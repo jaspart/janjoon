@@ -1,0 +1,282 @@
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-02-19 22:22:55
+tailor activate --name janjoonRooStyle
+project --topLevelPackage com.funder.janjoonweb --projectName janjoon --packaging pom
+module create --moduleName janjoon-domain --topLevelPackage com.funder.janjoonweb.domain --packaging jar
+email sender setup --hostServer smtp.gmail.com --port 587 --protocol SMTP --username janjoon.mailer --password BeHappy2012
+logging setup --level DEBUG
+module focus --moduleName ~
+module create --moduleName janjoon-ui --topLevelPackage com.funder.janjoonweb.ui --packaging war
+logging setup --level DEBUG
+module focus --moduleName ~
+backup
+/* MySQL JPA setup
+module focus --moduleName janjoon-domain
+jpa setup --provider HIBERNATE --database HYPERSONIC_IN_MEMORY
+/*
+enum type --class ~.reference.JJRelationship
+enum constant --name version
+enum constant --name requirement
+enum constant --name related
+enum constant --name child
+enum constant --name duplicated
+// script roo/domain/enums.roo
+/*
+tailor deactivate
+entity jpa --class ~.JJAbstractEntity --abstract --inheritanceType TABLE_PER_CLASS
+tailor activate --name janjoonRooStyle
+module focus --moduleName janjoon-domain
+entity jpa --class JJContact --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJContactSEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJProject --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJProjectSEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJProduct --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJProductSEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJVersion --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJVersionSEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJPhase --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJPhaseSEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJCategory --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJCategorySEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJJob --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJJobSEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJRight --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJRightSEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJStatus --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJStatusSEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJImportance --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJImportanceSEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJCriticity --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJCriticitySEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJMessage --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJMessageSEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJBuild --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJBuildSEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJTestcase --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJTestcaseSEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJTeststep --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJTeststepSEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJChapter --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJChapterSEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJBug --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJBugSEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJRequirement --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJRequirementSEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJTask --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJTaskSEQ
+module focus --moduleName janjoon-domain
+entity jpa --class JJTestplan --extends ~.JJAbstractEntity --activeRecord false --testAutomatically true --sequenceName JJTestplanSEQ
+// script roo/domain/entityHeaders.roo
+/*
+focus --class ~.JJAbstractEntity
+field string --fieldName name --sizeMax 25 --notNull
+field string --fieldName description --sizeMax 250 --notNull
+field date --fieldName creationDate --type java.util.Date --notNull
+field reference --fieldName createdBy --type ~.JJContact
+field date --fieldName updatedDate --type java.util.Date
+field reference --fieldName updatedBy --type ~.domain.JJContact
+field boolean --fieldName enabled
+// script roo/domain/abstractEntities.roo
+/*
+focus --class ~.JJProject
+field set --fieldName chapters  --type ~.JJChapter --cardinality ONE_TO_MANY --mappedBy project --fetch LAZY
+field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy project --fetch LAZY
+field set --fieldName testplans --type ~.JJTestplan --cardinality ONE_TO_MANY --mappedBy project --fetch LAZY
+focus --class ~.JJProduct
+field string --fieldName extname --sizeMax 25 --notNull
+field set --fieldName jjversions  --type ~.JJVersion --cardinality ONE_TO_MANY --mappedBy product --fetch LAZY
+field set --fieldName chapters  --type ~.JJChapter --cardinality ONE_TO_MANY --mappedBy product --fetch LAZY
+focus --class ~.JJVersion
+field reference --fieldName product --type ~.JJProduct
+field reference --fieldName phase --type ~.JJPhase
+field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy jjversion --fetch LAZY
+field set --fieldName testplans --type ~.JJTestplan --cardinality ONE_TO_MANY --mappedBy jjversion --fetch LAZY
+field set --fieldName builds --type ~.JJBuild --cardinality ONE_TO_MANY --mappedBy jjversion --fetch LAZY
+focus --class ~.JJChapter
+field reference --fieldName project --type ~.JJProject
+field reference --fieldName category --type ~.JJCategory
+field reference --fieldName product --type ~.JJProduct
+field set --fieldName requirements --type ~.JJRequirement --cardinality ONE_TO_MANY --mappedBy chapter --fetch LAZY
+focus --class ~.JJCategory
+field number --fieldName stage --type java.lang.Integer
+focus --class ~.JJContact
+field string --fieldName password --sizeMax 25 --notNull
+field string --fieldName email --regexp "[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+" --notNull
+field number --fieldName ldap --type java.lang.Integer
+field string --fieldName firstname --sizeMax 25 --notNull
+field string --fieldName lastname --sizeMax 25 --notNull
+field date --fieldName dateofbirth --type java.util.Date
+field string --fieldName picture --sizeMax 25
+field reference --fieldName job --type ~.JJJob
+field set --fieldName rights --type ~.JJRight
+field set --fieldName products --type ~.JJProduct
+field set --fieldName projects --type ~.JJProject
+focus --class ~.JJMessage
+field string --fieldName message --sizeMax 250 --notNull
+focus --class ~.JJStatus
+field number --fieldName statusLevel --type java.lang.Integer
+focus --class ~.JJImportance
+field number --fieldName importanceLevel --type java.lang.Integer
+focus --class ~.JJCriticity
+field number --fieldName criticityLevel --type java.lang.Integer
+focus --class ~.JJBug
+field reference --fieldName project --type ~.JJProject
+field date --fieldName startDate --type java.util.Date
+field date --fieldName endDate --type java.util.Date
+field number --fieldName workload --type java.lang.Integer
+field reference --fieldName jjversion --type ~.JJVersion
+field reference --fieldName category --type ~.JJCategory
+field reference --fieldName criticity --type ~.JJCriticity
+field reference --fieldName importance --type ~.JJImportance
+field reference --fieldName status --type ~.JJStatus
+field enum --fieldName relation --type ~.reference.JJRelationship
+field reference --fieldName bugUp --type ~.JJBug
+field reference --fieldName requirement --type ~.JJRequirement
+field set --fieldName bugs --type ~.JJBug  --cardinality ONE_TO_MANY --mappedBy bugUp --fetch LAZY
+field set --fieldName tasks --type ~.JJTask  --cardinality ONE_TO_MANY --mappedBy bug --fetch LAZY
+field set --fieldName assignedTos --type ~.JJContact --cardinality ONE_TO_MANY --fetch LAZY
+field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
+focus --class ~.JJRequirement
+field reference --fieldName project --type ~.JJProject
+field date --fieldName startDate --type java.util.Date
+field date --fieldName endDate --type java.util.Date
+field reference --fieldName chapter --type ~.JJChapter
+field reference --fieldName jjversion --type ~.JJVersion
+field reference --fieldName category --type ~.JJCategory
+field reference --fieldName criticity --type ~.JJCriticity
+field reference --fieldName importance --type ~.JJImportance
+field reference --fieldName status --type ~.JJStatus
+field enum --fieldName relation --type ~.reference.JJRelationship
+field reference --fieldName requirementUp --type ~.JJRequirement
+field set --fieldName requirements --type ~.JJRequirement --cardinality ONE_TO_MANY --mappedBy requirementUp --fetch LAZY
+field set --fieldName bugs --type ~.JJBug --cardinality ONE_TO_MANY --mappedBy requirement --fetch LAZY
+field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy requirement --fetch LAZY
+field set --fieldName assignedTos --type ~.JJContact --cardinality ONE_TO_MANY --fetch LAZY
+field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
+focus --class ~.JJTask
+field reference --fieldName project --type ~.JJProject
+field date --fieldName startDate --type java.util.Date
+field date --fieldName endDate --type java.util.Date
+field number --fieldName workload --type java.lang.Integer
+field reference --fieldName jjversion --type ~.JJVersion
+field reference --fieldName bug --type ~.JJBug
+field reference --fieldName requirement --type ~.JJRequirement
+field set --fieldName assignedTos --type ~.JJContact --cardinality ONE_TO_MANY --fetch LAZY
+field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
+focus --class ~.JJBuild
+field reference --fieldName jjversion --type ~.JJVersion
+field set --fieldName testplans --type ~.JJTestplan --cardinality ONE_TO_MANY --mappedBy build --fetch LAZY
+focus --class ~.JJTestplan
+field reference --fieldName project --type ~.JJProject
+field reference --fieldName jjversion --type ~.JJVersion
+field reference --fieldName build --type ~.JJBuild
+field set --fieldName testcases --type ~.JJTestcase --cardinality ONE_TO_MANY --mappedBy testplan --fetch LAZY
+focus --class ~.JJTestcase
+field number --fieldName place --type java.lang.Integer
+field string --fieldName resultat --sizeMax 100
+field reference --fieldName category --type ~.JJCategory
+field reference --fieldName testplan --type ~.JJTestplan
+field set --fieldName teststeps --type ~.JJTeststep --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
+field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --fetch LAZY
+field set --fieldName requirements  --type ~.JJRequirement --cardinality ONE_TO_MANY --fetch LAZY
+focus --class ~.JJTeststep
+field number --fieldName place --type java.lang.Integer
+field string --fieldName actionstep --sizeMax 100
+field string --fieldName resultat --sizeMax 100
+field boolean --fieldName passed
+field reference --fieldName testcase --type ~.JJTestcase
+field reference --fieldName requirement --type ~.JJRequirement
+// script roo/domain/concreteEntities.roo
+/*
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJAbstractEntityRepository --entity ~.JJAbstractEntity
+service --interface ~.JJAbstractEntityService --class ~.JJAbstractEntityServiceImpl --entity ~.JJAbstractEntity
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJProjectRepository --entity ~.JJProject
+service --interface ~.JJProjectService --class ~.JJProjectServiceImpl --entity ~.JJProject
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJProductRepository --entity ~.JJProduct
+service --interface ~.JJProductService --class ~.JJProductServiceImpl --entity ~.JJProduct
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJVersionRepository --entity ~.JJVersion
+service --interface ~.JJVersionService --class ~.JJVersionServiceImpl --entity ~.JJVersion
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJChapterRepository --entity ~.JJChapter
+service --interface ~.JJChapterService --class ~.JJChapterServiceImpl --entity ~.JJChapter
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJPhaseRepository --entity ~.JJPhase
+service --interface ~.JJPhaseService --class ~.JJPhaseServiceImpl --entity ~.JJPhase
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJCategoryRepository --entity ~.JJCategory
+service --interface ~.JJCategoryService --class ~.JJCategoryServiceImpl --entity ~.JJCategory
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJJobRepository --entity ~.JJJob
+service --interface ~.JJJobService --class ~.JJJobServiceImpl --entity ~.JJJob
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJRightRepository --entity ~.JJRight
+service --interface ~.JJRightService --class ~.JJRightServiceImpl --entity ~.JJRight
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJContactRepository --entity ~.JJContact
+service --interface ~.JJContactService --class ~.JJContactServiceImpl --entity ~.JJContact
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJMessageRepository --entity ~.JJMessage
+service --interface ~.JJMessageService --class ~.JJMessageServiceImpl --entity ~.JJMessage
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJStatusRepository --entity ~.JJStatus
+service --interface ~.JJStatusService --class ~.JJStatusServiceImpl --entity ~.JJStatus
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJImportanceRepository --entity ~.JJImportance
+service --interface ~.JJImportanceService --class ~.JJImportanceServiceImpl --entity ~.JJImportance
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJCriticityRepository --entity ~.JJCriticity
+service --interface ~.JJCriticityService --class ~.JJCriticityServiceImpl --entity ~.JJCriticity
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJBugRepository --entity ~.JJBug
+service --interface ~.JJBugService --class ~.JJBugServiceImpl --entity ~.JJBug
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJRequirementRepository --entity ~.JJRequirement
+service --interface ~.JJRequirementService --class ~.JJRequirementServiceImpl --entity ~.JJRequirement
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJTaskRepository --entity ~.JJTask
+service --interface ~.JJTaskService --class ~.JJTaskServiceImpl --entity ~.JJTask
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJBuildRepository --entity ~.JJBuild
+service --interface ~.JJBuildService --class ~.JJBuildServiceImpl --entity ~.JJBuild
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJTestplanRepository --entity ~.JJTestplan
+service --interface ~.JJTestplanService --class ~.JJTestplanServiceImpl --entity ~.JJTestplan
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJTestcaseRepository --entity ~.JJTestcase
+service --interface ~.JJTestcaseService --class ~.JJTestcaseServiceImpl --entity ~.JJTestcase
+module focus --moduleName janjoon-domain
+module focus --moduleName janjoon-domain
+repository jpa --interface ~.JJTeststepRepository --entity ~.JJTeststep
+service --interface ~.JJTeststepService --class ~.JJTeststepServiceImpl --entity ~.JJTeststep
+module focus --moduleName janjoon-domain
+// script roo/domain/layers.roo
+module focus --moduleName janjoon-ui
+web jsf setup --implementation APACHE_MYFACES --theme SMOOTHNESS
+web jsf all --package ~.mb
+module focus --moduleName ~
+module focus --moduleName ~
+backup
+// script /home/micmic/Documents/PROJETS/mmanager/my-roo-projects/janjoon/roo/janjoon.roo
+quit
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-02-19 22:26:50
