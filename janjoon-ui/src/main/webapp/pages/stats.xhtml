@@ -1,0 +1,43 @@
+
+<ui:composition template="/templates/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+    
+	<style type="text/css">
+		.alignTop {
+			vertical-align: top;
+		}
+	</style>
+
+	<link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
+	<link type="text/css" rel="stylesheet" href="/syntaxhighlighter/standard.css" />
+
+	<ui:define name="content">
+		<p:tabMenu activeIndex="7" name="content">
+		    <ui:include src="/templates/menu.xhtml" />
+		</p:tabMenu>
+		<br/>
+		<p:lineChart id="linear" value="#{chartBean.linearModel}" legendPosition="e"
+			title="Linear Chart" minY="0" maxY="10" style="height:300px"/>
+
+		<p:lineChart id="category" value="#{chartBean.categoryModel}" legendPosition="e"
+			title="Category Chart" minY="0" maxY="200" style="height:300px;margin-top:20px"/>
+	</ui:define>
+
+	<ui:define name="outer">
+		<ui:insert name="highlight">
+			<script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shCore.js"></script>
+			<script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushXml.js"></script>
+			<script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushJava.js"></script>
+			<script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushCss.js"></script>
+			<script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushJScript.js"></script>
+			<script type="text/javascript">
+				dp.SyntaxHighlighter.ClipboardSwf = '\#{request.contextPath}/syntaxhighlighter/clipboard.swf';
+				dp.SyntaxHighlighter.HighlightAll('code');
+			</script>
+		</ui:insert>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,124 @@
+
+<ui:composition template="/templates/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    
+<style type="text/css">
+	.alignTop {
+		vertical-align: top;
+	}
+</style>
+    
+    <link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
+    <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/standard.css" />
+
+	<ui:define name="content">
+	
+		<p:tabMenu activeIndex="3" name="content">  
+		    <ui:include src="/templates/menu.xhtml" />
+		</p:tabMenu> 
+		<br/>
+		<p:panel header="CPROD 12.04 /src/com.company.product/Expenses.java" style="width: 360;valign: top;">
+			<h:panelGrid columns="2" columnClasses="alignTop,alignTop">
+				<p:panel>  
+		        	<h:form id="form">
+			        	<h:outputLabel value="Product:"/>
+				        <p:selectOneMenu value="#{pprBean.city}" effect="fold" editable="true">  
+				            <f:selectItem itemLabel="CPROD" itemValue="" />  
+				            <f:selectItems value="#{pprBean.cities}" />  
+				        </p:selectOneMenu> 
+				        <h:outputLabel value="Version:"/>
+				        <p:selectOneMenu value="#{pprBean.city}" effect="fold" editable="true">  
+				            <f:selectItem itemLabel="12.04" itemValue="" />  
+				            <f:selectItems value="#{pprBean.cities}" />  
+				        </p:selectOneMenu> 
+				  
+					    <p:tree id="docTree" value="#{documentsController.root}" var="doc" animate="true">  
+					        <p:treeNode expandedIcon="ui-icon-folder-open"  
+					                    collapsedIcon="ui-icon-folder-collapsed">  
+					            <h:outputText value="#{doc.name}"/>  
+					        </p:treeNode>  
+					  
+					        <p:treeNode type="src" icon="ui-icon-document">  
+					            <h:outputText value="#{doc.name}" />  
+					        </p:treeNode>  
+					  
+					        <p:treeNode type="WebContent" icon="ui-icon-image">  
+					            <h:outputText value="#{doc.name}" />  
+					        </p:treeNode>  
+					  
+					        <p:treeNode type="conf" icon="ui-icon-video">  
+					            <h:outputText value="#{doc.name}" />  
+					        </p:treeNode>  
+					    </p:tree>  
+					    <h:outputLabel value="Task"/>
+				        <p:selectOneMenu value="#{pprBean.city}" effect="fold" editable="true">  
+				            <f:selectItem itemLabel="TREQ000312: update interface" itemValue="" />  
+				            <f:selectItems value="#{pprBean.cities}" />  
+				        </p:selectOneMenu> 
+				        <p:commandButton value="Submit" actionListener="#{pprBean.savePerson}" id="submit"   
+            				update="" icon="ui-icon-disk" /> 
+            			<p:commandButton value="Mark Done" actionListener="#{pprBean.savePerson}" id="markdone"   
+            				update="" icon="ui-icon-disk" />
+					</h:form>
+				</p:panel>
+				<p:panel>  
+					<h:form id="form2">
+				         <textarea name="code" class="java" cols="110" rows="24">
+
+/**
+ * Copyright 2009 Prime Technology.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.company.product;
+
+import java.io.Serializable;
+
+public class Expenses implements Serializable {
+
+        /** Expenses serial */
+	private static final long serialVersionUID = 1L;
+
+		private String name;
+        
+        private String amout;
+        
+        private String type;
+}
+						</textarea>
+					</h:form>
+				</p:panel>
+		  	</h:panelGrid>
+    	</p:panel>
+	</ui:define>
+
+	<ui:define name="outer">          
+	    <ui:insert name="highlight">
+		    <script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shCore.js"></script>
+		    <script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushXml.js"></script>
+		    <script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushJava.js"></script>
+		    <script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushCss.js"></script>
+		    <script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushJScript.js"></script>
+		    <script type="text/javascript">
+				dp.SyntaxHighlighter.ClipboardSwf = '\#{request.contextPath}/syntaxhighlighter/clipboard.swf';
+				dp.SyntaxHighlighter.HighlightAll('code');
+		    </script>
+		</ui:insert>
+	</ui:define>
+	
+</ui:composition>
