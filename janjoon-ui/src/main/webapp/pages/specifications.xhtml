@@ -1,14 +1,13 @@
-<ui:composition 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui"
-    template="/templates/template.xhtml">
-    
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="../templates/layout.xhtml">
     <link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
     <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/standard.css" />
-
 	<ui:define name="content"><center>
 	
 		<p:tabMenu activeIndex="1" name="content">  
@@ -17,12 +16,12 @@
 		<br/>
 		<h:form id="specForm">
 		
-	        <p:autoComplete value="#{autoCompleteBean.selectedPlayer1}" id="project" completeMethod="#{autoCompleteBean.completePlayer}"  
+	        <!-- AJA AUTOCOMPLETE <p:autoComplete value="#{autoCompleteBean.selectedPlayer1}" id="project" completeMethod="#{autoCompleteBean.completePlayer}"  
                 var="p" itemLabel="#{p.name}" itemValue="#{p}" converter="player" forceSelection="true"/>
-            <p:watermark for="project" value="Project (Mandatory)" />
+            <p:watermark for="project" value="Project (Mandatory)" /> -->
             
-	        <p:autoComplete value="#{autoCompleteBean.selectedPlayer1}" id="product" completeMethod="#{autoCompleteBean.completePlayer}"  
-                var="p" itemLabel="#{p.name}" itemValue="#{p}" converter="player" forceSelection="true"/>
+	        <!-- AJA AUTOCOMPLETE <p:autoComplete value="#{autoCompleteBean.selectedPlayer1}" id="product" completeMethod="#{autoCompleteBean.completePlayer}"  
+                var="p" itemLabel="#{p.name}" itemValue="#{p}" converter="player" forceSelection="true"/> -->
             <p:watermark for="product" value="Product (Optional)" />
                 
 			<p:column style="width:25%">
@@ -438,15 +437,15 @@
 			        <p:inputText id="dlgtitle" value="ReqTitle" required="true" style="width: 500px; font-weight: bold;"/>
 		        
 			        <h:outputLabel id="dlgproductLabel" for="product" value="Product:" style="font-weight:bold"/>
-					<p:autoComplete id="dlgproduct" dropdown="true" value="#{projectAutoCompleteBean.selectedProject}"   
+					<!-- AJA AUTOCOMPLETE <p:autoComplete id="dlgproduct" dropdown="true" value="#{projectAutoCompleteBean.selectedProject}"   
 			            label="truc" itemValue="machine" completeMethod="#{projectAutoCompleteBean.complete}"
-			            style="width: 20px; font-weight: bold;"/>
+			            style="width: 20px; font-weight: bold;"/> -->
 				    
 				    <h:outputLabel for="chapter" value="Chapter:" style="font-weight:bold"/>
-				    <p:autoComplete id="dlgChapter" dropdown="true" value="#{ressourceAutoCompleteBean.selectedPlayers}" 
+				    <!-- AJA AUTOCOMPLETE <p:autoComplete id="dlgChapter" dropdown="true" value="#{ressourceAutoCompleteBean.selectedPlayers}" 
 			    		completeMethod="#{ressourceAutoCompleteBean.completePlayer}"  
 				        var="p" itemLabel="#{p.name}" itemValue="#{p}" converter="player" multiple="true"
-				        style="width: 20px; font-weight: bold;"/>  
+				        style="width: 20px; font-weight: bold;"/> -->
 				</h:panelGrid>
 			    <p:editor id="dlgeditor" value="#{editorBean.value}" width="600"/>  <br/>
 			    <p:commandButton type="reset" value="Reset" />  
@@ -458,3 +457,4 @@
 		</h:form>
 	</center></ui:define>
 </ui:composition>
+</html>

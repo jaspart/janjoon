@@ -1,21 +1,14 @@
-
-<ui:composition template="/templates/template.xhtml"
-	xmlns="http://www.w3.org/1999/xhtml"
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-    
-	<style type="text/css">
-		.alignTop {
-			vertical-align: top;
-		}
-	</style>
-
-	<link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
-	<link type="text/css" rel="stylesheet" href="/syntaxhighlighter/standard.css" />
-
-	<ui:define name="content">
+	
+<ui:composition template="../templates/layout.xhtml">
+    <link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
+    <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/standard.css" />
+	<ui:define name="content"><center>
 		<p:tabMenu activeIndex="7" name="content">
 		    <ui:include src="/templates/menu.xhtml" />
 		</p:tabMenu>
@@ -25,9 +18,9 @@
 
 		<p:lineChart id="category" value="#{chartBean.categoryModel}" legendPosition="e"
 			title="Category Chart" minY="0" maxY="200" style="height:300px;margin-top:20px"/>
-	</ui:define>
+	</center></ui:define>
 
-	<ui:define name="outer">
+	<ui:define name="outer"><center>
 		<ui:insert name="highlight">
 			<script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shCore.js"></script>
 			<script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushXml.js"></script>
@@ -39,5 +32,6 @@
 				dp.SyntaxHighlighter.HighlightAll('code');
 			</script>
 		</ui:insert>
-	</ui:define>
+	</center></ui:define>
 </ui:composition>
+</html>

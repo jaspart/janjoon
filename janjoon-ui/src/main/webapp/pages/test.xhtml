@@ -1,16 +1,14 @@
-
-<ui:composition template="/templates/template.xhtml"
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui">
-
-	<link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/templates/style.css" />
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="../templates/layout.xhtml">
     <link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
-    <link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/standard.css" />
-
-	<ui:define name="content">
+    <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/standard.css" />
+	<ui:define name="content"><center>
 	
 		<p:tabMenu activeIndex="4" name="content">  
 		    <ui:include src="/templates/menu.xhtml" />
@@ -92,9 +90,9 @@
 			  </td>
 			</tr></table>
     	</p:panel>
-	</ui:define>
+	</center></ui:define>
 
-	<ui:define name="outer">          
+	<ui:define name="outer"><center>
 	    <ui:insert name="highlight">
 		    <script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shCore.js"></script>
 		    <script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushXml.js"></script>
@@ -106,6 +104,6 @@
 				dp.SyntaxHighlighter.HighlightAll('code');
 		    </script>
 		</ui:insert>
-	</ui:define>
-	
+	</center></ui:define>
 </ui:composition>
+</html>

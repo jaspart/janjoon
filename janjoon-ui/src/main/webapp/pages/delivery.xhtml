@@ -1,28 +1,20 @@
-
-<ui:composition template="/templates/template.xhtml"
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui">
-    
-<style type="text/css">
-	.alignTop {
-		vertical-align: top;
-	}
-</style>
-    
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="../templates/layout.xhtml">
     <link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
     <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/standard.css" />
-
-	<ui:define name="content">
+	<ui:define name="content"><center>
 	
 		<p:tabMenu activeIndex="5" name="content">  
 		    <ui:include src="/templates/menu.xhtml" />
 		</p:tabMenu> 
 		<br/>
-		<center><div style="width:500px">
-	   	<h:form>  
+		<div style="width:500px"><h:form>  
 		  
 		    <p:growl id="messages" showDetail="true" />  
 		  
@@ -58,7 +50,7 @@
 		        </h:panelGrid>  
 		    </p:dialog>  
 		  
-		</h:form>
-		</div></center>
-	</ui:define>
+		</h:form></div>
+	</center></ui:define>
 </ui:composition>
+</html>

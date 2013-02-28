@@ -1,18 +1,17 @@
-
-<ui:composition template="/templates/template.xhtml"
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui">
-
-	<ui:define name="content">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 	
+<ui:composition template="../templates/layout.xhtml">
+	<ui:define name="content"><center>
 		<p:tabMenu activeIndex="0" name="content">  
 		    <ui:include src="/templates/menu.xhtml" />
 		</p:tabMenu> 
 		<br/><br/><br/><br/>
-		<center><div style="width:600px"> 
+		<div style="width:600px"> 
 			<h:form>  
 			
 				<p:growl id="messages" showDetail="true" />
@@ -40,7 +39,7 @@
 				        
 		            	
 		            	<h:outputLabel for="ressources" value="Ressources :" />
-					    <p:autoComplete value="#{ressourceAutoCompleteBean.selectedPlayers}" completeMethod="#{ressourceAutoCompleteBean.completePlayer}"  
+					    <!-- AJA AUTOCOMPLETE <p:autoComplete value="#{ressourceAutoCompleteBean.selectedPlayers}" completeMethod="#{ressourceAutoCompleteBean.completePlayer}"  
 					        var="p" itemLabel="#{p.name}" itemValue="#{p}" converter="player" multiple="true" width="100px">  
 					        <p:growl id="growl" showDetail="true" sticky="true" />  
 					  
@@ -53,7 +52,7 @@
 					        <p:column style="width:80%">  
 					            #{p.name} - #{p.position}  
 					        </p:column>
-					    </p:autoComplete> 
+					    </p:autoComplete> -->
 					    <br/>
 						
 						<p:editor id="editor" value="#{editorBean.value}" width="600"/>  <br/>
@@ -66,3 +65,4 @@
 		</div></center>
 	</ui:define>
 </ui:composition>
+</html>

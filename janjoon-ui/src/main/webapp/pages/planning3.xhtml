@@ -1,12 +1,12 @@
-
-<ui:composition template="/templates/template.xhtml"
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui">
-
-	<ui:define name="content">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="../templates/layout.xhtml">
+	<ui:define name="content"><center>
 	
 		<p:tabMenu activeIndex="0" name="content">  
 		    <ui:include src="/templates/menu.xhtml" />
@@ -43,5 +43,6 @@
 	    <p:resizable for="campnou" grid="50" width="20">  
 	        <p:ajax listener="#{resizeBean.onResize}" update="growl"/>  
 	    </p:resizable> 
-	</ui:define>
+	</center></ui:define>
 </ui:composition>
+</html>
