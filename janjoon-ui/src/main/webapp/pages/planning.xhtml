@@ -7,59 +7,75 @@
 	
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content"><center>
-		<p:tabMenu activeIndex="0" name="content">  
-		    <ui:include src="/templates/menu.xhtml" />
+		<p:tabMenu activeIndex="0" name="content">
+			<ui:include src="/templates/menu.xhtml" />
 		</p:tabMenu> 
 		<br/><br/><br/><br/>
 		<div style="width:600px"> 
-			<h:form>  
+			<h:form id="form">
+				<p:tabView id="tabView" dynamic="true" cache="true">
 			
-				<p:growl id="messages" showDetail="true" />
+					<p:tab id="tba1" title="Gantt">
+						<h:panelGrid columns="2" cellpadding="10">
+							<p:growl id="messages" showDetail="true" />
+							<p:schedule value="#{scheduleController.eventModel}" widgetVar="myschedule">
+								<p:ajax event="dateSelect" listener="#{scheduleController.onDateSelect}" update="eventDetails" oncomplete="eventDialog.show()" />
+								<p:ajax event="eventSelect" listener="#{scheduleController.onEventSelect}" update="eventDetails" oncomplete="eventDialog.show()" />  
+								<p:ajax event="eventMove" listener="#{scheduleController.onEventMove}" update="messages" />
+								<p:ajax event="eventResize" listener="#{scheduleController.onEventResize}" update="messages" />
+							</p:schedule>
+						</h:panelGrid>
+					</p:tab>
+			
+					<p:tab id="tab2" title="Scrum">
+						<h:panelGrid columns="2" cellpadding="10">
+							<p:graphicImage id="tab2Img" value="/images/godfather/godfather2.jpg" />
+							<h:outputText value="Francis Ford Coppola's legendary continuation and sequel to his landmark 1972 film, The_Godfather, parallels the young Vito Corleone's rise with his son Michael's spiritual fall, deepening The_Godfather's depiction of the dark side of the American dream.
+							In the early 1900s, the child Vito flees his Sicilian village for America after the local Mafia kills his family. Vito struggles to make a living, legally or illegally, for his wife and growing brood in Little Italy,
+							killing the local Black Hand Fanucci after he demands his customary cut of the tyro's business. With Fanucci gone, Vito's communal stature grows."/>
+						</h:panelGrid>
+					</p:tab>
+			
+				</p:tabView>
 				
-				<p:schedule value="#{scheduleController.eventModel}" widgetVar="myschedule">
-				    <p:ajax event="dateSelect" listener="#{scheduleController.onDateSelect}" update="eventDetails" oncomplete="eventDialog.show()" />
-				    <p:ajax event="eventSelect" listener="#{scheduleController.onEventSelect}" update="eventDetails" oncomplete="eventDialog.show()" />  
-				    <p:ajax event="eventMove" listener="#{scheduleController.onEventMove}" update="messages" />
-				    <p:ajax event="eventResize" listener="#{scheduleController.onEventResize}" update="messages" />
-				</p:schedule>
 				
 				<p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">  
-				    <h:panelGrid id="eventDetails" columns="2">
-				        <h:outputLabel for="title" value="Title:" />
-				        <p:inputText id="title" value="#{scheduleController.event.title}" required="true"/>
+					<h:panelGrid id="eventDetails" columns="2">
+						<h:outputLabel for="title" value="Title:" />
+						<p:inputText id="title" value="#{scheduleController.event.title}" required="true"/>
 				
-				        <h:outputLabel for="from" value="From:" />
-				        <p:calendar value="#{scheduleController.event.startDate}" pattern="dd/MM/yyyy HH:mm" />
+						<h:outputLabel for="from" value="From:" />
+						<p:calendar value="#{scheduleController.event.startDate}" pattern="dd/MM/yyyy HH:mm" />
 				
-				        <h:outputLabel for="to" value="To:" />
-				        <p:calendar value="#{scheduleController.event.endDate}" pattern="dd/MM/yyyy HH:mm" /> 
+						<h:outputLabel for="to" value="To:" />
+						<p:calendar value="#{scheduleController.event.endDate}" pattern="dd/MM/yyyy HH:mm" /> 
 				
-				        <h:outputLabel for="allDay" value="All Day:" />
-				        <h:selectBooleanCheckbox id="allDay" value="#{scheduleController.event.allDay}" /> 
-				        
-		            	
-		            	<h:outputLabel for="ressources" value="Ressources :" />
-					    <!-- AJA AUTOCOMPLETE <p:autoComplete value="#{ressourceAutoCompleteBean.selectedPlayers}" completeMethod="#{ressourceAutoCompleteBean.completePlayer}"  
-					        var="p" itemLabel="#{p.name}" itemValue="#{p}" converter="player" multiple="true" width="100px">  
-					        <p:growl id="growl" showDetail="true" sticky="true" />  
+						<h:outputLabel for="allDay" value="All Day:" />
+						<h:selectBooleanCheckbox id="allDay" value="#{scheduleController.event.allDay}" /> 
+						
+						
+						<h:outputLabel for="ressources" value="Ressources :" />
+						<p:autoComplete value="#{ressourceAutoCompleteBean.selectedPlayers}" completeMethod="#{ressourceAutoCompleteBean.completePlayer}"  
+							var="p" itemLabel="#{p.name}" itemValue="#{p}" converter="player" multiple="true" width="100px">  
+							<p:growl id="growl" showDetail="true" sticky="true" />  
 					  
-					        <p:ajax event="itemUnselect" listener="#{ressourceAutoCompleteBean.handleUnselect}"  update="growl" />
+							<p:ajax event="itemUnselect" listener="#{ressourceAutoCompleteBean.handleUnselect}"  update="growl" />
 					  
-					        <p:column style="width:20%;text-align:center">
-					            <p:graphicImage value="/images/barca/#{p.photo}" width="40" height="50"/>  
-					        </p:column>
+							<p:column style="width:20%;text-align:center">
+								<p:graphicImage value="/images/barca/#{p.photo}" width="40" height="50"/>  
+							</p:column>
 					  
-					        <p:column style="width:80%">  
-					            #{p.name} - #{p.position}  
-					        </p:column>
-					    </p:autoComplete> -->
-					    <br/>
+							<p:column style="width:80%">  
+								#{p.name} - #{p.position}  
+							</p:column>
+						</p:autoComplete> 
+						<br/>
 						
 						<p:editor id="editor" value="#{editorBean.value}" width="600"/>  <br/>
 				
-				        <p:commandButton type="reset" value="Reset" />  
-				        <p:commandButton value="Save" actionListener="#{scheduleController.addEvent}" oncomplete="myschedule.update();eventDialog.hide();"/>  
-				    </h:panelGrid>
+						<p:commandButton type="reset" value="Reset" />  
+						<p:commandButton value="Save" actionListener="#{scheduleController.addEvent}" oncomplete="myschedule.update();eventDialog.hide();"/>  
+					</h:panelGrid>
 				</p:dialog>
 			</h:form>
 		</div></center>

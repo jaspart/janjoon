@@ -34,7 +34,7 @@
 			
 			<table border="0">
 			<tr>
-			<td width="400">
+			<td width="390">
 			    <p:contextMenu for="left">
 			        <p:menuitem value="Edit" update="display" icon="ui-icon-pencil" oncomplete="requirementDialog.show()"/>  
 			        <p:menuitem value="Delete" update="left" icon="ui-icon-close" actionListener="#{reqBusinessBean.deleteRequirement}"/>  
@@ -115,28 +115,28 @@
 								    <p:menu overlay="true" trigger="dynaButton" my="left top" at="left bottom">  
 							            <p:menuitem>
 							            	<h:commandLink>  
-									            <p:graphicImage value="/images/pdf.png" />
+									            <p:graphicImage value="/resources/images/pdf.png" />
 												<h:outputLabel value="export in pdf"/>
 									            <p:dataExporter type="pdf" target="tbl" fileName="requirements"/>  
 									        </h:commandLink>  
 							            </p:menuitem>
 							            <p:menuitem>
 							            	<h:commandLink>  
-									            <p:graphicImage value="/images/csv.png" />
+									            <p:graphicImage value="/resources/images/csv.png" />
 												<h:outputLabel value="export in csv"/>
 									            <p:dataExporter type="pdf" target="tbl" fileName="requirements"/>  
 									        </h:commandLink>  
 							            </p:menuitem>
 							            <p:menuitem>
 							            	<h:commandLink>  
-									            <p:graphicImage value="/images/xml.png" />
+									            <p:graphicImage value="/resources/images/xml.png" />
 												<h:outputLabel value="export in xml"/>
 									            <p:dataExporter type="pdf" target="tbl" fileName="requirements"/>  
 									        </h:commandLink>  
 							            </p:menuitem>
 							            <p:menuitem>
 							            	<h:commandLink>  
-									            <p:graphicImage value="/images/excel.png" />
+									            <p:graphicImage value="/resources/images/excel.png" />
 												<h:outputLabel value="export in xls"/>
 									            <p:dataExporter type="pdf" target="tbl" fileName="requirements"/>  
 									        </h:commandLink>  
@@ -160,7 +160,7 @@
 			    </p:dataTable>
 		    </td>
 		    
-			<td width="400">
+			<td width="390">
 			    <p:contextMenu for="middle">
 			        <p:menuitem value="Edit" update="display" icon="ui-icon-pencil" oncomplete="requirementDialog.show()"/>  
 			        <p:menuitem value="Delete" update="middle" icon="ui-icon-close" actionListener="#{reqFunctionalBean.deleteRequirement}"/>  
@@ -285,7 +285,7 @@
 			    </p:dataTable>
 		    </td>
 		    
-			<td width="400">
+			<td width="390">
 			    <p:contextMenu for="right">
 			        <p:menuitem value="Edit" update="display" icon="ui-icon-pencil" oncomplete="requirementDialog.show()"/>  
 			        <p:menuitem value="Delete" update="right" icon="ui-icon-close" actionListener="#{reqTechnicalBean.deleteRequirement}"/>  
