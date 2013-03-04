@@ -6,103 +6,103 @@
 	xmlns:p="http://primefaces.org/ui">
 	
 <ui:composition template="../templates/layout.xhtml">
-    <link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
-    <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/standard.css" />
+	<link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
+	<link type="text/css" rel="stylesheet" href="/syntaxhighlighter/standard.css" />
 	<ui:define name="content"><center>
 	
 		<p:tabMenu activeIndex="4" name="content">  
-		    <ui:include src="/templates/menu.xhtml" />
+			<ui:include src="/templates/menu.xhtml" />
 		</p:tabMenu> 
 		<br/>
 		
 		<p:panel header="CPROD 12.04 PPROJECT" style="vertical-align: top">
 			<table class="mytable">
-			  <tr><td valign="top">
-	        	<h:form id="form">
-		        	<h:outputLabel value="Product:"/>
-			        <p:selectOneMenu value="#{pprBean.city}" effect="fold" editable="true">  
-			            <f:selectItem itemLabel="CPROD" itemValue="" />  
-			            <f:selectItems value="#{pprBean.cities}" />  
-			        </p:selectOneMenu> 
-			        <br/>
-			        <h:outputLabel value="Version:"/>
-			        <p:selectOneMenu value="#{pprBean.city}" effect="fold" editable="true">  
-			            <f:selectItem itemLabel="12.04" itemValue="" />  
-			            <f:selectItems value="#{pprBean.cities}" />  
-			        </p:selectOneMenu> 
-			        <br/>
-			        <h:outputLabel value="Project:"/>
-			        <p:selectOneMenu value="#{pprBean.city}" effect="fold" editable="true">  
-			            <f:selectItem itemLabel="Client custo" itemValue="" />  
-			            <f:selectItems value="#{pprBean.cities}" />  
-			        </p:selectOneMenu> 
-			        <br/>
+				<tr><td valign="top">
+				<h:form id="form">
+					<h:outputLabel value="Product:"/>
+					<p:selectOneMenu value="#{pprBean.city}" effect="fold" editable="true">  
+						<f:selectItem itemLabel="CPROD" itemValue="" />  
+						<f:selectItems value="#{pprBean.cities}" />  
+					</p:selectOneMenu> 
+					<br/>
+					<h:outputLabel value="Version:"/>
+					<p:selectOneMenu value="#{pprBean.city}" effect="fold" editable="true">  
+						<f:selectItem itemLabel="12.04" itemValue="" />  
+						<f:selectItems value="#{pprBean.cities}" />  
+					</p:selectOneMenu> 
+					<br/>
+					<h:outputLabel value="Project:"/>
+					<p:selectOneMenu value="#{pprBean.city}" effect="fold" editable="true">  
+						<f:selectItem itemLabel="Client custo" itemValue="" />  
+						<f:selectItems value="#{pprBean.cities}" />  
+					</p:selectOneMenu> 
+					<br/>
 			  
-				    <p:tree id="docTree" value="#{documentsController.root}" 
-				    	width="700" var="doc" animate="true">  
-				        <p:treeNode expandedIcon="ui-icon-folder-open"  
-				                    collapsedIcon="ui-icon-folder-collapsed">  
-				            <h:outputText value="#{doc.name}"/>  
-				        </p:treeNode>  
+					<p:tree id="docTree" value="#{documentsController.root}" 
+						width="700" var="doc" animate="true">  
+						<p:treeNode expandedIcon="ui-icon-folder-open"  
+									collapsedIcon="ui-icon-folder-collapsed">  
+							<h:outputText value="#{doc.name}"/>  
+						</p:treeNode>  
 				  
-				        <p:treeNode type="src" icon="ui-icon-document">  
-				            <h:outputText value="#{doc.name}" />  
-				        </p:treeNode>  
+						<p:treeNode type="src" icon="ui-icon-document">  
+							<h:outputText value="#{doc.name}" />  
+						</p:treeNode>  
 				  
-				        <p:treeNode type="WebContent" icon="ui-icon-image">  
-				            <h:outputText value="#{doc.name}" />  
-				        </p:treeNode>  
+						<p:treeNode type="WebContent" icon="ui-icon-image">  
+							<h:outputText value="#{doc.name}" />  
+						</p:treeNode>  
 				  
-				        <p:treeNode type="conf" icon="ui-icon-video">  
-				            <h:outputText value="#{doc.name}" />  
-				        </p:treeNode>  
-				    </p:tree>  
-			        <p:commandButton value="Start" actionListener="#{pprBean.savePerson}" id="start" update="" icon="ui-icon-disk" /> 
-			        <p:commandButton value="Test plan" actionListener="#{pprBean.savePerson}" id="testplanp" update="" icon="ui-icon-circle-plus" /> 
-			        <br/>
-			        <p:commandButton value="Save" actionListener="#{pprBean.savePerson}" id="save" update="" icon="ui-icon-play" /> 
-			        <p:commandButton value="History" actionListener="#{pprBean.savePerson}" id="history" update="" icon="ui-icon-bookmark" /> 
+						<p:treeNode type="conf" icon="ui-icon-video">  
+							<h:outputText value="#{doc.name}" />  
+						</p:treeNode>  
+					</p:tree>  
+					<p:commandButton value="Start" actionListener="#{pprBean.savePerson}" id="start" update="" icon="ui-icon-disk" /> 
+					<p:commandButton value="Test plan" actionListener="#{pprBean.savePerson}" id="testplanp" update="" icon="ui-icon-circle-plus" /> 
+					<br/>
+					<p:commandButton value="Save" actionListener="#{pprBean.savePerson}" id="save" update="" icon="ui-icon-play" /> 
+					<p:commandButton value="History" actionListener="#{pprBean.savePerson}" id="history" update="" icon="ui-icon-bookmark" /> 
 				</h:form>
-			  </td>
-			  <td>
+				</td>
+				<td>
 				<p:dataTable var="car" value="#{tableBean.requirementList}">  
-			        <p:column headerText="#" width="10">
-				    1
-			        </p:column>  
+					<p:column headerText="#" width="10">
+					1
+					</p:column>  
 
-			        <p:column headerText="action" style="width: 600px;">
-				    <p:inplace id="ajaxAction" editor="true">  
-		                <p:inputText value="#{inplaceBean.text}" required="true" label="text"/>  
-		            </p:inplace>
-			        </p:column>  
+					<p:column headerText="action" style="width: 600px;">
+					<p:inplace id="ajaxAction" editor="true">  
+						<p:inputText value="#{inplaceBean.text}" required="true" label="text"/>  
+					</p:inplace>
+					</p:column>  
 
-			        <p:column headerText="result" style="width: 600px;">
-				    <p:inplace id="ajaxResult" editor="true">
-		                <p:inputText value="#{inplaceBean.text}" required="true" label="text"/>
-		            </p:inplace>
-			        </p:column>
+					<p:column headerText="result" style="width: 600px;">
+					<p:inplace id="ajaxResult" editor="true">
+						<p:inputText value="#{inplaceBean.text}" required="true" label="text"/>
+					</p:inplace>
+					</p:column>
 			  
-			        <p:column headerText="status" width="100">
-		            <p:selectBooleanButton value="#{formBean.value1}" onLabel="passed" offLabel="failed" />
-			        </p:column>
-			    </p:dataTable>
-			    <p:commandButton value="Add Step" actionListener="#{pprBean.savePerson}" id="start" update="" icon="ui-icon-plus" /> 
-			  </td>
+					<p:column headerText="status" width="100">
+					<p:selectBooleanButton value="#{formBean.value1}" onLabel="passed" offLabel="failed" />
+					</p:column>
+				</p:dataTable>
+				<p:commandButton value="Add Step" actionListener="#{pprBean.savePerson}" id="start" update="" icon="ui-icon-plus" /> 
+				</td>
 			</tr></table>
-    	</p:panel>
+		</p:panel>
 	</center></ui:define>
 
 	<ui:define name="outer"><center>
-	    <ui:insert name="highlight">
-		    <script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shCore.js"></script>
-		    <script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushXml.js"></script>
-		    <script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushJava.js"></script>
-		    <script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushCss.js"></script>
-		    <script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushJScript.js"></script>
-		    <script type="text/javascript">
+		<ui:insert name="highlight">
+			<script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shCore.js"></script>
+			<script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushXml.js"></script>
+			<script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushJava.js"></script>
+			<script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushCss.js"></script>
+			<script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushJScript.js"></script>
+			<script type="text/javascript">
 				dp.SyntaxHighlighter.ClipboardSwf = '\#{request.contextPath}/syntaxhighlighter/clipboard.swf';
 				dp.SyntaxHighlighter.HighlightAll('code');
-		    </script>
+			</script>
 		</ui:insert>
 	</center></ui:define>
 </ui:composition>

@@ -8,7 +8,7 @@
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content"><center>
 		<p:tabMenu activeIndex="0" name="content">  
-		    <ui:include src="/templates/menu.xhtml" />
+			<ui:include src="/templates/menu.xhtml" />
 		</p:tabMenu> 
 		<br/><br/><br/><br/>
 		<div style="width:600px"> 
@@ -72,9 +72,9 @@ $(function() {
 
   //inject some buttons (for this demo only)
   $(".ganttButtonBar div").append("<button onclick='clearGantt();' class='button'>clear</button>")
-          .append("        ")
-          .append("<button onclick='openResourceEditor();' class='button'>edit resources</button>")
-          .append("<button onclick='getFile();' class='button'>export</button>");
+		  .append("		")
+		  .append("<button onclick='openResourceEditor();' class='button'>edit resources</button>")
+		  .append("<button onclick='getFile();' class='button'>export</button>");
   $(".ganttButtonBar h1").html("<img src='twGanttSmall.png'>");
   $(".ganttButtonBar div").addClass('buttons');
   //overwrite with localized ones
@@ -86,12 +86,12 @@ $(function() {
 
   //fill default Teamwork roles if any
   if (!ge.roles || ge.roles.length == 0) {
-    setRoles();
+	setRoles();
   }
 
   //fill default Resources roles if any
   if (!ge.resources || ge.resources.length == 0) {
-    setResource();
+	setResource();
   }
 
 
@@ -119,18 +119,18 @@ function saveGanttOnServer() {
 //-------------------------------------------  Create some demo data ------------------------------------------------------
 function setRoles() {
   ge.roles = [
-    {
-      id:"tmp_1",
-      name:"Project Manager"
-    },
-    {
-      id:"tmp_2",
-      name:"Worker"
-    },
-    {
-      id:"tmp_3",
-      name:"Stakeholder/Customer"
-    }
+	{
+	  id:"tmp_1",
+	  name:"Project Manager"
+	},
+	{
+	  id:"tmp_2",
+	  name:"Worker"
+	},
+	{
+	  id:"tmp_3",
+	  name:"Stakeholder/Customer"
+	}
   ];
 }
 
@@ -157,23 +157,23 @@ function clearGantt() {
 
 function loadI18n() {
   GanttMaster.messages = {
-    "CHANGE_OUT_OF_SCOPE":"NO_RIGHTS_FOR_UPDATE_PARENTS_OUT_OF_EDITOR_SCOPE",
-    "START_IS_MILESTONE":"START_IS_MILESTONE",
-    "END_IS_MILESTONE":"END_IS_MILESTONE",
-    "TASK_HAS_CONSTRAINTS":"TASK_HAS_CONSTRAINTS",
-    "GANTT_ERROR_DEPENDS_ON_OPEN_TASK":"GANTT_ERROR_DEPENDS_ON_OPEN_TASK",
-    "GANTT_ERROR_DESCENDANT_OF_CLOSED_TASK":"GANTT_ERROR_DESCENDANT_OF_CLOSED_TASK",
-    "TASK_HAS_EXTERNAL_DEPS":"TASK_HAS_EXTERNAL_DEPS",
-    "GANNT_ERROR_LOADING_DATA_TASK_REMOVED":"GANNT_ERROR_LOADING_DATA_TASK_REMOVED",
-    "ERROR_SETTING_DATES":"ERROR_SETTING_DATES",
-    "CIRCULAR_REFERENCE":"CIRCULAR_REFERENCE",
-    "CANNOT_DEPENDS_ON_ANCESTORS":"CANNOT_DEPENDS_ON_ANCESTORS",
-    "CANNOT_DEPENDS_ON_DESCENDANTS":"CANNOT_DEPENDS_ON_DESCENDANTS",
-    "INVALID_DATE_FORMAT":"INVALID_DATE_FORMAT",
-    "TASK_MOVE_INCONSISTENT_LEVEL":"TASK_MOVE_INCONSISTENT_LEVEL",
+	"CHANGE_OUT_OF_SCOPE":"NO_RIGHTS_FOR_UPDATE_PARENTS_OUT_OF_EDITOR_SCOPE",
+	"START_IS_MILESTONE":"START_IS_MILESTONE",
+	"END_IS_MILESTONE":"END_IS_MILESTONE",
+	"TASK_HAS_CONSTRAINTS":"TASK_HAS_CONSTRAINTS",
+	"GANTT_ERROR_DEPENDS_ON_OPEN_TASK":"GANTT_ERROR_DEPENDS_ON_OPEN_TASK",
+	"GANTT_ERROR_DESCENDANT_OF_CLOSED_TASK":"GANTT_ERROR_DESCENDANT_OF_CLOSED_TASK",
+	"TASK_HAS_EXTERNAL_DEPS":"TASK_HAS_EXTERNAL_DEPS",
+	"GANNT_ERROR_LOADING_DATA_TASK_REMOVED":"GANNT_ERROR_LOADING_DATA_TASK_REMOVED",
+	"ERROR_SETTING_DATES":"ERROR_SETTING_DATES",
+	"CIRCULAR_REFERENCE":"CIRCULAR_REFERENCE",
+	"CANNOT_DEPENDS_ON_ANCESTORS":"CANNOT_DEPENDS_ON_ANCESTORS",
+	"CANNOT_DEPENDS_ON_DESCENDANTS":"CANNOT_DEPENDS_ON_DESCENDANTS",
+	"INVALID_DATE_FORMAT":"INVALID_DATE_FORMAT",
+	"TASK_MOVE_INCONSISTENT_LEVEL":"TASK_MOVE_INCONSISTENT_LEVEL",
 
-    "GANT_QUARTER_SHORT":"trim.",
-    "GANT_SEMESTER_SHORT":"sem."
+	"GANT_QUARTER_SHORT":"trim.",
+	"GANT_SEMESTER_SHORT":"sem."
   };
 }
 
@@ -185,19 +185,19 @@ function openResourceEditor() {
   editor.addClass("resEdit");
 
   for (var i in ge.resources) {
-    var res = ge.resources[i];
-    var inp = $("<input type='text'>").attr("pos", i).addClass("resLine").val(res.name);
-    editor.append(inp).append("<br>");
+	var res = ge.resources[i];
+	var inp = $("<input type='text'>").attr("pos", i).addClass("resLine").val(res.name);
+	editor.append(inp).append("<br>");
   }
 
   var sv = $("<div>save</div>").css("float", "right").addClass("button").click(function() {
-    $(this).closest(".resEdit").find("input").each(function() {
-      var el = $(this);
-      var pos = el.attr("pos");
-      ge.resources[pos].name = el.val();
-    });
-    ge.editor.redraw();
-    closeBlackPopup();
+	$(this).closest(".resEdit").find("input").each(function() {
+	  var el = $(this);
+	  var pos = el.attr("pos");
+	  ge.resources[pos].name = el.val();
+	});
+	ge.editor.redraw();
+	closeBlackPopup();
   });
   editor.append(sv);
 
@@ -228,14 +228,14 @@ Storage.prototype.getObject = function(key) {
 function loadFromLocalStorage() {
   var ret;
   if (localStorage) {
-    if (localStorage.getObject("teamworkGantDemo")) {
-      ret = localStorage.getObject("teamworkGantDemo");
-    }
+	if (localStorage.getObject("teamworkGantDemo")) {
+	  ret = localStorage.getObject("teamworkGantDemo");
+	}
   } else {
-    $("#taZone").show();
+	$("#taZone").show();
   }
   if (!ret || !ret.tasks || ret.tasks.length == 0)
-    ret = JSON.parse($("#ta").val());
+	ret = JSON.parse($("#ta").val());
   ge.loadProject(ret);
   ge.checkpoint(); //empty the undo stack
 }
@@ -244,9 +244,9 @@ function loadFromLocalStorage() {
 function saveInLocalStorage() {
   var prj = ge.saveProject();
   if (localStorage) {
-    localStorage.setObject("teamworkGantDemo", prj);
+	localStorage.setObject("teamworkGantDemo", prj);
   } else {
-    $("#ta").val(JSON.stringify(prj));
+	$("#ta").val(JSON.stringify(prj));
   }
 }
 
@@ -255,48 +255,48 @@ function saveInLocalStorage() {
 </script>
 
 <div id="gantEditorTemplates" style="display:none;">
-  <div class="__template__" type="GANTBUTTONS"></div>
-  <div class="__template__" type="TASKSEDITHEAD"></div>
-  <div class="__template__" type="TASKROW"></div>
-  <div class="__template__" type="TASKEMPTYROW"></div>
-  <div class="__template__" type="TASKBAR"></div>
-  <div class="__template__" type="CHANGE_STATUS"></div>
-  <div class="__template__" type="TASK_EDITOR"></div>
-  <div class="__template__" type="ASSIGNMENT_ROW"></div>
+	<div class="__template__" type="GANTBUTTONS"></div>
+	<div class="__template__" type="TASKSEDITHEAD"></div>
+	<div class="__template__" type="TASKROW"></div>
+	<div class="__template__" type="TASKEMPTYROW"></div>
+	<div class="__template__" type="TASKBAR"></div>
+	<div class="__template__" type="CHANGE_STATUS"></div>
+	<div class="__template__" type="TASK_EDITOR"></div>
+	<div class="__template__" type="ASSIGNMENT_ROW"></div>
 </div>
 
 <script type="text/javascript">
 //<![CDATA[ 
   $.JST.loadDecorator("ASSIGNMENT_ROW", function(assigTr, taskAssig) {
 
-    var resEl = assigTr.find("[name=resourceId]");
-    for (var i in taskAssig.task.master.resources) {
-      var res = taskAssig.task.master.resources[i];
-      var opt = $("<option>");
-      opt.val(res.id).html(res.name);
-      if (taskAssig.assig.resourceId == res.id)
-        opt.attr("selected", "true");
-      resEl.append(opt);
-    }
+	var resEl = assigTr.find("[name=resourceId]");
+	for (var i in taskAssig.task.master.resources) {
+	  var res = taskAssig.task.master.resources[i];
+	  var opt = $("<option>");
+	  opt.val(res.id).html(res.name);
+	  if (taskAssig.assig.resourceId == res.id)
+		opt.attr("selected", "true");
+	  resEl.append(opt);
+	}
 
 
-    var roleEl = assigTr.find("[name=roleId]");
-    for (var i in taskAssig.task.master.roles) {
-      var role = taskAssig.task.master.roles[i];
-      var optr = $("<option>");
-      optr.val(role.id).html(role.name);
-      if (taskAssig.assig.roleId == role.id)
-        optr.attr("selected", "true");
-      roleEl.append(optr);
-    }
+	var roleEl = assigTr.find("[name=roleId]");
+	for (var i in taskAssig.task.master.roles) {
+	  var role = taskAssig.task.master.roles[i];
+	  var optr = $("<option>");
+	  optr.val(role.id).html(role.name);
+	  if (taskAssig.assig.roleId == role.id)
+		optr.attr("selected", "true");
+	  roleEl.append(optr);
+	}
 
-    if (taskAssig.task.master.canWrite) {
-      assigTr.find(".delAssig").click(function() {
-        var tr = $(this).closest("[assigId]").fadeOut(200, function() {
-          $(this).remove();
-        });
-      });
-    }
+	if (taskAssig.task.master.canWrite) {
+	  assigTr.find(".delAssig").click(function() {
+		var tr = $(this).closest("[assigId]").fadeOut(200, function() {
+		  $(this).remove();
+		});
+	  });
+	}
 
 
   });

@@ -6,11 +6,11 @@
 	xmlns:p="http://primefaces.org/ui">
 	
 <ui:composition template="../templates/layout.xhtml">
-    <link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
-    <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/standard.css" />
+	<link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
+	<link type="text/css" rel="stylesheet" href="/syntaxhighlighter/standard.css" />
 	<ui:define name="content"><center>
 		<p:tabMenu activeIndex="7" name="content">
-		    <ui:include src="/templates/menu.xhtml" />
+			<ui:include src="/templates/menu.xhtml" />
 		</p:tabMenu>
 		<br/>
 		<p:lineChart id="linear" value="#{chartBean.linearModel}" legendPosition="e"
