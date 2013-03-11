@@ -1,0 +1,41 @@
+
+/*
+
+   Create all the janjoon entities (without their attributes).
+
+*/
+
+# ==================================================
+
+tailor deactivate
+
+/* Abstract class of all janjoon entities */
+entity jpa --class ~.JJAbstractEntity --abstract --inheritanceType TABLE_PER_CLASS
+
+tailor activate --name janjoonRooStyle
+
+# ==================================================
+
+entity jpa --class JJContact --extends ~.JJAbstractEntity
+entity jpa --class JJProject --extends ~.JJAbstractEntity
+entity jpa --class JJProduct --extends ~.JJAbstractEntity
+entity jpa --class JJVersion --extends ~.JJAbstractEntity
+entity jpa --class JJPhase --extends ~.JJAbstractEntity
+entity jpa --class JJCategory --extends ~.JJAbstractEntity
+entity jpa --class JJJob --extends ~.JJAbstractEntity
+entity jpa --class JJRight --extends ~.JJAbstractEntity
+entity jpa --class JJStatus --extends ~.JJAbstractEntity
+entity jpa --class JJImportance --extends ~.JJAbstractEntity
+entity jpa --class JJCriticity --extends ~.JJAbstractEntity
+entity jpa --class JJMessage --extends ~.JJAbstractEntity
+entity jpa --class JJBuild --extends ~.JJAbstractEntity
+entity jpa --class JJTestcase --extends ~.JJAbstractEntity
+entity jpa --class JJTeststep --extends ~.JJAbstractEntity
+entity jpa --class JJChapter --extends ~.JJAbstractEntity
+entity jpa --class JJBug --extends ~.JJAbstractEntity
+entity jpa --class JJRequirement --extends ~.JJAbstractEntity
+entity jpa --class JJTask --extends ~.JJAbstractEntity
+entity jpa --class JJTestplan --extends ~.JJAbstractEntity
+
+# ==================================================
+

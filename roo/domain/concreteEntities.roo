@@ -1,0 +1,180 @@
+
+/*
+
+   Define the attributes of all janjoon concrete entities.
+
+*/
+
+# ==================================================
+
+focus --class ~.JJProject
+field set --fieldName chapters  --type ~.JJChapter --cardinality ONE_TO_MANY --mappedBy project --fetch LAZY
+field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy project --fetch LAZY
+field set --fieldName testplans --type ~.JJTestplan --cardinality ONE_TO_MANY --mappedBy project --fetch LAZY
+
+# ==================================================
+
+focus --class ~.JJProduct
+field string --fieldName extname --sizeMax 25 --notNull
+field set --fieldName jjversions  --type ~.JJVersion --cardinality ONE_TO_MANY --mappedBy product --fetch LAZY
+field set --fieldName chapters  --type ~.JJChapter --cardinality ONE_TO_MANY --mappedBy product --fetch LAZY
+
+# ==================================================
+
+focus --class ~.JJVersion
+field reference --fieldName product --type ~.JJProduct
+field reference --fieldName phase --type ~.JJPhase
+field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy jjversion --fetch LAZY
+field set --fieldName testplans --type ~.JJTestplan --cardinality ONE_TO_MANY --mappedBy jjversion --fetch LAZY
+field set --fieldName builds --type ~.JJBuild --cardinality ONE_TO_MANY --mappedBy jjversion --fetch LAZY
+
+# ==================================================
+
+focus --class ~.JJChapter
+field reference --fieldName project --type ~.JJProject
+field reference --fieldName category --type ~.JJCategory
+field reference --fieldName product --type ~.JJProduct
+field set --fieldName requirements --type ~.JJRequirement --cardinality ONE_TO_MANY --mappedBy chapter --fetch LAZY
+
+# ==================================================
+
+# focus --class ~.JJPhase
+
+# ==================================================
+
+focus --class ~.JJCategory
+field number --fieldName stage --type java.lang.Integer
+
+# ==================================================
+
+# focus --class ~.JJJob
+
+# ==================================================
+
+# focus --class ~.JJRight
+
+# ==================================================
+
+focus --class ~.JJContact
+field string --fieldName password --sizeMax 25 --notNull
+field string --fieldName email --regexp "[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+" --notNull
+field number --fieldName ldap --type java.lang.Integer
+field string --fieldName firstname --sizeMax 25 --notNull
+field string --fieldName lastname --sizeMax 25 --notNull
+field date --fieldName dateofbirth --type java.util.Date
+field string --fieldName picture --sizeMax 25
+field reference --fieldName job --type ~.JJJob
+field set --fieldName rights --type ~.JJRight
+field set --fieldName products --type ~.JJProduct
+field set --fieldName projects --type ~.JJProject
+
+# ==================================================
+
+focus --class ~.JJMessage
+field string --fieldName message --sizeMax 250 --notNull
+
+# ==================================================
+
+focus --class ~.JJStatus
+field number --fieldName statusLevel --type java.lang.Integer
+
+# ==================================================
+
+focus --class ~.JJImportance
+field number --fieldName importanceLevel --type java.lang.Integer
+
+# ==================================================
+
+focus --class ~.JJCriticity
+field number --fieldName criticityLevel --type java.lang.Integer
+
+# ==================================================
+
+focus --class ~.JJBug
+field reference --fieldName project --type ~.JJProject
+field date --fieldName startDate --type java.util.Date
+field date --fieldName endDate --type java.util.Date
+field number --fieldName workload --type java.lang.Integer
+field reference --fieldName jjversion --type ~.JJVersion
+field reference --fieldName category --type ~.JJCategory
+field reference --fieldName criticity --type ~.JJCriticity
+field reference --fieldName importance --type ~.JJImportance
+field reference --fieldName status --type ~.JJStatus
+field enum --fieldName relation --type ~.reference.JJRelationship
+field reference --fieldName bugUp --type ~.JJBug
+field reference --fieldName requirement --type ~.JJRequirement
+field set --fieldName bugs --type ~.JJBug  --cardinality ONE_TO_MANY --mappedBy bugUp --fetch LAZY
+field set --fieldName tasks --type ~.JJTask  --cardinality ONE_TO_MANY --mappedBy bug --fetch LAZY
+field set --fieldName assignedTos --type ~.JJContact --cardinality ONE_TO_MANY --fetch LAZY
+field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
+
+# ==================================================
+
+focus --class ~.JJRequirement
+field reference --fieldName project --type ~.JJProject
+field date --fieldName startDate --type java.util.Date
+field date --fieldName endDate --type java.util.Date
+field reference --fieldName chapter --type ~.JJChapter
+field reference --fieldName jjversion --type ~.JJVersion
+field reference --fieldName category --type ~.JJCategory
+field reference --fieldName criticity --type ~.JJCriticity
+field reference --fieldName importance --type ~.JJImportance
+field reference --fieldName status --type ~.JJStatus
+field enum --fieldName relation --type ~.reference.JJRelationship
+field reference --fieldName requirementUp --type ~.JJRequirement
+field set --fieldName requirements --type ~.JJRequirement --cardinality ONE_TO_MANY --mappedBy requirementUp --fetch LAZY
+field set --fieldName bugs --type ~.JJBug --cardinality ONE_TO_MANY --mappedBy requirement --fetch LAZY
+field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy requirement --fetch LAZY
+field set --fieldName assignedTos --type ~.JJContact --cardinality ONE_TO_MANY --fetch LAZY
+field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
+
+# ==================================================
+
+focus --class ~.JJTask
+field reference --fieldName project --type ~.JJProject
+field date --fieldName startDate --type java.util.Date
+field date --fieldName endDate --type java.util.Date
+field number --fieldName workload --type java.lang.Integer
+field reference --fieldName jjversion --type ~.JJVersion
+field reference --fieldName bug --type ~.JJBug
+field reference --fieldName requirement --type ~.JJRequirement
+field set --fieldName assignedTos --type ~.JJContact --cardinality ONE_TO_MANY --fetch LAZY
+field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
+
+# ==================================================
+
+focus --class ~.JJBuild
+field reference --fieldName jjversion --type ~.JJVersion
+field set --fieldName testplans --type ~.JJTestplan --cardinality ONE_TO_MANY --mappedBy build --fetch LAZY
+
+# ==================================================
+
+focus --class ~.JJTestplan
+field reference --fieldName project --type ~.JJProject
+field reference --fieldName jjversion --type ~.JJVersion
+field reference --fieldName build --type ~.JJBuild
+field set --fieldName testcases --type ~.JJTestcase --cardinality ONE_TO_MANY --mappedBy testplan --fetch LAZY
+
+# ==================================================
+
+focus --class ~.JJTestcase
+field number --fieldName place --type java.lang.Integer
+field string --fieldName resultat --sizeMax 100
+field reference --fieldName category --type ~.JJCategory
+field reference --fieldName testplan --type ~.JJTestplan
+field set --fieldName teststeps --type ~.JJTeststep --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
+field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --fetch LAZY
+field set --fieldName requirements  --type ~.JJRequirement --cardinality ONE_TO_MANY --fetch LAZY
+
+# ==================================================
+
+focus --class ~.JJTeststep
+field number --fieldName place --type java.lang.Integer
+field string --fieldName actionstep --sizeMax 100
+field string --fieldName resultat --sizeMax 100
+field boolean --fieldName passed
+field reference --fieldName testcase --type ~.JJTestcase
+field reference --fieldName requirement --type ~.JJRequirement
+
+# ==================================================
+

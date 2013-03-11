@@ -1,0 +1,36 @@
+
+/*
+
+   Create the repositories and services for all janjoon entities.
+
+*/
+
+# ==================================================
+
+layer --class JJAbstractEntity
+
+# ==================================================
+
+layer --class JJProject
+layer --class JJProduct
+layer --class JJVersion
+layer --class JJChapter
+layer --class JJPhase
+layer --class JJCategory
+layer --class JJJob
+layer --class JJRight
+layer --class JJContact
+layer --class JJMessage
+layer --class JJStatus
+layer --class JJImportance
+layer --class JJCriticity
+layer --class JJBug
+layer --class JJRequirement
+layer --class JJTask
+layer --class JJBuild
+layer --class JJTestplan
+layer --class JJTestcase
+layer --class JJTeststep
+
+# ==================================================
+
