@@ -14,9 +14,10 @@
 			<ui:include src="/templates/menu.xhtml" />
 		</p:tabMenu>
 		<br/>
+
 		<p:panel header="CPROD 12.04 /src/com.company.product/Expenses.java" style="width: 360;valign: top;">
-			<h:panelGrid columns="2" columnClasses="alignTop,alignTop">
-				<p:panel>
+			<table class="mytable">
+				<tr><td valign="top">
 					<h:form id="form">
 						<h:outputLabel value="Product:"/>
 						<p:selectOneMenu value="#{pprBean.city}" effect="fold" editable="true">
@@ -57,8 +58,8 @@
 						<p:commandButton value="Mark Done" actionListener="#{pprBean.savePerson}" id="markdone"   
 							update="" icon="ui-icon-disk" />
 					</h:form>
-				</p:panel>
-				<p:panel>
+				</td>
+				<td>
 					<h:form id="form2">
 						 <textarea name="code" class="java" cols="110" rows="24">
 
@@ -95,8 +96,8 @@ public class Expenses implements Serializable {
 }
 						</textarea>
 					</h:form>
-				</p:panel>
-		  	</h:panelGrid>
+				</td>
+			</tr></table>
 		</p:panel>
 	</center></ui:define>
 
