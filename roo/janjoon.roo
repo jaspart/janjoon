@@ -13,19 +13,19 @@ mysql-jpa-setup --userName janjoon-admin --password BeHappy2013 --databaseName j
 hypersonic-jpa-setup
 
 /* Create all enumerations */
-script roo/domain/enums.roo
+script domain/enums.roo
 
 /* Create all entities */
-script roo/domain/entityHeaders.roo
+script domain/entityHeaders.roo
 
 /* Define all abstract entities attributes */
-script roo/domain/abstractEntities.roo
+script domain/abstractEntities.roo
 
 /* Define all concrete entities attributes */
-script roo/domain/concreteEntities.roo
+script domain/concreteEntities.roo
 
 /* Define the repositories and services for all entities. */
-script roo/domain/layers.roo
+script domain/layers.roo
 
 /* Create the JSF UI */
 jsf-setup

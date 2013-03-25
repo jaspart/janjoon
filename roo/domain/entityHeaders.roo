@@ -23,6 +23,8 @@ entity jpa --class JJVersion --extends ~.JJAbstractEntity
 entity jpa --class JJPhase --extends ~.JJAbstractEntity
 entity jpa --class JJCategory --extends ~.JJAbstractEntity
 entity jpa --class JJJob --extends ~.JJAbstractEntity
+entity jpa --class JJHardware --extends ~.JJAbstractEntity
+entity jpa --class JJSoftware --extends ~.JJAbstractEntity
 entity jpa --class JJRight --extends ~.JJAbstractEntity
 entity jpa --class JJStatus --extends ~.JJAbstractEntity
 entity jpa --class JJImportance --extends ~.JJAbstractEntity
@@ -33,6 +35,7 @@ entity jpa --class JJTestcase --extends ~.JJAbstractEntity
 entity jpa --class JJTeststep --extends ~.JJAbstractEntity
 entity jpa --class JJChapter --extends ~.JJAbstractEntity
 entity jpa --class JJBug --extends ~.JJAbstractEntity
+entity jpa --class JJSprint --extends ~.JJAbstractEntity
 entity jpa --class JJRequirement --extends ~.JJAbstractEntity
 entity jpa --class JJTask --extends ~.JJAbstractEntity
 entity jpa --class JJTestplan --extends ~.JJAbstractEntity

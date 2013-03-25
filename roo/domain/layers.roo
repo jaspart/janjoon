@@ -18,6 +18,8 @@ layer --class JJChapter
 layer --class JJPhase
 layer --class JJCategory
 layer --class JJJob
+layer --class JJHardware
+layer --class JJSoftware
 layer --class JJRight
 layer --class JJContact
 layer --class JJMessage
@@ -25,6 +27,7 @@ layer --class JJStatus
 layer --class JJImportance
 layer --class JJCriticity
 layer --class JJBug
+layer --class JJSprint
 layer --class JJRequirement
 layer --class JJTask
 layer --class JJBuild
