@@ -13,10 +13,10 @@
          <action type="execute"/>
          <action type="execute" command="module create --moduleName ${projectName}-domain --topLevelPackage ${topLevelPackage}.domain --packaging jar"/>
          <action type="execute" command="email sender setup --hostServer smtp.gmail.com --port 587 --protocol SMTP --username janjoon.mailer --password BeHappy2012"/>
-         <action type="execute" command="logging setup --level DEBUG"/><!--INFO-->
+         <action type="execute" command="logging setup --level INFO"/><!--INFO-->
          <action type="focus" module="~"/>
          <action type="execute" command="module create --moduleName ${projectName}-ui --topLevelPackage ${topLevelPackage}.ui --packaging war"/>
-         <action type="execute" command="logging setup --level DEBUG"/>
+         <action type="execute" command="logging setup --level INFO"/>
          <action type="focus" module="~"/>
          <action type="execute" command="backup"/>
       </config>
