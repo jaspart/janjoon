@@ -1,9 +1,9 @@
 
-/*
-
-   Define the attributes of all janjoon concrete entities.
-
-*/
+/**
+ *
+ *   Define the attributes of all janjoon concrete entities.
+ *
+ */
 
 # ==================================================
 
@@ -51,6 +51,16 @@ field number --fieldName stage --type java.lang.Integer
 
 # ==================================================
 
+#<<<<<<< .mine
+# focus --class ~.JJHardware
+
+# ==================================================
+
+# focus --class ~.JJSoftware
+
+# ==================================================
+
+=======
 focus --class ~.JJHardware
 field reference --fieldName testcase --type ~.JJTestcase
 
@@ -61,6 +71,7 @@ field reference --fieldName testcase --type ~.JJTestcase
 
 # ==================================================
 
+#>>>>>>> .r14
 # focus --class ~.JJRight
 
 # ==================================================
