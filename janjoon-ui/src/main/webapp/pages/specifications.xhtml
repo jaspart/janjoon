@@ -4,457 +4,195 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-	
+
 <ui:composition template="../templates/layout.xhtml">
 	<link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
 	<link type="text/css" rel="stylesheet" href="/syntaxhighlighter/standard.css" />
-	<ui:define name="content"><center>
-	
-		<p:tabMenu activeIndex="1" name="content">
-			<ui:include src="/templates/menu.xhtml" />
-		</p:tabMenu>
-		<br/>
-		<h:form id="specForm">
-		
-			<!-- AJA AUTOCOMPLETE <p:autoComplete value="#{autoCompleteBean.selectedPlayer1}" id="project" completeMethod="#{autoCompleteBean.completePlayer}"  
+	<ui:define name="content">
+		<!--<center>-->
+			<br/>
+			
+			<h:form id="specForm">
+
+				<!-- AJA AUTOCOMPLETE <p:autoComplete value="#{autoCompleteBean.selectedPlayer1}" id="project" completeMethod="#{autoCompleteBean.completePlayer}"  
 				var="p" itemLabel="#{p.name}" itemValue="#{p}" converter="player" forceSelection="true"/>
 			<p:watermark for="project" value="Project (Mandatory)" />-->
-			
-			<!-- AJA AUTOCOMPLETE <p:autoComplete value="#{autoCompleteBean.selectedPlayer1}" id="product" completeMethod="#{autoCompleteBean.completePlayer}"  
+
+				<!-- AJA AUTOCOMPLETE <p:autoComplete value="#{autoCompleteBean.selectedPlayer1}" id="product" completeMethod="#{autoCompleteBean.completePlayer}"  
 				var="p" itemLabel="#{p.name}" itemValue="#{p}" converter="player" forceSelection="true"/>
 			<p:watermark for="product" value="Product (Optional)" />-->
-				
-			<p:column style="width:25%">
-				<p:button value="Business" icon="ui-icon-star" disabled="true"/>
-				<p:button value="Functional" icon="ui-icon-star" disabled="true"/>
-				<p:button value="Architecture" icon="ui-icon-star"/>
-				<p:button value="Security" icon="ui-icon-star"/>
-				<p:button value="Technical" icon="ui-icon-star" disabled="true"/>
-			</p:column>
-			
-			<table border="0">
-			<tr>
-			<td width="390">
-				<p:contextMenu for="left">
-					<p:menuitem value="Edit" update="display" icon="ui-icon-pencil" oncomplete="requirementDialog.show()"/>
-					<p:menuitem value="Delete" update="left" icon="ui-icon-close" actionListener="#{reqBusinessBean.deleteRequirement}"/>
-				</p:contextMenu>
-				<p:dataTable id="left" var="requirement" value="#{reqBusinessBean.requirementsSmall}" widgetVar="reqBusinessTable"
-					emptyMessage="No requirements found with given criteria" filteredValue="#{reqBusinessBean.filteredRequirements}"
-					rowKey="#{requirement.model}" selection="#{reqBusinessBean.selectedRequirement}" selectionMode="single"
-					listener="#{scheduleController.onDateSelect}"
-					update="eventDetails" oncomplete="eventDialog.show()">
-					<p:ajax event="rowSelect" oncomplete="requirementDialog.show()" />
-					<f:facet name="header">
-						<p:outputPanel>
-							<h:panelGrid columns="4" style="margin-bottom:10px">
-								<p:column style="width:25%">
-									
-									<!--  begin of the chapter manager  -->
-									<p:column style="width:25%">
-										<p:commandButton id="reqBusiChapterButton" icon="ui-icon-clipboard" type="button" />
-									</p:column>
-									<p:column style="width:25%">
-										<p:overlayPanel id="reqBusiChapterPanel" for="reqBusiChapterButton" hideEffect="fade" dynamic="true">
-											<p:contextMenu for="docs">
-												<p:menuitem value="View" update="documentPanel" icon="ui-icon-search" oncomplete="documentDialog.show()"/>
-												<p:menuitem value="Delete" actionListener="#{documentsController.deleteNode}" update="docs" icon="ui-icon-close"/>
-											</p:contextMenu>
-											
-											<p:tieredMenu style="width:180px">
-											<p:menuitem value="Manage Document" url="http://www.prime.com.tr" />
-											</p:tieredMenu>
-											
-											<p:treeTable value="#{documentsController.root}" var="document" id="docs"   
-														 selectionMode="single" selection="#{documentsController.selectedNode}">
-												<f:facet name="header">
-													Right-Click to See Options  
-												</f:facet>
-												<p:column style="width:150px">
-													<f:facet name="header">
-														Name  
-													</f:facet>
-													<h:outputText value="#{document.name}" />
-												</p:column>
-												<p:column style="width:100px">
-													<f:facet name="header">
-														Size  
-													</f:facet>
-													<h:outputText value="#{document.size}" />
-												</p:column>
-												<p:column style="width:100px">
-													<f:facet name="header">
-														Type  
-													</f:facet>
-													<h:outputText value="#{document.type}" />
-												</p:column>
-											</p:treeTable>
-											<p:dialog header="Document Detail" showEffect="fade" widgetVar="documentDialog" modal="true">
-												<p:outputPanel id="documentPanel">
-													<h:panelGrid  columns="2" cellpadding="5" rendered="#{not empty documentsController.selectedNode}">
-														<h:outputLabel for="name" value="Name: " />
-														<h:outputText id="name" value="#{documentsController.selectedNode.data.name}" style="font-weight:bold" />
-										  
-														<h:outputLabel for="size" value="Size: " />
-														<h:outputText id="size" value="#{documentsController.selectedNode.data.size}" style="font-weight:bold" />
-										  
-														<h:outputLabel for="type" value="Type " />
-														<h:outputText id="type" value="#{documentsController.selectedNode.data.type}" style="font-weight:bold" />
-													</h:panelGrid>
-												</p:outputPanel>
-											</p:dialog>
-										</p:overlayPanel>
-									</p:column>
-									<!--  end of the chapter manager  -->
-									
-									<p:inputText id="globalFilter" onkeyup="reqBusinessTable.filter()" style="width:150px" />
-									<p:watermark for="globalFilter" value="Search..." />
-									
-									<!--  begin of the document manager  -->
-									<p:commandButton id="dynaButton" icon="ui-icon-document" type="button"/>
-									<p:menu overlay="true" trigger="dynaButton" my="left top" at="left bottom">
-										<p:menuitem>
-											<h:commandLink>
-												<p:graphicImage value="/resources/images/pdf.png" />
-												<h:outputLabel value="export in pdf"/>
-												<p:dataExporter type="pdf" target="tbl" fileName="requirements"/>
-											</h:commandLink>
-										</p:menuitem>
-										<p:menuitem>
-											<h:commandLink>
-												<p:graphicImage value="/resources/images/csv.png" />
-												<h:outputLabel value="export in csv"/>
-												<p:dataExporter type="pdf" target="tbl" fileName="requirements"/>
-											</h:commandLink>
-										</p:menuitem>
-										<p:menuitem>
-											<h:commandLink>
-												<p:graphicImage value="/resources/images/xml.png" />
-												<h:outputLabel value="export in xml"/>
-												<p:dataExporter type="pdf" target="tbl" fileName="requirements"/>
-											</h:commandLink>
-										</p:menuitem>
-										<p:menuitem>
-											<h:commandLink>
-												<p:graphicImage value="/resources/images/excel.png" />
-												<h:outputLabel value="export in xls"/>
-												<p:dataExporter type="pdf" target="tbl" fileName="requirements"/>
-											</h:commandLink>
-										</p:menuitem>
-									</p:menu>
-									<!--  end of the chapter manager  -->
-									
-								</p:column>
-							</h:panelGrid>
-						</p:outputPanel>
-					</f:facet>
-					<p:column headerText="Chapter">
-						#{requirement.model}
-					</p:column>
-					<p:column headerText="Order">
-						#{requirement.year}
-					</p:column>
-					<p:column headerText="Requirement" >
-						#{requirement.manufacturer}
-					</p:column>
-				</p:dataTable>
-			</td>
-			
-			<td width="390">
-				<p:contextMenu for="middle">
-					<p:menuitem value="Edit" update="display" icon="ui-icon-pencil" oncomplete="requirementDialog.show()"/>
-					<p:menuitem value="Delete" update="middle" icon="ui-icon-close" actionListener="#{reqFunctionalBean.deleteRequirement}"/>
-				</p:contextMenu>
-				<p:dataTable id="middle" var="requirement" value="#{reqFunctionalBean.requirementsSmall}" widgetVar="reqFunctionalTable"
-					emptyMessage="No requirements found with given criteria" filteredValue="#{reqFunctionalBean.filteredRequirements}"
-					rowKey="#{requirement.model}" selection="#{reqFunctionalBean.selectedRequirement}" selectionMode="single"
-					listener="#{scheduleController.onDateSelect}"
-					update="eventDetails" oncomplete="eventDialog.show()">
-					<p:ajax event="rowSelect" oncomplete="requirementDialog.show()" />
-					<f:facet name="header">
-						<p:outputPanel>
-							<h:panelGrid columns="4" style="margin-bottom:10px">
-								<p:column style="width:25%">
-									
-									<!--  begin of the chapter manager  -->
-									<p:column style="width:25%">
-										<p:commandButton id="reqBusiChapterButton" icon="ui-icon-clipboard" type="button" />
-									</p:column>
-									<p:column style="width:25%">
-										<p:overlayPanel id="reqBusiChapterPanel" for="reqBusiChapterButton" hideEffect="fade" dynamic="true">
-											<p:contextMenu for="docs">
-												<p:menuitem value="View" update="documentPanel" icon="ui-icon-search" oncomplete="documentDialog.show()"/>
-												<p:menuitem value="Delete" actionListener="#{documentsController.deleteNode}" update="docs" icon="ui-icon-close"/>
-											</p:contextMenu>
-											
-											<p:tieredMenu style="width:180px">
-											<p:menuitem value="Manage Document" url="http://www.prime.com.tr" />
-											</p:tieredMenu>
-											
-											<p:treeTable value="#{documentsController.root}" var="document" id="docs"   
-														 selectionMode="single" selection="#{documentsController.selectedNode}">
-												<f:facet name="header">
-													Right-Click to See Options  
-												</f:facet>
-												<p:column style="width:150px">
-													<f:facet name="header">
-														Name  
-													</f:facet>
-													<h:outputText value="#{document.name}" />
-												</p:column>
-												<p:column style="width:100px">
-													<f:facet name="header">
-														Size  
-													</f:facet>
-													<h:outputText value="#{document.size}" />
-												</p:column>
-												<p:column style="width:100px">
-													<f:facet name="header">
-														Type  
-													</f:facet>
-													<h:outputText value="#{document.type}" />
-												</p:column>
-											</p:treeTable>
-											<p:dialog header="Document Detail" showEffect="fade" widgetVar="documentDialog" modal="true">
-												<p:outputPanel id="documentPanel">
-													<h:panelGrid  columns="2" cellpadding="5" rendered="#{not empty documentsController.selectedNode}">
-														<h:outputLabel for="name" value="Name: " />
-														<h:outputText id="name" value="#{documentsController.selectedNode.data.name}" style="font-weight:bold" />
-										  
-														<h:outputLabel for="size" value="Size: " />
-														<h:outputText id="size" value="#{documentsController.selectedNode.data.size}" style="font-weight:bold" />
-										  
-														<h:outputLabel for="type" value="Type " />
-														<h:outputText id="type" value="#{documentsController.selectedNode.data.type}" style="font-weight:bold" />
-													</h:panelGrid>
-												</p:outputPanel>
-											</p:dialog>
-										</p:overlayPanel>
-									</p:column>
-									<!--  end of the chapter manager  -->
-									
-									<p:inputText id="globalFilter" onkeyup="reqBusinessTable.filter()" style="width:150px" />
-									<p:watermark for="globalFilter" value="Search..." />
-									
-									<!--  begin of the document manager  -->
-									<p:commandButton id="dynaButton" icon="ui-icon-document" type="button"/>
-									<p:menu overlay="true" trigger="dynaButton" my="left top" at="left bottom">
-										<p:menuitem>
-											<h:commandLink>
-												<p:graphicImage value="/images/pdf.png" />
-												<h:outputLabel value="export in pdf"/>
-												<p:dataExporter type="pdf" target="tbl" fileName="requirements"/>
-											</h:commandLink>
-										</p:menuitem>
-										<p:menuitem>
-											<h:commandLink>
-												<p:graphicImage value="/images/csv.png" />
-												<h:outputLabel value="export in csv"/>
-												<p:dataExporter type="pdf" target="tbl" fileName="requirements"/>
-											</h:commandLink>
-										</p:menuitem>
-										<p:menuitem>
-											<h:commandLink>
-												<p:graphicImage value="/images/xml.png" />
-												<h:outputLabel value="export in xml"/>
-												<p:dataExporter type="pdf" target="tbl" fileName="requirements"/>
-											</h:commandLink>
-										</p:menuitem>
-										<p:menuitem>
-											<h:commandLink>
-												<p:graphicImage value="/images/excel.png" />
-												<h:outputLabel value="export in xls"/>
-												<p:dataExporter type="pdf" target="tbl" fileName="requirements"/>
-											</h:commandLink>
-										</p:menuitem>
-									</p:menu>
-									<!--  end of the chapter manager  -->
-								</p:column>
-							</h:panelGrid>
-						</p:outputPanel>
-					</f:facet>
-					<p:column headerText="Chapter">
-						#{requirement.model}
-					</p:column>
-					<p:column headerText="Order">
-						#{requirement.year}
-					</p:column>
-					<p:column headerText="Requirement" >
-						#{requirement.manufacturer}
-					</p:column>
-				</p:dataTable>
-			</td>
-			
-			<td width="390">
-				<p:contextMenu for="right">
-					<p:menuitem value="Edit" update="display" icon="ui-icon-pencil" oncomplete="requirementDialog.show()"/>
-					<p:menuitem value="Delete" update="right" icon="ui-icon-close" actionListener="#{reqTechnicalBean.deleteRequirement}"/>
-				</p:contextMenu>
-				<p:dataTable id="right" var="requirement" value="#{reqTechnicalBean.requirementsSmall}" widgetVar="reqTechnicalTable"
-					emptyMessage="No requirements found with given criteria" filteredValue="#{reqTechnicalBean.filteredRequirements}"
-					rowKey="#{requirement.model}" selection="#{reqTechnicalBean.selectedRequirement}" selectionMode="single"
-					listener="#{scheduleController.onDateSelect}"
-					update="eventDetails" oncomplete="eventDialog.show()">
-					<p:ajax event="rowSelect" oncomplete="requirementDialog.show()" />
-					<f:facet name="header">
-						<p:outputPanel>
-							<h:panelGrid columns="4" style="margin-bottom:10px">
-								<p:column style="width:25%">
-									
-									<!--  begin of the chapter manager  -->
-									<p:column style="width:25%">
-										<p:commandButton id="reqBusiChapterButton" icon="ui-icon-clipboard" type="button" />
-									</p:column>
-									<p:column style="width:25%">
-										<p:overlayPanel id="reqBusiChapterPanel" for="reqBusiChapterButton" hideEffect="fade" dynamic="true">
-											<p:contextMenu for="docs">
-												<p:menuitem value="View" update="documentPanel" icon="ui-icon-search" oncomplete="documentDialog.show()"/>
-												<p:menuitem value="Delete" actionListener="#{documentsController.deleteNode}" update="docs" icon="ui-icon-close"/>
-											</p:contextMenu>
-											
-											<p:tieredMenu style="width:180px">
-											<p:menuitem value="Manage Document" url="http://www.prime.com.tr" />
-											</p:tieredMenu>
-											
-											<p:treeTable value="#{documentsController.root}" var="document" id="docs"   
-														 selectionMode="single" selection="#{documentsController.selectedNode}">
-												<f:facet name="header">
-													Right-Click to See Options  
-												</f:facet>
-												<p:column style="width:150px">
-													<f:facet name="header">
-														Name  
-													</f:facet>
-													<h:outputText value="#{document.name}" />
-												</p:column>
-												<p:column style="width:100px">
-													<f:facet name="header">
-														Size  
-													</f:facet>
-													<h:outputText value="#{document.size}" />
-												</p:column>
-												<p:column style="width:100px">
-													<f:facet name="header">
-														Type  
-													</f:facet>
-													<h:outputText value="#{document.type}" />
-												</p:column>
-											</p:treeTable>
-											<p:dialog header="Document Detail" showEffect="fade" widgetVar="documentDialog" modal="true">
-												<p:outputPanel id="documentPanel">
-													<h:panelGrid  columns="2" cellpadding="5" rendered="#{not empty documentsController.selectedNode}">
-														<h:outputLabel for="name" value="Name: " />
-														<h:outputText id="name" value="#{documentsController.selectedNode.data.name}" style="font-weight:bold" />
-										  
-														<h:outputLabel for="size" value="Size: " />
-														<h:outputText id="size" value="#{documentsController.selectedNode.data.size}" style="font-weight:bold" />
-										  
-														<h:outputLabel for="type" value="Type " />
-														<h:outputText id="type" value="#{documentsController.selectedNode.data.type}" style="font-weight:bold" />
-													</h:panelGrid>
-												</p:outputPanel>
-											</p:dialog>
-										</p:overlayPanel>
-									</p:column>
-									<!--  end of the chapter manager  -->
-									
-									<p:inputText id="globalFilter" onkeyup="reqBusinessTable.filter()" style="width:150px" />
-									<p:watermark for="globalFilter" value="Search..." />
-									
-									<!--  begin of the document manager  -->
-									<p:commandButton id="dynaButton" icon="ui-icon-document" type="button"/>
-									<p:menu overlay="true" trigger="dynaButton" my="left top" at="left bottom">
-										<p:menuitem>
-											<h:commandLink>
-												<p:graphicImage value="/images/pdf.png" />
-												<h:outputLabel value="export in pdf"/>
-												<p:dataExporter type="pdf" target="tbl" fileName="requirements"/>
-											</h:commandLink>
-										</p:menuitem>
-										<p:menuitem>
-											<h:commandLink>
-												<p:graphicImage value="/images/csv.png" />
-												<h:outputLabel value="export in csv"/>
-												<p:dataExporter type="pdf" target="tbl" fileName="requirements"/>
-											</h:commandLink>
-										</p:menuitem>
-										<p:menuitem>
-											<h:commandLink>
-												<p:graphicImage value="/images/xml.png" />
-												<h:outputLabel value="export in xml"/>
-												<p:dataExporter type="pdf" target="tbl" fileName="requirements"/>
-											</h:commandLink>
-										</p:menuitem>
-										<p:menuitem>
-											<h:commandLink>
-												<p:graphicImage value="/images/excel.png" />
-												<h:outputLabel value="export in xls"/>
-												<p:dataExporter type="pdf" target="tbl" fileName="requirements"/>
-											</h:commandLink>
-										</p:menuitem>
-									</p:menu>
-									<!--  end of the chapter manager  -->
 
-								</p:column>
-							</h:panelGrid>
-						</p:outputPanel>
-					</f:facet>
-					<p:column headerText="Chapter">
-						#{requirement.model}
-					</p:column>
-					<p:column headerText="Order">
-						#{requirement.year}
-					</p:column>
-					<p:column headerText="Requirement" >
-						#{requirement.manufacturer}
-					</p:column>
-				</p:dataTable>
-			</td>
+				<p:column style="width:25%">
+					<p:button value="Business" icon="ui-icon-star" disabled="true" />
+					<p:button value="Functional" icon="ui-icon-star" disabled="true" />
+					<p:button value="Architecture" icon="ui-icon-star" />
+					<p:button value="Security" icon="ui-icon-star" />
+					<p:button value="Technical" icon="ui-icon-star" disabled="true" />
+				</p:column>
 
-			</tr>
-			</table>
-		  
-			<p:dialog header="Requirement Detail" widgetVar="requirementDialog" resizable="false"  
-					  width="200" showEffect="clip" hideEffect="fold" id="dialog">
-				<h:panelGrid id="display" columns="2" cellpadding="4">
-					<f:facet name="header">
-						<p:graphicImage value="/images/requirements/#{requirementBean.selectedRequirement.manufacturer}.jpg"/>
-					</f:facet>
-					<h:outputText value="Model:" />
-					<h:outputText value="#{requirementBean.selectedRequirement.model}" style="font-weight:bold"/>
-					<h:outputText value="Year:" />
-					<h:outputText value="#{requirementBean.selectedRequirement.year}" style="font-weight:bold"/>
-					<h:outputText value="Manufacturer:" />
-					<h:outputText value="#{requirementBean.selectedRequirement.manufacturer}" style="font-weight:bold"/>
-					<h:outputText value="Color:" />
-					<h:outputText value="#{requirementBean.selectedRequirement.color}" style="font-weight:bold"/>
-				</h:panelGrid>
-			</p:dialog>
-			
-			<p:dialog id="dlgRequirement" header="Event Details" widgetVar="requirementDialog" showEffect="fade" hideEffect="fade" modal="true">
-				<h:panelGrid columns="2" cellpadding="5">
-					<h:outputLabel for="title" value="Title:" style="font-weight:bold"/>
-					<p:inputText id="dlgtitle" value="ReqTitle" required="true" style="width: 500px; font-weight: bold;"/>
+				<table>
+					<tr>
+					
+					<td width="390">
+						<p:contextMenu for="left">
+							<p:menuitem value="Edit" update="display" icon="ui-icon-pencil" oncomplete="requirementDialog.show()" />
+							<p:menuitem value="Delete" update="left" icon="ui-icon-close" actionListener="#{reqBusinessBean.deleteRequirement}" />
+						</p:contextMenu> 
+					
+						<p:dataTable id="left" var="requirement"
+							value="#{reqBusinessBean.requirementsSmall}"
+							widgetVar="reqBusinessTable"
+							emptyMessage="No requirements found with given criteria"
+							filteredValue="#{reqBusinessBean.filteredRequirements}"
+							rowKey="#{requirement.model}"
+							selection="#{reqBusinessBean.selectedRequirement}"
+							selectionMode="single"
+							listener="#{scheduleController.onDateSelect}"
+							update="eventDetails" oncomplete="eventDialog.show()">
+							<p:ajax event="rowSelect" oncomplete="requirementDialog.show()" />
+							<f:facet name="header">
+								<p:panelGrid style="margin-top:10px">  
+    								<f:facet name="header">  
+        								<p:row>  
+           									<p:column colspan="2">
+           										<p:commandButton id="reqBusiChapterButton" icon="ui-icon-clipboard" type="button" />
+           									</p:column>  
+            								<p:column colspan="5">
+            									<p:inputText id="globalFilter" onkeyup="reqBusinessTable.filter()" style="width:150px" />
+												<p:watermark for="globalFilter" value="Search..." />
+											</p:column>  
+            								<p:column colspan="2">
+            									<p:commandButton id="createButton" icon="ui-icon-plus" title="Create Requirement" oncomplete="newRequirement.show()" />
+            								</p:column>  
+            								<p:column>
+            									<p:commandButton id="dynaButton" icon="ui-icon-document" type="button" />
+												<p:menu overlay="true" trigger="dynaButton" my="left top" at="left bottom">
+													<p:menuitem>
+														<h:commandLink>
+															<p:graphicImage value="/resources/images/pdf.png" />
+															<h:outputLabel value="export in pdf" />
+															<p:dataExporter type="pdf" target="tbl" fileName="requirements" />
+														</h:commandLink>
+													</p:menuitem>
+													<p:menuitem>
+														<h:commandLink>
+															<p:graphicImage value="/resources/images/csv.png" />
+															<h:outputLabel value="export in csv" />
+															<p:dataExporter type="pdf" target="tbl" fileName="requirements" />
+														</h:commandLink>
+													</p:menuitem>
+													<p:menuitem>
+														<h:commandLink>
+															<p:graphicImage value="/resources/images/xml.png" />
+															<h:outputLabel value="export in xml" />
+															<p:dataExporter type="pdf" target="tbl" fileName="requirements" />
+														</h:commandLink>
+													</p:menuitem>
+													<p:menuitem>
+														<h:commandLink>
+															<p:graphicImage value="/resources/images/excel.png" />
+															<h:outputLabel value="export in xls" />
+															<p:dataExporter type="pdf" target="tbl" fileName="requirements" />
+														</h:commandLink>
+													</p:menuitem>
+												</p:menu>
+										</p:column>  
+        								</p:row>  
+    								</f:facet>  
+  								</p:panelGrid>
+							</f:facet>
+							
+						    <p:column headerText="Chapter">#{jJRequirementBean.name}</p:column>
+					    	<p:column headerText="Order">#{requirement.year}</p:column>
+					    	<p:column headerText="Requirement">#{requirement.manufacturer}</p:column>
+					    	<f:facet name="footer">In total there are X Spec Req.</f:facet>
+						</p:dataTable>
+					</td>
+
+						</tr>
+				</table>
 				
-					<h:outputLabel id="dlgproductLabel" for="product" value="Product:" style="font-weight:bold"/>
-					<!-- AJA AUTOCOMPLETE <p:autoComplete id="dlgproduct" dropdown="true" value="#{projectAutoCompleteBean.selectedProject}"   
+				<p:dialog header="New Requirement" widgetVar="newRequirement" maximizable="true" minimizable="true" showEffect="clip" hideEffect="fold">
+					    <h:panelGrid columns="2" cellpadding="5">  
+            				<h:outputLabel for="#{jJRequirementBean.JJRequirement_.name}" value="Name:" />  
+            				<p:inputText value="#{jJRequirementBean.JJRequirement_.name}" minlength="1" maxlength="25" label="Name" />  
+              
+           					<h:outputLabel for="#{jJRequirementBean.JJRequirement_.description}" value="Description:" />  
+            				<p:inputText value="#{jJRequirementBean.JJRequirement_.description}" minlength="1" maxlength="250" label="Description" />  
+                  
+                  			<h:outputLabel for="#{jJRequirementBean.JJRequirement_.creationDate}" value="Creation Date:" /> 
+   							<p:calendar value="#{jJRequirementBean.JJRequirement_.creationDate}" id="popupButtonCal" showOn="button" /> 
+            				<!-- <h:outputLabel for="#{jJRequirementBean.JJRequirement_.creationDate}" value="Creation Date:" />  
+            				<p:inputText id="#{jJRequirementBean.JJRequirement_.creationDate}" label="telephone" />  -->
+            				<f:facet name="footer">  
+        						<p:row>  
+            						<p:column>  
+                			  			<p:commandButton value="Reset" type="reset"/> 
+            						</p:column>  
+            						<p:column>  
+           								<h:commandButton value="#{messages.label_save}" type="submit" action="#{jJRequirementBean.persist}"/> 
+            						</p:column>   
+        						</p:row>  
+    						</f:facet> 
+        				</h:panelGrid>  
+				</p:dialog>
+		
+
+				<p:dialog header="Requirement Detail" widgetVar="requirementDialog"
+					resizable="false" width="200" showEffect="clip" hideEffect="fold"
+					id="dialog">
+					<h:panelGrid id="display" columns="2" cellpadding="4">
+						<f:facet name="header">
+							<p:graphicImage
+								value="/images/requirements/#{requirementBean.selectedRequirement.manufacturer}.jpg" />
+						</f:facet>
+						<h:outputText value="Model:" />
+						<h:outputText value="#{requirementBean.selectedRequirement.model}"
+							style="font-weight:bold" />
+						<h:outputText value="Year:" />
+						<h:outputText value="#{requirementBean.selectedRequirement.year}"
+							style="font-weight:bold" />
+						<h:outputText value="Manufacturer:" />
+						<h:outputText
+							value="#{requirementBean.selectedRequirement.manufacturer}"
+							style="font-weight:bold" />
+						<h:outputText value="Color:" />
+						<h:outputText value="#{requirementBean.selectedRequirement.color}"
+							style="font-weight:bold" />
+					</h:panelGrid>
+				</p:dialog>
+
+				<p:dialog id="dlgRequirement" header="Event Details"
+					widgetVar="requirementDialog" showEffect="fade" hideEffect="fade"
+					modal="true">
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:outputLabel for="title" value="Title:" style="font-weight:bold" />
+						<p:inputText id="dlgtitle" value="ReqTitle" required="true"
+							style="width: 500px; font-weight: bold;" />
+
+						<h:outputLabel id="dlgproductLabel" for="product" value="Product:"
+							style="font-weight:bold" />
+						<!-- AJA AUTOCOMPLETE <p:autoComplete id="dlgproduct" dropdown="true" value="#{projectAutoCompleteBean.selectedProject}"   
 						label="truc" itemValue="machine" completeMethod="#{projectAutoCompleteBean.complete}"
 						style="width: 20px; font-weight: bold;"/>-->
-					
-					<h:outputLabel for="chapter" value="Chapter:" style="font-weight:bold"/>
-					<!-- AJA AUTOCOMPLETE <p:autoComplete id="dlgChapter" dropdown="true" value="#{ressourceAutoCompleteBean.selectedPlayers}" 
+
+						<h:outputLabel for="chapter" value="Chapter:"
+							style="font-weight:bold" />
+						<!-- AJA AUTOCOMPLETE <p:autoComplete id="dlgChapter" dropdown="true" value="#{ressourceAutoCompleteBean.selectedPlayers}" 
 						completeMethod="#{ressourceAutoCompleteBean.completePlayer}"  
 						var="p" itemLabel="#{p.name}" itemValue="#{p}" converter="player" multiple="true"
 						style="width: 20px; font-weight: bold;"/>-->
-				</h:panelGrid>
-				<p:editor id="dlgeditor" value="#{editorBean.value}" width="600"/>	<br/>
-				<p:commandButton type="reset" value="Reset" />
-				<p:commandButton value="Save" 
-					actionListener="reqTechnical.selectedRequirement.displayRequirement" 
-					oncomplete="requirements.update();requirementDialog.hide();"/>
-			</p:dialog>				
+					</h:panelGrid>
+					<p:editor id="dlgeditor" value="#{editorBean.value}" width="600" />
+					<br />
+					<p:commandButton type="reset" value="Reset" />
+					<p:commandButton value="Save"
+						actionListener="reqTechnical.selectedRequirement.displayRequirement"
+						oncomplete="requirements.update();requirementDialog.hide();" />
+				</p:dialog>
 
-		</h:form>
-	</center></ui:define>
+			</h:form>
+	
+	</ui:define>
 </ui:composition>
 </html>
