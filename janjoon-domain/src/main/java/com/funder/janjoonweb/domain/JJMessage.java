@@ -1,5 +1,6 @@
 package com.funder.janjoonweb.domain;
 
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -14,4 +15,13 @@ public class JJMessage extends JJAbstractEntity {
     @NotNull
     @Size(max = 250)
     private String message;
+
+    @ManyToOne
+    private JJCriticity criticity;
+
+    @ManyToOne
+    private JJStatus status;
+
+    @ManyToOne
+    private JJImportance importance;
 }

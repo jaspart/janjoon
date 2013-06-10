@@ -38,28 +38,28 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
     private List<JJRequirement> JJRequirementDataOnDemand.data;
     
     @Autowired
-    JJCategoryDataOnDemand JJRequirementDataOnDemand.jJCategoryDataOnDemand;
+    private JJCategoryDataOnDemand JJRequirementDataOnDemand.jJCategoryDataOnDemand;
     
     @Autowired
-    JJChapterDataOnDemand JJRequirementDataOnDemand.jJChapterDataOnDemand;
+    private JJChapterDataOnDemand JJRequirementDataOnDemand.jJChapterDataOnDemand;
     
     @Autowired
-    JJContactDataOnDemand JJRequirementDataOnDemand.jJContactDataOnDemand;
+    private JJContactDataOnDemand JJRequirementDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    JJCriticityDataOnDemand JJRequirementDataOnDemand.jJCriticityDataOnDemand;
+    private JJCriticityDataOnDemand JJRequirementDataOnDemand.jJCriticityDataOnDemand;
     
     @Autowired
-    JJImportanceDataOnDemand JJRequirementDataOnDemand.jJImportanceDataOnDemand;
+    private JJImportanceDataOnDemand JJRequirementDataOnDemand.jJImportanceDataOnDemand;
     
     @Autowired
-    JJVersionDataOnDemand JJRequirementDataOnDemand.jJVersionDataOnDemand;
+    private JJVersionDataOnDemand JJRequirementDataOnDemand.jJVersionDataOnDemand;
     
     @Autowired
-    JJProjectDataOnDemand JJRequirementDataOnDemand.jJProjectDataOnDemand;
+    private JJProjectDataOnDemand JJRequirementDataOnDemand.jJProjectDataOnDemand;
     
     @Autowired
-    JJStatusDataOnDemand JJRequirementDataOnDemand.jJStatusDataOnDemand;
+    private JJStatusDataOnDemand JJRequirementDataOnDemand.jJStatusDataOnDemand;
     
     @Autowired
     JJRequirementService JJRequirementDataOnDemand.jJRequirementService;
@@ -73,7 +73,10 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
         setDescription(obj, index);
         setEnabled(obj, index);
         setEndDate(obj, index);
+        setImpact(obj, index);
         setName(obj, index);
+        setNote(obj, index);
+        setNumero(obj, index);
         setRelation(obj, index);
         setRequirementUp(obj, index);
         setStartDate(obj, index);
@@ -104,12 +107,33 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
         obj.setEndDate(endDate);
     }
     
+    public void JJRequirementDataOnDemand.setImpact(JJRequirement obj, int index) {
+        String impact = "impact_" + index;
+        if (impact.length() > 100) {
+            impact = impact.substring(0, 100);
+        }
+        obj.setImpact(impact);
+    }
+    
     public void JJRequirementDataOnDemand.setName(JJRequirement obj, int index) {
         String name = "name_" + index;
         if (name.length() > 25) {
             name = name.substring(0, 25);
         }
         obj.setName(name);
+    }
+    
+    public void JJRequirementDataOnDemand.setNote(JJRequirement obj, int index) {
+        String note = "note_" + index;
+        if (note.length() > 250) {
+            note = note.substring(0, 250);
+        }
+        obj.setNote(note);
+    }
+    
+    public void JJRequirementDataOnDemand.setNumero(JJRequirement obj, int index) {
+        Integer numero = new Integer(index);
+        obj.setNumero(numero);
     }
     
     public void JJRequirementDataOnDemand.setRelation(JJRequirement obj, int index) {

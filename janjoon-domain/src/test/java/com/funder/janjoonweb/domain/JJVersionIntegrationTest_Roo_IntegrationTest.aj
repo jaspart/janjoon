@@ -25,7 +25,7 @@ privileged aspect JJVersionIntegrationTest_Roo_IntegrationTest {
     declare @type: JJVersionIntegrationTest: @Transactional;
     
     @Autowired
-    JJVersionDataOnDemand JJVersionIntegrationTest.dod;
+    private JJVersionDataOnDemand JJVersionIntegrationTest.dod;
     
     @Autowired
     JJVersionService JJVersionIntegrationTest.jJVersionService;

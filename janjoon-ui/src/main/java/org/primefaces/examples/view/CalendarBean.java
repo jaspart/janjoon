@@ -2,7 +2,7 @@ package org.primefaces.examples.view;
   
 import java.util.Date;  
   
-import org.primefaces.event.DateSelectEvent;  
+import org.primefaces.event.SelectEvent;  
   
 @SuppressWarnings("unused")
 public class CalendarBean {  

@@ -1,15 +1,11 @@
 
-/*
+#/*   Create the repositories and services for all janjoon entities. */
 
-   Create the repositories and services for all janjoon entities.
-
-*/
-
-# ==================================================
+#######################
 
 layer --class JJAbstractEntity
 
-# ==================================================
+#######################
 
 layer --class JJProject
 layer --class JJProduct
@@ -35,5 +31,5 @@ layer --class JJTestplan
 layer --class JJTestcase
 layer --class JJTeststep
 
-# ==================================================
+#######################
 

@@ -33,16 +33,16 @@ privileged aspect JJChapterDataOnDemand_Roo_DataOnDemand {
     private List<JJChapter> JJChapterDataOnDemand.data;
     
     @Autowired
-    JJCategoryDataOnDemand JJChapterDataOnDemand.jJCategoryDataOnDemand;
+    private JJCategoryDataOnDemand JJChapterDataOnDemand.jJCategoryDataOnDemand;
     
     @Autowired
-    JJContactDataOnDemand JJChapterDataOnDemand.jJContactDataOnDemand;
+    private JJContactDataOnDemand JJChapterDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    JJProductDataOnDemand JJChapterDataOnDemand.jJProductDataOnDemand;
+    private JJProductDataOnDemand JJChapterDataOnDemand.jJProductDataOnDemand;
     
     @Autowired
-    JJProjectDataOnDemand JJChapterDataOnDemand.jJProjectDataOnDemand;
+    private JJProjectDataOnDemand JJChapterDataOnDemand.jJProjectDataOnDemand;
     
     @Autowired
     JJChapterService JJChapterDataOnDemand.jJChapterService;

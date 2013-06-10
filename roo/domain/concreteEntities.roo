@@ -1,25 +1,21 @@
 
-/**
- *
- *   Define the attributes of all janjoon concrete entities.
- *
- */
+#/*   Define the attributes of all janjoon concrete entities. */
 
-# ==================================================
+#######################
 
 focus --class ~.JJProject
 field set --fieldName chapters  --type ~.JJChapter --cardinality ONE_TO_MANY --mappedBy project --fetch LAZY
 field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy project --fetch LAZY
 field set --fieldName testplans --type ~.JJTestplan --cardinality ONE_TO_MANY --mappedBy project --fetch LAZY
 
-# ==================================================
+#######################
 
 focus --class ~.JJProduct
 field string --fieldName extname --sizeMax 25 --notNull
 field set --fieldName jjversions  --type ~.JJVersion --cardinality ONE_TO_MANY --mappedBy product --fetch LAZY
 field set --fieldName chapters  --type ~.JJChapter --cardinality ONE_TO_MANY --mappedBy product --fetch LAZY
 
-# ==================================================
+#######################
 
 focus --class ~.JJVersion
 field reference --fieldName product --type ~.JJProduct
@@ -28,7 +24,7 @@ field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy
 field set --fieldName testplans --type ~.JJTestplan --cardinality ONE_TO_MANY --mappedBy jjversion --fetch LAZY
 field set --fieldName builds --type ~.JJBuild --cardinality ONE_TO_MANY --mappedBy jjversion --fetch LAZY
 
-# ==================================================
+#######################
 
 focus --class ~.JJChapter
 field reference --fieldName project --type ~.JJProject
@@ -36,45 +32,43 @@ field reference --fieldName category --type ~.JJCategory
 field reference --fieldName product --type ~.JJProduct
 field set --fieldName requirements --type ~.JJRequirement --cardinality ONE_TO_MANY --mappedBy chapter --fetch LAZY
 
-# ==================================================
+#######################
 
 # focus --class ~.JJPhase
 
-# ==================================================
+#######################
 
 focus --class ~.JJCategory
 field number --fieldName stage --type java.lang.Integer
 
-# ==================================================
+#######################
 
 # focus --class ~.JJJob
 
-# ==================================================
+#######################
 
 #<<<<<<< .mine
 # focus --class ~.JJHardware
 
-# ==================================================
+#######################
 
 # focus --class ~.JJSoftware
 
-# ==================================================
+#######################
 
-=======
 focus --class ~.JJHardware
 field reference --fieldName testcase --type ~.JJTestcase
 
-# ==================================================
+#######################
 
 focus --class ~.JJSoftware
 field reference --fieldName testcase --type ~.JJTestcase
 
-# ==================================================
+#######################
 
-#>>>>>>> .r14
 # focus --class ~.JJRight
 
-# ==================================================
+#######################
 
 focus --class ~.JJContact
 field string --fieldName password --sizeMax 25 --notNull
@@ -89,7 +83,7 @@ field set --fieldName rights --type ~.JJRight
 field set --fieldName products --type ~.JJProduct
 field set --fieldName projects --type ~.JJProject
 
-# ==================================================
+#######################
 
 focus --class ~.JJMessage
 field string --fieldName message --sizeMax 250 --notNull
@@ -97,22 +91,22 @@ field reference --fieldName criticity --type ~.JJCriticity
 field reference --fieldName status --type ~.JJStatus
 field reference --fieldName importance --type ~.JJImportance
 
-# ==================================================
+#######################
 
 focus --class ~.JJStatus
 field number --fieldName statusLevel --type java.lang.Integer
 
-# ==================================================
+#######################
 
 focus --class ~.JJImportance
 field number --fieldName importanceLevel --type java.lang.Integer
 
-# ==================================================
+#######################
 
 focus --class ~.JJCriticity
 field number --fieldName criticityLevel --type java.lang.Integer
 
-# ==================================================
+#######################
 
 focus --class ~.JJBug
 field reference --fieldName project --type ~.JJProject
@@ -132,7 +126,7 @@ field set --fieldName tasks --type ~.JJTask  --cardinality ONE_TO_MANY --mappedB
 field set --fieldName assignedTos --type ~.JJContact --cardinality ONE_TO_MANY --fetch LAZY
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
 
-# ==================================================
+#######################
 
 focus --class ~.JJRequirement
 field number --fieldName numero --type java.lang.Integer
@@ -155,7 +149,7 @@ field set --fieldName assignedTos --type ~.JJContact --cardinality ONE_TO_MANY -
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
 field string --fieldName note --sizeMax 250
 
-# ==================================================
+#######################
 
 focus --class ~.JJSprint
 field number --fieldName numero --type java.lang.Integer
@@ -164,7 +158,7 @@ field set --fieldName builds --type ~.JJBuild --cardinality ONE_TO_MANY --fetch 
 field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --fetch LAZY
 field set --fieldName obstacles --type ~.JJTask --cardinality ONE_TO_MANY --fetch LAZY
 
-# ==================================================
+#######################
 
 focus --class ~.JJTask
 field reference --fieldName project --type ~.JJProject
@@ -177,13 +171,13 @@ field reference --fieldName requirement --type ~.JJRequirement
 field set --fieldName assignedTos --type ~.JJContact --cardinality ONE_TO_MANY --fetch LAZY
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
 
-# ==================================================
+#######################
 
 focus --class ~.JJBuild
 field reference --fieldName jjversion --type ~.JJVersion
 field set --fieldName testplans --type ~.JJTestplan --cardinality ONE_TO_MANY --mappedBy build --fetch LAZY
 
-# ==================================================
+#######################
 
 focus --class ~.JJTestplan
 field reference --fieldName project --type ~.JJProject
@@ -191,7 +185,7 @@ field reference --fieldName jjversion --type ~.JJVersion
 field reference --fieldName build --type ~.JJBuild
 field set --fieldName testcases --type ~.JJTestcase --cardinality ONE_TO_MANY --mappedBy testplan --fetch LAZY
 
-# ==================================================
+#######################
 
 focus --class ~.JJTestcase
 field number --fieldName place --type java.lang.Integer
@@ -204,7 +198,7 @@ field set --fieldName teststeps --type ~.JJTeststep --cardinality ONE_TO_MANY --
 field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --fetch LAZY
 field set --fieldName requirements  --type ~.JJRequirement --cardinality ONE_TO_MANY --fetch LAZY
 
-# ==================================================
+#######################
 
 focus --class ~.JJTeststep
 field number --fieldName place --type java.lang.Integer
@@ -214,5 +208,5 @@ field boolean --fieldName passed
 field reference --fieldName testcase --type ~.JJTestcase
 field reference --fieldName requirement --type ~.JJRequirement
 
-# ==================================================
+#######################
 

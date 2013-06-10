@@ -4,7 +4,9 @@
 package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJCategory;
+import com.funder.janjoonweb.domain.JJHardware;
 import com.funder.janjoonweb.domain.JJRequirement;
+import com.funder.janjoonweb.domain.JJSoftware;
 import com.funder.janjoonweb.domain.JJTask;
 import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJTestplan;
@@ -35,6 +37,22 @@ privileged aspect JJTestcase_Roo_JavaBean {
     
     public void JJTestcase.setCategory(JJCategory category) {
         this.category = category;
+    }
+    
+    public Set<JJSoftware> JJTestcase.getSoftwares() {
+        return this.softwares;
+    }
+    
+    public void JJTestcase.setSoftwares(Set<JJSoftware> softwares) {
+        this.softwares = softwares;
+    }
+    
+    public Set<JJHardware> JJTestcase.getHardwares() {
+        return this.hardwares;
+    }
+    
+    public void JJTestcase.setHardwares(Set<JJHardware> hardwares) {
+        this.hardwares = hardwares;
     }
     
     public JJTestplan JJTestcase.getTestplan() {

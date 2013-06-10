@@ -25,7 +25,7 @@ privileged aspect JJStatusIntegrationTest_Roo_IntegrationTest {
     declare @type: JJStatusIntegrationTest: @Transactional;
     
     @Autowired
-    JJStatusDataOnDemand JJStatusIntegrationTest.dod;
+    private JJStatusDataOnDemand JJStatusIntegrationTest.dod;
     
     @Autowired
     JJStatusService JJStatusIntegrationTest.jJStatusService;

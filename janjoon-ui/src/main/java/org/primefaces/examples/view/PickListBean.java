@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;  
 import javax.faces.application.FacesMessage;  
 import javax.faces.context.FacesContext;  
-import org.primefaces.event.TransferEvent;  
+//import org.primefaces.event.TransferEvent;  
   
 import org.primefaces.examples.domain.Player;  
 import org.primefaces.model.DualListModel;  
@@ -44,7 +44,7 @@ public class PickListBean {
         this.cities = cities;  
     }  
       
-    public void onTransfer(TransferEvent event) {  
+/*    public void onTransfer(TransferEvent event) {  
         StringBuilder builder = new StringBuilder();  
         for(Object item : event.getItems()) {  
             builder.append(((Player) item).getName()).append("<br />");  
@@ -56,5 +56,5 @@ public class PickListBean {
         msg.setDetail(builder.toString());  
           
         FacesContext.getCurrentInstance().addMessage(null, msg);  
-    }  
+    }  */
 }

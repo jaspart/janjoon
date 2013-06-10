@@ -6,19 +6,18 @@
       xmlns:p="http://primefaces.org/ui">
 <ui:composition>
   <title>#{applicationBean.appName}</title>
-    <h:outputStylesheet library="css" name="standard.css" />
-    <h:outputScript library="js" name="calendar.js" />
-	<p:tabMenu activeIndex="2" name="content">
-		<p:menuitem value="Project" url="/pages/planning.jsf" icon="ui-icon-clipboard" />  
-		<p:menuitem value="Specs" url="/pages/specifications.jsf" icon="ui-icon-document"/>  
-		<p:menuitem value="Bugs" url="/pages/bugs.jsf" icon="ui-icon-gear"/>  
-		<p:menuitem value="Dev" url="/pages/development.jsf" icon="ui-icon-wrench" />  
-		<p:menuitem value="Test" url="/pages/test.jsf" icon="ui-icon-check" />
-		<p:menuitem value="Delivery" url="/pages/delivery.jsf" icon="ui-icon-star" />
-		<p:menuitem value="Teams" url="/pages/teams.jsf" icon="ui-icon-person" />  
-		<p:menuitem value="Stats" url="/pages/stats.jsf" icon="ui-icon-arrowreturnthick-1-n" />  
-		<p:menuitem value="Admin" url="/pages/administration.jsf" icon="ui-icon-key" />  
-	</p:tabMenu> 
-
+  <h:outputStylesheet library="css" name="standard.css" />
+  <h:outputScript library="js" name="calendar.js" />
+  <p:tabMenu name="content">
+	<p:menuitem value="Project" url="/pages/planning.jsf" icon="ui-icon-clipboard" />  
+	<p:menuitem value="Specs" url="/pages/specifications.jsf" icon="ui-icon-document"/>  
+	<p:menuitem value="Bugs" url="/pages/bugs.jsf" icon="ui-icon-gear"/>  
+	<p:menuitem value="Dev" url="/pages/development.jsf" icon="ui-icon-wrench" />  
+	<p:menuitem value="Test" url="/pages/test.jsf" icon="ui-icon-check" />
+	<p:menuitem value="Delivery" url="/pages/delivery.jsf" icon="ui-icon-star" />
+	<p:menuitem value="Teams" url="/pages/teams.jsf" icon="ui-icon-person" />  
+	<p:menuitem value="Stats" url="/pages/stats.jsf" icon="ui-icon-arrowreturnthick-1-n" />  
+	<p:menuitem value="Admin" url="/pages/administration.jsf" icon="ui-icon-key" />  
+  </p:tabMenu>
 </ui:composition>
 </html>

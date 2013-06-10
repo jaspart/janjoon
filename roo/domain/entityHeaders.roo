@@ -1,20 +1,16 @@
 
-/*
+#/*  Create all the janjoon entities (without their attributes). */
 
-   Create all the janjoon entities (without their attributes).
-
-*/
-
-# ==================================================
+#######################
 
 tailor deactivate
 
-/* Abstract class of all janjoon entities */
+# Abstract class of all janjoon entities */
 entity jpa --class ~.JJAbstractEntity --abstract --inheritanceType TABLE_PER_CLASS
 
 tailor activate --name janjoonRooStyle
 
-# ==================================================
+#######################
 
 entity jpa --class JJContact --extends ~.JJAbstractEntity
 entity jpa --class JJProject --extends ~.JJAbstractEntity
@@ -40,5 +36,5 @@ entity jpa --class JJRequirement --extends ~.JJAbstractEntity
 entity jpa --class JJTask --extends ~.JJAbstractEntity
 entity jpa --class JJTestplan --extends ~.JJAbstractEntity
 
-# ==================================================
+#######################
 

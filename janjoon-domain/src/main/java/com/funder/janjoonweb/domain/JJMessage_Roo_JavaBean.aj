@@ -3,7 +3,10 @@
 
 package com.funder.janjoonweb.domain;
 
+import com.funder.janjoonweb.domain.JJCriticity;
+import com.funder.janjoonweb.domain.JJImportance;
 import com.funder.janjoonweb.domain.JJMessage;
+import com.funder.janjoonweb.domain.JJStatus;
 
 privileged aspect JJMessage_Roo_JavaBean {
     
@@ -13,6 +16,30 @@ privileged aspect JJMessage_Roo_JavaBean {
     
     public void JJMessage.setMessage(String message) {
         this.message = message;
+    }
+    
+    public JJCriticity JJMessage.getCriticity() {
+        return this.criticity;
+    }
+    
+    public void JJMessage.setCriticity(JJCriticity criticity) {
+        this.criticity = criticity;
+    }
+    
+    public JJStatus JJMessage.getStatus() {
+        return this.status;
+    }
+    
+    public void JJMessage.setStatus(JJStatus status) {
+        this.status = status;
+    }
+    
+    public JJImportance JJMessage.getImportance() {
+        return this.importance;
+    }
+    
+    public void JJMessage.setImportance(JJImportance importance) {
+        this.importance = importance;
     }
     
 }

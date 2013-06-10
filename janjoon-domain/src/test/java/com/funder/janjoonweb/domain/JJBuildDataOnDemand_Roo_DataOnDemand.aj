@@ -31,10 +31,10 @@ privileged aspect JJBuildDataOnDemand_Roo_DataOnDemand {
     private List<JJBuild> JJBuildDataOnDemand.data;
     
     @Autowired
-    JJContactDataOnDemand JJBuildDataOnDemand.jJContactDataOnDemand;
+    private JJContactDataOnDemand JJBuildDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    JJVersionDataOnDemand JJBuildDataOnDemand.jJVersionDataOnDemand;
+    private JJVersionDataOnDemand JJBuildDataOnDemand.jJVersionDataOnDemand;
     
     @Autowired
     JJBuildService JJBuildDataOnDemand.jJBuildService;

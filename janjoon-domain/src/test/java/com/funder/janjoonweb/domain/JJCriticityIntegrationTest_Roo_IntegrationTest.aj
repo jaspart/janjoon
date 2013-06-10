@@ -25,7 +25,7 @@ privileged aspect JJCriticityIntegrationTest_Roo_IntegrationTest {
     declare @type: JJCriticityIntegrationTest: @Transactional;
     
     @Autowired
-    JJCriticityDataOnDemand JJCriticityIntegrationTest.dod;
+    private JJCriticityDataOnDemand JJCriticityIntegrationTest.dod;
     
     @Autowired
     JJCriticityService JJCriticityIntegrationTest.jJCriticityService;

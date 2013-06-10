@@ -25,7 +25,7 @@ privileged aspect JJTeststepIntegrationTest_Roo_IntegrationTest {
     declare @type: JJTeststepIntegrationTest: @Transactional;
     
     @Autowired
-    JJTeststepDataOnDemand JJTeststepIntegrationTest.dod;
+    private JJTeststepDataOnDemand JJTeststepIntegrationTest.dod;
     
     @Autowired
     JJTeststepService JJTeststepIntegrationTest.jJTeststepService;

@@ -100,20 +100,20 @@ privileged aspect JJBug_Roo_JavaBean {
         this.relation = relation;
     }
     
-    public JJBug JJBug.getBugUp() {
-        return this.bugUp;
-    }
-    
-    public void JJBug.setBugUp(JJBug bugUp) {
-        this.bugUp = bugUp;
-    }
-    
     public JJRequirement JJBug.getRequirement() {
         return this.requirement;
     }
     
     public void JJBug.setRequirement(JJRequirement requirement) {
         this.requirement = requirement;
+    }
+    
+    public JJBug JJBug.getBugUp() {
+        return this.bugUp;
+    }
+    
+    public void JJBug.setBugUp(JJBug bugUp) {
+        this.bugUp = bugUp;
     }
     
     public Set<JJBug> JJBug.getBugs() {

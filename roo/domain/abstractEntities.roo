@@ -1,11 +1,5 @@
 
-/*
-
-   Define the attributes of all janjoon abstract entities.
-
-*/
-
-# ==================================================
+#/*   Define the attributes of all janjoon abstract entities. */
 
 focus --class ~.JJAbstractEntity
 field string --fieldName name --sizeMax 25 --notNull
@@ -16,6 +10,5 @@ field date --fieldName updatedDate --type java.util.Date
 field reference --fieldName updatedBy --type ~.domain.JJContact
 field boolean --fieldName enabled
 
-# ==================================================
 
  

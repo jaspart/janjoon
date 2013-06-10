@@ -53,10 +53,10 @@ public class JJBug extends JJAbstractEntity {
     private JJRelationship relation;
 
     @ManyToOne
-    private com.funder.janjoonweb.domain.JJBug bugUp;
+    private JJRequirement requirement;
 
     @ManyToOne
-    private JJRequirement requirement;
+    private com.funder.janjoonweb.domain.JJBug bugUp;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bugUp")
     private Set<com.funder.janjoonweb.domain.JJBug> bugs = new HashSet<com.funder.janjoonweb.domain.JJBug>();

@@ -25,7 +25,7 @@ privileged aspect JJContactIntegrationTest_Roo_IntegrationTest {
     declare @type: JJContactIntegrationTest: @Transactional;
     
     @Autowired
-    JJContactDataOnDemand JJContactIntegrationTest.dod;
+    private JJContactDataOnDemand JJContactIntegrationTest.dod;
     
     @Autowired
     JJContactService JJContactIntegrationTest.jJContactService;

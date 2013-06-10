@@ -25,7 +25,7 @@ privileged aspect JJCategoryIntegrationTest_Roo_IntegrationTest {
     declare @type: JJCategoryIntegrationTest: @Transactional;
     
     @Autowired
-    JJCategoryDataOnDemand JJCategoryIntegrationTest.dod;
+    private JJCategoryDataOnDemand JJCategoryIntegrationTest.dod;
     
     @Autowired
     JJCategoryService JJCategoryIntegrationTest.jJCategoryService;

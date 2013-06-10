@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
@@ -20,6 +21,8 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity(sequenceName = "JJRequirementSEQ")
 public class JJRequirement extends JJAbstractEntity {
+
+    private Integer numero;
 
     @ManyToOne
     private JJProject project;
@@ -50,6 +53,9 @@ public class JJRequirement extends JJAbstractEntity {
     @ManyToOne
     private JJStatus status;
 
+    @Size(max = 100)
+    private String impact;
+
     @Enumerated
     private JJRelationship relation;
 
@@ -70,4 +76,7 @@ public class JJRequirement extends JJAbstractEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<JJMessage> messages = new HashSet<JJMessage>();
+
+    @Size(max = 250)
+    private String note;
 }

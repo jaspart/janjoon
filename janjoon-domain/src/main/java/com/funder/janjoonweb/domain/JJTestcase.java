@@ -24,6 +24,12 @@ public class JJTestcase extends JJAbstractEntity {
     @ManyToOne
     private JJCategory category;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
+    private Set<JJSoftware> softwares = new HashSet<JJSoftware>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
+    private Set<JJHardware> hardwares = new HashSet<JJHardware>();
+
     @ManyToOne
     private JJTestplan testplan;
 

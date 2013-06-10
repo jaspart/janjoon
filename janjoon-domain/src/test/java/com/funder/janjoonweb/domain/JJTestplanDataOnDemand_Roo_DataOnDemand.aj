@@ -33,16 +33,16 @@ privileged aspect JJTestplanDataOnDemand_Roo_DataOnDemand {
     private List<JJTestplan> JJTestplanDataOnDemand.data;
     
     @Autowired
-    JJBuildDataOnDemand JJTestplanDataOnDemand.jJBuildDataOnDemand;
+    private JJBuildDataOnDemand JJTestplanDataOnDemand.jJBuildDataOnDemand;
     
     @Autowired
-    JJContactDataOnDemand JJTestplanDataOnDemand.jJContactDataOnDemand;
+    private JJContactDataOnDemand JJTestplanDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    JJVersionDataOnDemand JJTestplanDataOnDemand.jJVersionDataOnDemand;
+    private JJVersionDataOnDemand JJTestplanDataOnDemand.jJVersionDataOnDemand;
     
     @Autowired
-    JJProjectDataOnDemand JJTestplanDataOnDemand.jJProjectDataOnDemand;
+    private JJProjectDataOnDemand JJTestplanDataOnDemand.jJProjectDataOnDemand;
     
     @Autowired
     JJTestplanService JJTestplanDataOnDemand.jJTestplanService;

@@ -4,10 +4,13 @@
 package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJContactDataOnDemand;
+import com.funder.janjoonweb.domain.JJCriticityDataOnDemand;
+import com.funder.janjoonweb.domain.JJImportanceDataOnDemand;
 import com.funder.janjoonweb.domain.JJMessage;
 import com.funder.janjoonweb.domain.JJMessageDataOnDemand;
 import com.funder.janjoonweb.domain.JJMessageRepository;
 import com.funder.janjoonweb.domain.JJMessageService;
+import com.funder.janjoonweb.domain.JJStatusDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,7 +33,16 @@ privileged aspect JJMessageDataOnDemand_Roo_DataOnDemand {
     private List<JJMessage> JJMessageDataOnDemand.data;
     
     @Autowired
-    JJContactDataOnDemand JJMessageDataOnDemand.jJContactDataOnDemand;
+    private JJContactDataOnDemand JJMessageDataOnDemand.jJContactDataOnDemand;
+    
+    @Autowired
+    private JJCriticityDataOnDemand JJMessageDataOnDemand.jJCriticityDataOnDemand;
+    
+    @Autowired
+    private JJImportanceDataOnDemand JJMessageDataOnDemand.jJImportanceDataOnDemand;
+    
+    @Autowired
+    private JJStatusDataOnDemand JJMessageDataOnDemand.jJStatusDataOnDemand;
     
     @Autowired
     JJMessageService JJMessageDataOnDemand.jJMessageService;

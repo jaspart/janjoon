@@ -30,7 +30,7 @@ privileged aspect JJRightDataOnDemand_Roo_DataOnDemand {
     private List<JJRight> JJRightDataOnDemand.data;
     
     @Autowired
-    JJContactDataOnDemand JJRightDataOnDemand.jJContactDataOnDemand;
+    private JJContactDataOnDemand JJRightDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
     JJRightService JJRightDataOnDemand.jJRightService;

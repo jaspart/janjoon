@@ -21,6 +21,14 @@ import java.util.Set;
 
 privileged aspect JJRequirement_Roo_JavaBean {
     
+    public Integer JJRequirement.getNumero() {
+        return this.numero;
+    }
+    
+    public void JJRequirement.setNumero(Integer numero) {
+        this.numero = numero;
+    }
+    
     public JJProject JJRequirement.getProject() {
         return this.project;
     }
@@ -93,6 +101,14 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.status = status;
     }
     
+    public String JJRequirement.getImpact() {
+        return this.impact;
+    }
+    
+    public void JJRequirement.setImpact(String impact) {
+        this.impact = impact;
+    }
+    
     public JJRelationship JJRequirement.getRelation() {
         return this.relation;
     }
@@ -147,6 +163,14 @@ privileged aspect JJRequirement_Roo_JavaBean {
     
     public void JJRequirement.setMessages(Set<JJMessage> messages) {
         this.messages = messages;
+    }
+    
+    public String JJRequirement.getNote() {
+        return this.note;
+    }
+    
+    public void JJRequirement.setNote(String note) {
+        this.note = note;
     }
     
 }

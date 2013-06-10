@@ -1,35 +1,35 @@
 
-/* Activate the janjoon roo style */
+#/* Activate the janjoon roo style #*/
 tailor activate --name janjoonRooStyle
 
-/* Create the project with two submodules (domain & ui) */
+#/* Create the project with two submodules (domain & ui) #*/
 project --topLevelPackage com.funder.janjoonweb --projectName janjoon
 
-/* MySQL JPA setup
-mysql-jpa-setup --userName janjoon-admin --password BeHappy2013 --databaseName janjoon-domain
-*/
+#/* MySQL JPA setup
+# mysql-jpa-setup --userName janjoon-admin --password BeHappy2013 --databaseName janjoon-domain
+#*/
 
-/* Hypersonic JPA setup */
+#/* Hypersonic JPA setup #*/
 hypersonic-jpa-setup
 
-/* Create all enumerations */
+#/* Create all enumerations #*/
 script domain/enums.roo
 
-/* Create all entities */
+#/* Create all entities #*/
 script domain/entityHeaders.roo
 
-/* Define all abstract entities attributes */
+#/* Define all abstract entities attributes #*/
 script domain/abstractEntities.roo
 
-/* Define all concrete entities attributes */
+#/* Define all concrete entities attributes #*/
 script domain/concreteEntities.roo
 
-/* Define the repositories and services for all entities. */
+#/* Define the repositories and services for all entities. #*/
 script domain/layers.roo
 
-/* Create the JSF UI */
+#/* Create the JSF UI #*/
 jsf-setup
 
-/* Close the janjoon roo project (only backup for the moment) */ 
+#/* Close the janjoon roo project (only backup for the moment) #*/ 
 close
 

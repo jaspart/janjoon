@@ -5,8 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import java.io.Serializable;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -15,10 +13,7 @@ import javax.faces.model.SelectItem;
 
 @ManagedBean
 @SessionScoped
-public class LocaleBean implements Serializable{
-
-    private static final long serialVersionUID = 1L;
-
+public class LocaleBean {
     private Locale locale;
 
     @PostConstruct
