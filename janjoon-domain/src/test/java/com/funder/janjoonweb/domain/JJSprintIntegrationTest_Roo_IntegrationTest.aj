@@ -25,7 +25,7 @@ privileged aspect JJSprintIntegrationTest_Roo_IntegrationTest {
     declare @type: JJSprintIntegrationTest: @Transactional;
     
     @Autowired
-    private JJSprintDataOnDemand JJSprintIntegrationTest.dod;
+    JJSprintDataOnDemand JJSprintIntegrationTest.dod;
     
     @Autowired
     JJSprintService JJSprintIntegrationTest.jJSprintService;

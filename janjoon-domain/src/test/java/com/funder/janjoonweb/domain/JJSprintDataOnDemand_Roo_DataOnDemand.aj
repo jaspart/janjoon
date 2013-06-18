@@ -31,10 +31,10 @@ privileged aspect JJSprintDataOnDemand_Roo_DataOnDemand {
     private List<JJSprint> JJSprintDataOnDemand.data;
     
     @Autowired
-    private JJContactDataOnDemand JJSprintDataOnDemand.jJContactDataOnDemand;
+    JJContactDataOnDemand JJSprintDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    private JJProjectDataOnDemand JJSprintDataOnDemand.jJProjectDataOnDemand;
+    JJProjectDataOnDemand JJSprintDataOnDemand.jJProjectDataOnDemand;
     
     @Autowired
     JJSprintService JJSprintDataOnDemand.jJSprintService;

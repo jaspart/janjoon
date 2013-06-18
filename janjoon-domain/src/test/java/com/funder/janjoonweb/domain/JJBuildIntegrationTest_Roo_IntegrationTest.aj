@@ -25,7 +25,7 @@ privileged aspect JJBuildIntegrationTest_Roo_IntegrationTest {
     declare @type: JJBuildIntegrationTest: @Transactional;
     
     @Autowired
-    private JJBuildDataOnDemand JJBuildIntegrationTest.dod;
+    JJBuildDataOnDemand JJBuildIntegrationTest.dod;
     
     @Autowired
     JJBuildService JJBuildIntegrationTest.jJBuildService;

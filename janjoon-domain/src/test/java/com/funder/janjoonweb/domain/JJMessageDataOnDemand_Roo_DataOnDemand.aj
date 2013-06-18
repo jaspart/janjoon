@@ -33,16 +33,16 @@ privileged aspect JJMessageDataOnDemand_Roo_DataOnDemand {
     private List<JJMessage> JJMessageDataOnDemand.data;
     
     @Autowired
-    private JJContactDataOnDemand JJMessageDataOnDemand.jJContactDataOnDemand;
+    JJContactDataOnDemand JJMessageDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    private JJCriticityDataOnDemand JJMessageDataOnDemand.jJCriticityDataOnDemand;
+    JJCriticityDataOnDemand JJMessageDataOnDemand.jJCriticityDataOnDemand;
     
     @Autowired
-    private JJImportanceDataOnDemand JJMessageDataOnDemand.jJImportanceDataOnDemand;
+    JJImportanceDataOnDemand JJMessageDataOnDemand.jJImportanceDataOnDemand;
     
     @Autowired
-    private JJStatusDataOnDemand JJMessageDataOnDemand.jJStatusDataOnDemand;
+    JJStatusDataOnDemand JJMessageDataOnDemand.jJStatusDataOnDemand;
     
     @Autowired
     JJMessageService JJMessageDataOnDemand.jJMessageService;

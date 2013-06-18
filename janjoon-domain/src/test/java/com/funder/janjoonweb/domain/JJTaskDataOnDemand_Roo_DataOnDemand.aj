@@ -34,19 +34,19 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
     private List<JJTask> JJTaskDataOnDemand.data;
     
     @Autowired
-    private JJBugDataOnDemand JJTaskDataOnDemand.jJBugDataOnDemand;
+    JJBugDataOnDemand JJTaskDataOnDemand.jJBugDataOnDemand;
     
     @Autowired
-    private JJContactDataOnDemand JJTaskDataOnDemand.jJContactDataOnDemand;
+    JJContactDataOnDemand JJTaskDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    private JJVersionDataOnDemand JJTaskDataOnDemand.jJVersionDataOnDemand;
+    JJVersionDataOnDemand JJTaskDataOnDemand.jJVersionDataOnDemand;
     
     @Autowired
-    private JJProjectDataOnDemand JJTaskDataOnDemand.jJProjectDataOnDemand;
+    JJProjectDataOnDemand JJTaskDataOnDemand.jJProjectDataOnDemand;
     
     @Autowired
-    private JJRequirementDataOnDemand JJTaskDataOnDemand.jJRequirementDataOnDemand;
+    JJRequirementDataOnDemand JJTaskDataOnDemand.jJRequirementDataOnDemand;
     
     @Autowired
     JJTaskService JJTaskDataOnDemand.jJTaskService;

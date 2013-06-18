@@ -31,10 +31,10 @@ privileged aspect JJHardwareDataOnDemand_Roo_DataOnDemand {
     private List<JJHardware> JJHardwareDataOnDemand.data;
     
     @Autowired
-    private JJContactDataOnDemand JJHardwareDataOnDemand.jJContactDataOnDemand;
+    JJContactDataOnDemand JJHardwareDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    private JJTestcaseDataOnDemand JJHardwareDataOnDemand.jJTestcaseDataOnDemand;
+    JJTestcaseDataOnDemand JJHardwareDataOnDemand.jJTestcaseDataOnDemand;
     
     @Autowired
     JJHardwareService JJHardwareDataOnDemand.jJHardwareService;

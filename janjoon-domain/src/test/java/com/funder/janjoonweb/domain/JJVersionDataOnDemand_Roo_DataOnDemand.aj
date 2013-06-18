@@ -32,13 +32,13 @@ privileged aspect JJVersionDataOnDemand_Roo_DataOnDemand {
     private List<JJVersion> JJVersionDataOnDemand.data;
     
     @Autowired
-    private JJContactDataOnDemand JJVersionDataOnDemand.jJContactDataOnDemand;
+    JJContactDataOnDemand JJVersionDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    private JJPhaseDataOnDemand JJVersionDataOnDemand.jJPhaseDataOnDemand;
+    JJPhaseDataOnDemand JJVersionDataOnDemand.jJPhaseDataOnDemand;
     
     @Autowired
-    private JJProductDataOnDemand JJVersionDataOnDemand.jJProductDataOnDemand;
+    JJProductDataOnDemand JJVersionDataOnDemand.jJProductDataOnDemand;
     
     @Autowired
     JJVersionService JJVersionDataOnDemand.jJVersionService;

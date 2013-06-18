@@ -38,28 +38,28 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
     private List<JJRequirement> JJRequirementDataOnDemand.data;
     
     @Autowired
-    private JJCategoryDataOnDemand JJRequirementDataOnDemand.jJCategoryDataOnDemand;
+    JJCategoryDataOnDemand JJRequirementDataOnDemand.jJCategoryDataOnDemand;
     
     @Autowired
-    private JJChapterDataOnDemand JJRequirementDataOnDemand.jJChapterDataOnDemand;
+    JJChapterDataOnDemand JJRequirementDataOnDemand.jJChapterDataOnDemand;
     
     @Autowired
-    private JJContactDataOnDemand JJRequirementDataOnDemand.jJContactDataOnDemand;
+    JJContactDataOnDemand JJRequirementDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    private JJCriticityDataOnDemand JJRequirementDataOnDemand.jJCriticityDataOnDemand;
+    JJCriticityDataOnDemand JJRequirementDataOnDemand.jJCriticityDataOnDemand;
     
     @Autowired
-    private JJImportanceDataOnDemand JJRequirementDataOnDemand.jJImportanceDataOnDemand;
+    JJImportanceDataOnDemand JJRequirementDataOnDemand.jJImportanceDataOnDemand;
     
     @Autowired
-    private JJVersionDataOnDemand JJRequirementDataOnDemand.jJVersionDataOnDemand;
+    JJVersionDataOnDemand JJRequirementDataOnDemand.jJVersionDataOnDemand;
     
     @Autowired
-    private JJProjectDataOnDemand JJRequirementDataOnDemand.jJProjectDataOnDemand;
+    JJProjectDataOnDemand JJRequirementDataOnDemand.jJProjectDataOnDemand;
     
     @Autowired
-    private JJStatusDataOnDemand JJRequirementDataOnDemand.jJStatusDataOnDemand;
+    JJStatusDataOnDemand JJRequirementDataOnDemand.jJStatusDataOnDemand;
     
     @Autowired
     JJRequirementService JJRequirementDataOnDemand.jJRequirementService;

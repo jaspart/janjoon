@@ -25,7 +25,7 @@ privileged aspect JJHardwareIntegrationTest_Roo_IntegrationTest {
     declare @type: JJHardwareIntegrationTest: @Transactional;
     
     @Autowired
-    private JJHardwareDataOnDemand JJHardwareIntegrationTest.dod;
+    JJHardwareDataOnDemand JJHardwareIntegrationTest.dod;
     
     @Autowired
     JJHardwareService JJHardwareIntegrationTest.jJHardwareService;

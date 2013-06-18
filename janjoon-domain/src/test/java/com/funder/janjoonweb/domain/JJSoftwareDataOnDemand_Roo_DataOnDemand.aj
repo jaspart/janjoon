@@ -31,10 +31,10 @@ privileged aspect JJSoftwareDataOnDemand_Roo_DataOnDemand {
     private List<JJSoftware> JJSoftwareDataOnDemand.data;
     
     @Autowired
-    private JJContactDataOnDemand JJSoftwareDataOnDemand.jJContactDataOnDemand;
+    JJContactDataOnDemand JJSoftwareDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    private JJTestcaseDataOnDemand JJSoftwareDataOnDemand.jJTestcaseDataOnDemand;
+    JJTestcaseDataOnDemand JJSoftwareDataOnDemand.jJTestcaseDataOnDemand;
     
     @Autowired
     JJSoftwareService JJSoftwareDataOnDemand.jJSoftwareService;

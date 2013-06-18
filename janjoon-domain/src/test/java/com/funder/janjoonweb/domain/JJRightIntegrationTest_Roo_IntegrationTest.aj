@@ -25,7 +25,7 @@ privileged aspect JJRightIntegrationTest_Roo_IntegrationTest {
     declare @type: JJRightIntegrationTest: @Transactional;
     
     @Autowired
-    private JJRightDataOnDemand JJRightIntegrationTest.dod;
+    JJRightDataOnDemand JJRightIntegrationTest.dod;
     
     @Autowired
     JJRightService JJRightIntegrationTest.jJRightService;

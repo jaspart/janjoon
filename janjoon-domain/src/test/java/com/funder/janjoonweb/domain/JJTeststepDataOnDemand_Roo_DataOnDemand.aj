@@ -32,13 +32,13 @@ privileged aspect JJTeststepDataOnDemand_Roo_DataOnDemand {
     private List<JJTeststep> JJTeststepDataOnDemand.data;
     
     @Autowired
-    private JJContactDataOnDemand JJTeststepDataOnDemand.jJContactDataOnDemand;
+    JJContactDataOnDemand JJTeststepDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    private JJRequirementDataOnDemand JJTeststepDataOnDemand.jJRequirementDataOnDemand;
+    JJRequirementDataOnDemand JJTeststepDataOnDemand.jJRequirementDataOnDemand;
     
     @Autowired
-    private JJTestcaseDataOnDemand JJTeststepDataOnDemand.jJTestcaseDataOnDemand;
+    JJTestcaseDataOnDemand JJTeststepDataOnDemand.jJTestcaseDataOnDemand;
     
     @Autowired
     JJTeststepService JJTeststepDataOnDemand.jJTeststepService;

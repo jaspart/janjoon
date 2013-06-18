@@ -25,7 +25,7 @@ privileged aspect JJMessageIntegrationTest_Roo_IntegrationTest {
     declare @type: JJMessageIntegrationTest: @Transactional;
     
     @Autowired
-    private JJMessageDataOnDemand JJMessageIntegrationTest.dod;
+    JJMessageDataOnDemand JJMessageIntegrationTest.dod;
     
     @Autowired
     JJMessageService JJMessageIntegrationTest.jJMessageService;

@@ -38,28 +38,28 @@ privileged aspect JJBugDataOnDemand_Roo_DataOnDemand {
     private List<JJBug> JJBugDataOnDemand.data;
     
     @Autowired
-    private JJCategoryDataOnDemand JJBugDataOnDemand.jJCategoryDataOnDemand;
+    JJCategoryDataOnDemand JJBugDataOnDemand.jJCategoryDataOnDemand;
     
     @Autowired
-    private JJContactDataOnDemand JJBugDataOnDemand.jJContactDataOnDemand;
+    JJContactDataOnDemand JJBugDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    private JJCriticityDataOnDemand JJBugDataOnDemand.jJCriticityDataOnDemand;
+    JJCriticityDataOnDemand JJBugDataOnDemand.jJCriticityDataOnDemand;
     
     @Autowired
-    private JJImportanceDataOnDemand JJBugDataOnDemand.jJImportanceDataOnDemand;
+    JJImportanceDataOnDemand JJBugDataOnDemand.jJImportanceDataOnDemand;
     
     @Autowired
-    private JJVersionDataOnDemand JJBugDataOnDemand.jJVersionDataOnDemand;
+    JJVersionDataOnDemand JJBugDataOnDemand.jJVersionDataOnDemand;
     
     @Autowired
-    private JJProjectDataOnDemand JJBugDataOnDemand.jJProjectDataOnDemand;
+    JJProjectDataOnDemand JJBugDataOnDemand.jJProjectDataOnDemand;
     
     @Autowired
-    private JJRequirementDataOnDemand JJBugDataOnDemand.jJRequirementDataOnDemand;
+    JJRequirementDataOnDemand JJBugDataOnDemand.jJRequirementDataOnDemand;
     
     @Autowired
-    private JJStatusDataOnDemand JJBugDataOnDemand.jJStatusDataOnDemand;
+    JJStatusDataOnDemand JJBugDataOnDemand.jJStatusDataOnDemand;
     
     @Autowired
     JJBugService JJBugDataOnDemand.jJBugService;

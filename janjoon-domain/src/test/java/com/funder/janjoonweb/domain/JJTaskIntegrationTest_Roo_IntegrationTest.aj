@@ -25,7 +25,7 @@ privileged aspect JJTaskIntegrationTest_Roo_IntegrationTest {
     declare @type: JJTaskIntegrationTest: @Transactional;
     
     @Autowired
-    private JJTaskDataOnDemand JJTaskIntegrationTest.dod;
+    JJTaskDataOnDemand JJTaskIntegrationTest.dod;
     
     @Autowired
     JJTaskService JJTaskIntegrationTest.jJTaskService;

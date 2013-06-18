@@ -6,193 +6,144 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="../templates/layout.xhtml">
-	<link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
-	<link type="text/css" rel="stylesheet" href="/syntaxhighlighter/standard.css" />
+	<link type="text/css" rel="stylesheet"
+		href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
+	<link type="text/css" rel="stylesheet"
+		href="/syntaxhighlighter/standard.css" />
 	<ui:define name="content">
 		<!--<center>-->
-			<br/>
-			
-			<h:form id="specForm">
+		<br />
 
-				<!-- AJA AUTOCOMPLETE <p:autoComplete value="#{autoCompleteBean.selectedPlayer1}" id="project" completeMethod="#{autoCompleteBean.completePlayer}"  
-				var="p" itemLabel="#{p.name}" itemValue="#{p}" converter="player" forceSelection="true"/>
-			<p:watermark for="project" value="Project (Mandatory)" />-->
+		<h:form prependId="false" id="dataForm">
 
-				<!-- AJA AUTOCOMPLETE <p:autoComplete value="#{autoCompleteBean.selectedPlayer1}" id="product" completeMethod="#{autoCompleteBean.completePlayer}"  
-				var="p" itemLabel="#{p.name}" itemValue="#{p}" converter="player" forceSelection="true"/>
-			<p:watermark for="product" value="Product (Optional)" />-->
+			<p:column style="width:25%">
+				<!--  <p:button value="Business" icon="ui-icon-star" />-->
+				<p:commandButton value="Business"
+					actionListener="#{jJRequirementBean.findAllJJRequirements}" id="bBusiness"
+					update="dataForm,data,leftTable" />
+				<p:button value="Functional" icon="ui-icon-star" disabled="true" />
+				<p:button value="Architecture" icon="ui-icon-star" />
+				<p:button value="Security" icon="ui-icon-star" />
+				<p:button value="Technical" icon="ui-icon-star" disabled="true" />
+			</p:column>
 
-				<p:column style="width:25%">
-					<p:button value="Business" icon="ui-icon-star" disabled="true" />
-					<p:button value="Functional" icon="ui-icon-star" disabled="true" />
-					<p:button value="Architecture" icon="ui-icon-star" />
-					<p:button value="Security" icon="ui-icon-star" />
-					<p:button value="Technical" icon="ui-icon-star" disabled="true" />
-				</p:column>
+			<p:panel id="data" toggleable="true" toggleSpeed="250">
 
-				<table>
-					<tr>
-					
-					<td width="390">
-						<p:contextMenu for="left">
-							<p:menuitem value="Edit" update="display" icon="ui-icon-pencil" oncomplete="requirementDialog.show()" />
-							<p:menuitem value="Delete" update="left" icon="ui-icon-close" actionListener="#{reqBusinessBean.deleteRequirement}" />
-						</p:contextMenu> 
-					
-						<p:dataTable id="left" var="requirement"
-							value="#{reqBusinessBean.requirementsSmall}"
-							widgetVar="reqBusinessTable"
-							emptyMessage="No requirements found with given criteria"
-							filteredValue="#{reqBusinessBean.filteredRequirements}"
-							rowKey="#{requirement.model}"
-							selection="#{reqBusinessBean.selectedRequirement}"
-							selectionMode="single"
-							listener="#{scheduleController.onDateSelect}"
-							update="eventDetails" oncomplete="eventDialog.show()">
-							<p:ajax event="rowSelect" oncomplete="requirementDialog.show()" />
+
+				<p:dataTable id="leftTable"
+					value="#{jJRequirementBean.allJJRequirements}" var="JJRequirement_"
+					resizableColumns="false">
+
+					<f:facet name="header">
+						<p:panelGrid style="margin-top:10px">
 							<f:facet name="header">
-								<p:panelGrid style="margin-top:10px">  
-    								<f:facet name="header">  
-        								<p:row>  
-           									<p:column colspan="2">
-           										<p:commandButton id="reqBusiChapterButton" icon="ui-icon-clipboard" type="button" />
-           									</p:column>  
-            								<p:column colspan="5">
-            									<p:inputText id="globalFilter" onkeyup="reqBusinessTable.filter()" style="width:150px" />
-												<p:watermark for="globalFilter" value="Search..." />
-											</p:column>  
-            								<p:column colspan="2">
-            									<p:commandButton id="createButton" icon="ui-icon-plus" title="Create Requirement" oncomplete="newRequirement.show()" />
-            								</p:column>  
-            								<p:column>
-            									<p:commandButton id="dynaButton" icon="ui-icon-document" type="button" />
-												<p:menu overlay="true" trigger="dynaButton" my="left top" at="left bottom">
-													<p:menuitem>
-														<h:commandLink>
-															<p:graphicImage value="/resources/images/pdf.png" />
-															<h:outputLabel value="export in pdf" />
-															<p:dataExporter type="pdf" target="tbl" fileName="requirements" />
-														</h:commandLink>
-													</p:menuitem>
-													<p:menuitem>
-														<h:commandLink>
-															<p:graphicImage value="/resources/images/csv.png" />
-															<h:outputLabel value="export in csv" />
-															<p:dataExporter type="pdf" target="tbl" fileName="requirements" />
-														</h:commandLink>
-													</p:menuitem>
-													<p:menuitem>
-														<h:commandLink>
-															<p:graphicImage value="/resources/images/xml.png" />
-															<h:outputLabel value="export in xml" />
-															<p:dataExporter type="pdf" target="tbl" fileName="requirements" />
-														</h:commandLink>
-													</p:menuitem>
-													<p:menuitem>
-														<h:commandLink>
-															<p:graphicImage value="/resources/images/excel.png" />
-															<h:outputLabel value="export in xls" />
-															<p:dataExporter type="pdf" target="tbl" fileName="requirements" />
-														</h:commandLink>
-													</p:menuitem>
-												</p:menu>
-										</p:column>  
-        								</p:row>  
-    								</f:facet>  
-  								</p:panelGrid>
+								<p:row>
+									<p:column colspan="2">
+										<p:commandButton id="reqBusiChapterButton"
+											icon="ui-icon-clipboard" type="button" />
+									</p:column>
+									<p:column colspan="5">
+										<!--onkeyup="reqBusinessTable.filter()"  -->
+										<p:inputText id="globalFilter" style="width:150px" />
+										<p:watermark for="globalFilter" value="Search..." />
+									</p:column>
+									<p:column colspan="2">
+										<p:commandButton id="createButton" icon="ui-icon-plus"
+											title="Create Requirement" oncomplete="newRequirement.show()" actionListener="#{jJRequirementBean.createNewJJRequirement}" />
+									</p:column>
+									<p:column>
+										<p:commandButton id="dynaButton" icon="ui-icon-document"
+											type="button" />
+										<p:menu overlay="true" trigger="dynaButton" my="left top"
+											at="left bottom">
+											<p:menuitem>
+												<h:commandLink>
+													<p:graphicImage value="/resources/images/pdf.png" />
+													<h:outputLabel value="export in pdf" />
+													<p:dataExporter type="pdf" target="tbl"
+														fileName="requirements" />
+												</h:commandLink>
+											</p:menuitem>
+											<p:menuitem>
+												<h:commandLink>
+													<p:graphicImage value="/resources/images/csv.png" />
+													<h:outputLabel value="export in csv" />
+													<p:dataExporter type="pdf" target="tbl"
+														fileName="requirements" />
+												</h:commandLink>
+											</p:menuitem>
+											<p:menuitem>
+												<h:commandLink>
+													<p:graphicImage value="/resources/images/xml.png" />
+													<h:outputLabel value="export in xml" />
+													<p:dataExporter type="pdf" target="tbl"
+														fileName="requirements" />
+												</h:commandLink>
+											</p:menuitem>
+											<p:menuitem>
+												<h:commandLink>
+													<p:graphicImage value="/resources/images/excel.png" />
+													<h:outputLabel value="export in xls" />
+													<p:dataExporter type="pdf" target="tbl"
+														fileName="requirements" />
+												</h:commandLink>
+											</p:menuitem>
+										</p:menu>
+									</p:column>
+								</p:row>
 							</f:facet>
-							
-						    <p:column headerText="Chapter">#{jJRequirementBean.name}</p:column>
-					    	<p:column headerText="Order">#{requirement.year}</p:column>
-					    	<p:column headerText="Requirement">#{requirement.manufacturer}</p:column>
-					    	<f:facet name="footer">In total there are X Spec Req.</f:facet>
-						</p:dataTable>
-					</td>
+						</p:panelGrid>
+					</f:facet>
+					
+					<p:column headerText="Name">
+						<h:outputText value="#{JJRequirement_['name']}" />
+					</p:column>
 
-						</tr>
-				</table>
-				
-				<p:dialog header="New Requirement" widgetVar="newRequirement" maximizable="true" minimizable="true" showEffect="clip" hideEffect="fold">
+					<p:column headerText="Description">
+						<h:outputText value="#{JJRequirement_.description}" />
+					</p:column>
+
+					<p:column headerText="Ceation Date">
+						<h:outputText value="#{JJRequirement_.creationDate}" />
+					</p:column>
+					 
+					<f:facet name="footer">In total there are X Spec Req.</f:facet>
+				</p:dataTable>
+
+			</p:panel>
+			
+
+
+		</h:form>
+		
+		<h:form id="dialogForm">
+		
+		<p:dialog header="New Requirement" widgetVar="newRequirement" maximizable="true" minimizable="true" showEffect="clip" hideEffect="fold">
 					    <h:panelGrid columns="2" cellpadding="5">  
-            				<h:outputLabel for="#{jJRequirementBean.JJRequirement_.name}" value="Name:" />  
-            				<p:inputText value="#{jJRequirementBean.JJRequirement_.name}" minlength="1" maxlength="25" label="Name" />  
+            				<h:outputLabel for="name" value="Name:" />  
+            				<p:inputText  id="name" value="#{jJRequirementBean.myJJRequirement.name}" minlength="1" maxlength="25" label="Name" />  
               
-           					<h:outputLabel for="#{jJRequirementBean.JJRequirement_.description}" value="Description:" />  
-            				<p:inputText value="#{jJRequirementBean.JJRequirement_.description}" minlength="1" maxlength="250" label="Description" />  
-                  
-                  			<h:outputLabel for="#{jJRequirementBean.JJRequirement_.creationDate}" value="Creation Date:" /> 
-   							<p:calendar value="#{jJRequirementBean.JJRequirement_.creationDate}" id="popupButtonCal" showOn="button" /> 
-            				<!-- <h:outputLabel for="#{jJRequirementBean.JJRequirement_.creationDate}" value="Creation Date:" />  
-            				<p:inputText id="#{jJRequirementBean.JJRequirement_.creationDate}" label="telephone" />  -->
+           					<h:outputLabel for="description" value="Description:" />  
+            				<p:inputText id="description" value="#{jJRequirementBean.myJJRequirement.description}" minlength="1" maxlength="250" label="Description" />  
+
+                  			<h:outputLabel for="creationDate" value="Creation Date:" /> 
+   							<p:calendar id="creationDate" value="#{jJRequirementBean.myJJRequirement.creationDate}" pattern="dd/MM/yyyy"  showOn="button" /> 
+            		
             				<f:facet name="footer">  
         						<p:row>  
             						<p:column>  
                 			  			<p:commandButton value="Reset" type="reset"/> 
             						</p:column>  
             						<p:column>  
-           								<h:commandButton value="#{messages.label_save}" type="submit" action="#{jJRequirementBean.persist}"/> 
+           								<h:commandButton value="#{messages.label_save}" type="submit" action="#{jJRequirementBean.myPersist}" update="dataForm,data,leftTable"/> 
             						</p:column>   
         						</p:row>  
     						</f:facet> 
         				</h:panelGrid>  
 				</p:dialog>
 		
+		</h:form>
 
-				<p:dialog header="Requirement Detail" widgetVar="requirementDialog"
-					resizable="false" width="200" showEffect="clip" hideEffect="fold"
-					id="dialog">
-					<h:panelGrid id="display" columns="2" cellpadding="4">
-						<f:facet name="header">
-							<p:graphicImage
-								value="/images/requirements/#{requirementBean.selectedRequirement.manufacturer}.jpg" />
-						</f:facet>
-						<h:outputText value="Model:" />
-						<h:outputText value="#{requirementBean.selectedRequirement.model}"
-							style="font-weight:bold" />
-						<h:outputText value="Year:" />
-						<h:outputText value="#{requirementBean.selectedRequirement.year}"
-							style="font-weight:bold" />
-						<h:outputText value="Manufacturer:" />
-						<h:outputText
-							value="#{requirementBean.selectedRequirement.manufacturer}"
-							style="font-weight:bold" />
-						<h:outputText value="Color:" />
-						<h:outputText value="#{requirementBean.selectedRequirement.color}"
-							style="font-weight:bold" />
-					</h:panelGrid>
-				</p:dialog>
-
-				<p:dialog id="dlgRequirement" header="Event Details"
-					widgetVar="requirementDialog" showEffect="fade" hideEffect="fade"
-					modal="true">
-					<h:panelGrid columns="2" cellpadding="5">
-						<h:outputLabel for="title" value="Title:" style="font-weight:bold" />
-						<p:inputText id="dlgtitle" value="ReqTitle" required="true"
-							style="width: 500px; font-weight: bold;" />
-
-						<h:outputLabel id="dlgproductLabel" for="product" value="Product:"
-							style="font-weight:bold" />
-						<!-- AJA AUTOCOMPLETE <p:autoComplete id="dlgproduct" dropdown="true" value="#{projectAutoCompleteBean.selectedProject}"   
-						label="truc" itemValue="machine" completeMethod="#{projectAutoCompleteBean.complete}"
-						style="width: 20px; font-weight: bold;"/>-->
-
-						<h:outputLabel for="chapter" value="Chapter:"
-							style="font-weight:bold" />
-						<!-- AJA AUTOCOMPLETE <p:autoComplete id="dlgChapter" dropdown="true" value="#{ressourceAutoCompleteBean.selectedPlayers}" 
-						completeMethod="#{ressourceAutoCompleteBean.completePlayer}"  
-						var="p" itemLabel="#{p.name}" itemValue="#{p}" converter="player" multiple="true"
-						style="width: 20px; font-weight: bold;"/>-->
-					</h:panelGrid>
-					<p:editor id="dlgeditor" value="#{editorBean.value}" width="600" />
-					<br />
-					<p:commandButton type="reset" value="Reset" />
-					<p:commandButton value="Save"
-						actionListener="reqTechnical.selectedRequirement.displayRequirement"
-						oncomplete="requirements.update();requirementDialog.hide();" />
-				</p:dialog>
-
-			</h:form>
-	
 	</ui:define>
 </ui:composition>
 </html>
