@@ -49,7 +49,7 @@
 									</p:column>
 									<p:column colspan="2">
 										<p:commandButton id="createButton" icon="ui-icon-plus"
-											title="Create Requirement" oncomplete="newRequirement.show()" actionListener="#{jJRequirementBean.createNewJJRequirement}" />
+											title="Create Requirement" oncomplete="newRequirement.show()" actionListener="#{jJRequirementBean.createNewBusinessJJRequirement}" />
 									</p:column>
 									<p:column>
 										<p:commandButton id="dynaButton" icon="ui-icon-document"
@@ -126,8 +126,8 @@
            					<h:outputLabel for="description" value="Description:" />  
             				<p:inputText id="description" value="#{jJRequirementBean.myJJRequirement.description}" minlength="1" maxlength="250" label="Description" />  
 
-                  			<h:outputLabel for="creationDate" value="Creation Date:" /> 
-   							<p:calendar id="creationDate" value="#{jJRequirementBean.myJJRequirement.creationDate}" pattern="dd/MM/yyyy"  showOn="button" /> 
+<!--                   			<h:outputLabel for="creationDate" value="Creation Date:" />  -->
+<!--    							<p:calendar id="creationDate" value="#{jJRequirementBean.myJJRequirement.creationDate}" pattern="dd/MM/yyyy"  showOn="button" />  -->
             		
             				<f:facet name="footer">  
         						<p:row>  
@@ -135,7 +135,7 @@
                 			  			<p:commandButton value="Reset" type="reset"/> 
             						</p:column>  
             						<p:column>  
-           								<h:commandButton value="#{messages.label_save}" type="submit" action="#{jJRequirementBean.myPersist}" update="dataForm,data,leftTable"/> 
+           								<h:commandButton value="#{messages.label_save}" action="#{jJRequirementBean.myPersist}" update="dataForm,data,leftTable"/> 
             						</p:column>   
         						</p:row>  
     						</f:facet> 
