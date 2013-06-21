@@ -31,18 +31,18 @@ a:visited {
 }
 
 .wrapper {
-    width: 1024px;
-    min-width: 1024px;
-    max-width: 1024px;
+    width: 1440px;
+    min-width: 1440px;
+    max-width: 1440px;
     margin-right: auto;
     margin-left: auto; /* fix max-width incompatibility in IE6 */
-    width: expression(document.body.clientWidth > 1024 ? "1024px" : "auto");
+    width: expression(document.body.clientWidth > 1440px ? "1440px" : "auto");
     overflow: hidden;
     display: block;
 }
 
 .menu {
-    width: 230px;
+    width: 180px;
     vertical-align: top;
     text-align: center;
     margin-right: 5px;
@@ -50,7 +50,7 @@ a:visited {
 }
 
 .content {
-    width: 770px;
+    width: 1240px;
     height: auto;
     vertical-align: top;
     text-align: left;
