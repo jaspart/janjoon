@@ -7,7 +7,10 @@ import com.funder.janjoonweb.domain.JJRightDataOnDemand;
 import com.funder.janjoonweb.domain.JJRightIntegrationTest;
 import com.funder.janjoonweb.domain.JJRightRepository;
 import com.funder.janjoonweb.domain.JJRightService;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,7 @@ privileged aspect JJRightIntegrationTest_Roo_IntegrationTest {
     
     declare @type: JJRightIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: JJRightIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: JJRightIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: JJRightIntegrationTest: @Transactional;
     
@@ -108,7 +111,16 @@ privileged aspect JJRightIntegrationTest_Roo_IntegrationTest {
         JJRight obj = dod.getNewTransientJJRight(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'JJRight' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'JJRight' identifier to be null", obj.getId());
-        jJRightService.saveJJRight(obj);
+        try {
+            jJRightService.saveJJRight(obj);
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         jJRightRepository.flush();
         Assert.assertNotNull("Expected 'JJRight' identifier to no longer be null", obj.getId());
     }

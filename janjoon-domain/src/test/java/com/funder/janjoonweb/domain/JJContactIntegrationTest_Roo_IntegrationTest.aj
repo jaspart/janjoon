@@ -7,7 +7,10 @@ import com.funder.janjoonweb.domain.JJContactDataOnDemand;
 import com.funder.janjoonweb.domain.JJContactIntegrationTest;
 import com.funder.janjoonweb.domain.JJContactRepository;
 import com.funder.janjoonweb.domain.JJContactService;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,7 @@ privileged aspect JJContactIntegrationTest_Roo_IntegrationTest {
     
     declare @type: JJContactIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: JJContactIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: JJContactIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: JJContactIntegrationTest: @Transactional;
     
@@ -108,7 +111,16 @@ privileged aspect JJContactIntegrationTest_Roo_IntegrationTest {
         JJContact obj = dod.getNewTransientJJContact(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'JJContact' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'JJContact' identifier to be null", obj.getId());
-        jJContactService.saveJJContact(obj);
+        try {
+            jJContactService.saveJJContact(obj);
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         jJContactRepository.flush();
         Assert.assertNotNull("Expected 'JJContact' identifier to no longer be null", obj.getId());
     }

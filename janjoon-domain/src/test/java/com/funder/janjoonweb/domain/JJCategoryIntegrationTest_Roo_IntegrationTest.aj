@@ -7,7 +7,10 @@ import com.funder.janjoonweb.domain.JJCategoryDataOnDemand;
 import com.funder.janjoonweb.domain.JJCategoryIntegrationTest;
 import com.funder.janjoonweb.domain.JJCategoryRepository;
 import com.funder.janjoonweb.domain.JJCategoryService;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,7 @@ privileged aspect JJCategoryIntegrationTest_Roo_IntegrationTest {
     
     declare @type: JJCategoryIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: JJCategoryIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: JJCategoryIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: JJCategoryIntegrationTest: @Transactional;
     
@@ -108,7 +111,16 @@ privileged aspect JJCategoryIntegrationTest_Roo_IntegrationTest {
         JJCategory obj = dod.getNewTransientJJCategory(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'JJCategory' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'JJCategory' identifier to be null", obj.getId());
-        jJCategoryService.saveJJCategory(obj);
+        try {
+            jJCategoryService.saveJJCategory(obj);
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         jJCategoryRepository.flush();
         Assert.assertNotNull("Expected 'JJCategory' identifier to no longer be null", obj.getId());
     }

@@ -1,10 +1,8 @@
 package com.funder.janjoonweb.ui.mb;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.annotation.PostConstruct;
+import java.util.Random;
 
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -20,48 +18,81 @@ import com.funder.janjoonweb.ui.mb.converter.JJProjectConverter;
 @RooSerializable
 @RooJsfManagedBean(entity = JJRequirement.class, beanName = "jJRequirementBean")
 public class JJRequirementBean {
-	
-	
 
-	private JJRequirement myBusinessJJRequirement;
-	private JJRequirement myFunctionalJJRequirement;
-	private JJRequirement myTechnicalJJRequirement;
+	private JJRequirement myJJRequirement;
+	private JJRequirement myEditedJJRequirement;
+	private JJRequirement mySelectedBusinessJJRequirement;
+	private JJRequirement mySelectedFunctionalJJRequirement;
+	private JJRequirement mySelectedTechnicalJJRequirement;
+
+	private int creationColumnNumber;
+	private int editionColumnNumber;
 
 	private List<JJRequirement> myBusinessJJRequirements;
 	private List<JJRequirement> myFunctionalJJRequirements;
 	private List<JJRequirement> myTechnicalJJRequirements;
-	
+
 	private JJProjectConverter projectConverter = new JJProjectConverter();
 	private JJChapterConverter chapterConverter = new JJChapterConverter();
-	
-	
-	public JJRequirement getMyBusinessJJRequirement() {
-		System.out.println("get business req invoked");
-		return myBusinessJJRequirement;
+
+	public JJRequirement getMyJJRequirement() {
+		System.out.println("get req invoked");
+		return myJJRequirement;
 	}
 
-	public void setMyBusinessJJRequirement(JJRequirement myBusinessJJRequirement) {
-		this.myBusinessJJRequirement = myBusinessJJRequirement;
+	public void setMyJJRequirement(JJRequirement myJJRequirement) {
+		this.myJJRequirement = myJJRequirement;
 	}
 
-	public JJRequirement getMyFunctionalJJRequirement() {
-		System.out.println("get functional req invoked");
-		return myFunctionalJJRequirement;
+	public JJRequirement getMyEditedJJRequirement() {
+		return myEditedJJRequirement;
 	}
 
-	public void setMyFunctionalJJRequirement(
-			JJRequirement myFunctionalJJRequirement) {
-		this.myFunctionalJJRequirement = myFunctionalJJRequirement;
+	public void setMyEditedJJRequirement(JJRequirement myEditedJJRequirement) {
+		this.myEditedJJRequirement = myEditedJJRequirement;
 	}
 
-	public JJRequirement getMyTechnicalJJRequirement() {
-		System.out.println("get technical req invoked");
-		return myTechnicalJJRequirement;
+	public JJRequirement getMySelectedBusinessJJRequirement() {
+		return mySelectedBusinessJJRequirement;
 	}
 
-	public void setMyTechnicalJJRequirement(
-			JJRequirement myTechnicalJJRequirement) {
-		this.myTechnicalJJRequirement = myTechnicalJJRequirement;
+	public void setMySelectedBusinessJJRequirement(
+			JJRequirement mySelectedBusinessJJRequirement) {
+		this.mySelectedBusinessJJRequirement = mySelectedBusinessJJRequirement;
+	}
+
+	public JJRequirement getMySelectedFunctionalJJRequirement() {
+		return mySelectedFunctionalJJRequirement;
+	}
+
+	public void setMySelectedFunctionalJJRequirement(
+			JJRequirement mySelectedFunctionalJJRequirement) {
+		this.mySelectedFunctionalJJRequirement = mySelectedFunctionalJJRequirement;
+	}
+
+	public JJRequirement getMySelectedTechnicalJJRequirement() {
+		return mySelectedTechnicalJJRequirement;
+	}
+
+	public void setMySelectedTechnicalJJRequirement(
+			JJRequirement mySelectedTechnicalJJRequirement) {
+		this.mySelectedTechnicalJJRequirement = mySelectedTechnicalJJRequirement;
+	}
+
+	public int getCreationColumnNumber() {
+		return creationColumnNumber;
+	}
+
+	public void setCreationColumnNumber(int creationColumnNumber) {
+		this.creationColumnNumber = creationColumnNumber;
+	}
+
+	public int getEditionColumnNumber() {
+		return editionColumnNumber;
+	}
+
+	public void setEditionColumnNumber(int editionColumnNumber) {
+		this.editionColumnNumber = editionColumnNumber;
 	}
 
 	public List<JJRequirement> getMyBusinessJJRequirements() {
@@ -106,233 +137,211 @@ public class JJRequirementBean {
 	public void setChapterConverter(JJChapterConverter chapterConverter) {
 		this.chapterConverter = chapterConverter;
 	}
-	
-	public void createNewBusinessJJRequirement() {
-		
-		
-		JJProject project;
-		for (int i = 0; i < 3; i++) {
-			project = new JJProject();
-			project.setName("ProjectName " + i);
-			project.setDescription("ProjectDescription " + i);
-			project.setCreationDate(new Date());
-			jJProjectService.saveJJProject(project);
+
+	public void createJJRequirement(int number) {
+		List<JJProject> JJProjectList = jJProjectService.findAllJJProjects();
+		if (JJProjectList.isEmpty()) {
+			JJProject project;
+			for (int i = 0; i < 3; i++) {
+				project = new JJProject();
+				project.setName("ProjectName " + i);
+				project.setDescription("ProjectDescription " + i);
+				project.setCreationDate(new Date());
+				jJProjectService.saveJJProject(project);
+			}
 		}
-		
-		JJChapter chapter;
-		for (int i = 0; i < 3; i++) {
-			chapter = new JJChapter();
-			chapter.setName("ChapterName " + i);
-			chapter.setDescription("ChapterDescription " + i);
-			chapter.setCreationDate(new Date());
-			jJChapterService.saveJJChapter(chapter);
+
+		List<JJChapter> JJChapterList = jJChapterService.findAllJJChapters();
+		if (JJChapterList.isEmpty()) {
+			JJChapter chapter;
+			for (int i = 0; i < 3; i++) {
+				chapter = new JJChapter();
+				chapter.setName("ChapterName " + i);
+				chapter.setDescription("ChapterDescription " + i);
+				chapter.setCreationDate(new Date());
+				jJChapterService.saveJJChapter(chapter);
+			}
 		}
-		
-		System.out.println("business req bean created");
-		myBusinessJJRequirement = new JJRequirement();
-		myBusinessJJRequirement.setCreationDate(new Date());
-		myBusinessJJRequirement.setEnabled(true);
+
+		System.out.println("JJRequirement bean created");
+		myJJRequirement = new JJRequirement();
+		myJJRequirement.setCreationDate(new Date());
+		myJJRequirement.setEnabled(true);
+
+		this.creationColumnNumber = number;
+		String category = null;
+		switch (number) {
+		case 1:
+			category = "BUSINESS";
+			break;
+		case 2:
+			category = "FUNCTIONAL";
+			break;
+		case 3:
+			category = "TECHNICAL";
+			break;
+
+		default:
+			break;
+		}
+
+		JJCategory myJJCategory = null;
 
 		List<JJCategory> JJCategoryList = jJCategoryService
-				.findAllJJCategorys();
-		JJCategory myJJCategory = null;
+				.getJJCategoryWithName(category);
+
 		if (!JJCategoryList.isEmpty()) {
-			System.out.println("The table JJCategory is not empty");
 			for (JJCategory jjCategory : JJCategoryList) {
-				if (jjCategory.getName().equalsIgnoreCase("BUSINESS")) {
-					System.out
-							.println("A JJCategory as name BUSINESS is founded");
-					myJJCategory = jjCategory;
-					break;
-				}
-
+				myJJCategory = jjCategory;
+				break;
 			}
-			if (myJJCategory == null)
-				myJJCategory = createANDsaveJJCategory("BUSINESS");
-		} else {
-			System.out.println("The table JJCategory is empty");
-			myJJCategory = createANDsaveJJCategory("BUSINESS");
-		}
-		myBusinessJJRequirement.setCategory(myJJCategory);
-	}
 
-	public void createNewFunctionalJJRequirement() {
-		System.out.println("functional req bean created");
-		myFunctionalJJRequirement = new JJRequirement();
-		myFunctionalJJRequirement.setCreationDate(new Date());
-		myFunctionalJJRequirement.setEnabled(true);
+		} else
+			myJJCategory = createANDpersistJJCategory(category);
 
-		List<JJCategory> JJCategoryList = jJCategoryService
-				.findAllJJCategorys();
-		JJCategory myJJCategory = null;
-		if (!JJCategoryList.isEmpty()) {
-			System.out.println("The table JJCategory is not empty");
-			for (JJCategory jjCategory : JJCategoryList) {
-				if (jjCategory.getName().equalsIgnoreCase("FUNCTIONAL")) {
-					System.out
-							.println("A JJCategory as name FUNCTIONAL is founded");
-					myJJCategory = jjCategory;
-					break;
-				}
+		myJJRequirement.setCategory(myJJCategory);
 
-			}
-			if (myJJCategory == null)
-				myJJCategory = createANDsaveJJCategory("FUNCTIONAL");
-		} else {
-			System.out.println("The table JJCategory is empty");
-			myJJCategory = createANDsaveJJCategory("FUNCTIONAL");
-		}
-		myFunctionalJJRequirement.setCategory(myJJCategory);
-	}
-
-	public void createNewTechnicalJJRequirement() {
-		System.out.println("technical req bean created");
-		myTechnicalJJRequirement = new JJRequirement();
-		myTechnicalJJRequirement.setCreationDate(new Date());
-		myTechnicalJJRequirement.setEnabled(true);
-
-		List<JJCategory> JJCategoryList = jJCategoryService
-				.findAllJJCategorys();
-		JJCategory myJJCategory = null;
-		if (!JJCategoryList.isEmpty()) {
-			System.out.println("The table JJCategory is not empty");
-			for (JJCategory jjCategory : JJCategoryList) {
-				if (jjCategory.getName().equalsIgnoreCase("TECHNICAL")) {
-					System.out
-							.println("A JJCategory as name TECHNICAL is founded");
-					myJJCategory = jjCategory;
-					break;
-				}
-
-			}
-			if (myJJCategory == null)
-				myJJCategory = createANDsaveJJCategory("TECHNICAL");
-		} else {
-			System.out.println("The table JJCategory is empty");
-			myJJCategory = createANDsaveJJCategory("TECHNICAL");
-		}
-		myTechnicalJJRequirement.setCategory(myJJCategory);
-	}
-
-	public void persistNewBusinessJJRequirement() {
-		List<JJStatus> JJStatusList = jJStatusService.findAllJJStatuses();
 		JJStatus myJJStatus = null;
 
+		List<JJStatus> JJStatusList = jJStatusService
+				.getJJStatusWithName("NEW");
+
 		if (!JJStatusList.isEmpty()) {
-			System.out.println("The table JJStatus is not empty");
 			for (JJStatus jjStatus : JJStatusList) {
-				if (jjStatus.getName().equalsIgnoreCase("NEW")) {
-					System.out.println("A JJStatus as name NEW is founded");
-					myJJStatus = jjStatus;
-					break;
-				}
-
+				myJJStatus = jjStatus;
+				break;
 			}
-			if (myJJStatus == null)
-				myJJStatus = createANDsaveJJStatus();
-		} else {
-			System.out.println("The table JJStatus is empty");
-			myJJStatus = createANDsaveJJStatus();
-		}
 
-		myBusinessJJRequirement.setStatus(myJJStatus);
-		jJRequirementService.saveJJRequirement(myBusinessJJRequirement);
+		} else
+			myJJStatus = createANDpersistJJStatus("NEW");
 
-		System.out.println("save done");
-		findAllBusinessJJRequirements();
+		myJJRequirement.setStatus(myJJStatus);
+		myJJRequirement.setNumero(new Random().nextInt(1000) + 1);
+
 	}
 
-	public void persistNewFunctionalJJRequirement() {
-		List<JJStatus> JJStatusList = jJStatusService.findAllJJStatuses();
+	public void editJJRequirement(int number) {
+		this.editionColumnNumber = number;
+		JJRequirement req = new JJRequirement();
+		switch (number) {
+		case 1:
+			req = mySelectedBusinessJJRequirement;
+			break;
+		case 2:
+			req = mySelectedFunctionalJJRequirement;
+			break;
+
+		case 3:
+			req = mySelectedTechnicalJJRequirement;
+			break;
+
+		default:
+			break;
+		}
+		System.out.println("JJRequiremnt selected is :" + req.getId());
+
+		System.out.println("EditJJRequirement bean created");
+
+		myEditedJJRequirement = new JJRequirement();
+		myEditedJJRequirement.setCreationDate(req.getCreationDate());
+		myEditedJJRequirement.setUpdatedDate(new Date());
+		myEditedJJRequirement.setEnabled(true);
+		myEditedJJRequirement.setCategory(req.getCategory());
+
 		JJStatus myJJStatus = null;
 
-		if (!JJStatusList.isEmpty()) {
-			System.out.println("The table JJStatus is not empty");
-			for (JJStatus jjStatus : JJStatusList) {
-				if (jjStatus.getName().equalsIgnoreCase("NEW")) {
-					System.out.println("A JJStatus as name NEW is founded");
-					myJJStatus = jjStatus;
-					break;
-				}
-
-			}
-			if (myJJStatus == null)
-				myJJStatus = createANDsaveJJStatus();
-		} else {
-			System.out.println("The table JJStatus is empty");
-			myJJStatus = createANDsaveJJStatus();
-		}
-
-		myFunctionalJJRequirement.setStatus(myJJStatus);
-		jJRequirementService.saveJJRequirement(myFunctionalJJRequirement);
-
-		System.out.println("save done");
-		findAllFunctionalJJRequirements();
-	}
-
-	public void persistNewTechnicalJJRequirement() {
-		List<JJStatus> JJStatusList = jJStatusService.findAllJJStatuses();
-		JJStatus myJJStatus = null;
+		List<JJStatus> JJStatusList = jJStatusService
+				.getJJStatusWithName("MODIFY");
 
 		if (!JJStatusList.isEmpty()) {
-			System.out.println("The table JJStatus is not empty");
 			for (JJStatus jjStatus : JJStatusList) {
-				if (jjStatus.getName().equalsIgnoreCase("NEW")) {
-					System.out.println("A JJStatus as name NEW is founded");
-					myJJStatus = jjStatus;
-					break;
-				}
-
+				myJJStatus = jjStatus;
+				break;
 			}
-			if (myJJStatus == null)
-				myJJStatus = createANDsaveJJStatus();
+
+		} else
+			myJJStatus = createANDpersistJJStatus("MODIFY");
+
+		myEditedJJRequirement.setStatus(myJJStatus);
+		myEditedJJRequirement.setNumero(req.getNumero());
+		myEditedJJRequirement.setProject(req.getProject());
+		myEditedJJRequirement.setChapter(req.getChapter());
+		myEditedJJRequirement.setDescription(req.getDescription());
+		myEditedJJRequirement.setName(req.getName());
+		myEditedJJRequirement.setNote(req.getNote());
+
+	}
+
+	public void persistJJRequirement(int index) {
+
+		if (index == 1) {
+			jJRequirementService.saveJJRequirement(myJJRequirement);
+			findAllJJRequirementsWithCategory(creationColumnNumber);
 		} else {
-			System.out.println("The table JJStatus is empty");
-			myJJStatus = createANDsaveJJStatus();
+			switch (editionColumnNumber) {
+			case 1:
+				mySelectedBusinessJJRequirement.setEnabled(false);
+				jJRequirementService
+						.updateJJRequirement(mySelectedBusinessJJRequirement);
+				break;
+			case 2:
+				mySelectedFunctionalJJRequirement.setEnabled(false);
+				jJRequirementService
+						.updateJJRequirement(mySelectedFunctionalJJRequirement);
+				break;
+			case 3:
+				mySelectedTechnicalJJRequirement.setEnabled(false);
+				jJRequirementService
+						.updateJJRequirement(mySelectedTechnicalJJRequirement);
+				break;
+
+			default:
+				break;
+			}
+
+			jJRequirementService.saveJJRequirement(myEditedJJRequirement);
+			findAllJJRequirementsWithCategory(editionColumnNumber);
+		}
+	}
+
+	public void findAllJJRequirementsWithCategory(int number) {
+		System.out.println("findAllJJRequirementsWithCategory is invoked");
+		switch (number) {
+		case 1:
+			myBusinessJJRequirements = jJRequirementService
+					.getAllJJRequirementsWithCategory("BUSINESS");
+			break;
+		case 2:
+			myFunctionalJJRequirements = jJRequirementService
+					.getAllJJRequirementsWithCategory("FUNCTIONAL");
+			break;
+		case 3:
+			myTechnicalJJRequirements = jJRequirementService
+					.getAllJJRequirementsWithCategory("TECHNICAL");
+			break;
+		default:
+			break;
 		}
 
-		myTechnicalJJRequirement.setStatus(myJJStatus);
-		jJRequirementService.saveJJRequirement(myTechnicalJJRequirement);
-
-		System.out.println("save done");
-		findAllTechnicalJJRequirements();
 	}
 
-	public void findAllBusinessJJRequirements() {
-		System.out.println("findAllBusinessJJRequirements is invoked");
-		myBusinessJJRequirements = jJRequirementService
-				.getAllSpecifiedJJRequirements("BUSINESS");
-	}
-
-	public void findAllFunctionalJJRequirements() {
-		System.out.println("findAllFunctionalJJRequirements is invoked");
-		myFunctionalJJRequirements = jJRequirementService
-				.getAllSpecifiedJJRequirements("FUNCTIONAL");
-	}
-
-	public void findAllTechnicalJJRequirements() {
-		System.out.println("findAllTechnicalJJRequirements is invoked");
-		myTechnicalJJRequirements = jJRequirementService
-				.getAllSpecifiedJJRequirements("TECHNICAL");
-	}
-
-	private JJStatus createANDsaveJJStatus() {
+	private JJStatus createANDpersistJJStatus(String name) {
 		JJStatus newJJStatus = new JJStatus();
-		newJJStatus.setName("NEW");
+		newJJStatus.setName(name);
 		newJJStatus.setCreationDate(new Date());
-		newJJStatus.setDescription("A Status defined as NEW");
+		newJJStatus.setDescription("A JJStatus defined as " + name);
+		newJJStatus.setEnabled(true);
 		jJStatusService.saveJJStatus(newJJStatus);
-		System.out.println("The Status is saved into the database");
 		return newJJStatus;
 	}
 
-	private JJCategory createANDsaveJJCategory(String name) {
+	private JJCategory createANDpersistJJCategory(String name) {
 		JJCategory newJJCategory = new JJCategory();
 		newJJCategory.setName(name);
 		newJJCategory.setCreationDate(new Date());
-		newJJCategory.setDescription("A Category defined as " + name);
+		newJJCategory.setDescription("A JJCategory defined as " + name);
+		newJJCategory.setEnabled(true);
 		jJCategoryService.saveJJCategory(newJJCategory);
-		System.out.println("The category is saved into the database");
 		return newJJCategory;
 	}
 

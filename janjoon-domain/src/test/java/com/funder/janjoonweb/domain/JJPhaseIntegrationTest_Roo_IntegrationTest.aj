@@ -7,7 +7,10 @@ import com.funder.janjoonweb.domain.JJPhaseDataOnDemand;
 import com.funder.janjoonweb.domain.JJPhaseIntegrationTest;
 import com.funder.janjoonweb.domain.JJPhaseRepository;
 import com.funder.janjoonweb.domain.JJPhaseService;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,7 @@ privileged aspect JJPhaseIntegrationTest_Roo_IntegrationTest {
     
     declare @type: JJPhaseIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: JJPhaseIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: JJPhaseIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: JJPhaseIntegrationTest: @Transactional;
     
@@ -108,7 +111,16 @@ privileged aspect JJPhaseIntegrationTest_Roo_IntegrationTest {
         JJPhase obj = dod.getNewTransientJJPhase(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'JJPhase' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'JJPhase' identifier to be null", obj.getId());
-        jJPhaseService.saveJJPhase(obj);
+        try {
+            jJPhaseService.saveJJPhase(obj);
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         jJPhaseRepository.flush();
         Assert.assertNotNull("Expected 'JJPhase' identifier to no longer be null", obj.getId());
     }

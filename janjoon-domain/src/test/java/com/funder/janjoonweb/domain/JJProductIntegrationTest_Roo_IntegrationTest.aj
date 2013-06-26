@@ -7,7 +7,10 @@ import com.funder.janjoonweb.domain.JJProductDataOnDemand;
 import com.funder.janjoonweb.domain.JJProductIntegrationTest;
 import com.funder.janjoonweb.domain.JJProductRepository;
 import com.funder.janjoonweb.domain.JJProductService;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,7 @@ privileged aspect JJProductIntegrationTest_Roo_IntegrationTest {
     
     declare @type: JJProductIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: JJProductIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: JJProductIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: JJProductIntegrationTest: @Transactional;
     
@@ -108,7 +111,16 @@ privileged aspect JJProductIntegrationTest_Roo_IntegrationTest {
         JJProduct obj = dod.getNewTransientJJProduct(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'JJProduct' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'JJProduct' identifier to be null", obj.getId());
-        jJProductService.saveJJProduct(obj);
+        try {
+            jJProductService.saveJJProduct(obj);
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         jJProductRepository.flush();
         Assert.assertNotNull("Expected 'JJProduct' identifier to no longer be null", obj.getId());
     }

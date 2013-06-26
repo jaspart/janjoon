@@ -7,7 +7,10 @@ import com.funder.janjoonweb.domain.JJTestcaseDataOnDemand;
 import com.funder.janjoonweb.domain.JJTestcaseIntegrationTest;
 import com.funder.janjoonweb.domain.JJTestcaseRepository;
 import com.funder.janjoonweb.domain.JJTestcaseService;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,7 @@ privileged aspect JJTestcaseIntegrationTest_Roo_IntegrationTest {
     
     declare @type: JJTestcaseIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: JJTestcaseIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: JJTestcaseIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: JJTestcaseIntegrationTest: @Transactional;
     
@@ -108,7 +111,16 @@ privileged aspect JJTestcaseIntegrationTest_Roo_IntegrationTest {
         JJTestcase obj = dod.getNewTransientJJTestcase(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'JJTestcase' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'JJTestcase' identifier to be null", obj.getId());
-        jJTestcaseService.saveJJTestcase(obj);
+        try {
+            jJTestcaseService.saveJJTestcase(obj);
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         jJTestcaseRepository.flush();
         Assert.assertNotNull("Expected 'JJTestcase' identifier to no longer be null", obj.getId());
     }

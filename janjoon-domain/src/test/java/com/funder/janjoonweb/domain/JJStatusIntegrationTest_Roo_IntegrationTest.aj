@@ -7,7 +7,10 @@ import com.funder.janjoonweb.domain.JJStatusDataOnDemand;
 import com.funder.janjoonweb.domain.JJStatusIntegrationTest;
 import com.funder.janjoonweb.domain.JJStatusRepository;
 import com.funder.janjoonweb.domain.JJStatusService;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,7 @@ privileged aspect JJStatusIntegrationTest_Roo_IntegrationTest {
     
     declare @type: JJStatusIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: JJStatusIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: JJStatusIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: JJStatusIntegrationTest: @Transactional;
     
@@ -108,7 +111,16 @@ privileged aspect JJStatusIntegrationTest_Roo_IntegrationTest {
         JJStatus obj = dod.getNewTransientJJStatus(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'JJStatus' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'JJStatus' identifier to be null", obj.getId());
-        jJStatusService.saveJJStatus(obj);
+        try {
+            jJStatusService.saveJJStatus(obj);
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         jJStatusRepository.flush();
         Assert.assertNotNull("Expected 'JJStatus' identifier to no longer be null", obj.getId());
     }

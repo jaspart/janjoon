@@ -7,7 +7,10 @@ import com.funder.janjoonweb.domain.JJMessageDataOnDemand;
 import com.funder.janjoonweb.domain.JJMessageIntegrationTest;
 import com.funder.janjoonweb.domain.JJMessageRepository;
 import com.funder.janjoonweb.domain.JJMessageService;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,7 @@ privileged aspect JJMessageIntegrationTest_Roo_IntegrationTest {
     
     declare @type: JJMessageIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: JJMessageIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: JJMessageIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: JJMessageIntegrationTest: @Transactional;
     
@@ -108,7 +111,16 @@ privileged aspect JJMessageIntegrationTest_Roo_IntegrationTest {
         JJMessage obj = dod.getNewTransientJJMessage(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'JJMessage' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'JJMessage' identifier to be null", obj.getId());
-        jJMessageService.saveJJMessage(obj);
+        try {
+            jJMessageService.saveJJMessage(obj);
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         jJMessageRepository.flush();
         Assert.assertNotNull("Expected 'JJMessage' identifier to no longer be null", obj.getId());
     }

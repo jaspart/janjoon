@@ -7,7 +7,10 @@ import com.funder.janjoonweb.domain.JJJobDataOnDemand;
 import com.funder.janjoonweb.domain.JJJobIntegrationTest;
 import com.funder.janjoonweb.domain.JJJobRepository;
 import com.funder.janjoonweb.domain.JJJobService;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,7 @@ privileged aspect JJJobIntegrationTest_Roo_IntegrationTest {
     
     declare @type: JJJobIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: JJJobIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: JJJobIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: JJJobIntegrationTest: @Transactional;
     
@@ -108,7 +111,16 @@ privileged aspect JJJobIntegrationTest_Roo_IntegrationTest {
         JJJob obj = dod.getNewTransientJJJob(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'JJJob' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'JJJob' identifier to be null", obj.getId());
-        jJJobService.saveJJJob(obj);
+        try {
+            jJJobService.saveJJJob(obj);
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         jJJobRepository.flush();
         Assert.assertNotNull("Expected 'JJJob' identifier to no longer be null", obj.getId());
     }

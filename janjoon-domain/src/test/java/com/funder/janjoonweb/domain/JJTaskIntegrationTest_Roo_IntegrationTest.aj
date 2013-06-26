@@ -7,7 +7,10 @@ import com.funder.janjoonweb.domain.JJTaskDataOnDemand;
 import com.funder.janjoonweb.domain.JJTaskIntegrationTest;
 import com.funder.janjoonweb.domain.JJTaskRepository;
 import com.funder.janjoonweb.domain.JJTaskService;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,7 @@ privileged aspect JJTaskIntegrationTest_Roo_IntegrationTest {
     
     declare @type: JJTaskIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: JJTaskIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: JJTaskIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: JJTaskIntegrationTest: @Transactional;
     
@@ -108,7 +111,16 @@ privileged aspect JJTaskIntegrationTest_Roo_IntegrationTest {
         JJTask obj = dod.getNewTransientJJTask(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'JJTask' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'JJTask' identifier to be null", obj.getId());
-        jJTaskService.saveJJTask(obj);
+        try {
+            jJTaskService.saveJJTask(obj);
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         jJTaskRepository.flush();
         Assert.assertNotNull("Expected 'JJTask' identifier to no longer be null", obj.getId());
     }

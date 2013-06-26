@@ -7,7 +7,10 @@ import com.funder.janjoonweb.domain.JJBugDataOnDemand;
 import com.funder.janjoonweb.domain.JJBugIntegrationTest;
 import com.funder.janjoonweb.domain.JJBugRepository;
 import com.funder.janjoonweb.domain.JJBugService;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,7 @@ privileged aspect JJBugIntegrationTest_Roo_IntegrationTest {
     
     declare @type: JJBugIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: JJBugIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: JJBugIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: JJBugIntegrationTest: @Transactional;
     
@@ -108,7 +111,16 @@ privileged aspect JJBugIntegrationTest_Roo_IntegrationTest {
         JJBug obj = dod.getNewTransientJJBug(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'JJBug' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'JJBug' identifier to be null", obj.getId());
-        jJBugService.saveJJBug(obj);
+        try {
+            jJBugService.saveJJBug(obj);
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         jJBugRepository.flush();
         Assert.assertNotNull("Expected 'JJBug' identifier to no longer be null", obj.getId());
     }

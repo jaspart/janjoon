@@ -34,6 +34,7 @@ import com.funder.janjoonweb.ui.mb.converter.JJProjectConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJStatusConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJVersionConverter;
+import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -41,7 +42,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
-import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -55,6 +55,7 @@ import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
+import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
 import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
@@ -192,15 +193,16 @@ privileged aspect JJBugBean_Roo_ManagedBean {
     
     public HtmlPanelGrid JJBugBean.populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
         
-        HtmlOutputText nameCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel nameCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        nameCreateOutput.setFor("nameCreateInput");
         nameCreateOutput.setId("nameCreateOutput");
-        nameCreateOutput.setValue("Name: * ");
+        nameCreateOutput.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameCreateOutput);
         
         InputText nameCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -218,9 +220,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         nameCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(nameCreateInputMessage);
         
-        HtmlOutputText descriptionCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel descriptionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        descriptionCreateOutput.setFor("descriptionCreateInput");
         descriptionCreateOutput.setId("descriptionCreateOutput");
-        descriptionCreateOutput.setValue("Description: * ");
+        descriptionCreateOutput.setValue("Description:");
         htmlPanelGrid.getChildren().add(descriptionCreateOutput);
         
         InputTextarea descriptionCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
@@ -238,9 +241,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         descriptionCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(descriptionCreateInputMessage);
         
-        HtmlOutputText creationDateCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel creationDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        creationDateCreateOutput.setFor("creationDateCreateInput");
         creationDateCreateOutput.setId("creationDateCreateOutput");
-        creationDateCreateOutput.setValue("Creation Date: * ");
+        creationDateCreateOutput.setValue("Creation Date:");
         htmlPanelGrid.getChildren().add(creationDateCreateOutput);
         
         Calendar creationDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
@@ -258,9 +262,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         creationDateCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(creationDateCreateInputMessage);
         
-        HtmlOutputText createdByCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel createdByCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        createdByCreateOutput.setFor("createdByCreateInput");
         createdByCreateOutput.setId("createdByCreateOutput");
-        createdByCreateOutput.setValue("Created By:   ");
+        createdByCreateOutput.setValue("Created By:");
         htmlPanelGrid.getChildren().add(createdByCreateOutput);
         
         AutoComplete createdByCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -281,9 +286,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         createdByCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(createdByCreateInputMessage);
         
-        HtmlOutputText updatedDateCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel updatedDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        updatedDateCreateOutput.setFor("updatedDateCreateInput");
         updatedDateCreateOutput.setId("updatedDateCreateOutput");
-        updatedDateCreateOutput.setValue("Updated Date:   ");
+        updatedDateCreateOutput.setValue("Updated Date:");
         htmlPanelGrid.getChildren().add(updatedDateCreateOutput);
         
         Calendar updatedDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
@@ -301,9 +307,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         updatedDateCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(updatedDateCreateInputMessage);
         
-        HtmlOutputText updatedByCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel updatedByCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        updatedByCreateOutput.setFor("updatedByCreateInput");
         updatedByCreateOutput.setId("updatedByCreateOutput");
-        updatedByCreateOutput.setValue("Updated By:   ");
+        updatedByCreateOutput.setValue("Updated By:");
         htmlPanelGrid.getChildren().add(updatedByCreateOutput);
         
         AutoComplete updatedByCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -324,9 +331,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         updatedByCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(updatedByCreateInputMessage);
         
-        HtmlOutputText enabledCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel enabledCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        enabledCreateOutput.setFor("enabledCreateInput");
         enabledCreateOutput.setId("enabledCreateOutput");
-        enabledCreateOutput.setValue("Enabled:   ");
+        enabledCreateOutput.setValue("Enabled:");
         htmlPanelGrid.getChildren().add(enabledCreateOutput);
         
         SelectBooleanCheckbox enabledCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
@@ -341,9 +349,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         enabledCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
         
-        HtmlOutputText projectCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel projectCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        projectCreateOutput.setFor("projectCreateInput");
         projectCreateOutput.setId("projectCreateOutput");
-        projectCreateOutput.setValue("Project:   ");
+        projectCreateOutput.setValue("Project:");
         htmlPanelGrid.getChildren().add(projectCreateOutput);
         
         AutoComplete projectCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -364,9 +373,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         projectCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(projectCreateInputMessage);
         
-        HtmlOutputText startDateCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel startDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        startDateCreateOutput.setFor("startDateCreateInput");
         startDateCreateOutput.setId("startDateCreateOutput");
-        startDateCreateOutput.setValue("Start Date:   ");
+        startDateCreateOutput.setValue("Start Date:");
         htmlPanelGrid.getChildren().add(startDateCreateOutput);
         
         Calendar startDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
@@ -384,9 +394,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         startDateCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(startDateCreateInputMessage);
         
-        HtmlOutputText endDateCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel endDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        endDateCreateOutput.setFor("endDateCreateInput");
         endDateCreateOutput.setId("endDateCreateOutput");
-        endDateCreateOutput.setValue("End Date:   ");
+        endDateCreateOutput.setValue("End Date:");
         htmlPanelGrid.getChildren().add(endDateCreateOutput);
         
         Calendar endDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
@@ -404,9 +415,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         endDateCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(endDateCreateInputMessage);
         
-        HtmlOutputText workloadCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel workloadCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        workloadCreateOutput.setFor("workloadCreateInput");
         workloadCreateOutput.setId("workloadCreateOutput");
-        workloadCreateOutput.setValue("Workload:   ");
+        workloadCreateOutput.setValue("Workload:");
         htmlPanelGrid.getChildren().add(workloadCreateOutput);
         
         Spinner workloadCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
@@ -422,9 +434,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         workloadCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(workloadCreateInputMessage);
         
-        HtmlOutputText jjversionCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel jjversionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        jjversionCreateOutput.setFor("jjversionCreateInput");
         jjversionCreateOutput.setId("jjversionCreateOutput");
-        jjversionCreateOutput.setValue("Jjversion:   ");
+        jjversionCreateOutput.setValue("Jjversion:");
         htmlPanelGrid.getChildren().add(jjversionCreateOutput);
         
         AutoComplete jjversionCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -445,9 +458,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         jjversionCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(jjversionCreateInputMessage);
         
-        HtmlOutputText categoryCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel categoryCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        categoryCreateOutput.setFor("categoryCreateInput");
         categoryCreateOutput.setId("categoryCreateOutput");
-        categoryCreateOutput.setValue("Category:   ");
+        categoryCreateOutput.setValue("Category:");
         htmlPanelGrid.getChildren().add(categoryCreateOutput);
         
         AutoComplete categoryCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -468,9 +482,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         categoryCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(categoryCreateInputMessage);
         
-        HtmlOutputText criticityCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel criticityCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        criticityCreateOutput.setFor("criticityCreateInput");
         criticityCreateOutput.setId("criticityCreateOutput");
-        criticityCreateOutput.setValue("Criticity:   ");
+        criticityCreateOutput.setValue("Criticity:");
         htmlPanelGrid.getChildren().add(criticityCreateOutput);
         
         AutoComplete criticityCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -491,9 +506,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         criticityCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(criticityCreateInputMessage);
         
-        HtmlOutputText importanceCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel importanceCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        importanceCreateOutput.setFor("importanceCreateInput");
         importanceCreateOutput.setId("importanceCreateOutput");
-        importanceCreateOutput.setValue("Importance:   ");
+        importanceCreateOutput.setValue("Importance:");
         htmlPanelGrid.getChildren().add(importanceCreateOutput);
         
         AutoComplete importanceCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -514,9 +530,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         importanceCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(importanceCreateInputMessage);
         
-        HtmlOutputText statusCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel statusCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        statusCreateOutput.setFor("statusCreateInput");
         statusCreateOutput.setId("statusCreateOutput");
-        statusCreateOutput.setValue("Status:   ");
+        statusCreateOutput.setValue("Status:");
         htmlPanelGrid.getChildren().add(statusCreateOutput);
         
         AutoComplete statusCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -537,9 +554,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         statusCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(statusCreateInputMessage);
         
-        HtmlOutputText relationCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel relationCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        relationCreateOutput.setFor("relationCreateInput");
         relationCreateOutput.setId("relationCreateOutput");
-        relationCreateOutput.setValue("Relation:   ");
+        relationCreateOutput.setValue("Relation:");
         htmlPanelGrid.getChildren().add(relationCreateOutput);
         
         AutoComplete relationCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -556,9 +574,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         relationCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(relationCreateInputMessage);
         
-        HtmlOutputText requirementCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel requirementCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        requirementCreateOutput.setFor("requirementCreateInput");
         requirementCreateOutput.setId("requirementCreateOutput");
-        requirementCreateOutput.setValue("Requirement:   ");
+        requirementCreateOutput.setValue("Requirement:");
         htmlPanelGrid.getChildren().add(requirementCreateOutput);
         
         AutoComplete requirementCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -579,9 +598,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         requirementCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementCreateInputMessage);
         
-        HtmlOutputText bugUpCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel bugUpCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        bugUpCreateOutput.setFor("bugUpCreateInput");
         bugUpCreateOutput.setId("bugUpCreateOutput");
-        bugUpCreateOutput.setValue("Bug Up:   ");
+        bugUpCreateOutput.setValue("Bug Up:");
         htmlPanelGrid.getChildren().add(bugUpCreateOutput);
         
         AutoComplete bugUpCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -604,7 +624,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText bugsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugsCreateOutput.setId("bugsCreateOutput");
-        bugsCreateOutput.setValue("Bugs:   ");
+        bugsCreateOutput.setValue("Bugs:");
         htmlPanelGrid.getChildren().add(bugsCreateOutput);
         
         HtmlOutputText bugsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -620,7 +640,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText tasksCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         tasksCreateOutput.setId("tasksCreateOutput");
-        tasksCreateOutput.setValue("Tasks:   ");
+        tasksCreateOutput.setValue("Tasks:");
         htmlPanelGrid.getChildren().add(tasksCreateOutput);
         
         HtmlOutputText tasksCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -636,7 +656,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText assignedTosCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         assignedTosCreateOutput.setId("assignedTosCreateOutput");
-        assignedTosCreateOutput.setValue("Assigned Tos:   ");
+        assignedTosCreateOutput.setValue("Assigned Tos:");
         htmlPanelGrid.getChildren().add(assignedTosCreateOutput);
         
         HtmlOutputText assignedTosCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -652,7 +672,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesCreateOutput.setId("messagesCreateOutput");
-        messagesCreateOutput.setValue("Messages:   ");
+        messagesCreateOutput.setValue("Messages:");
         htmlPanelGrid.getChildren().add(messagesCreateOutput);
         
         HtmlOutputText messagesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -671,15 +691,16 @@ privileged aspect JJBugBean_Roo_ManagedBean {
     
     public HtmlPanelGrid JJBugBean.populateEditPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
         
-        HtmlOutputText nameEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel nameEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        nameEditOutput.setFor("nameEditInput");
         nameEditOutput.setId("nameEditOutput");
-        nameEditOutput.setValue("Name: * ");
+        nameEditOutput.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameEditOutput);
         
         InputText nameEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -697,9 +718,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         nameEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(nameEditInputMessage);
         
-        HtmlOutputText descriptionEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel descriptionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        descriptionEditOutput.setFor("descriptionEditInput");
         descriptionEditOutput.setId("descriptionEditOutput");
-        descriptionEditOutput.setValue("Description: * ");
+        descriptionEditOutput.setValue("Description:");
         htmlPanelGrid.getChildren().add(descriptionEditOutput);
         
         InputTextarea descriptionEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
@@ -717,9 +739,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         descriptionEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(descriptionEditInputMessage);
         
-        HtmlOutputText creationDateEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel creationDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        creationDateEditOutput.setFor("creationDateEditInput");
         creationDateEditOutput.setId("creationDateEditOutput");
-        creationDateEditOutput.setValue("Creation Date: * ");
+        creationDateEditOutput.setValue("Creation Date:");
         htmlPanelGrid.getChildren().add(creationDateEditOutput);
         
         Calendar creationDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
@@ -737,9 +760,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         creationDateEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(creationDateEditInputMessage);
         
-        HtmlOutputText createdByEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel createdByEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        createdByEditOutput.setFor("createdByEditInput");
         createdByEditOutput.setId("createdByEditOutput");
-        createdByEditOutput.setValue("Created By:   ");
+        createdByEditOutput.setValue("Created By:");
         htmlPanelGrid.getChildren().add(createdByEditOutput);
         
         AutoComplete createdByEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -760,9 +784,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         createdByEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(createdByEditInputMessage);
         
-        HtmlOutputText updatedDateEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel updatedDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        updatedDateEditOutput.setFor("updatedDateEditInput");
         updatedDateEditOutput.setId("updatedDateEditOutput");
-        updatedDateEditOutput.setValue("Updated Date:   ");
+        updatedDateEditOutput.setValue("Updated Date:");
         htmlPanelGrid.getChildren().add(updatedDateEditOutput);
         
         Calendar updatedDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
@@ -780,9 +805,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         updatedDateEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(updatedDateEditInputMessage);
         
-        HtmlOutputText updatedByEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel updatedByEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        updatedByEditOutput.setFor("updatedByEditInput");
         updatedByEditOutput.setId("updatedByEditOutput");
-        updatedByEditOutput.setValue("Updated By:   ");
+        updatedByEditOutput.setValue("Updated By:");
         htmlPanelGrid.getChildren().add(updatedByEditOutput);
         
         AutoComplete updatedByEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -803,9 +829,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         updatedByEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(updatedByEditInputMessage);
         
-        HtmlOutputText enabledEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel enabledEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        enabledEditOutput.setFor("enabledEditInput");
         enabledEditOutput.setId("enabledEditOutput");
-        enabledEditOutput.setValue("Enabled:   ");
+        enabledEditOutput.setValue("Enabled:");
         htmlPanelGrid.getChildren().add(enabledEditOutput);
         
         SelectBooleanCheckbox enabledEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
@@ -820,9 +847,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         enabledEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledEditInputMessage);
         
-        HtmlOutputText projectEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel projectEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        projectEditOutput.setFor("projectEditInput");
         projectEditOutput.setId("projectEditOutput");
-        projectEditOutput.setValue("Project:   ");
+        projectEditOutput.setValue("Project:");
         htmlPanelGrid.getChildren().add(projectEditOutput);
         
         AutoComplete projectEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -843,9 +871,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         projectEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(projectEditInputMessage);
         
-        HtmlOutputText startDateEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel startDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        startDateEditOutput.setFor("startDateEditInput");
         startDateEditOutput.setId("startDateEditOutput");
-        startDateEditOutput.setValue("Start Date:   ");
+        startDateEditOutput.setValue("Start Date:");
         htmlPanelGrid.getChildren().add(startDateEditOutput);
         
         Calendar startDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
@@ -863,9 +892,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         startDateEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(startDateEditInputMessage);
         
-        HtmlOutputText endDateEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel endDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        endDateEditOutput.setFor("endDateEditInput");
         endDateEditOutput.setId("endDateEditOutput");
-        endDateEditOutput.setValue("End Date:   ");
+        endDateEditOutput.setValue("End Date:");
         htmlPanelGrid.getChildren().add(endDateEditOutput);
         
         Calendar endDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
@@ -883,9 +913,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         endDateEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(endDateEditInputMessage);
         
-        HtmlOutputText workloadEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel workloadEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        workloadEditOutput.setFor("workloadEditInput");
         workloadEditOutput.setId("workloadEditOutput");
-        workloadEditOutput.setValue("Workload:   ");
+        workloadEditOutput.setValue("Workload:");
         htmlPanelGrid.getChildren().add(workloadEditOutput);
         
         Spinner workloadEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
@@ -901,9 +932,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         workloadEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(workloadEditInputMessage);
         
-        HtmlOutputText jjversionEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel jjversionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        jjversionEditOutput.setFor("jjversionEditInput");
         jjversionEditOutput.setId("jjversionEditOutput");
-        jjversionEditOutput.setValue("Jjversion:   ");
+        jjversionEditOutput.setValue("Jjversion:");
         htmlPanelGrid.getChildren().add(jjversionEditOutput);
         
         AutoComplete jjversionEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -924,9 +956,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         jjversionEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(jjversionEditInputMessage);
         
-        HtmlOutputText categoryEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel categoryEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        categoryEditOutput.setFor("categoryEditInput");
         categoryEditOutput.setId("categoryEditOutput");
-        categoryEditOutput.setValue("Category:   ");
+        categoryEditOutput.setValue("Category:");
         htmlPanelGrid.getChildren().add(categoryEditOutput);
         
         AutoComplete categoryEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -947,9 +980,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         categoryEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(categoryEditInputMessage);
         
-        HtmlOutputText criticityEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel criticityEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        criticityEditOutput.setFor("criticityEditInput");
         criticityEditOutput.setId("criticityEditOutput");
-        criticityEditOutput.setValue("Criticity:   ");
+        criticityEditOutput.setValue("Criticity:");
         htmlPanelGrid.getChildren().add(criticityEditOutput);
         
         AutoComplete criticityEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -970,9 +1004,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         criticityEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(criticityEditInputMessage);
         
-        HtmlOutputText importanceEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel importanceEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        importanceEditOutput.setFor("importanceEditInput");
         importanceEditOutput.setId("importanceEditOutput");
-        importanceEditOutput.setValue("Importance:   ");
+        importanceEditOutput.setValue("Importance:");
         htmlPanelGrid.getChildren().add(importanceEditOutput);
         
         AutoComplete importanceEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -993,9 +1028,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         importanceEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(importanceEditInputMessage);
         
-        HtmlOutputText statusEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel statusEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        statusEditOutput.setFor("statusEditInput");
         statusEditOutput.setId("statusEditOutput");
-        statusEditOutput.setValue("Status:   ");
+        statusEditOutput.setValue("Status:");
         htmlPanelGrid.getChildren().add(statusEditOutput);
         
         AutoComplete statusEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -1016,9 +1052,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         statusEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(statusEditInputMessage);
         
-        HtmlOutputText relationEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel relationEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        relationEditOutput.setFor("relationEditInput");
         relationEditOutput.setId("relationEditOutput");
-        relationEditOutput.setValue("Relation:   ");
+        relationEditOutput.setValue("Relation:");
         htmlPanelGrid.getChildren().add(relationEditOutput);
         
         AutoComplete relationEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -1035,9 +1072,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         relationEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(relationEditInputMessage);
         
-        HtmlOutputText requirementEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel requirementEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        requirementEditOutput.setFor("requirementEditInput");
         requirementEditOutput.setId("requirementEditOutput");
-        requirementEditOutput.setValue("Requirement:   ");
+        requirementEditOutput.setValue("Requirement:");
         htmlPanelGrid.getChildren().add(requirementEditOutput);
         
         AutoComplete requirementEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -1058,9 +1096,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         requirementEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementEditInputMessage);
         
-        HtmlOutputText bugUpEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel bugUpEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        bugUpEditOutput.setFor("bugUpEditInput");
         bugUpEditOutput.setId("bugUpEditOutput");
-        bugUpEditOutput.setValue("Bug Up:   ");
+        bugUpEditOutput.setValue("Bug Up:");
         htmlPanelGrid.getChildren().add(bugUpEditOutput);
         
         AutoComplete bugUpEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -1083,7 +1122,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText bugsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugsEditOutput.setId("bugsEditOutput");
-        bugsEditOutput.setValue("Bugs:   ");
+        bugsEditOutput.setValue("Bugs:");
         htmlPanelGrid.getChildren().add(bugsEditOutput);
         
         HtmlOutputText bugsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1099,7 +1138,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText tasksEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         tasksEditOutput.setId("tasksEditOutput");
-        tasksEditOutput.setValue("Tasks:   ");
+        tasksEditOutput.setValue("Tasks:");
         htmlPanelGrid.getChildren().add(tasksEditOutput);
         
         HtmlOutputText tasksEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1115,7 +1154,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText assignedTosEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         assignedTosEditOutput.setId("assignedTosEditOutput");
-        assignedTosEditOutput.setValue("Assigned Tos:   ");
+        assignedTosEditOutput.setValue("Assigned Tos:");
         htmlPanelGrid.getChildren().add(assignedTosEditOutput);
         
         HtmlOutputText assignedTosEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1131,7 +1170,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesEditOutput.setId("messagesEditOutput");
-        messagesEditOutput.setValue("Messages:   ");
+        messagesEditOutput.setValue("Messages:");
         htmlPanelGrid.getChildren().add(messagesEditOutput);
         
         HtmlOutputText messagesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1150,7 +1189,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
     
     public HtmlPanelGrid JJBugBean.populateViewPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -1158,7 +1197,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText nameLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         nameLabel.setId("nameLabel");
-        nameLabel.setValue("Name:   ");
+        nameLabel.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameLabel);
         
         HtmlOutputText nameValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1168,7 +1207,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText descriptionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         descriptionLabel.setId("descriptionLabel");
-        descriptionLabel.setValue("Description:   ");
+        descriptionLabel.setValue("Description:");
         htmlPanelGrid.getChildren().add(descriptionLabel);
         
         InputTextarea descriptionValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
@@ -1180,7 +1219,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText creationDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         creationDateLabel.setId("creationDateLabel");
-        creationDateLabel.setValue("Creation Date:   ");
+        creationDateLabel.setValue("Creation Date:");
         htmlPanelGrid.getChildren().add(creationDateLabel);
         
         HtmlOutputText creationDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1192,7 +1231,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText createdByLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         createdByLabel.setId("createdByLabel");
-        createdByLabel.setValue("Created By:   ");
+        createdByLabel.setValue("Created By:");
         htmlPanelGrid.getChildren().add(createdByLabel);
         
         HtmlOutputText createdByValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1202,7 +1241,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText updatedDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         updatedDateLabel.setId("updatedDateLabel");
-        updatedDateLabel.setValue("Updated Date:   ");
+        updatedDateLabel.setValue("Updated Date:");
         htmlPanelGrid.getChildren().add(updatedDateLabel);
         
         HtmlOutputText updatedDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1214,7 +1253,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText updatedByLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         updatedByLabel.setId("updatedByLabel");
-        updatedByLabel.setValue("Updated By:   ");
+        updatedByLabel.setValue("Updated By:");
         htmlPanelGrid.getChildren().add(updatedByLabel);
         
         HtmlOutputText updatedByValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1224,7 +1263,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText enabledLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         enabledLabel.setId("enabledLabel");
-        enabledLabel.setValue("Enabled:   ");
+        enabledLabel.setValue("Enabled:");
         htmlPanelGrid.getChildren().add(enabledLabel);
         
         HtmlOutputText enabledValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1233,7 +1272,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText projectLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         projectLabel.setId("projectLabel");
-        projectLabel.setValue("Project:   ");
+        projectLabel.setValue("Project:");
         htmlPanelGrid.getChildren().add(projectLabel);
         
         HtmlOutputText projectValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1243,7 +1282,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText startDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         startDateLabel.setId("startDateLabel");
-        startDateLabel.setValue("Start Date:   ");
+        startDateLabel.setValue("Start Date:");
         htmlPanelGrid.getChildren().add(startDateLabel);
         
         HtmlOutputText startDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1255,7 +1294,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText endDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         endDateLabel.setId("endDateLabel");
-        endDateLabel.setValue("End Date:   ");
+        endDateLabel.setValue("End Date:");
         htmlPanelGrid.getChildren().add(endDateLabel);
         
         HtmlOutputText endDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1267,7 +1306,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText workloadLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         workloadLabel.setId("workloadLabel");
-        workloadLabel.setValue("Workload:   ");
+        workloadLabel.setValue("Workload:");
         htmlPanelGrid.getChildren().add(workloadLabel);
         
         HtmlOutputText workloadValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1276,7 +1315,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText jjversionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         jjversionLabel.setId("jjversionLabel");
-        jjversionLabel.setValue("Jjversion:   ");
+        jjversionLabel.setValue("Jjversion:");
         htmlPanelGrid.getChildren().add(jjversionLabel);
         
         HtmlOutputText jjversionValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1286,7 +1325,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText categoryLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         categoryLabel.setId("categoryLabel");
-        categoryLabel.setValue("Category:   ");
+        categoryLabel.setValue("Category:");
         htmlPanelGrid.getChildren().add(categoryLabel);
         
         HtmlOutputText categoryValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1296,7 +1335,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText criticityLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         criticityLabel.setId("criticityLabel");
-        criticityLabel.setValue("Criticity:   ");
+        criticityLabel.setValue("Criticity:");
         htmlPanelGrid.getChildren().add(criticityLabel);
         
         HtmlOutputText criticityValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1306,7 +1345,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText importanceLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         importanceLabel.setId("importanceLabel");
-        importanceLabel.setValue("Importance:   ");
+        importanceLabel.setValue("Importance:");
         htmlPanelGrid.getChildren().add(importanceLabel);
         
         HtmlOutputText importanceValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1316,7 +1355,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText statusLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         statusLabel.setId("statusLabel");
-        statusLabel.setValue("Status:   ");
+        statusLabel.setValue("Status:");
         htmlPanelGrid.getChildren().add(statusLabel);
         
         HtmlOutputText statusValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1326,7 +1365,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText relationLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         relationLabel.setId("relationLabel");
-        relationLabel.setValue("Relation:   ");
+        relationLabel.setValue("Relation:");
         htmlPanelGrid.getChildren().add(relationLabel);
         
         HtmlOutputText relationValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1335,7 +1374,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText requirementLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         requirementLabel.setId("requirementLabel");
-        requirementLabel.setValue("Requirement:   ");
+        requirementLabel.setValue("Requirement:");
         htmlPanelGrid.getChildren().add(requirementLabel);
         
         HtmlOutputText requirementValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1345,7 +1384,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText bugUpLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugUpLabel.setId("bugUpLabel");
-        bugUpLabel.setValue("Bug Up:   ");
+        bugUpLabel.setValue("Bug Up:");
         htmlPanelGrid.getChildren().add(bugUpLabel);
         
         HtmlOutputText bugUpValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1355,7 +1394,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText bugsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugsLabel.setId("bugsLabel");
-        bugsLabel.setValue("Bugs:   ");
+        bugsLabel.setValue("Bugs:");
         htmlPanelGrid.getChildren().add(bugsLabel);
         
         HtmlOutputText bugsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1365,7 +1404,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText tasksLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         tasksLabel.setId("tasksLabel");
-        tasksLabel.setValue("Tasks:   ");
+        tasksLabel.setValue("Tasks:");
         htmlPanelGrid.getChildren().add(tasksLabel);
         
         HtmlOutputText tasksValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1375,7 +1414,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText assignedTosLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         assignedTosLabel.setId("assignedTosLabel");
-        assignedTosLabel.setValue("Assigned Tos:   ");
+        assignedTosLabel.setValue("Assigned Tos:");
         htmlPanelGrid.getChildren().add(assignedTosLabel);
         
         HtmlOutputText assignedTosValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1385,7 +1424,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         
         HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesLabel.setId("messagesLabel");
-        messagesLabel.setValue("Messages:   ");
+        messagesLabel.setValue("Messages:");
         htmlPanelGrid.getChildren().add(messagesLabel);
         
         HtmlOutputText messagesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1611,16 +1650,16 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         String message = "";
         if (JJBug_.getId() != null) {
             jJBugService.updateJJBug(JJBug_);
-            message = "Successfully updated";
+            message = "message_successfully_updated";
         } else {
             jJBugService.saveJJBug(JJBug_);
-            message = "Successfully created";
+            message = "message_successfully_created";
         }
         RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("createDialog.hide()");
-        context.execute("editDialog.hide()");
+        context.execute("createDialogWidget.hide()");
+        context.execute("editDialogWidget.hide()");
         
-        FacesMessage facesMessage = new FacesMessage(message);
+        FacesMessage facesMessage = MessageFactory.getMessage(message, "JJBug");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
         return findAllJJBugs();
@@ -1628,7 +1667,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
     
     public String JJBugBean.delete() {
         jJBugService.deleteJJBug(JJBug_);
-        FacesMessage facesMessage = new FacesMessage("Successfully deleted");
+        FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "JJBug");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
         return findAllJJBugs();

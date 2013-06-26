@@ -7,7 +7,10 @@ import com.funder.janjoonweb.domain.JJImportanceDataOnDemand;
 import com.funder.janjoonweb.domain.JJImportanceIntegrationTest;
 import com.funder.janjoonweb.domain.JJImportanceRepository;
 import com.funder.janjoonweb.domain.JJImportanceService;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,7 @@ privileged aspect JJImportanceIntegrationTest_Roo_IntegrationTest {
     
     declare @type: JJImportanceIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: JJImportanceIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: JJImportanceIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: JJImportanceIntegrationTest: @Transactional;
     
@@ -108,7 +111,16 @@ privileged aspect JJImportanceIntegrationTest_Roo_IntegrationTest {
         JJImportance obj = dod.getNewTransientJJImportance(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'JJImportance' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'JJImportance' identifier to be null", obj.getId());
-        jJImportanceService.saveJJImportance(obj);
+        try {
+            jJImportanceService.saveJJImportance(obj);
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         jJImportanceRepository.flush();
         Assert.assertNotNull("Expected 'JJImportance' identifier to no longer be null", obj.getId());
     }

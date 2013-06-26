@@ -16,6 +16,7 @@ import com.funder.janjoonweb.ui.mb.converter.JJJobConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJProductConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJProjectConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJRightConverter;
+import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -24,7 +25,6 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
-import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -40,6 +40,7 @@ import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
+import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
 import org.primefaces.component.selectmanymenu.SelectManyMenu;
 import org.primefaces.component.spinner.Spinner;
@@ -155,15 +156,16 @@ privileged aspect JJContactBean_Roo_ManagedBean {
     
     public HtmlPanelGrid JJContactBean.populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
         
-        HtmlOutputText nameCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel nameCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        nameCreateOutput.setFor("nameCreateInput");
         nameCreateOutput.setId("nameCreateOutput");
-        nameCreateOutput.setValue("Name: * ");
+        nameCreateOutput.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameCreateOutput);
         
         InputText nameCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -181,9 +183,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         nameCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(nameCreateInputMessage);
         
-        HtmlOutputText descriptionCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel descriptionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        descriptionCreateOutput.setFor("descriptionCreateInput");
         descriptionCreateOutput.setId("descriptionCreateOutput");
-        descriptionCreateOutput.setValue("Description: * ");
+        descriptionCreateOutput.setValue("Description:");
         htmlPanelGrid.getChildren().add(descriptionCreateOutput);
         
         InputTextarea descriptionCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
@@ -201,9 +204,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         descriptionCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(descriptionCreateInputMessage);
         
-        HtmlOutputText creationDateCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel creationDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        creationDateCreateOutput.setFor("creationDateCreateInput");
         creationDateCreateOutput.setId("creationDateCreateOutput");
-        creationDateCreateOutput.setValue("Creation Date: * ");
+        creationDateCreateOutput.setValue("Creation Date:");
         htmlPanelGrid.getChildren().add(creationDateCreateOutput);
         
         Calendar creationDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
@@ -221,9 +225,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         creationDateCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(creationDateCreateInputMessage);
         
-        HtmlOutputText createdByCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel createdByCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        createdByCreateOutput.setFor("createdByCreateInput");
         createdByCreateOutput.setId("createdByCreateOutput");
-        createdByCreateOutput.setValue("Created By:   ");
+        createdByCreateOutput.setValue("Created By:");
         htmlPanelGrid.getChildren().add(createdByCreateOutput);
         
         AutoComplete createdByCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -244,9 +249,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         createdByCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(createdByCreateInputMessage);
         
-        HtmlOutputText updatedDateCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel updatedDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        updatedDateCreateOutput.setFor("updatedDateCreateInput");
         updatedDateCreateOutput.setId("updatedDateCreateOutput");
-        updatedDateCreateOutput.setValue("Updated Date:   ");
+        updatedDateCreateOutput.setValue("Updated Date:");
         htmlPanelGrid.getChildren().add(updatedDateCreateOutput);
         
         Calendar updatedDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
@@ -264,9 +270,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         updatedDateCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(updatedDateCreateInputMessage);
         
-        HtmlOutputText updatedByCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel updatedByCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        updatedByCreateOutput.setFor("updatedByCreateInput");
         updatedByCreateOutput.setId("updatedByCreateOutput");
-        updatedByCreateOutput.setValue("Updated By:   ");
+        updatedByCreateOutput.setValue("Updated By:");
         htmlPanelGrid.getChildren().add(updatedByCreateOutput);
         
         AutoComplete updatedByCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -287,9 +294,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         updatedByCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(updatedByCreateInputMessage);
         
-        HtmlOutputText enabledCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel enabledCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        enabledCreateOutput.setFor("enabledCreateInput");
         enabledCreateOutput.setId("enabledCreateOutput");
-        enabledCreateOutput.setValue("Enabled:   ");
+        enabledCreateOutput.setValue("Enabled:");
         htmlPanelGrid.getChildren().add(enabledCreateOutput);
         
         SelectBooleanCheckbox enabledCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
@@ -304,9 +312,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         enabledCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
         
-        HtmlOutputText passwordCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel passwordCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        passwordCreateOutput.setFor("passwordCreateInput");
         passwordCreateOutput.setId("passwordCreateOutput");
-        passwordCreateOutput.setValue("Password: * ");
+        passwordCreateOutput.setValue("Password:");
         htmlPanelGrid.getChildren().add(passwordCreateOutput);
         
         InputText passwordCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -324,9 +333,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         passwordCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(passwordCreateInputMessage);
         
-        HtmlOutputText emailCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel emailCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        emailCreateOutput.setFor("emailCreateInput");
         emailCreateOutput.setId("emailCreateOutput");
-        emailCreateOutput.setValue("Email: * ");
+        emailCreateOutput.setValue("Email:");
         htmlPanelGrid.getChildren().add(emailCreateOutput);
         
         InputText emailCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -335,6 +345,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         RegexValidator emailCreateInputRegexValidator = new RegexValidator();
         emailCreateInputRegexValidator.setPattern("[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+");
         emailCreateInput.addValidator(emailCreateInputRegexValidator);
+        emailCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(emailCreateInput);
         
         Message emailCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -343,9 +354,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         emailCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(emailCreateInputMessage);
         
-        HtmlOutputText ldapCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel ldapCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        ldapCreateOutput.setFor("ldapCreateInput");
         ldapCreateOutput.setId("ldapCreateOutput");
-        ldapCreateOutput.setValue("Ldap:   ");
+        ldapCreateOutput.setValue("Ldap:");
         htmlPanelGrid.getChildren().add(ldapCreateOutput);
         
         Spinner ldapCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
@@ -361,9 +373,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         ldapCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(ldapCreateInputMessage);
         
-        HtmlOutputText firstnameCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel firstnameCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        firstnameCreateOutput.setFor("firstnameCreateInput");
         firstnameCreateOutput.setId("firstnameCreateOutput");
-        firstnameCreateOutput.setValue("Firstname: * ");
+        firstnameCreateOutput.setValue("Firstname:");
         htmlPanelGrid.getChildren().add(firstnameCreateOutput);
         
         InputText firstnameCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -381,9 +394,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         firstnameCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(firstnameCreateInputMessage);
         
-        HtmlOutputText lastnameCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel lastnameCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        lastnameCreateOutput.setFor("lastnameCreateInput");
         lastnameCreateOutput.setId("lastnameCreateOutput");
-        lastnameCreateOutput.setValue("Lastname: * ");
+        lastnameCreateOutput.setValue("Lastname:");
         htmlPanelGrid.getChildren().add(lastnameCreateOutput);
         
         InputText lastnameCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -401,9 +415,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         lastnameCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(lastnameCreateInputMessage);
         
-        HtmlOutputText dateofbirthCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel dateofbirthCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        dateofbirthCreateOutput.setFor("dateofbirthCreateInput");
         dateofbirthCreateOutput.setId("dateofbirthCreateOutput");
-        dateofbirthCreateOutput.setValue("Dateofbirth:   ");
+        dateofbirthCreateOutput.setValue("Dateofbirth:");
         htmlPanelGrid.getChildren().add(dateofbirthCreateOutput);
         
         Calendar dateofbirthCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
@@ -421,9 +436,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         dateofbirthCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(dateofbirthCreateInputMessage);
         
-        HtmlOutputText pictureCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel pictureCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        pictureCreateOutput.setFor("pictureCreateInput");
         pictureCreateOutput.setId("pictureCreateOutput");
-        pictureCreateOutput.setValue("Picture: * ");
+        pictureCreateOutput.setValue("Picture:");
         htmlPanelGrid.getChildren().add(pictureCreateOutput);
         
         InputText pictureCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -441,9 +457,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         pictureCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(pictureCreateInputMessage);
         
-        HtmlOutputText jobCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel jobCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        jobCreateOutput.setFor("jobCreateInput");
         jobCreateOutput.setId("jobCreateOutput");
-        jobCreateOutput.setValue("Job:   ");
+        jobCreateOutput.setValue("Job:");
         htmlPanelGrid.getChildren().add(jobCreateOutput);
         
         AutoComplete jobCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -464,9 +481,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         jobCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(jobCreateInputMessage);
         
-        HtmlOutputText rightsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel rightsCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        rightsCreateOutput.setFor("rightsCreateInput");
         rightsCreateOutput.setId("rightsCreateOutput");
-        rightsCreateOutput.setValue("Rights:   ");
+        rightsCreateOutput.setValue("Rights:");
         htmlPanelGrid.getChildren().add(rightsCreateOutput);
         
         SelectManyMenu rightsCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
@@ -488,9 +506,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         rightsCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(rightsCreateInputMessage);
         
-        HtmlOutputText productsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel productsCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        productsCreateOutput.setFor("productsCreateInput");
         productsCreateOutput.setId("productsCreateOutput");
-        productsCreateOutput.setValue("Products:   ");
+        productsCreateOutput.setValue("Products:");
         htmlPanelGrid.getChildren().add(productsCreateOutput);
         
         SelectManyMenu productsCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
@@ -512,9 +531,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         productsCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(productsCreateInputMessage);
         
-        HtmlOutputText projectsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel projectsCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        projectsCreateOutput.setFor("projectsCreateInput");
         projectsCreateOutput.setId("projectsCreateOutput");
-        projectsCreateOutput.setValue("Projects:   ");
+        projectsCreateOutput.setValue("Projects:");
         htmlPanelGrid.getChildren().add(projectsCreateOutput);
         
         SelectManyMenu projectsCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
@@ -541,15 +561,16 @@ privileged aspect JJContactBean_Roo_ManagedBean {
     
     public HtmlPanelGrid JJContactBean.populateEditPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
         
-        HtmlOutputText nameEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel nameEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        nameEditOutput.setFor("nameEditInput");
         nameEditOutput.setId("nameEditOutput");
-        nameEditOutput.setValue("Name: * ");
+        nameEditOutput.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameEditOutput);
         
         InputText nameEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -567,9 +588,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         nameEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(nameEditInputMessage);
         
-        HtmlOutputText descriptionEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel descriptionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        descriptionEditOutput.setFor("descriptionEditInput");
         descriptionEditOutput.setId("descriptionEditOutput");
-        descriptionEditOutput.setValue("Description: * ");
+        descriptionEditOutput.setValue("Description:");
         htmlPanelGrid.getChildren().add(descriptionEditOutput);
         
         InputTextarea descriptionEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
@@ -587,9 +609,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         descriptionEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(descriptionEditInputMessage);
         
-        HtmlOutputText creationDateEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel creationDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        creationDateEditOutput.setFor("creationDateEditInput");
         creationDateEditOutput.setId("creationDateEditOutput");
-        creationDateEditOutput.setValue("Creation Date: * ");
+        creationDateEditOutput.setValue("Creation Date:");
         htmlPanelGrid.getChildren().add(creationDateEditOutput);
         
         Calendar creationDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
@@ -607,9 +630,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         creationDateEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(creationDateEditInputMessage);
         
-        HtmlOutputText createdByEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel createdByEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        createdByEditOutput.setFor("createdByEditInput");
         createdByEditOutput.setId("createdByEditOutput");
-        createdByEditOutput.setValue("Created By:   ");
+        createdByEditOutput.setValue("Created By:");
         htmlPanelGrid.getChildren().add(createdByEditOutput);
         
         AutoComplete createdByEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -630,9 +654,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         createdByEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(createdByEditInputMessage);
         
-        HtmlOutputText updatedDateEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel updatedDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        updatedDateEditOutput.setFor("updatedDateEditInput");
         updatedDateEditOutput.setId("updatedDateEditOutput");
-        updatedDateEditOutput.setValue("Updated Date:   ");
+        updatedDateEditOutput.setValue("Updated Date:");
         htmlPanelGrid.getChildren().add(updatedDateEditOutput);
         
         Calendar updatedDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
@@ -650,9 +675,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         updatedDateEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(updatedDateEditInputMessage);
         
-        HtmlOutputText updatedByEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel updatedByEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        updatedByEditOutput.setFor("updatedByEditInput");
         updatedByEditOutput.setId("updatedByEditOutput");
-        updatedByEditOutput.setValue("Updated By:   ");
+        updatedByEditOutput.setValue("Updated By:");
         htmlPanelGrid.getChildren().add(updatedByEditOutput);
         
         AutoComplete updatedByEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -673,9 +699,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         updatedByEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(updatedByEditInputMessage);
         
-        HtmlOutputText enabledEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel enabledEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        enabledEditOutput.setFor("enabledEditInput");
         enabledEditOutput.setId("enabledEditOutput");
-        enabledEditOutput.setValue("Enabled:   ");
+        enabledEditOutput.setValue("Enabled:");
         htmlPanelGrid.getChildren().add(enabledEditOutput);
         
         SelectBooleanCheckbox enabledEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
@@ -690,9 +717,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         enabledEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledEditInputMessage);
         
-        HtmlOutputText passwordEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel passwordEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        passwordEditOutput.setFor("passwordEditInput");
         passwordEditOutput.setId("passwordEditOutput");
-        passwordEditOutput.setValue("Password: * ");
+        passwordEditOutput.setValue("Password:");
         htmlPanelGrid.getChildren().add(passwordEditOutput);
         
         InputText passwordEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -710,9 +738,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         passwordEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(passwordEditInputMessage);
         
-        HtmlOutputText emailEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel emailEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        emailEditOutput.setFor("emailEditInput");
         emailEditOutput.setId("emailEditOutput");
-        emailEditOutput.setValue("Email: * ");
+        emailEditOutput.setValue("Email:");
         htmlPanelGrid.getChildren().add(emailEditOutput);
         
         InputText emailEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -721,6 +750,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         RegexValidator emailEditInputRegexValidator = new RegexValidator();
         emailEditInputRegexValidator.setPattern("[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+");
         emailEditInput.addValidator(emailEditInputRegexValidator);
+        emailEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(emailEditInput);
         
         Message emailEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -729,9 +759,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         emailEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(emailEditInputMessage);
         
-        HtmlOutputText ldapEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel ldapEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        ldapEditOutput.setFor("ldapEditInput");
         ldapEditOutput.setId("ldapEditOutput");
-        ldapEditOutput.setValue("Ldap:   ");
+        ldapEditOutput.setValue("Ldap:");
         htmlPanelGrid.getChildren().add(ldapEditOutput);
         
         Spinner ldapEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
@@ -747,9 +778,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         ldapEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(ldapEditInputMessage);
         
-        HtmlOutputText firstnameEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel firstnameEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        firstnameEditOutput.setFor("firstnameEditInput");
         firstnameEditOutput.setId("firstnameEditOutput");
-        firstnameEditOutput.setValue("Firstname: * ");
+        firstnameEditOutput.setValue("Firstname:");
         htmlPanelGrid.getChildren().add(firstnameEditOutput);
         
         InputText firstnameEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -767,9 +799,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         firstnameEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(firstnameEditInputMessage);
         
-        HtmlOutputText lastnameEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel lastnameEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        lastnameEditOutput.setFor("lastnameEditInput");
         lastnameEditOutput.setId("lastnameEditOutput");
-        lastnameEditOutput.setValue("Lastname: * ");
+        lastnameEditOutput.setValue("Lastname:");
         htmlPanelGrid.getChildren().add(lastnameEditOutput);
         
         InputText lastnameEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -787,9 +820,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         lastnameEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(lastnameEditInputMessage);
         
-        HtmlOutputText dateofbirthEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel dateofbirthEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        dateofbirthEditOutput.setFor("dateofbirthEditInput");
         dateofbirthEditOutput.setId("dateofbirthEditOutput");
-        dateofbirthEditOutput.setValue("Dateofbirth:   ");
+        dateofbirthEditOutput.setValue("Dateofbirth:");
         htmlPanelGrid.getChildren().add(dateofbirthEditOutput);
         
         Calendar dateofbirthEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
@@ -807,9 +841,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         dateofbirthEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(dateofbirthEditInputMessage);
         
-        HtmlOutputText pictureEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel pictureEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        pictureEditOutput.setFor("pictureEditInput");
         pictureEditOutput.setId("pictureEditOutput");
-        pictureEditOutput.setValue("Picture: * ");
+        pictureEditOutput.setValue("Picture:");
         htmlPanelGrid.getChildren().add(pictureEditOutput);
         
         InputText pictureEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -827,9 +862,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         pictureEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(pictureEditInputMessage);
         
-        HtmlOutputText jobEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel jobEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        jobEditOutput.setFor("jobEditInput");
         jobEditOutput.setId("jobEditOutput");
-        jobEditOutput.setValue("Job:   ");
+        jobEditOutput.setValue("Job:");
         htmlPanelGrid.getChildren().add(jobEditOutput);
         
         AutoComplete jobEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
@@ -850,9 +886,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         jobEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(jobEditInputMessage);
         
-        HtmlOutputText rightsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel rightsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        rightsEditOutput.setFor("rightsEditInput");
         rightsEditOutput.setId("rightsEditOutput");
-        rightsEditOutput.setValue("Rights:   ");
+        rightsEditOutput.setValue("Rights:");
         htmlPanelGrid.getChildren().add(rightsEditOutput);
         
         SelectManyMenu rightsEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
@@ -874,9 +911,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         rightsEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(rightsEditInputMessage);
         
-        HtmlOutputText productsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel productsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        productsEditOutput.setFor("productsEditInput");
         productsEditOutput.setId("productsEditOutput");
-        productsEditOutput.setValue("Products:   ");
+        productsEditOutput.setValue("Products:");
         htmlPanelGrid.getChildren().add(productsEditOutput);
         
         SelectManyMenu productsEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
@@ -898,9 +936,10 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         productsEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(productsEditInputMessage);
         
-        HtmlOutputText projectsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel projectsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        projectsEditOutput.setFor("projectsEditInput");
         projectsEditOutput.setId("projectsEditOutput");
-        projectsEditOutput.setValue("Projects:   ");
+        projectsEditOutput.setValue("Projects:");
         htmlPanelGrid.getChildren().add(projectsEditOutput);
         
         SelectManyMenu projectsEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
@@ -927,7 +966,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
     
     public HtmlPanelGrid JJContactBean.populateViewPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -935,7 +974,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText nameLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         nameLabel.setId("nameLabel");
-        nameLabel.setValue("Name:   ");
+        nameLabel.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameLabel);
         
         HtmlOutputText nameValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -945,7 +984,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText descriptionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         descriptionLabel.setId("descriptionLabel");
-        descriptionLabel.setValue("Description:   ");
+        descriptionLabel.setValue("Description:");
         htmlPanelGrid.getChildren().add(descriptionLabel);
         
         InputTextarea descriptionValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
@@ -957,7 +996,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText creationDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         creationDateLabel.setId("creationDateLabel");
-        creationDateLabel.setValue("Creation Date:   ");
+        creationDateLabel.setValue("Creation Date:");
         htmlPanelGrid.getChildren().add(creationDateLabel);
         
         HtmlOutputText creationDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -969,7 +1008,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText createdByLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         createdByLabel.setId("createdByLabel");
-        createdByLabel.setValue("Created By:   ");
+        createdByLabel.setValue("Created By:");
         htmlPanelGrid.getChildren().add(createdByLabel);
         
         HtmlOutputText createdByValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -979,7 +1018,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText updatedDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         updatedDateLabel.setId("updatedDateLabel");
-        updatedDateLabel.setValue("Updated Date:   ");
+        updatedDateLabel.setValue("Updated Date:");
         htmlPanelGrid.getChildren().add(updatedDateLabel);
         
         HtmlOutputText updatedDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -991,7 +1030,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText updatedByLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         updatedByLabel.setId("updatedByLabel");
-        updatedByLabel.setValue("Updated By:   ");
+        updatedByLabel.setValue("Updated By:");
         htmlPanelGrid.getChildren().add(updatedByLabel);
         
         HtmlOutputText updatedByValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1001,7 +1040,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText enabledLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         enabledLabel.setId("enabledLabel");
-        enabledLabel.setValue("Enabled:   ");
+        enabledLabel.setValue("Enabled:");
         htmlPanelGrid.getChildren().add(enabledLabel);
         
         HtmlOutputText enabledValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1010,7 +1049,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText passwordLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         passwordLabel.setId("passwordLabel");
-        passwordLabel.setValue("Password:   ");
+        passwordLabel.setValue("Password:");
         htmlPanelGrid.getChildren().add(passwordLabel);
         
         HtmlOutputText passwordValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1020,7 +1059,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText emailLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         emailLabel.setId("emailLabel");
-        emailLabel.setValue("Email:   ");
+        emailLabel.setValue("Email:");
         htmlPanelGrid.getChildren().add(emailLabel);
         
         HtmlOutputText emailValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1030,7 +1069,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText ldapLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         ldapLabel.setId("ldapLabel");
-        ldapLabel.setValue("Ldap:   ");
+        ldapLabel.setValue("Ldap:");
         htmlPanelGrid.getChildren().add(ldapLabel);
         
         HtmlOutputText ldapValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1039,7 +1078,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText firstnameLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         firstnameLabel.setId("firstnameLabel");
-        firstnameLabel.setValue("Firstname:   ");
+        firstnameLabel.setValue("Firstname:");
         htmlPanelGrid.getChildren().add(firstnameLabel);
         
         HtmlOutputText firstnameValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1049,7 +1088,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText lastnameLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         lastnameLabel.setId("lastnameLabel");
-        lastnameLabel.setValue("Lastname:   ");
+        lastnameLabel.setValue("Lastname:");
         htmlPanelGrid.getChildren().add(lastnameLabel);
         
         HtmlOutputText lastnameValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1059,7 +1098,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText dateofbirthLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         dateofbirthLabel.setId("dateofbirthLabel");
-        dateofbirthLabel.setValue("Dateofbirth:   ");
+        dateofbirthLabel.setValue("Dateofbirth:");
         htmlPanelGrid.getChildren().add(dateofbirthLabel);
         
         HtmlOutputText dateofbirthValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1071,7 +1110,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText pictureLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         pictureLabel.setId("pictureLabel");
-        pictureLabel.setValue("Picture:   ");
+        pictureLabel.setValue("Picture:");
         htmlPanelGrid.getChildren().add(pictureLabel);
         
         HtmlOutputText pictureValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1081,7 +1120,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText jobLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         jobLabel.setId("jobLabel");
-        jobLabel.setValue("Job:   ");
+        jobLabel.setValue("Job:");
         htmlPanelGrid.getChildren().add(jobLabel);
         
         HtmlOutputText jobValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1091,7 +1130,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText rightsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         rightsLabel.setId("rightsLabel");
-        rightsLabel.setValue("Rights:   ");
+        rightsLabel.setValue("Rights:");
         htmlPanelGrid.getChildren().add(rightsLabel);
         
         SelectManyMenu rightsValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
@@ -1110,7 +1149,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText productsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         productsLabel.setId("productsLabel");
-        productsLabel.setValue("Products:   ");
+        productsLabel.setValue("Products:");
         htmlPanelGrid.getChildren().add(productsLabel);
         
         SelectManyMenu productsValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
@@ -1129,7 +1168,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         HtmlOutputText projectsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         projectsLabel.setId("projectsLabel");
-        projectsLabel.setValue("Projects:   ");
+        projectsLabel.setValue("Projects:");
         htmlPanelGrid.getChildren().add(projectsLabel);
         
         SelectManyMenu projectsValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
@@ -1263,16 +1302,16 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         String message = "";
         if (JJContact_.getId() != null) {
             jJContactService.updateJJContact(JJContact_);
-            message = "Successfully updated";
+            message = "message_successfully_updated";
         } else {
             jJContactService.saveJJContact(JJContact_);
-            message = "Successfully created";
+            message = "message_successfully_created";
         }
         RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("createDialog.hide()");
-        context.execute("editDialog.hide()");
+        context.execute("createDialogWidget.hide()");
+        context.execute("editDialogWidget.hide()");
         
-        FacesMessage facesMessage = new FacesMessage(message);
+        FacesMessage facesMessage = MessageFactory.getMessage(message, "JJContact");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
         return findAllJJContacts();
@@ -1280,7 +1319,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
     
     public String JJContactBean.delete() {
         jJContactService.deleteJJContact(JJContact_);
-        FacesMessage facesMessage = new FacesMessage("Successfully deleted");
+        FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "JJContact");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
         return findAllJJContacts();

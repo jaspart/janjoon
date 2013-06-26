@@ -7,7 +7,10 @@ import com.funder.janjoonweb.domain.JJBuildDataOnDemand;
 import com.funder.janjoonweb.domain.JJBuildIntegrationTest;
 import com.funder.janjoonweb.domain.JJBuildRepository;
 import com.funder.janjoonweb.domain.JJBuildService;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,7 @@ privileged aspect JJBuildIntegrationTest_Roo_IntegrationTest {
     
     declare @type: JJBuildIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: JJBuildIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: JJBuildIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: JJBuildIntegrationTest: @Transactional;
     
@@ -108,7 +111,16 @@ privileged aspect JJBuildIntegrationTest_Roo_IntegrationTest {
         JJBuild obj = dod.getNewTransientJJBuild(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'JJBuild' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'JJBuild' identifier to be null", obj.getId());
-        jJBuildService.saveJJBuild(obj);
+        try {
+            jJBuildService.saveJJBuild(obj);
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         jJBuildRepository.flush();
         Assert.assertNotNull("Expected 'JJBuild' identifier to no longer be null", obj.getId());
     }

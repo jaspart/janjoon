@@ -7,7 +7,10 @@ import com.funder.janjoonweb.domain.JJTeststepDataOnDemand;
 import com.funder.janjoonweb.domain.JJTeststepIntegrationTest;
 import com.funder.janjoonweb.domain.JJTeststepRepository;
 import com.funder.janjoonweb.domain.JJTeststepService;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,7 @@ privileged aspect JJTeststepIntegrationTest_Roo_IntegrationTest {
     
     declare @type: JJTeststepIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: JJTeststepIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: JJTeststepIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: JJTeststepIntegrationTest: @Transactional;
     
@@ -108,7 +111,16 @@ privileged aspect JJTeststepIntegrationTest_Roo_IntegrationTest {
         JJTeststep obj = dod.getNewTransientJJTeststep(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'JJTeststep' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'JJTeststep' identifier to be null", obj.getId());
-        jJTeststepService.saveJJTeststep(obj);
+        try {
+            jJTeststepService.saveJJTeststep(obj);
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         jJTeststepRepository.flush();
         Assert.assertNotNull("Expected 'JJTeststep' identifier to no longer be null", obj.getId());
     }
