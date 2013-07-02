@@ -4,6 +4,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
@@ -27,6 +31,7 @@ public class JJRequirementBean {
 
 	private int creationColumnNumber;
 	private int editionColumnNumber;
+	private int deleteColumnNumber;
 
 	private List<JJRequirement> myBusinessJJRequirements;
 	private List<JJRequirement> myFunctionalJJRequirements;
@@ -93,6 +98,14 @@ public class JJRequirementBean {
 
 	public void setEditionColumnNumber(int editionColumnNumber) {
 		this.editionColumnNumber = editionColumnNumber;
+	}
+
+	public int getDeleteColumnNumber() {
+		return deleteColumnNumber;
+	}
+
+	public void setDeleteColumnNumber(int deleteColumnNumber) {
+		this.deleteColumnNumber = deleteColumnNumber;
 	}
 
 	public List<JJRequirement> getMyBusinessJJRequirements() {
@@ -277,7 +290,7 @@ public class JJRequirementBean {
 		if (index == 1) {
 			jJRequirementService.saveJJRequirement(myJJRequirement);
 			findAllJJRequirementsWithCategory(creationColumnNumber);
-		} else {
+		} else if (index == 2) {
 			switch (editionColumnNumber) {
 			case 1:
 				mySelectedBusinessJJRequirement.setEnabled(false);
@@ -301,7 +314,78 @@ public class JJRequirementBean {
 
 			jJRequirementService.saveJJRequirement(myEditedJJRequirement);
 			findAllJJRequirementsWithCategory(editionColumnNumber);
+		} else {
+			switch (deleteColumnNumber) {
+			case 1:
+
+				jJRequirementService
+						.updateJJRequirement(mySelectedBusinessJJRequirement);
+				break;
+			case 2:
+
+				jJRequirementService
+						.updateJJRequirement(mySelectedFunctionalJJRequirement);
+				break;
+			case 3:
+
+				jJRequirementService
+						.updateJJRequirement(mySelectedTechnicalJJRequirement);
+				break;
+
+			default:
+				break;
+			}
+
+			findAllJJRequirementsWithCategory(deleteColumnNumber);
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"This JJRequirement is deleted.", "Delete Status");
+
+			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
+	}
+
+	public void deleteJJRequirement(int number) {
+		this.deleteColumnNumber = number;
+
+		JJStatus myJJStatus = null;
+
+		List<JJStatus> JJStatusList = jJStatusService
+				.getJJStatusWithName("DELETED");
+
+		if (!JJStatusList.isEmpty()) {
+			for (JJStatus jjStatus : JJStatusList) {
+				myJJStatus = jjStatus;
+				break;
+			}
+
+		} else
+			myJJStatus = createANDpersistJJStatus("DELETED");
+
+		switch (number) {
+		case 1:
+			mySelectedBusinessJJRequirement.setEnabled(false);
+			mySelectedBusinessJJRequirement.setStatus(myJJStatus);
+			break;
+		case 2:
+			mySelectedFunctionalJJRequirement.setEnabled(false);
+			mySelectedFunctionalJJRequirement.setStatus(myJJStatus);
+			break;
+
+		case 3:
+			mySelectedTechnicalJJRequirement.setEnabled(false);
+			mySelectedTechnicalJJRequirement.setStatus(myJJStatus);
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	public void deleteJJRequirementMessage(ActionEvent actionEvent) {
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Delete Status", "This JJRequirement is deleted.");
+
+		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
 	public void findAllJJRequirementsWithCategory(int number) {

@@ -13,26 +13,31 @@
 	<ui:define name="content">
 		<h:form prependId="false" id="dataForm">
 			<br></br>
+			<p:growl id="messages" />
 			<p:contextMenu for="leftTable">
-				<p:menuitem id="editLeft" value="Edit" icon="ui-icon-pencil"
+				<p:menuitem id="editLeft" value="#{messages.label_edit}"
+					icon="ui-icon-pencil"
 					actionListener="#{jJRequirementBean.editJJRequirement(1)}"
-					update="myEditDialog"
-					oncomplete="editJJRequirement.show()" />
-				<p:menuitem value="Delete" icon="ui-icon-close" />
+					update="myEditDialog" oncomplete="editJJRequirement.show()" />
+				<p:menuitem id="deleteLeft" value="#{messages.label_delete}"
+					actionListener="#{jJRequirementBean.deleteJJRequirement(1)}"
+					icon="ui-icon-trash" oncomplete="deleteJJRequirement.show()" />
 			</p:contextMenu>
 			<p:contextMenu for="middleTable">
 				<p:menuitem id="editMiddle" value="Edit" icon="ui-icon-pencil"
 					actionListener="#{jJRequirementBean.editJJRequirement(2)}"
-					update="myEditDialog"
-					oncomplete="editJJRequirement.show()" />
-				<p:menuitem value="Delete" icon="ui-icon-close" />
+					update="myEditDialog" oncomplete="editJJRequirement.show()" />
+				<p:menuitem id="deleteMiddle" value="#{messages.label_delete}"
+					actionListener="#{jJRequirementBean.deleteJJRequirement(2)}"
+					icon="ui-icon-trash" oncomplete="deleteJJRequirement.show()" />
 			</p:contextMenu>
 			<p:contextMenu for="rightTable">
 				<p:menuitem id="editRight" value="Edit" icon="ui-icon-pencil"
 					actionListener="#{jJRequirementBean.editJJRequirement(3)}"
-					update="myEditDialog"
-					oncomplete="editJJRequirement.show()" />
-				<p:menuitem value="Delete" icon="ui-icon-close" />
+					update="myEditDialog" oncomplete="editJJRequirement.show()" />
+				<p:menuitem id="deleteRight" value="#{messages.label_delete}"
+					actionListener="#{jJRequirementBean.deleteJJRequirement(3)}"
+					icon="ui-icon-trash" oncomplete="deleteJJRequirement.show()" />
 			</p:contextMenu>
 			<table>
 				<tr>
@@ -387,6 +392,19 @@
 					</f:facet>
 				</h:panelGrid>
 			</p:dialog>
+			<p:confirmDialog id="myDeleteDialog"
+				message="#{messages.label_delete_record}"
+				header="#{messages.label_confirm_deletion}" severity="alert"
+				widgetVar="deleteJJRequirement">
+				<p:commandButton id="confirm" value="#{messages.label_yes}"
+					oncomplete="deleteJJRequirement.hide()" update="dataForm"
+					process="@this"
+					actionListener="#{jJRequirementBean.persistJJRequirement(3)}" />
+				<p:commandButton id="decline" value="#{messages.label_no}"
+					onclick="deleteJJRequirement.hide()" type="button" />
+			</p:confirmDialog>
+
+
 		</h:form>
 
 		<h:form id="createdialogForm">
