@@ -8,6 +8,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import org.primefaces.event.SelectEvent;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
@@ -32,6 +33,8 @@ public class JJRequirementBean {
 	private int creationColumnNumber;
 	private int editionColumnNumber;
 	private int deleteColumnNumber;
+	private int releaseColumnNumber;
+	private int discardColumnNumber;
 
 	private List<JJRequirement> myBusinessJJRequirements;
 	private List<JJRequirement> myFunctionalJJRequirements;
@@ -39,6 +42,10 @@ public class JJRequirementBean {
 
 	private JJProjectConverter projectConverter = new JJProjectConverter();
 	private JJChapterConverter chapterConverter = new JJChapterConverter();
+
+	private boolean disabled;
+	private String messageRelease;
+	private String messageDiscard;
 
 	public JJRequirement getMyJJRequirement() {
 		System.out.println("get req invoked");
@@ -108,6 +115,22 @@ public class JJRequirementBean {
 		this.deleteColumnNumber = deleteColumnNumber;
 	}
 
+	public int getReleaseColumnNumber() {
+		return releaseColumnNumber;
+	}
+
+	public void setReleaseColumnNumber(int releaseColumnNumber) {
+		this.releaseColumnNumber = releaseColumnNumber;
+	}
+
+	public int getDiscardColumnNumber() {
+		return discardColumnNumber;
+	}
+
+	public void setDiscardColumnNumber(int discardColumnNumber) {
+		this.discardColumnNumber = discardColumnNumber;
+	}
+
 	public List<JJRequirement> getMyBusinessJJRequirements() {
 		return myBusinessJJRequirements;
 	}
@@ -149,6 +172,30 @@ public class JJRequirementBean {
 
 	public void setChapterConverter(JJChapterConverter chapterConverter) {
 		this.chapterConverter = chapterConverter;
+	}
+
+	public boolean getDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
+
+	public String getMessageRelease() {
+		return messageRelease;
+	}
+
+	public void setMessageRelease(String messageRelease) {
+		this.messageRelease = messageRelease;
+	}
+
+	public String getMessageDiscard() {
+		return messageDiscard;
+	}
+
+	public void setMessageDiscard(String messageDiscard) {
+		this.messageDiscard = messageDiscard;
 	}
 
 	public void createJJRequirement(int number) {
@@ -407,6 +454,144 @@ public class JJRequirementBean {
 			break;
 		}
 
+	}
+
+	public void releaseJJRequirement() {
+		List<JJRequirement> reqList = null;
+
+		JJStatus myJJStatus = null;
+
+		List<JJStatus> JJStatusList = jJStatusService
+				.getJJStatusWithName("RELEASE");
+
+		if (!JJStatusList.isEmpty()) {
+			for (JJStatus jjStatus : JJStatusList) {
+				myJJStatus = jjStatus;
+				break;
+			}
+
+		} else
+			myJJStatus = createANDpersistJJStatus("RELEASE");
+
+		switch (releaseColumnNumber) {
+		case 1:
+			reqList = myBusinessJJRequirements;
+			break;
+
+		case 2:
+			reqList = myFunctionalJJRequirements;
+			break;
+
+		case 3:
+			reqList = myTechnicalJJRequirements;
+			break;
+
+		default:
+			break;
+		}
+
+		for (JJRequirement jjRequirement : reqList) {
+			if (!jjRequirement.getStatus().getName()
+					.equalsIgnoreCase("RELEASE")) {
+				jjRequirement.setStatus(myJJStatus);
+				jJRequirementService.updateJJRequirement(jjRequirement);
+			}
+
+		}
+		findAllJJRequirementsWithCategory(releaseColumnNumber);
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"All JJRequirements are released.", "Release Status");
+
+		FacesContext.getCurrentInstance().addMessage(null, message);
+
+	}
+
+	public void discardJJRequirement() {
+
+		JJStatus myJJStatus = null;
+
+		List<JJStatus> JJStatusList = jJStatusService
+				.getJJStatusWithName("DISCARD");
+
+		if (!JJStatusList.isEmpty()) {
+			for (JJStatus jjStatus : JJStatusList) {
+				myJJStatus = jjStatus;
+				break;
+			}
+
+		} else
+			myJJStatus = createANDpersistJJStatus("DISCARD");
+
+		JJRequirement req = null;
+
+		switch (discardColumnNumber) {
+		case 1:
+
+			mySelectedBusinessJJRequirement.setEnabled(false);
+			mySelectedBusinessJJRequirement.setStatus(myJJStatus);
+			req = mySelectedBusinessJJRequirement;
+			break;
+		case 2:
+			mySelectedFunctionalJJRequirement.setEnabled(false);
+			mySelectedFunctionalJJRequirement.setStatus(myJJStatus);
+			req = mySelectedFunctionalJJRequirement;
+			break;
+
+		case 3:
+			mySelectedTechnicalJJRequirement.setEnabled(false);
+			mySelectedTechnicalJJRequirement.setStatus(myJJStatus);
+			req = mySelectedTechnicalJJRequirement;
+			break;
+
+		default:
+			break;
+		}
+
+		jJRequirementService.updateJJRequirement(req);
+
+		findAllJJRequirementsWithCategory(discardColumnNumber);
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"This requirement is discarded.", "Discard Status");
+
+		FacesContext.getCurrentInstance().addMessage(null, message);
+
+	}
+
+	public void onRowSelect(SelectEvent event) {
+		JJRequirement req = (JJRequirement) event.getObject();
+
+		FacesMessage msg = new FacesMessage("JJRequirement Selected "
+				+ req.getName(), req.getName());
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+
+		System.out.println("\n" + req.getStatus().getName());
+		if (req.getStatus().getName().equalsIgnoreCase("RELEASE"))
+			disabled = true;
+		else
+			disabled = false;
+	}
+
+	public void updateMessageRelease(int number) {
+		this.releaseColumnNumber = number;
+		switch (number) {
+		case 1:
+			messageRelease = "Are you sure you want to release all Business JJRequirements";
+			break;
+
+		case 2:
+			messageRelease = "Are you sure you want to release all Functional JJRequirements";
+			break;
+		case 3:
+			messageRelease = "Are you sure you want to release all Technical JJRequirements";
+			break;
+		default:
+			break;
+		}
+	}
+
+	public void updateMessageDiscard(int number) {
+		this.discardColumnNumber = number;
+		messageDiscard = "Are you sure you want to discard this requirement";
 	}
 
 	private JJStatus createANDpersistJJStatus(String name) {

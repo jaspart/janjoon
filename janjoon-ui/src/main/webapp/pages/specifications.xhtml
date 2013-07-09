@@ -14,30 +14,46 @@
 		<h:form prependId="false" id="dataForm">
 			<br></br>
 			<p:growl id="messages" />
-			<p:contextMenu for="leftTable">
+
+			<p:contextMenu id="leftContextMenu" for="leftTable">
 				<p:menuitem id="editLeft" value="#{messages.label_edit}"
 					icon="ui-icon-pencil"
 					actionListener="#{jJRequirementBean.editJJRequirement(1)}"
-					update="myEditDialog" oncomplete="editJJRequirement.show()" />
+					update="myEditDialog" oncomplete="editJJRequirement.show()"
+					disabled="#{jJRequirementBean.disabled}" />
 				<p:menuitem id="deleteLeft" value="#{messages.label_delete}"
 					actionListener="#{jJRequirementBean.deleteJJRequirement(1)}"
 					icon="ui-icon-trash" oncomplete="deleteJJRequirement.show()" />
+				<p:menuitem id="discardLeft" value="Discard"
+					actionListener="#{jJRequirementBean.updateMessageDiscard(1)}"
+					icon="ui-icon-close" update="myDiscardDialog"
+					oncomplete="discardJJRequirement.show()" />
 			</p:contextMenu>
-			<p:contextMenu for="middleTable">
+			<p:contextMenu id="middleContextMenu" for="middleTable">
 				<p:menuitem id="editMiddle" value="Edit" icon="ui-icon-pencil"
 					actionListener="#{jJRequirementBean.editJJRequirement(2)}"
-					update="myEditDialog" oncomplete="editJJRequirement.show()" />
+					update="myEditDialog" oncomplete="editJJRequirement.show()"
+					disabled="#{jJRequirementBean.disabled}" />
 				<p:menuitem id="deleteMiddle" value="#{messages.label_delete}"
 					actionListener="#{jJRequirementBean.deleteJJRequirement(2)}"
 					icon="ui-icon-trash" oncomplete="deleteJJRequirement.show()" />
+				<p:menuitem id="discardMiddle" value="Discard"
+					actionListener="#{jJRequirementBean.updateMessageDiscard(2)}"
+					icon="ui-icon-close" update="myDiscardDialog"
+					oncomplete="discardJJRequirement.show()" />
 			</p:contextMenu>
-			<p:contextMenu for="rightTable">
+			<p:contextMenu id="rightContextMenu" for="rightTable">
 				<p:menuitem id="editRight" value="Edit" icon="ui-icon-pencil"
 					actionListener="#{jJRequirementBean.editJJRequirement(3)}"
-					update="myEditDialog" oncomplete="editJJRequirement.show()" />
+					update="myEditDialog" oncomplete="editJJRequirement.show()"
+					disabled="#{jJRequirementBean.disabled}" />
 				<p:menuitem id="deleteRight" value="#{messages.label_delete}"
 					actionListener="#{jJRequirementBean.deleteJJRequirement(3)}"
 					icon="ui-icon-trash" oncomplete="deleteJJRequirement.show()" />
+				<p:menuitem id="discardRight" value="Discard"
+					actionListener="#{jJRequirementBean.updateMessageDiscard(3)}"
+					icon="ui-icon-close" update="myDiscardDialog"
+					oncomplete="discardJJRequirement.show()" />
 			</p:contextMenu>
 			<table>
 				<tr>
@@ -64,6 +80,9 @@
 							rowKey="#{Requirement.name}"
 							selection="#{jJRequirementBean.mySelectedBusinessJJRequirement}"
 							selectionMode="single">
+							<p:ajax event="rowSelect"
+								listener="#{jJRequirementBean.onRowSelect}"
+								update=":dataForm:leftContextMenu :dataForm:messages" />
 
 							<f:facet name="header">
 								<p:panelGrid>
@@ -73,8 +92,16 @@
 												<p:commandButton id="reqBusiChapterButton"
 													icon="ui-icon-clipboard" type="button" />
 											</p:column>
-											<p:column colspan="5">
-												<p:inputText id="globalFilter" style="width:200px" />
+											<p:column colspan="1">
+												<p:commandButton id="releaseButton"
+													icon=".ui-icon-carat-2-n-s"
+													title="Release All Business Requirements"
+													actionListener="#{jJRequirementBean.updateMessageRelease(1)}"
+													update=":dataForm:myReleaseDialog"
+													oncomplete="releaseJJRequirement.show()" />
+											</p:column>
+											<p:column colspan="4">
+												<p:inputText id="globalFilter" style="width:150px" />
 												<p:watermark for="globalFilter" value="Search..." />
 											</p:column>
 											<p:column colspan="1">
@@ -149,6 +176,10 @@
 							selection="#{jJRequirementBean.mySelectedFunctionalJJRequirement}"
 							selectionMode="single">
 
+							<p:ajax event="rowSelect"
+								listener="#{jJRequirementBean.onRowSelect}"
+								update=":dataForm:middleContextMenu :dataForm:messages" />
+
 							<f:facet name="header">
 								<p:panelGrid>
 									<f:facet name="header">
@@ -157,8 +188,16 @@
 												<p:commandButton id="reqBusiChapterButton"
 													icon="ui-icon-clipboard" type="button" />
 											</p:column>
-											<p:column colspan="5">
-												<p:inputText id="globalFilter" style="width:200px" />
+											<p:column colspan="1">
+												<p:commandButton id="releaseButton"
+													icon=".ui-icon-carat-2-n-s"
+													title="Release All Functional Requirements"
+													actionListener="#{jJRequirementBean.updateMessageRelease(2)}"
+													update=":dataForm:myReleaseDialog"
+													oncomplete="releaseJJRequirement.show()" />
+											</p:column>
+											<p:column colspan="4">
+												<p:inputText id="globalFilter" style="width:150px" />
 												<p:watermark for="globalFilter" value="Search..." />
 											</p:column>
 											<p:column colspan="1">
@@ -233,6 +272,10 @@
 							selection="#{jJRequirementBean.mySelectedTechnicalJJRequirement}"
 							selectionMode="single">
 
+							<p:ajax event="rowSelect"
+								listener="#{jJRequirementBean.onRowSelect}"
+								update=":dataForm:rightContextMenu :dataForm:messages" />
+
 							<f:facet name="header">
 								<p:panelGrid>
 									<f:facet name="header">
@@ -241,9 +284,17 @@
 												<p:commandButton id="reqBusiChapterButton"
 													icon="ui-icon-clipboard" type="button" />
 											</p:column>
-											<p:column colspan="5">
+											<p:column colspan="1">
+												<p:commandButton id="releaseButton"
+													icon=".ui-icon-carat-2-n-s"
+													title="Release All Technical Requirements"
+													actionListener="#{jJRequirementBean.updateMessageRelease(3)}"
+													update=":dataForm:myReleaseDialog"
+													oncomplete="releaseJJRequirement.show()" />
+											</p:column>
+											<p:column colspan="4">
 
-												<p:inputText id="globalFilter" style="width:200px" />
+												<p:inputText id="globalFilter" style="width:150px" />
 												<p:watermark for="globalFilter" value="Search..." />
 											</p:column>
 											<p:column colspan="1">
@@ -396,12 +447,36 @@
 				message="#{messages.label_delete_record}"
 				header="#{messages.label_confirm_deletion}" severity="alert"
 				widgetVar="deleteJJRequirement">
-				<p:commandButton id="confirm" value="#{messages.label_yes}"
+				<p:commandButton id="confirmDelete" value="#{messages.label_yes}"
 					oncomplete="deleteJJRequirement.hide()" update="dataForm"
 					process="@this"
 					actionListener="#{jJRequirementBean.persistJJRequirement(3)}" />
-				<p:commandButton id="decline" value="#{messages.label_no}"
+				<p:commandButton id="declineDelete" value="#{messages.label_no}"
 					onclick="deleteJJRequirement.hide()" type="button" />
+			</p:confirmDialog>
+
+			<p:confirmDialog id="myDiscardDialog"
+				message="#{jJRequirementBean.messageDiscard}"
+				header="Confirm discard" severity="alert"
+				widgetVar="discardJJRequirement">
+				<p:commandButton id="confirmDiscard" value="#{messages.label_yes}"
+					oncomplete="discardJJRequirement.hide()" update="dataForm"
+					process="@this"
+					actionListener="#{jJRequirementBean.discardJJRequirement}" />
+				<p:commandButton id="declineDiscard" value="#{messages.label_no}"
+					onclick="discardJJRequirement.hide()" type="button" />
+			</p:confirmDialog>
+
+			<p:confirmDialog id="myReleaseDialog"
+				message="#{jJRequirementBean.messageRelease}"
+				header="Confirm release" severity="alert"
+				widgetVar="releaseJJRequirement">
+				<p:commandButton id="confirmRelease" value="#{messages.label_yes}"
+					oncomplete="releaseJJRequirement.hide()" update="dataForm"
+					process="@this"
+					actionListener="#{jJRequirementBean.releaseJJRequirement}" />
+				<p:commandButton id="declineRelease" value="#{messages.label_no}"
+					onclick="releaseJJRequirement.hide()" type="button" />
 			</p:confirmDialog>
 
 
@@ -486,9 +561,6 @@
 					</f:facet>
 				</h:panelGrid>
 			</p:dialog>
-		</h:form>
-		<h:form id="editdialogForm">
-
 		</h:form>
 	</ui:define>
 </ui:composition>
