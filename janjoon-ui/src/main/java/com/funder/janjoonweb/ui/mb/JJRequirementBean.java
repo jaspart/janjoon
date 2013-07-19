@@ -13,8 +13,6 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.funder.janjoonweb.domain.JJCategory;
-import com.funder.janjoonweb.domain.JJChapter;
-import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJStatus;
 import com.funder.janjoonweb.ui.mb.converter.JJChapterConverter;
@@ -199,30 +197,7 @@ public class JJRequirementBean {
 	}
 
 	public void createJJRequirement(int number) {
-		List<JJProject> JJProjectList = jJProjectService.findAllJJProjects();
-		if (JJProjectList.isEmpty()) {
-			JJProject project;
-			for (int i = 0; i < 3; i++) {
-				project = new JJProject();
-				project.setName("ProjectName " + i);
-				project.setDescription("ProjectDescription " + i);
-				project.setCreationDate(new Date());
-				jJProjectService.saveJJProject(project);
-			}
-		}
-
-		List<JJChapter> JJChapterList = jJChapterService.findAllJJChapters();
-		if (JJChapterList.isEmpty()) {
-			JJChapter chapter;
-			for (int i = 0; i < 3; i++) {
-				chapter = new JJChapter();
-				chapter.setName("ChapterName " + i);
-				chapter.setDescription("ChapterDescription " + i);
-				chapter.setCreationDate(new Date());
-				jJChapterService.saveJJChapter(chapter);
-			}
-		}
-
+	
 		System.out.println("JJRequirement bean created");
 		myJJRequirement = new JJRequirement();
 		myJJRequirement.setCreationDate(new Date());
