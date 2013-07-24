@@ -22,61 +22,64 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaEntity(sequenceName = "JJRequirementSEQ")
 public class JJRequirement extends JJAbstractEntity {
 
-    private Integer numero;
+	private Integer numero;
 
-    @ManyToOne
-    private JJProject project;
+	@ManyToOne
+	private JJProject project;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
-    private Date startDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "M-")
+	private Date startDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
-    private Date endDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "M-")
+	private Date endDate;
 
-    @ManyToOne
-    private JJChapter chapter;
+	@ManyToOne
+	private JJChapter chapter;
 
-    @ManyToOne
-    private JJVersion jjversion;
+	@ManyToOne
+	private JJVersion jjversion;
 
-    @ManyToOne
-    private JJCategory category;
+	@ManyToOne
+	private JJProduct product;
 
-    @ManyToOne
-    private JJCriticity criticity;
+	@ManyToOne
+	private JJCategory category;
 
-    @ManyToOne
-    private JJImportance importance;
+	@ManyToOne
+	private JJCriticity criticity;
 
-    @ManyToOne
-    private JJStatus status;
+	@ManyToOne
+	private JJImportance importance;
 
-    @Size(max = 100)
-    private String impact;
+	@ManyToOne
+	private JJStatus status;
 
-    @Enumerated
-    private JJRelationship relation;
+	@Size(max = 100)
+	private String impact;
 
-    @ManyToOne
-    private com.funder.janjoonweb.domain.JJRequirement requirementUp;
+	@Enumerated
+	private JJRelationship relation;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirementUp")
-    private Set<com.funder.janjoonweb.domain.JJRequirement> requirements = new HashSet<com.funder.janjoonweb.domain.JJRequirement>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
+	private Set<JJBug> bugs = new HashSet<JJBug>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
-    private Set<JJBug> bugs = new HashSet<JJBug>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
+	private Set<JJTask> tasks = new HashSet<JJTask>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
-    private Set<JJTask> tasks = new HashSet<JJTask>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<JJContact> assignedTos = new HashSet<JJContact>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<JJContact> assignedTos = new HashSet<JJContact>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<JJMessage> messages = new HashSet<JJMessage>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<JJMessage> messages = new HashSet<JJMessage>();
+	@Size(max = 250)
+	private String note;
 
-    @Size(max = 250)
-    private String note;
+	@ManyToOne
+	private JJRequirement requirementLink;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirementLink")
+	private Set<JJRequirement> requirementsLink = new HashSet<JJRequirement>();
 }

@@ -8,6 +8,7 @@ import com.funder.janjoonweb.domain.JJChapterDataOnDemand;
 import com.funder.janjoonweb.domain.JJContactDataOnDemand;
 import com.funder.janjoonweb.domain.JJCriticityDataOnDemand;
 import com.funder.janjoonweb.domain.JJImportanceDataOnDemand;
+import com.funder.janjoonweb.domain.JJProductDataOnDemand;
 import com.funder.janjoonweb.domain.JJProjectDataOnDemand;
 import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJRequirementDataOnDemand;
@@ -56,6 +57,9 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
     JJVersionDataOnDemand JJRequirementDataOnDemand.jJVersionDataOnDemand;
     
     @Autowired
+    JJProductDataOnDemand JJRequirementDataOnDemand.jJProductDataOnDemand;
+    
+    @Autowired
     JJProjectDataOnDemand JJRequirementDataOnDemand.jJProjectDataOnDemand;
     
     @Autowired
@@ -78,7 +82,7 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
         setNote(obj, index);
         setNumero(obj, index);
         setRelation(obj, index);
-        setRequirementUp(obj, index);
+        setRequirementLink(obj, index);
         setStartDate(obj, index);
         setUpdatedDate(obj, index);
         return obj;
@@ -141,9 +145,9 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
         obj.setRelation(relation);
     }
     
-    public void JJRequirementDataOnDemand.setRequirementUp(JJRequirement obj, int index) {
-        JJRequirement requirementUp = obj;
-        obj.setRequirementUp(requirementUp);
+    public void JJRequirementDataOnDemand.setRequirementLink(JJRequirement obj, int index) {
+        JJRequirement requirementLink = obj;
+        obj.setRequirementLink(requirementLink);
     }
     
     public void JJRequirementDataOnDemand.setStartDate(JJRequirement obj, int index) {

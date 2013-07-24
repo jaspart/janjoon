@@ -35,3 +35,27 @@ quit
 hint
 quit
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-07-09 09:43:10
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-07-23 12:35:18
+hint
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-07-23 12:39:39
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-07-23 12:59:07
+hint
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-07-23 13:01:44
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-07-24 11:21:49
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-07-24 12:03:27
+focus --class ~.JJRequirement
+field reference --fieldName product --type ~.JJProduct
+field reference --fieldName requirementLink --type ~.JJRequirement
+field set --fieldName requirementsLink --type ~.JJRequirement --cardinality ONE_TO_MANY --mappedBy requirementLink --fetch LAZY
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-07-24 12:12:14
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-07-24 12:12:28
+hint
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-07-24 12:12:56
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-07-24 12:15:47
+hint
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-07-24 12:16:05

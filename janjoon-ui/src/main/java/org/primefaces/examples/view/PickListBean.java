@@ -1,13 +1,11 @@
 package org.primefaces.examples.view;  
   
-import java.util.ArrayList;  
-import java.util.List;  
-import javax.faces.application.FacesMessage;  
-import javax.faces.context.FacesContext;  
+import java.util.ArrayList;
+import java.util.List;
+
+import org.primefaces.examples.domain.Player;
+import org.primefaces.model.DualListModel;
 //import org.primefaces.event.TransferEvent;  
-  
-import org.primefaces.examples.domain.Player;  
-import org.primefaces.model.DualListModel;  
   
 public class PickListBean {  
   

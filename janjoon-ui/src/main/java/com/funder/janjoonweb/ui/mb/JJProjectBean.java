@@ -17,6 +17,7 @@ import com.funder.janjoonweb.domain.JJChapterService;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProductService;
 import com.funder.janjoonweb.domain.JJProject;
+import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJRequirementService;
 import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.domain.JJVersionService;
@@ -69,18 +70,18 @@ public class JJProjectBean {
 
 	public List<JJProject> getMyJJProjectList() {
 		/*** Begin Temporary ***/
-//
-//		if (jJChapterService.getAllJJChapter().isEmpty()) {
-//			JJChapter chapter;
-//			for (int i = 0; i < 4; i++) {
-//				chapter = new JJChapter();
-//				chapter.setName("ChapterName " + i);
-//				chapter.setDescription("ChapterDescription " + i);
-//				chapter.setCreationDate(new Date());
-//				chapter.setEnabled(true);
-//				jJChapterService.saveJJChapter(chapter);
-//			}
-//		}
+
+		if (jJChapterService.getAllJJChapter().isEmpty()) {
+			JJChapter chapter;
+			for (int i = 0; i < 4; i++) {
+				chapter = new JJChapter();
+				chapter.setName("ChapterName " + i);
+				chapter.setDescription("ChapterDescription " + i);
+				chapter.setCreationDate(new Date());
+				chapter.setEnabled(true);
+				jJChapterService.saveJJChapter(chapter);
+			}
+		}
 
 		if (jJVersionService.getAllJJVersion().isEmpty()) {
 			JJVersion version;
@@ -127,32 +128,32 @@ public class JJProjectBean {
 			}
 		}
 
-//		List<JJProduct> jJProductList = jJProductService.getAllJJProduct();
-//		if (!jJProductList.isEmpty()) {
-//			for (int i = 0; i < jJProductList.size(); i++) {
-//
-//				List<JJChapter> jJChapterList = jJChapterService
-//						.getAllJJChapter();
-//
-//				Set<JJChapter> chapters = new HashSet<JJChapter>();
-//
-//				if (i == 0) {
-//					jJChapterList.get(i).setProduct(jJProductList.get(i));
-//					chapters.add(jJChapterList.get(i));
-//					jJChapterList.get(i + 1).setProduct(jJProductList.get(i));
-//					chapters.add(jJChapterList.get(i + 1));
-//				} else {
-//					jJChapterList.get(i + 1).setProduct(jJProductList.get(i));
-//					chapters.add(jJChapterList.get(i + 1));
-//					jJChapterList.get(i + 2).setProduct(jJProductList.get(i));
-//					chapters.add(jJChapterList.get(i + 2));
-//				}
-//
-//				jJProductList.get(i).setChapters(chapters);
-//
-//				jJProductService.updateJJProduct(jJProductList.get(i));
-//			}
-//		}
+		// List<JJProduct> jJProductList = jJProductService.getAllJJProduct();
+		// if (!jJProductList.isEmpty()) {
+		// for (int i = 0; i < jJProductList.size(); i++) {
+		//
+		// List<JJChapter> jJChapterList = jJChapterService
+		// .getAllJJChapter();
+		//
+		// Set<JJChapter> chapters = new HashSet<JJChapter>();
+		//
+		// if (i == 0) {
+		// jJChapterList.get(i).setProduct(jJProductList.get(i));
+		// chapters.add(jJChapterList.get(i));
+		// jJChapterList.get(i + 1).setProduct(jJProductList.get(i));
+		// chapters.add(jJChapterList.get(i + 1));
+		// } else {
+		// jJChapterList.get(i + 1).setProduct(jJProductList.get(i));
+		// chapters.add(jJChapterList.get(i + 1));
+		// jJChapterList.get(i + 2).setProduct(jJProductList.get(i));
+		// chapters.add(jJChapterList.get(i + 2));
+		// }
+		//
+		// jJProductList.get(i).setChapters(chapters);
+		//
+		// jJProductService.updateJJProduct(jJProductList.get(i));
+		// }
+		// }
 
 		if (jJProjectService.findAllJJProjects().isEmpty()) {
 			JJProject project;
@@ -163,23 +164,23 @@ public class JJProjectBean {
 				project.setCreationDate(new Date());
 				project.setEnabled(true);
 
-//				Set<JJChapter> chapters = new HashSet<JJChapter>();
-//				List<JJChapter> jJChapterList = jJChapterService
-//						.getAllJJChapter();
-//
-//				if (i == 0) {
-//					jJChapterList.get(i).setProject(project);
-//					chapters.add(jJChapterList.get(i));
-//					jJChapterList.get(i + 1).setProject(project);
-//					chapters.add(jJChapterList.get(i + 1));
-//				} else {
-//					jJChapterList.get(i + 1).setProject(project);
-//					chapters.add(jJChapterList.get(i + 1));
-//					jJChapterList.get(i + 2).setProject(project);
-//					chapters.add(jJChapterList.get(i + 2));
-//				}
-//
-//				project.setChapters(chapters);
+				// Set<JJChapter> chapters = new HashSet<JJChapter>();
+				// List<JJChapter> jJChapterList = jJChapterService
+				// .getAllJJChapter();
+				//
+				// if (i == 0) {
+				// jJChapterList.get(i).setProject(project);
+				// chapters.add(jJChapterList.get(i));
+				// jJChapterList.get(i + 1).setProject(project);
+				// chapters.add(jJChapterList.get(i + 1));
+				// } else {
+				// jJChapterList.get(i + 1).setProject(project);
+				// chapters.add(jJChapterList.get(i + 1));
+				// jJChapterList.get(i + 2).setProject(project);
+				// chapters.add(jJChapterList.get(i + 2));
+				// }
+				//
+				// project.setChapters(chapters);
 
 				jJProjectService.saveJJProject(project);
 			}
@@ -222,9 +223,14 @@ public class JJProjectBean {
 				// req.setProject(myJJProject);
 				// req.setJjversion(jjversion);
 				// req.setChapter(chapter);
-				jJRequirementService
-						.getAllJJRequirementsWithCategoryAndProject("BUSINESS",
+				List<JJRequirement> list = jJRequirementService
+						.getAllJJRequirementsWithProject("BUSINESS",
 								myJJProject);
+
+				System.out.println("List.size = " + list.size());
+				jJRequirementBean.setMyBusinessJJRequirements(list);
+				System.out.println("My Project "+ myJJProject.getId());
+				jJRequirementBean.setCurrentProject(myJJProject);
 			}
 
 		} else {

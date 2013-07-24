@@ -23,12 +23,14 @@
 					</h:form>
 				</p:panel>
 				<h:panelGroup>
-					<ui:insert name="header,content">
+					<ui:insert name="header">
 						<ui:include src="header.xhtml" />
 					</ui:insert>
-					<h:panelGrid cellspacing="0" cellpadding="0" styleClass="content">
-						<ui:insert name="content" />
-					</h:panelGrid>
+					
+						<h:panelGrid  id="contentGrid"  cellspacing="0" cellpadding="0" styleClass="content">
+							<ui:insert name="content" />
+						</h:panelGrid>
+					
 					<ui:insert name="footer">
 						<ui:include src="footer.xhtml" />
 					</ui:insert>

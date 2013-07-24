@@ -10,6 +10,7 @@ import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJCriticity;
 import com.funder.janjoonweb.domain.JJImportance;
 import com.funder.janjoonweb.domain.JJMessage;
+import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJStatus;
@@ -69,6 +70,14 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.jjversion = jjversion;
     }
     
+    public JJProduct JJRequirement.getProduct() {
+        return this.product;
+    }
+    
+    public void JJRequirement.setProduct(JJProduct product) {
+        this.product = product;
+    }
+    
     public JJCategory JJRequirement.getCategory() {
         return this.category;
     }
@@ -117,22 +126,6 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.relation = relation;
     }
     
-    public JJRequirement JJRequirement.getRequirementUp() {
-        return this.requirementUp;
-    }
-    
-    public void JJRequirement.setRequirementUp(JJRequirement requirementUp) {
-        this.requirementUp = requirementUp;
-    }
-    
-    public Set<JJRequirement> JJRequirement.getRequirements() {
-        return this.requirements;
-    }
-    
-    public void JJRequirement.setRequirements(Set<JJRequirement> requirements) {
-        this.requirements = requirements;
-    }
-    
     public Set<JJBug> JJRequirement.getBugs() {
         return this.bugs;
     }
@@ -171,6 +164,22 @@ privileged aspect JJRequirement_Roo_JavaBean {
     
     public void JJRequirement.setNote(String note) {
         this.note = note;
+    }
+    
+    public JJRequirement JJRequirement.getRequirementLink() {
+        return this.requirementLink;
+    }
+    
+    public void JJRequirement.setRequirementLink(JJRequirement requirementLink) {
+        this.requirementLink = requirementLink;
+    }
+    
+    public Set<JJRequirement> JJRequirement.getRequirementsLink() {
+        return this.requirementsLink;
+    }
+    
+    public void JJRequirement.setRequirementsLink(Set<JJRequirement> requirementsLink) {
+        this.requirementsLink = requirementsLink;
     }
     
 }
