@@ -157,4 +157,31 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 	}
 
+	public List<JJRequirement> getAllJJRequirementsWithRequirementLinkAndCategory(
+			String categoryName, JJRequirement requirementLink) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
+				.createQuery(JJRequirement.class);
+
+		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
+
+		Path<Object> path = from.join("category").get("name");
+
+		from.fetch("category");
+
+		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
+		Predicate predicate1 = criteriaBuilder.equal(path, categoryName);
+		Predicate predicate2 = criteriaBuilder.equal(from.get("enabled"), true);
+		Predicate predicate3 = criteriaBuilder.equal(
+				from.join("requirementLink"), requirementLink);
+
+		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3));
+
+		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
+
+		return result.getResultList();
+
+	}
+
 }

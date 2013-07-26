@@ -16,9 +16,11 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.funder.janjoonweb.domain.JJCategory;
+import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJStatus;
+import com.funder.janjoonweb.domain.JJVersion;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJRequirement.class, beanName = "jJRequirementBean")
@@ -61,6 +63,8 @@ public class JJRequirementBean {
 	private String messageDiscard;
 
 	private JJProject currentProject;
+	private JJProduct currentProduct;
+	private JJVersion currentVersion;
 
 	public JJRequirement getMyJJRequirement() {
 		System.out.println("get req invoked");
@@ -174,8 +178,26 @@ public class JJRequirementBean {
 	}
 
 	public List<JJRequirement> getBusinessJJRequirementsList() {
-		businessJJRequirementsList = jJRequirementService
-				.getAllJJRequirementsWithCategory("BUSINESS");
+		if (currentProject != null)
+			if (currentProduct != null)
+				if (currentVersion != null)
+
+					businessJJRequirementsList = jJRequirementService
+							.getAllJJRequirementsWithProjectAndProductAndVersion(
+									"BUSINESS", currentProject, currentProduct,
+									currentVersion);
+				else
+
+					businessJJRequirementsList = jJRequirementService
+							.getAllJJRequirementsWithProjectAndProduct(
+									"BUSINESS", currentProject, currentProduct);
+			else
+				businessJJRequirementsList = jJRequirementService
+						.getAllJJRequirementsWithProject("BUSINESS",
+								currentProject);
+		else
+			businessJJRequirementsList = jJRequirementService
+					.getAllJJRequirementsWithCategory("BUSINESS");
 		return businessJJRequirementsList;
 	}
 
@@ -194,8 +216,32 @@ public class JJRequirementBean {
 	}
 
 	public List<JJRequirement> getFunctionalJJRequirementsList() {
-		functionalJJRequirementsList = jJRequirementService
-				.getAllJJRequirementsWithCategory("FUNCTIONAL");
+
+		if (currentProject != null)
+			if (currentProduct != null)
+				if (currentVersion != null)
+
+					functionalJJRequirementsList = jJRequirementService
+							.getAllJJRequirementsWithProjectAndProductAndVersion(
+									"FUNCTIONAL", currentProject,
+									currentProduct, currentVersion);
+
+				else
+
+					functionalJJRequirementsList = jJRequirementService
+							.getAllJJRequirementsWithProjectAndProduct(
+									"FUNCTIONAL", currentProject,
+									currentProduct);
+
+			else
+				functionalJJRequirementsList = jJRequirementService
+						.getAllJJRequirementsWithProject("FUNCTIONAL",
+								currentProject);
+		else
+
+			functionalJJRequirementsList = jJRequirementService
+					.getAllJJRequirementsWithCategory("FUNCTIONAL");
+
 		return functionalJJRequirementsList;
 	}
 
@@ -214,8 +260,30 @@ public class JJRequirementBean {
 	}
 
 	public List<JJRequirement> getTechnicalJJRequirementsList() {
-		technicalJJRequirementsList = jJRequirementService
-				.getAllJJRequirementsWithCategory("TECHNICAL");
+
+		if (currentProject != null)
+			if (currentProduct != null)
+				if (currentVersion != null)
+
+					technicalJJRequirementsList = jJRequirementService
+							.getAllJJRequirementsWithProjectAndProductAndVersion(
+									"TECHNICAL", currentProject,
+									currentProduct, currentVersion);
+
+				else
+
+					technicalJJRequirementsList = jJRequirementService
+							.getAllJJRequirementsWithProjectAndProduct(
+									"TECHNICAL", currentProject, currentProduct);
+			else
+				technicalJJRequirementsList = jJRequirementService
+						.getAllJJRequirementsWithProject("TECHNICAL",
+								currentProject);
+		else
+
+			technicalJJRequirementsList = jJRequirementService
+					.getAllJJRequirementsWithCategory("TECHNICAL");
+
 		return technicalJJRequirementsList;
 	}
 
@@ -263,6 +331,22 @@ public class JJRequirementBean {
 
 	public void setCurrentProject(JJProject currentProject) {
 		this.currentProject = currentProject;
+	}
+
+	public JJProduct getCurrentProduct() {
+		return currentProduct;
+	}
+
+	public void setCurrentProduct(JJProduct currentProduct) {
+		this.currentProduct = currentProduct;
+	}
+
+	public JJVersion getCurrentVersion() {
+		return currentVersion;
+	}
+
+	public void setCurrentVersion(JJVersion currentVersion) {
+		this.currentVersion = currentVersion;
 	}
 
 	public void createJJRequirement(int number) {
@@ -380,7 +464,6 @@ public class JJRequirementBean {
 		myEditedJJRequirement.setDescription(req.getDescription());
 		myEditedJJRequirement.setName(req.getName());
 		myEditedJJRequirement.setNote(req.getNote());
-
 	}
 
 	public void persistJJRequirement(int index) {
@@ -416,6 +499,7 @@ public class JJRequirementBean {
 			jJRequirementService.saveJJRequirement(myJJRequirement);
 			findAllJJRequirementsWithCategory(creationColumnNumber);
 		} else if (index == 2) {
+
 			switch (editionColumnNumber) {
 			case 1:
 				mySelectedBusinessJJRequirement.setEnabled(false);
@@ -436,6 +520,32 @@ public class JJRequirementBean {
 			default:
 				break;
 			}
+
+			Set<JJRequirement> requirementsLink = new HashSet<JJRequirement>();
+			List<JJRequirement> tempList = new ArrayList<JJRequirement>();
+
+			if (selectedBusinessJJRequirements.size() > 0) {
+				for (JJRequirement req : selectedBusinessJJRequirements)
+					req.setRequirementLink(myEditedJJRequirement);
+				tempList.addAll(tempList.size(), selectedBusinessJJRequirements);
+			}
+
+			if (selectedFunctionalJJRequirements.size() > 0) {
+				for (JJRequirement req : selectedFunctionalJJRequirements)
+					req.setRequirementLink(myEditedJJRequirement);
+				tempList.addAll(tempList.size(),
+						selectedFunctionalJJRequirements);
+			}
+
+			if (selectedTechnicalJJRequirements.size() > 0) {
+				for (JJRequirement req : selectedTechnicalJJRequirements)
+					req.setRequirementLink(myEditedJJRequirement);
+				tempList.addAll(tempList.size(),
+						selectedTechnicalJJRequirements);
+			}
+
+			requirementsLink.addAll(tempList);
+			myEditedJJRequirement.setRequirementsLink(requirementsLink);
 
 			jJRequirementService.saveJJRequirement(myEditedJJRequirement);
 			findAllJJRequirementsWithCategory(editionColumnNumber);
@@ -521,16 +631,81 @@ public class JJRequirementBean {
 		System.out.println("findAllJJRequirementsWithCategory is invoked");
 		switch (number) {
 		case 1:
-			myBusinessJJRequirements = jJRequirementService
-					.getAllJJRequirementsWithCategory("BUSINESS");
+			if (currentProject != null)
+				if (currentProduct != null)
+
+					if (currentVersion != null)
+
+						myBusinessJJRequirements = jJRequirementService
+								.getAllJJRequirementsWithProjectAndProductAndVersion(
+										"BUSINESS", currentProject,
+										currentProduct, currentVersion);
+					else
+
+						myBusinessJJRequirements = jJRequirementService
+								.getAllJJRequirementsWithProjectAndProduct(
+										"BUSINESS", currentProject,
+										currentProduct);
+				else
+					myBusinessJJRequirements = jJRequirementService
+							.getAllJJRequirementsWithProject("BUSINESS",
+									currentProject);
+			else
+				myBusinessJJRequirements = jJRequirementService
+						.getAllJJRequirementsWithCategory("BUSINESS");
 			break;
 		case 2:
-			myFunctionalJJRequirements = jJRequirementService
-					.getAllJJRequirementsWithCategory("FUNCTIONAL");
+
+			if (currentProject != null)
+				if (currentProduct != null)
+
+					if (currentVersion != null)
+
+						myFunctionalJJRequirements = jJRequirementService
+								.getAllJJRequirementsWithProjectAndProductAndVersion(
+										"FUNCTIONAL", currentProject,
+										currentProduct, currentVersion);
+
+					else
+
+						myFunctionalJJRequirements = jJRequirementService
+								.getAllJJRequirementsWithProjectAndProduct(
+										"FUNCTIONAL", currentProject,
+										currentProduct);
+
+				else
+					myFunctionalJJRequirements = jJRequirementService
+							.getAllJJRequirementsWithProject("FUNCTIONAL",
+									currentProject);
+			else
+
+				myFunctionalJJRequirements = jJRequirementService
+						.getAllJJRequirementsWithCategory("FUNCTIONAL");
 			break;
 		case 3:
-			myTechnicalJJRequirements = jJRequirementService
-					.getAllJJRequirementsWithCategory("TECHNICAL");
+			if (currentProject != null)
+				if (currentProduct != null)
+					if (currentVersion != null)
+
+						myTechnicalJJRequirements = jJRequirementService
+								.getAllJJRequirementsWithProjectAndProductAndVersion(
+										"TECHNICAL", currentProject,
+										currentProduct, currentVersion);
+
+					else
+
+						myTechnicalJJRequirements = jJRequirementService
+								.getAllJJRequirementsWithProjectAndProduct(
+										"TECHNICAL", currentProject,
+										currentProduct);
+				else
+					myTechnicalJJRequirements = jJRequirementService
+							.getAllJJRequirementsWithProject("TECHNICAL",
+									currentProject);
+			else
+
+				myTechnicalJJRequirements = jJRequirementService
+						.getAllJJRequirementsWithCategory("TECHNICAL");
 			break;
 		default:
 			break;
@@ -637,6 +812,60 @@ public class JJRequirementBean {
 
 		FacesContext.getCurrentInstance().addMessage(null, message);
 
+	}
+
+	public void selectRequirement(int columnNumber) {
+
+		List<JJRequirement> businessRequirementList = new ArrayList<JJRequirement>();
+		List<JJRequirement> functionalRequirementList = new ArrayList<JJRequirement>();
+		List<JJRequirement> technicalRequirementList = new ArrayList<JJRequirement>();
+
+		JJRequirement req = new JJRequirement();
+		switch (columnNumber) {
+		case 1:
+
+			req = mySelectedBusinessJJRequirement;
+			businessRequirementList.add(req);
+			myBusinessJJRequirements = businessRequirementList;
+
+			myFunctionalJJRequirements = jJRequirementService
+					.getAllJJRequirementsWithRequirementLinkAndCategory(
+							"FUNCTIONAL", req);
+			myTechnicalJJRequirements = jJRequirementService
+					.getAllJJRequirementsWithRequirementLinkAndCategory(
+							"TECHNICAL", req);
+			break;
+		case 2:
+			req = mySelectedFunctionalJJRequirement;
+			myBusinessJJRequirements = jJRequirementService
+					.getAllJJRequirementsWithRequirementLinkAndCategory(
+							"BUSINESS", req);
+			functionalRequirementList.add(req);
+			myFunctionalJJRequirements = functionalRequirementList;
+
+			myTechnicalJJRequirements = jJRequirementService
+					.getAllJJRequirementsWithRequirementLinkAndCategory(
+							"TECHNICAL", req);
+
+			break;
+		case 3:
+			req = mySelectedTechnicalJJRequirement;
+
+			myBusinessJJRequirements = jJRequirementService
+					.getAllJJRequirementsWithRequirementLinkAndCategory(
+							"BUSINESS", req);
+
+			myFunctionalJJRequirements = jJRequirementService
+					.getAllJJRequirementsWithRequirementLinkAndCategory(
+							"FUNCTIONAL", req);
+			technicalRequirementList.add(req);
+			myTechnicalJJRequirements = technicalRequirementList;
+			break;
+
+		default:
+			break;
+		}
+		System.out.println("END");
 	}
 
 	public void onRowSelect(SelectEvent event) {

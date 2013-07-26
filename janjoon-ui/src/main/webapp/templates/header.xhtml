@@ -13,18 +13,26 @@
 		<h:panelGrid columns="2" cellpadding="2">
 			<p:tabMenu name="content">
 				<p:menuitem url="/pages/home.jsf" icon="ui-icon-home" />
-				<p:menuitem value="Project" url="/pages/planning.jsf" icon="ui-icon-clipboard" />
-				<p:menuitem value="Specs" url="/pages/specifications.jsf" icon="ui-icon-document" />
+				<p:menuitem value="Project" url="/pages/planning.jsf"
+					icon="ui-icon-clipboard" />
+				<p:menuitem value="Specs" url="/pages/specifications.jsf"
+					icon="ui-icon-document" />
 				<p:menuitem value="Bugs" url="/pages/bugs.jsf" icon="ui-icon-gear" />
-				<p:menuitem value="Dev" url="/pages/development.jsf" icon="ui-icon-wrench" />
+				<p:menuitem value="Dev" url="/pages/development.jsf"
+					icon="ui-icon-wrench" />
 				<p:menuitem value="Test" url="/pages/test.jsf" icon="ui-icon-check" />
-				<p:menuitem value="Delivery" url="/pages/delivery.jsf" icon="ui-icon-star" />
-				<p:menuitem value="Teams" url="/pages/teams.jsf" icon="ui-icon-person" />
-				<p:menuitem value="Stats" url="/pages/stats.jsf" icon="ui-icon-arrowreturnthick-1-n" />
-				<p:menuitem value="Admin" url="/pages/administration.jsf" icon="ui-icon-key" />
+				<p:menuitem value="Delivery" url="/pages/delivery.jsf"
+					icon="ui-icon-star" />
+				<p:menuitem value="Teams" url="/pages/teams.jsf"
+					icon="ui-icon-person" />
+				<p:menuitem value="Stats" url="/pages/stats.jsf"
+					icon="ui-icon-arrowreturnthick-1-n" />
+				<p:menuitem value="Admin" url="/pages/administration.jsf"
+					icon="ui-icon-key" />
 				<f:facet name="options">
 					<p:inputText style="margin-right:10px" />
-					<p:commandButton type="button" value="Logout" icon="ui-icon-extlink" />
+					<p:commandButton type="button" value="Logout"
+						icon="ui-icon-extlink" />
 				</f:facet>
 			</p:tabMenu>
 
@@ -35,10 +43,13 @@
 					effect="fade" style="width:160px" filter="true"
 					filterMatchMode="startsWith">
 
-					<f:converter converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
+					<f:converter
+						converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
 
-					<f:selectItem itemLabel="#{jJProjectBean.myJJProject.name}" itemValue="#{jJProjectBean.myJJProject}" />
-					<f:selectItems value="#{jJProjectBean.myJJProjectList}" var="p" itemLabel="#{p.name}" itemValue="#{p}" />
+					<f:selectItem itemLabel="#{jJProjectBean.myJJProject.name}"
+						itemValue="#{jJProjectBean.myJJProject}" />
+					<f:selectItems value="#{jJProjectBean.myJJProjectList}" var="p"
+						itemLabel="#{p.name}" itemValue="#{p}" />
 
 					<p:ajax process="@this" partialSubmit="true"
 						listener="#{jJProjectBean.handleSelectProject(jJProductBean,jJVersionBean,jJRequirementBean)}"
@@ -59,8 +70,8 @@
 						itemLabel="#{p.name}" itemValue="#{p}" />
 
 					<p:ajax process="@this" partialSubmit="true"
-						listener="#{jJProductBean.handleSelectProduct(jJVersionBean,jJProjectBean)}"
-						update="messagesHeader versionSelectOneMenu" />
+						listener="#{jJProductBean.handleSelectProduct(jJVersionBean,jJProjectBean,jJRequirementBean)}"
+						update="messagesHeader versionSelectOneMenu :contentGrid" />
 				</p:selectOneMenu>
 
 				<h:outputText value="Version :" />
@@ -77,7 +88,8 @@
 						itemLabel="#{v.name}" itemValue="#{v}" />
 
 					<p:ajax process="@this" partialSubmit="true"
-						listener="#{jJVersionBean.handleSelect}" update="messagesHeader" />
+						listener="#{jJVersionBean.handleSelect(jJRequirementBean)}"
+						update="messagesHeader :contentGrid" />
 				</p:selectOneMenu>
 
 			</h:panelGrid>

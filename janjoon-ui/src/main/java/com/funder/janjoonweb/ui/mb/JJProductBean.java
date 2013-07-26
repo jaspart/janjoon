@@ -12,6 +12,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 import com.funder.janjoonweb.domain.JJChapterService;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProject;
+import com.funder.janjoonweb.domain.JJRequirementService;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJProduct.class, beanName = "jJProductBean")
@@ -27,6 +28,14 @@ public class JJProductBean {
 
 	public void setjJChapterService(JJChapterService jJChapterService) {
 		this.jJChapterService = jJChapterService;
+	}
+
+	@Autowired
+	JJRequirementService jJRequirementService;
+
+	public void setjJRequirementService(
+			JJRequirementService jJRequirementService) {
+		this.jJRequirementService = jJRequirementService;
 	}
 
 	public boolean isDisabled() {
@@ -47,11 +56,10 @@ public class JJProductBean {
 
 	public List<JJProduct> getMyJJProductList() {
 
-//		myJJProductList = jJChapterService
-//				.getAllJJProductInJJChapterWithJJProject(project);
+		// myJJProductList = jJChapterService
+		// .getAllJJProductInJJChapterWithJJProject(project);
 		myJJProductList = jJProductService.getAllJJProduct();
-				
-		
+
 		JJProduct product = new JJProduct();
 		product.setId((long) 1234567890);
 		product.setName("Select All");
@@ -72,7 +80,7 @@ public class JJProductBean {
 	}
 
 	public void handleSelectProduct(JJVersionBean jJVersionBean,
-			JJProjectBean jJProjectBean) {
+			JJProjectBean jJProjectBean, JJRequirementBean jJRequirementBean) {
 
 		if (myJJProduct != null) {
 			System.out.println("myJJProduct.getId() " + myJJProduct.getId());
@@ -89,13 +97,49 @@ public class JJProductBean {
 				jJVersionBean.setProduct(myJJProduct);
 				jJVersionBean.setProject(project);
 			}
+
+			if (jJRequirementBean != null) {
+
+				jJRequirementBean.setCurrentProduct(myJJProduct);
+
+				jJRequirementBean
+						.setMyBusinessJJRequirements(jJRequirementService
+								.getAllJJRequirementsWithProjectAndProduct(
+										"BUSINESS", project, myJJProduct));
+
+				jJRequirementBean
+						.setMyFunctionalJJRequirements(jJRequirementService
+								.getAllJJRequirementsWithProjectAndProduct(
+										"FUNCTIONAL", project, myJJProduct));
+
+				jJRequirementBean
+						.setMyTechnicalJJRequirements(jJRequirementService
+								.getAllJJRequirementsWithProjectAndProduct(
+										"TECHNICAL", project, myJJProduct));
+
+			}
+
 		} else {
-			// Requete getReqwithProject
+			// IF PRODUCT IS NULL GET ALL JJREQUIRMENTS WITH PROJECT
 			System.out.println("Product is null");
 			if (jJVersionBean != null) {
 				jJVersionBean.setDisabled(true);
 				jJVersionBean.setMyJJVersion(null);
 			}
+
+			jJRequirementBean.setCurrentProduct(myJJProduct);
+
+			jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
+					.getAllJJRequirementsWithProject("BUSINESS", project));
+
+			jJRequirementBean
+					.setMyFunctionalJJRequirements(jJRequirementService
+							.getAllJJRequirementsWithProject("FUNCTIONAL",
+									project));
+
+			jJRequirementBean.setMyTechnicalJJRequirements(jJRequirementService
+					.getAllJJRequirementsWithProject("TECHNICAL", project));
+
 		}
 
 	}

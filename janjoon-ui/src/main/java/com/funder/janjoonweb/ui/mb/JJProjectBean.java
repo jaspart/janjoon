@@ -217,20 +217,24 @@ public class JJProjectBean {
 			}
 
 			if (jJRequirementBean != null) {
-				// Requete getReqwithProject
-				System.out.println("Requirement is not null");
-				// JJRequirement req = new JJRequirement();
-				// req.setProject(myJJProject);
-				// req.setJjversion(jjversion);
-				// req.setChapter(chapter);
-				List<JJRequirement> list = jJRequirementService
-						.getAllJJRequirementsWithProject("BUSINESS",
-								myJJProject);
 
-				System.out.println("List.size = " + list.size());
-				jJRequirementBean.setMyBusinessJJRequirements(list);
-				System.out.println("My Project "+ myJJProject.getId());
 				jJRequirementBean.setCurrentProject(myJJProject);
+
+				jJRequirementBean
+						.setMyBusinessJJRequirements(jJRequirementService
+								.getAllJJRequirementsWithProject("BUSINESS",
+										myJJProject));
+
+				jJRequirementBean
+						.setMyFunctionalJJRequirements(jJRequirementService
+								.getAllJJRequirementsWithProject("FUNCTIONAL",
+										myJJProject));
+
+				jJRequirementBean
+						.setMyTechnicalJJRequirements(jJRequirementService
+								.getAllJJRequirementsWithProject("TECHNICAL",
+										myJJProject));
+
 			}
 
 		} else {
@@ -245,7 +249,20 @@ public class JJProjectBean {
 				jJVersionBean.setDisabled(true);
 				jJVersionBean.setMyJJVersion(null);
 			}
-			// Requete getALLReq
+			
+			// IF PROJECT IS NULL GET ALL JJREQUIRMENTS
+
+			jJRequirementBean.setCurrentProject(myJJProject);
+
+			jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
+					.getAllJJRequirementsWithCategory("BUSINESS"));
+
+			jJRequirementBean
+					.setMyFunctionalJJRequirements(jJRequirementService
+							.getAllJJRequirementsWithCategory("FUNCTIONAL"));
+
+			jJRequirementBean.setMyTechnicalJJRequirements(jJRequirementService
+					.getAllJJRequirementsWithCategory("TECHNICAL"));
 
 		}
 

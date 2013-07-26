@@ -18,4 +18,7 @@ public interface JJRequirementService {
 	public List<JJRequirement> getAllJJRequirementsWithProjectAndProductAndVersion(
 			String categoryName, JJProject project, JJProduct product,
 			JJVersion version);
+
+	public List<JJRequirement> getAllJJRequirementsWithRequirementLinkAndCategory(
+			String categoryName, JJRequirement requirementLink);
 }

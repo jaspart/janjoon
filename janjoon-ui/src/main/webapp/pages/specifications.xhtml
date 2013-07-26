@@ -28,6 +28,9 @@
 					actionListener="#{jJRequirementBean.updateMessageDiscard(1)}"
 					icon="ui-icon-close" update="myDiscardDialog"
 					oncomplete="discardJJRequirement.show()" />
+				<p:menuitem id="selectLeft" value="Select"
+					actionListener="#{jJRequirementBean.selectRequirement(1)}"
+					icon="ui-icon-check" update=":dataForm" />
 			</p:contextMenu>
 			<p:contextMenu id="middleContextMenu" for="middleTable">
 				<p:menuitem id="editMiddle" value="Edit" icon="ui-icon-pencil"
@@ -41,6 +44,9 @@
 					actionListener="#{jJRequirementBean.updateMessageDiscard(2)}"
 					icon="ui-icon-close" update="myDiscardDialog"
 					oncomplete="discardJJRequirement.show()" />
+				<p:menuitem id="selectMiddle" value="Select"
+					actionListener="#{jJRequirementBean.selectRequirement(2)}"
+					icon="ui-icon-check" update=":dataForm" />
 			</p:contextMenu>
 			<p:contextMenu id="rightContextMenu" for="rightTable">
 				<p:menuitem id="editRight" value="Edit" icon="ui-icon-pencil"
@@ -54,6 +60,9 @@
 					actionListener="#{jJRequirementBean.updateMessageDiscard(3)}"
 					icon="ui-icon-close" update="myDiscardDialog"
 					oncomplete="discardJJRequirement.show()" />
+				<p:menuitem id="selectRight" value="Select"
+					actionListener="#{jJRequirementBean.selectRequirement(3)}"
+					icon="ui-icon-check" update=":dataForm" />
 			</p:contextMenu>
 			<table>
 				<tr>
@@ -398,38 +407,84 @@
 						</p:autoComplete>
 						<p:watermark for="projectEdit" value="Project" />
 					</h:panelGrid>
-					<h:panelGrid columns="3" cellpadding="2">
-						<p:inputText id="nameEdit"
-							value="#{jJRequirementBean.myEditedJJRequirement.name}"
-							required="true">
-							<f:validateLength minimum="1" maximum="25" />
-							<p:ajax update="msgNameEdit" event="keyup" />
-						</p:inputText>
-						<p:message for="nameEdit" id="msgNameEdit" display="icon" />
-						<p:watermark for="nameEdit" value="Name" />
+					<h:panelGrid columns="1" cellpadding="2">
 
-						<p:inputText id="descriptionEdit"
-							value="#{jJRequirementBean.myEditedJJRequirement.description}"
-							required="true">
-							<f:validateLength minimum="1" maximum="250" />
-							<p:ajax update="msgDescriptionEdit" event="keyup" />
-						</p:inputText>
-						<p:message for="descriptionEdit" id="msgDescriptionEdit"
-							display="icon" />
-						<p:watermark for="descriptionEdit" value="Description" />
+						<h:panelGrid columns="3" cellpadding="2">
+							<p:inputText id="nameEdit"
+								value="#{jJRequirementBean.myEditedJJRequirement.name}"
+								required="true">
+								<f:validateLength minimum="1" maximum="25" />
+								<p:ajax update="msgNameEdit" event="keyup" />
+							</p:inputText>
+							<p:message for="nameEdit" id="msgNameEdit" display="icon" />
+							<p:watermark for="nameEdit" value="Name" />
+
+							<p:inputText id="descriptionEdit"
+								value="#{jJRequirementBean.myEditedJJRequirement.description}"
+								required="true">
+								<f:validateLength minimum="1" maximum="250" />
+								<p:ajax update="msgDescriptionEdit" event="keyup" />
+							</p:inputText>
+							<p:message for="descriptionEdit" id="msgDescriptionEdit"
+								display="icon" />
+							<p:watermark for="descriptionEdit" value="Description" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="3" cellpadding="2">
+							<p:inputTextarea id="noteEdit" rows="6" cols="20"
+								value="#{jJRequirementBean.myEditedJJRequirement.note}"
+								required="false">
+								<f:validateLength minimum="0" maximum="250" />
+								<p:ajax update="msgNoteEdit" event="keyup" />
+							</p:inputTextarea>
+							<p:message for="noteEdit" id="msgNoteEdit" display="icon" />
+							<p:watermark for="noteEdit" value="Note" />
+						</h:panelGrid>
+						<h:panelGrid columns="3" cellpadding="2">
+							<h:outputText value="Business: " />
+							<h:outputText value="Functional: " />
+							<h:outputText value="Technical: " />
+							<p:selectManyMenu id="businessReqListEdit"
+								value="#{jJRequirementBean.selectedBusinessJJRequirements}"
+								var="p" showCheckbox="true" style="height:75px">
+								<f:selectItems
+									value="#{jJRequirementBean.businessJJRequirementsList}"
+									var="req" itemLabel="#{req.name}" itemValue="#{req}" />
+								<f:converter
+									converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" />
+								<p:column style="text-align:left">  
+								                #{p.name}
+								            </p:column>
+							</p:selectManyMenu>
+
+							<p:selectManyMenu id="functionalReqListEdit"
+								value="#{jJRequirementBean.selectedFunctionalJJRequirements}"
+								var="p" showCheckbox="true" style="height:75px">
+								<f:selectItems
+									value="#{jJRequirementBean.functionalJJRequirementsList}"
+									var="req" itemLabel="#{req.name}" itemValue="#{req}" />
+								<f:converter
+									converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" />
+								<p:column style="text-align:left">  
+								                #{p.name}
+								            </p:column>
+							</p:selectManyMenu>
+
+							<p:selectManyMenu id="technicalReqListEdit"
+								value="#{jJRequirementBean.selectedTechnicalJJRequirements}"
+								var="p" showCheckbox="true" style="height:75px">
+								<f:selectItems
+									value="#{jJRequirementBean.technicalJJRequirementsList}"
+									var="req" itemLabel="#{req.name}" itemValue="#{req}" />
+								<f:converter
+									converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" />
+								<p:column style="text-align:left">  
+								                #{p.name}
+								            </p:column>
+							</p:selectManyMenu>
+
+						</h:panelGrid>
 					</h:panelGrid>
-
-					<h:panelGrid columns="3" cellpadding="2">
-						<p:inputTextarea id="noteEdit" rows="6" cols="20"
-							value="#{jJRequirementBean.myEditedJJRequirement.note}"
-							required="false">
-							<f:validateLength minimum="0" maximum="250" />
-							<p:ajax update="msgNoteEdit" event="keyup" />
-						</p:inputTextarea>
-						<p:message for="noteEdit" id="msgNoteEdit" display="icon" />
-						<p:watermark for="noteEdit" value="Note" />
-					</h:panelGrid>
-
 					<f:facet name="footer">
 						<p:row>
 							<p:column>
@@ -577,7 +632,7 @@
 								                #{p.name}
 								            </p:column>
 							</p:selectManyMenu>
-							
+
 							<p:selectManyMenu id="technicalReqList"
 								value="#{jJRequirementBean.selectedTechnicalJJRequirements}"
 								var="p" showCheckbox="true" style="height:75px">

@@ -5,11 +5,13 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProject;
+import com.funder.janjoonweb.domain.JJRequirementService;
 import com.funder.janjoonweb.domain.JJVersion;
 
 @RooSerializable
@@ -21,6 +23,14 @@ public class JJVersionBean {
 	private boolean disabled = true;
 	private JJProduct product;
 	private JJProject project;
+
+	@Autowired
+	JJRequirementService jJRequirementService;
+
+	public void setjJRequirementService(
+			JJRequirementService jJRequirementService) {
+		this.jJRequirementService = jJRequirementService;
+	}
 
 	public JJVersion getMyJJVersion() {
 		return myJJVersion;
@@ -67,8 +77,8 @@ public class JJVersionBean {
 		this.project = project;
 	}
 
-	public void handleSelect() {
-		System.out.println("HEEEEERRREE");
+	public void handleSelect(JJRequirementBean jJRequirementBean) {
+
 		if (myJJVersion != null) {
 			System.out.println("myJJVersion.getId() " + myJJVersion.getId());
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -77,11 +87,49 @@ public class JJVersionBean {
 
 			FacesContext.getCurrentInstance().addMessage(null, message);
 
-			// Requete getReqwithProject&Product&Version
+			if (jJRequirementBean != null) {
+
+				jJRequirementBean.setCurrentVersion(myJJVersion);
+
+				jJRequirementBean
+						.setMyBusinessJJRequirements(jJRequirementService
+								.getAllJJRequirementsWithProjectAndProductAndVersion(
+										"BUSINESS", project, product,
+										myJJVersion));
+
+				jJRequirementBean
+						.setMyFunctionalJJRequirements(jJRequirementService
+								.getAllJJRequirementsWithProjectAndProductAndVersion(
+										"FUNCTIONAL", project, product,
+										myJJVersion));
+
+				jJRequirementBean
+						.setMyTechnicalJJRequirements(jJRequirementService
+								.getAllJJRequirementsWithProjectAndProductAndVersion(
+										"TECHNICAL", project, product,
+										myJJVersion));
+
+			}
 		} else {
-			
-			// Requete getReqwithProject&Product
+
+			// IF VERSION IS NULL GET ALL JJREQUIRMENTS WITH PROJECT AND PRODUCT
 			System.out.println("My version is null");
+
+			jJRequirementBean.setCurrentVersion(myJJVersion);
+
+			jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
+					.getAllJJRequirementsWithProjectAndProduct("BUSINESS",
+							project, product));
+
+			jJRequirementBean
+					.setMyFunctionalJJRequirements(jJRequirementService
+							.getAllJJRequirementsWithProjectAndProduct(
+									"FUNCTIONAL", project, product));
+
+			jJRequirementBean.setMyTechnicalJJRequirements(jJRequirementService
+					.getAllJJRequirementsWithProjectAndProduct("TECHNICAL",
+							project, product));
+
 		}
 
 	}
