@@ -550,7 +550,7 @@ Ganttalendar.prototype.drawLink = function (from, to, type) {
     }
 
     //arrow
-    var arr = $("<img src='resources/images/linkArrow.png'>").css({
+    var arr = $("<img src='../resources/images/linkArrow.png'>").css({
       position: 'absolute',
       top: rectTo.top + rectTo.height / 2 - 5,
       left: rectTo.left - 5
@@ -649,7 +649,7 @@ Ganttalendar.prototype.drawLink = function (from, to, type) {
     }
 
     //arrow
-    var arr = $("<img src='resources/images/linkArrow.png'>").css({
+    var arr = $("<img src='../resources/images/linkArrow.png'>").css({
       position: 'absolute',
       top: rectTo.top + rectTo.height / 2 - 5,
       left: rectTo.left - 5

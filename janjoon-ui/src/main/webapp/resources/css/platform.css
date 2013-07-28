@@ -33,7 +33,7 @@ BODY, TBODY {
 }
 
 BODY {
-  background-color: #91B4B7; 
+  /*background-color: #91B4B7; */
 }
 
 a {
@@ -185,7 +185,7 @@ TH, .tableHeader {
 }
 
 TH a {
-  color: #FFFFFF;
+  color: FFFFFF;
 }
 
 

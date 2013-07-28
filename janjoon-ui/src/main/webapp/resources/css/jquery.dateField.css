@@ -1,5 +1,5 @@
 .calBox {
-  background-color: #91B4B7;
+  /*background-color: #91B4B7;*/
   padding: 2px;
   -moz-border-radius: 4px;
   text-align: center;
@@ -38,12 +38,12 @@
   border: none;
 }
 .calElement.prev {
-  background: transparent url(../../resources/images/prev.png) no-repeat 10px 0;
+  background: transparent url(../resources/images/prev.png) no-repeat 10px 0;
   float:left;
 }
 
 .calElement.next {
-  background: transparent url(../../resources/images/next.png) no-repeat;
+  background: transparent url(../resources/images/next.png) no-repeat;
   float:right;
 }
 

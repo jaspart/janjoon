@@ -101,7 +101,7 @@
   background-color: #aaa;
   cursor: w-resize;
   text-align: center;
-  color: white;
+  color: grey;
 }
 
 .end{
@@ -145,7 +145,7 @@
 }
 
 .ganttHead1 th,.ganttHead2 th{
-  border-left:1px solid white;
+  border-left:1px solid grey;
 }
 
 .ganttToday{
@@ -216,7 +216,7 @@
   top:0px;
   position:absolute;
   width:18px;
-  background: url("../../resources/images/milestone.png") no-repeat;
+  background: url("../resources/images/milestone.png") no-repeat;
   height:18px;
   display:none;
 }
@@ -237,7 +237,7 @@
 }
 
 .taskBox .layout.extDep{
-  background-image:url("resources/images/hasExternalDeps.png");
+  background-image:url("../resources/images/hasExternalDeps.png");
 }
 
 
@@ -307,7 +307,7 @@
  background-color: #fbb11e;
 }
 .taskStatus[status=STATUS_UNDEFINED]{
- background-color: #ffffff;
+ background-color: grey;
 }
 .taskStatus.selected{
   border:#666 2px solid;
