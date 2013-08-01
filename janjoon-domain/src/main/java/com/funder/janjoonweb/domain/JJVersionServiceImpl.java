@@ -48,7 +48,6 @@ public class JJVersionServiceImpl implements JJVersionService {
 		select.where(criteriaBuilder.and(predicate1, predicate2));
 
 		TypedQuery<JJVersion> result = entityManager.createQuery(select);
-		System.out.println("result.getResultList().size()" +result.getResultList().size());
 		return result.getResultList();
 
 	}

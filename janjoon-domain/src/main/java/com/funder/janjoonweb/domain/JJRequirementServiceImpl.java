@@ -78,9 +78,6 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
-		System.out
-				.println("\n///////////////////////////////////////////////////////////////Get Req with project "
-						+ result.getResultList().size());
 
 		return result.getResultList();
 
@@ -112,9 +109,6 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 				predicate4));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
-		System.out
-				.println("\n///////////////////////////////////////////////////////////////Get Req with project "
-						+ result.getResultList().size());
 
 		return result.getResultList();
 
@@ -149,9 +143,6 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 				predicate4, predicate5));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
-		System.out
-				.println("\n///////////////////////////////////////////////////////////////Get Req with project "
-						+ result.getResultList().size());
 
 		return result.getResultList();
 

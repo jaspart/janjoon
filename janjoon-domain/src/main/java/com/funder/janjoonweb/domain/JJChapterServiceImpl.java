@@ -81,17 +81,12 @@ public class JJChapterServiceImpl implements JJChapterService {
 
 		TypedQuery<JJChapter> result = entityManager.createQuery(select);
 
-		System.out
-				.println("Chapter List size " + result.getResultList().size());
-
 		List<JJChapter> jJChapterList = result.getResultList();
 		List<JJProduct> jJProduct = new ArrayList<JJProduct>();
 		for (JJChapter jjChapter : jJChapterList) {
 			if (!jJProduct.contains(jjChapter.getProduct()))
 				jJProduct.add(jjChapter.getProduct());
 		}
-
-		System.out.println("Product List size " + jJProduct.size());
 
 		return jJProduct;
 

@@ -110,6 +110,14 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.status = status;
     }
     
+    public Boolean JJRequirement.getIsCompleted() {
+        return this.isCompleted;
+    }
+    
+    public void JJRequirement.setIsCompleted(Boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
+    
     public String JJRequirement.getImpact() {
         return this.impact;
     }

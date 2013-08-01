@@ -141,6 +141,7 @@ field reference --fieldName criticity --type ~.JJCriticity
 field reference --fieldName importance --type ~.JJImportance
 field reference --fieldName status --type ~.JJStatus
 field string --fieldName impact --sizeMax 100
+field boolean --fieldName isCompleted
 field enum --fieldName relation --type ~.reference.JJRelationship
 field reference --fieldName requirementLink --type ~.JJRequirement
 field set --fieldName requirementsLink --type ~.JJRequirement --cardinality ONE_TO_MANY --mappedBy requirementLink --fetch LAZY

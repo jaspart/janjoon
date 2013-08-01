@@ -59,12 +59,12 @@ public class JJProjectBean {
 	}
 
 	public JJProject getMyJJProject() {
-		System.out.println("Getter is invoked");
+
 		return myJJProject;
 	}
 
 	public void setMyJJProject(JJProject myJJProject) {
-		System.out.println("Setter is invoked");
+
 		this.myJJProject = myJJProject;
 	}
 
@@ -198,7 +198,7 @@ public class JJProjectBean {
 	public void handleSelectProject(JJProductBean jJProductBean,
 			JJVersionBean jJVersionBean, JJRequirementBean jJRequirementBean) {
 		if (myJJProject != null) {
-			System.out.println(myJJProject.getId());
+
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Project selected: " + myJJProject.getName(),
 					"Selection info");
@@ -239,8 +239,6 @@ public class JJProjectBean {
 
 		} else {
 
-			System.out.println("Project is null");
-
 			if (jJProductBean != null) {
 				jJProductBean.setDisabled(true);
 				jJProductBean.setMyJJProduct(null);
@@ -249,7 +247,7 @@ public class JJProjectBean {
 				jJVersionBean.setDisabled(true);
 				jJVersionBean.setMyJJVersion(null);
 			}
-			
+
 			// IF PROJECT IS NULL GET ALL JJREQUIRMENTS
 
 			jJRequirementBean.setCurrentProject(myJJProject);

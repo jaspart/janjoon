@@ -78,6 +78,7 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
         setEnabled(obj, index);
         setEndDate(obj, index);
         setImpact(obj, index);
+        setIsCompleted(obj, index);
         setName(obj, index);
         setNote(obj, index);
         setNumero(obj, index);
@@ -117,6 +118,11 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
             impact = impact.substring(0, 100);
         }
         obj.setImpact(impact);
+    }
+    
+    public void JJRequirementDataOnDemand.setIsCompleted(JJRequirement obj, int index) {
+        Boolean isCompleted = Boolean.TRUE;
+        obj.setIsCompleted(isCompleted);
     }
     
     public void JJRequirementDataOnDemand.setName(JJRequirement obj, int index) {

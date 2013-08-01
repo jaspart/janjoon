@@ -83,7 +83,7 @@ public class JJProductBean {
 			JJProjectBean jJProjectBean, JJRequirementBean jJRequirementBean) {
 
 		if (myJJProduct != null) {
-			System.out.println("myJJProduct.getId() " + myJJProduct.getId());
+
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Product selected: " + myJJProduct.getName(),
 					"Selection info");
@@ -121,7 +121,7 @@ public class JJProductBean {
 
 		} else {
 			// IF PRODUCT IS NULL GET ALL JJREQUIRMENTS WITH PROJECT
-			System.out.println("Product is null");
+
 			if (jJVersionBean != null) {
 				jJVersionBean.setDisabled(true);
 				jJVersionBean.setMyJJVersion(null);

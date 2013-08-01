@@ -80,7 +80,7 @@ public class JJVersionBean {
 	public void handleSelect(JJRequirementBean jJRequirementBean) {
 
 		if (myJJVersion != null) {
-			System.out.println("myJJVersion.getId() " + myJJVersion.getId());
+
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Version selected: " + myJJVersion.getName(),
 					"Selection info");
@@ -113,7 +113,6 @@ public class JJVersionBean {
 		} else {
 
 			// IF VERSION IS NULL GET ALL JJREQUIRMENTS WITH PROJECT AND PRODUCT
-			System.out.println("My version is null");
 
 			jJRequirementBean.setCurrentVersion(myJJVersion);
 

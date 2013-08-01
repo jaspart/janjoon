@@ -63,6 +63,9 @@
 				<p:menuitem id="selectRight" value="Select"
 					actionListener="#{jJRequirementBean.selectRequirement(3)}"
 					icon="ui-icon-check" update=":dataForm" />
+				<p:menuitem id="isCompletedRight" value="Completed"
+					actionListener="#{jJRequirementBean.completeRequirement()}"
+					icon="ui-icon-arrowthick-1-e" update=":dataForm" />
 			</p:contextMenu>
 			<table>
 				<tr>
@@ -83,99 +86,103 @@
 				<tr></tr>
 				<tr>
 					<td><p:dataTable id="leftTable"
-						value="#{jJRequirementBean.myBusinessJJRequirements}"
-						var="Requirement" resizableColumns="true" scrollable="true"
-						scrollHeight="525" style="width:410px"
-						rowKey="#{Requirement.name}"
-						selection="#{jJRequirementBean.mySelectedBusinessJJRequirement}"
-						selectionMode="single">
-						<p:ajax event="rowSelect"
-							listener="#{jJRequirementBean.onRowSelect}"
-							update=":dataForm:leftContextMenu :dataForm:messages" />
-						<f:facet name="header">
-							<p:panelGrid>
-								<f:facet name="header">
-									<p:row>
-										<p:column colspan="1">
-											<p:commandButton id="reqBusiChapterButton"
-												icon="ui-icon-clipboard" type="button" />
-										</p:column>
-										<p:column colspan="1">
-											<p:commandButton id="releaseButton"
-												icon=".ui-icon-carat-2-n-s"
-												title="Release All Business Requirements"
-												actionListener="#{jJRequirementBean.updateMessageRelease(1)}"
-												update=":dataForm:myReleaseDialog"
-												oncomplete="releaseJJRequirement.show()" />
-										</p:column>
-										<p:column colspan="4">
-											<p:inputText id="globalFilter" style="width:150px" />
-											<p:watermark for="globalFilter" value="Search..." />
-										</p:column>
-										<p:column colspan="1">
-											<p:commandButton id="createButton" icon="ui-icon-plus"
-												title="Add Business Requirement"
-												actionListener="#{jJRequirementBean.createJJRequirement(1)}"
-												oncomplete="createJJRequirement.show()" />
-										</p:column>
-										<p:column colspan="1">
-											<p:commandButton id="dynaButton" icon="ui-icon-document"
-												type="button" />
-											<p:menu overlay="true" trigger="dynaButton" my="left top"
-												at="left bottom">
-												<p:menuitem>
-													<h:commandLink>
-														<p:graphicImage value="/resources/images/pdf.png" />
-														<h:outputLabel value="export in pdf" />
-														<p:dataExporter type="pdf" target="tbl"
-															fileName="requirements" />
-													</h:commandLink>
-												</p:menuitem>
-												<p:menuitem>
-													<h:commandLink>
-														<p:graphicImage value="/resources/images/csv.png" />
-														<h:outputLabel value="export in csv" />
-														<p:dataExporter type="pdf" target="tbl"
-															fileName="requirements" />
-													</h:commandLink>
-												</p:menuitem>
-												<p:menuitem>
-													<h:commandLink>
-														<p:graphicImage value="/resources/images/xml.png" />
-														<h:outputLabel value="export in xml" />
-														<p:dataExporter type="pdf" target="tbl"
-															fileName="requirements" />
-													</h:commandLink>
-												</p:menuitem>
-												<p:menuitem>
-													<h:commandLink>
-														<p:graphicImage value="/resources/images/excel.png" />
-														<h:outputLabel value="export in xls" />
-														<p:dataExporter type="pdf" target="tbl"
-															fileName="requirements" />
-													</h:commandLink>
-												</p:menuitem>
-											</p:menu>
-										</p:column>
-									</p:row>
-								</f:facet>
-							</p:panelGrid>
-						</f:facet>
+							value="#{jJRequirementBean.myBusinessJJRequirements}"
+							var="Requirement" resizableColumns="true" scrollable="true"
+							scrollHeight="525" style="width:410px"
+							rowKey="#{Requirement.name}"
+							selection="#{jJRequirementBean.mySelectedBusinessJJRequirement}"
+							selectionMode="single">
+							<p:ajax event="rowSelect"
+								listener="#{jJRequirementBean.onRowSelect}"
+								update=":dataForm:leftContextMenu :dataForm:messages" />
+							<f:facet name="header">
+								<p:panelGrid>
+									<f:facet name="header">
+										<p:row>
+											<p:column colspan="1">
+												<p:commandButton id="reqBusiChapterButton"
+													icon="ui-icon-clipboard" type="button" />
+											</p:column>
+											<p:column colspan="1">
+												<p:commandButton id="releaseButton"
+													icon=".ui-icon-carat-2-n-s"
+													title="Release All Business Requirements"
+													actionListener="#{jJRequirementBean.updateMessageRelease(1)}"
+													update=":dataForm:myReleaseDialog"
+													oncomplete="releaseJJRequirement.show()" />
+											</p:column>
+											<p:column colspan="4">
+												<p:inputText id="globalFilter" style="width:150px" />
+												<!-- 												<p:watermark for="globalFilter" value="Search..." /> -->
+											</p:column>
+											<p:column colspan="1">
+												<p:commandButton id="createButton" icon="ui-icon-plus"
+													title="Add Business Requirement"
+													actionListener="#{jJRequirementBean.createJJRequirement(1)}"
+													oncomplete="createJJRequirement.show()" />
+											</p:column>
+											<p:column colspan="1">
+												<p:commandButton id="dynaButton" icon="ui-icon-document"
+													type="button" />
+												<!-- 												<p:menu overlay="true" trigger="dynaButton" my="left top" -->
+												<!-- 													at="left bottom"> -->
+												<!-- 													<p:menuitem> -->
+												<!-- 														<h:commandLink> -->
+												<!-- 															<p:graphicImage value="/resources/images/pdf.png" /> -->
+												<!-- 															<h:outputLabel value="export in pdf" /> -->
+												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
+												<!-- 																fileName="requirements" /> -->
+												<!-- 														</h:commandLink> -->
+												<!-- 													</p:menuitem> -->
+												<!-- 													<p:menuitem> -->
+												<!-- 														<h:commandLink> -->
+												<!-- 															<p:graphicImage value="/resources/images/csv.png" /> -->
+												<!-- 															<h:outputLabel value="export in csv" /> -->
+												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
+												<!-- 																fileName="requirements" /> -->
+												<!-- 														</h:commandLink> -->
+												<!-- 													</p:menuitem> -->
+												<!-- 													<p:menuitem> -->
+												<!-- 														<h:commandLink> -->
+												<!-- 															<p:graphicImage value="/resources/images/xml.png" /> -->
+												<!-- 															<h:outputLabel value="export in xml" /> -->
+												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
+												<!-- 																fileName="requirements" /> -->
+												<!-- 														</h:commandLink> -->
+												<!-- 													</p:menuitem> -->
+												<!-- 													<p:menuitem> -->
+												<!-- 														<h:commandLink> -->
+												<!-- 															<p:graphicImage value="/resources/images/excel.png" /> -->
+												<!-- 															<h:outputLabel value="export in xls" /> -->
+												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
+												<!-- 																fileName="requirements" /> -->
+												<!-- 														</h:commandLink> -->
+												<!-- 													</p:menuitem> -->
+												<!-- 												</p:menu> -->
+											</p:column>
+										</p:row>
+									</f:facet>
+								</p:panelGrid>
+							</f:facet>
 
-						<p:column headerText="Requirement">
-							<h:outputText value="#{Requirement.name}" />
-						</p:column>
+							<p:column headerText="Requirement">
+								<h:outputText value="#{Requirement.name}" />
+							</p:column>
 
-						<p:column headerText="Project">
-							<h:outputText value="#{Requirement.project.name}" />
-						</p:column>
+							<p:column headerText="Project">
+								<h:outputText value="#{Requirement.project.name}" />
+							</p:column>
 
-						<p:column headerText="Chapter">
-							<h:outputText value="#{Requirement.chapter.name}" />
-						</p:column>
+							<p:column headerText="Chapter">
+								<h:outputText value="#{Requirement.chapter.name}" />
+							</p:column>
 
-						<f:facet name="footer">Business Requirements</f:facet>
-					</p:dataTable></td>
+							<f:facet name="footer">Business Requirements
+							 <p:progressBar widgetVar="pbLeft" style="width:385px"
+									value="#{jJRequirementBean.progressLeft}"
+									labelTemplate="{value}%" />
+							</f:facet>
+						</p:dataTable></td>
 					<td><p:dataTable id="middleTable"
 							value="#{jJRequirementBean.myFunctionalJJRequirements}"
 							var="Requirement" resizableColumns="true" scrollable="true"
@@ -206,7 +213,7 @@
 											</p:column>
 											<p:column colspan="4">
 												<p:inputText id="globalFilter" style="width:150px" />
-												<p:watermark for="globalFilter" value="Search..." />
+												<!-- 												<p:watermark for="globalFilter" value="Search..." /> -->
 											</p:column>
 											<p:column colspan="1">
 												<p:commandButton id="createButton" icon="ui-icon-plus"
@@ -217,41 +224,41 @@
 											<p:column colspan="1">
 												<p:commandButton id="dynaButton" icon="ui-icon-document"
 													type="button" />
-												<p:menu overlay="true" trigger="dynaButton" my="left top"
-													at="left bottom">
-													<p:menuitem>
-														<h:commandLink>
-															<p:graphicImage value="/resources/images/pdf.png" />
-															<h:outputLabel value="export in pdf" />
-															<p:dataExporter type="pdf" target="tbl"
-																fileName="requirements" />
-														</h:commandLink>
-													</p:menuitem>
-													<p:menuitem>
-														<h:commandLink>
-															<p:graphicImage value="/resources/images/csv.png" />
-															<h:outputLabel value="export in csv" />
-															<p:dataExporter type="pdf" target="tbl"
-																fileName="requirements" />
-														</h:commandLink>
-													</p:menuitem>
-													<p:menuitem>
-														<h:commandLink>
-															<p:graphicImage value="/resources/images/xml.png" />
-															<h:outputLabel value="export in xml" />
-															<p:dataExporter type="pdf" target="tbl"
-																fileName="requirements" />
-														</h:commandLink>
-													</p:menuitem>
-													<p:menuitem>
-														<h:commandLink>
-															<p:graphicImage value="/resources/images/excel.png" />
-															<h:outputLabel value="export in xls" />
-															<p:dataExporter type="pdf" target="tbl"
-																fileName="requirements" />
-														</h:commandLink>
-													</p:menuitem>
-												</p:menu>
+												<!-- 												<p:menu overlay="true" trigger="dynaButton" my="left top" -->
+												<!-- 													at="left bottom"> -->
+												<!-- 													<p:menuitem> -->
+												<!-- 														<h:commandLink> -->
+												<!-- 															<p:graphicImage value="/resources/images/pdf.png" /> -->
+												<!-- 															<h:outputLabel value="export in pdf" /> -->
+												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
+												<!-- 																fileName="requirements" /> -->
+												<!-- 														</h:commandLink> -->
+												<!-- 													</p:menuitem> -->
+												<!-- 													<p:menuitem> -->
+												<!-- 														<h:commandLink> -->
+												<!-- 															<p:graphicImage value="/resources/images/csv.png" /> -->
+												<!-- 															<h:outputLabel value="export in csv" /> -->
+												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
+												<!-- 																fileName="requirements" /> -->
+												<!-- 														</h:commandLink> -->
+												<!-- 													</p:menuitem> -->
+												<!-- 													<p:menuitem> -->
+												<!-- 														<h:commandLink> -->
+												<!-- 															<p:graphicImage value="/resources/images/xml.png" /> -->
+												<!-- 															<h:outputLabel value="export in xml" /> -->
+												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
+												<!-- 																fileName="requirements" /> -->
+												<!-- 														</h:commandLink> -->
+												<!-- 													</p:menuitem> -->
+												<!-- 													<p:menuitem> -->
+												<!-- 														<h:commandLink> -->
+												<!-- 															<p:graphicImage value="/resources/images/excel.png" /> -->
+												<!-- 															<h:outputLabel value="export in xls" /> -->
+												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
+												<!-- 																fileName="requirements" /> -->
+												<!-- 														</h:commandLink> -->
+												<!-- 													</p:menuitem> -->
+												<!-- 												</p:menu> -->
 											</p:column>
 										</p:row>
 									</f:facet>
@@ -270,7 +277,11 @@
 								<h:outputText value="#{Requirement.chapter.name}" />
 							</p:column>
 
-							<f:facet name="footer">Functional Requirements</f:facet>
+							<f:facet name="footer">Functional Requirements
+							<p:progressBar widgetVar="pbMiddle" style="width:385px"
+									value="#{jJRequirementBean.progressMiddle}"
+									labelTemplate="{value}%" />
+							</f:facet>
 						</p:dataTable></td>
 					<td><p:dataTable id="rightTable"
 							value="#{jJRequirementBean.myTechnicalJJRequirements}"
@@ -303,7 +314,7 @@
 											<p:column colspan="4">
 
 												<p:inputText id="globalFilter" style="width:150px" />
-												<p:watermark for="globalFilter" value="Search..." />
+												<!-- 												<p:watermark for="globalFilter" value="Search..." /> -->
 											</p:column>
 											<p:column colspan="1">
 												<p:commandButton id="createButton" icon="ui-icon-plus"
@@ -314,41 +325,41 @@
 											<p:column colspan="1">
 												<p:commandButton id="dynaButton" icon="ui-icon-document"
 													type="button" />
-												<p:menu overlay="true" trigger="dynaButton" my="left top"
-													at="left bottom">
-													<p:menuitem>
-														<h:commandLink>
-															<p:graphicImage value="/resources/images/pdf.png" />
-															<h:outputLabel value="export in pdf" />
-															<p:dataExporter type="pdf" target="tbl"
-																fileName="requirements" />
-														</h:commandLink>
-													</p:menuitem>
-													<p:menuitem>
-														<h:commandLink>
-															<p:graphicImage value="/resources/images/csv.png" />
-															<h:outputLabel value="export in csv" />
-															<p:dataExporter type="pdf" target="tbl"
-																fileName="requirements" />
-														</h:commandLink>
-													</p:menuitem>
-													<p:menuitem>
-														<h:commandLink>
-															<p:graphicImage value="/resources/images/xml.png" />
-															<h:outputLabel value="export in xml" />
-															<p:dataExporter type="pdf" target="tbl"
-																fileName="requirements" />
-														</h:commandLink>
-													</p:menuitem>
-													<p:menuitem>
-														<h:commandLink>
-															<p:graphicImage value="/resources/images/excel.png" />
-															<h:outputLabel value="export in xls" />
-															<p:dataExporter type="pdf" target="tbl"
-																fileName="requirements" />
-														</h:commandLink>
-													</p:menuitem>
-												</p:menu>
+												<!-- 												<p:menu overlay="true" trigger="dynaButton" my="left top" -->
+												<!-- 													at="left bottom"> -->
+												<!-- 													<p:menuitem> -->
+												<!-- 														<h:commandLink> -->
+												<!-- 															<p:graphicImage value="/resources/images/pdf.png" /> -->
+												<!-- 															<h:outputLabel value="export in pdf" /> -->
+												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
+												<!-- 																fileName="requirements" /> -->
+												<!-- 														</h:commandLink> -->
+												<!-- 													</p:menuitem> -->
+												<!-- 													<p:menuitem> -->
+												<!-- 														<h:commandLink> -->
+												<!-- 															<p:graphicImage value="/resources/images/csv.png" /> -->
+												<!-- 															<h:outputLabel value="export in csv" /> -->
+												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
+												<!-- 																fileName="requirements" /> -->
+												<!-- 														</h:commandLink> -->
+												<!-- 													</p:menuitem> -->
+												<!-- 													<p:menuitem> -->
+												<!-- 														<h:commandLink> -->
+												<!-- 															<p:graphicImage value="/resources/images/xml.png" /> -->
+												<!-- 															<h:outputLabel value="export in xml" /> -->
+												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
+												<!-- 																fileName="requirements" /> -->
+												<!-- 														</h:commandLink> -->
+												<!-- 													</p:menuitem> -->
+												<!-- 													<p:menuitem> -->
+												<!-- 														<h:commandLink> -->
+												<!-- 															<p:graphicImage value="/resources/images/excel.png" /> -->
+												<!-- 															<h:outputLabel value="export in xls" /> -->
+												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
+												<!-- 																fileName="requirements" /> -->
+												<!-- 														</h:commandLink> -->
+												<!-- 													</p:menuitem> -->
+												<!-- 												</p:menu> -->
 											</p:column>
 										</p:row>
 									</f:facet>
@@ -367,7 +378,11 @@
 								<h:outputText value="#{Requirement.chapter.name}" />
 							</p:column>
 
-							<f:facet name="footer">Technical Requirements</f:facet>
+							<f:facet name="footer">Technical Requirements
+							 <p:progressBar widgetVar="pbRight" style="width:385px"
+									value="#{jJRequirementBean.progressRight}"
+									labelTemplate="{value}%" />
+							</f:facet>
 
 						</p:dataTable></td>
 				</tr>
@@ -381,50 +396,50 @@
 
 					<h:panelGrid columns="3" cellpadding="1">
 						<h:panelGrid>
-						<p:autoComplete id="chapterEdit"
-							value="#{jJRequirementBean.myEditedJJRequirement.chapter}"
-							completeMethod="#{jJRequirementBean.completeChapter}"
-							var="chapter" itemLabel="#{chapter.name}" itemValue="#{chapter}"
-							multiple="false" dropdown="true" required="false">
-							<f:converter
-								converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
-							<p:column style="text-align:center">  
+							<p:autoComplete id="chapterEdit"
+								value="#{jJRequirementBean.myEditedJJRequirement.chapter}"
+								completeMethod="#{jJRequirementBean.completeChapter}"
+								var="chapter" itemLabel="#{chapter.name}" itemValue="#{chapter}"
+								multiple="false" dropdown="true" required="false">
+								<f:converter
+									converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
+								<p:column style="text-align:center">  
            							 #{chapter.name}<!-- - #{chapter.creationDate} -->
-        					</p:column>
-						</p:autoComplete>
-						<p:watermark for="chapterEdit" value="Chapter" />
+								</p:column>
+							</p:autoComplete>
+							<p:watermark for="chapterEdit" value="Chapter" />
 						</h:panelGrid>
-						
+
 						<h:panelGrid>
-						<p:autoComplete id="productEdit"
-							value="#{jJRequirementBean.myEditedJJRequirement.product}"
-							completeMethod="#{jJRequirementBean.completeProduct}"
-							var="product" itemLabel="#{product.name}" itemValue="#{product}"
-							multiple="false" dropdown="true" required="false">
-							<f:converter
-								converterId="com.funder.janjoonweb.ui.mb.converter.JJProductConverter" />
-							<p:column style="text-align:center">  
+							<p:autoComplete id="productEdit"
+								value="#{jJRequirementBean.myEditedJJRequirement.product}"
+								completeMethod="#{jJRequirementBean.completeProduct}"
+								var="product" itemLabel="#{product.name}" itemValue="#{product}"
+								multiple="false" dropdown="true" required="false">
+								<f:converter
+									converterId="com.funder.janjoonweb.ui.mb.converter.JJProductConverter" />
+								<p:column style="text-align:center">  
            							 #{product.name}<!-- - #{product.creationDate} -->
-        						</p:column>
-						</p:autoComplete>
-						<p:watermark for="productEdit" value="Product" />
+								</p:column>
+							</p:autoComplete>
+							<p:watermark for="productEdit" value="Product" />
 						</h:panelGrid>
-						
+
 						<h:panelGrid>
-						<p:autoComplete id="projectEdit"
-							value="#{jJRequirementBean.myEditedJJRequirement.project}"
-							completeMethod="#{jJRequirementBean.completeProject}"
-							var="project" itemLabel="#{project.name}" itemValue="#{project}"
-							multiple="false" dropdown="true" required="false">
-							<f:converter
-								converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
-							<p:column style="text-align:center">  
+							<p:autoComplete id="projectEdit"
+								value="#{jJRequirementBean.myEditedJJRequirement.project}"
+								completeMethod="#{jJRequirementBean.completeProject}"
+								var="project" itemLabel="#{project.name}" itemValue="#{project}"
+								multiple="false" dropdown="true" required="false">
+								<f:converter
+									converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
+								<p:column style="text-align:center">  
            							 #{project.name} - #{project.creationDate}
         						</p:column>
-						</p:autoComplete>
-						<p:watermark for="projectEdit" value="Project" />
+							</p:autoComplete>
+							<p:watermark for="projectEdit" value="Project" />
 						</h:panelGrid>
-					
+
 					</h:panelGrid>
 					<h:panelGrid columns="1" cellpadding="3">
 
@@ -462,7 +477,7 @@
 							<p:message for="noteEdit" id="msgNoteEdit" display="icon" />
 							<p:watermark for="noteEdit" value="Note" />
 						</h:panelGrid>
-						
+
 						<h:panelGrid columns="3" cellpadding="2">
 							<h:outputText value="Business: " />
 							<h:outputText value="Functional: " />
@@ -567,50 +582,50 @@
 
 					<h:panelGrid columns="3" cellpadding="3">
 						<h:panelGrid>
-						<p:autoComplete id="chapter"
-							value="#{jJRequirementBean.myJJRequirement.chapter}"
-							completeMethod="#{jJRequirementBean.completeChapter}"
-							var="chapter" itemLabel="#{chapter.name}" itemValue="#{chapter}"
-							multiple="false" dropdown="true" required="false">
-							<f:converter
-								converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
-							<p:column style="text-align:center">  
+							<p:autoComplete id="chapter"
+								value="#{jJRequirementBean.myJJRequirement.chapter}"
+								completeMethod="#{jJRequirementBean.completeChapter}"
+								var="chapter" itemLabel="#{chapter.name}" itemValue="#{chapter}"
+								multiple="false" dropdown="true" required="false">
+								<f:converter
+									converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
+								<p:column style="text-align:center">  
            							 #{chapter.name}<!-- - #{chapter.creationDate} -->
-        						</p:column>
-						</p:autoComplete>
-						<p:watermark for="chapter" value="Chapter" />
+								</p:column>
+							</p:autoComplete>
+							<p:watermark for="chapter" value="Chapter" />
 						</h:panelGrid>
-						
+
 						<h:panelGrid>
-						<p:autoComplete id="product"
-							value="#{jJRequirementBean.myJJRequirement.product}"
-							completeMethod="#{jJRequirementBean.completeProduct}"
-							var="product" itemLabel="#{product.name}" itemValue="#{product}"
-							multiple="false" dropdown="true" required="false">
-							<f:converter
-								converterId="com.funder.janjoonweb.ui.mb.converter.JJProductConverter" />
-							<p:column style="text-align:center">  
+							<p:autoComplete id="product"
+								value="#{jJRequirementBean.myJJRequirement.product}"
+								completeMethod="#{jJRequirementBean.completeProduct}"
+								var="product" itemLabel="#{product.name}" itemValue="#{product}"
+								multiple="false" dropdown="true" required="false">
+								<f:converter
+									converterId="com.funder.janjoonweb.ui.mb.converter.JJProductConverter" />
+								<p:column style="text-align:center">  
            							 #{product.name}<!-- - #{product.creationDate} -->
-        						</p:column>
-						</p:autoComplete>
-						<p:watermark for="product" value="Product" />
+								</p:column>
+							</p:autoComplete>
+							<p:watermark for="product" value="Product" />
 						</h:panelGrid>
-						
+
 						<h:panelGrid>
-						<p:autoComplete id="project"
-							value="#{jJRequirementBean.myJJRequirement.project}"
-							completeMethod="#{jJRequirementBean.completeProject}"
-							var="project" itemLabel="#{project.name}" itemValue="#{project}"
-							multiple="false" dropdown="true" required="false">
-							<f:converter
-								converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
-							<p:column style="text-align:center">  
+							<p:autoComplete id="project"
+								value="#{jJRequirementBean.myJJRequirement.project}"
+								completeMethod="#{jJRequirementBean.completeProject}"
+								var="project" itemLabel="#{project.name}" itemValue="#{project}"
+								multiple="false" dropdown="true" required="false">
+								<f:converter
+									converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
+								<p:column style="text-align:center">  
            							 #{project.name}<!-- - #{project.creationDate} -->
-        						</p:column>
-						</p:autoComplete>
-						<p:watermark for="project" value="Project" />
+								</p:column>
+							</p:autoComplete>
+							<p:watermark for="project" value="Project" />
 						</h:panelGrid>
-						
+
 					</h:panelGrid>
 
 					<h:panelGrid columns="1" cellpadding="3">
@@ -625,7 +640,7 @@
 							<p:message for="name" id="msgName" display="icon" />
 							<p:watermark for="name" value="Name" />
 						</h:panelGrid>
-						
+
 						<h:panelGrid columns="1" cellpadding="3">
 							<p:inputTextarea id="description" rows="6" cols="70"
 								value="#{jJRequirementBean.myJJRequirement.description}"
@@ -636,7 +651,7 @@
 							<p:message for="description" id="msgDescription" display="icon" />
 							<p:watermark for="description" value="Description" />
 						</h:panelGrid>
-						
+
 						<h:panelGrid columns="1" cellpadding="3">
 							<p:inputTextarea id="note" rows="3" cols="70"
 								value="#{jJRequirementBean.myJJRequirement.note}"

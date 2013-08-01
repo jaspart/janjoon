@@ -59,3 +59,11 @@ quit
 hint
 quit
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-07-24 12:16:05
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-07-29 15:28:06
+focus --class ~.JJRequirement
+field boolean --fieldName isCompleted
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-07-29 17:07:57
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-07-31 13:22:11
+hint
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-07-31 13:22:26

@@ -66,8 +66,12 @@ public class JJRequirementBean {
 	private JJProduct currentProduct;
 	private JJVersion currentVersion;
 
+	private int progressLeft = 0;
+	private int progressMiddle = 0;
+	private int progressRight = 0;
+
 	public JJRequirement getMyJJRequirement() {
-		System.out.println("get req invoked");
+
 		return myJJRequirement;
 	}
 
@@ -349,19 +353,136 @@ public class JJRequirementBean {
 		this.currentVersion = currentVersion;
 	}
 
+	public int getProgressLeft() {
+
+		if (myBusinessJJRequirements != null) {
+			System.out.println("myBusinessJJRequirements.size() "
+					+ myBusinessJJRequirements.size());
+			if (myBusinessJJRequirements.size() > 0) {
+				int numberCompleted = 0;
+				for (JJRequirement req : myBusinessJJRequirements) {
+
+					List<JJRequirement> tempList = jJRequirementService
+							.getAllJJRequirementsWithRequirementLinkAndCategory(
+									"FUNCTIONAL", req);
+
+					if (tempList.size() > 0) {
+						int numberFuncCompleted = 0;
+						for (JJRequirement jjreq : tempList) {
+
+							List<JJRequirement> tempList2 = jJRequirementService
+									.getAllJJRequirementsWithRequirementLinkAndCategory(
+											"TECHNICAL", jjreq);
+							if (tempList2.size() > 0) {
+								int numberTechCompleted = 0;
+								for (JJRequirement jjRequirement : tempList2) {
+									if (jjRequirement.getIsCompleted().equals(
+											true)) {
+										numberTechCompleted++;
+									}
+								}
+
+								if (numberTechCompleted == tempList2.size())
+									numberFuncCompleted++;
+							}
+
+						}
+						if (numberFuncCompleted == tempList.size())
+							numberCompleted++;
+					}
+
+				}
+				System.out.println("numberCompleted Left" + numberCompleted);
+				progressLeft = (numberCompleted * 100)
+						/ myBusinessJJRequirements.size();
+				System.out.println("progressLeft " + progressLeft);
+				return progressLeft;
+
+			} else
+				return 0;
+		} else
+			return 0;
+	}
+
+	public void setProgressLeft(int progressLeft) {
+		this.progressLeft = progressLeft;
+	}
+
+	public int getProgressMiddle() {
+		if (myFunctionalJJRequirements != null) {
+			System.out.println("myFunctionalJJRequirements.size() "
+					+ myFunctionalJJRequirements.size());
+			if (myFunctionalJJRequirements.size() > 0) {
+				int numberCompleted = 0;
+				for (JJRequirement req : myFunctionalJJRequirements) {
+
+					List<JJRequirement> tempList = jJRequirementService
+							.getAllJJRequirementsWithRequirementLinkAndCategory(
+									"TECHNICAL", req);
+
+					if (tempList.size() > 0) {
+						int numberTechCompleted = 0;
+						for (JJRequirement jjreq : tempList) {
+							if (jjreq.getIsCompleted().equals(true)) {
+								numberTechCompleted++;
+							}
+
+						}
+						if (numberTechCompleted == tempList.size())
+							numberCompleted++;
+					}
+
+				}
+				System.out.println("numberCompleted Middle" + numberCompleted);
+				progressMiddle = (numberCompleted * 100)
+						/ myFunctionalJJRequirements.size();
+				System.out.println("progressMiddle " + progressMiddle);
+				return progressMiddle;
+
+			} else
+				return 0;
+		} else
+			return 0;
+	}
+
+	public void setProgressMiddle(int progressMiddle) {
+		this.progressMiddle = progressMiddle;
+	}
+
+	public int getProgressRight() {
+		if (myTechnicalJJRequirements != null) {
+			System.out.println("myTechnicalJJRequirements.size() "
+					+ myTechnicalJJRequirements.size());
+			if (myTechnicalJJRequirements.size() > 0) {
+				int numberCompleted = 0;
+
+				for (JJRequirement jjreq : myTechnicalJJRequirements) {
+					if (jjreq.getIsCompleted().equals(true)) {
+						numberCompleted++;
+					}
+				}
+				System.out.println("numberCompleted Right" + numberCompleted);
+				progressRight = (numberCompleted * 100)
+						/ myTechnicalJJRequirements.size();
+				System.out.println("progressRight " + progressRight);
+				return progressRight;
+			} else
+				return 0;
+		} else
+			return 0;
+
+	}
+
+	public void setProgressRight(int progressRight) {
+		this.progressRight = progressRight;
+	}
+
 	public void createJJRequirement(int number) {
-		System.out.println("JJRequirement bean created");
-		// System.out.println("businessJJRequirementsList.size() "
-		// + businessJJRequirementsList.size());
-		// functionalJJRequirementsList;
-		// technicalJJRequirementsList;
-		//
-		// if (currentProject != null)
-		// System.out.println("Current project " + currentProject.getId());
-		//
+
 		myJJRequirement = new JJRequirement();
 		myJJRequirement.setCreationDate(new Date());
 		myJJRequirement.setEnabled(true);
+		myJJRequirement.setIsCompleted(false);
 
 		this.creationColumnNumber = number;
 		String category = null;
@@ -412,6 +533,10 @@ public class JJRequirementBean {
 
 		myJJRequirement.setStatus(myJJStatus);
 		myJJRequirement.setNumero(new Random().nextInt(1000) + 1);
+		if (currentProject != null)
+			myJJRequirement.setProject(currentProject);
+		if (currentProduct != null)
+			myJJRequirement.setProduct(currentProduct);
 
 	}
 
@@ -433,9 +558,6 @@ public class JJRequirementBean {
 		default:
 			break;
 		}
-		System.out.println("JJRequiremnt selected is :" + req.getId());
-
-		System.out.println("EditJJRequirement bean created");
 
 		myEditedJJRequirement = new JJRequirement();
 		myEditedJJRequirement.setCreationDate(req.getCreationDate());
@@ -461,6 +583,7 @@ public class JJRequirementBean {
 		myEditedJJRequirement.setNumero(req.getNumero());
 		myEditedJJRequirement.setProject(req.getProject());
 		myEditedJJRequirement.setChapter(req.getChapter());
+		myEditedJJRequirement.setProduct(req.getProduct());
 		myEditedJJRequirement.setDescription(req.getDescription());
 		myEditedJJRequirement.setName(req.getName());
 		myEditedJJRequirement.setNote(req.getNote());
@@ -550,11 +673,10 @@ public class JJRequirementBean {
 			jJRequirementService.saveJJRequirement(myEditedJJRequirement);
 			findAllJJRequirementsWithCategory(editionColumnNumber);
 		} else {
-			System.out.println("******************************* "
-					+ deleteColumnNumber);
+
 			switch (deleteColumnNumber) {
 			case 1:
-				System.out.println(";;;;;;;;;;;;;;;;;;;;;;;");
+
 				jJRequirementService
 						.updateJJRequirement(mySelectedBusinessJJRequirement);
 				break;
@@ -583,7 +705,6 @@ public class JJRequirementBean {
 
 	public void deleteJJRequirement(int number) {
 
-		System.out.println("$$$$$$$$$$$$$$$$$$$number " + number);
 		this.deleteColumnNumber = number;
 
 		JJStatus myJJStatus = null;
@@ -628,7 +749,7 @@ public class JJRequirementBean {
 	}
 
 	public void findAllJJRequirementsWithCategory(int number) {
-		System.out.println("findAllJJRequirementsWithCategory is invoked");
+
 		switch (number) {
 		case 1:
 			if (currentProject != null)
@@ -865,7 +986,7 @@ public class JJRequirementBean {
 		default:
 			break;
 		}
-		System.out.println("END");
+
 	}
 
 	public void onRowSelect(SelectEvent event) {
@@ -875,7 +996,6 @@ public class JJRequirementBean {
 				+ req.getName(), req.getName());
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 
-		System.out.println("\n" + req.getStatus().getName());
 		if (req.getStatus().getName().equalsIgnoreCase("RELEASE"))
 			disabled = true;
 		else
@@ -903,6 +1023,13 @@ public class JJRequirementBean {
 	public void updateMessageDiscard(int number) {
 		this.discardColumnNumber = number;
 		messageDiscard = "Are you sure you want to discard this requirement";
+	}
+
+	public void completeRequirement() {
+		mySelectedTechnicalJJRequirement.setIsCompleted(true);
+		jJRequirementService
+				.updateJJRequirement(mySelectedTechnicalJJRequirement);
+
 	}
 
 	private JJStatus createANDpersistJJStatus(String name) {
