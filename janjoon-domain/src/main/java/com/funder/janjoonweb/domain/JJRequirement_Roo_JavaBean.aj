@@ -174,20 +174,20 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.note = note;
     }
     
-    public JJRequirement JJRequirement.getRequirementLink() {
-        return this.requirementLink;
+    public Set<JJRequirement> JJRequirement.getRequirementsLink1() {
+        return this.requirementsLink1;
     }
     
-    public void JJRequirement.setRequirementLink(JJRequirement requirementLink) {
-        this.requirementLink = requirementLink;
+    public void JJRequirement.setRequirementsLink1(Set<JJRequirement> requirementsLink1) {
+        this.requirementsLink1 = requirementsLink1;
     }
     
-    public Set<JJRequirement> JJRequirement.getRequirementsLink() {
-        return this.requirementsLink;
+    public Set<JJRequirement> JJRequirement.getRequirementsLink2() {
+        return this.requirementsLink2;
     }
     
-    public void JJRequirement.setRequirementsLink(Set<JJRequirement> requirementsLink) {
-        this.requirementsLink = requirementsLink;
+    public void JJRequirement.setRequirementsLink2(Set<JJRequirement> requirementsLink2) {
+        this.requirementsLink2 = requirementsLink2;
     }
     
 }

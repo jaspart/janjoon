@@ -91,4 +91,31 @@ public class JJChapterServiceImpl implements JJChapterService {
 		return jJProduct;
 
 	}
+
+	@Override
+	public List<JJChapter> getAllJJChaptersWithProjectAndCategory(
+			JJProject project, JJCategory category) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJChapter> criteriaQuery = criteriaBuilder
+				.createQuery(JJChapter.class);
+
+		Root<JJChapter> from = criteriaQuery.from(JJChapter.class);
+
+		CriteriaQuery<JJChapter> select = criteriaQuery.select(from);
+
+		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
+		Predicate predicate2 = criteriaBuilder.equal(from.join("project"),
+				project);
+		Predicate predicate3 = criteriaBuilder.equal(from.join("category"),
+				category);
+
+		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3));
+
+		TypedQuery<JJChapter> result = entityManager.createQuery(select);
+		System.out.println("result.getResultList().size() "
+				+ result.getResultList().size());
+		return result.getResultList();
+
+	}
 }

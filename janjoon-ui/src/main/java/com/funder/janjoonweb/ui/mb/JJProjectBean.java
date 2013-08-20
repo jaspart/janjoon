@@ -12,12 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
-import com.funder.janjoonweb.domain.JJChapter;
 import com.funder.janjoonweb.domain.JJChapterService;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProductService;
 import com.funder.janjoonweb.domain.JJProject;
-import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJRequirementService;
 import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.domain.JJVersionService;
@@ -71,17 +69,17 @@ public class JJProjectBean {
 	public List<JJProject> getMyJJProjectList() {
 		/*** Begin Temporary ***/
 
-		if (jJChapterService.getAllJJChapter().isEmpty()) {
-			JJChapter chapter;
-			for (int i = 0; i < 4; i++) {
-				chapter = new JJChapter();
-				chapter.setName("ChapterName " + i);
-				chapter.setDescription("ChapterDescription " + i);
-				chapter.setCreationDate(new Date());
-				chapter.setEnabled(true);
-				jJChapterService.saveJJChapter(chapter);
-			}
-		}
+		// if (jJChapterService.getAllJJChapter().isEmpty()) {
+		// JJChapter chapter;
+		// for (int i = 0; i < 4; i++) {
+		// chapter = new JJChapter();
+		// chapter.setName("ChapterName " + i);
+		// chapter.setDescription("ChapterDescription " + i);
+		// chapter.setCreationDate(new Date());
+		// chapter.setEnabled(true);
+		// jJChapterService.saveJJChapter(chapter);
+		// }
+		// }
 
 		if (jJVersionService.getAllJJVersion().isEmpty()) {
 			JJVersion version;
@@ -196,7 +194,8 @@ public class JJProjectBean {
 	}
 
 	public void handleSelectProject(JJProductBean jJProductBean,
-			JJVersionBean jJVersionBean, JJRequirementBean jJRequirementBean) {
+			JJVersionBean jJVersionBean, JJRequirementBean jJRequirementBean,
+			JJChapterBean jJChapterBean) {
 		if (myJJProject != null) {
 
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -219,6 +218,7 @@ public class JJProjectBean {
 			if (jJRequirementBean != null) {
 
 				jJRequirementBean.setCurrentProject(myJJProject);
+				jJChapterBean.setCurrentProject(myJJProject);
 
 				jJRequirementBean
 						.setMyBusinessJJRequirements(jJRequirementService
@@ -237,6 +237,9 @@ public class JJProjectBean {
 
 			}
 
+			if (jJChapterBean != null)
+				jJChapterBean.setCurrentProject(myJJProject);
+
 		} else {
 
 			if (jJProductBean != null) {
@@ -251,6 +254,7 @@ public class JJProjectBean {
 			// IF PROJECT IS NULL GET ALL JJREQUIRMENTS
 
 			jJRequirementBean.setCurrentProject(myJJProject);
+			jJChapterBean.setCurrentProject(myJJProject);
 
 			jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
 					.getAllJJRequirementsWithCategory("BUSINESS"));

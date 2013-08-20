@@ -56,6 +56,32 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	}
 
 	@Override
+	public List<JJRequirement> getAllJJRequirementsWithCategoryAndChapter(
+			String categoryName) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
+				.createQuery(JJRequirement.class);
+
+		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
+
+		Path<Object> path = from.join("category").get("name");
+
+		from.fetch("category");
+
+		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
+		Predicate predicate1 = criteriaBuilder.equal(path, categoryName);
+		Predicate predicate2 = criteriaBuilder.equal(from.get("enabled"), true);
+		Predicate predicate3 = criteriaBuilder.isNull(from.join("chapter"));
+
+		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3));
+
+		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
+		return result.getResultList();
+
+	}
+
+	@Override
 	public List<JJRequirement> getAllJJRequirementsWithProject(
 			String categoryName, JJProject project) {
 
@@ -76,6 +102,37 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 				project);
 
 		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3));
+
+		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
+
+		return result.getResultList();
+
+	}
+
+	@Override
+	public List<JJRequirement> getAllJJRequirementsWithProjectAndChapter(
+			String categoryName, JJProject project) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
+				.createQuery(JJRequirement.class);
+
+		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
+
+		Path<Object> path = from.join("category").get("name");
+
+		from.fetch("category");
+
+		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
+		Predicate predicate1 = criteriaBuilder.equal(path, categoryName);
+		Predicate predicate2 = criteriaBuilder.equal(from.get("enabled"), true);
+		Predicate predicate3 = criteriaBuilder.equal(from.join("project"),
+				project);
+
+		Predicate predicate4 = criteriaBuilder.isNull(from.join("chapter"));
+
+		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
+				predicate4));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 
@@ -115,6 +172,41 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	}
 
 	@Override
+	public List<JJRequirement> getAllJJRequirementsWithProjectAndProductAndChapter(
+			String categoryName, JJProject project, JJProduct product) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
+				.createQuery(JJRequirement.class);
+
+		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
+
+		Path<Object> path = from.join("category").get("name");
+
+		from.fetch("category");
+
+		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
+		Predicate predicate1 = criteriaBuilder.equal(path, categoryName);
+		Predicate predicate2 = criteriaBuilder.equal(from.get("enabled"), true);
+		Predicate predicate3 = criteriaBuilder.equal(from.join("project"),
+				project);
+		Predicate predicate4 = criteriaBuilder.equal(from.join("product"),
+				product);
+		Predicate predicate5 = criteriaBuilder.isNull(from.get("chapter"));
+		
+//		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
+//				predicate4));
+
+		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
+				predicate4, predicate5));
+
+		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
+
+		return result.getResultList();
+
+	}
+
+	@Override
 	public List<JJRequirement> getAllJJRequirementsWithProjectAndProductAndVersion(
 			String categoryName, JJProject project, JJProduct product,
 			JJVersion version) {
@@ -141,6 +233,42 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
 				predicate4, predicate5));
+
+		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
+
+		return result.getResultList();
+
+	}
+
+	@Override
+	public List<JJRequirement> getAllJJRequirementsWithProjectAndProductAndVersionAndChapter(
+			String categoryName, JJProject project, JJProduct product,
+			JJVersion version) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
+				.createQuery(JJRequirement.class);
+
+		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
+
+		Path<Object> path = from.join("category").get("name");
+
+		from.fetch("category");
+
+		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
+		Predicate predicate1 = criteriaBuilder.equal(path, categoryName);
+		Predicate predicate2 = criteriaBuilder.equal(from.get("enabled"), true);
+		Predicate predicate3 = criteriaBuilder.equal(from.join("project"),
+				project);
+		Predicate predicate4 = criteriaBuilder.equal(from.join("product"),
+				product);
+		Predicate predicate5 = criteriaBuilder.equal(from.join("jjversion"),
+				version);
+
+		Predicate predicate6 = criteriaBuilder.isNull(from.join("chapter"));
+
+		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
+				predicate4, predicate5, predicate6));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 

@@ -83,7 +83,6 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
         setNote(obj, index);
         setNumero(obj, index);
         setRelation(obj, index);
-        setRequirementLink(obj, index);
         setStartDate(obj, index);
         setUpdatedDate(obj, index);
         return obj;
@@ -149,11 +148,6 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
     public void JJRequirementDataOnDemand.setRelation(JJRequirement obj, int index) {
         JJRelationship relation = JJRelationship.class.getEnumConstants()[0];
         obj.setRelation(relation);
-    }
-    
-    public void JJRequirementDataOnDemand.setRequirementLink(JJRequirement obj, int index) {
-        JJRequirement requirementLink = obj;
-        obj.setRequirementLink(requirementLink);
     }
     
     public void JJRequirementDataOnDemand.setStartDate(JJRequirement obj, int index) {

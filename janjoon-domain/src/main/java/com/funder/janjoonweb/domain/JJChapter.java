@@ -1,5 +1,4 @@
 package com.funder.janjoonweb.domain;
-
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -26,4 +25,10 @@ public class JJChapter extends JJAbstractEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chapter")
     private Set<JJRequirement> requirements = new HashSet<JJRequirement>();
+
+    @ManyToOne
+    private JJChapter parent;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent")
+    private Set<JJChapter> chapters = new HashSet<JJChapter>();
 }

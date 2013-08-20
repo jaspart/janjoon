@@ -56,6 +56,7 @@ privileged aspect JJChapterDataOnDemand_Roo_DataOnDemand {
         setDescription(obj, index);
         setEnabled(obj, index);
         setName(obj, index);
+        setParent(obj, index);
         setUpdatedDate(obj, index);
         return obj;
     }
@@ -84,6 +85,11 @@ privileged aspect JJChapterDataOnDemand_Roo_DataOnDemand {
             name = name.substring(0, 25);
         }
         obj.setName(name);
+    }
+    
+    public void JJChapterDataOnDemand.setParent(JJChapter obj, int index) {
+        JJChapter parent = obj;
+        obj.setParent(parent);
     }
     
     public void JJChapterDataOnDemand.setUpdatedDate(JJChapter obj, int index) {

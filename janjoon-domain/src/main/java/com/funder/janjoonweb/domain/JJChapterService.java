@@ -10,4 +10,7 @@ public interface JJChapterService {
 
 	public List<JJProduct> getAllJJProductInJJChapterWithJJProject(
 			JJProject project);
+
+	public List<JJChapter> getAllJJChaptersWithProjectAndCategory(
+			JJProject project, JJCategory category);
 }

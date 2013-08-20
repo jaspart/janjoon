@@ -44,4 +44,20 @@ privileged aspect JJChapter_Roo_JavaBean {
         this.requirements = requirements;
     }
     
+    public JJChapter JJChapter.getParent() {
+        return this.parent;
+    }
+    
+    public void JJChapter.setParent(JJChapter parent) {
+        this.parent = parent;
+    }
+    
+    public Set<JJChapter> JJChapter.getChapters() {
+        return this.chapters;
+    }
+    
+    public void JJChapter.setChapters(Set<JJChapter> chapters) {
+        this.chapters = chapters;
+    }
+    
 }

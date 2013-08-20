@@ -503,32 +503,24 @@ public class JJRequirementBean {
 
 		JJCategory myJJCategory = null;
 
-		List<JJCategory> JJCategoryList = jJCategoryService
+		JJCategory jjCategory = jJCategoryService
 				.getJJCategoryWithName(category);
 
-		if (!JJCategoryList.isEmpty()) {
-			for (JJCategory jjCategory : JJCategoryList) {
-				myJJCategory = jjCategory;
-				break;
-			}
+		if (jjCategory != null)
 
-		} else
+			myJJCategory = jjCategory;
+		else
 			myJJCategory = createANDpersistJJCategory(category);
 
 		myJJRequirement.setCategory(myJJCategory);
 
 		JJStatus myJJStatus = null;
 
-		List<JJStatus> JJStatusList = jJStatusService
-				.getJJStatusWithName("NEW");
+		JJStatus jjStatus = jJStatusService.getJJStatusWithName("NEW");
 
-		if (!JJStatusList.isEmpty()) {
-			for (JJStatus jjStatus : JJStatusList) {
-				myJJStatus = jjStatus;
-				break;
-			}
-
-		} else
+		if (jjStatus != null)
+			myJJStatus = jjStatus;
+		else
 			myJJStatus = createANDpersistJJStatus("NEW");
 
 		myJJRequirement.setStatus(myJJStatus);
@@ -537,6 +529,8 @@ public class JJRequirementBean {
 			myJJRequirement.setProject(currentProject);
 		if (currentProduct != null)
 			myJJRequirement.setProduct(currentProduct);
+		
+		myJJRequirement.setChapter(null);
 
 	}
 
@@ -567,16 +561,11 @@ public class JJRequirementBean {
 
 		JJStatus myJJStatus = null;
 
-		List<JJStatus> JJStatusList = jJStatusService
-				.getJJStatusWithName("MODIFY");
+		JJStatus jjStatus = jJStatusService.getJJStatusWithName("MODIFY");
 
-		if (!JJStatusList.isEmpty()) {
-			for (JJStatus jjStatus : JJStatusList) {
-				myJJStatus = jjStatus;
-				break;
-			}
-
-		} else
+		if (jjStatus != null)
+			myJJStatus = jjStatus;
+		else
 			myJJStatus = createANDpersistJJStatus("MODIFY");
 
 		myEditedJJRequirement.setStatus(myJJStatus);
@@ -709,16 +698,11 @@ public class JJRequirementBean {
 
 		JJStatus myJJStatus = null;
 
-		List<JJStatus> JJStatusList = jJStatusService
-				.getJJStatusWithName("DELETED");
+		JJStatus jjStatus = jJStatusService.getJJStatusWithName("DELETED");
 
-		if (!JJStatusList.isEmpty()) {
-			for (JJStatus jjStatus : JJStatusList) {
-				myJJStatus = jjStatus;
-				break;
-			}
-
-		} else
+		if (jjStatus != null)
+			myJJStatus = jjStatus;
+		else
 			myJJStatus = createANDpersistJJStatus("DELETED");
 
 		switch (number) {
@@ -839,16 +823,11 @@ public class JJRequirementBean {
 
 		JJStatus myJJStatus = null;
 
-		List<JJStatus> JJStatusList = jJStatusService
-				.getJJStatusWithName("RELEASE");
+		JJStatus jjStatus = jJStatusService.getJJStatusWithName("RELEASE");
 
-		if (!JJStatusList.isEmpty()) {
-			for (JJStatus jjStatus : JJStatusList) {
-				myJJStatus = jjStatus;
-				break;
-			}
-
-		} else
+		if (jjStatus != null)
+			myJJStatus = jjStatus;
+		else
 			myJJStatus = createANDpersistJJStatus("RELEASE");
 
 		switch (releaseColumnNumber) {
@@ -888,16 +867,11 @@ public class JJRequirementBean {
 
 		JJStatus myJJStatus = null;
 
-		List<JJStatus> JJStatusList = jJStatusService
-				.getJJStatusWithName("DISCARD");
+		JJStatus jjStatus = jJStatusService.getJJStatusWithName("DISCARD");
 
-		if (!JJStatusList.isEmpty()) {
-			for (JJStatus jjStatus : JJStatusList) {
-				myJJStatus = jjStatus;
-				break;
-			}
-
-		} else
+		if (jjStatus != null)
+			myJJStatus = jjStatus;
+		else
 			myJJStatus = createANDpersistJJStatus("DISCARD");
 
 		JJRequirement req = null;

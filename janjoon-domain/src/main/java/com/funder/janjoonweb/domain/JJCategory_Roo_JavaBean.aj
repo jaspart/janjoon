@@ -4,6 +4,8 @@
 package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJCategory;
+import com.funder.janjoonweb.domain.JJChapter;
+import java.util.Set;
 
 privileged aspect JJCategory_Roo_JavaBean {
     
@@ -13,6 +15,14 @@ privileged aspect JJCategory_Roo_JavaBean {
     
     public void JJCategory.setStage(Integer stage) {
         this.stage = stage;
+    }
+    
+    public Set<JJChapter> JJCategory.getChapters() {
+        return this.chapters;
+    }
+    
+    public void JJCategory.setChapters(Set<JJChapter> chapters) {
+        this.chapters = chapters;
     }
     
 }

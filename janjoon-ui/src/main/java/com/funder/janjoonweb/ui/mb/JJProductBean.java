@@ -80,7 +80,8 @@ public class JJProductBean {
 	}
 
 	public void handleSelectProduct(JJVersionBean jJVersionBean,
-			JJProjectBean jJProjectBean, JJRequirementBean jJRequirementBean) {
+			JJProjectBean jJProjectBean, JJRequirementBean jJRequirementBean,
+			JJChapterBean jJChapterBean) {
 
 		if (myJJProduct != null) {
 
@@ -118,6 +119,8 @@ public class JJProductBean {
 										"TECHNICAL", project, myJJProduct));
 
 			}
+			if (jJChapterBean != null)
+				jJChapterBean.setCurrentProduct(myJJProduct);
 
 		} else {
 			// IF PRODUCT IS NULL GET ALL JJREQUIRMENTS WITH PROJECT
@@ -128,6 +131,7 @@ public class JJProductBean {
 			}
 
 			jJRequirementBean.setCurrentProduct(myJJProduct);
+			jJChapterBean.setCurrentProduct(myJJProduct);
 
 			jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
 					.getAllJJRequirementsWithProject("BUSINESS", project));
