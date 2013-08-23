@@ -146,10 +146,8 @@ field reference --fieldName status --type ~.JJStatus
 field string --fieldName impact --sizeMax 100
 field boolean --fieldName isCompleted
 field enum --fieldName relation --type ~.reference.JJRelationship
-
-field set --fieldName requirementsLink1 --type ~.JJRequirement --cardinality MANY_TO_MANY --fetch LAZY
-field set --fieldName requirementsLink2 --type ~.JJRequirement --cardinality MANY_TO_MANY --mappedBy requirementLink1 --fetch LAZY
-
+field set --fieldName requirementLinkUp --type ~.JJRequirement --cardinality MANY_TO_MANY --mappedBy --fetch LAZY
+field set --fieldName requirementLinkDown --type ~.JJRequirement --cardinality MANY_TO_MANY --mappedBy requirementLinkUp --fetch LAZY
 field set --fieldName bugs --type ~.JJBug --cardinality ONE_TO_MANY --mappedBy requirement --fetch LAZY
 field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy requirement --fetch LAZY
 field set --fieldName assignedTos --type ~.JJContact --cardinality ONE_TO_MANY --fetch LAZY
@@ -216,4 +214,5 @@ field reference --fieldName testcase --type ~.JJTestcase
 field reference --fieldName requirement --type ~.JJRequirement
 
 #######################
+ 
 

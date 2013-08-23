@@ -5,6 +5,7 @@ package com.funder.janjoonweb.ui.mb;
 
 import com.funder.janjoonweb.domain.JJCategory;
 import com.funder.janjoonweb.domain.JJCategoryService;
+import com.funder.janjoonweb.domain.JJChapter;
 import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJContactService;
 import com.funder.janjoonweb.ui.mb.JJCategoryBean;
@@ -12,6 +13,7 @@ import com.funder.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
@@ -65,6 +67,8 @@ privileged aspect JJCategoryBean_Roo_ManagedBean {
     private HtmlPanelGrid JJCategoryBean.viewPanelGrid;
     
     private boolean JJCategoryBean.createDialogVisible = false;
+    
+    private List<JJChapter> JJCategoryBean.selectedChapters;
     
     @PostConstruct
     public void JJCategoryBean.init() {
@@ -313,6 +317,22 @@ privileged aspect JJCategoryBean_Roo_ManagedBean {
         stageCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(stageCreateInputMessage);
         
+        HtmlOutputText chaptersCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        chaptersCreateOutput.setId("chaptersCreateOutput");
+        chaptersCreateOutput.setValue("Chapters:");
+        htmlPanelGrid.getChildren().add(chaptersCreateOutput);
+        
+        HtmlOutputText chaptersCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        chaptersCreateInput.setId("chaptersCreateInput");
+        chaptersCreateInput.setValue("This relationship is managed from the JJChapter side");
+        htmlPanelGrid.getChildren().add(chaptersCreateInput);
+        
+        Message chaptersCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        chaptersCreateInputMessage.setId("chaptersCreateInputMessage");
+        chaptersCreateInputMessage.setFor("chaptersCreateInput");
+        chaptersCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(chaptersCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -493,6 +513,22 @@ privileged aspect JJCategoryBean_Roo_ManagedBean {
         stageEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(stageEditInputMessage);
         
+        HtmlOutputText chaptersEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        chaptersEditOutput.setId("chaptersEditOutput");
+        chaptersEditOutput.setValue("Chapters:");
+        htmlPanelGrid.getChildren().add(chaptersEditOutput);
+        
+        HtmlOutputText chaptersEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        chaptersEditInput.setId("chaptersEditInput");
+        chaptersEditInput.setValue("This relationship is managed from the JJChapter side");
+        htmlPanelGrid.getChildren().add(chaptersEditInput);
+        
+        Message chaptersEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        chaptersEditInputMessage.setId("chaptersEditInputMessage");
+        chaptersEditInputMessage.setFor("chaptersEditInput");
+        chaptersEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(chaptersEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -588,6 +624,16 @@ privileged aspect JJCategoryBean_Roo_ManagedBean {
         stageValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCategoryBean.JJCategory_.stage}", String.class));
         htmlPanelGrid.getChildren().add(stageValue);
         
+        HtmlOutputText chaptersLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        chaptersLabel.setId("chaptersLabel");
+        chaptersLabel.setValue("Chapters:");
+        htmlPanelGrid.getChildren().add(chaptersLabel);
+        
+        HtmlOutputText chaptersValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        chaptersValue.setId("chaptersValue");
+        chaptersValue.setValue("This relationship is managed from the JJChapter side");
+        htmlPanelGrid.getChildren().add(chaptersValue);
+        
         return htmlPanelGrid;
     }
     
@@ -624,7 +670,21 @@ privileged aspect JJCategoryBean_Roo_ManagedBean {
         return suggestions;
     }
     
+    public List<JJChapter> JJCategoryBean.getSelectedChapters() {
+        return selectedChapters;
+    }
+    
+    public void JJCategoryBean.setSelectedChapters(List<JJChapter> selectedChapters) {
+        if (selectedChapters != null) {
+            JJCategory_.setChapters(new HashSet<JJChapter>(selectedChapters));
+        }
+        this.selectedChapters = selectedChapters;
+    }
+    
     public String JJCategoryBean.onEdit() {
+        if (JJCategory_ != null && JJCategory_.getChapters() != null) {
+            selectedChapters = new ArrayList<JJChapter>(JJCategory_.getChapters());
+        }
         return null;
     }
     
@@ -677,6 +737,7 @@ privileged aspect JJCategoryBean_Roo_ManagedBean {
     
     public void JJCategoryBean.reset() {
         JJCategory_ = null;
+        selectedChapters = null;
         createDialogVisible = false;
     }
     

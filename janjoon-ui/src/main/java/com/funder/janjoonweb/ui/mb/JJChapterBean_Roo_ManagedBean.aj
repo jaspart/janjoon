@@ -16,6 +16,7 @@ import com.funder.janjoonweb.domain.JJProjectService;
 import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.ui.mb.JJChapterBean;
 import com.funder.janjoonweb.ui.mb.converter.JJCategoryConverter;
+import com.funder.janjoonweb.ui.mb.converter.JJChapterConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJProductConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJProjectConverter;
@@ -86,6 +87,8 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
     private boolean JJChapterBean.createDialogVisible = false;
     
     private List<JJRequirement> JJChapterBean.selectedRequirements;
+    
+    private List<JJChapter> JJChapterBean.selectedChapters;
     
     @PostConstruct
     public void JJChapterBean.init() {
@@ -402,6 +405,46 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         requirementsCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementsCreateInputMessage);
         
+        OutputLabel parentCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        parentCreateOutput.setFor("parentCreateInput");
+        parentCreateOutput.setId("parentCreateOutput");
+        parentCreateOutput.setValue("Parent:");
+        htmlPanelGrid.getChildren().add(parentCreateOutput);
+        
+        AutoComplete parentCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        parentCreateInput.setId("parentCreateInput");
+        parentCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJChapterBean.JJChapter_.parent}", JJChapter.class));
+        parentCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJChapterBean.completeParent}", List.class, new Class[] { String.class }));
+        parentCreateInput.setDropdown(true);
+        parentCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "parent", String.class));
+        parentCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{parent.name} #{parent.description} #{parent.creationDate} #{parent.updatedDate}", String.class));
+        parentCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{parent}", JJChapter.class));
+        parentCreateInput.setConverter(new JJChapterConverter());
+        parentCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(parentCreateInput);
+        
+        Message parentCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        parentCreateInputMessage.setId("parentCreateInputMessage");
+        parentCreateInputMessage.setFor("parentCreateInput");
+        parentCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(parentCreateInputMessage);
+        
+        HtmlOutputText chaptersCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        chaptersCreateOutput.setId("chaptersCreateOutput");
+        chaptersCreateOutput.setValue("Chapters:");
+        htmlPanelGrid.getChildren().add(chaptersCreateOutput);
+        
+        HtmlOutputText chaptersCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        chaptersCreateInput.setId("chaptersCreateInput");
+        chaptersCreateInput.setValue("This relationship is managed from the JJChapter side");
+        htmlPanelGrid.getChildren().add(chaptersCreateInput);
+        
+        Message chaptersCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        chaptersCreateInputMessage.setId("chaptersCreateInputMessage");
+        chaptersCreateInputMessage.setFor("chaptersCreateInput");
+        chaptersCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(chaptersCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -651,6 +694,46 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         requirementsEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementsEditInputMessage);
         
+        OutputLabel parentEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        parentEditOutput.setFor("parentEditInput");
+        parentEditOutput.setId("parentEditOutput");
+        parentEditOutput.setValue("Parent:");
+        htmlPanelGrid.getChildren().add(parentEditOutput);
+        
+        AutoComplete parentEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        parentEditInput.setId("parentEditInput");
+        parentEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJChapterBean.JJChapter_.parent}", JJChapter.class));
+        parentEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJChapterBean.completeParent}", List.class, new Class[] { String.class }));
+        parentEditInput.setDropdown(true);
+        parentEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "parent", String.class));
+        parentEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{parent.name} #{parent.description} #{parent.creationDate} #{parent.updatedDate}", String.class));
+        parentEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{parent}", JJChapter.class));
+        parentEditInput.setConverter(new JJChapterConverter());
+        parentEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(parentEditInput);
+        
+        Message parentEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        parentEditInputMessage.setId("parentEditInputMessage");
+        parentEditInputMessage.setFor("parentEditInput");
+        parentEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(parentEditInputMessage);
+        
+        HtmlOutputText chaptersEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        chaptersEditOutput.setId("chaptersEditOutput");
+        chaptersEditOutput.setValue("Chapters:");
+        htmlPanelGrid.getChildren().add(chaptersEditOutput);
+        
+        HtmlOutputText chaptersEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        chaptersEditInput.setId("chaptersEditInput");
+        chaptersEditInput.setValue("This relationship is managed from the JJChapter side");
+        htmlPanelGrid.getChildren().add(chaptersEditInput);
+        
+        Message chaptersEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        chaptersEditInputMessage.setId("chaptersEditInputMessage");
+        chaptersEditInputMessage.setFor("chaptersEditInput");
+        chaptersEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(chaptersEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -777,6 +860,26 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         requirementsValue.setValue("This relationship is managed from the JJRequirement side");
         htmlPanelGrid.getChildren().add(requirementsValue);
         
+        HtmlOutputText parentLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        parentLabel.setId("parentLabel");
+        parentLabel.setValue("Parent:");
+        htmlPanelGrid.getChildren().add(parentLabel);
+        
+        HtmlOutputText parentValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        parentValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJChapterBean.JJChapter_.parent}", JJChapter.class));
+        parentValue.setConverter(new JJChapterConverter());
+        htmlPanelGrid.getChildren().add(parentValue);
+        
+        HtmlOutputText chaptersLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        chaptersLabel.setId("chaptersLabel");
+        chaptersLabel.setValue("Chapters:");
+        htmlPanelGrid.getChildren().add(chaptersLabel);
+        
+        HtmlOutputText chaptersValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        chaptersValue.setId("chaptersValue");
+        chaptersValue.setValue("This relationship is managed from the JJChapter side");
+        htmlPanelGrid.getChildren().add(chaptersValue);
+        
         return htmlPanelGrid;
     }
     
@@ -857,9 +960,34 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         this.selectedRequirements = selectedRequirements;
     }
     
+    public List<JJChapter> JJChapterBean.completeParent(String query) {
+        List<JJChapter> suggestions = new ArrayList<JJChapter>();
+        for (JJChapter jJChapter : jJChapterService.findAllJJChapters()) {
+            String jJChapterStr = String.valueOf(jJChapter.getName() +  " "  + jJChapter.getDescription() +  " "  + jJChapter.getCreationDate() +  " "  + jJChapter.getUpdatedDate());
+            if (jJChapterStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJChapter);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJChapter> JJChapterBean.getSelectedChapters() {
+        return selectedChapters;
+    }
+    
+    public void JJChapterBean.setSelectedChapters(List<JJChapter> selectedChapters) {
+        if (selectedChapters != null) {
+            JJChapter_.setChapters(new HashSet<JJChapter>(selectedChapters));
+        }
+        this.selectedChapters = selectedChapters;
+    }
+    
     public String JJChapterBean.onEdit() {
         if (JJChapter_ != null && JJChapter_.getRequirements() != null) {
             selectedRequirements = new ArrayList<JJRequirement>(JJChapter_.getRequirements());
+        }
+        if (JJChapter_ != null && JJChapter_.getChapters() != null) {
+            selectedChapters = new ArrayList<JJChapter>(JJChapter_.getChapters());
         }
         return null;
     }
@@ -914,6 +1042,7 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
     public void JJChapterBean.reset() {
         JJChapter_ = null;
         selectedRequirements = null;
+        selectedChapters = null;
         createDialogVisible = false;
     }
     

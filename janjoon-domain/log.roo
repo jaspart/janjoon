@@ -87,3 +87,69 @@ field set --fieldName requirementsLink2 --type ~.JJRequirement --cardinality MAN
 quit
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-20 19:13:12
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-20 19:13:25
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-20 19:38:50
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-22 17:01:11
+focus --class ~.JJRequirement
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-22 17:07:09
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-22 17:07:16
+focus --class ~.JJRequirement
+field set --fieldName requirementsLink1 --type ~.JJRequirement --cardinality MANY_TO_MANY
+field set --type ~.JJRequirement --fieldName requirementsLink2 --class ~.JJRequirement --cardinality MANY_TO_MANY
+entity jpa --class JJRequirementTOJJRequirement
+field string --fieldName status
+entity jpa --class JJRequirementLink
+field string --fieldName status --column STATUS
+field string --fieldName status 
+field reference --fieldName requirementsLinkUP --type ~.JJRequirement --cardinality MANY_TO_ONE
+field reference --fieldName requirementsLinkDOWN --type ~.JJRequirement --cardinality MANY_TO_ONE
+field string --fieldName requirmentLinkUPId --class ~.JJRequirementLink
+field string --fieldName requirmentLinkDOWNId --class ~.JJRequirementLink
+focus --class ~.JJRequirement
+field set --fieldName requirementUP --type ~.JJRequirementLink --cardinality ONE_TO_MANY --mappedBy requirementsLinkUP --fetch LAZY
+field set --fieldName requirementDOWN --type ~.JJRequirementLink --cardinality ONE_TO_MANY --mappedBy requirementLinkDOWN --fetch LAZY
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-22 18:19:18
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-22 18:20:00
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-22 18:20:35
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 09:39:16
+hint
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-23 09:52:39
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 09:57:50
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-23 09:59:19
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 10:05:43
+focus --class ~.JJRequirement
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-23 10:12:54
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 10:46:25
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-23 10:48:45
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 10:51:32
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-23 10:55:03
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 11:09:26
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 11:12:00
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-23 11:12:20
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 11:13:10
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 11:14:41
+hint
+focus --class ~.JJRequirement
+field set --fieldName requirementUP --type ~.JJRequirementLink --cardinality ONE_TO_MANY --mappedBy requirementsLinkUP --fetch LAZY
+field set --fieldName requirementDOWN --type ~.JJRequirementLink --cardinality ONE_TO_MANY --mappedBy requirementLinkDOWN --fetch LAZY
+hint
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-23 11:20:55
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-23 11:27:44
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 13:22:17
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 13:42:03
+focus --class ~.JJRequirementLink
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-23 13:43:39
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 13:46:53
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-23 13:50:50
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 14:02:46
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 14:39:57
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 15:07:36
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-23 16:16:58
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 16:20:50
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-23 16:23:28
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 18:39:07
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-08-23 18:47:49
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-08-23 18:50:56

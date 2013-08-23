@@ -32,6 +32,4 @@ public interface JJRequirementService {
 			String categoryName, JJProject project, JJProduct product,
 			JJVersion version);
 
-	public List<JJRequirement> getAllJJRequirementsWithRequirementLinkAndCategory(
-			String categoryName, JJRequirement requirementLink);
 }
