@@ -78,7 +78,7 @@ field boolean --fieldName basic
 #######################
 
 focus --class ~.JJProfile
-field set --fieldName rights --type ~.JJRight --cardinality MANY_TO_MANY --mappedBy profile --fetch LAZY
+field set --fieldName rights --type ~.JJRight --cardinality MANY_TO_MANY --mappedBy profiles --fetch LAZY
 
 #######################
 
