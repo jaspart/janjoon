@@ -3,7 +3,7 @@
 
 focus --class ~.JJAbstractEntity
 field string --fieldName name --sizeMax 25 --notNull
-field string --fieldName description --sizeMax 250 --notNull
+field string --fieldName description --sizeMax 500 --notNull
 field date --fieldName creationDate --type java.util.Date --notNull
 field reference --fieldName createdBy --type ~.JJContact
 field date --fieldName updatedDate --type java.util.Date

@@ -10,5 +10,5 @@ enum constant --name related
 enum constant --name child
 enum constant --name duplicated
 
-#######################
+
 
