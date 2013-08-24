@@ -2,8 +2,10 @@
 #/*   Define the attributes of all janjoon concrete entities. */
 
 #######################
-# focus --class ~.JJConfiguration
-#######################
+
+focus --class ~.JJConfiguration
+field string --fieldName parameter --sizeMax 25 --notNull
+field string --fieldName value --sizeMax 25 --notNull
 
 #######################
 
