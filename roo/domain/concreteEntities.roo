@@ -2,6 +2,10 @@
 #/*   Define the attributes of all janjoon concrete entities. */
 
 #######################
+# focus --class ~.JJConfiguration
+#######################
+
+#######################
 
 focus --class ~.JJProject
 field set --fieldName chapters  --type ~.JJChapter --cardinality ONE_TO_MANY --mappedBy project --fetch LAZY

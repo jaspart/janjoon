@@ -7,6 +7,7 @@ layer --class JJAbstractEntity
 
 #######################
 
+layer --class JJConfiguration
 layer --class JJProject
 layer --class JJProduct
 layer --class JJVersion
@@ -17,6 +18,8 @@ layer --class JJJob
 layer --class JJHardware
 layer --class JJSoftware
 layer --class JJRight
+layer --class JJPermission
+layer --class JJProfile
 layer --class JJContact
 layer --class JJMessage
 layer --class JJStatus

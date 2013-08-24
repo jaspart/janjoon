@@ -12,6 +12,7 @@ tailor activate --name janjoonRooStyle
 
 #######################
 
+entity jpa --class JJConfiguration --extends ~.JJAbstractEntity
 entity jpa --class JJContact --extends ~.JJAbstractEntity
 entity jpa --class JJProject --extends ~.JJAbstractEntity
 entity jpa --class JJProduct --extends ~.JJAbstractEntity
@@ -23,6 +24,7 @@ entity jpa --class JJHardware --extends ~.JJAbstractEntity
 entity jpa --class JJSoftware --extends ~.JJAbstractEntity
 entity jpa --class JJRight
 entity jpa --class JJPermission
+entity jpa --class JJProfile
 entity jpa --class JJStatus --extends ~.JJAbstractEntity
 entity jpa --class JJImportance --extends ~.JJAbstractEntity
 entity jpa --class JJCriticity --extends ~.JJAbstractEntity
