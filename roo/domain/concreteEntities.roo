@@ -5,7 +5,7 @@
 
 focus --class ~.JJConfiguration
 field string --fieldName parameter --sizeMax 25 --notNull
-field string --fieldName value --sizeMax 25 --notNull
+field string --fieldName value --sizeMax 100 --notNull
 
 #######################
 
