@@ -131,9 +131,9 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
     
     private List<JJMessage> JJRequirementBean.selectedMessages;
     
-    private List<JJRequirement> JJRequirementBean.selectedRequirementLinkUp;
-    
     private List<JJRequirement> JJRequirementBean.selectedRequirementLinkDown;
+    
+    private List<JJRequirement> JJRequirementBean.selectedRequirementLinkUp;
     
     @PostConstruct
     public void JJRequirementBean.init() {
@@ -244,7 +244,7 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         descriptionCreateInput.setId("descriptionCreateInput");
         descriptionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.description}", String.class));
         LengthValidator descriptionCreateInputValidator = new LengthValidator();
-        descriptionCreateInputValidator.setMaximum(250);
+        descriptionCreateInputValidator.setMaximum(500);
         descriptionCreateInput.addValidator(descriptionCreateInputValidator);
         descriptionCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionCreateInput);
@@ -760,6 +760,22 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         noteCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(noteCreateInputMessage);
         
+        HtmlOutputText requirementLinkDownCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        requirementLinkDownCreateOutput.setId("requirementLinkDownCreateOutput");
+        requirementLinkDownCreateOutput.setValue("Requirement Link Down:");
+        htmlPanelGrid.getChildren().add(requirementLinkDownCreateOutput);
+        
+        HtmlOutputText requirementLinkDownCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        requirementLinkDownCreateInput.setId("requirementLinkDownCreateInput");
+        requirementLinkDownCreateInput.setValue("This relationship is managed from the JJRequirement side");
+        htmlPanelGrid.getChildren().add(requirementLinkDownCreateInput);
+        
+        Message requirementLinkDownCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        requirementLinkDownCreateInputMessage.setId("requirementLinkDownCreateInputMessage");
+        requirementLinkDownCreateInputMessage.setFor("requirementLinkDownCreateInput");
+        requirementLinkDownCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(requirementLinkDownCreateInputMessage);
+        
         OutputLabel requirementLinkUpCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         requirementLinkUpCreateOutput.setFor("requirementLinkUpCreateInput");
         requirementLinkUpCreateOutput.setId("requirementLinkUpCreateOutput");
@@ -785,21 +801,24 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         requirementLinkUpCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementLinkUpCreateInputMessage);
         
-        HtmlOutputText requirementLinkDownCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementLinkDownCreateOutput.setId("requirementLinkDownCreateOutput");
-        requirementLinkDownCreateOutput.setValue("Requirement Link Down:");
-        htmlPanelGrid.getChildren().add(requirementLinkDownCreateOutput);
+        OutputLabel orderingCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        orderingCreateOutput.setFor("orderingCreateInput");
+        orderingCreateOutput.setId("orderingCreateOutput");
+        orderingCreateOutput.setValue("Ordering:");
+        htmlPanelGrid.getChildren().add(orderingCreateOutput);
         
-        HtmlOutputText requirementLinkDownCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementLinkDownCreateInput.setId("requirementLinkDownCreateInput");
-        requirementLinkDownCreateInput.setValue("This relationship is managed from the JJRequirement side");
-        htmlPanelGrid.getChildren().add(requirementLinkDownCreateInput);
+        Spinner orderingCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        orderingCreateInput.setId("orderingCreateInput");
+        orderingCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.ordering}", Integer.class));
+        orderingCreateInput.setRequired(false);
         
-        Message requirementLinkDownCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        requirementLinkDownCreateInputMessage.setId("requirementLinkDownCreateInputMessage");
-        requirementLinkDownCreateInputMessage.setFor("requirementLinkDownCreateInput");
-        requirementLinkDownCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(requirementLinkDownCreateInputMessage);
+        htmlPanelGrid.getChildren().add(orderingCreateInput);
+        
+        Message orderingCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        orderingCreateInputMessage.setId("orderingCreateInputMessage");
+        orderingCreateInputMessage.setFor("orderingCreateInput");
+        orderingCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(orderingCreateInputMessage);
         
         return htmlPanelGrid;
     }
@@ -843,7 +862,7 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         descriptionEditInput.setId("descriptionEditInput");
         descriptionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.description}", String.class));
         LengthValidator descriptionEditInputValidator = new LengthValidator();
-        descriptionEditInputValidator.setMaximum(250);
+        descriptionEditInputValidator.setMaximum(500);
         descriptionEditInput.addValidator(descriptionEditInputValidator);
         descriptionEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionEditInput);
@@ -1359,6 +1378,22 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         noteEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(noteEditInputMessage);
         
+        HtmlOutputText requirementLinkDownEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        requirementLinkDownEditOutput.setId("requirementLinkDownEditOutput");
+        requirementLinkDownEditOutput.setValue("Requirement Link Down:");
+        htmlPanelGrid.getChildren().add(requirementLinkDownEditOutput);
+        
+        HtmlOutputText requirementLinkDownEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        requirementLinkDownEditInput.setId("requirementLinkDownEditInput");
+        requirementLinkDownEditInput.setValue("This relationship is managed from the JJRequirement side");
+        htmlPanelGrid.getChildren().add(requirementLinkDownEditInput);
+        
+        Message requirementLinkDownEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        requirementLinkDownEditInputMessage.setId("requirementLinkDownEditInputMessage");
+        requirementLinkDownEditInputMessage.setFor("requirementLinkDownEditInput");
+        requirementLinkDownEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(requirementLinkDownEditInputMessage);
+        
         OutputLabel requirementLinkUpEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         requirementLinkUpEditOutput.setFor("requirementLinkUpEditInput");
         requirementLinkUpEditOutput.setId("requirementLinkUpEditOutput");
@@ -1384,21 +1419,24 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         requirementLinkUpEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementLinkUpEditInputMessage);
         
-        HtmlOutputText requirementLinkDownEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementLinkDownEditOutput.setId("requirementLinkDownEditOutput");
-        requirementLinkDownEditOutput.setValue("Requirement Link Down:");
-        htmlPanelGrid.getChildren().add(requirementLinkDownEditOutput);
+        OutputLabel orderingEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        orderingEditOutput.setFor("orderingEditInput");
+        orderingEditOutput.setId("orderingEditOutput");
+        orderingEditOutput.setValue("Ordering:");
+        htmlPanelGrid.getChildren().add(orderingEditOutput);
         
-        HtmlOutputText requirementLinkDownEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementLinkDownEditInput.setId("requirementLinkDownEditInput");
-        requirementLinkDownEditInput.setValue("This relationship is managed from the JJRequirement side");
-        htmlPanelGrid.getChildren().add(requirementLinkDownEditInput);
+        Spinner orderingEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        orderingEditInput.setId("orderingEditInput");
+        orderingEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.ordering}", Integer.class));
+        orderingEditInput.setRequired(false);
         
-        Message requirementLinkDownEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        requirementLinkDownEditInputMessage.setId("requirementLinkDownEditInputMessage");
-        requirementLinkDownEditInputMessage.setFor("requirementLinkDownEditInput");
-        requirementLinkDownEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(requirementLinkDownEditInputMessage);
+        htmlPanelGrid.getChildren().add(orderingEditInput);
+        
+        Message orderingEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        orderingEditInputMessage.setId("orderingEditInputMessage");
+        orderingEditInputMessage.setFor("orderingEditInput");
+        orderingEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(orderingEditInputMessage);
         
         return htmlPanelGrid;
     }
@@ -1681,6 +1719,16 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         noteValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(noteValue);
         
+        HtmlOutputText requirementLinkDownLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        requirementLinkDownLabel.setId("requirementLinkDownLabel");
+        requirementLinkDownLabel.setValue("Requirement Link Down:");
+        htmlPanelGrid.getChildren().add(requirementLinkDownLabel);
+        
+        HtmlOutputText requirementLinkDownValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        requirementLinkDownValue.setId("requirementLinkDownValue");
+        requirementLinkDownValue.setValue("This relationship is managed from the JJRequirement side");
+        htmlPanelGrid.getChildren().add(requirementLinkDownValue);
+        
         HtmlOutputText requirementLinkUpLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         requirementLinkUpLabel.setId("requirementLinkUpLabel");
         requirementLinkUpLabel.setValue("Requirement Link Up:");
@@ -1700,15 +1748,14 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         requirementLinkUpValue.getChildren().add(requirementLinkUpValueItems);
         htmlPanelGrid.getChildren().add(requirementLinkUpValue);
         
-        HtmlOutputText requirementLinkDownLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementLinkDownLabel.setId("requirementLinkDownLabel");
-        requirementLinkDownLabel.setValue("Requirement Link Down:");
-        htmlPanelGrid.getChildren().add(requirementLinkDownLabel);
+        HtmlOutputText orderingLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        orderingLabel.setId("orderingLabel");
+        orderingLabel.setValue("Ordering:");
+        htmlPanelGrid.getChildren().add(orderingLabel);
         
-        HtmlOutputText requirementLinkDownValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementLinkDownValue.setId("requirementLinkDownValue");
-        requirementLinkDownValue.setValue("This relationship is managed from the JJRequirement side");
-        htmlPanelGrid.getChildren().add(requirementLinkDownValue);
+        HtmlOutputText orderingValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        orderingValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.ordering}", String.class));
+        htmlPanelGrid.getChildren().add(orderingValue);
         
         return htmlPanelGrid;
     }
@@ -1888,17 +1935,6 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         this.selectedMessages = selectedMessages;
     }
     
-    public List<JJRequirement> JJRequirementBean.getSelectedRequirementLinkUp() {
-        return selectedRequirementLinkUp;
-    }
-    
-    public void JJRequirementBean.setSelectedRequirementLinkUp(List<JJRequirement> selectedRequirementLinkUp) {
-        if (selectedRequirementLinkUp != null) {
-            JJRequirement_.setRequirementLinkUp(new HashSet<JJRequirement>(selectedRequirementLinkUp));
-        }
-        this.selectedRequirementLinkUp = selectedRequirementLinkUp;
-    }
-    
     public List<JJRequirement> JJRequirementBean.getSelectedRequirementLinkDown() {
         return selectedRequirementLinkDown;
     }
@@ -1908,6 +1944,17 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
             JJRequirement_.setRequirementLinkDown(new HashSet<JJRequirement>(selectedRequirementLinkDown));
         }
         this.selectedRequirementLinkDown = selectedRequirementLinkDown;
+    }
+    
+    public List<JJRequirement> JJRequirementBean.getSelectedRequirementLinkUp() {
+        return selectedRequirementLinkUp;
+    }
+    
+    public void JJRequirementBean.setSelectedRequirementLinkUp(List<JJRequirement> selectedRequirementLinkUp) {
+        if (selectedRequirementLinkUp != null) {
+            JJRequirement_.setRequirementLinkUp(new HashSet<JJRequirement>(selectedRequirementLinkUp));
+        }
+        this.selectedRequirementLinkUp = selectedRequirementLinkUp;
     }
     
     public String JJRequirementBean.onEdit() {
@@ -1923,11 +1970,11 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         if (JJRequirement_ != null && JJRequirement_.getMessages() != null) {
             selectedMessages = new ArrayList<JJMessage>(JJRequirement_.getMessages());
         }
-        if (JJRequirement_ != null && JJRequirement_.getRequirementLinkUp() != null) {
-            selectedRequirementLinkUp = new ArrayList<JJRequirement>(JJRequirement_.getRequirementLinkUp());
-        }
         if (JJRequirement_ != null && JJRequirement_.getRequirementLinkDown() != null) {
             selectedRequirementLinkDown = new ArrayList<JJRequirement>(JJRequirement_.getRequirementLinkDown());
+        }
+        if (JJRequirement_ != null && JJRequirement_.getRequirementLinkUp() != null) {
+            selectedRequirementLinkUp = new ArrayList<JJRequirement>(JJRequirement_.getRequirementLinkUp());
         }
         return null;
     }
@@ -1985,8 +2032,8 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         selectedTasks = null;
         selectedAssignedTos = null;
         selectedMessages = null;
-        selectedRequirementLinkUp = null;
         selectedRequirementLinkDown = null;
+        selectedRequirementLinkUp = null;
         createDialogVisible = false;
     }
     

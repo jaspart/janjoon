@@ -99,7 +99,7 @@ privileged aspect JJRightIntegrationTest_Roo_IntegrationTest {
         obj = jJRightService.findJJRight(id);
         boolean modified =  dod.modifyJJRight(obj);
         Integer currentVersion = obj.getVersion();
-        JJRight merged = (JJRight)jJRightService.updateJJRight(obj);
+        JJRight merged = jJRightService.updateJJRight(obj);
         jJRightRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'JJRight' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

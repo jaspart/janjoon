@@ -14,6 +14,8 @@ import com.funder.janjoonweb.domain.JJProductService;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJProjectService;
 import com.funder.janjoonweb.domain.JJRequirement;
+import com.funder.janjoonweb.domain.JJTestcase;
+import com.funder.janjoonweb.domain.JJTestplan;
 import com.funder.janjoonweb.ui.mb.JJChapterBean;
 import com.funder.janjoonweb.ui.mb.converter.JJCategoryConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJChapterConverter;
@@ -43,6 +45,7 @@ import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
+import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +93,10 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
     
     private List<JJChapter> JJChapterBean.selectedChapters;
     
+    private List<JJTestplan> JJChapterBean.selectedTestplans;
+    
+    private List<JJTestcase> JJChapterBean.selectedTestcases;
+    
     @PostConstruct
     public void JJChapterBean.init() {
         columns = new ArrayList<String>();
@@ -97,6 +104,7 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         columns.add("description");
         columns.add("creationDate");
         columns.add("updatedDate");
+        columns.add("ordering");
     }
     
     public String JJChapterBean.getName() {
@@ -198,7 +206,7 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         descriptionCreateInput.setId("descriptionCreateInput");
         descriptionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJChapterBean.JJChapter_.description}", String.class));
         LengthValidator descriptionCreateInputValidator = new LengthValidator();
-        descriptionCreateInputValidator.setMaximum(250);
+        descriptionCreateInputValidator.setMaximum(500);
         descriptionCreateInput.addValidator(descriptionCreateInputValidator);
         descriptionCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionCreateInput);
@@ -445,6 +453,57 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         chaptersCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(chaptersCreateInputMessage);
         
+        OutputLabel orderingCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        orderingCreateOutput.setFor("orderingCreateInput");
+        orderingCreateOutput.setId("orderingCreateOutput");
+        orderingCreateOutput.setValue("Ordering:");
+        htmlPanelGrid.getChildren().add(orderingCreateOutput);
+        
+        Spinner orderingCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        orderingCreateInput.setId("orderingCreateInput");
+        orderingCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJChapterBean.JJChapter_.ordering}", Integer.class));
+        orderingCreateInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(orderingCreateInput);
+        
+        Message orderingCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        orderingCreateInputMessage.setId("orderingCreateInputMessage");
+        orderingCreateInputMessage.setFor("orderingCreateInput");
+        orderingCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(orderingCreateInputMessage);
+        
+        HtmlOutputText testplansCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testplansCreateOutput.setId("testplansCreateOutput");
+        testplansCreateOutput.setValue("Testplans:");
+        htmlPanelGrid.getChildren().add(testplansCreateOutput);
+        
+        HtmlOutputText testplansCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testplansCreateInput.setId("testplansCreateInput");
+        testplansCreateInput.setValue("This relationship is managed from the JJTestplan side");
+        htmlPanelGrid.getChildren().add(testplansCreateInput);
+        
+        Message testplansCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testplansCreateInputMessage.setId("testplansCreateInputMessage");
+        testplansCreateInputMessage.setFor("testplansCreateInput");
+        testplansCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testplansCreateInputMessage);
+        
+        HtmlOutputText testcasesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesCreateOutput.setId("testcasesCreateOutput");
+        testcasesCreateOutput.setValue("Testcases:");
+        htmlPanelGrid.getChildren().add(testcasesCreateOutput);
+        
+        HtmlOutputText testcasesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesCreateInput.setId("testcasesCreateInput");
+        testcasesCreateInput.setValue("This relationship is managed from the JJTestcase side");
+        htmlPanelGrid.getChildren().add(testcasesCreateInput);
+        
+        Message testcasesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcasesCreateInputMessage.setId("testcasesCreateInputMessage");
+        testcasesCreateInputMessage.setFor("testcasesCreateInput");
+        testcasesCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcasesCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -487,7 +546,7 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         descriptionEditInput.setId("descriptionEditInput");
         descriptionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJChapterBean.JJChapter_.description}", String.class));
         LengthValidator descriptionEditInputValidator = new LengthValidator();
-        descriptionEditInputValidator.setMaximum(250);
+        descriptionEditInputValidator.setMaximum(500);
         descriptionEditInput.addValidator(descriptionEditInputValidator);
         descriptionEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionEditInput);
@@ -734,6 +793,57 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         chaptersEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(chaptersEditInputMessage);
         
+        OutputLabel orderingEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        orderingEditOutput.setFor("orderingEditInput");
+        orderingEditOutput.setId("orderingEditOutput");
+        orderingEditOutput.setValue("Ordering:");
+        htmlPanelGrid.getChildren().add(orderingEditOutput);
+        
+        Spinner orderingEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        orderingEditInput.setId("orderingEditInput");
+        orderingEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJChapterBean.JJChapter_.ordering}", Integer.class));
+        orderingEditInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(orderingEditInput);
+        
+        Message orderingEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        orderingEditInputMessage.setId("orderingEditInputMessage");
+        orderingEditInputMessage.setFor("orderingEditInput");
+        orderingEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(orderingEditInputMessage);
+        
+        HtmlOutputText testplansEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testplansEditOutput.setId("testplansEditOutput");
+        testplansEditOutput.setValue("Testplans:");
+        htmlPanelGrid.getChildren().add(testplansEditOutput);
+        
+        HtmlOutputText testplansEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testplansEditInput.setId("testplansEditInput");
+        testplansEditInput.setValue("This relationship is managed from the JJTestplan side");
+        htmlPanelGrid.getChildren().add(testplansEditInput);
+        
+        Message testplansEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testplansEditInputMessage.setId("testplansEditInputMessage");
+        testplansEditInputMessage.setFor("testplansEditInput");
+        testplansEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testplansEditInputMessage);
+        
+        HtmlOutputText testcasesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesEditOutput.setId("testcasesEditOutput");
+        testcasesEditOutput.setValue("Testcases:");
+        htmlPanelGrid.getChildren().add(testcasesEditOutput);
+        
+        HtmlOutputText testcasesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesEditInput.setId("testcasesEditInput");
+        testcasesEditInput.setValue("This relationship is managed from the JJTestcase side");
+        htmlPanelGrid.getChildren().add(testcasesEditInput);
+        
+        Message testcasesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcasesEditInputMessage.setId("testcasesEditInputMessage");
+        testcasesEditInputMessage.setFor("testcasesEditInput");
+        testcasesEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcasesEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -880,6 +990,35 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         chaptersValue.setValue("This relationship is managed from the JJChapter side");
         htmlPanelGrid.getChildren().add(chaptersValue);
         
+        HtmlOutputText orderingLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        orderingLabel.setId("orderingLabel");
+        orderingLabel.setValue("Ordering:");
+        htmlPanelGrid.getChildren().add(orderingLabel);
+        
+        HtmlOutputText orderingValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        orderingValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJChapterBean.JJChapter_.ordering}", String.class));
+        htmlPanelGrid.getChildren().add(orderingValue);
+        
+        HtmlOutputText testplansLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testplansLabel.setId("testplansLabel");
+        testplansLabel.setValue("Testplans:");
+        htmlPanelGrid.getChildren().add(testplansLabel);
+        
+        HtmlOutputText testplansValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testplansValue.setId("testplansValue");
+        testplansValue.setValue("This relationship is managed from the JJTestplan side");
+        htmlPanelGrid.getChildren().add(testplansValue);
+        
+        HtmlOutputText testcasesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesLabel.setId("testcasesLabel");
+        testcasesLabel.setValue("Testcases:");
+        htmlPanelGrid.getChildren().add(testcasesLabel);
+        
+        HtmlOutputText testcasesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesValue.setId("testcasesValue");
+        testcasesValue.setValue("This relationship is managed from the JJTestcase side");
+        htmlPanelGrid.getChildren().add(testcasesValue);
+        
         return htmlPanelGrid;
     }
     
@@ -982,12 +1121,40 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         this.selectedChapters = selectedChapters;
     }
     
+    public List<JJTestplan> JJChapterBean.getSelectedTestplans() {
+        return selectedTestplans;
+    }
+    
+    public void JJChapterBean.setSelectedTestplans(List<JJTestplan> selectedTestplans) {
+        if (selectedTestplans != null) {
+            JJChapter_.setTestplans(new HashSet<JJTestplan>(selectedTestplans));
+        }
+        this.selectedTestplans = selectedTestplans;
+    }
+    
+    public List<JJTestcase> JJChapterBean.getSelectedTestcases() {
+        return selectedTestcases;
+    }
+    
+    public void JJChapterBean.setSelectedTestcases(List<JJTestcase> selectedTestcases) {
+        if (selectedTestcases != null) {
+            JJChapter_.setTestcases(new HashSet<JJTestcase>(selectedTestcases));
+        }
+        this.selectedTestcases = selectedTestcases;
+    }
+    
     public String JJChapterBean.onEdit() {
         if (JJChapter_ != null && JJChapter_.getRequirements() != null) {
             selectedRequirements = new ArrayList<JJRequirement>(JJChapter_.getRequirements());
         }
         if (JJChapter_ != null && JJChapter_.getChapters() != null) {
             selectedChapters = new ArrayList<JJChapter>(JJChapter_.getChapters());
+        }
+        if (JJChapter_ != null && JJChapter_.getTestplans() != null) {
+            selectedTestplans = new ArrayList<JJTestplan>(JJChapter_.getTestplans());
+        }
+        if (JJChapter_ != null && JJChapter_.getTestcases() != null) {
+            selectedTestcases = new ArrayList<JJTestcase>(JJChapter_.getTestcases());
         }
         return null;
     }
@@ -1043,6 +1210,8 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         JJChapter_ = null;
         selectedRequirements = null;
         selectedChapters = null;
+        selectedTestplans = null;
+        selectedTestcases = null;
         createDialogVisible = false;
     }
     

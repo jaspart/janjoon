@@ -31,4 +31,18 @@ public class JJChapter extends JJAbstractEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent")
     private Set<JJChapter> chapters = new HashSet<JJChapter>();
+
+    /**
+     */
+    private Integer ordering;
+
+    /**
+     */
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chapter")
+    private Set<JJTestplan> testplans = new HashSet<JJTestplan>();
+
+    /**
+     */
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chapter")
+    private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
 }

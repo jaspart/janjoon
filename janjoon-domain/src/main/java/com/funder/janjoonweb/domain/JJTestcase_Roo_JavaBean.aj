@@ -4,7 +4,9 @@
 package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJCategory;
+import com.funder.janjoonweb.domain.JJChapter;
 import com.funder.janjoonweb.domain.JJHardware;
+import com.funder.janjoonweb.domain.JJMessage;
 import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJSoftware;
 import com.funder.janjoonweb.domain.JJTask;
@@ -15,12 +17,12 @@ import java.util.Set;
 
 privileged aspect JJTestcase_Roo_JavaBean {
     
-    public Integer JJTestcase.getPlace() {
-        return this.place;
+    public Integer JJTestcase.getOrdering() {
+        return this.ordering;
     }
     
-    public void JJTestcase.setPlace(Integer place) {
-        this.place = place;
+    public void JJTestcase.setOrdering(Integer ordering) {
+        this.ordering = ordering;
     }
     
     public String JJTestcase.getResultat() {
@@ -85,6 +87,22 @@ privileged aspect JJTestcase_Roo_JavaBean {
     
     public void JJTestcase.setRequirements(Set<JJRequirement> requirements) {
         this.requirements = requirements;
+    }
+    
+    public Set<JJMessage> JJTestcase.getMessages() {
+        return this.messages;
+    }
+    
+    public void JJTestcase.setMessages(Set<JJMessage> messages) {
+        this.messages = messages;
+    }
+    
+    public JJChapter JJTestcase.getChapter() {
+        return this.chapter;
+    }
+    
+    public void JJTestcase.setChapter(JJChapter chapter) {
+        this.chapter = chapter;
     }
     
 }

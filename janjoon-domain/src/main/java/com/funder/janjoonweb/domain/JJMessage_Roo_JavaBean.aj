@@ -3,10 +3,15 @@
 
 package com.funder.janjoonweb.domain;
 
+import com.funder.janjoonweb.domain.JJBuild;
 import com.funder.janjoonweb.domain.JJCriticity;
 import com.funder.janjoonweb.domain.JJImportance;
 import com.funder.janjoonweb.domain.JJMessage;
+import com.funder.janjoonweb.domain.JJSprint;
 import com.funder.janjoonweb.domain.JJStatus;
+import com.funder.janjoonweb.domain.JJTestcase;
+import com.funder.janjoonweb.domain.JJTestplan;
+import com.funder.janjoonweb.domain.JJTeststep;
 
 privileged aspect JJMessage_Roo_JavaBean {
     
@@ -40,6 +45,46 @@ privileged aspect JJMessage_Roo_JavaBean {
     
     public void JJMessage.setImportance(JJImportance importance) {
         this.importance = importance;
+    }
+    
+    public JJSprint JJMessage.getSprint() {
+        return this.sprint;
+    }
+    
+    public void JJMessage.setSprint(JJSprint sprint) {
+        this.sprint = sprint;
+    }
+    
+    public JJBuild JJMessage.getBuild() {
+        return this.build;
+    }
+    
+    public void JJMessage.setBuild(JJBuild build) {
+        this.build = build;
+    }
+    
+    public JJTestplan JJMessage.getTestplan() {
+        return this.testplan;
+    }
+    
+    public void JJMessage.setTestplan(JJTestplan testplan) {
+        this.testplan = testplan;
+    }
+    
+    public JJTeststep JJMessage.getTeststep() {
+        return this.teststep;
+    }
+    
+    public void JJMessage.setTeststep(JJTeststep teststep) {
+        this.teststep = teststep;
+    }
+    
+    public JJTestcase JJMessage.getTestcase() {
+        return this.testcase;
+    }
+    
+    public void JJMessage.setTestcase(JJTestcase testcase) {
+        this.testcase = testcase;
     }
     
 }

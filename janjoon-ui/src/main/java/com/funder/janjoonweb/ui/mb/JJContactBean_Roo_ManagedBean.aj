@@ -193,7 +193,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         descriptionCreateInput.setId("descriptionCreateInput");
         descriptionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.description}", String.class));
         LengthValidator descriptionCreateInputValidator = new LengthValidator();
-        descriptionCreateInputValidator.setMaximum(250);
+        descriptionCreateInputValidator.setMaximum(500);
         descriptionCreateInput.addValidator(descriptionCreateInputValidator);
         descriptionCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionCreateInput);
@@ -556,6 +556,60 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         projectsCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(projectsCreateInputMessage);
         
+        OutputLabel accountNonExpiredCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        accountNonExpiredCreateOutput.setFor("accountNonExpiredCreateInput");
+        accountNonExpiredCreateOutput.setId("accountNonExpiredCreateOutput");
+        accountNonExpiredCreateOutput.setValue("Account Non Expired:");
+        htmlPanelGrid.getChildren().add(accountNonExpiredCreateOutput);
+        
+        SelectBooleanCheckbox accountNonExpiredCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        accountNonExpiredCreateInput.setId("accountNonExpiredCreateInput");
+        accountNonExpiredCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.accountNonExpired}", Boolean.class));
+        accountNonExpiredCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(accountNonExpiredCreateInput);
+        
+        Message accountNonExpiredCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        accountNonExpiredCreateInputMessage.setId("accountNonExpiredCreateInputMessage");
+        accountNonExpiredCreateInputMessage.setFor("accountNonExpiredCreateInput");
+        accountNonExpiredCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(accountNonExpiredCreateInputMessage);
+        
+        OutputLabel credentialsNonExpiredCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        credentialsNonExpiredCreateOutput.setFor("credentialsNonExpiredCreateInput");
+        credentialsNonExpiredCreateOutput.setId("credentialsNonExpiredCreateOutput");
+        credentialsNonExpiredCreateOutput.setValue("Credentials Non Expired:");
+        htmlPanelGrid.getChildren().add(credentialsNonExpiredCreateOutput);
+        
+        SelectBooleanCheckbox credentialsNonExpiredCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        credentialsNonExpiredCreateInput.setId("credentialsNonExpiredCreateInput");
+        credentialsNonExpiredCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.credentialsNonExpired}", Boolean.class));
+        credentialsNonExpiredCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(credentialsNonExpiredCreateInput);
+        
+        Message credentialsNonExpiredCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        credentialsNonExpiredCreateInputMessage.setId("credentialsNonExpiredCreateInputMessage");
+        credentialsNonExpiredCreateInputMessage.setFor("credentialsNonExpiredCreateInput");
+        credentialsNonExpiredCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(credentialsNonExpiredCreateInputMessage);
+        
+        OutputLabel accountNonLockedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        accountNonLockedCreateOutput.setFor("accountNonLockedCreateInput");
+        accountNonLockedCreateOutput.setId("accountNonLockedCreateOutput");
+        accountNonLockedCreateOutput.setValue("Account Non Locked:");
+        htmlPanelGrid.getChildren().add(accountNonLockedCreateOutput);
+        
+        SelectBooleanCheckbox accountNonLockedCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        accountNonLockedCreateInput.setId("accountNonLockedCreateInput");
+        accountNonLockedCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.accountNonLocked}", Boolean.class));
+        accountNonLockedCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(accountNonLockedCreateInput);
+        
+        Message accountNonLockedCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        accountNonLockedCreateInputMessage.setId("accountNonLockedCreateInputMessage");
+        accountNonLockedCreateInputMessage.setFor("accountNonLockedCreateInput");
+        accountNonLockedCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(accountNonLockedCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -598,7 +652,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         descriptionEditInput.setId("descriptionEditInput");
         descriptionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.description}", String.class));
         LengthValidator descriptionEditInputValidator = new LengthValidator();
-        descriptionEditInputValidator.setMaximum(250);
+        descriptionEditInputValidator.setMaximum(500);
         descriptionEditInput.addValidator(descriptionEditInputValidator);
         descriptionEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionEditInput);
@@ -961,6 +1015,60 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         projectsEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(projectsEditInputMessage);
         
+        OutputLabel accountNonExpiredEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        accountNonExpiredEditOutput.setFor("accountNonExpiredEditInput");
+        accountNonExpiredEditOutput.setId("accountNonExpiredEditOutput");
+        accountNonExpiredEditOutput.setValue("Account Non Expired:");
+        htmlPanelGrid.getChildren().add(accountNonExpiredEditOutput);
+        
+        SelectBooleanCheckbox accountNonExpiredEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        accountNonExpiredEditInput.setId("accountNonExpiredEditInput");
+        accountNonExpiredEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.accountNonExpired}", Boolean.class));
+        accountNonExpiredEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(accountNonExpiredEditInput);
+        
+        Message accountNonExpiredEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        accountNonExpiredEditInputMessage.setId("accountNonExpiredEditInputMessage");
+        accountNonExpiredEditInputMessage.setFor("accountNonExpiredEditInput");
+        accountNonExpiredEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(accountNonExpiredEditInputMessage);
+        
+        OutputLabel credentialsNonExpiredEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        credentialsNonExpiredEditOutput.setFor("credentialsNonExpiredEditInput");
+        credentialsNonExpiredEditOutput.setId("credentialsNonExpiredEditOutput");
+        credentialsNonExpiredEditOutput.setValue("Credentials Non Expired:");
+        htmlPanelGrid.getChildren().add(credentialsNonExpiredEditOutput);
+        
+        SelectBooleanCheckbox credentialsNonExpiredEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        credentialsNonExpiredEditInput.setId("credentialsNonExpiredEditInput");
+        credentialsNonExpiredEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.credentialsNonExpired}", Boolean.class));
+        credentialsNonExpiredEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(credentialsNonExpiredEditInput);
+        
+        Message credentialsNonExpiredEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        credentialsNonExpiredEditInputMessage.setId("credentialsNonExpiredEditInputMessage");
+        credentialsNonExpiredEditInputMessage.setFor("credentialsNonExpiredEditInput");
+        credentialsNonExpiredEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(credentialsNonExpiredEditInputMessage);
+        
+        OutputLabel accountNonLockedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        accountNonLockedEditOutput.setFor("accountNonLockedEditInput");
+        accountNonLockedEditOutput.setId("accountNonLockedEditOutput");
+        accountNonLockedEditOutput.setValue("Account Non Locked:");
+        htmlPanelGrid.getChildren().add(accountNonLockedEditOutput);
+        
+        SelectBooleanCheckbox accountNonLockedEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        accountNonLockedEditInput.setId("accountNonLockedEditInput");
+        accountNonLockedEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.accountNonLocked}", Boolean.class));
+        accountNonLockedEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(accountNonLockedEditInput);
+        
+        Message accountNonLockedEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        accountNonLockedEditInputMessage.setId("accountNonLockedEditInputMessage");
+        accountNonLockedEditInputMessage.setFor("accountNonLockedEditInput");
+        accountNonLockedEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(accountNonLockedEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -1184,6 +1292,33 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         projectsValueItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJProject}", JJProject.class));
         projectsValue.getChildren().add(projectsValueItems);
         htmlPanelGrid.getChildren().add(projectsValue);
+        
+        HtmlOutputText accountNonExpiredLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        accountNonExpiredLabel.setId("accountNonExpiredLabel");
+        accountNonExpiredLabel.setValue("Account Non Expired:");
+        htmlPanelGrid.getChildren().add(accountNonExpiredLabel);
+        
+        HtmlOutputText accountNonExpiredValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        accountNonExpiredValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.accountNonExpired}", String.class));
+        htmlPanelGrid.getChildren().add(accountNonExpiredValue);
+        
+        HtmlOutputText credentialsNonExpiredLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        credentialsNonExpiredLabel.setId("credentialsNonExpiredLabel");
+        credentialsNonExpiredLabel.setValue("Credentials Non Expired:");
+        htmlPanelGrid.getChildren().add(credentialsNonExpiredLabel);
+        
+        HtmlOutputText credentialsNonExpiredValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        credentialsNonExpiredValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.credentialsNonExpired}", String.class));
+        htmlPanelGrid.getChildren().add(credentialsNonExpiredValue);
+        
+        HtmlOutputText accountNonLockedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        accountNonLockedLabel.setId("accountNonLockedLabel");
+        accountNonLockedLabel.setValue("Account Non Locked:");
+        htmlPanelGrid.getChildren().add(accountNonLockedLabel);
+        
+        HtmlOutputText accountNonLockedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        accountNonLockedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.accountNonLocked}", String.class));
+        htmlPanelGrid.getChildren().add(accountNonLockedValue);
         
         return htmlPanelGrid;
     }

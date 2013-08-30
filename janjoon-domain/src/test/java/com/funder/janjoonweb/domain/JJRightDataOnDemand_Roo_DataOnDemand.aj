@@ -3,16 +3,17 @@
 
 package com.funder.janjoonweb.domain;
 
-import com.funder.janjoonweb.domain.JJContactDataOnDemand;
+import com.funder.janjoonweb.domain.JJCategoryDataOnDemand;
+import com.funder.janjoonweb.domain.JJPermission;
+import com.funder.janjoonweb.domain.JJPermissionDataOnDemand;
+import com.funder.janjoonweb.domain.JJProductDataOnDemand;
+import com.funder.janjoonweb.domain.JJProjectDataOnDemand;
 import com.funder.janjoonweb.domain.JJRight;
 import com.funder.janjoonweb.domain.JJRightDataOnDemand;
 import com.funder.janjoonweb.domain.JJRightRepository;
 import com.funder.janjoonweb.domain.JJRightService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -30,7 +31,16 @@ privileged aspect JJRightDataOnDemand_Roo_DataOnDemand {
     private List<JJRight> JJRightDataOnDemand.data;
     
     @Autowired
-    JJContactDataOnDemand JJRightDataOnDemand.jJContactDataOnDemand;
+    JJCategoryDataOnDemand JJRightDataOnDemand.jJCategoryDataOnDemand;
+    
+    @Autowired
+    JJPermissionDataOnDemand JJRightDataOnDemand.jJPermissionDataOnDemand;
+    
+    @Autowired
+    JJProductDataOnDemand JJRightDataOnDemand.jJProductDataOnDemand;
+    
+    @Autowired
+    JJProjectDataOnDemand JJRightDataOnDemand.jJProjectDataOnDemand;
     
     @Autowired
     JJRightService JJRightDataOnDemand.jJRightService;
@@ -40,43 +50,37 @@ privileged aspect JJRightDataOnDemand_Roo_DataOnDemand {
     
     public JJRight JJRightDataOnDemand.getNewTransientJJRight(int index) {
         JJRight obj = new JJRight();
-        setCreationDate(obj, index);
-        setDescription(obj, index);
-        setEnabled(obj, index);
-        setName(obj, index);
-        setUpdatedDate(obj, index);
+        setBasic(obj, index);
+        setPermission(obj, index);
+        setR(obj, index);
+        setW(obj, index);
+        setX(obj, index);
         return obj;
     }
     
-    public void JJRightDataOnDemand.setCreationDate(JJRight obj, int index) {
-        Date creationDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
-        obj.setCreationDate(creationDate);
+    public void JJRightDataOnDemand.setBasic(JJRight obj, int index) {
+        Boolean basic = Boolean.TRUE;
+        obj.setBasic(basic);
     }
     
-    public void JJRightDataOnDemand.setDescription(JJRight obj, int index) {
-        String description = "description_" + index;
-        if (description.length() > 250) {
-            description = description.substring(0, 250);
-        }
-        obj.setDescription(description);
+    public void JJRightDataOnDemand.setPermission(JJRight obj, int index) {
+        JJPermission permission = jJPermissionDataOnDemand.getRandomJJPermission();
+        obj.setPermission(permission);
     }
     
-    public void JJRightDataOnDemand.setEnabled(JJRight obj, int index) {
-        Boolean enabled = Boolean.TRUE;
-        obj.setEnabled(enabled);
+    public void JJRightDataOnDemand.setR(JJRight obj, int index) {
+        Boolean r = Boolean.TRUE;
+        obj.setR(r);
     }
     
-    public void JJRightDataOnDemand.setName(JJRight obj, int index) {
-        String name = "name_" + index;
-        if (name.length() > 25) {
-            name = name.substring(0, 25);
-        }
-        obj.setName(name);
+    public void JJRightDataOnDemand.setW(JJRight obj, int index) {
+        Boolean w = Boolean.TRUE;
+        obj.setW(w);
     }
     
-    public void JJRightDataOnDemand.setUpdatedDate(JJRight obj, int index) {
-        Date updatedDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
-        obj.setUpdatedDate(updatedDate);
+    public void JJRightDataOnDemand.setX(JJRight obj, int index) {
+        Boolean x = Boolean.TRUE;
+        obj.setX(x);
     }
     
     public JJRight JJRightDataOnDemand.getSpecificJJRight(int index) {

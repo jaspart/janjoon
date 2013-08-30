@@ -3,15 +3,25 @@
 
 package com.funder.janjoonweb.ui.mb;
 
-import com.funder.janjoonweb.domain.JJContact;
-import com.funder.janjoonweb.domain.JJContactService;
+import com.funder.janjoonweb.domain.JJCategory;
+import com.funder.janjoonweb.domain.JJCategoryService;
+import com.funder.janjoonweb.domain.JJPermission;
+import com.funder.janjoonweb.domain.JJPermissionService;
+import com.funder.janjoonweb.domain.JJProduct;
+import com.funder.janjoonweb.domain.JJProductService;
+import com.funder.janjoonweb.domain.JJProfile;
+import com.funder.janjoonweb.domain.JJProject;
+import com.funder.janjoonweb.domain.JJProjectService;
 import com.funder.janjoonweb.domain.JJRight;
 import com.funder.janjoonweb.domain.JJRightService;
 import com.funder.janjoonweb.ui.mb.JJRightBean;
-import com.funder.janjoonweb.ui.mb.converter.JJContactConverter;
+import com.funder.janjoonweb.ui.mb.converter.JJCategoryConverter;
+import com.funder.janjoonweb.ui.mb.converter.JJPermissionConverter;
+import com.funder.janjoonweb.ui.mb.converter.JJProductConverter;
+import com.funder.janjoonweb.ui.mb.converter.JJProjectConverter;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
@@ -22,12 +32,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.DateTimeConverter;
-import javax.faces.validator.LengthValidator;
 import org.primefaces.component.autocomplete.AutoComplete;
-import org.primefaces.component.calendar.Calendar;
-import org.primefaces.component.inputtext.InputText;
-import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
@@ -45,7 +50,16 @@ privileged aspect JJRightBean_Roo_ManagedBean {
     JJRightService JJRightBean.jJRightService;
     
     @Autowired
-    JJContactService JJRightBean.jJContactService;
+    JJPermissionService JJRightBean.jJPermissionService;
+    
+    @Autowired
+    JJProjectService JJRightBean.jJProjectService;
+    
+    @Autowired
+    JJProductService JJRightBean.jJProductService;
+    
+    @Autowired
+    JJCategoryService JJRightBean.jJCategoryService;
     
     private String JJRightBean.name = "JJRights";
     
@@ -65,13 +79,11 @@ privileged aspect JJRightBean_Roo_ManagedBean {
     
     private boolean JJRightBean.createDialogVisible = false;
     
+    private List<JJProfile> JJRightBean.selectedProfiles;
+    
     @PostConstruct
     public void JJRightBean.init() {
         columns = new ArrayList<String>();
-        columns.add("name");
-        columns.add("description");
-        columns.add("creationDate");
-        columns.add("updatedDate");
     }
     
     public String JJRightBean.getName() {
@@ -142,155 +154,189 @@ privileged aspect JJRightBean_Roo_ManagedBean {
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
         
-        OutputLabel nameCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        nameCreateOutput.setFor("nameCreateInput");
-        nameCreateOutput.setId("nameCreateOutput");
-        nameCreateOutput.setValue("Name:");
-        htmlPanelGrid.getChildren().add(nameCreateOutput);
+        OutputLabel permissionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        permissionCreateOutput.setFor("permissionCreateInput");
+        permissionCreateOutput.setId("permissionCreateOutput");
+        permissionCreateOutput.setValue("Permission:");
+        htmlPanelGrid.getChildren().add(permissionCreateOutput);
         
-        InputText nameCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
-        nameCreateInput.setId("nameCreateInput");
-        nameCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.name}", String.class));
-        LengthValidator nameCreateInputValidator = new LengthValidator();
-        nameCreateInputValidator.setMaximum(25);
-        nameCreateInput.addValidator(nameCreateInputValidator);
-        nameCreateInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(nameCreateInput);
+        AutoComplete permissionCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        permissionCreateInput.setId("permissionCreateInput");
+        permissionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.permission}", JJPermission.class));
+        permissionCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRightBean.completePermission}", List.class, new Class[] { String.class }));
+        permissionCreateInput.setDropdown(true);
+        permissionCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "permission", String.class));
+        permissionCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{permission.permission}", String.class));
+        permissionCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{permission}", JJPermission.class));
+        permissionCreateInput.setConverter(new JJPermissionConverter());
+        permissionCreateInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(permissionCreateInput);
         
-        Message nameCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        nameCreateInputMessage.setId("nameCreateInputMessage");
-        nameCreateInputMessage.setFor("nameCreateInput");
-        nameCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(nameCreateInputMessage);
+        Message permissionCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        permissionCreateInputMessage.setId("permissionCreateInputMessage");
+        permissionCreateInputMessage.setFor("permissionCreateInput");
+        permissionCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(permissionCreateInputMessage);
         
-        OutputLabel descriptionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        descriptionCreateOutput.setFor("descriptionCreateInput");
-        descriptionCreateOutput.setId("descriptionCreateOutput");
-        descriptionCreateOutput.setValue("Description:");
-        htmlPanelGrid.getChildren().add(descriptionCreateOutput);
+        OutputLabel projectCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        projectCreateOutput.setFor("projectCreateInput");
+        projectCreateOutput.setId("projectCreateOutput");
+        projectCreateOutput.setValue("Project:");
+        htmlPanelGrid.getChildren().add(projectCreateOutput);
         
-        InputTextarea descriptionCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        descriptionCreateInput.setId("descriptionCreateInput");
-        descriptionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.description}", String.class));
-        LengthValidator descriptionCreateInputValidator = new LengthValidator();
-        descriptionCreateInputValidator.setMaximum(250);
-        descriptionCreateInput.addValidator(descriptionCreateInputValidator);
-        descriptionCreateInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(descriptionCreateInput);
+        AutoComplete projectCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        projectCreateInput.setId("projectCreateInput");
+        projectCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.project}", JJProject.class));
+        projectCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRightBean.completeProject}", List.class, new Class[] { String.class }));
+        projectCreateInput.setDropdown(true);
+        projectCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "project", String.class));
+        projectCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{project.name} #{project.description} #{project.creationDate} #{project.updatedDate}", String.class));
+        projectCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{project}", JJProject.class));
+        projectCreateInput.setConverter(new JJProjectConverter());
+        projectCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(projectCreateInput);
         
-        Message descriptionCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        descriptionCreateInputMessage.setId("descriptionCreateInputMessage");
-        descriptionCreateInputMessage.setFor("descriptionCreateInput");
-        descriptionCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(descriptionCreateInputMessage);
+        Message projectCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        projectCreateInputMessage.setId("projectCreateInputMessage");
+        projectCreateInputMessage.setFor("projectCreateInput");
+        projectCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(projectCreateInputMessage);
         
-        OutputLabel creationDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        creationDateCreateOutput.setFor("creationDateCreateInput");
-        creationDateCreateOutput.setId("creationDateCreateOutput");
-        creationDateCreateOutput.setValue("Creation Date:");
-        htmlPanelGrid.getChildren().add(creationDateCreateOutput);
+        OutputLabel productCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        productCreateOutput.setFor("productCreateInput");
+        productCreateOutput.setId("productCreateOutput");
+        productCreateOutput.setValue("Product:");
+        htmlPanelGrid.getChildren().add(productCreateOutput);
         
-        Calendar creationDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
-        creationDateCreateInput.setId("creationDateCreateInput");
-        creationDateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.creationDate}", Date.class));
-        creationDateCreateInput.setNavigator(true);
-        creationDateCreateInput.setEffect("slideDown");
-        creationDateCreateInput.setPattern("dd/MM/yyyy");
-        creationDateCreateInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(creationDateCreateInput);
+        AutoComplete productCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        productCreateInput.setId("productCreateInput");
+        productCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.product}", JJProduct.class));
+        productCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRightBean.completeProduct}", List.class, new Class[] { String.class }));
+        productCreateInput.setDropdown(true);
+        productCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "product", String.class));
+        productCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{product.name} #{product.description} #{product.creationDate} #{product.updatedDate}", String.class));
+        productCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{product}", JJProduct.class));
+        productCreateInput.setConverter(new JJProductConverter());
+        productCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(productCreateInput);
         
-        Message creationDateCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        creationDateCreateInputMessage.setId("creationDateCreateInputMessage");
-        creationDateCreateInputMessage.setFor("creationDateCreateInput");
-        creationDateCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(creationDateCreateInputMessage);
+        Message productCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        productCreateInputMessage.setId("productCreateInputMessage");
+        productCreateInputMessage.setFor("productCreateInput");
+        productCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(productCreateInputMessage);
         
-        OutputLabel createdByCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        createdByCreateOutput.setFor("createdByCreateInput");
-        createdByCreateOutput.setId("createdByCreateOutput");
-        createdByCreateOutput.setValue("Created By:");
-        htmlPanelGrid.getChildren().add(createdByCreateOutput);
+        OutputLabel categoryCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        categoryCreateOutput.setFor("categoryCreateInput");
+        categoryCreateOutput.setId("categoryCreateOutput");
+        categoryCreateOutput.setValue("Category:");
+        htmlPanelGrid.getChildren().add(categoryCreateOutput);
         
-        AutoComplete createdByCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        createdByCreateInput.setId("createdByCreateInput");
-        createdByCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.createdBy}", JJContact.class));
-        createdByCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRightBean.completeCreatedBy}", List.class, new Class[] { String.class }));
-        createdByCreateInput.setDropdown(true);
-        createdByCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "createdBy", String.class));
-        createdByCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{createdBy.name} #{createdBy.description} #{createdBy.creationDate} #{createdBy.updatedDate}", String.class));
-        createdByCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{createdBy}", JJContact.class));
-        createdByCreateInput.setConverter(new JJContactConverter());
-        createdByCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(createdByCreateInput);
+        AutoComplete categoryCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        categoryCreateInput.setId("categoryCreateInput");
+        categoryCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.category}", JJCategory.class));
+        categoryCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRightBean.completeCategory}", List.class, new Class[] { String.class }));
+        categoryCreateInput.setDropdown(true);
+        categoryCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "category", String.class));
+        categoryCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{category.name} #{category.description} #{category.creationDate} #{category.updatedDate}", String.class));
+        categoryCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{category}", JJCategory.class));
+        categoryCreateInput.setConverter(new JJCategoryConverter());
+        categoryCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(categoryCreateInput);
         
-        Message createdByCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        createdByCreateInputMessage.setId("createdByCreateInputMessage");
-        createdByCreateInputMessage.setFor("createdByCreateInput");
-        createdByCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(createdByCreateInputMessage);
+        Message categoryCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        categoryCreateInputMessage.setId("categoryCreateInputMessage");
+        categoryCreateInputMessage.setFor("categoryCreateInput");
+        categoryCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(categoryCreateInputMessage);
         
-        OutputLabel updatedDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        updatedDateCreateOutput.setFor("updatedDateCreateInput");
-        updatedDateCreateOutput.setId("updatedDateCreateOutput");
-        updatedDateCreateOutput.setValue("Updated Date:");
-        htmlPanelGrid.getChildren().add(updatedDateCreateOutput);
+        OutputLabel rCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        rCreateOutput.setFor("rCreateInput");
+        rCreateOutput.setId("rCreateOutput");
+        rCreateOutput.setValue("R:");
+        htmlPanelGrid.getChildren().add(rCreateOutput);
         
-        Calendar updatedDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
-        updatedDateCreateInput.setId("updatedDateCreateInput");
-        updatedDateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.updatedDate}", Date.class));
-        updatedDateCreateInput.setNavigator(true);
-        updatedDateCreateInput.setEffect("slideDown");
-        updatedDateCreateInput.setPattern("dd/MM/yyyy");
-        updatedDateCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(updatedDateCreateInput);
+        SelectBooleanCheckbox rCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        rCreateInput.setId("rCreateInput");
+        rCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.r}", Boolean.class));
+        rCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(rCreateInput);
         
-        Message updatedDateCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        updatedDateCreateInputMessage.setId("updatedDateCreateInputMessage");
-        updatedDateCreateInputMessage.setFor("updatedDateCreateInput");
-        updatedDateCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(updatedDateCreateInputMessage);
+        Message rCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        rCreateInputMessage.setId("rCreateInputMessage");
+        rCreateInputMessage.setFor("rCreateInput");
+        rCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(rCreateInputMessage);
         
-        OutputLabel updatedByCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        updatedByCreateOutput.setFor("updatedByCreateInput");
-        updatedByCreateOutput.setId("updatedByCreateOutput");
-        updatedByCreateOutput.setValue("Updated By:");
-        htmlPanelGrid.getChildren().add(updatedByCreateOutput);
+        OutputLabel wCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        wCreateOutput.setFor("wCreateInput");
+        wCreateOutput.setId("wCreateOutput");
+        wCreateOutput.setValue("W:");
+        htmlPanelGrid.getChildren().add(wCreateOutput);
         
-        AutoComplete updatedByCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        updatedByCreateInput.setId("updatedByCreateInput");
-        updatedByCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.updatedBy}", JJContact.class));
-        updatedByCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRightBean.completeUpdatedBy}", List.class, new Class[] { String.class }));
-        updatedByCreateInput.setDropdown(true);
-        updatedByCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "updatedBy", String.class));
-        updatedByCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{updatedBy.name} #{updatedBy.description} #{updatedBy.creationDate} #{updatedBy.updatedDate}", String.class));
-        updatedByCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{updatedBy}", JJContact.class));
-        updatedByCreateInput.setConverter(new JJContactConverter());
-        updatedByCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(updatedByCreateInput);
+        SelectBooleanCheckbox wCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        wCreateInput.setId("wCreateInput");
+        wCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.w}", Boolean.class));
+        wCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(wCreateInput);
         
-        Message updatedByCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        updatedByCreateInputMessage.setId("updatedByCreateInputMessage");
-        updatedByCreateInputMessage.setFor("updatedByCreateInput");
-        updatedByCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(updatedByCreateInputMessage);
+        Message wCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        wCreateInputMessage.setId("wCreateInputMessage");
+        wCreateInputMessage.setFor("wCreateInput");
+        wCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(wCreateInputMessage);
         
-        OutputLabel enabledCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        enabledCreateOutput.setFor("enabledCreateInput");
-        enabledCreateOutput.setId("enabledCreateOutput");
-        enabledCreateOutput.setValue("Enabled:");
-        htmlPanelGrid.getChildren().add(enabledCreateOutput);
+        OutputLabel xCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        xCreateOutput.setFor("xCreateInput");
+        xCreateOutput.setId("xCreateOutput");
+        xCreateOutput.setValue("X:");
+        htmlPanelGrid.getChildren().add(xCreateOutput);
         
-        SelectBooleanCheckbox enabledCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
-        enabledCreateInput.setId("enabledCreateInput");
-        enabledCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.enabled}", Boolean.class));
-        enabledCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(enabledCreateInput);
+        SelectBooleanCheckbox xCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        xCreateInput.setId("xCreateInput");
+        xCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.x}", Boolean.class));
+        xCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(xCreateInput);
         
-        Message enabledCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        enabledCreateInputMessage.setId("enabledCreateInputMessage");
-        enabledCreateInputMessage.setFor("enabledCreateInput");
-        enabledCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
+        Message xCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        xCreateInputMessage.setId("xCreateInputMessage");
+        xCreateInputMessage.setFor("xCreateInput");
+        xCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(xCreateInputMessage);
+        
+        HtmlOutputText profilesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        profilesCreateOutput.setId("profilesCreateOutput");
+        profilesCreateOutput.setValue("Profiles:");
+        htmlPanelGrid.getChildren().add(profilesCreateOutput);
+        
+        HtmlOutputText profilesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        profilesCreateInput.setId("profilesCreateInput");
+        profilesCreateInput.setValue("This relationship is managed from the JJProfile side");
+        htmlPanelGrid.getChildren().add(profilesCreateInput);
+        
+        Message profilesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        profilesCreateInputMessage.setId("profilesCreateInputMessage");
+        profilesCreateInputMessage.setFor("profilesCreateInput");
+        profilesCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(profilesCreateInputMessage);
+        
+        OutputLabel basicCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        basicCreateOutput.setFor("basicCreateInput");
+        basicCreateOutput.setId("basicCreateOutput");
+        basicCreateOutput.setValue("Basic:");
+        htmlPanelGrid.getChildren().add(basicCreateOutput);
+        
+        SelectBooleanCheckbox basicCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        basicCreateInput.setId("basicCreateInput");
+        basicCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.basic}", Boolean.class));
+        basicCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(basicCreateInput);
+        
+        Message basicCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        basicCreateInputMessage.setId("basicCreateInputMessage");
+        basicCreateInputMessage.setFor("basicCreateInput");
+        basicCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(basicCreateInputMessage);
         
         return htmlPanelGrid;
     }
@@ -303,155 +349,189 @@ privileged aspect JJRightBean_Roo_ManagedBean {
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
         
-        OutputLabel nameEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        nameEditOutput.setFor("nameEditInput");
-        nameEditOutput.setId("nameEditOutput");
-        nameEditOutput.setValue("Name:");
-        htmlPanelGrid.getChildren().add(nameEditOutput);
+        OutputLabel permissionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        permissionEditOutput.setFor("permissionEditInput");
+        permissionEditOutput.setId("permissionEditOutput");
+        permissionEditOutput.setValue("Permission:");
+        htmlPanelGrid.getChildren().add(permissionEditOutput);
         
-        InputText nameEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
-        nameEditInput.setId("nameEditInput");
-        nameEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.name}", String.class));
-        LengthValidator nameEditInputValidator = new LengthValidator();
-        nameEditInputValidator.setMaximum(25);
-        nameEditInput.addValidator(nameEditInputValidator);
-        nameEditInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(nameEditInput);
+        AutoComplete permissionEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        permissionEditInput.setId("permissionEditInput");
+        permissionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.permission}", JJPermission.class));
+        permissionEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRightBean.completePermission}", List.class, new Class[] { String.class }));
+        permissionEditInput.setDropdown(true);
+        permissionEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "permission", String.class));
+        permissionEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{permission.permission}", String.class));
+        permissionEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{permission}", JJPermission.class));
+        permissionEditInput.setConverter(new JJPermissionConverter());
+        permissionEditInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(permissionEditInput);
         
-        Message nameEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        nameEditInputMessage.setId("nameEditInputMessage");
-        nameEditInputMessage.setFor("nameEditInput");
-        nameEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(nameEditInputMessage);
+        Message permissionEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        permissionEditInputMessage.setId("permissionEditInputMessage");
+        permissionEditInputMessage.setFor("permissionEditInput");
+        permissionEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(permissionEditInputMessage);
         
-        OutputLabel descriptionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        descriptionEditOutput.setFor("descriptionEditInput");
-        descriptionEditOutput.setId("descriptionEditOutput");
-        descriptionEditOutput.setValue("Description:");
-        htmlPanelGrid.getChildren().add(descriptionEditOutput);
+        OutputLabel projectEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        projectEditOutput.setFor("projectEditInput");
+        projectEditOutput.setId("projectEditOutput");
+        projectEditOutput.setValue("Project:");
+        htmlPanelGrid.getChildren().add(projectEditOutput);
         
-        InputTextarea descriptionEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        descriptionEditInput.setId("descriptionEditInput");
-        descriptionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.description}", String.class));
-        LengthValidator descriptionEditInputValidator = new LengthValidator();
-        descriptionEditInputValidator.setMaximum(250);
-        descriptionEditInput.addValidator(descriptionEditInputValidator);
-        descriptionEditInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(descriptionEditInput);
+        AutoComplete projectEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        projectEditInput.setId("projectEditInput");
+        projectEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.project}", JJProject.class));
+        projectEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRightBean.completeProject}", List.class, new Class[] { String.class }));
+        projectEditInput.setDropdown(true);
+        projectEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "project", String.class));
+        projectEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{project.name} #{project.description} #{project.creationDate} #{project.updatedDate}", String.class));
+        projectEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{project}", JJProject.class));
+        projectEditInput.setConverter(new JJProjectConverter());
+        projectEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(projectEditInput);
         
-        Message descriptionEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        descriptionEditInputMessage.setId("descriptionEditInputMessage");
-        descriptionEditInputMessage.setFor("descriptionEditInput");
-        descriptionEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(descriptionEditInputMessage);
+        Message projectEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        projectEditInputMessage.setId("projectEditInputMessage");
+        projectEditInputMessage.setFor("projectEditInput");
+        projectEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(projectEditInputMessage);
         
-        OutputLabel creationDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        creationDateEditOutput.setFor("creationDateEditInput");
-        creationDateEditOutput.setId("creationDateEditOutput");
-        creationDateEditOutput.setValue("Creation Date:");
-        htmlPanelGrid.getChildren().add(creationDateEditOutput);
+        OutputLabel productEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        productEditOutput.setFor("productEditInput");
+        productEditOutput.setId("productEditOutput");
+        productEditOutput.setValue("Product:");
+        htmlPanelGrid.getChildren().add(productEditOutput);
         
-        Calendar creationDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
-        creationDateEditInput.setId("creationDateEditInput");
-        creationDateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.creationDate}", Date.class));
-        creationDateEditInput.setNavigator(true);
-        creationDateEditInput.setEffect("slideDown");
-        creationDateEditInput.setPattern("dd/MM/yyyy");
-        creationDateEditInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(creationDateEditInput);
+        AutoComplete productEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        productEditInput.setId("productEditInput");
+        productEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.product}", JJProduct.class));
+        productEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRightBean.completeProduct}", List.class, new Class[] { String.class }));
+        productEditInput.setDropdown(true);
+        productEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "product", String.class));
+        productEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{product.name} #{product.description} #{product.creationDate} #{product.updatedDate}", String.class));
+        productEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{product}", JJProduct.class));
+        productEditInput.setConverter(new JJProductConverter());
+        productEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(productEditInput);
         
-        Message creationDateEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        creationDateEditInputMessage.setId("creationDateEditInputMessage");
-        creationDateEditInputMessage.setFor("creationDateEditInput");
-        creationDateEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(creationDateEditInputMessage);
+        Message productEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        productEditInputMessage.setId("productEditInputMessage");
+        productEditInputMessage.setFor("productEditInput");
+        productEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(productEditInputMessage);
         
-        OutputLabel createdByEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        createdByEditOutput.setFor("createdByEditInput");
-        createdByEditOutput.setId("createdByEditOutput");
-        createdByEditOutput.setValue("Created By:");
-        htmlPanelGrid.getChildren().add(createdByEditOutput);
+        OutputLabel categoryEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        categoryEditOutput.setFor("categoryEditInput");
+        categoryEditOutput.setId("categoryEditOutput");
+        categoryEditOutput.setValue("Category:");
+        htmlPanelGrid.getChildren().add(categoryEditOutput);
         
-        AutoComplete createdByEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        createdByEditInput.setId("createdByEditInput");
-        createdByEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.createdBy}", JJContact.class));
-        createdByEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRightBean.completeCreatedBy}", List.class, new Class[] { String.class }));
-        createdByEditInput.setDropdown(true);
-        createdByEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "createdBy", String.class));
-        createdByEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{createdBy.name} #{createdBy.description} #{createdBy.creationDate} #{createdBy.updatedDate}", String.class));
-        createdByEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{createdBy}", JJContact.class));
-        createdByEditInput.setConverter(new JJContactConverter());
-        createdByEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(createdByEditInput);
+        AutoComplete categoryEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        categoryEditInput.setId("categoryEditInput");
+        categoryEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.category}", JJCategory.class));
+        categoryEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRightBean.completeCategory}", List.class, new Class[] { String.class }));
+        categoryEditInput.setDropdown(true);
+        categoryEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "category", String.class));
+        categoryEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{category.name} #{category.description} #{category.creationDate} #{category.updatedDate}", String.class));
+        categoryEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{category}", JJCategory.class));
+        categoryEditInput.setConverter(new JJCategoryConverter());
+        categoryEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(categoryEditInput);
         
-        Message createdByEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        createdByEditInputMessage.setId("createdByEditInputMessage");
-        createdByEditInputMessage.setFor("createdByEditInput");
-        createdByEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(createdByEditInputMessage);
+        Message categoryEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        categoryEditInputMessage.setId("categoryEditInputMessage");
+        categoryEditInputMessage.setFor("categoryEditInput");
+        categoryEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(categoryEditInputMessage);
         
-        OutputLabel updatedDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        updatedDateEditOutput.setFor("updatedDateEditInput");
-        updatedDateEditOutput.setId("updatedDateEditOutput");
-        updatedDateEditOutput.setValue("Updated Date:");
-        htmlPanelGrid.getChildren().add(updatedDateEditOutput);
+        OutputLabel rEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        rEditOutput.setFor("rEditInput");
+        rEditOutput.setId("rEditOutput");
+        rEditOutput.setValue("R:");
+        htmlPanelGrid.getChildren().add(rEditOutput);
         
-        Calendar updatedDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
-        updatedDateEditInput.setId("updatedDateEditInput");
-        updatedDateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.updatedDate}", Date.class));
-        updatedDateEditInput.setNavigator(true);
-        updatedDateEditInput.setEffect("slideDown");
-        updatedDateEditInput.setPattern("dd/MM/yyyy");
-        updatedDateEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(updatedDateEditInput);
+        SelectBooleanCheckbox rEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        rEditInput.setId("rEditInput");
+        rEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.r}", Boolean.class));
+        rEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(rEditInput);
         
-        Message updatedDateEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        updatedDateEditInputMessage.setId("updatedDateEditInputMessage");
-        updatedDateEditInputMessage.setFor("updatedDateEditInput");
-        updatedDateEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(updatedDateEditInputMessage);
+        Message rEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        rEditInputMessage.setId("rEditInputMessage");
+        rEditInputMessage.setFor("rEditInput");
+        rEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(rEditInputMessage);
         
-        OutputLabel updatedByEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        updatedByEditOutput.setFor("updatedByEditInput");
-        updatedByEditOutput.setId("updatedByEditOutput");
-        updatedByEditOutput.setValue("Updated By:");
-        htmlPanelGrid.getChildren().add(updatedByEditOutput);
+        OutputLabel wEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        wEditOutput.setFor("wEditInput");
+        wEditOutput.setId("wEditOutput");
+        wEditOutput.setValue("W:");
+        htmlPanelGrid.getChildren().add(wEditOutput);
         
-        AutoComplete updatedByEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        updatedByEditInput.setId("updatedByEditInput");
-        updatedByEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.updatedBy}", JJContact.class));
-        updatedByEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRightBean.completeUpdatedBy}", List.class, new Class[] { String.class }));
-        updatedByEditInput.setDropdown(true);
-        updatedByEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "updatedBy", String.class));
-        updatedByEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{updatedBy.name} #{updatedBy.description} #{updatedBy.creationDate} #{updatedBy.updatedDate}", String.class));
-        updatedByEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{updatedBy}", JJContact.class));
-        updatedByEditInput.setConverter(new JJContactConverter());
-        updatedByEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(updatedByEditInput);
+        SelectBooleanCheckbox wEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        wEditInput.setId("wEditInput");
+        wEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.w}", Boolean.class));
+        wEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(wEditInput);
         
-        Message updatedByEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        updatedByEditInputMessage.setId("updatedByEditInputMessage");
-        updatedByEditInputMessage.setFor("updatedByEditInput");
-        updatedByEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(updatedByEditInputMessage);
+        Message wEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        wEditInputMessage.setId("wEditInputMessage");
+        wEditInputMessage.setFor("wEditInput");
+        wEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(wEditInputMessage);
         
-        OutputLabel enabledEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        enabledEditOutput.setFor("enabledEditInput");
-        enabledEditOutput.setId("enabledEditOutput");
-        enabledEditOutput.setValue("Enabled:");
-        htmlPanelGrid.getChildren().add(enabledEditOutput);
+        OutputLabel xEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        xEditOutput.setFor("xEditInput");
+        xEditOutput.setId("xEditOutput");
+        xEditOutput.setValue("X:");
+        htmlPanelGrid.getChildren().add(xEditOutput);
         
-        SelectBooleanCheckbox enabledEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
-        enabledEditInput.setId("enabledEditInput");
-        enabledEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.enabled}", Boolean.class));
-        enabledEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(enabledEditInput);
+        SelectBooleanCheckbox xEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        xEditInput.setId("xEditInput");
+        xEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.x}", Boolean.class));
+        xEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(xEditInput);
         
-        Message enabledEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        enabledEditInputMessage.setId("enabledEditInputMessage");
-        enabledEditInputMessage.setFor("enabledEditInput");
-        enabledEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(enabledEditInputMessage);
+        Message xEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        xEditInputMessage.setId("xEditInputMessage");
+        xEditInputMessage.setFor("xEditInput");
+        xEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(xEditInputMessage);
+        
+        HtmlOutputText profilesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        profilesEditOutput.setId("profilesEditOutput");
+        profilesEditOutput.setValue("Profiles:");
+        htmlPanelGrid.getChildren().add(profilesEditOutput);
+        
+        HtmlOutputText profilesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        profilesEditInput.setId("profilesEditInput");
+        profilesEditInput.setValue("This relationship is managed from the JJProfile side");
+        htmlPanelGrid.getChildren().add(profilesEditInput);
+        
+        Message profilesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        profilesEditInputMessage.setId("profilesEditInputMessage");
+        profilesEditInputMessage.setFor("profilesEditInput");
+        profilesEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(profilesEditInputMessage);
+        
+        OutputLabel basicEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        basicEditOutput.setFor("basicEditInput");
+        basicEditOutput.setId("basicEditOutput");
+        basicEditOutput.setValue("Basic:");
+        htmlPanelGrid.getChildren().add(basicEditOutput);
+        
+        SelectBooleanCheckbox basicEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        basicEditInput.setId("basicEditInput");
+        basicEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.basic}", Boolean.class));
+        basicEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(basicEditInput);
+        
+        Message basicEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        basicEditInputMessage.setId("basicEditInputMessage");
+        basicEditInputMessage.setFor("basicEditInput");
+        basicEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(basicEditInputMessage);
         
         return htmlPanelGrid;
     }
@@ -464,80 +544,91 @@ privileged aspect JJRightBean_Roo_ManagedBean {
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
         
-        HtmlOutputText nameLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        nameLabel.setId("nameLabel");
-        nameLabel.setValue("Name:");
-        htmlPanelGrid.getChildren().add(nameLabel);
+        HtmlOutputText permissionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        permissionLabel.setId("permissionLabel");
+        permissionLabel.setValue("Permission:");
+        htmlPanelGrid.getChildren().add(permissionLabel);
         
-        HtmlOutputText nameValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        nameValue.setId("nameValue");
-        nameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.name}", String.class));
-        htmlPanelGrid.getChildren().add(nameValue);
+        HtmlOutputText permissionValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        permissionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.permission}", JJPermission.class));
+        permissionValue.setConverter(new JJPermissionConverter());
+        htmlPanelGrid.getChildren().add(permissionValue);
         
-        HtmlOutputText descriptionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        descriptionLabel.setId("descriptionLabel");
-        descriptionLabel.setValue("Description:");
-        htmlPanelGrid.getChildren().add(descriptionLabel);
+        HtmlOutputText projectLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        projectLabel.setId("projectLabel");
+        projectLabel.setValue("Project:");
+        htmlPanelGrid.getChildren().add(projectLabel);
         
-        InputTextarea descriptionValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        descriptionValue.setId("descriptionValue");
-        descriptionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.description}", String.class));
-        descriptionValue.setReadonly(true);
-        descriptionValue.setDisabled(true);
-        htmlPanelGrid.getChildren().add(descriptionValue);
+        HtmlOutputText projectValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        projectValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.project}", JJProject.class));
+        projectValue.setConverter(new JJProjectConverter());
+        htmlPanelGrid.getChildren().add(projectValue);
         
-        HtmlOutputText creationDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        creationDateLabel.setId("creationDateLabel");
-        creationDateLabel.setValue("Creation Date:");
-        htmlPanelGrid.getChildren().add(creationDateLabel);
+        HtmlOutputText productLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        productLabel.setId("productLabel");
+        productLabel.setValue("Product:");
+        htmlPanelGrid.getChildren().add(productLabel);
         
-        HtmlOutputText creationDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        creationDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.creationDate}", Date.class));
-        DateTimeConverter creationDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
-        creationDateValueConverter.setPattern("dd/MM/yyyy");
-        creationDateValue.setConverter(creationDateValueConverter);
-        htmlPanelGrid.getChildren().add(creationDateValue);
+        HtmlOutputText productValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        productValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.product}", JJProduct.class));
+        productValue.setConverter(new JJProductConverter());
+        htmlPanelGrid.getChildren().add(productValue);
         
-        HtmlOutputText createdByLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        createdByLabel.setId("createdByLabel");
-        createdByLabel.setValue("Created By:");
-        htmlPanelGrid.getChildren().add(createdByLabel);
+        HtmlOutputText categoryLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        categoryLabel.setId("categoryLabel");
+        categoryLabel.setValue("Category:");
+        htmlPanelGrid.getChildren().add(categoryLabel);
         
-        HtmlOutputText createdByValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        createdByValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.createdBy}", JJContact.class));
-        createdByValue.setConverter(new JJContactConverter());
-        htmlPanelGrid.getChildren().add(createdByValue);
+        HtmlOutputText categoryValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        categoryValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.category}", JJCategory.class));
+        categoryValue.setConverter(new JJCategoryConverter());
+        htmlPanelGrid.getChildren().add(categoryValue);
         
-        HtmlOutputText updatedDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        updatedDateLabel.setId("updatedDateLabel");
-        updatedDateLabel.setValue("Updated Date:");
-        htmlPanelGrid.getChildren().add(updatedDateLabel);
+        HtmlOutputText rLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        rLabel.setId("rLabel");
+        rLabel.setValue("R:");
+        htmlPanelGrid.getChildren().add(rLabel);
         
-        HtmlOutputText updatedDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        updatedDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.updatedDate}", Date.class));
-        DateTimeConverter updatedDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
-        updatedDateValueConverter.setPattern("dd/MM/yyyy");
-        updatedDateValue.setConverter(updatedDateValueConverter);
-        htmlPanelGrid.getChildren().add(updatedDateValue);
+        HtmlOutputText rValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        rValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.r}", String.class));
+        htmlPanelGrid.getChildren().add(rValue);
         
-        HtmlOutputText updatedByLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        updatedByLabel.setId("updatedByLabel");
-        updatedByLabel.setValue("Updated By:");
-        htmlPanelGrid.getChildren().add(updatedByLabel);
+        HtmlOutputText wLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        wLabel.setId("wLabel");
+        wLabel.setValue("W:");
+        htmlPanelGrid.getChildren().add(wLabel);
         
-        HtmlOutputText updatedByValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        updatedByValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.updatedBy}", JJContact.class));
-        updatedByValue.setConverter(new JJContactConverter());
-        htmlPanelGrid.getChildren().add(updatedByValue);
+        HtmlOutputText wValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        wValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.w}", String.class));
+        htmlPanelGrid.getChildren().add(wValue);
         
-        HtmlOutputText enabledLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        enabledLabel.setId("enabledLabel");
-        enabledLabel.setValue("Enabled:");
-        htmlPanelGrid.getChildren().add(enabledLabel);
+        HtmlOutputText xLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        xLabel.setId("xLabel");
+        xLabel.setValue("X:");
+        htmlPanelGrid.getChildren().add(xLabel);
         
-        HtmlOutputText enabledValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.enabled}", String.class));
-        htmlPanelGrid.getChildren().add(enabledValue);
+        HtmlOutputText xValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        xValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.x}", String.class));
+        htmlPanelGrid.getChildren().add(xValue);
+        
+        HtmlOutputText profilesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        profilesLabel.setId("profilesLabel");
+        profilesLabel.setValue("Profiles:");
+        htmlPanelGrid.getChildren().add(profilesLabel);
+        
+        HtmlOutputText profilesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        profilesValue.setId("profilesValue");
+        profilesValue.setValue("This relationship is managed from the JJProfile side");
+        htmlPanelGrid.getChildren().add(profilesValue);
+        
+        HtmlOutputText basicLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        basicLabel.setId("basicLabel");
+        basicLabel.setValue("Basic:");
+        htmlPanelGrid.getChildren().add(basicLabel);
+        
+        HtmlOutputText basicValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        basicValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.basic}", String.class));
+        htmlPanelGrid.getChildren().add(basicValue);
         
         return htmlPanelGrid;
     }
@@ -553,29 +644,65 @@ privileged aspect JJRightBean_Roo_ManagedBean {
         this.JJRight_ = JJRight_;
     }
     
-    public List<JJContact> JJRightBean.completeCreatedBy(String query) {
-        List<JJContact> suggestions = new ArrayList<JJContact>();
-        for (JJContact jJContact : jJContactService.findAllJJContacts()) {
-            String jJContactStr = String.valueOf(jJContact.getName() +  " "  + jJContact.getDescription() +  " "  + jJContact.getCreationDate() +  " "  + jJContact.getUpdatedDate());
-            if (jJContactStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJContact);
+    public List<JJPermission> JJRightBean.completePermission(String query) {
+        List<JJPermission> suggestions = new ArrayList<JJPermission>();
+        for (JJPermission jJPermission : jJPermissionService.findAllJJPermissions()) {
+            String jJPermissionStr = String.valueOf(jJPermission.getPermission());
+            if (jJPermissionStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJPermission);
             }
         }
         return suggestions;
     }
     
-    public List<JJContact> JJRightBean.completeUpdatedBy(String query) {
-        List<JJContact> suggestions = new ArrayList<JJContact>();
-        for (JJContact jJContact : jJContactService.findAllJJContacts()) {
-            String jJContactStr = String.valueOf(jJContact.getName() +  " "  + jJContact.getDescription() +  " "  + jJContact.getCreationDate() +  " "  + jJContact.getUpdatedDate());
-            if (jJContactStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJContact);
+    public List<JJProject> JJRightBean.completeProject(String query) {
+        List<JJProject> suggestions = new ArrayList<JJProject>();
+        for (JJProject jJProject : jJProjectService.findAllJJProjects()) {
+            String jJProjectStr = String.valueOf(jJProject.getName() +  " "  + jJProject.getDescription() +  " "  + jJProject.getCreationDate() +  " "  + jJProject.getUpdatedDate());
+            if (jJProjectStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJProject);
             }
         }
         return suggestions;
+    }
+    
+    public List<JJProduct> JJRightBean.completeProduct(String query) {
+        List<JJProduct> suggestions = new ArrayList<JJProduct>();
+        for (JJProduct jJProduct : jJProductService.findAllJJProducts()) {
+            String jJProductStr = String.valueOf(jJProduct.getName() +  " "  + jJProduct.getDescription() +  " "  + jJProduct.getCreationDate() +  " "  + jJProduct.getUpdatedDate());
+            if (jJProductStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJProduct);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJCategory> JJRightBean.completeCategory(String query) {
+        List<JJCategory> suggestions = new ArrayList<JJCategory>();
+        for (JJCategory jJCategory : jJCategoryService.findAllJJCategorys()) {
+            String jJCategoryStr = String.valueOf(jJCategory.getName() +  " "  + jJCategory.getDescription() +  " "  + jJCategory.getCreationDate() +  " "  + jJCategory.getUpdatedDate());
+            if (jJCategoryStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJCategory);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJProfile> JJRightBean.getSelectedProfiles() {
+        return selectedProfiles;
+    }
+    
+    public void JJRightBean.setSelectedProfiles(List<JJProfile> selectedProfiles) {
+        if (selectedProfiles != null) {
+            JJRight_.setProfiles(new HashSet<JJProfile>(selectedProfiles));
+        }
+        this.selectedProfiles = selectedProfiles;
     }
     
     public String JJRightBean.onEdit() {
+        if (JJRight_ != null && JJRight_.getProfiles() != null) {
+            selectedProfiles = new ArrayList<JJProfile>(JJRight_.getProfiles());
+        }
         return null;
     }
     
@@ -628,6 +755,7 @@ privileged aspect JJRightBean_Roo_ManagedBean {
     
     public void JJRightBean.reset() {
         JJRight_ = null;
+        selectedProfiles = null;
         createDialogVisible = false;
     }
     

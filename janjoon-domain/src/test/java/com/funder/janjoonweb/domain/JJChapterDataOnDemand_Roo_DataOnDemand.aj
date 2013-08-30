@@ -56,6 +56,7 @@ privileged aspect JJChapterDataOnDemand_Roo_DataOnDemand {
         setDescription(obj, index);
         setEnabled(obj, index);
         setName(obj, index);
+        setOrdering(obj, index);
         setParent(obj, index);
         setUpdatedDate(obj, index);
         return obj;
@@ -68,8 +69,8 @@ privileged aspect JJChapterDataOnDemand_Roo_DataOnDemand {
     
     public void JJChapterDataOnDemand.setDescription(JJChapter obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 250) {
-            description = description.substring(0, 250);
+        if (description.length() > 500) {
+            description = description.substring(0, 500);
         }
         obj.setDescription(description);
     }
@@ -85,6 +86,11 @@ privileged aspect JJChapterDataOnDemand_Roo_DataOnDemand {
             name = name.substring(0, 25);
         }
         obj.setName(name);
+    }
+    
+    public void JJChapterDataOnDemand.setOrdering(JJChapter obj, int index) {
+        Integer ordering = new Integer(index);
+        obj.setOrdering(ordering);
     }
     
     public void JJChapterDataOnDemand.setParent(JJChapter obj, int index) {

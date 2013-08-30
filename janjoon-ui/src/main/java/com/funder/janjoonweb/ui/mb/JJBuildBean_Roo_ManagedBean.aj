@@ -7,6 +7,7 @@ import com.funder.janjoonweb.domain.JJBuild;
 import com.funder.janjoonweb.domain.JJBuildService;
 import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJContactService;
+import com.funder.janjoonweb.domain.JJMessage;
 import com.funder.janjoonweb.domain.JJTestplan;
 import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.domain.JJVersionService;
@@ -74,6 +75,8 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
     private boolean JJBuildBean.createDialogVisible = false;
     
     private List<JJTestplan> JJBuildBean.selectedTestplans;
+    
+    private List<JJMessage> JJBuildBean.selectedMessages;
     
     @PostConstruct
     public void JJBuildBean.init() {
@@ -183,7 +186,7 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         descriptionCreateInput.setId("descriptionCreateInput");
         descriptionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.description}", String.class));
         LengthValidator descriptionCreateInputValidator = new LengthValidator();
-        descriptionCreateInputValidator.setMaximum(250);
+        descriptionCreateInputValidator.setMaximum(500);
         descriptionCreateInput.addValidator(descriptionCreateInputValidator);
         descriptionCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionCreateInput);
@@ -342,6 +345,22 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         testplansCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testplansCreateInputMessage);
         
+        HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesCreateOutput.setId("messagesCreateOutput");
+        messagesCreateOutput.setValue("Messages:");
+        htmlPanelGrid.getChildren().add(messagesCreateOutput);
+        
+        HtmlOutputText messagesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesCreateInput.setId("messagesCreateInput");
+        messagesCreateInput.setValue("This relationship is managed from the JJMessage side");
+        htmlPanelGrid.getChildren().add(messagesCreateInput);
+        
+        Message messagesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        messagesCreateInputMessage.setId("messagesCreateInputMessage");
+        messagesCreateInputMessage.setFor("messagesCreateInput");
+        messagesCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(messagesCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -384,7 +403,7 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         descriptionEditInput.setId("descriptionEditInput");
         descriptionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.description}", String.class));
         LengthValidator descriptionEditInputValidator = new LengthValidator();
-        descriptionEditInputValidator.setMaximum(250);
+        descriptionEditInputValidator.setMaximum(500);
         descriptionEditInput.addValidator(descriptionEditInputValidator);
         descriptionEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionEditInput);
@@ -543,6 +562,22 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         testplansEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testplansEditInputMessage);
         
+        HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesEditOutput.setId("messagesEditOutput");
+        messagesEditOutput.setValue("Messages:");
+        htmlPanelGrid.getChildren().add(messagesEditOutput);
+        
+        HtmlOutputText messagesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesEditInput.setId("messagesEditInput");
+        messagesEditInput.setValue("This relationship is managed from the JJMessage side");
+        htmlPanelGrid.getChildren().add(messagesEditInput);
+        
+        Message messagesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        messagesEditInputMessage.setId("messagesEditInputMessage");
+        messagesEditInputMessage.setFor("messagesEditInput");
+        messagesEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(messagesEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -649,6 +684,16 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         testplansValue.setValue("This relationship is managed from the JJTestplan side");
         htmlPanelGrid.getChildren().add(testplansValue);
         
+        HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesLabel.setId("messagesLabel");
+        messagesLabel.setValue("Messages:");
+        htmlPanelGrid.getChildren().add(messagesLabel);
+        
+        HtmlOutputText messagesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesValue.setId("messagesValue");
+        messagesValue.setValue("This relationship is managed from the JJMessage side");
+        htmlPanelGrid.getChildren().add(messagesValue);
+        
         return htmlPanelGrid;
     }
     
@@ -707,9 +752,23 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         this.selectedTestplans = selectedTestplans;
     }
     
+    public List<JJMessage> JJBuildBean.getSelectedMessages() {
+        return selectedMessages;
+    }
+    
+    public void JJBuildBean.setSelectedMessages(List<JJMessage> selectedMessages) {
+        if (selectedMessages != null) {
+            JJBuild_.setMessages(new HashSet<JJMessage>(selectedMessages));
+        }
+        this.selectedMessages = selectedMessages;
+    }
+    
     public String JJBuildBean.onEdit() {
         if (JJBuild_ != null && JJBuild_.getTestplans() != null) {
             selectedTestplans = new ArrayList<JJTestplan>(JJBuild_.getTestplans());
+        }
+        if (JJBuild_ != null && JJBuild_.getMessages() != null) {
+            selectedMessages = new ArrayList<JJMessage>(JJBuild_.getMessages());
         }
         return null;
     }
@@ -764,6 +823,7 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
     public void JJBuildBean.reset() {
         JJBuild_ = null;
         selectedTestplans = null;
+        selectedMessages = null;
         createDialogVisible = false;
     }
     

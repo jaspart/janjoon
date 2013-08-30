@@ -101,4 +101,28 @@ privileged aspect JJContact_Roo_JavaBean {
         this.projects = projects;
     }
     
+    public Boolean JJContact.getAccountNonExpired() {
+        return this.accountNonExpired;
+    }
+    
+    public void JJContact.setAccountNonExpired(Boolean accountNonExpired) {
+        this.accountNonExpired = accountNonExpired;
+    }
+    
+    public Boolean JJContact.getCredentialsNonExpired() {
+        return this.credentialsNonExpired;
+    }
+    
+    public void JJContact.setCredentialsNonExpired(Boolean credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
+    }
+    
+    public Boolean JJContact.getAccountNonLocked() {
+        return this.accountNonLocked;
+    }
+    
+    public void JJContact.setAccountNonLocked(Boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+    
 }

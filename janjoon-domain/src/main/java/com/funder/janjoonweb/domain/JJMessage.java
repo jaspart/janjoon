@@ -1,5 +1,4 @@
 package com.funder.janjoonweb.domain;
-
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,4 +23,29 @@ public class JJMessage extends JJAbstractEntity {
 
     @ManyToOne
     private JJImportance importance;
+
+    /**
+     */
+    @ManyToOne
+    private JJSprint sprint;
+
+    /**
+     */
+    @ManyToOne
+    private JJBuild build;
+
+    /**
+     */
+    @ManyToOne
+    private JJTestplan testplan;
+
+    /**
+     */
+    @ManyToOne
+    private JJTeststep teststep;
+
+    /**
+     */
+    @ManyToOne
+    private JJTestcase testcase;
 }

@@ -363,10 +363,10 @@ public class JJRequirementBean {
 				for (JJRequirement req : myBusinessJJRequirements) {
 
 					req = jJRequirementService.findJJRequirement(req.getId());
-					Set<JJRequirement> requirementsUp = new HashSet<JJRequirement>();
-					requirementsUp = req.getRequirementLinkUp();
+					Set<JJRequirement> requirementsDown = new HashSet<JJRequirement>();
+					requirementsDown = req.getRequirementLinkDown();
 					List<JJRequirement> tempList = new ArrayList<JJRequirement>();
-					for (JJRequirement jjRequirement : requirementsUp) {
+					for (JJRequirement jjRequirement : requirementsDown) {
 						if (jjRequirement.getCategory().getName()
 								.equalsIgnoreCase("FUNCTIONAL"))
 							tempList.add(jjRequirement);
@@ -378,10 +378,10 @@ public class JJRequirementBean {
 
 							jjreq = jJRequirementService
 									.findJJRequirement(jjreq.getId());
-							Set<JJRequirement> requirementsDown = new HashSet<JJRequirement>();
-							requirementsDown = jjreq.getRequirementLinkDown();
+							Set<JJRequirement> requirements1Down = new HashSet<JJRequirement>();
+							requirements1Down = jjreq.getRequirementLinkDown();
 							List<JJRequirement> tempList2 = new ArrayList<JJRequirement>();
-							for (JJRequirement jjRequirement : requirementsDown) {
+							for (JJRequirement jjRequirement : requirements1Down) {
 								if (jjRequirement.getCategory().getName()
 										.equalsIgnoreCase("TECHNICAL"))
 									tempList2.add(jjRequirement);
@@ -596,6 +596,24 @@ public class JJRequirementBean {
 		myEditedJJRequirement.setDescription(req.getDescription());
 		myEditedJJRequirement.setName(req.getName());
 		myEditedJJRequirement.setNote(req.getNote());
+
+		// req = jJRequirementService.findJJRequirement(req.getId());
+		//
+		// Set<JJRequirement> requirementsDown = req.getRequirementLinkDown();
+		// System.out
+		// .println("requirementsDown.size() " + requirementsDown.size());
+		// for (JJRequirement jjRequirement : requirementsDown) {
+		// if (jjRequirement.getCategory().getName()
+		// .equalsIgnoreCase("BUSINESS"))
+		// selectedBusinessJJRequirements.add(jjRequirement);
+		// else if (jjRequirement.getCategory().getName()
+		// .equalsIgnoreCase("FUNCTIONAL"))
+		// selectedFunctionalJJRequirements.add(jjRequirement);
+		// else if (jjRequirement.getCategory().getName()
+		// .equalsIgnoreCase("TECHNICAL"))
+		// selectedTechnicalJJRequirements.add(jjRequirement);
+		// }
+
 	}
 
 	public void persistJJRequirement(int index) {
@@ -661,14 +679,14 @@ public class JJRequirementBean {
 			default:
 				break;
 			}
-			
+
 			Set<JJRequirement> requirementsDown = new HashSet<JJRequirement>();
 			List<JJRequirement> tempList = new ArrayList<JJRequirement>();
 
 			if (selectedBusinessJJRequirements.size() > 0) {
 				for (JJRequirement req : selectedBusinessJJRequirements) {
 					req = jJRequirementService.findJJRequirement(req.getId());
-					req.getRequirementLinkUp().add(myEditedJJRequirement);
+					req.getRequirementLinkUp().add(myJJRequirement);
 				}
 				tempList.addAll(tempList.size(), selectedBusinessJJRequirements);
 			}
@@ -676,7 +694,7 @@ public class JJRequirementBean {
 			if (selectedFunctionalJJRequirements.size() > 0) {
 				for (JJRequirement req : selectedFunctionalJJRequirements) {
 					req = jJRequirementService.findJJRequirement(req.getId());
-					req.getRequirementLinkUp().add(myEditedJJRequirement);
+					req.getRequirementLinkUp().add(myJJRequirement);
 				}
 
 				tempList.addAll(tempList.size(),
@@ -686,7 +704,7 @@ public class JJRequirementBean {
 			if (selectedTechnicalJJRequirements.size() > 0) {
 				for (JJRequirement req : selectedTechnicalJJRequirements) {
 					req = jJRequirementService.findJJRequirement(req.getId());
-					req.getRequirementLinkUp().add(myEditedJJRequirement);
+					req.getRequirementLinkUp().add(myJJRequirement);
 				}
 
 				tempList.addAll(tempList.size(),
@@ -694,11 +712,7 @@ public class JJRequirementBean {
 			}
 
 			requirementsDown.addAll(tempList);
-
 			myEditedJJRequirement.setRequirementLinkDown(requirementsDown);
-			
-			
-			
 
 			jJRequirementService.saveJJRequirement(myEditedJJRequirement);
 			findAllJJRequirementsWithCategory(editionColumnNumber);

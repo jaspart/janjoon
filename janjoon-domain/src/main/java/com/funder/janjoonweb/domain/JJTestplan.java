@@ -1,5 +1,4 @@
 package com.funder.janjoonweb.domain;
-
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -26,4 +25,14 @@ public class JJTestplan extends JJAbstractEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testplan")
     private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
+
+    /**
+     */
+    @ManyToOne
+    private JJChapter chapter;
+
+    /**
+     */
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testplan")
+    private Set<JJMessage> messages = new HashSet<JJMessage>();
 }

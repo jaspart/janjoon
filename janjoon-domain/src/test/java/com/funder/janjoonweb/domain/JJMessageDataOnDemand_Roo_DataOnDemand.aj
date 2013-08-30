@@ -3,6 +3,7 @@
 
 package com.funder.janjoonweb.domain;
 
+import com.funder.janjoonweb.domain.JJBuildDataOnDemand;
 import com.funder.janjoonweb.domain.JJContactDataOnDemand;
 import com.funder.janjoonweb.domain.JJCriticityDataOnDemand;
 import com.funder.janjoonweb.domain.JJImportanceDataOnDemand;
@@ -10,7 +11,11 @@ import com.funder.janjoonweb.domain.JJMessage;
 import com.funder.janjoonweb.domain.JJMessageDataOnDemand;
 import com.funder.janjoonweb.domain.JJMessageRepository;
 import com.funder.janjoonweb.domain.JJMessageService;
+import com.funder.janjoonweb.domain.JJSprintDataOnDemand;
 import com.funder.janjoonweb.domain.JJStatusDataOnDemand;
+import com.funder.janjoonweb.domain.JJTestcaseDataOnDemand;
+import com.funder.janjoonweb.domain.JJTestplanDataOnDemand;
+import com.funder.janjoonweb.domain.JJTeststepDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,6 +38,9 @@ privileged aspect JJMessageDataOnDemand_Roo_DataOnDemand {
     private List<JJMessage> JJMessageDataOnDemand.data;
     
     @Autowired
+    JJBuildDataOnDemand JJMessageDataOnDemand.jJBuildDataOnDemand;
+    
+    @Autowired
     JJContactDataOnDemand JJMessageDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
@@ -42,7 +50,19 @@ privileged aspect JJMessageDataOnDemand_Roo_DataOnDemand {
     JJImportanceDataOnDemand JJMessageDataOnDemand.jJImportanceDataOnDemand;
     
     @Autowired
+    JJSprintDataOnDemand JJMessageDataOnDemand.jJSprintDataOnDemand;
+    
+    @Autowired
     JJStatusDataOnDemand JJMessageDataOnDemand.jJStatusDataOnDemand;
+    
+    @Autowired
+    JJTestcaseDataOnDemand JJMessageDataOnDemand.jJTestcaseDataOnDemand;
+    
+    @Autowired
+    JJTestplanDataOnDemand JJMessageDataOnDemand.jJTestplanDataOnDemand;
+    
+    @Autowired
+    JJTeststepDataOnDemand JJMessageDataOnDemand.jJTeststepDataOnDemand;
     
     @Autowired
     JJMessageService JJMessageDataOnDemand.jJMessageService;
@@ -68,8 +88,8 @@ privileged aspect JJMessageDataOnDemand_Roo_DataOnDemand {
     
     public void JJMessageDataOnDemand.setDescription(JJMessage obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 250) {
-            description = description.substring(0, 250);
+        if (description.length() > 500) {
+            description = description.substring(0, 500);
         }
         obj.setDescription(description);
     }

@@ -21,7 +21,7 @@ public abstract class JJAbstractEntity {
     private String name;
 
     @NotNull
-    @Size(max = 250)
+    @Size(max = 500)
     private String description;
 
     @NotNull

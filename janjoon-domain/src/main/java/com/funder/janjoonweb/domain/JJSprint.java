@@ -1,5 +1,4 @@
 package com.funder.janjoonweb.domain;
-
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -28,4 +27,9 @@ public class JJSprint extends JJAbstractEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<JJTask> obstacles = new HashSet<JJTask>();
+
+    /**
+     */
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "sprint")
+    private Set<JJMessage> messages = new HashSet<JJMessage>();
 }

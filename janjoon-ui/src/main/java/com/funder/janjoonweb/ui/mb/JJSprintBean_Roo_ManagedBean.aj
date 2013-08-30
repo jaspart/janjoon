@@ -6,6 +6,7 @@ package com.funder.janjoonweb.ui.mb;
 import com.funder.janjoonweb.domain.JJBuild;
 import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJContactService;
+import com.funder.janjoonweb.domain.JJMessage;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJProjectService;
 import com.funder.janjoonweb.domain.JJSprint;
@@ -80,6 +81,8 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
     private List<JJTask> JJSprintBean.selectedTasks;
     
     private List<JJTask> JJSprintBean.selectedObstacles;
+    
+    private List<JJMessage> JJSprintBean.selectedMessages;
     
     @PostConstruct
     public void JJSprintBean.init() {
@@ -190,7 +193,7 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         descriptionCreateInput.setId("descriptionCreateInput");
         descriptionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJSprintBean.JJSprint_.description}", String.class));
         LengthValidator descriptionCreateInputValidator = new LengthValidator();
-        descriptionCreateInputValidator.setMaximum(250);
+        descriptionCreateInputValidator.setMaximum(500);
         descriptionCreateInput.addValidator(descriptionCreateInputValidator);
         descriptionCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionCreateInput);
@@ -400,6 +403,22 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         obstaclesCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(obstaclesCreateInputMessage);
         
+        HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesCreateOutput.setId("messagesCreateOutput");
+        messagesCreateOutput.setValue("Messages:");
+        htmlPanelGrid.getChildren().add(messagesCreateOutput);
+        
+        HtmlOutputText messagesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesCreateInput.setId("messagesCreateInput");
+        messagesCreateInput.setValue("This relationship is managed from the JJMessage side");
+        htmlPanelGrid.getChildren().add(messagesCreateInput);
+        
+        Message messagesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        messagesCreateInputMessage.setId("messagesCreateInputMessage");
+        messagesCreateInputMessage.setFor("messagesCreateInput");
+        messagesCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(messagesCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -442,7 +461,7 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         descriptionEditInput.setId("descriptionEditInput");
         descriptionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJSprintBean.JJSprint_.description}", String.class));
         LengthValidator descriptionEditInputValidator = new LengthValidator();
-        descriptionEditInputValidator.setMaximum(250);
+        descriptionEditInputValidator.setMaximum(500);
         descriptionEditInput.addValidator(descriptionEditInputValidator);
         descriptionEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionEditInput);
@@ -652,6 +671,22 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         obstaclesEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(obstaclesEditInputMessage);
         
+        HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesEditOutput.setId("messagesEditOutput");
+        messagesEditOutput.setValue("Messages:");
+        htmlPanelGrid.getChildren().add(messagesEditOutput);
+        
+        HtmlOutputText messagesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesEditInput.setId("messagesEditInput");
+        messagesEditInput.setValue("This relationship is managed from the JJMessage side");
+        htmlPanelGrid.getChildren().add(messagesEditInput);
+        
+        Message messagesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        messagesEditInputMessage.setId("messagesEditInputMessage");
+        messagesEditInputMessage.setFor("messagesEditInput");
+        messagesEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(messagesEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -787,6 +822,16 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         obstaclesValue.setValue("This relationship is managed from the JJTask side");
         htmlPanelGrid.getChildren().add(obstaclesValue);
         
+        HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesLabel.setId("messagesLabel");
+        messagesLabel.setValue("Messages:");
+        htmlPanelGrid.getChildren().add(messagesLabel);
+        
+        HtmlOutputText messagesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesValue.setId("messagesValue");
+        messagesValue.setValue("This relationship is managed from the JJMessage side");
+        htmlPanelGrid.getChildren().add(messagesValue);
+        
         return htmlPanelGrid;
     }
     
@@ -867,6 +912,17 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         this.selectedObstacles = selectedObstacles;
     }
     
+    public List<JJMessage> JJSprintBean.getSelectedMessages() {
+        return selectedMessages;
+    }
+    
+    public void JJSprintBean.setSelectedMessages(List<JJMessage> selectedMessages) {
+        if (selectedMessages != null) {
+            JJSprint_.setMessages(new HashSet<JJMessage>(selectedMessages));
+        }
+        this.selectedMessages = selectedMessages;
+    }
+    
     public String JJSprintBean.onEdit() {
         if (JJSprint_ != null && JJSprint_.getBuilds() != null) {
             selectedBuilds = new ArrayList<JJBuild>(JJSprint_.getBuilds());
@@ -876,6 +932,9 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         }
         if (JJSprint_ != null && JJSprint_.getObstacles() != null) {
             selectedObstacles = new ArrayList<JJTask>(JJSprint_.getObstacles());
+        }
+        if (JJSprint_ != null && JJSprint_.getMessages() != null) {
+            selectedMessages = new ArrayList<JJMessage>(JJSprint_.getMessages());
         }
         return null;
     }
@@ -932,6 +991,7 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         selectedBuilds = null;
         selectedTasks = null;
         selectedObstacles = null;
+        selectedMessages = null;
         createDialogVisible = false;
     }
     

@@ -4,8 +4,8 @@
 #######################
 
 focus --class ~.JJConfiguration
-field string --fieldName parameter --sizeMax 25 --notNull
-field string --fieldName value --sizeMax 100 --notNull
+field string --fieldName param --sizeMax 25 --notNull
+field string --fieldName val --sizeMax 100 --notNull
 
 #######################
 
@@ -66,7 +66,7 @@ field reference --fieldName testcase --type ~.JJTestcase
 #######################
 
 focus --class ~.JJPermission
-field string --fieldName object --sizeMax 25 --notNull
+field string --fieldName permission --sizeMax 25 --notNull
 
 #######################
 
@@ -75,16 +75,16 @@ field reference --fieldName permission --type ~.JJPermission --notNull
 field reference --fieldName project --type ~.JJProject
 field reference --fieldName product --type ~.JJProduct
 field reference --fieldName category --type ~.JJCategory
-field boolean --fieldName read
-field boolean --fieldName write
-field boolean --fieldName execute
+field boolean --fieldName r
+field boolean --fieldName w
+field boolean --fieldName x
 field set --fieldName profiles --type ~.JJProfile --cardinality MANY_TO_MANY --mappedBy rights --fetch LAZY
 field boolean --fieldName basic
 
 #######################
 
 focus --class ~.JJProfile
-field set --fieldName rights --type ~.JJRight --cardinality MANY_TO_MANY --mappedBy profiles --fetch LAZY
+field set --fieldName rights --type ~.JJRight --cardinality MANY_TO_MANY --fetch LAZY
 
 #######################
 
@@ -112,6 +112,11 @@ field string --fieldName message --sizeMax 250 --notNull
 field reference --fieldName criticity --type ~.JJCriticity
 field reference --fieldName status --type ~.JJStatus
 field reference --fieldName importance --type ~.JJImportance
+field reference --fieldName sprint --type ~.JJSprint
+field reference --fieldName build --type ~.JJBuild
+field reference --fieldName testplan --type ~.JJTestplan
+field reference --fieldName teststep --type ~.JJTeststep
+field reference --fieldName testcase --type ~.JJTestcase
 
 #######################
 
@@ -166,7 +171,7 @@ field reference --fieldName status --type ~.JJStatus
 field string --fieldName impact --sizeMax 100
 field boolean --fieldName isCompleted
 field enum --fieldName relation --type ~.reference.JJRelationship
-field set --fieldName requirementLinkUp --type ~.JJRequirement --cardinality MANY_TO_MANY --mappedBy requirementLinkDown --fetch LAZY
+field set --fieldName requirementLinkUp --type ~.JJRequirement --cardinality MANY_TO_MANY --fetch LAZY
 field set --fieldName requirementLinkDown --type ~.JJRequirement --cardinality MANY_TO_MANY --mappedBy requirementLinkUp --fetch LAZY
 field set --fieldName bugs --type ~.JJBug --cardinality ONE_TO_MANY --mappedBy requirement --fetch LAZY
 field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy requirement --fetch LAZY
@@ -182,7 +187,7 @@ field reference --fieldName project --type ~.JJProject
 field set --fieldName builds --type ~.JJBuild --cardinality ONE_TO_MANY --fetch LAZY
 field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --fetch LAZY
 field set --fieldName obstacles --type ~.JJTask --cardinality ONE_TO_MANY --fetch LAZY
-field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
+field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy sprint --fetch LAZY
 
 #######################
 
@@ -202,7 +207,7 @@ field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --f
 focus --class ~.JJBuild
 field reference --fieldName jjversion --type ~.JJVersion
 field set --fieldName testplans --type ~.JJTestplan --cardinality ONE_TO_MANY --mappedBy build --fetch LAZY
-field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
+field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy build --fetch LAZY
 
 #######################
 
@@ -212,7 +217,7 @@ field reference --fieldName jjversion --type ~.JJVersion
 field reference --fieldName build --type ~.JJBuild
 field reference --fieldName chapter --type ~.JJChapter
 field set --fieldName testcases --type ~.JJTestcase --cardinality ONE_TO_MANY --mappedBy testplan --fetch LAZY
-field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
+field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy testplan --fetch LAZY
 
 #######################
 
@@ -227,7 +232,7 @@ field reference --fieldName testplan --type ~.JJTestplan
 field set --fieldName teststeps --type ~.JJTeststep --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
 field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --fetch LAZY
 field set --fieldName requirements  --type ~.JJRequirement --cardinality ONE_TO_MANY --fetch LAZY
-field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
+field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
 
 #######################
 
@@ -238,7 +243,7 @@ field string --fieldName resultat --sizeMax 100
 field boolean --fieldName passed
 field reference --fieldName testcase --type ~.JJTestcase
 field reference --fieldName requirement --type ~.JJRequirement
-field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
+field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy teststep --fetch LAZY
 
 #######################
  

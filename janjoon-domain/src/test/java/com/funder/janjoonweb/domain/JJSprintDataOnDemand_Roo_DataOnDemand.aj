@@ -60,8 +60,8 @@ privileged aspect JJSprintDataOnDemand_Roo_DataOnDemand {
     
     public void JJSprintDataOnDemand.setDescription(JJSprint obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 250) {
-            description = description.substring(0, 250);
+        if (description.length() > 500) {
+            description = description.substring(0, 500);
         }
         obj.setDescription(description);
     }

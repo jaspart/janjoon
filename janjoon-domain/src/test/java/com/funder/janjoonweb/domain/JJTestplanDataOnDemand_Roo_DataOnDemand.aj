@@ -4,6 +4,7 @@
 package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJBuildDataOnDemand;
+import com.funder.janjoonweb.domain.JJChapterDataOnDemand;
 import com.funder.janjoonweb.domain.JJContactDataOnDemand;
 import com.funder.janjoonweb.domain.JJProjectDataOnDemand;
 import com.funder.janjoonweb.domain.JJTestplan;
@@ -34,6 +35,9 @@ privileged aspect JJTestplanDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     JJBuildDataOnDemand JJTestplanDataOnDemand.jJBuildDataOnDemand;
+    
+    @Autowired
+    JJChapterDataOnDemand JJTestplanDataOnDemand.jJChapterDataOnDemand;
     
     @Autowired
     JJContactDataOnDemand JJTestplanDataOnDemand.jJContactDataOnDemand;
@@ -67,8 +71,8 @@ privileged aspect JJTestplanDataOnDemand_Roo_DataOnDemand {
     
     public void JJTestplanDataOnDemand.setDescription(JJTestplan obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 250) {
-            description = description.substring(0, 250);
+        if (description.length() > 500) {
+            description = description.substring(0, 500);
         }
         obj.setDescription(description);
     }

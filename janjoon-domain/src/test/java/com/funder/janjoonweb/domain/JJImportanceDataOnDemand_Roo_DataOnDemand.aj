@@ -56,8 +56,8 @@ privileged aspect JJImportanceDataOnDemand_Roo_DataOnDemand {
     
     public void JJImportanceDataOnDemand.setDescription(JJImportance obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 250) {
-            description = description.substring(0, 250);
+        if (description.length() > 500) {
+            description = description.substring(0, 500);
         }
         obj.setDescription(description);
     }

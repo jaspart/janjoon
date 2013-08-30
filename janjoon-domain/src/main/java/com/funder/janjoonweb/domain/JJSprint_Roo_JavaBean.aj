@@ -4,6 +4,7 @@
 package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJBuild;
+import com.funder.janjoonweb.domain.JJMessage;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJSprint;
 import com.funder.janjoonweb.domain.JJTask;
@@ -49,6 +50,14 @@ privileged aspect JJSprint_Roo_JavaBean {
     
     public void JJSprint.setObstacles(Set<JJTask> obstacles) {
         this.obstacles = obstacles;
+    }
+    
+    public Set<JJMessage> JJSprint.getMessages() {
+        return this.messages;
+    }
+    
+    public void JJSprint.setMessages(Set<JJMessage> messages) {
+        this.messages = messages;
     }
     
 }

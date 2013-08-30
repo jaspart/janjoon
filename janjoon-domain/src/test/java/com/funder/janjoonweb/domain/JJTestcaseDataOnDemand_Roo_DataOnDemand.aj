@@ -4,6 +4,7 @@
 package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJCategoryDataOnDemand;
+import com.funder.janjoonweb.domain.JJChapterDataOnDemand;
 import com.funder.janjoonweb.domain.JJContactDataOnDemand;
 import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJTestcaseDataOnDemand;
@@ -35,6 +36,9 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     JJCategoryDataOnDemand JJTestcaseDataOnDemand.jJCategoryDataOnDemand;
     
     @Autowired
+    JJChapterDataOnDemand JJTestcaseDataOnDemand.jJChapterDataOnDemand;
+    
+    @Autowired
     JJContactDataOnDemand JJTestcaseDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
@@ -52,7 +56,7 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
         setDescription(obj, index);
         setEnabled(obj, index);
         setName(obj, index);
-        setPlace(obj, index);
+        setOrdering(obj, index);
         setResultat(obj, index);
         setUpdatedDate(obj, index);
         return obj;
@@ -65,8 +69,8 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     
     public void JJTestcaseDataOnDemand.setDescription(JJTestcase obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 250) {
-            description = description.substring(0, 250);
+        if (description.length() > 500) {
+            description = description.substring(0, 500);
         }
         obj.setDescription(description);
     }
@@ -84,9 +88,9 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
         obj.setName(name);
     }
     
-    public void JJTestcaseDataOnDemand.setPlace(JJTestcase obj, int index) {
-        Integer place = new Integer(index);
-        obj.setPlace(place);
+    public void JJTestcaseDataOnDemand.setOrdering(JJTestcase obj, int index) {
+        Integer ordering = new Integer(index);
+        obj.setOrdering(ordering);
     }
     
     public void JJTestcaseDataOnDemand.setResultat(JJTestcase obj, int index) {

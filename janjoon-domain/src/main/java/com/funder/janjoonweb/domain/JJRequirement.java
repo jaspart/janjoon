@@ -1,5 +1,4 @@
 package com.funder.janjoonweb.domain;
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -7,7 +6,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -28,68 +26,69 @@ import com.funder.janjoonweb.domain.reference.JJRelationship;
 @RooJpaEntity(sequenceName = "JJRequirementSEQ")
 public class JJRequirement extends JJAbstractEntity {
 
-	private Integer numero;
+    private Integer numero;
 
-	@ManyToOne
-	private JJProject project;
+    @ManyToOne
+    private JJProject project;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(style = "M-")
-	private Date startDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date startDate;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(style = "M-")
-	private Date endDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date endDate;
 
-	@ManyToOne
-	private JJChapter chapter;
+    @ManyToOne
+    private JJChapter chapter;
 
-	@ManyToOne
-	private JJVersion jjversion;
+    @ManyToOne
+    private JJVersion jjversion;
 
-	@ManyToOne
-	private JJProduct product;
+    @ManyToOne
+    private JJProduct product;
 
-	@ManyToOne
-	private JJCategory category;
+    @ManyToOne
+    private JJCategory category;
 
-	@ManyToOne
-	private JJCriticity criticity;
+    @ManyToOne
+    private JJCriticity criticity;
 
-	@ManyToOne
-	private JJImportance importance;
+    @ManyToOne
+    private JJImportance importance;
 
-	@ManyToOne
-	private JJStatus status;
+    @ManyToOne
+    private JJStatus status;
 
-	private Boolean isCompleted;
+    private Boolean isCompleted;
 
-	@Size(max = 100)
-	private String impact;
+    @Size(max = 100)
+    private String impact;
 
-	@Enumerated
-	private JJRelationship relation;
+    @Enumerated
+    private JJRelationship relation;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
-	private Set<JJBug> bugs = new HashSet<JJBug>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
+    private Set<JJBug> bugs = new HashSet<JJBug>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
-	private Set<JJTask> tasks = new HashSet<JJTask>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
+    private Set<JJTask> tasks = new HashSet<JJTask>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<JJContact> assignedTos = new HashSet<JJContact>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<JJContact> assignedTos = new HashSet<JJContact>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<JJMessage> messages = new HashSet<JJMessage>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<JJMessage> messages = new HashSet<JJMessage>();
 
-	@Size(max = 250)
-	private String note;
+    @Size(max = 250)
+    private String note;
 
-	@ManyToMany(cascade = { CascadeType.ALL })
-	@JoinTable(name = "JJRequirementLink", joinColumns = { @JoinColumn(name = "ReqLinkUp_ID", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "ReqLinkDown_ID", referencedColumnName = "id") })
-	private Set<JJRequirement> requirementLinkUp = new HashSet<JJRequirement>();
+    @ManyToMany(mappedBy = "requirementLinkUp")
+    private Set<JJRequirement> requirementLinkDown = new HashSet<JJRequirement>();
 
-	@ManyToMany(mappedBy = "requirementLinkUp")
-	private Set<JJRequirement> requirementLinkDown = new HashSet<JJRequirement>();
+    @ManyToMany(cascade = { javax.persistence.CascadeType.ALL })
+    @JoinTable(name = "JJRequirementLink", joinColumns = { @javax.persistence.JoinColumn(name = "ReqLinkUp_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "ReqLinkDown_ID", referencedColumnName = "id") })
+    private Set<JJRequirement> requirementLinkUp = new HashSet<JJRequirement>();
 
+    private Integer ordering;
 }

@@ -53,7 +53,7 @@
       <config command="layer">
          <action type="focus" module="domain"/>
          <action type="execute" command="repository jpa --interface ~.${class}Repository --entity ~.${class}"/>
-         <action type="execute" command="service --interface ~.${class}Service --class ~.${class}ServiceImpl --entity ~.${class}"/>
+         <action type="execute" command="service type --interface ~.${class}Service --class ~.${class}ServiceImpl --entity ~.${class}"/>
          <!--<action type="execute" command="solr add -class ~.${class}"/>-->
          <action type="focus" module="domain"/>
       </config>

@@ -1,5 +1,4 @@
 package com.funder.janjoonweb.domain;
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -57,4 +56,16 @@ public class JJContact extends JJAbstractEntity {
 
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<JJProject> projects = new HashSet<JJProject>();
+
+    /**
+     */
+    private Boolean accountNonExpired;
+
+    /**
+     */
+    private Boolean credentialsNonExpired;
+
+    /**
+     */
+    private Boolean accountNonLocked;
 }

@@ -8,6 +8,8 @@ import com.funder.janjoonweb.domain.JJChapter;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
+import com.funder.janjoonweb.domain.JJTestcase;
+import com.funder.janjoonweb.domain.JJTestplan;
 import java.util.Set;
 
 privileged aspect JJChapter_Roo_JavaBean {
@@ -58,6 +60,30 @@ privileged aspect JJChapter_Roo_JavaBean {
     
     public void JJChapter.setChapters(Set<JJChapter> chapters) {
         this.chapters = chapters;
+    }
+    
+    public Integer JJChapter.getOrdering() {
+        return this.ordering;
+    }
+    
+    public void JJChapter.setOrdering(Integer ordering) {
+        this.ordering = ordering;
+    }
+    
+    public Set<JJTestplan> JJChapter.getTestplans() {
+        return this.testplans;
+    }
+    
+    public void JJChapter.setTestplans(Set<JJTestplan> testplans) {
+        this.testplans = testplans;
+    }
+    
+    public Set<JJTestcase> JJChapter.getTestcases() {
+        return this.testcases;
+    }
+    
+    public void JJChapter.setTestcases(Set<JJTestcase> testcases) {
+        this.testcases = testcases;
     }
     
 }

@@ -53,8 +53,8 @@ privileged aspect JJTeststepDataOnDemand_Roo_DataOnDemand {
         setDescription(obj, index);
         setEnabled(obj, index);
         setName(obj, index);
+        setOrdering(obj, index);
         setPassed(obj, index);
-        setPlace(obj, index);
         setResultat(obj, index);
         setUpdatedDate(obj, index);
         return obj;
@@ -75,8 +75,8 @@ privileged aspect JJTeststepDataOnDemand_Roo_DataOnDemand {
     
     public void JJTeststepDataOnDemand.setDescription(JJTeststep obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 250) {
-            description = description.substring(0, 250);
+        if (description.length() > 500) {
+            description = description.substring(0, 500);
         }
         obj.setDescription(description);
     }
@@ -94,14 +94,14 @@ privileged aspect JJTeststepDataOnDemand_Roo_DataOnDemand {
         obj.setName(name);
     }
     
+    public void JJTeststepDataOnDemand.setOrdering(JJTeststep obj, int index) {
+        Integer ordering = new Integer(index);
+        obj.setOrdering(ordering);
+    }
+    
     public void JJTeststepDataOnDemand.setPassed(JJTeststep obj, int index) {
         Boolean passed = Boolean.TRUE;
         obj.setPassed(passed);
-    }
-    
-    public void JJTeststepDataOnDemand.setPlace(JJTeststep obj, int index) {
-        Integer place = new Integer(index);
-        obj.setPlace(place);
     }
     
     public void JJTeststepDataOnDemand.setResultat(JJTeststep obj, int index) {

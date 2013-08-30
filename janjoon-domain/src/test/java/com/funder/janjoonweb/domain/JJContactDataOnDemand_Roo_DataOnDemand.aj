@@ -7,7 +7,7 @@ import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJContactDataOnDemand;
 import com.funder.janjoonweb.domain.JJContactRepository;
 import com.funder.janjoonweb.domain.JJContactService;
-import com.funder.janjoonweb.domain.JJJobDataOnDemand;
+import com.funder.janjoonweb.domain.JJJob;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,9 +30,6 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
     private List<JJContact> JJContactDataOnDemand.data;
     
     @Autowired
-    JJJobDataOnDemand JJContactDataOnDemand.jJJobDataOnDemand;
-    
-    @Autowired
     JJContactService JJContactDataOnDemand.jJContactService;
     
     @Autowired
@@ -40,13 +37,17 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
     
     public JJContact JJContactDataOnDemand.getNewTransientJJContact(int index) {
         JJContact obj = new JJContact();
+        setAccountNonExpired(obj, index);
+        setAccountNonLocked(obj, index);
         setCreatedBy(obj, index);
         setCreationDate(obj, index);
+        setCredentialsNonExpired(obj, index);
         setDateofbirth(obj, index);
         setDescription(obj, index);
         setEmail(obj, index);
         setEnabled(obj, index);
         setFirstname(obj, index);
+        setJob(obj, index);
         setLastname(obj, index);
         setLdap(obj, index);
         setName(obj, index);
@@ -55,6 +56,16 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
         setUpdatedBy(obj, index);
         setUpdatedDate(obj, index);
         return obj;
+    }
+    
+    public void JJContactDataOnDemand.setAccountNonExpired(JJContact obj, int index) {
+        Boolean accountNonExpired = Boolean.TRUE;
+        obj.setAccountNonExpired(accountNonExpired);
+    }
+    
+    public void JJContactDataOnDemand.setAccountNonLocked(JJContact obj, int index) {
+        Boolean accountNonLocked = Boolean.TRUE;
+        obj.setAccountNonLocked(accountNonLocked);
     }
     
     public void JJContactDataOnDemand.setCreatedBy(JJContact obj, int index) {
@@ -67,6 +78,11 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
         obj.setCreationDate(creationDate);
     }
     
+    public void JJContactDataOnDemand.setCredentialsNonExpired(JJContact obj, int index) {
+        Boolean credentialsNonExpired = Boolean.TRUE;
+        obj.setCredentialsNonExpired(credentialsNonExpired);
+    }
+    
     public void JJContactDataOnDemand.setDateofbirth(JJContact obj, int index) {
         Date dateofbirth = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setDateofbirth(dateofbirth);
@@ -74,8 +90,8 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
     
     public void JJContactDataOnDemand.setDescription(JJContact obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 250) {
-            description = description.substring(0, 250);
+        if (description.length() > 500) {
+            description = description.substring(0, 500);
         }
         obj.setDescription(description);
     }
@@ -96,6 +112,11 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
             firstname = firstname.substring(0, 25);
         }
         obj.setFirstname(firstname);
+    }
+    
+    public void JJContactDataOnDemand.setJob(JJContact obj, int index) {
+        JJJob job = null;
+        obj.setJob(job);
     }
     
     public void JJContactDataOnDemand.setLastname(JJContact obj, int index) {

@@ -8,16 +8,28 @@
 <ui:composition template="../templates/layout.xhtml">
 	<script src="js/nicEdit.js" type="text/javascript"></script>
 	<script type="text/javascript">
-	bkLib.onDomLoaded(function() {
-		new nicEditor().panelInstance('area1');
-		new nicEditor({fullPanel : true}).panelInstance('areaCreate');
-		new nicEditor({fullPanel : true}).panelInstance('areaEdit');
-		new nicEditor({iconsPath : 'js/nicEditorIcons.gif'}).panelInstance('area3');
-		new nicEditor({buttonList : ['fontSize','bold','italic','underline','strikeThrough','subscript','superscript','html','image']}).panelInstance('area4');
-		new nicEditor({maxHeight : 100}).panelInstance('area5');
-	});
+		bkLib.onDomLoaded(function() {
+			new nicEditor().panelInstance('area1');
+			new nicEditor({
+				fullPanel : true
+			}).panelInstance('areaCreate');
+			new nicEditor({
+				fullPanel : true
+			}).panelInstance('areaEdit');
+			new nicEditor({
+				iconsPath : 'js/nicEditorIcons.gif'
+			}).panelInstance('area3');
+			new nicEditor({
+				buttonList : [ 'fontSize', 'bold', 'italic', 'underline',
+						'strikeThrough', 'subscript', 'superscript', 'html',
+						'image' ]
+			}).panelInstance('area4');
+			new nicEditor({
+				maxHeight : 100
+			}).panelInstance('area5');
+		});
 	</script>
-	
+
 	<ui:define name="content">
 
 		<h:form id="dataForm">
@@ -401,13 +413,30 @@
 			</table>
 			<p:dialog id="myEditDialog" header="Edit JJRequirement"
 				widgetVar="editJJRequirement" maximizable="false"
-				minimizable="false" dynamic="true" showEffect="fade" hideEffect="fade">
+				minimizable="false" dynamic="true" showEffect="fade"
+				hideEffect="fade">
 
 				<h:panelGrid columns="1" cellpadding="3">
 
-					<h:panelGrid columns="2" cellpadding="1">
+					<h:panelGrid columns="3" cellpadding="3">
 
 						<h:panelGrid>
+							<h:panelGrid>
+								<p:autoComplete id="chapterEdit"
+									value="#{jJRequirementBean.myEditedJJRequirement.chapter}"
+									completeMethod="#{jJRequirementBean.completeChapter}"
+									var="chapter" itemLabel="#{chapter.name}"
+									itemValue="#{chapter}" multiple="false" dropdown="true"
+									required="false">
+									<f:converter
+										converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
+									<p:column style="text-align:center">  
+           							 #{chapter.name}<!-- - #{chapter.creationDate} -->
+									</p:column>
+								</p:autoComplete>
+								<p:watermark for="chapterEdit" value="Chapter" />
+							</h:panelGrid>
+
 							<p:autoComplete id="productEdit"
 								value="#{jJRequirementBean.myEditedJJRequirement.product}"
 								completeMethod="#{jJRequirementBean.completeProduct}"
@@ -462,12 +491,15 @@
 								display="icon" />
 							<p:watermark for="descriptionEdit" value="Description" /-->
 							<!-- EDITOR WYSIWYG -->
-							<p:editor id="descriptionEdit" rows="4" cols="70" widgetVar="editorEdit" 
-								value="#{jJRequirementBean.myEditedJJRequirement.description}" required="true">
+							<p:editor id="descriptionEdit" rows="4" cols="70"
+								widgetVar="editorEdit"
+								value="#{jJRequirementBean.myEditedJJRequirement.description}"
+								required="true">
 								<f:validateLength minimum="1" maximum="250" />
 								<!--p:ajax update="msgDescriptionEdit" event="keyup" /-->
 							</p:editor>
-							<p:message for="descriptionEdit" id="msgDescriptionEdit" display="icon" />
+							<p:message for="descriptionEdit" id="msgDescriptionEdit"
+								display="icon" />
 							<p:watermark for="descriptionEdit" value="Description" />
 						</h:panelGrid>
 
@@ -486,6 +518,7 @@
 							<h:outputText value="Business: " />
 							<h:outputText value="Functional: " />
 							<h:outputText value="Technical: " />
+
 							<p:selectManyMenu id="businessReqListEdit"
 								value="#{jJRequirementBean.selectedBusinessJJRequirements}"
 								var="p" showCheckbox="true" style="height:75px">
@@ -584,7 +617,22 @@
 
 				<h:panelGrid columns="1" cellpadding="3">
 
-					<h:panelGrid columns="2" cellpadding="3">
+					<h:panelGrid columns="3" cellpadding="3">
+
+						<h:panelGrid>
+							<p:autoComplete id="chapter"
+								value="#{jJRequirementBean.myJJRequirement.chapter}"
+								completeMethod="#{jJRequirementBean.completeChapter}"
+								var="chapter" itemLabel="#{chapter.name}" itemValue="#{chapter}"
+								multiple="false" dropdown="true" required="false">
+								<f:converter
+									converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
+								<p:column style="text-align:center">  
+           							 #{chapter.name}<!-- - #{chapter.creationDate} -->
+								</p:column>
+							</p:autoComplete>
+							<p:watermark for="chapter" value="Chapter" />
+						</h:panelGrid>
 
 						<h:panelGrid>
 							<p:autoComplete id="product"
@@ -641,8 +689,10 @@
 							<p:message for="description" id="msgDescription" display="icon" />
 							<p:watermark for="description" value="Description" /-->
 							<!-- EDITOR WYSIWYG -->
-							<p:editor id="description" rows="4" cols="70" widgetVar="editorCreate" 
-								value="#{jJRequirementBean.myJJRequirement.description}" required="true">
+							<p:editor id="description" rows="4" cols="70"
+								widgetVar="editorCreate"
+								value="#{jJRequirementBean.myJJRequirement.description}"
+								required="true">
 								<f:validateLength minimum="1" maximum="250" />
 								<!--p:ajax update="msgDescription" event="keyup" /-->
 							</p:editor>

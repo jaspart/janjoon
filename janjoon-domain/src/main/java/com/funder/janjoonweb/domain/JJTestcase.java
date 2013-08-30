@@ -1,5 +1,4 @@
 package com.funder.janjoonweb.domain;
-
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -16,7 +15,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaEntity(sequenceName = "JJTestcaseSEQ")
 public class JJTestcase extends JJAbstractEntity {
 
-    private Integer place;
+    private Integer ordering;
 
     @Size(max = 100)
     private String resultat;
@@ -41,4 +40,14 @@ public class JJTestcase extends JJAbstractEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<JJRequirement> requirements = new HashSet<JJRequirement>();
+
+    /**
+     */
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
+    private Set<JJMessage> messages = new HashSet<JJMessage>();
+
+    /**
+     */
+    @ManyToOne
+    private JJChapter chapter;
 }

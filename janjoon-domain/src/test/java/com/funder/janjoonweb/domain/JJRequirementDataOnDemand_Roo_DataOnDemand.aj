@@ -82,6 +82,7 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
         setName(obj, index);
         setNote(obj, index);
         setNumero(obj, index);
+        setOrdering(obj, index);
         setRelation(obj, index);
         setStartDate(obj, index);
         setUpdatedDate(obj, index);
@@ -95,8 +96,8 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
     
     public void JJRequirementDataOnDemand.setDescription(JJRequirement obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 250) {
-            description = description.substring(0, 250);
+        if (description.length() > 500) {
+            description = description.substring(0, 500);
         }
         obj.setDescription(description);
     }
@@ -143,6 +144,11 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
     public void JJRequirementDataOnDemand.setNumero(JJRequirement obj, int index) {
         Integer numero = new Integer(index);
         obj.setNumero(numero);
+    }
+    
+    public void JJRequirementDataOnDemand.setOrdering(JJRequirement obj, int index) {
+        Integer ordering = new Integer(index);
+        obj.setOrdering(ordering);
     }
     
     public void JJRequirementDataOnDemand.setRelation(JJRequirement obj, int index) {

@@ -3,18 +3,20 @@
 
 package com.funder.janjoonweb.domain;
 
+import com.funder.janjoonweb.domain.JJMessage;
 import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJTeststep;
+import java.util.Set;
 
 privileged aspect JJTeststep_Roo_JavaBean {
     
-    public Integer JJTeststep.getPlace() {
-        return this.place;
+    public Integer JJTeststep.getOrdering() {
+        return this.ordering;
     }
     
-    public void JJTeststep.setPlace(Integer place) {
-        this.place = place;
+    public void JJTeststep.setOrdering(Integer ordering) {
+        this.ordering = ordering;
     }
     
     public String JJTeststep.getActionstep() {
@@ -55,6 +57,14 @@ privileged aspect JJTeststep_Roo_JavaBean {
     
     public void JJTeststep.setRequirement(JJRequirement requirement) {
         this.requirement = requirement;
+    }
+    
+    public Set<JJMessage> JJTeststep.getMessages() {
+        return this.messages;
+    }
+    
+    public void JJTeststep.setMessages(Set<JJMessage> messages) {
+        this.messages = messages;
     }
     
 }

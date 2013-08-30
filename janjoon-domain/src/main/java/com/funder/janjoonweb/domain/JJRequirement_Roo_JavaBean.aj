@@ -174,6 +174,14 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.note = note;
     }
     
+    public Set<JJRequirement> JJRequirement.getRequirementLinkDown() {
+        return this.requirementLinkDown;
+    }
+    
+    public void JJRequirement.setRequirementLinkDown(Set<JJRequirement> requirementLinkDown) {
+        this.requirementLinkDown = requirementLinkDown;
+    }
+    
     public Set<JJRequirement> JJRequirement.getRequirementLinkUp() {
         return this.requirementLinkUp;
     }
@@ -182,12 +190,12 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.requirementLinkUp = requirementLinkUp;
     }
     
-    public Set<JJRequirement> JJRequirement.getRequirementLinkDown() {
-        return this.requirementLinkDown;
+    public Integer JJRequirement.getOrdering() {
+        return this.ordering;
     }
     
-    public void JJRequirement.setRequirementLinkDown(Set<JJRequirement> requirementLinkDown) {
-        this.requirementLinkDown = requirementLinkDown;
+    public void JJRequirement.setOrdering(Integer ordering) {
+        this.ordering = ordering;
     }
     
 }

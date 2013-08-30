@@ -4,6 +4,8 @@
 package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJBuild;
+import com.funder.janjoonweb.domain.JJChapter;
+import com.funder.janjoonweb.domain.JJMessage;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJTestplan;
@@ -42,6 +44,22 @@ privileged aspect JJTestplan_Roo_JavaBean {
     
     public void JJTestplan.setTestcases(Set<JJTestcase> testcases) {
         this.testcases = testcases;
+    }
+    
+    public JJChapter JJTestplan.getChapter() {
+        return this.chapter;
+    }
+    
+    public void JJTestplan.setChapter(JJChapter chapter) {
+        this.chapter = chapter;
+    }
+    
+    public Set<JJMessage> JJTestplan.getMessages() {
+        return this.messages;
+    }
+    
+    public void JJTestplan.setMessages(Set<JJMessage> messages) {
+        this.messages = messages;
     }
     
 }
