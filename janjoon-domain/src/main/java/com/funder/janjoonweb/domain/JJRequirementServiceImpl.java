@@ -96,12 +96,16 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		from.fetch("category");
 
 		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
-		Predicate predicate1 = criteriaBuilder.equal(path, categoryName);
-		Predicate predicate2 = criteriaBuilder.equal(from.get("enabled"), true);
-		Predicate predicate3 = criteriaBuilder.equal(from.join("project"),
+		Predicate predicate1 = criteriaBuilder.equal(from.join("project"),
 				project);
+		Predicate predicate2 = criteriaBuilder.equal(from.get("enabled"), true);
+		Predicate predicate3 = criteriaBuilder.equal(path, categoryName);
 
-		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3));
+		if (!categoryName.isEmpty())
+			select.where(criteriaBuilder
+					.and(predicate1, predicate2, predicate3));
+		else
+			select.where(criteriaBuilder.and(predicate1, predicate2));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 
@@ -155,15 +159,19 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		from.fetch("category");
 
 		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
-		Predicate predicate1 = criteriaBuilder.equal(path, categoryName);
-		Predicate predicate2 = criteriaBuilder.equal(from.get("enabled"), true);
-		Predicate predicate3 = criteriaBuilder.equal(from.join("project"),
-				project);
-		Predicate predicate4 = criteriaBuilder.equal(from.join("product"),
-				product);
 
-		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
-				predicate4));
+		Predicate predicate1 = criteriaBuilder.equal(from.join("project"),
+				project);
+		Predicate predicate2 = criteriaBuilder.equal(from.get("enabled"), true);
+		Predicate predicate3 = criteriaBuilder.equal(from.join("product"),
+				product);
+		Predicate predicate4 = criteriaBuilder.equal(path, categoryName);
+		if (!categoryName.isEmpty())
+			select.where(criteriaBuilder.and(predicate1, predicate2,
+					predicate3, predicate4));
+		else
+			select.where(criteriaBuilder
+					.and(predicate1, predicate2, predicate3));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 
@@ -193,9 +201,9 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		Predicate predicate4 = criteriaBuilder.equal(from.join("product"),
 				product);
 		Predicate predicate5 = criteriaBuilder.isNull(from.get("chapter"));
-		
-//		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
-//				predicate4));
+
+		// select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
+		// predicate4));
 
 		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
 				predicate4, predicate5));
@@ -222,18 +230,22 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		from.fetch("category");
 
 		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
-		Predicate predicate1 = criteriaBuilder.equal(path, categoryName);
-		Predicate predicate2 = criteriaBuilder.equal(from.get("enabled"), true);
-		Predicate predicate3 = criteriaBuilder.equal(from.join("project"),
+
+		Predicate predicate1 = criteriaBuilder.equal(from.join("project"),
 				project);
-		Predicate predicate4 = criteriaBuilder.equal(from.join("product"),
+		Predicate predicate2 = criteriaBuilder.equal(from.get("enabled"), true);
+
+		Predicate predicate3 = criteriaBuilder.equal(from.join("product"),
 				product);
-		Predicate predicate5 = criteriaBuilder.equal(from.join("jjversion"),
+		Predicate predicate4 = criteriaBuilder.equal(from.join("jjversion"),
 				version);
-
-		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
-				predicate4, predicate5));
-
+		Predicate predicate5 = criteriaBuilder.equal(path, categoryName);
+		if (!categoryName.isEmpty())
+			select.where(criteriaBuilder.and(predicate1, predicate2,
+					predicate3, predicate4, predicate5));
+		else
+			select.where(criteriaBuilder.and(predicate1, predicate2,
+					predicate3, predicate4));
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 
 		return result.getResultList();

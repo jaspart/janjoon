@@ -143,6 +143,7 @@
 												<p:commandButton id="createBusinessRequirement"
 													icon="ui-icon-plus" title="Add Business Requirement"
 													actionListener="#{jJRequirementBean.createJJRequirement(1)}"
+													update=":dataForm:myCreateDialog"
 													oncomplete="createJJRequirement.show()" />
 											</p:column>
 											<p:column colspan="1">
@@ -711,48 +712,91 @@
 							<p:watermark for="note" value="Note" />
 						</h:panelGrid>
 
-						<h:panelGrid columns="3" cellpadding="3">
-							<h:outputText value="Business: " />
-							<h:outputText value="Functional: " />
-							<h:outputText value="Technical: " />
-							<p:selectManyMenu id="businessReqList"
-								value="#{jJRequirementBean.selectedBusinessJJRequirements}"
-								var="p" showCheckbox="true" style="height:75px">
-								<f:selectItems
-									value="#{jJRequirementBean.businessJJRequirementsList}"
-									var="req" itemLabel="#{req.name}" itemValue="#{req}" />
-								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" />
-								<p:column style="text-align:left">  
-								                #{p.name}
-								            </p:column>
-							</p:selectManyMenu>
+						<h:panelGrid columns="1" cellpadding="3">
 
-							<p:selectManyMenu id="functionalReqList"
-								value="#{jJRequirementBean.selectedFunctionalJJRequirements}"
-								var="p" showCheckbox="true" style="height:75px">
-								<f:selectItems
-									value="#{jJRequirementBean.functionalJJRequirementsList}"
-									var="req" itemLabel="#{req.name}" itemValue="#{req}" />
-								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" />
-								<p:column style="text-align:left">  
-								                #{p.name}
-								            </p:column>
-							</p:selectManyMenu>
+							<p:dataTable id="linkTable" value="#{jJRequirementBean.linkDown}"
+								var="Link" resizableColumns="true" scrollable="true"
+								scrollHeight="100" style="width:250px"
+								rowKey="#{Link.requirement.name}"
+								selection="#{jJRequirementBean.selectedLinkDown}"
+								selectionMode="single">
+								<p:column headerText="Requirement">
+									<h:outputText value="#{Link.requirement.name}" />
+								</p:column>
 
-							<p:selectManyMenu id="technicalReqList"
-								value="#{jJRequirementBean.selectedTechnicalJJRequirements}"
-								var="p" showCheckbox="true" style="height:75px">
-								<f:selectItems
-									value="#{jJRequirementBean.technicalJJRequirementsList}"
-									var="req" itemLabel="#{req.name}" itemValue="#{req}" />
-								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" />
-								<p:column style="text-align:left">  
-								                #{p.name}
-								            </p:column>
-							</p:selectManyMenu>
+
+<!-- 								<p:column headerText="Selected"> -->
+
+
+<!-- 									<p:selectBooleanCheckbox value="true"> -->
+<!-- 																						onLabel="Yes" offLabel="No" onIcon="ui-icon-check" -->
+<!-- 																						offIcon="ui-icon-close"> -->
+<!-- 																						<p:ajax update="msg" listener="#{formBean.addMessage}" /> -->
+<!-- 									</p:selectBooleanCheckbox> -->
+
+<!-- 								</p:column> -->
+
+								<p:column headerText="Selected" style="width:25%">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{Link.selected}" />
+										</f:facet>
+										<f:facet name="input">
+											<h:selectOneMenu value="#{Link.selected}" style="width:100%">
+												<f:selectItems value="#{jJRequirementBean.checks}" var="check"
+													itemLabel="#{check}" itemValue="#{check}" />
+											</h:selectOneMenu>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+							</p:dataTable>
+
+
+
+
+
+
+							<!-- 							<h:outputText value="Business: " /> -->
+							<!-- 							<h:outputText value="Functional: " /> -->
+							<!-- 							<h:outputText value="Technical: " /> -->
+							<!-- 							<p:selectManyMenu id="businessReqList" -->
+							<!-- 								value="#{jJRequirementBean.selectedBusinessJJRequirements}" -->
+							<!-- 								var="p" showCheckbox="true" style="height:75px"> -->
+							<!-- 								<f:selectItems -->
+							<!-- 									value="#{jJRequirementBean.businessJJRequirementsList}" -->
+							<!-- 									var="req" itemLabel="#{req.name}" itemValue="#{req}" /> -->
+							<!-- 								<f:converter -->
+							<!-- 									converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" /> -->
+							<!-- 								<p:column style="text-align:left">   -->
+							<!-- 								                #{p.name} -->
+							<!-- 								            </p:column> -->
+							<!-- 							</p:selectManyMenu> -->
+
+							<!-- 							<p:selectManyMenu id="functionalReqList" -->
+							<!-- 								value="#{jJRequirementBean.selectedFunctionalJJRequirements}" -->
+							<!-- 								var="p" showCheckbox="true" style="height:75px"> -->
+							<!-- 								<f:selectItems -->
+							<!-- 									value="#{jJRequirementBean.functionalJJRequirementsList}" -->
+							<!-- 									var="req" itemLabel="#{req.name}" itemValue="#{req}" /> -->
+							<!-- 								<f:converter -->
+							<!-- 									converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" /> -->
+							<!-- 								<p:column style="text-align:left">   -->
+							<!-- 								                #{p.name} -->
+							<!-- 								            </p:column> -->
+							<!-- 							</p:selectManyMenu> -->
+
+							<!-- 							<p:selectManyMenu id="technicalReqList" -->
+							<!-- 								value="#{jJRequirementBean.selectedTechnicalJJRequirements}" -->
+							<!-- 								var="p" showCheckbox="true" style="height:75px"> -->
+							<!-- 								<f:selectItems -->
+							<!-- 									value="#{jJRequirementBean.technicalJJRequirementsList}" -->
+							<!-- 									var="req" itemLabel="#{req.name}" itemValue="#{req}" /> -->
+							<!-- 								<f:converter -->
+							<!-- 									converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" /> -->
+							<!-- 								<p:column style="text-align:left">   -->
+							<!-- 								                #{p.name} -->
+							<!-- 								            </p:column> -->
+							<!-- 							</p:selectManyMenu> -->
 
 						</h:panelGrid>
 					</h:panelGrid>

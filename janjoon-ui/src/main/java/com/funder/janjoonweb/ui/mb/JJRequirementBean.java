@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.TreeNode;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
@@ -57,6 +58,20 @@ public class JJRequirementBean {
 
 	private List<JJRequirement> technicalJJRequirementsList;
 	private List<JJRequirement> selectedTechnicalJJRequirements;
+
+	private List<ListWrapperClass> linkDown ;
+	private ListWrapperClass selectedLinkDown;
+	
+	private final static String[] checks={"YES","NO"};  
+	
+	public static String[] getChecks() {
+		return checks;
+	}
+
+	private TreeNode root;  
+    
+    private TreeNode[] selectedNodes; 
+	
 
 	private boolean disabled;
 	private String messageRelease;
@@ -305,6 +320,22 @@ public class JJRequirementBean {
 		this.selectedTechnicalJJRequirements = selectedTechnicalJJRequirements;
 	}
 
+	public List<ListWrapperClass> getLinkDown() {
+		return linkDown;
+	}
+
+	public void setLinkDown(List<ListWrapperClass> linkDown) {
+		this.linkDown = linkDown;
+	}
+
+	public ListWrapperClass getSelectedLinkDown() {
+		return selectedLinkDown;
+	}
+
+	public void setSelectedLinkDown(ListWrapperClass selectedLinkDown) {
+		this.selectedLinkDown = selectedLinkDown;
+	}
+
 	public boolean getDisabled() {
 		return disabled;
 	}
@@ -551,6 +582,31 @@ public class JJRequirementBean {
 			myJJRequirement.setProduct(currentProduct);
 
 		myJJRequirement.setChapter(null);
+		
+		linkDown = new ArrayList<ListWrapperClass>();
+		List<JJRequirement> tmpList = new ArrayList<JJRequirement>();
+		if (currentProject != null)
+			if (currentProduct != null)
+				if (currentVersion != null)
+
+					tmpList = jJRequirementService
+							.getAllJJRequirementsWithProjectAndProductAndVersion(
+									"", currentProject, currentProduct,
+									currentVersion);
+				else
+
+					tmpList = jJRequirementService
+							.getAllJJRequirementsWithProjectAndProduct("",
+									currentProject, currentProduct);
+			else
+				tmpList = jJRequirementService.getAllJJRequirementsWithProject(
+						"", currentProject);
+		// else
+		// tmpList = jJRequirementService
+		// .getAllJJRequirementsWithCategory("BUSINESS");
+		System.out.println("tmpList.size() " + tmpList.size());
+		for (JJRequirement jjRequirement : tmpList)
+			linkDown.add(new ListWrapperClass(jjRequirement, "NO"));
 
 	}
 
@@ -1106,4 +1162,33 @@ public class JJRequirementBean {
 		return newJJCategory;
 	}
 
+	public class ListWrapperClass {
+		private JJRequirement requirement;
+		private String selected;
+
+		public JJRequirement getRequirement() {
+			return requirement;
+		}
+
+		public void setRequirement(JJRequirement requirement) {
+			this.requirement = requirement;
+		}
+
+		
+
+		public String getSelected() {
+			return selected;
+		}
+
+		public void setSelected(String selected) {
+			this.selected = selected;
+		}
+
+		public ListWrapperClass(JJRequirement requirement, String selected) {
+			super();
+			this.requirement = requirement;
+			this.selected = selected;
+		}
+
+	}
 }

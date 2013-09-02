@@ -7,7 +7,7 @@ import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJContactDataOnDemand;
 import com.funder.janjoonweb.domain.JJContactRepository;
 import com.funder.janjoonweb.domain.JJContactService;
-import com.funder.janjoonweb.domain.JJJob;
+import com.funder.janjoonweb.domain.JJJobDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +30,9 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
     private List<JJContact> JJContactDataOnDemand.data;
     
     @Autowired
+    JJJobDataOnDemand JJContactDataOnDemand.jJJobDataOnDemand;
+    
+    @Autowired
     JJContactService JJContactDataOnDemand.jJContactService;
     
     @Autowired
@@ -47,7 +50,6 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
         setEmail(obj, index);
         setEnabled(obj, index);
         setFirstname(obj, index);
-        setJob(obj, index);
         setLastname(obj, index);
         setLdap(obj, index);
         setName(obj, index);
@@ -112,11 +114,6 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
             firstname = firstname.substring(0, 25);
         }
         obj.setFirstname(firstname);
-    }
-    
-    public void JJContactDataOnDemand.setJob(JJContact obj, int index) {
-        JJJob job = null;
-        obj.setJob(job);
     }
     
     public void JJContactDataOnDemand.setLastname(JJContact obj, int index) {
