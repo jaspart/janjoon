@@ -12,7 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.TreeNode;
+import org.primefaces.model.DualListModel;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
@@ -59,19 +59,16 @@ public class JJRequirementBean {
 	private List<JJRequirement> technicalJJRequirementsList;
 	private List<JJRequirement> selectedTechnicalJJRequirements;
 
-	private List<ListWrapperClass> linkDown ;
-	private ListWrapperClass selectedLinkDown;
-	
-	private final static String[] checks={"YES","NO"};  
-	
-	public static String[] getChecks() {
-		return checks;
+	private DualListModel<JJRequirement> requirementsLinkDown;
+
+	public DualListModel<JJRequirement> getRequirementsLinkDown() {
+		return requirementsLinkDown;
 	}
 
-	private TreeNode root;  
-    
-    private TreeNode[] selectedNodes; 
-	
+	public void setRequirementsLinkDown(
+			DualListModel<JJRequirement> requirementsLinkDown) {
+		this.requirementsLinkDown = requirementsLinkDown;
+	}
 
 	private boolean disabled;
 	private String messageRelease;
@@ -320,22 +317,6 @@ public class JJRequirementBean {
 		this.selectedTechnicalJJRequirements = selectedTechnicalJJRequirements;
 	}
 
-	public List<ListWrapperClass> getLinkDown() {
-		return linkDown;
-	}
-
-	public void setLinkDown(List<ListWrapperClass> linkDown) {
-		this.linkDown = linkDown;
-	}
-
-	public ListWrapperClass getSelectedLinkDown() {
-		return selectedLinkDown;
-	}
-
-	public void setSelectedLinkDown(ListWrapperClass selectedLinkDown) {
-		this.selectedLinkDown = selectedLinkDown;
-	}
-
 	public boolean getDisabled() {
 		return disabled;
 	}
@@ -582,32 +563,34 @@ public class JJRequirementBean {
 			myJJRequirement.setProduct(currentProduct);
 
 		myJJRequirement.setChapter(null);
-		
-		linkDown = new ArrayList<ListWrapperClass>();
-		List<JJRequirement> tmpList = new ArrayList<JJRequirement>();
+
+		List<JJRequirement> requirementsLinkDownSource = new ArrayList<JJRequirement>();
+		List<JJRequirement> requirementsLinkDownTarget = new ArrayList<JJRequirement>();
+
 		if (currentProject != null)
 			if (currentProduct != null)
 				if (currentVersion != null)
 
-					tmpList = jJRequirementService
+					requirementsLinkDownSource = jJRequirementService
 							.getAllJJRequirementsWithProjectAndProductAndVersion(
 									"", currentProject, currentProduct,
 									currentVersion);
 				else
 
-					tmpList = jJRequirementService
+					requirementsLinkDownSource = jJRequirementService
 							.getAllJJRequirementsWithProjectAndProduct("",
 									currentProject, currentProduct);
 			else
-				tmpList = jJRequirementService.getAllJJRequirementsWithProject(
-						"", currentProject);
+				requirementsLinkDownSource = jJRequirementService
+						.getAllJJRequirementsWithProject("", currentProject);
 		// else
-		// tmpList = jJRequirementService
-		// .getAllJJRequirementsWithCategory("BUSINESS");
-		System.out.println("tmpList.size() " + tmpList.size());
-		for (JJRequirement jjRequirement : tmpList)
-			linkDown.add(new ListWrapperClass(jjRequirement, "NO"));
+		// requirementsLinkDownSource = jJRequirementService
+		// .getAllJJRequirementsWithCategory("");
+		System.out.println("requirementsLinkDownSource.size()"
+				+ requirementsLinkDownSource.size());
 
+		requirementsLinkDown = new DualListModel<JJRequirement>(
+				requirementsLinkDownSource, requirementsLinkDownTarget);
 	}
 
 	public void editJJRequirement(int number) {
@@ -653,22 +636,22 @@ public class JJRequirementBean {
 		myEditedJJRequirement.setName(req.getName());
 		myEditedJJRequirement.setNote(req.getNote());
 
-		// req = jJRequirementService.findJJRequirement(req.getId());
-		//
-		// Set<JJRequirement> requirementsDown = req.getRequirementLinkDown();
-		// System.out
-		// .println("requirementsDown.size() " + requirementsDown.size());
-		// for (JJRequirement jjRequirement : requirementsDown) {
-		// if (jjRequirement.getCategory().getName()
-		// .equalsIgnoreCase("BUSINESS"))
-		// selectedBusinessJJRequirements.add(jjRequirement);
-		// else if (jjRequirement.getCategory().getName()
-		// .equalsIgnoreCase("FUNCTIONAL"))
-		// selectedFunctionalJJRequirements.add(jjRequirement);
-		// else if (jjRequirement.getCategory().getName()
-		// .equalsIgnoreCase("TECHNICAL"))
-		// selectedTechnicalJJRequirements.add(jjRequirement);
-		// }
+		req = jJRequirementService.findJJRequirement(req.getId());
+
+		Set<JJRequirement> requirementsDown = req.getRequirementLinkDown();
+		System.out
+				.println("requirementsDown.size() " + requirementsDown.size());
+		for (JJRequirement jjRequirement : requirementsDown) {
+			if (jjRequirement.getCategory().getName()
+					.equalsIgnoreCase("BUSINESS"))
+				selectedBusinessJJRequirements.add(jjRequirement);
+			else if (jjRequirement.getCategory().getName()
+					.equalsIgnoreCase("FUNCTIONAL"))
+				selectedFunctionalJJRequirements.add(jjRequirement);
+			else if (jjRequirement.getCategory().getName()
+					.equalsIgnoreCase("TECHNICAL"))
+				selectedTechnicalJJRequirements.add(jjRequirement);
+		}
 
 	}
 
@@ -676,40 +659,43 @@ public class JJRequirementBean {
 
 		if (index == 1) {
 
-			Set<JJRequirement> requirementsDown = new HashSet<JJRequirement>();
-			List<JJRequirement> tempList = new ArrayList<JJRequirement>();
-
-			if (selectedBusinessJJRequirements.size() > 0) {
-				for (JJRequirement req : selectedBusinessJJRequirements) {
-					req = jJRequirementService.findJJRequirement(req.getId());
-					req.getRequirementLinkUp().add(myJJRequirement);
-				}
-				tempList.addAll(tempList.size(), selectedBusinessJJRequirements);
-			}
-
-			if (selectedFunctionalJJRequirements.size() > 0) {
-				for (JJRequirement req : selectedFunctionalJJRequirements) {
-					req = jJRequirementService.findJJRequirement(req.getId());
-					req.getRequirementLinkUp().add(myJJRequirement);
-				}
-
-				tempList.addAll(tempList.size(),
-						selectedFunctionalJJRequirements);
-			}
-
-			if (selectedTechnicalJJRequirements.size() > 0) {
-				for (JJRequirement req : selectedTechnicalJJRequirements) {
-					req = jJRequirementService.findJJRequirement(req.getId());
-					req.getRequirementLinkUp().add(myJJRequirement);
-				}
-
-				tempList.addAll(tempList.size(),
-						selectedTechnicalJJRequirements);
-			}
-
-			requirementsDown.addAll(tempList);
-
-			myJJRequirement.setRequirementLinkDown(requirementsDown);
+			// Set<JJRequirement> requirementsDown = new
+			// HashSet<JJRequirement>();
+			// List<JJRequirement> tempList = new ArrayList<JJRequirement>();
+			// System.out.println("########## "
+			// + selectedBusinessJJRequirements.size());
+			//
+			// if (selectedBusinessJJRequirements.size() > 0) {
+			// for (JJRequirement req : selectedBusinessJJRequirements) {
+			// req = jJRequirementService.findJJRequirement(req.getId());
+			// req.getRequirementLinkUp().add(myJJRequirement);
+			// }
+			// tempList.addAll(tempList.size(), selectedBusinessJJRequirements);
+			// }
+			//
+			// if (selectedFunctionalJJRequirements.size() > 0) {
+			// for (JJRequirement req : selectedFunctionalJJRequirements) {
+			// req = jJRequirementService.findJJRequirement(req.getId());
+			// req.getRequirementLinkUp().add(myJJRequirement);
+			// }
+			//
+			// tempList.addAll(tempList.size(),
+			// selectedFunctionalJJRequirements);
+			// }
+			//
+			// if (selectedTechnicalJJRequirements.size() > 0) {
+			// for (JJRequirement req : selectedTechnicalJJRequirements) {
+			// req = jJRequirementService.findJJRequirement(req.getId());
+			// req.getRequirementLinkUp().add(myJJRequirement);
+			// }
+			//
+			// tempList.addAll(tempList.size(),
+			// selectedTechnicalJJRequirements);
+			// }
+			//
+			// requirementsDown.addAll(tempList);
+			//
+			// myJJRequirement.setRequirementLinkDown(requirementsDown);
 
 			jJRequirementService.saveJJRequirement(myJJRequirement);
 			findAllJJRequirementsWithCategory(creationColumnNumber);
@@ -1160,35 +1146,5 @@ public class JJRequirementBean {
 		newJJCategory.setEnabled(true);
 		jJCategoryService.saveJJCategory(newJJCategory);
 		return newJJCategory;
-	}
-
-	public class ListWrapperClass {
-		private JJRequirement requirement;
-		private String selected;
-
-		public JJRequirement getRequirement() {
-			return requirement;
-		}
-
-		public void setRequirement(JJRequirement requirement) {
-			this.requirement = requirement;
-		}
-
-		
-
-		public String getSelected() {
-			return selected;
-		}
-
-		public void setSelected(String selected) {
-			this.selected = selected;
-		}
-
-		public ListWrapperClass(JJRequirement requirement, String selected) {
-			super();
-			this.requirement = requirement;
-			this.selected = selected;
-		}
-
 	}
 }
