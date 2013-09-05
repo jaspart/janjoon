@@ -12,7 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.DualListModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
@@ -21,6 +21,8 @@ import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJStatus;
+import com.funder.janjoonweb.domain.JJTask;
+import com.funder.janjoonweb.domain.JJTaskService;
 import com.funder.janjoonweb.domain.JJVersion;
 
 @RooSerializable
@@ -59,18 +61,11 @@ public class JJRequirementBean {
 	private List<JJRequirement> technicalJJRequirementsList;
 	private List<JJRequirement> selectedTechnicalJJRequirements;
 
-	private DualListModel<JJRequirement> requirementsLinkDown;
-
-	public DualListModel<JJRequirement> getRequirementsLinkDown() {
-		return requirementsLinkDown;
-	}
-
-	public void setRequirementsLinkDown(
-			DualListModel<JJRequirement> requirementsLinkDown) {
-		this.requirementsLinkDown = requirementsLinkDown;
-	}
+	private List<JJTask> tasksList;
+	private List<JJTask> selectedTasksList;
 
 	private boolean disabled;
+
 	private String messageRelease;
 	private String messageDiscard;
 
@@ -81,6 +76,17 @@ public class JJRequirementBean {
 	private int progressLeft = 0;
 	private int progressMiddle = 0;
 	private int progressRight = 0;
+
+	private int coverageProgressLeft = 0;
+	private int coverageProgressMiddle = 0;
+	private int coverageProgressRight = 0;
+
+	@Autowired
+	JJTaskService jJTaskService;
+
+	public void setjJTaskService(JJTaskService jJTaskService) {
+		this.jJTaskService = jJTaskService;
+	}
 
 	public JJRequirement getMyJJRequirement() {
 
@@ -317,6 +323,23 @@ public class JJRequirementBean {
 		this.selectedTechnicalJJRequirements = selectedTechnicalJJRequirements;
 	}
 
+	public List<JJTask> getTasksList() {
+		tasksList = jJTaskService.findAllJJTasks();
+		return tasksList;
+	}
+
+	public void setTasksList(List<JJTask> tasksList) {
+		this.tasksList = tasksList;
+	}
+
+	public List<JJTask> getSelectedTasksList() {
+		return selectedTasksList;
+	}
+
+	public void setSelectedTasksList(List<JJTask> selectedTasksList) {
+		this.selectedTasksList = selectedTasksList;
+	}
+
 	public boolean getDisabled() {
 		return disabled;
 	}
@@ -368,8 +391,7 @@ public class JJRequirementBean {
 	public int getProgressLeft() {
 
 		if (myBusinessJJRequirements != null) {
-			System.out.println("myBusinessJJRequirements.size() "
-					+ myBusinessJJRequirements.size());
+
 			if (myBusinessJJRequirements.size() > 0) {
 				int numberCompleted = 0;
 				for (JJRequirement req : myBusinessJJRequirements) {
@@ -418,10 +440,10 @@ public class JJRequirementBean {
 					}
 
 				}
-				System.out.println("numberCompleted Left" + numberCompleted);
+
 				progressLeft = (numberCompleted * 100)
 						/ myBusinessJJRequirements.size();
-				System.out.println("progressLeft " + progressLeft);
+
 				return progressLeft;
 
 			} else
@@ -436,8 +458,7 @@ public class JJRequirementBean {
 
 	public int getProgressMiddle() {
 		if (myFunctionalJJRequirements != null) {
-			System.out.println("myFunctionalJJRequirements.size() "
-					+ myFunctionalJJRequirements.size());
+
 			if (myFunctionalJJRequirements.size() > 0) {
 				int numberCompleted = 0;
 				for (JJRequirement req : myFunctionalJJRequirements) {
@@ -465,10 +486,10 @@ public class JJRequirementBean {
 					}
 
 				}
-				System.out.println("numberCompleted Middle" + numberCompleted);
+
 				progressMiddle = (numberCompleted * 100)
 						/ myFunctionalJJRequirements.size();
-				System.out.println("progressMiddle " + progressMiddle);
+
 				return progressMiddle;
 
 			} else
@@ -483,8 +504,6 @@ public class JJRequirementBean {
 
 	public int getProgressRight() {
 		if (myTechnicalJJRequirements != null) {
-			System.out.println("myTechnicalJJRequirements.size() "
-					+ myTechnicalJJRequirements.size());
 			if (myTechnicalJJRequirements.size() > 0) {
 				int numberCompleted = 0;
 
@@ -493,10 +512,10 @@ public class JJRequirementBean {
 						numberCompleted++;
 					}
 				}
-				System.out.println("numberCompleted Right" + numberCompleted);
+
 				progressRight = (numberCompleted * 100)
 						/ myTechnicalJJRequirements.size();
-				System.out.println("progressRight " + progressRight);
+
 				return progressRight;
 			} else
 				return 0;
@@ -507,6 +526,106 @@ public class JJRequirementBean {
 
 	public void setProgressRight(int progressRight) {
 		this.progressRight = progressRight;
+	}
+
+	public int getCoverageProgressLeft() {
+
+		if (myBusinessJJRequirements != null) {
+			if (myBusinessJJRequirements.size() > 0) {
+				int numberCompleted = 0;
+
+				for (JJRequirement jjreq : myBusinessJJRequirements) {
+					jjreq = jJRequirementService.findJJRequirement(jjreq
+							.getId());
+					Set<JJRequirement> listLinkDown = jjreq
+							.getRequirementLinkDown();
+					for (JJRequirement jjRequirement : listLinkDown) {
+						if (jjRequirement.getCategory().getName()
+								.equalsIgnoreCase("FUNCTIONAL")) {
+							numberCompleted++;
+							break;
+						}
+
+					}
+				}
+
+				coverageProgressLeft = (numberCompleted * 100)
+						/ myBusinessJJRequirements.size();
+
+				return coverageProgressLeft;
+			} else
+				return 0;
+		} else
+			return 0;
+	}
+
+	public void setCoverageProgressLeft(int coverageProgressLeft) {
+		this.coverageProgressLeft = coverageProgressLeft;
+	}
+
+	public int getCoverageProgressMiddle() {
+
+		if (myFunctionalJJRequirements != null) {
+			if (myFunctionalJJRequirements.size() > 0) {
+				int numberCompleted = 0;
+
+				for (JJRequirement jjreq : myFunctionalJJRequirements) {
+					jjreq = jJRequirementService.findJJRequirement(jjreq
+							.getId());
+					Set<JJRequirement> listLinkDown = jjreq
+							.getRequirementLinkDown();
+					for (JJRequirement jjRequirement : listLinkDown) {
+						if (jjRequirement.getCategory().getName()
+								.equalsIgnoreCase("TECHNICAL")) {
+							numberCompleted++;
+							break;
+						}
+
+					}
+				}
+
+				coverageProgressMiddle = (numberCompleted * 100)
+						/ myFunctionalJJRequirements.size();
+
+				return coverageProgressMiddle;
+			} else
+				return 0;
+		} else
+			return 0;
+
+	}
+
+	public void setCoverageProgressMiddle(int coverageProgressMiddle) {
+		this.coverageProgressMiddle = coverageProgressMiddle;
+	}
+
+	public int getCoverageProgressRight() {
+
+		if (myTechnicalJJRequirements != null) {
+			if (myTechnicalJJRequirements.size() > 0) {
+				int numberCompleted = 0;
+
+				for (JJRequirement jjreq : myTechnicalJJRequirements) {
+					jjreq = jJRequirementService.findJJRequirement(jjreq
+							.getId());
+					Set<JJTask> tasks = jjreq.getTasks();
+					if (!tasks.isEmpty())
+						numberCompleted++;
+				}
+
+				coverageProgressRight = (numberCompleted * 100)
+						/ myTechnicalJJRequirements.size();
+
+				return coverageProgressRight;
+			} else
+				return 0;
+		} else
+			return 0;
+
+	}
+
+	public void setCoverageProgressRight(int coverageProgressRight) {
+		this.coverageProgressRight = coverageProgressRight;
 	}
 
 	public void createJJRequirement(int number) {
@@ -564,33 +683,6 @@ public class JJRequirementBean {
 
 		myJJRequirement.setChapter(null);
 
-		List<JJRequirement> requirementsLinkDownSource = new ArrayList<JJRequirement>();
-		List<JJRequirement> requirementsLinkDownTarget = new ArrayList<JJRequirement>();
-
-		if (currentProject != null)
-			if (currentProduct != null)
-				if (currentVersion != null)
-
-					requirementsLinkDownSource = jJRequirementService
-							.getAllJJRequirementsWithProjectAndProductAndVersion(
-									"", currentProject, currentProduct,
-									currentVersion);
-				else
-
-					requirementsLinkDownSource = jJRequirementService
-							.getAllJJRequirementsWithProjectAndProduct("",
-									currentProject, currentProduct);
-			else
-				requirementsLinkDownSource = jJRequirementService
-						.getAllJJRequirementsWithProject("", currentProject);
-		// else
-		// requirementsLinkDownSource = jJRequirementService
-		// .getAllJJRequirementsWithCategory("");
-		System.out.println("requirementsLinkDownSource.size()"
-				+ requirementsLinkDownSource.size());
-
-		requirementsLinkDown = new DualListModel<JJRequirement>(
-				requirementsLinkDownSource, requirementsLinkDownTarget);
 	}
 
 	public void editJJRequirement(int number) {
@@ -639,8 +731,7 @@ public class JJRequirementBean {
 		req = jJRequirementService.findJJRequirement(req.getId());
 
 		Set<JJRequirement> requirementsDown = req.getRequirementLinkDown();
-		System.out
-				.println("requirementsDown.size() " + requirementsDown.size());
+
 		for (JJRequirement jjRequirement : requirementsDown) {
 			if (jjRequirement.getCategory().getName()
 					.equalsIgnoreCase("BUSINESS"))
@@ -659,45 +750,74 @@ public class JJRequirementBean {
 
 		if (index == 1) {
 
-			// Set<JJRequirement> requirementsDown = new
-			// HashSet<JJRequirement>();
-			// List<JJRequirement> tempList = new ArrayList<JJRequirement>();
-			// System.out.println("########## "
-			// + selectedBusinessJJRequirements.size());
-			//
-			// if (selectedBusinessJJRequirements.size() > 0) {
-			// for (JJRequirement req : selectedBusinessJJRequirements) {
-			// req = jJRequirementService.findJJRequirement(req.getId());
-			// req.getRequirementLinkUp().add(myJJRequirement);
-			// }
-			// tempList.addAll(tempList.size(), selectedBusinessJJRequirements);
-			// }
-			//
-			// if (selectedFunctionalJJRequirements.size() > 0) {
-			// for (JJRequirement req : selectedFunctionalJJRequirements) {
-			// req = jJRequirementService.findJJRequirement(req.getId());
-			// req.getRequirementLinkUp().add(myJJRequirement);
-			// }
-			//
-			// tempList.addAll(tempList.size(),
-			// selectedFunctionalJJRequirements);
-			// }
-			//
-			// if (selectedTechnicalJJRequirements.size() > 0) {
-			// for (JJRequirement req : selectedTechnicalJJRequirements) {
-			// req = jJRequirementService.findJJRequirement(req.getId());
-			// req.getRequirementLinkUp().add(myJJRequirement);
-			// }
-			//
-			// tempList.addAll(tempList.size(),
-			// selectedTechnicalJJRequirements);
-			// }
-			//
-			// requirementsDown.addAll(tempList);
-			//
-			// myJJRequirement.setRequirementLinkDown(requirementsDown);
+			Set<JJRequirement> requirementsDown = new HashSet<JJRequirement>();
+			List<JJRequirement> tempList = new ArrayList<JJRequirement>();
+
+			if (selectedBusinessJJRequirements.size() > 0) {
+				for (JJRequirement req : selectedBusinessJJRequirements) {
+					req = jJRequirementService.findJJRequirement(req.getId());
+					req.getRequirementLinkUp().add(myJJRequirement);
+				}
+				tempList.addAll(tempList.size(), selectedBusinessJJRequirements);
+			}
+
+			if (selectedFunctionalJJRequirements.size() > 0) {
+				for (JJRequirement req : selectedFunctionalJJRequirements) {
+					req = jJRequirementService.findJJRequirement(req.getId());
+					req.getRequirementLinkUp().add(myJJRequirement);
+				}
+
+				tempList.addAll(tempList.size(),
+						selectedFunctionalJJRequirements);
+			}
+
+			if (selectedTechnicalJJRequirements.size() > 0) {
+				for (JJRequirement req : selectedTechnicalJJRequirements) {
+					req = jJRequirementService.findJJRequirement(req.getId());
+					req.getRequirementLinkUp().add(myJJRequirement);
+				}
+
+				tempList.addAll(tempList.size(),
+						selectedTechnicalJJRequirements);
+			}
+
+			requirementsDown.addAll(tempList);
+
+			myJJRequirement.setRequirementLinkDown(requirementsDown);
+
+			if (creationColumnNumber == 3) {
+
+				if (selectedTasksList.size() > 0) {
+//					for (JJTask task : selectedTasksList) {
+//						task.setRequirement(myJJRequirement);
+//						task.setStartDate(new Date());
+//						jJTaskService.updateJJTask(task);
+//					}
+
+					Set<JJTask> tasks = new HashSet<JJTask>();
+					tasks.addAll(selectedTasksList);
+					myJJRequirement.setTasks(tasks);
+
+				}
+
+			}
 
 			jJRequirementService.saveJJRequirement(myJJRequirement);
+			if (creationColumnNumber == 3) {
+
+				if (selectedTasksList.size() > 0) {
+					for (JJTask task : selectedTasksList) {
+						task.setRequirement(myJJRequirement);
+						task.setStartDate(new Date());
+						jJTaskService.updateJJTask(task);
+					}
+
+				}
+
+			}
+			
+			
+			
 			findAllJJRequirementsWithCategory(creationColumnNumber);
 		} else if (index == 2) {
 

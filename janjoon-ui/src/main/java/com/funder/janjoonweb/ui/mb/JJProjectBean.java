@@ -17,6 +17,8 @@ import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProductService;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirementService;
+import com.funder.janjoonweb.domain.JJTask;
+import com.funder.janjoonweb.domain.JJTaskService;
 import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.domain.JJVersionService;
 
@@ -56,6 +58,13 @@ public class JJProjectBean {
 		this.jJRequirementService = jJRequirementService;
 	}
 
+	@Autowired
+	JJTaskService jJTaskService;
+
+	public void setjJTaskService(JJTaskService jJTaskService) {
+		this.jJTaskService = jJTaskService;
+	}
+
 	public JJProject getMyJJProject() {
 
 		return myJJProject;
@@ -80,6 +89,18 @@ public class JJProjectBean {
 		// jJChapterService.saveJJChapter(chapter);
 		// }
 		// }
+
+		if (jJTaskService.findAllJJTasks().isEmpty()) {
+			JJTask task;
+			for (int i = 0; i < 6; i++) {
+				task = new JJTask();
+				task.setName("TaskName " + i);
+				task.setDescription("TaskDescription " + i);
+				task.setCreationDate(new Date());
+				task.setEnabled(true);
+				jJTaskService.saveJJTask(task);
+			}
+		}
 
 		if (jJVersionService.getAllJJVersion().isEmpty()) {
 			JJVersion version;

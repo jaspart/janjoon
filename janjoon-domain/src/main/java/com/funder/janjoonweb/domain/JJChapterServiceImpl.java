@@ -113,8 +113,6 @@ public class JJChapterServiceImpl implements JJChapterService {
 		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3));
 
 		TypedQuery<JJChapter> result = entityManager.createQuery(select);
-		System.out.println("result.getResultList().size() "
-				+ result.getResultList().size());
 		return result.getResultList();
 
 	}
