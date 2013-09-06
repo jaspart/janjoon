@@ -149,7 +149,7 @@ public class JJChapterBean {
 		if (currentProduct != null)
 			myJJChapter.setProduct(currentProduct);
 
-		myJJChapter.setParent(null);
+		//myJJChapter.setParent(null);
 
 		treeBean(category);
 
@@ -248,6 +248,7 @@ public class JJChapterBean {
 
 	public List<JJChapter> completeChapter(String query) {
 		List<JJChapter> suggestions = new ArrayList<JJChapter>();
+		List<JJChapter> parentChapterList = new ArrayList<JJChapter>();
 		for (JJChapter jJChapter : jJChapterService
 				.getAllJJChaptersWithProjectAndCategory(currentProject,
 						currentJJCategory)) {
@@ -263,28 +264,51 @@ public class JJChapterBean {
 	}
 
 	public void treeBean(String categoryName) {
+		
+		leftRoot = new DefaultTreeNode("Root", null);
+		rightRoot = new DefaultTreeNode("Root", null);
 
 		List<JJRequirement> jJRequirementList;
+		JJChapter parentChapter = null;
+		List<JJChapter> jJChapList;
+
 		if (currentProject != null)
-			if (currentProduct != null)
+			if (currentProduct != null) {
 
 				jJRequirementList = jJRequirementService
 						.getAllJJRequirementsWithProjectAndProductAndChapter(
 								categoryName, currentProject, currentProduct);
-			else
+				parentChapter = jJChapterService
+						.getParentJJChapterWithProjectAndProductAndCategory(
+								currentProject, currentProduct,
+								currentJJCategory);
+
+			} else {
 				jJRequirementList = jJRequirementService
 						.getAllJJRequirementsWithProjectAndChapter(
 								categoryName, currentProject);
-		else
+				parentChapter = jJChapterService
+						.getParentJJChapterWithProjectAndCategory(
+								currentProject, currentJJCategory);
+			}
+		else {
 			jJRequirementList = jJRequirementService
 					.getAllJJRequirementsWithCategoryAndChapter(categoryName);
+			parentChapter = jJChapterService
+					.getParentJJChapterWithCategory(currentJJCategory);
+		}
 
-		leftRoot = new DefaultTreeNode("Root", null);
+		
 
 		for (int i = 0; i < jJRequirementList.size(); i++) {
 			TreeNode node = new DefaultTreeNode(jJRequirementList.get(i)
 					.getName(), leftRoot);
 		}
+		
+		System.out.println("parentChapter "+parentChapter);
+		
+
+		// TreeNode node = new DefaultTreeNode(parentChapter, rightRoot);
 
 		// TreeNode node0 = new DefaultTreeNode("Node 0", leftRoot);
 		// TreeNode node1 = new DefaultTreeNode("Node 1", leftRoot);

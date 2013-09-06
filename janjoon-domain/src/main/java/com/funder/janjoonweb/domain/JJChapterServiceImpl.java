@@ -1,6 +1,5 @@
 package com.funder.janjoonweb.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -8,7 +7,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -50,18 +48,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 	}
 
 	@Override
-	public List<JJProduct> getAllJJProductInJJChapterWithJJProject(
-			JJProject project) {
-
-		/*
-		 * Query query =
-		 * entityManager.createQuery("select s.product from JJChapter s " +
-		 * "join fetch s.project where s.project=:value");
-		 * query.setParameter("value", "project");
-		 * 
-		 * @SuppressWarnings("unchecked") List<JJProduct> list =
-		 * query.getResultList(); return list;
-		 */
+	public List<JJChapter> getAllJJChaptersWithCategory(JJCategory category) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJChapter> criteriaQuery = criteriaBuilder
@@ -69,26 +56,43 @@ public class JJChapterServiceImpl implements JJChapterService {
 
 		Root<JJChapter> from = criteriaQuery.from(JJChapter.class);
 
-		Path<Object> path = from.join("project");
-
-		from.fetch("project");
-
 		CriteriaQuery<JJChapter> select = criteriaQuery.select(from);
-		Predicate predicate1 = criteriaBuilder.equal(path, project);
-		Predicate predicate2 = criteriaBuilder.equal(from.get("enabled"), true);
+
+		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
+
+		Predicate predicate2 = criteriaBuilder.equal(from.join("category"),
+				category);
 
 		select.where(criteriaBuilder.and(predicate1, predicate2));
 
 		TypedQuery<JJChapter> result = entityManager.createQuery(select);
+		return result.getResultList();
 
-		List<JJChapter> jJChapterList = result.getResultList();
-		List<JJProduct> jJProduct = new ArrayList<JJProduct>();
-		for (JJChapter jjChapter : jJChapterList) {
-			if (!jJProduct.contains(jjChapter.getProduct()))
-				jJProduct.add(jjChapter.getProduct());
-		}
+	}
 
-		return jJProduct;
+	@Override
+	public JJChapter getParentJJChapterWithCategory(JJCategory category) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJChapter> criteriaQuery = criteriaBuilder
+				.createQuery(JJChapter.class);
+
+		Root<JJChapter> from = criteriaQuery.from(JJChapter.class);
+
+		CriteriaQuery<JJChapter> select = criteriaQuery.select(from);
+
+		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
+
+		Predicate predicate2 = criteriaBuilder.equal(from.join("category"),
+				category);
+		Predicate predicate3 = criteriaBuilder.isNull(from.get("parent"));
+		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3));
+
+		TypedQuery<JJChapter> result = entityManager.createQuery(select);
+		if (result.getResultList().size() == 0)
+			return null;
+		else
+			return result.getSingleResult();
 
 	}
 
@@ -116,4 +120,95 @@ public class JJChapterServiceImpl implements JJChapterService {
 		return result.getResultList();
 
 	}
+
+	@Override
+	public JJChapter getParentJJChapterWithProjectAndCategory(
+			JJProject project, JJCategory category) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJChapter> criteriaQuery = criteriaBuilder
+				.createQuery(JJChapter.class);
+
+		Root<JJChapter> from = criteriaQuery.from(JJChapter.class);
+
+		CriteriaQuery<JJChapter> select = criteriaQuery.select(from);
+
+		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
+		Predicate predicate2 = criteriaBuilder.equal(from.join("project"),
+				project);
+		Predicate predicate3 = criteriaBuilder.equal(from.join("category"),
+				category);
+		Predicate predicate4 = criteriaBuilder.isNull(from.get("parent"));
+
+		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
+				predicate4));
+
+		TypedQuery<JJChapter> result = entityManager.createQuery(select);
+		if (result.getResultList().size() == 0)
+			return null;
+		else
+			return result.getSingleResult();
+
+	}
+
+	@Override
+	public List<JJChapter> getAllJJChaptersWithProjectAndProductAndCategory(
+			JJProject project, JJProduct product, JJCategory category) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJChapter> criteriaQuery = criteriaBuilder
+				.createQuery(JJChapter.class);
+
+		Root<JJChapter> from = criteriaQuery.from(JJChapter.class);
+
+		CriteriaQuery<JJChapter> select = criteriaQuery.select(from);
+
+		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
+		Predicate predicate2 = criteriaBuilder.equal(from.join("project"),
+				project);
+		Predicate predicate3 = criteriaBuilder.equal(from.join("product"),
+				product);
+		Predicate predicate4 = criteriaBuilder.equal(from.join("category"),
+				category);
+
+		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
+				predicate4));
+
+		TypedQuery<JJChapter> result = entityManager.createQuery(select);
+		return result.getResultList();
+
+	}
+
+	@Override
+	public JJChapter getParentJJChapterWithProjectAndProductAndCategory(
+			JJProject project, JJProduct product, JJCategory category) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJChapter> criteriaQuery = criteriaBuilder
+				.createQuery(JJChapter.class);
+
+		Root<JJChapter> from = criteriaQuery.from(JJChapter.class);
+
+		CriteriaQuery<JJChapter> select = criteriaQuery.select(from);
+
+		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
+		Predicate predicate2 = criteriaBuilder.equal(from.join("project"),
+				project);
+		Predicate predicate3 = criteriaBuilder.equal(from.join("product"),
+				product);
+		Predicate predicate4 = criteriaBuilder.equal(from.join("category"),
+				category);
+		Predicate predicate5 = criteriaBuilder.isNull(from.get("parent"));
+
+		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
+				predicate4, predicate5));
+
+		TypedQuery<JJChapter> result = entityManager.createQuery(select);
+		if (result.getResultList().size() == 0)
+			return null;
+		else
+			return result.getSingleResult();
+
+	}
+
 }

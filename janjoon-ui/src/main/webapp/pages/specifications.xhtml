@@ -839,21 +839,28 @@
 								multiple="false" dropdown="true" required="false">
 								<f:converter
 									converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
-								<p:column style="text-align:center">  
+								<p:column>  
            							 #{chapter.name}<!-- - #{chapter.creationDate} -->
 								</p:column>
 							</p:autoComplete>
 							<p:watermark for="chapterParent" value="Parent" />
 						</h:panelGrid>
 
-						<h:panelGrid>
+						<h:panelGrid columns="2" cellpadding="3">
 
-							<p:tree id="treeSingle" value="#{jJChapterBean.leftRoot}"
-								var="node" selectionMode="single"
+							<p:tree id="leftTreeSingle" value="#{jJChapterBean.leftRoot}"
+								var="nodeLeft" selectionMode="single"
 								selection="#{jJChapterBean.selectedLeftNode}">
-
 								<p:treeNode>
-									<h:outputText value="#{node}" />
+									<h:outputText value="#{nodeLeft}" />
+								</p:treeNode>
+							</p:tree>
+							
+							<p:tree id="RightTreeSingle" value="#{jJChapterBean.rightRoot}"
+								var="nodeRight" selectionMode="single"
+								selection="#{jJChapterBean.selectedRightNode}">
+								<p:treeNode>
+									<h:outputText value="#{nodeRight}" />
 								</p:treeNode>
 							</p:tree>
 

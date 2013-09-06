@@ -72,7 +72,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
 		Predicate predicate1 = criteriaBuilder.equal(path, categoryName);
 		Predicate predicate2 = criteriaBuilder.equal(from.get("enabled"), true);
-		Predicate predicate3 = criteriaBuilder.isNull(from.join("chapter"));
+		Predicate predicate3 = criteriaBuilder.isNull(from.get("chapter"));
 
 		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3));
 
@@ -133,7 +133,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		Predicate predicate3 = criteriaBuilder.equal(from.join("project"),
 				project);
 
-		Predicate predicate4 = criteriaBuilder.isNull(from.join("chapter"));
+		Predicate predicate4 = criteriaBuilder.isNull(from.get("chapter"));
 
 		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
 				predicate4));
@@ -277,7 +277,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		Predicate predicate5 = criteriaBuilder.equal(from.join("jjversion"),
 				version);
 
-		Predicate predicate6 = criteriaBuilder.isNull(from.join("chapter"));
+		Predicate predicate6 = criteriaBuilder.isNull(from.get("chapter"));
 
 		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
 				predicate4, predicate5, predicate6));
