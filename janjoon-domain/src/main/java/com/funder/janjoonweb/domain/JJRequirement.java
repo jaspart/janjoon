@@ -83,11 +83,14 @@ public class JJRequirement extends JJAbstractEntity {
     @Size(max = 250)
     private String note;
 
-    @ManyToMany(mappedBy = "requirementLinkUp")
+    @ManyToMany(mappedBy = "requirementLinkUp", fetch = FetchType.EAGER)
     private Set<JJRequirement> requirementLinkDown = new HashSet<JJRequirement>();
 
-    @ManyToMany(cascade = { javax.persistence.CascadeType.ALL })
-    @JoinTable(name = "JJRequirementLink", joinColumns = { @javax.persistence.JoinColumn(name = "ReqLinkUp_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "ReqLinkDown_ID", referencedColumnName = "id") })
+//    @ManyToMany(cascade = { javax.persistence.CascadeType.ALL }, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "JJRequirementLink", 
+        joinColumns = { @javax.persistence.JoinColumn(name = "ReqLinkUp_ID", referencedColumnName = "id") }, 
+        inverseJoinColumns = { @javax.persistence.JoinColumn(name = "ReqLinkDown_ID", referencedColumnName = "id") })
     private Set<JJRequirement> requirementLinkUp = new HashSet<JJRequirement>();
 
     private Integer ordering;

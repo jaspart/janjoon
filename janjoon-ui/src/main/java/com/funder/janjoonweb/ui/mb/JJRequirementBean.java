@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import java.io.*;
+
+
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -654,11 +657,9 @@ public class JJRequirementBean {
 
 		JJCategory myJJCategory = null;
 
-		JJCategory jjCategory = jJCategoryService
-				.getJJCategoryWithName(category);
+		JJCategory jjCategory = jJCategoryService.getJJCategoryWithName(category);
 
 		if (jjCategory != null)
-
 			myJJCategory = jjCategory;
 		else
 			myJJCategory = createANDpersistJJCategory(category);
@@ -731,54 +732,106 @@ public class JJRequirementBean {
 		req = jJRequirementService.findJJRequirement(req.getId());
 
 		Set<JJRequirement> requirementsDown = req.getRequirementLinkDown();
-
+		System.out.println("AJA LOG == requirementsDown == ");
 		for (JJRequirement jjRequirement : requirementsDown) {
-			if (jjRequirement.getCategory().getName()
-					.equalsIgnoreCase("BUSINESS"))
+			System.out.println("AJA LOG requirementsDown : "+jjRequirement.getName());
+			if (jjRequirement.getCategory().getName().equalsIgnoreCase("BUSINESS")){
 				selectedBusinessJJRequirements.add(jjRequirement);
-			else if (jjRequirement.getCategory().getName()
-					.equalsIgnoreCase("FUNCTIONAL"))
+			}
+			else if (jjRequirement.getCategory().getName().equalsIgnoreCase("FUNCTIONAL")){
 				selectedFunctionalJJRequirements.add(jjRequirement);
-			else if (jjRequirement.getCategory().getName()
-					.equalsIgnoreCase("TECHNICAL"))
+			}
+			else if (jjRequirement.getCategory().getName().equalsIgnoreCase("TECHNICAL")){
 				selectedTechnicalJJRequirements.add(jjRequirement);
+			}
 		}
-
 	}
 
-	public void persistJJRequirement(int index) {
-
-		if (index == 1) {
-
-			Set<JJRequirement> requirementsDown = new HashSet<JJRequirement>();
-			List<JJRequirement> tempList = new ArrayList<JJRequirement>();
-
+	public void persistJJRequirement(int index) throws Exception {
+		Set<JJRequirement> tempList1 = new HashSet<JJRequirement>();
+		Set<JJRequirement> tempList2 = new HashSet<JJRequirement>();
+		System.out.println("AJA LOG persistJJRequirement == ");
+		if(selectedBusinessJJRequirements != null){
 			if (selectedBusinessJJRequirements.size() > 0) {
 				for (JJRequirement req : selectedBusinessJJRequirements) {
+					System.out.println("AJA LOG selectedBusinessJJRequirements : "+req.getName());
+					//req.getRequirementLinkUp().add(myJJRequirement);
+					//myJJRequirement.getRequirementLinkUp().add(req);
+
+				//	req.getRequirementLinkUp().add(myJJRequirement);
+				//	myJJRequirement.getRequirementLinkUp().add(req);
+
+					tempList1.add(req);
+					System.out.println("AJA LOG tempList1 : "+tempList1.contains(req));
+					//myJJRequirement.getRequirementLinkDown().add(req);
+				}
+				myJJRequirement.setRequirementLinkDown(tempList1);
+				for (JJRequirement req : myJJRequirement.getRequirementLinkDown()) {
+					System.out.println("AJA LOG getreq : "+req.getName());
+				}
+				//myJJRequirement.setRequirementLinkUp(tempList1);
+			//	req.getSelectedBusinessJJRequirements().add(myJJRequirement);
+			//	myJJRequirement.getSelectedBusinessJJRequirements().add(req);
+			}
+			else{
+				System.out.println("No selectedBusinessJJRequirements! isEmpty pointer.");
+			}
+		}
+		else{
+			System.out.println("No selectedBusinessJJRequirements! null pointer.");
+		}
+		System.out.println("Saving Requirement. (if no message after this one, then it means that the saving crashed!)");		
+		jJRequirementService.saveJJRequirement(myJJRequirement);
+		System.out.println("Requirement Saving process. (if no message after this one, then it means that the findall crashed!)");
+		findAllJJRequirementsWithCategory(creationColumnNumber);
+		System.out.println("Requirement Saved.");		
+
+		System.out.println("AJA saveJJRequirement == ");
+		for(JJRequirement req : jJRequirementService.getAllJJRequirementsWithCategory("BUSINESS")){
+			for (JJRequirement down : req.getRequirementLinkDown()) {
+				System.out.println("AJA down : "+down.getName());
+			}
+			for (JJRequirement up : req.getRequirementLinkUp()) {
+				System.out.println("AJA up : "+up.getName());
+			}
+		}
+
+		findAllJJRequirementsWithCategory(creationColumnNumber);
+
+
+
+//		if (index == 1) {
+
+/*			Set<JJRequirement> requirementsDown = new HashSet<JJRequirement>();
+			List<JJRequirement> tempList = new ArrayList<JJRequirement>();
+
+			if(selectedBusinessJJRequirements != null)
+			if (selectedBusinessJJRequirements.size() > 0) {
+				for (JJRequirement req : selectedBusinessJJRequirements) {
+					System.out.println("AJA LOG getreq : "+req.getName());
 					req = jJRequirementService.findJJRequirement(req.getId());
+					System.out.println("AJA LOG getreq : "+req.getName());
 					req.getRequirementLinkUp().add(myJJRequirement);
 				}
 				tempList.addAll(tempList.size(), selectedBusinessJJRequirements);
 			}
 
+			if(selectedFunctionalJJRequirements != null)
 			if (selectedFunctionalJJRequirements.size() > 0) {
 				for (JJRequirement req : selectedFunctionalJJRequirements) {
 					req = jJRequirementService.findJJRequirement(req.getId());
 					req.getRequirementLinkUp().add(myJJRequirement);
 				}
-
-				tempList.addAll(tempList.size(),
-						selectedFunctionalJJRequirements);
+				tempList.addAll(tempList.size(), selectedFunctionalJJRequirements);
 			}
 
+			if(selectedTechnicalJJRequirements != null)
 			if (selectedTechnicalJJRequirements.size() > 0) {
 				for (JJRequirement req : selectedTechnicalJJRequirements) {
 					req = jJRequirementService.findJJRequirement(req.getId());
 					req.getRequirementLinkUp().add(myJJRequirement);
 				}
-
-				tempList.addAll(tempList.size(),
-						selectedTechnicalJJRequirements);
+				tempList.addAll(tempList.size(), selectedTechnicalJJRequirements);
 			}
 
 			requirementsDown.addAll(tempList);
@@ -786,56 +839,56 @@ public class JJRequirementBean {
 			myJJRequirement.setRequirementLinkDown(requirementsDown);
 
 			if (creationColumnNumber == 3) {
-
 				if (selectedTasksList.size() > 0) {
 //					for (JJTask task : selectedTasksList) {
 //						task.setRequirement(myJJRequirement);
 //						task.setStartDate(new Date());
 //						jJTaskService.updateJJTask(task);
 //					}
-
 					Set<JJTask> tasks = new HashSet<JJTask>();
 					tasks.addAll(selectedTasksList);
 					myJJRequirement.setTasks(tasks);
-
 				}
-
 			}
 
-			jJRequirementService.saveJJRequirement(myJJRequirement);
+			//jJRequirementService.saveJJRequirement(myJJRequirement);
 			if (creationColumnNumber == 3) {
-
 				if (selectedTasksList.size() > 0) {
 					for (JJTask task : selectedTasksList) {
 						task.setRequirement(myJJRequirement);
 						task.setStartDate(new Date());
 						jJTaskService.updateJJTask(task);
 					}
-
 				}
-
 			}
-			
-			
-			
+
+			jJRequirementService.saveJJRequirement(myJJRequirement);
+
+			System.out.println("AJA saveJJRequirement == ");
+			for(JJRequirement req : jJRequirementService.getAllJJRequirementsWithCategory("BUSINESS")){
+				for (JJRequirement down : req.getRequirementLinkDown()) {
+					System.out.println("AJA down : "+down.getName());
+				}
+				for (JJRequirement up : req.getRequirementLinkUp()) {
+					System.out.println("AJA up : "+up.getName());
+				}
+			}
+
 			findAllJJRequirementsWithCategory(creationColumnNumber);
-		} else if (index == 2) {
+*//*		} else if (index == 2) {
 
 			switch (editionColumnNumber) {
 			case 1:
 				mySelectedBusinessJJRequirement.setEnabled(false);
-				jJRequirementService
-						.updateJJRequirement(mySelectedBusinessJJRequirement);
+				jJRequirementService.updateJJRequirement(mySelectedBusinessJJRequirement);
 				break;
 			case 2:
 				mySelectedFunctionalJJRequirement.setEnabled(false);
-				jJRequirementService
-						.updateJJRequirement(mySelectedFunctionalJJRequirement);
+				jJRequirementService.updateJJRequirement(mySelectedFunctionalJJRequirement);
 				break;
 			case 3:
 				mySelectedTechnicalJJRequirement.setEnabled(false);
-				jJRequirementService
-						.updateJJRequirement(mySelectedTechnicalJJRequirement);
+				jJRequirementService.updateJJRequirement(mySelectedTechnicalJJRequirement);
 				break;
 
 			default:
@@ -845,32 +898,33 @@ public class JJRequirementBean {
 			Set<JJRequirement> requirementsDown = new HashSet<JJRequirement>();
 			List<JJRequirement> tempList = new ArrayList<JJRequirement>();
 
+			if(selectedBusinessJJRequirements != null)
 			if (selectedBusinessJJRequirements.size() > 0) {
+				System.out.println("AJA selectedBusinessJJRequirements.size="+selectedBusinessJJRequirements.size());
 				for (JJRequirement req : selectedBusinessJJRequirements) {
+					System.out.println("AJA req.getId()="+req.getId());
 					req = jJRequirementService.findJJRequirement(req.getId());
 					req.getRequirementLinkUp().add(myJJRequirement);
 				}
 				tempList.addAll(tempList.size(), selectedBusinessJJRequirements);
 			}
 
+			if(selectedFunctionalJJRequirements != null)
 			if (selectedFunctionalJJRequirements.size() > 0) {
 				for (JJRequirement req : selectedFunctionalJJRequirements) {
 					req = jJRequirementService.findJJRequirement(req.getId());
 					req.getRequirementLinkUp().add(myJJRequirement);
 				}
-
-				tempList.addAll(tempList.size(),
-						selectedFunctionalJJRequirements);
+				tempList.addAll(tempList.size(), selectedFunctionalJJRequirements);
 			}
 
+			if(selectedTechnicalJJRequirements != null)
 			if (selectedTechnicalJJRequirements.size() > 0) {
 				for (JJRequirement req : selectedTechnicalJJRequirements) {
 					req = jJRequirementService.findJJRequirement(req.getId());
 					req.getRequirementLinkUp().add(myJJRequirement);
 				}
-
-				tempList.addAll(tempList.size(),
-						selectedTechnicalJJRequirements);
+				tempList.addAll(tempList.size(), selectedTechnicalJJRequirements);
 			}
 
 			requirementsDown.addAll(tempList);
@@ -882,19 +936,13 @@ public class JJRequirementBean {
 
 			switch (deleteColumnNumber) {
 			case 1:
-
-				jJRequirementService
-						.updateJJRequirement(mySelectedBusinessJJRequirement);
+				jJRequirementService.updateJJRequirement(mySelectedBusinessJJRequirement);
 				break;
 			case 2:
-
-				jJRequirementService
-						.updateJJRequirement(mySelectedFunctionalJJRequirement);
+				jJRequirementService.updateJJRequirement(mySelectedFunctionalJJRequirement);
 				break;
 			case 3:
-
-				jJRequirementService
-						.updateJJRequirement(mySelectedTechnicalJJRequirement);
+				jJRequirementService.updateJJRequirement(mySelectedTechnicalJJRequirement);
 				break;
 
 			default:
@@ -907,6 +955,7 @@ public class JJRequirementBean {
 
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
+*/
 	}
 
 	public void deleteJJRequirement(int number) {
@@ -953,86 +1002,79 @@ public class JJRequirementBean {
 
 		switch (number) {
 		case 1:
-			if (currentProject != null)
-				if (currentProduct != null)
-
-					if (currentVersion != null)
-
+			if (currentProject != null) {
+				if (currentProduct != null) {
+					if (currentVersion != null) {
 						myBusinessJJRequirements = jJRequirementService
 								.getAllJJRequirementsWithProjectAndProductAndVersion(
-										"BUSINESS", currentProject,
-										currentProduct, currentVersion);
-					else
-
+										"BUSINESS", currentProject, currentProduct, currentVersion);
+					}
+					else {
 						myBusinessJJRequirements = jJRequirementService
 								.getAllJJRequirementsWithProjectAndProduct(
-										"BUSINESS", currentProject,
-										currentProduct);
-				else
+										"BUSINESS", currentProject, currentProduct);
+					}
+				}
+				else {
 					myBusinessJJRequirements = jJRequirementService
-							.getAllJJRequirementsWithProject("BUSINESS",
-									currentProject);
-			else
+							.getAllJJRequirementsWithProject("BUSINESS", currentProject);
+				}
+			}
+			else {
 				myBusinessJJRequirements = jJRequirementService
 						.getAllJJRequirementsWithCategory("BUSINESS");
+			}
 			break;
 		case 2:
-
 			if (currentProject != null)
-				if (currentProduct != null)
-
-					if (currentVersion != null)
-
+				if (currentProduct != null) {
+					if (currentVersion != null) {
 						myFunctionalJJRequirements = jJRequirementService
 								.getAllJJRequirementsWithProjectAndProductAndVersion(
-										"FUNCTIONAL", currentProject,
-										currentProduct, currentVersion);
-
-					else
-
+										"FUNCTIONAL", currentProject, currentProduct, currentVersion);
+					}
+					else {
 						myFunctionalJJRequirements = jJRequirementService
 								.getAllJJRequirementsWithProjectAndProduct(
-										"FUNCTIONAL", currentProject,
-										currentProduct);
-
-				else
+										"FUNCTIONAL", currentProject, currentProduct);
+					}
+				}
+				else {
 					myFunctionalJJRequirements = jJRequirementService
-							.getAllJJRequirementsWithProject("FUNCTIONAL",
-									currentProject);
-			else
-
+							.getAllJJRequirementsWithProject("FUNCTIONAL", currentProject);
+				}
+			else {
 				myFunctionalJJRequirements = jJRequirementService
 						.getAllJJRequirementsWithCategory("FUNCTIONAL");
+			}
 			break;
 		case 3:
-			if (currentProject != null)
-				if (currentProduct != null)
-					if (currentVersion != null)
-
+			if (currentProject != null) {
+				if (currentProduct != null) {
+					if (currentVersion != null) {
 						myTechnicalJJRequirements = jJRequirementService
 								.getAllJJRequirementsWithProjectAndProductAndVersion(
-										"TECHNICAL", currentProject,
-										currentProduct, currentVersion);
-
-					else
-
+										"TECHNICAL", currentProject, currentProduct, currentVersion);
+					}
+					else {
 						myTechnicalJJRequirements = jJRequirementService
 								.getAllJJRequirementsWithProjectAndProduct(
-										"TECHNICAL", currentProject,
-										currentProduct);
-				else
+										"TECHNICAL", currentProject, currentProduct);
+					}
+				}
+				else {
 					myTechnicalJJRequirements = jJRequirementService
-							.getAllJJRequirementsWithProject("TECHNICAL",
-									currentProject);
-			else
-
+							.getAllJJRequirementsWithProject("TECHNICAL", currentProject);
+				}
+			}
+			else {
 				myTechnicalJJRequirements = jJRequirementService
 						.getAllJJRequirementsWithCategory("TECHNICAL");
+			}
 			break;
 		default:
 			break;
 		}
-
 	}
 
 	public void releaseJJRequirement() {
