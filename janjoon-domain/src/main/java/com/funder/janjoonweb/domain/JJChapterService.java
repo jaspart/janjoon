@@ -18,6 +18,9 @@ public interface JJChapterService {
 	public JJChapter getParentJJChapterWithProjectAndCategory(
 			JJProject project, JJCategory category);
 
+	public List<JJChapter> getAllParentJJChapterWithProjectAndCategory(
+			JJProject project, JJCategory category);
+
 	public List<JJChapter> getAllJJChaptersWithProjectAndProductAndCategory(
 			JJProject project, JJProduct product, JJCategory category);
 

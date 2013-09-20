@@ -2,11 +2,14 @@ package com.funder.janjoonweb.ui.mb;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,9 @@ public class JJChapterBean {
 	private TreeNode rightRoot;
 	private TreeNode selectedLeftNode;
 	private TreeNode selectedRightNode;
+	
+	private TreeNode chapterRoot;
+	private TreeNode selectedChapterNode;
 
 	@Autowired
 	JJRequirementService jJRequirementService;
@@ -107,12 +113,25 @@ public class JJChapterBean {
 		this.selectedRightNode = selectedRightNode;
 	}
 
-	public void createJJChapter(int number, JJCategoryBean jJCategoryBean) {
+	public TreeNode getChapterRoot() {
+		return chapterRoot;
+	}
 
-		myJJChapter = new JJChapter();
-		myJJChapter.setCreationDate(new Date());
-		myJJChapter.setEnabled(true);
+	public void setChapterRoot(TreeNode chapterRoot) {
+		this.chapterRoot = chapterRoot;
+	}
 
+	public TreeNode getSelectedChapterNode() {
+		return selectedChapterNode;
+	}
+
+	public void setSelectedChapterNode(TreeNode selectedChapterNode) {
+		this.selectedChapterNode = selectedChapterNode;
+	}
+
+	public void initParameter(int number, JJCategoryBean jJCategoryBean){
+		System.out.println("BEGIN INIT PARAMETER");
+		
 		this.creationColumnNumber = number;
 		String category = null;
 		switch (number) {
@@ -131,28 +150,35 @@ public class JJChapterBean {
 		}
 
 		JJCategory myJJCategory = null;
-
 		JJCategory jjCategory = jJCategoryService
 				.getJJCategoryWithName(category);
 
 		if (jjCategory != null)
-
 			myJJCategory = jjCategory;
 		else if (jJCategoryBean != null)
 			myJJCategory = jJCategoryBean.createANDpersistJJCategory(category);
 		currentJJCategory = myJJCategory;
-
-		myJJChapter.setCategory(myJJCategory);
+		chapterTreeBean(currentJJCategory.getName());
+		createJJChapter() ;
+		System.out.println("END INIT PARAMETER");
+	}
+	
+	public void createJJChapter() {
+		System.out.println("BEGIN CREATE JJCHAPTER");
+		myJJChapter = new JJChapter();
+		myJJChapter.setCreationDate(new Date());
+		myJJChapter.setEnabled(true);
+		myJJChapter.setCategory(currentJJCategory);
 
 		if (currentProject != null)
 			myJJChapter.setProject(currentProject);
 		if (currentProduct != null)
 			myJJChapter.setProduct(currentProduct);
 
-		//myJJChapter.setParent(null);
+		// myJJChapter.setParent(null);
 
-		treeBean(category);
-
+		//treeBean(currentJJCategory.getName());
+		System.out.println("END CREATE JJCHAPTER");
 	}
 
 	public void persistJJChapter(int index) {
@@ -248,7 +274,7 @@ public class JJChapterBean {
 
 	public List<JJChapter> completeChapter(String query) {
 		List<JJChapter> suggestions = new ArrayList<JJChapter>();
-		List<JJChapter> parentChapterList = new ArrayList<JJChapter>();
+
 		for (JJChapter jJChapter : jJChapterService
 				.getAllJJChaptersWithProjectAndCategory(currentProject,
 						currentJJCategory)) {
@@ -263,52 +289,85 @@ public class JJChapterBean {
 		return suggestions;
 	}
 
-	public void treeBean(String categoryName) {
-		
-		leftRoot = new DefaultTreeNode("Root", null);
-		rightRoot = new DefaultTreeNode("Root", null);
-
-		List<JJRequirement> jJRequirementList;
+	public void chapterTreeBean(String categoryName){
+		chapterRoot = new DefaultTreeNode("Root", null);
 		JJChapter parentChapter = null;
-		List<JJChapter> jJChapList;
-
-		if (currentProject != null)
+		
+		if (currentProject != null) {
 			if (currentProduct != null) {
 
-				jJRequirementList = jJRequirementService
-						.getAllJJRequirementsWithProjectAndProductAndChapter(
-								categoryName, currentProject, currentProduct);
 				parentChapter = jJChapterService
 						.getParentJJChapterWithProjectAndProductAndCategory(
 								currentProject, currentProduct,
 								currentJJCategory);
 
 			} else {
-				jJRequirementList = jJRequirementService
-						.getAllJJRequirementsWithProjectAndChapter(
-								categoryName, currentProject);
+			
 				parentChapter = jJChapterService
 						.getParentJJChapterWithProjectAndCategory(
 								currentProject, currentJJCategory);
 			}
-		else {
-			jJRequirementList = jJRequirementService
-					.getAllJJRequirementsWithCategoryAndChapter(categoryName);
+		} else {
+
 			parentChapter = jJChapterService
 					.getParentJJChapterWithCategory(currentJJCategory);
 		}
-
 		
+		Set<JJChapter> jJChapList = new HashSet<JJChapter>();
+		if(parentChapter!= null)
+			jJChapList= parentChapter.getChapters();
+		for (JJChapter jjChapter : jJChapList) {
+			TreeNode node = createTree(jjChapter, chapterRoot);
+		}
+		
+	}
+	
+	public void treeBean(String categoryName) {
+
+		// Requirement Tree WHERE chapter = null
+		leftRoot = new DefaultTreeNode("Root", null);
+
+		// Chapter Tree
+		rightRoot = new DefaultTreeNode("Root", null);
+
+		List<JJRequirement> jJRequirementList;
+		JJChapter parentChapter = null;
+		//List<JJChapter> jJChapList;
+
+		if (currentProject != null) {
+			if (currentProduct != null) {
+
+				jJRequirementList = jJRequirementService
+						.getAllJJRequirementsWithProjectAndProductAndChapter(
+								categoryName, currentProject, currentProduct);
+//				parentChapter = jJChapterService
+//						.getParentJJChapterWithProjectAndProductAndCategory(
+//								currentProject, currentProduct,
+//								currentJJCategory);
+
+			} else {
+				jJRequirementList = jJRequirementService
+						.getAllJJRequirementsWithProjectAndChapter(
+								categoryName, currentProject);
+//				parentChapter = jJChapterService
+//						.getParentJJChapterWithProjectAndCategory(
+//								currentProject, currentJJCategory);
+			}
+		} else {
+			jJRequirementList = jJRequirementService
+					.getAllJJRequirementsWithCategoryAndChapter(categoryName);
+//			parentChapter = jJChapterService
+//					.getParentJJChapterWithCategory(currentJJCategory);
+		}
 
 		for (int i = 0; i < jJRequirementList.size(); i++) {
 			TreeNode node = new DefaultTreeNode(jJRequirementList.get(i)
 					.getName(), leftRoot);
 		}
-		
-		System.out.println("parentChapter "+parentChapter);
-		
 
-		// TreeNode node = new DefaultTreeNode(parentChapter, rightRoot);
+		System.out.println("parentChapter " + parentChapter);
+
+		//TreeNode node = new DefaultTreeNode(parentChapter, rightRoot);
 
 		// TreeNode node0 = new DefaultTreeNode("Node 0", leftRoot);
 		// TreeNode node1 = new DefaultTreeNode("Node 1", leftRoot);
@@ -326,4 +385,42 @@ public class JJChapterBean {
 		//
 		// TreeNode node100 = new DefaultTreeNode("Node 1.0.0", node10);
 	}
+    public void onNodeSelect(NodeSelectEvent event) {  
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", event.getTreeNode().getData().toString());  
+     
+        FacesContext.getCurrentInstance().addMessage(null, message);  
+    }
+	  public void displaySelectedSingle() {  
+	        if(selectedChapterNode != null) {  
+	            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", selectedChapterNode.getData().toString());  
+	            FacesContext.getCurrentInstance().addMessage(null, message);  
+	        }  
+	    }  
+	  
+	    public void deleteNode() { 
+	    	
+	    	  if(selectedChapterNode != null) {  
+		            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Deleted", selectedChapterNode.getData().toString());  
+		  
+		            FacesContext.getCurrentInstance().addMessage(null, message);  
+		        } 
+//	    	selectedChapterNode.getChildren().clear();  
+//	    	selectedChapterNode.getParent().getChildren().remove(selectedChapterNode);  
+//	    	selectedChapterNode.setParent(null);  
+//	    	selectedChapterNode = null;  
+	    } 
+	    
+	    // Recursive function to create tree
+
+	    public TreeNode createTree(JJChapter treeObj, TreeNode rootNode) {
+	        TreeNode newNode = new DefaultTreeNode(treeObj, rootNode);
+
+	        Set<JJChapter> childNodes1 = treeObj.getChapters();
+
+	        for (JJChapter tt : childNodes1) {
+	            TreeNode newNode2 = createTree(tt, newNode);
+	        }
+
+	        return newNode;
+	    }
 }
