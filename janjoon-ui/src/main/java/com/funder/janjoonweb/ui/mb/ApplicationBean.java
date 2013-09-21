@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.roo.addon.jsf.application.RooJsfApplicationBean;
 
-@RooJsfApplicationBean
+
 public class ApplicationBean {
 
     public String getColumnName(String column) {

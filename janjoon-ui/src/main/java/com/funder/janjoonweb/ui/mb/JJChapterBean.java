@@ -19,6 +19,8 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.event.DragDropEvent;
+import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -336,13 +338,15 @@ public class JJChapterBean {
 		if (parentChapter != null)
 			jJChapList = parentChapter.getChapters();
 		for (JJChapter jjChapter : jJChapList) {
-			TreeNode node = createTree(jjChapter, chapterRoot);
+			TreeNode node = createTree(jjChapter, chapterRoot, 0);
 		}
 
 	}
 
-	public void treeBean(String categoryName) {
-
+	public void treeBean() {
+		String categoryName = "BUSINESS";
+		JJCategory category = jJCategoryService
+				.getJJCategoryWithName("BUSINESS");
 		// Requirement Tree WHERE chapter = null
 		leftRoot = new DefaultTreeNode("Root", null);
 
@@ -351,7 +355,6 @@ public class JJChapterBean {
 
 		List<JJRequirement> jJRequirementList;
 		JJChapter parentChapter = null;
-		// List<JJChapter> jJChapList;
 
 		if (currentProject != null) {
 			if (currentProduct != null) {
@@ -359,50 +362,38 @@ public class JJChapterBean {
 				jJRequirementList = jJRequirementService
 						.getAllJJRequirementsWithProjectAndProductAndChapter(
 								categoryName, currentProject, currentProduct);
-				// parentChapter = jJChapterService
-				// .getParentJJChapterWithProjectAndProductAndCategory(
-				// currentProject, currentProduct,
-				// currentJJCategory);
+				parentChapter = jJChapterService
+						.getParentJJChapterWithProjectAndProductAndCategory(
+								currentProject, currentProduct, category);
 
 			} else {
 				jJRequirementList = jJRequirementService
 						.getAllJJRequirementsWithProjectAndChapter(
 								categoryName, currentProject);
-				// parentChapter = jJChapterService
-				// .getParentJJChapterWithProjectAndCategory(
-				// currentProject, currentJJCategory);
+				parentChapter = jJChapterService
+						.getParentJJChapterWithProjectAndCategory(
+								currentProject, category);
 			}
 		} else {
 			jJRequirementList = jJRequirementService
 					.getAllJJRequirementsWithCategoryAndChapter(categoryName);
-			// parentChapter = jJChapterService
-			// .getParentJJChapterWithCategory(currentJJCategory);
+			parentChapter = jJChapterService
+					.getParentJJChapterWithCategory(category);
 		}
 
-		for (int i = 0; i < jJRequirementList.size(); i++) {
-			TreeNode node = new DefaultTreeNode(jJRequirementList.get(i)
-					.getName(), leftRoot);
+		for (JJRequirement jjRequirement : jJRequirementList) {
+			TreeNode node = new DefaultTreeNode("R- " + jjRequirement.getId()
+					+ " - " + jjRequirement.getName(), leftRoot);
+			// TreeNode node2 = new DefaultTreeNode("TOTO", rightRoot);
 		}
+		// TreeNode node2 = new DefaultTreeNode("TOTO23", rightRoot);
 
-		System.out.println("parentChapter " + parentChapter);
-
-		// TreeNode node = new DefaultTreeNode(parentChapter, rightRoot);
-
-		// TreeNode node0 = new DefaultTreeNode("Node 0", leftRoot);
-		// TreeNode node1 = new DefaultTreeNode("Node 1", leftRoot);
-		// TreeNode node2 = new DefaultTreeNode("Node 2", leftRoot);
-		//
-		// TreeNode node00 = new DefaultTreeNode("Node 0.0", node0);
-		// TreeNode node01 = new DefaultTreeNode("Node 0.1", node0);
-		//
-		// TreeNode node10 = new DefaultTreeNode("Node 1.0", node1);
-		// TreeNode node11 = new DefaultTreeNode("Node 1.1", node1);
-		//
-		// TreeNode node000 = new DefaultTreeNode("Node 0.0.0", node00);
-		// TreeNode node001 = new DefaultTreeNode("Node 0.0.1", node00);
-		// TreeNode node010 = new DefaultTreeNode("Node 0.1.0", node01);
-		//
-		// TreeNode node100 = new DefaultTreeNode("Node 1.0.0", node10);
+		Set<JJChapter> jJChapList = new HashSet<JJChapter>();
+		if (parentChapter != null)
+			jJChapList = parentChapter.getChapters();
+		for (JJChapter jjChapter : jJChapList) {
+			TreeNode node = createTree(jjChapter, rightRoot, 1);
+		}
 	}
 
 	public void onNodeSelect(NodeSelectEvent event) {
@@ -436,13 +427,18 @@ public class JJChapterBean {
 
 	// Recursive function to create tree
 
-	public TreeNode createTree(JJChapter treeObj, TreeNode rootNode) {
-		TreeNode newNode = new DefaultTreeNode(treeObj, rootNode);
-
+	public TreeNode createTree(JJChapter treeObj, TreeNode rootNode, int index) {
+		TreeNode newNode;
+		if (index == 0) {
+			newNode = new DefaultTreeNode(treeObj, rootNode);
+		} else {
+			newNode = new DefaultTreeNode("C- " + treeObj.getId() + " - "
+					+ treeObj.getName(), rootNode);
+		}
 		Set<JJChapter> childNodes1 = treeObj.getChapters();
 
 		for (JJChapter tt : childNodes1) {
-			TreeNode newNode2 = createTree(tt, newNode);
+			TreeNode newNode2 = createTree(tt, newNode, index);
 		}
 
 		return newNode;
@@ -452,6 +448,7 @@ public class JJChapterBean {
 			BadElementException, DocumentException {
 		Document pdf = (Document) document;
 		pdf.addTitle("THIS IS THE TITLE");
+
 		Element elm;
 
 		pdf.open();
@@ -460,12 +457,12 @@ public class JJChapterBean {
 		Font font = new Font(Font.COURIER, 10, Font.BOLD);
 		font.setColor(new Color(0x92, 0x90, 0x83));
 
-//		Chunk chunk = new Chunk("testing text element ", font);
-//		chunk.setBackground(new Color(0xff, 0xe4, 0x00));
-		
+		// Chunk chunk = new Chunk("testing text element ", font);
+		// chunk.setBackground(new Color(0xff, 0xe4, 0x00));
 
 		Phrase phrase = new Phrase(20, "Business Specification");
-		JJCategory category = jJCategoryService.getJJCategoryWithName("BUSINESS");
+		JJCategory category = jJCategoryService
+				.getJJCategoryWithName("BUSINESS");
 		List<JJChapter> list = jJChapterService
 				.getAllJJChaptersWithProjectAndCategory(currentProject,
 						category);
@@ -473,30 +470,27 @@ public class JJChapterBean {
 		for (JJChapter jjChapter : list) {
 			Chunk chunk = new Chunk(jjChapter.getName(), font);
 			chunk.setBackground(new Color(0xff, 0xe4, 0x00));
-			
-			
+
 			phrase.add(chunk);
-			
+
 			Set<JJRequirement> listReq = jjChapter.getRequirements();
 			for (JJRequirement jjRequirement : listReq) {
 				Chunk chunk2 = new Chunk(jjRequirement.getName(), font);
 				chunk2.setBackground(new Color(0xff, 0xe4, 0x00));
 				phrase.add(chunk2);
 			}
-		
-			
+
 		}
-		
-//		for (int i = 0; i < 10; i++) {
-//			Chunk chunk = new Chunk("testing text element ", font);
-//			chunk.setBackground(new Color(0xff, 0xe4, 0x00));
-//			phrase.add(chunk);
-//		}
+
+		// for (int i = 0; i < 10; i++) {
+		// Chunk chunk = new Chunk("testing text element ", font);
+		// chunk.setBackground(new Color(0xff, 0xe4, 0x00));
+		// phrase.add(chunk);
+		// }
 
 		Paragraph paragraph = new Paragraph(); // 1
 		paragraph.add(phrase); // 2
 		pdf.add(paragraph); // 3
-		
 
 		// ServletContext servletContext = (ServletContext)
 		// FacesContext.getCurrentInstance().getExternalContext().getContext();
@@ -521,4 +515,17 @@ public class JJChapterBean {
 			cell.setCellStyle(cellStyle);
 		}
 	}
+
+	public void onDragDrop(TreeDragDropEvent event) {
+		TreeNode dragNode = event.getDragNode();
+		TreeNode dropNode = event.getDropNode();
+		int dropIndex = event.getDropIndex();
+
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Dragged " + dragNode.getData() + "  \nDropped on "
+						+ dropNode.getData() + " at " + dropIndex,
+				"Dropped on " + dropNode.getData() + " at " + dropIndex);
+		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+
 }

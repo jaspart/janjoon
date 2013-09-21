@@ -121,12 +121,16 @@
 									<f:facet name="header">
 										<p:row>
 											<p:column colspan="2">
-												<p:splitButton id="manageDocumentLeft"
-													title="Manage Document" icon="ui-icon-clipboard">
+												<p:splitButton id="managementLeft" title="Management"
+													icon="ui-icon-clipboard">
 													<p:menuitem id="manageChapterLeft" value="Manage Chapter"
 														icon="ui-icon-arrowrefresh-1-w"
 														actionListener="#{jJChapterBean.initParameter(1,jJCategoryBean)}"
 														oncomplete="manageJJChapter.show()" />
+													<p:menuitem id="manageDocumentLeft" value="Manage Document"
+														actionListener="#{jJChapterBean.treeBean()}"
+														oncomplete="manageDocument.show()" />
+
 												</p:splitButton>
 											</p:column>
 											<p:column colspan="1">
@@ -139,7 +143,7 @@
 											</p:column>
 											<p:column colspan="3">
 												<p:inputText id="globalFilter" style="width:110px" />
-												<!-- 												<p:watermark for="globalFilter" value="Search..." /> -->
+
 											</p:column>
 											<p:column colspan="1">
 												<p:commandButton id="createBusinessRequirement"
@@ -157,33 +161,10 @@
 															<p:graphicImage value="/resources/images/pdf.png" />
 															<h:outputLabel value="export in pdf" />
 															<p:dataExporter type="pdf" target="leftTable"
-																fileName="requirements" preProcessor="#{jJChapterBean.preProcessPDF}"/>
+																fileName="requirements"
+																preProcessor="#{jJChapterBean.preProcessPDF}" />
 														</h:commandLink>
 													</p:menuitem>
-													<!-- 													<p:menuitem> -->
-													<!-- 														<h:commandLink> -->
-													<!-- 															<p:graphicImage value="/resources/images/csv.png" /> -->
-													<!-- 															<h:outputLabel value="export in csv" /> -->
-													<!-- 															<p:dataExporter type="pdf" target="tbl" -->
-													<!-- 																fileName="requirements" /> -->
-													<!-- 														</h:commandLink> -->
-													<!-- 													</p:menuitem> -->
-													<!-- 													<p:menuitem> -->
-													<!-- 														<h:commandLink> -->
-													<!-- 															<p:graphicImage value="/resources/images/xml.png" /> -->
-													<!-- 															<h:outputLabel value="export in xml" /> -->
-													<!-- 															<p:dataExporter type="pdf" target="tbl" -->
-													<!-- 																fileName="requirements" /> -->
-													<!-- 														</h:commandLink> -->
-													<!-- 													</p:menuitem> -->
-													<!-- 													<p:menuitem> -->
-													<!-- 														<h:commandLink> -->
-													<!-- 															<p:graphicImage value="/resources/images/excel.png" /> -->
-													<!-- 															<h:outputLabel value="export in xls" /> -->
-													<!-- 															<p:dataExporter type="pdf" target="tbl" -->
-													<!-- 																fileName="requirements" /> -->
-													<!-- 														</h:commandLink> -->
-													<!-- 													</p:menuitem> -->
 												</p:menu>
 											</p:column>
 										</p:row>
@@ -242,7 +223,7 @@
 											</p:column>
 											<p:column colspan="4">
 												<p:inputText id="globalFilter" style="width:150px" />
-												<!-- 												<p:watermark for="globalFilter" value="Search..." /> -->
+
 											</p:column>
 											<p:column colspan="1">
 												<p:commandButton id="createButton" icon="ui-icon-plus"
@@ -253,41 +234,6 @@
 											<p:column colspan="1">
 												<p:commandButton id="dynaButton" icon="ui-icon-document"
 													type="button" />
-												<!-- 												<p:menu overlay="true" trigger="dynaButton" my="left top" -->
-												<!-- 													at="left bottom"> -->
-												<!-- 													<p:menuitem> -->
-												<!-- 														<h:commandLink> -->
-												<!-- 															<p:graphicImage value="/resources/images/pdf.png" /> -->
-												<!-- 															<h:outputLabel value="export in pdf" /> -->
-												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
-												<!-- 																fileName="requirements" /> -->
-												<!-- 														</h:commandLink> -->
-												<!-- 													</p:menuitem> -->
-												<!-- 													<p:menuitem> -->
-												<!-- 														<h:commandLink> -->
-												<!-- 															<p:graphicImage value="/resources/images/csv.png" /> -->
-												<!-- 															<h:outputLabel value="export in csv" /> -->
-												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
-												<!-- 																fileName="requirements" /> -->
-												<!-- 														</h:commandLink> -->
-												<!-- 													</p:menuitem> -->
-												<!-- 													<p:menuitem> -->
-												<!-- 														<h:commandLink> -->
-												<!-- 															<p:graphicImage value="/resources/images/xml.png" /> -->
-												<!-- 															<h:outputLabel value="export in xml" /> -->
-												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
-												<!-- 																fileName="requirements" /> -->
-												<!-- 														</h:commandLink> -->
-												<!-- 													</p:menuitem> -->
-												<!-- 													<p:menuitem> -->
-												<!-- 														<h:commandLink> -->
-												<!-- 															<p:graphicImage value="/resources/images/excel.png" /> -->
-												<!-- 															<h:outputLabel value="export in xls" /> -->
-												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
-												<!-- 																fileName="requirements" /> -->
-												<!-- 														</h:commandLink> -->
-												<!-- 													</p:menuitem> -->
-												<!-- 												</p:menu> -->
 											</p:column>
 										</p:row>
 									</f:facet>
@@ -346,7 +292,6 @@
 											<p:column colspan="4">
 
 												<p:inputText id="globalFilter" style="width:150px" />
-												<!-- 												<p:watermark for="globalFilter" value="Search..." /> -->
 											</p:column>
 											<p:column colspan="1">
 												<p:commandButton id="createButton" icon="ui-icon-plus"
@@ -357,41 +302,6 @@
 											<p:column colspan="1">
 												<p:commandButton id="dynaButton" icon="ui-icon-document"
 													type="button" />
-												<!-- 												<p:menu overlay="true" trigger="dynaButton" my="left top" -->
-												<!-- 													at="left bottom"> -->
-												<!-- 													<p:menuitem> -->
-												<!-- 														<h:commandLink> -->
-												<!-- 															<p:graphicImage value="/resources/images/pdf.png" /> -->
-												<!-- 															<h:outputLabel value="export in pdf" /> -->
-												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
-												<!-- 																fileName="requirements" /> -->
-												<!-- 														</h:commandLink> -->
-												<!-- 													</p:menuitem> -->
-												<!-- 													<p:menuitem> -->
-												<!-- 														<h:commandLink> -->
-												<!-- 															<p:graphicImage value="/resources/images/csv.png" /> -->
-												<!-- 															<h:outputLabel value="export in csv" /> -->
-												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
-												<!-- 																fileName="requirements" /> -->
-												<!-- 														</h:commandLink> -->
-												<!-- 													</p:menuitem> -->
-												<!-- 													<p:menuitem> -->
-												<!-- 														<h:commandLink> -->
-												<!-- 															<p:graphicImage value="/resources/images/xml.png" /> -->
-												<!-- 															<h:outputLabel value="export in xml" /> -->
-												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
-												<!-- 																fileName="requirements" /> -->
-												<!-- 														</h:commandLink> -->
-												<!-- 													</p:menuitem> -->
-												<!-- 													<p:menuitem> -->
-												<!-- 														<h:commandLink> -->
-												<!-- 															<p:graphicImage value="/resources/images/excel.png" /> -->
-												<!-- 															<h:outputLabel value="export in xls" /> -->
-												<!-- 															<p:dataExporter type="pdf" target="tbl" -->
-												<!-- 																fileName="requirements" /> -->
-												<!-- 														</h:commandLink> -->
-												<!-- 													</p:menuitem> -->
-												<!-- 												</p:menu> -->
 											</p:column>
 										</p:row>
 									</f:facet>
@@ -854,6 +764,41 @@
 				</f:facet>
 			</p:dialog>
 
+
+			<p:dialog id="myManageDocumentDialog" header="Create JJChapter"
+				widgetVar="manageDocument" maximizable="false" minimizable="false"
+				showEffect="clip" hideEffect="fold" dynamic="true">
+				<h:panelGrid columns="2" cellpadding="3">
+					<p:tree id="leftTreeSingle" value="#{jJChapterBean.leftRoot}"
+						var="nodeLeft" selectionMode="single"
+						selection="#{jJChapterBean.selectedLeftNode}" draggable="true"
+						droppable="true" dragdropScope="demo">
+						<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
+							update=":dataForm:messages" />
+						<p:treeNode>
+							<h:outputText value="#{nodeLeft}" />
+						</p:treeNode>
+					</p:tree>
+
+					<p:tree id="RightTreeSingle" value="#{jJChapterBean.rightRoot}"
+						var="nodeRight" selectionMode="single"
+						selection="#{jJChapterBean.selectedRightNode}" draggable="true"
+						droppable="true" dragdropScope="demo">
+						<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
+							update=":dataForm:messages" />
+						<p:treeNode>
+							<h:outputText value="#{nodeRight}" />
+						</p:treeNode>
+					</p:tree>
+				</h:panelGrid>
+				<f:facet name="footer">
+					<p:row>
+						<p:column>
+							<p:commandButton value="Reset" type="reset" />
+						</p:column>
+					</p:row>
+				</f:facet>
+			</p:dialog>
 		</h:form>
 
 	</ui:define>
