@@ -7,6 +7,18 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.net.URL;
+
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.IOException;
+import java.io.StringReader;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -43,6 +55,11 @@ import com.lowagie.text.Font;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
+import com.lowagie.text.html.simpleparser.HTMLWorker;
+import com.lowagie.text.html.simpleparser.StyleSheet;
+import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.pdf.codec.Base64;
+import com.lowagie.text.Image;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJChapter.class, beanName = "jJChapterBean")
@@ -454,50 +471,47 @@ public class JJChapterBean {
 		pdf.open();
 		pdf.setPageSize(PageSize.A4);
 
-		Font font = new Font(Font.COURIER, 10, Font.BOLD);
-		font.setColor(new Color(0x92, 0x90, 0x83));
+		Font fontTitle = new Font(Font.COURIER, 30, Font.BOLD);
+		fontTitle.setColor(new Color(0x92, 0x90, 0x83));
+		Font fontChapter = new Font(Font.COURIER, 15, Font.BOLD);
+		fontChapter.setColor(new Color(0x92, 0x90, 0x83));
+		Font fontRequirement = new Font(Font.COURIER, 10, Font.BOLD);
+		fontRequirement.setColor(new Color(0x92, 0x90, 0x83));
+		Font fontNote = new Font(Font.COURIER, 8, Font.BOLD);
+		fontNote.setColor(new Color(0x92, 0x90, 0x83));
+		
+		StyleSheet stylez = new StyleSheet();
+		stylez.loadTagStyle("body", "font", "Times New Roman");
 
-		// Chunk chunk = new Chunk("testing text element ", font);
-		// chunk.setBackground(new Color(0xff, 0xe4, 0x00));
-
-		Phrase phrase = new Phrase(20, "Business Specification");
+		Phrase phrase = new Phrase(20, "Business Specification \n"+currentProject.getName()+"\n"+"\n");
 		JJCategory category = jJCategoryService
 				.getJJCategoryWithName("BUSINESS");
-		List<JJChapter> list = jJChapterService
-				.getAllJJChaptersWithProjectAndCategory(currentProject,
-						category);
+		List<JJChapter> list = jJChapterService.getAllJJChaptersWithProjectAndCategory(currentProject, category);
 
 		for (JJChapter jjChapter : list) {
-			Chunk chunk = new Chunk(jjChapter.getName(), font);
-			chunk.setBackground(new Color(0xff, 0xe4, 0x00));
-
-			phrase.add(chunk);
+			phrase.add(new Chunk("\n"+jjChapter.getName()+"\n", fontChapter));
+			phrase.add(new Chunk(jjChapter.getDescription()+"\n", fontNote));
 
 			Set<JJRequirement> listReq = jjChapter.getRequirements();
 			for (JJRequirement jjRequirement : listReq) {
-				Chunk chunk2 = new Chunk(jjRequirement.getName(), font);
-				chunk2.setBackground(new Color(0xff, 0xe4, 0x00));
-				phrase.add(chunk2);
+				phrase.add(new Chunk(jjRequirement.getName()+"\n", fontRequirement));
+				StringReader strReader = new StringReader(jjRequirement.getDescription());
+				ArrayList arrList = HTMLWorker.parseToList(strReader, stylez);
+				for (int i = 0; i < arrList.size(); ++i) {
+					Element e = (Element) arrList.get(i);
+					phrase.add(e);
+				}
+				URL adresseImage = new URL("http://www.primefaces.org/showcase/images/logo.png") ;
+				Image photoEtu = Image.getInstance(adresseImage);
+				// phrase.add(photoEtu);
+
+				phrase.add(new Chunk(jjRequirement.getNote()+"\n", fontNote));
 			}
-
 		}
-
-		// for (int i = 0; i < 10; i++) {
-		// Chunk chunk = new Chunk("testing text element ", font);
-		// chunk.setBackground(new Color(0xff, 0xe4, 0x00));
-		// phrase.add(chunk);
-		// }
 
 		Paragraph paragraph = new Paragraph(); // 1
 		paragraph.add(phrase); // 2
 		pdf.add(paragraph); // 3
-
-		// ServletContext servletContext = (ServletContext)
-		// FacesContext.getCurrentInstance().getExternalContext().getContext();
-		// String logo = servletContext.getRealPath("") + File.separator +
-		// "images" + File.separator + "prime_logo.png";
-		//
-		// pdf.add(Image.getInstance(logo));
 	}
 
 	public void postProcessXLS(Object document) {
