@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.net.URL;
-
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -78,6 +77,8 @@ public class JJChapterBean {
 
 	private TreeNode chapterRoot;
 	private TreeNode selectedChapterNode;
+	
+	private JJChapter parentChapter = null;
 
 	@Autowired
 	JJRequirementService jJRequirementService;
@@ -365,13 +366,13 @@ public class JJChapterBean {
 		JJCategory category = jJCategoryService
 				.getJJCategoryWithName("BUSINESS");
 		// Requirement Tree WHERE chapter = null
-		leftRoot = new DefaultTreeNode("Root", null);
+		leftRoot = new DefaultTreeNode("RootRequirement", null);
 
 		// Chapter Tree
-		rightRoot = new DefaultTreeNode("Root", null);
+		rightRoot = new DefaultTreeNode("RootChapter", null);
 
 		List<JJRequirement> jJRequirementList;
-		JJChapter parentChapter = null;
+		
 
 		if (currentProject != null) {
 			if (currentProduct != null) {
@@ -399,11 +400,9 @@ public class JJChapterBean {
 		}
 
 		for (JJRequirement jjRequirement : jJRequirementList) {
-			TreeNode node = new DefaultTreeNode("R- " + jjRequirement.getId()
-					+ " - " + jjRequirement.getName(), leftRoot);
-			// TreeNode node2 = new DefaultTreeNode("TOTO", rightRoot);
+			TreeNode node = new DefaultTreeNode("R-" + jjRequirement.getId()
+					+ "- " + jjRequirement.getName(), leftRoot);
 		}
-		// TreeNode node2 = new DefaultTreeNode("TOTO23", rightRoot);
 
 		Set<JJChapter> jJChapList = new HashSet<JJChapter>();
 		if (parentChapter != null)
@@ -449,7 +448,7 @@ public class JJChapterBean {
 		if (index == 0) {
 			newNode = new DefaultTreeNode(treeObj, rootNode);
 		} else {
-			newNode = new DefaultTreeNode("C- " + treeObj.getId() + " - "
+			newNode = new DefaultTreeNode("C-" + treeObj.getId() + "- "
 					+ treeObj.getName(), rootNode);
 		}
 		Set<JJChapter> childNodes1 = treeObj.getChapters();
@@ -466,8 +465,6 @@ public class JJChapterBean {
 		Document pdf = (Document) document;
 		pdf.addTitle("THIS IS THE TITLE");
 
-		Element elm;
-
 		pdf.open();
 		pdf.setPageSize(PageSize.A4);
 
@@ -479,33 +476,39 @@ public class JJChapterBean {
 		fontRequirement.setColor(new Color(0x92, 0x90, 0x83));
 		Font fontNote = new Font(Font.COURIER, 8, Font.BOLD);
 		fontNote.setColor(new Color(0x92, 0x90, 0x83));
-		
+
 		StyleSheet stylez = new StyleSheet();
 		stylez.loadTagStyle("body", "font", "Times New Roman");
 
-		Phrase phrase = new Phrase(20, "Business Specification \n"+currentProject.getName()+"\n"+"\n");
+		Phrase phrase = new Phrase(20, "Business Specification \n"
+				+ currentProject.getName() + "\n" + "\n");
 		JJCategory category = jJCategoryService
 				.getJJCategoryWithName("BUSINESS");
-		List<JJChapter> list = jJChapterService.getAllJJChaptersWithProjectAndCategory(currentProject, category);
+		List<JJChapter> list = jJChapterService
+				.getAllJJChaptersWithProjectAndCategory(currentProject,
+						category);
 
 		for (JJChapter jjChapter : list) {
-			phrase.add(new Chunk("\n"+jjChapter.getName()+"\n", fontChapter));
-			phrase.add(new Chunk(jjChapter.getDescription()+"\n", fontNote));
+			phrase.add(new Chunk("\n" + jjChapter.getName() + "\n", fontChapter));
+			phrase.add(new Chunk(jjChapter.getDescription() + "\n", fontNote));
 
 			Set<JJRequirement> listReq = jjChapter.getRequirements();
 			for (JJRequirement jjRequirement : listReq) {
-				phrase.add(new Chunk(jjRequirement.getName()+"\n", fontRequirement));
-				StringReader strReader = new StringReader(jjRequirement.getDescription());
+				phrase.add(new Chunk(jjRequirement.getName() + "\n",
+						fontRequirement));
+				StringReader strReader = new StringReader(
+						jjRequirement.getDescription());
 				ArrayList arrList = HTMLWorker.parseToList(strReader, stylez);
 				for (int i = 0; i < arrList.size(); ++i) {
 					Element e = (Element) arrList.get(i);
 					phrase.add(e);
 				}
-				URL adresseImage = new URL("http://www.primefaces.org/showcase/images/logo.png") ;
+				URL adresseImage = new URL(
+						"http://www.primefaces.org/showcase/images/logo.png");
 				Image photoEtu = Image.getInstance(adresseImage);
 				// phrase.add(photoEtu);
 
-				phrase.add(new Chunk(jjRequirement.getNote()+"\n", fontNote));
+				phrase.add(new Chunk(jjRequirement.getNote() + "\n", fontNote));
 			}
 		}
 
@@ -535,11 +538,53 @@ public class JJChapterBean {
 		TreeNode dropNode = event.getDropNode();
 		int dropIndex = event.getDropIndex();
 
+		String dragNodeData = dragNode.getData().toString();
+		String dropNodeData = dropNode.getData().toString();
+
+		if (dragNodeData.startsWith("R-")) {
+			long idRequirement = Long
+					.parseLong(getIdFromString(dragNodeData, 1));
+			JJRequirement requirement = jJRequirementService
+					.findJJRequirement(idRequirement);
+
+			if (dropNodeData.startsWith("C-")) {
+				long idChapter = Long
+						.parseLong(getIdFromString(dropNodeData, 1));
+				JJChapter chapter = jJChapterService.findJJChapter(idChapter);
+				requirement.setChapter(chapter);
+				jJRequirementService.updateJJRequirement(requirement);
+			}
+
+			if (dropNodeData.equalsIgnoreCase("RootChapter") && parentChapter!=null) {
+				requirement.setChapter(parentChapter);
+				jJRequirementService.updateJJRequirement(requirement);
+			}
+
+			if (dropNodeData.equalsIgnoreCase("RootRequirement") || dropNodeData.startsWith("R-")) {
+				
+				JJChapter tmpChapter = requirement.getChapter();
+				if(tmpChapter!=null){
+				JJChapter chapter = jJChapterService.findJJChapter(tmpChapter.getId());
+				chapter.getRequirements().remove(requirement);
+				requirement.setChapter(null);
+				jJRequirementService.updateJJRequirement(requirement);
+				jJChapterService.updateJJChapter(chapter);
+				}
+				
+			}
+
+		}
+
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"Dragged " + dragNode.getData() + "  \nDropped on "
 						+ dropNode.getData() + " at " + dropIndex,
 				"Dropped on " + dropNode.getData() + " at " + dropIndex);
 		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+
+	private String getIdFromString(String s, int index) {
+		String[] temp = s.split("-");
+		return temp[index];
 	}
 
 }
