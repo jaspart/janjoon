@@ -126,9 +126,11 @@
 													<p:menuitem id="manageChapterLeft" value="Manage Chapter"
 														icon="ui-icon-arrowrefresh-1-w"
 														actionListener="#{jJChapterBean.initParameter(1,jJCategoryBean)}"
+														update=":dataForm:myManageChapterDialog"
 														oncomplete="manageJJChapter.show()" />
 													<p:menuitem id="manageDocumentLeft" value="Manage Document"
-														actionListener="#{jJChapterBean.treeBean()}"
+														actionListener="#{jJChapterBean.treeBean(1)}"
+														update=":dataForm:myManageDocumentDialog"
 														oncomplete="manageDocument.show()" />
 
 												</p:splitButton>
@@ -209,9 +211,20 @@
 								<p:panelGrid>
 									<f:facet name="header">
 										<p:row>
-											<p:column colspan="1">
-												<p:commandButton id="reqBusiChapterButton"
-													icon="ui-icon-clipboard" type="button" />
+											<p:column colspan="2">
+												<p:splitButton id="managementMiddle" title="Management"
+													icon="ui-icon-clipboard">
+													<p:menuitem id="manageChapterMiddle" value="Manage Chapter"
+														icon="ui-icon-arrowrefresh-1-w"
+														actionListener="#{jJChapterBean.initParameter(2,jJCategoryBean)}"
+														update=":dataForm:myManageChapterDialog"
+														oncomplete="manageJJChapter.show()" />
+													<p:menuitem id="manageDocumentMiddle" value="Manage Document"
+														actionListener="#{jJChapterBean.treeBean(2)}"
+														update=":dataForm:myManageDocumentDialog"
+														oncomplete="manageDocument.show()" />
+
+												</p:splitButton>
 											</p:column>
 											<p:column colspan="1">
 												<p:commandButton id="releaseButton"
@@ -221,8 +234,8 @@
 													update=":dataForm:myReleaseDialog"
 													oncomplete="releaseJJRequirement.show()" />
 											</p:column>
-											<p:column colspan="4">
-												<p:inputText id="globalFilter" style="width:150px" />
+											<p:column colspan="3">
+												<p:inputText id="globalFilter" style="width:110px" />
 
 											</p:column>
 											<p:column colspan="1">
@@ -277,9 +290,20 @@
 								<p:panelGrid>
 									<f:facet name="header">
 										<p:row>
-											<p:column colspan="1">
-												<p:commandButton id="reqBusiChapterButton"
-													icon="ui-icon-clipboard" type="button" />
+											<p:column colspan="2">
+												<p:splitButton id="managementRight" title="Management"
+													icon="ui-icon-clipboard">
+													<p:menuitem id="manageChapterRight" value="Manage Chapter"
+														icon="ui-icon-arrowrefresh-1-w"
+														actionListener="#{jJChapterBean.initParameter(3,jJCategoryBean)}"
+														update=":dataForm:myManageChapterDialog"
+														oncomplete="manageJJChapter.show()" />
+													<p:menuitem id="manageDocumentRight" value="Manage Document"
+														actionListener="#{jJChapterBean.treeBean(3)}"
+														update=":dataForm:myManageDocumentDialog"
+														oncomplete="manageDocument.show()" />
+
+												</p:splitButton>
 											</p:column>
 											<p:column colspan="1">
 												<p:commandButton id="releaseButton"
@@ -289,9 +313,9 @@
 													update=":dataForm:myReleaseDialog"
 													oncomplete="releaseJJRequirement.show()" />
 											</p:column>
-											<p:column colspan="4">
+											<p:column colspan="3">
 
-												<p:inputText id="globalFilter" style="width:150px" />
+												<p:inputText id="globalFilter" style="width:110px" />
 											</p:column>
 											<p:column colspan="1">
 												<p:commandButton id="createButton" icon="ui-icon-plus"
@@ -512,63 +536,53 @@
 			<p:dialog id="myCreateDialog" header="Create JJRequirement"
 				widgetVar="createJJRequirement" maximizable="false"
 				minimizable="false" showEffect="fade" hideEffect="fade"
-				dynamic="true">
+				dynamic="true" width="700" minWidth="700">
 
-				<h:panelGrid columns="1" cellpadding="3">
-
-					<h:panelGrid columns="3" cellpadding="3">
-
-						<h:panelGrid>
-							<p:autoComplete id="chapter"
-								value="#{jJRequirementBean.myJJRequirement.chapter}"
-								completeMethod="#{jJRequirementBean.completeChapter}"
-								var="chapter" itemLabel="#{chapter.name}" itemValue="#{chapter}"
-								multiple="false" dropdown="true" required="false">
-								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
-								<p:column style="text-align:center">  
-           							 #{chapter.name}<!-- - #{chapter.creationDate} -->
-								</p:column>
-							</p:autoComplete>
-							<p:watermark for="chapter" value="Chapter" />
-						</h:panelGrid>
-
-						<h:panelGrid>
-							<p:autoComplete id="product"
-								value="#{jJRequirementBean.myJJRequirement.product}"
-								completeMethod="#{jJRequirementBean.completeProduct}"
-								var="product" itemLabel="#{product.name}" itemValue="#{product}"
-								multiple="false" dropdown="true" required="false">
-								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJProductConverter" />
-								<p:column style="text-align:center">  
-           							 #{product.name}<!-- - #{product.creationDate} -->
-								</p:column>
-							</p:autoComplete>
-							<p:watermark for="product" value="Product" />
-						</h:panelGrid>
-
-						<h:panelGrid>
-							<p:autoComplete id="project"
-								value="#{jJRequirementBean.myJJRequirement.project}"
-								completeMethod="#{jJRequirementBean.completeProject}"
-								var="project" itemLabel="#{project.name}" itemValue="#{project}"
-								multiple="false" dropdown="true" required="false">
-								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
-								<p:column style="text-align:center">  
+				<h:panelGrid id="creationReq" columns="1" cellpadding="3">
+					<p:messages id="msgs" />
+					<h:panelGrid columns="6" cellpadding="3">
+						<p:autoComplete id="project"
+							value="#{jJRequirementBean.myJJRequirement.project}"
+							completeMethod="#{jJRequirementBean.completeProject}"
+							var="project" itemLabel="#{project.name}" itemValue="#{project}"
+							multiple="false" dropdown="true" required="false">
+							<f:converter
+								converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
+							<p:column style="text-align:center">  
            							 #{project.name}<!-- - #{project.creationDate} -->
-								</p:column>
-							</p:autoComplete>
-							<p:watermark for="project" value="Project" />
-						</h:panelGrid>
+							</p:column>
+						</p:autoComplete>
+						<p:watermark for="project" value="Project" />
 
+						<p:autoComplete id="product"
+							value="#{jJRequirementBean.myJJRequirement.product}"
+							completeMethod="#{jJRequirementBean.completeProduct}"
+							var="product" itemLabel="#{product.name}" itemValue="#{product}"
+							multiple="false" dropdown="true" required="false">
+							<f:converter
+								converterId="com.funder.janjoonweb.ui.mb.converter.JJProductConverter" />
+							<p:column style="text-align:center">  
+           							 #{product.name}<!-- - #{product.creationDate} -->
+							</p:column>
+						</p:autoComplete>
+						<p:watermark for="product" value="Product" />
+
+						<p:autoComplete id="chapter"
+							value="#{jJRequirementBean.myJJRequirement.chapter}"
+							completeMethod="#{jJRequirementBean.completeChapter}"
+							var="chapter" itemLabel="#{chapter.name}" itemValue="#{chapter}"
+							multiple="false" dropdown="true" required="false">
+							<f:converter
+								converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
+							<p:column style="text-align:center">  
+           							 #{chapter.name}<!-- - #{chapter.creationDate} -->
+							</p:column>
+						</p:autoComplete>
+						<p:watermark for="chapter" value="Chapter" />
 					</h:panelGrid>
 
-
 					<h:panelGrid columns="2" cellpadding="3">
-
-						<h:panelGrid columns="2" cellpadding="3">
+						<h:panelGrid columns="1" cellpadding="3">
 							<h:outputText value="Tasks: " />
 							<p:selectManyMenu id="tasksList"
 								value="#{jJRequirementBean.selectedTasksList}" var="t"
@@ -583,7 +597,7 @@
 							</p:selectManyMenu>
 						</h:panelGrid>
 
-						<h:panelGrid columns="1" cellpadding="3">
+						<h:panelGrid columns="3" cellpadding="3">
 							<p:inputText id="name" cols="60"
 								value="#{jJRequirementBean.myJJRequirement.name}"
 								required="true">
@@ -594,13 +608,7 @@
 							<p:watermark for="name" value="Name" />
 						</h:panelGrid>
 					</h:panelGrid>
-
-					<h:panelGrid columns="1" cellpadding="3">
-
-
-
-						<h:panelGrid columns="1" cellpadding="3">
-							<!--p:inputTextarea id="description" rows="6" cols="70"
+					<!--p:inputTextarea id="description" rows="6" cols="70"
 								value="#{jJRequirementBean.myJJRequirement.description}"
 								required="true">
 								<f:validateLength minimum="1" maximum="250" />
@@ -608,145 +616,74 @@
 							</p:inputTextarea>
 							<p:message for="description" id="msgDescription" display="icon" />
 							<p:watermark for="description" value="Description" /-->
-							<!-- EDITOR WYSIWYG -->
-							<p:editor id="description" rows="4" cols="70"
-								widgetVar="editorCreate"
-								value="#{jJRequirementBean.myJJRequirement.description}"
-								required="true">
-								<f:validateLength minimum="1" maximum="250" />
-								<!--p:ajax update="msgDescription" event="keyup" /-->
-							</p:editor>
-							<p:message for="description" id="msgDescription" display="icon" />
-							<p:watermark for="description" value="Description" />
-						</h:panelGrid>
+					<!-- EDITOR WYSIWYG -->
 
-						<h:panelGrid columns="1" cellpadding="3">
-							<p:inputTextarea id="note" rows="2" cols="70"
-								value="#{jJRequirementBean.myJJRequirement.note}"
-								required="false">
-								<f:validateLength minimum="0" maximum="250" />
-								<p:ajax update="msgNote" event="keyup" />
-							</p:inputTextarea>
-							<p:message for="note" id="msgNote" display="icon" />
-							<p:watermark for="note" value="Note" />
-						</h:panelGrid>
 
-						<h:panelGrid columns="3" cellpadding="3">
-							<h:outputText value="Business: " />
-							<h:outputText value="Functional: " />
-							<h:outputText value="Technical: " />
-							<p:selectManyMenu id="businessReqList"
-								value="#{jJRequirementBean.selectedBusinessJJRequirements}"
-								var="p" showCheckbox="true" style="height:75px">
-								<f:selectItems
-									value="#{jJRequirementBean.businessJJRequirementsList}"
-									var="req" itemLabel="#{req.name}" itemValue="#{req}" />
-								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" />
-								<p:column style="text-align:left">  
-															                #{p.name}
-															            </p:column>
-							</p:selectManyMenu>
-
-							<p:selectManyMenu id="functionalReqList"
-								value="#{jJRequirementBean.selectedFunctionalJJRequirements}"
-								var="p" showCheckbox="true" style="height:75px">
-								<f:selectItems
-									value="#{jJRequirementBean.functionalJJRequirementsList}"
-									var="req" itemLabel="#{req.name}" itemValue="#{req}" />
-								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" />
-								<p:column style="text-align:left">  
-															                #{p.name}
-															            </p:column>
-							</p:selectManyMenu>
-
-							<p:selectManyMenu id="technicalReqList"
-								value="#{jJRequirementBean.selectedTechnicalJJRequirements}"
-								var="p" showCheckbox="true" style="height:75px">
-								<f:selectItems
-									value="#{jJRequirementBean.technicalJJRequirementsList}"
-									var="req" itemLabel="#{req.name}" itemValue="#{req}" />
-								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" />
-								<p:column style="text-align:left">  
-															                #{p.name}
-															            </p:column>
-							</p:selectManyMenu>
-
-						</h:panelGrid>
-					</h:panelGrid>
-					<f:facet name="footer">
-						<p:row>
-							<p:column>
-								<p:commandButton value="Reset" type="reset" />
-							</p:column>
-							<p:column>
-								<h:commandButton value="#{messages.label_save}"
-									action="#{jJRequirementBean.persistJJRequirement(1)}"
-									update=":dataForm" />
-							</p:column>
-						</p:row>
-					</f:facet>
-				</h:panelGrid>
-			</p:dialog>
-
-			<p:dialog id="myManageChapterDialog" header="Manage JJChapter"
-				widgetVar="manageJJChapter" maximizable="false" minimizable="false"
-				showEffect="clip" hideEffect="fold" dynamic="true">
-				<h:panelGrid columns="1" cellpadding="3">
-
-					<p:contextMenu for="chapterTreeSingle">
-						<p:menuitem value="View" update=":dataForm:messages"
-							actionListener="#{jJChapterBean.displaySelectedSingle}"
-							icon="ui-icon-search" />
-						<p:menuitem value="Delete" update=":dataForm:messages"
-							actionListener="#{jJChapterBean.deleteNode}" icon="ui-icon-close" />
-					</p:contextMenu>
-					<p:tree id="chapterTreeSingle" value="#{jJChapterBean.chapterRoot}"
-						var="nodeChapter" selectionMode="single"
-						selection="#{jJChapterBean.selectedChapterNode}" dynamic="true">
-						<p:ajax event="select" update=":dataForm:messages"
-							listener="#{jJChapterBean.onNodeSelect}" />
-						<p:treeNode>
-
-							<h:outputText value="#{nodeChapter.name}" />
-						</p:treeNode>
-					</p:tree>
-					<h:panelGrid columns="3" cellpadding="3">
-						<p:inputText id="chapterName" cols="60"
-							value="#{jJChapterBean.myJJChapter.name}" required="false">
-							<!-- 							<f:validateLength minimum="1" maximum="25" /> -->
-							<!-- 							<p:ajax update="msgNameChapter" event="keyup" /> -->
-						</p:inputText>
-						<p:message for="chapterName" id="msgNameChapter" display="icon" />
-						<p:watermark for="chapterName" value="Name" />
-					</h:panelGrid>
-
-					<h:panelGrid columns="3" cellpadding="3">
-						<p:inputTextarea id="chapterDescription" rows="6" cols="70"
-							value="#{jJChapterBean.myJJChapter.description}" required="false">
-							<!-- 							<f:validateLength minimum="1" maximum="250" /> -->
-							<!-- 							<p:ajax update="msgDescriptionChapter" event="keyup" /> -->
-						</p:inputTextarea>
-						<p:message for="chapterDescription" id="msgDescriptionChapter"
-							display="icon" />
-						<p:watermark for="chapterDescription" value="Description" />
-					</h:panelGrid>
 
 					<h:panelGrid columns="2" cellpadding="3">
-						<p:autoComplete id="chapterParent"
-							value="#{jJChapterBean.myJJChapter.parent}"
-							completeMethod="#{jJChapterBean.completeChapter}" var="chapter"
-							itemLabel="#{chapter.name}" itemValue="#{chapter}"
-							multiple="false" dropdown="true" required="false">
+						<p:editor id="description" rows="4" cols="70"
+							widgetVar="editorCreate"
+							value="#{jJRequirementBean.myJJRequirement.description}"
+							required="true">
+							<f:validateLength minimum="1" maximum="250" />
+							<!--p:ajax update="msgDescription" event="keyup" /-->
+						</p:editor>
+						<p:message for="description" id="msgDescription" display="icon" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="3" cellpadding="3">
+						<p:inputTextarea id="note" rows="2" cols="70"
+							value="#{jJRequirementBean.myJJRequirement.note}"
+							required="false">
+							<f:validateLength minimum="0" maximum="250" />
+							<p:ajax update="msgNote" event="keyup" />
+						</p:inputTextarea>
+						<p:message for="note" id="msgNote" display="icon" />
+						<p:watermark for="note" value="Note" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="3" cellpadding="3">
+						<h:outputText value="Business: " />
+						<h:outputText value="Functional: " />
+						<h:outputText value="Technical: " />
+						<p:selectManyMenu id="businessReqList"
+							value="#{jJRequirementBean.selectedBusinessJJRequirements}"
+							var="p" showCheckbox="true" style="height:75px">
+							<f:selectItems
+								value="#{jJRequirementBean.businessJJRequirementsList}"
+								var="req" itemLabel="#{req.name}" itemValue="#{req}" />
 							<f:converter
-								converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
-							<p:column>  
-           							 #{chapter.name}- #{chapter.creationDate}
-							</p:column>
-						</p:autoComplete>
-						<p:watermark for="chapterParent" value="Parent" />
+								converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" />
+							<p:column style="text-align:left">  
+															                #{p.name}
+															            </p:column>
+						</p:selectManyMenu>
+
+						<p:selectManyMenu id="functionalReqList"
+							value="#{jJRequirementBean.selectedFunctionalJJRequirements}"
+							var="p" showCheckbox="true" style="height:75px">
+							<f:selectItems
+								value="#{jJRequirementBean.functionalJJRequirementsList}"
+								var="req" itemLabel="#{req.name}" itemValue="#{req}" />
+							<f:converter
+								converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" />
+							<p:column style="text-align:left">  
+															                #{p.name}
+															            </p:column>
+						</p:selectManyMenu>
+
+						<p:selectManyMenu id="technicalReqList"
+							value="#{jJRequirementBean.selectedTechnicalJJRequirements}"
+							var="p" showCheckbox="true" style="height:75px">
+							<f:selectItems
+								value="#{jJRequirementBean.technicalJJRequirementsList}"
+								var="req" itemLabel="#{req.name}" itemValue="#{req}" />
+							<f:converter
+								converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" />
+							<p:column style="text-align:left">  
+															                #{p.name}
+															            </p:column>
+						</p:selectManyMenu>
 					</h:panelGrid>
 
 				</h:panelGrid>
@@ -757,8 +694,84 @@
 						</p:column>
 						<p:column>
 							<h:commandButton value="#{messages.label_save}"
-								action="#{jJChapterBean.persistJJChapter(1)}"
-								update=":dataForm:messages" />
+								action="#{jJRequirementBean.persistJJRequirement(1)}"
+								update=":dataForm" />
+						</p:column>
+					</p:row>
+				</f:facet>
+			</p:dialog>
+
+			<p:dialog id="myManageChapterDialog" header="Manage JJChapter"
+				widgetVar="manageJJChapter" maximizable="false" minimizable="false"
+				dynamic="true">
+				<h:panelGrid columns="1" cellpadding="3">
+
+					<p:contextMenu for="chapterTreeSingle">
+						<p:menuitem value="Edit" update="editField"
+							actionListener="#{jJChapterBean.editNode()}"
+							icon="ui-icon-search" />
+						<p:menuitem value="Delete"
+							update=":dataForm:messages  myManageChapterDialog"
+							actionListener="#{jJChapterBean.deleteNode(jJCategoryBean)}"
+							icon="ui-icon-close" oncomplete="manageJJChapter.show()" />
+					</p:contextMenu>
+					<p:tree id="chapterTreeSingle" value="#{jJChapterBean.chapterRoot}"
+						var="nodeChapter" selectionMode="single"
+						selection="#{jJChapterBean.selectedChapterNode}" dynamic="true">
+						<p:treeNode>
+
+							<h:outputText value="#{nodeChapter}" />
+						</p:treeNode>
+					</p:tree>
+
+					<h:panelGrid id="editField" columns="1" cellpadding="3">
+						<h:panelGrid columns="3" cellpadding="3">
+							<p:inputText id="chapterName" cols="60"
+								value="#{jJChapterBean.myJJChapter.name}" required="false">
+								<!-- 							<f:validateLength minimum="1" maximum="25" /> -->
+								<!-- 							<p:ajax update="msgNameChapter" event="keyup" /> -->
+							</p:inputText>
+							<p:message for="chapterName" id="msgNameChapter" display="icon" />
+							<p:watermark for="chapterName" value="Name" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="3" cellpadding="3">
+							<p:inputTextarea id="chapterDescription" rows="6" cols="70"
+								value="#{jJChapterBean.myJJChapter.description}"
+								required="false">
+								<!-- 							<f:validateLength minimum="1" maximum="250" /> -->
+								<!-- 							<p:ajax update="msgDescriptionChapter" event="keyup" /> -->
+							</p:inputTextarea>
+							<p:message for="chapterDescription" id="msgDescriptionChapter"
+								display="icon" />
+							<p:watermark for="chapterDescription" value="Description" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="2" cellpadding="3">
+							<p:autoComplete id="chapterParent"
+								value="#{jJChapterBean.myJJChapter.parent}"
+								completeMethod="#{jJChapterBean.completeChapter}" var="chapter"
+								itemLabel="#{chapter.name}" itemValue="#{chapter}"
+								multiple="false" dropdown="true" required="false">
+								<f:converter
+									converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
+								<p:column>  
+           							 #{chapter.name}
+							</p:column>
+							</p:autoComplete>
+							<p:watermark for="chapterParent" value="Parent" />
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGrid>
+				<f:facet name="footer">
+					<p:row>
+						<p:column>
+							<p:commandButton value="Reset" type="reset" />
+						</p:column>
+						<p:column>
+							<h:commandButton value="#{messages.label_save}"
+								action="#{jJChapterBean.persistJJChapter()}"
+								update=":dataForm" />
 						</p:column>
 					</p:row>
 				</f:facet>
@@ -790,13 +803,6 @@
 						</p:treeNode>
 					</p:tree>
 				</h:panelGrid>
-				<f:facet name="footer">
-					<p:row>
-						<p:column>
-							<p:commandButton value="Reset" type="reset" />
-						</p:column>
-					</p:row>
-				</f:facet>
 			</p:dialog>
 		</h:form>
 

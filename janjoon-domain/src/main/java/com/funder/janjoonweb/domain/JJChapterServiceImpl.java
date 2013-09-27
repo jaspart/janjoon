@@ -71,7 +71,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 	}
 
 	@Override
-	public JJChapter getParentJJChapterWithCategory(JJCategory category) {
+	public List<JJChapter> getAllParentJJChapterWithCategory(JJCategory category) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJChapter> criteriaQuery = criteriaBuilder
@@ -89,10 +89,8 @@ public class JJChapterServiceImpl implements JJChapterService {
 		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3));
 
 		TypedQuery<JJChapter> result = entityManager.createQuery(select);
-		if (result.getResultList().size() == 0)
-			return null;
-		else
-			return result.getSingleResult();
+
+		return result.getResultList();
 
 	}
 
@@ -122,36 +120,6 @@ public class JJChapterServiceImpl implements JJChapterService {
 	}
 
 	@Override
-	public JJChapter getParentJJChapterWithProjectAndCategory(
-			JJProject project, JJCategory category) {
-
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJChapter> criteriaQuery = criteriaBuilder
-				.createQuery(JJChapter.class);
-
-		Root<JJChapter> from = criteriaQuery.from(JJChapter.class);
-
-		CriteriaQuery<JJChapter> select = criteriaQuery.select(from);
-
-		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
-		Predicate predicate2 = criteriaBuilder.equal(from.join("project"),
-				project);
-		Predicate predicate3 = criteriaBuilder.equal(from.join("category"),
-				category);
-		Predicate predicate4 = criteriaBuilder.isNull(from.get("parent"));
-
-		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
-				predicate4));
-
-		TypedQuery<JJChapter> result = entityManager.createQuery(select);
-		if (result.getResultList().size() == 0)
-			return null;
-		else
-			return result.getSingleResult();
-
-	}
-
-	@Override
 	public List<JJChapter> getAllParentJJChapterWithProjectAndCategory(
 			JJProject project, JJCategory category) {
 
@@ -174,10 +142,10 @@ public class JJChapterServiceImpl implements JJChapterService {
 				predicate4));
 
 		TypedQuery<JJChapter> result = entityManager.createQuery(select);
-		
 		return result.getResultList();
 
 	}
+
 
 	@Override
 	public List<JJChapter> getAllJJChaptersWithProjectAndProductAndCategory(
@@ -208,7 +176,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 	}
 
 	@Override
-	public JJChapter getParentJJChapterWithProjectAndProductAndCategory(
+	public List<JJChapter> getAllParentJJChapterWithProjectAndProductAndCategory(
 			JJProject project, JJProduct product, JJCategory category) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -232,10 +200,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 				predicate4, predicate5));
 
 		TypedQuery<JJChapter> result = entityManager.createQuery(select);
-		if (result.getResultList().size() == 0)
-			return null;
-		else
-			return result.getSingleResult();
+		return result.getResultList();
 
 	}
 

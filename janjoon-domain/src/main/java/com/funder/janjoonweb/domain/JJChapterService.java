@@ -10,12 +10,9 @@ public interface JJChapterService {
 
 	public List<JJChapter> getAllJJChaptersWithCategory(JJCategory category);
 
-	public JJChapter getParentJJChapterWithCategory(JJCategory category);
+	public List<JJChapter> getAllParentJJChapterWithCategory(JJCategory category);
 
 	public List<JJChapter> getAllJJChaptersWithProjectAndCategory(
-			JJProject project, JJCategory category);
-
-	public JJChapter getParentJJChapterWithProjectAndCategory(
 			JJProject project, JJCategory category);
 
 	public List<JJChapter> getAllParentJJChapterWithProjectAndCategory(
@@ -24,6 +21,6 @@ public interface JJChapterService {
 	public List<JJChapter> getAllJJChaptersWithProjectAndProductAndCategory(
 			JJProject project, JJProduct product, JJCategory category);
 
-	public JJChapter getParentJJChapterWithProjectAndProductAndCategory(
+	public List<JJChapter> getAllParentJJChapterWithProjectAndProductAndCategory(
 			JJProject project, JJProduct product, JJCategory category);
 }

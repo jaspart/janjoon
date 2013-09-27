@@ -92,7 +92,7 @@ public class JJProjectBean {
 
 		if (jJTaskService.findAllJJTasks().isEmpty()) {
 			JJTask task;
-			for (int i = 0; i < 6; i++) {
+			for (int i = 0; i < 4; i++) {
 				task = new JJTask();
 				task.setName("TaskName " + i);
 				task.setDescription("TaskDescription " + i);
@@ -147,33 +147,6 @@ public class JJProjectBean {
 			}
 		}
 
-		// List<JJProduct> jJProductList = jJProductService.getAllJJProduct();
-		// if (!jJProductList.isEmpty()) {
-		// for (int i = 0; i < jJProductList.size(); i++) {
-		//
-		// List<JJChapter> jJChapterList = jJChapterService
-		// .getAllJJChapter();
-		//
-		// Set<JJChapter> chapters = new HashSet<JJChapter>();
-		//
-		// if (i == 0) {
-		// jJChapterList.get(i).setProduct(jJProductList.get(i));
-		// chapters.add(jJChapterList.get(i));
-		// jJChapterList.get(i + 1).setProduct(jJProductList.get(i));
-		// chapters.add(jJChapterList.get(i + 1));
-		// } else {
-		// jJChapterList.get(i + 1).setProduct(jJProductList.get(i));
-		// chapters.add(jJChapterList.get(i + 1));
-		// jJChapterList.get(i + 2).setProduct(jJProductList.get(i));
-		// chapters.add(jJChapterList.get(i + 2));
-		// }
-		//
-		// jJProductList.get(i).setChapters(chapters);
-		//
-		// jJProductService.updateJJProduct(jJProductList.get(i));
-		// }
-		// }
-
 		if (jJProjectService.findAllJJProjects().isEmpty()) {
 			JJProject project;
 			for (int i = 0; i < 2; i++) {
@@ -182,24 +155,6 @@ public class JJProjectBean {
 				project.setDescription("ProjectDescription " + i);
 				project.setCreationDate(new Date());
 				project.setEnabled(true);
-
-				// Set<JJChapter> chapters = new HashSet<JJChapter>();
-				// List<JJChapter> jJChapterList = jJChapterService
-				// .getAllJJChapter();
-				//
-				// if (i == 0) {
-				// jJChapterList.get(i).setProject(project);
-				// chapters.add(jJChapterList.get(i));
-				// jJChapterList.get(i + 1).setProject(project);
-				// chapters.add(jJChapterList.get(i + 1));
-				// } else {
-				// jJChapterList.get(i + 1).setProject(project);
-				// chapters.add(jJChapterList.get(i + 1));
-				// jJChapterList.get(i + 2).setProject(project);
-				// chapters.add(jJChapterList.get(i + 2));
-				// }
-				//
-				// project.setChapters(chapters);
 
 				jJProjectService.saveJJProject(project);
 			}
