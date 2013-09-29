@@ -1,5 +1,7 @@
 package com.funder.janjoonweb.domain;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -20,8 +22,7 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 	@Override
 	public JJCategory getJJCategoryWithName(String name) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder
-				.createQuery(JJCategory.class);
+		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder.createQuery(JJCategory.class);
 
 		Root<JJCategory> from = criteriaQuery.from(JJCategory.class);
 
@@ -36,6 +37,25 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 			return null;
 		else
 			return result.getSingleResult();
+	}
+
+	@Override
+	public List<JJCategory> getAllJJCategory() {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder.createQuery(JJCategory.class);
+
+		Root<JJCategory> from = criteriaQuery.from(JJCategory.class);
+
+		CriteriaQuery<JJCategory> select = criteriaQuery.select(from);
+
+		Predicate predicate = criteriaBuilder.equal(from.get("enabled"), true);
+
+		select.where(predicate);
+
+		TypedQuery<JJCategory> result = entityManager.createQuery(select);
+		return result.getResultList();
+
 	}
 
 }

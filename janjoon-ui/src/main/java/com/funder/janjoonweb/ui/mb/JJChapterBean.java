@@ -513,54 +513,63 @@ public class JJChapterBean {
 
 		pdf.open();
 		pdf.setPageSize(PageSize.A4);
+		Paragraph paragraph = new Paragraph();
 
-		Font fontTitle = new Font(Font.COURIER, 30, Font.BOLD);
-		fontTitle.setColor(new Color(0x92, 0x90, 0x83));
-		Font fontChapter = new Font(Font.COURIER, 15, Font.BOLD);
-		fontChapter.setColor(new Color(0x92, 0x90, 0x83));
-		Font fontRequirement = new Font(Font.COURIER, 10, Font.BOLD);
-		fontRequirement.setColor(new Color(0x92, 0x90, 0x83));
+		Font fontTitle = new Font(Font.TIMES_ROMAN, 30, Font.BOLD);
+		fontTitle.setColor(new Color(0x24, 0x14, 0x14));
+		Font fontChapter = new Font(Font.HELVETICA, 15, Font.BOLD);
+		fontChapter.setColor(new Color(0x4E, 0x4E, 0x4E));
+		Font fontRequirement = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+		fontRequirement.setColor(new Color(0x5A, 0x5A, 0x5A));
 		Font fontNote = new Font(Font.COURIER, 8, Font.BOLD);
-		fontNote.setColor(new Color(0x92, 0x90, 0x83));
+		fontNote.setColor(new Color(0x82, 0x82, 0x82));
 
-		StyleSheet stylez = new StyleSheet();
-		stylez.loadTagStyle("body", "font", "Times New Roman");
+		/*Font fontTitle = new Font(FontFamily.TIMES_ROMAN, 30, Font.BOLD, new BaseColor(20, 20, 20));
+		Font fontChapter = new Font(FontFamily.HELVETICA, 15, Font.BOLD, new BaseColor(30, 30, 30));
+		Font fontRequirement = new Font(FontFamily.TIMES_ROMAN, 10, Font.BOLD, new BaseColor(10, 10, 10));
+		Font fontNote = new Font(FontFamily.COURIER, 8, Font.BOLD, new BaseColor(50, 50, 50));*/
 
-		Phrase phrase = new Phrase(20, "Business Specification \n"
-				+ currentProject.getName() + "\n" + "\n");
-		JJCategory category = jJCategoryService
-				.getJJCategoryWithName("BUSINESS");
+		StyleSheet style = new StyleSheet();
+		style.loadTagStyle("body", "font", "Times New Roman");
+
+		Phrase phrase = new Phrase(20, new Chunk("\n"+"Business Specification \n"+
+			currentProject.getName()+"\n"+"\n"+"\n", fontChapter));
+		JJCategory category = jJCategoryService.getJJCategoryWithName("BUSINESS");
+
 		List<JJChapter> list = jJChapterService
 				.getAllJJChaptersWithProjectAndCategory(currentProject,
 						category);
+		paragraph.add(phrase);
 
 		for (JJChapter jjChapter : list) {
-			phrase.add(new Chunk("\n" + jjChapter.getName() + "\n", fontChapter));
-			phrase.add(new Chunk(jjChapter.getDescription() + "\n", fontNote));
+			paragraph.add(new Chunk("\n"+jjChapter.getName()+"\n", fontChapter));
+			paragraph.add(new Chunk(jjChapter.getDescription()+"\n", fontNote));
 
 			Set<JJRequirement> listReq = jjChapter.getRequirements();
 			for (JJRequirement jjRequirement : listReq) {
-				phrase.add(new Chunk(jjRequirement.getName() + "\n",
-						fontRequirement));
-				StringReader strReader = new StringReader(
-						jjRequirement.getDescription());
-				ArrayList arrList = HTMLWorker.parseToList(strReader, stylez);
-				for (int i = 0; i < arrList.size(); ++i) {
-					Element e = (Element) arrList.get(i);
-					phrase.add(e);
+				if(jjRequirement.getEnabled()) {
+					paragraph.add(new Chunk(jjRequirement.getName()+"\n", fontRequirement));
+					StringReader strReader = new StringReader(jjRequirement.getDescription());
+					System.out.println("strReader = "+strReader.getClass().getName());
+					ArrayList arrList = HTMLWorker.parseToList(strReader, style);
+					paragraph.addAll(arrList);
+					/*for (int i = 0; i < arrList.size(); ++i) {
+						Element e = (Element) arrList.get(i);
+						System.out.println("ArrayElement = "+e.getClass().getName());
+						paragraph.add(e);
+					}*/
+					if(jjRequirement.getNote().length() > 2){
+						paragraph.add("Note: "+new Chunk(jjRequirement.getNote()+"\n", fontNote));
+					}
 				}
-				URL adresseImage = new URL(
-						"http://www.primefaces.org/showcase/images/logo.png");
-				Image photoEtu = Image.getInstance(adresseImage);
-				// phrase.add(photoEtu);
-
-				phrase.add(new Chunk(jjRequirement.getNote() + "\n", fontNote));
 			}
 		}
 
-		Paragraph paragraph = new Paragraph(); // 1
-		paragraph.add(phrase); // 2
-		pdf.add(paragraph); // 3
+		paragraph.add(phrase);
+		Image image=Image.getInstance("http://www.google.com/intl/en_ALL/images/logos/images_logo_lg.gif");
+		image.scaleToFit((float)200.0, (float)49.0);
+		paragraph.add(image);
+		pdf.add(paragraph);
 	}
 
 	public void postProcessXLS(Object document) {

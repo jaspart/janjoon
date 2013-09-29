@@ -13,6 +13,8 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.funder.janjoonweb.domain.JJChapterService;
+import com.funder.janjoonweb.domain.JJCategory;
+import com.funder.janjoonweb.domain.JJCategoryService;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProductService;
 import com.funder.janjoonweb.domain.JJProject;
@@ -21,6 +23,12 @@ import com.funder.janjoonweb.domain.JJTask;
 import com.funder.janjoonweb.domain.JJTaskService;
 import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.domain.JJVersionService;
+import com.funder.janjoonweb.domain.JJContact;
+import com.funder.janjoonweb.domain.JJContactService;
+import com.funder.janjoonweb.domain.JJPermission;
+import com.funder.janjoonweb.domain.JJPermissionService;
+import com.funder.janjoonweb.domain.JJRight;
+import com.funder.janjoonweb.domain.JJRightService;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJProject.class, beanName = "jJProjectBean")
@@ -51,11 +59,42 @@ public class JJProjectBean {
 	}
 
 	@Autowired
+	JJCategoryService jJCategoryService;
+
+	public void setjJCategoryService(JJCategoryService jJCategoryService) {
+		this.jJCategoryService = jJCategoryService;
+	}
+
+	@Autowired
 	JJRequirementService jJRequirementService;
 
 	public void setjJRequirementService(
 			JJRequirementService jJRequirementService) {
 		this.jJRequirementService = jJRequirementService;
+	}
+
+	@Autowired
+	JJContactService localJJContactService;
+
+	public void setjJContactService(
+			JJContactService localJJContactService) {
+		this.localJJContactService = localJJContactService;
+	}
+
+	@Autowired
+	JJPermissionService jJPermissionService;
+
+	public void setjJPermissionService(
+			JJPermissionService jJPermissionService) {
+		this.jJPermissionService = jJPermissionService;
+	}
+
+	@Autowired
+	JJRightService jJRightService;
+
+	public void setjJRightService(
+			JJRightService jJRightService) {
+		this.jJRightService = jJRightService;
 	}
 
 	@Autowired
@@ -114,6 +153,7 @@ public class JJProjectBean {
 			}
 		}
 
+
 		if (jJProductService.getAllJJProduct().isEmpty()) {
 			JJProduct product;
 			for (int i = 0; i < 2; i++) {
@@ -148,8 +188,8 @@ public class JJProjectBean {
 		}
 
 		if (jJProjectService.findAllJJProjects().isEmpty()) {
-			JJProject project;
 			for (int i = 0; i < 2; i++) {
+				JJProject project;
 				project = new JJProject();
 				project.setName("ProjectName " + i);
 				project.setDescription("ProjectDescription " + i);
@@ -159,6 +199,96 @@ public class JJProjectBean {
 				jJProjectService.saveJJProject(project);
 			}
 		}
+
+		JJCategory CategoryBusiness;
+		JJCategory CategoryFunctional;
+		JJCategory CategoryTechnical;
+		JJCategory CategoryArchitecture;
+		JJCategory CategorySecurity;
+		if (jJCategoryService.getAllJJCategory().isEmpty()) {
+			String name = "BUSINESS";
+			CategoryBusiness = new JJCategory();
+			CategoryBusiness.setName(name);
+			CategoryBusiness.setCreationDate(new Date());
+			CategoryBusiness.setDescription("A JJCategory defined as " + name);
+			CategoryBusiness.setEnabled(true);
+			CategoryBusiness.setStage(1);
+			jJCategoryService.saveJJCategory(CategoryBusiness);
+
+			name = "FUNCTIONAL";
+			CategoryFunctional = new JJCategory();
+			CategoryFunctional.setName(name);
+			CategoryFunctional.setCreationDate(new Date());
+			CategoryFunctional.setDescription("A JJCategory defined as " + name);
+			CategoryFunctional.setEnabled(true);
+			CategoryFunctional.setStage(2);
+			jJCategoryService.saveJJCategory(CategoryFunctional);
+
+			name = "TECHNICAL";
+			CategoryTechnical = new JJCategory();
+			CategoryTechnical.setName(name);
+			CategoryTechnical.setCreationDate(new Date());
+			CategoryTechnical.setDescription("A JJCategory defined as " + name);
+			CategoryTechnical.setEnabled(true);
+			CategoryTechnical.setStage(3);
+			jJCategoryService.saveJJCategory(CategoryTechnical);
+
+			name = "ARCHITECTURE";
+			CategoryArchitecture = new JJCategory();
+			CategoryArchitecture.setName(name);
+			CategoryArchitecture.setCreationDate(new Date());
+			CategoryArchitecture.setDescription("A JJCategory defined as " + name);
+			CategoryArchitecture.setEnabled(true);
+			CategoryArchitecture.setStage(2);
+			jJCategoryService.saveJJCategory(CategoryArchitecture);
+
+			name = "SECURITY";
+			CategorySecurity = new JJCategory();
+			CategorySecurity.setName(name);
+			CategorySecurity.setCreationDate(new Date());
+			CategorySecurity.setDescription("A JJCategory defined as " + name);
+			CategorySecurity.setEnabled(true);
+			CategorySecurity.setStage(2);
+			jJCategoryService.saveJJCategory(CategorySecurity);
+		}
+
+		JJPermission newJJPermission;
+		if (jJPermissionService.getAllJJPermission().isEmpty()) {
+			newJJPermission = new JJPermission();
+			newJJPermission.setPermission("general");
+			jJPermissionService.saveJJPermission(newJJPermission);
+		}
+
+		if (jJRightService.getAllJJRight().isEmpty()) {
+			JJRight newJJRight = new JJRight();
+			newJJRight.setProject(jJProjectService.getAllJJProject().get(0));
+			newJJRight.setProduct(jJProductService.getAllJJProduct().get(0));
+			newJJRight.setPermission(jJPermissionService.getAllJJPermission().get(0));
+			newJJRight.setCategory(jJCategoryService.getAllJJCategory().get(0));
+			newJJRight.setR(true);
+			newJJRight.setW(true);
+			newJJRight.setX(true);
+			jJRightService.saveJJRight(newJJRight);
+		}
+/*
+		if (localJJContactService.getAllJJContact().isEmpty()) {
+			JJContact newJJContact = new JJContact();
+			newJJContact.setPassword("starit");
+			newJJContact.setEmail("starit@gmail.com");
+			newJJContact.setLdap(123456);
+			newJJContact.setFirstname("janjoon");
+			newJJContact.setLastname("admin");
+			newJJContact.setDateofbirth(new Date());
+			newJJContact.setEnabled(true);
+			newJJContact.setAccountNonExpired(true);
+			newJJContact.setCredentialsNonExpired(true);
+			newJJContact.setAccountNonLocked(true);
+
+			//newJJContact.setJjright(rights);
+			localJJContactService.saveJJContact(newJJContact);
+		}
+*/
+
 		/*** End Temporary ***/
 
 		myJJProjectList = jJProjectService.getAllJJProject();
@@ -198,18 +328,15 @@ public class JJProjectBean {
 
 				jJRequirementBean
 						.setMyBusinessJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProject("BUSINESS",
-										myJJProject));
+								.getAllJJRequirementsWithProject("BUSINESS", myJJProject));
 
 				jJRequirementBean
 						.setMyFunctionalJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProject("FUNCTIONAL",
-										myJJProject));
+								.getAllJJRequirementsWithProject("FUNCTIONAL", myJJProject));
 
 				jJRequirementBean
 						.setMyTechnicalJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProject("TECHNICAL",
-										myJJProject));
+								.getAllJJRequirementsWithProject("TECHNICAL", myJJProject));
 
 			}
 
