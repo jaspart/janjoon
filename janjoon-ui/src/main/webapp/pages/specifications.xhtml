@@ -426,20 +426,8 @@
 						</h:panelGrid>
 
 						<h:panelGrid columns="1" cellpadding="3">
-							<!--p:inputTextarea id="descriptionEdit" rows="6" cols="70"
-								value="#{jJRequirementBean.myEditedJJRequirement.description}"
-								required="true">
-								<f:validateLength minimum="1" maximum="250" />
-								<p:ajax update="msgDescriptionEdit" event="keyup" />
-							</p:inputTextarea>
-							<p:message for="descriptionEdit" id="msgDescriptionEdit"
-								display="icon" />
-							<p:watermark for="descriptionEdit" value="Description" /-->
-							<!-- EDITOR WYSIWYG -->
-							<p:editor id="descriptionEdit" rows="4" cols="70"
-								widgetVar="editorEdit"
-								value="#{jJRequirementBean.myEditedJJRequirement.description}"
-								required="true">
+							<p:editor id="descriptionEdit" rows="4" cols="70" widgetVar="editorEdit"
+								value="#{jJRequirementBean.myEditedJJRequirement.description}" required="true">
 								<f:validateLength minimum="1" maximum="250" />
 								<!--p:ajax update="msgDescriptionEdit" event="keyup" /-->
 							</p:editor>
@@ -608,17 +596,6 @@
 							<p:watermark for="name" value="Name" />
 						</h:panelGrid>
 					</h:panelGrid>
-					<!--p:inputTextarea id="description" rows="6" cols="70"
-								value="#{jJRequirementBean.myJJRequirement.description}"
-								required="true">
-								<f:validateLength minimum="1" maximum="250" />
-								<p:ajax update="msgDescription" event="keyup" />
-							</p:inputTextarea>
-							<p:message for="description" id="msgDescription" display="icon" />
-							<p:watermark for="description" value="Description" /-->
-					<!-- EDITOR WYSIWYG -->
-
-
 
 					<h:panelGrid columns="2" cellpadding="3">
 						<p:editor id="description" rows="4" cols="70"
@@ -701,7 +678,7 @@
 				</f:facet>
 			</p:dialog>
 
-			<p:dialog id="myManageChapterDialog" header="Manage JJChapter"
+			<p:dialog id="myManageChapterDialog" header="Manage Chapters"
 				widgetVar="manageJJChapter" maximizable="false" minimizable="false"
 				dynamic="true">
 				<h:panelGrid columns="1" cellpadding="3">
@@ -719,15 +696,13 @@
 						var="nodeChapter" selectionMode="single"
 						selection="#{jJChapterBean.selectedChapterNode}" dynamic="true">
 						<p:treeNode>
-
 							<h:outputText value="#{nodeChapter}" />
 						</p:treeNode>
 					</p:tree>
 
 					<h:panelGrid id="editField" columns="1" cellpadding="3">
 						<h:panelGrid columns="3" cellpadding="3">
-							<p:inputText id="chapterName" cols="60"
-								value="#{jJChapterBean.myJJChapter.name}" required="false">
+							<p:inputText id="chapterName" cols="60" value="#{jJChapterBean.myJJChapter.name}" required="false">
 								<!-- 							<f:validateLength minimum="1" maximum="25" /> -->
 								<!-- 							<p:ajax update="msgNameChapter" event="keyup" /> -->
 							</p:inputText>
@@ -736,14 +711,15 @@
 						</h:panelGrid>
 
 						<h:panelGrid columns="3" cellpadding="3">
-							<p:inputTextarea id="chapterDescription" rows="6" cols="70"
-								value="#{jJChapterBean.myJJChapter.description}"
-								required="false">
-								<!-- 							<f:validateLength minimum="1" maximum="250" /> -->
-								<!-- 							<p:ajax update="msgDescriptionChapter" event="keyup" /> -->
-							</p:inputTextarea>
-							<p:message for="chapterDescription" id="msgDescriptionChapter"
-								display="icon" />
+
+							<p:editor id="chapterDescription" rows="4" cols="70" value="#{jJChapterBean.myJJChapter.description}" required="false">
+								<f:validateLength minimum="1" maximum="250" />
+							</p:editor>
+
+							<!-- <p:inputTextarea id="chapterDescription" rows="6" cols="70" value="#{jJChapterBean.myJJChapter.description}" required="false">
+							</p:inputTextarea> -->
+							
+							<p:message for="chapterDescription" id="msgDescriptionChapter" display="icon" />
 							<p:watermark for="chapterDescription" value="Description" />
 						</h:panelGrid>
 
@@ -778,9 +754,9 @@
 			</p:dialog>
 
 
-			<p:dialog id="myManageDocumentDialog" header="Create JJChapter"
+			<p:dialog id="myManageDocumentDialog" header="Manage Document"
 				widgetVar="manageDocument" maximizable="false" minimizable="false"
-				showEffect="clip" hideEffect="fold" dynamic="true">
+				showEffect="fade" hideEffect="fade" dynamic="true">
 				<h:panelGrid columns="2" cellpadding="3">
 					<p:tree id="leftTreeSingle" value="#{jJChapterBean.leftRoot}"
 						var="nodeLeft" selectionMode="single"
