@@ -4,106 +4,171 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-	
+
 <ui:composition template="../templates/layout.xhtml">
-	<link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
-	<link type="text/css" rel="stylesheet" href="/syntaxhighlighter/standard.css" />
-	<ui:define name="content"><center>
-	
-		<p:tabMenu activeIndex="4" name="content">
-			<ui:include src="/templates/menu.xhtml" />
-		</p:tabMenu>
-		<br/>
-		
-		<p:panel header="CPROD 12.04 PPROJECT" style="vertical-align: top">
-			<table class="mytable">
-				<tr><td valign="top">
-				<h:form id="form">
-					<h:outputLabel value="Product:"/>
-					<p:selectOneMenu value="#{pprBean.city}" effect="fold" editable="true">
-						<f:selectItem itemLabel="CPROD" itemValue="" />
-						<f:selectItems value="#{pprBean.cities}" />
-					</p:selectOneMenu>
-					<br/>
-					<h:outputLabel value="Version:"/>
-					<p:selectOneMenu value="#{pprBean.city}" effect="fold" editable="true">
-						<f:selectItem itemLabel="12.04" itemValue="" />
-						<f:selectItems value="#{pprBean.cities}" />
-					</p:selectOneMenu>
-					<br/>
-					<h:outputLabel value="Project:"/>
-					<p:selectOneMenu value="#{pprBean.city}" effect="fold" editable="true">
-						<f:selectItem itemLabel="Client custo" itemValue="" />
-						<f:selectItems value="#{pprBean.cities}" />
-					</p:selectOneMenu>
-					<br/>
-			  
-					<p:tree id="docTree" value="#{documentsController.root}" 
-						width="700" var="doc" animate="true">
-						<p:treeNode expandedIcon="ui-icon-folder-open"  
-									collapsedIcon="ui-icon-folder-collapsed">
-							<h:outputText value="#{doc.name}"/>
-						</p:treeNode>
-				  
-						<p:treeNode type="src" icon="ui-icon-document">
-							<h:outputText value="#{doc.name}" />
-						</p:treeNode>
-				  
-						<p:treeNode type="WebContent" icon="ui-icon-image">
-							<h:outputText value="#{doc.name}" />
-						</p:treeNode>
-				  
-						<p:treeNode type="conf" icon="ui-icon-video">
-							<h:outputText value="#{doc.name}" />
+	<ui:define name="content">
+		<h:form id="dataForm">
+
+			<p:messages id="msgs" />
+			<h:panelGrid id="mainPanelGrid" columns="2">
+
+				<h:panelGrid id="leftPanelGrid" cellpadding="3">
+					<p:tree id="testCaseTreeSingle"
+						value="#{jJTestcaseBean.testCaseRootNode}" var="node"
+						selectionMode="single"
+						selection="#{jJTestcaseBean.testCaseSelectedNode}" dynamic="true">
+						<p:treeNode>
+							<h:outputText value="#{node}" />
 						</p:treeNode>
 					</p:tree>
-					<p:commandButton value="Start" actionListener="#{pprBean.savePerson}" id="start" update="" icon="ui-icon-disk" />
-					<p:commandButton value="Test plan" actionListener="#{pprBean.savePerson}" id="testplanp" update="" icon="ui-icon-circle-plus" />
-					<br/>
-					<p:commandButton value="Save" actionListener="#{pprBean.savePerson}" id="save" update="" icon="ui-icon-play" />
-					<p:commandButton value="History" actionListener="#{pprBean.savePerson}" id="history" update="" icon="ui-icon-bookmark" />
+				</h:panelGrid>
+
+				<h:panelGrid id="centerPanelGrid" columns="1" cellpadding="3">
+
+					<h:panelGrid id="testCasePanelGrid" columns="3" cellpadding="3">
+						<p:inputText id="name" value="#{jJTestcaseBean.jJTestCase.name}"
+							label="Name" required="true">
+							<f:validateLength minimum="2" />
+						
+						</p:inputText>
+						<p:message for="name" id="msgName" display="icon" />
+						<p:watermark for="name" value="Name *" />
+
+
+						<p:inputText id="description"
+							value="#{jJTestcaseBean.jJTestCase.description}"
+							label="Description" required="true">
+							<f:validateLength minimum="2" />
+						
+						</p:inputText>
+						<p:message for="description" id="msgDescription" display="icon" />
+						<p:watermark for="description" value="Description *" />
+					</h:panelGrid>
+
+					<p:panel id="testStepPanel" style="width:600px">
+
+						<p:messages id="testStepMsgs" />
+						<h:panelGrid id="testStepPanelGrid" columns="1" cellpadding="3">
+							<h:panelGrid columns="7" cellpadding="3">
+								<p:inputText id="action"
+									value="#{jJTeststepBean.jJTeststep.actionstep}" label="Action"
+									required="true">
+									<f:validateLength minimum="2" maximum="100" />
+									
+								</p:inputText>
+								<p:message for="action" id="msgAction" display="icon" />
+								<p:watermark for="action" value="Action *" />
+
+
+								<p:inputText id="result"
+									value="#{jJTeststepBean.jJTeststep.resultat}" label="Result"
+									required="true">
+									<f:validateLength minimum="2" maximum="100" />
+									
+								</p:inputText>
+								<p:message for="result" id="msgResult" display="icon" />
+								<p:watermark for="result" value="Result *" />
+
+								<p:commandButton id="addTestStep" update="testStepPanel"
+									actionListener="#{jJTeststepBean.addTestStep}"
+									icon="ui-icon-circle-plus" process="@this,action,result" />
+
+							</h:panelGrid>
+
+							<p:dataTable id="testStepDataTable" var="ts"
+								value="#{jJTeststepBean.testStepList}" resizableColumns="true"
+								scrollRows="5" scrollable="true" scrollHeight="115"
+								style="width:550px" rowKey="#{ts.ordering}" editable="true"
+								editMode="cell">
+
+								<p:ajax event="cellEdit" listener="#{tableBean.onCellEdit}"
+									process="@this,actionInput,resultInput" />
+
+
+								<p:column headerText="" colspan="2">
+									<h:outputText value="#{ts.ordering}" />
+								</p:column>
+
+								<p:column headerText="Action" colspan="7">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{ts.actionstep}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:inputText id="actionInput" value="#{ts.actionstep}"
+												style="width:75%" />
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+								<p:column headerText="Result" colspan="7">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{ts.resultat}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:inputText id="resultInput" value="#{ts.resultat}"
+												style="width:75%" />
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+								<p:column headerText="" colspan="3">
+									<p:commandButton id="insertTestStep"
+										icon="ui-icon-circle-triangle-n" process="@this"
+										action="#{jJTeststepBean.insertTestStep}"
+										update="testStepDataTable :dataForm:testStepMsgs">
+										<f:setPropertyActionListener value="#{ts}"
+											target="#{jJTeststepBean.insertedjJTeststep}" />
+									</p:commandButton>
+									<p:tooltip for="insertTestStep" value="Insert a Test Step"
+										showEffect="fade" hideEffect="fade" />
+
+									<p:commandButton id="deleteTestStep"
+										icon="ui-icon-circle-minus" process="@this"
+										oncomplete="deleteTestStep.show()">
+										<f:setPropertyActionListener value="#{ts}"
+											target="#{jJTeststepBean.tmpjJTeststep}" />
+									</p:commandButton>
+
+									<p:tooltip for="deleteTestStep"
+										value="#{messages.label_delete} a Test Step" showEffect="fade"
+										hideEffect="fade" />
+								</p:column>
+
+							</p:dataTable>
+
+
+						</h:panelGrid>
+					</p:panel>
+
+				</h:panelGrid>
+
+				<p:commandButton id="btn" value="Save" update="msgs"
+					actionListener="#{jJTestcaseBean.persistTestCase}"
+					icon="ui-icon-disk" process="@this,name,description" />
+			</h:panelGrid>
+
+
+
+		</h:form>
+
+		<p:confirmDialog id="deleteTestStepDialog" widgetVar="deleteTestStep"
+			message="#{messages.label_delete_record}" showEffect="fade"
+			hideEffect="explode" header="#{messages.label_confirm_deletion}"
+			severity="alarm">
+			<p:outputPanel id="deletePanel">
+				<h:form id="deleteForm">
+					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+						action="#{jJTeststepBean.deleteTestStep}"
+						update=":dataForm:testStepMsgs  :dataForm:testStepDataTable"
+						oncomplete="deleteTestStep.hide()" process="@this" />
+					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+						onclick="deleteTestStep.hide()" type="button" />
 				</h:form>
-				</td>
-				<td>
-				<p:dataTable var="car" value="#{tableBean.requirementList}">
-					<p:column headerText="#" width="10">
-					1
-					</p:column>
+			</p:outputPanel>
+		</p:confirmDialog>
 
-					<p:column headerText="action" style="width: 600px;">
-					<p:inplace id="ajaxAction" editor="true">
-						<p:inputText value="#{inplaceBean.text}" required="true" label="text"/>
-					</p:inplace>
-					</p:column>
-
-					<p:column headerText="result" style="width: 600px;">
-					<p:inplace id="ajaxResult" editor="true">
-						<p:inputText value="#{inplaceBean.text}" required="true" label="text"/>
-					</p:inplace>
-					</p:column>
-			  
-					<p:column headerText="status" width="100">
-					<p:selectBooleanButton value="#{formBean.value1}" onLabel="passed" offLabel="failed" />
-					</p:column>
-				</p:dataTable>
-				<p:commandButton value="Add Step" actionListener="#{pprBean.savePerson}" id="start" update="" icon="ui-icon-plus" />
-				</td>
-			</tr></table>
-		</p:panel>
-	</center></ui:define>
-
-	<ui:define name="outer"><center>
-		<ui:insert name="highlight">
-			<script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shCore.js"></script>
-			<script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushXml.js"></script>
-			<script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushJava.js"></script>
-			<script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushCss.js"></script>
-			<script type="text/javascript" src="#{request.contextPath}/syntaxhighlighter/shBrushJScript.js"></script>
-			<script type="text/javascript">
-				dp.SyntaxHighlighter.ClipboardSwf = '\#{request.contextPath}/syntaxhighlighter/clipboard.swf';
-				dp.SyntaxHighlighter.HighlightAll('code');
-			</script>
-		</ui:insert>
-	</center></ui:define>
+	</ui:define>
 </ui:composition>
 </html>
