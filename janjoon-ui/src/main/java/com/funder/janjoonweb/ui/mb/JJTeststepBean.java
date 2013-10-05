@@ -8,13 +8,11 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import com.funder.janjoonweb.domain.JJRequirement;
-import com.funder.janjoonweb.domain.JJTeststep;
-
-import org.primefaces.event.CellEditEvent;
-import org.primefaces.event.SelectEvent;
+import org.primefaces.event.RowEditEvent;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
+
+import com.funder.janjoonweb.domain.JJTeststep;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJTeststep.class, beanName = "jJTeststepBean")
@@ -22,11 +20,9 @@ public class JJTeststepBean {
 
 	private JJTeststep jJTeststep = new JJTeststep();
 
-	private JJTeststep tmpjJTeststep;
+	private JJTeststep deletedjJTeststep;
 
 	private JJTeststep insertedjJTeststep;
-
-	private JJTeststep selectedJJTeststep;
 
 	private List<JJTeststep> testStepList = new ArrayList<JJTeststep>();
 
@@ -38,12 +34,12 @@ public class JJTeststepBean {
 		this.jJTeststep = jJTeststep;
 	}
 
-	public JJTeststep getTmpjJTeststep() {
-		return tmpjJTeststep;
+	public JJTeststep getDeletedjJTeststep() {
+		return deletedjJTeststep;
 	}
 
-	public void setTmpjJTeststep(JJTeststep tmpjJTeststep) {
-		this.tmpjJTeststep = tmpjJTeststep;
+	public void setDeletedjJTeststep(JJTeststep deletedjJTeststep) {
+		this.deletedjJTeststep = deletedjJTeststep;
 	}
 
 	public JJTeststep getInsertedjJTeststep() {
@@ -54,14 +50,6 @@ public class JJTeststepBean {
 		this.insertedjJTeststep = insertedjJTeststep;
 	}
 
-	public JJTeststep getSelectedJJTeststep() {
-		return selectedJJTeststep;
-	}
-
-	public void setSelectedJJTeststep(JJTeststep selectedJJTeststep) {
-		this.selectedJJTeststep = selectedJJTeststep;
-	}
-
 	public List<JJTeststep> getTestStepList() {
 		return testStepList;
 	}
@@ -70,10 +58,19 @@ public class JJTeststepBean {
 		this.testStepList = testStepList;
 	}
 
+	public void initTestStepParameter() {
+
+		jJTeststep = new JJTeststep();
+		testStepList.removeAll(testStepList);
+		deletedjJTeststep = null;
+		insertedjJTeststep = null;
+
+	}
+
 	public void addTestStep(ActionEvent actionEvent) {
 
 		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage("Added " + jJTeststep.getActionstep() + "!"));
+				new FacesMessage(jJTeststep.getActionstep() + " Added !"));
 		jJTeststep.setName(jJTeststep.getActionstep());
 		jJTeststep.setDescription("TOTO");
 		jJTeststep.setCreationDate(new Date());
@@ -87,14 +84,14 @@ public class JJTeststepBean {
 
 	public void deleteTestStep() {
 
-		if (tmpjJTeststep != null) {
+		if (deletedjJTeststep != null) {
 
-			int index = testStepList.indexOf(tmpjJTeststep);
-			System.out.println("Deleted Index " + index);
+			int index = testStepList.indexOf(deletedjJTeststep);
+
 			FacesContext.getCurrentInstance().addMessage(
 					null,
-					new FacesMessage("Deleted " + tmpjJTeststep.getActionstep()
-							+ "!"));
+					new FacesMessage(deletedjJTeststep.getActionstep()
+							+ " Deleted !"));
 			testStepList.remove(index);
 
 			for (int i = index; i < testStepList.size(); i++) {
@@ -108,10 +105,7 @@ public class JJTeststepBean {
 
 		if (insertedjJTeststep != null) {
 
-			System.out.println("insertedjJTeststep.getOrdering() "
-					+ insertedjJTeststep.getOrdering());
 			int index = testStepList.indexOf(insertedjJTeststep);
-			System.out.println("Insert Index " + index);
 
 			List<JJTeststep> tmpList = new ArrayList<JJTeststep>();
 
@@ -131,38 +125,34 @@ public class JJTeststepBean {
 			jJTeststep.setCreationDate(new Date());
 			jJTeststep.setOrdering(index + 1);
 			jJTeststep.setEnabled(true);
+			jJTeststep.setActionstep("Insert a value");
+			jJTeststep.setResultat("Insert a value");
 
 			testStepList.add(jJTeststep);
 			testStepList.addAll(tmpList);
 
 			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage("Inserted a test Step !"));
+					new FacesMessage("Test Step Inserted !"));
 
 			jJTeststep = new JJTeststep();
 		}
 
 	}
 
-	public void onCellEdit(CellEditEvent event) {
-		Object oldValue = event.getOldValue();
-		Object newValue = event.getNewValue();
-		
-		System.out.println("Heeeeere");
+	public void editTestStep(RowEditEvent event) {
 
-//		if (newValue != null && !newValue.equals(oldValue)) {
-//			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-//					"Cell Changed", "Old: " + oldValue + ", New:" + newValue);
-//			FacesContext.getCurrentInstance().addMessage(null, msg);
-//		}
+		FacesMessage msg = new FacesMessage("Test Step Edited",
+				((JJTeststep) event.getObject()).getActionstep());
+
+		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 
-	public void onRowSelect(SelectEvent event) {
-		JJTeststep testStep = (JJTeststep) event.getObject();
+	public void cancelEditTestStep(RowEditEvent event) {
 
-		// FacesMessage msg = new FacesMessage("JJTeststep Selected "
-		// + req.getName(), req.getName());
-		// FacesContext.getCurrentInstance().addMessage(null, msg);
+		FacesMessage msg = new FacesMessage("Test Step edition Cancelled",
+				((JJTeststep) event.getObject()).getActionstep());
 
+		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 
 }

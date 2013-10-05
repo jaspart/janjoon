@@ -7,21 +7,40 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
+
+		<h:form id="msgForm">
+			<p:messages id="msgs" />
+		</h:form>
+
 		<h:form id="dataForm">
 
-			<p:messages id="msgs" />
 			<h:panelGrid id="mainPanelGrid" columns="2">
 
-				<h:panelGrid id="leftPanelGrid" cellpadding="3">
-					<p:tree id="testCaseTreeSingle"
-						value="#{jJTestcaseBean.testCaseRootNode}" var="node"
-						selectionMode="single"
-						selection="#{jJTestcaseBean.testCaseSelectedNode}" dynamic="true">
-						<p:treeNode>
-							<h:outputText value="#{node}" />
-						</p:treeNode>
-					</p:tree>
-				</h:panelGrid>
+
+
+				<p:panel id="treePanel" style="width:350px">
+					<h:panelGrid id="leftPanelGrid" columns="1" cellpadding="3">
+						<p:tree id="testCaseTreeSingle"
+							value="#{jJTestcaseBean.testCaseRootNode}" var="node"
+							selectionMode="single"
+							selection="#{jJTestcaseBean.testCaseSelectedNode}" dynamic="true">
+							<p:treeNode>
+								<h:outputText value="#{node}" />
+							</p:treeNode>
+						</p:tree>
+						<p:button id="addTestCase" value="New"
+							update=":msgForm:msgs :dataForm"
+							actionListener="#{jJTestcaseBean.persistTestCase(jJTeststepBean)}"
+							icon="ui-icon-circle-plus" />
+						<p:tooltip for="addTestCase" value="Add a new Test Case"
+							showEffect="fade" hideEffect="fade" />
+					</h:panelGrid>
+				</p:panel>
+
+
+
+
+
 
 				<h:panelGrid id="centerPanelGrid" columns="1" cellpadding="3">
 
@@ -29,7 +48,7 @@
 						<p:inputText id="name" value="#{jJTestcaseBean.jJTestCase.name}"
 							label="Name" required="true">
 							<f:validateLength minimum="2" />
-						
+
 						</p:inputText>
 						<p:message for="name" id="msgName" display="icon" />
 						<p:watermark for="name" value="Name *" />
@@ -39,7 +58,7 @@
 							value="#{jJTestcaseBean.jJTestCase.description}"
 							label="Description" required="true">
 							<f:validateLength minimum="2" />
-						
+
 						</p:inputText>
 						<p:message for="description" id="msgDescription" display="icon" />
 						<p:watermark for="description" value="Description *" />
@@ -54,7 +73,7 @@
 									value="#{jJTeststepBean.jJTeststep.actionstep}" label="Action"
 									required="true">
 									<f:validateLength minimum="2" maximum="100" />
-									
+
 								</p:inputText>
 								<p:message for="action" id="msgAction" display="icon" />
 								<p:watermark for="action" value="Action *" />
@@ -64,7 +83,7 @@
 									value="#{jJTeststepBean.jJTeststep.resultat}" label="Result"
 									required="true">
 									<f:validateLength minimum="2" maximum="100" />
-									
+
 								</p:inputText>
 								<p:message for="result" id="msgResult" display="icon" />
 								<p:watermark for="result" value="Result *" />
@@ -76,48 +95,62 @@
 							</h:panelGrid>
 
 							<p:dataTable id="testStepDataTable" var="ts"
-								value="#{jJTeststepBean.testStepList}" resizableColumns="true"
-								scrollRows="5" scrollable="true" scrollHeight="115"
-								style="width:550px" rowKey="#{ts.ordering}" editable="true"
-								editMode="cell">
+								value="#{jJTeststepBean.testStepList}" scrollRows="5"
+								scrollable="true" scrollHeight="115" style="width:550px"
+								rowKey="#{ts.ordering}" editable="true">
 
-								<p:ajax event="cellEdit" listener="#{tableBean.onCellEdit}"
-									process="@this,actionInput,resultInput" />
+								<p:ajax event="rowEdit"
+									listener="#{jJTeststepBean.editTestStep}"
+									update=":dataForm:testStepMsgs" process="@this" />
+								<p:ajax event="rowEditCancel"
+									listener="#{jJTeststepBean.cancelEditTestStep}"
+									update=":dataForm:testStepMsgs" process="@this" />
 
+								<f:facet name="header">  
+            						Test Steps  
+        						</f:facet>
 
-								<p:column headerText="" colspan="2">
+								<p:column headerText="" style="width:9%">
 									<h:outputText value="#{ts.ordering}" />
 								</p:column>
 
-								<p:column headerText="Action" colspan="7">
+								<p:column headerText="Action" style="width:33%">
 									<p:cellEditor>
 										<f:facet name="output">
 											<h:outputText value="#{ts.actionstep}" />
 										</f:facet>
 										<f:facet name="input">
 											<p:inputText id="actionInput" value="#{ts.actionstep}"
-												style="width:75%" />
+												style="width:90%" required="true" label="Action Input"
+												widgetVar="actionInput">
+												<f:validateLength minimum="2" maximum="100" />
+											</p:inputText>
 										</f:facet>
 									</p:cellEditor>
 								</p:column>
 
-								<p:column headerText="Result" colspan="7">
+								<p:column headerText="Result" style="width:33%">
 									<p:cellEditor>
 										<f:facet name="output">
 											<h:outputText value="#{ts.resultat}" />
 										</f:facet>
 										<f:facet name="input">
 											<p:inputText id="resultInput" value="#{ts.resultat}"
-												style="width:75%" />
+												style="width:90%" required="true" label="Result Input"
+												widgetVar="resultInput">
+												<f:validateLength minimum="2" maximum="100" />
+											</p:inputText>
 										</f:facet>
 									</p:cellEditor>
 								</p:column>
 
-								<p:column headerText="" colspan="3">
+								<p:column headerText="">
 									<p:commandButton id="insertTestStep"
 										icon="ui-icon-circle-triangle-n" process="@this"
 										action="#{jJTeststepBean.insertTestStep}"
-										update="testStepDataTable :dataForm:testStepMsgs">
+										update="testStepDataTable :dataForm:testStepMsgs"
+										style="align:center">
+
 										<f:setPropertyActionListener value="#{ts}"
 											target="#{jJTeststepBean.insertedjJTeststep}" />
 									</p:commandButton>
@@ -126,14 +159,19 @@
 
 									<p:commandButton id="deleteTestStep"
 										icon="ui-icon-circle-minus" process="@this"
-										oncomplete="deleteTestStep.show()">
+										oncomplete="deleteTestStep.show()" style="align:center">
 										<f:setPropertyActionListener value="#{ts}"
-											target="#{jJTeststepBean.tmpjJTeststep}" />
+											target="#{jJTeststepBean.deletedjJTeststep}" />
 									</p:commandButton>
 
 									<p:tooltip for="deleteTestStep"
 										value="#{messages.label_delete} a Test Step" showEffect="fade"
 										hideEffect="fade" />
+
+
+								</p:column>
+								<p:column style="width:10%">
+									<p:rowEditor />
 								</p:column>
 
 							</p:dataTable>
@@ -144,12 +182,14 @@
 
 				</h:panelGrid>
 
-				<p:commandButton id="btn" value="Save" update="msgs"
-					actionListener="#{jJTestcaseBean.persistTestCase}"
-					icon="ui-icon-disk" process="@this,name,description" />
+				<p:commandButton id="btn" value="Save"
+					update=":msgForm:msgs :dataForm"
+					actionListener="#{jJTestcaseBean.persistTestCase(jJTeststepBean)}"
+					icon="ui-icon-disk"
+					process="@this,name,description @widgetVar(actionInput) @widgetVar(resultInput)" />
+
+
 			</h:panelGrid>
-
-
 
 		</h:form>
 
