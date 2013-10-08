@@ -16,22 +16,33 @@
 
 			<h:panelGrid id="mainPanelGrid" columns="2">
 
-
-
 				<p:panel id="treePanel" style="width:350px">
 					<h:panelGrid id="leftPanelGrid" columns="1" cellpadding="3">
+
+						<p:contextMenu for="testCaseTreeSingle">
+							<p:menuitem value="Edit" update=":dataForm"
+								actionListener="#{jJTestcaseBean.editNode(jJTeststepBean)}"
+								icon="ui-icon-pencil" process="@parent" />
+							<p:menuitem value="Delete" icon="ui-icon-close"
+								actionListener="#{jJTestcaseBean.deleteNode(jJTeststepBean)}"
+								process="@parent" update=":msgForm:msgs :dataForm" />
+						</p:contextMenu>
+
+
 						<p:tree id="testCaseTreeSingle"
 							value="#{jJTestcaseBean.testCaseRootNode}" var="node"
 							selectionMode="single"
 							selection="#{jJTestcaseBean.testCaseSelectedNode}" dynamic="true">
+							<p:ajax event="select" update=":msgForm:msgs"
+								listener="#{jJTestcaseBean.onNodeSelect}" />
 							<p:treeNode>
 								<h:outputText value="#{node}" />
 							</p:treeNode>
 						</p:tree>
-						<p:button id="addTestCase" value="New"
+						<p:commandButton id="addTestCase" value="New"
 							update=":msgForm:msgs :dataForm"
-							actionListener="#{jJTestcaseBean.persistTestCase(jJTeststepBean)}"
-							icon="ui-icon-circle-plus" />
+							action="#{jJTestcaseBean.initTestCaseParameter(jJTeststepBean)}"
+							icon="ui-icon-circle-plus"  />
 						<p:tooltip for="addTestCase" value="Add a new Test Case"
 							showEffect="fade" hideEffect="fade" />
 					</h:panelGrid>
@@ -197,14 +208,31 @@
 			message="#{messages.label_delete_record}" showEffect="fade"
 			hideEffect="explode" header="#{messages.label_confirm_deletion}"
 			severity="alarm">
-			<p:outputPanel id="deletePanel">
-				<h:form id="deleteForm">
+			<p:outputPanel id="deleteTestStepPanel">
+				<h:form id="deleteTestStepForm">
 					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
 						action="#{jJTeststepBean.deleteTestStep}"
 						update=":dataForm:testStepMsgs  :dataForm:testStepDataTable"
 						oncomplete="deleteTestStep.hide()" process="@this" />
 					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
 						onclick="deleteTestStep.hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
+
+
+		<p:confirmDialog id="deleteTestCaseDialog" widgetVar="deleteTestCase"
+			message="#{messages.label_delete_record}" showEffect="fade"
+			hideEffect="explode" header="#{messages.label_confirm_deletion}"
+			severity="alarm">
+			<p:outputPanel id="deleteTestCasePanel">
+				<h:form id="deleteTestCaseForm">
+					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+						action="#{jJTestcaseBean.deleteNode()}"
+						update=":msgForm:msgs :dataForm:treePanel"
+						oncomplete="deleteTestCase.hide()" />
+					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+						onclick="deleteTestCase.hide()" type="button" />
 				</h:form>
 			</p:outputPanel>
 		</p:confirmDialog>

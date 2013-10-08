@@ -61,7 +61,7 @@ public class JJTeststepBean {
 	public void initTestStepParameter() {
 
 		jJTeststep = new JJTeststep();
-		testStepList.removeAll(testStepList);
+		testStepList = new ArrayList<JJTeststep>();
 		deletedjJTeststep = null;
 		insertedjJTeststep = null;
 
