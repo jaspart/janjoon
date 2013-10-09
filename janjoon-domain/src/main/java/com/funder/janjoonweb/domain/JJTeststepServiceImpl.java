@@ -40,4 +40,26 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 		return result.getResultList();
 
 	}
+	
+	@Override
+	public List<JJTeststep> getJJTeststepWithJJTestcase(JJTestcase jJTestcase) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJTeststep> criteriaQuery = criteriaBuilder
+				.createQuery(JJTeststep.class);
+
+		Root<JJTeststep> from = criteriaQuery.from(JJTeststep.class);
+
+		CriteriaQuery<JJTeststep> select = criteriaQuery.select(from);
+
+		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
+		Predicate predicate2 = criteriaBuilder.equal(from.get("testcase"), jJTestcase);
+
+		select.where(predicate1,predicate2);
+		criteriaQuery.orderBy(criteriaBuilder.asc(from.get("ordering")));
+
+		TypedQuery<JJTeststep> result = entityManager.createQuery(select);
+		return result.getResultList();
+
+	}
 }

@@ -87,7 +87,9 @@ public class JJTestcaseBean {
 			TreeNode newNode = new DefaultTreeNode("TC-" + jjTestcase.getId()
 					+ "- " + jjTestcase.getName(), testCaseRootNode);
 
-			Set<JJTeststep> teststeps = jjTestcase.getTeststeps();
+			// Set<JJTeststep> teststeps = jjTestcase.getTeststeps();
+			List<JJTeststep> teststeps = jJTeststepService
+					.getJJTeststepWithJJTestcase(jJTestCase);
 			for (JJTeststep jjTeststep : teststeps) {
 				TreeNode newNode1 = new DefaultTreeNode("TS-"
 						+ jjTeststep.getId() + "- "
@@ -101,6 +103,42 @@ public class JJTestcaseBean {
 		description = null;
 		tmpJJTeststepList = new ArrayList<String>();
 		jJTeststepBean.initTestStepParameter();
+
+	}
+
+	public void editNode(JJTeststepBean jJTeststepBean) {
+
+		long idjJTestCase;
+
+		if (testCaseSelectedNode != null) {
+
+			mode = "Edit";
+			name = null;
+			description = null;
+			tmpJJTeststepList = new ArrayList<String>();
+
+			idjJTestCase = Long.parseLong(getStringFromString(
+					testCaseSelectedNode.getData().toString(), 1));
+
+			System.out.println(idjJTestCase);
+
+			jJTestCase = jJTestcaseService.findJJTestcase(idjJTestCase);
+
+			name = jJTestCase.getName();
+			description = jJTestCase.getDescription();
+
+			jJTeststepBean.initTestStepParameter();
+
+			// Set<JJTeststep> list = jJTestCase.getTeststeps();
+
+			List<JJTeststep> list = jJTeststepService
+					.getJJTeststepWithJJTestcase(jJTestCase);
+			for (JJTeststep jjTeststep : list) {
+				jJTeststepBean.getTestStepList().add(jjTeststep);
+				tmpJJTeststepList.add(getFromString(jjTeststep));
+			}
+
+		}
 
 	}
 
@@ -146,10 +184,16 @@ public class JJTestcaseBean {
 			message = "Edit " + jJTestCase.getName() + " Saved !";
 			fmsg = new FacesMessage(message, jJTestCase.getName());
 
+			List<JJTeststep> list = jJTeststepBean.getTestStepList();
+
+			Set<JJTeststep> finalTestSteplist = new HashSet<JJTeststep>();
+
+			JJTestcase finalTestCase = new JJTestcase();
+
 			if (name.equalsIgnoreCase(jJTestCase.getName())
 					&& description
 							.equalsIgnoreCase(jJTestCase.getDescription())) {
-
+				finalTestCase = jJTestCase;
 			} else {
 
 				JJTestcase tmpJJTestcase = new JJTestcase();
@@ -161,78 +205,90 @@ public class JJTestcaseBean {
 				jJTestcaseService.saveJJTestcase(tmpJJTestcase);
 				jJTestCase.setEnabled(false);
 				jJTestcaseService.updateJJTestcase(jJTestCase);
+				finalTestCase = jJTestcaseService.findJJTestcase(tmpJJTestcase.getId());
 			}
+
+			for (JJTeststep jjTeststep : list) {
+
+				String str = getFromString(jjTeststep);
+
+				for (String element : tmpJJTeststepList) {
+					String id = getStringFromString(str, 0);
+					String action = getStringFromString(str, 1);
+					String result = getStringFromString(str, 2);
+					String order = getStringFromString(str, 3);
+					if (element.startsWith(id)) {
+
+						if (getStringFromString(element, 1).equalsIgnoreCase(
+								action)
+								&& getStringFromString(element, 2)
+										.equalsIgnoreCase(result)
+								&& getStringFromString(element, 3)
+										.equalsIgnoreCase(order)) {
+
+							// jjTeststep.setTestcase(finalTestCase);
+							// jJTeststepService.updateJJTeststep(jjTeststep);
+							finalTestSteplist.add(jjTeststep);
+							break;
+						} else {
+							JJTeststep ts = new JJTeststep();
+							ts.setCreationDate(jjTeststep.getCreationDate());
+							ts.setUpdatedDate(new Date());
+							ts.setActionstep(jjTeststep.getActionstep());
+							ts.setName(jjTeststep.getName());
+							ts.setResultat(jjTeststep.getResultat());
+							ts.setOrdering(jjTeststep.getOrdering());
+							ts.setEnabled(true);
+							ts.setDescription("TOTO");
+							jJTeststepService.saveJJTeststep(ts);
+
+							finalTestSteplist.add(jJTeststepService
+									.findJJTeststep(jjTeststep.getId()));
+
+							jjTeststep.setEnabled(false);
+							jJTeststepService.updateJJTeststep(jjTeststep);
+
+						}
+
+					} else {
+						jJTeststepService.saveJJTeststep(jjTeststep);
+						Long Id = jjTeststep.getId();
+						jjTeststep = jJTeststepService.findJJTeststep(Id);
+						// jjTeststep.setTestcase(finalTestCase);
+						// jJTeststepService.updateJJTeststep(jjTeststep);
+						finalTestSteplist.add(jjTeststep);
+					}
+				}
+
+			}
+			for (JJTeststep element : finalTestSteplist) {
+
+				element.setTestcase(finalTestCase);
+				jJTeststepService.updateJJTeststep(element);
+
+			}
+
+			finalTestCase.setTeststeps(finalTestSteplist);
+			jJTestcaseService.updateJJTestcase(finalTestCase);
 
 		}
 
 		FacesContext.getCurrentInstance().addMessage(null, fmsg);
+		System.out.println("**********************************");
 
-		// List<JJTestcase> list = jJTestcaseService.getAllJJTestcase();
-		// System.out.println("\n listJJTestcase.size() " + list.size());
-		// for (JJTestcase jjTestcase : list) {
-		// System.out.println("\n jjTestcase.getName() "
-		// + jjTestcase.getName());
-		// Set<JJTeststep> list5 = jjTestcase.getTeststeps();
-		// for (JJTeststep jjTeststep : list5) {
-		// System.out.println(jjTeststep.getActionstep() + " "
-		// + jjTeststep.getResultat());
-		// }
-		// }
+		List<JJTestcase> list = jJTestcaseService.getAllJJTestcase();
+		System.out.println("\n listJJTestcase.size() " + list.size());
+		for (JJTestcase jjTestcase : list) {
+			System.out.println("\n jjTestcase.getName() "
+					+ jjTestcase.getName());
+			Set<JJTeststep> list5 = jjTestcase.getTeststeps();
+			for (JJTeststep jjTeststep : list5) {
+				System.out.println(jjTeststep.getActionstep() + " - "
+						+ jjTeststep.getResultat());
+			}
+		}
 
 		initTestCaseParameter(jJTeststepBean);
-
-	}
-
-	public void editNode(JJTeststepBean jJTeststepBean) {
-		// persistIndex = 2;
-		// Long idChapter = Long.parseLong(getIdFromString(selectedChapterNode
-		// .getData().toString(), 1));
-		// JJChapter chapter = jJChapterService.findJJChapter(idChapter);
-		//
-		// myJJChapter = chapter;
-		// // myJJChapter.setName(editJJChapter.getName());
-		// // myJJChapter.setCreationDate(editJJChapter.getCreationDate());
-		// // myJJChapter.setUpdatedDate(new Date());
-		// // myJJChapter.setEnabled(true);
-		// // myJJChapter.setDescription(editJJChapter.getDescription());
-		// // myJJChapter.setParent(editJJChapter.getParent());
-		// // myJJChapter.setChapters(myJJChapter.getChapters());
-		// // myJJChapter.setRequirements(myJJChapter.getRequirements());
-		// // myJJChapter.setCategory(editJJChapter.getCategory());
-		// // myJJChapter.setProduct(editJJChapter.getProduct());
-		// // myJJChapter.setProject(editJJChapter.getProject());
-
-		long idjJTestCase;
-
-		if (testCaseSelectedNode != null) {
-
-			mode = "Edit";
-			name = null;
-			description = null;
-			tmpJJTeststepList = new ArrayList<String>();
-
-			idjJTestCase = Long.parseLong(getIdFromString(testCaseSelectedNode
-					.getData().toString(), 1));
-
-			System.out.println(idjJTestCase);
-
-			jJTestCase = jJTestcaseService.findJJTestcase(idjJTestCase);
-
-			name = jJTestCase.getName();
-			description = jJTestCase.getDescription();
-
-			jJTeststepBean.initTestStepParameter();
-
-			Set<JJTeststep> list = jJTestCase.getTeststeps();
-			for (JJTeststep jjTeststep : list) {
-				jJTeststepBean.getTestStepList().add(jjTeststep);
-				tmpJJTeststepList.add(jjTeststep.getId() + "-"
-						+ jjTeststep.getActionstep() + "-"
-						+ jjTeststep.getResultat() + "-"
-						+ jjTeststep.getOrdering());
-			}
-
-		}
 
 	}
 
@@ -243,8 +299,8 @@ public class JJTestcaseBean {
 
 		if (testCaseSelectedNode != null) {
 
-			idjJTestCase = Long.parseLong(getIdFromString(testCaseSelectedNode
-					.getData().toString(), 1));
+			idjJTestCase = Long.parseLong(getStringFromString(
+					testCaseSelectedNode.getData().toString(), 1));
 
 			System.out.println(idjJTestCase);
 
@@ -254,8 +310,8 @@ public class JJTestcaseBean {
 
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Deleted"
-							+ getIdFromString(testCaseSelectedNode.getData()
-									.toString(), 2), "Deleted"
+							+ getStringFromString(testCaseSelectedNode
+									.getData().toString(), 2), "Deleted"
 							+ testCaseSelectedNode.getData());
 			FacesContext.getCurrentInstance().addMessage(null, message);
 
@@ -273,9 +329,16 @@ public class JJTestcaseBean {
 		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
-	private String getIdFromString(String s, int index) {
+	private String getStringFromString(String s, int index) {
 		String[] temp = s.split("-");
 		return temp[index];
+	}
+
+	private String getFromString(JJTeststep jjTeststep) {
+		String str = jjTeststep.getId() + "-" + jjTeststep.getActionstep()
+				+ "-" + jjTeststep.getResultat() + "-"
+				+ jjTeststep.getOrdering();
+		return str;
 	}
 
 }
