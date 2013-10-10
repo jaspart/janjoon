@@ -24,28 +24,15 @@ public class JJMessage extends JJAbstractEntity {
     @ManyToOne
     private JJImportance importance;
 
-    /**
-     */
     @ManyToOne
     private JJSprint sprint;
-
-    /**
-     */
+   
     @ManyToOne
     private JJBuild build;
 
-    /**
-     */
-    @ManyToOne
-    private JJTestplan testplan;
-
-    /**
-     */
     @ManyToOne
     private JJTeststep teststep;
 
-    /**
-     */
     @ManyToOne
     private JJTestcase testcase;
 }

@@ -7,7 +7,6 @@ import com.funder.janjoonweb.domain.JJBuild;
 import com.funder.janjoonweb.domain.JJPhase;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJTask;
-import com.funder.janjoonweb.domain.JJTestplan;
 import com.funder.janjoonweb.domain.JJVersion;
 import java.util.Set;
 
@@ -35,14 +34,6 @@ privileged aspect JJVersion_Roo_JavaBean {
     
     public void JJVersion.setTasks(Set<JJTask> tasks) {
         this.tasks = tasks;
-    }
-    
-    public Set<JJTestplan> JJVersion.getTestplans() {
-        return this.testplans;
-    }
-    
-    public void JJVersion.setTestplans(Set<JJTestplan> testplans) {
-        this.testplans = testplans;
     }
     
     public Set<JJBuild> JJVersion.getBuilds() {

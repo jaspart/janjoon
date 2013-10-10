@@ -30,9 +30,10 @@ layer --class JJSprint
 layer --class JJRequirement
 layer --class JJTask
 layer --class JJBuild
-layer --class JJTestplan
 layer --class JJTestcase
 layer --class JJTeststep
+layer --class JJTestcaseexecution
+layer --class JJTeststepexecution
 
 #######################
 

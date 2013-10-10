@@ -9,7 +9,6 @@ import com.funder.janjoonweb.domain.JJContactService;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJProjectService;
 import com.funder.janjoonweb.domain.JJTask;
-import com.funder.janjoonweb.domain.JJTestplan;
 import com.funder.janjoonweb.ui.mb.JJProjectBean;
 import com.funder.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
@@ -72,8 +71,6 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
     private List<JJChapter> JJProjectBean.selectedChapters;
     
     private List<JJTask> JJProjectBean.selectedTasks;
-    
-    private List<JJTestplan> JJProjectBean.selectedTestplans;
     
     @PostConstruct
     public void JJProjectBean.init() {
@@ -334,22 +331,6 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         tasksCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(tasksCreateInputMessage);
         
-        HtmlOutputText testplansCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testplansCreateOutput.setId("testplansCreateOutput");
-        testplansCreateOutput.setValue("Testplans:");
-        htmlPanelGrid.getChildren().add(testplansCreateOutput);
-        
-        HtmlOutputText testplansCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testplansCreateInput.setId("testplansCreateInput");
-        testplansCreateInput.setValue("This relationship is managed from the JJTestplan side");
-        htmlPanelGrid.getChildren().add(testplansCreateInput);
-        
-        Message testplansCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        testplansCreateInputMessage.setId("testplansCreateInputMessage");
-        testplansCreateInputMessage.setFor("testplansCreateInput");
-        testplansCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(testplansCreateInputMessage);
-        
         return htmlPanelGrid;
     }
     
@@ -543,22 +524,6 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         tasksEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(tasksEditInputMessage);
         
-        HtmlOutputText testplansEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testplansEditOutput.setId("testplansEditOutput");
-        testplansEditOutput.setValue("Testplans:");
-        htmlPanelGrid.getChildren().add(testplansEditOutput);
-        
-        HtmlOutputText testplansEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testplansEditInput.setId("testplansEditInput");
-        testplansEditInput.setValue("This relationship is managed from the JJTestplan side");
-        htmlPanelGrid.getChildren().add(testplansEditInput);
-        
-        Message testplansEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        testplansEditInputMessage.setId("testplansEditInputMessage");
-        testplansEditInputMessage.setFor("testplansEditInput");
-        testplansEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(testplansEditInputMessage);
-        
         return htmlPanelGrid;
     }
     
@@ -665,16 +630,6 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         tasksValue.setValue("This relationship is managed from the JJTask side");
         htmlPanelGrid.getChildren().add(tasksValue);
         
-        HtmlOutputText testplansLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testplansLabel.setId("testplansLabel");
-        testplansLabel.setValue("Testplans:");
-        htmlPanelGrid.getChildren().add(testplansLabel);
-        
-        HtmlOutputText testplansValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testplansValue.setId("testplansValue");
-        testplansValue.setValue("This relationship is managed from the JJTestplan side");
-        htmlPanelGrid.getChildren().add(testplansValue);
-        
         return htmlPanelGrid;
     }
     
@@ -733,26 +688,12 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         this.selectedTasks = selectedTasks;
     }
     
-    public List<JJTestplan> JJProjectBean.getSelectedTestplans() {
-        return selectedTestplans;
-    }
-    
-    public void JJProjectBean.setSelectedTestplans(List<JJTestplan> selectedTestplans) {
-        if (selectedTestplans != null) {
-            JJProject_.setTestplans(new HashSet<JJTestplan>(selectedTestplans));
-        }
-        this.selectedTestplans = selectedTestplans;
-    }
-    
     public String JJProjectBean.onEdit() {
         if (JJProject_ != null && JJProject_.getChapters() != null) {
             selectedChapters = new ArrayList<JJChapter>(JJProject_.getChapters());
         }
         if (JJProject_ != null && JJProject_.getTasks() != null) {
             selectedTasks = new ArrayList<JJTask>(JJProject_.getTasks());
-        }
-        if (JJProject_ != null && JJProject_.getTestplans() != null) {
-            selectedTestplans = new ArrayList<JJTestplan>(JJProject_.getTestplans());
         }
         return null;
     }
@@ -808,7 +749,6 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         JJProject_ = null;
         selectedChapters = null;
         selectedTasks = null;
-        selectedTestplans = null;
         createDialogVisible = false;
     }
     

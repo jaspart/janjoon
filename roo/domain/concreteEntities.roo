@@ -12,7 +12,6 @@ field string --fieldName val --sizeMax 100 --notNull
 focus --class ~.JJProject
 field set --fieldName chapters  --type ~.JJChapter --cardinality ONE_TO_MANY --mappedBy project --fetch LAZY
 field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy project --fetch LAZY
-field set --fieldName testplans --type ~.JJTestplan --cardinality ONE_TO_MANY --mappedBy project --fetch LAZY
 
 #######################
 
@@ -27,7 +26,6 @@ focus --class ~.JJVersion
 field reference --fieldName product --type ~.JJProduct
 field reference --fieldName phase --type ~.JJPhase
 field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy jjversion --fetch LAZY
-field set --fieldName testplans --type ~.JJTestplan --cardinality ONE_TO_MANY --mappedBy jjversion --fetch LAZY
 field set --fieldName builds --type ~.JJBuild --cardinality ONE_TO_MANY --mappedBy jjversion --fetch LAZY
 
 #######################
@@ -40,7 +38,6 @@ field reference --fieldName product --type ~.JJProduct
 field reference --fieldName parent --type ~.domain.JJChapter
 field set --fieldName chapters --type ~.domain.JJChapter --cardinality ONE_TO_MANY --mappedBy parent --fetch LAZY
 field set --fieldName requirements --type ~.JJRequirement --cardinality ONE_TO_MANY --mappedBy chapter --fetch LAZY
-field set --fieldName testplans --type ~.JJTestplan --cardinality ONE_TO_MANY --mappedBy chapter --fetch LAZY
 field set --fieldName testcases --type ~.JJTestcase --cardinality ONE_TO_MANY --mappedBy chapter --fetch LAZY
 
 #######################
@@ -114,7 +111,6 @@ field reference --fieldName status --type ~.JJStatus
 field reference --fieldName importance --type ~.JJImportance
 field reference --fieldName sprint --type ~.JJSprint
 field reference --fieldName build --type ~.JJBuild
-field reference --fieldName testplan --type ~.JJTestplan
 field reference --fieldName teststep --type ~.JJTeststep
 field reference --fieldName testcase --type ~.JJTestcase
 
@@ -206,18 +202,7 @@ field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --f
 
 focus --class ~.JJBuild
 field reference --fieldName jjversion --type ~.JJVersion
-field set --fieldName testplans --type ~.JJTestplan --cardinality ONE_TO_MANY --mappedBy build --fetch LAZY
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy build --fetch LAZY
-
-#######################
-
-focus --class ~.JJTestplan
-field reference --fieldName project --type ~.JJProject
-field reference --fieldName jjversion --type ~.JJVersion
-field reference --fieldName build --type ~.JJBuild
-field reference --fieldName chapter --type ~.JJChapter
-field set --fieldName testcases --type ~.JJTestcase --cardinality ONE_TO_MANY --mappedBy testplan --fetch LAZY
-field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy testplan --fetch LAZY
 
 #######################
 
@@ -228,7 +213,6 @@ field reference --fieldName category --type ~.JJCategory
 field reference --fieldName chapter --type ~.JJChapter
 field set --fieldName softwares --type ~.JJSoftware --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
 field set --fieldName hardwares --type ~.JJHardware --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
-field reference --fieldName testplan --type ~.JJTestplan
 field set --fieldName teststeps --type ~.JJTeststep --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
 field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --fetch LAZY
 field set --fieldName requirements  --type ~.JJRequirement --cardinality ONE_TO_MANY --fetch LAZY
@@ -246,5 +230,17 @@ field reference --fieldName requirement --type ~.JJRequirement
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy teststep --fetch LAZY
 
 #######################
+
+focus --class ~.JJTestcaseexecution
+field reference --fieldName build --type ~.JJBuild
+field reference --fieldName buildTestcase --type ~.JJTestcase
+field boolean --fieldName passed
+
+
+#######################
+focus --class ~.JJTeststepexecution
+field reference --fieldName build --type ~.JJBuild
+field reference --fieldName buildTestcase --type ~.JJTestcase
+field boolean --fieldName passed
  
 

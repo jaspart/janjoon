@@ -5,7 +5,6 @@ package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJBuild;
 import com.funder.janjoonweb.domain.JJMessage;
-import com.funder.janjoonweb.domain.JJTestplan;
 import com.funder.janjoonweb.domain.JJVersion;
 import java.util.Set;
 
@@ -17,14 +16,6 @@ privileged aspect JJBuild_Roo_JavaBean {
     
     public void JJBuild.setJjversion(JJVersion jjversion) {
         this.jjversion = jjversion;
-    }
-    
-    public Set<JJTestplan> JJBuild.getTestplans() {
-        return this.testplans;
-    }
-    
-    public void JJBuild.setTestplans(Set<JJTestplan> testplans) {
-        this.testplans = testplans;
     }
     
     public Set<JJMessage> JJBuild.getMessages() {

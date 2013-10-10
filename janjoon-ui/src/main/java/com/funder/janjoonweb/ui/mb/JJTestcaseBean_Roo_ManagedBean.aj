@@ -16,14 +16,11 @@ import com.funder.janjoonweb.domain.JJSoftware;
 import com.funder.janjoonweb.domain.JJTask;
 import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJTestcaseService;
-import com.funder.janjoonweb.domain.JJTestplan;
-import com.funder.janjoonweb.domain.JJTestplanService;
 import com.funder.janjoonweb.domain.JJTeststep;
 import com.funder.janjoonweb.ui.mb.JJTestcaseBean;
 import com.funder.janjoonweb.ui.mb.converter.JJCategoryConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJChapterConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJContactConverter;
-import com.funder.janjoonweb.ui.mb.converter.JJTestplanConverter;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,12 +65,7 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
     JJCategoryService JJTestcaseBean.jJCategoryService;
     
     @Autowired
-    JJTestplanService JJTestcaseBean.jJTestplanService;
-    
-    @Autowired
     JJChapterService JJTestcaseBean.jJChapterService;
-    
-    private String JJTestcaseBean.name = "JJTestcases";
     
     private JJTestcase JJTestcaseBean.JJTestcase_;
     
@@ -427,30 +419,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         hardwaresCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(hardwaresCreateInputMessage);
         
-        OutputLabel testplanCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        testplanCreateOutput.setFor("testplanCreateInput");
-        testplanCreateOutput.setId("testplanCreateOutput");
-        testplanCreateOutput.setValue("Testplan:");
-        htmlPanelGrid.getChildren().add(testplanCreateOutput);
-        
-        AutoComplete testplanCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        testplanCreateInput.setId("testplanCreateInput");
-        testplanCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.testplan}", JJTestplan.class));
-        testplanCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseBean.completeTestplan}", List.class, new Class[] { String.class }));
-        testplanCreateInput.setDropdown(true);
-        testplanCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "testplan", String.class));
-        testplanCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{testplan.name} #{testplan.description} #{testplan.creationDate} #{testplan.updatedDate}", String.class));
-        testplanCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{testplan}", JJTestplan.class));
-        testplanCreateInput.setConverter(new JJTestplanConverter());
-        testplanCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(testplanCreateInput);
-        
-        Message testplanCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        testplanCreateInputMessage.setId("testplanCreateInputMessage");
-        testplanCreateInputMessage.setFor("testplanCreateInput");
-        testplanCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(testplanCreateInputMessage);
-        
         HtmlOutputText teststepsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         teststepsCreateOutput.setId("teststepsCreateOutput");
         teststepsCreateOutput.setValue("Teststeps:");
@@ -796,30 +764,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         hardwaresEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(hardwaresEditInputMessage);
         
-        OutputLabel testplanEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        testplanEditOutput.setFor("testplanEditInput");
-        testplanEditOutput.setId("testplanEditOutput");
-        testplanEditOutput.setValue("Testplan:");
-        htmlPanelGrid.getChildren().add(testplanEditOutput);
-        
-        AutoComplete testplanEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        testplanEditInput.setId("testplanEditInput");
-        testplanEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.testplan}", JJTestplan.class));
-        testplanEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseBean.completeTestplan}", List.class, new Class[] { String.class }));
-        testplanEditInput.setDropdown(true);
-        testplanEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "testplan", String.class));
-        testplanEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{testplan.name} #{testplan.description} #{testplan.creationDate} #{testplan.updatedDate}", String.class));
-        testplanEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{testplan}", JJTestplan.class));
-        testplanEditInput.setConverter(new JJTestplanConverter());
-        testplanEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(testplanEditInput);
-        
-        Message testplanEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        testplanEditInputMessage.setId("testplanEditInputMessage");
-        testplanEditInputMessage.setFor("testplanEditInput");
-        testplanEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(testplanEditInputMessage);
-        
         HtmlOutputText teststepsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         teststepsEditOutput.setId("teststepsEditOutput");
         teststepsEditOutput.setValue("Teststeps:");
@@ -1045,16 +989,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         hardwaresValue.setValue("This relationship is managed from the JJHardware side");
         htmlPanelGrid.getChildren().add(hardwaresValue);
         
-        HtmlOutputText testplanLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testplanLabel.setId("testplanLabel");
-        testplanLabel.setValue("Testplan:");
-        htmlPanelGrid.getChildren().add(testplanLabel);
-        
-        HtmlOutputText testplanValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testplanValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.testplan}", JJTestplan.class));
-        testplanValue.setConverter(new JJTestplanConverter());
-        htmlPanelGrid.getChildren().add(testplanValue);
-        
         HtmlOutputText teststepsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         teststepsLabel.setId("teststepsLabel");
         teststepsLabel.setValue("Teststeps:");
@@ -1172,17 +1106,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
             JJTestcase_.setHardwares(new HashSet<JJHardware>(selectedHardwares));
         }
         this.selectedHardwares = selectedHardwares;
-    }
-    
-    public List<JJTestplan> JJTestcaseBean.completeTestplan(String query) {
-        List<JJTestplan> suggestions = new ArrayList<JJTestplan>();
-        for (JJTestplan jJTestplan : jJTestplanService.findAllJJTestplans()) {
-            String jJTestplanStr = String.valueOf(jJTestplan.getName() +  " "  + jJTestplan.getDescription() +  " "  + jJTestplan.getCreationDate() +  " "  + jJTestplan.getUpdatedDate());
-            if (jJTestplanStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJTestplan);
-            }
-        }
-        return suggestions;
     }
     
     public List<JJTeststep> JJTestcaseBean.getSelectedTeststeps() {

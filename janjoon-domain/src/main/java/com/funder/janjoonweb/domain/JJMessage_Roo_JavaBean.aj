@@ -10,7 +10,6 @@ import com.funder.janjoonweb.domain.JJMessage;
 import com.funder.janjoonweb.domain.JJSprint;
 import com.funder.janjoonweb.domain.JJStatus;
 import com.funder.janjoonweb.domain.JJTestcase;
-import com.funder.janjoonweb.domain.JJTestplan;
 import com.funder.janjoonweb.domain.JJTeststep;
 
 privileged aspect JJMessage_Roo_JavaBean {
@@ -61,14 +60,6 @@ privileged aspect JJMessage_Roo_JavaBean {
     
     public void JJMessage.setBuild(JJBuild build) {
         this.build = build;
-    }
-    
-    public JJTestplan JJMessage.getTestplan() {
-        return this.testplan;
-    }
-    
-    public void JJMessage.setTestplan(JJTestplan testplan) {
-        this.testplan = testplan;
     }
     
     public JJTeststep JJMessage.getTeststep() {

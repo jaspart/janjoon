@@ -11,7 +11,6 @@ import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJSoftware;
 import com.funder.janjoonweb.domain.JJTask;
 import com.funder.janjoonweb.domain.JJTestcase;
-import com.funder.janjoonweb.domain.JJTestplan;
 import com.funder.janjoonweb.domain.JJTeststep;
 import java.util.Set;
 
@@ -55,14 +54,6 @@ privileged aspect JJTestcase_Roo_JavaBean {
     
     public void JJTestcase.setHardwares(Set<JJHardware> hardwares) {
         this.hardwares = hardwares;
-    }
-    
-    public JJTestplan JJTestcase.getTestplan() {
-        return this.testplan;
-    }
-    
-    public void JJTestcase.setTestplan(JJTestplan testplan) {
-        this.testplan = testplan;
     }
     
     public Set<JJTeststep> JJTestcase.getTeststeps() {

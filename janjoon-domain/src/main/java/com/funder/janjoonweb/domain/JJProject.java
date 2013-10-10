@@ -20,6 +20,4 @@ public class JJProject extends JJAbstractEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "project")
     private Set<JJTask> tasks = new HashSet<JJTask>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "project")
-    private Set<JJTestplan> testplans = new HashSet<JJTestplan>();
 }

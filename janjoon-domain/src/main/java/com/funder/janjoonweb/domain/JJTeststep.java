@@ -31,8 +31,6 @@ public class JJTeststep extends JJAbstractEntity {
     @ManyToOne
     private JJRequirement requirement;
 
-    /**
-     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "teststep")
     private Set<JJMessage> messages = new HashSet<JJMessage>();
 }

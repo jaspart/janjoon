@@ -18,10 +18,5 @@ public class JJBuild extends JJAbstractEntity {
     private JJVersion jjversion;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "build")
-    private Set<JJTestplan> testplans = new HashSet<JJTestplan>();
-
-    /**
-     */
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "build")
     private Set<JJMessage> messages = new HashSet<JJMessage>();
 }

@@ -14,7 +14,6 @@ import com.funder.janjoonweb.domain.JJMessageService;
 import com.funder.janjoonweb.domain.JJSprintDataOnDemand;
 import com.funder.janjoonweb.domain.JJStatusDataOnDemand;
 import com.funder.janjoonweb.domain.JJTestcaseDataOnDemand;
-import com.funder.janjoonweb.domain.JJTestplanDataOnDemand;
 import com.funder.janjoonweb.domain.JJTeststepDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -57,9 +56,6 @@ privileged aspect JJMessageDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     JJTestcaseDataOnDemand JJMessageDataOnDemand.jJTestcaseDataOnDemand;
-    
-    @Autowired
-    JJTestplanDataOnDemand JJMessageDataOnDemand.jJTestplanDataOnDemand;
     
     @Autowired
     JJTeststepDataOnDemand JJMessageDataOnDemand.jJTeststepDataOnDemand;

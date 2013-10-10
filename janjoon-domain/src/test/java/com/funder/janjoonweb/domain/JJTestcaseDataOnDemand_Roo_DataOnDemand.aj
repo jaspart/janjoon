@@ -10,7 +10,6 @@ import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJTestcaseDataOnDemand;
 import com.funder.janjoonweb.domain.JJTestcaseRepository;
 import com.funder.janjoonweb.domain.JJTestcaseService;
-import com.funder.janjoonweb.domain.JJTestplanDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,9 +39,6 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     JJContactDataOnDemand JJTestcaseDataOnDemand.jJContactDataOnDemand;
-    
-    @Autowired
-    JJTestplanDataOnDemand JJTestcaseDataOnDemand.jJTestplanDataOnDemand;
     
     @Autowired
     JJTestcaseService JJTestcaseDataOnDemand.jJTestcaseService;

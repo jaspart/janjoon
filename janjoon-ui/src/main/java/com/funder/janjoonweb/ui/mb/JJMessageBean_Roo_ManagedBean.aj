@@ -19,8 +19,6 @@ import com.funder.janjoonweb.domain.JJStatus;
 import com.funder.janjoonweb.domain.JJStatusService;
 import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJTestcaseService;
-import com.funder.janjoonweb.domain.JJTestplan;
-import com.funder.janjoonweb.domain.JJTestplanService;
 import com.funder.janjoonweb.domain.JJTeststep;
 import com.funder.janjoonweb.domain.JJTeststepService;
 import com.funder.janjoonweb.ui.mb.JJMessageBean;
@@ -31,7 +29,6 @@ import com.funder.janjoonweb.ui.mb.converter.JJImportanceConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJSprintConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJStatusConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJTestcaseConverter;
-import com.funder.janjoonweb.ui.mb.converter.JJTestplanConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJTeststepConverter;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
@@ -85,9 +82,6 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
     
     @Autowired
     JJBuildService JJMessageBean.jJBuildService;
-    
-    @Autowired
-    JJTestplanService JJMessageBean.jJTestplanService;
     
     @Autowired
     JJTeststepService JJMessageBean.jJTeststepService;
@@ -482,30 +476,6 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         buildCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(buildCreateInputMessage);
         
-        OutputLabel testplanCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        testplanCreateOutput.setFor("testplanCreateInput");
-        testplanCreateOutput.setId("testplanCreateOutput");
-        testplanCreateOutput.setValue("Testplan:");
-        htmlPanelGrid.getChildren().add(testplanCreateOutput);
-        
-        AutoComplete testplanCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        testplanCreateInput.setId("testplanCreateInput");
-        testplanCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.testplan}", JJTestplan.class));
-        testplanCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeTestplan}", List.class, new Class[] { String.class }));
-        testplanCreateInput.setDropdown(true);
-        testplanCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "testplan", String.class));
-        testplanCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{testplan.name} #{testplan.description} #{testplan.creationDate} #{testplan.updatedDate}", String.class));
-        testplanCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{testplan}", JJTestplan.class));
-        testplanCreateInput.setConverter(new JJTestplanConverter());
-        testplanCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(testplanCreateInput);
-        
-        Message testplanCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        testplanCreateInputMessage.setId("testplanCreateInputMessage");
-        testplanCreateInputMessage.setFor("testplanCreateInput");
-        testplanCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(testplanCreateInputMessage);
-        
         OutputLabel teststepCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         teststepCreateOutput.setFor("teststepCreateInput");
         teststepCreateOutput.setId("teststepCreateOutput");
@@ -856,30 +826,6 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         buildEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(buildEditInputMessage);
         
-        OutputLabel testplanEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        testplanEditOutput.setFor("testplanEditInput");
-        testplanEditOutput.setId("testplanEditOutput");
-        testplanEditOutput.setValue("Testplan:");
-        htmlPanelGrid.getChildren().add(testplanEditOutput);
-        
-        AutoComplete testplanEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        testplanEditInput.setId("testplanEditInput");
-        testplanEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.testplan}", JJTestplan.class));
-        testplanEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeTestplan}", List.class, new Class[] { String.class }));
-        testplanEditInput.setDropdown(true);
-        testplanEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "testplan", String.class));
-        testplanEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{testplan.name} #{testplan.description} #{testplan.creationDate} #{testplan.updatedDate}", String.class));
-        testplanEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{testplan}", JJTestplan.class));
-        testplanEditInput.setConverter(new JJTestplanConverter());
-        testplanEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(testplanEditInput);
-        
-        Message testplanEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        testplanEditInputMessage.setId("testplanEditInputMessage");
-        testplanEditInputMessage.setFor("testplanEditInput");
-        testplanEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(testplanEditInputMessage);
-        
         OutputLabel teststepEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         teststepEditOutput.setFor("teststepEditInput");
         teststepEditOutput.setId("teststepEditOutput");
@@ -1076,16 +1022,6 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         buildValue.setConverter(new JJBuildConverter());
         htmlPanelGrid.getChildren().add(buildValue);
         
-        HtmlOutputText testplanLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testplanLabel.setId("testplanLabel");
-        testplanLabel.setValue("Testplan:");
-        htmlPanelGrid.getChildren().add(testplanLabel);
-        
-        HtmlOutputText testplanValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testplanValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.testplan}", JJTestplan.class));
-        testplanValue.setConverter(new JJTestplanConverter());
-        htmlPanelGrid.getChildren().add(testplanValue);
-        
         HtmlOutputText teststepLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         teststepLabel.setId("teststepLabel");
         teststepLabel.setValue("Teststep:");
@@ -1192,17 +1128,6 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
             String jJBuildStr = String.valueOf(jJBuild.getName() +  " "  + jJBuild.getDescription() +  " "  + jJBuild.getCreationDate() +  " "  + jJBuild.getUpdatedDate());
             if (jJBuildStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJBuild);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<JJTestplan> JJMessageBean.completeTestplan(String query) {
-        List<JJTestplan> suggestions = new ArrayList<JJTestplan>();
-        for (JJTestplan jJTestplan : jJTestplanService.findAllJJTestplans()) {
-            String jJTestplanStr = String.valueOf(jJTestplan.getName() +  " "  + jJTestplan.getDescription() +  " "  + jJTestplan.getCreationDate() +  " "  + jJTestplan.getUpdatedDate());
-            if (jJTestplanStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJTestplan);
             }
         }
         return suggestions;

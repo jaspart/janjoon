@@ -11,7 +11,6 @@ import com.funder.janjoonweb.domain.JJPhaseService;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProductService;
 import com.funder.janjoonweb.domain.JJTask;
-import com.funder.janjoonweb.domain.JJTestplan;
 import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.domain.JJVersionService;
 import com.funder.janjoonweb.ui.mb.JJVersionBean;
@@ -82,8 +81,6 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
     private boolean JJVersionBean.createDialogVisible = false;
     
     private List<JJTask> JJVersionBean.selectedTasks;
-    
-    private List<JJTestplan> JJVersionBean.selectedTestplans;
     
     private List<JJBuild> JJVersionBean.selectedBuilds;
     
@@ -378,22 +375,6 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
         tasksCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(tasksCreateInputMessage);
         
-        HtmlOutputText testplansCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testplansCreateOutput.setId("testplansCreateOutput");
-        testplansCreateOutput.setValue("Testplans:");
-        htmlPanelGrid.getChildren().add(testplansCreateOutput);
-        
-        HtmlOutputText testplansCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testplansCreateInput.setId("testplansCreateInput");
-        testplansCreateInput.setValue("This relationship is managed from the JJTestplan side");
-        htmlPanelGrid.getChildren().add(testplansCreateInput);
-        
-        Message testplansCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        testplansCreateInputMessage.setId("testplansCreateInputMessage");
-        testplansCreateInputMessage.setFor("testplansCreateInput");
-        testplansCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(testplansCreateInputMessage);
-        
         HtmlOutputText buildsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         buildsCreateOutput.setId("buildsCreateOutput");
         buildsCreateOutput.setValue("Builds:");
@@ -635,22 +616,6 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
         tasksEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(tasksEditInputMessage);
         
-        HtmlOutputText testplansEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testplansEditOutput.setId("testplansEditOutput");
-        testplansEditOutput.setValue("Testplans:");
-        htmlPanelGrid.getChildren().add(testplansEditOutput);
-        
-        HtmlOutputText testplansEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testplansEditInput.setId("testplansEditInput");
-        testplansEditInput.setValue("This relationship is managed from the JJTestplan side");
-        htmlPanelGrid.getChildren().add(testplansEditInput);
-        
-        Message testplansEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        testplansEditInputMessage.setId("testplansEditInputMessage");
-        testplansEditInputMessage.setFor("testplansEditInput");
-        testplansEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(testplansEditInputMessage);
-        
         HtmlOutputText buildsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         buildsEditOutput.setId("buildsEditOutput");
         buildsEditOutput.setValue("Builds:");
@@ -783,16 +748,6 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
         tasksValue.setValue("This relationship is managed from the JJTask side");
         htmlPanelGrid.getChildren().add(tasksValue);
         
-        HtmlOutputText testplansLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testplansLabel.setId("testplansLabel");
-        testplansLabel.setValue("Testplans:");
-        htmlPanelGrid.getChildren().add(testplansLabel);
-        
-        HtmlOutputText testplansValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testplansValue.setId("testplansValue");
-        testplansValue.setValue("This relationship is managed from the JJTestplan side");
-        htmlPanelGrid.getChildren().add(testplansValue);
-        
         HtmlOutputText buildsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         buildsLabel.setId("buildsLabel");
         buildsLabel.setValue("Builds:");
@@ -872,17 +827,6 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
         this.selectedTasks = selectedTasks;
     }
     
-    public List<JJTestplan> JJVersionBean.getSelectedTestplans() {
-        return selectedTestplans;
-    }
-    
-    public void JJVersionBean.setSelectedTestplans(List<JJTestplan> selectedTestplans) {
-        if (selectedTestplans != null) {
-            JJVersion_.setTestplans(new HashSet<JJTestplan>(selectedTestplans));
-        }
-        this.selectedTestplans = selectedTestplans;
-    }
-    
     public List<JJBuild> JJVersionBean.getSelectedBuilds() {
         return selectedBuilds;
     }
@@ -897,9 +841,6 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
     public String JJVersionBean.onEdit() {
         if (JJVersion_ != null && JJVersion_.getTasks() != null) {
             selectedTasks = new ArrayList<JJTask>(JJVersion_.getTasks());
-        }
-        if (JJVersion_ != null && JJVersion_.getTestplans() != null) {
-            selectedTestplans = new ArrayList<JJTestplan>(JJVersion_.getTestplans());
         }
         if (JJVersion_ != null && JJVersion_.getBuilds() != null) {
             selectedBuilds = new ArrayList<JJBuild>(JJVersion_.getBuilds());
@@ -957,7 +898,6 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
     public void JJVersionBean.reset() {
         JJVersion_ = null;
         selectedTasks = null;
-        selectedTestplans = null;
         selectedBuilds = null;
         createDialogVisible = false;
     }
