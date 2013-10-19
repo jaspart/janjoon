@@ -81,7 +81,7 @@
          <action type="execute" command="web mvc all --package ~.mb"/>
          <action type="execute" command="web mvc finder all"/>
          <action type="execute" command="web flow"/>
-         <!--action type="execute" command="web mvc language -code fr"/-->
+         <action type="execute" command="web mvc language -code fr"/>
          <action type="execute" command="web mvc language --code de"/>
          <action type="execute" command="web mvc language --code es"/>
          <action type="execute" command="security setup"/>
