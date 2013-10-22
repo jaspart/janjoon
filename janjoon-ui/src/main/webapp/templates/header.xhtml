@@ -12,6 +12,7 @@
 		<p:growl id="messagesHeader" />
 		<h:panelGrid columns="3" cellpadding="2">
 			<p:tabMenu id="tabMenu" name="content">
+				<p:menuitem value="Main" url="/pages/main.jsf" />
 				<p:menuitem url="/pages/home.jsf" icon="ui-icon-home" />
 				<p:menuitem value="Project" url="/pages/planning.jsf"
 					icon="ui-icon-clipboard" disabled="true" />
@@ -37,7 +38,7 @@
 						icon="ui-icon-extlink" />
 				</f:facet>
 			</p:tabMenu>
-			<p:sticky target="tabMenu" />
+			<!-- 			<p:sticky target="tabMenu" /> -->
 			<h:panelGrid columns="2" cellpadding="2" align="right">
 				<h:outputText value="Project :" />
 				<p:selectOneMenu id="projectSelectOneMenu"

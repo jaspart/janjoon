@@ -17,7 +17,6 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -424,85 +423,85 @@ public class JJChapterBean {
 
 	}
 
-	public void onDragDrop(TreeDragDropEvent event) {
-		TreeNode dragNode = event.getDragNode();
-		TreeNode dropNode = event.getDropNode();
-		int dropIndex = event.getDropIndex();
-
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"Dragged " + dragNode.getData() + "  \nDropped on "
-						+ dropNode.getData() + " at " + dropIndex,
-				"Dropped on " + dropNode.getData() + " at " + dropIndex);
-		FacesContext.getCurrentInstance().addMessage(null, message);
-
-		String dragNodeData = dragNode.getData().toString();
-		String dropNodeData = dropNode.getData().toString();
-
-		if (dragNodeData.startsWith("R-")) {
-			long idRequirement = Long
-					.parseLong(getIdFromString(dragNodeData, 1));
-			JJRequirement requirement = jJRequirementService
-					.findJJRequirement(idRequirement);
-
-			if (dropNodeData.startsWith("C-")) {
-
-				long idChapter = Long
-						.parseLong(getIdFromString(dropNodeData, 1));
-				JJChapter chapter = jJChapterService.findJJChapter(idChapter);
-
-				if (requirement.getChapter() != chapter) {
-					requirement.setChapter(chapter);
-				}
-				requirement.setOrdering(dropIndex);
-				jJRequirementService.updateJJRequirement(requirement);
-
-				List<TreeNode> list = dropNode.getChildren();
-				List<String> listRequirement = new ArrayList<String>();
-				for (TreeNode treeNode : list) {
-					String treeNodeData = treeNode.getData().toString();
-					if (treeNodeData.startsWith("R-")) {
-						listRequirement.add(treeNodeData);
-					}
-				}
-				for (int i = 0; i < listRequirement.size(); i++) {
-					idRequirement = Long.parseLong(getIdFromString(
-							listRequirement.get(i), 1));
-					requirement = jJRequirementService
-							.findJJRequirement(idRequirement);
-					if (requirement.getOrdering() != i) {
-						requirement.setOrdering(i);
-						jJRequirementService.updateJJRequirement(requirement);
-					}
-				}
-
-			}
-
-			if (dropNodeData.equalsIgnoreCase("RootRequirement")) {
-				JJChapter tmpChapter = requirement.getChapter();
-				if (tmpChapter != null) {
-					requirement.setChapter(null);
-					requirement.setOrdering(0);
-					jJRequirementService.updateJJRequirement(requirement);
-
-				}
-
-			}
-
-		}
-
-		// List<JJRequirement> req =
-		// jJRequirementService.findAllJJRequirements();
-		// for (JJRequirement jjRequirement : req) {
-		// System.out.println(" \n jjRequirement.getName() "
-		// + jjRequirement.getName());
-		// System.out.println(" \n jjRequirement.getChapter().getName() "
-		// + jjRequirement.getChapter().getName());
-		// System.out.println(" \n jjRequirement.getOrdering() "
-		// + jjRequirement.getOrdering());
-		//
-		// }
-
-	}
+//	public void onDragDrop(TreeDragDropEvent event) {
+//		TreeNode dragNode = event.getDragNode();
+//		TreeNode dropNode = event.getDropNode();
+//		int dropIndex = event.getDropIndex();
+//
+//		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+//				"Dragged " + dragNode.getData() + "  \nDropped on "
+//						+ dropNode.getData() + " at " + dropIndex,
+//				"Dropped on " + dropNode.getData() + " at " + dropIndex);
+//		FacesContext.getCurrentInstance().addMessage(null, message);
+//
+//		String dragNodeData = dragNode.getData().toString();
+//		String dropNodeData = dropNode.getData().toString();
+//
+//		if (dragNodeData.startsWith("R-")) {
+//			long idRequirement = Long
+//					.parseLong(getIdFromString(dragNodeData, 1));
+//			JJRequirement requirement = jJRequirementService
+//					.findJJRequirement(idRequirement);
+//
+//			if (dropNodeData.startsWith("C-")) {
+//
+//				long idChapter = Long
+//						.parseLong(getIdFromString(dropNodeData, 1));
+//				JJChapter chapter = jJChapterService.findJJChapter(idChapter);
+//
+//				if (requirement.getChapter() != chapter) {
+//					requirement.setChapter(chapter);
+//				}
+//				requirement.setOrdering(dropIndex);
+//				jJRequirementService.updateJJRequirement(requirement);
+//
+//				List<TreeNode> list = dropNode.getChildren();
+//				List<String> listRequirement = new ArrayList<String>();
+//				for (TreeNode treeNode : list) {
+//					String treeNodeData = treeNode.getData().toString();
+//					if (treeNodeData.startsWith("R-")) {
+//						listRequirement.add(treeNodeData);
+//					}
+//				}
+//				for (int i = 0; i < listRequirement.size(); i++) {
+//					idRequirement = Long.parseLong(getIdFromString(
+//							listRequirement.get(i), 1));
+//					requirement = jJRequirementService
+//							.findJJRequirement(idRequirement);
+//					if (requirement.getOrdering() != i) {
+//						requirement.setOrdering(i);
+//						jJRequirementService.updateJJRequirement(requirement);
+//					}
+//				}
+//
+//			}
+//
+//			if (dropNodeData.equalsIgnoreCase("RootRequirement")) {
+//				JJChapter tmpChapter = requirement.getChapter();
+//				if (tmpChapter != null) {
+//					requirement.setChapter(null);
+//					requirement.setOrdering(0);
+//					jJRequirementService.updateJJRequirement(requirement);
+//
+//				}
+//
+//			}
+//
+//		}
+//
+//		// List<JJRequirement> req =
+//		// jJRequirementService.findAllJJRequirements();
+//		// for (JJRequirement jjRequirement : req) {
+//		// System.out.println(" \n jjRequirement.getName() "
+//		// + jjRequirement.getName());
+//		// System.out.println(" \n jjRequirement.getChapter().getName() "
+//		// + jjRequirement.getChapter().getName());
+//		// System.out.println(" \n jjRequirement.getOrdering() "
+//		// + jjRequirement.getOrdering());
+//		//
+//		// }
+//
+//	}
 
 	public void preProcessPDF(Object document) throws IOException,
 			BadElementException, DocumentException {

@@ -762,8 +762,8 @@
 						var="nodeLeft" selectionMode="single"
 						selection="#{jJChapterBean.selectedLeftNode}" draggable="true"
 						droppable="true" dragdropScope="demo">
-						<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
-							update=":dataForm:messages" />
+<!-- 						<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}" -->
+<!-- 							update=":dataForm:messages" /> -->
 						<p:treeNode>
 							<h:outputText value="#{nodeLeft}" />
 						</p:treeNode>
@@ -772,8 +772,8 @@
 						var="nodeRight" selectionMode="single"
 						selection="#{jJChapterBean.selectedRightNode}" draggable="true"
 						droppable="true" dragdropScope="demo">
-						<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
-							update=":dataForm:messages" />
+<!-- 						<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}" -->
+<!-- 							update=":dataForm:messages" /> -->
 						<p:treeNode>
 							<h:outputText value="#{nodeRight}" />
 						</p:treeNode>
