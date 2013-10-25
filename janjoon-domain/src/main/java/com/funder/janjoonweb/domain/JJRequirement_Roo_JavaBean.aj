@@ -15,12 +15,21 @@ import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJStatus;
 import com.funder.janjoonweb.domain.JJTask;
+import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.domain.reference.JJRelationship;
 import java.util.Date;
 import java.util.Set;
 
 privileged aspect JJRequirement_Roo_JavaBean {
+    
+    public Integer JJRequirement.getOrdering() {
+        return this.ordering;
+    }
+    
+    public void JJRequirement.setOrdering(Integer ordering) {
+        this.ordering = ordering;
+    }
     
     public Integer JJRequirement.getNumero() {
         return this.numero;
@@ -190,12 +199,12 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.requirementLinkUp = requirementLinkUp;
     }
     
-    public Integer JJRequirement.getOrdering() {
-        return this.ordering;
+    public Set<JJTestcase> JJRequirement.getTestcases() {
+        return this.testcases;
     }
     
-    public void JJRequirement.setOrdering(Integer ordering) {
-        this.ordering = ordering;
+    public void JJRequirement.setTestcases(Set<JJTestcase> testcases) {
+        this.testcases = testcases;
     }
     
 }

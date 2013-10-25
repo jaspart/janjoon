@@ -173,6 +173,7 @@ field set --fieldName bugs --type ~.JJBug --cardinality ONE_TO_MANY --mappedBy r
 field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy requirement --fetch LAZY
 field set --fieldName assignedTos --type ~.JJContact --cardinality ONE_TO_MANY --fetch LAZY
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
+field set --fieldName testcases  --type ~.JJTestcase --cardinality ONE_TO_MANY --mappedBy requirement --fetch LAZY
 field string --fieldName note --sizeMax 250
 
 #######################
@@ -211,11 +212,11 @@ field number --fieldName ordering --type java.lang.Integer
 field string --fieldName resultat --sizeMax 100
 field reference --fieldName category --type ~.JJCategory
 field reference --fieldName chapter --type ~.JJChapter
+field reference --fieldName requirement --type ~.JJRequirement
 field set --fieldName softwares --type ~.JJSoftware --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
 field set --fieldName hardwares --type ~.JJHardware --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
 field set --fieldName teststeps --type ~.JJTeststep --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
 field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --fetch LAZY
-field set --fieldName requirements  --type ~.JJRequirement --cardinality ONE_TO_MANY --fetch LAZY
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
 
 #######################

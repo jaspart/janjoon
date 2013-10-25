@@ -58,7 +58,7 @@ public class JJProductBean {
 
 		// myJJProductList = jJChapterService
 		// .getAllJJProductInJJChapterWithJJProject(project);
-		myJJProductList = jJProductService.getAllJJProduct();
+		myJJProductList = jJProductService.getAllJJProducts();
 
 		JJProduct product = new JJProduct();
 		product.setId((long) 1234567890);

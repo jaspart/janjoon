@@ -22,7 +22,7 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 	}
 	
 	@Override
-	public List<JJTeststep> getAllJJTeststep() {
+	public List<JJTeststep> getAllJJTeststeps() {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTeststep> criteriaQuery = criteriaBuilder
@@ -42,7 +42,7 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 	}
 	
 	@Override
-	public List<JJTeststep> getJJTeststepWithJJTestcase(JJTestcase jJTestcase) {
+	public List<JJTeststep> getJJTeststepWithTestcase(JJTestcase jJTestcase) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTeststep> criteriaQuery = criteriaBuilder

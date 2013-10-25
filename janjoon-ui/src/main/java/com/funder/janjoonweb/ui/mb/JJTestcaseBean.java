@@ -10,12 +10,16 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.funder.janjoonweb.domain.JJCategory;
+import com.funder.janjoonweb.domain.JJChapter;
+import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJTeststep;
 import com.funder.janjoonweb.domain.JJTeststepService;
@@ -26,14 +30,23 @@ public class JJTestcaseBean {
 
 	private JJTestcase jJTestCase = new JJTestcase();
 
-	private TreeNode testCaseRootNode;
-	private TreeNode testCaseSelectedNode;
+	private JJProject currentProject;
+
+	private JJChapter chapter = null;
+
+	private TreeNode rootNode;
+	private TreeNode selectedNode;
 
 	private String mode = "New";
 	private String name = null;
 	private String description = null;
 
+	private int tabIndex = 0;
+
+	private boolean disabled = true;
+
 	private List<String> tmpJJTeststepList = new ArrayList<String>();
+	private List<JJTeststep> jJTeststepList = new ArrayList<JJTeststep>();
 
 	@Autowired
 	JJTeststepService jJTeststepService;
@@ -50,20 +63,28 @@ public class JJTestcaseBean {
 		this.jJTestCase = jJTestCase;
 	}
 
-	public TreeNode getTestCaseRootNode() {
-		return testCaseRootNode;
+	public JJProject getCurrentProject() {
+		return currentProject;
 	}
 
-	public void setTestCaseRootNode(TreeNode testCaseRootNode) {
-		this.testCaseRootNode = testCaseRootNode;
+	public void setCurrentProject(JJProject currentProject) {
+		this.currentProject = currentProject;
 	}
 
-	public TreeNode getTestCaseSelectedNode() {
-		return testCaseSelectedNode;
+	public TreeNode getRootNode() {
+		return rootNode;
 	}
 
-	public void setTestCaseSelectedNode(TreeNode testCaseSelectedNode) {
-		this.testCaseSelectedNode = testCaseSelectedNode;
+	public void setRootNode(TreeNode rootNode) {
+		this.rootNode = rootNode;
+	}
+
+	public TreeNode getSelectedNode() {
+		return selectedNode;
+	}
+
+	public void setSelectedNode(TreeNode selectedNode) {
+		this.selectedNode = selectedNode;
 	}
 
 	public String getMode() {
@@ -74,71 +95,87 @@ public class JJTestcaseBean {
 		this.mode = mode;
 	}
 
-	private void initTestCaseParameter(JJTeststepBean jJTeststepBean) {
+	public boolean getDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
+
+	public List<JJTeststep> getjJTeststepList() {
+		return jJTeststepList;
+	}
+
+	public void setjJTeststepList(List<JJTeststep> jJTeststepList) {
+		this.jJTeststepList = jJTeststepList;
+	}
+
+	public int getTabIndex() {
+		return tabIndex;
+	}
+
+	public void setTabIndex(int tabIndex) {
+		this.tabIndex = tabIndex;
+	}
+
+	public void initTestCaseParameter(JJTeststepBean jJTeststepBean) {
 
 		System.out.println("INIT");
+		rootNode = new DefaultTreeNode("Root", null);
+		if (currentProject != null) {
 
-		testCaseRootNode = new DefaultTreeNode("Root", null);
+			TreeNode projectNode = new DefaultTreeNode("P-"
+					+ currentProject.getId() + "- " + currentProject.getName(),
+					rootNode);
 
-		List<JJTestcase> testcases = jJTestcaseService.getAllJJTestcase();
+			List<JJCategory> categorys = jJCategoryService.getAllJJCategorys();
+			for (JJCategory jjCategory : categorys) {
 
-		for (JJTestcase jjTestcase : testcases) {
+				TreeNode categoryNode = new DefaultTreeNode("C-"
+						+ jjCategory.getId() + "- " + jjCategory.getName(),
+						projectNode);
 
-			TreeNode newNode = new DefaultTreeNode("TC-" + jjTestcase.getId()
-					+ "- " + jjTestcase.getName(), testCaseRootNode);
+				List<JJChapter> chapters = jJChapterService
+						.getAllJJChaptersWithProjectAndCategory(currentProject,
+								jjCategory);
 
-			// Set<JJTeststep> teststeps = jjTestcase.getTeststeps();
-			List<JJTeststep> teststeps = jJTeststepService
-					.getJJTeststepWithJJTestcase(jJTestCase);
-			for (JJTeststep jjTeststep : teststeps) {
-				TreeNode newNode1 = new DefaultTreeNode("TS-"
-						+ jjTeststep.getId() + "- "
-						+ jjTeststep.getActionstep(), newNode);
+				for (JJChapter jjChapter : chapters) {
+					TreeNode chapterNode = new DefaultTreeNode("CH-"
+							+ jjChapter.getId() + "- " + jjChapter.getName(),
+							categoryNode);
+
+					List<JJTestcase> testcases = jJTestcaseService
+							.getAllJJTestcasesWithChapter(jjChapter);
+
+					for (JJTestcase jjTestcase : testcases) {
+
+						TreeNode testcaseNode = new DefaultTreeNode("TC-"
+								+ jjTestcase.getId() + "- "
+								+ jjTestcase.getName(), chapterNode);
+
+						List<JJTeststep> teststeps = jJTeststepService
+								.getJJTeststepWithTestcase(jjTestcase);
+						for (JJTeststep jjTeststep : teststeps) {
+							TreeNode teststepNode = new DefaultTreeNode("TS-"
+									+ jjTeststep.getId() + "- "
+									+ jjTeststep.getActionstep(), testcaseNode);
+						}
+					}
+				}
 			}
 		}
 
 		mode = "New";
+		disabled = true;
 		jJTestCase = new JJTestcase();
 		name = null;
 		description = null;
+		chapter = null;
 		tmpJJTeststepList = new ArrayList<String>();
 		jJTeststepBean.initTestStepParameter();
-
-	}
-
-	public void editNode(JJTeststepBean jJTeststepBean) {
-
-		long idjJTestCase;
-
-		if (testCaseSelectedNode != null) {
-
-			mode = "Edit";
-			name = null;
-			description = null;
-			tmpJJTeststepList = new ArrayList<String>();
-
-			idjJTestCase = Long.parseLong(getStringFromString(
-					testCaseSelectedNode.getData().toString(), 1));
-
-			System.out.println(idjJTestCase);
-
-			jJTestCase = jJTestcaseService.findJJTestcase(idjJTestCase);
-
-			name = jJTestCase.getName();
-			description = jJTestCase.getDescription();
-
-			jJTeststepBean.initTestStepParameter();
-
-			// Set<JJTeststep> list = jJTestCase.getTeststeps();
-
-			List<JJTeststep> list = jJTeststepService
-					.getJJTeststepWithJJTestcase(jJTestCase);
-			for (JJTeststep jjTeststep : list) {
-				jJTeststepBean.getTestStepList().add(jjTeststep);
-				tmpJJTeststepList.add(getFromString(jjTeststep));
-			}
-
-		}
+		jJTeststepList = new ArrayList<JJTeststep>();
+		tabIndex = 0;
 
 	}
 
@@ -174,6 +211,7 @@ public class JJTestcaseBean {
 
 			jJTestCase.setCreationDate(new Date());
 			jJTestCase.setEnabled(true);
+			jJTestCase.setChapter(chapter);
 
 			message = "New " + jJTestCase.getName() + " Saved !";
 			fmsg = new FacesMessage(message, jJTestCase.getName());
@@ -205,7 +243,8 @@ public class JJTestcaseBean {
 				jJTestcaseService.saveJJTestcase(tmpJJTestcase);
 				jJTestCase.setEnabled(false);
 				jJTestcaseService.updateJJTestcase(jJTestCase);
-				finalTestCase = jJTestcaseService.findJJTestcase(tmpJJTestcase.getId());
+				finalTestCase = jJTestcaseService.findJJTestcase(tmpJJTestcase
+						.getId());
 			}
 
 			for (JJTeststep jjTeststep : list) {
@@ -276,7 +315,7 @@ public class JJTestcaseBean {
 		FacesContext.getCurrentInstance().addMessage(null, fmsg);
 		System.out.println("**********************************");
 
-		List<JJTestcase> list = jJTestcaseService.getAllJJTestcase();
+		List<JJTestcase> list = jJTestcaseService.getAllJJTestcases();
 		System.out.println("\n listJJTestcase.size() " + list.size());
 		for (JJTestcase jjTestcase : list) {
 			System.out.println("\n jjTestcase.getName() "
@@ -292,15 +331,53 @@ public class JJTestcaseBean {
 
 	}
 
-	public void deleteNode(JJTeststepBean jJTeststepBean) {
+	public void editTestcase(JJTeststepBean jJTeststepBean) {
+
+		long idjJTestCase;
+
+		if (selectedNode != null
+				&& selectedNode.getData().toString().startsWith("TC")) {
+
+			mode = "Edit";
+			name = null;
+			description = null;
+			tmpJJTeststepList = new ArrayList<String>();
+
+			idjJTestCase = Long.parseLong(getStringFromString(selectedNode
+					.getData().toString(), 1));
+
+			System.out.println(idjJTestCase);
+
+			jJTestCase = jJTestcaseService.findJJTestcase(idjJTestCase);
+
+			name = jJTestCase.getName();
+			description = jJTestCase.getDescription();
+
+			jJTeststepBean.initTestStepParameter();
+
+			// Set<JJTeststep> list = jJTestCase.getTeststeps();
+
+			List<JJTeststep> list = jJTeststepService
+					.getJJTeststepWithTestcase(jJTestCase);
+			for (JJTeststep jjTeststep : list) {
+				jJTeststepBean.getTestStepList().add(jjTeststep);
+				tmpJJTeststepList.add(getFromString(jjTeststep));
+			}
+
+		}
+
+	}
+
+	public void deleteTestcase(JJTeststepBean jJTeststepBean) {
 
 		long idjJTestCase;
 		JJTestcase jJTestCase;
 
-		if (testCaseSelectedNode != null) {
+		if (selectedNode != null
+				&& selectedNode.getData().toString().startsWith("TC")) {
 
-			idjJTestCase = Long.parseLong(getStringFromString(
-					testCaseSelectedNode.getData().toString(), 1));
+			idjJTestCase = Long.parseLong(getStringFromString(selectedNode
+					.getData().toString(), 1));
 
 			System.out.println(idjJTestCase);
 
@@ -310,23 +387,76 @@ public class JJTestcaseBean {
 
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Deleted"
-							+ getStringFromString(testCaseSelectedNode
-									.getData().toString(), 2), "Deleted"
-							+ testCaseSelectedNode.getData());
+							+ getStringFromString(selectedNode.getData()
+									.toString(), 2), "Deleted"
+							+ selectedNode.getData());
 			FacesContext.getCurrentInstance().addMessage(null, message);
-
-			initTestCaseParameter(jJTeststepBean);
 
 		}
 
 	}
 
+	public void newTestcase(JJTeststepBean jJTeststepBean) {
+		if (selectedNode != null
+				&& selectedNode.getData().toString().startsWith("CH")) {
+			System.out.println("New testcase");
+			initTestCaseParameter(jJTeststepBean);
+
+			long idjJChapter = Long.parseLong(getStringFromString(selectedNode
+					.getData().toString(), 1));
+
+			System.out.println(idjJChapter);
+
+			chapter = jJChapterService.findJJChapter(idjJChapter);
+			jJTestCase.setChapter(chapter);
+		}
+	}
+
 	public void onNodeSelect(NodeSelectEvent event) {
+
+		String selectedNode = event.getTreeNode().toString();
+		System.out.println("selectedNode " + selectedNode);
+
+		if (selectedNode.startsWith("TC")) {
+			disabled = false;
+
+		} else {
+			disabled = true;
+		}
+
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"Selected " + event.getTreeNode().toString(), event
 						.getTreeNode().toString());
 
 		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+
+	public void createTabs() {
+		if (selectedNode.getData().toString().startsWith("TC")) {
+
+			jJTeststepList = new ArrayList<JJTeststep>();
+			long idjJTestCase;
+			JJTestcase jJTestCase;
+
+			idjJTestCase = Long.parseLong(getStringFromString(selectedNode
+					.getData().toString(), 1));
+
+			jJTestCase = jJTestcaseService.findJJTestcase(idjJTestCase);
+
+			jJTeststepList = jJTeststepService
+					.getJJTeststepWithTestcase(jJTestCase);
+			if (jJTeststepList.size() > 0)
+				tabIndex = 0;
+		}
+	}
+
+
+
+	public void incrementTabIndex() {
+		if (tabIndex < jJTeststepList.size() - 1 && jJTeststepList.size() > 0)
+			tabIndex++;
+		
+		System.out.println("tabIndex "+tabIndex);
 	}
 
 	private String getStringFromString(String s, int index) {

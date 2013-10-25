@@ -5,7 +5,6 @@ package com.funder.janjoonweb.ui.mb;
 
 import com.funder.janjoonweb.domain.JJChapter;
 import com.funder.janjoonweb.domain.JJContact;
-import com.funder.janjoonweb.domain.JJContactService;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJProjectService;
 import com.funder.janjoonweb.domain.JJTask;
@@ -46,9 +45,6 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
     
     @Autowired
     JJProjectService JJProjectBean.jJProjectService;
-    
-    @Autowired
-    JJContactService JJProjectBean.jJContactService;
     
     private String JJProjectBean.name = "JJProjects";
     

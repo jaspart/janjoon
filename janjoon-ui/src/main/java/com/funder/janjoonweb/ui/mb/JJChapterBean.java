@@ -17,6 +17,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,7 +160,7 @@ public class JJChapterBean {
 		this.parentChapterList = parentChapterList;
 	}
 
-	public void initParameter(int number, JJCategoryBean jJCategoryBean) {
+	public void initParameter(int number) {
 		persistIndex = 1;
 		this.creationColumnNumber = number;
 		String category = null;
@@ -178,22 +179,17 @@ public class JJChapterBean {
 			break;
 		}
 
-		JJCategory myJJCategory = null;
 		JJCategory jjCategory = jJCategoryService
 				.getJJCategoryWithName(category);
 
-		if (jjCategory != null)
-			myJJCategory = jjCategory;
-		else if (jJCategoryBean != null)
-			myJJCategory = jJCategoryBean.createANDpersistJJCategory(category);
-		currentJJCategory = myJJCategory;
+		currentJJCategory = jjCategory;
 
-		chapterTreeBean(myJJCategory);
+		chapterTreeBean(jjCategory);
 
 		myJJChapter = new JJChapter();
 		myJJChapter.setCreationDate(new Date());
 		myJJChapter.setEnabled(true);
-		myJJChapter.setCategory(myJJCategory);
+		myJJChapter.setCategory(jjCategory);
 
 		if (currentProject != null)
 			myJJChapter.setProject(currentProject);
@@ -376,7 +372,7 @@ public class JJChapterBean {
 		// myJJChapter.setProject(editJJChapter.getProject());
 	}
 
-	public void deleteNode(JJCategoryBean jJCategoryBean) {
+	public void deleteNode() {
 
 		System.out.println("Delete node");
 
@@ -410,7 +406,7 @@ public class JJChapterBean {
 		// selectedChapterNode.setParent(null);
 		// selectedChapterNode = null;
 
-		initParameter(creationColumnNumber, jJCategoryBean);
+		initParameter(creationColumnNumber);
 		list = chapterRoot.getChildren();
 		for (TreeNode treeNode : list) {
 			treeNode.setExpanded(true);
@@ -423,85 +419,85 @@ public class JJChapterBean {
 
 	}
 
-//	public void onDragDrop(TreeDragDropEvent event) {
-//		TreeNode dragNode = event.getDragNode();
-//		TreeNode dropNode = event.getDropNode();
-//		int dropIndex = event.getDropIndex();
-//
-//		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-//				"Dragged " + dragNode.getData() + "  \nDropped on "
-//						+ dropNode.getData() + " at " + dropIndex,
-//				"Dropped on " + dropNode.getData() + " at " + dropIndex);
-//		FacesContext.getCurrentInstance().addMessage(null, message);
-//
-//		String dragNodeData = dragNode.getData().toString();
-//		String dropNodeData = dropNode.getData().toString();
-//
-//		if (dragNodeData.startsWith("R-")) {
-//			long idRequirement = Long
-//					.parseLong(getIdFromString(dragNodeData, 1));
-//			JJRequirement requirement = jJRequirementService
-//					.findJJRequirement(idRequirement);
-//
-//			if (dropNodeData.startsWith("C-")) {
-//
-//				long idChapter = Long
-//						.parseLong(getIdFromString(dropNodeData, 1));
-//				JJChapter chapter = jJChapterService.findJJChapter(idChapter);
-//
-//				if (requirement.getChapter() != chapter) {
-//					requirement.setChapter(chapter);
-//				}
-//				requirement.setOrdering(dropIndex);
-//				jJRequirementService.updateJJRequirement(requirement);
-//
-//				List<TreeNode> list = dropNode.getChildren();
-//				List<String> listRequirement = new ArrayList<String>();
-//				for (TreeNode treeNode : list) {
-//					String treeNodeData = treeNode.getData().toString();
-//					if (treeNodeData.startsWith("R-")) {
-//						listRequirement.add(treeNodeData);
-//					}
-//				}
-//				for (int i = 0; i < listRequirement.size(); i++) {
-//					idRequirement = Long.parseLong(getIdFromString(
-//							listRequirement.get(i), 1));
-//					requirement = jJRequirementService
-//							.findJJRequirement(idRequirement);
-//					if (requirement.getOrdering() != i) {
-//						requirement.setOrdering(i);
-//						jJRequirementService.updateJJRequirement(requirement);
-//					}
-//				}
-//
-//			}
-//
-//			if (dropNodeData.equalsIgnoreCase("RootRequirement")) {
-//				JJChapter tmpChapter = requirement.getChapter();
-//				if (tmpChapter != null) {
-//					requirement.setChapter(null);
-//					requirement.setOrdering(0);
-//					jJRequirementService.updateJJRequirement(requirement);
-//
-//				}
-//
-//			}
-//
-//		}
-//
-//		// List<JJRequirement> req =
-//		// jJRequirementService.findAllJJRequirements();
-//		// for (JJRequirement jjRequirement : req) {
-//		// System.out.println(" \n jjRequirement.getName() "
-//		// + jjRequirement.getName());
-//		// System.out.println(" \n jjRequirement.getChapter().getName() "
-//		// + jjRequirement.getChapter().getName());
-//		// System.out.println(" \n jjRequirement.getOrdering() "
-//		// + jjRequirement.getOrdering());
-//		//
-//		// }
-//
-//	}
+	public void onDragDrop(TreeDragDropEvent event) {
+		TreeNode dragNode = event.getDragNode();
+		TreeNode dropNode = event.getDropNode();
+		int dropIndex = event.getDropIndex();
+
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Dragged " + dragNode.getData() + "  \nDropped on "
+						+ dropNode.getData() + " at " + dropIndex,
+				"Dropped on " + dropNode.getData() + " at " + dropIndex);
+		FacesContext.getCurrentInstance().addMessage(null, message);
+
+		String dragNodeData = dragNode.getData().toString();
+		String dropNodeData = dropNode.getData().toString();
+
+		if (dragNodeData.startsWith("R-")) {
+			long idRequirement = Long
+					.parseLong(getIdFromString(dragNodeData, 1));
+			JJRequirement requirement = jJRequirementService
+					.findJJRequirement(idRequirement);
+
+			if (dropNodeData.startsWith("C-")) {
+
+				long idChapter = Long
+						.parseLong(getIdFromString(dropNodeData, 1));
+				JJChapter chapter = jJChapterService.findJJChapter(idChapter);
+
+				if (requirement.getChapter() != chapter) {
+					requirement.setChapter(chapter);
+				}
+				requirement.setOrdering(dropIndex);
+				jJRequirementService.updateJJRequirement(requirement);
+
+				List<TreeNode> list = dropNode.getChildren();
+				List<String> listRequirement = new ArrayList<String>();
+				for (TreeNode treeNode : list) {
+					String treeNodeData = treeNode.getData().toString();
+					if (treeNodeData.startsWith("R-")) {
+						listRequirement.add(treeNodeData);
+					}
+				}
+				for (int i = 0; i < listRequirement.size(); i++) {
+					idRequirement = Long.parseLong(getIdFromString(
+							listRequirement.get(i), 1));
+					requirement = jJRequirementService
+							.findJJRequirement(idRequirement);
+					if (requirement.getOrdering() != i) {
+						requirement.setOrdering(i);
+						jJRequirementService.updateJJRequirement(requirement);
+					}
+				}
+
+			}
+
+			if (dropNodeData.equalsIgnoreCase("RootRequirement")) {
+				JJChapter tmpChapter = requirement.getChapter();
+				if (tmpChapter != null) {
+					requirement.setChapter(null);
+					requirement.setOrdering(0);
+					jJRequirementService.updateJJRequirement(requirement);
+
+				}
+
+			}
+
+		}
+
+		// List<JJRequirement> req =
+		// jJRequirementService.findAllJJRequirements();
+		// for (JJRequirement jjRequirement : req) {
+		// System.out.println(" \n jjRequirement.getName() "
+		// + jjRequirement.getName());
+		// System.out.println(" \n jjRequirement.getChapter().getName() "
+		// + jjRequirement.getChapter().getName());
+		// System.out.println(" \n jjRequirement.getOrdering() "
+		// + jjRequirement.getOrdering());
+		//
+		// }
+
+	}
 
 	public void preProcessPDF(Object document) throws IOException,
 			BadElementException, DocumentException {
@@ -521,17 +517,23 @@ public class JJChapterBean {
 		Font fontNote = new Font(Font.COURIER, 8, Font.BOLD);
 		fontNote.setColor(new Color(0x82, 0x82, 0x82));
 
-		/*Font fontTitle = new Font(FontFamily.TIMES_ROMAN, 30, Font.BOLD, new BaseColor(20, 20, 20));
-		Font fontChapter = new Font(FontFamily.HELVETICA, 15, Font.BOLD, new BaseColor(30, 30, 30));
-		Font fontRequirement = new Font(FontFamily.TIMES_ROMAN, 10, Font.BOLD, new BaseColor(10, 10, 10));
-		Font fontNote = new Font(FontFamily.COURIER, 8, Font.BOLD, new BaseColor(50, 50, 50));*/
+		/*
+		 * Font fontTitle = new Font(FontFamily.TIMES_ROMAN, 30, Font.BOLD, new
+		 * BaseColor(20, 20, 20)); Font fontChapter = new
+		 * Font(FontFamily.HELVETICA, 15, Font.BOLD, new BaseColor(30, 30, 30));
+		 * Font fontRequirement = new Font(FontFamily.TIMES_ROMAN, 10,
+		 * Font.BOLD, new BaseColor(10, 10, 10)); Font fontNote = new
+		 * Font(FontFamily.COURIER, 8, Font.BOLD, new BaseColor(50, 50, 50));
+		 */
 
 		StyleSheet style = new StyleSheet();
 		style.loadTagStyle("body", "font", "Times New Roman");
 
-		Phrase phrase = new Phrase(20, new Chunk("\n"+"Business Specification \n"+
-			currentProject.getName()+"\n"+"\n"+"\n", fontChapter));
-		JJCategory category = jJCategoryService.getJJCategoryWithName("BUSINESS");
+		Phrase phrase = new Phrase(20, new Chunk("\n"
+				+ "Business Specification \n" + currentProject.getName() + "\n"
+				+ "\n" + "\n", fontChapter));
+		JJCategory category = jJCategoryService
+				.getJJCategoryWithName("BUSINESS");
 
 		List<JJChapter> list = jJChapterService
 				.getAllJJChaptersWithProjectAndCategory(currentProject,
@@ -539,32 +541,42 @@ public class JJChapterBean {
 		paragraph.add(phrase);
 
 		for (JJChapter jjChapter : list) {
-			paragraph.add(new Chunk("\n"+jjChapter.getName()+"\n", fontChapter));
-			paragraph.add(new Chunk(jjChapter.getDescription()+"\n", fontNote));
+			paragraph.add(new Chunk("\n" + jjChapter.getName() + "\n",
+					fontChapter));
+			paragraph
+					.add(new Chunk(jjChapter.getDescription() + "\n", fontNote));
 
 			Set<JJRequirement> listReq = jjChapter.getRequirements();
 			for (JJRequirement jjRequirement : listReq) {
-				if(jjRequirement.getEnabled()) {
-					paragraph.add(new Chunk(jjRequirement.getName()+"\n", fontRequirement));
-					StringReader strReader = new StringReader(jjRequirement.getDescription());
-					System.out.println("strReader = "+strReader.getClass().getName());
-					ArrayList arrList = HTMLWorker.parseToList(strReader, style);
+				if (jjRequirement.getEnabled()) {
+					paragraph.add(new Chunk(jjRequirement.getName() + "\n",
+							fontRequirement));
+					StringReader strReader = new StringReader(
+							jjRequirement.getDescription());
+					System.out.println("strReader = "
+							+ strReader.getClass().getName());
+					ArrayList arrList = HTMLWorker
+							.parseToList(strReader, style);
 					paragraph.addAll(arrList);
-					/*for (int i = 0; i < arrList.size(); ++i) {
-						Element e = (Element) arrList.get(i);
-						System.out.println("ArrayElement = "+e.getClass().getName());
-						paragraph.add(e);
-					}*/
-					if(jjRequirement.getNote().length() > 2){
-						paragraph.add("Note: "+new Chunk(jjRequirement.getNote()+"\n", fontNote));
+					/*
+					 * for (int i = 0; i < arrList.size(); ++i) { Element e =
+					 * (Element) arrList.get(i);
+					 * System.out.println("ArrayElement = "
+					 * +e.getClass().getName()); paragraph.add(e); }
+					 */
+					if (jjRequirement.getNote().length() > 2) {
+						paragraph.add("Note: "
+								+ new Chunk(jjRequirement.getNote() + "\n",
+										fontNote));
 					}
 				}
 			}
 		}
 
 		paragraph.add(phrase);
-		Image image=Image.getInstance("http://www.google.com/intl/en_ALL/images/logos/images_logo_lg.gif");
-		image.scaleToFit((float)200.0, (float)49.0);
+		Image image = Image
+				.getInstance("http://www.google.com/intl/en_ALL/images/logos/images_logo_lg.gif");
+		image.scaleToFit((float) 200.0, (float) 49.0);
 		paragraph.add(image);
 		pdf.add(paragraph);
 	}

@@ -22,7 +22,8 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 	@Override
 	public JJPermission getJJPermissionWithName(String name) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder.createQuery(JJPermission.class);
+		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
+				.createQuery(JJPermission.class);
 
 		Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
 
@@ -40,16 +41,18 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 	}
 
 	@Override
-	public List<JJPermission> getAllJJPermission() {
+	public List<JJPermission> getAllJJPermissions() {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder.createQuery(JJPermission.class);
+		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
+				.createQuery(JJPermission.class);
 
 		Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
 
 		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
 
-		Predicate predicate = criteriaBuilder.equal(from.get("permission"), "general");
+		Predicate predicate = criteriaBuilder.equal(from.get("permission"),
+				"general");
 
 		select.where(predicate);
 

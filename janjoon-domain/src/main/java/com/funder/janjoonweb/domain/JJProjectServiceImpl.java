@@ -19,7 +19,7 @@ public class JJProjectServiceImpl implements JJProjectService {
 	}
 
 	@Override
-	public List<JJProject> getAllJJProject() {
+	public List<JJProject> getAllJJProjects() {
 
 		// Query query = entityManager
 		// .createQuery("select s from JJProject s where s.enabled=:value");

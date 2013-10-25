@@ -6,6 +6,7 @@ package com.funder.janjoonweb.domain;
 import com.funder.janjoonweb.domain.JJCategoryDataOnDemand;
 import com.funder.janjoonweb.domain.JJChapterDataOnDemand;
 import com.funder.janjoonweb.domain.JJContactDataOnDemand;
+import com.funder.janjoonweb.domain.JJRequirementDataOnDemand;
 import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJTestcaseDataOnDemand;
 import com.funder.janjoonweb.domain.JJTestcaseRepository;
@@ -39,6 +40,9 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     JJContactDataOnDemand JJTestcaseDataOnDemand.jJContactDataOnDemand;
+    
+    @Autowired
+    JJRequirementDataOnDemand JJTestcaseDataOnDemand.jJRequirementDataOnDemand;
     
     @Autowired
     JJTestcaseService JJTestcaseDataOnDemand.jJTestcaseService;

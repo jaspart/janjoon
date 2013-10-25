@@ -23,29 +23,24 @@ public class JJTestcase extends JJAbstractEntity {
     @ManyToOne
     private JJCategory category;
 
+    @ManyToOne
+    private JJChapter chapter;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
     private Set<JJSoftware> softwares = new HashSet<JJSoftware>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
     private Set<JJHardware> hardwares = new HashSet<JJHardware>();
 
-   
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
     private Set<JJTeststep> teststeps = new HashSet<JJTeststep>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<JJTask> tasks = new HashSet<JJTask>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<JJRequirement> requirements = new HashSet<JJRequirement>();
-
-    /**
-     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
     private Set<JJMessage> messages = new HashSet<JJMessage>();
 
-    /**
-     */
     @ManyToOne
-    private JJChapter chapter;
+    private JJRequirement requirement;
 }

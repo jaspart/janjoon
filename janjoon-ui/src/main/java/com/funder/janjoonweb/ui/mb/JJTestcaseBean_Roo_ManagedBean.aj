@@ -12,6 +12,7 @@ import com.funder.janjoonweb.domain.JJContactService;
 import com.funder.janjoonweb.domain.JJHardware;
 import com.funder.janjoonweb.domain.JJMessage;
 import com.funder.janjoonweb.domain.JJRequirement;
+import com.funder.janjoonweb.domain.JJRequirementService;
 import com.funder.janjoonweb.domain.JJSoftware;
 import com.funder.janjoonweb.domain.JJTask;
 import com.funder.janjoonweb.domain.JJTestcase;
@@ -21,6 +22,7 @@ import com.funder.janjoonweb.ui.mb.JJTestcaseBean;
 import com.funder.janjoonweb.ui.mb.converter.JJCategoryConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJChapterConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJContactConverter;
+import com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,6 +69,9 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
     @Autowired
     JJChapterService JJTestcaseBean.jJChapterService;
     
+    @Autowired
+    JJRequirementService JJTestcaseBean.jJRequirementService;
+    
     private JJTestcase JJTestcaseBean.JJTestcase_;
     
     private List<JJTestcase> JJTestcaseBean.allJJTestcases;
@@ -90,8 +95,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
     private List<JJTeststep> JJTestcaseBean.selectedTeststeps;
     
     private List<JJTask> JJTestcaseBean.selectedTasks;
-    
-    private List<JJRequirement> JJTestcaseBean.selectedRequirements;
     
     private List<JJMessage> JJTestcaseBean.selectedMessages;
     
@@ -387,6 +390,30 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         categoryCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(categoryCreateInputMessage);
         
+        OutputLabel chapterCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        chapterCreateOutput.setFor("chapterCreateInput");
+        chapterCreateOutput.setId("chapterCreateOutput");
+        chapterCreateOutput.setValue("Chapter:");
+        htmlPanelGrid.getChildren().add(chapterCreateOutput);
+        
+        AutoComplete chapterCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        chapterCreateInput.setId("chapterCreateInput");
+        chapterCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.chapter}", JJChapter.class));
+        chapterCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseBean.completeChapter}", List.class, new Class[] { String.class }));
+        chapterCreateInput.setDropdown(true);
+        chapterCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "chapter", String.class));
+        chapterCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{chapter.name} #{chapter.description} #{chapter.creationDate} #{chapter.updatedDate}", String.class));
+        chapterCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{chapter}", JJChapter.class));
+        chapterCreateInput.setConverter(new JJChapterConverter());
+        chapterCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(chapterCreateInput);
+        
+        Message chapterCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        chapterCreateInputMessage.setId("chapterCreateInputMessage");
+        chapterCreateInputMessage.setFor("chapterCreateInput");
+        chapterCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(chapterCreateInputMessage);
+        
         HtmlOutputText softwaresCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         softwaresCreateOutput.setId("softwaresCreateOutput");
         softwaresCreateOutput.setValue("Softwares:");
@@ -451,22 +478,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         tasksCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(tasksCreateInputMessage);
         
-        HtmlOutputText requirementsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementsCreateOutput.setId("requirementsCreateOutput");
-        requirementsCreateOutput.setValue("Requirements:");
-        htmlPanelGrid.getChildren().add(requirementsCreateOutput);
-        
-        HtmlOutputText requirementsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementsCreateInput.setId("requirementsCreateInput");
-        requirementsCreateInput.setValue("This relationship is managed from the JJRequirement side");
-        htmlPanelGrid.getChildren().add(requirementsCreateInput);
-        
-        Message requirementsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        requirementsCreateInputMessage.setId("requirementsCreateInputMessage");
-        requirementsCreateInputMessage.setFor("requirementsCreateInput");
-        requirementsCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(requirementsCreateInputMessage);
-        
         HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesCreateOutput.setId("messagesCreateOutput");
         messagesCreateOutput.setValue("Messages:");
@@ -483,29 +494,29 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         messagesCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(messagesCreateInputMessage);
         
-        OutputLabel chapterCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        chapterCreateOutput.setFor("chapterCreateInput");
-        chapterCreateOutput.setId("chapterCreateOutput");
-        chapterCreateOutput.setValue("Chapter:");
-        htmlPanelGrid.getChildren().add(chapterCreateOutput);
+        OutputLabel requirementCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        requirementCreateOutput.setFor("requirementCreateInput");
+        requirementCreateOutput.setId("requirementCreateOutput");
+        requirementCreateOutput.setValue("Requirement:");
+        htmlPanelGrid.getChildren().add(requirementCreateOutput);
         
-        AutoComplete chapterCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        chapterCreateInput.setId("chapterCreateInput");
-        chapterCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.chapter}", JJChapter.class));
-        chapterCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseBean.completeChapter}", List.class, new Class[] { String.class }));
-        chapterCreateInput.setDropdown(true);
-        chapterCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "chapter", String.class));
-        chapterCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{chapter.name} #{chapter.description} #{chapter.creationDate} #{chapter.updatedDate}", String.class));
-        chapterCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{chapter}", JJChapter.class));
-        chapterCreateInput.setConverter(new JJChapterConverter());
-        chapterCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(chapterCreateInput);
+        AutoComplete requirementCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        requirementCreateInput.setId("requirementCreateInput");
+        requirementCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.requirement}", JJRequirement.class));
+        requirementCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseBean.completeRequirement}", List.class, new Class[] { String.class }));
+        requirementCreateInput.setDropdown(true);
+        requirementCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "requirement", String.class));
+        requirementCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{requirement.name} #{requirement.description} #{requirement.creationDate} #{requirement.updatedDate}", String.class));
+        requirementCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{requirement}", JJRequirement.class));
+        requirementCreateInput.setConverter(new JJRequirementConverter());
+        requirementCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(requirementCreateInput);
         
-        Message chapterCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        chapterCreateInputMessage.setId("chapterCreateInputMessage");
-        chapterCreateInputMessage.setFor("chapterCreateInput");
-        chapterCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(chapterCreateInputMessage);
+        Message requirementCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        requirementCreateInputMessage.setId("requirementCreateInputMessage");
+        requirementCreateInputMessage.setFor("requirementCreateInput");
+        requirementCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(requirementCreateInputMessage);
         
         return htmlPanelGrid;
     }
@@ -732,6 +743,30 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         categoryEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(categoryEditInputMessage);
         
+        OutputLabel chapterEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        chapterEditOutput.setFor("chapterEditInput");
+        chapterEditOutput.setId("chapterEditOutput");
+        chapterEditOutput.setValue("Chapter:");
+        htmlPanelGrid.getChildren().add(chapterEditOutput);
+        
+        AutoComplete chapterEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        chapterEditInput.setId("chapterEditInput");
+        chapterEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.chapter}", JJChapter.class));
+        chapterEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseBean.completeChapter}", List.class, new Class[] { String.class }));
+        chapterEditInput.setDropdown(true);
+        chapterEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "chapter", String.class));
+        chapterEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{chapter.name} #{chapter.description} #{chapter.creationDate} #{chapter.updatedDate}", String.class));
+        chapterEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{chapter}", JJChapter.class));
+        chapterEditInput.setConverter(new JJChapterConverter());
+        chapterEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(chapterEditInput);
+        
+        Message chapterEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        chapterEditInputMessage.setId("chapterEditInputMessage");
+        chapterEditInputMessage.setFor("chapterEditInput");
+        chapterEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(chapterEditInputMessage);
+        
         HtmlOutputText softwaresEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         softwaresEditOutput.setId("softwaresEditOutput");
         softwaresEditOutput.setValue("Softwares:");
@@ -796,22 +831,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         tasksEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(tasksEditInputMessage);
         
-        HtmlOutputText requirementsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementsEditOutput.setId("requirementsEditOutput");
-        requirementsEditOutput.setValue("Requirements:");
-        htmlPanelGrid.getChildren().add(requirementsEditOutput);
-        
-        HtmlOutputText requirementsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementsEditInput.setId("requirementsEditInput");
-        requirementsEditInput.setValue("This relationship is managed from the JJRequirement side");
-        htmlPanelGrid.getChildren().add(requirementsEditInput);
-        
-        Message requirementsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        requirementsEditInputMessage.setId("requirementsEditInputMessage");
-        requirementsEditInputMessage.setFor("requirementsEditInput");
-        requirementsEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(requirementsEditInputMessage);
-        
         HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesEditOutput.setId("messagesEditOutput");
         messagesEditOutput.setValue("Messages:");
@@ -828,29 +847,29 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         messagesEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(messagesEditInputMessage);
         
-        OutputLabel chapterEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        chapterEditOutput.setFor("chapterEditInput");
-        chapterEditOutput.setId("chapterEditOutput");
-        chapterEditOutput.setValue("Chapter:");
-        htmlPanelGrid.getChildren().add(chapterEditOutput);
+        OutputLabel requirementEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        requirementEditOutput.setFor("requirementEditInput");
+        requirementEditOutput.setId("requirementEditOutput");
+        requirementEditOutput.setValue("Requirement:");
+        htmlPanelGrid.getChildren().add(requirementEditOutput);
         
-        AutoComplete chapterEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        chapterEditInput.setId("chapterEditInput");
-        chapterEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.chapter}", JJChapter.class));
-        chapterEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseBean.completeChapter}", List.class, new Class[] { String.class }));
-        chapterEditInput.setDropdown(true);
-        chapterEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "chapter", String.class));
-        chapterEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{chapter.name} #{chapter.description} #{chapter.creationDate} #{chapter.updatedDate}", String.class));
-        chapterEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{chapter}", JJChapter.class));
-        chapterEditInput.setConverter(new JJChapterConverter());
-        chapterEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(chapterEditInput);
+        AutoComplete requirementEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        requirementEditInput.setId("requirementEditInput");
+        requirementEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.requirement}", JJRequirement.class));
+        requirementEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseBean.completeRequirement}", List.class, new Class[] { String.class }));
+        requirementEditInput.setDropdown(true);
+        requirementEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "requirement", String.class));
+        requirementEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{requirement.name} #{requirement.description} #{requirement.creationDate} #{requirement.updatedDate}", String.class));
+        requirementEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{requirement}", JJRequirement.class));
+        requirementEditInput.setConverter(new JJRequirementConverter());
+        requirementEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(requirementEditInput);
         
-        Message chapterEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        chapterEditInputMessage.setId("chapterEditInputMessage");
-        chapterEditInputMessage.setFor("chapterEditInput");
-        chapterEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(chapterEditInputMessage);
+        Message requirementEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        requirementEditInputMessage.setId("requirementEditInputMessage");
+        requirementEditInputMessage.setFor("requirementEditInput");
+        requirementEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(requirementEditInputMessage);
         
         return htmlPanelGrid;
     }
@@ -969,6 +988,16 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         categoryValue.setConverter(new JJCategoryConverter());
         htmlPanelGrid.getChildren().add(categoryValue);
         
+        HtmlOutputText chapterLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        chapterLabel.setId("chapterLabel");
+        chapterLabel.setValue("Chapter:");
+        htmlPanelGrid.getChildren().add(chapterLabel);
+        
+        HtmlOutputText chapterValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        chapterValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.chapter}", JJChapter.class));
+        chapterValue.setConverter(new JJChapterConverter());
+        htmlPanelGrid.getChildren().add(chapterValue);
+        
         HtmlOutputText softwaresLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         softwaresLabel.setId("softwaresLabel");
         softwaresLabel.setValue("Softwares:");
@@ -1009,16 +1038,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         tasksValue.setValue("This relationship is managed from the JJTask side");
         htmlPanelGrid.getChildren().add(tasksValue);
         
-        HtmlOutputText requirementsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementsLabel.setId("requirementsLabel");
-        requirementsLabel.setValue("Requirements:");
-        htmlPanelGrid.getChildren().add(requirementsLabel);
-        
-        HtmlOutputText requirementsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementsValue.setId("requirementsValue");
-        requirementsValue.setValue("This relationship is managed from the JJRequirement side");
-        htmlPanelGrid.getChildren().add(requirementsValue);
-        
         HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesLabel.setId("messagesLabel");
         messagesLabel.setValue("Messages:");
@@ -1029,15 +1048,15 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         messagesValue.setValue("This relationship is managed from the JJMessage side");
         htmlPanelGrid.getChildren().add(messagesValue);
         
-        HtmlOutputText chapterLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        chapterLabel.setId("chapterLabel");
-        chapterLabel.setValue("Chapter:");
-        htmlPanelGrid.getChildren().add(chapterLabel);
+        HtmlOutputText requirementLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        requirementLabel.setId("requirementLabel");
+        requirementLabel.setValue("Requirement:");
+        htmlPanelGrid.getChildren().add(requirementLabel);
         
-        HtmlOutputText chapterValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        chapterValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.chapter}", JJChapter.class));
-        chapterValue.setConverter(new JJChapterConverter());
-        htmlPanelGrid.getChildren().add(chapterValue);
+        HtmlOutputText requirementValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        requirementValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.requirement}", JJRequirement.class));
+        requirementValue.setConverter(new JJRequirementConverter());
+        htmlPanelGrid.getChildren().add(requirementValue);
         
         return htmlPanelGrid;
     }
@@ -1081,6 +1100,17 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
             String jJCategoryStr = String.valueOf(jJCategory.getName() +  " "  + jJCategory.getDescription() +  " "  + jJCategory.getCreationDate() +  " "  + jJCategory.getUpdatedDate());
             if (jJCategoryStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJCategory);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJChapter> JJTestcaseBean.completeChapter(String query) {
+        List<JJChapter> suggestions = new ArrayList<JJChapter>();
+        for (JJChapter jJChapter : jJChapterService.findAllJJChapters()) {
+            String jJChapterStr = String.valueOf(jJChapter.getName() +  " "  + jJChapter.getDescription() +  " "  + jJChapter.getCreationDate() +  " "  + jJChapter.getUpdatedDate());
+            if (jJChapterStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJChapter);
             }
         }
         return suggestions;
@@ -1130,17 +1160,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         this.selectedTasks = selectedTasks;
     }
     
-    public List<JJRequirement> JJTestcaseBean.getSelectedRequirements() {
-        return selectedRequirements;
-    }
-    
-    public void JJTestcaseBean.setSelectedRequirements(List<JJRequirement> selectedRequirements) {
-        if (selectedRequirements != null) {
-            JJTestcase_.setRequirements(new HashSet<JJRequirement>(selectedRequirements));
-        }
-        this.selectedRequirements = selectedRequirements;
-    }
-    
     public List<JJMessage> JJTestcaseBean.getSelectedMessages() {
         return selectedMessages;
     }
@@ -1152,12 +1171,12 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         this.selectedMessages = selectedMessages;
     }
     
-    public List<JJChapter> JJTestcaseBean.completeChapter(String query) {
-        List<JJChapter> suggestions = new ArrayList<JJChapter>();
-        for (JJChapter jJChapter : jJChapterService.findAllJJChapters()) {
-            String jJChapterStr = String.valueOf(jJChapter.getName() +  " "  + jJChapter.getDescription() +  " "  + jJChapter.getCreationDate() +  " "  + jJChapter.getUpdatedDate());
-            if (jJChapterStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJChapter);
+    public List<JJRequirement> JJTestcaseBean.completeRequirement(String query) {
+        List<JJRequirement> suggestions = new ArrayList<JJRequirement>();
+        for (JJRequirement jJRequirement : jJRequirementService.findAllJJRequirements()) {
+            String jJRequirementStr = String.valueOf(jJRequirement.getName() +  " "  + jJRequirement.getDescription() +  " "  + jJRequirement.getCreationDate() +  " "  + jJRequirement.getUpdatedDate());
+            if (jJRequirementStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJRequirement);
             }
         }
         return suggestions;
@@ -1175,9 +1194,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         }
         if (JJTestcase_ != null && JJTestcase_.getTasks() != null) {
             selectedTasks = new ArrayList<JJTask>(JJTestcase_.getTasks());
-        }
-        if (JJTestcase_ != null && JJTestcase_.getRequirements() != null) {
-            selectedRequirements = new ArrayList<JJRequirement>(JJTestcase_.getRequirements());
         }
         if (JJTestcase_ != null && JJTestcase_.getMessages() != null) {
             selectedMessages = new ArrayList<JJMessage>(JJTestcase_.getMessages());
@@ -1238,7 +1254,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         selectedHardwares = null;
         selectedTeststeps = null;
         selectedTasks = null;
-        selectedRequirements = null;
         selectedMessages = null;
         createDialogVisible = false;
     }

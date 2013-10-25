@@ -797,29 +797,14 @@ public class JJRequirementBean {
 			break;
 		}
 
-		JJCategory myJJCategory = null;
-
 		JJCategory jjCategory = jJCategoryService
 				.getJJCategoryWithName(category);
 
-		if (jjCategory != null)
-
-			myJJCategory = jjCategory;
-		else
-			myJJCategory = createANDpersistJJCategory(category);
-
-		myJJRequirement.setCategory(myJJCategory);
-
-		JJStatus myJJStatus = null;
+		myJJRequirement.setCategory(jjCategory);
 
 		JJStatus jjStatus = jJStatusService.getJJStatusWithName("NEW");
 
-		if (jjStatus != null)
-			myJJStatus = jjStatus;
-		else
-			myJJStatus = createANDpersistJJStatus("NEW");
-
-		myJJRequirement.setStatus(myJJStatus);
+		myJJRequirement.setStatus(jjStatus);
 		myJJRequirement.setNumero(new Random().nextInt(1000) + 1);
 		if (currentProject != null)
 			myJJRequirement.setProject(currentProject);
@@ -855,16 +840,9 @@ public class JJRequirementBean {
 		myEditedJJRequirement.setEnabled(true);
 		myEditedJJRequirement.setCategory(req.getCategory());
 
-		JJStatus myJJStatus = null;
+		JJStatus jjStatus = jJStatusService.getJJStatusWithName("MODIFIED");
 
-		JJStatus jjStatus = jJStatusService.getJJStatusWithName("MODIFY");
-
-		if (jjStatus != null)
-			myJJStatus = jjStatus;
-		else
-			myJJStatus = createANDpersistJJStatus("MODIFY");
-
-		myEditedJJRequirement.setStatus(myJJStatus);
+		myEditedJJRequirement.setStatus(jjStatus);
 		myEditedJJRequirement.setNumero(req.getNumero());
 		myEditedJJRequirement.setProject(req.getProject());
 		myEditedJJRequirement.setChapter(req.getChapter());
@@ -1102,28 +1080,21 @@ public class JJRequirementBean {
 
 		this.deleteColumnNumber = number;
 
-		JJStatus myJJStatus = null;
-
 		JJStatus jjStatus = jJStatusService.getJJStatusWithName("DELETED");
-
-		if (jjStatus != null)
-			myJJStatus = jjStatus;
-		else
-			myJJStatus = createANDpersistJJStatus("DELETED");
 
 		switch (number) {
 		case 1:
 			mySelectedBusinessJJRequirement.setEnabled(false);
-			mySelectedBusinessJJRequirement.setStatus(myJJStatus);
+			mySelectedBusinessJJRequirement.setStatus(jjStatus);
 			break;
 		case 2:
 			mySelectedFunctionalJJRequirement.setEnabled(false);
-			mySelectedFunctionalJJRequirement.setStatus(myJJStatus);
+			mySelectedFunctionalJJRequirement.setStatus(jjStatus);
 			break;
 
 		case 3:
 			mySelectedTechnicalJJRequirement.setEnabled(false);
-			mySelectedTechnicalJJRequirement.setStatus(myJJStatus);
+			mySelectedTechnicalJJRequirement.setStatus(jjStatus);
 			break;
 
 		default:
@@ -1227,14 +1198,7 @@ public class JJRequirementBean {
 	public void releaseJJRequirement() {
 		List<JJRequirement> reqList = null;
 
-		JJStatus myJJStatus = null;
-
-		JJStatus jjStatus = jJStatusService.getJJStatusWithName("RELEASE");
-
-		if (jjStatus != null)
-			myJJStatus = jjStatus;
-		else
-			myJJStatus = createANDpersistJJStatus("RELEASE");
+		JJStatus jjStatus = jJStatusService.getJJStatusWithName("RELEASED");
 
 		switch (releaseColumnNumber) {
 		case 1:
@@ -1256,7 +1220,7 @@ public class JJRequirementBean {
 		for (JJRequirement jjRequirement : reqList) {
 			if (!jjRequirement.getStatus().getName()
 					.equalsIgnoreCase("RELEASE")) {
-				jjRequirement.setStatus(myJJStatus);
+				jjRequirement.setStatus(jjStatus);
 				jJRequirementService.updateJJRequirement(jjRequirement);
 			}
 
@@ -1271,14 +1235,7 @@ public class JJRequirementBean {
 
 	public void discardJJRequirement() {
 
-		JJStatus myJJStatus = null;
-
-		JJStatus jjStatus = jJStatusService.getJJStatusWithName("DISCARD");
-
-		if (jjStatus != null)
-			myJJStatus = jjStatus;
-		else
-			myJJStatus = createANDpersistJJStatus("DISCARD");
+		JJStatus jjStatus = jJStatusService.getJJStatusWithName("DISCARDED");
 
 		JJRequirement req = null;
 
@@ -1286,18 +1243,18 @@ public class JJRequirementBean {
 		case 1:
 
 			mySelectedBusinessJJRequirement.setEnabled(false);
-			mySelectedBusinessJJRequirement.setStatus(myJJStatus);
+			mySelectedBusinessJJRequirement.setStatus(jjStatus);
 			req = mySelectedBusinessJJRequirement;
 			break;
 		case 2:
 			mySelectedFunctionalJJRequirement.setEnabled(false);
-			mySelectedFunctionalJJRequirement.setStatus(myJJStatus);
+			mySelectedFunctionalJJRequirement.setStatus(jjStatus);
 			req = mySelectedFunctionalJJRequirement;
 			break;
 
 		case 3:
 			mySelectedTechnicalJJRequirement.setEnabled(false);
-			mySelectedTechnicalJJRequirement.setStatus(myJJStatus);
+			mySelectedTechnicalJJRequirement.setStatus(jjStatus);
 			req = mySelectedTechnicalJJRequirement;
 			break;
 
@@ -1435,26 +1392,6 @@ public class JJRequirementBean {
 		jJRequirementService
 				.updateJJRequirement(mySelectedTechnicalJJRequirement);
 
-	}
-
-	private JJStatus createANDpersistJJStatus(String name) {
-		JJStatus newJJStatus = new JJStatus();
-		newJJStatus.setName(name);
-		newJJStatus.setCreationDate(new Date());
-		newJJStatus.setDescription("A JJStatus defined as " + name);
-		newJJStatus.setEnabled(true);
-		jJStatusService.saveJJStatus(newJJStatus);
-		return newJJStatus;
-	}
-
-	private JJCategory createANDpersistJJCategory(String name) {
-		JJCategory newJJCategory = new JJCategory();
-		newJJCategory.setName(name);
-		newJJCategory.setCreationDate(new Date());
-		newJJCategory.setDescription("A JJCategory defined as " + name);
-		newJJCategory.setEnabled(true);
-		jJCategoryService.saveJJCategory(newJJCategory);
-		return newJJCategory;
 	}
 
 	private String getIdFromString(String s) {

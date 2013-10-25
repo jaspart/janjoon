@@ -24,6 +24,7 @@ import com.funder.janjoonweb.domain.JJRequirementService;
 import com.funder.janjoonweb.domain.JJStatus;
 import com.funder.janjoonweb.domain.JJStatusService;
 import com.funder.janjoonweb.domain.JJTask;
+import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.domain.JJVersionService;
 import com.funder.janjoonweb.domain.reference.JJRelationship;
@@ -135,6 +136,8 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
     
     private List<JJRequirement> JJRequirementBean.selectedRequirementLinkUp;
     
+    private List<JJTestcase> JJRequirementBean.selectedTestcases;
+    
     @PostConstruct
     public void JJRequirementBean.init() {
         columns = new ArrayList<String>();
@@ -142,7 +145,7 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         columns.add("description");
         columns.add("creationDate");
         columns.add("updatedDate");
-        columns.add("numero");
+        columns.add("ordering");
     }
     
     public String JJRequirementBean.getName() {
@@ -362,6 +365,25 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         enabledCreateInputMessage.setFor("enabledCreateInput");
         enabledCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
+        
+        OutputLabel orderingCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        orderingCreateOutput.setFor("orderingCreateInput");
+        orderingCreateOutput.setId("orderingCreateOutput");
+        orderingCreateOutput.setValue("Ordering:");
+        htmlPanelGrid.getChildren().add(orderingCreateOutput);
+        
+        Spinner orderingCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        orderingCreateInput.setId("orderingCreateInput");
+        orderingCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.ordering}", Integer.class));
+        orderingCreateInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(orderingCreateInput);
+        
+        Message orderingCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        orderingCreateInputMessage.setId("orderingCreateInputMessage");
+        orderingCreateInputMessage.setFor("orderingCreateInput");
+        orderingCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(orderingCreateInputMessage);
         
         OutputLabel numeroCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         numeroCreateOutput.setFor("numeroCreateInput");
@@ -801,24 +823,21 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         requirementLinkUpCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementLinkUpCreateInputMessage);
         
-        OutputLabel orderingCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        orderingCreateOutput.setFor("orderingCreateInput");
-        orderingCreateOutput.setId("orderingCreateOutput");
-        orderingCreateOutput.setValue("Ordering:");
-        htmlPanelGrid.getChildren().add(orderingCreateOutput);
+        HtmlOutputText testcasesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesCreateOutput.setId("testcasesCreateOutput");
+        testcasesCreateOutput.setValue("Testcases:");
+        htmlPanelGrid.getChildren().add(testcasesCreateOutput);
         
-        Spinner orderingCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
-        orderingCreateInput.setId("orderingCreateInput");
-        orderingCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.ordering}", Integer.class));
-        orderingCreateInput.setRequired(false);
+        HtmlOutputText testcasesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesCreateInput.setId("testcasesCreateInput");
+        testcasesCreateInput.setValue("This relationship is managed from the JJTestcase side");
+        htmlPanelGrid.getChildren().add(testcasesCreateInput);
         
-        htmlPanelGrid.getChildren().add(orderingCreateInput);
-        
-        Message orderingCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        orderingCreateInputMessage.setId("orderingCreateInputMessage");
-        orderingCreateInputMessage.setFor("orderingCreateInput");
-        orderingCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(orderingCreateInputMessage);
+        Message testcasesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcasesCreateInputMessage.setId("testcasesCreateInputMessage");
+        testcasesCreateInputMessage.setFor("testcasesCreateInput");
+        testcasesCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcasesCreateInputMessage);
         
         return htmlPanelGrid;
     }
@@ -980,6 +999,25 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         enabledEditInputMessage.setFor("enabledEditInput");
         enabledEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledEditInputMessage);
+        
+        OutputLabel orderingEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        orderingEditOutput.setFor("orderingEditInput");
+        orderingEditOutput.setId("orderingEditOutput");
+        orderingEditOutput.setValue("Ordering:");
+        htmlPanelGrid.getChildren().add(orderingEditOutput);
+        
+        Spinner orderingEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        orderingEditInput.setId("orderingEditInput");
+        orderingEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.ordering}", Integer.class));
+        orderingEditInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(orderingEditInput);
+        
+        Message orderingEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        orderingEditInputMessage.setId("orderingEditInputMessage");
+        orderingEditInputMessage.setFor("orderingEditInput");
+        orderingEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(orderingEditInputMessage);
         
         OutputLabel numeroEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         numeroEditOutput.setFor("numeroEditInput");
@@ -1419,24 +1457,21 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         requirementLinkUpEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementLinkUpEditInputMessage);
         
-        OutputLabel orderingEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        orderingEditOutput.setFor("orderingEditInput");
-        orderingEditOutput.setId("orderingEditOutput");
-        orderingEditOutput.setValue("Ordering:");
-        htmlPanelGrid.getChildren().add(orderingEditOutput);
+        HtmlOutputText testcasesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesEditOutput.setId("testcasesEditOutput");
+        testcasesEditOutput.setValue("Testcases:");
+        htmlPanelGrid.getChildren().add(testcasesEditOutput);
         
-        Spinner orderingEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
-        orderingEditInput.setId("orderingEditInput");
-        orderingEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.ordering}", Integer.class));
-        orderingEditInput.setRequired(false);
+        HtmlOutputText testcasesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesEditInput.setId("testcasesEditInput");
+        testcasesEditInput.setValue("This relationship is managed from the JJTestcase side");
+        htmlPanelGrid.getChildren().add(testcasesEditInput);
         
-        htmlPanelGrid.getChildren().add(orderingEditInput);
-        
-        Message orderingEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        orderingEditInputMessage.setId("orderingEditInputMessage");
-        orderingEditInputMessage.setFor("orderingEditInput");
-        orderingEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(orderingEditInputMessage);
+        Message testcasesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcasesEditInputMessage.setId("testcasesEditInputMessage");
+        testcasesEditInputMessage.setFor("testcasesEditInput");
+        testcasesEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcasesEditInputMessage);
         
         return htmlPanelGrid;
     }
@@ -1523,6 +1558,15 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         HtmlOutputText enabledValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.enabled}", String.class));
         htmlPanelGrid.getChildren().add(enabledValue);
+        
+        HtmlOutputText orderingLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        orderingLabel.setId("orderingLabel");
+        orderingLabel.setValue("Ordering:");
+        htmlPanelGrid.getChildren().add(orderingLabel);
+        
+        HtmlOutputText orderingValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        orderingValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.ordering}", String.class));
+        htmlPanelGrid.getChildren().add(orderingValue);
         
         HtmlOutputText numeroLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         numeroLabel.setId("numeroLabel");
@@ -1748,14 +1792,15 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         requirementLinkUpValue.getChildren().add(requirementLinkUpValueItems);
         htmlPanelGrid.getChildren().add(requirementLinkUpValue);
         
-        HtmlOutputText orderingLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        orderingLabel.setId("orderingLabel");
-        orderingLabel.setValue("Ordering:");
-        htmlPanelGrid.getChildren().add(orderingLabel);
+        HtmlOutputText testcasesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesLabel.setId("testcasesLabel");
+        testcasesLabel.setValue("Testcases:");
+        htmlPanelGrid.getChildren().add(testcasesLabel);
         
-        HtmlOutputText orderingValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        orderingValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.ordering}", String.class));
-        htmlPanelGrid.getChildren().add(orderingValue);
+        HtmlOutputText testcasesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesValue.setId("testcasesValue");
+        testcasesValue.setValue("This relationship is managed from the JJTestcase side");
+        htmlPanelGrid.getChildren().add(testcasesValue);
         
         return htmlPanelGrid;
     }
@@ -1957,6 +2002,17 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         this.selectedRequirementLinkUp = selectedRequirementLinkUp;
     }
     
+    public List<JJTestcase> JJRequirementBean.getSelectedTestcases() {
+        return selectedTestcases;
+    }
+    
+    public void JJRequirementBean.setSelectedTestcases(List<JJTestcase> selectedTestcases) {
+        if (selectedTestcases != null) {
+            JJRequirement_.setTestcases(new HashSet<JJTestcase>(selectedTestcases));
+        }
+        this.selectedTestcases = selectedTestcases;
+    }
+    
     public String JJRequirementBean.onEdit() {
         if (JJRequirement_ != null && JJRequirement_.getBugs() != null) {
             selectedBugs = new ArrayList<JJBug>(JJRequirement_.getBugs());
@@ -1975,6 +2031,9 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         }
         if (JJRequirement_ != null && JJRequirement_.getRequirementLinkUp() != null) {
             selectedRequirementLinkUp = new ArrayList<JJRequirement>(JJRequirement_.getRequirementLinkUp());
+        }
+        if (JJRequirement_ != null && JJRequirement_.getTestcases() != null) {
+            selectedTestcases = new ArrayList<JJTestcase>(JJRequirement_.getTestcases());
         }
         return null;
     }
@@ -2034,6 +2093,7 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         selectedMessages = null;
         selectedRequirementLinkDown = null;
         selectedRequirementLinkUp = null;
+        selectedTestcases = null;
         createDialogVisible = false;
     }
     

@@ -41,7 +41,7 @@ public class JJRightServiceImpl implements JJRightService {
 	}
 
 	@Override
-	public List<JJRight> getAllJJRight() {
+	public List<JJRight> getAllJJRights() {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJRight> criteriaQuery = criteriaBuilder.createQuery(JJRight.class);

@@ -16,42 +16,64 @@
 
 			<h:panelGrid id="mainPanelGrid" columns="2">
 
-				<p:panel id="treePanel" style="width:350px">
-					<h:panelGrid id="leftPanelGrid" columns="1" cellpadding="3">
 
-						<p:contextMenu for="testCaseTreeSingle">
-							<p:menuitem value="Edit" update=":dataForm"
-								actionListener="#{jJTestcaseBean.editNode(jJTeststepBean)}"
-								icon="ui-icon-pencil" process="@parent" />
-							<p:menuitem value="Delete" icon="ui-icon-close"
-								actionListener="#{jJTestcaseBean.deleteNode(jJTeststepBean)}"
-								process="@parent" update=":msgForm:msgs :dataForm" />
-						</p:contextMenu>
+				<h:panelGrid id="leftPanelGrid" columns="1" cellpadding="3">
 
 
-						<p:tree id="testCaseTreeSingle"
-							value="#{jJTestcaseBean.testCaseRootNode}" var="node"
-							selectionMode="single"
-							selection="#{jJTestcaseBean.testCaseSelectedNode}" dynamic="true">
-							<p:ajax event="select" update=":msgForm:msgs"
-								listener="#{jJTestcaseBean.onNodeSelect}" />
-							<p:treeNode>
-								<h:outputText value="#{node}" />
-							</p:treeNode>
-						</p:tree>
-						<p:commandButton id="addTestCase" value="New"
-							update=":msgForm:msgs :dataForm"
-							action="#{jJTestcaseBean.initTestCaseParameter(jJTeststepBean)}"
-							icon="ui-icon-circle-plus"  />
-						<p:tooltip for="addTestCase" value="Add a new Test Case"
-							showEffect="fade" hideEffect="fade" />
-					</h:panelGrid>
-				</p:panel>
+					<p:outputLabel value="Build :" />
+					<p:selectOneMenu id="buildSelectOneMenu"
+						value="#{jJBuildBean.jJBuild}" panelStyle="width:150px"
+						effect="fade" style="width:160px" filter="true"
+						filterMatchMode="startsWith">
+
+						<f:converter
+							converterId="com.funder.janjoonweb.ui.mb.converter.JJBuildConverter" />
+
+						<f:selectItem itemLabel="#{jJBuildBean.jJBuild.name}"
+							itemValue="#{jJBuildBean.jJBuild}" />
+						<f:selectItems value="#{jJBuildBean.jJBuildList}" var="b"
+							itemLabel="#{b.name}" itemValue="#{b}" />
+
+						<p:ajax process="@this" partialSubmit="true"
+							listener="#{jJBuildBean.handleSelectBuild(JJTestcaseexecutionBean,JJTeststepexecutionBean)}" />
+					</p:selectOneMenu>
 
 
 
+					<p:commandButton id="runButton" value="Run" icon="ui-icon-play"
+						disabled="#{jJTestcaseBean.disabled}"
+						actionListener="#{jJTestcaseBean.createTabs}"
+						update=":runForm:tabView" process="@this" partialSubmit="true"
+						oncomplete="testcaseExecution.show()" />
 
 
+					<p:contextMenu for="testCaseTreeSingle">
+
+						<p:menuitem id="newTestcase" value="New"
+							icon="ui-icon-circle-plus"
+							actionListener="#{jJTestcaseBean.newTestcase(jJTeststepBean)}"
+							process="@parent" update=":msgForm:msgs :dataForm" />
+						<p:menuitem id="editTestcase" value="Edit"
+							actionListener="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
+							icon="ui-icon-pencil" process="@parent" update=":dataForm" />
+						<p:menuitem id="deleteTestcase" value="Delete"
+							icon="ui-icon-close"
+							actionListener="#{jJTestcaseBean.deleteTestcase(jJTeststepBean)}"
+							process="@parent" update=":msgForm:msgs :dataForm" />
+					</p:contextMenu>
+
+
+					<p:tree id="testCaseTreeSingle" value="#{jJTestcaseBean.rootNode}"
+						var="node" selectionMode="single"
+						selection="#{jJTestcaseBean.selectedNode}" dynamic="true">
+						<p:ajax event="select" update=":msgForm:msgs :dataForm:runButton"
+							listener="#{jJTestcaseBean.onNodeSelect}" />
+						<p:treeNode>
+							<h:outputText value="#{node}" />
+						</p:treeNode>
+					</p:tree>
+
+				</h:panelGrid>
 
 				<h:panelGrid id="centerPanelGrid" columns="1" cellpadding="3">
 
@@ -193,12 +215,13 @@
 
 				</h:panelGrid>
 
-				<p:commandButton id="btn" value="Save"
-					update=":msgForm:msgs :dataForm"
-					actionListener="#{jJTestcaseBean.persistTestCase(jJTeststepBean)}"
-					icon="ui-icon-disk"
-					process="@this,name,description @widgetVar(actionInput) @widgetVar(resultInput)" />
-
+				<h:panelGrid id="SouthPanelGrid" columns="1" cellpadding="3">
+					<p:commandButton id="btn" value="Save"
+						update=":msgForm:msgs :dataForm"
+						actionListener="#{jJTestcaseBean.persistTestCase(jJTeststepBean)}"
+						icon="ui-icon-disk"
+						process="@this,name,description @widgetVar(actionInput) @widgetVar(resultInput)" />
+				</h:panelGrid>
 
 			</h:panelGrid>
 
@@ -229,13 +252,42 @@
 				<h:form id="deleteTestCaseForm">
 					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
 						action="#{jJTestcaseBean.deleteNode()}"
-						update=":msgForm:msgs :dataForm:treePanel"
+						update=":msgForm:msgs :dataForm:testCaseTreeSingle"
 						oncomplete="deleteTestCase.hide()" />
 					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
 						onclick="deleteTestCase.hide()" type="button" />
 				</h:form>
 			</p:outputPanel>
 		</p:confirmDialog>
+
+		<p:dialog id="runTestcaseDialog" header="Test Case Execution"
+			widgetVar="testcaseExecution" maximizable="true" minimizable="false"
+			showEffect="fade" hideEffect="fade" dynamic="true" style="width:400px">
+			<h:form id="runForm">
+				<h:panelGrid columns="1">
+					<p:tabView id="tabView" var="teststep"
+						value="#{jJTestcaseBean.jJTeststepList}"
+						widgetVar="teststepTabView"
+						activeIndex="#{jJTestcaseBean.tabIndex}" dynamic="true">
+					
+						<p:tab title="#{teststep.ordering}">
+							<h:panelGrid columns="2">
+								<p:panel>
+									<h:outputText value="#{teststep.actionstep}" />
+								</p:panel>
+								<p:panel>
+									<h:outputText value="#{teststep.resultat}" />
+								</p:panel>
+							</h:panelGrid>
+						</p:tab>
+					</p:tabView>
+					<p:commandButton id="nextButton" value="Next"
+						icon="ui-icon-arrowthick-1-e"
+						actionListener="#{jJTestcaseBean.incrementTabIndex}"
+						update=":runForm:tabView" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
 
 	</ui:define>
 </ui:composition>

@@ -125,7 +125,7 @@
 													icon="ui-icon-clipboard">
 													<p:menuitem id="manageChapterLeft" value="Manage Chapter"
 														icon="ui-icon-arrowrefresh-1-w"
-														actionListener="#{jJChapterBean.initParameter(1,jJCategoryBean)}"
+														actionListener="#{jJChapterBean.initParameter(1)}"
 														update=":dataForm:myManageChapterDialog"
 														oncomplete="manageJJChapter.show()" />
 													<p:menuitem id="manageDocumentLeft" value="Manage Document"
@@ -216,10 +216,11 @@
 													icon="ui-icon-clipboard">
 													<p:menuitem id="manageChapterMiddle" value="Manage Chapter"
 														icon="ui-icon-arrowrefresh-1-w"
-														actionListener="#{jJChapterBean.initParameter(2,jJCategoryBean)}"
+														actionListener="#{jJChapterBean.initParameter(2)}"
 														update=":dataForm:myManageChapterDialog"
 														oncomplete="manageJJChapter.show()" />
-													<p:menuitem id="manageDocumentMiddle" value="Manage Document"
+													<p:menuitem id="manageDocumentMiddle"
+														value="Manage Document"
 														actionListener="#{jJChapterBean.treeBean(2)}"
 														update=":dataForm:myManageDocumentDialog"
 														oncomplete="manageDocument.show()" />
@@ -295,10 +296,11 @@
 													icon="ui-icon-clipboard">
 													<p:menuitem id="manageChapterRight" value="Manage Chapter"
 														icon="ui-icon-arrowrefresh-1-w"
-														actionListener="#{jJChapterBean.initParameter(3,jJCategoryBean)}"
+														actionListener="#{jJChapterBean.initParameter(3)}"
 														update=":dataForm:myManageChapterDialog"
 														oncomplete="manageJJChapter.show()" />
-													<p:menuitem id="manageDocumentRight" value="Manage Document"
+													<p:menuitem id="manageDocumentRight"
+														value="Manage Document"
 														actionListener="#{jJChapterBean.treeBean(3)}"
 														update=":dataForm:myManageDocumentDialog"
 														oncomplete="manageDocument.show()" />
@@ -426,8 +428,10 @@
 						</h:panelGrid>
 
 						<h:panelGrid columns="1" cellpadding="3">
-							<p:editor id="descriptionEdit" rows="4" cols="70" widgetVar="editorEdit"
-								value="#{jJRequirementBean.myEditedJJRequirement.description}" required="true">
+							<p:editor id="descriptionEdit" rows="4" cols="70"
+								widgetVar="editorEdit"
+								value="#{jJRequirementBean.myEditedJJRequirement.description}"
+								required="true">
 								<f:validateLength minimum="1" maximum="250" />
 								<!--p:ajax update="msgDescriptionEdit" event="keyup" /-->
 							</p:editor>
@@ -689,7 +693,7 @@
 							icon="ui-icon-pencil" />
 						<p:menuitem value="Delete"
 							update=":dataForm:messages  myManageChapterDialog"
-							actionListener="#{jJChapterBean.deleteNode(jJCategoryBean)}"
+							actionListener="#{jJChapterBean.deleteNode()}"
 							icon="ui-icon-close" oncomplete="manageJJChapter.show()" />
 					</p:contextMenu>
 					<p:tree id="chapterTreeSingle" value="#{jJChapterBean.chapterRoot}"
@@ -702,7 +706,8 @@
 
 					<h:panelGrid id="editField" columns="1" cellpadding="3">
 						<h:panelGrid columns="3" cellpadding="3">
-							<p:inputText id="chapterName" cols="60" value="#{jJChapterBean.myJJChapter.name}" required="false">
+							<p:inputText id="chapterName" cols="60"
+								value="#{jJChapterBean.myJJChapter.name}" required="false">
 								<!-- 							<f:validateLength minimum="1" maximum="25" /> -->
 								<!-- 							<p:ajax update="msgNameChapter" event="keyup" /> -->
 							</p:inputText>
@@ -712,14 +717,17 @@
 
 						<h:panelGrid columns="3" cellpadding="3">
 
-							<p:editor id="chapterDescription" rows="4" cols="70" value="#{jJChapterBean.myJJChapter.description}" required="false">
+							<p:editor id="chapterDescription" rows="4" cols="70"
+								value="#{jJChapterBean.myJJChapter.description}"
+								required="false">
 								<f:validateLength minimum="1" maximum="250" />
 							</p:editor>
 
 							<!-- <p:inputTextarea id="chapterDescription" rows="6" cols="70" value="#{jJChapterBean.myJJChapter.description}" required="false">
 							</p:inputTextarea> -->
-							
-							<p:message for="chapterDescription" id="msgDescriptionChapter" display="icon" />
+
+							<p:message for="chapterDescription" id="msgDescriptionChapter"
+								display="icon" />
 							<p:watermark for="chapterDescription" value="Description" />
 						</h:panelGrid>
 
@@ -746,8 +754,7 @@
 						</p:column>
 						<p:column>
 							<h:commandButton value="#{messages.label_save}"
-								action="#{jJChapterBean.persistJJChapter()}"
-								update=":dataForm" />
+								action="#{jJChapterBean.persistJJChapter()}" update=":dataForm" />
 						</p:column>
 					</p:row>
 				</f:facet>
@@ -762,8 +769,8 @@
 						var="nodeLeft" selectionMode="single"
 						selection="#{jJChapterBean.selectedLeftNode}" draggable="true"
 						droppable="true" dragdropScope="demo">
-<!-- 						<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}" -->
-<!-- 							update=":dataForm:messages" /> -->
+						<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
+							update=":dataForm:messages" />
 						<p:treeNode>
 							<h:outputText value="#{nodeLeft}" />
 						</p:treeNode>
@@ -772,8 +779,8 @@
 						var="nodeRight" selectionMode="single"
 						selection="#{jJChapterBean.selectedRightNode}" draggable="true"
 						droppable="true" dragdropScope="demo">
-<!-- 						<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}" -->
-<!-- 							update=":dataForm:messages" /> -->
+						<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
+							update=":dataForm:messages" />
 						<p:treeNode>
 							<h:outputText value="#{nodeRight}" />
 						</p:treeNode>

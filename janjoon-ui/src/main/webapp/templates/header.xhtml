@@ -38,7 +38,7 @@
 						icon="ui-icon-extlink" />
 				</f:facet>
 			</p:tabMenu>
-			<!-- 			<p:sticky target="tabMenu" /> -->
+			<p:sticky target="tabMenu" />
 			<h:panelGrid columns="2" cellpadding="2" align="right">
 				<h:outputText value="Project :" />
 				<p:selectOneMenu id="projectSelectOneMenu"
@@ -55,7 +55,7 @@
 						itemLabel="#{p.name}" itemValue="#{p}" />
 
 					<p:ajax process="@this" partialSubmit="true"
-						listener="#{jJProjectBean.handleSelectProject(jJProductBean,jJVersionBean,jJRequirementBean,jJChapterBean)}"
+						listener="#{jJProjectBean.handleSelectProject(jJProductBean,jJVersionBean,jJRequirementBean,jJChapterBean,jJTestcaseBean,jJTeststepBean)}"
 						update="messagesHeader productSelectOneMenu versionSelectOneMenu :contentGrid" />
 				</p:selectOneMenu>
 

@@ -1,5 +1,7 @@
 package com.funder.janjoonweb.domain;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -15,6 +17,23 @@ public class JJStatusServiceImpl implements JJStatusService {
 
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
+	}
+
+	@Override
+	public List<JJStatus> getAllJJStatuses() {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJStatus> criteriaQuery = criteriaBuilder
+				.createQuery(JJStatus.class);
+
+		Root<JJStatus> from = criteriaQuery.from(JJStatus.class);
+
+		CriteriaQuery<JJStatus> select = criteriaQuery.select(from);
+		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
+
+		select.where(predicate1);
+
+		TypedQuery<JJStatus> result = entityManager.createQuery(select);
+		return result.getResultList();
 	}
 
 	@Override

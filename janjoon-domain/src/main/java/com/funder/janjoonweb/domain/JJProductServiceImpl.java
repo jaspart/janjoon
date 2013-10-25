@@ -20,7 +20,7 @@ public class JJProductServiceImpl implements JJProductService {
 	}
 
 	@Override
-	public List<JJProduct> getAllJJProduct() {
+	public List<JJProduct> getAllJJProducts() {
 
 		// Query query = entityManager
 		// .createQuery("select s from JJProduct s where s.enabled=:value");

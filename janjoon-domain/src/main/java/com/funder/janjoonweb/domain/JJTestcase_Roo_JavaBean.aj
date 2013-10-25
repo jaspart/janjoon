@@ -40,6 +40,14 @@ privileged aspect JJTestcase_Roo_JavaBean {
         this.category = category;
     }
     
+    public JJChapter JJTestcase.getChapter() {
+        return this.chapter;
+    }
+    
+    public void JJTestcase.setChapter(JJChapter chapter) {
+        this.chapter = chapter;
+    }
+    
     public Set<JJSoftware> JJTestcase.getSoftwares() {
         return this.softwares;
     }
@@ -72,14 +80,6 @@ privileged aspect JJTestcase_Roo_JavaBean {
         this.tasks = tasks;
     }
     
-    public Set<JJRequirement> JJTestcase.getRequirements() {
-        return this.requirements;
-    }
-    
-    public void JJTestcase.setRequirements(Set<JJRequirement> requirements) {
-        this.requirements = requirements;
-    }
-    
     public Set<JJMessage> JJTestcase.getMessages() {
         return this.messages;
     }
@@ -88,12 +88,12 @@ privileged aspect JJTestcase_Roo_JavaBean {
         this.messages = messages;
     }
     
-    public JJChapter JJTestcase.getChapter() {
-        return this.chapter;
+    public JJRequirement JJTestcase.getRequirement() {
+        return this.requirement;
     }
     
-    public void JJTestcase.setChapter(JJChapter chapter) {
-        this.chapter = chapter;
+    public void JJTestcase.setRequirement(JJRequirement requirement) {
+        this.requirement = requirement;
     }
     
 }
