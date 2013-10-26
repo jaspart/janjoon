@@ -9,6 +9,3 @@ field reference --fieldName createdBy --type ~.JJContact
 field date --fieldName updatedDate --type java.util.Date
 field reference --fieldName updatedBy --type ~.domain.JJContact
 field boolean --fieldName enabled
-
-
- 
