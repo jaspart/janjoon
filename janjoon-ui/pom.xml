@@ -6,7 +6,7 @@
 	<groupId>com.funder.janjoonweb.ui</groupId>
 	<artifactId>janjoon-ui</artifactId>
 	<packaging>war</packaging>
-	<version>0.1.0.BUILD-SNAPSHOT</version>
+	<version>0.2-BUILD_NUMBER</version>
 	<name>janjoon-ui</name>
 	<properties>
 		<aspectj.version>1.7.2</aspectj.version>
@@ -220,7 +220,7 @@
 		<dependency>
 			<groupId>com.funder.janjoonweb.domain</groupId>
 			<artifactId>janjoon-domain</artifactId>
-			<version>0.1.0.BUILD-SNAPSHOT</version>
+			<version>0.2-BUILD_NUMBER</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>

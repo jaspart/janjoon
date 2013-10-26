@@ -4,7 +4,7 @@
     <groupId>com.funder.janjoonweb.domain</groupId>
     <artifactId>janjoon-domain</artifactId>
     <packaging>jar</packaging>
-    <version>0.1.0.BUILD-SNAPSHOT</version>
+    <version>0.2-BUILD_NUMBER</version>
     <name>janjoon-domain</name>
     <properties>
         <aspectj.version>1.7.2</aspectj.version>
