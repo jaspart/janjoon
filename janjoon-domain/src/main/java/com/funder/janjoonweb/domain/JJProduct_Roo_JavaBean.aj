@@ -18,12 +18,12 @@ privileged aspect JJProduct_Roo_JavaBean {
         this.extname = extname;
     }
     
-    public Set<JJVersion> JJProduct.getJjversions() {
-        return this.jjversions;
+    public Set<JJVersion> JJProduct.getVersions() {
+        return this.versions;
     }
     
-    public void JJProduct.setJjversions(Set<JJVersion> jjversions) {
-        this.jjversions = jjversions;
+    public void JJProduct.setVersions(Set<JJVersion> versions) {
+        this.versions = versions;
     }
     
     public Set<JJChapter> JJProduct.getChapters() {

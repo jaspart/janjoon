@@ -324,3 +324,89 @@ quit
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-24 11:45:33
 quit
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-24 12:16:46
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-28 15:53:06
+focus --class ~.JJPermission
+field reference --fieldName project --type ~.JJProject
+field reference --fieldName product --type ~.JJProduct
+field reference --fieldName contact --type ~.JJContact
+field reference --fieldName profile --type ~.JJProfile
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-28 16:05:26
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-28 16:05:31
+focus --class ~.JJRight
+// [failed] field string --fieldName object --sizeMax 25 --notNull
+field string --fieldName objet --sizeMax 25 --notNull
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-28 16:09:29
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-28 16:09:33
+focus --class ~.JJRight
+field reference --fieldName profile --type ~.JJProfile
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-28 16:16:16
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-28 16:16:19
+focus --class ~.JJProfile
+field set --fieldName rights --type ~.JJRight --cardinality ONE_TO_MANY --fetch LAZY --mappedBy profile
+focus --class ~.JJContact
+field set --fieldName permissions --type ~.JJPermission --cardinality ONE_TO_MANY --mappedBy contact --fetch LAZY
+exit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-28 16:27:04
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-28 16:27:09
+focus --class ~.JJBug
+field reference --fieldName assignedTos --type ~.JJContact
+hint
+help
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-28 16:36:12
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-28 16:36:16
+focus --class ~.JJBug
+field enum --fieldName relation --type ~.reference.JJRelationship
+field reference --fieldName sprint --type ~.JJSprint
+field reference --fieldName testcase --type ~.JJTestcase
+focus --class ~.JJRequirement
+field reference --fieldName sprint --type ~.JJSprint
+field reference --fieldName assignedTo --type ~.JJContact
+field boolean --fieldName isOperation
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-28 16:48:14
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-28 16:48:18
+focus --class ~.JJTestcase
+// [failed] field string --fieldName action --sizeMax 100
+field string --fieldName actioncase --sizeMax 100
+field reference --fieldName product --type ~.JJProduct
+field reference --fieldName sprint --type ~.JJSprint
+field number --fieldName workload --type java.lang.Integer
+field number --fieldName pricepoint --type java.lang.Integer
+focus --class ~.JJTask
+field boolean --fieldName isCompleted
+field reference --fieldName assignedTo --type ~.JJContact
+field reference --fieldName testcase --type ~.JJTestcase
+field date --fieldName startDatePlanned --type java.util.Date
+field date --fieldName endDatePlanned --type java.util.Date
+field number --fieldName workloadPlanned --type java.lang.Integer
+field date --fieldName startDateRevised --type java.util.Date
+field date --fieldName endDateRevised --type java.util.Date
+field number --fieldName workloadRevised --type java.lang.Integer
+field date --fieldName startDateReal --type java.util.Date
+field date --fieldName endDateReal --type java.util.Date
+field number --fieldName workloadReal --type java.lang.Integer
+field number --fieldName consumed --type java.lang.Integer
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-28 17:16:46
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-28 17:29:28
+focus --class ~.JJContact
+field set --fieldName permissions --type ~.JJPermission --cardinality ONE_TO_MANY --mappedBy contact --fetch LAZY
+focus --class ~.JJProduct
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-28 17:46:48
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-28 17:57:01
+focus --class ~.JJProduct
+field set --fieldName versions  --type ~.JJVersion --cardinality ONE_TO_MANY --mappedBy product --fetch LAZY
+focus --class ~.JJPermission
+field string --fieldName name --sizeMax 25 --notNull
+focus --class ~.JJProfile
+field string --fieldName name --sizeMax 25 --notNull
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-28 18:09:55
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-28 18:16:31
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-28 18:18:10

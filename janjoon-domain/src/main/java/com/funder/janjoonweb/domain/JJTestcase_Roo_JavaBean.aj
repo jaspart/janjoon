@@ -7,8 +7,10 @@ import com.funder.janjoonweb.domain.JJCategory;
 import com.funder.janjoonweb.domain.JJChapter;
 import com.funder.janjoonweb.domain.JJHardware;
 import com.funder.janjoonweb.domain.JJMessage;
+import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJSoftware;
+import com.funder.janjoonweb.domain.JJSprint;
 import com.funder.janjoonweb.domain.JJTask;
 import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJTeststep;
@@ -24,12 +26,28 @@ privileged aspect JJTestcase_Roo_JavaBean {
         this.ordering = ordering;
     }
     
+    public String JJTestcase.getActioncase() {
+        return this.actioncase;
+    }
+    
+    public void JJTestcase.setActioncase(String actioncase) {
+        this.actioncase = actioncase;
+    }
+    
     public String JJTestcase.getResultat() {
         return this.resultat;
     }
     
     public void JJTestcase.setResultat(String resultat) {
         this.resultat = resultat;
+    }
+    
+    public JJProduct JJTestcase.getProduct() {
+        return this.product;
+    }
+    
+    public void JJTestcase.setProduct(JJProduct product) {
+        this.product = product;
     }
     
     public JJCategory JJTestcase.getCategory() {
@@ -48,6 +66,22 @@ privileged aspect JJTestcase_Roo_JavaBean {
         this.chapter = chapter;
     }
     
+    public JJRequirement JJTestcase.getRequirement() {
+        return this.requirement;
+    }
+    
+    public void JJTestcase.setRequirement(JJRequirement requirement) {
+        this.requirement = requirement;
+    }
+    
+    public JJSprint JJTestcase.getSprint() {
+        return this.sprint;
+    }
+    
+    public void JJTestcase.setSprint(JJSprint sprint) {
+        this.sprint = sprint;
+    }
+    
     public Set<JJSoftware> JJTestcase.getSoftwares() {
         return this.softwares;
     }
@@ -62,6 +96,22 @@ privileged aspect JJTestcase_Roo_JavaBean {
     
     public void JJTestcase.setHardwares(Set<JJHardware> hardwares) {
         this.hardwares = hardwares;
+    }
+    
+    public Integer JJTestcase.getWorkload() {
+        return this.workload;
+    }
+    
+    public void JJTestcase.setWorkload(Integer workload) {
+        this.workload = workload;
+    }
+    
+    public Integer JJTestcase.getPricepoint() {
+        return this.pricepoint;
+    }
+    
+    public void JJTestcase.setPricepoint(Integer pricepoint) {
+        this.pricepoint = pricepoint;
     }
     
     public Set<JJTeststep> JJTestcase.getTeststeps() {
@@ -86,14 +136,6 @@ privileged aspect JJTestcase_Roo_JavaBean {
     
     public void JJTestcase.setMessages(Set<JJMessage> messages) {
         this.messages = messages;
-    }
-    
-    public JJRequirement JJTestcase.getRequirement() {
-        return this.requirement;
-    }
-    
-    public void JJTestcase.setRequirement(JJRequirement requirement) {
-        this.requirement = requirement;
     }
     
 }

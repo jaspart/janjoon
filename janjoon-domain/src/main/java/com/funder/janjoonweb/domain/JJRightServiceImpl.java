@@ -50,9 +50,9 @@ public class JJRightServiceImpl implements JJRightService {
 
 		CriteriaQuery<JJRight> select = criteriaQuery.select(from);
 
-		Predicate predicate = criteriaBuilder.equal(from.get("basic"), true);
-
-		select.where(predicate);
+		// Predicate predicate = criteriaBuilder.equal(from.get("basic"), true);
+		//
+		// select.where(predicate);
 
 		TypedQuery<JJRight> result = entityManager.createQuery(select);
 		return result.getResultList();

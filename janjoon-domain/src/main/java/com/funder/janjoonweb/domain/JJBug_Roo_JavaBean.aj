@@ -11,11 +11,12 @@ import com.funder.janjoonweb.domain.JJImportance;
 import com.funder.janjoonweb.domain.JJMessage;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
+import com.funder.janjoonweb.domain.JJSprint;
 import com.funder.janjoonweb.domain.JJStatus;
 import com.funder.janjoonweb.domain.JJTask;
+import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.domain.reference.JJRelationship;
-import java.util.Date;
 import java.util.Set;
 
 privileged aspect JJBug_Roo_JavaBean {
@@ -28,36 +29,12 @@ privileged aspect JJBug_Roo_JavaBean {
         this.project = project;
     }
     
-    public Date JJBug.getStartDate() {
-        return this.startDate;
+    public JJVersion JJBug.getVersioning() {
+        return this.versioning;
     }
     
-    public void JJBug.setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-    
-    public Date JJBug.getEndDate() {
-        return this.endDate;
-    }
-    
-    public void JJBug.setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-    
-    public Integer JJBug.getWorkload() {
-        return this.workload;
-    }
-    
-    public void JJBug.setWorkload(Integer workload) {
-        this.workload = workload;
-    }
-    
-    public JJVersion JJBug.getJjversion() {
-        return this.jjversion;
-    }
-    
-    public void JJBug.setJjversion(JJVersion jjversion) {
-        this.jjversion = jjversion;
+    public void JJBug.setVersioning(JJVersion versioning) {
+        this.versioning = versioning;
     }
     
     public JJCategory JJBug.getCategory() {
@@ -92,14 +69,6 @@ privileged aspect JJBug_Roo_JavaBean {
         this.status = status;
     }
     
-    public JJRelationship JJBug.getRelation() {
-        return this.relation;
-    }
-    
-    public void JJBug.setRelation(JJRelationship relation) {
-        this.relation = relation;
-    }
-    
     public JJRequirement JJBug.getRequirement() {
         return this.requirement;
     }
@@ -108,12 +77,28 @@ privileged aspect JJBug_Roo_JavaBean {
         this.requirement = requirement;
     }
     
-    public JJBug JJBug.getBugUp() {
-        return this.bugUp;
+    public JJRelationship JJBug.getRelation() {
+        return this.relation;
     }
     
-    public void JJBug.setBugUp(JJBug bugUp) {
-        this.bugUp = bugUp;
+    public void JJBug.setRelation(JJRelationship relation) {
+        this.relation = relation;
+    }
+    
+    public JJSprint JJBug.getSprint() {
+        return this.sprint;
+    }
+    
+    public void JJBug.setSprint(JJSprint sprint) {
+        this.sprint = sprint;
+    }
+    
+    public JJTestcase JJBug.getTestcase() {
+        return this.testcase;
+    }
+    
+    public void JJBug.setTestcase(JJTestcase testcase) {
+        this.testcase = testcase;
     }
     
     public Set<JJBug> JJBug.getBugs() {
@@ -124,6 +109,14 @@ privileged aspect JJBug_Roo_JavaBean {
         this.bugs = bugs;
     }
     
+    public JJBug JJBug.getBugUp() {
+        return this.bugUp;
+    }
+    
+    public void JJBug.setBugUp(JJBug bugUp) {
+        this.bugUp = bugUp;
+    }
+    
     public Set<JJTask> JJBug.getTasks() {
         return this.tasks;
     }
@@ -132,11 +125,11 @@ privileged aspect JJBug_Roo_JavaBean {
         this.tasks = tasks;
     }
     
-    public Set<JJContact> JJBug.getAssignedTos() {
+    public JJContact JJBug.getAssignedTos() {
         return this.assignedTos;
     }
     
-    public void JJBug.setAssignedTos(Set<JJContact> assignedTos) {
+    public void JJBug.setAssignedTos(JJContact assignedTos) {
         this.assignedTos = assignedTos;
     }
     

@@ -14,6 +14,7 @@ import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJRequirementDataOnDemand;
 import com.funder.janjoonweb.domain.JJRequirementRepository;
 import com.funder.janjoonweb.domain.JJRequirementService;
+import com.funder.janjoonweb.domain.JJSprintDataOnDemand;
 import com.funder.janjoonweb.domain.JJStatusDataOnDemand;
 import com.funder.janjoonweb.domain.JJVersionDataOnDemand;
 import com.funder.janjoonweb.domain.reference.JJRelationship;
@@ -39,13 +40,13 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
     private List<JJRequirement> JJRequirementDataOnDemand.data;
     
     @Autowired
+    JJContactDataOnDemand JJRequirementDataOnDemand.jJContactDataOnDemand;
+    
+    @Autowired
     JJCategoryDataOnDemand JJRequirementDataOnDemand.jJCategoryDataOnDemand;
     
     @Autowired
     JJChapterDataOnDemand JJRequirementDataOnDemand.jJChapterDataOnDemand;
-    
-    @Autowired
-    JJContactDataOnDemand JJRequirementDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
     JJCriticityDataOnDemand JJRequirementDataOnDemand.jJCriticityDataOnDemand;
@@ -54,16 +55,19 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
     JJImportanceDataOnDemand JJRequirementDataOnDemand.jJImportanceDataOnDemand;
     
     @Autowired
-    JJVersionDataOnDemand JJRequirementDataOnDemand.jJVersionDataOnDemand;
-    
-    @Autowired
     JJProductDataOnDemand JJRequirementDataOnDemand.jJProductDataOnDemand;
     
     @Autowired
     JJProjectDataOnDemand JJRequirementDataOnDemand.jJProjectDataOnDemand;
     
     @Autowired
+    JJSprintDataOnDemand JJRequirementDataOnDemand.jJSprintDataOnDemand;
+    
+    @Autowired
     JJStatusDataOnDemand JJRequirementDataOnDemand.jJStatusDataOnDemand;
+    
+    @Autowired
+    JJVersionDataOnDemand JJRequirementDataOnDemand.jJVersionDataOnDemand;
     
     @Autowired
     JJRequirementService JJRequirementDataOnDemand.jJRequirementService;
@@ -79,6 +83,7 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
         setEndDate(obj, index);
         setImpact(obj, index);
         setIsCompleted(obj, index);
+        setIsOperation(obj, index);
         setName(obj, index);
         setNote(obj, index);
         setNumero(obj, index);
@@ -123,6 +128,11 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
     public void JJRequirementDataOnDemand.setIsCompleted(JJRequirement obj, int index) {
         Boolean isCompleted = Boolean.TRUE;
         obj.setIsCompleted(isCompleted);
+    }
+    
+    public void JJRequirementDataOnDemand.setIsOperation(JJRequirement obj, int index) {
+        Boolean isOperation = Boolean.TRUE;
+        obj.setIsOperation(isOperation);
     }
     
     public void JJRequirementDataOnDemand.setName(JJRequirement obj, int index) {

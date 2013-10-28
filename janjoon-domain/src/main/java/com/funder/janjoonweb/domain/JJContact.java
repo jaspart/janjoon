@@ -1,9 +1,5 @@
 package com.funder.janjoonweb.domain;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -14,6 +10,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.tostring.RooToString;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 
 @RooJavaBean
 @RooToString
@@ -48,24 +49,14 @@ public class JJContact extends JJAbstractEntity {
     @ManyToOne
     private JJJob job;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private Set<JJRight> rights = new HashSet<JJRight>();
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    private Set<JJProduct> products = new HashSet<JJProduct>();
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    private Set<JJProject> projects = new HashSet<JJProject>();
-
-    /**
-     */
     private Boolean accountNonExpired;
 
-    /**
-     */
     private Boolean credentialsNonExpired;
+
+    private Boolean accountNonLocked;
 
     /**
      */
-    private Boolean accountNonLocked;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "contact")
+    private Set<JJPermission> permissions = new HashSet<JJPermission>();
 }

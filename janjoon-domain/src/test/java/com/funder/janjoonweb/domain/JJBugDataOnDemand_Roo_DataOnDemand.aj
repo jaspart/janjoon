@@ -13,7 +13,9 @@ import com.funder.janjoonweb.domain.JJCriticityDataOnDemand;
 import com.funder.janjoonweb.domain.JJImportanceDataOnDemand;
 import com.funder.janjoonweb.domain.JJProjectDataOnDemand;
 import com.funder.janjoonweb.domain.JJRequirementDataOnDemand;
+import com.funder.janjoonweb.domain.JJSprintDataOnDemand;
 import com.funder.janjoonweb.domain.JJStatusDataOnDemand;
+import com.funder.janjoonweb.domain.JJTestcaseDataOnDemand;
 import com.funder.janjoonweb.domain.JJVersionDataOnDemand;
 import com.funder.janjoonweb.domain.reference.JJRelationship;
 import java.security.SecureRandom;
@@ -38,10 +40,10 @@ privileged aspect JJBugDataOnDemand_Roo_DataOnDemand {
     private List<JJBug> JJBugDataOnDemand.data;
     
     @Autowired
-    JJCategoryDataOnDemand JJBugDataOnDemand.jJCategoryDataOnDemand;
+    JJContactDataOnDemand JJBugDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    JJContactDataOnDemand JJBugDataOnDemand.jJContactDataOnDemand;
+    JJCategoryDataOnDemand JJBugDataOnDemand.jJCategoryDataOnDemand;
     
     @Autowired
     JJCriticityDataOnDemand JJBugDataOnDemand.jJCriticityDataOnDemand;
@@ -50,16 +52,22 @@ privileged aspect JJBugDataOnDemand_Roo_DataOnDemand {
     JJImportanceDataOnDemand JJBugDataOnDemand.jJImportanceDataOnDemand;
     
     @Autowired
-    JJVersionDataOnDemand JJBugDataOnDemand.jJVersionDataOnDemand;
-    
-    @Autowired
     JJProjectDataOnDemand JJBugDataOnDemand.jJProjectDataOnDemand;
     
     @Autowired
     JJRequirementDataOnDemand JJBugDataOnDemand.jJRequirementDataOnDemand;
     
     @Autowired
+    JJSprintDataOnDemand JJBugDataOnDemand.jJSprintDataOnDemand;
+    
+    @Autowired
     JJStatusDataOnDemand JJBugDataOnDemand.jJStatusDataOnDemand;
+    
+    @Autowired
+    JJTestcaseDataOnDemand JJBugDataOnDemand.jJTestcaseDataOnDemand;
+    
+    @Autowired
+    JJVersionDataOnDemand JJBugDataOnDemand.jJVersionDataOnDemand;
     
     @Autowired
     JJBugService JJBugDataOnDemand.jJBugService;
@@ -73,12 +81,9 @@ privileged aspect JJBugDataOnDemand_Roo_DataOnDemand {
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
-        setEndDate(obj, index);
         setName(obj, index);
         setRelation(obj, index);
-        setStartDate(obj, index);
         setUpdatedDate(obj, index);
-        setWorkload(obj, index);
         return obj;
     }
     
@@ -105,11 +110,6 @@ privileged aspect JJBugDataOnDemand_Roo_DataOnDemand {
         obj.setEnabled(enabled);
     }
     
-    public void JJBugDataOnDemand.setEndDate(JJBug obj, int index) {
-        Date endDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
-        obj.setEndDate(endDate);
-    }
-    
     public void JJBugDataOnDemand.setName(JJBug obj, int index) {
         String name = "name_" + index;
         if (name.length() > 25) {
@@ -123,19 +123,9 @@ privileged aspect JJBugDataOnDemand_Roo_DataOnDemand {
         obj.setRelation(relation);
     }
     
-    public void JJBugDataOnDemand.setStartDate(JJBug obj, int index) {
-        Date startDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
-        obj.setStartDate(startDate);
-    }
-    
     public void JJBugDataOnDemand.setUpdatedDate(JJBug obj, int index) {
         Date updatedDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setUpdatedDate(updatedDate);
-    }
-    
-    public void JJBugDataOnDemand.setWorkload(JJBug obj, int index) {
-        Integer workload = new Integer(index);
-        obj.setWorkload(workload);
     }
     
     public JJBug JJBugDataOnDemand.getSpecificJJBug(int index) {

@@ -9,6 +9,14 @@ import java.util.Set;
 
 privileged aspect JJProfile_Roo_JavaBean {
     
+    public String JJProfile.getName() {
+        return this.name;
+    }
+    
+    public void JJProfile.setName(String name) {
+        this.name = name;
+    }
+    
     public Set<JJRight> JJProfile.getRights() {
         return this.rights;
     }

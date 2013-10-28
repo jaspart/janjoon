@@ -10,12 +10,12 @@ import java.util.Set;
 
 privileged aspect JJBuild_Roo_JavaBean {
     
-    public JJVersion JJBuild.getJjversion() {
-        return this.jjversion;
+    public JJVersion JJBuild.getVersioning() {
+        return this.versioning;
     }
     
-    public void JJBuild.setJjversion(JJVersion jjversion) {
-        this.jjversion = jjversion;
+    public void JJBuild.setVersioning(JJVersion versioning) {
+        this.versioning = versioning;
     }
     
     public Set<JJMessage> JJBuild.getMessages() {

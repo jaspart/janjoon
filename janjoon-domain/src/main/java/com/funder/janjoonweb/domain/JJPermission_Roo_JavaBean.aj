@@ -3,16 +3,52 @@
 
 package com.funder.janjoonweb.domain;
 
+import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJPermission;
+import com.funder.janjoonweb.domain.JJProduct;
+import com.funder.janjoonweb.domain.JJProfile;
+import com.funder.janjoonweb.domain.JJProject;
 
 privileged aspect JJPermission_Roo_JavaBean {
     
-    public String JJPermission.getPermission() {
-        return this.permission;
+    public String JJPermission.getName() {
+        return this.name;
     }
     
-    public void JJPermission.setPermission(String permission) {
-        this.permission = permission;
+    public void JJPermission.setName(String name) {
+        this.name = name;
+    }
+    
+    public JJProject JJPermission.getProject() {
+        return this.project;
+    }
+    
+    public void JJPermission.setProject(JJProject project) {
+        this.project = project;
+    }
+    
+    public JJProduct JJPermission.getProduct() {
+        return this.product;
+    }
+    
+    public void JJPermission.setProduct(JJProduct product) {
+        this.product = product;
+    }
+    
+    public JJContact JJPermission.getContact() {
+        return this.contact;
+    }
+    
+    public void JJPermission.setContact(JJContact contact) {
+        this.contact = contact;
+    }
+    
+    public JJProfile JJPermission.getProfile() {
+        return this.profile;
+    }
+    
+    public void JJPermission.setProfile(JJProfile profile) {
+        this.profile = profile;
     }
     
 }

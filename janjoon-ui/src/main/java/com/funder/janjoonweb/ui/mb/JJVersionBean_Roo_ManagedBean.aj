@@ -10,7 +10,6 @@ import com.funder.janjoonweb.domain.JJPhase;
 import com.funder.janjoonweb.domain.JJPhaseService;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProductService;
-import com.funder.janjoonweb.domain.JJTask;
 import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.domain.JJVersionService;
 import com.funder.janjoonweb.ui.mb.JJVersionBean;
@@ -79,8 +78,6 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
     private HtmlPanelGrid JJVersionBean.viewPanelGrid;
     
     private boolean JJVersionBean.createDialogVisible = false;
-    
-    private List<JJTask> JJVersionBean.selectedTasks;
     
     private List<JJBuild> JJVersionBean.selectedBuilds;
     
@@ -359,22 +356,6 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
         phaseCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(phaseCreateInputMessage);
         
-        HtmlOutputText tasksCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        tasksCreateOutput.setId("tasksCreateOutput");
-        tasksCreateOutput.setValue("Tasks:");
-        htmlPanelGrid.getChildren().add(tasksCreateOutput);
-        
-        HtmlOutputText tasksCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        tasksCreateInput.setId("tasksCreateInput");
-        tasksCreateInput.setValue("This relationship is managed from the JJTask side");
-        htmlPanelGrid.getChildren().add(tasksCreateInput);
-        
-        Message tasksCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        tasksCreateInputMessage.setId("tasksCreateInputMessage");
-        tasksCreateInputMessage.setFor("tasksCreateInput");
-        tasksCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(tasksCreateInputMessage);
-        
         HtmlOutputText buildsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         buildsCreateOutput.setId("buildsCreateOutput");
         buildsCreateOutput.setValue("Builds:");
@@ -600,22 +581,6 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
         phaseEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(phaseEditInputMessage);
         
-        HtmlOutputText tasksEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        tasksEditOutput.setId("tasksEditOutput");
-        tasksEditOutput.setValue("Tasks:");
-        htmlPanelGrid.getChildren().add(tasksEditOutput);
-        
-        HtmlOutputText tasksEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        tasksEditInput.setId("tasksEditInput");
-        tasksEditInput.setValue("This relationship is managed from the JJTask side");
-        htmlPanelGrid.getChildren().add(tasksEditInput);
-        
-        Message tasksEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        tasksEditInputMessage.setId("tasksEditInputMessage");
-        tasksEditInputMessage.setFor("tasksEditInput");
-        tasksEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(tasksEditInputMessage);
-        
         HtmlOutputText buildsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         buildsEditOutput.setId("buildsEditOutput");
         buildsEditOutput.setValue("Builds:");
@@ -738,16 +703,6 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
         phaseValue.setConverter(new JJPhaseConverter());
         htmlPanelGrid.getChildren().add(phaseValue);
         
-        HtmlOutputText tasksLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        tasksLabel.setId("tasksLabel");
-        tasksLabel.setValue("Tasks:");
-        htmlPanelGrid.getChildren().add(tasksLabel);
-        
-        HtmlOutputText tasksValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        tasksValue.setId("tasksValue");
-        tasksValue.setValue("This relationship is managed from the JJTask side");
-        htmlPanelGrid.getChildren().add(tasksValue);
-        
         HtmlOutputText buildsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         buildsLabel.setId("buildsLabel");
         buildsLabel.setValue("Builds:");
@@ -816,17 +771,6 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJTask> JJVersionBean.getSelectedTasks() {
-        return selectedTasks;
-    }
-    
-    public void JJVersionBean.setSelectedTasks(List<JJTask> selectedTasks) {
-        if (selectedTasks != null) {
-            JJVersion_.setTasks(new HashSet<JJTask>(selectedTasks));
-        }
-        this.selectedTasks = selectedTasks;
-    }
-    
     public List<JJBuild> JJVersionBean.getSelectedBuilds() {
         return selectedBuilds;
     }
@@ -839,9 +783,6 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
     }
     
     public String JJVersionBean.onEdit() {
-        if (JJVersion_ != null && JJVersion_.getTasks() != null) {
-            selectedTasks = new ArrayList<JJTask>(JJVersion_.getTasks());
-        }
         if (JJVersion_ != null && JJVersion_.getBuilds() != null) {
             selectedBuilds = new ArrayList<JJBuild>(JJVersion_.getBuilds());
         }
@@ -897,7 +838,6 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
     
     public void JJVersionBean.reset() {
         JJVersion_ = null;
-        selectedTasks = null;
         selectedBuilds = null;
         createDialogVisible = false;
     }

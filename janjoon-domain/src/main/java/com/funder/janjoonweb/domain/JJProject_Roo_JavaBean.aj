@@ -5,7 +5,6 @@ package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJChapter;
 import com.funder.janjoonweb.domain.JJProject;
-import com.funder.janjoonweb.domain.JJTask;
 import java.util.Set;
 
 privileged aspect JJProject_Roo_JavaBean {
@@ -16,14 +15,6 @@ privileged aspect JJProject_Roo_JavaBean {
     
     public void JJProject.setChapters(Set<JJChapter> chapters) {
         this.chapters = chapters;
-    }
-    
-    public Set<JJTask> JJProject.getTasks() {
-        return this.tasks;
-    }
-    
-    public void JJProject.setTasks(Set<JJTask> tasks) {
-        this.tasks = tasks;
     }
     
 }

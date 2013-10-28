@@ -13,6 +13,7 @@ import com.funder.janjoonweb.domain.JJMessage;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
+import com.funder.janjoonweb.domain.JJSprint;
 import com.funder.janjoonweb.domain.JJStatus;
 import com.funder.janjoonweb.domain.JJTask;
 import com.funder.janjoonweb.domain.JJTestcase;
@@ -71,12 +72,12 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.chapter = chapter;
     }
     
-    public JJVersion JJRequirement.getJjversion() {
-        return this.jjversion;
+    public JJVersion JJRequirement.getVersioning() {
+        return this.versioning;
     }
     
-    public void JJRequirement.setJjversion(JJVersion jjversion) {
-        this.jjversion = jjversion;
+    public void JJRequirement.setVersioning(JJVersion versioning) {
+        this.versioning = versioning;
     }
     
     public JJProduct JJRequirement.getProduct() {
@@ -119,12 +120,12 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.status = status;
     }
     
-    public Boolean JJRequirement.getIsCompleted() {
-        return this.isCompleted;
+    public JJSprint JJRequirement.getSprint() {
+        return this.sprint;
     }
     
-    public void JJRequirement.setIsCompleted(Boolean isCompleted) {
-        this.isCompleted = isCompleted;
+    public void JJRequirement.setSprint(JJSprint sprint) {
+        this.sprint = sprint;
     }
     
     public String JJRequirement.getImpact() {
@@ -159,12 +160,12 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.tasks = tasks;
     }
     
-    public Set<JJContact> JJRequirement.getAssignedTos() {
-        return this.assignedTos;
+    public JJContact JJRequirement.getAssignedTo() {
+        return this.assignedTo;
     }
     
-    public void JJRequirement.setAssignedTos(Set<JJContact> assignedTos) {
-        this.assignedTos = assignedTos;
+    public void JJRequirement.setAssignedTo(JJContact assignedTo) {
+        this.assignedTo = assignedTo;
     }
     
     public Set<JJMessage> JJRequirement.getMessages() {
@@ -205,6 +206,22 @@ privileged aspect JJRequirement_Roo_JavaBean {
     
     public void JJRequirement.setTestcases(Set<JJTestcase> testcases) {
         this.testcases = testcases;
+    }
+    
+    public Boolean JJRequirement.getIsOperation() {
+        return this.isOperation;
+    }
+    
+    public void JJRequirement.setIsOperation(Boolean isOperation) {
+        this.isOperation = isOperation;
+    }
+    
+    public Boolean JJRequirement.getIsCompleted() {
+        return this.isCompleted;
+    }
+    
+    public void JJRequirement.setIsCompleted(Boolean isCompleted) {
+        this.isCompleted = isCompleted;
     }
     
 }

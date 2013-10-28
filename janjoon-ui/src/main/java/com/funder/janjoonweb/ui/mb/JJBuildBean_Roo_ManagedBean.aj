@@ -302,29 +302,29 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         enabledCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
         
-        OutputLabel jjversionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        jjversionCreateOutput.setFor("jjversionCreateInput");
-        jjversionCreateOutput.setId("jjversionCreateOutput");
-        jjversionCreateOutput.setValue("Jjversion:");
-        htmlPanelGrid.getChildren().add(jjversionCreateOutput);
+        OutputLabel versioningCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        versioningCreateOutput.setFor("versioningCreateInput");
+        versioningCreateOutput.setId("versioningCreateOutput");
+        versioningCreateOutput.setValue("Versioning:");
+        htmlPanelGrid.getChildren().add(versioningCreateOutput);
         
-        AutoComplete jjversionCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        jjversionCreateInput.setId("jjversionCreateInput");
-        jjversionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.jjversion}", JJVersion.class));
-        jjversionCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJBuildBean.completeJjversion}", List.class, new Class[] { String.class }));
-        jjversionCreateInput.setDropdown(true);
-        jjversionCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jjversion", String.class));
-        jjversionCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jjversion.name} #{jjversion.description} #{jjversion.creationDate} #{jjversion.updatedDate}", String.class));
-        jjversionCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jjversion}", JJVersion.class));
-        jjversionCreateInput.setConverter(new JJVersionConverter());
-        jjversionCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(jjversionCreateInput);
+        AutoComplete versioningCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        versioningCreateInput.setId("versioningCreateInput");
+        versioningCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.versioning}", JJVersion.class));
+        versioningCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJBuildBean.completeVersioning}", List.class, new Class[] { String.class }));
+        versioningCreateInput.setDropdown(true);
+        versioningCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "versioning", String.class));
+        versioningCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{versioning.name} #{versioning.description} #{versioning.creationDate} #{versioning.updatedDate}", String.class));
+        versioningCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{versioning}", JJVersion.class));
+        versioningCreateInput.setConverter(new JJVersionConverter());
+        versioningCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(versioningCreateInput);
         
-        Message jjversionCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        jjversionCreateInputMessage.setId("jjversionCreateInputMessage");
-        jjversionCreateInputMessage.setFor("jjversionCreateInput");
-        jjversionCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(jjversionCreateInputMessage);
+        Message versioningCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        versioningCreateInputMessage.setId("versioningCreateInputMessage");
+        versioningCreateInputMessage.setFor("versioningCreateInput");
+        versioningCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(versioningCreateInputMessage);
         
         HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesCreateOutput.setId("messagesCreateOutput");
@@ -503,29 +503,29 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         enabledEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledEditInputMessage);
         
-        OutputLabel jjversionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        jjversionEditOutput.setFor("jjversionEditInput");
-        jjversionEditOutput.setId("jjversionEditOutput");
-        jjversionEditOutput.setValue("Jjversion:");
-        htmlPanelGrid.getChildren().add(jjversionEditOutput);
+        OutputLabel versioningEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        versioningEditOutput.setFor("versioningEditInput");
+        versioningEditOutput.setId("versioningEditOutput");
+        versioningEditOutput.setValue("Versioning:");
+        htmlPanelGrid.getChildren().add(versioningEditOutput);
         
-        AutoComplete jjversionEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        jjversionEditInput.setId("jjversionEditInput");
-        jjversionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.jjversion}", JJVersion.class));
-        jjversionEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJBuildBean.completeJjversion}", List.class, new Class[] { String.class }));
-        jjversionEditInput.setDropdown(true);
-        jjversionEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jjversion", String.class));
-        jjversionEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jjversion.name} #{jjversion.description} #{jjversion.creationDate} #{jjversion.updatedDate}", String.class));
-        jjversionEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jjversion}", JJVersion.class));
-        jjversionEditInput.setConverter(new JJVersionConverter());
-        jjversionEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(jjversionEditInput);
+        AutoComplete versioningEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        versioningEditInput.setId("versioningEditInput");
+        versioningEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.versioning}", JJVersion.class));
+        versioningEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJBuildBean.completeVersioning}", List.class, new Class[] { String.class }));
+        versioningEditInput.setDropdown(true);
+        versioningEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "versioning", String.class));
+        versioningEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{versioning.name} #{versioning.description} #{versioning.creationDate} #{versioning.updatedDate}", String.class));
+        versioningEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{versioning}", JJVersion.class));
+        versioningEditInput.setConverter(new JJVersionConverter());
+        versioningEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(versioningEditInput);
         
-        Message jjversionEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        jjversionEditInputMessage.setId("jjversionEditInputMessage");
-        jjversionEditInputMessage.setFor("jjversionEditInput");
-        jjversionEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(jjversionEditInputMessage);
+        Message versioningEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        versioningEditInputMessage.setId("versioningEditInputMessage");
+        versioningEditInputMessage.setFor("versioningEditInput");
+        versioningEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(versioningEditInputMessage);
         
         HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesEditOutput.setId("messagesEditOutput");
@@ -629,15 +629,15 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.enabled}", String.class));
         htmlPanelGrid.getChildren().add(enabledValue);
         
-        HtmlOutputText jjversionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        jjversionLabel.setId("jjversionLabel");
-        jjversionLabel.setValue("Jjversion:");
-        htmlPanelGrid.getChildren().add(jjversionLabel);
+        HtmlOutputText versioningLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        versioningLabel.setId("versioningLabel");
+        versioningLabel.setValue("Versioning:");
+        htmlPanelGrid.getChildren().add(versioningLabel);
         
-        HtmlOutputText jjversionValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        jjversionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.jjversion}", JJVersion.class));
-        jjversionValue.setConverter(new JJVersionConverter());
-        htmlPanelGrid.getChildren().add(jjversionValue);
+        HtmlOutputText versioningValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        versioningValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.versioning}", JJVersion.class));
+        versioningValue.setConverter(new JJVersionConverter());
+        htmlPanelGrid.getChildren().add(versioningValue);
         
         HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesLabel.setId("messagesLabel");
@@ -685,7 +685,7 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJVersion> JJBuildBean.completeJjversion(String query) {
+    public List<JJVersion> JJBuildBean.completeVersioning(String query) {
         List<JJVersion> suggestions = new ArrayList<JJVersion>();
         for (JJVersion jJVersion : jJVersionService.findAllJJVersions()) {
             String jJVersionStr = String.valueOf(jJVersion.getName() +  " "  + jJVersion.getDescription() +  " "  + jJVersion.getCreationDate() +  " "  + jJVersion.getUpdatedDate());

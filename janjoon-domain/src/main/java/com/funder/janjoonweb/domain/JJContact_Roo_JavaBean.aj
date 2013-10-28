@@ -5,9 +5,7 @@ package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJJob;
-import com.funder.janjoonweb.domain.JJProduct;
-import com.funder.janjoonweb.domain.JJProject;
-import com.funder.janjoonweb.domain.JJRight;
+import com.funder.janjoonweb.domain.JJPermission;
 import java.util.Date;
 import java.util.Set;
 
@@ -77,30 +75,6 @@ privileged aspect JJContact_Roo_JavaBean {
         this.job = job;
     }
     
-    public Set<JJRight> JJContact.getRights() {
-        return this.rights;
-    }
-    
-    public void JJContact.setRights(Set<JJRight> rights) {
-        this.rights = rights;
-    }
-    
-    public Set<JJProduct> JJContact.getProducts() {
-        return this.products;
-    }
-    
-    public void JJContact.setProducts(Set<JJProduct> products) {
-        this.products = products;
-    }
-    
-    public Set<JJProject> JJContact.getProjects() {
-        return this.projects;
-    }
-    
-    public void JJContact.setProjects(Set<JJProject> projects) {
-        this.projects = projects;
-    }
-    
     public Boolean JJContact.getAccountNonExpired() {
         return this.accountNonExpired;
     }
@@ -123,6 +97,14 @@ privileged aspect JJContact_Roo_JavaBean {
     
     public void JJContact.setAccountNonLocked(Boolean accountNonLocked) {
         this.accountNonLocked = accountNonLocked;
+    }
+    
+    public Set<JJPermission> JJContact.getPermissions() {
+        return this.permissions;
+    }
+    
+    public void JJContact.setPermissions(Set<JJPermission> permissions) {
+        this.permissions = permissions;
     }
     
 }

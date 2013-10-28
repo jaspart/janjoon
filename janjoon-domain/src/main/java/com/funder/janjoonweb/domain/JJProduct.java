@@ -16,13 +16,14 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaEntity(sequenceName = "JJProductSEQ")
 public class JJProduct extends JJAbstractEntity {
 
-    @NotNull
-    @Size(max = 25)
-    private String extname;
+	@NotNull
+	@Size(max = 25)
+	private String extname;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
-    private Set<JJVersion> jjversions = new HashSet<JJVersion>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
+	private Set<JJVersion> versions = new HashSet<JJVersion>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
-    private Set<JJChapter> chapters = new HashSet<JJChapter>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
+	private Set<JJChapter> chapters = new HashSet<JJChapter>();
+
 }

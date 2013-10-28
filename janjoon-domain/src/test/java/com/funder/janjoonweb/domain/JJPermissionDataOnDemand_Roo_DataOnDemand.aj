@@ -3,10 +3,14 @@
 
 package com.funder.janjoonweb.domain;
 
+import com.funder.janjoonweb.domain.JJContactDataOnDemand;
 import com.funder.janjoonweb.domain.JJPermission;
 import com.funder.janjoonweb.domain.JJPermissionDataOnDemand;
 import com.funder.janjoonweb.domain.JJPermissionRepository;
 import com.funder.janjoonweb.domain.JJPermissionService;
+import com.funder.janjoonweb.domain.JJProductDataOnDemand;
+import com.funder.janjoonweb.domain.JJProfileDataOnDemand;
+import com.funder.janjoonweb.domain.JJProjectDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -26,6 +30,18 @@ privileged aspect JJPermissionDataOnDemand_Roo_DataOnDemand {
     private List<JJPermission> JJPermissionDataOnDemand.data;
     
     @Autowired
+    JJContactDataOnDemand JJPermissionDataOnDemand.jJContactDataOnDemand;
+    
+    @Autowired
+    JJProductDataOnDemand JJPermissionDataOnDemand.jJProductDataOnDemand;
+    
+    @Autowired
+    JJProfileDataOnDemand JJPermissionDataOnDemand.jJProfileDataOnDemand;
+    
+    @Autowired
+    JJProjectDataOnDemand JJPermissionDataOnDemand.jJProjectDataOnDemand;
+    
+    @Autowired
     JJPermissionService JJPermissionDataOnDemand.jJPermissionService;
     
     @Autowired
@@ -33,16 +49,16 @@ privileged aspect JJPermissionDataOnDemand_Roo_DataOnDemand {
     
     public JJPermission JJPermissionDataOnDemand.getNewTransientJJPermission(int index) {
         JJPermission obj = new JJPermission();
-        setPermission(obj, index);
+        setName(obj, index);
         return obj;
     }
     
-    public void JJPermissionDataOnDemand.setPermission(JJPermission obj, int index) {
-        String permission = "permission_" + index;
-        if (permission.length() > 25) {
-            permission = permission.substring(0, 25);
+    public void JJPermissionDataOnDemand.setName(JJPermission obj, int index) {
+        String name = "name_" + index;
+        if (name.length() > 25) {
+            name = name.substring(0, 25);
         }
-        obj.setPermission(permission);
+        obj.setName(name);
     }
     
     public JJPermission JJPermissionDataOnDemand.getSpecificJJPermission(int index) {

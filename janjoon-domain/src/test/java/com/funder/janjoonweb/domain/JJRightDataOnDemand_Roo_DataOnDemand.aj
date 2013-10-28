@@ -4,10 +4,7 @@
 package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJCategoryDataOnDemand;
-import com.funder.janjoonweb.domain.JJPermission;
-import com.funder.janjoonweb.domain.JJPermissionDataOnDemand;
-import com.funder.janjoonweb.domain.JJProductDataOnDemand;
-import com.funder.janjoonweb.domain.JJProjectDataOnDemand;
+import com.funder.janjoonweb.domain.JJProfileDataOnDemand;
 import com.funder.janjoonweb.domain.JJRight;
 import com.funder.janjoonweb.domain.JJRightDataOnDemand;
 import com.funder.janjoonweb.domain.JJRightRepository;
@@ -34,13 +31,7 @@ privileged aspect JJRightDataOnDemand_Roo_DataOnDemand {
     JJCategoryDataOnDemand JJRightDataOnDemand.jJCategoryDataOnDemand;
     
     @Autowired
-    JJPermissionDataOnDemand JJRightDataOnDemand.jJPermissionDataOnDemand;
-    
-    @Autowired
-    JJProductDataOnDemand JJRightDataOnDemand.jJProductDataOnDemand;
-    
-    @Autowired
-    JJProjectDataOnDemand JJRightDataOnDemand.jJProjectDataOnDemand;
+    JJProfileDataOnDemand JJRightDataOnDemand.jJProfileDataOnDemand;
     
     @Autowired
     JJRightService JJRightDataOnDemand.jJRightService;
@@ -50,22 +41,19 @@ privileged aspect JJRightDataOnDemand_Roo_DataOnDemand {
     
     public JJRight JJRightDataOnDemand.getNewTransientJJRight(int index) {
         JJRight obj = new JJRight();
-        setBasic(obj, index);
-        setPermission(obj, index);
+        setObjet(obj, index);
         setR(obj, index);
         setW(obj, index);
         setX(obj, index);
         return obj;
     }
     
-    public void JJRightDataOnDemand.setBasic(JJRight obj, int index) {
-        Boolean basic = Boolean.TRUE;
-        obj.setBasic(basic);
-    }
-    
-    public void JJRightDataOnDemand.setPermission(JJRight obj, int index) {
-        JJPermission permission = jJPermissionDataOnDemand.getRandomJJPermission();
-        obj.setPermission(permission);
+    public void JJRightDataOnDemand.setObjet(JJRight obj, int index) {
+        String objet = "objet_" + index;
+        if (objet.length() > 25) {
+            objet = objet.substring(0, 25);
+        }
+        obj.setObjet(objet);
     }
     
     public void JJRightDataOnDemand.setR(JJRight obj, int index) {

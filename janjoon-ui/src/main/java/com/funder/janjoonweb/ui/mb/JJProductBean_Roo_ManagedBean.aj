@@ -68,7 +68,7 @@ privileged aspect JJProductBean_Roo_ManagedBean {
     
     private boolean JJProductBean.createDialogVisible = false;
     
-    private List<JJVersion> JJProductBean.selectedJjversions;
+    private List<JJVersion> JJProductBean.selectedVersions;
     
     private List<JJChapter> JJProductBean.selectedChapters;
     
@@ -321,21 +321,21 @@ privileged aspect JJProductBean_Roo_ManagedBean {
         extnameCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(extnameCreateInputMessage);
         
-        HtmlOutputText jjversionsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        jjversionsCreateOutput.setId("jjversionsCreateOutput");
-        jjversionsCreateOutput.setValue("Jjversions:");
-        htmlPanelGrid.getChildren().add(jjversionsCreateOutput);
+        HtmlOutputText versionsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        versionsCreateOutput.setId("versionsCreateOutput");
+        versionsCreateOutput.setValue("Versions:");
+        htmlPanelGrid.getChildren().add(versionsCreateOutput);
         
-        HtmlOutputText jjversionsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        jjversionsCreateInput.setId("jjversionsCreateInput");
-        jjversionsCreateInput.setValue("This relationship is managed from the JJVersion side");
-        htmlPanelGrid.getChildren().add(jjversionsCreateInput);
+        HtmlOutputText versionsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        versionsCreateInput.setId("versionsCreateInput");
+        versionsCreateInput.setValue("This relationship is managed from the JJVersion side");
+        htmlPanelGrid.getChildren().add(versionsCreateInput);
         
-        Message jjversionsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        jjversionsCreateInputMessage.setId("jjversionsCreateInputMessage");
-        jjversionsCreateInputMessage.setFor("jjversionsCreateInput");
-        jjversionsCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(jjversionsCreateInputMessage);
+        Message versionsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        versionsCreateInputMessage.setId("versionsCreateInputMessage");
+        versionsCreateInputMessage.setFor("versionsCreateInput");
+        versionsCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(versionsCreateInputMessage);
         
         HtmlOutputText chaptersCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         chaptersCreateOutput.setId("chaptersCreateOutput");
@@ -535,21 +535,21 @@ privileged aspect JJProductBean_Roo_ManagedBean {
         extnameEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(extnameEditInputMessage);
         
-        HtmlOutputText jjversionsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        jjversionsEditOutput.setId("jjversionsEditOutput");
-        jjversionsEditOutput.setValue("Jjversions:");
-        htmlPanelGrid.getChildren().add(jjversionsEditOutput);
+        HtmlOutputText versionsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        versionsEditOutput.setId("versionsEditOutput");
+        versionsEditOutput.setValue("Versions:");
+        htmlPanelGrid.getChildren().add(versionsEditOutput);
         
-        HtmlOutputText jjversionsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        jjversionsEditInput.setId("jjversionsEditInput");
-        jjversionsEditInput.setValue("This relationship is managed from the JJVersion side");
-        htmlPanelGrid.getChildren().add(jjversionsEditInput);
+        HtmlOutputText versionsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        versionsEditInput.setId("versionsEditInput");
+        versionsEditInput.setValue("This relationship is managed from the JJVersion side");
+        htmlPanelGrid.getChildren().add(versionsEditInput);
         
-        Message jjversionsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        jjversionsEditInputMessage.setId("jjversionsEditInputMessage");
-        jjversionsEditInputMessage.setFor("jjversionsEditInput");
-        jjversionsEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(jjversionsEditInputMessage);
+        Message versionsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        versionsEditInputMessage.setId("versionsEditInputMessage");
+        versionsEditInputMessage.setFor("versionsEditInput");
+        versionsEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(versionsEditInputMessage);
         
         HtmlOutputText chaptersEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         chaptersEditOutput.setId("chaptersEditOutput");
@@ -663,15 +663,15 @@ privileged aspect JJProductBean_Roo_ManagedBean {
         extnameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProductBean.JJProduct_.extname}", String.class));
         htmlPanelGrid.getChildren().add(extnameValue);
         
-        HtmlOutputText jjversionsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        jjversionsLabel.setId("jjversionsLabel");
-        jjversionsLabel.setValue("Jjversions:");
-        htmlPanelGrid.getChildren().add(jjversionsLabel);
+        HtmlOutputText versionsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        versionsLabel.setId("versionsLabel");
+        versionsLabel.setValue("Versions:");
+        htmlPanelGrid.getChildren().add(versionsLabel);
         
-        HtmlOutputText jjversionsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        jjversionsValue.setId("jjversionsValue");
-        jjversionsValue.setValue("This relationship is managed from the JJVersion side");
-        htmlPanelGrid.getChildren().add(jjversionsValue);
+        HtmlOutputText versionsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        versionsValue.setId("versionsValue");
+        versionsValue.setValue("This relationship is managed from the JJVersion side");
+        htmlPanelGrid.getChildren().add(versionsValue);
         
         HtmlOutputText chaptersLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         chaptersLabel.setId("chaptersLabel");
@@ -719,15 +719,15 @@ privileged aspect JJProductBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJVersion> JJProductBean.getSelectedJjversions() {
-        return selectedJjversions;
+    public List<JJVersion> JJProductBean.getSelectedVersions() {
+        return selectedVersions;
     }
     
-    public void JJProductBean.setSelectedJjversions(List<JJVersion> selectedJjversions) {
-        if (selectedJjversions != null) {
-            JJProduct_.setJjversions(new HashSet<JJVersion>(selectedJjversions));
+    public void JJProductBean.setSelectedVersions(List<JJVersion> selectedVersions) {
+        if (selectedVersions != null) {
+            JJProduct_.setVersions(new HashSet<JJVersion>(selectedVersions));
         }
-        this.selectedJjversions = selectedJjversions;
+        this.selectedVersions = selectedVersions;
     }
     
     public List<JJChapter> JJProductBean.getSelectedChapters() {
@@ -742,8 +742,8 @@ privileged aspect JJProductBean_Roo_ManagedBean {
     }
     
     public String JJProductBean.onEdit() {
-        if (JJProduct_ != null && JJProduct_.getJjversions() != null) {
-            selectedJjversions = new ArrayList<JJVersion>(JJProduct_.getJjversions());
+        if (JJProduct_ != null && JJProduct_.getVersions() != null) {
+            selectedVersions = new ArrayList<JJVersion>(JJProduct_.getVersions());
         }
         if (JJProduct_ != null && JJProduct_.getChapters() != null) {
             selectedChapters = new ArrayList<JJChapter>(JJProduct_.getChapters());
@@ -800,7 +800,7 @@ privileged aspect JJProductBean_Roo_ManagedBean {
     
     public void JJProductBean.reset() {
         JJProduct_ = null;
-        selectedJjversions = null;
+        selectedVersions = null;
         selectedChapters = null;
         createDialogVisible = false;
     }

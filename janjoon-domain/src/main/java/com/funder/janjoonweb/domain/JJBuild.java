@@ -15,7 +15,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 public class JJBuild extends JJAbstractEntity {
 
     @ManyToOne
-    private JJVersion jjversion;
+    private JJVersion versioning;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "build")
     private Set<JJMessage> messages = new HashSet<JJMessage>();

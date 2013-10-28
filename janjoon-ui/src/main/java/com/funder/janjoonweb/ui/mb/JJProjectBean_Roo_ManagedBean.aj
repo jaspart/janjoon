@@ -7,7 +7,6 @@ import com.funder.janjoonweb.domain.JJChapter;
 import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJProjectService;
-import com.funder.janjoonweb.domain.JJTask;
 import com.funder.janjoonweb.ui.mb.JJProjectBean;
 import com.funder.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
@@ -65,8 +64,6 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
     private boolean JJProjectBean.createDialogVisible = false;
     
     private List<JJChapter> JJProjectBean.selectedChapters;
-    
-    private List<JJTask> JJProjectBean.selectedTasks;
     
     @PostConstruct
     public void JJProjectBean.init() {
@@ -311,22 +308,6 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         chaptersCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(chaptersCreateInputMessage);
         
-        HtmlOutputText tasksCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        tasksCreateOutput.setId("tasksCreateOutput");
-        tasksCreateOutput.setValue("Tasks:");
-        htmlPanelGrid.getChildren().add(tasksCreateOutput);
-        
-        HtmlOutputText tasksCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        tasksCreateInput.setId("tasksCreateInput");
-        tasksCreateInput.setValue("This relationship is managed from the JJTask side");
-        htmlPanelGrid.getChildren().add(tasksCreateInput);
-        
-        Message tasksCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        tasksCreateInputMessage.setId("tasksCreateInputMessage");
-        tasksCreateInputMessage.setFor("tasksCreateInput");
-        tasksCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(tasksCreateInputMessage);
-        
         return htmlPanelGrid;
     }
     
@@ -504,22 +485,6 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         chaptersEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(chaptersEditInputMessage);
         
-        HtmlOutputText tasksEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        tasksEditOutput.setId("tasksEditOutput");
-        tasksEditOutput.setValue("Tasks:");
-        htmlPanelGrid.getChildren().add(tasksEditOutput);
-        
-        HtmlOutputText tasksEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        tasksEditInput.setId("tasksEditInput");
-        tasksEditInput.setValue("This relationship is managed from the JJTask side");
-        htmlPanelGrid.getChildren().add(tasksEditInput);
-        
-        Message tasksEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        tasksEditInputMessage.setId("tasksEditInputMessage");
-        tasksEditInputMessage.setFor("tasksEditInput");
-        tasksEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(tasksEditInputMessage);
-        
         return htmlPanelGrid;
     }
     
@@ -616,16 +581,6 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         chaptersValue.setValue("This relationship is managed from the JJChapter side");
         htmlPanelGrid.getChildren().add(chaptersValue);
         
-        HtmlOutputText tasksLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        tasksLabel.setId("tasksLabel");
-        tasksLabel.setValue("Tasks:");
-        htmlPanelGrid.getChildren().add(tasksLabel);
-        
-        HtmlOutputText tasksValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        tasksValue.setId("tasksValue");
-        tasksValue.setValue("This relationship is managed from the JJTask side");
-        htmlPanelGrid.getChildren().add(tasksValue);
-        
         return htmlPanelGrid;
     }
     
@@ -673,23 +628,9 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         this.selectedChapters = selectedChapters;
     }
     
-    public List<JJTask> JJProjectBean.getSelectedTasks() {
-        return selectedTasks;
-    }
-    
-    public void JJProjectBean.setSelectedTasks(List<JJTask> selectedTasks) {
-        if (selectedTasks != null) {
-            JJProject_.setTasks(new HashSet<JJTask>(selectedTasks));
-        }
-        this.selectedTasks = selectedTasks;
-    }
-    
     public String JJProjectBean.onEdit() {
         if (JJProject_ != null && JJProject_.getChapters() != null) {
             selectedChapters = new ArrayList<JJChapter>(JJProject_.getChapters());
-        }
-        if (JJProject_ != null && JJProject_.getTasks() != null) {
-            selectedTasks = new ArrayList<JJTask>(JJProject_.getTasks());
         }
         return null;
     }
@@ -744,7 +685,6 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
     public void JJProjectBean.reset() {
         JJProject_ = null;
         selectedChapters = null;
-        selectedTasks = null;
         createDialogVisible = false;
     }
     

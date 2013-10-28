@@ -14,6 +14,8 @@ import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJRequirementService;
 import com.funder.janjoonweb.domain.JJTask;
 import com.funder.janjoonweb.domain.JJTaskService;
+import com.funder.janjoonweb.domain.JJTestcase;
+import com.funder.janjoonweb.domain.JJTestcaseService;
 import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.domain.JJVersionService;
 import com.funder.janjoonweb.ui.mb.JJTaskBean;
@@ -21,6 +23,7 @@ import com.funder.janjoonweb.ui.mb.converter.JJBugConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJProjectConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter;
+import com.funder.janjoonweb.ui.mb.converter.JJTestcaseConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJVersionConverter;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
@@ -74,6 +77,9 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
     @Autowired
     JJRequirementService JJTaskBean.jJRequirementService;
     
+    @Autowired
+    JJTestcaseService JJTaskBean.jJTestcaseService;
+    
     private String JJTaskBean.name = "JJTasks";
     
     private JJTask JJTaskBean.JJTask_;
@@ -92,8 +98,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
     
     private boolean JJTaskBean.createDialogVisible = false;
     
-    private List<JJContact> JJTaskBean.selectedAssignedTos;
-    
     private List<JJMessage> JJTaskBean.selectedMessages;
     
     @PostConstruct
@@ -103,7 +107,7 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         columns.add("description");
         columns.add("creationDate");
         columns.add("updatedDate");
-        columns.add("startDate");
+        columns.add("startDatePlanned");
     }
     
     public String JJTaskBean.getName() {
@@ -348,90 +352,231 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         projectCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(projectCreateInputMessage);
         
-        OutputLabel startDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        startDateCreateOutput.setFor("startDateCreateInput");
-        startDateCreateOutput.setId("startDateCreateOutput");
-        startDateCreateOutput.setValue("Start Date:");
-        htmlPanelGrid.getChildren().add(startDateCreateOutput);
+        OutputLabel startDatePlannedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        startDatePlannedCreateOutput.setFor("startDatePlannedCreateInput");
+        startDatePlannedCreateOutput.setId("startDatePlannedCreateOutput");
+        startDatePlannedCreateOutput.setValue("Start Date Planned:");
+        htmlPanelGrid.getChildren().add(startDatePlannedCreateOutput);
         
-        Calendar startDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
-        startDateCreateInput.setId("startDateCreateInput");
-        startDateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.startDate}", Date.class));
-        startDateCreateInput.setNavigator(true);
-        startDateCreateInput.setEffect("slideDown");
-        startDateCreateInput.setPattern("dd/MM/yyyy");
-        startDateCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(startDateCreateInput);
+        Calendar startDatePlannedCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        startDatePlannedCreateInput.setId("startDatePlannedCreateInput");
+        startDatePlannedCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.startDatePlanned}", Date.class));
+        startDatePlannedCreateInput.setNavigator(true);
+        startDatePlannedCreateInput.setEffect("slideDown");
+        startDatePlannedCreateInput.setPattern("dd/MM/yyyy");
+        startDatePlannedCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(startDatePlannedCreateInput);
         
-        Message startDateCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        startDateCreateInputMessage.setId("startDateCreateInputMessage");
-        startDateCreateInputMessage.setFor("startDateCreateInput");
-        startDateCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(startDateCreateInputMessage);
+        Message startDatePlannedCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        startDatePlannedCreateInputMessage.setId("startDatePlannedCreateInputMessage");
+        startDatePlannedCreateInputMessage.setFor("startDatePlannedCreateInput");
+        startDatePlannedCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(startDatePlannedCreateInputMessage);
         
-        OutputLabel endDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        endDateCreateOutput.setFor("endDateCreateInput");
-        endDateCreateOutput.setId("endDateCreateOutput");
-        endDateCreateOutput.setValue("End Date:");
-        htmlPanelGrid.getChildren().add(endDateCreateOutput);
+        OutputLabel endDatePlannedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        endDatePlannedCreateOutput.setFor("endDatePlannedCreateInput");
+        endDatePlannedCreateOutput.setId("endDatePlannedCreateOutput");
+        endDatePlannedCreateOutput.setValue("End Date Planned:");
+        htmlPanelGrid.getChildren().add(endDatePlannedCreateOutput);
         
-        Calendar endDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
-        endDateCreateInput.setId("endDateCreateInput");
-        endDateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.endDate}", Date.class));
-        endDateCreateInput.setNavigator(true);
-        endDateCreateInput.setEffect("slideDown");
-        endDateCreateInput.setPattern("dd/MM/yyyy");
-        endDateCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(endDateCreateInput);
+        Calendar endDatePlannedCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        endDatePlannedCreateInput.setId("endDatePlannedCreateInput");
+        endDatePlannedCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.endDatePlanned}", Date.class));
+        endDatePlannedCreateInput.setNavigator(true);
+        endDatePlannedCreateInput.setEffect("slideDown");
+        endDatePlannedCreateInput.setPattern("dd/MM/yyyy");
+        endDatePlannedCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(endDatePlannedCreateInput);
         
-        Message endDateCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        endDateCreateInputMessage.setId("endDateCreateInputMessage");
-        endDateCreateInputMessage.setFor("endDateCreateInput");
-        endDateCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(endDateCreateInputMessage);
+        Message endDatePlannedCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        endDatePlannedCreateInputMessage.setId("endDatePlannedCreateInputMessage");
+        endDatePlannedCreateInputMessage.setFor("endDatePlannedCreateInput");
+        endDatePlannedCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(endDatePlannedCreateInputMessage);
         
-        OutputLabel workloadCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        workloadCreateOutput.setFor("workloadCreateInput");
-        workloadCreateOutput.setId("workloadCreateOutput");
-        workloadCreateOutput.setValue("Workload:");
-        htmlPanelGrid.getChildren().add(workloadCreateOutput);
+        OutputLabel workloadPlannedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        workloadPlannedCreateOutput.setFor("workloadPlannedCreateInput");
+        workloadPlannedCreateOutput.setId("workloadPlannedCreateOutput");
+        workloadPlannedCreateOutput.setValue("Workload Planned:");
+        htmlPanelGrid.getChildren().add(workloadPlannedCreateOutput);
         
-        Spinner workloadCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
-        workloadCreateInput.setId("workloadCreateInput");
-        workloadCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workload}", Integer.class));
-        workloadCreateInput.setRequired(false);
+        Spinner workloadPlannedCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        workloadPlannedCreateInput.setId("workloadPlannedCreateInput");
+        workloadPlannedCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadPlanned}", Integer.class));
+        workloadPlannedCreateInput.setRequired(false);
         
-        htmlPanelGrid.getChildren().add(workloadCreateInput);
+        htmlPanelGrid.getChildren().add(workloadPlannedCreateInput);
         
-        Message workloadCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        workloadCreateInputMessage.setId("workloadCreateInputMessage");
-        workloadCreateInputMessage.setFor("workloadCreateInput");
-        workloadCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(workloadCreateInputMessage);
+        Message workloadPlannedCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        workloadPlannedCreateInputMessage.setId("workloadPlannedCreateInputMessage");
+        workloadPlannedCreateInputMessage.setFor("workloadPlannedCreateInput");
+        workloadPlannedCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(workloadPlannedCreateInputMessage);
         
-        OutputLabel jjversionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        jjversionCreateOutput.setFor("jjversionCreateInput");
-        jjversionCreateOutput.setId("jjversionCreateOutput");
-        jjversionCreateOutput.setValue("Jjversion:");
-        htmlPanelGrid.getChildren().add(jjversionCreateOutput);
+        OutputLabel startDateRevisedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        startDateRevisedCreateOutput.setFor("startDateRevisedCreateInput");
+        startDateRevisedCreateOutput.setId("startDateRevisedCreateOutput");
+        startDateRevisedCreateOutput.setValue("Start Date Revised:");
+        htmlPanelGrid.getChildren().add(startDateRevisedCreateOutput);
         
-        AutoComplete jjversionCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        jjversionCreateInput.setId("jjversionCreateInput");
-        jjversionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.jjversion}", JJVersion.class));
-        jjversionCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeJjversion}", List.class, new Class[] { String.class }));
-        jjversionCreateInput.setDropdown(true);
-        jjversionCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jjversion", String.class));
-        jjversionCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jjversion.name} #{jjversion.description} #{jjversion.creationDate} #{jjversion.updatedDate}", String.class));
-        jjversionCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jjversion}", JJVersion.class));
-        jjversionCreateInput.setConverter(new JJVersionConverter());
-        jjversionCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(jjversionCreateInput);
+        Calendar startDateRevisedCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        startDateRevisedCreateInput.setId("startDateRevisedCreateInput");
+        startDateRevisedCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.startDateRevised}", Date.class));
+        startDateRevisedCreateInput.setNavigator(true);
+        startDateRevisedCreateInput.setEffect("slideDown");
+        startDateRevisedCreateInput.setPattern("dd/MM/yyyy");
+        startDateRevisedCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(startDateRevisedCreateInput);
         
-        Message jjversionCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        jjversionCreateInputMessage.setId("jjversionCreateInputMessage");
-        jjversionCreateInputMessage.setFor("jjversionCreateInput");
-        jjversionCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(jjversionCreateInputMessage);
+        Message startDateRevisedCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        startDateRevisedCreateInputMessage.setId("startDateRevisedCreateInputMessage");
+        startDateRevisedCreateInputMessage.setFor("startDateRevisedCreateInput");
+        startDateRevisedCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(startDateRevisedCreateInputMessage);
+        
+        OutputLabel endDateRevisedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        endDateRevisedCreateOutput.setFor("endDateRevisedCreateInput");
+        endDateRevisedCreateOutput.setId("endDateRevisedCreateOutput");
+        endDateRevisedCreateOutput.setValue("End Date Revised:");
+        htmlPanelGrid.getChildren().add(endDateRevisedCreateOutput);
+        
+        Calendar endDateRevisedCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        endDateRevisedCreateInput.setId("endDateRevisedCreateInput");
+        endDateRevisedCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.endDateRevised}", Date.class));
+        endDateRevisedCreateInput.setNavigator(true);
+        endDateRevisedCreateInput.setEffect("slideDown");
+        endDateRevisedCreateInput.setPattern("dd/MM/yyyy");
+        endDateRevisedCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(endDateRevisedCreateInput);
+        
+        Message endDateRevisedCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        endDateRevisedCreateInputMessage.setId("endDateRevisedCreateInputMessage");
+        endDateRevisedCreateInputMessage.setFor("endDateRevisedCreateInput");
+        endDateRevisedCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(endDateRevisedCreateInputMessage);
+        
+        OutputLabel workloadRevisedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        workloadRevisedCreateOutput.setFor("workloadRevisedCreateInput");
+        workloadRevisedCreateOutput.setId("workloadRevisedCreateOutput");
+        workloadRevisedCreateOutput.setValue("Workload Revised:");
+        htmlPanelGrid.getChildren().add(workloadRevisedCreateOutput);
+        
+        Spinner workloadRevisedCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        workloadRevisedCreateInput.setId("workloadRevisedCreateInput");
+        workloadRevisedCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadRevised}", Integer.class));
+        workloadRevisedCreateInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(workloadRevisedCreateInput);
+        
+        Message workloadRevisedCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        workloadRevisedCreateInputMessage.setId("workloadRevisedCreateInputMessage");
+        workloadRevisedCreateInputMessage.setFor("workloadRevisedCreateInput");
+        workloadRevisedCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(workloadRevisedCreateInputMessage);
+        
+        OutputLabel startDateRealCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        startDateRealCreateOutput.setFor("startDateRealCreateInput");
+        startDateRealCreateOutput.setId("startDateRealCreateOutput");
+        startDateRealCreateOutput.setValue("Start Date Real:");
+        htmlPanelGrid.getChildren().add(startDateRealCreateOutput);
+        
+        Calendar startDateRealCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        startDateRealCreateInput.setId("startDateRealCreateInput");
+        startDateRealCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.startDateReal}", Date.class));
+        startDateRealCreateInput.setNavigator(true);
+        startDateRealCreateInput.setEffect("slideDown");
+        startDateRealCreateInput.setPattern("dd/MM/yyyy");
+        startDateRealCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(startDateRealCreateInput);
+        
+        Message startDateRealCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        startDateRealCreateInputMessage.setId("startDateRealCreateInputMessage");
+        startDateRealCreateInputMessage.setFor("startDateRealCreateInput");
+        startDateRealCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(startDateRealCreateInputMessage);
+        
+        OutputLabel endDateRealCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        endDateRealCreateOutput.setFor("endDateRealCreateInput");
+        endDateRealCreateOutput.setId("endDateRealCreateOutput");
+        endDateRealCreateOutput.setValue("End Date Real:");
+        htmlPanelGrid.getChildren().add(endDateRealCreateOutput);
+        
+        Calendar endDateRealCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        endDateRealCreateInput.setId("endDateRealCreateInput");
+        endDateRealCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.endDateReal}", Date.class));
+        endDateRealCreateInput.setNavigator(true);
+        endDateRealCreateInput.setEffect("slideDown");
+        endDateRealCreateInput.setPattern("dd/MM/yyyy");
+        endDateRealCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(endDateRealCreateInput);
+        
+        Message endDateRealCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        endDateRealCreateInputMessage.setId("endDateRealCreateInputMessage");
+        endDateRealCreateInputMessage.setFor("endDateRealCreateInput");
+        endDateRealCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(endDateRealCreateInputMessage);
+        
+        OutputLabel workloadRealCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        workloadRealCreateOutput.setFor("workloadRealCreateInput");
+        workloadRealCreateOutput.setId("workloadRealCreateOutput");
+        workloadRealCreateOutput.setValue("Workload Real:");
+        htmlPanelGrid.getChildren().add(workloadRealCreateOutput);
+        
+        Spinner workloadRealCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        workloadRealCreateInput.setId("workloadRealCreateInput");
+        workloadRealCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadReal}", Integer.class));
+        workloadRealCreateInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(workloadRealCreateInput);
+        
+        Message workloadRealCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        workloadRealCreateInputMessage.setId("workloadRealCreateInputMessage");
+        workloadRealCreateInputMessage.setFor("workloadRealCreateInput");
+        workloadRealCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(workloadRealCreateInputMessage);
+        
+        OutputLabel consumedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        consumedCreateOutput.setFor("consumedCreateInput");
+        consumedCreateOutput.setId("consumedCreateOutput");
+        consumedCreateOutput.setValue("Consumed:");
+        htmlPanelGrid.getChildren().add(consumedCreateOutput);
+        
+        Spinner consumedCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        consumedCreateInput.setId("consumedCreateInput");
+        consumedCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.consumed}", Integer.class));
+        consumedCreateInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(consumedCreateInput);
+        
+        Message consumedCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        consumedCreateInputMessage.setId("consumedCreateInputMessage");
+        consumedCreateInputMessage.setFor("consumedCreateInput");
+        consumedCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(consumedCreateInputMessage);
+        
+        OutputLabel versioningCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        versioningCreateOutput.setFor("versioningCreateInput");
+        versioningCreateOutput.setId("versioningCreateOutput");
+        versioningCreateOutput.setValue("Versioning:");
+        htmlPanelGrid.getChildren().add(versioningCreateOutput);
+        
+        AutoComplete versioningCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        versioningCreateInput.setId("versioningCreateInput");
+        versioningCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.versioning}", JJVersion.class));
+        versioningCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeVersioning}", List.class, new Class[] { String.class }));
+        versioningCreateInput.setDropdown(true);
+        versioningCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "versioning", String.class));
+        versioningCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{versioning.name} #{versioning.description} #{versioning.creationDate} #{versioning.updatedDate}", String.class));
+        versioningCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{versioning}", JJVersion.class));
+        versioningCreateInput.setConverter(new JJVersionConverter());
+        versioningCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(versioningCreateInput);
+        
+        Message versioningCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        versioningCreateInputMessage.setId("versioningCreateInputMessage");
+        versioningCreateInputMessage.setFor("versioningCreateInput");
+        versioningCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(versioningCreateInputMessage);
         
         OutputLabel bugCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         bugCreateOutput.setFor("bugCreateInput");
@@ -481,21 +626,53 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         requirementCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementCreateInputMessage);
         
-        HtmlOutputText assignedTosCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        assignedTosCreateOutput.setId("assignedTosCreateOutput");
-        assignedTosCreateOutput.setValue("Assigned Tos:");
-        htmlPanelGrid.getChildren().add(assignedTosCreateOutput);
+        OutputLabel testcaseCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        testcaseCreateOutput.setFor("testcaseCreateInput");
+        testcaseCreateOutput.setId("testcaseCreateOutput");
+        testcaseCreateOutput.setValue("Testcase:");
+        htmlPanelGrid.getChildren().add(testcaseCreateOutput);
         
-        HtmlOutputText assignedTosCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        assignedTosCreateInput.setId("assignedTosCreateInput");
-        assignedTosCreateInput.setValue("This relationship is managed from the JJContact side");
-        htmlPanelGrid.getChildren().add(assignedTosCreateInput);
+        AutoComplete testcaseCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        testcaseCreateInput.setId("testcaseCreateInput");
+        testcaseCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.testcase}", JJTestcase.class));
+        testcaseCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeTestcase}", List.class, new Class[] { String.class }));
+        testcaseCreateInput.setDropdown(true);
+        testcaseCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "testcase", String.class));
+        testcaseCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{testcase.name} #{testcase.description} #{testcase.creationDate} #{testcase.updatedDate}", String.class));
+        testcaseCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{testcase}", JJTestcase.class));
+        testcaseCreateInput.setConverter(new JJTestcaseConverter());
+        testcaseCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(testcaseCreateInput);
         
-        Message assignedTosCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        assignedTosCreateInputMessage.setId("assignedTosCreateInputMessage");
-        assignedTosCreateInputMessage.setFor("assignedTosCreateInput");
-        assignedTosCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(assignedTosCreateInputMessage);
+        Message testcaseCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcaseCreateInputMessage.setId("testcaseCreateInputMessage");
+        testcaseCreateInputMessage.setFor("testcaseCreateInput");
+        testcaseCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcaseCreateInputMessage);
+        
+        OutputLabel assignedToCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        assignedToCreateOutput.setFor("assignedToCreateInput");
+        assignedToCreateOutput.setId("assignedToCreateOutput");
+        assignedToCreateOutput.setValue("Assigned To:");
+        htmlPanelGrid.getChildren().add(assignedToCreateOutput);
+        
+        AutoComplete assignedToCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        assignedToCreateInput.setId("assignedToCreateInput");
+        assignedToCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.assignedTo}", JJContact.class));
+        assignedToCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeAssignedTo}", List.class, new Class[] { String.class }));
+        assignedToCreateInput.setDropdown(true);
+        assignedToCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "assignedTo", String.class));
+        assignedToCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{assignedTo.name} #{assignedTo.description} #{assignedTo.creationDate} #{assignedTo.updatedDate}", String.class));
+        assignedToCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{assignedTo}", JJContact.class));
+        assignedToCreateInput.setConverter(new JJContactConverter());
+        assignedToCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(assignedToCreateInput);
+        
+        Message assignedToCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        assignedToCreateInputMessage.setId("assignedToCreateInputMessage");
+        assignedToCreateInputMessage.setFor("assignedToCreateInput");
+        assignedToCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(assignedToCreateInputMessage);
         
         HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesCreateOutput.setId("messagesCreateOutput");
@@ -512,6 +689,24 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         messagesCreateInputMessage.setFor("messagesCreateInput");
         messagesCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(messagesCreateInputMessage);
+        
+        OutputLabel isCompletedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        isCompletedCreateOutput.setFor("isCompletedCreateInput");
+        isCompletedCreateOutput.setId("isCompletedCreateOutput");
+        isCompletedCreateOutput.setValue("Is Completed:");
+        htmlPanelGrid.getChildren().add(isCompletedCreateOutput);
+        
+        SelectBooleanCheckbox isCompletedCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        isCompletedCreateInput.setId("isCompletedCreateInput");
+        isCompletedCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.isCompleted}", Boolean.class));
+        isCompletedCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(isCompletedCreateInput);
+        
+        Message isCompletedCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        isCompletedCreateInputMessage.setId("isCompletedCreateInputMessage");
+        isCompletedCreateInputMessage.setFor("isCompletedCreateInput");
+        isCompletedCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(isCompletedCreateInputMessage);
         
         return htmlPanelGrid;
     }
@@ -698,90 +893,231 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         projectEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(projectEditInputMessage);
         
-        OutputLabel startDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        startDateEditOutput.setFor("startDateEditInput");
-        startDateEditOutput.setId("startDateEditOutput");
-        startDateEditOutput.setValue("Start Date:");
-        htmlPanelGrid.getChildren().add(startDateEditOutput);
+        OutputLabel startDatePlannedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        startDatePlannedEditOutput.setFor("startDatePlannedEditInput");
+        startDatePlannedEditOutput.setId("startDatePlannedEditOutput");
+        startDatePlannedEditOutput.setValue("Start Date Planned:");
+        htmlPanelGrid.getChildren().add(startDatePlannedEditOutput);
         
-        Calendar startDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
-        startDateEditInput.setId("startDateEditInput");
-        startDateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.startDate}", Date.class));
-        startDateEditInput.setNavigator(true);
-        startDateEditInput.setEffect("slideDown");
-        startDateEditInput.setPattern("dd/MM/yyyy");
-        startDateEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(startDateEditInput);
+        Calendar startDatePlannedEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        startDatePlannedEditInput.setId("startDatePlannedEditInput");
+        startDatePlannedEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.startDatePlanned}", Date.class));
+        startDatePlannedEditInput.setNavigator(true);
+        startDatePlannedEditInput.setEffect("slideDown");
+        startDatePlannedEditInput.setPattern("dd/MM/yyyy");
+        startDatePlannedEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(startDatePlannedEditInput);
         
-        Message startDateEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        startDateEditInputMessage.setId("startDateEditInputMessage");
-        startDateEditInputMessage.setFor("startDateEditInput");
-        startDateEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(startDateEditInputMessage);
+        Message startDatePlannedEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        startDatePlannedEditInputMessage.setId("startDatePlannedEditInputMessage");
+        startDatePlannedEditInputMessage.setFor("startDatePlannedEditInput");
+        startDatePlannedEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(startDatePlannedEditInputMessage);
         
-        OutputLabel endDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        endDateEditOutput.setFor("endDateEditInput");
-        endDateEditOutput.setId("endDateEditOutput");
-        endDateEditOutput.setValue("End Date:");
-        htmlPanelGrid.getChildren().add(endDateEditOutput);
+        OutputLabel endDatePlannedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        endDatePlannedEditOutput.setFor("endDatePlannedEditInput");
+        endDatePlannedEditOutput.setId("endDatePlannedEditOutput");
+        endDatePlannedEditOutput.setValue("End Date Planned:");
+        htmlPanelGrid.getChildren().add(endDatePlannedEditOutput);
         
-        Calendar endDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
-        endDateEditInput.setId("endDateEditInput");
-        endDateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.endDate}", Date.class));
-        endDateEditInput.setNavigator(true);
-        endDateEditInput.setEffect("slideDown");
-        endDateEditInput.setPattern("dd/MM/yyyy");
-        endDateEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(endDateEditInput);
+        Calendar endDatePlannedEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        endDatePlannedEditInput.setId("endDatePlannedEditInput");
+        endDatePlannedEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.endDatePlanned}", Date.class));
+        endDatePlannedEditInput.setNavigator(true);
+        endDatePlannedEditInput.setEffect("slideDown");
+        endDatePlannedEditInput.setPattern("dd/MM/yyyy");
+        endDatePlannedEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(endDatePlannedEditInput);
         
-        Message endDateEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        endDateEditInputMessage.setId("endDateEditInputMessage");
-        endDateEditInputMessage.setFor("endDateEditInput");
-        endDateEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(endDateEditInputMessage);
+        Message endDatePlannedEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        endDatePlannedEditInputMessage.setId("endDatePlannedEditInputMessage");
+        endDatePlannedEditInputMessage.setFor("endDatePlannedEditInput");
+        endDatePlannedEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(endDatePlannedEditInputMessage);
         
-        OutputLabel workloadEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        workloadEditOutput.setFor("workloadEditInput");
-        workloadEditOutput.setId("workloadEditOutput");
-        workloadEditOutput.setValue("Workload:");
-        htmlPanelGrid.getChildren().add(workloadEditOutput);
+        OutputLabel workloadPlannedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        workloadPlannedEditOutput.setFor("workloadPlannedEditInput");
+        workloadPlannedEditOutput.setId("workloadPlannedEditOutput");
+        workloadPlannedEditOutput.setValue("Workload Planned:");
+        htmlPanelGrid.getChildren().add(workloadPlannedEditOutput);
         
-        Spinner workloadEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
-        workloadEditInput.setId("workloadEditInput");
-        workloadEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workload}", Integer.class));
-        workloadEditInput.setRequired(false);
+        Spinner workloadPlannedEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        workloadPlannedEditInput.setId("workloadPlannedEditInput");
+        workloadPlannedEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadPlanned}", Integer.class));
+        workloadPlannedEditInput.setRequired(false);
         
-        htmlPanelGrid.getChildren().add(workloadEditInput);
+        htmlPanelGrid.getChildren().add(workloadPlannedEditInput);
         
-        Message workloadEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        workloadEditInputMessage.setId("workloadEditInputMessage");
-        workloadEditInputMessage.setFor("workloadEditInput");
-        workloadEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(workloadEditInputMessage);
+        Message workloadPlannedEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        workloadPlannedEditInputMessage.setId("workloadPlannedEditInputMessage");
+        workloadPlannedEditInputMessage.setFor("workloadPlannedEditInput");
+        workloadPlannedEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(workloadPlannedEditInputMessage);
         
-        OutputLabel jjversionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        jjversionEditOutput.setFor("jjversionEditInput");
-        jjversionEditOutput.setId("jjversionEditOutput");
-        jjversionEditOutput.setValue("Jjversion:");
-        htmlPanelGrid.getChildren().add(jjversionEditOutput);
+        OutputLabel startDateRevisedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        startDateRevisedEditOutput.setFor("startDateRevisedEditInput");
+        startDateRevisedEditOutput.setId("startDateRevisedEditOutput");
+        startDateRevisedEditOutput.setValue("Start Date Revised:");
+        htmlPanelGrid.getChildren().add(startDateRevisedEditOutput);
         
-        AutoComplete jjversionEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        jjversionEditInput.setId("jjversionEditInput");
-        jjversionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.jjversion}", JJVersion.class));
-        jjversionEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeJjversion}", List.class, new Class[] { String.class }));
-        jjversionEditInput.setDropdown(true);
-        jjversionEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jjversion", String.class));
-        jjversionEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jjversion.name} #{jjversion.description} #{jjversion.creationDate} #{jjversion.updatedDate}", String.class));
-        jjversionEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jjversion}", JJVersion.class));
-        jjversionEditInput.setConverter(new JJVersionConverter());
-        jjversionEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(jjversionEditInput);
+        Calendar startDateRevisedEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        startDateRevisedEditInput.setId("startDateRevisedEditInput");
+        startDateRevisedEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.startDateRevised}", Date.class));
+        startDateRevisedEditInput.setNavigator(true);
+        startDateRevisedEditInput.setEffect("slideDown");
+        startDateRevisedEditInput.setPattern("dd/MM/yyyy");
+        startDateRevisedEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(startDateRevisedEditInput);
         
-        Message jjversionEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        jjversionEditInputMessage.setId("jjversionEditInputMessage");
-        jjversionEditInputMessage.setFor("jjversionEditInput");
-        jjversionEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(jjversionEditInputMessage);
+        Message startDateRevisedEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        startDateRevisedEditInputMessage.setId("startDateRevisedEditInputMessage");
+        startDateRevisedEditInputMessage.setFor("startDateRevisedEditInput");
+        startDateRevisedEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(startDateRevisedEditInputMessage);
+        
+        OutputLabel endDateRevisedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        endDateRevisedEditOutput.setFor("endDateRevisedEditInput");
+        endDateRevisedEditOutput.setId("endDateRevisedEditOutput");
+        endDateRevisedEditOutput.setValue("End Date Revised:");
+        htmlPanelGrid.getChildren().add(endDateRevisedEditOutput);
+        
+        Calendar endDateRevisedEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        endDateRevisedEditInput.setId("endDateRevisedEditInput");
+        endDateRevisedEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.endDateRevised}", Date.class));
+        endDateRevisedEditInput.setNavigator(true);
+        endDateRevisedEditInput.setEffect("slideDown");
+        endDateRevisedEditInput.setPattern("dd/MM/yyyy");
+        endDateRevisedEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(endDateRevisedEditInput);
+        
+        Message endDateRevisedEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        endDateRevisedEditInputMessage.setId("endDateRevisedEditInputMessage");
+        endDateRevisedEditInputMessage.setFor("endDateRevisedEditInput");
+        endDateRevisedEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(endDateRevisedEditInputMessage);
+        
+        OutputLabel workloadRevisedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        workloadRevisedEditOutput.setFor("workloadRevisedEditInput");
+        workloadRevisedEditOutput.setId("workloadRevisedEditOutput");
+        workloadRevisedEditOutput.setValue("Workload Revised:");
+        htmlPanelGrid.getChildren().add(workloadRevisedEditOutput);
+        
+        Spinner workloadRevisedEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        workloadRevisedEditInput.setId("workloadRevisedEditInput");
+        workloadRevisedEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadRevised}", Integer.class));
+        workloadRevisedEditInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(workloadRevisedEditInput);
+        
+        Message workloadRevisedEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        workloadRevisedEditInputMessage.setId("workloadRevisedEditInputMessage");
+        workloadRevisedEditInputMessage.setFor("workloadRevisedEditInput");
+        workloadRevisedEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(workloadRevisedEditInputMessage);
+        
+        OutputLabel startDateRealEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        startDateRealEditOutput.setFor("startDateRealEditInput");
+        startDateRealEditOutput.setId("startDateRealEditOutput");
+        startDateRealEditOutput.setValue("Start Date Real:");
+        htmlPanelGrid.getChildren().add(startDateRealEditOutput);
+        
+        Calendar startDateRealEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        startDateRealEditInput.setId("startDateRealEditInput");
+        startDateRealEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.startDateReal}", Date.class));
+        startDateRealEditInput.setNavigator(true);
+        startDateRealEditInput.setEffect("slideDown");
+        startDateRealEditInput.setPattern("dd/MM/yyyy");
+        startDateRealEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(startDateRealEditInput);
+        
+        Message startDateRealEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        startDateRealEditInputMessage.setId("startDateRealEditInputMessage");
+        startDateRealEditInputMessage.setFor("startDateRealEditInput");
+        startDateRealEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(startDateRealEditInputMessage);
+        
+        OutputLabel endDateRealEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        endDateRealEditOutput.setFor("endDateRealEditInput");
+        endDateRealEditOutput.setId("endDateRealEditOutput");
+        endDateRealEditOutput.setValue("End Date Real:");
+        htmlPanelGrid.getChildren().add(endDateRealEditOutput);
+        
+        Calendar endDateRealEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        endDateRealEditInput.setId("endDateRealEditInput");
+        endDateRealEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.endDateReal}", Date.class));
+        endDateRealEditInput.setNavigator(true);
+        endDateRealEditInput.setEffect("slideDown");
+        endDateRealEditInput.setPattern("dd/MM/yyyy");
+        endDateRealEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(endDateRealEditInput);
+        
+        Message endDateRealEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        endDateRealEditInputMessage.setId("endDateRealEditInputMessage");
+        endDateRealEditInputMessage.setFor("endDateRealEditInput");
+        endDateRealEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(endDateRealEditInputMessage);
+        
+        OutputLabel workloadRealEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        workloadRealEditOutput.setFor("workloadRealEditInput");
+        workloadRealEditOutput.setId("workloadRealEditOutput");
+        workloadRealEditOutput.setValue("Workload Real:");
+        htmlPanelGrid.getChildren().add(workloadRealEditOutput);
+        
+        Spinner workloadRealEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        workloadRealEditInput.setId("workloadRealEditInput");
+        workloadRealEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadReal}", Integer.class));
+        workloadRealEditInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(workloadRealEditInput);
+        
+        Message workloadRealEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        workloadRealEditInputMessage.setId("workloadRealEditInputMessage");
+        workloadRealEditInputMessage.setFor("workloadRealEditInput");
+        workloadRealEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(workloadRealEditInputMessage);
+        
+        OutputLabel consumedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        consumedEditOutput.setFor("consumedEditInput");
+        consumedEditOutput.setId("consumedEditOutput");
+        consumedEditOutput.setValue("Consumed:");
+        htmlPanelGrid.getChildren().add(consumedEditOutput);
+        
+        Spinner consumedEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        consumedEditInput.setId("consumedEditInput");
+        consumedEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.consumed}", Integer.class));
+        consumedEditInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(consumedEditInput);
+        
+        Message consumedEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        consumedEditInputMessage.setId("consumedEditInputMessage");
+        consumedEditInputMessage.setFor("consumedEditInput");
+        consumedEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(consumedEditInputMessage);
+        
+        OutputLabel versioningEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        versioningEditOutput.setFor("versioningEditInput");
+        versioningEditOutput.setId("versioningEditOutput");
+        versioningEditOutput.setValue("Versioning:");
+        htmlPanelGrid.getChildren().add(versioningEditOutput);
+        
+        AutoComplete versioningEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        versioningEditInput.setId("versioningEditInput");
+        versioningEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.versioning}", JJVersion.class));
+        versioningEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeVersioning}", List.class, new Class[] { String.class }));
+        versioningEditInput.setDropdown(true);
+        versioningEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "versioning", String.class));
+        versioningEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{versioning.name} #{versioning.description} #{versioning.creationDate} #{versioning.updatedDate}", String.class));
+        versioningEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{versioning}", JJVersion.class));
+        versioningEditInput.setConverter(new JJVersionConverter());
+        versioningEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(versioningEditInput);
+        
+        Message versioningEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        versioningEditInputMessage.setId("versioningEditInputMessage");
+        versioningEditInputMessage.setFor("versioningEditInput");
+        versioningEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(versioningEditInputMessage);
         
         OutputLabel bugEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         bugEditOutput.setFor("bugEditInput");
@@ -831,21 +1167,53 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         requirementEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementEditInputMessage);
         
-        HtmlOutputText assignedTosEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        assignedTosEditOutput.setId("assignedTosEditOutput");
-        assignedTosEditOutput.setValue("Assigned Tos:");
-        htmlPanelGrid.getChildren().add(assignedTosEditOutput);
+        OutputLabel testcaseEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        testcaseEditOutput.setFor("testcaseEditInput");
+        testcaseEditOutput.setId("testcaseEditOutput");
+        testcaseEditOutput.setValue("Testcase:");
+        htmlPanelGrid.getChildren().add(testcaseEditOutput);
         
-        HtmlOutputText assignedTosEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        assignedTosEditInput.setId("assignedTosEditInput");
-        assignedTosEditInput.setValue("This relationship is managed from the JJContact side");
-        htmlPanelGrid.getChildren().add(assignedTosEditInput);
+        AutoComplete testcaseEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        testcaseEditInput.setId("testcaseEditInput");
+        testcaseEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.testcase}", JJTestcase.class));
+        testcaseEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeTestcase}", List.class, new Class[] { String.class }));
+        testcaseEditInput.setDropdown(true);
+        testcaseEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "testcase", String.class));
+        testcaseEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{testcase.name} #{testcase.description} #{testcase.creationDate} #{testcase.updatedDate}", String.class));
+        testcaseEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{testcase}", JJTestcase.class));
+        testcaseEditInput.setConverter(new JJTestcaseConverter());
+        testcaseEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(testcaseEditInput);
         
-        Message assignedTosEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        assignedTosEditInputMessage.setId("assignedTosEditInputMessage");
-        assignedTosEditInputMessage.setFor("assignedTosEditInput");
-        assignedTosEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(assignedTosEditInputMessage);
+        Message testcaseEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcaseEditInputMessage.setId("testcaseEditInputMessage");
+        testcaseEditInputMessage.setFor("testcaseEditInput");
+        testcaseEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcaseEditInputMessage);
+        
+        OutputLabel assignedToEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        assignedToEditOutput.setFor("assignedToEditInput");
+        assignedToEditOutput.setId("assignedToEditOutput");
+        assignedToEditOutput.setValue("Assigned To:");
+        htmlPanelGrid.getChildren().add(assignedToEditOutput);
+        
+        AutoComplete assignedToEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        assignedToEditInput.setId("assignedToEditInput");
+        assignedToEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.assignedTo}", JJContact.class));
+        assignedToEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeAssignedTo}", List.class, new Class[] { String.class }));
+        assignedToEditInput.setDropdown(true);
+        assignedToEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "assignedTo", String.class));
+        assignedToEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{assignedTo.name} #{assignedTo.description} #{assignedTo.creationDate} #{assignedTo.updatedDate}", String.class));
+        assignedToEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{assignedTo}", JJContact.class));
+        assignedToEditInput.setConverter(new JJContactConverter());
+        assignedToEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(assignedToEditInput);
+        
+        Message assignedToEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        assignedToEditInputMessage.setId("assignedToEditInputMessage");
+        assignedToEditInputMessage.setFor("assignedToEditInput");
+        assignedToEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(assignedToEditInputMessage);
         
         HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesEditOutput.setId("messagesEditOutput");
@@ -862,6 +1230,24 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         messagesEditInputMessage.setFor("messagesEditInput");
         messagesEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(messagesEditInputMessage);
+        
+        OutputLabel isCompletedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        isCompletedEditOutput.setFor("isCompletedEditInput");
+        isCompletedEditOutput.setId("isCompletedEditOutput");
+        isCompletedEditOutput.setValue("Is Completed:");
+        htmlPanelGrid.getChildren().add(isCompletedEditOutput);
+        
+        SelectBooleanCheckbox isCompletedEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        isCompletedEditInput.setId("isCompletedEditInput");
+        isCompletedEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.isCompleted}", Boolean.class));
+        isCompletedEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(isCompletedEditInput);
+        
+        Message isCompletedEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        isCompletedEditInputMessage.setId("isCompletedEditInputMessage");
+        isCompletedEditInputMessage.setFor("isCompletedEditInput");
+        isCompletedEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(isCompletedEditInputMessage);
         
         return htmlPanelGrid;
     }
@@ -959,48 +1345,123 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         projectValue.setConverter(new JJProjectConverter());
         htmlPanelGrid.getChildren().add(projectValue);
         
-        HtmlOutputText startDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        startDateLabel.setId("startDateLabel");
-        startDateLabel.setValue("Start Date:");
-        htmlPanelGrid.getChildren().add(startDateLabel);
+        HtmlOutputText startDatePlannedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        startDatePlannedLabel.setId("startDatePlannedLabel");
+        startDatePlannedLabel.setValue("Start Date Planned:");
+        htmlPanelGrid.getChildren().add(startDatePlannedLabel);
         
-        HtmlOutputText startDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        startDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.startDate}", Date.class));
-        DateTimeConverter startDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
-        startDateValueConverter.setPattern("dd/MM/yyyy");
-        startDateValue.setConverter(startDateValueConverter);
-        htmlPanelGrid.getChildren().add(startDateValue);
+        HtmlOutputText startDatePlannedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        startDatePlannedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.startDatePlanned}", Date.class));
+        DateTimeConverter startDatePlannedValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
+        startDatePlannedValueConverter.setPattern("dd/MM/yyyy");
+        startDatePlannedValue.setConverter(startDatePlannedValueConverter);
+        htmlPanelGrid.getChildren().add(startDatePlannedValue);
         
-        HtmlOutputText endDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        endDateLabel.setId("endDateLabel");
-        endDateLabel.setValue("End Date:");
-        htmlPanelGrid.getChildren().add(endDateLabel);
+        HtmlOutputText endDatePlannedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        endDatePlannedLabel.setId("endDatePlannedLabel");
+        endDatePlannedLabel.setValue("End Date Planned:");
+        htmlPanelGrid.getChildren().add(endDatePlannedLabel);
         
-        HtmlOutputText endDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        endDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.endDate}", Date.class));
-        DateTimeConverter endDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
-        endDateValueConverter.setPattern("dd/MM/yyyy");
-        endDateValue.setConverter(endDateValueConverter);
-        htmlPanelGrid.getChildren().add(endDateValue);
+        HtmlOutputText endDatePlannedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        endDatePlannedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.endDatePlanned}", Date.class));
+        DateTimeConverter endDatePlannedValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
+        endDatePlannedValueConverter.setPattern("dd/MM/yyyy");
+        endDatePlannedValue.setConverter(endDatePlannedValueConverter);
+        htmlPanelGrid.getChildren().add(endDatePlannedValue);
         
-        HtmlOutputText workloadLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        workloadLabel.setId("workloadLabel");
-        workloadLabel.setValue("Workload:");
-        htmlPanelGrid.getChildren().add(workloadLabel);
+        HtmlOutputText workloadPlannedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        workloadPlannedLabel.setId("workloadPlannedLabel");
+        workloadPlannedLabel.setValue("Workload Planned:");
+        htmlPanelGrid.getChildren().add(workloadPlannedLabel);
         
-        HtmlOutputText workloadValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        workloadValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workload}", String.class));
-        htmlPanelGrid.getChildren().add(workloadValue);
+        HtmlOutputText workloadPlannedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        workloadPlannedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadPlanned}", String.class));
+        htmlPanelGrid.getChildren().add(workloadPlannedValue);
         
-        HtmlOutputText jjversionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        jjversionLabel.setId("jjversionLabel");
-        jjversionLabel.setValue("Jjversion:");
-        htmlPanelGrid.getChildren().add(jjversionLabel);
+        HtmlOutputText startDateRevisedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        startDateRevisedLabel.setId("startDateRevisedLabel");
+        startDateRevisedLabel.setValue("Start Date Revised:");
+        htmlPanelGrid.getChildren().add(startDateRevisedLabel);
         
-        HtmlOutputText jjversionValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        jjversionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.jjversion}", JJVersion.class));
-        jjversionValue.setConverter(new JJVersionConverter());
-        htmlPanelGrid.getChildren().add(jjversionValue);
+        HtmlOutputText startDateRevisedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        startDateRevisedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.startDateRevised}", Date.class));
+        DateTimeConverter startDateRevisedValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
+        startDateRevisedValueConverter.setPattern("dd/MM/yyyy");
+        startDateRevisedValue.setConverter(startDateRevisedValueConverter);
+        htmlPanelGrid.getChildren().add(startDateRevisedValue);
+        
+        HtmlOutputText endDateRevisedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        endDateRevisedLabel.setId("endDateRevisedLabel");
+        endDateRevisedLabel.setValue("End Date Revised:");
+        htmlPanelGrid.getChildren().add(endDateRevisedLabel);
+        
+        HtmlOutputText endDateRevisedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        endDateRevisedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.endDateRevised}", Date.class));
+        DateTimeConverter endDateRevisedValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
+        endDateRevisedValueConverter.setPattern("dd/MM/yyyy");
+        endDateRevisedValue.setConverter(endDateRevisedValueConverter);
+        htmlPanelGrid.getChildren().add(endDateRevisedValue);
+        
+        HtmlOutputText workloadRevisedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        workloadRevisedLabel.setId("workloadRevisedLabel");
+        workloadRevisedLabel.setValue("Workload Revised:");
+        htmlPanelGrid.getChildren().add(workloadRevisedLabel);
+        
+        HtmlOutputText workloadRevisedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        workloadRevisedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadRevised}", String.class));
+        htmlPanelGrid.getChildren().add(workloadRevisedValue);
+        
+        HtmlOutputText startDateRealLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        startDateRealLabel.setId("startDateRealLabel");
+        startDateRealLabel.setValue("Start Date Real:");
+        htmlPanelGrid.getChildren().add(startDateRealLabel);
+        
+        HtmlOutputText startDateRealValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        startDateRealValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.startDateReal}", Date.class));
+        DateTimeConverter startDateRealValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
+        startDateRealValueConverter.setPattern("dd/MM/yyyy");
+        startDateRealValue.setConverter(startDateRealValueConverter);
+        htmlPanelGrid.getChildren().add(startDateRealValue);
+        
+        HtmlOutputText endDateRealLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        endDateRealLabel.setId("endDateRealLabel");
+        endDateRealLabel.setValue("End Date Real:");
+        htmlPanelGrid.getChildren().add(endDateRealLabel);
+        
+        HtmlOutputText endDateRealValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        endDateRealValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.endDateReal}", Date.class));
+        DateTimeConverter endDateRealValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
+        endDateRealValueConverter.setPattern("dd/MM/yyyy");
+        endDateRealValue.setConverter(endDateRealValueConverter);
+        htmlPanelGrid.getChildren().add(endDateRealValue);
+        
+        HtmlOutputText workloadRealLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        workloadRealLabel.setId("workloadRealLabel");
+        workloadRealLabel.setValue("Workload Real:");
+        htmlPanelGrid.getChildren().add(workloadRealLabel);
+        
+        HtmlOutputText workloadRealValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        workloadRealValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadReal}", String.class));
+        htmlPanelGrid.getChildren().add(workloadRealValue);
+        
+        HtmlOutputText consumedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        consumedLabel.setId("consumedLabel");
+        consumedLabel.setValue("Consumed:");
+        htmlPanelGrid.getChildren().add(consumedLabel);
+        
+        HtmlOutputText consumedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        consumedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.consumed}", String.class));
+        htmlPanelGrid.getChildren().add(consumedValue);
+        
+        HtmlOutputText versioningLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        versioningLabel.setId("versioningLabel");
+        versioningLabel.setValue("Versioning:");
+        htmlPanelGrid.getChildren().add(versioningLabel);
+        
+        HtmlOutputText versioningValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        versioningValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.versioning}", JJVersion.class));
+        versioningValue.setConverter(new JJVersionConverter());
+        htmlPanelGrid.getChildren().add(versioningValue);
         
         HtmlOutputText bugLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugLabel.setId("bugLabel");
@@ -1022,15 +1483,25 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         requirementValue.setConverter(new JJRequirementConverter());
         htmlPanelGrid.getChildren().add(requirementValue);
         
-        HtmlOutputText assignedTosLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        assignedTosLabel.setId("assignedTosLabel");
-        assignedTosLabel.setValue("Assigned Tos:");
-        htmlPanelGrid.getChildren().add(assignedTosLabel);
+        HtmlOutputText testcaseLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcaseLabel.setId("testcaseLabel");
+        testcaseLabel.setValue("Testcase:");
+        htmlPanelGrid.getChildren().add(testcaseLabel);
         
-        HtmlOutputText assignedTosValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        assignedTosValue.setId("assignedTosValue");
-        assignedTosValue.setValue("This relationship is managed from the JJContact side");
-        htmlPanelGrid.getChildren().add(assignedTosValue);
+        HtmlOutputText testcaseValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcaseValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.testcase}", JJTestcase.class));
+        testcaseValue.setConverter(new JJTestcaseConverter());
+        htmlPanelGrid.getChildren().add(testcaseValue);
+        
+        HtmlOutputText assignedToLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        assignedToLabel.setId("assignedToLabel");
+        assignedToLabel.setValue("Assigned To:");
+        htmlPanelGrid.getChildren().add(assignedToLabel);
+        
+        HtmlOutputText assignedToValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        assignedToValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.assignedTo}", JJContact.class));
+        assignedToValue.setConverter(new JJContactConverter());
+        htmlPanelGrid.getChildren().add(assignedToValue);
         
         HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesLabel.setId("messagesLabel");
@@ -1041,6 +1512,15 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         messagesValue.setId("messagesValue");
         messagesValue.setValue("This relationship is managed from the JJMessage side");
         htmlPanelGrid.getChildren().add(messagesValue);
+        
+        HtmlOutputText isCompletedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        isCompletedLabel.setId("isCompletedLabel");
+        isCompletedLabel.setValue("Is Completed:");
+        htmlPanelGrid.getChildren().add(isCompletedLabel);
+        
+        HtmlOutputText isCompletedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        isCompletedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.isCompleted}", String.class));
+        htmlPanelGrid.getChildren().add(isCompletedValue);
         
         return htmlPanelGrid;
     }
@@ -1089,7 +1569,7 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJVersion> JJTaskBean.completeJjversion(String query) {
+    public List<JJVersion> JJTaskBean.completeVersioning(String query) {
         List<JJVersion> suggestions = new ArrayList<JJVersion>();
         for (JJVersion jJVersion : jJVersionService.findAllJJVersions()) {
             String jJVersionStr = String.valueOf(jJVersion.getName() +  " "  + jJVersion.getDescription() +  " "  + jJVersion.getCreationDate() +  " "  + jJVersion.getUpdatedDate());
@@ -1122,15 +1602,26 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJContact> JJTaskBean.getSelectedAssignedTos() {
-        return selectedAssignedTos;
+    public List<JJTestcase> JJTaskBean.completeTestcase(String query) {
+        List<JJTestcase> suggestions = new ArrayList<JJTestcase>();
+        for (JJTestcase jJTestcase : jJTestcaseService.findAllJJTestcases()) {
+            String jJTestcaseStr = String.valueOf(jJTestcase.getName() +  " "  + jJTestcase.getDescription() +  " "  + jJTestcase.getCreationDate() +  " "  + jJTestcase.getUpdatedDate());
+            if (jJTestcaseStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJTestcase);
+            }
+        }
+        return suggestions;
     }
     
-    public void JJTaskBean.setSelectedAssignedTos(List<JJContact> selectedAssignedTos) {
-        if (selectedAssignedTos != null) {
-            JJTask_.setAssignedTos(new HashSet<JJContact>(selectedAssignedTos));
+    public List<JJContact> JJTaskBean.completeAssignedTo(String query) {
+        List<JJContact> suggestions = new ArrayList<JJContact>();
+        for (JJContact jJContact : jJContactService.findAllJJContacts()) {
+            String jJContactStr = String.valueOf(jJContact.getName() +  " "  + jJContact.getDescription() +  " "  + jJContact.getCreationDate() +  " "  + jJContact.getUpdatedDate());
+            if (jJContactStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJContact);
+            }
         }
-        this.selectedAssignedTos = selectedAssignedTos;
+        return suggestions;
     }
     
     public List<JJMessage> JJTaskBean.getSelectedMessages() {
@@ -1145,9 +1636,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
     }
     
     public String JJTaskBean.onEdit() {
-        if (JJTask_ != null && JJTask_.getAssignedTos() != null) {
-            selectedAssignedTos = new ArrayList<JJContact>(JJTask_.getAssignedTos());
-        }
         if (JJTask_ != null && JJTask_.getMessages() != null) {
             selectedMessages = new ArrayList<JJMessage>(JJTask_.getMessages());
         }
@@ -1203,7 +1691,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
     
     public void JJTaskBean.reset() {
         JJTask_ = null;
-        selectedAssignedTos = null;
         selectedMessages = null;
         createDialogVisible = false;
     }

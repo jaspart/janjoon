@@ -282,7 +282,7 @@ public class JJProjectBean {
 					versions.add(jJVersionList.get(i + 2));
 				}
 
-				product.setJjversions(versions);
+				product.setVersions(versions);
 
 				jJProductService.saveJJProduct(product);
 			}
@@ -352,16 +352,14 @@ public class JJProjectBean {
 
 		if (jJPermissionService.getAllJJPermissions().isEmpty()) {
 			JJPermission newJJPermission = new JJPermission();
-			newJJPermission.setPermission("general");
+			newJJPermission.setName("general");
+
 			jJPermissionService.saveJJPermission(newJJPermission);
 		}
 
 		if (jJRightService.getAllJJRights().isEmpty()) {
 			JJRight newJJRight = new JJRight();
-			newJJRight.setProject(jJProjectService.getAllJJProjects().get(0));
-			newJJRight.setProduct(jJProductService.getAllJJProducts().get(0));
-			newJJRight.setPermission(jJPermissionService.getAllJJPermissions()
-					.get(0));
+			newJJRight.setObjet("right");
 			newJJRight
 					.setCategory(jJCategoryService.getAllJJCategorys().get(0));
 			newJJRight.setR(true);

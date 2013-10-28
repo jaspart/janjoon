@@ -975,7 +975,7 @@ public class JJRequirementBean {
 				if (selectedTasksList.size() > 0) {
 					for (JJTask task : selectedTasksList) {
 						task.setRequirement(myJJRequirement);
-						task.setStartDate(new Date());
+						task.setStartDateReal(new Date());
 						jJTaskService.updateJJTask(task);
 					}
 

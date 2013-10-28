@@ -1,72 +1,68 @@
 package com.funder.janjoonweb.domain;
 
-import com.funder.janjoonweb.domain.reference.JJRelationship;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import org.springframework.format.annotation.DateTimeFormat;
+
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.tostring.RooToString;
+
+import com.funder.janjoonweb.domain.reference.JJRelationship;
 
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJBugSEQ")
 public class JJBug extends JJAbstractEntity {
 
-    @ManyToOne
-    private JJProject project;
+	@ManyToOne
+	private JJProject project;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
-    private Date startDate;
+	@ManyToOne
+	private JJVersion versioning;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
-    private Date endDate;
+	@ManyToOne
+	private JJCategory category;
 
-    private Integer workload;
+	@ManyToOne
+	private JJCriticity criticity;
 
-    @ManyToOne
-    private JJVersion jjversion;
+	@ManyToOne
+	private JJImportance importance;
 
-    @ManyToOne
-    private JJCategory category;
+	@ManyToOne
+	private JJStatus status;
 
-    @ManyToOne
-    private JJCriticity criticity;
+	@ManyToOne
+	private JJRequirement requirement;
 
-    @ManyToOne
-    private JJImportance importance;
+	@Enumerated
+	private JJRelationship relation;
 
-    @ManyToOne
-    private JJStatus status;
+	@ManyToOne
+	private JJSprint sprint;
 
-    @Enumerated
-    private JJRelationship relation;
+	@ManyToOne
+	private JJTestcase testcase;
 
-    @ManyToOne
-    private JJRequirement requirement;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bugUp")
+	private Set<JJBug> bugs = new HashSet<JJBug>();
 
-    @ManyToOne
-    private com.funder.janjoonweb.domain.JJBug bugUp;
+	@ManyToOne
+	private JJBug bugUp;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bugUp")
-    private Set<com.funder.janjoonweb.domain.JJBug> bugs = new HashSet<com.funder.janjoonweb.domain.JJBug>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bug")
+	private Set<JJTask> tasks = new HashSet<JJTask>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bug")
-    private Set<JJTask> tasks = new HashSet<JJTask>();
+	@ManyToOne
+	private JJContact assignedTos;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<JJContact> assignedTos = new HashSet<JJContact>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<JJMessage> messages = new HashSet<JJMessage>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<JJMessage> messages = new HashSet<JJMessage>();
 }

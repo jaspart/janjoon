@@ -7,28 +7,21 @@ import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJContactService;
 import com.funder.janjoonweb.domain.JJJob;
 import com.funder.janjoonweb.domain.JJJobService;
-import com.funder.janjoonweb.domain.JJProduct;
-import com.funder.janjoonweb.domain.JJProject;
-import com.funder.janjoonweb.domain.JJRight;
+import com.funder.janjoonweb.domain.JJPermission;
 import com.funder.janjoonweb.ui.mb.JJContactBean;
 import com.funder.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJJobConverter;
-import com.funder.janjoonweb.ui.mb.converter.JJProductConverter;
-import com.funder.janjoonweb.ui.mb.converter.JJProjectConverter;
-import com.funder.janjoonweb.ui.mb.converter.JJRightConverter;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.UISelectItems;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
@@ -42,7 +35,6 @@ import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
-import org.primefaces.component.selectmanymenu.SelectManyMenu;
 import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
@@ -78,11 +70,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
     
     private boolean JJContactBean.createDialogVisible = false;
     
-    private List<JJRight> JJContactBean.selectedRights;
-    
-    private List<JJProduct> JJContactBean.selectedProducts;
-    
-    private List<JJProject> JJContactBean.selectedProjects;
+    private List<JJPermission> JJContactBean.selectedPermissions;
     
     @PostConstruct
     public void JJContactBean.init() {
@@ -481,81 +469,6 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         jobCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(jobCreateInputMessage);
         
-        OutputLabel rightsCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        rightsCreateOutput.setFor("rightsCreateInput");
-        rightsCreateOutput.setId("rightsCreateOutput");
-        rightsCreateOutput.setValue("Rights:");
-        htmlPanelGrid.getChildren().add(rightsCreateOutput);
-        
-        SelectManyMenu rightsCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
-        rightsCreateInput.setId("rightsCreateInput");
-        rightsCreateInput.setConverter(new JJRightConverter());
-        rightsCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedRights}", List.class));
-        UISelectItems rightsCreateInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        rightsCreateInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.allJJRights}", List.class));
-        rightsCreateInput.setRequired(false);
-        rightsCreateInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJRight", String.class));
-        rightsCreateInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJRight}", String.class));
-        rightsCreateInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJRight}", JJRight.class));
-        rightsCreateInput.getChildren().add(rightsCreateInputItems);
-        htmlPanelGrid.getChildren().add(rightsCreateInput);
-        
-        Message rightsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        rightsCreateInputMessage.setId("rightsCreateInputMessage");
-        rightsCreateInputMessage.setFor("rightsCreateInput");
-        rightsCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(rightsCreateInputMessage);
-        
-        OutputLabel productsCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        productsCreateOutput.setFor("productsCreateInput");
-        productsCreateOutput.setId("productsCreateOutput");
-        productsCreateOutput.setValue("Products:");
-        htmlPanelGrid.getChildren().add(productsCreateOutput);
-        
-        SelectManyMenu productsCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
-        productsCreateInput.setId("productsCreateInput");
-        productsCreateInput.setConverter(new JJProductConverter());
-        productsCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedProducts}", List.class));
-        UISelectItems productsCreateInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        productsCreateInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProductBean.allJJProducts}", List.class));
-        productsCreateInput.setRequired(false);
-        productsCreateInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJProduct", String.class));
-        productsCreateInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJProduct}", String.class));
-        productsCreateInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJProduct}", JJProduct.class));
-        productsCreateInput.getChildren().add(productsCreateInputItems);
-        htmlPanelGrid.getChildren().add(productsCreateInput);
-        
-        Message productsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        productsCreateInputMessage.setId("productsCreateInputMessage");
-        productsCreateInputMessage.setFor("productsCreateInput");
-        productsCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(productsCreateInputMessage);
-        
-        OutputLabel projectsCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        projectsCreateOutput.setFor("projectsCreateInput");
-        projectsCreateOutput.setId("projectsCreateOutput");
-        projectsCreateOutput.setValue("Projects:");
-        htmlPanelGrid.getChildren().add(projectsCreateOutput);
-        
-        SelectManyMenu projectsCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
-        projectsCreateInput.setId("projectsCreateInput");
-        projectsCreateInput.setConverter(new JJProjectConverter());
-        projectsCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedProjects}", List.class));
-        UISelectItems projectsCreateInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        projectsCreateInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProjectBean.allJJProjects}", List.class));
-        projectsCreateInput.setRequired(false);
-        projectsCreateInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJProject", String.class));
-        projectsCreateInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJProject}", String.class));
-        projectsCreateInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJProject}", JJProject.class));
-        projectsCreateInput.getChildren().add(projectsCreateInputItems);
-        htmlPanelGrid.getChildren().add(projectsCreateInput);
-        
-        Message projectsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        projectsCreateInputMessage.setId("projectsCreateInputMessage");
-        projectsCreateInputMessage.setFor("projectsCreateInput");
-        projectsCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(projectsCreateInputMessage);
-        
         OutputLabel accountNonExpiredCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         accountNonExpiredCreateOutput.setFor("accountNonExpiredCreateInput");
         accountNonExpiredCreateOutput.setId("accountNonExpiredCreateOutput");
@@ -609,6 +522,22 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         accountNonLockedCreateInputMessage.setFor("accountNonLockedCreateInput");
         accountNonLockedCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(accountNonLockedCreateInputMessage);
+        
+        HtmlOutputText permissionsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        permissionsCreateOutput.setId("permissionsCreateOutput");
+        permissionsCreateOutput.setValue("Permissions:");
+        htmlPanelGrid.getChildren().add(permissionsCreateOutput);
+        
+        HtmlOutputText permissionsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        permissionsCreateInput.setId("permissionsCreateInput");
+        permissionsCreateInput.setValue("This relationship is managed from the JJPermission side");
+        htmlPanelGrid.getChildren().add(permissionsCreateInput);
+        
+        Message permissionsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        permissionsCreateInputMessage.setId("permissionsCreateInputMessage");
+        permissionsCreateInputMessage.setFor("permissionsCreateInput");
+        permissionsCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(permissionsCreateInputMessage);
         
         return htmlPanelGrid;
     }
@@ -940,81 +869,6 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         jobEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(jobEditInputMessage);
         
-        OutputLabel rightsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        rightsEditOutput.setFor("rightsEditInput");
-        rightsEditOutput.setId("rightsEditOutput");
-        rightsEditOutput.setValue("Rights:");
-        htmlPanelGrid.getChildren().add(rightsEditOutput);
-        
-        SelectManyMenu rightsEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
-        rightsEditInput.setId("rightsEditInput");
-        rightsEditInput.setConverter(new JJRightConverter());
-        rightsEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedRights}", List.class));
-        UISelectItems rightsEditInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        rightsEditInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.allJJRights}", List.class));
-        rightsEditInput.setRequired(false);
-        rightsEditInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJRight", String.class));
-        rightsEditInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJRight}", String.class));
-        rightsEditInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJRight}", JJRight.class));
-        rightsEditInput.getChildren().add(rightsEditInputItems);
-        htmlPanelGrid.getChildren().add(rightsEditInput);
-        
-        Message rightsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        rightsEditInputMessage.setId("rightsEditInputMessage");
-        rightsEditInputMessage.setFor("rightsEditInput");
-        rightsEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(rightsEditInputMessage);
-        
-        OutputLabel productsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        productsEditOutput.setFor("productsEditInput");
-        productsEditOutput.setId("productsEditOutput");
-        productsEditOutput.setValue("Products:");
-        htmlPanelGrid.getChildren().add(productsEditOutput);
-        
-        SelectManyMenu productsEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
-        productsEditInput.setId("productsEditInput");
-        productsEditInput.setConverter(new JJProductConverter());
-        productsEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedProducts}", List.class));
-        UISelectItems productsEditInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        productsEditInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProductBean.allJJProducts}", List.class));
-        productsEditInput.setRequired(false);
-        productsEditInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJProduct", String.class));
-        productsEditInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJProduct}", String.class));
-        productsEditInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJProduct}", JJProduct.class));
-        productsEditInput.getChildren().add(productsEditInputItems);
-        htmlPanelGrid.getChildren().add(productsEditInput);
-        
-        Message productsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        productsEditInputMessage.setId("productsEditInputMessage");
-        productsEditInputMessage.setFor("productsEditInput");
-        productsEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(productsEditInputMessage);
-        
-        OutputLabel projectsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        projectsEditOutput.setFor("projectsEditInput");
-        projectsEditOutput.setId("projectsEditOutput");
-        projectsEditOutput.setValue("Projects:");
-        htmlPanelGrid.getChildren().add(projectsEditOutput);
-        
-        SelectManyMenu projectsEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
-        projectsEditInput.setId("projectsEditInput");
-        projectsEditInput.setConverter(new JJProjectConverter());
-        projectsEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedProjects}", List.class));
-        UISelectItems projectsEditInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        projectsEditInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProjectBean.allJJProjects}", List.class));
-        projectsEditInput.setRequired(false);
-        projectsEditInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJProject", String.class));
-        projectsEditInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJProject}", String.class));
-        projectsEditInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJProject}", JJProject.class));
-        projectsEditInput.getChildren().add(projectsEditInputItems);
-        htmlPanelGrid.getChildren().add(projectsEditInput);
-        
-        Message projectsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        projectsEditInputMessage.setId("projectsEditInputMessage");
-        projectsEditInputMessage.setFor("projectsEditInput");
-        projectsEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(projectsEditInputMessage);
-        
         OutputLabel accountNonExpiredEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         accountNonExpiredEditOutput.setFor("accountNonExpiredEditInput");
         accountNonExpiredEditOutput.setId("accountNonExpiredEditOutput");
@@ -1068,6 +922,22 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         accountNonLockedEditInputMessage.setFor("accountNonLockedEditInput");
         accountNonLockedEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(accountNonLockedEditInputMessage);
+        
+        HtmlOutputText permissionsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        permissionsEditOutput.setId("permissionsEditOutput");
+        permissionsEditOutput.setValue("Permissions:");
+        htmlPanelGrid.getChildren().add(permissionsEditOutput);
+        
+        HtmlOutputText permissionsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        permissionsEditInput.setId("permissionsEditInput");
+        permissionsEditInput.setValue("This relationship is managed from the JJPermission side");
+        htmlPanelGrid.getChildren().add(permissionsEditInput);
+        
+        Message permissionsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        permissionsEditInputMessage.setId("permissionsEditInputMessage");
+        permissionsEditInputMessage.setFor("permissionsEditInput");
+        permissionsEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(permissionsEditInputMessage);
         
         return htmlPanelGrid;
     }
@@ -1236,63 +1106,6 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         jobValue.setConverter(new JJJobConverter());
         htmlPanelGrid.getChildren().add(jobValue);
         
-        HtmlOutputText rightsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        rightsLabel.setId("rightsLabel");
-        rightsLabel.setValue("Rights:");
-        htmlPanelGrid.getChildren().add(rightsLabel);
-        
-        SelectManyMenu rightsValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
-        rightsValue.setId("rightsValue");
-        rightsValue.setConverter(new JJRightConverter());
-        rightsValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedRights}", List.class));
-        UISelectItems rightsValueItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        rightsValue.setReadonly(true);
-        rightsValue.setDisabled(true);
-        rightsValueItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.rights}", Set.class));
-        rightsValueItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJRight", String.class));
-        rightsValueItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJRight}", String.class));
-        rightsValueItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJRight}", JJRight.class));
-        rightsValue.getChildren().add(rightsValueItems);
-        htmlPanelGrid.getChildren().add(rightsValue);
-        
-        HtmlOutputText productsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        productsLabel.setId("productsLabel");
-        productsLabel.setValue("Products:");
-        htmlPanelGrid.getChildren().add(productsLabel);
-        
-        SelectManyMenu productsValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
-        productsValue.setId("productsValue");
-        productsValue.setConverter(new JJProductConverter());
-        productsValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedProducts}", List.class));
-        UISelectItems productsValueItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        productsValue.setReadonly(true);
-        productsValue.setDisabled(true);
-        productsValueItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.products}", Set.class));
-        productsValueItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJProduct", String.class));
-        productsValueItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJProduct}", String.class));
-        productsValueItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJProduct}", JJProduct.class));
-        productsValue.getChildren().add(productsValueItems);
-        htmlPanelGrid.getChildren().add(productsValue);
-        
-        HtmlOutputText projectsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        projectsLabel.setId("projectsLabel");
-        projectsLabel.setValue("Projects:");
-        htmlPanelGrid.getChildren().add(projectsLabel);
-        
-        SelectManyMenu projectsValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
-        projectsValue.setId("projectsValue");
-        projectsValue.setConverter(new JJProjectConverter());
-        projectsValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedProjects}", List.class));
-        UISelectItems projectsValueItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        projectsValue.setReadonly(true);
-        projectsValue.setDisabled(true);
-        projectsValueItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.projects}", Set.class));
-        projectsValueItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJProject", String.class));
-        projectsValueItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJProject}", String.class));
-        projectsValueItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJProject}", JJProject.class));
-        projectsValue.getChildren().add(projectsValueItems);
-        htmlPanelGrid.getChildren().add(projectsValue);
-        
         HtmlOutputText accountNonExpiredLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         accountNonExpiredLabel.setId("accountNonExpiredLabel");
         accountNonExpiredLabel.setValue("Account Non Expired:");
@@ -1319,6 +1132,16 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         HtmlOutputText accountNonLockedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         accountNonLockedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.accountNonLocked}", String.class));
         htmlPanelGrid.getChildren().add(accountNonLockedValue);
+        
+        HtmlOutputText permissionsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        permissionsLabel.setId("permissionsLabel");
+        permissionsLabel.setValue("Permissions:");
+        htmlPanelGrid.getChildren().add(permissionsLabel);
+        
+        HtmlOutputText permissionsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        permissionsValue.setId("permissionsValue");
+        permissionsValue.setValue("This relationship is managed from the JJPermission side");
+        htmlPanelGrid.getChildren().add(permissionsValue);
         
         return htmlPanelGrid;
     }
@@ -1367,48 +1190,20 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJRight> JJContactBean.getSelectedRights() {
-        return selectedRights;
+    public List<JJPermission> JJContactBean.getSelectedPermissions() {
+        return selectedPermissions;
     }
     
-    public void JJContactBean.setSelectedRights(List<JJRight> selectedRights) {
-        if (selectedRights != null) {
-            JJContact_.setRights(new HashSet<JJRight>(selectedRights));
+    public void JJContactBean.setSelectedPermissions(List<JJPermission> selectedPermissions) {
+        if (selectedPermissions != null) {
+            JJContact_.setPermissions(new HashSet<JJPermission>(selectedPermissions));
         }
-        this.selectedRights = selectedRights;
-    }
-    
-    public List<JJProduct> JJContactBean.getSelectedProducts() {
-        return selectedProducts;
-    }
-    
-    public void JJContactBean.setSelectedProducts(List<JJProduct> selectedProducts) {
-        if (selectedProducts != null) {
-            JJContact_.setProducts(new HashSet<JJProduct>(selectedProducts));
-        }
-        this.selectedProducts = selectedProducts;
-    }
-    
-    public List<JJProject> JJContactBean.getSelectedProjects() {
-        return selectedProjects;
-    }
-    
-    public void JJContactBean.setSelectedProjects(List<JJProject> selectedProjects) {
-        if (selectedProjects != null) {
-            JJContact_.setProjects(new HashSet<JJProject>(selectedProjects));
-        }
-        this.selectedProjects = selectedProjects;
+        this.selectedPermissions = selectedPermissions;
     }
     
     public String JJContactBean.onEdit() {
-        if (JJContact_ != null && JJContact_.getRights() != null) {
-            selectedRights = new ArrayList<JJRight>(JJContact_.getRights());
-        }
-        if (JJContact_ != null && JJContact_.getProducts() != null) {
-            selectedProducts = new ArrayList<JJProduct>(JJContact_.getProducts());
-        }
-        if (JJContact_ != null && JJContact_.getProjects() != null) {
-            selectedProjects = new ArrayList<JJProject>(JJContact_.getProjects());
+        if (JJContact_ != null && JJContact_.getPermissions() != null) {
+            selectedPermissions = new ArrayList<JJPermission>(JJContact_.getPermissions());
         }
         return null;
     }
@@ -1462,9 +1257,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
     
     public void JJContactBean.reset() {
         JJContact_ = null;
-        selectedRights = null;
-        selectedProducts = null;
-        selectedProjects = null;
+        selectedPermissions = null;
         createDialogVisible = false;
     }
     

@@ -11,6 +11,7 @@ import com.funder.janjoonweb.domain.JJTask;
 import com.funder.janjoonweb.domain.JJTaskDataOnDemand;
 import com.funder.janjoonweb.domain.JJTaskRepository;
 import com.funder.janjoonweb.domain.JJTaskService;
+import com.funder.janjoonweb.domain.JJTestcaseDataOnDemand;
 import com.funder.janjoonweb.domain.JJVersionDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -34,19 +35,22 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
     private List<JJTask> JJTaskDataOnDemand.data;
     
     @Autowired
-    JJBugDataOnDemand JJTaskDataOnDemand.jJBugDataOnDemand;
-    
-    @Autowired
     JJContactDataOnDemand JJTaskDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    JJVersionDataOnDemand JJTaskDataOnDemand.jJVersionDataOnDemand;
+    JJBugDataOnDemand JJTaskDataOnDemand.jJBugDataOnDemand;
     
     @Autowired
     JJProjectDataOnDemand JJTaskDataOnDemand.jJProjectDataOnDemand;
     
     @Autowired
     JJRequirementDataOnDemand JJTaskDataOnDemand.jJRequirementDataOnDemand;
+    
+    @Autowired
+    JJTestcaseDataOnDemand JJTaskDataOnDemand.jJTestcaseDataOnDemand;
+    
+    @Autowired
+    JJVersionDataOnDemand JJTaskDataOnDemand.jJVersionDataOnDemand;
     
     @Autowired
     JJTaskService JJTaskDataOnDemand.jJTaskService;
@@ -56,15 +60,28 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
     
     public JJTask JJTaskDataOnDemand.getNewTransientJJTask(int index) {
         JJTask obj = new JJTask();
+        setConsumed(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
-        setEndDate(obj, index);
+        setEndDatePlanned(obj, index);
+        setEndDateReal(obj, index);
+        setEndDateRevised(obj, index);
+        setIsCompleted(obj, index);
         setName(obj, index);
-        setStartDate(obj, index);
+        setStartDatePlanned(obj, index);
+        setStartDateReal(obj, index);
+        setStartDateRevised(obj, index);
         setUpdatedDate(obj, index);
-        setWorkload(obj, index);
+        setWorkloadPlanned(obj, index);
+        setWorkloadReal(obj, index);
+        setWorkloadRevised(obj, index);
         return obj;
+    }
+    
+    public void JJTaskDataOnDemand.setConsumed(JJTask obj, int index) {
+        Integer consumed = new Integer(index);
+        obj.setConsumed(consumed);
     }
     
     public void JJTaskDataOnDemand.setCreationDate(JJTask obj, int index) {
@@ -85,9 +102,24 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
         obj.setEnabled(enabled);
     }
     
-    public void JJTaskDataOnDemand.setEndDate(JJTask obj, int index) {
-        Date endDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
-        obj.setEndDate(endDate);
+    public void JJTaskDataOnDemand.setEndDatePlanned(JJTask obj, int index) {
+        Date endDatePlanned = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setEndDatePlanned(endDatePlanned);
+    }
+    
+    public void JJTaskDataOnDemand.setEndDateReal(JJTask obj, int index) {
+        Date endDateReal = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setEndDateReal(endDateReal);
+    }
+    
+    public void JJTaskDataOnDemand.setEndDateRevised(JJTask obj, int index) {
+        Date endDateRevised = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setEndDateRevised(endDateRevised);
+    }
+    
+    public void JJTaskDataOnDemand.setIsCompleted(JJTask obj, int index) {
+        Boolean isCompleted = Boolean.TRUE;
+        obj.setIsCompleted(isCompleted);
     }
     
     public void JJTaskDataOnDemand.setName(JJTask obj, int index) {
@@ -98,9 +130,19 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
         obj.setName(name);
     }
     
-    public void JJTaskDataOnDemand.setStartDate(JJTask obj, int index) {
-        Date startDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
-        obj.setStartDate(startDate);
+    public void JJTaskDataOnDemand.setStartDatePlanned(JJTask obj, int index) {
+        Date startDatePlanned = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setStartDatePlanned(startDatePlanned);
+    }
+    
+    public void JJTaskDataOnDemand.setStartDateReal(JJTask obj, int index) {
+        Date startDateReal = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setStartDateReal(startDateReal);
+    }
+    
+    public void JJTaskDataOnDemand.setStartDateRevised(JJTask obj, int index) {
+        Date startDateRevised = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setStartDateRevised(startDateRevised);
     }
     
     public void JJTaskDataOnDemand.setUpdatedDate(JJTask obj, int index) {
@@ -108,9 +150,19 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
         obj.setUpdatedDate(updatedDate);
     }
     
-    public void JJTaskDataOnDemand.setWorkload(JJTask obj, int index) {
-        Integer workload = new Integer(index);
-        obj.setWorkload(workload);
+    public void JJTaskDataOnDemand.setWorkloadPlanned(JJTask obj, int index) {
+        Integer workloadPlanned = new Integer(index);
+        obj.setWorkloadPlanned(workloadPlanned);
+    }
+    
+    public void JJTaskDataOnDemand.setWorkloadReal(JJTask obj, int index) {
+        Integer workloadReal = new Integer(index);
+        obj.setWorkloadReal(workloadReal);
+    }
+    
+    public void JJTaskDataOnDemand.setWorkloadRevised(JJTask obj, int index) {
+        Integer workloadRevised = new Integer(index);
+        obj.setWorkloadRevised(workloadRevised);
     }
     
     public JJTask JJTaskDataOnDemand.getSpecificJJTask(int index) {

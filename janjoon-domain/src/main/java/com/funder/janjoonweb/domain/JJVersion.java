@@ -15,15 +15,12 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaEntity(sequenceName = "JJVersionSEQ")
 public class JJVersion extends JJAbstractEntity {
 
-    @ManyToOne
-    private JJProduct product;
+	@ManyToOne
+	private JJProduct product;
 
-    @ManyToOne
-    private JJPhase phase;
+	@ManyToOne
+	private JJPhase phase;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "jjversion")
-    private Set<JJTask> tasks = new HashSet<JJTask>();
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "jjversion")
-    private Set<JJBuild> builds = new HashSet<JJBuild>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "versioning")
+	private Set<JJBuild> builds = new HashSet<JJBuild>();
 }

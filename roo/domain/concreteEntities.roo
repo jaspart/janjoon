@@ -61,7 +61,7 @@ field reference --fieldName testcase --type ~.JJTestcase
 #######################
 
 focus --class ~.JJPermission
-field string --fieldName name --sizeMax 25 --field
+field string --fieldName name --sizeMax 25 --notNull
 field reference --fieldName project --type ~.JJProject
 field reference --fieldName product --type ~.JJProduct
 field reference --fieldName contact --type ~.JJContact
@@ -70,17 +70,18 @@ field reference --fieldName profile --type ~.JJProfile
 #######################
 
 focus --class ~.JJRight
-field string --fieldName object --sizeMax 25 --notNull
+field string --fieldName objet --sizeMax 25 --notNull
 field reference --fieldName category --type ~.JJCategory
 field boolean --fieldName r
 field boolean --fieldName w
 field boolean --fieldName x
+field reference --fieldName profile --type ~.JJProfile
 
 #######################
 
 focus --class ~.JJProfile
 field string --fieldName name --sizeMax 25 --notNull
-field set --fieldName rights --type ~.JJRight --cardinality ONE_TO_MANY --fetch LAZY
+field set --fieldName rights --type ~.JJRight --cardinality ONE_TO_MANY --fetch LAZY --mappedBy profile
 
 #######################
 
@@ -96,7 +97,7 @@ field reference --fieldName job --type ~.JJJob
 field boolean --fieldName accountNonExpired
 field boolean --fieldName credentialsNonExpired
 field boolean --fieldName accountNonLocked
-field set --fieldName JJPermission --type ~.JJBug  --cardinality ONE_TO_MANY --mappedBy contact --fetch LAZY
+field set --fieldName permissions --type ~.JJPermission --cardinality ONE_TO_MANY --mappedBy contact --fetch LAZY
 
 
 #######################
@@ -218,7 +219,7 @@ field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --m
 
 focus --class ~.JJTestcase
 field number --fieldName ordering --type java.lang.Integer
-field string --fieldName action --sizeMax 100
+field string --fieldName actioncase --sizeMax 100
 field string --fieldName resultat --sizeMax 100
 field reference --fieldName product --type ~.JJProduct
 field reference --fieldName category --type ~.JJCategory
@@ -230,7 +231,7 @@ field set --fieldName hardwares --type ~.JJHardware --cardinality ONE_TO_MANY --
 field number --fieldName workload --type java.lang.Integer
 field number --fieldName pricepoint --type java.lang.Integer
 field set --fieldName teststeps --type ~.JJTeststep --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
-field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --fetch LAZY --mappedBy testcase --fetch LAZY
+field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
 
 #######################

@@ -237,7 +237,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		Predicate predicate3 = criteriaBuilder.equal(from.join("product"),
 				product);
-		Predicate predicate4 = criteriaBuilder.equal(from.join("jjversion"),
+		Predicate predicate4 = criteriaBuilder.equal(from.join("versioning"),
 				version);
 		Predicate predicate5 = criteriaBuilder.equal(path, categoryName);
 		if (!categoryName.isEmpty())
@@ -274,7 +274,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 				project);
 		Predicate predicate4 = criteriaBuilder.equal(from.join("product"),
 				product);
-		Predicate predicate5 = criteriaBuilder.equal(from.join("jjversion"),
+		Predicate predicate5 = criteriaBuilder.equal(from.join("versioning"),
 				version);
 
 		Predicate predicate6 = criteriaBuilder.isNull(from.get("chapter"));

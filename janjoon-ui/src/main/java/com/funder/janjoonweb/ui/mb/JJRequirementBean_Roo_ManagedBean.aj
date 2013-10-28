@@ -21,6 +21,8 @@ import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJProjectService;
 import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJRequirementService;
+import com.funder.janjoonweb.domain.JJSprint;
+import com.funder.janjoonweb.domain.JJSprintService;
 import com.funder.janjoonweb.domain.JJStatus;
 import com.funder.janjoonweb.domain.JJStatusService;
 import com.funder.janjoonweb.domain.JJTask;
@@ -37,6 +39,7 @@ import com.funder.janjoonweb.ui.mb.converter.JJImportanceConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJProductConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJProjectConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter;
+import com.funder.janjoonweb.ui.mb.converter.JJSprintConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJStatusConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJVersionConverter;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
@@ -106,6 +109,9 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
     @Autowired
     JJStatusService JJRequirementBean.jJStatusService;
     
+    @Autowired
+    JJSprintService JJRequirementBean.jJSprintService;
+    
     private String JJRequirementBean.name = "JJRequirements";
     
     private JJRequirement JJRequirementBean.JJRequirement_;
@@ -127,8 +133,6 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
     private List<JJBug> JJRequirementBean.selectedBugs;
     
     private List<JJTask> JJRequirementBean.selectedTasks;
-    
-    private List<JJContact> JJRequirementBean.selectedAssignedTos;
     
     private List<JJMessage> JJRequirementBean.selectedMessages;
     
@@ -494,29 +498,29 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         chapterCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(chapterCreateInputMessage);
         
-        OutputLabel jjversionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        jjversionCreateOutput.setFor("jjversionCreateInput");
-        jjversionCreateOutput.setId("jjversionCreateOutput");
-        jjversionCreateOutput.setValue("Jjversion:");
-        htmlPanelGrid.getChildren().add(jjversionCreateOutput);
+        OutputLabel versioningCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        versioningCreateOutput.setFor("versioningCreateInput");
+        versioningCreateOutput.setId("versioningCreateOutput");
+        versioningCreateOutput.setValue("Versioning:");
+        htmlPanelGrid.getChildren().add(versioningCreateOutput);
         
-        AutoComplete jjversionCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        jjversionCreateInput.setId("jjversionCreateInput");
-        jjversionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.jjversion}", JJVersion.class));
-        jjversionCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRequirementBean.completeJjversion}", List.class, new Class[] { String.class }));
-        jjversionCreateInput.setDropdown(true);
-        jjversionCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jjversion", String.class));
-        jjversionCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jjversion.name} #{jjversion.description} #{jjversion.creationDate} #{jjversion.updatedDate}", String.class));
-        jjversionCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jjversion}", JJVersion.class));
-        jjversionCreateInput.setConverter(new JJVersionConverter());
-        jjversionCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(jjversionCreateInput);
+        AutoComplete versioningCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        versioningCreateInput.setId("versioningCreateInput");
+        versioningCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.versioning}", JJVersion.class));
+        versioningCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRequirementBean.completeVersioning}", List.class, new Class[] { String.class }));
+        versioningCreateInput.setDropdown(true);
+        versioningCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "versioning", String.class));
+        versioningCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{versioning.name} #{versioning.description} #{versioning.creationDate} #{versioning.updatedDate}", String.class));
+        versioningCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{versioning}", JJVersion.class));
+        versioningCreateInput.setConverter(new JJVersionConverter());
+        versioningCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(versioningCreateInput);
         
-        Message jjversionCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        jjversionCreateInputMessage.setId("jjversionCreateInputMessage");
-        jjversionCreateInputMessage.setFor("jjversionCreateInput");
-        jjversionCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(jjversionCreateInputMessage);
+        Message versioningCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        versioningCreateInputMessage.setId("versioningCreateInputMessage");
+        versioningCreateInputMessage.setFor("versioningCreateInput");
+        versioningCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(versioningCreateInputMessage);
         
         OutputLabel productCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         productCreateOutput.setFor("productCreateInput");
@@ -638,23 +642,29 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         statusCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(statusCreateInputMessage);
         
-        OutputLabel isCompletedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        isCompletedCreateOutput.setFor("isCompletedCreateInput");
-        isCompletedCreateOutput.setId("isCompletedCreateOutput");
-        isCompletedCreateOutput.setValue("Is Completed:");
-        htmlPanelGrid.getChildren().add(isCompletedCreateOutput);
+        OutputLabel sprintCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        sprintCreateOutput.setFor("sprintCreateInput");
+        sprintCreateOutput.setId("sprintCreateOutput");
+        sprintCreateOutput.setValue("Sprint:");
+        htmlPanelGrid.getChildren().add(sprintCreateOutput);
         
-        SelectBooleanCheckbox isCompletedCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
-        isCompletedCreateInput.setId("isCompletedCreateInput");
-        isCompletedCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.isCompleted}", Boolean.class));
-        isCompletedCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(isCompletedCreateInput);
+        AutoComplete sprintCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        sprintCreateInput.setId("sprintCreateInput");
+        sprintCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.sprint}", JJSprint.class));
+        sprintCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRequirementBean.completeSprint}", List.class, new Class[] { String.class }));
+        sprintCreateInput.setDropdown(true);
+        sprintCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "sprint", String.class));
+        sprintCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{sprint.name} #{sprint.description} #{sprint.creationDate} #{sprint.updatedDate}", String.class));
+        sprintCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{sprint}", JJSprint.class));
+        sprintCreateInput.setConverter(new JJSprintConverter());
+        sprintCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(sprintCreateInput);
         
-        Message isCompletedCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        isCompletedCreateInputMessage.setId("isCompletedCreateInputMessage");
-        isCompletedCreateInputMessage.setFor("isCompletedCreateInput");
-        isCompletedCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(isCompletedCreateInputMessage);
+        Message sprintCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        sprintCreateInputMessage.setId("sprintCreateInputMessage");
+        sprintCreateInputMessage.setFor("sprintCreateInput");
+        sprintCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(sprintCreateInputMessage);
         
         OutputLabel impactCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         impactCreateOutput.setFor("impactCreateInput");
@@ -729,21 +739,29 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         tasksCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(tasksCreateInputMessage);
         
-        HtmlOutputText assignedTosCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        assignedTosCreateOutput.setId("assignedTosCreateOutput");
-        assignedTosCreateOutput.setValue("Assigned Tos:");
-        htmlPanelGrid.getChildren().add(assignedTosCreateOutput);
+        OutputLabel assignedToCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        assignedToCreateOutput.setFor("assignedToCreateInput");
+        assignedToCreateOutput.setId("assignedToCreateOutput");
+        assignedToCreateOutput.setValue("Assigned To:");
+        htmlPanelGrid.getChildren().add(assignedToCreateOutput);
         
-        HtmlOutputText assignedTosCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        assignedTosCreateInput.setId("assignedTosCreateInput");
-        assignedTosCreateInput.setValue("This relationship is managed from the JJContact side");
-        htmlPanelGrid.getChildren().add(assignedTosCreateInput);
+        AutoComplete assignedToCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        assignedToCreateInput.setId("assignedToCreateInput");
+        assignedToCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.assignedTo}", JJContact.class));
+        assignedToCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRequirementBean.completeAssignedTo}", List.class, new Class[] { String.class }));
+        assignedToCreateInput.setDropdown(true);
+        assignedToCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "assignedTo", String.class));
+        assignedToCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{assignedTo.name} #{assignedTo.description} #{assignedTo.creationDate} #{assignedTo.updatedDate}", String.class));
+        assignedToCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{assignedTo}", JJContact.class));
+        assignedToCreateInput.setConverter(new JJContactConverter());
+        assignedToCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(assignedToCreateInput);
         
-        Message assignedTosCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        assignedTosCreateInputMessage.setId("assignedTosCreateInputMessage");
-        assignedTosCreateInputMessage.setFor("assignedTosCreateInput");
-        assignedTosCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(assignedTosCreateInputMessage);
+        Message assignedToCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        assignedToCreateInputMessage.setId("assignedToCreateInputMessage");
+        assignedToCreateInputMessage.setFor("assignedToCreateInput");
+        assignedToCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(assignedToCreateInputMessage);
         
         HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesCreateOutput.setId("messagesCreateOutput");
@@ -838,6 +856,42 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         testcasesCreateInputMessage.setFor("testcasesCreateInput");
         testcasesCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testcasesCreateInputMessage);
+        
+        OutputLabel isOperationCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        isOperationCreateOutput.setFor("isOperationCreateInput");
+        isOperationCreateOutput.setId("isOperationCreateOutput");
+        isOperationCreateOutput.setValue("Is Operation:");
+        htmlPanelGrid.getChildren().add(isOperationCreateOutput);
+        
+        SelectBooleanCheckbox isOperationCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        isOperationCreateInput.setId("isOperationCreateInput");
+        isOperationCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.isOperation}", Boolean.class));
+        isOperationCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(isOperationCreateInput);
+        
+        Message isOperationCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        isOperationCreateInputMessage.setId("isOperationCreateInputMessage");
+        isOperationCreateInputMessage.setFor("isOperationCreateInput");
+        isOperationCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(isOperationCreateInputMessage);
+        
+        OutputLabel isCompletedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        isCompletedCreateOutput.setFor("isCompletedCreateInput");
+        isCompletedCreateOutput.setId("isCompletedCreateOutput");
+        isCompletedCreateOutput.setValue("Is Completed:");
+        htmlPanelGrid.getChildren().add(isCompletedCreateOutput);
+        
+        SelectBooleanCheckbox isCompletedCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        isCompletedCreateInput.setId("isCompletedCreateInput");
+        isCompletedCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.isCompleted}", Boolean.class));
+        isCompletedCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(isCompletedCreateInput);
+        
+        Message isCompletedCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        isCompletedCreateInputMessage.setId("isCompletedCreateInputMessage");
+        isCompletedCreateInputMessage.setFor("isCompletedCreateInput");
+        isCompletedCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(isCompletedCreateInputMessage);
         
         return htmlPanelGrid;
     }
@@ -1128,29 +1182,29 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         chapterEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(chapterEditInputMessage);
         
-        OutputLabel jjversionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        jjversionEditOutput.setFor("jjversionEditInput");
-        jjversionEditOutput.setId("jjversionEditOutput");
-        jjversionEditOutput.setValue("Jjversion:");
-        htmlPanelGrid.getChildren().add(jjversionEditOutput);
+        OutputLabel versioningEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        versioningEditOutput.setFor("versioningEditInput");
+        versioningEditOutput.setId("versioningEditOutput");
+        versioningEditOutput.setValue("Versioning:");
+        htmlPanelGrid.getChildren().add(versioningEditOutput);
         
-        AutoComplete jjversionEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        jjversionEditInput.setId("jjversionEditInput");
-        jjversionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.jjversion}", JJVersion.class));
-        jjversionEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRequirementBean.completeJjversion}", List.class, new Class[] { String.class }));
-        jjversionEditInput.setDropdown(true);
-        jjversionEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jjversion", String.class));
-        jjversionEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jjversion.name} #{jjversion.description} #{jjversion.creationDate} #{jjversion.updatedDate}", String.class));
-        jjversionEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jjversion}", JJVersion.class));
-        jjversionEditInput.setConverter(new JJVersionConverter());
-        jjversionEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(jjversionEditInput);
+        AutoComplete versioningEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        versioningEditInput.setId("versioningEditInput");
+        versioningEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.versioning}", JJVersion.class));
+        versioningEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRequirementBean.completeVersioning}", List.class, new Class[] { String.class }));
+        versioningEditInput.setDropdown(true);
+        versioningEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "versioning", String.class));
+        versioningEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{versioning.name} #{versioning.description} #{versioning.creationDate} #{versioning.updatedDate}", String.class));
+        versioningEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{versioning}", JJVersion.class));
+        versioningEditInput.setConverter(new JJVersionConverter());
+        versioningEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(versioningEditInput);
         
-        Message jjversionEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        jjversionEditInputMessage.setId("jjversionEditInputMessage");
-        jjversionEditInputMessage.setFor("jjversionEditInput");
-        jjversionEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(jjversionEditInputMessage);
+        Message versioningEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        versioningEditInputMessage.setId("versioningEditInputMessage");
+        versioningEditInputMessage.setFor("versioningEditInput");
+        versioningEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(versioningEditInputMessage);
         
         OutputLabel productEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         productEditOutput.setFor("productEditInput");
@@ -1272,23 +1326,29 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         statusEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(statusEditInputMessage);
         
-        OutputLabel isCompletedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        isCompletedEditOutput.setFor("isCompletedEditInput");
-        isCompletedEditOutput.setId("isCompletedEditOutput");
-        isCompletedEditOutput.setValue("Is Completed:");
-        htmlPanelGrid.getChildren().add(isCompletedEditOutput);
+        OutputLabel sprintEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        sprintEditOutput.setFor("sprintEditInput");
+        sprintEditOutput.setId("sprintEditOutput");
+        sprintEditOutput.setValue("Sprint:");
+        htmlPanelGrid.getChildren().add(sprintEditOutput);
         
-        SelectBooleanCheckbox isCompletedEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
-        isCompletedEditInput.setId("isCompletedEditInput");
-        isCompletedEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.isCompleted}", Boolean.class));
-        isCompletedEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(isCompletedEditInput);
+        AutoComplete sprintEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        sprintEditInput.setId("sprintEditInput");
+        sprintEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.sprint}", JJSprint.class));
+        sprintEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRequirementBean.completeSprint}", List.class, new Class[] { String.class }));
+        sprintEditInput.setDropdown(true);
+        sprintEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "sprint", String.class));
+        sprintEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{sprint.name} #{sprint.description} #{sprint.creationDate} #{sprint.updatedDate}", String.class));
+        sprintEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{sprint}", JJSprint.class));
+        sprintEditInput.setConverter(new JJSprintConverter());
+        sprintEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(sprintEditInput);
         
-        Message isCompletedEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        isCompletedEditInputMessage.setId("isCompletedEditInputMessage");
-        isCompletedEditInputMessage.setFor("isCompletedEditInput");
-        isCompletedEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(isCompletedEditInputMessage);
+        Message sprintEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        sprintEditInputMessage.setId("sprintEditInputMessage");
+        sprintEditInputMessage.setFor("sprintEditInput");
+        sprintEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(sprintEditInputMessage);
         
         OutputLabel impactEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         impactEditOutput.setFor("impactEditInput");
@@ -1363,21 +1423,29 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         tasksEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(tasksEditInputMessage);
         
-        HtmlOutputText assignedTosEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        assignedTosEditOutput.setId("assignedTosEditOutput");
-        assignedTosEditOutput.setValue("Assigned Tos:");
-        htmlPanelGrid.getChildren().add(assignedTosEditOutput);
+        OutputLabel assignedToEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        assignedToEditOutput.setFor("assignedToEditInput");
+        assignedToEditOutput.setId("assignedToEditOutput");
+        assignedToEditOutput.setValue("Assigned To:");
+        htmlPanelGrid.getChildren().add(assignedToEditOutput);
         
-        HtmlOutputText assignedTosEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        assignedTosEditInput.setId("assignedTosEditInput");
-        assignedTosEditInput.setValue("This relationship is managed from the JJContact side");
-        htmlPanelGrid.getChildren().add(assignedTosEditInput);
+        AutoComplete assignedToEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        assignedToEditInput.setId("assignedToEditInput");
+        assignedToEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.assignedTo}", JJContact.class));
+        assignedToEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRequirementBean.completeAssignedTo}", List.class, new Class[] { String.class }));
+        assignedToEditInput.setDropdown(true);
+        assignedToEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "assignedTo", String.class));
+        assignedToEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{assignedTo.name} #{assignedTo.description} #{assignedTo.creationDate} #{assignedTo.updatedDate}", String.class));
+        assignedToEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{assignedTo}", JJContact.class));
+        assignedToEditInput.setConverter(new JJContactConverter());
+        assignedToEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(assignedToEditInput);
         
-        Message assignedTosEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        assignedTosEditInputMessage.setId("assignedTosEditInputMessage");
-        assignedTosEditInputMessage.setFor("assignedTosEditInput");
-        assignedTosEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(assignedTosEditInputMessage);
+        Message assignedToEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        assignedToEditInputMessage.setId("assignedToEditInputMessage");
+        assignedToEditInputMessage.setFor("assignedToEditInput");
+        assignedToEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(assignedToEditInputMessage);
         
         HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesEditOutput.setId("messagesEditOutput");
@@ -1472,6 +1540,42 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         testcasesEditInputMessage.setFor("testcasesEditInput");
         testcasesEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testcasesEditInputMessage);
+        
+        OutputLabel isOperationEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        isOperationEditOutput.setFor("isOperationEditInput");
+        isOperationEditOutput.setId("isOperationEditOutput");
+        isOperationEditOutput.setValue("Is Operation:");
+        htmlPanelGrid.getChildren().add(isOperationEditOutput);
+        
+        SelectBooleanCheckbox isOperationEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        isOperationEditInput.setId("isOperationEditInput");
+        isOperationEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.isOperation}", Boolean.class));
+        isOperationEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(isOperationEditInput);
+        
+        Message isOperationEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        isOperationEditInputMessage.setId("isOperationEditInputMessage");
+        isOperationEditInputMessage.setFor("isOperationEditInput");
+        isOperationEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(isOperationEditInputMessage);
+        
+        OutputLabel isCompletedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        isCompletedEditOutput.setFor("isCompletedEditInput");
+        isCompletedEditOutput.setId("isCompletedEditOutput");
+        isCompletedEditOutput.setValue("Is Completed:");
+        htmlPanelGrid.getChildren().add(isCompletedEditOutput);
+        
+        SelectBooleanCheckbox isCompletedEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        isCompletedEditInput.setId("isCompletedEditInput");
+        isCompletedEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.isCompleted}", Boolean.class));
+        isCompletedEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(isCompletedEditInput);
+        
+        Message isCompletedEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        isCompletedEditInputMessage.setId("isCompletedEditInputMessage");
+        isCompletedEditInputMessage.setFor("isCompletedEditInput");
+        isCompletedEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(isCompletedEditInputMessage);
         
         return htmlPanelGrid;
     }
@@ -1621,15 +1725,15 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         chapterValue.setConverter(new JJChapterConverter());
         htmlPanelGrid.getChildren().add(chapterValue);
         
-        HtmlOutputText jjversionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        jjversionLabel.setId("jjversionLabel");
-        jjversionLabel.setValue("Jjversion:");
-        htmlPanelGrid.getChildren().add(jjversionLabel);
+        HtmlOutputText versioningLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        versioningLabel.setId("versioningLabel");
+        versioningLabel.setValue("Versioning:");
+        htmlPanelGrid.getChildren().add(versioningLabel);
         
-        HtmlOutputText jjversionValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        jjversionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.jjversion}", JJVersion.class));
-        jjversionValue.setConverter(new JJVersionConverter());
-        htmlPanelGrid.getChildren().add(jjversionValue);
+        HtmlOutputText versioningValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        versioningValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.versioning}", JJVersion.class));
+        versioningValue.setConverter(new JJVersionConverter());
+        htmlPanelGrid.getChildren().add(versioningValue);
         
         HtmlOutputText productLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         productLabel.setId("productLabel");
@@ -1681,14 +1785,15 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         statusValue.setConverter(new JJStatusConverter());
         htmlPanelGrid.getChildren().add(statusValue);
         
-        HtmlOutputText isCompletedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        isCompletedLabel.setId("isCompletedLabel");
-        isCompletedLabel.setValue("Is Completed:");
-        htmlPanelGrid.getChildren().add(isCompletedLabel);
+        HtmlOutputText sprintLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        sprintLabel.setId("sprintLabel");
+        sprintLabel.setValue("Sprint:");
+        htmlPanelGrid.getChildren().add(sprintLabel);
         
-        HtmlOutputText isCompletedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        isCompletedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.isCompleted}", String.class));
-        htmlPanelGrid.getChildren().add(isCompletedValue);
+        HtmlOutputText sprintValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        sprintValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.sprint}", JJSprint.class));
+        sprintValue.setConverter(new JJSprintConverter());
+        htmlPanelGrid.getChildren().add(sprintValue);
         
         HtmlOutputText impactLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         impactLabel.setId("impactLabel");
@@ -1731,15 +1836,15 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         tasksValue.setValue("This relationship is managed from the JJTask side");
         htmlPanelGrid.getChildren().add(tasksValue);
         
-        HtmlOutputText assignedTosLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        assignedTosLabel.setId("assignedTosLabel");
-        assignedTosLabel.setValue("Assigned Tos:");
-        htmlPanelGrid.getChildren().add(assignedTosLabel);
+        HtmlOutputText assignedToLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        assignedToLabel.setId("assignedToLabel");
+        assignedToLabel.setValue("Assigned To:");
+        htmlPanelGrid.getChildren().add(assignedToLabel);
         
-        HtmlOutputText assignedTosValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        assignedTosValue.setId("assignedTosValue");
-        assignedTosValue.setValue("This relationship is managed from the JJContact side");
-        htmlPanelGrid.getChildren().add(assignedTosValue);
+        HtmlOutputText assignedToValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        assignedToValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.assignedTo}", JJContact.class));
+        assignedToValue.setConverter(new JJContactConverter());
+        htmlPanelGrid.getChildren().add(assignedToValue);
         
         HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesLabel.setId("messagesLabel");
@@ -1802,6 +1907,24 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         testcasesValue.setValue("This relationship is managed from the JJTestcase side");
         htmlPanelGrid.getChildren().add(testcasesValue);
         
+        HtmlOutputText isOperationLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        isOperationLabel.setId("isOperationLabel");
+        isOperationLabel.setValue("Is Operation:");
+        htmlPanelGrid.getChildren().add(isOperationLabel);
+        
+        HtmlOutputText isOperationValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        isOperationValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.isOperation}", String.class));
+        htmlPanelGrid.getChildren().add(isOperationValue);
+        
+        HtmlOutputText isCompletedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        isCompletedLabel.setId("isCompletedLabel");
+        isCompletedLabel.setValue("Is Completed:");
+        htmlPanelGrid.getChildren().add(isCompletedLabel);
+        
+        HtmlOutputText isCompletedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        isCompletedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.isCompleted}", String.class));
+        htmlPanelGrid.getChildren().add(isCompletedValue);
+        
         return htmlPanelGrid;
     }
     
@@ -1860,7 +1983,7 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJVersion> JJRequirementBean.completeJjversion(String query) {
+    public List<JJVersion> JJRequirementBean.completeVersioning(String query) {
         List<JJVersion> suggestions = new ArrayList<JJVersion>();
         for (JJVersion jJVersion : jJVersionService.findAllJJVersions()) {
             String jJVersionStr = String.valueOf(jJVersion.getName() +  " "  + jJVersion.getDescription() +  " "  + jJVersion.getCreationDate() +  " "  + jJVersion.getUpdatedDate());
@@ -1926,6 +2049,17 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         return suggestions;
     }
     
+    public List<JJSprint> JJRequirementBean.completeSprint(String query) {
+        List<JJSprint> suggestions = new ArrayList<JJSprint>();
+        for (JJSprint jJSprint : jJSprintService.findAllJJSprints()) {
+            String jJSprintStr = String.valueOf(jJSprint.getName() +  " "  + jJSprint.getDescription() +  " "  + jJSprint.getCreationDate() +  " "  + jJSprint.getUpdatedDate());
+            if (jJSprintStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJSprint);
+            }
+        }
+        return suggestions;
+    }
+    
     public List<JJRelationship> JJRequirementBean.completeRelation(String query) {
         List<JJRelationship> suggestions = new ArrayList<JJRelationship>();
         for (JJRelationship jJRelationship : JJRelationship.values()) {
@@ -1958,15 +2092,15 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         this.selectedTasks = selectedTasks;
     }
     
-    public List<JJContact> JJRequirementBean.getSelectedAssignedTos() {
-        return selectedAssignedTos;
-    }
-    
-    public void JJRequirementBean.setSelectedAssignedTos(List<JJContact> selectedAssignedTos) {
-        if (selectedAssignedTos != null) {
-            JJRequirement_.setAssignedTos(new HashSet<JJContact>(selectedAssignedTos));
+    public List<JJContact> JJRequirementBean.completeAssignedTo(String query) {
+        List<JJContact> suggestions = new ArrayList<JJContact>();
+        for (JJContact jJContact : jJContactService.findAllJJContacts()) {
+            String jJContactStr = String.valueOf(jJContact.getName() +  " "  + jJContact.getDescription() +  " "  + jJContact.getCreationDate() +  " "  + jJContact.getUpdatedDate());
+            if (jJContactStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJContact);
+            }
         }
-        this.selectedAssignedTos = selectedAssignedTos;
+        return suggestions;
     }
     
     public List<JJMessage> JJRequirementBean.getSelectedMessages() {
@@ -2019,9 +2153,6 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         }
         if (JJRequirement_ != null && JJRequirement_.getTasks() != null) {
             selectedTasks = new ArrayList<JJTask>(JJRequirement_.getTasks());
-        }
-        if (JJRequirement_ != null && JJRequirement_.getAssignedTos() != null) {
-            selectedAssignedTos = new ArrayList<JJContact>(JJRequirement_.getAssignedTos());
         }
         if (JJRequirement_ != null && JJRequirement_.getMessages() != null) {
             selectedMessages = new ArrayList<JJMessage>(JJRequirement_.getMessages());
@@ -2089,7 +2220,6 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         JJRequirement_ = null;
         selectedBugs = null;
         selectedTasks = null;
-        selectedAssignedTos = null;
         selectedMessages = null;
         selectedRequirementLinkDown = null;
         selectedRequirementLinkUp = null;

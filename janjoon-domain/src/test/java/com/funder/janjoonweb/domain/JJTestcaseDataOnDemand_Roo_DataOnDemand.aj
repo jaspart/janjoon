@@ -6,7 +6,9 @@ package com.funder.janjoonweb.domain;
 import com.funder.janjoonweb.domain.JJCategoryDataOnDemand;
 import com.funder.janjoonweb.domain.JJChapterDataOnDemand;
 import com.funder.janjoonweb.domain.JJContactDataOnDemand;
+import com.funder.janjoonweb.domain.JJProductDataOnDemand;
 import com.funder.janjoonweb.domain.JJRequirementDataOnDemand;
+import com.funder.janjoonweb.domain.JJSprintDataOnDemand;
 import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJTestcaseDataOnDemand;
 import com.funder.janjoonweb.domain.JJTestcaseRepository;
@@ -42,7 +44,13 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     JJContactDataOnDemand JJTestcaseDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
+    JJProductDataOnDemand JJTestcaseDataOnDemand.jJProductDataOnDemand;
+    
+    @Autowired
     JJRequirementDataOnDemand JJTestcaseDataOnDemand.jJRequirementDataOnDemand;
+    
+    @Autowired
+    JJSprintDataOnDemand JJTestcaseDataOnDemand.jJSprintDataOnDemand;
     
     @Autowired
     JJTestcaseService JJTestcaseDataOnDemand.jJTestcaseService;
@@ -52,14 +60,25 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     
     public JJTestcase JJTestcaseDataOnDemand.getNewTransientJJTestcase(int index) {
         JJTestcase obj = new JJTestcase();
+        setActioncase(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
         setName(obj, index);
         setOrdering(obj, index);
+        setPricepoint(obj, index);
         setResultat(obj, index);
         setUpdatedDate(obj, index);
+        setWorkload(obj, index);
         return obj;
+    }
+    
+    public void JJTestcaseDataOnDemand.setActioncase(JJTestcase obj, int index) {
+        String actioncase = "actioncase_" + index;
+        if (actioncase.length() > 100) {
+            actioncase = actioncase.substring(0, 100);
+        }
+        obj.setActioncase(actioncase);
     }
     
     public void JJTestcaseDataOnDemand.setCreationDate(JJTestcase obj, int index) {
@@ -93,6 +112,11 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
         obj.setOrdering(ordering);
     }
     
+    public void JJTestcaseDataOnDemand.setPricepoint(JJTestcase obj, int index) {
+        Integer pricepoint = new Integer(index);
+        obj.setPricepoint(pricepoint);
+    }
+    
     public void JJTestcaseDataOnDemand.setResultat(JJTestcase obj, int index) {
         String resultat = "resultat_" + index;
         if (resultat.length() > 100) {
@@ -104,6 +128,11 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     public void JJTestcaseDataOnDemand.setUpdatedDate(JJTestcase obj, int index) {
         Date updatedDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setUpdatedDate(updatedDate);
+    }
+    
+    public void JJTestcaseDataOnDemand.setWorkload(JJTestcase obj, int index) {
+        Integer workload = new Integer(index);
+        obj.setWorkload(workload);
     }
     
     public JJTestcase JJTestcaseDataOnDemand.getSpecificJJTestcase(int index) {

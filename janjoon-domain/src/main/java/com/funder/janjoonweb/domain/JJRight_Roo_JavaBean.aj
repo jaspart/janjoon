@@ -4,37 +4,17 @@
 package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJCategory;
-import com.funder.janjoonweb.domain.JJPermission;
-import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProfile;
-import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRight;
-import java.util.Set;
 
 privileged aspect JJRight_Roo_JavaBean {
     
-    public JJPermission JJRight.getPermission() {
-        return this.permission;
+    public String JJRight.getObjet() {
+        return this.objet;
     }
     
-    public void JJRight.setPermission(JJPermission permission) {
-        this.permission = permission;
-    }
-    
-    public JJProject JJRight.getProject() {
-        return this.project;
-    }
-    
-    public void JJRight.setProject(JJProject project) {
-        this.project = project;
-    }
-    
-    public JJProduct JJRight.getProduct() {
-        return this.product;
-    }
-    
-    public void JJRight.setProduct(JJProduct product) {
-        this.product = product;
+    public void JJRight.setObjet(String objet) {
+        this.objet = objet;
     }
     
     public JJCategory JJRight.getCategory() {
@@ -69,20 +49,12 @@ privileged aspect JJRight_Roo_JavaBean {
         this.x = x;
     }
     
-    public Set<JJProfile> JJRight.getProfiles() {
-        return this.profiles;
+    public JJProfile JJRight.getProfile() {
+        return this.profile;
     }
     
-    public void JJRight.setProfiles(Set<JJProfile> profiles) {
-        this.profiles = profiles;
-    }
-    
-    public Boolean JJRight.getBasic() {
-        return this.basic;
-    }
-    
-    public void JJRight.setBasic(Boolean basic) {
-        this.basic = basic;
+    public void JJRight.setProfile(JJProfile profile) {
+        this.profile = profile;
     }
     
 }

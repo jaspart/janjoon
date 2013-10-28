@@ -51,8 +51,8 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
 
-		Predicate predicate = criteriaBuilder.equal(from.get("permission"),
-				"general");
+		Predicate predicate = criteriaBuilder
+				.equal(from.get("name"), "general");
 
 		select.where(predicate);
 

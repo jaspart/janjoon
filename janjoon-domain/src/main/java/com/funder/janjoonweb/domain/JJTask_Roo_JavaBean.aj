@@ -9,6 +9,7 @@ import com.funder.janjoonweb.domain.JJMessage;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJTask;
+import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJVersion;
 import java.util.Date;
 import java.util.Set;
@@ -23,36 +24,92 @@ privileged aspect JJTask_Roo_JavaBean {
         this.project = project;
     }
     
-    public Date JJTask.getStartDate() {
-        return this.startDate;
+    public Date JJTask.getStartDatePlanned() {
+        return this.startDatePlanned;
     }
     
-    public void JJTask.setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void JJTask.setStartDatePlanned(Date startDatePlanned) {
+        this.startDatePlanned = startDatePlanned;
     }
     
-    public Date JJTask.getEndDate() {
-        return this.endDate;
+    public Date JJTask.getEndDatePlanned() {
+        return this.endDatePlanned;
     }
     
-    public void JJTask.setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void JJTask.setEndDatePlanned(Date endDatePlanned) {
+        this.endDatePlanned = endDatePlanned;
     }
     
-    public Integer JJTask.getWorkload() {
-        return this.workload;
+    public Integer JJTask.getWorkloadPlanned() {
+        return this.workloadPlanned;
     }
     
-    public void JJTask.setWorkload(Integer workload) {
-        this.workload = workload;
+    public void JJTask.setWorkloadPlanned(Integer workloadPlanned) {
+        this.workloadPlanned = workloadPlanned;
     }
     
-    public JJVersion JJTask.getJjversion() {
-        return this.jjversion;
+    public Date JJTask.getStartDateRevised() {
+        return this.startDateRevised;
     }
     
-    public void JJTask.setJjversion(JJVersion jjversion) {
-        this.jjversion = jjversion;
+    public void JJTask.setStartDateRevised(Date startDateRevised) {
+        this.startDateRevised = startDateRevised;
+    }
+    
+    public Date JJTask.getEndDateRevised() {
+        return this.endDateRevised;
+    }
+    
+    public void JJTask.setEndDateRevised(Date endDateRevised) {
+        this.endDateRevised = endDateRevised;
+    }
+    
+    public Integer JJTask.getWorkloadRevised() {
+        return this.workloadRevised;
+    }
+    
+    public void JJTask.setWorkloadRevised(Integer workloadRevised) {
+        this.workloadRevised = workloadRevised;
+    }
+    
+    public Date JJTask.getStartDateReal() {
+        return this.startDateReal;
+    }
+    
+    public void JJTask.setStartDateReal(Date startDateReal) {
+        this.startDateReal = startDateReal;
+    }
+    
+    public Date JJTask.getEndDateReal() {
+        return this.endDateReal;
+    }
+    
+    public void JJTask.setEndDateReal(Date endDateReal) {
+        this.endDateReal = endDateReal;
+    }
+    
+    public Integer JJTask.getWorkloadReal() {
+        return this.workloadReal;
+    }
+    
+    public void JJTask.setWorkloadReal(Integer workloadReal) {
+        this.workloadReal = workloadReal;
+    }
+    
+    public Integer JJTask.getConsumed() {
+        return this.consumed;
+    }
+    
+    public void JJTask.setConsumed(Integer consumed) {
+        this.consumed = consumed;
+    }
+    
+    public JJVersion JJTask.getVersioning() {
+        return this.versioning;
+    }
+    
+    public void JJTask.setVersioning(JJVersion versioning) {
+        this.versioning = versioning;
     }
     
     public JJBug JJTask.getBug() {
@@ -71,12 +128,20 @@ privileged aspect JJTask_Roo_JavaBean {
         this.requirement = requirement;
     }
     
-    public Set<JJContact> JJTask.getAssignedTos() {
-        return this.assignedTos;
+    public JJTestcase JJTask.getTestcase() {
+        return this.testcase;
     }
     
-    public void JJTask.setAssignedTos(Set<JJContact> assignedTos) {
-        this.assignedTos = assignedTos;
+    public void JJTask.setTestcase(JJTestcase testcase) {
+        this.testcase = testcase;
+    }
+    
+    public JJContact JJTask.getAssignedTo() {
+        return this.assignedTo;
+    }
+    
+    public void JJTask.setAssignedTo(JJContact assignedTo) {
+        this.assignedTo = assignedTo;
     }
     
     public Set<JJMessage> JJTask.getMessages() {
@@ -85,6 +150,14 @@ privileged aspect JJTask_Roo_JavaBean {
     
     public void JJTask.setMessages(Set<JJMessage> messages) {
         this.messages = messages;
+    }
+    
+    public Boolean JJTask.getIsCompleted() {
+        return this.isCompleted;
+    }
+    
+    public void JJTask.setIsCompleted(Boolean isCompleted) {
+        this.isCompleted = isCompleted;
     }
     
 }

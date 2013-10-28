@@ -1,11 +1,13 @@
 package com.funder.janjoonweb.domain;
+
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
@@ -16,9 +18,11 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaEntity(sequenceName = "JJProfileSEQ")
 public class JJProfile {
 
-    /**
-     */
-	@JoinTable(name = "JJRightJJProfile", joinColumns = { @javax.persistence.JoinColumn(name = "Right_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Profile_ID", referencedColumnName = "id") })
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<JJRight> rights = new HashSet<JJRight>();
+	@NotNull
+	@Size(max = 25)
+	private String name;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")
+	private Set<JJRight> rights = new HashSet<JJRight>();
+
 }

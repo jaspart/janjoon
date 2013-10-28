@@ -7,25 +7,23 @@ import com.funder.janjoonweb.domain.JJProfile;
 import com.funder.janjoonweb.domain.JJProfileService;
 import com.funder.janjoonweb.domain.JJRight;
 import com.funder.janjoonweb.ui.mb.JJProfileBean;
-import com.funder.janjoonweb.ui.mb.converter.JJRightConverter;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.UISelectItems;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.LengthValidator;
+import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
-import org.primefaces.component.selectmanymenu.SelectManyMenu;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +60,7 @@ privileged aspect JJProfileBean_Roo_ManagedBean {
     @PostConstruct
     public void JJProfileBean.init() {
         columns = new ArrayList<String>();
+        columns.add("name");
     }
     
     public String JJProfileBean.getName() {
@@ -132,23 +131,35 @@ privileged aspect JJProfileBean_Roo_ManagedBean {
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
         
-        OutputLabel rightsCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        rightsCreateOutput.setFor("rightsCreateInput");
+        OutputLabel nameCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        nameCreateOutput.setFor("nameCreateInput");
+        nameCreateOutput.setId("nameCreateOutput");
+        nameCreateOutput.setValue("Name:");
+        htmlPanelGrid.getChildren().add(nameCreateOutput);
+        
+        InputText nameCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        nameCreateInput.setId("nameCreateInput");
+        nameCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProfileBean.JJProfile_.name}", String.class));
+        LengthValidator nameCreateInputValidator = new LengthValidator();
+        nameCreateInputValidator.setMaximum(25);
+        nameCreateInput.addValidator(nameCreateInputValidator);
+        nameCreateInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(nameCreateInput);
+        
+        Message nameCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        nameCreateInputMessage.setId("nameCreateInputMessage");
+        nameCreateInputMessage.setFor("nameCreateInput");
+        nameCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(nameCreateInputMessage);
+        
+        HtmlOutputText rightsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         rightsCreateOutput.setId("rightsCreateOutput");
         rightsCreateOutput.setValue("Rights:");
         htmlPanelGrid.getChildren().add(rightsCreateOutput);
         
-        SelectManyMenu rightsCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        HtmlOutputText rightsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         rightsCreateInput.setId("rightsCreateInput");
-        rightsCreateInput.setConverter(new JJRightConverter());
-        rightsCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProfileBean.selectedRights}", List.class));
-        UISelectItems rightsCreateInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        rightsCreateInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.allJJRights}", List.class));
-        rightsCreateInput.setRequired(false);
-        rightsCreateInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJRight", String.class));
-        rightsCreateInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJRight}", String.class));
-        rightsCreateInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJRight}", JJRight.class));
-        rightsCreateInput.getChildren().add(rightsCreateInputItems);
+        rightsCreateInput.setValue("This relationship is managed from the JJRight side");
         htmlPanelGrid.getChildren().add(rightsCreateInput);
         
         Message rightsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -168,23 +179,35 @@ privileged aspect JJProfileBean_Roo_ManagedBean {
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
         
-        OutputLabel rightsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        rightsEditOutput.setFor("rightsEditInput");
+        OutputLabel nameEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        nameEditOutput.setFor("nameEditInput");
+        nameEditOutput.setId("nameEditOutput");
+        nameEditOutput.setValue("Name:");
+        htmlPanelGrid.getChildren().add(nameEditOutput);
+        
+        InputText nameEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        nameEditInput.setId("nameEditInput");
+        nameEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProfileBean.JJProfile_.name}", String.class));
+        LengthValidator nameEditInputValidator = new LengthValidator();
+        nameEditInputValidator.setMaximum(25);
+        nameEditInput.addValidator(nameEditInputValidator);
+        nameEditInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(nameEditInput);
+        
+        Message nameEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        nameEditInputMessage.setId("nameEditInputMessage");
+        nameEditInputMessage.setFor("nameEditInput");
+        nameEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(nameEditInputMessage);
+        
+        HtmlOutputText rightsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         rightsEditOutput.setId("rightsEditOutput");
         rightsEditOutput.setValue("Rights:");
         htmlPanelGrid.getChildren().add(rightsEditOutput);
         
-        SelectManyMenu rightsEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        HtmlOutputText rightsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         rightsEditInput.setId("rightsEditInput");
-        rightsEditInput.setConverter(new JJRightConverter());
-        rightsEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProfileBean.selectedRights}", List.class));
-        UISelectItems rightsEditInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        rightsEditInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.allJJRights}", List.class));
-        rightsEditInput.setRequired(false);
-        rightsEditInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJRight", String.class));
-        rightsEditInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJRight}", String.class));
-        rightsEditInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJRight}", JJRight.class));
-        rightsEditInput.getChildren().add(rightsEditInputItems);
+        rightsEditInput.setValue("This relationship is managed from the JJRight side");
         htmlPanelGrid.getChildren().add(rightsEditInput);
         
         Message rightsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -204,23 +227,24 @@ privileged aspect JJProfileBean_Roo_ManagedBean {
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
         
+        HtmlOutputText nameLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        nameLabel.setId("nameLabel");
+        nameLabel.setValue("Name:");
+        htmlPanelGrid.getChildren().add(nameLabel);
+        
+        HtmlOutputText nameValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        nameValue.setId("nameValue");
+        nameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProfileBean.JJProfile_.name}", String.class));
+        htmlPanelGrid.getChildren().add(nameValue);
+        
         HtmlOutputText rightsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         rightsLabel.setId("rightsLabel");
         rightsLabel.setValue("Rights:");
         htmlPanelGrid.getChildren().add(rightsLabel);
         
-        SelectManyMenu rightsValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        HtmlOutputText rightsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         rightsValue.setId("rightsValue");
-        rightsValue.setConverter(new JJRightConverter());
-        rightsValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProfileBean.selectedRights}", List.class));
-        UISelectItems rightsValueItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        rightsValue.setReadonly(true);
-        rightsValue.setDisabled(true);
-        rightsValueItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProfileBean.JJProfile_.rights}", Set.class));
-        rightsValueItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJRight", String.class));
-        rightsValueItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJRight}", String.class));
-        rightsValueItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJRight}", JJRight.class));
-        rightsValue.getChildren().add(rightsValueItems);
+        rightsValue.setValue("This relationship is managed from the JJRight side");
         htmlPanelGrid.getChildren().add(rightsValue);
         
         return htmlPanelGrid;

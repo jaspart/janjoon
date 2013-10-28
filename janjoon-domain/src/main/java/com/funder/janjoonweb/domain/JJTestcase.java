@@ -1,4 +1,5 @@
 package com.funder.janjoonweb.domain;
+
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -15,32 +16,46 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaEntity(sequenceName = "JJTestcaseSEQ")
 public class JJTestcase extends JJAbstractEntity {
 
-    private Integer ordering;
+	private Integer ordering;
 
-    @Size(max = 100)
-    private String resultat;
+	@Size(max = 100)
+	private String actioncase;
 
-    @ManyToOne
-    private JJCategory category;
+	@Size(max = 100)
+	private String resultat;
 
-    @ManyToOne
-    private JJChapter chapter;
+	@ManyToOne
+	private JJProduct product;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
-    private Set<JJSoftware> softwares = new HashSet<JJSoftware>();
+	@ManyToOne
+	private JJCategory category;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
-    private Set<JJHardware> hardwares = new HashSet<JJHardware>();
+	@ManyToOne
+	private JJChapter chapter;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
-    private Set<JJTeststep> teststeps = new HashSet<JJTeststep>();
+	@ManyToOne
+	private JJRequirement requirement;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<JJTask> tasks = new HashSet<JJTask>();
+	@ManyToOne
+	private JJSprint sprint;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
-    private Set<JJMessage> messages = new HashSet<JJMessage>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
+	private Set<JJSoftware> softwares = new HashSet<JJSoftware>();
 
-    @ManyToOne
-    private JJRequirement requirement;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
+	private Set<JJHardware> hardwares = new HashSet<JJHardware>();
+
+	private Integer workload;
+
+	private Integer pricepoint;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
+	private Set<JJTeststep> teststeps = new HashSet<JJTeststep>();
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
+	private Set<JJTask> tasks = new HashSet<JJTask>();
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
+	private Set<JJMessage> messages = new HashSet<JJMessage>();
+
 }
