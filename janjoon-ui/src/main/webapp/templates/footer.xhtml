@@ -11,7 +11,6 @@
       <h:panelGrid columns="2" cellspacing="0" cellpadding="0">
         <h:panelGrid width="600" cellspacing="0" cellpadding="0">
           <h:panelGrid columns="5">
-            <h:outputText value="Version 0.2-BUILD_NUMBER | " />
             <h:outputText value="| #{messages.label_language}:" />
             <h:panelGroup>
               <h:commandLink id="switchToEnglish" action="#{localeBean.setSelectedLocale}">
@@ -46,11 +45,23 @@
                 </h:outputFormat>
               </p:tooltip>
             </h:panelGroup>
+            <h:panelGroup>
+              <h:commandLink id="switchToFrench" action="#{localeBean.setSelectedLocale}">
+                <f:param name="locale" value="fr" />
+                <h:graphicImage library="images" name="es.png" alt="Switch language to French" />
+              </h:commandLink>
+              <p:tooltip for="switchToFrench">
+                <h:outputFormat value="#{messages.label_language_switch}">
+                  <f:param value="French" />
+                </h:outputFormat>
+              </p:tooltip>
+            </h:panelGroup>
           </h:panelGrid>
         </h:panelGrid>
         <h:panelGrid align="right">
-          <h:outputLink value="http://springsource.com">
-            <h:graphicImage library="images" name="springsource-logo.png" alt="SpringSource" />
+          <h:outputLink value="http://www.starit.fr/">
+		    <h:outputText value="Version 0.2-BUILD_NUMBER | " />
+            <h:graphicImage library="images" name="starit-logo.png" alt="StarIT - Janjoon" />
           </h:outputLink>
         </h:panelGrid>
       </h:panelGrid>
