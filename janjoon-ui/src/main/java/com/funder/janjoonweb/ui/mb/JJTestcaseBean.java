@@ -10,19 +10,25 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.funder.janjoonweb.domain.JJBug;
+import com.funder.janjoonweb.domain.JJBugService;
+import com.funder.janjoonweb.domain.JJBuild;
 import com.funder.janjoonweb.domain.JJCategory;
 import com.funder.janjoonweb.domain.JJChapter;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJTestcase;
+import com.funder.janjoonweb.domain.JJTestcaseexecution;
+import com.funder.janjoonweb.domain.JJTestcaseexecutionService;
 import com.funder.janjoonweb.domain.JJTeststep;
 import com.funder.janjoonweb.domain.JJTeststepService;
+import com.funder.janjoonweb.domain.JJTeststepexecution;
+import com.funder.janjoonweb.domain.JJTeststepexecutionService;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJTestcase.class, beanName = "jJTestcaseBean")
@@ -30,7 +36,10 @@ public class JJTestcaseBean {
 
 	private JJTestcase jJTestCase = new JJTestcase();
 
+	private JJTestcase selectedTestcase;
+
 	private JJProject currentProject;
+	private JJBuild currentBuild;
 
 	private JJChapter chapter = null;
 
@@ -44,15 +53,40 @@ public class JJTestcaseBean {
 	private int tabIndex = 0;
 
 	private boolean disabled = true;
+	private boolean passed = true;
+	private boolean disabledQuit = true;
+	private boolean renderedComment = false;
 
 	private List<String> tmpJJTeststepList = new ArrayList<String>();
-	private List<JJTeststep> jJTeststepList = new ArrayList<JJTeststep>();
 
 	@Autowired
 	JJTeststepService jJTeststepService;
 
 	public void setjJTeststepService(JJTeststepService jJTeststepService) {
 		this.jJTeststepService = jJTeststepService;
+	}
+
+	@Autowired
+	JJTeststepexecutionService jJTeststepexecutionService;
+
+	public void setjJTeststepexecutionService(
+			JJTeststepexecutionService jJTeststepexecutionService) {
+		this.jJTeststepexecutionService = jJTeststepexecutionService;
+	}
+
+	@Autowired
+	JJTestcaseexecutionService jJTestcaseexecutionService;
+
+	public void setjJTestcaseexecutionService(
+			JJTestcaseexecutionService jJTestcaseexecutionService) {
+		this.jJTestcaseexecutionService = jJTestcaseexecutionService;
+	}
+
+	@Autowired
+	JJBugService jJBugService;
+
+	public void setjJBugService(JJBugService jJBugService) {
+		this.jJBugService = jJBugService;
 	}
 
 	public JJTestcase getjJTestCase() {
@@ -69,6 +103,14 @@ public class JJTestcaseBean {
 
 	public void setCurrentProject(JJProject currentProject) {
 		this.currentProject = currentProject;
+	}
+
+	public JJBuild getCurrentBuild() {
+		return currentBuild;
+	}
+
+	public void setCurrentBuild(JJBuild currentBuild) {
+		this.currentBuild = currentBuild;
 	}
 
 	public TreeNode getRootNode() {
@@ -103,12 +145,28 @@ public class JJTestcaseBean {
 		this.disabled = disabled;
 	}
 
-	public List<JJTeststep> getjJTeststepList() {
-		return jJTeststepList;
+	public boolean getPassed() {
+		return passed;
 	}
 
-	public void setjJTeststepList(List<JJTeststep> jJTeststepList) {
-		this.jJTeststepList = jJTeststepList;
+	public void setPassed(boolean passed) {
+		this.passed = passed;
+	}
+
+	public boolean getDisabledQuit() {
+		return disabledQuit;
+	}
+
+	public void setDisabledQuit(boolean disabledQuit) {
+		this.disabledQuit = disabledQuit;
+	}
+
+	public boolean getRenderedComment() {
+		return renderedComment;
+	}
+
+	public void setRenderedComment(boolean renderedComment) {
+		this.renderedComment = renderedComment;
 	}
 
 	public int getTabIndex() {
@@ -174,7 +232,7 @@ public class JJTestcaseBean {
 		chapter = null;
 		tmpJJTeststepList = new ArrayList<String>();
 		jJTeststepBean.initTestStepParameter();
-		jJTeststepList = new ArrayList<JJTeststep>();
+
 		tabIndex = 0;
 
 	}
@@ -417,11 +475,12 @@ public class JJTestcaseBean {
 		String selectedNode = event.getTreeNode().toString();
 		System.out.println("selectedNode " + selectedNode);
 
-		if (selectedNode.startsWith("TC")) {
+		if (selectedNode.startsWith("TC") && currentBuild != null) {
 			disabled = false;
 
 		} else {
 			disabled = true;
+
 		}
 
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -431,10 +490,18 @@ public class JJTestcaseBean {
 		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
-	public void createTabs() {
+	public void createTabs(JJTestcaseexecutionBean jJTestcaseexecutionBean,
+			JJTeststepexecutionBean jJTeststepexecutionBean, JJBugBean jJBugBean) {
 		if (selectedNode.getData().toString().startsWith("TC")) {
 
-			jJTeststepList = new ArrayList<JJTeststep>();
+			jJTestcaseexecutionBean.initParameter();
+			jJTeststepexecutionBean.initParameter();
+
+			passed = true;
+			renderedComment = !passed;
+
+			selectedTestcase = null;
+
 			long idjJTestCase;
 			JJTestcase jJTestCase;
 
@@ -443,20 +510,163 @@ public class JJTestcaseBean {
 
 			jJTestCase = jJTestcaseService.findJJTestcase(idjJTestCase);
 
-			jJTeststepList = jJTeststepService
+			selectedTestcase = jJTestCase;
+
+			// Verify if this testcase has a testcaseexecution
+			JJTestcaseexecution jJTestcaseexecution = jJTestcaseexecutionService
+					.getTestcaseexecutionWithTestcaseAndBuild(jJTestCase,
+							currentBuild);
+
+			if (jJTestcaseexecution == null) {
+				System.out.println("jJTestcaseexecution is null");
+				jJTestcaseexecutionBean.createJJTestcaseexecution(jJTestCase);
+			} else {
+				System.out.println("jJTestcaseexecution is not null");
+				jJTestcaseexecutionBean
+						.setjJTestcaseexecution(jJTestcaseexecution);
+			}
+
+			List<JJTeststep> jJTeststepList = jJTeststepService
 					.getJJTeststepWithTestcase(jJTestCase);
-			if (jJTeststepList.size() > 0)
+
+			if (jJTeststepList.size() > 0) {
 				tabIndex = 0;
+			}
+
+			for (JJTeststep jJTeststep : jJTeststepList) {
+				JJTeststepexecution jJTeststepexecution = jJTeststepexecutionService
+						.getTeststepexecutionWithTeststepAndBuild(jJTeststep,
+								currentBuild);
+				if (jJTeststepexecution == null) {
+					System.out.println("jJTeststepexecution is null");
+					jJTeststepexecutionBean
+							.createJJTeststepexecution(jJTeststep);
+				} else {
+					System.out.println("jJTeststepexecution is not null");
+					jJTeststepexecutionBean
+							.insertJJTeststepexecution(jJTeststepexecution);
+				}
+
+			}
+
+			for (JJTeststepexecution jJTeststepexecution : jJTeststepexecutionBean
+					.getjJTeststepexecutionList()) {
+				if (!jJTeststepexecution.getPassed()) {
+					tabIndex = jJTeststepexecution.getTeststep().getOrdering() - 1;
+					passed = false;
+					JJBug jJBug = jJBugService.getBugWithTestcaseAndProject(
+							jJTestCase, currentProject);
+					if (jJBug != null) {
+						System.out.println("Bug is not null");
+						jJBugBean.setjJBug(jJBug);
+					} else {
+						jJBugBean.createJJBug(jJTestCase);
+						System.out.println("Bug is null");
+					}
+					break;
+				}
+
+			}
+			renderedComment = !passed;
+			disabledQuit = passed;
+
 		}
 	}
 
+	public void onTabChange(JJTeststepexecutionBean jJTeststepexecutionBean,
+			JJBugBean jJBugBean) {
+		System.out.println("?????????????tabIndex " + tabIndex);
+		passed = jJTeststepexecutionBean.getjJTeststepexecutionList()
+				.get(tabIndex).getPassed();
+		disabledQuit = passed;
+		renderedComment = !passed;
+		JJTeststepexecution jJTeststepexecution = jJTeststepexecutionBean
+				.getjJTeststepexecutionList().get(tabIndex);
 
+		if (passed) {
+			jJTeststepexecution.setPassed(true);
+			jJTeststepexecutionService
+					.updateJJTeststepexecution(jJTeststepexecution);
+		} else {
+			jJTeststepexecution.setPassed(false);
+			jJTeststepexecutionService
+					.updateJJTeststepexecution(jJTeststepexecution);
+			JJBug jJBug = jJBugService.getBugWithTestcaseAndProject(
+					selectedTestcase, currentProject);
+			if (jJBug != null) {
 
-	public void incrementTabIndex() {
-		if (tabIndex < jJTeststepList.size() - 1 && jJTeststepList.size() > 0)
+				jJBugBean.setjJBug(jJBug);
+			} else {
+				jJBugBean.createJJBug(selectedTestcase);
+
+			}
+		}
+
+		System.out.println("tabIndex " + tabIndex);
+	}
+
+	public void incrementTabIndex(
+			JJTeststepexecutionBean jJTeststepexecutionBean, JJBugBean jJBugBean) {
+		if (tabIndex < jJTeststepexecutionBean.getjJTeststepexecutionList()
+				.size() - 1
+				&& jJTeststepexecutionBean.getjJTeststepexecutionList().size() > 0)
 			tabIndex++;
-		
-		System.out.println("tabIndex "+tabIndex);
+
+		passed = jJTeststepexecutionBean.getjJTeststepexecutionList()
+				.get(tabIndex).getPassed();
+
+		disabledQuit = passed;
+		renderedComment = !passed;
+
+		if (passed) {
+			// cache bug comment and disable quit
+		} else {
+			// display bug comment and enable quit
+		}
+
+		System.out.println("tabIndex " + tabIndex);
+	}
+
+	public void managePassed(JJTeststepexecutionBean jJTeststepexecutionBean,
+			JJBugBean jJBugBean) {
+		System.out.println("//////////tabIndex " + tabIndex);
+		disabledQuit = passed;
+		renderedComment = !passed;
+
+		JJTeststepexecution jJTeststepexecution = jJTeststepexecutionBean
+				.getjJTeststepexecutionList().get(tabIndex);
+
+		if (passed) {
+			jJTeststepexecution.setPassed(true);
+			jJTeststepexecutionService
+					.updateJJTeststepexecution(jJTeststepexecution);
+		} else {
+			jJTeststepexecution.setPassed(false);
+			jJTeststepexecutionService
+					.updateJJTeststepexecution(jJTeststepexecution);
+			JJBug jJBug = jJBugService.getBugWithTestcaseAndProject(
+					selectedTestcase, currentProject);
+			if (jJBug != null) {
+
+				jJBugBean.setjJBug(jJBug);
+			} else {
+				jJBugBean.createJJBug(selectedTestcase);
+
+			}
+		}
+
+	}
+
+	public void quitRun(JJTestcaseexecutionBean jJTestcaseexecutionBean,
+			JJTeststepexecutionBean jJTeststepexecutionBean, JJBugBean jJBugBean) {
+
+		jJBugService.updateJJBug(jJBugBean.getjJBug());
+		JJTestcaseexecution jJTestcaseexecution = jJTestcaseexecutionBean
+				.getjJTestcaseexecution();
+		jJTestcaseexecution.setPassed(false);
+		jJTestcaseexecutionService
+				.updateJJTestcaseexecution(jJTestcaseexecution);
+
 	}
 
 	private String getStringFromString(String s, int index) {

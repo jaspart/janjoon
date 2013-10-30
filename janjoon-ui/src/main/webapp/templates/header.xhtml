@@ -55,7 +55,7 @@
 						itemLabel="#{p.name}" itemValue="#{p}" />
 
 					<p:ajax process="@this" partialSubmit="true"
-						listener="#{jJProjectBean.handleSelectProject(jJProductBean,jJVersionBean,jJRequirementBean,jJChapterBean,jJTestcaseBean,jJTeststepBean)}"
+						listener="#{jJProjectBean.handleSelectProject(jJProductBean,jJVersionBean,jJRequirementBean,jJChapterBean,jJTestcaseBean,jJTeststepBean,jJBugBean)}"
 						update="messagesHeader productSelectOneMenu versionSelectOneMenu :contentGrid" />
 				</p:selectOneMenu>
 

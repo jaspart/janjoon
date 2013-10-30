@@ -17,12 +17,12 @@ privileged aspect JJTestcaseexecution_Roo_JavaBean {
         this.build = build;
     }
     
-    public JJTestcase JJTestcaseexecution.getBuildTestcase() {
-        return this.buildTestcase;
+    public JJTestcase JJTestcaseexecution.getTestcase() {
+        return this.testcase;
     }
     
-    public void JJTestcaseexecution.setBuildTestcase(JJTestcase buildTestcase) {
-        this.buildTestcase = buildTestcase;
+    public void JJTestcaseexecution.setTestcase(JJTestcase testcase) {
+        this.testcase = testcase;
     }
     
     public Boolean JJTestcaseexecution.getPassed() {

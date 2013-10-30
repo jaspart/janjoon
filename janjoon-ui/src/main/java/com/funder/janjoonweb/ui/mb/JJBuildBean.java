@@ -49,16 +49,17 @@ public class JJBuildBean {
 
 	public void handleSelectBuild(
 			JJTestcaseexecutionBean jJTestcaseexecutionBean,
-			JJTeststepexecutionBean jJTeststepexecutionBean) {
-		if (jJBuild != null) {
-
-			if (jJTestcaseexecutionBean != null) {
-
-				jJTestcaseexecutionBean.setCurrentBuild(jJBuild);
-			}
-			if (jJTeststepexecutionBean != null) {
-				jJTeststepexecutionBean.setCurrentBuild(jJBuild);
-			}
+			JJTeststepexecutionBean jJTeststepexecutionBean,
+			JJTestcaseBean jJTestcaseBean) {
+		
+		if (jJTestcaseexecutionBean != null) {
+			jJTestcaseexecutionBean.setCurrentBuild(jJBuild);
+		}
+		if (jJTeststepexecutionBean != null) {
+			jJTeststepexecutionBean.setCurrentBuild(jJBuild);
+		}
+		if (jJTestcaseBean != null) {
+			jJTestcaseBean.setCurrentBuild(jJBuild);
 		}
 
 	}

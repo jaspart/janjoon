@@ -35,10 +35,10 @@ privileged aspect JJTestcaseexecutionDataOnDemand_Roo_DataOnDemand {
     JJBuildDataOnDemand JJTestcaseexecutionDataOnDemand.jJBuildDataOnDemand;
     
     @Autowired
-    JJTestcaseDataOnDemand JJTestcaseexecutionDataOnDemand.jJTestcaseDataOnDemand;
+    JJContactDataOnDemand JJTestcaseexecutionDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    JJContactDataOnDemand JJTestcaseexecutionDataOnDemand.jJContactDataOnDemand;
+    JJTestcaseDataOnDemand JJTestcaseexecutionDataOnDemand.jJTestcaseDataOnDemand;
     
     @Autowired
     JJTestcaseexecutionService JJTestcaseexecutionDataOnDemand.jJTestcaseexecutionService;

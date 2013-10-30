@@ -249,14 +249,14 @@ field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --m
 
 focus --class ~.JJTestcaseexecution
 field reference --fieldName build --type ~.JJBuild
-field reference --fieldName buildTestcase --type ~.JJTestcase
+field reference --fieldName testcase --type ~.JJTestcase
 field boolean --fieldName passed
 
 
 #######################
 focus --class ~.JJTeststepexecution
 field reference --fieldName build --type ~.JJBuild
-field reference --fieldName buildTestcase --type ~.JJTestcase
+field reference --fieldName teststep --type ~.JJTeststep
 field boolean --fieldName passed
  
 

@@ -398,7 +398,7 @@ public class JJProjectBean {
 	public void handleSelectProject(JJProductBean jJProductBean,
 			JJVersionBean jJVersionBean, JJRequirementBean jJRequirementBean,
 			JJChapterBean jJChapterBean, JJTestcaseBean jJTestcaseBean,
-			JJTeststepBean jJTeststepBean) {
+			JJTeststepBean jJTeststepBean, JJBugBean jJBugBean) {
 		if (myJJProject != null) {
 
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -447,6 +447,10 @@ public class JJProjectBean {
 				jJTestcaseBean.setCurrentProject(myJJProject);
 				jJTestcaseBean.initTestCaseParameter(jJTeststepBean);
 			}
+
+			if (jJBugBean != null)
+				jJBugBean.setCurrentProject(myJJProject);
+
 		} else {
 
 			if (jJProductBean != null) {
@@ -479,6 +483,8 @@ public class JJProjectBean {
 				jJTestcaseBean.setCurrentProject(myJJProject);
 				jJTestcaseBean.initTestCaseParameter(jJTeststepBean);
 			}
+			if (jJBugBean != null)
+				jJBugBean.setCurrentProject(myJJProject);
 
 		}
 

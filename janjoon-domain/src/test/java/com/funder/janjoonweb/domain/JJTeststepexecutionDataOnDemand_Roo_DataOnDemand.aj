@@ -5,7 +5,7 @@ package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJBuildDataOnDemand;
 import com.funder.janjoonweb.domain.JJContactDataOnDemand;
-import com.funder.janjoonweb.domain.JJTestcaseDataOnDemand;
+import com.funder.janjoonweb.domain.JJTeststepDataOnDemand;
 import com.funder.janjoonweb.domain.JJTeststepexecution;
 import com.funder.janjoonweb.domain.JJTeststepexecutionDataOnDemand;
 import com.funder.janjoonweb.domain.JJTeststepexecutionRepository;
@@ -35,10 +35,10 @@ privileged aspect JJTeststepexecutionDataOnDemand_Roo_DataOnDemand {
     JJBuildDataOnDemand JJTeststepexecutionDataOnDemand.jJBuildDataOnDemand;
     
     @Autowired
-    JJTestcaseDataOnDemand JJTeststepexecutionDataOnDemand.jJTestcaseDataOnDemand;
+    JJContactDataOnDemand JJTeststepexecutionDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    JJContactDataOnDemand JJTeststepexecutionDataOnDemand.jJContactDataOnDemand;
+    JJTeststepDataOnDemand JJTeststepexecutionDataOnDemand.jJTeststepDataOnDemand;
     
     @Autowired
     JJTeststepexecutionService JJTeststepexecutionDataOnDemand.jJTeststepexecutionService;

@@ -328,29 +328,29 @@ privileged aspect JJTestcaseexecutionBean_Roo_ManagedBean {
         buildCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(buildCreateInputMessage);
         
-        OutputLabel buildTestcaseCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        buildTestcaseCreateOutput.setFor("buildTestcaseCreateInput");
-        buildTestcaseCreateOutput.setId("buildTestcaseCreateOutput");
-        buildTestcaseCreateOutput.setValue("Build Testcase:");
-        htmlPanelGrid.getChildren().add(buildTestcaseCreateOutput);
+        OutputLabel testcaseCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        testcaseCreateOutput.setFor("testcaseCreateInput");
+        testcaseCreateOutput.setId("testcaseCreateOutput");
+        testcaseCreateOutput.setValue("Testcase:");
+        htmlPanelGrid.getChildren().add(testcaseCreateOutput);
         
-        AutoComplete buildTestcaseCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        buildTestcaseCreateInput.setId("buildTestcaseCreateInput");
-        buildTestcaseCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseexecutionBean.JJTestcaseexecution_.buildTestcase}", JJTestcase.class));
-        buildTestcaseCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseexecutionBean.completeBuildTestcase}", List.class, new Class[] { String.class }));
-        buildTestcaseCreateInput.setDropdown(true);
-        buildTestcaseCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "buildTestcase", String.class));
-        buildTestcaseCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{buildTestcase.name} #{buildTestcase.description} #{buildTestcase.creationDate} #{buildTestcase.updatedDate}", String.class));
-        buildTestcaseCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{buildTestcase}", JJTestcase.class));
-        buildTestcaseCreateInput.setConverter(new JJTestcaseConverter());
-        buildTestcaseCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(buildTestcaseCreateInput);
+        AutoComplete testcaseCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        testcaseCreateInput.setId("testcaseCreateInput");
+        testcaseCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseexecutionBean.JJTestcaseexecution_.testcase}", JJTestcase.class));
+        testcaseCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseexecutionBean.completeTestcase}", List.class, new Class[] { String.class }));
+        testcaseCreateInput.setDropdown(true);
+        testcaseCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "testcase", String.class));
+        testcaseCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{testcase.name} #{testcase.description} #{testcase.creationDate} #{testcase.updatedDate}", String.class));
+        testcaseCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{testcase}", JJTestcase.class));
+        testcaseCreateInput.setConverter(new JJTestcaseConverter());
+        testcaseCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(testcaseCreateInput);
         
-        Message buildTestcaseCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        buildTestcaseCreateInputMessage.setId("buildTestcaseCreateInputMessage");
-        buildTestcaseCreateInputMessage.setFor("buildTestcaseCreateInput");
-        buildTestcaseCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(buildTestcaseCreateInputMessage);
+        Message testcaseCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcaseCreateInputMessage.setId("testcaseCreateInputMessage");
+        testcaseCreateInputMessage.setFor("testcaseCreateInput");
+        testcaseCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcaseCreateInputMessage);
         
         OutputLabel passedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         passedCreateOutput.setFor("passedCreateInput");
@@ -555,29 +555,29 @@ privileged aspect JJTestcaseexecutionBean_Roo_ManagedBean {
         buildEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(buildEditInputMessage);
         
-        OutputLabel buildTestcaseEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        buildTestcaseEditOutput.setFor("buildTestcaseEditInput");
-        buildTestcaseEditOutput.setId("buildTestcaseEditOutput");
-        buildTestcaseEditOutput.setValue("Build Testcase:");
-        htmlPanelGrid.getChildren().add(buildTestcaseEditOutput);
+        OutputLabel testcaseEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        testcaseEditOutput.setFor("testcaseEditInput");
+        testcaseEditOutput.setId("testcaseEditOutput");
+        testcaseEditOutput.setValue("Testcase:");
+        htmlPanelGrid.getChildren().add(testcaseEditOutput);
         
-        AutoComplete buildTestcaseEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        buildTestcaseEditInput.setId("buildTestcaseEditInput");
-        buildTestcaseEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseexecutionBean.JJTestcaseexecution_.buildTestcase}", JJTestcase.class));
-        buildTestcaseEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseexecutionBean.completeBuildTestcase}", List.class, new Class[] { String.class }));
-        buildTestcaseEditInput.setDropdown(true);
-        buildTestcaseEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "buildTestcase", String.class));
-        buildTestcaseEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{buildTestcase.name} #{buildTestcase.description} #{buildTestcase.creationDate} #{buildTestcase.updatedDate}", String.class));
-        buildTestcaseEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{buildTestcase}", JJTestcase.class));
-        buildTestcaseEditInput.setConverter(new JJTestcaseConverter());
-        buildTestcaseEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(buildTestcaseEditInput);
+        AutoComplete testcaseEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        testcaseEditInput.setId("testcaseEditInput");
+        testcaseEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseexecutionBean.JJTestcaseexecution_.testcase}", JJTestcase.class));
+        testcaseEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseexecutionBean.completeTestcase}", List.class, new Class[] { String.class }));
+        testcaseEditInput.setDropdown(true);
+        testcaseEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "testcase", String.class));
+        testcaseEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{testcase.name} #{testcase.description} #{testcase.creationDate} #{testcase.updatedDate}", String.class));
+        testcaseEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{testcase}", JJTestcase.class));
+        testcaseEditInput.setConverter(new JJTestcaseConverter());
+        testcaseEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(testcaseEditInput);
         
-        Message buildTestcaseEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        buildTestcaseEditInputMessage.setId("buildTestcaseEditInputMessage");
-        buildTestcaseEditInputMessage.setFor("buildTestcaseEditInput");
-        buildTestcaseEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(buildTestcaseEditInputMessage);
+        Message testcaseEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcaseEditInputMessage.setId("testcaseEditInputMessage");
+        testcaseEditInputMessage.setFor("testcaseEditInput");
+        testcaseEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcaseEditInputMessage);
         
         OutputLabel passedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         passedEditOutput.setFor("passedEditInput");
@@ -693,15 +693,15 @@ privileged aspect JJTestcaseexecutionBean_Roo_ManagedBean {
         buildValue.setConverter(new JJBuildConverter());
         htmlPanelGrid.getChildren().add(buildValue);
         
-        HtmlOutputText buildTestcaseLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        buildTestcaseLabel.setId("buildTestcaseLabel");
-        buildTestcaseLabel.setValue("Build Testcase:");
-        htmlPanelGrid.getChildren().add(buildTestcaseLabel);
+        HtmlOutputText testcaseLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcaseLabel.setId("testcaseLabel");
+        testcaseLabel.setValue("Testcase:");
+        htmlPanelGrid.getChildren().add(testcaseLabel);
         
-        HtmlOutputText buildTestcaseValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        buildTestcaseValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseexecutionBean.JJTestcaseexecution_.buildTestcase}", JJTestcase.class));
-        buildTestcaseValue.setConverter(new JJTestcaseConverter());
-        htmlPanelGrid.getChildren().add(buildTestcaseValue);
+        HtmlOutputText testcaseValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcaseValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseexecutionBean.JJTestcaseexecution_.testcase}", JJTestcase.class));
+        testcaseValue.setConverter(new JJTestcaseConverter());
+        htmlPanelGrid.getChildren().add(testcaseValue);
         
         HtmlOutputText passedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         passedLabel.setId("passedLabel");
@@ -759,7 +759,7 @@ privileged aspect JJTestcaseexecutionBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJTestcase> JJTestcaseexecutionBean.completeBuildTestcase(String query) {
+    public List<JJTestcase> JJTestcaseexecutionBean.completeTestcase(String query) {
         List<JJTestcase> suggestions = new ArrayList<JJTestcase>();
         for (JJTestcase jJTestcase : jJTestcaseService.findAllJJTestcases()) {
             String jJTestcaseStr = String.valueOf(jJTestcase.getName() +  " "  + jJTestcase.getDescription() +  " "  + jJTestcase.getCreationDate() +  " "  + jJTestcase.getUpdatedDate());

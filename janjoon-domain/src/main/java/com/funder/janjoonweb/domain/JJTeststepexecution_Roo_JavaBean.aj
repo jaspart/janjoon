@@ -4,7 +4,7 @@
 package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJBuild;
-import com.funder.janjoonweb.domain.JJTestcase;
+import com.funder.janjoonweb.domain.JJTeststep;
 import com.funder.janjoonweb.domain.JJTeststepexecution;
 
 privileged aspect JJTeststepexecution_Roo_JavaBean {
@@ -17,12 +17,12 @@ privileged aspect JJTeststepexecution_Roo_JavaBean {
         this.build = build;
     }
     
-    public JJTestcase JJTeststepexecution.getBuildTestcase() {
-        return this.buildTestcase;
+    public JJTeststep JJTeststepexecution.getTeststep() {
+        return this.teststep;
     }
     
-    public void JJTeststepexecution.setBuildTestcase(JJTestcase buildTestcase) {
-        this.buildTestcase = buildTestcase;
+    public void JJTeststepexecution.setTeststep(JJTeststep teststep) {
+        this.teststep = teststep;
     }
     
     public Boolean JJTeststepexecution.getPassed() {
