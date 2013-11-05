@@ -228,7 +228,7 @@ public class JJRequirementBean {
 									"BUSINESS", currentProject, currentProduct);
 			else
 				businessJJRequirementsList = jJRequirementService
-						.getAllJJRequirementsWithProject("BUSINESS",
+						.getAllJJRequirementsWithCategoryAndProject("BUSINESS",
 								currentProject);
 		else
 			businessJJRequirementsList = jJRequirementService
@@ -270,8 +270,8 @@ public class JJRequirementBean {
 
 			else
 				functionalJJRequirementsList = jJRequirementService
-						.getAllJJRequirementsWithProject("FUNCTIONAL",
-								currentProject);
+						.getAllJJRequirementsWithCategoryAndProject(
+								"FUNCTIONAL", currentProject);
 		else
 
 			functionalJJRequirementsList = jJRequirementService
@@ -312,8 +312,8 @@ public class JJRequirementBean {
 									"TECHNICAL", currentProject, currentProduct);
 			else
 				technicalJJRequirementsList = jJRequirementService
-						.getAllJJRequirementsWithProject("TECHNICAL",
-								currentProject);
+						.getAllJJRequirementsWithCategoryAndProject(
+								"TECHNICAL", currentProject);
 		else
 
 			technicalJJRequirementsList = jJRequirementService
@@ -353,8 +353,9 @@ public class JJRequirementBean {
 							.getAllJJRequirementsWithProjectAndProduct(
 									"BUSINESS", currentProject, currentProduct);
 			else
-				tmpList = jJRequirementService.getAllJJRequirementsWithProject(
-						"BUSINESS", currentProject);
+				tmpList = jJRequirementService
+						.getAllJJRequirementsWithCategoryAndProject("BUSINESS",
+								currentProject);
 		else
 			tmpList = jJRequirementService
 					.getAllJJRequirementsWithCategory("BUSINESS");
@@ -398,8 +399,9 @@ public class JJRequirementBean {
 									"FUNCTIONAL", currentProject,
 									currentProduct);
 			else
-				tmpList = jJRequirementService.getAllJJRequirementsWithProject(
-						"FUNCTIONAL", currentProject);
+				tmpList = jJRequirementService
+						.getAllJJRequirementsWithCategoryAndProject(
+								"FUNCTIONAL", currentProject);
 		else
 			tmpList = jJRequirementService
 					.getAllJJRequirementsWithCategory("FUNCTIONAL");
@@ -442,8 +444,9 @@ public class JJRequirementBean {
 							.getAllJJRequirementsWithProjectAndProduct(
 									"TECHNICAL", currentProject, currentProduct);
 			else
-				tmpList = jJRequirementService.getAllJJRequirementsWithProject(
-						"TECHNICAL", currentProject);
+				tmpList = jJRequirementService
+						.getAllJJRequirementsWithCategoryAndProject(
+								"TECHNICAL", currentProject);
 		else
 			tmpList = jJRequirementService
 					.getAllJJRequirementsWithCategory("TECHNICAL");
@@ -1130,8 +1133,8 @@ public class JJRequirementBean {
 										currentProduct);
 				else
 					myBusinessJJRequirements = jJRequirementService
-							.getAllJJRequirementsWithProject("BUSINESS",
-									currentProject);
+							.getAllJJRequirementsWithCategoryAndProject(
+									"BUSINESS", currentProject);
 			else
 				myBusinessJJRequirements = jJRequirementService
 						.getAllJJRequirementsWithCategory("BUSINESS");
@@ -1157,8 +1160,8 @@ public class JJRequirementBean {
 
 				else
 					myFunctionalJJRequirements = jJRequirementService
-							.getAllJJRequirementsWithProject("FUNCTIONAL",
-									currentProject);
+							.getAllJJRequirementsWithCategoryAndProject(
+									"FUNCTIONAL", currentProject);
 			else
 
 				myFunctionalJJRequirements = jJRequirementService
@@ -1182,8 +1185,8 @@ public class JJRequirementBean {
 										currentProduct);
 				else
 					myTechnicalJJRequirements = jJRequirementService
-							.getAllJJRequirementsWithProject("TECHNICAL",
-									currentProject);
+							.getAllJJRequirementsWithCategoryAndProject(
+									"TECHNICAL", currentProject);
 			else
 
 				myTechnicalJJRequirements = jJRequirementService

@@ -22,6 +22,7 @@ import com.funder.janjoonweb.domain.JJBuild;
 import com.funder.janjoonweb.domain.JJCategory;
 import com.funder.janjoonweb.domain.JJChapter;
 import com.funder.janjoonweb.domain.JJProject;
+import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJTestcaseexecution;
 import com.funder.janjoonweb.domain.JJTestcaseexecutionService;
@@ -54,10 +55,10 @@ public class JJTestcaseBean {
 
 	private boolean disabled = true;
 	private boolean passed = true;
-	private boolean disabledQuit = true;
-	private boolean renderedComment = false;
 
 	private List<String> tmpJJTeststepList = new ArrayList<String>();
+
+	private List<JJRequirement> reqList;
 
 	@Autowired
 	JJTeststepService jJTeststepService;
@@ -153,28 +154,20 @@ public class JJTestcaseBean {
 		this.passed = passed;
 	}
 
-	public boolean getDisabledQuit() {
-		return disabledQuit;
-	}
-
-	public void setDisabledQuit(boolean disabledQuit) {
-		this.disabledQuit = disabledQuit;
-	}
-
-	public boolean getRenderedComment() {
-		return renderedComment;
-	}
-
-	public void setRenderedComment(boolean renderedComment) {
-		this.renderedComment = renderedComment;
-	}
-
 	public int getTabIndex() {
 		return tabIndex;
 	}
 
 	public void setTabIndex(int tabIndex) {
 		this.tabIndex = tabIndex;
+	}
+
+	public List<JJRequirement> getReqList() {
+		return reqList;
+	}
+
+	public void setReqList(List<JJRequirement> reqList) {
+		this.reqList = reqList;
 	}
 
 	public void initTestCaseParameter(JJTeststepBean jJTeststepBean) {
@@ -232,6 +225,9 @@ public class JJTestcaseBean {
 		chapter = null;
 		tmpJJTeststepList = new ArrayList<String>();
 		jJTeststepBean.initTestStepParameter();
+
+		reqList = jJRequirementService
+				.getAllJJRequirementsWithProject(currentProject);
 
 		tabIndex = 0;
 
@@ -498,13 +494,11 @@ public class JJTestcaseBean {
 			jJTeststepexecutionBean.initParameter();
 
 			passed = true;
-			renderedComment = !passed;
 
 			selectedTestcase = null;
 
 			long idjJTestCase;
 			JJTestcase jJTestCase;
-
 			idjJTestCase = Long.parseLong(getStringFromString(selectedNode
 					.getData().toString(), 1));
 
@@ -567,71 +561,92 @@ public class JJTestcaseBean {
 				}
 
 			}
-			renderedComment = !passed;
-			disabledQuit = passed;
 
 		}
 	}
 
 	public void onTabChange(JJTeststepexecutionBean jJTeststepexecutionBean,
 			JJBugBean jJBugBean) {
-		System.out.println("?????????????tabIndex " + tabIndex);
-		passed = jJTeststepexecutionBean.getjJTeststepexecutionList()
-				.get(tabIndex).getPassed();
-		disabledQuit = passed;
-		renderedComment = !passed;
+		System.out.println("onTabChange tabIndex " + tabIndex);
+
 		JJTeststepexecution jJTeststepexecution = jJTeststepexecutionBean
 				.getjJTeststepexecutionList().get(tabIndex);
 
-		if (passed) {
-			jJTeststepexecution.setPassed(true);
-			jJTeststepexecutionService
-					.updateJJTeststepexecution(jJTeststepexecution);
-		} else {
+		passed = jJTeststepexecution.getPassed();
+
+		if (!passed) {
 			jJTeststepexecution.setPassed(false);
 			jJTeststepexecutionService
 					.updateJJTeststepexecution(jJTeststepexecution);
 			JJBug jJBug = jJBugService.getBugWithTestcaseAndProject(
 					selectedTestcase, currentProject);
 			if (jJBug != null) {
-
 				jJBugBean.setjJBug(jJBug);
 			} else {
 				jJBugBean.createJJBug(selectedTestcase);
-
 			}
 		}
 
 		System.out.println("tabIndex " + tabIndex);
 	}
 
-	public void incrementTabIndex(
+	public void nextTabIndex(JJTestcaseexecutionBean jJTestcaseexecutionBean,
 			JJTeststepexecutionBean jJTeststepexecutionBean, JJBugBean jJBugBean) {
-		if (tabIndex < jJTeststepexecutionBean.getjJTeststepexecutionList()
-				.size() - 1
-				&& jJTeststepexecutionBean.getjJTeststepexecutionList().size() > 0)
+
+		// Traiter le cas précedent et le cas suivant
+
+		int size = jJTeststepexecutionBean.getjJTeststepexecutionList().size();
+		if (tabIndex == size - 1) {
+
+			JJTeststepexecution jJTeststepexecution = jJTeststepexecutionBean
+					.getjJTeststepexecutionList().get(tabIndex);
+
+			passed = jJTeststepexecution.getPassed();
+
+			JJTestcaseexecution jJTestcaseexecution = jJTestcaseexecutionBean
+					.getjJTestcaseexecution();
+			jJTestcaseexecution.setPassed(passed);
+			jJTestcaseexecutionService
+					.updateJJTestcaseexecution(jJTestcaseexecution);
+
+			if (!passed) {
+				jJBugService.updateJJBug(jJBugBean.getjJBug());
+			}
+
+		} else if (tabIndex < size - 1 && size > 0) {
+
+			if (!passed) {
+				// Update le bug si le passed de l'ancien teststep est à false
+				jJBugService.updateJJBug(jJBugBean.getjJBug());
+			}
+
 			tabIndex++;
 
-		passed = jJTeststepexecutionBean.getjJTeststepexecutionList()
-				.get(tabIndex).getPassed();
+			System.out.println("nextTabIndex tabIndex " + tabIndex);
 
-		disabledQuit = passed;
-		renderedComment = !passed;
+			JJTeststepexecution jJTeststepexecution = jJTeststepexecutionBean
+					.getjJTeststepexecutionList().get(tabIndex);
 
-		if (passed) {
-			// cache bug comment and disable quit
-		} else {
-			// display bug comment and enable quit
+			passed = jJTeststepexecution.getPassed();
+
+			if (!passed) {
+				JJBug jJBug = jJBugService.getBugWithTestcaseAndProject(
+						selectedTestcase, currentProject);
+				if (jJBug != null) {
+
+					jJBugBean.setjJBug(jJBug);
+				} else {
+					jJBugBean.createJJBug(selectedTestcase);
+
+				}
+			}
 		}
-
-		System.out.println("tabIndex " + tabIndex);
 	}
 
-	public void managePassed(JJTeststepexecutionBean jJTeststepexecutionBean,
+	public void onChangeValue(JJTeststepexecutionBean jJTeststepexecutionBean,
 			JJBugBean jJBugBean) {
-		System.out.println("//////////tabIndex " + tabIndex);
-		disabledQuit = passed;
-		renderedComment = !passed;
+
+		System.out.println("onChangeValue tabIndex " + tabIndex);
 
 		JJTeststepexecution jJTeststepexecution = jJTeststepexecutionBean
 				.getjJTeststepexecutionList().get(tabIndex);

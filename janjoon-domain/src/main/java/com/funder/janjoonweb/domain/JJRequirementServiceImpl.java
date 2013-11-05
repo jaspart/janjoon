@@ -21,6 +21,45 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	}
 
 	@Override
+	public List<JJRequirement> getAllJJRequirements() {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
+				.createQuery(JJRequirement.class);
+
+		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
+
+		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
+
+		Predicate predicate = criteriaBuilder.equal(from.get("enabled"), true);
+
+		select.where(predicate);
+
+		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
+		return result.getResultList();
+
+	}
+
+	public List<JJRequirement> getAllJJRequirementsWithProject(JJProject project) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
+				.createQuery(JJRequirement.class);
+
+		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
+
+		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
+
+		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
+		Predicate predicate2 = criteriaBuilder.equal(from.get("project"),
+				project);
+
+		select.where(criteriaBuilder.and(predicate1, predicate2));
+
+		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
+		return result.getResultList();
+	}
+
+	@Override
 	public List<JJRequirement> getAllJJRequirementsWithCategory(
 			String categoryName) {
 
@@ -82,7 +121,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	}
 
 	@Override
-	public List<JJRequirement> getAllJJRequirementsWithProject(
+	public List<JJRequirement> getAllJJRequirementsWithCategoryAndProject(
 			String categoryName, JJProject project) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

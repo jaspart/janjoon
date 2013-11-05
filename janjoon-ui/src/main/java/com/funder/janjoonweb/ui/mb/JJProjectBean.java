@@ -425,17 +425,17 @@ public class JJProjectBean {
 
 				jJRequirementBean
 						.setMyBusinessJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProject("BUSINESS",
+								.getAllJJRequirementsWithCategoryAndProject("BUSINESS",
 										myJJProject));
 
 				jJRequirementBean
 						.setMyFunctionalJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProject("FUNCTIONAL",
+								.getAllJJRequirementsWithCategoryAndProject("FUNCTIONAL",
 										myJJProject));
 
 				jJRequirementBean
 						.setMyTechnicalJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProject("TECHNICAL",
+								.getAllJJRequirementsWithCategoryAndProject("TECHNICAL",
 										myJJProject));
 
 			}

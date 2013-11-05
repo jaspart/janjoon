@@ -134,15 +134,17 @@ public class JJProductBean {
 			jJChapterBean.setCurrentProduct(myJJProduct);
 
 			jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
-					.getAllJJRequirementsWithProject("BUSINESS", project));
+					.getAllJJRequirementsWithCategoryAndProject("BUSINESS",
+							project));
 
 			jJRequirementBean
 					.setMyFunctionalJJRequirements(jJRequirementService
-							.getAllJJRequirementsWithProject("FUNCTIONAL",
-									project));
+							.getAllJJRequirementsWithCategoryAndProject(
+									"FUNCTIONAL", project));
 
 			jJRequirementBean.setMyTechnicalJJRequirements(jJRequirementService
-					.getAllJJRequirementsWithProject("TECHNICAL", project));
+					.getAllJJRequirementsWithCategoryAndProject("TECHNICAL",
+							project));
 
 		}
 

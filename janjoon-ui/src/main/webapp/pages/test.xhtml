@@ -96,6 +96,22 @@
 						</p:inputText>
 						<p:message for="description" id="msgDescription" display="icon" />
 						<p:watermark for="description" value="Description *" />
+
+						<p:commandButton id="reqBtn" value="Requirements"
+							icon="ui-icon-circle-plus" type="button" />
+
+						<p:overlayPanel id="reqPanel" for="reqBtn" hideEffect="fade"
+							dynamic="true">
+							<p:dataTable id="reqDataTable" var="req"
+								value="#{jJTestcaseBean.reqList}">
+								<p:column headerText="Name">
+									<h:outputText value="#{req.name}" />
+								</p:column>
+							</p:dataTable>
+						</p:overlayPanel>
+
+
+
 					</h:panelGrid>
 
 					<p:panel id="testStepPanel" style="width:600px">
@@ -262,18 +278,17 @@
 		</p:confirmDialog>
 
 		<p:dialog id="runTestcaseDialog" header="Test Case Execution"
-			widgetVar="testcaseExecution" maximizable="true" minimizable="false"
-			showEffect="fade" hideEffect="fade" dynamic="true"
-			style="width:400px">
+			widgetVar="testcaseExecution" showEffect="fade" hideEffect="fade"
+			dynamic="true" style="width:400px">
 			<h:form id="runForm">
-				<h:panelGrid columns="1">
+				<h:panelGrid columns="1" cellpadding="3">
 					<p:tabView id="tabView" var="teststepexecution"
 						value="#{jJTeststepexecutionBean.jJTeststepexecutionList}"
 						widgetVar="teststepTabView"
 						activeIndex="#{jJTestcaseBean.tabIndex}" dynamic="true">
 						<p:ajax event="tabChange"
 							listener="#{jJTestcaseBean.onTabChange(jJTeststepexecutionBean,jJBugBean)}"
-							update=":runForm:quitButton :runForm:passedButton :runForm:commentBug" />
+							update=":runForm:passedButton :runForm:quitButton :runForm:commentBug" />
 						<p:tab title="#{teststepexecution.teststep.ordering}">
 							<h:panelGrid columns="2">
 								<p:panel>
@@ -282,32 +297,34 @@
 								<p:panel>
 									<h:outputText value="#{teststepexecution.teststep.resultat}" />
 								</p:panel>
-
 							</h:panelGrid>
 						</p:tab>
 					</p:tabView>
-					<h:panelGrid columns="2">
-						<h:panelGrid columns="1">
-							<p:selectBooleanButton id="passedButton"
-								value="#{jJTestcaseBean.passed}" onLabel="Passed"
-								offLabel="Failed" onIcon="ui-icon-check" offIcon="ui-icon-close">
-								<p:ajax listener="#{jJTestcaseBean.managePassed(jJTeststepexecutionBean,jJBugBean)}" />
-							</p:selectBooleanButton>
-							<h:panelGrid id="commentBug" columns="1">
-								<p:inputText value="#{jJBugBean.jJBug.description}"
-									rendered="#{jJTestcaseBean.renderedComment}" />
-							</h:panelGrid>
-						</h:panelGrid>
-						<h:panelGrid columns="1">
-							<p:commandButton id="quitButton" value="Quit"
-								disabled="#{jJTestcaseBean.disabledQuit}"
-								actionListener="#{jJTestcaseBean.quitRun(jJTestcaseexecutionBean,jJTeststepexecutionBean,jJBugBean)}"
-								oncomplete="testcaseExecution.hide()" />
-							<p:commandButton id="nextButton" value="Next"
-								icon="ui-icon-arrowthick-1-e"
-								actionListener="#{jJTestcaseBean.incrementTabIndex(jJTeststepexecutionBean,jJBugBean)}"
-								update=":runForm:tabView,quitButton,passedButton,commentBug" />
-						</h:panelGrid>
+					<h:panelGrid columns="2" cellpadding="3">
+
+						<p:selectBooleanButton id="passedButton"
+							value="#{jJTestcaseBean.passed}" onLabel="Passed"
+							offLabel="Failed" onIcon="ui-icon-circle-check"
+							offIcon="ui-icon-alert">
+							<p:ajax
+								listener="#{jJTestcaseBean.onChangeValue(jJTeststepexecutionBean,jJBugBean)}"
+								update="quitButton,commentBug" />
+						</p:selectBooleanButton>
+
+						<p:commandButton id="quitButton" value="Quit"
+							icon="ui-icon-circle-close"
+							actionListener="#{jJTestcaseBean.quitRun(jJTestcaseexecutionBean,jJTeststepexecutionBean,jJBugBean)}"
+							oncomplete="testcaseExecution.hide()"
+							disabled="#{jJTestcaseBean.passed}" />
+
+						<p:inputText id="commentBug"
+							value="#{jJBugBean.jJBug.description}"
+							disabled="#{jJTestcaseBean.passed}" />
+
+						<p:commandButton id="nextButton" value="Next"
+							icon="ui-icon-circle-arrow-e"
+							actionListener="#{jJTestcaseBean.nextTabIndex(jJTestcaseexecutionBean,jJTeststepexecutionBean,jJBugBean)}"
+							update=":runForm:tabView,passedButton,quitButton,commentBug" />
 					</h:panelGrid>
 				</h:panelGrid>
 			</h:form>

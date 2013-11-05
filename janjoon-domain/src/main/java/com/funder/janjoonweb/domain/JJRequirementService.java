@@ -9,10 +9,14 @@ public interface JJRequirementService {
 	public List<JJRequirement> getAllJJRequirementsWithCategory(
 			String categoryName);
 
+	public List<JJRequirement> getAllJJRequirements();
+
+	public List<JJRequirement> getAllJJRequirementsWithProject(JJProject project);
+
 	public List<JJRequirement> getAllJJRequirementsWithCategoryAndChapter(
 			String categoryName);
 
-	public List<JJRequirement> getAllJJRequirementsWithProject(
+	public List<JJRequirement> getAllJJRequirementsWithCategoryAndProject(
 			String categoryName, JJProject project);
 
 	public List<JJRequirement> getAllJJRequirementsWithProjectAndChapter(
