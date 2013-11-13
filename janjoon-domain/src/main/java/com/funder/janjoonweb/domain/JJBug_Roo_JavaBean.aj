@@ -14,7 +14,7 @@ import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJSprint;
 import com.funder.janjoonweb.domain.JJStatus;
 import com.funder.janjoonweb.domain.JJTask;
-import com.funder.janjoonweb.domain.JJTestcase;
+import com.funder.janjoonweb.domain.JJTeststep;
 import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.domain.reference.JJRelationship;
 import java.util.Set;
@@ -77,6 +77,14 @@ privileged aspect JJBug_Roo_JavaBean {
         this.requirement = requirement;
     }
     
+    public JJTeststep JJBug.getTeststep() {
+        return this.teststep;
+    }
+    
+    public void JJBug.setTeststep(JJTeststep teststep) {
+        this.teststep = teststep;
+    }
+    
     public JJRelationship JJBug.getRelation() {
         return this.relation;
     }
@@ -91,14 +99,6 @@ privileged aspect JJBug_Roo_JavaBean {
     
     public void JJBug.setSprint(JJSprint sprint) {
         this.sprint = sprint;
-    }
-    
-    public JJTestcase JJBug.getTestcase() {
-        return this.testcase;
-    }
-    
-    public void JJBug.setTestcase(JJTestcase testcase) {
-        this.testcase = testcase;
     }
     
     public Set<JJBug> JJBug.getBugs() {

@@ -44,7 +44,7 @@ public class JJBugServiceImpl implements JJBugService {
 	}
 
 	@Override
-	public JJBug getBugWithTestcaseAndProject(JJTestcase testcase,
+	public JJBug getBugWithTeststepAndProject(JJTeststep teststep,
 			JJProject project) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -56,8 +56,8 @@ public class JJBugServiceImpl implements JJBugService {
 		CriteriaQuery<JJBug> select = criteriaQuery.select(from);
 
 		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
-		Predicate predicate2 = criteriaBuilder.equal(from.get("testcase"),
-				testcase);
+		Predicate predicate2 = criteriaBuilder.equal(from.get("teststep"),
+				teststep);
 		Predicate predicate3 = criteriaBuilder.equal(from.get("project"),
 				project);
 

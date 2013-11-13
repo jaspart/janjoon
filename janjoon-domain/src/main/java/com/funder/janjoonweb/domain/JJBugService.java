@@ -8,6 +8,6 @@ import org.springframework.roo.addon.layers.service.RooService;
 public interface JJBugService {
 	public List<JJBug> getAllJJBugs();
 
-	public JJBug getBugWithTestcaseAndProject(JJTestcase testcase,
+	public JJBug getBugWithTeststepAndProject(JJTeststep teststep,
 			JJProject project);
 }

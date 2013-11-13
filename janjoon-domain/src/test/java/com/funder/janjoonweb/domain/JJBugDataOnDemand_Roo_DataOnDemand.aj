@@ -15,7 +15,7 @@ import com.funder.janjoonweb.domain.JJProjectDataOnDemand;
 import com.funder.janjoonweb.domain.JJRequirementDataOnDemand;
 import com.funder.janjoonweb.domain.JJSprintDataOnDemand;
 import com.funder.janjoonweb.domain.JJStatusDataOnDemand;
-import com.funder.janjoonweb.domain.JJTestcaseDataOnDemand;
+import com.funder.janjoonweb.domain.JJTeststepDataOnDemand;
 import com.funder.janjoonweb.domain.JJVersionDataOnDemand;
 import com.funder.janjoonweb.domain.reference.JJRelationship;
 import java.security.SecureRandom;
@@ -64,7 +64,7 @@ privileged aspect JJBugDataOnDemand_Roo_DataOnDemand {
     JJStatusDataOnDemand JJBugDataOnDemand.jJStatusDataOnDemand;
     
     @Autowired
-    JJTestcaseDataOnDemand JJBugDataOnDemand.jJTestcaseDataOnDemand;
+    JJTeststepDataOnDemand JJBugDataOnDemand.jJTeststepDataOnDemand;
     
     @Autowired
     JJVersionDataOnDemand JJBugDataOnDemand.jJVersionDataOnDemand;

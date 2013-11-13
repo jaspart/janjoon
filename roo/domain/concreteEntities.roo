@@ -137,7 +137,7 @@ field reference --fieldName criticity --type ~.JJCriticity
 field reference --fieldName importance --type ~.JJImportance
 field reference --fieldName status --type ~.JJStatus
 field reference --fieldName requirement --type ~.JJRequirement
-field reference --fieldName testcase --type ~.JJTestcase
+field reference --fieldName teststep --type ~.JJTeststep
 field reference --fieldName sprint --type ~.JJSprint
 field enum --fieldName relation --type ~.reference.JJRelationship
 field reference --fieldName bugUp --type ~.JJBug

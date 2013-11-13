@@ -7,7 +7,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.funder.janjoonweb.domain.JJBug;
 import com.funder.janjoonweb.domain.JJProject;
-import com.funder.janjoonweb.domain.JJTestcase;
+import com.funder.janjoonweb.domain.JJTeststep;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJBug.class, beanName = "jJBugBean")
@@ -32,14 +32,14 @@ public class JJBugBean {
 		this.currentProject = currentProject;
 	}
 
-	public void createJJBug(JJTestcase jJTestcase) {
+	public void createJJBug(JJTeststep jJTeststep) {
 		JJBug bug = new JJBug();
 		bug.setName("BUG NAME");
 		bug.setCreationDate(new Date());
 		bug.setEnabled(true);
 		bug.setDescription("Insert a comment");
 		bug.setProject(currentProject);
-		bug.setTestcase(jJTestcase);
+		bug.setTeststep(jJTeststep);
 
 		jJBugService.saveJJBug(bug);
 		jJBug = jJBugService.findJJBug(bug.getId());

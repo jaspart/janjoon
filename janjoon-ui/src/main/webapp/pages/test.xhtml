@@ -53,7 +53,7 @@
 						<p:menuitem id="newTestcase" value="New"
 							icon="ui-icon-circle-plus"
 							actionListener="#{jJTestcaseBean.newTestcase(jJTeststepBean)}"
-							process="@parent" update=":msgForm:msgs :dataForm" />
+							process="@parent" update=":msgForm:msgs :dataForm :dataForm:requirements" />
 						<p:menuitem id="editTestcase" value="Edit"
 							actionListener="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
 							icon="ui-icon-pencil" process="@parent" update=":dataForm" />
@@ -97,18 +97,42 @@
 						<p:message for="description" id="msgDescription" display="icon" />
 						<p:watermark for="description" value="Description *" />
 
-						<p:commandButton id="reqBtn" value="Requirements"
-							icon="ui-icon-circle-plus" type="button" />
+						<h:panelGrid columns="1" style="margin-bottom:10px"
+							cellpadding="5">
 
-						<p:overlayPanel id="reqPanel" for="reqBtn" hideEffect="fade"
-							dynamic="true">
-							<p:dataTable id="reqDataTable" var="req"
-								value="#{jJTestcaseBean.reqList}">
-								<p:column headerText="Name">
+
+
+							<p:dataTable id="requirements" var="req"
+								value="#{jJTestcaseBean.reqListModel}"
+								selection="#{jJTestcaseBean.selectedReq}"  paginator="true"
+								rows="5" widgetVar="requirementTable" >
+
+								<p:ajax event="rowSelectRadio"
+									listener="#{jJTestcaseBean.onRowSelect}" />
+
+								<f:facet name="header">
+								Requirements List Based Selection
+								</f:facet>
+
+								<p:column id="selectColumn" selectionMode="single"  style="width:2%" />
+								
+
+								<p:column id="nameColumn" filterBy="name" headerText="Name"
+									filterMatchMode="startsWith" style="width:25%">
 									<h:outputText value="#{req.name}" />
 								</p:column>
+
+								<p:column id="categoryColumn" filterBy="category"
+									headerText="Category"
+									filterOptions="#{jJTestcaseBean.categoryOptions}"
+									filterMatchMode="exact">
+									<h:outputText value="#{req.category.name}" />
+								</p:column>
+
 							</p:dataTable>
-						</p:overlayPanel>
+
+
+						</h:panelGrid>
 
 
 
@@ -237,7 +261,7 @@
 						update=":msgForm:msgs :dataForm"
 						actionListener="#{jJTestcaseBean.persistTestCase(jJTeststepBean)}"
 						icon="ui-icon-disk"
-						process="@this,name,description @widgetVar(actionInput) @widgetVar(resultInput)" />
+						process="@this,name,description @widgetVar(actionInput) @widgetVar(resultInput) @widgetVar(requirementTable) " />
 				</h:panelGrid>
 
 			</h:panelGrid>

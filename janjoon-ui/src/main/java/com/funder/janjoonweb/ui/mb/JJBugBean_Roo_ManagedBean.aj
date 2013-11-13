@@ -23,8 +23,8 @@ import com.funder.janjoonweb.domain.JJSprintService;
 import com.funder.janjoonweb.domain.JJStatus;
 import com.funder.janjoonweb.domain.JJStatusService;
 import com.funder.janjoonweb.domain.JJTask;
-import com.funder.janjoonweb.domain.JJTestcase;
-import com.funder.janjoonweb.domain.JJTestcaseService;
+import com.funder.janjoonweb.domain.JJTeststep;
+import com.funder.janjoonweb.domain.JJTeststepService;
 import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.domain.JJVersionService;
 import com.funder.janjoonweb.domain.reference.JJRelationship;
@@ -38,7 +38,7 @@ import com.funder.janjoonweb.ui.mb.converter.JJProjectConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJSprintConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJStatusConverter;
-import com.funder.janjoonweb.ui.mb.converter.JJTestcaseConverter;
+import com.funder.janjoonweb.ui.mb.converter.JJTeststepConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJVersionConverter;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
@@ -101,10 +101,10 @@ privileged aspect JJBugBean_Roo_ManagedBean {
     JJRequirementService JJBugBean.jJRequirementService;
     
     @Autowired
-    JJSprintService JJBugBean.jJSprintService;
+    JJTeststepService JJBugBean.jJTeststepService;
     
     @Autowired
-    JJTestcaseService JJBugBean.jJTestcaseService;
+    JJSprintService JJBugBean.jJSprintService;
     
     private String JJBugBean.name = "JJBugs";
     
@@ -525,6 +525,30 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         requirementCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementCreateInputMessage);
         
+        OutputLabel teststepCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        teststepCreateOutput.setFor("teststepCreateInput");
+        teststepCreateOutput.setId("teststepCreateOutput");
+        teststepCreateOutput.setValue("Teststep:");
+        htmlPanelGrid.getChildren().add(teststepCreateOutput);
+        
+        AutoComplete teststepCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        teststepCreateInput.setId("teststepCreateInput");
+        teststepCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBugBean.JJBug_.teststep}", JJTeststep.class));
+        teststepCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJBugBean.completeTeststep}", List.class, new Class[] { String.class }));
+        teststepCreateInput.setDropdown(true);
+        teststepCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "teststep", String.class));
+        teststepCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{teststep.name} #{teststep.description} #{teststep.creationDate} #{teststep.updatedDate}", String.class));
+        teststepCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{teststep}", JJTeststep.class));
+        teststepCreateInput.setConverter(new JJTeststepConverter());
+        teststepCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(teststepCreateInput);
+        
+        Message teststepCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        teststepCreateInputMessage.setId("teststepCreateInputMessage");
+        teststepCreateInputMessage.setFor("teststepCreateInput");
+        teststepCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(teststepCreateInputMessage);
+        
         OutputLabel relationCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         relationCreateOutput.setFor("relationCreateInput");
         relationCreateOutput.setId("relationCreateOutput");
@@ -568,30 +592,6 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         sprintCreateInputMessage.setFor("sprintCreateInput");
         sprintCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(sprintCreateInputMessage);
-        
-        OutputLabel testcaseCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        testcaseCreateOutput.setFor("testcaseCreateInput");
-        testcaseCreateOutput.setId("testcaseCreateOutput");
-        testcaseCreateOutput.setValue("Testcase:");
-        htmlPanelGrid.getChildren().add(testcaseCreateOutput);
-        
-        AutoComplete testcaseCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        testcaseCreateInput.setId("testcaseCreateInput");
-        testcaseCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBugBean.JJBug_.testcase}", JJTestcase.class));
-        testcaseCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJBugBean.completeTestcase}", List.class, new Class[] { String.class }));
-        testcaseCreateInput.setDropdown(true);
-        testcaseCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "testcase", String.class));
-        testcaseCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{testcase.name} #{testcase.description} #{testcase.creationDate} #{testcase.updatedDate}", String.class));
-        testcaseCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{testcase}", JJTestcase.class));
-        testcaseCreateInput.setConverter(new JJTestcaseConverter());
-        testcaseCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(testcaseCreateInput);
-        
-        Message testcaseCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        testcaseCreateInputMessage.setId("testcaseCreateInputMessage");
-        testcaseCreateInputMessage.setFor("testcaseCreateInput");
-        testcaseCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(testcaseCreateInputMessage);
         
         HtmlOutputText bugsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugsCreateOutput.setId("bugsCreateOutput");
@@ -1018,6 +1018,30 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         requirementEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementEditInputMessage);
         
+        OutputLabel teststepEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        teststepEditOutput.setFor("teststepEditInput");
+        teststepEditOutput.setId("teststepEditOutput");
+        teststepEditOutput.setValue("Teststep:");
+        htmlPanelGrid.getChildren().add(teststepEditOutput);
+        
+        AutoComplete teststepEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        teststepEditInput.setId("teststepEditInput");
+        teststepEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBugBean.JJBug_.teststep}", JJTeststep.class));
+        teststepEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJBugBean.completeTeststep}", List.class, new Class[] { String.class }));
+        teststepEditInput.setDropdown(true);
+        teststepEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "teststep", String.class));
+        teststepEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{teststep.name} #{teststep.description} #{teststep.creationDate} #{teststep.updatedDate}", String.class));
+        teststepEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{teststep}", JJTeststep.class));
+        teststepEditInput.setConverter(new JJTeststepConverter());
+        teststepEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(teststepEditInput);
+        
+        Message teststepEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        teststepEditInputMessage.setId("teststepEditInputMessage");
+        teststepEditInputMessage.setFor("teststepEditInput");
+        teststepEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(teststepEditInputMessage);
+        
         OutputLabel relationEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         relationEditOutput.setFor("relationEditInput");
         relationEditOutput.setId("relationEditOutput");
@@ -1061,30 +1085,6 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         sprintEditInputMessage.setFor("sprintEditInput");
         sprintEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(sprintEditInputMessage);
-        
-        OutputLabel testcaseEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        testcaseEditOutput.setFor("testcaseEditInput");
-        testcaseEditOutput.setId("testcaseEditOutput");
-        testcaseEditOutput.setValue("Testcase:");
-        htmlPanelGrid.getChildren().add(testcaseEditOutput);
-        
-        AutoComplete testcaseEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        testcaseEditInput.setId("testcaseEditInput");
-        testcaseEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBugBean.JJBug_.testcase}", JJTestcase.class));
-        testcaseEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJBugBean.completeTestcase}", List.class, new Class[] { String.class }));
-        testcaseEditInput.setDropdown(true);
-        testcaseEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "testcase", String.class));
-        testcaseEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{testcase.name} #{testcase.description} #{testcase.creationDate} #{testcase.updatedDate}", String.class));
-        testcaseEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{testcase}", JJTestcase.class));
-        testcaseEditInput.setConverter(new JJTestcaseConverter());
-        testcaseEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(testcaseEditInput);
-        
-        Message testcaseEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        testcaseEditInputMessage.setId("testcaseEditInputMessage");
-        testcaseEditInputMessage.setFor("testcaseEditInput");
-        testcaseEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(testcaseEditInputMessage);
         
         HtmlOutputText bugsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugsEditOutput.setId("bugsEditOutput");
@@ -1338,6 +1338,16 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         requirementValue.setConverter(new JJRequirementConverter());
         htmlPanelGrid.getChildren().add(requirementValue);
         
+        HtmlOutputText teststepLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        teststepLabel.setId("teststepLabel");
+        teststepLabel.setValue("Teststep:");
+        htmlPanelGrid.getChildren().add(teststepLabel);
+        
+        HtmlOutputText teststepValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        teststepValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBugBean.JJBug_.teststep}", JJTeststep.class));
+        teststepValue.setConverter(new JJTeststepConverter());
+        htmlPanelGrid.getChildren().add(teststepValue);
+        
         HtmlOutputText relationLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         relationLabel.setId("relationLabel");
         relationLabel.setValue("Relation:");
@@ -1356,16 +1366,6 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         sprintValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBugBean.JJBug_.sprint}", JJSprint.class));
         sprintValue.setConverter(new JJSprintConverter());
         htmlPanelGrid.getChildren().add(sprintValue);
-        
-        HtmlOutputText testcaseLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testcaseLabel.setId("testcaseLabel");
-        testcaseLabel.setValue("Testcase:");
-        htmlPanelGrid.getChildren().add(testcaseLabel);
-        
-        HtmlOutputText testcaseValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testcaseValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBugBean.JJBug_.testcase}", JJTestcase.class));
-        testcaseValue.setConverter(new JJTestcaseConverter());
-        htmlPanelGrid.getChildren().add(testcaseValue);
         
         HtmlOutputText bugsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugsLabel.setId("bugsLabel");
@@ -1530,6 +1530,17 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         return suggestions;
     }
     
+    public List<JJTeststep> JJBugBean.completeTeststep(String query) {
+        List<JJTeststep> suggestions = new ArrayList<JJTeststep>();
+        for (JJTeststep jJTeststep : jJTeststepService.findAllJJTeststeps()) {
+            String jJTeststepStr = String.valueOf(jJTeststep.getName() +  " "  + jJTeststep.getDescription() +  " "  + jJTeststep.getCreationDate() +  " "  + jJTeststep.getUpdatedDate());
+            if (jJTeststepStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJTeststep);
+            }
+        }
+        return suggestions;
+    }
+    
     public List<JJRelationship> JJBugBean.completeRelation(String query) {
         List<JJRelationship> suggestions = new ArrayList<JJRelationship>();
         for (JJRelationship jJRelationship : JJRelationship.values()) {
@@ -1546,17 +1557,6 @@ privileged aspect JJBugBean_Roo_ManagedBean {
             String jJSprintStr = String.valueOf(jJSprint.getName() +  " "  + jJSprint.getDescription() +  " "  + jJSprint.getCreationDate() +  " "  + jJSprint.getUpdatedDate());
             if (jJSprintStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJSprint);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<JJTestcase> JJBugBean.completeTestcase(String query) {
-        List<JJTestcase> suggestions = new ArrayList<JJTestcase>();
-        for (JJTestcase jJTestcase : jJTestcaseService.findAllJJTestcases()) {
-            String jJTestcaseStr = String.valueOf(jJTestcase.getName() +  " "  + jJTestcase.getDescription() +  " "  + jJTestcase.getCreationDate() +  " "  + jJTestcase.getUpdatedDate());
-            if (jJTestcaseStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJTestcase);
             }
         }
         return suggestions;
