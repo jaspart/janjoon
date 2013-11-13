@@ -12,7 +12,7 @@
 			<p:messages id="msgs" />
 		</h:form>
 
-		<h:form id="dataForm">
+		<h:form id="testForm">
 
 			<h:panelGrid id="mainPanelGrid" columns="2">
 
@@ -53,21 +53,21 @@
 						<p:menuitem id="newTestcase" value="New"
 							icon="ui-icon-circle-plus"
 							actionListener="#{jJTestcaseBean.newTestcase(jJTeststepBean)}"
-							process="@parent" update=":msgForm:msgs :dataForm :dataForm:requirements" />
+							process="@parent" update=":msgForm:msgs :testForm :testForm:requirements" />
 						<p:menuitem id="editTestcase" value="Edit"
 							actionListener="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
-							icon="ui-icon-pencil" process="@parent" update=":dataForm" />
+							icon="ui-icon-pencil" process="@parent" update=":testForm" />
 						<p:menuitem id="deleteTestcase" value="Delete"
 							icon="ui-icon-close"
 							actionListener="#{jJTestcaseBean.deleteTestcase(jJTeststepBean)}"
-							process="@parent" update=":msgForm:msgs :dataForm" />
+							process="@parent" update=":msgForm:msgs :testForm" />
 					</p:contextMenu>
 
 
 					<p:tree id="testCaseTreeSingle" value="#{jJTestcaseBean.rootNode}"
 						var="node" selectionMode="single"
 						selection="#{jJTestcaseBean.selectedNode}" dynamic="true">
-						<p:ajax event="select" update=":msgForm:msgs :dataForm:runButton"
+						<p:ajax event="select" update=":msgForm:msgs :testForm:runButton"
 							listener="#{jJTestcaseBean.onNodeSelect}" />
 						<p:treeNode>
 							<h:outputText value="#{node}" />
@@ -175,10 +175,10 @@
 
 								<p:ajax event="rowEdit"
 									listener="#{jJTeststepBean.editTestStep}"
-									update=":dataForm:testStepMsgs" process="@this" />
+									update=":testForm:testStepMsgs" process="@this" />
 								<p:ajax event="rowEditCancel"
 									listener="#{jJTeststepBean.cancelEditTestStep}"
-									update=":dataForm:testStepMsgs" process="@this" />
+									update=":testForm:testStepMsgs" process="@this" />
 
 								<f:facet name="header">  
             						Test Steps  
@@ -222,7 +222,7 @@
 									<p:commandButton id="insertTestStep"
 										icon="ui-icon-circle-triangle-n" process="@this"
 										action="#{jJTeststepBean.insertTestStep}"
-										update="testStepDataTable :dataForm:testStepMsgs"
+										update="testStepDataTable :testForm:testStepMsgs"
 										style="align:center">
 
 										<f:setPropertyActionListener value="#{ts}"
@@ -258,7 +258,7 @@
 
 				<h:panelGrid id="SouthPanelGrid" columns="1" cellpadding="3">
 					<p:commandButton id="btn" value="Save"
-						update=":msgForm:msgs :dataForm"
+						update=":msgForm:msgs :testForm"
 						actionListener="#{jJTestcaseBean.persistTestCase(jJTeststepBean)}"
 						icon="ui-icon-disk"
 						process="@this,name,description @widgetVar(actionInput) @widgetVar(resultInput) @widgetVar(requirementTable) " />
@@ -276,7 +276,7 @@
 				<h:form id="deleteTestStepForm">
 					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
 						action="#{jJTeststepBean.deleteTestStep}"
-						update=":dataForm:testStepMsgs  :dataForm:testStepDataTable"
+						update=":testForm:testStepMsgs  :testForm:testStepDataTable"
 						oncomplete="deleteTestStep.hide()" process="@this" />
 					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
 						onclick="deleteTestStep.hide()" type="button" />
@@ -293,7 +293,7 @@
 				<h:form id="deleteTestCaseForm">
 					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
 						action="#{jJTestcaseBean.deleteNode()}"
-						update=":msgForm:msgs :dataForm:testCaseTreeSingle"
+						update=":msgForm:msgs :testForm:testCaseTreeSingle"
 						oncomplete="deleteTestCase.hide()" />
 					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
 						onclick="deleteTestCase.hide()" type="button" />

@@ -264,6 +264,8 @@ public class JJTestcaseBean {
 			}
 		}
 
+		expandTree(rootNode);
+
 		mode = "New";
 		disabled = true;
 		jJTestCase = new JJTestcase();
@@ -275,6 +277,14 @@ public class JJTestcaseBean {
 		selectedReq = null;
 		tabIndex = 0;
 
+	}
+
+	private void expandTree(TreeNode treeNode) {
+		List<TreeNode> list = treeNode.getChildren();
+		for (TreeNode tr : list) {
+			expandTree(tr);
+			tr.setExpanded(true);
+		}
 	}
 
 	public void persistTestCase(JJTeststepBean jJTeststepBean) {
@@ -317,7 +327,6 @@ public class JJTestcaseBean {
 			fmsg = new FacesMessage(message, jJTestCase.getName());
 
 			jJTestcaseService.saveJJTestcase(jJTestCase);
-			
 
 		}
 		// else if (mode.equalsIgnoreCase("Edit")) {
@@ -460,7 +469,7 @@ public class JJTestcaseBean {
 			description = jJTestCase.getDescription();
 
 			jJTeststepBean.initTestStepParameter();
-			
+
 			selectedReq = jJTestCase.getRequirement();
 
 			// Set<JJTeststep> list = jJTestCase.getTeststeps();
