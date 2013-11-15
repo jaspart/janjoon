@@ -57,6 +57,7 @@ public class JJTestcaseBean {
 
 	private boolean disabled = true;
 	private boolean passed = true;
+	private boolean rendered = false;
 
 	private List<String> tmpJJTeststepList = new ArrayList<String>();
 
@@ -160,6 +161,14 @@ public class JJTestcaseBean {
 
 	public void setPassed(boolean passed) {
 		this.passed = passed;
+	}
+
+	public boolean getRendered() {
+		return rendered;
+	}
+
+	public void setRendered(boolean rendered) {
+		this.rendered = rendered;
 	}
 
 	public int getTabIndex() {
@@ -276,6 +285,7 @@ public class JJTestcaseBean {
 		jJTeststepBean.initTestStepParameter();
 		selectedReq = null;
 		tabIndex = 0;
+		rendered = false;
 
 	}
 
@@ -480,6 +490,8 @@ public class JJTestcaseBean {
 				jJTeststepBean.getTestStepList().add(jjTeststep);
 				tmpJJTeststepList.add(getFromString(jjTeststep));
 			}
+			
+			rendered = true;
 
 		}
 
@@ -518,7 +530,7 @@ public class JJTestcaseBean {
 				&& selectedNode.getData().toString().startsWith("CH")) {
 			System.out.println("New testcase");
 			initTestCaseParameter(jJTeststepBean);
-
+			rendered = true;
 			long idjJChapter = Long.parseLong(getStringFromString(selectedNode
 					.getData().toString(), 1));
 
@@ -534,14 +546,27 @@ public class JJTestcaseBean {
 		String selectedNode = event.getTreeNode().toString();
 		System.out.println("selectedNode " + selectedNode);
 
-		if (selectedNode.startsWith("TC") && currentBuild != null) {
-			disabled = false;
-
-		} else {
-			disabled = true;
-
+		if (selectedNode.startsWith("P")) {
+			rendered = false;
+		} else if (selectedNode.startsWith("C")) {
+			rendered = false;
+		} else if (selectedNode.startsWith("CH")) {
+			rendered = true;
 		}
 
+		else if (selectedNode.startsWith("TC")) {
+			rendered = true;
+			if (currentBuild != null)
+
+				disabled = false;
+
+			else
+				disabled = true;
+
+		}
+		
+		System.out.println(rendered);
+		
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"Selected " + event.getTreeNode().toString(), event
 						.getTreeNode().toString());
@@ -549,6 +574,10 @@ public class JJTestcaseBean {
 		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
+	public void display(){
+		System.out.println("mahbouuul");
+	}
+	
 	public void createTabs(JJTestcaseexecutionBean jJTestcaseexecutionBean,
 			JJTeststepexecutionBean jJTeststepexecutionBean, JJBugBean jJBugBean) {
 		if (selectedNode.getData().toString().startsWith("TC")) {

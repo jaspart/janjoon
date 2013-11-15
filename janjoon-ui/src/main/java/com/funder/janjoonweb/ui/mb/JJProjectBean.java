@@ -445,6 +445,7 @@ public class JJProjectBean {
 
 			if (jJTestcaseBean != null) {
 				jJTestcaseBean.setCurrentProject(myJJProject);
+				jJTestcaseBean.setRendered(false);
 				jJTestcaseBean.initTestCaseParameter(jJTeststepBean);
 			}
 
@@ -481,6 +482,7 @@ public class JJProjectBean {
 			}
 			if (jJTestcaseBean != null) {
 				jJTestcaseBean.setCurrentProject(myJJProject);
+				jJTestcaseBean.setRendered(false);
 				jJTestcaseBean.initTestCaseParameter(jJTeststepBean);
 			}
 			if (jJBugBean != null)

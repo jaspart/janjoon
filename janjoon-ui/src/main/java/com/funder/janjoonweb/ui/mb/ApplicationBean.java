@@ -37,817 +37,658 @@ public class ApplicationBean {
 
 	@PostConstruct
 	public void init() {
-	
-		menuModel = new DefaultMenuModel();
-		
-		DefaultSubMenu submenu;
-		DefaultMenuItem  item;
 
-		submenu = new DefaultSubMenu();
+		menuModel = new DefaultMenuModel();
+
+		DefaultSubMenu submenu;
+		DefaultMenuItem item;
+
+		submenu = new DefaultSubMenu("JJBug");
 		submenu.setId("jJBugSubmenu");
-		submenu.setLabel("JJBug");
-		
-		item = new DefaultMenuItem("Create","ui-icon ui-icon-document");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
 		item.setId("createJJBugMenuItem");
 		item.setCommand("#{jJBugBean.displayCreateDialog}");
 		item.setAjax(false);
 		item.setAsync(false);
 		item.setUpdate(":dataForm:data");
-		
+
 		submenu.addElement(item);
-		
-		item = new DefaultMenuItem("List All","ui-icon ui-icon-folder-open");
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
 		item.setId("listJJBugMenuItem");
 		item.setCommand("#{jJBugBean.displayList}");
 		item.setAjax(false);
 		item.setAsync(false);
 		item.setUpdate(":dataForm:data");
-		
+
 		submenu.addElement(item);
-		
+
 		menuModel.addElement(submenu);
-		
-		/////////////
-		submenu = new DefaultSubMenu();
+
+		// ///////////
+		submenu = new DefaultSubMenu("JJBuild");
 		submenu.setId("jJBuildSubmenu");
-		submenu.setLabel("JJBuild");
-		
-		item = new DefaultMenuItem("Create","ui-icon ui-icon-document");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
 		item.setId("createJJBuildMenuItem");
 		item.setCommand("#{jJBuildBean.displayCreateDialog}");
 		item.setAjax(false);
 		item.setAsync(false);
 		item.setUpdate(":dataForm:data");
-		
+
 		submenu.addElement(item);
-		
-		item = new DefaultMenuItem("List All","ui-icon ui-icon-folder-open");
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
 		item.setId("listJJBuildMenuItem");
 		item.setCommand("#{jJBuildBean.displayList}");
 		item.setAjax(false);
 		item.setAsync(false);
 		item.setUpdate(":dataForm:data");
-		
+
 		submenu.addElement(item);
-		
+
 		menuModel.addElement(submenu);
-		
-		//////////////
-		submenu = new DefaultSubMenu();
+
+		// ////////////
+		submenu = new DefaultSubMenu("JJCategory");
 		submenu.setId("jJCategorySubmenu");
-		submenu.setLabel("JJCategory");
-		
-		item = new DefaultMenuItem("Create","ui-icon ui-icon-document");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
 		item.setId("createJJCategoryMenuItem");
 		item.setCommand("#{jJCategoryBean.displayCreateDialog}");
 		item.setAjax(false);
 		item.setAsync(false);
 		item.setUpdate(":dataForm:data");
-		
+
 		submenu.addElement(item);
-		
-		item = new DefaultMenuItem("List All","ui-icon ui-icon-folder-open");
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
 		item.setId("listJJCategoryMenuItem");
 		item.setCommand("#{jJCategoryBean.displayList}");
 		item.setAjax(false);
 		item.setAsync(false);
 		item.setUpdate(":dataForm:data");
-		
+
 		submenu.addElement(item);
-		
+
 		menuModel.addElement(submenu);
 
-		/////////
-		submenu = new DefaultSubMenu();
+		// ///////
+		submenu = new DefaultSubMenu("JJChapter");
 		submenu.setId("jJChapterSubmenu");
-		submenu.setLabel("JJChapter");
-		
-		item = new DefaultMenuItem("Create","ui-icon ui-icon-document");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
 		item.setId("createJJChapterMenuItem");
 		item.setCommand("#{jJChapterBean.displayCreateDialog}");
 		item.setAjax(false);
 		item.setAsync(false);
 		item.setUpdate(":dataForm:data");
-		
+
 		submenu.addElement(item);
-		
-		item = new DefaultMenuItem("List All","ui-icon ui-icon-folder-open");
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
 		item.setId("listJJChapterMenuItem");
 		item.setCommand("#{jJChapterBean.displayList}");
 		item.setAjax(false);
 		item.setAsync(false);
 		item.setUpdate(":dataForm:data");
-		
+
 		submenu.addElement(item);
-		
+
 		menuModel.addElement(submenu);
 
-		/////////
-		submenu = new DefaultSubMenu();
+		// ///////
+		submenu = new DefaultSubMenu("JJConfiguration");
 		submenu.setId("jJConfigurationSubmenu");
-		submenu.setLabel("JJConfiguration");
-		
-		item = new DefaultMenuItem("Create","ui-icon ui-icon-document");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
 		item.setId("createJJConfigurationMenuItem");
-		item.setCommand( "#{jJConfigurationBean.displayCreateDialog}");
+		item.setCommand("#{jJConfigurationBean.displayCreateDialog}");
 		item.setAjax(false);
 		item.setAsync(false);
 		item.setUpdate(":dataForm:data");
-		
+
 		submenu.addElement(item);
-		
-		item = new DefaultMenuItem("List All","ui-icon ui-icon-folder-open");
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
 		item.setId("listJJConfigurationMenuItem");
 		item.setCommand("#{jJConfigurationBean.displayList}");
 		item.setAjax(false);
 		item.setAsync(false);
 		item.setUpdate(":dataForm:data");
-		
+
 		submenu.addElement(item);
-		
+
 		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJContactSubmenu");
-//		submenu.setLabel("JJContact");
-//		item = new UIMenuItem();
-//		item.setId("createJJContactMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJContactBean.displayCreateDialog}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJContactMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJContactBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJCriticitySubmenu");
-//		submenu.setLabel("JJCriticity");
-//		item = new UIMenuItem();
-//		item.setId("createJJCriticityMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJCriticityBean.displayCreateDialog}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJCriticityMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJCriticityBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJHardwareSubmenu");
-//		submenu.setLabel("JJHardware");
-//		item = new UIMenuItem();
-//		item.setId("createJJHardwareMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJHardwareBean.displayCreateDialog}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJHardwareMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJHardwareBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJImportanceSubmenu");
-//		submenu.setLabel("JJImportance");
-//		item = new UIMenuItem();
-//		item.setId("createJJImportanceMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJImportanceBean.displayCreateDialog}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJImportanceMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJImportanceBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJJobSubmenu");
-//		submenu.setLabel("JJJob");
-//		item = new UIMenuItem();
-//		item.setId("createJJJobMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJJobBean.displayCreateDialog}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJJobMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJJobBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJMessageSubmenu");
-//		submenu.setLabel("JJMessage");
-//		item = new UIMenuItem();
-//		item.setId("createJJMessageMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJMessageBean.displayCreateDialog}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJMessageMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJMessageBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJPermissionSubmenu");
-//		submenu.setLabel("JJPermission");
-//		item = new UIMenuItem();
-//		item.setId("createJJPermissionMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJPermissionBean.displayCreateDialog}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJPermissionMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJPermissionBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJPhaseSubmenu");
-//		submenu.setLabel("JJPhase");
-//		item = new UIMenuItem();
-//		item.setId("createJJPhaseMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJPhaseBean.displayCreateDialog}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJPhaseMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJPhaseBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJProductSubmenu");
-//		submenu.setLabel("JJProduct");
-//		item = new UIMenuItem();
-//		item.setId("createJJProductMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJProductBean.displayCreateDialog}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJProductMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJProductBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJProfileSubmenu");
-//		submenu.setLabel("JJProfile");
-//		item = new UIMenuItem();
-//		item.setId("createJJProfileMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJProfileBean.displayCreateDialog}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJProfileMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJProfileBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJProjectSubmenu");
-//		submenu.setLabel("JJProject");
-//		item = new UIMenuItem();
-//		item.setId("createJJProjectMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJProjectBean.displayCreateDialog}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJProjectMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJProjectBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJRequirementSubmenu");
-//		submenu.setLabel("JJRequirement");
-//		item = new UIMenuItem();
-//		item.setId("createJJRequirementMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJRequirementBean.displayCreateDialog}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJRequirementMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJRequirementBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJRightSubmenu");
-//		submenu.setLabel("JJRight");
-//		item = new UIMenuItem();
-//		item.setId("createJJRightMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJRightBean.displayCreateDialog}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJRightMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJRightBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJSoftwareSubmenu");
-//		submenu.setLabel("JJSoftware");
-//		item = new UIMenuItem();
-//		item.setId("createJJSoftwareMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJSoftwareBean.displayCreateDialog}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJSoftwareMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJSoftwareBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJSprintSubmenu");
-//		submenu.setLabel("JJSprint");
-//		item = new UIMenuItem();
-//		item.setId("createJJSprintMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJSprintBean.displayCreateDialog}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJSprintMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJSprintBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJStatusSubmenu");
-//		submenu.setLabel("JJStatus");
-//		item = new UIMenuItem();
-//		item.setId("createJJStatusMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJStatusBean.displayCreateDialog}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJStatusMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJStatusBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJTaskSubmenu");
-//		submenu.setLabel("JJTask");
-//		item = new UIMenuItem();
-//		item.setId("createJJTaskMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJTaskBean.displayCreateDialog}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJTaskMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJTaskBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJTestcaseSubmenu");
-//		submenu.setLabel("JJTestcase");
-//		item = new UIMenuItem();
-//		item.setId("createJJTestcaseMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJTestcaseBean.displayCreateDialog}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJTestcaseMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJTestcaseBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJTestcaseexecutionSubmenu");
-//		submenu.setLabel("JJTestcaseexecution");
-//		item = new UIMenuItem();
-//		item.setId("createJJTestcaseexecutionMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJTestcaseexecutionBean.displayCreateDialog}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJTestcaseexecutionMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJTestcaseexecutionBean.displayList}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJTeststepSubmenu");
-//		submenu.setLabel("JJTeststep");
-//		item = new UIMenuItem();
-//		item.setId("createJJTeststepMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJTeststepBean.displayCreateDialog}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJTeststepMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJTeststepBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJTeststepexecutionSubmenu");
-//		submenu.setLabel("JJTeststepexecution");
-//		item = new UIMenuItem();
-//		item.setId("createJJTeststepexecutionMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJTeststepexecutionBean.displayCreateDialog}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJTeststepexecutionMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJTeststepexecutionBean.displayList}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
-//
-//		submenu = new UISubmenu();
-//		submenu.setId("jJVersionSubmenu");
-//		submenu.setLabel("JJVersion");
-//		item = new UIMenuItem();
-//		item.setId("createJJVersionMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_create}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJVersionBean.displayCreateDialog}",
-//				String.class, new Class[0]));
-//		item.setIcon("ui-icon ui-icon-document");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		item = new UIMenuItem();
-//		item.setId("listJJVersionMenuItem");
-//		item.setValueExpression("value", expressionFactory
-//				.createValueExpression(elContext, "#{messages.label_list}",
-//						String.class));
-//		item.setActionExpression(expressionFactory.createMethodExpression(
-//				elContext, "#{jJVersionBean.displayList}", String.class,
-//				new Class[0]));
-//		item.setIcon("ui-icon ui-icon-folder-open");
-//		item.setAjax(false);
-//		item.setAsync(false);
-//		item.setUpdate(":dataForm:data");
-//		submenu.getChildren().add(item);
-//		menuModel.addElement(submenu);
+
+		// //////
+		submenu = new DefaultSubMenu("JJContact");
+		submenu.setId("jJContactSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJContactMenuItem");
+		item.setCommand("#{jJContactBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJContactMenuItem");
+		item.setCommand("#{jJContactBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// //////
+		submenu = new DefaultSubMenu("JJCriticity");
+		submenu.setId("jJCriticitySubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJCriticityMenuItem");
+		item.setCommand("#{jJCriticityBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJCriticityMenuItem");
+		item.setCommand("#{jJCriticityBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// //////
+		submenu = new DefaultSubMenu("JJHardware");
+		submenu.setId("jJHardwareSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJHardwareMenuItem");
+		item.setCommand("#{jJHardwareBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJHardwareMenuItem");
+		item.setCommand("#{jJHardwareBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// ///////
+		submenu = new DefaultSubMenu("JJImportance");
+		submenu.setId("jJImportanceSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJImportanceMenuItem");
+		item.setCommand("#{jJImportanceBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJImportanceMenuItem");
+		item.setCommand("#{jJImportanceBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// //////
+		submenu = new DefaultSubMenu("JJJob");
+		submenu.setId("jJJobSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJJobMenuItem");
+		item.setCommand("#{jJJobBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJJobMenuItem");
+		item.setCommand("#{jJJobBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// /////
+		submenu = new DefaultSubMenu("JJMessage");
+		submenu.setId("jJMessageSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJMessageMenuItem");
+		item.setCommand("#{jJMessageBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJMessageMenuItem");
+		item.setCommand("#{jJMessageBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// ////////
+		submenu = new DefaultSubMenu("JJPermission");
+		submenu.setId("jJPermissionSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJPermissionMenuItem");
+		item.setCommand("#{jJPermissionBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJPermissionMenuItem");
+		item.setCommand("#{jJPermissionBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// ///////
+		submenu = new DefaultSubMenu("JJPhase");
+		submenu.setId("jJPhaseSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJPhaseMenuItem");
+		item.setCommand("#{jJPhaseBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJPhaseMenuItem");
+		item.setCommand("#{jJPhaseBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// ///
+		submenu = new DefaultSubMenu("JJProduct");
+		submenu.setId("jJProductSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJProductMenuItem");
+		item.setCommand("#{jJProductBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJProductMenuItem");
+		item.setCommand("#{jJProductBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// ///////
+		submenu = new DefaultSubMenu("JJProfile");
+		submenu.setId("jJProfileSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJProfileMenuItem");
+		item.setCommand("#{jJProfileBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJProfileMenuItem");
+		item.setCommand("#{jJProfileBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// ///////
+		submenu = new DefaultSubMenu("JJProject");
+		submenu.setId("jJProjectSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJProjectMenuItem");
+		item.setCommand("#{jJProjectBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJProjectMenuItem");
+		item.setCommand("#{jJProjectBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// /////
+		submenu = new DefaultSubMenu("JJRequirement");
+		submenu.setId("jJRequirementSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJRequirementMenuItem");
+		item.setCommand("#{jJRequirementBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJRequirementMenuItem");
+		item.setCommand("#{jJRequirementBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// ///
+		submenu = new DefaultSubMenu("JJRight");
+		submenu.setId("jJRightSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJRightMenuItem");
+		item.setCommand("#{jJRightBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJRightMenuItem");
+		item.setCommand("#{jJRightBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// /////
+		submenu = new DefaultSubMenu("JJSoftware");
+		submenu.setId("jJSoftwareSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJSoftwareMenuItem");
+		item.setCommand("#{jJSoftwareBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJSoftwareMenuItem");
+		item.setCommand("#{jJSoftwareBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// ////
+		submenu = new DefaultSubMenu("JJSprint");
+		submenu.setId("jJSprintSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJSprintMenuItem");
+		item.setCommand("#{jJSprintBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJSprintMenuItem");
+		item.setCommand("#{jJSprintBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// /////
+		submenu = new DefaultSubMenu("JJStatus");
+		submenu.setId("jJStatusSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJStatusMenuItem");
+		item.setCommand("#{jJStatusBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJStatusMenuItem");
+		item.setCommand("#{jJStatusBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// //
+		submenu = new DefaultSubMenu("JJTask");
+		submenu.setId("jJTaskSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJTaskMenuItem");
+		item.setCommand("#{jJTaskBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJTaskMenuItem");
+		item.setCommand("#{jJTaskBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// ///
+		submenu = new DefaultSubMenu("JJTestcase");
+		submenu.setId("jJTestcaseSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJTestcaseMenuItem");
+		item.setCommand("#{jJTestcaseBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJTestcaseMenuItem");
+		item.setCommand("#{jJTestcaseBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// ////
+		submenu = new DefaultSubMenu("JJTestcaseExecution");
+		submenu.setId("jJTestcaseexecutionSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJTestcaseexecutionMenuItem");
+		item.setCommand("#{jJTestcaseexecutionBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJTestcaseexecutionMenuItem");
+		item.setCommand("#{jJTestcaseexecutionBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// //
+		submenu = new DefaultSubMenu("JJTeststep");
+		submenu.setId("jJTeststepSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJTeststepMenuItem");
+		item.setCommand("#{jJTeststepBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJTeststepMenuItem");
+		item.setCommand("#{jJTeststepBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// //
+		submenu = new DefaultSubMenu("JJTeststepExecution");
+		submenu.setId("jJTeststepexecutionSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJTeststepexecutionMenuItem");
+		item.setCommand("#{jJTeststepexecutionBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJTeststepexecutionMenuItem");
+		item.setCommand("#{jJTeststepexecutionBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// ////
+		submenu = new DefaultSubMenu("JJVersion");
+		submenu.setId("jJVersionSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJVersionMenuItem");
+		item.setCommand("#{jJVersionBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJVersionMenuItem");
+		item.setCommand("#{jJVersionBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
 	}
 
 	public MenuModel getMenuModel() {
