@@ -67,6 +67,8 @@ public class JJTestcaseBean {
 
 	private String number;
 
+	private String selectedTitle;
+
 	private SelectItem[] categoryOptions;
 
 	@Autowired
@@ -207,6 +209,14 @@ public class JJTestcaseBean {
 		this.number = number;
 	}
 
+	public String getSelectedTitle() {
+		return selectedTitle;
+	}
+
+	public void setSelectedTitle(String selectedTitle) {
+		this.selectedTitle = selectedTitle;
+	}
+
 	public SelectItem[] getCategoryOptions() {
 
 		List<JJCategory> categoriesList = jJCategoryService.getAllJJCategorys();
@@ -286,6 +296,7 @@ public class JJTestcaseBean {
 		selectedReq = null;
 		tabIndex = 0;
 		rendered = false;
+		selectedTitle = "";
 
 	}
 
@@ -482,6 +493,9 @@ public class JJTestcaseBean {
 
 			selectedReq = jJTestCase.getRequirement();
 
+			selectedTitle = "R- " + selectedReq.getId() + " - "
+					+ selectedReq.getName();
+
 			// Set<JJTeststep> list = jJTestCase.getTeststeps();
 
 			List<JJTeststep> list = jJTeststepService
@@ -490,7 +504,7 @@ public class JJTestcaseBean {
 				jJTeststepBean.getTestStepList().add(jjTeststep);
 				tmpJJTeststepList.add(getFromString(jjTeststep));
 			}
-			
+
 			rendered = true;
 
 		}
@@ -546,6 +560,9 @@ public class JJTestcaseBean {
 		String selectedNode = event.getTreeNode().toString();
 		System.out.println("selectedNode " + selectedNode);
 
+		selectedReq = null;
+		selectedTitle = "";
+
 		if (selectedNode.startsWith("P")) {
 			rendered = false;
 		} else if (selectedNode.startsWith("C")) {
@@ -564,9 +581,9 @@ public class JJTestcaseBean {
 				disabled = true;
 
 		}
-		
+
 		System.out.println(rendered);
-		
+
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"Selected " + event.getTreeNode().toString(), event
 						.getTreeNode().toString());
@@ -574,7 +591,6 @@ public class JJTestcaseBean {
 		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
-		
 	public void createTabs(JJTestcaseexecutionBean jJTestcaseexecutionBean,
 			JJTeststepexecutionBean jJTeststepexecutionBean, JJBugBean jJBugBean) {
 		if (selectedNode.getData().toString().startsWith("TC")) {
@@ -773,6 +789,9 @@ public class JJTestcaseBean {
 	public void onRowSelect(SelectEvent event) {
 
 		System.out.println("Row selected");
+
+		selectedTitle = "R- " + selectedReq.getId() + " - "
+				+ selectedReq.getName();
 
 	}
 
