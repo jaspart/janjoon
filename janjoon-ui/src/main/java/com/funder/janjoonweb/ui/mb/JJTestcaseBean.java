@@ -574,10 +574,7 @@ public class JJTestcaseBean {
 		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
-	public void display(){
-		System.out.println("mahbouuul");
-	}
-	
+		
 	public void createTabs(JJTestcaseexecutionBean jJTestcaseexecutionBean,
 			JJTeststepexecutionBean jJTeststepexecutionBean, JJBugBean jJBugBean) {
 		if (selectedNode.getData().toString().startsWith("TC")) {

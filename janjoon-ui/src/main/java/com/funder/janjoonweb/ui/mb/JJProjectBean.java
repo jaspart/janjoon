@@ -21,6 +21,8 @@ import com.funder.janjoonweb.domain.JJPermission;
 import com.funder.janjoonweb.domain.JJPermissionService;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProductService;
+import com.funder.janjoonweb.domain.JJProfile;
+import com.funder.janjoonweb.domain.JJProfileService;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirementService;
 import com.funder.janjoonweb.domain.JJRight;
@@ -119,6 +121,15 @@ public class JJProjectBean {
 		this.jJTaskService = jJTaskService;
 	}
 
+	@Autowired
+	JJProfileService jJProfileService;
+	
+	
+	public void setjJProfileService(JJProfileService jJProfileService) {
+		this.jJProfileService = jJProfileService;
+	}
+	
+	
 	public JJProject getMyJJProject() {
 
 		return myJJProject;
@@ -131,6 +142,33 @@ public class JJProjectBean {
 
 	public List<JJProject> getMyJJProjectList() {
 		/*** Begin Temporary ***/
+		
+		if(jJProfileService.findAllJJProfiles().isEmpty()){
+			JJProfile profile = new JJProfile();
+			profile.setName("ProjectManager");
+			jJProfileService.saveJJProfile(profile);
+			
+			profile = new JJProfile();
+			profile.setName("ProductManager");
+			jJProfileService.saveJJProfile(profile);
+			
+			profile = new JJProfile();
+			profile.setName("CEO");
+			jJProfileService.saveJJProfile(profile);
+			
+			profile = new JJProfile();
+			profile.setName("CTO");
+			jJProfileService.saveJJProfile(profile);
+			
+			profile = new JJProfile();
+			profile.setName("Tester");
+			jJProfileService.saveJJProfile(profile);
+			
+			profile = new JJProfile();
+			profile.setName("Developer");
+			jJProfileService.saveJJProfile(profile);
+			
+		}
 
 		if (jJBuildService.getAllJJBuilds().isEmpty()) {
 			JJBuild build;
@@ -358,15 +396,337 @@ public class JJProjectBean {
 		}
 
 		if (jJRightService.getAllJJRights().isEmpty()) {
-			JJRight newJJRight = new JJRight();
-			newJJRight.setObjet("right");
-			newJJRight
-					.setCategory(jJCategoryService.getAllJJCategorys().get(0));
-			newJJRight.setR(true);
-			newJJRight.setW(true);
-			newJJRight.setX(true);
-			jJRightService.saveJJRight(newJJRight);
+			
+			JJCategory businessCategory = jJCategoryService.getJJCategoryWithName("BUSINESS");
+			JJCategory functionalCategory = jJCategoryService.getJJCategoryWithName("FUNCTIONAL");
+			JJCategory technicalCategory = jJCategoryService.getJJCategoryWithName("TECHNICAL");
+			JJCategory architectureCategory = jJCategoryService.getJJCategoryWithName("ARCHITECTURE");
+			
+			JJProfile projectManagerProfile = jJProfileService.getJJProfileWithName("ProjectManager");
+			JJProfile productManagerProfile = jJProfileService.getJJProfileWithName("ProductManager");
+			JJProfile ceoProfile = jJProfileService.getJJProfileWithName("CEO");
+			JJProfile ctoProfile = jJProfileService.getJJProfileWithName("CTO");
+			JJProfile testerProfile = jJProfileService.getJJProfileWithName("Tester");
+			JJProfile developerProfile = jJProfileService.getJJProfileWithName("Developer");
+			
+			
+			// Project Manager Profile
+			JJRight right = new JJRight();
+			right.setObjet("Project");
+			right.setR(true);
+			right.setW(true);
+			right.setX(true);
+			right.setProfile(projectManagerProfile);
+			
+			projectManagerProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);
+			
+			right = new JJRight();
+			right.setObjet("Requirement");
+			right.setCategory(businessCategory);
+			right.setR(true);
+			right.setW(true);
+			right.setX(true);
+			right.setProfile(projectManagerProfile);
+			
+			projectManagerProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);
+			
+			right = new JJRight();
+			right.setObjet("Requirement");
+			right.setCategory(functionalCategory);
+			right.setR(true);
+			right.setW(false);
+			right.setX(true);
+			right.setProfile(projectManagerProfile);
+			
+			projectManagerProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);
+			
+			right = new JJRight();
+			right.setObjet("Requirement");
+			right.setCategory(technicalCategory);
+			right.setR(true);
+			right.setW(false);
+			right.setX(false);
+			right.setProfile(projectManagerProfile);
+			
+			projectManagerProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);
+			
+			right = new JJRight();
+			right.setObjet("Requirement");
+			right.setCategory(architectureCategory);
+			right.setR(true);
+			right.setW(false);
+			right.setX(false);
+			right.setProfile(projectManagerProfile);
+			
+			projectManagerProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);
+			
+			
+			right = new JJRight();
+			right.setObjet("Planning");
+			right.setCategory(architectureCategory);
+			right.setR(true);
+			right.setW(true);
+			right.setX(false);
+			right.setProfile(projectManagerProfile);
+			
+			projectManagerProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);
+			
+			right = new JJRight();
+			right.setObjet("Planning");
+			right.setCategory(technicalCategory);
+			right.setR(true);
+			right.setW(true);
+			right.setX(true);
+			right.setProfile(projectManagerProfile);
+			
+			projectManagerProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);
+			
+			
+			right = new JJRight();
+			right.setObjet("Test");
+			right.setR(true);
+			right.setW(false);
+			right.setX(false);
+			right.setProfile(projectManagerProfile);
+			
+			projectManagerProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);
+			
+			right = new JJRight();
+			right.setObjet("Product");
+			right.setR(true);
+			right.setW(false);
+			right.setX(false);
+			right.setProfile(projectManagerProfile);
+			
+			projectManagerProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);			
+			
+			// Product Manager Profile
+			
+			right = new JJRight();
+			right.setObjet("Product");
+			right.setCategory(functionalCategory);
+			right.setR(true);
+			right.setW(true);
+			right.setX(false);
+			right.setProfile(productManagerProfile);
+			
+			productManagerProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);
+			
+			
+			right = new JJRight();
+			right.setObjet("Requirement");
+			right.setCategory(businessCategory);
+			right.setR(true);
+			right.setW(false);
+			right.setX(true);
+			right.setProfile(productManagerProfile);
+			
+			productManagerProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);
+			
+			right = new JJRight();
+			right.setObjet("Requirement");
+			right.setCategory(functionalCategory);
+			right.setR(true);
+			right.setW(true);
+			right.setX(true);
+			right.setProfile(productManagerProfile);
+			
+			productManagerProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);
+			
+			right = new JJRight();
+			right.setObjet("Requirement");
+			right.setCategory(technicalCategory);
+			right.setR(true);
+			right.setW(true);
+			right.setX(true);
+			right.setProfile(productManagerProfile);
+			
+			productManagerProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);
+			
+			right = new JJRight();
+			right.setObjet("Requirement");
+			right.setCategory(architectureCategory);
+			right.setR(true);
+			right.setW(true);
+			right.setX(true);
+			right.setProfile(productManagerProfile);
+			
+			productManagerProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);
+			
+			right = new JJRight();
+			right.setObjet("Planning");
+			right.setCategory(architectureCategory);
+			right.setR(true);
+			right.setW(true);
+			right.setX(true);
+			right.setProfile(productManagerProfile);
+			
+			productManagerProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);
+			
+			right = new JJRight();
+			right.setObjet("Planning");
+			right.setCategory(technicalCategory);
+			right.setR(true);
+			right.setW(true);
+			right.setX(true);
+			right.setProfile(productManagerProfile);
+			
+			productManagerProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);
+			
+			right = new JJRight();
+			right.setObjet("Test");
+			right.setR(true);
+			right.setW(true);
+			right.setX(false);
+			right.setProfile(productManagerProfile);
+			
+			productManagerProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);
+			
+			
+			
+			// CEO  Profile
+			right = new JJRight();
+			right.setObjet("*");
+			right.setR(true);
+			right.setW(true);
+			right.setX(false);
+			right.setProfile(ceoProfile);
+			
+			ceoProfile.getRights().add(right);
+			
+			jJRightService.saveJJRight(right);
+			
+			// CEO  Profile
+			right = new JJRight();
+			right.setObjet("*");
+			right.setR(true);
+			right.setW(true);
+			right.setX(true);
+			right.setProfile(ctoProfile);
+
+			ctoProfile.getRights().add(right);
+
+			jJRightService.saveJJRight(right);
+			
+			// Tester  Profile
+			right = new JJRight();
+			right.setObjet("Test");
+			right.setR(true);
+			right.setW(true);
+			right.setX(true);
+			right.setProfile(testerProfile);
+
+			testerProfile.getRights().add(right);
+
+			jJRightService.saveJJRight(right);
+			
+			right = new JJRight();
+			right.setObjet("Requirement");
+			right.setR(true);
+			right.setW(false);
+			right.setX(true);
+			right.setProfile(testerProfile);
+
+			testerProfile.getRights().add(right);
+
+			jJRightService.saveJJRight(right);
+			
+			right = new JJRight();
+			right.setObjet("Product");
+			right.setCategory(technicalCategory);
+			right.setR(false);
+			right.setW(false);
+			right.setX(true);
+			right.setProfile(testerProfile);
+
+			testerProfile.getRights().add(right);
+
+			jJRightService.saveJJRight(right);
+			
+			
+			// Developer  Profile
+			right = new JJRight();
+			right.setObjet("Test");
+			right.setR(true);
+			right.setW(true);
+			right.setX(false);
+			right.setProfile(developerProfile);
+
+			developerProfile.getRights().add(right);
+
+			jJRightService.saveJJRight(right);
+
+			right = new JJRight();
+			right.setObjet("Requirement");
+			right.setR(true);
+			right.setW(false);
+			right.setX(false);
+			right.setProfile(developerProfile);
+
+			developerProfile.getRights().add(right);
+
+			jJRightService.saveJJRight(right);
+
+			right = new JJRight();
+			right.setObjet("Product");
+			right.setCategory(technicalCategory);
+			right.setR(true);
+			right.setW(true);
+			right.setX(true);
+			right.setProfile(developerProfile);
+
+			developerProfile.getRights().add(right);
+
+			jJRightService.saveJJRight(right);
+			
+			
 		}
+		
+		List<JJProfile> listp = jJProfileService.findAllJJProfiles();
+		for (JJProfile jjProfile : listp) {
+			System.out.println("\n jjProfile "+jjProfile.getName());
+			Set<JJRight> listr = jjProfile.getRights();
+			for (JJRight jjRight : listr) {
+				System.out.println("\n jjRight:id "+jjRight.getObjet()+" "+jjRight.getId());
+			}
+			
+			System.out.println("\n");
+		}
+		
 
 		// if (localJJContactService.getAllJJContact().isEmpty()) {
 		// JJContact newJJContact = new JJContact();
