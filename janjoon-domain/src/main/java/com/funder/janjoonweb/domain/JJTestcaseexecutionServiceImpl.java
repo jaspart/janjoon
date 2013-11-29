@@ -70,4 +70,33 @@ public class JJTestcaseexecutionServiceImpl implements
 			return null;
 
 	}
+
+	@Override
+	public JJTestcaseexecution getTestcaseexecutionWithTestcase(
+			JJTestcase testcase) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJTestcaseexecution> criteriaQuery = criteriaBuilder
+				.createQuery(JJTestcaseexecution.class);
+
+		Root<JJTestcaseexecution> from = criteriaQuery
+				.from(JJTestcaseexecution.class);
+
+		CriteriaQuery<JJTestcaseexecution> select = criteriaQuery.select(from);
+
+		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
+		Predicate predicate2 = criteriaBuilder.equal(from.get("testcase"),
+				testcase);
+
+		select.where(criteriaBuilder.and(predicate1, predicate2));
+
+		TypedQuery<JJTestcaseexecution> result = entityManager
+				.createQuery(select);
+		if (result.getResultList().size() > 0)
+			return result.getResultList().get(0);
+		else
+			return null;
+
+	}
+
 }

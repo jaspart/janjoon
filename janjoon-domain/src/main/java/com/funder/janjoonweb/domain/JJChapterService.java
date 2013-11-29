@@ -17,7 +17,13 @@ public interface JJChapterService {
 	public List<JJChapter> getAllJJChaptersWithProjectAndCategory(
 			JJProject project, JJCategory category);
 
+	public List<JJChapter> getAllJJChaptersWithProjectAndCategorySortedByOrder(
+			JJProject project, JJCategory category);
+
 	public List<JJChapter> getAllParentJJChapterWithProjectAndCategory(
+			JJProject project, JJCategory category);
+
+	public List<JJChapter> getAllParentJJChapterWithProjectAndCategorySortedByOrder(
 			JJProject project, JJCategory category);
 
 	public List<JJChapter> getAllJJChaptersWithProjectAndProductAndCategory(
@@ -25,4 +31,7 @@ public interface JJChapterService {
 
 	public List<JJChapter> getAllParentJJChapterWithProjectAndProductAndCategory(
 			JJProject project, JJProduct product, JJCategory category);
+
+	public List<JJChapter> getAllJJChaptersWithProjectAndCategoryAndParentSortedByOrder(
+			JJProject project, JJCategory category, JJChapter parent);
 }

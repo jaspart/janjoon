@@ -1,5 +1,10 @@
 package com.funder.janjoonweb.ui.mb;
 
+import java.awt.Color;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -34,6 +39,18 @@ import com.funder.janjoonweb.domain.JJTeststep;
 import com.funder.janjoonweb.domain.JJTeststepService;
 import com.funder.janjoonweb.domain.JJTeststepexecution;
 import com.funder.janjoonweb.domain.JJTeststepexecutionService;
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Chunk;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.html.simpleparser.HTMLWorker;
+import com.lowagie.text.html.simpleparser.StyleSheet;
+import com.lowagie.text.pdf.PdfWriter;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJTestcase.class, beanName = "jJTestcaseBean")
@@ -567,6 +584,9 @@ public class JJTestcaseBean {
 			rendered = false;
 		} else if (selectedNode.startsWith("C")) {
 			rendered = false;
+			long idCategory = Long.parseLong(getStringFromString(selectedNode,
+					1));
+			preProcessPDF(idCategory);
 		} else if (selectedNode.startsWith("CH")) {
 			rendered = true;
 		}
@@ -713,6 +733,15 @@ public class JJTestcaseBean {
 
 			if (!passed) {
 				jJBugService.updateJJBug(jJBugBean.getjJBug());
+			} else {
+				// Quand un test est fini avec succes, les taches associees au
+				// requirement associe au test sont mis a "isCompleted=true"
+				// (par consequence absolue, la barre de progression de
+				// l'interface de specifications avance).
+				JJTestcase testcase = jJTestcaseexecution.getTestcase();
+				JJRequirement requirement = testcase.getRequirement();
+				requirement.setIsCompleted(true);
+				jJRequirementService.updateJJRequirement(requirement);
 			}
 
 		} else if (tabIndex < size - 1 && size > 0) {
@@ -805,6 +834,85 @@ public class JJTestcaseBean {
 				+ "-" + jjTeststep.getResultat() + "-"
 				+ jjTeststep.getOrdering();
 		return str;
+	}
+
+	private void preProcessPDF(long idCategory) {
+
+		Document pdf = new Document(PageSize.A4);
+
+		try {
+			PdfWriter.getInstance(pdf, new FileOutputStream("./test.pdf"));
+
+			pdf.open();
+
+			Paragraph paragraph = new Paragraph();
+
+			Font fontTitle = new Font(Font.TIMES_ROMAN, 30, Font.BOLD);
+			fontTitle.setColor(new Color(0x24, 0x14, 0x14));
+
+			Font fontChapter = new Font(Font.HELVETICA, 15, Font.BOLD);
+			fontChapter.setColor(new Color(0x4E, 0x4E, 0x4E));
+
+			Font fontTest = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+			fontTest.setColor(new Color(0x5A, 0x5A, 0x5A));
+
+			Font fontPassed = new Font(Font.COURIER, 8, Font.BOLD);
+			fontPassed.setColor(new Color(0x82, 0x82, 0x82));
+
+			StyleSheet style = new StyleSheet();
+			style.loadTagStyle("body", "font", "Times New Roman");
+
+			JJCategory category = jJCategoryService.findJJCategory(idCategory);
+
+			Phrase phrase = new Phrase(20, new Chunk("\n "
+					+ currentProject.getName() + "\n" + category.getName()
+					+ "\n " + "\n", fontChapter));
+			paragraph.add(phrase);
+
+			List<JJChapter> list = jJChapterService
+					.getAllParentJJChapterWithProjectAndCategorySortedByOrder(
+							currentProject, category);
+
+			for (JJChapter jjChapter : list) {
+				orderChapters(jjChapter, category, paragraph, fontPassed,
+						fontChapter, fontTest, style);
+			}
+
+			pdf.add(paragraph);
+			pdf.close();
+		} catch (FileNotFoundException | DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private void orderChapters(JJChapter chapter, JJCategory category,
+			Paragraph paragraph, Font fontPassed, Font fontChapter,
+			Font fontTest, StyleSheet style) {
+
+		paragraph.add(new Chunk("\n" + chapter.getName() + "\n", fontChapter));
+
+		List<JJChapter> listChild = jJChapterService
+				.getAllJJChaptersWithProjectAndCategoryAndParentSortedByOrder(
+						currentProject, category, chapter);
+		for (JJChapter jjChapter : listChild) {
+			orderChapters(jjChapter, category, paragraph, fontPassed,
+					fontChapter, fontTest, style);
+		}
+
+		List<JJTestcase> listTestcase = jJTestcaseService
+				.getAllJJTestcasesWithChapter(chapter);
+
+		for (JJTestcase jjTestcase : listTestcase) {
+			if (jjTestcase.getEnabled()) {
+				paragraph.add(new Chunk(jjTestcase.getName() + "\n", fontTest));
+				JJTestcaseexecution testcaseexecution = jJTestcaseexecutionService
+						.getTestcaseexecutionWithTestcase(jjTestcase);
+				paragraph.add(new Chunk("\n Passed: "
+						+ testcaseexecution.getPassed() + "\n", fontPassed));
+			}
+		}
 	}
 
 	private class RequirementDataModel extends ListDataModel<JJRequirement>

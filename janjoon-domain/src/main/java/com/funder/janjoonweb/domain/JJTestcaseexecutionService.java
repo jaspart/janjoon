@@ -11,4 +11,7 @@ public interface JJTestcaseexecutionService {
 
 	public JJTestcaseexecution getTestcaseexecutionWithTestcaseAndBuild(
 			JJTestcase testcase, JJBuild build);
+
+	public JJTestcaseexecution getTestcaseexecutionWithTestcase(
+			JJTestcase testcase);
 }

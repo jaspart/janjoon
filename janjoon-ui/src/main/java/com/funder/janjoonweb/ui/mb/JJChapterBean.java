@@ -26,6 +26,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.funder.janjoonweb.domain.JJCategory;
 import com.funder.janjoonweb.domain.JJChapter;
+import com.funder.janjoonweb.domain.JJChapterService;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
@@ -536,41 +537,13 @@ public class JJChapterBean {
 				.getJJCategoryWithName("BUSINESS");
 
 		List<JJChapter> list = jJChapterService
-				.getAllJJChaptersWithProjectAndCategory(currentProject,
-						category);
+				.getAllParentJJChapterWithProjectAndCategorySortedByOrder(
+						currentProject, category);
 		paragraph.add(phrase);
 
 		for (JJChapter jjChapter : list) {
-			paragraph.add(new Chunk("\n" + jjChapter.getName() + "\n",
-					fontChapter));
-			paragraph
-					.add(new Chunk(jjChapter.getDescription() + "\n", fontNote));
-
-			Set<JJRequirement> listReq = jjChapter.getRequirements();
-			for (JJRequirement jjRequirement : listReq) {
-				if (jjRequirement.getEnabled()) {
-					paragraph.add(new Chunk(jjRequirement.getName() + "\n",
-							fontRequirement));
-					StringReader strReader = new StringReader(
-							jjRequirement.getDescription());
-					System.out.println("strReader = "
-							+ strReader.getClass().getName());
-					ArrayList arrList = HTMLWorker
-							.parseToList(strReader, style);
-					paragraph.addAll(arrList);
-					/*
-					 * for (int i = 0; i < arrList.size(); ++i) { Element e =
-					 * (Element) arrList.get(i);
-					 * System.out.println("ArrayElement = "
-					 * +e.getClass().getName()); paragraph.add(e); }
-					 */
-					if (jjRequirement.getNote().length() > 2) {
-						paragraph.add("Note: "
-								+ new Chunk(jjRequirement.getNote() + "\n",
-										fontNote));
-					}
-				}
-			}
+			orderChapters(jjChapter, category, paragraph, fontNote,
+					fontChapter, fontRequirement, style);
 		}
 
 		paragraph.add(phrase);
@@ -579,6 +552,47 @@ public class JJChapterBean {
 		image.scaleToFit((float) 200.0, (float) 49.0);
 		paragraph.add(image);
 		pdf.add(paragraph);
+	}
+
+	private void orderChapters(JJChapter chapter, JJCategory category,
+			Paragraph paragraph, Font fontNote, Font fontChapter,
+			Font fontRequirement, StyleSheet style) throws IOException {
+
+		paragraph.add(new Chunk("\n" + chapter.getName() + "\n", fontChapter));
+		paragraph.add(new Chunk(chapter.getDescription() + "\n", fontNote));
+
+		List<JJChapter> listChild = jJChapterService
+				.getAllJJChaptersWithProjectAndCategoryAndParentSortedByOrder(
+						currentProject, category, chapter);
+		for (JJChapter jjChapter : listChild) {
+			orderChapters(jjChapter, category, paragraph, fontNote,
+					fontChapter, fontRequirement, style);
+		}
+
+		Set<JJRequirement> listReq = chapter.getRequirements();
+		for (JJRequirement jjRequirement : listReq) {
+			if (jjRequirement.getEnabled()) {
+				paragraph.add(new Chunk(jjRequirement.getName() + "\n",
+						fontRequirement));
+				StringReader strReader = new StringReader(
+						jjRequirement.getDescription());
+				System.out.println("strReader = "
+						+ strReader.getClass().getName());
+				ArrayList arrList = HTMLWorker.parseToList(strReader, style);
+				paragraph.addAll(arrList);
+				/*
+				 * for (int i = 0; i < arrList.size(); ++i) { Element e =
+				 * (Element) arrList.get(i);
+				 * System.out.println("ArrayElement = "
+				 * +e.getClass().getName()); paragraph.add(e); }
+				 */
+				if (jjRequirement.getNote().length() > 2) {
+					paragraph.add("Note: "
+							+ new Chunk(jjRequirement.getNote() + "\n",
+									fontNote));
+				}
+			}
+		}
 	}
 
 	public void postProcessXLS(Object document) {
