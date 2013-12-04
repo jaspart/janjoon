@@ -17,13 +17,13 @@
 				<p:menuitem value="Project" url="/pages/planning.jsf"
 					icon="ui-icon-clipboard" disabled="true" />
 				<p:menuitem value="Specs" url="/pages/specifications.jsf"
-					icon="ui-icon-document" />
+					icon="ui-icon-document" update=":contentGrid" />
 				<p:menuitem value="Bugs" url="/pages/bugs.jsf" icon="ui-icon-gear"
 					disabled="true" />
 				<p:menuitem value="Dev" url="/pages/development.jsf"
 					icon="ui-icon-wrench" disabled="true" />
 				<p:menuitem value="Test" url="/pages/test.jsf" icon="ui-icon-check"
-					disabled="false" />
+					update=":contentGrid" />
 				<p:menuitem value="Delivery" url="/pages/delivery.jsf"
 					icon="ui-icon-star" disabled="true" />
 				<p:menuitem value="Teams" url="/pages/teams.jsf"
@@ -31,7 +31,7 @@
 				<p:menuitem value="Stats" url="/pages/stats.jsf"
 					icon="ui-icon-arrowreturnthick-1-n" disabled="true" />
 				<p:menuitem value="Admin" url="/pages/administration.jsf"
-					icon="ui-icon-key" disabled="true" />
+					icon="ui-icon-key" update=":contentGrid" />
 				<f:facet name="options">
 					<p:inputText style="margin-right:10px" />
 					<p:commandButton type="button" value="Logout"
