@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:form id="ContactForm">
+	<p:panel id="ContactPanel" style="width:600px" columns="1"
+		cellpadding="6">
+
+		<p:dataTable id="ContactDataTable" var="contact"
+			value="#{jJContactBean.contactList}" paginator="true" rows="10"
+			style="width:550px"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			rowsPerPageTemplate="5,10,15">
+			<f:facet name="header">  
+            Contact List  
+        </f:facet>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Firstname" />
+				</f:facet>
+				<h:outputText value="#{contact.firstname}" />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Lastname" />
+				</f:facet>
+				<h:outputText value="#{contact.lastname}" />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Email" />
+				</f:facet>
+				<h:outputText value="#{contact.email}" />
+			</p:column>
+		</p:dataTable>
+
+		<p:commandButton value="New" id="newContact"
+			actionListener="#{jJContactBean.newContact}"
+			update=":tabview:contactDialog"
+			oncomplete="contactDialogWidget.show()" icon="ui-icon-circle-plus" />
+	</p:panel>
+
+</h:form>
+
+<p:dialog id="contactDialog" header="#{jJContactBean.message}"
+	modal="true" widgetVar="contactDialogWidget" dynamic="true"
+	showEffect="fade" hideEffect="explode">
+
+	<p:outputPanel id="contactDialogPanel">
+		<h:form id="contactDialogForm">
+			<p:panelGrid id="grid" columns="2" cellpadding="6">
+				<p:panel columns="3" cellpadding="6">
+					<p:inputText id="firstname"
+						value="#{jJContactBean.contact.firstname}" label="Firstname"
+						required="true" widgetVar="firstnameWidget">
+						<f:validateLength maximum="25" />
+					</p:inputText>
+					<p:message for="firstname" id="msgFirstname" />
+					<p:watermark for="firstname" value="Firstname *" />
+
+
+					<p:inputText id="lastname"
+						value="#{jJContactBean.contact.lastname}" label="Lastname"
+						required="true" widgetVar="lastnameWidget">
+						<f:validateLength maximum="25" />
+					</p:inputText>
+					<p:message for="lastname" id="msgLastname" />
+					<p:watermark for="lastname" value="Lastname *" />
+
+
+					<p:inputText id="email" value="#{jJContactBean.contact.email}"
+						label="Email" required="true" widgetVar="emailWidget" />
+					<p:message for="email" id="msgEmail" />
+					<p:watermark for="email" value="Email *" />
+					<h:outputText value="#{jJContactBean.contact.email}" />
+				</p:panel>
+
+				<p:panel columns="1" cellpadding="6">
+					<p:panel columns="2" cellpadding="6">
+						<h:outputText value="Password: " />
+						<p:password id="password"
+							value="#{jJContactBean.contact.password}" feedback="true"
+							inline="true" label="Password" required="true"
+							widgetVar="passwordWidget" />
+						<p:message for="password" id="msgPassword" />
+					</p:panel>
+					<p:selectBooleanButton value="#{jJContactBean.contact.enabled}"
+						onLabel="Active" offLabel="Inactive" />
+				</p:panel>
+			</p:panelGrid>
+			<p:commandButton id="submitButton" value="Save" update="grid"
+				process="@widgetVar(firstnameWidget) @widgetVar(lastnameWidget) @widgetVar(emailWidget) @widgetVar(passwordWidget)"
+				action="#{jJContactBean.save}" />
+		</h:form>
+	</p:outputPanel>
+</p:dialog>
+
+
+</html>
