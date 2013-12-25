@@ -715,18 +715,6 @@ public class JJProjectBean {
 			
 			
 		}
-		
-		List<JJProfile> listp = jJProfileService.findAllJJProfiles();
-		for (JJProfile jjProfile : listp) {
-			System.out.println("\n jjProfile "+jjProfile.getName());
-			Set<JJRight> listr = jjProfile.getRights();
-			for (JJRight jjRight : listr) {
-				System.out.println("\n jjRight:id "+jjRight.getObjet()+" "+jjRight.getId());
-			}
-			
-			System.out.println("\n");
-		}
-		
 
 		// if (localJJContactService.getAllJJContact().isEmpty()) {
 		// JJContact newJJContact = new JJContact();
