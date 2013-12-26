@@ -3,12 +3,14 @@
 
 package com.funder.janjoonweb.domain;
 
+import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJContactDataOnDemand;
 import com.funder.janjoonweb.domain.JJPermission;
 import com.funder.janjoonweb.domain.JJPermissionDataOnDemand;
 import com.funder.janjoonweb.domain.JJPermissionRepository;
 import com.funder.janjoonweb.domain.JJPermissionService;
 import com.funder.janjoonweb.domain.JJProductDataOnDemand;
+import com.funder.janjoonweb.domain.JJProfile;
 import com.funder.janjoonweb.domain.JJProfileDataOnDemand;
 import com.funder.janjoonweb.domain.JJProjectDataOnDemand;
 import java.security.SecureRandom;
@@ -49,16 +51,19 @@ privileged aspect JJPermissionDataOnDemand_Roo_DataOnDemand {
     
     public JJPermission JJPermissionDataOnDemand.getNewTransientJJPermission(int index) {
         JJPermission obj = new JJPermission();
-        setName(obj, index);
+        setContact(obj, index);
+        setProfile(obj, index);
         return obj;
     }
     
-    public void JJPermissionDataOnDemand.setName(JJPermission obj, int index) {
-        String name = "name_" + index;
-        if (name.length() > 25) {
-            name = name.substring(0, 25);
-        }
-        obj.setName(name);
+    public void JJPermissionDataOnDemand.setContact(JJPermission obj, int index) {
+        JJContact contact = jJContactDataOnDemand.getRandomJJContact();
+        obj.setContact(contact);
+    }
+    
+    public void JJPermissionDataOnDemand.setProfile(JJPermission obj, int index) {
+        JJProfile profile = jJProfileDataOnDemand.getRandomJJProfile();
+        obj.setProfile(profile);
     }
     
     public JJPermission JJPermissionDataOnDemand.getSpecificJJPermission(int index) {

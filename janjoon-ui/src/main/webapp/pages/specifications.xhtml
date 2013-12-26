@@ -606,7 +606,6 @@
 							widgetVar="editorCreate"
 							value="#{jJRequirementBean.myJJRequirement.description}"
 							required="true">
-							<f:validateLength minimum="1" maximum="250" />
 							<!--p:ajax update="msgDescription" event="keyup" /-->
 						</p:editor>
 						<p:message for="description" id="msgDescription" display="icon" />
@@ -720,7 +719,6 @@
 							<p:editor id="chapterDescription" rows="4" cols="70"
 								value="#{jJChapterBean.myJJChapter.description}"
 								required="false">
-								<f:validateLength minimum="1" maximum="250" />
 							</p:editor>
 
 							<!-- <p:inputTextarea id="chapterDescription" rows="6" cols="70" value="#{jJChapterBean.myJJChapter.description}" required="false">

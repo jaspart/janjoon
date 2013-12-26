@@ -232,7 +232,6 @@ public class JJContactBean {
 		System.out.println("selectedProduct " + selectedProduct);
 		
 		JJPermission permission = new JJPermission();
-		permission.setName("TEMP name");
 		permission.setProfile(selectedProfile);
 		
 		if(selectedProject != null)

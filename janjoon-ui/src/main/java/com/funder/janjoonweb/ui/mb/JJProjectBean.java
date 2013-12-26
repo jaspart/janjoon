@@ -17,7 +17,6 @@ import com.funder.janjoonweb.domain.JJBuildService;
 import com.funder.janjoonweb.domain.JJCategory;
 import com.funder.janjoonweb.domain.JJCategoryService;
 import com.funder.janjoonweb.domain.JJContactService;
-import com.funder.janjoonweb.domain.JJPermission;
 import com.funder.janjoonweb.domain.JJPermissionService;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProductService;
@@ -386,13 +385,6 @@ public class JJProjectBean {
 			CategorySecurity.setEnabled(true);
 			CategorySecurity.setStage(2);
 			jJCategoryService.saveJJCategory(CategorySecurity);
-		}
-
-		if (jJPermissionService.getAllJJPermissions().isEmpty()) {
-			JJPermission newJJPermission = new JJPermission();
-			newJJPermission.setName("general");
-
-			jJPermissionService.saveJJPermission(newJJPermission);
 		}
 
 		if (jJRightService.getAllJJRights().isEmpty()) {

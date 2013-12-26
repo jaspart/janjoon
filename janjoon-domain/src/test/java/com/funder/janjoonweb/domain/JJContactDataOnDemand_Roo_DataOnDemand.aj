@@ -7,7 +7,7 @@ import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJContactDataOnDemand;
 import com.funder.janjoonweb.domain.JJContactRepository;
 import com.funder.janjoonweb.domain.JJContactService;
-import com.funder.janjoonweb.domain.JJJobDataOnDemand;
+import com.funder.janjoonweb.domain.JJJob;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,9 +30,6 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
     private List<JJContact> JJContactDataOnDemand.data;
     
     @Autowired
-    JJJobDataOnDemand JJContactDataOnDemand.jJJobDataOnDemand;
-    
-    @Autowired
     JJContactService JJContactDataOnDemand.jJContactService;
     
     @Autowired
@@ -50,6 +47,7 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
         setEmail(obj, index);
         setEnabled(obj, index);
         setFirstname(obj, index);
+        setJob(obj, index);
         setLastname(obj, index);
         setLdap(obj, index);
         setName(obj, index);
@@ -116,6 +114,11 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
         obj.setFirstname(firstname);
     }
     
+    public void JJContactDataOnDemand.setJob(JJContact obj, int index) {
+        JJJob job = null;
+        obj.setJob(job);
+    }
+    
     public void JJContactDataOnDemand.setLastname(JJContact obj, int index) {
         String lastname = "lastname_" + index;
         if (lastname.length() > 25) {
@@ -139,8 +142,8 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
     
     public void JJContactDataOnDemand.setPassword(JJContact obj, int index) {
         String password = "password_" + index;
-        if (password.length() > 25) {
-            password = password.substring(0, 25);
+        if (password.length() > 35) {
+            password = password.substring(0, 35);
         }
         obj.setPassword(password);
     }

@@ -306,11 +306,11 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         passwordCreateOutput.setValue("Password:");
         htmlPanelGrid.getChildren().add(passwordCreateOutput);
         
-        InputText passwordCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        InputTextarea passwordCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         passwordCreateInput.setId("passwordCreateInput");
         passwordCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.password}", String.class));
         LengthValidator passwordCreateInputValidator = new LengthValidator();
-        passwordCreateInputValidator.setMaximum(25);
+        passwordCreateInputValidator.setMaximum(35);
         passwordCreateInput.addValidator(passwordCreateInputValidator);
         passwordCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(passwordCreateInput);
@@ -706,11 +706,11 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         passwordEditOutput.setValue("Password:");
         htmlPanelGrid.getChildren().add(passwordEditOutput);
         
-        InputText passwordEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        InputTextarea passwordEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         passwordEditInput.setId("passwordEditInput");
         passwordEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.password}", String.class));
         LengthValidator passwordEditInputValidator = new LengthValidator();
-        passwordEditInputValidator.setMaximum(25);
+        passwordEditInputValidator.setMaximum(35);
         passwordEditInput.addValidator(passwordEditInputValidator);
         passwordEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(passwordEditInput);
@@ -1030,9 +1030,11 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         passwordLabel.setValue("Password:");
         htmlPanelGrid.getChildren().add(passwordLabel);
         
-        HtmlOutputText passwordValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputTextarea passwordValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         passwordValue.setId("passwordValue");
         passwordValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.password}", String.class));
+        passwordValue.setReadonly(true);
+        passwordValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(passwordValue);
         
         HtmlOutputText emailLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);

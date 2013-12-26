@@ -30,9 +30,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.LengthValidator;
 import org.primefaces.component.autocomplete.AutoComplete;
-import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.context.RequestContext;
@@ -81,7 +79,6 @@ privileged aspect JJPermissionBean_Roo_ManagedBean {
     @PostConstruct
     public void JJPermissionBean.init() {
         columns = new ArrayList<String>();
-        columns.add("name");
     }
     
     public String JJPermissionBean.getName() {
@@ -152,27 +149,6 @@ privileged aspect JJPermissionBean_Roo_ManagedBean {
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
         
-        OutputLabel nameCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        nameCreateOutput.setFor("nameCreateInput");
-        nameCreateOutput.setId("nameCreateOutput");
-        nameCreateOutput.setValue("Name:");
-        htmlPanelGrid.getChildren().add(nameCreateOutput);
-        
-        InputText nameCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
-        nameCreateInput.setId("nameCreateInput");
-        nameCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJPermissionBean.JJPermission_.name}", String.class));
-        LengthValidator nameCreateInputValidator = new LengthValidator();
-        nameCreateInputValidator.setMaximum(25);
-        nameCreateInput.addValidator(nameCreateInputValidator);
-        nameCreateInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(nameCreateInput);
-        
-        Message nameCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        nameCreateInputMessage.setId("nameCreateInputMessage");
-        nameCreateInputMessage.setFor("nameCreateInput");
-        nameCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(nameCreateInputMessage);
-        
         OutputLabel projectCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         projectCreateOutput.setFor("projectCreateInput");
         projectCreateOutput.setId("projectCreateOutput");
@@ -236,7 +212,7 @@ privileged aspect JJPermissionBean_Roo_ManagedBean {
         contactCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{contact.name} #{contact.description} #{contact.creationDate} #{contact.updatedDate}", String.class));
         contactCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{contact}", JJContact.class));
         contactCreateInput.setConverter(new JJContactConverter());
-        contactCreateInput.setRequired(false);
+        contactCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(contactCreateInput);
         
         Message contactCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -260,7 +236,7 @@ privileged aspect JJPermissionBean_Roo_ManagedBean {
         profileCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{profile.name}", String.class));
         profileCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{profile}", JJProfile.class));
         profileCreateInput.setConverter(new JJProfileConverter());
-        profileCreateInput.setRequired(false);
+        profileCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(profileCreateInput);
         
         Message profileCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -279,27 +255,6 @@ privileged aspect JJPermissionBean_Roo_ManagedBean {
         ELContext elContext = facesContext.getELContext();
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
-        
-        OutputLabel nameEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        nameEditOutput.setFor("nameEditInput");
-        nameEditOutput.setId("nameEditOutput");
-        nameEditOutput.setValue("Name:");
-        htmlPanelGrid.getChildren().add(nameEditOutput);
-        
-        InputText nameEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
-        nameEditInput.setId("nameEditInput");
-        nameEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJPermissionBean.JJPermission_.name}", String.class));
-        LengthValidator nameEditInputValidator = new LengthValidator();
-        nameEditInputValidator.setMaximum(25);
-        nameEditInput.addValidator(nameEditInputValidator);
-        nameEditInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(nameEditInput);
-        
-        Message nameEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        nameEditInputMessage.setId("nameEditInputMessage");
-        nameEditInputMessage.setFor("nameEditInput");
-        nameEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(nameEditInputMessage);
         
         OutputLabel projectEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         projectEditOutput.setFor("projectEditInput");
@@ -364,7 +319,7 @@ privileged aspect JJPermissionBean_Roo_ManagedBean {
         contactEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{contact.name} #{contact.description} #{contact.creationDate} #{contact.updatedDate}", String.class));
         contactEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{contact}", JJContact.class));
         contactEditInput.setConverter(new JJContactConverter());
-        contactEditInput.setRequired(false);
+        contactEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(contactEditInput);
         
         Message contactEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -388,7 +343,7 @@ privileged aspect JJPermissionBean_Roo_ManagedBean {
         profileEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{profile.name}", String.class));
         profileEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{profile}", JJProfile.class));
         profileEditInput.setConverter(new JJProfileConverter());
-        profileEditInput.setRequired(false);
+        profileEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(profileEditInput);
         
         Message profileEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -407,16 +362,6 @@ privileged aspect JJPermissionBean_Roo_ManagedBean {
         ELContext elContext = facesContext.getELContext();
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
-        
-        HtmlOutputText nameLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        nameLabel.setId("nameLabel");
-        nameLabel.setValue("Name:");
-        htmlPanelGrid.getChildren().add(nameLabel);
-        
-        HtmlOutputText nameValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        nameValue.setId("nameValue");
-        nameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJPermissionBean.JJPermission_.name}", String.class));
-        htmlPanelGrid.getChildren().add(nameValue);
         
         HtmlOutputText projectLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         projectLabel.setId("projectLabel");

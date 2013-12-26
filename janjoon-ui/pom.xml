@@ -214,8 +214,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>
-			<artifactId>smoothness</artifactId>
-			<version>1.0.4</version>
+			<artifactId>all-themes</artifactId>
+			<version>1.0.10</version>
 		</dependency>
 		<dependency>
 			<groupId>com.funder.janjoonweb.domain</groupId>

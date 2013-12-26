@@ -61,11 +61,10 @@ field reference --fieldName testcase --type ~.JJTestcase
 #######################
 
 focus --class ~.JJPermission
-field string --fieldName name --sizeMax 25 --notNull
 field reference --fieldName project --type ~.JJProject
 field reference --fieldName product --type ~.JJProduct
-field reference --fieldName contact --type ~.JJContact
-field reference --fieldName profile --type ~.JJProfile
+field reference --fieldName contact --type ~.JJContact --notNull
+field reference --fieldName profile --type ~.JJProfile --notNull
 
 #######################
 

@@ -11,14 +11,6 @@ import com.funder.janjoonweb.domain.JJProject;
 
 privileged aspect JJPermission_Roo_JavaBean {
     
-    public String JJPermission.getName() {
-        return this.name;
-    }
-    
-    public void JJPermission.setName(String name) {
-        this.name = name;
-    }
-    
     public JJProject JJPermission.getProject() {
         return this.project;
     }
