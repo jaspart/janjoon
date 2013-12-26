@@ -193,16 +193,16 @@ public class JJContactBean {
 			message = "message_successfully_updated";
 		}
 
-		if(permissionList.size()>0){
-			
-			contact = jJContactService.findJJContact(contact.getId());
-			for (JJPermission permission : permissionList) {
-				permission.setContact(contact);
-				contact.getPermissions().add(permission);
-				jJPermissionService.updateJJPermission(permission);
-			}
-
-		}
+//		if(permissionList.size()>0){
+//			
+//			contact = jJContactService.findJJContact(contact.getId());
+//			for (JJPermission permission : permissionList) {
+//				permission.setContact(contact);
+//				contact.getPermissions().add(permission);
+//				jJPermissionService.updateJJPermission(permission);
+//			}
+//
+//		}
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("contactDialogWidget.hide()");
 	

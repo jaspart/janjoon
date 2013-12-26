@@ -13,6 +13,8 @@ import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.PreRenderComponentEvent;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
@@ -253,6 +255,57 @@ public class JJTestcaseBean {
 		this.categoryOptions = categoryOptions;
 	}
 
+	
+	public void initTree(){
+		
+		System.out.println("INIT TREE");
+		rootNode = new DefaultTreeNode("Root", null);
+		if (currentProject != null) {
+
+			TreeNode projectNode = new DefaultTreeNode("P-"
+					+ currentProject.getId() + "- " + currentProject.getName(),
+					rootNode);
+
+			List<JJCategory> categorys = jJCategoryService.getAllJJCategorys();
+			for (JJCategory jjCategory : categorys) {
+
+				TreeNode categoryNode = new DefaultTreeNode("C-"
+						+ jjCategory.getId() + "- " + jjCategory.getName(),
+						projectNode);
+
+				List<JJChapter> chapters = jJChapterService
+						.getAllJJChaptersWithProjectAndCategory(currentProject,
+								jjCategory);
+
+				for (JJChapter jjChapter : chapters) {
+					TreeNode chapterNode = new DefaultTreeNode("CH-"
+							+ jjChapter.getId() + "- " + jjChapter.getName(),
+							categoryNode);
+
+					List<JJTestcase> testcases = jJTestcaseService
+							.getAllJJTestcasesWithChapter(jjChapter);
+
+					for (JJTestcase jjTestcase : testcases) {
+
+						TreeNode testcaseNode = new DefaultTreeNode("TC-"
+								+ jjTestcase.getId() + "- "
+								+ jjTestcase.getName(), chapterNode);
+
+						List<JJTeststep> teststeps = jJTeststepService
+								.getJJTeststepWithTestcase(jjTestcase);
+						for (JJTeststep jjTeststep : teststeps) {
+							TreeNode teststepNode = new DefaultTreeNode("TS-"
+									+ jjTeststep.getId() + "- "
+									+ jjTeststep.getActionstep(), testcaseNode);
+						}
+					}
+				}
+			}
+		}
+
+		expandTree(rootNode);
+	}
+	
 	public void initTestCaseParameter(JJTeststepBean jJTeststepBean) {
 
 		System.out.println("INIT");
@@ -913,6 +966,10 @@ public class JJTestcaseBean {
 						+ testcaseexecution.getPassed() + "\n", fontPassed));
 			}
 		}
+	}
+	
+	public void load(ComponentSystemEvent event){
+		initTree();
 	}
 
 	private class RequirementDataModel extends ListDataModel<JJRequirement>
