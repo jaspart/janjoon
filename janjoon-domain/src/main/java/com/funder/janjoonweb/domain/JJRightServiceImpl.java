@@ -59,4 +59,22 @@ public class JJRightServiceImpl implements JJRightService {
 
 	}
 
+	public List<JJRight> getObjectWriterList(String object){
+		return getObjectWriterList(object, true);
+	}
+	
+	public List<JJRight> getObjectWriterList(String object, boolean w){
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJRight> criteriaQuery = criteriaBuilder.createQuery(JJRight.class);
+		Root<JJRight> from = criteriaQuery.from(JJRight.class);
+		CriteriaQuery<JJRight> select = criteriaQuery.select(from);
+
+		Predicate predicate1 = criteriaBuilder.equal(from.get("w"), true);
+		Predicate predicate2 = criteriaBuilder.equal(from.get("object"), object);
+		
+		select.where(criteriaBuilder.and(predicate1,predicate2));
+
+		TypedQuery<JJRight> result = entityManager.createQuery(select);
+		return result.getResultList();
+	}	
 }

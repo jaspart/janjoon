@@ -749,13 +749,13 @@ public class JJProjectBean {
 
 			if (jJProductBean != null) {
 				jJProductBean.setDisabled(false);
-				jJProductBean.setMyJJProduct(null);
+				jJProductBean.setProduct(null);
 				jJProductBean.setProject(myJJProject);
 			}
 
 			if (jJVersionBean != null) {
 				jJVersionBean.setDisabled(true);
-				jJVersionBean.setMyJJVersion(null);
+				jJVersionBean.setProduct(null);
 			}
 
 			if (jJRequirementBean != null) {
@@ -796,11 +796,11 @@ public class JJProjectBean {
 
 			if (jJProductBean != null) {
 				jJProductBean.setDisabled(true);
-				jJProductBean.setMyJJProduct(null);
+				jJProductBean.setProduct(null);
 			}
 			if (jJVersionBean != null) {
 				jJVersionBean.setDisabled(true);
-				jJVersionBean.setMyJJVersion(null);
+				jJVersionBean.setProduct(null);
 			}
 
 			// IF PROJECT IS NULL GET ALL JJREQUIRMENTS

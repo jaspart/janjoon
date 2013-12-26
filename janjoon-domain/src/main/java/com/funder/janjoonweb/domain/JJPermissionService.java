@@ -9,4 +9,6 @@ public interface JJPermissionService {
 	public JJPermission getJJPermissionWithName(String name);
 
 	public List<JJPermission> getAllJJPermissions();
+	
+	public List<JJPermission> getProductManagerPermissions(JJProfile profile);
 }

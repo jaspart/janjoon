@@ -8,35 +8,34 @@
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
 
-		<p:tabView id="tabview" widgetVar="tabView" dynamic="true"
-			cache="true">
+		<p:tabView id="tabview" widgetVar="tabView" dynamic="true" cache="true">
 
 			<p:tab id="tabUser" title="User">
-				<h:panelGrid columns="1" cellpadding="3">
+				<h:panelGrid id="panUser" columns="1" cellpadding="3">
 					<ui:include src="Contact.xhtml" />
 				</h:panelGrid>
 			</p:tab>
 
 			<p:tab id="tabProfile" title="Profile">
-				<h:panelGrid columns="2" cellpadding="10">
+				<h:panelGrid id="panProfile" columns="2" cellpadding="10">
 					<ui:include src="Profile.xhtml" />
 				</h:panelGrid>
 			</p:tab>
 
 			<p:tab id="tabProduct" title="Product">
-				<h:panelGrid columns="2" cellpadding="10">
+				<h:panelGrid id="panProduct" columns="2" cellpadding="10">
 					<ui:include src="Product.xhtml" />
 				</h:panelGrid>
 			</p:tab>
 
 			<p:tab id="tabProject" title="Project">
-				<h:panelGrid columns="2" cellpadding="10">
+				<h:panelGrid id="panProject" columns="2" cellpadding="10">
 					<ui:include src="Project.xhtml" />
 				</h:panelGrid>
 			</p:tab>
 
 			<p:tab id="tabWorkflow" title="Workflow">
-				<h:panelGrid columns="2" cellpadding="10">
+				<h:panelGrid id="panWorkflow" columns="2" cellpadding="10">
 					<ui:include src="Workflow.xhtml" />
 				</h:panelGrid>
 			</p:tab>

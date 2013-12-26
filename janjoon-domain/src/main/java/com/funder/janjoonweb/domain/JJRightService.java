@@ -8,4 +8,8 @@ public interface JJRightService {
 	public JJRight getJJRightWithName(String name);
 
 	public List<JJRight> getAllJJRights();
+	
+	public List<JJRight> getObjectWriterList(String object);
+	public List<JJRight> getObjectWriterList(String object, boolean w);
+
 }

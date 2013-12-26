@@ -10,7 +10,7 @@
 	<h:outputScript library="js" name="calendar.js" />
 	<h:form prependId="false" id="headerForm">
 		<p:growl id="messagesHeader" />
-		<h:panelGrid columns="3" cellpadding="2">
+		<h:panelGrid id="panelMenu" columns="3" cellpadding="2">
 			<p:tabMenu id="tabMenu" name="content">
 				<p:menuitem value="Main" url="/pages/main.jsf" />
 				<p:menuitem url="/pages/home.jsf" icon="ui-icon-home" />
@@ -38,7 +38,6 @@
 						icon="ui-icon-extlink" />
 				</f:facet>
 			</p:tabMenu>
-			<p:sticky target="tabMenu" />
 			<h:panelGrid columns="2" cellpadding="2" align="right">
 				<h:outputText value="Project :" />
 				<p:selectOneMenu id="projectSelectOneMenu"
@@ -46,8 +45,7 @@
 					effect="fade" style="width:160px" filter="true"
 					filterMatchMode="startsWith">
 
-					<f:converter
-						converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
+					<f:converter converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
 
 					<f:selectItem itemLabel="#{jJProjectBean.myJJProject.name}"
 						itemValue="#{jJProjectBean.myJJProject}" />
@@ -60,8 +58,7 @@
 				</p:selectOneMenu>
 
 				<h:outputText value="Product :" />
-				<p:selectOneMenu id="productSelectOneMenu"
-					value="#{jJProductBean.myJJProduct}" panelStyle="width:150px"
+				<p:selectOneMenu id="productSelectOneMenu" value="#{jJProductBean.myJJProduct}" panelStyle="width:150px"
 					effect="fade" style="width:160px" filter="true"
 					filterMatchMode="startsWith" disabled="#{jJProductBean.disabled}">
 					<f:converter
@@ -82,8 +79,7 @@
 					value="#{jJVersionBean.myJJVersion}" panelStyle="width:150px"
 					effect="fade" style="width:160px" filter="true"
 					filterMatchMode="startsWith" disabled="#{jJVersionBean.disabled}">
-					<f:converter
-						converterId="com.funder.janjoonweb.ui.mb.converter.JJVersionConverter" />
+					<f:converter converterId="com.funder.janjoonweb.ui.mb.converter.JJVersionConverter" />
 
 					<f:selectItem itemLabel="#{jJVersionBean.myJJVersion.name}"
 						itemValue="#{jJVersionBean.myJJVersion}" />
@@ -94,10 +90,9 @@
 						listener="#{jJVersionBean.handleSelect(jJRequirementBean)}"
 						update="messagesHeader :contentGrid" />
 				</p:selectOneMenu>
-
 			</h:panelGrid>
-
 		</h:panelGrid>
+		<p:sticky target="panelMenu" />
 	</h:form>
 </ui:composition>
 </html>

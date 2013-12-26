@@ -25,7 +25,6 @@ public class JJBugServiceImpl implements JJBugService {
 
 	@Override
 	public List<JJBug> getAllJJBugs() {
-
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
 				.createQuery(JJBug.class);
@@ -44,22 +43,18 @@ public class JJBugServiceImpl implements JJBugService {
 	}
 
 	@Override
-	public JJBug getBugWithTeststepAndProject(JJTeststep teststep,
-			JJProject project) {
+	public JJBug getBugWithTeststepAndProject(JJTeststep teststep, JJProject project) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
-				.createQuery(JJBug.class);
+		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder.createQuery(JJBug.class);
 
 		Root<JJBug> from = criteriaQuery.from(JJBug.class);
 
 		CriteriaQuery<JJBug> select = criteriaQuery.select(from);
 
 		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
-		Predicate predicate2 = criteriaBuilder.equal(from.get("teststep"),
-				teststep);
-		Predicate predicate3 = criteriaBuilder.equal(from.get("project"),
-				project);
+		Predicate predicate2 = criteriaBuilder.equal(from.get("teststep"), teststep);
+		Predicate predicate3 = criteriaBuilder.equal(from.get("project"), project);
 
 		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3));
 
@@ -68,7 +63,5 @@ public class JJBugServiceImpl implements JJBugService {
 			return result.getResultList().get(0);
 		else
 			return null;
-
 	}
-
-}
+}	

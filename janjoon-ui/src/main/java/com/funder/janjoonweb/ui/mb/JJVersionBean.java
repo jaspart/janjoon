@@ -18,8 +18,8 @@ import com.funder.janjoonweb.domain.JJVersion;
 @RooJsfManagedBean(entity = JJVersion.class, beanName = "jJVersionBean")
 public class JJVersionBean {
 
-	private JJVersion myJJVersion;
-	private List<JJVersion> myJJVersionList;
+	private JJVersion version;
+	private List<JJVersion> versionList;
 	private boolean disabled = true;
 	private JJProduct product;
 	private JJProject project;
@@ -27,30 +27,29 @@ public class JJVersionBean {
 	@Autowired
 	JJRequirementService jJRequirementService;
 
-	public void setjJRequirementService(
-			JJRequirementService jJRequirementService) {
+	public void setjJRequirementService(JJRequirementService jJRequirementService) {
 		this.jJRequirementService = jJRequirementService;
 	}
 
-	public JJVersion getMyJJVersion() {
-		return myJJVersion;
+	public JJVersion getVersion() {
+		return version;
 	}
 
-	public void setMyJJVersion(JJVersion myJJVersion) {
-		this.myJJVersion = myJJVersion;
+	public void setVersion(JJVersion version) {
+		this.version = version;
 	}
 
-	public List<JJVersion> getMyJJVersionList() {
-		myJJVersionList = jJVersionService.getAllJJVersionsWithProduct(product);
+	public List<JJVersion> getVersionList() {
+		versionList = jJVersionService.getAllJJVersionsWithProduct(product);
 		JJVersion version = new JJVersion();
 		version.setId((long) 1234567890);
 		version.setName("Select All");
-		myJJVersionList.add(0, version);
-		return myJJVersionList;
+		versionList.add(0, version);
+		return versionList;
 	}
 
-	public void setMyJJVersionList(List<JJVersion> myJJVersionList) {
-		this.myJJVersionList = myJJVersionList;
+	public void setVersionList(List<JJVersion> versionList) {
+		this.versionList = versionList;
 	}
 
 	public boolean getDisabled() {
@@ -78,58 +77,36 @@ public class JJVersionBean {
 	}
 
 	public void handleSelect(JJRequirementBean jJRequirementBean) {
-
-		if (myJJVersion != null) {
-
+		if (version != null) {
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Version selected: " + myJJVersion.getName(),
-					"Selection info");
+					"Version selected: " + version.getName(), "Selection info");
 
 			FacesContext.getCurrentInstance().addMessage(null, message);
 
 			if (jJRequirementBean != null) {
+				jJRequirementBean.setCurrentVersion(version);
 
-				jJRequirementBean.setCurrentVersion(myJJVersion);
+				jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
+						.getAllJJRequirementsWithProjectAndProductAndVersion("BUSINESS", project, product, version));
 
-				jJRequirementBean
-						.setMyBusinessJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProjectAndProductAndVersion(
-										"BUSINESS", project, product,
-										myJJVersion));
+				jJRequirementBean.setMyFunctionalJJRequirements(jJRequirementService
+						.getAllJJRequirementsWithProjectAndProductAndVersion("FUNCTIONAL", project, product, version));
 
-				jJRequirementBean
-						.setMyFunctionalJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProjectAndProductAndVersion(
-										"FUNCTIONAL", project, product,
-										myJJVersion));
-
-				jJRequirementBean
-						.setMyTechnicalJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProjectAndProductAndVersion(
-										"TECHNICAL", project, product,
-										myJJVersion));
-
+				jJRequirementBean.setMyTechnicalJJRequirements(jJRequirementService
+						.getAllJJRequirementsWithProjectAndProductAndVersion("TECHNICAL", project, product, version));
 			}
 		} else {
-
 			// IF VERSION IS NULL GET ALL JJREQUIRMENTS WITH PROJECT AND PRODUCT
-
-			jJRequirementBean.setCurrentVersion(myJJVersion);
+			jJRequirementBean.setCurrentVersion(version);
 
 			jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
-					.getAllJJRequirementsWithProjectAndProduct("BUSINESS",
-							project, product));
+					.getAllJJRequirementsWithProjectAndProduct("BUSINESS", project, product));
 
-			jJRequirementBean
-					.setMyFunctionalJJRequirements(jJRequirementService
-							.getAllJJRequirementsWithProjectAndProduct(
-									"FUNCTIONAL", project, product));
+			jJRequirementBean.setMyFunctionalJJRequirements(jJRequirementService
+					.getAllJJRequirementsWithProjectAndProduct("FUNCTIONAL", project, product));
 
 			jJRequirementBean.setMyTechnicalJJRequirements(jJRequirementService
-					.getAllJJRequirementsWithProjectAndProduct("TECHNICAL",
-							project, product));
-
+					.getAllJJRequirementsWithProjectAndProduct("TECHNICAL",	project, product));
 		}
-
 	}
 }

@@ -4,4 +4,179 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
+
+<h:form id="ProductForm">
+	<p:panel id="ProductPanel" style="width:600px" columns="1"
+		cellpadding="6">
+
+		<p:dataTable id="ProductDataTable" var="product"
+			value="#{jJProductBean.productList}" paginator="true" rows="10"
+			style="width:550px"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			rowsPerPageTemplate="5,10,15">
+			<f:facet name="header">Product List</f:facet>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Internal Name" />
+				</f:facet>
+				<h:outputText value="#{product.name}" />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="External Name" />
+				</f:facet>
+				<h:outputText value="#{product.extname}" />
+			</p:column>
+
+		</p:dataTable>
+
+		<p:commandButton value="New" id="newProduct"
+			actionListener="#{jJProductBean.newProduct}"
+			update=":tabview:productDialog"
+			oncomplete="productDialogWidget.show()" icon="ui-icon-circle-plus" />
+	</p:panel>
+
+</h:form>
+
+<p:dialog id="productDialog" header="#{jJProductBean.message}"
+	modal="true" widgetVar="productDialogWidget" dynamic="true"
+	showEffect="fade" hideEffect="explode">
+	<p:ajax event="close" update=":tabview:ProductForm"
+		listener="#{jJProductBean.dialogClose}" />
+	<p:outputPanel id="productDialogPanel">
+		<h:form id="productDialogForm">
+			<p:growl id="msg" />
+			<p:panelGrid columns="1" cellpadding="6">
+				<p:panelGrid columns="2" cellpadding="6">
+					<p:panel columns="3" cellpadding="6">
+						<p:inputText id="name"
+							value="#{jJProductBean.product.name}" label="Name"
+							required="true" widgetVar="nameWidget">
+							<f:validateLength maximum="25" />
+						</p:inputText>
+						<p:message for="name" id="msgName" />
+						<p:watermark for="name" value="Name *" />
+
+						<p:inputText id="extname"
+							value="#{jJProductBean.product.extname}" label="Extname"
+							required="true" widgetVar="extnameWidget">
+							<f:validateLength maximum="25" />
+						</p:inputText>
+						<p:message for="extname" id="msgExtname" />
+						<p:watermark for="extname" value="External Name *" />
+					</p:panel>
+
+					<p:panel columns="1" cellpadding="6">
+						<p:panel columns="2" cellpadding="6">
+							<h:outputText value="Product Manager: *" />
+							<p:selectOneMenu id="productManagerSelect"
+								value="#{jJProductBean.productManager}" panelStyle="width:150px"
+								effect="fade" style="width:160px" filter="true"
+								filterMatchMode="startsWith">
+
+								<f:converter converterId="com.funder.janjoonweb.ui.mb.converter.JJContactConverter" />
+
+								<f:selectItem itemLabel="#{jJProductBean.productManager.name}"
+									itemValue="#{jJProductBean.productManager}" />
+								<f:selectItems value="#{jJProductBean.productManagerList}" var="p"
+									itemLabel="#{p.name}" itemValue="#{p}" />
+
+							</p:selectOneMenu>
+							<p:message for="projectManagerSelect" id="msgProjectManager" />
+						</p:panel>
+						<p:selectBooleanButton value="#{jJProductBean.product.enabled}"
+							onLabel="Active" offLabel="Inactive" onIcon="ui-icon-check"
+							offIcon="ui-icon-close">
+							<p:ajax update="msg" listener="#{jJProductBean.addMessage}" />
+						</p:selectBooleanButton>
+					</p:panel>
+				</p:panelGrid>
+				
+				<p:panel columns="7" cellpadding="6">
+					<h:outputLabel value="Profile: *" />
+					<p:selectOneMenu id="selectOneMenuProfile"
+						value="#{jJProductBean.selectedProfile}" panelStyle="width:150px"
+						effect="fade" style="width:160px" filter="true"
+						filterMatchMode="startsWith" required="true"
+						widgetVar="profileWidget" label="Profile">
+
+						<f:converter converterId="com.funder.janjoonweb.ui.mb.converter.JJProfileConverter" />
+
+						<f:selectItem itemLabel="#{jJProductBean.selectedProfile.name}"
+							itemValue="#{jJProductBean.selectedProfile}" />
+						<f:selectItems value="#{jJProductBean.profileList}" var="p"
+							itemLabel="#{p.name}" itemValue="#{p}" />
+					</p:selectOneMenu>
+				
+					<h:outputLabel value="Project:" />
+					<p:selectOneMenu id="selectOneMenuProject"
+						value="#{jJProductBean.selectedProject}" panelStyle="width:150px"
+						effect="fade" style="width:160px" filter="true"
+						filterMatchMode="startsWith" widgetVar="projectWidget">
+
+						<f:converter converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
+
+						<f:selectItem itemLabel="#{jJProductBean.selectedProject.name}"
+							itemValue="#{jJProductBean.selectedProject}" />
+						<f:selectItems value="#{jJProductBean.projectList}" var="p"
+							itemLabel="#{p.name}" itemValue="#{p}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="Product:" />
+					<p:selectOneMenu id="selectOneMenuProduct"
+						value="#{jJProductBean.selectedProduct}" panelStyle="width:150px"
+						effect="fade" style="width:160px" filter="true"
+						filterMatchMode="startsWith" widgetVar="productWidget">
+
+						<f:converter converterId="com.funder.janjoonweb.ui.mb.converter.JJProductConverter" />
+
+						<f:selectItem itemLabel="#{jJProductBean.selectedProduct.name}"
+							itemValue="#{jJProductBean.selectedProduct}" />
+						<f:selectItems value="#{jJProductBean.productList}" var="p"
+							itemLabel="#{p.name}" itemValue="#{p}" />
+					</p:selectOneMenu>
+
+					<p:commandButton id="addPermission"
+						update="msg permissionDataTable"
+						actionListener="#{jJProductBean.addPermission}"
+						icon="ui-icon-circle-plus"
+						process="@widgetVar(profileWidget) @widgetVar(projectWidget) @widgetVar(productWidget)" />
+				</p:panel>
+
+				<p:dataTable id="permissionDataTable" var="permission"
+					value="#{jJProductBean.permissionList}" scrollRows="10"
+					scrollable="true" liveScroll="true" scrollHeight="150"
+					style="width:700px">
+					<f:facet name="header">Permission List</f:facet>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Profile" />
+						</f:facet>
+						<h:outputText value="#{permission.profile.name}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Project" />
+						</f:facet>
+						<h:outputText value="#{permission.project.name}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Product" />
+						</f:facet>
+						<h:outputText value="#{permission.product.name}" />
+					</p:column>
+				</p:dataTable>
+			</p:panelGrid>
+			<p:commandButton id="submitButton" value="Save"
+				update="productDialogForm"
+				process="@widgetVar(firstnameWidget) @widgetVar(lastnameWidget) @widgetVar(emailWidget) @widgetVar(passwordWidget)"
+				action="#{jJProductBean.save}" />
+
+		</h:form>
+	</p:outputPanel>
+</p:dialog>
+
 </html>

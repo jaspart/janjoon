@@ -29,23 +29,14 @@ import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 public class JJContactBean {
 
 	private JJContact contact;
-
 	private List<JJContact> contactList;
-
 	private JJProfile selectedProfile;
-
 	private List<JJProfile> profileList;
-
 	private JJProject selectedProject;
-
 	private List<JJProject> projectList;
-
 	private JJProduct selectedProduct;
-
 	private List<JJProduct> productList;
-
 	private List<JJPermission> permissionList;
-
 	private String message;
 
 	@Autowired
@@ -68,7 +59,6 @@ public class JJContactBean {
 	public void setjJProductService(JJProductService jJProductService) {
 		this.jJProductService = jJProductService;
 	}
-	
 	
 	@Autowired
 	JJPermissionService jJPermissionService;
@@ -193,23 +183,19 @@ public class JJContactBean {
 			message = "message_successfully_updated";
 		}
 
-//		if(permissionList.size()>0){
-//			
-//			contact = jJContactService.findJJContact(contact.getId());
-//			for (JJPermission permission : permissionList) {
-//				permission.setContact(contact);
-//				contact.getPermissions().add(permission);
-//				jJPermissionService.updateJJPermission(permission);
-//			}
-//
-//		}
+		if(permissionList.size()>0){
+			
+			contact = jJContactService.findJJContact(contact.getId());
+			for (JJPermission permission : permissionList) {
+				permission.setContact(contact);
+				contact.getPermissions().add(permission);
+				jJPermissionService.updateJJPermission(permission);
+			}
+		}
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("contactDialogWidget.hide()");
 	
-		
-		
-		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJContact");
+		FacesMessage facesMessage = MessageFactory.getMessage(message, "JJContact");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
