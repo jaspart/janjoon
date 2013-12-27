@@ -20,48 +20,6 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 	}
 
 	@Override
-	public JJPermission getJJPermissionWithName(String name) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
-				.createQuery(JJPermission.class);
-
-		Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
-
-		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
-		Predicate predicate1 = criteriaBuilder.equal(from.get("name"), name);
-		Predicate predicate2 = criteriaBuilder.equal(from.get("enabled"), true);
-
-		select.where(criteriaBuilder.and(predicate1, predicate2));
-
-		TypedQuery<JJPermission> result = entityManager.createQuery(select);
-		if (result.getResultList().size() == 0)
-			return null;
-		else
-			return result.getSingleResult();
-	}
-
-	@Override
-	public List<JJPermission> getAllJJPermissions() {
-
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
-				.createQuery(JJPermission.class);
-
-		Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
-
-		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
-
-		Predicate predicate = criteriaBuilder
-				.equal(from.get("name"), "general");
-
-		select.where(predicate);
-
-		TypedQuery<JJPermission> result = entityManager.createQuery(select);
-		return result.getResultList();
-
-	}
-	
-	@Override
 	public List<JJPermission> getProductManagerPermissions(JJProfile profile){
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder

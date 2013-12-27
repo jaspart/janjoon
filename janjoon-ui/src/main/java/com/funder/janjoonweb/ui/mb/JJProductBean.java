@@ -6,23 +6,22 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import org.primefaces.context.RequestContext;
 
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.funder.janjoonweb.domain.JJChapterService;
+import com.funder.janjoonweb.domain.JJContact;
+import com.funder.janjoonweb.domain.JJPermission;
+import com.funder.janjoonweb.domain.JJPermissionService;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirementService;
-
-import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJRight;
 import com.funder.janjoonweb.domain.JJRightService;
-import com.funder.janjoonweb.domain.JJRightServiceImpl;
-import com.funder.janjoonweb.domain.JJPermission;
-import com.funder.janjoonweb.domain.JJPermissionService;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
@@ -31,15 +30,18 @@ public class JJProductBean {
 
 	private JJProduct product;
 	private List<JJProduct> productList;
-	private List<JJContact> productManagerList;
+	
+	private List<JJProduct> productListTable;
+
 	private JJContact productManager;
+	private List<JJContact> productManagerList;
+
 	private boolean disabled = true;
 	private JJProject project;
 	private String message;
 
 	@Autowired
 	JJChapterService jJChapterService;
-	JJRightService jJRightService;
 
 	public void setjJChapterService(JJChapterService jJChapterService) {
 		this.jJChapterService = jJChapterService;
@@ -51,6 +53,20 @@ public class JJProductBean {
 	public void setjJRequirementService(
 			JJRequirementService jJRequirementService) {
 		this.jJRequirementService = jJRequirementService;
+	}
+
+	@Autowired
+	JJRightService jJRightService;
+
+	public void setjJRightService(JJRightService jJRightService) {
+		this.jJRightService = jJRightService;
+	}
+
+	@Autowired
+	JJPermissionService jJPermissionService;
+
+	public void setjJPermissionService(JJPermissionService jJPermissionService) {
+		this.jJPermissionService = jJPermissionService;
 	}
 
 	public boolean isDisabled() {
@@ -86,13 +102,33 @@ public class JJProductBean {
 		this.productList = productList;
 	}
 
+	public List<JJProduct> getProductListTable() {
+		productListTable = jJProductService.getAllJJProducts();
+		return productListTable;
+	}
+
+	public void setProductListTable(List<JJProduct> productListTable) {
+		this.productListTable = productListTable;
+	}
+
+	public JJContact getProductManager() {
+		return productManager;
+	}
+
+	public void setProductManager(JJContact productManager) {
+		this.productManager = productManager;
+	}
+
 	public List<JJContact> getProductManagerList() {
+
 		productManagerList = new ArrayList<JJContact>();
-		
-		for(JJRight right : jJRightService.getObjectWriterList("Product",true)){
-			//recuperer les permission avec les profiles de ces droits right.getProfile()
-			List<JJPermission> permissions = JJPermissionService.getProductManagerPermissions(right.getProfile());
-			for(JJPermission permission : permissions){
+
+		List<JJRight> rights = jJRightService.getObjectWriterList("Product");
+		System.out.println("rights "+rights.size());
+		for (JJRight right : rights ) {
+			List<JJPermission> permissions = jJPermissionService
+					.getProductManagerPermissions(right.getProfile());
+			for (JJPermission permission : permissions) {
 				productManagerList.add(permission.getContact());
 			}
 		}
@@ -111,16 +147,22 @@ public class JJProductBean {
 		this.project = project;
 	}
 
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
 	public void newProduct() {
 		message = "New Product";
 		product = new JJProduct();
 		product.setEnabled(true);
 		product.setCreationDate(new Date());
 		product.setDescription("Defined as a Product");
-		product.setName("TEMP Value");
-//		product.setManager("TEMP Value");
 	}
-	
+
 	public void editProduct() {
 		message = "Edit Product";
 	}
@@ -132,20 +174,24 @@ public class JJProductBean {
 		if (product.getId() == null) {
 			System.out.println("IS a new Product");
 			jJProductService.saveJJProduct(product);
-			message = "Product_successfully_created";
+			message = "message_successfully_created";
 		} else {
 			jJProductService.updateJJProduct(product);
-			message = "Product_successfully_updated";
+			message = "message_successfully_updated";
 		}
 
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("productDialogWidget.hide()");
-	
-		FacesMessage facesMessage = MessageFactory.getMessage(message, "JJProduct");
+
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				"JJProduct");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
-
 	
+	public void dialogClose(CloseEvent event) {
+		newProduct();
+	}
+
 	public void handleSelectProduct(JJVersionBean jJVersionBean,
 			JJProjectBean jJProjectBean, JJRequirementBean jJRequirementBean,
 			JJChapterBean jJChapterBean) {
@@ -168,14 +214,20 @@ public class JJProductBean {
 
 				jJRequirementBean.setCurrentProduct(product);
 
-				jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
-						.getAllJJRequirementsWithProjectAndProduct("BUSINESS", project, product));
+				jJRequirementBean
+						.setMyBusinessJJRequirements(jJRequirementService
+								.getAllJJRequirementsWithProjectAndProduct(
+										"BUSINESS", project, product));
 
-				jJRequirementBean.setMyFunctionalJJRequirements(jJRequirementService
-						.getAllJJRequirementsWithProjectAndProduct("FUNCTIONAL", project, product));
+				jJRequirementBean
+						.setMyFunctionalJJRequirements(jJRequirementService
+								.getAllJJRequirementsWithProjectAndProduct(
+										"FUNCTIONAL", project, product));
 
-				jJRequirementBean.setMyTechnicalJJRequirements(jJRequirementService
-						.getAllJJRequirementsWithProjectAndProduct("TECHNICAL", project, product));
+				jJRequirementBean
+						.setMyTechnicalJJRequirements(jJRequirementService
+								.getAllJJRequirementsWithProjectAndProduct(
+										"TECHNICAL", project, product));
 
 			}
 			if (jJChapterBean != null)
@@ -193,13 +245,17 @@ public class JJProductBean {
 			jJChapterBean.setCurrentProduct(product);
 
 			jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
-					.getAllJJRequirementsWithCategoryAndProject("BUSINESS",	project));
+					.getAllJJRequirementsWithCategoryAndProject("BUSINESS",
+							project));
 
-			jJRequirementBean.setMyFunctionalJJRequirements(jJRequirementService
-					.getAllJJRequirementsWithCategoryAndProject("FUNCTIONAL", project));
+			jJRequirementBean
+					.setMyFunctionalJJRequirements(jJRequirementService
+							.getAllJJRequirementsWithCategoryAndProject(
+									"FUNCTIONAL", project));
 
 			jJRequirementBean.setMyTechnicalJJRequirements(jJRequirementService
-					.getAllJJRequirementsWithCategoryAndProject("TECHNICAL", project));
+					.getAllJJRequirementsWithCategoryAndProject("TECHNICAL",
+							project));
 
 		}
 	}

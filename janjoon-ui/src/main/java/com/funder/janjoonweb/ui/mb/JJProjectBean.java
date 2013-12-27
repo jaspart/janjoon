@@ -39,8 +39,8 @@ import com.funder.janjoonweb.domain.JJVersionService;
 @RooJsfManagedBean(entity = JJProject.class, beanName = "jJProjectBean")
 public class JJProjectBean {
 
-	private JJProject myJJProject;
-	private List<JJProject> myJJProjectList;
+	private JJProject project;
+	private List<JJProject> projectList;
 
 	@Autowired
 	JJStatusService jJStatusService;
@@ -122,51 +122,49 @@ public class JJProjectBean {
 
 	@Autowired
 	JJProfileService jJProfileService;
-	
-	
+
 	public void setjJProfileService(JJProfileService jJProfileService) {
 		this.jJProfileService = jJProfileService;
 	}
-	
-	
-	public JJProject getMyJJProject() {
 
-		return myJJProject;
+	public JJProject getProject() {
+
+		return project;
 	}
 
-	public void setMyJJProject(JJProject myJJProject) {
+	public void setProject(JJProject project) {
 
-		this.myJJProject = myJJProject;
+		this.project = project;
 	}
 
-	public List<JJProject> getMyJJProjectList() {
+	public List<JJProject> getProjectList() {
 		/*** Begin Temporary ***/
-		
-		if(jJProfileService.findAllJJProfiles().isEmpty()){
+
+		if (jJProfileService.findAllJJProfiles().isEmpty()) {
 			JJProfile profile = new JJProfile();
 			profile.setName("ProjectManager");
 			jJProfileService.saveJJProfile(profile);
-			
+
 			profile = new JJProfile();
 			profile.setName("ProductManager");
 			jJProfileService.saveJJProfile(profile);
-			
+
 			profile = new JJProfile();
 			profile.setName("CEO");
 			jJProfileService.saveJJProfile(profile);
-			
+
 			profile = new JJProfile();
 			profile.setName("CTO");
 			jJProfileService.saveJJProfile(profile);
-			
+
 			profile = new JJProfile();
 			profile.setName("Tester");
 			jJProfileService.saveJJProfile(profile);
-			
+
 			profile = new JJProfile();
 			profile.setName("Developer");
 			jJProfileService.saveJJProfile(profile);
-			
+
 		}
 
 		if (jJBuildService.getAllJJBuilds().isEmpty()) {
@@ -387,21 +385,28 @@ public class JJProjectBean {
 			jJCategoryService.saveJJCategory(CategorySecurity);
 		}
 
-		if (jJRightService.getAllJJRights().isEmpty()) {
-			
-			JJCategory businessCategory = jJCategoryService.getJJCategoryWithName("BUSINESS");
-			JJCategory functionalCategory = jJCategoryService.getJJCategoryWithName("FUNCTIONAL");
-			JJCategory technicalCategory = jJCategoryService.getJJCategoryWithName("TECHNICAL");
-			JJCategory architectureCategory = jJCategoryService.getJJCategoryWithName("ARCHITECTURE");
-			
-			JJProfile projectManagerProfile = jJProfileService.getJJProfileWithName("ProjectManager");
-			JJProfile productManagerProfile = jJProfileService.getJJProfileWithName("ProductManager");
+		if (jJRightService.findAllJJRights().isEmpty()) {
+
+			JJCategory businessCategory = jJCategoryService
+					.getJJCategoryWithName("BUSINESS");
+			JJCategory functionalCategory = jJCategoryService
+					.getJJCategoryWithName("FUNCTIONAL");
+			JJCategory technicalCategory = jJCategoryService
+					.getJJCategoryWithName("TECHNICAL");
+			JJCategory architectureCategory = jJCategoryService
+					.getJJCategoryWithName("ARCHITECTURE");
+
+			JJProfile projectManagerProfile = jJProfileService
+					.getJJProfileWithName("ProjectManager");
+			JJProfile productManagerProfile = jJProfileService
+					.getJJProfileWithName("ProductManager");
 			JJProfile ceoProfile = jJProfileService.getJJProfileWithName("CEO");
 			JJProfile ctoProfile = jJProfileService.getJJProfileWithName("CTO");
-			JJProfile testerProfile = jJProfileService.getJJProfileWithName("Tester");
-			JJProfile developerProfile = jJProfileService.getJJProfileWithName("Developer");
-			
-			
+			JJProfile testerProfile = jJProfileService
+					.getJJProfileWithName("Tester");
+			JJProfile developerProfile = jJProfileService
+					.getJJProfileWithName("Developer");
+
 			// Project Manager Profile
 			JJRight right = new JJRight();
 			right.setObjet("Project");
@@ -409,11 +414,11 @@ public class JJProjectBean {
 			right.setW(true);
 			right.setX(true);
 			right.setProfile(projectManagerProfile);
-			
+
 			projectManagerProfile.getRights().add(right);
-			
+
 			jJRightService.saveJJRight(right);
-			
+
 			right = new JJRight();
 			right.setObjet("Requirement");
 			right.setCategory(businessCategory);
@@ -421,11 +426,11 @@ public class JJProjectBean {
 			right.setW(true);
 			right.setX(true);
 			right.setProfile(projectManagerProfile);
-			
+
 			projectManagerProfile.getRights().add(right);
-			
+
 			jJRightService.saveJJRight(right);
-			
+
 			right = new JJRight();
 			right.setObjet("Requirement");
 			right.setCategory(functionalCategory);
@@ -433,11 +438,11 @@ public class JJProjectBean {
 			right.setW(false);
 			right.setX(true);
 			right.setProfile(projectManagerProfile);
-			
+
 			projectManagerProfile.getRights().add(right);
-			
+
 			jJRightService.saveJJRight(right);
-			
+
 			right = new JJRight();
 			right.setObjet("Requirement");
 			right.setCategory(technicalCategory);
@@ -445,11 +450,11 @@ public class JJProjectBean {
 			right.setW(false);
 			right.setX(false);
 			right.setProfile(projectManagerProfile);
-			
+
 			projectManagerProfile.getRights().add(right);
-			
+
 			jJRightService.saveJJRight(right);
-			
+
 			right = new JJRight();
 			right.setObjet("Requirement");
 			right.setCategory(architectureCategory);
@@ -457,12 +462,11 @@ public class JJProjectBean {
 			right.setW(false);
 			right.setX(false);
 			right.setProfile(projectManagerProfile);
-			
+
 			projectManagerProfile.getRights().add(right);
-			
+
 			jJRightService.saveJJRight(right);
-			
-			
+
 			right = new JJRight();
 			right.setObjet("Planning");
 			right.setCategory(architectureCategory);
@@ -470,11 +474,11 @@ public class JJProjectBean {
 			right.setW(true);
 			right.setX(false);
 			right.setProfile(projectManagerProfile);
-			
+
 			projectManagerProfile.getRights().add(right);
-			
+
 			jJRightService.saveJJRight(right);
-			
+
 			right = new JJRight();
 			right.setObjet("Planning");
 			right.setCategory(technicalCategory);
@@ -482,36 +486,35 @@ public class JJProjectBean {
 			right.setW(true);
 			right.setX(true);
 			right.setProfile(projectManagerProfile);
-			
+
 			projectManagerProfile.getRights().add(right);
-			
+
 			jJRightService.saveJJRight(right);
-			
-			
+
 			right = new JJRight();
 			right.setObjet("Test");
 			right.setR(true);
 			right.setW(false);
 			right.setX(false);
 			right.setProfile(projectManagerProfile);
-			
+
 			projectManagerProfile.getRights().add(right);
-			
+
 			jJRightService.saveJJRight(right);
-			
+
 			right = new JJRight();
 			right.setObjet("Product");
 			right.setR(true);
 			right.setW(false);
 			right.setX(false);
 			right.setProfile(projectManagerProfile);
-			
+
 			projectManagerProfile.getRights().add(right);
-			
-			jJRightService.saveJJRight(right);			
-			
+
+			jJRightService.saveJJRight(right);
+
 			// Product Manager Profile
-			
+
 			right = new JJRight();
 			right.setObjet("Product");
 			right.setCategory(functionalCategory);
@@ -519,12 +522,11 @@ public class JJProjectBean {
 			right.setW(true);
 			right.setX(false);
 			right.setProfile(productManagerProfile);
-			
+
 			productManagerProfile.getRights().add(right);
-			
+
 			jJRightService.saveJJRight(right);
-			
-			
+
 			right = new JJRight();
 			right.setObjet("Requirement");
 			right.setCategory(businessCategory);
@@ -532,11 +534,11 @@ public class JJProjectBean {
 			right.setW(false);
 			right.setX(true);
 			right.setProfile(productManagerProfile);
-			
+
 			productManagerProfile.getRights().add(right);
-			
+
 			jJRightService.saveJJRight(right);
-			
+
 			right = new JJRight();
 			right.setObjet("Requirement");
 			right.setCategory(functionalCategory);
@@ -544,11 +546,11 @@ public class JJProjectBean {
 			right.setW(true);
 			right.setX(true);
 			right.setProfile(productManagerProfile);
-			
+
 			productManagerProfile.getRights().add(right);
-			
+
 			jJRightService.saveJJRight(right);
-			
+
 			right = new JJRight();
 			right.setObjet("Requirement");
 			right.setCategory(technicalCategory);
@@ -556,11 +558,11 @@ public class JJProjectBean {
 			right.setW(true);
 			right.setX(true);
 			right.setProfile(productManagerProfile);
-			
+
 			productManagerProfile.getRights().add(right);
-			
+
 			jJRightService.saveJJRight(right);
-			
+
 			right = new JJRight();
 			right.setObjet("Requirement");
 			right.setCategory(architectureCategory);
@@ -568,11 +570,11 @@ public class JJProjectBean {
 			right.setW(true);
 			right.setX(true);
 			right.setProfile(productManagerProfile);
-			
+
 			productManagerProfile.getRights().add(right);
-			
+
 			jJRightService.saveJJRight(right);
-			
+
 			right = new JJRight();
 			right.setObjet("Planning");
 			right.setCategory(architectureCategory);
@@ -580,11 +582,11 @@ public class JJProjectBean {
 			right.setW(true);
 			right.setX(true);
 			right.setProfile(productManagerProfile);
-			
+
 			productManagerProfile.getRights().add(right);
-			
+
 			jJRightService.saveJJRight(right);
-			
+
 			right = new JJRight();
 			right.setObjet("Planning");
 			right.setCategory(technicalCategory);
@@ -592,37 +594,35 @@ public class JJProjectBean {
 			right.setW(true);
 			right.setX(true);
 			right.setProfile(productManagerProfile);
-			
+
 			productManagerProfile.getRights().add(right);
-			
+
 			jJRightService.saveJJRight(right);
-			
+
 			right = new JJRight();
 			right.setObjet("Test");
 			right.setR(true);
 			right.setW(true);
 			right.setX(false);
 			right.setProfile(productManagerProfile);
-			
+
 			productManagerProfile.getRights().add(right);
-			
+
 			jJRightService.saveJJRight(right);
-			
-			
-			
-			// CEO  Profile
+
+			// CEO Profile
 			right = new JJRight();
 			right.setObjet("*");
 			right.setR(true);
 			right.setW(true);
 			right.setX(false);
 			right.setProfile(ceoProfile);
-			
+
 			ceoProfile.getRights().add(right);
-			
+
 			jJRightService.saveJJRight(right);
-			
-			// CEO  Profile
+
+			// CEO Profile
 			right = new JJRight();
 			right.setObjet("*");
 			right.setR(true);
@@ -633,8 +633,8 @@ public class JJProjectBean {
 			ctoProfile.getRights().add(right);
 
 			jJRightService.saveJJRight(right);
-			
-			// Tester  Profile
+
+			// Tester Profile
 			right = new JJRight();
 			right.setObjet("Test");
 			right.setR(true);
@@ -645,7 +645,7 @@ public class JJProjectBean {
 			testerProfile.getRights().add(right);
 
 			jJRightService.saveJJRight(right);
-			
+
 			right = new JJRight();
 			right.setObjet("Requirement");
 			right.setR(true);
@@ -656,7 +656,7 @@ public class JJProjectBean {
 			testerProfile.getRights().add(right);
 
 			jJRightService.saveJJRight(right);
-			
+
 			right = new JJRight();
 			right.setObjet("Product");
 			right.setCategory(technicalCategory);
@@ -668,9 +668,8 @@ public class JJProjectBean {
 			testerProfile.getRights().add(right);
 
 			jJRightService.saveJJRight(right);
-			
-			
-			// Developer  Profile
+
+			// Developer Profile
 			right = new JJRight();
 			right.setObjet("Test");
 			right.setR(true);
@@ -704,8 +703,7 @@ public class JJProjectBean {
 			developerProfile.getRights().add(right);
 
 			jJRightService.saveJJRight(right);
-			
-			
+
 		}
 
 		// if (localJJContactService.getAllJJContact().isEmpty()) {
@@ -727,30 +725,29 @@ public class JJProjectBean {
 
 		/*** End Temporary ***/
 
-		myJJProjectList = jJProjectService.getAllJJProjects();
-		return myJJProjectList;
+		projectList = jJProjectService.getAllJJProjects();
+		return projectList;
 	}
 
-	public void setMyJJProjectList(List<JJProject> myJJProjectList) {
-		this.myJJProjectList = myJJProjectList;
+	public void setProjectList(List<JJProject> projectList) {
+		this.projectList = projectList;
 	}
 
 	public void handleSelectProject(JJProductBean jJProductBean,
 			JJVersionBean jJVersionBean, JJRequirementBean jJRequirementBean,
 			JJChapterBean jJChapterBean, JJTestcaseBean jJTestcaseBean,
 			JJTeststepBean jJTeststepBean, JJBugBean jJBugBean) {
-		if (myJJProject != null) {
+		if (project != null) {
 
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Project selected: " + myJJProject.getName(),
-					"Selection info");
+					"Project selected: " + project.getName(), "Selection info");
 
 			FacesContext.getCurrentInstance().addMessage(null, message);
 
 			if (jJProductBean != null) {
 				jJProductBean.setDisabled(false);
 				jJProductBean.setProduct(null);
-				jJProductBean.setProject(myJJProject);
+				jJProductBean.setProject(project);
 			}
 
 			if (jJVersionBean != null) {
@@ -760,37 +757,37 @@ public class JJProjectBean {
 
 			if (jJRequirementBean != null) {
 
-				jJRequirementBean.setCurrentProject(myJJProject);
-				jJChapterBean.setCurrentProject(myJJProject);
+				jJRequirementBean.setCurrentProject(project);
+				jJChapterBean.setCurrentProject(project);
 
 				jJRequirementBean
 						.setMyBusinessJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithCategoryAndProject("BUSINESS",
-										myJJProject));
+								.getAllJJRequirementsWithCategoryAndProject(
+										"BUSINESS", project));
 
 				jJRequirementBean
 						.setMyFunctionalJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithCategoryAndProject("FUNCTIONAL",
-										myJJProject));
+								.getAllJJRequirementsWithCategoryAndProject(
+										"FUNCTIONAL", project));
 
 				jJRequirementBean
 						.setMyTechnicalJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithCategoryAndProject("TECHNICAL",
-										myJJProject));
+								.getAllJJRequirementsWithCategoryAndProject(
+										"TECHNICAL", project));
 
 			}
 
 			if (jJChapterBean != null)
-				jJChapterBean.setCurrentProject(myJJProject);
+				jJChapterBean.setCurrentProject(project);
 
 			if (jJTestcaseBean != null) {
-				jJTestcaseBean.setCurrentProject(myJJProject);
+				jJTestcaseBean.setCurrentProject(project);
 				jJTestcaseBean.setRendered(false);
 				jJTestcaseBean.initTestCaseParameter(jJTeststepBean);
 			}
 
 			if (jJBugBean != null)
-				jJBugBean.setCurrentProject(myJJProject);
+				jJBugBean.setCurrentProject(project);
 
 		} else {
 
@@ -805,8 +802,8 @@ public class JJProjectBean {
 
 			// IF PROJECT IS NULL GET ALL JJREQUIRMENTS
 			if (jJRequirementBean != null) {
-				jJRequirementBean.setCurrentProject(myJJProject);
-				jJChapterBean.setCurrentProject(myJJProject);
+				jJRequirementBean.setCurrentProject(project);
+				jJChapterBean.setCurrentProject(project);
 
 				jJRequirementBean
 						.setMyBusinessJJRequirements(jJRequirementService
@@ -821,12 +818,12 @@ public class JJProjectBean {
 								.getAllJJRequirementsWithCategory("TECHNICAL"));
 			}
 			if (jJTestcaseBean != null) {
-				jJTestcaseBean.setCurrentProject(myJJProject);
+				jJTestcaseBean.setCurrentProject(project);
 				jJTestcaseBean.setRendered(false);
 				jJTestcaseBean.initTestCaseParameter(jJTeststepBean);
 			}
 			if (jJBugBean != null)
-				jJBugBean.setCurrentProject(myJJProject);
+				jJBugBean.setCurrentProject(project);
 
 		}
 

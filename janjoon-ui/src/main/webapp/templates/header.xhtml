@@ -41,15 +41,16 @@
 			<h:panelGrid columns="2" cellpadding="2" align="right">
 				<h:outputText value="Project :" />
 				<p:selectOneMenu id="projectSelectOneMenu"
-					value="#{jJProjectBean.myJJProject}" panelStyle="width:150px"
+					value="#{jJProjectBean.project}" panelStyle="width:150px"
 					effect="fade" style="width:160px" filter="true"
 					filterMatchMode="startsWith">
 
-					<f:converter converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
+					<f:converter
+						converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
 
-					<f:selectItem itemLabel="#{jJProjectBean.myJJProject.name}"
-						itemValue="#{jJProjectBean.myJJProject}" />
-					<f:selectItems value="#{jJProjectBean.myJJProjectList}" var="p"
+					<f:selectItem itemLabel="#{jJProjectBean.project.name}"
+						itemValue="#{jJProjectBean.project}" />
+					<f:selectItems value="#{jJProjectBean.projectList}" var="p"
 						itemLabel="#{p.name}" itemValue="#{p}" />
 
 					<p:ajax process="@this" partialSubmit="true"
@@ -58,15 +59,16 @@
 				</p:selectOneMenu>
 
 				<h:outputText value="Product :" />
-				<p:selectOneMenu id="productSelectOneMenu" value="#{jJProductBean.myJJProduct}" panelStyle="width:150px"
+				<p:selectOneMenu id="productSelectOneMenu"
+					value="#{jJProductBean.product}" panelStyle="width:150px"
 					effect="fade" style="width:160px" filter="true"
 					filterMatchMode="startsWith" disabled="#{jJProductBean.disabled}">
 					<f:converter
 						converterId="com.funder.janjoonweb.ui.mb.converter.JJProductConverter" />
 
-					<f:selectItem itemLabel="#{jJProductBean.myJJProduct.name}"
-						itemValue="#{jJProductBean.myJJProduct}" />
-					<f:selectItems value="#{jJProductBean.myJJProductList}" var="p"
+					<f:selectItem itemLabel="#{jJProductBean.product.name}"
+						itemValue="#{jJProductBean.product}" />
+					<f:selectItems value="#{jJProductBean.productList}" var="p"
 						itemLabel="#{p.name}" itemValue="#{p}" />
 
 					<p:ajax process="@this" partialSubmit="true"
@@ -76,14 +78,15 @@
 
 				<h:outputText value="Version :" />
 				<p:selectOneMenu id="versionSelectOneMenu"
-					value="#{jJVersionBean.myJJVersion}" panelStyle="width:150px"
+					value="#{jJVersionBean.version}" panelStyle="width:150px"
 					effect="fade" style="width:160px" filter="true"
 					filterMatchMode="startsWith" disabled="#{jJVersionBean.disabled}">
-					<f:converter converterId="com.funder.janjoonweb.ui.mb.converter.JJVersionConverter" />
+					<f:converter
+						converterId="com.funder.janjoonweb.ui.mb.converter.JJVersionConverter" />
 
-					<f:selectItem itemLabel="#{jJVersionBean.myJJVersion.name}"
-						itemValue="#{jJVersionBean.myJJVersion}" />
-					<f:selectItems value="#{jJVersionBean.myJJVersionList}" var="v"
+					<f:selectItem itemLabel="#{jJVersionBean.version.name}"
+						itemValue="#{jJVersionBean.version}" />
+					<f:selectItems value="#{jJVersionBean.versionList}" var="v"
 						itemLabel="#{v.name}" itemValue="#{v}" />
 
 					<p:ajax process="@this" partialSubmit="true"
