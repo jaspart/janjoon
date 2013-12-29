@@ -206,6 +206,17 @@
                         </execution>
                     </executions>
                     <configuration>
+<ajdtBuildDefFile>build.ajproperties</ajdtBuildDefFile>
+<source>1.6</source>
+<target>1.6</target>
+<XnoInline>true</XnoInline>
+<aspectLibraries>
+<aspectLibrary>
+<groupId>org.springframework</groupId>
+<artifactId>spring-aspects</artifactId>
+</aspectLibrary>
+</aspectLibraries>
+<showWeaveInfo>true</showWeaveInfo>
                         <outxml>true</outxml>
                         <aspectLibraries>
                             <aspectLibrary>
