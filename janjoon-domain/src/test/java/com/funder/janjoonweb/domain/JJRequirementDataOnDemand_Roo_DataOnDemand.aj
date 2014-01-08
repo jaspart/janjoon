@@ -101,9 +101,6 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
     
     public void JJRequirementDataOnDemand.setDescription(JJRequirement obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 500) {
-            description = description.substring(0, 500);
-        }
         obj.setDescription(description);
     }
     
@@ -145,9 +142,6 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
     
     public void JJRequirementDataOnDemand.setNote(JJRequirement obj, int index) {
         String note = "note_" + index;
-        if (note.length() > 250) {
-            note = note.substring(0, 250);
-        }
         obj.setNote(note);
     }
     

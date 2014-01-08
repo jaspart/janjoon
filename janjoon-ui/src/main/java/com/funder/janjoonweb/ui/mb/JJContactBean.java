@@ -2,7 +2,9 @@ package com.funder.janjoonweb.ui.mb;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -22,6 +24,7 @@ import com.funder.janjoonweb.domain.JJProfile;
 import com.funder.janjoonweb.domain.JJProfileService;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJProjectService;
+import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
@@ -59,7 +62,7 @@ public class JJContactBean {
 	public void setjJProductService(JJProductService jJProductService) {
 		this.jJProductService = jJProductService;
 	}
-	
+
 	@Autowired
 	JJPermissionService jJPermissionService;
 
@@ -136,7 +139,7 @@ public class JJContactBean {
 	}
 
 	public List<JJPermission> getPermissionList() {
-//		permissionList = jJPermissionService.findAllJJPermissions();
+		// permissionList = jJPermissionService.findAllJJPermissions();
 		return permissionList;
 	}
 
@@ -183,19 +186,26 @@ public class JJContactBean {
 			message = "message_successfully_updated";
 		}
 
-//		if(permissionList.size()>0){
-//			
-//			contact = jJContactService.findJJContact(contact.getId());
-//			for (JJPermission permission : permissionList) {
-//				permission.setContact(contact);
-//				contact.getPermissions().add(permission);
-//				jJPermissionService.updateJJPermission(permission);
-//			}
-//		}
+		if (permissionList.size() > 0) {
+			System.out
+					.println("permissionList.size() " + permissionList.size());
+			contact = jJContactService.findJJContact(contact.getId());
+			Set<JJPermission> permissions = new HashSet<JJPermission>();
+			for (JJPermission permission : permissionList) {
+				permission.setContact(contact);
+				permissions.add(permission);
+				jJPermissionService.saveJJPermission(permission);
+			}
+
+			contact.setPermissions(permissions);
+			jJContactService.updateJJContact(contact);
+		}
+
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("contactDialogWidget.hide()");
-	
-		FacesMessage facesMessage = MessageFactory.getMessage(message, "JJContact");
+
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				"JJContact");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -213,25 +223,24 @@ public class JJContactBean {
 	}
 
 	public void addPermission() {
-		System.out.println("selectedProfile " + selectedProfile);
-		System.out.println("selectedProject " + selectedProject);
-		System.out.println("selectedProduct " + selectedProduct);
-		
+	
 		JJPermission permission = new JJPermission();
 		permission.setProfile(selectedProfile);
-		
-		if(selectedProject != null)
+
+		if (selectedProject != null)
 			permission.setProject(selectedProject);
-		if(selectedProduct !=null)
+		if (selectedProduct != null)
 			permission.setProduct(selectedProduct);
-		
-		jJPermissionService.saveJJPermission(permission);
-		
-		permission = jJPermissionService.findJJPermission(permission.getId());
+
+//		jJPermissionService.saveJJPermission(permission);
+//
+//		System.out.println("JJPermission sauvé");
+//		
+//		permission = jJPermissionService.findJJPermission(permission.getId());
 		permissionList.add(permission);
-		
-		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_created",
-				"JJPermission");
+
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_created", "JJPermission");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 

@@ -64,9 +64,6 @@ privileged aspect JJTeststepexecutionDataOnDemand_Roo_DataOnDemand {
     
     public void JJTeststepexecutionDataOnDemand.setDescription(JJTeststepexecution obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 500) {
-            description = description.substring(0, 500);
-        }
         obj.setDescription(description);
     }
     

@@ -3,20 +3,24 @@ package com.funder.janjoonweb.domain;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.tostring.RooToString;
+
 import com.funder.janjoonweb.domain.reference.JJRelationship;
 
 @RooJavaBean
@@ -81,7 +85,7 @@ public class JJRequirement extends JJAbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
 
-	@Size(max = 250)
+	@Lob
 	private String note;
 
 	@ManyToMany(mappedBy = "requirementLinkUp", fetch = FetchType.EAGER)

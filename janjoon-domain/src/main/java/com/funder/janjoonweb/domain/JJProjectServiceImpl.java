@@ -45,4 +45,30 @@ public class JJProjectServiceImpl implements JJProjectService {
 		return result.getResultList();
 
 	}
+
+	@Override
+	public JJProject getJJProjectWithName(String name) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJProject> criteriaQuery = criteriaBuilder
+				.createQuery(JJProject.class);
+
+		Root<JJProject> from = criteriaQuery.from(JJProject.class);
+
+		CriteriaQuery<JJProject> select = criteriaQuery.select(from);
+
+		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
+		Predicate predicate2 = criteriaBuilder.equal(from.get("name"), name);
+
+		select.where(criteriaBuilder.and(predicate1, predicate2));
+
+		TypedQuery<JJProject> result = entityManager.createQuery(select);
+
+		if (result.getResultList().size() > 0)
+			return result.getResultList().get(0);
+		else
+			return null;
+
+	}
+
 }

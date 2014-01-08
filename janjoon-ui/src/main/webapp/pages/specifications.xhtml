@@ -451,7 +451,6 @@
 							<p:inputTextarea id="noteEdit" rows="1" cols="70"
 								value="#{jJRequirementBean.myEditedJJRequirement.note}"
 								required="false">
-								<f:validateLength minimum="0" />
 								<p:ajax update="msgNoteEdit" event="keyup" />
 							</p:inputTextarea>
 							<p:message for="noteEdit" id="msgNoteEdit" display="icon" />
@@ -637,7 +636,6 @@
 							<p:inputTextarea id="note" rows="1" cols="70"
 								value="#{jJRequirementBean.myJJRequirement.note}"
 								required="false">
-								<f:validateLength minimum="0" />
 								<p:ajax update="msgNote" event="keyup" />
 							</p:inputTextarea>
 							<p:message for="note" id="msgNote" display="icon" />

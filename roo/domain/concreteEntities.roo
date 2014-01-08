@@ -172,7 +172,7 @@ field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy
 field reference --fieldName assignedTo --type ~.JJContact
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
 field set --fieldName testcases  --type ~.JJTestcase --cardinality ONE_TO_MANY --mappedBy requirement --fetch LAZY
-field string --fieldName note --sizeMax 250
+field string --fieldName note
 field boolean --fieldName isOperation
 field boolean --fieldName isCompleted
 

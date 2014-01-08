@@ -69,9 +69,6 @@ privileged aspect JJChapterDataOnDemand_Roo_DataOnDemand {
     
     public void JJChapterDataOnDemand.setDescription(JJChapter obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 500) {
-            description = description.substring(0, 500);
-        }
         obj.setDescription(description);
     }
     

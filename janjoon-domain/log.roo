@@ -421,3 +421,11 @@ focus --class ~.JJBug
 field reference --fieldName teststep --type ~.JJTeststep
 quit
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-11-11 16:42:49
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2014-01-06 14:15:45
+focus --class ~.JJAbstractEntity
+focus --class ~.JJRequirement
+quit
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2014-01-06 14:23:23
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2014-01-06 14:39:10
+focus --class ~.JJAbstractEntity
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2014-01-06 18:14:07

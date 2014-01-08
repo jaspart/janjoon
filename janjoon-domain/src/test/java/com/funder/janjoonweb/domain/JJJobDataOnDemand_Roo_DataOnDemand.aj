@@ -3,7 +3,7 @@
 
 package com.funder.janjoonweb.domain;
 
-import com.funder.janjoonweb.domain.JJContactDataOnDemand;
+import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJJob;
 import com.funder.janjoonweb.domain.JJJobDataOnDemand;
 import com.funder.janjoonweb.domain.JJJobRepository;
@@ -30,9 +30,6 @@ privileged aspect JJJobDataOnDemand_Roo_DataOnDemand {
     private List<JJJob> JJJobDataOnDemand.data;
     
     @Autowired
-    JJContactDataOnDemand JJJobDataOnDemand.jJContactDataOnDemand;
-    
-    @Autowired
     JJJobService JJJobDataOnDemand.jJJobService;
     
     @Autowired
@@ -40,12 +37,19 @@ privileged aspect JJJobDataOnDemand_Roo_DataOnDemand {
     
     public JJJob JJJobDataOnDemand.getNewTransientJJJob(int index) {
         JJJob obj = new JJJob();
+        setCreatedBy(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
         setName(obj, index);
+        setUpdatedBy(obj, index);
         setUpdatedDate(obj, index);
         return obj;
+    }
+    
+    public void JJJobDataOnDemand.setCreatedBy(JJJob obj, int index) {
+        JJContact createdBy = null;
+        obj.setCreatedBy(createdBy);
     }
     
     public void JJJobDataOnDemand.setCreationDate(JJJob obj, int index) {
@@ -55,9 +59,6 @@ privileged aspect JJJobDataOnDemand_Roo_DataOnDemand {
     
     public void JJJobDataOnDemand.setDescription(JJJob obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 500) {
-            description = description.substring(0, 500);
-        }
         obj.setDescription(description);
     }
     
@@ -72,6 +73,11 @@ privileged aspect JJJobDataOnDemand_Roo_DataOnDemand {
             name = name.substring(0, 25);
         }
         obj.setName(name);
+    }
+    
+    public void JJJobDataOnDemand.setUpdatedBy(JJJob obj, int index) {
+        JJContact updatedBy = null;
+        obj.setUpdatedBy(updatedBy);
     }
     
     public void JJJobDataOnDemand.setUpdatedDate(JJJob obj, int index) {

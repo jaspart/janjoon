@@ -57,9 +57,6 @@ privileged aspect JJConfigurationDataOnDemand_Roo_DataOnDemand {
     
     public void JJConfigurationDataOnDemand.setDescription(JJConfiguration obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 500) {
-            description = description.substring(0, 500);
-        }
         obj.setDescription(description);
     }
     
