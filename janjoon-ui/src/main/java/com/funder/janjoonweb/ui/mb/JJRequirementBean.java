@@ -19,6 +19,7 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.funder.janjoonweb.domain.JJCategory;
+import com.funder.janjoonweb.domain.JJChapter;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
@@ -1404,6 +1405,33 @@ public class JJRequirementBean {
 
 	private String formatString(JJRequirement req) {
 		return req.getId() + "- " + req.getName();
+
+	}
+
+//	public List<JJChapter> completeChapters(String query) {
+//		List<JJChapter> suggestions = new ArrayList<JJChapter>();
+//
+//		for (JJChapter jJChapter : jJChapterService
+//				.getAllJJChaptersWithProjectAndCategory(currentProject,
+//						currentJJCategory)) {
+//			String jJChapterStr = String.valueOf(jJChapter.getName() + " "
+//					+ jJChapter.getDescription() + " "
+//					+ jJChapter.getCreationDate() + " "
+//					+ jJChapter.getUpdatedDate());
+//			if (jJChapterStr.toLowerCase().startsWith(query.toLowerCase())) {
+//				suggestions.add(jJChapter);
+//			}
+//		}
+//		return suggestions;
+//	}
+	
+	public void load(JJProjectBean jJProjectBean, JJChapterBean jJChapterBean,
+			JJProductBean jJProductBean) {
+		if (currentProject == null) {
+			currentProject = jJProjectBean.getProject();
+			jJChapterBean.setCurrentProject(currentProject);
+			jJProductBean.setProject(currentProject);
+		}
 
 	}
 }

@@ -13,7 +13,8 @@
 		</h:form>
 
 		<h:form id="testForm">
-			<f:event type="preRenderView" listener="#{jJTestcaseBean.load}" />
+			<f:event type="preRenderView"
+				listener="#{jJTestcaseBean.load(jJProjectBean,jJTeststepBean,jJChapterBean,jJProductBean,jJBugBean)}" />
 			<h:panelGrid id="mainPanelGrid" columns="2">
 
 

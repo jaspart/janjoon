@@ -749,8 +749,7 @@ public class JJProjectBean {
 			JJVersionBean jJVersionBean, JJRequirementBean jJRequirementBean,
 			JJChapterBean jJChapterBean, JJTestcaseBean jJTestcaseBean,
 			JJTeststepBean jJTeststepBean, JJBugBean jJBugBean) {
-		if (project != null
-				&& !project.getName().equalsIgnoreCase("Default Project")) {
+		if (project != null) {
 
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Project selected: " + project.getName(), "Selection info");
@@ -788,64 +787,7 @@ public class JJProjectBean {
 
 			jJBugBean.setCurrentProject(project);
 
-		} else {
-
-			jJRequirementBean.setCurrentProject(null);
-
-			jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
-					.getAllJJRequirementsWithCategoryAndProject("BUSINESS",
-							project));
-
-			jJRequirementBean
-					.setMyFunctionalJJRequirements(jJRequirementService
-							.getAllJJRequirementsWithCategoryAndProject(
-									"FUNCTIONAL", project));
-
-			jJRequirementBean.setMyTechnicalJJRequirements(jJRequirementService
-					.getAllJJRequirementsWithCategoryAndProject("TECHNICAL",
-							project));
-			jJChapterBean.setCurrentProject(null);
-
-		}
-
-		// else {
-		//
-		// if (jJProductBean != null) {
-		// jJProductBean.setDisabled(true);
-		// jJProductBean.setProduct(null);
-		// }
-		// if (jJVersionBean != null) {
-		// jJVersionBean.setDisabled(true);
-		// jJVersionBean.setProduct(null);
-		// }
-		//
-		// // IF PROJECT IS NULL GET ALL JJREQUIRMENTS
-		// if (jJRequirementBean != null) {
-		// jJRequirementBean.setCurrentProject(project);
-		// jJChapterBean.setCurrentProject(project);
-		//
-		// jJRequirementBean
-		// .setMyBusinessJJRequirements(jJRequirementService
-		// .getAllJJRequirementsWithCategory("BUSINESS"));
-		//
-		// jJRequirementBean
-		// .setMyFunctionalJJRequirements(jJRequirementService
-		// .getAllJJRequirementsWithCategory("FUNCTIONAL"));
-		//
-		// jJRequirementBean
-		// .setMyTechnicalJJRequirements(jJRequirementService
-		// .getAllJJRequirementsWithCategory("TECHNICAL"));
-		// }
-		// if (jJTestcaseBean != null) {
-		// jJTestcaseBean.setCurrentProject(project);
-		// jJTestcaseBean.setRendered(false);
-		// jJTestcaseBean.initTestCaseParameter(jJTeststepBean);
-		// }
-		// if (jJBugBean != null)
-		// jJBugBean.setCurrentProject(project);
-		//
-		// }
-
+		} 
 	}
 
 }
