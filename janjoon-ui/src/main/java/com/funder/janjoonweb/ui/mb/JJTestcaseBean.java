@@ -3,8 +3,6 @@ package com.funder.janjoonweb.ui.mb;
 import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -13,8 +11,6 @@ import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ComponentSystemEvent;
-import javax.faces.event.PreRenderComponentEvent;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
@@ -41,16 +37,13 @@ import com.funder.janjoonweb.domain.JJTeststep;
 import com.funder.janjoonweb.domain.JJTeststepService;
 import com.funder.janjoonweb.domain.JJTeststepexecution;
 import com.funder.janjoonweb.domain.JJTeststepexecutionService;
-import com.lowagie.text.BadElementException;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Font;
-import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
-import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.html.simpleparser.StyleSheet;
 import com.lowagie.text.pdf.PdfWriter;
 
@@ -923,7 +916,7 @@ public class JJTestcaseBean {
 		System.out.println("load du test case");
 		if (currentProject == null) {
 			currentProject = jJProjectBean.getProject();
-			jJChapterBean.setCurrentProject(currentProject);
+			jJChapterBean.setProject(currentProject);
 			jJProductBean.setProject(currentProject);
 			jJBugBean.setCurrentProject(currentProject);
 			initTestCaseParameter(jJTeststepBean);

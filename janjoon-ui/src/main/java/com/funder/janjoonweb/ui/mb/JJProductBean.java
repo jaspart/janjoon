@@ -212,7 +212,7 @@ public class JJProductBean {
 
 			if (jJRequirementBean != null) {
 
-				jJRequirementBean.setCurrentProduct(product);
+				jJRequirementBean.setProduct(product);
 
 				jJRequirementBean
 						.setMyBusinessJJRequirements(jJRequirementService
@@ -231,7 +231,7 @@ public class JJProductBean {
 
 			}
 			if (jJChapterBean != null)
-				jJChapterBean.setCurrentProduct(product);
+				jJChapterBean.setProduct(product);
 
 		} else {
 			// IF PRODUCT IS NULL GET ALL JJREQUIRMENTS WITH PROJECT
@@ -241,8 +241,8 @@ public class JJProductBean {
 				jJVersionBean.setProduct(null);
 			}
 
-			jJRequirementBean.setCurrentProduct(product);
-			jJChapterBean.setCurrentProduct(product);
+			jJRequirementBean.setProduct(product);
+			jJChapterBean.setProduct(product);
 
 			jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
 					.getAllJJRequirementsWithCategoryAndProject("BUSINESS",

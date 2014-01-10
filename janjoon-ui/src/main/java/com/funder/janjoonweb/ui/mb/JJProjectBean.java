@@ -763,8 +763,8 @@ public class JJProjectBean {
 			jJVersionBean.setDisabled(true);
 			jJVersionBean.setProduct(null);
 
-			jJRequirementBean.setCurrentProject(project);
-			jJChapterBean.setCurrentProject(project);
+			jJRequirementBean.setProject(project);
+			jJChapterBean.setProject(project);
 
 			jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
 					.getAllJJRequirementsWithCategoryAndProject("BUSINESS",
@@ -779,7 +779,7 @@ public class JJProjectBean {
 					.getAllJJRequirementsWithCategoryAndProject("TECHNICAL",
 							project));
 
-			jJChapterBean.setCurrentProject(project);
+			jJChapterBean.setProject(project);
 
 			jJTestcaseBean.setCurrentProject(project);
 			jJTestcaseBean.setRendered(false);

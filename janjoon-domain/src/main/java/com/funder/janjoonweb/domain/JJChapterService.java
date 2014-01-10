@@ -32,6 +32,13 @@ public interface JJChapterService {
 	public List<JJChapter> getAllParentJJChapterWithProjectAndProductAndCategory(
 			JJProject project, JJProduct product, JJCategory category);
 
+	public List<JJChapter> getAllParentJJChapterWithProjectAndProductAndCategorySortedByOrder(
+			JJProject project, JJProduct product, JJCategory category);
+
 	public List<JJChapter> getAllJJChaptersWithProjectAndCategoryAndParentSortedByOrder(
 			JJProject project, JJCategory category, JJChapter parent);
+
+	public List<JJChapter> getAllChildsJJChapterWithParentSortedByOrder(
+			JJChapter parent);
+
 }

@@ -107,7 +107,7 @@
 														update=":dataForm:myManageChapterDialog"
 														oncomplete="manageJJChapter.show()" />
 													<p:menuitem id="manageDocumentLeft" value="Manage Document"
-														actionListener="#{jJChapterBean.treeBean(1)}"
+														actionListener="#{jJChapterBean.transferTreeBean(1)}"
 														update=":dataForm:myManageDocumentDialog"
 														oncomplete="manageDocument.show()" />
 
@@ -199,7 +199,7 @@
 														oncomplete="manageJJChapter.show()" />
 													<p:menuitem id="manageDocumentMiddle"
 														value="Manage Document"
-														actionListener="#{jJChapterBean.treeBean(2)}"
+														actionListener="#{jJChapterBean.transferTreeBean(2)}"
 														update=":dataForm:myManageDocumentDialog"
 														oncomplete="manageDocument.show()" />
 
@@ -279,7 +279,7 @@
 														oncomplete="manageJJChapter.show()" />
 													<p:menuitem id="manageDocumentRight"
 														value="Manage Document"
-														actionListener="#{jJChapterBean.treeBean(3)}"
+														actionListener="#{jJChapterBean.transferTreeBean(3)}"
 														update=":dataForm:myManageDocumentDialog"
 														oncomplete="manageDocument.show()" />
 
@@ -698,6 +698,7 @@
 					<p:tree id="chapterTreeSingle" value="#{jJChapterBean.chapterRoot}"
 						var="nodeChapter" selectionMode="single"
 						selection="#{jJChapterBean.selectedChapterNode}" dynamic="true">
+						
 						<p:treeNode>
 							<h:outputText value="#{nodeChapter}" />
 						</p:treeNode>
@@ -706,7 +707,7 @@
 					<h:panelGrid id="editField" columns="1" cellpadding="3">
 						<h:panelGrid columns="3" cellpadding="3">
 							<p:inputText id="chapterName" cols="60"
-								value="#{jJChapterBean.myJJChapter.name}" required="false">
+								value="#{jJChapterBean.chapter.name}" required="false">
 							</p:inputText>
 							<p:message for="chapterName" id="msgNameChapter" display="icon" />
 							<p:watermark for="chapterName" value="Name" />
@@ -714,8 +715,7 @@
 
 						<h:panelGrid columns="3" cellpadding="3">
 							<p:editor id="chapterDescription" rows="4" cols="70"
-								value="#{jJChapterBean.myJJChapter.description}"
-								required="false">
+								value="#{jJChapterBean.chapter.description}" required="false">
 							</p:editor>
 							<p:message for="chapterDescription" id="msgDescriptionChapter"
 								display="icon" />
@@ -723,18 +723,26 @@
 						</h:panelGrid>
 
 						<h:panelGrid columns="2" cellpadding="3">
-							<p:autoComplete id="chapterParent"
-								value="#{jJChapterBean.myJJChapter.parent}"
-								completeMethod="#{jJChapterBean.completeChapter}" var="chapter"
-								itemLabel="#{chapter.name}" itemValue="#{chapter}"
-								multiple="false" dropdown="true" required="false">
+
+							<h:outputLabel for="chapterParentOneMenu" value="Parent Chapter:" />
+							<p:selectOneMenu id="chapterParentOneMenu"
+								value="#{jJChapterBean.parentChapter}" panelStyle="width:150px"
+								effect="fade" style="width:160px" filter="true"
+								filterMatchMode="startsWith">
+
 								<f:converter
 									converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
-								<p:column>  
-           							 #{chapter.name}
-							</p:column>
-							</p:autoComplete>
-							<p:watermark for="chapterParent" value="Parent" />
+
+								<f:selectItem itemLabel="#{jJChapterBean.parentChapter.name}"
+									itemValue="#{jJChapterBean.parentChapter}" />
+								<f:selectItems value="#{jJChapterBean.chapterList}" var="c"
+									itemLabel="#{c.name}" itemValue="#{c}" />
+
+								<p:ajax process="@this" partialSubmit="true"
+									listener="#{jJChapterBean.handleSelectChapter()}" />
+
+							</p:selectOneMenu>
+
 						</h:panelGrid>
 					</h:panelGrid>
 				</h:panelGrid>
@@ -754,7 +762,7 @@
 			<p:dialog id="myManageDocumentDialog" header="Manage Document"
 				widgetVar="manageDocument" maximizable="false" minimizable="false"
 				showEffect="fade" hideEffect="fade" dynamic="true">
-				<h:panelGrid columns="2" cellpadding="3">
+				<h:panelGrid columns="3" cellpadding="3">
 					<p:tree id="leftTreeSingle" value="#{jJChapterBean.leftRoot}"
 						var="nodeLeft" selectionMode="single"
 						selection="#{jJChapterBean.selectedLeftNode}" draggable="true"
@@ -765,6 +773,7 @@
 							<h:outputText value="#{nodeLeft}" />
 						</p:treeNode>
 					</p:tree>
+					<p:graphicImage alt="Transfer" library="images" name="transfer.png" />
 					<p:tree id="RightTreeSingle" value="#{jJChapterBean.rightRoot}"
 						var="nodeRight" selectionMode="single"
 						selection="#{jJChapterBean.selectedRightNode}" draggable="true"

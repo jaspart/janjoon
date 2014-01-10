@@ -84,7 +84,7 @@ public class JJVersionBean {
 			FacesContext.getCurrentInstance().addMessage(null, message);
 
 			if (jJRequirementBean != null) {
-				jJRequirementBean.setCurrentVersion(version);
+				jJRequirementBean.setVersion(version);
 
 				jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
 						.getAllJJRequirementsWithProjectAndProductAndVersion("BUSINESS", project, product, version));
@@ -97,7 +97,7 @@ public class JJVersionBean {
 			}
 		} else {
 			// IF VERSION IS NULL GET ALL JJREQUIRMENTS WITH PROJECT AND PRODUCT
-			jJRequirementBean.setCurrentVersion(version);
+			jJRequirementBean.setVersion(version);
 
 			jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
 					.getAllJJRequirementsWithProjectAndProduct("BUSINESS", project, product));

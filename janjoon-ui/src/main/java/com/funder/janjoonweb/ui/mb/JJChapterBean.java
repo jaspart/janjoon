@@ -17,6 +17,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -26,7 +27,6 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.funder.janjoonweb.domain.JJCategory;
 import com.funder.janjoonweb.domain.JJChapter;
-import com.funder.janjoonweb.domain.JJChapterService;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
@@ -47,10 +47,11 @@ import com.lowagie.text.html.simpleparser.StyleSheet;
 @RooJsfManagedBean(entity = JJChapter.class, beanName = "jJChapterBean")
 public class JJChapterBean {
 
-	private JJChapter myJJChapter;
-	private JJProject currentProject;
-	private JJProduct currentProduct;
-	private JJCategory currentJJCategory;
+	private JJChapter chapter;
+
+	private JJProject project;
+	private JJProduct product;
+	private JJCategory category;
 
 	private int creationColumnNumber;
 	private int persistIndex = 1;
@@ -63,7 +64,8 @@ public class JJChapterBean {
 	private TreeNode chapterRoot;
 	private TreeNode selectedChapterNode;
 
-	private List<JJChapter> parentChapterList;
+	private List<JJChapter> chapterList;
+	private JJChapter parentChapter;
 
 	@Autowired
 	JJRequirementService jJRequirementService;
@@ -73,12 +75,36 @@ public class JJChapterBean {
 		this.jJRequirementService = jJRequirementService;
 	}
 
-	public JJChapter getMyJJChapter() {
-		return myJJChapter;
+	public JJChapter getChapter() {
+		return chapter;
 	}
 
-	public void setMyJJChapter(JJChapter myJJChapter) {
-		this.myJJChapter = myJJChapter;
+	public void setChapter(JJChapter chapter) {
+		this.chapter = chapter;
+	}
+
+	public JJProject getProject() {
+		return project;
+	}
+
+	public void setProject(JJProject project) {
+		this.project = project;
+	}
+
+	public JJProduct getProduct() {
+		return product;
+	}
+
+	public void setProduct(JJProduct product) {
+		this.product = product;
+	}
+
+	public JJCategory getCategory() {
+		return category;
+	}
+
+	public void setCategory(JJCategory category) {
+		this.category = category;
 	}
 
 	public int getCreationColumnNumber() {
@@ -87,22 +113,6 @@ public class JJChapterBean {
 
 	public void setCreationColumnNumber(int creationColumnNumber) {
 		this.creationColumnNumber = creationColumnNumber;
-	}
-
-	public JJProject getCurrentProject() {
-		return currentProject;
-	}
-
-	public void setCurrentProject(JJProject currentProject) {
-		this.currentProject = currentProject;
-	}
-
-	public JJProduct getCurrentProduct() {
-		return currentProduct;
-	}
-
-	public void setCurrentProduct(JJProduct currentProduct) {
-		this.currentProduct = currentProduct;
 	}
 
 	public TreeNode getLeftRoot() {
@@ -153,27 +163,46 @@ public class JJChapterBean {
 		this.selectedChapterNode = selectedChapterNode;
 	}
 
-	public List<JJChapter> getParentChapterList() {
-		return parentChapterList;
+	public List<JJChapter> getChapterList() {
+		if (product != null) {
+
+			chapterList = jJChapterService
+					.getAllJJChaptersWithProjectAndProductAndCategory(project,
+							product, category);
+
+		} else {
+
+			chapterList = jJChapterService
+					.getAllJJChaptersWithProjectAndCategory(project, category);
+		}
+		return chapterList;
 	}
 
-	public void setParentChapterList(List<JJChapter> parentChapterList) {
-		this.parentChapterList = parentChapterList;
+	public void setChapterList(List<JJChapter> chapterList) {
+		this.chapterList = chapterList;
+	}
+
+	public JJChapter getParentChapter() {
+		return parentChapter;
+	}
+
+	public void setParentChapter(JJChapter parentChapter) {
+		this.parentChapter = parentChapter;
 	}
 
 	public void initParameter(int number) {
 		persistIndex = 1;
 		this.creationColumnNumber = number;
-		String category = null;
+		String categoryName = null;
 		switch (number) {
 		case 1:
-			category = "BUSINESS";
+			categoryName = "BUSINESS";
 			break;
 		case 2:
-			category = "FUNCTIONAL";
+			categoryName = "FUNCTIONAL";
 			break;
 		case 3:
-			category = "TECHNICAL";
+			categoryName = "TECHNICAL";
 			break;
 
 		default:
@@ -181,39 +210,56 @@ public class JJChapterBean {
 		}
 
 		JJCategory jjCategory = jJCategoryService
-				.getJJCategoryWithName(category);
+				.getJJCategoryWithName(categoryName);
 
-		currentJJCategory = jjCategory;
+		category = jjCategory;
 
 		chapterTreeBean(jjCategory);
 
-		myJJChapter = new JJChapter();
-		myJJChapter.setCreationDate(new Date());
-		myJJChapter.setEnabled(true);
-		myJJChapter.setCategory(jjCategory);
+		chapter = new JJChapter();
+		chapter.setCreationDate(new Date());
+		chapter.setEnabled(true);
+		chapter.setCategory(jjCategory);
 
-		if (currentProject != null)
-			myJJChapter.setProject(currentProject);
-		if (currentProduct != null)
-			myJJChapter.setProduct(currentProduct);
+		if (project != null)
+			chapter.setProject(project);
+		if (product != null)
+			chapter.setProduct(product);
 
+		parentChapter = null;
 	}
 
 	public void persistJJChapter() {
 		if (persistIndex == 1) {
-			jJChapterService.saveJJChapter(myJJChapter);
+			jJChapterService.saveJJChapter(chapter);
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					myJJChapter.getName() + " is saved.", "Save Status");
+					chapter.getName() + " is saved.", "Save Status");
 
 			FacesContext.getCurrentInstance().addMessage(null, message);
+
+			List<JJChapter> list = jJChapterService
+					.getAllJJChaptersWithCategory(category);
+			for (JJChapter jjChapter : list) {
+				System.out.println("Chapter: " + jjChapter.getName());
+				// System.out.println("Parent: " +
+				// jjChapter.getParent().getName());
+				System.out.println("Childs: ");
+				Set<JJChapter> childs = jjChapter.getChapters();
+				for (JJChapter jjChapter2 : childs) {
+					System.out.println("Child Name: " + jjChapter2.getName()
+							+ " Order: " + jjChapter2.getOrdering());
+				}
+				System.out.println("\n\n");
+			}
+
 		} else {
 			// editJJChapter.setEnabled(false);
 			// jJChapterService.updateJJChapter(editJJChapter);
-			// jJChapterService.updateJJChapter(myJJChapter);
-			myJJChapter.setUpdatedDate(new Date());
-			jJChapterService.updateJJChapter(myJJChapter);
+			// jJChapterService.updateJJChapter(chapter);
+			chapter.setUpdatedDate(new Date());
+			jJChapterService.updateJJChapter(chapter);
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					myJJChapter.getName() + " is edited.", "Edit Status");
+					chapter.getName() + " is edited.", "Edit Status");
 
 			FacesContext.getCurrentInstance().addMessage(null, message);
 
@@ -224,8 +270,7 @@ public class JJChapterBean {
 		List<JJChapter> suggestions = new ArrayList<JJChapter>();
 
 		for (JJChapter jJChapter : jJChapterService
-				.getAllJJChaptersWithProjectAndCategory(currentProject,
-						currentJJCategory)) {
+				.getAllJJChaptersWithProjectAndCategory(project, category)) {
 			String jJChapterStr = String.valueOf(jJChapter.getName() + " "
 					+ jJChapter.getDescription() + " "
 					+ jJChapter.getCreationDate() + " "
@@ -238,42 +283,34 @@ public class JJChapterBean {
 	}
 
 	public void chapterTreeBean(JJCategory category) {
-		chapterRoot = new DefaultTreeNode("Root", null);
+		chapterRoot = new DefaultTreeNode("RootChapter", null);
+
 		List<JJChapter> parentChapters = null;
 
-		if (currentProject != null) {
-			if (currentProduct != null) {
+		if (product != null) {
 
-				parentChapters = jJChapterService
-						.getAllParentJJChapterWithProjectAndProductAndCategory(
-								currentProject, currentProduct, category);
+			parentChapters = jJChapterService
+					.getAllParentJJChapterWithProjectAndProductAndCategorySortedByOrder(
+							project, product, category);
 
-			} else {
-
-				parentChapters = jJChapterService
-						.getAllParentJJChapterWithProjectAndCategory(
-								currentProject, category);
-			}
 		} else {
 
 			parentChapters = jJChapterService
-					.getAllParentJJChapterWithCategory(category);
+					.getAllParentJJChapterWithProjectAndCategorySortedByOrder(
+							project, category);
 		}
 
 		for (JJChapter jjChapter : parentChapters) {
 			TreeNode node = createTree(jjChapter, chapterRoot, 0);
 		}
 
-		// Set<JJChapter> jJChapList = new HashSet<JJChapter>();
-		// if (parentChapter != null)
-		// jJChapList = parentChapter.getChapters();
-		// for (JJChapter jjChapter : jJChapList) {
-		// TreeNode node = createTree(jjChapter, chapterRoot, 0);
+		// List<TreeNode> childrenlist = chapterRoot.getChildren();
+		// for (TreeNode treeNode : childrenlist) {
+		// treeNode.setExpanded(true);
 		// }
-
 	}
 
-	public void treeBean(int index) {
+	public void transferTreeBean(int index) {
 
 		JJCategory category = getCategory(index);
 		List<JJChapter> parentChapters = null;
@@ -287,24 +324,23 @@ public class JJChapterBean {
 
 		List<JJRequirement> jJRequirementList;
 
-		if (currentProject != null) {
-			if (currentProduct != null) {
+		if (project != null) {
+			if (product != null) {
 
 				jJRequirementList = jJRequirementService
 						.getAllJJRequirementsWithProjectAndProductAndChapter(
-								category.getName(), currentProject,
-								currentProduct);
+								category.getName(), project, product);
 				parentChapters = jJChapterService
 						.getAllParentJJChapterWithProjectAndProductAndCategory(
-								currentProject, currentProduct, category);
+								project, product, category);
 
 			} else {
 				jJRequirementList = jJRequirementService
 						.getAllJJRequirementsWithProjectAndChapter(
-								category.getName(), currentProject);
+								category.getName(), project);
 				parentChapters = jJChapterService
-						.getAllParentJJChapterWithProjectAndCategory(
-								currentProject, category);
+						.getAllParentJJChapterWithProjectAndCategory(project,
+								category);
 			}
 		} else {
 			jJRequirementList = jJRequirementService
@@ -331,7 +367,8 @@ public class JJChapterBean {
 		newNode = new DefaultTreeNode("C-" + treeObj.getId() + "- "
 				+ treeObj.getName(), rootNode);
 
-		Set<JJChapter> childNodes1 = treeObj.getChapters();
+		List<JJChapter> childNodes1 = jJChapterService
+				.getAllChildsJJChapterWithParentSortedByOrder(treeObj);
 
 		for (JJChapter tt : childNodes1) {
 			if (tt.getEnabled()) {
@@ -349,69 +386,58 @@ public class JJChapterBean {
 				}
 			}
 		}
+		newNode.setExpanded(true);
 
 		return newNode;
 	}
 
 	public void editNode() {
 		persistIndex = 2;
+		System.out.println(selectedChapterNode.getData().toString());
 		Long idChapter = Long.parseLong(getIdFromString(selectedChapterNode
 				.getData().toString(), 1));
-		JJChapter chapter = jJChapterService.findJJChapter(idChapter);
-
-		myJJChapter = chapter;
-		// myJJChapter.setName(editJJChapter.getName());
-		// myJJChapter.setCreationDate(editJJChapter.getCreationDate());
-		// myJJChapter.setUpdatedDate(new Date());
-		// myJJChapter.setEnabled(true);
-		// myJJChapter.setDescription(editJJChapter.getDescription());
-		// myJJChapter.setParent(editJJChapter.getParent());
-		// myJJChapter.setChapters(myJJChapter.getChapters());
-		// myJJChapter.setRequirements(myJJChapter.getRequirements());
-		// myJJChapter.setCategory(editJJChapter.getCategory());
-		// myJJChapter.setProduct(editJJChapter.getProduct());
-		// myJJChapter.setProject(editJJChapter.getProject());
+		chapter = jJChapterService.findJJChapter(idChapter);
+		parentChapter = chapter.getParent();
 	}
 
 	public void deleteNode() {
 
 		System.out.println("Delete node");
 
-		long idChapter;
-		JJChapter chapter;
+		long idSelectedChapter = Long.parseLong(getIdFromString(
+				selectedChapterNode.getData().toString(), 1));
 
-		List<TreeNode> list = selectedChapterNode.getChildren();
-		for (TreeNode treeNode : list) {
+		JJChapter selectedChapter = jJChapterService
+				.findJJChapter(idSelectedChapter);
 
-			idChapter = Long.parseLong(getIdFromString(treeNode.getData()
-					.toString(), 1));
-			chapter = jJChapterService.findJJChapter(idChapter);
+		JJChapter parentSelectedChapter = selectedChapter.getParent();
 
-			idChapter = Long.parseLong(getIdFromString(selectedChapterNode
-					.getParent().getData().toString(), 1));
-			JJChapter parent = jJChapterService.findJJChapter(idChapter);
-			chapter.setParent(parent);
+		List<TreeNode> childrenlist = selectedChapterNode.getChildren();
+		System.out.println(childrenlist.size());
+		for (TreeNode childTreeNode : childrenlist) {
 
-			jJChapterService.updateJJChapter(chapter);
+			long idChildChapter = Long.parseLong(getIdFromString(childTreeNode
+					.getData().toString(), 1));
+			JJChapter childChapter = jJChapterService
+					.findJJChapter(idChildChapter);
+			childChapter.setParent(parentSelectedChapter);
+			if (parentSelectedChapter != null) {
+				childChapter.setOrdering(parentSelectedChapter.getChapters()
+						.size());
+			} else {
+				childChapter.setOrdering(jJChapterService
+						.getAllParentJJChapterWithProjectAndCategorySortedByOrder(
+								project, category).size());
+			}
+
+			jJChapterService.updateJJChapter(childChapter);
 
 		}
 
-		idChapter = Long.parseLong(getIdFromString(selectedChapterNode
-				.getData().toString(), 1));
-		chapter = jJChapterService.findJJChapter(idChapter);
-		chapter.setEnabled(false);
-		jJChapterService.updateJJChapter(chapter);
-
-		// selectedChapterNode.getChildren().clear();
-		// selectedChapterNode.getParent().getChildren().remove(selectedChapterNode);
-		// selectedChapterNode.setParent(null);
-		// selectedChapterNode = null;
+		selectedChapter.setEnabled(false);
+		jJChapterService.updateJJChapter(selectedChapter);
 
 		initParameter(creationColumnNumber);
-		list = chapterRoot.getChildren();
-		for (TreeNode treeNode : list) {
-			treeNode.setExpanded(true);
-		}
 
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"Deleted" + selectedChapterNode.getData(), "Deleted"
@@ -421,18 +447,15 @@ public class JJChapterBean {
 	}
 
 	public void onDragDrop(TreeDragDropEvent event) {
+
 		TreeNode dragNode = event.getDragNode();
 		TreeNode dropNode = event.getDropNode();
 		int dropIndex = event.getDropIndex();
 
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"Dragged " + dragNode.getData() + "  \nDropped on "
-						+ dropNode.getData() + " at " + dropIndex,
-				"Dropped on " + dropNode.getData() + " at " + dropIndex);
-		FacesContext.getCurrentInstance().addMessage(null, message);
-
 		String dragNodeData = dragNode.getData().toString();
 		String dropNodeData = dropNode.getData().toString();
+
+		FacesMessage message = null;
 
 		if (dragNodeData.startsWith("R-")) {
 			long idRequirement = Long
@@ -471,20 +494,46 @@ public class JJChapterBean {
 					}
 				}
 
+				message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Dragged Requirement: " + dragNode.getData()
+								+ "  \nDropped on Chapter: "
+								+ dropNode.getData() + " at " + dropIndex,
+						"Dropped on " + dropNode.getData() + " at " + dropIndex);
+
 			}
 
-			if (dropNodeData.equalsIgnoreCase("RootRequirement")) {
+			else if (dropNodeData.equalsIgnoreCase("RootRequirement")) {
 				JJChapter tmpChapter = requirement.getChapter();
 				if (tmpChapter != null) {
 					requirement.setChapter(null);
 					requirement.setOrdering(0);
 					jJRequirementService.updateJJRequirement(requirement);
 
+					message = new FacesMessage(FacesMessage.SEVERITY_WARN,
+							"Requirement: " + dragNode.getData()
+									+ " is detached from chapter",
+							"Dropped on " + dropNode.getData() + " at "
+									+ dropIndex);
+
 				}
+
+			} else if (dropNodeData.startsWith("R-")) {
+
+				message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"This action id forbidden and does not have effects",
+						"Dropped on " + dropNode.getData() + " at " + dropIndex);
+
+			} else if (dropNodeData.equalsIgnoreCase("RootChapter")) {
+
+				message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"This action id forbidden and does not have effects",
+						"Dropped on " + dropNode.getData() + " at " + dropIndex);
 
 			}
 
 		}
+
+		FacesContext.getCurrentInstance().addMessage(null, message);
 
 		// List<JJRequirement> req =
 		// jJRequirementService.findAllJJRequirements();
@@ -531,14 +580,14 @@ public class JJChapterBean {
 		style.loadTagStyle("body", "font", "Times New Roman");
 
 		Phrase phrase = new Phrase(20, new Chunk("\n"
-				+ "Business Specification \n" + currentProject.getName() + "\n"
-				+ "\n" + "\n", fontChapter));
+				+ "Business Specification \n" + project.getName() + "\n" + "\n"
+				+ "\n", fontChapter));
 		JJCategory category = jJCategoryService
 				.getJJCategoryWithName("BUSINESS");
 
 		List<JJChapter> list = jJChapterService
 				.getAllParentJJChapterWithProjectAndCategorySortedByOrder(
-						currentProject, category);
+						project, category);
 		paragraph.add(phrase);
 
 		for (JJChapter jjChapter : list) {
@@ -563,7 +612,7 @@ public class JJChapterBean {
 
 		List<JJChapter> listChild = jJChapterService
 				.getAllJJChaptersWithProjectAndCategoryAndParentSortedByOrder(
-						currentProject, category, chapter);
+						project, category, chapter);
 		for (JJChapter jjChapter : listChild) {
 			orderChapters(jjChapter, category, paragraph, fontNote,
 					fontChapter, fontRequirement, style);
@@ -625,6 +674,24 @@ public class JJChapterBean {
 			break;
 		}
 		return jjCategory;
+	}
+
+	public void handleSelectChapter() {
+
+		if (persistIndex == 1) {
+			if (parentChapter != null) {
+				chapter.setParent(parentChapter);
+				chapter.setOrdering(parentChapter.getChapters().size());
+			} else {
+				chapter.setOrdering(chapterList.size());
+			}
+		}
+		// else {
+		// if (!parentChapter.equals(chapter.getParent())) {
+		//
+		// }
+		// }
+
 	}
 
 	private String getIdFromString(String s, int index) {

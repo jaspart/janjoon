@@ -19,7 +19,6 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.funder.janjoonweb.domain.JJCategory;
-import com.funder.janjoonweb.domain.JJChapter;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
@@ -83,9 +82,9 @@ public class JJRequirementBean {
 	private String messageRelease;
 	private String messageDiscard;
 
-	private JJProject currentProject;
-	private JJProduct currentProduct;
-	private JJVersion currentVersion;
+	private JJProject project;
+	private JJProduct product;
+	private JJVersion version;
 
 	private int progressLeft = 0;
 	private int progressMiddle = 0;
@@ -214,23 +213,22 @@ public class JJRequirementBean {
 	}
 
 	public List<JJRequirement> getBusinessJJRequirementsList() {
-		if (currentProject != null)
-			if (currentProduct != null)
-				if (currentVersion != null)
+		if (project != null)
+			if (product != null)
+				if (version != null)
 
 					businessJJRequirementsList = jJRequirementService
 							.getAllJJRequirementsWithProjectAndProductAndVersion(
-									"BUSINESS", currentProject, currentProduct,
-									currentVersion);
+									"BUSINESS", project, product, version);
 				else
 
 					businessJJRequirementsList = jJRequirementService
 							.getAllJJRequirementsWithProjectAndProduct(
-									"BUSINESS", currentProject, currentProduct);
+									"BUSINESS", project, product);
 			else
 				businessJJRequirementsList = jJRequirementService
 						.getAllJJRequirementsWithCategoryAndProject("BUSINESS",
-								currentProject);
+								project);
 		else
 			businessJJRequirementsList = jJRequirementService
 					.getAllJJRequirementsWithCategory("BUSINESS");
@@ -253,26 +251,24 @@ public class JJRequirementBean {
 
 	public List<JJRequirement> getFunctionalJJRequirementsList() {
 
-		if (currentProject != null)
-			if (currentProduct != null)
-				if (currentVersion != null)
+		if (project != null)
+			if (product != null)
+				if (version != null)
 
 					functionalJJRequirementsList = jJRequirementService
 							.getAllJJRequirementsWithProjectAndProductAndVersion(
-									"FUNCTIONAL", currentProject,
-									currentProduct, currentVersion);
+									"FUNCTIONAL", project, product, version);
 
 				else
 
 					functionalJJRequirementsList = jJRequirementService
 							.getAllJJRequirementsWithProjectAndProduct(
-									"FUNCTIONAL", currentProject,
-									currentProduct);
+									"FUNCTIONAL", project, product);
 
 			else
 				functionalJJRequirementsList = jJRequirementService
 						.getAllJJRequirementsWithCategoryAndProject(
-								"FUNCTIONAL", currentProject);
+								"FUNCTIONAL", project);
 		else
 
 			functionalJJRequirementsList = jJRequirementService
@@ -297,24 +293,23 @@ public class JJRequirementBean {
 
 	public List<JJRequirement> getTechnicalJJRequirementsList() {
 
-		if (currentProject != null)
-			if (currentProduct != null)
-				if (currentVersion != null)
+		if (project != null)
+			if (product != null)
+				if (version != null)
 
 					technicalJJRequirementsList = jJRequirementService
 							.getAllJJRequirementsWithProjectAndProductAndVersion(
-									"TECHNICAL", currentProject,
-									currentProduct, currentVersion);
+									"TECHNICAL", project, product, version);
 
 				else
 
 					technicalJJRequirementsList = jJRequirementService
 							.getAllJJRequirementsWithProjectAndProduct(
-									"TECHNICAL", currentProject, currentProduct);
+									"TECHNICAL", project, product);
 			else
 				technicalJJRequirementsList = jJRequirementService
 						.getAllJJRequirementsWithCategoryAndProject(
-								"TECHNICAL", currentProject);
+								"TECHNICAL", project);
 		else
 
 			technicalJJRequirementsList = jJRequirementService
@@ -340,23 +335,22 @@ public class JJRequirementBean {
 	public List<String> getMyBusinessJJRequirementList() {
 		List<JJRequirement> tmpList = new ArrayList<JJRequirement>();
 		myBusinessJJRequirementList = new ArrayList<String>();
-		if (currentProject != null)
-			if (currentProduct != null)
-				if (currentVersion != null)
+		if (project != null)
+			if (product != null)
+				if (version != null)
 
 					tmpList = jJRequirementService
 							.getAllJJRequirementsWithProjectAndProductAndVersion(
-									"BUSINESS", currentProject, currentProduct,
-									currentVersion);
+									"BUSINESS", project, product, version);
 				else
 
 					tmpList = jJRequirementService
 							.getAllJJRequirementsWithProjectAndProduct(
-									"BUSINESS", currentProject, currentProduct);
+									"BUSINESS", project, product);
 			else
 				tmpList = jJRequirementService
 						.getAllJJRequirementsWithCategoryAndProject("BUSINESS",
-								currentProject);
+								project);
 		else
 			tmpList = jJRequirementService
 					.getAllJJRequirementsWithCategory("BUSINESS");
@@ -385,24 +379,22 @@ public class JJRequirementBean {
 	public List<String> getMyFunctionalJJRequirementList() {
 		List<JJRequirement> tmpList = new ArrayList<JJRequirement>();
 		myFunctionalJJRequirementList = new ArrayList<String>();
-		if (currentProject != null)
-			if (currentProduct != null)
-				if (currentVersion != null)
+		if (project != null)
+			if (product != null)
+				if (version != null)
 
 					tmpList = jJRequirementService
 							.getAllJJRequirementsWithProjectAndProductAndVersion(
-									"FUNCTIONAL", currentProject,
-									currentProduct, currentVersion);
+									"FUNCTIONAL", project, product, version);
 				else
 
 					tmpList = jJRequirementService
 							.getAllJJRequirementsWithProjectAndProduct(
-									"FUNCTIONAL", currentProject,
-									currentProduct);
+									"FUNCTIONAL", project, product);
 			else
 				tmpList = jJRequirementService
 						.getAllJJRequirementsWithCategoryAndProject(
-								"FUNCTIONAL", currentProject);
+								"FUNCTIONAL", project);
 		else
 			tmpList = jJRequirementService
 					.getAllJJRequirementsWithCategory("FUNCTIONAL");
@@ -431,23 +423,22 @@ public class JJRequirementBean {
 	public List<String> getMyTechnicalJJRequirementList() {
 		List<JJRequirement> tmpList = new ArrayList<JJRequirement>();
 		myTechnicalJJRequirementList = new ArrayList<String>();
-		if (currentProject != null)
-			if (currentProduct != null)
-				if (currentVersion != null)
+		if (project != null)
+			if (product != null)
+				if (version != null)
 
 					tmpList = jJRequirementService
 							.getAllJJRequirementsWithProjectAndProductAndVersion(
-									"TECHNICAL", currentProject,
-									currentProduct, currentVersion);
+									"TECHNICAL", project, product, version);
 				else
 
 					tmpList = jJRequirementService
 							.getAllJJRequirementsWithProjectAndProduct(
-									"TECHNICAL", currentProject, currentProduct);
+									"TECHNICAL", project, product);
 			else
 				tmpList = jJRequirementService
 						.getAllJJRequirementsWithCategoryAndProject(
-								"TECHNICAL", currentProject);
+								"TECHNICAL", project);
 		else
 			tmpList = jJRequirementService
 					.getAllJJRequirementsWithCategory("TECHNICAL");
@@ -513,28 +504,28 @@ public class JJRequirementBean {
 		this.messageDiscard = messageDiscard;
 	}
 
-	public JJProject getCurrentProject() {
-		return currentProject;
+	public JJProject getProject() {
+		return project;
 	}
 
-	public void setCurrentProject(JJProject currentProject) {
-		this.currentProject = currentProject;
+	public void setProject(JJProject project) {
+		this.project = project;
 	}
 
-	public JJProduct getCurrentProduct() {
-		return currentProduct;
+	public JJProduct getProduct() {
+		return product;
 	}
 
-	public void setCurrentProduct(JJProduct currentProduct) {
-		this.currentProduct = currentProduct;
+	public void setProduct(JJProduct product) {
+		this.product = product;
 	}
 
-	public JJVersion getCurrentVersion() {
-		return currentVersion;
+	public JJVersion geVersion() {
+		return version;
 	}
 
-	public void setCurrentVersion(JJVersion currentVersion) {
-		this.currentVersion = currentVersion;
+	public void setVersion(JJVersion version) {
+		this.version = version;
 	}
 
 	public int getProgressLeft() {
@@ -810,10 +801,10 @@ public class JJRequirementBean {
 
 		myJJRequirement.setStatus(jjStatus);
 		myJJRequirement.setNumero(new Random().nextInt(1000) + 1);
-		if (currentProject != null)
-			myJJRequirement.setProject(currentProject);
-		if (currentProduct != null)
-			myJJRequirement.setProduct(currentProduct);
+		if (project != null)
+			myJJRequirement.setProject(project);
+		if (product != null)
+			myJJRequirement.setProduct(product);
 
 		myJJRequirement.setChapter(null);
 
@@ -1117,77 +1108,71 @@ public class JJRequirementBean {
 
 		switch (number) {
 		case 1:
-			if (currentProject != null)
-				if (currentProduct != null)
+			if (project != null)
+				if (product != null)
 
-					if (currentVersion != null)
+					if (version != null)
 
 						myBusinessJJRequirements = jJRequirementService
 								.getAllJJRequirementsWithProjectAndProductAndVersion(
-										"BUSINESS", currentProject,
-										currentProduct, currentVersion);
+										"BUSINESS", project, product, version);
 					else
 
 						myBusinessJJRequirements = jJRequirementService
 								.getAllJJRequirementsWithProjectAndProduct(
-										"BUSINESS", currentProject,
-										currentProduct);
+										"BUSINESS", project, product);
 				else
 					myBusinessJJRequirements = jJRequirementService
 							.getAllJJRequirementsWithCategoryAndProject(
-									"BUSINESS", currentProject);
+									"BUSINESS", project);
 			else
 				myBusinessJJRequirements = jJRequirementService
 						.getAllJJRequirementsWithCategory("BUSINESS");
 			break;
 		case 2:
 
-			if (currentProject != null)
-				if (currentProduct != null)
+			if (project != null)
+				if (product != null)
 
-					if (currentVersion != null)
+					if (version != null)
 
 						myFunctionalJJRequirements = jJRequirementService
 								.getAllJJRequirementsWithProjectAndProductAndVersion(
-										"FUNCTIONAL", currentProject,
-										currentProduct, currentVersion);
+										"FUNCTIONAL", project, product, version);
 
 					else
 
 						myFunctionalJJRequirements = jJRequirementService
 								.getAllJJRequirementsWithProjectAndProduct(
-										"FUNCTIONAL", currentProject,
-										currentProduct);
+										"FUNCTIONAL", project, product);
 
 				else
 					myFunctionalJJRequirements = jJRequirementService
 							.getAllJJRequirementsWithCategoryAndProject(
-									"FUNCTIONAL", currentProject);
+									"FUNCTIONAL", project);
 			else
 
 				myFunctionalJJRequirements = jJRequirementService
 						.getAllJJRequirementsWithCategory("FUNCTIONAL");
 			break;
 		case 3:
-			if (currentProject != null)
-				if (currentProduct != null)
-					if (currentVersion != null)
+			if (project != null)
+				if (product != null)
+					if (version != null)
 
 						myTechnicalJJRequirements = jJRequirementService
 								.getAllJJRequirementsWithProjectAndProductAndVersion(
-										"TECHNICAL", currentProject,
-										currentProduct, currentVersion);
+										"TECHNICAL", project, product, version);
 
 					else
 
 						myTechnicalJJRequirements = jJRequirementService
 								.getAllJJRequirementsWithProjectAndProduct(
-										"TECHNICAL", currentProject,
-										currentProduct);
+										"TECHNICAL", project, product);
 				else
 					myTechnicalJJRequirements = jJRequirementService
 							.getAllJJRequirementsWithCategoryAndProject(
-									"TECHNICAL", currentProject);
+									"TECHNICAL", project);
 			else
 
 				myTechnicalJJRequirements = jJRequirementService
@@ -1408,29 +1393,29 @@ public class JJRequirementBean {
 
 	}
 
-//	public List<JJChapter> completeChapters(String query) {
-//		List<JJChapter> suggestions = new ArrayList<JJChapter>();
-//
-//		for (JJChapter jJChapter : jJChapterService
-//				.getAllJJChaptersWithProjectAndCategory(currentProject,
-//						currentJJCategory)) {
-//			String jJChapterStr = String.valueOf(jJChapter.getName() + " "
-//					+ jJChapter.getDescription() + " "
-//					+ jJChapter.getCreationDate() + " "
-//					+ jJChapter.getUpdatedDate());
-//			if (jJChapterStr.toLowerCase().startsWith(query.toLowerCase())) {
-//				suggestions.add(jJChapter);
-//			}
-//		}
-//		return suggestions;
-//	}
-	
+	// public List<JJChapter> completeChapters(String query) {
+	// List<JJChapter> suggestions = new ArrayList<JJChapter>();
+	//
+	// for (JJChapter jJChapter : jJChapterService
+	// .getAllJJChaptersWithProjectAndCategory(project,
+	// currentJJCategory)) {
+	// String jJChapterStr = String.valueOf(jJChapter.getName() + " "
+	// + jJChapter.getDescription() + " "
+	// + jJChapter.getCreationDate() + " "
+	// + jJChapter.getUpdatedDate());
+	// if (jJChapterStr.toLowerCase().startsWith(query.toLowerCase())) {
+	// suggestions.add(jJChapter);
+	// }
+	// }
+	// return suggestions;
+	// }
+
 	public void load(JJProjectBean jJProjectBean, JJChapterBean jJChapterBean,
 			JJProductBean jJProductBean) {
-		if (currentProject == null) {
-			currentProject = jJProjectBean.getProject();
-			jJChapterBean.setCurrentProject(currentProject);
-			jJProductBean.setProject(currentProject);
+		if (project == null) {
+			project = jJProjectBean.getProject();
+			jJChapterBean.setProject(project);
+			jJProductBean.setProject(project);
 		}
 
 	}
