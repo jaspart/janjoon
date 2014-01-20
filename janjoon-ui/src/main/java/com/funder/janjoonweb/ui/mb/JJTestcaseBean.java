@@ -70,6 +70,7 @@ public class JJTestcaseBean {
 	private boolean disabled = true;
 	private boolean passed = true;
 	private boolean rendered = false;
+	private boolean disabledNewTestcase = true;
 
 	private List<String> tmpJJTeststepList = new ArrayList<String>();
 
@@ -167,6 +168,14 @@ public class JJTestcaseBean {
 
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
+	}
+
+	public boolean getDisabledNewTestcase() {
+		return disabledNewTestcase;
+	}
+
+	public void setDisabledNewTestcase(boolean disabledNewTestcase) {
+		this.disabledNewTestcase = disabledNewTestcase;
 	}
 
 	public boolean getPassed() {
@@ -282,14 +291,14 @@ public class JJTestcaseBean {
 						TreeNode testcaseNode = new DefaultTreeNode("TC-"
 								+ jjTestcase.getId() + "- "
 								+ jjTestcase.getName(), chapterNode);
-
-						List<JJTeststep> teststeps = jJTeststepService
-								.getJJTeststepWithTestcase(jjTestcase);
-						for (JJTeststep jjTeststep : teststeps) {
-							TreeNode teststepNode = new DefaultTreeNode("TS-"
-									+ jjTeststep.getId() + "- "
-									+ jjTeststep.getActionstep(), testcaseNode);
-						}
+						//
+						// List<JJTeststep> teststeps = jJTeststepService
+						// .getJJTeststepWithTestcase(jjTestcase);
+						// for (JJTeststep jjTeststep : teststeps) {
+						// TreeNode teststepNode = new DefaultTreeNode("TS-"
+						// + jjTeststep.getId() + "- "
+						// + jjTeststep.getActionstep(), testcaseNode);
+						// }
 					}
 				}
 			}
@@ -574,20 +583,34 @@ public class JJTestcaseBean {
 
 		selectedReq = null;
 		selectedTitle = "";
+		
+		String identifier = getStringFromString(selectedNode,0);
+		
 
-		if (selectedNode.startsWith("P")) {
+		if (identifier.equalsIgnoreCase("P")) {
+			
 			rendered = false;
-		} else if (selectedNode.startsWith("C")) {
+			disabledNewTestcase = true;
+		} else if (identifier.equalsIgnoreCase("C")) {
 			rendered = false;
-			long idCategory = Long.parseLong(getStringFromString(selectedNode,
-					1));
-			preProcessPDF(idCategory);
-		} else if (selectedNode.startsWith("CH")) {
-			rendered = true;
+			disabledNewTestcase = true;
+			
+			/**
+			 * Création du PDF est en commentaire pour le moment 
+			 */
+			
+//			long idCategory = Long.parseLong(getStringFromString(selectedNode,
+//					1));
+//			preProcessPDF(idCategory);
+		} else if (identifier.equalsIgnoreCase("CH")) {
+			
+			rendered = false;
+			disabledNewTestcase = false;
 		}
 
-		else if (selectedNode.startsWith("TC")) {
-			rendered = true;
+		else if (identifier.equalsIgnoreCase("TC")) {
+			rendered = false;
+			disabledNewTestcase = true;
 			if (currentBuild != null)
 
 				disabled = false;
@@ -597,7 +620,7 @@ public class JJTestcaseBean {
 
 		}
 
-		System.out.println(rendered);
+		System.out.println(disabledNewTestcase);
 
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"Selected " + event.getTreeNode().toString(), event
@@ -606,6 +629,11 @@ public class JJTestcaseBean {
 		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
+	public void processNewTestcase(JJTeststepBean jJTeststepBean){
+		//rendered = true;
+		newTestcase(jJTeststepBean);
+	}
+	
 	public void createTabs(JJTestcaseexecutionBean jJTestcaseexecutionBean,
 			JJTeststepexecutionBean jJTeststepexecutionBean, JJBugBean jJBugBean) {
 		if (selectedNode.getData().toString().startsWith("TC")) {
@@ -916,11 +944,12 @@ public class JJTestcaseBean {
 		System.out.println("load du test case");
 		if (currentProject == null) {
 			currentProject = jJProjectBean.getProject();
-			jJChapterBean.setProject(currentProject);
-			jJProductBean.setProject(currentProject);
-			jJBugBean.setCurrentProject(currentProject);
-			initTestCaseParameter(jJTeststepBean);
 		}
+
+		jJChapterBean.setProject(currentProject);
+		jJProductBean.setProject(currentProject);
+		jJBugBean.setCurrentProject(currentProject);
+		initTestCaseParameter(jJTeststepBean);
 
 	}
 

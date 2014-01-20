@@ -13,7 +13,7 @@
 		</h:form>
 
 		<h:form id="testForm">
-			<f:event type="preRenderView"
+			<f:event type="preRenderComponent"
 				listener="#{jJTestcaseBean.load(jJProjectBean,jJTeststepBean,jJChapterBean,jJProductBean,jJBugBean)}" />
 			<h:panelGrid id="mainPanelGrid" columns="2">
 
@@ -50,12 +50,6 @@
 
 
 					<p:contextMenu for="testCaseTreeSingle">
-
-						<p:menuitem id="newTestcase" value="New"
-							icon="ui-icon-circle-plus"
-							actionListener="#{jJTestcaseBean.newTestcase(jJTeststepBean)}"
-							process="@parent"
-							update=":msgForm:msgs :testForm:centerPanelGrid" />
 						<p:menuitem id="editTestcase" value="Edit"
 							actionListener="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
 							icon="ui-icon-pencil" process="@parent"
@@ -71,12 +65,18 @@
 						var="node" selectionMode="single"
 						selection="#{jJTestcaseBean.selectedNode}" dynamic="true">
 						<p:ajax event="select"
-							update=":msgForm:msgs :testForm:runButton :testForm:centerPanelGrid"
+							update=":msgForm:msgs :testForm:newTestcase :testForm:runButton :testForm:centerPanelGrid"
 							listener="#{jJTestcaseBean.onNodeSelect}" />
 						<p:treeNode>
 							<h:outputText value="#{node}" />
 						</p:treeNode>
 					</p:tree>
+					
+					<p:commandButton id="newTestcase" value="New Testcase" disabled="#{jJTestcaseBean.disabledNewTestcase}"
+						icon="ui-icon-circle-plus"
+						actionListener="#{jJTestcaseBean.processNewTestcase(jJTeststepBean)}"
+						update=":msgForm:msgs :testForm:centerPanelGrid" />
+
 
 				</h:panelGrid>
 
