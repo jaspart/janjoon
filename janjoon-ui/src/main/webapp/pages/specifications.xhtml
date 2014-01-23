@@ -94,7 +94,7 @@
 							<p:ajax event="rowSelect"
 								listener="#{jJRequirementBean.onRowSelect}"
 								update=":dataForm:leftContextMenu :dataForm:messages" />
-							<f:facet name="header">
+							<f:facet name="header">Business Category
 								<p:panelGrid>
 									<f:facet name="header">
 										<p:row>
@@ -185,7 +185,7 @@
 								listener="#{jJRequirementBean.onRowSelect}"
 								update=":dataForm:middleContextMenu :dataForm:messages" />
 
-							<f:facet name="header">
+							<f:facet name="header">Functional Category
 								<p:panelGrid>
 									<f:facet name="header">
 										<p:row>
@@ -265,7 +265,7 @@
 								listener="#{jJRequirementBean.onRowSelect}"
 								update=":dataForm:rightContextMenu :dataForm:messages" />
 
-							<f:facet name="header">
+							<f:facet name="header">Technical Category
 								<p:panelGrid>
 									<f:facet name="header">
 										<p:row>
@@ -698,7 +698,7 @@
 					<p:tree id="chapterTreeSingle" value="#{jJChapterBean.chapterRoot}"
 						var="nodeChapter" selectionMode="single"
 						selection="#{jJChapterBean.selectedChapterNode}" dynamic="true">
-						
+
 						<p:treeNode>
 							<h:outputText value="#{nodeChapter}" />
 						</p:treeNode>

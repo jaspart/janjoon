@@ -750,11 +750,11 @@ public class JJProjectBean {
 			JJChapterBean jJChapterBean, JJTestcaseBean jJTestcaseBean,
 			JJTeststepBean jJTeststepBean, JJBugBean jJBugBean) {
 		if (project != null) {
-
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Project selected: " + project.getName(), "Selection info");
-
-			FacesContext.getCurrentInstance().addMessage(null, message);
+//
+//			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+//					"Project selected: " + project.getName(), "Selection info");
+//
+//			FacesContext.getCurrentInstance().addMessage(null, message);
 
 			jJProductBean.setDisabled(false);
 			jJProductBean.setProduct(null);

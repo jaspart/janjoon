@@ -78,10 +78,10 @@ public class JJVersionBean {
 
 	public void handleSelect(JJRequirementBean jJRequirementBean) {
 		if (version != null) {
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Version selected: " + version.getName(), "Selection info");
-
-			FacesContext.getCurrentInstance().addMessage(null, message);
+//			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+//					"Version selected: " + version.getName(), "Selection info");
+//
+//			FacesContext.getCurrentInstance().addMessage(null, message);
 
 			if (jJRequirementBean != null) {
 				jJRequirementBean.setVersion(version);

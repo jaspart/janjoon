@@ -198,9 +198,9 @@ public class JJProductBean {
 
 		if (product != null) {
 
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Product selected: " + product.getName(), "Selection info");
-			FacesContext.getCurrentInstance().addMessage(null, message);
+//			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+//					"Product selected: " + product.getName(), "Selection info");
+//			FacesContext.getCurrentInstance().addMessage(null, message);
 
 			// Requete getReqwithProject&Product
 			if (jJVersionBean != null) {
