@@ -1343,9 +1343,9 @@ public class JJRequirementBean {
 	public void onRowSelect(SelectEvent event) {
 		JJRequirement req = (JJRequirement) event.getObject();
 
-		FacesMessage msg = new FacesMessage("JJRequirement Selected "
-				+ req.getName(), req.getName());
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+//		FacesMessage msg = new FacesMessage("JJRequirement Selected "
+//				+ req.getName(), req.getName());
+//		FacesContext.getCurrentInstance().addMessage(null, msg);
 
 		if (req.getStatus().getName().equalsIgnoreCase("RELEASE"))
 			disabled = true;
