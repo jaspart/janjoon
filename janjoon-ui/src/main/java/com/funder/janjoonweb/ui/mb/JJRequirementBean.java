@@ -13,6 +13,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import org.primefaces.event.CloseEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
@@ -1352,6 +1353,10 @@ public class JJRequirementBean {
 		else
 			disabled = false;
 	}
+	
+	
+	
+	
 
 	public void updateMessageRelease(int number) {
 		this.releaseColumnNumber = number;
@@ -1418,5 +1423,12 @@ public class JJRequirementBean {
 			jJProductBean.setProject(project);
 		}
 
+	}
+	
+	
+	
+	public void closeDialog(CloseEvent event) {
+		myJJRequirement = null;
+		myEditedJJRequirement = null;
 	}
 }

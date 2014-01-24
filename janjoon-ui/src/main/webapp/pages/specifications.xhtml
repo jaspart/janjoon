@@ -527,7 +527,8 @@
 				widgetVar="createJJRequirement" maximizable="true"
 				minimizable="false" showEffect="fade" hideEffect="fade"
 				dynamic="true" width="740" minWidth="740">
-
+				<p:ajax event="close" update=":dataForm"
+					listener="#{jJRequirementBean.closeDialog}" />
 				<p:panelGrid style="margin-top:20px">
 					<f:facet name="header">
 						<p:row>
@@ -762,6 +763,8 @@
 			<p:dialog id="myManageDocumentDialog" header="Manage Document"
 				widgetVar="manageDocument" maximizable="false" minimizable="false"
 				showEffect="fade" hideEffect="fade" dynamic="true">
+				<p:ajax event="close" update=":dataForm"
+					listener="#{jJChapterBean.closeDialog}" />
 				<h:panelGrid columns="3" cellpadding="3">
 					<p:tree id="leftTreeSingle" value="#{jJChapterBean.leftRoot}"
 						var="nodeLeft" selectionMode="single"

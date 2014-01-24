@@ -17,6 +17,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.primefaces.event.CloseEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
@@ -425,9 +426,10 @@ public class JJChapterBean {
 				childChapter.setOrdering(parentSelectedChapter.getChapters()
 						.size());
 			} else {
-				childChapter.setOrdering(jJChapterService
-						.getAllParentJJChapterWithProjectAndCategorySortedByOrder(
-								project, category).size());
+				childChapter
+						.setOrdering(jJChapterService
+								.getAllParentJJChapterWithProjectAndCategorySortedByOrder(
+										project, category).size());
 			}
 
 			jJChapterService.updateJJChapter(childChapter);
@@ -697,6 +699,10 @@ public class JJChapterBean {
 	private String getIdFromString(String s, int index) {
 		String[] temp = s.split("-");
 		return temp[index];
+	}
+
+	public void closeDialog(CloseEvent event) {
+		chapter = null;
 	}
 
 }
