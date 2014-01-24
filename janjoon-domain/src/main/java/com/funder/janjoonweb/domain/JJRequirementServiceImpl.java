@@ -34,6 +34,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		Predicate predicate = criteriaBuilder.equal(from.get("enabled"), true);
 
 		select.where(predicate);
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 		return result.getResultList();

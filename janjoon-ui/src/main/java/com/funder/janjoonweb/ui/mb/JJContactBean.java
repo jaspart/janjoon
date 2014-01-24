@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -33,6 +34,16 @@ public class JJContactBean {
 
 	private JJContact contact;
 	private List<JJContact> contactList;
+	private JJContact selectedContact;
+
+	public JJContact getSelectedContact() {
+		return selectedContact;
+	}
+
+	public void setSelectedContact(JJContact selectedContact) {
+		this.selectedContact = selectedContact;
+	}
+
 	private JJProfile selectedProfile;
 	private List<JJProfile> profileList;
 	private JJProject selectedProject;
@@ -41,6 +52,8 @@ public class JJContactBean {
 	private List<JJProduct> productList;
 	private List<JJPermission> permissionList;
 	private String message;
+	
+	
 
 	@Autowired
 	JJProfileService jJProfileService;
@@ -223,7 +236,7 @@ public class JJContactBean {
 	}
 
 	public void addPermission() {
-	
+
 		JJPermission permission = new JJPermission();
 		permission.setProfile(selectedProfile);
 
@@ -232,16 +245,31 @@ public class JJContactBean {
 		if (selectedProduct != null)
 			permission.setProduct(selectedProduct);
 
-//		jJPermissionService.saveJJPermission(permission);
-//
-//		System.out.println("JJPermission sauvé");
-//		
-//		permission = jJPermissionService.findJJPermission(permission.getId());
+		// jJPermissionService.saveJJPermission(permission);
+		//
+		// System.out.println("JJPermission sauvé");
+		//
+		// permission =
+		// jJPermissionService.findJJPermission(permission.getId());
 		permissionList.add(permission);
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_created", "JJPermission");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
+
+	public void onRowSelect(SelectEvent event) {
+		System.out.println("in it");
+		selectedContact = (JJContact) event.getObject();
+		System.out.println(selectedContact.getFirstname());
+		
+	}
+	
+	 public void deleteContact() {  
+		 System.out.println("IN delete");
+		 selectedContact.setEnabled(false);
+		 jJContactService.updateJJContact(selectedContact);
+		 contactList.remove(selectedContact);  
+	    }
 
 }

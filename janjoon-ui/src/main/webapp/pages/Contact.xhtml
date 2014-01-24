@@ -9,12 +9,30 @@
 	<p:panel id="ContactPanel" style="width:600px" columns="1"
 		cellpadding="6">
 
-		<p:dataTable id="ContactDataTable" var="contact"
-			value="#{jJContactBean.contactList}" paginator="true" rows="10"
-			style="width:550px"
-			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-			rowsPerPageTemplate="5,10,15">
-			<f:facet name="header">  
+		<p:commandButton value="New" id="newContact"
+			actionListener="#{jJContactBean.newContact}"
+			update=":tabview:contactDialog"
+			oncomplete="contactDialogWidget.show()" icon="ui-icon-circle-plus" />
+
+		<p:contextMenu for="ContactDataTable">
+			<p:menuitem value="Delete" update="ContactDataTable" icon="ui-icon-close"
+				actionListener="#{jJContactBean.deleteContact}" />
+		</p:contextMenu>
+
+		<p:dataTable id="ContactDataTable"
+			var="contact"
+			rowKey="contact.firstname"
+			value="#{jJContactBean.contactList}"
+			selection="#{jJContactBean.selectedContact}"
+			selectionMode="single"
+			scrollHeight="450"
+			resizableColumns="true"
+			scrollable="true"
+			style="width:550px">
+		
+		<p:ajax event="rowSelect" listener="#{jJContactBean.onRowSelect}" />
+		
+		<f:facet name="header">  
             Contact List  
         </f:facet>
 
@@ -40,10 +58,6 @@
 			</p:column>
 		</p:dataTable>
 
-		<p:commandButton value="New" id="newContact"
-			actionListener="#{jJContactBean.newContact}"
-			update=":tabview:contactDialog"
-			oncomplete="contactDialogWidget.show()" icon="ui-icon-circle-plus" />
 	</p:panel>
 
 </h:form>
@@ -118,7 +132,7 @@
 							itemLabel="#{p.name}" itemValue="#{p}" />
 
 					</p:selectOneMenu>
-				
+
 					<h:outputLabel value="Project:" />
 					<p:selectOneMenu id="selectOneMenuProject"
 						value="#{jJContactBean.selectedProject}" panelStyle="width:150px"

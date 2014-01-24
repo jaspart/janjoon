@@ -28,7 +28,7 @@ public class JJContact extends JJAbstractEntity {
     private String password;
 
     @NotNull
-    @Pattern(regexp = "[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+")
+    @Pattern(regexp = "[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})")
     private String email;
 
     private Integer ldap;
