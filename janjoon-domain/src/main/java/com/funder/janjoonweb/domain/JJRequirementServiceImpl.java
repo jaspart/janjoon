@@ -37,6 +37,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
+
 		return result.getResultList();
 
 	}
@@ -55,6 +56,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 				project);
 
 		select.where(criteriaBuilder.and(predicate1, predicate2));
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 		return result.getResultList();
@@ -89,8 +91,10 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		Predicate predicate2 = criteriaBuilder.equal(from.get("enabled"), true);
 
 		select.where(criteriaBuilder.and(predicate1, predicate2));
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
+
 		return result.getResultList();
 
 	}
@@ -115,6 +119,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		Predicate predicate3 = criteriaBuilder.isNull(from.get("chapter"));
 
 		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3));
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 		return result.getResultList();
@@ -147,6 +152,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		else
 			select.where(criteriaBuilder.and(predicate1, predicate2));
 
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
+
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 
 		return result.getResultList();
@@ -177,6 +184,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
 				predicate4));
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 
@@ -212,6 +220,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		else
 			select.where(criteriaBuilder
 					.and(predicate1, predicate2, predicate3));
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 
@@ -247,6 +256,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
 				predicate4, predicate5));
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 
@@ -286,6 +296,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		else
 			select.where(criteriaBuilder.and(predicate1, predicate2,
 					predicate3, predicate4));
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
+
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 
 		return result.getResultList();
@@ -321,6 +333,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
 				predicate4, predicate5, predicate6));
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 

@@ -337,82 +337,33 @@
 				</tr>
 			</table>
 
-			<p:dialog id="myEditDialog" header="Edit Requirement"
-				widgetVar="editJJRequirement" maximizable="true" minimizable="false"
-				showEffect="fade" hideEffect="fade" dynamic="true" width="740"
-				minWidth="740">
+			<p:dialog id="myEditDialog" header="Edit JJRequirement"
+				widgetVar="editJJRequirement" maximizable="false"
+				minimizable="false" dynamic="true" showEffect="fade"
+				hideEffect="fade">
+	<p:ajax event="close" update=":dataForm"
+					listener="#{jJRequirementBean.closeDialog}" />
+				<h:panelGrid columns="1" cellpadding="3">
 
-				<p:panelGrid style="margin-top:20px">
-					<f:facet name="header">
-						<p:row>
-							<p:column colspan="3">
-								<p:inputText id="nameEdit"
-									value="#{jJRequirementBean.myEditedJJRequirement.name}"
-									required="true" style="font-size:200%;width=75%;">
-									<f:validateLength minimum="1" maximum="25" />
-									<p:ajax update="msgNameEdit" event="keyup" />
-									<p:message for="nameEdit" id="msgNameEdit" display="icon" />
-									<p:watermark for="nameEdit" value="Name" />
-								</p:inputText>
-							</p:column>
-						</p:row>
-					</f:facet>
+					<h:panelGrid columns="3" cellpadding="3">
 
-					<p:row>
-						<p:column>
-							<p:autoComplete id="projectEdit"
-								value="#{jJRequirementBean.myEditedJJRequirement.project}"
-								completeMethod="#{jJRequirementBean.completeProject}"
-								var="project" itemLabel="#{project.name}" itemValue="#{project}"
-								multiple="false" dropdown="true" required="false">
-								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
-								<!--p:column style="text-align:center">#{project.name}</p:column-->
-							</p:autoComplete>
-							<p:watermark for="projectEdit" value="Project" />
-						</p:column>
-						<p:column rowspan="3">
-							<p:scrollPanel style="width:200px;height:100px">
-								<p:panel header="Tasks: " />
-								<p:selectManyMenu id="tasksListEdit"
-									value="#{jJRequirementBean.selectedTasksList}" var="t"
-									showCheckbox="true" style="width:200px;height:100px">
-									<f:selectItems value="#{jJRequirementBean.tasksList}"
-										var="task" itemLabel="#{task.name}" itemValue="#{task}" />
+						<h:panelGrid>
+							<h:panelGrid>
+								<p:autoComplete id="chapterEdit"
+									value="#{jJRequirementBean.myEditedJJRequirement.chapter}"
+									completeMethod="#{jJRequirementBean.completeChapter}"
+									var="chapter" itemLabel="#{chapter.name}"
+									itemValue="#{chapter}" multiple="false" dropdown="true"
+									required="false">
 									<f:converter
-										converterId="com.funder.janjoonweb.ui.mb.converter.JJTaskConverter" />
-									<p:column style="text-align:left">#{t.name}</p:column>
-								</p:selectManyMenu>
-							</p:scrollPanel>
-						</p:column>
-						<p:column rowspan="6">
-							<p:scrollPanel style="width:200px;height:500px">
-								<p:panel header="Business:" />
-								<p:selectManyCheckbox id="businessReqListEdit"
-									value="#{jJRequirementBean.selectedBusinessJJRequirementList}"
-									layout="pageDirection">
-									<f:selectItems
-										value="#{jJRequirementBean.myBusinessJJRequirementList}" />
-								</p:selectManyCheckbox>
-								<p:panel header="Functional:" />
-								<p:selectManyCheckbox id="functionalReqListEdit"
-									value="#{jJRequirementBean.selectedFunctionalJJRequirementList}"
-									layout="pageDirection">
-									<f:selectItems
-										value="#{jJRequirementBean.myFunctionalJJRequirementList}" />
-								</p:selectManyCheckbox>
-								<p:panel header="Technical:" />
-								<p:selectManyCheckbox id="technicalReqListEdit"
-									value="#{jJRequirementBean.selectedTechnicalJJRequirementList}"
-									layout="pageDirection">
-									<f:selectItems
-										value="#{jJRequirementBean.myTechnicalJJRequirementList}" />
-								</p:selectManyCheckbox>
-							</p:scrollPanel>
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column>
+										converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
+									<p:column style="text-align:center">  
+           							 #{chapter.name}<!-- - #{chapter.creationDate} -->
+									</p:column>
+								</p:autoComplete>
+								<p:watermark for="chapterEdit" value="Chapter" />
+							</h:panelGrid>
+
 							<p:autoComplete id="productEdit"
 								value="#{jJRequirementBean.myEditedJJRequirement.product}"
 								completeMethod="#{jJRequirementBean.completeProduct}"
@@ -420,71 +371,103 @@
 								multiple="false" dropdown="true" required="false">
 								<f:converter
 									converterId="com.funder.janjoonweb.ui.mb.converter.JJProductConverter" />
-								<!--p:column style="text-align:center">#{product.name}</p:column-->
+								<p:column style="text-align:center">  
+           							 #{product.name}<!-- - #{product.creationDate} -->
+								</p:column>
 							</p:autoComplete>
 							<p:watermark for="productEdit" value="Product" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column>
-							<p:autoComplete id="chapterEdit"
-								value="#{jJRequirementBean.myEditedJJRequirement.chapter}"
-								completeMethod="#{jJRequirementBean.completeChapter}"
-								var="chapter" itemLabel="#{chapter.name}" itemValue="#{chapter}"
+						</h:panelGrid>
+
+						<h:panelGrid>
+							<p:autoComplete id="projectEdit"
+								value="#{jJRequirementBean.myEditedJJRequirement.project}"
+								completeMethod="#{jJRequirementBean.completeProject}"
+								var="project" itemLabel="#{project.name}" itemValue="#{project}"
 								multiple="false" dropdown="true" required="false">
 								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
-								<!--p:column style="text-align:center">#{chapter.name}</p:column-->
+									converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
+								<p:column style="text-align:center">  
+           							 #{project.name} - #{project.creationDate}
+        						</p:column>
 							</p:autoComplete>
-							<p:watermark for="chapterEdit" value="Chapter" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column colspan="2" styleClass="ui-widget-header">
-							<p:spacer height="0" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column colspan="2">
-							<p:editor id="descriptionEdit" rows="1" cols="70"
-								widgetVar="editorCreate" style="width: 440px"
+							<p:watermark for="projectEdit" value="Project" />
+						</h:panelGrid>
+
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="3">
+
+						<h:panelGrid columns="1" cellpadding="3">
+							<p:inputText id="nameEdit" cols="60"
+								value="#{jJRequirementBean.myEditedJJRequirement.name}"
+								required="true">
+								<f:validateLength minimum="1" maximum="25" />
+								<p:ajax update="msgNameEdit" event="keyup" />
+							</p:inputText>
+							<p:message for="nameEdit" id="msgNameEdit" display="icon" />
+							<p:watermark for="nameEdit" value="Name" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" cellpadding="3">
+							<p:editor id="descriptionEdit" rows="4" cols="70"
+								widgetVar="editorEdit"
 								value="#{jJRequirementBean.myEditedJJRequirement.description}"
 								required="true">
+								<f:validateLength minimum="1" maximum="250" />
+								<!--p:ajax update="msgDescriptionEdit" event="keyup" /-->
 							</p:editor>
 							<p:message for="descriptionEdit" id="msgDescriptionEdit"
 								display="icon" />
 							<p:watermark for="descriptionEdit" value="Description" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column colspan="2">
-							<p:inputTextarea id="noteEdit" rows="1" cols="70"
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" cellpadding="3">
+							<p:inputTextarea id="noteEdit" rows="2" cols="70"
 								value="#{jJRequirementBean.myEditedJJRequirement.note}"
 								required="false">
+								<f:validateLength minimum="0" maximum="250" />
 								<p:ajax update="msgNoteEdit" event="keyup" />
 							</p:inputTextarea>
 							<p:message for="noteEdit" id="msgNoteEdit" display="icon" />
 							<p:watermark for="noteEdit" value="Note" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column colspan="3" styleClass="ui-widget-header">
-							<p:spacer height="0" />
-						</p:column>
-					</p:row>
-				</p:panelGrid>
-				<f:facet name="footer">
-					<p:row>
-						<p:column>
-							<p:commandButton value="Reset" type="reset" />
-						</p:column>
-						<p:column>
-							<h:commandButton value="#{messages.label_save}"
-								action="#{jJRequirementBean.persistJJRequirement(1)}"
-								update=":dataForm" />
-						</p:column>
-					</p:row>
-				</f:facet>
+						</h:panelGrid>
+
+						<h:panelGrid columns="6" cellpadding="2">
+							<h:outputText value="Business: " />
+							<p:selectManyCheckbox id="businessReqListEdit"
+								value="#{jJRequirementBean.selectedBusinessJJRequirementList}"
+								layout="pageDirection">
+								<f:selectItems
+									value="#{jJRequirementBean.myBusinessJJRequirementList}" />
+							</p:selectManyCheckbox>
+							<h:outputText value="Functional: " />
+							<p:selectManyCheckbox id="functionalReqListEdit"
+								value="#{jJRequirementBean.selectedFunctionalJJRequirementList}"
+								layout="pageDirection">
+								<f:selectItems
+									value="#{jJRequirementBean.myFunctionalJJRequirementList}" />
+							</p:selectManyCheckbox>
+							<h:outputText value="Technical: " />
+							<p:selectManyCheckbox id="technicalReqListEdit"
+								value="#{jJRequirementBean.selectedTechnicalJJRequirementList}"
+								layout="pageDirection">
+								<f:selectItems
+									value="#{jJRequirementBean.myTechnicalJJRequirementList}" />
+							</p:selectManyCheckbox>
+						</h:panelGrid>
+					</h:panelGrid>
+					<f:facet name="footer">
+						<p:row>
+							<p:column>
+								<p:commandButton value="Reset" type="reset" />
+							</p:column>
+							<p:column>
+								<h:commandButton value="#{messages.label_save}"
+									action="#{jJRequirementBean.persistJJRequirement(2)}"
+									update=":dataForm" />
+							</p:column>
+						</p:row>
+					</f:facet>
+				</h:panelGrid>
 			</p:dialog>
 
 			<p:confirmDialog id="myDeleteDialog"
