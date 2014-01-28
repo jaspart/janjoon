@@ -190,9 +190,6 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         InputTextarea descriptionCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         descriptionCreateInput.setId("descriptionCreateInput");
         descriptionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.description}", String.class));
-        LengthValidator descriptionCreateInputValidator = new LengthValidator();
-        descriptionCreateInputValidator.setMaximum(500);
-        descriptionCreateInput.addValidator(descriptionCreateInputValidator);
         descriptionCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionCreateInput);
         
@@ -494,9 +491,6 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         InputTextarea descriptionEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         descriptionEditInput.setId("descriptionEditInput");
         descriptionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.description}", String.class));
-        LengthValidator descriptionEditInputValidator = new LengthValidator();
-        descriptionEditInputValidator.setMaximum(500);
-        descriptionEditInput.addValidator(descriptionEditInputValidator);
         descriptionEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionEditInput);
         

@@ -250,9 +250,6 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         InputTextarea descriptionCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         descriptionCreateInput.setId("descriptionCreateInput");
         descriptionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.description}", String.class));
-        LengthValidator descriptionCreateInputValidator = new LengthValidator();
-        descriptionCreateInputValidator.setMaximum(500);
-        descriptionCreateInput.addValidator(descriptionCreateInputValidator);
         descriptionCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionCreateInput);
         
@@ -788,10 +785,7 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         InputTextarea noteCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         noteCreateInput.setId("noteCreateInput");
         noteCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.note}", String.class));
-        LengthValidator noteCreateInputValidator = new LengthValidator();
-        noteCreateInputValidator.setMaximum(250);
-        noteCreateInput.addValidator(noteCreateInputValidator);
-        noteCreateInput.setRequired(true);
+        noteCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(noteCreateInput);
         
         Message noteCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -934,9 +928,6 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         InputTextarea descriptionEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         descriptionEditInput.setId("descriptionEditInput");
         descriptionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.description}", String.class));
-        LengthValidator descriptionEditInputValidator = new LengthValidator();
-        descriptionEditInputValidator.setMaximum(500);
-        descriptionEditInput.addValidator(descriptionEditInputValidator);
         descriptionEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionEditInput);
         
@@ -1472,10 +1463,7 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         InputTextarea noteEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         noteEditInput.setId("noteEditInput");
         noteEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.note}", String.class));
-        LengthValidator noteEditInputValidator = new LengthValidator();
-        noteEditInputValidator.setMaximum(250);
-        noteEditInput.addValidator(noteEditInputValidator);
-        noteEditInput.setRequired(true);
+        noteEditInput.setRequired(false);
         htmlPanelGrid.getChildren().add(noteEditInput);
         
         Message noteEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);

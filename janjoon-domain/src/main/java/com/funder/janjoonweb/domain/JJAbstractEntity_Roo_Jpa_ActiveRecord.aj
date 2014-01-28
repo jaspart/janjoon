@@ -14,6 +14,8 @@ privileged aspect JJAbstractEntity_Roo_Jpa_ActiveRecord {
     @PersistenceContext
     transient EntityManager JJAbstractEntity.entityManager;
     
+    public static final List<String> JJAbstractEntity.fieldNames4OrderClauseFilter = java.util.Arrays.asList("name", "description", "creationDate", "createdBy", "updatedDate", "updatedBy", "enabled");
+    
     public static final EntityManager JJAbstractEntity.entityManager() {
         EntityManager em = new JJAbstractEntity() {
         }.entityManager;
@@ -29,6 +31,17 @@ privileged aspect JJAbstractEntity_Roo_Jpa_ActiveRecord {
         return entityManager().createQuery("SELECT o FROM JJAbstractEntity o", JJAbstractEntity.class).getResultList();
     }
     
+    public static List<JJAbstractEntity> JJAbstractEntity.findAllJJAbstractEntitys(String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM JJAbstractEntity o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, JJAbstractEntity.class).getResultList();
+    }
+    
     public static JJAbstractEntity JJAbstractEntity.findJJAbstractEntity(Long id) {
         if (id == null) return null;
         return entityManager().find(JJAbstractEntity.class, id);
@@ -36,6 +49,17 @@ privileged aspect JJAbstractEntity_Roo_Jpa_ActiveRecord {
     
     public static List<JJAbstractEntity> JJAbstractEntity.findJJAbstractEntityEntries(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM JJAbstractEntity o", JJAbstractEntity.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+    
+    public static List<JJAbstractEntity> JJAbstractEntity.findJJAbstractEntityEntries(int firstResult, int maxResults, String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM JJAbstractEntity o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, JJAbstractEntity.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
     
     @Transactional

@@ -180,9 +180,6 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         InputTextarea descriptionCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         descriptionCreateInput.setId("descriptionCreateInput");
         descriptionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.description}", String.class));
-        LengthValidator descriptionCreateInputValidator = new LengthValidator();
-        descriptionCreateInputValidator.setMaximum(500);
-        descriptionCreateInput.addValidator(descriptionCreateInputValidator);
         descriptionCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionCreateInput);
         
@@ -331,7 +328,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         emailCreateInput.setId("emailCreateInput");
         emailCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.email}", String.class));
         RegexValidator emailCreateInputRegexValidator = new RegexValidator();
-        emailCreateInputRegexValidator.setPattern("[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+");
+        emailCreateInputRegexValidator.setPattern("[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})");
         emailCreateInput.addValidator(emailCreateInputRegexValidator);
         emailCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(emailCreateInput);
@@ -580,9 +577,6 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         InputTextarea descriptionEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         descriptionEditInput.setId("descriptionEditInput");
         descriptionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.description}", String.class));
-        LengthValidator descriptionEditInputValidator = new LengthValidator();
-        descriptionEditInputValidator.setMaximum(500);
-        descriptionEditInput.addValidator(descriptionEditInputValidator);
         descriptionEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionEditInput);
         
@@ -731,7 +725,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         emailEditInput.setId("emailEditInput");
         emailEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.email}", String.class));
         RegexValidator emailEditInputRegexValidator = new RegexValidator();
-        emailEditInputRegexValidator.setPattern("[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+");
+        emailEditInputRegexValidator.setPattern("[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})");
         emailEditInput.addValidator(emailEditInputRegexValidator);
         emailEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(emailEditInput);
