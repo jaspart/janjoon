@@ -44,22 +44,23 @@
 	modal="true" widgetVar="productDialogWidget" dynamic="true"
 	showEffect="fade" hideEffect="explode">
 	<p:ajax event="close" update=":tabview:ProductForm"
-		listener="#{jJProductBean.dialogClose}" />
+		listener="#{jJProductBean.closeDialog}" />
 	<p:outputPanel id="productDialogPanel">
 		<h:form id="productDialogForm">
 			<p:growl id="msg" />
 			<p:panelGrid columns="1" cellpadding="6">
 
 				<p:panel columns="3" cellpadding="6">
-					<p:inputText id="name" value="#{jJProductBean.product.name}"
+					<p:inputText id="name" value="#{jJProductBean.productAdmin.name}"
 						label="Name" required="true" widgetVar="nameWidget">
 						<f:validateLength maximum="25" />
 					</p:inputText>
 					<p:message for="name" id="msgName" />
 					<p:watermark for="name" value="Name *" />
 
-					<p:inputText id="extname" value="#{jJProductBean.product.extname}"
-						label="Extname" required="true" widgetVar="extnameWidget">
+					<p:inputText id="extname"
+						value="#{jJProductBean.productAdmin.extname}" label="Extname"
+						required="true" widgetVar="extnameWidget">
 						<f:validateLength maximum="25" />
 					</p:inputText>
 					<p:message for="extname" id="msgExtname" />
@@ -83,16 +84,32 @@
 					</p:selectOneMenu>
 					<p:message for="productManagerSelect" id="msgProjectManager" />
 				</p:panel>
-
+				<p:panel columns="2" cellpadding="6">
+					<p:selectBooleanButton
+						value="#{jJProductBean.productAdmin.enabled}" onLabel="Enabled"
+						offLabel="Disabled" onIcon="ui-icon-check" offIcon="ui-icon-close">
+						<p:ajax update="msg" listener="#{jJProductBean.addMessage}" />
+					</p:selectBooleanButton>
+					<p:commandButton id="submitButton" value="Save"
+						update="productDialogForm :headerForm"
+						process="@widgetVar(nameWidget) @widgetVar(extnameWidget)"
+						action="#{jJProductBean.save}" />
+				</p:panel>
 
 
 			</p:panelGrid>
-			<p:commandButton id="submitButton" value="Save"
-				update="productDialogForm"
-				process="@widgetVar(nameWidget) @widgetVar(extnameWidget) "
-				action="#{jJProductBean.save}" />
 		</h:form>
 	</p:outputPanel>
+	<f:facet name="footer">
+		<p:row>
+			<p:column>
+				<p:commandButton value="Close"
+					oncomplete="productDialogWidget.hide()"
+					action="#{jJProductBean.closeDialog()}"
+					update=":tabview:ProductForm" />
+			</p:column>
+		</p:row>
+	</f:facet>
 </p:dialog>
 
 </html>

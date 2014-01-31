@@ -20,7 +20,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 	}
 
 	@Override
-	public List<JJPermission> getProductManagerPermissions(JJProfile profile){
+	public List<JJPermission> getManagerPermissions(JJProfile profile){
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
 				.createQuery(JJPermission.class);

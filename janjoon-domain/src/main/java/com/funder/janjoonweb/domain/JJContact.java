@@ -1,4 +1,5 @@
 package com.funder.janjoonweb.domain;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,42 +24,42 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaEntity(sequenceName = "JJContactSEQ")
 public class JJContact extends JJAbstractEntity {
 
-    @NotNull
-    @Size(max = 35)
-    private String password;
+	@NotNull
+	@Size(max = 35)
+	private String password;
 
-    @NotNull
-    @Pattern(regexp = "[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})")
-    private String email;
+	@NotNull
+	@Pattern(regexp = "[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})")
+	private String email;
 
-    private Integer ldap;
+	private Integer ldap;
 
-    @NotNull
-    @Size(max = 25)
-    private String firstname;
+	@NotNull
+	@Size(max = 25)
+	private String firstname;
 
-    @NotNull
-    @Size(max = 25)
-    private String lastname;
+	@NotNull
+	@Size(max = 25)
+	private String lastname;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
-    private Date dateofbirth;
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "M-")
+	private Date dateofbirth;
 
-    @Size(max = 25)
-    private String picture;
+	@Size(max = 25)
+	private String picture;
 
-    @ManyToOne
-    private JJJob job;
+	@ManyToOne
+	private JJJob job;
 
-    private Boolean accountNonExpired;
+	private Boolean accountNonExpired;
 
-    private Boolean credentialsNonExpired;
+	private Boolean credentialsNonExpired;
 
-    private Boolean accountNonLocked;
+	private Boolean accountNonLocked;
 
-    /**
+	/**
      */
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "contact")
-    private Set<JJPermission> permissions = new HashSet<JJPermission>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "contact")
+	private Set<JJPermission> permissions = new HashSet<JJPermission>();
 }

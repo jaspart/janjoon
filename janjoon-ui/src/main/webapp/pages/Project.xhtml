@@ -4,4 +4,97 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
+
+<h:form id="ProjectForm">
+	<p:panel id="ProjectPanel" style="width:600px" columns="1"
+		cellpadding="6">
+
+		<p:dataTable id="ProjectDataTable" var="project"
+			value="#{jJProjectBean.projectListTable}" paginator="true" rows="10"
+			style="width:550px"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			rowsPerPageTemplate="5,10,15">
+			<f:facet name="header">Project List</f:facet>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Name" />
+				</f:facet>
+				<h:outputText value="#{project.name}" />
+			</p:column>
+
+		</p:dataTable>
+
+		<p:commandButton value="New" id="newProject"
+			actionListener="#{jJProjectBean.newProject}"
+			update=":tabview:projectDialog"
+			oncomplete="projectDialogWidget.show()" icon="ui-icon-circle-plus" />
+	</p:panel>
+
+</h:form>
+
+<p:dialog id="projectDialog" header="#{jJProjectBean.message}"
+	modal="true" widgetVar="projectDialogWidget" dynamic="true"
+	showEffect="fade" hideEffect="explode">
+	<p:ajax event="close" update=":tabview:ProjectForm"
+		listener="#{jJProjectBean.closeDialog}" />
+	<p:outputPanel id="projectDialogPanel">
+		<h:form id="projectDialogForm">
+			<p:growl id="msg" />
+			<p:panelGrid columns="1" cellpadding="6">
+
+				<p:panel columns="3" cellpadding="6">
+					<p:inputText id="name" value="#{jJProjectBean.projectAdmin.name}"
+						label="Name" required="true" widgetVar="nameWidget">
+						<f:validateLength maximum="25" />
+					</p:inputText>
+					<p:message for="name" id="msgName" />
+					<p:watermark for="name" value="Name *" />
+				</p:panel>
+
+				<p:panel columns="3" cellpadding="6">
+					<h:outputText value="Project Manager: *" />
+					<p:selectOneMenu id="projectManagerSelect"
+						value="#{jJProjectBean.projectManager}" panelStyle="width:150px"
+						effect="fade" style="width:160px" filter="true"
+						filterMatchMode="startsWith">
+
+						<f:converter
+							converterId="com.funder.janjoonweb.ui.mb.converter.JJContactConverter" />
+
+						<f:selectItem itemLabel="#{jJProjectBean.projectManager.name}"
+							itemValue="#{jJProjectBean.projectManager}" />
+						<f:selectItems value="#{jJProjectBean.projectManagerList}" var="p"
+							itemLabel="#{p.name}" itemValue="#{p}" />
+
+					</p:selectOneMenu>
+					<p:message for="projectManagerSelect" id="msgProjectManager" />
+				</p:panel>
+
+
+				<p:panel columns="2" cellpadding="6">
+					<p:selectBooleanButton
+						value="#{jJProjectBean.projectAdmin.enabled}" onLabel="Enabled"
+						offLabel="Disabled" onIcon="ui-icon-check" offIcon="ui-icon-close">
+						<p:ajax update="msg" listener="#{jJProjectBean.addMessage}" />
+					</p:selectBooleanButton>
+					<p:commandButton id="submitButton" value="Save"
+						update="projectDialogForm :headerForm"
+						process="@widgetVar(nameWidget)" action="#{jJProjectBean.save}" />
+				</p:panel>
+			</p:panelGrid>
+
+		</h:form>
+	</p:outputPanel>
+	<f:facet name="footer">
+		<p:row>
+			<p:column>
+				<p:commandButton value="Close"
+					oncomplete="projectDialogWidget.hide()"
+					action="#{jJProjectBean.closeDialog()}"
+					update=":tabview:ProjectForm" />
+			</p:column>
+		</p:row>
+	</f:facet>
+</p:dialog>
 </html>

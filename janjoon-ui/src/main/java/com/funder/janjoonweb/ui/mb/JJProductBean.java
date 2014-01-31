@@ -28,18 +28,6 @@ import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 @RooJsfManagedBean(entity = JJProduct.class, beanName = "jJProductBean")
 public class JJProductBean {
 
-	private JJProduct product;
-	private List<JJProduct> productList;
-	
-	private List<JJProduct> productListTable;
-
-	private JJContact productManager;
-	private List<JJContact> productManagerList;
-
-	private boolean disabled = true;
-	private JJProject project;
-	private String message;
-
 	@Autowired
 	JJChapterService jJChapterService;
 
@@ -69,13 +57,18 @@ public class JJProductBean {
 		this.jJPermissionService = jJPermissionService;
 	}
 
-	public boolean isDisabled() {
-		return disabled;
-	}
+	private JJProduct product;
+	private List<JJProduct> productList;
 
-	public void setDisabled(boolean disabled) {
-		this.disabled = disabled;
-	}
+	private JJProduct productAdmin;
+	private List<JJProduct> productListTable;
+
+	private JJContact productManager;
+	private List<JJContact> productManagerList;
+
+	private boolean disabled = true;
+	private JJProject project;
+	private String message;
 
 	public JJProduct getProduct() {
 		return product;
@@ -102,6 +95,14 @@ public class JJProductBean {
 		this.productList = productList;
 	}
 
+	public JJProduct getProductAdmin() {
+		return productAdmin;
+	}
+
+	public void setProductAdmin(JJProduct productAdmin) {
+		this.productAdmin = productAdmin;
+	}
+
 	public List<JJProduct> getProductListTable() {
 		productListTable = jJProductService.getAllJJProducts();
 		return productListTable;
@@ -124,10 +125,10 @@ public class JJProductBean {
 		productManagerList = new ArrayList<JJContact>();
 
 		List<JJRight> rights = jJRightService.getObjectWriterList("Product");
-		System.out.println("rights "+rights.size());
-		for (JJRight right : rights ) {
+		System.out.println("rights " + rights.size());
+		for (JJRight right : rights) {
 			List<JJPermission> permissions = jJPermissionService
-					.getProductManagerPermissions(right.getProfile());
+					.getManagerPermissions(right.getProfile());
 			for (JJPermission permission : permissions) {
 				productManagerList.add(permission.getContact());
 			}
@@ -137,6 +138,14 @@ public class JJProductBean {
 
 	public void setProductManagerList(List<JJContact> productManagerList) {
 		this.productManagerList = productManagerList;
+	}
+
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 
 	public JJProject getProject() {
@@ -155,52 +164,16 @@ public class JJProductBean {
 		this.message = message;
 	}
 
-	public void newProduct() {
-		message = "New Product";
-		product = new JJProduct();
-		product.setEnabled(true);
-		product.setCreationDate(new Date());
-		product.setDescription("Defined as a Product");
-	}
-
-	public void editProduct() {
-		message = "Edit Product";
-	}
-
-	public void save() {
-		System.out.println("SAVING ...");
-		String message = "";
-
-		if (product.getId() == null) {
-			System.out.println("IS a new Product");
-			jJProductService.saveJJProduct(product);
-			message = "message_successfully_created";
-		} else {
-			jJProductService.updateJJProduct(product);
-			message = "message_successfully_updated";
-		}
-
-		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("productDialogWidget.hide()");
-
-		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJProduct");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-	}
-	
-	public void dialogClose(CloseEvent event) {
-		newProduct();
-	}
-
 	public void handleSelectProduct(JJVersionBean jJVersionBean,
 			JJProjectBean jJProjectBean, JJRequirementBean jJRequirementBean,
 			JJChapterBean jJChapterBean) {
 
 		if (product != null) {
 
-//			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-//					"Product selected: " + product.getName(), "Selection info");
-//			FacesContext.getCurrentInstance().addMessage(null, message);
+			// FacesMessage message = new
+			// FacesMessage(FacesMessage.SEVERITY_INFO,
+			// "Product selected: " + product.getName(), "Selection info");
+			// FacesContext.getCurrentInstance().addMessage(null, message);
 
 			// Requete getReqwithProject&Product
 			if (jJVersionBean != null) {
@@ -259,4 +232,51 @@ public class JJProductBean {
 
 		}
 	}
+
+	public void newProduct() {
+		System.out.println("Initial bean product");
+		message = "New Product";
+		productAdmin = new JJProduct();
+		productAdmin.setEnabled(true);
+		productAdmin.setCreationDate(new Date());
+		productAdmin.setDescription("Defined as a Product");
+	}
+
+	public void save() {
+		System.out.println("SAVING Product...");
+		String message = "";
+
+		if (productAdmin.getId() == null) {
+			System.out.println("IS a new JJProduct");
+			jJProductService.saveJJProduct(productAdmin);
+			message = "message_successfully_created";
+
+			newProduct();
+
+		} else {
+			jJProductService.updateJJProduct(productAdmin);
+			message = "message_successfully_updated";
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("productDialogWidget.hide()");
+		}
+
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				"JJProduct");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+	}
+
+	public void addMessage() {
+		String summary = productAdmin.getEnabled() ? "Enabled Product"
+				: "Disabled Product";
+
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(summary));
+	}
+
+	public void closeDialog(CloseEvent event) {
+		System.out.println("close dialog");
+		productAdmin = null;
+	}
+
 }

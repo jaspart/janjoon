@@ -1,5 +1,6 @@
 package com.funder.janjoonweb.ui.mb;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -8,6 +9,8 @@ import java.util.Set;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -16,7 +19,9 @@ import com.funder.janjoonweb.domain.JJBuild;
 import com.funder.janjoonweb.domain.JJBuildService;
 import com.funder.janjoonweb.domain.JJCategory;
 import com.funder.janjoonweb.domain.JJCategoryService;
+import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJContactService;
+import com.funder.janjoonweb.domain.JJPermission;
 import com.funder.janjoonweb.domain.JJPermissionService;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProductService;
@@ -34,13 +39,11 @@ import com.funder.janjoonweb.domain.JJTask;
 import com.funder.janjoonweb.domain.JJTaskService;
 import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.domain.JJVersionService;
+import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJProject.class, beanName = "jJProjectBean")
 public class JJProjectBean {
-
-	private JJProject project;
-	private List<JJProject> projectList;
 
 	@Autowired
 	JJStatusService jJStatusService;
@@ -126,6 +129,17 @@ public class JJProjectBean {
 	public void setjJProfileService(JJProfileService jJProfileService) {
 		this.jJProfileService = jJProfileService;
 	}
+
+	private JJProject project;
+	private List<JJProject> projectList;
+
+	private JJProject projectAdmin;
+	private List<JJProject> projectListTable;
+
+	private JJContact projectManager;
+	private List<JJContact> projectManagerList;
+
+	private String message;
 
 	public JJProject getProject() {
 
@@ -745,16 +759,71 @@ public class JJProjectBean {
 		this.projectList = projectList;
 	}
 
+	public JJProject getProjectAdmin() {
+		return projectAdmin;
+	}
+
+	public void setProjectAdmin(JJProject projectAdmin) {
+		this.projectAdmin = projectAdmin;
+	}
+
+	public List<JJProject> getProjectListTable() {
+		projectListTable = jJProjectService.getAllJJProjects();
+		return projectListTable;
+	}
+
+	public void setProjectListTable(List<JJProject> projectListTable) {
+		this.projectListTable = projectListTable;
+	}
+
+	public JJContact getProjectManager() {
+		return projectManager;
+	}
+
+	public void setProjectManager(JJContact projectManager) {
+		this.projectManager = projectManager;
+	}
+
+	public List<JJContact> getProjectManagerList() {
+
+		projectManagerList = new ArrayList<JJContact>();
+
+		List<JJRight> rights = jJRightService.getObjectWriterList("Project");
+		System.out.println("rights " + rights.size());
+		for (JJRight right : rights) {
+			List<JJPermission> permissions = jJPermissionService
+					.getManagerPermissions(right.getProfile());
+			for (JJPermission permission : permissions) {
+				projectManagerList.add(permission.getContact());
+			}
+		}
+
+		return projectManagerList;
+	}
+
+	public void setProjectManagerList(List<JJContact> projectManagerList) {
+		this.projectManagerList = projectManagerList;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
 	public void handleSelectProject(JJProductBean jJProductBean,
 			JJVersionBean jJVersionBean, JJRequirementBean jJRequirementBean,
 			JJChapterBean jJChapterBean, JJTestcaseBean jJTestcaseBean,
 			JJTeststepBean jJTeststepBean, JJBugBean jJBugBean) {
 		if (project != null) {
-//
-//			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-//					"Project selected: " + project.getName(), "Selection info");
-//
-//			FacesContext.getCurrentInstance().addMessage(null, message);
+			//
+			// FacesMessage message = new
+			// FacesMessage(FacesMessage.SEVERITY_INFO,
+			// "Project selected: " + project.getName(), "Selection info");
+			//
+			// FacesContext.getCurrentInstance().addMessage(null, message);
 
 			jJProductBean.setDisabled(false);
 			jJProductBean.setProduct(null);
@@ -787,7 +856,53 @@ public class JJProjectBean {
 
 			jJBugBean.setCurrentProject(project);
 
-		} 
+		}
+	}
+
+	public void newProject() {
+		System.out.println("Initial bean project");
+		message = "New Project";
+		projectAdmin = new JJProject();
+		projectAdmin.setEnabled(true);
+		projectAdmin.setCreationDate(new Date());
+		projectAdmin.setDescription("Defined as a Project");
+	}
+
+	public void save() {
+		System.out.println("SAVING Project...");
+		String message = "";
+
+		if (projectAdmin.getId() == null) {
+			System.out.println("IS a new JJProject");
+			jJProjectService.saveJJProject(projectAdmin);
+			message = "message_successfully_created";
+
+			newProject();
+
+		} else {
+			jJProjectService.updateJJProject(projectAdmin);
+			message = "message_successfully_updated";
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("projectDialogWidget.hide()");
+		}
+
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				"JJProject");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+	}
+
+	public void addMessage() {
+		String summary = projectAdmin.getEnabled() ? "Enabled Project"
+				: "Disabled Project";
+
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(summary));
+	}
+
+	public void closeDialog(CloseEvent event) {
+		System.out.println("close dialog");
+		projectAdmin = null;
 	}
 
 }

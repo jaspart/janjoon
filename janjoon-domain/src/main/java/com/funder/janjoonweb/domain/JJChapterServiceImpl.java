@@ -1,6 +1,8 @@
 package com.funder.janjoonweb.domain;
 
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -44,6 +46,69 @@ public class JJChapterServiceImpl implements JJChapterService {
 
 		TypedQuery<JJChapter> result = entityManager.createQuery(select);
 		return result.getResultList();
+
+	}
+	
+	@Override
+	public SortedMap<Integer, Object> getAllElement( JJChapter parent) {
+
+		// Query query = entityManager
+		// .createQuery("select s from JJChapter s where s.enabled=:value");
+		// query.setParameter("value", true);
+		//
+		// @SuppressWarnings("unchecked")
+		// List<JJChapter> list = query.getResultList();
+		// return list;
+
+		SortedMap<Integer, Object> elements = new TreeMap<Integer, Object>();
+		
+		TypedQuery<JJChapter> resultC = null;
+		try{
+			CriteriaBuilder criteriaBuilderC = entityManager.getCriteriaBuilder();
+			CriteriaQuery<JJChapter> criteriaQueryC = criteriaBuilderC.createQuery(JJChapter.class);
+			Root<JJChapter> fromC = criteriaQueryC.from(JJChapter.class);
+			CriteriaQuery<JJChapter> selectC = criteriaQueryC.select(fromC);
+			Predicate predicate1C = criteriaBuilderC.equal(fromC.get("enabled"), true);
+			Predicate predicate2C = criteriaBuilderC.equal(fromC.get("parent"), parent);
+			selectC.where(criteriaBuilderC.and(predicate1C, predicate2C));
+			selectC.orderBy(criteriaBuilderC.asc(fromC.get("ordering")));
+			resultC = entityManager.createQuery(selectC);
+		}catch(Exception e){
+			System.out.println("getAllElementChapter exception "+e);
+		}
+		
+		for (JJChapter chapter : resultC.getResultList()) {
+			elements.put(chapter.getOrdering(), chapter);
+		}
+		
+		TypedQuery<JJRequirement> resultR=null;
+		try{
+			CriteriaBuilder criteriaBuilderR = entityManager.getCriteriaBuilder();
+			CriteriaQuery<JJRequirement> criteriaQueryR = criteriaBuilderR.createQuery(JJRequirement.class);
+			Root<JJRequirement> fromR = criteriaQueryR.from(JJRequirement.class);
+			CriteriaQuery<JJRequirement> selectR = criteriaQueryR.select(fromR);
+			Predicate predicate1R = criteriaBuilderR.equal(fromR.get("enabled"), true);
+			Predicate predicate2R = criteriaBuilderR.equal(fromR.get("chapter"), parent);
+			selectR.where(criteriaBuilderR.and(predicate1R, predicate2R));
+			selectR.orderBy(criteriaBuilderR.asc(fromR.get("ordering")));
+			resultR = entityManager.createQuery(selectR);
+		}catch(Exception e){
+			System.out.println("getAllElementRequirement exception "+e);
+		}
+
+		for (JJRequirement requirement : resultR.getResultList()) {
+			elements.put(requirement.getOrdering(), requirement);
+		}
+		
+		System.out.println("S elements.size() "+elements.size());
+		System.out.println("R elements.size() "+resultR.getResultList().size());
+		System.out.println("C elements.size() "+resultC.getResultList().size());
+
+		for (Object element : elements.entrySet()) {
+			System.out.println("S element="+element.getClass().getName());
+		}
+		
+		return elements;
 
 	}
 

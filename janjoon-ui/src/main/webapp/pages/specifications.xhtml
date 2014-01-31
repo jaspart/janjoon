@@ -99,19 +99,12 @@
 									<f:facet name="header">
 										<p:row>
 											<p:column colspan="2">
-												<p:splitButton id="managementLeft" title="Management"
-													icon="ui-icon-clipboard">
-													<p:menuitem id="manageChapterLeft" value="Manage Chapter"
-														icon="ui-icon-arrowrefresh-1-w"
-														actionListener="#{jJChapterBean.initParameter(1)}"
-														update=":dataForm:myManageChapterDialog"
-														oncomplete="manageJJChapter.show()" />
-													<p:menuitem id="manageDocumentLeft" value="Manage Document"
-														actionListener="#{jJChapterBean.transferTreeBean(1)}"
-														update=":dataForm:myManageDocumentDialog"
-														oncomplete="manageDocument.show()" />
-
-												</p:splitButton>
+												<p:commandButton id="manageChapterLeft"
+													icon="ui-icon-arrowrefresh-1-w"
+													title="Manage Chapter and Document"
+													actionListener="#{jJChapterBean.initParameter(1)}"
+													update=":dataForm:myManageChapterDialog"
+													oncomplete="manageJJChapter.show()" />
 											</p:column>
 											<p:column colspan="1">
 												<p:commandButton id="releaseButton"
@@ -156,8 +149,8 @@
 								<h:outputText value="#{Requirement.name}" />
 							</p:column>
 
-							<p:column headerText="Project">
-								<h:outputText value="#{Requirement.project.name}" />
+							<p:column headerText="Product">
+								<h:outputText value="#{Requirement.product.name}" />
 							</p:column>
 
 							<p:column headerText="Chapter">
@@ -190,20 +183,14 @@
 									<f:facet name="header">
 										<p:row>
 											<p:column colspan="2">
-												<p:splitButton id="managementMiddle" title="Management"
-													icon="ui-icon-clipboard">
-													<p:menuitem id="manageChapterMiddle" value="Manage Chapter"
-														icon="ui-icon-arrowrefresh-1-w"
-														actionListener="#{jJChapterBean.initParameter(2)}"
-														update=":dataForm:myManageChapterDialog"
-														oncomplete="manageJJChapter.show()" />
-													<p:menuitem id="manageDocumentMiddle"
-														value="Manage Document"
-														actionListener="#{jJChapterBean.transferTreeBean(2)}"
-														update=":dataForm:myManageDocumentDialog"
-														oncomplete="manageDocument.show()" />
 
-												</p:splitButton>
+												<p:commandButton id="manageChapterMiddle"
+													icon="ui-icon-arrowrefresh-1-w"
+													title="Manage Chapter and Document"
+													actionListener="#{jJChapterBean.initParameter(2)}"
+													update=":dataForm:myManageChapterDialog"
+													oncomplete="manageJJChapter.show()" />
+
 											</p:column>
 											<p:column colspan="1">
 												<p:commandButton id="releaseButton"
@@ -236,7 +223,7 @@
 								<h:outputText value="#{Requirement['name']}" />
 							</p:column>
 
-							<p:column headerText="Project">
+							<p:column headerText="Product">
 								<h:outputText value="#{Requirement.project.name}" />
 							</p:column>
 
@@ -270,20 +257,12 @@
 									<f:facet name="header">
 										<p:row>
 											<p:column colspan="2">
-												<p:splitButton id="managementRight" title="Management"
-													icon="ui-icon-clipboard">
-													<p:menuitem id="manageChapterRight" value="Manage Chapter"
-														icon="ui-icon-arrowrefresh-1-w"
-														actionListener="#{jJChapterBean.initParameter(3)}"
-														update=":dataForm:myManageChapterDialog"
-														oncomplete="manageJJChapter.show()" />
-													<p:menuitem id="manageDocumentRight"
-														value="Manage Document"
-														actionListener="#{jJChapterBean.transferTreeBean(3)}"
-														update=":dataForm:myManageDocumentDialog"
-														oncomplete="manageDocument.show()" />
-
-												</p:splitButton>
+												<p:commandButton id="manageChapterRight"
+													icon="ui-icon-arrowrefresh-1-w"
+													title="Manage Chapter and Document"
+													actionListener="#{jJChapterBean.initParameter(3)}"
+													update=":dataForm:myManageChapterDialog"
+													oncomplete="manageJJChapter.show()" />
 											</p:column>
 											<p:column colspan="1">
 												<p:commandButton id="releaseButton"
@@ -316,8 +295,8 @@
 								<h:outputText value="#{Requirement['name']}" />
 							</p:column>
 
-							<p:column headerText="Project">
-								<h:outputText value="#{Requirement.project.name}" />
+							<p:column headerText="Product">
+								<h:outputText value="#{Requirement.product.name}" />
 							</p:column>
 
 							<p:column headerText="Chapter">
@@ -341,7 +320,7 @@
 				widgetVar="editJJRequirement" maximizable="false"
 				minimizable="false" dynamic="true" showEffect="fade"
 				hideEffect="fade">
-	<p:ajax event="close" update=":dataForm"
+				<p:ajax event="close" update=":dataForm"
 					listener="#{jJRequirementBean.closeDialog}" />
 				<h:panelGrid columns="1" cellpadding="3">
 
@@ -668,6 +647,32 @@
 			<p:dialog id="myManageChapterDialog" header="Manage Chapters"
 				widgetVar="manageJJChapter" maximizable="false" minimizable="false"
 				dynamic="true">
+				<p:ajax event="close" update=":dataForm"
+					listener="#{jJChapterBean.closeDialog}" />
+				<h:panelGrid columns="3" cellpadding="3">
+					<p:tree id="leftTreeIncorporated" value="#{jJChapterBean.leftRoot}"
+						var="nodeLeft" selectionMode="single"
+						selection="#{jJChapterBean.selectedLeftNode}" draggable="true"
+						droppable="true" dragdropScope="demo">
+						<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
+							update=":dataForm:messages" />
+						<p:treeNode>
+							<h:outputText value="#{nodeLeft}" />
+						</p:treeNode>
+					</p:tree>
+					<p:graphicImage alt="Transfer" library="images" name="transfer.png" />
+					<p:tree id="RightTreeIncorporated"
+						value="#{jJChapterBean.rightRoot}" var="nodeRight"
+						selectionMode="single"
+						selection="#{jJChapterBean.selectedRightNode}" draggable="true"
+						droppable="true" dragdropScope="demo">
+						<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
+							update=":dataForm:messages" />
+						<p:treeNode>
+							<h:outputText value="#{nodeRight}" />
+						</p:treeNode>
+					</p:tree>
+				</h:panelGrid>
 				<h:panelGrid columns="1" cellpadding="3">
 					<p:contextMenu for="chapterTreeSingle">
 						<p:menuitem value="Edit" update="editField"
@@ -706,7 +711,7 @@
 							<p:watermark for="chapterDescription" value="Description" />
 						</h:panelGrid>
 
-						<h:panelGrid columns="2" cellpadding="3">
+						<h:panelGrid columns="3" cellpadding="3">
 
 							<h:outputLabel for="chapterParentOneMenu" value="Parent Chapter:" />
 							<p:selectOneMenu id="chapterParentOneMenu"
@@ -727,50 +732,23 @@
 
 							</p:selectOneMenu>
 
+							<p:commandButton value="#{messages.label_save}"
+								oncomplete="manageJJChapter.show()"
+								action="#{jJChapterBean.persistJJChapter()}"
+								update="myManageChapterDialog" />
+
 						</h:panelGrid>
 					</h:panelGrid>
 				</h:panelGrid>
 				<f:facet name="footer">
 					<p:row>
 						<p:column>
-							<p:commandButton value="Reset" type="reset" />
-						</p:column>
-						<p:column>
-							<h:commandButton value="#{messages.label_save}"
-								action="#{jJChapterBean.persistJJChapter()}" update=":dataForm" />
+							<p:commandButton value="Close"
+								oncomplete="manageJJChapter.hide()"
+								action="#{jJChapterBean.closeDialog()}" update=":dataForm" />
 						</p:column>
 					</p:row>
 				</f:facet>
-			</p:dialog>
-
-			<p:dialog id="myManageDocumentDialog" header="Manage Document"
-				widgetVar="manageDocument" maximizable="false" minimizable="false"
-				showEffect="fade" hideEffect="fade" dynamic="true">
-				<p:ajax event="close" update=":dataForm"
-					listener="#{jJChapterBean.closeDialog}" />
-				<h:panelGrid columns="3" cellpadding="3">
-					<p:tree id="leftTreeSingle" value="#{jJChapterBean.leftRoot}"
-						var="nodeLeft" selectionMode="single"
-						selection="#{jJChapterBean.selectedLeftNode}" draggable="true"
-						droppable="true" dragdropScope="demo">
-						<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
-							update=":dataForm:messages" />
-						<p:treeNode>
-							<h:outputText value="#{nodeLeft}" />
-						</p:treeNode>
-					</p:tree>
-					<p:graphicImage alt="Transfer" library="images" name="transfer.png" />
-					<p:tree id="RightTreeSingle" value="#{jJChapterBean.rightRoot}"
-						var="nodeRight" selectionMode="single"
-						selection="#{jJChapterBean.selectedRightNode}" draggable="true"
-						droppable="true" dragdropScope="demo">
-						<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
-							update=":dataForm:messages" />
-						<p:treeNode>
-							<h:outputText value="#{nodeRight}" />
-						</p:treeNode>
-					</p:tree>
-				</h:panelGrid>
 			</p:dialog>
 		</h:form>
 	</ui:define>

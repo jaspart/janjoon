@@ -86,7 +86,7 @@ field set --fieldName rights --type ~.JJRight --cardinality ONE_TO_MANY --fetch 
 
 focus --class ~.JJContact
 field string --fieldName password --sizeMax 25 --notNull
-field string --fieldName email --regexp "[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+" --notNull
+field string --fieldName email --regexp "[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})" --notNull
 field number --fieldName ldap --type java.lang.Integer
 field string --fieldName firstname --sizeMax 25 --notNull
 field string --fieldName lastname --sizeMax 25 --notNull
