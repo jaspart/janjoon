@@ -33,7 +33,7 @@
 		</p:dataTable>
 
 		<p:commandButton value="New" id="newProduct"
-			actionListener="#{jJProductBean.newProduct}"
+			actionListener="#{jJProductBean.newProduct(jJVersionBean)}"
 			update=":tabview:productDialog"
 			oncomplete="productDialogWidget.show()" icon="ui-icon-circle-plus" />
 	</p:panel>
@@ -93,9 +93,37 @@
 					<p:commandButton id="submitButton" value="Save"
 						update="productDialogForm :headerForm"
 						process="@widgetVar(nameWidget) @widgetVar(extnameWidget)"
-						action="#{jJProductBean.save}" />
+						action="#{jJProductBean.save(jJVersionBean)}" />
 				</p:panel>
 
+				<p:panel id="versionPanel" columns="4" cellpadding="6">
+					<p:inputText id="version"
+						value="#{jJVersionBean.versionAdmin.name}" label="Version Name"
+						required="true" widgetVar="versionWidget">
+						<f:validateLength maximum="25" />
+					</p:inputText>
+					<p:message for="version" id="msgVersion" />
+					<p:watermark for="version" value="Version Name *" />
+
+					<p:commandButton id="saveVersion" update="msg versionPanel"
+						actionListener="#{jJVersionBean.save}" icon="ui-icon-circle-plus"
+						process="@widgetVar(versionWidget)" />
+
+					<p:dataTable id="versionDataTable" var="version"
+						value="#{jJVersionBean.versionDataModel}" paginator="true"
+						rows="4" selection="#{jJVersionBean.versionListTable}">
+						<p:ajax event="rowSelectCheckbox"
+							listener="#{jJVersionBean.onRowSelect}" />
+						<f:facet name="header">  
+            			Version List  
+        			</f:facet>
+						<p:column selectionMode="multiple" style="width:2%" />
+						<p:column headerText="Name" filterBy="name"
+							filterMatchMode="startsWith" style="width:25%">  
+							#{version.name}
+						</p:column>
+					</p:dataTable>
+				</p:panel>
 
 			</p:panelGrid>
 		</h:form>

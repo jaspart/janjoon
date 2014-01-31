@@ -80,4 +80,25 @@ public class JJVersionServiceImpl implements JJVersionService {
 
 	}
 
+	@Override
+	public List<JJVersion> getAllJJVersionWithoutProduct() {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJVersion> criteriaQuery = criteriaBuilder
+				.createQuery(JJVersion.class);
+
+		Root<JJVersion> from = criteriaQuery.from(JJVersion.class);
+
+		CriteriaQuery<JJVersion> select = criteriaQuery.select(from);
+
+		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
+		Predicate predicate2 = criteriaBuilder.isNull(from.get("product"));
+
+		select.where(criteriaBuilder.and(predicate1, predicate2));
+
+		TypedQuery<JJVersion> result = entityManager.createQuery(select);
+		return result.getResultList();
+
+	}
+
 }

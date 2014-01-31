@@ -9,4 +9,6 @@ public interface JJVersionService {
 	public List<JJVersion> getAllJJVersionsWithProduct(JJProduct product);
 
 	public List<JJVersion> getAllJJVersion();
+
+	public List<JJVersion> getAllJJVersionWithoutProduct();
 }

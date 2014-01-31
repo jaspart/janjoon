@@ -22,6 +22,7 @@ import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirementService;
 import com.funder.janjoonweb.domain.JJRight;
 import com.funder.janjoonweb.domain.JJRightService;
+import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
@@ -233,16 +234,19 @@ public class JJProductBean {
 		}
 	}
 
-	public void newProduct() {
+	public void newProduct(JJVersionBean jJVersionBean) {
 		System.out.println("Initial bean product");
 		message = "New Product";
 		productAdmin = new JJProduct();
 		productAdmin.setEnabled(true);
 		productAdmin.setCreationDate(new Date());
 		productAdmin.setDescription("Defined as a Product");
+
+		jJVersionBean.newVersion();
+
 	}
 
-	public void save() {
+	public void save(JJVersionBean jJVersionBean) {
 		System.out.println("SAVING Product...");
 		String message = "";
 
@@ -251,7 +255,30 @@ public class JJProductBean {
 			jJProductService.saveJJProduct(productAdmin);
 			message = "message_successfully_created";
 
-			newProduct();
+			List<JJVersion> versions = jJVersionBean.getVersionListTable();
+
+			if (versions != null && !versions.isEmpty()) {
+				JJProduct product = jJProductService.findJJProduct(productAdmin
+						.getId());
+				product.getVersions().addAll(versions);
+				for (JJVersion jjVersion : versions) {
+					System.out.println(jjVersion.getName());
+					jjVersion.setProduct(product);
+				}
+				jJProductService.updateJJProduct(product);
+			}
+
+			// //
+			// product = jJProductService.findJJProduct(product.getId());
+			// System.out.println("Seconf round");
+			// for (JJVersion jjVersion : product.getVersions()) {
+			//
+			//
+			// System.out.println(jjVersion.getName());
+			//
+			// }
+			// //
+			newProduct(jJVersionBean);
 
 		} else {
 			jJProductService.updateJJProduct(productAdmin);
