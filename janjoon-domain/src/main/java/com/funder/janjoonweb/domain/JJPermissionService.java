@@ -8,5 +8,4 @@ import org.springframework.roo.addon.layers.service.RooService;
 public interface JJPermissionService {
 	
 	public List<JJPermission> getManagerPermissions(JJProfile profile);
-	public List<JJPermission> getProjectManagerPermissions(JJProfile profile);
 }

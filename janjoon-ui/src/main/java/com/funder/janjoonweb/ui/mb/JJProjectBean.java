@@ -41,18 +41,9 @@ import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.domain.JJVersionService;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 
-import com.funder.janjoonweb.ui.mb.util.MessageFactory;
-
 @RooSerializable
 @RooJsfManagedBean(entity = JJProject.class, beanName = "jJProjectBean")
 public class JJProjectBean {
-
-	private List<JJProject> projectListTable;
-
-	private JJContact projectManager;
-	private List<JJContact> projectManagerList;
-
-	private String message;
 
 	@Autowired
 	JJStatusService jJStatusService;
@@ -165,142 +156,211 @@ public class JJProjectBean {
 		this.project = project;
 	}
 
-	public void setProjectList(List<JJProject> projectList) {
-		this.projectList = projectList;
-	}
+	public List<JJProject> getProjectList() {
+		/*** Begin Temporary ***/
 
-	public List<JJProject> getProjectListTable() {
-		projectListTable = jJProjectService.getAllJJProjects();
-		return projectListTable;
-	}
+		if (jJProfileService.findAllJJProfiles().isEmpty()) {
+			JJProfile profile = new JJProfile();
+			profile.setName("ProjectManager");
+			jJProfileService.saveJJProfile(profile);
 
-	public void setProjectListTable(List<JJProject> projectListTable) {
-		this.projectListTable = projectListTable;
-	}
+			profile = new JJProfile();
+			profile.setName("ProductManager");
+			jJProfileService.saveJJProfile(profile);
 
-	public JJContact getProjectManager() {
-		return projectManager;
-	}
+			profile = new JJProfile();
+			profile.setName("CEO");
+			jJProfileService.saveJJProfile(profile);
 
-	public void setProjectManager(JJContact projectManager) {
-		this.projectManager = projectManager;
-	}
+			profile = new JJProfile();
+			profile.setName("CTO");
+			jJProfileService.saveJJProfile(profile);
 
-	public List<JJContact> getProjectManagerList() {
+			profile = new JJProfile();
+			profile.setName("Tester");
+			jJProfileService.saveJJProfile(profile);
 
-		projectManagerList = new ArrayList<JJContact>();
+			profile = new JJProfile();
+			profile.setName("Developer");
+			jJProfileService.saveJJProfile(profile);
 
-		List<JJRight> rights = jJRightService.getObjectWriterList("Project");
-		System.out.println("rights "+rights.size());
-		for (JJRight right : rights ) {
-			List<JJPermission> permissions = jJPermissionService
-					.getProjectManagerPermissions(right.getProfile());
-			for (JJPermission permission : permissions) {
-				projectManagerList.add(permission.getContact());
+		}
+
+		if (jJBuildService.getAllJJBuilds().isEmpty()) {
+			JJBuild build;
+			for (int i = 0; i < 4; i++) {
+				build = new JJBuild();
+				build.setName("Build 0." + i);
+				build.setCreationDate(new Date());
+				build.setDescription("Build 0." + i + " Description");
+				build.setEnabled(true);
+				jJBuildService.saveJJBuild(build);
 			}
 		}
-		return projectManagerList;
-	}
 
-	public void setProjectManagerList(List<JJContact> projectManagerList) {
-		this.projectManagerList = projectManagerList;
-	}
-	public String getMessage() {
-		return message;
-	}
+		if (jJSprintService.getAllJJSprints().isEmpty()) {
+			JJSprint sprint;
+			for (int i = 0; i < 4; i++) {
+				sprint = new JJSprint();
+				sprint.setName("Sprint " + i);
+				sprint.setCreationDate(new Date());
+				sprint.setDescription("Sprint " + i + " Description");
+				sprint.setEnabled(true);
+				jJSprintService.saveJJSprint(sprint);
+			}
+		}
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+		if (jJStatusService.getAllJJStatuses().isEmpty()) {
+			String name = "NEW";
+			JJStatus StatusNew = new JJStatus();
+			StatusNew.setName(name);
+			StatusNew.setCreationDate(new Date());
+			StatusNew.setDescription("A JJStatus defined as " + name);
+			StatusNew.setEnabled(true);
+			jJStatusService.saveJJStatus(StatusNew);
 
-	public void newProject() {
-		message = "New Project";
-		project = new JJProject();
-		project.setEnabled(true);
-		project.setCreationDate(new Date());
-		project.setDescription("Defined as a Project");
-	}
+			name = "DELETED";
+			JJStatus StatusDeleted = new JJStatus();
+			StatusDeleted.setName(name);
+			StatusDeleted.setCreationDate(new Date());
+			StatusDeleted.setDescription("A JJStatus defined as " + name);
+			StatusDeleted.setEnabled(true);
+			jJStatusService.saveJJStatus(StatusDeleted);
 
-	public void editProject() {
-		message = "Edit Project";
-	}
+			name = "DISCARDED";
+			JJStatus StatusDiscarded = new JJStatus();
+			StatusDiscarded.setName(name);
+			StatusDiscarded.setCreationDate(new Date());
+			StatusDiscarded.setDescription("A JJStatus defined as " + name);
+			StatusDiscarded.setEnabled(true);
+			jJStatusService.saveJJStatus(StatusDiscarded);
 
-	public void save() {
-		System.out.println("SAVING ...");
-		String message = "";
+			name = "MODIFIED";
+			JJStatus StatusModified = new JJStatus();
+			StatusModified.setName(name);
+			StatusModified.setCreationDate(new Date());
+			StatusModified.setDescription("A JJStatus defined as " + name);
+			StatusModified.setEnabled(true);
+			jJStatusService.saveJJStatus(StatusModified);
 
-		if (project.getId() == null) {
-			System.out.println("IS a new Project");
+			name = "RELEASED";
+			JJStatus StatusReleased = new JJStatus();
+			StatusReleased.setName(name);
+			StatusReleased.setCreationDate(new Date());
+			StatusReleased.setDescription("A JJStatus defined as " + name);
+			StatusReleased.setEnabled(true);
+			jJStatusService.saveJJStatus(StatusReleased);
+
+			name = "FAILED";
+			JJStatus StatusFailed = new JJStatus();
+			StatusFailed.setName(name);
+			StatusFailed.setCreationDate(new Date());
+			StatusFailed.setDescription("A JJStatus defined as " + name);
+			StatusFailed.setEnabled(true);
+			jJStatusService.saveJJStatus(StatusFailed);
+
+			name = "PASSED";
+			JJStatus StatusPassed = new JJStatus();
+			StatusPassed.setName(name);
+			StatusPassed.setCreationDate(new Date());
+			StatusPassed.setDescription("A JJStatus defined as " + name);
+			StatusPassed.setEnabled(true);
+			jJStatusService.saveJJStatus(StatusPassed);
+
+			name = "CANCELED";
+			JJStatus StatusCanceled = new JJStatus();
+			StatusCanceled.setName(name);
+			StatusCanceled.setCreationDate(new Date());
+			StatusCanceled.setDescription("A JJStatus defined as " + name);
+			StatusCanceled.setEnabled(true);
+			jJStatusService.saveJJStatus(StatusCanceled);
+
+			name = "RUNNING";
+			JJStatus StatusRunning = new JJStatus();
+			StatusRunning.setName(name);
+			StatusRunning.setCreationDate(new Date());
+			StatusRunning.setDescription("A JJStatus defined as " + name);
+			StatusRunning.setEnabled(true);
+			jJStatusService.saveJJStatus(StatusRunning);
+
+		}
+
+		if (jJTaskService.findAllJJTasks().isEmpty()) {
+			JJTask task;
+			for (int i = 0; i < 4; i++) {
+				task = new JJTask();
+				task.setName("TaskName " + i);
+				task.setDescription("TaskDescription " + i);
+				task.setCreationDate(new Date());
+				task.setEnabled(true);
+				jJTaskService.saveJJTask(task);
+			}
+		}
+
+		if (jJVersionService.getAllJJVersion().isEmpty()) {
+			JJVersion version;
+			for (int i = 0; i < 4; i++) {
+				version = new JJVersion();
+				version.setName("VersionName " + i);
+				version.setDescription("VersionDescription " + i);
+				version.setCreationDate(new Date());
+				version.setEnabled(true);
+				jJVersionService.saveJJVersion(version);
+			}
+		}
+
+		if (jJProductService.getAllJJProducts().isEmpty()) {
+			JJProduct product;
+			for (int i = 0; i < 2; i++) {
+				product = new JJProduct();
+				product.setName("ProductName " + i);
+				product.setDescription("ProductDescription " + i);
+				product.setCreationDate(new Date());
+				product.setEnabled(true);
+				product.setExtname("ProductExtName " + i);
+
+				List<JJVersion> jJVersionList = jJVersionService
+						.getAllJJVersion();
+
+				Set<JJVersion> versions = new HashSet<JJVersion>();
+
+				if (i == 0) {
+					jJVersionList.get(i).setProduct(product);
+					versions.add(jJVersionList.get(i));
+					jJVersionList.get(i + 1).setProduct(product);
+					versions.add(jJVersionList.get(i + 1));
+				} else {
+					jJVersionList.get(i + 1).setProduct(product);
+					versions.add(jJVersionList.get(i + 1));
+					jJVersionList.get(i + 2).setProduct(product);
+					versions.add(jJVersionList.get(i + 2));
+				}
+
+				product.setVersions(versions);
+
+				jJProductService.saveJJProduct(product);
+			}
+		}
+
+		if (jJProjectService.getAllJJProjects().isEmpty()) {
+			JJProject project;
+			for (int i = 0; i < 2; i++) {
+				project = new JJProject();
+				project.setName("ProjectName " + i);
+				project.setDescription("ProjectDescription " + i);
+				project.setCreationDate(new Date());
+				project.setEnabled(true);
+
+				jJProjectService.saveJJProject(project);
+			}
+			project = new JJProject();
+			project.setName("Default Project");
+			project.setDescription("Delault ProjectDescription ");
+			project.setCreationDate(new Date());
+			project.setEnabled(true);
+
 			jJProjectService.saveJJProject(project);
-			message = "message_successfully_created";
-		} else {
-			jJProjectService.updateJJProject(project);
-			message = "message_successfully_updated";
 		}
-
-		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("projectDialogWidget.hide()");
-
-		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJProject");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-	}
-	
-	public void dialogClose(CloseEvent event) {
-		newProject();
-	}
-
-/*	public void handleSelectProject(JJVersionBean jJVersionBean,
-			JJProjectBean jJProjectBean, JJRequirementBean jJRequirementBean,
-			JJChapterBean jJChapterBean) {
-
-		if (project != null) {
-
-//			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-//					"Project selected: " + project.getName(), "Selection info");
-//			FacesContext.getCurrentInstance().addMessage(null, message);
-
-			// Requete getReqwithProject&Project
-			if (jJVersionBean != null) {
-				jJVersionBean.setDisabled(false);
-				jJVersionBean.setProduct(null);
-				jJVersionBean.setProduct(project);
-				jJVersionBean.setProject(project);
-			}
-
-			if (jJRequirementBean != null) {
-
-				jJRequirementBean.setProduct(project);
-
-				jJRequirementBean
-						.setMyBusinessJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProjectAndProduct(
-										"BUSINESS", project, project));
-
-				jJRequirementBean
-						.setMyFunctionalJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProjectAndProduct(
-										"FUNCTIONAL", project, project));
-
-				jJRequirementBean
-						.setMyTechnicalJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProjectAndProduct(
-										"TECHNICAL", project, project));
-
-			}
-			if (jJChapterBean != null)
-				jJChapterBean.setProduct(project);
-
-		} else {
-			// IF PRODUCT IS NULL GET ALL JJREQUIRMENTS WITH PROJECT
-
-			if (jJVersionBean != null) {
-				jJVersionBean.setDisabled(true);
-				jJVersionBean.setProduct(null);
-			}
-
-			jJRequirementBean.setProduct(project);
-			jJChapterBean.setProduct(project);
 
 		if (jJCategoryService.getAllJJCategorys().isEmpty()) {
 			String name = "BUSINESS";
