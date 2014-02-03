@@ -65,6 +65,17 @@ a:visited {
     width: 120px !important;
 }
 
+.cleanMenu .ui-tabmenu .ui-tabmenu-nav.ui-widget-header{
+    padding-left: 0px !important;
+    width: 100% !important;
+}
+.ui-tabmenu .ui-tabmenu-nav.ui-widget-header{
+    padding-left: 0px !important;
+}
+.cleanTab .ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem.ui-state-default {
+    padding: 5px 1px;
+}
+
 .ui-selectmanymenu {
     width: 155px !important;
     height: 100px !important;

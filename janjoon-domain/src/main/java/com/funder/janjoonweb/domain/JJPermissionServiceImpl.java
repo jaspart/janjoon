@@ -36,4 +36,22 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		TypedQuery<JJPermission> result = entityManager.createQuery(select);
 		return result.getResultList();
 	}
+
+	@Override
+	public List<JJPermission> getProjectManagerPermissions(JJProfile profile){
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
+				.createQuery(JJPermission.class);
+
+		Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
+
+		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
+
+		Predicate predicate = criteriaBuilder.equal(from.get("profile"), profile);
+
+		select.where(predicate);
+
+		TypedQuery<JJPermission> result = entityManager.createQuery(select);
+		return result.getResultList();
+	}
 }
