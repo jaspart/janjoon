@@ -1,6 +1,8 @@
 package com.funder.janjoonweb.ui.mb;
 
 import java.util.regex.Matcher;
+
+
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +21,8 @@ import org.springframework.beans.factory.annotation.Configurable;
 @Configurable
 public class ApplicationBean {
 
+	
+	
 	public String getColumnName(String column) {
 		if (column == null || column.length() == 0) {
 			return column;
