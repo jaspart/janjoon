@@ -11,6 +11,7 @@ field string --fieldName val --sizeMax 100 --notNull
 
 focus --class ~.JJProject
 field set --fieldName chapters  --type ~.JJChapter --cardinality ONE_TO_MANY --mappedBy project --fetch LAZY
+field reference --fieldName manager --type ~.JJContact --notNull
 
 #######################
 
@@ -18,6 +19,7 @@ focus --class ~.JJProduct
 field string --fieldName extname --sizeMax 25 --notNull
 field set --fieldName versions  --type ~.JJVersion --cardinality ONE_TO_MANY --mappedBy product --fetch LAZY
 field set --fieldName chapters  --type ~.JJChapter --cardinality ONE_TO_MANY --mappedBy product --fetch LAZY
+field reference --fieldName manager --type ~.JJContact --notNull
 
 #######################
 

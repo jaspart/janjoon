@@ -4,6 +4,7 @@
 package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJChapter;
+import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJVersion;
 import java.util.Set;
@@ -32,6 +33,14 @@ privileged aspect JJProduct_Roo_JavaBean {
     
     public void JJProduct.setChapters(Set<JJChapter> chapters) {
         this.chapters = chapters;
+    }
+    
+    public JJContact JJProduct.getManager() {
+        return this.manager;
+    }
+    
+    public void JJProduct.setManager(JJContact manager) {
+        this.manager = manager;
     }
     
 }

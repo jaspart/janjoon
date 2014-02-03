@@ -594,3 +594,14 @@ quit
 // Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-01-31 16:13:49
 quit
 // Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-01-31 16:14:17
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-02-03 11:40:07
+// [failed] focus --class ~.JJProject
+// [failed] field reference --fieldName manager --type ~.JJContact --notNull
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-02-03 11:46:07
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-02-03 12:04:09
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-02-03 12:04:45
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-02-03 12:22:26
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-02-03 12:23:37

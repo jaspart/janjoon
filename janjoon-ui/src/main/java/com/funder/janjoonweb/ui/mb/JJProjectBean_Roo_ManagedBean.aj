@@ -305,6 +305,30 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         chaptersCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(chaptersCreateInputMessage);
         
+        OutputLabel managerCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        managerCreateOutput.setFor("managerCreateInput");
+        managerCreateOutput.setId("managerCreateOutput");
+        managerCreateOutput.setValue("Manager:");
+        htmlPanelGrid.getChildren().add(managerCreateOutput);
+        
+        AutoComplete managerCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        managerCreateInput.setId("managerCreateInput");
+        managerCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProjectBean.JJProject_.manager}", JJContact.class));
+        managerCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJProjectBean.completeManager}", List.class, new Class[] { String.class }));
+        managerCreateInput.setDropdown(true);
+        managerCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "manager", String.class));
+        managerCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{manager.name} #{manager.description} #{manager.creationDate} #{manager.updatedDate}", String.class));
+        managerCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{manager}", JJContact.class));
+        managerCreateInput.setConverter(new JJContactConverter());
+        managerCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(managerCreateInput);
+        
+        Message managerCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        managerCreateInputMessage.setId("managerCreateInputMessage");
+        managerCreateInputMessage.setFor("managerCreateInput");
+        managerCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(managerCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -479,6 +503,30 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         chaptersEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(chaptersEditInputMessage);
         
+        OutputLabel managerEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        managerEditOutput.setFor("managerEditInput");
+        managerEditOutput.setId("managerEditOutput");
+        managerEditOutput.setValue("Manager:");
+        htmlPanelGrid.getChildren().add(managerEditOutput);
+        
+        AutoComplete managerEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        managerEditInput.setId("managerEditInput");
+        managerEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProjectBean.JJProject_.manager}", JJContact.class));
+        managerEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJProjectBean.completeManager}", List.class, new Class[] { String.class }));
+        managerEditInput.setDropdown(true);
+        managerEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "manager", String.class));
+        managerEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{manager.name} #{manager.description} #{manager.creationDate} #{manager.updatedDate}", String.class));
+        managerEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{manager}", JJContact.class));
+        managerEditInput.setConverter(new JJContactConverter());
+        managerEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(managerEditInput);
+        
+        Message managerEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        managerEditInputMessage.setId("managerEditInputMessage");
+        managerEditInputMessage.setFor("managerEditInput");
+        managerEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(managerEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -575,6 +623,16 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         chaptersValue.setValue("This relationship is managed from the JJChapter side");
         htmlPanelGrid.getChildren().add(chaptersValue);
         
+        HtmlOutputText managerLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        managerLabel.setId("managerLabel");
+        managerLabel.setValue("Manager:");
+        htmlPanelGrid.getChildren().add(managerLabel);
+        
+        HtmlOutputText managerValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        managerValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProjectBean.JJProject_.manager}", JJContact.class));
+        managerValue.setConverter(new JJContactConverter());
+        htmlPanelGrid.getChildren().add(managerValue);
+        
         return htmlPanelGrid;
     }
     
@@ -620,6 +678,17 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
             JJProject_.setChapters(new HashSet<JJChapter>(selectedChapters));
         }
         this.selectedChapters = selectedChapters;
+    }
+    
+    public List<JJContact> JJProjectBean.completeManager(String query) {
+        List<JJContact> suggestions = new ArrayList<JJContact>();
+        for (JJContact jJContact : jJContactService.findAllJJContacts()) {
+            String jJContactStr = String.valueOf(jJContact.getName() +  " "  + jJContact.getDescription() +  " "  + jJContact.getCreationDate() +  " "  + jJContact.getUpdatedDate());
+            if (jJContactStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJContact);
+            }
+        }
+        return suggestions;
     }
     
     public String JJProjectBean.onEdit() {

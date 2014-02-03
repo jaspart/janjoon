@@ -4,6 +4,7 @@
 package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJChapter;
+import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJProject;
 import java.util.Set;
 
@@ -15,6 +16,14 @@ privileged aspect JJProject_Roo_JavaBean {
     
     public void JJProject.setChapters(Set<JJChapter> chapters) {
         this.chapters = chapters;
+    }
+    
+    public JJContact JJProject.getManager() {
+        return this.manager;
+    }
+    
+    public void JJProject.setManager(JJContact manager) {
+        this.manager = manager;
     }
     
 }

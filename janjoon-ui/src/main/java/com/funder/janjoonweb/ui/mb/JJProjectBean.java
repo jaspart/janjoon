@@ -874,6 +874,8 @@ public class JJProjectBean {
 
 		if (projectAdmin.getId() == null) {
 			System.out.println("IS a new JJProject");
+
+			projectAdmin.setManager(projectManager);
 			jJProjectService.saveJJProject(projectAdmin);
 			message = "message_successfully_created";
 

@@ -252,6 +252,7 @@ public class JJProductBean {
 
 		if (productAdmin.getId() == null) {
 			System.out.println("IS a new JJProduct");
+			productAdmin.setManager(productManager);
 			jJProductService.saveJJProduct(productAdmin);
 			message = "message_successfully_created";
 
@@ -262,7 +263,7 @@ public class JJProductBean {
 						.getId());
 				product.getVersions().addAll(versions);
 				for (JJVersion jjVersion : versions) {
-					System.out.println(jjVersion.getName());
+//					System.out.println(jjVersion.getName());
 					jjVersion.setProduct(product);
 				}
 				jJProductService.updateJJProduct(product);
