@@ -40,7 +40,7 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 	}
 
 	@Override
-	public List<JJCategory> getAllJJCategorys() {
+	public List<JJCategory> getAllJJCategories() {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder.createQuery(JJCategory.class);

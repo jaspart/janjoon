@@ -241,7 +241,7 @@ public class JJProductBean {
 		productAdmin.setEnabled(true);
 		productAdmin.setCreationDate(new Date());
 		productAdmin.setDescription("Defined as a Product");
-
+		productManager = null;
 		jJVersionBean.newVersion();
 
 	}
@@ -263,7 +263,7 @@ public class JJProductBean {
 						.getId());
 				product.getVersions().addAll(versions);
 				for (JJVersion jjVersion : versions) {
-//					System.out.println(jjVersion.getName());
+					// System.out.println(jjVersion.getName());
 					jjVersion.setProduct(product);
 				}
 				jJProductService.updateJJProduct(product);
@@ -302,9 +302,20 @@ public class JJProductBean {
 				new FacesMessage(summary));
 	}
 
-	public void closeDialog(CloseEvent event) {
+	public void closeDialog(JJVersionBean jJVersionBean) {
 		System.out.println("close dialog");
 		productAdmin = null;
+		productManager = null;
+		productManagerList = null;
+		jJVersionBean.setVersionAdmin(null);
+		jJVersionBean.setVersionListTable(null);
+		jJVersionBean.setVersionDataModel(null);
+		
+	}
+
+	public void handleSelectProductManager() {
+		System.out.println(productManager.getFirstname() + " "
+				+ productManager.getLastname());
 	}
 
 }

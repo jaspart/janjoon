@@ -58,7 +58,8 @@
 						value="#{jJProjectBean.projectManager}" panelStyle="width:150px"
 						effect="fade" style="width:160px" filter="true"
 						filterMatchMode="startsWith">
-
+						<p:ajax process="@this" partialSubmit="true"
+							listener="#{jJProductBean.handleSelectProjectManager()}" />
 						<f:converter
 							converterId="com.funder.janjoonweb.ui.mb.converter.JJContactConverter" />
 

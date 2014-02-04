@@ -44,7 +44,7 @@
 	modal="true" widgetVar="productDialogWidget" dynamic="true"
 	showEffect="fade" hideEffect="explode">
 	<p:ajax event="close" update=":tabview:ProductForm"
-		listener="#{jJProductBean.closeDialog}" />
+		listener="#{jJProductBean.closeDialog(jJVersionBean)}" />
 	<p:outputPanel id="productDialogPanel">
 		<h:form id="productDialogForm">
 			<p:growl id="msg" />
@@ -72,7 +72,8 @@
 						value="#{jJProductBean.productManager}" panelStyle="width:150px"
 						effect="fade" style="width:160px" filter="true"
 						filterMatchMode="startsWith">
-
+						<p:ajax process="@this" partialSubmit="true"
+							listener="#{jJProductBean.handleSelectProductManager()}" />
 						<f:converter
 							converterId="com.funder.janjoonweb.ui.mb.converter.JJContactConverter" />
 
@@ -133,7 +134,7 @@
 			<p:column>
 				<p:commandButton value="Close"
 					oncomplete="productDialogWidget.hide()"
-					action="#{jJProductBean.closeDialog()}"
+					action="#{jJProductBean.closeDialog(jJVersionBean)}"
 					update=":tabview:ProductForm" />
 			</p:column>
 		</p:row>

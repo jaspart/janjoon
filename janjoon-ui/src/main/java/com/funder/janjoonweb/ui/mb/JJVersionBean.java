@@ -7,7 +7,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.ListDataModel;
 
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.SelectableDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProject;
-import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJRequirementService;
 import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;

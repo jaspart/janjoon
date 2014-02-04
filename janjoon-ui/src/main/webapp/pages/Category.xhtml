@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:form id="CategoryForm">
+	<p:panel id="CategoryPanel" style="width:600px" columns="1"
+		cellpadding="6">
+
+		<p:dataTable id="CategoryDataTable" var="category"
+			value="#{jJCategoryBean.categoryListTable}" paginator="true"
+			rows="10" style="width:550px"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			rowsPerPageTemplate="5,10,15">
+			<f:facet name="header">Category List</f:facet>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Name" />
+				</f:facet>
+				<h:outputText value="#{category.name}" />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Stage" />
+				</f:facet>
+				<h:outputText value="#{category.stage}" />
+			</p:column>
+
+		</p:dataTable>
+
+		<p:commandButton value="New" id="newCategory"
+			actionListener="#{jJCategoryBean.newCategory}"
+			update=":tabview:categoryDialog"
+			oncomplete="categoryDialogWidget.show()" icon="ui-icon-circle-plus" />
+	</p:panel>
+
+</h:form>
+
+<p:dialog id="categoryDialog" header="#{jJCategoryBean.message}"
+	modal="true" widgetVar="categoryDialogWidget" dynamic="true"
+	showEffect="fade" hideEffect="explode">
+	<p:ajax event="close" update=":tabview:CategoryForm"
+		listener="#{jJCategoryBean.closeDialog}" />
+	<p:outputPanel id="categoryDialogPanel">
+		<h:form id="categoryDialogForm">
+			<p:growl id="msg" />
+			<p:panelGrid columns="1" cellpadding="6">
+				<p:panel columns="3" cellpadding="6">
+					<p:inputText id="name" value="#{jJCategoryBean.categoryAdmin.name}"
+						label="Name" required="true" widgetVar="nameWidget">
+						<f:validateLength maximum="25" />
+					</p:inputText>
+					<p:message for="name" id="msgName" />
+					<p:watermark for="name" value="Name *" />
+				</p:panel>
+				<p:panel columns="2" cellpadding="6">
+					<h:outputLabel for="stage" value="Stage: " />
+					<p:outputPanel>
+						<p:spinner id="stage"
+							value="#{jJCategoryBean.categoryAdmin.stage}" min="0" max="100">
+							<p:ajax update="stagevalue" process="@this" />
+						</p:spinner>
+						<h:outputText id="stagevalue"
+							value="#{jJCategoryBean.categoryAdmin.stage}" />
+					</p:outputPanel>
+				</p:panel>
+				<p:commandButton id="submitButton" value="Save"
+					update="categoryDialogForm" process="@widgetVar(nameWidget)"
+					action="#{jJCategoryBean.save}" />
+			</p:panelGrid>
+		</h:form>
+	</p:outputPanel>
+	<f:facet name="footer">
+		<p:row>
+			<p:column>
+				<p:commandButton value="Close"
+					oncomplete="categoryDialogWidget.hide()"
+					action="#{jJCategoryBean.closeDialog()}"
+					update=":tabview:CategoryForm" />
+			</p:column>
+		</p:row>
+	</f:facet>
+</p:dialog>
+</html>

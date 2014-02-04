@@ -362,7 +362,7 @@ public class JJProjectBean {
 			jJProjectService.saveJJProject(project);
 		}
 
-		if (jJCategoryService.getAllJJCategorys().isEmpty()) {
+		if (jJCategoryService.getAllJJCategories().isEmpty()) {
 			String name = "BUSINESS";
 			JJCategory CategoryBusiness = new JJCategory();
 			CategoryBusiness.setName(name);
@@ -866,6 +866,7 @@ public class JJProjectBean {
 		projectAdmin.setEnabled(true);
 		projectAdmin.setCreationDate(new Date());
 		projectAdmin.setDescription("Defined as a Project");
+		projectManager = null;
 	}
 
 	public void save() {
@@ -905,6 +906,13 @@ public class JJProjectBean {
 	public void closeDialog(CloseEvent event) {
 		System.out.println("close dialog");
 		projectAdmin = null;
+		projectManager = null;
+		projectManagerList = null;
+	}
+
+	public void handleSelectProjectManager() {
+		System.out.println(projectManager.getFirstname() + " "
+				+ projectManager.getLastname());
 	}
 
 }

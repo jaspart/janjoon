@@ -240,7 +240,7 @@ public class JJTestcaseBean {
 
 	public SelectItem[] getCategoryOptions() {
 
-		List<JJCategory> categoriesList = jJCategoryService.getAllJJCategorys();
+		List<JJCategory> categoriesList = jJCategoryService.getAllJJCategories();
 
 		categoryOptions = new SelectItem[categoriesList.size() + 1];
 
@@ -267,7 +267,7 @@ public class JJTestcaseBean {
 					+ currentProject.getId() + "- " + currentProject.getName(),
 					rootNode);
 
-			List<JJCategory> categorys = jJCategoryService.getAllJJCategorys();
+			List<JJCategory> categorys = jJCategoryService.getAllJJCategories();
 			for (JJCategory jjCategory : categorys) {
 
 				TreeNode categoryNode = new DefaultTreeNode("C-"

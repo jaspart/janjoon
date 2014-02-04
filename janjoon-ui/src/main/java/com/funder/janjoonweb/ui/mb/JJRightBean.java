@@ -48,7 +48,7 @@ public class JJRightBean {
 	}
 
 	public List<JJCategory> getCategoryList() {
-		categoryList = jJCategoryService.getAllJJCategorys();
+		categoryList = jJCategoryService.getAllJJCategories();
 
 		return categoryList;
 	}
