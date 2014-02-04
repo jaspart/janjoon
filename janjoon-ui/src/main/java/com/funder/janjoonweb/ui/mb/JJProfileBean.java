@@ -31,6 +31,7 @@ public class JJProfileBean {
 	}
 
 	public List<JJProfile> getProfileListTable() {
+
 		profileListTable = jJProfileService.findAllJJProfiles();
 		return profileListTable;
 	}
@@ -103,5 +104,7 @@ public class JJProfileBean {
 		jJRightBean.setCategory(null);
 		jJRightBean.setRightListTable(null);
 		jJRightBean.setCategoryList(null);
+		jJRightBean.setObject(null);
+		jJRightBean.setObjectList(null);
 	}
 }

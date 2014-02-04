@@ -22,6 +22,9 @@ public class JJRightBean {
 	private JJCategory category;
 	private List<JJCategory> categoryList;
 
+	private String object;
+	private List<String> objectList;
+
 	public JJRight getRightAdmin() {
 		return rightAdmin;
 	}
@@ -57,6 +60,23 @@ public class JJRightBean {
 		this.categoryList = categoryList;
 	}
 
+	public String getObject() {
+		return object;
+	}
+
+	public void setObject(String object) {
+		this.object = object;
+	}
+
+	public List<String> getObjectList() {
+		objectList = jJRightService.getTablesName();
+		return objectList;
+	}
+
+	public void setObjectList(List<String> objectList) {
+		this.objectList = objectList;
+	}
+
 	public void newRight() {
 		System.out.println("Initial bean right");
 		rightAdmin = new JJRight();
@@ -65,7 +85,8 @@ public class JJRightBean {
 		rightAdmin.setX(false);
 		rightListTable = null;
 		category = null;
-
+		object = null;
+		
 	}
 
 	public void save() {
@@ -75,6 +96,7 @@ public class JJRightBean {
 		if (rightAdmin.getId() == null) {
 			System.out.println("IS a new JJRight");
 			rightAdmin.setCategory(category);
+			rightAdmin.setObjet(object);
 			jJRightService.saveJJRight(rightAdmin);
 
 			message = "message_successfully_created";
@@ -94,13 +116,17 @@ public class JJRightBean {
 	}
 
 	public void addMessage() {
-//		System.out.println("rightAdmin.getR() " + rightAdmin.getR());
-//		System.out.println("rightAdmin.getW() " + rightAdmin.getW());
-//		System.out.println("rightAdmin.getX() " + rightAdmin.getX());
+		// System.out.println("rightAdmin.getR() " + rightAdmin.getR());
+		// System.out.println("rightAdmin.getW() " + rightAdmin.getW());
+		// System.out.println("rightAdmin.getX() " + rightAdmin.getX());
 	}
 
 	public void handleSelectCategory() {
-//		System.out.println(category.getName());
+		// System.out.println(category.getName());
+	}
+	
+	public void handleSelectObject() {
+		System.out.println(object);
 	}
 
 }

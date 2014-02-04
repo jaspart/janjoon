@@ -54,16 +54,19 @@
 
 				<p:panel id="rightPanel" columns="2" cellpadding="6">
 
-
-
-					<p:panel columns="3" cellpadding="6">
-						<p:inputText id="right" value="#{jJRightBean.rightAdmin.objet}"
-							label="Right Object" required="true" widgetVar="rightWidget">
-							<f:validateLength maximum="25" />
-						</p:inputText>
-						<p:message for="right" id="msgRight" />
-						<p:watermark for="right" value="Right Object *" />
-
+					<p:panel columns="2" cellpadding="6">
+						<h:outputText value="Object: *" />
+						<p:selectOneMenu id="object" value="#{jJRightBean.object}"
+							panelStyle="width:150px" effect="fade" style="width:160px"
+							filter="true" filterMatchMode="startsWith"
+							widgetVar="objectWidget" label="Right Object" required="true">
+							<p:ajax process="@this" partialSubmit="true"
+								listener="#{jJRightBean.handleSelectObject()}" />
+							<f:selectItem itemLabel="#{jJRightBean.object}"
+								itemValue="#{jJRightBean.object}" />
+							<f:selectItems value="#{jJRightBean.objectList}" var="p"
+								itemLabel="#{p}" itemValue="#{p}" />
+						</p:selectOneMenu>
 					</p:panel>
 
 					<p:panel columns="2" cellpadding="6">
@@ -104,7 +107,7 @@
 
 						<p:commandButton id="saveRight" update="msg rightPanel"
 							actionListener="#{jJRightBean.save}" icon="ui-icon-circle-plus"
-							process="@widgetVar(rightWidget)" />
+							process="@widgetVar(objectWidget)" />
 
 					</p:panel>
 

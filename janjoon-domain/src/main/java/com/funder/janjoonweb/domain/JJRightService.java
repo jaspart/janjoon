@@ -13,4 +13,6 @@ public interface JJRightService {
 
 	public List<JJRight> getRightsWithoutProfile();
 
+	public List<String> getTablesName();
+
 }

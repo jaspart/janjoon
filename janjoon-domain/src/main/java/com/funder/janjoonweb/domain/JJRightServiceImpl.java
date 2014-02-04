@@ -1,6 +1,8 @@
 package com.funder.janjoonweb.domain;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,6 +11,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
+
+import org.hibernate.SessionFactory;
 
 public class JJRightServiceImpl implements JJRightService {
 
@@ -17,6 +23,12 @@ public class JJRightServiceImpl implements JJRightService {
 
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
+	}
+
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
 	}
 
 	public List<JJRight> getObjectWriterList(String objet) {
@@ -52,6 +64,22 @@ public class JJRightServiceImpl implements JJRightService {
 
 		TypedQuery<JJRight> result = entityManager.createQuery(select);
 		return result.getResultList();
+	}
+
+	@Override
+	public List<String> getTablesName() {
+
+		Metamodel model = entityManager.getMetamodel();
+		model.getEntities();
+
+		List<String> tableNames = new ArrayList<String>();
+
+		Set<EntityType<?>> allEntityTypes = model.getEntities();
+		for (EntityType<?> entityType : allEntityTypes) {
+			tableNames.add(entityType.getName());
+		}
+
+		return tableNames;
 	}
 
 }
