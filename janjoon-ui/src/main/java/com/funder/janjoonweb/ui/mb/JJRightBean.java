@@ -83,10 +83,10 @@ public class JJRightBean {
 		rightAdmin.setR(false);
 		rightAdmin.setW(false);
 		rightAdmin.setX(false);
-		rightListTable = null;
+		
 		category = null;
 		object = null;
-		
+
 	}
 
 	public void save() {
@@ -124,9 +124,9 @@ public class JJRightBean {
 	public void handleSelectCategory() {
 		// System.out.println(category.getName());
 	}
-	
+
 	public void handleSelectObject() {
-		System.out.println(object);
+		// System.out.println(object);
 	}
 
 }

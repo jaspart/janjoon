@@ -43,14 +43,6 @@ privileged aspect JJContact_Roo_JavaBean {
         this.firstname = firstname;
     }
     
-    public String JJContact.getLastname() {
-        return this.lastname;
-    }
-    
-    public void JJContact.setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-    
     public Date JJContact.getDateofbirth() {
         return this.dateofbirth;
     }

@@ -18,7 +18,6 @@
 //package org.primefaces.extensions.showcase.controller.timeline;
 package org.primefaces.examples.view;
 
-
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,8 +32,8 @@ import org.primefaces.extensions.model.timeline.TimelineModel;
 
 /**
  * CustomTimelineController
- *
- * @author  Oleg Varaksin / last modified by $Author: $
+ * 
+ * @author Oleg Varaksin / last modified by $Author: $
  * @version $Revision: 1.0 $
  */
 @ManagedBean
@@ -42,7 +41,8 @@ import org.primefaces.extensions.model.timeline.TimelineModel;
 public class CustomTimelineController implements Serializable {
 
 	private TimelineModel model;
-	private String locale; // current locale as String, java.util.Locale is possible too.
+	private String locale; // current locale as String, java.util.Locale is
+							// possible too.
 	private Date start;
 	private Date end;
 
@@ -59,7 +59,8 @@ public class CustomTimelineController implements Serializable {
 		end = cal.getTime();
 
 		// groups
-		String[] NAMES = new String[] {"Thomas", "Oleg", "Nilesh", "Mauricio", "Pavol", "Sudheer"};
+		String[] NAMES = new String[] { "Thomas", "Oleg", "Nilesh", "Mauricio",
+				"Pavol", "Sudheer" };
 
 		// create timeline model
 		model = new TimelineModel();
@@ -69,14 +70,19 @@ public class CustomTimelineController implements Serializable {
 			Date end = new Date(now.getTime() - 12 * 60 * 60 * 1000);
 
 			for (int i = 0; i < 5; i++) {
-				Date start = new Date(end.getTime() + Math.round(Math.random() * 5) * 60 * 60 * 1000);
-				end = new Date(start.getTime() + Math.round(4 + Math.random() * 5) * 60 * 60 * 1000);
+				Date start = new Date(end.getTime()
+						+ Math.round(Math.random() * 5) * 60 * 60 * 1000);
+				end = new Date(start.getTime()
+						+ Math.round(4 + Math.random() * 5) * 60 * 60 * 1000);
 
 				long r = Math.round(Math.random() * 2);
-				String availability = (r == 0 ? "Unavailable" : (r == 1 ? "Available" : "Maybe"));
+				String availability = (r == 0 ? "Unavailable"
+						: (r == 1 ? "Available" : "Maybe"));
 
-				// create an event with content, start / end dates, editable flag, group name and custom style class
-				TimelineEvent event = new TimelineEvent(availability, start, end, true, name, availability.toLowerCase());
+				// create an event with content, start / end dates, editable
+				// flag, group name and custom style class
+				TimelineEvent event = new TimelineEvent(availability, start,
+						end, true, name, availability.toLowerCase());
 				model.add(event);
 			}
 		}

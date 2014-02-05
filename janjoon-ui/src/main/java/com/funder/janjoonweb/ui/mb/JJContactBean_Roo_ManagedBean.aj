@@ -379,27 +379,6 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         firstnameCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(firstnameCreateInputMessage);
         
-        OutputLabel lastnameCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        lastnameCreateOutput.setFor("lastnameCreateInput");
-        lastnameCreateOutput.setId("lastnameCreateOutput");
-        lastnameCreateOutput.setValue("Lastname:");
-        htmlPanelGrid.getChildren().add(lastnameCreateOutput);
-        
-        InputText lastnameCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
-        lastnameCreateInput.setId("lastnameCreateInput");
-        lastnameCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.lastname}", String.class));
-        LengthValidator lastnameCreateInputValidator = new LengthValidator();
-        lastnameCreateInputValidator.setMaximum(25);
-        lastnameCreateInput.addValidator(lastnameCreateInputValidator);
-        lastnameCreateInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(lastnameCreateInput);
-        
-        Message lastnameCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        lastnameCreateInputMessage.setId("lastnameCreateInputMessage");
-        lastnameCreateInputMessage.setFor("lastnameCreateInput");
-        lastnameCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(lastnameCreateInputMessage);
-        
         OutputLabel dateofbirthCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         dateofbirthCreateOutput.setFor("dateofbirthCreateInput");
         dateofbirthCreateOutput.setId("dateofbirthCreateOutput");
@@ -776,27 +755,6 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         firstnameEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(firstnameEditInputMessage);
         
-        OutputLabel lastnameEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        lastnameEditOutput.setFor("lastnameEditInput");
-        lastnameEditOutput.setId("lastnameEditOutput");
-        lastnameEditOutput.setValue("Lastname:");
-        htmlPanelGrid.getChildren().add(lastnameEditOutput);
-        
-        InputText lastnameEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
-        lastnameEditInput.setId("lastnameEditInput");
-        lastnameEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.lastname}", String.class));
-        LengthValidator lastnameEditInputValidator = new LengthValidator();
-        lastnameEditInputValidator.setMaximum(25);
-        lastnameEditInput.addValidator(lastnameEditInputValidator);
-        lastnameEditInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(lastnameEditInput);
-        
-        Message lastnameEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        lastnameEditInputMessage.setId("lastnameEditInputMessage");
-        lastnameEditInputMessage.setFor("lastnameEditInput");
-        lastnameEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(lastnameEditInputMessage);
-        
         OutputLabel dateofbirthEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         dateofbirthEditOutput.setFor("dateofbirthEditInput");
         dateofbirthEditOutput.setId("dateofbirthEditOutput");
@@ -1059,16 +1017,6 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         firstnameValue.setId("firstnameValue");
         firstnameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.firstname}", String.class));
         htmlPanelGrid.getChildren().add(firstnameValue);
-        
-        HtmlOutputText lastnameLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        lastnameLabel.setId("lastnameLabel");
-        lastnameLabel.setValue("Lastname:");
-        htmlPanelGrid.getChildren().add(lastnameLabel);
-        
-        HtmlOutputText lastnameValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        lastnameValue.setId("lastnameValue");
-        lastnameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.lastname}", String.class));
-        htmlPanelGrid.getChildren().add(lastnameValue);
         
         HtmlOutputText dateofbirthLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         dateofbirthLabel.setId("dateofbirthLabel");

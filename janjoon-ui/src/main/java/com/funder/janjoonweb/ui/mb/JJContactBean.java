@@ -1,163 +1,44 @@
 package com.funder.janjoonweb.ui.mb;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.CloseEvent;
-import org.primefaces.event.SelectEvent;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJPermission;
-import com.funder.janjoonweb.domain.JJPermissionService;
-import com.funder.janjoonweb.domain.JJProduct;
-import com.funder.janjoonweb.domain.JJProductService;
-import com.funder.janjoonweb.domain.JJProfile;
-import com.funder.janjoonweb.domain.JJProfileService;
-import com.funder.janjoonweb.domain.JJProject;
-import com.funder.janjoonweb.domain.JJProjectService;
-import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJContact.class, beanName = "jJContactBean")
 public class JJContactBean {
 
-	private JJContact contact;
-	private List<JJContact> contactList;
-	private JJContact selectedContact;
+	private JJContact contactAdmin;
+	private List<JJContact> contactListTable;
 
-	public JJContact getSelectedContact() {
-		return selectedContact;
-	}
-
-	public void setSelectedContact(JJContact selectedContact) {
-		this.selectedContact = selectedContact;
-	}
-
-	private JJProfile selectedProfile;
-	private List<JJProfile> profileList;
-	private JJProject selectedProject;
-	private List<JJProject> projectList;
-	private JJProduct selectedProduct;
-	private List<JJProduct> productList;
-	private List<JJPermission> permissionList;
 	private String message;
-	
-	
+	private boolean disabled;
 
-	@Autowired
-	JJProfileService jJProfileService;
-
-	public void setjJProfileService(JJProfileService jJProfileService) {
-		this.jJProfileService = jJProfileService;
+	public JJContact getContactAdmin() {
+		return contactAdmin;
 	}
 
-	@Autowired
-	JJProjectService jJProjectService;
-
-	public void setjJProjectService(JJProjectService jJProjectService) {
-		this.jJProjectService = jJProjectService;
+	public void setContactAdmin(JJContact contactAdmin) {
+		this.contactAdmin = contactAdmin;
 	}
 
-	@Autowired
-	JJProductService jJProductService;
-
-	public void setjJProductService(JJProductService jJProductService) {
-		this.jJProductService = jJProductService;
+	public List<JJContact> getContactListTable() {
+		contactListTable = jJContactService.getAllJJContact();
+		return contactListTable;
 	}
 
-	@Autowired
-	JJPermissionService jJPermissionService;
-
-	public void setjJPermissionService(JJPermissionService jJPermissionService) {
-		this.jJPermissionService = jJPermissionService;
-	}
-
-	public JJContact getContact() {
-		return contact;
-	}
-
-	public void setContact(JJContact contact) {
-		this.contact = contact;
-	}
-
-	public List<JJContact> getContactList() {
-		contactList = jJContactService.getAllJJContact();
-		return contactList;
-	}
-
-	public void setContactList(List<JJContact> contactList) {
-		this.contactList = contactList;
-	}
-
-	public JJProfile getSelectedProfile() {
-		return selectedProfile;
-	}
-
-	public void setSelectedProfile(JJProfile selectedProfile) {
-		this.selectedProfile = selectedProfile;
-	}
-
-	public List<JJProfile> getProfileList() {
-		profileList = jJProfileService.findAllJJProfiles();
-		return profileList;
-	}
-
-	public void setProfileList(List<JJProfile> profileList) {
-		this.profileList = profileList;
-	}
-
-	public JJProject getSelectedProject() {
-		return selectedProject;
-	}
-
-	public void setSelectedProject(JJProject selectedProject) {
-		this.selectedProject = selectedProject;
-	}
-
-	public List<JJProject> getProjectList() {
-		projectList = jJProjectService.getAllJJProjects();
-		return projectList;
-	}
-
-	public void setProjectList(List<JJProject> projectList) {
-		this.projectList = projectList;
-	}
-
-	public JJProduct getSelectedProduct() {
-		return selectedProduct;
-	}
-
-	public void setSelectedProduct(JJProduct selectedProduct) {
-		this.selectedProduct = selectedProduct;
-	}
-
-	public List<JJProduct> getProductList() {
-		productList = jJProductService.getAllJJProducts();
-		return productList;
-	}
-
-	public void setProductList(List<JJProduct> productList) {
-		this.productList = productList;
-	}
-
-	public List<JJPermission> getPermissionList() {
-		// permissionList = jJPermissionService.findAllJJPermissions();
-		return permissionList;
-	}
-
-	public void setPermissionList(List<JJPermission> permissionList) {
-		this.permissionList = permissionList;
+	public void setContactListTable(List<JJContact> contactListTable) {
+		this.contactListTable = contactListTable;
 	}
 
 	public String getMessage() {
@@ -168,54 +49,56 @@ public class JJContactBean {
 		this.message = message;
 	}
 
-	public void newContact() {
-		message = "New User";
-		contact = new JJContact();
-		contact.setEnabled(true);
-		contact.setCreationDate(new Date());
-		contact.setDescription("Defined as a Contact");
-		contact.setName("TEMP Value");
-		permissionList = new ArrayList<JJPermission>();
-		selectedProfile = null;
-		selectedProject = null;
-		selectedProduct = null;
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
+
+	public void newContact(JJPermissionBean jJPermissionBean) {
+		System.out.println("Initial bean contact");
+		message = "New Contact";
+		disabled = false;
+		contactAdmin = new JJContact();
+		contactAdmin.setEnabled(true);
+		contactAdmin.setCreationDate(new Date());
+		jJPermissionBean.setContact(contactAdmin);
+		jJPermissionBean.newPermission();
 	}
 
 	public void editContact() {
-		message = "Edit User";
+		message = "Edit Contact";
 	}
 
-	public void save() {
-		System.out.println("SAVING ...");
+	public void save(JJPermissionBean jJPermissionBean) {
+		System.out.println("SAVING Contact...");
 		String message = "";
 
-		if (contact.getId() == null) {
-			System.out.println("IS a new Contact");
-			jJContactService.saveJJContact(contact);
+		if (contactAdmin.getId() == null) {
+			System.out.println("IS a new JJContact");
+			contactAdmin.setDescription("This contact is "
+					+ contactAdmin.getFirstname() + " "
+					+ contactAdmin.getName());
+
+			jJContactService.saveJJContact(contactAdmin);
+
 			message = "message_successfully_created";
 
+			JJContact contact = jJContactService.findJJContact(contactAdmin
+					.getId());
+
+			jJPermissionBean.setContact(contact);
+
+			disabled = true;
+
 		} else {
-			jJContactService.updateJJContact(contact);
+			jJContactService.updateJJContact(contactAdmin);
 			message = "message_successfully_updated";
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("contactDialogWidget.hide()");
 		}
-
-		if (permissionList.size() > 0) {
-			System.out
-					.println("permissionList.size() " + permissionList.size());
-			contact = jJContactService.findJJContact(contact.getId());
-			Set<JJPermission> permissions = new HashSet<JJPermission>();
-			for (JJPermission permission : permissionList) {
-				permission.setContact(contact);
-				permissions.add(permission);
-				jJPermissionService.saveJJPermission(permission);
-			}
-
-			contact.setPermissions(permissions);
-			jJContactService.updateJJContact(contact);
-		}
-
-		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("contactDialogWidget.hide()");
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJContact");
@@ -223,53 +106,55 @@ public class JJContactBean {
 
 	}
 
+	public void saveAll(JJPermissionBean jJPermissionBean) {
+		System.out.println("SAVING All Contact...");
+		String message = "Attribute permisson to contact";
+
+		List<JJPermission> permissions = jJPermissionBean
+				.getPermisssionListTable();
+
+		if (permissions != null && !permissions.isEmpty()) {
+			JJContact contact = jJContactService.findJJContact(contactAdmin
+					.getId());
+			contact.getPermissions().addAll(permissions);
+
+			// for (JJPermission permission : permissions) {
+			// permission.setContact(contact);
+			// }
+
+			jJContactService.updateJJContact(contact);
+
+		}
+
+		newContact(jJPermissionBean);
+
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				"JJContact and JJPermission");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+	}
+
 	public void addMessage() {
-		String summary = contact.getEnabled() ? "Active Contact"
+		String summary = contactAdmin.getEnabled() ? "Active Contact"
 				: "Inactive Contact";
 
 		FacesContext.getCurrentInstance().addMessage(null,
 				new FacesMessage(summary));
 	}
 
-	public void dialogClose(CloseEvent event) {
-		newContact();
+	public void closeDialog(JJPermissionBean jJPermissionBean) {
+		System.out.println("close dialog");
+		contactAdmin = null;
+		disabled = false;
+		jJPermissionBean.setPermissionAdmin(null);
+		jJPermissionBean.setPermisssionListTable(null);
+		jJPermissionBean.setProfile(null);
+		jJPermissionBean.setProfileList(null);
+		jJPermissionBean.setProject(null);
+		jJPermissionBean.setProjectList(null);
+		jJPermissionBean.setProduct(null);
+		jJPermissionBean.setProductList(null);
+		jJPermissionBean.setContact(null);
+
 	}
-
-	public void addPermission() {
-
-		JJPermission permission = new JJPermission();
-		permission.setProfile(selectedProfile);
-
-		if (selectedProject != null)
-			permission.setProject(selectedProject);
-		if (selectedProduct != null)
-			permission.setProduct(selectedProduct);
-
-		// jJPermissionService.saveJJPermission(permission);
-		//
-		// System.out.println("JJPermission sauvé");
-		//
-		// permission =
-		// jJPermissionService.findJJPermission(permission.getId());
-		permissionList.add(permission);
-
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_created", "JJPermission");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-	}
-
-	public void onRowSelect(SelectEvent event) {
-		System.out.println("in it");
-		selectedContact = (JJContact) event.getObject();
-		System.out.println(selectedContact.getFirstname());
-		
-	}
-	
-	 public void deleteContact() {  
-		 System.out.println("IN delete");
-		 selectedContact.setEnabled(false);
-		 jJContactService.updateJJContact(selectedContact);
-		 contactList.remove(selectedContact);  
-	    }
-
 }

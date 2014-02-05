@@ -38,10 +38,6 @@ public class JJContact extends JJAbstractEntity {
 	@Size(max = 25)
 	private String firstname;
 
-	@NotNull
-	@Size(max = 25)
-	private String lastname;
-
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(style = "M-")
 	private Date dateofbirth;

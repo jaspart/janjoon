@@ -6,6 +6,11 @@ import org.springframework.roo.addon.layers.service.RooService;
 
 @RooService(domainTypes = { com.funder.janjoonweb.domain.JJPermission.class })
 public interface JJPermissionService {
-	
+
 	public List<JJPermission> getManagerPermissions(JJProfile profile);
+
+	public List<JJPermission> getJJPermissionsWithProfileAndContact(
+			JJProfile profile, JJContact contact);
+
+	public List<JJPermission> getJJPermissionsWithContact(JJContact contact);
 }

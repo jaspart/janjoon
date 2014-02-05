@@ -315,7 +315,7 @@ public class JJProductBean {
 
 	public void handleSelectProductManager() {
 		System.out.println(productManager.getFirstname() + " "
-				+ productManager.getLastname());
+				+ productManager.getName());
 	}
 
 }

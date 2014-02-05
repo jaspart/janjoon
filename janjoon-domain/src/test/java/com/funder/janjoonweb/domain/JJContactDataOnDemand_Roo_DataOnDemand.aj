@@ -50,7 +50,6 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
         setEmail(obj, index);
         setEnabled(obj, index);
         setFirstname(obj, index);
-        setLastname(obj, index);
         setLdap(obj, index);
         setName(obj, index);
         setPassword(obj, index);
@@ -111,14 +110,6 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
             firstname = firstname.substring(0, 25);
         }
         obj.setFirstname(firstname);
-    }
-    
-    public void JJContactDataOnDemand.setLastname(JJContact obj, int index) {
-        String lastname = "lastname_" + index;
-        if (lastname.length() > 25) {
-            lastname = lastname.substring(0, 25);
-        }
-        obj.setLastname(lastname);
     }
     
     public void JJContactDataOnDemand.setLdap(JJContact obj, int index) {

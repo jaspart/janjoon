@@ -101,8 +101,8 @@ public class JJProfileBean {
 		System.out.println("close dialog");
 		profileAdmin = null;
 		jJRightBean.setRightAdmin(null);
-		jJRightBean.setCategory(null);
 		jJRightBean.setRightListTable(null);
+		jJRightBean.setCategory(null);
 		jJRightBean.setCategoryList(null);
 		jJRightBean.setObject(null);
 		jJRightBean.setObjectList(null);

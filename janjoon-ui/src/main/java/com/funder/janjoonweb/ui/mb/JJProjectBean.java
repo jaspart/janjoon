@@ -912,7 +912,7 @@ public class JJProjectBean {
 
 	public void handleSelectProjectManager() {
 		System.out.println(projectManager.getFirstname() + " "
-				+ projectManager.getLastname());
+				+ projectManager.getName());
 	}
 
 }
