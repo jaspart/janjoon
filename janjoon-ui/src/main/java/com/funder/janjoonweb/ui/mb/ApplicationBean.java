@@ -20,8 +20,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 @RequestScoped
 @Configurable
 public class ApplicationBean {
-
-	
+///////////////	
 	
 	public String getColumnName(String column) {
 		if (column == null || column.length() == 0) {
