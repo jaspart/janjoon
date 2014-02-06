@@ -1,9 +1,11 @@
 package com.funder.janjoonweb.ui.mb;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.print.attribute.standard.Severity;
 
 import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJPermission;
@@ -42,11 +44,13 @@ public class JJPermissionBean {
 	}
 
 	public List<JJPermission> getPermisssionListTable() {
-		if(contact!=null){
-		permisssionListTable = jJPermissionService
-				.getJJPermissionsWithContact(contact);
-		}else
+		if (contact != null && contact.getId() != null) {
+
+			permisssionListTable = jJPermissionService
+					.getJJPermissionsWithContact(contact);
+		} else {
 			permisssionListTable = null;
+		}
 		return permisssionListTable;
 	}
 
@@ -124,21 +128,32 @@ public class JJPermissionBean {
 	public void save() {
 		System.out.println("SAVING Permission...");
 		String message = "";
-
+		FacesMessage facesMessage = null;
 		if (permissionAdmin.getId() == null) {
 			System.out.println("IS a new JJPermission");
-			permissionAdmin.setProfile(profile);
-			permissionAdmin.setProject(project);
-			permissionAdmin.setProduct(product);
-			permissionAdmin.setContact(contact);
 
-			// if(jJPermissionService.) Requete pour vérifier si ce permission.profile and permission.contact existe dans la base
+			List<JJPermission> permission = jJPermissionService
+					.getJJPermissionsWithProfileAndContact(profile, contact);
 
-			jJPermissionService.saveJJPermission(permissionAdmin);
+			if (permission.isEmpty()) {
+				System.out.println("is empty");
+				permissionAdmin.setProfile(profile);
+				permissionAdmin.setProject(project);
+				permissionAdmin.setProduct(product);
+				permissionAdmin.setContact(contact);
 
-			message = "message_successfully_created";
+				jJPermissionService.saveJJPermission(permissionAdmin);
 
-			newPermission();
+				message = "message_successfully_created";
+				facesMessage = MessageFactory.getMessage(message,
+						"JJPermission");
+				newPermission();
+			} else {
+
+				message = "This profile is already attributed to this contact";
+				facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						message, "JJPermission");
+			}
 
 		} else {
 			jJPermissionService.updateJJPermission(permissionAdmin);
@@ -146,8 +161,6 @@ public class JJPermissionBean {
 			message = "message_successfully_updated";
 		}
 
-		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJPermission");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}

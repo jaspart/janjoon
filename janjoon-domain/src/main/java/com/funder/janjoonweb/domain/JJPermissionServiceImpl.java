@@ -52,11 +52,12 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		Predicate predicate1 = criteriaBuilder.equal(from.get("profile"),
 				profile);
 		Predicate predicate2 = criteriaBuilder.equal(from.get("contact"),
-				profile);
+				contact);
 
 		select.where(criteriaBuilder.and(predicate1, predicate2));
 
 		TypedQuery<JJPermission> result = entityManager.createQuery(select);
+
 		return result.getResultList();
 	}
 
@@ -76,6 +77,8 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		select.where(predicate);
 
 		TypedQuery<JJPermission> result = entityManager.createQuery(select);
+
 		return result.getResultList();
+
 	}
 }

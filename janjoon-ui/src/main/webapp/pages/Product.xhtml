@@ -80,7 +80,7 @@
 						<f:selectItem itemLabel="#{jJProductBean.productManager.name}"
 							itemValue="#{jJProductBean.productManager}" />
 						<f:selectItems value="#{jJProductBean.productManagerList}" var="p"
-							itemLabel="#{p.name}" itemValue="#{p}" />
+							itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />
 
 					</p:selectOneMenu>
 					<p:message for="productManagerSelect" id="msgProjectManager" />

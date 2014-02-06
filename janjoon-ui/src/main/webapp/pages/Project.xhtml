@@ -66,7 +66,7 @@
 						<f:selectItem itemLabel="#{jJProjectBean.projectManager.name}"
 							itemValue="#{jJProjectBean.projectManager}" />
 						<f:selectItems value="#{jJProjectBean.projectManagerList}" var="p"
-							itemLabel="#{p.name}" itemValue="#{p}" />
+							itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />
 
 					</p:selectOneMenu>
 					<p:message for="projectManagerSelect" id="msgProjectManager" />

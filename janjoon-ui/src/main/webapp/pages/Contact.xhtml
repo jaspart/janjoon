@@ -101,7 +101,7 @@
 							<p:ajax update="msg" listener="#{jJContactBean.addMessage}" />
 						</p:selectBooleanButton>
 					</p:panel>
-					<p:commandButton id="saveContact" value="Save"
+					<p:commandButton id="saveContact" value="Save Contact"
 						update="contactDialogForm"
 						process="@widgetVar(firstnameWidget) @widgetVar(lastnameWidget) @widgetVar(emailWidget) @widgetVar(passwordWidget)"
 						action="#{jJContactBean.save(jJPermissionBean)}"
@@ -116,7 +116,7 @@
 						effect="fade" style="width:160px" filter="true"
 						filterMatchMode="startsWith" required="true"
 						widgetVar="profileWidget" label="Profile"
-						disabled="#{ jJContactBean.disabled}">
+						disabled="#{not jJContactBean.disabled}">
 
 						<f:converter
 							converterId="com.funder.janjoonweb.ui.mb.converter.JJProfileConverter" />
@@ -133,7 +133,7 @@
 						value="#{jJPermissionBean.project}" panelStyle="width:150px"
 						effect="fade" style="width:160px" filter="true"
 						filterMatchMode="startsWith" widgetVar="projectWidget"
-						disabled="#{ jJContactBean.disabled}">
+						disabled="#{not jJContactBean.disabled}">
 
 						<f:converter
 							converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
@@ -150,7 +150,7 @@
 						value="#{jJPermissionBean.product}" panelStyle="width:150px"
 						effect="fade" style="width:160px" filter="true"
 						filterMatchMode="startsWith" widgetVar="productWidget"
-						disabled="#{ jJContactBean.disabled}">
+						disabled="#{not jJContactBean.disabled}">
 
 						<f:converter
 							converterId="com.funder.janjoonweb.ui.mb.converter.JJProductConverter" />
@@ -162,41 +162,41 @@
 
 					</p:selectOneMenu>
 
-					<p:commandButton id="savePermission"
-						update="msg permissionPanel permissionDataTable"
+					<p:commandButton id="savePermission" value="Add Permission"
+						update="msg permissionPanel"
 						actionListener="#{jJPermissionBean.save}"
-						icon="ui-icon-circle-plus" process="@widgetVar(profileWidget)"
-						disabled="#{ jJContactBean.disabled}" />
+						icon="ui-icon-circle-plus"
+						process="@widgetVar(profileWidget) @widgetVar(projectWidget) @widgetVar(productWidget)"
+						disabled="#{not jJContactBean.disabled}" />
 
+
+					<p:dataTable id="permissionDataTable" var="permission"
+						value="#{jJPermissionBean.permisssionListTable}" paginator="true"
+						rows="4">
+
+						<f:facet name="header">  
+            			Permission List  
+        			</f:facet>
+
+						<p:column headerText="Profile" style="width:25%">  
+							#{permission.profile.name}
+						</p:column>
+						<p:column headerText="Project" style="width:25%">  
+							#{permission.project.name}
+						</p:column>
+						<p:column headerText="Product" style="width:25%">  
+							#{permission.product.name}
+						</p:column>
+
+					</p:dataTable>
 
 				</p:panel>
 
 
 
-				<p:dataTable id="permissionDataTable" var="permission"
-					value="#{jJPermissionBean.permisssionListTable}" paginator="true"
-					rows="4">
-
-					<f:facet name="header">  
-            			Permission List  
-        			</f:facet>
-
-					<p:column headerText="Profile" style="width:25%">  
-							#{permission.profile.name}
-						</p:column>
-					<p:column headerText="Project" style="width:25%">  
-							#{permission.project.name}
-						</p:column>
-					<p:column headerText="Product" style="width:25%">  
-							#{permission.product.name}
-						</p:column>
-
-				</p:dataTable>
-				<p:commandButton id="submitButton" value="Save All"
-					update="contactDialogForm"
-					action="#{jJContactBean.saveAll(jJPermissionBean)}"
-					disabled="#{jJContactBean.disabled}" />
-
+				<p:commandButton id="resetButton" value="Reset"
+					update="contactDialogForm" process="@this"
+					action="#{jJContactBean.newContact(jJPermissionBean)}" />
 
 			</p:panelGrid>
 		</h:form>

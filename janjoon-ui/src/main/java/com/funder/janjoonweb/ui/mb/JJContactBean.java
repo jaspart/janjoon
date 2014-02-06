@@ -106,34 +106,6 @@ public class JJContactBean {
 
 	}
 
-	public void saveAll(JJPermissionBean jJPermissionBean) {
-		System.out.println("SAVING All Contact...");
-		String message = "Attribute permisson to contact";
-
-		List<JJPermission> permissions = jJPermissionBean
-				.getPermisssionListTable();
-
-		if (permissions != null && !permissions.isEmpty()) {
-			JJContact contact = jJContactService.findJJContact(contactAdmin
-					.getId());
-			contact.getPermissions().addAll(permissions);
-
-			// for (JJPermission permission : permissions) {
-			// permission.setContact(contact);
-			// }
-
-			jJContactService.updateJJContact(contact);
-
-		}
-
-		newContact(jJPermissionBean);
-
-		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJContact and JJPermission");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-
-	}
-
 	public void addMessage() {
 		String summary = contactAdmin.getEnabled() ? "Active Contact"
 				: "Inactive Contact";
