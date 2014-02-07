@@ -42,6 +42,13 @@ public interface JJChapterService {
 	public List<JJChapter> getAllChildsJJChapterWithParentSortedByOrder(
 			JJChapter parent);
 
-	public SortedMap<Integer, Object> getAllElement( JJChapter parent);
-	
+	public SortedMap<Integer, Object> getAllElement(JJChapter parent);
+
+	// New generic
+	public List<JJChapter> getAllParentsJJChapterSortedByOrder(
+			JJProject project, JJProduct product, JJCategory category);
+
+	public List<JJChapter> getAllJJChapters(JJProject project,
+			JJProduct product, JJCategory category);
+
 }

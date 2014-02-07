@@ -9,7 +9,7 @@
 
 	<ui:define name="content">
 		<h:form id="dataForm">
-			<f:event type="preRenderView"
+			<f:event type="preRenderComponent"
 				listener="#{jJRequirementBean.load(jJProjectBean,jJChapterBean,jJProductBean)}" />
 			<p:growl id="messages" />
 
@@ -98,13 +98,12 @@
 								<p:panelGrid>
 									<f:facet name="header">
 										<p:row>
-											<p:column colspan="2">
+											<p:column colspan="1">
 												<p:commandButton id="manageChapterLeft"
-													icon="ui-icon-arrowrefresh-1-w"
-													title="Manage Chapter and Document"
-													actionListener="#{jJChapterBean.initParameter(1)}"
-													update=":dataForm:myManageChapterDialog"
-													oncomplete="manageJJChapter.show()" />
+													icon="ui-icon-document" title="Manage Chapter and Document"
+													actionListener="#{jJChapterBean.initChapterBean('BUSINESS')}"
+													update=":chapterDialogForm"
+													oncomplete="chapterDialogWidget.show()" />
 											</p:column>
 											<p:column colspan="1">
 												<p:commandButton id="releaseButton"
@@ -114,8 +113,8 @@
 													update=":dataForm:myReleaseDialog"
 													oncomplete="releaseJJRequirement.show()" />
 											</p:column>
-											<p:column colspan="3">
-												<p:inputText id="globalFilter" style="width:110px" />
+											<p:column colspan="4">
+												<p:inputText id="globalFilter" style="width:120px" />
 
 											</p:column>
 											<p:column colspan="1">
@@ -125,7 +124,7 @@
 													oncomplete="createJJRequirement.show()" />
 											</p:column>
 											<p:column colspan="1">
-												<p:commandButton id="dynaButton" icon="ui-icon-document"
+												<p:commandButton id="dynaButton" icon="ui-icon-clipboard"
 													type="button" ajax="false" />
 												<p:menu overlay="true" trigger="dynaButton" my="left top"
 													at="left bottom">
@@ -182,14 +181,13 @@
 								<p:panelGrid>
 									<f:facet name="header">
 										<p:row>
-											<p:column colspan="2">
+											<p:column colspan="1">
 
 												<p:commandButton id="manageChapterMiddle"
-													icon="ui-icon-arrowrefresh-1-w"
-													title="Manage Chapter and Document"
-													actionListener="#{jJChapterBean.initParameter(2)}"
-													update=":dataForm:myManageChapterDialog"
-													oncomplete="manageJJChapter.show()" />
+													icon="ui-icon-document" title="Manage Chapter and Document"
+													actionListener="#{jJChapterBean.initChapterBean('FUNCTIONAL')}"
+													update=":chapterDialogForm"
+													oncomplete="chapterDialogWidget.show()" />
 
 											</p:column>
 											<p:column colspan="1">
@@ -200,8 +198,8 @@
 													update=":dataForm:myReleaseDialog"
 													oncomplete="releaseJJRequirement.show()" />
 											</p:column>
-											<p:column colspan="3">
-												<p:inputText id="globalFilter" style="width:110px" />
+											<p:column colspan="4">
+												<p:inputText id="globalFilter" style="width:120px" />
 
 											</p:column>
 											<p:column colspan="1">
@@ -211,7 +209,7 @@
 													oncomplete="createJJRequirement.show()" />
 											</p:column>
 											<p:column colspan="1">
-												<p:commandButton id="dynaButton" icon="ui-icon-document"
+												<p:commandButton id="dynaButton" icon="ui-icon-clipboard"
 													type="button" />
 											</p:column>
 										</p:row>
@@ -256,13 +254,12 @@
 								<p:panelGrid>
 									<f:facet name="header">
 										<p:row>
-											<p:column colspan="2">
+											<p:column colspan="1">
 												<p:commandButton id="manageChapterRight"
-													icon="ui-icon-arrowrefresh-1-w"
-													title="Manage Chapter and Document"
-													actionListener="#{jJChapterBean.initParameter(3)}"
-													update=":dataForm:myManageChapterDialog"
-													oncomplete="manageJJChapter.show()" />
+													icon="ui-icon-document" title="Manage Chapter and Document"
+													actionListener="#{jJChapterBean.initChapterBean('TECHNICAL')}"
+													update=":chapterDialogForm"
+													oncomplete="chapterDialogWidget.show()" />
 											</p:column>
 											<p:column colspan="1">
 												<p:commandButton id="releaseButton"
@@ -272,9 +269,9 @@
 													update=":dataForm:myReleaseDialog"
 													oncomplete="releaseJJRequirement.show()" />
 											</p:column>
-											<p:column colspan="3">
+											<p:column colspan="4">
 
-												<p:inputText id="globalFilter" style="width:110px" />
+												<p:inputText id="globalFilter" style="width:120px" />
 											</p:column>
 											<p:column colspan="1">
 												<p:commandButton id="createButton" icon="ui-icon-plus"
@@ -283,7 +280,7 @@
 													oncomplete="createJJRequirement.show()" />
 											</p:column>
 											<p:column colspan="1">
-												<p:commandButton id="dynaButton" icon="ui-icon-document"
+												<p:commandButton id="dynaButton" icon="ui-icon-clipboard"
 													type="button" />
 											</p:column>
 										</p:row>
@@ -643,114 +640,98 @@
 					</p:row>
 				</f:facet>
 			</p:dialog>
-
-			<p:dialog id="myManageChapterDialog" header="Manage Chapters"
-				widgetVar="manageJJChapter" maximizable="false" minimizable="false"
-				dynamic="true">
-				<p:ajax event="close" update=":dataForm"
-					listener="#{jJChapterBean.closeDialog}" />
-				<h:panelGrid columns="3" cellpadding="3">
-					<p:tree id="leftTreeIncorporated" value="#{jJChapterBean.leftRoot}"
-						var="nodeLeft" selectionMode="single"
-						selection="#{jJChapterBean.selectedLeftNode}" draggable="true"
-						droppable="true" dragdropScope="demo">
-						<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
-							update=":dataForm:messages" />
-						<p:treeNode>
-							<h:outputText value="#{nodeLeft}" />
-						</p:treeNode>
-					</p:tree>
-					<p:graphicImage alt="Transfer" library="images" name="transfer.png" />
-					<p:tree id="RightTreeIncorporated"
-						value="#{jJChapterBean.rightRoot}" var="nodeRight"
-						selectionMode="single"
-						selection="#{jJChapterBean.selectedRightNode}" draggable="true"
-						droppable="true" dragdropScope="demo">
-						<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
-							update=":dataForm:messages" />
-						<p:treeNode>
-							<h:outputText value="#{nodeRight}" />
-						</p:treeNode>
-					</p:tree>
-				</h:panelGrid>
-				<h:panelGrid columns="1" cellpadding="3">
-					<p:contextMenu for="chapterTreeSingle">
-						<p:menuitem value="Edit" update="editField"
-							actionListener="#{jJChapterBean.editNode()}"
-							icon="ui-icon-pencil" />
-						<p:menuitem value="Delete"
-							update=":dataForm:messages  myManageChapterDialog"
-							actionListener="#{jJChapterBean.deleteNode()}"
-							icon="ui-icon-close" oncomplete="manageJJChapter.show()" />
-					</p:contextMenu>
-
-					<p:tree id="chapterTreeSingle" value="#{jJChapterBean.chapterRoot}"
-						var="nodeChapter" selectionMode="single"
-						selection="#{jJChapterBean.selectedChapterNode}" dynamic="true">
-
-						<p:treeNode>
-							<h:outputText value="#{nodeChapter}" />
-						</p:treeNode>
-					</p:tree>
-
-					<h:panelGrid id="editField" columns="1" cellpadding="3">
-						<h:panelGrid columns="3" cellpadding="3">
-							<p:inputText id="chapterName" cols="60"
-								value="#{jJChapterBean.chapter.name}" required="false">
-							</p:inputText>
-							<p:message for="chapterName" id="msgNameChapter" display="icon" />
-							<p:watermark for="chapterName" value="Name" />
-						</h:panelGrid>
-
-						<h:panelGrid columns="3" cellpadding="3">
-							<p:editor id="chapterDescription" rows="4" cols="70"
-								value="#{jJChapterBean.chapter.description}" required="false">
-							</p:editor>
-							<p:message for="chapterDescription" id="msgDescriptionChapter"
-								display="icon" />
-							<p:watermark for="chapterDescription" value="Description" />
-						</h:panelGrid>
-
-						<h:panelGrid columns="3" cellpadding="3">
-
-							<h:outputLabel for="chapterParentOneMenu" value="Parent Chapter:" />
-							<p:selectOneMenu id="chapterParentOneMenu"
-								value="#{jJChapterBean.parentChapter}" panelStyle="width:150px"
-								effect="fade" style="width:160px" filter="true"
-								filterMatchMode="startsWith">
-
-								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
-
-								<f:selectItem itemLabel="#{jJChapterBean.parentChapter.name}"
-									itemValue="#{jJChapterBean.parentChapter}" />
-								<f:selectItems value="#{jJChapterBean.chapterList}" var="c"
-									itemLabel="#{c.name}" itemValue="#{c}" />
-
-								<p:ajax process="@this" partialSubmit="true"
-									listener="#{jJChapterBean.handleSelectChapter()}" />
-
-							</p:selectOneMenu>
-
-							<p:commandButton value="#{messages.label_save}"
-								oncomplete="manageJJChapter.show()"
-								action="#{jJChapterBean.persistJJChapter()}"
-								update="myManageChapterDialog" />
-
-						</h:panelGrid>
-					</h:panelGrid>
-				</h:panelGrid>
-				<f:facet name="footer">
-					<p:row>
-						<p:column>
-							<p:commandButton value="Close"
-								oncomplete="manageJJChapter.hide()"
-								action="#{jJChapterBean.closeDialog()}" update=":dataForm" />
-						</p:column>
-					</p:row>
-				</f:facet>
-			</p:dialog>
 		</h:form>
+
+		<p:dialog id="chapterDialog" header="Chapter"
+			widgetVar="chapterDialogWidget" maximizable="false"
+			minimizable="false" dynamic="true" resizable="false">
+			<p:ajax event="close" update=":dataForm"
+				listener="#{jJChapterBean.closeDialog}" />
+			<p:outputPanel id="chapterDialogPanel">
+				<h:form id="chapterDialogForm">
+					<p:growl id="msg" />
+					<p:panelGrid style="margin-top:20px">
+						<p:row>
+							<p:column colspan="2">
+								<p:inputText id="name" value="#{jJChapterBean.chapter.name}"
+									required="true" widgetVar="nameWidget" label="Chapter Name"
+									requiredMessage="Chapter Name is a required value">
+								</p:inputText>
+								<p:message for="name" id="msgName" />
+								<p:watermark for="name" value="Name *" />
+							</p:column>
+							<p:column colspan="2">
+								<h:outputText for="parent" value="Parent Chapter:" />
+								<p:selectOneMenu id="parent"
+									value="#{jJChapterBean.parentChapter}" panelStyle="width:150px"
+									effect="fade" style="width:160px" filter="true"
+									filterMatchMode="startsWith">
+									<f:converter
+										converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
+									<f:selectItem itemLabel="#{jJChapterBean.parentChapter.name}"
+										itemValue="#{jJChapterBean.parentChapter}" />
+									<f:selectItems value="#{jJChapterBean.chapterList}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />
+									<p:ajax process="@this" partialSubmit="true"
+										listener="#{jJChapterBean.handleSelectParentChapter()}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2">
+								<h:outputText value="Description : *" />
+								<p:editor id="description" widgetVar="descriptionWidget"
+									style="width:400px"
+									value="#{jJChapterBean.chapter.description}" required="true"
+									requiredMessage="Chapter Description is a required value">
+								</p:editor>
+								<!-- 								<p:message for="description" id="msgDescription" /> -->
+							</p:column>
+							<p:column colspan="2">
+								<p:contextMenu for="chapterTreeSingle">
+									<p:menuitem value="Edit" update="chapterDialogForm"
+										actionListener="#{jJChapterBean.editNode()}"
+										icon="ui-icon-pencil" />
+									<p:menuitem value="Delete" update="chapterDialogForm"
+										actionListener="#{jJChapterBean.deleteNode()}"
+										icon="ui-icon-close" />
+								</p:contextMenu>
+								<h:outputText value="Chapters Tree" />
+								<p:tree id="chapterTreeSingle"
+									value="#{jJChapterBean.chapterRoot}" var="nodeChapter"
+									selectionMode="single"
+									selection="#{jJChapterBean.selectedChapterNode}" dynamic="true">
+
+									<p:treeNode>
+										<h:outputText value="#{nodeChapter}" />
+									</p:treeNode>
+								</p:tree>
+							</p:column>
+						</p:row>
+
+						<f:facet name="footer">
+							<p:row>
+								<p:column colspan="3">
+									<p:commandButton value="Save" action="#{jJChapterBean.save()}"
+										process="@form" update="chapterDialogForm" />
+								</p:column>
+							</p:row>
+						</f:facet>
+					</p:panelGrid>
+
+				</h:form>
+			</p:outputPanel>
+			<f:facet name="footer">
+				<p:row>
+					<p:column>
+						<p:commandButton value="Close"
+							oncomplete="chapterDialogWidget.hide()"
+							action="#{jJChapterBean.closeDialog()}" update=":dataForm" />
+					</p:column>
+				</p:row>
+			</f:facet>
+		</p:dialog>
+
 	</ui:define>
 </ui:composition>
 </html>

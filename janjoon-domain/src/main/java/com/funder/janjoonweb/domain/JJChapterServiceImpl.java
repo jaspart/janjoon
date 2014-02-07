@@ -1,5 +1,6 @@
 package com.funder.janjoonweb.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -48,66 +49,56 @@ public class JJChapterServiceImpl implements JJChapterService {
 		return result.getResultList();
 
 	}
-	
-	@Override
-	public SortedMap<Integer, Object> getAllElement( JJChapter parent) {
 
-		// Query query = entityManager
-		// .createQuery("select s from JJChapter s where s.enabled=:value");
-		// query.setParameter("value", true);
-		//
-		// @SuppressWarnings("unchecked")
-		// List<JJChapter> list = query.getResultList();
-		// return list;
+	@Override
+	public SortedMap<Integer, Object> getAllElement(JJChapter parent) {
 
 		SortedMap<Integer, Object> elements = new TreeMap<Integer, Object>();
-		
-		TypedQuery<JJChapter> resultC = null;
-		try{
-			CriteriaBuilder criteriaBuilderC = entityManager.getCriteriaBuilder();
-			CriteriaQuery<JJChapter> criteriaQueryC = criteriaBuilderC.createQuery(JJChapter.class);
-			Root<JJChapter> fromC = criteriaQueryC.from(JJChapter.class);
-			CriteriaQuery<JJChapter> selectC = criteriaQueryC.select(fromC);
-			Predicate predicate1C = criteriaBuilderC.equal(fromC.get("enabled"), true);
-			Predicate predicate2C = criteriaBuilderC.equal(fromC.get("parent"), parent);
-			selectC.where(criteriaBuilderC.and(predicate1C, predicate2C));
-			selectC.orderBy(criteriaBuilderC.asc(fromC.get("ordering")));
-			resultC = entityManager.createQuery(selectC);
-		}catch(Exception e){
-			System.out.println("getAllElementChapter exception "+e);
-		}
-		
+
+		CriteriaBuilder criteriaBuilderC = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJChapter> criteriaQueryC = criteriaBuilderC
+				.createQuery(JJChapter.class);
+		Root<JJChapter> fromC = criteriaQueryC.from(JJChapter.class);
+		CriteriaQuery<JJChapter> selectC = criteriaQueryC.select(fromC);
+		Predicate predicate1C = criteriaBuilderC.equal(fromC.get("enabled"),
+				true);
+		Predicate predicate2C = criteriaBuilderC.equal(fromC.get("parent"),
+				parent);
+		selectC.where(criteriaBuilderC.and(predicate1C, predicate2C));
+		selectC.orderBy(criteriaBuilderC.asc(fromC.get("ordering")));
+		TypedQuery<JJChapter> resultC = entityManager.createQuery(selectC);
+
 		for (JJChapter chapter : resultC.getResultList()) {
 			elements.put(chapter.getOrdering(), chapter);
 		}
-		
-		TypedQuery<JJRequirement> resultR=null;
-		try{
-			CriteriaBuilder criteriaBuilderR = entityManager.getCriteriaBuilder();
-			CriteriaQuery<JJRequirement> criteriaQueryR = criteriaBuilderR.createQuery(JJRequirement.class);
-			Root<JJRequirement> fromR = criteriaQueryR.from(JJRequirement.class);
-			CriteriaQuery<JJRequirement> selectR = criteriaQueryR.select(fromR);
-			Predicate predicate1R = criteriaBuilderR.equal(fromR.get("enabled"), true);
-			Predicate predicate2R = criteriaBuilderR.equal(fromR.get("chapter"), parent);
-			selectR.where(criteriaBuilderR.and(predicate1R, predicate2R));
-			selectR.orderBy(criteriaBuilderR.asc(fromR.get("ordering")));
-			resultR = entityManager.createQuery(selectR);
-		}catch(Exception e){
-			System.out.println("getAllElementRequirement exception "+e);
-		}
+
+		CriteriaBuilder criteriaBuilderR = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJRequirement> criteriaQueryR = criteriaBuilderR
+				.createQuery(JJRequirement.class);
+		Root<JJRequirement> fromR = criteriaQueryR.from(JJRequirement.class);
+		CriteriaQuery<JJRequirement> selectR = criteriaQueryR.select(fromR);
+		Predicate predicate1R = criteriaBuilderR.equal(fromR.get("enabled"),
+				true);
+		Predicate predicate2R = criteriaBuilderR.equal(fromR.get("chapter"),
+				parent);
+		selectR.where(criteriaBuilderR.and(predicate1R, predicate2R));
+		selectR.orderBy(criteriaBuilderR.asc(fromR.get("ordering")));
+		TypedQuery<JJRequirement> resultR = entityManager.createQuery(selectR);
 
 		for (JJRequirement requirement : resultR.getResultList()) {
 			elements.put(requirement.getOrdering(), requirement);
 		}
-		
-		System.out.println("S elements.size() "+elements.size());
-		System.out.println("R elements.size() "+resultR.getResultList().size());
-		System.out.println("C elements.size() "+resultC.getResultList().size());
+
+		System.out.println("S elements.size() " + elements.size());
+		System.out.println("R elements.size() "
+				+ resultR.getResultList().size());
+		System.out.println("C elements.size() "
+				+ resultC.getResultList().size());
 
 		for (Object element : elements.entrySet()) {
-			System.out.println("S element="+element.getClass().getName());
+			System.out.println("S element=" + element.getClass().getName());
 		}
-		
+
 		return elements;
 
 	}
@@ -345,7 +336,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 		return result.getResultList();
 
 	}
-	
+
 	@Override
 	public List<JJChapter> getAllParentJJChapterWithProjectAndProductAndCategorySortedByOrder(
 			JJProject project, JJProduct product, JJCategory category) {
@@ -370,14 +361,11 @@ public class JJChapterServiceImpl implements JJChapterService {
 		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3,
 				predicate4, predicate5));
 		select.orderBy(criteriaBuilder.asc(from.get("ordering")));
-		
+
 		TypedQuery<JJChapter> result = entityManager.createQuery(select);
 		return result.getResultList();
 
 	}
-	
-	
-	
 
 	@Override
 	public List<JJChapter> getAllJJChaptersWithProjectAndCategoryAndParentSortedByOrder(
@@ -427,6 +415,79 @@ public class JJChapterServiceImpl implements JJChapterService {
 
 		TypedQuery<JJChapter> result = entityManager.createQuery(select);
 		return result.getResultList();
+	}
+
+	// New generic Request
+
+	@Override
+	public List<JJChapter> getAllParentsJJChapterSortedByOrder(
+			JJProject project, JJProduct product, JJCategory category) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJChapter> criteriaQuery = criteriaBuilder
+				.createQuery(JJChapter.class);
+
+		Root<JJChapter> from = criteriaQuery.from(JJChapter.class);
+
+		CriteriaQuery<JJChapter> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		predicates.add(criteriaBuilder.isNull(from.get("parent")));
+
+		// Adding predicates in case of parameter not being null
+		if (project != null) {
+			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}
+		if (product != null) {
+			predicates.add(criteriaBuilder.equal(from.get("product"), product));
+		}
+		if (category != null) {
+			predicates
+					.add(criteriaBuilder.equal(from.get("category"), category));
+		}
+
+		select.where(predicates.toArray(new Predicate[] {}));
+		select.orderBy(criteriaBuilder.asc(from.get("ordering")));
+
+		TypedQuery<JJChapter> result = entityManager.createQuery(select);
+		return result.getResultList();
+	}
+
+	@Override
+	public List<JJChapter> getAllJJChapters(JJProject project,
+			JJProduct product, JJCategory category) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJChapter> criteriaQuery = criteriaBuilder
+				.createQuery(JJChapter.class);
+
+		Root<JJChapter> from = criteriaQuery.from(JJChapter.class);
+
+		CriteriaQuery<JJChapter> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		predicates.add(criteriaBuilder.isNull(from.get("parent")));
+
+		// Adding predicates in case of parameter not being null
+		if (project != null) {
+			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}
+		if (product != null) {
+			predicates.add(criteriaBuilder.equal(from.get("product"), product));
+		}
+		if (category != null) {
+			predicates
+					.add(criteriaBuilder.equal(from.get("category"), category));
+		}
+
+		select.where(predicates.toArray(new Predicate[] {}));
+
+		TypedQuery<JJChapter> result = entityManager.createQuery(select);
+		return result.getResultList();
+
 	}
 
 }
