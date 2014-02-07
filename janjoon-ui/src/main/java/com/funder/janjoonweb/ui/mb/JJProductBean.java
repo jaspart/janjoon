@@ -125,7 +125,7 @@ public class JJProductBean {
 
 		productManagerList = new ArrayList<JJContact>();
 
-		List<JJRight> rights = jJRightService.getObjectWriterList("Product");
+		List<JJRight> rights = jJRightService.getObjectWriterList("JJProduct");
 		System.out.println("rights " + rights.size());
 		for (JJRight right : rights) {
 			List<JJPermission> permissions = jJPermissionService

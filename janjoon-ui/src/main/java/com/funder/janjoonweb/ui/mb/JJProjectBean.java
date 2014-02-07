@@ -435,7 +435,7 @@ public class JJProjectBean {
 
 			// Project Manager Profile
 			JJRight right = new JJRight();
-			right.setObjet("Project");
+			right.setObjet("JJProject");
 			right.setR(true);
 			right.setW(true);
 			right.setX(true);
@@ -446,7 +446,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Requirement");
+			right.setObjet("JJRequirement");
 			right.setCategory(businessCategory);
 			right.setR(true);
 			right.setW(true);
@@ -458,7 +458,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Requirement");
+			right.setObjet("JJRequirement");
 			right.setCategory(functionalCategory);
 			right.setR(true);
 			right.setW(false);
@@ -470,7 +470,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Requirement");
+			right.setObjet("JJRequirement");
 			right.setCategory(technicalCategory);
 			right.setR(true);
 			right.setW(false);
@@ -482,7 +482,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Requirement");
+			right.setObjet("JJRequirement");
 			right.setCategory(architectureCategory);
 			right.setR(true);
 			right.setW(false);
@@ -494,7 +494,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Planning");
+			right.setObjet("JJPlanning");
 			right.setCategory(architectureCategory);
 			right.setR(true);
 			right.setW(true);
@@ -506,7 +506,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Planning");
+			right.setObjet("JJPlanning");
 			right.setCategory(technicalCategory);
 			right.setR(true);
 			right.setW(true);
@@ -518,7 +518,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Test");
+			right.setObjet("JJTest");
 			right.setR(true);
 			right.setW(false);
 			right.setX(false);
@@ -529,7 +529,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Product");
+			right.setObjet("JJProduct");
 			right.setR(true);
 			right.setW(false);
 			right.setX(false);
@@ -542,7 +542,7 @@ public class JJProjectBean {
 			// Product Manager Profile
 
 			right = new JJRight();
-			right.setObjet("Product");
+			right.setObjet("JJProduct");
 			right.setCategory(functionalCategory);
 			right.setR(true);
 			right.setW(true);
@@ -554,7 +554,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Requirement");
+			right.setObjet("JJRequirement");
 			right.setCategory(businessCategory);
 			right.setR(true);
 			right.setW(false);
@@ -566,7 +566,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Requirement");
+			right.setObjet("JJRequirement");
 			right.setCategory(functionalCategory);
 			right.setR(true);
 			right.setW(true);
@@ -578,7 +578,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Requirement");
+			right.setObjet("JJRequirement");
 			right.setCategory(technicalCategory);
 			right.setR(true);
 			right.setW(true);
@@ -590,7 +590,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Requirement");
+			right.setObjet("JJRequirement");
 			right.setCategory(architectureCategory);
 			right.setR(true);
 			right.setW(true);
@@ -602,7 +602,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Planning");
+			right.setObjet("JJPlanning");
 			right.setCategory(architectureCategory);
 			right.setR(true);
 			right.setW(true);
@@ -614,7 +614,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Planning");
+			right.setObjet("JJPlanning");
 			right.setCategory(technicalCategory);
 			right.setR(true);
 			right.setW(true);
@@ -626,7 +626,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Test");
+			right.setObjet("JJTest");
 			right.setR(true);
 			right.setW(true);
 			right.setX(false);
@@ -662,7 +662,7 @@ public class JJProjectBean {
 
 			// Tester Profile
 			right = new JJRight();
-			right.setObjet("Test");
+			right.setObjet("JJTest");
 			right.setR(true);
 			right.setW(true);
 			right.setX(true);
@@ -673,7 +673,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Requirement");
+			right.setObjet("JJRequirement");
 			right.setR(true);
 			right.setW(false);
 			right.setX(true);
@@ -684,7 +684,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Product");
+			right.setObjet("JJProduct");
 			right.setCategory(technicalCategory);
 			right.setR(false);
 			right.setW(false);
@@ -697,7 +697,7 @@ public class JJProjectBean {
 
 			// Developer Profile
 			right = new JJRight();
-			right.setObjet("Test");
+			right.setObjet("JJTest");
 			right.setR(true);
 			right.setW(true);
 			right.setX(false);
@@ -708,7 +708,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Requirement");
+			right.setObjet("JJRequirement");
 			right.setR(true);
 			right.setW(false);
 			right.setX(false);
@@ -719,7 +719,7 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("Product");
+			right.setObjet("JJProduct");
 			right.setCategory(technicalCategory);
 			right.setR(true);
 			right.setW(true);
@@ -731,23 +731,6 @@ public class JJProjectBean {
 			jJRightService.saveJJRight(right);
 
 		}
-
-		// if (localJJContactService.getAllJJContact().isEmpty()) {
-		// JJContact newJJContact = new JJContact();
-		// newJJContact.setPassword("starit");
-		// newJJContact.setEmail("starit@gmail.com");
-		// newJJContact.setLdap(123456);
-		// newJJContact.setFirstname("janjoon");
-		// newJJContact.setLastname("admin");
-		// newJJContact.setDateofbirth(new Date());
-		// newJJContact.setEnabled(true);
-		// newJJContact.setAccountNonExpired(true);
-		// newJJContact.setCredentialsNonExpired(true);
-		// newJJContact.setAccountNonLocked(true);
-		//
-		// // newJJContact.setJjright(rights);
-		// jJContactService.saveJJContact(newJJContact);
-		// }
 
 		/*** End Temporary ***/
 
@@ -788,7 +771,7 @@ public class JJProjectBean {
 
 		projectManagerList = new ArrayList<JJContact>();
 
-		List<JJRight> rights = jJRightService.getObjectWriterList("Project");
+		List<JJRight> rights = jJRightService.getObjectWriterList("JJProject");
 		System.out.println("rights " + rights.size());
 		for (JJRight right : rights) {
 			List<JJPermission> permissions = jJPermissionService
