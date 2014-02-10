@@ -689,19 +689,22 @@
 							</p:column>
 							<p:column colspan="2">
 								<p:contextMenu for="chapterTreeSingle">
-									<p:menuitem value="Edit" update="chapterDialogForm"
-										actionListener="#{jJChapterBean.editNode()}"
-										icon="ui-icon-pencil" />
-									<p:menuitem value="Delete" update="chapterDialogForm"
-										actionListener="#{jJChapterBean.deleteNode()}"
-										icon="ui-icon-close" />
+									<p:menuitem value="Edit"
+										actionListener="#{jJChapterBean.editChapter()}"
+										process="@this" icon="ui-icon-pencil"
+										update="chapterDialogForm" />
+									<p:menuitem value="Delete"
+										actionListener="#{jJChapterBean.deleteChapter()}"
+										process="@this" icon="ui-icon-close"
+										update="chapterDialogForm" />
 								</p:contextMenu>
 								<h:outputText value="Chapters Tree" />
 								<p:tree id="chapterTreeSingle"
 									value="#{jJChapterBean.chapterRoot}" var="nodeChapter"
 									selectionMode="single"
-									selection="#{jJChapterBean.selectedChapterNode}" dynamic="true">
-
+									selection="#{jJChapterBean.selectedChapterNode}" dynamic="true"
+									cache="false">
+									<p:ajax event="select" listener="#{jJChapterBean.onNodeSelect}" />
 									<p:treeNode>
 										<h:outputText value="#{nodeChapter}" />
 									</p:treeNode>
@@ -714,6 +717,15 @@
 								<p:column colspan="3">
 									<p:commandButton value="Save" action="#{jJChapterBean.save()}"
 										process="@form" update="chapterDialogForm" />
+								</p:column>
+							</p:row>
+						</f:facet>
+					</p:panelGrid>
+					<p:panelGrid style="margin-top:20px">
+						<f:facet name="footer">
+							<p:row>
+								<p:column colspan="3">
+								
 								</p:column>
 							</p:row>
 						</f:facet>

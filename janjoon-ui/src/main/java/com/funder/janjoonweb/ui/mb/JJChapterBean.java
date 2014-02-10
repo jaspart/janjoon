@@ -6,6 +6,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -68,7 +69,6 @@ public class JJChapterBean {
 	private JJCategory category;
 
 	private int creationColumnNumber;
-	private int persistIndex = 1;
 
 	/**
 	 * Transfer Tree
@@ -84,12 +84,44 @@ public class JJChapterBean {
 	private TreeNode chapterRoot;
 	private TreeNode selectedChapterNode;
 
+	/**
+	 * SortedMap of a node's children to manage the child's order into the
+	 * parent node
+	 */
+	// private SortedMap<Integer, Object> childElements;
+
 	public JJChapter getChapter() {
 		return chapter;
 	}
 
 	public void setChapter(JJChapter chapter) {
 		this.chapter = chapter;
+	}
+
+	public JJChapter getParentChapter() {
+		return parentChapter;
+	}
+
+	public void setParentChapter(JJChapter parentChapter) {
+		this.parentChapter = parentChapter;
+	}
+
+	public List<JJChapter> getChapterList() {
+		// if (product != null) {
+
+		chapterList = jJChapterService.getAllJJChapters(project, product,
+				category);
+
+		// } else {
+		//
+		// chapterList = jJChapterService
+		// .getAllJJChaptersWithProjectAndCategory(project, category);
+		// }
+		return chapterList;
+	}
+
+	public void setChapterList(List<JJChapter> chapterList) {
+		this.chapterList = chapterList;
 	}
 
 	public JJProject getProject() {
@@ -132,20 +164,20 @@ public class JJChapterBean {
 		this.leftRoot = leftRoot;
 	}
 
-	public TreeNode getRightRoot() {
-		return rightRoot;
-	}
-
-	public void setRightRoot(TreeNode rightRoot) {
-		this.rightRoot = rightRoot;
-	}
-
 	public TreeNode getSelectedLeftNode() {
 		return selectedLeftNode;
 	}
 
 	public void setSelectedLeftNode(TreeNode selectedLeftNode) {
 		this.selectedLeftNode = selectedLeftNode;
+	}
+
+	public TreeNode getRightRoot() {
+		return rightRoot;
+	}
+
+	public void setRightRoot(TreeNode rightRoot) {
+		this.rightRoot = rightRoot;
 	}
 
 	public TreeNode getSelectedRightNode() {
@@ -172,32 +204,6 @@ public class JJChapterBean {
 		this.selectedChapterNode = selectedChapterNode;
 	}
 
-	public List<JJChapter> getChapterList() {
-		// if (product != null) {
-
-		chapterList = jJChapterService.getAllJJChapters(project, product,
-				category);
-
-		// } else {
-		//
-		// chapterList = jJChapterService
-		// .getAllJJChaptersWithProjectAndCategory(project, category);
-		// }
-		return chapterList;
-	}
-
-	public void setChapterList(List<JJChapter> chapterList) {
-		this.chapterList = chapterList;
-	}
-
-	public JJChapter getParentChapter() {
-		return parentChapter;
-	}
-
-	public void setParentChapter(JJChapter parentChapter) {
-		this.parentChapter = parentChapter;
-	}
-
 	public void initChapterBean(String categoryName) {
 		System.out.println("Init chapterBean");
 		category = jJCategoryService.getJJCategoryWithName(categoryName);
@@ -215,55 +221,104 @@ public class JJChapterBean {
 		chapter.setProject(project);
 		chapter.setProduct(product);
 		parentChapter = null;
+		chapter.setParent(parentChapter);
+
+		SortedMap<Integer, Object> elements = getSortedElements(parentChapter);
+		if (elements.isEmpty()) {
+			chapter.setOrdering(0);
+		} else {
+			chapter.setOrdering(elements.size());
+		}
 	}
 
-	public void initParameter(int number) {
-		persistIndex = 1;
-		this.creationColumnNumber = number;
-		String categoryName = null;
-		switch (number) {
-		case 1:
-			categoryName = "BUSINESS";
-			break;
-		case 2:
-			categoryName = "FUNCTIONAL";
-			break;
-		case 3:
-			categoryName = "TECHNICAL";
-			break;
+	public void editChapter() {
 
-		default:
-			break;
+		Long idChapter = Long.parseLong(getSplitFromString(selectedChapterNode
+				.getData().toString(), 1));
+		chapter = jJChapterService.findJJChapter(idChapter);
+		parentChapter = chapter.getParent();
+	}
+
+	public void deleteChapter() {
+
+		System.out.println("Delete node");
+
+		long idSelectedChapter = Long.parseLong(getSplitFromString(
+				selectedChapterNode.getData().toString(), 1));
+
+		JJChapter selectedChapter = jJChapterService
+				.findJJChapter(idSelectedChapter);
+
+		JJChapter parentSelectedChapter = selectedChapter.getParent();
+
+		SortedMap<Integer, Object> elements = getSortedElements(parentSelectedChapter);
+
+		int increment = elements.size();
+
+		elements = getSortedElements(selectedChapter);
+
+		System.out
+				.println("\n***** Update chapter and order for children  *****");
+		for (Map.Entry<Integer, Object> entry : elements.entrySet()) {
+			String className = entry.getValue().getClass().getSimpleName();
+			int lastOrder;
+			if (className.equalsIgnoreCase("JJChapter")) {
+
+				JJChapter chapter = (JJChapter) entry.getValue();
+
+				if (chapter.getEnabled()) {
+					lastOrder = chapter.getOrdering();
+					chapter.setOrdering(lastOrder + increment);
+					chapter.setParent(parentSelectedChapter);
+					jJChapterService.updateJJChapter(chapter);
+				}
+			} else if (className.equalsIgnoreCase("JJRequirement")) {
+
+				JJRequirement requirement = (JJRequirement) entry.getValue();
+
+				if (requirement.getEnabled()) {
+					lastOrder = requirement.getOrdering();
+					requirement.setOrdering(lastOrder + increment);
+					requirement.setChapter(parentSelectedChapter);
+					jJRequirementService.updateJJRequirement(requirement);
+				}
+			}
+
 		}
 
-		JJCategory jjCategory = jJCategoryService
-				.getJJCategoryWithName(categoryName);
-
-		category = jjCategory;
+		/**
+		 * Make the selectedChapter as inactif
+		 */
+		selectedChapter.setEnabled(false);
+		jJChapterService.updateJJChapter(selectedChapter);
 
 		chapterTreeBean();
+		newChapter();
 
-		parentChapter = null;
-		transferTreeBean(number);
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Deleted" + selectedChapterNode.getData(), "Deleted"
+						+ selectedChapterNode.getData());
+		FacesContext.getCurrentInstance().addMessage(null, message);
+
 	}
 
 	public void save() {
 		String message = "";
 		if (chapter.getId() == null) {
 			System.out.println("Save new Chapter");
-			chapter.setParent(parentChapter);
+
 			jJChapterService.saveJJChapter(chapter);
 			message = "message_successfully_created";
-			
-		
-			chapterTreeBean();
-			newChapter();
 
 		} else {
 			chapter.setUpdatedDate(new Date());
 			jJChapterService.updateJJChapter(chapter);
 			message = "message_successfully_updated";
+
 		}
+
+		chapterTreeBean();
+		newChapter();
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJChapter");
@@ -290,32 +345,14 @@ public class JJChapterBean {
 		System.out.println("Create chapter TreeBean");
 		chapterRoot = new DefaultTreeNode("RootChapter", null);
 
-		// List<JJChapter> parentChapters = null;
-
-		// if (product != null) {
-		//
-		// parentChapters = jJChapterService
-		// .getAllParentJJChapterWithProjectAndProductAndCategorySortedByOrder(
-		// project, product, category);
-		//
-		// } else {
-		//
-		// parentChapters = jJChapterService
-		// .getAllParentJJChapterWithProjectAndCategorySortedByOrder(
-		// project, category);
-		// }
-
 		List<JJChapter> parentChapters = jJChapterService
-				.getAllParentsJJChapterSortedByOrder(project, product, category);
-	
-		for (JJChapter jjChapter : parentChapters) {
-			TreeNode node = createTree(jjChapter, chapterRoot, 0);
+				.getAllParentsJJChapterSortedByOrder(project, product,
+						category, true);
+
+		for (JJChapter chapter : parentChapters) {
+			TreeNode node = createTree(chapter, chapterRoot, 0);
 		}
 
-		// List<TreeNode> childrenlist = chapterRoot.getChildren();
-		// for (TreeNode treeNode : childrenlist) {
-		// treeNode.setExpanded(true);
-		// }
 	}
 
 	public void transferTreeBean(int index) {
@@ -368,138 +405,37 @@ public class JJChapterBean {
 		}
 	}
 
-	public TreeNode createTreeTemp(JJChapter treeObj, TreeNode rootNode,
-			int index) {
-		TreeNode newNode;
-
-		newNode = new DefaultTreeNode("C-" + treeObj.getId() + "- "
-				+ treeObj.getName(), rootNode);
-
-		SortedMap<Integer, Object> elements = jJChapterService
-				.getAllElement(treeObj);
-		System.out.println("elements.size() " + elements.size());
-
-		for (Object element : elements.entrySet()) {
-			System.out.println("element=" + element.getClass().getName());
-
-		}
-
-		//
-		//
-		// List<JJChapter> childNodes1 = jJChapterService
-		// .getAllChildsJJChapterWithParentSortedByOrder(treeObj);
-		//
-		// for (JJChapter tt : childNodes1) {
-		// if (tt.getEnabled()) {
-		// TreeNode newNode2 = createTreeTemp(tt, newNode, index);
-		//
-		//
-		// }
-		// }
-		//
-		// if (index == 1) {
-		// Set<JJRequirement> childNodes2 = treeObj.getRequirements();
-		// for (JJRequirement jjRequirement : childNodes2) {
-		// if (jjRequirement.getEnabled()) {
-		// TreeNode newNode3 = new DefaultTreeNode("R-"
-		// + jjRequirement.getId() + "- "
-		// + jjRequirement.getName(), newNode);
-		//
-		// }
-		// }
-		// }
-		// newNode.setExpanded(true);
-
-		return newNode;
-	}
-
 	// Recursive function to create tree
-	public TreeNode createTree(JJChapter treeObj, TreeNode rootNode, int index) {
-		TreeNode newNode;
+	public TreeNode createTree(JJChapter chapter, TreeNode rootNode, int index) {
 
-		newNode = new DefaultTreeNode("C-" + treeObj.getId() + "- "
-				+ treeObj.getName(), rootNode);
+		TreeNode newNode = new DefaultTreeNode("C-" + chapter.getId() + "- "
+				+ chapter.getName(), rootNode);
 
-		List<JJChapter> childNodes1 = jJChapterService
-				.getAllChildsJJChapterWithParentSortedByOrder(treeObj);
+		List<JJChapter> chapterChildren = jJChapterService
+				.getAllChildsJJChapterWithParentSortedByOrder(chapter, true);
 
-		for (JJChapter tt : childNodes1) {
-			if (tt.getEnabled()) {
-				TreeNode newNode2 = createTree(tt, newNode, index);
+		for (JJChapter chapterChild : chapterChildren) {
+			if (chapterChild.getEnabled()) {
+				TreeNode newNode2 = createTree(chapterChild, newNode, index);
 
 			}
 		}
 
 		if (index == 1) {
-			Set<JJRequirement> childNodes2 = treeObj.getRequirements();
-			for (JJRequirement jjRequirement : childNodes2) {
-				if (jjRequirement.getEnabled()) {
+			Set<JJRequirement> requirementChildren = chapter.getRequirements();
+			for (JJRequirement requirementChild : requirementChildren) {
+				if (requirementChild.getEnabled()) {
 					TreeNode newNode3 = new DefaultTreeNode("R-"
-							+ jjRequirement.getId() + "- "
-							+ jjRequirement.getName(), newNode);
+							+ requirementChild.getId() + "- "
+							+ requirementChild.getName(), newNode);
 
 				}
 			}
 		}
+
 		newNode.setExpanded(true);
 
 		return newNode;
-	}
-
-	public void editNode() {
-		persistIndex = 2;
-		// System.out.println(selectedChapterNode.getData().toString());
-		Long idChapter = Long.parseLong(getSplitFromString(selectedChapterNode
-				.getData().toString(), 1));
-		chapter = jJChapterService.findJJChapter(idChapter);
-		parentChapter = chapter.getParent();
-	}
-
-	public void deleteNode() {
-
-		// System.out.println("Delete node");
-
-		long idSelectedChapter = Long.parseLong(getSplitFromString(
-				selectedChapterNode.getData().toString(), 1));
-
-		JJChapter selectedChapter = jJChapterService
-				.findJJChapter(idSelectedChapter);
-
-		JJChapter parentSelectedChapter = selectedChapter.getParent();
-
-		List<TreeNode> childrenlist = selectedChapterNode.getChildren();
-		// System.out.println(childrenlist.size());
-		for (TreeNode childTreeNode : childrenlist) {
-
-			long idChildChapter = Long.parseLong(getSplitFromString(
-					childTreeNode.getData().toString(), 1));
-			JJChapter childChapter = jJChapterService
-					.findJJChapter(idChildChapter);
-			childChapter.setParent(parentSelectedChapter);
-			if (parentSelectedChapter != null) {
-				childChapter.setOrdering(parentSelectedChapter.getChapters()
-						.size());
-			} else {
-				childChapter
-						.setOrdering(jJChapterService
-								.getAllParentJJChapterWithProjectAndCategorySortedByOrder(
-										project, category).size());
-			}
-
-			jJChapterService.updateJJChapter(childChapter);
-
-		}
-
-		selectedChapter.setEnabled(false);
-		jJChapterService.updateJJChapter(selectedChapter);
-
-		initParameter(creationColumnNumber);
-
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"Deleted" + selectedChapterNode.getData(), "Deleted"
-						+ selectedChapterNode.getData());
-		FacesContext.getCurrentInstance().addMessage(null, message);
-
 	}
 
 	public void onDragDrop(TreeDragDropEvent event) {
@@ -762,36 +698,63 @@ public class JJChapterBean {
 
 	public void handleSelectParentChapter() {
 
-//		SortedMap<Integer, Object> elements = new TreeMap<Integer, Object>();
-//		chapter.setParent(parentChapter);
-		if (parentChapter != null) {
-			
-//			List<JJChapter> chapters = jJChapterService
-//					.getAllChildsJJChapterWithParentSortedByOrder(parentChapter);
-//			for (JJChapter chapter : chapters) {
-//				elements.put(chapter.getOrdering(), chapter);
-//			}
-//
-//			for (Object element : elements.entrySet()) {
-//				System.out.println("S element=" + element.getClass().getName());
-//			}
+		SortedMap<Integer, Object> elements = getSortedElements(parentChapter);
 
-			chapter.setOrdering(parentChapter.getChapters().size());
+		chapter.setParent(parentChapter);
+
+		/**
+		 * Attribute order to chapter
+		 */
+		if (elements.isEmpty()) {
+			chapter.setOrdering(0);
 		} else {
-			chapter.setOrdering(chapterList.size());
+			chapter.setOrdering(elements.size());
 		}
 
-		// else {
-		// if (!parentChapter.equals(chapter.getParent())) {
-		//
-		// }
-		// }
+	}
+
+	private SortedMap<Integer, Object> getSortedElements(JJChapter parent) {
+
+		SortedMap<Integer, Object> elements = new TreeMap<Integer, Object>();
+
+		if (parent != null) {
+
+			List<JJChapter> chapters = jJChapterService
+					.getAllChildsJJChapterWithParentSortedByOrder(parent, false);
+
+			for (JJChapter chapter : chapters) {
+				elements.put(chapter.getOrdering(), chapter);
+			}
+
+			List<JJRequirement> requirements = jJRequirementService
+					.getAllChildsJJRequirementWithChapterSortedByOrder(parent,
+							false);
+
+			for (JJRequirement requirement : requirements) {
+				elements.put(requirement.getOrdering(), requirement);
+			}
+
+		} else {
+			List<JJChapter> chapters = jJChapterService
+					.getAllParentsJJChapterSortedByOrder(project, product,
+							category, false);
+
+			for (JJChapter chapter : chapters) {
+				elements.put(chapter.getOrdering(), chapter);
+			}
+		}
+
+		return elements;
 
 	}
 
 	private String getSplitFromString(String s, int index) {
 		String[] temp = s.split("-");
 		return temp[index];
+	}
+
+	public void onNodeSelect(NodeSelectEvent event) {
+		selectedChapterNode = event.getTreeNode();
 	}
 
 	public void closeDialog(CloseEvent event) {
@@ -811,6 +774,8 @@ public class JJChapterBean {
 
 		chapterRoot = null;
 		selectedChapterNode = null;
+
+		// childElements = null;
 
 	}
 

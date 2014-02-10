@@ -39,16 +39,18 @@ public interface JJChapterService {
 	public List<JJChapter> getAllJJChaptersWithProjectAndCategoryAndParentSortedByOrder(
 			JJProject project, JJCategory category, JJChapter parent);
 
-	public List<JJChapter> getAllChildsJJChapterWithParentSortedByOrder(
-			JJChapter parent);
-
-	public SortedMap<Integer, Object> getAllElement(JJChapter parent);
+	// public List<JJChapter> getAllChildsJJChapterWithParentSortedByOrder(
+	// JJChapter parent);
 
 	// New generic
 	public List<JJChapter> getAllParentsJJChapterSortedByOrder(
-			JJProject project, JJProduct product, JJCategory category);
+			JJProject project, JJProduct product, JJCategory category,
+			boolean onlyActif);
 
 	public List<JJChapter> getAllJJChapters(JJProject project,
 			JJProduct product, JJCategory category);
+
+	public List<JJChapter> getAllChildsJJChapterWithParentSortedByOrder(
+			JJChapter parent, boolean onlyActif);
 
 }

@@ -36,4 +36,7 @@ public interface JJRequirementService {
 			String categoryName, JJProject project, JJProduct product,
 			JJVersion version);
 
+	public List<JJRequirement> getAllChildsJJRequirementWithChapterSortedByOrder(
+			JJChapter chapter, boolean onlyActif);
+
 }

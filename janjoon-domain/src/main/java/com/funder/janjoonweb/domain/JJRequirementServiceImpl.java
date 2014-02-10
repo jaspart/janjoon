@@ -1,5 +1,6 @@
 package com.funder.janjoonweb.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -339,5 +340,30 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		return result.getResultList();
 
+	}
+
+	@Override
+	public List<JJRequirement> getAllChildsJJRequirementWithChapterSortedByOrder(
+			JJChapter chapter, boolean onlyActif) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
+				.createQuery(JJRequirement.class);
+
+		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
+
+		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		predicates.add(criteriaBuilder.equal(from.get("chapter"), chapter));
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.orderBy(criteriaBuilder.asc(from.get("ordering")));
+
+		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
+		return result.getResultList();
 	}
 }
