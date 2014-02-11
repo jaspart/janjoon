@@ -342,6 +342,64 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 	}
 
+	// Generic Request
+
+	@Override
+	public List<JJRequirement> getAllJJRequirements(JJCategory category,
+			JJProject project, JJProduct product, JJVersion version,
+			JJChapter chapter, boolean withChapter, boolean onlyActif) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
+				.createQuery(JJRequirement.class);
+
+		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
+
+		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+
+		if (category != null) {
+			predicates
+					.add(criteriaBuilder.equal(from.get("category"), category));
+		}
+
+		if (project != null) {
+			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}
+
+		if (product != null) {
+			predicates.add(criteriaBuilder.equal(from.get("product"), product));
+		}
+
+		if (version != null) {
+			predicates.add(criteriaBuilder.equal(from.get("versioning"),
+					version));
+		}
+
+		if (withChapter) {
+			if (chapter != null) {
+				predicates.add(criteriaBuilder.equal(from.get("chapter"),
+						chapter));
+			} else {
+				predicates.add(criteriaBuilder.isNull(from.get("chapter")));
+			}
+
+		}
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		//select.orderBy(criteriaBuilder.asc(from.get("ordering")));
+
+		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
+		
+		System.out.println("result.getResultList().size() "+result.getResultList().size());
+		return result.getResultList();
+	}
+
 	@Override
 	public List<JJRequirement> getAllChildsJJRequirementWithChapterSortedByOrder(
 			JJChapter chapter, boolean onlyActif) {

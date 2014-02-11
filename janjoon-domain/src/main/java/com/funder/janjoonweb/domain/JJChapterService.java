@@ -1,7 +1,6 @@
 package com.funder.janjoonweb.domain;
 
 import java.util.List;
-import java.util.SortedMap;
 
 import org.springframework.roo.addon.layers.service.RooService;
 

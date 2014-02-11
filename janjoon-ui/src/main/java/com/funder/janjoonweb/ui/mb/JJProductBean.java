@@ -8,7 +8,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -310,7 +309,7 @@ public class JJProductBean {
 		jJVersionBean.setVersionAdmin(null);
 		jJVersionBean.setVersionListTable(null);
 		jJVersionBean.setVersionDataModel(null);
-		
+
 	}
 
 	public void handleSelectProductManager() {

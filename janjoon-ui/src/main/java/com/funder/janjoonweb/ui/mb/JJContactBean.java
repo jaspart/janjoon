@@ -11,7 +11,6 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.funder.janjoonweb.domain.JJContact;
-import com.funder.janjoonweb.domain.JJPermission;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable

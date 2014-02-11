@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -20,6 +22,7 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.funder.janjoonweb.domain.JJCategory;
+import com.funder.janjoonweb.domain.JJChapter;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
@@ -770,33 +773,32 @@ public class JJRequirementBean {
 	}
 
 	public void createJJRequirement(int number) {
-
+		selectedChapter = null;
 		myJJRequirement = new JJRequirement();
 		myJJRequirement.setCreationDate(new Date());
 		myJJRequirement.setEnabled(true);
 		myJJRequirement.setIsCompleted(false);
 
 		this.creationColumnNumber = number;
-		String category = null;
+		String categoryName = null;
 		switch (number) {
 		case 1:
-			category = "BUSINESS";
+			categoryName = "BUSINESS";
 			break;
 		case 2:
-			category = "FUNCTIONAL";
+			categoryName = "FUNCTIONAL";
 			break;
 		case 3:
-			category = "TECHNICAL";
+			categoryName = "TECHNICAL";
 			break;
 
 		default:
 			break;
 		}
 
-		JJCategory jjCategory = jJCategoryService
-				.getJJCategoryWithName(category);
+		category = jJCategoryService.getJJCategoryWithName(categoryName);
 
-		myJJRequirement.setCategory(jjCategory);
+		myJJRequirement.setCategory(category);
 
 		JJStatus jjStatus = jJStatusService.getJJStatusWithName("NEW");
 
@@ -812,6 +814,7 @@ public class JJRequirementBean {
 	}
 
 	public void editJJRequirement(int number) {
+
 		this.editionColumnNumber = number;
 		JJRequirement req = new JJRequirement();
 		switch (number) {
@@ -830,11 +833,15 @@ public class JJRequirementBean {
 			break;
 		}
 
+		category = req.getCategory();
+
+		selectedChapterEdit = req.getChapter();
+
 		myEditedJJRequirement = new JJRequirement();
 		myEditedJJRequirement.setCreationDate(req.getCreationDate());
 		myEditedJJRequirement.setUpdatedDate(new Date());
 		myEditedJJRequirement.setEnabled(true);
-		myEditedJJRequirement.setCategory(req.getCategory());
+		myEditedJJRequirement.setCategory(category);
 
 		JJStatus jjStatus = jJStatusService.getJJStatusWithName("MODIFIED");
 
@@ -842,6 +849,19 @@ public class JJRequirementBean {
 		myEditedJJRequirement.setNumero(req.getNumero());
 		myEditedJJRequirement.setProject(req.getProject());
 		myEditedJJRequirement.setChapter(req.getChapter());
+
+		SortedMap<Integer, Object> elements = getSortedElements(
+				selectedChapterEdit, false);
+
+		/**
+		 * Attribute order to chapter
+		 */
+		if (elements.isEmpty()) {
+			myEditedJJRequirement.setOrdering(0);
+		} else {
+			myEditedJJRequirement.setOrdering(elements.size());
+		}
+
 		myEditedJJRequirement.setProduct(req.getProduct());
 		myEditedJJRequirement.setDescription(req.getDescription());
 		myEditedJJRequirement.setName(req.getName());
@@ -1344,19 +1364,15 @@ public class JJRequirementBean {
 	public void onRowSelect(SelectEvent event) {
 		JJRequirement req = (JJRequirement) event.getObject();
 
-//		FacesMessage msg = new FacesMessage("JJRequirement Selected "
-//				+ req.getName(), req.getName());
-//		FacesContext.getCurrentInstance().addMessage(null, msg);
+		// FacesMessage msg = new FacesMessage("JJRequirement Selected "
+		// + req.getName(), req.getName());
+		// FacesContext.getCurrentInstance().addMessage(null, msg);
 
 		if (req.getStatus().getName().equalsIgnoreCase("RELEASE"))
 			disabled = true;
 		else
 			disabled = false;
 	}
-	
-	
-	
-	
 
 	public void updateMessageRelease(int number) {
 		this.releaseColumnNumber = number;
@@ -1424,9 +1440,128 @@ public class JJRequirementBean {
 		}
 
 	}
-	
-	
-	
+
+	public void handleSelectChapter() {
+
+		SortedMap<Integer, Object> elements = getSortedElements(
+				selectedChapter, false);
+
+		/**
+		 * Attribute order to chapter
+		 */
+		if (elements.isEmpty()) {
+			myJJRequirement.setOrdering(0);
+		} else {
+			myJJRequirement.setOrdering(elements.size());
+		}
+
+		System.out.println("myJJRequirement.getOrdering() "
+				+ myJJRequirement.getOrdering());
+		myJJRequirement.setChapter(selectedChapter);
+	}
+
+	public void handleSelectChapterEdit() {
+
+		SortedMap<Integer, Object> elements = getSortedElements(
+				selectedChapter, false);
+
+		/**
+		 * Attribute order to chapter
+		 */
+		if (elements.isEmpty()) {
+			myEditedJJRequirement.setOrdering(0);
+		} else {
+			myEditedJJRequirement.setOrdering(elements.size());
+		}
+
+		System.out.println("myEditedJJRequirement.getOrdering() "
+				+ myEditedJJRequirement.getOrdering());
+		myEditedJJRequirement.setChapter(selectedChapterEdit);
+	}
+
+	private JJCategory category;
+
+	private JJChapter selectedChapter;
+
+	public JJChapter getSelectedChapter() {
+		return selectedChapter;
+	}
+
+	public void setSelectedChapter(JJChapter selectedChapter) {
+		this.selectedChapter = selectedChapter;
+	}
+
+	private List<JJChapter> chapterList;
+
+	public List<JJChapter> getChapterList() {
+		chapterList = jJChapterService.getAllJJChapters(project, product,
+				category);
+		return chapterList;
+	}
+
+	public void setChapterList(List<JJChapter> chapterList) {
+		this.chapterList = chapterList;
+	}
+
+	private JJChapter selectedChapterEdit;
+
+	public JJChapter getSelectedChapterEdit() {
+		return selectedChapterEdit;
+	}
+
+	public void setSelectedChapterEdit(JJChapter selectedChapterEdit) {
+		this.selectedChapterEdit = selectedChapterEdit;
+	}
+
+	private List<JJChapter> chapterListEdit;
+
+	public List<JJChapter> getChapterListEdit() {
+		chapterListEdit = jJChapterService.getAllJJChapters(project, product,
+				category);
+		return chapterListEdit;
+	}
+
+	public void setChapterListEdit(List<JJChapter> chapterListEdit) {
+		this.chapterListEdit = chapterListEdit;
+	}
+
+	public SortedMap<Integer, Object> getSortedElements(JJChapter parent,
+			boolean onlyActif) {
+
+		SortedMap<Integer, Object> elements = new TreeMap<Integer, Object>();
+
+		if (parent != null) {
+
+			List<JJChapter> chapters = jJChapterService
+					.getAllChildsJJChapterWithParentSortedByOrder(parent,
+							onlyActif);
+
+			for (JJChapter chapter : chapters) {
+				elements.put(chapter.getOrdering(), chapter);
+			}
+
+			List<JJRequirement> requirements = jJRequirementService
+					.getAllChildsJJRequirementWithChapterSortedByOrder(parent,
+							onlyActif);
+
+			for (JJRequirement requirement : requirements) {
+				elements.put(requirement.getOrdering(), requirement);
+			}
+
+		} else {
+			List<JJChapter> chapters = jJChapterService
+					.getAllParentsJJChapterSortedByOrder(project, product,
+							category, onlyActif);
+
+			for (JJChapter chapter : chapters) {
+				elements.put(chapter.getOrdering(), chapter);
+			}
+		}
+
+		return elements;
+
+	}
+
 	public void closeDialog(CloseEvent event) {
 		myJJRequirement = null;
 		myEditedJJRequirement = null;

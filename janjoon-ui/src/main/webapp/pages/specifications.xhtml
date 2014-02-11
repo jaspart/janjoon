@@ -325,19 +325,20 @@
 
 						<h:panelGrid>
 							<h:panelGrid>
-								<p:autoComplete id="chapterEdit"
-									value="#{jJRequirementBean.myEditedJJRequirement.chapter}"
-									completeMethod="#{jJRequirementBean.completeChapter}"
-									var="chapter" itemLabel="#{chapter.name}"
-									itemValue="#{chapter}" multiple="false" dropdown="true"
-									required="false">
+								<p:selectOneMenu id="chapterEdit"
+									value="#{jJRequirementBean.selectedChapterEdit}"
+									panelStyle="width:150px" effect="fade" style="width:160px"
+									filter="true" filterMatchMode="startsWith">
 									<f:converter
 										converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
-									<p:column style="text-align:center">  
-           							 #{chapter.name}<!-- - #{chapter.creationDate} -->
-									</p:column>
-								</p:autoComplete>
-								<p:watermark for="chapterEdit" value="Chapter" />
+									<f:selectItem
+										itemLabel="#{jJRequirementBean.selectedChapterEdit.name}"
+										itemValue="#{jJRequirementBean.selectedChapterEdit}" />
+									<f:selectItems value="#{jJRequirementBean.chapterListEdit}"
+										var="c" itemLabel="#{c.name}" itemValue="#{c}" />
+									<p:ajax process="@this" partialSubmit="true"
+										listener="#{jJRequirementBean.handleSelectChapterEdit()}" />
+								</p:selectOneMenu>
 							</h:panelGrid>
 
 							<p:autoComplete id="productEdit"
@@ -583,16 +584,21 @@
 					</p:row>
 					<p:row>
 						<p:column>
-							<p:autoComplete id="chapter"
-								value="#{jJRequirementBean.myJJRequirement.chapter}"
-								completeMethod="#{jJRequirementBean.completeChapter}"
-								var="chapter" itemLabel="#{chapter.name}" itemValue="#{chapter}"
-								multiple="false" dropdown="true" required="false">
+							<h:outputText for="chapter" value="Chapter:" />
+							<p:selectOneMenu id="chapter"
+								value="#{jJRequirementBean.selectedChapter}"
+								panelStyle="width:150px" effect="fade" style="width:160px"
+								filter="true" filterMatchMode="startsWith">
 								<f:converter
 									converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
-								<!--p:column style="text-align:center">#{chapter.name}</p:column-->
-							</p:autoComplete>
-							<p:watermark for="chapter" value="Chapter" />
+								<f:selectItem
+									itemLabel="#{jJRequirementBean.selectedChapter.name}"
+									itemValue="#{jJRequirementBean.selectedChapter}" />
+								<f:selectItems value="#{jJRequirementBean.chapterList}" var="c"
+									itemLabel="#{c.name}" itemValue="#{c}" />
+								<p:ajax process="@this" partialSubmit="true"
+									listener="#{jJRequirementBean.handleSelectChapter()}" />
+							</p:selectOneMenu>
 						</p:column>
 					</p:row>
 					<p:row>
@@ -641,7 +647,6 @@
 				</f:facet>
 			</p:dialog>
 		</h:form>
-
 		<p:dialog id="chapterDialog" header="Chapter"
 			widgetVar="chapterDialogWidget" maximizable="false"
 			minimizable="false" dynamic="true" resizable="false">
@@ -650,7 +655,7 @@
 			<p:outputPanel id="chapterDialogPanel">
 				<h:form id="chapterDialogForm">
 					<p:growl id="msg" />
-					<p:panelGrid style="margin-top:20px">
+					<p:panelGrid style="margin-top:10px">
 						<p:row>
 							<p:column colspan="2">
 								<p:inputText id="name" value="#{jJChapterBean.chapter.name}"
@@ -681,11 +686,10 @@
 							<p:column colspan="2">
 								<h:outputText value="Description : *" />
 								<p:editor id="description" widgetVar="descriptionWidget"
-									style="width:400px"
+									style="width:388px"
 									value="#{jJChapterBean.chapter.description}" required="true"
 									requiredMessage="Chapter Description is a required value">
 								</p:editor>
-								<!-- 								<p:message for="description" id="msgDescription" /> -->
 							</p:column>
 							<p:column colspan="2">
 								<p:contextMenu for="chapterTreeSingle">
@@ -721,14 +725,40 @@
 							</p:row>
 						</f:facet>
 					</p:panelGrid>
-					<p:panelGrid style="margin-top:20px">
-						<f:facet name="footer">
-							<p:row>
-								<p:column colspan="3">
-								
-								</p:column>
-							</p:row>
-						</f:facet>
+					<p:panelGrid>
+						<p:row>
+							<p:column colspan="3">
+								<p:tree id="leftTreeIncorporated"
+									value="#{jJChapterBean.leftRoot}" var="nodeLeft"
+									selectionMode="single"
+									selection="#{jJChapterBean.selectedLeftNode}" draggable="true"
+									droppable="true" dragdropScope="demo">
+									<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
+										update=":chapterDialogForm" />
+									<p:treeNode>
+										<h:outputText value="#{nodeLeft}" />
+									</p:treeNode>
+								</p:tree>
+							</p:column>
+							<p:column colspan="3">
+								<p:graphicImage alt="Transfer" library="images"
+									name="transfer.png" />
+							</p:column>
+							<p:column colspan="3">
+								<p:tree id="RightTreeIncorporated"
+									value="#{jJChapterBean.rightRoot}" var="nodeRight"
+									selectionMode="single"
+									selection="#{jJChapterBean.selectedRightNode}" draggable="true"
+									droppable="true" dragdropScope="demo">
+									<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
+										update=":chapterDialogForm" />
+									<p:treeNode>
+										<h:outputText value="#{nodeRight}" />
+									</p:treeNode>
+								</p:tree>
+
+							</p:column>
+						</p:row>
 					</p:panelGrid>
 
 				</h:form>
