@@ -239,7 +239,7 @@ public class JJChapterBean {
 		SortedMap<Integer, Object> elements = getSortedElements(
 				parentSelectedChapter, false);
 
-		int increment = elements.size();
+		int increment = elements.lastKey() + 1;
 
 		elements = getSortedElements(selectedChapter, false);
 
@@ -588,7 +588,7 @@ public class JJChapterBean {
 		if (elements.isEmpty()) {
 			chapter.setOrdering(0);
 		} else {
-			chapter.setOrdering(elements.size());
+			chapter.setOrdering(elements.lastKey() + 1);
 		}
 
 	}
@@ -598,14 +598,248 @@ public class JJChapterBean {
 	}
 
 	public void onDragDrop(TreeDragDropEvent event) {
-		TreeNode dragNode = event.getDragNode();
-		TreeNode dropNode = event.getDropNode();
+
+		String dragNodeData = event.getDragNode().getData().toString();
+		String dropNodeData = event.getDropNode().getData().toString();
+
 		int dropIndex = event.getDropIndex();
 
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"Dragged " + dragNode.getData(), "Dropped on "
-						+ dropNode.getData() + " at " + dropIndex);
+		FacesMessage message = null;
+
+		System.out.println("dragNodeData " + dragNodeData);
+		System.out.println("dropNodeData " + dropNodeData);
+
+		if (dragNodeData.startsWith("R-")) {
+
+			long requirementID = Long.parseLong(getSplitFromString(
+					dragNodeData, 1));
+
+			JJRequirement REQUIREMENT = jJRequirementService
+					.findJJRequirement(requirementID);
+
+			JJChapter requirementCHAPTER = REQUIREMENT.getChapter();
+
+			if (dropNodeData.startsWith("C-")) {
+
+				if (requirementCHAPTER != null) {
+					int requirementOrder = REQUIREMENT.getOrdering();
+
+					SortedMap<Integer, Object> elements = getSortedElements(
+							requirementCHAPTER, false);
+
+					SortedMap<Integer, Object> subElements = elements
+							.tailMap(requirementOrder);
+
+					REQUIREMENT.setChapter(null);
+					REQUIREMENT.setOrdering(null);
+					REQUIREMENT.setUpdatedDate(new Date());
+
+					jJRequirementService.updateJJRequirement(REQUIREMENT);
+
+					subElements.remove(requirementOrder);
+
+					for (Map.Entry<Integer, Object> entry : subElements
+							.entrySet()) {
+
+						String className = entry.getValue().getClass()
+								.getSimpleName();
+						if (className.equalsIgnoreCase("JJChapter")) {
+
+							JJChapter chapter = (JJChapter) entry.getValue();
+
+							int lastOrder = chapter.getOrdering();
+							chapter.setOrdering(lastOrder - 1);
+							chapter.setUpdatedDate(new Date());
+
+							jJChapterService.updateJJChapter(chapter);
+
+						} else if (className.equalsIgnoreCase("JJRequirement")) {
+
+							JJRequirement requirement = (JJRequirement) entry
+									.getValue();
+
+							int lastOrder = requirement.getOrdering();
+							requirement.setOrdering(lastOrder - 1);
+							requirement.setUpdatedDate(new Date());
+
+							jJRequirementService
+									.updateJJRequirement(requirement);
+						}
+
+					}
+
+				}
+
+				long chapterID = Long.parseLong(getSplitFromString(
+						dropNodeData, 1));
+				JJChapter CHAPTER = jJChapterService.findJJChapter(chapterID);
+
+				SortedMap<Integer, Object> elements = getSortedElements(
+						CHAPTER, false);
+
+				if (elements.isEmpty()) {
+
+					REQUIREMENT.setChapter(CHAPTER);
+					REQUIREMENT.setOrdering(0);
+					REQUIREMENT.setUpdatedDate(new Date());
+
+					jJRequirementService.updateJJRequirement(REQUIREMENT);
+
+				} else {
+
+					if (dropIndex < elements.size()) {
+						int i = 0;
+						for (Map.Entry<Integer, Object> entry : elements
+								.entrySet()) {
+							if (i == dropIndex) {
+								i = entry.getKey();
+								break;
+							} else {
+								i++;
+							}
+
+						}
+
+						SortedMap<Integer, Object> subElements = elements
+								.tailMap(i);
+						for (Map.Entry<Integer, Object> entry : subElements
+								.entrySet()) {
+
+							String className = entry.getValue().getClass()
+									.getSimpleName();
+							if (className.equalsIgnoreCase("JJChapter")) {
+
+								JJChapter chapter = (JJChapter) entry
+										.getValue();
+
+								int lastOrder = chapter.getOrdering();
+								chapter.setOrdering(lastOrder + 1);
+								chapter.setUpdatedDate(new Date());
+
+								jJChapterService.updateJJChapter(chapter);
+
+							} else if (className
+									.equalsIgnoreCase("JJRequirement")) {
+
+								JJRequirement requirement = (JJRequirement) entry
+										.getValue();
+
+								int lastOrder = requirement.getOrdering();
+								requirement.setOrdering(lastOrder + 1);
+								requirement.setUpdatedDate(new Date());
+
+								jJRequirementService
+										.updateJJRequirement(requirement);
+							}
+
+						}
+
+						REQUIREMENT.setChapter(CHAPTER);
+						REQUIREMENT.setOrdering(i);
+						REQUIREMENT.setUpdatedDate(new Date());
+
+						jJRequirementService.updateJJRequirement(REQUIREMENT);
+
+					} else {
+						REQUIREMENT.setChapter(CHAPTER);
+						REQUIREMENT.setOrdering(elements.lastKey());
+						REQUIREMENT.setUpdatedDate(new Date());
+
+						jJRequirementService.updateJJRequirement(REQUIREMENT);
+					}
+				}
+				message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Requirement: " + dragNodeData
+								+ "\n Dropped on Chapter: " + dropNodeData
+								+ " at (" + dropIndex + ")", null);
+
+			} else if (dropNodeData.startsWith("leftRoot")) {
+
+				if (requirementCHAPTER == null) {
+					message = new FacesMessage(FacesMessage.SEVERITY_WARN,
+							"Requirement: " + dragNodeData + "\n Dropped on: "
+									+ dropNodeData + " at (" + dropIndex + ")"
+									+ "\n No changes found", null);
+
+				} else {
+
+					int requirementOrder = REQUIREMENT.getOrdering();
+
+					SortedMap<Integer, Object> elements = getSortedElements(
+							requirementCHAPTER, false);
+
+					SortedMap<Integer, Object> subElements = elements
+							.tailMap(requirementOrder);
+
+					REQUIREMENT.setChapter(null);
+					REQUIREMENT.setOrdering(null);
+					REQUIREMENT.setUpdatedDate(new Date());
+
+					jJRequirementService.updateJJRequirement(REQUIREMENT);
+
+					subElements.remove(requirementOrder);
+
+					for (Map.Entry<Integer, Object> entry : subElements
+							.entrySet()) {
+						System.out.println(entry.getKey() + " ==> "
+								+ entry.getValue().getClass().getSimpleName());
+						String className = entry.getValue().getClass()
+								.getSimpleName();
+						if (className.equalsIgnoreCase("JJChapter")) {
+
+							JJChapter chapter = (JJChapter) entry.getValue();
+
+							int lastOrder = chapter.getOrdering();
+							chapter.setOrdering(lastOrder - 1);
+							chapter.setUpdatedDate(new Date());
+
+							jJChapterService.updateJJChapter(chapter);
+
+						} else if (className.equalsIgnoreCase("JJRequirement")) {
+
+							JJRequirement requirement = (JJRequirement) entry
+									.getValue();
+
+							int lastOrder = requirement.getOrdering();
+							requirement.setOrdering(lastOrder - 1);
+							requirement.setUpdatedDate(new Date());
+
+							jJRequirementService
+									.updateJJRequirement(requirement);
+						}
+
+					}
+
+					message = new FacesMessage(FacesMessage.SEVERITY_WARN,
+							"Requirement: " + dragNodeData
+									+ " is detached from chapter",
+							"\n Dropped on " + dropNodeData + " at ("
+									+ dropIndex + ")");
+
+				}
+
+			} else if (dropNodeData.startsWith("R-")
+					|| dropNodeData.startsWith("rightRoot")) {
+				message = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR,
+						"Requirement: "
+								+ dragNodeData
+								+ "\nDropped on: "
+								+ dropNodeData
+								+ " at ("
+								+ dropIndex
+								+ ")"
+								+ "\nThis action is not allowed and does not have effects",
+						null);
+
+			}
+
+		}
+
 		FacesContext.getCurrentInstance().addMessage(null, message);
+		newChapter();
+		chapterTreeBean();
+		transferTreeBean();
 	}
 
 	public void closeDialog(CloseEvent event) {

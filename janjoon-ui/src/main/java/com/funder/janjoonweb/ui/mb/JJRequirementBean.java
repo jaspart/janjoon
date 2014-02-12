@@ -859,7 +859,7 @@ public class JJRequirementBean {
 		if (elements.isEmpty()) {
 			myEditedJJRequirement.setOrdering(0);
 		} else {
-			myEditedJJRequirement.setOrdering(elements.size());
+			myEditedJJRequirement.setOrdering(elements.lastKey() + 1);
 		}
 
 		myEditedJJRequirement.setProduct(req.getProduct());
@@ -1452,7 +1452,7 @@ public class JJRequirementBean {
 		if (elements.isEmpty()) {
 			myJJRequirement.setOrdering(0);
 		} else {
-			myJJRequirement.setOrdering(elements.size());
+			myJJRequirement.setOrdering(elements.lastKey() + 1);
 		}
 
 		System.out.println("myJJRequirement.getOrdering() "
@@ -1471,7 +1471,7 @@ public class JJRequirementBean {
 		if (elements.isEmpty()) {
 			myEditedJJRequirement.setOrdering(0);
 		} else {
-			myEditedJJRequirement.setOrdering(elements.size());
+			myEditedJJRequirement.setOrdering(elements.lastKey() + 1);
 		}
 
 		System.out.println("myEditedJJRequirement.getOrdering() "

@@ -129,9 +129,9 @@
 												<p:menu overlay="true" trigger="dynaButton" my="left top"
 													at="left bottom">
 													<p:menuitem>
-														<h:commandLink>
+														<h:commandLink id="link" >
 															<p:graphicImage value="/resources/images/pdf.png" />
-															<h:outputLabel value="export in pdf" />
+															<h:outputLabel for="link" value="export in pdf" />
 															<p:dataExporter type="pdf" target="leftTable"
 																fileName="requirements"
 																preProcessor="#{jJChapterBean.preProcessPDF}" />
@@ -218,7 +218,7 @@
 							</f:facet>
 
 							<p:column headerText="Requirement">
-								<h:outputText value="#{Requirement['name']}" />
+								<h:outputText value="#{Requirement.name}" />
 							</p:column>
 
 							<p:column headerText="Product">
@@ -289,7 +289,7 @@
 							</f:facet>
 
 							<p:column headerText="Requirement">
-								<h:outputText value="#{Requirement['name']}" />
+								<h:outputText value="#{Requirement.name}" />
 							</p:column>
 
 							<p:column headerText="Product">
