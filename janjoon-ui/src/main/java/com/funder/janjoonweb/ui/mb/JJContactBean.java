@@ -5,8 +5,10 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.model.ListDataModel;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.model.SelectableDataModel;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
@@ -18,7 +20,9 @@ import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 public class JJContactBean {
 
 	private JJContact contactAdmin;
-	private List<JJContact> contactListTable;
+	private ContactDataModel contactDataModel;
+
+	private JJContact selectedContact;
 
 	private String message;
 	private boolean disabled;
@@ -31,13 +35,22 @@ public class JJContactBean {
 		this.contactAdmin = contactAdmin;
 	}
 
-	public List<JJContact> getContactListTable() {
-		contactListTable = jJContactService.getAllJJContact();
-		return contactListTable;
+	public ContactDataModel getContactDataModel() {
+		contactDataModel = new ContactDataModel(
+				jJContactService.getAllJJContact());
+		return contactDataModel;
 	}
 
-	public void setContactListTable(List<JJContact> contactListTable) {
-		this.contactListTable = contactListTable;
+	public void setContactDataModel(ContactDataModel contactDataModel) {
+		this.contactDataModel = contactDataModel;
+	}
+
+	public JJContact getSelectedContact() {
+		return selectedContact;
+	}
+
+	public void setSelectedContact(JJContact selectedContact) {
+		this.selectedContact = selectedContact;
 	}
 
 	public String getMessage() {
@@ -63,12 +76,23 @@ public class JJContactBean {
 		contactAdmin = new JJContact();
 		contactAdmin.setEnabled(true);
 		contactAdmin.setCreationDate(new Date());
+		selectedContact = null;
 		jJPermissionBean.setContact(contactAdmin);
 		jJPermissionBean.newPermission();
 	}
 
 	public void editContact() {
 		message = "Edit Contact";
+	}
+
+	public void deleteContact() {
+		// message = "Edit Contact";
+
+		if (selectedContact != null) {
+			selectedContact.setEnabled(false);
+			jJContactService.updateJJContact(selectedContact);
+
+		}
 	}
 
 	public void save(JJPermissionBean jJPermissionBean) {
@@ -116,6 +140,7 @@ public class JJContactBean {
 	public void closeDialog(JJPermissionBean jJPermissionBean) {
 		System.out.println("close dialog");
 		contactAdmin = null;
+		selectedContact = null;
 		disabled = false;
 		jJPermissionBean.setPermissionAdmin(null);
 		jJPermissionBean.setPermisssionListTable(null);
@@ -128,4 +153,36 @@ public class JJContactBean {
 		jJPermissionBean.setContact(null);
 
 	}
+
+	private class ContactDataModel extends ListDataModel<JJContact> implements
+			SelectableDataModel<JJContact> {
+
+		public ContactDataModel() {
+		}
+
+		public ContactDataModel(List<JJContact> data) {
+			super(data);
+		}
+
+		@Override
+		public JJContact getRowData(String rowKey) {
+			// In a real app, a more efficient way like a query by rowKey should
+			// be implemented to deal with huge data
+
+			List<JJContact> contacts = (List<JJContact>) getWrappedData();
+
+			for (JJContact contact : contacts) {
+				if (contact.getName().equals(rowKey))
+					return contact;
+			}
+
+			return null;
+		}
+
+		@Override
+		public Object getRowKey(JJContact contact) {
+			return contact.getName();
+		}
+	}
+
 }

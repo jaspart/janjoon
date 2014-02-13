@@ -9,9 +9,14 @@
 	<p:panel id="ContactPanel" style="width:600px" columns="1"
 		cellpadding="6">
 
+		<p:contextMenu for="ContactDataTable">
+			<p:menuitem value="Delete" update="ContactDataTable" icon="ui-icon-close"
+				actionListener="#{jJContactBean.deleteContact}" />
+		</p:contextMenu>
+
 		<p:dataTable id="ContactDataTable" var="contact"
-			value="#{jJContactBean.contactListTable}" paginator="true" rows="10"
-			style="width:550px"
+			value="#{jJContactBean.contactDataModel}" paginator="true" rows="10"
+			style="width:550px" selectionMode="single" selection="#{jJContactBean.selectedContact}"
 			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 			rowsPerPageTemplate="5,10,15">
 			<f:facet name="header">User List</f:facet>
