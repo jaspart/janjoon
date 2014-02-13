@@ -129,16 +129,6 @@
 			</p:panelGrid>
 		</h:form>
 	</p:outputPanel>
-	<f:facet name="footer">
-		<p:row>
-			<p:column>
-				<p:commandButton value="Close"
-					oncomplete="productDialogWidget.hide()"
-					action="#{jJProductBean.closeDialog(jJVersionBean)}"
-					update=":tabview:ProductForm" />
-			</p:column>
-		</p:row>
-	</f:facet>
 </p:dialog>
 
 </html>

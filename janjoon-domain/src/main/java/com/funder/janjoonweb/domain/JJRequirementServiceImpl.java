@@ -392,11 +392,10 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		}
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
-		//select.orderBy(criteriaBuilder.asc(from.get("ordering")));
+		// select.orderBy(criteriaBuilder.asc(from.get("ordering")));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
-		
-		System.out.println("result.getResultList().size() "+result.getResultList().size());
+
 		return result.getResultList();
 	}
 

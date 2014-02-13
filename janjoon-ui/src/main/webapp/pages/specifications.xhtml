@@ -129,7 +129,7 @@
 												<p:menu overlay="true" trigger="dynaButton" my="left top"
 													at="left bottom">
 													<p:menuitem>
-														<h:commandLink id="link" >
+														<h:commandLink id="link">
 															<p:graphicImage value="/resources/images/pdf.png" />
 															<h:outputLabel for="link" value="export in pdf" />
 															<p:dataExporter type="pdf" target="leftTable"
@@ -732,7 +732,7 @@
 									value="#{jJChapterBean.leftRoot}" var="nodeLeft"
 									selectionMode="single"
 									selection="#{jJChapterBean.selectedLeftNode}" draggable="true"
-									droppable="true" dragdropScope="demo">
+									droppable="true" dragdropScope="demo" cache="false">
 									<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
 										update=":chapterDialogForm" />
 									<p:treeNode>
@@ -749,7 +749,7 @@
 									value="#{jJChapterBean.rightRoot}" var="nodeRight"
 									selectionMode="single"
 									selection="#{jJChapterBean.selectedRightNode}" draggable="true"
-									droppable="true" dragdropScope="demo">
+									droppable="true" dragdropScope="demo" cache="false">
 									<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
 										update=":chapterDialogForm" />
 									<p:treeNode>
@@ -763,15 +763,6 @@
 
 				</h:form>
 			</p:outputPanel>
-			<f:facet name="footer">
-				<p:row>
-					<p:column>
-						<p:commandButton value="Close"
-							oncomplete="chapterDialogWidget.hide()"
-							action="#{jJChapterBean.closeDialog()}" update=":dataForm" />
-					</p:column>
-				</p:row>
-			</f:facet>
 		</p:dialog>
 
 	</ui:define>

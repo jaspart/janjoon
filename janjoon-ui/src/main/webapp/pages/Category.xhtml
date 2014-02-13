@@ -74,15 +74,5 @@
 			</p:panelGrid>
 		</h:form>
 	</p:outputPanel>
-	<f:facet name="footer">
-		<p:row>
-			<p:column>
-				<p:commandButton value="Close"
-					oncomplete="categoryDialogWidget.hide()"
-					action="#{jJCategoryBean.closeDialog()}"
-					update=":tabview:CategoryForm" />
-			</p:column>
-		</p:row>
-	</f:facet>
 </p:dialog>
 </html>
