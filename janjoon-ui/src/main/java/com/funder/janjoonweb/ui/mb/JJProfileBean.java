@@ -56,6 +56,17 @@ public class JJProfileBean {
 		jJRightBean.newRight();
 
 	}
+	
+	public void deleteProfile() {
+		
+		if (profileAdmin != null) {
+			System.out.println(profileAdmin.getName());
+
+//			profileAdmin.setEnabled(false);
+//			jJProfileService.updateJJProfile(profileAdmin);
+
+		}
+	}
 
 	public void save(JJRightBean jJRightBean) {
 		System.out.println("SAVING Profile...");

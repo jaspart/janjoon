@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+	<h:form id="profileForm">
+		<p:panel id="profilePanel" style="width:600px" columns="1"
+			cellpadding="6">
+			<p:dataTable id="profileDataTable" var="profile"
+				value="#{jJProfileBean.profileListTable}" paginator="true" rows="15"
+				style="width:550px" rowKey="#{profile.id}">>
+				<f:facet name="header">Profile List</f:facet>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Internal Name" />
+					</f:facet>
+					<h:outputText value="#{profile.name}" />
+				</p:column>
+				<p:column styleClass="action-column">
+					<f:facet name="header">
+						<h:outputText value="Actions" />
+					</f:facet>
+					<p:commandButton id="editButton" icon="ui-icon-pencil">
+						<f:setPropertyActionListener value="#{profile}"
+							target="#{jJProfileBean.profileAdmin}" />
+					</p:commandButton>
+					<p:tooltip for="editButton" value="#{messages.label_edit}"
+						showEffect="fade" hideEffect="fade" />
+					<p:commandButton id="deleteButton" icon="ui-icon-trash"
+						oncomplete="profileDeleteDialogWidget.show()"
+						title="#{messages.label_delete}">
+						<f:setPropertyActionListener value="#{profile}"
+							target="#{jJProfileBean.profileAdmin}" />
+					</p:commandButton>
+					<p:tooltip for="deleteButton" value="#{messages.label_delete}"
+						showEffect="fade" hideEffect="fade" />
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton value="New" id="newProfile"
+						actionListener="#{jJProfileBean.newProfile(jJRightBean)}"
+						update=":tabview:profileDialog"
+						oncomplete="profileDialogWidget.show()" icon="ui-icon-circle-plus" />
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+	<p:dialog id="profileDialog" header="#{jJProfileBean.message}"
+		modal="true" widgetVar="profileDialogWidget" dynamic="true"
+		showEffect="fade" hideEffect="explode">
+		<p:ajax event="close" update=":tabview:profileForm"
+			listener="#{jJProfileBean.closeDialog(jJRightBean)}" />
+		<p:outputPanel id="profileDialogPanel">
+			<h:form id="profileDialogForm">
+				<p:growl id="msg" />
+				<p:panelGrid columns="1" cellpadding="6">
+					<p:panel columns="3" cellpadding="6">
+						<p:inputText id="name" value="#{jJProfileBean.profileAdmin.name}"
+							label="Name" required="true" widgetVar="nameWidget">
+							<f:validateLength maximum="25" />
+						</p:inputText>
+						<p:message for="name" id="msgName" />
+						<p:watermark for="name" value="Name *" />
+					</p:panel>
+					<p:panel id="rightPanel" columns="2" cellpadding="6">
+						<p:panel columns="2" cellpadding="6">
+							<h:outputText value="Object: *" />
+							<p:selectOneMenu id="object" value="#{jJRightBean.object}"
+								panelStyle="width:150px" effect="fade" style="width:160px"
+								filter="true" filterMatchMode="startsWith"
+								widgetVar="objectWidget" label="Right Object" required="true">
+								<p:ajax process="@this" partialSubmit="true"
+									listener="#{jJRightBean.handleSelectObject()}" />
+								<f:selectItem itemLabel="#{jJRightBean.object}"
+									itemValue="#{jJRightBean.object}" />
+								<f:selectItems value="#{jJRightBean.objectList}" var="p"
+									itemLabel="#{p}" itemValue="#{p}" />
+							</p:selectOneMenu>
+						</p:panel>
+						<p:panel columns="2" cellpadding="6">
+							<h:outputText value="Category: *" />
+							<p:selectOneMenu id="categories" value="#{jJRightBean.category}"
+								panelStyle="width:150px" effect="fade" style="width:160px"
+								filter="true" filterMatchMode="startsWith">
+								<p:ajax process="@this" partialSubmit="true"
+									listener="#{jJRightBean.handleSelectCategory()}" />
+								<f:converter
+									converterId="com.funder.janjoonweb.ui.mb.converter.JJCategoryConverter" />
+								<f:selectItem itemLabel="#{jJRightBean.category.name}"
+									itemValue="#{jJRightBean.category}" />
+								<f:selectItems value="#{jJRightBean.categoryList}" var="p"
+									itemLabel="#{p.name}" itemValue="#{p}" />
+							</p:selectOneMenu>
+						</p:panel>
+						<p:panel columns="7" cellpadding="6">
+							<h:outputText value="R " />
+							<p:selectBooleanCheckbox value="#{jJRightBean.rightAdmin.r}">
+								<p:ajax listener="#{jJRightBean.addMessage}" />
+							</p:selectBooleanCheckbox>
+							<h:outputText value="W " />
+							<p:selectBooleanCheckbox value="#{jJRightBean.rightAdmin.w}">
+								<p:ajax listener="#{jJRightBean.addMessage}" />
+							</p:selectBooleanCheckbox>
+							<h:outputText value="X " />
+							<p:selectBooleanCheckbox value="#{jJRightBean.rightAdmin.x}">
+								<p:ajax listener="#{jJRightBean.addMessage}" />
+							</p:selectBooleanCheckbox>
+							<p:commandButton id="saveRight" update="msg rightPanel"
+								actionListener="#{jJRightBean.save}" icon="ui-icon-circle-plus"
+								process="@widgetVar(objectWidget)" />
+						</p:panel>
+						<p:dataTable id="rightDataTable" var="right"
+							value="#{jJRightBean.rightListTable}" paginator="true" rows="4">
+							<f:facet name="header">  
+            			Right List  
+        			</f:facet>
+							<p:column headerText="Object" style="width:25%">  
+							#{right.objet}
+						</p:column>
+							<p:column headerText="Category" style="width:30%">  
+							#{right.category.name}
+						</p:column>
+							<p:column headerText="Read" style="width:15%">  
+							#{right.r}
+						</p:column>
+							<p:column headerText="Write" style="width:15%">  
+							#{right.w}
+						</p:column>
+							<p:column headerText="Execute" style="width:15%">  
+							#{right.x}
+						</p:column>
+						</p:dataTable>
+					</p:panel>
+					<p:commandButton id="submitButton" value="Save"
+						update="profileDialogForm" process="@widgetVar(nameWidget)"
+						action="#{jJProfileBean.save(jJRightBean)}" />
+
+				</p:panelGrid>
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+	<p:confirmDialog id="profileDeleteDialog"
+		widgetVar="profileDeleteDialogWidget"
+		message="#{messages.label_delete_record}" showEffect="fade"
+		hideEffect="explode" header="#{messages.label_confirm_deletion}"
+		severity="alarm">
+		<p:outputPanel id="profileDeletePanel">
+			<h:form id="profileDeleteForm">
+				<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+					action="#{jJProfileBean.deleteProfile}"
+					update=":tabview:profileForm"
+					oncomplete="profileDeleteDialogWidget.hide()" />
+				<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+					onclick="profileDeleteDialogWidget.hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:confirmDialog>
+</ui:composition>
+</html>

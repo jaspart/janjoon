@@ -8,41 +8,54 @@
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
 
-		<p:tabView id="tabview" widgetVar="tabView" dynamic="true" cache="true">
+		<p:tabView id="tabview" widgetVar="tabView" dynamic="true"
+			cache="true">
 
 			<p:tab id="tabUser" title="User">
 				<h:panelGrid columns="1" cellpadding="3">
-					<ui:include src="Contact.xhtml" />
+					<ui:insert name="contact">
+						<ui:include src="contact.xhtml" />
+					</ui:insert>
 				</h:panelGrid>
 			</p:tab>
 
 			<p:tab id="tabProfile" title="Profile">
 				<h:panelGrid columns="1" cellpadding="3">
-					<ui:include src="Profile.xhtml" />
+					<ui:insert name="profile">
+						<ui:include src="profile.xhtml" />
+					</ui:insert>
 				</h:panelGrid>
 			</p:tab>
 
 			<p:tab id="tabProduct" title="Product">
 				<h:panelGrid columns="1" cellpadding="3">
-					<ui:include src="Product.xhtml" />
+					<ui:insert name="product">
+						<ui:include src="product.xhtml" />
+					</ui:insert>
 				</h:panelGrid>
 			</p:tab>
 
 			<p:tab id="tabProject" title="Project">
 				<h:panelGrid columns="1" cellpadding="3">
-					<ui:include src="Project.xhtml" />
+					<ui:insert name="project">
+						<ui:include src="project.xhtml" />
+					</ui:insert>
 				</h:panelGrid>
 			</p:tab>
 
 			<p:tab id="tabCategory" title="Category">
 				<h:panelGrid columns="1" cellpadding="3">
-					<ui:include src="Category.xhtml" />
+					<ui:insert name="category">
+						<ui:include src="category.xhtml" />
+					</ui:insert>
 				</h:panelGrid>
 			</p:tab>
 
 			<p:tab id="tabWorkflow" title="Workflow">
 				<h:panelGrid columns="1" cellpadding="3">
-					<ui:include src="Workflow.xhtml" />
+					<ui:insert name="workflow">
+						<ui:include src="workflow.xhtml" />
+					</ui:insert>
 				</h:panelGrid>
 			</p:tab>
 

@@ -245,6 +245,18 @@ public class JJProductBean {
 
 	}
 
+	public void deleteProduct() {
+		// message = "Edit Contact";
+
+		if (productAdmin != null) {
+			System.out.println(productAdmin.getName());
+
+			productAdmin.setEnabled(false);
+			jJProductService.updateJJProduct(productAdmin);
+
+		}
+	}
+
 	public void save(JJVersionBean jJVersionBean) {
 		System.out.println("SAVING Product...");
 		String message = "";

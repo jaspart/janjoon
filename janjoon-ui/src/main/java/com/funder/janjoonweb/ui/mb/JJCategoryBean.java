@@ -57,6 +57,18 @@ public class JJCategoryBean {
 		categoryAdmin.setStage(0);
 	}
 
+	public void deleteCategory() {
+		// message = "Edit Contact";
+
+		if (categoryAdmin != null) {
+			System.out.println(categoryAdmin.getName());
+
+			categoryAdmin.setEnabled(false);
+			jJCategoryService.updateJJCategory(categoryAdmin);
+
+		}
+	}
+
 	public void save() {
 		System.out.println("SAVING Category...");
 		String message = "";

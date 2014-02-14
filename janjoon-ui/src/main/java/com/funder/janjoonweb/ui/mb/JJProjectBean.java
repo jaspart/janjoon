@@ -852,6 +852,18 @@ public class JJProjectBean {
 		projectManager = null;
 	}
 
+	public void deleteProject() {
+		// message = "Edit Contact";
+
+		if (projectAdmin != null) {
+			System.out.println(projectAdmin.getName());
+
+			projectAdmin.setEnabled(false);
+			jJProjectService.updateJJProject(projectAdmin);
+
+		}
+	}
+
 	public void save() {
 		System.out.println("SAVING Project...");
 		String message = "";

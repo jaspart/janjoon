@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+	<h:form id="projectForm">
+		<p:panel id="projectForm" style="width:600px" columns="1"
+			cellpadding="6">
+			<p:dataTable id="projectDataTable" var="project"
+				value="#{jJProjectBean.projectListTable}" paginator="true" rows="15"
+				style="width:550px" rowKey="#{project.id}">
+				<f:facet name="header">Project List</f:facet>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Name" />
+					</f:facet>
+					<h:outputText value="#{project.name}" />
+				</p:column>
+				<p:column styleClass="action-column">
+					<f:facet name="header">
+						<h:outputText value="Actions" />
+					</f:facet>
+					<p:commandButton id="editButton" icon="ui-icon-pencil">
+						<f:setPropertyActionListener value="#{project}"
+							target="#{jJProjectBean.projectAdmin}" />
+					</p:commandButton>
+					<p:tooltip for="editButton" value="#{messages.label_edit}"
+						showEffect="fade" hideEffect="fade" />
+					<p:commandButton id="deleteButton" icon="ui-icon-trash"
+						oncomplete="projectDeleteDialogWidget.show()"
+						title="#{messages.label_delete}">
+						<f:setPropertyActionListener value="#{project}"
+							target="#{jJProjectBean.projectAdmin}" />
+					</p:commandButton>
+					<p:tooltip for="deleteButton" value="#{messages.label_delete}"
+						showEffect="fade" hideEffect="fade" />
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton value="New" id="newProject"
+						actionListener="#{jJProjectBean.newProject}"
+						update=":tabview:projectDialog"
+						oncomplete="projectDialogWidget.show()" icon="ui-icon-circle-plus" />
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+	<p:dialog id="projectDialog" header="#{jJProjectBean.message}"
+		modal="true" widgetVar="projectDialogWidget" dynamic="true"
+		showEffect="fade" hideEffect="explode">
+		<p:ajax event="close" update=":tabview:projectForm"
+			listener="#{jJProjectBean.closeDialog}" />
+		<p:outputPanel id="projectDialogPanel">
+			<h:form id="projectDialogForm">
+				<p:growl id="msg" />
+				<p:panelGrid columns="1" cellpadding="6">
+					<p:panel columns="3" cellpadding="6">
+						<p:inputText id="name" value="#{jJProjectBean.projectAdmin.name}"
+							label="Name" required="true" widgetVar="nameWidget">
+							<f:validateLength maximum="25" />
+						</p:inputText>
+						<p:message for="name" id="msgName" />
+						<p:watermark for="name" value="Name *" />
+					</p:panel>
+					<p:panel columns="3" cellpadding="6">
+						<h:outputText value="Project Manager: *" />
+						<p:selectOneMenu id="projectManagerSelect"
+							value="#{jJProjectBean.projectManager}" panelStyle="width:150px"
+							effect="fade" style="width:160px" filter="true"
+							filterMatchMode="startsWith">
+							<p:ajax process="@this" partialSubmit="true"
+								listener="#{jJProductBean.handleSelectProjectManager()}" />
+							<f:converter
+								converterId="com.funder.janjoonweb.ui.mb.converter.JJContactConverter" />
+
+							<f:selectItem itemLabel="#{jJProjectBean.projectManager.name}"
+								itemValue="#{jJProjectBean.projectManager}" />
+							<f:selectItems value="#{jJProjectBean.projectManagerList}"
+								var="p" itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />
+
+						</p:selectOneMenu>
+						<p:message for="projectManagerSelect" id="msgProjectManager" />
+					</p:panel>
+					<p:panel columns="2" cellpadding="6">
+						<p:selectBooleanButton
+							value="#{jJProjectBean.projectAdmin.enabled}" onLabel="Enabled"
+							offLabel="Disabled" onIcon="ui-icon-check"
+							offIcon="ui-icon-close">
+							<p:ajax update="msg" listener="#{jJProjectBean.addMessage}" />
+						</p:selectBooleanButton>
+						<p:commandButton id="submitButton" value="Save"
+							update="projectDialogForm :headerForm"
+							process="@widgetVar(nameWidget)" action="#{jJProjectBean.save}" />
+					</p:panel>
+				</p:panelGrid>
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+	<p:confirmDialog id="projectDeleteDialog"
+		widgetVar="projectDeleteDialogWidget"
+		message="#{messages.label_delete_record}" showEffect="fade"
+		hideEffect="explode" header="#{messages.label_confirm_deletion}"
+		severity="alarm">
+		<p:outputPanel id="projectDeletePanel">
+			<h:form id="projectDeleteForm">
+				<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+					action="#{jJProjectBean.deleteProject}"
+					update=":tabview:projectForm :headerForm"
+					oncomplete="projectDeleteDialogWidget.hide()" />
+				<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+					onclick="projectDeleteDialogWidget.hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:confirmDialog>
+</ui:composition>
+</html>
