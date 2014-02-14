@@ -7,7 +7,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.CloseEvent;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
@@ -57,6 +56,11 @@ public class JJCategoryBean {
 		categoryAdmin.setStage(0);
 	}
 
+	public void editCategory() {
+		System.out.println("Update bean category");
+		message = "Edit Category";
+	}
+
 	public void deleteCategory() {
 		// message = "Edit Contact";
 
@@ -70,11 +74,11 @@ public class JJCategoryBean {
 	}
 
 	public void save() {
-		System.out.println("SAVING Category...");
+
 		String message = "";
 
 		if (categoryAdmin.getId() == null) {
-			System.out.println("IS a new JJCategory");
+			System.out.println("SAVING new Category...");
 
 			categoryAdmin.setDescription("This is category "
 					+ categoryAdmin.getName());
@@ -84,10 +88,13 @@ public class JJCategoryBean {
 			newCategory();
 
 		} else {
+			System.out.println("UPDATING Category...");
+
 			jJCategoryService.updateJJCategory(categoryAdmin);
 			message = "message_successfully_updated";
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("categoryDialogWidget.hide()");
+			closeDialog();
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
@@ -96,7 +103,7 @@ public class JJCategoryBean {
 
 	}
 
-	public void closeDialog(CloseEvent event) {
+	public void closeDialog() {
 		System.out.println("close dialog");
 		categoryAdmin = null;
 	}
