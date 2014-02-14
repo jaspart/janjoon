@@ -20,9 +20,8 @@ import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 public class JJContactBean {
 
 	private JJContact contactAdmin;
+	private List<JJContact> contactDataTable;
 	private ContactDataModel contactDataModel;
-
-	private JJContact selectedContact;
 
 	private String message;
 	private boolean disabled;
@@ -35,6 +34,15 @@ public class JJContactBean {
 		this.contactAdmin = contactAdmin;
 	}
 
+	public List<JJContact> getContactDataTable() {
+		contactDataTable = jJContactService.getAllJJContact();
+		return contactDataTable;
+	}
+
+	public void setContactDataTable(List<JJContact> contactDataTable) {
+		this.contactDataTable = contactDataTable;
+	}
+
 	public ContactDataModel getContactDataModel() {
 		contactDataModel = new ContactDataModel(
 				jJContactService.getAllJJContact());
@@ -43,14 +51,6 @@ public class JJContactBean {
 
 	public void setContactDataModel(ContactDataModel contactDataModel) {
 		this.contactDataModel = contactDataModel;
-	}
-
-	public JJContact getSelectedContact() {
-		return selectedContact;
-	}
-
-	public void setSelectedContact(JJContact selectedContact) {
-		this.selectedContact = selectedContact;
 	}
 
 	public String getMessage() {
@@ -76,7 +76,7 @@ public class JJContactBean {
 		contactAdmin = new JJContact();
 		contactAdmin.setEnabled(true);
 		contactAdmin.setCreationDate(new Date());
-		selectedContact = null;
+
 		jJPermissionBean.setContact(contactAdmin);
 		jJPermissionBean.newPermission();
 	}
@@ -88,9 +88,11 @@ public class JJContactBean {
 	public void deleteContact() {
 		// message = "Edit Contact";
 
-		if (selectedContact != null) {
-			selectedContact.setEnabled(false);
-			jJContactService.updateJJContact(selectedContact);
+		if (contactAdmin != null) {
+			System.out.println(contactAdmin.getName());
+
+			contactAdmin.setEnabled(false);
+			jJContactService.updateJJContact(contactAdmin);
 
 		}
 	}
@@ -140,7 +142,6 @@ public class JJContactBean {
 	public void closeDialog(JJPermissionBean jJPermissionBean) {
 		System.out.println("close dialog");
 		contactAdmin = null;
-		selectedContact = null;
 		disabled = false;
 		jJPermissionBean.setPermissionAdmin(null);
 		jJPermissionBean.setPermisssionListTable(null);
@@ -156,9 +157,6 @@ public class JJContactBean {
 
 	private class ContactDataModel extends ListDataModel<JJContact> implements
 			SelectableDataModel<JJContact> {
-
-		public ContactDataModel() {
-		}
 
 		public ContactDataModel(List<JJContact> data) {
 			super(data);
