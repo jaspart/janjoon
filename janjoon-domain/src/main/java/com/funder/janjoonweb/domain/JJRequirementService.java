@@ -38,11 +38,12 @@ public interface JJRequirementService {
 
 	// Generic request
 
-	public List<JJRequirement> getAllJJRequirements(JJCategory category,
+	public List<JJRequirement> getRequirements(JJCategory category,
 			JJProject project, JJProduct product, JJVersion version,
-			JJChapter chapter, boolean withChapter, boolean onlyActif);
+			JJChapter chapter, boolean withChapter, boolean onlyActif,
+			boolean orderByCreationdate);
 
-	public List<JJRequirement> getAllChildsJJRequirementWithChapterSortedByOrder(
+	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
 			JJChapter chapter, boolean onlyActif);
 
 }

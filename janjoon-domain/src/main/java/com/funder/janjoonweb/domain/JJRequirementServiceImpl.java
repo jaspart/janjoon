@@ -345,9 +345,10 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	// Generic Request
 
 	@Override
-	public List<JJRequirement> getAllJJRequirements(JJCategory category,
+	public List<JJRequirement> getRequirements(JJCategory category,
 			JJProject project, JJProduct product, JJVersion version,
-			JJChapter chapter, boolean withChapter, boolean onlyActif) {
+			JJChapter chapter, boolean withChapter, boolean onlyActif,
+			boolean orderByCreationdate) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
@@ -392,7 +393,10 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		}
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
-		// select.orderBy(criteriaBuilder.asc(from.get("ordering")));
+
+		if (orderByCreationdate) {
+			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
+		}
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 
@@ -400,7 +404,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	}
 
 	@Override
-	public List<JJRequirement> getAllChildsJJRequirementWithChapterSortedByOrder(
+	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
 			JJChapter chapter, boolean onlyActif) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder

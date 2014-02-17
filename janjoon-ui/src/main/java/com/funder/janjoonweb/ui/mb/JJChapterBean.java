@@ -349,8 +349,8 @@ public class JJChapterBean {
 		leftRoot = new DefaultTreeNode("leftRoot", null);
 
 		List<JJRequirement> jJRequirementList = jJRequirementService
-				.getAllJJRequirements(category, project, product, null, null,
-						true, true);
+				.getRequirements(category, project, product, null, null, true,
+						true, false);
 
 		for (JJRequirement requirement : jJRequirementList) {
 			TreeNode node = new DefaultTreeNode("R-" + requirement.getId()
@@ -546,7 +546,7 @@ public class JJChapterBean {
 			}
 
 			List<JJRequirement> requirements = jJRequirementService
-					.getAllChildsJJRequirementWithChapterSortedByOrder(parent,
+					.getRequirementChildrenWithChapterSortedByOrder(parent,
 							onlyActif);
 
 			for (JJRequirement requirement : requirements) {

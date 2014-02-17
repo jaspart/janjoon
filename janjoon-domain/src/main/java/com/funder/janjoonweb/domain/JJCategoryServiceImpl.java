@@ -1,5 +1,6 @@
 package com.funder.janjoonweb.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -7,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -22,7 +24,8 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 	@Override
 	public JJCategory getJJCategoryWithName(String name) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder.createQuery(JJCategory.class);
+		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder
+				.createQuery(JJCategory.class);
 
 		Root<JJCategory> from = criteriaQuery.from(JJCategory.class);
 
@@ -43,7 +46,8 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 	public List<JJCategory> getAllJJCategories() {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder.createQuery(JJCategory.class);
+		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder
+				.createQuery(JJCategory.class);
 
 		Root<JJCategory> from = criteriaQuery.from(JJCategory.class);
 
@@ -56,6 +60,34 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 		TypedQuery<JJCategory> result = entityManager.createQuery(select);
 		return result.getResultList();
 
+	}
+
+	@Override
+	public List<JJCategory> getCategories(boolean onlyActif,
+			boolean sortedByStage) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder
+				.createQuery(JJCategory.class);
+
+		Root<JJCategory> from = criteriaQuery.from(JJCategory.class);
+
+		CriteriaQuery<JJCategory> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		
+		if (sortedByStage) {
+			select.orderBy(criteriaBuilder.asc(from.get("stage")));
+		}
+
+		TypedQuery<JJCategory> result = entityManager.createQuery(select);
+		return result.getResultList();
 	}
 
 }

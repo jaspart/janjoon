@@ -86,10 +86,6 @@ public class JJRequirementBean {
 	private String messageRelease;
 	private String messageDiscard;
 
-	private JJProject project;
-	private JJProduct product;
-	private JJVersion version;
-
 	private int progressLeft = 0;
 	private int progressMiddle = 0;
 	private int progressRight = 0;
@@ -1432,7 +1428,12 @@ public class JJRequirementBean {
 	// }
 
 	public void load(JJProjectBean jJProjectBean, JJChapterBean jJChapterBean,
-			JJProductBean jJProductBean) {
+			JJProductBean jJProductBean,JJVersionBean jJVersionBean) {
+		
+		project = jJProjectBean.getProject();
+		product = jJProductBean.getProduct();
+		version = jJVersionBean.getVersion();
+		
 		if (project == null) {
 			project = jJProjectBean.getProject();
 			jJChapterBean.setProject(project);
@@ -1541,7 +1542,7 @@ public class JJRequirementBean {
 			}
 
 			List<JJRequirement> requirements = jJRequirementService
-					.getAllChildsJJRequirementWithChapterSortedByOrder(parent,
+					.getRequirementChildrenWithChapterSortedByOrder(parent,
 							onlyActif);
 
 			for (JJRequirement requirement : requirements) {
@@ -1566,4 +1567,190 @@ public class JJRequirementBean {
 		myJJRequirement = null;
 		myEditedJJRequirement = null;
 	}
+
+	// /////////////////////////////////////////////////////////////
+	// Transformation
+
+	private JJCategory lowCategory;
+
+	public JJCategory getLowCategory() {
+		return lowCategory;
+	}
+
+	public void setLowCategory(JJCategory lowCategory) {
+		this.lowCategory = lowCategory;
+	}
+
+	private JJCategory mediumCategory;
+
+	public JJCategory getMediumCategory() {
+		return mediumCategory;
+	}
+
+	public void setMediumCategory(JJCategory mediumCategory) {
+		this.mediumCategory = mediumCategory;
+	}
+
+	private JJCategory highCategory;
+
+	public JJCategory getHighCategory() {
+		return highCategory;
+	}
+
+	public void setHighCategory(JJCategory highCategory) {
+		this.highCategory = highCategory;
+	}
+
+	private List<JJCategory> categoryList;
+
+	public List<JJCategory> getCategoryList() {
+		categoryList = jJCategoryService.getCategories(true, true);
+		return categoryList;
+	}
+
+	public void setCategoryList(List<JJCategory> categoryList) {
+		this.categoryList = categoryList;
+	}
+
+	private String templateHeader = null;
+
+	public String getTemplateHeader() {
+		return templateHeader;
+	}
+
+	public void setTemplateHeader(String templateHeader) {
+		this.templateHeader = templateHeader;
+	}
+
+	private List<JJRequirement> lowRequirementList;
+
+	public List<JJRequirement> getLowRequirementList() {
+		if (lowCategory != null) {
+			lowRequirementList = jJRequirementService.getRequirements(
+					lowCategory, project, product, version, null, false, true,
+					true);
+		} else {
+			lowRequirementList = null;
+		}
+		return lowRequirementList;
+	}
+
+	public void setLowRequirementList(List<JJRequirement> lowRequirementList) {
+		this.lowRequirementList = lowRequirementList;
+	}
+
+	private List<JJRequirement> mediumRequirementList;
+
+	public List<JJRequirement> getMediumRequirementList() {
+		if (mediumCategory != null) {
+			mediumRequirementList = jJRequirementService.getRequirements(
+					mediumCategory, project, product, version, null, false,
+					true, true);
+		} else {
+			mediumRequirementList = null;
+		}
+		return mediumRequirementList;
+	}
+
+	public void setMediumRequirementList(
+			List<JJRequirement> mediumRequirementList) {
+		this.mediumRequirementList = mediumRequirementList;
+	}
+
+	private List<JJRequirement> highRequirementList;
+
+	public List<JJRequirement> getHighRequirementList() {
+		if (highCategory != null) {
+			highRequirementList = jJRequirementService.getRequirements(
+					highCategory, project, product, version, null, false, true,
+					true);
+		} else {
+			highRequirementList = null;
+		}
+
+		return highRequirementList;
+	}
+
+	public void setHighRequirementList(List<JJRequirement> highRequirementList) {
+		this.highRequirementList = highRequirementList;
+	}
+
+	private JJProject project;
+	private JJProduct product;
+	private JJVersion version;
+
+	public void updateTemplate(long id) {
+		System.out.println("A voir avec Arnaud");
+
+		JJCategory category = jJCategoryService.findJJCategory(id);
+
+		if (templateHeader != null) {
+			String[] categories = templateHeader.split("/");
+			int length = categories.length;
+
+			System.out.println(length);
+
+			switch (length) {
+			case 1:
+				if (category.getStage() > lowCategory.getStage()) {
+					mediumCategory = category;
+					templateHeader += mediumCategory.getName() + "/";
+				} else if (category.getStage() < lowCategory.getStage()) {
+					mediumCategory = lowCategory;
+					lowCategory = category;
+					templateHeader = lowCategory.getName() + "/"
+							+ mediumCategory.getName() + "/";
+				} else {
+					lowCategory = category;
+					templateHeader = lowCategory.getName() + "/";
+				}
+
+				break;
+
+			case 2:
+
+				if (category.getStage() > mediumCategory.getStage()) {
+					highCategory = category;
+					templateHeader += highCategory.getName();
+				} else if (category.getStage() > lowCategory.getStage()) {
+					mediumCategory = category;
+					templateHeader = lowCategory.getName() + "/"
+							+ mediumCategory.getName() + "/";
+				} else {
+					lowCategory = category;
+					templateHeader = lowCategory.getName() + "/"
+							+ mediumCategory.getName() + "/";
+				}
+
+				break;
+			case 3:
+				if (category.getStage() > mediumCategory.getStage()) {
+					highCategory = category;
+					templateHeader = lowCategory.getName() + "/"
+							+ mediumCategory.getName() + "/"
+							+ highCategory.getName();
+				} else if (category.getStage() > lowCategory.getStage()) {
+					mediumCategory = category;
+					templateHeader = lowCategory.getName() + "/"
+							+ mediumCategory.getName() + "/"
+							+ highCategory.getName();
+				} else {
+					lowCategory = category;
+					templateHeader = lowCategory.getName() + "/"
+							+ mediumCategory.getName() + "/"
+							+ highCategory.getName();
+				}
+
+				break;
+
+			}
+
+		} else {
+			lowCategory = category;
+			templateHeader = category.getName() + "/";
+		}
+
+		System.out.println("\n" + templateHeader);
+	}
+
 }
