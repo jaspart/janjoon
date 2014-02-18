@@ -187,9 +187,10 @@ public class JJChapterBean {
 		this.selectedChapterNode = selectedChapterNode;
 	}
 
-	public void initChapterBean(String categoryName) {
+	public void initChapterBean(long id) {
 		System.out.println("Init chapterBean");
-		category = jJCategoryService.getJJCategoryWithName(categoryName);
+		System.out.println("Id "+id);
+		category = jJCategoryService.findJJCategory(id);
 
 		newChapter();
 		chapterTreeBean();

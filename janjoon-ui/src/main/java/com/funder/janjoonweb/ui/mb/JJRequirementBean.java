@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -14,9 +15,12 @@ import java.util.TreeMap;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.model.ListDataModel;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.SelectableDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -30,6 +34,7 @@ import com.funder.janjoonweb.domain.JJStatus;
 import com.funder.janjoonweb.domain.JJTask;
 import com.funder.janjoonweb.domain.JJTaskService;
 import com.funder.janjoonweb.domain.JJVersion;
+import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJRequirement.class, beanName = "jJRequirementBean")
@@ -502,30 +507,6 @@ public class JJRequirementBean {
 
 	public void setMessageDiscard(String messageDiscard) {
 		this.messageDiscard = messageDiscard;
-	}
-
-	public JJProject getProject() {
-		return project;
-	}
-
-	public void setProject(JJProject project) {
-		this.project = project;
-	}
-
-	public JJProduct getProduct() {
-		return product;
-	}
-
-	public void setProduct(JJProduct product) {
-		this.product = product;
-	}
-
-	public JJVersion geVersion() {
-		return version;
-	}
-
-	public void setVersion(JJVersion version) {
-		this.version = version;
 	}
 
 	public int getProgressLeft() {
@@ -1427,16 +1408,16 @@ public class JJRequirementBean {
 	// return suggestions;
 	// }
 
-	public void load(JJProjectBean jJProjectBean, JJChapterBean jJChapterBean,
-			JJProductBean jJProductBean,JJVersionBean jJVersionBean) {
-		
+	public void load(JJProjectBean jJProjectBean, JJProductBean jJProductBean,
+			JJVersionBean jJVersionBean, JJChapterBean jJChapterBean) {
+
 		project = jJProjectBean.getProject();
 		product = jJProductBean.getProduct();
 		version = jJVersionBean.getVersion();
-		
+
+		jJChapterBean.setProject(project);
+
 		if (project == null) {
-			project = jJProjectBean.getProject();
-			jJChapterBean.setProject(project);
 			jJProductBean.setProject(project);
 		}
 
@@ -1563,15 +1544,28 @@ public class JJRequirementBean {
 
 	}
 
-	public void closeDialog(CloseEvent event) {
-		myJJRequirement = null;
-		myEditedJJRequirement = null;
-	}
-
 	// /////////////////////////////////////////////////////////////
 	// Transformation
 
 	private JJCategory lowCategory;
+	private JJCategory mediumCategory;
+	private JJCategory highCategory;
+	private List<JJCategory> categoryList;
+
+	private String templateHeader;
+	private String outputTemplateHeader;
+
+	private List<RequirementDataModel> tableDataModelList;
+	private JJRequirement requirement;
+	private JJRequirement selectedRequirement;
+
+	private JJProject project;
+	private JJProduct product;
+	private JJVersion version;
+
+	private long idCategory;
+
+	private String message;
 
 	public JJCategory getLowCategory() {
 		return lowCategory;
@@ -1581,8 +1575,6 @@ public class JJRequirementBean {
 		this.lowCategory = lowCategory;
 	}
 
-	private JJCategory mediumCategory;
-
 	public JJCategory getMediumCategory() {
 		return mediumCategory;
 	}
@@ -1591,8 +1583,6 @@ public class JJRequirementBean {
 		this.mediumCategory = mediumCategory;
 	}
 
-	private JJCategory highCategory;
-
 	public JJCategory getHighCategory() {
 		return highCategory;
 	}
@@ -1600,8 +1590,6 @@ public class JJRequirementBean {
 	public void setHighCategory(JJCategory highCategory) {
 		this.highCategory = highCategory;
 	}
-
-	private List<JJCategory> categoryList;
 
 	public List<JJCategory> getCategoryList() {
 		categoryList = jJCategoryService.getCategories(true, true);
@@ -1612,8 +1600,6 @@ public class JJRequirementBean {
 		this.categoryList = categoryList;
 	}
 
-	private String templateHeader = null;
-
 	public String getTemplateHeader() {
 		return templateHeader;
 	}
@@ -1622,67 +1608,100 @@ public class JJRequirementBean {
 		this.templateHeader = templateHeader;
 	}
 
-	private List<JJRequirement> lowRequirementList;
-
-	public List<JJRequirement> getLowRequirementList() {
-		if (lowCategory != null) {
-			lowRequirementList = jJRequirementService.getRequirements(
-					lowCategory, project, product, version, null, false, true,
-					true);
-		} else {
-			lowRequirementList = null;
+	public String getOutputTemplateHeader() {
+		if (templateHeader != null) {
+			outputTemplateHeader = templateHeader.replace("/", " ");
 		}
-		return lowRequirementList;
+		return outputTemplateHeader;
 	}
 
-	public void setLowRequirementList(List<JJRequirement> lowRequirementList) {
-		this.lowRequirementList = lowRequirementList;
+	public void setOutputTemplateHeader(String outputTemplateHeader) {
+		this.outputTemplateHeader = outputTemplateHeader;
 	}
 
-	private List<JJRequirement> mediumRequirementList;
+	public List<RequirementDataModel> getTableDataModelList() {
 
-	public List<JJRequirement> getMediumRequirementList() {
-		if (mediumCategory != null) {
-			mediumRequirementList = jJRequirementService.getRequirements(
-					mediumCategory, project, product, version, null, false,
-					true, true);
-		} else {
-			mediumRequirementList = null;
-		}
-		return mediumRequirementList;
-	}
+		if (tableDataModelList == null) {
 
-	public void setMediumRequirementList(
-			List<JJRequirement> mediumRequirementList) {
-		this.mediumRequirementList = mediumRequirementList;
-	}
+			Map<String, List<JJRequirement>> mapTable = new LinkedHashMap<String, List<JJRequirement>>();
 
-	private List<JJRequirement> highRequirementList;
+			mapTable.put("0;lowCategory;empty", getList(null));
+			mapTable.put("0;mediumCategory;empty", getList(null));
+			mapTable.put("0;highCategory;empty", getList(null));
 
-	public List<JJRequirement> getHighRequirementList() {
-		if (highCategory != null) {
-			highRequirementList = jJRequirementService.getRequirements(
-					highCategory, project, product, version, null, false, true,
-					true);
-		} else {
-			highRequirementList = null;
+			fullTableDataModelList(mapTable);
 		}
 
-		return highRequirementList;
+		return tableDataModelList;
 	}
 
-	public void setHighRequirementList(List<JJRequirement> highRequirementList) {
-		this.highRequirementList = highRequirementList;
+	public void setTableDataModelList(
+			List<RequirementDataModel> tableDataModelList) {
+		this.tableDataModelList = tableDataModelList;
 	}
 
-	private JJProject project;
-	private JJProduct product;
-	private JJVersion version;
+	public JJRequirement getRequirement() {
+		return requirement;
+	}
+
+	public void setRequirement(JJRequirement requirement) {
+		this.requirement = requirement;
+	}
+
+	public JJRequirement getSelectedRequirement() {
+		return selectedRequirement;
+	}
+
+	public void setSelectedRequirement(JJRequirement selectedRequirement) {
+		this.selectedRequirement = selectedRequirement;
+	}
+
+	public JJProject getProject() {
+		return project;
+	}
+
+	public void setProject(JJProject project) {
+		this.project = project;
+	}
+
+	public JJProduct getProduct() {
+		return product;
+	}
+
+	public void setProduct(JJProduct product) {
+		this.product = product;
+	}
+
+	public JJVersion geVersion() {
+		return version;
+	}
+
+	public void setVersion(JJVersion version) {
+		this.version = version;
+	}
+
+	public long getIdCategory() {
+		return idCategory;
+	}
+
+	public void setIdCategory(long idCategory) {
+		this.idCategory = idCategory;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
 	public void updateTemplate(long id) {
 		System.out.println("A voir avec Arnaud");
 
 		JJCategory category = jJCategoryService.findJJCategory(id);
+
+		Map<String, List<JJRequirement>> mapTable = new LinkedHashMap<String, List<JJRequirement>>();
 
 		if (templateHeader != null) {
 			String[] categories = templateHeader.split("/");
@@ -1695,14 +1714,34 @@ public class JJRequirementBean {
 				if (category.getStage() > lowCategory.getStage()) {
 					mediumCategory = category;
 					templateHeader += mediumCategory.getName() + "/";
+
+					mapTable.put(String.valueOf(lowCategory.getId()),
+							getList(lowCategory));
+					mapTable.put(String.valueOf(mediumCategory.getId()),
+							getList(mediumCategory));
+					mapTable.put("0;highCategory;empty", getList(null));
+
 				} else if (category.getStage() < lowCategory.getStage()) {
 					mediumCategory = lowCategory;
 					lowCategory = category;
 					templateHeader = lowCategory.getName() + "/"
 							+ mediumCategory.getName() + "/";
+
+					mapTable.put(String.valueOf(lowCategory.getId()),
+							getList(lowCategory));
+					mapTable.put(String.valueOf(mediumCategory.getId()),
+							getList(mediumCategory));
+					mapTable.put("0;highCategory;empty", getList(null));
+
 				} else {
 					lowCategory = category;
 					templateHeader = lowCategory.getName() + "/";
+
+					mapTable.put(String.valueOf(lowCategory.getId()),
+							getList(lowCategory));
+					mapTable.put("0;mediumCategory;empty", getList(null));
+					mapTable.put("0;highCategory;empty", getList(null));
+
 				}
 
 				break;
@@ -1710,16 +1749,39 @@ public class JJRequirementBean {
 			case 2:
 
 				if (category.getStage() > mediumCategory.getStage()) {
+
 					highCategory = category;
 					templateHeader += highCategory.getName();
+
+					mapTable.put(String.valueOf(lowCategory.getId()),
+							getList(lowCategory));
+					mapTable.put(String.valueOf(mediumCategory.getId()),
+							getList(mediumCategory));
+					mapTable.put(String.valueOf(highCategory.getId()),
+							getList(highCategory));
+
 				} else if (category.getStage() > lowCategory.getStage()) {
 					mediumCategory = category;
 					templateHeader = lowCategory.getName() + "/"
 							+ mediumCategory.getName() + "/";
+
+					mapTable.put(String.valueOf(lowCategory.getId()),
+							getList(lowCategory));
+					mapTable.put(String.valueOf(mediumCategory.getId()),
+							getList(mediumCategory));
+					mapTable.put("0;highCategory;empty", getList(null));
+
 				} else {
 					lowCategory = category;
 					templateHeader = lowCategory.getName() + "/"
 							+ mediumCategory.getName() + "/";
+
+					mapTable.put(String.valueOf(lowCategory.getId()),
+							getList(lowCategory));
+					mapTable.put(String.valueOf(lowCategory.getId()),
+							getList(mediumCategory));
+					mapTable.put("0;highCategory;empty", getList(null));
+
 				}
 
 				break;
@@ -1729,11 +1791,13 @@ public class JJRequirementBean {
 					templateHeader = lowCategory.getName() + "/"
 							+ mediumCategory.getName() + "/"
 							+ highCategory.getName();
+
 				} else if (category.getStage() > lowCategory.getStage()) {
 					mediumCategory = category;
 					templateHeader = lowCategory.getName() + "/"
 							+ mediumCategory.getName() + "/"
 							+ highCategory.getName();
+
 				} else {
 					lowCategory = category;
 					templateHeader = lowCategory.getName() + "/"
@@ -1741,16 +1805,203 @@ public class JJRequirementBean {
 							+ highCategory.getName();
 				}
 
+				mapTable.put(String.valueOf(lowCategory.getId()),
+						getList(lowCategory));
+				mapTable.put(String.valueOf(mediumCategory.getId()),
+						getList(mediumCategory));
+				mapTable.put(String.valueOf(highCategory.getId()),
+						getList(highCategory));
+
 				break;
 
 			}
 
 		} else {
 			lowCategory = category;
-			templateHeader = category.getName() + "/";
+			templateHeader = lowCategory.getName() + "/";
+
+			mapTable.put(String.valueOf(lowCategory.getId()),
+					getList(lowCategory));
+			mapTable.put("0;mediumCategory;empty", getList(null));
+			mapTable.put("0;highCategory;empty", getList(null));
+
 		}
 
+		fullTableDataModelList(mapTable);
+
 		System.out.println("\n" + templateHeader);
+	}
+
+	private void fullTableDataModelList(
+			Map<String, List<JJRequirement>> mapTable) {
+		tableDataModelList = new ArrayList<RequirementDataModel>();
+		for (Map.Entry<String, List<JJRequirement>> entry : mapTable.entrySet()) {
+
+			List<JJRequirement> value = entry.getValue();
+
+			String key = entry.getKey();
+			long categoryId;
+			String idDataModel;
+
+			if (key.contains("empty")) {
+				categoryId = Long.parseLong(splitString(key, ";", 0));
+				idDataModel = splitString(key, ";", 1);
+			} else {
+				categoryId = Long.parseLong(key);
+				JJCategory category = jJCategoryService
+						.findJJCategory(categoryId);
+				idDataModel = category.getName();
+			}
+
+			RequirementDataModel requirementDataModel = new RequirementDataModel(
+					value, categoryId, idDataModel);
+
+			tableDataModelList.add(requirementDataModel);
+		}
+	}
+
+	public void newRequirement(long id) {
+		System.out.println("New Requirement");
+
+		message = "New Requirement";
+
+		idCategory = id;
+		JJCategory category = jJCategoryService.findJJCategory(id);
+
+		requirement = new JJRequirement();
+		requirement.setCreationDate(new Date());
+		requirement.setEnabled(true);
+		requirement.setCategory(category);
+		requirement.setChapter(null);
+		requirement.setProject(project);
+		requirement.setProduct(product);
+		requirement.setVersioning(version);
+	}
+
+	public void newRequirement() {
+		System.out.println("Edit Requirement");
+		message = "Edit Requirement";
+	}
+
+	public void save() {
+
+		String message = "";
+
+		if (requirement.getId() == null) {
+			System.out.println("SAVING new Requirement...");
+
+			jJRequirementService.saveJJRequirement(requirement);
+
+			message = "message_successfully_created";
+
+			newRequirement(idCategory);
+
+		} else {
+			System.out.println("UPDATING Requirement...");
+
+			jJRequirementService.updateJJRequirement(requirement);
+
+			message = "message_successfully_updated";
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("requirementDialogWidget.hide()");
+			// closeDialog();
+		}
+
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				"JJRequirement");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+	}
+
+	public void closeDialog(CloseEvent event) {
+		System.out.println("close Dialog");
+		requirement = null;
+		idCategory = 0;
+		message = null;
+
+		// Autres Variables
+
+		// Temp Variable
+		myJJRequirement = null;
+		myEditedJJRequirement = null;
+	}
+
+	private List<JJRequirement> getList(JJCategory category) {
+		List<JJRequirement> list = new ArrayList<JJRequirement>();
+		if (category != null) {
+			list = jJRequirementService.getRequirements(category, project,
+					product, version, null, false, true, true);
+		}
+		return list;
+	}
+
+	private String splitString(String s, String regex, int index) {
+		String[] result = s.split(regex);
+		return result[index];
+	}
+
+	public class RequirementDataModel extends ListDataModel<JJRequirement>
+			implements SelectableDataModel<JJRequirement> {
+
+		private String idDataModel;
+		private long categoryId = 0;
+		private boolean disabled;
+
+		public String getIdDataModel() {
+			return idDataModel;
+		}
+
+		public void setIdDataModel(String idDataModel) {
+			this.idDataModel = idDataModel;
+		}
+
+		public long getCategoryId() {
+			return categoryId;
+		}
+
+		public void setCategoryId(long categoryId) {
+			this.categoryId = categoryId;
+		}
+
+		public boolean getDisabled() {
+			if (categoryId != 0) {
+				disabled = false;
+			} else {
+				disabled = true;
+			}
+			return disabled;
+		}
+
+		public void setDisabled(boolean disabled) {
+			this.disabled = disabled;
+		}
+
+		public RequirementDataModel(List<JJRequirement> data, long categoryId,
+				String idDataModel) {
+			super(data);
+			this.categoryId = categoryId;
+			this.idDataModel = idDataModel;
+
+		}
+
+		@Override
+		public JJRequirement getRowData(String rowKey) {
+
+			@SuppressWarnings("unchecked")
+			List<JJRequirement> requirements = (List<JJRequirement>) getWrappedData();
+
+			for (JJRequirement requirement : requirements) {
+				if (requirement.getId().equals(rowKey))
+					return requirement;
+			}
+
+			return null;
+		}
+
+		@Override
+		public Object getRowKey(JJRequirement requirement) {
+			return requirement.getId();
+		}
 	}
 
 }
