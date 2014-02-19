@@ -46,8 +46,8 @@ public interface JJChapterService {
 			JJProject project, JJProduct product, JJCategory category,
 			boolean onlyActif);
 
-	public List<JJChapter> getAllJJChapters(JJProject project,
-			JJProduct product, JJCategory category);
+	public List<JJChapter> getChapters(JJProject project,
+			JJProduct product, JJCategory category,boolean onlyActif);
 
 	public List<JJChapter> getAllChildsJJChapterWithParentSortedByOrder(
 			JJChapter parent, boolean onlyActif);

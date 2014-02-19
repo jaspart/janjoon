@@ -1,5 +1,6 @@
 package com.funder.janjoonweb.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -48,7 +49,7 @@ public class JJProjectServiceImpl implements JJProjectService {
 
 	@Override
 	public JJProject getJJProjectWithName(String name) {
-		
+
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJProject> criteriaQuery = criteriaBuilder
 				.createQuery(JJProject.class);
@@ -68,6 +69,32 @@ public class JJProjectServiceImpl implements JJProjectService {
 			return result.getResultList().get(0);
 		else
 			return null;
+
+	}
+
+	// New Generic
+
+	@Override
+	public List<JJProject> getProjects(boolean onlyActif) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJProject> criteriaQuery = criteriaBuilder
+				.createQuery(JJProject.class);
+
+		Root<JJProject> from = criteriaQuery.from(JJProject.class);
+
+		CriteriaQuery<JJProject> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+
+		select.where(predicates.toArray(new Predicate[] {}));
+
+		TypedQuery<JJProject> result = entityManager.createQuery(select);
+		return result.getResultList();
 
 	}
 

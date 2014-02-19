@@ -9,4 +9,7 @@ public interface JJProjectService {
 	public List<JJProject> getAllJJProjects();
 
 	public JJProject getJJProjectWithName(String name);
+
+	// New Generic
+	public List<JJProject> getProjects(boolean onlyActif);
 }

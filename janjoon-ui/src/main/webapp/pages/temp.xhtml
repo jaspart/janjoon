@@ -88,17 +88,18 @@
 									</p:panelGrid>
 								</f:facet>
 
-								<p:column headerText="Name" style="width:25%">  
-            						#{requirement.name}  
-        						</p:column>
+								<p:column headerText="Requirement" style="width:25%">
+									<h:outputText value="#{requirement.name}" />
+								</p:column>
 
-								<p:column headerText="Project" style="width:25%">  
-            						#{requirement.name}  
-        						</p:column>
+								<p:column headerText="Product" style="width:25%">
+									<h:outputText value="#{requirement.product.name}" />
+								</p:column>
 
-								<p:column headerText="Chapter" style="width:25%">  
-            						#{requirement.name}  
-        						</p:column>
+								<p:column headerText="Chapter" style="width:25%">
+									<h:outputText value="#{requirement.chapter.name}" />
+								</p:column>
+
 							</p:dataTable></td>
 					</ui:repeat>
 				</tr>
@@ -113,6 +114,126 @@
 			<p:outputPanel id="requirementDialogPanel">
 				<h:form id="requirementDialogForm">
 					<p:growl id="msg" />
+					<p:panelGrid style="margin-top:10px">
+						<p:row>
+							<p:column colspan="2">
+								<p:inputText id="name"
+									value="#{jJRequirementBean.requirement.name}" required="true"
+									widgetVar="nameWidget" label="Requirement Name"
+									requiredMessage="Requirement Name is a required value">
+								</p:inputText>
+								<p:message for="name" id="msgName" />
+								<p:watermark for="name" value="Name *" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText for="project" value="Project:" />
+								<p:selectOneMenu id="project"
+									value="#{jJRequirementBean.requirementProject}"
+									panelStyle="width:150px" effect="fade" style="width:150px"
+									filter="true" filterMatchMode="startsWith">
+									<f:converter
+										converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
+									<f:selectItem
+										itemLabel="#{jJRequirementBean.requirementProject.name}"
+										itemValue="#{jJRequirementBean.requirementProject}" />
+									<f:selectItems
+										value="#{jJRequirementBean.requirementProjectList}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />
+									<p:ajax process="@this" partialSubmit="true"
+										listener="#{jJRequirementBean.handleSelectProject()}" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+								<h:outputText for="product" value="Product:" />
+								<p:selectOneMenu id="product"
+									value="#{jJRequirementBean.requirementProduct}"
+									panelStyle="width:150px" effect="fade" style="width:150px"
+									filter="true" filterMatchMode="startsWith">
+									<f:converter
+										converterId="com.funder.janjoonweb.ui.mb.converter.JJProductConverter" />
+									<f:selectItem
+										itemLabel="#{jJRequirementBean.requirementProduct.name}"
+										itemValue="#{jJRequirementBean.requirementProduct}" />
+									<f:selectItems
+										value="#{jJRequirementBean.requirementProductList}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />
+									<p:ajax process="@this" partialSubmit="true"
+										update="chapter,version"
+										listener="#{jJRequirementBean.handleSelectProduct()}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText for="chapter" value="Chapter:" />
+								<p:selectOneMenu id="chapter"
+									value="#{jJRequirementBean.requirementChapter}"
+									panelStyle="width:150px" effect="fade" style="width:150px"
+									filter="true" filterMatchMode="startsWith">
+									<f:converter
+										converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
+									<f:selectItem
+										itemLabel="#{jJRequirementBean.requirementChapter.name}"
+										itemValue="#{jJRequirementBean.requirementChapter}" />
+									<f:selectItems
+										value="#{jJRequirementBean.requirementChapterList}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />
+									<p:ajax process="@this" partialSubmit="true"
+										listener="#{jJRequirementBean.handleSelectChapter1()}" />
+								</p:selectOneMenu>
+
+							</p:column>
+							<p:column>
+								<h:outputText for="version" value="Version:" />
+								<p:selectOneMenu id="version"
+									value="#{jJRequirementBean.requirementVersion}"
+									panelStyle="width:150px" effect="fade" style="width:150px"
+									filter="true" filterMatchMode="startsWith"
+									disabled="#{jJRequirementBean.disabledVersion}">
+									<f:converter
+										converterId="com.funder.janjoonweb.ui.mb.converter.JJVersionConverter" />
+									<f:selectItem
+										itemLabel="#{jJRequirementBean.requirementVersion.name}"
+										itemValue="#{jJRequirementBean.requirementVersion}" />
+									<f:selectItems
+										value="#{jJRequirementBean.requirementVersionList}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />
+									<p:ajax process="@this" partialSubmit="true"
+										listener="#{jJRequirementBean.handleSelectVersion()}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2">
+								<h:outputText value="Description : *" />
+								<p:editor id="description" widgetVar="descriptionWidget"
+									style="width:388px"
+									value="#{jJRequirementBean.requirement.description}"
+									required="true"
+									requiredMessage="Requirement Description is a required value">
+								</p:editor>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2">
+								<p:inputTextarea id="note" rows="1" cols="70"
+									value="#{jJRequirementBean.requirement.note}">
+								</p:inputTextarea>
+								<p:watermark for="note" value="Note" />
+							</p:column>
+						</p:row>
+						<f:facet name="footer">
+							<p:row>
+								<p:column colspan="3">
+									<p:commandButton value="Save"
+										action="#{jJRequirementBean.save()}" process="@form"
+										update="requirementDialogForm" />
+								</p:column>
+							</p:row>
+						</f:facet>
+					</p:panelGrid>
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>

@@ -403,8 +403,8 @@ public class JJChapterServiceImpl implements JJChapterService {
 	}
 
 	@Override
-	public List<JJChapter> getAllJJChapters(JJProject project,
-			JJProduct product, JJCategory category) {
+	public List<JJChapter> getChapters(JJProject project, JJProduct product,
+			JJCategory category, boolean onlyActif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJChapter> criteriaQuery = criteriaBuilder
@@ -416,8 +416,9 @@ public class JJChapterServiceImpl implements JJChapterService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
 		// Adding predicates in case of parameter not being null
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));

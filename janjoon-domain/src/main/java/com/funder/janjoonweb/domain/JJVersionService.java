@@ -11,4 +11,7 @@ public interface JJVersionService {
 	public List<JJVersion> getAllJJVersion();
 
 	public List<JJVersion> getAllJJVersionWithoutProduct();
+
+	// New Generic
+	public List<JJVersion> getVersions(boolean onlyActif, JJProduct product);
 }

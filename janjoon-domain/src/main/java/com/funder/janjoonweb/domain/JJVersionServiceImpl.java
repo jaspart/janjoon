@@ -1,5 +1,6 @@
 package com.funder.janjoonweb.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -101,4 +102,32 @@ public class JJVersionServiceImpl implements JJVersionService {
 
 	}
 
+	// New Generic
+
+	@Override
+	public List<JJVersion> getVersions(boolean onlyActif, JJProduct product) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJVersion> criteriaQuery = criteriaBuilder
+				.createQuery(JJVersion.class);
+
+		Root<JJVersion> from = criteriaQuery.from(JJVersion.class);
+
+		CriteriaQuery<JJVersion> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+
+		if (product != null) {
+			predicates.add(criteriaBuilder.equal(from.get("product"), product));
+		}
+		select.where(predicates.toArray(new Predicate[] {}));
+
+		TypedQuery<JJVersion> result = entityManager.createQuery(select);
+		return result.getResultList();
+
+	}
 }

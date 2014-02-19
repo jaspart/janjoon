@@ -106,8 +106,8 @@ public class JJChapterBean {
 	}
 
 	public List<JJChapter> getChapterList() {
-		chapterList = jJChapterService.getAllJJChapters(project, product,
-				category);
+		chapterList = jJChapterService.getChapters(project, product,
+				category,true);
 		return chapterList;
 	}
 
@@ -205,6 +205,7 @@ public class JJChapterBean {
 		chapter.setCategory(category);
 		chapter.setProject(project);
 		chapter.setProduct(product);
+		chapter.setDescription(null);
 		parentChapter = null;
 		chapter.setParent(parentChapter);
 
