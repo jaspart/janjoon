@@ -65,10 +65,9 @@
 				<p:selectOneMenu id="productSelectOneMenu"
 					value="#{jJProductBean.product}" panelStyle="width:150px"
 					effect="fade" style="width:160px" filter="true"
-					filterMatchMode="startsWith" disabled="#{jJProductBean.disabled}">
+					filterMatchMode="startsWith">
 					<f:converter
 						converterId="com.funder.janjoonweb.ui.mb.converter.JJProductConverter" />
-
 					<f:selectItem itemLabel="#{jJProductBean.product.name}"
 						itemValue="#{jJProductBean.product}" />
 					<f:selectItems value="#{jJProductBean.productList}" var="p"

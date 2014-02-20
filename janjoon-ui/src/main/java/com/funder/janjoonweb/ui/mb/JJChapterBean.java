@@ -35,6 +35,7 @@ import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJRequirementService;
+import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Chunk;
@@ -67,6 +68,7 @@ public class JJChapterBean {
 
 	private JJProject project;
 	private JJProduct product;
+	private JJVersion version;
 	private JJCategory category;
 
 	/**
@@ -129,6 +131,14 @@ public class JJChapterBean {
 
 	public void setProduct(JJProduct product) {
 		this.product = product;
+	}
+
+	public JJVersion getVersion() {
+		return version;
+	}
+
+	public void setVersion(JJVersion version) {
+		this.version = version;
 	}
 
 	public JJCategory getCategory() {
@@ -315,22 +325,6 @@ public class JJChapterBean {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 
-	// public List<JJChapter> completeChapter(String query) {
-	// List<JJChapter> suggestions = new ArrayList<JJChapter>();
-	//
-	// for (JJChapter jJChapter : jJChapterService
-	// .getAllJJChaptersWithProjectAndCategory(project, category)) {
-	// String jJChapterStr = String.valueOf(jJChapter.getName() + " "
-	// + jJChapter.getDescription() + " "
-	// + jJChapter.getCreationDate() + " "
-	// + jJChapter.getUpdatedDate());
-	// if (jJChapterStr.toLowerCase().startsWith(query.toLowerCase())) {
-	// suggestions.add(jJChapter);
-	// }
-	// }
-	// return suggestions;
-	// }
-
 	public void chapterTreeBean() {
 
 		chapterRoot = new DefaultTreeNode("RootChapter", null);
@@ -351,7 +345,7 @@ public class JJChapterBean {
 		leftRoot = new DefaultTreeNode("leftRoot", null);
 
 		List<JJRequirement> jJRequirementList = jJRequirementService
-				.getRequirements(category, project, product, null, null, true,
+				.getRequirements(category, project, product, version, null, true,
 						true, false);
 
 		for (JJRequirement requirement : jJRequirementList) {
@@ -515,22 +509,6 @@ public class JJChapterBean {
 			}
 		}
 	}
-
-	// public void postProcessXLS(Object document) {
-	// HSSFWorkbook wb = (HSSFWorkbook) document;
-	// HSSFSheet sheet = wb.getSheetAt(0);
-	// HSSFRow header = sheet.getRow(0);
-	//
-	// HSSFCellStyle cellStyle = wb.createCellStyle();
-	// cellStyle.setFillForegroundColor(HSSFColor.GREEN.index);
-	// cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-	//
-	// for (int i = 0; i < header.getPhysicalNumberOfCells(); i++) {
-	// HSSFCell cell = header.getCell(i);
-	//
-	// cell.setCellStyle(cellStyle);
-	// }
-	// }
 
 	public SortedMap<Integer, Object> getSortedElements(JJChapter parent,
 			boolean onlyActif) {

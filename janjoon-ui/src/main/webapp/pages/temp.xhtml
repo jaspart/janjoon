@@ -28,7 +28,11 @@
 				<tr>
 					<ui:repeat value="#{jJRequirementBean.tableDataModelList}"
 						var="tableDataModel">
-						<td><p:dataTable id="input#{tableDataModel.idDataModel}"
+						<p:contextMenu for="foo">
+							<p:menuitem value="#{messages.label_edit}" icon="ui-icon-pencil"
+								actionListener="#{jJRequirementBean.editRequirement(tableDataModel.categoryId)}" />
+						</p:contextMenu>
+						<td><p:dataTable id="foo"
 								selectionMode="single" var="requirement"
 								value="#{tableDataModel}" paginator="true" rows="10"
 								selection="#{jJRequirementBean.selectedRequirement}"
@@ -125,8 +129,6 @@
 								<p:message for="name" id="msgName" />
 								<p:watermark for="name" value="Name *" />
 							</p:column>
-						</p:row>
-						<p:row>
 							<p:column>
 								<h:outputText for="project" value="Project:" />
 								<p:selectOneMenu id="project"
@@ -145,6 +147,8 @@
 										listener="#{jJRequirementBean.handleSelectProject()}" />
 								</p:selectOneMenu>
 							</p:column>
+						</p:row>
+						<p:row>
 							<p:column>
 								<h:outputText for="product" value="Product:" />
 								<p:selectOneMenu id="product"
@@ -163,27 +167,6 @@
 										update="chapter,version"
 										listener="#{jJRequirementBean.handleSelectProduct()}" />
 								</p:selectOneMenu>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column>
-								<h:outputText for="chapter" value="Chapter:" />
-								<p:selectOneMenu id="chapter"
-									value="#{jJRequirementBean.requirementChapter}"
-									panelStyle="width:150px" effect="fade" style="width:150px"
-									filter="true" filterMatchMode="startsWith">
-									<f:converter
-										converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
-									<f:selectItem
-										itemLabel="#{jJRequirementBean.requirementChapter.name}"
-										itemValue="#{jJRequirementBean.requirementChapter}" />
-									<f:selectItems
-										value="#{jJRequirementBean.requirementChapterList}" var="c"
-										itemLabel="#{c.name}" itemValue="#{c}" />
-									<p:ajax process="@this" partialSubmit="true"
-										listener="#{jJRequirementBean.handleSelectChapter1()}" />
-								</p:selectOneMenu>
-
 							</p:column>
 							<p:column>
 								<h:outputText for="version" value="Version:" />
@@ -204,9 +187,61 @@
 										listener="#{jJRequirementBean.handleSelectVersion()}" />
 								</p:selectOneMenu>
 							</p:column>
+							<p:column>
+								<h:outputText for="chapter" value="Chapter:" />
+								<p:selectOneMenu id="chapter"
+									value="#{jJRequirementBean.requirementChapter}"
+									panelStyle="width:150px" effect="fade" style="width:150px"
+									filter="true" filterMatchMode="startsWith">
+									<f:converter
+										converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
+									<f:selectItem
+										itemLabel="#{jJRequirementBean.requirementChapter.name}"
+										itemValue="#{jJRequirementBean.requirementChapter}" />
+									<f:selectItems
+										value="#{jJRequirementBean.requirementChapterList}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />
+									<p:ajax process="@this" partialSubmit="true"
+										listener="#{jJRequirementBean.handleSelectChapter1()}" />
+								</p:selectOneMenu>
+							</p:column>
 						</p:row>
 						<p:row>
-							<p:column colspan="2">
+							<p:column>
+								<p:selectCheckboxMenu
+									value="#{jJRequirementBean.selectedLowRequirementsList}"
+									label="#{jJRequirementBean.lowCategoryName}" filter="true"
+									filterText="Filter" filterMatchMode="contains"
+									panelStyle="width:220px"
+									disabled="#{jJRequirementBean.disabledLowRequirements}">
+									<f:selectItems value="#{jJRequirementBean.lowRequirementsList}" />
+								</p:selectCheckboxMenu>
+							</p:column>
+							<p:column>
+								<p:selectCheckboxMenu
+									value="#{jJRequirementBean.selectedMediumRequirementsList}"
+									label="#{jJRequirementBean.mediumCategoryName}" filter="true"
+									filterText="Filter" filterMatchMode="contains"
+									panelStyle="width:220px"
+									disabled="#{jJRequirementBean.disabledMediumRequirements}">
+									<f:selectItems
+										value="#{jJRequirementBean.mediumRequirementsList}" />
+								</p:selectCheckboxMenu>
+							</p:column>
+							<p:column>
+								<p:selectCheckboxMenu
+									value="#{jJRequirementBean.selectedHighRequirementsList}"
+									label="#{jJRequirementBean.highCategoryName}" filter="true"
+									filterText="Filter" filterMatchMode="contains"
+									panelStyle="width:220px"
+									disabled="#{jJRequirementBean.disabledHighRequirements}">
+									<f:selectItems
+										value="#{jJRequirementBean.highRequirementsList}" />
+								</p:selectCheckboxMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="3">
 								<h:outputText value="Description : *" />
 								<p:editor id="description" widgetVar="descriptionWidget"
 									style="width:388px"
@@ -217,8 +252,8 @@
 							</p:column>
 						</p:row>
 						<p:row>
-							<p:column colspan="2">
-								<p:inputTextarea id="note" rows="1" cols="70"
+							<p:column rowspan="3" colspan="3">
+								<p:inputTextarea id="note" rows="3" cols="100"
 									value="#{jJRequirementBean.requirement.note}">
 								</p:inputTextarea>
 								<p:watermark for="note" value="Note" />
