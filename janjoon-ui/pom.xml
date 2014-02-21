@@ -57,6 +57,18 @@
 		</pluginRepository>
 	</pluginRepositories>
 	<dependencies>
+		<!--Git dependencies -->
+		<dependency>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit</artifactId>
+			<version>3.2.0.201312181205-r</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>0.1.50</version>
+		</dependency>
+
 		<!-- General dependencies for standard applications -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -251,8 +263,8 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.9</version>
 		</dependency>
-		
-		
+
+
 		<dependency>
 			<groupId>javax.el</groupId>
 			<artifactId>el-api</artifactId>
@@ -269,7 +281,7 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.funder.janjoonweb.domain</groupId>
 			<artifactId>janjoon-domain</artifactId>
