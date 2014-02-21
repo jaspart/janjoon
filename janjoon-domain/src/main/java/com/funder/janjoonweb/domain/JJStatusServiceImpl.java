@@ -1,5 +1,6 @@
 package com.funder.janjoonweb.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -57,4 +58,36 @@ public class JJStatusServiceImpl implements JJStatusService {
 			return result.getSingleResult();
 
 	}
+
+	// New Generic
+
+	@Override
+	public List<JJStatus> getStatusSortedByName(boolean onlyActif,
+			List<String> names) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJStatus> criteriaQuery = criteriaBuilder
+				.createQuery(JJStatus.class);
+
+		Root<JJStatus> from = criteriaQuery.from(JJStatus.class);
+
+		CriteriaQuery<JJStatus> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		if (onlyActif) {
+			
+		}
+
+//		for (String name : names) {
+//			predicates.add(criteriaBuilder.notEqual(from.get("name"), name));
+//		}
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.orderBy(criteriaBuilder.asc(from.get("name")));
+
+		TypedQuery<JJStatus> result = entityManager.createQuery(select);
+		return result.getResultList();
+	}
+
 }

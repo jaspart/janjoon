@@ -3,7 +3,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <ui:composition template="../templates/layout.xhtml">
 
@@ -27,18 +28,14 @@
 				<tr />
 				<tr>
 					<ui:repeat value="#{jJRequirementBean.tableDataModelList}"
-						var="tableDataModel">
-						<p:contextMenu for="foo">
-							<p:menuitem value="#{messages.label_edit}" icon="ui-icon-pencil"
-								actionListener="#{jJRequirementBean.editRequirement(tableDataModel.categoryId)}" />
-						</p:contextMenu>
-						<td><p:dataTable id="foo"
-								selectionMode="single" var="requirement"
+						var="tableDataModel" varStatus="status">
+
+						<td><p:dataTable id="dataTable" var="requirement"
 								value="#{tableDataModel}" paginator="true" rows="10"
-								selection="#{jJRequirementBean.selectedRequirement}"
 								style="width:410px">
+
 								<f:facet name="header">  
-          							#{tableDataModel.idDataModel}
+          							#{tableDataModel.nameDataModel}
           							<p:panelGrid>
 										<f:facet name="header">
 											<p:row>
@@ -46,7 +43,6 @@
 													<p:commandButton id="manageChapterButton"
 														icon="ui-icon-document"
 														title="Manage Chapter and Document"
-														disabled="#{tableDataModel.disabled}"
 														actionListener="#{jJChapterBean.initChapterBean(tableDataModel.categoryId)}"
 														update=":chapterDialogForm"
 														oncomplete="chapterDialogWidget.show()" />
@@ -54,33 +50,28 @@
 												<p:column colspan="1">
 													<p:commandButton id="releaseRequirementButton"
 														icon=".ui-icon-carat-2-n-s"
-														title="Release All Requirements"
-														disabled="#{tableDataModel.disabled}" />
+														title="Release All Requirements" />
 												</p:column>
 												<p:column colspan="4">
-													<p:inputText id="globalFilter" style="width:120px"
-														disabled="#{tableDataModel.disabled}" />
+													<p:inputText id="globalFilter" style="width:120px" />
 												</p:column>
 												<p:column colspan="1">
 													<p:commandButton id="newRequirementButton"
 														icon="ui-icon-plus" title="New Requirement"
-														disabled="#{tableDataModel.disabled}"
 														actionListener="#{jJRequirementBean.newRequirement(tableDataModel.categoryId)}"
 														update=":requirementDialog"
 														oncomplete="requirementDialogWidget.show()" />
 												</p:column>
 												<p:column colspan="1">
 													<p:commandButton id="exportButton" icon="ui-icon-clipboard"
-														type="button" ajax="false"
-														disabled="#{tableDataModel.disabled}" />
+														type="button" ajax="false" />
 													<p:menu overlay="true" trigger="exportButton" my="left top"
 														at="left bottom">
 														<p:menuitem>
 															<h:commandLink id="pdf">
 																<p:graphicImage value="/resources/images/pdf.png" />
 																<h:outputLabel for="pdf" value="export in pdf" />
-																<p:dataExporter type="pdf"
-																	target="input#{tableDataModel.idDataModel}"
+																<p:dataExporter type="pdf" target="dataTable"
 																	fileName="requirements"
 																	preProcessor="#{jJChapterBean.preProcessPDF}" />
 															</h:commandLink>
@@ -104,6 +95,21 @@
 									<h:outputText value="#{requirement.chapter.name}" />
 								</p:column>
 
+								<p:column styleClass="action-column">
+									<f:facet name="header">
+										<h:outputText value="Actions" />
+									</f:facet>
+									<p:commandButton id="editButton" icon="ui-icon-pencil"
+										action="#{jJRequirementBean.editRequirement(tableDataModel.categoryId)}"
+										oncomplete="requirementDialogWidget.show()"
+										update=":requirementDialog">
+										<f:setPropertyActionListener value="#{requirement}"
+											target="#{tableDataModel.selectedRequirement}" />
+									</p:commandButton>
+									<p:tooltip for="editButton" value="#{messages.label_edit}"
+										showEffect="fade" hideEffect="fade" />
+
+								</p:column>
 							</p:dataTable></td>
 					</ui:repeat>
 				</tr>
@@ -120,7 +126,7 @@
 					<p:growl id="msg" />
 					<p:panelGrid style="margin-top:10px">
 						<p:row>
-							<p:column colspan="2">
+							<p:column>
 								<p:inputText id="name"
 									value="#{jJRequirementBean.requirement.name}" required="true"
 									widgetVar="nameWidget" label="Requirement Name"
@@ -128,6 +134,24 @@
 								</p:inputText>
 								<p:message for="name" id="msgName" />
 								<p:watermark for="name" value="Name *" />
+							</p:column>
+							<p:column>
+								<h:outputText for="status" value="Status:" />
+								<p:selectOneMenu id="status"
+									value="#{jJRequirementBean.requirementStatus}"
+									panelStyle="width:150px" effect="fade" style="width:150px"
+									filter="true" filterMatchMode="startsWith">
+									<f:converter
+										converterId="com.funder.janjoonweb.ui.mb.converter.JJStatusConverter" />
+									<f:selectItem
+										itemLabel="#{jJRequirementBean.requirementStatus.name}"
+										itemValue="#{jJRequirementBean.requirementStatus}" />
+									<f:selectItems
+										value="#{jJRequirementBean.requirementStatusList}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />
+									<p:ajax process="@this" partialSubmit="true"
+										listener="#{jJRequirementBean.handleSelectStatus()}" />
+								</p:selectOneMenu>
 							</p:column>
 							<p:column>
 								<h:outputText for="project" value="Project:" />

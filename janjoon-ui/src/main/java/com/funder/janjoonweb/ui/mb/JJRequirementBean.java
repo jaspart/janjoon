@@ -1542,7 +1542,7 @@ public class JJRequirementBean {
 	private List<RequirementDataModel> tableDataModelList;
 
 	private JJRequirement requirement;
-	private JJRequirement selectedRequirement;
+
 
 	private JJProject project;
 	private JJProject requirementProject;
@@ -1563,6 +1563,10 @@ public class JJRequirementBean {
 
 	private List<JJChapter> requirementChapterList;
 
+	private JJStatus requirementStatus;
+
+	private List<JJStatus> requirementStatusList;
+
 	private String templateHeader;
 	private String outputTemplateHeader;
 	private String message;
@@ -1581,8 +1585,10 @@ public class JJRequirementBean {
 	private boolean disabledMediumRequirements;
 	private boolean disabledHighRequirements;
 	private boolean disabledVersion;
+	private boolean disabledStatus;
 
 	private Map<String, JJRequirement> storeMap;
+	private List<String> namesList;
 
 	public JJCategory getLowCategory() {
 		return lowCategory;
@@ -1642,13 +1648,7 @@ public class JJRequirementBean {
 		this.requirement = requirement;
 	}
 
-	public JJRequirement getSelectedRequirement() {
-		return selectedRequirement;
-	}
-
-	public void setSelectedRequirement(JJRequirement selectedRequirement) {
-		this.selectedRequirement = selectedRequirement;
-	}
+	
 
 	public JJProject getProject() {
 		return project;
@@ -1743,6 +1743,24 @@ public class JJRequirementBean {
 
 	public void setRequirementChapterList(List<JJChapter> requirementChapterList) {
 		this.requirementChapterList = requirementChapterList;
+	}
+
+	public JJStatus getRequirementStatus() {
+		return requirementStatus;
+	}
+
+	public void setRequirementStatus(JJStatus requirementStatus) {
+		this.requirementStatus = requirementStatus;
+	}
+
+	public List<JJStatus> getRequirementStatusList() {
+		requirementStatusList = jJStatusService.getAllJJStatuses();
+		return requirementStatusList;
+	}
+
+	public void setRequirementStatusList(List<JJStatus> requirementStatusList) {
+		
+		this.requirementStatusList = requirementStatusList;
 	}
 
 	public String getTemplateHeader() {
@@ -1879,6 +1897,14 @@ public class JJRequirementBean {
 		this.disabledVersion = disabledVersion;
 	}
 
+	public boolean getDisabledStatus() {
+		return disabledStatus;
+	}
+
+	public void setDisabledStatus(boolean disabledStatus) {
+		this.disabledStatus = disabledStatus;
+	}
+
 	public void newRequirement(long id) {
 		System.out.println("New Requirement");
 
@@ -1913,17 +1939,51 @@ public class JJRequirementBean {
 		requirementChapter = null;
 		requirement.setChapter(requirementChapter);
 
-		fullUpDownRequirementsList();
+		namesList = new ArrayList<String>();
+		requirementStatus = jJStatusService.getJJStatusWithName("NEW");
+		disabledStatus = true;
+
+		// fullUpDownRequirementsList();
 
 	}
 
 	public void editRequirement(long id) {
 		System.out.println("Edit Requirement");
-		System.out.println(id);
+
 		message = "Edit Requirement";
-		if (selectedRequirement != null) {
-			System.out.println(selectedRequirement.getName());
+		for (RequirementDataModel requirementDataModel : tableDataModelList) {
+			if (requirementDataModel.getCategoryId() == id) {
+				requirement = requirementDataModel.getSelectedRequirement();
+				break;
+			}
+
 		}
+
+		requirementCategory = requirement.getCategory();
+		requirement.setUpdatedDate(new Date());
+
+		requirementProject = requirement.getProject();
+
+		requirementProduct = requirement.getProduct();
+
+		if (requirementProduct != null) {
+			disabledVersion = false;
+		} else {
+			disabledVersion = true;
+		}
+
+		requirementVersion = requirement.getVersioning();
+
+		requirementChapter = requirement.getChapter();
+		
+		
+		
+		namesList = new ArrayList<String>();
+
+		requirementStatus = jJStatusService.getJJStatusWithName("MODIFIED");
+
+		disabledStatus = false;
+
 	}
 
 	public void save() {
@@ -1934,14 +1994,12 @@ public class JJRequirementBean {
 		requirement.setProduct(requirementProduct);
 		requirement.setVersioning(requirementVersion);
 		requirement.setChapter(requirementChapter);
+		requirement.setStatus(requirementStatus);
 
-		JJStatus status;
-
+		System.out.println("requirementStatus.getId() "+requirementStatus.getId());
+		
 		if (requirement.getId() == null) {
 			System.out.println("SAVING new Requirement...");
-
-			status = jJStatusService.getJJStatusWithName("NEW");
-			requirement.setStatus(status);
 
 			// Set<JJRequirement> linkUp = new HashSet<JJRequirement>();
 			// linkUp.addAll(getUpRequirementsList());
@@ -1960,15 +2018,12 @@ public class JJRequirementBean {
 		} else {
 			System.out.println("UPDATING Requirement...");
 
-			status = jJStatusService.getJJStatusWithName("MODIFIED");
-			requirement.setStatus(status);
-
 			jJRequirementService.updateJJRequirement(requirement);
 
 			message = "message_successfully_updated";
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("requirementDialogWidget.hide()");
-			// closeDialog();
+			closeDialog();
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
@@ -1977,7 +2032,7 @@ public class JJRequirementBean {
 
 	}
 
-	public void closeDialog(CloseEvent event) {
+	public void closeDialog() {
 		System.out.println("close Dialog");
 		message = null;
 		lowCategoryName = null;
@@ -1992,6 +2047,8 @@ public class JJRequirementBean {
 		requirementProjectList = null;
 		requirementVersion = null;
 		requirementVersionList = null;
+		requirementStatus = null;
+		requirementStatusList = null;
 		requirementCategory = null;
 		lowRequirementsList = null;
 		mediumRequirementsList = null;
@@ -2033,6 +2090,10 @@ public class JJRequirementBean {
 
 	}
 
+	public void handleSelectStatus() {
+		System.out.println(requirementStatus.getName());
+	}
+
 	public void load(JJProjectBean jJProjectBean, JJProductBean jJProductBean,
 			JJVersionBean jJVersionBean, JJChapterBean jJChapterBean) {
 
@@ -2044,23 +2105,18 @@ public class JJRequirementBean {
 		jJChapterBean.setProduct(product);
 		jJChapterBean.setVersion(version);
 
-		selectedRequirement = null;
 
 		fullTableDataModelList();
 	}
 
 	public void updateTemplate(long id) {
-		System.out.println("A voir avec Arnaud");
 
 		JJCategory category = jJCategoryService.findJJCategory(id);
 
 		if (templateHeader != null) {
 			String[] categories = templateHeader.split("/");
-			int length = categories.length;
 
-			System.out.println(length);
-
-			switch (length) {
+			switch (categories.length) {
 			case 1:
 				if (category.getStage() > lowCategory.getStage()) {
 					mediumCategory = category;
@@ -2101,22 +2157,18 @@ public class JJRequirementBean {
 			case 3:
 				if (category.getStage() > mediumCategory.getStage()) {
 					highCategory = category;
-					templateHeader = lowCategory.getName() + "/"
-							+ mediumCategory.getName() + "/"
-							+ highCategory.getName();
 
 				} else if (category.getStage() > lowCategory.getStage()) {
 					mediumCategory = category;
-					templateHeader = lowCategory.getName() + "/"
-							+ mediumCategory.getName() + "/"
-							+ highCategory.getName();
 
 				} else {
 					lowCategory = category;
-					templateHeader = lowCategory.getName() + "/"
-							+ mediumCategory.getName() + "/"
-							+ highCategory.getName();
+
 				}
+
+				templateHeader = lowCategory.getName() + "/"
+						+ mediumCategory.getName() + "/"
+						+ highCategory.getName();
 
 				break;
 
@@ -2133,48 +2185,36 @@ public class JJRequirementBean {
 	private void fullTableDataModelList() {
 		Map<String, List<JJRequirement>> mapTable = new LinkedHashMap<String, List<JJRequirement>>();
 
-		if (lowCategory == null) {
-			mapTable.put("0;lowCategory;empty", getRequirementsList(null));
-		} else {
+		if (lowCategory != null) {
 			mapTable.put(String.valueOf(lowCategory.getId()),
 					getRequirementsList(lowCategory));
 		}
 
-		if (mediumCategory == null) {
-			mapTable.put("0;mediumCategory;empty", getRequirementsList(null));
-		} else {
+		if (mediumCategory != null) {
 			mapTable.put(String.valueOf(mediumCategory.getId()),
 					getRequirementsList(mediumCategory));
 		}
-		if (highCategory == null) {
-			mapTable.put("0;highCategory;empty", getRequirementsList(null));
-		} else {
 
+		if (highCategory != null) {
 			mapTable.put(String.valueOf(highCategory.getId()),
 					getRequirementsList(highCategory));
 		}
 
 		tableDataModelList = new ArrayList<RequirementDataModel>();
+
 		for (Map.Entry<String, List<JJRequirement>> entry : mapTable.entrySet()) {
 
 			List<JJRequirement> value = entry.getValue();
 
 			String key = entry.getKey();
-			long categoryId;
-			String idDataModel;
 
-			if (key.contains("empty")) {
-				categoryId = Long.parseLong(splitString(key, ";", 0));
-				idDataModel = splitString(key, ";", 1);
-			} else {
-				categoryId = Long.parseLong(key);
-				JJCategory category = jJCategoryService
-						.findJJCategory(categoryId);
-				idDataModel = category.getName();
-			}
+			long categoryId = Long.parseLong(key);
+
+			JJCategory category = jJCategoryService.findJJCategory(categoryId);
+			String nameDataModel = category.getName();
 
 			RequirementDataModel requirementDataModel = new RequirementDataModel(
-					value, categoryId, idDataModel);
+					value, categoryId, nameDataModel);
 
 			tableDataModelList.add(requirementDataModel);
 		}
@@ -2368,16 +2408,17 @@ public class JJRequirementBean {
 	public class RequirementDataModel extends ListDataModel<JJRequirement>
 			implements SelectableDataModel<JJRequirement> {
 
-		private String idDataModel;
-		private long categoryId = 0;
-		private boolean disabled;
+		private String nameDataModel;
+		private long categoryId;
 
-		public String getIdDataModel() {
-			return idDataModel;
+		private JJRequirement selectedRequirement;
+
+		public String getNameDataModel() {
+			return nameDataModel;
 		}
 
-		public void setIdDataModel(String idDataModel) {
-			this.idDataModel = idDataModel;
+		public void setNameDataModel(String nameDataModel) {
+			this.nameDataModel = nameDataModel;
 		}
 
 		public long getCategoryId() {
@@ -2388,24 +2429,19 @@ public class JJRequirementBean {
 			this.categoryId = categoryId;
 		}
 
-		public boolean getDisabled() {
-			if (categoryId != 0) {
-				disabled = false;
-			} else {
-				disabled = true;
-			}
-			return disabled;
+		public JJRequirement getSelectedRequirement() {
+			return selectedRequirement;
 		}
 
-		public void setDisabled(boolean disabled) {
-			this.disabled = disabled;
+		public void setSelectedRequirement(JJRequirement selectedRequirement) {
+			this.selectedRequirement = selectedRequirement;
 		}
 
 		public RequirementDataModel(List<JJRequirement> data, long categoryId,
-				String idDataModel) {
+				String nameDataModel) {
 			super(data);
 			this.categoryId = categoryId;
-			this.idDataModel = idDataModel;
+			this.nameDataModel = nameDataModel;
 
 		}
 

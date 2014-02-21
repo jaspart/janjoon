@@ -10,4 +10,9 @@ public interface JJStatusService {
 	public List<JJStatus> getAllJJStatuses();
 
 	public JJStatus getJJStatusWithName(String name);
+
+	// New Generic
+
+	public List<JJStatus> getStatusSortedByName(boolean onlyActif,
+			List<String> names);
 }
