@@ -12,7 +12,6 @@ public interface JJStatusService {
 	public JJStatus getJJStatusWithName(String name);
 
 	// New Generic
-
-	public List<JJStatus> getStatusSortedByName(boolean onlyActif,
-			List<String> names);
+	public List<JJStatus> getStatus(boolean onlyActif, List<String> names,
+			boolean sortedByName);
 }

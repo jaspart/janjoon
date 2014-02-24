@@ -50,7 +50,9 @@
 												<p:column colspan="1">
 													<p:commandButton id="releaseRequirementButton"
 														icon=".ui-icon-carat-2-n-s"
-														title="Release All Requirements" />
+														title="Release All Requirements"
+														actionListener="#{jJRequirementBean.releaseRequirement(tableDataModel.categoryId)}"
+														update=":specForm" />
 												</p:column>
 												<p:column colspan="4">
 													<p:inputText id="globalFilter" style="width:120px" />
@@ -100,13 +102,23 @@
 										<h:outputText value="Actions" />
 									</f:facet>
 									<p:commandButton id="editButton" icon="ui-icon-pencil"
-										action="#{jJRequirementBean.editRequirement(tableDataModel.categoryId)}"
+										action="#{jJRequirementBean.editRequirement()}"
 										oncomplete="requirementDialogWidget.show()"
-										update=":requirementDialog">
+										update=":requirementDialog"
+										disabled="#{jJRequirementBean.getDisabledEdit(requirement)}">
 										<f:setPropertyActionListener value="#{requirement}"
-											target="#{tableDataModel.selectedRequirement}" />
+											target="#{jJRequirementBean.requirement}" />
 									</p:commandButton>
 									<p:tooltip for="editButton" value="#{messages.label_edit}"
+										showEffect="fade" hideEffect="fade" />
+
+									<p:commandButton id="deleteButton" icon="ui-icon-trash"
+										oncomplete="requirementDeleteDialogWidget.show()"
+										title="#{messages.label_delete}">
+										<f:setPropertyActionListener value="#{requirement}"
+											target="#{jJRequirementBean.requirement}" />
+									</p:commandButton>
+									<p:tooltip for="deleteButton" value="#{messages.label_delete}"
 										showEffect="fade" hideEffect="fade" />
 
 								</p:column>
@@ -140,7 +152,8 @@
 								<p:selectOneMenu id="status"
 									value="#{jJRequirementBean.requirementStatus}"
 									panelStyle="width:150px" effect="fade" style="width:150px"
-									filter="true" filterMatchMode="startsWith">
+									filter="true" filterMatchMode="startsWith"
+									disabled="#{jJRequirementBean.disabledStatus}">
 									<f:converter
 										converterId="com.funder.janjoonweb.ui.mb.converter.JJStatusConverter" />
 									<f:selectItem
@@ -298,8 +311,6 @@
 		</p:dialog>
 
 
-
-
 		<p:dialog id="chapterDialog" header="Chapter" modal="true"
 			widgetVar="chapterDialogWidget" maximizable="false"
 			minimizable="false" dynamic="true" resizable="false">
@@ -416,6 +427,23 @@
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
+
+		<p:confirmDialog id="requirementDeleteDialog"
+			widgetVar="requirementDeleteDialogWidget"
+			message="#{messages.label_delete_record}" showEffect="fade"
+			hideEffect="explode" header="#{messages.label_confirm_deletion}"
+			severity="alarm">
+			<p:outputPanel id="requirementDeletePanel">
+				<h:form id="requirementDeleteForm">
+					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+						action="#{jJRequirementBean.deleteRequirement}" update=":specForm"
+						oncomplete="requirementDeleteDialogWidget.hide()" />
+					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+						onclick="requirementDeleteDialogWidget.hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
+
 	</ui:define>
 </ui:composition>
 </html>

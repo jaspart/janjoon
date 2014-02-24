@@ -190,7 +190,7 @@ field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --m
 #######################
 
 focus --class ~.JJTask
-field reference --fieldName project --type ~.JJProject
+#field reference --fieldName project --type ~.JJProject
 field date --fieldName startDatePlanned --type java.util.Date
 field date --fieldName endDatePlanned --type java.util.Date
 field number --fieldName workloadPlanned --type java.lang.Integer

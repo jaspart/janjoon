@@ -62,8 +62,8 @@ public class JJStatusServiceImpl implements JJStatusService {
 	// New Generic
 
 	@Override
-	public List<JJStatus> getStatusSortedByName(boolean onlyActif,
-			List<String> names) {
+	public List<JJStatus> getStatus(boolean onlyActif, List<String> names,
+			boolean sortedByName) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJStatus> criteriaQuery = criteriaBuilder
 				.createQuery(JJStatus.class);
@@ -73,19 +73,35 @@ public class JJStatusServiceImpl implements JJStatusService {
 		CriteriaQuery<JJStatus> select = criteriaQuery.select(from);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		if (onlyActif) {
-			
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-//		for (String name : names) {
-//			predicates.add(criteriaBuilder.notEqual(from.get("name"), name));
-//		}
+		if (names.isEmpty()) {
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
-		select.orderBy(criteriaBuilder.asc(from.get("name")));
+			select.where(criteriaBuilder.and(predicates
+					.toArray(new Predicate[] {})));
+		} else {
 
+			List<Predicate> namePredicates = new ArrayList<Predicate>();
+			for (String name : names) {
+
+				namePredicates.add(criteriaBuilder.or(criteriaBuilder.notEqual(
+						from.get("name"), name)));
+
+			}
+
+			Predicate namePredicate = criteriaBuilder.and(namePredicates
+					.toArray(new Predicate[] {}));
+			predicates.add(namePredicate);
+			select.where(criteriaBuilder.and(predicates
+					.toArray(new Predicate[] {})));
+		}
+
+		if (sortedByName) {
+			select.orderBy(criteriaBuilder.asc(from.get("name")));
+		}
 		TypedQuery<JJStatus> result = entityManager.createQuery(select);
 		return result.getResultList();
 	}

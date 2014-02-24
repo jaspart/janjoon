@@ -1543,7 +1543,6 @@ public class JJRequirementBean {
 
 	private JJRequirement requirement;
 
-
 	private JJProject project;
 	private JJProject requirementProject;
 
@@ -1647,8 +1646,6 @@ public class JJRequirementBean {
 	public void setRequirement(JJRequirement requirement) {
 		this.requirement = requirement;
 	}
-
-	
 
 	public JJProject getProject() {
 		return project;
@@ -1754,12 +1751,14 @@ public class JJRequirementBean {
 	}
 
 	public List<JJStatus> getRequirementStatusList() {
-		requirementStatusList = jJStatusService.getAllJJStatuses();
+
+		requirementStatusList = jJStatusService
+				.getStatus(true, namesList, true);
 		return requirementStatusList;
 	}
 
 	public void setRequirementStatusList(List<JJStatus> requirementStatusList) {
-		
+
 		this.requirementStatusList = requirementStatusList;
 	}
 
@@ -1947,17 +1946,10 @@ public class JJRequirementBean {
 
 	}
 
-	public void editRequirement(long id) {
+	public void editRequirement() {
 		System.out.println("Edit Requirement");
 
 		message = "Edit Requirement";
-		for (RequirementDataModel requirementDataModel : tableDataModelList) {
-			if (requirementDataModel.getCategoryId() == id) {
-				requirement = requirementDataModel.getSelectedRequirement();
-				break;
-			}
-
-		}
 
 		requirementCategory = requirement.getCategory();
 		requirement.setUpdatedDate(new Date());
@@ -1975,14 +1967,49 @@ public class JJRequirementBean {
 		requirementVersion = requirement.getVersioning();
 
 		requirementChapter = requirement.getChapter();
-		
-		
-		
+
 		namesList = new ArrayList<String>();
+		namesList.add("DELETED");
+		namesList.add("NEW");
 
-		requirementStatus = jJStatusService.getJJStatusWithName("MODIFIED");
-
+		if (requirement.getStatus().getName().equalsIgnoreCase("NEW")) {
+			requirementStatus = jJStatusService.getJJStatusWithName("MODIFIED");
+		} else {
+			requirementStatus = requirement.getStatus();
+		}
 		disabledStatus = false;
+
+	}
+
+	public void deleteRequirement() {
+
+		System.out.println("DELETE Requirement ...");
+		requirement.setEnabled(false);
+		jJRequirementService.updateJJRequirement(requirement);
+		requirement = null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public void releaseRequirement(long id) {
+
+		System.out.println("RELEASE Requirements ...");
+		List<JJRequirement> list = new ArrayList<JJRequirement>();
+		for (RequirementDataModel requirementDataModel : tableDataModelList) {
+			if (requirementDataModel.getCategoryId() == id) {
+				List<JJRequirement> temp = (List<JJRequirement>) requirementDataModel
+						.getWrappedData();
+				list.addAll(temp);
+				break;
+			}
+
+		}
+
+		JJStatus status = jJStatusService.getJJStatusWithName("RELEASED");
+
+		for (JJRequirement requirement : list) {
+			requirement.setStatus(status);
+			jJRequirementService.updateJJRequirement(requirement);
+		}
 
 	}
 
@@ -1996,8 +2023,9 @@ public class JJRequirementBean {
 		requirement.setChapter(requirementChapter);
 		requirement.setStatus(requirementStatus);
 
-		System.out.println("requirementStatus.getId() "+requirementStatus.getId());
-		
+		System.out.println("requirementStatus.getId() "
+				+ requirementStatus.getId());
+
 		if (requirement.getId() == null) {
 			System.out.println("SAVING new Requirement...");
 
@@ -2032,9 +2060,18 @@ public class JJRequirementBean {
 
 	}
 
+	public boolean getDisabledEdit(JJRequirement requirement) {
+		if (requirement.getStatus().getName().equalsIgnoreCase("RELEASED")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public void closeDialog() {
 		System.out.println("close Dialog");
 		message = null;
+		namesList = null;
 		lowCategoryName = null;
 		mediumCategoryName = null;
 		highCategoryName = null;
@@ -2104,7 +2141,6 @@ public class JJRequirementBean {
 		jJChapterBean.setProject(project);
 		jJChapterBean.setProduct(product);
 		jJChapterBean.setVersion(version);
-
 
 		fullTableDataModelList();
 	}
@@ -2411,8 +2447,6 @@ public class JJRequirementBean {
 		private String nameDataModel;
 		private long categoryId;
 
-		private JJRequirement selectedRequirement;
-
 		public String getNameDataModel() {
 			return nameDataModel;
 		}
@@ -2427,14 +2461,6 @@ public class JJRequirementBean {
 
 		public void setCategoryId(long categoryId) {
 			this.categoryId = categoryId;
-		}
-
-		public JJRequirement getSelectedRequirement() {
-			return selectedRequirement;
-		}
-
-		public void setSelectedRequirement(JJRequirement selectedRequirement) {
-			this.selectedRequirement = selectedRequirement;
 		}
 
 		public RequirementDataModel(List<JJRequirement> data, long categoryId,
