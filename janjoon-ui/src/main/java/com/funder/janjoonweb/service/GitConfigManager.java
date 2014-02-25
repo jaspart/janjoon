@@ -192,18 +192,13 @@ public class GitConfigManager extends ConfigManagerAbstract {
 	}
 
 	@Override
-	public TreeNode listRepositoryContent(String branche) {
-		if (getAllBranches().contains(branche)) 
-		{
-			checkOut(branche);
+	public TreeNode listRepositoryContent() {
+		
+		checkOut("master");
 			DefaultTreeNode root = new DefaultTreeNode("folder",repository.getWorkTree(), null);
 			repositoryTreeNode(repository.getWorkTree(), root);
 			return root;
-		} else
-		{
-			System.out.println(branche+"branche n'existe pas");
-			return null;
-		}
+		
 	}
 
 	private void repositoryTreeNode(File workTree, DefaultTreeNode root) {

@@ -35,7 +35,7 @@ public abstract class ConfigManagerAbstract implements Serializable
 	
 	public abstract boolean createRepository (String path);
 	
-	public abstract TreeNode listRepositoryContent(String branche);	
+	public abstract TreeNode listRepositoryContent();	
 	
 	public abstract boolean pushRepository(String repoPath,String url,String userName,String password);
 

@@ -19,24 +19,18 @@
 			<br />
 			<p:panel header="#{jJDevelopment.selectedTree}"
 				style="width: 360;valign: top;">
+				<h:form id="form">
 				<table class="mytable">
-					<h:form id="form">
+					
 						<tr>
-							<td valign="top"><h:outputLabel value="Branche:" /> <p:selectOneMenu
-									id="branches" value="#{jJDevelopment.branche}" effect="fold"
-									editable="false" onchange="">
-									<f:selectItems value="#{jJDevelopment.branches}" />
-									<p:ajax update=":form:fileTree,:form:fileTexte"
-										listener="#{jJDevelopment.handleBrancheChange}" />
-								</p:selectOneMenu> <h:outputLabel value="Version:" /> <p:selectOneMenu
-									value="#{pprBean.city}" effect="fold" editable="true">
-									<f:selectItem itemLabel="12.04" itemValue="" />
-									<f:selectItems value="#{pprBean.cities}" />
+							<td valign="top"><h:outputLabel value="Task: " /> <p:selectOneMenu
+									id="task" value="" effect="fold" editable="false">
+									<f:selectItems value="hjvghj" />
 								</p:selectOneMenu> <p:growl id="messages" showDetail="true" /> <p:tree
 									id="fileTree" value="#{jJDevelopment.tree}" var="file"
 									animate="true" selection="#{jJDevelopment.selectedTree}"
 									selectionMode="single">
-									<p:ajax event="select" update=":form:messages,:form:fileTexte"
+									<p:ajax event="select" update=":form:messages,:form:tabView"
 										listener="#{jJDevelopment.onSelectTree}" />
 									<p:treeNode type="folder" expandedIcon="ui-icon-folder-open"
 										collapsedIcon="ui-icon-folder-collapsed">
@@ -48,27 +42,31 @@
 									<p:treeNode type="file" icon="ui-icon-document">
 										<h:outputText value="#{file.name}" />
 									</p:treeNode>
-								</p:tree> <h:outputLabel value="Task" /> <p:selectOneMenu
-									value="#{pprBean.city}" effect="fold" editable="true">
-									<f:selectItem itemLabel="TREQ000312: update interface"
-										itemValue="" />
-									<f:selectItems value="#{pprBean.cities}" />
-								</p:selectOneMenu> 
-								<p:commandButton value="Commit" id="submit"
-									update=":form:branches,:form:fileTree,:form:fileTexte"
-									icon="ui-icon-disk" action="#{jJDevelopment.commit}"
-									process="@this" /> 
-									<p:commandButton value="LoadRepository"
-									actionListener="#{pprBean.savePerson}" id="markdone" update=""
-									icon="ui-icon-disk" /></td>
-							<td>
-							<p:inputTextarea id="fileTexte" rows="20" cols="75"
-									value="#{jJDevelopment.fileTexte}" />
-									</td>
-						</tr>
-					</h:form>
-				</table>
+								</p:tree></td>
+							<td><p:tabView id="tabView"
+									activeIndex="#{jJDevelopment.activeTabIndex}"
+									binding="#{jJDevelopment.tabView}" scrollable="true"
+									value="#{jJDevelopment.files}" var="tab">
+									<p:ajax event="tabClose" listener="#{jJDevelopment.onCloseTab}" />
+									<p:ajax event="tabChange"
+										listener="#{jJDevelopment.onChangeTab}" />
+									<p:tab title="#{tab.title}" closable="true">
+										<p:inputTextarea id="textArea" rows="20" cols="75"
+											value="#{tab.texte}">
+											
+										</p:inputTextarea>
+									</p:tab>
 
+								</p:tabView></td>
+						</tr>
+						<tr>
+							<td><p:commandButton value="Commit" id="submit" icon="ui-icon-disk"
+									action="#{jJDevelopment.commit}" process="@this" /></td>
+							<td><p:commandButton value="LoadRepository" id="markdone"
+									update="" icon="ui-icon-disk" /></td>
+						</tr>
+				</table>
+				</h:form>
 			</p:panel>
 		</center>
 	</ui:define>
