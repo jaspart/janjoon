@@ -86,10 +86,9 @@ public class JJChapterBean {
 	private TreeNode selectedChapterNode;
 
 	/**
-	 * SortedMap of a node's children to manage the child's order into the
-	 * parent node
+	 * Id Category for Document Exporter
 	 */
-	// private SortedMap<Integer, Object> childElements;
+	private long categoryId;
 
 	public JJChapter getChapter() {
 		return chapter;
@@ -108,8 +107,8 @@ public class JJChapterBean {
 	}
 
 	public List<JJChapter> getChapterList() {
-		chapterList = jJChapterService.getChapters(project, product,
-				category,true);
+		chapterList = jJChapterService.getChapters(project, product, category,
+				true);
 		return chapterList;
 	}
 
@@ -199,7 +198,7 @@ public class JJChapterBean {
 
 	public void initChapterBean(long id) {
 		System.out.println("Init chapterBean");
-		System.out.println("Id "+id);
+		System.out.println("Id " + id);
 		category = jJCategoryService.findJJCategory(id);
 
 		newChapter();
@@ -220,7 +219,7 @@ public class JJChapterBean {
 		chapter.setParent(parentChapter);
 
 		SortedMap<Integer, Object> elements = getSortedElements(parentChapter,
-				false);
+				null, false);
 		if (elements.isEmpty()) {
 			chapter.setOrdering(0);
 		} else {
@@ -249,11 +248,11 @@ public class JJChapterBean {
 		JJChapter parentSelectedChapter = selectedChapter.getParent();
 
 		SortedMap<Integer, Object> elements = getSortedElements(
-				parentSelectedChapter, false);
+				parentSelectedChapter, null, false);
 
 		int increment = elements.lastKey() + 1;
 
-		elements = getSortedElements(selectedChapter, false);
+		elements = getSortedElements(selectedChapter, null, false);
 
 		System.out
 				.println("\n***** Update chapter and order for children  *****");
@@ -345,8 +344,8 @@ public class JJChapterBean {
 		leftRoot = new DefaultTreeNode("leftRoot", null);
 
 		List<JJRequirement> jJRequirementList = jJRequirementService
-				.getRequirements(category, project, product, version, null, true,
-						true, false);
+				.getRequirements(category, project, product, version, null,
+						true, true, false);
 
 		for (JJRequirement requirement : jJRequirementList) {
 			TreeNode node = new DefaultTreeNode("R-" + requirement.getId()
@@ -388,10 +387,10 @@ public class JJChapterBean {
 		} else if (index == 1) {
 
 			SortedMap<Integer, Object> elements = getSortedElements(
-					chapterParent, true);
+					chapterParent, product, true);
 			for (Map.Entry<Integer, Object> entry : elements.entrySet()) {
 				String className = entry.getValue().getClass().getSimpleName();
-				int lastOrder;
+
 				if (className.equalsIgnoreCase("JJChapter")) {
 
 					JJChapter chapter = (JJChapter) entry.getValue();
@@ -415,21 +414,28 @@ public class JJChapterBean {
 		return newNode;
 	}
 
+	public void updateCategoryId(long id) {
+		categoryId = id;
+	}
+
 	public void preProcessPDF(Object document) throws IOException,
 			BadElementException, DocumentException {
+
 		Document pdf = (Document) document;
 		pdf.addTitle("THIS IS THE TITLE");
 
 		pdf.open();
 		pdf.setPageSize(PageSize.A4);
-		Paragraph paragraph = new Paragraph();
 
 		Font fontTitle = new Font(Font.TIMES_ROMAN, 30, Font.BOLD);
 		fontTitle.setColor(new Color(0x24, 0x14, 0x14));
+
 		Font fontChapter = new Font(Font.HELVETICA, 15, Font.BOLD);
 		fontChapter.setColor(new Color(0x4E, 0x4E, 0x4E));
+
 		Font fontRequirement = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
 		fontRequirement.setColor(new Color(0x5A, 0x5A, 0x5A));
+
 		Font fontNote = new Font(Font.COURIER, 8, Font.BOLD);
 		fontNote.setColor(new Color(0x82, 0x82, 0x82));
 
@@ -445,19 +451,21 @@ public class JJChapterBean {
 		StyleSheet style = new StyleSheet();
 		style.loadTagStyle("body", "font", "Times New Roman");
 
-		Phrase phrase = new Phrase(20, new Chunk("\n"
-				+ "Business Specification \n" + project.getName() + "\n" + "\n"
-				+ "\n", fontChapter));
-		JJCategory category = jJCategoryService
-				.getJJCategoryWithName("BUSINESS");
+		category = jJCategoryService.findJJCategory(categoryId);
 
-		List<JJChapter> list = jJChapterService
-				.getAllParentJJChapterWithProjectAndCategorySortedByOrder(
-						project, category);
+		Phrase phrase = new Phrase(20, new Chunk("\n" + category.getName()
+				+ " Specification \n" + project.getName() + "\n" + "\n" + "\n",
+				fontChapter));
+
+		Paragraph paragraph = new Paragraph();
 		paragraph.add(phrase);
 
-		for (JJChapter jjChapter : list) {
-			orderChapters(jjChapter, category, paragraph, fontNote,
+		List<JJChapter> parentChapters = jJChapterService
+				.getAllParentsJJChapterSortedByOrder(project, product,
+						category, true);
+
+		for (JJChapter chapter : parentChapters) {
+			createTreeDocument(chapter, category, paragraph, fontNote,
 					fontChapter, fontRequirement, style);
 		}
 
@@ -469,28 +477,35 @@ public class JJChapterBean {
 		pdf.add(paragraph);
 	}
 
-	private void orderChapters(JJChapter chapter, JJCategory category,
-			Paragraph paragraph, Font fontNote, Font fontChapter,
-			Font fontRequirement, StyleSheet style) throws IOException {
+	private void createTreeDocument(JJChapter chapterParent,
+			JJCategory category, Paragraph paragraph, Font fontNote,
+			Font fontChapter, Font fontRequirement, StyleSheet style)
+			throws IOException {
 
-		paragraph.add(new Chunk("\n" + chapter.getName() + "\n", fontChapter));
-		paragraph.add(new Chunk(chapter.getDescription() + "\n", fontNote));
+		paragraph.add(new Chunk("\n" + chapterParent.getName() + "\n",
+				fontChapter));
+		paragraph
+				.add(new Chunk(chapterParent.getDescription() + "\n", fontNote));
 
-		List<JJChapter> listChild = jJChapterService
-				.getAllJJChaptersWithProjectAndCategoryAndParentSortedByOrder(
-						project, category, chapter);
-		for (JJChapter jjChapter : listChild) {
-			orderChapters(jjChapter, category, paragraph, fontNote,
-					fontChapter, fontRequirement, style);
-		}
+		SortedMap<Integer, Object> elements = getSortedElements(chapterParent,
+				product, true);
+		for (Map.Entry<Integer, Object> entry : elements.entrySet()) {
+			String className = entry.getValue().getClass().getSimpleName();
 
-		Set<JJRequirement> listReq = chapter.getRequirements();
-		for (JJRequirement jjRequirement : listReq) {
-			if (jjRequirement.getEnabled()) {
-				paragraph.add(new Chunk(jjRequirement.getName() + "\n",
+			if (className.equalsIgnoreCase("JJChapter")) {
+
+				JJChapter chapter = (JJChapter) entry.getValue();
+				createTreeDocument(chapter, category, paragraph, fontNote,
+						fontChapter, fontRequirement, style);
+
+			} else if (className.equalsIgnoreCase("JJRequirement")) {
+
+				JJRequirement requirement = (JJRequirement) entry.getValue();
+
+				paragraph.add(new Chunk(requirement.getName() + "\n",
 						fontRequirement));
 				StringReader strReader = new StringReader(
-						jjRequirement.getDescription());
+						requirement.getDescription());
 				System.out.println("strReader = "
 						+ strReader.getClass().getName());
 				ArrayList arrList = HTMLWorker.parseToList(strReader, style);
@@ -501,17 +516,21 @@ public class JJChapterBean {
 				 * System.out.println("ArrayElement = "
 				 * +e.getClass().getName()); paragraph.add(e); }
 				 */
-				if (jjRequirement.getNote().length() > 2) {
-					paragraph.add("Note: "
-							+ new Chunk(jjRequirement.getNote() + "\n",
-									fontNote));
+				if (requirement.getNote().length() > 2) {
+					paragraph
+							.add("Note: "
+									+ new Chunk(requirement.getNote() + "\n",
+											fontNote));
 				}
+
 			}
+
 		}
+
 	}
 
 	public SortedMap<Integer, Object> getSortedElements(JJChapter parent,
-			boolean onlyActif) {
+			JJProduct product, boolean onlyActif) {
 
 		SortedMap<Integer, Object> elements = new TreeMap<Integer, Object>();
 
@@ -556,7 +575,7 @@ public class JJChapterBean {
 	public void handleSelectParentChapter() {
 
 		SortedMap<Integer, Object> elements = getSortedElements(parentChapter,
-				false);
+				null, false);
 
 		chapter.setParent(parentChapter);
 
@@ -602,7 +621,8 @@ public class JJChapterBean {
 				if (requirementCHAPTER != null) {
 					int requirementOrder = REQUIREMENT.getOrdering();
 
-					elements = getSortedElements(requirementCHAPTER, false);
+					elements = getSortedElements(requirementCHAPTER, null,
+							false);
 
 					subElements = elements.tailMap(requirementOrder);
 
@@ -651,7 +671,7 @@ public class JJChapterBean {
 
 				JJChapter CHAPTER = jJChapterService.findJJChapter(chapterID);
 
-				elements = getSortedElements(CHAPTER, false);
+				elements = getSortedElements(CHAPTER, null, false);
 
 				if (elements.isEmpty()) {
 					REQUIREMENT.setOrdering(0);
@@ -732,7 +752,8 @@ public class JJChapterBean {
 
 				} else {
 					int requirementOrder = REQUIREMENT.getOrdering();
-					elements = getSortedElements(requirementCHAPTER, false);
+					elements = getSortedElements(requirementCHAPTER, null,
+							false);
 
 					subElements = elements.tailMap(requirementOrder);
 
@@ -835,14 +856,14 @@ public class JJChapterBean {
 
 				// Update the last chapter list
 
-				elements = getSortedElements(chapterParent, false);
+				elements = getSortedElements(chapterParent, null, false);
 
 				subElements = elements.tailMap(chapterOrder);
 
 				CHAPTER.setParent(null);
 
 				SortedMap<Integer, Object> tmpElements = getSortedElements(
-						null, false);
+						null, null, false);
 
 				CHAPTER.setOrdering(tmpElements.lastKey() + 1);
 				CHAPTER.setUpdatedDate(new Date());
@@ -881,7 +902,7 @@ public class JJChapterBean {
 
 				// End Update the last chapter list
 
-				elements = getSortedElements(newChapterPARENT, false);
+				elements = getSortedElements(newChapterPARENT, null, false);
 
 				if (newChapterPARENT == null) {
 					elements.remove(CHAPTER.getOrdering());

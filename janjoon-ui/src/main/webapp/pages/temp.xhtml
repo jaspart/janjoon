@@ -65,39 +65,49 @@
 														oncomplete="requirementDialogWidget.show()" />
 												</p:column>
 												<p:column colspan="1">
-													<p:commandButton id="exportButton" icon="ui-icon-clipboard"
-														type="button" ajax="false" />
-													<p:menu overlay="true" trigger="exportButton" my="left top"
-														at="left bottom">
-														<p:menuitem>
-															<h:commandLink id="pdf">
-																<p:graphicImage value="/resources/images/pdf.png" />
-																<h:outputLabel for="pdf" value="export in pdf" />
-																<p:dataExporter type="pdf" target="dataTable"
-																	fileName="requirements"
-																	preProcessor="#{jJChapterBean.preProcessPDF}" />
-															</h:commandLink>
-														</p:menuitem>
-													</p:menu>
+													<!-- 													<p:commandButton id="exportButton" icon="ui-icon-clipboard" type="button" ajax="false" /> -->
+													<!-- 													<p:menu overlay="true" trigger="exportButton" my="left top" -->
+													<!-- 														at="left bottom"> -->
+													<!-- 														<p:menuitem> -->
+													<h:commandLink id="pdf"
+														actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}">
+														<p:graphicImage value="/resources/images/pdf.png" />
+														<p:dataExporter type="pdf" target="dataTable"
+															fileName="Document"
+															preProcessor="#{jJChapterBean.preProcessPDF}" />
+													</h:commandLink>
+													<p:tooltip for="pdf" value="export to PDF"
+														showEffect="fade" hideEffect="fade" />
+													<!-- 														</p:menuitem> -->
+													<!-- 													</p:menu> -->
 												</p:column>
 											</p:row>
 										</f:facet>
 									</p:panelGrid>
 								</f:facet>
 
-								<p:column headerText="Requirement" style="width:25%">
+								<p:column style="width:25%">
+									<f:facet name="header">
+										<h:outputText value="Requirement" />
+									</f:facet>
 									<h:outputText value="#{requirement.name}" />
 								</p:column>
 
-								<p:column headerText="Product" style="width:25%">
+								<p:column style="width:25%">
+									<f:facet name="header">
+										<h:outputText value="Product" />
+									</f:facet>
 									<h:outputText value="#{requirement.product.name}" />
 								</p:column>
 
-								<p:column headerText="Chapter" style="width:25%">
+								<p:column style="width:25%">
+									<f:facet name="header">
+										<h:outputText value="Chapter" />
+									</f:facet>
 									<h:outputText value="#{requirement.chapter.name}" />
 								</p:column>
 
-								<p:column styleClass="action-column">
+								<p:column exportable="false" styleClass="action-column">
 									<f:facet name="header">
 										<h:outputText value="Actions" />
 									</f:facet>
@@ -239,7 +249,7 @@
 										value="#{jJRequirementBean.requirementChapterList}" var="c"
 										itemLabel="#{c.name}" itemValue="#{c}" />
 									<p:ajax process="@this" partialSubmit="true"
-										listener="#{jJRequirementBean.handleSelectChapter1()}" />
+										listener="#{jJRequirementBean.handleSelectChapter(jJChapterBean)}" />
 								</p:selectOneMenu>
 							</p:column>
 						</p:row>
@@ -300,8 +310,8 @@
 							<p:row>
 								<p:column colspan="3">
 									<p:commandButton value="Save"
-										action="#{jJRequirementBean.save()}" process="@form"
-										update="requirementDialogForm" />
+										action="#{jJRequirementBean.save(jJChapterBean)}"
+										process="@form" update="requirementDialogForm" />
 								</p:column>
 							</p:row>
 						</f:facet>

@@ -1937,6 +1937,7 @@ public class JJRequirementBean {
 
 		requirementChapter = null;
 		requirement.setChapter(requirementChapter);
+		requirement.setOrdering(null);
 
 		namesList = new ArrayList<String>();
 		requirementStatus = jJStatusService.getJJStatusWithName("NEW");
@@ -2013,18 +2014,17 @@ public class JJRequirementBean {
 
 	}
 
-	public void save() {
+	public void save(JJChapterBean jJChapterBean) {
 
 		String message = "";
+		SortedMap<Integer, Object> elements = null;
 
 		requirement.setProject(requirementProject);
 		requirement.setProduct(requirementProduct);
 		requirement.setVersioning(requirementVersion);
-		requirement.setChapter(requirementChapter);
 		requirement.setStatus(requirementStatus);
 
-		System.out.println("requirementStatus.getId() "
-				+ requirementStatus.getId());
+		getRequirementOrder(jJChapterBean);
 
 		if (requirement.getId() == null) {
 			System.out.println("SAVING new Requirement...");
@@ -2046,13 +2046,15 @@ public class JJRequirementBean {
 		} else {
 			System.out.println("UPDATING Requirement...");
 
-			jJRequirementService.updateJJRequirement(requirement);
+			// jJRequirementService.updateJJRequirement(requirement);
 
 			message = "message_successfully_updated";
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("requirementDialogWidget.hide()");
 			closeDialog();
 		}
+
+		elements = null;
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJRequirement");
@@ -2123,7 +2125,7 @@ public class JJRequirementBean {
 
 	}
 
-	public void handleSelectChapter1() {
+	public void handleSelectChapter(JJChapterBean jJChapterBean) {
 
 	}
 
@@ -2439,6 +2441,158 @@ public class JJRequirementBean {
 	private String splitString(String s, String regex, int index) {
 		String[] result = s.split(regex);
 		return result[index];
+	}
+
+	private void getRequirementOrder(JJChapterBean jJChapterBean) {
+		SortedMap<Integer, Object> elements = null;
+		SortedMap<Integer, Object> subElements = null;
+		if (requirement.getId() == null) {
+			requirement.setChapter(requirementChapter);
+
+			if (requirementChapter != null) {
+				elements = jJChapterBean.getSortedElements(requirementChapter,
+						null, false);
+				if (elements.isEmpty()) {
+					requirement.setOrdering(0);
+				} else {
+					requirement.setOrdering(elements.lastKey() + 1);
+				}
+			} else {
+				requirement.setOrdering(null);
+			}
+		} else {
+
+			if (requirementChapter != null) {
+
+				if (requirement.getChapter() != null) {
+
+					if (requirement.getChapter().getId() != requirementChapter
+							.getId()) {
+
+						int requirementOrder = requirement.getOrdering();
+						elements = jJChapterBean.getSortedElements(
+								requirement.getChapter(), null, false);
+
+						subElements = elements.tailMap(requirementOrder);
+
+						requirement.setChapter(requirementChapter);
+						elements = jJChapterBean.getSortedElements(
+								requirementChapter, null, false);
+						if (elements.isEmpty()) {
+							requirement.setOrdering(0);
+
+						} else {
+							requirement.setOrdering(elements.lastKey() + 1);
+						}
+
+						jJRequirementService.updateJJRequirement(requirement);
+
+						subElements.remove(requirementOrder);
+
+						for (Map.Entry<Integer, Object> entry : subElements
+								.entrySet()) {
+
+							String className = entry.getValue().getClass()
+									.getSimpleName();
+							if (className.equalsIgnoreCase("JJChapter")) {
+
+								JJChapter chapter = (JJChapter) entry
+										.getValue();
+
+								int lastOrder = chapter.getOrdering();
+								chapter.setOrdering(lastOrder - 1);
+								chapter.setUpdatedDate(new Date());
+
+								jJChapterService.updateJJChapter(chapter);
+
+							} else if (className
+									.equalsIgnoreCase("JJRequirement")) {
+
+								JJRequirement requirement = (JJRequirement) entry
+										.getValue();
+
+								int lastOrder = requirement.getOrdering();
+								requirement.setOrdering(lastOrder - 1);
+								requirement.setUpdatedDate(new Date());
+
+								jJRequirementService
+										.updateJJRequirement(requirement);
+							}
+
+						}
+
+					} else {
+
+						jJRequirementService.updateJJRequirement(requirement);
+
+					}
+				} else {
+					requirement.setChapter(requirementChapter);
+					elements = jJChapterBean.getSortedElements(
+							requirementChapter, null, false);
+					if (elements.isEmpty()) {
+						requirement.setOrdering(0);
+					} else {
+						requirement.setOrdering(elements.lastKey() + 1);
+					}
+
+					jJRequirementService.updateJJRequirement(requirement);
+				}
+
+			} else {
+
+				if (requirement.getChapter() != null) {
+					int requirementOrder = requirement.getOrdering();
+					elements = jJChapterBean.getSortedElements(
+							requirement.getChapter(), null, false);
+
+					subElements = elements.tailMap(requirementOrder);
+
+					requirement.setChapter(null);
+					requirement.setOrdering(null);
+
+					jJRequirementService.updateJJRequirement(requirement);
+
+					subElements.remove(requirementOrder);
+
+					for (Map.Entry<Integer, Object> entry : subElements
+							.entrySet()) {
+
+						String className = entry.getValue().getClass()
+								.getSimpleName();
+						if (className.equalsIgnoreCase("JJChapter")) {
+
+							JJChapter chapter = (JJChapter) entry.getValue();
+
+							int lastOrder = chapter.getOrdering();
+							chapter.setOrdering(lastOrder - 1);
+							chapter.setUpdatedDate(new Date());
+
+							jJChapterService.updateJJChapter(chapter);
+
+						} else if (className.equalsIgnoreCase("JJRequirement")) {
+
+							JJRequirement requirement = (JJRequirement) entry
+									.getValue();
+
+							int lastOrder = requirement.getOrdering();
+							requirement.setOrdering(lastOrder - 1);
+							requirement.setUpdatedDate(new Date());
+
+							jJRequirementService
+									.updateJJRequirement(requirement);
+						}
+
+					}
+
+				} else {
+					jJRequirementService.updateJJRequirement(requirement);
+				}
+
+			}
+		}
+		elements = null;
+		subElements = null;
 	}
 
 	public class RequirementDataModel extends ListDataModel<JJRequirement>
