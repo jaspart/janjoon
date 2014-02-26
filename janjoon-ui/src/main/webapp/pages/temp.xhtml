@@ -297,6 +297,9 @@
 									requiredMessage="Requirement Description is a required value">
 								</p:editor>
 							</p:column>
+
+
+
 						</p:row>
 						<p:row>
 							<p:column rowspan="3" colspan="3">
@@ -309,7 +312,7 @@
 						<f:facet name="footer">
 							<p:row>
 								<p:column colspan="3">
-									<p:commandButton value="Save"
+									<p:commandButton value="Save" oncomplete=""
 										action="#{jJRequirementBean.save(jJChapterBean)}"
 										process="@form" update="requirementDialogForm" />
 								</p:column>
