@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import java.util.SortedMap;
@@ -19,7 +18,6 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.ListDataModel;
 
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.CloseEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.SelectableDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1945,9 +1943,9 @@ public class JJRequirementBean {
 
 		fullRequirementsList();
 
-		selectedLowRequirementsList = null;
-		selectedMediumRequirementsList = null;
-		selectedHighRequirementsList = null;
+		selectedLowRequirementsList = new ArrayList<String>();
+		selectedMediumRequirementsList = new ArrayList<String>();
+		selectedHighRequirementsList = new ArrayList<String>();
 
 	}
 
@@ -2031,9 +2029,14 @@ public class JJRequirementBean {
 		requirement.setStatus(requirementStatus);
 
 		getRequirementsListUP();
-		getRequirementsListDOWN();
 
+		if (!requirementCategory.equals(lowCategory)) {
+			getRequirementsListDOWN();
+		}
+
+		System.out.println("Begin");
 		getRequirementOrder(jJChapterBean);
+		System.out.println("Fin");
 
 		if (requirement.getId() == null) {
 			System.out.println("SAVING new Requirement...");
@@ -2259,17 +2262,17 @@ public class JJRequirementBean {
 
 	private void fullRequirementsList() {
 
-		if (requirementCategory.getId().equals(lowCategory.getId())) {
+		if (requirementCategory.equals(lowCategory)) {
 			disabledLowRequirements = true;
 			disabledMediumRequirements = false;
 			disabledHighRequirements = false;
 
-		} else if (requirementCategory.getId().equals(mediumCategory.getId())) {
+		} else if (requirementCategory.equals(mediumCategory)) {
 			disabledLowRequirements = false;
 			disabledMediumRequirements = true;
 			disabledHighRequirements = false;
 
-		} else if (requirementCategory.getId().equals(highCategory.getId())) {
+		} else if (requirementCategory.equals(highCategory)) {
 			disabledLowRequirements = false;
 			disabledMediumRequirements = false;
 			disabledHighRequirements = true;
@@ -2312,12 +2315,11 @@ public class JJRequirementBean {
 		storeMapUp = new ArrayList<JJRequirement>();
 		storeMapDown = new ArrayList<JJRequirement>();
 
-		selectedLowRequirementsList = null;
-		selectedMediumRequirementsList = null;
-		selectedHighRequirementsList = null;
+		selectedLowRequirementsList = new ArrayList<String>();
+		selectedMediumRequirementsList = new ArrayList<String>();
+		selectedHighRequirementsList = new ArrayList<String>();
 
-		if (lowCategory != null
-				&& requirementCategory.getId().equals(lowCategory.getId())) {
+		if (lowCategory != null && requirementCategory.equals(lowCategory)) {
 
 			list = requirement.getRequirementLinkUp();
 
@@ -2352,7 +2354,7 @@ public class JJRequirementBean {
 		}
 
 		if (mediumCategory != null
-				&& requirementCategory.getId().equals(mediumCategory.getId())) {
+				&& requirementCategory.equals(mediumCategory)) {
 
 			if (lowCategory != null) {
 				list = requirement.getRequirementLinkDown();
@@ -2386,8 +2388,7 @@ public class JJRequirementBean {
 
 		}
 
-		if (highCategory != null
-				&& requirementCategory.getId().equals(highCategory.getId())) {
+		if (highCategory != null && requirementCategory.equals(highCategory)) {
 
 			list = requirement.getRequirementLinkDown();
 
@@ -2435,65 +2436,59 @@ public class JJRequirementBean {
 		/**
 		 * Low Category
 		 */
-		if (requirementCategory.getId().equals(lowCategory.getId())) {
+		if (requirementCategory.equals(lowCategory)) {
 
 			// List UP contains M & H
-			if (selectedMediumRequirementsList != null) {
-				for (String entry : selectedMediumRequirementsList) {
 
-					String key = splitString(entry, "-", 0);
+			for (String entry : selectedMediumRequirementsList) {
 
-					JJRequirement reqUp = jJRequirementService
-							.findJJRequirement(Long.parseLong(key));
-					if (requirement.getId() == null) {
-						reqUp.getRequirementLinkDown().add(requirement);
-					}
-					listUP.add(reqUp);
+				String key = splitString(entry, "-", 0);
+
+				JJRequirement req = jJRequirementService.findJJRequirement(Long
+						.parseLong(key));
+				if (requirement.getId() == null) {
+					req.getRequirementLinkDown().add(requirement);
 				}
+				listUP.add(req);
 			}
 
-			if (selectedHighRequirementsList != null) {
-				for (String entry : selectedHighRequirementsList) {
+			for (String entry : selectedHighRequirementsList) {
 
-					String key = splitString(entry, "-", 0);
+				String key = splitString(entry, "-", 0);
 
-					JJRequirement reqUp = jJRequirementService
-							.findJJRequirement(Long.parseLong(key));
-					if (requirement.getId() == null) {
-						reqUp.getRequirementLinkDown().add(requirement);
-					}
-					listUP.add(reqUp);
+				JJRequirement req = jJRequirementService.findJJRequirement(Long
+						.parseLong(key));
+				if (requirement.getId() == null) {
+					req.getRequirementLinkDown().add(requirement);
 				}
+				listUP.add(req);
+
 			}
 		}
 
 		/**
 		 * Medium Category
 		 */
-		else if (requirementCategory.getId().equals(mediumCategory.getId())) {
+		else if (requirementCategory.equals(mediumCategory)) {
 
 			// List UP contains H
-			if (selectedHighRequirementsList != null) {
-				for (String entry : selectedHighRequirementsList) {
 
-					String key = splitString(entry, "-", 0);
+			for (String entry : selectedHighRequirementsList) {
 
-					JJRequirement reqUp = jJRequirementService
-							.findJJRequirement(Long.parseLong(key));
-					if (requirement.getId() == null) {
-						reqUp.getRequirementLinkDown().add(requirement);
-					}
-					listUP.add(reqUp);
+				String key = splitString(entry, "-", 0);
+
+				JJRequirement req = jJRequirementService.findJJRequirement(Long
+						.parseLong(key));
+				if (requirement.getId() == null) {
+					req.getRequirementLinkDown().add(requirement);
 				}
+				listUP.add(req);
 			}
+
 		}
 
 		if (requirement.getId() == null) {
-
-			Set<JJRequirement> requirementsUp = new HashSet<JJRequirement>();
-			requirementsUp.addAll(listUP);
-			requirement.getRequirementLinkUp().addAll(requirementsUp);
-
+			requirement.getRequirementLinkUp().addAll(listUP);
 		} else {
 
 			if (!listUP.isEmpty() && !storeMapUp.isEmpty()) {
@@ -2501,6 +2496,60 @@ public class JJRequirementBean {
 
 				System.out
 						.println("!listUP.isEmpty() && !storeMapUp.isEmpty()");
+
+				List<String> idListUP = new ArrayList<String>();
+				List<String> idStoreMapUp = new ArrayList<String>();
+
+				for (JJRequirement req : listUP) {
+					idListUP.add(String.valueOf(req.getId()));
+				}
+
+				for (JJRequirement req : storeMapUp) {
+					idStoreMapUp.add(String.valueOf(req.getId()));
+				}
+
+				if (!idStoreMapUp.equals(idListUP)) {
+
+					List<JJRequirement> removeList = new ArrayList<JJRequirement>();
+					List<JJRequirement> addList = new ArrayList<JJRequirement>();
+
+					for (String key : idStoreMapUp) {
+						if (!idListUP.contains(key)) {
+							for (JJRequirement req : storeMapUp) {
+								if (req.getId().equals(Long.parseLong(key))) {
+									req.getRequirementLinkDown().remove(
+											requirement);
+									removeList.add(req);
+									break;
+								}
+							}
+						}
+					}
+
+					for (String key : idListUP) {
+						if (!idStoreMapUp.contains(key)) {
+							for (JJRequirement req : listUP) {
+								if (req.getId().equals(Long.parseLong(key))) {
+									req.getRequirementLinkDown().add(
+											requirement);
+									addList.add(req);
+									break;
+								}
+							}
+						}
+					}
+
+					if (!removeList.isEmpty()) {
+						requirement.getRequirementLinkUp()
+								.removeAll(removeList);
+					}
+
+					if (!addList.isEmpty()) {
+						requirement.getRequirementLinkUp().addAll(addList);
+					}
+
+				}
+
 			}
 
 			else if (listUP.isEmpty() && !storeMapUp.isEmpty()) {
@@ -2520,7 +2569,6 @@ public class JJRequirementBean {
 
 				for (JJRequirement req : listUP) {
 					req.getRequirementLinkDown().add(requirement);
-
 				}
 
 				requirement.getRequirementLinkUp().addAll(listUP);
@@ -2535,108 +2583,162 @@ public class JJRequirementBean {
 
 	private void getRequirementsListDOWN() {
 
-		if (!requirementCategory.getId().equals(lowCategory.getId())) {
-			List<JJRequirement> listDOWN = new ArrayList<JJRequirement>();
-			/**
-			 * Medium Category
-			 */
-			if (requirementCategory.getId().equals(mediumCategory.getId())) {
+		List<JJRequirement> listDOWN = new ArrayList<JJRequirement>();
 
-				// List DOWN contains L
-				if (selectedLowRequirementsList != null) {
-					for (String entry : selectedLowRequirementsList) {
+		/**
+		 * Medium Category
+		 */
+		if (requirementCategory.equals(mediumCategory)) {
 
-						String key = splitString(entry, "-", 0);
+			// List DOWN contains L
 
-						JJRequirement reqDown = jJRequirementService
-								.findJJRequirement(Long.parseLong(key));
-						if (requirement.getId() == null) {
-							reqDown.getRequirementLinkUp().add(requirement);
-						}
-						listDOWN.add(reqDown);
-					}
-				}
-			}
-			/**
-			 * High Category
-			 */
-			else if (requirementCategory.getId().equals(highCategory.getId())) {
+			for (String entry : selectedLowRequirementsList) {
 
-				// List DOWN contains L & M
-				if (selectedLowRequirementsList != null) {
-					for (String entry : selectedLowRequirementsList) {
+				String key = splitString(entry, "-", 0);
 
-						String key = splitString(entry, "-", 0);
-
-						JJRequirement reqDown = jJRequirementService
-								.findJJRequirement(Long.parseLong(key));
-						if (requirement.getId() == null) {
-							reqDown.getRequirementLinkUp().add(requirement);
-						}
-						listDOWN.add(reqDown);
-					}
-				}
-
-				if (selectedMediumRequirementsList != null) {
-
-					for (String entry : selectedMediumRequirementsList) {
-
-						String key = splitString(entry, "-", 0);
-
-						JJRequirement reqDown = jJRequirementService
-								.findJJRequirement(Long.parseLong(key));
-						if (requirement.getId() == null) {
-							reqDown.getRequirementLinkUp().add(requirement);
-						}
-						listDOWN.add(reqDown);
-					}
-				}
+				JJRequirement req = jJRequirementService.findJJRequirement(Long
+						.parseLong(key));
+				listDOWN.add(req);
 			}
 
-			if (requirement.getId() == null) {
-
-				Set<JJRequirement> requirementsDown = new HashSet<JJRequirement>();
-				requirementsDown.addAll(listDOWN);
-				requirement.getRequirementLinkDown().addAll(requirementsDown);
-
-			} else {
-
-				if (!listDOWN.isEmpty() && !storeMapDown.isEmpty()) {
-					// Traitement elm par elem
-
-					System.out
-							.println("!listDOWN.isEmpty() && !storeMapDown.isEmpty()");
-				}
-
-				else if (listDOWN.isEmpty() && !storeMapDown.isEmpty()) {
-					// Supprimer les storeMapDown
-
-					System.out
-							.println("listDOWN.isEmpty() && !storeMapDown.isEmpty()");
-
-					for (JJRequirement req : storeMapDown) {
-						req.getRequirementLinkUp().remove(requirement);
-					}
-					requirement.getRequirementLinkDown()
-							.removeAll(storeMapDown);
-
-				} else if (!listDOWN.isEmpty() && storeMapDown.isEmpty()) {
-					System.out
-							.println("!listDOWN.isEmpty() && storeMapDown.isEmpty()");
-					// Ajouter list Down
-
-					for (JJRequirement req : listDOWN) {
-						req.getRequirementLinkUp().add(requirement);
-
-					}
-					requirement.getRequirementLinkDown().addAll(listDOWN);
-				}
-
-			}
-
-			System.out.println("Fin Down "
-					+ requirement.getRequirementLinkDown().size());
 		}
+		/**
+		 * High Category
+		 */
+		else if (requirementCategory.equals(highCategory)) {
+
+			// List DOWN contains L & M
+
+			for (String entry : selectedLowRequirementsList) {
+				String key = splitString(entry, "-", 0);
+
+				JJRequirement req = jJRequirementService.findJJRequirement(Long
+						.parseLong(key));
+				listDOWN.add(req);
+			}
+
+			for (String entry : selectedMediumRequirementsList) {
+
+				String key = splitString(entry, "-", 0);
+
+				JJRequirement req = jJRequirementService.findJJRequirement(Long
+						.parseLong(key));
+
+				listDOWN.add(req);
+			}
+
+		}
+
+		if (requirement.getId() == null) {
+
+			for (JJRequirement req : listDOWN) {
+				req.getRequirementLinkUp().add(requirement);
+			}
+
+			requirement.getRequirementLinkDown().addAll(listDOWN);
+
+		} else {
+			System.out.println("requirement.getId() != null");
+			if (!listDOWN.isEmpty() && !storeMapDown.isEmpty()) {
+				// Traitement elm par elem
+
+				System.out
+						.println("!listDOWN.isEmpty() && !storeMapDown.isEmpty()");
+
+				List<String> idListDown = new ArrayList<String>();
+				List<String> idStoreMapDown = new ArrayList<String>();
+
+				for (JJRequirement req : listDOWN) {
+					idListDown.add(String.valueOf(req.getId()));
+				}
+
+				for (JJRequirement req : storeMapDown) {
+					idStoreMapDown.add(String.valueOf(req.getId()));
+				}
+
+				if (!idStoreMapDown.equals(idListDown)) {
+
+					List<JJRequirement> removeList = new ArrayList<JJRequirement>();
+					List<JJRequirement> addList = new ArrayList<JJRequirement>();
+
+					for (String key : idStoreMapDown) {
+						if (!idListDown.contains(key)) {
+							for (JJRequirement req : storeMapDown) {
+								if (req.getId().equals(Long.parseLong(key))) {
+									removeList.add(req);
+									break;
+								}
+							}
+						}
+					}
+
+					for (String key : idListDown) {
+						if (!idStoreMapDown.contains(key)) {
+							for (JJRequirement req : listDOWN) {
+								if (req.getId().equals(Long.parseLong(key))) {
+									addList.add(req);
+									break;
+								}
+							}
+						}
+					}
+
+					if (!removeList.isEmpty()) {
+
+						for (JJRequirement req : removeList) {
+							req.getRequirementLinkUp().remove(requirement);
+							jJRequirementService.updateJJRequirement(req);
+						}
+
+						requirement.getRequirementLinkDown().removeAll(
+								removeList);
+					}
+
+					if (!addList.isEmpty()) {
+
+						for (JJRequirement req : addList) {
+							req.getRequirementLinkUp().add(requirement);
+						}
+
+						requirement.getRequirementLinkDown().addAll(addList);
+					}
+
+				}
+
+			}
+
+			else if (listDOWN.isEmpty() && !storeMapDown.isEmpty()) {
+				// Supprimer les storeMapDown
+
+				System.out
+						.println("listDOWN.isEmpty() && !storeMapDown.isEmpty()");
+
+				for (JJRequirement req : storeMapDown) {
+					req.getRequirementLinkUp().remove(requirement);
+					jJRequirementService.updateJJRequirement(req);
+				}
+
+				requirement.getRequirementLinkDown().removeAll(storeMapDown);
+
+			} else if (!listDOWN.isEmpty() && storeMapDown.isEmpty()) {
+				System.out
+						.println("!listDOWN.isEmpty() && storeMapDown.isEmpty()");
+				// Ajouter list Down
+
+				for (JJRequirement req : listDOWN) {
+					req.getRequirementLinkUp().add(requirement);
+				}
+				requirement.getRequirementLinkDown().addAll(listDOWN);
+			}
+
+		}
+
+		System.out
+				.println("Fin Down requirement.getRequirementLinkDown().size() "
+						+ requirement.getRequirementLinkDown().size());
+
+		System.out.println("Quit");
+
 	}
 
 	private List<JJRequirement> getRequirementsList(JJCategory category) {

@@ -19,28 +19,35 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaActiveRecord(inheritanceType = "TABLE_PER_CLASS")
 public abstract class JJAbstractEntity {
 
-    @NotNull
-    @Size(max = 25)
-    private String name;
+	@NotNull
+	@Size(max = 25)
+	private String name;
 
-    @NotNull
-    @Lob
-    private String description;
+	@NotNull
+	@Lob
+	private String description;
 
-    @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
-    private Date creationDate;
+	@NotNull
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "M-")
+	private Date creationDate;
 
-    @ManyToOne
-    private JJContact createdBy;
+	@ManyToOne
+	private JJContact createdBy;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
-    private Date updatedDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "M-")
+	private Date updatedDate;
 
-    @ManyToOne
-    private JJContact updatedBy;
+	@ManyToOne
+	private JJContact updatedBy;
 
-    private Boolean enabled;
+	private Boolean enabled;
+
+	@Override
+	public boolean equals(Object obj) {
+		JJAbstractEntity abstractEntity = (JJAbstractEntity) obj;
+		return this.getId().equals(abstractEntity.getId());
+	}
+
 }
