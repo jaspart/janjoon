@@ -48,8 +48,7 @@
 									binding="#{jJDevelopment.tabView}" scrollable="true"
 									value="#{jJDevelopment.files}" var="tab">
 									<p:ajax event="tabClose" listener="#{jJDevelopment.onCloseTab}" />
-									<p:ajax event="tabChange"
-										listener="#{jJDevelopment.onChangeTab}" />
+									<p:ajax event="tabChange" listener="#{jJDevelopment.onChangeTab}" />
 									<p:tab title="#{tab.title}" closable="true">
 										<p:inputTextarea id="textArea" rows="20" cols="75"
 											value="#{tab.texte}">

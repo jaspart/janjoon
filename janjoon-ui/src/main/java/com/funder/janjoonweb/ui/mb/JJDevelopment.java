@@ -2,6 +2,7 @@ package com.funder.janjoonweb.ui.mb;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,8 +28,8 @@ import com.funder.janjoonweb.service.GitConfigManager;
 @ViewScoped
 public class JJDevelopment implements Serializable {
 
-	private TabView tabView;
 	private static final long serialVersionUID = 1L;
+	private TabView tabView;
 	private ConfigManagerAbstract configManager;
 	private String URL;
 	private String path;
@@ -38,17 +39,33 @@ public class JJDevelopment implements Serializable {
 	private int activeTabIndex;
 	private TreeNode tree;
 	private TreeNode selectedTree;
-	private List<FileMap> files;
+	private ArrayList<FileMap> files;
 	private File file;
 
 	public JJDevelopment() throws IOException {
 
 		URL = "https://github.com/chemakh/TestRepository.git";
-		path = "/home/lazher/git/.git/Repository/TestRepository/.git";
-		userName = "";
-		password = "";
-		configManager = new GitConfigManager(path);
-
+			
+		password = "taraji0000";
+		userName="chemakh";
+		try           
+		{
+			configManager=new GitConfigManager();
+			path = "/home/lazher/git/";
+			path=configManager.cloneRemoteRepository(URL, "TestRepository", 
+					userName, password, path);
+			configManager=new GitConfigManager(path);
+			System.out.println(path);
+			
+		}catch(Exception e)
+		{
+			path="/home/lazher/git/TestRepository/.git";
+			configManager=new GitConfigManager(path);
+			System.out.println(path);
+			
+		}
+		
+		
 		tree = configManager.listRepositoryContent();
 		selectedTree = tree;
 		while (selectedTree.getChildCount() != 0) {
@@ -59,7 +76,7 @@ public class JJDevelopment implements Serializable {
 		files = new ArrayList<FileMap>();
 		try (FileInputStream inputStream = new FileInputStream(file)) {
 			String fileTexte = IOUtils.toString(inputStream);
-			FileMap filemap = new FileMap(0, file.getName(), fileTexte, file);
+			FileMap filemap = new FileMap(file.getPath(), file.getName(), fileTexte, file);
 			files.add(filemap);
 		}
 
@@ -67,10 +84,10 @@ public class JJDevelopment implements Serializable {
 
 	public ConfigManagerAbstract getConfigManager() {
 		return configManager;
-	}
+	}	
 
-	public void setConfigManager() {
-		this.configManager = new GitConfigManager(path);
+	public void setConfigManager(ConfigManagerAbstract configManager) {
+		this.configManager = configManager;
 	}
 
 	public String getURL() {
@@ -141,7 +158,7 @@ public class JJDevelopment implements Serializable {
 		return file;
 	}
 
-	public void setFiles(List<FileMap> files) {
+	public void setFiles(ArrayList<FileMap> files) {
 		this.files = files;
 	}
 
@@ -161,48 +178,63 @@ public class JJDevelopment implements Serializable {
 		this.activeTabIndex = activeTabIndex;
 	}
 
-	public String commit()
-	{
-		//InputTextarea textArea = (InputTextarea) foundComponent;
-		//System.out.println(textArea.getValue().toString());
-		//files.get(activeTabIndex).setTexte(textArea.getValue().toString());
+	public String commit() {
+
 		for (FileMap fileMap : files) {
-			configManager.setFileTexte(fileMap.getFile(), fileMap.getTexte());
+			// configManager.setFileTexte(fileMap.getFile(),
+			// fileMap.getTexte());
 			System.out.println(fileMap.getFile().getName() + "  :"
 					+ fileMap.getTexte());
 
 		}
-		configManager.checkIn("FirstCommit");
+		// configManager.checkIn("FirstCommit");
 		return "/pages/development.jsf?faces-redirect=true";
 
 	}
 
-	public void onSelectTree(NodeSelectEvent event) throws IOException {
-		if (event.getTreeNode().getType().equalsIgnoreCase("file")) {
+	public void onSelectTree(NodeSelectEvent event)  {
+
+		System.out.println("fdddddjk");
+		if (event.getTreeNode().getType().equalsIgnoreCase("file")) 
+		{
+			System.out.println("fffffffffffffffffffffffffffd");
 			selectedTree = event.getTreeNode();
 			file = (File) selectedTree.getData();
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Selected", event.getTreeNode().toString());
 			FacesContext.getCurrentInstance().addMessage(null, message);
 			System.out.println(selectedTree.toString());
-			try (FileInputStream inputStream = new FileInputStream(file)) {
+			if (contains(file) == -1) {
+				try (FileInputStream inputStream = new FileInputStream(file)) {
 
-				String fileTexte = IOUtils.toString(inputStream);
-				System.out.println(fileTexte);
-				if (contains(file) == -1) {
-					FileMap filemap = new FileMap(files.size(), file.getName(),
+					String fileTexte = IOUtils.toString(inputStream);
+					System.out.println(fileTexte);
+
+					FileMap filemap = new FileMap(file.getPath(), file.getName(),
 							fileTexte, file);
 					files.add(filemap);
+				} catch (FileNotFoundException e) {
+					System.out.println("filenotFound");
+					e.printStackTrace();
+				} catch (IOException e) {
+					System.out.println("filenotFound");
+					e.printStackTrace();
 				}
-				tabView.setActiveIndex(contains(file));
-
 			}
+			tabView.setActiveIndex(contains(file));
+
 		}
 
 	}
 
 	public void onCloseTab(TabCloseEvent event) {
-		files.remove((FileMap) event.getData());
+		FileMap f = (FileMap) event.getData();
+		int j = contains(f.getFile());
+		System.out.println(f.getTexte());
+		files.get(j).setTexte(f.getTexte());
+		configManager.setFileTexte(files.get(j).getFile(), files.get(j)
+				.getTexte());
+		files.remove((FileMap)event.getData());
 	}
 
 	public void onChangeTab(TabChangeEvent event) {

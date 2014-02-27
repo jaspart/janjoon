@@ -15,6 +15,7 @@ public abstract class ConfigManagerAbstract implements Serializable
 	 */
 	private static final long serialVersionUID = 1L;
 	private String type;	
+	protected Object repository;
 	
 	public String getType() {
 		return type.toString();
@@ -25,11 +26,12 @@ public abstract class ConfigManagerAbstract implements Serializable
 		this.type = type;
 	}	
 
+	
 	public abstract boolean checkIn(String message);
 	
 	public abstract boolean checkOut(String branche);
 	
-	public abstract String cloneRemoteRepository(String path,String name,String username,String password);
+	public abstract String cloneRemoteRepository(String url,String name,String username,String password,String path);
 	
 	public abstract boolean addFile(String Path,String name);
 	

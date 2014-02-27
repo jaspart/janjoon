@@ -20,13 +20,12 @@ public class GitConfigManager extends ConfigManagerAbstract {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Repository repository;
 	private Git git;
 	
 	public Repository getRepository() {
-		return repository;
+		return (Repository) repository;
 	}
-
+	
 	public void setRepository(String path) {
 
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
@@ -41,7 +40,7 @@ public class GitConfigManager extends ConfigManagerAbstract {
 					.setWorkTree(file.getParentFile())
 					// scan up the file system tree
 					.build();
-			git = new Git(repository);
+			git = new Git((Repository) repository);
 			System.out.println("GitConfigManager created");
 
 		} catch (IOException e) {
@@ -67,7 +66,7 @@ public class GitConfigManager extends ConfigManagerAbstract {
 					.setWorkTree(file.getParentFile())
 					// scan up the file system tree
 					.build();
-			git = new Git(repository);
+			git = new Git((Repository) repository);
 			System.out.println("GitConfigManager created");
 
 		} catch (IOException e) {
@@ -89,7 +88,7 @@ public class GitConfigManager extends ConfigManagerAbstract {
 					.setWorkTree(file.getParentFile())
 					// scan up the file system tree
 					.build();
-			git = new Git(repository);
+			git = new Git((Repository) repository);
 			System.out.println("GitConfigManager created");
 
 		} catch (IOException e) {
@@ -97,6 +96,10 @@ public class GitConfigManager extends ConfigManagerAbstract {
 			e.printStackTrace();
 		}
 
+	}
+
+	public GitConfigManager() {
+		
 	}
 
 	// commit a repository
@@ -108,7 +111,7 @@ public class GitConfigManager extends ConfigManagerAbstract {
 			commit.setMessage(message);					
 			commit.setAll(true);
 			commit.call();
-			System.out.println(repository.getDirectory().getName()
+			System.out.println(((Repository) repository).getDirectory().getName()
 					+ " Commited");
 			return true;
 		} catch (NoHeadException e) {
@@ -147,7 +150,7 @@ public class GitConfigManager extends ConfigManagerAbstract {
 			//checkOutCommand.setAllPaths(true);
 			checkOutCommand.setName(branche);
 			checkOutCommand.call();
-			System.out.println(repository.getDirectory().getName()
+			System.out.println(((Repository) repository).getDirectory().getName()
 					+ " checkedOut");
 			return true;
 		} catch (RefAlreadyExistsException e) {
@@ -181,7 +184,7 @@ public class GitConfigManager extends ConfigManagerAbstract {
 			Repository newRepo = new FileRepository(path + ".git");
 			newRepo.create();
 			System.out
-					.println(repository.getDirectory().getName() + " Created");
+					.println(((Repository) repository).getDirectory().getName() + " Created");
 			return true;
 		} catch (IOException e) {
 			System.out.println("IOException");
@@ -195,8 +198,8 @@ public class GitConfigManager extends ConfigManagerAbstract {
 	public TreeNode listRepositoryContent() {
 		
 		checkOut("master");
-			DefaultTreeNode root = new DefaultTreeNode("folder",repository.getWorkTree(), null);
-			repositoryTreeNode(repository.getWorkTree(), root);
+			DefaultTreeNode root = new DefaultTreeNode("folder",((Repository) repository).getWorkTree(), null);
+			repositoryTreeNode(((Repository) repository).getWorkTree(), root);
 			return root;
 		
 	}
@@ -232,9 +235,9 @@ public class GitConfigManager extends ConfigManagerAbstract {
 
 	@Override
 	public String cloneRemoteRepository(String url, String name,
-			String username, String password) {
+			String username, String password,String path) {
 		CloneCommand cloneCommand = Git.cloneRepository();
-		File file = new File(repository.getDirectory().getPath() + "/" + name);
+		File file = new File(path + "/" + name);
 		cloneCommand.setDirectory(file);
 		cloneCommand.setURI(url);
 
@@ -249,7 +252,7 @@ public class GitConfigManager extends ConfigManagerAbstract {
 			FileRepositoryBuilder builder = new FileRepositoryBuilder();
 			Repository repo;
 			try {
-				file = new File(repository.getDirectory().getPath() + "/"
+				file = new File(path + "/"
 						+ name + "/.git");
 				repo = builder.setGitDir(file)
 				// scan up the file system tree
@@ -295,7 +298,7 @@ public class GitConfigManager extends ConfigManagerAbstract {
 					.setWorkTree(file.getParentFile())
 					// scan up the file system tree
 					.build();
-			git = new Git(repository);
+			git = new Git((Repository) repository);
 			Git git = new Git((Repository) rep);
 
 			PushCommand pushCommand = git.push();
@@ -395,7 +398,7 @@ public class GitConfigManager extends ConfigManagerAbstract {
 	@Override
 	public boolean addFile(String path, String name) {
 
-		File myfile = new File(repository.getDirectory().getParent() + "/"
+		File myfile = new File(((Repository) repository).getDirectory().getParent() + "/"
 				+ path, name);
 		try {
 
@@ -406,10 +409,10 @@ public class GitConfigManager extends ConfigManagerAbstract {
 			// git.commit().setMessage(name + " added").setAll(true)
 			// .call();
 			System.out.println("Added file " + myfile + " to repository at "
-					+ repository.getDirectory());
+					+ ((Repository) repository).getDirectory());
 			return true;
 		} catch (IOException e) {
-			File directory = new File(repository.getDirectory().getParent()
+			File directory = new File(((Repository) repository).getDirectory().getParent()
 					+ "/" + path);
 			if (directory.mkdirs()) {
 				try {
@@ -422,7 +425,7 @@ public class GitConfigManager extends ConfigManagerAbstract {
 					// git.commit().setMessage(name + " added").setAll(true)
 					// .call();
 					System.out.println("Added file " + myfile
-							+ " to repository at " + repository.getDirectory());
+							+ " to repository at " + ((Repository) repository).getDirectory());
 					return true;
 				} catch (IOException e1) {
 					System.out.println("IOException");

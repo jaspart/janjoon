@@ -8,13 +8,14 @@ public class FileMap {
 	private String texte;
 	private File file;
 	
-	public FileMap(int i, String title, String texte, File file) {
+	public FileMap(String i, String title, String texte, File file) {
 		
 		this.title = title;
 		this.texte = texte;
 		this.file = file;
-		this.id="TabView_"+i;
+		this.id=i;
 	}
+	
 	public String getTitle() {
 		return title;
 	}
