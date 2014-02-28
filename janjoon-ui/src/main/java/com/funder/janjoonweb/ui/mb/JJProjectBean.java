@@ -858,19 +858,6 @@ public class JJProjectBean {
 			jJRequirementBean.setProject(project);
 			jJChapterBean.setProject(project);
 
-			jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
-					.getAllJJRequirementsWithCategoryAndProject("BUSINESS",
-							project));
-
-			jJRequirementBean
-					.setMyFunctionalJJRequirements(jJRequirementService
-							.getAllJJRequirementsWithCategoryAndProject(
-									"FUNCTIONAL", project));
-
-			jJRequirementBean.setMyTechnicalJJRequirements(jJRequirementService
-					.getAllJJRequirementsWithCategoryAndProject("TECHNICAL",
-							project));
-
 			jJChapterBean.setProject(project);
 
 			jJTestcaseBean.setCurrentProject(project);

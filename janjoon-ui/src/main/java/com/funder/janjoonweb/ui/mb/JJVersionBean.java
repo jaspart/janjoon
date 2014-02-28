@@ -125,38 +125,10 @@ public class JJVersionBean {
 
 			if (jJRequirementBean != null) {
 				jJRequirementBean.setVersion(version);
-
-				jJRequirementBean
-						.setMyBusinessJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProjectAndProductAndVersion(
-										"BUSINESS", project, product, version));
-
-				jJRequirementBean
-						.setMyFunctionalJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProjectAndProductAndVersion(
-										"FUNCTIONAL", project, product, version));
-
-				jJRequirementBean
-						.setMyTechnicalJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProjectAndProductAndVersion(
-										"TECHNICAL", project, product, version));
 			}
 		} else {
 			// IF VERSION IS NULL GET ALL JJREQUIRMENTS WITH PROJECT AND PRODUCT
 			jJRequirementBean.setVersion(version);
-
-			jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
-					.getAllJJRequirementsWithProjectAndProduct("BUSINESS",
-							project, product));
-
-			jJRequirementBean
-					.setMyFunctionalJJRequirements(jJRequirementService
-							.getAllJJRequirementsWithProjectAndProduct(
-									"FUNCTIONAL", project, product));
-
-			jJRequirementBean.setMyTechnicalJJRequirements(jJRequirementService
-					.getAllJJRequirementsWithProjectAndProduct("TECHNICAL",
-							project, product));
 		}
 	}
 
@@ -166,7 +138,7 @@ public class JJVersionBean {
 		versionAdmin = new JJVersion();
 		versionAdmin.setEnabled(true);
 		versionAdmin.setCreationDate(new Date());
-		
+
 		versionListTable = null;
 
 	}
@@ -194,12 +166,12 @@ public class JJVersionBean {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
-	
+
 	public void onRowSelect(SelectEvent event) {
 
 		System.out.println("Row selected");
 
-		if(versionListTable !=null){
+		if (versionListTable != null) {
 			System.out.println("la selection est non null");
 		}
 

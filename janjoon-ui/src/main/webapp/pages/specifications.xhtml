@@ -3,654 +3,345 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <ui:composition template="../templates/layout.xhtml">
 
 	<ui:define name="content">
-		<h:form id="dataForm">
+		<h:form id="specForm">
 			<f:event type="preRenderComponent"
 				listener="#{jJRequirementBean.loadData(jJProjectBean,jJProductBean,jJVersionBean,jJChapterBean)}" />
-			<p:growl id="messages" />
-
-			<p:contextMenu id="leftContextMenu" for="leftTable">
-				<p:menuitem id="editLeft" value="#{messages.label_edit}"
-					icon="ui-icon-pencil"
-					actionListener="#{jJRequirementBean.editJJRequirement(1)}"
-					update="myEditDialog" oncomplete="editJJRequirement.show()"
-					disabled="#{jJRequirementBean.disabled}" />
-				<p:menuitem id="deleteLeft" value="#{messages.label_delete}"
-					actionListener="#{jJRequirementBean.deleteJJRequirement(1)}"
-					icon="ui-icon-trash" oncomplete="deleteJJRequirement.show()" />
-				<p:menuitem id="discardLeft" value="Discard"
-					actionListener="#{jJRequirementBean.updateMessageDiscard(1)}"
-					icon="ui-icon-close" update="myDiscardDialog"
-					oncomplete="discardJJRequirement.show()" />
-				<p:menuitem id="selectLeft" value="Select"
-					actionListener="#{jJRequirementBean.selectRequirement(1)}"
-					icon="ui-icon-check" update=":dataForm" />
-			</p:contextMenu>
-			<p:contextMenu id="middleContextMenu" for="middleTable">
-				<p:menuitem id="editMiddle" value="Edit" icon="ui-icon-pencil"
-					actionListener="#{jJRequirementBean.editJJRequirement(2)}"
-					update="myEditDialog" oncomplete="editJJRequirement.show()"
-					disabled="#{jJRequirementBean.disabled}" />
-				<p:menuitem id="deleteMiddle" value="#{messages.label_delete}"
-					actionListener="#{jJRequirementBean.deleteJJRequirement(2)}"
-					icon="ui-icon-trash" oncomplete="deleteJJRequirement.show()" />
-				<p:menuitem id="discardMiddle" value="Discard"
-					actionListener="#{jJRequirementBean.updateMessageDiscard(2)}"
-					icon="ui-icon-close" update="myDiscardDialog"
-					oncomplete="discardJJRequirement.show()" />
-				<p:menuitem id="selectMiddle" value="Select"
-					actionListener="#{jJRequirementBean.selectRequirement(2)}"
-					icon="ui-icon-check" update=":dataForm" />
-			</p:contextMenu>
-			<p:contextMenu id="rightContextMenu" for="rightTable">
-				<p:menuitem id="editRight" value="Edit" icon="ui-icon-pencil"
-					actionListener="#{jJRequirementBean.editJJRequirement(3)}"
-					update="myEditDialog" oncomplete="editJJRequirement.show()"
-					disabled="#{jJRequirementBean.disabled}" />
-				<p:menuitem id="deleteRight" value="#{messages.label_delete}"
-					actionListener="#{jJRequirementBean.deleteJJRequirement(3)}"
-					icon="ui-icon-trash" oncomplete="deleteJJRequirement.show()" />
-				<p:menuitem id="discardRight" value="Discard"
-					actionListener="#{jJRequirementBean.updateMessageDiscard(3)}"
-					icon="ui-icon-close" update="myDiscardDialog"
-					oncomplete="discardJJRequirement.show()" />
-				<p:menuitem id="selectRight" value="Select"
-					actionListener="#{jJRequirementBean.selectRequirement(3)}"
-					icon="ui-icon-check" update=":dataForm" />
-				<p:menuitem id="isCompletedRight" value="Completed"
-					actionListener="#{jJRequirementBean.completeRequirement()}"
-					icon="ui-icon-arrowthick-1-e" update=":dataForm" />
-			</p:contextMenu>
-
 			<table>
 				<tr>
-					<p:column>
-						<p:commandButton value="Business" icon="ui-icon-star"
-							actionListener="#{jJRequirementBean.findAllJJRequirementsWithCategory(1)}"
-							id="businessButton" update="leftTable" />
-						<p:commandButton value="Functional" icon="ui-icon-star"
-							actionListener="#{jJRequirementBean.findAllJJRequirementsWithCategory(2)}"
-							id="functionalButton" update="middleTable" />
-						<p:button value="Architecture" icon="ui-icon-star" disabled="true" />
-						<p:button value="Security" icon="ui-icon-star" disabled="true" />
-						<p:commandButton value="Technical" icon="ui-icon-star"
-							actionListener="#{jJRequirementBean.findAllJJRequirementsWithCategory(3)}"
-							id="technicalButton" update="rightTable" />
-					</p:column>
+					<ui:repeat value="#{jJRequirementBean.categoryList}" var="button">
+						<p:commandButton id="input#{button.name}" value="#{button.name}"
+							actionListener="#{jJRequirementBean.updateTemplate(button.id)}"
+							update=":specForm" />
+					</ui:repeat>
 				</tr>
-				<tr></tr>
+				<tr />
 				<tr>
-					<td><p:dataTable id="leftTable"
-							value="#{jJRequirementBean.myBusinessJJRequirements}"
-							var="Requirement" resizableColumns="true" scrollable="true"
-							scrollHeight="450" style="width:410px"
-							rowKey="#{Requirement.name}"
-							selection="#{jJRequirementBean.mySelectedBusinessJJRequirement}"
-							selectionMode="single">
-							<p:ajax event="rowSelect"
-								listener="#{jJRequirementBean.onRowSelect}"
-								update=":dataForm:leftContextMenu :dataForm:messages" />
-							<f:facet name="header">Business Category
-								<p:panelGrid>
+					<td><h:outputLabel for="template" value="Template: " /> <h:outputText
+							id="template" value="#{jJRequirementBean.outputTemplateHeader}" /></td>
+				</tr>
+				<tr />
+				<tr>
+					<ui:repeat value="#{jJRequirementBean.tableDataModelList}"
+						var="tableDataModel" varStatus="status">
+
+						<td><p:dataTable id="dataTable" var="requirement"
+								value="#{tableDataModel}" paginator="true" rows="10"
+								style="width:410px">
+
+								<f:facet name="header">  
+          							#{tableDataModel.nameDataModel}
+          							<p:panelGrid>
+										<f:facet name="header">
+											<p:row>
+												<p:column colspan="1">
+													<p:commandButton id="manageChapterButton"
+														icon="ui-icon-document"
+														title="Manage Chapter and Document"
+														actionListener="#{jJChapterBean.initChapterBean(tableDataModel.categoryId)}"
+														update=":chapterDialogForm"
+														oncomplete="chapterDialogWidget.show()" />
+												</p:column>
+												<p:column colspan="1">
+													<p:commandButton id="releaseRequirementButton"
+														icon=".ui-icon-carat-2-n-s"
+														title="Release All Requirements"
+														actionListener="#{jJRequirementBean.releaseRequirement(tableDataModel.categoryId)}"
+														update=":specForm" />
+												</p:column>
+												<p:column colspan="4">
+													<p:inputText id="globalFilter" style="width:120px" />
+												</p:column>
+												<p:column colspan="1">
+													<p:commandButton id="newRequirementButton"
+														icon="ui-icon-plus" title="New Requirement"
+														actionListener="#{jJRequirementBean.newRequirement(tableDataModel.categoryId)}"
+														update=":requirementDialog"
+														oncomplete="requirementDialogWidget.show()" />
+												</p:column>
+												<p:column colspan="1">
+													<!-- 													<p:commandButton id="exportButton" icon="ui-icon-clipboard" type="button" ajax="false" /> -->
+													<!-- 													<p:menu overlay="true" trigger="exportButton" my="left top" -->
+													<!-- 														at="left bottom"> -->
+													<!-- 														<p:menuitem> -->
+													<h:commandLink id="pdf"
+														actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}">
+														<p:graphicImage value="/resources/images/pdf.png" />
+														<p:dataExporter type="pdf" target="dataTable"
+															fileName="Document"
+															preProcessor="#{jJChapterBean.preProcessPDF}" />
+													</h:commandLink>
+													<p:tooltip for="pdf" value="export to PDF"
+														showEffect="fade" hideEffect="fade" />
+													<!-- 														</p:menuitem> -->
+													<!-- 													</p:menu> -->
+												</p:column>
+											</p:row>
+										</f:facet>
+									</p:panelGrid>
+								</f:facet>
+
+								<p:column style="width:25%">
 									<f:facet name="header">
-										<p:row>
-											<p:column colspan="1">
-												<p:commandButton id="manageChapterLeft"
-													icon="ui-icon-document" title="Manage Chapter and Document"
-													actionListener="#{jJChapterBean.initChapterBean('BUSINESS')}"
-													update=":chapterDialogForm"
-													oncomplete="chapterDialogWidget.show()" />
-											</p:column>
-											<p:column colspan="1">
-												<p:commandButton id="releaseButton"
-													icon=".ui-icon-carat-2-n-s"
-													title="Release All Business Requirements"
-													actionListener="#{jJRequirementBean.updateMessageRelease(1)}"
-													update=":dataForm:myReleaseDialog"
-													oncomplete="releaseJJRequirement.show()" />
-											</p:column>
-											<p:column colspan="4">
-												<p:inputText id="globalFilter" style="width:120px" />
-
-											</p:column>
-											<p:column colspan="1">
-												<p:commandButton id="createBusinessRequirement"
-													icon="ui-icon-plus" title="Add Business Requirement"
-													actionListener="#{jJRequirementBean.createJJRequirement(1)}"
-													oncomplete="createJJRequirement.show()" />
-											</p:column>
-											<p:column colspan="1">
-												<p:commandButton id="dynaButton" icon="ui-icon-clipboard"
-													type="button" ajax="false" />
-												<p:menu overlay="true" trigger="dynaButton" my="left top"
-													at="left bottom">
-													<p:menuitem>
-														<h:commandLink id="link">
-															<p:graphicImage value="/resources/images/pdf.png" />
-															<h:outputLabel for="link" value="export in pdf" />
-															<p:dataExporter type="pdf" target="leftTable"
-																fileName="requirements"
-																preProcessor="#{jJChapterBean.preProcessPDF}" />
-														</h:commandLink>
-													</p:menuitem>
-												</p:menu>
-											</p:column>
-										</p:row>
+										<h:outputText value="Requirement" />
 									</f:facet>
-								</p:panelGrid>
-							</f:facet>
+									<h:outputText value="#{requirement.name}" />
+								</p:column>
 
-							<p:column headerText="Requirement">
-								<h:outputText value="#{Requirement.name}" />
-							</p:column>
-
-							<p:column headerText="Product">
-								<h:outputText value="#{Requirement.product.name}" />
-							</p:column>
-
-							<p:column headerText="Chapter">
-								<h:outputText value="#{Requirement.chapter.name}" />
-							</p:column>
-
-							<f:facet name="footer">Business Requirements
-							 <p:progressBar widgetVar="pbLeft" style="width:385px"
-									value="#{jJRequirementBean.progressLeft}"
-									labelTemplate="{value}%" />
-								<p:progressBar widgetVar="coverageLeft" style="width:385px"
-									value="#{jJRequirementBean.coverageProgressLeft}"
-									labelTemplate="{value}%" />
-							</f:facet>
-						</p:dataTable></td>
-					<td><p:dataTable id="middleTable"
-							value="#{jJRequirementBean.myFunctionalJJRequirements}"
-							var="Requirement" resizableColumns="true" scrollable="true"
-							scrollHeight="450" style="width:410px"
-							rowKey="#{Requirement.name}"
-							selection="#{jJRequirementBean.mySelectedFunctionalJJRequirement}"
-							selectionMode="single">
-
-							<p:ajax event="rowSelect"
-								listener="#{jJRequirementBean.onRowSelect}"
-								update=":dataForm:middleContextMenu :dataForm:messages" />
-
-							<f:facet name="header">Functional Category
-								<p:panelGrid>
+								<p:column style="width:25%">
 									<f:facet name="header">
-										<p:row>
-											<p:column colspan="1">
-
-												<p:commandButton id="manageChapterMiddle"
-													icon="ui-icon-document" title="Manage Chapter and Document"
-													actionListener="#{jJChapterBean.initChapterBean('FUNCTIONAL')}"
-													update=":chapterDialogForm"
-													oncomplete="chapterDialogWidget.show()" />
-
-											</p:column>
-											<p:column colspan="1">
-												<p:commandButton id="releaseButton"
-													icon=".ui-icon-carat-2-n-s"
-													title="Release All Functional Requirements"
-													actionListener="#{jJRequirementBean.updateMessageRelease(2)}"
-													update=":dataForm:myReleaseDialog"
-													oncomplete="releaseJJRequirement.show()" />
-											</p:column>
-											<p:column colspan="4">
-												<p:inputText id="globalFilter" style="width:120px" />
-
-											</p:column>
-											<p:column colspan="1">
-												<p:commandButton id="createButton" icon="ui-icon-plus"
-													title="Add Functional Requirement"
-													actionListener="#{jJRequirementBean.createJJRequirement(2)}"
-													oncomplete="createJJRequirement.show()" />
-											</p:column>
-											<p:column colspan="1">
-												<p:commandButton id="dynaButton" icon="ui-icon-clipboard"
-													type="button" />
-											</p:column>
-										</p:row>
+										<h:outputText value="Product" />
 									</f:facet>
-								</p:panelGrid>
-							</f:facet>
+									<h:outputText value="#{requirement.product.name}" />
+								</p:column>
 
-							<p:column headerText="Requirement">
-								<h:outputText value="#{Requirement.name}" />
-							</p:column>
-
-							<p:column headerText="Product">
-								<h:outputText value="#{Requirement.project.name}" />
-							</p:column>
-
-							<p:column headerText="Chapter">
-								<h:outputText value="#{Requirement.chapter.name}" />
-							</p:column>
-
-							<f:facet name="footer">Functional Requirements
-							<p:progressBar widgetVar="pbMiddle" style="width:385px"
-									value="#{jJRequirementBean.progressMiddle}"
-									labelTemplate="{value}%" />
-								<p:progressBar widgetVar="coverageMiddle" style="width:385px"
-									value="#{jJRequirementBean.coverageProgressMiddle}"
-									labelTemplate="{value}%" />
-							</f:facet>
-						</p:dataTable></td>
-					<td><p:dataTable id="rightTable"
-							value="#{jJRequirementBean.myTechnicalJJRequirements}"
-							var="Requirement" resizableColumns="true" scrollable="true"
-							scrollHeight="450" style="width:410px"
-							rowKey="#{Requirement.name}"
-							selection="#{jJRequirementBean.mySelectedTechnicalJJRequirement}"
-							selectionMode="single">
-
-							<p:ajax event="rowSelect"
-								listener="#{jJRequirementBean.onRowSelect}"
-								update=":dataForm:rightContextMenu :dataForm:messages" />
-
-							<f:facet name="header">Technical Category
-								<p:panelGrid>
+								<p:column style="width:25%">
 									<f:facet name="header">
-										<p:row>
-											<p:column colspan="1">
-												<p:commandButton id="manageChapterRight"
-													icon="ui-icon-document" title="Manage Chapter and Document"
-													actionListener="#{jJChapterBean.initChapterBean('TECHNICAL')}"
-													update=":chapterDialogForm"
-													oncomplete="chapterDialogWidget.show()" />
-											</p:column>
-											<p:column colspan="1">
-												<p:commandButton id="releaseButton"
-													icon=".ui-icon-carat-2-n-s"
-													title="Release All Technical Requirements"
-													actionListener="#{jJRequirementBean.updateMessageRelease(3)}"
-													update=":dataForm:myReleaseDialog"
-													oncomplete="releaseJJRequirement.show()" />
-											</p:column>
-											<p:column colspan="4">
-
-												<p:inputText id="globalFilter" style="width:120px" />
-											</p:column>
-											<p:column colspan="1">
-												<p:commandButton id="createButton" icon="ui-icon-plus"
-													title="Add Technical Requirement"
-													actionListener="#{jJRequirementBean.createJJRequirement(3)}"
-													oncomplete="createJJRequirement.show()" />
-											</p:column>
-											<p:column colspan="1">
-												<p:commandButton id="dynaButton" icon="ui-icon-clipboard"
-													type="button" />
-											</p:column>
-										</p:row>
+										<h:outputText value="Chapter" />
 									</f:facet>
-								</p:panelGrid>
-							</f:facet>
+									<h:outputText value="#{requirement.chapter.name}" />
+								</p:column>
 
-							<p:column headerText="Requirement">
-								<h:outputText value="#{Requirement.name}" />
-							</p:column>
+								<p:column exportable="false" styleClass="action-column">
+									<f:facet name="header">
+										<h:outputText value="Actions" />
+									</f:facet>
+									<p:commandButton id="editButton" icon="ui-icon-pencil"
+										action="#{jJRequirementBean.editRequirement()}"
+										oncomplete="requirementDialogWidget.show()"
+										update=":requirementDialog"
+										disabled="#{jJRequirementBean.getDisabledEdit(requirement)}">
+										<f:setPropertyActionListener value="#{requirement}"
+											target="#{jJRequirementBean.requirement}" />
+									</p:commandButton>
+									<p:tooltip for="editButton" value="#{messages.label_edit}"
+										showEffect="fade" hideEffect="fade" />
 
-							<p:column headerText="Product">
-								<h:outputText value="#{Requirement.product.name}" />
-							</p:column>
+									<p:commandButton id="deleteButton" icon="ui-icon-trash"
+										oncomplete="requirementDeleteDialogWidget.show()"
+										title="#{messages.label_delete}">
+										<f:setPropertyActionListener value="#{requirement}"
+											target="#{jJRequirementBean.requirement}" />
+									</p:commandButton>
+									<p:tooltip for="deleteButton" value="#{messages.label_delete}"
+										showEffect="fade" hideEffect="fade" />
 
-							<p:column headerText="Chapter">
-								<h:outputText value="#{Requirement.chapter.name}" />
-							</p:column>
-
-							<f:facet name="footer">Technical Requirements
-							 <p:progressBar widgetVar="pbRight" style="width:385px"
-									value="#{jJRequirementBean.progressRight}"
-									labelTemplate="{value}%" />
-								<p:progressBar widgetVar="coverageRight" style="width:385px"
-									value="#{jJRequirementBean.coverageProgressRight}"
-									labelTemplate="{value}%" />
-							</f:facet>
-
-						</p:dataTable></td>
+								</p:column>
+								<f:facet name="footer">Progress Bar
+									<p:row>
+										<p:progressBar id="completion" style="width:385px"
+											value="#{tableDataModel.coverageProgress}"
+											labelTemplate="Coverage Progress Bar {value}%"
+											displayOnly="true" />
+									</p:row>
+									<p:row>
+										<p:progressBar id="coverage" style="width:385px"
+											value="#{tableDataModel.completionProgress}"
+											labelTemplate="Completion Progress Bar {value}%"
+											displayOnly="true" />
+									</p:row>
+								</f:facet>
+							</p:dataTable></td>
+					</ui:repeat>
 				</tr>
 			</table>
+		</h:form>
 
-			<p:dialog id="myEditDialog" header="Edit JJRequirement"
-				widgetVar="editJJRequirement" maximizable="false"
-				minimizable="false" dynamic="true" showEffect="fade"
-				hideEffect="fade">
-				<p:ajax event="close" update=":dataForm"
-					listener="#{jJRequirementBean.closeDialog}" />
-				<h:panelGrid columns="1" cellpadding="3">
-
-					<h:panelGrid columns="3" cellpadding="3">
-
-						<h:panelGrid>
-							<h:panelGrid>
-								<p:selectOneMenu id="chapterEdit"
-									value="#{jJRequirementBean.selectedChapterEdit}"
-									panelStyle="width:150px" effect="fade" style="width:160px"
+		<p:dialog id="requirementDialog" header="#{jJRequirementBean.message}"
+			modal="true" widgetVar="requirementDialogWidget" maximizable="false"
+			minimizable="false" dynamic="true" resizable="false">
+			<p:ajax event="close" update=":specForm"
+				listener="#{jJRequirementBean.closeDialog}" />
+			<p:outputPanel id="requirementDialogPanel">
+				<h:form id="requirementDialogForm">
+					<p:growl id="msg" />
+					<p:panelGrid style="margin-top:10px">
+						<p:row>
+							<p:column>
+								<p:inputText id="name"
+									value="#{jJRequirementBean.requirement.name}" required="true"
+									widgetVar="nameWidget" label="Requirement Name"
+									requiredMessage="Requirement Name is a required value">
+								</p:inputText>
+								<p:message for="name" id="msgName" />
+								<p:watermark for="name" value="Name *" />
+							</p:column>
+							<p:column>
+								<h:outputText for="status" value="Status:" />
+								<p:selectOneMenu id="status"
+									value="#{jJRequirementBean.requirementStatus}"
+									panelStyle="width:150px" effect="fade" style="width:150px"
+									filter="true" filterMatchMode="startsWith"
+									disabled="#{jJRequirementBean.disabledStatus}">
+									<f:converter
+										converterId="com.funder.janjoonweb.ui.mb.converter.JJStatusConverter" />
+									<f:selectItem
+										itemLabel="#{jJRequirementBean.requirementStatus.name}"
+										itemValue="#{jJRequirementBean.requirementStatus}" />
+									<f:selectItems
+										value="#{jJRequirementBean.requirementStatusList}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />
+									<p:ajax process="@this" partialSubmit="true"
+										listener="#{jJRequirementBean.handleSelectStatus()}" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+								<h:outputText for="project" value="Project:" />
+								<p:selectOneMenu id="project"
+									value="#{jJRequirementBean.requirementProject}"
+									panelStyle="width:150px" effect="fade" style="width:150px"
+									filter="true" filterMatchMode="startsWith" disabled="true">
+									<f:converter
+										converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
+									<f:selectItem
+										itemLabel="#{jJRequirementBean.requirementProject.name}"
+										itemValue="#{jJRequirementBean.requirementProject}" />
+									<f:selectItems
+										value="#{jJRequirementBean.requirementProjectList}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />
+									<p:ajax process="@this" partialSubmit="true"
+										listener="#{jJRequirementBean.handleSelectProject()}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText for="product" value="Product:" />
+								<p:selectOneMenu id="product"
+									value="#{jJRequirementBean.requirementProduct}"
+									panelStyle="width:150px" effect="fade" style="width:150px"
+									filter="true" filterMatchMode="startsWith">
+									<f:converter
+										converterId="com.funder.janjoonweb.ui.mb.converter.JJProductConverter" />
+									<f:selectItem
+										itemLabel="#{jJRequirementBean.requirementProduct.name}"
+										itemValue="#{jJRequirementBean.requirementProduct}" />
+									<f:selectItems
+										value="#{jJRequirementBean.requirementProductList}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />
+									<p:ajax process="@this" partialSubmit="true"
+										update="chapter,version"
+										listener="#{jJRequirementBean.handleSelectProduct()}" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+								<h:outputText for="version" value="Version:" />
+								<p:selectOneMenu id="version"
+									value="#{jJRequirementBean.requirementVersion}"
+									panelStyle="width:150px" effect="fade" style="width:150px"
+									filter="true" filterMatchMode="startsWith"
+									disabled="#{jJRequirementBean.disabledVersion}">
+									<f:converter
+										converterId="com.funder.janjoonweb.ui.mb.converter.JJVersionConverter" />
+									<f:selectItem
+										itemLabel="#{jJRequirementBean.requirementVersion.name}"
+										itemValue="#{jJRequirementBean.requirementVersion}" />
+									<f:selectItems
+										value="#{jJRequirementBean.requirementVersionList}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />
+									<p:ajax process="@this" partialSubmit="true"
+										listener="#{jJRequirementBean.handleSelectVersion()}" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+								<h:outputText for="chapter" value="Chapter:" />
+								<p:selectOneMenu id="chapter"
+									value="#{jJRequirementBean.requirementChapter}"
+									panelStyle="width:150px" effect="fade" style="width:150px"
 									filter="true" filterMatchMode="startsWith">
 									<f:converter
 										converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
 									<f:selectItem
-										itemLabel="#{jJRequirementBean.selectedChapterEdit.name}"
-										itemValue="#{jJRequirementBean.selectedChapterEdit}" />
-									<f:selectItems value="#{jJRequirementBean.chapterListEdit}"
-										var="c" itemLabel="#{c.name}" itemValue="#{c}" />
+										itemLabel="#{jJRequirementBean.requirementChapter.name}"
+										itemValue="#{jJRequirementBean.requirementChapter}" />
+									<f:selectItems
+										value="#{jJRequirementBean.requirementChapterList}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />
 									<p:ajax process="@this" partialSubmit="true"
-										listener="#{jJRequirementBean.handleSelectChapterEdit()}" />
+										listener="#{jJRequirementBean.handleSelectChapter(jJChapterBean)}" />
 								</p:selectOneMenu>
-							</h:panelGrid>
-
-							<p:autoComplete id="productEdit"
-								value="#{jJRequirementBean.myEditedJJRequirement.product}"
-								completeMethod="#{jJRequirementBean.completeProduct}"
-								var="product" itemLabel="#{product.name}" itemValue="#{product}"
-								multiple="false" dropdown="true" required="false">
-								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJProductConverter" />
-								<p:column style="text-align:center">  
-           							 #{product.name}<!-- - #{product.creationDate} -->
-								</p:column>
-							</p:autoComplete>
-							<p:watermark for="productEdit" value="Product" />
-						</h:panelGrid>
-
-						<h:panelGrid>
-							<p:autoComplete id="projectEdit"
-								value="#{jJRequirementBean.myEditedJJRequirement.project}"
-								completeMethod="#{jJRequirementBean.completeProject}"
-								var="project" itemLabel="#{project.name}" itemValue="#{project}"
-								multiple="false" dropdown="true" required="false">
-								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
-								<p:column style="text-align:center">  
-           							 #{project.name} - #{project.creationDate}
-        						</p:column>
-							</p:autoComplete>
-							<p:watermark for="projectEdit" value="Project" />
-						</h:panelGrid>
-
-					</h:panelGrid>
-					<h:panelGrid columns="1" cellpadding="3">
-
-						<h:panelGrid columns="1" cellpadding="3">
-							<p:inputText id="nameEdit" cols="60"
-								value="#{jJRequirementBean.myEditedJJRequirement.name}"
-								required="true">
-								<f:validateLength minimum="1" maximum="25" />
-								<p:ajax update="msgNameEdit" event="keyup" />
-							</p:inputText>
-							<p:message for="nameEdit" id="msgNameEdit" display="icon" />
-							<p:watermark for="nameEdit" value="Name" />
-						</h:panelGrid>
-
-						<h:panelGrid columns="1" cellpadding="3">
-							<p:editor id="descriptionEdit" rows="4" cols="70"
-								widgetVar="editorEdit"
-								value="#{jJRequirementBean.myEditedJJRequirement.description}"
-								required="true">
-								<f:validateLength minimum="1" maximum="250" />
-								<!--p:ajax update="msgDescriptionEdit" event="keyup" /-->
-							</p:editor>
-							<p:message for="descriptionEdit" id="msgDescriptionEdit"
-								display="icon" />
-							<p:watermark for="descriptionEdit" value="Description" />
-						</h:panelGrid>
-
-						<h:panelGrid columns="1" cellpadding="3">
-							<p:inputTextarea id="noteEdit" rows="2" cols="70"
-								value="#{jJRequirementBean.myEditedJJRequirement.note}"
-								required="false">
-								<f:validateLength minimum="0" maximum="250" />
-								<p:ajax update="msgNoteEdit" event="keyup" />
-							</p:inputTextarea>
-							<p:message for="noteEdit" id="msgNoteEdit" display="icon" />
-							<p:watermark for="noteEdit" value="Note" />
-						</h:panelGrid>
-
-						<h:panelGrid columns="6" cellpadding="2">
-							<h:outputText value="Business: " />
-							<p:selectManyCheckbox id="businessReqListEdit"
-								value="#{jJRequirementBean.selectedBusinessJJRequirementList}"
-								layout="pageDirection">
-								<f:selectItems
-									value="#{jJRequirementBean.myBusinessJJRequirementList}" />
-							</p:selectManyCheckbox>
-							<h:outputText value="Functional: " />
-							<p:selectManyCheckbox id="functionalReqListEdit"
-								value="#{jJRequirementBean.selectedFunctionalJJRequirementList}"
-								layout="pageDirection">
-								<f:selectItems
-									value="#{jJRequirementBean.myFunctionalJJRequirementList}" />
-							</p:selectManyCheckbox>
-							<h:outputText value="Technical: " />
-							<p:selectManyCheckbox id="technicalReqListEdit"
-								value="#{jJRequirementBean.selectedTechnicalJJRequirementList}"
-								layout="pageDirection">
-								<f:selectItems
-									value="#{jJRequirementBean.myTechnicalJJRequirementList}" />
-							</p:selectManyCheckbox>
-						</h:panelGrid>
-					</h:panelGrid>
-					<f:facet name="footer">
-						<p:row>
-							<p:column>
-								<p:commandButton value="Reset" type="reset" />
-							</p:column>
-							<p:column>
-								<h:commandButton value="#{messages.label_save}"
-									action="#{jJRequirementBean.persistJJRequirement(2)}"
-									update=":dataForm" />
 							</p:column>
 						</p:row>
-					</f:facet>
-				</h:panelGrid>
-			</p:dialog>
-
-			<p:confirmDialog id="myDeleteDialog"
-				message="#{messages.label_delete_record}"
-				header="#{messages.label_confirm_deletion}" severity="alert"
-				widgetVar="deleteJJRequirement">
-				<p:commandButton id="confirmDelete" value="#{messages.label_yes}"
-					oncomplete="deleteJJRequirement.hide()" update=":dataForm"
-					process="@this"
-					actionListener="#{jJRequirementBean.persistJJRequirement(3)}" />
-				<p:commandButton id="declineDelete" value="#{messages.label_no}"
-					onclick="deleteJJRequirement.hide()" type="button" />
-			</p:confirmDialog>
-
-			<p:confirmDialog id="myDiscardDialog"
-				message="#{jJRequirementBean.messageDiscard}"
-				header="Confirm discard" severity="alert"
-				widgetVar="discardJJRequirement">
-				<p:commandButton id="confirmDiscard" value="#{messages.label_yes}"
-					oncomplete="discardJJRequirement.hide()" update=":dataForm"
-					process="@this"
-					actionListener="#{jJRequirementBean.discardJJRequirement}" />
-				<p:commandButton id="declineDiscard" value="#{messages.label_no}"
-					onclick="discardJJRequirement.hide()" type="button" />
-			</p:confirmDialog>
-
-			<p:confirmDialog id="myReleaseDialog"
-				message="#{jJRequirementBean.messageRelease}"
-				header="Confirm release" severity="alert"
-				widgetVar="releaseJJRequirement">
-				<p:commandButton id="confirmRelease" value="#{messages.label_yes}"
-					oncomplete="releaseJJRequirement.hide()" update=":dataForm"
-					process="@this"
-					actionListener="#{jJRequirementBean.releaseJJRequirement}" />
-				<p:commandButton id="declineRelease" value="#{messages.label_no}"
-					onclick="releaseJJRequirement.hide()" type="button" />
-			</p:confirmDialog>
-
-			<p:dialog id="myCreateDialog" header="Create Requirement"
-				widgetVar="createJJRequirement" maximizable="true"
-				minimizable="false" showEffect="fade" hideEffect="fade"
-				dynamic="true" width="740" minWidth="740">
-				<p:ajax event="close" update=":dataForm"
-					listener="#{jJRequirementBean.closeDialog}" />
-				<p:panelGrid style="margin-top:20px">
-					<f:facet name="header">
+						<p:row>
+							<p:column>
+								<p:selectCheckboxMenu
+									value="#{jJRequirementBean.selectedLowRequirementsList}"
+									label="#{jJRequirementBean.lowCategoryName}" filter="true"
+									filterText="Filter" filterMatchMode="contains"
+									panelStyle="width:220px"
+									disabled="#{jJRequirementBean.disabledLowRequirements}">
+									<f:selectItems value="#{jJRequirementBean.lowRequirementsList}" />
+								</p:selectCheckboxMenu>
+							</p:column>
+							<p:column>
+								<p:selectCheckboxMenu
+									value="#{jJRequirementBean.selectedMediumRequirementsList}"
+									label="#{jJRequirementBean.mediumCategoryName}" filter="true"
+									filterText="Filter" filterMatchMode="contains"
+									panelStyle="width:220px"
+									disabled="#{jJRequirementBean.disabledMediumRequirements}">
+									<f:selectItems
+										value="#{jJRequirementBean.mediumRequirementsList}" />
+								</p:selectCheckboxMenu>
+							</p:column>
+							<p:column>
+								<p:selectCheckboxMenu
+									value="#{jJRequirementBean.selectedHighRequirementsList}"
+									label="#{jJRequirementBean.highCategoryName}" filter="true"
+									filterText="Filter" filterMatchMode="contains"
+									panelStyle="width:220px"
+									disabled="#{jJRequirementBean.disabledHighRequirements}">
+									<f:selectItems
+										value="#{jJRequirementBean.highRequirementsList}" />
+								</p:selectCheckboxMenu>
+							</p:column>
+						</p:row>
 						<p:row>
 							<p:column colspan="3">
-								<p:inputText id="name"
-									value="#{jJRequirementBean.myJJRequirement.name}"
-									required="true" style="font-size:`200%;width=75%;">
-									<f:validateLength minimum="1" maximum="25" />
-									<p:ajax update="msgName" event="keyup" />
-									<p:message for="name" id="msgName" display="icon" />
-									<p:watermark for="name" value="Name" />
-								</p:inputText>
+								<h:outputText value="Description : *" />
+								<p:editor id="description" widgetVar="descriptionWidget"
+									style="width:388px"
+									value="#{jJRequirementBean.requirement.description}"
+									required="true"
+									requiredMessage="Requirement Description is a required value">
+								</p:editor>
+							</p:column>
+
+
+
+						</p:row>
+						<p:row>
+							<p:column rowspan="3" colspan="3">
+								<p:inputTextarea id="note" rows="3" cols="100"
+									value="#{jJRequirementBean.requirement.note}">
+								</p:inputTextarea>
+								<p:watermark for="note" value="Note" />
 							</p:column>
 						</p:row>
-					</f:facet>
+						<f:facet name="footer">
+							<p:row>
+								<p:column colspan="3">
+									<p:commandButton value="Save" oncomplete=""
+										action="#{jJRequirementBean.save(jJChapterBean)}"
+										process="@form" update="requirementDialogForm" />
+								</p:column>
+							</p:row>
+						</f:facet>
+					</p:panelGrid>
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
 
-					<p:row>
-						<p:column>
-							<p:autoComplete id="project"
-								value="#{jJRequirementBean.myJJRequirement.project}"
-								completeMethod="#{jJRequirementBean.completeProject}"
-								var="project" itemLabel="#{project.name}" itemValue="#{project}"
-								multiple="false" dropdown="true" required="false">
-								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
-								<!--p:column style="text-align:center">#{project.name}</p:column-->
-							</p:autoComplete>
-							<p:watermark for="project" value="Project" />
-						</p:column>
-						<p:column rowspan="3">
-							<h:outputText value="Tasks: " />
-							<p:selectManyMenu id="tasksList"
-								value="#{jJRequirementBean.selectedTasksList}" var="t"
-								showCheckbox="true" style="height:75px">
-								<f:selectItems value="#{jJRequirementBean.tasksList}" var="task"
-									itemLabel="#{task.name}" itemValue="#{task}" />
-								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJTaskConverter" />
-								<p:column style="text-align:left">#{t.name}</p:column>
-							</p:selectManyMenu>
-						</p:column>
-						<p:column rowspan="6">
-							<div>
-								<h:outputText value="Business: " />
-								<p:selectManyMenu id="businessReqList"
-									value="#{jJRequirementBean.selectedBusinessJJRequirements}"
-									var="p" showCheckbox="true" style="height:75px">
-									<f:selectItems
-										value="#{jJRequirementBean.businessJJRequirementsList}"
-										var="req" itemLabel="#{req.name}" itemValue="#{req}" />
-									<f:converter
-										converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" />
-									<p:column style="text-align:left">#{p.name}</p:column>
-								</p:selectManyMenu>
-								<h:outputText value="Functional: " />
-								<p:selectManyMenu id="functionalReqList"
-									value="#{jJRequirementBean.selectedFunctionalJJRequirements}"
-									var="p" showCheckbox="true" style="height:75px">
-									<f:selectItems
-										value="#{jJRequirementBean.functionalJJRequirementsList}"
-										var="req" itemLabel="#{req.name}" itemValue="#{req}" />
-									<f:converter
-										converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" />
-									<p:column style="text-align:left">#{p.name}</p:column>
-								</p:selectManyMenu>
-								<h:outputText value="Technical: " />
-								<p:selectManyMenu id="technicalReqList"
-									value="#{jJRequirementBean.selectedTechnicalJJRequirements}"
-									var="p" showCheckbox="true" style="height:75px">
-									<f:selectItems
-										value="#{jJRequirementBean.technicalJJRequirementsList}"
-										var="req" itemLabel="#{req.name}" itemValue="#{req}" />
-									<f:converter
-										converterId="com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter" />
-									<p:column style="text-align:left">#{p.name}</p:column>
-								</p:selectManyMenu>
-							</div>
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column>
-							<p:autoComplete id="product"
-								value="#{jJRequirementBean.myJJRequirement.product}"
-								completeMethod="#{jJRequirementBean.completeProduct}"
-								var="product" itemLabel="#{product.name}" itemValue="#{product}"
-								multiple="false" dropdown="true" required="false">
-								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJProductConverter" />
-								<!--p:column style="text-align:center">#{product.name}</p:column-->
-							</p:autoComplete>
-							<p:watermark for="product" value="Product" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column>
-							<h:outputText for="chapter" value="Chapter:" />
-							<p:selectOneMenu id="chapter"
-								value="#{jJRequirementBean.selectedChapter}"
-								panelStyle="width:150px" effect="fade" style="width:160px"
-								filter="true" filterMatchMode="startsWith">
-								<f:converter
-									converterId="com.funder.janjoonweb.ui.mb.converter.JJChapterConverter" />
-								<f:selectItem
-									itemLabel="#{jJRequirementBean.selectedChapter.name}"
-									itemValue="#{jJRequirementBean.selectedChapter}" />
-								<f:selectItems value="#{jJRequirementBean.chapterList}" var="c"
-									itemLabel="#{c.name}" itemValue="#{c}" />
-								<p:ajax process="@this" partialSubmit="true"
-									listener="#{jJRequirementBean.handleSelectChapter()}" />
-							</p:selectOneMenu>
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column colspan="2" styleClass="ui-widget-header">
-							<p:spacer height="0" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column colspan="2">
-							<p:editor id="description" rows="1" cols="70"
-								widgetVar="editorCreate" style="width: 440px"
-								value="#{jJRequirementBean.myJJRequirement.description}"
-								required="true">
-							</p:editor>
-							<p:message for="description" id="msgDescription" display="icon" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column colspan="2">
-							<p:inputTextarea id="note" rows="1" cols="70"
-								value="#{jJRequirementBean.myJJRequirement.note}"
-								required="false">
-								<p:ajax update="msgNote" event="keyup" />
-							</p:inputTextarea>
-							<p:message for="note" id="msgNote" display="icon" />
-							<p:watermark for="note" value="Note" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column colspan="3" styleClass="ui-widget-header">
-							<p:spacer height="0" />
-						</p:column>
-					</p:row>
-				</p:panelGrid>
-				<f:facet name="footer">
-					<p:row>
-						<p:column>
-							<p:commandButton value="Reset" type="reset" />
-						</p:column>
-						<p:column>
-							<h:commandButton value="#{messages.label_save}"
-								action="#{jJRequirementBean.persistJJRequirement(1)}"
-								update=":dataForm" />
-						</p:column>
-					</p:row>
-				</f:facet>
-			</p:dialog>
-		</h:form>
-		<p:dialog id="chapterDialog" header="Chapter"
+
+		<p:dialog id="chapterDialog" header="Chapter" modal="true"
 			widgetVar="chapterDialogWidget" maximizable="false"
 			minimizable="false" dynamic="true" resizable="false">
-			<p:ajax event="close" update=":dataForm"
+			<p:ajax event="close" update=":specForm"
 				listener="#{jJChapterBean.closeDialog}" />
 			<p:outputPanel id="chapterDialogPanel">
 				<h:form id="chapterDialogForm">
@@ -756,7 +447,6 @@
 										<h:outputText value="#{nodeRight}" />
 									</p:treeNode>
 								</p:tree>
-
 							</p:column>
 						</p:row>
 					</p:panelGrid>
@@ -764,6 +454,22 @@
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
+
+		<p:confirmDialog id="requirementDeleteDialog"
+			widgetVar="requirementDeleteDialogWidget"
+			message="#{messages.label_delete_record}" showEffect="fade"
+			hideEffect="explode" header="#{messages.label_confirm_deletion}"
+			severity="alarm">
+			<p:outputPanel id="requirementDeletePanel">
+				<h:form id="requirementDeleteForm">
+					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+						action="#{jJRequirementBean.deleteRequirement}" update=":specForm"
+						oncomplete="requirementDeleteDialogWidget.hide()" />
+					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+						onclick="requirementDeleteDialogWidget.hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
 
 	</ui:define>
 </ui:composition>

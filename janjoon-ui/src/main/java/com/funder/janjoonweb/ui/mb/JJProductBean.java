@@ -185,22 +185,6 @@ public class JJProductBean {
 			if (jJRequirementBean != null) {
 
 				jJRequirementBean.setProduct(product);
-
-				jJRequirementBean
-						.setMyBusinessJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProjectAndProduct(
-										"BUSINESS", project, product));
-
-				jJRequirementBean
-						.setMyFunctionalJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProjectAndProduct(
-										"FUNCTIONAL", project, product));
-
-				jJRequirementBean
-						.setMyTechnicalJJRequirements(jJRequirementService
-								.getAllJJRequirementsWithProjectAndProduct(
-										"TECHNICAL", project, product));
-
 			}
 			if (jJChapterBean != null)
 				jJChapterBean.setProduct(product);
@@ -215,20 +199,6 @@ public class JJProductBean {
 
 			jJRequirementBean.setProduct(product);
 			jJChapterBean.setProduct(product);
-
-			jJRequirementBean.setMyBusinessJJRequirements(jJRequirementService
-					.getAllJJRequirementsWithCategoryAndProject("BUSINESS",
-							project));
-
-			jJRequirementBean
-					.setMyFunctionalJJRequirements(jJRequirementService
-							.getAllJJRequirementsWithCategoryAndProject(
-									"FUNCTIONAL", project));
-
-			jJRequirementBean.setMyTechnicalJJRequirements(jJRequirementService
-					.getAllJJRequirementsWithCategoryAndProject("TECHNICAL",
-							project));
-
 		}
 	}
 
@@ -262,7 +232,7 @@ public class JJProductBean {
 
 		if (productAdmin.getId() == null) {
 			System.out.println("IS a new JJProduct");
-		
+
 			productAdmin.setManager(productManager);
 			jJProductService.saveJJProduct(productAdmin);
 			message = "message_successfully_created";
@@ -325,10 +295,10 @@ public class JJProductBean {
 	}
 
 	public void handleSelectProductManager() {
-		
-		if(productManager!=null) {
-		System.out.println(productManager.getFirstname() + " "
-				+ productManager.getName());
+
+		if (productManager != null) {
+			System.out.println(productManager.getFirstname() + " "
+					+ productManager.getName());
 		}
 	}
 

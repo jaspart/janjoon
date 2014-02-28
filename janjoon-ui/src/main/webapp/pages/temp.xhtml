@@ -132,6 +132,20 @@
 										showEffect="fade" hideEffect="fade" />
 
 								</p:column>
+								<f:facet name="footer">Progress Bar
+									<p:row>
+										<p:progressBar id="completion" style="width:385px"
+											value="#{tableDataModel.coverageProgress}"
+											labelTemplate="Coverage Progress Bar {value}%"
+											displayOnly="true" />
+									</p:row>
+									<p:row>
+										<p:progressBar id="coverage" style="width:385px"
+											value="#{tableDataModel.completionProgress}"
+											labelTemplate="Completion Progress Bar {value}%"
+											displayOnly="true" />
+									</p:row>
+								</f:facet>
 							</p:dataTable></td>
 					</ui:repeat>
 				</tr>
