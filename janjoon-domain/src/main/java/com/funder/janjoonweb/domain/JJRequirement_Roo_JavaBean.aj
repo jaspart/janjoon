@@ -208,20 +208,20 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.testcases = testcases;
     }
     
-    public Boolean JJRequirement.getIsOperation() {
-        return this.isOperation;
+    public Boolean JJRequirement.getOperation() {
+        return this.operation;
     }
     
-    public void JJRequirement.setIsOperation(Boolean isOperation) {
-        this.isOperation = isOperation;
+    public void JJRequirement.setOperation(Boolean operation) {
+        this.operation = operation;
     }
     
-    public Boolean JJRequirement.getIsCompleted() {
-        return this.isCompleted;
+    public Boolean JJRequirement.getCompletion() {
+        return this.completion;
     }
     
-    public void JJRequirement.setIsCompleted(Boolean isCompleted) {
-        this.isCompleted = isCompleted;
+    public void JJRequirement.setCompletion(Boolean completion) {
+        this.completion = completion;
     }
     
 }

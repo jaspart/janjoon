@@ -14,6 +14,7 @@ import javax.faces.model.ListDataModel;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.SelectableDataModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
@@ -23,12 +24,21 @@ import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJStatus;
+import com.funder.janjoonweb.domain.JJTask;
+import com.funder.janjoonweb.domain.JJTaskService;
 import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJRequirement.class, beanName = "jJRequirementBean")
 public class JJRequirementBean {
+
+	@Autowired
+	JJTaskService jJTaskService;
+
+	public void setjJTaskService(JJTaskService jJTaskService) {
+		this.jJTaskService = jJTaskService;
+	}
 
 	private JJCategory lowCategory;
 	private JJCategory mediumCategory;
@@ -83,6 +93,12 @@ public class JJRequirementBean {
 	private boolean disabledHighRequirements;
 	private boolean disabledVersion;
 	private boolean disabledStatus;
+	private boolean disabledTask;
+
+	private boolean initiateTask;
+	private boolean disabledInitTask;
+
+	private JJTask task;
 
 	private List<JJRequirement> storeMapUp;
 	private List<JJRequirement> storeMapDown;
@@ -403,6 +419,38 @@ public class JJRequirementBean {
 		this.disabledStatus = disabledStatus;
 	}
 
+	public boolean getDisabledTask() {
+		return disabledTask;
+	}
+
+	public void setDisabledTask(boolean disabledTask) {
+		this.disabledTask = disabledTask;
+	}
+
+	public boolean getInitiateTask() {
+		return initiateTask;
+	}
+
+	public void setInitiateTask(boolean initiateTask) {
+		this.initiateTask = initiateTask;
+	}
+
+	public boolean getDisabledInitTask() {
+		return disabledInitTask;
+	}
+
+	public void setDisabledInitTask(boolean disabledInitTask) {
+		this.disabledInitTask = disabledInitTask;
+	}
+
+	public JJTask getTask() {
+		return task;
+	}
+
+	public void setTask(JJTask task) {
+		this.task = task;
+	}
+
 	public void newRequirement(long id) {
 		System.out.println("New Requirement");
 
@@ -446,6 +494,11 @@ public class JJRequirementBean {
 		selectedMediumRequirementsList = new ArrayList<String>();
 		selectedHighRequirementsList = new ArrayList<String>();
 
+		task = new JJTask();
+		disabledInitTask = false;
+		initiateTask = false;
+		disabledTask = true;
+
 	}
 
 	public void editRequirement() {
@@ -484,6 +537,18 @@ public class JJRequirementBean {
 		fullRequirementsList();
 		fullSelectedRequirementsList();
 
+		Set<JJTask> tasks = requirement.getTasks();
+		if (tasks.isEmpty()) {
+			initiateTask = false;
+			task = new JJTask();
+		} else {
+			for (JJTask temTask : requirement.getTasks()) {
+				task = temTask;
+				initiateTask = true;
+			}
+		}
+		disabledInitTask = true;
+		disabledTask = true;
 	}
 
 	public void deleteRequirement() {
@@ -533,14 +598,21 @@ public class JJRequirementBean {
 			getRequirementsListDOWN();
 		}
 
-		System.out.println("Begin");
 		getRequirementOrder(jJChapterBean);
-		System.out.println("Fin");
 
 		if (requirement.getId() == null) {
 			System.out.println("SAVING new Requirement...");
 
-			jJRequirementService.saveJJRequirement(requirement);
+			if (initiateTask) {
+				task.setName(requirement.getName());
+				task.setDescription("This Task: " + task.getName());
+				requirement.getTasks().add(task);
+				task.setRequirement(requirement);
+				jJRequirementService.saveJJRequirement(requirement);
+				jJTaskService.saveJJTask(task);
+			} else {
+				jJRequirementService.saveJJRequirement(requirement);
+			}
 
 			message = "message_successfully_created";
 
@@ -561,6 +633,27 @@ public class JJRequirementBean {
 				"JJRequirement");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
+	}
+
+	public void initiateTask() {
+
+		System.out.println("initiateTask " + initiateTask);
+
+		disabledTask = !initiateTask;
+
+		if (initiateTask) {
+			task = new JJTask();
+			task.setEnabled(true);
+			task.setCreationDate(new Date());
+			task.setWorkloadPlanned(8);
+		} else {
+			task = new JJTask();
+		}
+
+	}
+
+	public void completeTask() {
+		System.out.println("task.getCompletion() " + task.getCompletion());
 	}
 
 	public void closeDialog() {
@@ -591,6 +684,7 @@ public class JJRequirementBean {
 		disabledLowRequirements = true;
 		disabledMediumRequirements = true;
 		disabledHighRequirements = true;
+		task = null;
 
 		storeMapUp = null;
 		storeMapDown = null;
@@ -626,7 +720,7 @@ public class JJRequirementBean {
 
 	}
 
-	public void handleSelectChapter(JJChapterBean jJChapterBean) {
+	public void handleSelectChapter() {
 
 	}
 

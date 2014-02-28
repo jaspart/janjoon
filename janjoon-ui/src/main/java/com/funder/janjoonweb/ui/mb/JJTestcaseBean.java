@@ -763,7 +763,7 @@ public class JJTestcaseBean {
 				// l'interface de specifications avance).
 				JJTestcase testcase = jJTestcaseexecution.getTestcase();
 				JJRequirement requirement = testcase.getRequirement();
-				requirement.setIsCompleted(true);
+				requirement.setCompletion(true);
 				jJRequirementService.updateJJRequirement(requirement);
 			}
 

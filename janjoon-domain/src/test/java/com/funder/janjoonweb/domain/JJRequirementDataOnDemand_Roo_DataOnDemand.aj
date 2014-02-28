@@ -77,21 +77,26 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
     
     public JJRequirement JJRequirementDataOnDemand.getNewTransientJJRequirement(int index) {
         JJRequirement obj = new JJRequirement();
+        setCompletion(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
         setEndDate(obj, index);
         setImpact(obj, index);
-        setIsCompleted(obj, index);
-        setIsOperation(obj, index);
         setName(obj, index);
         setNote(obj, index);
         setNumero(obj, index);
+        setOperation(obj, index);
         setOrdering(obj, index);
         setRelation(obj, index);
         setStartDate(obj, index);
         setUpdatedDate(obj, index);
         return obj;
+    }
+    
+    public void JJRequirementDataOnDemand.setCompletion(JJRequirement obj, int index) {
+        Boolean completion = Boolean.TRUE;
+        obj.setCompletion(completion);
     }
     
     public void JJRequirementDataOnDemand.setCreationDate(JJRequirement obj, int index) {
@@ -122,16 +127,6 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
         obj.setImpact(impact);
     }
     
-    public void JJRequirementDataOnDemand.setIsCompleted(JJRequirement obj, int index) {
-        Boolean isCompleted = Boolean.TRUE;
-        obj.setIsCompleted(isCompleted);
-    }
-    
-    public void JJRequirementDataOnDemand.setIsOperation(JJRequirement obj, int index) {
-        Boolean isOperation = Boolean.TRUE;
-        obj.setIsOperation(isOperation);
-    }
-    
     public void JJRequirementDataOnDemand.setName(JJRequirement obj, int index) {
         String name = "name_" + index;
         if (name.length() > 25) {
@@ -148,6 +143,11 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
     public void JJRequirementDataOnDemand.setNumero(JJRequirement obj, int index) {
         Integer numero = new Integer(index);
         obj.setNumero(numero);
+    }
+    
+    public void JJRequirementDataOnDemand.setOperation(JJRequirement obj, int index) {
+        Boolean operation = Boolean.TRUE;
+        obj.setOperation(operation);
     }
     
     public void JJRequirementDataOnDemand.setOrdering(JJRequirement obj, int index) {

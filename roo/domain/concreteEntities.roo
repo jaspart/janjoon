@@ -174,8 +174,8 @@ field reference --fieldName assignedTo --type ~.JJContact
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
 field set --fieldName testcases  --type ~.JJTestcase --cardinality ONE_TO_MANY --mappedBy requirement --fetch LAZY
 field string --fieldName note
-field boolean --fieldName isOperation
-field boolean --fieldName isCompleted
+field boolean --fieldName operation
+field boolean --fieldName completion
 
 #######################
 
@@ -206,7 +206,7 @@ field reference --fieldName requirement --type ~.JJRequirement
 field reference --fieldName testcase --type ~.JJTestcase
 field reference --fieldName assignedTo --type ~.JJContact
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
-field boolean --fieldName isCompleted
+field boolean --fieldName completion
 
 #######################
 

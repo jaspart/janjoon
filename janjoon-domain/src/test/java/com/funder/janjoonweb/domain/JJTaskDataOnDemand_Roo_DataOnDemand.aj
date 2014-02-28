@@ -56,6 +56,7 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
     
     public JJTask JJTaskDataOnDemand.getNewTransientJJTask(int index) {
         JJTask obj = new JJTask();
+        setCompletion(obj, index);
         setConsumed(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
@@ -63,7 +64,6 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
         setEndDatePlanned(obj, index);
         setEndDateReal(obj, index);
         setEndDateRevised(obj, index);
-        setIsCompleted(obj, index);
         setName(obj, index);
         setStartDatePlanned(obj, index);
         setStartDateReal(obj, index);
@@ -73,6 +73,11 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
         setWorkloadReal(obj, index);
         setWorkloadRevised(obj, index);
         return obj;
+    }
+    
+    public void JJTaskDataOnDemand.setCompletion(JJTask obj, int index) {
+        Boolean completion = Boolean.TRUE;
+        obj.setCompletion(completion);
     }
     
     public void JJTaskDataOnDemand.setConsumed(JJTask obj, int index) {
@@ -108,11 +113,6 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
     public void JJTaskDataOnDemand.setEndDateRevised(JJTask obj, int index) {
         Date endDateRevised = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setEndDateRevised(endDateRevised);
-    }
-    
-    public void JJTaskDataOnDemand.setIsCompleted(JJTask obj, int index) {
-        Boolean isCompleted = Boolean.TRUE;
-        obj.setIsCompleted(isCompleted);
     }
     
     public void JJTaskDataOnDemand.setName(JJTask obj, int index) {

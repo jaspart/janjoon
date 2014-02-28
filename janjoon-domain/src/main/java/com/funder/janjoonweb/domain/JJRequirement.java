@@ -76,7 +76,7 @@ public class JJRequirement extends JJAbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
 	private Set<JJBug> bugs = new HashSet<JJBug>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "requirement")
 	private Set<JJTask> tasks = new HashSet<JJTask>();
 
 	@ManyToOne
@@ -98,7 +98,7 @@ public class JJRequirement extends JJAbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
 	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
 
-	private Boolean isOperation;
+	private Boolean operation;
 
-	private Boolean isCompleted;
+	private Boolean completion;
 }

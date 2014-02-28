@@ -263,7 +263,7 @@
 										value="#{jJRequirementBean.requirementChapterList}" var="c"
 										itemLabel="#{c.name}" itemValue="#{c}" />
 									<p:ajax process="@this" partialSubmit="true"
-										listener="#{jJRequirementBean.handleSelectChapter(jJChapterBean)}" />
+										listener="#{jJRequirementBean.handleSelectChapter()}" />
 								</p:selectOneMenu>
 							</p:column>
 						</p:row>
@@ -311,8 +311,39 @@
 									requiredMessage="Requirement Description is a required value">
 								</p:editor>
 							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="Initiate Task: " />
+								<p:selectBooleanCheckbox
+									value="#{jJRequirementBean.initiateTask}"
+									disabled="#{jJRequirementBean.disabledInitTask}">
+									<p:ajax listener="#{jJRequirementBean.initiateTask()}"
+										update="outputPanel completion" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+							<p:column>
+								<h:outputLabel for="workload" value="Workload: " />
+								<p:outputPanel id="outputPanel">
+									<p:spinner id="workload"
+										value="#{jJRequirementBean.task.workloadPlanned}"
+										stepFactor="1" min="0"
+										disabled="#{jJRequirementBean.disabledTask}">
+										<p:ajax update="workloadvalue" process="@this" />
+									</p:spinner>
+									<h:outputText id="workloadvalue"
+										value="#{jJRequirementBean.task.workloadPlanned} h" />
+								</p:outputPanel>
+							</p:column>
 
-
+							<p:column>
+								<h:outputText value="Complete Task: " />
+								<p:selectBooleanCheckbox id="completion"
+									value="#{jJRequirementBean.task.completion}"
+									disabled="#{jJRequirementBean.disabledTask}">
+									<p:ajax listener="#{jJRequirementBean.completeTask()}" />
+								</p:selectBooleanCheckbox>
+							</p:column>
 
 						</p:row>
 						<p:row>

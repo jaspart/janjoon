@@ -71,6 +71,6 @@ public class JJTask extends JJAbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
 
-	private Boolean isCompleted;
+	private Boolean completion;
 
 }
