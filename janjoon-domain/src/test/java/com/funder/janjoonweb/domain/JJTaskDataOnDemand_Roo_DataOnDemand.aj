@@ -5,7 +5,6 @@ package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJBugDataOnDemand;
 import com.funder.janjoonweb.domain.JJContactDataOnDemand;
-import com.funder.janjoonweb.domain.JJProjectDataOnDemand;
 import com.funder.janjoonweb.domain.JJRequirementDataOnDemand;
 import com.funder.janjoonweb.domain.JJTask;
 import com.funder.janjoonweb.domain.JJTaskDataOnDemand;
@@ -39,9 +38,6 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     JJBugDataOnDemand JJTaskDataOnDemand.jJBugDataOnDemand;
-    
-    @Autowired
-    JJProjectDataOnDemand JJTaskDataOnDemand.jJProjectDataOnDemand;
     
     @Autowired
     JJRequirementDataOnDemand JJTaskDataOnDemand.jJRequirementDataOnDemand;

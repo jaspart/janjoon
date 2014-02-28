@@ -2030,7 +2030,7 @@ public class JJRequirementBean {
 
 		getRequirementsListUP();
 
-		if (!requirementCategory.equals(lowCategory)) {
+		if (!requirementCategory.getId().equals(lowCategory.getId())) {
 			getRequirementsListDOWN();
 		}
 
@@ -2135,8 +2135,9 @@ public class JJRequirementBean {
 		System.out.println(requirementStatus.getName());
 	}
 
-	public void load(JJProjectBean jJProjectBean, JJProductBean jJProductBean,
-			JJVersionBean jJVersionBean, JJChapterBean jJChapterBean) {
+	public void loadData(JJProjectBean jJProjectBean,
+			JJProductBean jJProductBean, JJVersionBean jJVersionBean,
+			JJChapterBean jJChapterBean) {
 
 		project = jJProjectBean.getProject();
 		product = jJProductBean.getProduct();
@@ -2227,17 +2228,17 @@ public class JJRequirementBean {
 
 		if (lowCategory != null) {
 			mapTable.put(String.valueOf(lowCategory.getId()),
-					getRequirementsList(lowCategory));
+					getRequirementsList(lowCategory, product, version));
 		}
 
 		if (mediumCategory != null) {
 			mapTable.put(String.valueOf(mediumCategory.getId()),
-					getRequirementsList(mediumCategory));
+					getRequirementsList(mediumCategory, product, version));
 		}
 
 		if (highCategory != null) {
 			mapTable.put(String.valueOf(highCategory.getId()),
-					getRequirementsList(highCategory));
+					getRequirementsList(highCategory, product, version));
 		}
 
 		tableDataModelList = new ArrayList<RequirementDataModel>();
@@ -2262,17 +2263,20 @@ public class JJRequirementBean {
 
 	private void fullRequirementsList() {
 
-		if (requirementCategory.equals(lowCategory)) {
+		if (lowCategory != null
+				&& requirementCategory.getId().equals(lowCategory.getId())) {
 			disabledLowRequirements = true;
 			disabledMediumRequirements = false;
 			disabledHighRequirements = false;
 
-		} else if (requirementCategory.equals(mediumCategory)) {
+		} else if (mediumCategory != null
+				&& requirementCategory.getId().equals(mediumCategory.getId())) {
 			disabledLowRequirements = false;
 			disabledMediumRequirements = true;
 			disabledHighRequirements = false;
 
-		} else if (requirementCategory.equals(highCategory)) {
+		} else if (highCategory != null
+				&& requirementCategory.getId().equals(highCategory.getId())) {
 			disabledLowRequirements = false;
 			disabledMediumRequirements = false;
 			disabledHighRequirements = true;
@@ -2285,7 +2289,7 @@ public class JJRequirementBean {
 			disabledLowRequirements = true;
 		} else {
 			lowCategoryName = lowCategory.getName() + " :";
-			list = getRequirementsList(lowCategory);
+			list = getRequirementsList(lowCategory, null, null);
 			lowRequirementsList = convertRequirementListToStringList(list);
 		}
 		if (mediumCategory == null) {
@@ -2293,7 +2297,7 @@ public class JJRequirementBean {
 			disabledMediumRequirements = true;
 		} else {
 			mediumCategoryName = mediumCategory.getName() + " :";
-			list = getRequirementsList(mediumCategory);
+			list = getRequirementsList(mediumCategory, null, null);
 			mediumRequirementsList = convertRequirementListToStringList(list);
 		}
 
@@ -2302,7 +2306,7 @@ public class JJRequirementBean {
 			disabledHighRequirements = true;
 		} else {
 			highCategoryName = highCategory.getName() + " :";
-			list = getRequirementsList(highCategory);
+			list = getRequirementsList(highCategory, null, null);
 			highRequirementsList = convertRequirementListToStringList(list);
 		}
 
@@ -2319,7 +2323,8 @@ public class JJRequirementBean {
 		selectedMediumRequirementsList = new ArrayList<String>();
 		selectedHighRequirementsList = new ArrayList<String>();
 
-		if (lowCategory != null && requirementCategory.equals(lowCategory)) {
+		if (lowCategory != null
+				&& requirementCategory.getId().equals(lowCategory.getId())) {
 
 			list = requirement.getRequirementLinkUp();
 
@@ -2354,7 +2359,7 @@ public class JJRequirementBean {
 		}
 
 		if (mediumCategory != null
-				&& requirementCategory.equals(mediumCategory)) {
+				&& requirementCategory.getId().equals(mediumCategory.getId())) {
 
 			if (lowCategory != null) {
 				list = requirement.getRequirementLinkDown();
@@ -2388,7 +2393,8 @@ public class JJRequirementBean {
 
 		}
 
-		if (highCategory != null && requirementCategory.equals(highCategory)) {
+		if (highCategory != null
+				&& requirementCategory.getId().equals(highCategory.getId())) {
 
 			list = requirement.getRequirementLinkDown();
 
@@ -2436,7 +2442,7 @@ public class JJRequirementBean {
 		/**
 		 * Low Category
 		 */
-		if (requirementCategory.equals(lowCategory)) {
+		if (requirementCategory.getId().equals(lowCategory.getId())) {
 
 			// List UP contains M & H
 
@@ -2469,7 +2475,7 @@ public class JJRequirementBean {
 		/**
 		 * Medium Category
 		 */
-		else if (requirementCategory.equals(mediumCategory)) {
+		else if (requirementCategory.getId().equals(mediumCategory.getId())) {
 
 			// List UP contains H
 
@@ -2588,7 +2594,7 @@ public class JJRequirementBean {
 		/**
 		 * Medium Category
 		 */
-		if (requirementCategory.equals(mediumCategory)) {
+		if (requirementCategory.getId().equals(mediumCategory.getId())) {
 
 			// List DOWN contains L
 
@@ -2605,7 +2611,7 @@ public class JJRequirementBean {
 		/**
 		 * High Category
 		 */
-		else if (requirementCategory.equals(highCategory)) {
+		else if (requirementCategory.getId().equals(highCategory.getId())) {
 
 			// List DOWN contains L & M
 
@@ -2741,7 +2747,8 @@ public class JJRequirementBean {
 
 	}
 
-	private List<JJRequirement> getRequirementsList(JJCategory category) {
+	private List<JJRequirement> getRequirementsList(JJCategory category,
+			JJProduct product, JJVersion version) {
 		List<JJRequirement> list = new ArrayList<JJRequirement>();
 		if (category != null) {
 			list = jJRequirementService.getRequirements(category, project,

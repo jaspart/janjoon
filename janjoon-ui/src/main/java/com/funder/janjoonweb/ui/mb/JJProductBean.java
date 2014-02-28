@@ -125,7 +125,6 @@ public class JJProductBean {
 		productManagerList = new ArrayList<JJContact>();
 
 		List<JJRight> rights = jJRightService.getObjectWriterList("JJProduct");
-		System.out.println("rights " + rights.size());
 		for (JJRight right : rights) {
 			List<JJPermission> permissions = jJPermissionService
 					.getManagerPermissions(right.getProfile());
@@ -263,6 +262,7 @@ public class JJProductBean {
 
 		if (productAdmin.getId() == null) {
 			System.out.println("IS a new JJProduct");
+		
 			productAdmin.setManager(productManager);
 			jJProductService.saveJJProduct(productAdmin);
 			message = "message_successfully_created";
@@ -325,8 +325,11 @@ public class JJProductBean {
 	}
 
 	public void handleSelectProductManager() {
+		
+		if(productManager!=null) {
 		System.out.println(productManager.getFirstname() + " "
 				+ productManager.getName());
+		}
 	}
 
 }

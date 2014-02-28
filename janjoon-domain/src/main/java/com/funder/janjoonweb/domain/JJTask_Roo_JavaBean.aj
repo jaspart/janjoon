@@ -6,7 +6,6 @@ package com.funder.janjoonweb.domain;
 import com.funder.janjoonweb.domain.JJBug;
 import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJMessage;
-import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJTask;
 import com.funder.janjoonweb.domain.JJTestcase;
@@ -15,14 +14,6 @@ import java.util.Date;
 import java.util.Set;
 
 privileged aspect JJTask_Roo_JavaBean {
-    
-    public JJProject JJTask.getProject() {
-        return this.project;
-    }
-    
-    public void JJTask.setProject(JJProject project) {
-        this.project = project;
-    }
     
     public Date JJTask.getStartDatePlanned() {
         return this.startDatePlanned;

@@ -44,10 +44,4 @@ public abstract class JJAbstractEntity {
 
 	private Boolean enabled;
 
-	@Override
-	public boolean equals(Object obj) {
-		JJAbstractEntity abstractEntity = (JJAbstractEntity) obj;
-		return this.getId().equals(abstractEntity.getId());
-	}
-
 }

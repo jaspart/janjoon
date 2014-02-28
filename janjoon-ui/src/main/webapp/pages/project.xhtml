@@ -68,7 +68,10 @@
 						<p:selectOneMenu id="projectManagerSelect"
 							value="#{jJProjectBean.projectManager}" panelStyle="width:150px"
 							effect="fade" style="width:160px" filter="true"
-							filterMatchMode="startsWith">
+							filterMatchMode="startsWith" required="true"
+							label="Project Manager"
+							requiredMessage="Project Manager is a required value"
+							widgetVar="projectManagerWidget">
 							<p:ajax process="@this" partialSubmit="true"
 								listener="#{jJProductBean.handleSelectProjectManager()}" />
 							<f:converter
@@ -80,7 +83,7 @@
 								var="p" itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />
 
 						</p:selectOneMenu>
-						<p:message for="projectManagerSelect" id="msgProjectManager" />
+
 					</p:panel>
 					<p:panel columns="2" cellpadding="6">
 						<p:selectBooleanButton
@@ -91,7 +94,8 @@
 						</p:selectBooleanButton>
 						<p:commandButton id="submitButton" value="Save"
 							update="projectDialogForm :headerForm"
-							process="@widgetVar(nameWidget)" action="#{jJProjectBean.save}" />
+							process="@widgetVar(nameWidget) @widgetVar(projectManagerWidget)"
+							action="#{jJProjectBean.save}" />
 					</p:panel>
 				</p:panelGrid>
 			</h:form>

@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
@@ -20,9 +21,7 @@ public class JJProject extends JJAbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "project")
 	private Set<JJChapter> chapters = new HashSet<JJChapter>();
 
-	/**
-     */
-	// @NotNull
+	@NotNull
 	@ManyToOne
 	private JJContact manager;
 }

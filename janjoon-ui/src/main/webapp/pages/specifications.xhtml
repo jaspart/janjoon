@@ -10,7 +10,7 @@
 	<ui:define name="content">
 		<h:form id="dataForm">
 			<f:event type="preRenderComponent"
-				listener="#{jJRequirementBean.load(jJProjectBean,jJChapterBean,jJProductBean)}" />
+				listener="#{jJRequirementBean.loadData(jJProjectBean,jJProductBean,jJVersionBean,jJChapterBean)}" />
 			<p:growl id="messages" />
 
 			<p:contextMenu id="leftContextMenu" for="leftTable">

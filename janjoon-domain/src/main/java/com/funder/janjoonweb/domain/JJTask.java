@@ -21,8 +21,6 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaEntity(sequenceName = "JJTaskSEQ")
 public class JJTask extends JJAbstractEntity {
 
-	@ManyToOne
-	private JJProject project;
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(style = "M-")
 	private Date startDatePlanned;

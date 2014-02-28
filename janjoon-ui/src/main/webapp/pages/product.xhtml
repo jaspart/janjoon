@@ -81,17 +81,20 @@
 						<p:selectOneMenu id="productManagerSelect"
 							value="#{jJProductBean.productManager}" panelStyle="width:150px"
 							effect="fade" style="width:160px" filter="true"
-							filterMatchMode="startsWith">
+							filterMatchMode="startsWith" required="true"
+							requiredMessage="Product Manager is a required value"
+							widgetVar="productManagerWidget" label="Product Manager">
 							<p:ajax process="@this" partialSubmit="true"
 								listener="#{jJProductBean.handleSelectProductManager()}" />
 							<f:converter
 								converterId="com.funder.janjoonweb.ui.mb.converter.JJContactConverter" />
-							<f:selectItem itemLabel="#{jJProductBean.productManager.name}"
+							<f:selectItem
+								itemLabel="#{jJProductBean.productManager.firstname} #{jJProductBean.productManager.name}"
 								itemValue="#{jJProductBean.productManager}" />
 							<f:selectItems value="#{jJProductBean.productManagerList}"
 								var="p" itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />
 						</p:selectOneMenu>
-						<p:message for="productManagerSelect" id="msgProductManager" />
+
 					</p:panel>
 					<p:panel columns="2" cellpadding="6">
 						<p:selectBooleanButton
@@ -102,7 +105,7 @@
 						</p:selectBooleanButton>
 						<p:commandButton id="submitButton" value="Save"
 							update="productDialogForm :headerForm"
-							process="@widgetVar(nameWidget) @widgetVar(extnameWidget)"
+							process="@widgetVar(nameWidget) @widgetVar(extnameWidget) @widgetVar(productManagerWidget)"
 							action="#{jJProductBean.save(jJVersionBean)}" />
 					</p:panel>
 					<p:panel id="versionPanel" columns="4" cellpadding="6">

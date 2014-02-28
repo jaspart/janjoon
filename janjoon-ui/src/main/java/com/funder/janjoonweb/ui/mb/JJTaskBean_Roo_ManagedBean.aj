@@ -8,8 +8,6 @@ import com.funder.janjoonweb.domain.JJBugService;
 import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJContactService;
 import com.funder.janjoonweb.domain.JJMessage;
-import com.funder.janjoonweb.domain.JJProject;
-import com.funder.janjoonweb.domain.JJProjectService;
 import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJRequirementService;
 import com.funder.janjoonweb.domain.JJTask;
@@ -21,7 +19,6 @@ import com.funder.janjoonweb.domain.JJVersionService;
 import com.funder.janjoonweb.ui.mb.JJTaskBean;
 import com.funder.janjoonweb.ui.mb.converter.JJBugConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJContactConverter;
-import com.funder.janjoonweb.ui.mb.converter.JJProjectConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJTestcaseConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJVersionConverter;
@@ -64,9 +61,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
     
     @Autowired
     JJContactService JJTaskBean.jJContactService;
-    
-    @Autowired
-    JJProjectService JJTaskBean.jJProjectService;
     
     @Autowired
     JJVersionService JJTaskBean.jJVersionService;
@@ -324,30 +318,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         enabledCreateInputMessage.setFor("enabledCreateInput");
         enabledCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
-        
-        OutputLabel projectCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        projectCreateOutput.setFor("projectCreateInput");
-        projectCreateOutput.setId("projectCreateOutput");
-        projectCreateOutput.setValue("Project:");
-        htmlPanelGrid.getChildren().add(projectCreateOutput);
-        
-        AutoComplete projectCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        projectCreateInput.setId("projectCreateInput");
-        projectCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.project}", JJProject.class));
-        projectCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeProject}", List.class, new Class[] { String.class }));
-        projectCreateInput.setDropdown(true);
-        projectCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "project", String.class));
-        projectCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{project.name} #{project.description} #{project.creationDate} #{project.updatedDate}", String.class));
-        projectCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{project}", JJProject.class));
-        projectCreateInput.setConverter(new JJProjectConverter());
-        projectCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(projectCreateInput);
-        
-        Message projectCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        projectCreateInputMessage.setId("projectCreateInputMessage");
-        projectCreateInputMessage.setFor("projectCreateInput");
-        projectCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(projectCreateInputMessage);
         
         OutputLabel startDatePlannedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         startDatePlannedCreateOutput.setFor("startDatePlannedCreateInput");
@@ -863,30 +833,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         enabledEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledEditInputMessage);
         
-        OutputLabel projectEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        projectEditOutput.setFor("projectEditInput");
-        projectEditOutput.setId("projectEditOutput");
-        projectEditOutput.setValue("Project:");
-        htmlPanelGrid.getChildren().add(projectEditOutput);
-        
-        AutoComplete projectEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        projectEditInput.setId("projectEditInput");
-        projectEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.project}", JJProject.class));
-        projectEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeProject}", List.class, new Class[] { String.class }));
-        projectEditInput.setDropdown(true);
-        projectEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "project", String.class));
-        projectEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{project.name} #{project.description} #{project.creationDate} #{project.updatedDate}", String.class));
-        projectEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{project}", JJProject.class));
-        projectEditInput.setConverter(new JJProjectConverter());
-        projectEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(projectEditInput);
-        
-        Message projectEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        projectEditInputMessage.setId("projectEditInputMessage");
-        projectEditInputMessage.setFor("projectEditInput");
-        projectEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(projectEditInputMessage);
-        
         OutputLabel startDatePlannedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         startDatePlannedEditOutput.setFor("startDatePlannedEditInput");
         startDatePlannedEditOutput.setId("startDatePlannedEditOutput");
@@ -1329,16 +1275,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.enabled}", String.class));
         htmlPanelGrid.getChildren().add(enabledValue);
         
-        HtmlOutputText projectLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        projectLabel.setId("projectLabel");
-        projectLabel.setValue("Project:");
-        htmlPanelGrid.getChildren().add(projectLabel);
-        
-        HtmlOutputText projectValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        projectValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.project}", JJProject.class));
-        projectValue.setConverter(new JJProjectConverter());
-        htmlPanelGrid.getChildren().add(projectValue);
-        
         HtmlOutputText startDatePlannedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         startDatePlannedLabel.setId("startDatePlannedLabel");
         startDatePlannedLabel.setValue("Start Date Planned:");
@@ -1547,17 +1483,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
             String jJContactStr = String.valueOf(jJContact.getName() +  " "  + jJContact.getDescription() +  " "  + jJContact.getCreationDate() +  " "  + jJContact.getUpdatedDate());
             if (jJContactStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJContact);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<JJProject> JJTaskBean.completeProject(String query) {
-        List<JJProject> suggestions = new ArrayList<JJProject>();
-        for (JJProject jJProject : jJProjectService.findAllJJProjects()) {
-            String jJProjectStr = String.valueOf(jJProject.getName() +  " "  + jJProject.getDescription() +  " "  + jJProject.getCreationDate() +  " "  + jJProject.getUpdatedDate());
-            if (jJProjectStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJProject);
             }
         }
         return suggestions;

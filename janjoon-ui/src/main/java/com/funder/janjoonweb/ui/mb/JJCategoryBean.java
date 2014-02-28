@@ -21,6 +21,8 @@ public class JJCategoryBean {
 	private List<JJCategory> categoryListTable;
 
 	private String message;
+	private boolean disableLevel;
+	
 
 	public JJCategory getCategoryAdmin() {
 		return categoryAdmin;
@@ -47,18 +49,29 @@ public class JJCategoryBean {
 		this.message = message;
 	}
 
+	public boolean getDisableLevel() {
+		return disableLevel;
+	}
+
+	public void setDisableLevel(boolean disableLevel) {
+		this.disableLevel = disableLevel;
+	}
+
 	public void newCategory() {
 		System.out.println("Initial bean category");
 		message = "New Category";
+	
 		categoryAdmin = new JJCategory();
 		categoryAdmin.setEnabled(true);
 		categoryAdmin.setCreationDate(new Date());
 		categoryAdmin.setStage(0);
+		disableLevel = false;
 	}
 
 	public void editCategory() {
 		System.out.println("Update bean category");
 		message = "Edit Category";
+		disableLevel = true;
 	}
 
 	public void deleteCategory() {

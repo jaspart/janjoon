@@ -3,6 +3,7 @@
 
 package com.funder.janjoonweb.domain;
 
+import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJContactDataOnDemand;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJProjectDataOnDemand;
@@ -43,6 +44,7 @@ privileged aspect JJProjectDataOnDemand_Roo_DataOnDemand {
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
+        setManager(obj, index);
         setName(obj, index);
         setUpdatedDate(obj, index);
         return obj;
@@ -61,6 +63,11 @@ privileged aspect JJProjectDataOnDemand_Roo_DataOnDemand {
     public void JJProjectDataOnDemand.setEnabled(JJProject obj, int index) {
         Boolean enabled = Boolean.TRUE;
         obj.setEnabled(enabled);
+    }
+    
+    public void JJProjectDataOnDemand.setManager(JJProject obj, int index) {
+        JJContact manager = jJContactDataOnDemand.getRandomJJContact();
+        obj.setManager(manager);
     }
     
     public void JJProjectDataOnDemand.setName(JJProject obj, int index) {

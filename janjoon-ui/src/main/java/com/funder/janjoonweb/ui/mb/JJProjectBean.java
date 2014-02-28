@@ -144,7 +144,6 @@ public class JJProjectBean {
 	public JJProject getProject() {
 
 		if (project == null) {
-			System.out.println("Projet is null");
 			project = jJProjectService.getJJProjectWithName("Default Project");
 		}
 
@@ -158,33 +157,6 @@ public class JJProjectBean {
 
 	public List<JJProject> getProjectList() {
 		/*** Begin Temporary ***/
-
-		if (jJProfileService.findAllJJProfiles().isEmpty()) {
-			JJProfile profile = new JJProfile();
-			profile.setName("ProjectManager");
-			jJProfileService.saveJJProfile(profile);
-
-			profile = new JJProfile();
-			profile.setName("ProductManager");
-			jJProfileService.saveJJProfile(profile);
-
-			profile = new JJProfile();
-			profile.setName("CEO");
-			jJProfileService.saveJJProfile(profile);
-
-			profile = new JJProfile();
-			profile.setName("CTO");
-			jJProfileService.saveJJProfile(profile);
-
-			profile = new JJProfile();
-			profile.setName("Tester");
-			jJProfileService.saveJJProfile(profile);
-
-			profile = new JJProfile();
-			profile.setName("Developer");
-			jJProfileService.saveJJProfile(profile);
-
-		}
 
 		if (jJBuildService.getAllJJBuilds().isEmpty()) {
 			JJBuild build;
@@ -309,59 +281,6 @@ public class JJProjectBean {
 			}
 		}
 
-		if (jJProductService.getAllJJProducts().isEmpty()) {
-			JJProduct product;
-			for (int i = 0; i < 2; i++) {
-				product = new JJProduct();
-				product.setName("ProductName " + i);
-				product.setDescription("ProductDescription " + i);
-				product.setCreationDate(new Date());
-				product.setEnabled(true);
-				product.setExtname("ProductExtName " + i);
-
-				List<JJVersion> jJVersionList = jJVersionService
-						.getAllJJVersion();
-
-				Set<JJVersion> versions = new HashSet<JJVersion>();
-
-				if (i == 0) {
-					jJVersionList.get(i).setProduct(product);
-					versions.add(jJVersionList.get(i));
-					jJVersionList.get(i + 1).setProduct(product);
-					versions.add(jJVersionList.get(i + 1));
-				} else {
-					jJVersionList.get(i + 1).setProduct(product);
-					versions.add(jJVersionList.get(i + 1));
-					jJVersionList.get(i + 2).setProduct(product);
-					versions.add(jJVersionList.get(i + 2));
-				}
-
-				product.setVersions(versions);
-
-				jJProductService.saveJJProduct(product);
-			}
-		}
-
-		if (jJProjectService.getAllJJProjects().isEmpty()) {
-			JJProject project;
-			for (int i = 0; i < 2; i++) {
-				project = new JJProject();
-				project.setName("ProjectName " + i);
-				project.setDescription("ProjectDescription " + i);
-				project.setCreationDate(new Date());
-				project.setEnabled(true);
-
-				jJProjectService.saveJJProject(project);
-			}
-			project = new JJProject();
-			project.setName("Default Project");
-			project.setDescription("Delault ProjectDescription ");
-			project.setCreationDate(new Date());
-			project.setEnabled(true);
-
-			jJProjectService.saveJJProject(project);
-		}
-
 		if (jJCategoryService.getAllJJCategories().isEmpty()) {
 			String name = "BUSINESS";
 			JJCategory CategoryBusiness = new JJCategory();
@@ -409,6 +328,33 @@ public class JJProjectBean {
 			CategorySecurity.setEnabled(true);
 			CategorySecurity.setStage(2);
 			jJCategoryService.saveJJCategory(CategorySecurity);
+		}
+
+		if (jJProfileService.findAllJJProfiles().isEmpty()) {
+			JJProfile profile = new JJProfile();
+			profile.setName("ProjectManager");
+			jJProfileService.saveJJProfile(profile);
+
+			profile = new JJProfile();
+			profile.setName("ProductManager");
+			jJProfileService.saveJJProfile(profile);
+
+			profile = new JJProfile();
+			profile.setName("CEO");
+			jJProfileService.saveJJProfile(profile);
+
+			profile = new JJProfile();
+			profile.setName("CTO");
+			jJProfileService.saveJJProfile(profile);
+
+			profile = new JJProfile();
+			profile.setName("Tester");
+			jJProfileService.saveJJProfile(profile);
+
+			profile = new JJProfile();
+			profile.setName("Developer");
+			jJProfileService.saveJJProfile(profile);
+
 		}
 
 		if (jJRightService.findAllJJRights().isEmpty()) {
@@ -732,6 +678,99 @@ public class JJProjectBean {
 
 		}
 
+		if (jJContactService.findAllJJContacts().isEmpty()) {
+
+			JJContact contact = new JJContact();
+			contact.setName("Admin");
+			contact.setFirstname("Admin");
+			contact.setDescription("This contact is " + contact.getFirstname()
+					+ " " + contact.getName());
+			contact.setPassword("adminadmin");
+			contact.setEnabled(true);
+			contact.setEmail("admin@gmail.com");
+			contact.setCreationDate(new Date());
+
+			jJContactService.saveJJContact(contact);
+
+			JJProfile projectManagerProfile = jJProfileService
+					.getJJProfileWithName("ProjectManager");
+			JJProfile productManagerProfile = jJProfileService
+					.getJJProfileWithName("ProductManager");
+
+			JJPermission permission = new JJPermission();
+			permission.setContact(contact);
+			permission.setProfile(projectManagerProfile);
+			contact.getPermissions().add(permission);
+			jJPermissionService.saveJJPermission(permission);
+
+			permission = new JJPermission();
+			permission.setContact(contact);
+			permission.setProfile(productManagerProfile);
+			contact.getPermissions().add(permission);
+			jJPermissionService.saveJJPermission(permission);
+
+		}
+
+		if (jJProductService.getAllJJProducts().isEmpty()) {
+			JJContact manager = jJContactService
+					.getJJContactWithEmail("admin@gmail.com");
+			JJProduct product;
+			for (int i = 0; i < 2; i++) {
+				product = new JJProduct();
+				product.setName("ProductName " + i);
+				product.setDescription("ProductDescription " + i);
+				product.setCreationDate(new Date());
+				product.setEnabled(true);
+				product.setExtname("ProductExtName " + i);
+				product.setManager(manager);
+
+				List<JJVersion> jJVersionList = jJVersionService
+						.getAllJJVersion();
+
+				Set<JJVersion> versions = new HashSet<JJVersion>();
+
+				if (i == 0) {
+					jJVersionList.get(i).setProduct(product);
+					versions.add(jJVersionList.get(i));
+					jJVersionList.get(i + 1).setProduct(product);
+					versions.add(jJVersionList.get(i + 1));
+				} else {
+					jJVersionList.get(i + 1).setProduct(product);
+					versions.add(jJVersionList.get(i + 1));
+					jJVersionList.get(i + 2).setProduct(product);
+					versions.add(jJVersionList.get(i + 2));
+				}
+
+				product.setVersions(versions);
+
+				jJProductService.saveJJProduct(product);
+			}
+		}
+
+		if (jJProjectService.getAllJJProjects().isEmpty()) {
+			JJContact manager = jJContactService
+					.getJJContactWithEmail("admin@gmail.com");
+			JJProject project;
+			for (int i = 0; i < 2; i++) {
+				project = new JJProject();
+				project.setName("ProjectName " + i);
+				project.setDescription("ProjectDescription " + i);
+				project.setCreationDate(new Date());
+				project.setEnabled(true);
+				project.setManager(manager);
+
+				jJProjectService.saveJJProject(project);
+			}
+			project = new JJProject();
+			project.setName("Default Project");
+			project.setDescription("Delault ProjectDescription ");
+			project.setCreationDate(new Date());
+			project.setEnabled(true);
+			project.setManager(manager);
+
+			jJProjectService.saveJJProject(project);
+		}
+
 		/*** End Temporary ***/
 
 		projectList = jJProjectService.getAllJJProjects();
@@ -814,6 +853,7 @@ public class JJProjectBean {
 
 			jJVersionBean.setDisabled(true);
 			jJVersionBean.setProduct(null);
+			jJVersionBean.setVersion(null);
 
 			jJRequirementBean.setProject(project);
 			jJChapterBean.setProject(project);
@@ -906,8 +946,10 @@ public class JJProjectBean {
 	}
 
 	public void handleSelectProjectManager() {
-		System.out.println(projectManager.getFirstname() + " "
-				+ projectManager.getName());
+		if (projectManager != null) {
+			System.out.println(projectManager.getFirstname() + " "
+					+ projectManager.getName());
+		}
 	}
 
 }

@@ -11,7 +11,7 @@
 	<ui:define name="content">
 		<h:form id="specForm">
 			<f:event type="preRenderComponent"
-				listener="#{jJRequirementBean.load(jJProjectBean,jJProductBean,jJVersionBean,jJChapterBean)}" />
+				listener="#{jJRequirementBean.loadData(jJProjectBean,jJProductBean,jJVersionBean,jJChapterBean)}" />
 			<table>
 				<tr>
 					<ui:repeat value="#{jJRequirementBean.categoryList}" var="button">
@@ -181,7 +181,7 @@
 								<p:selectOneMenu id="project"
 									value="#{jJRequirementBean.requirementProject}"
 									panelStyle="width:150px" effect="fade" style="width:150px"
-									filter="true" filterMatchMode="startsWith">
+									filter="true" filterMatchMode="startsWith" disabled="true">
 									<f:converter
 										converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
 									<f:selectItem
