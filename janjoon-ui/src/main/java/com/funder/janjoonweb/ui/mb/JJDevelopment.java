@@ -31,10 +31,6 @@ public class JJDevelopment implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private TabView tabView;
 	private ConfigManagerAbstract configManager;
-	private String URL;
-	private String path;
-	private String userName;
-	private String password;
 	private String type;
 	private int activeTabIndex;
 	private TreeNode tree;
@@ -44,39 +40,37 @@ public class JJDevelopment implements Serializable {
 
 	public JJDevelopment() throws IOException {
 
-		URL = "https://github.com/chemakh/TestRepository.git";
-			
-		password = "taraji0000";
-		userName="chemakh";
-		try           
-		{
-			configManager=new GitConfigManager();
-			path = "/home/lazher/git/";
-			path=configManager.cloneRemoteRepository(URL, "TestRepository", 
-					userName, password, path);
-			configManager=new GitConfigManager(path);
+		String URL = "https://github.com/janjoon/ProductName-1";
+		String password = "BeHappy2012";
+		String userName = "janjoon";
+		try {
+			configManager = new GitConfigManager(1, userName, password);
+			String path = System.getProperty("user.home") + "/git/";
+			path = configManager.cloneRemoteRepository(URL, "JanjonProduct",
+					path);
+			configManager = new GitConfigManager(URL, path, userName, password);
 			System.out.println(path);
-			
-		}catch(Exception e)
-		{
-			path="/home/lazher/git/TestRepository/.git";
-			configManager=new GitConfigManager(path);
-			System.out.println(path);
-			
+
+		} catch (Exception e) {
+			String path = System.getProperty("user.home")
+					+ "/git/JanjonProduct/";
+			configManager = new GitConfigManager(URL, path, userName, password);
+			System.out.println(path);			
+
 		}
-		
-		
+
 		tree = configManager.listRepositoryContent();
 		selectedTree = tree;
 		while (selectedTree.getChildCount() != 0) {
 			selectedTree = selectedTree.getChildren().get(0);
-			System.out.println(selectedTree.getData().getClass());
+			// System.out.println(selectedTree.getData().getClass());
 		}
 		file = (File) selectedTree.getData();
 		files = new ArrayList<FileMap>();
 		try (FileInputStream inputStream = new FileInputStream(file)) {
 			String fileTexte = IOUtils.toString(inputStream);
-			FileMap filemap = new FileMap(file.getPath(), file.getName(), fileTexte, file);
+			FileMap filemap = new FileMap(file.getPath(), file.getName(),
+					fileTexte, file);
 			files.add(filemap);
 		}
 
@@ -84,42 +78,10 @@ public class JJDevelopment implements Serializable {
 
 	public ConfigManagerAbstract getConfigManager() {
 		return configManager;
-	}	
+	}
 
 	public void setConfigManager(ConfigManagerAbstract configManager) {
 		this.configManager = configManager;
-	}
-
-	public String getURL() {
-		return URL;
-	}
-
-	public void setURL(String uRL) {
-		URL = uRL;
-	}
-
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public String getType() {
@@ -178,40 +140,71 @@ public class JJDevelopment implements Serializable {
 		this.activeTabIndex = activeTabIndex;
 	}
 
-	public String commit() {
+	public void pull() {
+		if (configManager.pullRepository()) {
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Updated To Head", configManager.getPath());
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		} else {
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Error with Synchronisation", configManager.getPath());
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+
+	}
+
+	public void commit() {
 
 		for (FileMap fileMap : files) {
-			// configManager.setFileTexte(fileMap.getFile(),
-			// fileMap.getTexte());
+			configManager.setFileTexte(fileMap.getFile(), fileMap.getTexte());
 			System.out.println(fileMap.getFile().getName() + "  :"
 					+ fileMap.getTexte());
 
 		}
-		// configManager.checkIn("FirstCommit");
-		return "/pages/development.jsf?faces-redirect=true";
+		System.out.println(configManager.getPassWord() + " / "
+				+ configManager.getUserName());
+		if (configManager.checkIn("FirstCommit")) {
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Commited", configManager.getPath());
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			if (configManager.pushRepository()) {
+				message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Pushed to remote Repository", configManager.getPath());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			} else {
+				message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Probleme Lors du Fetch ", configManager.getPath());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+
+		} else {
+
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "Probleme Lors du Commit",
+					configManager.getPath());
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
 
 	}
 
-	public void onSelectTree(NodeSelectEvent event)  {
+	public void onSelectTree(NodeSelectEvent event) {
 
-		System.out.println("fdddddjk");
-		if (event.getTreeNode().getType().equalsIgnoreCase("file")) 
-		{
+		if (event.getTreeNode().getType().equalsIgnoreCase("file")) {
 			System.out.println("fffffffffffffffffffffffffffd");
 			selectedTree = event.getTreeNode();
 			file = (File) selectedTree.getData();
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Selected", event.getTreeNode().toString());
 			FacesContext.getCurrentInstance().addMessage(null, message);
-			System.out.println(selectedTree.toString());
+
 			if (contains(file) == -1) {
 				try (FileInputStream inputStream = new FileInputStream(file)) {
 
 					String fileTexte = IOUtils.toString(inputStream);
-					System.out.println(fileTexte);
+					// System.out.println(fileTexte);
 
-					FileMap filemap = new FileMap(file.getPath(), file.getName(),
-							fileTexte, file);
+					FileMap filemap = new FileMap(file.getPath(),
+							file.getName(), fileTexte, file);
 					files.add(filemap);
 				} catch (FileNotFoundException e) {
 					System.out.println("filenotFound");
@@ -230,17 +223,17 @@ public class JJDevelopment implements Serializable {
 	public void onCloseTab(TabCloseEvent event) {
 		FileMap f = (FileMap) event.getData();
 		int j = contains(f.getFile());
-		System.out.println(f.getTexte());
+		// System.out.println(f.getTexte());
 		files.get(j).setTexte(f.getTexte());
 		configManager.setFileTexte(files.get(j).getFile(), files.get(j)
 				.getTexte());
-		files.remove((FileMap)event.getData());
+		files.remove((FileMap) event.getData());
 	}
 
 	public void onChangeTab(TabChangeEvent event) {
 		FileMap f = (FileMap) event.getData();
 		int j = contains(f.getFile());
-		System.out.println(f.getTexte());
+		// System.out.println(f.getTexte());
 		files.get(j).setTexte(f.getTexte());
 
 	}

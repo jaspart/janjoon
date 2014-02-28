@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/layout.xhtml">
+	<link type="text/css" rel="stylesheet"
+		href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
+	<link type="text/css" rel="stylesheet"
+		href="/syntaxhighlighter/standard.css" />
+	<ui:define name="content">
+		<center>
+			<p:tabMenu activeIndex="3" name="content">
+				<ui:include src="/templates/menu.xhtml" />
+			</p:tabMenu>
+			<br />
+			<p:panel header="#{jJDevelopment.selectedTree}"
+				style="width: 360;valign: top;">
+				<h:link value="TestWith TexteArea" outcome="development"/>
+				<h:form id="form">
+					<table class="mytable">
+
+						<tr>
+							<td valign="top"><h:outputLabel value="Task: " /> <p:selectOneMenu
+									id="task" value="" effect="fold" editable="false">
+									<f:selectItems value="hjvghj" />
+								</p:selectOneMenu> <p:growl id="messages" showDetail="true" /> <p:tree
+									id="fileTree" value="#{jJDevelopment.tree}" var="file"
+									animate="true" selection="#{jJDevelopment.selectedTree}"
+									selectionMode="single">
+									<p:ajax event="select" update=":form:messages,:form:tabView"
+										listener="#{jJDevelopment.onSelectTree}" />
+									<p:treeNode type="folder" expandedIcon="ui-icon-folder-open"
+										collapsedIcon="ui-icon-folder-collapsed">
+
+										<h:outputText value="#{file.name}" />
+
+									</p:treeNode>
+
+									<p:treeNode type="file" icon="ui-icon-document">
+										<h:outputText value="#{file.name}" />
+									</p:treeNode>
+								</p:tree></td>
+							<td><p:tabView id="tabView"
+									activeIndex="#{jJDevelopment.activeTabIndex}"
+									binding="#{jJDevelopment.tabView}" scrollable="true"
+									value="#{jJDevelopment.files}" var="tab">
+									<p:ajax event="tabClose" listener="#{jJDevelopment.onCloseTab}" update=":form:tabView" />
+									<p:ajax event="tabChange"
+										listener="#{jJDevelopment.onChangeTab}" update=":form:tabView" />
+									<p:tab title="#{tab.title}" closable="true">
+
+										<pe:codeMirror id="codeMirror1" mode="xml"
+											widgetVar="myCodeMirror" theme="eclipse" value="#{tab.texte}"
+											lineNumbers="true"
+											extraKeys="{'Ctrl-Space': function(cm){CodeMirror.simpleHint (cm, CodeMirror.javascriptHint);}}" />
+									</p:tab>
+
+								</p:tabView></td>
+						</tr>
+						<tr>
+							<td><p:commandButton value="Commit" id="submit"
+									icon="ui-icon-disk" actionListener="#{jJDevelopment.commit}"
+									update=":form:messages,:form:tabView,:form:fileTree" /></td>
+								<td>
+								<p:commandButton value="UpdateToHead" id="fetchFromRepo"
+								icon="ui-icon-disk" actionListener="#{jJDevelopment.pull}"
+									update=":form:messages,:form:tabView,:form:fileTree"/>
+								</td>
+							
+						</tr>
+					</table>
+					<h3 style="margin-top: 0">Server-side code completion</h3>
+				</h:form>
+				<p:blockUI block="form" trigger=":form:submit">  
+        				LOADING<br />
+					<p:graphicImage library="images" name="ajax-loader1.gif" />
+				</p:blockUI>
+				<p:blockUI block="form" trigger=":form:fetchFromRepo">  
+        				LOADING<br />
+					<p:graphicImage library="images" name="ajax-loader1.gif" />
+				</p:blockUI>
+			</p:panel>
+		</center>
+	</ui:define>
+	<ui:define name="outer">
+		<center>
+			<ui:insert name="highlight">
+				<script type="text/javascript"
+					src="#{request.contextPath}/syntaxhighlighter/shCore.js"></script>
+				<script type="text/javascript"
+					src="#{request.contextPath}/syntaxhighlighter/shBrushXml.js"></script>
+				<script type="text/javascript"
+					src="#{request.contextPath}/syntaxhighlighter/shBrushJava.js"></script>
+				<script type="text/javascript"
+					src="#{request.contextPath}/syntaxhighlighter/shBrushCss.js"></script>
+				<script type="text/javascript"
+					src="#{request.contextPath}/syntaxhighlighter/shBrushJScript.js"></script>
+				<script type="text/javascript">
+					dp.SyntaxHighlighter.ClipboardSwf = '\#{request.contextPath}/syntaxhighlighter/clipboard.swf';
+					dp.SyntaxHighlighter.HighlightAll('code');
+				</script>
+			</ui:insert>
+		</center>
+	</ui:define>
+</ui:composition>
+</html>

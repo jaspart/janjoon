@@ -19,9 +19,10 @@
 			<br />
 			<p:panel header="#{jJDevelopment.selectedTree}"
 				style="width: 360;valign: top;">
+				<h:link    value="TestWith CodeMirror" outcome="edittest" />
 				<h:form id="form">
-				<table class="mytable">
-					
+					<table class="mytable">
+			
 						<tr>
 							<td valign="top"><h:outputLabel value="Task: " /> <p:selectOneMenu
 									id="task" value="" effect="fold" editable="false">
@@ -48,24 +49,38 @@
 									binding="#{jJDevelopment.tabView}" scrollable="true"
 									value="#{jJDevelopment.files}" var="tab">
 									<p:ajax event="tabClose" listener="#{jJDevelopment.onCloseTab}" />
-									<p:ajax event="tabChange" listener="#{jJDevelopment.onChangeTab}" />
+									<p:ajax event="tabChange"
+										listener="#{jJDevelopment.onChangeTab}" />
 									<p:tab title="#{tab.title}" closable="true">
 										<p:inputTextarea id="textArea" rows="20" cols="75"
 											value="#{tab.texte}">
-											
+
 										</p:inputTextarea>
-									</p:tab>
+					</p:tab>
 
 								</p:tabView></td>
 						</tr>
 						<tr>
-							<td><p:commandButton value="Commit" id="submit" icon="ui-icon-disk"
-									action="#{jJDevelopment.commit}" process="@this" /></td>
-							<td><p:commandButton value="LoadRepository" id="markdone"
-									update="" icon="ui-icon-disk" /></td>
+							<td><p:commandButton value="Commit" id="submit"
+									icon="ui-icon-disk" actionListener="#{jJDevelopment.commit}"
+									update=":form:messages,:form:tabView,:form:fileTree" /></td>
+							<td>
+								<p:commandButton value="UpdateToHead" id="fetchFromRepo"
+								icon="ui-icon-disk" actionListener="#{jJDevelopment.pull}"
+									update=":form:messages,:form:tabView,:form:fileTree"/>
+								</td>
+							
 						</tr>
-				</table>
+					</table>					
 				</h:form>
+				<p:blockUI block="form" trigger=":form:submit">  
+        				LOADING<br />
+					<p:graphicImage library="images" name="ajax-loader1.gif" />
+				</p:blockUI>
+				<p:blockUI block="form" trigger=":form:fetchFromRepo">  
+        				LOADING<br />
+					<p:graphicImage library="images" name="ajax-loader1.gif" />
+				</p:blockUI>
 			</p:panel>
 		</center>
 	</ui:define>
