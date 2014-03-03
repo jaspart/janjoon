@@ -56,7 +56,10 @@
 										<pe:codeMirror id="codeMirror1" mode="xml"
 											widgetVar="myCodeMirror" theme="eclipse" value="#{tab.texte}"
 											lineNumbers="true"
-											extraKeys="{'Ctrl-Space': function(cm){CodeMirror.simpleHint (cm, CodeMirror.javascriptHint);}}" />
+											extraKeys="{'Ctrl-Space': function(cm){CodeMirror.simpleHint (cm, CodeMirror.javascriptHint);}}" >
+										<p:ajax event="blur" listener="#{jJDevelopment.valueChangeHandlerCodeMirror}"/>
+										
+											</pe:codeMirror>
 									</p:tab>
 
 								</p:tabView></td>

@@ -12,12 +12,15 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.*;
 
 import org.apache.commons.io.IOUtils;
+import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.TabCloseEvent;
+import org.primefaces.extensions.component.codemirror.CodeMirror;
 import org.primefaces.model.TreeNode;
 
 import com.funder.janjoonweb.service.ConfigManagerAbstract;
@@ -219,6 +222,24 @@ public class JJDevelopment implements Serializable {
 		}
 
 	}
+	public void valueChangeHandler(AjaxBehaviorEvent event){
+			
+			System.out.println("---------------------------------------------------------");
+			InputTextarea texte=(InputTextarea) event.getComponent();
+			//File  f=texte.
+			
+			System.out.println(texte.getValue()+"---");
+			texte.setSubmittedValue(texte.getValue());}
+	
+	public void valueChangeHandlerCodeMirror(AjaxBehaviorEvent event){
+		
+		System.out.println("---------------------------------------------------------");
+		CodeMirror texte=(CodeMirror) event.getComponent();
+		//File  f=texte.
+		
+		System.out.println(texte.getValue()+"---");
+		texte.setSubmittedValue(texte.getValue());}
+	
 
 	public void onCloseTab(TabCloseEvent event) {
 		FileMap f = (FileMap) event.getData();

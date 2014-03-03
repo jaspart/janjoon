@@ -53,8 +53,8 @@
 										listener="#{jJDevelopment.onChangeTab}" />
 									<p:tab title="#{tab.title}" closable="true">
 										<p:inputTextarea id="textArea" rows="20" cols="75"
-											value="#{tab.texte}">
-
+											value="#{tab.texte}" >
+											 <p:ajax event="blur" listener="#{jJDevelopment.valueChangeHandler}"/>
 										</p:inputTextarea>
 					</p:tab>
 
