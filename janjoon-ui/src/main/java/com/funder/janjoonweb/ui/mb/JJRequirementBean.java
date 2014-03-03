@@ -1624,7 +1624,7 @@ public class JJRequirementBean {
 			} else {
 				completionProgress = compteur / dataList.size();
 			}
-			return completionProgress;
+			return completionProgress*100;
 		}
 
 		private float calculCompletion(JJRequirement requirement) {
@@ -1636,30 +1636,25 @@ public class JJRequirementBean {
 			}
 
 			Set<JJTask> tasks = requirement.getTasks();
+			int hasTaskCompleted = 0;
 			if (!tasks.isEmpty()) {
-				boolean isCompletion = true;
+				boolean isCompleted = true;
 				for (JJTask task : tasks) {
 					if (!task.getCompletion()) {
-						isCompletion = false;
+						isCompleted = false;
 						break;
 					}
 				}
-				if (isCompletion) {
+				if (isCompleted) {
 					compteur++;
-					compteur = (compteur * 100);
-					if (!linksUp.isEmpty()) {
-						compteur = compteur / linksUp.size();
-					}
-
+					hasTaskCompleted = 1;
 				}
 			}
-
 			if (!linksUp.isEmpty()) {
-				compteur = compteur / linksUp.size();
+				compteur = compteur / (linksUp.size() + hasTaskCompleted);
 			}
-
+			
 			return compteur;
-
 		}
 
 		public void setCompletionProgress(float completionProgress) {
