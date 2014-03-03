@@ -1546,19 +1546,52 @@ public class JJRequirementBean {
 
 		public float getCoverageProgress() {
 			System.out.println("categoryId " + categoryId);
+
 			float compteur = 0;
 			List<JJRequirement> dataList = (List<JJRequirement>) getWrappedData();
 			System.out.println("dataList.size() " + dataList.size());
-			for (JJRequirement requirement : dataList) {
-				if (!requirement.getRequirementLinkDown().isEmpty()
-						&& !requirement.getRequirementLinkUp().isEmpty()) {
-					compteur++;
-				} else if (!requirement.getRequirementLinkDown().isEmpty()
-						|| !requirement.getRequirementLinkUp().isEmpty()) {
-					compteur += 0.5;
+
+			List<JJCategory> categoryList = jJCategoryService.getCategories(
+					true, true);
+
+			boolean sizeIsOne = false;
+
+			if (categoryId == categoryList.get(0).getId()) {
+				System.out.println("categoryId == categoryList.get(0).getId()");
+				for (JJRequirement requirement : dataList) {
+					if (!requirement.getRequirementLinkUp().isEmpty()) {
+						compteur++;
+					}
+				}
+
+				sizeIsOne = true;
+			} else if (categoryId == categoryList.get(categoryList.size() - 1)
+					.getId() && !sizeIsOne) {
+				System.out
+						.println("categoryId == categoryList.get(categoryList.size() - 1)"
+								+ ".getId() && !sizeIsOne");
+				for (JJRequirement requirement : dataList) {
+					if (!requirement.getRequirementLinkDown().isEmpty()
+							&& !requirement.getTasks().isEmpty()) {
+						compteur++;
+					} else if (!requirement.getRequirementLinkDown().isEmpty()
+							|| !requirement.getTasks().isEmpty()) {
+						compteur += 0.5;
+					}
+				}
+			} else {
+				System.out.println("else");
+				for (JJRequirement requirement : dataList) {
+
+					if (!requirement.getRequirementLinkDown().isEmpty()
+							&& !requirement.getRequirementLinkUp().isEmpty()) {
+						compteur++;
+					} else if (!requirement.getRequirementLinkDown().isEmpty()
+							|| !requirement.getRequirementLinkUp().isEmpty()) {
+						compteur += 0.5;
+					}
 				}
 			}
-
 			System.out.println("compteur " + compteur);
 
 			if (dataList.isEmpty()) {
