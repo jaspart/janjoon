@@ -29,7 +29,6 @@ import javax.faces.convert.DateTimeConverter;
 import javax.faces.validator.LengthValidator;
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.calendar.Calendar;
-import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
@@ -156,11 +155,11 @@ privileged aspect JJProductBean_Roo_ManagedBean {
         nameCreateOutput.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameCreateOutput);
         
-        InputText nameCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        InputTextarea nameCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         nameCreateInput.setId("nameCreateInput");
         nameCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProductBean.JJProduct_.name}", String.class));
         LengthValidator nameCreateInputValidator = new LengthValidator();
-        nameCreateInputValidator.setMaximum(25);
+        nameCreateInputValidator.setMaximum(100);
         nameCreateInput.addValidator(nameCreateInputValidator);
         nameCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(nameCreateInput);
@@ -303,11 +302,11 @@ privileged aspect JJProductBean_Roo_ManagedBean {
         extnameCreateOutput.setValue("Extname:");
         htmlPanelGrid.getChildren().add(extnameCreateOutput);
         
-        InputText extnameCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        InputTextarea extnameCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         extnameCreateInput.setId("extnameCreateInput");
         extnameCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProductBean.JJProduct_.extname}", String.class));
         LengthValidator extnameCreateInputValidator = new LengthValidator();
-        extnameCreateInputValidator.setMaximum(25);
+        extnameCreateInputValidator.setMaximum(100);
         extnameCreateInput.addValidator(extnameCreateInputValidator);
         extnameCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(extnameCreateInput);
@@ -391,11 +390,11 @@ privileged aspect JJProductBean_Roo_ManagedBean {
         nameEditOutput.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameEditOutput);
         
-        InputText nameEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        InputTextarea nameEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         nameEditInput.setId("nameEditInput");
         nameEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProductBean.JJProduct_.name}", String.class));
         LengthValidator nameEditInputValidator = new LengthValidator();
-        nameEditInputValidator.setMaximum(25);
+        nameEditInputValidator.setMaximum(100);
         nameEditInput.addValidator(nameEditInputValidator);
         nameEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(nameEditInput);
@@ -538,11 +537,11 @@ privileged aspect JJProductBean_Roo_ManagedBean {
         extnameEditOutput.setValue("Extname:");
         htmlPanelGrid.getChildren().add(extnameEditOutput);
         
-        InputText extnameEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        InputTextarea extnameEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         extnameEditInput.setId("extnameEditInput");
         extnameEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProductBean.JJProduct_.extname}", String.class));
         LengthValidator extnameEditInputValidator = new LengthValidator();
-        extnameEditInputValidator.setMaximum(25);
+        extnameEditInputValidator.setMaximum(100);
         extnameEditInput.addValidator(extnameEditInputValidator);
         extnameEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(extnameEditInput);
@@ -625,9 +624,11 @@ privileged aspect JJProductBean_Roo_ManagedBean {
         nameLabel.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameLabel);
         
-        HtmlOutputText nameValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputTextarea nameValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         nameValue.setId("nameValue");
         nameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProductBean.JJProduct_.name}", String.class));
+        nameValue.setReadonly(true);
+        nameValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(nameValue);
         
         HtmlOutputText descriptionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -700,9 +701,11 @@ privileged aspect JJProductBean_Roo_ManagedBean {
         extnameLabel.setValue("Extname:");
         htmlPanelGrid.getChildren().add(extnameLabel);
         
-        HtmlOutputText extnameValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputTextarea extnameValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         extnameValue.setId("extnameValue");
         extnameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProductBean.JJProduct_.extname}", String.class));
+        extnameValue.setReadonly(true);
+        extnameValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(extnameValue);
         
         HtmlOutputText versionsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);

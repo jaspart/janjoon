@@ -16,7 +16,7 @@ field reference --fieldName manager --type ~.JJContact --notNull
 #######################
 
 focus --class ~.JJProduct
-field string --fieldName extname --sizeMax 25 --notNull
+field string --fieldName extname --sizeMax 100 --notNull
 field set --fieldName versions  --type ~.JJVersion --cardinality ONE_TO_MANY --mappedBy product --fetch LAZY
 field set --fieldName chapters  --type ~.JJChapter --cardinality ONE_TO_MANY --mappedBy product --fetch LAZY
 field reference --fieldName manager --type ~.JJContact --notNull
@@ -90,7 +90,7 @@ focus --class ~.JJContact
 field string --fieldName password --sizeMax 25 --notNull
 field string --fieldName email --regexp "[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})" --notNull
 field number --fieldName ldap --type java.lang.Integer
-field string --fieldName firstname --sizeMax 25 --notNull
+field string --fieldName firstname --sizeMax 100 --notNull
 field date --fieldName dateofbirth --type java.util.Date
 field string --fieldName picture --sizeMax 25
 field reference --fieldName job --type ~.JJJob

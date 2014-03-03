@@ -18,7 +18,7 @@ import javax.persistence.ManyToOne;
 public class JJProduct extends JJAbstractEntity {
 
 	@NotNull
-	@Size(max = 25)
+	@Size(max = 100)
 	private String extname;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")

@@ -74,8 +74,8 @@ privileged aspect JJTeststepexecutionDataOnDemand_Roo_DataOnDemand {
     
     public void JJTeststepexecutionDataOnDemand.setName(JJTeststepexecution obj, int index) {
         String name = "name_" + index;
-        if (name.length() > 25) {
-            name = name.substring(0, 25);
+        if (name.length() > 100) {
+            name = name.substring(0, 100);
         }
         obj.setName(name);
     }

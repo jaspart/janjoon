@@ -68,8 +68,8 @@ privileged aspect JJProductDataOnDemand_Roo_DataOnDemand {
     
     public void JJProductDataOnDemand.setExtname(JJProduct obj, int index) {
         String extname = "extname_" + index;
-        if (extname.length() > 25) {
-            extname = extname.substring(0, 25);
+        if (extname.length() > 100) {
+            extname = extname.substring(0, 100);
         }
         obj.setExtname(extname);
     }
@@ -81,8 +81,8 @@ privileged aspect JJProductDataOnDemand_Roo_DataOnDemand {
     
     public void JJProductDataOnDemand.setName(JJProduct obj, int index) {
         String name = "name_" + index;
-        if (name.length() > 25) {
-            name = name.substring(0, 25);
+        if (name.length() > 100) {
+            name = name.substring(0, 100);
         }
         obj.setName(name);
     }

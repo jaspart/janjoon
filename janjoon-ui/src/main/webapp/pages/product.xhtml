@@ -64,14 +64,14 @@
 					<p:panel columns="3" cellpadding="6">
 						<p:inputText id="name" value="#{jJProductBean.productAdmin.name}"
 							label="Name" required="true" widgetVar="nameWidget">
-							<f:validateLength maximum="25" />
+							<f:validateLength maximum="100" />
 						</p:inputText>
 						<p:message for="name" id="msgName" />
 						<p:watermark for="name" value="Name *" />
 						<p:inputText id="extname"
 							value="#{jJProductBean.productAdmin.extname}" label="Extname"
 							required="true" widgetVar="extnameWidget">
-							<f:validateLength maximum="25" />
+							<f:validateLength maximum="100" />
 						</p:inputText>
 						<p:message for="extname" id="msgExtname" />
 						<p:watermark for="extname" value="External Name *" />
@@ -112,7 +112,7 @@
 						<p:inputText id="version"
 							value="#{jJVersionBean.versionAdmin.name}" label="Version Name"
 							required="true" widgetVar="versionWidget">
-							<f:validateLength maximum="25" />
+							<f:validateLength maximum="100" />
 						</p:inputText>
 						<p:message for="version" id="msgVersion" />
 						<p:watermark for="version" value="Version Name *" />

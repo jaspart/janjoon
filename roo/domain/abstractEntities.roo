@@ -2,7 +2,7 @@
 #/*   Define the attributes of all janjoon abstract entities. */
 
 focus --class ~.JJAbstractEntity
-field string --fieldName name --sizeMax 25 --notNull
+field string --fieldName name --sizeMax 100 --notNull
 field string --fieldName description --notNull
 field date --fieldName creationDate --type java.util.Date --notNull
 field reference --fieldName createdBy --type ~.JJContact

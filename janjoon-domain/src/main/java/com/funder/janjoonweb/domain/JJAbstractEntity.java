@@ -20,7 +20,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 public abstract class JJAbstractEntity {
 
 	@NotNull
-	@Size(max = 25)
+	@Size(max = 100)
 	private String name;
 
 	@NotNull

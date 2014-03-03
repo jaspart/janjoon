@@ -156,11 +156,11 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         nameCreateOutput.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameCreateOutput);
         
-        InputText nameCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        InputTextarea nameCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         nameCreateInput.setId("nameCreateInput");
         nameCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.name}", String.class));
         LengthValidator nameCreateInputValidator = new LengthValidator();
-        nameCreateInputValidator.setMaximum(25);
+        nameCreateInputValidator.setMaximum(100);
         nameCreateInput.addValidator(nameCreateInputValidator);
         nameCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(nameCreateInput);
@@ -364,11 +364,11 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         firstnameCreateOutput.setValue("Firstname:");
         htmlPanelGrid.getChildren().add(firstnameCreateOutput);
         
-        InputText firstnameCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        InputTextarea firstnameCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         firstnameCreateInput.setId("firstnameCreateInput");
         firstnameCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.firstname}", String.class));
         LengthValidator firstnameCreateInputValidator = new LengthValidator();
-        firstnameCreateInputValidator.setMaximum(25);
+        firstnameCreateInputValidator.setMaximum(100);
         firstnameCreateInput.addValidator(firstnameCreateInputValidator);
         firstnameCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(firstnameCreateInput);
@@ -532,11 +532,11 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         nameEditOutput.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameEditOutput);
         
-        InputText nameEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        InputTextarea nameEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         nameEditInput.setId("nameEditInput");
         nameEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.name}", String.class));
         LengthValidator nameEditInputValidator = new LengthValidator();
-        nameEditInputValidator.setMaximum(25);
+        nameEditInputValidator.setMaximum(100);
         nameEditInput.addValidator(nameEditInputValidator);
         nameEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(nameEditInput);
@@ -740,11 +740,11 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         firstnameEditOutput.setValue("Firstname:");
         htmlPanelGrid.getChildren().add(firstnameEditOutput);
         
-        InputText firstnameEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        InputTextarea firstnameEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         firstnameEditInput.setId("firstnameEditInput");
         firstnameEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.firstname}", String.class));
         LengthValidator firstnameEditInputValidator = new LengthValidator();
-        firstnameEditInputValidator.setMaximum(25);
+        firstnameEditInputValidator.setMaximum(100);
         firstnameEditInput.addValidator(firstnameEditInputValidator);
         firstnameEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(firstnameEditInput);
@@ -907,9 +907,11 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         nameLabel.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameLabel);
         
-        HtmlOutputText nameValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputTextarea nameValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         nameValue.setId("nameValue");
         nameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.name}", String.class));
+        nameValue.setReadonly(true);
+        nameValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(nameValue);
         
         HtmlOutputText descriptionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1013,9 +1015,11 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         firstnameLabel.setValue("Firstname:");
         htmlPanelGrid.getChildren().add(firstnameLabel);
         
-        HtmlOutputText firstnameValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputTextarea firstnameValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         firstnameValue.setId("firstnameValue");
         firstnameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.firstname}", String.class));
+        firstnameValue.setReadonly(true);
+        firstnameValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(firstnameValue);
         
         HtmlOutputText dateofbirthLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);

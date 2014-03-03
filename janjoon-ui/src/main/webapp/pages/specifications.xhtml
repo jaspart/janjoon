@@ -488,9 +488,9 @@
 
 		<p:confirmDialog id="requirementDeleteDialog"
 			widgetVar="requirementDeleteDialogWidget"
-			message="#{messages.label_delete_record}" showEffect="fade"
-			hideEffect="explode" header="#{messages.label_confirm_deletion}"
-			severity="alarm">
+			message="Are you sure you want to delete this requirement?"
+			showEffect="fade" hideEffect="explode"
+			header="#{messages.label_confirm_deletion}" severity="alarm">
 			<p:outputPanel id="requirementDeletePanel">
 				<h:form id="requirementDeleteForm">
 					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"

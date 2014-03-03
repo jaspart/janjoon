@@ -71,8 +71,8 @@ privileged aspect JJImportanceDataOnDemand_Roo_DataOnDemand {
     
     public void JJImportanceDataOnDemand.setName(JJImportance obj, int index) {
         String name = "name_" + index;
-        if (name.length() > 25) {
-            name = name.substring(0, 25);
+        if (name.length() > 100) {
+            name = name.substring(0, 100);
         }
         obj.setName(name);
     }

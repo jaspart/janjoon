@@ -178,11 +178,11 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         nameCreateOutput.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameCreateOutput);
         
-        InputText nameCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        InputTextarea nameCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         nameCreateInput.setId("nameCreateInput");
         nameCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJChapterBean.JJChapter_.name}", String.class));
         LengthValidator nameCreateInputValidator = new LengthValidator();
-        nameCreateInputValidator.setMaximum(25);
+        nameCreateInputValidator.setMaximum(100);
         nameCreateInput.addValidator(nameCreateInputValidator);
         nameCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(nameCreateInput);
@@ -499,11 +499,11 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         nameEditOutput.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameEditOutput);
         
-        InputText nameEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        InputTextarea nameEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         nameEditInput.setId("nameEditInput");
         nameEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJChapterBean.JJChapter_.name}", String.class));
         LengthValidator nameEditInputValidator = new LengthValidator();
-        nameEditInputValidator.setMaximum(25);
+        nameEditInputValidator.setMaximum(100);
         nameEditInput.addValidator(nameEditInputValidator);
         nameEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(nameEditInput);
@@ -819,9 +819,11 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         nameLabel.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameLabel);
         
-        HtmlOutputText nameValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputTextarea nameValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         nameValue.setId("nameValue");
         nameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJChapterBean.JJChapter_.name}", String.class));
+        nameValue.setReadonly(true);
+        nameValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(nameValue);
         
         HtmlOutputText descriptionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);

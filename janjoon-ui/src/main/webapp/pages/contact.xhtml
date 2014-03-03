@@ -73,7 +73,7 @@
 								value="#{jJContactBean.contactAdmin.firstname}"
 								label="Firstname" required="true" widgetVar="firstnameWidget"
 								disabled="#{jJContactBean.disabled}">
-								<f:validateLength maximum="25" />
+								<f:validateLength maximum="100" />
 							</p:inputText>
 							<p:message for="firstname" id="msgFirstname" />
 							<p:watermark for="firstname" value="Firstname *" />
@@ -81,7 +81,7 @@
 								value="#{jJContactBean.contactAdmin.name}" label="Lastname"
 								required="true" widgetVar="lastnameWidget"
 								disabled="#{jJContactBean.disabled}">
-								<f:validateLength maximum="25" />
+								<f:validateLength maximum="100" />
 							</p:inputText>
 							<p:message for="lastname" id="msgLastname" />
 							<p:watermark for="lastname" value="Lastname *" />

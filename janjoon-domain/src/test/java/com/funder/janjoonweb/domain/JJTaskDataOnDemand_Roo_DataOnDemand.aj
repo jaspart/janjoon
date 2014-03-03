@@ -117,8 +117,8 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
     
     public void JJTaskDataOnDemand.setName(JJTask obj, int index) {
         String name = "name_" + index;
-        if (name.length() > 25) {
-            name = name.substring(0, 25);
+        if (name.length() > 100) {
+            name = name.substring(0, 100);
         }
         obj.setName(name);
     }

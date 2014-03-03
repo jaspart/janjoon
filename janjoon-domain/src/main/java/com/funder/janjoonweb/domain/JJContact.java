@@ -35,7 +35,7 @@ public class JJContact extends JJAbstractEntity {
 	private Integer ldap;
 
 	@NotNull
-	@Size(max = 25)
+	@Size(max = 100)
 	private String firstname;
 
 	@Temporal(TemporalType.TIMESTAMP)
