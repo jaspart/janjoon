@@ -32,7 +32,9 @@
 
 						<td><p:dataTable id="dataTable" var="requirement"
 								value="#{tableDataModel}" paginator="true" rows="10"
-								style="width:410px">
+								style="width:410px"
+								filteredValue="#{tableDataModel.filtredRequirements}"
+								widgetVar="#{tableDataModel.nameDataModel}_dataTableWidget">
 
 								<f:facet name="header">  
           							#{tableDataModel.nameDataModel}
@@ -55,7 +57,8 @@
 														update=":specForm" />
 												</p:column>
 												<p:column colspan="4">
-													<p:inputText id="globalFilter" style="width:120px" />
+													<p:inputText id="globalFilter" style="width:120px"
+														onkeyup="#{tableDataModel.nameDataModel}_dataTableWidget.filter()" />
 												</p:column>
 												<p:column colspan="1">
 													<p:commandButton id="newRequirementButton"
@@ -86,21 +89,24 @@
 									</p:panelGrid>
 								</f:facet>
 
-								<p:column style="width:25%">
+								<p:column filterBy="name" filterStyle="display:none"
+									style="width:25%">
 									<f:facet name="header">
 										<h:outputText value="Requirement" />
 									</f:facet>
 									<h:outputText value="#{requirement.name}" />
 								</p:column>
 
-								<p:column style="width:25%">
+								<p:column filterBy="product.name" filterStyle="display:none"
+									style="width:25%">
 									<f:facet name="header">
 										<h:outputText value="Product" />
 									</f:facet>
 									<h:outputText value="#{requirement.product.name}" />
 								</p:column>
 
-								<p:column style="width:25%">
+								<p:column filterBy="chapter.name" filterStyle="display:none"
+									style="width:25%">
 									<f:facet name="header">
 										<h:outputText value="Chapter" />
 									</f:facet>
@@ -305,7 +311,7 @@
 							<p:column colspan="3">
 								<h:outputText value="Description : *" />
 								<p:editor id="description" widgetVar="descriptionWidget"
-									style="width:388px"
+									style="width:680px"
 									value="#{jJRequirementBean.requirement.description}"
 									required="true"
 									requiredMessage="Requirement Description is a required value">
@@ -349,8 +355,8 @@
 						<p:row>
 							<p:column rowspan="3" colspan="3">
 								<p:inputTextarea id="note" rows="3" cols="100"
-									value="#{jJRequirementBean.requirement.note}">
-								</p:inputTextarea>
+									value="#{jJRequirementBean.requirement.note}"
+									autoResize="false" />
 								<p:watermark for="note" value="Note" />
 							</p:column>
 						</p:row>

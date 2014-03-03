@@ -1527,6 +1527,8 @@ public class JJRequirementBean {
 
 		private float coverageProgress = 0;
 		private int completionProgress = 0;
+		
+		private List<JJRequirement> filtredRequirements;
 
 		public String getNameDataModel() {
 			return nameDataModel;
@@ -1615,6 +1617,14 @@ public class JJRequirementBean {
 
 		public void setCompletionProgress(int completionProgress) {
 			this.completionProgress = completionProgress;
+		}
+
+		public List<JJRequirement> getFiltredRequirements() {
+			return filtredRequirements;
+		}
+
+		public void setFiltredRequirements(List<JJRequirement> filtredRequirements) {
+			this.filtredRequirements = filtredRequirements;
 		}
 
 		public RequirementDataModel(List<JJRequirement> data, long categoryId,
