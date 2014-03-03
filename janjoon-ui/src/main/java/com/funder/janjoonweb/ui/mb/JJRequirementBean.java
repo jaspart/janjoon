@@ -1526,8 +1526,8 @@ public class JJRequirementBean {
 		private long categoryId;
 
 		private float coverageProgress = 0;
-		private int completionProgress = 0;
-		
+		private float completionProgress = 0;
+
 		private List<JJRequirement> filtredRequirements;
 
 		public String getNameDataModel() {
@@ -1611,11 +1611,58 @@ public class JJRequirementBean {
 			this.coverageProgress = coverageProgress;
 		}
 
-		public int getCompletionProgress() {
+		public float getCompletionProgress() {
+			float compteur = 0;
+			List<JJRequirement> dataList = (List<JJRequirement>) getWrappedData();
+
+			for (JJRequirement requirement : dataList) {
+				compteur = compteur + calculCompletion(requirement);
+			}
+
+			if (dataList.isEmpty()) {
+				completionProgress = 0;
+			} else {
+				completionProgress = compteur / dataList.size();
+			}
 			return completionProgress;
 		}
 
-		public void setCompletionProgress(int completionProgress) {
+		private float calculCompletion(JJRequirement requirement) {
+			float compteur = 0;
+
+			Set<JJRequirement> linksUp = requirement.getRequirementLinkUp();
+			for (JJRequirement req : linksUp) {
+				compteur = compteur + calculCompletion(req);
+			}
+
+			Set<JJTask> tasks = requirement.getTasks();
+			if (!tasks.isEmpty()) {
+				boolean isCompletion = true;
+				for (JJTask task : tasks) {
+					if (!task.getCompletion()) {
+						isCompletion = false;
+						break;
+					}
+				}
+				if (isCompletion) {
+					compteur++;
+					compteur = (compteur * 100);
+					if (!linksUp.isEmpty()) {
+						compteur = compteur / linksUp.size();
+					}
+
+				}
+			}
+
+			if (!linksUp.isEmpty()) {
+				compteur = compteur / linksUp.size();
+			}
+
+			return compteur;
+
+		}
+
+		public void setCompletionProgress(float completionProgress) {
 			this.completionProgress = completionProgress;
 		}
 
@@ -1623,7 +1670,8 @@ public class JJRequirementBean {
 			return filtredRequirements;
 		}
 
-		public void setFiltredRequirements(List<JJRequirement> filtredRequirements) {
+		public void setFiltredRequirements(
+				List<JJRequirement> filtredRequirements) {
 			this.filtredRequirements = filtredRequirements;
 		}
 
