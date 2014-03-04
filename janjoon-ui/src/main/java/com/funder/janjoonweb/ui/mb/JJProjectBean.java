@@ -281,7 +281,7 @@ public class JJProjectBean {
 			}
 		}
 
-		if (jJCategoryService.getAllJJCategories().isEmpty()) {
+		if (jJCategoryService.getCategories(null, false, true, true).isEmpty()) {
 			String name = "BUSINESS";
 			JJCategory CategoryBusiness = new JJCategory();
 			CategoryBusiness.setName(name);
@@ -360,13 +360,13 @@ public class JJProjectBean {
 		if (jJRightService.findAllJJRights().isEmpty()) {
 
 			JJCategory businessCategory = jJCategoryService
-					.getJJCategoryWithName("BUSINESS");
+					.getCategoryWithName("BUSINESS", true);
 			JJCategory functionalCategory = jJCategoryService
-					.getJJCategoryWithName("FUNCTIONAL");
+					.getCategoryWithName("FUNCTIONAL", true);
 			JJCategory technicalCategory = jJCategoryService
-					.getJJCategoryWithName("TECHNICAL");
+					.getCategoryWithName("TECHNICAL", true);
 			JJCategory architectureCategory = jJCategoryService
-					.getJJCategoryWithName("ARCHITECTURE");
+					.getCategoryWithName("ARCHITECTURE", true);
 
 			JJProfile projectManagerProfile = jJProfileService
 					.getJJProfileWithName("ProjectManager");

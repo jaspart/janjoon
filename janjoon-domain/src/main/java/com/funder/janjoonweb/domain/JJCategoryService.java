@@ -6,10 +6,8 @@ import org.springframework.roo.addon.layers.service.RooService;
 
 @RooService(domainTypes = { com.funder.janjoonweb.domain.JJCategory.class })
 public interface JJCategoryService {
-	public JJCategory getJJCategoryWithName(String name);
+	public JJCategory getCategoryWithName(String name, boolean onlyActif);
 
-	public List<JJCategory> getAllJJCategories();
-
-	public List<JJCategory> getCategories(boolean onlyActif,
-			boolean sortedByStage);
+	public List<JJCategory> getCategories(String name, boolean withName,
+			boolean onlyActif, boolean sortedByStage);
 }

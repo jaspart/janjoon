@@ -137,7 +137,7 @@ public class JJRequirementBean {
 	}
 
 	public List<JJCategory> getCategoryList() {
-		categoryList = jJCategoryService.getCategories(true, true);
+		categoryList = jJCategoryService.getCategories(null, false, true, true);
 		return categoryList;
 	}
 
@@ -1554,7 +1554,7 @@ public class JJRequirementBean {
 			System.out.println("dataList.size() " + dataList.size());
 
 			List<JJCategory> categoryList = jJCategoryService.getCategories(
-					true, true);
+					null, false, true, true);
 
 			boolean sizeIsOne = false;
 

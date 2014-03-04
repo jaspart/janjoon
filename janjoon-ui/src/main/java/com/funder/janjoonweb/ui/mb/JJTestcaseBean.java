@@ -240,7 +240,8 @@ public class JJTestcaseBean {
 
 	public SelectItem[] getCategoryOptions() {
 
-		List<JJCategory> categoriesList = jJCategoryService.getAllJJCategories();
+		List<JJCategory> categoriesList = jJCategoryService.getCategories(null,
+				false, true, true);
 
 		categoryOptions = new SelectItem[categoriesList.size() + 1];
 
@@ -267,7 +268,8 @@ public class JJTestcaseBean {
 					+ currentProject.getId() + "- " + currentProject.getName(),
 					rootNode);
 
-			List<JJCategory> categorys = jJCategoryService.getAllJJCategories();
+			List<JJCategory> categorys = jJCategoryService.getCategories(null,
+					false, true, true);
 			for (JJCategory jjCategory : categorys) {
 
 				TreeNode categoryNode = new DefaultTreeNode("C-"
@@ -583,27 +585,27 @@ public class JJTestcaseBean {
 
 		selectedReq = null;
 		selectedTitle = "";
-		
-		String identifier = getStringFromString(selectedNode,0);
-		
+
+		String identifier = getStringFromString(selectedNode, 0);
 
 		if (identifier.equalsIgnoreCase("P")) {
-			
+
 			rendered = false;
 			disabledNewTestcase = true;
 		} else if (identifier.equalsIgnoreCase("C")) {
 			rendered = false;
 			disabledNewTestcase = true;
-			
+
 			/**
-			 * Création du PDF est en commentaire pour le moment 
+			 * Création du PDF est en commentaire pour le moment
 			 */
-			
-//			long idCategory = Long.parseLong(getStringFromString(selectedNode,
-//					1));
-//			preProcessPDF(idCategory);
+
+			// long idCategory =
+			// Long.parseLong(getStringFromString(selectedNode,
+			// 1));
+			// preProcessPDF(idCategory);
 		} else if (identifier.equalsIgnoreCase("CH")) {
-			
+
 			rendered = false;
 			disabledNewTestcase = false;
 		}
@@ -629,11 +631,11 @@ public class JJTestcaseBean {
 		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
-	public void processNewTestcase(JJTeststepBean jJTeststepBean){
-		//rendered = true;
+	public void processNewTestcase(JJTeststepBean jJTeststepBean) {
+		// rendered = true;
 		newTestcase(jJTeststepBean);
 	}
-	
+
 	public void createTabs(JJTestcaseexecutionBean jJTestcaseexecutionBean,
 			JJTeststepexecutionBean jJTeststepexecutionBean, JJBugBean jJBugBean) {
 		if (selectedNode.getData().toString().startsWith("TC")) {

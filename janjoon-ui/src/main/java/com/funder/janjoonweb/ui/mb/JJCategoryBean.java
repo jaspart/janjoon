@@ -11,6 +11,7 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.funder.janjoonweb.domain.JJCategory;
+import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
@@ -22,7 +23,6 @@ public class JJCategoryBean {
 
 	private String message;
 	private boolean disableLevel;
-	
 
 	public JJCategory getCategoryAdmin() {
 		return categoryAdmin;
@@ -33,7 +33,8 @@ public class JJCategoryBean {
 	}
 
 	public List<JJCategory> getCategoryListTable() {
-		categoryListTable = jJCategoryService.getAllJJCategories();
+		categoryListTable = jJCategoryService.getCategories(null, false, true,
+				true);
 		return categoryListTable;
 	}
 
@@ -60,7 +61,7 @@ public class JJCategoryBean {
 	public void newCategory() {
 		System.out.println("Initial bean category");
 		message = "New Category";
-	
+
 		categoryAdmin = new JJCategory();
 		categoryAdmin.setEnabled(true);
 		categoryAdmin.setCreationDate(new Date());
@@ -89,29 +90,41 @@ public class JJCategoryBean {
 	public void save() {
 
 		String message = "";
+		FacesMessage facesMessage = null;
+		String name = categoryAdmin.getName().trim().toUpperCase();
+		List<JJCategory> categories = jJCategoryService.getCategories(name,
+				true, false, false);
 
-		if (categoryAdmin.getId() == null) {
-			System.out.println("SAVING new Category...");
+		if (categories.isEmpty()) {
+			categoryAdmin.setName(name);
+			if (categoryAdmin.getId() == null) {
+				System.out.println("SAVING new Category...");
 
-			categoryAdmin.setDescription("This is category "
-					+ categoryAdmin.getName());
-			jJCategoryService.saveJJCategory(categoryAdmin);
-			message = "message_successfully_created";
+				categoryAdmin.setDescription("This is category "
+						+ categoryAdmin.getName());
+				jJCategoryService.saveJJCategory(categoryAdmin);
+				message = "message_successfully_created";
 
-			newCategory();
+				newCategory();
+
+			} else {
+				System.out.println("UPDATING Category...");
+
+				jJCategoryService.updateJJCategory(categoryAdmin);
+				message = "message_successfully_updated";
+				RequestContext context = RequestContext.getCurrentInstance();
+				context.execute("categoryDialogWidget.hide()");
+				closeDialog();
+			}
+
+			facesMessage = MessageFactory.getMessage(message, "JJCategory");
 
 		} else {
-			System.out.println("UPDATING Category...");
-
-			jJCategoryService.updateJJCategory(categoryAdmin);
-			message = "message_successfully_updated";
-			RequestContext context = RequestContext.getCurrentInstance();
-			context.execute("categoryDialogWidget.hide()");
-			closeDialog();
+			message = "This category is already exist into the database, try to use another name";
+			facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					message, "JJCategory");
 		}
 
-		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJCategory");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}

@@ -51,7 +51,7 @@ public class JJRightBean {
 	}
 
 	public List<JJCategory> getCategoryList() {
-		categoryList = jJCategoryService.getAllJJCategories();
+		categoryList = jJCategoryService.getCategories(null, false, true, true);
 
 		return categoryList;
 	}
@@ -83,7 +83,7 @@ public class JJRightBean {
 		rightAdmin.setR(false);
 		rightAdmin.setW(false);
 		rightAdmin.setX(false);
-		
+
 		category = null;
 		object = null;
 
