@@ -44,8 +44,8 @@ public class JJPermissionBean {
 	public List<JJPermission> getPermisssionListTable() {
 		if (contact != null && contact.getId() != null) {
 
-			permisssionListTable = jJPermissionService
-					.getJJPermissionsWithContact(contact);
+			permisssionListTable = jJPermissionService.getPermissions(contact,
+					true, null, null, null);
 		} else {
 			permisssionListTable = null;
 		}
@@ -130,8 +130,8 @@ public class JJPermissionBean {
 		if (permissionAdmin.getId() == null) {
 			System.out.println("IS a new JJPermission");
 
-			List<JJPermission> permission = jJPermissionService
-					.getJJPermissionsWithProfileAndContact(profile, contact);
+			List<JJPermission> permission = jJPermissionService.getPermissions(
+					contact, false, profile, project, product);
 
 			if (permission.isEmpty()) {
 				System.out.println("is empty");
@@ -148,7 +148,7 @@ public class JJPermissionBean {
 				newPermission();
 			} else {
 
-				message = "This profile is already attributed to this contact";
+				message = "This permission is already attributed to this contact";
 				facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
 						message, "JJPermission");
 			}

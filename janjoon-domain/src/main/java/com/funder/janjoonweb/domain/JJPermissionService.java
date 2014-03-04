@@ -9,8 +9,7 @@ public interface JJPermissionService {
 
 	public List<JJPermission> getManagerPermissions(JJProfile profile);
 
-	public List<JJPermission> getJJPermissionsWithProfileAndContact(
-			JJProfile profile, JJContact contact);
-
-	public List<JJPermission> getJJPermissionsWithContact(JJContact contact);
+	public List<JJPermission> getPermissions(JJContact contact,
+			boolean onlyContact, JJProfile profile, JJProject project,
+			JJProduct product);
 }

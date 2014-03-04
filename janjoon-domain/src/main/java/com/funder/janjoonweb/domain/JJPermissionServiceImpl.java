@@ -1,5 +1,6 @@
 package com.funder.janjoonweb.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -39,8 +40,9 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 	}
 
 	@Override
-	public List<JJPermission> getJJPermissionsWithProfileAndContact(
-			JJProfile profile, JJContact contact) {
+	public List<JJPermission> getPermissions(JJContact contact,
+			boolean onlyContact, JJProfile profile, JJProject project,
+			JJProduct product) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
 				.createQuery(JJPermission.class);
@@ -49,32 +51,30 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
 
-		Predicate predicate1 = criteriaBuilder.equal(from.get("profile"),
-				profile);
-		Predicate predicate2 = criteriaBuilder.equal(from.get("contact"),
-				contact);
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		predicates.add(criteriaBuilder.equal(from.get("contact"), contact));
 
-		select.where(criteriaBuilder.and(predicate1, predicate2));
+		if (!onlyContact) {
 
-		TypedQuery<JJPermission> result = entityManager.createQuery(select);
+			predicates.add(criteriaBuilder.equal(from.get("profile"), profile));
 
-		return result.getResultList();
-	}
+			if (project != null) {
+				predicates.add(criteriaBuilder.equal(from.get("project"),
+						project));
+			} else {
+				predicates.add(criteriaBuilder.isNull(from.get("project")));
+			}
 
-	@Override
-	public List<JJPermission> getJJPermissionsWithContact(JJContact contact) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
-				.createQuery(JJPermission.class);
+			if (product != null) {
+				predicates.add(criteriaBuilder.equal(from.get("product"),
+						product));
+			} else {
+				predicates.add(criteriaBuilder.isNull(from.get("product")));
+			}
 
-		Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
+		}
 
-		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
-
-		Predicate predicate = criteriaBuilder.equal(from.get("contact"),
-				contact);
-
-		select.where(predicate);
+		select.where(predicates.toArray(new Predicate[] {}));
 
 		TypedQuery<JJPermission> result = entityManager.createQuery(select);
 
