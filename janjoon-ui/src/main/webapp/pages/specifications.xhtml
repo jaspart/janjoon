@@ -159,8 +159,8 @@
 		</h:form>
 
 		<p:dialog id="requirementDialog" header="#{jJRequirementBean.message}"
-			modal="true" widgetVar="requirementDialogWidget" maximizable="false"
-			minimizable="false" dynamic="true" resizable="false">
+			modal="true" widgetVar="requirementDialogWidget" dynamic="true"
+			resizable="false">
 			<p:ajax event="close" update=":specForm"
 				listener="#{jJRequirementBean.closeDialog}" />
 			<p:outputPanel id="requirementDialogPanel">
@@ -376,8 +376,7 @@
 
 
 		<p:dialog id="chapterDialog" header="Chapter" modal="true"
-			maximizable="true" widgetVar="chapterDialogWidget" dynamic="true"
-			resizable="false">
+			widgetVar="chapterDialogWidget" dynamic="true" resizable="false">
 			<p:ajax event="close" update=":specForm"
 				listener="#{jJChapterBean.closeDialog}" />
 			<p:layout id="layout" style="min-width:760px;min-height:450px;">

@@ -249,7 +249,7 @@ public class JJRequirementBean {
 	public List<JJChapter> getRequirementChapterList() {
 		requirementChapterList = jJChapterService.getChapters(
 				requirementProject, requirementProduct, requirementCategory,
-				true);
+				true, new ArrayList<String>());
 		return requirementChapterList;
 	}
 
@@ -1624,7 +1624,7 @@ public class JJRequirementBean {
 			} else {
 				completionProgress = compteur / dataList.size();
 			}
-			return completionProgress*100;
+			return completionProgress * 100;
 		}
 
 		private float calculCompletion(JJRequirement requirement) {
@@ -1653,7 +1653,7 @@ public class JJRequirementBean {
 			if (!linksUp.isEmpty()) {
 				compteur = compteur / (linksUp.size() + hasTaskCompleted);
 			}
-			
+
 			return compteur;
 		}
 
