@@ -9,7 +9,7 @@
 	<h:outputStylesheet library="css" name="standard.css" />
 	<h:outputScript library="js" name="calendar.js" />
 	<h:form prependId="false" id="headerForm">
-		<p:growl id="messagesHeader" />
+
 		<h:panelGrid id="panelMenu" columns="3" cellpadding="2">
 			<p:tabMenu id="tabMenu" name="content">
 				<p:menuitem value="home" icon="ui-icon-home"
@@ -54,7 +54,7 @@
 
 					<p:ajax process="@this" partialSubmit="true"
 						listener="#{jJProjectBean.handleSelectProject(jJProductBean,jJVersionBean,jJRequirementBean,jJChapterBean,jJTestcaseBean,jJTeststepBean,jJBugBean)}"
-						update="messagesHeader productSelectOneMenu versionSelectOneMenu :contentGrid" />
+						update="productSelectOneMenu versionSelectOneMenu :contentGrid" />
 				</p:selectOneMenu>
 
 				<h:outputText value="Product :" />
@@ -70,8 +70,8 @@
 						itemLabel="#{p.name}" itemValue="#{p}" />
 
 					<p:ajax process="@this" partialSubmit="true"
-						listener="#{jJProductBean.handleSelectProduct(jJVersionBean,jJProjectBean,jJRequirementBean,jJChapterBean)}"
-						update="messagesHeader versionSelectOneMenu :contentGrid" />
+						listener="#{jJProductBean.handleSelectProduct(jJVersionBean,jJRequirementBean,jJChapterBean)}"
+						update="versionSelectOneMenu :contentGrid" />
 				</p:selectOneMenu>
 
 				<h:outputText value="Version :" />
@@ -88,8 +88,8 @@
 						itemLabel="#{v.name}" itemValue="#{v}" />
 
 					<p:ajax process="@this" partialSubmit="true"
-						listener="#{jJVersionBean.handleSelect(jJRequirementBean)}"
-						update="messagesHeader :contentGrid" />
+						listener="#{jJVersionBean.handleSelectVersion(jJRequirementBean,jJChapterBean)}"
+						update=":contentGrid" />
 				</p:selectOneMenu>
 			</h:panelGrid>
 		</h:panelGrid>

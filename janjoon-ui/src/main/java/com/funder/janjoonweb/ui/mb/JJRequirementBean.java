@@ -13,6 +13,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.ListDataModel;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.SelectableDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
@@ -229,7 +230,7 @@ public class JJRequirementBean {
 	}
 
 	public List<JJVersion> getRequirementVersionList() {
-		requirementVersionList = jJVersionService.getVersions(true,
+		requirementVersionList = jJVersionService.getVersions(true, true,
 				requirementProduct);
 		return requirementVersionList;
 	}
@@ -451,6 +452,128 @@ public class JJRequirementBean {
 		this.task = task;
 	}
 
+	// Import Requirement
+
+	private JJProject importProject;
+	private List<JJProject> importProjectList;
+
+	private JJProduct importProduct;
+	private List<JJProduct> importProductList;
+
+	private JJVersion importVersion;
+	private List<JJVersion> importVersionList;
+
+	private JJCategory importCategory;
+	private List<JJCategory> importCategoryList;
+
+	private JJStatus importStatus;
+	private List<JJStatus> importStatusList;
+
+	private ImportDataModel importDataModel;
+
+	private List<JJRequirement> listTable;
+
+	public JJProject getImportProject() {
+		return importProject;
+	}
+
+	public void setImportProject(JJProject importProject) {
+		this.importProject = importProject;
+	}
+
+	public List<JJProject> getImportProjectList() {
+		importProjectList = jJProjectService.getProjects(true);
+		return importProjectList;
+	}
+
+	public void setImportProjectList(List<JJProject> importProjectList) {
+		this.importProjectList = importProjectList;
+	}
+
+	public JJProduct getImportProduct() {
+		return importProduct;
+	}
+
+	public void setImportProduct(JJProduct importProduct) {
+		this.importProduct = importProduct;
+	}
+
+	public List<JJProduct> getImportProductList() {
+		importProductList = jJProductService.getProducts(true);
+		return importProductList;
+	}
+
+	public void setImportProductList(List<JJProduct> importProductList) {
+		this.importProductList = importProductList;
+	}
+
+	public JJVersion getImportVersion() {
+		return importVersion;
+	}
+
+	public void setImportVersion(JJVersion importVersion) {
+		this.importVersion = importVersion;
+	}
+
+	public List<JJVersion> getImportVersionList() {
+		importVersionList = jJVersionService.getVersions(true, true, null);
+		return importVersionList;
+	}
+
+	public void setImportVersionList(List<JJVersion> importVersionList) {
+		this.importVersionList = importVersionList;
+	}
+
+	public JJCategory getImportCategory() {
+		return importCategory;
+	}
+
+	public void setImportCategory(JJCategory importCategory) {
+		this.importCategory = importCategory;
+	}
+
+	public List<JJCategory> getImportCategoryList() {
+		return importCategoryList;
+	}
+
+	public void setImportCategoryList(List<JJCategory> importCategoryList) {
+		this.importCategoryList = importCategoryList;
+	}
+
+	public JJStatus getImportStatus() {
+		return importStatus;
+	}
+
+	public void setImportStatus(JJStatus importStatus) {
+		this.importStatus = importStatus;
+	}
+
+	public List<JJStatus> getImportStatusList() {
+		return importStatusList;
+	}
+
+	public void setImportStatusList(List<JJStatus> importStatusList) {
+		this.importStatusList = importStatusList;
+	}
+
+	public ImportDataModel getImportDataModel() {
+		importDataModel = new ImportDataModel(
+				jJRequirementService.findAllJJRequirements());
+		return importDataModel;
+	}
+
+	public void setImportDataModel(ImportDataModel importDataModel) {
+		this.importDataModel = importDataModel;
+	}
+
+	public List<JJRequirement> getListTable() {
+		return listTable;
+	}
+
+	public void setListTable(List<JJRequirement> listTable) {
+		this.listTable = listTable;
+	}
+
 	public void newRequirement(long id) {
 		System.out.println("New Requirement");
 
@@ -635,7 +758,11 @@ public class JJRequirementBean {
 
 	}
 
-	public void initiateTask() {
+	public void importRequirement() {
+
+	}
+
+	public void loadTask() {
 
 		System.out.println("initiateTask " + initiateTask);
 
@@ -652,8 +779,23 @@ public class JJRequirementBean {
 
 	}
 
-	public void completeTask() {
+	public void checkCompleteTask() {
 		System.out.println("task.getCompletion() " + task.getCompletion());
+	}
+
+	public void loadImport() {
+		System.out.println("Import Requirement");
+		message = "Import Requirement";
+	}
+
+	public void onRowSelect(SelectEvent event) {
+
+		System.out.println("Row selected");
+
+		if (listTable != null) {
+			System.out.println("la selection est non null");
+		}
+
 	}
 
 	public void closeDialog() {
@@ -688,6 +830,12 @@ public class JJRequirementBean {
 
 		storeMapUp = null;
 		storeMapDown = null;
+	}
+
+	public void closeImportDialog() {
+		message = null;
+		importDataModel = null;
+		listTable = null;
 	}
 
 	public boolean getDisabledEdit(JJRequirement requirement) {
@@ -729,16 +877,11 @@ public class JJRequirementBean {
 	}
 
 	public void loadData(JJProjectBean jJProjectBean,
-			JJProductBean jJProductBean, JJVersionBean jJVersionBean,
 			JJChapterBean jJChapterBean) {
 
 		project = jJProjectBean.getProject();
-		product = jJProductBean.getProduct();
-		version = jJVersionBean.getVersion();
 
 		jJChapterBean.setProject(project);
-		jJChapterBean.setProduct(product);
-		jJChapterBean.setVersion(version);
 
 		fullTableDataModelList();
 	}
@@ -1345,7 +1488,7 @@ public class JJRequirementBean {
 		List<JJRequirement> list = new ArrayList<JJRequirement>();
 		if (category != null) {
 			list = jJRequirementService.getRequirements(category, project,
-					product, version, null, false, true, true);
+					product, version, null, null, false, true, true);
 		}
 		return list;
 	}
@@ -1551,7 +1694,6 @@ public class JJRequirementBean {
 
 			float compteur = 0;
 			List<JJRequirement> dataList = (List<JJRequirement>) getWrappedData();
-			System.out.println("dataList.size() " + dataList.size());
 
 			List<JJCategory> categoryList = jJCategoryService.getCategories(
 					null, false, true, true);
@@ -1559,52 +1701,84 @@ public class JJRequirementBean {
 			boolean sizeIsOne = false;
 
 			if (categoryId == categoryList.get(0).getId()) {
-				System.out.println("categoryId == categoryList.get(0).getId()");
+
 				for (JJRequirement requirement : dataList) {
-					if (!requirement.getRequirementLinkUp().isEmpty()) {
-						compteur++;
+
+					for (JJRequirement req : requirement.getRequirementLinkUp()) {
+						if (req.getEnabled()) {
+							compteur++;
+							break;
+						}
 					}
+
 				}
 
 				sizeIsOne = true;
 			} else if (categoryId == categoryList.get(categoryList.size() - 1)
 					.getId() && !sizeIsOne) {
-				System.out
-						.println("categoryId == categoryList.get(categoryList.size() - 1)"
-								+ ".getId() && !sizeIsOne");
+
 				for (JJRequirement requirement : dataList) {
-					if (!requirement.getRequirementLinkDown().isEmpty()
-							&& !requirement.getTasks().isEmpty()) {
+					boolean linkUp = false;
+					boolean linkDown = false;
+
+					for (JJRequirement req : requirement.getRequirementLinkUp()) {
+						if (req.getEnabled()) {
+							linkUp = true;
+							break;
+						}
+					}
+
+					for (JJTask task : requirement.getTasks()) {
+						if (task.getEnabled()) {
+							linkDown = true;
+							break;
+						}
+					}
+
+					if (linkUp && linkDown) {
 						compteur++;
-					} else if (!requirement.getRequirementLinkDown().isEmpty()
-							|| !requirement.getTasks().isEmpty()) {
+					} else if (linkUp || linkDown) {
 						compteur += 0.5;
 					}
+
 				}
 			} else {
-				System.out.println("else");
+
 				for (JJRequirement requirement : dataList) {
 
-					if (!requirement.getRequirementLinkDown().isEmpty()
-							&& !requirement.getRequirementLinkUp().isEmpty()) {
+					boolean linkUp = false;
+					boolean linkDown = false;
+
+					for (JJRequirement req : requirement.getRequirementLinkUp()) {
+						if (req.getEnabled()) {
+							linkUp = true;
+							break;
+						}
+					}
+
+					for (JJRequirement req : requirement
+							.getRequirementLinkDown()) {
+						if (req.getEnabled()) {
+							linkDown = true;
+							break;
+						}
+					}
+
+					if (linkUp && linkDown) {
 						compteur++;
-					} else if (!requirement.getRequirementLinkDown().isEmpty()
-							|| !requirement.getRequirementLinkUp().isEmpty()) {
+					} else if (linkUp || linkDown) {
 						compteur += 0.5;
 					}
 				}
 			}
-			System.out.println("compteur " + compteur);
 
 			if (dataList.isEmpty()) {
 				coverageProgress = 0;
 			} else {
-				coverageProgress = (compteur * 100) / dataList.size();
+				coverageProgress = compteur / dataList.size();
 			}
 
-			System.out.println("coverageProgress " + coverageProgress);
-
-			return coverageProgress;
+			return coverageProgress * 100;
 		}
 
 		public void setCoverageProgress(float coverageProgress) {
@@ -1624,25 +1798,33 @@ public class JJRequirementBean {
 			} else {
 				completionProgress = compteur / dataList.size();
 			}
+
 			return completionProgress * 100;
 		}
 
 		private float calculCompletion(JJRequirement requirement) {
 			float compteur = 0;
-
+			int size = 0;
 			Set<JJRequirement> linksUp = requirement.getRequirementLinkUp();
 			for (JJRequirement req : linksUp) {
-				compteur = compteur + calculCompletion(req);
+				if (req.getEnabled()) {
+					compteur = compteur + calculCompletion(req);
+					size++;
+				}
 			}
 
 			Set<JJTask> tasks = requirement.getTasks();
 			int hasTaskCompleted = 0;
 			if (!tasks.isEmpty()) {
-				boolean isCompleted = true;
+				boolean isCompleted = false;
 				for (JJTask task : tasks) {
-					if (!task.getCompletion()) {
-						isCompleted = false;
-						break;
+					if (task.getEnabled()) {
+						if (task.getCompletion()) {
+							isCompleted = true;
+						} else {
+							isCompleted = false;
+							break;
+						}
 					}
 				}
 				if (isCompleted) {
@@ -1650,8 +1832,8 @@ public class JJRequirementBean {
 					hasTaskCompleted = 1;
 				}
 			}
-			if (!linksUp.isEmpty()) {
-				compteur = compteur / (linksUp.size() + hasTaskCompleted);
+			if (size > 0) {
+				compteur = compteur / (size + hasTaskCompleted);
 			}
 
 			return compteur;
@@ -1678,6 +1860,37 @@ public class JJRequirementBean {
 
 		}
 
+		@Override
+		public JJRequirement getRowData(String rowKey) {
+
+			List<JJRequirement> requirements = (List<JJRequirement>) getWrappedData();
+
+			for (JJRequirement requirement : requirements) {
+				if (requirement.getId().equals(rowKey))
+					return requirement;
+			}
+
+			return null;
+		}
+
+		@Override
+		public Object getRowKey(JJRequirement requirement) {
+			return requirement.getId();
+		}
+	}
+
+	public class ImportDataModel extends ListDataModel<JJRequirement> implements
+			SelectableDataModel<JJRequirement> {
+
+		public ImportDataModel() {
+
+		}
+
+		public ImportDataModel(List<JJRequirement> data) {
+			super(data);
+		}
+
+		@SuppressWarnings("unchecked")
 		@Override
 		public JJRequirement getRowData(String rowKey) {
 

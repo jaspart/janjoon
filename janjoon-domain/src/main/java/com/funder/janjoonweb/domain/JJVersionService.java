@@ -6,12 +6,8 @@ import org.springframework.roo.addon.layers.service.RooService;
 
 @RooService(domainTypes = { com.funder.janjoonweb.domain.JJVersion.class })
 public interface JJVersionService {
-	public List<JJVersion> getAllJJVersionsWithProduct(JJProduct product);
-
-	public List<JJVersion> getAllJJVersion();
-
-	public List<JJVersion> getAllJJVersionWithoutProduct();
 
 	// New Generic
-	public List<JJVersion> getVersions(boolean onlyActif, JJProduct product);
+	public List<JJVersion> getVersions(boolean onlyActif, boolean withProduct,
+			JJProduct product);
 }

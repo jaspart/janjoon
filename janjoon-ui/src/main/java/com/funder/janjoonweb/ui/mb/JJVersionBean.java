@@ -14,7 +14,6 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.funder.janjoonweb.domain.JJProduct;
-import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirementService;
 import com.funder.janjoonweb.domain.JJVersion;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
@@ -32,7 +31,11 @@ public class JJVersionBean {
 	}
 
 	private JJVersion version;
+	private JJVersion versionTemp;
+
 	private List<JJVersion> versionList;
+
+	private JJProduct product;
 
 	private JJVersion versionAdmin;
 	private List<JJVersion> versionListTable;
@@ -41,10 +44,10 @@ public class JJVersionBean {
 
 	private boolean disabled = true;
 
-	private JJProduct product;
-	private JJProject project;
-
 	public JJVersion getVersion() {
+		if (version == null) {
+			version = versionTemp;
+		}
 		return version;
 	}
 
@@ -53,16 +56,25 @@ public class JJVersionBean {
 	}
 
 	public List<JJVersion> getVersionList() {
-		versionList = jJVersionService.getAllJJVersionsWithProduct(product);
-		JJVersion version = new JJVersion();
-		version.setId((long) 1234567890);
-		version.setName("Select All");
-		versionList.add(0, version);
+
+		versionList = jJVersionService.getVersions(true, true, product);
+		versionTemp = new JJVersion();
+		versionTemp.setId(Long.valueOf("0"));
+		versionTemp.setName("Select All");
+		versionList.add(0, versionTemp);
 		return versionList;
 	}
 
 	public void setVersionList(List<JJVersion> versionList) {
 		this.versionList = versionList;
+	}
+
+	public JJProduct getProduct() {
+		return product;
+	}
+
+	public void setProduct(JJProduct product) {
+		this.product = product;
 	}
 
 	public JJVersion getVersionAdmin() {
@@ -82,8 +94,8 @@ public class JJVersionBean {
 	}
 
 	public VersionDataModel getVersionDataModel() {
-		versionDataModel = new VersionDataModel(
-				jJVersionService.getAllJJVersionWithoutProduct());
+		versionDataModel = new VersionDataModel(jJVersionService.getVersions(
+				true, false, null));
 		return versionDataModel;
 	}
 
@@ -99,37 +111,10 @@ public class JJVersionBean {
 		this.disabled = disabled;
 	}
 
-	public JJProduct getProduct() {
-		return product;
-	}
-
-	public void setProduct(JJProduct product) {
-		this.product = product;
-	}
-
-	public JJProject getProject() {
-		return project;
-	}
-
-	public void setProject(JJProject project) {
-		this.project = project;
-	}
-
-	public void handleSelect(JJRequirementBean jJRequirementBean) {
-		if (version != null) {
-			// FacesMessage message = new
-			// FacesMessage(FacesMessage.SEVERITY_INFO,
-			// "Version selected: " + version.getName(), "Selection info");
-			//
-			// FacesContext.getCurrentInstance().addMessage(null, message);
-
-			if (jJRequirementBean != null) {
-				jJRequirementBean.setVersion(version);
-			}
-		} else {
-			// IF VERSION IS NULL GET ALL JJREQUIRMENTS WITH PROJECT AND PRODUCT
-			jJRequirementBean.setVersion(version);
-		}
+	public void handleSelectVersion(JJRequirementBean jJRequirementBean,
+			JJChapterBean jJChapterBean) {
+		jJRequirementBean.setVersion(version);
+		jJChapterBean.setVersion(version);
 	}
 
 	public void newVersion() {
@@ -177,6 +162,7 @@ public class JJVersionBean {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	private class VersionDataModel extends ListDataModel<JJVersion> implements
 			SelectableDataModel<JJVersion> {
 

@@ -4,7 +4,6 @@
 package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJMessage;
-import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJTeststep;
 import java.util.Set;
@@ -49,14 +48,6 @@ privileged aspect JJTeststep_Roo_JavaBean {
     
     public void JJTeststep.setTestcase(JJTestcase testcase) {
         this.testcase = testcase;
-    }
-    
-    public JJRequirement JJTeststep.getRequirement() {
-        return this.requirement;
-    }
-    
-    public void JJTeststep.setRequirement(JJRequirement requirement) {
-        this.requirement = requirement;
     }
     
     public Set<JJMessage> JJTeststep.getMessages() {

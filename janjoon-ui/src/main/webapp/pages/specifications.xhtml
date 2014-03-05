@@ -11,7 +11,7 @@
 	<ui:define name="content">
 		<h:form id="specForm">
 			<f:event type="preRenderComponent"
-				listener="#{jJRequirementBean.loadData(jJProjectBean,jJProductBean,jJVersionBean,jJChapterBean)}" />
+				listener="#{jJRequirementBean.loadData(jJProjectBean,jJChapterBean)}" />
 			<table>
 				<tr>
 					<ui:repeat value="#{jJRequirementBean.categoryList}" var="button">
@@ -26,6 +26,11 @@
 							id="template" value="#{jJRequirementBean.outputTemplateHeader}" /></td>
 				</tr>
 				<tr />
+				<tr>
+					<td><p:commandButton id="import" value="Import"
+							actionListener="#{jJRequirementBean.loadImport()}"
+							update=":importDialog" oncomplete="importDialogWidget.show()" /></td>
+				</tr>
 				<tr>
 					<ui:repeat value="#{jJRequirementBean.tableDataModelList}"
 						var="tableDataModel" varStatus="status">
@@ -324,7 +329,7 @@
 								<p:selectBooleanCheckbox
 									value="#{jJRequirementBean.initiateTask}"
 									disabled="#{jJRequirementBean.disabledInitTask}">
-									<p:ajax listener="#{jJRequirementBean.initiateTask()}"
+									<p:ajax listener="#{jJRequirementBean.loadTask()}"
 										update="outputPanel completion" />
 								</p:selectBooleanCheckbox>
 							</p:column>
@@ -347,7 +352,7 @@
 								<p:selectBooleanCheckbox id="completion"
 									value="#{jJRequirementBean.task.completion}"
 									disabled="#{jJRequirementBean.disabledTask}">
-									<p:ajax listener="#{jJRequirementBean.completeTask()}" />
+									<p:ajax listener="#{jJRequirementBean.checkCompleteTask()}" />
 								</p:selectBooleanCheckbox>
 							</p:column>
 
@@ -514,6 +519,38 @@
 				</h:form>
 			</p:outputPanel>
 		</p:confirmDialog>
+
+		<p:dialog id="importDialog" header="#{jJRequirementBean.message}"
+			modal="true" widgetVar="importDialogWidget" dynamic="true"
+			resizable="false">
+			<p:ajax event="close" update=":specForm"
+				listener="#{jJRequirementBean.closeImportDialog}" />
+			<p:outputPanel id="importDialogPanel">
+				<h:form id="importDialogForm">
+					<p:growl id="msg" />
+					
+						<p:dataTable id="importDataTable" var="req"
+							value="#{jJRequirementBean.importDataModel}" paginator="true"
+							rows="4" selection="#{jJRequirementBean.listTable}">
+							<p:ajax event="rowSelectCheckbox"
+								listener="#{jJRequirementBean.onRowSelect}" />
+							<f:facet name="header">  
+            							Requirement Import List  
+        							</f:facet>
+							<p:column selectionMode="multiple" style="width:2%" />
+							<p:column headerText="Name" filterBy="name"
+								filterMatchMode="startsWith" style="width:25%">  
+										#{req.name}
+									</p:column>
+						</p:dataTable>
+					
+					<p:panelGrid style="margin-top:10px">
+						
+					
+					</p:panelGrid>
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
 
 	</ui:define>
 </ui:composition>

@@ -58,6 +58,7 @@ public class JJProductBean {
 	}
 
 	private JJProduct product;
+	private JJProduct productTemp;
 	private List<JJProduct> productList;
 
 	private JJProduct productAdmin;
@@ -66,11 +67,15 @@ public class JJProductBean {
 	private JJContact productManager;
 	private List<JJContact> productManagerList;
 
-	private boolean disabled = true;
 	private JJProject project;
+
 	private String message;
 
 	public JJProduct getProduct() {
+		if (product == null) {
+			product = productTemp;
+		}
+
 		return product;
 	}
 
@@ -79,15 +84,12 @@ public class JJProductBean {
 	}
 
 	public List<JJProduct> getProductList() {
+		productList = jJProductService.getProducts(true);
 
-		// productList = jJChapterService
-		// .getAllJJProductInJJChapterWithJJProject(project);
-		productList = jJProductService.getAllJJProducts();
-
-		JJProduct product = new JJProduct();
-		product.setId((long) 1234567890);
-		product.setName("Select All");
-		productList.add(0, product);
+		productTemp = new JJProduct();
+		productTemp.setId(Long.valueOf("0"));
+		productTemp.setName("Select All");
+		productList.add(0, productTemp);
 		return productList;
 	}
 
@@ -104,7 +106,7 @@ public class JJProductBean {
 	}
 
 	public List<JJProduct> getProductListTable() {
-		productListTable = jJProductService.getAllJJProducts();
+		productListTable = jJProductService.getProducts(true);
 		return productListTable;
 	}
 
@@ -139,14 +141,6 @@ public class JJProductBean {
 		this.productManagerList = productManagerList;
 	}
 
-	public boolean isDisabled() {
-		return disabled;
-	}
-
-	public void setDisabled(boolean disabled) {
-		this.disabled = disabled;
-	}
-
 	public JJProject getProject() {
 		return project;
 	}
@@ -164,41 +158,26 @@ public class JJProductBean {
 	}
 
 	public void handleSelectProduct(JJVersionBean jJVersionBean,
-			JJProjectBean jJProjectBean, JJRequirementBean jJRequirementBean,
-			JJChapterBean jJChapterBean) {
+			JJRequirementBean jJRequirementBean, JJChapterBean jJChapterBean) {
+
+		jJRequirementBean.setProduct(product);
+
+		jJChapterBean.setProduct(product);
+
+		jJChapterBean.setVersion(null);
 
 		if (product != null) {
 
-			// FacesMessage message = new
-			// FacesMessage(FacesMessage.SEVERITY_INFO,
-			// "Product selected: " + product.getName(), "Selection info");
-			// FacesContext.getCurrentInstance().addMessage(null, message);
-
-			// Requete getReqwithProject&Product
-			if (jJVersionBean != null) {
-				jJVersionBean.setDisabled(false);
-				jJVersionBean.setProduct(null);
-				jJVersionBean.setProduct(product);
-				jJVersionBean.setProject(project);
-			}
-
-			if (jJRequirementBean != null) {
-
-				jJRequirementBean.setProduct(product);
-			}
-			if (jJChapterBean != null)
-				jJChapterBean.setProduct(product);
+			jJVersionBean.setDisabled(false);
+			jJVersionBean.setProduct(product);
+			jJVersionBean.setVersion(null);
 
 		} else {
-			// IF PRODUCT IS NULL GET ALL JJREQUIRMENTS WITH PROJECT
 
-			if (jJVersionBean != null) {
-				jJVersionBean.setDisabled(true);
-				jJVersionBean.setProduct(null);
-			}
+			jJVersionBean.setDisabled(true);
+			jJVersionBean.setProduct(null);
+			jJVersionBean.setVersion(null);
 
-			jJRequirementBean.setProduct(product);
-			jJChapterBean.setProduct(product);
 		}
 	}
 

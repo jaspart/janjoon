@@ -82,7 +82,7 @@ public class JJPermissionBean {
 	}
 
 	public List<JJProject> getProjectList() {
-		projectList = jJProjectService.getAllJJProjects();
+		projectList = jJProjectService.getProjects(true);
 		return projectList;
 	}
 
@@ -99,7 +99,7 @@ public class JJPermissionBean {
 	}
 
 	public List<JJProduct> getProductList() {
-		productList = jJProductService.getAllJJProducts();
+		productList = jJProductService.getProducts(true);
 		return productList;
 	}
 

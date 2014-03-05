@@ -269,7 +269,7 @@ public class JJProjectBean {
 			}
 		}
 
-		if (jJVersionService.getAllJJVersion().isEmpty()) {
+		if (jJVersionService.getVersions(true, true, null).isEmpty()) {
 			JJVersion version;
 			for (int i = 0; i < 4; i++) {
 				version = new JJVersion();
@@ -711,7 +711,7 @@ public class JJProjectBean {
 
 		}
 
-		if (jJProductService.getAllJJProducts().isEmpty()) {
+		if (jJProductService.getProducts(true).isEmpty()) {
 			JJContact manager = jJContactService
 					.getJJContactWithEmail("admin@gmail.com");
 			JJProduct product;
@@ -724,8 +724,8 @@ public class JJProjectBean {
 				product.setExtname("ProductExtName " + i);
 				product.setManager(manager);
 
-				List<JJVersion> jJVersionList = jJVersionService
-						.getAllJJVersion();
+				List<JJVersion> jJVersionList = jJVersionService.getVersions(
+						true, true, null);
 
 				Set<JJVersion> versions = new HashSet<JJVersion>();
 
@@ -747,7 +747,7 @@ public class JJProjectBean {
 			}
 		}
 
-		if (jJProjectService.getAllJJProjects().isEmpty()) {
+		if (jJProjectService.getProjects(true).isEmpty()) {
 			JJContact manager = jJContactService
 					.getJJContactWithEmail("admin@gmail.com");
 			JJProject project;
@@ -773,7 +773,7 @@ public class JJProjectBean {
 
 		/*** End Temporary ***/
 
-		projectList = jJProjectService.getAllJJProjects();
+		projectList = jJProjectService.getProjects(true);
 		return projectList;
 	}
 
@@ -790,7 +790,7 @@ public class JJProjectBean {
 	}
 
 	public List<JJProject> getProjectListTable() {
-		projectListTable = jJProjectService.getAllJJProjects();
+		projectListTable = jJProjectService.getProjects(true);
 		return projectListTable;
 	}
 
@@ -839,34 +839,20 @@ public class JJProjectBean {
 			JJVersionBean jJVersionBean, JJRequirementBean jJRequirementBean,
 			JJChapterBean jJChapterBean, JJTestcaseBean jJTestcaseBean,
 			JJTeststepBean jJTeststepBean, JJBugBean jJBugBean) {
-		if (project != null) {
-			//
-			// FacesMessage message = new
-			// FacesMessage(FacesMessage.SEVERITY_INFO,
-			// "Project selected: " + project.getName(), "Selection info");
-			//
-			// FacesContext.getCurrentInstance().addMessage(null, message);
 
-			jJProductBean.setDisabled(false);
-			jJProductBean.setProduct(null);
-			jJProductBean.setProject(project);
+		
+		jJProductBean.setProject(project);
 
-			jJVersionBean.setDisabled(true);
-			jJVersionBean.setProduct(null);
-			jJVersionBean.setVersion(null);
+		jJRequirementBean.setProject(project);
 
-			jJRequirementBean.setProject(project);
-			jJChapterBean.setProject(project);
+		jJChapterBean.setProject(project);
 
-			jJChapterBean.setProject(project);
+		jJTestcaseBean.setCurrentProject(project);
+		jJTestcaseBean.setRendered(false);
+		jJTestcaseBean.initTestCaseParameter(jJTeststepBean);
 
-			jJTestcaseBean.setCurrentProject(project);
-			jJTestcaseBean.setRendered(false);
-			jJTestcaseBean.initTestCaseParameter(jJTeststepBean);
+		jJBugBean.setCurrentProject(project);
 
-			jJBugBean.setCurrentProject(project);
-
-		}
 	}
 
 	public void newProject() {

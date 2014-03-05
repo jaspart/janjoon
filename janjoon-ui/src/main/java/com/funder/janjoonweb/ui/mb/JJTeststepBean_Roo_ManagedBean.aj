@@ -6,15 +6,12 @@ package com.funder.janjoonweb.ui.mb;
 import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJContactService;
 import com.funder.janjoonweb.domain.JJMessage;
-import com.funder.janjoonweb.domain.JJRequirement;
-import com.funder.janjoonweb.domain.JJRequirementService;
 import com.funder.janjoonweb.domain.JJTestcase;
 import com.funder.janjoonweb.domain.JJTestcaseService;
 import com.funder.janjoonweb.domain.JJTeststep;
 import com.funder.janjoonweb.domain.JJTeststepService;
 import com.funder.janjoonweb.ui.mb.JJTeststepBean;
 import com.funder.janjoonweb.ui.mb.converter.JJContactConverter;
-import com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJTestcaseConverter;
 import com.funder.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
@@ -58,9 +55,6 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
     
     @Autowired
     JJTestcaseService JJTeststepBean.jJTestcaseService;
-    
-    @Autowired
-    JJRequirementService JJTeststepBean.jJRequirementService;
     
     private String JJTeststepBean.name = "JJTeststeps";
     
@@ -410,30 +404,6 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         testcaseCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testcaseCreateInputMessage);
         
-        OutputLabel requirementCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        requirementCreateOutput.setFor("requirementCreateInput");
-        requirementCreateOutput.setId("requirementCreateOutput");
-        requirementCreateOutput.setValue("Requirement:");
-        htmlPanelGrid.getChildren().add(requirementCreateOutput);
-        
-        AutoComplete requirementCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        requirementCreateInput.setId("requirementCreateInput");
-        requirementCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.requirement}", JJRequirement.class));
-        requirementCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTeststepBean.completeRequirement}", List.class, new Class[] { String.class }));
-        requirementCreateInput.setDropdown(true);
-        requirementCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "requirement", String.class));
-        requirementCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{requirement.name} #{requirement.description} #{requirement.creationDate} #{requirement.updatedDate}", String.class));
-        requirementCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{requirement}", JJRequirement.class));
-        requirementCreateInput.setConverter(new JJRequirementConverter());
-        requirementCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(requirementCreateInput);
-        
-        Message requirementCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        requirementCreateInputMessage.setId("requirementCreateInputMessage");
-        requirementCreateInputMessage.setFor("requirementCreateInput");
-        requirementCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(requirementCreateInputMessage);
-        
         HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesCreateOutput.setId("messagesCreateOutput");
         messagesCreateOutput.setValue("Messages:");
@@ -711,30 +681,6 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         testcaseEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testcaseEditInputMessage);
         
-        OutputLabel requirementEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        requirementEditOutput.setFor("requirementEditInput");
-        requirementEditOutput.setId("requirementEditOutput");
-        requirementEditOutput.setValue("Requirement:");
-        htmlPanelGrid.getChildren().add(requirementEditOutput);
-        
-        AutoComplete requirementEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        requirementEditInput.setId("requirementEditInput");
-        requirementEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.requirement}", JJRequirement.class));
-        requirementEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTeststepBean.completeRequirement}", List.class, new Class[] { String.class }));
-        requirementEditInput.setDropdown(true);
-        requirementEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "requirement", String.class));
-        requirementEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{requirement.name} #{requirement.description} #{requirement.creationDate} #{requirement.updatedDate}", String.class));
-        requirementEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{requirement}", JJRequirement.class));
-        requirementEditInput.setConverter(new JJRequirementConverter());
-        requirementEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(requirementEditInput);
-        
-        Message requirementEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        requirementEditInputMessage.setId("requirementEditInputMessage");
-        requirementEditInputMessage.setFor("requirementEditInput");
-        requirementEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(requirementEditInputMessage);
-        
         HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesEditOutput.setId("messagesEditOutput");
         messagesEditOutput.setValue("Messages:");
@@ -891,16 +837,6 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         testcaseValue.setConverter(new JJTestcaseConverter());
         htmlPanelGrid.getChildren().add(testcaseValue);
         
-        HtmlOutputText requirementLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementLabel.setId("requirementLabel");
-        requirementLabel.setValue("Requirement:");
-        htmlPanelGrid.getChildren().add(requirementLabel);
-        
-        HtmlOutputText requirementValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.requirement}", JJRequirement.class));
-        requirementValue.setConverter(new JJRequirementConverter());
-        htmlPanelGrid.getChildren().add(requirementValue);
-        
         HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesLabel.setId("messagesLabel");
         messagesLabel.setValue("Messages:");
@@ -953,17 +889,6 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
             String jJTestcaseStr = String.valueOf(jJTestcase.getName() +  " "  + jJTestcase.getDescription() +  " "  + jJTestcase.getCreationDate() +  " "  + jJTestcase.getUpdatedDate());
             if (jJTestcaseStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJTestcase);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<JJRequirement> JJTeststepBean.completeRequirement(String query) {
-        List<JJRequirement> suggestions = new ArrayList<JJRequirement>();
-        for (JJRequirement jJRequirement : jJRequirementService.findAllJJRequirements()) {
-            String jJRequirementStr = String.valueOf(jJRequirement.getName() +  " "  + jJRequirement.getDescription() +  " "  + jJRequirement.getCreationDate() +  " "  + jJRequirement.getUpdatedDate());
-            if (jJRequirementStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJRequirement);
             }
         }
         return suggestions;

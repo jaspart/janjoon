@@ -20,34 +20,6 @@ public class JJProductServiceImpl implements JJProductService {
 		this.entityManager = entityManager;
 	}
 
-	@Override
-	public List<JJProduct> getAllJJProducts() {
-
-		// Query query = entityManager
-		// .createQuery("select s from JJProduct s where s.enabled=:value");
-		// query.setParameter("value", true);
-		//
-		// @SuppressWarnings("unchecked")
-		// List<JJProduct> list = query.getResultList();
-		// return list;
-
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJProduct> criteriaQuery = criteriaBuilder
-				.createQuery(JJProduct.class);
-
-		Root<JJProduct> from = criteriaQuery.from(JJProduct.class);
-
-		CriteriaQuery<JJProduct> select = criteriaQuery.select(from);
-
-		Predicate predicate = criteriaBuilder.equal(from.get("enabled"), true);
-
-		select.where(predicate);
-
-		TypedQuery<JJProduct> result = entityManager.createQuery(select);
-		return result.getResultList();
-
-	}
-
 	// New Generic
 
 	@Override

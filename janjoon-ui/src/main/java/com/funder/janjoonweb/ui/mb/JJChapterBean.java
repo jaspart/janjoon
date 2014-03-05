@@ -356,7 +356,7 @@ public class JJChapterBean {
 
 		List<JJRequirement> jJRequirementList = jJRequirementService
 				.getRequirements(category, project, product, version, null,
-						true, true, false);
+						null, true, true, false);
 
 		for (JJRequirement requirement : jJRequirementList) {
 			TreeNode node = new DefaultTreeNode("R-" + requirement.getId()
