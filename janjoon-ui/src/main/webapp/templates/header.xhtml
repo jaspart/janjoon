@@ -3,12 +3,15 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">>
 <ui:composition>
 	<title>#{applicationBean.appName}</title>
 	<h:outputStylesheet library="css" name="standard.css" />
 	<h:outputScript library="js" name="calendar.js" />
-	<h:form prependId="false" id="headerForm">
+	
+	<h:form prependId="false" id="headerForm">		
 
 		<h:panelGrid id="panelMenu" columns="3" cellpadding="2">
 			<p:tabMenu id="tabMenu" name="content">
@@ -37,7 +40,11 @@
 					url="/pages/administration.jsf?faces-redirect=true"
 					icon="ui-icon-key" update=":contentGrid" />
 			</p:tabMenu>
-			<h:panelGrid columns="2" cellpadding="2" align="right">
+			
+			<h:panelGrid columns="2" cellpadding="2" align="right">	
+			<h:outputLink value="#{request.contextPath}/j_spring_security_logout" rendered="#{jJLoginBean.enable}" >Logout2 :</h:outputLink>	
+			<h:outputText value="#{jJLoginBean.username}" rendered="#{jJLoginBean.enable}"></h:outputText>	
+				
 				<h:outputText value="Project :" />
 				<p:selectOneMenu id="projectSelectOneMenu"
 					value="#{jJProjectBean.project}" panelStyle="width:150px"

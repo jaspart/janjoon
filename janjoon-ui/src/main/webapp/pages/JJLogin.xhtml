@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../templates/layout.xhtml">
+	<ui:define name="title">
+		JanJoon Login
+	</ui:define>
+	<ui:define name="content">
+	<center>
+		 <h:message for="login" styleClass="alert alert-error"/>
+                <div>
+                    <h:form id="login" method="post">
+                        <h:outputLabel for="username" value="Username"/>
+                        <h:inputText id="username" value="#{jJLoginBean.username}" required="true" requiredMessage="userName is required"/>
+                        <p:message for="username" ></p:message>
+                        <h:outputLabel for="password" value="Password "/>
+                        <h:inputSecret id="password" value="#{jJLoginBean.password}" required="true" requiredMessage="PassWord is required"/>
+                        <p:message for="password" ></p:message>                        
+                        <h:commandButton value="Login" action="#{jJLoginBean.login}" />
+                       
+                    </h:form>
+                </div>
+                </center>
+	</ui:define>
+</ui:composition>
+</html>

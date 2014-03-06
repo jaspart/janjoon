@@ -19,4 +19,18 @@
     <factory>
         <exception-handler-factory>com.funder.janjoonweb.ui.mb.util.ViewExpiredExceptionExceptionHandlerFactory</exception-handler-factory>
     </factory>
+    <navigation-rule>
+        <from-view-id>/pages/JJLogin.xhtml</from-view-id>
+        <navigation-case>
+           <from-action>#{jJLoginBean.login}</from-action>
+           <from-outcome>success</from-outcome>
+           <to-view-id>/pages/main.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+           <from-action>#{jJLoginBean.login}</from-action>
+           <from-outcome>fail</from-outcome>
+           <to-view-id>/pages/JJLogin.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
 </faces-config>

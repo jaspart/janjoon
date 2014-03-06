@@ -14,7 +14,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<roo.version>1.2.5.RELEASE</roo.version>
 		<slf4j.version>1.7.5</slf4j.version>
-		<spring.version>3.1.4.RELEASE</spring.version>
+		<spring.version>3.2.8.RELEASE</spring.version>
+		<spring-sec.version>3.2.1.RELEASE</spring-sec.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -57,8 +58,12 @@
 		</pluginRepository>
 	</pluginRepositories>
 	<dependencies>
-		
-		<!--Git dependencies -->
+		<!--Git&&SVN dependencies -->
+		<dependency>
+			<groupId>org.tmatesoft.svnkit</groupId>
+			<artifactId>svnkit</artifactId>
+			<version>1.7.8</version>
+		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jgit</groupId>
 			<artifactId>org.eclipse.jgit</artifactId>
@@ -169,20 +174,25 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<!-- Spring Security -->
-		<dependency>
+				<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-			<version>${spring.version}</version>
+			<version>${spring-sec.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>${spring-sec.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
-			<version>${spring.version}</version>
+			<version>${spring-sec.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
-			<version>${spring.version}</version>
+			<version>${spring-sec.version}</version>
 		</dependency>
 		<!-- MyFaces dependencies -->
 		<dependency>
@@ -206,11 +216,6 @@
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
 			<version>4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.primefaces</groupId>
-			<artifactId>primefaces-mobile</artifactId>
-			<version>0.9.4</version>
 		</dependency>
 		<!-- PrimeFaces Theme dependencies -->
 		<dependency>

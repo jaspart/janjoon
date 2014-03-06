@@ -96,6 +96,11 @@ public class JJContactBean {
 
 		}
 	}
+	
+	public JJContact getContactByEmail(String email)
+	{
+		return jJContactService.getJJContactWithEmail(email);
+	}
 
 	public void save(JJPermissionBean jJPermissionBean) {
 		System.out.println("SAVING Contact...");
