@@ -38,7 +38,6 @@ field reference --fieldName product --type ~.JJProduct
 field reference --fieldName parent --type ~.domain.JJChapter
 field set --fieldName chapters --type ~.domain.JJChapter --cardinality ONE_TO_MANY --mappedBy parent --fetch LAZY
 field set --fieldName requirements --type ~.JJRequirement --cardinality ONE_TO_MANY --mappedBy chapter --fetch LAZY
-field set --fieldName testcases --type ~.JJTestcase --cardinality ONE_TO_MANY --mappedBy chapter --fetch LAZY
 
 #######################
 # focus --class ~.JJPhase
@@ -223,7 +222,7 @@ field string --fieldName resultat --sizeMax 100
 field reference --fieldName product --type ~.JJProduct
 field reference --fieldName category --type ~.JJCategory
 field reference --fieldName chapter --type ~.JJChapter
-field reference --fieldName requirement --type ~.JJRequirement
+field reference --fieldName requirement --type ~.JJRequirement --notNull
 field reference --fieldName sprint --type ~.JJSprint
 field set --fieldName softwares --type ~.JJSoftware --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
 field set --fieldName hardwares --type ~.JJHardware --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
@@ -241,7 +240,6 @@ field string --fieldName actionstep --sizeMax 100
 field string --fieldName resultat --sizeMax 100
 field boolean --fieldName passed
 field reference --fieldName testcase --type ~.JJTestcase
-field reference --fieldName requirement --type ~.JJRequirement
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy teststep --fetch LAZY
 
 #######################

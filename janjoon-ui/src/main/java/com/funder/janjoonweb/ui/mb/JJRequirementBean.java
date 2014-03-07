@@ -7,13 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.ListDataModel;
 
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.SelectableDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
@@ -48,7 +49,7 @@ public class JJRequirementBean {
 
 	private List<JJCategory> categoryList;
 
-	private List<RequirementDataModel> tableDataModelList;
+	private List<CategoryDataModel> tableDataModelList;
 
 	private JJRequirement requirement;
 
@@ -146,12 +147,11 @@ public class JJRequirementBean {
 		this.categoryList = categoryList;
 	}
 
-	public List<RequirementDataModel> getTableDataModelList() {
+	public List<CategoryDataModel> getTableDataModelList() {
 		return tableDataModelList;
 	}
 
-	public void setTableDataModelList(
-			List<RequirementDataModel> tableDataModelList) {
+	public void setTableDataModelList(List<CategoryDataModel> tableDataModelList) {
 		this.tableDataModelList = tableDataModelList;
 	}
 
@@ -469,9 +469,11 @@ public class JJRequirementBean {
 	private JJStatus importStatus;
 	private List<JJStatus> importStatusList;
 
-	private ImportDataModel importDataModel;
+	private FormatDataModel formatDataModel;
 
-	private List<JJRequirement> listTable;
+	private List<ImportFormat> selectedFormats;
+
+	private boolean disableImportVersion;
 
 	public JJProject getImportProject() {
 		return importProject;
@@ -499,7 +501,14 @@ public class JJRequirementBean {
 	}
 
 	public List<JJProduct> getImportProductList() {
+
 		importProductList = jJProductService.getProducts(true);
+
+		JJProduct product = new JJProduct();
+		product.setId(Long.valueOf("0"));
+		product.setName("Select All");
+		importProductList.add(0, product);
+
 		return importProductList;
 	}
 
@@ -516,7 +525,15 @@ public class JJRequirementBean {
 	}
 
 	public List<JJVersion> getImportVersionList() {
-		importVersionList = jJVersionService.getVersions(true, true, null);
+
+		importVersionList = jJVersionService.getVersions(true, true,
+				importProduct);
+
+		JJVersion version = new JJVersion();
+		version.setId(Long.valueOf("0"));
+		version.setName("Select All");
+		importVersionList.add(0, version);
+
 		return importVersionList;
 	}
 
@@ -533,6 +550,14 @@ public class JJRequirementBean {
 	}
 
 	public List<JJCategory> getImportCategoryList() {
+		importCategoryList = jJCategoryService.getCategories(null, false, true,
+				true);
+
+		// JJCategory category = new JJCategory();
+		// category.setId(Long.valueOf("0"));
+		// category.setName("Select All");
+		// importCategoryList.add(0, category);
+
 		return importCategoryList;
 	}
 
@@ -549,6 +574,13 @@ public class JJRequirementBean {
 	}
 
 	public List<JJStatus> getImportStatusList() {
+		List<String> names = new ArrayList<String>();
+		names.add("RUNNING");
+		names.add("FAILED");
+		names.add("PASSED");
+
+		importStatusList = jJStatusService.getStatus(true, names, true);
+
 		return importStatusList;
 	}
 
@@ -556,22 +588,29 @@ public class JJRequirementBean {
 		this.importStatusList = importStatusList;
 	}
 
-	public ImportDataModel getImportDataModel() {
-		importDataModel = new ImportDataModel(
-				jJRequirementService.findAllJJRequirements());
-		return importDataModel;
+	public FormatDataModel getFormatDataModel() {
+
+		return formatDataModel;
 	}
 
-	public void setImportDataModel(ImportDataModel importDataModel) {
-		this.importDataModel = importDataModel;
+	public void setFormatDataModel(FormatDataModel formatDataModel) {
+		this.formatDataModel = formatDataModel;
 	}
 
-	public List<JJRequirement> getListTable() {
-		return listTable;
+	public List<ImportFormat> getSelectedFormats() {
+		return selectedFormats;
 	}
 
-	public void setListTable(List<JJRequirement> listTable) {
-		this.listTable = listTable;
+	public void setSelectedFormats(List<ImportFormat> selectedFormats) {
+		this.selectedFormats = selectedFormats;
+	}
+
+	public boolean getDisableImportVersion() {
+		return disableImportVersion;
+	}
+
+	public void setDisableImportVersion(boolean disableImportVersion) {
+		this.disableImportVersion = disableImportVersion;
 	}
 
 	public void newRequirement(long id) {
@@ -687,7 +726,7 @@ public class JJRequirementBean {
 
 		System.out.println("RELEASE Requirements ...");
 		List<JJRequirement> list = new ArrayList<JJRequirement>();
-		for (RequirementDataModel requirementDataModel : tableDataModelList) {
+		for (CategoryDataModel requirementDataModel : tableDataModelList) {
 			if (requirementDataModel.getCategoryId() == id) {
 				List<JJRequirement> temp = (List<JJRequirement>) requirementDataModel
 						.getWrappedData();
@@ -758,8 +797,112 @@ public class JJRequirementBean {
 
 	}
 
-	public void importRequirement() {
+	public void importRequirement(JJChapterBean jJChapterBean) {
+		SortedMap<Integer, Object> elements = null;
+		SortedMap<Integer, Integer> chapters = new TreeMap<Integer, Integer>();
 
+		System.out.println("In import action");
+
+		System.out.println("selectedFormats.size() " + selectedFormats.size());
+
+		for (ImportFormat format : selectedFormats) {
+
+			JJStatus status = jJStatusService.getJJStatusWithName("NEW");
+
+			JJRequirement requirement = format.getRequirement();
+
+			JJRequirement importRequirement = new JJRequirement();
+
+			importRequirement.setName(requirement.getName() + "(i)");
+			importRequirement.setDescription(requirement.getDescription());
+			importRequirement.setCreationDate(requirement.getCreationDate());
+			importRequirement.setUpdatedDate(new Date());
+
+			importRequirement.setProject(project);
+			importRequirement.setProduct(importProduct);
+			importRequirement.setVersioning(importVersion);
+			importRequirement.setEnabled(true);
+			importRequirement.setCategory(requirement.getCategory());
+			importRequirement.setNote(requirement.getNote());
+			importRequirement.setStatus(status);
+
+			JJChapter chapter = requirement.getChapter();
+
+			if (chapter == null) {
+				importRequirement.setChapter(chapter);
+				importRequirement.setOrdering(null);
+			} else {
+
+				if (format.getCopyChapter()) {
+					JJChapter importChapter = null;
+
+					if (chapters.containsKey(Integer.valueOf(chapter.getId()
+							.intValue()))) {
+
+						long id = chapters.get(
+								Integer.valueOf(chapter.getId().intValue()))
+								.longValue();
+
+						importChapter = jJChapterService.findJJChapter(id);
+
+					} else {
+
+						importChapter = new JJChapter();
+						importChapter.setName(chapter.getName() + "(i)");
+						importChapter.setDescription(chapter.getDescription());
+						importChapter
+								.setCreationDate(chapter.getCreationDate());
+						importChapter.setEnabled(true);
+						importChapter.setCategory(chapter.getCategory());
+						importChapter.setProject(project);
+						importChapter.setProduct(chapter.getProduct());
+						importChapter.setUpdatedDate(new Date());
+						importChapter.setParent(null);
+
+						elements = jJChapterBean.getSortedElements(null, null,
+								false);
+						if (elements.isEmpty()) {
+							importChapter.setOrdering(0);
+						} else {
+							importChapter.setOrdering(elements.lastKey() + 1);
+						}
+
+						jJChapterService.saveJJChapter(importChapter);
+
+						chapters.put(Integer
+								.valueOf(chapter.getId().intValue()), Integer
+								.valueOf(importChapter.getId().intValue()));
+
+					}
+
+					importRequirement.setChapter(importChapter);
+					elements = jJChapterBean.getSortedElements(importChapter,
+							null, false);
+					if (elements.isEmpty()) {
+						importRequirement.setOrdering(0);
+					} else {
+						importRequirement.setOrdering(elements.lastKey() + 1);
+					}
+
+				} else {
+					importRequirement.setChapter(chapter);
+					elements = jJChapterBean.getSortedElements(chapter, null,
+							false);
+					if (elements.isEmpty()) {
+						importRequirement.setOrdering(0);
+					} else {
+						importRequirement.setOrdering(elements.lastKey() + 1);
+					}
+				}
+			}
+
+			jJRequirementService.saveJJRequirement(importRequirement);
+
+		}
+
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("dialogWidget.hide()");
+		closeDialogImport();
 	}
 
 	public void loadTask() {
@@ -783,19 +926,73 @@ public class JJRequirementBean {
 		System.out.println("task.getCompletion() " + task.getCompletion());
 	}
 
-	public void loadImport() {
-		System.out.println("Import Requirement");
-		message = "Import Requirement";
-	}
+	public void fillTableImport() {
+		List<ImportFormat> data = new ArrayList<ImportFormat>();
 
-	public void onRowSelect(SelectEvent event) {
-
-		System.out.println("Row selected");
-
-		if (listTable != null) {
-			System.out.println("la selection est non null");
+		int i = 0;
+		for (JJRequirement requirement : jJRequirementService.getRequirements(
+				importCategory, importProject, importProduct, importVersion,
+				importStatus, null, false, true, true)) {
+			data.add(new ImportFormat(String.valueOf(i), requirement, false,
+					false));
+			i++;
 		}
 
+		formatDataModel = new FormatDataModel(data);
+	}
+
+	public void loadImportFormat() {
+		System.out.println("Import Requirement");
+		message = "Import Requirement";
+
+		importProject = project;
+		importProduct = product;
+		importVersion = version;
+
+		if (importProduct == null) {
+			disableImportVersion = true;
+			importVersion = null;
+		} else {
+			disableImportVersion = false;
+		}
+
+		fillTableImport();
+
+		System.out.println("End");
+
+	}
+
+	public void handelSelectImportProject() {
+		fillTableImport();
+		selectedFormats = null;
+	}
+
+	public void handelSelectImportProduct() {
+		importVersion = null;
+		if (importProduct == null) {
+			disableImportVersion = true;
+
+		} else {
+			disableImportVersion = false;
+
+		}
+		fillTableImport();
+		selectedFormats = null;
+	}
+
+	public void handelSelectImportVersion() {
+		fillTableImport();
+		selectedFormats = null;
+	}
+
+	public void handelSelectImportCategory() {
+		fillTableImport();
+		selectedFormats = null;
+	}
+
+	public void handelSelectImportStatus() {
+		fillTableImport();
+		selectedFormats = null;
 	}
 
 	public void closeDialog() {
@@ -832,10 +1029,20 @@ public class JJRequirementBean {
 		storeMapDown = null;
 	}
 
-	public void closeImportDialog() {
+	public void closeDialogImport() {
 		message = null;
-		importDataModel = null;
-		listTable = null;
+		formatDataModel = null;
+		selectedFormats = null;
+		importCategory = null;
+		importProduct = null;
+		importProject = null;
+		importVersion = null;
+		importStatus = null;
+		importCategoryList = null;
+		importProductList = null;
+		importProjectList = null;
+		importVersionList = null;
+		importStatusList = null;
 	}
 
 	public boolean getDisabledEdit(JJRequirement requirement) {
@@ -977,7 +1184,7 @@ public class JJRequirementBean {
 					getRequirementsList(highCategory, product, version));
 		}
 
-		tableDataModelList = new ArrayList<RequirementDataModel>();
+		tableDataModelList = new ArrayList<CategoryDataModel>();
 
 		for (Map.Entry<String, List<JJRequirement>> entry : mapTable.entrySet()) {
 
@@ -990,7 +1197,7 @@ public class JJRequirementBean {
 			JJCategory category = jJCategoryService.findJJCategory(categoryId);
 			String nameDataModel = category.getName();
 
-			RequirementDataModel requirementDataModel = new RequirementDataModel(
+			CategoryDataModel requirementDataModel = new CategoryDataModel(
 					value, categoryId, nameDataModel);
 
 			tableDataModelList.add(requirementDataModel);
@@ -1662,7 +1869,7 @@ public class JJRequirementBean {
 	}
 
 	@SuppressWarnings("unchecked")
-	public class RequirementDataModel extends ListDataModel<JJRequirement>
+	public class CategoryDataModel extends ListDataModel<JJRequirement>
 			implements SelectableDataModel<JJRequirement> {
 
 		private String nameDataModel;
@@ -1852,7 +2059,7 @@ public class JJRequirementBean {
 			this.filtredRequirements = filtredRequirements;
 		}
 
-		public RequirementDataModel(List<JJRequirement> data, long categoryId,
+		public CategoryDataModel(List<JJRequirement> data, long categoryId,
 				String nameDataModel) {
 			super(data);
 			this.categoryId = categoryId;
@@ -1879,34 +2086,89 @@ public class JJRequirementBean {
 		}
 	}
 
-	public class ImportDataModel extends ListDataModel<JJRequirement> implements
-			SelectableDataModel<JJRequirement> {
+	private class FormatDataModel extends ListDataModel<ImportFormat> implements
+			SelectableDataModel<ImportFormat> {
 
-		public ImportDataModel() {
-
+		public FormatDataModel() {
 		}
 
-		public ImportDataModel(List<JJRequirement> data) {
+		public FormatDataModel(List<ImportFormat> data) {
 			super(data);
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public JJRequirement getRowData(String rowKey) {
+		public ImportFormat getRowData(String rowKey) {
+			// In a real app, a more efficient way like a query by rowKey should
+			// be implemented to deal with huge data
 
-			List<JJRequirement> requirements = (List<JJRequirement>) getWrappedData();
+			List<ImportFormat> formats = (List<ImportFormat>) getWrappedData();
 
-			for (JJRequirement requirement : requirements) {
-				if (requirement.getId().equals(rowKey))
-					return requirement;
+			for (ImportFormat format : formats) {
+				if (format.getId().equals(rowKey))
+					return format;
 			}
 
 			return null;
 		}
 
 		@Override
-		public Object getRowKey(JJRequirement requirement) {
-			return requirement.getId();
+		public Object getRowKey(ImportFormat format) {
+			return format.getId();
 		}
+	}
+
+	public class ImportFormat {
+
+		private String id;
+		private JJRequirement requirement;
+		private boolean copyTestcase;
+		private boolean copyChapter;
+
+		public ImportFormat() {
+			super();
+		}
+
+		public ImportFormat(String id, JJRequirement requirement,
+				boolean copyTestcase, boolean copyChapter) {
+			super();
+			this.id = id;
+			this.requirement = requirement;
+			this.copyTestcase = copyTestcase;
+			this.copyChapter = copyChapter;
+		}
+
+		public String getId() {
+			return id;
+		}
+
+		public void setId(String id) {
+			this.id = id;
+		}
+
+		public JJRequirement getRequirement() {
+			return requirement;
+		}
+
+		public void setRequirement(JJRequirement requirement) {
+			this.requirement = requirement;
+		}
+
+		public boolean getCopyTestcase() {
+			return copyTestcase;
+		}
+
+		public void setCopyTestcase(boolean copyTestcase) {
+			this.copyTestcase = copyTestcase;
+		}
+
+		public boolean getCopyChapter() {
+			return copyChapter;
+		}
+
+		public void setCopyChapter(boolean copyChapter) {
+			this.copyChapter = copyChapter;
+		}
+
 	}
 }

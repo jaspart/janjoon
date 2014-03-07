@@ -4,9 +4,9 @@
 package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJCategoryDataOnDemand;
-import com.funder.janjoonweb.domain.JJChapterDataOnDemand;
 import com.funder.janjoonweb.domain.JJContactDataOnDemand;
 import com.funder.janjoonweb.domain.JJProductDataOnDemand;
+import com.funder.janjoonweb.domain.JJRequirement;
 import com.funder.janjoonweb.domain.JJRequirementDataOnDemand;
 import com.funder.janjoonweb.domain.JJSprintDataOnDemand;
 import com.funder.janjoonweb.domain.JJTestcase;
@@ -38,9 +38,6 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     JJCategoryDataOnDemand JJTestcaseDataOnDemand.jJCategoryDataOnDemand;
     
     @Autowired
-    JJChapterDataOnDemand JJTestcaseDataOnDemand.jJChapterDataOnDemand;
-    
-    @Autowired
     JJContactDataOnDemand JJTestcaseDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
@@ -67,6 +64,7 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
         setName(obj, index);
         setOrdering(obj, index);
         setPricepoint(obj, index);
+        setRequirement(obj, index);
         setResultat(obj, index);
         setUpdatedDate(obj, index);
         setWorkload(obj, index);
@@ -112,6 +110,11 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     public void JJTestcaseDataOnDemand.setPricepoint(JJTestcase obj, int index) {
         Integer pricepoint = new Integer(index);
         obj.setPricepoint(pricepoint);
+    }
+    
+    public void JJTestcaseDataOnDemand.setRequirement(JJTestcase obj, int index) {
+        JJRequirement requirement = jJRequirementDataOnDemand.getRandomJJRequirement();
+        obj.setRequirement(requirement);
     }
     
     public void JJTestcaseDataOnDemand.setResultat(JJTestcase obj, int index) {

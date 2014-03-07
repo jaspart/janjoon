@@ -5,8 +5,6 @@ package com.funder.janjoonweb.ui.mb;
 
 import com.funder.janjoonweb.domain.JJCategory;
 import com.funder.janjoonweb.domain.JJCategoryService;
-import com.funder.janjoonweb.domain.JJChapter;
-import com.funder.janjoonweb.domain.JJChapterService;
 import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.domain.JJContactService;
 import com.funder.janjoonweb.domain.JJHardware;
@@ -24,7 +22,6 @@ import com.funder.janjoonweb.domain.JJTestcaseService;
 import com.funder.janjoonweb.domain.JJTeststep;
 import com.funder.janjoonweb.ui.mb.JJTestcaseBean;
 import com.funder.janjoonweb.ui.mb.converter.JJCategoryConverter;
-import com.funder.janjoonweb.ui.mb.converter.JJChapterConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJProductConverter;
 import com.funder.janjoonweb.ui.mb.converter.JJRequirementConverter;
@@ -74,9 +71,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
     
     @Autowired
     JJCategoryService JJTestcaseBean.jJCategoryService;
-    
-    @Autowired
-    JJChapterService JJTestcaseBean.jJChapterService;
     
     @Autowired
     JJRequirementService JJTestcaseBean.jJRequirementService;
@@ -444,30 +438,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         categoryCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(categoryCreateInputMessage);
         
-        OutputLabel chapterCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        chapterCreateOutput.setFor("chapterCreateInput");
-        chapterCreateOutput.setId("chapterCreateOutput");
-        chapterCreateOutput.setValue("Chapter:");
-        htmlPanelGrid.getChildren().add(chapterCreateOutput);
-        
-        AutoComplete chapterCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        chapterCreateInput.setId("chapterCreateInput");
-        chapterCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.chapter}", JJChapter.class));
-        chapterCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseBean.completeChapter}", List.class, new Class[] { String.class }));
-        chapterCreateInput.setDropdown(true);
-        chapterCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "chapter", String.class));
-        chapterCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{chapter.name} #{chapter.description} #{chapter.creationDate} #{chapter.updatedDate}", String.class));
-        chapterCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{chapter}", JJChapter.class));
-        chapterCreateInput.setConverter(new JJChapterConverter());
-        chapterCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(chapterCreateInput);
-        
-        Message chapterCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        chapterCreateInputMessage.setId("chapterCreateInputMessage");
-        chapterCreateInputMessage.setFor("chapterCreateInput");
-        chapterCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(chapterCreateInputMessage);
-        
         OutputLabel requirementCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         requirementCreateOutput.setFor("requirementCreateInput");
         requirementCreateOutput.setId("requirementCreateOutput");
@@ -483,7 +453,7 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         requirementCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{requirement.name} #{requirement.description} #{requirement.creationDate} #{requirement.updatedDate}", String.class));
         requirementCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{requirement}", JJRequirement.class));
         requirementCreateInput.setConverter(new JJRequirementConverter());
-        requirementCreateInput.setRequired(false);
+        requirementCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(requirementCreateInput);
         
         Message requirementCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -901,30 +871,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         categoryEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(categoryEditInputMessage);
         
-        OutputLabel chapterEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        chapterEditOutput.setFor("chapterEditInput");
-        chapterEditOutput.setId("chapterEditOutput");
-        chapterEditOutput.setValue("Chapter:");
-        htmlPanelGrid.getChildren().add(chapterEditOutput);
-        
-        AutoComplete chapterEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        chapterEditInput.setId("chapterEditInput");
-        chapterEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.chapter}", JJChapter.class));
-        chapterEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseBean.completeChapter}", List.class, new Class[] { String.class }));
-        chapterEditInput.setDropdown(true);
-        chapterEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "chapter", String.class));
-        chapterEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{chapter.name} #{chapter.description} #{chapter.creationDate} #{chapter.updatedDate}", String.class));
-        chapterEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{chapter}", JJChapter.class));
-        chapterEditInput.setConverter(new JJChapterConverter());
-        chapterEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(chapterEditInput);
-        
-        Message chapterEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        chapterEditInputMessage.setId("chapterEditInputMessage");
-        chapterEditInputMessage.setFor("chapterEditInput");
-        chapterEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(chapterEditInputMessage);
-        
         OutputLabel requirementEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         requirementEditOutput.setFor("requirementEditInput");
         requirementEditOutput.setId("requirementEditOutput");
@@ -940,7 +886,7 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         requirementEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{requirement.name} #{requirement.description} #{requirement.creationDate} #{requirement.updatedDate}", String.class));
         requirementEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{requirement}", JJRequirement.class));
         requirementEditInput.setConverter(new JJRequirementConverter());
-        requirementEditInput.setRequired(false);
+        requirementEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(requirementEditInput);
         
         Message requirementEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -1232,16 +1178,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         categoryValue.setConverter(new JJCategoryConverter());
         htmlPanelGrid.getChildren().add(categoryValue);
         
-        HtmlOutputText chapterLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        chapterLabel.setId("chapterLabel");
-        chapterLabel.setValue("Chapter:");
-        htmlPanelGrid.getChildren().add(chapterLabel);
-        
-        HtmlOutputText chapterValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        chapterValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.chapter}", JJChapter.class));
-        chapterValue.setConverter(new JJChapterConverter());
-        htmlPanelGrid.getChildren().add(chapterValue);
-        
         HtmlOutputText requirementLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         requirementLabel.setId("requirementLabel");
         requirementLabel.setValue("Requirement:");
@@ -1383,17 +1319,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
             String jJCategoryStr = String.valueOf(jJCategory.getName() +  " "  + jJCategory.getDescription() +  " "  + jJCategory.getCreationDate() +  " "  + jJCategory.getUpdatedDate());
             if (jJCategoryStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJCategory);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<JJChapter> JJTestcaseBean.completeChapter(String query) {
-        List<JJChapter> suggestions = new ArrayList<JJChapter>();
-        for (JJChapter jJChapter : jJChapterService.findAllJJChapters()) {
-            String jJChapterStr = String.valueOf(jJChapter.getName() +  " "  + jJChapter.getDescription() +  " "  + jJChapter.getCreationDate() +  " "  + jJChapter.getUpdatedDate());
-            if (jJChapterStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJChapter);
             }
         }
         return suggestions;

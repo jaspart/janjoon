@@ -1,4 +1,5 @@
 package com.funder.janjoonweb.domain;
+
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -14,26 +15,24 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaEntity(sequenceName = "JJChapterSEQ")
 public class JJChapter extends JJAbstractEntity {
 
-    @ManyToOne
-    private JJProject project;
+	private Integer ordering;
 
-    @ManyToOne
-    private JJCategory category;
+	@ManyToOne
+	private JJProject project;
 
-    @ManyToOne
-    private JJProduct product;
+	@ManyToOne
+	private JJCategory category;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chapter")
-    private Set<JJRequirement> requirements = new HashSet<JJRequirement>();
+	@ManyToOne
+	private JJProduct product;
 
-    @ManyToOne
-    private JJChapter parent;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chapter")
+	private Set<JJRequirement> requirements = new HashSet<JJRequirement>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent")
-    private Set<JJChapter> chapters = new HashSet<JJChapter>();
+	@ManyToOne
+	private JJChapter parent;
 
-    private Integer ordering;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent")
+	private Set<JJChapter> chapters = new HashSet<JJChapter>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chapter")
-    private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
 }

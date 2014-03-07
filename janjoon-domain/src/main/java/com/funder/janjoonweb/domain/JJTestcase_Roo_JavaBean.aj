@@ -4,7 +4,6 @@
 package com.funder.janjoonweb.domain;
 
 import com.funder.janjoonweb.domain.JJCategory;
-import com.funder.janjoonweb.domain.JJChapter;
 import com.funder.janjoonweb.domain.JJHardware;
 import com.funder.janjoonweb.domain.JJMessage;
 import com.funder.janjoonweb.domain.JJProduct;
@@ -56,14 +55,6 @@ privileged aspect JJTestcase_Roo_JavaBean {
     
     public void JJTestcase.setCategory(JJCategory category) {
         this.category = category;
-    }
-    
-    public JJChapter JJTestcase.getChapter() {
-        return this.chapter;
-    }
-    
-    public void JJTestcase.setChapter(JJChapter chapter) {
-        this.chapter = chapter;
     }
     
     public JJRequirement JJTestcase.getRequirement() {

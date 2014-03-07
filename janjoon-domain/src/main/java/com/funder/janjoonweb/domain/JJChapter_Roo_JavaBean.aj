@@ -8,10 +8,17 @@ import com.funder.janjoonweb.domain.JJChapter;
 import com.funder.janjoonweb.domain.JJProduct;
 import com.funder.janjoonweb.domain.JJProject;
 import com.funder.janjoonweb.domain.JJRequirement;
-import com.funder.janjoonweb.domain.JJTestcase;
 import java.util.Set;
 
 privileged aspect JJChapter_Roo_JavaBean {
+    
+    public Integer JJChapter.getOrdering() {
+        return this.ordering;
+    }
+    
+    public void JJChapter.setOrdering(Integer ordering) {
+        this.ordering = ordering;
+    }
     
     public JJProject JJChapter.getProject() {
         return this.project;
@@ -59,22 +66,6 @@ privileged aspect JJChapter_Roo_JavaBean {
     
     public void JJChapter.setChapters(Set<JJChapter> chapters) {
         this.chapters = chapters;
-    }
-    
-    public Integer JJChapter.getOrdering() {
-        return this.ordering;
-    }
-    
-    public void JJChapter.setOrdering(Integer ordering) {
-        this.ordering = ordering;
-    }
-    
-    public Set<JJTestcase> JJChapter.getTestcases() {
-        return this.testcases;
-    }
-    
-    public void JJChapter.setTestcases(Set<JJTestcase> testcases) {
-        this.testcases = testcases;
     }
     
 }

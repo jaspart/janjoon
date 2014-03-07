@@ -259,67 +259,59 @@ public class JJTestcaseBean {
 	}
 
 	public void initTestCaseParameter(JJTeststepBean jJTeststepBean) {
-
-		System.out.println("INIT");
-		rootNode = new DefaultTreeNode("Root", null);
-		if (currentProject != null) {
-
-			TreeNode projectNode = new DefaultTreeNode("P-"
-					+ currentProject.getId() + "- " + currentProject.getName(),
-					rootNode);
-
-			List<JJCategory> categorys = jJCategoryService.getCategories(null,
-					false, true, true);
-			for (JJCategory jjCategory : categorys) {
-
-				TreeNode categoryNode = new DefaultTreeNode("C-"
-						+ jjCategory.getId() + "- " + jjCategory.getName(),
-						projectNode);
-
-				List<JJChapter> chapters = jJChapterService
-						.getAllJJChaptersWithProjectAndCategory(currentProject,
-								jjCategory);
-
-				for (JJChapter jjChapter : chapters) {
-					TreeNode chapterNode = new DefaultTreeNode("CH-"
-							+ jjChapter.getId() + "- " + jjChapter.getName(),
-							categoryNode);
-
-					List<JJTestcase> testcases = jJTestcaseService
-							.getAllJJTestcasesWithChapter(jjChapter);
-
-					for (JJTestcase jjTestcase : testcases) {
-
-						TreeNode testcaseNode = new DefaultTreeNode("TC-"
-								+ jjTestcase.getId() + "- "
-								+ jjTestcase.getName(), chapterNode);
-						//
-						// List<JJTeststep> teststeps = jJTeststepService
-						// .getJJTeststepWithTestcase(jjTestcase);
-						// for (JJTeststep jjTeststep : teststeps) {
-						// TreeNode teststepNode = new DefaultTreeNode("TS-"
-						// + jjTeststep.getId() + "- "
-						// + jjTeststep.getActionstep(), testcaseNode);
-						// }
-					}
-				}
-			}
-		}
-
-		expandTree(rootNode);
-
-		mode = "New";
-		disabled = true;
-		jJTestCase = new JJTestcase();
-		name = null;
-		description = null;
-		chapter = null;
-		tmpJJTeststepList = new ArrayList<String>();
-		jJTeststepBean.initTestStepParameter();
-		selectedReq = null;
-		tabIndex = 0;
-		rendered = false;
-		selectedTitle = "";
+//
+//		System.out.println("INIT");
+//		rootNode = new DefaultTreeNode("Root", null);
+//		if (currentProject != null) {
+//
+//			TreeNode projectNode = new DefaultTreeNode("P-"
+//					+ currentProject.getId() + "- " + currentProject.getName(),
+//					rootNode);
+//
+//			List<JJCategory> categorys = jJCategoryService.getCategories(null,
+//					false, true, true);
+//			for (JJCategory jjCategory : categorys) {
+//
+//				TreeNode categoryNode = new DefaultTreeNode("C-"
+//						+ jjCategory.getId() + "- " + jjCategory.getName(),
+//						projectNode);
+//
+//				List<JJChapter> chapters = jJChapterService
+//						.getAllJJChaptersWithProjectAndCategory(currentProject,
+//								jjCategory);
+//
+//				for (JJChapter jjChapter : chapters) {
+//					TreeNode chapterNode = new DefaultTreeNode("CH-"
+//							+ jjChapter.getId() + "- " + jjChapter.getName(),
+//							categoryNode);
+//
+////					List<JJTestcase> testcases = jJTestcaseService
+////							.getAllJJTestcasesWithChapter(jjChapter);
+////
+////					for (JJTestcase jjTestcase : testcases) {
+////
+////						TreeNode testcaseNode = new DefaultTreeNode("TC-"
+////								+ jjTestcase.getId() + "- "
+////								+ jjTestcase.getName(), chapterNode);
+////					}
+//				}
+//			}
+//		}
+//
+//		expandTree(rootNode);
+//
+//		mode = "New";
+//		disabled = true;
+//		jJTestCase = new JJTestcase();
+//		name = null;
+//		description = null;
+//		chapter = null;
+//		tmpJJTeststepList = new ArrayList<String>();
+//		jJTeststepBean.initTestStepParameter();
+//		selectedReq = null;
+//		tabIndex = 0;
+//		rendered = false;
+//		selectedTitle = "";
 
 	}
 
@@ -363,7 +355,6 @@ public class JJTestcaseBean {
 
 			jJTestCase.setCreationDate(new Date());
 			jJTestCase.setEnabled(true);
-			jJTestCase.setChapter(chapter);
 
 			jJTestCase.setRequirement(selectedReq);
 
@@ -563,19 +554,19 @@ public class JJTestcaseBean {
 	}
 
 	public void newTestcase(JJTeststepBean jJTeststepBean) {
-		if (selectedNode != null
-				&& selectedNode.getData().toString().startsWith("CH")) {
-			System.out.println("New testcase");
-			initTestCaseParameter(jJTeststepBean);
-			rendered = true;
-			long idjJChapter = Long.parseLong(getStringFromString(selectedNode
-					.getData().toString(), 1));
-
-			System.out.println(idjJChapter);
-
-			chapter = jJChapterService.findJJChapter(idjJChapter);
-			jJTestCase.setChapter(chapter);
-		}
+//		if (selectedNode != null
+//				&& selectedNode.getData().toString().startsWith("CH")) {
+//			System.out.println("New testcase");
+//			initTestCaseParameter(jJTeststepBean);
+//			rendered = true;
+//			long idjJChapter = Long.parseLong(getStringFromString(selectedNode
+//					.getData().toString(), 1));
+//
+//			System.out.println(idjJChapter);
+//
+//			chapter = jJChapterService.findJJChapter(idjJChapter);
+//
+//		}
 	}
 
 	public void onNodeSelect(NodeSelectEvent event) {
@@ -863,52 +854,52 @@ public class JJTestcaseBean {
 
 	private void preProcessPDF(long idCategory) {
 
-		Document pdf = new Document(PageSize.A4);
-
-		try {
-			PdfWriter.getInstance(pdf, new FileOutputStream("./test.pdf"));
-
-			pdf.open();
-
-			Paragraph paragraph = new Paragraph();
-
-			Font fontTitle = new Font(Font.TIMES_ROMAN, 30, Font.BOLD);
-			fontTitle.setColor(new Color(0x24, 0x14, 0x14));
-
-			Font fontChapter = new Font(Font.HELVETICA, 15, Font.BOLD);
-			fontChapter.setColor(new Color(0x4E, 0x4E, 0x4E));
-
-			Font fontTest = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
-			fontTest.setColor(new Color(0x5A, 0x5A, 0x5A));
-
-			Font fontPassed = new Font(Font.COURIER, 8, Font.BOLD);
-			fontPassed.setColor(new Color(0x82, 0x82, 0x82));
-
-			StyleSheet style = new StyleSheet();
-			style.loadTagStyle("body", "font", "Times New Roman");
-
-			JJCategory category = jJCategoryService.findJJCategory(idCategory);
-
-			Phrase phrase = new Phrase(20, new Chunk("\n "
-					+ currentProject.getName() + "\n" + category.getName()
-					+ "\n " + "\n", fontChapter));
-			paragraph.add(phrase);
-
-			List<JJChapter> list = jJChapterService
-					.getAllParentJJChapterWithProjectAndCategorySortedByOrder(
-							currentProject, category);
-
-			for (JJChapter jjChapter : list) {
-				orderChapters(jjChapter, category, paragraph, fontPassed,
-						fontChapter, fontTest, style);
-			}
-
-			pdf.add(paragraph);
-			pdf.close();
-		} catch (FileNotFoundException | DocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		Document pdf = new Document(PageSize.A4);
+//
+//		try {
+//			PdfWriter.getInstance(pdf, new FileOutputStream("./test.pdf"));
+//
+//			pdf.open();
+//
+//			Paragraph paragraph = new Paragraph();
+//
+//			Font fontTitle = new Font(Font.TIMES_ROMAN, 30, Font.BOLD);
+//			fontTitle.setColor(new Color(0x24, 0x14, 0x14));
+//
+//			Font fontChapter = new Font(Font.HELVETICA, 15, Font.BOLD);
+//			fontChapter.setColor(new Color(0x4E, 0x4E, 0x4E));
+//
+//			Font fontTest = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+//			fontTest.setColor(new Color(0x5A, 0x5A, 0x5A));
+//
+//			Font fontPassed = new Font(Font.COURIER, 8, Font.BOLD);
+//			fontPassed.setColor(new Color(0x82, 0x82, 0x82));
+//
+//			StyleSheet style = new StyleSheet();
+//			style.loadTagStyle("body", "font", "Times New Roman");
+//
+//			JJCategory category = jJCategoryService.findJJCategory(idCategory);
+//
+//			Phrase phrase = new Phrase(20, new Chunk("\n "
+//					+ currentProject.getName() + "\n" + category.getName()
+//					+ "\n " + "\n", fontChapter));
+//			paragraph.add(phrase);
+//
+//			List<JJChapter> list = jJChapterService
+//					.getAllParentJJChapterWithProjectAndCategorySortedByOrder(
+//							currentProject, category);
+//
+//			for (JJChapter jjChapter : list) {
+//				orderChapters(jjChapter, category, paragraph, fontPassed,
+//						fontChapter, fontTest, style);
+//			}
+//
+//			pdf.add(paragraph);
+//			pdf.close();
+//		} catch (FileNotFoundException | DocumentException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 	}
 
@@ -916,28 +907,28 @@ public class JJTestcaseBean {
 			Paragraph paragraph, Font fontPassed, Font fontChapter,
 			Font fontTest, StyleSheet style) {
 
-		paragraph.add(new Chunk("\n" + chapter.getName() + "\n", fontChapter));
-
-		List<JJChapter> listChild = jJChapterService
-				.getAllJJChaptersWithProjectAndCategoryAndParentSortedByOrder(
-						currentProject, category, chapter);
-		for (JJChapter jjChapter : listChild) {
-			orderChapters(jjChapter, category, paragraph, fontPassed,
-					fontChapter, fontTest, style);
-		}
-
-		List<JJTestcase> listTestcase = jJTestcaseService
-				.getAllJJTestcasesWithChapter(chapter);
-
-		for (JJTestcase jjTestcase : listTestcase) {
-			if (jjTestcase.getEnabled()) {
-				paragraph.add(new Chunk(jjTestcase.getName() + "\n", fontTest));
-				JJTestcaseexecution testcaseexecution = jJTestcaseexecutionService
-						.getTestcaseexecutionWithTestcase(jjTestcase);
-				paragraph.add(new Chunk("\n Passed: "
-						+ testcaseexecution.getPassed() + "\n", fontPassed));
-			}
-		}
+//		paragraph.add(new Chunk("\n" + chapter.getName() + "\n", fontChapter));
+//
+//		List<JJChapter> listChild = jJChapterService
+//				.getAllJJChaptersWithProjectAndCategoryAndParentSortedByOrder(
+//						currentProject, category, chapter);
+//		for (JJChapter jjChapter : listChild) {
+//			orderChapters(jjChapter, category, paragraph, fontPassed,
+//					fontChapter, fontTest, style);
+//		}
+//
+//		List<JJTestcase> listTestcase = jJTestcaseService
+//				.getAllJJTestcasesWithChapter(chapter);
+//
+//		for (JJTestcase jjTestcase : listTestcase) {
+//			if (jjTestcase.getEnabled()) {
+//				paragraph.add(new Chunk(jjTestcase.getName() + "\n", fontTest));
+//				JJTestcaseexecution testcaseexecution = jJTestcaseexecutionService
+//						.getTestcaseexecutionWithTestcase(jjTestcase);
+//				paragraph.add(new Chunk("\n Passed: "
+//						+ testcaseexecution.getPassed() + "\n", fontPassed));
+//			}
+//		}
 	}
 
 	public void load(JJProjectBean jJProjectBean,

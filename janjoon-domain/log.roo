@@ -443,3 +443,5 @@ field reference --fieldName manager --type ~.JJContact --notNull
 focus --class ~.JJProduct
 field reference --fieldName manager --type ~.JJContact --notNull
 // Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-02-03 12:04:00
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-07 11:58:37
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-07 11:59:36

@@ -2,11 +2,14 @@ package com.funder.janjoonweb.domain;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -30,9 +33,7 @@ public class JJTestcase extends JJAbstractEntity {
 	@ManyToOne
 	private JJCategory category;
 
-	@ManyToOne
-	private JJChapter chapter;
-
+	@NotNull
 	@ManyToOne
 	private JJRequirement requirement;
 

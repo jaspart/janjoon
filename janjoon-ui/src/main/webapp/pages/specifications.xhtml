@@ -27,9 +27,9 @@
 				</tr>
 				<tr />
 				<tr>
-					<td><p:commandButton id="import" value="Import"
-							actionListener="#{jJRequirementBean.loadImport()}"
-							update=":importDialog" oncomplete="importDialogWidget.show()" /></td>
+					<td><p:commandButton id="commandButton" value="Import"
+							actionListener="#{jJRequirementBean.loadImportFormat()}"
+							update=":dialog" oncomplete="dialogWidget.show()" /></td>
 				</tr>
 				<tr>
 					<ui:repeat value="#{jJRequirementBean.tableDataModelList}"
@@ -368,7 +368,7 @@
 						<f:facet name="footer">
 							<p:row>
 								<p:column colspan="3">
-									<p:commandButton value="Save" oncomplete=""
+									<p:commandButton value="Save"
 										action="#{jJRequirementBean.save(jJChapterBean)}"
 										process="@form" update="requirementDialogForm" />
 								</p:column>
@@ -520,38 +520,170 @@
 			</p:outputPanel>
 		</p:confirmDialog>
 
-		<p:dialog id="importDialog" header="#{jJRequirementBean.message}"
-			modal="true" widgetVar="importDialogWidget" dynamic="true"
+		<p:dialog id="dialog" header="#{jJRequirementBean.message}"
+			modal="true" widgetVar="dialogWidget" dynamic="true"
 			resizable="false">
 			<p:ajax event="close" update=":specForm"
-				listener="#{jJRequirementBean.closeImportDialog}" />
-			<p:outputPanel id="importDialogPanel">
-				<h:form id="importDialogForm">
-					<p:growl id="msg" />
-					
-						<p:dataTable id="importDataTable" var="req"
-							value="#{jJRequirementBean.importDataModel}" paginator="true"
-							rows="4" selection="#{jJRequirementBean.listTable}">
-							<p:ajax event="rowSelectCheckbox"
-								listener="#{jJRequirementBean.onRowSelect}" />
-							<f:facet name="header">  
-            							Requirement Import List  
-        							</f:facet>
-							<p:column selectionMode="multiple" style="width:2%" />
-							<p:column headerText="Name" filterBy="name"
-								filterMatchMode="startsWith" style="width:25%">  
-										#{req.name}
+				listener="#{jJRequirementBean.closeDialogImport}" />
+			<p:layout id="importlayout" style="min-width:700px;min-height:450px;">
+				<p:layoutUnit position="center">
+					<p:outputPanel id="dialogPanel">
+						<h:form id="dialogForm">
+							<p:growl id="msg" />
+							<p:panelGrid style="margin-top:10px">
+								<p:row>
+									<p:column>
+										<h:outputText value="Project :" />
+										<p:selectOneMenu id="projectSelectOneMenu"
+											value="#{jJRequirementBean.importProject}"
+											panelStyle="width:150px" effect="fade" style="width:160px"
+											filter="true" filterMatchMode="startsWith">
+											<f:converter
+												converterId="com.funder.janjoonweb.ui.mb.converter.JJProjectConverter" />
+											<f:selectItem
+												itemLabel="#{jJRequirementBean.importProject.name}"
+												itemValue="#{jJRequirementBean.importProject}" />
+											<f:selectItems value="#{jJRequirementBean.importProjectList}"
+												var="p" itemLabel="#{p.name}" itemValue="#{p}" />
+											<p:ajax process="@this" partialSubmit="true"
+												listener="#{jJRequirementBean.handelSelectImportProject}"
+												update="formatDataTable" />
+										</p:selectOneMenu>
 									</p:column>
-						</p:dataTable>
-					
-					<p:panelGrid style="margin-top:10px">
-						
-					
-					</p:panelGrid>
-				</h:form>
-			</p:outputPanel>
-		</p:dialog>
+									<p:column>
+										<h:outputText value="Product :" />
+										<p:selectOneMenu id="productSelectOneMenu"
+											value="#{jJRequirementBean.importProduct}"
+											panelStyle="width:150px" effect="fade" style="width:160px"
+											filter="true" filterMatchMode="startsWith">
+											<f:converter
+												converterId="com.funder.janjoonweb.ui.mb.converter.JJProductConverter" />
+											<f:selectItem
+												itemLabel="#{jJRequirementBean.importProduct.name}"
+												itemValue="#{jJRequirementBean.importProduct}" />
+											<f:selectItems value="#{jJRequirementBean.importProductList}"
+												var="p" itemLabel="#{p.name}" itemValue="#{p}" />
+											<p:ajax process="@this" partialSubmit="true"
+												listener="#{jJRequirementBean.handelSelectImportProduct}"
+												update="formatDataTable versionSelectOneMenu" />
+										</p:selectOneMenu>
+									</p:column>
+									<p:column>
+										<h:outputText value="Version :" />
+										<p:selectOneMenu id="versionSelectOneMenu"
+											value="#{jJRequirementBean.importVersion}"
+											panelStyle="width:150px" effect="fade" style="width:160px"
+											filter="true" filterMatchMode="startsWith"
+											disabled="#{jJRequirementBean.disableImportVersion}">
 
+											<f:converter
+												converterId="com.funder.janjoonweb.ui.mb.converter.JJVersionConverter" />
+
+											<f:selectItem
+												itemLabel="#{jJRequirementBean.importVersion.name}"
+												itemValue="#{jJRequirementBean.importVersion}" />
+											<f:selectItems value="#{jJRequirementBean.importVersionList}"
+												var="v" itemLabel="#{v.name}" itemValue="#{v}" />
+											<p:ajax process="@this" partialSubmit="true"
+												listener="#{jJRequirementBean.handelSelectImportVersion}"
+												update="formatDataTable" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText value="Category :" />
+										<p:selectOneMenu id="categorySelectOneMenu"
+											value="#{jJRequirementBean.importCategory}"
+											panelStyle="width:150px" effect="fade" style="width:160px"
+											filter="true" filterMatchMode="startsWith">
+											<f:converter
+												converterId="com.funder.janjoonweb.ui.mb.converter.JJCategoryConverter" />
+											<f:selectItem
+												itemLabel="#{jJRequirementBean.importCategory.name}"
+												itemValue="#{jJRequirementBean.importCategory}" />
+											<f:selectItems
+												value="#{jJRequirementBean.importCategoryList}" var="p"
+												itemLabel="#{p.name}" itemValue="#{p}" />
+											<p:ajax process="@this" partialSubmit="true"
+												listener="#{jJRequirementBean.handelSelectImportCategory}"
+												update="formatDataTable" />
+										</p:selectOneMenu>
+									</p:column>
+									<p:column>
+										<h:outputText value="Status :" />
+										<p:selectOneMenu id="statusSelectOneMenu"
+											value="#{jJRequirementBean.importStatus}"
+											panelStyle="width:150px" effect="fade" style="width:160px"
+											filter="true" filterMatchMode="startsWith">
+											<f:converter
+												converterId="com.funder.janjoonweb.ui.mb.converter.JJStatusConverter" />
+											<f:selectItem
+												itemLabel="#{jJRequirementBean.importStatus.name}"
+												itemValue="#{jJRequirementBean.importStatus}" />
+											<f:selectItems value="#{jJRequirementBean.importStatusList}"
+												var="p" itemLabel="#{p.name}" itemValue="#{p}" />
+											<p:ajax process="@this" partialSubmit="true"
+												listener="#{jJRequirementBean.handelSelectImportStatus}"
+												update="formatDataTable" />
+										</p:selectOneMenu>
+									</p:column>
+
+								</p:row>
+							</p:panelGrid>
+							<p:dataTable id="formatDataTable" var="format" editable="true"
+								value="#{jJRequirementBean.formatDataModel}" paginator="true"
+								rows="10" selection="#{jJRequirementBean.selectedFormats}">
+
+
+								<f:facet name="header">  
+            						Checkbox Based Selection  
+        						</f:facet>
+
+								<p:column selectionMode="multiple" style="width:2%" />
+
+								<p:column headerText="Requirement" style="width:30%">  
+            						#{format.requirement.name}  
+        						</p:column>
+
+								<p:column headerText="Copy Testcase" style="width:25%">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{format.copyTestcase}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:selectBooleanCheckbox value="#{format.copyTestcase}" />
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+
+								<p:column headerText="Copy Chapter" style="width:25%">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{format.copyChapter}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:selectBooleanCheckbox value="#{format.copyChapter}">
+												<p:ajax process="@this"
+													listener="#{jJRequirementBean.copyChapter}" />
+											</p:selectBooleanCheckbox>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column style="width:18%">
+									<p:rowEditor />
+								</p:column>
+
+							</p:dataTable>
+
+							<p:commandButton value="Import"
+								action="#{jJRequirementBean.importRequirement(jJChapterBean)}" />
+						</h:form>
+					</p:outputPanel>
+				</p:layoutUnit>
+			</p:layout>
+		</p:dialog>
 	</ui:define>
 </ui:composition>
 </html>
