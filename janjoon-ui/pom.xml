@@ -451,6 +451,12 @@
 					<webAppConfig>
 						<contextPath>/${project.name}</contextPath>
 					</webAppConfig>
+					<loginServices>
+						<loginService implementation="org.eclipse.jetty.security.HashLoginService">
+						<name>JanjoonSecurityRealm</name>
+						<!--config>${basedir}/src/test/resources/jetty-realm.properties</config-->
+						</loginService>
+					</loginServices>
 				</configuration>
 			</plugin>
 		</plugins>

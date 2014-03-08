@@ -45,6 +45,7 @@ privileged aspect JJRequirementServiceImpl_Roo_Service {
     }
     
     public JJRequirement JJRequirementServiceImpl.updateJJRequirement(JJRequirement JJRequirement_) {
+	System.out.println("Coucou Sirine!!!");
         return jJRequirementRepository.save(JJRequirement_);
     }
     

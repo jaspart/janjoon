@@ -86,7 +86,8 @@
 	<welcome-file-list>
 		<welcome-file>/index.html</welcome-file>
 	</welcome-file-list>
-	 <login-config>
-        <auth-method>BASIC</auth-method>
-    </login-config>
+	<login-config>
+		<auth-method>BASIC</auth-method>
+		<realm-name>JanjoonSecurityRealm</realm-name>
+ 	</login-config>
 </web-app>
