@@ -11,16 +11,12 @@
  <global-method-security proxy-target-class="true" pre-post-annotations="enabled"/>
  
 	<context:component-scan base-package="com.funder.janjoonweb.ui.mb" />	
-	<context:component-scan base-package="com.funder.janjoonweb.ui.securite" />	
+	<context:component-scan base-package="com.funder.janjoonweb.ui.security" />	
 		
 	<context:spring-configured/>	
-	<context:component-scan base-package="com.funder.janjoonweb.domain">
-        <context:exclude-filter expression=".*_Roo_.*" type="regex"/>
-        <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
-    </context:component-scan>
+	<context:annotation-config />
     
-    <http security="none" pattern="../resources/**"/>
-    <http security="none" pattern="/org.richfaces.resources/**"/>
+    <http security="none" pattern="../resources/**"/>   
     <http security="none" pattern="../templates/**"/>
     
     <http auto-config="true"
@@ -28,8 +24,8 @@
         entry-point-ref="entryPoint">
         <intercept-url pattern="/pages/main.jsf" access="permitAll"/>
         <intercept-url pattern="/pages/JJLogin.jsf" access="permitAll"/>
-        <intercept-url pattern="/pages/**" access="hasRole('ROLE_USER')"/>
-        <logout logout-success-url="/pages/JJLogin.jsf" invalidate-session="true"/>
+        <intercept-url pattern="/pages/**" access="isAuthenticated()"/>
+        <logout logout-url="/pages/logout.jsf"   logout-success-url="/pages/JJLogin.jsf" invalidate-session="true" delete-cookies="true"/>
         <form-login login-page="/pages/JJLogin.jsf"
                 authentication-failure-url="/pages/JJLogin.jsf"
                 default-target-url="/"
@@ -38,13 +34,9 @@
     </http> 
         
    <authentication-manager alias="authenticationManager" >
-        <authentication-provider >
-        <user-service>
-        <user name="janjoon" password="BeHappy2012" authorities="ROLE_ADMIN" />
-        </user-service>
-        </authentication-provider>		
+        <authentication-provider ref="contactAuthentificationProvider" />        	
     </authentication-manager>
         
-    <b:bean id="jsfWebExpressionHandler" class="com.funder.janjoonweb.ui.securite.JsfDefaultWebSecurityExpressionhandler"/>
+    <b:bean id="jsfWebExpressionHandler" class="com.funder.janjoonweb.ui.security.JsfDefaultWebSecurityExpressionhandler"/>
     
 </b:beans>

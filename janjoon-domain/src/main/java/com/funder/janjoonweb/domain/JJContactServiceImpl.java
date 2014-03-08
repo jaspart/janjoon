@@ -1,5 +1,6 @@
 package com.funder.janjoonweb.domain;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,7 +11,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-public class JJContactServiceImpl implements JJContactService {
+public class JJContactServiceImpl implements JJContactService ,Serializable{
+	
+	
+	private static final long serialVersionUID = 1L;
 	@PersistenceContext
 	private EntityManager entityManager;
 

@@ -1,4 +1,4 @@
-package com.funder.janjoonweb.ui.securite;
+package com.funder.janjoonweb.ui.security;
 
 import java.io.IOException;
 

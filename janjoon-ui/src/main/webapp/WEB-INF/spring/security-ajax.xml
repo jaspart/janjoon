@@ -10,10 +10,10 @@
                   <entry>
                       <key>
                           <bean
-                          	class="com.funder.janjoonweb.ui.securite.JSFRequestMatcher" />
+                          	class="com.funder.janjoonweb.ui.security.JSFRequestMatcher" />
                       </key>
                               <bean
-                                      class="com.funder.janjoonweb.ui.securite.Http401EntryPoint"/>
+                                      class="com.funder.janjoonweb.ui.security.Http401EntryPoint"/>
                   </entry>
             </map>
         </constructor-arg>

@@ -20,7 +20,7 @@
                         <h:outputLabel for="password" value="Password "/>
                         <h:inputSecret id="password" value="#{jJLoginBean.password}" required="true" requiredMessage="PassWord is required"/>
                         <p:message for="password" ></p:message>                        
-                        <h:commandButton value="Login" action="#{jJLoginBean.login}" />
+                        <h:commandButton value="Login" action="#{jJLoginBean.login}" ajax="true" />
                        
                     </h:form>
                 </div>

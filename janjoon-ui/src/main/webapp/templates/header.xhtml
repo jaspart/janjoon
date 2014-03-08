@@ -42,7 +42,7 @@
 			</p:tabMenu>
 			
 			<h:panelGrid columns="2" cellpadding="2" align="right">	
-			<h:outputLink value="#{request.contextPath}/j_spring_security_logout" rendered="#{jJLoginBean.enable}" >Logout2 :</h:outputLink>	
+			<h:outputLink value="logout.jsf" action="#{jJLoginBean.logout}"   rendered="#{jJLoginBean.enable}" >Logout2 :</h:outputLink>	
 			<h:outputText value="#{jJLoginBean.username}" rendered="#{jJLoginBean.enable}"></h:outputText>	
 				
 				<h:outputText value="Project :" />

@@ -1,4 +1,4 @@
-package com.funder.janjoonweb.ui.securite;
+package com.funder.janjoonweb.ui.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -12,11 +12,11 @@ import com.funder.janjoonweb.domain.JJContact;
 import com.funder.janjoonweb.ui.mb.JJContactBean;
 
 
-//@Component("contactAuthentificationProvider")
+@Component("contactAuthentificationProvider")
 public class JJContactAuthentificationProvider implements
 		AuthenticationProvider {	
 	
-	JJContactBean jJContactBean;	
+	
 	
 
 	@Override
@@ -26,7 +26,7 @@ public class JJContactAuthentificationProvider implements
 		
 		String username = authentication.getName();
         String password = (String) authentication.getCredentials();
-        
+        JJContactBean jJContactBean=new JJContactBean();	
         JJContact contact=jJContactBean.getContactByEmail(username);   
         
         if (contact == null) {
@@ -37,7 +37,7 @@ public class JJContactAuthentificationProvider implements
             throw new BadCredentialsException("Wrong password.");
         }         
         
-        return new UsernamePasswordAuthenticationToken(username, password);
+        return new UsernamePasswordAuthenticationToken(username, password,null);
 		
 	}
 

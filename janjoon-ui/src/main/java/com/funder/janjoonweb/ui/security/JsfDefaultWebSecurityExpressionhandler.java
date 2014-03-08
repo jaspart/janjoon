@@ -1,4 +1,4 @@
-package com.funder.janjoonweb.ui.securite;
+package com.funder.janjoonweb.ui.security;
 
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;

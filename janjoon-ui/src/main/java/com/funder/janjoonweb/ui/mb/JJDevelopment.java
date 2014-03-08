@@ -164,7 +164,7 @@ public class JJDevelopment implements Serializable {
 					+ fileMap.getTexte());
 
 		}
-		/*System.out.println(configManager.getPassWord() + " / "
+		System.out.println(configManager.getPassWord() + " / "
 				+ configManager.getUserName());
 		if (configManager.checkIn("FirstCommit")) {
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -186,7 +186,7 @@ public class JJDevelopment implements Serializable {
 					FacesMessage.SEVERITY_ERROR, "Probleme Lors du Commit",
 					configManager.getPath());
 			FacesContext.getCurrentInstance().addMessage(null, message);
-		}*/
+		}
 
 	}
 
