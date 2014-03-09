@@ -12,9 +12,12 @@
 	<h:outputScript library="js" name="calendar.js" />
 	
 	<h:form prependId="false" id="headerForm">		
-
 		<h:panelGrid id="panelMenu" columns="3" cellpadding="2">
-			<p:tabMenu id="tabMenu" name="content">
+			<h:link outcome="main">
+				<p:graphicImage library="images" name="janjoon_logo.png"
+					styleClass="banner" alt="JanJoon Home" style="float: left;" />
+			</h:link>
+			<p:tabMenu id="tabMenu" name="content" style="float: none;">
 				<p:menuitem value="home" icon="ui-icon-home"
 					url="/pages/main.jsf?faces-redirect=true" />
 				<p:menuitem value="Project"

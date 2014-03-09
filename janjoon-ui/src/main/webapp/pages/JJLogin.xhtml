@@ -10,21 +10,24 @@
 		JanJoon Login
 	</ui:define>
 	<ui:define name="content">
-	<center>
-		 <h:message for="login" styleClass="alert alert-error"/>
-                <div>
+		<h:message for="login" styleClass="alert alert-error"/>
+		<p:panel id="loginPanel" header="Please login..."
+			style="margin-top:50px;margin-bottom:50px;width:30%;margin-left:auto !important;margin-right:auto !important;">
                     <h:form id="login" method="post">
-                        <h:outputLabel for="username" value="Username"/>
-                        <h:inputText id="username" value="#{jJLoginBean.username}" required="true" requiredMessage="userName is required"/>
+                        <h:outputLabel for="username" value="Username" style="margin-top:20px;" />
+                        <p:inputText id="username" value="#{jJLoginBean.username}"
+				required="true" requiredMessage="Username is required"/>
                         <p:message for="username" ></p:message>
-                        <h:outputLabel for="password" value="Password "/>
-                        <h:inputSecret id="password" value="#{jJLoginBean.password}" required="true" requiredMessage="PassWord is required"/>
-                        <p:message for="password" ></p:message>                        
-                        <h:commandButton value="Login" action="#{jJLoginBean.login}" ajax="true" />
+
+                        <h:outputLabel for="password" value="Password" style="margin-top:20px;"/>
+                        <p:password id="password" value="#{jJLoginBean.password}"
+				required="true" requiredMessage="Password is required"/>
+                        <p:message for="password" ></p:message> 
                        
+                        <p:commandButton value="Login" action="#{jJLoginBean.login}"
+				ajax="true"  style="margin-top:20px;" />
                     </h:form>
-                </div>
-                </center>
+		</p:panel>
 	</ui:define>
 </ui:composition>
 </html>
