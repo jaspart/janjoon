@@ -60,7 +60,7 @@
 	</h:form>
 	<p:dialog id="contactDialog" header="#{jJContactBean.message}"
 		modal="true" widgetVar="contactDialogWidget" dynamic="true"
-		showEffect="fade" hideEffect="explode" appendToBody="true">
+		showEffect="fade" hideEffect="explode" appendTo="@(body)">
 		<p:ajax event="close" update=":tabview:contactForm"
 			listener="#{jJContactBean.closeDialog(jJPermissionBean)}" />
 		<p:outputPanel id="contactDialogPanel">
@@ -190,7 +190,7 @@
 		widgetVar="contactDeleteDialogWidget"
 		message="#{messages.label_delete_record}" showEffect="fade"
 		hideEffect="explode" header="#{messages.label_confirm_deletion}"
-		severity="alarm">
+		severity="alarm" appendTo="@(body)">
 		<p:outputPanel id="contactDeletePanel">
 			<h:form id="contactDeleteForm">
 				<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"

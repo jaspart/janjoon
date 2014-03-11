@@ -48,7 +48,7 @@
 	</h:form>
 	<p:dialog id="profileDialog" header="#{jJProfileBean.message}"
 		modal="true" widgetVar="profileDialogWidget" dynamic="true"
-		showEffect="fade" hideEffect="explode">
+		showEffect="fade" hideEffect="explode" appendTo="@(body)">
 		<p:ajax event="close" update=":tabview:profileForm"
 			listener="#{jJProfileBean.closeDialog(jJRightBean)}" />
 		<p:outputPanel id="profileDialogPanel">
@@ -144,7 +144,7 @@
 		widgetVar="profileDeleteDialogWidget"
 		message="#{messages.label_delete_record}" showEffect="fade"
 		hideEffect="explode" header="#{messages.label_confirm_deletion}"
-		severity="alarm">
+		severity="alarm" appendTo="@(body)">
 		<p:outputPanel id="profileDeletePanel">
 			<h:form id="profileDeleteForm">
 				<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"

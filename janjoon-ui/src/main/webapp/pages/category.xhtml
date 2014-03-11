@@ -58,7 +58,7 @@
 	</h:form>
 	<p:dialog id="categoryDialog" header="#{jJCategoryBean.message}"
 		modal="true" widgetVar="categoryDialogWidget" dynamic="true"
-		showEffect="fade" hideEffect="explode">
+		showEffect="fade" hideEffect="explode" appendTo="@(body)">
 		<p:ajax event="close" update=":tabview:categoryForm"
 			listener="#{jJCategoryBean.closeDialog}" />
 		<p:outputPanel id="categoryDialogPanel">
@@ -105,7 +105,7 @@
 		widgetVar="categoryDeleteDialogWidget"
 		message="#{messages.label_delete_record}" showEffect="fade"
 		hideEffect="explode" header="#{messages.label_confirm_deletion}"
-		severity="alarm">
+		severity="alarm" appendTo="@(body)">
 		<p:outputPanel id="categoryDeletePanel">
 			<h:form id="categoryDeleteForm">
 				<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
