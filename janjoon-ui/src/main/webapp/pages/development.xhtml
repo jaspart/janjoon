@@ -12,6 +12,8 @@
 	<link type="text/css" rel="stylesheet"
 		href="/syntaxhighlighter/standard.css" />
 	<ui:define name="content">
+	<f:event type="preRenderComponent"
+				listener="#{jJDevelopment.loadData(jJProjectBean)}" />
 		<center>
 			<p:tabMenu activeIndex="3" name="content">
 				<ui:include src="/templates/menu.xhtml" />
@@ -19,8 +21,9 @@
 			<br />
 			<p:panel header="#{jJDevelopment.selectedTree}"
 				style="width: 90%;valign: top;">
-				<h:link value="TestWith CodeMirror" outcome="edittest" />
+				<h:link value="TestWith CodeMirror" outcome="development2" />
 				<h:form id="form">
+								
 					<table class="mytable">
 						<tr><td valign="top">
 							<h:outputLabel value="Task: " />

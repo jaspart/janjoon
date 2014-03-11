@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../templates/layout.xhtml">
+	<ui:define name="title">
+		JanJoon Login
+	</ui:define>
+	<ui:define name="content">
+		<p:growl id="auth"  for="login" styleClass="alert alert-error"/>
+		<p:panel id="loginPanel" header="Please login..."
+			style="margin-top:50px;margin-bottom:50px;width:30%;margin-left:auto !important;margin-right:auto !important;">
+                    <h:form id="login" method="post" >
+                        <h:outputLabel for="username" value="Username:" style="margin-top:20px;" />
+                        <p:inputText id="username" value="#{loginBean.username}"
+				required="true" requiredMessage="Username is required"/>
+                        <p:message for="username" id="mail" closable="true" />
+
+                        <h:outputLabel for="password" value="Password :" style="margin-top:20px;"/>
+                        <p:password id="password" value="#{loginBean.password}"
+				required="true" requiredMessage="Password is required"/>
+                        <p:message for="password" id="mdp" closable="true"   /> 
+                       
+                        <p:commandButton id="submit" value="Login" action="#{loginBean.login}"
+				ajax="true"  style="margin-top:20px;" update=":login:mdp,:login:mail,:auth" />
+                    </h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

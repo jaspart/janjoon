@@ -14,7 +14,7 @@ import org.eclipse.jgit.transport.*;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
-public class GitConfigManager extends ConfigManagerAbstract {
+public class GitConfigManager extends AbstractConfigManager {
 
 	/**
 	 * 

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.primefaces.model.TreeNode;
 
-public abstract class ConfigManagerAbstract implements Serializable
+public abstract class AbstractConfigManager implements Serializable
 {
 	
 	
@@ -20,7 +20,7 @@ public abstract class ConfigManagerAbstract implements Serializable
 	protected String path;
 	protected String userName,passWord;
 	
-	public ConfigManagerAbstract(String type, String url, String path,String name,String mdp)
+	public AbstractConfigManager(String type, String url, String path,String name,String mdp)
 	{		
 		this.type = type;
 		this.url = url;

@@ -60,7 +60,7 @@
 	</h:form>
 	<p:dialog id="contactDialog" header="#{jJContactBean.message}"
 		modal="true" widgetVar="contactDialogWidget" dynamic="true"
-		showEffect="fade" hideEffect="explode">
+		showEffect="fade" hideEffect="explode" appendToBody="true">
 		<p:ajax event="close" update=":tabview:contactForm"
 			listener="#{jJContactBean.closeDialog(jJPermissionBean)}" />
 		<p:outputPanel id="contactDialogPanel">

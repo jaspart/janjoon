@@ -45,8 +45,8 @@
 			</p:tabMenu>
 			
 			<h:panelGrid columns="2" cellpadding="2" align="right">	
-			<h:outputLink value="logout.jsf" action="#{jJLoginBean.logout}"   rendered="#{jJLoginBean.enable}" >Logout2 :</h:outputLink>	
-			<h:outputText value="#{jJLoginBean.username}" rendered="#{jJLoginBean.enable}"></h:outputText>	
+			<h:outputLink value="logout.jsf" action="#{loginBean.logout}"   rendered="#{loginBean.enable}" >Logout2 :</h:outputLink>	
+			<h:outputText value="#{loginBean.username}" rendered="#{loginBean.enable}"></h:outputText>	
 				
 				<h:outputText value="Project :" />
 				<p:selectOneMenu id="projectSelectOneMenu"
@@ -63,7 +63,7 @@
 						itemLabel="#{p.name}" itemValue="#{p}" />
 
 					<p:ajax process="@this" partialSubmit="true"
-						listener="#{jJProjectBean.handleSelectProject(jJProductBean,jJVersionBean,jJRequirementBean,jJChapterBean,jJTestcaseBean,jJTeststepBean,jJBugBean)}"
+						listener="#{jJProjectBean.handleSelectProject(jJProductBean,jJVersionBean,jJRequirementBean,jJChapterBean,jJTestcaseBean,jJTeststepBean,jJBugBean,p)}"
 						update="productSelectOneMenu versionSelectOneMenu :contentGrid" />
 				</p:selectOneMenu>
 

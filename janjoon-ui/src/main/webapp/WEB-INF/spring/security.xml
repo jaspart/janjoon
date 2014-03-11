@@ -23,11 +23,11 @@
         use-expressions="true"
         entry-point-ref="entryPoint">
         <intercept-url pattern="/pages/main.jsf" access="permitAll"/>
-        <intercept-url pattern="/pages/JJLogin.jsf" access="permitAll"/>
+        <intercept-url pattern="/pages/login.jsf" access="permitAll"/>
         <intercept-url pattern="/pages/**" access="isAuthenticated()"/>
-        <logout logout-url="/pages/logout.jsf"   logout-success-url="/pages/JJLogin.jsf" invalidate-session="true" delete-cookies="true"/>
-        <form-login login-page="/pages/JJLogin.jsf"
-                authentication-failure-url="/pages/JJLogin.jsf"
+        <logout logout-url="/pages/logout.jsf"   logout-success-url="/pages/login.jsf" invalidate-session="true" delete-cookies="true"/>
+        <form-login login-page="/pages/login.jsf"
+                authentication-failure-url="/pages/login.jsf"
                 default-target-url="/"
                 always-use-default-target="true"/>
         <expression-handler ref="jsfWebExpressionHandler"/>

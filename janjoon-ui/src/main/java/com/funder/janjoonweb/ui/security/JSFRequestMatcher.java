@@ -9,10 +9,7 @@ import org.springframework.security.web.util.RequestMatcher;
 @SuppressWarnings("deprecation")
 public class JSFRequestMatcher implements RequestMatcher {
 
-    public JSFRequestMatcher() {
-		
-	}
-
+   
 	@SuppressWarnings("unchecked")
 	@Override
     public boolean matches(HttpServletRequest request) {

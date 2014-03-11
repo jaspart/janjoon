@@ -1,51 +1,46 @@
 package com.funder.janjoonweb.ui.mb;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.*;
 import javax.faces.context.FacesContext;
 import javax.faces.event.*;
 
 import org.apache.commons.io.IOUtils;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.tabview.TabView;
-import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.event.TabChangeEvent;
-import org.primefaces.event.TabCloseEvent;
+import org.primefaces.event.*;
 import org.primefaces.extensions.component.codemirror.CodeMirror;
 import org.primefaces.model.TreeNode;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.funder.janjoonweb.service.ConfigManagerAbstract;
-import com.funder.janjoonweb.service.FileMap;
-import com.funder.janjoonweb.service.GitConfigManager;
+import com.funder.janjoonweb.service.*;
 
-@ManagedBean
+@ManagedBean(name="jJDevelopment")
 @ViewScoped
-public class JJDevelopment implements Serializable {
+public class DevelopmentBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private TabView tabView;
-	private ConfigManagerAbstract configManager;
+	private AbstractConfigManager configManager;
 	private String type;
 	private int activeTabIndex;
 	private TreeNode tree;
 	private TreeNode selectedTree;
 	private ArrayList<FileMap> files;
-	private File file;
+	private File file;	
+	private JJProjectBean jJProjectBean;
 
-	public JJDevelopment() throws IOException {
+	public DevelopmentBean() throws IOException {
 
 		String URL = "https://github.com/janjoon/ProductName-1";
 		String password = "BeHappy2012";
-		String userName = "janjoon";
+		String userName = "janjoon";			
+		//System.out.println(jJProjectBean.getProject().getName());
+		
 		try {
 			configManager = new GitConfigManager(1, userName, password);
 			String path = System.getProperty("user.home") + "/git/";
@@ -77,13 +72,17 @@ public class JJDevelopment implements Serializable {
 			files.add(filemap);
 		}
 
+	}	
+	@Autowired
+	public void setjJProjectBean(JJProjectBean jJProjectBean) {
+		this.jJProjectBean = jJProjectBean;
 	}
 
-	public ConfigManagerAbstract getConfigManager() {
+	public AbstractConfigManager getConfigManager() {
 		return configManager;
 	}
 
-	public void setConfigManager(ConfigManagerAbstract configManager) {
+	public void setConfigManager(AbstractConfigManager configManager) {
 		this.configManager = configManager;
 	}
 
@@ -141,7 +140,7 @@ public class JJDevelopment implements Serializable {
 
 	public void setActiveTabIndex(int activeTabIndex) {
 		this.activeTabIndex = activeTabIndex;
-	}
+	}	
 
 	public void pull() {
 		if (configManager.pullRepository()) {
@@ -271,5 +270,18 @@ public class JJDevelopment implements Serializable {
 		}
 		return j;
 
+	}
+	
+	public void loadData(JJProjectBean jJProjectBean) {
+
+		System.out.println(jJProjectBean.getProject().getName());
+		this.jJProjectBean = jJProjectBean;
+
+	
+	}
+	
+	public static Object findBean(String beanName) {
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    return  context.getApplication().evaluateExpressionGet(context, "#{" + beanName + "}", Object.class);
 	}
 }

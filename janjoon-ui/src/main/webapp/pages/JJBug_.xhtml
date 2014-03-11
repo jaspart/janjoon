@@ -46,7 +46,7 @@
         </p:dataTable>
       </p:panel>
     </h:form>
-    <p:dialog id="createDialog" header="#{messages.label_create} JJBug" modal="true" widgetVar="createDialogWidget" dynamic="true" visible="#{jJBugBean.createDialogVisible}" resizable="true" maximizable="true" showEffect="fade" hideEffect="explode">
+    <p:dialog id="createDialog" appendToBody="true" header="#{messages.label_create} JJBug" modal="true" widgetVar="createDialogWidget" dynamic="true" visible="#{jJBugBean.createDialogVisible}" resizable="true" maximizable="true" showEffect="fade" hideEffect="explode">
       <p:ajax event="close" update=":dataForm:data" listener="#{jJBugBean.handleDialogClose}" />
       <p:outputPanel id="createPanel">
         <h:form id="createForm" enctype="multipart/form-data">

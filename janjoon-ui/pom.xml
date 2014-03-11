@@ -174,7 +174,7 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<!-- Spring Security -->
-				<dependency>
+		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
 			<version>${spring-sec.version}</version>
@@ -199,6 +199,11 @@
 			<groupId>org.apache.myfaces.core</groupId>
 			<artifactId>myfaces-api</artifactId>
 			<version>2.1.7</version>
+		</dependency>
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.myfaces.core</groupId>
@@ -453,8 +458,8 @@
 					</webAppConfig>
 					<loginServices>
 						<loginService implementation="org.eclipse.jetty.security.HashLoginService">
-						<name>JanjoonSecurityRealm</name>
-						<!--config>${basedir}/src/test/resources/jetty-realm.properties</config-->
+							<name>JanjoonSecurityRealm</name>
+							<!--config>${basedir}/src/test/resources/jetty-realm.properties</config -->
 						</loginService>
 					</loginServices>
 				</configuration>

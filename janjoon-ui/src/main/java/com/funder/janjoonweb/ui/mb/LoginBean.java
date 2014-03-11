@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
 import com.funder.janjoonweb.domain.JJContact;
 
 @Scope("session")
-@Component("jJLoginBean")
-public class JJLoginBean implements Serializable{
+@Component("loginBean")
+public class LoginBean implements Serializable{
 	/**
 	 * 
 	 */
@@ -41,7 +41,7 @@ public class JJLoginBean implements Serializable{
 	}
 
 	@Autowired
-	public JJLoginBean(AuthenticationManager authenticationManager) {
+	public LoginBean(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
 	}
 
