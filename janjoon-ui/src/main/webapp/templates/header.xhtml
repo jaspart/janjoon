@@ -4,9 +4,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions"
-	xmlns:sec="http://www.springframework.org/security/tags">
->
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
 <ui:composition>
 	<title>#{applicationBean.appName}</title>
 	<h:outputStylesheet library="css" name="standard.css" />
@@ -66,7 +65,7 @@
 						itemLabel="#{p.name}" itemValue="#{p}" />
 
 					<p:ajax process="@this" partialSubmit="true"
-						listener="#{jJProjectBean.handleSelectProject(jJProductBean,jJVersionBean,jJRequirementBean,jJChapterBean,jJTestcaseBean,jJTeststepBean,jJBugBean,p)}"
+						listener="#{jJProjectBean.handleSelectProject(jJProductBean,jJVersionBean,jJRequirementBean,jJChapterBean,jJTestcaseBean,jJTeststepBean,jJBugBean,jJTaskBean)}"
 						update="productSelectOneMenu versionSelectOneMenu :contentGrid" />
 				</p:selectOneMenu>
 

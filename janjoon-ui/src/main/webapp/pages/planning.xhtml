@@ -8,6 +8,15 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
+		<h:form id="planningForm">
+			<f:event type="preRenderComponent"
+				listener="#{jJTaskBean.loadData(jJProjectBean)}" />
+			<pe:timeline id="timeline" value="#{jJTaskBean.model}"
+				editable="true" eventMargin="10" eventMarginAxis="0"
+				locale="#{LocaleBean.locale}" start="#{jJTaskBean.start}"
+				end="#{jJTaskBean.end}" showNavigation="true" showButtonNew="true"
+				axisOnTop="true" themable="false" />
+		</h:form>
 	</ui:define>
 </ui:composition>
 </html>

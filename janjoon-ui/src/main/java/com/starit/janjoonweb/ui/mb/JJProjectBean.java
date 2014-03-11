@@ -838,9 +838,9 @@ public class JJProjectBean {
 	public void handleSelectProject(JJProductBean jJProductBean,
 			JJVersionBean jJVersionBean, JJRequirementBean jJRequirementBean,
 			JJChapterBean jJChapterBean, JJTestcaseBean jJTestcaseBean,
-			JJTeststepBean jJTeststepBean, JJBugBean jJBugBean) {
+			JJTeststepBean jJTeststepBean, JJBugBean jJBugBean,
+			JJTaskBean jJTaskBean) {
 
-		
 		jJProductBean.setProject(project);
 
 		jJRequirementBean.setProject(project);
@@ -852,6 +852,8 @@ public class JJProjectBean {
 		jJTestcaseBean.initTestCaseParameter(jJTeststepBean);
 
 		jJBugBean.setCurrentProject(project);
+
+		jJTaskBean.setProject(project);
 
 	}
 
