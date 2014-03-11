@@ -1,0 +1,8 @@
+package com.starit.janjoonweb.ui.converter;
+import com.starit.janjoonweb.domain.JJJob;
+
+import org.springframework.roo.addon.jsf.converter.RooJsfConverter;
+
+@RooJsfConverter(entity = JJJob.class)
+public class JJJobConverter {
+}

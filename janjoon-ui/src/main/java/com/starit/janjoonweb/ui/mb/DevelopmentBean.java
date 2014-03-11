@@ -18,9 +18,9 @@ import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.starit.janjoonweb.service.*;
-import com.starit.janjoonweb.service.AbstractConfigManager;
-import com.starit.janjoonweb.service.FileMap;
-import com.starit.janjoonweb.service.GitConfigManager;
+import com.starit.janjoonweb.ui.util.service.AbstractConfigManager;
+import com.starit.janjoonweb.ui.util.service.FileMap;
+import com.starit.janjoonweb.ui.util.service.GitConfigManager;
 
 @ManagedBean(name="jJDevelopment")
 @ViewScoped

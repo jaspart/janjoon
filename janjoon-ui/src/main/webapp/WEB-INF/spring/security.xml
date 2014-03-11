@@ -37,6 +37,6 @@
         <authentication-provider ref="contactAuthentificationProvider" />        	
     </authentication-manager>
         
-    <b:bean id="jsfWebExpressionHandler" class="com.starit.janjoonweb.ui.mb.security.JsfDefaultWebSecurityExpressionhandler"/>
+    <b:bean id="jsfWebExpressionHandler" class="com.starit.janjoonweb.ui.security.JsfDefaultWebSecurityExpressionhandler"/>
     
 </b:beans>

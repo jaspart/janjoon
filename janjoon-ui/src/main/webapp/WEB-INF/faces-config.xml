@@ -17,7 +17,7 @@
         </locale-config>
     </application>
     <factory>
-        <exception-handler-factory>com.starit.janjoonweb.ui.mb.util.ViewExpiredExceptionExceptionHandlerFactory</exception-handler-factory>
+        <exception-handler-factory>com.starit.janjoonweb.ui.util.ViewExpiredExceptionExceptionHandlerFactory</exception-handler-factory>
     </factory>
     <navigation-rule>
         <from-view-id>/pages/login.xhtml</from-view-id>

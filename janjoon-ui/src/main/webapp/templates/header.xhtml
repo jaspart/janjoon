@@ -58,7 +58,7 @@
 					filterMatchMode="startsWith">
 
 					<f:converter
-						converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
+						converterId="com.starit.janjoonweb.ui.converter.JJProjectConverter" />
 
 					<f:selectItem itemLabel="#{jJProjectBean.project.name}"
 						itemValue="#{jJProjectBean.project}" />
@@ -76,7 +76,7 @@
 					effect="fade" style="width:160px" filter="true"
 					filterMatchMode="startsWith">
 					<f:converter
-						converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
+						converterId="com.starit.janjoonweb.ui.converter.JJProductConverter" />
 					<f:selectItem itemLabel="#{jJProductBean.product.name}"
 						itemValue="#{jJProductBean.product}" />
 					<f:selectItems value="#{jJProductBean.productList}" var="p"
@@ -93,7 +93,7 @@
 					effect="fade" style="width:160px" filter="true"
 					filterMatchMode="startsWith" disabled="#{jJVersionBean.disabled}">
 					<f:converter
-						converterId="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter" />
+						converterId="com.starit.janjoonweb.ui.converter.JJVersionConverter" />
 
 					<f:selectItem itemLabel="#{jJVersionBean.version.name}"
 						itemValue="#{jJVersionBean.version}" />
