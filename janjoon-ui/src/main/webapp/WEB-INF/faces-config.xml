@@ -6,7 +6,7 @@
     <application>
         <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
         <resource-bundle>
-            <base-name>com.funder.janjoonweb.ui.mb.i18n.messages</base-name>
+            <base-name>com.starit.janjoonweb.ui.mb.i18n.messages</base-name>
             <var>messages</var>
         </resource-bundle>
         <locale-config>
@@ -17,7 +17,7 @@
         </locale-config>
     </application>
     <factory>
-        <exception-handler-factory>com.funder.janjoonweb.ui.mb.util.ViewExpiredExceptionExceptionHandlerFactory</exception-handler-factory>
+        <exception-handler-factory>com.starit.janjoonweb.ui.mb.util.ViewExpiredExceptionExceptionHandlerFactory</exception-handler-factory>
     </factory>
     <navigation-rule>
         <from-view-id>/pages/login.xhtml</from-view-id>

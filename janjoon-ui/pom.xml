@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.funder.janjoonweb.ui</groupId>
+	<groupId>com.starit.janjoonweb.ui</groupId>
 	<artifactId>janjoon-ui</artifactId>
 	<packaging>war</packaging>
 	<version>0.2-BUILD_NUMBER</version>
@@ -294,7 +294,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.funder.janjoonweb.domain</groupId>
+			<groupId>com.starit.janjoonweb.domain</groupId>
 			<artifactId>janjoon-domain</artifactId>
 			<version>0.2-BUILD_NUMBER</version>
 		</dependency>

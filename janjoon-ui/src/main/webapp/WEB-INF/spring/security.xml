@@ -10,8 +10,8 @@
   
  <global-method-security proxy-target-class="true" pre-post-annotations="enabled"/>
  
-	<context:component-scan base-package="com.funder.janjoonweb.ui.mb" />	
-	<context:component-scan base-package="com.funder.janjoonweb.ui.security" />	
+	<context:component-scan base-package="com.starit.janjoonweb.ui.mb" />	
+	<context:component-scan base-package="com.starit.janjoonweb.ui.security" />	
 		
 	<context:spring-configured/>	
 	<context:annotation-config />
@@ -37,6 +37,6 @@
         <authentication-provider ref="contactAuthentificationProvider" />        	
     </authentication-manager>
         
-    <b:bean id="jsfWebExpressionHandler" class="com.funder.janjoonweb.ui.security.JsfDefaultWebSecurityExpressionhandler"/>
+    <b:bean id="jsfWebExpressionHandler" class="com.starit.janjoonweb.ui.mb.security.JsfDefaultWebSecurityExpressionhandler"/>
     
 </b:beans>
