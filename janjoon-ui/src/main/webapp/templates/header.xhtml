@@ -5,13 +5,14 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions"
-	xmlns:sec="http://www.springframework.org/security/tags">>
+	xmlns:sec="http://www.springframework.org/security/tags">
+>
 <ui:composition>
 	<title>#{applicationBean.appName}</title>
 	<h:outputStylesheet library="css" name="standard.css" />
 	<h:outputScript library="js" name="calendar.js" />
-	
-	<h:form prependId="false" id="headerForm">		
+
+	<h:form prependId="false" id="headerForm">
 		<h:panelGrid id="panelMenu" columns="3" cellpadding="2">
 			<h:link outcome="main">
 				<p:graphicImage library="images" name="janjoon_logo.png"
@@ -27,7 +28,7 @@
 					url="/pages/specifications.jsf?faces-redirect=true"
 					icon="ui-icon-document" update=":contentGrid" />
 				<p:menuitem value="Bugs" url="/pages/bugs.jsf?faces-redirect=true"
-					icon="ui-icon-gear" disabled="true" />
+					icon="ui-icon-gear" />
 				<p:menuitem value="Dev"
 					url="/pages/development.jsf?faces-redirect=true"
 					icon="ui-icon-wrench" />
@@ -43,11 +44,13 @@
 					url="/pages/administration.jsf?faces-redirect=true"
 					icon="ui-icon-key" update=":contentGrid" />
 			</p:tabMenu>
-			
-			<h:panelGrid columns="2" cellpadding="2" align="right">	
-			<h:outputLink value="logout.jsf" action="#{loginBean.logout}"   rendered="#{loginBean.enable}" >Logout2 :</h:outputLink>	
-			<h:outputText value="#{loginBean.username}" rendered="#{loginBean.enable}"></h:outputText>	
-				
+
+			<h:panelGrid columns="2" cellpadding="2" align="right">
+				<h:outputLink value="logout.jsf" action="#{loginBean.logout}"
+					rendered="#{loginBean.enable}">Logout2 :</h:outputLink>
+				<h:outputText value="#{loginBean.username}"
+					rendered="#{loginBean.enable}"></h:outputText>
+
 				<h:outputText value="Project :" />
 				<p:selectOneMenu id="projectSelectOneMenu"
 					value="#{jJProjectBean.project}" panelStyle="width:150px"

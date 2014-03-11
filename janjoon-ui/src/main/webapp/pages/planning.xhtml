@@ -8,27 +8,6 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
-
-		<pe:timeline id="timeline" value="#{customTimelineController.model}"
-			editable="true" eventMargin="10" eventMarginAxis="0"
-			locale="#{customTimelineController.locale}"
-			start="#{customTimelineController.start}"
-			end="#{customTimelineController.end}" showNavigation="true"
-			showButtonNew="true" axisOnTop="true" themable="false" />
-
-		<h:panelGrid columns="2" style="margin-top:15px" cellpadding="5">
-			<h:outputText value="Select your Locale: " />
-			<p:selectOneButton value="#{customTimelineController.locale}">
-				<f:selectItem itemLabel="English" itemValue="en" />
-				<f:selectItem itemLabel="German" itemValue="de" />
-				<f:selectItem itemLabel="Russian" itemValue="ru" />
-				<f:selectItem itemLabel="Spanish" itemValue="es" />
-				<f:selectItem itemLabel="Catalan" itemValue="ca" />
-				<f:selectItem itemLabel="Italian" itemValue="it" />
-				<p:ajax event="change" update="timeline" />
-			</p:selectOneButton>
-		</h:panelGrid>
-
 	</ui:define>
 </ui:composition>
 </html>
