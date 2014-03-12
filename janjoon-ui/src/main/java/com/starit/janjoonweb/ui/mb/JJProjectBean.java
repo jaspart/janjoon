@@ -712,8 +712,14 @@ public class JJProjectBean {
 		}
 
 		if (jJProductService.getProducts(true).isEmpty()) {
-			JJContact manager = jJContactService
-					.getJJContactWithEmail("admin@gmail.com");
+			JJContact manager = null;
+			List<JJContact> contacts = jJContactService.getContacts(
+					"admin@gmail.com", true);
+
+			if (contacts.size() > 0) {
+				manager = contacts.get(0);
+			}
+
 			JJProduct product;
 			for (int i = 0; i < 2; i++) {
 				product = new JJProduct();
@@ -748,8 +754,13 @@ public class JJProjectBean {
 		}
 
 		if (jJProjectService.getProjects(true).isEmpty()) {
-			JJContact manager = jJContactService
-					.getJJContactWithEmail("admin@gmail.com");
+			JJContact manager = null;
+			List<JJContact> contacts = jJContactService.getContacts(
+					"admin@gmail.com", true);
+
+			if (contacts.size() > 0) {
+				manager = contacts.get(0);
+			}
 			JJProject project;
 			for (int i = 0; i < 2; i++) {
 				project = new JJProject();

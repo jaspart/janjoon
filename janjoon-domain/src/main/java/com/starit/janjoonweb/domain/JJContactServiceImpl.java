@@ -1,6 +1,7 @@
 package com.starit.janjoonweb.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -11,10 +12,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-public class JJContactServiceImpl implements JJContactService ,Serializable{
-	
-	
-	private static final long serialVersionUID = 1L;
+public class JJContactServiceImpl implements JJContactService, Serializable {
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -23,38 +22,26 @@ public class JJContactServiceImpl implements JJContactService ,Serializable{
 	}
 
 	@Override
-	public JJContact getJJContactWithEmail(String email) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJContact> criteriaQuery = criteriaBuilder.createQuery(JJContact.class);
-
-		Root<JJContact> from = criteriaQuery.from(JJContact.class);
-
-		CriteriaQuery<JJContact> select = criteriaQuery.select(from);
-		Predicate predicate1 = criteriaBuilder.equal(from.get("email"), email);
-		Predicate predicate2 = criteriaBuilder.equal(from.get("enabled"), true);
-
-		select.where(criteriaBuilder.and(predicate1, predicate2));
-
-		TypedQuery<JJContact> result = entityManager.createQuery(select);
-		if (result.getResultList().size() == 0)
-			return null;
-		else
-			return result.getSingleResult();
-	}
-
-	@Override
-	public List<JJContact> getAllJJContact() {
+	public List<JJContact> getContacts(String email, boolean onlyActif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJContact> criteriaQuery = criteriaBuilder.createQuery(JJContact.class);
+		CriteriaQuery<JJContact> criteriaQuery = criteriaBuilder
+				.createQuery(JJContact.class);
 
 		Root<JJContact> from = criteriaQuery.from(JJContact.class);
 
 		CriteriaQuery<JJContact> select = criteriaQuery.select(from);
 
-		Predicate predicate = criteriaBuilder.equal(from.get("enabled"), true);
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
 
-		select.where(predicate);
+		if (email != null) {
+			predicates.add(criteriaBuilder.equal(from.get("email"), email));
+		}
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		TypedQuery<JJContact> result = entityManager.createQuery(select);
 		return result.getResultList();

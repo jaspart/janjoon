@@ -35,7 +35,7 @@ public class JJContactBean {
 	}
 
 	public List<JJContact> getContactDataTable() {
-		contactDataTable = jJContactService.getAllJJContact();
+		contactDataTable = jJContactService.getContacts(null, true);
 		return contactDataTable;
 	}
 
@@ -44,8 +44,8 @@ public class JJContactBean {
 	}
 
 	public ContactDataModel getContactDataModel() {
-		contactDataModel = new ContactDataModel(
-				jJContactService.getAllJJContact());
+		contactDataModel = new ContactDataModel(jJContactService.getContacts(
+				null, true));
 		return contactDataModel;
 	}
 
@@ -96,10 +96,15 @@ public class JJContactBean {
 
 		}
 	}
-	
-	public JJContact getContactByEmail(String email)
-	{
-		return jJContactService.getJJContactWithEmail(email);
+
+	public JJContact getContactByEmail(String email) {
+
+		List<JJContact> contacts = jJContactService.getContacts(email, true);
+
+		if (contacts.size() > 0)
+			return contacts.get(0);
+		else
+			return null;
 	}
 
 	public void save(JJPermissionBean jJPermissionBean) {

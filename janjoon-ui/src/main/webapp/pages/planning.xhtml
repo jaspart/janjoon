@@ -15,7 +15,10 @@
 				editable="true" eventMargin="10" eventMarginAxis="0"
 				locale="#{LocaleBean.locale}" start="#{jJTaskBean.start}"
 				end="#{jJTaskBean.end}" showNavigation="true" showButtonNew="true"
-				axisOnTop="true" themable="false" />
+				showMajorLabels="false" axisOnTop="true" groupsChangeable="true"
+				groupsOnRight="false" var="task">
+				<h:outputText value="Task #{task.name}" />
+			</pe:timeline>
 		</h:form>
 	</ui:define>
 </ui:composition>
