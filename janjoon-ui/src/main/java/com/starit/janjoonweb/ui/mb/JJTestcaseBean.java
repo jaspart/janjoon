@@ -461,7 +461,7 @@ public class JJTestcaseBean {
 		FacesContext.getCurrentInstance().addMessage(null, fmsg);
 		System.out.println("**********************************");
 
-		List<JJTestcase> list = jJTestcaseService.getAllJJTestcases();
+		List<JJTestcase> list = jJTestcaseService.getTestcases(true);
 		System.out.println("\n listJJTestcase.size() " + list.size());
 		for (JJTestcase jjTestcase : list) {
 			System.out.println("\n jjTestcase.getName() "

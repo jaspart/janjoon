@@ -29,6 +29,8 @@ import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
+import com.starit.janjoonweb.domain.JJTestcase;
+import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.util.MessageFactory;
 
@@ -41,6 +43,13 @@ public class JJRequirementBean {
 
 	public void setjJTaskService(JJTaskService jJTaskService) {
 		this.jJTaskService = jJTaskService;
+	}
+
+	@Autowired
+	JJTestcaseService jJTestcaseService;
+
+	public void setjJTestcaseService(JJTestcaseService jJTestcaseService) {
+		this.jJTestcaseService = jJTestcaseService;
 	}
 
 	private JJCategory lowCategory;
@@ -785,6 +794,41 @@ public class JJRequirementBean {
 			System.out.println("UPDATING Requirement...");
 
 			// jJRequirementService.updateJJRequirement(requirement);
+			Set<JJTask> tasks = null;
+			Set<JJTestcase> testcases = null;
+			if (requirementStatus.getName().equalsIgnoreCase("CANCELED")
+					|| requirementStatus.getName()
+							.equalsIgnoreCase("DISCARDED")) {
+
+				tasks = requirement.getTasks();
+				for (JJTask task : tasks) {
+					task.setEnabled(false);
+				}
+
+				testcases = requirement.getTestcases();
+				for (JJTestcase testcase : testcases) {
+					testcase.setEnabled(false);
+				}
+
+			} else if (requirementStatus.getName().equalsIgnoreCase("MODIFIED")) {
+				tasks = requirement.getTasks();
+				for (JJTask task : tasks) {
+					task.setEnabled(true);
+				}
+
+				testcases = requirement.getTestcases();
+				for (JJTestcase testcase : testcases) {
+					testcase.setEnabled(true);
+				}
+			}
+
+			if (!tasks.isEmpty()) {
+				jJTaskService.updateTasks(tasks);
+			}
+
+			if (!testcases.isEmpty()) {
+				jJTestcaseService.updateTestcases(testcases);
+			}
 
 			message = "message_successfully_updated";
 			RequestContext context = RequestContext.getCurrentInstance();
@@ -1089,6 +1133,7 @@ public class JJRequirementBean {
 
 	public void handleSelectStatus() {
 		System.out.println(requirementStatus.getName());
+
 	}
 
 	public void loadData(JJProjectBean jJProjectBean,

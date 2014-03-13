@@ -1,6 +1,8 @@
 package com.starit.janjoonweb.domain;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,7 +22,7 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 	}
 
 	@Override
-	public List<JJTestcase> getAllJJTestcases() {
+	public List<JJTestcase> getTestcases(boolean onlyActif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcase> criteriaQuery = criteriaBuilder
@@ -30,9 +32,12 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 
 		CriteriaQuery<JJTestcase> select = criteriaQuery.select(from);
 
-		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
 
-		select.where(predicate1);
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		TypedQuery<JJTestcase> result = entityManager.createQuery(select);
 		return result.getResultList();
@@ -40,25 +45,12 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 	}
 
 	@Override
-	public List<JJTestcase> getAllJJTestcasesWithChapter(JJChapter chapter) {
-
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJTestcase> criteriaQuery = criteriaBuilder
-				.createQuery(JJTestcase.class);
-
-		Root<JJTestcase> from = criteriaQuery.from(JJTestcase.class);
-
-		CriteriaQuery<JJTestcase> select = criteriaQuery.select(from);
-
-		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
-		Predicate predicate2 = criteriaBuilder.equal(from.get("chapter"),
-				chapter);
-
-		select.where(criteriaBuilder.and(predicate1, predicate2));
-
-		TypedQuery<JJTestcase> result = entityManager.createQuery(select);
-		return result.getResultList();
-
+	public void saveTestcases(Set<JJTestcase> testcases) {
+		jJTestcaseRepository.save(testcases);
 	}
 
+	@Override
+	public void updateTestcases(Set<JJTestcase> testcases) {
+		jJTestcaseRepository.save(testcases);
+	}
 }

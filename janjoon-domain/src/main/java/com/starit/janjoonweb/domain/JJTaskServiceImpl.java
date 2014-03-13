@@ -2,6 +2,7 @@ package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,19 +23,29 @@ public class JJTaskServiceImpl implements JJTaskService {
 	}
 
 	@Override
-	public List<JJTask> getTasks(JJProject project, JJContact contact) {
+	public List<JJTask> getTasks(JJProject project, JJContact contact,
+			boolean onlyActif) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
 				.createQuery(JJTask.class);
 
 		Root<JJTask> from = criteriaQuery.from(JJTask.class);
-		Path<Object> path = from.join("requirement").get("project");
 
 		CriteriaQuery<JJTask> select = criteriaQuery.select(from);
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		predicates.add(criteriaBuilder.equal(from.get("assignedTo"), contact));
-		predicates.add(criteriaBuilder.equal(path, project));
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+		if (contact != null) {
+			predicates.add(criteriaBuilder.equal(from.get("assignedTo"),
+					contact));
+		}
+
+		if (project != null) {
+			Path<Object> path = from.join("requirement").get("project");
+			predicates.add(criteriaBuilder.equal(path, project));
+		}
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
@@ -42,6 +53,16 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 		return result.getResultList();
 
+	}
+
+	@Override
+	public void saveTasks(Set<JJTask> tasks) {
+		jJTaskRepository.save(tasks);
+	}
+
+	@Override
+	public void updateTasks(Set<JJTask> tasks) {
+		jJTaskRepository.save(tasks);
 	}
 
 }

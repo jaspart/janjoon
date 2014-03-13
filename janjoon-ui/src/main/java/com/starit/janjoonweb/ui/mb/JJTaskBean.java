@@ -79,7 +79,7 @@ public class JJTaskBean {
 
 		for (JJContact contact : contacts) {
 
-			List<JJTask> tasks = jJTaskService.getTasks(project, contact);
+			List<JJTask> tasks = jJTaskService.getTasks(project, contact, true);
 
 			for (JJTask task : tasks) {
 				Date start = task.getCreationDate();

@@ -95,7 +95,7 @@ public class JJRequirement extends JJAbstractEntity {
 	@JoinTable(name = "JJRequirementLink", joinColumns = { @javax.persistence.JoinColumn(name = "ReqLinkDOWN_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "ReqLinkUP_ID", referencedColumnName = "id") })
 	private Set<JJRequirement> requirementLinkUp = new HashSet<JJRequirement>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "requirement")
 	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
 
 	private Boolean operation;
