@@ -459,10 +459,17 @@
 					<loginServices>
 						<loginService implementation="org.eclipse.jetty.security.HashLoginService">
 							<name>JanjoonSecurityRealm</name>
-							<!--config>${basedir}/src/test/resources/jetty-realm.properties</config -->
+							<config>/src/main/resources/realm.properties</config>
 						</loginService>
 					</loginServices>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-servlets</artifactId>
+						<version>8.1.4.v20120524</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
