@@ -8,8 +8,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 public class JJPermissionServiceImpl implements JJPermissionService {
 
@@ -20,23 +22,43 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		this.entityManager = entityManager;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public List<JJPermission> getManagerPermissions(JJProfile profile) {
+	public List<JJContact> getManagers(String objet) {
+
+		List<JJContact> contacts = new ArrayList<JJContact>();
+
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
 				.createQuery(JJPermission.class);
-
 		Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
 
+		Path<Object> path = from.join("profile");
+		from.fetch("profile");
 		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
 
-		Predicate predicate = criteriaBuilder.equal(from.get("profile"),
-				profile);
+		Subquery<JJRight> subquery = criteriaQuery.subquery(JJRight.class);
+		Root fromRight = subquery.from(JJRight.class);
+		subquery.select(fromRight.get("profile"));
 
-		select.where(predicate);
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(fromRight.get("w"), true));
+		predicates.add(criteriaBuilder.equal(fromRight.get("objet"), objet));
+
+		subquery.where(criteriaBuilder.and(predicates
+				.toArray(new Predicate[] {})));
+		select.where(criteriaBuilder.in(path).value(subquery));
 
 		TypedQuery<JJPermission> result = entityManager.createQuery(select);
-		return result.getResultList();
+
+		List<JJPermission> permissions = result.getResultList();
+		for (JJPermission permission : permissions) {
+			contacts.add(permission.getContact());
+		}
+
+		return contacts;
+
 	}
 
 	@Override

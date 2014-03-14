@@ -11,7 +11,6 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -766,6 +765,14 @@ public class JJProjectBean {
 				manager = contacts.get(0);
 			}
 			JJProject project;
+			project = new JJProject();
+			project.setName("Default Project");
+			project.setDescription("Delault ProjectDescription ");
+			project.setCreationDate(new Date());
+			project.setEnabled(true);
+			project.setManager(manager);
+			jJProjectService.saveJJProject(project);
+
 			for (int i = 0; i < 2; i++) {
 				project = new JJProject();
 				project.setName("ProjectName " + i);
@@ -776,13 +783,6 @@ public class JJProjectBean {
 
 				jJProjectService.saveJJProject(project);
 			}
-			project = new JJProject();
-			project.setName("Default Project");
-			project.setDescription("Delault ProjectDescription ");
-			project.setCreationDate(new Date());
-			project.setEnabled(true);
-			project.setManager(manager);
-			jJProjectService.saveJJProject(project);
 
 		}
 		projectList = jJProjectService.getProjects(true);
@@ -847,18 +847,7 @@ public class JJProjectBean {
 
 	public List<JJContact> getProjectManagerList() {
 
-		projectManagerList = new ArrayList<JJContact>();
-
-		List<JJRight> rights = jJRightService.getObjectWriterList("JJProject");
-		System.out.println("rights " + rights.size());
-		for (JJRight right : rights) {
-			List<JJPermission> permissions = jJPermissionService
-					.getManagerPermissions(right.getProfile());
-			for (JJPermission permission : permissions) {
-				projectManagerList.add(permission.getContact());
-			}
-		}
-
+		projectManagerList = jJPermissionService.getManagers("JJProject");
 		return projectManagerList;
 	}
 
@@ -905,6 +894,12 @@ public class JJProjectBean {
 		projectManager = null;
 	}
 
+	public void editProject() {
+		System.out.println("Update bean category");
+		message = "Edit Project";
+		projectManager = projectAdmin.getManager();
+	}
+
 	public void deleteProject() {
 		// message = "Edit Contact";
 
@@ -921,20 +916,24 @@ public class JJProjectBean {
 		System.out.println("SAVING Project...");
 		String message = "";
 
+		projectAdmin.setManager(projectManager);
+
 		if (projectAdmin.getId() == null) {
 			System.out.println("IS a new JJProject");
 
-			projectAdmin.setManager(projectManager);
 			jJProjectService.saveJJProject(projectAdmin);
 			message = "message_successfully_created";
 
 			newProject();
 
 		} else {
+			projectAdmin.setUpdatedDate(new Date());
+
 			jJProjectService.updateJJProject(projectAdmin);
 			message = "message_successfully_updated";
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("projectDialogWidget.hide()");
+			closeDialog();
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
@@ -951,7 +950,7 @@ public class JJProjectBean {
 				new FacesMessage(summary));
 	}
 
-	public void closeDialog(CloseEvent event) {
+	public void closeDialog() {
 		System.out.println("close dialog");
 		projectAdmin = null;
 		projectManager = null;

@@ -22,7 +22,10 @@
 					<f:facet name="header">
 						<h:outputText value="Actions" />
 					</f:facet>
-					<p:commandButton id="editButton" icon="ui-icon-pencil">
+					<p:commandButton id="editButton" icon="ui-icon-pencil"
+						oncomplete="projectDialogWidget.show()"
+						action="#{jJProjectBean.editProject}"
+						update=":tabview:projectDialog">
 						<f:setPropertyActionListener value="#{project}"
 							target="#{jJProjectBean.projectAdmin}" />
 					</p:commandButton>
@@ -49,54 +52,64 @@
 	<p:dialog id="projectDialog" header="#{jJProjectBean.message}"
 		modal="true" widgetVar="projectDialogWidget" dynamic="true"
 		showEffect="fade" hideEffect="explode" appendTo="@(body)">
-		<p:ajax event="close" update=":tabview:projectForm"
+		<p:ajax event="close" update=":tabview:projectForm :headerForm"
 			listener="#{jJProjectBean.closeDialog}" />
 		<p:outputPanel id="projectDialogPanel">
 			<h:form id="projectDialogForm">
 				<p:growl id="msg" />
-				<p:panelGrid columns="1" cellpadding="6">
-					<p:panel columns="3" cellpadding="6">
-						<p:inputText id="name" value="#{jJProjectBean.projectAdmin.name}"
-							label="Name" required="true" widgetVar="nameWidget">
-							<f:validateLength maximum="100" />
-						</p:inputText>
-						<p:message for="name" id="msgName" />
-						<p:watermark for="name" value="Name *" />
-					</p:panel>
-					<p:panel columns="3" cellpadding="6">
-						<h:outputText value="Project Manager: *" />
-						<p:selectOneMenu id="projectManagerSelect"
-							value="#{jJProjectBean.projectManager}" panelStyle="width:150px"
-							effect="fade" style="width:160px" filter="true"
-							filterMatchMode="startsWith" required="true"
-							label="Project Manager"
-							requiredMessage="Project Manager is a required value"
-							widgetVar="projectManagerWidget">
-							<p:ajax process="@this" partialSubmit="true"
-								listener="#{jJProductBean.handleSelectProjectManager()}" />
-							<f:converter
-								converterId="com.starit.janjoonweb.ui.converter.JJContactConverter" />
+				<p:panelGrid style="margin-top:10px">
+					<p:row>
+						<p:column colspan="2">
+							<p:inputText id="name" value="#{jJProjectBean.projectAdmin.name}"
+								label="Name" required="true" widgetVar="nameWidget">
+								<f:validateLength maximum="100" />
+							</p:inputText>
+							<p:message for="name" id="msgName" />
+							<p:watermark for="name" value="Name *" />
+						</p:column>
+						<p:column colspan="2">
+							<h:outputText value="Project Manager: *" />
+							<p:selectOneMenu id="projectManagerSelect"
+								value="#{jJProjectBean.projectManager}" panelStyle="width:150px"
+								effect="fade" style="width:160px" filter="true"
+								filterMatchMode="startsWith" required="true"
+								label="Project Manager"
+								requiredMessage="Project Manager is a required value"
+								widgetVar="projectManagerWidget">
+								<p:ajax process="@this" partialSubmit="true"
+									listener="#{jJProductBean.handleSelectProjectManager()}" />
+								<f:converter
+									converterId="com.starit.janjoonweb.ui.converter.JJContactConverter" />
 
-							<f:selectItem itemLabel="#{jJProjectBean.projectManager.name}"
-								itemValue="#{jJProjectBean.projectManager}" />
-							<f:selectItems value="#{jJProjectBean.projectManagerList}"
-								var="p" itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />
+								<f:selectItem
+									itemLabel="#{jJProjectBean.projectManager.firstname} #{jJProjectBean.projectManager.name}"
+									itemValue="#{jJProjectBean.projectManager}" />
+								<f:selectItems value="#{jJProjectBean.projectManagerList}"
+									var="p" itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />
 
-						</p:selectOneMenu>
-
-					</p:panel>
-					<p:panel columns="2" cellpadding="6">
-						<p:selectBooleanButton
-							value="#{jJProjectBean.projectAdmin.enabled}" onLabel="Enabled"
-							offLabel="Disabled" onIcon="ui-icon-check"
-							offIcon="ui-icon-close">
-							<p:ajax update="msg" listener="#{jJProjectBean.addMessage}" />
-						</p:selectBooleanButton>
-						<p:commandButton id="submitButton" value="Save"
-							update="projectDialogForm :headerForm"
-							process="@widgetVar(nameWidget) @widgetVar(projectManagerWidget)"
-							action="#{jJProjectBean.save}" />
-					</p:panel>
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="3">
+							<p:selectBooleanButton
+								value="#{jJProjectBean.projectAdmin.enabled}" onLabel="Enabled"
+								offLabel="Disabled" onIcon="ui-icon-check"
+								offIcon="ui-icon-close">
+								<p:ajax update="msg" listener="#{jJProjectBean.addMessage}" />
+							</p:selectBooleanButton>
+						</p:column>
+					</p:row>
+					<f:facet name="footer">
+						<p:row>
+							<p:column colspan="3">
+								<p:commandButton id="submitButton" value="Save"
+									update="projectDialogForm :headerForm"
+									process="@widgetVar(nameWidget) @widgetVar(projectManagerWidget)"
+									action="#{jJProjectBean.save}" />
+							</p:column>
+						</p:row>
+					</f:facet>
 				</p:panelGrid>
 			</h:form>
 		</p:outputPanel>

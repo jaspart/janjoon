@@ -34,7 +34,7 @@ public class JJRightBean {
 	}
 
 	public List<JJRight> getRightListTable() {
-		rightListTable = jJRightService.getRightsWithoutProfile();
+		rightListTable = jJRightService.getRights(null);
 		return rightListTable;
 	}
 

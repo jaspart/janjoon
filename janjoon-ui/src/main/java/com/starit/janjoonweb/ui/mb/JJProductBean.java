@@ -127,16 +127,8 @@ public class JJProductBean {
 
 	public List<JJContact> getProductManagerList() {
 
-		productManagerList = new ArrayList<JJContact>();
+		productManagerList = jJPermissionService.getManagers("JJProduct");
 
-		List<JJRight> rights = jJRightService.getObjectWriterList("JJProduct");
-		for (JJRight right : rights) {
-			List<JJPermission> permissions = jJPermissionService
-					.getManagerPermissions(right.getProfile());
-			for (JJPermission permission : permissions) {
-				productManagerList.add(permission.getContact());
-			}
-		}
 		return productManagerList;
 	}
 

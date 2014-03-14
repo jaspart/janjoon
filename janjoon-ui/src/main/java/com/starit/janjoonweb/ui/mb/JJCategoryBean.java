@@ -110,6 +110,8 @@ public class JJCategoryBean {
 			} else {
 				System.out.println("UPDATING Category...");
 
+				categoryAdmin.setUpdatedDate(new Date());
+
 				jJCategoryService.updateJJCategory(categoryAdmin);
 				message = "message_successfully_updated";
 				RequestContext context = RequestContext.getCurrentInstance();

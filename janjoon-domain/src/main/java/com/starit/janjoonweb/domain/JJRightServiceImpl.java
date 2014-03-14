@@ -14,8 +14,6 @@ import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 
-import org.hibernate.SessionFactory;
-
 public class JJRightServiceImpl implements JJRightService {
 
 	@PersistenceContext
@@ -25,42 +23,20 @@ public class JJRightServiceImpl implements JJRightService {
 		this.entityManager = entityManager;
 	}
 
-	private SessionFactory sessionFactory;
-
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
-
-	public List<JJRight> getObjectWriterList(String objet) {
-		return getObjectWriterList(objet, true);
-	}
-
-	public List<JJRight> getObjectWriterList(String objet, boolean w) {
+	public List<JJRight> getRights(JJProfile profile) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJRight> criteriaQuery = criteriaBuilder
 				.createQuery(JJRight.class);
 		Root<JJRight> from = criteriaQuery.from(JJRight.class);
 		CriteriaQuery<JJRight> select = criteriaQuery.select(from);
 
-		Predicate predicate1 = criteriaBuilder.equal(from.get("w"), w);
-		Predicate predicate2 = criteriaBuilder.equal(from.get("objet"), objet);
+		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		select.where(criteriaBuilder.and(predicate1, predicate2));
+		if (profile != null) {
+			predicates.add(criteriaBuilder.equal(from.get("profile"), profile));
+		}
 
-		TypedQuery<JJRight> result = entityManager.createQuery(select);
-		return result.getResultList();
-	}
-
-	public List<JJRight> getRightsWithoutProfile() {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJRight> criteriaQuery = criteriaBuilder
-				.createQuery(JJRight.class);
-		Root<JJRight> from = criteriaQuery.from(JJRight.class);
-		CriteriaQuery<JJRight> select = criteriaQuery.select(from);
-
-		Predicate predicate = criteriaBuilder.isNull(from.get("profile"));
-
-		select.where(predicate);
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		TypedQuery<JJRight> result = entityManager.createQuery(select);
 		return result.getResultList();
