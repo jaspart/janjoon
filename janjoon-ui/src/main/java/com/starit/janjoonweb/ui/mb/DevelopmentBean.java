@@ -306,17 +306,7 @@ public class DevelopmentBean implements Serializable {
 
 		}
 
-	}
-
-	public void taskValueChangeListener(AjaxBehaviorEvent e) {
-
-		// task=(JJTask) e.getSource();
-		SelectOneMenu select = (SelectOneMenu) e.getComponent();
-		task = (JJTask) select.getValue();
-		System.out
-				.println("---------------------------------------------------------");
-		System.out.println("1:" + task.getName());
-	}
+	}	
 
 	public void valueChangeHandler(AjaxBehaviorEvent event) {
 

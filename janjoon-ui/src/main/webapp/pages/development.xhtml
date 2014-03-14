@@ -34,9 +34,9 @@
 										itemLabel="#{t.name}" itemValue="#{t}" />
 									<f:converter
 										converterId="com.starit.janjoonweb.ui.converter.JJTaskConverter" />
-									<f:ajax event="valueChange"
-										listener="#{jJDevelopment.taskValueChangeListener}" />
-								</p:selectOneMenu> <p:message for="taskSelectOneMenu" id="taskmessage"
+									
+								</p:selectOneMenu>
+								 <p:message for="taskSelectOneMenu" id="taskmessage"
 									closable="true" /> <p:growl id="messages" showDetail="true" />
 								<p:tree id="fileTree" value="#{jJDevelopment.tree}" var="file"
 									animate="true" selection="#{jJDevelopment.selectedTree}"

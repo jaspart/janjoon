@@ -42,13 +42,7 @@ public abstract class JJAbstractEntity {
 	@ManyToOne
 	private JJContact updatedBy;
 
-	private Boolean enabled;
+	private Boolean enabled;	
 	
-	@Override
-	public boolean equals(Object object) {
-        return (object instanceof JJAbstractEntity) && (getId() != null) 
-             ? getId().equals(((JJAbstractEntity) object).getId()) 
-             : (object == this);
-    }
 
 }

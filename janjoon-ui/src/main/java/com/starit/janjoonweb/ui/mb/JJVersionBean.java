@@ -34,7 +34,7 @@ public class JJVersionBean {
 	}
 
 	private JJVersion version;
-	private JJVersion versionTemp;
+	
 
 	private List<JJVersion> versionList;
 
@@ -48,9 +48,7 @@ public class JJVersionBean {
 	private boolean disabled = true;
 
 	public JJVersion getVersion() {
-		if (version == null) {
-			version = versionTemp;
-		}
+		
 		return version;
 	}
 
@@ -61,10 +59,7 @@ public class JJVersionBean {
 	public List<JJVersion> getVersionList() {
 
 		versionList = jJVersionService.getVersions(true, true, product);
-		versionTemp = new JJVersion();
-		versionTemp.setId(Long.valueOf("0"));
-		versionTemp.setName("Select All");
-		versionList.add(0, versionTemp);
+		
 		return versionList;
 	}
 
