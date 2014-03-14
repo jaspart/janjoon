@@ -10,7 +10,6 @@ import org.primefaces.extensions.model.timeline.TimelineModel;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
-import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJTask;
 
@@ -18,11 +17,21 @@ import com.starit.janjoonweb.domain.JJTask;
 @RooJsfManagedBean(entity = JJTask.class, beanName = "jJTaskBean")
 public class JJTaskBean {
 
+	private List<JJTask> tasks;
+
 	private TimelineModel model;
 	private Date start;
 	private Date end;
 
 	private JJProject project;
+
+	public List<JJTask> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(List<JJTask> tasks) {
+		this.tasks = tasks;
+	}
 
 	public TimelineModel getModel() {
 		return model;
@@ -47,10 +56,20 @@ public class JJTaskBean {
 	public void loadData(JJProjectBean jJProjectBean) {
 
 		project = jJProjectBean.getProject();
+		tasks = jJTaskService.getTasks(project, null, true);
+		Date now = new Date();
+		
+		for (JJTask task : tasks) {
+			task.setStartDatePlanned(now);
+			task.setEndDatePlanned(new Date(now.getTime()
+					+ task.getWorkloadPlanned() * 60 * 60 * 1000));
+		}
+		createTimeLineModel(now);
+	}
 
+	private void createTimeLineModel(Date now) {
 		// Set initial start / end dates for the axis of the timeline
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		Date now = new Date();
 
 		// Before 4 hours for now
 		cal.setTimeInMillis(now.getTime() - 4 * 60 * 60 * 1000);
@@ -60,25 +79,15 @@ public class JJTaskBean {
 		cal.setTimeInMillis(now.getTime() + 8 * 60 * 60 * 1000);
 		end = cal.getTime();
 
-		// Contacts
-
-		List<JJContact> contacts = jJContactService.getContacts(null, true);
-
 		// Create timeline model
 		model = new TimelineModel();
 
-		for (JJContact contact : contacts) {
+		for (JJTask task : tasks) {
+			// Date start = task.getCreationDate();
+			Date end = new Date(now.getTime() + task.getWorkloadPlanned() * 60
+					* 60 * 1000);
 
-			List<JJTask> tasks = jJTaskService.getTasks(project, contact, true);
-
-			for (JJTask task : tasks) {
-				Date start = task.getCreationDate();
-				Date end = new Date(start.getTime() + task.getWorkloadPlanned()
-						* 60 * 60 * 1000);
-			
-				model.add(new TimelineEvent(task, start, end, true, contact
-						.getFirstname() + " " + contact.getName()));
-			}
+			model.add(new TimelineEvent(task, now, end, true, task.getName()));
 		}
 
 	}

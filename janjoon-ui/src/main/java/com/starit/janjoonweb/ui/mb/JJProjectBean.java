@@ -1,13 +1,11 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
@@ -143,12 +141,13 @@ public class JJProjectBean {
 	private String message;
 
 	public JJProject getProject() {
-
+		if (project == null) {
+			project = jJProjectService.getJJProjectWithName("Default Project");
+		}
 		return project;
 	}
 
 	public void setProject(JJProject project) {
-
 		this.project = project;
 	}
 
@@ -254,8 +253,7 @@ public class JJProjectBean {
 
 		}
 
-		if (jJVersionService.getVersions(true, true, null).isEmpty()
-				&& (jJTaskService.findAllJJTasks().isEmpty())) {
+		if (jJVersionService.getVersions(true, true, null).isEmpty()) {
 			JJVersion version;
 			for (int i = 0; i < 4; i++) {
 				version = new JJVersion();
@@ -786,30 +784,31 @@ public class JJProjectBean {
 
 		}
 		projectList = jJProjectService.getProjects(true);
-		List<JJProduct> productList = jJProductService.getProducts(true);
-		if (jJRequirementService.findAllJJRequirements().isEmpty()) {
-			JJRequirement jJRequirement;
-			for (int j = 0; j < projectList.size(); j++) {
-				jJRequirement = new JJRequirement();
-				jJRequirement.setName("Requirement " + j);
-				jJRequirement.setDescription("RequirementDescription " + j);
-				jJRequirement.setCreationDate(new Date());
-				jJRequirement.setEnabled(true);
-				jJRequirement.setProduct(productList.get(j));
-				jJRequirement.setProject(projectList.get(j));
-				jJRequirementService.saveJJRequirement(jJRequirement);
-				JJTask jJTask;
-				for (int i = 0; i < 4; i++) {
-					jJTask = new JJTask();
-					jJTask.setName("TaskName " + i + ":R-" + j);
-					jJTask.setDescription("TaskDescription " + i + ":R-" + j);
-					jJTask.setCreationDate(new Date());
-					jJTask.setEnabled(true);
-					jJTask.setRequirement(jJRequirement);
-					jJTaskService.saveJJTask(jJTask);
-				}
-			}
-		}
+		// List<JJProduct> productList = jJProductService.getProducts(true);
+		// if (jJRequirementService.findAllJJRequirements().isEmpty()) {
+		// JJRequirement jJRequirement;
+		// for (int j = 0; j < projectList.size(); j++) {
+		// jJRequirement = new JJRequirement();
+		// jJRequirement.setName("Requirement " + j);
+		// jJRequirement.setDescription("RequirementDescription " + j);
+		// jJRequirement.setCreationDate(new Date());
+		// jJRequirement.setEnabled(true);
+		// jJRequirement.setProduct(productList.get(j));
+		// jJRequirement.setProject(projectList.get(j));
+		// jJRequirementService.saveJJRequirement(jJRequirement);
+		// JJTask jJTask;
+		// for (int i = 0; i < 4; i++) {
+		// jJTask = new JJTask();
+		// jJTask.setName("TaskName " + i + ":R-" + j);
+		// jJTask.setDescription("TaskDescription " + i + ":R-" + j);
+		// jJTask.setCreationDate(new Date());
+		// jJTask.setEnabled(true);
+		// jJTask.setRequirement(jJRequirement);
+		// jJTask.setWorkloadPlanned(10);
+		// jJTaskService.saveJJTask(jJTask);
+		// }
+		// }
+		// }
 
 		/*** End Temporary ***/
 

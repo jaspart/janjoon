@@ -11,14 +11,48 @@
 		<h:form id="planningForm">
 			<f:event type="preRenderComponent"
 				listener="#{jJTaskBean.loadData(jJProjectBean)}" />
-			<pe:timeline id="timeline" value="#{jJTaskBean.model}"
-				editable="true" eventMargin="10" eventMarginAxis="0"
-				locale="#{LocaleBean.locale}" start="#{jJTaskBean.start}"
-				end="#{jJTaskBean.end}" showNavigation="true" showButtonNew="true"
-				showMajorLabels="false" axisOnTop="true" groupsChangeable="true"
-				groupsOnRight="false" var="task">
-				<h:outputText value="Task #{task.name}" />
-			</pe:timeline>
+
+
+
+			<p:panel style="margin-top:10px">
+				<p:row>
+					<p:column>
+
+						<p:dataTable var="task" value="#{jJTaskBean.tasks}">
+							<p:column headerText="Name">
+								<h:outputText value="#{task.name}" />
+							</p:column>
+
+							<p:column headerText="Start Date">
+								<h:outputText value="#{task.startDatePlanned}" />
+							</p:column>
+
+							<p:column headerText="End Date">
+								<h:outputText value="#{task.endDatePlanned}" />
+							</p:column>
+
+							<p:column headerText="Assigned To">
+								<h:outputText value="#{task.assignedTo.name}" />
+							</p:column>
+						</p:dataTable>
+					</p:column>
+					<p:column>
+						<pe:timeline id="timeline" value="#{jJTaskBean.model}"
+							editable="true" eventMargin="10" eventMarginAxis="0"
+							locale="#{LocaleBean.locale}" start="#{jJTaskBean.start}"
+							end="#{jJTaskBean.end}" showNavigation="true"
+							showButtonNew="true" showMajorLabels="false" axisOnTop="true"
+							groupsChangeable="true" groupsOnRight="false" var="task">
+							<h:outputText value="#{task.name}" />
+						</pe:timeline>
+					</p:column>
+				</p:row>
+
+
+			</p:panel>
+
+
+
 		</h:form>
 	</ui:define>
 </ui:composition>
