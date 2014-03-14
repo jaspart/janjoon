@@ -769,8 +769,7 @@ public class JJProjectBean {
 			project.setCreationDate(new Date());
 			project.setEnabled(true);
 			project.setManager(manager);
-			jJProjectService.saveJJProject(project);
-
+			jJProjectService.saveJJProject(project);			
 			for (int i = 0; i < 2; i++) {
 				project = new JJProject();
 				project.setName("ProjectName " + i);
@@ -782,7 +781,6 @@ public class JJProjectBean {
 				jJProjectService.saveJJProject(project);
 			}
 
-		}
 		projectList = jJProjectService.getProjects(true);
 		// List<JJProduct> productList = jJProductService.getProducts(true);
 		// if (jJRequirementService.findAllJJRequirements().isEmpty()) {
@@ -809,7 +807,7 @@ public class JJProjectBean {
 		// }
 		// }
 		// }
-
+		}
 		/*** End Temporary ***/
 
 		return projectList;

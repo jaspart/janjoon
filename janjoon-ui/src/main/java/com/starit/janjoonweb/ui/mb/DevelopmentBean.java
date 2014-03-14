@@ -1,20 +1,22 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.*;
-import javax.faces.component.UIComponent;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.primefaces.component.inputtextarea.InputTextarea;
-import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TabChangeEvent;
@@ -22,15 +24,21 @@ import org.primefaces.event.TabCloseEvent;
 import org.primefaces.extensions.component.codemirror.CodeMirror;
 import org.primefaces.model.TreeNode;
 
-import com.starit.janjoonweb.domain.*;
-import com.starit.janjoonweb.ui.util.service.*;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJTask;
+import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.ui.util.service.AbstractConfigManager;
+import com.starit.janjoonweb.ui.util.service.FileMap;
+import com.starit.janjoonweb.ui.util.service.GitConfigManager;
 
 @ManagedBean(name = "jJDevelopment")
 @ViewScoped
 public class DevelopmentBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static String URL = "https://github.com/janjoon/";
+	private static String URL = "https://github.com/janjoon/ProductName-1";
 	private TabView tabView;
 	private AbstractConfigManager configManager;
 	private String type;
@@ -47,10 +55,6 @@ public class DevelopmentBean implements Serializable {
 	private JJTask task;
 
 	public DevelopmentBean() throws FileNotFoundException, IOException {
-		String ProjectUrl = URL + "ProductName-1";
-		String password = "BeHappy2012";
-		String userName = "janjoon";
-
 		// getting value from session
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
@@ -71,7 +75,7 @@ public class DevelopmentBean implements Serializable {
 		if (contact == null) {
 			JJContactBean conbean = new JJContactBean();
 			contact = conbean.getContactByEmail("admin@gmail.com");
-		}
+		}		
 		System.out.println(contact.getName());
 		tasks = prodbean.getTasksByProduct(product, project);
 		for (JJTask t : tasks) {
@@ -79,19 +83,17 @@ public class DevelopmentBean implements Serializable {
 		}
 
 		try {
-			configManager = new GitConfigManager(1, userName, password);
+			configManager = new GitConfigManager(1, contact);
 			String path = System.getProperty("user.home") + "/git/";
-			path = configManager.cloneRemoteRepository(ProjectUrl,
+			path = configManager.cloneRemoteRepository(URL,
 					"JanjonProduct", path);
-			configManager = new GitConfigManager(ProjectUrl, path, userName,
-					password);
+			configManager = new GitConfigManager(URL, path, contact);
 			System.out.println(path);
 
 		} catch (Exception e) {
 			String path = System.getProperty("user.home")
 					+ "/git/JanjonProduct/";
-			configManager = new GitConfigManager(ProjectUrl, path, userName,
-					password);
+			configManager = new GitConfigManager(URL, path, contact);
 			System.out.println(path);
 		}
 		tree = getConfigManager().listRepositoryContent();
@@ -247,9 +249,7 @@ public class DevelopmentBean implements Serializable {
 			System.out.println(fileMap.getFile().getName() + "  :"
 					+ fileMap.getTexte());
 
-		}
-		System.out.println(configManager.getPassWord() + " / "
-				+ configManager.getUserName());
+		}		
 		System.out.println(task.toString());
 		if (configManager.checkIn(task.getName())) {
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,

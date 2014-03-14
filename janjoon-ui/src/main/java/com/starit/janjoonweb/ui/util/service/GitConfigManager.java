@@ -2,8 +2,7 @@ package com.starit.janjoonweb.ui.util.service;
 
 import java.io.*;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.eclipse.jgit.api.*;
 import org.eclipse.jgit.api.errors.*;
@@ -11,10 +10,9 @@ import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.*;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.*;
-import org.primefaces.model.DefaultTreeNode;
-import org.primefaces.model.TreeNode;
+import org.primefaces.model.*;
 
-import com.starit.janjoonweb.domain.JJTask;
+import com.starit.janjoonweb.domain.JJContact;
 
 public class GitConfigManager extends AbstractConfigManager {
 
@@ -83,8 +81,8 @@ public class GitConfigManager extends AbstractConfigManager {
 		}
 	}
 
-	public GitConfigManager(String url, String path, String name, String mdp) {
-		super("GIT", url, path, name, mdp);
+	public GitConfigManager(String url, String path,JJContact jjContact) {
+		super("GIT", url, path, jjContact);
 
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
 		try {
@@ -112,7 +110,7 @@ public class GitConfigManager extends AbstractConfigManager {
 
 	public GitConfigManager(String url, String path) {
 
-		super("GIT", url, path, "", "");
+		super("GIT", url, path,null);
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
 		try {
 			File file;
@@ -137,8 +135,8 @@ public class GitConfigManager extends AbstractConfigManager {
 
 	}
 
-	public GitConfigManager(int i, String nom, String mdp) {
-		super("GIT", "", "", nom, mdp);
+	public GitConfigManager(int i, JJContact contact) {
+		super("GIT", "", "", contact);
 	}
 
 	// commit a repository
@@ -146,7 +144,7 @@ public class GitConfigManager extends AbstractConfigManager {
 	public boolean checkIn(String message) {
 		try {
 			CommitCommand commit = git.commit();
-			commit.setAuthor(userName, "");
+			commit.setAuthor(jJContact.getName(), "");
 			commit.setMessage(message);
 			commit.setAll(true);
 			commit.call();
@@ -284,10 +282,10 @@ public class GitConfigManager extends AbstractConfigManager {
 		cloneCommand.setDirectory(file);
 		cloneCommand.setURI(url);
 
-		if (userName != null) {
+		if (jJContact != null) {
 			cloneCommand
 					.setCredentialsProvider(new UsernamePasswordCredentialsProvider(
-							userName, passWord));
+							jJContact.getName(), jJContact.getPassword()));
 		}
 		try {
 			cloneCommand.call();
@@ -326,18 +324,16 @@ public class GitConfigManager extends AbstractConfigManager {
 	@Override
 	public boolean pushRepository() {
 
-		FileRepositoryBuilder builder = new FileRepositoryBuilder();
-
 		git = new Git(repository);
 
 		PushCommand pushCommand = git.push();
 		pushCommand.setRemote(url);
 		pushCommand.setPushAll();
 		pushCommand.setForce(true);
-		if (userName != null)
+		if (jJContact != null)
 			pushCommand
 					.setCredentialsProvider(new UsernamePasswordCredentialsProvider(
-							userName, passWord));
+							jJContact.getName(), jJContact.getPassword()));
 
 		try {
 			pushCommand.call();
@@ -363,10 +359,10 @@ public class GitConfigManager extends AbstractConfigManager {
 			remoteConfig.addURI(uri);
 			remoteConfig.update(config);
 			PullCommand putchCommand = git.pull();
-			if (userName != null)
+			if (jJContact != null)
 				putchCommand
 						.setCredentialsProvider(new UsernamePasswordCredentialsProvider(
-								userName, passWord));
+								jJContact.getName(), jJContact.getPassword()));
 
 			putchCommand.call();
 			System.out.println(repository.getDirectory().getParent()

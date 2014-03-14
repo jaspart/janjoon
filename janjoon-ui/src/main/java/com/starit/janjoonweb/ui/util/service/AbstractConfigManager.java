@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.primefaces.model.TreeNode;
 
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJTask;
 
 public abstract class AbstractConfigManager implements Serializable
@@ -19,16 +20,16 @@ public abstract class AbstractConfigManager implements Serializable
 	
 	private String type;	
 	protected String url;
-	protected String path;
-	protected String userName,passWord;
+	protected String path;	
+	protected JJContact jJContact;
 	
-	public AbstractConfigManager(String type, String url, String path,String name,String mdp)
+	public AbstractConfigManager(String type, String url, String path,JJContact jJContact)
 	{		
 		this.type = type;
 		this.url = url;
 		this.path = path;
-		this.userName=name;
-		this.passWord=mdp;
+		this.jJContact=jJContact;
+		
 	}
 
 	public String getType() {
@@ -56,21 +57,14 @@ public abstract class AbstractConfigManager implements Serializable
 	public void setPath(String path) {
 		this.path = path;
 	}
+	
 
-	public String getUserName() {
-		return userName;
+	public JJContact getjJContact() {
+		return jJContact;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getPassWord() {
-		return passWord;
-	}
-
-	public void setPassWord(String passWord) {
-		this.passWord = passWord;
+	public void setjJContact(JJContact jJContact) {
+		this.jJContact = jJContact;
 	}
 
 	public abstract boolean checkIn(String message);
