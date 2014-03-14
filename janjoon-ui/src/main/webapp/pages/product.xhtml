@@ -28,7 +28,10 @@
 					<f:facet name="header">
 						<h:outputText value="Actions" />
 					</f:facet>
-					<p:commandButton id="editButton" icon="ui-icon-pencil">
+					<p:commandButton id="editButton" icon="ui-icon-pencil"
+						oncomplete="productDialogWidget.show()"
+						action="#{jJProductBean.editProduct(jJVersionBean)}"
+						update=":tabview:productDialog">
 						<f:setPropertyActionListener value="#{product}"
 							target="#{jJProductBean.productAdmin}" />
 					</p:commandButton>
@@ -55,86 +58,115 @@
 	<p:dialog id="productDialog" header="#{jJProductBean.message}"
 		modal="true" widgetVar="productDialogWidget" dynamic="true"
 		showEffect="fade" hideEffect="explode" appendTo="@(body)">
-		<p:ajax event="close" update=":tabview:productForm"
+		<p:ajax event="close" update=":tabview:productForm :headerForm"
 			listener="#{jJProductBean.closeDialog(jJVersionBean)}" />
 		<p:outputPanel id="productDialogPanel">
 			<h:form id="productDialogForm">
 				<p:growl id="msg" />
-				<p:panelGrid columns="1" cellpadding="6">
-					<p:panel columns="3" cellpadding="6">
-						<p:inputText id="name" value="#{jJProductBean.productAdmin.name}"
-							label="Name" required="true" widgetVar="nameWidget">
-							<f:validateLength maximum="100" />
-						</p:inputText>
-						<p:message for="name" id="msgName" />
-						<p:watermark for="name" value="Name *" />
-						<p:inputText id="extname"
-							value="#{jJProductBean.productAdmin.extname}" label="Extname"
-							required="true" widgetVar="extnameWidget">
-							<f:validateLength maximum="100" />
-						</p:inputText>
-						<p:message for="extname" id="msgExtname" />
-						<p:watermark for="extname" value="External Name *" />
-					</p:panel>
-					<p:panel columns="2" cellpadding="6">
-						<h:outputText value="Product Manager: *" />
-						<p:selectOneMenu id="productManagerSelect"
-							value="#{jJProductBean.productManager}" panelStyle="width:150px"
-							effect="fade" style="width:160px" filter="true"
-							filterMatchMode="startsWith" required="true"
-							requiredMessage="Product Manager is a required value"
-							widgetVar="productManagerWidget" label="Product Manager">
-							<p:ajax process="@this" partialSubmit="true"
-								listener="#{jJProductBean.handleSelectProductManager()}" />
-							<f:converter
-								converterId="com.starit.janjoonweb.ui.converter.JJContactConverter" />
-							<f:selectItem
-								itemLabel="#{jJProductBean.productManager.firstname} #{jJProductBean.productManager.name}"
-								itemValue="#{jJProductBean.productManager}" />
-							<f:selectItems value="#{jJProductBean.productManagerList}"
-								var="p" itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />
-						</p:selectOneMenu>
+				<p:panel style="margin-top:10px">
+					<p:row>
+						<p:column>
+							<p:panelGrid style="margin-top:10px">
+								<p:row>
+									<p:column>
+										<p:inputText id="name"
+											value="#{jJProductBean.productAdmin.name}" label="Name"
+											required="true" widgetVar="nameWidget">
+											<f:validateLength maximum="100" />
+										</p:inputText>
+										<p:message for="name" id="msgName" />
+										<p:watermark for="name" value="Name *" />
+									</p:column>
+									<p:column>
+										<h:outputText value="Product Manager: *" />
+										<p:selectOneMenu id="productManagerSelect"
+											value="#{jJProductBean.productManager}"
+											panelStyle="width:150px" effect="fade" style="width:160px"
+											filter="true" filterMatchMode="startsWith" required="true"
+											requiredMessage="Product Manager is a required value"
+											widgetVar="productManagerWidget" label="Product Manager">
+											<p:ajax process="@this" partialSubmit="true"
+												listener="#{jJProductBean.handleSelectProductManager()}" />
+											<f:converter
+												converterId="com.starit.janjoonweb.ui.converter.JJContactConverter" />
+											<f:selectItem
+												itemLabel="#{jJProductBean.productManager.firstname} #{jJProductBean.productManager.name}"
+												itemValue="#{jJProductBean.productManager}" />
+											<f:selectItems value="#{jJProductBean.productManagerList}"
+												var="p" itemLabel="#{p.firstname} #{p.name}"
+												itemValue="#{p}" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:inputText id="extname"
+											value="#{jJProductBean.productAdmin.extname}" label="Extname"
+											required="true" widgetVar="extnameWidget">
+											<f:validateLength maximum="100" />
+										</p:inputText>
+										<p:message for="extname" id="msgExtname" />
+										<p:watermark for="extname" value="External Name *" />
+									</p:column>
 
-					</p:panel>
-					<p:panel columns="2" cellpadding="6">
-						<p:selectBooleanButton
-							value="#{jJProductBean.productAdmin.enabled}" onLabel="Enabled"
-							offLabel="Disabled" onIcon="ui-icon-check"
-							offIcon="ui-icon-close">
-							<p:ajax update="msg" listener="#{jJProductBean.addMessage}" />
-						</p:selectBooleanButton>
-						<p:commandButton id="submitButton" value="Save"
-							update="productDialogForm :headerForm"
-							process="@widgetVar(nameWidget) @widgetVar(extnameWidget) @widgetVar(productManagerWidget)"
-							action="#{jJProductBean.save(jJVersionBean)}" />
-					</p:panel>
-					<p:panel id="versionPanel" columns="4" cellpadding="6">
-						<p:inputText id="version"
-							value="#{jJVersionBean.versionAdmin.name}" label="Version Name"
-							required="true" widgetVar="versionWidget">
-							<f:validateLength maximum="100" />
-						</p:inputText>
-						<p:message for="version" id="msgVersion" />
-						<p:watermark for="version" value="Version Name *" />
-						<p:commandButton id="saveVersion" update="msg versionPanel"
-							actionListener="#{jJVersionBean.save}" icon="ui-icon-circle-plus"
-							process="@widgetVar(versionWidget)" />
-						<p:dataTable id="versionDataTable" var="version"
-							value="#{jJVersionBean.versionDataModel}" paginator="true"
-							rows="4" selection="#{jJVersionBean.versionListTable}">
-							<p:ajax event="rowSelectCheckbox"
-								listener="#{jJVersionBean.onRowSelect}" />
-							<f:facet name="header">  
-            			Version List  
-        			</f:facet>
-							<p:column selectionMode="multiple" style="width:2%" />
-							<p:column headerText="Name" filterBy="name"
-								filterMatchMode="startsWith" style="width:25%">  
+									<p:column>
+										<p:selectBooleanButton
+											value="#{jJProductBean.productAdmin.enabled}"
+											onLabel="Enabled" offLabel="Disabled" onIcon="ui-icon-check"
+											offIcon="ui-icon-close">
+											<p:ajax update="msg" listener="#{jJProductBean.addMessage}" />
+										</p:selectBooleanButton>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:inputText id="version"
+											value="#{jJVersionBean.versionAdmin.name}"
+											label="Version Name" required="true"
+											widgetVar="versionWidget">
+											<f:validateLength maximum="100" />
+										</p:inputText>
+										<p:message for="version" id="msgVersion" />
+										<p:watermark for="version" value="Version Name *" />
+									</p:column>
+
+									<p:column>
+										<p:commandButton id="saveVersion"
+											update="version versionDataTable"
+											actionListener="#{jJVersionBean.save}"
+											icon="ui-icon-circle-plus" value="New Version"
+											process="@widgetVar(versionWidget)" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:column>
+					</p:row>
+					<p:dataTable id="versionDataTable" var="version"
+						value="#{jJVersionBean.versionDataModel}" paginator="true"
+						style="width:467px" rows="4" widgetVar="versionDataTableWidget"
+						selection="#{jJVersionBean.versionListTable}">
+						<p:ajax event="rowSelectCheckbox"
+							listener="#{jJVersionBean.onRowSelect}" />
+						<f:facet name="header">  
+            				Version List 
+						</f:facet>
+						<p:column selectionMode="multiple" style="width:2%" />
+						<p:column headerText="Name" filterBy="name"
+							filterMatchMode="startsWith" style="width:25%">  
 							#{version.name}
 						</p:column>
-						</p:dataTable>
-					</p:panel>
-				</p:panelGrid>
+					</p:dataTable>
+					<f:facet name="footer">
+						<p:row>
+							<p:column colspan="3">
+								<p:commandButton id="submitButton" value="Save"
+									update="productDialogForm :headerForm"
+									process="@widgetVar(nameWidget) @widgetVar(extnameWidget) @widgetVar(productManagerWidget) @widgetVar(versionDataTableWidget)"
+									action="#{jJProductBean.save(jJVersionBean)}" />
+							</p:column>
+						</p:row>
+					</f:facet>
+				</p:panel>
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>

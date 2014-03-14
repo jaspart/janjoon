@@ -24,7 +24,6 @@ import com.starit.janjoonweb.ui.util.MessageFactory;
 @RooJsfManagedBean(entity = JJVersion.class, beanName = "jJVersionBean")
 public class JJVersionBean {
 
-	
 	@Autowired
 	JJRequirementService jJRequirementService;
 
@@ -34,7 +33,6 @@ public class JJVersionBean {
 	}
 
 	private JJVersion version;
-	
 
 	private List<JJVersion> versionList;
 
@@ -48,7 +46,7 @@ public class JJVersionBean {
 	private boolean disabled = true;
 
 	public JJVersion getVersion() {
-		
+
 		return version;
 	}
 
@@ -59,7 +57,7 @@ public class JJVersionBean {
 	public List<JJVersion> getVersionList() {
 
 		versionList = jJVersionService.getVersions(true, true, product);
-		
+
 		return versionList;
 	}
 
@@ -111,13 +109,12 @@ public class JJVersionBean {
 
 	public void handleSelectVersion(JJRequirementBean jJRequirementBean,
 			JJChapterBean jJChapterBean) {
-		
+
 		jJRequirementBean.setVersion(version);
-		jJChapterBean.setVersion(version);	
+		jJChapterBean.setVersion(version);
 	}
-	
-	public List<JJTask> getTastksByVersion(JJVersion jJversion)
-	{
+
+	public List<JJTask> getTastksByVersion(JJVersion jJversion) {
 		return jJVersionService.getTastksByVersion(jJversion);
 	}
 
@@ -169,9 +166,6 @@ public class JJVersionBean {
 	@SuppressWarnings("unchecked")
 	private class VersionDataModel extends ListDataModel<JJVersion> implements
 			SelectableDataModel<JJVersion> {
-
-		public VersionDataModel() {
-		}
 
 		public VersionDataModel(List<JJVersion> data) {
 			super(data);

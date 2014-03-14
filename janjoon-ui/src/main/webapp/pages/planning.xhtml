@@ -11,13 +11,9 @@
 		<h:form id="planningForm">
 			<f:event type="preRenderComponent"
 				listener="#{jJTaskBean.loadData(jJProjectBean)}" />
-
-
-
 			<p:panel style="margin-top:10px">
 				<p:row>
 					<p:column>
-
 						<p:dataTable var="task" value="#{jJTaskBean.tasks}">
 							<p:column headerText="Name">
 								<h:outputText value="#{task.name}" />
@@ -47,12 +43,7 @@
 						</pe:timeline>
 					</p:column>
 				</p:row>
-
-
 			</p:panel>
-
-
-
 		</h:form>
 	</ui:define>
 </ui:composition>

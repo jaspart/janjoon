@@ -1,11 +1,9 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
@@ -15,13 +13,10 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJChapterService;
 import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJPermission;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirementService;
-import com.starit.janjoonweb.domain.JJRight;
-import com.starit.janjoonweb.domain.JJRightService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJVersion;
@@ -54,13 +49,6 @@ public class JJProductBean {
 	}
 
 	@Autowired
-	JJRightService jJRightService;
-
-	public void setjJRightService(JJRightService jJRightService) {
-		this.jJRightService = jJRightService;
-	}
-
-	@Autowired
 	JJPermissionService jJPermissionService;
 
 	public void setjJPermissionService(JJPermissionService jJPermissionService) {
@@ -80,7 +68,7 @@ public class JJProductBean {
 
 	private String message;
 
-	public JJProduct getProduct() {		
+	public JJProduct getProduct() {
 
 		return product;
 	}
@@ -92,7 +80,6 @@ public class JJProductBean {
 	public List<JJProduct> getProductList() {
 		productList = jJProductService.getProducts(true);
 
-		
 		return productList;
 	}
 
@@ -188,8 +175,14 @@ public class JJProductBean {
 
 	}
 
+	public void editProduct(JJVersionBean jJVersionBean) {
+		System.out.println("Update bean product");
+		message = "Edit Product";
+		productManager = productAdmin.getManager();
+		jJVersionBean.newVersion();
+	}
+
 	public void deleteProduct() {
-		// message = "Edit Contact";
 
 		if (productAdmin != null) {
 			System.out.println(productAdmin.getName());
@@ -204,6 +197,18 @@ public class JJProductBean {
 		System.out.println("SAVING Product...");
 		String message = "";
 
+		List<JJVersion> versions = jJVersionBean.getVersionListTable();
+
+		if (!versions.isEmpty()) {
+			JJProduct product = jJProductService.findJJProduct(productAdmin
+					.getId());
+			product.getVersions().addAll(versions);
+			for (JJVersion jjVersion : versions) {
+				// System.out.println(jjVersion.getName());
+				jjVersion.setProduct(product);
+			}
+		}
+
 		if (productAdmin.getId() == null) {
 			System.out.println("IS a new JJProduct");
 
@@ -211,26 +216,21 @@ public class JJProductBean {
 			jJProductService.saveJJProduct(productAdmin);
 			message = "message_successfully_created";
 
-			List<JJVersion> versions = jJVersionBean.getVersionListTable();
-
-			if (versions != null && !versions.isEmpty()) {
-				JJProduct product = jJProductService.findJJProduct(productAdmin
-						.getId());
-				product.getVersions().addAll(versions);
-				for (JJVersion jjVersion : versions) {
-					// System.out.println(jjVersion.getName());
-					jjVersion.setProduct(product);
-				}
+			if (!versions.isEmpty()) {
 				jJProductService.updateJJProduct(product);
 			}
 
 			newProduct(jJVersionBean);
 
 		} else {
+
+			productAdmin.setUpdatedDate(new Date());
+
 			jJProductService.updateJJProduct(productAdmin);
 			message = "message_successfully_updated";
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("productDialogWidget.hide()");
+			closeDialog(jJVersionBean);
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,

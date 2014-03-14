@@ -782,6 +782,7 @@ public class JJProjectBean {
 			}
 
 		projectList = jJProjectService.getProjects(true);
+		
 		// List<JJProduct> productList = jJProductService.getProducts(true);
 		// if (jJRequirementService.findAllJJRequirements().isEmpty()) {
 		// JJRequirement jJRequirement;
@@ -892,7 +893,7 @@ public class JJProjectBean {
 	}
 
 	public void editProject() {
-		System.out.println("Update bean category");
+		System.out.println("Update bean project");
 		message = "Edit Project";
 		projectManager = projectAdmin.getManager();
 	}
