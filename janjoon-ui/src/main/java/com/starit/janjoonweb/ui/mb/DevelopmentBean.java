@@ -1,38 +1,36 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.*;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.primefaces.component.inputtextarea.InputTextarea;
+import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.TabCloseEvent;
 import org.primefaces.extensions.component.codemirror.CodeMirror;
 import org.primefaces.model.TreeNode;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.starit.janjoonweb.ui.util.service.AbstractConfigManager;
-import com.starit.janjoonweb.ui.util.service.FileMap;
-import com.starit.janjoonweb.ui.util.service.GitConfigManager;
+import com.starit.janjoonweb.domain.*;
+import com.starit.janjoonweb.ui.util.service.*;
 
-@ManagedBean(name="jJDevelopment")
+@ManagedBean(name = "jJDevelopment")
 @ViewScoped
 public class DevelopmentBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private static String URL = "https://github.com/janjoon/";
 	private TabView tabView;
 	private AbstractConfigManager configManager;
 	private String type;
@@ -40,37 +38,67 @@ public class DevelopmentBean implements Serializable {
 	private TreeNode tree;
 	private TreeNode selectedTree;
 	private ArrayList<FileMap> files;
-	private File file;	
-	private JJProjectBean jJProjectBean;
+	private File file;
+	private JJProject project;
+	private JJProduct product;
+	private JJVersion version;
+	private JJContact contact;
+	private List<JJTask> tasks;
+	private JJTask task;
 
-	public DevelopmentBean() throws IOException {
-
-		String URL = "https://github.com/janjoon/ProductName-1";
+	public DevelopmentBean() throws FileNotFoundException, IOException {
+		String ProjectUrl = URL + "ProductName-1";
 		String password = "BeHappy2012";
-		String userName = "janjoon";			
-		//System.out.println(jJProjectBean.getProject().getName());
-		
+		String userName = "janjoon";
+
+		// getting value from session
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		contact = (JJContact) session.getAttribute("JJContact");
+		JJVersionBean verbean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
+		JJProjectBean projbean = (JJProjectBean) session
+				.getAttribute("jJProjectBean");
+		JJProductBean prodbean = (JJProductBean) session
+				.getAttribute("jJProductBean");
+		if (verbean != null) {
+			if (verbean.getVersion() != null) {
+				version = verbean.getVersion();
+			}
+		}
+		product = prodbean.getProduct();
+		project = projbean.getProject();
+		if (contact == null) {
+			JJContactBean conbean = new JJContactBean();
+			contact = conbean.getContactByEmail("admin@gmail.com");
+		}
+		System.out.println(contact.getName());
+		tasks = prodbean.getTasksByProduct(product, project);
+		for (JJTask t : tasks) {
+			System.out.println("111111" + t.getName());
+		}
+
 		try {
 			configManager = new GitConfigManager(1, userName, password);
 			String path = System.getProperty("user.home") + "/git/";
-			path = configManager.cloneRemoteRepository(URL, "JanjonProduct",
-					path);
-			configManager = new GitConfigManager(URL, path, userName, password);
+			path = configManager.cloneRemoteRepository(ProjectUrl,
+					"JanjonProduct", path);
+			configManager = new GitConfigManager(ProjectUrl, path, userName,
+					password);
 			System.out.println(path);
 
 		} catch (Exception e) {
 			String path = System.getProperty("user.home")
 					+ "/git/JanjonProduct/";
-			configManager = new GitConfigManager(URL, path, userName, password);
-			System.out.println(path);			
-
+			configManager = new GitConfigManager(ProjectUrl, path, userName,
+					password);
+			System.out.println(path);
 		}
-
-		tree = configManager.listRepositoryContent();
-		selectedTree = tree;
+		tree = getConfigManager().listRepositoryContent();
+		selectedTree = getTree();
 		while (selectedTree.getChildCount() != 0) {
 			selectedTree = selectedTree.getChildren().get(0);
-			// System.out.println(selectedTree.getData().getClass());
+
 		}
 		file = (File) selectedTree.getData();
 		files = new ArrayList<FileMap>();
@@ -80,14 +108,10 @@ public class DevelopmentBean implements Serializable {
 					fileTexte, file);
 			files.add(filemap);
 		}
-
-	}	
-	@Autowired
-	public void setjJProjectBean(JJProjectBean jJProjectBean) {
-		this.jJProjectBean = jJProjectBean;
 	}
 
 	public AbstractConfigManager getConfigManager() {
+
 		return configManager;
 	}
 
@@ -104,6 +128,7 @@ public class DevelopmentBean implements Serializable {
 	}
 
 	public TreeNode getTree() {
+
 		return tree;
 	}
 
@@ -112,6 +137,7 @@ public class DevelopmentBean implements Serializable {
 	}
 
 	public TreeNode getSelectedTree() {
+
 		return selectedTree;
 	}
 
@@ -128,6 +154,7 @@ public class DevelopmentBean implements Serializable {
 	}
 
 	public File getFile() {
+
 		return file;
 	}
 
@@ -149,7 +176,55 @@ public class DevelopmentBean implements Serializable {
 
 	public void setActiveTabIndex(int activeTabIndex) {
 		this.activeTabIndex = activeTabIndex;
-	}	
+	}
+
+	public JJProject getProject() {
+		return project;
+	}
+
+	public void setProject(JJProject project) {
+		this.project = project;
+	}
+
+	public JJVersion getVersion() {
+		return version;
+	}
+
+	public void setVersion(JJVersion version) {
+		this.version = version;
+	}
+
+	public JJContact getContact() {
+		return contact;
+	}
+
+	public void setContact(JJContact contact) {
+		this.contact = contact;
+	}
+
+	public JJProduct getProduct() {
+		return product;
+	}
+
+	public void setProduct(JJProduct product) {
+		this.product = product;
+	}
+
+	public List<JJTask> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(List<JJTask> tasks) {
+		this.tasks = tasks;
+	}
+
+	public JJTask getTask() {
+		return task;
+	}
+
+	public void setTask(JJTask task) {
+		this.task = task;
+	}
 
 	public void pull() {
 		if (configManager.pullRepository()) {
@@ -157,8 +232,9 @@ public class DevelopmentBean implements Serializable {
 					"Updated To Head", configManager.getPath());
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		} else {
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Error with Synchronisation", configManager.getPath());
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "Error with Synchronisation",
+					configManager.getPath());
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
 
@@ -174,7 +250,8 @@ public class DevelopmentBean implements Serializable {
 		}
 		System.out.println(configManager.getPassWord() + " / "
 				+ configManager.getUserName());
-		if (configManager.checkIn("FirstCommit")) {
+		System.out.println(task.toString());
+		if (configManager.checkIn(task.getName())) {
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Commited", configManager.getPath());
 			FacesContext.getCurrentInstance().addMessage(null, message);
@@ -230,29 +307,43 @@ public class DevelopmentBean implements Serializable {
 		}
 
 	}
-	public void valueChangeHandler(AjaxBehaviorEvent event){
-			
-			System.out.println("---------------------------------------------------------");
-			InputTextarea texte=(InputTextarea) event.getComponent();
-			//File  f=texte.
-			
-			System.out.println(texte.getValue()+"---");
-			texte.setSubmittedValue(texte.getValue());}
-	
-	public void valueChangeHandlerCodeMirror(AjaxBehaviorEvent event){
-		
-		System.out.println("---------------------------------------------------------");
-		CodeMirror texte=(CodeMirror) event.getComponent();
-		//File  f=texte.
-		
-		System.out.println(texte.getValue()+"---");
-		texte.setSubmittedValue(texte.getValue());}
-	
+
+	public void taskValueChangeListener(AjaxBehaviorEvent e) {
+
+		// task=(JJTask) e.getSource();
+		SelectOneMenu select = (SelectOneMenu) e.getComponent();
+		task = (JJTask) select.getValue();
+		System.out
+				.println("---------------------------------------------------------");
+		System.out.println("1:" + task.getName());
+	}
+
+	public void valueChangeHandler(AjaxBehaviorEvent event) {
+
+		System.out
+				.println("---------------------------------------------------------");
+		InputTextarea texte = (InputTextarea) event.getComponent();
+		// File f=texte.
+
+		System.out.println(texte.getValue() + "---");
+		texte.setSubmittedValue(texte.getValue());
+	}
+
+	public void valueChangeHandlerCodeMirror(AjaxBehaviorEvent event) {
+
+		System.out
+				.println("---------------------------------------------------------");
+		CodeMirror texte = (CodeMirror) event.getComponent();
+		// File f=texte.
+
+		System.out.println(texte.getValue() + "---");
+		texte.setSubmittedValue(texte.getValue());
+	}
 
 	public void onCloseTab(TabCloseEvent event) {
 		FileMap f = (FileMap) event.getData();
+
 		int j = contains(f.getFile());
-		// System.out.println(f.getTexte());
 		files.get(j).setTexte(f.getTexte());
 		configManager.setFileTexte(files.get(j).getFile(), files.get(j)
 				.getTexte());
@@ -260,9 +351,9 @@ public class DevelopmentBean implements Serializable {
 	}
 
 	public void onChangeTab(TabChangeEvent event) {
+
 		FileMap f = (FileMap) event.getData();
 		int j = contains(f.getFile());
-		// System.out.println(f.getTexte());
 		files.get(j).setTexte(f.getTexte());
 
 	}
@@ -280,17 +371,5 @@ public class DevelopmentBean implements Serializable {
 		return j;
 
 	}
-	
-	public void loadData(JJProjectBean jJProjectBean) {
 
-		System.out.println(jJProjectBean.getProject().getName());
-		this.jJProjectBean = jJProjectBean;
-
-	
-	}
-	
-	public static Object findBean(String beanName) {
-	    FacesContext context = FacesContext.getCurrentInstance();
-	    return  context.getApplication().evaluateExpressionGet(context, "#{" + beanName + "}", Object.class);
-	}
 }

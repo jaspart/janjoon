@@ -151,7 +151,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 		// Adding predicates in case of parameter not being null
-		if (project != null) {
+		if (project!= null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
 		}
 		if (product != null) {

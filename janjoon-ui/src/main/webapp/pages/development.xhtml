@@ -12,8 +12,6 @@
 	<link type="text/css" rel="stylesheet"
 		href="/syntaxhighlighter/standard.css" />
 	<ui:define name="content">
-	<f:event type="preRenderComponent"
-				listener="#{jJDevelopment.loadData(jJProjectBean)}" />
 		<center>
 			<p:tabMenu activeIndex="3" name="content">
 				<ui:include src="/templates/menu.xhtml" />
@@ -23,58 +21,62 @@
 				style="width: 90%;valign: top;">
 				<h:link value="TestWith CodeMirror" outcome="development2" />
 				<h:form id="form">
-								
-					<table class="mytable">
-						<tr><td valign="top">
-							<h:outputLabel value="Task: " />
-							<p:selectOneMenu
-								id="task" value="" effect="fold" editable="false">
-								<f:selectItems value="hjvghj" />
-							</p:selectOneMenu>
-							<p:growl id="messages" showDetail="true" /> 
-							<p:tree
-								id="fileTree" value="#{jJDevelopment.tree}" var="file"
-								animate="true" selection="#{jJDevelopment.selectedTree}"
-								selectionMode="single">
-								<p:ajax event="select" update=":form:messages,:form:tabView"
-									listener="#{jJDevelopment.onSelectTree}" />
-								<p:treeNode type="folder" expandedIcon="ui-icon-folder-open"
-									collapsedIcon="ui-icon-folder-collapsed">
-									<h:outputText value="#{file.name}" />
-								</p:treeNode>
-								<p:treeNode type="file" icon="ui-icon-document">
-									<h:outputText value="#{file.name}" />
-								</p:treeNode>
-							</p:tree></td>
-							<td><p:tabView id="tabView"
-								activeIndex="#{jJDevelopment.activeTabIndex}"
-								binding="#{jJDevelopment.tabView}" scrollable="true"
-								value="#{jJDevelopment.files}" var="tab">
-								<p:ajax event="tabClose" listener="#{jJDevelopment.onCloseTab}" />
-								<p:ajax event="tabChange"
-									listener="#{jJDevelopment.onChangeTab}" />
-								<p:tab title="#{tab.title}" closable="true">
-								<p:inputTextarea id="textArea" rows="20" cols="75"
-									value="#{tab.texte}" >
-								 <p:ajax event="blur" 
-									listener="#{jJDevelopment.valueChangeHandler}"/>
-								</p:inputTextarea>
-								</p:tab>
 
-							</p:tabView></td>
+					<table class="mytable">
+						<tr>
+							<td valign="top"><h:outputText for="taskSelectOneMenu"
+									value="Task :" /> <p:selectOneMenu id="taskSelectOneMenu"
+									value="#{jJDevelopment.task}" panelStyle="width:150px"
+									effect="fold" editable="false" style="width:160px"
+									required="true" requiredMessage="Select task to commit">
+									<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
+									<f:selectItems value="#{jJDevelopment.tasks}" var="t"
+										itemLabel="#{t.name}" itemValue="#{t}" />
+									<f:converter
+										converterId="com.starit.janjoonweb.ui.converter.JJTaskConverter" />
+									<f:ajax event="valueChange"
+										listener="#{jJDevelopment.taskValueChangeListener}" />
+								</p:selectOneMenu> <p:message for="taskSelectOneMenu" id="taskmessage"
+									closable="true" /> <p:growl id="messages" showDetail="true" />
+								<p:tree id="fileTree" value="#{jJDevelopment.tree}" var="file"
+									animate="true" selection="#{jJDevelopment.selectedTree}"
+									selectionMode="single">
+									<p:ajax event="select" update=":form:messages,:form:tabView"
+										listener="#{jJDevelopment.onSelectTree}" />
+									<p:treeNode type="folder" expandedIcon="ui-icon-folder-open"
+										collapsedIcon="ui-icon-folder-collapsed">
+										<h:outputText value="#{file.name}" />
+									</p:treeNode>
+									<p:treeNode type="file" icon="ui-icon-document">
+										<h:outputText value="#{file.name}" />
+									</p:treeNode>
+								</p:tree></td>
+							<td><p:tabView id="tabView"
+									activeIndex="#{jJDevelopment.activeTabIndex}"
+									binding="#{jJDevelopment.tabView}" scrollable="true"
+									value="#{jJDevelopment.files}" var="tab">
+									<p:ajax event="tabClose" listener="#{jJDevelopment.onCloseTab}" />
+									<p:ajax event="tabChange"
+										listener="#{jJDevelopment.onChangeTab}" />
+									<p:tab title="#{tab.title}" closable="true">
+										<p:inputTextarea id="textArea" rows="20" cols="75"
+											value="#{tab.texte}">
+											<p:ajax event="blur"
+												listener="#{jJDevelopment.valueChangeHandler}" />
+										</p:inputTextarea>
+									</p:tab>
+
+								</p:tabView></td>
 						</tr>
 						<tr>
 							<td><p:commandButton value="Commit" id="submit"
-								icon="ui-icon-disk" actionListener="#{jJDevelopment.commit}"
-								update=":form:messages,:form:tabView,:form:fileTree" />
-							</td>
-							<td>
-								<p:commandButton value="UpdateToHead" id="fetchFromRepo"
-								icon="ui-icon-disk" actionListener="#{jJDevelopment.pull}"
-									update=":form:messages,:form:tabView,:form:fileTree"/>
-							</td>
+									icon="ui-icon-disk" actionListener="#{jJDevelopment.commit}"
+									update=":form:messages,:form:tabView,:form:fileTree,:form:taskmessage" /></td>
+							<td><p:commandButton value="UpdateToHead" id="fetchFromRepo"
+									icon="ui-icon-disk" actionListener="#{jJDevelopment.pull}"
+									update=":form:messages,:form:tabView,:form:fileTree" /></td>
 						</tr>
-					</table>					
+					</table>
 				</h:form>
 				<p:blockUI block="form" trigger=":form:submit">  
         				LOADING<br />

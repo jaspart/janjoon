@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
@@ -28,6 +29,7 @@ import com.starit.janjoonweb.domain.JJProductService;
 import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJProfileService;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJRight;
 import com.starit.janjoonweb.domain.JJRightService;
@@ -143,10 +145,6 @@ public class JJProjectBean {
 
 	public JJProject getProject() {
 
-		if (project == null) {
-			project = jJProjectService.getJJProjectWithName("Default Project");
-		}
-
 		return project;
 	}
 
@@ -257,19 +255,8 @@ public class JJProjectBean {
 
 		}
 
-		if (jJTaskService.findAllJJTasks().isEmpty()) {
-			JJTask task;
-			for (int i = 0; i < 4; i++) {
-				task = new JJTask();
-				task.setName("TaskName " + i);
-				task.setDescription("TaskDescription " + i);
-				task.setCreationDate(new Date());
-				task.setEnabled(true);
-				jJTaskService.saveJJTask(task);
-			}
-		}
-
-		if (jJVersionService.getVersions(true, true, null).isEmpty()) {
+		if (jJVersionService.getVersions(true, true, null).isEmpty()
+				&& (jJTaskService.findAllJJTasks().isEmpty())) {
 			JJVersion version;
 			for (int i = 0; i < 4; i++) {
 				version = new JJVersion();
@@ -681,11 +668,11 @@ public class JJProjectBean {
 		if (jJContactService.findAllJJContacts().isEmpty()) {
 
 			JJContact contact = new JJContact();
-			contact.setName("Admin");
+			contact.setName("janjoon");
 			contact.setFirstname("Admin");
 			contact.setDescription("This contact is " + contact.getFirstname()
 					+ " " + contact.getName());
-			contact.setPassword("adminadmin");
+			contact.setPassword("BeHappy2012");
 			contact.setEnabled(true);
 			contact.setEmail("admin@gmail.com");
 			contact.setCreationDate(new Date());
@@ -746,11 +733,28 @@ public class JJProjectBean {
 					jJVersionList.get(i + 2).setProduct(product);
 					versions.add(jJVersionList.get(i + 2));
 				}
-
 				product.setVersions(versions);
-
 				jJProductService.saveJJProduct(product);
 			}
+			product = new JJProduct();
+			product.setName("Default Product");
+			product.setDescription("Delault ProductDescription ");
+			product.setCreationDate(new Date());
+			product.setEnabled(true);
+			product.setExtname("ProductExtName ");
+			product.setManager(manager);
+
+			List<JJVersion> jJVersionList = jJVersionService.getVersions(true,
+					true, null);
+
+			Set<JJVersion> versions = new HashSet<JJVersion>();
+
+			jJVersionList.get(0).setProduct(product);
+			versions.add(jJVersionList.get(0));
+			jJVersionList.get(0 + 1).setProduct(product);
+			versions.add(jJVersionList.get(0 + 1));
+			product.setVersions(versions);
+			jJProductService.saveJJProduct(product);
 		}
 
 		if (jJProjectService.getProjects(true).isEmpty()) {
@@ -778,13 +782,37 @@ public class JJProjectBean {
 			project.setCreationDate(new Date());
 			project.setEnabled(true);
 			project.setManager(manager);
-
 			jJProjectService.saveJJProject(project);
+
+		}
+		projectList = jJProjectService.getProjects(true);
+		List<JJProduct> productList = jJProductService.getProducts(true);
+		if (jJRequirementService.findAllJJRequirements().isEmpty()) {
+			JJRequirement jJRequirement;
+			for (int j = 0; j < projectList.size(); j++) {
+				jJRequirement = new JJRequirement();
+				jJRequirement.setName("Requirement " + j);
+				jJRequirement.setDescription("RequirementDescription " + j);
+				jJRequirement.setCreationDate(new Date());
+				jJRequirement.setEnabled(true);
+				jJRequirement.setProduct(productList.get(j));
+				jJRequirement.setProject(projectList.get(j));
+				jJRequirementService.saveJJRequirement(jJRequirement);
+				JJTask jJTask;
+				for (int i = 0; i < 4; i++) {
+					jJTask = new JJTask();
+					jJTask.setName("TaskName " + i + ":R-" + j);
+					jJTask.setDescription("TaskDescription " + i + ":R-" + j);
+					jJTask.setCreationDate(new Date());
+					jJTask.setEnabled(true);
+					jJTask.setRequirement(jJRequirement);
+					jJTaskService.saveJJTask(jJTask);
+				}
+			}
 		}
 
 		/*** End Temporary ***/
 
-		projectList = jJProjectService.getProjects(true);
 		return projectList;
 	}
 
@@ -863,7 +891,6 @@ public class JJProjectBean {
 		jJTestcaseBean.initTestCaseParameter(jJTeststepBean);
 
 		jJBugBean.setCurrentProject(project);
-
 		jJTaskBean.setProject(project);
 
 	}

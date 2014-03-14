@@ -45,5 +45,29 @@ public class JJProductServiceImpl implements JJProductService {
 		return result.getResultList();
 
 	}
+	@Override
+	public JJProduct getJJProductWithName(String name) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJProduct> criteriaQuery = criteriaBuilder
+				.createQuery(JJProduct.class);
+
+		Root<JJProduct> from = criteriaQuery.from(JJProduct.class);
+
+		CriteriaQuery<JJProduct> select = criteriaQuery.select(from);
+
+		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
+		Predicate predicate2 = criteriaBuilder.equal(from.get("name"), name);
+
+		select.where(criteriaBuilder.and(predicate1, predicate2));
+
+		TypedQuery<JJProduct> result = entityManager.createQuery(select);
+
+		if (result.getResultList().size() > 0)
+			return result.getResultList().get(0);
+		else
+			return null;
+
+	}
 
 }

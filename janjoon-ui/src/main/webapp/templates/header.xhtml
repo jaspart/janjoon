@@ -55,12 +55,10 @@
 					value="#{jJProjectBean.project}" panelStyle="width:150px"
 					effect="fade" style="width:160px" filter="true"
 					filterMatchMode="startsWith">
-
+					<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
 					<f:converter
 						converterId="com.starit.janjoonweb.ui.converter.JJProjectConverter" />
-
-					<f:selectItem itemLabel="#{jJProjectBean.project.name}"
-						itemValue="#{jJProjectBean.project}" />
+					
 					<f:selectItems value="#{jJProjectBean.projectList}" var="p"
 						itemLabel="#{p.name}" itemValue="#{p}" />
 
@@ -76,14 +74,13 @@
 					filterMatchMode="startsWith">
 					<f:converter
 						converterId="com.starit.janjoonweb.ui.converter.JJProductConverter" />
-					<f:selectItem itemLabel="#{jJProductBean.product.name}"
-						itemValue="#{jJProductBean.product}" />
+						<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
 					<f:selectItems value="#{jJProductBean.productList}" var="p"
 						itemLabel="#{p.name}" itemValue="#{p}" />
 
-					<p:ajax process="@this" 
+					<p:ajax process="@this"
 						listener="#{jJProductBean.handleSelectProduct(jJVersionBean,jJRequirementBean,jJChapterBean)}"
-						update="versionSelectOneMenu :contentGrid" />
+						update="productSelectOneMenu versionSelectOneMenu :contentGrid" />
 				</p:selectOneMenu>
 
 				<h:outputText value="Version :" />
@@ -93,9 +90,8 @@
 					filterMatchMode="startsWith" disabled="#{jJVersionBean.disabled}">
 					<f:converter
 						converterId="com.starit.janjoonweb.ui.converter.JJVersionConverter" />
+						<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
 
-					<f:selectItem itemLabel="#{jJVersionBean.version.name}"
-						itemValue="#{jJVersionBean.version}" />
 					<f:selectItems value="#{jJVersionBean.versionList}" var="v"
 						itemLabel="#{v.name}" itemValue="#{v}" />
 

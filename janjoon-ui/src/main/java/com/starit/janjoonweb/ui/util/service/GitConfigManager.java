@@ -14,6 +14,8 @@ import org.eclipse.jgit.transport.*;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
+import com.starit.janjoonweb.domain.JJTask;
+
 public class GitConfigManager extends AbstractConfigManager {
 
 	/**

@@ -54,4 +54,24 @@ public class JJVersionServiceImpl implements JJVersionService {
 		return result.getResultList();
 
 	}
+	@Override
+	public List<JJTask> getTastksByVersion(JJVersion jJversion) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
+				.createQuery(JJTask.class);
+		Root<JJTask> from = criteriaQuery.from(JJTask.class);
+		CriteriaQuery<JJTask> select = criteriaQuery.select(from);
+		Predicate predicate = criteriaBuilder.equal(from.get("versioning"),
+				jJversion);
+		select.where(criteriaBuilder.and(predicate));
+		select.orderBy(criteriaBuilder.desc(from.get("name")));
+
+		TypedQuery<JJTask> result = entityManager.createQuery(select);
+		return result.getResultList();
+		
+	}
+
+	
+
+	
 }

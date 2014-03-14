@@ -14,4 +14,6 @@ public interface JJTaskService {
 	public void saveTasks(Set<JJTask> tasks);
 
 	public void updateTasks(Set<JJTask> tasks);
+
+	public List<JJTask> getTasksByProduct(JJProduct product,JJProject project);
 }

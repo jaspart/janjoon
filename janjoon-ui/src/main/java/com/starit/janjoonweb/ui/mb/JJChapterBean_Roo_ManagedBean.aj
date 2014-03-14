@@ -2,29 +2,11 @@
 // You may push code into the target .java compilation unit if you wish to edit any member(s).
 
 package com.starit.janjoonweb.ui.mb;
-
-import com.starit.janjoonweb.domain.JJCategory;
-import com.starit.janjoonweb.domain.JJCategoryService;
-import com.starit.janjoonweb.domain.JJChapter;
-import com.starit.janjoonweb.domain.JJChapterService;
-import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJContactService;
-import com.starit.janjoonweb.domain.JJProduct;
-import com.starit.janjoonweb.domain.JJProductService;
-import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJProjectService;
-import com.starit.janjoonweb.domain.JJRequirement;
-import com.starit.janjoonweb.ui.mb.JJChapterBean;
-import com.starit.janjoonweb.ui.converter.JJCategoryConverter;
-import com.starit.janjoonweb.ui.converter.JJChapterConverter;
-import com.starit.janjoonweb.ui.converter.JJContactConverter;
-import com.starit.janjoonweb.ui.converter.JJProductConverter;
-import com.starit.janjoonweb.ui.converter.JJProjectConverter;
-import com.starit.janjoonweb.ui.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -36,6 +18,7 @@ import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.validator.LengthValidator;
+
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.inputtext.InputText;
@@ -47,6 +30,14 @@ import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.starit.janjoonweb.domain.*;
+import com.starit.janjoonweb.ui.converter.JJCategoryConverter;
+import com.starit.janjoonweb.ui.converter.JJChapterConverter;
+import com.starit.janjoonweb.ui.converter.JJContactConverter;
+import com.starit.janjoonweb.ui.converter.JJProductConverter;
+import com.starit.janjoonweb.ui.converter.JJProjectConverter;
+import com.starit.janjoonweb.ui.util.MessageFactory;
 
 privileged aspect JJChapterBean_Roo_ManagedBean {
     

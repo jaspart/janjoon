@@ -2224,4 +2224,24 @@ public class JJRequirementBean {
 		}
 
 	}
+	
+	public List<JJRequirement> getRequirements(JJCategory category,
+			JJProject project, JJProduct product, JJVersion version,
+			JJStatus status, JJChapter chapter, boolean withChapter,
+			boolean onlyActif, boolean orderByCreationdate)
+			{
+					return jJRequirementService.getRequirements(category, project, product, 
+							version, status, chapter, withChapter, onlyActif, orderByCreationdate);
+			}
+	
+	public List<JJRequirement> getRequirements(JJProject project, JJProduct product, JJVersion version)
+	{
+		return jJRequirementService.getRequirements(project, product, version);
+	}
+
+	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
+			JJChapter chapter, boolean onlyActif)
+			{
+				return jJRequirementService.getRequirementChildrenWithChapterSortedByOrder(chapter, onlyActif);
+			}
 }

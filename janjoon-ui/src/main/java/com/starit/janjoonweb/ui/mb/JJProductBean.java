@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
@@ -21,6 +22,8 @@ import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJRight;
 import com.starit.janjoonweb.domain.JJRightService;
+import com.starit.janjoonweb.domain.JJTask;
+import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.util.MessageFactory;
 
@@ -37,6 +40,13 @@ public class JJProductBean {
 
 	@Autowired
 	JJRequirementService jJRequirementService;
+
+	@Autowired
+	JJTaskService jJTaskService;
+
+	public void setjJTaskService(JJTaskService jJTaskService) {
+		this.jJTaskService = jJTaskService;
+	}
 
 	public void setjJRequirementService(
 			JJRequirementService jJRequirementService) {
@@ -58,7 +68,6 @@ public class JJProductBean {
 	}
 
 	private JJProduct product;
-	private JJProduct productTemp;
 	private List<JJProduct> productList;
 
 	private JJProduct productAdmin;
@@ -71,10 +80,7 @@ public class JJProductBean {
 
 	private String message;
 
-	public JJProduct getProduct() {
-		if (product == null) {
-			product = productTemp;
-		}
+	public JJProduct getProduct() {		
 
 		return product;
 	}
@@ -86,10 +92,7 @@ public class JJProductBean {
 	public List<JJProduct> getProductList() {
 		productList = jJProductService.getProducts(true);
 
-		productTemp = new JJProduct();
-		productTemp.setId(Long.valueOf("0"));
-		productTemp.setName("Select All");
-		productList.add(0, productTemp);
+		
 		return productList;
 	}
 
@@ -229,16 +232,6 @@ public class JJProductBean {
 				jJProductService.updateJJProduct(product);
 			}
 
-			// //
-			// product = jJProductService.findJJProduct(product.getId());
-			// System.out.println("Seconf round");
-			// for (JJVersion jjVersion : product.getVersions()) {
-			//
-			//
-			// System.out.println(jjVersion.getName());
-			//
-			// }
-			// //
 			newProduct(jJVersionBean);
 
 		} else {
@@ -271,6 +264,10 @@ public class JJProductBean {
 		jJVersionBean.setVersionListTable(null);
 		jJVersionBean.setVersionDataModel(null);
 
+	}
+
+	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project) {
+		return jJTaskService.getTasksByProduct(product, project);
 	}
 
 	public void handleSelectProductManager() {

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.faces.model.ListDataModel;
 
@@ -15,6 +16,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJRequirementService;
+import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.util.MessageFactory;
 
@@ -22,6 +24,7 @@ import com.starit.janjoonweb.ui.util.MessageFactory;
 @RooJsfManagedBean(entity = JJVersion.class, beanName = "jJVersionBean")
 public class JJVersionBean {
 
+	
 	@Autowired
 	JJRequirementService jJRequirementService;
 
@@ -113,8 +116,14 @@ public class JJVersionBean {
 
 	public void handleSelectVersion(JJRequirementBean jJRequirementBean,
 			JJChapterBean jJChapterBean) {
+		
 		jJRequirementBean.setVersion(version);
-		jJChapterBean.setVersion(version);
+		jJChapterBean.setVersion(version);	
+	}
+	
+	public List<JJTask> getTastksByVersion(JJVersion jJversion)
+	{
+		return jJVersionService.getTastksByVersion(jJversion);
 	}
 
 	public void newVersion() {

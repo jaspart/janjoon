@@ -13,17 +13,40 @@
 		<param-name>primefaces.CLIENT_SIDE_VALIDATION</param-name>
 		<param-value>true</param-value>
 	</context-param>
+	
+	<!-- To Be Commented after activing spring security -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath*:META-INF/spring/applicationContext*.xml</param-value>
+	</context-param>
+	
+	<!-- Spring Security 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath*:META-INF/spring/applicationContext*.xml
 					/WEB-INF/spring/*.xml		
 		</param-value>
-	</context-param>
+	</context-param>	
 	
 	<context-param>
         <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
         <param-value>/WEB-INF/springsecurity.taglib.xml</param-value>
-    </context-param>
+    </context-param> 
+    
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>   
+        
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping> 
+        
+    <login-config>
+		<auth-method>BASIC</auth-method>
+		<realm-name>JanjoonSecurityRealm</realm-name>
+ 	</login-config>    -->
     
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
@@ -32,16 +55,8 @@
 	<context-param>
 		<param-name>org.apache.myfaces.SERIALIZE_STATE_IN_SESSION</param-name>
 		<param-value>false</param-value>
-	</context-param>
-	<filter>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+	</context-param>	
+        
 	<filter>
 		<filter-name>PrimeFaces FileUpload Filter</filter-name>
 		<filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
@@ -53,7 +68,7 @@
 	<filter>
 		<filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
 		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
-	</filter>
+	</filter>	
 	<filter-mapping>
 		<filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -63,17 +78,24 @@
             org.springframework.web.context.ContextLoaderListener
         </listener-class>
     </listener>
+    
     <listener>
         <listener-class>
             org.springframework.web.context.request.RequestContextListener
         </listener-class>
-    </listener>
+    </listener>   
+ 
 	<listener>
 		<listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
 	</listener>
+	
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<init-param>
+     		<param-name>keepgenerated</param-name>
+     		<param-value>true</param-value>
+ 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
@@ -86,8 +108,6 @@
 	<welcome-file-list>
 		<welcome-file>/index.html</welcome-file>
 	</welcome-file-list>
-	<login-config>
-		<auth-method>BASIC</auth-method>
-		<realm-name>JanjoonSecurityRealm</realm-name>
- 	</login-config>
+	
+	
 </web-app>

@@ -2,10 +2,12 @@ package com.starit.janjoonweb.domain;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -23,4 +25,12 @@ public class JJVersion extends JJAbstractEntity {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "versioning")
 	private Set<JJBuild> builds = new HashSet<JJBuild>();
+	
+	@Override
+	public boolean equals(Object object) {
+        return (object instanceof JJVersion) && (getId() != null) 
+             ? getId().equals(((JJVersion) object).getId()) 
+             : (object == this);
+    }
+		
 }

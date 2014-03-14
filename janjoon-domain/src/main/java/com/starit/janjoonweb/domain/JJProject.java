@@ -24,4 +24,11 @@ public class JJProject extends JJAbstractEntity {
 	@NotNull
 	@ManyToOne
 	private JJContact manager;
+	
+	@Override
+	public boolean equals(Object object) {
+        return (object instanceof JJProject) && (getId() != null) 
+             ? getId().equals(((JJProject) object).getId()) 
+             : (object == this);
+    }
 }

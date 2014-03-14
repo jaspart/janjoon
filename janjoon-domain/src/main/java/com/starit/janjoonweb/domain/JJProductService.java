@@ -8,4 +8,6 @@ import org.springframework.roo.addon.layers.service.RooService;
 public interface JJProductService {
 	// New Generic
 	public List<JJProduct> getProducts(boolean onlyActif);
+
+	public JJProduct getJJProductWithName(String name);
 }

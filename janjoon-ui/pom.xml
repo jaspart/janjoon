@@ -456,20 +456,14 @@
 					<webAppConfig>
 						<contextPath>/${project.name}</contextPath>
 					</webAppConfig>
+					<!-- Jetty Security 
 					<loginServices>
 						<loginService implementation="org.eclipse.jetty.security.HashLoginService">
-							<name>JanjoonSecurityRealm</name>
-							<config>/src/main/resources/realm.properties</config>
+							<name>JanjoonSecurityRealm</name>													
 						</loginService>
 					</loginServices>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.eclipse.jetty</groupId>
-						<artifactId>jetty-servlets</artifactId>
-						<version>8.1.4.v20120524</version>
-					</dependency>
-				</dependencies>
+					-->
+				</configuration>				
 			</plugin>
 		</plugins>
 	</build>

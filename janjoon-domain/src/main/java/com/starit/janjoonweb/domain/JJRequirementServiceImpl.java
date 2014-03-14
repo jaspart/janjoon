@@ -62,25 +62,25 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		if (category != null) {
+		if (category  != null) {
 			predicates
 					.add(criteriaBuilder.equal(from.get("category"), category));
 		}
 
-		if (project != null) {
+		if (project  != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
 		}
 
-		if (product != null) {
+		if (product  != null) {
 			predicates.add(criteriaBuilder.equal(from.get("product"), product));
 		}
 
-		if (version != null) {
+		if (version  != null) {
 			predicates.add(criteriaBuilder.equal(from.get("versioning"),
 					version));
 		}
 
-		if (status != null) {
+		if (status  != null) {
 			predicates.add(criteriaBuilder.equal(from.get("status"), status));
 		}
 
@@ -128,5 +128,11 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 		return result.getResultList();
+	}
+
+	@Override
+	public List<JJRequirement> getRequirements(JJProject project,
+			JJProduct product, JJVersion version) {
+		return getRequirements(null, project, product, version, null, null, false, true, true);
 	}
 }

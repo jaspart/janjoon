@@ -85,7 +85,14 @@ public class LoginBean implements Serializable{
 			FacesContext fContext = FacesContext.getCurrentInstance();
 			HttpSession session = (HttpSession) fContext.getExternalContext()
 					.getSession(true);
+			JJVersionBean jjVersionBean=(JJVersionBean) findBean("jJVersionBean");
+			JJProjectBean jjProjectBean=(JJProjectBean) findBean("jJProjectBean");
+			JJProductBean jJProductBean=(JJProductBean) findBean("jJProductBean");
+			//gérer la session spring security 
 			session.putValue("JJContact", contact);
+			session.putValue("jJVersionBean", jjVersionBean);
+			session.putValue("jJProjectBean", jjProjectBean);
+			session.putValue("jJProductBean", jJProductBean);
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Welcome ", contact.getFirstname());
 			FacesContext.getCurrentInstance().addMessage("login", message);
@@ -120,6 +127,10 @@ public class LoginBean implements Serializable{
 		this.contact = contact;
 	}
 
-	// authentificationProvider implementation
+	public static Object findBean(String beanName) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		return context.getApplication().evaluateExpressionGet(context,
+				"#{" + beanName + "}", Object.class);
+	}
 
 }
