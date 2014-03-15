@@ -456,13 +456,13 @@
 					<webAppConfig>
 						<contextPath>/${project.name}</contextPath>
 					</webAppConfig>
-					<!-- Jetty Security 
+					<!-- Jetty Security--> 
 					<loginServices>
 						<loginService implementation="org.eclipse.jetty.security.HashLoginService">
 							<name>JanjoonSecurityRealm</name>													
 						</loginService>
 					</loginServices>
-					-->
+					
 				</configuration>				
 			</plugin>
 		</plugins>
