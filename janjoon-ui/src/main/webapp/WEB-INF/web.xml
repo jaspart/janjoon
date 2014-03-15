@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	version="3.0">
 	<display-name>janjoon-ui</display-name>
-	<description>Roo generated janjoon-ui application</description>
+	<description>Janjoon FrontEnd Web Application</description>
 	<context-param>
 		<param-name>defaultHtmlEscape</param-name>
 		<param-value>true</param-value>
@@ -47,6 +47,7 @@
 		<realm-name>JanjoonSecurityRealm</realm-name>
  	</login-config>
     
+	<!-- PrimeFaces -->
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
 		<param-value>bootstrap</param-value>
@@ -64,6 +65,8 @@
 		<filter-name>PrimeFaces FileUpload Filter</filter-name>
 		<servlet-name>Faces Servlet</servlet-name>
 	</filter-mapping>
+
+	<!-- Spring Framework -->
 	<filter>
 		<filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
 		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
@@ -73,17 +76,18 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<listener>
-	<listener-class>
-	    org.springframework.web.context.ContextLoaderListener
-	</listener-class>
-    </listener>
+		<listener-class>
+		    org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
     
-    <listener>
-	<listener-class>
-	    org.springframework.web.context.request.RequestContextListener
-	</listener-class>
-    </listener>   
+	<listener>
+		<listener-class>
+		    org.springframework.web.context.request.RequestContextListener
+		</listener-class>
+	</listener>   
  
+	<!-- Java Server Faces -->
 	<listener>
 		<listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
 	</listener>
@@ -107,6 +111,5 @@
 	<welcome-file-list>
 		<welcome-file>/index.html</welcome-file>
 	</welcome-file-list>
-	
 	
 </web-app>
