@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -12,8 +13,6 @@ import javax.validation.constraints.Size;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.tostring.RooToString;
-
-import javax.persistence.ManyToOne;
 
 @RooJavaBean
 @RooToString
@@ -33,11 +32,10 @@ public class JJProduct extends JJAbstractEntity {
 	@NotNull
 	@ManyToOne
 	private JJContact manager;
-	
+
 	@Override
 	public boolean equals(Object object) {
-        return (object instanceof JJProduct) && (getId() != null) 
-             ? getId().equals(((JJProduct) object).getId()) 
-             : (object == this);
-    }
+		return (object instanceof JJProduct) && (getId() != null) ? getId()
+				.equals(((JJProduct) object).getId()) : (object == this);
+	}
 }

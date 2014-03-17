@@ -3,9 +3,7 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJCategoryDataOnDemand;
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
-import com.starit.janjoonweb.domain.JJProductDataOnDemand;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementDataOnDemand;
 import com.starit.janjoonweb.domain.JJSprintDataOnDemand;
@@ -35,13 +33,7 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     private List<JJTestcase> JJTestcaseDataOnDemand.data;
     
     @Autowired
-    JJCategoryDataOnDemand JJTestcaseDataOnDemand.jJCategoryDataOnDemand;
-    
-    @Autowired
     JJContactDataOnDemand JJTestcaseDataOnDemand.jJContactDataOnDemand;
-    
-    @Autowired
-    JJProductDataOnDemand JJTestcaseDataOnDemand.jJProductDataOnDemand;
     
     @Autowired
     JJRequirementDataOnDemand JJTestcaseDataOnDemand.jJRequirementDataOnDemand;
@@ -57,7 +49,7 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     
     public JJTestcase JJTestcaseDataOnDemand.getNewTransientJJTestcase(int index) {
         JJTestcase obj = new JJTestcase();
-        setActioncase(obj, index);
+        setAction(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
@@ -71,12 +63,12 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
         return obj;
     }
     
-    public void JJTestcaseDataOnDemand.setActioncase(JJTestcase obj, int index) {
-        String actioncase = "actioncase_" + index;
-        if (actioncase.length() > 100) {
-            actioncase = actioncase.substring(0, 100);
+    public void JJTestcaseDataOnDemand.setAction(JJTestcase obj, int index) {
+        String action = "action_" + index;
+        if (action.length() > 100) {
+            action = action.substring(0, 100);
         }
-        obj.setActioncase(actioncase);
+        obj.setAction(action);
     }
     
     public void JJTestcaseDataOnDemand.setCreationDate(JJTestcase obj, int index) {

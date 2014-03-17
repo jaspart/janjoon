@@ -25,12 +25,11 @@ public class JJVersion extends JJAbstractEntity {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "versioning")
 	private Set<JJBuild> builds = new HashSet<JJBuild>();
-	
+
 	@Override
 	public boolean equals(Object object) {
-        return (object instanceof JJVersion) && (getId() != null) 
-             ? getId().equals(((JJVersion) object).getId()) 
-             : (object == this);
-    }
-		
+		return (object instanceof JJVersion) && (getId() != null) ? getId()
+				.equals(((JJVersion) object).getId()) : (object == this);
+	}
+
 }

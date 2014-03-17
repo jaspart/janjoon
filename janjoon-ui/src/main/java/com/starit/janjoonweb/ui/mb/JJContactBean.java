@@ -13,7 +13,7 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.ui.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJContact.class, beanName = "jJContactBean")

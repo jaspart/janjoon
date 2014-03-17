@@ -42,6 +42,8 @@
 				<p:menuitem value="Admin"
 					url="/pages/administration.jsf?faces-redirect=true"
 					icon="ui-icon-key" update=":contentGrid" />
+				<p:menuitem value="Temp" url="/pages/temp.jsf?faces-redirect=true"
+					update=":contentGrid" />
 			</p:tabMenu>
 
 			<h:panelGrid columns="2" cellpadding="2" align="right">
@@ -55,10 +57,10 @@
 					value="#{jJProjectBean.project}" panelStyle="width:150px"
 					effect="fade" style="width:160px" filter="true"
 					filterMatchMode="startsWith">
-					
+
 					<f:converter
-						converterId="com.starit.janjoonweb.ui.converter.JJProjectConverter" />
-					
+						converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
+
 					<f:selectItems value="#{jJProjectBean.projectList}" var="p"
 						itemLabel="#{p.name}" itemValue="#{p}" />
 
@@ -73,8 +75,8 @@
 					effect="fade" style="width:160px" filter="true"
 					filterMatchMode="startsWith">
 					<f:converter
-						converterId="com.starit.janjoonweb.ui.converter.JJProductConverter" />
-						<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
+						converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
+					<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
 					<f:selectItems value="#{jJProductBean.productList}" var="p"
 						itemLabel="#{p.name}" itemValue="#{p}" />
 
@@ -89,8 +91,8 @@
 					effect="fade" style="width:160px" filter="true"
 					filterMatchMode="startsWith" disabled="#{jJVersionBean.disabled}">
 					<f:converter
-						converterId="com.starit.janjoonweb.ui.converter.JJVersionConverter" />
-						<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
+						converterId="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter" />
+					<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
 
 					<f:selectItems value="#{jJVersionBean.versionList}" var="v"
 						itemLabel="#{v.name}" itemValue="#{v}" />

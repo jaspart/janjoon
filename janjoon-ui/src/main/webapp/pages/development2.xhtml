@@ -34,7 +34,7 @@
 									<f:selectItems value="#{jJDevelopment.tasks}" var="t"
 										itemLabel="#{t.name}" itemValue="#{t}" />
 									<f:converter
-										converterId="com.starit.janjoonweb.ui.converter.JJTaskConverter" />
+										converterId="com.starit.janjoonweb.ui.mb.converter.JJTaskConverter" />
 									<f:ajax event="valueChange"
 										listener="#{jJDevelopment.taskValueChangeListener}" />
 								</p:selectOneMenu> <p:message for="taskSelectOneMenu" id="taskmessage"

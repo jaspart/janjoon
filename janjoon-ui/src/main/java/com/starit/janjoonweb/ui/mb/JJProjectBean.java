@@ -36,7 +36,7 @@ import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
-import com.starit.janjoonweb.ui.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJProject.class, beanName = "jJProjectBean")
@@ -871,11 +871,11 @@ public class JJProjectBean {
 
 		jJChapterBean.setProject(project);
 
-		jJTestcaseBean.setCurrentProject(project);
-		jJTestcaseBean.setRendered(false);
-		jJTestcaseBean.initTestCaseParameter(jJTeststepBean);
-
-		jJBugBean.setCurrentProject(project);
+//		jJTestcaseBean.setCurrentProject(project);
+//		jJTestcaseBean.setRendered(false);
+//		jJTestcaseBean.initTestCaseParameter(jJTeststepBean);
+//
+//		jJBugBean.setCurrentProject(project);
 		jJTaskBean.setProject(project);
 
 	}

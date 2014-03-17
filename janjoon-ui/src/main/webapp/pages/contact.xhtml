@@ -146,7 +146,7 @@
 											widgetVar="profileWidget" label="Profile"
 											disabled="#{not jJContactBean.disabled}">
 											<f:converter
-												converterId="com.starit.janjoonweb.ui.converter.JJProfileConverter" />
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJProfileConverter" />
 											<f:selectItem itemLabel="#{jJPermissionBean.profile.name}"
 												itemValue="#{jJPermissionBean.profile}" />
 											<f:selectItems value="#{jJPermissionBean.profileList}"
@@ -162,7 +162,7 @@
 											filterMatchMode="startsWith" widgetVar="projectWidget"
 											disabled="#{not jJContactBean.disabled}">
 											<f:converter
-												converterId="com.starit.janjoonweb.ui.converter.JJProjectConverter" />
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
 											<f:selectItem itemLabel="#{jJPermissionBean.project.name}"
 												itemValue="#{jJPermissionBean.project}" />
 											<f:selectItems value="#{jJPermissionBean.projectList}"
@@ -178,7 +178,7 @@
 											filterMatchMode="startsWith" widgetVar="productWidget"
 											disabled="#{not jJContactBean.disabled}">
 											<f:converter
-												converterId="com.starit.janjoonweb.ui.converter.JJProductConverter" />
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
 											<f:selectItem itemLabel="#{jJPermissionBean.product.name}"
 												itemValue="#{jJPermissionBean.product}" />
 											<f:selectItems value="#{jJPermissionBean.productList}"

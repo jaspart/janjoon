@@ -72,12 +72,11 @@ public class JJTask extends JJAbstractEntity {
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
 
 	private Boolean completion;
-	
+
 	@Override
 	public boolean equals(Object object) {
-        return (object instanceof JJTask) && (getId() != null) 
-             ? getId().equals(((JJTask) object).getId()) 
-             : (object == this);
-    }
+		return (object instanceof JJTask) && (getId() != null) ? getId()
+				.equals(((JJTask) object).getId()) : (object == this);
+	}
 
 }

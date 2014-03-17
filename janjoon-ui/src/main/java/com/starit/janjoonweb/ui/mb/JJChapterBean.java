@@ -24,11 +24,10 @@ import com.lowagie.text.*;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.html.simpleparser.StyleSheet;
 import com.starit.janjoonweb.domain.*;
-import com.starit.janjoonweb.ui.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJChapter.class, beanName = "jJChapterBean")
-@SuppressWarnings("unused")
+
 public class JJChapterBean {
 
 	@Autowired

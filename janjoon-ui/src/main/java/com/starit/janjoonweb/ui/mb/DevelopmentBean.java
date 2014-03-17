@@ -29,9 +29,9 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.ui.util.service.AbstractConfigManager;
-import com.starit.janjoonweb.ui.util.service.FileMap;
-import com.starit.janjoonweb.ui.util.service.GitConfigManager;
+import com.starit.janjoonweb.ui.mb.util.service.AbstractConfigManager;
+import com.starit.janjoonweb.ui.mb.util.service.FileMap;
+import com.starit.janjoonweb.ui.mb.util.service.GitConfigManager;
 
 @ManagedBean(name = "jJDevelopment")
 @ViewScoped

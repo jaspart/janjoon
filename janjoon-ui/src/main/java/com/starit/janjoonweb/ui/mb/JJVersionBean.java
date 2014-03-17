@@ -17,7 +17,7 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.ui.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJVersion.class, beanName = "jJVersionBean")

@@ -10,9 +10,9 @@ import com.starit.janjoonweb.domain.JJProfileService;
 import com.starit.janjoonweb.domain.JJRight;
 import com.starit.janjoonweb.domain.JJRightService;
 import com.starit.janjoonweb.ui.mb.JJRightBean;
-import com.starit.janjoonweb.ui.converter.JJCategoryConverter;
-import com.starit.janjoonweb.ui.converter.JJProfileConverter;
-import com.starit.janjoonweb.ui.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJProfileConverter;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -162,30 +162,6 @@ privileged aspect JJRightBean_Roo_ManagedBean {
         objetCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(objetCreateInputMessage);
         
-        OutputLabel categoryCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        categoryCreateOutput.setFor("categoryCreateInput");
-        categoryCreateOutput.setId("categoryCreateOutput");
-        categoryCreateOutput.setValue("Category:");
-        htmlPanelGrid.getChildren().add(categoryCreateOutput);
-        
-        AutoComplete categoryCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        categoryCreateInput.setId("categoryCreateInput");
-        categoryCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.category}", JJCategory.class));
-        categoryCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRightBean.completeCategory}", List.class, new Class[] { String.class }));
-        categoryCreateInput.setDropdown(true);
-        categoryCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "category", String.class));
-        categoryCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{category.name} #{category.description} #{category.creationDate} #{category.updatedDate}", String.class));
-        categoryCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{category}", JJCategory.class));
-        categoryCreateInput.setConverter(new JJCategoryConverter());
-        categoryCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(categoryCreateInput);
-        
-        Message categoryCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        categoryCreateInputMessage.setId("categoryCreateInputMessage");
-        categoryCreateInputMessage.setFor("categoryCreateInput");
-        categoryCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(categoryCreateInputMessage);
-        
         OutputLabel rCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         rCreateOutput.setFor("rCreateInput");
         rCreateOutput.setId("rCreateOutput");
@@ -239,6 +215,30 @@ privileged aspect JJRightBean_Roo_ManagedBean {
         xCreateInputMessage.setFor("xCreateInput");
         xCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(xCreateInputMessage);
+        
+        OutputLabel categoryCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        categoryCreateOutput.setFor("categoryCreateInput");
+        categoryCreateOutput.setId("categoryCreateOutput");
+        categoryCreateOutput.setValue("Category:");
+        htmlPanelGrid.getChildren().add(categoryCreateOutput);
+        
+        AutoComplete categoryCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        categoryCreateInput.setId("categoryCreateInput");
+        categoryCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.category}", JJCategory.class));
+        categoryCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRightBean.completeCategory}", List.class, new Class[] { String.class }));
+        categoryCreateInput.setDropdown(true);
+        categoryCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "category", String.class));
+        categoryCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{category.name} #{category.description} #{category.creationDate} #{category.updatedDate}", String.class));
+        categoryCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{category}", JJCategory.class));
+        categoryCreateInput.setConverter(new JJCategoryConverter());
+        categoryCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(categoryCreateInput);
+        
+        Message categoryCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        categoryCreateInputMessage.setId("categoryCreateInputMessage");
+        categoryCreateInputMessage.setFor("categoryCreateInput");
+        categoryCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(categoryCreateInputMessage);
         
         OutputLabel profileCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         profileCreateOutput.setFor("profileCreateInput");
@@ -296,30 +296,6 @@ privileged aspect JJRightBean_Roo_ManagedBean {
         objetEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(objetEditInputMessage);
         
-        OutputLabel categoryEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        categoryEditOutput.setFor("categoryEditInput");
-        categoryEditOutput.setId("categoryEditOutput");
-        categoryEditOutput.setValue("Category:");
-        htmlPanelGrid.getChildren().add(categoryEditOutput);
-        
-        AutoComplete categoryEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        categoryEditInput.setId("categoryEditInput");
-        categoryEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.category}", JJCategory.class));
-        categoryEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRightBean.completeCategory}", List.class, new Class[] { String.class }));
-        categoryEditInput.setDropdown(true);
-        categoryEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "category", String.class));
-        categoryEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{category.name} #{category.description} #{category.creationDate} #{category.updatedDate}", String.class));
-        categoryEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{category}", JJCategory.class));
-        categoryEditInput.setConverter(new JJCategoryConverter());
-        categoryEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(categoryEditInput);
-        
-        Message categoryEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        categoryEditInputMessage.setId("categoryEditInputMessage");
-        categoryEditInputMessage.setFor("categoryEditInput");
-        categoryEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(categoryEditInputMessage);
-        
         OutputLabel rEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         rEditOutput.setFor("rEditInput");
         rEditOutput.setId("rEditOutput");
@@ -374,6 +350,30 @@ privileged aspect JJRightBean_Roo_ManagedBean {
         xEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(xEditInputMessage);
         
+        OutputLabel categoryEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        categoryEditOutput.setFor("categoryEditInput");
+        categoryEditOutput.setId("categoryEditOutput");
+        categoryEditOutput.setValue("Category:");
+        htmlPanelGrid.getChildren().add(categoryEditOutput);
+        
+        AutoComplete categoryEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        categoryEditInput.setId("categoryEditInput");
+        categoryEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.category}", JJCategory.class));
+        categoryEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRightBean.completeCategory}", List.class, new Class[] { String.class }));
+        categoryEditInput.setDropdown(true);
+        categoryEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "category", String.class));
+        categoryEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{category.name} #{category.description} #{category.creationDate} #{category.updatedDate}", String.class));
+        categoryEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{category}", JJCategory.class));
+        categoryEditInput.setConverter(new JJCategoryConverter());
+        categoryEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(categoryEditInput);
+        
+        Message categoryEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        categoryEditInputMessage.setId("categoryEditInputMessage");
+        categoryEditInputMessage.setFor("categoryEditInput");
+        categoryEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(categoryEditInputMessage);
+        
         OutputLabel profileEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         profileEditOutput.setFor("profileEditInput");
         profileEditOutput.setId("profileEditOutput");
@@ -419,16 +419,6 @@ privileged aspect JJRightBean_Roo_ManagedBean {
         objetValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.objet}", String.class));
         htmlPanelGrid.getChildren().add(objetValue);
         
-        HtmlOutputText categoryLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        categoryLabel.setId("categoryLabel");
-        categoryLabel.setValue("Category:");
-        htmlPanelGrid.getChildren().add(categoryLabel);
-        
-        HtmlOutputText categoryValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        categoryValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.category}", JJCategory.class));
-        categoryValue.setConverter(new JJCategoryConverter());
-        htmlPanelGrid.getChildren().add(categoryValue);
-        
         HtmlOutputText rLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         rLabel.setId("rLabel");
         rLabel.setValue("R:");
@@ -455,6 +445,16 @@ privileged aspect JJRightBean_Roo_ManagedBean {
         HtmlOutputText xValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         xValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.x}", String.class));
         htmlPanelGrid.getChildren().add(xValue);
+        
+        HtmlOutputText categoryLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        categoryLabel.setId("categoryLabel");
+        categoryLabel.setValue("Category:");
+        htmlPanelGrid.getChildren().add(categoryLabel);
+        
+        HtmlOutputText categoryValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        categoryValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.category}", JJCategory.class));
+        categoryValue.setConverter(new JJCategoryConverter());
+        htmlPanelGrid.getChildren().add(categoryValue);
         
         HtmlOutputText profileLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         profileLabel.setId("profileLabel");

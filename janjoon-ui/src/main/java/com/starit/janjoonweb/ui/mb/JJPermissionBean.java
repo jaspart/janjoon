@@ -13,7 +13,7 @@ import com.starit.janjoonweb.domain.JJPermission;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.ui.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJPermission.class, beanName = "jJPermissionBean")

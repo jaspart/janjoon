@@ -9,5 +9,5 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaEntity(sequenceName = "JJImportanceSEQ")
 public class JJImportance extends JJAbstractEntity {
 
-    private Integer importanceLevel;
+	private Integer importanceLevel;
 }

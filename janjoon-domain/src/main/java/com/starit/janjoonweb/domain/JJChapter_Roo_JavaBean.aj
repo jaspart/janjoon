@@ -44,14 +44,6 @@ privileged aspect JJChapter_Roo_JavaBean {
         this.product = product;
     }
     
-    public Set<JJRequirement> JJChapter.getRequirements() {
-        return this.requirements;
-    }
-    
-    public void JJChapter.setRequirements(Set<JJRequirement> requirements) {
-        this.requirements = requirements;
-    }
-    
     public JJChapter JJChapter.getParent() {
         return this.parent;
     }
@@ -66,6 +58,14 @@ privileged aspect JJChapter_Roo_JavaBean {
     
     public void JJChapter.setChapters(Set<JJChapter> chapters) {
         this.chapters = chapters;
+    }
+    
+    public Set<JJRequirement> JJChapter.getRequirements() {
+        return this.requirements;
+    }
+    
+    public void JJChapter.setRequirements(Set<JJRequirement> requirements) {
+        this.requirements = requirements;
     }
     
 }

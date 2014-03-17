@@ -7,7 +7,7 @@ import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJProfileService;
 import com.starit.janjoonweb.domain.JJRight;
 import com.starit.janjoonweb.ui.mb.JJProfileBean;
-import com.starit.janjoonweb.ui.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

@@ -18,12 +18,12 @@ privileged aspect JJTeststep_Roo_JavaBean {
         this.ordering = ordering;
     }
     
-    public String JJTeststep.getActionstep() {
-        return this.actionstep;
+    public String JJTeststep.getAction() {
+        return this.action;
     }
     
-    public void JJTeststep.setActionstep(String actionstep) {
-        this.actionstep = actionstep;
+    public void JJTeststep.setAction(String action) {
+        this.action = action;
     }
     
     public String JJTeststep.getResultat() {

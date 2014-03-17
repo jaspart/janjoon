@@ -9,5 +9,5 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaEntity(sequenceName = "JJCriticitySEQ")
 public class JJCriticity extends JJAbstractEntity {
 
-    private Integer criticityLevel;
+	private Integer criticityLevel;
 }

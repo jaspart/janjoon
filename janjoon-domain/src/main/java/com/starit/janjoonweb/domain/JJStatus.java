@@ -9,5 +9,5 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaEntity(sequenceName = "JJStatusSEQ")
 public class JJStatus extends JJAbstractEntity {
 
-    private Integer statusLevel;
+	private Integer statusLevel;
 }

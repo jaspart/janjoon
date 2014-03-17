@@ -22,16 +22,10 @@ public class JJTestcase extends JJAbstractEntity {
 	private Integer ordering;
 
 	@Size(max = 100)
-	private String actioncase;
+	private String action;
 
 	@Size(max = 100)
 	private String resultat;
-
-	@ManyToOne
-	private JJProduct product;
-
-	@ManyToOne
-	private JJCategory category;
 
 	@NotNull
 	@ManyToOne
@@ -40,15 +34,15 @@ public class JJTestcase extends JJAbstractEntity {
 	@ManyToOne
 	private JJSprint sprint;
 
+	private Integer workload;
+
+	private Integer pricepoint;
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
 	private Set<JJSoftware> softwares = new HashSet<JJSoftware>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
 	private Set<JJHardware> hardwares = new HashSet<JJHardware>();
-
-	private Integer workload;
-
-	private Integer pricepoint;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
 	private Set<JJTeststep> teststeps = new HashSet<JJTeststep>();

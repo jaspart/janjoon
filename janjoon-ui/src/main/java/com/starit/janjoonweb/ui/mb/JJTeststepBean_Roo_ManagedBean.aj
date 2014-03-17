@@ -11,9 +11,9 @@ import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTeststepService;
 import com.starit.janjoonweb.ui.mb.JJTeststepBean;
-import com.starit.janjoonweb.ui.converter.JJContactConverter;
-import com.starit.janjoonweb.ui.converter.JJTestcaseConverter;
-import com.starit.janjoonweb.ui.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -320,26 +320,26 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         orderingCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(orderingCreateInputMessage);
         
-        OutputLabel actionstepCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        actionstepCreateOutput.setFor("actionstepCreateInput");
-        actionstepCreateOutput.setId("actionstepCreateOutput");
-        actionstepCreateOutput.setValue("Actionstep:");
-        htmlPanelGrid.getChildren().add(actionstepCreateOutput);
+        OutputLabel actionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        actionCreateOutput.setFor("actionCreateInput");
+        actionCreateOutput.setId("actionCreateOutput");
+        actionCreateOutput.setValue("Action:");
+        htmlPanelGrid.getChildren().add(actionCreateOutput);
         
-        InputTextarea actionstepCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        actionstepCreateInput.setId("actionstepCreateInput");
-        actionstepCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.actionstep}", String.class));
-        LengthValidator actionstepCreateInputValidator = new LengthValidator();
-        actionstepCreateInputValidator.setMaximum(100);
-        actionstepCreateInput.addValidator(actionstepCreateInputValidator);
-        actionstepCreateInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(actionstepCreateInput);
+        InputTextarea actionCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        actionCreateInput.setId("actionCreateInput");
+        actionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.action}", String.class));
+        LengthValidator actionCreateInputValidator = new LengthValidator();
+        actionCreateInputValidator.setMaximum(100);
+        actionCreateInput.addValidator(actionCreateInputValidator);
+        actionCreateInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(actionCreateInput);
         
-        Message actionstepCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        actionstepCreateInputMessage.setId("actionstepCreateInputMessage");
-        actionstepCreateInputMessage.setFor("actionstepCreateInput");
-        actionstepCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(actionstepCreateInputMessage);
+        Message actionCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        actionCreateInputMessage.setId("actionCreateInputMessage");
+        actionCreateInputMessage.setFor("actionCreateInput");
+        actionCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(actionCreateInputMessage);
         
         OutputLabel resultatCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         resultatCreateOutput.setFor("resultatCreateInput");
@@ -597,26 +597,26 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         orderingEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(orderingEditInputMessage);
         
-        OutputLabel actionstepEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        actionstepEditOutput.setFor("actionstepEditInput");
-        actionstepEditOutput.setId("actionstepEditOutput");
-        actionstepEditOutput.setValue("Actionstep:");
-        htmlPanelGrid.getChildren().add(actionstepEditOutput);
+        OutputLabel actionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        actionEditOutput.setFor("actionEditInput");
+        actionEditOutput.setId("actionEditOutput");
+        actionEditOutput.setValue("Action:");
+        htmlPanelGrid.getChildren().add(actionEditOutput);
         
-        InputTextarea actionstepEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        actionstepEditInput.setId("actionstepEditInput");
-        actionstepEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.actionstep}", String.class));
-        LengthValidator actionstepEditInputValidator = new LengthValidator();
-        actionstepEditInputValidator.setMaximum(100);
-        actionstepEditInput.addValidator(actionstepEditInputValidator);
-        actionstepEditInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(actionstepEditInput);
+        InputTextarea actionEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        actionEditInput.setId("actionEditInput");
+        actionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.action}", String.class));
+        LengthValidator actionEditInputValidator = new LengthValidator();
+        actionEditInputValidator.setMaximum(100);
+        actionEditInput.addValidator(actionEditInputValidator);
+        actionEditInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(actionEditInput);
         
-        Message actionstepEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        actionstepEditInputMessage.setId("actionstepEditInputMessage");
-        actionstepEditInputMessage.setFor("actionstepEditInput");
-        actionstepEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(actionstepEditInputMessage);
+        Message actionEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        actionEditInputMessage.setId("actionEditInputMessage");
+        actionEditInputMessage.setFor("actionEditInput");
+        actionEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(actionEditInputMessage);
         
         OutputLabel resultatEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         resultatEditOutput.setFor("resultatEditInput");
@@ -794,17 +794,17 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         orderingValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.ordering}", String.class));
         htmlPanelGrid.getChildren().add(orderingValue);
         
-        HtmlOutputText actionstepLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        actionstepLabel.setId("actionstepLabel");
-        actionstepLabel.setValue("Actionstep:");
-        htmlPanelGrid.getChildren().add(actionstepLabel);
+        HtmlOutputText actionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        actionLabel.setId("actionLabel");
+        actionLabel.setValue("Action:");
+        htmlPanelGrid.getChildren().add(actionLabel);
         
-        InputTextarea actionstepValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        actionstepValue.setId("actionstepValue");
-        actionstepValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.actionstep}", String.class));
-        actionstepValue.setReadonly(true);
-        actionstepValue.setDisabled(true);
-        htmlPanelGrid.getChildren().add(actionstepValue);
+        InputTextarea actionValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        actionValue.setId("actionValue");
+        actionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.action}", String.class));
+        actionValue.setReadonly(true);
+        actionValue.setDisabled(true);
+        htmlPanelGrid.getChildren().add(actionValue);
         
         HtmlOutputText resultatLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         resultatLabel.setId("resultatLabel");

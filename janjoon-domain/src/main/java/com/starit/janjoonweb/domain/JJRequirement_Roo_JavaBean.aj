@@ -136,6 +136,38 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.impact = impact;
     }
     
+    public String JJRequirement.getNote() {
+        return this.note;
+    }
+    
+    public void JJRequirement.setNote(String note) {
+        this.note = note;
+    }
+    
+    public Boolean JJRequirement.getOperation() {
+        return this.operation;
+    }
+    
+    public void JJRequirement.setOperation(Boolean operation) {
+        this.operation = operation;
+    }
+    
+    public Boolean JJRequirement.getCompletion() {
+        return this.completion;
+    }
+    
+    public void JJRequirement.setCompletion(Boolean completion) {
+        this.completion = completion;
+    }
+    
+    public JJContact JJRequirement.getAssignedTo() {
+        return this.assignedTo;
+    }
+    
+    public void JJRequirement.setAssignedTo(JJContact assignedTo) {
+        this.assignedTo = assignedTo;
+    }
+    
     public JJRelationship JJRequirement.getRelation() {
         return this.relation;
     }
@@ -160,28 +192,12 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.tasks = tasks;
     }
     
-    public JJContact JJRequirement.getAssignedTo() {
-        return this.assignedTo;
-    }
-    
-    public void JJRequirement.setAssignedTo(JJContact assignedTo) {
-        this.assignedTo = assignedTo;
-    }
-    
     public Set<JJMessage> JJRequirement.getMessages() {
         return this.messages;
     }
     
     public void JJRequirement.setMessages(Set<JJMessage> messages) {
         this.messages = messages;
-    }
-    
-    public String JJRequirement.getNote() {
-        return this.note;
-    }
-    
-    public void JJRequirement.setNote(String note) {
-        this.note = note;
     }
     
     public Set<JJRequirement> JJRequirement.getRequirementLinkDown() {
@@ -206,22 +222,6 @@ privileged aspect JJRequirement_Roo_JavaBean {
     
     public void JJRequirement.setTestcases(Set<JJTestcase> testcases) {
         this.testcases = testcases;
-    }
-    
-    public Boolean JJRequirement.getOperation() {
-        return this.operation;
-    }
-    
-    public void JJRequirement.setOperation(Boolean operation) {
-        this.operation = operation;
-    }
-    
-    public Boolean JJRequirement.getCompletion() {
-        return this.completion;
-    }
-    
-    public void JJRequirement.setCompletion(Boolean completion) {
-        this.completion = completion;
     }
     
 }

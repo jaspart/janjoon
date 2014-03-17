@@ -70,6 +70,16 @@ public class JJRequirement extends JJAbstractEntity {
 	@Size(max = 100)
 	private String impact;
 
+	@Lob
+	private String note;
+
+	private Boolean operation;
+
+	private Boolean completion;
+
+	@ManyToOne
+	private JJContact assignedTo;
+
 	@Enumerated
 	private JJRelationship relation;
 
@@ -79,14 +89,8 @@ public class JJRequirement extends JJAbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "requirement")
 	private Set<JJTask> tasks = new HashSet<JJTask>();
 
-	@ManyToOne
-	private JJContact assignedTo;
-
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
-
-	@Lob
-	private String note;
 
 	@ManyToMany(mappedBy = "requirementLinkUp", fetch = FetchType.EAGER)
 	private Set<JJRequirement> requirementLinkDown = new HashSet<JJRequirement>();
@@ -98,7 +102,4 @@ public class JJRequirement extends JJAbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "requirement")
 	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
 
-	private Boolean operation;
-
-	private Boolean completion;
 }

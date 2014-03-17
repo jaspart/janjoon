@@ -13,23 +13,23 @@ import com.starit.janjoonweb.domain.JJTeststep;
 @RooJsfManagedBean(entity = JJBug.class, beanName = "jJBugBean")
 public class JJBugBean {
 
-	private JJBug jJBug;
-	private JJProject currentProject;
+	private JJBug bug;
+	private JJProject project;
 
-	public JJBug getjJBug() {
-		return jJBug;
+	public JJBug getBug() {
+		return bug;
 	}
 
-	public void setjJBug(JJBug jJBug) {
-		this.jJBug = jJBug;
+	public void setBug(JJBug bug) {
+		this.bug = bug;
 	}
 
-	public JJProject getCurrentProject() {
-		return currentProject;
+	public JJProject getProject() {
+		return project;
 	}
 
-	public void setCurrentProject(JJProject currentProject) {
-		this.currentProject = currentProject;
+	public void setProject(JJProject project) {
+		this.project = project;
 	}
 
 	public void createJJBug(JJTeststep jJTeststep) {
@@ -38,11 +38,11 @@ public class JJBugBean {
 		bug.setCreationDate(new Date());
 		bug.setEnabled(true);
 		bug.setDescription("Insert a comment");
-		bug.setProject(currentProject);
+		bug.setProject(project);
 		bug.setTeststep(jJTeststep);
 
 		jJBugService.saveJJBug(bug);
-		jJBug = jJBugService.findJJBug(bug.getId());
+		bug = jJBugService.findJJBug(bug.getId());
 
 	}
 }

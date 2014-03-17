@@ -17,14 +17,6 @@ privileged aspect JJRight_Roo_JavaBean {
         this.objet = objet;
     }
     
-    public JJCategory JJRight.getCategory() {
-        return this.category;
-    }
-    
-    public void JJRight.setCategory(JJCategory category) {
-        this.category = category;
-    }
-    
     public Boolean JJRight.getR() {
         return this.r;
     }
@@ -47,6 +39,14 @@ privileged aspect JJRight_Roo_JavaBean {
     
     public void JJRight.setX(Boolean x) {
         this.x = x;
+    }
+    
+    public JJCategory JJRight.getCategory() {
+        return this.category;
+    }
+    
+    public void JJRight.setCategory(JJCategory category) {
+        this.category = category;
     }
     
     public JJProfile JJRight.getProfile() {

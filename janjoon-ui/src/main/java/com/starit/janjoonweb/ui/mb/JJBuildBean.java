@@ -59,7 +59,7 @@ public class JJBuildBean {
 			jJTeststepexecutionBean.setCurrentBuild(jJBuild);
 		}
 		if (jJTestcaseBean != null) {
-			jJTestcaseBean.setCurrentBuild(jJBuild);
+		//	jJTestcaseBean.setCurrentBuild(jJBuild);
 		}
 
 	}

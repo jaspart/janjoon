@@ -54,8 +54,6 @@ public class JJContact extends JJAbstractEntity {
 
 	private Boolean accountNonLocked;
 
-	/**
-     */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "contact")
 	private Set<JJPermission> permissions = new HashSet<JJPermission>();
 }

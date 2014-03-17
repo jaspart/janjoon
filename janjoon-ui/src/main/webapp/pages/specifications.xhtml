@@ -190,7 +190,7 @@
 									filter="true" filterMatchMode="startsWith"
 									disabled="#{jJRequirementBean.disabledStatus}">
 									<f:converter
-										converterId="com.starit.janjoonweb.ui.converter.JJStatusConverter" />
+										converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
 									<f:selectItem
 										itemLabel="#{jJRequirementBean.requirementStatus.name}"
 										itemValue="#{jJRequirementBean.requirementStatus}" />
@@ -208,7 +208,7 @@
 									panelStyle="width:150px" effect="fade" style="width:150px"
 									filter="true" filterMatchMode="startsWith" disabled="true">
 									<f:converter
-										converterId="com.starit.janjoonweb.ui.converter.JJProjectConverter" />
+										converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
 									<f:selectItem
 										itemLabel="#{jJRequirementBean.requirementProject.name}"
 										itemValue="#{jJRequirementBean.requirementProject}" />
@@ -228,7 +228,7 @@
 									panelStyle="width:150px" effect="fade" style="width:150px"
 									filter="true" filterMatchMode="startsWith">
 									<f:converter
-										converterId="com.starit.janjoonweb.ui.converter.JJProductConverter" />
+										converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
 									<f:selectItem
 										itemLabel="#{jJRequirementBean.requirementProduct.name}"
 										itemValue="#{jJRequirementBean.requirementProduct}" />
@@ -248,7 +248,7 @@
 									filter="true" filterMatchMode="startsWith"
 									disabled="#{jJRequirementBean.disabledVersion}">
 									<f:converter
-										converterId="com.starit.janjoonweb.ui.converter.JJVersionConverter" />
+										converterId="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter" />
 									<f:selectItem
 										itemLabel="#{jJRequirementBean.requirementVersion.name}"
 										itemValue="#{jJRequirementBean.requirementVersion}" />
@@ -266,7 +266,7 @@
 									panelStyle="width:150px" effect="fade" style="width:150px"
 									filter="true" filterMatchMode="startsWith">
 									<f:converter
-										converterId="com.starit.janjoonweb.ui.converter.JJChapterConverter" />
+										converterId="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter" />
 									<f:selectItem
 										itemLabel="#{jJRequirementBean.requirementChapter.name}"
 										itemValue="#{jJRequirementBean.requirementChapter}" />
@@ -407,7 +407,7 @@
 											panelStyle="width:150px" effect="fade" style="width:160px"
 											filter="true" filterMatchMode="startsWith">
 											<f:converter
-												converterId="com.starit.janjoonweb.ui.converter.JJChapterConverter" />
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter" />
 											<f:selectItem itemLabel="#{jJChapterBean.parentChapter.name}"
 												itemValue="#{jJChapterBean.parentChapter}" />
 											<f:selectItems value="#{jJChapterBean.chapterList}" var="c"
@@ -541,7 +541,7 @@
 											panelStyle="width:150px" effect="fade" style="width:160px"
 											filter="true" filterMatchMode="startsWith">
 											<f:converter
-												converterId="com.starit.janjoonweb.ui.converter.JJProjectConverter" />
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
 											<f:selectItem
 												itemLabel="#{jJRequirementBean.importProject.name}"
 												itemValue="#{jJRequirementBean.importProject}" />
@@ -559,7 +559,7 @@
 											panelStyle="width:150px" effect="fade" style="width:160px"
 											filter="true" filterMatchMode="startsWith">
 											<f:converter
-												converterId="com.starit.janjoonweb.ui.converter.JJProductConverter" />
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
 											<f:selectItem
 												itemLabel="#{jJRequirementBean.importProduct.name}"
 												itemValue="#{jJRequirementBean.importProduct}" />
@@ -579,7 +579,7 @@
 											disabled="#{jJRequirementBean.disableImportVersion}">
 
 											<f:converter
-												converterId="com.starit.janjoonweb.ui.converter.JJVersionConverter" />
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter" />
 
 											<f:selectItem
 												itemLabel="#{jJRequirementBean.importVersion.name}"
@@ -600,7 +600,7 @@
 											panelStyle="width:150px" effect="fade" style="width:160px"
 											filter="true" filterMatchMode="startsWith">
 											<f:converter
-												converterId="com.starit.janjoonweb.ui.converter.JJCategoryConverter" />
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter" />
 											<f:selectItem
 												itemLabel="#{jJRequirementBean.importCategory.name}"
 												itemValue="#{jJRequirementBean.importCategory}" />
@@ -619,7 +619,7 @@
 											panelStyle="width:150px" effect="fade" style="width:160px"
 											filter="true" filterMatchMode="startsWith">
 											<f:converter
-												converterId="com.starit.janjoonweb.ui.converter.JJStatusConverter" />
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
 											<f:selectItem
 												itemLabel="#{jJRequirementBean.importStatus.name}"
 												itemValue="#{jJRequirementBean.importStatus}" />

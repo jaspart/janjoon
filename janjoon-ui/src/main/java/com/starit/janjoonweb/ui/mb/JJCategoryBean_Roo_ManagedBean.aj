@@ -3,18 +3,11 @@
 
 package com.starit.janjoonweb.ui.mb;
 
-import com.starit.janjoonweb.domain.JJCategory;
-import com.starit.janjoonweb.domain.JJCategoryService;
-import com.starit.janjoonweb.domain.JJChapter;
-import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJContactService;
-import com.starit.janjoonweb.ui.mb.JJCategoryBean;
-import com.starit.janjoonweb.ui.converter.JJContactConverter;
-import com.starit.janjoonweb.ui.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -26,6 +19,7 @@ import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.validator.LengthValidator;
+
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.inputtext.InputText;
@@ -37,6 +31,13 @@ import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.starit.janjoonweb.domain.JJCategory;
+import com.starit.janjoonweb.domain.JJCategoryService;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJContactService;
+import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 privileged aspect JJCategoryBean_Roo_ManagedBean {
     
@@ -67,8 +68,6 @@ privileged aspect JJCategoryBean_Roo_ManagedBean {
     private HtmlPanelGrid JJCategoryBean.viewPanelGrid;
     
     private boolean JJCategoryBean.createDialogVisible = false;
-    
-    private List<JJChapter> JJCategoryBean.selectedChapters;
     
     @PostConstruct
     public void JJCategoryBean.init() {
@@ -314,14 +313,16 @@ privileged aspect JJCategoryBean_Roo_ManagedBean {
         stageCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(stageCreateInputMessage);
         
-        HtmlOutputText chaptersCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel chaptersCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        chaptersCreateOutput.setFor("chaptersCreateInput");
         chaptersCreateOutput.setId("chaptersCreateOutput");
         chaptersCreateOutput.setValue("Chapters:");
         htmlPanelGrid.getChildren().add(chaptersCreateOutput);
         
-        HtmlOutputText chaptersCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputText chaptersCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         chaptersCreateInput.setId("chaptersCreateInput");
-        chaptersCreateInput.setValue("This relationship is managed from the JJChapter side");
+        chaptersCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCategoryBean.JJCategory_.chapters}", Set.class));
+        chaptersCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(chaptersCreateInput);
         
         Message chaptersCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -507,14 +508,16 @@ privileged aspect JJCategoryBean_Roo_ManagedBean {
         stageEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(stageEditInputMessage);
         
-        HtmlOutputText chaptersEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel chaptersEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        chaptersEditOutput.setFor("chaptersEditInput");
         chaptersEditOutput.setId("chaptersEditOutput");
         chaptersEditOutput.setValue("Chapters:");
         htmlPanelGrid.getChildren().add(chaptersEditOutput);
         
-        HtmlOutputText chaptersEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputText chaptersEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         chaptersEditInput.setId("chaptersEditInput");
-        chaptersEditInput.setValue("This relationship is managed from the JJChapter side");
+        chaptersEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCategoryBean.JJCategory_.chapters}", Set.class));
+        chaptersEditInput.setRequired(false);
         htmlPanelGrid.getChildren().add(chaptersEditInput);
         
         Message chaptersEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -626,8 +629,7 @@ privileged aspect JJCategoryBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(chaptersLabel);
         
         HtmlOutputText chaptersValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        chaptersValue.setId("chaptersValue");
-        chaptersValue.setValue("This relationship is managed from the JJChapter side");
+        chaptersValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCategoryBean.JJCategory_.chapters}", String.class));
         htmlPanelGrid.getChildren().add(chaptersValue);
         
         return htmlPanelGrid;
@@ -666,21 +668,7 @@ privileged aspect JJCategoryBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJChapter> JJCategoryBean.getSelectedChapters() {
-        return selectedChapters;
-    }
-    
-    public void JJCategoryBean.setSelectedChapters(List<JJChapter> selectedChapters) {
-        if (selectedChapters != null) {
-            JJCategory_.setChapters(new HashSet<JJChapter>(selectedChapters));
-        }
-        this.selectedChapters = selectedChapters;
-    }
-    
     public String JJCategoryBean.onEdit() {
-        if (JJCategory_ != null && JJCategory_.getChapters() != null) {
-            selectedChapters = new ArrayList<JJChapter>(JJCategory_.getChapters());
-        }
         return null;
     }
     
@@ -733,7 +721,6 @@ privileged aspect JJCategoryBean_Roo_ManagedBean {
     
     public void JJCategoryBean.reset() {
         JJCategory_ = null;
-        selectedChapters = null;
         createDialogVisible = false;
     }
     

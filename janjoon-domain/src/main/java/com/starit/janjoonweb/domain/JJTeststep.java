@@ -1,15 +1,18 @@
 package com.starit.janjoonweb.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.tostring.RooToString;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 
 @RooJavaBean
 @RooToString
@@ -18,9 +21,11 @@ public class JJTeststep extends JJAbstractEntity {
 
 	private Integer ordering;
 
+	@NotNull
 	@Size(max = 100)
-	private String actionstep;
+	private String action;
 
+	@NotNull
 	@Size(max = 100)
 	private String resultat;
 

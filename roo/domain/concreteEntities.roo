@@ -164,17 +164,18 @@ field reference --fieldName importance --type ~.JJImportance
 field reference --fieldName status --type ~.JJStatus
 field reference --fieldName sprint --type ~.JJSprint
 field string --fieldName impact --sizeMax 100
+field string --fieldName note
+field boolean --fieldName operation
+field boolean --fieldName completion
+field reference --fieldName assignedTo --type ~.JJContact
 field enum --fieldName relation --type ~.reference.JJRelationship
 field set --fieldName requirementLinkUp --type ~.JJRequirement --cardinality MANY_TO_MANY --fetch LAZY
 field set --fieldName requirementLinkDown --type ~.JJRequirement --cardinality MANY_TO_MANY --mappedBy requirementLinkUp --fetch LAZY
 field set --fieldName bugs --type ~.JJBug --cardinality ONE_TO_MANY --mappedBy requirement --fetch LAZY
 field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy requirement --fetch LAZY
-field reference --fieldName assignedTo --type ~.JJContact
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --fetch LAZY
 field set --fieldName testcases  --type ~.JJTestcase --cardinality ONE_TO_MANY --mappedBy requirement --fetch LAZY
-field string --fieldName note
-field boolean --fieldName operation
-field boolean --fieldName completion
+
 
 #######################
 
@@ -217,17 +218,14 @@ field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --m
 
 focus --class ~.JJTestcase
 field number --fieldName ordering --type java.lang.Integer
-field string --fieldName actioncase --sizeMax 100
+field string --fieldName action --sizeMax 100
 field string --fieldName resultat --sizeMax 100
-field reference --fieldName product --type ~.JJProduct
-field reference --fieldName category --type ~.JJCategory
-field reference --fieldName chapter --type ~.JJChapter
 field reference --fieldName requirement --type ~.JJRequirement --notNull
 field reference --fieldName sprint --type ~.JJSprint
-field set --fieldName softwares --type ~.JJSoftware --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
-field set --fieldName hardwares --type ~.JJHardware --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
 field number --fieldName workload --type java.lang.Integer
 field number --fieldName pricepoint --type java.lang.Integer
+field set --fieldName softwares --type ~.JJSoftware --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
+field set --fieldName hardwares --type ~.JJHardware --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
 field set --fieldName teststeps --type ~.JJTeststep --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
 field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
@@ -236,8 +234,8 @@ field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --m
 
 focus --class ~.JJTeststep
 field number --fieldName ordering --type java.lang.Integer
-field string --fieldName actionstep --sizeMax 100
-field string --fieldName resultat --sizeMax 100
+field string --fieldName action --sizeMax 100 --notNull
+field string --fieldName resultat --sizeMax 100 --notNull
 field boolean --fieldName passed
 field reference --fieldName testcase --type ~.JJTestcase
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy teststep --fetch LAZY
