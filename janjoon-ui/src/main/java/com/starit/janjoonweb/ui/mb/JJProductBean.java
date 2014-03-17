@@ -2,6 +2,7 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -62,7 +63,7 @@ public class JJProductBean {
 	private List<JJProduct> productListTable;
 
 	private JJContact productManager;
-	private List<JJContact> productManagerList;
+	private Set<JJContact> productManagerList;
 
 	private JJProject project;
 
@@ -112,14 +113,14 @@ public class JJProductBean {
 		this.productManager = productManager;
 	}
 
-	public List<JJContact> getProductManagerList() {
+	public Set<JJContact> getProductManagerList() {
 
 		productManagerList = jJPermissionService.getManagers("JJProduct");
 
 		return productManagerList;
 	}
 
-	public void setProductManagerList(List<JJContact> productManagerList) {
+	public void setProductManagerList(Set<JJContact> productManagerList) {
 		this.productManagerList = productManagerList;
 	}
 

@@ -26,7 +26,6 @@ import com.starit.janjoonweb.domain.JJProductService;
 import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJProfileService;
 import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJRight;
 import com.starit.janjoonweb.domain.JJRightService;
@@ -34,7 +33,6 @@ import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJSprintService;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
-import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
@@ -136,7 +134,7 @@ public class JJProjectBean {
 	private List<JJProject> projectListTable;
 
 	private JJContact projectManager;
-	private List<JJContact> projectManagerList;
+	private Set<JJContact> projectManagerList;
 
 	private String message;
 
@@ -769,7 +767,7 @@ public class JJProjectBean {
 			project.setCreationDate(new Date());
 			project.setEnabled(true);
 			project.setManager(manager);
-			jJProjectService.saveJJProject(project);			
+			jJProjectService.saveJJProject(project);
 			for (int i = 0; i < 2; i++) {
 				project = new JJProject();
 				project.setName("ProjectName " + i);
@@ -781,33 +779,33 @@ public class JJProjectBean {
 				jJProjectService.saveJJProject(project);
 			}
 
-		projectList = jJProjectService.getProjects(true);
-		
-		// List<JJProduct> productList = jJProductService.getProducts(true);
-		// if (jJRequirementService.findAllJJRequirements().isEmpty()) {
-		// JJRequirement jJRequirement;
-		// for (int j = 0; j < projectList.size(); j++) {
-		// jJRequirement = new JJRequirement();
-		// jJRequirement.setName("Requirement " + j);
-		// jJRequirement.setDescription("RequirementDescription " + j);
-		// jJRequirement.setCreationDate(new Date());
-		// jJRequirement.setEnabled(true);
-		// jJRequirement.setProduct(productList.get(j));
-		// jJRequirement.setProject(projectList.get(j));
-		// jJRequirementService.saveJJRequirement(jJRequirement);
-		// JJTask jJTask;
-		// for (int i = 0; i < 4; i++) {
-		// jJTask = new JJTask();
-		// jJTask.setName("TaskName " + i + ":R-" + j);
-		// jJTask.setDescription("TaskDescription " + i + ":R-" + j);
-		// jJTask.setCreationDate(new Date());
-		// jJTask.setEnabled(true);
-		// jJTask.setRequirement(jJRequirement);
-		// jJTask.setWorkloadPlanned(10);
-		// jJTaskService.saveJJTask(jJTask);
-		// }
-		// }
-		// }
+			projectList = jJProjectService.getProjects(true);
+
+			// List<JJProduct> productList = jJProductService.getProducts(true);
+			// if (jJRequirementService.findAllJJRequirements().isEmpty()) {
+			// JJRequirement jJRequirement;
+			// for (int j = 0; j < projectList.size(); j++) {
+			// jJRequirement = new JJRequirement();
+			// jJRequirement.setName("Requirement " + j);
+			// jJRequirement.setDescription("RequirementDescription " + j);
+			// jJRequirement.setCreationDate(new Date());
+			// jJRequirement.setEnabled(true);
+			// jJRequirement.setProduct(productList.get(j));
+			// jJRequirement.setProject(projectList.get(j));
+			// jJRequirementService.saveJJRequirement(jJRequirement);
+			// JJTask jJTask;
+			// for (int i = 0; i < 4; i++) {
+			// jJTask = new JJTask();
+			// jJTask.setName("TaskName " + i + ":R-" + j);
+			// jJTask.setDescription("TaskDescription " + i + ":R-" + j);
+			// jJTask.setCreationDate(new Date());
+			// jJTask.setEnabled(true);
+			// jJTask.setRequirement(jJRequirement);
+			// jJTask.setWorkloadPlanned(10);
+			// jJTaskService.saveJJTask(jJTask);
+			// }
+			// }
+			// }
 		}
 		/*** End Temporary ***/
 
@@ -843,13 +841,13 @@ public class JJProjectBean {
 		this.projectManager = projectManager;
 	}
 
-	public List<JJContact> getProjectManagerList() {
+	public Set<JJContact> getProjectManagerList() {
 
 		projectManagerList = jJPermissionService.getManagers("JJProject");
 		return projectManagerList;
 	}
 
-	public void setProjectManagerList(List<JJContact> projectManagerList) {
+	public void setProjectManagerList(Set<JJContact> projectManagerList) {
 		this.projectManagerList = projectManagerList;
 	}
 

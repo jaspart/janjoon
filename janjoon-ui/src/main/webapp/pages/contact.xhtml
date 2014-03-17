@@ -34,7 +34,10 @@
 					<f:facet name="header">
 						<h:outputText value="Actions" />
 					</f:facet>
-					<p:commandButton id="editButton" icon="ui-icon-pencil">
+					<p:commandButton id="editButton" icon="ui-icon-pencil"
+						oncomplete="contactDialogWidget.show()"
+						action="#{jJContactBean.editContact(jJPermissionBean)}"
+						update=":tabview:contactDialog">
 						<f:setPropertyActionListener value="#{contact}"
 							target="#{jJContactBean.contactAdmin}" />
 					</p:commandButton>
@@ -217,6 +220,7 @@
 							<p:column colspan="4">
 								<p:commandButton id="resetButton" value="Reset"
 									update="contactDialogForm" process="@this"
+									disabled="#{jJContactBean.disabledReset}"
 									action="#{jJContactBean.newContact(jJPermissionBean)}" />
 							</p:column>
 						</p:row>

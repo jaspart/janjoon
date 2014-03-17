@@ -1,7 +1,9 @@
 package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -24,9 +26,9 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public List<JJContact> getManagers(String objet) {
+	public Set<JJContact> getManagers(String objet) {
 
-		List<JJContact> contacts = new ArrayList<JJContact>();
+		Set<JJContact> contacts = new HashSet<JJContact>();
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
@@ -48,6 +50,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 		subquery.where(criteriaBuilder.and(predicates
 				.toArray(new Predicate[] {})));
+
 		select.where(criteriaBuilder.in(path).value(subquery));
 
 		TypedQuery<JJPermission> result = entityManager.createQuery(select);
@@ -80,14 +83,14 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 			predicates.add(criteriaBuilder.equal(from.get("profile"), profile));
 
-			if (project  != null) {
+			if (project != null) {
 				predicates.add(criteriaBuilder.equal(from.get("project"),
 						project));
 			} else {
 				predicates.add(criteriaBuilder.isNull(from.get("project")));
 			}
 
-			if (product  != null) {
+			if (product != null) {
 				predicates.add(criteriaBuilder.equal(from.get("product"),
 						product));
 			} else {

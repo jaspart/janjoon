@@ -140,6 +140,8 @@ public class JJPermissionBean {
 				permissionAdmin.setProduct(product);
 				permissionAdmin.setContact(contact);
 
+				contact.getPermissions().add(permissionAdmin);
+
 				jJPermissionService.saveJJPermission(permissionAdmin);
 
 				message = "message_successfully_created";

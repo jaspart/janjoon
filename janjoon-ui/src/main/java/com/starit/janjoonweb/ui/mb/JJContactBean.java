@@ -25,6 +25,7 @@ public class JJContactBean {
 
 	private String message;
 	private boolean disabled;
+	private boolean disabledReset;
 
 	public JJContact getContactAdmin() {
 		return contactAdmin;
@@ -69,6 +70,14 @@ public class JJContactBean {
 		this.disabled = disabled;
 	}
 
+	public boolean getDisabledReset() {
+		return disabledReset;
+	}
+
+	public void setDisabledReset(boolean disabledReset) {
+		this.disabledReset = disabledReset;
+	}
+
 	public void newContact(JJPermissionBean jJPermissionBean) {
 		System.out.println("Initial bean contact");
 		message = "New Contact";
@@ -79,10 +88,17 @@ public class JJContactBean {
 
 		jJPermissionBean.setContact(contactAdmin);
 		jJPermissionBean.newPermission();
+		disabledReset = false;
 	}
 
-	public void editContact() {
+	public void editContact(JJPermissionBean jJPermissionBean) {
 		message = "Edit Contact";
+		disabled = false;
+
+		jJPermissionBean.setContact(contactAdmin);
+		jJPermissionBean.newPermission();
+
+		disabledReset = true;
 	}
 
 	public void deleteContact() {
@@ -129,10 +145,15 @@ public class JJContactBean {
 			disabled = true;
 
 		} else {
+
+			contactAdmin.setUpdatedDate(new Date());
+
 			jJContactService.updateJJContact(contactAdmin);
 			message = "message_successfully_updated";
-			RequestContext context = RequestContext.getCurrentInstance();
-			context.execute("contactDialogWidget.hide()");
+			
+			disabled = true;
+//			RequestContext context = RequestContext.getCurrentInstance();
+//			context.execute("contactDialogWidget.hide()");
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
@@ -153,6 +174,7 @@ public class JJContactBean {
 		System.out.println("close dialog");
 		contactAdmin = null;
 		disabled = false;
+		disabledReset = false;
 		jJPermissionBean.setPermissionAdmin(null);
 		jJPermissionBean.setPermisssionListTable(null);
 		jJPermissionBean.setProfile(null);
