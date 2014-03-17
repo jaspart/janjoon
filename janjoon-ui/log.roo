@@ -44,3 +44,6 @@ web jsf scaffold --class com.starit.janjoonweb.ui.DevBean --entity ~.util.servic
 // Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-13 11:14:44
 // Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-13 13:50:59
 // Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-13 14:07:18
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-17 18:23:33
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-17 18:24:26

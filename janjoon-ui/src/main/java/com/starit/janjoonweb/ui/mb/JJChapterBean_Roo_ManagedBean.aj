@@ -21,7 +21,6 @@ import javax.faces.validator.LengthValidator;
 
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.calendar.Calendar;
-import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
@@ -31,13 +30,23 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.starit.janjoonweb.domain.*;
-import com.starit.janjoonweb.ui.converter.JJCategoryConverter;
-import com.starit.janjoonweb.ui.converter.JJChapterConverter;
-import com.starit.janjoonweb.ui.converter.JJContactConverter;
-import com.starit.janjoonweb.ui.converter.JJProductConverter;
-import com.starit.janjoonweb.ui.converter.JJProjectConverter;
-import com.starit.janjoonweb.ui.util.MessageFactory;
+import com.starit.janjoonweb.domain.JJCategory;
+import com.starit.janjoonweb.domain.JJCategoryService;
+import com.starit.janjoonweb.domain.JJChapter;
+import com.starit.janjoonweb.domain.JJChapterService;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJContactService;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProductService;
+import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJProjectService;
+import com.starit.janjoonweb.domain.JJRequirement;
+import com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJChapterConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJProductConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJProjectConverter;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 privileged aspect JJChapterBean_Roo_ManagedBean {
     
