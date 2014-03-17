@@ -34,6 +34,8 @@ public class JJRightServiceImpl implements JJRightService {
 
 		if (profile != null) {
 			predicates.add(criteriaBuilder.equal(from.get("profile"), profile));
+		} else {
+			predicates.add(criteriaBuilder.isNull(from.get("profile")));
 		}
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));

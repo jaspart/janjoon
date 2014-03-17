@@ -57,7 +57,8 @@
 	</h:form>
 	<p:dialog id="productDialog" header="#{jJProductBean.message}"
 		modal="true" widgetVar="productDialogWidget" dynamic="true"
-		showEffect="fade" hideEffect="explode" appendTo="@(body)">
+		showEffect="fade" hideEffect="explode" appendTo="@(body)"
+		resizable="false">
 		<p:ajax event="close" update=":tabview:productForm :headerForm"
 			listener="#{jJProductBean.closeDialog(jJVersionBean)}" />
 		<p:outputPanel id="productDialogPanel">
@@ -132,7 +133,7 @@
 
 									<p:column>
 										<p:commandButton id="saveVersion"
-											update="version versionDataTable"
+											update="version versionDataTable msg"
 											actionListener="#{jJVersionBean.save}"
 											icon="ui-icon-circle-plus" value="New Version"
 											process="@widgetVar(versionWidget)" />

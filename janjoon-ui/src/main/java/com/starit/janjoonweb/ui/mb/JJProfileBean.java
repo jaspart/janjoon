@@ -56,14 +56,14 @@ public class JJProfileBean {
 		jJRightBean.newRight();
 
 	}
-	
+
 	public void deleteProfile() {
-		
+
 		if (profileAdmin != null) {
 			System.out.println(profileAdmin.getName());
 
-//			profileAdmin.setEnabled(false);
-//			jJProfileService.updateJJProfile(profileAdmin);
+			// profileAdmin.setEnabled(false);
+			// jJProfileService.updateJJProfile(profileAdmin);
 
 		}
 	}
@@ -72,26 +72,23 @@ public class JJProfileBean {
 		System.out.println("SAVING Profile...");
 		String message = "";
 
+		List<JJRight> rights = jJRightBean.getRightListTable();
+
+		if (!rights.isEmpty()) {
+
+			profileAdmin.getRights().addAll(rights);
+
+			for (JJRight right : rights) {
+				right.setProfile(profileAdmin);
+			}
+
+		}
+
 		if (profileAdmin.getId() == null) {
 			System.out.println("IS a new JJProfile");
 
 			jJProfileService.saveJJProfile(profileAdmin);
 			message = "message_successfully_created";
-
-			List<JJRight> rights = jJRightBean.getRightListTable();
-
-			if (rights != null && !rights.isEmpty()) {
-				JJProfile profile = jJProfileService.findJJProfile(profileAdmin
-						.getId());
-				profile.getRights().addAll(rights);
-
-				for (JJRight right : rights) {
-					right.setProfile(profile);
-				}
-
-				jJProfileService.updateJJProfile(profile);
-
-			}
 
 			newProfile(jJRightBean);
 
@@ -113,6 +110,7 @@ public class JJProfileBean {
 		profileAdmin = null;
 		jJRightBean.setRightAdmin(null);
 		jJRightBean.setRightListTable(null);
+		jJRightBean.setRightDataModel(null);
 		jJRightBean.setCategory(null);
 		jJRightBean.setCategoryList(null);
 		jJRightBean.setObject(null);

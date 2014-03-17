@@ -60,129 +60,168 @@
 	</h:form>
 	<p:dialog id="contactDialog" header="#{jJContactBean.message}"
 		modal="true" widgetVar="contactDialogWidget" dynamic="true"
-		showEffect="fade" hideEffect="explode" appendTo="@(body)">
+		showEffect="fade" hideEffect="explode" appendTo="@(body)"
+		resizable="false">
 		<p:ajax event="close" update=":tabview:contactForm"
 			listener="#{jJContactBean.closeDialog(jJPermissionBean)}" />
 		<p:outputPanel id="contactDialogPanel">
 			<h:form id="contactDialogForm">
 				<p:growl id="msg" />
-				<p:panelGrid columns="1" cellpadding="6">
-					<p:panel id="contactPanel" columns="2" cellpadding="6">
-						<p:panel columns="3" cellpadding="6">
-							<p:inputText id="firstname"
-								value="#{jJContactBean.contactAdmin.firstname}"
-								label="Firstname" required="true" widgetVar="firstnameWidget"
-								disabled="#{jJContactBean.disabled}">
-								<f:validateLength maximum="100" />
-							</p:inputText>
-							<p:message for="firstname" id="msgFirstname" />
-							<p:watermark for="firstname" value="Firstname *" />
-							<p:inputText id="lastname"
-								value="#{jJContactBean.contactAdmin.name}" label="Lastname"
-								required="true" widgetVar="lastnameWidget"
-								disabled="#{jJContactBean.disabled}">
-								<f:validateLength maximum="100" />
-							</p:inputText>
-							<p:message for="lastname" id="msgLastname" />
-							<p:watermark for="lastname" value="Lastname *" />
-							<p:inputText id="email"
-								value="#{jJContactBean.contactAdmin.email}" label="Email"
-								required="true" widgetVar="emailWidget"
-								disabled="#{jJContactBean.disabled}" />
-							<p:message for="email" id="msgEmail" />
-							<p:watermark for="email" value="Email *" />
-							<h:outputText value="#{jJContactBean.contactAdmin.email}" />
-						</p:panel>
-						<p:panel columns="1" cellpadding="6">
-							<p:panel columns="2" cellpadding="6">
-								<h:outputText value="Password: *" />
-								<p:password id="password"
-									value="#{jJContactBean.contactAdmin.password}" feedback="true"
-									inline="true" label="Password" required="true"
-									widgetVar="passwordWidget" disabled="#{jJContactBean.disabled}" />
-								<p:message for="password" id="msgPassword" />
-							</p:panel>
-							<p:selectBooleanButton
-								value="#{jJContactBean.contactAdmin.enabled}" onLabel="Active"
-								offLabel="Inactive" onIcon="ui-icon-check"
-								offIcon="ui-icon-close" disabled="#{jJContactBean.disabled}">
-								<p:ajax update="msg" listener="#{jJContactBean.addMessage}" />
-							</p:selectBooleanButton>
-						</p:panel>
-						<p:commandButton id="saveContact" value="Save Contact"
-							update="contactDialogForm"
-							process="@widgetVar(firstnameWidget) @widgetVar(lastnameWidget) @widgetVar(emailWidget) @widgetVar(passwordWidget)"
-							action="#{jJContactBean.save(jJPermissionBean)}"
-							disabled="#{jJContactBean.disabled}" />
-					</p:panel>
-					<p:panel id="permissionPanel" columns="7" cellpadding="6">
-						<h:outputLabel value="Profile: *" />
-						<p:selectOneMenu id="selectOneMenuProfile"
-							value="#{jJPermissionBean.profile}" panelStyle="width:150px"
-							effect="fade" style="width:160px" filter="true"
-							filterMatchMode="startsWith" required="true"
-							widgetVar="profileWidget" label="Profile"
-							disabled="#{not jJContactBean.disabled}">
-							<f:converter
-								converterId="com.starit.janjoonweb.ui.converter.JJProfileConverter" />
-							<f:selectItem itemLabel="#{jJPermissionBean.profile.name}"
-								itemValue="#{jJPermissionBean.profile}" />
-							<f:selectItems value="#{jJPermissionBean.profileList}" var="p"
-								itemLabel="#{p.name}" itemValue="#{p}" />
-						</p:selectOneMenu>
-						<h:outputLabel value="Project:" />
-						<p:selectOneMenu id="selectOneMenuProject"
-							value="#{jJPermissionBean.project}" panelStyle="width:150px"
-							effect="fade" style="width:160px" filter="true"
-							filterMatchMode="startsWith" widgetVar="projectWidget"
-							disabled="#{not jJContactBean.disabled}">
-							<f:converter
-								converterId="com.starit.janjoonweb.ui.converter.JJProjectConverter" />
-							<f:selectItem itemLabel="#{jJPermissionBean.project.name}"
-								itemValue="#{jJPermissionBean.project}" />
-							<f:selectItems value="#{jJPermissionBean.projectList}" var="p"
-								itemLabel="#{p.name}" itemValue="#{p}" />
-						</p:selectOneMenu>
-						<h:outputLabel value="Product:" />
-						<p:selectOneMenu id="selectOneMenuProduct"
-							value="#{jJPermissionBean.product}" panelStyle="width:150px"
-							effect="fade" style="width:160px" filter="true"
-							filterMatchMode="startsWith" widgetVar="productWidget"
-							disabled="#{not jJContactBean.disabled}">
-							<f:converter
-								converterId="com.starit.janjoonweb.ui.converter.JJProductConverter" />
-							<f:selectItem itemLabel="#{jJPermissionBean.product.name}"
-								itemValue="#{jJPermissionBean.product}" />
-							<f:selectItems value="#{jJPermissionBean.productList}" var="p"
-								itemLabel="#{p.name}" itemValue="#{p}" />
-						</p:selectOneMenu>
-						<p:commandButton id="savePermission" value="Add Permission"
-							update="msg permissionPanel"
-							actionListener="#{jJPermissionBean.save}"
-							icon="ui-icon-circle-plus"
-							process="@widgetVar(profileWidget) @widgetVar(projectWidget) @widgetVar(productWidget)"
-							disabled="#{not jJContactBean.disabled}" />
-						<p:dataTable id="permissionDataTable" var="permission"
-							value="#{jJPermissionBean.permisssionListTable}" paginator="true"
-							rows="4">
-							<f:facet name="header">  
+				<p:panel style="margin-top:10px">
+					<p:row>
+						<p:column>
+							<p:panelGrid style="margin-top:10px">
+								<p:row>
+									<p:column>
+										<p:inputText id="firstname"
+											value="#{jJContactBean.contactAdmin.firstname}"
+											label="Firstname" required="true" widgetVar="firstnameWidget"
+											disabled="#{jJContactBean.disabled}">
+											<f:validateLength maximum="100" />
+										</p:inputText>
+										<p:message for="firstname" id="msgFirstname" />
+										<p:watermark for="firstname" value="Firstname *" />
+									</p:column>
+									<p:column>
+										<p:inputText id="lastname"
+											value="#{jJContactBean.contactAdmin.name}" label="Lastname"
+											required="true" widgetVar="lastnameWidget"
+											disabled="#{jJContactBean.disabled}">
+											<f:validateLength maximum="100" />
+										</p:inputText>
+										<p:message for="lastname" id="msgLastname" />
+										<p:watermark for="lastname" value="Lastname *" />
+									</p:column>
+
+									<p:column>
+										<p:inputText id="email"
+											value="#{jJContactBean.contactAdmin.email}" label="Email"
+											required="true" widgetVar="emailWidget"
+											disabled="#{jJContactBean.disabled}" />
+										<p:message for="email" id="msgEmail" />
+										<p:watermark for="email" value="Email *" />
+										<h:outputText value="#{jJContactBean.contactAdmin.email}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText value="Password: *" />
+										<p:password id="password"
+											value="#{jJContactBean.contactAdmin.password}"
+											feedback="true" inline="true" label="Password"
+											required="true" widgetVar="passwordWidget"
+											disabled="#{jJContactBean.disabled}" />
+										<p:message for="password" id="msgPassword" />
+									</p:column>
+
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<p:selectBooleanButton
+											value="#{jJContactBean.contactAdmin.enabled}"
+											onLabel="Active" offLabel="Inactive" onIcon="ui-icon-check"
+											offIcon="ui-icon-close" disabled="#{jJContactBean.disabled}">
+											<p:ajax update="msg" listener="#{jJContactBean.addMessage}" />
+										</p:selectBooleanButton>
+									</p:column>
+									<p:column>
+										<p:commandButton id="saveContact" value="Save Contact"
+											update="contactDialogForm"
+											process="@widgetVar(firstnameWidget) @widgetVar(lastnameWidget) @widgetVar(emailWidget) @widgetVar(passwordWidget)"
+											action="#{jJContactBean.save(jJPermissionBean)}"
+											disabled="#{jJContactBean.disabled}" />
+									</p:column>
+								</p:row>
+								<p:row>
+
+									<p:column>
+										<h:outputText value="Profile: *" />
+										<p:selectOneMenu id="profile"
+											value="#{jJPermissionBean.profile}" panelStyle="width:150px"
+											effect="fade" style="width:160px" filter="true"
+											filterMatchMode="startsWith" required="true"
+											widgetVar="profileWidget" label="Profile"
+											disabled="#{not jJContactBean.disabled}">
+											<f:converter
+												converterId="com.starit.janjoonweb.ui.converter.JJProfileConverter" />
+											<f:selectItem itemLabel="#{jJPermissionBean.profile.name}"
+												itemValue="#{jJPermissionBean.profile}" />
+											<f:selectItems value="#{jJPermissionBean.profileList}"
+												var="p" itemLabel="#{p.name}" itemValue="#{p}" />
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="Project:" />
+										<p:selectOneMenu id="project"
+											value="#{jJPermissionBean.project}" panelStyle="width:150px"
+											effect="fade" style="width:160px" filter="true"
+											filterMatchMode="startsWith" widgetVar="projectWidget"
+											disabled="#{not jJContactBean.disabled}">
+											<f:converter
+												converterId="com.starit.janjoonweb.ui.converter.JJProjectConverter" />
+											<f:selectItem itemLabel="#{jJPermissionBean.project.name}"
+												itemValue="#{jJPermissionBean.project}" />
+											<f:selectItems value="#{jJPermissionBean.projectList}"
+												var="p" itemLabel="#{p.name}" itemValue="#{p}" />
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="Product:" />
+										<p:selectOneMenu id="product"
+											value="#{jJPermissionBean.product}" panelStyle="width:150px"
+											effect="fade" style="width:160px" filter="true"
+											filterMatchMode="startsWith" widgetVar="productWidget"
+											disabled="#{not jJContactBean.disabled}">
+											<f:converter
+												converterId="com.starit.janjoonweb.ui.converter.JJProductConverter" />
+											<f:selectItem itemLabel="#{jJPermissionBean.product.name}"
+												itemValue="#{jJPermissionBean.product}" />
+											<f:selectItems value="#{jJPermissionBean.productList}"
+												var="p" itemLabel="#{p.name}" itemValue="#{p}" />
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column>
+										<p:commandButton id="savePermission" value="Add Permission"
+											update="profile project product permissionDataTable msg"
+											actionListener="#{jJPermissionBean.save}"
+											icon="ui-icon-circle-plus"
+											process="@widgetVar(profileWidget) @widgetVar(projectWidget) @widgetVar(productWidget)"
+											disabled="#{not jJContactBean.disabled}" />
+									</p:column>
+
+								</p:row>
+							</p:panelGrid>
+						</p:column>
+					</p:row>
+					<p:dataTable id="permissionDataTable" var="permission"
+						value="#{jJPermissionBean.permisssionListTable}" paginator="true"
+						rows="4">
+						<f:facet name="header">  
             			Permission List  
         			</f:facet>
-							<p:column headerText="Profile" style="width:25%">  
+						<p:column headerText="Profile" style="width:25%">  
 							#{permission.profile.name}
 						</p:column>
-							<p:column headerText="Project" style="width:25%">  
+						<p:column headerText="Project" style="width:25%">  
 							#{permission.project.name}
 						</p:column>
-							<p:column headerText="Product" style="width:25%">  
+						<p:column headerText="Product" style="width:25%">  
 							#{permission.product.name}
 						</p:column>
-						</p:dataTable>
-					</p:panel>
-					<p:commandButton id="resetButton" value="Reset"
-						update="contactDialogForm" process="@this"
-						action="#{jJContactBean.newContact(jJPermissionBean)}" />
-				</p:panelGrid>
+					</p:dataTable>
+					<f:facet name="footer">
+						<p:row>
+							<p:column colspan="4">
+								<p:commandButton id="resetButton" value="Reset"
+									update="contactDialogForm" process="@this"
+									action="#{jJContactBean.newContact(jJPermissionBean)}" />
+							</p:column>
+						</p:row>
+					</f:facet>
+				</p:panel>
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>

@@ -200,12 +200,10 @@ public class JJProductBean {
 		List<JJVersion> versions = jJVersionBean.getVersionListTable();
 
 		if (!versions.isEmpty()) {
-			JJProduct product = jJProductService.findJJProduct(productAdmin
-					.getId());
-			product.getVersions().addAll(versions);
-			for (JJVersion jjVersion : versions) {
-				// System.out.println(jjVersion.getName());
-				jjVersion.setProduct(product);
+
+			productAdmin.getVersions().addAll(versions);
+			for (JJVersion version : versions) {
+				version.setProduct(productAdmin);
 			}
 		}
 
@@ -215,10 +213,6 @@ public class JJProductBean {
 			productAdmin.setManager(productManager);
 			jJProductService.saveJJProduct(productAdmin);
 			message = "message_successfully_created";
-
-			if (!versions.isEmpty()) {
-				jJProductService.updateJJProduct(product);
-			}
 
 			newProduct(jJVersionBean);
 

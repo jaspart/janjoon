@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.faces.model.ListDataModel;
 
@@ -164,7 +163,7 @@ public class JJVersionBean {
 	}
 
 	@SuppressWarnings("unchecked")
-	private class VersionDataModel extends ListDataModel<JJVersion> implements
+	public class VersionDataModel extends ListDataModel<JJVersion> implements
 			SelectableDataModel<JJVersion> {
 
 		public VersionDataModel(List<JJVersion> data) {

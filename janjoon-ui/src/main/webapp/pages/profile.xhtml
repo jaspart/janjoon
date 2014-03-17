@@ -48,95 +48,125 @@
 	</h:form>
 	<p:dialog id="profileDialog" header="#{jJProfileBean.message}"
 		modal="true" widgetVar="profileDialogWidget" dynamic="true"
-		showEffect="fade" hideEffect="explode" appendTo="@(body)">
+		showEffect="fade" hideEffect="explode" appendTo="@(body)"
+		resizable="false">
 		<p:ajax event="close" update=":tabview:profileForm"
 			listener="#{jJProfileBean.closeDialog(jJRightBean)}" />
 		<p:outputPanel id="profileDialogPanel">
 			<h:form id="profileDialogForm">
 				<p:growl id="msg" />
-				<p:panelGrid columns="1" cellpadding="6">
-					<p:panel columns="3" cellpadding="6">
-						<p:inputText id="name" value="#{jJProfileBean.profileAdmin.name}"
-							label="Name" required="true" widgetVar="nameWidget">
-							<f:validateLength maximum="100" />
-						</p:inputText>
-						<p:message for="name" id="msgName" />
-						<p:watermark for="name" value="Name *" />
-					</p:panel>
-					<p:panel id="rightPanel" columns="2" cellpadding="6">
-						<p:panel columns="2" cellpadding="6">
-							<h:outputText value="Object: *" />
-							<p:selectOneMenu id="object" value="#{jJRightBean.object}"
-								panelStyle="width:150px" effect="fade" style="width:160px"
-								filter="true" filterMatchMode="startsWith"
-								widgetVar="objectWidget" label="Right Object" required="true">
-								<p:ajax process="@this" partialSubmit="true"
-									listener="#{jJRightBean.handleSelectObject()}" />
-								<f:selectItem itemLabel="#{jJRightBean.object}"
-									itemValue="#{jJRightBean.object}" />
-								<f:selectItems value="#{jJRightBean.objectList}" var="p"
-									itemLabel="#{p}" itemValue="#{p}" />
-							</p:selectOneMenu>
-						</p:panel>
-						<p:panel columns="2" cellpadding="6">
-							<h:outputText value="Category: *" />
-							<p:selectOneMenu id="categories" value="#{jJRightBean.category}"
-								panelStyle="width:150px" effect="fade" style="width:160px"
-								filter="true" filterMatchMode="startsWith">
-								<p:ajax process="@this" partialSubmit="true"
-									listener="#{jJRightBean.handleSelectCategory()}" />
-								<f:converter
-									converterId="com.starit.janjoonweb.ui.converter.JJCategoryConverter" />
-								<f:selectItem itemLabel="#{jJRightBean.category.name}"
-									itemValue="#{jJRightBean.category}" />
-								<f:selectItems value="#{jJRightBean.categoryList}" var="p"
-									itemLabel="#{p.name}" itemValue="#{p}" />
-							</p:selectOneMenu>
-						</p:panel>
-						<p:panel columns="7" cellpadding="6">
-							<h:outputText value="R " />
-							<p:selectBooleanCheckbox value="#{jJRightBean.rightAdmin.r}">
-								<p:ajax listener="#{jJRightBean.addMessage}" />
-							</p:selectBooleanCheckbox>
-							<h:outputText value="W " />
-							<p:selectBooleanCheckbox value="#{jJRightBean.rightAdmin.w}">
-								<p:ajax listener="#{jJRightBean.addMessage}" />
-							</p:selectBooleanCheckbox>
-							<h:outputText value="X " />
-							<p:selectBooleanCheckbox value="#{jJRightBean.rightAdmin.x}">
-								<p:ajax listener="#{jJRightBean.addMessage}" />
-							</p:selectBooleanCheckbox>
-							<p:commandButton id="saveRight" update="msg rightPanel"
-								actionListener="#{jJRightBean.save}" icon="ui-icon-circle-plus"
-								process="@widgetVar(objectWidget)" />
-						</p:panel>
-						<p:dataTable id="rightDataTable" var="right"
-							value="#{jJRightBean.rightListTable}" paginator="true" rows="4">
-							<f:facet name="header">  
-            			Right List  
-        			</f:facet>
-							<p:column headerText="Object" style="width:25%">  
+				<p:panel style="margin-top:10px">
+					<p:row>
+						<p:column>
+							<p:panelGrid style="margin-top:10px">
+								<p:row>
+									<p:column colspan="4">
+										<p:inputText id="name"
+											value="#{jJProfileBean.profileAdmin.name}" label="Name"
+											required="true" widgetVar="nameWidget">
+											<f:validateLength maximum="100" />
+										</p:inputText>
+										<p:message for="name" id="msgName" />
+										<p:watermark for="name" value="Name *" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText value="Object: *" />
+										<p:selectOneMenu id="object" value="#{jJRightBean.object}"
+											panelStyle="width:150px" effect="fade" style="width:160px"
+											filter="true" filterMatchMode="startsWith"
+											widgetVar="objectWidget" label="Right Object" required="true">
+											<p:ajax process="@this" partialSubmit="true"
+												listener="#{jJRightBean.handleSelectObject()}" />
+											<f:selectItem itemLabel="#{jJRightBean.object}"
+												itemValue="#{jJRightBean.object}" />
+											<f:selectItems value="#{jJRightBean.objectList}" var="p"
+												itemLabel="#{p}" itemValue="#{p}" />
+										</p:selectOneMenu>
+									</p:column>
+									<p:column>
+										<h:outputText value="Category: " />
+										<p:selectOneMenu id="category" value="#{jJRightBean.category}"
+											panelStyle="width:150px" effect="fade" style="width:160px"
+											filter="true" filterMatchMode="startsWith">
+											<p:ajax process="@this" partialSubmit="true"
+												listener="#{jJRightBean.handleSelectCategory()}" />
+											<f:converter
+												converterId="com.starit.janjoonweb.ui.converter.JJCategoryConverter" />
+											<f:selectItem itemLabel="#{jJRightBean.category.name}"
+												itemValue="#{jJRightBean.category}" />
+											<f:selectItems value="#{jJRightBean.categoryList}" var="p"
+												itemLabel="#{p.name}" itemValue="#{p}" />
+										</p:selectOneMenu>
+									</p:column>
+									<p:column>
+										<h:outputText value="R " />
+										<p:selectBooleanCheckbox id="r"
+											value="#{jJRightBean.rightAdmin.r}">
+											<p:ajax listener="#{jJRightBean.addMessage}" />
+										</p:selectBooleanCheckbox>
+										<h:outputText value="W " />
+										<p:selectBooleanCheckbox id="w"
+											value="#{jJRightBean.rightAdmin.w}">
+											<p:ajax listener="#{jJRightBean.addMessage}" />
+										</p:selectBooleanCheckbox>
+										<h:outputText value="X " />
+										<p:selectBooleanCheckbox id="x"
+											value="#{jJRightBean.rightAdmin.x}">
+											<p:ajax listener="#{jJRightBean.addMessage}" />
+										</p:selectBooleanCheckbox>
+									</p:column>
+									<p:column>
+										<p:commandButton id="saveRight"
+											update="rightDataTable r w x category object msg"
+											actionListener="#{jJRightBean.save}" value="Add Right"
+											icon="ui-icon-circle-plus" process="@widgetVar(objectWidget)" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:column>
+					</p:row>
+					<p:dataTable id="rightDataTable" var="right"
+						value="#{jJRightBean.rightDataModel}" paginator="true"
+						style="width:467px" rows="4" widgetVar="rightDataTableWidget"
+						selection="#{jJRightBean.rightListTable}">
+						<p:ajax event="rowSelectCheckbox"
+							listener="#{jJRightBean.onRowSelect}" />
+						<f:facet name="header">  
+            				Right List 
+						</f:facet>
+						<p:column selectionMode="multiple" style="width:3%" />
+						<p:column headerText="Object" filterMatchMode="startsWith"
+							style="width:25%">  
 							#{right.objet}
 						</p:column>
-							<p:column headerText="Category" style="width:30%">  
+						<p:column headerText="Category" filterMatchMode="startsWith"
+							style="width:30%">  
 							#{right.category.name}
 						</p:column>
-							<p:column headerText="Read" style="width:15%">  
+						<p:column headerText="Read" style="width:14%">  
 							#{right.r}
 						</p:column>
-							<p:column headerText="Write" style="width:15%">  
+						<p:column headerText="Write" style="width:14%">  
 							#{right.w}
 						</p:column>
-							<p:column headerText="Execute" style="width:15%">  
+						<p:column headerText="Execute" style="width:14%">  
 							#{right.x}
 						</p:column>
-						</p:dataTable>
-					</p:panel>
-					<p:commandButton id="submitButton" value="Save"
-						update="profileDialogForm" process="@widgetVar(nameWidget)"
-						action="#{jJProfileBean.save(jJRightBean)}" />
+					</p:dataTable>
 
-				</p:panelGrid>
+					<f:facet name="footer">
+						<p:row>
+							<p:column colspan="3">
+								<p:commandButton id="submitButton" value="Save"
+									update="profileDialogForm"
+									process="@widgetVar(nameWidget) @widgetVar(rightDataTableWidget)"
+									action="#{jJProfileBean.save(jJRightBean)}" />
+							</p:column>
+						</p:row>
+					</f:facet>
+				</p:panel>
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>

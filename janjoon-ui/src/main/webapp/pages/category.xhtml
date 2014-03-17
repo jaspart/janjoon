@@ -58,7 +58,8 @@
 	</h:form>
 	<p:dialog id="categoryDialog" header="#{jJCategoryBean.message}"
 		modal="true" widgetVar="categoryDialogWidget" dynamic="true"
-		showEffect="fade" hideEffect="explode" appendTo="@(body)">
+		showEffect="fade" hideEffect="explode" appendTo="@(body)"
+		resizable="false">
 		<p:ajax event="close" update=":tabview:categoryForm"
 			listener="#{jJCategoryBean.closeDialog}" />
 		<p:outputPanel id="categoryDialogPanel">

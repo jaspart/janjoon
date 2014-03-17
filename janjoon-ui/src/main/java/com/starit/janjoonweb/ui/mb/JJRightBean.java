@@ -4,7 +4,10 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.model.ListDataModel;
 
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.SelectableDataModel;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
@@ -18,6 +21,7 @@ public class JJRightBean {
 
 	private JJRight rightAdmin;
 	private List<JJRight> rightListTable;
+	private RightDataModel rightDataModel;
 
 	private JJCategory category;
 	private List<JJCategory> categoryList;
@@ -34,12 +38,20 @@ public class JJRightBean {
 	}
 
 	public List<JJRight> getRightListTable() {
-		rightListTable = jJRightService.getRights(null);
 		return rightListTable;
 	}
 
 	public void setRightListTable(List<JJRight> rightListTable) {
 		this.rightListTable = rightListTable;
+	}
+
+	public RightDataModel getRightDataModel() {
+		rightDataModel = new RightDataModel(jJRightService.getRights(null));
+		return rightDataModel;
+	}
+
+	public void setRightDataModel(RightDataModel rightDataModel) {
+		this.rightDataModel = rightDataModel;
 	}
 
 	public JJCategory getCategory() {
@@ -87,6 +99,8 @@ public class JJRightBean {
 		category = null;
 		object = null;
 
+		rightListTable = null;
+
 	}
 
 	public void save() {
@@ -127,6 +141,45 @@ public class JJRightBean {
 
 	public void handleSelectObject() {
 		// System.out.println(object);
+	}
+
+	public void onRowSelect(SelectEvent event) {
+
+		System.out.println("Row selected");
+
+		if (rightListTable != null) {
+			System.out.println("la selection est non null");
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public class RightDataModel extends ListDataModel<JJRight> implements
+			SelectableDataModel<JJRight> {
+
+		public RightDataModel(List<JJRight> data) {
+			super(data);
+		}
+
+		@Override
+		public JJRight getRowData(String rowKey) {
+			// In a real app, a more efficient way like a query by rowKey should
+			// be implemented to deal with huge data
+
+			List<JJRight> rights = (List<JJRight>) getWrappedData();
+
+			for (JJRight right : rights) {
+				if (right.getObjet().equals(rowKey))
+					return right;
+			}
+
+			return null;
+		}
+
+		@Override
+		public Object getRowKey(JJRight right) {
+			return right.getObjet();
+		}
 	}
 
 }

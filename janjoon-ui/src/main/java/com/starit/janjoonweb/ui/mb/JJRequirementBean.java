@@ -694,7 +694,6 @@ public class JJRequirementBean {
 		requirementChapter = requirement.getChapter();
 
 		namesList = new ArrayList<String>();
-		namesList.add("DELETED");
 		namesList.add("NEW");
 
 		if (requirement.getStatus().getName().equalsIgnoreCase("NEW")) {
@@ -795,8 +794,7 @@ public class JJRequirementBean {
 			Set<JJTask> tasks = null;
 			Set<JJTestcase> testcases = null;
 			if (requirementStatus.getName().equalsIgnoreCase("CANCELED")
-					|| requirementStatus.getName()
-							.equalsIgnoreCase("DISCARDED")) {
+					|| requirementStatus.getName().equalsIgnoreCase("DELETED")) {
 
 				tasks = requirement.getTasks();
 				for (JJTask task : tasks) {
@@ -806,6 +804,11 @@ public class JJRequirementBean {
 				testcases = requirement.getTestcases();
 				for (JJTestcase testcase : testcases) {
 					testcase.setEnabled(false);
+				}
+
+				if (requirementStatus.getName().equalsIgnoreCase("DELETED")) {
+					requirement.setEnabled(false);
+					jJRequirementService.updateJJRequirement(requirement);
 				}
 
 			} else if (requirementStatus.getName().equalsIgnoreCase("MODIFIED")) {
@@ -2223,24 +2226,25 @@ public class JJRequirementBean {
 		}
 
 	}
-	
+
 	public List<JJRequirement> getRequirements(JJCategory category,
 			JJProject project, JJProduct product, JJVersion version,
 			JJStatus status, JJChapter chapter, boolean withChapter,
-			boolean onlyActif, boolean orderByCreationdate)
-			{
-					return jJRequirementService.getRequirements(category, project, product, 
-							version, status, chapter, withChapter, onlyActif, orderByCreationdate);
-			}
-	
-	public List<JJRequirement> getRequirements(JJProject project, JJProduct product, JJVersion version)
-	{
+			boolean onlyActif, boolean orderByCreationdate) {
+		return jJRequirementService.getRequirements(category, project, product,
+				version, status, chapter, withChapter, onlyActif,
+				orderByCreationdate);
+	}
+
+	public List<JJRequirement> getRequirements(JJProject project,
+			JJProduct product, JJVersion version) {
 		return jJRequirementService.getRequirements(project, product, version);
 	}
 
 	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
-			JJChapter chapter, boolean onlyActif)
-			{
-				return jJRequirementService.getRequirementChildrenWithChapterSortedByOrder(chapter, onlyActif);
-			}
+			JJChapter chapter, boolean onlyActif) {
+		return jJRequirementService
+				.getRequirementChildrenWithChapterSortedByOrder(chapter,
+						onlyActif);
+	}
 }

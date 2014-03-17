@@ -24,7 +24,7 @@ public class JJProduct extends JJAbstractEntity {
 	@Size(max = 100)
 	private String extname;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product")
 	private Set<JJVersion> versions = new HashSet<JJVersion>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
