@@ -77,7 +77,7 @@ public abstract class AbstractConfigManager implements Serializable
 	
 	public abstract boolean createRepository (String path);
 	
-	public abstract TreeNode listRepositoryContent();	
+	public abstract TreeNode listRepositoryContent(String version);	
 	
 	public abstract boolean pushRepository();
 

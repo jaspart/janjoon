@@ -81,7 +81,7 @@ public class GitConfigManager extends AbstractConfigManager {
 		}
 	}
 
-	public GitConfigManager(String url, String path,JJContact jjContact) {
+	public GitConfigManager(String url, String path, JJContact jjContact) {
 		super("GIT", url, path, jjContact);
 
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
@@ -110,7 +110,7 @@ public class GitConfigManager extends AbstractConfigManager {
 
 	public GitConfigManager(String url, String path) {
 
-		super("GIT", url, path,null);
+		super("GIT", url, path, null);
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
 		try {
 			File file;
@@ -144,7 +144,7 @@ public class GitConfigManager extends AbstractConfigManager {
 	public boolean checkIn(String message) {
 		try {
 			CommitCommand commit = git.commit();
-			commit.setAuthor(jJContact.getName(), "");
+			//commit.setAuthor(jJContact.getName(), "");
 			commit.setMessage(message);
 			commit.setAll(true);
 			commit.call();
@@ -236,13 +236,14 @@ public class GitConfigManager extends AbstractConfigManager {
 	}
 
 	@Override
-	public TreeNode listRepositoryContent() {
+	public TreeNode listRepositoryContent(String version) {
 
 		System.out.println(repository.getWorkTree().getPath());
-		// checkOut(getAllBranches().get(0));
+		
 		DefaultTreeNode root = new DefaultTreeNode("folder", repository
-				.getDirectory().getParentFile(), null);
-		repositoryTreeNode(repository.getWorkTree(), root);
+				.getDirectory().getParentFile()+"/"+version, null);
+		
+		repositoryTreeNode(new File(repository.getDirectory().getParentFile()+"/"+version), root);
 
 		return root;
 
@@ -254,7 +255,7 @@ public class GitConfigManager extends AbstractConfigManager {
 		int i = 0;
 		while (i < files.length) {
 			if (!files[i].getName().equalsIgnoreCase(".git")) {
-				//System.out.println(files[i].getName());
+				// System.out.println(files[i].getName());
 				if (files[i].isDirectory()) {
 					DefaultTreeNode tree = new DefaultTreeNode("folder",
 							files[i], root);
@@ -262,7 +263,7 @@ public class GitConfigManager extends AbstractConfigManager {
 					File[] t = files[i].listFiles();
 					int j = 0;
 					while (j < t.length) {
-						
+
 						j++;
 					}
 
@@ -277,17 +278,18 @@ public class GitConfigManager extends AbstractConfigManager {
 
 	@Override
 	public String cloneRemoteRepository(String url, String name, String path) {
-		CloneCommand cloneCommand = Git.cloneRepository();
-		File file = new File(path + "/" + name);
-		cloneCommand.setDirectory(file);
-		cloneCommand.setURI(url);
 
-		if (jJContact != null) {
-			cloneCommand
-					.setCredentialsProvider(new UsernamePasswordCredentialsProvider(
-							jJContact.getName(), jJContact.getPassword()));
-		}
 		try {
+			CloneCommand cloneCommand = Git.cloneRepository();
+			File file = new File(path + "/" + name);
+			cloneCommand.setDirectory(file);
+			cloneCommand.setURI(url);
+
+			if (jJContact != null) {
+				cloneCommand
+						.setCredentialsProvider(new UsernamePasswordCredentialsProvider(
+								jJContact.getName(), jJContact.getPassword()));
+			}
 			cloneCommand.call();
 			System.out.println("cloneRemoteRepository getted");
 			FileRepositoryBuilder builder = new FileRepositoryBuilder();
@@ -308,34 +310,39 @@ public class GitConfigManager extends AbstractConfigManager {
 		} catch (InvalidRemoteException e) {
 			System.out.println("InvalidRemoteException getted");
 			e.printStackTrace();
-			return null;
+			try {
+				delete(new File(path + "/" + name));
+			} catch (IOException e1) {
+
+				e1.printStackTrace();
+			}
+			return "InvalidRemoteException";
 		} catch (TransportException e) {
+
 			System.out.println("TransportException getted");
-			e.printStackTrace();
-			return null;
+			return "TransportException";
 		} catch (GitAPIException e) {
+
 			System.out.println("GitAPIException getted");
 			e.printStackTrace();
 			return null;
 		}
-
 	}
 
 	@Override
 	public boolean pushRepository() {
 
-		git = new Git(repository);
-
-		PushCommand pushCommand = git.push();
-		pushCommand.setRemote(url);
-		pushCommand.setPushAll();
-		pushCommand.setForce(true);
-		if (jJContact != null)
-			pushCommand
-					.setCredentialsProvider(new UsernamePasswordCredentialsProvider(
-							jJContact.getName(), jJContact.getPassword()));
-
 		try {
+			git = new Git(repository);
+
+			PushCommand pushCommand = git.push();
+			pushCommand.setRemote(url);
+			pushCommand.setPushAll();
+			pushCommand.setForce(true);
+			if (jJContact != null)
+				pushCommand
+						.setCredentialsProvider(new UsernamePasswordCredentialsProvider(
+								jJContact.getName(), jJContact.getPassword()));
 			pushCommand.call();
 			System.out.println("push called");
 			return true;
@@ -350,10 +357,10 @@ public class GitConfigManager extends AbstractConfigManager {
 	@Override
 	public boolean pullRepository() {
 
-		git = new Git(repository);
-		StoredConfig config = repository.getConfig();
-		RemoteConfig remoteConfig;
 		try {
+			git = new Git(repository);
+			StoredConfig config = repository.getConfig();
+			RemoteConfig remoteConfig;
 			remoteConfig = new RemoteConfig(config, "origin");
 			URIish uri = new URIish(url);
 			remoteConfig.addURI(uri);
@@ -499,6 +506,45 @@ public class GitConfigManager extends AbstractConfigManager {
 			return false;
 		}
 
+	}
+
+	public static void delete(File file) throws IOException {
+
+		if (file.isDirectory()) {
+
+			// directory is empty, then delete it
+			if (file.list().length == 0) {
+
+				file.delete();
+				System.out.println("Directory is deleted : "
+						+ file.getAbsolutePath());
+
+			} else {
+
+				// list all the directory contents
+				String files[] = file.list();
+
+				for (String temp : files) {
+					// construct the file structure
+					File fileDelete = new File(file, temp);
+
+					// recursive delete
+					delete(fileDelete);
+				}
+
+				// check the directory again, if empty then delete it
+				if (file.list().length == 0) {
+					file.delete();
+					System.out.println("Directory is deleted : "
+							+ file.getAbsolutePath());
+				}
+			}
+
+		} else {
+			// if file, then delete it
+			file.delete();
+			System.out.println("File is deleted : " + file.getAbsolutePath());
+		}
 	}
 
 }

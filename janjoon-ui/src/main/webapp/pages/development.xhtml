@@ -17,10 +17,16 @@
 				<ui:include src="/templates/menu.xhtml" />
 			</p:tabMenu>
 			<br />
+			<p:panel header="Error"
+				style="width: 90%;valign: top;" rendered="#{!jJDevelopment.render}">
+				<H1>
+				Product not available on the version control manager.
+				</H1>
+				</p:panel>
 			<p:panel header="#{jJDevelopment.selectedTree}"
-				style="width: 90%;valign: top;">
+				style="width: 90%;valign: top;" rendered="#{jJDevelopment.render}">
 				<h:link value="TestWith CodeMirror" outcome="development2" />
-				<h:form id="form">
+				<h:form id="form" >
 
 					<table class="mytable">
 						<tr>
@@ -71,12 +77,21 @@
 								</p:panel></td>
 						</tr>
 						<tr>
-							<td><p:commandButton value="Commit" id="submit"
-									icon="ui-icon-disk" actionListener="#{jJDevelopment.commit}"
-									update=":form:messages,:form:tabView,:form:fileTree,:form:taskmessage" /></td>
+							<td><p:selectBooleanCheckbox value="#{jJDevelopment.check}"
+									id="Marcasdone" /> <h:outputLabel value="Marc as done"
+									for="Marcasdone" /> <br /> 
+							</td>
 							<td><p:commandButton value="UpdateToHead" id="fetchFromRepo"
 									icon="ui-icon-disk" actionListener="#{jJDevelopment.pull}"
 									update=":form:messages,:form:tabView,:form:fileTree" /></td>
+						</tr>
+						<tr>
+							<td><p:commandButton value="Commit" id="submit"
+									icon="ui-icon-disk" actionListener="#{jJDevelopment.commit}"
+									update=":form:messages,:form:tabView,:form:fileTree,:form:taskmessage" /></td>
+							<td><p:commandButton id="showDialogButton" type="button"
+									value="CreateMessage" onclick="PF('dlg').show()"
+									actionListener="#{jJDevelopment.CreateMessage}" /></td>
 						</tr>
 					</table>
 				</h:form>

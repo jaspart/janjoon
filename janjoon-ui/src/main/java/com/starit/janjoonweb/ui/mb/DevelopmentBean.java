@@ -6,7 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -16,29 +18,23 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.jgit.api.errors.InvalidRemoteException;
+import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.tabview.TabView;
-import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.event.TabChangeEvent;
-import org.primefaces.event.TabCloseEvent;
+import org.primefaces.event.*;
 import org.primefaces.extensions.component.codemirror.CodeMirror;
 import org.primefaces.model.TreeNode;
 
-import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJProduct;
-import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJTask;
-import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.ui.mb.util.service.AbstractConfigManager;
-import com.starit.janjoonweb.ui.mb.util.service.FileMap;
-import com.starit.janjoonweb.ui.mb.util.service.GitConfigManager;
+import com.starit.janjoonweb.domain.*;
+import com.starit.janjoonweb.ui.mb.util.service.*;
 
 @ManagedBean(name = "jJDevelopment")
 @ViewScoped
 public class DevelopmentBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static String URL = "https://github.com/janjoon/ProductName-1";
+	private boolean render;
 	private TabView tabView;
 	private AbstractConfigManager configManager;
 	private String type;
@@ -47,11 +43,14 @@ public class DevelopmentBean implements Serializable {
 	private TreeNode selectedTree;
 	private ArrayList<FileMap> files;
 	private File file;
+	private JJMessage message;
 	private JJProject project;
 	private JJProduct product;
 	private JJVersion version;
 	private JJContact contact;
+	private JJConfiguration configuration;
 	private List<JJTask> tasks;
+	private boolean check;
 	private JJTask task;
 
 	public DevelopmentBean() throws FileNotFoundException, IOException {
@@ -72,49 +71,101 @@ public class DevelopmentBean implements Serializable {
 		}
 		product = prodbean.getProduct();
 		project = projbean.getProject();
-		if (contact == null) {
-			JJContactBean conbean = new JJContactBean();
-			contact = conbean.getContactByEmail("admin@gmail.com");
-		}		
+		configuration = projbean.getConfiguration();
+
 		System.out.println(contact.getName());
 		tasks = prodbean.getTasksByProduct(product, project);
 		for (JJTask t : tasks) {
 			System.out.println("111111" + t.getName());
 		}
-
-		try {
-			configManager = new GitConfigManager(1, contact);
-			String path = System.getProperty("user.home") + "/git/";
-			path = configManager.cloneRemoteRepository(URL,
-					"JanjonProduct", path);
-			configManager = new GitConfigManager(URL, path, contact);
-			System.out.println(path);
-
-		} catch (Exception e) {
-			String path = System.getProperty("user.home")
-					+ "/git/JanjonProduct/";
-			configManager = new GitConfigManager(URL, path, contact);
-			System.out.println(path);
+		if (message == null) {
+			message = new JJMessage();
 		}
-		tree = getConfigManager().listRepositoryContent();
-		selectedTree = getTree();
-		while (selectedTree.getChildCount() != 0) {
-			selectedTree = selectedTree.getChildren().get(0);
+		if (getConfigManager() != null && version != null && product != null) {
+			render = true;
+			tree = configManager.listRepositoryContent(version.getName());
+			
+			selectedTree = getTree();
+			while (selectedTree.getChildCount() != 0) {
+				selectedTree = selectedTree.getChildren().get(0);
+
+			}
+			file = (File) selectedTree.getData();
+			files = new ArrayList<FileMap>();
+			try (FileInputStream inputStream = new FileInputStream(file)) {
+				String fileTexte = IOUtils.toString(inputStream);
+				FileMap filemap = new FileMap(file.getPath(), file.getName(),
+						fileTexte, file);
+				files.add(filemap);
+			}
+
+		} else {
+			render = false;
+			if (product == null) {
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR,
+						"Please Select a project and a version ",
+						"Project and version are set to null");
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			} else {
+				if (version == null) {
+
+					FacesMessage message = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"Please Select a version ",
+							"Version is set to null");
+					FacesContext.getCurrentInstance().addMessage(null, message);
+
+				} else {
+					FacesMessage message = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"Product not available on the version control manager.",
+							"Project  not available");
+					FacesContext.getCurrentInstance().addMessage(null, message);
+				}
+			}
 
 		}
-		file = (File) selectedTree.getData();
-		files = new ArrayList<FileMap>();
-		try (FileInputStream inputStream = new FileInputStream(file)) {
-			String fileTexte = IOUtils.toString(inputStream);
-			FileMap filemap = new FileMap(file.getPath(), file.getName(),
-					fileTexte, file);
-			files.add(filemap);
-		}
+
 	}
 
 	public AbstractConfigManager getConfigManager() {
 
+		if (configuration.getParam().equalsIgnoreCase("git") && product != null
+				&& version != null) {
+			String url = configuration.getVal()
+					+ product.getName().replace(" ", "-");
+			try {
+				configManager = new GitConfigManager(1, contact);
+				String path = System.getProperty("user.home") + "/git/";
+
+				path = configManager.cloneRemoteRepository(url,
+						product.getName(), path);
+				if (path != null
+						&& !path.equalsIgnoreCase("InvalidRemoteException")) {
+					configManager = new GitConfigManager(url, path, contact);
+					System.out.println(path);
+				} else if (path == null) {
+					path = System.getProperty("user.home") + "/git/"
+							+ product.getName() + "/";
+					configManager = new GitConfigManager(url, path, contact);
+					System.out.println(path);
+				} else {
+					configManager = null;
+
+				}
+			} catch (JGitInternalException e) {
+				String path = System.getProperty("user.home") + "/git/"
+						+ product.getName() + "/";
+				configManager = new GitConfigManager(url, path, contact);
+				System.out.println(path);
+			}
+
+		} else
+			configManager = null;
+
 		return configManager;
+
 	}
 
 	public void setConfigManager(AbstractConfigManager configManager) {
@@ -134,8 +185,8 @@ public class DevelopmentBean implements Serializable {
 		return tree;
 	}
 
-	public void setTree() {
-		this.tree = configManager.listRepositoryContent();
+	public void setTree(TreeNode tree) {
+		this.tree = tree;
 	}
 
 	public TreeNode getSelectedTree() {
@@ -228,6 +279,38 @@ public class DevelopmentBean implements Serializable {
 		this.task = task;
 	}
 
+	public boolean isCheck() {
+		return check;
+	}
+
+	public void setCheck(boolean check) {
+		this.check = check;
+	}
+
+	public JJConfiguration getConfiguration() {
+		return configuration;
+	}
+
+	public void setConfiguration(JJConfiguration configuration) {
+		this.configuration = configuration;
+	}
+
+	public JJMessage getMessage() {
+		return message;
+	}
+
+	public void setMessage(JJMessage message) {
+		this.message = message;
+	}
+
+	public boolean isRender() {
+		return render;
+	}
+
+	public void setRender(boolean render) {
+		this.render = render;
+	}
+
 	public void pull() {
 		if (configManager.pullRepository()) {
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -249,8 +332,14 @@ public class DevelopmentBean implements Serializable {
 			System.out.println(fileMap.getFile().getName() + "  :"
 					+ fileMap.getTexte());
 
-		}		
+		}
 		System.out.println(task.toString());
+		if (check) {
+
+			task.setEndDateReal(new Date());
+			task.persist();
+
+		}
 		if (configManager.checkIn(task.getName())) {
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Commited", configManager.getPath());
@@ -306,7 +395,7 @@ public class DevelopmentBean implements Serializable {
 
 		}
 
-	}	
+	}
 
 	public void valueChangeHandler(AjaxBehaviorEvent event) {
 
@@ -346,6 +435,16 @@ public class DevelopmentBean implements Serializable {
 		int j = contains(f.getFile());
 		files.get(j).setTexte(f.getTexte());
 
+	}
+
+	public void CreateMessage() {
+		message = new JJMessage();
+	}
+
+	public void PersistMessage() {
+		message.setCreatedBy(contact);
+		message.setCreationDate(new Date());
+		message.persist();
 	}
 
 	public int contains(File f) {

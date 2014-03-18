@@ -12,6 +12,7 @@
 	<h:outputScript library="js" name="calendar.js" />
 
 	<h:form prependId="false" id="headerForm">
+		<p:growl id="growl" showDetail="true" sticky="true" />
 		<h:panelGrid id="panelMenu" columns="3" cellpadding="2">
 			<h:link outcome="main">
 				<p:graphicImage library="images" name="janjoon_logo.png"
@@ -28,9 +29,11 @@
 					icon="ui-icon-document" update=":contentGrid" />
 				<p:menuitem value="Bugs" url="/pages/bugs.jsf?faces-redirect=true"
 					icon="ui-icon-gear" />
-				<p:menuitem value="Dev"
-					url="/pages/development.jsf?faces-redirect=true"
-					icon="ui-icon-wrench" />
+				<p:menuitem value="Dev" url="/pages/development.jsf?faces-redirect=true"
+					icon="ui-icon-wrench" rendered="#{!loginBean.enable}"/>
+				<!-- url="/pages/development.jsf?faces-redirect=true" -->
+				<p:menuitem value="Dev" action="#{loginBean.redirectToDev}"
+					update="growl" icon="ui-icon-wrench" rendered="#{loginBean.enable}" />
 				<p:menuitem value="Test" url="/pages/test.jsf?faces-redirect=true"
 					icon="ui-icon-check" update=":contentGrid" />
 				<p:menuitem value="Delivery"

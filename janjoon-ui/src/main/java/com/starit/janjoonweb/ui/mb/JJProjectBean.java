@@ -17,6 +17,8 @@ import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
+import com.starit.janjoonweb.domain.JJConfiguration;
+import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJPermission;
@@ -26,6 +28,7 @@ import com.starit.janjoonweb.domain.JJProductService;
 import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJProfileService;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJRight;
 import com.starit.janjoonweb.domain.JJRightService;
@@ -33,6 +36,7 @@ import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJSprintService;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
+import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
@@ -127,6 +131,24 @@ public class JJProjectBean {
 		this.jJProfileService = jJProfileService;
 	}
 
+	@Autowired
+	JJConfigurationService jJConfigurationService;
+
+	JJConfiguration configuration;
+
+	public JJConfiguration getConfiguration() {
+		return configuration;
+	}
+
+	public void setConfiguration(JJConfiguration configuration) {
+		this.configuration = configuration;
+	}
+
+	public void setjJConfigurationService(
+			JJConfigurationService jJConfigurationService) {
+		this.jJConfigurationService = jJConfigurationService;
+	}
+
 	private JJProject project;
 	private List<JJProject> projectList;
 
@@ -152,6 +174,18 @@ public class JJProjectBean {
 	public List<JJProject> getProjectList() {
 		/*** Begin Temporary ***/
 
+		if (jJConfigurationService.findAllJJConfigurations().isEmpty()) {
+			JJConfiguration configuration = new JJConfiguration();
+			configuration.setName("ConfigurationManager");
+			configuration.setCreationDate(new Date());
+			configuration.setDescription("Test Configuration Manager");
+			configuration.setParam("git");
+			configuration.setVal("https://github.com/janjoon/");
+			configuration.setEnabled(true);
+			jJConfigurationService.saveJJConfiguration(configuration);
+			this.setConfiguration(configuration);
+		}
+		configuration = jJConfigurationService.findAllJJConfigurations().get(0);
 		if (jJBuildService.getAllJJBuilds().isEmpty()) {
 			JJBuild build;
 			for (int i = 0; i < 4; i++) {
@@ -253,7 +287,13 @@ public class JJProjectBean {
 
 		if (jJVersionService.getVersions(true, true, null).isEmpty()) {
 			JJVersion version;
-			for (int i = 0; i < 4; i++) {
+			version = new JJVersion();
+			version.setName("Default-Version");
+			version.setDescription("Default-VersionDescription ");
+			version.setCreationDate(new Date());
+			version.setEnabled(true);
+			jJVersionService.saveJJVersion(version);
+			for (int i = 0; i < 2; i++) {
 				version = new JJVersion();
 				version.setName("VersionName " + i);
 				version.setDescription("VersionDescription " + i);
@@ -703,34 +743,6 @@ public class JJProjectBean {
 			}
 
 			JJProduct product;
-			for (int i = 0; i < 2; i++) {
-				product = new JJProduct();
-				product.setName("ProductName " + i);
-				product.setDescription("ProductDescription " + i);
-				product.setCreationDate(new Date());
-				product.setEnabled(true);
-				product.setExtname("ProductExtName " + i);
-				product.setManager(manager);
-
-				List<JJVersion> jJVersionList = jJVersionService.getVersions(
-						true, true, null);
-
-				Set<JJVersion> versions = new HashSet<JJVersion>();
-
-				if (i == 0) {
-					jJVersionList.get(i).setProduct(product);
-					versions.add(jJVersionList.get(i));
-					jJVersionList.get(i + 1).setProduct(product);
-					versions.add(jJVersionList.get(i + 1));
-				} else {
-					jJVersionList.get(i + 1).setProduct(product);
-					versions.add(jJVersionList.get(i + 1));
-					jJVersionList.get(i + 2).setProduct(product);
-					versions.add(jJVersionList.get(i + 2));
-				}
-				product.setVersions(versions);
-				jJProductService.saveJJProduct(product);
-			}
 			product = new JJProduct();
 			product.setName("Default Product");
 			product.setDescription("Delault ProductDescription ");
@@ -746,10 +758,74 @@ public class JJProjectBean {
 
 			jJVersionList.get(0).setProduct(product);
 			versions.add(jJVersionList.get(0));
-			jJVersionList.get(0 + 1).setProduct(product);
-			versions.add(jJVersionList.get(0 + 1));
 			product.setVersions(versions);
 			jJProductService.saveJJProduct(product);
+			versions=new HashSet<JJVersion>();
+			for (int i = 0; i < 2; i++) {
+				product = new JJProduct();
+				product.setName("ProductName " + i);
+				product.setDescription("ProductDescription " + i);
+				product.setCreationDate(new Date());
+				product.setEnabled(true);
+				product.setExtname("ProductExtName " + i);
+				product.setManager(manager);
+				int j;
+				if (i == 0) {
+					j = i + 1;
+					jJVersionList.get(j).setProduct(product);
+					versions.add(jJVersionList.get(j));
+					jJVersionList.get(j + 1).setProduct(product);
+					versions.add(jJVersionList.get(j + 1));
+
+				} else {
+					jJProductService.saveJJProduct(product);
+					JJVersion version;
+					version = new JJVersion();
+					version.setName("main");
+					version.setDescription("VersionDescription Main");
+					version.setCreationDate(new Date());
+					version.setEnabled(true);
+					version.setProduct(product);
+					jJVersionService.saveJJVersion(version);
+					
+					
+					versions.add(version);
+					JJVersion version1 = new JJVersion();
+					version1.setName("integ/14.1");
+					version1.setDescription("VersionDescription Integ V:14.1");
+					version1.setCreationDate(new Date());
+					version1.setEnabled(true);
+					version1.setProduct(product);
+					jJVersionService.saveJJVersion(version1);
+					
+					
+					versions.add(version1);
+					JJVersion version2 = new JJVersion();
+					version2.setName("integ/14.2");
+					version2.setDescription("VersionDescription Integ V:14.2");
+					version2.setCreationDate(new Date());
+					version2.setEnabled(true);
+					version2.setProduct(product);
+					jJVersionService.saveJJVersion(version2);
+					
+					
+					versions.add(version2);
+					JJVersion version3 = new JJVersion();
+					version3.setName("prod/13.4");
+					version3.setDescription("VersionDescription Production V:13.4");
+					version3.setCreationDate(new Date());
+					version3.setEnabled(true);
+					version3.setProduct(product);
+					jJVersionService.saveJJVersion(version3);
+					
+					versions.add(version3);
+
+				}
+				product.setVersions(versions);
+				product.persist();
+
+			}
+
 		}
 
 		if (jJProjectService.getProjects(true).isEmpty()) {
@@ -781,34 +857,35 @@ public class JJProjectBean {
 
 			projectList = jJProjectService.getProjects(true);
 
-			// List<JJProduct> productList = jJProductService.getProducts(true);
-			// if (jJRequirementService.findAllJJRequirements().isEmpty()) {
-			// JJRequirement jJRequirement;
-			// for (int j = 0; j < projectList.size(); j++) {
-			// jJRequirement = new JJRequirement();
-			// jJRequirement.setName("Requirement " + j);
-			// jJRequirement.setDescription("RequirementDescription " + j);
-			// jJRequirement.setCreationDate(new Date());
-			// jJRequirement.setEnabled(true);
-			// jJRequirement.setProduct(productList.get(j));
-			// jJRequirement.setProject(projectList.get(j));
-			// jJRequirementService.saveJJRequirement(jJRequirement);
-			// JJTask jJTask;
-			// for (int i = 0; i < 4; i++) {
-			// jJTask = new JJTask();
-			// jJTask.setName("TaskName " + i + ":R-" + j);
-			// jJTask.setDescription("TaskDescription " + i + ":R-" + j);
-			// jJTask.setCreationDate(new Date());
-			// jJTask.setEnabled(true);
-			// jJTask.setRequirement(jJRequirement);
-			// jJTask.setWorkloadPlanned(10);
-			// jJTaskService.saveJJTask(jJTask);
-			// }
-			// }
-			// }
+			List<JJProduct> productList = jJProductService.getProducts(true);
+			if (jJRequirementService.findAllJJRequirements().isEmpty()) {
+				JJRequirement jJRequirement;
+				for (int j = 0; j < projectList.size(); j++) {
+					jJRequirement = new JJRequirement();
+					jJRequirement.setName("Requirement " + j);
+					jJRequirement.setDescription("RequirementDescription " + j);
+					jJRequirement.setCreationDate(new Date());
+					jJRequirement.setEnabled(true);
+					jJRequirement.setProduct(productList.get(j));
+					jJRequirement.setProject(projectList.get(j));
+					jJRequirementService.saveJJRequirement(jJRequirement);
+					JJTask jJTask;
+					for (int i = 0; i < 4; i++) {
+						jJTask = new JJTask();
+						jJTask.setName("TaskName " + i + ":R-" + j);
+						jJTask.setDescription("TaskDescription " + i + ":R-"
+								+ j);
+						jJTask.setCreationDate(new Date());
+						jJTask.setEnabled(true);
+						jJTask.setRequirement(jJRequirement);
+						jJTask.setWorkloadPlanned(10);
+						jJTaskService.saveJJTask(jJTask);
+					}
+				}
+			}
 		}
 		/*** End Temporary ***/
-
+		projectList = jJProjectService.getProjects(true);
 		return projectList;
 	}
 
@@ -871,11 +948,11 @@ public class JJProjectBean {
 
 		jJChapterBean.setProject(project);
 
-//		jJTestcaseBean.setCurrentProject(project);
-//		jJTestcaseBean.setRendered(false);
-//		jJTestcaseBean.initTestCaseParameter(jJTeststepBean);
-//
-//		jJBugBean.setCurrentProject(project);
+		// jJTestcaseBean.setCurrentProject(project);
+		// jJTestcaseBean.setRendered(false);
+		// jJTestcaseBean.initTestCaseParameter(jJTeststepBean);
+		//
+		// jJBugBean.setCurrentProject(project);
 		jJTaskBean.setProject(project);
 
 	}

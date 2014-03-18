@@ -6,6 +6,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.apache.myfaces.config.element.FacesConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -85,14 +86,15 @@ public class LoginBean implements Serializable{
 			FacesContext fContext = FacesContext.getCurrentInstance();
 			HttpSession session = (HttpSession) fContext.getExternalContext()
 					.getSession(true);
-			JJVersionBean jjVersionBean=(JJVersionBean) findBean("jJVersionBean");
+			/*JJVersionBean jjVersionBean=(JJVersionBean) findBean("jJVersionBean");
 			JJProjectBean jjProjectBean=(JJProjectBean) findBean("jJProjectBean");
 			JJProductBean jJProductBean=(JJProductBean) findBean("jJProductBean");
 			//gérer la session spring security 
-			session.putValue("JJContact", contact);
+			
 			session.putValue("jJVersionBean", jjVersionBean);
 			session.putValue("jJProjectBean", jjProjectBean);
-			session.putValue("jJProductBean", jJProductBean);
+			session.putValue("jJProductBean", jJProductBean);*/
+			session.putValue("JJContact", contact);
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Welcome ", contact.getFirstname());
 			FacesContext.getCurrentInstance().addMessage("login", message);
@@ -131,6 +133,26 @@ public class LoginBean implements Serializable{
 		FacesContext context = FacesContext.getCurrentInstance();
 		return context.getApplication().evaluateExpressionGet(context,
 				"#{" + beanName + "}", Object.class);
+	}
+	
+	public String redirectToDev()
+	{
+		JJVersionBean jjVersionBean=(JJVersionBean) findBean("jJVersionBean");
+		JJProductBean jJProductBean=(JJProductBean) findBean("jJProductBean");
+		String s=null;
+		if(jjVersionBean.getVersion()!=null&&jJProductBean!=null)
+		{
+			s="/pages/development.jsf?faces-redirect=true";
+			
+		}
+		else
+		{
+			s=FacesContext.getCurrentInstance().getViewRoot().getViewId();
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Please Select a project and a version ", "Project or version is set to null");
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+		return s;
 	}
 
 }
