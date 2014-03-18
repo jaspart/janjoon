@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,12 +71,23 @@ public class JJProductBean {
 	private String message;
 
 	public JJProduct getProduct() {
-
 		return product;
 	}
 
 	public void setProduct(JJProduct product) {
+
 		this.product = product;
+
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJVersionBean verbean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
+		verbean.setVersion(null);
+		if (product != null) {
+			verbean.setDisabled(false);
+		} else {
+			verbean.setDisabled(true);
+		}
 	}
 
 	public List<JJProduct> getProductList() {
@@ -125,6 +137,11 @@ public class JJProductBean {
 	}
 
 	public JJProject getProject() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJProjectBean projbean = (JJProjectBean) session
+				.getAttribute("jJProjectBean");
+		this.project = projbean.getProject();
 		return project;
 	}
 
@@ -138,30 +155,6 @@ public class JJProductBean {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	public void handleSelectProduct(JJVersionBean jJVersionBean,
-			JJRequirementBean jJRequirementBean, JJChapterBean jJChapterBean) {
-
-		jJRequirementBean.setProduct(product);
-
-		jJChapterBean.setProduct(product);
-
-		jJChapterBean.setVersion(null);
-
-		if (product != null) {
-
-			jJVersionBean.setDisabled(false);
-			jJVersionBean.setProduct(product);
-			jJVersionBean.setVersion(null);
-
-		} else {
-
-			jJVersionBean.setDisabled(true);
-			jJVersionBean.setProduct(null);
-			jJVersionBean.setVersion(null);
-
-		}
 	}
 
 	public void newProduct(JJVersionBean jJVersionBean) {

@@ -12,26 +12,26 @@
 	</h:head>
 	<h:body>
 		<pe:layout styleClass="wrapper">
-				<pe:layoutPane position="west" size="200" styleClass="menu">
-					<h:form id="menuForm">
-						<ui:insert name="menu">
-							<ui:include src="menu.xhtml" />
-						</ui:insert>
-					</h:form>
-				</pe:layoutPane>
-				<pe:layoutPane position="center" closable="false">
-					<ui:insert name="header">
-						<ui:include src="header.xhtml" />
+			<pe:layoutPane position="west" size="200" styleClass="menu">
+				<h:form id="menuForm">
+					<ui:insert name="menu">
+						<ui:include src="menu.xhtml" />
 					</ui:insert>
-					
-					<h:panelGrid  id="contentGrid"  cellspacing="0" cellpadding="0" styleClass="content">
-						<ui:insert name="content" />
-					</h:panelGrid>
-					
-					<ui:insert name="footer">
-						<ui:include src="footer.xhtml" />
-					</ui:insert>
-				</pe:layoutPane>
+				</h:form>
+			</pe:layoutPane>
+			<pe:layoutPane position="center" closable="false">
+				<ui:insert name="header">
+					<ui:include src="header.xhtml" />
+				</ui:insert>
+
+				<h:panelGrid id="contentPanel" cellspacing="0" cellpadding="0" styleClass="content">
+					<ui:insert name="content" />
+				</h:panelGrid>
+
+				<ui:insert name="footer">
+					<ui:include src="footer.xhtml" />
+				</ui:insert>
+			</pe:layoutPane>
 		</pe:layout>
 	</h:body>
 </f:view>

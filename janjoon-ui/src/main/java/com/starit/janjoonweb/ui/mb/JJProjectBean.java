@@ -760,7 +760,7 @@ public class JJProjectBean {
 			versions.add(jJVersionList.get(0));
 			product.setVersions(versions);
 			jJProductService.saveJJProduct(product);
-			versions=new HashSet<JJVersion>();
+			versions = new HashSet<JJVersion>();
 			for (int i = 0; i < 2; i++) {
 				product = new JJProduct();
 				product.setName("ProductName " + i);
@@ -787,8 +787,7 @@ public class JJProjectBean {
 					version.setEnabled(true);
 					version.setProduct(product);
 					jJVersionService.saveJJVersion(version);
-					
-					
+
 					versions.add(version);
 					JJVersion version1 = new JJVersion();
 					version1.setName("integ/14.1");
@@ -797,8 +796,7 @@ public class JJProjectBean {
 					version1.setEnabled(true);
 					version1.setProduct(product);
 					jJVersionService.saveJJVersion(version1);
-					
-					
+
 					versions.add(version1);
 					JJVersion version2 = new JJVersion();
 					version2.setName("integ/14.2");
@@ -807,8 +805,7 @@ public class JJProjectBean {
 					version2.setEnabled(true);
 					version2.setProduct(product);
 					jJVersionService.saveJJVersion(version2);
-					
-					
+
 					versions.add(version2);
 					JJVersion version3 = new JJVersion();
 					version3.setName("prod/13.4");
@@ -817,7 +814,7 @@ public class JJProjectBean {
 					version3.setEnabled(true);
 					version3.setProduct(product);
 					jJVersionService.saveJJVersion(version3);
-					
+
 					versions.add(version3);
 
 				}
@@ -934,27 +931,6 @@ public class JJProjectBean {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	public void handleSelectProject(JJProductBean jJProductBean,
-			JJVersionBean jJVersionBean, JJRequirementBean jJRequirementBean,
-			JJChapterBean jJChapterBean, JJTestcaseBean jJTestcaseBean,
-			JJTeststepBean jJTeststepBean, JJBugBean jJBugBean,
-			JJTaskBean jJTaskBean) {
-
-		jJProductBean.setProject(project);
-
-		jJRequirementBean.setProject(project);
-
-		jJChapterBean.setProject(project);
-
-		// jJTestcaseBean.setCurrentProject(project);
-		// jJTestcaseBean.setRendered(false);
-		// jJTestcaseBean.initTestCaseParameter(jJTeststepBean);
-		//
-		// jJBugBean.setCurrentProject(project);
-		jJTaskBean.setProject(project);
-
 	}
 
 	public void newProject() {

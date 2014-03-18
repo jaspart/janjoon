@@ -6,6 +6,7 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.ListDataModel;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.SelectableDataModel;
@@ -35,8 +36,6 @@ public class JJVersionBean {
 
 	private List<JJVersion> versionList;
 
-	private JJProduct product;
-
 	private JJVersion versionAdmin;
 	private List<JJVersion> versionListTable;
 
@@ -55,6 +54,12 @@ public class JJVersionBean {
 
 	public List<JJVersion> getVersionList() {
 
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJProductBean prodbean = (JJProductBean) session
+				.getAttribute("jJProductBean");
+		JJProduct product = prodbean.getProduct();
+
 		versionList = jJVersionService.getVersions(true, true, product);
 
 		return versionList;
@@ -62,14 +67,6 @@ public class JJVersionBean {
 
 	public void setVersionList(List<JJVersion> versionList) {
 		this.versionList = versionList;
-	}
-
-	public JJProduct getProduct() {
-		return product;
-	}
-
-	public void setProduct(JJProduct product) {
-		this.product = product;
 	}
 
 	public JJVersion getVersionAdmin() {
@@ -104,13 +101,6 @@ public class JJVersionBean {
 
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
-	}
-
-	public void handleSelectVersion(JJRequirementBean jJRequirementBean,
-			JJChapterBean jJChapterBean) {
-
-		jJRequirementBean.setVersion(version);
-		jJChapterBean.setVersion(version);
 	}
 
 	public List<JJTask> getTastksByVersion(JJVersion jJversion) {

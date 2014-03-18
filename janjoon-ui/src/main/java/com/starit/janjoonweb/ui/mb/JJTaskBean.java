@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
+
 import org.primefaces.extensions.model.timeline.TimelineEvent;
 import org.primefaces.extensions.model.timeline.TimelineModel;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
@@ -46,6 +49,11 @@ public class JJTaskBean {
 	}
 
 	public JJProject getProject() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJProjectBean projbean = (JJProjectBean) session
+				.getAttribute("jJProjectBean");
+		this.project = projbean.getProject();
 		return project;
 	}
 
@@ -53,12 +61,12 @@ public class JJTaskBean {
 		this.project = project;
 	}
 
-	public void loadData(JJProjectBean jJProjectBean) {
+	public void loadData() {
+		this.getProject();
 
-		project = jJProjectBean.getProject();
 		tasks = jJTaskService.getTasks(project, null, true);
 		Date now = new Date();
-		
+
 		for (JJTask task : tasks) {
 			task.setStartDatePlanned(now);
 			task.setEndDatePlanned(new Date(now.getTime()

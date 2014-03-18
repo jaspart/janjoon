@@ -13,6 +13,7 @@ import java.util.TreeMap;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -46,9 +47,10 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
+import com.starit.janjoonweb.domain.JJTestcase;
+import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
-
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJChapter.class, beanName = "jJChapterBean")
@@ -61,6 +63,13 @@ public class JJChapterBean {
 	public void setjJRequirementService(
 			JJRequirementService jJRequirementService) {
 		this.jJRequirementService = jJRequirementService;
+	}
+
+	@Autowired
+	JJTestcaseService jJTestcaseService;
+
+	public void setjJTestcaseService(JJTestcaseService jJTestcaseService) {
+		this.jJTestcaseService = jJTestcaseService;
 	}
 
 	private JJChapter chapter;
@@ -86,9 +95,6 @@ public class JJChapterBean {
 	private TreeNode chapterRoot;
 	private TreeNode selectedChapterNode;
 
-	/**
-	 * Id Category for Document Exporter
-	 */
 	private long categoryId;
 
 	public JJChapter getChapter() {
@@ -130,6 +136,11 @@ public class JJChapterBean {
 	}
 
 	public JJProject getProject() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJProjectBean projbean = (JJProjectBean) session
+				.getAttribute("jJProjectBean");
+		this.project = projbean.getProject();
 		return project;
 	}
 
@@ -138,6 +149,11 @@ public class JJChapterBean {
 	}
 
 	public JJProduct getProduct() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJProductBean prodbean = (JJProductBean) session
+				.getAttribute("jJProductBean");
+		this.product = prodbean.getProduct();
 		return product;
 	}
 
@@ -146,6 +162,12 @@ public class JJChapterBean {
 	}
 
 	public JJVersion getVersion() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJVersionBean verbean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
+		this.version = verbean.getVersion();
+
 		return version;
 	}
 
@@ -209,10 +231,19 @@ public class JJChapterBean {
 		this.selectedChapterNode = selectedChapterNode;
 	}
 
-	public void initChapterBean(long id) {
+	public long getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(long categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public void loadData(long categoryId) {
 		System.out.println("Init chapterBean");
-		System.out.println("Id " + id);
-		category = jJCategoryService.findJJCategory(id);
+		this.categoryId = categoryId;
+		System.out.println("id " + categoryId);
+		category = jJCategoryService.findJJCategory(categoryId);
 
 		newChapter();
 		chapterTree();
@@ -221,6 +252,11 @@ public class JJChapterBean {
 
 	private void newChapter() {
 		System.out.println("Create new chapter");
+
+		this.getProject();
+		this.getProduct();
+		this.getVersion();
+
 		chapter = new JJChapter();
 		chapter.setCreationDate(new Date());
 		chapter.setEnabled(true);
@@ -232,7 +268,7 @@ public class JJChapterBean {
 		chapter.setParent(parentChapter);
 
 		SortedMap<Integer, Object> elements = getSortedElements(parentChapter,
-				null, false);
+				project, null, category, false);
 		if (elements.isEmpty()) {
 			chapter.setOrdering(0);
 		} else {
@@ -261,11 +297,12 @@ public class JJChapterBean {
 		JJChapter parentSelectedChapter = selectedChapter.getParent();
 
 		SortedMap<Integer, Object> elements = getSortedElements(
-				parentSelectedChapter, null, false);
+				parentSelectedChapter, project, null, category, false);
 
 		int increment = elements.lastKey() + 1;
 
-		elements = getSortedElements(selectedChapter, null, false);
+		elements = getSortedElements(selectedChapter, project, null, category,
+				false);
 
 		System.out
 				.println("\n***** Update chapter and order for children  *****");
@@ -345,7 +382,8 @@ public class JJChapterBean {
 				project, product, category, true, true);
 
 		for (JJChapter chapter : parentChapters) {
-			TreeNode node = createTree(chapter, chapterRoot, 0);
+			TreeNode node = createTree(chapter, chapterRoot, project, product,
+					category, 0);
 		}
 
 	}
@@ -372,7 +410,8 @@ public class JJChapterBean {
 				project, product, category, true, true);
 
 		for (JJChapter chapter : parentChapters) {
-			TreeNode node = createTree(chapter, rightRoot, 1);
+			TreeNode node = createTree(chapter, rightRoot, project, product,
+					category, 1);
 		}
 
 	}
@@ -393,7 +432,7 @@ public class JJChapterBean {
 
 	// Recursive function to create tree
 	public TreeNode createTree(JJChapter chapterParent, TreeNode rootNode,
-			int index) {
+			JJProject project, JJProduct product, JJCategory category, int index) {
 
 		TreeNode newNode = new DefaultTreeNode("C-" + chapterParent.getId()
 				+ "- " + chapterParent.getName(), rootNode);
@@ -404,21 +443,23 @@ public class JJChapterBean {
 
 			for (JJChapter chapterChild : chapterChildren) {
 				if (chapterChild.getEnabled()) {
-					TreeNode newNode2 = createTree(chapterChild, newNode, index);
+					TreeNode newNode2 = createTree(chapterChild, newNode,
+							project, product, category, index);
 
 				}
 			}
 		} else if (index == 1) {
 
 			SortedMap<Integer, Object> elements = getSortedElements(
-					chapterParent, product, true);
+					chapterParent, project, product, category, true);
 			for (Map.Entry<Integer, Object> entry : elements.entrySet()) {
 				String className = entry.getValue().getClass().getSimpleName();
 
 				if (className.equalsIgnoreCase("JJChapter")) {
 
 					JJChapter chapter = (JJChapter) entry.getValue();
-					TreeNode newNode2 = createTree(chapter, newNode, index);
+					TreeNode newNode2 = createTree(chapter, newNode, project,
+							product, category, index);
 
 				} else if (className.equalsIgnoreCase("JJRequirement")) {
 
@@ -427,6 +468,35 @@ public class JJChapterBean {
 					TreeNode newNode3 = new DefaultTreeNode("R-"
 							+ requirement.getId() + "- "
 							+ requirement.getName(), newNode);
+				}
+
+			}
+
+		} else if (index == 2) {
+
+			SortedMap<Integer, Object> elements = getSortedElements(
+					chapterParent, project, product, category, true);
+			for (Map.Entry<Integer, Object> entry : elements.entrySet()) {
+				String className = entry.getValue().getClass().getSimpleName();
+
+				if (className.equalsIgnoreCase("JJChapter")) {
+
+					JJChapter chapter = (JJChapter) entry.getValue();
+					TreeNode newNode2 = createTree(chapter, newNode, project,
+							product, category, index);
+
+				} else if (className.equalsIgnoreCase("JJRequirement")) {
+
+					JJRequirement requirement = (JJRequirement) entry
+							.getValue();
+					List<JJTestcase> testcases = jJTestcaseService
+							.getTestcases(requirement, true, true);
+					for (JJTestcase testcase : testcases) {
+						TreeNode newNode3 = new DefaultTreeNode("TC-"
+								+ testcase.getId() + "- " + testcase.getName(),
+								newNode);
+					}
+
 				}
 
 			}
@@ -444,6 +514,10 @@ public class JJChapterBean {
 
 	public void preProcessPDF(Object document) throws IOException,
 			BadElementException, DocumentException {
+
+		this.getProject();
+		this.getProduct();
+		this.getVersion();
 
 		Document pdf = (Document) document;
 		pdf.addTitle("THIS IS THE TITLE");
@@ -475,7 +549,7 @@ public class JJChapterBean {
 		StyleSheet style = new StyleSheet();
 		style.loadTagStyle("body", "font", "Times New Roman");
 
-		category = jJCategoryService.findJJCategory(categoryId);
+		JJCategory category = jJCategoryService.findJJCategory(categoryId);
 
 		Phrase phrase = new Phrase(20, new Chunk("\n" + category.getName()
 				+ " Specification \n" + project.getName() + "\n" + "\n" + "\n",
@@ -511,7 +585,7 @@ public class JJChapterBean {
 				.add(new Chunk(chapterParent.getDescription() + "\n", fontNote));
 
 		SortedMap<Integer, Object> elements = getSortedElements(chapterParent,
-				product, true);
+				project, product, category, true);
 		for (Map.Entry<Integer, Object> entry : elements.entrySet()) {
 			String className = entry.getValue().getClass().getSimpleName();
 
@@ -553,7 +627,8 @@ public class JJChapterBean {
 	}
 
 	public SortedMap<Integer, Object> getSortedElements(JJChapter parent,
-			JJProduct product, boolean onlyActif) {
+			JJProject project, JJProduct product, JJCategory category,
+			boolean onlyActif) {
 
 		SortedMap<Integer, Object> elements = new TreeMap<Integer, Object>();
 
@@ -596,7 +671,7 @@ public class JJChapterBean {
 	public void handleSelectParentChapter() {
 
 		SortedMap<Integer, Object> elements = getSortedElements(parentChapter,
-				null, false);
+				project, null, category, false);
 
 		chapter.setParent(parentChapter);
 
@@ -642,8 +717,8 @@ public class JJChapterBean {
 				if (requirementCHAPTER != null) {
 					int requirementOrder = REQUIREMENT.getOrdering();
 
-					elements = getSortedElements(requirementCHAPTER, null,
-							false);
+					elements = getSortedElements(requirementCHAPTER, project,
+							null, category, false);
 
 					subElements = elements.tailMap(requirementOrder);
 
@@ -692,7 +767,8 @@ public class JJChapterBean {
 
 				JJChapter CHAPTER = jJChapterService.findJJChapter(chapterID);
 
-				elements = getSortedElements(CHAPTER, null, false);
+				elements = getSortedElements(CHAPTER, project, null, category,
+						false);
 
 				if (elements.isEmpty()) {
 					REQUIREMENT.setOrdering(0);
@@ -773,8 +849,8 @@ public class JJChapterBean {
 
 				} else {
 					int requirementOrder = REQUIREMENT.getOrdering();
-					elements = getSortedElements(requirementCHAPTER, null,
-							false);
+					elements = getSortedElements(requirementCHAPTER, project,
+							null, category, false);
 
 					subElements = elements.tailMap(requirementOrder);
 
@@ -877,14 +953,15 @@ public class JJChapterBean {
 
 				// Update the last chapter list
 
-				elements = getSortedElements(chapterParent, null, false);
+				elements = getSortedElements(chapterParent, project, null,
+						category, false);
 
 				subElements = elements.tailMap(chapterOrder);
 
 				CHAPTER.setParent(null);
 
 				SortedMap<Integer, Object> tmpElements = getSortedElements(
-						null, null, false);
+						null, project, null, category, false);
 
 				CHAPTER.setOrdering(tmpElements.lastKey() + 1);
 				CHAPTER.setUpdatedDate(new Date());
@@ -923,7 +1000,8 @@ public class JJChapterBean {
 
 				// End Update the last chapter list
 
-				elements = getSortedElements(newChapterPARENT, null, false);
+				elements = getSortedElements(newChapterPARENT, project, null,
+						category, false);
 
 				if (newChapterPARENT == null) {
 					elements.remove(CHAPTER.getOrdering());
@@ -1009,6 +1087,7 @@ public class JJChapterBean {
 		}
 
 		FacesContext.getCurrentInstance().addMessage(null, message);
+
 		newChapter();
 		chapterTree();
 		transferTree();

@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.ListDataModel;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.SelectableDataModel;
@@ -172,6 +173,11 @@ public class JJRequirementBean {
 	}
 
 	public JJProject getProject() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJProjectBean projbean = (JJProjectBean) session
+				.getAttribute("jJProjectBean");
+		this.project = projbean.getProject();
 		return project;
 	}
 
@@ -197,6 +203,11 @@ public class JJRequirementBean {
 	}
 
 	public JJProduct getProduct() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJProductBean prodbean = (JJProductBean) session
+				.getAttribute("jJProductBean");
+		this.product = prodbean.getProduct();
 		return product;
 	}
 
@@ -221,7 +232,12 @@ public class JJRequirementBean {
 		this.requirementProductList = requirementProductList;
 	}
 
-	public JJVersion geVersion() {
+	public JJVersion getVersion() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJVersionBean verbean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
+		this.version = verbean.getVersion();
 		return version;
 	}
 
@@ -905,8 +921,9 @@ public class JJRequirementBean {
 						importChapter.setUpdatedDate(new Date());
 						importChapter.setParent(null);
 
-						elements = jJChapterBean.getSortedElements(null, null,
-								false);
+						elements = jJChapterBean.getSortedElements(null,
+								requirement.getProject(), null,
+								requirement.getCategory(), false);
 						if (elements.isEmpty()) {
 							importChapter.setOrdering(0);
 						} else {
@@ -923,7 +940,8 @@ public class JJRequirementBean {
 
 					importRequirement.setChapter(importChapter);
 					elements = jJChapterBean.getSortedElements(importChapter,
-							null, false);
+							requirement.getProject(), null,
+							requirement.getCategory(), false);
 					if (elements.isEmpty()) {
 						importRequirement.setOrdering(0);
 					} else {
@@ -932,8 +950,9 @@ public class JJRequirementBean {
 
 				} else {
 					importRequirement.setChapter(chapter);
-					elements = jJChapterBean.getSortedElements(chapter, null,
-							false);
+					elements = jJChapterBean.getSortedElements(chapter,
+							requirement.getProject(), null,
+							requirement.getCategory(), false);
 					if (elements.isEmpty()) {
 						importRequirement.setOrdering(0);
 					} else {
@@ -1138,12 +1157,12 @@ public class JJRequirementBean {
 
 	}
 
-	public void loadData(JJProjectBean jJProjectBean,
-			JJChapterBean jJChapterBean) {
-
-		project = jJProjectBean.getProject();
-
-		jJChapterBean.setProject(project);
+	public void loadData() {
+		
+		this.getProduct();
+		this.getProject();
+		this.getVersion();
+	
 
 		fullTableDataModelList();
 	}
@@ -1779,7 +1798,8 @@ public class JJRequirementBean {
 
 			if (requirementChapter != null) {
 				elements = jJChapterBean.getSortedElements(requirementChapter,
-						null, false);
+						requirement.getProject(), null,
+						requirement.getCategory(), false);
 				if (elements.isEmpty()) {
 					requirement.setOrdering(0);
 				} else {
@@ -1799,13 +1819,16 @@ public class JJRequirementBean {
 
 						int requirementOrder = requirement.getOrdering();
 						elements = jJChapterBean.getSortedElements(
-								requirement.getChapter(), null, false);
+								requirement.getChapter(),
+								requirement.getProject(), null,
+								requirement.getCategory(), false);
 
 						subElements = elements.tailMap(requirementOrder);
 
 						requirement.setChapter(requirementChapter);
 						elements = jJChapterBean.getSortedElements(
-								requirementChapter, null, false);
+								requirementChapter, requirement.getProject(),
+								null, requirement.getCategory(), false);
 						if (elements.isEmpty()) {
 							requirement.setOrdering(0);
 
@@ -1857,7 +1880,8 @@ public class JJRequirementBean {
 				} else {
 					requirement.setChapter(requirementChapter);
 					elements = jJChapterBean.getSortedElements(
-							requirementChapter, null, false);
+							requirementChapter, requirement.getProject(), null,
+							requirement.getCategory(), false);
 					if (elements.isEmpty()) {
 						requirement.setOrdering(0);
 					} else {
@@ -1872,7 +1896,8 @@ public class JJRequirementBean {
 				if (requirement.getChapter() != null) {
 					int requirementOrder = requirement.getOrdering();
 					elements = jJChapterBean.getSortedElements(
-							requirement.getChapter(), null, false);
+							requirement.getChapter(), requirement.getProject(),
+							null, requirement.getCategory(), false);
 
 					subElements = elements.tailMap(requirementOrder);
 
