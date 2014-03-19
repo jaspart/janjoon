@@ -21,24 +21,20 @@
 							actionListener="#{jJRequirementBean.updateTemplate(button.id)}"
 							update=":specForm" />
 					</ui:repeat>
+
+					<p:commandButton id="commandButton" value="Import"
+						style="float: right;"
+						actionListener="#{jJRequirementBean.loadImportFormat()}"
+						update=":dialog" oncomplete="dialogWidget.show()" />
 				</tr>
 				<tr />
-				<tr>
-					<td><h:outputLabel for="template" value="Template: " /> <h:outputText
-							id="template" value="#{jJRequirementBean.outputTemplateHeader}" /></td>
-				</tr>
-				<tr />
-				<tr>
-					<td><p:commandButton id="commandButton" value="Import"
-							actionListener="#{jJRequirementBean.loadImportFormat()}"
-							update=":dialog" oncomplete="dialogWidget.show()" /></td>
-				</tr>
+
 				<tr>
 					<ui:repeat value="#{jJRequirementBean.tableDataModelList}"
 						var="tableDataModel" varStatus="status">
 
 						<td><p:dataTable id="dataTable" var="requirement"
-								value="#{tableDataModel}" paginator="true" rows="10"
+								value="#{tableDataModel}" paginator="true" rows="6"
 								style="width:410px"
 								filteredValue="#{tableDataModel.filtredRequirements}"
 								widgetVar="#{tableDataModel.nameDataModel}_dataTableWidget">

@@ -66,8 +66,6 @@ public class JJProductBean {
 	private JJContact productManager;
 	private Set<JJContact> productManagerList;
 
-	private JJProject project;
-
 	private String message;
 
 	public JJProduct getProduct() {
@@ -80,13 +78,13 @@ public class JJProductBean {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		JJVersionBean verbean = (JJVersionBean) session
+		JJVersionBean jJVersionBean = (JJVersionBean) session
 				.getAttribute("jJVersionBean");
-		verbean.setVersion(null);
+		jJVersionBean.setVersion(null);
 		if (product != null) {
-			verbean.setDisabled(false);
+			jJVersionBean.setDisabled(false);
 		} else {
-			verbean.setDisabled(true);
+			jJVersionBean.setDisabled(true);
 		}
 	}
 
@@ -134,19 +132,6 @@ public class JJProductBean {
 
 	public void setProductManagerList(Set<JJContact> productManagerList) {
 		this.productManagerList = productManagerList;
-	}
-
-	public JJProject getProject() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJProjectBean projbean = (JJProjectBean) session
-				.getAttribute("jJProjectBean");
-		this.project = projbean.getProject();
-		return project;
-	}
-
-	public void setProject(JJProject project) {
-		this.project = project;
 	}
 
 	public String getMessage() {
@@ -247,7 +232,7 @@ public class JJProductBean {
 	}
 
 	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project) {
-		return jJTaskService.getTasksByProduct(product, project);
+		return jJTaskService.getTasks(project, product, null, true);
 	}
 
 	public void handleSelectProductManager() {

@@ -37,4 +37,10 @@ public class JJChapter extends JJAbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chapter")
 	private Set<JJRequirement> requirements = new HashSet<JJRequirement>();
 
+	@Override
+	public boolean equals(Object object) {
+		return (object instanceof JJChapter) && (getId() != null) ? getId()
+				.equals(((JJChapter) object).getId()) : (object == this);
+	}
+
 }

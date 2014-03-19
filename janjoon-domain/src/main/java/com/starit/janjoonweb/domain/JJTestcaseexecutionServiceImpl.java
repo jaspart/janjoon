@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -21,7 +22,8 @@ public class JJTestcaseexecutionServiceImpl implements
 	}
 
 	@Override
-	public List<JJTestcaseexecution> getAllTestcaseexecutions() {
+	public JJTestcaseexecution getTestcaseexecution(JJTestcase testcase,
+			JJBuild build, boolean onlyActif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcaseexecution> criteriaQuery = criteriaBuilder
@@ -32,63 +34,21 @@ public class JJTestcaseexecutionServiceImpl implements
 
 		CriteriaQuery<JJTestcaseexecution> select = criteriaQuery.select(from);
 
-		Predicate predicate = criteriaBuilder.equal(from.get("enabled"), true);
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		if (testcase != null) {
+			predicates
+					.add(criteriaBuilder.equal(from.get("testcase"), testcase));
+		}
 
-		select.where(predicate);
+		if (build != null) {
+			predicates.add(criteriaBuilder.equal(from.get("build"), build));
+		}
 
-		TypedQuery<JJTestcaseexecution> result = entityManager
-				.createQuery(select);
-		return result.getResultList();
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
 
-	}
-
-	@Override
-	public JJTestcaseexecution getTestcaseexecutionWithTestcaseAndBuild(
-			JJTestcase testcase, JJBuild build) {
-
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJTestcaseexecution> criteriaQuery = criteriaBuilder
-				.createQuery(JJTestcaseexecution.class);
-
-		Root<JJTestcaseexecution> from = criteriaQuery
-				.from(JJTestcaseexecution.class);
-
-		CriteriaQuery<JJTestcaseexecution> select = criteriaQuery.select(from);
-
-		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
-		Predicate predicate2 = criteriaBuilder.equal(from.get("testcase"),
-				testcase);
-		Predicate predicate3 = criteriaBuilder.equal(from.get("build"), build);
-
-		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3));
-
-		TypedQuery<JJTestcaseexecution> result = entityManager
-				.createQuery(select);
-		if (result.getResultList().size() > 0)
-			return result.getResultList().get(0);
-		else
-			return null;
-
-	}
-
-	@Override
-	public JJTestcaseexecution getTestcaseexecutionWithTestcase(
-			JJTestcase testcase) {
-
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJTestcaseexecution> criteriaQuery = criteriaBuilder
-				.createQuery(JJTestcaseexecution.class);
-
-		Root<JJTestcaseexecution> from = criteriaQuery
-				.from(JJTestcaseexecution.class);
-
-		CriteriaQuery<JJTestcaseexecution> select = criteriaQuery.select(from);
-
-		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
-		Predicate predicate2 = criteriaBuilder.equal(from.get("testcase"),
-				testcase);
-
-		select.where(criteriaBuilder.and(predicate1, predicate2));
+		select.where(predicates.toArray(new Predicate[] {}));
 
 		TypedQuery<JJTestcaseexecution> result = entityManager
 				.createQuery(select);

@@ -1,66 +1,47 @@
+
 package com.starit.janjoonweb.ui.mb;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJVersion;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJBuild.class, beanName = "jJBuildBean")
 public class JJBuildBean {
 
-	private JJBuild jJBuild;
-	private List<JJBuild> jJBuildList;
+	private JJBuild build;
+	private List<JJBuild> buildList;
 
-	public JJBuild getjJBuild() {
-		return jJBuild;
+	public JJBuild getBuild() {
+		return build;
 	}
 
-	public void setjJBuild(JJBuild jJBuild) {
-		this.jJBuild = jJBuild;
+	public void setBuild(JJBuild build) {
+		this.build = build;
 	}
 
-	public List<JJBuild> getjJBuildList() {
-		jJBuildList = jJBuildService.getAllJJBuilds();
-		return jJBuildList;
+	public List<JJBuild> getBuildList() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJVersionBean jJVersionBean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
+
+		JJVersion version = jJVersionBean.getVersion();
+
+		buildList = jJBuildService.getBuilds(version, true, true);
+
+		return buildList;
 	}
 
-	public void setjJBuildList(List<JJBuild> jJBuildList) {
-		this.jJBuildList = jJBuildList;
+	public void setBuildList(List<JJBuild> buildList) {
+		this.buildList = buildList;
 	}
 
-	public List<JJBuild> completeBuild(String query) {
-		List<JJBuild> suggestions = new ArrayList<JJBuild>();
-
-		for (JJBuild jJBuild : jJBuildService.getAllJJBuilds()) {
-			String jJChapterStr = String.valueOf(jJBuild.getName() + " "
-					+ jJBuild.getDescription() + " "
-					+ jJBuild.getCreationDate() + " "
-					+ jJBuild.getUpdatedDate());
-			if (jJChapterStr.toLowerCase().startsWith(query.toLowerCase())) {
-				suggestions.add(jJBuild);
-			}
-		}
-		return suggestions;
-	}
-
-	public void handleSelectBuild(
-			JJTestcaseexecutionBean jJTestcaseexecutionBean,
-			JJTeststepexecutionBean jJTeststepexecutionBean,
-			JJTestcaseBean jJTestcaseBean) {
-		
-		if (jJTestcaseexecutionBean != null) {
-			jJTestcaseexecutionBean.setCurrentBuild(jJBuild);
-		}
-		if (jJTeststepexecutionBean != null) {
-			jJTeststepexecutionBean.setCurrentBuild(jJBuild);
-		}
-		if (jJTestcaseBean != null) {
-		//	jJTestcaseBean.setCurrentBuild(jJBuild);
-		}
-
-	}
 }

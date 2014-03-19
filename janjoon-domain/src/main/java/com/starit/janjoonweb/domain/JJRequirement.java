@@ -102,4 +102,10 @@ public class JJRequirement extends JJAbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "requirement")
 	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
 
+	@Override
+	public boolean equals(Object object) {
+		return (object instanceof JJRequirement) && (getId() != null) ? getId()
+				.equals(((JJRequirement) object).getId()) : (object == this);
+	}
+
 }

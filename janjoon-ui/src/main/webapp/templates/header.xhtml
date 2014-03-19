@@ -92,7 +92,7 @@
 					filterMatchMode="startsWith">
 					<f:converter
 						converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
-					<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
+					<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
 					<f:selectItems value="#{jJProductBean.productList}" var="p"
 						itemLabel="#{p.name}" itemValue="#{p}" />
 
@@ -106,7 +106,7 @@
 					filterMatchMode="startsWith" disabled="#{jJVersionBean.disabled}">
 					<f:converter
 						converterId="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter" />
-					<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
+					<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
 
 					<f:selectItems value="#{jJVersionBean.versionList}" var="v"
 						itemLabel="#{v.name}" itemValue="#{v}" />

@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,23 +11,19 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-
 public class JJBuildServiceImpl implements JJBuildService {
-	
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
+
 	}
-	
-	/**
-	 * Get Enabled JJBuild List
-	 */
 
 	@Override
-	public List<JJBuild> getAllJJBuilds() {
-
+	public List<JJBuild> getBuilds(JJVersion version, boolean withVersion,
+			boolean onlyActif) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBuild> criteriaQuery = criteriaBuilder
 				.createQuery(JJBuild.class);
@@ -35,9 +32,22 @@ public class JJBuildServiceImpl implements JJBuildService {
 
 		CriteriaQuery<JJBuild> select = criteriaQuery.select(from);
 
-		Predicate predicate = criteriaBuilder.equal(from.get("enabled"), true);
+		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		select.where(predicate);
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+
+		if (withVersion) {
+			if (version != null) {
+				predicates.add(criteriaBuilder.equal(from.get("versioning"),
+						version));
+			} else {
+				predicates.add(criteriaBuilder.isNull(from.get("versioning")));
+			}
+		}
+
+		select.where(predicates.toArray(new Predicate[] {}));
 
 		TypedQuery<JJBuild> result = entityManager.createQuery(select);
 		return result.getResultList();

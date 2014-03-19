@@ -13,27 +13,155 @@
 			<f:event type="preRenderComponent"
 				listener="#{jJTestcaseBean.loadData()}" />
 
-			<p:layoutUnit position="west" size="200" resizable="true">
-				<p:panelGrid style="margin-top:10px">
-					<p:row>
-						<p:column colspan="2">
-							<p:tree id="testCaseTree" value="#{jJTestcaseBean.rootNode}"
-								var="node" selectionMode="single"
-								selection="#{jJTestcaseBean.selectedNode}" dynamic="true">
-
-								<p:treeNode>
-									<h:outputText value="#{node}" />
-								</p:treeNode>
-							</p:tree>
-						</p:column>
-					</p:row>
-				</p:panelGrid>
+			<p:layoutUnit position="west"
+				style="min-width:200px;min-height:500px;" resizable="true">
+				<h:form id="testFormWest">
+					<p:panelGrid style="margin-top:10px">
+						<p:row>
+							<p:column>
+								<h:outputText for="build" value="Build:" />
+								<p:selectOneMenu id="build" value="#{jJBuildBean.build}"
+									panelStyle="width:150px" effect="fade" style="width:150px"
+									filter="true" filterMatchMode="startsWith">
+									<f:converter
+										converterId="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter" />
+									<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
+									<f:selectItems value="#{jJBuildBean.buildList}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />
+									<p:ajax process="@this" partialSubmit="true"
+										update=":testFormCenter" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:tree id="testCaseTree" value="#{jJTestcaseBean.rootNode}"
+									var="node" selectionMode="single"
+									selection="#{jJTestcaseBean.selectedNode}" dynamic="true">
+									<p:ajax event="select"
+										listener="#{jJTestcaseBean.onNodeSelect}"
+										update=":testFormCenter" />
+									<p:treeNode>
+										<h:outputText value="#{node}" />
+									</p:treeNode>
+								</p:tree>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</h:form>
 			</p:layoutUnit>
-			<p:layoutUnit position="center" resizable="true">
-				<h:form>
+			<p:layoutUnit position="center" resizable="true"
+				style="min-height:500px;">
+				<h:form id="testFormCenter">
+					<p:dataTable id="testcaseRecapDataTable" var="testcaseRecap"
+						value="#{jJTestcaseBean.testCaseRecaps}" paginator="true"
+						rows="15" style="width:550px"
+						rowKey="#{testcaseRecap.testcase.id}"
+						rendered="#{jJTestcaseBean.rendredTestCaseRecaps}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="3">
+									<h:outputText value="#{jJTestcaseBean.chapter.name}" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Testcase" />
+							</f:facet>
+							<h:outputText value="#{testcaseRecap.testcase.name}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Status" />
+							</f:facet>
+							<h:outputText value="#{testcaseRecap.status}" />
+						</p:column>
+
+						<p:column styleClass="action-column">
+							<f:facet name="header">
+								<h:outputText value="Actions" />
+							</f:facet>
+							<p:commandButton id="runButton" icon="ui-icon-pencil"
+								disabled="#{testcaseRecap.rendered}">
+								<!-- 								<f:setPropertyActionListener value="#{contact}" -->
+								<!-- 									target="#{jJContactBean.contactAdmin}" /> -->
+							</p:commandButton>
+							<p:tooltip for="runButton"
+								value="Run #{testcaseRecap.testcase.name}" showEffect="fade"
+								hideEffect="fade" />
+						</p:column>
+						<f:facet name="footer">
+							<p:commandButton value="New testcase" id="newTestcase"
+								actionListener="#{jJTestcaseBean.newTestcase()}"
+								update=":testcaseDialog"
+								oncomplete="testcaseDialogWidget.show()"
+								icon="ui-icon-circle-plus" />
+						</f:facet>
+					</p:dataTable>
 				</h:form>
 			</p:layoutUnit>
 		</p:layout>
+
+		<p:dialog id="testcaseDialog" header="#{jJTestcaseBean.message}"
+			modal="true" widgetVar="testcaseDialogWidget" dynamic="true"
+			resizable="false" appendTo="@(body)">
+			<p:ajax event="close" update=":testFormCenter :testFormWest"
+				listener="#{jJTestcaseBean.closeDialog}" />
+			<p:outputPanel id="testcaseDialogPanel">
+				<h:form id="testcaseDialogForm">
+					<p:growl id="msg" />
+					<p:panelGrid style="margin-top:10px">
+						<p:row>
+							<p:column>
+								<p:inputText id="name" value="#{jJTestcaseBean.testcase.name}"
+									required="true" widgetVar="nameWidget" label="Testcase Name"
+									requiredMessage="Testcase Name is a required value">
+								</p:inputText>
+								<p:message for="name" id="msgName" />
+								<p:watermark for="name" value="Name *" />
+							</p:column>
+							<p:column>
+								<h:outputText for="requirement" value="Requirement:" />
+								<p:selectOneMenu id="requirement"
+									value="#{jJTestcaseBean.requirement}" panelStyle="width:150px"
+									effect="fade" style="width:150px" filter="true" required="true"
+									filterMatchMode="startsWith" widgetVar="requirementWidget"
+									requiredMessage="Testcase Requirement is a required value">
+									<f:converter
+										converterId="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter" />
+									<f:selectItem value="#{jJTestcaseBean.requirement}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />
+									<f:selectItems value="#{jJTestcaseBean.requirements}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2">
+								<h:outputText value="Description : *" />
+								<p:editor id="description" widgetVar="descriptionWidget"
+									style="width:680px"
+									value="#{jJTestcaseBean.testcase.description}" required="true"
+									requiredMessage="Testcase Description is a required value">
+								</p:editor>
+							</p:column>
+						</p:row>
+						<f:facet name="footer">
+							<p:row>
+								<p:column colspan="2">
+									<p:commandButton value="Save" id="saveTestcase"
+										actionListener="#{jJTestcaseBean.save}"
+										process="@widgetVar(nameWidget) @widgetVar(requirementWidget) @widgetVar(descriptionWidget)"
+										update=":testcaseDialogForm" icon="ui-icon-circle-plus" />
+								</p:column>
+							</p:row>
+						</f:facet>
+					</p:panelGrid>
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+
 	</ui:define>
 </ui:composition>
 </html>

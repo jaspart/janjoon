@@ -49,6 +49,14 @@ public class JJVersionBean {
 	}
 
 	public void setVersion(JJVersion version) {
+		
+//		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+//				.getExternalContext().getSession(false);
+//		JJBuildBean jJBuildBean = (JJBuildBean) session
+//				.getAttribute("jJBuildBean");
+//		jJBuildBean.setBuild(null);
+//		jJBuildBean.getBuildList();
+		
 		this.version = version;
 	}
 
@@ -56,9 +64,9 @@ public class JJVersionBean {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		JJProductBean prodbean = (JJProductBean) session
+		JJProductBean jJProductBean = (JJProductBean) session
 				.getAttribute("jJProductBean");
-		JJProduct product = prodbean.getProduct();
+		JJProduct product = jJProductBean.getProduct();
 
 		versionList = jJVersionService.getVersions(true, true, product);
 

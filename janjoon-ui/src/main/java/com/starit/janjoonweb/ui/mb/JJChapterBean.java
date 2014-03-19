@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -15,12 +14,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.primefaces.event.CloseEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TreeDragDropEvent;
@@ -47,7 +40,6 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
-import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -78,7 +70,6 @@ public class JJChapterBean {
 
 	private JJProject project;
 	private JJProduct product;
-	private JJVersion version;
 	private JJCategory category;
 
 	/**
@@ -138,9 +129,9 @@ public class JJChapterBean {
 	public JJProject getProject() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		JJProjectBean projbean = (JJProjectBean) session
+		JJProjectBean jJProjectBean = (JJProjectBean) session
 				.getAttribute("jJProjectBean");
-		this.project = projbean.getProject();
+		this.project = jJProjectBean.getProject();
 		return project;
 	}
 
@@ -151,28 +142,14 @@ public class JJChapterBean {
 	public JJProduct getProduct() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		JJProductBean prodbean = (JJProductBean) session
+		JJProductBean jJProductBean = (JJProductBean) session
 				.getAttribute("jJProductBean");
-		this.product = prodbean.getProduct();
+		this.product = jJProductBean.getProduct();
 		return product;
 	}
 
 	public void setProduct(JJProduct product) {
 		this.product = product;
-	}
-
-	public JJVersion getVersion() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJVersionBean verbean = (JJVersionBean) session
-				.getAttribute("jJVersionBean");
-		this.version = verbean.getVersion();
-
-		return version;
-	}
-
-	public void setVersion(JJVersion version) {
-		this.version = version;
 	}
 
 	public JJCategory getCategory() {
@@ -253,9 +230,8 @@ public class JJChapterBean {
 	private void newChapter() {
 		System.out.println("Create new chapter");
 
-		this.getProject();
-		this.getProduct();
-		this.getVersion();
+		getProject();
+		getProduct();
 
 		chapter = new JJChapter();
 		chapter.setCreationDate(new Date());
@@ -393,6 +369,13 @@ public class JJChapterBean {
 		// Requirement Tree WHERE requirment.getChapter = null
 		leftRoot = new DefaultTreeNode("leftRoot", null);
 
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJVersionBean jJVersionBean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
+
+		JJVersion version = jJVersionBean.getVersion();
+
 		List<JJRequirement> jJRequirementList = jJRequirementService
 				.getRequirements(category, project, product, version, null,
 						null, true, true, false);
@@ -472,35 +455,6 @@ public class JJChapterBean {
 
 			}
 
-		} else if (index == 2) {
-
-			SortedMap<Integer, Object> elements = getSortedElements(
-					chapterParent, project, product, category, true);
-			for (Map.Entry<Integer, Object> entry : elements.entrySet()) {
-				String className = entry.getValue().getClass().getSimpleName();
-
-				if (className.equalsIgnoreCase("JJChapter")) {
-
-					JJChapter chapter = (JJChapter) entry.getValue();
-					TreeNode newNode2 = createTree(chapter, newNode, project,
-							product, category, index);
-
-				} else if (className.equalsIgnoreCase("JJRequirement")) {
-
-					JJRequirement requirement = (JJRequirement) entry
-							.getValue();
-					List<JJTestcase> testcases = jJTestcaseService
-							.getTestcases(requirement, true, true);
-					for (JJTestcase testcase : testcases) {
-						TreeNode newNode3 = new DefaultTreeNode("TC-"
-								+ testcase.getId() + "- " + testcase.getName(),
-								newNode);
-					}
-
-				}
-
-			}
-
 		}
 
 		newNode.setExpanded(true);
@@ -517,7 +471,6 @@ public class JJChapterBean {
 
 		this.getProject();
 		this.getProduct();
-		this.getVersion();
 
 		Document pdf = (Document) document;
 		pdf.addTitle("THIS IS THE TITLE");

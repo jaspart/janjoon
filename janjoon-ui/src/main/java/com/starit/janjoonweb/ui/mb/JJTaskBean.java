@@ -51,9 +51,9 @@ public class JJTaskBean {
 	public JJProject getProject() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		JJProjectBean projbean = (JJProjectBean) session
+		JJProjectBean jJProjectBean = (JJProjectBean) session
 				.getAttribute("jJProjectBean");
-		this.project = projbean.getProject();
+		this.project = jJProjectBean.getProject();
 		return project;
 	}
 
@@ -62,9 +62,9 @@ public class JJTaskBean {
 	}
 
 	public void loadData() {
-		this.getProject();
+		getProject();
 
-		tasks = jJTaskService.getTasks(project, null, true);
+		tasks = jJTaskService.getTasks(project, null, null, true);
 		Date now = new Date();
 
 		for (JJTask task : tasks) {

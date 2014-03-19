@@ -186,7 +186,7 @@ public class JJProjectBean {
 			this.setConfiguration(configuration);
 		}
 		configuration = jJConfigurationService.findAllJJConfigurations().get(0);
-		if (jJBuildService.getAllJJBuilds().isEmpty()) {
+		if (jJBuildService.getBuilds(null, false, true).isEmpty()) {
 			JJBuild build;
 			for (int i = 0; i < 4; i++) {
 				build = new JJBuild();

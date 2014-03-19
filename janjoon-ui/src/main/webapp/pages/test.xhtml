@@ -30,8 +30,7 @@
 						<f:converter
 							converterId="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter" />
 
-						<f:selectItem itemLabel="#{jJBuildBean.jJBuild.name}"
-							itemValue="#{jJBuildBean.jJBuild}" />
+						<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
 						<f:selectItems value="#{jJBuildBean.jJBuildList}" var="b"
 							itemLabel="#{b.name}" itemValue="#{b}" />
 

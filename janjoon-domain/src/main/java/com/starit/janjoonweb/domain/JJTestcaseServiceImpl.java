@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -23,7 +24,7 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 
 	@Override
 	public List<JJTestcase> getTestcases(JJRequirement requirement,
-			boolean onlyActif, boolean sortedByOrder) {
+			JJChapter chapter, boolean onlyActif, boolean sortedByOrder) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcase> criteriaQuery = criteriaBuilder
@@ -37,6 +38,11 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 		if (requirement != null) {
 			predicates.add(criteriaBuilder.equal(from.get("requirement"),
 					requirement));
+		}
+
+		if (chapter != null) {
+			Path<Object> path = from.join("requirement").get("chapter");
+			predicates.add(criteriaBuilder.equal(path, chapter));
 		}
 
 		if (onlyActif) {

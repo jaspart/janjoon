@@ -175,9 +175,9 @@ public class JJRequirementBean {
 	public JJProject getProject() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		JJProjectBean projbean = (JJProjectBean) session
+		JJProjectBean jJProjectBean = (JJProjectBean) session
 				.getAttribute("jJProjectBean");
-		this.project = projbean.getProject();
+		this.project = jJProjectBean.getProject();
 		return project;
 	}
 
@@ -205,9 +205,9 @@ public class JJRequirementBean {
 	public JJProduct getProduct() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		JJProductBean prodbean = (JJProductBean) session
+		JJProductBean jJProductBean = (JJProductBean) session
 				.getAttribute("jJProductBean");
-		this.product = prodbean.getProduct();
+		this.product = jJProductBean.getProduct();
 		return product;
 	}
 
@@ -235,9 +235,9 @@ public class JJRequirementBean {
 	public JJVersion getVersion() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		JJVersionBean verbean = (JJVersionBean) session
+		JJVersionBean jJVersionBean = (JJVersionBean) session
 				.getAttribute("jJVersionBean");
-		this.version = verbean.getVersion();
+		this.version = jJVersionBean.getVersion();
 		return version;
 	}
 
@@ -1158,11 +1158,12 @@ public class JJRequirementBean {
 	}
 
 	public void loadData() {
+
+		System.out.println("IN ReqBean load data");
 		
-		this.getProduct();
-		this.getProject();
-		this.getVersion();
-	
+		getProduct();
+		getProject();
+		getVersion();
 
 		fullTableDataModelList();
 	}
@@ -1237,7 +1238,6 @@ public class JJRequirementBean {
 			templateHeader = lowCategory.getName() + "/";
 		}
 
-		System.out.println("\n" + templateHeader);
 	}
 
 	private void fullTableDataModelList() {
@@ -1977,7 +1977,6 @@ public class JJRequirementBean {
 		}
 
 		public float getCoverageProgress() {
-			System.out.println("categoryId " + categoryId);
 
 			float compteur = 0;
 			List<JJRequirement> dataList = (List<JJRequirement>) getWrappedData();
