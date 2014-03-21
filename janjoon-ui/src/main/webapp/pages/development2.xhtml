@@ -17,8 +17,14 @@
 				<ui:include src="/templates/menu.xhtml" />
 			</p:tabMenu>
 			<br />
-			<p:panel header="#{jJDevelopment.selectedTree}"
-				style="width: 360;valign: top;">
+			<p:panel header="Error"
+				style="width: 90%;valign: top;" rendered="#{!jJDevelopment.render}">
+				<H1>
+				Product not available on the version control manager.
+				</H1>
+				</p:panel>
+			<p:panel header="#{jJDevelopment.product.name}"
+				style="width: 90%;valign: top;" rendered="#{jJDevelopment.render}">
 				<h:link value="TestWith TexteArea" outcome="development" />
 				<h:form id="form">
 					<table class="mytable">
@@ -55,41 +61,88 @@
 										<h:outputText value="#{file.name}" />
 									</p:treeNode>
 								</p:tree></td>
-							<td><p:tabView id="tabView" cache="true" effect="Fade"
+								
+							<td><p:panel header="#{jJDevelopment.file.name}" style="height:430px;width:700px;">
+							<p:tabView id="tabView" cache="true" effect="Fade" style=""
 									effectDuration="slow"
 									activeIndex="#{jJDevelopment.activeTabIndex}"
 									binding="#{jJDevelopment.tabView}" scrollable="true"
-									value="#{jJDevelopment.files}" var="tab">
+									value="#{jJDevelopment.files}" var="tab" >
 									<p:ajax event="tabClose" listener="#{jJDevelopment.onCloseTab}"
 										update=":form:tabView" />
 									<p:ajax event="tabChange"
 										listener="#{jJDevelopment.onChangeTab}" update=":form:tabView" />
-									<p:tab title="#{tab.title}" closable="true">										
-										<pe:codeMirror id="codeMirror1" mode="xml"
-											widgetVar="myCodeMirror" theme="ambiance" value="#{tab.texte}"
-											lineNumbers="true"											
-											extraKeys="{ 'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.xmlHint);}}"											
-											tabSize="100">
+									<p:tab title="#{tab.title}" closable="true" >
+										<pe:codeMirror id="codeMirror1" mode="javaScript"
+											widgetVar="myCodeMirror" theme="eclipse" value="#{tab.texte}"
+											lineNumbers="true" 
+											extraKeys="{ 'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);}}"
+											tabSize="100" >
 											<p:ajax event="blur"
 												listener="#{jJDevelopment.valueChangeHandlerCodeMirror}" />
 
 										</pe:codeMirror>
 									</p:tab>
 
-								</p:tabView></td>
+								</p:tabView>
+								</p:panel></td>
+						</tr>
+						<tr>
+							<td><p:selectBooleanCheckbox value="#{jJDevelopment.check}"
+									id="Marcasdone" /> <h:outputLabel value="Marc as done"
+									for="Marcasdone" /> <br /></td>
+							<td><p:commandButton value="UpdateToHead" id="fetchFromRepo"
+									icon="ui-icon-disk" actionListener="#{jJDevelopment.pull}"
+									update=":form:messages,:form:tabView,:form:fileTree" /></td>
 						</tr>
 						<tr>
 							<td><p:commandButton value="Commit" id="submit"
 									icon="ui-icon-disk" actionListener="#{jJDevelopment.commit}"
-									update=":form:messages,:form:tabView,:form:fileTree" /></td>
-							<td><p:commandButton value="UpdateToHead" id="fetchFromRepo"
-									icon="ui-icon-disk" actionListener="#{jJDevelopment.pull}"
-									update=":form:messages,:form:tabView,:form:fileTree" /></td>
-
+									update=":form:messages,:form:tabView,:form:fileTree,:form:taskmessage" /></td>
+							<td><p:commandButton id="showDialogButton" type="button"
+									value="CreateMessage" onclick="PF('dlg').show()" /></td>
 						</tr>
 					</table>
-					<h3 style="margin-top: 0">Server-side code completion</h3>
+
+					<p:growl id="grow" showDetail="true" life="3000" />
+
+					<p:dialog id="dialog" header="Create Message" widgetVar="dlg"
+						resizable="false">
+
+						<h:panelGrid columns="2" cellpadding="5">
+							<p:outputLabel for="name" value="Name:" />
+							<p:inputText value="#{jJDevelopment.message.name}" id="name"
+								 label="name" />
+
+							<p:outputLabel for="description" value="Description:" />
+							<p:inputText value="#{jJDevelopment.message.description}"
+								id="description" label="description" />
+
+							<p:outputLabel for="message" value="Message:" />
+							<p:inputText value="#{jJDevelopment.message.message}"
+								id="message" label="message" />
+
+
+							<f:facet name="footer">
+								<p:commandButton id="loginButton" value="Login" update="grow"
+									actionListener="#{jJDevelopment.PersistMessage}"
+									oncomplete="handleLoginRequest(xhr, status, args)" />
+							</f:facet>
+						</h:panelGrid>
+
+					</p:dialog>
 				</h:form>
+				<script type="text/javascript">  
+    			function handleLoginRequest(xhr, status, args) {  
+        			if(args.validationFailed || !args.loggedIn) {  
+            				PF('dlg').jq.effect("shake", { times:5 }, 100);  
+        						}   
+        			else {  
+           					 PF('dlg').hide();  
+            				$('#showDialogButton').fadeOut();  
+        					}  
+    					}  
+				</script>
 				<p:blockUI block="form" trigger=":form:submit">  
         				LOADING<br />
 					<p:graphicImage library="images" name="ajax-loader1.gif" />

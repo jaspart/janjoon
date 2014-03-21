@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -14,6 +15,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.HttpSession;
 
@@ -22,6 +24,7 @@ import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.tabview.TabView;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.*;
 import org.primefaces.extensions.component.codemirror.CodeMirror;
 import org.primefaces.model.TreeNode;
@@ -72,19 +75,17 @@ public class DevelopmentBean implements Serializable {
 		product = prodbean.getProduct();
 		project = projbean.getProject();
 		configuration = projbean.getConfiguration();
-
+		message = new JJMessage();
 		System.out.println(contact.getName());
 		tasks = prodbean.getTasksByProduct(product, project);
 		for (JJTask t : tasks) {
 			System.out.println("111111" + t.getName());
 		}
-		if (message == null) {
-			message = new JJMessage();
-		}
+
 		if (getConfigManager() != null && version != null && product != null) {
 			render = true;
 			tree = configManager.listRepositoryContent(version.getName());
-			
+
 			selectedTree = getTree();
 			while (selectedTree.getChildCount() != 0) {
 				selectedTree = selectedTree.getChildren().get(0);
@@ -327,41 +328,54 @@ public class DevelopmentBean implements Serializable {
 
 	public void commit() {
 
-		for (FileMap fileMap : files) {
-			configManager.setFileTexte(fileMap.getFile(), fileMap.getTexte());
-			System.out.println(fileMap.getFile().getName() + "  :"
-					+ fileMap.getTexte());
+		if (!message.getName().equalsIgnoreCase("")) {
+			for (FileMap fileMap : files) {
+				configManager.setFileTexte(fileMap.getFile(),
+						fileMap.getTexte());
+				System.out.println(fileMap.getFile().getName() + "  :"
+						+ fileMap.getTexte());
 
-		}
-		System.out.println(task.toString());
-		if (check) {
+			}
+			System.out.println(task.toString());
+			if (check) {
 
-			task.setEndDateReal(new Date());
-			task.persist();
+				task.setEndDateReal(new Date());
+				task.persist();
 
-		}
-		if (configManager.checkIn(task.getName())) {
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Commited", configManager.getPath());
-			FacesContext.getCurrentInstance().addMessage(null, message);
-			if (configManager.pushRepository()) {
-				message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"Pushed to remote Repository", configManager.getPath());
-				FacesContext.getCurrentInstance().addMessage(null, message);
-			} else {
-				message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-						"Probleme Lors du Fetch ", configManager.getPath());
-				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 
-		} else {
+			if (configManager.checkIn(task.getId() + ":" + task.getName()
+					+ " : " + message.getMessage())) {
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_INFO, "Commited",
+						configManager.getPath());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+				if (configManager.pushRepository()) {
+					message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+							"Pushed to remote Repository",
+							configManager.getPath());
+					FacesContext.getCurrentInstance().addMessage(null, message);
+				} else {
+					message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Probleme Lors du Fetch ", configManager.getPath());
+					FacesContext.getCurrentInstance().addMessage(null, message);
+				}
 
+			} else {
+
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "Probleme Lors du Commit",
+						configManager.getPath());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+		} else {
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("dlg.show()");
 			FacesMessage message = new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, "Probleme Lors du Commit",
-					configManager.getPath());
+					"You Have to create message before commiting");
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
-
 	}
 
 	public void onSelectTree(NodeSelectEvent event) {
@@ -437,14 +451,40 @@ public class DevelopmentBean implements Serializable {
 
 	}
 
-	public void CreateMessage() {
-		message = new JJMessage();
+	public void CreateMessage(ActionEvent actionEvent) {
+
 	}
 
-	public void PersistMessage() {
-		message.setCreatedBy(contact);
-		message.setCreationDate(new Date());
-		message.persist();
+	public void PersistMessage(ActionEvent actionEvent) {
+
+		RequestContext context = RequestContext.getCurrentInstance();
+		FacesMessage msg = null;
+		boolean loggedIn = false;
+
+		if (!message.getDescription().equalsIgnoreCase("")
+				&& message.getName().equalsIgnoreCase("")
+				&& message.getMessage().equalsIgnoreCase("") && task != null) {
+			loggedIn = true;
+			message.setCreatedBy(contact);
+			message.setCreationDate(new Date());
+			message.persist();
+			Set<JJMessage> m = new HashSet<JJMessage>();
+			m.add(message);
+			task.setMessages(m);
+			if (task.getStartDateReal()==null)
+				task.setStartDateReal(new Date());
+			task.persist();
+			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Message created", message.getName());
+		} else {
+			loggedIn = false;
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN,
+					"Creation Error",
+					"one or more  requeired field are set to null");
+		}
+
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		context.addCallbackParam("loggedIn", loggedIn);
 	}
 
 	public int contains(File f) {

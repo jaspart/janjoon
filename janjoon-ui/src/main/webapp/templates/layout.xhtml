@@ -26,6 +26,7 @@
 
 				<h:panelGrid id="contentPanel" cellspacing="0" cellpadding="0" styleClass="content">
 					<ui:insert name="content" />
+					<p:growl id="auth"  for="login" styleClass="alert alert-error" showDetail="true"/>
 				</h:panelGrid>
 
 				<ui:insert name="footer">

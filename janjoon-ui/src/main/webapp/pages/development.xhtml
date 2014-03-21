@@ -23,7 +23,7 @@
 				Product not available on the version control manager.
 				</H1>
 				</p:panel>
-			<p:panel header="#{jJDevelopment.selectedTree}"
+			<p:panel header="#{jJDevelopment.product.name}"
 				style="width: 90%;valign: top;" rendered="#{jJDevelopment.render}">
 				<h:link value="TestWith CodeMirror" outcome="development2" />
 				<h:form id="form" >
@@ -56,17 +56,17 @@
 										<h:outputText value="#{file.name}" />
 									</p:treeNode>
 								</p:tree></td>
-							<td><p:panel >
+							<td><p:panel header="#{jJDevelopment.file.name}" style="height:430px;width:700px;">
 									<p:tabView id="tabView"
 										activeIndex="#{jJDevelopment.activeTabIndex}"
 										binding="#{jJDevelopment.tabView}" scrollable="true"
-										value="#{jJDevelopment.files}" var="tab">
+										value="#{jJDevelopment.files}" var="tab" style="">
 										<p:ajax event="tabClose"
 											listener="#{jJDevelopment.onCloseTab}" />
 										<p:ajax event="tabChange"
 											listener="#{jJDevelopment.onChangeTab}" />
 										<p:tab title="#{tab.title}" closable="true">
-											<p:inputTextarea id="textArea" rows="20" cols="75"
+											<p:inputTextarea id="textArea" rows="20" cols="75" autoResize="false" scrollHeight="21"
 												value="#{tab.texte}">
 												<p:ajax event="blur"
 													listener="#{jJDevelopment.valueChangeHandler}" />
@@ -74,13 +74,13 @@
 										</p:tab>
 
 									</p:tabView>
-								</p:panel></td>
+								</p:panel>
+								</td>
 						</tr>
 						<tr>
 							<td><p:selectBooleanCheckbox value="#{jJDevelopment.check}"
 									id="Marcasdone" /> <h:outputLabel value="Marc as done"
-									for="Marcasdone" /> <br /> 
-							</td>
+									for="Marcasdone" /> <br /></td>
 							<td><p:commandButton value="UpdateToHead" id="fetchFromRepo"
 									icon="ui-icon-disk" actionListener="#{jJDevelopment.pull}"
 									update=":form:messages,:form:tabView,:form:fileTree" /></td>
@@ -90,11 +90,48 @@
 									icon="ui-icon-disk" actionListener="#{jJDevelopment.commit}"
 									update=":form:messages,:form:tabView,:form:fileTree,:form:taskmessage" /></td>
 							<td><p:commandButton id="showDialogButton" type="button"
-									value="CreateMessage" onclick="PF('dlg').show()"
-									actionListener="#{jJDevelopment.CreateMessage}" /></td>
+									value="CreateMessage" onclick="PF('dlg').show()" /></td>
 						</tr>
 					</table>
+				<p:growl id="grow" showDetail="true" life="3000" />
+
+					<p:dialog id="dialog" header="Create Message" widgetVar="dlg"
+						resizable="false">
+
+						<h:panelGrid columns="2" cellpadding="5">
+							<p:outputLabel for="name" value="Name:" />
+							<p:inputText value="#{jJDevelopment.message.name}" id="name"
+								 label="name" />
+
+							<p:outputLabel for="description" value="Description:" />
+							<p:inputText value="#{jJDevelopment.message.description}"
+								id="description" label="description" />
+
+							<p:outputLabel for="message" value="Message:" />
+							<p:inputText value="#{jJDevelopment.message.message}"
+								id="message" label="message" />
+
+
+							<f:facet name="footer">
+								<p:commandButton id="loginButton" value="Login" update="grow"
+									actionListener="#{jJDevelopment.PersistMessage}"
+									oncomplete="handleLoginRequest(xhr, status, args)" />
+							</f:facet>
+						</h:panelGrid>
+
+					</p:dialog>
 				</h:form>
+				<script type="text/javascript">  
+    			function handleLoginRequest(xhr, status, args) {  
+        			if(args.validationFailed || !args.loggedIn) {  
+            				PF('dlg').jq.effect("shake", { times:5 }, 100);  
+        						}   
+        			else {  
+           					 PF('dlg').hide();  
+            				$('#showDialogButton').fadeOut();  
+        					}  
+    					}  
+				</script>
 				<p:blockUI block="form" trigger=":form:submit">  
         				LOADING<br />
 					<p:graphicImage library="images" name="ajax-loader1.gif" />
