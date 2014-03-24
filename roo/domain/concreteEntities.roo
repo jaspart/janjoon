@@ -108,8 +108,15 @@ field reference --fieldName status --type ~.JJStatus
 field reference --fieldName importance --type ~.JJImportance
 field reference --fieldName sprint --type ~.JJSprint
 field reference --fieldName build --type ~.JJBuild
-field reference --fieldName teststep --type ~.JJTeststep
 field reference --fieldName testcase --type ~.JJTestcase
+field reference --fieldName project --type ~.JJProject
+field reference --fieldName product --type ~.JJProduct
+field reference --fieldName version --type ~.JJVersion
+field reference --fieldName requirement --type ~.JJRequirement
+field reference --fieldName task --type ~.JJTask
+field reference --fieldName chapter --type ~.JJChapter
+field reference --fieldName bug --type ~.JJBug
+field reference --fieldName member --type ~.JJContact
 
 #######################
 
@@ -131,6 +138,7 @@ field number --fieldName criticityLevel --type java.lang.Integer
 focus --class ~.JJBug
 field reference --fieldName project --type ~.JJProject
 field reference --fieldName versioning --type ~.JJVersion
+field reference --fieldName build --type ~.JJBuild
 field reference --fieldName category --type ~.JJCategory
 field reference --fieldName criticity --type ~.JJCriticity
 field reference --fieldName importance --type ~.JJImportance
@@ -218,8 +226,6 @@ field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --m
 
 focus --class ~.JJTestcase
 field number --fieldName ordering --type java.lang.Integer
-field string --fieldName action --sizeMax 100
-field string --fieldName resultat --sizeMax 100
 field reference --fieldName requirement --type ~.JJRequirement --notNull
 field reference --fieldName sprint --type ~.JJSprint
 field number --fieldName workload --type java.lang.Integer
@@ -229,6 +235,8 @@ field set --fieldName hardwares --type ~.JJHardware --cardinality ONE_TO_MANY --
 field set --fieldName teststeps --type ~.JJTeststep --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
 field set --fieldName tasks --type ~.JJTask --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
+field set --fieldName testcaseexecution --type ~.JJTestcaseexecution --cardinality ONE_TO_MANY --mappedBy testcase --fetch LAZY
+field boolean --fieldName automatic
 
 #######################
 
@@ -246,7 +254,6 @@ focus --class ~.JJTestcaseexecution
 field reference --fieldName build --type ~.JJBuild
 field reference --fieldName testcase --type ~.JJTestcase
 field boolean --fieldName passed
-
 
 #######################
 focus --class ~.JJTeststepexecution

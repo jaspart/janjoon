@@ -163,7 +163,7 @@
 
 		<p:dialog id="requirementDialog" header="#{jJRequirementBean.message}"
 			modal="true" widgetVar="requirementDialogWidget" dynamic="true"
-			resizable="false" appendTo="@(body)">
+			resizable="false">
 			<p:ajax event="close" update=":specForm"
 				listener="#{jJRequirementBean.closeDialog}" />
 			<p:outputPanel id="requirementDialogPanel">
@@ -378,8 +378,7 @@
 		</p:dialog>
 
 		<p:dialog id="chapterDialog" header="Chapter" modal="true"
-			widgetVar="chapterDialogWidget" dynamic="true" resizable="false"
-			appendTo="@(body)">
+			widgetVar="chapterDialogWidget" dynamic="true" resizable="false">
 			<p:ajax event="close" update=":specForm"
 				listener="#{jJChapterBean.closeDialog}" />
 			<p:outputPanel id="chapterDialogPanel">
@@ -504,8 +503,7 @@
 			widgetVar="requirementDeleteDialogWidget"
 			message="Are you sure you want to delete this requirement?"
 			showEffect="fade" hideEffect="explode"
-			header="#{messages.label_confirm_deletion}" severity="alarm"
-			appendTo="@(body)">
+			header="#{messages.label_confirm_deletion}" severity="alarm">
 			<p:outputPanel id="requirementDeletePanel">
 				<h:form id="requirementDeleteForm">
 					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
@@ -519,7 +517,7 @@
 
 		<p:dialog id="dialog" header="#{jJRequirementBean.message}"
 			modal="true" widgetVar="dialogWidget" dynamic="true"
-			resizable="false" appendTo="@(body)">
+			resizable="false">
 			<p:ajax event="close" update=":specForm"
 				listener="#{jJRequirementBean.closeDialogImport}" />
 			<p:layout id="importlayout" style="min-width:700px;min-height:450px;">
