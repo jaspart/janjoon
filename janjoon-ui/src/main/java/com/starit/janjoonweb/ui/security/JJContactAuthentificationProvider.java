@@ -1,6 +1,8 @@
 package com.starit.janjoonweb.ui.security;
 
 
+import java.io.Serializable;
+
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.*;
 import org.springframework.stereotype.Component;
@@ -11,10 +13,15 @@ import com.starit.janjoonweb.ui.mb.JJContactBean;
 
 @Component("contactAuthentificationProvider")
 public class JJContactAuthentificationProvider implements
-		AuthenticationProvider {	
+		AuthenticationProvider,Serializable {	
 	
 	
 	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public Authentication authenticate(Authentication authentication)

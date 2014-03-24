@@ -50,6 +50,13 @@
 					</ui:insert>
 				</h:panelGrid>
 			</p:tab>
+			<p:tab id="tabConfig" title="Configuration">
+				<h:panelGrid columns="1" cellpadding="3">
+					<ui:insert name="configuration">
+						<ui:include src="config.xhtml" />
+					</ui:insert>
+				</h:panelGrid>
+			</p:tab>
 
 			<p:tab id="tabWorkflow" title="Workflow">
 				<h:panelGrid columns="1" cellpadding="3">

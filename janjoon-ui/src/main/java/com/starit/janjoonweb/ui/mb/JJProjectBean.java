@@ -28,6 +28,7 @@ import com.starit.janjoonweb.domain.JJProductService;
 import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJProfileService;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJProjectService;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJRight;
@@ -52,7 +53,7 @@ public class JJProjectBean {
 	public void setjJStatusService(JJStatusService jJStatusService) {
 		this.jJStatusService = jJStatusService;
 	}
-
+	
 	@Autowired
 	JJBuildService jJBuildService;
 
@@ -931,6 +932,29 @@ public class JJProjectBean {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+
+	public void handleSelectProject(JJProductBean jJProductBean,
+			JJVersionBean jJVersionBean, JJRequirementBean jJRequirementBean,
+			JJChapterBean jJChapterBean, JJTestcaseBean jJTestcaseBean,
+			JJTeststepBean jJTeststepBean, JJBugBean jJBugBean,
+			JJTaskBean jJTaskBean) {
+		JJConfigurationBean conf;
+		
+		//jJProductBean.setProject(project);
+
+		jJRequirementBean.setProject(project);
+
+		//jJChapterBean.setProject(project);
+
+		// jJTestcaseBean.setCurrentProject(project);
+		// jJTestcaseBean.setRendered(false);
+		// jJTestcaseBean.initTestCaseParameter(jJTeststepBean);
+		//
+		// jJBugBean.setCurrentProject(project);
+		jJTaskBean.setProject(project);
+
 	}
 
 	public void newProject() {

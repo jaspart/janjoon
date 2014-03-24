@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+
+	<h:form id="configForm">
+		<p:growl id="ConfMessage" showDetail="true" />
+		<p:panel id="configPanel" style="width:700px" columns="1"
+			cellpadding="6">
+			<p:dataTable id="dataTable" var="conf"
+				value="#{jJConfigurationBean.configList}" paginator="true" rows="10"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15">
+				<f:facet name="header">  
+           Configuration List  
+        </f:facet>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Name" />
+					</f:facet>
+					<h:outputText value="#{conf.name}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Description" />
+					</f:facet>
+					<h:outputText value="#{conf.description}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Parametre" />
+					</f:facet>
+					<h:outputText value="#{conf.param}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Value" />
+					</f:facet>
+					<h:outputText value="#{conf.val}" />
+				</p:column>
+				<p:column styleClass="action-column">
+					<f:facet name="header">
+						<h:outputText value="Actions" />
+					</f:facet>
+					<p:commandButton id="editButton" icon="ui-icon-pencil">
+
+						<f:setPropertyActionListener value="#{conf}"
+							target="#{jJConfigurationBean.selectedConf}" />
+					</p:commandButton>
+					<p:tooltip for="editButton" value="#{messages.label_edit}"
+						showEffect="fade" hideEffect="fade" />
+					<p:commandButton id="deleteButton" icon="ui-icon-trash"
+						oncomplete="configDeleteDialogWidget.show()"
+						title="#{messages.label_delete}">
+						<f:setPropertyActionListener value="#{conf}"
+							target="#{jJConfigurationBean.selectedConf}" />
+					</p:commandButton>
+					<p:tooltip for="deleteButton" value="#{messages.label_delete}"
+						showEffect="fade" hideEffect="fade" />
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton value="New" id="newConf"
+						icon="ui-icon-circle-plus" />
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
+		<p:confirmDialog id="configDeleteDialog"
+			widgetVar="configDeleteDialogWidget"
+			message="#{messages.label_delete_record}" showEffect="fade"
+			hideEffect="explode" header="#{messages.label_confirm_deletion}"
+			severity="alarm" appendTo="@(body)">
+			<p:outputPanel id="configDeletePanel">
+				<h:form id="configDeleteForm">
+					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+						actionListener="#{jJConfigurationBean.deleteConfig}"
+						update=":tabview:configForm"
+						oncomplete="configDeleteDialogWidget.hide()" />
+					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+						onclick="configDeleteDialogWidget.hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
+	</h:form>
+</ui:composition>
+</html>

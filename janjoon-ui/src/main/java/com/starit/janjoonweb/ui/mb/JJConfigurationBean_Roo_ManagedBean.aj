@@ -73,6 +73,8 @@ privileged aspect JJConfigurationBean_Roo_ManagedBean {
         columns.add("creationDate");
         columns.add("updatedDate");
         columns.add("param");
+        columns.add("val");
+        setConfigList(jJConfigurationService.getConfigs(true));
     }
     
     public String JJConfigurationBean.getName() {

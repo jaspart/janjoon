@@ -10,7 +10,7 @@
 		JanJoon Login
 	</ui:define>
 	<ui:define name="content">
-		
+		<h5>BeHappy2012</h5>
 		<p:panel id="loginPanel" header="Please login..."
 			style="margin-top:50px;margin-bottom:50px;width:30%;margin-left:auto !important;margin-right:auto !important;">
                     <h:form id="login" method="post" >
@@ -26,6 +26,7 @@
                        
                         <p:commandButton id="submit" value="Login" action="#{loginBean.login}"
 				ajax="true"  style="margin-top:20px;" update=":login:mdp,:login:mail,:auth" />
+				
                     </h:form>
 		</p:panel>
 	</ui:define>

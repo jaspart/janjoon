@@ -46,6 +46,7 @@ public class DevelopmentBean implements Serializable {
 	private TreeNode selectedTree;
 	private ArrayList<FileMap> files;
 	private File file;
+	private String comment;
 	private JJMessage message;
 	private JJProject project;
 	private JJProduct product;
@@ -312,6 +313,14 @@ public class DevelopmentBean implements Serializable {
 		this.render = render;
 	}
 
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
 	public void pull() {
 		if (configManager.pullRepository()) {
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -328,7 +337,7 @@ public class DevelopmentBean implements Serializable {
 
 	public void commit() {
 
-		if (!message.getName().equalsIgnoreCase("")) {
+		if (!comment.replace(" ", "").equalsIgnoreCase("")) {
 			for (FileMap fileMap : files) {
 				configManager.setFileTexte(fileMap.getFile(),
 						fileMap.getTexte());
@@ -343,9 +352,22 @@ public class DevelopmentBean implements Serializable {
 				task.persist();
 
 			}
+			message.setCreatedBy(contact);
+			message.setCreationDate(new Date());
+			message.setEnabled(true);
+			message.setMessage(comment);
+			message.setDescription("JJmessage For"+task.getName()+"nl"+task.getDescription());
+			message.setName("JJmessage For"+task.getName());
+			message.persist();
+			Set<JJMessage> m = new HashSet<JJMessage>();
+			m.add(message);
+			task.setMessages(m);
+			if (task.getStartDateReal()==null)
+				task.setStartDateReal(new Date());
+			task.persist();
 
 			if (configManager.checkIn(task.getId() + ":" + task.getName()
-					+ " : " + message.getMessage())) {
+					+ " : " + comment)) {
 				FacesMessage message = new FacesMessage(
 						FacesMessage.SEVERITY_INFO, "Commited",
 						configManager.getPath());
@@ -369,12 +391,12 @@ public class DevelopmentBean implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 		} else {
-			RequestContext context = RequestContext.getCurrentInstance();
-			context.execute("dlg.show()");
+			//RequestContext context = RequestContext.getCurrentInstance();
+			//context.execute("dlg.show()");
 			FacesMessage message = new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, "Probleme Lors du Commit",
-					"You Have to create message before commiting");
-			FacesContext.getCurrentInstance().addMessage(null, message);
+					"You Have to create comment before commiting");
+			//FacesContext.getCurrentInstance().addMessage(null, message);
 		}
 	}
 
@@ -455,6 +477,7 @@ public class DevelopmentBean implements Serializable {
 
 	}
 
+
 	public void PersistMessage(ActionEvent actionEvent) {
 
 		RequestContext context = RequestContext.getCurrentInstance();
@@ -485,6 +508,7 @@ public class DevelopmentBean implements Serializable {
 
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		context.addCallbackParam("loggedIn", loggedIn);
+
 	}
 
 	public int contains(File f) {
