@@ -6,7 +6,9 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition>
 	<h:form id="menuForm">
+	<p:scrollPanel style="height:650px;" mode="native">
 		<p:slideMenu model="#{applicationBean.menuModel}" />
+	</p:scrollPanel>
 	</h:form>
 </ui:composition>
 </html>

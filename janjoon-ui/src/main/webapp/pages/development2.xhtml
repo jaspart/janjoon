@@ -12,24 +12,21 @@
 	<link type="text/css" rel="stylesheet"
 		href="/syntaxhighlighter/standard.css" />
 	<ui:define name="content">
-		<center>
-			<p:tabMenu activeIndex="3" name="content">
+		<!--center-->
+			<!--p:tabMenu activeIndex="3" name="content">
 				<ui:include src="/templates/menu.xhtml" />
 			</p:tabMenu>
-			<br />
-			<p:panel header="Error" style="width: 90%;valign: top;"
-				rendered="#{!jJDevelopment.render}">
+			<br /-->
+			<p:panel header="Error" rendered="#{!jJDevelopment.render}">
 				<H1>Product not available on the version control manager.</H1>
 			</p:panel>
-			<p:panel header="#{jJDevelopment.product.name}"
-				style="width: 90%;valign: top;" rendered="#{jJDevelopment.render}">
-				<h:link value="TestWith TexteArea" outcome="development" />
+			<p:panel header="#{jJDevelopment.product.name}" rendered="#{jJDevelopment.render}">
+				<h:link value="TestWith CodeMirror" outcome="development" />
+
 				<h:form id="form">
 					<table class="mytable">
-
 						<tr>
-
-							<td valign="top"><h:outputText for="taskSelectOneMenu"
+							<td valign="top"><p:outputLabel for="taskSelectOneMenu"
 									value="Task :" /> <p:selectOneMenu id="taskSelectOneMenu"
 									value="#{jJDevelopment.task}" panelStyle="width:150px"
 									effect="fold" editable="false" style="width:160px"
@@ -39,49 +36,51 @@
 										itemLabel="#{t.name}" itemValue="#{t}" />
 									<f:converter
 										converterId="com.starit.janjoonweb.ui.mb.converter.JJTaskConverter" />
-									<f:ajax event="valueChange"
-										listener="#{jJDevelopment.taskValueChangeListener}" />
+
 								</p:selectOneMenu> <p:message for="taskSelectOneMenu" id="taskmessage"
 									closable="true" /> <p:growl id="messages" showDetail="true" />
-								<p:tree id="fileTree" value="#{jJDevelopment.tree}" var="file"
-									animate="true" selection="#{jJDevelopment.selectedTree}"
-									selectionMode="single">
-									<p:ajax event="select" update=":form:messages,:form:tabView"
-										listener="#{jJDevelopment.onSelectTree}" />
-									<p:treeNode type="folder" expandedIcon="ui-icon-folder-open"
-										collapsedIcon="ui-icon-folder-collapsed">
+								<p:panel header="Project Explorer" style="height:500px;">
+									<p:scrollPanel style="height:250px;" mode="native">
 
-										<h:outputText value="#{file.name}" />
+										<p:tree id="fileTree" value="#{jJDevelopment.tree}" var="file"
+											animate="true" selection="#{jJDevelopment.selectedTree}"
+											selectionMode="single">
+											<p:ajax event="select" update=":form:messages,:form:tabView"
+												listener="#{jJDevelopment.onSelectTree}" />
+											<p:treeNode type="folder" expandedIcon="ui-icon-folder-open"
+												collapsedIcon="ui-icon-folder-collapsed">
+												<h:outputText value="#{file.name}" />
+											</p:treeNode>
+											<p:treeNode type="file" icon="ui-icon-document">
+												<h:outputText value="#{file.name}" />
+											</p:treeNode>
+										</p:tree>
+									</p:scrollPanel>
+									<br />
+									<p:outputLabel for="textMess" value="Comment : " />
+									<p:inputTextarea id="textMess" value="#{jJDevelopment.comment}"
+										required="true" requiredMessage="Set Comment to commit"
+										rows="6" cols="37" autoResize="false" />
+									<p:message for="textMess" id="commentmessage" closable="true" />
+								</p:panel></td>
 
-									</p:treeNode>
+							<td><p:panel header="File Content"
+									style="height:530px;width:700px;valign:center;">
 
-									<p:treeNode type="file" icon="ui-icon-document">
-										<h:outputText value="#{file.name}" />
-									</p:treeNode>
-								</p:tree></td>
-
-							<td><p:panel header="#{jJDevelopment.file.name}"
-									style="height:430px;width:700px;">
-									<p:tabView id="tabView" cache="true" effect="Fade" style=""
-										effectDuration="slow"
+									<p:tabView id="tabView"
 										activeIndex="#{jJDevelopment.activeTabIndex}"
 										binding="#{jJDevelopment.tabView}" scrollable="true"
-										value="#{jJDevelopment.files}" var="tab">
+										value="#{jJDevelopment.files}" var="tab" style="">
 										<p:ajax event="tabClose"
-											listener="#{jJDevelopment.onCloseTab}" update=":form:tabView" />
+											listener="#{jJDevelopment.onCloseTab}" />
 										<p:ajax event="tabChange"
-											listener="#{jJDevelopment.onChangeTab}"
-											update=":form:tabView" />
+											listener="#{jJDevelopment.onChangeTab}" />
 										<p:tab title="#{tab.title}" closable="true">
-											<pe:codeMirror id="codeMirror1" mode="javaScript"
-												widgetVar="myCodeMirror" theme="eclipse"
-												value="#{tab.texte}" lineNumbers="true"
-												extraKeys="{ 'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);}}"
-												tabSize="100">
+											<p:inputTextarea id="textArea" rows="27" cols="88"
+												autoResize="false" scrollHeight="28" value="#{tab.texte}">
 												<p:ajax event="blur"
-													listener="#{jJDevelopment.valueChangeHandlerCodeMirror}" />
-
-											</pe:codeMirror>
+													listener="#{jJDevelopment.valueChangeHandler}" />
+											</p:inputTextarea>
 										</p:tab>
 
 									</p:tabView>
@@ -92,18 +91,21 @@
 									id="Marcasdone" /> <h:outputLabel value="Marc as done"
 									for="Marcasdone" /> <br /></td>
 							<td><p:commandButton value="UpdateToHead" id="fetchFromRepo"
-									icon="ui-icon-disk" actionListener="#{jJDevelopment.pull}"
-									update=":form:messages,:form:tabView,:form:fileTree" /></td>
+									immediate="true" icon="ui-icon-disk"
+									actionListener="#{jJDevelopment.pull}"
+									update=":form:messages,:form:tabView,:form:fileTree,:form" /></td>
 						</tr>
 						<tr>
 							<td><p:commandButton value="Commit" id="submit"
 									icon="ui-icon-disk" actionListener="#{jJDevelopment.commit}"
 									update=":form:messages,:form:tabView,:form:fileTree,:form:taskmessage" /></td>
+
 							<td><p:commandButton id="showDialogButton" type="button"
 									value="CreateMessage" onclick="PF('dlg').show()" /></td>
-						</tr>
-					</table>
 
+						</tr>
+
+					</table>
 					<p:growl id="grow" showDetail="true" life="3000" />
 
 					<p:dialog id="dialog" header="Create Message" widgetVar="dlg"
@@ -129,30 +131,29 @@
 									oncomplete="handleLoginRequest(xhr, status, args)" />
 							</f:facet>
 						</h:panelGrid>
-
 					</p:dialog>
 				</h:form>
+
 				<script type="text/javascript">  
-    			function handleLoginRequest(xhr, status, args) {  
-        			if(args.validationFailed || !args.loggedIn) {  
-            				PF('dlg').jq.effect("shake", { times:5 }, 100);  
-        						}   
-        			else {  
-           					 PF('dlg').hide();  
-            				$('#showDialogButton').fadeOut();  
+					function handleLoginRequest(xhr, status, args) {  
+        					if(args.validationFailed || !args.loggedIn) {  
+            						PF('dlg').jq.effect("shake", { times:5 }, 100);  
+        					}   
+        					else {
+           						PF('dlg').hide();  
+            						$('#showDialogButton').fadeOut();  
         					}  
     					}  
 				</script>
-				<p:blockUI block="form" trigger=":form:submit">  
-        				LOADING<br />
+
+				<p:blockUI block="form" trigger=":form:submit">LOADING<br />
 					<p:graphicImage library="images" name="ajax-loader1.gif" />
 				</p:blockUI>
-				<p:blockUI block="form" trigger=":form:fetchFromRepo">  
-        				LOADING<br />
+				<p:blockUI block="form" trigger=":form:fetchFromRepo">LOADING<br />
 					<p:graphicImage library="images" name="ajax-loader1.gif" />
 				</p:blockUI>
 			</p:panel>
-		</center>
+		<!--/center-->
 	</ui:define>
 	<ui:define name="outer">
 		<center>

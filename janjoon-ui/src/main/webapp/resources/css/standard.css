@@ -2,6 +2,7 @@ body,div,td {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	word-wrap: break-word;
+	vertical-align: top;
 }
 
 body {
@@ -31,10 +32,10 @@ a:visited {
 }
 
 .wrapper {
-	width: document.body.clientWidth;
-	height: document.body.clientheight;
+	width: 100%;
+	height: 100%;
+	vertical-align: top;
 	overflow: scroll;
-	display: block;
 }
 
 .menu {
@@ -43,6 +44,13 @@ a:visited {
 	text-align: left;
 	margin-right: 5px;
 	word-wrap: break-word;
+}
+
+.central {
+	width: auto;
+	height: auto;
+	vertical-align: top;
+	text-align: left;
 }
 
 .content {

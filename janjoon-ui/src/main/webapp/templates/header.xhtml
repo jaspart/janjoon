@@ -13,15 +13,15 @@
 
 	<h:form prependId="false" id="headerForm">
 		<p:growl id="growl" showDetail="true" sticky="true" />
-		<h:panelGrid id="panelMenu" columns="3" cellpadding="2">
+		<h:panelGrid id="panelMenu" columns="3" cellpadding="2" style="background-color:white;">
 
 			<h:link outcome="main">
 				<p:graphicImage library="images" name="janjoon_logo.png"
 					styleClass="banner" alt="JanJoon Home" style="float: left;" />
 			</h:link>
 
-			<p:tabMenu id="tabMenu" name="content" style="float: none;">
-				<p:menuitem value="home" icon="ui-icon-home"
+			<p:tabMenu id="tabMenu" name="content" style="float: none;" activeIndex="-1">
+				<p:menuitem value="" icon="ui-icon-home"
 					url="/pages/main.jsf?faces-redirect=true" />
 
 				<p:menuitem value="Project"
@@ -63,15 +63,15 @@
 					update=":contentPanel" />
 			</p:tabMenu>
 
-			<h:panelGrid columns="2" cellpadding="2" align="right">
+			<h:panelGrid columns="2" cellpadding="2" align="right" style="float: right;">
 				<h:outputLink value="logout.jsf" action="#{loginBean.logout}"
-					rendered="#{loginBean.enable}">Logout2 :</h:outputLink>
+					rendered="#{loginBean.enable}">Logout:</h:outputLink>
 				<h:outputText value="#{loginBean.username}"
 					rendered="#{loginBean.enable}"></h:outputText>
 
-				<h:outputText value="Project :" />
+				<h:outputText value="Project:" />
 				<p:selectOneMenu id="projectSelectOneMenu"
-					value="#{jJProjectBean.project}" panelStyle="width:150px"
+					value="#{jJProjectBean.project}" panelStyle="width:120px"
 					effect="fade" style="width:160px" filter="true"
 					filterMatchMode="startsWith">
 
@@ -85,9 +85,9 @@
 
 				</p:selectOneMenu>
 
-				<h:outputText value="Product :" />
+				<h:outputText value="Product:" />
 				<p:selectOneMenu id="productSelectOneMenu"
-					value="#{jJProductBean.product}" panelStyle="width:150px"
+					value="#{jJProductBean.product}" panelStyle="width:120px"
 					effect="fade" style="width:160px" filter="true"
 					filterMatchMode="startsWith">
 					<f:converter
@@ -99,9 +99,9 @@
 					<p:ajax process="@this" update=":contentPanel,versionSelectOneMenu" />
 				</p:selectOneMenu>
 
-				<h:outputText value="Version :" />
+				<h:outputText value="Version:" />
 				<p:selectOneMenu id="versionSelectOneMenu"
-					value="#{jJVersionBean.version}" panelStyle="width:150px"
+					value="#{jJVersionBean.version}" panelStyle="width:120px"
 					effect="fade" style="width:160px" filter="true"
 					filterMatchMode="startsWith" disabled="#{jJVersionBean.disabled}">
 					<f:converter
