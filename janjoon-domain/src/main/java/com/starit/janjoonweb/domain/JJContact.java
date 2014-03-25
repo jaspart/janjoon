@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -54,6 +55,27 @@ public class JJContact extends JJAbstractEntity {
 
 	private Boolean accountNonLocked;
 
+	@ManyToOne
+	private JJProject lastProject;
+
+	@ManyToOne
+	private JJProduct lastProduct;
+
+	@ManyToOne
+	private JJVersion lastVersion;
+
+	@ManyToOne
+	private JJContact manager;
+
+	@ManyToOne
+	private JJCompany company;
+
+	@Lob
+	private String calendar;
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "contact")
 	private Set<JJPermission> permissions = new HashSet<JJPermission>();
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "contact")
+	private Set<JJMessage> messages = new HashSet<JJMessage>();
 }

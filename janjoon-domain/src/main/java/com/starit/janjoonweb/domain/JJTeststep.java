@@ -1,12 +1,6 @@
 package com.starit.janjoonweb.domain;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -23,17 +17,14 @@ public class JJTeststep extends JJAbstractEntity {
 
 	@NotNull
 	@Size(max = 100)
-	private String action;
+	private String actionstep;
 
 	@NotNull
 	@Size(max = 100)
-	private String resultat;
+	private String resultatstep;
 
 	private Boolean passed;
 
 	@ManyToOne
 	private JJTestcase testcase;
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "teststep")
-	private Set<JJMessage> messages = new HashSet<JJMessage>();
 }

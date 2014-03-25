@@ -6,6 +6,7 @@ package com.starit.janjoonweb.ui.mb;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
+import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJPhaseService;
 import com.starit.janjoonweb.domain.JJProduct;
@@ -79,6 +80,8 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
     private boolean JJVersionBean.createDialogVisible = false;
     
     private List<JJBuild> JJVersionBean.selectedBuilds;
+    
+    private List<JJMessage> JJVersionBean.selectedMessages;
     
     @PostConstruct
     public void JJVersionBean.init() {
@@ -368,6 +371,22 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
         buildsCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(buildsCreateInputMessage);
         
+        HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesCreateOutput.setId("messagesCreateOutput");
+        messagesCreateOutput.setValue("Messages:");
+        htmlPanelGrid.getChildren().add(messagesCreateOutput);
+        
+        HtmlOutputText messagesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesCreateInput.setId("messagesCreateInput");
+        messagesCreateInput.setValue("This relationship is managed from the JJMessage side");
+        htmlPanelGrid.getChildren().add(messagesCreateInput);
+        
+        Message messagesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        messagesCreateInputMessage.setId("messagesCreateInputMessage");
+        messagesCreateInputMessage.setFor("messagesCreateInput");
+        messagesCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(messagesCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -590,6 +609,22 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
         buildsEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(buildsEditInputMessage);
         
+        HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesEditOutput.setId("messagesEditOutput");
+        messagesEditOutput.setValue("Messages:");
+        htmlPanelGrid.getChildren().add(messagesEditOutput);
+        
+        HtmlOutputText messagesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesEditInput.setId("messagesEditInput");
+        messagesEditInput.setValue("This relationship is managed from the JJMessage side");
+        htmlPanelGrid.getChildren().add(messagesEditInput);
+        
+        Message messagesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        messagesEditInputMessage.setId("messagesEditInputMessage");
+        messagesEditInputMessage.setFor("messagesEditInput");
+        messagesEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(messagesEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -708,6 +743,16 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
         buildsValue.setValue("This relationship is managed from the JJBuild side");
         htmlPanelGrid.getChildren().add(buildsValue);
         
+        HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesLabel.setId("messagesLabel");
+        messagesLabel.setValue("Messages:");
+        htmlPanelGrid.getChildren().add(messagesLabel);
+        
+        HtmlOutputText messagesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesValue.setId("messagesValue");
+        messagesValue.setValue("This relationship is managed from the JJMessage side");
+        htmlPanelGrid.getChildren().add(messagesValue);
+        
         return htmlPanelGrid;
     }
     
@@ -777,9 +822,23 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
         this.selectedBuilds = selectedBuilds;
     }
     
+    public List<JJMessage> JJVersionBean.getSelectedMessages() {
+        return selectedMessages;
+    }
+    
+    public void JJVersionBean.setSelectedMessages(List<JJMessage> selectedMessages) {
+        if (selectedMessages != null) {
+            JJVersion_.setMessages(new HashSet<JJMessage>(selectedMessages));
+        }
+        this.selectedMessages = selectedMessages;
+    }
+    
     public String JJVersionBean.onEdit() {
         if (JJVersion_ != null && JJVersion_.getBuilds() != null) {
             selectedBuilds = new ArrayList<JJBuild>(JJVersion_.getBuilds());
+        }
+        if (JJVersion_ != null && JJVersion_.getMessages() != null) {
+            selectedMessages = new ArrayList<JJMessage>(JJVersion_.getMessages());
         }
         return null;
     }
@@ -834,6 +893,7 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
     public void JJVersionBean.reset() {
         JJVersion_ = null;
         selectedBuilds = null;
+        selectedMessages = null;
         createDialogVisible = false;
     }
     

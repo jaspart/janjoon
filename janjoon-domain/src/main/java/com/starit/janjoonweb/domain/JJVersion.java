@@ -26,6 +26,9 @@ public class JJVersion extends JJAbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "versioning")
 	private Set<JJBuild> builds = new HashSet<JJBuild>();
 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "versioning")
+	private Set<JJMessage> messages = new HashSet<JJMessage>();
+	
 	@Override
 	public boolean equals(Object object) {
 		return (object instanceof JJVersion) && (getId() != null) ? getId()

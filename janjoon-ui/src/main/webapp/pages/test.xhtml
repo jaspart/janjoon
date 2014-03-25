@@ -289,7 +289,7 @@
 		<p:confirmDialog id="deleteTestStepDialog" widgetVar="deleteTestStep"
 			message="#{messages.label_delete_record}" showEffect="fade"
 			hideEffect="explode" header="#{messages.label_confirm_deletion}"
-			severity="alarm" appendTo="@(body)">
+			severity="alarm">
 			<p:outputPanel id="deleteTestStepPanel">
 				<h:form id="deleteTestStepForm">
 					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
@@ -306,7 +306,7 @@
 		<p:confirmDialog id="deleteTestCaseDialog" widgetVar="deleteTestCase"
 			message="#{messages.label_delete_record}" showEffect="fade"
 			hideEffect="explode" header="#{messages.label_confirm_deletion}"
-			severity="alarm" appendTo="@(body)">
+			severity="alarm">
 			<p:outputPanel id="deleteTestCasePanel">
 				<h:form id="deleteTestCaseForm">
 					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
@@ -321,7 +321,7 @@
 
 		<p:dialog id="runTestcaseDialog" header="Test Case Execution"
 			widgetVar="testcaseExecution" showEffect="fade" hideEffect="fade"
-			dynamic="true" style="width:400px" appendTo="@(body)">
+			dynamic="true" style="width:400px">
 			<h:form id="runForm">
 				<h:panelGrid columns="1" cellpadding="3">
 					<p:tabView id="tabView" var="teststepexecution"

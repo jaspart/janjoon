@@ -3,14 +3,21 @@
 
 package com.starit.janjoonweb.domain;
 
+import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJChapter;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJImportance;
 import com.starit.janjoonweb.domain.JJMessage;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJStatus;
+import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTestcase;
-import com.starit.janjoonweb.domain.JJTeststep;
+import com.starit.janjoonweb.domain.JJVersion;
 
 privileged aspect JJMessage_Roo_JavaBean {
     
@@ -22,36 +29,12 @@ privileged aspect JJMessage_Roo_JavaBean {
         this.message = message;
     }
     
-    public JJCriticity JJMessage.getCriticity() {
-        return this.criticity;
+    public JJBug JJMessage.getBug() {
+        return this.bug;
     }
     
-    public void JJMessage.setCriticity(JJCriticity criticity) {
-        this.criticity = criticity;
-    }
-    
-    public JJStatus JJMessage.getStatus() {
-        return this.status;
-    }
-    
-    public void JJMessage.setStatus(JJStatus status) {
-        this.status = status;
-    }
-    
-    public JJImportance JJMessage.getImportance() {
-        return this.importance;
-    }
-    
-    public void JJMessage.setImportance(JJImportance importance) {
-        this.importance = importance;
-    }
-    
-    public JJSprint JJMessage.getSprint() {
-        return this.sprint;
-    }
-    
-    public void JJMessage.setSprint(JJSprint sprint) {
-        this.sprint = sprint;
+    public void JJMessage.setBug(JJBug bug) {
+        this.bug = bug;
     }
     
     public JJBuild JJMessage.getBuild() {
@@ -62,12 +45,84 @@ privileged aspect JJMessage_Roo_JavaBean {
         this.build = build;
     }
     
-    public JJTeststep JJMessage.getTeststep() {
-        return this.teststep;
+    public JJChapter JJMessage.getChapter() {
+        return this.chapter;
     }
     
-    public void JJMessage.setTeststep(JJTeststep teststep) {
-        this.teststep = teststep;
+    public void JJMessage.setChapter(JJChapter chapter) {
+        this.chapter = chapter;
+    }
+    
+    public JJContact JJMessage.getContact() {
+        return this.contact;
+    }
+    
+    public void JJMessage.setContact(JJContact contact) {
+        this.contact = contact;
+    }
+    
+    public JJCriticity JJMessage.getCriticity() {
+        return this.criticity;
+    }
+    
+    public void JJMessage.setCriticity(JJCriticity criticity) {
+        this.criticity = criticity;
+    }
+    
+    public JJImportance JJMessage.getImportance() {
+        return this.importance;
+    }
+    
+    public void JJMessage.setImportance(JJImportance importance) {
+        this.importance = importance;
+    }
+    
+    public JJProduct JJMessage.getProduct() {
+        return this.product;
+    }
+    
+    public void JJMessage.setProduct(JJProduct product) {
+        this.product = product;
+    }
+    
+    public JJProject JJMessage.getProject() {
+        return this.project;
+    }
+    
+    public void JJMessage.setProject(JJProject project) {
+        this.project = project;
+    }
+    
+    public JJRequirement JJMessage.getRequirement() {
+        return this.requirement;
+    }
+    
+    public void JJMessage.setRequirement(JJRequirement requirement) {
+        this.requirement = requirement;
+    }
+    
+    public JJSprint JJMessage.getSprint() {
+        return this.sprint;
+    }
+    
+    public void JJMessage.setSprint(JJSprint sprint) {
+        this.sprint = sprint;
+    }
+    
+    public JJStatus JJMessage.getStatus() {
+        return this.status;
+    }
+    
+    public void JJMessage.setStatus(JJStatus status) {
+        this.status = status;
+    }
+    
+    public JJTask JJMessage.getTask() {
+        return this.task;
+    }
+    
+    public void JJMessage.setTask(JJTask task) {
+        this.task = task;
     }
     
     public JJTestcase JJMessage.getTestcase() {
@@ -76,6 +131,14 @@ privileged aspect JJMessage_Roo_JavaBean {
     
     public void JJMessage.setTestcase(JJTestcase testcase) {
         this.testcase = testcase;
+    }
+    
+    public JJVersion JJMessage.getVersioning() {
+        return this.versioning;
+    }
+    
+    public void JJMessage.setVersioning(JJVersion versioning) {
+        this.versioning = versioning;
     }
     
 }

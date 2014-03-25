@@ -5,6 +5,8 @@ package com.starit.janjoonweb.ui.mb;
 
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
+import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJContact;
@@ -30,6 +32,7 @@ import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.domain.reference.JJRelationship;
 import com.starit.janjoonweb.ui.mb.JJBugBean;
 import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJBuildConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJCriticityConverter;
@@ -104,6 +107,9 @@ privileged aspect JJBugBean_Roo_ManagedBean {
     
     @Autowired
     JJSprintService JJBugBean.jJSprintService;
+    
+    @Autowired
+    JJBuildService JJBugBean.jJBuildService;
     
     private String JJBugBean.name = "JJBugs";
     
@@ -588,6 +594,30 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         sprintCreateInputMessage.setFor("sprintCreateInput");
         sprintCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(sprintCreateInputMessage);
+        
+        OutputLabel buildCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        buildCreateOutput.setFor("buildCreateInput");
+        buildCreateOutput.setId("buildCreateOutput");
+        buildCreateOutput.setValue("Build:");
+        htmlPanelGrid.getChildren().add(buildCreateOutput);
+        
+        AutoComplete buildCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        buildCreateInput.setId("buildCreateInput");
+        buildCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBugBean.JJBug_.build}", JJBuild.class));
+        buildCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJBugBean.completeBuild}", List.class, new Class[] { String.class }));
+        buildCreateInput.setDropdown(true);
+        buildCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "build", String.class));
+        buildCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{build.name} #{build.description} #{build.creationDate} #{build.updatedDate}", String.class));
+        buildCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{build}", JJBuild.class));
+        buildCreateInput.setConverter(new JJBuildConverter());
+        buildCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(buildCreateInput);
+        
+        Message buildCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        buildCreateInputMessage.setId("buildCreateInputMessage");
+        buildCreateInputMessage.setFor("buildCreateInput");
+        buildCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(buildCreateInputMessage);
         
         HtmlOutputText bugsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugsCreateOutput.setId("bugsCreateOutput");
@@ -1079,6 +1109,30 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         sprintEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(sprintEditInputMessage);
         
+        OutputLabel buildEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        buildEditOutput.setFor("buildEditInput");
+        buildEditOutput.setId("buildEditOutput");
+        buildEditOutput.setValue("Build:");
+        htmlPanelGrid.getChildren().add(buildEditOutput);
+        
+        AutoComplete buildEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        buildEditInput.setId("buildEditInput");
+        buildEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBugBean.JJBug_.build}", JJBuild.class));
+        buildEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJBugBean.completeBuild}", List.class, new Class[] { String.class }));
+        buildEditInput.setDropdown(true);
+        buildEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "build", String.class));
+        buildEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{build.name} #{build.description} #{build.creationDate} #{build.updatedDate}", String.class));
+        buildEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{build}", JJBuild.class));
+        buildEditInput.setConverter(new JJBuildConverter());
+        buildEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(buildEditInput);
+        
+        Message buildEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        buildEditInputMessage.setId("buildEditInputMessage");
+        buildEditInputMessage.setFor("buildEditInput");
+        buildEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(buildEditInputMessage);
+        
         HtmlOutputText bugsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugsEditOutput.setId("bugsEditOutput");
         bugsEditOutput.setValue("Bugs:");
@@ -1362,6 +1416,16 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         sprintValue.setConverter(new JJSprintConverter());
         htmlPanelGrid.getChildren().add(sprintValue);
         
+        HtmlOutputText buildLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        buildLabel.setId("buildLabel");
+        buildLabel.setValue("Build:");
+        htmlPanelGrid.getChildren().add(buildLabel);
+        
+        HtmlOutputText buildValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        buildValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBugBean.JJBug_.build}", JJBuild.class));
+        buildValue.setConverter(new JJBuildConverter());
+        htmlPanelGrid.getChildren().add(buildValue);
+        
         HtmlOutputText bugsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugsLabel.setId("bugsLabel");
         bugsLabel.setValue("Bugs:");
@@ -1552,6 +1616,17 @@ privileged aspect JJBugBean_Roo_ManagedBean {
             String jJSprintStr = String.valueOf(jJSprint.getName() +  " "  + jJSprint.getDescription() +  " "  + jJSprint.getCreationDate() +  " "  + jJSprint.getUpdatedDate());
             if (jJSprintStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJSprint);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJBuild> JJBugBean.completeBuild(String query) {
+        List<JJBuild> suggestions = new ArrayList<JJBuild>();
+        for (JJBuild jJBuild : jJBuildService.findAllJJBuilds()) {
+            String jJBuildStr = String.valueOf(jJBuild.getName() +  " "  + jJBuild.getDescription() +  " "  + jJBuild.getCreationDate() +  " "  + jJBuild.getUpdatedDate());
+            if (jJBuildStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJBuild);
             }
         }
         return suggestions;

@@ -7,6 +7,7 @@ import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugDataOnDemand;
 import com.starit.janjoonweb.domain.JJBugRepository;
 import com.starit.janjoonweb.domain.JJBugService;
+import com.starit.janjoonweb.domain.JJBuildDataOnDemand;
 import com.starit.janjoonweb.domain.JJCategoryDataOnDemand;
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJCriticityDataOnDemand;
@@ -41,6 +42,9 @@ privileged aspect JJBugDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     JJContactDataOnDemand JJBugDataOnDemand.jJContactDataOnDemand;
+    
+    @Autowired
+    JJBuildDataOnDemand JJBugDataOnDemand.jJBuildDataOnDemand;
     
     @Autowired
     JJCategoryDataOnDemand JJBugDataOnDemand.jJCategoryDataOnDemand;

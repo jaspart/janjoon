@@ -49,7 +49,7 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     
     public JJTestcase JJTestcaseDataOnDemand.getNewTransientJJTestcase(int index) {
         JJTestcase obj = new JJTestcase();
-        setAction(obj, index);
+        setAutomatic(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
@@ -57,18 +57,14 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
         setOrdering(obj, index);
         setPricepoint(obj, index);
         setRequirement(obj, index);
-        setResultat(obj, index);
         setUpdatedDate(obj, index);
         setWorkload(obj, index);
         return obj;
     }
     
-    public void JJTestcaseDataOnDemand.setAction(JJTestcase obj, int index) {
-        String action = "action_" + index;
-        if (action.length() > 100) {
-            action = action.substring(0, 100);
-        }
-        obj.setAction(action);
+    public void JJTestcaseDataOnDemand.setAutomatic(JJTestcase obj, int index) {
+        Boolean automatic = true;
+        obj.setAutomatic(automatic);
     }
     
     public void JJTestcaseDataOnDemand.setCreationDate(JJTestcase obj, int index) {
@@ -107,14 +103,6 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     public void JJTestcaseDataOnDemand.setRequirement(JJTestcase obj, int index) {
         JJRequirement requirement = jJRequirementDataOnDemand.getRandomJJRequirement();
         obj.setRequirement(requirement);
-    }
-    
-    public void JJTestcaseDataOnDemand.setResultat(JJTestcase obj, int index) {
-        String resultat = "resultat_" + index;
-        if (resultat.length() > 100) {
-            resultat = resultat.substring(0, 100);
-        }
-        obj.setResultat(resultat);
     }
     
     public void JJTestcaseDataOnDemand.setUpdatedDate(JJTestcase obj, int index) {

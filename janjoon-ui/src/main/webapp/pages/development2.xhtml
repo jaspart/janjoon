@@ -17,12 +17,10 @@
 				<ui:include src="/templates/menu.xhtml" />
 			</p:tabMenu>
 			<br />
-			<p:panel header="Error"
-				style="width: 90%;valign: top;" rendered="#{!jJDevelopment.render}">
-				<H1>
-				Product not available on the version control manager.
-				</H1>
-				</p:panel>
+			<p:panel header="Error" style="width: 90%;valign: top;"
+				rendered="#{!jJDevelopment.render}">
+				<H1>Product not available on the version control manager.</H1>
+			</p:panel>
 			<p:panel header="#{jJDevelopment.product.name}"
 				style="width: 90%;valign: top;" rendered="#{jJDevelopment.render}">
 				<h:link value="TestWith TexteArea" outcome="development" />
@@ -61,30 +59,32 @@
 										<h:outputText value="#{file.name}" />
 									</p:treeNode>
 								</p:tree></td>
-								
-							<td><p:panel header="#{jJDevelopment.file.name}" style="height:430px;width:700px;">
-							<p:tabView id="tabView" cache="true" effect="Fade" style=""
-									effectDuration="slow"
-									activeIndex="#{jJDevelopment.activeTabIndex}"
-									binding="#{jJDevelopment.tabView}" scrollable="true"
-									value="#{jJDevelopment.files}" var="tab" >
-									<p:ajax event="tabClose" listener="#{jJDevelopment.onCloseTab}"
-										update=":form:tabView" />
-									<p:ajax event="tabChange"
-										listener="#{jJDevelopment.onChangeTab}" update=":form:tabView" />
-									<p:tab title="#{tab.title}" closable="true" >
-										<pe:codeMirror id="codeMirror1" mode="javaScript"
-											widgetVar="myCodeMirror" theme="eclipse" value="#{tab.texte}"
-											lineNumbers="true" 
-											extraKeys="{ 'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);}}"
-											tabSize="100" >
-											<p:ajax event="blur"
-												listener="#{jJDevelopment.valueChangeHandlerCodeMirror}" />
 
-										</pe:codeMirror>
-									</p:tab>
+							<td><p:panel header="#{jJDevelopment.file.name}"
+									style="height:430px;width:700px;">
+									<p:tabView id="tabView" cache="true" effect="Fade" style=""
+										effectDuration="slow"
+										activeIndex="#{jJDevelopment.activeTabIndex}"
+										binding="#{jJDevelopment.tabView}" scrollable="true"
+										value="#{jJDevelopment.files}" var="tab">
+										<p:ajax event="tabClose"
+											listener="#{jJDevelopment.onCloseTab}" update=":form:tabView" />
+										<p:ajax event="tabChange"
+											listener="#{jJDevelopment.onChangeTab}"
+											update=":form:tabView" />
+										<p:tab title="#{tab.title}" closable="true">
+											<pe:codeMirror id="codeMirror1" mode="javaScript"
+												widgetVar="myCodeMirror" theme="eclipse"
+												value="#{tab.texte}" lineNumbers="true"
+												extraKeys="{ 'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);}}"
+												tabSize="100">
+												<p:ajax event="blur"
+													listener="#{jJDevelopment.valueChangeHandlerCodeMirror}" />
 
-								</p:tabView>
+											</pe:codeMirror>
+										</p:tab>
+
+									</p:tabView>
 								</p:panel></td>
 						</tr>
 						<tr>
@@ -112,7 +112,7 @@
 						<h:panelGrid columns="2" cellpadding="5">
 							<p:outputLabel for="name" value="Name:" />
 							<p:inputText value="#{jJDevelopment.message.name}" id="name"
-								 label="name" />
+								label="name" />
 
 							<p:outputLabel for="description" value="Description:" />
 							<p:inputText value="#{jJDevelopment.message.description}"

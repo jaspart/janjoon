@@ -77,6 +77,8 @@ public class JJTestcaseBean {
 	private JJRequirement requirement;
 	private List<JJRequirement> requirements;
 
+	private boolean disabled;
+
 	public JJTestcase getTestcase() {
 		return testcase;
 	}
@@ -88,9 +90,9 @@ public class JJTestcaseBean {
 	public JJProject getProject() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		JJProjectBean projbean = (JJProjectBean) session
+		JJProjectBean jJProjectBean = (JJProjectBean) session
 				.getAttribute("jJProjectBean");
-		this.project = projbean.getProject();
+		this.project = jJProjectBean.getProject();
 		return project;
 	}
 
@@ -101,9 +103,9 @@ public class JJTestcaseBean {
 	public JJProduct getProduct() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		JJProductBean prodbean = (JJProductBean) session
+		JJProductBean jJProductBean = (JJProductBean) session
 				.getAttribute("jJProductBean");
-		this.product = prodbean.getProduct();
+		this.product = jJProductBean.getProduct();
 		return product;
 	}
 
@@ -197,6 +199,14 @@ public class JJTestcaseBean {
 		this.requirements = requirements;
 	}
 
+	public boolean getDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
+
 	public void loadData() {
 
 		System.out.println("load data in test");
@@ -214,16 +224,19 @@ public class JJTestcaseBean {
 
 	}
 
-	public void newTestcase() {
+	public void newTestcase(JJTeststepBean jJTeststepBean) {
 		System.out.println("I m in new testcase");
 		message = "New Testcase";
 		testcase = new JJTestcase();
 		testcase.setEnabled(true);
 		testcase.setCreationDate(new Date());
 		requirement = null;
+		disabled = false;
+
+		jJTeststepBean.loadData();
 	}
 
-	public void save() {
+	public void save(JJTeststepBean jJTeststepBean) {
 		System.out.println("Saving ...");
 		String message = "";
 		if (testcase.getId() == null) {
@@ -231,7 +244,12 @@ public class JJTestcaseBean {
 			requirement.getTestcases().add(testcase);
 			jJTestcaseService.saveJJTestcase(testcase);
 
-			newTestcase();
+			disabled = true;
+
+			//jJTeststepBean.newTeststep();
+			
+			System.out.println("end saving");
+
 			message = "message_successfully_created";
 		}
 
@@ -240,11 +258,12 @@ public class JJTestcaseBean {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 
-	public void closeDialog() {
+	public void closeDialog(JJTeststepBean jJTeststepBean) {
 		System.out.println("close Dialog");
 		testcase = null;
 		requirement = null;
 		createTestcaseTree();
+		jJTeststepBean.setTeststep(null);
 	}
 
 	private void createTestcaseTree() {

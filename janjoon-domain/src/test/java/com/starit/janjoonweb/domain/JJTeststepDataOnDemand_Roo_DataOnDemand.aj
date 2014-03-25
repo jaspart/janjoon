@@ -44,24 +44,24 @@ privileged aspect JJTeststepDataOnDemand_Roo_DataOnDemand {
     
     public JJTeststep JJTeststepDataOnDemand.getNewTransientJJTeststep(int index) {
         JJTeststep obj = new JJTeststep();
-        setAction(obj, index);
+        setActionstep(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
         setName(obj, index);
         setOrdering(obj, index);
         setPassed(obj, index);
-        setResultat(obj, index);
+        setResultatstep(obj, index);
         setUpdatedDate(obj, index);
         return obj;
     }
     
-    public void JJTeststepDataOnDemand.setAction(JJTeststep obj, int index) {
-        String action = "action_" + index;
-        if (action.length() > 100) {
-            action = action.substring(0, 100);
+    public void JJTeststepDataOnDemand.setActionstep(JJTeststep obj, int index) {
+        String actionstep = "actionstep_" + index;
+        if (actionstep.length() > 100) {
+            actionstep = actionstep.substring(0, 100);
         }
-        obj.setAction(action);
+        obj.setActionstep(actionstep);
     }
     
     public void JJTeststepDataOnDemand.setCreationDate(JJTeststep obj, int index) {
@@ -97,12 +97,12 @@ privileged aspect JJTeststepDataOnDemand_Roo_DataOnDemand {
         obj.setPassed(passed);
     }
     
-    public void JJTeststepDataOnDemand.setResultat(JJTeststep obj, int index) {
-        String resultat = "resultat_" + index;
-        if (resultat.length() > 100) {
-            resultat = resultat.substring(0, 100);
+    public void JJTeststepDataOnDemand.setResultatstep(JJTeststep obj, int index) {
+        String resultatstep = "resultatstep_" + index;
+        if (resultatstep.length() > 100) {
+            resultatstep = resultatstep.substring(0, 100);
         }
-        obj.setResultat(resultat);
+        obj.setResultatstep(resultatstep);
     }
     
     public void JJTeststepDataOnDemand.setUpdatedDate(JJTeststep obj, int index) {

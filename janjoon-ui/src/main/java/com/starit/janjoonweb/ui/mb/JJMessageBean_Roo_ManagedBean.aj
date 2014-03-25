@@ -3,8 +3,12 @@
 
 package com.starit.janjoonweb.ui.mb;
 
+import com.starit.janjoonweb.domain.JJBug;
+import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJBuildService;
+import com.starit.janjoonweb.domain.JJChapter;
+import com.starit.janjoonweb.domain.JJChapterService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJCriticity;
@@ -13,23 +17,37 @@ import com.starit.janjoonweb.domain.JJImportance;
 import com.starit.janjoonweb.domain.JJImportanceService;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJMessageService;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProductService;
+import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJProjectService;
+import com.starit.janjoonweb.domain.JJRequirement;
+import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJSprintService;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
+import com.starit.janjoonweb.domain.JJTask;
+import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseService;
-import com.starit.janjoonweb.domain.JJTeststep;
-import com.starit.janjoonweb.domain.JJTeststepService;
+import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.JJMessageBean;
+import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJBuildConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJChapterConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJCriticityConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJImportanceConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJProductConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJProjectConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJSprintConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJStatusConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJTaskConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJTeststepConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJVersionConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,25 +86,43 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
     JJContactService JJMessageBean.jJContactService;
     
     @Autowired
-    JJCriticityService JJMessageBean.jJCriticityService;
-    
-    @Autowired
-    JJStatusService JJMessageBean.jJStatusService;
-    
-    @Autowired
-    JJImportanceService JJMessageBean.jJImportanceService;
-    
-    @Autowired
-    JJSprintService JJMessageBean.jJSprintService;
+    JJBugService JJMessageBean.jJBugService;
     
     @Autowired
     JJBuildService JJMessageBean.jJBuildService;
     
     @Autowired
-    JJTeststepService JJMessageBean.jJTeststepService;
+    JJChapterService JJMessageBean.jJChapterService;
+    
+    @Autowired
+    JJCriticityService JJMessageBean.jJCriticityService;
+    
+    @Autowired
+    JJImportanceService JJMessageBean.jJImportanceService;
+    
+    @Autowired
+    JJProductService JJMessageBean.jJProductService;
+    
+    @Autowired
+    JJProjectService JJMessageBean.jJProjectService;
+    
+    @Autowired
+    JJRequirementService JJMessageBean.jJRequirementService;
+    
+    @Autowired
+    JJSprintService JJMessageBean.jJSprintService;
+    
+    @Autowired
+    JJStatusService JJMessageBean.jJStatusService;
+    
+    @Autowired
+    JJTaskService JJMessageBean.jJTaskService;
     
     @Autowired
     JJTestcaseService JJMessageBean.jJTestcaseService;
+    
+    @Autowired
+    JJVersionService JJMessageBean.jJVersionService;
     
     private String JJMessageBean.name = "JJMessages";
     
@@ -352,101 +388,29 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         messageCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(messageCreateInputMessage);
         
-        OutputLabel criticityCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        criticityCreateOutput.setFor("criticityCreateInput");
-        criticityCreateOutput.setId("criticityCreateOutput");
-        criticityCreateOutput.setValue("Criticity:");
-        htmlPanelGrid.getChildren().add(criticityCreateOutput);
+        OutputLabel bugCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        bugCreateOutput.setFor("bugCreateInput");
+        bugCreateOutput.setId("bugCreateOutput");
+        bugCreateOutput.setValue("Bug:");
+        htmlPanelGrid.getChildren().add(bugCreateOutput);
         
-        AutoComplete criticityCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        criticityCreateInput.setId("criticityCreateInput");
-        criticityCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.criticity}", JJCriticity.class));
-        criticityCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeCriticity}", List.class, new Class[] { String.class }));
-        criticityCreateInput.setDropdown(true);
-        criticityCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "criticity", String.class));
-        criticityCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{criticity.name} #{criticity.description} #{criticity.creationDate} #{criticity.updatedDate}", String.class));
-        criticityCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{criticity}", JJCriticity.class));
-        criticityCreateInput.setConverter(new JJCriticityConverter());
-        criticityCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(criticityCreateInput);
+        AutoComplete bugCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        bugCreateInput.setId("bugCreateInput");
+        bugCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.bug}", JJBug.class));
+        bugCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeBug}", List.class, new Class[] { String.class }));
+        bugCreateInput.setDropdown(true);
+        bugCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "bug", String.class));
+        bugCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{bug.name} #{bug.description} #{bug.creationDate} #{bug.updatedDate}", String.class));
+        bugCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{bug}", JJBug.class));
+        bugCreateInput.setConverter(new JJBugConverter());
+        bugCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(bugCreateInput);
         
-        Message criticityCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        criticityCreateInputMessage.setId("criticityCreateInputMessage");
-        criticityCreateInputMessage.setFor("criticityCreateInput");
-        criticityCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(criticityCreateInputMessage);
-        
-        OutputLabel statusCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        statusCreateOutput.setFor("statusCreateInput");
-        statusCreateOutput.setId("statusCreateOutput");
-        statusCreateOutput.setValue("Status:");
-        htmlPanelGrid.getChildren().add(statusCreateOutput);
-        
-        AutoComplete statusCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        statusCreateInput.setId("statusCreateInput");
-        statusCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.status}", JJStatus.class));
-        statusCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeStatus}", List.class, new Class[] { String.class }));
-        statusCreateInput.setDropdown(true);
-        statusCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "status", String.class));
-        statusCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{status.name} #{status.description} #{status.creationDate} #{status.updatedDate}", String.class));
-        statusCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{status}", JJStatus.class));
-        statusCreateInput.setConverter(new JJStatusConverter());
-        statusCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(statusCreateInput);
-        
-        Message statusCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        statusCreateInputMessage.setId("statusCreateInputMessage");
-        statusCreateInputMessage.setFor("statusCreateInput");
-        statusCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(statusCreateInputMessage);
-        
-        OutputLabel importanceCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        importanceCreateOutput.setFor("importanceCreateInput");
-        importanceCreateOutput.setId("importanceCreateOutput");
-        importanceCreateOutput.setValue("Importance:");
-        htmlPanelGrid.getChildren().add(importanceCreateOutput);
-        
-        AutoComplete importanceCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        importanceCreateInput.setId("importanceCreateInput");
-        importanceCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.importance}", JJImportance.class));
-        importanceCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeImportance}", List.class, new Class[] { String.class }));
-        importanceCreateInput.setDropdown(true);
-        importanceCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "importance", String.class));
-        importanceCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{importance.name} #{importance.description} #{importance.creationDate} #{importance.updatedDate}", String.class));
-        importanceCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{importance}", JJImportance.class));
-        importanceCreateInput.setConverter(new JJImportanceConverter());
-        importanceCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(importanceCreateInput);
-        
-        Message importanceCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        importanceCreateInputMessage.setId("importanceCreateInputMessage");
-        importanceCreateInputMessage.setFor("importanceCreateInput");
-        importanceCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(importanceCreateInputMessage);
-        
-        OutputLabel sprintCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        sprintCreateOutput.setFor("sprintCreateInput");
-        sprintCreateOutput.setId("sprintCreateOutput");
-        sprintCreateOutput.setValue("Sprint:");
-        htmlPanelGrid.getChildren().add(sprintCreateOutput);
-        
-        AutoComplete sprintCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        sprintCreateInput.setId("sprintCreateInput");
-        sprintCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.sprint}", JJSprint.class));
-        sprintCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeSprint}", List.class, new Class[] { String.class }));
-        sprintCreateInput.setDropdown(true);
-        sprintCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "sprint", String.class));
-        sprintCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{sprint.name} #{sprint.description} #{sprint.creationDate} #{sprint.updatedDate}", String.class));
-        sprintCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{sprint}", JJSprint.class));
-        sprintCreateInput.setConverter(new JJSprintConverter());
-        sprintCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(sprintCreateInput);
-        
-        Message sprintCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        sprintCreateInputMessage.setId("sprintCreateInputMessage");
-        sprintCreateInputMessage.setFor("sprintCreateInput");
-        sprintCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(sprintCreateInputMessage);
+        Message bugCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        bugCreateInputMessage.setId("bugCreateInputMessage");
+        bugCreateInputMessage.setFor("bugCreateInput");
+        bugCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(bugCreateInputMessage);
         
         OutputLabel buildCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         buildCreateOutput.setFor("buildCreateInput");
@@ -472,29 +436,245 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         buildCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(buildCreateInputMessage);
         
-        OutputLabel teststepCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        teststepCreateOutput.setFor("teststepCreateInput");
-        teststepCreateOutput.setId("teststepCreateOutput");
-        teststepCreateOutput.setValue("Teststep:");
-        htmlPanelGrid.getChildren().add(teststepCreateOutput);
+        OutputLabel chapterCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        chapterCreateOutput.setFor("chapterCreateInput");
+        chapterCreateOutput.setId("chapterCreateOutput");
+        chapterCreateOutput.setValue("Chapter:");
+        htmlPanelGrid.getChildren().add(chapterCreateOutput);
         
-        AutoComplete teststepCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        teststepCreateInput.setId("teststepCreateInput");
-        teststepCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.teststep}", JJTeststep.class));
-        teststepCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeTeststep}", List.class, new Class[] { String.class }));
-        teststepCreateInput.setDropdown(true);
-        teststepCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "teststep", String.class));
-        teststepCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{teststep.name} #{teststep.description} #{teststep.creationDate} #{teststep.updatedDate}", String.class));
-        teststepCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{teststep}", JJTeststep.class));
-        teststepCreateInput.setConverter(new JJTeststepConverter());
-        teststepCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(teststepCreateInput);
+        AutoComplete chapterCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        chapterCreateInput.setId("chapterCreateInput");
+        chapterCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.chapter}", JJChapter.class));
+        chapterCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeChapter}", List.class, new Class[] { String.class }));
+        chapterCreateInput.setDropdown(true);
+        chapterCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "chapter", String.class));
+        chapterCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{chapter.name} #{chapter.description} #{chapter.creationDate} #{chapter.updatedDate}", String.class));
+        chapterCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{chapter}", JJChapter.class));
+        chapterCreateInput.setConverter(new JJChapterConverter());
+        chapterCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(chapterCreateInput);
         
-        Message teststepCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        teststepCreateInputMessage.setId("teststepCreateInputMessage");
-        teststepCreateInputMessage.setFor("teststepCreateInput");
-        teststepCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(teststepCreateInputMessage);
+        Message chapterCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        chapterCreateInputMessage.setId("chapterCreateInputMessage");
+        chapterCreateInputMessage.setFor("chapterCreateInput");
+        chapterCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(chapterCreateInputMessage);
+        
+        OutputLabel contactCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        contactCreateOutput.setFor("contactCreateInput");
+        contactCreateOutput.setId("contactCreateOutput");
+        contactCreateOutput.setValue("Contact:");
+        htmlPanelGrid.getChildren().add(contactCreateOutput);
+        
+        AutoComplete contactCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        contactCreateInput.setId("contactCreateInput");
+        contactCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.contact}", JJContact.class));
+        contactCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeContact}", List.class, new Class[] { String.class }));
+        contactCreateInput.setDropdown(true);
+        contactCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "contact", String.class));
+        contactCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{contact.name} #{contact.description} #{contact.creationDate} #{contact.updatedDate}", String.class));
+        contactCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{contact}", JJContact.class));
+        contactCreateInput.setConverter(new JJContactConverter());
+        contactCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(contactCreateInput);
+        
+        Message contactCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        contactCreateInputMessage.setId("contactCreateInputMessage");
+        contactCreateInputMessage.setFor("contactCreateInput");
+        contactCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(contactCreateInputMessage);
+        
+        OutputLabel criticityCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        criticityCreateOutput.setFor("criticityCreateInput");
+        criticityCreateOutput.setId("criticityCreateOutput");
+        criticityCreateOutput.setValue("Criticity:");
+        htmlPanelGrid.getChildren().add(criticityCreateOutput);
+        
+        AutoComplete criticityCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        criticityCreateInput.setId("criticityCreateInput");
+        criticityCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.criticity}", JJCriticity.class));
+        criticityCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeCriticity}", List.class, new Class[] { String.class }));
+        criticityCreateInput.setDropdown(true);
+        criticityCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "criticity", String.class));
+        criticityCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{criticity.name} #{criticity.description} #{criticity.creationDate} #{criticity.updatedDate}", String.class));
+        criticityCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{criticity}", JJCriticity.class));
+        criticityCreateInput.setConverter(new JJCriticityConverter());
+        criticityCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(criticityCreateInput);
+        
+        Message criticityCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        criticityCreateInputMessage.setId("criticityCreateInputMessage");
+        criticityCreateInputMessage.setFor("criticityCreateInput");
+        criticityCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(criticityCreateInputMessage);
+        
+        OutputLabel importanceCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        importanceCreateOutput.setFor("importanceCreateInput");
+        importanceCreateOutput.setId("importanceCreateOutput");
+        importanceCreateOutput.setValue("Importance:");
+        htmlPanelGrid.getChildren().add(importanceCreateOutput);
+        
+        AutoComplete importanceCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        importanceCreateInput.setId("importanceCreateInput");
+        importanceCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.importance}", JJImportance.class));
+        importanceCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeImportance}", List.class, new Class[] { String.class }));
+        importanceCreateInput.setDropdown(true);
+        importanceCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "importance", String.class));
+        importanceCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{importance.name} #{importance.description} #{importance.creationDate} #{importance.updatedDate}", String.class));
+        importanceCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{importance}", JJImportance.class));
+        importanceCreateInput.setConverter(new JJImportanceConverter());
+        importanceCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(importanceCreateInput);
+        
+        Message importanceCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        importanceCreateInputMessage.setId("importanceCreateInputMessage");
+        importanceCreateInputMessage.setFor("importanceCreateInput");
+        importanceCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(importanceCreateInputMessage);
+        
+        OutputLabel productCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        productCreateOutput.setFor("productCreateInput");
+        productCreateOutput.setId("productCreateOutput");
+        productCreateOutput.setValue("Product:");
+        htmlPanelGrid.getChildren().add(productCreateOutput);
+        
+        AutoComplete productCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        productCreateInput.setId("productCreateInput");
+        productCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.product}", JJProduct.class));
+        productCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeProduct}", List.class, new Class[] { String.class }));
+        productCreateInput.setDropdown(true);
+        productCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "product", String.class));
+        productCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{product.name} #{product.description} #{product.creationDate} #{product.updatedDate}", String.class));
+        productCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{product}", JJProduct.class));
+        productCreateInput.setConverter(new JJProductConverter());
+        productCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(productCreateInput);
+        
+        Message productCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        productCreateInputMessage.setId("productCreateInputMessage");
+        productCreateInputMessage.setFor("productCreateInput");
+        productCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(productCreateInputMessage);
+        
+        OutputLabel projectCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        projectCreateOutput.setFor("projectCreateInput");
+        projectCreateOutput.setId("projectCreateOutput");
+        projectCreateOutput.setValue("Project:");
+        htmlPanelGrid.getChildren().add(projectCreateOutput);
+        
+        AutoComplete projectCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        projectCreateInput.setId("projectCreateInput");
+        projectCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.project}", JJProject.class));
+        projectCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeProject}", List.class, new Class[] { String.class }));
+        projectCreateInput.setDropdown(true);
+        projectCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "project", String.class));
+        projectCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{project.name} #{project.description} #{project.creationDate} #{project.updatedDate}", String.class));
+        projectCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{project}", JJProject.class));
+        projectCreateInput.setConverter(new JJProjectConverter());
+        projectCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(projectCreateInput);
+        
+        Message projectCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        projectCreateInputMessage.setId("projectCreateInputMessage");
+        projectCreateInputMessage.setFor("projectCreateInput");
+        projectCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(projectCreateInputMessage);
+        
+        OutputLabel requirementCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        requirementCreateOutput.setFor("requirementCreateInput");
+        requirementCreateOutput.setId("requirementCreateOutput");
+        requirementCreateOutput.setValue("Requirement:");
+        htmlPanelGrid.getChildren().add(requirementCreateOutput);
+        
+        AutoComplete requirementCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        requirementCreateInput.setId("requirementCreateInput");
+        requirementCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.requirement}", JJRequirement.class));
+        requirementCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeRequirement}", List.class, new Class[] { String.class }));
+        requirementCreateInput.setDropdown(true);
+        requirementCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "requirement", String.class));
+        requirementCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{requirement.name} #{requirement.description} #{requirement.creationDate} #{requirement.updatedDate}", String.class));
+        requirementCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{requirement}", JJRequirement.class));
+        requirementCreateInput.setConverter(new JJRequirementConverter());
+        requirementCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(requirementCreateInput);
+        
+        Message requirementCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        requirementCreateInputMessage.setId("requirementCreateInputMessage");
+        requirementCreateInputMessage.setFor("requirementCreateInput");
+        requirementCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(requirementCreateInputMessage);
+        
+        OutputLabel sprintCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        sprintCreateOutput.setFor("sprintCreateInput");
+        sprintCreateOutput.setId("sprintCreateOutput");
+        sprintCreateOutput.setValue("Sprint:");
+        htmlPanelGrid.getChildren().add(sprintCreateOutput);
+        
+        AutoComplete sprintCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        sprintCreateInput.setId("sprintCreateInput");
+        sprintCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.sprint}", JJSprint.class));
+        sprintCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeSprint}", List.class, new Class[] { String.class }));
+        sprintCreateInput.setDropdown(true);
+        sprintCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "sprint", String.class));
+        sprintCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{sprint.name} #{sprint.description} #{sprint.creationDate} #{sprint.updatedDate}", String.class));
+        sprintCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{sprint}", JJSprint.class));
+        sprintCreateInput.setConverter(new JJSprintConverter());
+        sprintCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(sprintCreateInput);
+        
+        Message sprintCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        sprintCreateInputMessage.setId("sprintCreateInputMessage");
+        sprintCreateInputMessage.setFor("sprintCreateInput");
+        sprintCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(sprintCreateInputMessage);
+        
+        OutputLabel statusCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        statusCreateOutput.setFor("statusCreateInput");
+        statusCreateOutput.setId("statusCreateOutput");
+        statusCreateOutput.setValue("Status:");
+        htmlPanelGrid.getChildren().add(statusCreateOutput);
+        
+        AutoComplete statusCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        statusCreateInput.setId("statusCreateInput");
+        statusCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.status}", JJStatus.class));
+        statusCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeStatus}", List.class, new Class[] { String.class }));
+        statusCreateInput.setDropdown(true);
+        statusCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "status", String.class));
+        statusCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{status.name} #{status.description} #{status.creationDate} #{status.updatedDate}", String.class));
+        statusCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{status}", JJStatus.class));
+        statusCreateInput.setConverter(new JJStatusConverter());
+        statusCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(statusCreateInput);
+        
+        Message statusCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        statusCreateInputMessage.setId("statusCreateInputMessage");
+        statusCreateInputMessage.setFor("statusCreateInput");
+        statusCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(statusCreateInputMessage);
+        
+        OutputLabel taskCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        taskCreateOutput.setFor("taskCreateInput");
+        taskCreateOutput.setId("taskCreateOutput");
+        taskCreateOutput.setValue("Task:");
+        htmlPanelGrid.getChildren().add(taskCreateOutput);
+        
+        AutoComplete taskCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        taskCreateInput.setId("taskCreateInput");
+        taskCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.task}", JJTask.class));
+        taskCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeTask}", List.class, new Class[] { String.class }));
+        taskCreateInput.setDropdown(true);
+        taskCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "task", String.class));
+        taskCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{task.name} #{task.description} #{task.creationDate} #{task.updatedDate}", String.class));
+        taskCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{task}", JJTask.class));
+        taskCreateInput.setConverter(new JJTaskConverter());
+        taskCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(taskCreateInput);
+        
+        Message taskCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        taskCreateInputMessage.setId("taskCreateInputMessage");
+        taskCreateInputMessage.setFor("taskCreateInput");
+        taskCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(taskCreateInputMessage);
         
         OutputLabel testcaseCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         testcaseCreateOutput.setFor("testcaseCreateInput");
@@ -519,6 +699,30 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         testcaseCreateInputMessage.setFor("testcaseCreateInput");
         testcaseCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testcaseCreateInputMessage);
+        
+        OutputLabel versioningCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        versioningCreateOutput.setFor("versioningCreateInput");
+        versioningCreateOutput.setId("versioningCreateOutput");
+        versioningCreateOutput.setValue("Versioning:");
+        htmlPanelGrid.getChildren().add(versioningCreateOutput);
+        
+        AutoComplete versioningCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        versioningCreateInput.setId("versioningCreateInput");
+        versioningCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.versioning}", JJVersion.class));
+        versioningCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeVersioning}", List.class, new Class[] { String.class }));
+        versioningCreateInput.setDropdown(true);
+        versioningCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "versioning", String.class));
+        versioningCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{versioning.name} #{versioning.description} #{versioning.creationDate} #{versioning.updatedDate}", String.class));
+        versioningCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{versioning}", JJVersion.class));
+        versioningCreateInput.setConverter(new JJVersionConverter());
+        versioningCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(versioningCreateInput);
+        
+        Message versioningCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        versioningCreateInputMessage.setId("versioningCreateInputMessage");
+        versioningCreateInputMessage.setFor("versioningCreateInput");
+        versioningCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(versioningCreateInputMessage);
         
         return htmlPanelGrid;
     }
@@ -699,101 +903,29 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         messageEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(messageEditInputMessage);
         
-        OutputLabel criticityEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        criticityEditOutput.setFor("criticityEditInput");
-        criticityEditOutput.setId("criticityEditOutput");
-        criticityEditOutput.setValue("Criticity:");
-        htmlPanelGrid.getChildren().add(criticityEditOutput);
+        OutputLabel bugEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        bugEditOutput.setFor("bugEditInput");
+        bugEditOutput.setId("bugEditOutput");
+        bugEditOutput.setValue("Bug:");
+        htmlPanelGrid.getChildren().add(bugEditOutput);
         
-        AutoComplete criticityEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        criticityEditInput.setId("criticityEditInput");
-        criticityEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.criticity}", JJCriticity.class));
-        criticityEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeCriticity}", List.class, new Class[] { String.class }));
-        criticityEditInput.setDropdown(true);
-        criticityEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "criticity", String.class));
-        criticityEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{criticity.name} #{criticity.description} #{criticity.creationDate} #{criticity.updatedDate}", String.class));
-        criticityEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{criticity}", JJCriticity.class));
-        criticityEditInput.setConverter(new JJCriticityConverter());
-        criticityEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(criticityEditInput);
+        AutoComplete bugEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        bugEditInput.setId("bugEditInput");
+        bugEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.bug}", JJBug.class));
+        bugEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeBug}", List.class, new Class[] { String.class }));
+        bugEditInput.setDropdown(true);
+        bugEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "bug", String.class));
+        bugEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{bug.name} #{bug.description} #{bug.creationDate} #{bug.updatedDate}", String.class));
+        bugEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{bug}", JJBug.class));
+        bugEditInput.setConverter(new JJBugConverter());
+        bugEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(bugEditInput);
         
-        Message criticityEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        criticityEditInputMessage.setId("criticityEditInputMessage");
-        criticityEditInputMessage.setFor("criticityEditInput");
-        criticityEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(criticityEditInputMessage);
-        
-        OutputLabel statusEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        statusEditOutput.setFor("statusEditInput");
-        statusEditOutput.setId("statusEditOutput");
-        statusEditOutput.setValue("Status:");
-        htmlPanelGrid.getChildren().add(statusEditOutput);
-        
-        AutoComplete statusEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        statusEditInput.setId("statusEditInput");
-        statusEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.status}", JJStatus.class));
-        statusEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeStatus}", List.class, new Class[] { String.class }));
-        statusEditInput.setDropdown(true);
-        statusEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "status", String.class));
-        statusEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{status.name} #{status.description} #{status.creationDate} #{status.updatedDate}", String.class));
-        statusEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{status}", JJStatus.class));
-        statusEditInput.setConverter(new JJStatusConverter());
-        statusEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(statusEditInput);
-        
-        Message statusEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        statusEditInputMessage.setId("statusEditInputMessage");
-        statusEditInputMessage.setFor("statusEditInput");
-        statusEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(statusEditInputMessage);
-        
-        OutputLabel importanceEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        importanceEditOutput.setFor("importanceEditInput");
-        importanceEditOutput.setId("importanceEditOutput");
-        importanceEditOutput.setValue("Importance:");
-        htmlPanelGrid.getChildren().add(importanceEditOutput);
-        
-        AutoComplete importanceEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        importanceEditInput.setId("importanceEditInput");
-        importanceEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.importance}", JJImportance.class));
-        importanceEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeImportance}", List.class, new Class[] { String.class }));
-        importanceEditInput.setDropdown(true);
-        importanceEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "importance", String.class));
-        importanceEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{importance.name} #{importance.description} #{importance.creationDate} #{importance.updatedDate}", String.class));
-        importanceEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{importance}", JJImportance.class));
-        importanceEditInput.setConverter(new JJImportanceConverter());
-        importanceEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(importanceEditInput);
-        
-        Message importanceEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        importanceEditInputMessage.setId("importanceEditInputMessage");
-        importanceEditInputMessage.setFor("importanceEditInput");
-        importanceEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(importanceEditInputMessage);
-        
-        OutputLabel sprintEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        sprintEditOutput.setFor("sprintEditInput");
-        sprintEditOutput.setId("sprintEditOutput");
-        sprintEditOutput.setValue("Sprint:");
-        htmlPanelGrid.getChildren().add(sprintEditOutput);
-        
-        AutoComplete sprintEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        sprintEditInput.setId("sprintEditInput");
-        sprintEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.sprint}", JJSprint.class));
-        sprintEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeSprint}", List.class, new Class[] { String.class }));
-        sprintEditInput.setDropdown(true);
-        sprintEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "sprint", String.class));
-        sprintEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{sprint.name} #{sprint.description} #{sprint.creationDate} #{sprint.updatedDate}", String.class));
-        sprintEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{sprint}", JJSprint.class));
-        sprintEditInput.setConverter(new JJSprintConverter());
-        sprintEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(sprintEditInput);
-        
-        Message sprintEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        sprintEditInputMessage.setId("sprintEditInputMessage");
-        sprintEditInputMessage.setFor("sprintEditInput");
-        sprintEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(sprintEditInputMessage);
+        Message bugEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        bugEditInputMessage.setId("bugEditInputMessage");
+        bugEditInputMessage.setFor("bugEditInput");
+        bugEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(bugEditInputMessage);
         
         OutputLabel buildEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         buildEditOutput.setFor("buildEditInput");
@@ -819,29 +951,245 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         buildEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(buildEditInputMessage);
         
-        OutputLabel teststepEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        teststepEditOutput.setFor("teststepEditInput");
-        teststepEditOutput.setId("teststepEditOutput");
-        teststepEditOutput.setValue("Teststep:");
-        htmlPanelGrid.getChildren().add(teststepEditOutput);
+        OutputLabel chapterEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        chapterEditOutput.setFor("chapterEditInput");
+        chapterEditOutput.setId("chapterEditOutput");
+        chapterEditOutput.setValue("Chapter:");
+        htmlPanelGrid.getChildren().add(chapterEditOutput);
         
-        AutoComplete teststepEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        teststepEditInput.setId("teststepEditInput");
-        teststepEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.teststep}", JJTeststep.class));
-        teststepEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeTeststep}", List.class, new Class[] { String.class }));
-        teststepEditInput.setDropdown(true);
-        teststepEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "teststep", String.class));
-        teststepEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{teststep.name} #{teststep.description} #{teststep.creationDate} #{teststep.updatedDate}", String.class));
-        teststepEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{teststep}", JJTeststep.class));
-        teststepEditInput.setConverter(new JJTeststepConverter());
-        teststepEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(teststepEditInput);
+        AutoComplete chapterEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        chapterEditInput.setId("chapterEditInput");
+        chapterEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.chapter}", JJChapter.class));
+        chapterEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeChapter}", List.class, new Class[] { String.class }));
+        chapterEditInput.setDropdown(true);
+        chapterEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "chapter", String.class));
+        chapterEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{chapter.name} #{chapter.description} #{chapter.creationDate} #{chapter.updatedDate}", String.class));
+        chapterEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{chapter}", JJChapter.class));
+        chapterEditInput.setConverter(new JJChapterConverter());
+        chapterEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(chapterEditInput);
         
-        Message teststepEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        teststepEditInputMessage.setId("teststepEditInputMessage");
-        teststepEditInputMessage.setFor("teststepEditInput");
-        teststepEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(teststepEditInputMessage);
+        Message chapterEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        chapterEditInputMessage.setId("chapterEditInputMessage");
+        chapterEditInputMessage.setFor("chapterEditInput");
+        chapterEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(chapterEditInputMessage);
+        
+        OutputLabel contactEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        contactEditOutput.setFor("contactEditInput");
+        contactEditOutput.setId("contactEditOutput");
+        contactEditOutput.setValue("Contact:");
+        htmlPanelGrid.getChildren().add(contactEditOutput);
+        
+        AutoComplete contactEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        contactEditInput.setId("contactEditInput");
+        contactEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.contact}", JJContact.class));
+        contactEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeContact}", List.class, new Class[] { String.class }));
+        contactEditInput.setDropdown(true);
+        contactEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "contact", String.class));
+        contactEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{contact.name} #{contact.description} #{contact.creationDate} #{contact.updatedDate}", String.class));
+        contactEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{contact}", JJContact.class));
+        contactEditInput.setConverter(new JJContactConverter());
+        contactEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(contactEditInput);
+        
+        Message contactEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        contactEditInputMessage.setId("contactEditInputMessage");
+        contactEditInputMessage.setFor("contactEditInput");
+        contactEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(contactEditInputMessage);
+        
+        OutputLabel criticityEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        criticityEditOutput.setFor("criticityEditInput");
+        criticityEditOutput.setId("criticityEditOutput");
+        criticityEditOutput.setValue("Criticity:");
+        htmlPanelGrid.getChildren().add(criticityEditOutput);
+        
+        AutoComplete criticityEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        criticityEditInput.setId("criticityEditInput");
+        criticityEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.criticity}", JJCriticity.class));
+        criticityEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeCriticity}", List.class, new Class[] { String.class }));
+        criticityEditInput.setDropdown(true);
+        criticityEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "criticity", String.class));
+        criticityEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{criticity.name} #{criticity.description} #{criticity.creationDate} #{criticity.updatedDate}", String.class));
+        criticityEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{criticity}", JJCriticity.class));
+        criticityEditInput.setConverter(new JJCriticityConverter());
+        criticityEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(criticityEditInput);
+        
+        Message criticityEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        criticityEditInputMessage.setId("criticityEditInputMessage");
+        criticityEditInputMessage.setFor("criticityEditInput");
+        criticityEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(criticityEditInputMessage);
+        
+        OutputLabel importanceEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        importanceEditOutput.setFor("importanceEditInput");
+        importanceEditOutput.setId("importanceEditOutput");
+        importanceEditOutput.setValue("Importance:");
+        htmlPanelGrid.getChildren().add(importanceEditOutput);
+        
+        AutoComplete importanceEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        importanceEditInput.setId("importanceEditInput");
+        importanceEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.importance}", JJImportance.class));
+        importanceEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeImportance}", List.class, new Class[] { String.class }));
+        importanceEditInput.setDropdown(true);
+        importanceEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "importance", String.class));
+        importanceEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{importance.name} #{importance.description} #{importance.creationDate} #{importance.updatedDate}", String.class));
+        importanceEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{importance}", JJImportance.class));
+        importanceEditInput.setConverter(new JJImportanceConverter());
+        importanceEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(importanceEditInput);
+        
+        Message importanceEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        importanceEditInputMessage.setId("importanceEditInputMessage");
+        importanceEditInputMessage.setFor("importanceEditInput");
+        importanceEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(importanceEditInputMessage);
+        
+        OutputLabel productEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        productEditOutput.setFor("productEditInput");
+        productEditOutput.setId("productEditOutput");
+        productEditOutput.setValue("Product:");
+        htmlPanelGrid.getChildren().add(productEditOutput);
+        
+        AutoComplete productEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        productEditInput.setId("productEditInput");
+        productEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.product}", JJProduct.class));
+        productEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeProduct}", List.class, new Class[] { String.class }));
+        productEditInput.setDropdown(true);
+        productEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "product", String.class));
+        productEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{product.name} #{product.description} #{product.creationDate} #{product.updatedDate}", String.class));
+        productEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{product}", JJProduct.class));
+        productEditInput.setConverter(new JJProductConverter());
+        productEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(productEditInput);
+        
+        Message productEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        productEditInputMessage.setId("productEditInputMessage");
+        productEditInputMessage.setFor("productEditInput");
+        productEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(productEditInputMessage);
+        
+        OutputLabel projectEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        projectEditOutput.setFor("projectEditInput");
+        projectEditOutput.setId("projectEditOutput");
+        projectEditOutput.setValue("Project:");
+        htmlPanelGrid.getChildren().add(projectEditOutput);
+        
+        AutoComplete projectEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        projectEditInput.setId("projectEditInput");
+        projectEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.project}", JJProject.class));
+        projectEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeProject}", List.class, new Class[] { String.class }));
+        projectEditInput.setDropdown(true);
+        projectEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "project", String.class));
+        projectEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{project.name} #{project.description} #{project.creationDate} #{project.updatedDate}", String.class));
+        projectEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{project}", JJProject.class));
+        projectEditInput.setConverter(new JJProjectConverter());
+        projectEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(projectEditInput);
+        
+        Message projectEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        projectEditInputMessage.setId("projectEditInputMessage");
+        projectEditInputMessage.setFor("projectEditInput");
+        projectEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(projectEditInputMessage);
+        
+        OutputLabel requirementEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        requirementEditOutput.setFor("requirementEditInput");
+        requirementEditOutput.setId("requirementEditOutput");
+        requirementEditOutput.setValue("Requirement:");
+        htmlPanelGrid.getChildren().add(requirementEditOutput);
+        
+        AutoComplete requirementEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        requirementEditInput.setId("requirementEditInput");
+        requirementEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.requirement}", JJRequirement.class));
+        requirementEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeRequirement}", List.class, new Class[] { String.class }));
+        requirementEditInput.setDropdown(true);
+        requirementEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "requirement", String.class));
+        requirementEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{requirement.name} #{requirement.description} #{requirement.creationDate} #{requirement.updatedDate}", String.class));
+        requirementEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{requirement}", JJRequirement.class));
+        requirementEditInput.setConverter(new JJRequirementConverter());
+        requirementEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(requirementEditInput);
+        
+        Message requirementEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        requirementEditInputMessage.setId("requirementEditInputMessage");
+        requirementEditInputMessage.setFor("requirementEditInput");
+        requirementEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(requirementEditInputMessage);
+        
+        OutputLabel sprintEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        sprintEditOutput.setFor("sprintEditInput");
+        sprintEditOutput.setId("sprintEditOutput");
+        sprintEditOutput.setValue("Sprint:");
+        htmlPanelGrid.getChildren().add(sprintEditOutput);
+        
+        AutoComplete sprintEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        sprintEditInput.setId("sprintEditInput");
+        sprintEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.sprint}", JJSprint.class));
+        sprintEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeSprint}", List.class, new Class[] { String.class }));
+        sprintEditInput.setDropdown(true);
+        sprintEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "sprint", String.class));
+        sprintEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{sprint.name} #{sprint.description} #{sprint.creationDate} #{sprint.updatedDate}", String.class));
+        sprintEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{sprint}", JJSprint.class));
+        sprintEditInput.setConverter(new JJSprintConverter());
+        sprintEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(sprintEditInput);
+        
+        Message sprintEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        sprintEditInputMessage.setId("sprintEditInputMessage");
+        sprintEditInputMessage.setFor("sprintEditInput");
+        sprintEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(sprintEditInputMessage);
+        
+        OutputLabel statusEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        statusEditOutput.setFor("statusEditInput");
+        statusEditOutput.setId("statusEditOutput");
+        statusEditOutput.setValue("Status:");
+        htmlPanelGrid.getChildren().add(statusEditOutput);
+        
+        AutoComplete statusEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        statusEditInput.setId("statusEditInput");
+        statusEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.status}", JJStatus.class));
+        statusEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeStatus}", List.class, new Class[] { String.class }));
+        statusEditInput.setDropdown(true);
+        statusEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "status", String.class));
+        statusEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{status.name} #{status.description} #{status.creationDate} #{status.updatedDate}", String.class));
+        statusEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{status}", JJStatus.class));
+        statusEditInput.setConverter(new JJStatusConverter());
+        statusEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(statusEditInput);
+        
+        Message statusEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        statusEditInputMessage.setId("statusEditInputMessage");
+        statusEditInputMessage.setFor("statusEditInput");
+        statusEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(statusEditInputMessage);
+        
+        OutputLabel taskEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        taskEditOutput.setFor("taskEditInput");
+        taskEditOutput.setId("taskEditOutput");
+        taskEditOutput.setValue("Task:");
+        htmlPanelGrid.getChildren().add(taskEditOutput);
+        
+        AutoComplete taskEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        taskEditInput.setId("taskEditInput");
+        taskEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.task}", JJTask.class));
+        taskEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeTask}", List.class, new Class[] { String.class }));
+        taskEditInput.setDropdown(true);
+        taskEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "task", String.class));
+        taskEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{task.name} #{task.description} #{task.creationDate} #{task.updatedDate}", String.class));
+        taskEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{task}", JJTask.class));
+        taskEditInput.setConverter(new JJTaskConverter());
+        taskEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(taskEditInput);
+        
+        Message taskEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        taskEditInputMessage.setId("taskEditInputMessage");
+        taskEditInputMessage.setFor("taskEditInput");
+        taskEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(taskEditInputMessage);
         
         OutputLabel testcaseEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         testcaseEditOutput.setFor("testcaseEditInput");
@@ -866,6 +1214,30 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         testcaseEditInputMessage.setFor("testcaseEditInput");
         testcaseEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testcaseEditInputMessage);
+        
+        OutputLabel versioningEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        versioningEditOutput.setFor("versioningEditInput");
+        versioningEditOutput.setId("versioningEditOutput");
+        versioningEditOutput.setValue("Versioning:");
+        htmlPanelGrid.getChildren().add(versioningEditOutput);
+        
+        AutoComplete versioningEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        versioningEditInput.setId("versioningEditInput");
+        versioningEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.versioning}", JJVersion.class));
+        versioningEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJMessageBean.completeVersioning}", List.class, new Class[] { String.class }));
+        versioningEditInput.setDropdown(true);
+        versioningEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "versioning", String.class));
+        versioningEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{versioning.name} #{versioning.description} #{versioning.creationDate} #{versioning.updatedDate}", String.class));
+        versioningEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{versioning}", JJVersion.class));
+        versioningEditInput.setConverter(new JJVersionConverter());
+        versioningEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(versioningEditInput);
+        
+        Message versioningEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        versioningEditInputMessage.setId("versioningEditInputMessage");
+        versioningEditInputMessage.setFor("versioningEditInput");
+        versioningEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(versioningEditInputMessage);
         
         return htmlPanelGrid;
     }
@@ -967,45 +1339,15 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         messageValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(messageValue);
         
-        HtmlOutputText criticityLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        criticityLabel.setId("criticityLabel");
-        criticityLabel.setValue("Criticity:");
-        htmlPanelGrid.getChildren().add(criticityLabel);
+        HtmlOutputText bugLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        bugLabel.setId("bugLabel");
+        bugLabel.setValue("Bug:");
+        htmlPanelGrid.getChildren().add(bugLabel);
         
-        HtmlOutputText criticityValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        criticityValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.criticity}", JJCriticity.class));
-        criticityValue.setConverter(new JJCriticityConverter());
-        htmlPanelGrid.getChildren().add(criticityValue);
-        
-        HtmlOutputText statusLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        statusLabel.setId("statusLabel");
-        statusLabel.setValue("Status:");
-        htmlPanelGrid.getChildren().add(statusLabel);
-        
-        HtmlOutputText statusValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        statusValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.status}", JJStatus.class));
-        statusValue.setConverter(new JJStatusConverter());
-        htmlPanelGrid.getChildren().add(statusValue);
-        
-        HtmlOutputText importanceLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        importanceLabel.setId("importanceLabel");
-        importanceLabel.setValue("Importance:");
-        htmlPanelGrid.getChildren().add(importanceLabel);
-        
-        HtmlOutputText importanceValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        importanceValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.importance}", JJImportance.class));
-        importanceValue.setConverter(new JJImportanceConverter());
-        htmlPanelGrid.getChildren().add(importanceValue);
-        
-        HtmlOutputText sprintLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        sprintLabel.setId("sprintLabel");
-        sprintLabel.setValue("Sprint:");
-        htmlPanelGrid.getChildren().add(sprintLabel);
-        
-        HtmlOutputText sprintValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        sprintValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.sprint}", JJSprint.class));
-        sprintValue.setConverter(new JJSprintConverter());
-        htmlPanelGrid.getChildren().add(sprintValue);
+        HtmlOutputText bugValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        bugValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.bug}", JJBug.class));
+        bugValue.setConverter(new JJBugConverter());
+        htmlPanelGrid.getChildren().add(bugValue);
         
         HtmlOutputText buildLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         buildLabel.setId("buildLabel");
@@ -1017,15 +1359,105 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         buildValue.setConverter(new JJBuildConverter());
         htmlPanelGrid.getChildren().add(buildValue);
         
-        HtmlOutputText teststepLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        teststepLabel.setId("teststepLabel");
-        teststepLabel.setValue("Teststep:");
-        htmlPanelGrid.getChildren().add(teststepLabel);
+        HtmlOutputText chapterLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        chapterLabel.setId("chapterLabel");
+        chapterLabel.setValue("Chapter:");
+        htmlPanelGrid.getChildren().add(chapterLabel);
         
-        HtmlOutputText teststepValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        teststepValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.teststep}", JJTeststep.class));
-        teststepValue.setConverter(new JJTeststepConverter());
-        htmlPanelGrid.getChildren().add(teststepValue);
+        HtmlOutputText chapterValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        chapterValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.chapter}", JJChapter.class));
+        chapterValue.setConverter(new JJChapterConverter());
+        htmlPanelGrid.getChildren().add(chapterValue);
+        
+        HtmlOutputText contactLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        contactLabel.setId("contactLabel");
+        contactLabel.setValue("Contact:");
+        htmlPanelGrid.getChildren().add(contactLabel);
+        
+        HtmlOutputText contactValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        contactValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.contact}", JJContact.class));
+        contactValue.setConverter(new JJContactConverter());
+        htmlPanelGrid.getChildren().add(contactValue);
+        
+        HtmlOutputText criticityLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        criticityLabel.setId("criticityLabel");
+        criticityLabel.setValue("Criticity:");
+        htmlPanelGrid.getChildren().add(criticityLabel);
+        
+        HtmlOutputText criticityValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        criticityValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.criticity}", JJCriticity.class));
+        criticityValue.setConverter(new JJCriticityConverter());
+        htmlPanelGrid.getChildren().add(criticityValue);
+        
+        HtmlOutputText importanceLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        importanceLabel.setId("importanceLabel");
+        importanceLabel.setValue("Importance:");
+        htmlPanelGrid.getChildren().add(importanceLabel);
+        
+        HtmlOutputText importanceValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        importanceValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.importance}", JJImportance.class));
+        importanceValue.setConverter(new JJImportanceConverter());
+        htmlPanelGrid.getChildren().add(importanceValue);
+        
+        HtmlOutputText productLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        productLabel.setId("productLabel");
+        productLabel.setValue("Product:");
+        htmlPanelGrid.getChildren().add(productLabel);
+        
+        HtmlOutputText productValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        productValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.product}", JJProduct.class));
+        productValue.setConverter(new JJProductConverter());
+        htmlPanelGrid.getChildren().add(productValue);
+        
+        HtmlOutputText projectLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        projectLabel.setId("projectLabel");
+        projectLabel.setValue("Project:");
+        htmlPanelGrid.getChildren().add(projectLabel);
+        
+        HtmlOutputText projectValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        projectValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.project}", JJProject.class));
+        projectValue.setConverter(new JJProjectConverter());
+        htmlPanelGrid.getChildren().add(projectValue);
+        
+        HtmlOutputText requirementLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        requirementLabel.setId("requirementLabel");
+        requirementLabel.setValue("Requirement:");
+        htmlPanelGrid.getChildren().add(requirementLabel);
+        
+        HtmlOutputText requirementValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        requirementValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.requirement}", JJRequirement.class));
+        requirementValue.setConverter(new JJRequirementConverter());
+        htmlPanelGrid.getChildren().add(requirementValue);
+        
+        HtmlOutputText sprintLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        sprintLabel.setId("sprintLabel");
+        sprintLabel.setValue("Sprint:");
+        htmlPanelGrid.getChildren().add(sprintLabel);
+        
+        HtmlOutputText sprintValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        sprintValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.sprint}", JJSprint.class));
+        sprintValue.setConverter(new JJSprintConverter());
+        htmlPanelGrid.getChildren().add(sprintValue);
+        
+        HtmlOutputText statusLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        statusLabel.setId("statusLabel");
+        statusLabel.setValue("Status:");
+        htmlPanelGrid.getChildren().add(statusLabel);
+        
+        HtmlOutputText statusValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        statusValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.status}", JJStatus.class));
+        statusValue.setConverter(new JJStatusConverter());
+        htmlPanelGrid.getChildren().add(statusValue);
+        
+        HtmlOutputText taskLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        taskLabel.setId("taskLabel");
+        taskLabel.setValue("Task:");
+        htmlPanelGrid.getChildren().add(taskLabel);
+        
+        HtmlOutputText taskValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        taskValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.task}", JJTask.class));
+        taskValue.setConverter(new JJTaskConverter());
+        htmlPanelGrid.getChildren().add(taskValue);
         
         HtmlOutputText testcaseLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         testcaseLabel.setId("testcaseLabel");
@@ -1036,6 +1468,16 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         testcaseValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.testcase}", JJTestcase.class));
         testcaseValue.setConverter(new JJTestcaseConverter());
         htmlPanelGrid.getChildren().add(testcaseValue);
+        
+        HtmlOutputText versioningLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        versioningLabel.setId("versioningLabel");
+        versioningLabel.setValue("Versioning:");
+        htmlPanelGrid.getChildren().add(versioningLabel);
+        
+        HtmlOutputText versioningValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        versioningValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.JJMessage_.versioning}", JJVersion.class));
+        versioningValue.setConverter(new JJVersionConverter());
+        htmlPanelGrid.getChildren().add(versioningValue);
         
         return htmlPanelGrid;
     }
@@ -1073,45 +1515,12 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJCriticity> JJMessageBean.completeCriticity(String query) {
-        List<JJCriticity> suggestions = new ArrayList<JJCriticity>();
-        for (JJCriticity jJCriticity : jJCriticityService.findAllJJCriticitys()) {
-            String jJCriticityStr = String.valueOf(jJCriticity.getName() +  " "  + jJCriticity.getDescription() +  " "  + jJCriticity.getCreationDate() +  " "  + jJCriticity.getUpdatedDate());
-            if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJCriticity);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<JJStatus> JJMessageBean.completeStatus(String query) {
-        List<JJStatus> suggestions = new ArrayList<JJStatus>();
-        for (JJStatus jJStatus : jJStatusService.findAllJJStatuses()) {
-            String jJStatusStr = String.valueOf(jJStatus.getName() +  " "  + jJStatus.getDescription() +  " "  + jJStatus.getCreationDate() +  " "  + jJStatus.getUpdatedDate());
-            if (jJStatusStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJStatus);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<JJImportance> JJMessageBean.completeImportance(String query) {
-        List<JJImportance> suggestions = new ArrayList<JJImportance>();
-        for (JJImportance jJImportance : jJImportanceService.findAllJJImportances()) {
-            String jJImportanceStr = String.valueOf(jJImportance.getName() +  " "  + jJImportance.getDescription() +  " "  + jJImportance.getCreationDate() +  " "  + jJImportance.getUpdatedDate());
-            if (jJImportanceStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJImportance);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<JJSprint> JJMessageBean.completeSprint(String query) {
-        List<JJSprint> suggestions = new ArrayList<JJSprint>();
-        for (JJSprint jJSprint : jJSprintService.findAllJJSprints()) {
-            String jJSprintStr = String.valueOf(jJSprint.getName() +  " "  + jJSprint.getDescription() +  " "  + jJSprint.getCreationDate() +  " "  + jJSprint.getUpdatedDate());
-            if (jJSprintStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJSprint);
+    public List<JJBug> JJMessageBean.completeBug(String query) {
+        List<JJBug> suggestions = new ArrayList<JJBug>();
+        for (JJBug jJBug : jJBugService.findAllJJBugs()) {
+            String jJBugStr = String.valueOf(jJBug.getName() +  " "  + jJBug.getDescription() +  " "  + jJBug.getCreationDate() +  " "  + jJBug.getUpdatedDate());
+            if (jJBugStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJBug);
             }
         }
         return suggestions;
@@ -1128,12 +1537,111 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJTeststep> JJMessageBean.completeTeststep(String query) {
-        List<JJTeststep> suggestions = new ArrayList<JJTeststep>();
-        for (JJTeststep jJTeststep : jJTeststepService.findAllJJTeststeps()) {
-            String jJTeststepStr = String.valueOf(jJTeststep.getName() +  " "  + jJTeststep.getDescription() +  " "  + jJTeststep.getCreationDate() +  " "  + jJTeststep.getUpdatedDate());
-            if (jJTeststepStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJTeststep);
+    public List<JJChapter> JJMessageBean.completeChapter(String query) {
+        List<JJChapter> suggestions = new ArrayList<JJChapter>();
+        for (JJChapter jJChapter : jJChapterService.findAllJJChapters()) {
+            String jJChapterStr = String.valueOf(jJChapter.getName() +  " "  + jJChapter.getDescription() +  " "  + jJChapter.getCreationDate() +  " "  + jJChapter.getUpdatedDate());
+            if (jJChapterStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJChapter);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJContact> JJMessageBean.completeContact(String query) {
+        List<JJContact> suggestions = new ArrayList<JJContact>();
+        for (JJContact jJContact : jJContactService.findAllJJContacts()) {
+            String jJContactStr = String.valueOf(jJContact.getName() +  " "  + jJContact.getDescription() +  " "  + jJContact.getCreationDate() +  " "  + jJContact.getUpdatedDate());
+            if (jJContactStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJContact);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJCriticity> JJMessageBean.completeCriticity(String query) {
+        List<JJCriticity> suggestions = new ArrayList<JJCriticity>();
+        for (JJCriticity jJCriticity : jJCriticityService.findAllJJCriticitys()) {
+            String jJCriticityStr = String.valueOf(jJCriticity.getName() +  " "  + jJCriticity.getDescription() +  " "  + jJCriticity.getCreationDate() +  " "  + jJCriticity.getUpdatedDate());
+            if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJCriticity);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJImportance> JJMessageBean.completeImportance(String query) {
+        List<JJImportance> suggestions = new ArrayList<JJImportance>();
+        for (JJImportance jJImportance : jJImportanceService.findAllJJImportances()) {
+            String jJImportanceStr = String.valueOf(jJImportance.getName() +  " "  + jJImportance.getDescription() +  " "  + jJImportance.getCreationDate() +  " "  + jJImportance.getUpdatedDate());
+            if (jJImportanceStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJImportance);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJProduct> JJMessageBean.completeProduct(String query) {
+        List<JJProduct> suggestions = new ArrayList<JJProduct>();
+        for (JJProduct jJProduct : jJProductService.findAllJJProducts()) {
+            String jJProductStr = String.valueOf(jJProduct.getName() +  " "  + jJProduct.getDescription() +  " "  + jJProduct.getCreationDate() +  " "  + jJProduct.getUpdatedDate());
+            if (jJProductStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJProduct);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJProject> JJMessageBean.completeProject(String query) {
+        List<JJProject> suggestions = new ArrayList<JJProject>();
+        for (JJProject jJProject : jJProjectService.findAllJJProjects()) {
+            String jJProjectStr = String.valueOf(jJProject.getName() +  " "  + jJProject.getDescription() +  " "  + jJProject.getCreationDate() +  " "  + jJProject.getUpdatedDate());
+            if (jJProjectStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJProject);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJRequirement> JJMessageBean.completeRequirement(String query) {
+        List<JJRequirement> suggestions = new ArrayList<JJRequirement>();
+        for (JJRequirement jJRequirement : jJRequirementService.findAllJJRequirements()) {
+            String jJRequirementStr = String.valueOf(jJRequirement.getName() +  " "  + jJRequirement.getDescription() +  " "  + jJRequirement.getCreationDate() +  " "  + jJRequirement.getUpdatedDate());
+            if (jJRequirementStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJRequirement);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJSprint> JJMessageBean.completeSprint(String query) {
+        List<JJSprint> suggestions = new ArrayList<JJSprint>();
+        for (JJSprint jJSprint : jJSprintService.findAllJJSprints()) {
+            String jJSprintStr = String.valueOf(jJSprint.getName() +  " "  + jJSprint.getDescription() +  " "  + jJSprint.getCreationDate() +  " "  + jJSprint.getUpdatedDate());
+            if (jJSprintStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJSprint);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJStatus> JJMessageBean.completeStatus(String query) {
+        List<JJStatus> suggestions = new ArrayList<JJStatus>();
+        for (JJStatus jJStatus : jJStatusService.findAllJJStatuses()) {
+            String jJStatusStr = String.valueOf(jJStatus.getName() +  " "  + jJStatus.getDescription() +  " "  + jJStatus.getCreationDate() +  " "  + jJStatus.getUpdatedDate());
+            if (jJStatusStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJStatus);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJTask> JJMessageBean.completeTask(String query) {
+        List<JJTask> suggestions = new ArrayList<JJTask>();
+        for (JJTask jJTask : jJTaskService.findAllJJTasks()) {
+            String jJTaskStr = String.valueOf(jJTask.getName() +  " "  + jJTask.getDescription() +  " "  + jJTask.getCreationDate() +  " "  + jJTask.getUpdatedDate());
+            if (jJTaskStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJTask);
             }
         }
         return suggestions;
@@ -1145,6 +1653,17 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
             String jJTestcaseStr = String.valueOf(jJTestcase.getName() +  " "  + jJTestcase.getDescription() +  " "  + jJTestcase.getCreationDate() +  " "  + jJTestcase.getUpdatedDate());
             if (jJTestcaseStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJTestcase);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJVersion> JJMessageBean.completeVersioning(String query) {
+        List<JJVersion> suggestions = new ArrayList<JJVersion>();
+        for (JJVersion jJVersion : jJVersionService.findAllJJVersions()) {
+            String jJVersionStr = String.valueOf(jJVersion.getName() +  " "  + jJVersion.getDescription() +  " "  + jJVersion.getCreationDate() +  " "  + jJVersion.getUpdatedDate());
+            if (jJVersionStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJVersion);
             }
         }
         return suggestions;

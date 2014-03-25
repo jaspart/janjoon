@@ -89,7 +89,7 @@ public class JJRequirement extends JJAbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "requirement")
 	private Set<JJTask> tasks = new HashSet<JJTask>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
 
 	@ManyToMany(mappedBy = "requirementLinkUp", fetch = FetchType.EAGER)

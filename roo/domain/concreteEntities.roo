@@ -116,7 +116,7 @@ field reference --fieldName requirement --type ~.JJRequirement
 field reference --fieldName task --type ~.JJTask
 field reference --fieldName chapter --type ~.JJChapter
 field reference --fieldName bug --type ~.JJBug
-field reference --fieldName member --type ~.JJContact
+field reference --fieldName contact --type ~.JJContact
 
 #######################
 
@@ -242,8 +242,8 @@ field boolean --fieldName automatic
 
 focus --class ~.JJTeststep
 field number --fieldName ordering --type java.lang.Integer
-field string --fieldName action --sizeMax 100 --notNull
-field string --fieldName resultat --sizeMax 100 --notNull
+field string --fieldName actionstep --sizeMax 100 --notNull
+field string --fieldName resultatstep --sizeMax 100 --notNull
 field boolean --fieldName passed
 field reference --fieldName testcase --type ~.JJTestcase
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy teststep --fetch LAZY
@@ -260,5 +260,13 @@ focus --class ~.JJTeststepexecution
 field reference --fieldName build --type ~.JJBuild
 field reference --fieldName teststep --type ~.JJTeststep
 field boolean --fieldName passed
- 
 
+#######################
+focus --class ~.JJCompany
+field string --fieldName logo --sizeMax 200
+field string --fieldName banner --sizeMax 200
+field string --fieldName calendar
+field number --fieldName priceload --type java.lang.Integer
+field number --fieldName pricepoint --type java.lang.Integer
+field string --fieldName currency --sizeMax 3
+field set --fieldName contacts  --type ~.JJContact --cardinality ONE_TO_MANY --mappedBy company --fetch LAZY

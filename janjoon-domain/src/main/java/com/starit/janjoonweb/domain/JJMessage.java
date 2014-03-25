@@ -18,23 +18,45 @@ public class JJMessage extends JJAbstractEntity {
 	private String message;
 
 	@ManyToOne
-	private JJCriticity criticity;
-
-	@ManyToOne
-	private JJStatus status;
-
-	@ManyToOne
-	private JJImportance importance;
-
-	@ManyToOne
-	private JJSprint sprint;
+	private JJBug bug;
 
 	@ManyToOne
 	private JJBuild build;
 
 	@ManyToOne
-	private JJTeststep teststep;
+	private JJChapter chapter;
+
+	@ManyToOne
+	private JJContact contact;
+
+	@ManyToOne
+	private JJCriticity criticity;
+
+	@ManyToOne
+	private JJImportance importance;
+
+	@ManyToOne
+	private JJProduct product;
+
+	@ManyToOne
+	private JJProject project;
+
+	@ManyToOne
+	private JJRequirement requirement;
+
+	@ManyToOne
+	private JJSprint sprint;
+
+	@ManyToOne
+	private JJStatus status;
+
+	@ManyToOne
+	private JJTask task;
 
 	@ManyToOne
 	private JJTestcase testcase;
+
+	@ManyToOne
+	private JJVersion versioning;
+
 }

@@ -1,99 +1,107 @@
 body,div,td {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    word-wrap: break-word;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	word-wrap: break-word;
 }
 
 body {
-    background-color: #fff;
-    text-align: left;
+	background-color: #fff;
+	text-align: left;
 }
 
 a img {
-    border: 0 none;
-    vertical-align: middle;
+	border: 0 none;
+	vertical-align: middle;
 }
 
 a {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 a:hover {
-    color: #456314;
+	color: #456314;
 }
 
 a:active {
-    color: #7db223;
+	color: #7db223;
 }
 
 a:visited {
-    color: #7db223;
+	color: #7db223;
 }
 
 .wrapper {
-    width: 1440px;
-    min-width: 1440px;
-    max-width: 1440px;
-    margin-right: auto;
-    margin-left: auto; /* fix max-width incompatibility in IE6 */
-    width: expression(document.body.clientWidth > 1440px ? "1440px" : "auto");
-    overflow: hidden;
-    display: block;
+	width: document.body.clientWidth;
+	height: document.body.clientheight;
+	overflow: scroll;
+	display: block;
 }
 
 .menu {
-    width: 180px;
-    vertical-align: top;
-    text-align: center;
-    margin-right: 5px;
-    word-wrap: break-word;
+	width: 180px;
+	vertical-align: top;
+	text-align: left;
+	margin-right: 5px;
+	word-wrap: break-word;
 }
 
 .content {
-    width: 1240px;
-    height: auto;
-    vertical-align: top;
-    text-align: left;
+	width: auto;
+	height: auto;
+	vertical-align: top;
+	text-align: left;	
+}
+
+
+
+.chat {
+	width: 180px;
+	vertical-align: top;
+	text-align: left;
+	margin-right: 5px;
+	word-wrap: break-word;
 }
 
 .banner {
-    margin-bottom:5px;
+	margin-bottom: 5px;
 }
 
 .action-column {
-    text-align: center;
-    width: 120px !important;
+	text-align: center;
+	width: 120px !important;
 }
 
-.cleanMenu .ui-tabmenu .ui-tabmenu-nav.ui-widget-header{
-    padding-left: 0px !important;
-    width: 100% !important;
+.cleanMenu .ui-tabmenu .ui-tabmenu-nav.ui-widget-header {
+	padding-left: 0px !important;
+	width: 100% !important;
 }
-.ui-tabmenu .ui-tabmenu-nav.ui-widget-header{
-    padding-left: 0px !important;
+
+.ui-tabmenu .ui-tabmenu-nav.ui-widget-header {
+	padding-left: 0px !important;
 }
+
 .cleanTab .ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem.ui-state-default {
-    padding: 5px 1px;
+	padding: 5px 1px;
 }
 
 .ui-selectmanymenu {
-    width: 155px !important;
-    height: 100px !important;
+	width: 155px !important;
+	height: 100px !important;
 }
 
 .dialog {
-    width: auto;
+	width: auto;
 }
 
 .col1 {
-    vertical-align: top;
-    font-weight: bold;
+	vertical-align: top;
+	font-weight: bold;
 }
 
 .col2 {
-    vertical-align: top;
+	vertical-align: top;
 }
 
 .col3 {
-    vertical-align: top;
+	vertical-align: top;
 }

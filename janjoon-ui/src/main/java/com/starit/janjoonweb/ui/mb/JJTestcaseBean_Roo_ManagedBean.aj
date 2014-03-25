@@ -338,48 +338,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         orderingCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(orderingCreateInputMessage);
         
-        OutputLabel actionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        actionCreateOutput.setFor("actionCreateInput");
-        actionCreateOutput.setId("actionCreateOutput");
-        actionCreateOutput.setValue("Action:");
-        htmlPanelGrid.getChildren().add(actionCreateOutput);
-        
-        InputTextarea actionCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        actionCreateInput.setId("actionCreateInput");
-        actionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.action}", String.class));
-        LengthValidator actionCreateInputValidator = new LengthValidator();
-        actionCreateInputValidator.setMaximum(100);
-        actionCreateInput.addValidator(actionCreateInputValidator);
-        actionCreateInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(actionCreateInput);
-        
-        Message actionCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        actionCreateInputMessage.setId("actionCreateInputMessage");
-        actionCreateInputMessage.setFor("actionCreateInput");
-        actionCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(actionCreateInputMessage);
-        
-        OutputLabel resultatCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        resultatCreateOutput.setFor("resultatCreateInput");
-        resultatCreateOutput.setId("resultatCreateOutput");
-        resultatCreateOutput.setValue("Resultat:");
-        htmlPanelGrid.getChildren().add(resultatCreateOutput);
-        
-        InputTextarea resultatCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        resultatCreateInput.setId("resultatCreateInput");
-        resultatCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.resultat}", String.class));
-        LengthValidator resultatCreateInputValidator = new LengthValidator();
-        resultatCreateInputValidator.setMaximum(100);
-        resultatCreateInput.addValidator(resultatCreateInputValidator);
-        resultatCreateInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(resultatCreateInput);
-        
-        Message resultatCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        resultatCreateInputMessage.setId("resultatCreateInputMessage");
-        resultatCreateInputMessage.setFor("resultatCreateInput");
-        resultatCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(resultatCreateInputMessage);
-        
         OutputLabel requirementCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         requirementCreateOutput.setFor("requirementCreateInput");
         requirementCreateOutput.setId("requirementCreateOutput");
@@ -465,6 +423,24 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         pricepointCreateInputMessage.setFor("pricepointCreateInput");
         pricepointCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(pricepointCreateInputMessage);
+        
+        OutputLabel automaticCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        automaticCreateOutput.setFor("automaticCreateInput");
+        automaticCreateOutput.setId("automaticCreateOutput");
+        automaticCreateOutput.setValue("Automatic:");
+        htmlPanelGrid.getChildren().add(automaticCreateOutput);
+        
+        SelectBooleanCheckbox automaticCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        automaticCreateInput.setId("automaticCreateInput");
+        automaticCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.automatic}", Boolean.class));
+        automaticCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(automaticCreateInput);
+        
+        Message automaticCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        automaticCreateInputMessage.setId("automaticCreateInputMessage");
+        automaticCreateInputMessage.setFor("automaticCreateInput");
+        automaticCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(automaticCreateInputMessage);
         
         HtmlOutputText softwaresCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         softwaresCreateOutput.setId("softwaresCreateOutput");
@@ -723,48 +699,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         orderingEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(orderingEditInputMessage);
         
-        OutputLabel actionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        actionEditOutput.setFor("actionEditInput");
-        actionEditOutput.setId("actionEditOutput");
-        actionEditOutput.setValue("Action:");
-        htmlPanelGrid.getChildren().add(actionEditOutput);
-        
-        InputTextarea actionEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        actionEditInput.setId("actionEditInput");
-        actionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.action}", String.class));
-        LengthValidator actionEditInputValidator = new LengthValidator();
-        actionEditInputValidator.setMaximum(100);
-        actionEditInput.addValidator(actionEditInputValidator);
-        actionEditInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(actionEditInput);
-        
-        Message actionEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        actionEditInputMessage.setId("actionEditInputMessage");
-        actionEditInputMessage.setFor("actionEditInput");
-        actionEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(actionEditInputMessage);
-        
-        OutputLabel resultatEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        resultatEditOutput.setFor("resultatEditInput");
-        resultatEditOutput.setId("resultatEditOutput");
-        resultatEditOutput.setValue("Resultat:");
-        htmlPanelGrid.getChildren().add(resultatEditOutput);
-        
-        InputTextarea resultatEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        resultatEditInput.setId("resultatEditInput");
-        resultatEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.resultat}", String.class));
-        LengthValidator resultatEditInputValidator = new LengthValidator();
-        resultatEditInputValidator.setMaximum(100);
-        resultatEditInput.addValidator(resultatEditInputValidator);
-        resultatEditInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(resultatEditInput);
-        
-        Message resultatEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        resultatEditInputMessage.setId("resultatEditInputMessage");
-        resultatEditInputMessage.setFor("resultatEditInput");
-        resultatEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(resultatEditInputMessage);
-        
         OutputLabel requirementEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         requirementEditOutput.setFor("requirementEditInput");
         requirementEditOutput.setId("requirementEditOutput");
@@ -850,6 +784,24 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         pricepointEditInputMessage.setFor("pricepointEditInput");
         pricepointEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(pricepointEditInputMessage);
+        
+        OutputLabel automaticEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        automaticEditOutput.setFor("automaticEditInput");
+        automaticEditOutput.setId("automaticEditOutput");
+        automaticEditOutput.setValue("Automatic:");
+        htmlPanelGrid.getChildren().add(automaticEditOutput);
+        
+        SelectBooleanCheckbox automaticEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        automaticEditInput.setId("automaticEditInput");
+        automaticEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.automatic}", Boolean.class));
+        automaticEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(automaticEditInput);
+        
+        Message automaticEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        automaticEditInputMessage.setId("automaticEditInputMessage");
+        automaticEditInputMessage.setFor("automaticEditInput");
+        automaticEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(automaticEditInputMessage);
         
         HtmlOutputText softwaresEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         softwaresEditOutput.setId("softwaresEditOutput");
@@ -1028,30 +980,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         orderingValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.ordering}", String.class));
         htmlPanelGrid.getChildren().add(orderingValue);
         
-        HtmlOutputText actionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        actionLabel.setId("actionLabel");
-        actionLabel.setValue("Action:");
-        htmlPanelGrid.getChildren().add(actionLabel);
-        
-        InputTextarea actionValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        actionValue.setId("actionValue");
-        actionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.action}", String.class));
-        actionValue.setReadonly(true);
-        actionValue.setDisabled(true);
-        htmlPanelGrid.getChildren().add(actionValue);
-        
-        HtmlOutputText resultatLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        resultatLabel.setId("resultatLabel");
-        resultatLabel.setValue("Resultat:");
-        htmlPanelGrid.getChildren().add(resultatLabel);
-        
-        InputTextarea resultatValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        resultatValue.setId("resultatValue");
-        resultatValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.resultat}", String.class));
-        resultatValue.setReadonly(true);
-        resultatValue.setDisabled(true);
-        htmlPanelGrid.getChildren().add(resultatValue);
-        
         HtmlOutputText requirementLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         requirementLabel.setId("requirementLabel");
         requirementLabel.setValue("Requirement:");
@@ -1089,6 +1017,15 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         HtmlOutputText pricepointValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         pricepointValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.pricepoint}", String.class));
         htmlPanelGrid.getChildren().add(pricepointValue);
+        
+        HtmlOutputText automaticLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        automaticLabel.setId("automaticLabel");
+        automaticLabel.setValue("Automatic:");
+        htmlPanelGrid.getChildren().add(automaticLabel);
+        
+        HtmlOutputText automaticValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        automaticValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.automatic}", String.class));
+        htmlPanelGrid.getChildren().add(automaticValue);
         
         HtmlOutputText softwaresLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         softwaresLabel.setId("softwaresLabel");

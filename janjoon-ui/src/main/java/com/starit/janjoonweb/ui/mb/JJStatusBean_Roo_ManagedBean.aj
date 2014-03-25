@@ -5,6 +5,7 @@ package com.starit.janjoonweb.ui.mb;
 
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
+import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.ui.mb.JJStatusBean;
@@ -12,6 +13,7 @@ import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
@@ -65,6 +67,8 @@ privileged aspect JJStatusBean_Roo_ManagedBean {
     private HtmlPanelGrid JJStatusBean.viewPanelGrid;
     
     private boolean JJStatusBean.createDialogVisible = false;
+    
+    private List<JJMessage> JJStatusBean.selectedMessages;
     
     @PostConstruct
     public void JJStatusBean.init() {
@@ -310,6 +314,22 @@ privileged aspect JJStatusBean_Roo_ManagedBean {
         statusLevelCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(statusLevelCreateInputMessage);
         
+        HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesCreateOutput.setId("messagesCreateOutput");
+        messagesCreateOutput.setValue("Messages:");
+        htmlPanelGrid.getChildren().add(messagesCreateOutput);
+        
+        HtmlOutputText messagesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesCreateInput.setId("messagesCreateInput");
+        messagesCreateInput.setValue("This relationship is managed from the JJMessage side");
+        htmlPanelGrid.getChildren().add(messagesCreateInput);
+        
+        Message messagesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        messagesCreateInputMessage.setId("messagesCreateInputMessage");
+        messagesCreateInputMessage.setFor("messagesCreateInput");
+        messagesCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(messagesCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -487,6 +507,22 @@ privileged aspect JJStatusBean_Roo_ManagedBean {
         statusLevelEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(statusLevelEditInputMessage);
         
+        HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesEditOutput.setId("messagesEditOutput");
+        messagesEditOutput.setValue("Messages:");
+        htmlPanelGrid.getChildren().add(messagesEditOutput);
+        
+        HtmlOutputText messagesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesEditInput.setId("messagesEditInput");
+        messagesEditInput.setValue("This relationship is managed from the JJMessage side");
+        htmlPanelGrid.getChildren().add(messagesEditInput);
+        
+        Message messagesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        messagesEditInputMessage.setId("messagesEditInputMessage");
+        messagesEditInputMessage.setFor("messagesEditInput");
+        messagesEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(messagesEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -584,6 +620,16 @@ privileged aspect JJStatusBean_Roo_ManagedBean {
         statusLevelValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.statusLevel}", String.class));
         htmlPanelGrid.getChildren().add(statusLevelValue);
         
+        HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesLabel.setId("messagesLabel");
+        messagesLabel.setValue("Messages:");
+        htmlPanelGrid.getChildren().add(messagesLabel);
+        
+        HtmlOutputText messagesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesValue.setId("messagesValue");
+        messagesValue.setValue("This relationship is managed from the JJMessage side");
+        htmlPanelGrid.getChildren().add(messagesValue);
+        
         return htmlPanelGrid;
     }
     
@@ -620,7 +666,21 @@ privileged aspect JJStatusBean_Roo_ManagedBean {
         return suggestions;
     }
     
+    public List<JJMessage> JJStatusBean.getSelectedMessages() {
+        return selectedMessages;
+    }
+    
+    public void JJStatusBean.setSelectedMessages(List<JJMessage> selectedMessages) {
+        if (selectedMessages != null) {
+            JJStatus_.setMessages(new HashSet<JJMessage>(selectedMessages));
+        }
+        this.selectedMessages = selectedMessages;
+    }
+    
     public String JJStatusBean.onEdit() {
+        if (JJStatus_ != null && JJStatus_.getMessages() != null) {
+            selectedMessages = new ArrayList<JJMessage>(JJStatus_.getMessages());
+        }
         return null;
     }
     
@@ -673,6 +733,7 @@ privileged aspect JJStatusBean_Roo_ManagedBean {
     
     public void JJStatusBean.reset() {
         JJStatus_ = null;
+        selectedMessages = null;
         createDialogVisible = false;
     }
     

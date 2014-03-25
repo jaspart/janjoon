@@ -6,12 +6,12 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="../templates/layout.xhtml">
-	<ui:define name="content" >
+	<ui:define name="content">
 
 		<p:tabView id="tabview" widgetVar="tabView" dynamic="true"
 			cache="true">
 
-			<p:tab id="tabUser" title="User" >
+			<p:tab id="tabUser" title="User">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="contact">
 						<ui:include src="contact.xhtml" />

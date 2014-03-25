@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -11,17 +10,34 @@
 	<h:head>
 	</h:head>
 	<h:body>
-					<ui:insert name="header">
-						<ui:include src="header.xhtml" />
-					</ui:insert>
-					
-					<h:panelGrid  id="contentGrid"  cellspacing="0" cellpadding="0" styleClass="content">
-						<ui:insert name="content" />
-					</h:panelGrid>
-					
-					<ui:insert name="footer">
-						<ui:include src="footer.xhtml" />
-					</ui:insert>
+		<h:panelGrid columns="3" styleClass="wrapper">
+			<p:panel header="Menu" styleClass="menu" toggleable="true"
+				closable="true" toggleOrientation="horizontal">
+				<ui:insert name="menu">
+					<ui:include src="menu.xhtml" />
+				</ui:insert>
+			</p:panel>
+			<p:panel>
+				<ui:insert name="header">
+					<ui:include src="header.xhtml" />
+				</ui:insert>
+
+				<p:panel id="contentPanel" styleClass="content">
+					<ui:insert name="content" />
+					<p:growl id="auth" for="login" styleClass="alert alert-error"
+						showDetail="true" />
+				</p:panel>
+
+				<ui:insert name="footer">
+					<ui:include src="footer.xhtml" />
+				</ui:insert>
+			</p:panel>
+
+			<p:panel header="Chat" styleClass="chat" toggleable="true"
+				closable="true" toggleOrientation="horizontal">
+				<h:outputText value="Messages" />
+			</p:panel>
+		</h:panelGrid>
 	</h:body>
 </f:view>
 </html>

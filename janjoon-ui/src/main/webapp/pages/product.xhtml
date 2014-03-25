@@ -57,8 +57,7 @@
 	</h:form>
 	<p:dialog id="productDialog" header="#{jJProductBean.message}"
 		modal="true" widgetVar="productDialogWidget" dynamic="true"
-		showEffect="fade" hideEffect="explode" appendTo="@(body)"
-		resizable="false">
+		showEffect="fade" hideEffect="explode" resizable="false">
 		<p:ajax event="close" update=":tabview:productForm :headerForm"
 			listener="#{jJProductBean.closeDialog(jJVersionBean)}" />
 		<p:outputPanel id="productDialogPanel">
@@ -175,7 +174,7 @@
 		widgetVar="productDeleteDialogWidget"
 		message="#{messages.label_delete_record}" showEffect="fade"
 		hideEffect="explode" header="#{messages.label_confirm_deletion}"
-		severity="alarm" appendTo="@(body)">
+		severity="alarm">
 		<p:outputPanel id="productDeletePanel">
 			<h:form id="productDeleteForm">
 				<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"

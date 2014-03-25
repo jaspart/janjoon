@@ -23,22 +23,6 @@ privileged aspect JJTestcase_Roo_JavaBean {
         this.ordering = ordering;
     }
     
-    public String JJTestcase.getAction() {
-        return this.action;
-    }
-    
-    public void JJTestcase.setAction(String action) {
-        this.action = action;
-    }
-    
-    public String JJTestcase.getResultat() {
-        return this.resultat;
-    }
-    
-    public void JJTestcase.setResultat(String resultat) {
-        this.resultat = resultat;
-    }
-    
     public JJRequirement JJTestcase.getRequirement() {
         return this.requirement;
     }
@@ -69,6 +53,14 @@ privileged aspect JJTestcase_Roo_JavaBean {
     
     public void JJTestcase.setPricepoint(Integer pricepoint) {
         this.pricepoint = pricepoint;
+    }
+    
+    public boolean JJTestcase.isAutomatic() {
+        return this.automatic;
+    }
+    
+    public void JJTestcase.setAutomatic(boolean automatic) {
+        this.automatic = automatic;
     }
     
     public Set<JJSoftware> JJTestcase.getSoftwares() {

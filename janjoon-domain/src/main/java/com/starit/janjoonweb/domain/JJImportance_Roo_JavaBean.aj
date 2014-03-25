@@ -4,6 +4,8 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJImportance;
+import com.starit.janjoonweb.domain.JJMessage;
+import java.util.Set;
 
 privileged aspect JJImportance_Roo_JavaBean {
     
@@ -13,6 +15,14 @@ privileged aspect JJImportance_Roo_JavaBean {
     
     public void JJImportance.setImportanceLevel(Integer importanceLevel) {
         this.importanceLevel = importanceLevel;
+    }
+    
+    public Set<JJMessage> JJImportance.getMessages() {
+        return this.messages;
+    }
+    
+    public void JJImportance.setMessages(Set<JJMessage> messages) {
+        this.messages = messages;
     }
     
 }

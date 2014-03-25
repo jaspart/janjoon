@@ -3,7 +3,9 @@
 
 package com.starit.janjoonweb.domain;
 
+import com.starit.janjoonweb.domain.JJBugDataOnDemand;
 import com.starit.janjoonweb.domain.JJBuildDataOnDemand;
+import com.starit.janjoonweb.domain.JJChapterDataOnDemand;
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJCriticityDataOnDemand;
 import com.starit.janjoonweb.domain.JJImportanceDataOnDemand;
@@ -11,10 +13,14 @@ import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJMessageDataOnDemand;
 import com.starit.janjoonweb.domain.JJMessageRepository;
 import com.starit.janjoonweb.domain.JJMessageService;
+import com.starit.janjoonweb.domain.JJProductDataOnDemand;
+import com.starit.janjoonweb.domain.JJProjectDataOnDemand;
+import com.starit.janjoonweb.domain.JJRequirementDataOnDemand;
 import com.starit.janjoonweb.domain.JJSprintDataOnDemand;
 import com.starit.janjoonweb.domain.JJStatusDataOnDemand;
+import com.starit.janjoonweb.domain.JJTaskDataOnDemand;
 import com.starit.janjoonweb.domain.JJTestcaseDataOnDemand;
-import com.starit.janjoonweb.domain.JJTeststepDataOnDemand;
+import com.starit.janjoonweb.domain.JJVersionDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,7 +43,13 @@ privileged aspect JJMessageDataOnDemand_Roo_DataOnDemand {
     private List<JJMessage> JJMessageDataOnDemand.data;
     
     @Autowired
+    JJBugDataOnDemand JJMessageDataOnDemand.jJBugDataOnDemand;
+    
+    @Autowired
     JJBuildDataOnDemand JJMessageDataOnDemand.jJBuildDataOnDemand;
+    
+    @Autowired
+    JJChapterDataOnDemand JJMessageDataOnDemand.jJChapterDataOnDemand;
     
     @Autowired
     JJContactDataOnDemand JJMessageDataOnDemand.jJContactDataOnDemand;
@@ -49,16 +61,28 @@ privileged aspect JJMessageDataOnDemand_Roo_DataOnDemand {
     JJImportanceDataOnDemand JJMessageDataOnDemand.jJImportanceDataOnDemand;
     
     @Autowired
+    JJProductDataOnDemand JJMessageDataOnDemand.jJProductDataOnDemand;
+    
+    @Autowired
+    JJProjectDataOnDemand JJMessageDataOnDemand.jJProjectDataOnDemand;
+    
+    @Autowired
+    JJRequirementDataOnDemand JJMessageDataOnDemand.jJRequirementDataOnDemand;
+    
+    @Autowired
     JJSprintDataOnDemand JJMessageDataOnDemand.jJSprintDataOnDemand;
     
     @Autowired
     JJStatusDataOnDemand JJMessageDataOnDemand.jJStatusDataOnDemand;
     
     @Autowired
+    JJTaskDataOnDemand JJMessageDataOnDemand.jJTaskDataOnDemand;
+    
+    @Autowired
     JJTestcaseDataOnDemand JJMessageDataOnDemand.jJTestcaseDataOnDemand;
     
     @Autowired
-    JJTeststepDataOnDemand JJMessageDataOnDemand.jJTeststepDataOnDemand;
+    JJVersionDataOnDemand JJMessageDataOnDemand.jJVersionDataOnDemand;
     
     @Autowired
     JJMessageService JJMessageDataOnDemand.jJMessageService;

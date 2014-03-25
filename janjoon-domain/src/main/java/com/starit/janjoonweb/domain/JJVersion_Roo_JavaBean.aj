@@ -4,6 +4,7 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJVersion;
@@ -33,6 +34,14 @@ privileged aspect JJVersion_Roo_JavaBean {
     
     public void JJVersion.setBuilds(Set<JJBuild> builds) {
         this.builds = builds;
+    }
+    
+    public Set<JJMessage> JJVersion.getMessages() {
+        return this.messages;
+    }
+    
+    public void JJVersion.setMessages(Set<JJMessage> messages) {
+        this.messages = messages;
     }
     
 }

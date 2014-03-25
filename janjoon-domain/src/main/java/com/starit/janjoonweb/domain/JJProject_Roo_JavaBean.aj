@@ -5,6 +5,7 @@ package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJProject;
 import java.util.Set;
 
@@ -16,6 +17,14 @@ privileged aspect JJProject_Roo_JavaBean {
     
     public void JJProject.setChapters(Set<JJChapter> chapters) {
         this.chapters = chapters;
+    }
+    
+    public Set<JJMessage> JJProject.getMessages() {
+        return this.messages;
+    }
+    
+    public void JJProject.setMessages(Set<JJMessage> messages) {
+        this.messages = messages;
     }
     
     public JJContact JJProject.getManager() {

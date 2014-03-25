@@ -3,9 +3,14 @@
 
 package com.starit.janjoonweb.domain;
 
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJJob;
+import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJPermission;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJVersion;
 import java.util.Date;
 import java.util.Set;
 
@@ -91,12 +96,68 @@ privileged aspect JJContact_Roo_JavaBean {
         this.accountNonLocked = accountNonLocked;
     }
     
+    public JJProject JJContact.getLastProject() {
+        return this.lastProject;
+    }
+    
+    public void JJContact.setLastProject(JJProject lastProject) {
+        this.lastProject = lastProject;
+    }
+    
+    public JJProduct JJContact.getLastProduct() {
+        return this.lastProduct;
+    }
+    
+    public void JJContact.setLastProduct(JJProduct lastProduct) {
+        this.lastProduct = lastProduct;
+    }
+    
+    public JJVersion JJContact.getLastVersion() {
+        return this.lastVersion;
+    }
+    
+    public void JJContact.setLastVersion(JJVersion lastVersion) {
+        this.lastVersion = lastVersion;
+    }
+    
+    public JJContact JJContact.getManager() {
+        return this.manager;
+    }
+    
+    public void JJContact.setManager(JJContact manager) {
+        this.manager = manager;
+    }
+    
+    public JJCompany JJContact.getCompany() {
+        return this.company;
+    }
+    
+    public void JJContact.setCompany(JJCompany company) {
+        this.company = company;
+    }
+    
+    public String JJContact.getCalendar() {
+        return this.calendar;
+    }
+    
+    public void JJContact.setCalendar(String calendar) {
+        this.calendar = calendar;
+    }
+    
     public Set<JJPermission> JJContact.getPermissions() {
         return this.permissions;
     }
     
     public void JJContact.setPermissions(Set<JJPermission> permissions) {
         this.permissions = permissions;
+    }
+    
+    public Set<JJMessage> JJContact.getMessages() {
+        return this.messages;
+    }
+    
+    public void JJContact.setMessages(Set<JJMessage> messages) {
+        this.messages = messages;
     }
     
 }

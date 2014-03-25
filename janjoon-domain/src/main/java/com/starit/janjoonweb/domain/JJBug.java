@@ -1,4 +1,5 @@
 package com.starit.janjoonweb.domain;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,49 +20,52 @@ import com.starit.janjoonweb.domain.reference.JJRelationship;
 @RooJpaEntity(sequenceName = "JJBugSEQ")
 public class JJBug extends JJAbstractEntity {
 
-    @ManyToOne
-    private JJProject project;
+	@ManyToOne
+	private JJProject project;
 
-    @ManyToOne
-    private JJVersion versioning;
+	@ManyToOne
+	private JJVersion versioning;
 
-    @ManyToOne
-    private JJCategory category;
+	@ManyToOne
+	private JJCategory category;
 
-    @ManyToOne
-    private JJCriticity criticity;
+	@ManyToOne
+	private JJCriticity criticity;
 
-    @ManyToOne
-    private JJImportance importance;
+	@ManyToOne
+	private JJImportance importance;
 
-    @ManyToOne
-    private JJStatus status;
+	@ManyToOne
+	private JJStatus status;
 
-    @ManyToOne
-    private JJRequirement requirement;
-    
-    @ManyToOne
-    private JJTeststep teststep;
+	@ManyToOne
+	private JJRequirement requirement;
 
-    @Enumerated
-    private JJRelationship relation;
+	@ManyToOne
+	private JJTeststep teststep;
 
-    @ManyToOne
-    private JJSprint sprint;
+	@Enumerated
+	private JJRelationship relation;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bugUp")
-    private Set<JJBug> bugs = new HashSet<JJBug>();
+	@ManyToOne
+	private JJSprint sprint;
 
-    @ManyToOne
-    private JJBug bugUp;
+	@ManyToOne
+	private JJBuild build;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bug")
-    private Set<JJTask> tasks = new HashSet<JJTask>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bugUp")
+	private Set<JJBug> bugs = new HashSet<JJBug>();
 
-    @ManyToOne
-    private JJContact assignedTos;
+	@ManyToOne
+	private JJBug bugUp;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<JJMessage> messages = new HashSet<JJMessage>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bug")
+	private Set<JJTask> tasks = new HashSet<JJTask>();
+
+	@ManyToOne
+	private JJContact assignedTos;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bug")
+	private Set<JJMessage> messages = new HashSet<JJMessage>();
 
 }

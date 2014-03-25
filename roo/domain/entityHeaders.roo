@@ -39,7 +39,7 @@ entity jpa --class JJRequirement --extends ~.JJAbstractEntity
 entity jpa --class JJTask --extends ~.JJAbstractEntity
 entity jpa --class JJTestcaseexecution --extends ~.JJAbstractEntity
 entity jpa --class JJTeststepexecution --extends ~.JJAbstractEntity
-
+entity jpa --class JJCompany --extends ~.JJAbstractEntity
 
 #######################
 

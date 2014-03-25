@@ -93,7 +93,7 @@
 						</p:column>
 						<f:facet name="footer">
 							<p:commandButton value="New testcase" id="newTestcase"
-								actionListener="#{jJTestcaseBean.newTestcase()}"
+								actionListener="#{jJTestcaseBean.newTestcase(jJTeststepBean)}"
 								update=":testcaseDialog"
 								oncomplete="testcaseDialogWidget.show()"
 								icon="ui-icon-circle-plus" />
@@ -105,59 +105,111 @@
 
 		<p:dialog id="testcaseDialog" header="#{jJTestcaseBean.message}"
 			modal="true" widgetVar="testcaseDialogWidget" dynamic="true"
-			resizable="false" appendTo="@(body)">
+			resizable="false">
 			<p:ajax event="close" update=":testFormCenter :testFormWest"
-				listener="#{jJTestcaseBean.closeDialog}" />
+				listener="#{jJTestcaseBean.closeDialog(jJTeststepBean)}" />
 			<p:outputPanel id="testcaseDialogPanel">
 				<h:form id="testcaseDialogForm">
 					<p:growl id="msg" />
-					<p:panelGrid style="margin-top:10px">
+					<p:panel style="margin-top:10px">
 						<p:row>
 							<p:column>
-								<p:inputText id="name" value="#{jJTestcaseBean.testcase.name}"
-									required="true" widgetVar="nameWidget" label="Testcase Name"
-									requiredMessage="Testcase Name is a required value">
-								</p:inputText>
-								<p:message for="name" id="msgName" />
-								<p:watermark for="name" value="Name *" />
-							</p:column>
-							<p:column>
-								<h:outputText for="requirement" value="Requirement:" />
-								<p:selectOneMenu id="requirement"
-									value="#{jJTestcaseBean.requirement}" panelStyle="width:150px"
-									effect="fade" style="width:150px" filter="true" required="true"
-									filterMatchMode="startsWith" widgetVar="requirementWidget"
-									requiredMessage="Testcase Requirement is a required value">
-									<f:converter
-										converterId="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter" />
-									<f:selectItem value="#{jJTestcaseBean.requirement}" var="c"
-										itemLabel="#{c.name}" itemValue="#{c}" />
-									<f:selectItems value="#{jJTestcaseBean.requirements}" var="c"
-										itemLabel="#{c.name}" itemValue="#{c}" />
-								</p:selectOneMenu>
+								<p:panelGrid style="margin-top:10px">
+									<p:row>
+										<p:column>
+											<p:inputText id="name"
+												value="#{jJTestcaseBean.testcase.name}" required="true"
+												widgetVar="nameWidget" label="Testcase Name"
+												requiredMessage="Testcase Name is a required value"
+												disabled="#{jJTestcaseBean.disabled}">
+											</p:inputText>
+											<p:watermark for="name" value="Name *" />
+											<p:message for="name" id="msgName" />
+										</p:column>
+										<p:column>
+											<h:outputText for="requirement" value="Requirement: *" />
+											<p:selectOneMenu id="requirement"
+												disabled="#{jJTestcaseBean.disabled}"
+												value="#{jJTestcaseBean.requirement}"
+												panelStyle="width:150px" effect="fade" style="width:150px"
+												filter="true" required="true" filterMatchMode="startsWith"
+												widgetVar="requirementWidget"
+												requiredMessage="Testcase Requirement is a required value">
+												<f:converter
+													converterId="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter" />
+												<f:selectItem value="#{jJTestcaseBean.requirement}" var="c"
+													itemLabel="#{c.name}" itemValue="#{c}" />
+												<f:selectItems value="#{jJTestcaseBean.requirements}"
+													var="c" itemLabel="#{c.name}" itemValue="#{c}" />
+											</p:selectOneMenu>
+											<p:message for="requirement" id="msgRequirement" />
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column colspan="2">
+											<h:outputText value="Description : *" />
+											<p:editor id="description" widgetVar="descriptionWidget"
+												style="width:680px" disabled="#{jJTestcaseBean.disabled}"
+												value="#{jJTestcaseBean.testcase.description}"
+												required="true"
+												requiredMessage="Testcase Description is a required value" />
+											<p:message for="description" id="msgDescription" />
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column colspan="2">
+											<p:commandButton value="Save" id="saveTestcase"
+												disabled="#{jJTestcaseBean.disabled}"
+												actionListener="#{jJTestcaseBean.save(jJTeststepBean)}"
+												process="@widgetVar(nameWidget) @widgetVar(requirementWidget) @widgetVar(descriptionWidget)"
+												update="testcaseDialogForm" icon="ui-icon-circle-plus" />
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<p:inputText id="action"
+												value="#{jJTeststepBean.teststep.action}"
+												label="Teststep Action" required="true"
+												requiredMessage="Teststep Action is a required value"
+												maxlength="100" widgetVar="actionWidget">
+											</p:inputText>
+											<p:message for="action" id="msgAction" />
+											<p:watermark for="action" value="Action: *" />
+
+										</p:column>
+										<p:column>
+											<p:inputText id="resultat"
+												value="#{jJTeststepBean.teststep.resultat}"
+												label="Teststep Resultat" required="true"
+												requiredMessage="Teststep Resultat is a required value"
+												maxlength="100" widgetVar="resultatWidget">
+											</p:inputText>
+											<p:message for="resultat" id="msgResultat" />
+											<p:watermark for="resultat" value="Resultat *" />
+										</p:column>
+
+										<p:column>
+											<p:commandButton id="saveTestStep" value="New Teststep"
+												icon="ui-icon-circle-plus" update="action resultat"
+												process="@widgetVar(actionWidget) @widgetVar(resultatWidget)" />
+										</p:column>
+
+									</p:row>
+								</p:panelGrid>
 							</p:column>
 						</p:row>
-						<p:row>
-							<p:column colspan="2">
-								<h:outputText value="Description : *" />
-								<p:editor id="description" widgetVar="descriptionWidget"
-									style="width:680px"
-									value="#{jJTestcaseBean.testcase.description}" required="true"
-									requiredMessage="Testcase Description is a required value">
-								</p:editor>
-							</p:column>
-						</p:row>
+
 						<f:facet name="footer">
 							<p:row>
-								<p:column colspan="2">
-									<p:commandButton value="Save" id="saveTestcase"
-										actionListener="#{jJTestcaseBean.save}"
-										process="@widgetVar(nameWidget) @widgetVar(requirementWidget) @widgetVar(descriptionWidget)"
-										update=":testcaseDialogForm" icon="ui-icon-circle-plus" />
+								<p:column colspan="3">
+									<p:commandButton id="resetButton" value="Reset"
+										update="testcaseDialogForm" process="@none"
+										action="#{jJTestcaseBean.newTestcase(jJTeststepBean)}" />
 								</p:column>
 							</p:row>
 						</f:facet>
-					</p:panelGrid>
+					</p:panel>
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>

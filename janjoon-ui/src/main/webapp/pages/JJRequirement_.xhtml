@@ -73,8 +73,7 @@
 			header="#{messages.label_create} JJRequirement" modal="true"
 			widgetVar="createDialogWidget" dynamic="true"
 			visible="#{jJRequirementBean.createDialogVisible}" resizable="true"
-			maximizable="true" showEffect="fade" hideEffect="explode"
-			appendTo="@(body)">
+			maximizable="true" showEffect="fade" hideEffect="explode">
 			<p:ajax event="close" update=":dataForm:data"
 				listener="#{jJRequirementBean.handleDialogClose}" />
 			<p:outputPanel id="createPanel">
@@ -95,8 +94,7 @@
 		<p:dialog id="editDialog"
 			header="#{messages.label_edit} JJRequirement" modal="true"
 			widgetVar="editDialogWidget" dynamic="true" resizable="true"
-			maximizable="true" showEffect="fade" hideEffect="explode"
-			appendTo="@(body)">
+			maximizable="true" showEffect="fade" hideEffect="explode">
 			<p:ajax event="close" update=":dataForm:data"
 				listener="#{jJRequirementBean.handleDialogClose}" />
 			<p:outputPanel id="editPanel">
@@ -116,8 +114,7 @@
 		<p:dialog id="viewDialog"
 			header="#{messages.label_view} JJRequirement" modal="true"
 			widgetVar="viewDialogWidget" dynamic="true" resizable="true"
-			maximizable="true" showEffect="fade" hideEffect="explode"
-			appendTo="@(body)">
+			maximizable="true" showEffect="fade" hideEffect="explode">
 			<p:outputPanel id="viewPanel">
 				<h:form id="viewForm" enctype="multipart/form-data">
 					<h:panelGrid id="viewPanelGrid" columns="2"
@@ -132,7 +129,7 @@
 		<p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget"
 			message="#{messages.label_delete_record}" showEffect="fade"
 			hideEffect="explode" header="#{messages.label_confirm_deletion}"
-			severity="alarm" appendTo="@(body)">
+			severity="alarm">
 			<p:outputPanel id="deletePanel">
 				<h:form id="deleteForm">
 					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"

@@ -4,6 +4,7 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJBug;
+import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJCriticity;
@@ -99,6 +100,14 @@ privileged aspect JJBug_Roo_JavaBean {
     
     public void JJBug.setSprint(JJSprint sprint) {
         this.sprint = sprint;
+    }
+    
+    public JJBuild JJBug.getBuild() {
+        return this.build;
+    }
+    
+    public void JJBug.setBuild(JJBuild build) {
+        this.build = build;
     }
     
     public Set<JJBug> JJBug.getBugs() {

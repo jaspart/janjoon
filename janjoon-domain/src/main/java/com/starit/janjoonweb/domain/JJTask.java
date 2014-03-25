@@ -68,7 +68,7 @@ public class JJTask extends JJAbstractEntity {
 	@ManyToOne
 	private JJContact assignedTo;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "task")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
 
 	private Boolean completion;

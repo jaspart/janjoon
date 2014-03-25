@@ -8,7 +8,6 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
@@ -21,12 +20,6 @@ public class JJTestcase extends JJAbstractEntity {
 
 	private Integer ordering;
 
-	@Size(max = 100)
-	private String action;
-
-	@Size(max = 100)
-	private String resultat;
-
 	@NotNull
 	@ManyToOne
 	private JJRequirement requirement;
@@ -37,6 +30,8 @@ public class JJTestcase extends JJAbstractEntity {
 	private Integer workload;
 
 	private Integer pricepoint;
+
+	private boolean automatic;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
 	private Set<JJSoftware> softwares = new HashSet<JJSoftware>();

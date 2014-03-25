@@ -3,11 +3,15 @@
 
 package com.starit.janjoonweb.domain;
 
+import com.starit.janjoonweb.domain.JJCompanyDataOnDemand;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJContactRepository;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJJobDataOnDemand;
+import com.starit.janjoonweb.domain.JJProductDataOnDemand;
+import com.starit.janjoonweb.domain.JJProjectDataOnDemand;
+import com.starit.janjoonweb.domain.JJVersionDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,7 +34,19 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
     private List<JJContact> JJContactDataOnDemand.data;
     
     @Autowired
+    JJCompanyDataOnDemand JJContactDataOnDemand.jJCompanyDataOnDemand;
+    
+    @Autowired
     JJJobDataOnDemand JJContactDataOnDemand.jJJobDataOnDemand;
+    
+    @Autowired
+    JJProductDataOnDemand JJContactDataOnDemand.jJProductDataOnDemand;
+    
+    @Autowired
+    JJProjectDataOnDemand JJContactDataOnDemand.jJProjectDataOnDemand;
+    
+    @Autowired
+    JJVersionDataOnDemand JJContactDataOnDemand.jJVersionDataOnDemand;
     
     @Autowired
     JJContactService JJContactDataOnDemand.jJContactService;
@@ -42,6 +58,7 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
         JJContact obj = new JJContact();
         setAccountNonExpired(obj, index);
         setAccountNonLocked(obj, index);
+        setCalendar(obj, index);
         setCreatedBy(obj, index);
         setCreationDate(obj, index);
         setCredentialsNonExpired(obj, index);
@@ -51,6 +68,7 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
         setEnabled(obj, index);
         setFirstname(obj, index);
         setLdap(obj, index);
+        setManager(obj, index);
         setName(obj, index);
         setPassword(obj, index);
         setPicture(obj, index);
@@ -67,6 +85,11 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
     public void JJContactDataOnDemand.setAccountNonLocked(JJContact obj, int index) {
         Boolean accountNonLocked = Boolean.TRUE;
         obj.setAccountNonLocked(accountNonLocked);
+    }
+    
+    public void JJContactDataOnDemand.setCalendar(JJContact obj, int index) {
+        String calendar = "calendar_" + index;
+        obj.setCalendar(calendar);
     }
     
     public void JJContactDataOnDemand.setCreatedBy(JJContact obj, int index) {
@@ -115,6 +138,11 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
     public void JJContactDataOnDemand.setLdap(JJContact obj, int index) {
         Integer ldap = new Integer(index);
         obj.setLdap(ldap);
+    }
+    
+    public void JJContactDataOnDemand.setManager(JJContact obj, int index) {
+        JJContact manager = obj;
+        obj.setManager(manager);
     }
     
     public void JJContactDataOnDemand.setName(JJContact obj, int index) {

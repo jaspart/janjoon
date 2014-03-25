@@ -3,7 +3,7 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJContactDataOnDemand;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJPhaseDataOnDemand;
 import com.starit.janjoonweb.domain.JJPhaseRepository;
@@ -30,9 +30,6 @@ privileged aspect JJPhaseDataOnDemand_Roo_DataOnDemand {
     private List<JJPhase> JJPhaseDataOnDemand.data;
     
     @Autowired
-    JJContactDataOnDemand JJPhaseDataOnDemand.jJContactDataOnDemand;
-    
-    @Autowired
     JJPhaseService JJPhaseDataOnDemand.jJPhaseService;
     
     @Autowired
@@ -40,12 +37,19 @@ privileged aspect JJPhaseDataOnDemand_Roo_DataOnDemand {
     
     public JJPhase JJPhaseDataOnDemand.getNewTransientJJPhase(int index) {
         JJPhase obj = new JJPhase();
+        setCreatedBy(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
         setName(obj, index);
+        setUpdatedBy(obj, index);
         setUpdatedDate(obj, index);
         return obj;
+    }
+    
+    public void JJPhaseDataOnDemand.setCreatedBy(JJPhase obj, int index) {
+        JJContact createdBy = null;
+        obj.setCreatedBy(createdBy);
     }
     
     public void JJPhaseDataOnDemand.setCreationDate(JJPhase obj, int index) {
@@ -69,6 +73,11 @@ privileged aspect JJPhaseDataOnDemand_Roo_DataOnDemand {
             name = name.substring(0, 100);
         }
         obj.setName(name);
+    }
+    
+    public void JJPhaseDataOnDemand.setUpdatedBy(JJPhase obj, int index) {
+        JJContact updatedBy = null;
+        obj.setUpdatedBy(updatedBy);
     }
     
     public void JJPhaseDataOnDemand.setUpdatedDate(JJPhase obj, int index) {

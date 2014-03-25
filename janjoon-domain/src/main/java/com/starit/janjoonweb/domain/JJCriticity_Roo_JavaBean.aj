@@ -4,6 +4,8 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJCriticity;
+import com.starit.janjoonweb.domain.JJMessage;
+import java.util.Set;
 
 privileged aspect JJCriticity_Roo_JavaBean {
     
@@ -13,6 +15,14 @@ privileged aspect JJCriticity_Roo_JavaBean {
     
     public void JJCriticity.setCriticityLevel(Integer criticityLevel) {
         this.criticityLevel = criticityLevel;
+    }
+    
+    public Set<JJMessage> JJCriticity.getMessages() {
+        return this.messages;
+    }
+    
+    public void JJCriticity.setMessages(Set<JJMessage> messages) {
+        this.messages = messages;
     }
     
 }

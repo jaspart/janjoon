@@ -3,10 +3,8 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTeststep;
-import java.util.Set;
 
 privileged aspect JJTeststep_Roo_JavaBean {
     
@@ -18,20 +16,20 @@ privileged aspect JJTeststep_Roo_JavaBean {
         this.ordering = ordering;
     }
     
-    public String JJTeststep.getAction() {
-        return this.action;
+    public String JJTeststep.getActionstep() {
+        return this.actionstep;
     }
     
-    public void JJTeststep.setAction(String action) {
-        this.action = action;
+    public void JJTeststep.setActionstep(String actionstep) {
+        this.actionstep = actionstep;
     }
     
-    public String JJTeststep.getResultat() {
-        return this.resultat;
+    public String JJTeststep.getResultatstep() {
+        return this.resultatstep;
     }
     
-    public void JJTeststep.setResultat(String resultat) {
-        this.resultat = resultat;
+    public void JJTeststep.setResultatstep(String resultatstep) {
+        this.resultatstep = resultatstep;
     }
     
     public Boolean JJTeststep.getPassed() {
@@ -48,14 +46,6 @@ privileged aspect JJTeststep_Roo_JavaBean {
     
     public void JJTeststep.setTestcase(JJTestcase testcase) {
         this.testcase = testcase;
-    }
-    
-    public Set<JJMessage> JJTeststep.getMessages() {
-        return this.messages;
-    }
-    
-    public void JJTeststep.setMessages(Set<JJMessage> messages) {
-        this.messages = messages;
     }
     
 }

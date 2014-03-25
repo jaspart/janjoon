@@ -51,8 +51,7 @@
 	</h:form>
 	<p:dialog id="projectDialog" header="#{jJProjectBean.message}"
 		modal="true" widgetVar="projectDialogWidget" dynamic="true"
-		showEffect="fade" hideEffect="explode" appendTo="@(body)"
-		resizable="false">
+		showEffect="fade" hideEffect="explode" resizable="false">
 		<p:ajax event="close" update=":tabview:projectForm :headerForm"
 			listener="#{jJProjectBean.closeDialog}" />
 		<p:outputPanel id="projectDialogPanel">
@@ -119,7 +118,7 @@
 		widgetVar="projectDeleteDialogWidget"
 		message="#{messages.label_delete_record}" showEffect="fade"
 		hideEffect="explode" header="#{messages.label_confirm_deletion}"
-		severity="alarm" appendTo="@(body)">
+		severity="alarm">
 		<p:outputPanel id="projectDeletePanel">
 			<h:form id="projectDeleteForm">
 				<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"

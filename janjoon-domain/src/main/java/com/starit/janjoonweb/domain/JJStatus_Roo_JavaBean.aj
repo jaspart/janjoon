@@ -3,7 +3,9 @@
 
 package com.starit.janjoonweb.domain;
 
+import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJStatus;
+import java.util.Set;
 
 privileged aspect JJStatus_Roo_JavaBean {
     
@@ -13,6 +15,14 @@ privileged aspect JJStatus_Roo_JavaBean {
     
     public void JJStatus.setStatusLevel(Integer statusLevel) {
         this.statusLevel = statusLevel;
+    }
+    
+    public Set<JJMessage> JJStatus.getMessages() {
+        return this.messages;
+    }
+    
+    public void JJStatus.setMessages(Set<JJMessage> messages) {
+        this.messages = messages;
     }
     
 }
