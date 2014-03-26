@@ -55,11 +55,11 @@ privileged aspect JJTestcase_Roo_JavaBean {
         this.pricepoint = pricepoint;
     }
     
-    public boolean JJTestcase.isAutomatic() {
+    public Boolean JJTestcase.getAutomatic() {
         return this.automatic;
     }
     
-    public void JJTestcase.setAutomatic(boolean automatic) {
+    public void JJTestcase.setAutomatic(Boolean automatic) {
         this.automatic = automatic;
     }
     

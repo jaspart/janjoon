@@ -51,7 +51,7 @@ privileged aspect JJTeststepDataOnDemand_Roo_DataOnDemand {
         setName(obj, index);
         setOrdering(obj, index);
         setPassed(obj, index);
-        setResultatstep(obj, index);
+        setResultstep(obj, index);
         setUpdatedDate(obj, index);
         return obj;
     }
@@ -97,12 +97,12 @@ privileged aspect JJTeststepDataOnDemand_Roo_DataOnDemand {
         obj.setPassed(passed);
     }
     
-    public void JJTeststepDataOnDemand.setResultatstep(JJTeststep obj, int index) {
-        String resultatstep = "resultatstep_" + index;
-        if (resultatstep.length() > 100) {
-            resultatstep = resultatstep.substring(0, 100);
+    public void JJTeststepDataOnDemand.setResultstep(JJTeststep obj, int index) {
+        String resultstep = "resultstep_" + index;
+        if (resultstep.length() > 100) {
+            resultstep = resultstep.substring(0, 100);
         }
-        obj.setResultatstep(resultatstep);
+        obj.setResultstep(resultstep);
     }
     
     public void JJTeststepDataOnDemand.setUpdatedDate(JJTeststep obj, int index) {

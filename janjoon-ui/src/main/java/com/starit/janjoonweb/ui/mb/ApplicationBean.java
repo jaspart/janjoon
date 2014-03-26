@@ -139,6 +139,30 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// ///////
+		submenu = new DefaultSubMenu("JJCompany");
+		submenu.setId("jJCompanySubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJCompanyMenuItem");
+		item.setCommand("#{jJCompanyBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJCompanyMenuItem");
+		item.setCommand("#{jJCompanyBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// ///////
 		submenu = new DefaultSubMenu("JJConfiguration");
 		submenu.setId("jJConfigurationSubmenu");
 

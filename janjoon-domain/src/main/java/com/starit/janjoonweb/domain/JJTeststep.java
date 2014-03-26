@@ -21,7 +21,7 @@ public class JJTeststep extends JJAbstractEntity {
 
 	@NotNull
 	@Size(max = 100)
-	private String resultatstep;
+	private String resultstep;
 
 	private Boolean passed;
 

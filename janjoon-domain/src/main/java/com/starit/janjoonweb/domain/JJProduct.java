@@ -32,7 +32,7 @@ public class JJProduct extends JJAbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
 
-	// @NotNull
+	@NotNull
 	@ManyToOne
 	private JJContact manager;
 

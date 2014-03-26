@@ -24,12 +24,12 @@ privileged aspect JJTeststep_Roo_JavaBean {
         this.actionstep = actionstep;
     }
     
-    public String JJTeststep.getResultatstep() {
-        return this.resultatstep;
+    public String JJTeststep.getResultstep() {
+        return this.resultstep;
     }
     
-    public void JJTeststep.setResultatstep(String resultatstep) {
-        this.resultatstep = resultatstep;
+    public void JJTeststep.setResultstep(String resultstep) {
+        this.resultstep = resultstep;
     }
     
     public Boolean JJTeststep.getPassed() {

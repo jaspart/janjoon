@@ -63,7 +63,7 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     }
     
     public void JJTestcaseDataOnDemand.setAutomatic(JJTestcase obj, int index) {
-        Boolean automatic = true;
+        Boolean automatic = Boolean.TRUE;
         obj.setAutomatic(automatic);
     }
     

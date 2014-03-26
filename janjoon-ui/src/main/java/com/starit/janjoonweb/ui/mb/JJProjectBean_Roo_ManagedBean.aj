@@ -338,7 +338,7 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         managerCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{manager.name} #{manager.description} #{manager.creationDate} #{manager.updatedDate}", String.class));
         managerCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{manager}", JJContact.class));
         managerCreateInput.setConverter(new JJContactConverter());
-        managerCreateInput.setRequired(false);
+        managerCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(managerCreateInput);
         
         Message managerCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -552,7 +552,7 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         managerEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{manager.name} #{manager.description} #{manager.creationDate} #{manager.updatedDate}", String.class));
         managerEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{manager}", JJContact.class));
         managerEditInput.setConverter(new JJContactConverter());
-        managerEditInput.setRequired(false);
+        managerEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(managerEditInput);
         
         Message managerEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);

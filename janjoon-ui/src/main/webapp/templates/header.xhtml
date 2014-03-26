@@ -12,15 +12,19 @@
 	<h:outputScript library="js" name="calendar.js" />
 
 	<h:form prependId="false" id="headerForm">
-		<p:growl id="grow" showDetail="true" />
-		<h:panelGrid id="panelMenu" columns="3" cellpadding="2" style="background-color:white;">
+
+		<p:growl id="growlHeader" showDetail="true" sticky="true" />
+		<h:panelGrid id="panelMenu" columns="3" cellpadding="2"
+			style="background-color:white;">
+
 
 			<h:link outcome="main">
 				<p:graphicImage library="images" name="janjoon_logo.png"
 					styleClass="banner" alt="JanJoon Home" style="float: left;" />
 			</h:link>
 
-			<p:tabMenu id="tabMenu" name="content" style="float: none;" activeIndex="-1">
+			<p:tabMenu id="tabMenu" name="content" style="float: none;"
+				activeIndex="-1">
 				<p:menuitem value="" icon="ui-icon-home"
 					url="/pages/main.jsf?faces-redirect=true" />
 
@@ -39,9 +43,12 @@
 					url="/pages/development2.jsf?faces-redirect=true"
 					icon="ui-icon-wrench" rendered="#{!loginBean.enable}" />
 
-				
-				<p:menuitem value="Dev" actionListener="#{loginBean.redirectToDev}"
-					update="grow" icon="ui-icon-wrench" rendered="#{loginBean.enable}" />
+
+				<!-- url="/pages/development.jsf?faces-redirect=true" -->
+				<p:menuitem value="Dev" action="#{loginBean.redirectToDev}"
+					update="growlHeader" icon="ui-icon-wrench"
+					rendered="#{loginBean.enable}" />
+
 
 				<!-- 				<p:menuitem value="Test" url="/pages/test.jsf?faces-redirect=true" -->
 				<!-- 					icon="ui-icon-check" update=":contentPanel" /> -->
@@ -63,7 +70,8 @@
 					update=":contentPanel" />
 			</p:tabMenu>
 
-			<h:panelGrid columns="2" cellpadding="2" align="right" style="float: right;">
+			<h:panelGrid columns="2" cellpadding="2" align="right"
+				style="float: right;">
 				<h:outputLink value="logout.jsf" action="#{loginBean.logout}"
 					rendered="#{loginBean.enable}">Logout:</h:outputLink>
 				<h:outputText value="#{loginBean.contact.name}"
@@ -103,10 +111,10 @@
 				<p:selectOneMenu id="versionSelectOneMenu"
 					value="#{jJVersionBean.version}" panelStyle="width:120px"
 					effect="fade" style="width:160px" filter="true"
-					filterMatchMode="startsWith" disabled="#{jJVersionBean.disabled}" >
+					filterMatchMode="startsWith" disabled="#{jJVersionBean.disabled}">
 					<f:converter
 						converterId="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter" />
-						
+
 					<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
 
 					<f:selectItems value="#{jJVersionBean.versionList}" var="v"

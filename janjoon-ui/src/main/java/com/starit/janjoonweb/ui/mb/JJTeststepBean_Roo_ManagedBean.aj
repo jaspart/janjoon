@@ -337,26 +337,26 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         actionstepCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(actionstepCreateInputMessage);
         
-        OutputLabel resultatstepCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        resultatstepCreateOutput.setFor("resultatstepCreateInput");
-        resultatstepCreateOutput.setId("resultatstepCreateOutput");
-        resultatstepCreateOutput.setValue("Resultatstep:");
-        htmlPanelGrid.getChildren().add(resultatstepCreateOutput);
+        OutputLabel resultstepCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        resultstepCreateOutput.setFor("resultstepCreateInput");
+        resultstepCreateOutput.setId("resultstepCreateOutput");
+        resultstepCreateOutput.setValue("Resultstep:");
+        htmlPanelGrid.getChildren().add(resultstepCreateOutput);
         
-        InputTextarea resultatstepCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        resultatstepCreateInput.setId("resultatstepCreateInput");
-        resultatstepCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.resultatstep}", String.class));
-        LengthValidator resultatstepCreateInputValidator = new LengthValidator();
-        resultatstepCreateInputValidator.setMaximum(100);
-        resultatstepCreateInput.addValidator(resultatstepCreateInputValidator);
-        resultatstepCreateInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(resultatstepCreateInput);
+        InputTextarea resultstepCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        resultstepCreateInput.setId("resultstepCreateInput");
+        resultstepCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.resultstep}", String.class));
+        LengthValidator resultstepCreateInputValidator = new LengthValidator();
+        resultstepCreateInputValidator.setMaximum(100);
+        resultstepCreateInput.addValidator(resultstepCreateInputValidator);
+        resultstepCreateInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(resultstepCreateInput);
         
-        Message resultatstepCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        resultatstepCreateInputMessage.setId("resultatstepCreateInputMessage");
-        resultatstepCreateInputMessage.setFor("resultatstepCreateInput");
-        resultatstepCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(resultatstepCreateInputMessage);
+        Message resultstepCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        resultstepCreateInputMessage.setId("resultstepCreateInputMessage");
+        resultstepCreateInputMessage.setFor("resultstepCreateInput");
+        resultstepCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(resultstepCreateInputMessage);
         
         OutputLabel passedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         passedCreateOutput.setFor("passedCreateInput");
@@ -598,26 +598,26 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         actionstepEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(actionstepEditInputMessage);
         
-        OutputLabel resultatstepEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        resultatstepEditOutput.setFor("resultatstepEditInput");
-        resultatstepEditOutput.setId("resultatstepEditOutput");
-        resultatstepEditOutput.setValue("Resultatstep:");
-        htmlPanelGrid.getChildren().add(resultatstepEditOutput);
+        OutputLabel resultstepEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        resultstepEditOutput.setFor("resultstepEditInput");
+        resultstepEditOutput.setId("resultstepEditOutput");
+        resultstepEditOutput.setValue("Resultstep:");
+        htmlPanelGrid.getChildren().add(resultstepEditOutput);
         
-        InputTextarea resultatstepEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        resultatstepEditInput.setId("resultatstepEditInput");
-        resultatstepEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.resultatstep}", String.class));
-        LengthValidator resultatstepEditInputValidator = new LengthValidator();
-        resultatstepEditInputValidator.setMaximum(100);
-        resultatstepEditInput.addValidator(resultatstepEditInputValidator);
-        resultatstepEditInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(resultatstepEditInput);
+        InputTextarea resultstepEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        resultstepEditInput.setId("resultstepEditInput");
+        resultstepEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.resultstep}", String.class));
+        LengthValidator resultstepEditInputValidator = new LengthValidator();
+        resultstepEditInputValidator.setMaximum(100);
+        resultstepEditInput.addValidator(resultstepEditInputValidator);
+        resultstepEditInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(resultstepEditInput);
         
-        Message resultatstepEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        resultatstepEditInputMessage.setId("resultatstepEditInputMessage");
-        resultatstepEditInputMessage.setFor("resultatstepEditInput");
-        resultatstepEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(resultatstepEditInputMessage);
+        Message resultstepEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        resultstepEditInputMessage.setId("resultstepEditInputMessage");
+        resultstepEditInputMessage.setFor("resultstepEditInput");
+        resultstepEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(resultstepEditInputMessage);
         
         OutputLabel passedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         passedEditOutput.setFor("passedEditInput");
@@ -770,17 +770,17 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         actionstepValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(actionstepValue);
         
-        HtmlOutputText resultatstepLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        resultatstepLabel.setId("resultatstepLabel");
-        resultatstepLabel.setValue("Resultatstep:");
-        htmlPanelGrid.getChildren().add(resultatstepLabel);
+        HtmlOutputText resultstepLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        resultstepLabel.setId("resultstepLabel");
+        resultstepLabel.setValue("Resultstep:");
+        htmlPanelGrid.getChildren().add(resultstepLabel);
         
-        InputTextarea resultatstepValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        resultatstepValue.setId("resultatstepValue");
-        resultatstepValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.resultatstep}", String.class));
-        resultatstepValue.setReadonly(true);
-        resultatstepValue.setDisabled(true);
-        htmlPanelGrid.getChildren().add(resultatstepValue);
+        InputTextarea resultstepValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        resultstepValue.setId("resultstepValue");
+        resultstepValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.resultstep}", String.class));
+        resultstepValue.setReadonly(true);
+        resultstepValue.setDisabled(true);
+        htmlPanelGrid.getChildren().add(resultstepValue);
         
         HtmlOutputText passedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         passedLabel.setId("passedLabel");

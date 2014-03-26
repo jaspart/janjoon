@@ -26,6 +26,7 @@ import com.starit.janjoonweb.domain.JJChapterService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
+import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
 import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
@@ -77,7 +78,12 @@ public class JJTestcaseBean {
 	private JJRequirement requirement;
 	private List<JJRequirement> requirements;
 
+	private JJTask task;
+
 	private boolean disabled;
+	private boolean initiateTask;
+	private boolean disabledInitTask;
+	private boolean disabledTask;
 
 	public JJTestcase getTestcase() {
 		return testcase;
@@ -199,12 +205,44 @@ public class JJTestcaseBean {
 		this.requirements = requirements;
 	}
 
+	public JJTask getTask() {
+		return task;
+	}
+
+	public void setTask(JJTask task) {
+		this.task = task;
+	}
+
 	public boolean getDisabled() {
 		return disabled;
 	}
 
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
+	}
+
+	public boolean getInitiateTask() {
+		return initiateTask;
+	}
+
+	public void setInitiateTask(boolean initiateTask) {
+		this.initiateTask = initiateTask;
+	}
+
+	public boolean getDisabledInitTask() {
+		return disabledInitTask;
+	}
+
+	public void setDisabledInitTask(boolean disabledInitTask) {
+		this.disabledInitTask = disabledInitTask;
+	}
+
+	public boolean getDisabledTask() {
+		return disabledTask;
+	}
+
+	public void setDisabledTask(boolean disabledTask) {
+		this.disabledTask = disabledTask;
 	}
 
 	public void loadData() {
@@ -230,24 +268,67 @@ public class JJTestcaseBean {
 		testcase = new JJTestcase();
 		testcase.setEnabled(true);
 		testcase.setCreationDate(new Date());
+		testcase.setAutomatic(false);
 		requirement = null;
+
+		task = new JJTask();
+
+		initiateTask = false;
+		disabledInitTask = false;
+		disabledTask = true;
+
 		disabled = false;
 
-		jJTeststepBean.loadData();
+		jJTeststepBean.newTeststep();
+	}
+
+	public void addMessage() {
+
+		System.out
+				.println("testcase.getAutomatic() " + testcase.getAutomatic());
+
+	}
+
+	public void loadTask() {
+
+		disabledTask = !initiateTask;
+
+		if (initiateTask) {
+			task = new JJTask();
+			task.setEnabled(true);
+			task.setCreationDate(new Date());
+			task.setWorkloadPlanned(8);
+
+		} else {
+			task = new JJTask();
+		}
+
 	}
 
 	public void save(JJTeststepBean jJTeststepBean) {
 		System.out.println("Saving ...");
 		String message = "";
+
 		if (testcase.getId() == null) {
+
+			manageTestcaseOrder(requirement);
+
 			testcase.setRequirement(requirement);
 			requirement.getTestcases().add(testcase);
+
+			if (initiateTask) {
+				task.setName(testcase.getName());
+				task.setDescription("This Task: " + task.getName());
+				testcase.getTasks().add(task);
+				task.setTestcase(testcase);
+			}
+
 			jJTestcaseService.saveJJTestcase(testcase);
 
 			disabled = true;
+			disabledInitTask = true;
+			disabledTask = true;
 
-			//jJTeststepBean.newTeststep();
-			
 			System.out.println("end saving");
 
 			message = "message_successfully_created";
@@ -262,8 +343,29 @@ public class JJTestcaseBean {
 		System.out.println("close Dialog");
 		testcase = null;
 		requirement = null;
+		task = null;
 		createTestcaseTree();
 		jJTeststepBean.setTeststep(null);
+	}
+
+	private void manageTestcaseOrder(JJRequirement requirement) {
+
+		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
+
+		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,
+				requirement.getChapter(), false, false);
+
+		for (JJTestcase testcase : testcases) {
+			elements.put(testcase.getOrdering(), testcase);
+		}
+
+		if (elements.isEmpty()) {
+
+			testcase.setOrdering(0);
+		} else {
+			testcase.setOrdering(elements.lastKey() + 1);
+		}
+
 	}
 
 	private void createTestcaseTree() {
@@ -310,7 +412,7 @@ public class JJTestcaseBean {
 			rendredTestCaseRecaps = false;
 
 		} else if (code.equalsIgnoreCase("CH")) {
-			System.out.println("Chapitre selected");
+			System.out.println("Chapter selected");
 
 			long id = Long.parseLong(getSubString(selectedNode, 1, "-"));
 
@@ -325,11 +427,11 @@ public class JJTestcaseBean {
 
 		}
 
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"Selected " + event.getTreeNode().toString(), event
-						.getTreeNode().toString());
-
-		FacesContext.getCurrentInstance().addMessage(null, message);
+		// FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+		// "Selected " + event.getTreeNode().toString(), event
+		// .getTreeNode().toString());
+		//
+		// FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
 	private String getSubString(String s, int index, String c) {
@@ -346,6 +448,9 @@ public class JJTestcaseBean {
 
 		SortedMap<Integer, Object> elements = getSortedElements(chapterParent,
 				project, product, category, true);
+
+		SortedMap<Integer, JJTestcase> testcaseElements = new TreeMap<Integer, JJTestcase>();
+
 		for (Map.Entry<Integer, Object> entry : elements.entrySet()) {
 			String className = entry.getValue().getClass().getSimpleName();
 
@@ -361,13 +466,17 @@ public class JJTestcaseBean {
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
 						requirement, null, true, true);
 				for (JJTestcase testcase : testcases) {
-					TreeNode newNode3 = new DefaultTreeNode("TC-"
-							+ testcase.getId() + "- " + testcase.getName(),
-							newNode);
+					testcaseElements.put(testcase.getOrdering(), testcase);
 				}
 
 			}
+		}
 
+		for (Map.Entry<Integer, JJTestcase> testcaseEntry : testcaseElements
+				.entrySet()) {
+			JJTestcase testcase = testcaseEntry.getValue();
+			TreeNode newNode3 = new DefaultTreeNode("TC-" + testcase.getId()
+					+ "- " + testcase.getName(), newNode);
 		}
 
 		newNode.setExpanded(true);

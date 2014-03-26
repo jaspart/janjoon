@@ -62,7 +62,7 @@ public class JJContactBean {
 		this.message = message;
 	}
 
-	public boolean isDisabled() {
+	public boolean getDisabled() {
 		return disabled;
 	}
 
