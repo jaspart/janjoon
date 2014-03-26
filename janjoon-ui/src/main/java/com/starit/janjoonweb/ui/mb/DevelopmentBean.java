@@ -13,6 +13,7 @@ import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -20,13 +21,13 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
-import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.*;
 import org.primefaces.extensions.component.codemirror.CodeMirror;
+import org.primefaces.extensions.event.CompleteEvent;
 import org.primefaces.model.TreeNode;
 
 import com.starit.janjoonweb.domain.*;
@@ -96,8 +97,7 @@ public class DevelopmentBean implements Serializable {
 			files = new ArrayList<FileMap>();
 			try (FileInputStream inputStream = new FileInputStream(file)) {
 				String fileTexte = IOUtils.toString(inputStream);
-				FileMap filemap = new FileMap(file.getPath(), file.getName(),
-						fileTexte, file);
+				FileMap filemap = new FileMap(file.getName(), fileTexte, file);
 				files.add(filemap);
 			}
 
@@ -136,7 +136,7 @@ public class DevelopmentBean implements Serializable {
 		if (configuration.getParam().equalsIgnoreCase("git") && product != null
 				&& version != null) {
 			String url = configuration.getVal()
-					+ product.getName().replace(" ", "-");
+					+ product.getName().replace(" ", "-") + ".git";
 			try {
 				configManager = new GitConfigManager(1, contact);
 				String path = System.getProperty("user.home") + "/git/";
@@ -144,7 +144,8 @@ public class DevelopmentBean implements Serializable {
 				path = configManager.cloneRemoteRepository(url,
 						product.getName(), path);
 				if (path != null
-						&& !path.equalsIgnoreCase("InvalidRemoteException")) {
+						&& !path.equalsIgnoreCase("InvalidRemoteException")
+						&& !path.equalsIgnoreCase("TransportException")) {
 					configManager = new GitConfigManager(url, path, contact);
 					System.out.println(path);
 				} else if (path == null) {
@@ -321,11 +322,26 @@ public class DevelopmentBean implements Serializable {
 		this.comment = comment;
 	}
 
-	public void pull() {
+	public void pull() throws FileNotFoundException, IOException {
 		if (configManager.pullRepository()) {
+			tree = configManager.listRepositoryContent(version.getName());
+
+			selectedTree = getTree();
+			while (selectedTree.getChildCount() != 0) {
+				selectedTree = selectedTree.getChildren().get(0);
+
+			}
+			file = (File) selectedTree.getData();
+			files = new ArrayList<FileMap>();
+			try (FileInputStream inputStream = new FileInputStream(file)) {
+				String fileTexte = IOUtils.toString(inputStream);
+				FileMap filemap = new FileMap(file.getName(), fileTexte, file);
+				files.add(filemap);
+			}
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Updated To Head", configManager.getPath());
 			FacesContext.getCurrentInstance().addMessage(null, message);
+
 		} else {
 			FacesMessage message = new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, "Error with Synchronisation",
@@ -341,8 +357,8 @@ public class DevelopmentBean implements Serializable {
 			for (FileMap fileMap : files) {
 				configManager.setFileTexte(fileMap.getFile(),
 						fileMap.getTexte());
-				System.out.println(fileMap.getFile().getName() + "  :"
-						+ fileMap.getTexte());
+				//System.out.println(fileMap.getFile().getName() + "  :"
+					//	+ fileMap.getTexte());
 
 			}
 			System.out.println(task.toString());
@@ -356,13 +372,14 @@ public class DevelopmentBean implements Serializable {
 			message.setCreationDate(new Date());
 			message.setEnabled(true);
 			message.setMessage(comment);
-			message.setDescription("JJmessage For"+task.getName()+"nl"+task.getDescription());
-			message.setName("JJmessage For"+task.getName());
+			message.setDescription("JJmessage For" + task.getName() + "nl"
+					+ task.getDescription());
+			message.setName("JJmessage For" + task.getName());
 			message.persist();
 			Set<JJMessage> m = new HashSet<JJMessage>();
 			m.add(message);
 			task.setMessages(m);
-			if (task.getStartDateReal()==null)
+			if (task.getStartDateReal() == null)
 				task.setStartDateReal(new Date());
 			task.persist();
 
@@ -391,12 +408,12 @@ public class DevelopmentBean implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 		} else {
-			//RequestContext context = RequestContext.getCurrentInstance();
-			//context.execute("dlg.show()");
+			// RequestContext context = RequestContext.getCurrentInstance();
+			// context.execute("dlg.show()");
 			FacesMessage message = new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, "Probleme Lors du Commit",
 					"You Have to create comment before commiting");
-			//FacesContext.getCurrentInstance().addMessage(null, message);
+			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
 	}
 
@@ -416,9 +433,10 @@ public class DevelopmentBean implements Serializable {
 					String fileTexte = IOUtils.toString(inputStream);
 					// System.out.println(fileTexte);
 
-					FileMap filemap = new FileMap(file.getPath(),
-							file.getName(), fileTexte, file);
+					FileMap filemap = new FileMap(file.getName(), fileTexte,
+							file);
 					files.add(filemap);
+					System.out.println(filemap.getMode());
 				} catch (FileNotFoundException e) {
 					System.out.println("filenotFound");
 					e.printStackTrace();
@@ -440,7 +458,7 @@ public class DevelopmentBean implements Serializable {
 		InputTextarea texte = (InputTextarea) event.getComponent();
 		// File f=texte.
 
-		System.out.println(texte.getValue() + "---");
+		//System.out.println(texte.getValue() + "---");
 		texte.setSubmittedValue(texte.getValue());
 	}
 
@@ -451,7 +469,7 @@ public class DevelopmentBean implements Serializable {
 		CodeMirror texte = (CodeMirror) event.getComponent();
 		// File f=texte.
 
-		System.out.println(texte.getValue() + "---");
+		//System.out.println(texte.getValue() + "---");
 		texte.setSubmittedValue(texte.getValue());
 	}
 
@@ -473,11 +491,6 @@ public class DevelopmentBean implements Serializable {
 
 	}
 
-	public void CreateMessage(ActionEvent actionEvent) {
-
-	}
-
-
 	public void PersistMessage(ActionEvent actionEvent) {
 
 		RequestContext context = RequestContext.getCurrentInstance();
@@ -494,7 +507,7 @@ public class DevelopmentBean implements Serializable {
 			Set<JJMessage> m = new HashSet<JJMessage>();
 			m.add(message);
 			task.setMessages(m);
-			if (task.getStartDateReal()==null)
+			if (task.getStartDateReal() == null)
 				task.setStartDateReal(new Date());
 			task.persist();
 			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -510,6 +523,15 @@ public class DevelopmentBean implements Serializable {
 		context.addCallbackParam("loggedIn", loggedIn);
 
 	}
+	
+//	public List<String> complete(final CompleteEvent event) {  
+//        final ArrayList<String> suggestions = new ArrayList<String>();  
+//        CodeMirror cd=(CodeMirror) event.getComponent();
+//        System.out.println(cd.getMode());
+//        suggestions.add("context: " + event.getContext());  
+//        suggestions.add("token: " + event.getToken());    
+//        return suggestions;  
+//    }  
 
 	public int contains(File f) {
 		int i = 0;

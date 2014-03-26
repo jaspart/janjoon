@@ -283,7 +283,7 @@ public class GitConfigManager extends AbstractConfigManager {
 			CloneCommand cloneCommand = Git.cloneRepository();
 			File file = new File(path + "/" + name);
 			cloneCommand.setDirectory(file);
-			cloneCommand.setURI(url);
+			cloneCommand.setURI(url);		
 
 			if (jJContact != null) {
 				cloneCommand
@@ -319,7 +319,13 @@ public class GitConfigManager extends AbstractConfigManager {
 			return "InvalidRemoteException";
 		} catch (TransportException e) {
 
-			System.out.println("TransportException getted");
+			System.out.println("TransportException getted"+url);
+			try {
+				delete(new File(path + "/" + name));
+			} catch (IOException e1) {
+
+				e1.printStackTrace();
+			}
 			return "TransportException";
 		} catch (GitAPIException e) {
 

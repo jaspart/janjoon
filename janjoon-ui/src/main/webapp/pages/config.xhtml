@@ -49,15 +49,29 @@
 					<f:facet name="header">
 						<h:outputText value="Actions" />
 					</f:facet>
-					<p:commandButton id="editButton" icon="ui-icon-pencil">
 
+					<p:commandButton id="viewButton" icon="ui-icon-zoomin"
+						update=":tabview:viewForm:viewPanelGrid"
+						oncomplete="viewDialogWidget.show()"
+						title="#{messages.label_view}">
 						<f:setPropertyActionListener value="#{conf}"
-							target="#{jJConfigurationBean.selectedConf}" />
+							target="#{jJConfigurationBean.JJConfiguration_}" />
+					</p:commandButton>
+					<p:tooltip for="viewButton" value="#{messages.label_view}"
+						showEffect="fade" hideEffect="fade" />
+
+					<p:commandButton id="editButton" icon="ui-icon-pencil"
+						update=":tabview:editForm:editPanelGrid"
+						action="#{jJConfigurationBean.onEdit}"
+						oncomplete="editDialogWidget.show()"
+						title="#{messages.label_edit}">
+						<f:setPropertyActionListener value="#{conf}"
+							target="#{jJConfigurationBean.JJConfiguration_}" />
 					</p:commandButton>
 					<p:tooltip for="editButton" value="#{messages.label_edit}"
 						showEffect="fade" hideEffect="fade" />
 					<p:commandButton id="deleteButton" icon="ui-icon-trash"
-						oncomplete="configDeleteDialogWidget.show()"
+						oncomplete="deleteDialogWidget.show()"
 						title="#{messages.label_delete}">
 						<f:setPropertyActionListener value="#{conf}"
 							target="#{jJConfigurationBean.selectedConf}" />
@@ -66,27 +80,91 @@
 						showEffect="fade" hideEffect="fade" />
 				</p:column>
 				<f:facet name="footer">
-					<p:commandButton value="New" id="newConf"
-						icon="ui-icon-circle-plus" />
+					<p:commandButton value="New" id="createButton"
+						icon="ui-icon-circle-plus"
+						update=":tabview:createForm:createPanelGrid"
+						action="#{jJConfigurationBean.displayCreateDialogadmin}"
+						oncomplete="createDialogWidget.show()"
+						title="#{messages.label_create}" />
+					<p:tooltip for="createButton" value="#{messages.label_create}"
+						showEffect="fade" hideEffect="fade" />
 				</f:facet>
 			</p:dataTable>
 		</p:panel>
-		<p:confirmDialog id="configDeleteDialog"
-			widgetVar="configDeleteDialogWidget"
-			message="#{messages.label_delete_record}" showEffect="fade"
-			hideEffect="explode" header="#{messages.label_confirm_deletion}"
-			severity="alarm">
-			<p:outputPanel id="configDeletePanel">
-				<h:form id="configDeleteForm">
-					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
-						actionListener="#{jJConfigurationBean.deleteConfig}"
-						update=":tabview:configForm"
-						oncomplete="configDeleteDialogWidget.hide()" />
-					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
-						onclick="configDeleteDialogWidget.hide()" type="button" />
-				</h:form>
-			</p:outputPanel>
-		</p:confirmDialog>
+
 	</h:form>
+	<p:dialog id="createDialog"
+		header="#{messages.label_create} JJConfiguration" modal="true"
+		widgetVar="createDialogWidget" dynamic="true"
+		visible="#{jJConfigurationBean.createDialogVisible}" resizable="true"
+		maximizable="true" showEffect="fade" hideEffect="explode">
+		<p:ajax event="close" update=":tabview:configForm"
+			listener="#{jJConfigurationBean.handleDialogClose}" />
+		<p:outputPanel id="createPanel">
+			<h:form id="createForm" enctype="multipart/form-data">
+				<h:panelGrid id="createPanelGrid" columns="3"
+					binding="#{jJConfigurationBean.createPanelGrid}"
+					styleClass="dialog" columnClasses="col1,col2,col3" />
+				<p:commandButton id="createSaveButton"
+					value="#{messages.label_save}"
+					action="#{jJConfigurationBean.persist}"
+					update="createPanelGrid,:tabview:configForm:ConfMessage" />
+				<p:commandButton id="createCloseButton"
+					value="#{messages.label_close}" onclick="createDialogWidget.hide()"
+					type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+
+	<p:dialog id="editDialog"
+		header="#{messages.label_edit} JJConfiguration" modal="true"
+		widgetVar="editDialogWidget" dynamic="true" resizable="true"
+		maximizable="true" showEffect="fade" hideEffect="explode">
+		<p:ajax event="close" update=":tabview:configForm"
+			listener="#{jJConfigurationBean.handleDialogClose}" />
+		<p:outputPanel id="editPanel">
+			<h:form id="editForm" enctype="multipart/form-data">
+				<h:panelGrid id="editPanelGrid" columns="3"
+					binding="#{jJConfigurationBean.editPanelGrid}" styleClass="dialog"
+					columnClasses="col1,col2,col3" />
+				<p:commandButton id="editSaveButton" value="#{messages.label_save}"
+					action="#{jJConfigurationBean.persist}"
+					update="editPanelGrid,:tabview:configForm:ConfMessage" />
+				<p:commandButton id="editCloseButton"
+					value="#{messages.label_close}" onclick="editDialogWidget.hide()"
+					type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+
+	<p:dialog id="viewDialog"
+		header="#{messages.label_view} JJConfiguration" modal="true"
+		widgetVar="viewDialogWidget" dynamic="true" resizable="true"
+		maximizable="true" showEffect="fade" hideEffect="explode">
+		<p:outputPanel id="viewPanel">
+			<h:form id="viewForm" enctype="multipart/form-data">
+				<h:panelGrid id="viewPanelGrid" columns="2"
+					binding="#{jJConfigurationBean.viewPanelGrid}" styleClass="dialog"
+					columnClasses="col1,col2" />
+				<p:commandButton id="viewCloseButton"
+					value="#{messages.label_close}" onclick="viewDialogWidget.hide()"
+					type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+	<p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget"
+		message="#{messages.label_delete_record}" showEffect="fade"
+		hideEffect="explode" header="#{messages.label_confirm_deletion}"
+		severity="alarm">
+		<p:outputPanel id="deletePanel">
+			<h:form id="deleteForm">
+				<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+					action="#{jJConfigurationBean.deleteConfig}"
+					update=":tabview:configForm" oncomplete="deleteDialogWidget.hide()" />
+				<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+					onclick="deleteDialogWidget.hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:confirmDialog>
 </ui:composition>
 </html>

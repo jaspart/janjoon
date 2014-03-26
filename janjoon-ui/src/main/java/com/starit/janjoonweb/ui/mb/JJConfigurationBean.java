@@ -1,16 +1,14 @@
 package com.starit.janjoonweb.ui.mb;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-
-import com.starit.janjoonweb.domain.JJConfiguration;
-import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
+
+import com.starit.janjoonweb.domain.JJConfiguration;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJConfiguration.class, beanName = "jJConfigurationBean")
@@ -20,7 +18,8 @@ public class JJConfigurationBean {
 	private JJConfiguration selectedConf;
 
 	public List<JJConfiguration> getConfigList() {
-		
+		configList=jJConfigurationService.getConfigs(true);
+	    System.out.println("gets");
 		return configList;
 	}
 
@@ -34,7 +33,7 @@ public class JJConfigurationBean {
 		this.selectedConf = selectedConf;
 	}
 	
-	public void deleteConfig(ActionEvent e)
+	public void deleteConfig()
 	{
 		selectedConf.setEnabled(false);
 		jJConfigurationService.updateJJConfiguration(selectedConf);

@@ -1,9 +1,11 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpSession;
 
 import org.apache.myfaces.config.element.FacesConfig;
@@ -21,7 +23,7 @@ import com.starit.janjoonweb.domain.JJContact;
 
 @Scope("session")
 @Component("loginBean")
-public class LoginBean implements Serializable{
+public class LoginBean implements Serializable {
 	/**
 	 * 
 	 */
@@ -33,7 +35,7 @@ public class LoginBean implements Serializable{
 	private boolean enable = false;
 
 	public boolean isEnable() {
-		
+
 		return enable;
 	}
 
@@ -86,14 +88,6 @@ public class LoginBean implements Serializable{
 			FacesContext fContext = FacesContext.getCurrentInstance();
 			HttpSession session = (HttpSession) fContext.getExternalContext()
 					.getSession(true);
-			/*JJVersionBean jjVersionBean=(JJVersionBean) findBean("jJVersionBean");
-			JJProjectBean jjProjectBean=(JJProjectBean) findBean("jJProjectBean");
-			JJProductBean jJProductBean=(JJProductBean) findBean("jJProductBean");
-			//gérer la session spring security 
-			
-			session.putValue("jJVersionBean", jjVersionBean);
-			session.putValue("jJProjectBean", jjProjectBean);
-			session.putValue("jJProductBean", jJProductBean);*/
 			session.putValue("JJContact", contact);
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Welcome ", contact.getFirstname());
@@ -104,7 +98,7 @@ public class LoginBean implements Serializable{
 	}
 
 	public String getUsername() {
-		
+
 		return username;
 	}
 
@@ -134,25 +128,31 @@ public class LoginBean implements Serializable{
 		return context.getApplication().evaluateExpressionGet(context,
 				"#{" + beanName + "}", Object.class);
 	}
-	
-	public String redirectToDev()
-	{
-		JJVersionBean jjVersionBean=(JJVersionBean) findBean("jJVersionBean");
-		JJProductBean jJProductBean=(JJProductBean) findBean("jJProductBean");
-		String s=null;
-		if(jjVersionBean.getVersion()!=null&&jJProductBean!=null)
-		{
-			s="/pages/development.jsf?faces-redirect=true";
-			
-		}
-		else
-		{
-			s=FacesContext.getCurrentInstance().getViewRoot().getViewId();
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Please Select a project and a version ", "Project or version is set to null");
+
+	public void redirectToDev(ActionEvent e) throws IOException {
+		JJVersionBean jjVersionBean = (JJVersionBean) findBean("jJVersionBean");
+		JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
+		String s = "";
+		System.out.println("------------------------------------");
+		if (jjVersionBean.getVersion() != null && jJProductBean != null) {
+
+			FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(
+							"/janjoon-ui/pages/development.jsf?faces-redirect=true");
+
+		} else {
+			// s=FacesContext.getCurrentInstance().getViewRoot().getViewId();
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR,
+					"Please Select a project and a version ",
+					"Project or version is set to null");
 			FacesContext.getCurrentInstance().addMessage(null, message);
+			System.out.println(s + message.getDetail());
+
 		}
-		return s;
+
 	}
 
 }

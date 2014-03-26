@@ -1,5 +1,7 @@
 package com.starit.janjoonweb.ui.security;
 
+import java.io.Serializable;
+
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
@@ -10,8 +12,12 @@ import org.springframework.security.web.access.expression.WebSecurityExpressionH
 import org.springframework.stereotype.Component;
 
 @SuppressWarnings("deprecation")
-public class JsfDefaultWebSecurityExpressionhandler implements WebSecurityExpressionHandler, SecurityExpressionHandler<FilterInvocation> {
-    private DefaultWebSecurityExpressionHandler delegate = new DefaultWebSecurityExpressionHandler();
+public class JsfDefaultWebSecurityExpressionhandler implements WebSecurityExpressionHandler, Serializable,SecurityExpressionHandler<FilterInvocation> {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private DefaultWebSecurityExpressionHandler delegate = new DefaultWebSecurityExpressionHandler();
 
     @Override
     public ExpressionParser getExpressionParser() {
