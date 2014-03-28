@@ -25,6 +25,7 @@
 
 			<p:tabMenu id="tabMenu" name="content" style="float: none;"
 				activeIndex="-1">
+				
 				<p:menuitem value="" icon="ui-icon-home"
 					url="/pages/main.jsf?faces-redirect=true" />
 
@@ -42,17 +43,11 @@
 				<p:menuitem value="Dev"
 					url="/pages/development2.jsf?faces-redirect=true"
 					icon="ui-icon-wrench" rendered="#{!loginBean.enable}" />
-
-
-				<!-- url="/pages/development.jsf?faces-redirect=true" -->
-				<p:menuitem value="Dev" action="#{loginBean.redirectToDev}"
+					
+				<p:menuitem value="Dev" actionListener="#{loginBean.redirectToDev}"
 					update="growlHeader" icon="ui-icon-wrench"
 					rendered="#{loginBean.enable}" />
-
-
-				<!-- 				<p:menuitem value="Test" url="/pages/test.jsf?faces-redirect=true" -->
-				<!-- 					icon="ui-icon-check" update=":contentPanel" /> -->
-
+					
 				<p:menuitem value="Delivery"
 					url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
 
@@ -68,6 +63,7 @@
 
 				<p:menuitem value="Temp" url="/pages/temp.jsf?faces-redirect=true"
 					update=":contentPanel" />
+					
 			</p:tabMenu>
 
 			<h:panelGrid columns="2" cellpadding="2" align="right"
@@ -81,6 +77,7 @@
 				<p:selectOneMenu id="projectSelectOneMenu"
 					value="#{jJProjectBean.project}" panelStyle="width:120px"
 					effect="fade" style="width:160px" filter="true"
+					valueChangeListener="#{loginBean.changeEvent}"
 					filterMatchMode="startsWith">
 
 					<f:converter
@@ -96,14 +93,14 @@
 				<h:outputText value="Product:" />
 				<p:selectOneMenu id="productSelectOneMenu"
 					value="#{jJProductBean.product}" panelStyle="width:120px"
-					effect="fade" style="width:160px" filter="true"
-					filterMatchMode="startsWith">
+					effect="fade" style="width:160px" filter="true" 
+					valueChangeListener="#{loginBean.changeEvent}"
+					filterMatchMode="startsWith" >
 					<f:converter
 						converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
 					<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
 					<f:selectItems value="#{jJProductBean.productList}" var="p"
-						itemLabel="#{p.name}" itemValue="#{p}" />
-
+						itemLabel="#{p.name}" itemValue="#{p}" />					
 					<p:ajax process="@this" update=":contentPanel,versionSelectOneMenu" />
 				</p:selectOneMenu>
 
@@ -111,7 +108,9 @@
 				<p:selectOneMenu id="versionSelectOneMenu"
 					value="#{jJVersionBean.version}" panelStyle="width:120px"
 					effect="fade" style="width:160px" filter="true"
+					valueChangeListener="#{loginBean.changeEvent}"
 					filterMatchMode="startsWith" disabled="#{jJVersionBean.disabled}">
+					
 					<f:converter
 						converterId="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter" />
 

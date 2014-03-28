@@ -11,10 +11,12 @@ import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.ui.mb.JJCriticityBean;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -26,6 +28,7 @@ import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.validator.LengthValidator;
+
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.inputtext.InputText;
@@ -78,6 +81,26 @@ privileged aspect JJCriticityBean_Roo_ManagedBean {
         columns.add("creationDate");
         columns.add("updatedDate");
         columns.add("criticityLevel");
+        if(jJCriticityService.findAllJJCriticitys().isEmpty())
+		{
+			System.out.println("----------------------------------------------------------");
+			
+				JJCriticity cri=new JJCriticity();
+				cri.setName("Alert");
+				cri.setDescription("AlertCriticityDescription");
+				cri.setCreationDate(new Date());				
+				cri.setEnabled(true);
+				cri.setCriticityLevel(10);
+				jJCriticityService.saveJJCriticity(cri);
+				cri=new JJCriticity();
+				cri.setName("Info");
+				cri.setDescription("InfoCriticityDescription");
+				cri.setCreationDate(new Date());				
+				cri.setEnabled(true);
+				cri.setCriticityLevel(1);
+				jJCriticityService.saveJJCriticity(cri);
+			
+		}
     }
     
     public String JJCriticityBean.getName() {

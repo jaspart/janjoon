@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.ValueChangeEvent;
 
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -174,7 +176,7 @@ public class JJProjectBean {
 
 	public List<JJProject> getProjectList() {
 		/*** Begin Temporary ***/
-
+		
 		if (jJConfigurationService.findAllJJConfigurations().isEmpty()) {
 			JJConfiguration configuration = new JJConfiguration();
 			configuration.setName("ConfigurationManager");
@@ -1029,6 +1031,7 @@ public class JJProjectBean {
 		projectManager = null;
 		projectManagerList = null;
 	}
+	
 
 	public void handleSelectProjectManager() {
 		if (projectManager != null) {

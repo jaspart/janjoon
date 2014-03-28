@@ -6,7 +6,10 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
+		<f:event listener="#{loginBean.loadingMain}" type="preRenderView"  />
 		<p:panel id="mainPanel" toggleable="true" toggleSpeed="250">
+		<p:growl id="notif" showDetail="true" />
+		<p:growl id="dev" showDetail="true" />
 			<f:facet name="header">
 				<h:outputFormat value="#{messages.label_welcome_titlepane}">
 					<f:param value="#{applicationBean.appName}" />
