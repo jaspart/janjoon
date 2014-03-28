@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJProduct;
@@ -26,14 +25,6 @@ privileged aspect JJProduct_Roo_JavaBean {
     
     public void JJProduct.setVersions(Set<JJVersion> versions) {
         this.versions = versions;
-    }
-    
-    public Set<JJChapter> JJProduct.getChapters() {
-        return this.chapters;
-    }
-    
-    public void JJProduct.setChapters(Set<JJChapter> chapters) {
-        this.chapters = chapters;
     }
     
     public Set<JJMessage> JJProduct.getMessages() {

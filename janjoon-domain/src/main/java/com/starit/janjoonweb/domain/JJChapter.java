@@ -26,9 +26,6 @@ public class JJChapter extends JJAbstractEntity {
 	private JJCategory category;
 
 	@ManyToOne
-	private JJProduct product;
-
-	@ManyToOne
 	private JJChapter parent;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent")

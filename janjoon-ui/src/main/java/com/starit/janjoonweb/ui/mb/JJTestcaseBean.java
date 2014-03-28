@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -81,6 +82,9 @@ public class JJTestcaseBean {
 	private JJTask task;
 
 	private boolean disabled;
+	private boolean disabledTeststep;
+	private boolean disabledReset;
+
 	private boolean initiateTask;
 	private boolean disabledInitTask;
 	private boolean disabledTask;
@@ -221,6 +225,22 @@ public class JJTestcaseBean {
 		this.disabled = disabled;
 	}
 
+	public boolean getDisabledTeststep() {
+		return disabledTeststep;
+	}
+
+	public void setDisabledTeststep(boolean disabledTeststep) {
+		this.disabledTeststep = disabledTeststep;
+	}
+
+	public boolean getDisabledReset() {
+		return disabledReset;
+	}
+
+	public void setDisabledReset(boolean disabledReset) {
+		this.disabledReset = disabledReset;
+	}
+
 	public boolean getInitiateTask() {
 		return initiateTask;
 	}
@@ -278,6 +298,8 @@ public class JJTestcaseBean {
 		disabledTask = true;
 
 		disabled = false;
+		disabledTeststep = true;
+		disabledReset = false;
 
 		jJTeststepBean.newTeststep();
 	}
@@ -305,11 +327,62 @@ public class JJTestcaseBean {
 
 	}
 
-	public void save(JJTeststepBean jJTeststepBean) {
+	public void editTestcase(JJTeststepBean jJTeststepBean) {
+		System.out.println("Edit testcase");
+		message = "Edit Testcase";
+
+		System.out.println("testcase.getName() " + testcase.getName());
+
+		JJTestcase tc = jJTestcaseService.findJJTestcase(testcase.getId());
+		requirement = tc.getRequirement();
+
+		tc.getTasks();
+
+		Set<JJTask> tasks = tc.getTasks();
+		if (tasks.isEmpty()) {
+			task = new JJTask();
+		} else {
+			for (JJTask temTask : tc.getTasks()) {
+				task = temTask;
+			}
+		}
+
+		disabledInitTask = true;
+		disabledTask = true;
+
+		disabled = false;
+		disabledTeststep = false;
+		disabledReset = true;
+
+		jJTeststepBean.newTeststep();
+
+		System.out.println("End testcase");
+	}
+
+	public void handleSelectRequirement() {
+
+	}
+
+	public void save() {
 		System.out.println("Saving ...");
 		String message = "";
 
-		if (testcase.getId() == null) {
+		if (testcase.getId() != null) {
+
+			testcase.setUpdatedDate(new Date());
+
+			if (!requirement.equals(testcase.getRequirement())) {
+
+				testcase.setRequirement(requirement);
+				requirement.getTestcases().add(testcase);
+			}
+
+			jJTestcaseService.updateJJTestcase(testcase);
+
+			message = "message_successfully_updated";
+		}
+
+		else {
 
 			manageTestcaseOrder(requirement);
 
@@ -326,6 +399,7 @@ public class JJTestcaseBean {
 			jJTestcaseService.saveJJTestcase(testcase);
 
 			disabled = true;
+			disabledTeststep = false;
 			disabledInitTask = true;
 			disabledTask = true;
 
@@ -339,13 +413,20 @@ public class JJTestcaseBean {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 
-	public void closeDialog(JJTeststepBean jJTeststepBean) {
+	public void closeDialog() {
 		System.out.println("close Dialog");
 		testcase = null;
 		requirement = null;
 		task = null;
+
 		createTestcaseTree();
+
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJTeststepBean jJTeststepBean = (JJTeststepBean) session
+				.getAttribute("jJTeststepBean");
 		jJTeststepBean.setTeststep(null);
+		jJTeststepBean.setTeststeps(null);
 	}
 
 	private void manageTestcaseOrder(JJRequirement requirement) {
@@ -387,7 +468,7 @@ public class JJTestcaseBean {
 			categoryNode.setExpanded(true);
 
 			List<JJChapter> parentChapters = jJChapterService
-					.getParentsChapter(project, product, category, true, true);
+					.getParentsChapter(project, category, true, true);
 
 			for (JJChapter chapter : parentChapters) {
 				TreeNode node = createTree(chapter, categoryNode, project,
@@ -510,7 +591,7 @@ public class JJTestcaseBean {
 		} else {
 
 			List<JJChapter> chapters = jJChapterService.getParentsChapter(
-					project, product, category, onlyActif, true);
+					project, category, onlyActif, true);
 
 			for (JJChapter chapter : chapters) {
 				elements.put(chapter.getOrdering(), chapter);

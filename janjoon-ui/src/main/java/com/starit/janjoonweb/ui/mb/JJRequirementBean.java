@@ -273,8 +273,8 @@ public class JJRequirementBean {
 
 	public List<JJChapter> getRequirementChapterList() {
 		requirementChapterList = jJChapterService.getChapters(
-				requirementProject, requirementProduct, requirementCategory,
-				true, new ArrayList<String>());
+				requirementProject, requirementCategory, true,
+				new ArrayList<String>());
 		return requirementChapterList;
 	}
 
@@ -768,7 +768,7 @@ public class JJRequirementBean {
 
 	}
 
-	public void save(JJChapterBean jJChapterBean) {
+	public void save() {
 
 		String message = "";
 
@@ -783,7 +783,7 @@ public class JJRequirementBean {
 			getRequirementsListDOWN();
 		}
 
-		getRequirementOrder(jJChapterBean);
+		getRequirementOrder();
 
 		if (requirement.getId() == null) {
 			System.out.println("SAVING new Requirement...");
@@ -859,7 +859,7 @@ public class JJRequirementBean {
 
 	}
 
-	public void importRequirement(JJChapterBean jJChapterBean) {
+	public void importRequirement() {
 		SortedMap<Integer, Object> elements = null;
 		SortedMap<Integer, Integer> chapters = new TreeMap<Integer, Integer>();
 
@@ -917,12 +917,11 @@ public class JJRequirementBean {
 						importChapter.setEnabled(true);
 						importChapter.setCategory(chapter.getCategory());
 						importChapter.setProject(project);
-						importChapter.setProduct(chapter.getProduct());
 						importChapter.setUpdatedDate(new Date());
 						importChapter.setParent(null);
 
-						elements = jJChapterBean.getSortedElements(null,
-								requirement.getProject(), null,
+						elements = getSortedElements(null,
+								requirement.getProject(),
 								requirement.getCategory(), false);
 						if (elements.isEmpty()) {
 							importChapter.setOrdering(0);
@@ -939,8 +938,8 @@ public class JJRequirementBean {
 					}
 
 					importRequirement.setChapter(importChapter);
-					elements = jJChapterBean.getSortedElements(importChapter,
-							requirement.getProject(), null,
+					elements = getSortedElements(importChapter,
+							requirement.getProject(),
 							requirement.getCategory(), false);
 					if (elements.isEmpty()) {
 						importRequirement.setOrdering(0);
@@ -950,8 +949,8 @@ public class JJRequirementBean {
 
 				} else {
 					importRequirement.setChapter(chapter);
-					elements = jJChapterBean.getSortedElements(chapter,
-							requirement.getProject(), null,
+					elements = getSortedElements(chapter,
+							requirement.getProject(),
 							requirement.getCategory(), false);
 					if (elements.isEmpty()) {
 						importRequirement.setOrdering(0);
@@ -1135,11 +1134,9 @@ public class JJRequirementBean {
 		if (requirementProduct != null) {
 			disabledVersion = false;
 			requirementVersion = null;
-			requirementChapter = null;
 		} else {
 			disabledVersion = true;
 			requirementVersion = null;
-			requirementChapter = null;
 		}
 
 	}
@@ -1160,7 +1157,7 @@ public class JJRequirementBean {
 	public void loadData() {
 
 		System.out.println("IN ReqBean load data");
-		
+
 		getProduct();
 		getProject();
 		getVersion();
@@ -1790,16 +1787,16 @@ public class JJRequirementBean {
 		return result[index];
 	}
 
-	private void getRequirementOrder(JJChapterBean jJChapterBean) {
+	private void getRequirementOrder() {
 		SortedMap<Integer, Object> elements = null;
 		SortedMap<Integer, Object> subElements = null;
 		if (requirement.getId() == null) {
 			requirement.setChapter(requirementChapter);
 
 			if (requirementChapter != null) {
-				elements = jJChapterBean.getSortedElements(requirementChapter,
-						requirement.getProject(), null,
-						requirement.getCategory(), false);
+				elements = getSortedElements(requirementChapter,
+						requirement.getProject(), requirement.getCategory(),
+						false);
 				if (elements.isEmpty()) {
 					requirement.setOrdering(0);
 				} else {
@@ -1818,17 +1815,16 @@ public class JJRequirementBean {
 							.getId()) {
 
 						int requirementOrder = requirement.getOrdering();
-						elements = jJChapterBean.getSortedElements(
-								requirement.getChapter(),
-								requirement.getProject(), null,
+						elements = getSortedElements(requirement.getChapter(),
+								requirement.getProject(),
 								requirement.getCategory(), false);
 
 						subElements = elements.tailMap(requirementOrder);
 
 						requirement.setChapter(requirementChapter);
-						elements = jJChapterBean.getSortedElements(
-								requirementChapter, requirement.getProject(),
-								null, requirement.getCategory(), false);
+						elements = getSortedElements(requirementChapter,
+								requirement.getProject(),
+								requirement.getCategory(), false);
 						if (elements.isEmpty()) {
 							requirement.setOrdering(0);
 
@@ -1879,8 +1875,8 @@ public class JJRequirementBean {
 					}
 				} else {
 					requirement.setChapter(requirementChapter);
-					elements = jJChapterBean.getSortedElements(
-							requirementChapter, requirement.getProject(), null,
+					elements = getSortedElements(requirementChapter,
+							requirement.getProject(),
 							requirement.getCategory(), false);
 					if (elements.isEmpty()) {
 						requirement.setOrdering(0);
@@ -1895,9 +1891,9 @@ public class JJRequirementBean {
 
 				if (requirement.getChapter() != null) {
 					int requirementOrder = requirement.getOrdering();
-					elements = jJChapterBean.getSortedElements(
-							requirement.getChapter(), requirement.getProject(),
-							null, requirement.getCategory(), false);
+					elements = getSortedElements(requirement.getChapter(),
+							requirement.getProject(),
+							requirement.getCategory(), false);
 
 					subElements = elements.tailMap(requirementOrder);
 
@@ -1946,6 +1942,42 @@ public class JJRequirementBean {
 		}
 		elements = null;
 		subElements = null;
+	}
+
+	private SortedMap<Integer, Object> getSortedElements(JJChapter parent,
+			JJProject project, JJCategory category, boolean onlyActif) {
+
+		SortedMap<Integer, Object> elements = new TreeMap<Integer, Object>();
+
+		if (parent != null) {
+
+			List<JJChapter> chapters = jJChapterService
+					.getChildrenOfParentChapter(parent, onlyActif, true);
+
+			for (JJChapter chapter : chapters) {
+				elements.put(chapter.getOrdering(), chapter);
+			}
+
+			List<JJRequirement> requirements = jJRequirementService
+					.getRequirementChildrenWithChapterSortedByOrder(parent,
+							onlyActif);
+
+			for (JJRequirement requirement : requirements) {
+				elements.put(requirement.getOrdering(), requirement);
+
+			}
+		} else {
+
+			List<JJChapter> chapters = jJChapterService.getParentsChapter(
+					project, category, onlyActif, true);
+
+			for (JJChapter chapter : chapters) {
+				elements.put(chapter.getOrdering(), chapter);
+			}
+		}
+
+		return elements;
+
 	}
 
 	@SuppressWarnings("unchecked")

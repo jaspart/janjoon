@@ -3,7 +3,7 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJPhaseDataOnDemand;
 import com.starit.janjoonweb.domain.JJProductDataOnDemand;
 import com.starit.janjoonweb.domain.JJVersion;
@@ -32,6 +32,9 @@ privileged aspect JJVersionDataOnDemand_Roo_DataOnDemand {
     private List<JJVersion> JJVersionDataOnDemand.data;
     
     @Autowired
+    JJContactDataOnDemand JJVersionDataOnDemand.jJContactDataOnDemand;
+    
+    @Autowired
     JJPhaseDataOnDemand JJVersionDataOnDemand.jJPhaseDataOnDemand;
     
     @Autowired
@@ -45,19 +48,12 @@ privileged aspect JJVersionDataOnDemand_Roo_DataOnDemand {
     
     public JJVersion JJVersionDataOnDemand.getNewTransientJJVersion(int index) {
         JJVersion obj = new JJVersion();
-        setCreatedBy(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
         setName(obj, index);
-        setUpdatedBy(obj, index);
         setUpdatedDate(obj, index);
         return obj;
-    }
-    
-    public void JJVersionDataOnDemand.setCreatedBy(JJVersion obj, int index) {
-        JJContact createdBy = null;
-        obj.setCreatedBy(createdBy);
     }
     
     public void JJVersionDataOnDemand.setCreationDate(JJVersion obj, int index) {
@@ -81,11 +77,6 @@ privileged aspect JJVersionDataOnDemand_Roo_DataOnDemand {
             name = name.substring(0, 100);
         }
         obj.setName(name);
-    }
-    
-    public void JJVersionDataOnDemand.setUpdatedBy(JJVersion obj, int index) {
-        JJContact updatedBy = null;
-        obj.setUpdatedBy(updatedBy);
     }
     
     public void JJVersionDataOnDemand.setUpdatedDate(JJVersion obj, int index) {

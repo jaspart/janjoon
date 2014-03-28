@@ -10,8 +10,6 @@ import com.starit.janjoonweb.domain.JJChapterService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJMessage;
-import com.starit.janjoonweb.domain.JJProduct;
-import com.starit.janjoonweb.domain.JJProductService;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJProjectService;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -19,7 +17,6 @@ import com.starit.janjoonweb.ui.mb.JJChapterBean;
 import com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJChapterConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJProductConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJProjectConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
@@ -66,9 +63,6 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
     
     @Autowired
     JJCategoryService JJChapterBean.jJCategoryService;
-    
-    @Autowired
-    JJProductService JJChapterBean.jJProductService;
     
     private String JJChapterBean.name = "JJChapters";
     
@@ -386,30 +380,6 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         categoryCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(categoryCreateInputMessage);
         
-        OutputLabel productCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        productCreateOutput.setFor("productCreateInput");
-        productCreateOutput.setId("productCreateOutput");
-        productCreateOutput.setValue("Product:");
-        htmlPanelGrid.getChildren().add(productCreateOutput);
-        
-        AutoComplete productCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        productCreateInput.setId("productCreateInput");
-        productCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJChapterBean.JJChapter_.product}", JJProduct.class));
-        productCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJChapterBean.completeProduct}", List.class, new Class[] { String.class }));
-        productCreateInput.setDropdown(true);
-        productCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "product", String.class));
-        productCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{product.name} #{product.description} #{product.creationDate} #{product.updatedDate}", String.class));
-        productCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{product}", JJProduct.class));
-        productCreateInput.setConverter(new JJProductConverter());
-        productCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(productCreateInput);
-        
-        Message productCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        productCreateInputMessage.setId("productCreateInputMessage");
-        productCreateInputMessage.setFor("productCreateInput");
-        productCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(productCreateInputMessage);
-        
         OutputLabel parentCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         parentCreateOutput.setFor("parentCreateInput");
         parentCreateOutput.setId("parentCreateOutput");
@@ -707,30 +677,6 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         categoryEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(categoryEditInputMessage);
         
-        OutputLabel productEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        productEditOutput.setFor("productEditInput");
-        productEditOutput.setId("productEditOutput");
-        productEditOutput.setValue("Product:");
-        htmlPanelGrid.getChildren().add(productEditOutput);
-        
-        AutoComplete productEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        productEditInput.setId("productEditInput");
-        productEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJChapterBean.JJChapter_.product}", JJProduct.class));
-        productEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJChapterBean.completeProduct}", List.class, new Class[] { String.class }));
-        productEditInput.setDropdown(true);
-        productEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "product", String.class));
-        productEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{product.name} #{product.description} #{product.creationDate} #{product.updatedDate}", String.class));
-        productEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{product}", JJProduct.class));
-        productEditInput.setConverter(new JJProductConverter());
-        productEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(productEditInput);
-        
-        Message productEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        productEditInputMessage.setId("productEditInputMessage");
-        productEditInputMessage.setFor("productEditInput");
-        productEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(productEditInputMessage);
-        
         OutputLabel parentEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         parentEditOutput.setFor("parentEditInput");
         parentEditOutput.setId("parentEditOutput");
@@ -920,16 +866,6 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
         categoryValue.setConverter(new JJCategoryConverter());
         htmlPanelGrid.getChildren().add(categoryValue);
         
-        HtmlOutputText productLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        productLabel.setId("productLabel");
-        productLabel.setValue("Product:");
-        htmlPanelGrid.getChildren().add(productLabel);
-        
-        HtmlOutputText productValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        productValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJChapterBean.JJChapter_.product}", JJProduct.class));
-        productValue.setConverter(new JJProductConverter());
-        htmlPanelGrid.getChildren().add(productValue);
-        
         HtmlOutputText parentLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         parentLabel.setId("parentLabel");
         parentLabel.setValue("Parent:");
@@ -1023,17 +959,6 @@ privileged aspect JJChapterBean_Roo_ManagedBean {
             String jJCategoryStr = String.valueOf(jJCategory.getName() +  " "  + jJCategory.getDescription() +  " "  + jJCategory.getCreationDate() +  " "  + jJCategory.getUpdatedDate());
             if (jJCategoryStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJCategory);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<JJProduct> JJChapterBean.completeProduct(String query) {
-        List<JJProduct> suggestions = new ArrayList<JJProduct>();
-        for (JJProduct jJProduct : jJProductService.findAllJJProducts()) {
-            String jJProductStr = String.valueOf(jJProduct.getName() +  " "  + jJProduct.getDescription() +  " "  + jJProduct.getCreationDate() +  " "  + jJProduct.getUpdatedDate());
-            if (jJProductStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJProduct);
             }
         }
         return suggestions;

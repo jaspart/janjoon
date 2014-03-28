@@ -6,7 +6,6 @@ package com.starit.janjoonweb.domain;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJMessage;
-import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import java.util.Set;
@@ -35,14 +34,6 @@ privileged aspect JJChapter_Roo_JavaBean {
     
     public void JJChapter.setCategory(JJCategory category) {
         this.category = category;
-    }
-    
-    public JJProduct JJChapter.getProduct() {
-        return this.product;
-    }
-    
-    public void JJChapter.setProduct(JJProduct product) {
-        this.product = product;
     }
     
     public JJChapter JJChapter.getParent() {

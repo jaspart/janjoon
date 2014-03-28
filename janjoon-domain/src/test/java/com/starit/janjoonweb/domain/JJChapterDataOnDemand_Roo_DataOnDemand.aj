@@ -9,7 +9,6 @@ import com.starit.janjoonweb.domain.JJChapterDataOnDemand;
 import com.starit.janjoonweb.domain.JJChapterRepository;
 import com.starit.janjoonweb.domain.JJChapterService;
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
-import com.starit.janjoonweb.domain.JJProductDataOnDemand;
 import com.starit.janjoonweb.domain.JJProjectDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -37,9 +36,6 @@ privileged aspect JJChapterDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     JJContactDataOnDemand JJChapterDataOnDemand.jJContactDataOnDemand;
-    
-    @Autowired
-    JJProductDataOnDemand JJChapterDataOnDemand.jJProductDataOnDemand;
     
     @Autowired
     JJProjectDataOnDemand JJChapterDataOnDemand.jJProjectDataOnDemand;

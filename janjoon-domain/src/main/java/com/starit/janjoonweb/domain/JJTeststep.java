@@ -27,4 +27,10 @@ public class JJTeststep extends JJAbstractEntity {
 
 	@ManyToOne
 	private JJTestcase testcase;
+
+	@Override
+	public boolean equals(Object object) {
+		return (object instanceof JJTeststep) && (getId() != null) ? getId()
+				.equals(((JJTeststep) object).getId()) : (object == this);
+	}
 }

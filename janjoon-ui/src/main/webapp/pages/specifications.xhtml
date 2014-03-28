@@ -234,7 +234,7 @@
 										value="#{jJRequirementBean.requirementProductList}" var="c"
 										itemLabel="#{c.name}" itemValue="#{c}" />
 									<p:ajax process="@this" partialSubmit="true"
-										update="chapter,version"
+										update="version"
 										listener="#{jJRequirementBean.handleSelectProduct()}" />
 								</p:selectOneMenu>
 							</p:column>
@@ -367,8 +367,8 @@
 							<p:row>
 								<p:column colspan="3">
 									<p:commandButton value="Save"
-										action="#{jJRequirementBean.save(jJChapterBean)}"
-										process="@form" update="requirementDialogForm" />
+										action="#{jJRequirementBean.save()}" process="@form"
+										update="requirementDialogForm" />
 								</p:column>
 							</p:row>
 						</f:facet>
@@ -673,7 +673,7 @@
 							</p:dataTable>
 
 							<p:commandButton value="Import"
-								action="#{jJRequirementBean.importRequirement(jJChapterBean)}" />
+								action="#{jJRequirementBean.importRequirement()}" />
 						</h:form>
 					</p:outputPanel>
 				</p:layoutUnit>

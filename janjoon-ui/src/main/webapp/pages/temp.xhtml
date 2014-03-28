@@ -89,6 +89,16 @@
 							<p:tooltip for="runButton"
 								value="Run #{testcaseRecap.testcase.name}" showEffect="fade"
 								hideEffect="fade" />
+
+							<p:commandButton id="editButton" icon="ui-icon-pencil"
+								oncomplete="testcaseDialogWidget.show()"
+								action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
+								update=":testcaseDialog">
+								<f:setPropertyActionListener value="#{testcaseRecap.testcase}"
+									target="#{jJTestcaseBean.testcase}" />
+							</p:commandButton>
+							<p:tooltip for="editButton" value="#{messages.label_edit}"
+								showEffect="fade" hideEffect="fade" />
 						</p:column>
 						<f:facet name="footer">
 							<p:commandButton value="New testcase" id="newTestcase"
@@ -106,14 +116,12 @@
 			modal="true" widgetVar="testcaseDialogWidget" dynamic="true"
 			resizable="false">
 			<p:ajax event="close" update=":testFormCenter :testFormWest"
-				listener="#{jJTestcaseBean.closeDialog(jJTeststepBean)}" />
+				listener="#{jJTestcaseBean.closeDialog()}" />
 			<p:outputPanel id="testcaseDialogPanel">
 				<h:form id="testcaseDialogForm">
 					<p:growl id="msg" />
-					<p:scrollPanel style="width:750px;height:410px" mode="native">
-						<!-- 						<p:panelGrid style="margin-top:10px"> -->
-						<!-- 							<p:row> -->
-						<!-- 								<p:column> -->
+					<p:scrollPanel style="width:720px;height:500px" mode="native">
+
 						<p:panelGrid style="margin-top:10px">
 							<p:row>
 								<p:column>
@@ -134,10 +142,12 @@
 										requiredMessage="Testcase Requirement is a required value">
 										<f:converter
 											converterId="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter" />
-										<f:selectItem value="#{jJTestcaseBean.requirement}" var="c"
-											itemLabel="#{c.name}" itemValue="#{c}" />
+										<f:selectItem itemLabel="#{jJTestcaseBean.requirement.name}"
+											itemValue="#{jJTestcaseBean.requirement}" />
 										<f:selectItems value="#{jJTestcaseBean.requirements}" var="c"
 											itemLabel="#{c.name}" itemValue="#{c}" />
+										<p:ajax process="@this" partialSubmit="true"
+											listener="#{jJTestcaseBean.handleSelectRequirement()}" />
 									</p:selectOneMenu>
 									<p:message for="requirement" id="msgRequirement" />
 								</p:column>
@@ -185,9 +195,9 @@
 								<p:column>
 									<p:commandButton id="saveTestcase" value="Save"
 										disabled="#{jJTestcaseBean.disabled}"
-										actionListener="#{jJTestcaseBean.save(jJTeststepBean)}"
+										actionListener="#{jJTestcaseBean.save()}"
 										process="@widgetVar(nameWidget) @widgetVar(requirementWidget) @widgetVar(descriptionWidget)"
-										update="saveTestcase action result saveTestStep" />
+										update="saveTestcase" />
 								</p:column>
 							</p:row>
 							<p:row>
@@ -195,7 +205,7 @@
 									<h:outputText for="action" value="Action: *" />
 									<p:inputText id="action"
 										value="#{jJTeststepBean.teststep.actionstep}"
-										disabled="#{not jJTestcaseBean.disabled}"
+										disabled="#{jJTestcaseBean.disabledTeststep}"
 										label="Teststep Action" required="true"
 										requiredMessage="Teststep Action is a required value"
 										maxlength="100" widgetVar="actionWidget">
@@ -207,7 +217,7 @@
 									<h:outputText for="result" value="Result: *" />
 									<p:inputText id="result"
 										value="#{jJTeststepBean.teststep.resultstep}"
-										disabled="#{not jJTestcaseBean.disabled}"
+										disabled="#{jJTestcaseBean.disabledTeststep}"
 										label="Teststep Result" required="true"
 										requiredMessage="Teststep Result is a required value"
 										maxlength="100" widgetVar="resultWidget">
@@ -217,29 +227,107 @@
 								</p:column>
 								<p:column>
 									<p:commandButton id="saveTestStep" value="Add Teststep"
-										disabled="#{not jJTestcaseBean.disabled}"
+										disabled="#{jJTestcaseBean.disabledTeststep}"
 										actionListener="#{jJTeststepBean.save()}"
-										icon="ui-icon-circle-plus" update="action result"
+										icon="ui-icon-circle-plus"
+										update="action result testStepDataTable msg"
 										process="@widgetVar(actionWidget) @widgetVar(resultWidget)" />
 								</p:column>
 							</p:row>
 						</p:panelGrid>
-						<!-- 								</p:column> -->
-						<!-- 							</p:row> -->
+						<p:dataTable id="testStepDataTable" var="ts"
+							value="#{jJTeststepBean.teststeps}" scrollRows="10"
+							scrollable="true" scrollHeight="100" style="width:700px;"
+							rowKey="#{ts.name}" editable="true">
 
-						<!-- 							<f:facet name="footer"> -->
-						<!-- 								<p:row> -->
-						<!-- 									<p:column colspan="3"> -->
-						<!-- 										<p:commandButton id="resetButton" value="Reset" -->
-						<!-- 											update="testcaseDialogForm" process="@none" -->
-						<!-- 											action="#{jJTestcaseBean.newTestcase(jJTeststepBean)}" /> -->
-						<!-- 									</p:column> -->
-						<!-- 								</p:row> -->
-						<!-- 							</f:facet> -->
-						<!-- 						</p:panelGrid> -->
+							<p:ajax event="rowEdit" listener="#{jJTeststepBean.editTestStep}"
+								update=":testcaseDialogForm:msg"
+								process="@widgetVar(actionInputWidget) @widgetVar(resultInputWidget)" />
+
+							<p:ajax event="rowEditCancel"
+								listener="#{jJTeststepBean.cancelEditTestStep}"
+								update=":testcaseDialogForm:msg" />
+
+							<f:facet name="header">  
+            						Test Steps  
+        						</f:facet>
+
+							<p:column headerText="Order" style="width:9%;">
+								<h:outputText value="#{ts.ordering}" />
+							</p:column>
+
+							<p:column headerText="Action" style="width:33%;">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{ts.actionstep}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText value="#{ts.actionstep}" style="width:90%"
+											required="true" label="Action Input"
+											widgetVar="actionInputWidget"
+											requiredMessage="Action Input is a required value">
+										</p:inputText>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="Result" style="width:33%;">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{ts.resultstep}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText value="#{ts.resultstep}" style="width:90%"
+											required="true" label="Result Input"
+											widgetVar="resultInputWidget"
+											requiredMessage="Result Input is a required value">
+										</p:inputText>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="Actions" style="width:15%;">
+								<p:commandButton id="insertTestStep" update="testStepDataTable"
+									action="#{jJTeststepBean.insertTestStep()}"
+									icon="ui-icon-circle-triangle-n" process="@this"
+									style="align:center;">
+									<f:setPropertyActionListener value="#{ts}"
+										target="#{jJTeststepBean.teststep}" />
+								</p:commandButton>
+								<p:tooltip for="insertTestStep" value="Insert a Test Step"
+									showEffect="fade" hideEffect="fade" />
+
+								<p:commandButton id="deleteTestStep" update="testStepDataTable"
+									action="#{jJTeststepBean.deleteTestStep()}"
+									icon="ui-icon-circle-minus" process="@this"
+									style="align:center;">
+									<f:setPropertyActionListener value="#{ts}"
+										target="#{jJTeststepBean.teststep}" />
+								</p:commandButton>
+								<p:tooltip for="deleteTestStep"
+									value="#{messages.label_delete} a Test Step" showEffect="fade"
+									hideEffect="fade" />
+							</p:column>
+							<p:column style="width:10%;">
+								<p:rowEditor />
+							</p:column>
+
+						</p:dataTable>
+
+
 					</p:scrollPanel>
 				</h:form>
 			</p:outputPanel>
+			<f:facet name="footer">
+				<p:row>
+					<p:column colspan="3">
+						<p:commandButton id="resetButton" value="Reset"
+							disabled="#{jJTestcaseBean.disabledReset}"
+							update=":testcaseDialogForm"
+							action="#{jJTestcaseBean.newTestcase(jJTeststepBean)}" />
+					</p:column>
+				</p:row>
+			</f:facet>
 		</p:dialog>
 
 	</ui:define>

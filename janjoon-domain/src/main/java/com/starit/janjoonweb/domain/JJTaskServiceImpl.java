@@ -60,51 +60,6 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 	}
 
-//	@Override
-//	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project) {
-//
-//		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-//		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
-//				.createQuery(JJRequirement.class);
-//
-//		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
-//
-//		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
-//
-//		List<Predicate> predicates = new ArrayList<Predicate>();
-//
-//		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-//
-//		if (project != null) {
-//			predicates.add(criteriaBuilder.equal(from.get("project"), project));
-//		}
-//
-//		if (product != null) {
-//			predicates.add(criteriaBuilder.equal(from.get("product"), product));
-//		}
-//		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
-//
-//		List<JJRequirement> result = entityManager.createQuery(select)
-//				.getResultList();
-//
-//		List<JJTask> rf = new ArrayList<JJTask>();
-//		for (JJRequirement req : result) {
-//			System.out.println(req.getName());
-//			CriteriaQuery<JJTask> criteriaQuery1 = criteriaBuilder
-//					.createQuery(JJTask.class);
-//
-//			Root<JJTask> from1 = criteriaQuery1.from(JJTask.class);
-//
-//			CriteriaQuery<JJTask> select1 = criteriaQuery1.select(from1);
-//			Predicate predicate = criteriaBuilder.equal(
-//					from1.get("requirement"), req);
-//			select1.where(criteriaBuilder.and(predicate));
-//			rf.addAll(entityManager.createQuery(select1).getResultList());
-//		}
-//
-//		return rf;
-//	}
-
 	@Override
 	public void saveTasks(Set<JJTask> tasks) {
 		jJTaskRepository.save(tasks);

@@ -15,5 +15,4 @@ public interface JJTaskService {
 
 	public void updateTasks(Set<JJTask> tasks);
 
-//	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project);
 }

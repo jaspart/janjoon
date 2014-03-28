@@ -27,9 +27,6 @@ public class JJProduct extends JJAbstractEntity {
 	private Set<JJVersion> versions = new HashSet<JJVersion>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
-	private Set<JJChapter> chapters = new HashSet<JJChapter>();
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
 
 	@NotNull

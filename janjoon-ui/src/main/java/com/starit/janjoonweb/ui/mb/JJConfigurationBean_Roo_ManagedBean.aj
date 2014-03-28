@@ -73,7 +73,6 @@ privileged aspect JJConfigurationBean_Roo_ManagedBean {
         columns.add("creationDate");
         columns.add("updatedDate");
         columns.add("param");
-       
     }
     
     public String JJConfigurationBean.getName() {
@@ -699,14 +698,8 @@ privileged aspect JJConfigurationBean_Roo_ManagedBean {
     
     public String JJConfigurationBean.displayCreateDialog() {
         JJConfiguration_ = new JJConfiguration();
-        createDialogVisible = true;        
+        createDialogVisible = true;
         return "JJConfiguration_";
-    }
-    
-    public String JJConfigurationBean.displayCreateDialogadmin() {
-        JJConfiguration_ = new JJConfiguration();
-        createDialogVisible = true;        
-        return null;
     }
     
     public String JJConfigurationBean.persist() {

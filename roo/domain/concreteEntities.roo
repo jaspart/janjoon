@@ -17,7 +17,6 @@ field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --m
 focus --class ~.JJProduct
 field string --fieldName extname --sizeMax 100 --notNull
 field set --fieldName versions  --type ~.JJVersion --cardinality ONE_TO_MANY --mappedBy product --fetch LAZY
-field set --fieldName chapters  --type ~.JJChapter --cardinality ONE_TO_MANY --mappedBy product --fetch LAZY
 field reference --fieldName manager --type ~.JJContact --notNull
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy product --fetch LAZY
 #######################
@@ -35,7 +34,6 @@ focus --class ~.JJChapter
 field number --fieldName ordering --type java.lang.Integer
 field reference --fieldName project --type ~.JJProject
 field reference --fieldName category --type ~.JJCategory
-field reference --fieldName product --type ~.JJProduct
 field reference --fieldName parent --type ~.domain.JJChapter
 field set --fieldName chapters --type ~.domain.JJChapter --cardinality ONE_TO_MANY --mappedBy parent --fetch LAZY
 field set --fieldName requirements --type ~.JJRequirement --cardinality ONE_TO_MANY --mappedBy chapter --fetch LAZY
