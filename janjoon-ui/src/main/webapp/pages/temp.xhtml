@@ -121,7 +121,6 @@
 				<h:form id="testcaseDialogForm">
 					<p:growl id="msg" />
 					<p:scrollPanel style="width:720px;height:500px" mode="native">
-
 						<p:panelGrid style="margin-top:10px">
 							<p:row>
 								<p:column>
@@ -169,7 +168,6 @@
 									<p:message for="description" id="msgDescription" />
 								</p:column>
 							</p:row>
-
 							<p:row>
 								<p:column>
 									<h:outputText value="Initiate Task: " />
@@ -197,7 +195,7 @@
 										disabled="#{jJTestcaseBean.disabled}"
 										actionListener="#{jJTestcaseBean.save()}"
 										process="@widgetVar(nameWidget) @widgetVar(requirementWidget) @widgetVar(descriptionWidget)"
-										update="saveTestcase action result saveTestStep :testcaseDialogForm:msg" />
+										update="saveTestcase action result saveTestStep msg" />
 								</p:column>
 							</p:row>
 							<p:row>
@@ -211,7 +209,6 @@
 										maxlength="100" widgetVar="actionWidget">
 									</p:inputText>
 									<p:message for="action" id="msgAction" />
-
 								</p:column>
 								<p:column>
 									<h:outputText for="result" value="Result: *" />
@@ -223,7 +220,6 @@
 										maxlength="100" widgetVar="resultWidget">
 									</p:inputText>
 									<p:message for="result" id="msgResult" />
-
 								</p:column>
 								<p:column>
 									<p:commandButton id="saveTestStep" value="Add Teststep"
@@ -239,23 +235,18 @@
 							value="#{jJTeststepBean.teststeps}" scrollRows="10"
 							scrollable="true" scrollHeight="100" style="width:700px;"
 							rowKey="#{ts.name}" editable="true">
-
 							<p:ajax event="rowEdit" listener="#{jJTeststepBean.editTestStep}"
 								update=":testcaseDialogForm:msg"
 								process="@widgetVar(actionInputWidget) @widgetVar(resultInputWidget)" />
-
 							<p:ajax event="rowEditCancel"
 								listener="#{jJTeststepBean.cancelEditTestStep}"
 								update=":testcaseDialogForm:msg" />
-
 							<f:facet name="header">  
             						Test Steps  
-        						</f:facet>
-
+        					</f:facet>
 							<p:column headerText="Order" style="width:9%;">
 								<h:outputText value="#{ts.ordering}" />
 							</p:column>
-
 							<p:column headerText="Action" style="width:33%;">
 								<p:cellEditor>
 									<f:facet name="output">
@@ -270,7 +261,6 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-
 							<p:column headerText="Result" style="width:33%;">
 								<p:cellEditor>
 									<f:facet name="output">
@@ -285,7 +275,6 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-
 							<p:column headerText="Actions" style="width:15%;">
 								<p:commandButton id="insertTestStep" update="testStepDataTable"
 									action="#{jJTeststepBean.insertTestStep()}"
@@ -311,10 +300,7 @@
 							<p:column style="width:10%;">
 								<p:rowEditor />
 							</p:column>
-
 						</p:dataTable>
-
-
 					</p:scrollPanel>
 				</h:form>
 			</p:outputPanel>

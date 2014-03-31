@@ -79,13 +79,15 @@ public class JJTeststepBean {
 		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
 				.getAttribute("jJTestcaseBean");
 
-		JJTestcase testcase = jJTestcaseBean.getTestcase();
+		JJTestcase tc = jJTestcaseService.findJJTestcase(jJTestcaseBean
+				.getTestcase().getId());
 
 		if (teststep.getId() == null) {
 
-			manageTeststepOrder(testcase);
-			teststep.setTestcase(testcase);
-			testcase.getTeststeps().add(teststep);
+			manageTeststepOrder(tc);
+
+			teststep.setTestcase(tc);
+			tc.getTeststeps().add(teststep);
 
 			teststep.setName(teststep.getActionstep() + " "
 					+ teststep.getResultstep());
@@ -263,9 +265,9 @@ public class JJTeststepBean {
 
 		SortedMap<Integer, JJTeststep> elements = new TreeMap<Integer, JJTeststep>();
 
-		JJTestcase tc = jJTestcaseService.findJJTestcase(testcase.getId());
+		// JJTestcase tc = jJTestcaseService.findJJTestcase(testcase.getId());
 
-		Set<JJTeststep> teststeps = tc.getTeststeps();
+		Set<JJTeststep> teststeps = testcase.getTeststeps();
 
 		// System.out.println("teststeps size " + teststeps.size());
 

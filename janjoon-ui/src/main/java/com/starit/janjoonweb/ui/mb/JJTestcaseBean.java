@@ -356,7 +356,7 @@ public class JJTestcaseBean {
 
 		jJTeststepBean.newTeststep();
 
-		System.out.println("End testcase");
+		System.out.println("End Edit testcase");
 	}
 
 	public void handleSelectRequirement() {
