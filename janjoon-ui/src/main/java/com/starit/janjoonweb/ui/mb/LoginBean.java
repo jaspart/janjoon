@@ -232,6 +232,8 @@ public class LoginBean implements Serializable {
 	public void loadingPage(ComponentSystemEvent e) throws IOException {
 
 		if (!loading) {
+			loading = true;
+			
 			HttpSession session = (HttpSession) FacesContext
 					.getCurrentInstance().getExternalContext()
 					.getSession(false);
@@ -239,24 +241,28 @@ public class LoginBean implements Serializable {
 			DevelopmentBean jJDevelopment = (DevelopmentBean) session
 					.getAttribute("jJDevelopment");
 			jJDevelopment = new DevelopmentBean();
+			String path = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+			System.out.println(path);
 			FacesContext
 					.getCurrentInstance()
 					.getExternalContext()
-					.redirect(
-							"/janjoon-ui/pages/development.jsf?faces-redirect=true");
-			loading = true;
+					.redirect(path+
+							"/pages/development.jsf?faces-redirect=true");
+			
 		}
 	}
 	public void loadingMain(ComponentSystemEvent e) throws IOException {
 		
 		if (!loadMain && enable) {
 			
+			loadMain = true;			
+			String path = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
 			FacesContext
 					.getCurrentInstance()
 					.getExternalContext()
-					.redirect(
-							"/janjoon-ui/pages/main.jsf?faces-redirect=true");
-			loadMain = true;
+					.redirect(path+
+							"/pages/main.jsf?faces-redirect=true");
+			
 		}
 	}
 
@@ -277,11 +283,12 @@ public class LoginBean implements Serializable {
 			jJDevelopment = new DevelopmentBean();
 			if (!FacesContext.getCurrentInstance().getViewRoot().getViewId()
 					.contains("development")) {
+				String path = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
-						.redirect(
-								"/janjoon-ui/pages/development.jsf?faces-redirect=true");
+						.redirect(path+
+								"/pages/development.jsf?faces-redirect=true");
 			}
 			else{
 				RequestContext context=RequestContext.getCurrentInstance();
