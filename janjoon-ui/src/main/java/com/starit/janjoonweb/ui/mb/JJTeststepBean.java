@@ -28,6 +28,8 @@ public class JJTeststepBean {
 
 	private List<JJTeststep> teststeps;
 
+	private List<JJTeststep> teststepList;
+
 	public JJTeststep getTeststep() {
 		return teststep;
 	}
@@ -60,6 +62,31 @@ public class JJTeststepBean {
 
 	public void setTeststeps(List<JJTeststep> teststeps) {
 		this.teststeps = teststeps;
+	}
+
+	public List<JJTeststep> getTeststepList() {
+		System.out.println("in get list");
+
+		teststepList = new ArrayList<JJTeststep>();
+
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
+				.getAttribute("jJTestcaseBean");
+
+		JJTestcase testcase = jJTestcaseBean.getTestcase();
+
+		if (testcase.getId() != null) {
+			teststepList = jJTeststepService.getTeststeps(testcase, true, true);
+		}
+
+		System.out.println("teststeps.size() " + teststepList.size());
+
+		return teststepList;
+	}
+
+	public void setTeststepList(List<JJTeststep> teststepList) {
+		this.teststepList = teststepList;
 	}
 
 	public void newTeststep() {

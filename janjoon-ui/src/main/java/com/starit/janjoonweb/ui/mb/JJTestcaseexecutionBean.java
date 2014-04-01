@@ -2,6 +2,9 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.util.Date;
 
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
@@ -13,43 +16,44 @@ import com.starit.janjoonweb.domain.JJTestcaseexecution;
 @RooJsfManagedBean(entity = JJTestcaseexecution.class, beanName = "jJTestcaseexecutionBean")
 public class JJTestcaseexecutionBean {
 
-	private JJBuild currentBuild;
-	private JJTestcaseexecution jJTestcaseexecution;
+	private JJTestcaseexecution testcaseexecution;
 
-	public JJBuild getCurrentBuild() {
-		return currentBuild;
+	public JJTestcaseexecution getTestcaseexecution() {
+		return testcaseexecution;
 	}
 
-	public void setCurrentBuild(JJBuild currentBuild) {
-		this.currentBuild = currentBuild;
+	public void setTestcaseexecution(JJTestcaseexecution testcaseexecution) {
+		this.testcaseexecution = testcaseexecution;
 	}
 
-	public JJTestcaseexecution getjJTestcaseexecution() {
-		return jJTestcaseexecution;
-	}
+	public void newTestcaseexecution() {
 
-	public void setjJTestcaseexecution(JJTestcaseexecution jJTestcaseexecution) {
-		this.jJTestcaseexecution = jJTestcaseexecution;
-	}
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
 
-	public void initParameter() {
-		jJTestcaseexecution = null;
-	}
+		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
+				.getAttribute("jJTestcaseBean");
 
-	public void createJJTestcaseexecution(JJTestcase jJTestcase) {
-		JJTestcaseexecution testcaseexecution = new JJTestcaseexecution();
-		testcaseexecution.setBuild(currentBuild);
-		testcaseexecution.setPassed(true);
-		testcaseexecution.setName(jJTestcase.getName());
-		testcaseexecution.setDescription("TEST CASE EXECUTION");
+		JJTestcase testcase = jJTestcaseBean.getTestcase();
+
+		testcaseexecution = new JJTestcaseexecution();
+		testcaseexecution.setName(testcase.getName());
+		testcaseexecution.setDescription(testcase.getDescription());
 		testcaseexecution.setCreationDate(new Date());
-		testcaseexecution.setTestcase(jJTestcase);
 		testcaseexecution.setEnabled(true);
+		testcaseexecution.setTestcase(testcase);
+
+		testcaseexecution.setPassed(null);
+
+		JJBuildBean jJBuildBean = (JJBuildBean) session
+				.getAttribute("jJBuildBean");
+
+		JJBuild build = jJBuildBean.getBuild();
+
+		testcaseexecution.setBuild(build);
 
 		jJTestcaseexecutionService.saveJJTestcaseexecution(testcaseexecution);
 
-		jJTestcaseexecution = jJTestcaseexecutionService
-				.findJJTestcaseexecution(testcaseexecution.getId());
-
 	}
+
 }

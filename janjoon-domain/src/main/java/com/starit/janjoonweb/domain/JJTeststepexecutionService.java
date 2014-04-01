@@ -11,4 +11,7 @@ public interface JJTeststepexecutionService {
 
 	public JJTeststepexecution getTeststepexecutionWithTeststepAndBuild(
 			JJTeststep teststep, JJBuild build);
+
+	public void saveteststepexecutions(
+			List<JJTeststepexecution> teststepexecutions);
 }

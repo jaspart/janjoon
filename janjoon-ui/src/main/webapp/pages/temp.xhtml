@@ -16,12 +16,12 @@
 			<p:layoutUnit position="west"
 				style="min-width:200px;min-height:500px;" resizable="true">
 				<h:form id="testFormWest">
-					<p:panelGrid style="margin-top:10px">
+					<p:panelGrid style="margin-top:10px;">
 						<p:row>
 							<p:column>
 								<h:outputText for="build" value="Build:" />
 								<p:selectOneMenu id="build" value="#{jJBuildBean.build}"
-									panelStyle="width:150px" effect="fade" style="width:150px"
+									panelStyle="width:150px;" effect="fade" style="width:150px;"
 									filter="true" filterMatchMode="startsWith">
 									<f:converter
 										converterId="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter" />
@@ -53,28 +53,24 @@
 			<p:layoutUnit position="center" resizable="true"
 				style="min-height:500px;">
 				<h:form id="testFormCenter">
-					<p:dataTable id="testcaseRecapDataTable" var="testcaseRecap"
+					<p:dataTable id="testcaseRecapDataTable" var="tcr"
 						value="#{jJTestcaseBean.testCaseRecaps}" paginator="true" rows="8"
-						style="width:550px" rowKey="#{testcaseRecap.testcase.id}"
+						style="width:550px;" rowKey="#{tcr.testcase.name}"
 						rendered="#{jJTestcaseBean.rendredTestCaseRecaps}">
 						<f:facet name="header">
-							<p:row>
-								<p:column colspan="3">
-									<h:outputText value="#{jJTestcaseBean.chapter.name}" />
-								</p:column>
-							</p:row>
+							<h:outputText value="#{jJTestcaseBean.chapter.name}" />
 						</f:facet>
 						<p:column>
 							<f:facet name="header">
 								<h:outputText value="Testcase" />
 							</f:facet>
-							<h:outputText value="#{testcaseRecap.testcase.name}" />
+							<h:outputText value="#{tcr.testcase.name}" />
 						</p:column>
 						<p:column>
 							<f:facet name="header">
 								<h:outputText value="Status" />
 							</f:facet>
-							<h:outputText value="#{testcaseRecap.status}" />
+							<h:outputText value="#{tcr.status}" />
 						</p:column>
 
 						<p:column styleClass="action-column">
@@ -82,19 +78,19 @@
 								<h:outputText value="Actions" />
 							</f:facet>
 							<p:commandButton id="runButton" icon="ui-icon-play"
-								disabled="#{testcaseRecap.rendered}">
-								<!-- 								<f:setPropertyActionListener value="#{contact}" -->
-								<!-- 									target="#{jJContactBean.contactAdmin}" /> -->
+								oncomplete="runTestcaseDialogWidget.show()"
+								action="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
+								update=":runTestcaseDialog" disabled="#{tcr.rendered}">
+								<f:setPropertyActionListener value="#{tcr.testcase}"
+									target="#{jJTestcaseBean.testcase}" />
 							</p:commandButton>
-							<p:tooltip for="runButton"
-								value="Run #{testcaseRecap.testcase.name}" showEffect="fade"
-								hideEffect="fade" />
-
+							<p:tooltip for="runButton" value="Run #{tcr.testcase.name}"
+								showEffect="fade" hideEffect="fade" />
 							<p:commandButton id="editButton" icon="ui-icon-pencil"
 								oncomplete="testcaseDialogWidget.show()"
 								action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
 								update=":testcaseDialog">
-								<f:setPropertyActionListener value="#{testcaseRecap.testcase}"
+								<f:setPropertyActionListener value="#{tcr.testcase}"
 									target="#{jJTestcaseBean.testcase}" />
 							</p:commandButton>
 							<p:tooltip for="editButton" value="#{messages.label_edit}"
@@ -108,6 +104,53 @@
 								icon="ui-icon-circle-plus" />
 						</f:facet>
 					</p:dataTable>
+
+
+					<p:panelGrid style="margin-top:10px;"
+						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">
+									<h:outputText
+										value="TC #{jJTestcaseBean.testcase.ordering}: #{jJTestcaseBean.testcase.name}" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="Requirement: #{jJTestcaseBean.testcase.requirement.name}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="Description :" />
+								<p:editor id="description" widgetVar="descriptionWidget"
+									style="width:500px;"
+									value="#{jJTestcaseBean.testcase.description}" disabled="true" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+
+					<!-- 					<p:dataTable id="teststepRecapDataTable" value="#{jJTeststepBean.teststepList}" -->
+					<!-- 						rowKey="#{ts.name}" var="ts" -->
+					<!-- 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}" -->
+					<!-- 						paginator="true" rows="8" style="width:650px;"> -->
+					<!-- 						<f:facet name="header"> -->
+					<!-- 							<h:outputText value="Test Step List" /> -->
+					<!-- 						</f:facet> -->
+
+					<!-- 						<p:column headerText="Order"> -->
+					<!-- 							<h:outputText value="#{ts.ordering}" /> -->
+					<!-- 						</p:column> -->
+
+					<!-- 						<p:column headerText="Action"> -->
+					<!-- 							<h:outputText value="#{ts.actiontstep}" /> -->
+					<!-- 						</p:column> -->
+					<!-- 						<p:column headerText="Result"> -->
+					<!-- 							<h:outputText value="#{ts.resultstep}" /> -->
+					<!-- 						</p:column> -->
+					<!-- 					</p:dataTable> -->
+
+
 				</h:form>
 			</p:layoutUnit>
 		</p:layout>
@@ -120,8 +163,8 @@
 			<p:outputPanel id="testcaseDialogPanel">
 				<h:form id="testcaseDialogForm">
 					<p:growl id="msg" />
-					<p:scrollPanel style="width:720px;height:500px" mode="native">
-						<p:panelGrid style="margin-top:10px">
+					<p:scrollPanel style="width:720px;height:500px;" mode="native">
+						<p:panelGrid style="margin-top:10px;">
 							<p:row>
 								<p:column>
 									<p:inputText id="name" value="#{jJTestcaseBean.testcase.name}"
@@ -134,9 +177,9 @@
 								<p:column>
 									<h:outputText for="requirement" value="Requirement: *" />
 									<p:selectOneMenu id="requirement"
-										value="#{jJTestcaseBean.requirement}" panelStyle="width:150px"
-										effect="fade" style="width:150px" filter="true"
-										required="true" filterMatchMode="startsWith"
+										value="#{jJTestcaseBean.requirement}"
+										panelStyle="width:150px;" effect="fade" style="width:150px;"
+										filter="true" required="true" filterMatchMode="startsWith"
 										widgetVar="requirementWidget"
 										requiredMessage="Testcase Requirement is a required value">
 										<f:converter
@@ -162,7 +205,7 @@
 								<p:column colspan="3">
 									<h:outputText value="Description : *" />
 									<p:editor id="description" widgetVar="descriptionWidget"
-										style="width:680px"
+										style="width:680px;"
 										value="#{jJTestcaseBean.testcase.description}" required="true"
 										requiredMessage="Testcase Description is a required value" />
 									<p:message for="description" id="msgDescription" />
@@ -314,6 +357,80 @@
 					</p:column>
 				</p:row>
 			</f:facet>
+		</p:dialog>
+
+		<p:dialog id="runTestcaseDialog" header="Test Case Execution"
+			modal="true" widgetVar="runTestcaseDialogWidget" dynamic="true"
+			resizable="false">
+			<p:outputPanel id="runTestcaseDialogPanel">
+				<h:form id="runForm">
+					<p:scrollPanel style="width:720px;height:500px;" mode="native">
+
+						<p:tabView id="teststepTabView" widgetVar="teststepTabViewWidget"
+							activeIndex="#{jJTeststepexecutionBean.activeIndex}"
+							dynamic="true">
+
+
+							<ui:repeat
+								value="#{jJTeststepexecutionBean.teststepexecutionStructures}"
+								var="teststepexecutionStructure">
+
+								<p:tab title="#{teststepexecutionStructure.teststep.ordering}">
+									<h:panelGrid columns="2">
+										<p:panel>
+											<h:outputText
+												value="#{teststepexecution.teststep.actionstep}" />
+										</p:panel>
+										<p:panel>
+											<h:outputText value="#{teststepexecution.teststep.resultat}" />
+										</p:panel>
+									</h:panelGrid>
+								</p:tab>
+
+
+
+							</ui:repeat>
+
+							<p:tab title="#{teststepexecution.teststep.ordering}">
+								<h:panelGrid columns="2">
+									<p:panel>
+										<h:outputText value="#{teststepexecution.teststep.actionstep}" />
+									</p:panel>
+									<p:panel>
+										<h:outputText value="#{teststepexecution.teststep.resultat}" />
+									</p:panel>
+								</h:panelGrid>
+							</p:tab>
+						</p:tabView>
+						<h:panelGrid columns="2" cellpadding="3">
+
+							<p:selectBooleanButton id="passedButton"
+								value="#{jJTestcaseBean.passed}" onLabel="Passed"
+								offLabel="Failed" onIcon="ui-icon-circle-check"
+								offIcon="ui-icon-alert">
+								<p:ajax
+									listener="#{jJTestcaseBean.onChangeValue(jJTeststepexecutionBean,jJBugBean)}"
+									update="quitButton,commentBug" />
+							</p:selectBooleanButton>
+
+							<p:commandButton id="quitButton" value="Quit"
+								icon="ui-icon-circle-close"
+								actionListener="#{jJTestcaseBean.quitRun(jJTestcaseexecutionBean,jJTeststepexecutionBean,jJBugBean)}"
+								oncomplete="testcaseExecution.hide()"
+								disabled="#{jJTestcaseBean.passed}" />
+
+							<p:inputText id="commentBug"
+								value="#{jJBugBean.jJBug.description}"
+								disabled="#{jJTestcaseBean.passed}" />
+
+							<p:commandButton id="nextButton" value="Next"
+								icon="ui-icon-circle-arrow-e"
+								actionListener="#{jJTestcaseBean.nextTabIndex(jJTestcaseexecutionBean,jJTeststepexecutionBean,jJBugBean)}"
+								update=":runForm:tabView,passedButton,quitButton,commentBug" />
+						</h:panelGrid>
+					</p:scrollPanel>
+				</h:form>
+			</p:outputPanel>
 		</p:dialog>
 
 	</ui:define>

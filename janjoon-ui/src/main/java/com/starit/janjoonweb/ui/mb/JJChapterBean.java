@@ -40,6 +40,7 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
+import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -205,7 +206,7 @@ public class JJChapterBean {
 	public void loadData(long categoryId) {
 		System.out.println("Init chapterBean");
 		this.categoryId = categoryId;
-		System.out.println("id " + categoryId);
+
 		category = jJCategoryService.findJJCategory(categoryId);
 
 		newChapter();
@@ -600,6 +601,22 @@ public class JJChapterBean {
 
 	}
 
+	private SortedMap<Integer, JJTestcase> getSortedTestcases(
+			JJRequirement requirement, JJChapter chapter) {
+
+		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
+
+		List<JJTestcase> testcases = jJTestcaseService.getTestcases(
+				requirement, chapter, false, true);
+
+		for (JJTestcase testcase : testcases) {
+			elements.put(testcase.getOrdering(), testcase);
+		}
+
+		return elements;
+
+	}
+
 	private String getSplitFromString(String s, int index) {
 		String[] temp = s.split("-");
 		return temp[index];
@@ -636,8 +653,11 @@ public class JJChapterBean {
 
 		FacesMessage message = null;
 
-		SortedMap<Integer, Object> elements;
-		SortedMap<Integer, Object> subElements;
+		SortedMap<Integer, Object> elements = null;
+		SortedMap<Integer, Object> subElements = null;
+
+		SortedMap<Integer, JJTestcase> testcases = null;
+		SortedMap<Integer, JJTestcase> subTestcases = null;
 
 		if (dragNodeData.startsWith("R-")) {
 
@@ -649,9 +669,13 @@ public class JJChapterBean {
 
 			JJChapter requirementCHAPTER = REQUIREMENT.getChapter();
 
+			subTestcases = getSortedTestcases(REQUIREMENT, null);
+			testcases = getSortedTestcases(null, requirementCHAPTER);
+
 			if (dropNodeData.startsWith("C-")) {
 
 				if (requirementCHAPTER != null) {
+
 					int requirementOrder = REQUIREMENT.getOrdering();
 
 					elements = getSortedElements(requirementCHAPTER, project,
@@ -697,6 +721,48 @@ public class JJChapterBean {
 
 					}
 
+					if (!subTestcases.isEmpty()) {
+
+						SortedMap<Integer, JJTestcase> tempTestcases;
+
+						for (Map.Entry<Integer, JJTestcase> entry : subTestcases
+								.entrySet()) {
+
+							int testcaseOrder = entry.getKey();
+
+							JJTestcase testcase = entry.getValue();
+
+							tempTestcases = new TreeMap<Integer, JJTestcase>();
+							tempTestcases = testcases.tailMap(testcaseOrder);
+							tempTestcases.remove(testcaseOrder);
+
+							testcases.remove(testcaseOrder);
+
+							testcase.setOrdering(null);
+							testcase.setUpdatedDate(new Date());
+							jJTestcaseService.updateJJTestcase(testcase);
+
+							testcase = null;
+
+							for (Map.Entry<Integer, JJTestcase> tmpEntry : tempTestcases
+									.entrySet()) {
+
+								testcase = tmpEntry.getValue();
+								int lastOrder = testcase.getOrdering();
+
+								testcase.setOrdering(lastOrder - 1);
+								testcase.setUpdatedDate(new Date());
+								jJTestcaseService.updateJJTestcase(testcase);
+
+								testcase = null;
+
+							}
+
+						}
+
+						tempTestcases = null;
+					}
+
 				}
 
 				long chapterID = Long.parseLong(getSplitFromString(
@@ -705,6 +771,9 @@ public class JJChapterBean {
 				JJChapter CHAPTER = jJChapterService.findJJChapter(chapterID);
 
 				elements = getSortedElements(CHAPTER, project, category, false);
+
+				SortedMap<Integer, JJTestcase> testcases1 = getSortedTestcases(
+						null, CHAPTER);
 
 				if (elements.isEmpty()) {
 					REQUIREMENT.setOrdering(0);
@@ -770,6 +839,34 @@ public class JJChapterBean {
 
 				jJRequirementService.updateJJRequirement(REQUIREMENT);
 
+				if (!subTestcases.isEmpty()) {
+
+					int increment = 0;
+
+					if (!testcases1.isEmpty()) {
+
+						increment = testcases1.lastKey() + 1;
+					}
+
+					int i = 0;
+
+					for (Map.Entry<Integer, JJTestcase> entry : subTestcases
+							.entrySet()) {
+
+						int order = i + increment;
+
+						JJTestcase testcase = entry.getValue();
+
+						testcase.setOrdering(order);
+						testcase.setUpdatedDate(new Date());
+						jJTestcaseService.updateJJTestcase(testcase);
+
+						i++;
+
+						testcase = null;
+					}
+				}
+
 				message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 						"Requirement: " + dragNodeData
 								+ "\n Dropped on Chapter: " + dropNodeData
@@ -784,7 +881,9 @@ public class JJChapterBean {
 									+ "\n No changes found", null);
 
 				} else {
+
 					int requirementOrder = REQUIREMENT.getOrdering();
+
 					elements = getSortedElements(requirementCHAPTER, project,
 							category, false);
 
@@ -826,6 +925,49 @@ public class JJChapterBean {
 									.updateJJRequirement(requirement);
 						}
 
+					}
+
+					if (!subTestcases.isEmpty()) {
+
+						SortedMap<Integer, JJTestcase> tempTestcases;
+
+						for (Map.Entry<Integer, JJTestcase> entry : subTestcases
+								.entrySet()) {
+
+							int testcaseOrder = entry.getKey();
+
+							JJTestcase testcase = entry.getValue();
+
+							tempTestcases = new TreeMap<Integer, JJTestcase>();
+							tempTestcases = testcases.tailMap(testcaseOrder);
+							tempTestcases.remove(testcaseOrder);
+
+							testcases.remove(testcaseOrder);
+
+							testcase = null;
+
+							for (Map.Entry<Integer, JJTestcase> tmpEntry : tempTestcases
+									.entrySet()) {
+
+								testcase = tmpEntry.getValue();
+
+								if (!subTestcases.containsValue(testcase)) {
+
+									int lastOrder = testcase.getOrdering();
+
+									testcase.setOrdering(lastOrder - 1);
+									testcase.setUpdatedDate(new Date());
+									jJTestcaseService
+											.updateJJTestcase(testcase);
+								}
+
+								testcase = null;
+
+							}
+
+						}
+
+						tempTestcases = null;
 					}
 
 					message = new FacesMessage(FacesMessage.SEVERITY_WARN,
@@ -1031,6 +1173,8 @@ public class JJChapterBean {
 		message = null;
 		elements = null;
 		subElements = null;
+		testcases = null;
+		subTestcases = null;
 	}
 
 	public void closeDialog(CloseEvent event) {

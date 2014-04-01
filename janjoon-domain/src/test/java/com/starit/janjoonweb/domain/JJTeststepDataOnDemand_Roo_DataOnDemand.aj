@@ -50,7 +50,6 @@ privileged aspect JJTeststepDataOnDemand_Roo_DataOnDemand {
         setEnabled(obj, index);
         setName(obj, index);
         setOrdering(obj, index);
-        setPassed(obj, index);
         setResultstep(obj, index);
         setUpdatedDate(obj, index);
         return obj;
@@ -90,11 +89,6 @@ privileged aspect JJTeststepDataOnDemand_Roo_DataOnDemand {
     public void JJTeststepDataOnDemand.setOrdering(JJTeststep obj, int index) {
         Integer ordering = new Integer(index);
         obj.setOrdering(ordering);
-    }
-    
-    public void JJTeststepDataOnDemand.setPassed(JJTeststep obj, int index) {
-        Boolean passed = Boolean.TRUE;
-        obj.setPassed(passed);
     }
     
     public void JJTeststepDataOnDemand.setResultstep(JJTeststep obj, int index) {

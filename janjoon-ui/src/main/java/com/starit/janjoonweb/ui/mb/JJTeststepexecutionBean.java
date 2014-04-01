@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTeststepexecution;
@@ -15,48 +19,124 @@ import com.starit.janjoonweb.domain.JJTeststepexecution;
 @RooJsfManagedBean(entity = JJTeststepexecution.class, beanName = "jJTeststepexecutionBean")
 public class JJTeststepexecutionBean {
 
-	private JJBuild currentBuild;
-	private List<JJTeststepexecution> jJTeststepexecutionList;
+	private List<JJTeststepexecution> teststepexecutions;
+	private List<TeststepexecutionStructure> teststepexecutionStructures;
 
-	public JJBuild getCurrentBuild() {
-		return currentBuild;
+	private List<JJBug> bugs;
+
+	private int activeIndex;
+
+	public List<JJTeststepexecution> getTeststepexecutions() {
+		return teststepexecutions;
 	}
 
-	public void setCurrentBuild(JJBuild currentBuild) {
-		this.currentBuild = currentBuild;
+	public void setTeststepexecutions(
+			List<JJTeststepexecution> teststepexecutions) {
+		this.teststepexecutions = teststepexecutions;
 	}
 
-	public List<JJTeststepexecution> getjJTeststepexecutionList() {
-		return jJTeststepexecutionList;
+	public List<TeststepexecutionStructure> getTeststepexecutionStructures() {
+
+		teststepexecutionStructures = new ArrayList<TeststepexecutionStructure>();
+
+		for (JJTeststepexecution teststepexecution : teststepexecutions) {
+			TeststepexecutionStructure teststepexecutionStructure = new TeststepexecutionStructure(
+					teststepexecution, null, false);
+			teststepexecutionStructures.add(teststepexecutionStructure);
+		}
+
+		return teststepexecutionStructures;
 	}
 
-	public void setjJTeststepexecutionList(
-			List<JJTeststepexecution> jJTeststepexecutionList) {
-		this.jJTeststepexecutionList = jJTeststepexecutionList;
+	public void setTeststepexecutionStructures(
+			List<TeststepexecutionStructure> teststepexecutionStructures) {
+		this.teststepexecutionStructures = teststepexecutionStructures;
 	}
 
-	public void initParameter() {
-		jJTeststepexecutionList = new ArrayList<JJTeststepexecution>();
+	public List<JJBug> getBugs() {
+		return bugs;
 	}
 
-	public void createJJTeststepexecution(JJTeststep jJTeststep) {
-		JJTeststepexecution jJTeststepexecution = new JJTeststepexecution();
-		jJTeststepexecution.setBuild(currentBuild);
-		jJTeststepexecution.setPassed(true);
-		jJTeststepexecution.setName(jJTeststep.getName());
-		jJTeststepexecution.setDescription("TEST STEP EXECUTION");
-		jJTeststepexecution.setCreationDate(new Date());
-		jJTeststepexecution.setTeststep(jJTeststep);
-		jJTeststepexecution.setEnabled(true);
+	public void setBugs(List<JJBug> bugs) {
+		this.bugs = bugs;
+	}
 
-		jJTeststepexecutionService.saveJJTeststepexecution(jJTeststepexecution);
+	public int getActiveIndex() {
+		return activeIndex;
+	}
 
-		jJTeststepexecutionList.add(jJTeststepexecutionService
-				.findJJTeststepexecution(jJTeststepexecution.getId()));
+	public void setActiveIndex(int activeIndex) {
+		this.activeIndex = activeIndex;
+	}
+
+	public void newTabView(List<JJTeststep> teststeps) {
+
+		teststepexecutions = new ArrayList<JJTeststepexecution>();
+
+		for (JJTeststep teststep : teststeps) {
+
+			JJTeststepexecution teststepexecution = new JJTeststepexecution();
+
+			teststepexecution.setName(teststep.getName());
+			teststepexecution.setDescription(teststep.getDescription());
+			teststepexecution.setCreationDate(new Date());
+			teststepexecution.setEnabled(true);
+
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+			JJBuildBean jJBuildBean = (JJBuildBean) session
+					.getAttribute("jJBuildBean");
+
+			JJBuild build = jJBuildBean.getBuild();
+			teststepexecution.setBuild(build);
+
+			teststepexecution.setTeststep(teststep);
+			teststepexecution.setPassed(null);
+		}
+
+		jJTeststepexecutionService.saveteststepexecutions(teststepexecutions);
+	}
+
+	public class TeststepexecutionStructure {
+
+		private JJTeststepexecution teststepexecution;
+		private JJBug bug;
+		private boolean rendered;
+
+		public TeststepexecutionStructure(
+				JJTeststepexecution teststepexecution, JJBug bug,
+				boolean rendered) {
+			super();
+			this.teststepexecution = teststepexecution;
+			this.bug = bug;
+			this.rendered = rendered;
+		}
+
+		public JJTeststepexecution getTeststepexecution() {
+			return teststepexecution;
+		}
+
+		public void setTeststepexecution(JJTeststepexecution teststepexecution) {
+			this.teststepexecution = teststepexecution;
+		}
+
+		public JJBug getBug() {
+			return bug;
+		}
+
+		public void setBug(JJBug bug) {
+			this.bug = bug;
+		}
+
+		public boolean getRendered() {
+			return rendered;
+		}
+
+		public void setRendered(boolean rendered) {
+			this.rendered = rendered;
+		}
 
 	}
-	
-	public void insertJJTeststepexecution(JJTeststepexecution jJTeststepexecution){
-		jJTeststepexecutionList.add(jJTeststepexecution);
-	}
+
 }

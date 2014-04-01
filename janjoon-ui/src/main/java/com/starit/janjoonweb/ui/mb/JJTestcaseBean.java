@@ -31,6 +31,8 @@ import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
 import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
+import com.starit.janjoonweb.domain.JJTeststep;
+import com.starit.janjoonweb.domain.JJTeststepService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
@@ -60,6 +62,13 @@ public class JJTestcaseBean {
 		this.jJTestcaseexecutionService = jJTestcaseexecutionService;
 	}
 
+	@Autowired
+	JJTeststepService jJTeststepService;
+
+	public void setjJTeststepService(JJTeststepService jJTeststepService) {
+		this.jJTeststepService = jJTeststepService;
+	}
+
 	private JJTestcase testcase;
 
 	private JJProject project;
@@ -73,6 +82,7 @@ public class JJTestcaseBean {
 
 	private List<TestCaseRecap> testCaseRecaps;
 	private boolean rendredTestCaseRecaps;
+	private boolean rendredTestCaseHistorical;
 
 	private String message;
 
@@ -181,6 +191,14 @@ public class JJTestcaseBean {
 		this.rendredTestCaseRecaps = rendredTestCaseRecaps;
 	}
 
+	public boolean getRendredTestCaseHistorical() {
+		return rendredTestCaseHistorical;
+	}
+
+	public void setRendredTestCaseHistorical(boolean rendredTestCaseHistorical) {
+		this.rendredTestCaseHistorical = rendredTestCaseHistorical;
+	}
+
 	public String getMessage() {
 		return message;
 	}
@@ -276,6 +294,7 @@ public class JJTestcaseBean {
 		chapter = null;
 		testcase = null;
 		rendredTestCaseRecaps = false;
+		rendredTestCaseHistorical = false;
 		requirement = null;
 
 		createTestcaseTree();
@@ -357,6 +376,23 @@ public class JJTestcaseBean {
 		jJTeststepBean.newTeststep();
 
 		System.out.println("End Edit testcase");
+	}
+
+	public void runTestcase(JJTestcaseexecutionBean jJTestcaseexecutionBean,
+			JJTeststepexecutionBean jJTeststepexecutionBean) {
+
+		List<JJTeststep> teststeps = jJTeststepService.getTeststeps(testcase,
+				true, true);
+
+		// Traitement requête pour récupérer testcaseexecution
+
+		// if(new)
+		jJTestcaseexecutionBean.newTestcaseexecution();
+
+		jJTeststepexecutionBean.setActiveIndex(0);
+
+		jJTeststepexecutionBean.newTabView(teststeps);
+
 	}
 
 	public void handleSelectRequirement() {
@@ -487,10 +523,12 @@ public class JJTestcaseBean {
 		if (code.equalsIgnoreCase("P")) {
 			System.out.println("Project selected");
 			rendredTestCaseRecaps = false;
+			rendredTestCaseHistorical = false;
 		} else if (code.equalsIgnoreCase("C")) {
 
 			System.out.println("Category selected");
 			rendredTestCaseRecaps = false;
+			rendredTestCaseHistorical = false;
 
 		} else if (code.equalsIgnoreCase("CH")) {
 			System.out.println("Chapter selected");
@@ -498,13 +536,22 @@ public class JJTestcaseBean {
 			long id = Long.parseLong(getSubString(selectedNode, 1, "-"));
 
 			chapter = jJChapterService.findJJChapter(id);
+			testcase = null;
 
 			rendredTestCaseRecaps = true;
+			rendredTestCaseHistorical = false;
 		}
 
 		else if (code.equalsIgnoreCase("TC")) {
 			System.out.println("Testcase selected");
+
+			long id = Long.parseLong(getSubString(selectedNode, 1, "-"));
+
+			testcase = jJTestcaseService.findJJTestcase(id);
+			chapter = null;
+
 			rendredTestCaseRecaps = false;
+			rendredTestCaseHistorical = true;
 
 		}
 
@@ -625,17 +672,19 @@ public class JJTestcaseBean {
 			if (build != null) {
 				rendered = false;
 
-				JJTestcaseexecution testcaseexecution = jJTestcaseexecutionService
-						.getTestcaseexecution(testcase, build, true);
+				List<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionService
+						.getTestcaseexecutions(testcase, build, true, true);
 
-				if (testcaseexecution != null) {
+				if (!testcaseexecutions.isEmpty()) {
+					JJTestcaseexecution testcaseexecution = testcaseexecutions
+							.get(0);
 					if (testcaseexecution.getPassed()) {
 						status = "SUCCESS";
 					} else {
 						status = "FAILED";
 					}
 				} else {
-					status = "Not Run";
+					status = "NOT RUN";
 				}
 
 			} else {

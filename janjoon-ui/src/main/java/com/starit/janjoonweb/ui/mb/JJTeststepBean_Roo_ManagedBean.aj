@@ -358,24 +358,6 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         resultstepCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(resultstepCreateInputMessage);
         
-        OutputLabel passedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        passedCreateOutput.setFor("passedCreateInput");
-        passedCreateOutput.setId("passedCreateOutput");
-        passedCreateOutput.setValue("Passed:");
-        htmlPanelGrid.getChildren().add(passedCreateOutput);
-        
-        SelectBooleanCheckbox passedCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
-        passedCreateInput.setId("passedCreateInput");
-        passedCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.passed}", Boolean.class));
-        passedCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(passedCreateInput);
-        
-        Message passedCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        passedCreateInputMessage.setId("passedCreateInputMessage");
-        passedCreateInputMessage.setFor("passedCreateInput");
-        passedCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(passedCreateInputMessage);
-        
         OutputLabel testcaseCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         testcaseCreateOutput.setFor("testcaseCreateInput");
         testcaseCreateOutput.setId("testcaseCreateOutput");
@@ -619,24 +601,6 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         resultstepEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(resultstepEditInputMessage);
         
-        OutputLabel passedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        passedEditOutput.setFor("passedEditInput");
-        passedEditOutput.setId("passedEditOutput");
-        passedEditOutput.setValue("Passed:");
-        htmlPanelGrid.getChildren().add(passedEditOutput);
-        
-        SelectBooleanCheckbox passedEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
-        passedEditInput.setId("passedEditInput");
-        passedEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.passed}", Boolean.class));
-        passedEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(passedEditInput);
-        
-        Message passedEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        passedEditInputMessage.setId("passedEditInputMessage");
-        passedEditInputMessage.setFor("passedEditInput");
-        passedEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(passedEditInputMessage);
-        
         OutputLabel testcaseEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         testcaseEditOutput.setFor("testcaseEditInput");
         testcaseEditOutput.setId("testcaseEditOutput");
@@ -781,15 +745,6 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         resultstepValue.setReadonly(true);
         resultstepValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(resultstepValue);
-        
-        HtmlOutputText passedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        passedLabel.setId("passedLabel");
-        passedLabel.setValue("Passed:");
-        htmlPanelGrid.getChildren().add(passedLabel);
-        
-        HtmlOutputText passedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        passedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.passed}", String.class));
-        htmlPanelGrid.getChildren().add(passedValue);
         
         HtmlOutputText testcaseLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         testcaseLabel.setId("testcaseLabel");

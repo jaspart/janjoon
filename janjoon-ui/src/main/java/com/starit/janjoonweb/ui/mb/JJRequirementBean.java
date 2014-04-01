@@ -772,18 +772,17 @@ public class JJRequirementBean {
 
 		String message = "";
 
-		requirement.setProject(requirementProject);
 		requirement.setProduct(requirementProduct);
 		requirement.setVersioning(requirementVersion);
 		requirement.setStatus(requirementStatus);
 
 		getRequirementsListUP();
 
+		getRequirementOrder();
+
 		if (!requirementCategory.getId().equals(lowCategory.getId())) {
 			getRequirementsListDOWN();
 		}
-
-		getRequirementOrder();
 
 		if (requirement.getId() == null) {
 			System.out.println("SAVING new Requirement...");
@@ -805,47 +804,6 @@ public class JJRequirementBean {
 
 		} else {
 			System.out.println("UPDATING Requirement...");
-
-			// jJRequirementService.updateJJRequirement(requirement);
-			Set<JJTask> tasks = null;
-			Set<JJTestcase> testcases = null;
-			if (requirementStatus.getName().equalsIgnoreCase("CANCELED")
-					|| requirementStatus.getName().equalsIgnoreCase("DELETED")) {
-
-				tasks = requirement.getTasks();
-				for (JJTask task : tasks) {
-					task.setEnabled(false);
-				}
-
-				testcases = requirement.getTestcases();
-				for (JJTestcase testcase : testcases) {
-					testcase.setEnabled(false);
-				}
-
-				if (requirementStatus.getName().equalsIgnoreCase("DELETED")) {
-					requirement.setEnabled(false);
-					jJRequirementService.updateJJRequirement(requirement);
-				}
-
-			} else if (requirementStatus.getName().equalsIgnoreCase("MODIFIED")) {
-				tasks = requirement.getTasks();
-				for (JJTask task : tasks) {
-					task.setEnabled(true);
-				}
-
-				testcases = requirement.getTestcases();
-				for (JJTestcase testcase : testcases) {
-					testcase.setEnabled(true);
-				}
-			}
-
-			if (!tasks.isEmpty()) {
-				jJTaskService.updateTasks(tasks);
-			}
-
-			if (!testcases.isEmpty()) {
-				jJTestcaseService.updateTestcases(testcases);
-			}
 
 			message = "message_successfully_updated";
 			RequestContext context = RequestContext.getCurrentInstance();
@@ -1717,10 +1675,16 @@ public class JJRequirementBean {
 					if (!addList.isEmpty()) {
 
 						for (JJRequirement req : addList) {
-							req.getRequirementLinkUp().add(requirement);
+							JJRequirement req1 = jJRequirementService
+									.findJJRequirement(req.getId());
+							JJRequirement req2 = jJRequirementService
+									.findJJRequirement(requirement.getId());
+
+							req1.getRequirementLinkUp().add(req2);
+							req2.getRequirementLinkDown().add(req1);
+							jJRequirementService.updateJJRequirement(req1);
 						}
 
-						requirement.getRequirementLinkDown().addAll(addList);
 					}
 
 				}
@@ -1746,9 +1710,18 @@ public class JJRequirementBean {
 				// Ajouter list Down
 
 				for (JJRequirement req : listDOWN) {
-					req.getRequirementLinkUp().add(requirement);
+
+					JJRequirement req1 = jJRequirementService
+							.findJJRequirement(req.getId());
+					JJRequirement req2 = jJRequirementService
+							.findJJRequirement(requirement.getId());
+
+					req1.getRequirementLinkUp().add(req2);
+					req2.getRequirementLinkDown().add(req1);
+
+					jJRequirementService.updateJJRequirement(req1);
 				}
-				requirement.getRequirementLinkDown().addAll(listDOWN);
+
 			}
 
 		}
@@ -1788,15 +1761,24 @@ public class JJRequirementBean {
 	}
 
 	private void getRequirementOrder() {
+
 		SortedMap<Integer, Object> elements = null;
 		SortedMap<Integer, Object> subElements = null;
+
+		SortedMap<Integer, JJTestcase> testcases = null;
+		SortedMap<Integer, JJTestcase> subTestcases = null;
+
 		if (requirement.getId() == null) {
+
+			// Mode New Requirement
+
 			requirement.setChapter(requirementChapter);
 
 			if (requirementChapter != null) {
 				elements = getSortedElements(requirementChapter,
 						requirement.getProject(), requirement.getCategory(),
 						false);
+
 				if (elements.isEmpty()) {
 					requirement.setOrdering(0);
 				} else {
@@ -1805,16 +1787,28 @@ public class JJRequirementBean {
 			} else {
 				requirement.setOrdering(null);
 			}
+
 		} else {
+
+			subTestcases = getSortedTestcases(requirement, null);
+			testcases = getSortedTestcases(null, requirement.getChapter());
+
+			// Mode Edit Requirement
 
 			if (requirementChapter != null) {
 
 				if (requirement.getChapter() != null) {
 
+					// Drag R and Drop to C
+
 					if (requirement.getChapter().getId() != requirementChapter
 							.getId()) {
 
+						SortedMap<Integer, JJTestcase> testcases1 = getSortedTestcases(
+								null, requirementChapter);
+
 						int requirementOrder = requirement.getOrdering();
+
 						elements = getSortedElements(requirement.getChapter(),
 								requirement.getProject(),
 								requirement.getCategory(), false);
@@ -1822,9 +1816,11 @@ public class JJRequirementBean {
 						subElements = elements.tailMap(requirementOrder);
 
 						requirement.setChapter(requirementChapter);
+
 						elements = getSortedElements(requirementChapter,
 								requirement.getProject(),
 								requirement.getCategory(), false);
+
 						if (elements.isEmpty()) {
 							requirement.setOrdering(0);
 
@@ -1868,13 +1864,88 @@ public class JJRequirementBean {
 
 						}
 
+						if (!subTestcases.isEmpty()) {
+
+							SortedMap<Integer, JJTestcase> tempTestcases;
+
+							for (Map.Entry<Integer, JJTestcase> entry : subTestcases
+									.entrySet()) {
+
+								int testcaseOrder = entry.getKey();
+
+								JJTestcase testcase = entry.getValue();
+
+								tempTestcases = new TreeMap<Integer, JJTestcase>();
+								tempTestcases = testcases
+										.tailMap(testcaseOrder);
+								tempTestcases.remove(testcaseOrder);
+
+								testcases.remove(testcaseOrder);
+
+								testcase.setOrdering(null);
+								testcase.setUpdatedDate(new Date());
+								jJTestcaseService.updateJJTestcase(testcase);
+
+								testcase = null;
+
+								for (Map.Entry<Integer, JJTestcase> tmpEntry : tempTestcases
+										.entrySet()) {
+
+									testcase = tmpEntry.getValue();
+									int lastOrder = testcase.getOrdering();
+
+									testcase.setOrdering(lastOrder - 1);
+									testcase.setUpdatedDate(new Date());
+									jJTestcaseService
+											.updateJJTestcase(testcase);
+
+									testcase = null;
+
+								}
+
+							}
+
+							tempTestcases = null;
+
+							int increment = 0;
+
+							if (!testcases1.isEmpty()) {
+
+								increment = testcases1.lastKey() + 1;
+							}
+
+							int i = 0;
+
+							for (Map.Entry<Integer, JJTestcase> entry : subTestcases
+									.entrySet()) {
+
+								int order = i + increment;
+
+								JJTestcase testcase = entry.getValue();
+
+								testcase.setOrdering(order);
+								testcase.setUpdatedDate(new Date());
+								jJTestcaseService.updateJJTestcase(testcase);
+
+								i++;
+
+								testcase = null;
+							}
+
+						}
+
 					} else {
 
 						jJRequirementService.updateJJRequirement(requirement);
 
 					}
 				} else {
+
+					SortedMap<Integer, JJTestcase> testcases1 = getSortedTestcases(
+							null, requirementChapter);
+
 					requirement.setChapter(requirementChapter);
+
 					elements = getSortedElements(requirementChapter,
 							requirement.getProject(),
 							requirement.getCategory(), false);
@@ -1885,12 +1956,45 @@ public class JJRequirementBean {
 					}
 
 					jJRequirementService.updateJJRequirement(requirement);
+
+					if (!subTestcases.isEmpty()) {
+
+						int increment = 0;
+
+						if (!testcases1.isEmpty()) {
+
+							increment = testcases1.lastKey() + 1;
+						}
+
+						int i = 0;
+
+						for (Map.Entry<Integer, JJTestcase> entry : subTestcases
+								.entrySet()) {
+
+							int order = i + increment;
+
+							JJTestcase testcase = entry.getValue();
+
+							testcase.setOrdering(order);
+							testcase.setUpdatedDate(new Date());
+							jJTestcaseService.updateJJTestcase(testcase);
+
+							i++;
+
+							testcase = null;
+						}
+					}
+
 				}
 
 			} else {
 
+				// Drag R and Drop to Left
+
 				if (requirement.getChapter() != null) {
+
 					int requirementOrder = requirement.getOrdering();
+
 					elements = getSortedElements(requirement.getChapter(),
 							requirement.getProject(),
 							requirement.getCategory(), false);
@@ -1934,14 +2038,106 @@ public class JJRequirementBean {
 
 					}
 
+					if (!subTestcases.isEmpty()) {
+
+						SortedMap<Integer, JJTestcase> tempTestcases;
+
+						for (Map.Entry<Integer, JJTestcase> entry : subTestcases
+								.entrySet()) {
+
+							int testcaseOrder = entry.getKey();
+
+							JJTestcase testcase = entry.getValue();
+
+							tempTestcases = new TreeMap<Integer, JJTestcase>();
+							tempTestcases = testcases.tailMap(testcaseOrder);
+							tempTestcases.remove(testcaseOrder);
+
+							testcases.remove(testcaseOrder);
+
+							testcase = null;
+
+							for (Map.Entry<Integer, JJTestcase> tmpEntry : tempTestcases
+									.entrySet()) {
+
+								testcase = tmpEntry.getValue();
+
+								if (!subTestcases.containsValue(testcase)) {
+
+									int lastOrder = testcase.getOrdering();
+
+									testcase.setOrdering(lastOrder - 1);
+									testcase.setUpdatedDate(new Date());
+									jJTestcaseService
+											.updateJJTestcase(testcase);
+								}
+
+								testcase = null;
+
+							}
+
+						}
+
+						tempTestcases = null;
+					}
+
 				} else {
 					jJRequirementService.updateJJRequirement(requirement);
 				}
 
 			}
+
+			Set<JJTask> tasks = null;
+			Set<JJTestcase> testcaseList = null;
+
+			JJRequirement req = jJRequirementService
+					.findJJRequirement(requirement.getId());
+
+			if (requirementStatus.getName().equalsIgnoreCase("CANCELED")
+					|| requirementStatus.getName().equalsIgnoreCase("DELETED")) {
+
+				tasks = req.getTasks();
+				for (JJTask task : tasks) {
+					task.setEnabled(false);
+					task.setUpdatedDate(new Date());
+					jJTaskService.updateJJTask(task);
+				}
+
+				testcaseList = req.getTestcases();
+				for (JJTestcase testcase : testcaseList) {
+					testcase.setEnabled(false);
+					testcase.setUpdatedDate(new Date());
+					jJTestcaseService.updateJJTestcase(testcase);
+				}
+
+				if (requirementStatus.getName().equalsIgnoreCase("DELETED")) {
+					req.setEnabled(false);
+					req.setUpdatedDate(new Date());
+					jJRequirementService.updateJJRequirement(req);
+				}
+
+			} else if (requirementStatus.getName().equalsIgnoreCase("MODIFIED")) {
+				tasks = req.getTasks();
+				for (JJTask task : tasks) {
+					task.setEnabled(true);
+					task.setUpdatedDate(new Date());
+					jJTaskService.updateJJTask(task);
+				}
+
+				testcaseList = req.getTestcases();
+				for (JJTestcase testcase : testcaseList) {
+					testcase.setEnabled(true);
+					testcase.setUpdatedDate(new Date());
+					jJTestcaseService.updateJJTestcase(testcase);
+				}
+			}
+
 		}
 		elements = null;
 		subElements = null;
+
+		testcases = null;
+		subTestcases = null;
 	}
 
 	private SortedMap<Integer, Object> getSortedElements(JJChapter parent,
@@ -1974,6 +2170,22 @@ public class JJRequirementBean {
 			for (JJChapter chapter : chapters) {
 				elements.put(chapter.getOrdering(), chapter);
 			}
+		}
+
+		return elements;
+
+	}
+
+	private SortedMap<Integer, JJTestcase> getSortedTestcases(
+			JJRequirement requirement, JJChapter chapter) {
+
+		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
+
+		List<JJTestcase> testcases = jJTestcaseService.getTestcases(
+				requirement, chapter, false, true);
+
+		for (JJTestcase testcase : testcases) {
+			elements.put(testcase.getOrdering(), testcase);
 		}
 
 		return elements;

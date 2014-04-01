@@ -255,7 +255,6 @@ focus --class ~.JJTeststep
 field number --fieldName ordering --type java.lang.Integer
 field string --fieldName actionstep --sizeMax 100 --notNull
 field string --fieldName resultstep --sizeMax 100 --notNull
-field boolean --fieldName passed
 field reference --fieldName testcase --type ~.JJTestcase
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy teststep --fetch LAZY
 #######################

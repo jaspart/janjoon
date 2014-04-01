@@ -32,14 +32,6 @@ privileged aspect JJTeststep_Roo_JavaBean {
         this.resultstep = resultstep;
     }
     
-    public Boolean JJTeststep.getPassed() {
-        return this.passed;
-    }
-    
-    public void JJTeststep.setPassed(Boolean passed) {
-        this.passed = passed;
-    }
-    
     public JJTestcase JJTeststep.getTestcase() {
         return this.testcase;
     }

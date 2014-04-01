@@ -71,4 +71,9 @@ public class JJTeststepexecutionServiceImpl implements
 
 	}
 
+	public void saveteststepexecutions(
+			List<JJTeststepexecution> teststepexecutions) {
+		jJTeststepexecutionRepository.save(teststepexecutions);
+	}
+
 }

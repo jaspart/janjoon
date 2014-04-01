@@ -23,8 +23,6 @@ public class JJTeststep extends JJAbstractEntity {
 	@Size(max = 100)
 	private String resultstep;
 
-	private Boolean passed;
-
 	@ManyToOne
 	private JJTestcase testcase;
 

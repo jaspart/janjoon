@@ -22,8 +22,8 @@ public class JJTestcaseexecutionServiceImpl implements
 	}
 
 	@Override
-	public JJTestcaseexecution getTestcaseexecution(JJTestcase testcase,
-			JJBuild build, boolean onlyActif) {
+	public List<JJTestcaseexecution> getTestcaseexecutions(JJTestcase testcase,
+			JJBuild build, boolean onlyActif, boolean orderByCreationdate) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcaseexecution> criteriaQuery = criteriaBuilder
@@ -50,12 +50,14 @@ public class JJTestcaseexecutionServiceImpl implements
 
 		select.where(predicates.toArray(new Predicate[] {}));
 
+		if (orderByCreationdate) {
+			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
+		}
+
 		TypedQuery<JJTestcaseexecution> result = entityManager
 				.createQuery(select);
-		if (result.getResultList().size() > 0)
-			return result.getResultList().get(0);
-		else
-			return null;
+
+		return result.getResultList();
 
 	}
 
