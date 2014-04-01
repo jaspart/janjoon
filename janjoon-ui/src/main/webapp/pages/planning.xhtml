@@ -11,9 +11,9 @@
 		<h:form id="planningForm">
 			<f:event type="preRenderComponent"
 				listener="#{jJTaskBean.loadData()}" />
-			<p:panel style="margin-top:10px">
+			<p:panelGrid style="margin-top:10px">
 				<p:row>
-					<p:column>
+					<p:column style="width:50%">
 						<p:dataTable var="task" value="#{jJTaskBean.tasks}">
 							<p:column headerText="Name">
 								<h:outputText value="#{task.name}" />
@@ -32,7 +32,7 @@
 							</p:column>
 						</p:dataTable>
 					</p:column>
-					<p:column>
+					<p:column style="width:50%">
 						<pe:timeline id="timeline" value="#{jJTaskBean.model}"
 							editable="true" eventMargin="10" eventMarginAxis="0"
 							locale="#{LocaleBean.locale}" start="#{jJTaskBean.start}"
@@ -43,7 +43,7 @@
 						</pe:timeline>
 					</p:column>
 				</p:row>
-			</p:panel>
+			</p:panelGrid>
 		</h:form>
 	</ui:define>
 </ui:composition>

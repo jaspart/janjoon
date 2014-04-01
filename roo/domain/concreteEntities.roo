@@ -24,7 +24,6 @@ field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --m
 #######################
 focus --class ~.JJVersion
 field reference --fieldName product --type ~.JJProduct
-field reference --fieldName phase --type ~.JJPhase
 field set --fieldName builds --type ~.JJBuild --cardinality ONE_TO_MANY --mappedBy versioning --fetch LAZY
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy versioning --fetch LAZY
 #######################
@@ -41,7 +40,8 @@ field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --m
 #######################
 
 #######################
-# focus --class ~.JJPhase
+focus --class ~.JJPhase
+field number --fieldName level --type java.lang.Integer
 #######################
 
 #######################
@@ -143,15 +143,15 @@ field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --m
 
 #######################
 focus --class ~.JJCriticity
-field number --fieldName criticityLevel --type java.lang.Integer
+field number --fieldName level --type java.lang.Integer
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy criticity --fetch LAZY
 #######################
 
 #######################
 focus --class ~.JJBug
 field reference --fieldName project --type ~.JJProject
-field reference --fieldName versioning --type ~.JJVersion
-field reference --fieldName build --type ~.JJBuild
+field reference --fieldName versioning --type ~.JJVersion (main, integ/10.1...)
+field reference --fieldName build --type ~.JJBuild (10.1.3.1234)
 field reference --fieldName category --type ~.JJCategory
 field reference --fieldName criticity --type ~.JJCriticity
 field reference --fieldName importance --type ~.JJImportance
@@ -232,6 +232,7 @@ field boolean --fieldName completion
 #######################
 focus --class ~.JJBuild
 field reference --fieldName versioning --type ~.JJVersion
+field reference --fieldName phase --type ~.JJPhase
 field set --fieldName messages  --type ~.JJMessage --cardinality ONE_TO_MANY --mappedBy build --fetch LAZY
 #######################
 
@@ -264,6 +265,14 @@ focus --class ~.JJTestcaseexecution
 field reference --fieldName build --type ~.JJBuild
 field reference --fieldName testcase --type ~.JJTestcase
 field boolean --fieldName passed
+#######################
+
+#######################
+focus --class ~.JJWorflow
+field reference --fieldName source --type ~.JJStatus
+field reference --fieldName target --type ~.JJStatus
+field string --fieldName action
+field reference --fieldName actor --type ~.JJContact
 #######################
 
 #######################
