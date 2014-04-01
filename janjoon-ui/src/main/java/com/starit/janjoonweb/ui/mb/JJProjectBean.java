@@ -1,10 +1,12 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -23,6 +25,8 @@ import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
+import com.starit.janjoonweb.domain.JJCriticity;
+import com.starit.janjoonweb.domain.JJCriticityService;
 import com.starit.janjoonweb.domain.JJPermission;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
@@ -52,105 +56,41 @@ public class JJProjectBean {
 	@Autowired
 	JJStatusService jJStatusService;
 
-	public void setjJStatusService(JJStatusService jJStatusService) {
-		this.jJStatusService = jJStatusService;
-	}
-	
 	@Autowired
 	JJBuildService jJBuildService;
-
-	public void setjJBuildService(JJBuildService jJBuildService) {
-		this.jJBuildService = jJBuildService;
-	}
 
 	@Autowired
 	JJSprintService jJSprintService;
 
-	public void setjJSprintService(JJSprintService jJSprintService) {
-		this.jJSprintService = jJSprintService;
-	}
-
 	@Autowired
 	JJProductService jJProductService;
-
-	public void setjJProductService(JJProductService jJProductService) {
-		this.jJProductService = jJProductService;
-	}
+	
+	@Autowired
+	JJCriticityService jJCriticityService;
 
 	@Autowired
 	JJVersionService jJVersionService;
 
-	public void setjJVersionService(JJVersionService jJVersionService) {
-		this.jJVersionService = jJVersionService;
-	}
-
 	@Autowired
 	JJCategoryService jJCategoryService;
-
-	public void setjJCategoryService(JJCategoryService jJCategoryService) {
-		this.jJCategoryService = jJCategoryService;
-	}
 
 	@Autowired
 	JJRequirementService jJRequirementService;
 
-	public void setjJRequirementService(
-			JJRequirementService jJRequirementService) {
-		this.jJRequirementService = jJRequirementService;
-	}
-
 	@Autowired
 	JJContactService jJContactService;
-
-	public void setjJContactService(JJContactService jJContactService) {
-		this.jJContactService = jJContactService;
-	}
 
 	@Autowired
 	JJPermissionService jJPermissionService;
 
-	public void setjJPermissionService(JJPermissionService jJPermissionService) {
-		this.jJPermissionService = jJPermissionService;
-	}
-
 	@Autowired
 	JJRightService jJRightService;
-
-	public void setjJRightService(JJRightService jJRightService) {
-		this.jJRightService = jJRightService;
-	}
 
 	@Autowired
 	JJTaskService jJTaskService;
 
-	public void setjJTaskService(JJTaskService jJTaskService) {
-		this.jJTaskService = jJTaskService;
-	}
-
 	@Autowired
 	JJProfileService jJProfileService;
-
-	public void setjJProfileService(JJProfileService jJProfileService) {
-		this.jJProfileService = jJProfileService;
-	}
-
-	@Autowired
-	JJConfigurationService jJConfigurationService;
-
-	JJConfiguration configuration;
-
-	public JJConfiguration getConfiguration() {
-		return configuration;
-	}
-
-	public void setConfiguration(JJConfiguration configuration) {
-		this.configuration = configuration;
-	}
-
-	public void setjJConfigurationService(
-			JJConfigurationService jJConfigurationService) {
-		this.jJConfigurationService = jJConfigurationService;
-	}
 
 	private JJProject project;
 	private List<JJProject> projectList;
@@ -162,34 +102,42 @@ public class JJProjectBean {
 	private Set<JJContact> projectManagerList;
 
 	private String message;
-
-	public JJProject getProject() {
-		if (project == null) {
-			project = jJProjectService.getJJProjectWithName("Default Project");
-		}
-		return project;
-	}
-
-	public void setProject(JJProject project) {
-		this.project = project;
-	}
-
-	public List<JJProject> getProjectList() {
-		/*** Begin Temporary ***/
+	
+	 private List<String> columns;
+	
+	@PostConstruct
+    public void init() {
 		
-		if (jJConfigurationService.findAllJJConfigurations().isEmpty()) {
-			JJConfiguration configuration = new JJConfiguration();
-			configuration.setName("ConfigurationManager");
-			configuration.setCreationDate(new Date());
-			configuration.setDescription("Test Configuration Manager");
-			configuration.setParam("git");
-			configuration.setVal("https://github.com/janjoon/");
-			configuration.setEnabled(true);
-			jJConfigurationService.saveJJConfiguration(configuration);
-			this.setConfiguration(configuration);
+        columns = new ArrayList<String>();
+        columns.add("name");
+        columns.add("description");
+        columns.add("creationDate");
+        columns.add("updatedDate");
+        
+        /*** Begin Temporary ***/    
+        System.out.println("  /*** Begin Temporary ***/   ");
+       
+		if(jJCriticityService.findAllJJCriticitys().isEmpty())
+		{
+			System.out.println("----------------------------------------------------------");
+			
+				JJCriticity cri=new JJCriticity();
+				cri.setName("Alert");
+				cri.setDescription("AlertCriticityDescription");
+				cri.setCreationDate(new Date());				
+				cri.setEnabled(true);
+				cri.setCriticityLevel(10);
+				jJCriticityService.saveJJCriticity(cri);
+				cri=new JJCriticity();
+				cri.setName("Info");
+				cri.setDescription("InfoCriticityDescription");
+				cri.setCreationDate(new Date());				
+				cri.setEnabled(true);
+				cri.setCriticityLevel(1);
+				jJCriticityService.saveJJCriticity(cri);
+			
 		}
-		configuration = jJConfigurationService.findAllJJConfigurations().get(0);
-		if (jJBuildService.getBuilds(null, false, true).isEmpty()) {
+        if (jJBuildService.getBuilds(null, false, true).isEmpty()) {
 			JJBuild build;
 			for (int i = 0; i < 4; i++) {
 				build = new JJBuild();
@@ -886,6 +834,80 @@ public class JJProjectBean {
 		}
 		/*** End Temporary ***/
 		projectList = jJProjectService.getProjects(true);
+    }
+	
+	public List<String> getColumns()
+	{
+        return columns;
+    }
+
+	public void setjJStatusService(JJStatusService jJStatusService) {
+		this.jJStatusService = jJStatusService;
+	}
+
+	public void setjJBuildService(JJBuildService jJBuildService) {
+		this.jJBuildService = jJBuildService;
+	}
+
+	public void setjJSprintService(JJSprintService jJSprintService) {
+		this.jJSprintService = jJSprintService;
+	}
+
+	public void setjJProductService(JJProductService jJProductService) {
+		this.jJProductService = jJProductService;
+	}
+
+	public void setjJVersionService(JJVersionService jJVersionService) {
+		this.jJVersionService = jJVersionService;
+	}
+
+	public void setjJCategoryService(JJCategoryService jJCategoryService) {
+		this.jJCategoryService = jJCategoryService;
+	}
+	
+	public void setJJCriticityService(JJCriticityService jJCriticityService)
+	{
+		this.jJCriticityService=jJCriticityService;
+	}
+
+	public void setjJRequirementService(
+			JJRequirementService jJRequirementService) {
+		this.jJRequirementService = jJRequirementService;
+	}
+
+	public void setjJContactService(JJContactService jJContactService) {
+		this.jJContactService = jJContactService;
+	}
+
+	public void setjJPermissionService(JJPermissionService jJPermissionService) {
+		this.jJPermissionService = jJPermissionService;
+	}
+
+	public void setjJRightService(JJRightService jJRightService) {
+		this.jJRightService = jJRightService;
+	}
+
+	public void setjJTaskService(JJTaskService jJTaskService) {
+		this.jJTaskService = jJTaskService;
+	}
+
+	public void setjJProfileService(JJProfileService jJProfileService) {
+		this.jJProfileService = jJProfileService;
+	}
+
+	public JJProject getProject() {
+		if (project == null) {
+			project = jJProjectService.getJJProjectWithName("Default Project");
+		}
+		return project;
+	}
+
+	public void setProject(JJProject project) {
+		this.project = project;
+	}
+
+	public List<JJProject> getProjectList() {
+		
 		return projectList;
 	}
 

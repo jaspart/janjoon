@@ -143,12 +143,12 @@ privileged aspect JJTask_Roo_JavaBean {
         this.messages = messages;
     }
     
-    public Boolean JJTask.getCompletion() {
-        return this.completion;
+    public Boolean JJTask.getCompleted() {
+        return this.completed;
     }
     
-    public void JJTask.setCompletion(Boolean completion) {
-        this.completion = completion;
+    public void JJTask.setCompleted(Boolean completed) {
+        this.completed = completed;
     }
     
 }

@@ -56,7 +56,7 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
     
     public JJTask JJTaskDataOnDemand.getNewTransientJJTask(int index) {
         JJTask obj = new JJTask();
-        setCompletion(obj, index);
+        setCompleted(obj, index);
         setConsumed(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
@@ -75,9 +75,9 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
         return obj;
     }
     
-    public void JJTaskDataOnDemand.setCompletion(JJTask obj, int index) {
-        Boolean completion = Boolean.TRUE;
-        obj.setCompletion(completion);
+    public void JJTaskDataOnDemand.setCompleted(JJTask obj, int index) {
+        Boolean completed = Boolean.TRUE;
+        obj.setCompleted(completed);
     }
     
     public void JJTaskDataOnDemand.setConsumed(JJTask obj, int index) {

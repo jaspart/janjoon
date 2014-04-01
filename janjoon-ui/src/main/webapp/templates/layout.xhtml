@@ -82,10 +82,10 @@
 								value="#{jJMessageBean.jJmessage.message}" required="true" />
 							
 							<p:panelGrid columns="2">
-								<p:commandButton id="submit1" value="CreateInfo"
+								<p:commandButton id="submit1" value="CreateInfo" icon="ui-icon-info"
 									actionListener="#{jJMessageBean.createMessage}"
 									update=":messageCreationForm,creationGrowl" />
-								<p:commandButton id="submit2" value="CreateAlert"
+								<p:commandButton id="submit2" value="CreateAlert" icon="ui-icon-alert"
 									actionListener="#{jJMessageBean.createMessage}"
 									update=":messageCreationForm,creationGrowl" />
 							</p:panelGrid>

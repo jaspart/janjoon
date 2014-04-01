@@ -995,7 +995,7 @@ public class JJRequirementBean {
 	}
 
 	public void checkCompleteTask() {
-		System.out.println("task.getCompletion() " + task.getCompletion());
+		System.out.println("task.getCompletion() " + task.getCompleted());
 	}
 
 	public void fillTableImport() {
@@ -2137,7 +2137,7 @@ public class JJRequirementBean {
 				boolean isCompleted = false;
 				for (JJTask task : tasks) {
 					if (task.getEnabled()) {
-						if (task.getCompletion()) {
+						if (task.getCompleted()) {
 							isCompleted = true;
 						} else {
 							isCompleted = false;

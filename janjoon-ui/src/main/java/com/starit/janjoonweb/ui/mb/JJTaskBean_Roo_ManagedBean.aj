@@ -657,23 +657,23 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         messagesCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(messagesCreateInputMessage);
         
-        OutputLabel completionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        completionCreateOutput.setFor("completionCreateInput");
-        completionCreateOutput.setId("completionCreateOutput");
-        completionCreateOutput.setValue("Completion:");
-        htmlPanelGrid.getChildren().add(completionCreateOutput);
+        OutputLabel completedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        completedCreateOutput.setFor("completedCreateInput");
+        completedCreateOutput.setId("completedCreateOutput");
+        completedCreateOutput.setValue("Completed:");
+        htmlPanelGrid.getChildren().add(completedCreateOutput);
         
-        SelectBooleanCheckbox completionCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
-        completionCreateInput.setId("completionCreateInput");
-        completionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.completion}", Boolean.class));
-        completionCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(completionCreateInput);
+        SelectBooleanCheckbox completedCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        completedCreateInput.setId("completedCreateInput");
+        completedCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.completed}", Boolean.class));
+        completedCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(completedCreateInput);
         
-        Message completionCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        completionCreateInputMessage.setId("completionCreateInputMessage");
-        completionCreateInputMessage.setFor("completionCreateInput");
-        completionCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(completionCreateInputMessage);
+        Message completedCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        completedCreateInputMessage.setId("completedCreateInputMessage");
+        completedCreateInputMessage.setFor("completedCreateInput");
+        completedCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(completedCreateInputMessage);
         
         return htmlPanelGrid;
     }
@@ -1171,23 +1171,23 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         messagesEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(messagesEditInputMessage);
         
-        OutputLabel completionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        completionEditOutput.setFor("completionEditInput");
-        completionEditOutput.setId("completionEditOutput");
-        completionEditOutput.setValue("Completion:");
-        htmlPanelGrid.getChildren().add(completionEditOutput);
+        OutputLabel completedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        completedEditOutput.setFor("completedEditInput");
+        completedEditOutput.setId("completedEditOutput");
+        completedEditOutput.setValue("Completed:");
+        htmlPanelGrid.getChildren().add(completedEditOutput);
         
-        SelectBooleanCheckbox completionEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
-        completionEditInput.setId("completionEditInput");
-        completionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.completion}", Boolean.class));
-        completionEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(completionEditInput);
+        SelectBooleanCheckbox completedEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        completedEditInput.setId("completedEditInput");
+        completedEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.completed}", Boolean.class));
+        completedEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(completedEditInput);
         
-        Message completionEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        completionEditInputMessage.setId("completionEditInputMessage");
-        completionEditInputMessage.setFor("completionEditInput");
-        completionEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(completionEditInputMessage);
+        Message completedEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        completedEditInputMessage.setId("completedEditInputMessage");
+        completedEditInputMessage.setFor("completedEditInput");
+        completedEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(completedEditInputMessage);
         
         return htmlPanelGrid;
     }
@@ -1445,14 +1445,14 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         messagesValue.setValue("This relationship is managed from the JJMessage side");
         htmlPanelGrid.getChildren().add(messagesValue);
         
-        HtmlOutputText completionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        completionLabel.setId("completionLabel");
-        completionLabel.setValue("Completion:");
-        htmlPanelGrid.getChildren().add(completionLabel);
+        HtmlOutputText completedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        completedLabel.setId("completedLabel");
+        completedLabel.setValue("Completed:");
+        htmlPanelGrid.getChildren().add(completedLabel);
         
-        HtmlOutputText completionValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        completionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.completion}", String.class));
-        htmlPanelGrid.getChildren().add(completionValue);
+        HtmlOutputText completedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        completedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.completed}", String.class));
+        htmlPanelGrid.getChildren().add(completedValue);
         
         return htmlPanelGrid;
     }

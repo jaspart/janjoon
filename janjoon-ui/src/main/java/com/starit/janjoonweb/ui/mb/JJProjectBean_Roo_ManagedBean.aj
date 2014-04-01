@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
@@ -53,8 +52,6 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
     
     private boolean JJProjectBean.dataVisible = false;
     
-    private List<String> JJProjectBean.columns;
-    
     private HtmlPanelGrid JJProjectBean.createPanelGrid;
     
     private HtmlPanelGrid JJProjectBean.editPanelGrid;
@@ -67,21 +64,8 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
     
     private List<JJMessage> JJProjectBean.selectedMessages;
     
-    @PostConstruct
-    public void JJProjectBean.init() {
-        columns = new ArrayList<String>();
-        columns.add("name");
-        columns.add("description");
-        columns.add("creationDate");
-        columns.add("updatedDate");
-    }
-    
     public String JJProjectBean.getName() {
         return name;
-    }
-    
-    public List<String> JJProjectBean.getColumns() {
-        return columns;
     }
     
     public List<JJProject> JJProjectBean.getAllJJProjects() {

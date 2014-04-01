@@ -80,27 +80,7 @@ privileged aspect JJCriticityBean_Roo_ManagedBean {
         columns.add("description");
         columns.add("creationDate");
         columns.add("updatedDate");
-        columns.add("criticityLevel");
-        if(jJCriticityService.findAllJJCriticitys().isEmpty())
-		{
-			System.out.println("----------------------------------------------------------");
-			
-				JJCriticity cri=new JJCriticity();
-				cri.setName("Alert");
-				cri.setDescription("AlertCriticityDescription");
-				cri.setCreationDate(new Date());				
-				cri.setEnabled(true);
-				cri.setCriticityLevel(10);
-				jJCriticityService.saveJJCriticity(cri);
-				cri=new JJCriticity();
-				cri.setName("Info");
-				cri.setDescription("InfoCriticityDescription");
-				cri.setCreationDate(new Date());				
-				cri.setEnabled(true);
-				cri.setCriticityLevel(1);
-				jJCriticityService.saveJJCriticity(cri);
-			
-		}
+        columns.add("criticityLevel");        
     }
     
     public String JJCriticityBean.getName() {

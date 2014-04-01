@@ -13,7 +13,6 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
@@ -55,8 +54,6 @@ privileged aspect JJConfigurationBean_Roo_ManagedBean {
     
     private boolean JJConfigurationBean.dataVisible = false;
     
-    private List<String> JJConfigurationBean.columns;
-    
     private HtmlPanelGrid JJConfigurationBean.createPanelGrid;
     
     private HtmlPanelGrid JJConfigurationBean.editPanelGrid;
@@ -65,22 +62,8 @@ privileged aspect JJConfigurationBean_Roo_ManagedBean {
     
     private boolean JJConfigurationBean.createDialogVisible = false;
     
-    @PostConstruct
-    public void JJConfigurationBean.init() {
-        columns = new ArrayList<String>();
-        columns.add("name");
-        columns.add("description");
-        columns.add("creationDate");
-        columns.add("updatedDate");
-        columns.add("param");
-    }
-    
     public String JJConfigurationBean.getName() {
         return name;
-    }
-    
-    public List<String> JJConfigurationBean.getColumns() {
-        return columns;
     }
     
     public List<JJConfiguration> JJConfigurationBean.getAllJJConfigurations() {

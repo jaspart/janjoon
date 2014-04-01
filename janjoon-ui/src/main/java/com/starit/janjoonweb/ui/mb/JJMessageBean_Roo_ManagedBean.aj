@@ -3,26 +3,64 @@
 
 package com.starit.janjoonweb.ui.mb;
 
-import com.starit.janjoonweb.domain.*;
+import com.starit.janjoonweb.domain.JJBug;
+import com.starit.janjoonweb.domain.JJBugService;
+import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJBuildService;
+import com.starit.janjoonweb.domain.JJChapter;
+import com.starit.janjoonweb.domain.JJChapterService;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJContactService;
+import com.starit.janjoonweb.domain.JJCriticity;
+import com.starit.janjoonweb.domain.JJCriticityService;
+import com.starit.janjoonweb.domain.JJImportance;
+import com.starit.janjoonweb.domain.JJImportanceService;
+import com.starit.janjoonweb.domain.JJMessageService;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProductService;
+import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJProjectService;
+import com.starit.janjoonweb.domain.JJRequirement;
+import com.starit.janjoonweb.domain.JJRequirementService;
+import com.starit.janjoonweb.domain.JJSprint;
+import com.starit.janjoonweb.domain.JJSprintService;
+import com.starit.janjoonweb.domain.JJStatus;
+import com.starit.janjoonweb.domain.JJStatusService;
+import com.starit.janjoonweb.domain.JJTask;
+import com.starit.janjoonweb.domain.JJTaskService;
+import com.starit.janjoonweb.domain.JJTestcase;
+import com.starit.janjoonweb.domain.JJTestcaseService;
+import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.JJMessageBean;
-import com.starit.janjoonweb.ui.mb.converter.*;
+import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJBuildConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJChapterConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJCriticityConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJImportanceConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJProductConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJProjectConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJSprintConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJStatusConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJTaskConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJVersionConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.*;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.validator.LengthValidator;
-
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.inputtextarea.InputTextarea;
@@ -86,13 +124,7 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
     
     private String JJMessageBean.name = "JJMessages";
     
-    private JJMessage JJMessageBean.JJMessage_;
-    
-    private List<JJMessage> JJMessageBean.allJJMessages;
-    
     private boolean JJMessageBean.dataVisible = false;
-    
-    private List<String> JJMessageBean.columns;
     
     private HtmlPanelGrid JJMessageBean.createPanelGrid;
     
@@ -100,54 +132,12 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
     
     private HtmlPanelGrid JJMessageBean.viewPanelGrid;
     
-    private boolean JJMessageBean.createDialogVisible = false;
-    
-    @PostConstruct
-    public void JJMessageBean.init() {
-        columns = new ArrayList<String>();
-        columns.add("name");
-        columns.add("description");
-        columns.add("creationDate");
-        columns.add("updatedDate");
-        columns.add("message");
-        
-        if(jJMessageService.findAllJJMessages().isEmpty())
-		{
-			System.out.println("----------------------------------------------------------");
-			for (int j = 0; j < 30; j++) {
-				JJMessage mes=new JJMessage();
-				mes.setName("mes : "+j);
-				mes.setDescription("mesDescription : "+j);
-				mes.setCreationDate(new Date());
-				mes.setMessage("message tttttt"+j);
-				jJMessageService.saveJJMessage(mes);
-			}
-		}
-        allJJMessages=jJMessageService.findAllJJMessages();
-        setjJmessage(new JJMessage());
-       
-        
-    }
-    
     public String JJMessageBean.getName() {
         return name;
     }
     
-    public List<String> JJMessageBean.getColumns() {
-        return columns;
-    }
-    
-    public List<JJMessage> JJMessageBean.getAllJJMessages() {
-        return allJJMessages;
-    }
-    
-    public void JJMessageBean.setAllJJMessages(List<JJMessage> allJJMessages) {
-        this.allJJMessages = allJJMessages;
-    }
-    
     public String JJMessageBean.findAllJJMessages() {
-    	
-        allJJMessages = jJMessageService.findAllJJMessages();         
+        allJJMessages = jJMessageService.findAllJJMessages();
         dataVisible = !allJJMessages.isEmpty();
         return null;
     }
@@ -1460,17 +1450,6 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         return htmlPanelGrid;
     }
     
-    public JJMessage JJMessageBean.getJJMessage_() {
-        if (JJMessage_ == null) {
-            JJMessage_ = new JJMessage();
-        }
-        return JJMessage_;
-    }
-    
-    public void JJMessageBean.setJJMessage_(JJMessage JJMessage_) {
-        this.JJMessage_ = JJMessage_;
-    }
-    
     public List<JJContact> JJMessageBean.completeCreatedBy(String query) {
         List<JJContact> suggestions = new ArrayList<JJContact>();
         for (JJContact jJContact : jJContactService.findAllJJContacts()) {
@@ -1651,23 +1630,9 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         return null;
     }
     
-    public boolean JJMessageBean.isCreateDialogVisible() {
-        return createDialogVisible;
-    }
-    
-    public void JJMessageBean.setCreateDialogVisible(boolean createDialogVisible) {
-        this.createDialogVisible = createDialogVisible;
-    }
-    
     public String JJMessageBean.displayList() {
         createDialogVisible = false;
         findAllJJMessages();
-        return "JJMessage_";
-    }
-    
-    public String JJMessageBean.displayCreateDialog() {
-        JJMessage_ = new JJMessage();
-        createDialogVisible = true;
         return "JJMessage_";
     }
     
@@ -1682,8 +1647,8 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         }
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("createDialogWidget.hide()");
-        context.execute("editDialogWidget.hide()");        
-		
+        context.execute("editDialogWidget.hide()");
+        
         FacesMessage facesMessage = MessageFactory.getMessage(message, "JJMessage");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
@@ -1693,18 +1658,9 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
     public String JJMessageBean.delete() {
         jJMessageService.deleteJJMessage(JJMessage_);
         FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "JJMessage");
-        FacesContext.getCurrentInstance().addMessage(null, facesMessage);  reset();        
+        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+        reset();
         return findAllJJMessages();
-    }
-    
-    public void JJMessageBean.reset() {
-    	
-    	setAllJJMessages(jJMessageService.findAllJJMessages());
-    	RequestContext context = RequestContext.getCurrentInstance();       
-		//context.execute(getDataTable().getId()+".update()");	
-    	context.update("messagePanel");    	
-        JJMessage_ = null;
-        createDialogVisible = false;
     }
     
     public void JJMessageBean.handleDialogClose(CloseEvent event) {

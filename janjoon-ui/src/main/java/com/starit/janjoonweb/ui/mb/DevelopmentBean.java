@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -14,27 +13,32 @@ import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
-import javax.faces.event.ComponentSystemEvent;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.primefaces.component.inputtextarea.InputTextarea;
-import org.primefaces.component.panel.Panel;
-import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.*;
+import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.event.TabChangeEvent;
+import org.primefaces.event.TabCloseEvent;
 import org.primefaces.extensions.component.codemirror.CodeMirror;
-import org.primefaces.extensions.event.CompleteEvent;
 import org.primefaces.model.TreeNode;
 
-import com.starit.janjoonweb.domain.*;
-import com.starit.janjoonweb.ui.mb.util.service.*;
+import com.starit.janjoonweb.domain.JJConfiguration;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJMessage;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJTask;
+import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.ui.mb.util.service.AbstractConfigManager;
+import com.starit.janjoonweb.ui.mb.util.service.FileMap;
+import com.starit.janjoonweb.ui.mb.util.service.GitConfigManager;
 
 @ManagedBean(name = "jJDevelopment")
 @ViewScoped
@@ -71,6 +75,8 @@ public class DevelopmentBean implements Serializable {
 			contact = (JJContact) session.getAttribute("JJContact");
 			JJVersionBean verbean = (JJVersionBean) session
 					.getAttribute("jJVersionBean");
+			JJConfigurationBean confbean = (JJConfigurationBean) session
+					.getAttribute("jJConfigurationBean");
 			JJProjectBean projbean = (JJProjectBean) session
 					.getAttribute("jJProjectBean");
 			setMessageBean((JJMessageBean) session
@@ -84,12 +90,17 @@ public class DevelopmentBean implements Serializable {
 			}
 			product = prodbean.getProduct();
 			project = projbean.getProject();
-			configuration = projbean.getConfiguration();
+			
+			if(confbean==null)
+				confbean=new JJConfigurationBean();
+			
+			configuration = confbean.getjJconfiguration();
+			
 			message = new JJMessage();
 			System.out.println(contact.getName());
 			tasks = prodbean.getTasksByProduct(product, project);
 			for (JJTask t : tasks) {
-				System.out.println("111111" + t.getName());
+				System.out.println(t.getName()+"--"+configuration.getName());
 			}
 
 			if (getConfigManager() != null && version != null
@@ -378,9 +389,13 @@ public class DevelopmentBean implements Serializable {
 			if (check) {
 
 				task.setEndDateReal(new Date());
-				task.persist();
-
+				task.setCompleted(true);
+				
 			}
+			message.setProduct(product);
+			message.setContact(contact);
+			message.setProject(project);	
+			message.setVersioning(version);
 			message.setCreatedBy(contact);
 			message.setCreationDate(new Date());
 			message.setEnabled(true);
@@ -388,10 +403,8 @@ public class DevelopmentBean implements Serializable {
 			message.setDescription("JJmessage For" + task.getName() + "nl"
 					+ task.getDescription());
 			message.setName("JJmessage For" + task.getName());
-			messageBean.save(message);
-			Set<JJMessage> m = new HashSet<JJMessage>();
-			m.add(message);
-			task.setMessages(m);
+			messageBean.save(message);			
+			task.getMessages().add(message);
 			if (task.getStartDateReal() == null)
 				task.setStartDateReal(new Date());
 			task.persist();
@@ -422,8 +435,7 @@ public class DevelopmentBean implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 		} else {
-			// RequestContext context = RequestContext.getCurrentInstance();
-			// context.execute("dlg.show()");
+			
 			FacesMessage message = new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, "Probleme Lors du Commit",
 					"You Have to create comment before commiting");
