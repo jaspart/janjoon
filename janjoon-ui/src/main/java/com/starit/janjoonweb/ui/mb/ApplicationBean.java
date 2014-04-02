@@ -1339,8 +1339,8 @@ public class ApplicationBean {
 		if (jJContactService.getContacts(null, true).isEmpty()) {
 
 			JJContact contact = new JJContact();
-			contact.setName("Mailer");
-			contact.setFirstname("Janjoon");
+			contact.setName("janjoon");
+			contact.setFirstname("mailer");
 			contact.setDescription("This contact is " + contact.getFirstname()
 					+ " " + contact.getName());
 			contact.setPassword("BeHappy2012");
