@@ -89,5 +89,12 @@ public class JJConfigurationBean {
 		System.out
 				.println("deleted--------------------------------------------------------");
 		configList = jJConfigurationService.getConfigs(true);
+		jJconfiguration=new JJConfiguration();
 	}
+	
+	public void reset() {
+        setJJConfiguration_(null);
+        setCreateDialogVisible(false);
+        jJconfiguration=new JJConfiguration();
+    }
 }

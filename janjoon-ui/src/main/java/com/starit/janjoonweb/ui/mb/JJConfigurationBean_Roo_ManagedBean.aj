@@ -712,11 +712,6 @@ privileged aspect JJConfigurationBean_Roo_ManagedBean {
         return findAllJJConfigurations();
     }
     
-    public void JJConfigurationBean.reset() {
-        JJConfiguration_ = null;
-        createDialogVisible = false;
-    }
-    
     public void JJConfigurationBean.handleDialogClose(CloseEvent event) {
         reset();
     }

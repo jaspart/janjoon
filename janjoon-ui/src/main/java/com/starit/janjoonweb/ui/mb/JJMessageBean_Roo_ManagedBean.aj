@@ -15,6 +15,7 @@ import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJCriticityService;
 import com.starit.janjoonweb.domain.JJImportance;
 import com.starit.janjoonweb.domain.JJImportanceService;
+import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJMessageService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProductService;
@@ -124,6 +125,8 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
     
     private String JJMessageBean.name = "JJMessages";
     
+    private JJMessage JJMessageBean.JJMessage_;
+    
     private boolean JJMessageBean.dataVisible = false;
     
     private HtmlPanelGrid JJMessageBean.createPanelGrid;
@@ -131,6 +134,8 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
     private HtmlPanelGrid JJMessageBean.editPanelGrid;
     
     private HtmlPanelGrid JJMessageBean.viewPanelGrid;
+    
+    private boolean JJMessageBean.createDialogVisible = false;
     
     public String JJMessageBean.getName() {
         return name;
@@ -1508,6 +1513,17 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         return htmlPanelGrid;
     }
     
+    public JJMessage JJMessageBean.getJJMessage_() {
+        if (JJMessage_ == null) {
+            JJMessage_ = new JJMessage();
+        }
+        return JJMessage_;
+    }
+    
+    public void JJMessageBean.setJJMessage_(JJMessage JJMessage_) {
+        this.JJMessage_ = JJMessage_;
+    }
+    
     public List<JJContact> JJMessageBean.completeCreatedBy(String query) {
         List<JJContact> suggestions = new ArrayList<JJContact>();
         for (JJContact jJContact : jJContactService.findAllJJContacts()) {
@@ -1699,9 +1715,23 @@ privileged aspect JJMessageBean_Roo_ManagedBean {
         return null;
     }
     
+    public boolean JJMessageBean.isCreateDialogVisible() {
+        return createDialogVisible;
+    }
+    
+    public void JJMessageBean.setCreateDialogVisible(boolean createDialogVisible) {
+        this.createDialogVisible = createDialogVisible;
+    }
+    
     public String JJMessageBean.displayList() {
         createDialogVisible = false;
         findAllJJMessages();
+        return "JJMessage_";
+    }
+    
+    public String JJMessageBean.displayCreateDialog() {
+        JJMessage_ = new JJMessage();
+        createDialogVisible = true;
         return "JJMessage_";
     }
     

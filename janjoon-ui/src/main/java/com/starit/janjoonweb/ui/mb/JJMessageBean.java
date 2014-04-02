@@ -10,7 +10,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpSession;
 
-import org.primefaces.component.datatable.DataTable;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
@@ -24,11 +23,10 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 @RooJsfManagedBean(entity = JJMessage.class, beanName = "jJMessageBean")
 public class JJMessageBean {
 
-	private JJMessage jJmessage;
-	private JJMessage JJMessage_;
+	private JJMessage message;	
 	private List<JJMessage> allJJMessages;
 	private List<String> columns;
-	private boolean createDialogVisible = false; 
+	
 
 	@PostConstruct
 	public void init() {
@@ -52,48 +50,31 @@ public class JJMessageBean {
 			}
 		}
 		allJJMessages = jJMessageService.findAllJJMessages();
-		setjJmessage(new JJMessage());
+		setMessage(new JJMessage());
 
 	}
-	
+
 	public List<String> getColumns() {
-        return columns;
-    }
-    
-    public List<JJMessage> getAllJJMessages() {
-        return allJJMessages;
-    }
-    
-    public void setAllJJMessages(List<JJMessage> allJJMessages) {
-        this.allJJMessages = allJJMessages;
-    }
-
-	public JJMessage getjJmessage() {
-		return jJmessage;
+		return columns;
 	}
 
-	public void setjJmessage(JJMessage jJmessage) {
-		this.jJmessage = jJmessage;
+	public List<JJMessage> getAllJJMessages() {
+		return allJJMessages;
+	}
+
+	public void setAllJJMessages(List<JJMessage> allJJMessages) {
+		this.allJJMessages = allJJMessages;
 	}
 	
-	public JJMessage getJJMessage_() {
-        if (JJMessage_ == null) {
-            JJMessage_ = new JJMessage();
-        }
-        return JJMessage_;
-    }
-    
-    public void setJJMessage_(JJMessage JJMessage_) {
-        this.JJMessage_ = JJMessage_;
-    }
-    
-    public boolean isCreateDialogVisible() {
-        return createDialogVisible;
-    }
-    
-    public void setCreateDialogVisible(boolean createDialogVisible) {
-        this.createDialogVisible = createDialogVisible;
-    }
+	
+
+	public JJMessage getMessage() {
+		return message;
+	}
+
+	public void setMessage(JJMessage message) {
+		this.message = message;
+	}
 
 	public void save(JJMessage mes) {
 		String message = "";
@@ -112,22 +93,26 @@ public class JJMessageBean {
 	}
 
 	public void createMessage(ActionEvent e) {
-		
-	
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false);
+
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
 
 		JJCriticityBean jJCriticityBean = (JJCriticityBean) session
 				.getAttribute("jJCriticityBean");
-		List<JJCriticity> criticity=jJCriticityBean.getAllJJCriticitys();
+		if (jJCriticityBean == null) {
+			jJCriticityBean = new JJCriticityBean();
+			jJCriticityBean.findAllJJCriticitys();
 		
+		}
+
+		List<JJCriticity> criticity = jJCriticityBean.getAllJJCriticitys();
+
 		if (e.getComponent().getId().contains("submit1")) {
 			System.out.println("info");
 			int i = 0;
 			while (i < criticity.size()) {
-				if (criticity.get(i).getName().equalsIgnoreCase("Info")) 
-				{
-					jJmessage.setCriticity(criticity.get(i));
+				if (criticity.get(i).getName().equalsIgnoreCase("Info")) {
+					message.setCriticity(criticity.get(i));
 					i = criticity.size();
 				}
 				i++;
@@ -137,37 +122,33 @@ public class JJMessageBean {
 			int i = 0;
 			while (i < criticity.size()) {
 				if (criticity.get(i).getName().equalsIgnoreCase("Alert")) {
-					jJmessage.setCriticity(criticity.get(i));
+					message.setCriticity(criticity.get(i));
 					i = criticity.size();
 				}
 				i++;
 			}
 			System.out.println("alert");
 		}
-		jJmessage.setCreationDate(new Date());
-		jJmessage.setDescription(jJmessage.getName() + " : "
-				+ jJmessage.getMessage());
-		save(jJmessage);
-		jJmessage = new JJMessage();
+		message.setCreationDate(new Date());
+		message.setDescription(message.getName() + " : "
+				+ message.getMessage());
+		save(message);
+		message = new JJMessage();
 	}
 
 	public void onRowSelect(SelectEvent event) {
 
 		setJJMessage_((JJMessage) event.getObject());
-	}
-	
-	public String displayCreateDialog() {
-        JJMessage_ = new JJMessage();
-        createDialogVisible = true;
-        return "JJMessage_";
-    }
+	}	
 
 	public void reset() {
 
 		setAllJJMessages(jJMessageService.findAllJJMessages());
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.update("messagePanel");
-		JJMessage_ = null;
-		createDialogVisible = false;
+		if(FacesContext.getCurrentInstance().getViewRoot().getViewId().contains("main"))
+			context.update("contentPanel");
+		setJJMessage_(null);
+		setCreateDialogVisible(false);
 	}
 }

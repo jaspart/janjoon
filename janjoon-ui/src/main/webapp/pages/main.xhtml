@@ -6,10 +6,10 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
-		<f:event listener="#{loginBean.loadingMain}" type="preRenderView"  />
+		<f:event listener="#{loginBean.loadingMain}" type="preRenderView" />
 		<p:panel id="mainPanel" toggleable="true" toggleSpeed="250">
-		<p:growl id="notif" showDetail="true" />
-		<p:growl id="dev" showDetail="true" />
+			<p:growl id="notif" showDetail="true" />
+			<p:growl id="dev" showDetail="true" />
 			<f:facet name="header">
 				<h:outputFormat value="#{messages.label_welcome_titlepane}">
 					<f:param value="#{applicationBean.appName}" />
@@ -18,8 +18,32 @@
 			<p />
 			<h:outputText id="welcomeText" value="#{messages.label_welcome_text}" />
 			<p />
-			<div id="media"></div>
+
 		</p:panel>
+		<p:panel id="dataPanel" rendered="#{loginBean.enable}" header="Message DataTable">
+			<p:dataTable id="MessageTable2" value="#{jJMessageBean.allJJMessages}"
+				rowKey="#{mes.id}" var="mes" scrollable="true" scrollHeight="400"
+				sortMode="multiple">
+				<p:column headerText="Messages" sortBy="message">
+					<h:outputText value="#{mes.message}" />
+				</p:column>
+				<p:column headerText="Project" sortBy="project.name">
+					<h:outputText value="#{mes.project.name}" />
+				</p:column>
+				<p:column headerText="Product" sortBy="product.name">
+					<h:outputText value="#{mes.product.name}" />
+				</p:column>
+				<p:column headerText="Creator" sortBy="createdBy.name">
+					<h:outputText value="#{mes.createdBy.name}" />
+				</p:column>
+				<p:column headerText="Criticity" sortBy="criticity.name">
+					<h:outputText value="#{mes.criticity.name}" />
+				</p:column>
+
+			</p:dataTable>
+		</p:panel>
+
+
 	</ui:define>
 </ui:composition>
 </html>
