@@ -113,3 +113,10 @@ a:visited {
 .col3 {
 	vertical-align: top;
 }
+
+.CodeMirror-gutter {
+	z-index: 0;
+}
+CodeMirror-gutter {
+        z-index: 1;
+}
