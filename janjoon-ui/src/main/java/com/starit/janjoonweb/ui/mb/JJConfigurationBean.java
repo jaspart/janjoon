@@ -25,7 +25,7 @@ public class JJConfigurationBean {
 
 	@PostConstruct
 	public void init() {
-		
+
 		System.out.println("------initConfiguration------");
 		columns = new ArrayList<String>();
 		columns.add("name");
@@ -44,9 +44,10 @@ public class JJConfigurationBean {
 			configuration.setVal("https://github.com/janjoon/");
 			configuration.setEnabled(true);
 			jJConfigurationService.saveJJConfiguration(configuration);
-			jJconfiguration=jJConfigurationService.findAllJJConfigurations().get(0);
 		}
-		
+
+		jJconfiguration = jJConfigurationService.findAllJJConfigurations().get(0);
+
 	}
 
 	public JJConfiguration getjJconfiguration() {
@@ -74,10 +75,10 @@ public class JJConfigurationBean {
 	public void setSelectedConf(JJConfiguration selectedConf) {
 		this.selectedConf = selectedConf;
 	}
-	
-	  public List<String> getColumns() {
-	        return columns;
-	    }
+
+	public List<String> getColumns() {
+		return columns;
+	}
 
 	public void deleteConfig() {
 		selectedConf.setEnabled(false);
