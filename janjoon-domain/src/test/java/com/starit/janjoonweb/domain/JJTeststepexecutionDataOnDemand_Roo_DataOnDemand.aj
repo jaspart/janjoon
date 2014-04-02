@@ -5,6 +5,7 @@ package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJBuildDataOnDemand;
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
+import com.starit.janjoonweb.domain.JJTestcaseexecutionDataOnDemand;
 import com.starit.janjoonweb.domain.JJTeststepDataOnDemand;
 import com.starit.janjoonweb.domain.JJTeststepexecution;
 import com.starit.janjoonweb.domain.JJTeststepexecutionDataOnDemand;
@@ -36,6 +37,9 @@ privileged aspect JJTeststepexecutionDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     JJContactDataOnDemand JJTeststepexecutionDataOnDemand.jJContactDataOnDemand;
+    
+    @Autowired
+    JJTestcaseexecutionDataOnDemand JJTeststepexecutionDataOnDemand.jJTestcaseexecutionDataOnDemand;
     
     @Autowired
     JJTeststepDataOnDemand JJTeststepexecutionDataOnDemand.jJTeststepDataOnDemand;

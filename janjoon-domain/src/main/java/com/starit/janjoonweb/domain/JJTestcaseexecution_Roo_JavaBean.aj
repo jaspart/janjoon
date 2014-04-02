@@ -6,6 +6,8 @@ package com.starit.janjoonweb.domain;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
+import com.starit.janjoonweb.domain.JJTeststepexecution;
+import java.util.Set;
 
 privileged aspect JJTestcaseexecution_Roo_JavaBean {
     
@@ -31,6 +33,14 @@ privileged aspect JJTestcaseexecution_Roo_JavaBean {
     
     public void JJTestcaseexecution.setPassed(Boolean passed) {
         this.passed = passed;
+    }
+    
+    public Set<JJTeststepexecution> JJTestcaseexecution.getTeststepexecutions() {
+        return this.teststepexecutions;
+    }
+    
+    public void JJTestcaseexecution.setTeststepexecutions(Set<JJTeststepexecution> teststepexecutions) {
+        this.teststepexecutions = teststepexecutions;
     }
     
 }

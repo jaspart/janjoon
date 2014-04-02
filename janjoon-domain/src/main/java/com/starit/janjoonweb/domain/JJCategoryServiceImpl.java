@@ -21,7 +21,7 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 	}
 
 	@Override
-	public JJCategory getCategoryWithName(String name, boolean onlyActif) {
+	public JJCategory getCategory(String name, boolean onlyActif) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder
 				.createQuery(JJCategory.class);

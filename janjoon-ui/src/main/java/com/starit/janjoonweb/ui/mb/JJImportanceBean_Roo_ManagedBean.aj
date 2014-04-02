@@ -77,7 +77,7 @@ privileged aspect JJImportanceBean_Roo_ManagedBean {
         columns.add("description");
         columns.add("creationDate");
         columns.add("updatedDate");
-        columns.add("importanceLevel");
+        columns.add("objet");
     }
     
     public String JJImportanceBean.getName() {
@@ -295,24 +295,45 @@ privileged aspect JJImportanceBean_Roo_ManagedBean {
         enabledCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
         
-        OutputLabel importanceLevelCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        importanceLevelCreateOutput.setFor("importanceLevelCreateInput");
-        importanceLevelCreateOutput.setId("importanceLevelCreateOutput");
-        importanceLevelCreateOutput.setValue("Importance Level:");
-        htmlPanelGrid.getChildren().add(importanceLevelCreateOutput);
+        OutputLabel objetCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        objetCreateOutput.setFor("objetCreateInput");
+        objetCreateOutput.setId("objetCreateOutput");
+        objetCreateOutput.setValue("Objet:");
+        htmlPanelGrid.getChildren().add(objetCreateOutput);
         
-        Spinner importanceLevelCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
-        importanceLevelCreateInput.setId("importanceLevelCreateInput");
-        importanceLevelCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJImportanceBean.JJImportance_.importanceLevel}", Integer.class));
-        importanceLevelCreateInput.setRequired(false);
+        InputText objetCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        objetCreateInput.setId("objetCreateInput");
+        objetCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJImportanceBean.JJImportance_.objet}", String.class));
+        LengthValidator objetCreateInputValidator = new LengthValidator();
+        objetCreateInputValidator.setMaximum(25);
+        objetCreateInput.addValidator(objetCreateInputValidator);
+        objetCreateInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(objetCreateInput);
         
-        htmlPanelGrid.getChildren().add(importanceLevelCreateInput);
+        Message objetCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        objetCreateInputMessage.setId("objetCreateInputMessage");
+        objetCreateInputMessage.setFor("objetCreateInput");
+        objetCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(objetCreateInputMessage);
         
-        Message importanceLevelCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        importanceLevelCreateInputMessage.setId("importanceLevelCreateInputMessage");
-        importanceLevelCreateInputMessage.setFor("importanceLevelCreateInput");
-        importanceLevelCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(importanceLevelCreateInputMessage);
+        OutputLabel levelImportanceCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        levelImportanceCreateOutput.setFor("levelImportanceCreateInput");
+        levelImportanceCreateOutput.setId("levelImportanceCreateOutput");
+        levelImportanceCreateOutput.setValue("Level Importance:");
+        htmlPanelGrid.getChildren().add(levelImportanceCreateOutput);
+        
+        Spinner levelImportanceCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        levelImportanceCreateInput.setId("levelImportanceCreateInput");
+        levelImportanceCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJImportanceBean.JJImportance_.levelImportance}", Integer.class));
+        levelImportanceCreateInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(levelImportanceCreateInput);
+        
+        Message levelImportanceCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        levelImportanceCreateInputMessage.setId("levelImportanceCreateInputMessage");
+        levelImportanceCreateInputMessage.setFor("levelImportanceCreateInput");
+        levelImportanceCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(levelImportanceCreateInputMessage);
         
         HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesCreateOutput.setId("messagesCreateOutput");
@@ -488,24 +509,45 @@ privileged aspect JJImportanceBean_Roo_ManagedBean {
         enabledEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledEditInputMessage);
         
-        OutputLabel importanceLevelEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        importanceLevelEditOutput.setFor("importanceLevelEditInput");
-        importanceLevelEditOutput.setId("importanceLevelEditOutput");
-        importanceLevelEditOutput.setValue("Importance Level:");
-        htmlPanelGrid.getChildren().add(importanceLevelEditOutput);
+        OutputLabel objetEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        objetEditOutput.setFor("objetEditInput");
+        objetEditOutput.setId("objetEditOutput");
+        objetEditOutput.setValue("Objet:");
+        htmlPanelGrid.getChildren().add(objetEditOutput);
         
-        Spinner importanceLevelEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
-        importanceLevelEditInput.setId("importanceLevelEditInput");
-        importanceLevelEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJImportanceBean.JJImportance_.importanceLevel}", Integer.class));
-        importanceLevelEditInput.setRequired(false);
+        InputText objetEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        objetEditInput.setId("objetEditInput");
+        objetEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJImportanceBean.JJImportance_.objet}", String.class));
+        LengthValidator objetEditInputValidator = new LengthValidator();
+        objetEditInputValidator.setMaximum(25);
+        objetEditInput.addValidator(objetEditInputValidator);
+        objetEditInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(objetEditInput);
         
-        htmlPanelGrid.getChildren().add(importanceLevelEditInput);
+        Message objetEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        objetEditInputMessage.setId("objetEditInputMessage");
+        objetEditInputMessage.setFor("objetEditInput");
+        objetEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(objetEditInputMessage);
         
-        Message importanceLevelEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        importanceLevelEditInputMessage.setId("importanceLevelEditInputMessage");
-        importanceLevelEditInputMessage.setFor("importanceLevelEditInput");
-        importanceLevelEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(importanceLevelEditInputMessage);
+        OutputLabel levelImportanceEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        levelImportanceEditOutput.setFor("levelImportanceEditInput");
+        levelImportanceEditOutput.setId("levelImportanceEditOutput");
+        levelImportanceEditOutput.setValue("Level Importance:");
+        htmlPanelGrid.getChildren().add(levelImportanceEditOutput);
+        
+        Spinner levelImportanceEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        levelImportanceEditInput.setId("levelImportanceEditInput");
+        levelImportanceEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJImportanceBean.JJImportance_.levelImportance}", Integer.class));
+        levelImportanceEditInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(levelImportanceEditInput);
+        
+        Message levelImportanceEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        levelImportanceEditInputMessage.setId("levelImportanceEditInputMessage");
+        levelImportanceEditInputMessage.setFor("levelImportanceEditInput");
+        levelImportanceEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(levelImportanceEditInputMessage);
         
         HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesEditOutput.setId("messagesEditOutput");
@@ -611,14 +653,24 @@ privileged aspect JJImportanceBean_Roo_ManagedBean {
         enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJImportanceBean.JJImportance_.enabled}", String.class));
         htmlPanelGrid.getChildren().add(enabledValue);
         
-        HtmlOutputText importanceLevelLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        importanceLevelLabel.setId("importanceLevelLabel");
-        importanceLevelLabel.setValue("Importance Level:");
-        htmlPanelGrid.getChildren().add(importanceLevelLabel);
+        HtmlOutputText objetLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        objetLabel.setId("objetLabel");
+        objetLabel.setValue("Objet:");
+        htmlPanelGrid.getChildren().add(objetLabel);
         
-        HtmlOutputText importanceLevelValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        importanceLevelValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJImportanceBean.JJImportance_.importanceLevel}", String.class));
-        htmlPanelGrid.getChildren().add(importanceLevelValue);
+        HtmlOutputText objetValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        objetValue.setId("objetValue");
+        objetValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJImportanceBean.JJImportance_.objet}", String.class));
+        htmlPanelGrid.getChildren().add(objetValue);
+        
+        HtmlOutputText levelImportanceLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        levelImportanceLabel.setId("levelImportanceLabel");
+        levelImportanceLabel.setValue("Level Importance:");
+        htmlPanelGrid.getChildren().add(levelImportanceLabel);
+        
+        HtmlOutputText levelImportanceValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        levelImportanceValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJImportanceBean.JJImportance_.levelImportance}", String.class));
+        htmlPanelGrid.getChildren().add(levelImportanceValue);
         
         HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesLabel.setId("messagesLabel");

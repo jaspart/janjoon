@@ -1,5 +1,8 @@
 package com.starit.janjoonweb.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -18,7 +21,7 @@ public class JJProfileServiceImpl implements JJProfileService {
 	}
 
 	@Override
-	public JJProfile getJJProfileWithName(String name) {
+	public JJProfile getOneProfile(String name) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJProfile> criteriaQuery = criteriaBuilder
@@ -28,9 +31,13 @@ public class JJProfileServiceImpl implements JJProfileService {
 
 		CriteriaQuery<JJProfile> select = criteriaQuery.select(from);
 
-		Predicate predicate = criteriaBuilder.equal(from.get("name"), name);
+		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		select.where(predicate);
+		if (name != null) {
+			predicates.add(criteriaBuilder.equal(from.get("name"), name));
+		}
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		TypedQuery<JJProfile> result = entityManager.createQuery(select);
 

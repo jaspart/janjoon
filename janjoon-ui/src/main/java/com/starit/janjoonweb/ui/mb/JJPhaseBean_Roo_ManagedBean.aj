@@ -26,10 +26,12 @@ import javax.faces.convert.DateTimeConverter;
 import javax.faces.validator.LengthValidator;
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.calendar.Calendar;
+import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
+import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +73,7 @@ privileged aspect JJPhaseBean_Roo_ManagedBean {
         columns.add("description");
         columns.add("creationDate");
         columns.add("updatedDate");
+        columns.add("levelPhase");
     }
     
     public String JJPhaseBean.getName() {
@@ -288,6 +291,25 @@ privileged aspect JJPhaseBean_Roo_ManagedBean {
         enabledCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
         
+        OutputLabel levelPhaseCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        levelPhaseCreateOutput.setFor("levelPhaseCreateInput");
+        levelPhaseCreateOutput.setId("levelPhaseCreateOutput");
+        levelPhaseCreateOutput.setValue("Level Phase:");
+        htmlPanelGrid.getChildren().add(levelPhaseCreateOutput);
+        
+        Spinner levelPhaseCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        levelPhaseCreateInput.setId("levelPhaseCreateInput");
+        levelPhaseCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJPhaseBean.JJPhase_.levelPhase}", Integer.class));
+        levelPhaseCreateInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(levelPhaseCreateInput);
+        
+        Message levelPhaseCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        levelPhaseCreateInputMessage.setId("levelPhaseCreateInputMessage");
+        levelPhaseCreateInputMessage.setFor("levelPhaseCreateInput");
+        levelPhaseCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(levelPhaseCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -446,6 +468,25 @@ privileged aspect JJPhaseBean_Roo_ManagedBean {
         enabledEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledEditInputMessage);
         
+        OutputLabel levelPhaseEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        levelPhaseEditOutput.setFor("levelPhaseEditInput");
+        levelPhaseEditOutput.setId("levelPhaseEditOutput");
+        levelPhaseEditOutput.setValue("Level Phase:");
+        htmlPanelGrid.getChildren().add(levelPhaseEditOutput);
+        
+        Spinner levelPhaseEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        levelPhaseEditInput.setId("levelPhaseEditInput");
+        levelPhaseEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJPhaseBean.JJPhase_.levelPhase}", Integer.class));
+        levelPhaseEditInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(levelPhaseEditInput);
+        
+        Message levelPhaseEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        levelPhaseEditInputMessage.setId("levelPhaseEditInputMessage");
+        levelPhaseEditInputMessage.setFor("levelPhaseEditInput");
+        levelPhaseEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(levelPhaseEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -533,6 +574,15 @@ privileged aspect JJPhaseBean_Roo_ManagedBean {
         HtmlOutputText enabledValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJPhaseBean.JJPhase_.enabled}", String.class));
         htmlPanelGrid.getChildren().add(enabledValue);
+        
+        HtmlOutputText levelPhaseLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        levelPhaseLabel.setId("levelPhaseLabel");
+        levelPhaseLabel.setValue("Level Phase:");
+        htmlPanelGrid.getChildren().add(levelPhaseLabel);
+        
+        HtmlOutputText levelPhaseValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        levelPhaseValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJPhaseBean.JJPhase_.levelPhase}", String.class));
+        htmlPanelGrid.getChildren().add(levelPhaseValue);
         
         return htmlPanelGrid;
     }

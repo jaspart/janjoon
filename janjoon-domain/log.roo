@@ -6,3 +6,14 @@ quit
 // Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-13 11:59:08
 // Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-25 17:44:39
 // Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-25 17:58:17
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 10:53:09
+entity jpa --class JJWorflow --extends ~.JJAbstractEntity
+field reference --fieldName source --type ~.JJStatus
+field reference --fieldName target --type ~.JJStatus
+// [failed] field string --fieldName action
+field string --fieldName actionworkflow
+field reference --fieldName actor --type ~.JJContact
+repository jpa --interface ~.JJWorkflowRepository --entity ~.JJWorkflow
+service type --interface ~.JJWorflowService --class ~.JJWorflowServiceImpl --entity ~.JJWorflow
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 11:03:46

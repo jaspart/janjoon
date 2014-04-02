@@ -8,10 +8,13 @@ import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJMessage;
+import com.starit.janjoonweb.domain.JJPhase;
+import com.starit.janjoonweb.domain.JJPhaseService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.JJBuildBean;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJPhaseConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJVersionConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
@@ -53,6 +56,9 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
     
     @Autowired
     JJVersionService JJBuildBean.jJVersionService;
+    
+    @Autowired
+    JJPhaseService JJBuildBean.jJPhaseService;
     
     private String JJBuildBean.name = "JJBuilds";
     
@@ -322,6 +328,30 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         versioningCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(versioningCreateInputMessage);
         
+        OutputLabel phaseCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        phaseCreateOutput.setFor("phaseCreateInput");
+        phaseCreateOutput.setId("phaseCreateOutput");
+        phaseCreateOutput.setValue("Phase:");
+        htmlPanelGrid.getChildren().add(phaseCreateOutput);
+        
+        AutoComplete phaseCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        phaseCreateInput.setId("phaseCreateInput");
+        phaseCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.phase}", JJPhase.class));
+        phaseCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJBuildBean.completePhase}", List.class, new Class[] { String.class }));
+        phaseCreateInput.setDropdown(true);
+        phaseCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "phase", String.class));
+        phaseCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{phase.name} #{phase.description} #{phase.creationDate} #{phase.updatedDate}", String.class));
+        phaseCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{phase}", JJPhase.class));
+        phaseCreateInput.setConverter(new JJPhaseConverter());
+        phaseCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(phaseCreateInput);
+        
+        Message phaseCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        phaseCreateInputMessage.setId("phaseCreateInputMessage");
+        phaseCreateInputMessage.setFor("phaseCreateInput");
+        phaseCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(phaseCreateInputMessage);
+        
         HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesCreateOutput.setId("messagesCreateOutput");
         messagesCreateOutput.setValue("Messages:");
@@ -520,6 +550,30 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         versioningEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(versioningEditInputMessage);
         
+        OutputLabel phaseEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        phaseEditOutput.setFor("phaseEditInput");
+        phaseEditOutput.setId("phaseEditOutput");
+        phaseEditOutput.setValue("Phase:");
+        htmlPanelGrid.getChildren().add(phaseEditOutput);
+        
+        AutoComplete phaseEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        phaseEditInput.setId("phaseEditInput");
+        phaseEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.phase}", JJPhase.class));
+        phaseEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJBuildBean.completePhase}", List.class, new Class[] { String.class }));
+        phaseEditInput.setDropdown(true);
+        phaseEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "phase", String.class));
+        phaseEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{phase.name} #{phase.description} #{phase.creationDate} #{phase.updatedDate}", String.class));
+        phaseEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{phase}", JJPhase.class));
+        phaseEditInput.setConverter(new JJPhaseConverter());
+        phaseEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(phaseEditInput);
+        
+        Message phaseEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        phaseEditInputMessage.setId("phaseEditInputMessage");
+        phaseEditInputMessage.setFor("phaseEditInput");
+        phaseEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(phaseEditInputMessage);
+        
         HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesEditOutput.setId("messagesEditOutput");
         messagesEditOutput.setValue("Messages:");
@@ -634,6 +688,16 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         versioningValue.setConverter(new JJVersionConverter());
         htmlPanelGrid.getChildren().add(versioningValue);
         
+        HtmlOutputText phaseLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        phaseLabel.setId("phaseLabel");
+        phaseLabel.setValue("Phase:");
+        htmlPanelGrid.getChildren().add(phaseLabel);
+        
+        HtmlOutputText phaseValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        phaseValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.phase}", JJPhase.class));
+        phaseValue.setConverter(new JJPhaseConverter());
+        htmlPanelGrid.getChildren().add(phaseValue);
+        
         HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesLabel.setId("messagesLabel");
         messagesLabel.setValue("Messages:");
@@ -686,6 +750,17 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
             String jJVersionStr = String.valueOf(jJVersion.getName() +  " "  + jJVersion.getDescription() +  " "  + jJVersion.getCreationDate() +  " "  + jJVersion.getUpdatedDate());
             if (jJVersionStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJVersion);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJPhase> JJBuildBean.completePhase(String query) {
+        List<JJPhase> suggestions = new ArrayList<JJPhase>();
+        for (JJPhase jJPhase : jJPhaseService.findAllJJPhases()) {
+            String jJPhaseStr = String.valueOf(jJPhase.getName() +  " "  + jJPhase.getDescription() +  " "  + jJPhase.getCreationDate() +  " "  + jJPhase.getUpdatedDate());
+            if (jJPhaseStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJPhase);
             }
         }
         return suggestions;

@@ -8,4 +8,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity(sequenceName = "JJPhaseSEQ")
 public class JJPhase extends JJAbstractEntity {
+
+	private Integer levelPhase;
+
 }

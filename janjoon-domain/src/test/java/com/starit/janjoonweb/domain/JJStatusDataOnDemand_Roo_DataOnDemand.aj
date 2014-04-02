@@ -43,8 +43,9 @@ privileged aspect JJStatusDataOnDemand_Roo_DataOnDemand {
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
+        setLevelStatus(obj, index);
         setName(obj, index);
-        setStatusLevel(obj, index);
+        setObjet(obj, index);
         setUpdatedDate(obj, index);
         return obj;
     }
@@ -64,6 +65,11 @@ privileged aspect JJStatusDataOnDemand_Roo_DataOnDemand {
         obj.setEnabled(enabled);
     }
     
+    public void JJStatusDataOnDemand.setLevelStatus(JJStatus obj, int index) {
+        Integer levelStatus = new Integer(index);
+        obj.setLevelStatus(levelStatus);
+    }
+    
     public void JJStatusDataOnDemand.setName(JJStatus obj, int index) {
         String name = "name_" + index;
         if (name.length() > 100) {
@@ -72,9 +78,12 @@ privileged aspect JJStatusDataOnDemand_Roo_DataOnDemand {
         obj.setName(name);
     }
     
-    public void JJStatusDataOnDemand.setStatusLevel(JJStatus obj, int index) {
-        Integer statusLevel = new Integer(index);
-        obj.setStatusLevel(statusLevel);
+    public void JJStatusDataOnDemand.setObjet(JJStatus obj, int index) {
+        String objet = "objet_" + index;
+        if (objet.length() > 25) {
+            objet = objet.substring(0, 25);
+        }
+        obj.setObjet(objet);
     }
     
     public void JJStatusDataOnDemand.setUpdatedDate(JJStatus obj, int index) {

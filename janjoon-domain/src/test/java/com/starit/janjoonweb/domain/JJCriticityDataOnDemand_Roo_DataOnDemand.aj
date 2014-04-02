@@ -41,10 +41,11 @@ privileged aspect JJCriticityDataOnDemand_Roo_DataOnDemand {
     public JJCriticity JJCriticityDataOnDemand.getNewTransientJJCriticity(int index) {
         JJCriticity obj = new JJCriticity();
         setCreationDate(obj, index);
-        setCriticityLevel(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
+        setLevelCriticity(obj, index);
         setName(obj, index);
+        setObjet(obj, index);
         setUpdatedDate(obj, index);
         return obj;
     }
@@ -52,11 +53,6 @@ privileged aspect JJCriticityDataOnDemand_Roo_DataOnDemand {
     public void JJCriticityDataOnDemand.setCreationDate(JJCriticity obj, int index) {
         Date creationDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setCreationDate(creationDate);
-    }
-    
-    public void JJCriticityDataOnDemand.setCriticityLevel(JJCriticity obj, int index) {
-        Integer criticityLevel = new Integer(index);
-        obj.setCriticityLevel(criticityLevel);
     }
     
     public void JJCriticityDataOnDemand.setDescription(JJCriticity obj, int index) {
@@ -69,12 +65,25 @@ privileged aspect JJCriticityDataOnDemand_Roo_DataOnDemand {
         obj.setEnabled(enabled);
     }
     
+    public void JJCriticityDataOnDemand.setLevelCriticity(JJCriticity obj, int index) {
+        Integer levelCriticity = new Integer(index);
+        obj.setLevelCriticity(levelCriticity);
+    }
+    
     public void JJCriticityDataOnDemand.setName(JJCriticity obj, int index) {
         String name = "name_" + index;
         if (name.length() > 100) {
             name = name.substring(0, 100);
         }
         obj.setName(name);
+    }
+    
+    public void JJCriticityDataOnDemand.setObjet(JJCriticity obj, int index) {
+        String objet = "objet_" + index;
+        if (objet.length() > 25) {
+            objet = objet.substring(0, 25);
+        }
+        obj.setObjet(objet);
     }
     
     public void JJCriticityDataOnDemand.setUpdatedDate(JJCriticity obj, int index) {

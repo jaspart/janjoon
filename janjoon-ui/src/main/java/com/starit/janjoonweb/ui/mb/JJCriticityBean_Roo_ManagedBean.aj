@@ -77,7 +77,7 @@ privileged aspect JJCriticityBean_Roo_ManagedBean {
         columns.add("description");
         columns.add("creationDate");
         columns.add("updatedDate");
-        columns.add("criticityLevel");
+        columns.add("objet");
     }
     
     public String JJCriticityBean.getName() {
@@ -295,24 +295,45 @@ privileged aspect JJCriticityBean_Roo_ManagedBean {
         enabledCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
         
-        OutputLabel criticityLevelCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        criticityLevelCreateOutput.setFor("criticityLevelCreateInput");
-        criticityLevelCreateOutput.setId("criticityLevelCreateOutput");
-        criticityLevelCreateOutput.setValue("Criticity Level:");
-        htmlPanelGrid.getChildren().add(criticityLevelCreateOutput);
+        OutputLabel objetCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        objetCreateOutput.setFor("objetCreateInput");
+        objetCreateOutput.setId("objetCreateOutput");
+        objetCreateOutput.setValue("Objet:");
+        htmlPanelGrid.getChildren().add(objetCreateOutput);
         
-        Spinner criticityLevelCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
-        criticityLevelCreateInput.setId("criticityLevelCreateInput");
-        criticityLevelCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCriticityBean.JJCriticity_.criticityLevel}", Integer.class));
-        criticityLevelCreateInput.setRequired(false);
+        InputText objetCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        objetCreateInput.setId("objetCreateInput");
+        objetCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCriticityBean.JJCriticity_.objet}", String.class));
+        LengthValidator objetCreateInputValidator = new LengthValidator();
+        objetCreateInputValidator.setMaximum(25);
+        objetCreateInput.addValidator(objetCreateInputValidator);
+        objetCreateInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(objetCreateInput);
         
-        htmlPanelGrid.getChildren().add(criticityLevelCreateInput);
+        Message objetCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        objetCreateInputMessage.setId("objetCreateInputMessage");
+        objetCreateInputMessage.setFor("objetCreateInput");
+        objetCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(objetCreateInputMessage);
         
-        Message criticityLevelCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        criticityLevelCreateInputMessage.setId("criticityLevelCreateInputMessage");
-        criticityLevelCreateInputMessage.setFor("criticityLevelCreateInput");
-        criticityLevelCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(criticityLevelCreateInputMessage);
+        OutputLabel levelCriticityCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        levelCriticityCreateOutput.setFor("levelCriticityCreateInput");
+        levelCriticityCreateOutput.setId("levelCriticityCreateOutput");
+        levelCriticityCreateOutput.setValue("Level Criticity:");
+        htmlPanelGrid.getChildren().add(levelCriticityCreateOutput);
+        
+        Spinner levelCriticityCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        levelCriticityCreateInput.setId("levelCriticityCreateInput");
+        levelCriticityCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCriticityBean.JJCriticity_.levelCriticity}", Integer.class));
+        levelCriticityCreateInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(levelCriticityCreateInput);
+        
+        Message levelCriticityCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        levelCriticityCreateInputMessage.setId("levelCriticityCreateInputMessage");
+        levelCriticityCreateInputMessage.setFor("levelCriticityCreateInput");
+        levelCriticityCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(levelCriticityCreateInputMessage);
         
         HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesCreateOutput.setId("messagesCreateOutput");
@@ -488,24 +509,45 @@ privileged aspect JJCriticityBean_Roo_ManagedBean {
         enabledEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledEditInputMessage);
         
-        OutputLabel criticityLevelEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        criticityLevelEditOutput.setFor("criticityLevelEditInput");
-        criticityLevelEditOutput.setId("criticityLevelEditOutput");
-        criticityLevelEditOutput.setValue("Criticity Level:");
-        htmlPanelGrid.getChildren().add(criticityLevelEditOutput);
+        OutputLabel objetEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        objetEditOutput.setFor("objetEditInput");
+        objetEditOutput.setId("objetEditOutput");
+        objetEditOutput.setValue("Objet:");
+        htmlPanelGrid.getChildren().add(objetEditOutput);
         
-        Spinner criticityLevelEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
-        criticityLevelEditInput.setId("criticityLevelEditInput");
-        criticityLevelEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCriticityBean.JJCriticity_.criticityLevel}", Integer.class));
-        criticityLevelEditInput.setRequired(false);
+        InputText objetEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        objetEditInput.setId("objetEditInput");
+        objetEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCriticityBean.JJCriticity_.objet}", String.class));
+        LengthValidator objetEditInputValidator = new LengthValidator();
+        objetEditInputValidator.setMaximum(25);
+        objetEditInput.addValidator(objetEditInputValidator);
+        objetEditInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(objetEditInput);
         
-        htmlPanelGrid.getChildren().add(criticityLevelEditInput);
+        Message objetEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        objetEditInputMessage.setId("objetEditInputMessage");
+        objetEditInputMessage.setFor("objetEditInput");
+        objetEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(objetEditInputMessage);
         
-        Message criticityLevelEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        criticityLevelEditInputMessage.setId("criticityLevelEditInputMessage");
-        criticityLevelEditInputMessage.setFor("criticityLevelEditInput");
-        criticityLevelEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(criticityLevelEditInputMessage);
+        OutputLabel levelCriticityEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        levelCriticityEditOutput.setFor("levelCriticityEditInput");
+        levelCriticityEditOutput.setId("levelCriticityEditOutput");
+        levelCriticityEditOutput.setValue("Level Criticity:");
+        htmlPanelGrid.getChildren().add(levelCriticityEditOutput);
+        
+        Spinner levelCriticityEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        levelCriticityEditInput.setId("levelCriticityEditInput");
+        levelCriticityEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCriticityBean.JJCriticity_.levelCriticity}", Integer.class));
+        levelCriticityEditInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(levelCriticityEditInput);
+        
+        Message levelCriticityEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        levelCriticityEditInputMessage.setId("levelCriticityEditInputMessage");
+        levelCriticityEditInputMessage.setFor("levelCriticityEditInput");
+        levelCriticityEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(levelCriticityEditInputMessage);
         
         HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesEditOutput.setId("messagesEditOutput");
@@ -611,14 +653,24 @@ privileged aspect JJCriticityBean_Roo_ManagedBean {
         enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCriticityBean.JJCriticity_.enabled}", String.class));
         htmlPanelGrid.getChildren().add(enabledValue);
         
-        HtmlOutputText criticityLevelLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        criticityLevelLabel.setId("criticityLevelLabel");
-        criticityLevelLabel.setValue("Criticity Level:");
-        htmlPanelGrid.getChildren().add(criticityLevelLabel);
+        HtmlOutputText objetLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        objetLabel.setId("objetLabel");
+        objetLabel.setValue("Objet:");
+        htmlPanelGrid.getChildren().add(objetLabel);
         
-        HtmlOutputText criticityLevelValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        criticityLevelValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCriticityBean.JJCriticity_.criticityLevel}", String.class));
-        htmlPanelGrid.getChildren().add(criticityLevelValue);
+        HtmlOutputText objetValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        objetValue.setId("objetValue");
+        objetValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCriticityBean.JJCriticity_.objet}", String.class));
+        htmlPanelGrid.getChildren().add(objetValue);
+        
+        HtmlOutputText levelCriticityLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        levelCriticityLabel.setId("levelCriticityLabel");
+        levelCriticityLabel.setValue("Level Criticity:");
+        htmlPanelGrid.getChildren().add(levelCriticityLabel);
+        
+        HtmlOutputText levelCriticityValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        levelCriticityValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCriticityBean.JJCriticity_.levelCriticity}", String.class));
+        htmlPanelGrid.getChildren().add(levelCriticityValue);
         
         HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesLabel.setId("messagesLabel");

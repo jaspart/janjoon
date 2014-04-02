@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -24,7 +25,7 @@ public class JJSprintServiceImpl implements JJSprintService {
 	 */
 
 	@Override
-	public List<JJSprint> getAllJJSprints() {
+	public List<JJSprint> getSprints(boolean onlyActif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJSprint> criteriaQuery = criteriaBuilder
@@ -34,9 +35,12 @@ public class JJSprintServiceImpl implements JJSprintService {
 
 		CriteriaQuery<JJSprint> select = criteriaQuery.select(from);
 
-		Predicate predicate = criteriaBuilder.equal(from.get("enabled"), true);
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
 
-		select.where(predicate);
+		select.where(predicates.toArray(new Predicate[] {}));
 
 		TypedQuery<JJSprint> result = entityManager.createQuery(select);
 		return result.getResultList();

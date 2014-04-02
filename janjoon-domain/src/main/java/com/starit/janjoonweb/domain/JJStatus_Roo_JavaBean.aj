@@ -9,12 +9,20 @@ import java.util.Set;
 
 privileged aspect JJStatus_Roo_JavaBean {
     
-    public Integer JJStatus.getStatusLevel() {
-        return this.statusLevel;
+    public String JJStatus.getObjet() {
+        return this.objet;
     }
     
-    public void JJStatus.setStatusLevel(Integer statusLevel) {
-        this.statusLevel = statusLevel;
+    public void JJStatus.setObjet(String objet) {
+        this.objet = objet;
+    }
+    
+    public Integer JJStatus.getLevelStatus() {
+        return this.levelStatus;
+    }
+    
+    public void JJStatus.setLevelStatus(Integer levelStatus) {
+        this.levelStatus = levelStatus;
     }
     
     public Set<JJMessage> JJStatus.getMessages() {

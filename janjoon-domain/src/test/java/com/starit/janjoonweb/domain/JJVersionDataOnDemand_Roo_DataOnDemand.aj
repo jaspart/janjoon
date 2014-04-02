@@ -4,7 +4,6 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJPhaseDataOnDemand;
 import com.starit.janjoonweb.domain.JJProductDataOnDemand;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionDataOnDemand;
@@ -30,9 +29,6 @@ privileged aspect JJVersionDataOnDemand_Roo_DataOnDemand {
     private Random JJVersionDataOnDemand.rnd = new SecureRandom();
     
     private List<JJVersion> JJVersionDataOnDemand.data;
-    
-    @Autowired
-    JJPhaseDataOnDemand JJVersionDataOnDemand.jJPhaseDataOnDemand;
     
     @Autowired
     JJProductDataOnDemand JJVersionDataOnDemand.jJProductDataOnDemand;

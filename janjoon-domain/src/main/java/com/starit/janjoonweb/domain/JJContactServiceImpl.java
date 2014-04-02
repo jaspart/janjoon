@@ -1,6 +1,5 @@
 package com.starit.janjoonweb.domain;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-public class JJContactServiceImpl implements JJContactService, Serializable {
+public class JJContactServiceImpl implements JJContactService {
 
 	@PersistenceContext
 	private EntityManager entityManager;

@@ -4,5 +4,5 @@ import org.springframework.roo.addon.layers.service.RooService;
 
 @RooService(domainTypes = { com.starit.janjoonweb.domain.JJProfile.class })
 public interface JJProfileService {
-	public JJProfile getJJProfileWithName(String name);
+	public JJProfile getOneProfile(String name);
 }

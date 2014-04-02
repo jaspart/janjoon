@@ -9,12 +9,20 @@ import java.util.Set;
 
 privileged aspect JJCriticity_Roo_JavaBean {
     
-    public Integer JJCriticity.getCriticityLevel() {
-        return this.criticityLevel;
+    public String JJCriticity.getObjet() {
+        return this.objet;
     }
     
-    public void JJCriticity.setCriticityLevel(Integer criticityLevel) {
-        this.criticityLevel = criticityLevel;
+    public void JJCriticity.setObjet(String objet) {
+        this.objet = objet;
+    }
+    
+    public Integer JJCriticity.getLevelCriticity() {
+        return this.levelCriticity;
+    }
+    
+    public void JJCriticity.setLevelCriticity(Integer levelCriticity) {
+        this.levelCriticity = levelCriticity;
     }
     
     public Set<JJMessage> JJCriticity.getMessages() {

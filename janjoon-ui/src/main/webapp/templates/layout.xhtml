@@ -13,7 +13,7 @@
 
 		<h:panelGrid columns="3" styleClass="wrapper">
 			<p:panel header="Menu" styleClass="menu" toggleable="true"
-				closable="true" toggleOrientation="horizontal">
+				toggleOrientation="horizontal">
 				<ui:insert name="menu">
 					<ui:include src="menu.xhtml" />
 				</ui:insert>
@@ -35,7 +35,7 @@
 			</p:panel>
 
 			<p:panel id="messagePanel" header="Chat" styleClass="chat"
-				toggleable="true" style="height:100%;" closable="true"
+				toggleable="true" style="height:100%;"
 				toggleOrientation="horizontal">
 
 				<p:dataTable id="dataTable1" value="#{jJMessageBean.allJJMessages}"
@@ -70,22 +70,24 @@
 					</p:outputPanel>
 				</p:dialog>
 				<h:form id="messageCreationForm" rendered="#{loginBean.enable}">
-				<p:growl id="creationGrowl" showDetail="true"/>  
+					<p:growl id="creationGrowl" showDetail="true" />
 					<p:panel style="height: 100%;">
 						<p:panelGrid columns="1">
 							<p:outputLabel for="messageName" value="Nom :" />
 							<p:inputText id="messageName"
 								value="#{jJMessageBean.jJmessage.name}" required="true" />
-							
+
 							<p:outputLabel for="messagedsc" value="Message :" />
 							<p:inputTextarea id="messagedsc"
 								value="#{jJMessageBean.jJmessage.message}" required="true" />
-							
+
 							<p:panelGrid columns="2">
-								<p:commandButton id="submit1" value="CreateInfo" icon="ui-icon-info"
+								<p:commandButton id="submit1" value="CreateInfo"
+									icon="ui-icon-info"
 									actionListener="#{jJMessageBean.createMessage}"
 									update=":messageCreationForm,creationGrowl" />
-								<p:commandButton id="submit2" value="CreateAlert" icon="ui-icon-alert"
+								<p:commandButton id="submit2" value="CreateAlert"
+									icon="ui-icon-alert"
 									actionListener="#{jJMessageBean.createMessage}"
 									update=":messageCreationForm,creationGrowl" />
 							</p:panelGrid>

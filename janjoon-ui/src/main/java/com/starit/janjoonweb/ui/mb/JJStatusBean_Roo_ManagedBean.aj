@@ -77,7 +77,7 @@ privileged aspect JJStatusBean_Roo_ManagedBean {
         columns.add("description");
         columns.add("creationDate");
         columns.add("updatedDate");
-        columns.add("statusLevel");
+        columns.add("objet");
     }
     
     public String JJStatusBean.getName() {
@@ -295,24 +295,45 @@ privileged aspect JJStatusBean_Roo_ManagedBean {
         enabledCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
         
-        OutputLabel statusLevelCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        statusLevelCreateOutput.setFor("statusLevelCreateInput");
-        statusLevelCreateOutput.setId("statusLevelCreateOutput");
-        statusLevelCreateOutput.setValue("Status Level:");
-        htmlPanelGrid.getChildren().add(statusLevelCreateOutput);
+        OutputLabel objetCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        objetCreateOutput.setFor("objetCreateInput");
+        objetCreateOutput.setId("objetCreateOutput");
+        objetCreateOutput.setValue("Objet:");
+        htmlPanelGrid.getChildren().add(objetCreateOutput);
         
-        Spinner statusLevelCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
-        statusLevelCreateInput.setId("statusLevelCreateInput");
-        statusLevelCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.statusLevel}", Integer.class));
-        statusLevelCreateInput.setRequired(false);
+        InputText objetCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        objetCreateInput.setId("objetCreateInput");
+        objetCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.objet}", String.class));
+        LengthValidator objetCreateInputValidator = new LengthValidator();
+        objetCreateInputValidator.setMaximum(25);
+        objetCreateInput.addValidator(objetCreateInputValidator);
+        objetCreateInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(objetCreateInput);
         
-        htmlPanelGrid.getChildren().add(statusLevelCreateInput);
+        Message objetCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        objetCreateInputMessage.setId("objetCreateInputMessage");
+        objetCreateInputMessage.setFor("objetCreateInput");
+        objetCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(objetCreateInputMessage);
         
-        Message statusLevelCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        statusLevelCreateInputMessage.setId("statusLevelCreateInputMessage");
-        statusLevelCreateInputMessage.setFor("statusLevelCreateInput");
-        statusLevelCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(statusLevelCreateInputMessage);
+        OutputLabel levelStatusCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        levelStatusCreateOutput.setFor("levelStatusCreateInput");
+        levelStatusCreateOutput.setId("levelStatusCreateOutput");
+        levelStatusCreateOutput.setValue("Level Status:");
+        htmlPanelGrid.getChildren().add(levelStatusCreateOutput);
+        
+        Spinner levelStatusCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        levelStatusCreateInput.setId("levelStatusCreateInput");
+        levelStatusCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.levelStatus}", Integer.class));
+        levelStatusCreateInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(levelStatusCreateInput);
+        
+        Message levelStatusCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        levelStatusCreateInputMessage.setId("levelStatusCreateInputMessage");
+        levelStatusCreateInputMessage.setFor("levelStatusCreateInput");
+        levelStatusCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(levelStatusCreateInputMessage);
         
         HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesCreateOutput.setId("messagesCreateOutput");
@@ -488,24 +509,45 @@ privileged aspect JJStatusBean_Roo_ManagedBean {
         enabledEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledEditInputMessage);
         
-        OutputLabel statusLevelEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        statusLevelEditOutput.setFor("statusLevelEditInput");
-        statusLevelEditOutput.setId("statusLevelEditOutput");
-        statusLevelEditOutput.setValue("Status Level:");
-        htmlPanelGrid.getChildren().add(statusLevelEditOutput);
+        OutputLabel objetEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        objetEditOutput.setFor("objetEditInput");
+        objetEditOutput.setId("objetEditOutput");
+        objetEditOutput.setValue("Objet:");
+        htmlPanelGrid.getChildren().add(objetEditOutput);
         
-        Spinner statusLevelEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
-        statusLevelEditInput.setId("statusLevelEditInput");
-        statusLevelEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.statusLevel}", Integer.class));
-        statusLevelEditInput.setRequired(false);
+        InputText objetEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        objetEditInput.setId("objetEditInput");
+        objetEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.objet}", String.class));
+        LengthValidator objetEditInputValidator = new LengthValidator();
+        objetEditInputValidator.setMaximum(25);
+        objetEditInput.addValidator(objetEditInputValidator);
+        objetEditInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(objetEditInput);
         
-        htmlPanelGrid.getChildren().add(statusLevelEditInput);
+        Message objetEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        objetEditInputMessage.setId("objetEditInputMessage");
+        objetEditInputMessage.setFor("objetEditInput");
+        objetEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(objetEditInputMessage);
         
-        Message statusLevelEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        statusLevelEditInputMessage.setId("statusLevelEditInputMessage");
-        statusLevelEditInputMessage.setFor("statusLevelEditInput");
-        statusLevelEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(statusLevelEditInputMessage);
+        OutputLabel levelStatusEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        levelStatusEditOutput.setFor("levelStatusEditInput");
+        levelStatusEditOutput.setId("levelStatusEditOutput");
+        levelStatusEditOutput.setValue("Level Status:");
+        htmlPanelGrid.getChildren().add(levelStatusEditOutput);
+        
+        Spinner levelStatusEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        levelStatusEditInput.setId("levelStatusEditInput");
+        levelStatusEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.levelStatus}", Integer.class));
+        levelStatusEditInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(levelStatusEditInput);
+        
+        Message levelStatusEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        levelStatusEditInputMessage.setId("levelStatusEditInputMessage");
+        levelStatusEditInputMessage.setFor("levelStatusEditInput");
+        levelStatusEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(levelStatusEditInputMessage);
         
         HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesEditOutput.setId("messagesEditOutput");
@@ -611,14 +653,24 @@ privileged aspect JJStatusBean_Roo_ManagedBean {
         enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.enabled}", String.class));
         htmlPanelGrid.getChildren().add(enabledValue);
         
-        HtmlOutputText statusLevelLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        statusLevelLabel.setId("statusLevelLabel");
-        statusLevelLabel.setValue("Status Level:");
-        htmlPanelGrid.getChildren().add(statusLevelLabel);
+        HtmlOutputText objetLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        objetLabel.setId("objetLabel");
+        objetLabel.setValue("Objet:");
+        htmlPanelGrid.getChildren().add(objetLabel);
         
-        HtmlOutputText statusLevelValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        statusLevelValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.statusLevel}", String.class));
-        htmlPanelGrid.getChildren().add(statusLevelValue);
+        HtmlOutputText objetValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        objetValue.setId("objetValue");
+        objetValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.objet}", String.class));
+        htmlPanelGrid.getChildren().add(objetValue);
+        
+        HtmlOutputText levelStatusLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        levelStatusLabel.setId("levelStatusLabel");
+        levelStatusLabel.setValue("Level Status:");
+        htmlPanelGrid.getChildren().add(levelStatusLabel);
+        
+        HtmlOutputText levelStatusValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        levelStatusValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.levelStatus}", String.class));
+        htmlPanelGrid.getChildren().add(levelStatusValue);
         
         HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesLabel.setId("messagesLabel");

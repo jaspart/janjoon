@@ -5,6 +5,7 @@ package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJMessage;
+import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJVersion;
 import java.util.Set;
 
@@ -16,6 +17,14 @@ privileged aspect JJBuild_Roo_JavaBean {
     
     public void JJBuild.setVersioning(JJVersion versioning) {
         this.versioning = versioning;
+    }
+    
+    public JJPhase JJBuild.getPhase() {
+        return this.phase;
+    }
+    
+    public void JJBuild.setPhase(JJPhase phase) {
+        this.phase = phase;
     }
     
     public Set<JJMessage> JJBuild.getMessages() {

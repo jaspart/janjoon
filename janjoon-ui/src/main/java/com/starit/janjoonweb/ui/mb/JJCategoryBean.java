@@ -11,7 +11,6 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJCategory;
-import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable

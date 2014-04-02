@@ -61,3 +61,32 @@ quit
 // Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-01 17:28:49
 quit
 // Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-01 17:29:31
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 09:45:46
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 10:23:05
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 10:28:59
+// [failed] focus --class ~.JJTestcaseexecution
+// [failed] field set --fieldName teststepexecutions  --type ~.JJTeststepexecution --cardinality ONE_TO_MANY --mappedBy testcaseexecution --fetch LAZY
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 10:39:29
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 10:39:34
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 10:52:51
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 10:52:55
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 11:04:09
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 11:06:58
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 11:26:04
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 11:38:00
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 11:41:46
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 12:23:31
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 12:24:42
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 12:24:46
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 12:33:06
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 14:46:03
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 14:46:41

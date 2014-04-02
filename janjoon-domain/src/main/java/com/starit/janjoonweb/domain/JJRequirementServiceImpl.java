@@ -20,26 +20,6 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		this.entityManager = entityManager;
 	}
 
-	public List<JJRequirement> getAllJJRequirementsWithProject(JJProject project) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
-				.createQuery(JJRequirement.class);
-
-		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
-
-		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
-
-		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
-		Predicate predicate2 = criteriaBuilder.equal(from.get("project"),
-				project);
-
-		select.where(criteriaBuilder.and(predicate1, predicate2));
-		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
-
-		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
-		return result.getResultList();
-	}
-
 	// Generic Request
 
 	@Override
@@ -62,25 +42,25 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		if (category  != null) {
+		if (category != null) {
 			predicates
 					.add(criteriaBuilder.equal(from.get("category"), category));
 		}
 
-		if (project  != null) {
+		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
 		}
 
-		if (product  != null) {
+		if (product != null) {
 			predicates.add(criteriaBuilder.equal(from.get("product"), product));
 		}
 
-		if (version  != null) {
+		if (version != null) {
 			predicates.add(criteriaBuilder.equal(from.get("versioning"),
 					version));
 		}
 
-		if (status  != null) {
+		if (status != null) {
 			predicates.add(criteriaBuilder.equal(from.get("status"), status));
 		}
 
@@ -133,6 +113,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	@Override
 	public List<JJRequirement> getRequirements(JJProject project,
 			JJProduct product, JJVersion version) {
-		return getRequirements(null, project, product, version, null, null, false, true, true);
+		return getRequirements(null, project, product, version, null, null,
+				false, true, true);
 	}
 }

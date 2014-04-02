@@ -292,8 +292,8 @@ public class JJRequirementBean {
 
 	public List<JJStatus> getRequirementStatusList() {
 
-		requirementStatusList = jJStatusService
-				.getStatus(true, namesList, true);
+		requirementStatusList = jJStatusService.getStatus("JJRequirement",
+				true, namesList, true);
 		return requirementStatusList;
 	}
 
@@ -603,7 +603,8 @@ public class JJRequirementBean {
 		names.add("FAILED");
 		names.add("PASSED");
 
-		importStatusList = jJStatusService.getStatus(true, names, true);
+		importStatusList = jJStatusService.getStatus("JJRequirement", true,
+				names, true);
 
 		return importStatusList;
 	}
@@ -671,7 +672,8 @@ public class JJRequirementBean {
 		requirement.setOrdering(null);
 
 		namesList = new ArrayList<String>();
-		requirementStatus = jJStatusService.getJJStatusWithName("NEW");
+		requirementStatus = jJStatusService.getOneStatus("NEW",
+				"JJRequirement", true);
 		disabledStatus = true;
 
 		fullRequirementsList();
@@ -713,7 +715,8 @@ public class JJRequirementBean {
 		namesList.add("NEW");
 
 		if (requirement.getStatus().getName().equalsIgnoreCase("NEW")) {
-			requirementStatus = jJStatusService.getJJStatusWithName("MODIFIED");
+			requirementStatus = jJStatusService.getOneStatus("MODIFIED",
+					"JJRequirement", true);
 		} else {
 			requirementStatus = requirement.getStatus();
 		}
@@ -759,7 +762,8 @@ public class JJRequirementBean {
 
 		}
 
-		JJStatus status = jJStatusService.getJJStatusWithName("RELEASED");
+		JJStatus status = jJStatusService.getOneStatus("RELEASED",
+				"JJRequirement", true);
 
 		for (JJRequirement requirement : list) {
 			requirement.setStatus(status);
@@ -827,7 +831,8 @@ public class JJRequirementBean {
 
 		for (ImportFormat format : selectedFormats) {
 
-			JJStatus status = jJStatusService.getJJStatusWithName("NEW");
+			JJStatus status = jJStatusService.getOneStatus("NEW",
+					"JJRequirement", true);
 
 			JJRequirement requirement = format.getRequirement();
 

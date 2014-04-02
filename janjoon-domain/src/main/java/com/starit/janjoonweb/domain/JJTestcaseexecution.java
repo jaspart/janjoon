@@ -1,6 +1,12 @@
 package com.starit.janjoonweb.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
@@ -18,4 +24,7 @@ public class JJTestcaseexecution extends JJAbstractEntity {
 	private JJTestcase testcase;
 
 	private Boolean passed;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcaseexecution")
+	private Set<JJTeststepexecution> teststepexecutions = new HashSet<JJTeststepexecution>();
 }

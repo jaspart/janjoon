@@ -133,6 +133,14 @@ privileged aspect JJMessage_Roo_JavaBean {
         this.testcase = testcase;
     }
     
+    public JJTestcase JJMessage.getTeststep() {
+        return this.teststep;
+    }
+    
+    public void JJMessage.setTeststep(JJTestcase teststep) {
+        this.teststep = teststep;
+    }
+    
     public JJVersion JJMessage.getVersioning() {
         return this.versioning;
     }

@@ -43,8 +43,9 @@ privileged aspect JJImportanceDataOnDemand_Roo_DataOnDemand {
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
-        setImportanceLevel(obj, index);
+        setLevelImportance(obj, index);
         setName(obj, index);
+        setObjet(obj, index);
         setUpdatedDate(obj, index);
         return obj;
     }
@@ -64,9 +65,9 @@ privileged aspect JJImportanceDataOnDemand_Roo_DataOnDemand {
         obj.setEnabled(enabled);
     }
     
-    public void JJImportanceDataOnDemand.setImportanceLevel(JJImportance obj, int index) {
-        Integer importanceLevel = new Integer(index);
-        obj.setImportanceLevel(importanceLevel);
+    public void JJImportanceDataOnDemand.setLevelImportance(JJImportance obj, int index) {
+        Integer levelImportance = new Integer(index);
+        obj.setLevelImportance(levelImportance);
     }
     
     public void JJImportanceDataOnDemand.setName(JJImportance obj, int index) {
@@ -75,6 +76,14 @@ privileged aspect JJImportanceDataOnDemand_Roo_DataOnDemand {
             name = name.substring(0, 100);
         }
         obj.setName(name);
+    }
+    
+    public void JJImportanceDataOnDemand.setObjet(JJImportance obj, int index) {
+        String objet = "objet_" + index;
+        if (objet.length() > 25) {
+            objet = objet.substring(0, 25);
+        }
+        obj.setObjet(objet);
     }
     
     public void JJImportanceDataOnDemand.setUpdatedDate(JJImportance obj, int index) {

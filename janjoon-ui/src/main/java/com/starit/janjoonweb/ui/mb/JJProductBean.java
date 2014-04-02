@@ -186,10 +186,11 @@ public class JJProductBean {
 			}
 		}
 
+		productAdmin.setManager(productManager);
+
 		if (productAdmin.getId() == null) {
 			System.out.println("IS a new JJProduct");
 
-			productAdmin.setManager(productManager);
 			jJProductService.saveJJProduct(productAdmin);
 			message = "message_successfully_created";
 

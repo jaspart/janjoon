@@ -9,12 +9,20 @@ import java.util.Set;
 
 privileged aspect JJImportance_Roo_JavaBean {
     
-    public Integer JJImportance.getImportanceLevel() {
-        return this.importanceLevel;
+    public String JJImportance.getObjet() {
+        return this.objet;
     }
     
-    public void JJImportance.setImportanceLevel(Integer importanceLevel) {
-        this.importanceLevel = importanceLevel;
+    public void JJImportance.setObjet(String objet) {
+        this.objet = objet;
+    }
+    
+    public Integer JJImportance.getLevelImportance() {
+        return this.levelImportance;
+    }
+    
+    public void JJImportance.setLevelImportance(Integer levelImportance) {
+        this.levelImportance = levelImportance;
     }
     
     public Set<JJMessage> JJImportance.getMessages() {

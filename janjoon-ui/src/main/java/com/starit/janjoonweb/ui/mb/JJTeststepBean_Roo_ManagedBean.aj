@@ -3,8 +3,10 @@
 
 package com.starit.janjoonweb.ui.mb;
 
+import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
+import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.domain.JJTeststep;
@@ -15,6 +17,7 @@ import com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
@@ -71,6 +74,10 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
     private HtmlPanelGrid JJTeststepBean.viewPanelGrid;
     
     private boolean JJTeststepBean.createDialogVisible = false;
+    
+    private List<JJBug> JJTeststepBean.selectedBugs;
+    
+    private List<JJMessage> JJTeststepBean.selectedMessages;
     
     @PostConstruct
     public void JJTeststepBean.init() {
@@ -382,6 +389,38 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         testcaseCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testcaseCreateInputMessage);
         
+        HtmlOutputText bugsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        bugsCreateOutput.setId("bugsCreateOutput");
+        bugsCreateOutput.setValue("Bugs:");
+        htmlPanelGrid.getChildren().add(bugsCreateOutput);
+        
+        HtmlOutputText bugsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        bugsCreateInput.setId("bugsCreateInput");
+        bugsCreateInput.setValue("This relationship is managed from the JJBug side");
+        htmlPanelGrid.getChildren().add(bugsCreateInput);
+        
+        Message bugsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        bugsCreateInputMessage.setId("bugsCreateInputMessage");
+        bugsCreateInputMessage.setFor("bugsCreateInput");
+        bugsCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(bugsCreateInputMessage);
+        
+        HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesCreateOutput.setId("messagesCreateOutput");
+        messagesCreateOutput.setValue("Messages:");
+        htmlPanelGrid.getChildren().add(messagesCreateOutput);
+        
+        HtmlOutputText messagesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesCreateInput.setId("messagesCreateInput");
+        messagesCreateInput.setValue("This relationship is managed from the JJMessage side");
+        htmlPanelGrid.getChildren().add(messagesCreateInput);
+        
+        Message messagesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        messagesCreateInputMessage.setId("messagesCreateInputMessage");
+        messagesCreateInputMessage.setFor("messagesCreateInput");
+        messagesCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(messagesCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -625,6 +664,38 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         testcaseEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testcaseEditInputMessage);
         
+        HtmlOutputText bugsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        bugsEditOutput.setId("bugsEditOutput");
+        bugsEditOutput.setValue("Bugs:");
+        htmlPanelGrid.getChildren().add(bugsEditOutput);
+        
+        HtmlOutputText bugsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        bugsEditInput.setId("bugsEditInput");
+        bugsEditInput.setValue("This relationship is managed from the JJBug side");
+        htmlPanelGrid.getChildren().add(bugsEditInput);
+        
+        Message bugsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        bugsEditInputMessage.setId("bugsEditInputMessage");
+        bugsEditInputMessage.setFor("bugsEditInput");
+        bugsEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(bugsEditInputMessage);
+        
+        HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesEditOutput.setId("messagesEditOutput");
+        messagesEditOutput.setValue("Messages:");
+        htmlPanelGrid.getChildren().add(messagesEditOutput);
+        
+        HtmlOutputText messagesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesEditInput.setId("messagesEditInput");
+        messagesEditInput.setValue("This relationship is managed from the JJMessage side");
+        htmlPanelGrid.getChildren().add(messagesEditInput);
+        
+        Message messagesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        messagesEditInputMessage.setId("messagesEditInputMessage");
+        messagesEditInputMessage.setFor("messagesEditInput");
+        messagesEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(messagesEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -756,6 +827,26 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         testcaseValue.setConverter(new JJTestcaseConverter());
         htmlPanelGrid.getChildren().add(testcaseValue);
         
+        HtmlOutputText bugsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        bugsLabel.setId("bugsLabel");
+        bugsLabel.setValue("Bugs:");
+        htmlPanelGrid.getChildren().add(bugsLabel);
+        
+        HtmlOutputText bugsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        bugsValue.setId("bugsValue");
+        bugsValue.setValue("This relationship is managed from the JJBug side");
+        htmlPanelGrid.getChildren().add(bugsValue);
+        
+        HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesLabel.setId("messagesLabel");
+        messagesLabel.setValue("Messages:");
+        htmlPanelGrid.getChildren().add(messagesLabel);
+        
+        HtmlOutputText messagesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesValue.setId("messagesValue");
+        messagesValue.setValue("This relationship is managed from the JJMessage side");
+        htmlPanelGrid.getChildren().add(messagesValue);
+        
         return htmlPanelGrid;
     }
     
@@ -803,7 +894,35 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         return suggestions;
     }
     
+    public List<JJBug> JJTeststepBean.getSelectedBugs() {
+        return selectedBugs;
+    }
+    
+    public void JJTeststepBean.setSelectedBugs(List<JJBug> selectedBugs) {
+        if (selectedBugs != null) {
+            JJTeststep_.setBugs(new HashSet<JJBug>(selectedBugs));
+        }
+        this.selectedBugs = selectedBugs;
+    }
+    
+    public List<JJMessage> JJTeststepBean.getSelectedMessages() {
+        return selectedMessages;
+    }
+    
+    public void JJTeststepBean.setSelectedMessages(List<JJMessage> selectedMessages) {
+        if (selectedMessages != null) {
+            JJTeststep_.setMessages(new HashSet<JJMessage>(selectedMessages));
+        }
+        this.selectedMessages = selectedMessages;
+    }
+    
     public String JJTeststepBean.onEdit() {
+        if (JJTeststep_ != null && JJTeststep_.getBugs() != null) {
+            selectedBugs = new ArrayList<JJBug>(JJTeststep_.getBugs());
+        }
+        if (JJTeststep_ != null && JJTeststep_.getMessages() != null) {
+            selectedMessages = new ArrayList<JJMessage>(JJTeststep_.getMessages());
+        }
         return null;
     }
     
@@ -856,6 +975,8 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
     
     public void JJTeststepBean.reset() {
         JJTeststep_ = null;
+        selectedBugs = null;
+        selectedMessages = null;
         createDialogVisible = false;
     }
     

@@ -11,6 +11,7 @@ import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
 import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
+import com.starit.janjoonweb.domain.JJTeststepexecution;
 import com.starit.janjoonweb.ui.mb.JJTestcaseexecutionBean;
 import com.starit.janjoonweb.ui.mb.converter.JJBuildConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
@@ -18,6 +19,7 @@ import com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
@@ -75,6 +77,8 @@ privileged aspect JJTestcaseexecutionBean_Roo_ManagedBean {
     private HtmlPanelGrid JJTestcaseexecutionBean.viewPanelGrid;
     
     private boolean JJTestcaseexecutionBean.createDialogVisible = false;
+    
+    private List<JJTeststepexecution> JJTestcaseexecutionBean.selectedTeststepexecutions;
     
     @PostConstruct
     public void JJTestcaseexecutionBean.init() {
@@ -366,6 +370,22 @@ privileged aspect JJTestcaseexecutionBean_Roo_ManagedBean {
         passedCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(passedCreateInputMessage);
         
+        HtmlOutputText teststepexecutionsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        teststepexecutionsCreateOutput.setId("teststepexecutionsCreateOutput");
+        teststepexecutionsCreateOutput.setValue("Teststepexecutions:");
+        htmlPanelGrid.getChildren().add(teststepexecutionsCreateOutput);
+        
+        HtmlOutputText teststepexecutionsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        teststepexecutionsCreateInput.setId("teststepexecutionsCreateInput");
+        teststepexecutionsCreateInput.setValue("This relationship is managed from the JJTeststepexecution side");
+        htmlPanelGrid.getChildren().add(teststepexecutionsCreateInput);
+        
+        Message teststepexecutionsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        teststepexecutionsCreateInputMessage.setId("teststepexecutionsCreateInputMessage");
+        teststepexecutionsCreateInputMessage.setFor("teststepexecutionsCreateInput");
+        teststepexecutionsCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(teststepexecutionsCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -590,6 +610,22 @@ privileged aspect JJTestcaseexecutionBean_Roo_ManagedBean {
         passedEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(passedEditInputMessage);
         
+        HtmlOutputText teststepexecutionsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        teststepexecutionsEditOutput.setId("teststepexecutionsEditOutput");
+        teststepexecutionsEditOutput.setValue("Teststepexecutions:");
+        htmlPanelGrid.getChildren().add(teststepexecutionsEditOutput);
+        
+        HtmlOutputText teststepexecutionsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        teststepexecutionsEditInput.setId("teststepexecutionsEditInput");
+        teststepexecutionsEditInput.setValue("This relationship is managed from the JJTeststepexecution side");
+        htmlPanelGrid.getChildren().add(teststepexecutionsEditInput);
+        
+        Message teststepexecutionsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        teststepexecutionsEditInputMessage.setId("teststepexecutionsEditInputMessage");
+        teststepexecutionsEditInputMessage.setFor("teststepexecutionsEditInput");
+        teststepexecutionsEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(teststepexecutionsEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -707,6 +743,16 @@ privileged aspect JJTestcaseexecutionBean_Roo_ManagedBean {
         passedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseexecutionBean.JJTestcaseexecution_.passed}", String.class));
         htmlPanelGrid.getChildren().add(passedValue);
         
+        HtmlOutputText teststepexecutionsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        teststepexecutionsLabel.setId("teststepexecutionsLabel");
+        teststepexecutionsLabel.setValue("Teststepexecutions:");
+        htmlPanelGrid.getChildren().add(teststepexecutionsLabel);
+        
+        HtmlOutputText teststepexecutionsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        teststepexecutionsValue.setId("teststepexecutionsValue");
+        teststepexecutionsValue.setValue("This relationship is managed from the JJTeststepexecution side");
+        htmlPanelGrid.getChildren().add(teststepexecutionsValue);
+        
         return htmlPanelGrid;
     }
     
@@ -765,7 +811,21 @@ privileged aspect JJTestcaseexecutionBean_Roo_ManagedBean {
         return suggestions;
     }
     
+    public List<JJTeststepexecution> JJTestcaseexecutionBean.getSelectedTeststepexecutions() {
+        return selectedTeststepexecutions;
+    }
+    
+    public void JJTestcaseexecutionBean.setSelectedTeststepexecutions(List<JJTeststepexecution> selectedTeststepexecutions) {
+        if (selectedTeststepexecutions != null) {
+            JJTestcaseexecution_.setTeststepexecutions(new HashSet<JJTeststepexecution>(selectedTeststepexecutions));
+        }
+        this.selectedTeststepexecutions = selectedTeststepexecutions;
+    }
+    
     public String JJTestcaseexecutionBean.onEdit() {
+        if (JJTestcaseexecution_ != null && JJTestcaseexecution_.getTeststepexecutions() != null) {
+            selectedTeststepexecutions = new ArrayList<JJTeststepexecution>(JJTestcaseexecution_.getTeststepexecutions());
+        }
         return null;
     }
     
@@ -818,6 +878,7 @@ privileged aspect JJTestcaseexecutionBean_Roo_ManagedBean {
     
     public void JJTestcaseexecutionBean.reset() {
         JJTestcaseexecution_ = null;
+        selectedTeststepexecutions = null;
         createDialogVisible = false;
     }
     

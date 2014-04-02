@@ -57,6 +57,9 @@ public class JJMessage extends JJAbstractEntity {
 	private JJTestcase testcase;
 
 	@ManyToOne
+	private JJTestcase teststep;
+
+	@ManyToOne
 	private JJVersion versioning;
 
 }

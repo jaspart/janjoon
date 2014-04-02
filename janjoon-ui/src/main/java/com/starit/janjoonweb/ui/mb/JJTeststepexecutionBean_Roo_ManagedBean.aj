@@ -7,6 +7,8 @@ import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
+import com.starit.janjoonweb.domain.JJTestcaseexecution;
+import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTeststepService;
 import com.starit.janjoonweb.domain.JJTeststepexecution;
@@ -14,6 +16,7 @@ import com.starit.janjoonweb.domain.JJTeststepexecutionService;
 import com.starit.janjoonweb.ui.mb.JJTeststepexecutionBean;
 import com.starit.janjoonweb.ui.mb.converter.JJBuildConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJTestcaseexecutionConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJTeststepConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
@@ -57,6 +60,9 @@ privileged aspect JJTeststepexecutionBean_Roo_ManagedBean {
     
     @Autowired
     JJTeststepService JJTeststepexecutionBean.jJTeststepService;
+    
+    @Autowired
+    JJTestcaseexecutionService JJTeststepexecutionBean.jJTestcaseexecutionService;
     
     private String JJTeststepexecutionBean.name = "JJTeststepexecutions";
     
@@ -366,6 +372,30 @@ privileged aspect JJTeststepexecutionBean_Roo_ManagedBean {
         passedCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(passedCreateInputMessage);
         
+        OutputLabel testcaseexecutionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        testcaseexecutionCreateOutput.setFor("testcaseexecutionCreateInput");
+        testcaseexecutionCreateOutput.setId("testcaseexecutionCreateOutput");
+        testcaseexecutionCreateOutput.setValue("Testcaseexecution:");
+        htmlPanelGrid.getChildren().add(testcaseexecutionCreateOutput);
+        
+        AutoComplete testcaseexecutionCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        testcaseexecutionCreateInput.setId("testcaseexecutionCreateInput");
+        testcaseexecutionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepexecutionBean.JJTeststepexecution_.testcaseexecution}", JJTestcaseexecution.class));
+        testcaseexecutionCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTeststepexecutionBean.completeTestcaseexecution}", List.class, new Class[] { String.class }));
+        testcaseexecutionCreateInput.setDropdown(true);
+        testcaseexecutionCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "testcaseexecution", String.class));
+        testcaseexecutionCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{testcaseexecution.name} #{testcaseexecution.description} #{testcaseexecution.creationDate} #{testcaseexecution.updatedDate}", String.class));
+        testcaseexecutionCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{testcaseexecution}", JJTestcaseexecution.class));
+        testcaseexecutionCreateInput.setConverter(new JJTestcaseexecutionConverter());
+        testcaseexecutionCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(testcaseexecutionCreateInput);
+        
+        Message testcaseexecutionCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcaseexecutionCreateInputMessage.setId("testcaseexecutionCreateInputMessage");
+        testcaseexecutionCreateInputMessage.setFor("testcaseexecutionCreateInput");
+        testcaseexecutionCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcaseexecutionCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -590,6 +620,30 @@ privileged aspect JJTeststepexecutionBean_Roo_ManagedBean {
         passedEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(passedEditInputMessage);
         
+        OutputLabel testcaseexecutionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        testcaseexecutionEditOutput.setFor("testcaseexecutionEditInput");
+        testcaseexecutionEditOutput.setId("testcaseexecutionEditOutput");
+        testcaseexecutionEditOutput.setValue("Testcaseexecution:");
+        htmlPanelGrid.getChildren().add(testcaseexecutionEditOutput);
+        
+        AutoComplete testcaseexecutionEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        testcaseexecutionEditInput.setId("testcaseexecutionEditInput");
+        testcaseexecutionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepexecutionBean.JJTeststepexecution_.testcaseexecution}", JJTestcaseexecution.class));
+        testcaseexecutionEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTeststepexecutionBean.completeTestcaseexecution}", List.class, new Class[] { String.class }));
+        testcaseexecutionEditInput.setDropdown(true);
+        testcaseexecutionEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "testcaseexecution", String.class));
+        testcaseexecutionEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{testcaseexecution.name} #{testcaseexecution.description} #{testcaseexecution.creationDate} #{testcaseexecution.updatedDate}", String.class));
+        testcaseexecutionEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{testcaseexecution}", JJTestcaseexecution.class));
+        testcaseexecutionEditInput.setConverter(new JJTestcaseexecutionConverter());
+        testcaseexecutionEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(testcaseexecutionEditInput);
+        
+        Message testcaseexecutionEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcaseexecutionEditInputMessage.setId("testcaseexecutionEditInputMessage");
+        testcaseexecutionEditInputMessage.setFor("testcaseexecutionEditInput");
+        testcaseexecutionEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcaseexecutionEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -707,6 +761,16 @@ privileged aspect JJTeststepexecutionBean_Roo_ManagedBean {
         passedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepexecutionBean.JJTeststepexecution_.passed}", String.class));
         htmlPanelGrid.getChildren().add(passedValue);
         
+        HtmlOutputText testcaseexecutionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcaseexecutionLabel.setId("testcaseexecutionLabel");
+        testcaseexecutionLabel.setValue("Testcaseexecution:");
+        htmlPanelGrid.getChildren().add(testcaseexecutionLabel);
+        
+        HtmlOutputText testcaseexecutionValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcaseexecutionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepexecutionBean.JJTeststepexecution_.testcaseexecution}", JJTestcaseexecution.class));
+        testcaseexecutionValue.setConverter(new JJTestcaseexecutionConverter());
+        htmlPanelGrid.getChildren().add(testcaseexecutionValue);
+        
         return htmlPanelGrid;
     }
     
@@ -760,6 +824,17 @@ privileged aspect JJTeststepexecutionBean_Roo_ManagedBean {
             String jJTeststepStr = String.valueOf(jJTeststep.getName() +  " "  + jJTeststep.getDescription() +  " "  + jJTeststep.getCreationDate() +  " "  + jJTeststep.getUpdatedDate());
             if (jJTeststepStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJTeststep);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJTestcaseexecution> JJTeststepexecutionBean.completeTestcaseexecution(String query) {
+        List<JJTestcaseexecution> suggestions = new ArrayList<JJTestcaseexecution>();
+        for (JJTestcaseexecution jJTestcaseexecution : jJTestcaseexecutionService.findAllJJTestcaseexecutions()) {
+            String jJTestcaseexecutionStr = String.valueOf(jJTestcaseexecution.getName() +  " "  + jJTestcaseexecution.getDescription() +  " "  + jJTestcaseexecution.getCreationDate() +  " "  + jJTestcaseexecution.getUpdatedDate());
+            if (jJTestcaseexecutionStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJTestcaseexecution);
             }
         }
         return suggestions;

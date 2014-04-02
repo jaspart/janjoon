@@ -18,4 +18,7 @@ public class JJTeststepexecution extends JJAbstractEntity {
 	private JJTeststep teststep;
 
 	private Boolean passed;
+	
+	@ManyToOne
+	private JJTestcaseexecution testcaseexecution;
 }

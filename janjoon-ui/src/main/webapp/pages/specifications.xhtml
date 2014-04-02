@@ -348,7 +348,7 @@
 							<p:column>
 								<h:outputText value="Complete Task: " />
 								<p:selectBooleanCheckbox id="completion"
-									value="#{jJRequirementBean.task.completion}"
+									value="#{jJRequirementBean.task.completed}"
 									disabled="#{jJRequirementBean.disabledTask}">
 									<p:ajax listener="#{jJRequirementBean.checkCompleteTask()}" />
 								</p:selectBooleanCheckbox>

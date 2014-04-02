@@ -3,8 +3,11 @@
 
 package com.starit.janjoonweb.domain;
 
+import com.starit.janjoonweb.domain.JJBug;
+import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTeststep;
+import java.util.Set;
 
 privileged aspect JJTeststep_Roo_JavaBean {
     
@@ -38,6 +41,22 @@ privileged aspect JJTeststep_Roo_JavaBean {
     
     public void JJTeststep.setTestcase(JJTestcase testcase) {
         this.testcase = testcase;
+    }
+    
+    public Set<JJBug> JJTeststep.getBugs() {
+        return this.bugs;
+    }
+    
+    public void JJTeststep.setBugs(Set<JJBug> bugs) {
+        this.bugs = bugs;
+    }
+    
+    public Set<JJMessage> JJTeststep.getMessages() {
+        return this.messages;
+    }
+    
+    public void JJTeststep.setMessages(Set<JJMessage> messages) {
+        this.messages = messages;
     }
     
 }

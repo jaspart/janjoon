@@ -34,6 +34,7 @@ layer --class JJTestcase
 layer --class JJTeststep
 layer --class JJTestcaseexecution
 layer --class JJTeststepexecution
+layer --class JJWorflow
 
 #######################
 
