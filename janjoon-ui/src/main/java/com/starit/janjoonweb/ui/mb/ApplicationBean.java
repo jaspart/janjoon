@@ -1339,13 +1339,13 @@ public class ApplicationBean {
 		if (jJContactService.getContacts(null, true).isEmpty()) {
 
 			JJContact contact = new JJContact();
-			contact.setName("janjoon");
-			contact.setFirstname("Admin");
+			contact.setName("Mailer");
+			contact.setFirstname("Janjoon");
 			contact.setDescription("This contact is " + contact.getFirstname()
 					+ " " + contact.getName());
 			contact.setPassword("BeHappy2012");
 			contact.setEnabled(true);
-			contact.setEmail("admin@gmail.com");
+			contact.setEmail("janjoon.mailer@gmail.com");
 			contact.setCreationDate(new Date());
 
 			jJContactService.saveJJContact(contact);
@@ -1366,7 +1366,7 @@ public class ApplicationBean {
 		if (jJProductService.getProducts(true).isEmpty()) {
 			JJContact manager = null;
 			List<JJContact> contacts = jJContactService.getContacts(
-					"admin@gmail.com", true);
+					"janjoon.mailer@gmail.com", true);
 
 			if (contacts.size() > 0) {
 				manager = contacts.get(0);
@@ -1458,7 +1458,7 @@ public class ApplicationBean {
 		if (jJProjectService.getProjects(true).isEmpty()) {
 			JJContact manager = null;
 			List<JJContact> contacts = jJContactService.getContacts(
-					"admin@gmail.com", true);
+					"janjoon.mailer@gmail.com", true);
 
 			if (contacts.size() > 0) {
 				manager = contacts.get(0);

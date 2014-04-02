@@ -152,9 +152,12 @@ public class JJProjectBean {
 			jJProjectService.updateJJProject(projectAdmin);
 
 			message = "message_successfully_updated";
+
+			// closeDialog();
+
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("projectDialogWidget.hide()");
-			closeDialog();
+
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
@@ -176,13 +179,6 @@ public class JJProjectBean {
 		projectAdmin = null;
 		projectManager = null;
 		projectManagerList = null;
-	}
-
-	public void handleSelectProjectManager() {
-		if (projectManager != null) {
-			System.out.println(projectManager.getFirstname() + " "
-					+ projectManager.getName());
-		}
 	}
 
 }

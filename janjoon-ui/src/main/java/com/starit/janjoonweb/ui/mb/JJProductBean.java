@@ -197,6 +197,7 @@ public class JJProductBean {
 			newProduct(jJVersionBean);
 
 		} else {
+			System.out.println("UPDATING Product...");
 
 			productAdmin.setUpdatedDate(new Date());
 
@@ -204,7 +205,7 @@ public class JJProductBean {
 			message = "message_successfully_updated";
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("productDialogWidget.hide()");
-			closeDialog(jJVersionBean);
+			// closeDialog(jJVersionBean);
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
@@ -234,14 +235,6 @@ public class JJProductBean {
 
 	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project) {
 		return jJTaskService.getTasks(project, product, null, true);
-	}
-
-	public void handleSelectProductManager() {
-
-		if (productManager != null) {
-			System.out.println(productManager.getFirstname() + " "
-					+ productManager.getName());
-		}
 	}
 
 }
