@@ -870,8 +870,6 @@ public class ApplicationBean {
 
 		menuModel.addElement(submenu);
 
-		System.out.println("Begin Inject default values");
-
 		if (jJCriticityService.getCriticities("JJMessage", true).isEmpty()) {
 
 			String[] names = { "ALERT", "INFO" };
@@ -1511,8 +1509,6 @@ public class ApplicationBean {
 				}
 			}
 		}
-
-		System.out.println("End Inject default values");
 
 	}
 

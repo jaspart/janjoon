@@ -51,7 +51,7 @@ public class JJTeststepBean {
 
 		JJTestcase testcase = jJTestcaseBean.getTestcase();
 
-		if (testcase.getId() != null) {
+		if (testcase != null && testcase.getId() != null) {
 			teststeps = jJTeststepService.getTeststeps(testcase, true, true);
 		}
 

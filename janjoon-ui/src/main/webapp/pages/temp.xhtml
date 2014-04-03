@@ -35,12 +35,24 @@
 						</p:row>
 						<p:row>
 							<p:column>
+								<h:commandLink id="exportPDF" title="Export category to PDF"
+									disabled="#{jJTestcaseBean.disabledExport}">
+									<p:graphicImage value="/resources/images/pdf.png" />
+									<p:dataExporter type="pdf"
+										target=":testFormCenter:testcaseRecapDataTable"
+										fileName="#{jJTestcaseBean.namefile}"
+										preProcessor="#{jJTestcaseBean.preProcessPDF}" />
+								</h:commandLink>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
 								<p:tree id="testCaseTree" value="#{jJTestcaseBean.rootNode}"
 									var="node" selectionMode="single"
 									selection="#{jJTestcaseBean.selectedNode}" dynamic="true">
 									<p:ajax event="select"
 										listener="#{jJTestcaseBean.onNodeSelect}"
-										update=":testFormCenter" />
+										update=":testFormCenter :testFormWest:exportPDF" />
 									<p:treeNode>
 										<h:outputText value="#{node}" />
 									</p:treeNode>
@@ -60,13 +72,13 @@
 						<f:facet name="header">
 							<h:outputText value="#{jJTestcaseBean.chapter.name}" />
 						</f:facet>
-						<p:column>
+						<p:column exportable="false">
 							<f:facet name="header">
 								<h:outputText value="Testcase" />
 							</f:facet>
 							<h:outputText value="#{tcr.testcase.name}" />
 						</p:column>
-						<p:column>
+						<p:column exportable="false">
 							<f:facet name="header">
 								<h:outputText value="Status" />
 							</f:facet>

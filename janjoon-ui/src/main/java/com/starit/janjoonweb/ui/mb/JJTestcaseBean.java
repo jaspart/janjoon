@@ -1,5 +1,7 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.awt.Color;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +21,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Chunk;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.html.simpleparser.StyleSheet;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
@@ -77,6 +88,8 @@ public class JJTestcaseBean {
 
 	private JJChapter chapter;
 
+	private JJCategory category;
+
 	private TreeNode rootNode;
 	private TreeNode selectedNode;
 
@@ -98,6 +111,9 @@ public class JJTestcaseBean {
 	private boolean initiateTask;
 	private boolean disabledInitTask;
 	private boolean disabledTask;
+	private boolean disabledExport;
+
+	private String namefile;
 
 	public JJTestcase getTestcase() {
 		return testcase;
@@ -147,6 +163,14 @@ public class JJTestcaseBean {
 
 	public void setChapter(JJChapter chapter) {
 		this.chapter = chapter;
+	}
+
+	public JJCategory getCategory() {
+		return category;
+	}
+
+	public void setCategory(JJCategory category) {
+		this.category = category;
 	}
 
 	public TreeNode getRootNode() {
@@ -283,6 +307,22 @@ public class JJTestcaseBean {
 		this.disabledTask = disabledTask;
 	}
 
+	public boolean getDisabledExport() {
+		return disabledExport;
+	}
+
+	public void setDisabledExport(boolean disabledExport) {
+		this.disabledExport = disabledExport;
+	}
+
+	public String getNamefile() {
+		return namefile;
+	}
+
+	public void setNamefile(String namefile) {
+		this.namefile = namefile;
+	}
+
 	public void loadData() {
 
 		System.out.println("load data in test");
@@ -296,6 +336,11 @@ public class JJTestcaseBean {
 		rendredTestCaseRecaps = false;
 		rendredTestCaseHistorical = false;
 		requirement = null;
+
+		disabledExport = true;
+
+		namefile = null;
+		category = null;
 
 		createTestcaseTree();
 
@@ -507,8 +552,7 @@ public class JJTestcaseBean {
 					.getParentsChapter(project, category, true, true);
 
 			for (JJChapter chapter : parentChapters) {
-				TreeNode node = createTree(chapter, categoryNode, project,
-						product, category);
+				TreeNode node = createTree(chapter, categoryNode, category);
 			}
 		}
 
@@ -524,11 +568,22 @@ public class JJTestcaseBean {
 			System.out.println("Project selected");
 			rendredTestCaseRecaps = false;
 			rendredTestCaseHistorical = false;
+
+			namefile = null;
+			category = null;
+			disabledExport = true;
+
 		} else if (code.equalsIgnoreCase("C")) {
 
 			System.out.println("Category selected");
 			rendredTestCaseRecaps = false;
 			rendredTestCaseHistorical = false;
+
+			long id = Long.parseLong(getSubString(selectedNode, 1, "-"));
+			category = jJCategoryService.findJJCategory(id);
+
+			namefile = category.getName().trim();
+			disabledExport = false;
 
 		} else if (code.equalsIgnoreCase("CH")) {
 			System.out.println("Chapter selected");
@@ -540,6 +595,10 @@ public class JJTestcaseBean {
 
 			rendredTestCaseRecaps = true;
 			rendredTestCaseHistorical = false;
+
+			namefile = null;
+			category = null;
+			disabledExport = true;
 		}
 
 		else if (code.equalsIgnoreCase("TC")) {
@@ -552,6 +611,10 @@ public class JJTestcaseBean {
 
 			rendredTestCaseRecaps = false;
 			rendredTestCaseHistorical = true;
+
+			namefile = null;
+			category = null;
+			disabledExport = true;
 
 		}
 
@@ -569,7 +632,7 @@ public class JJTestcaseBean {
 
 	// Recursive function to create tree
 	private TreeNode createTree(JJChapter chapterParent, TreeNode rootNode,
-			JJProject project, JJProduct product, JJCategory category) {
+			JJCategory category) {
 
 		TreeNode newNode = new DefaultTreeNode("CH-" + chapterParent.getId()
 				+ "- " + chapterParent.getName(), rootNode);
@@ -585,8 +648,7 @@ public class JJTestcaseBean {
 			if (className.equalsIgnoreCase("JJChapter")) {
 
 				JJChapter chapter = (JJChapter) entry.getValue();
-				TreeNode newNode2 = createTree(chapter, newNode, project,
-						product, category);
+				TreeNode newNode2 = createTree(chapter, newNode, category);
 
 			} else if (className.equalsIgnoreCase("JJRequirement")) {
 
@@ -646,6 +708,100 @@ public class JJTestcaseBean {
 		}
 
 		return elements;
+
+	}
+
+	public void preProcessPDF(Object document) throws IOException,
+			BadElementException, DocumentException {
+
+		Document pdf = (Document) document;
+		pdf.open();
+		pdf.setPageSize(PageSize.A4);
+
+		Font fontTitle = new Font(Font.TIMES_ROMAN, 30, Font.BOLD);
+		fontTitle.setColor(new Color(0x24, 0x14, 0x14));
+
+		Font fontChapter = new Font(Font.HELVETICA, 15, Font.BOLD);
+		fontChapter.setColor(new Color(0x4E, 0x4E, 0x4E));
+
+		Font fontTestcase = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+		fontTestcase.setColor(new Color(0x5A, 0x5A, 0x5A));
+
+		Font fontTeststep = new Font(Font.COURIER, 8, Font.BOLD);
+		fontTeststep.setColor(new Color(0x82, 0x82, 0x82));
+
+		StyleSheet style = new StyleSheet();
+		style.loadTagStyle("body", "font", "Times New Roman");
+
+		Phrase phrase = new Phrase(20, new Chunk("\n" + category.getName()
+				+ "\n" + project.getName() + "\n" + "\n" + "\n", fontChapter));
+
+		Paragraph paragraph = new Paragraph();
+		paragraph.add(phrase);
+
+		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(
+				project, category, true, true);
+
+		for (JJChapter chapter : parentChapters) {
+			createTreeDocument(chapter, category, paragraph, fontTeststep,
+					fontChapter, fontTestcase, style);
+		}
+
+		paragraph.add(phrase);
+
+		pdf.add(paragraph);
+
+	}
+
+	private void createTreeDocument(JJChapter chapterParent,
+			JJCategory category, Paragraph paragraph, Font fontTeststep,
+			Font fontChapter, Font fontTestcase, StyleSheet style)
+			throws IOException {
+
+		paragraph.add(new Chunk("\n" + chapterParent.getName() + "\n",
+				fontChapter));
+
+		SortedMap<Integer, Object> elements = getSortedElements(chapterParent,
+				project, product, category, true);
+
+		SortedMap<Integer, JJTestcase> testcaseElements = new TreeMap<Integer, JJTestcase>();
+
+		for (Map.Entry<Integer, Object> entry : elements.entrySet()) {
+			String className = entry.getValue().getClass().getSimpleName();
+
+			if (className.equalsIgnoreCase("JJChapter")) {
+
+				JJChapter chapter = (JJChapter) entry.getValue();
+				createTreeDocument(chapter, category, paragraph, fontTeststep,
+						fontChapter, fontTestcase, style);
+
+			} else if (className.equalsIgnoreCase("JJRequirement")) {
+
+				JJRequirement requirement = (JJRequirement) entry.getValue();
+				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
+						requirement, null, true, true);
+				for (JJTestcase testcase : testcases) {
+					testcaseElements.put(testcase.getOrdering(), testcase);
+				}
+
+			}
+		}
+
+		for (Map.Entry<Integer, JJTestcase> testcaseEntry : testcaseElements
+				.entrySet()) {
+
+			JJTestcase testcase = testcaseEntry.getValue();
+
+			paragraph.add(new Chunk(testcase.getName() + "\n", fontTestcase));
+
+			List<JJTeststep> teststeps = jJTeststepService.getTeststeps(
+					testcase, true, true);
+
+			for (JJTeststep teststep : teststeps) {
+				paragraph.add(new Chunk(teststep.getActionstep() + "\t"
+						+ teststep.getResultstep() + "\n", fontTeststep));
+			}
+		}
 
 	}
 
