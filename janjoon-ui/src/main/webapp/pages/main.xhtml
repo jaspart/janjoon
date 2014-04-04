@@ -5,8 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition template="../templates/layout.xhtml">
-	<ui:define name="content">
-		<f:event listener="#{loginBean.loadingMain}" type="preRenderView" />
+	<ui:define name="content">		
 		<p:panel id="mainPanel" toggleable="true" toggleSpeed="250">
 			<p:growl id="notif" showDetail="true" />
 			<p:growl id="dev" showDetail="true" />
@@ -20,27 +19,51 @@
 			<p />
 
 		</p:panel>
-		<p:panel id="dataPanel" rendered="#{loginBean.enable}" header="Message DataTable">
-			<p:dataTable id="MessageTable2" value="#{jJMessageBean.allJJMessages}"
-				rowKey="#{mes.id}" var="mes" scrollable="true" scrollHeight="400"
-				sortMode="multiple">
-				<p:column headerText="Messages" sortBy="message">
-					<h:outputText value="#{mes.message}" />
-				</p:column>
-				<p:column headerText="Project" sortBy="project.name">
-					<h:outputText value="#{mes.project.name}" />
-				</p:column>
-				<p:column headerText="Product" sortBy="product.name">
-					<h:outputText value="#{mes.product.name}" />
-				</p:column>
-				<p:column headerText="Creator" sortBy="createdBy.name">
-					<h:outputText value="#{mes.createdBy.name}" />
-				</p:column>
-				<p:column headerText="Criticity" sortBy="criticity.name">
-					<h:outputText value="#{mes.criticity.name}" />
-				</p:column>
+		<p:panel id="dataPanel" rendered="#{loginBean.enable}" 
+			header="Message DataTable">
+			<f:event listener="#{jJMessageBean.initJJmessageTable}"
+				type="preRenderView"  />
+			<h:form id="messageForm">
+				<p:dataTable id="MessageTable2" sortMode="multiple" 
+					value="#{jJMessageBean.allJJMessages}" rowKey="#{mes.id}" var="mes"
+					widgetVar="messageTable" scrollable="true" scrollHeight="400"
+					filteredValue="#{jJMessageBean.filteredJJMessage}"
+					emptyMessage="No JJmessage found with given criteria">
+					<f:facet name="header">
+						<p:outputPanel>
+							<h:outputText value="Search all fields:" />
+							<p:inputText id="globalFilter"
+								onkeyup="PF('messageTable').filter()" style="width:150px"
+								placeholder="Enter keyword" />
+						</p:outputPanel>
+					</f:facet>
+					<p:column headerText="Messages" filterBy="message"
+						filterMatchMode="contains" sortBy="message">
+						<h:outputText value="#{mes.message}" />
+					</p:column>
+					<p:column headerText="Project" filterBy="project.name" sortBy="project.name"
+						filterOptions="#{jJMessageBean.projectOptions}"
+						filterMatchMode="contains">
+						<h:outputText value="#{mes.project.name}" />
+					</p:column>
+					<p:column headerText="Product" filterBy="product.name" sortBy="product.name"
+						filterOptions="#{jJMessageBean.productOptions}"
+						filterMatchMode="exact">
+						<h:outputText value="#{mes.product.name}" />
+					</p:column>
+					<p:column headerText="Creator" filterBy="createdBy.name" sortBy="createdBy.name"
+						filterOptions="#{jJMessageBean.creatorOptions}"
+						filterMatchMode="exact">
+						<h:outputText value="#{mes.createdBy.name}" />
+					</p:column>
+					<p:column headerText="Criticity" filterBy="criticity.name" sortBy="criticity.name"
+						filterMatchMode="exact"
+						filterOptions="#{jJMessageBean.criticityOptions}">
+						<h:outputText value="#{mes.criticity.name}" />
+					</p:column>
 
-			</p:dataTable>
+				</p:dataTable>
+			</h:form>
 		</p:panel>
 
 

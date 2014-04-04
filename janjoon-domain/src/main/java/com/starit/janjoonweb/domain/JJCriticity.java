@@ -24,6 +24,6 @@ public class JJCriticity extends JJAbstractEntity {
 	
 	private Integer levelCriticity;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "criticity")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "criticity")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
 }

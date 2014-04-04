@@ -91,6 +91,9 @@ a:visited {
 .cleanTab .ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem.ui-state-default {
 	padding: 5px 1px;
 }
+.ui-datatable-header {
+text-align: right !important;
+}
 
 .ui-selectmanymenu {
 	width: 155px !important;

@@ -71,87 +71,82 @@ public class DevelopmentBean implements Serializable {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		
-			contact = (JJContact) session.getAttribute("JJContact");
-			JJVersionBean verbean = (JJVersionBean) session
-					.getAttribute("jJVersionBean");
-			JJConfigurationBean confbean = (JJConfigurationBean) session
-					.getAttribute("jJConfigurationBean");
-			JJProjectBean projbean = (JJProjectBean) session
-					.getAttribute("jJProjectBean");
-			setMessageBean((JJMessageBean) session
-					.getAttribute("jJMessageBean"));
-			JJProductBean prodbean = (JJProductBean) session
-					.getAttribute("jJProductBean");
-			if (verbean != null) {
-				if (verbean.getVersion() != null) {
-					version = verbean.getVersion();
-				}
+
+		contact = (JJContact) session.getAttribute("JJContact");
+		JJVersionBean verbean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
+		JJConfigurationBean confbean = (JJConfigurationBean) session
+				.getAttribute("jJConfigurationBean");
+		JJProjectBean projbean = (JJProjectBean) session
+				.getAttribute("jJProjectBean");
+		setMessageBean((JJMessageBean) session.getAttribute("jJMessageBean"));
+		JJProductBean prodbean = (JJProductBean) session
+				.getAttribute("jJProductBean");
+		if (verbean != null) {
+			if (verbean.getVersion() != null) {
+				version = verbean.getVersion();
 			}
-			product = prodbean.getProduct();
-			project = projbean.getProject();
-			
-			if(confbean==null)
-				confbean=new JJConfigurationBean();
-			
-			configuration = confbean.getjJconfiguration();
-			
-			message = new JJMessage();
-			System.out.println(contact.getName());
-			tasks = prodbean.getTasksByProduct(product, project);
-			for (JJTask t : tasks) {
-				System.out.println(t.getName()+"--"+configuration.getName());
+		}
+		product = prodbean.getProduct();
+		project = projbean.getProject();
+
+		if (confbean == null)
+			confbean = new JJConfigurationBean();
+
+		configuration = confbean.getjJconfiguration();
+
+		message = new JJMessage();
+		System.out.println(contact.getName());
+		tasks = prodbean.getTasksByProduct(product, project);
+		for (JJTask t : tasks) {
+			System.out.println(t.getName() + "--" + configuration.getName());
+		}
+
+		if (getConfigManager() != null && version != null && product != null) {
+			render = true;
+			tree = configManager.listRepositoryContent(version.getName());
+
+			selectedTree = getTree();
+			while (selectedTree.getChildCount() != 0) {
+				selectedTree = selectedTree.getChildren().get(0);
+
+			}
+			file = (File) selectedTree.getData();
+			files = new ArrayList<FileMap>();
+			try (FileInputStream inputStream = new FileInputStream(file)) {
+				String fileTexte = IOUtils.toString(inputStream);
+				FileMap filemap = new FileMap(file.getName(), fileTexte, file);
+				files.add(filemap);
 			}
 
-			if (getConfigManager() != null && version != null
-					&& product != null) {
-				render = true;
-				tree = configManager.listRepositoryContent(version.getName());
-
-				selectedTree = getTree();
-				while (selectedTree.getChildCount() != 0) {
-					selectedTree = selectedTree.getChildren().get(0);
-
-				}
-				file = (File) selectedTree.getData();
-				files = new ArrayList<FileMap>();
-				try (FileInputStream inputStream = new FileInputStream(file)) {
-					String fileTexte = IOUtils.toString(inputStream);
-					FileMap filemap = new FileMap(file.getName(), fileTexte,
-							file);
-					files.add(filemap);
-				}
-
+		} else {
+			render = false;
+			if (product == null) {
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR,
+						"Please Select a project and a version ",
+						"Project and version are set to null");
+				FacesContext.getCurrentInstance().addMessage(null, message);
 			} else {
-				render = false;
-				if (product == null) {
+				if (version == null) {
+
 					FacesMessage message = new FacesMessage(
 							FacesMessage.SEVERITY_ERROR,
-							"Please Select a project and a version ",
-							"Project and version are set to null");
+							"Please Select a version ",
+							"Version is set to null");
 					FacesContext.getCurrentInstance().addMessage(null, message);
+
 				} else {
-					if (version == null) {
-
-						FacesMessage message = new FacesMessage(
-								FacesMessage.SEVERITY_ERROR,
-								"Please Select a version ",
-								"Version is set to null");
-						FacesContext.getCurrentInstance().addMessage(null,
-								message);
-
-					} else {
-						FacesMessage message = new FacesMessage(
-								FacesMessage.SEVERITY_ERROR,
-								"Product not available on the version control manager.",
-								"Project  not available");
-						FacesContext.getCurrentInstance().addMessage(null,
-								message);
-					}
+					FacesMessage message = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"Product not available on the version control manager.",
+							"Project  not available");
+					FacesContext.getCurrentInstance().addMessage(null, message);
 				}
-
 			}
-			session.putValue("jJDevelopment", this);	
+
+		}
+		session.putValue("jJDevelopment", this);
 
 	}
 
@@ -344,7 +339,7 @@ public class DevelopmentBean implements Serializable {
 
 	public void setMessageBean(JJMessageBean messageBean) {
 		this.messageBean = messageBean;
-	}	
+	}
 
 	public void pull() throws FileNotFoundException, IOException {
 		if (configManager.pullRepository()) {
@@ -390,11 +385,11 @@ public class DevelopmentBean implements Serializable {
 
 				task.setEndDateReal(new Date());
 				task.setCompleted(true);
-				
+
 			}
 			message.setProduct(product);
 			message.setContact(contact);
-			message.setProject(project);	
+			message.setProject(project);
 			message.setVersioning(version);
 			message.setCreatedBy(contact);
 			message.setCreationDate(new Date());
@@ -403,7 +398,7 @@ public class DevelopmentBean implements Serializable {
 			message.setDescription("JJmessage For" + task.getName() + "nl"
 					+ task.getDescription());
 			message.setName("JJmessage For" + task.getName());
-			messageBean.save(message);			
+			messageBean.save(message);
 			task.getMessages().add(message);
 			if (task.getStartDateReal() == null)
 				task.setStartDateReal(new Date());
@@ -435,7 +430,7 @@ public class DevelopmentBean implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 		} else {
-			
+
 			FacesMessage message = new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, "Probleme Lors du Commit",
 					"You Have to create comment before commiting");
@@ -502,8 +497,8 @@ public class DevelopmentBean implements Serializable {
 	}
 
 	public void onCloseTab(TabCloseEvent event) {
-		FileMap f = (FileMap) event.getData();
 
+		FileMap f = (FileMap) event.getData();
 		int j = contains(f.getFile());
 		files.get(j).setTexte(f.getTexte());
 		configManager.setFileTexte(files.get(j).getFile(), files.get(j)

@@ -10,7 +10,7 @@
 		JanJoon Login
 	</ui:define>
 	<ui:define name="content">
-	
+	<f:event listener="#{loginBean.loginRedirect}" type="preRenderView" />
 		<h5>BeHappy2012</h5>
 		<p:panel id="loginPanel" header="Please login..."
 			style="margin-top:50px;margin-bottom:50px;width:30%;margin-left:auto !important;margin-right:auto !important;">
@@ -28,7 +28,7 @@
 				<p:message for="password" id="mdp" closable="true" />
 
 				<p:commandButton id="submit" value="Login"
-					action="#{loginBean.login}" ajax="true" style="margin-top:20px;"
+					action="#{loginBean.login}" style="margin-top:20px;"
 					update=":login:mdp,:login:mail,:auth" />
 
 			</h:form>

@@ -10,7 +10,7 @@
 	<title>#{applicationBean.appName}</title>
 	<h:outputStylesheet library="css" name="standard.css" />
 	<h:outputScript library="js" name="calendar.js" />
-
+	<f:event listener="#{loginBean.loadingMain}" type="preRenderView" />
 	<h:form prependId="false" id="headerForm">
 
 		<p:growl id="growlHeader" showDetail="true" sticky="true" />
@@ -41,7 +41,7 @@
 					icon="ui-icon-gear" />
 
 				<p:menuitem value="Dev"
-					url="/pages/development2.jsf?faces-redirect=true"
+					url="/pages/development.jsf?faces-redirect=true"
 					icon="ui-icon-wrench" rendered="#{!loginBean.enable}" />
 
 				<p:menuitem value="Dev" actionListener="#{loginBean.redirectToDev}"

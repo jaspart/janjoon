@@ -3,9 +3,6 @@ package com.starit.janjoonweb.ui.mb;
 import java.io.IOException;
 import java.io.Serializable;
 
-import javax.el.ELContext;
-import javax.el.ExpressionFactory;
-import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -19,8 +16,6 @@ import javax.faces.event.ValueChangeEvent;
 import javax.servlet.http.HttpSession;
 
 import org.apache.myfaces.component.visit.FullVisitContext;
-import org.primefaces.component.blockui.BlockUI;
-import org.primefaces.component.graphicimage.GraphicImage;
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -30,6 +25,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.WebAttributes;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 
 import com.starit.janjoonweb.domain.JJContact;
@@ -44,10 +41,10 @@ public class LoginBean implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private AuthenticationManager authenticationManager;
-	private String username;
+	private String username = "janjoon.mailer@gmail.com";
 	private String password;
 	private boolean loading = false;
-	private boolean loadMain=false;
+	private boolean loadMain = false;
 	private JJContact contact;
 	private boolean enable = false;
 
@@ -65,6 +62,22 @@ public class LoginBean implements Serializable {
 		this.authenticationManager = authenticationManager;
 	}
 
+	protected String getRedirectUrl(HttpSession session) {
+
+		if (session != null) {
+			SavedRequest savedRequest = (SavedRequest) session
+					.getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+			if (savedRequest != null) {
+				String s = savedRequest.getRedirectUrl();
+				s = s.substring(s.lastIndexOf("/") + 1);
+				s = s.replace(s.substring(s.indexOf(".")), "");
+				return s;
+			}
+		}
+
+		return "main";
+	}
+
 	public String logout() {
 		FacesContext fContext = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) fContext.getExternalContext()
@@ -78,16 +91,15 @@ public class LoginBean implements Serializable {
 	@SuppressWarnings("deprecation")
 	public String login() {
 
-		String s = "";
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
 				username, password);
+		String prevPage = "";
 		try {
 			Authentication authentication = authenticationManager
 					.authenticate(token);
 			SecurityContext sContext = SecurityContextHolder.getContext();
 			sContext.setAuthentication(authentication);
 			enable = true;
-			s = "success";
 		} catch (AuthenticationException loginError) {
 
 			FacesMessage message = new FacesMessage(
@@ -97,7 +109,7 @@ public class LoginBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage("login", message);
 
 			enable = false;
-			s = "fail";
+			prevPage = "fail";
 		}
 		if (enable) {
 			JJContactBean service = new JJContactBean();
@@ -109,9 +121,11 @@ public class LoginBean implements Serializable {
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Welcome ", contact.getName());
 			FacesContext.getCurrentInstance().addMessage("login", message);
-		}
+			prevPage = getRedirectUrl(session);
 
-		return s;
+		}
+		System.out.println(prevPage);
+		return prevPage;
 	}
 
 	public String getUsername() {
@@ -233,7 +247,7 @@ public class LoginBean implements Serializable {
 
 		if (!loading) {
 			loading = true;
-			
+
 			HttpSession session = (HttpSession) FacesContext
 					.getCurrentInstance().getExternalContext()
 					.getSession(false);
@@ -241,28 +255,48 @@ public class LoginBean implements Serializable {
 			DevelopmentBean jJDevelopment = (DevelopmentBean) session
 					.getAttribute("jJDevelopment");
 			jJDevelopment = new DevelopmentBean();
-			String path = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+			String path = FacesContext.getCurrentInstance()
+					.getExternalContext().getRequestContextPath();
 			System.out.println(path);
 			FacesContext
 					.getCurrentInstance()
 					.getExternalContext()
-					.redirect(path+
-							"/pages/development.jsf?faces-redirect=true");
-			
+					.redirect(
+							path + "/pages/development.jsf?faces-redirect=true");
+
 		}
 	}
+
+	public void loginRedirect(ComponentSystemEvent e) throws IOException {
+		if (enable) {
+			String path = FacesContext.getCurrentInstance()
+					.getExternalContext().getRequestContextPath();
+			System.out.println(path);
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect(path + "/pages/main.jsf?faces-redirect=true");
+		}
+	}
+
 	public void loadingMain(ComponentSystemEvent e) throws IOException {
-		
-		if (!loadMain && enable) {
-			
-			loadMain = true;			
-			String path = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-			FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect(path+
-							"/pages/main.jsf?faces-redirect=true");
-			
+
+		if (enable) {
+
+			if (!loadMain) {
+				loadMain = true;
+				String path = FacesContext.getCurrentInstance()
+						.getExternalContext().getRequestContextPath();
+
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								path
+										+ FacesContext.getCurrentInstance()
+												.getViewRoot().getViewId()
+												.replace(".xhtml", ".jsf"));
+
+			}
+
 		}
 	}
 
@@ -283,21 +317,22 @@ public class LoginBean implements Serializable {
 			jJDevelopment = new DevelopmentBean();
 			if (!FacesContext.getCurrentInstance().getViewRoot().getViewId()
 					.contains("development")) {
-				String path = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+				String path = FacesContext.getCurrentInstance()
+						.getExternalContext().getRequestContextPath();
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
-						.redirect(path+
-								"/pages/development.jsf?faces-redirect=true");
-			}
-			else{
-				RequestContext context=RequestContext.getCurrentInstance();
+						.redirect(
+								path
+										+ "/pages/development.jsf?faces-redirect=true");
+			} else {
+				RequestContext context = RequestContext.getCurrentInstance();
 				context.update(":contentPanel:devPanel");
 				context.update(":contentPanel:errorPanel");
 			}
 
 		} else {
-			// s=FacesContext.getCurrentInstance().getViewRoot().getViewId();
+
 			FacesMessage message = new FacesMessage(
 					FacesMessage.SEVERITY_ERROR,
 					"Please Select a project and a version ",

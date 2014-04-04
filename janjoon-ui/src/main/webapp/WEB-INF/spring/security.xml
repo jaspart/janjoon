@@ -1,42 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <b:beans xmlns:b="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/security"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-  
- <global-method-security proxy-target-class="true" pre-post-annotations="enabled"/>
- 
-	<context:component-scan base-package="com.starit.janjoonweb.ui.mb" />	
-	<context:component-scan base-package="com.starit.janjoonweb.ui.security" />	
-		
-	<context:spring-configured/>	
+
+	<global-method-security proxy-target-class="true"
+		pre-post-annotations="enabled" />
+
+	<context:component-scan base-package="com.starit.janjoonweb.ui.mb" />
+	<context:component-scan base-package="com.starit.janjoonweb.ui.security" />
+
+	<context:spring-configured />
 	<context:annotation-config />
-    
-    <http security="none" pattern="../resources/**"/>   
-    <http security="none" pattern="../templates/**"/>
-    
-    <http auto-config="true"
-        use-expressions="true"
-        entry-point-ref="entryPoint">
-        <intercept-url pattern="/pages/main.jsf" access="permitAll"/>
-        <intercept-url pattern="/pages/login.jsf" access="permitAll"/>
-        <intercept-url pattern="/pages/**" access="isAuthenticated()"/>
-        <logout logout-url="/pages/logout.jsf"   logout-success-url="/pages/login.jsf" invalidate-session="true" delete-cookies="true"/>
-        <form-login login-page="/pages/login.jsf"
-                authentication-failure-url="/pages/login.jsf"
-                default-target-url="/"
-                always-use-default-target="true"/>
-        <expression-handler ref="jsfWebExpressionHandler"/>
-    </http> 
-        
-   <authentication-manager alias="authenticationManager" >
-        <authentication-provider ref="contactAuthentificationProvider" />        	
-    </authentication-manager>
-        
-    <b:bean id="jsfWebExpressionHandler" class="com.starit.janjoonweb.ui.security.JsfDefaultWebSecurityExpressionhandler"/>
-    
+
+	<http security="none" pattern="../resources/**" />
+	<http security="none" pattern="../templates/**" />
+
+	<http auto-config="true" use-expressions="true" entry-point-ref="entryPoint">
+		<intercept-url pattern="/pages/main.jsf" access="permitAll" />
+		<intercept-url pattern="/pages/login.jsf" access="permitAll" />
+		<intercept-url pattern="/pages/**" access="isAuthenticated()" />
+		<logout logout-url="/pages/logout.jsf" logout-success-url="/pages/login.jsf"
+			invalidate-session="true" delete-cookies="true" />
+		<form-login login-page="/pages/login.jsf" />
+		
+		<expression-handler ref="jsfWebExpressionHandler" />
+	</http>
+
+	
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider ref="contactAuthentificationProvider" />
+	</authentication-manager>
+
+	<b:bean id="jsfWebExpressionHandler"
+		class="com.starit.janjoonweb.ui.security.JsfDefaultWebSecurityExpressionhandler" />
+
 </b:beans>

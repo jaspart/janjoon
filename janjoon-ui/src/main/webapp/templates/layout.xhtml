@@ -36,12 +36,12 @@
 
 			<p:panel id="messagePanel" header="Chat" styleClass="chat"
 				toggleable="true" style="height:100%;"
-				toggleOrientation="horizontal">
+				toggleOrientation="horizontal" >
 
 				<p:dataTable id="dataTable1" value="#{jJMessageBean.allJJMessages}"
 					rowKey="#{mes.id}" var="mes" scrollable="true" scrollHeight="400"
 					rendered="#{loginBean.enable}"
-					style="border-spacing:0px;" selection="#{jJMessageBean.JJMessage_}"
+					style="border-spacing:0px;" 
 					selectionMode="single" sortBy="#{mes.creationDate}">
 					<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
 						listener="#{jJMessageBean.onRowSelect}"
@@ -61,7 +61,7 @@
 					<p:outputPanel id="viewPanel1">
 						<h:form id="viewForm1" enctype="multipart/form-data">
 							<h:panelGrid id="viewPanelGrid1" columns="2"
-								binding="#{jJMessageBean.viewPanelGrid}" styleClass="dialog"
+								binding="#{jJMessageBean.viewPanel}" styleClass="dialog"
 								columnClasses="col1,col2" />
 							<p:commandButton id="viewCloseButton1"
 								value="#{messages.label_close}"

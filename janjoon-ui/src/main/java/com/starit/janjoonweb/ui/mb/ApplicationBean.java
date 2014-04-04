@@ -845,7 +845,7 @@ public class ApplicationBean {
 		item.setUpdate(":dataForm:data");
 
 		submenu.addElement(item);
-
+		menuModel.addElement(submenu);
 		// ////
 		submenu = new DefaultSubMenu("JJWorkflow");
 		submenu.setId("jJWorkflowSubmenu");

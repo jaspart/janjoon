@@ -76,6 +76,6 @@ public class JJContact extends JJAbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "contact")
 	private Set<JJPermission> permissions = new HashSet<JJPermission>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "contact")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "contact")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
 }
