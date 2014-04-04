@@ -30,6 +30,8 @@ import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseService;
+import com.starit.janjoonweb.domain.JJTeststep;
+import com.starit.janjoonweb.domain.JJTeststepService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
@@ -49,6 +51,13 @@ public class JJRequirementBean {
 
 	public void setjJTestcaseService(JJTestcaseService jJTestcaseService) {
 		this.jJTestcaseService = jJTestcaseService;
+	}
+
+	@Autowired
+	JJTeststepService jJTeststepService;
+
+	public void setjJTeststepService(JJTeststepService jJTeststepService) {
+		this.jJTeststepService = jJTeststepService;
 	}
 
 	private JJCategory lowCategory;
@@ -834,7 +843,10 @@ public class JJRequirementBean {
 			JJStatus status = jJStatusService.getOneStatus("NEW",
 					"JJRequirement", true);
 
-			JJRequirement requirement = format.getRequirement();
+			JJRequirement req = format.getRequirement();
+
+			JJRequirement requirement = jJRequirementService
+					.findJJRequirement(req.getId());
 
 			JJRequirement importRequirement = new JJRequirement();
 
@@ -925,11 +937,106 @@ public class JJRequirementBean {
 
 			jJRequirementService.saveJJRequirement(importRequirement);
 
+			if (format.getCopyTestcase()) {
+
+				Set<JJTestcase> testcases = requirement.getTestcases();
+
+				if (testcases != null && !testcases.isEmpty()) {
+
+					for (JJTestcase tc : testcases) {
+
+						JJRequirement req1 = jJRequirementService
+								.findJJRequirement(importRequirement.getId());
+
+						JJTestcase importTestcase = new JJTestcase();
+
+						JJTestcase testcase = jJTestcaseService
+								.findJJTestcase(tc.getId());
+
+						SortedMap<Integer, JJTestcase> testcaseElements = manageTestcaseOrder(req1
+								.getChapter());
+
+						if (testcaseElements.isEmpty()) {
+
+							importTestcase.setOrdering(0);
+						} else {
+							importTestcase.setOrdering(testcaseElements
+									.lastKey() + 1);
+						}
+
+						importTestcase.setRequirement(req1);
+						req1.getTestcases().add(importTestcase);
+
+						importTestcase.setName(testcase.getName() + " (i)");
+						importTestcase
+								.setDescription(testcase.getDescription());
+						importTestcase.setCreationDate(testcase
+								.getCreationDate());
+						importTestcase.setUpdatedDate(new Date());
+						importTestcase.setAutomatic(testcase.getAutomatic());
+						importTestcase.setEnabled(true);
+
+						jJTestcaseService.saveJJTestcase(importTestcase);
+
+						Set<JJTeststep> teststeps = testcase.getTeststeps();
+
+						for (JJTeststep teststep : teststeps) {
+
+							JJTestcase tc1 = jJTestcaseService
+									.findJJTestcase(importTestcase.getId());
+
+							JJTeststep importTeststep = new JJTeststep();
+
+							importTeststep.setOrdering(teststep.getOrdering());
+
+							importTeststep.setTestcase(tc1);
+							tc1.getTeststeps().add(importTeststep);
+
+							importTeststep.setName(teststep.getName() + " (i)");
+							importTeststep.setDescription(teststep
+									.getDescription());
+							importTeststep.setCreationDate(teststep
+									.getCreationDate());
+							importTeststep.setUpdatedDate(new Date());
+							importTeststep.setActionstep(teststep
+									.getActionstep());
+							importTeststep.setResultstep(teststep
+									.getResultstep());
+							importTeststep.setEnabled(true);
+
+							jJTeststepService.saveJJTeststep(importTeststep);
+
+						}
+
+					}
+
+				}
+
+			}
+
 		}
 
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("dialogWidget.hide()");
 		closeDialogImport();
+	}
+
+	private SortedMap<Integer, JJTestcase> manageTestcaseOrder(JJChapter chapter) {
+
+		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
+
+		System.out.println("chapter.getName() " + chapter.getName() + " "
+				+ chapter.getId());
+
+		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,
+				chapter, false, false);
+
+		for (JJTestcase testcase : testcases) {
+			elements.put(testcase.getOrdering(), testcase);
+		}
+
+		return elements;
+
 	}
 
 	public void loadTask() {
