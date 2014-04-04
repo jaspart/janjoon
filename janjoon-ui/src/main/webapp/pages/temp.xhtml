@@ -26,7 +26,7 @@
 									<f:converter
 										converterId="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter" />
 									<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
-									<f:selectItems value="#{jJBuildBean.buildList}" var="c"
+									<f:selectItems value="#{jJBuildBean.builds}" var="c"
 										itemLabel="#{c.name}" itemValue="#{c}" />
 									<p:ajax process="@this" partialSubmit="true"
 										update=":testFormCenter" />
@@ -116,53 +116,71 @@
 								icon="ui-icon-circle-plus" />
 						</f:facet>
 					</p:dataTable>
-
-
-					<p:panelGrid style="margin-top:10px;"
-						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}">
+					<p:dataTable id="teststepRecapDataTable"
+						value="#{jJTeststepBean.teststeps}" rowKey="#{ts.name}" var="ts"
+						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
+						paginator="true" rows="8" style="width:650px;">
 						<f:facet name="header">
 							<p:row>
-								<p:column colspan="2">
+								<p:column>
 									<h:outputText
 										value="TC #{jJTestcaseBean.testcase.ordering}: #{jJTestcaseBean.testcase.name}" />
 								</p:column>
+
+								<p:column>
+									<h:outputText
+										value="Requirement: #{jJTestcaseBean.testcase.requirement.name}" />
+								</p:column>
+								<!-- 							<p:column> -->
+								<!-- 								<h:outputText value="Description :" /> -->
+								<!-- 								<p:editor id="description" widgetVar="descriptionWidget" -->
+								<!-- 									style="width:500px;" -->
+								<!-- 									value="#{jJTestcaseBean.testcase.description}" disabled="true" /> -->
+								<!-- 							</p:column> -->
+								<p:column>
+									<p:commandButton id="editButton" icon="ui-icon-pencil"
+										oncomplete="testcaseDialogWidget.show()"
+										action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
+										update=":testcaseDialog" />
+									<p:tooltip for="editButton" value="#{messages.label_edit}"
+										showEffect="fade" hideEffect="fade" />
+								</p:column>
 							</p:row>
 						</f:facet>
-						<p:row>
-							<p:column>
-								<h:outputText
-									value="Requirement: #{jJTestcaseBean.testcase.requirement.name}" />
-							</p:column>
-							<p:column>
-								<h:outputText value="Description :" />
-								<p:editor id="description" widgetVar="descriptionWidget"
-									style="width:500px;"
-									value="#{jJTestcaseBean.testcase.description}" disabled="true" />
-							</p:column>
-						</p:row>
-					</p:panelGrid>
 
-					<!-- 					<p:dataTable id="teststepRecapDataTable" value="#{jJTeststepBean.teststepList}" -->
-					<!-- 						rowKey="#{ts.name}" var="ts" -->
-					<!-- 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}" -->
-					<!-- 						paginator="true" rows="8" style="width:650px;"> -->
-					<!-- 						<f:facet name="header"> -->
-					<!-- 							<h:outputText value="Test Step List" /> -->
-					<!-- 						</f:facet> -->
+						<p:column headerText="Order">
+							<h:outputText value="#{ts.ordering}" />
+						</p:column>
 
-					<!-- 						<p:column headerText="Order"> -->
-					<!-- 							<h:outputText value="#{ts.ordering}" /> -->
-					<!-- 						</p:column> -->
+						<p:column headerText="Action">
+							<h:outputText value="#{ts.actionstep}" />
+						</p:column>
+						<p:column headerText="Result">
+							<h:outputText value="#{ts.resultstep}" />
+						</p:column>
+					</p:dataTable>
 
-					<!-- 						<p:column headerText="Action"> -->
-					<!-- 							<h:outputText value="#{ts.actiontstep}" /> -->
-					<!-- 						</p:column> -->
-					<!-- 						<p:column headerText="Result"> -->
-					<!-- 							<h:outputText value="#{ts.resultstep}" /> -->
-					<!-- 						</p:column> -->
-					<!-- 					</p:dataTable> -->
-
-
+					<p:dataTable id="testexecutionRecapDataTable"
+						value="#{jJTestcaseexecutionBean.testcaseexecutions}"
+						rowKey="#{tce.name}" var="tce"
+						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
+						paginator="true" rows="8" style="width:650px;">
+						<p:column headerText="Id">
+							<h:outputText value="#{tce.id}" />
+						</p:column>
+						<p:column headerText="Build">
+							<h:outputText value="#{tce.build.name}" />
+						</p:column>
+						<p:column headerText="Creation Date">
+							<h:outputText value="#{tce.creationDate}" />
+						</p:column>
+						<p:column headerText="Update Date">
+							<h:outputText value="#{tce.updatedDate}" />
+						</p:column>
+						<p:column headerText="Status">
+							<h:outputText value="#{tce.passed}" />
+						</p:column>
+					</p:dataTable>
 				</h:form>
 			</p:layoutUnit>
 		</p:layout>

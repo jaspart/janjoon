@@ -1,6 +1,8 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -18,12 +20,43 @@ public class JJTestcaseexecutionBean {
 
 	private JJTestcaseexecution testcaseexecution;
 
+	private List<JJTestcaseexecution> testcaseexecutions;
+
 	public JJTestcaseexecution getTestcaseexecution() {
 		return testcaseexecution;
 	}
 
 	public void setTestcaseexecution(JJTestcaseexecution testcaseexecution) {
 		this.testcaseexecution = testcaseexecution;
+	}
+
+	public List<JJTestcaseexecution> getTestcaseexecutions() {
+		testcaseexecutions = new ArrayList<JJTestcaseexecution>();
+
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
+				.getAttribute("jJTestcaseBean");
+
+		JJTestcase testcase = jJTestcaseBean.getTestcase();
+
+		JJBuildBean jJBuildBean = (JJBuildBean) session
+				.getAttribute("jJBuildBean");
+
+		JJBuild build = jJBuildBean.getBuild();
+
+		if (testcase != null && testcase.getId() != null) {
+
+			testcaseexecutions = jJTestcaseexecutionService
+					.getTestcaseexecutions(testcase, build, true, true);
+		}
+
+		return testcaseexecutions;
+	}
+
+	public void setTestcaseexecutions(
+			List<JJTestcaseexecution> testcaseexecutions) {
+		this.testcaseexecutions = testcaseexecutions;
 	}
 
 	public void newTestcaseexecution() {

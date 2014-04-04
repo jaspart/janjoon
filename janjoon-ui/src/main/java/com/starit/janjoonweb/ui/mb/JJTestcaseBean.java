@@ -365,6 +365,14 @@ public class JJTestcaseBean {
 		disabledTeststep = true;
 		disabledReset = false;
 
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+
+		JJBuildBean jJBuildBean = (JJBuildBean) session
+				.getAttribute("jJBuildBean");
+
+		jJBuildBean.setBuild(null);
+
 		jJTeststepBean.newTeststep();
 	}
 

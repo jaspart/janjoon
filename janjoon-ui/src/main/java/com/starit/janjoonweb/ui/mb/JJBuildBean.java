@@ -17,7 +17,7 @@ import com.starit.janjoonweb.domain.JJVersion;
 public class JJBuildBean {
 
 	private JJBuild build;
-	private List<JJBuild> buildList;
+	private List<JJBuild> builds;
 
 	public JJBuild getBuild() {
 		return build;
@@ -27,7 +27,7 @@ public class JJBuildBean {
 		this.build = build;
 	}
 
-	public List<JJBuild> getBuildList() {
+	public List<JJBuild> getBuilds() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJVersionBean jJVersionBean = (JJVersionBean) session
@@ -35,13 +35,13 @@ public class JJBuildBean {
 
 		JJVersion version = jJVersionBean.getVersion();
 
-		buildList = jJBuildService.getBuilds(version, true, true);
+		builds = jJBuildService.getBuilds(version, true, true);
 
-		return buildList;
+		return builds;
 	}
 
-	public void setBuildList(List<JJBuild> buildList) {
-		this.buildList = buildList;
+	public void setBuilds(List<JJBuild> builds) {
+		this.builds = builds;
 	}
 
 }

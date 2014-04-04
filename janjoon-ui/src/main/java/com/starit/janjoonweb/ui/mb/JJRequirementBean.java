@@ -999,9 +999,9 @@ public class JJRequirementBean {
 									.getCreationDate());
 							importTeststep.setUpdatedDate(new Date());
 							importTeststep.setActionstep(teststep
-									.getActionstep());
+									.getActionstep() + " (i)");
 							importTeststep.setResultstep(teststep
-									.getResultstep());
+									.getResultstep() + " (i)");
 							importTeststep.setEnabled(true);
 
 							jJTeststepService.saveJJTeststep(importTeststep);
