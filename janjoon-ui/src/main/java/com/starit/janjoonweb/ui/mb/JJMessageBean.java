@@ -214,6 +214,11 @@ public class JJMessageBean {
 			loadFiltredJJmessage = true;
 
 		}
+		String referrer = FacesContext.getCurrentInstance().getExternalContext().getRequestHeaderMap().get("referer");
+		if(!referrer.contains("main"))
+		{
+			filteredJJMessage = allJJMessages;
+		}
 		
 	}
 
