@@ -215,11 +215,11 @@ public class JJMessageBean {
 
 		}
 		String referrer = FacesContext.getCurrentInstance().getExternalContext().getRequestHeaderMap().get("referer");
-		if(!referrer.contains("main"))
+	/*AJA	if(!referrer.contains("main"))
 		{
 			filteredJJMessage = allJJMessages;
 		}
-		
+	*/	
 	}
 
 	public boolean listContaines(Object list, Long long1) {

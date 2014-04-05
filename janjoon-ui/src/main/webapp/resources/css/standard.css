@@ -60,8 +60,6 @@ a:visited {
 	text-align: left;	
 }
 
-
-
 .chat {
 	width: 180px;
 	vertical-align: top;
@@ -120,6 +118,17 @@ text-align: right !important;
 .CodeMirror-gutter {
 	z-index: 0;
 }
-CodeMirror-gutter {
-        z-index: 1;
+
+.TestcaseNotExecuted{
+  color:blue;
+}
+.TestcaseFailed{
+  color:red;
+}
+.TestcaseSuccess{
+  color:green;
+}
+.TestcaseChapter{
+  color:black;
+  font-weight:bold;
 }
