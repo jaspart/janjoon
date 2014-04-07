@@ -127,6 +127,8 @@ public class DevelopmentBean implements Serializable {
 						"Please Select a project and a version ",
 						"Project and version are set to null");
 				FacesContext.getCurrentInstance().addMessage(null, message);
+				FacesContext context = FacesContext.getCurrentInstance();
+				context.getExternalContext().getFlash().setKeepMessages(true);
 			} else {
 				if (version == null) {
 
@@ -135,6 +137,8 @@ public class DevelopmentBean implements Serializable {
 							"Please Select a version ",
 							"Version is set to null");
 					FacesContext.getCurrentInstance().addMessage(null, message);
+					FacesContext context = FacesContext.getCurrentInstance();
+					context.getExternalContext().getFlash().setKeepMessages(true);
 
 				} else {
 					FacesMessage message = new FacesMessage(
@@ -142,10 +146,12 @@ public class DevelopmentBean implements Serializable {
 							"Product not available on the version control manager.",
 							"Project  not available");
 					FacesContext.getCurrentInstance().addMessage(null, message);
+					FacesContext context = FacesContext.getCurrentInstance();
+					context.getExternalContext().getFlash().setKeepMessages(true);
 				}
 			}
-
 		}
+		
 		session.putValue("jJDevelopment", this);
 
 	}

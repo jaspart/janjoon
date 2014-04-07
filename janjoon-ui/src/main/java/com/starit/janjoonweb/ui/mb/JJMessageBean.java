@@ -20,39 +20,12 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.event.ToggleEvent;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
-import com.starit.janjoonweb.domain.JJAbstractEntity;
-import com.starit.janjoonweb.domain.JJBug;
-import com.starit.janjoonweb.domain.JJBuild;
-import com.starit.janjoonweb.domain.JJChapter;
-import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJCriticity;
-import com.starit.janjoonweb.domain.JJImportance;
-import com.starit.janjoonweb.domain.JJMessage;
-import com.starit.janjoonweb.domain.JJProduct;
-import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJRequirement;
-import com.starit.janjoonweb.domain.JJSprint;
-import com.starit.janjoonweb.domain.JJStatus;
-import com.starit.janjoonweb.domain.JJTask;
-import com.starit.janjoonweb.domain.JJTestcase;
-import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJBuildConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJChapterConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJCriticityConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJImportanceConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJProductConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJProjectConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJSprintConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJStatusConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJTaskConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJVersionConverter;
+import com.starit.janjoonweb.domain.*;
+import com.starit.janjoonweb.ui.mb.converter.*;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
@@ -61,6 +34,7 @@ public class JJMessageBean {
 
 	private JJMessage message;
 	private boolean loadFiltredJJmessage = false;
+	private boolean alertOrInfo;
 	private SelectItem[] projectOptions;
 	private SelectItem[] productOptions;
 	private SelectItem[] creatorOptions;
@@ -68,6 +42,8 @@ public class JJMessageBean {
 	private List<JJMessage> allJJMessages;
 	private List<JJMessage> filteredJJMessage;
 	private List<String> columns;
+	private boolean collapsedMesPanel = true;
+	private boolean collapsedLayoutPanel = true;
 	private HtmlPanelGrid viewPanel;
 	private JJMessage viewedMessage;
 
@@ -151,6 +127,30 @@ public class JJMessageBean {
 		this.loadFiltredJJmessage = loadFiltredJJmessage;
 	}
 
+	public boolean isCollapsedMesPanel() {
+		return collapsedMesPanel;
+	}
+
+	public void setCollapsedMesPanel(boolean collapsedMesPanel) {
+		this.collapsedMesPanel = collapsedMesPanel;
+	}
+
+	public boolean isCollapsedLayoutPanel() {
+		return collapsedLayoutPanel;
+	}
+
+	public void setCollapsedLayoutPanel(boolean collapsedLayoutPanel) {
+		this.collapsedLayoutPanel = collapsedLayoutPanel;
+	}
+
+	public boolean isAlertOrInfo() {
+		return alertOrInfo;
+	}
+
+	public void setAlertOrInfo(boolean alertOrInfo) {
+		this.alertOrInfo = alertOrInfo;
+	}
+
 	public SelectItem[] getProjectOptions() {
 
 		return projectOptions;
@@ -178,6 +178,16 @@ public class JJMessageBean {
 					.getName());
 		}
 		return options;
+	}
+
+	public void handleMesToggle(ToggleEvent event) {
+
+		this.collapsedMesPanel = !this.collapsedMesPanel;
+	}
+
+	public void handleLayoutToggle(ToggleEvent event) {
+
+		this.collapsedLayoutPanel = !this.collapsedLayoutPanel;
 	}
 
 	public void initJJmessageTable(ComponentSystemEvent e) {
@@ -214,12 +224,14 @@ public class JJMessageBean {
 			loadFiltredJJmessage = true;
 
 		}
-		String referrer = FacesContext.getCurrentInstance().getExternalContext().getRequestHeaderMap().get("referer");
-	/*AJA	if(!referrer.contains("main"))
-		{
-			filteredJJMessage = allJJMessages;
+		String referrer = FacesContext.getCurrentInstance()
+				.getExternalContext().getRequestHeaderMap().get("referer");
+		if (referrer != null) {
+			if (!referrer.contains("main")) {
+				filteredJJMessage = allJJMessages;
+			}
 		}
-	*/	
+
 	}
 
 	public boolean listContaines(Object list, Long long1) {
@@ -266,7 +278,7 @@ public class JJMessageBean {
 
 		List<JJCriticity> criticity = jJCriticityBean.getAllJJCriticitys();
 
-		if (e.getComponent().getId().contains("submit1")) {
+		if (alertOrInfo) {
 			System.out.println("info");
 			int i = 0;
 			while (i < criticity.size()) {
@@ -288,8 +300,31 @@ public class JJMessageBean {
 			}
 			System.out.println("alert");
 		}
+		try {
+			message.setName(message.getMessage().substring(0, 20));
+		} catch (StringIndexOutOfBoundsException c) {
+			message.setName(message.getMessage());
+		}
+		// set attribute
+		JJVersionBean jJVersionBean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
+		JJProductBean jJProductBean = (JJProductBean) session
+				.getAttribute("jJProductBean");
+		JJProjectBean jJProjectBean = (JJProjectBean) session
+				.getAttribute("jJProjectBean");
+		JJContact contact = (JJContact) session.getAttribute("JJContact");
+		if (jJProductBean.getProduct() != null)
+			message.setProduct(jJProductBean.getProduct());
+		if (jJProjectBean.getProject() != null)
+			message.setProject(jJProjectBean.getProject());
+		if (jJVersionBean.getVersion() != null)
+			message.setVersioning(jJVersionBean.getVersion());
+
+		message.setContact(contact);
+		message.setCreatedBy(contact);
+
 		message.setCreationDate(new Date());
-		message.setDescription(message.getName() + " : " + message.getMessage());
+		message.setDescription(message.getMessage());
 		save(message);
 		message = new JJMessage();
 	}

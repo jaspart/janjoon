@@ -7,7 +7,7 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:sec="http://www.springframework.org/security/tags">
 <ui:composition>
-	<title>#{applicationBean.appName}</title>
+	<title>#{messages.label_appName}</title>
 	<h:outputStylesheet library="css" name="standard.css" />
 	<h:outputScript library="js" name="calendar.js" />
 	<f:event listener="#{loginBean.loadingMain}" type="preRenderView" />
@@ -44,9 +44,9 @@
 					url="/pages/development.jsf?faces-redirect=true"
 					icon="ui-icon-wrench" rendered="#{!loginBean.enable}" />
 
-				<p:menuitem value="Dev" actionListener="#{loginBean.redirectToDev}"
-					update="growlHeader" icon="ui-icon-wrench"
-					rendered="#{loginBean.enable}" />
+				<p:menuitem id="devAction" value="Dev"
+					actionListener="#{loginBean.redirectToDev}" update="growlHeader"
+					icon="ui-icon-wrench" rendered="#{loginBean.enable}" />
 
 				<p:menuitem value="Delivery"
 					url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />

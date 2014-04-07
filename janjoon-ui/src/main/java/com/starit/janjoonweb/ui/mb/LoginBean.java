@@ -121,6 +121,8 @@ public class LoginBean implements Serializable {
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Welcome ", contact.getName());
 			FacesContext.getCurrentInstance().addMessage("login", message);
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.getExternalContext().getFlash().setKeepMessages(true);
 			prevPage = getRedirectUrl(session);
 
 		}
@@ -312,11 +314,14 @@ public class LoginBean implements Serializable {
 					.getCurrentInstance().getExternalContext()
 					.getSession(false);
 
-			DevelopmentBean jJDevelopment = (DevelopmentBean) session
-					.getAttribute("jJDevelopment");
-			jJDevelopment = new DevelopmentBean();
+			// DevelopmentBean jJDevelopment = (DevelopmentBean) session
+			// .getAttribute("jJDevelopment");
+			// jJDevelopment = new DevelopmentBean();
 			if (!FacesContext.getCurrentInstance().getViewRoot().getViewId()
 					.contains("development")) {
+				DevelopmentBean jJDevelopment = (DevelopmentBean) session
+						.getAttribute("jJDevelopment");
+				jJDevelopment = new DevelopmentBean();
 				String path = FacesContext.getCurrentInstance()
 						.getExternalContext().getRequestContextPath();
 				FacesContext
@@ -326,6 +331,7 @@ public class LoginBean implements Serializable {
 								path
 										+ "/pages/development.jsf?faces-redirect=true");
 			} else {
+
 				RequestContext context = RequestContext.getCurrentInstance();
 				context.update(":contentPanel:devPanel");
 				context.update(":contentPanel:errorPanel");

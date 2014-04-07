@@ -1,59 +1,22 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.*;
+import java.util.regex.*;
 
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.annotation.*;
+import javax.faces.bean.*;
 
-import org.primefaces.model.menu.DefaultMenuItem;
-import org.primefaces.model.menu.DefaultMenuModel;
-import org.primefaces.model.menu.DefaultSubMenu;
-import org.primefaces.model.menu.MenuModel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
+import org.primefaces.model.menu.*;
+import org.springframework.beans.factory.annotation.*;
 
-import com.starit.janjoonweb.domain.JJBuild;
-import com.starit.janjoonweb.domain.JJBuildService;
-import com.starit.janjoonweb.domain.JJCategory;
-import com.starit.janjoonweb.domain.JJCategoryService;
-import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJContactService;
-import com.starit.janjoonweb.domain.JJCriticity;
-import com.starit.janjoonweb.domain.JJCriticityService;
-import com.starit.janjoonweb.domain.JJPermission;
-import com.starit.janjoonweb.domain.JJPermissionService;
-import com.starit.janjoonweb.domain.JJProduct;
-import com.starit.janjoonweb.domain.JJProductService;
-import com.starit.janjoonweb.domain.JJProfile;
-import com.starit.janjoonweb.domain.JJProfileService;
-import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJProjectService;
-import com.starit.janjoonweb.domain.JJRequirement;
-import com.starit.janjoonweb.domain.JJRequirementService;
-import com.starit.janjoonweb.domain.JJRight;
-import com.starit.janjoonweb.domain.JJRightService;
-import com.starit.janjoonweb.domain.JJSprint;
-import com.starit.janjoonweb.domain.JJSprintService;
-import com.starit.janjoonweb.domain.JJStatus;
-import com.starit.janjoonweb.domain.JJStatusService;
-import com.starit.janjoonweb.domain.JJTask;
-import com.starit.janjoonweb.domain.JJTaskService;
-import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.domain.JJVersionService;
+import com.starit.janjoonweb.domain.*;
 
 //@RooJsfApplicationBean
 @ManagedBean
 @RequestScoped
 @Configurable
-public class ApplicationBean {
-
+public class ApplicationBean {	
+	
 	@Autowired
 	JJProjectService jJProjectService;
 
@@ -95,6 +58,7 @@ public class ApplicationBean {
 
 	@Autowired
 	JJProfileService jJProfileService;
+
 
 	public void setjJProjectService(JJProjectService jJProjectService) {
 		this.jJProjectService = jJProjectService;
@@ -171,7 +135,8 @@ public class ApplicationBean {
 
 	@PostConstruct
 	public void init() {
-
+			
+		System.out.println("applicationBeanINIT");
 		menuModel = new DefaultMenuModel();
 
 		DefaultSubMenu submenu;

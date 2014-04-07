@@ -77,6 +77,12 @@ a:visited {
 	width: 120px !important;
 }
 
+.ui-datatable .ui-column-filter {
+display: block;
+width: 120px;
+margin: auto;
+}
+
 .cleanMenu .ui-tabmenu .ui-tabmenu-nav.ui-widget-header {
 	padding-left: 0px !important;
 	width: 100% !important;
