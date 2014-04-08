@@ -55,7 +55,7 @@
 										update=":testFormCenter :testFormWest:exportPDF" />
 									<p:treeNode>
 										<h:outputText value="#{node}" />
-											<!--styleClass="#{node.styleClass}" /-->
+										<!--styleClass="#{node.styleClass}" /-->
 									</p:treeNode>
 								</p:tree>
 							</p:column>
@@ -162,24 +162,24 @@
 					</p:dataTable>
 
 					<p:dataTable id="testexecutionRecapDataTable"
-						value="#{jJTestcaseexecutionBean.testcaseexecutions}"
+						value="#{jJTestcaseexecutionBean.testCaseexecutionRecaps}"
 						rowKey="#{tce.name}" var="tce"
 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
 						paginator="true" rows="8" style="width:650px;">
 						<p:column headerText="Id">
-							<h:outputText value="#{tce.id}" />
+							<h:outputText value="#{tce.testcaseexecution.id}" />
 						</p:column>
 						<p:column headerText="Build">
-							<h:outputText value="#{tce.build.name}" />
+							<h:outputText value="#{tce.testcaseexecution.build.name}" />
 						</p:column>
 						<p:column headerText="Creation Date">
-							<h:outputText value="#{tce.creationDate}" />
+							<h:outputText value="#{tce.testcaseexecution.creationDate}" />
 						</p:column>
 						<p:column headerText="Update Date">
-							<h:outputText value="#{tce.updatedDate}" />
+							<h:outputText value="#{tce.testcaseexecution.updatedDate}" />
 						</p:column>
 						<p:column headerText="Status">
-							<h:outputText value="#{tce.passed}" />
+							<h:outputText value="#{tce.status}" />
 						</p:column>
 					</p:dataTable>
 				</h:form>
@@ -393,72 +393,65 @@
 		<p:dialog id="runTestcaseDialog" header="Test Case Execution"
 			modal="true" widgetVar="runTestcaseDialogWidget" dynamic="true"
 			resizable="false">
+			<p:ajax event="close" update=":testFormCenter :testFormWest"
+				listener="#{jJTeststepexecutionBean.closeDialog()}" />
 			<p:outputPanel id="runTestcaseDialogPanel">
 				<h:form id="runForm">
 					<p:scrollPanel style="width:720px;height:500px;" mode="native">
 
 						<p:tabView id="teststepTabView" widgetVar="teststepTabViewWidget"
 							activeIndex="#{jJTeststepexecutionBean.activeIndex}"
-							dynamic="true">
+							dynamic="true"
+							value="#{jJTeststepexecutionBean.teststepexecutions}" var="tse">
+
+							<p:tab title="#{tse.teststep.ordering}">
+								<p:panelGrid style="margin-top:10px;">
+									<p:row>
+										<p:column>
+											<h:outputText value="#{tse.teststep.actionstep}" />
+										</p:column>
+										<p:column>
+											<h:outputText value="#{tse.teststep.resultstep}" />
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column colspan="2">
+											<h:outputText value="Status: " />
+											<p:selectOneButton value="#{tse.passed}">
+												<p:ajax update="name description"
+													listener="#{jJTeststepexecutionBean.toto()}" />
+												<f:selectItem itemLabel="Passed" itemValue="true" />
+												<f:selectItem itemLabel="Failed" itemValue="false" />
+											</p:selectOneButton>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputText value="Name : *" />
+											<p:inputText id="name"
+												disabled="#{jJTeststepexecutionBean.disabled}"
+												value="#{jJTeststepexecutionBean.bug.name}" required="true"
+												widgetVar="nameWidget" label="Testcase Name"
+												requiredMessage="Testcase Name is a required value">
+											</p:inputText>
+											<p:message for="name" id="msgName" />
+										</p:column>
+										<p:column>
+											<h:outputText value="Description : *" />
+											<p:editor id="description" widgetVar="descriptionWidget"
+												style="width:400px;"
+												value="#{jJTeststepexecutionBean.bug.description}"
+												required="true"
+												disabled="#{jJTeststepexecutionBean.disabled}"
+												requiredMessage="Testcase Description is a required value" />
+											<p:message for="description" id="msgDescription" />
+										</p:column>
+									</p:row>
 
 
-							<ui:repeat
-								value="#{jJTeststepexecutionBean.teststepexecutionStructures}"
-								var="teststepexecutionStructure">
-
-								<p:tab title="#{teststepexecutionStructure.teststep.ordering}">
-									<h:panelGrid columns="2">
-										<p:panel>
-											<h:outputText
-												value="#{teststepexecution.teststep.actionstep}" />
-										</p:panel>
-										<p:panel>
-											<h:outputText value="#{teststepexecution.teststep.resultat}" />
-										</p:panel>
-									</h:panelGrid>
-								</p:tab>
-
-
-
-							</ui:repeat>
-
-							<p:tab title="#{teststepexecution.teststep.ordering}">
-								<h:panelGrid columns="2">
-									<p:panel>
-										<h:outputText value="#{teststepexecution.teststep.actionstep}" />
-									</p:panel>
-									<p:panel>
-										<h:outputText value="#{teststepexecution.teststep.resultat}" />
-									</p:panel>
-								</h:panelGrid>
+								</p:panelGrid>
 							</p:tab>
 						</p:tabView>
-						<h:panelGrid columns="2" cellpadding="3">
-
-							<p:selectBooleanButton id="passedButton"
-								value="#{jJTestcaseBean.passed}" onLabel="Passed"
-								offLabel="Failed" onIcon="ui-icon-circle-check"
-								offIcon="ui-icon-alert">
-								<p:ajax
-									listener="#{jJTestcaseBean.onChangeValue(jJTeststepexecutionBean,jJBugBean)}"
-									update="quitButton,commentBug" />
-							</p:selectBooleanButton>
-
-							<p:commandButton id="quitButton" value="Quit"
-								icon="ui-icon-circle-close"
-								actionListener="#{jJTestcaseBean.quitRun(jJTestcaseexecutionBean,jJTeststepexecutionBean,jJBugBean)}"
-								oncomplete="testcaseExecution.hide()"
-								disabled="#{jJTestcaseBean.passed}" />
-
-							<p:inputText id="commentBug"
-								value="#{jJBugBean.jJBug.description}"
-								disabled="#{jJTestcaseBean.passed}" />
-
-							<p:commandButton id="nextButton" value="Next"
-								icon="ui-icon-circle-arrow-e"
-								actionListener="#{jJTestcaseBean.nextTabIndex(jJTestcaseexecutionBean,jJTeststepexecutionBean,jJBugBean)}"
-								update=":runForm:tabView,passedButton,quitButton,commentBug" />
-						</h:panelGrid>
 					</p:scrollPanel>
 				</h:form>
 			</p:outputPanel>

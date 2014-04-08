@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -38,6 +39,35 @@ public class JJTeststepexecutionServiceImpl implements
 
 		TypedQuery<JJTeststepexecution> result = entityManager
 				.createQuery(select);
+		return result.getResultList();
+
+	}
+
+	@Override
+	public List<JJTeststepexecution> getTeststepexecutions(
+			JJTestcaseexecution testcaseexecution, boolean onlyActif) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJTeststepexecution> criteriaQuery = criteriaBuilder
+				.createQuery(JJTeststepexecution.class);
+
+		Root<JJTeststepexecution> from = criteriaQuery
+				.from(JJTeststepexecution.class);
+
+		CriteriaQuery<JJTeststepexecution> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		if (testcaseexecution != null) {
+			predicates.add(criteriaBuilder.equal(from.get("testcaseexecution"),
+					testcaseexecution));
+		}
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+
+		select.where(predicates.toArray(new Predicate[] {}));
+		TypedQuery<JJTeststepexecution> result = entityManager
+				.createQuery(select);
+
 		return result.getResultList();
 
 	}

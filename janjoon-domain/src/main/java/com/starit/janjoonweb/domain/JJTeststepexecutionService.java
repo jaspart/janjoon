@@ -9,6 +9,9 @@ public interface JJTeststepexecutionService {
 
 	public List<JJTeststepexecution> getAllTeststepexecutions();
 
+	public List<JJTeststepexecution> getTeststepexecutions(
+			JJTestcaseexecution testcaseexecution, boolean onlyActif);
+
 	public JJTeststepexecution getTeststepexecutionWithTeststepAndBuild(
 			JJTeststep teststep, JJBuild build);
 
