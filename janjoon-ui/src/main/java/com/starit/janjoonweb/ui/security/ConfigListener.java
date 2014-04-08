@@ -19,6 +19,8 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJCriticityService;
+import com.starit.janjoonweb.domain.JJMessage;
+import com.starit.janjoonweb.domain.JJMessageService;
 import com.starit.janjoonweb.domain.JJPermission;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
@@ -42,6 +44,9 @@ import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.ApplicationBean;
 
 public class ConfigListener implements ServletContextListener {
+
+	@Autowired
+	JJMessageService jJMessageService;
 
 	@Autowired
 	JJProjectService jJProjectService;
@@ -84,6 +89,10 @@ public class ConfigListener implements ServletContextListener {
 
 	@Autowired
 	JJProfileService jJProfileService;
+
+	public void setjJMessageService(JJMessageService jJMessageService) {
+		this.jJMessageService = jJMessageService;
+	}
 
 	public void setjJProjectService(JJProjectService jJProjectService) {
 		this.jJProjectService = jJProjectService;
@@ -194,7 +203,7 @@ public class ConfigListener implements ServletContextListener {
 			}
 		}
 
-		String[] objects = { "JJRequirement", "JJBug" };
+		String[] objects = { "JJRequirement", "JJBug", "JJMessage" };
 
 		for (String object : objects) {
 
@@ -226,6 +235,10 @@ public class ConfigListener implements ServletContextListener {
 					names.add("RESOLVED");
 					names.add("VERIFIED");
 					names.add("CLOSED");
+				} else {
+					names.add("NEW");
+					names.add("CLOSED");
+
 				}
 
 				for (String name : names) {
@@ -670,7 +683,7 @@ public class ConfigListener implements ServletContextListener {
 
 			jJVersionList.get(0).setProduct(product);
 			versions.add(jJVersionList.get(0));
-			
+
 			jJProductService.saveJJProduct(product);
 			jJVersionService.updateJJVersion(jJVersionList.get(0));
 			product.setVersions(versions);
@@ -691,9 +704,9 @@ public class ConfigListener implements ServletContextListener {
 					jJVersionList.get(j + 1).setProduct(product);
 					versions.add(jJVersionList.get(j + 1));
 					jJProductService.saveJJProduct(product);
-					
+
 					jJVersionService.updateJJVersion(jJVersionList.get(j));
-					jJVersionService.updateJJVersion(jJVersionList.get(j+1));
+					jJVersionService.updateJJVersion(jJVersionList.get(j + 1));
 					product.setVersions(versions);
 
 				} else {
@@ -735,13 +748,11 @@ public class ConfigListener implements ServletContextListener {
 					jJVersionService.saveJJVersion(version3);
 
 					versions.add(version3);
-					
+
 					jJProductService.saveJJProduct(product);
 					product.setVersions(versions);
 
 				}
-				
-				
 
 			}
 
@@ -800,6 +811,30 @@ public class ConfigListener implements ServletContextListener {
 						jJTask.setWorkloadPlanned(10);
 						jJTaskService.saveJJTask(jJTask);
 					}
+				}
+			}
+			if (jJMessageService.findAllJJMessages().isEmpty()) {
+				
+				int i = 0;
+				while (i < productList.size()) {
+					
+					for (int j = 0; j < 5; j++) {
+						
+						JJMessage mes = new JJMessage();
+						mes.setName("mes : " + j+"/"+i);
+						mes.setCreatedBy(manager);
+						mes.setContact(manager);
+						mes.setProduct(productList.get(i));
+						mes.setProject(projectList.get(i));
+						mes.setDescription("mesDescription : " + j+"/"+i);
+						mes.setCreationDate(new Date());
+						mes.setEnabled(true);
+						mes.setMessage("message tttttt" + j+"/"+i);
+						jJMessageService.saveJJMessage(mes);
+						
+					}
+					i++;
+
 				}
 			}
 		}

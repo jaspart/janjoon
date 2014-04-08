@@ -522,8 +522,7 @@ public class GitConfigManager extends AbstractConfigManager {
 			if (file.list().length == 0) {
 
 				file.delete();
-				System.out.println("Directory is deleted : "
-						+ file.getAbsolutePath());
+				
 
 			} else {
 
@@ -540,16 +539,13 @@ public class GitConfigManager extends AbstractConfigManager {
 
 				// check the directory again, if empty then delete it
 				if (file.list().length == 0) {
-					file.delete();
-					System.out.println("Directory is deleted : "
-							+ file.getAbsolutePath());
+					file.delete();					
 				}
 			}
 
 		} else {
 			// if file, then delete it
-			file.delete();
-			System.out.println("File is deleted : " + file.getAbsolutePath());
+			file.delete();			
 		}
 	}
 

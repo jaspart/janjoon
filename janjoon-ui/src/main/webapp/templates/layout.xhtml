@@ -11,17 +11,18 @@
 	</h:head>
 	<h:body>
 
-		<h:panelGrid columns="3" styleClass="wrapper">
+		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
 			<p:panel id="menuPanel" header="Menu" styleClass="menu"
 				toggleable="true" toggleOrientation="horizontal"
-				collapsed="#{jJMessageBean.collapsedLayoutPanel}">
+				collapsed="#{jJMessageBean.collapsedLayoutPanel}" >
 				<p:ajax event="toggle"
-					listener="#{jJMessageBean.handleLayoutToggle}" update="menuPanel,contentPanel,messagePanel" />
-				<ui:insert name="menu" >
-					<ui:include src="menu.xhtml"/>
+					listener="#{jJMessageBean.handleLayoutToggle}"
+					update="menuPanel,contentPanel,messagePanel" />
+				<ui:insert name="menu">
+					<ui:include src="menu.xhtml" />
 				</ui:insert>
 			</p:panel>
-			<p:panel styleClass="content">
+			<p:panel  styleClass="content">
 				<ui:insert name="header">
 					<ui:include src="header.xhtml" />
 				</ui:insert>
@@ -38,19 +39,22 @@
 			</p:panel>
 
 			<p:panel id="messagePanel" header="Chat" styleClass="chat"
-				toggleable="true" toggleOrientation="horizontal" style="height:100%;"
-				collapsed="#{jJMessageBean.collapsedMesPanel}">
+				toggleable="true" toggleOrientation="horizontal"
+				style="height:100%;" collapsed="#{jJMessageBean.collapsedMesPanel}">
 				<p:ajax event="toggle" listener="#{jJMessageBean.handleMesToggle}"
-					update="menuPanel,contentPanel,messagePanel" />
-				<p:dataTable id="dataTable1" value="#{jJMessageBean.allJJMessages}"
+					update=":applicatinPanelGrid,menuPanel,messagePanel,contentPanel" />
+				<p:dataTable id="dataTable1" value="#{jJMessageBean.enabledJJMessage}"
 					rowKey="#{mes.id}" var="mes" scrollable="true" scrollHeight="400"
-					rendered="#{loginBean.enable and !jJMessageBean.collapsedMesPanel}" 
-					style="border-spacing:0px;"
-					selectionMode="single" sortBy="#{mes.creationDate}"  >
+					rendered="#{loginBean.enable and !jJMessageBean.collapsedMesPanel}"
+					style="border-spacing:0px;" selectionMode="single"
+					sortBy="#{mes.creationDate}" sortOrder="DESCENDING"
+					>
+
 					<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
 						listener="#{jJMessageBean.onRowSelect}"
 						oncomplete="viewDialogWidget1.show()" />
-					<p:column headerText="Messages" sortBy="creationDate" >
+					
+					<p:column headerText="Messages" sortBy="creationDate">
 						<h:outputText id="viewButton" value="#{mes.message}" />
 						<p:tooltip for="viewButton"
 							value="#{messages.label_view} #{mes.name}" showEffect="fade"
@@ -63,7 +67,7 @@
 					resizable="true" maximizable="true" showEffect="fade"
 					hideEffect="explode">
 					<p:outputPanel id="viewPanel1">
-						<h:form id="viewForm1" enctype="multipart/form-data">
+						<h:form id="viewForm1">
 							<h:panelGrid id="viewPanelGrid1" columns="2"
 								binding="#{jJMessageBean.viewPanel}" styleClass="dialog"
 								columnClasses="col1,col2" />
@@ -74,27 +78,27 @@
 					</p:outputPanel>
 				</p:dialog>
 				<h:form id="messageCreationForm" rendered="#{loginBean.enable}">
-					<p:growl id="creationGrowl" showDetail="true" />					
-						<p:panelGrid columns="1">
+					<p:growl id="creationGrowl" showDetail="true" />
+					<p:panelGrid columns="1">
 
-							<p:outputLabel for="messagedsc" value="Message :" />
-							<p:inputTextarea id="messagedsc" cols="15" rows="6"
-								value="#{jJMessageBean.message.message}" required="true" />
+						<p:outputLabel for="messagedsc" value="Message :" />
+						<p:inputTextarea id="messagedsc" cols="14" rows="6"
+							value="#{jJMessageBean.message.message}" required="true" />
 
-							<p:panelGrid columns="2">
-								<h:outputText value="Save as: " />
-								<p:selectBooleanButton value="#{jJMessageBean.alertOrInfo}" onLabel="Info"
-									offLabel="Alert" onIcon="ui-icon-info" offIcon="ui-icon-alert">
-								</p:selectBooleanButton>
-							</p:panelGrid>
-							<p:commandButton id="submitMes" value="Save"
-									icon="ui-icon-disk"
-									actionListener="#{jJMessageBean.createMessage}"
-									update=":messageCreationForm,creationGrowl" />
-						</p:panelGrid>				
+						<p:panelGrid columns="2">
+							<h:outputText value="Save as: " />
+							<p:selectBooleanButton value="#{jJMessageBean.alertOrInfo}"
+								onLabel="Info" offLabel="Alert" onIcon="ui-icon-info"
+								offIcon="ui-icon-alert">
+							</p:selectBooleanButton>
+						</p:panelGrid>
+						<p:commandButton id="submitMes" value="Save" icon="ui-icon-disk"
+							actionListener="#{jJMessageBean.createMessage}"
+							update=":messageCreationForm,creationGrowl" />
+					</p:panelGrid>
 				</h:form>
 			</p:panel>
-		</h:panelGrid>	
+		</h:panelGrid>
 	</h:body>
 </f:view>
 </html>
