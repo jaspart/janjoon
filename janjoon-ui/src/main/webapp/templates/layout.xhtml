@@ -10,7 +10,6 @@
 	<h:head>
 	</h:head>
 	<h:body>
-
 		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
 			<p:panel id="menuPanel" header="Menu" styleClass="menu"
 				toggleable="true" toggleOrientation="horizontal"
@@ -32,12 +31,10 @@
 					<p:growl id="auth" for="login" styleClass="alert alert-error"
 						showDetail="true" />
 				</p:panel>
-
 				<ui:insert name="footer">
 					<ui:include src="footer.xhtml" />
 				</ui:insert>
 			</p:panel>
-
 			<p:panel id="messagePanel" header="Chat" styleClass="chat"
 				toggleable="true" toggleOrientation="horizontal"
 				style="height:100%;" collapsed="#{jJMessageBean.collapsedMesPanel}">
@@ -47,13 +44,11 @@
 					rowKey="#{mes.id}" var="mes" scrollable="true" scrollHeight="400"
 					rendered="#{loginBean.enable and !jJMessageBean.collapsedMesPanel}"
 					style="border-spacing:0px;" selectionMode="single"
-					sortBy="#{mes.creationDate}" sortOrder="DESCENDING"
-					>
+					sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
 
 					<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
 						listener="#{jJMessageBean.onRowSelect}"
 						oncomplete="viewDialogWidget1.show()" />
-					
 					<p:column headerText="Messages" sortBy="creationDate">
 						<h:outputText id="viewButton" value="#{mes.message}" />
 						<p:tooltip for="viewButton"
@@ -61,7 +56,6 @@
 							hideEffect="fade" />
 					</p:column>
 				</p:dataTable>
-
 				<p:dialog id="viewDialog1" header="#{messages.label_view} JJMessage"
 					modal="true" widgetVar="viewDialogWidget1" dynamic="true"
 					resizable="true" maximizable="true" showEffect="fade"
@@ -80,21 +74,17 @@
 				<h:form id="messageCreationForm" rendered="#{loginBean.enable}">
 					<p:growl id="creationGrowl" showDetail="true" />
 					<p:panelGrid columns="1">
-
 						<p:outputLabel for="messagedsc" value="Message :" />
 						<p:inputTextarea id="messagedsc" cols="14" rows="6"
 							value="#{jJMessageBean.message.message}" required="true" />
-
 						<p:panelGrid columns="2">
-							<h:outputText value="Save as: " />
 							<p:selectBooleanButton value="#{jJMessageBean.alertOrInfo}"
-								onLabel="Info" offLabel="Alert" onIcon="ui-icon-info"
-								offIcon="ui-icon-alert">
+								onLabel="Alert" offLabel="Info" onIcon="ui-icon-alert"
+								offIcon="ui-icon-info">
 							</p:selectBooleanButton>
-						</p:panelGrid>
-						<p:commandButton id="submitMes" value="Save" icon="ui-icon-disk"
-							actionListener="#{jJMessageBean.createMessage}"
-							update=":messageCreationForm,creationGrowl" />
+							<p:commandButton id="submitMes" value="OK"
+								actionListener="#{jJMessageBean.createMessage}"
+								update=":messageCreationForm,creationGrowl" />						</p:panelGrid>
 					</p:panelGrid>
 				</h:form>
 			</p:panel>

@@ -312,29 +312,6 @@ public class JJMessageBean {
 		}
 
 		List<JJCriticity> criticity = jJCriticityBean.getAllJJCriticitys();
-
-		if (alertOrInfo) {
-			System.out.println("info");
-			int i = 0;
-			while (i < criticity.size()) {
-				if (criticity.get(i).getName().equalsIgnoreCase("Info")) {
-					message.setCriticity(criticity.get(i));
-					i = criticity.size();
-				}
-				i++;
-			}
-
-		} else {
-			int i = 0;
-			while (i < criticity.size()) {
-				if (criticity.get(i).getName().equalsIgnoreCase("Alert")) {
-					message.setCriticity(criticity.get(i));
-					i = criticity.size();
-				}
-				i++;
-			}
-			System.out.println("alert");
-		}
 		try {
 			message.setName(message.getMessage().substring(0, 20));
 		} catch (StringIndexOutOfBoundsException c) {
@@ -718,8 +695,6 @@ public class JJMessageBean {
 
 			}
 		}
-
 		return htmlPanelGrid;
-
 	}
 }

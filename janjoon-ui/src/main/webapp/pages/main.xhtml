@@ -34,66 +34,72 @@
 						<p:outputPanel>
 							<h:outputText value="Search all fields:" />
 							<p:inputText id="globalFilter"
-								onkeyup="PF('messageTable').filter()" style="width:200px"
+								onkeyup="PF('messageTable').filter()"
+								style="width:200px"
 								placeholder="Enter keyword" />
 						</p:outputPanel>
 					</f:facet>
-					<p:column style="width:50px !important;">
-						<p:commandButton id="resolveButton" icon="ui-icon-trash"
-							oncomplete="resolveDialogWidget.show()" title="#{messages.label_disable}">
-							<f:setPropertyActionListener value="#{mes}"
-								target="#{jJMessageBean.resolvedJJMessage}" />
-						</p:commandButton>
-						<p:tooltip for="resolveButton" value="#{messages.label_disable}"
-							showEffect="fade" hideEffect="fade" />
-					</p:column>
 					<p:column headerText="Messages" filterBy="message"
 						filterMatchMode="contains" sortBy="message"
-						style="width: 200px !important;height: 5px !important;">
-						<h:outputText value="#{mes.message}" />
+						filterStyle="width: 90%;"
+						style="width: 10% !important;height: 5px !important;">
+						<h:outputText style="width: 90% !important;" value="#{mes.message}" />
 					</p:column>
 					<p:column headerText="Project" filterBy="project.name"
 						sortBy="project.name"
 						filterOptions="#{jJMessageBean.projectOptions}"
 						filterMatchMode="exact"
-						style="width: 100px !important;height: 5px !important;">
+						filterStyle="width: 90%;"
+						style="width: 6% !important;height: 5px !important;">
 						<h:outputText value="#{mes.project.name}" />
 					</p:column>
 					<p:column headerText="Product" filterBy="product.name"
 						sortBy="product.name"
 						filterOptions="#{jJMessageBean.productOptions}"
 						filterMatchMode="exact"
-						style="width: 100px !important;height: 5px !important;">
+						filterStyle="width: 90%;"
+						style="width: 6% !important;height: 5px !important;">
 						<h:outputText value="#{mes.product.name}" />
 					</p:column>
-
 					<p:column headerText="Creator" filterBy="createdBy.name"
 						sortBy="createdBy.name"
 						filterOptions="#{jJMessageBean.creatorOptions}"
 						filterMatchMode="exact"
-						style="width: 100px !important;height: 5px !important;">
+						filterStyle="width: 90%;"
+						style="width: 6% !important;height: 5px !important;">
 						<h:outputText value="#{mes.createdBy.name}" />
 					</p:column>
 					<p:column headerText="Criticity" filterBy="criticity.name"
 						sortBy="criticity.name" filterMatchMode="exact"
-						style="width: 100px !important;height: 5px !important;"
-						filterOptions="#{jJMessageBean.criticityOptions}">
+						style="width: 6% !important;height: 5px !important;"
+						filterOptions="#{jJMessageBean.criticityOptions}"
+						filterStyle="width: 90%;">
 						<h:outputText value="#{mes.criticity.name}" />
 					</p:column>
 					<p:column headerText="Status" sortBy="status.name"
 						filterBy="status.name" filterMatchMode="exact"
 						filterOptions="#{jJMessageBean.statusOptions}"
-						style="width: 100px !important;height: 5px !important;">
+						style="width: 6% !important;height: 5px !important;"
+						filterStyle="width: 90%;">
 						<h:outputText value="#{mes.status.name}" />
 					</p:column>
 					<p:column headerText="Creation Date" sortBy="creationDate"
-						style="width: 100px !important;height: 5px !important;">
-
+						style="width: 6% !important;height: 5px !important;">
 						<h:outputText value="#{mes.creationDate}">
 							<f:converter converterId="extendedDateTimeConverter" />
 							<f:attribute name="pattern" value="dd/MM/yyyy" />
 							<f:attribute name="timeZone" value="UCL" />
 						</h:outputText>
+					</p:column>
+					<p:column headerText="Resolve" style="width:5% !important;">
+						<p:commandButton id="resolveButton" value="resolve"
+							oncomplete="resolveDialogWidget.show()"
+							title="#{messages.label_disable}">
+							<f:setPropertyActionListener value="#{mes}"
+								target="#{jJMessageBean.resolvedJJMessage}" />
+						</p:commandButton>
+						<p:tooltip for="resolveButton" value="#{messages.label_disable}"
+							showEffect="fade" hideEffect="fade" />
 					</p:column>
 				</p:dataTable>
 			</h:form>
