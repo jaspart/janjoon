@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -19,12 +20,9 @@ public class JJBugServiceImpl implements JJBugService {
 		this.entityManager = entityManager;
 	}
 
-	/**
-	 * Get Enabled JJBuild List
-	 */
-
 	@Override
-	public List<JJBug> getAllJJBugs() {
+	public List<JJBug> getBugs(JJProject project, JJTeststep teststep,
+			JJBuild build, boolean onlyActif, boolean sortedByCreationDate) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
 				.createQuery(JJBug.class);
@@ -33,35 +31,34 @@ public class JJBugServiceImpl implements JJBugService {
 
 		CriteriaQuery<JJBug> select = criteriaQuery.select(from);
 
-		Predicate predicate = criteriaBuilder.equal(from.get("enabled"), true);
+		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		select.where(predicate);
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+
+		if (project != null) {
+			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}
+
+		if (teststep != null) {
+			predicates
+					.add(criteriaBuilder.equal(from.get("teststep"), teststep));
+		}
+
+		if (build != null) {
+			predicates.add(criteriaBuilder.equal(from.get("build"), build));
+		}
+
+		select.where(predicates.toArray(new Predicate[] {}));
+
+		if (sortedByCreationDate) {
+			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
+		}
 
 		TypedQuery<JJBug> result = entityManager.createQuery(select);
 		return result.getResultList();
 
 	}
 
-	@Override
-	public JJBug getBugWithTeststepAndProject(JJTeststep teststep, JJProject project) {
-
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder.createQuery(JJBug.class);
-
-		Root<JJBug> from = criteriaQuery.from(JJBug.class);
-
-		CriteriaQuery<JJBug> select = criteriaQuery.select(from);
-
-		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
-		Predicate predicate2 = criteriaBuilder.equal(from.get("teststep"), teststep);
-		Predicate predicate3 = criteriaBuilder.equal(from.get("project"), project);
-
-		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3));
-
-		TypedQuery<JJBug> result = entityManager.createQuery(select);
-		if (result.getResultList().size() > 0)
-			return result.getResultList().get(0);
-		else
-			return null;
-	}
-}	
+}

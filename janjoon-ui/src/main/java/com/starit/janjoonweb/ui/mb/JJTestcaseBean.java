@@ -818,46 +818,55 @@ public class JJTestcaseBean {
 
 		private String status;
 
-		private boolean rendered;
+		private boolean disabled;
 
 		public TestCaseRecap(JJTestcase testcase) {
 			super();
 			this.testcase = testcase;
 
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			JJBuildBean jJBuildBean = (JJBuildBean) session
-					.getAttribute("jJBuildBean");
+			List<JJTeststep> teststeps = jJTeststepService.getTeststeps(
+					testcase, true, true);
 
-			JJBuild build = jJBuildBean.getBuild();
+			if (!teststeps.isEmpty()) {
 
-			if (build != null) {
-				rendered = false;
+				HttpSession session = (HttpSession) FacesContext
+						.getCurrentInstance().getExternalContext()
+						.getSession(false);
+				JJBuildBean jJBuildBean = (JJBuildBean) session
+						.getAttribute("jJBuildBean");
 
-				List<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionService
-						.getTestcaseexecutions(testcase, build, true, true);
+				JJBuild build = jJBuildBean.getBuild();
 
-				if (!testcaseexecutions.isEmpty()) {
-					JJTestcaseexecution testcaseexecution = testcaseexecutions
-							.get(0);
-					if (testcaseexecution.getPassed() != null) {
+				if (build != null) {
+					disabled = false;
 
-						if (testcaseexecution.getPassed()) {
-							status = "SUCCESS";
+					List<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionService
+							.getTestcaseexecutions(testcase, build, true, true);
+
+					if (!testcaseexecutions.isEmpty()) {
+						JJTestcaseexecution testcaseexecution = testcaseexecutions
+								.get(0);
+						if (testcaseexecution.getPassed() != null) {
+
+							if (testcaseexecution.getPassed()) {
+								status = "SUCCESS";
+							} else {
+								status = "FAILED";
+							}
 						} else {
-							status = "FAILED";
+							status = "Non Fini";
 						}
 					} else {
-						status = "Non Fini";
+						status = "NOT RUN";
 					}
-				} else {
-					status = "NOT RUN";
-				}
 
+				} else {
+					disabled = true;
+					status = "Select a Build";
+				}
 			} else {
-				rendered = true;
-				status = "Select a Build";
+				disabled = true;
+				status = "This testcase doesn't have teststeps";
 			}
 
 		}
@@ -878,13 +887,14 @@ public class JJTestcaseBean {
 			this.status = status;
 		}
 
-		public boolean getRendered() {
-			return rendered;
+		public boolean getDisabled() {
+			return disabled;
 		}
 
-		public void setRendered(boolean rendered) {
-			this.rendered = rendered;
+		public void setDisabled(boolean disabled) {
+			this.disabled = disabled;
 		}
+
 	}
 
 }

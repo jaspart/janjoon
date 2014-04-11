@@ -22,6 +22,8 @@ public class JJTestcaseexecutionBean {
 
 	private List<TestCaseexecutionRecap> testCaseexecutionRecaps;
 
+	private Boolean status;
+
 	public JJTestcaseexecution getTestcaseexecution() {
 		return testcaseexecution;
 	}
@@ -65,6 +67,14 @@ public class JJTestcaseexecutionBean {
 		this.testCaseexecutionRecaps = testCaseexecutionRecaps;
 	}
 
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
 	public void loadTestcaseexecution(
 			JJTeststepexecutionBean jJTeststepexecutionBean) {
 
@@ -93,15 +103,34 @@ public class JJTestcaseexecutionBean {
 		} else {
 			newTestcaseexecution(testcase, build);
 		}
-		
-		System.out.println("##########################");
-		System.out.println(testcaseexecution.getId());
-		System.out.println("##########################");
+
+		status = null;
 
 		jJTeststepexecutionBean.loadTeststepexecution();
 
+	}
+
+	public void toto() {
+		testcaseexecution.setPassed(status);
+		System.out.println("testcaseexecution.getPassed() "
+				+ testcaseexecution.getPassed());
+	}
+
+	public void save() {
+		System.out.println("In save testcase execution");
+
+		Boolean status = testcaseexecution.getPassed();
+
+		JJTestcaseexecution tce = jJTestcaseexecutionService
+				.findJJTestcaseexecution(testcaseexecution.getId());
 		
-		
+		System.out.println("JOJO");
+		tce.setPassed(status);
+		tce.setUpdatedDate(new Date());
+		jJTestcaseexecutionService.updateJJTestcaseexecution(tce);
+
+		System.out.println("End save testcase execution");
+
 	}
 
 	private void newTestcaseexecution(JJTestcase testcase, JJBuild build) {
