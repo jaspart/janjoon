@@ -8,14 +8,12 @@ public class MaonClasse {
 
 	public static void main(String[] args)  {
 
-		GitConfigManager ggg=new GitConfigManager("https://github.com/janjoon/ProductName-1.git", "/home/lazher/git/.git/Repository/ProductName 1");
-		TreeNode  t=ggg.listRepositoryContent("integ/14.1");
-		System.out.println(t);
+		GitConfigManager ggg=new GitConfigManager("https://github.com/janjoon/ProductName-1.git", "/home/lazher/git/ProductName 1");
+		
 		JJContact contact=new JJContact();
 		contact.setName("janjoon");
 		contact.setPassword("BeHappy2012");
 		ggg.setjJContact(contact);
-		ggg.checkIn("fjgnkl,");
-		ggg.pushRepository();
+		ggg.addFile("/main/opooooo", "rrrrrrrrrrrrr",false);
 	}
 }

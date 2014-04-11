@@ -426,13 +426,15 @@ public class GitConfigManager extends AbstractConfigManager {
 	}
 
 	@Override
-	public boolean addFile(String path, String name) {
+	public boolean addFile(String path, String name,boolean isFile) {
 
 		File myfile = new File(repository.getDirectory().getParent() + "/"
 				+ path, name);
 		try {
 
 			System.out.println(myfile.getPath());
+			if(!isFile)
+				myfile.mkdirs();
 			myfile.createNewFile();
 			git.add().addFilepattern(".").call();
 			System.out.println("Added file " + myfile + " to repository at "

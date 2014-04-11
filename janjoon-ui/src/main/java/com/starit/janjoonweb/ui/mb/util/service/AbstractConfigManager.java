@@ -73,7 +73,7 @@ public abstract class AbstractConfigManager implements Serializable
 	
 	public abstract String cloneRemoteRepository(String url,String name,String path);
 	
-	public abstract boolean addFile(String Path,String name);
+	public abstract boolean addFile(String Path,String name,boolean isFile);
 	
 	public abstract boolean createRepository (String path);
 	
@@ -86,5 +86,7 @@ public abstract class AbstractConfigManager implements Serializable
 	public abstract ArrayList<String> getAllBranches();
 	
 	public abstract boolean setFileTexte(File file,String texte);
+
+	
 
 }

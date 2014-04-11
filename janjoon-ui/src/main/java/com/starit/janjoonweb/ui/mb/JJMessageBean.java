@@ -21,12 +21,14 @@ import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.ToggleEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJAbstractEntity;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJCriticity;
+import com.starit.janjoonweb.domain.JJCriticityService;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -52,9 +54,11 @@ public class JJMessageBean {
 	private boolean collapsedLayoutPanel = true;
 	private HtmlPanelGrid viewPanel;
 	private JJMessage viewedMessage;
+	
 
 	@PostConstruct
 	public void init() {
+		
 		columns = new ArrayList<String>();
 		columns.add("name");
 		columns.add("description");
@@ -62,7 +66,7 @@ public class JJMessageBean {
 		columns.add("updatedDate");
 		columns.add("message");
 		allJJMessages = jJMessageService.findAllJJMessages();
-		enabledJJMessage=jJMessageService.getMessages(true);
+		enabledJJMessage = jJMessageService.getMessages(true);
 		setMessage(new JJMessage());
 		initJJmessageTable(null);
 
@@ -205,14 +209,14 @@ public class JJMessageBean {
 	}
 
 	public void resolveJJMessage() {
-		
+
 		resolvedJJMessage.setEnabled(false);
 		JJStatus status = jJStatusService.getOneStatus("CLOSED", "JJMessage",
 				true);
 		if (status != null)
 			resolvedJJMessage.setStatus(status);
-		jJMessageService.updateJJMessage(resolvedJJMessage);		
-		String message="message_successfully_disabled";
+		jJMessageService.updateJJMessage(resolvedJJMessage);
+		String message = "message_successfully_disabled";
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				resolvedJJMessage.getName());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -291,7 +295,7 @@ public class JJMessageBean {
 			jJMessageService.saveJJMessage(mes);
 			message = "message_successfully_created";
 		}
-		
+
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJMessage");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -301,17 +305,24 @@ public class JJMessageBean {
 	public void createMessage(ActionEvent e) {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
+				.getExternalContext().getSession(false);		
 
-		JJCriticityBean jJCriticityBean = (JJCriticityBean) session
-				.getAttribute("jJCriticityBean");
-		if (jJCriticityBean == null) {
-			jJCriticityBean = new JJCriticityBean();
-			jJCriticityBean.findAllJJCriticitys();
+		if (!alertOrInfo) {
+			System.out.println("info");
 
+			JJCriticity criticity = jJCriticityService.getCriticityByName("INFO",true);
+			if (criticity != null)
+				message.setCriticity(criticity);
+
+		} else {
+			System.out.println("alert");
+			
+			JJCriticity criticity = jJCriticityService.getCriticityByName("ALERT",true);
+			if (criticity != null)
+				message.setCriticity(criticity);
 		}
 
-		List<JJCriticity> criticity = jJCriticityBean.getAllJJCriticitys();
+
 		try {
 			message.setName(message.getMessage().substring(0, 20));
 		} catch (StringIndexOutOfBoundsException c) {
@@ -323,6 +334,7 @@ public class JJMessageBean {
 
 		if (status != null)
 			message.setStatus(status);
+
 		JJVersionBean jJVersionBean = (JJVersionBean) session
 				.getAttribute("jJVersionBean");
 		JJProductBean jJProductBean = (JJProductBean) session
@@ -330,12 +342,14 @@ public class JJMessageBean {
 		JJProjectBean jJProjectBean = (JJProjectBean) session
 				.getAttribute("jJProjectBean");
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
+
 		if (jJProductBean.getProduct() != null)
 			message.setProduct(jJProductBean.getProduct());
 		if (jJProjectBean.getProject() != null)
 			message.setProject(jJProjectBean.getProject());
 		if (jJVersionBean.getVersion() != null)
 			message.setVersioning(jJVersionBean.getVersion());
+
 		message.setEnabled(true);
 		message.setContact(contact);
 		message.setCreatedBy(contact);

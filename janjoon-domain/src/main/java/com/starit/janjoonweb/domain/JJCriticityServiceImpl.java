@@ -48,4 +48,30 @@ public class JJCriticityServiceImpl implements JJCriticityService {
 
 	}
 
+	@Override
+	public JJCriticity getCriticityByName(String name, boolean onlyActif) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJCriticity> criteriaQuery = criteriaBuilder
+				.createQuery(JJCriticity.class);
+
+		Root<JJCriticity> from = criteriaQuery.from(JJCriticity.class);
+
+		CriteriaQuery<JJCriticity> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+
+		if (name != null) {
+			predicates.add(criteriaBuilder.equal(from.get("name"), name));
+		}
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+		TypedQuery<JJCriticity> result = entityManager.createQuery(select);
+		return result.getResultList().get(0);
+	}
+
 }
