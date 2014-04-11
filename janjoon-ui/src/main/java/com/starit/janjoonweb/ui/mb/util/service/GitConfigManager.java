@@ -428,6 +428,7 @@ public class GitConfigManager extends AbstractConfigManager {
 	@Override
 	public boolean addFile(String path, String name,boolean isFile) {
 
+		path=path.replace(repository.getDirectory().getParent(), "");
 		File myfile = new File(repository.getDirectory().getParent() + "/"
 				+ path, name);
 		try {

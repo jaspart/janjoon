@@ -47,13 +47,8 @@ public class TreeOperation {
 
 	}
 
-	public boolean commitFile(File file) {
-		return false;
-	}
-
 	public boolean addFile(File parent, String name) {
-		
-		
+
 		return configManager.addFile(parent.getPath(), name, true);
 	}
 
@@ -62,37 +57,43 @@ public class TreeOperation {
 		return configManager.addFile(parent.getPath(), name, false);
 	}
 
-	public boolean uploadFile(File directory,UploadedFile uploadedFile)
-	{
-
-		System.out.println("File type: " + uploadedFile.getContentType());
-		System.out.println("File name: " + uploadedFile.getFileName());
-		System.out.println("File size: " + uploadedFile.getSize() + " bytes");
-
-		String prefix = FilenameUtils.getBaseName(uploadedFile.getFileName());
-		String suffix = FilenameUtils.getExtension(uploadedFile.getFileName());
-
-		File file = null;
-		OutputStream output = null;
-
+	public boolean uploadFile(File parent, String uploadedFile, InputStream in)
+			{
+		OutputStream out;
 		try {
-			file = File.createTempFile(prefix + "_", "." + suffix, directory);
-			output = new FileOutputStream(file);
-			IOUtils.copy(uploadedFile.getInputstream(), output);			
+			out = new FileOutputStream(new File(parent.getPath()
+					+"/"+uploadedFile));
+			int read = 0;
+			byte[] bytes = new byte[1024];
+			try {
+				while ((read = in.read(bytes)) != -1) {
 
-			return true;
-			
-		} catch (IOException e) {
-			
-			if (file != null)
-				file.delete();
+					out.write(bytes, 0, read);
+				}
+				in.close();
 
+				out.flush();
+
+				out.close();
+
+				System.out.println("New file created!");
+				return addFile(parent, uploadedFile);
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+				return false;
+			}
+
+			
+		} catch (FileNotFoundException e) {
+			
 			e.printStackTrace();
 			return false;
-			
-		} finally {
-			IOUtils.closeQuietly(output);
 		}
+		
+
+		
+
 	}
 
 }

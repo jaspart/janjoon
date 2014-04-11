@@ -17,12 +17,14 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.ComponentSystemEvent;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.TabCloseEvent;
@@ -39,6 +41,7 @@ import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.service.AbstractConfigManager;
 import com.starit.janjoonweb.ui.mb.util.service.FileMap;
 import com.starit.janjoonweb.ui.mb.util.service.GitConfigManager;
+import com.starit.janjoonweb.ui.mb.util.service.TreeOperation;
 
 @ManagedBean(name = "jJDevelopment")
 @ViewScoped
@@ -47,6 +50,7 @@ public class DevelopmentBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean render;
 	private AbstractConfigManager configManager;
+	private TreeOperation treeOperation;
 	private String type;
 	private int activeTabIndex;
 	private TreeNode tree;
@@ -64,14 +68,13 @@ public class DevelopmentBean implements Serializable {
 	private List<JJTask> tasks;
 	private boolean check;
 	private JJTask task;
+	private String createdFileName;
+	private boolean fileOrFolder = true;
 
-	@SuppressWarnings("deprecation")
 	public DevelopmentBean() throws FileNotFoundException, IOException {
 		// getting value from session
-
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-
 		contact = (JJContact) session.getAttribute("JJContact");
 		JJVersionBean verbean = (JJVersionBean) session
 				.getAttribute("jJVersionBean");
@@ -95,15 +98,18 @@ public class DevelopmentBean implements Serializable {
 
 		configuration = confbean.getjJconfiguration();
 
-		message = new JJMessage();
-		System.out.println(contact.getName());
-		tasks = prodbean.getTasksByProduct(product, project);
-		for (JJTask t : tasks) {
-			System.out.println(t.getName() + "--" + configuration.getName());
-		}
-
 		if (getConfigManager() != null && version != null && product != null) {
+
+			message = new JJMessage();
+			System.out.println(contact.getName());
+			tasks = prodbean.getTasksByProduct(product, project);
+			for (JJTask t : tasks) {
+				System.out
+						.println(t.getName() + "--" + configuration.getName());
+			}
+
 			render = true;
+			treeOperation = new TreeOperation(configManager);
 			tree = configManager.listRepositoryContent(version.getName());
 
 			selectedTree = getTree();
@@ -127,8 +133,7 @@ public class DevelopmentBean implements Serializable {
 						"Please Select a project and a version ",
 						"Project and version are set to null");
 				FacesContext.getCurrentInstance().addMessage(null, message);
-				FacesContext context = FacesContext.getCurrentInstance();
-				context.getExternalContext().getFlash().setKeepMessages(true);
+
 			} else {
 				if (version == null) {
 
@@ -137,8 +142,6 @@ public class DevelopmentBean implements Serializable {
 							"Please Select a version ",
 							"Version is set to null");
 					FacesContext.getCurrentInstance().addMessage(null, message);
-					FacesContext context = FacesContext.getCurrentInstance();
-					context.getExternalContext().getFlash().setKeepMessages(true);
 
 				} else {
 					FacesMessage message = new FacesMessage(
@@ -146,13 +149,79 @@ public class DevelopmentBean implements Serializable {
 							"Product not available on the version control manager.",
 							"Project  not available");
 					FacesContext.getCurrentInstance().addMessage(null, message);
-					FacesContext context = FacesContext.getCurrentInstance();
-					context.getExternalContext().getFlash().setKeepMessages(true);
+
 				}
 			}
 		}
-		
-		session.putValue("jJDevelopment", this);
+		session.setAttribute("jJDevelopment", this);
+	}
+
+	public void reloadRepository(ComponentSystemEvent e)
+			throws FileNotFoundException, IOException {
+
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+
+		JJVersionBean verbean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
+
+		JJProductBean prodbean = (JJProductBean) session
+				.getAttribute("jJProductBean");
+
+		if (!(product == prodbean.getProduct() && version == verbean
+				.getVersion())) {
+			if (verbean != null) {
+				if (verbean.getVersion() != null) {
+					version = verbean.getVersion();
+				}
+			}
+
+			product = prodbean.getProduct();
+			if (version != null && product != null) {
+				DevelopmentBean jJDevelopment = (DevelopmentBean) session
+						.getAttribute("jJDevelopment");
+				jJDevelopment = new DevelopmentBean();
+
+			} else {
+
+				if (product == null) {
+					FacesMessage message = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"Please Select a project and a version ",
+							"Project and version are set to null");
+					FacesContext.getCurrentInstance().addMessage(null, message);
+
+				} else {
+					if (version == null) {
+
+						FacesMessage message = new FacesMessage(
+								FacesMessage.SEVERITY_ERROR,
+								"Please Select a version ",
+								"Version is set to null");
+						FacesContext.getCurrentInstance().addMessage(null,
+								message);
+
+					}
+				}
+			}
+		} else {
+			JJProjectBean jJProjectBean = (JJProjectBean) session
+					.getAttribute("jJProjectBean");
+			if (project != jJProjectBean.getProject()) {
+				DevelopmentBean jJDevelopment = (DevelopmentBean) session
+						.getAttribute("jJDevelopment");
+				jJDevelopment.setTasks(prodbean.getTasksByProduct(
+						prodbean.getProduct(), jJProjectBean.getProject()));
+			}
+			if (!render) {
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR,
+						"Product not available on the version control manager.",
+						"Project  not available");
+				FacesContext.getCurrentInstance().addMessage(null, message);
+
+			}
+		}
 
 	}
 
@@ -198,6 +267,14 @@ public class DevelopmentBean implements Serializable {
 
 	public void setConfigManager(AbstractConfigManager configManager) {
 		this.configManager = configManager;
+	}
+
+	public TreeOperation getTreeOperation() {
+		return treeOperation;
+	}
+
+	public void setTreeOperation(TreeOperation treeOperation) {
+		this.treeOperation = treeOperation;
 	}
 
 	public String getType() {
@@ -345,6 +422,22 @@ public class DevelopmentBean implements Serializable {
 
 	public void setMessageBean(JJMessageBean messageBean) {
 		this.messageBean = messageBean;
+	}
+
+	public String getCreatedFileName() {
+		return createdFileName;
+	}
+
+	public void setCreatedFileName(String createdFileName) {
+		this.createdFileName = createdFileName;
+	}
+
+	public boolean isFileOrFolder() {
+		return fileOrFolder;
+	}
+
+	public void setFileOrFolder(boolean fileOrFolder) {
+		this.fileOrFolder = fileOrFolder;
 	}
 
 	public void pull() throws FileNotFoundException, IOException {
@@ -497,7 +590,6 @@ public class DevelopmentBean implements Serializable {
 				.println("---------------------------------------------------------");
 		CodeMirror texte = (CodeMirror) event.getComponent();
 		// File f=texte.
-
 		// System.out.println(texte.getValue() + "---");
 		texte.setSubmittedValue(texte.getValue());
 	}
@@ -553,15 +645,6 @@ public class DevelopmentBean implements Serializable {
 
 	}
 
-	// public List<String> complete(final CompleteEvent event) {
-	// final ArrayList<String> suggestions = new ArrayList<String>();
-	// CodeMirror cd=(CodeMirror) event.getComponent();
-	// System.out.println(cd.getMode());
-	// suggestions.add("context: " + event.getContext());
-	// suggestions.add("token: " + event.getToken());
-	// return suggestions;
-	// }
-
 	public int contains(File f) {
 		int i = 0;
 		int j = -1;
@@ -576,4 +659,101 @@ public class DevelopmentBean implements Serializable {
 
 	}
 
+	public void deleteFile() {
+
+		File f = (File) selectedTree.getData();
+		selectedTree.getChildren().clear();
+		selectedTree.getParent().getChildren().remove(selectedTree);
+		selectedTree.setParent(null);
+		System.out.println("deletFile" + f.getName());
+		treeOperation.deleteFile(f);
+		int i = contains(f);
+		if (i != -1) {
+			files.remove(i);
+		}
+		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"File deleted", f.getName() + " supprimé avec succes");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+
+	}
+
+	public void commitFile() {
+		File f = (File) selectedTree.getData();
+		configManager.checkIn("commitFile" + f.getName());
+		System.out.println("commitFile");
+		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"File commited", f.getName() + " ajouté au depôt avec succes");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+
+	public void CreateFile() {
+
+		FacesMessage msg = null;
+		if (fileOrFolder) {
+			if (treeOperation.addFile((File) selectedTree.getData(),
+					createdFileName)) {
+				msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"File Created", createdFileName + " créé avec succes");
+				tree = configManager.listRepositoryContent(version.getName());
+				System.out.println("kamalna file ");
+			} else {
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Problem in File Creation",
+						"erreur lors de la création du fichier "
+								+ createdFileName);
+
+			}
+
+		} else {
+			if (treeOperation.addFolder((File) selectedTree.getData(),
+					createdFileName)) {
+				msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Folder Created", createdFileName + " créé avec succes");
+				tree = configManager.listRepositoryContent(version.getName());
+				System.out.println("kamalna Folder ");
+			} else {
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Problem in Folder Creation",
+						"erreur lors de la création du dossier "
+								+ createdFileName);
+
+			}
+
+		}
+		createdFileName = "";
+		fileOrFolder = true;
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("createFileDialogWidget.hide()");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+
+	public void handleFileUpload(FileUploadEvent event) {
+
+		try {
+			boolean upload = treeOperation.uploadFile((File) selectedTree
+					.getData(), event.getFile().getFileName(), event.getFile()
+					.getInputstream());
+			if (upload) {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Succesful", event.getFile().getFileName()
+								+ " is uploaded.");
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				tree = configManager.listRepositoryContent(version.getName());
+				RequestContext context = RequestContext.getCurrentInstance();
+				context.execute("createFileDialogWidget.hide()");
+			} else {
+				FacesMessage msg = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "Error", event.getFile()
+								.getFileName() + " is not uploaded.");
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+		} catch (IOException e) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Error", event.getFile().getFileName()
+							+ " is not uploaded.");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+		
+
+	}
 }

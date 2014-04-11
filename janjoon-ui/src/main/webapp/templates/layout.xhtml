@@ -13,7 +13,7 @@
 		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
 			<p:panel id="menuPanel" header="Menu" styleClass="menu"
 				toggleable="true" toggleOrientation="horizontal"
-				collapsed="#{jJMessageBean.collapsedLayoutPanel}" >
+				collapsed="#{jJMessageBean.collapsedLayoutPanel}">
 				<p:ajax event="toggle"
 					listener="#{jJMessageBean.handleLayoutToggle}"
 					update="menuPanel,contentPanel,messagePanel" />
@@ -21,7 +21,7 @@
 					<ui:include src="menu.xhtml" />
 				</ui:insert>
 			</p:panel>
-			<p:panel  styleClass="content">
+			<p:panel styleClass="content">
 				<ui:insert name="header">
 					<ui:include src="header.xhtml" />
 				</ui:insert>
@@ -29,7 +29,7 @@
 				<p:panel id="contentPanel" styleClass="content">
 					<ui:insert name="content" />
 					<p:growl id="auth" for="login" styleClass="alert alert-error"
-						showDetail="true" />
+						showDetail="true" life="2000" />
 				</p:panel>
 				<ui:insert name="footer">
 					<ui:include src="footer.xhtml" />
@@ -40,8 +40,9 @@
 				style="height:100%;" collapsed="#{jJMessageBean.collapsedMesPanel}">
 				<p:ajax event="toggle" listener="#{jJMessageBean.handleMesToggle}"
 					update=":applicatinPanelGrid,menuPanel,messagePanel,contentPanel" />
-				<p:dataTable id="dataTable1" value="#{jJMessageBean.enabledJJMessage}"
-					rowKey="#{mes.id}" var="mes" scrollable="true" scrollHeight="400"
+				<p:dataTable id="dataTable1"
+					value="#{jJMessageBean.enabledJJMessage}" rowKey="#{mes.id}"
+					var="mes" scrollable="true" scrollHeight="400"
 					rendered="#{loginBean.enable and !jJMessageBean.collapsedMesPanel}"
 					style="border-spacing:0px;" selectionMode="single"
 					sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
@@ -72,7 +73,7 @@
 					</p:outputPanel>
 				</p:dialog>
 				<h:form id="messageCreationForm" rendered="#{loginBean.enable}">
-					<p:growl id="creationGrowl" showDetail="true" />
+					<p:growl id="creationGrowl" showDetail="true" life="2000" />
 					<p:panelGrid columns="1">
 						<p:outputLabel for="messagedsc" value="Message :" />
 						<p:inputTextarea id="messagedsc" cols="14" rows="6"
@@ -84,11 +85,15 @@
 							</p:selectBooleanButton>
 							<p:commandButton id="submitMes" value="OK"
 								actionListener="#{jJMessageBean.createMessage}"
-								update=":messageCreationForm,creationGrowl" />						</p:panelGrid>
+								update=":messageCreationForm,creationGrowl" />
+						</p:panelGrid>
 					</p:panelGrid>
 				</h:form>
 			</p:panel>
 		</h:panelGrid>
+		<script type="text/javascript">
+			jQuery("div.ui-growl").remove();
+		</script>
 	</h:body>
 </f:view>
 </html>

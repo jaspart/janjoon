@@ -13,7 +13,7 @@
 	<f:event listener="#{loginBean.loadingMain}" type="preRenderView" />
 	<h:form prependId="false" id="headerForm">
 
-		<p:growl id="growlHeader" showDetail="true" sticky="true" />
+		<p:growl id="growlHeader" showDetail="true" sticky="true" life="2000"/>
 		<h:panelGrid id="panelMenu" columns="3" cellpadding="2"
 			style="background-color:white;">
 
