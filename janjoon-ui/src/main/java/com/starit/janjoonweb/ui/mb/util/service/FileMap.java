@@ -23,6 +23,8 @@ public class FileMap {
 		this.texte = texte;
 		this.file = file;
 		this.mode=Files.probeContentType(file.toPath());
+		if(this.mode==null)
+			this.mode="text";
 		if (this.mode.equalsIgnoreCase("application/javascript"))
 				this.mode="javascript";
 		

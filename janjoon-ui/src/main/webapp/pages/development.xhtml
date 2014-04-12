@@ -89,7 +89,7 @@
 													var="file" animate="true"
 													selection="#{jJDevelopment.selectedTree}"
 													selectionMode="single">
-													<p:ajax event="select" global="false"
+													<p:ajax event="select"
 														update=":form:messages,:form:tabView"
 														listener="#{jJDevelopment.onSelectTree}" />
 													<p:treeNode type="folder"
@@ -142,9 +142,9 @@
 									<p:ajax event="tabChange"
 										listener="#{jJDevelopment.onChangeTab}" update=":form:tabView" />
 									<p:tab title="#{tab.title}" closable="true">
-										<pe:codeMirror id="codeMirror1" mode="#{tab.mode}" autoformat="true"										
-											widgetVar="myCodeMirror" theme="eclipse" value="#{tab.texte}"
-											lineNumbers="true" tabSize="150"
+										<pe:codeMirror id="codeMirror1" mode="#{tab.mode}"
+											autoformat="true" widgetVar="myCodeMirror" theme="eclipse"
+											value="#{tab.texte}" lineNumbers="true" tabSize="150"
 											extraKeys="{ 'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);}}">
 											<p:ajax event="blur"
 												listener="#{jJDevelopment.valueChangeHandlerCodeMirror}" />
@@ -287,7 +287,7 @@
 			<ui:insert name="highlight">
 				<script type="text/javascript"
 					src="#{request.contextPath}/syntaxhighlighter/shCore.js"></script>
-		
+
 				<script type="text/javascript"
 					src="#{request.contextPath}/syntaxhighlighter/shBrushXml.js"></script>
 				<script type="text/javascript"
