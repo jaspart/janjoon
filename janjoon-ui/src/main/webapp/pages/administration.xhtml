@@ -57,6 +57,14 @@
 					</ui:insert>
 				</h:panelGrid>
 			</p:tab>
+			
+			<p:tab id="tabStatus" title="Status">
+				<h:panelGrid columns="1" cellpadding="3">
+					<ui:insert name="status">
+						<ui:include src="status.xhtml" />
+					</ui:insert>
+				</h:panelGrid>
+			</p:tab>
 
 			<p:tab id="tabWorkflow" title="Workflow">
 				<h:panelGrid columns="1" cellpadding="3">

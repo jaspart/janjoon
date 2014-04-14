@@ -689,34 +689,76 @@ public class DevelopmentBean implements Serializable {
 	public void CreateFile() {
 
 		FacesMessage msg = null;
-		if (fileOrFolder) {
-			if (treeOperation.addFile((File) selectedTree.getData(),
-					createdFileName)) {
-				msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"File Created", createdFileName + " créé avec succes");
-				tree = configManager.listRepositoryContent(version.getName());
-				System.out.println("kamalna file ");
-			} else {
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-						"Problem in File Creation",
-						"erreur lors de la création du fichier "
-								+ createdFileName);
+		if (selectedTree != null) {
+			if (fileOrFolder) {
+				if (treeOperation.addFile(version.getName(),
+						(File) selectedTree.getData(), createdFileName)) {
+					msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+							"File Created", createdFileName
+									+ " créé avec succes");
+					tree = configManager.listRepositoryContent(version
+							.getName());
+					System.out.println("kamalna file ");
+				} else {
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Problem in File Creation",
+							"erreur lors de la création du fichier "
+									+ createdFileName);
 
+				}
+
+			} else {
+				if (treeOperation.addFolder(version.getName(),
+						(File) selectedTree.getData(), createdFileName)) {
+					msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+							"Folder Created", createdFileName
+									+ " créé avec succes");
+					tree = configManager.listRepositoryContent(version
+							.getName());
+					System.out.println("kamalna Folder ");
+				} else {
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Problem in Folder Creation",
+							"erreur lors de la création du dossier "
+									+ createdFileName);
+
+				}
 			}
 
 		} else {
-			if (treeOperation.addFolder((File) selectedTree.getData(),
-					createdFileName)) {
-				msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"Folder Created", createdFileName + " créé avec succes");
-				tree = configManager.listRepositoryContent(version.getName());
-				System.out.println("kamalna Folder ");
-			} else {
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-						"Problem in Folder Creation",
-						"erreur lors de la création du dossier "
-								+ createdFileName);
+			if (fileOrFolder) {
+				if (treeOperation.addFile(version.getName(), null,
+						createdFileName)) {
+					msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+							"File Created", createdFileName
+									+ " créé avec succes");
+					tree = configManager.listRepositoryContent(version
+							.getName());
+					System.out.println("kamalna file ");
+				} else {
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Problem in File Creation",
+							"erreur lors de la création du fichier "
+									+ createdFileName);
 
+				}
+
+			} else {
+				if (treeOperation.addFolder(version.getName(), null,
+						createdFileName)) {
+					msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+							"Folder Created", createdFileName
+									+ " créé avec succes");
+					tree = configManager.listRepositoryContent(version
+							.getName());
+					System.out.println("kamalna Folder ");
+				} else {
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Problem in Folder Creation",
+							"erreur lors de la création du dossier "
+									+ createdFileName);
+
+				}
 			}
 
 		}
@@ -730,9 +772,17 @@ public class DevelopmentBean implements Serializable {
 	public void handleFileUpload(FileUploadEvent event) {
 
 		try {
-			boolean upload = treeOperation.uploadFile((File) selectedTree
-					.getData(), event.getFile().getFileName(), event.getFile()
-					.getInputstream());
+			boolean upload;
+			if (selectedTree != null)
+				upload = treeOperation.uploadFile(version.getName(),
+						(File) selectedTree.getData(), event.getFile()
+								.getFileName(), event.getFile()
+								.getInputstream());
+			else
+				upload = treeOperation.uploadFile(version.getName(), null,
+						event.getFile().getFileName(), event.getFile()
+								.getInputstream());
+
 			if (upload) {
 				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
 						"Succesful", event.getFile().getFileName()
@@ -753,7 +803,10 @@ public class DevelopmentBean implements Serializable {
 							+ " is not uploaded.");
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-		
 
+	}
+
+	public void addToRoot(ActionEvent e) {
+		selectedTree = null;
 	}
 }

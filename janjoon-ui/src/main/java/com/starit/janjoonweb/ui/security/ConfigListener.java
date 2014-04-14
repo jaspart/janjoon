@@ -15,6 +15,8 @@ import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
+import com.starit.janjoonweb.domain.JJConfiguration;
+import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJCriticity;
@@ -47,6 +49,9 @@ public class ConfigListener implements ServletContextListener {
 
 	@Autowired
 	JJMessageService jJMessageService;
+
+	@Autowired
+	JJConfigurationService jJConfigurationService;
 
 	@Autowired
 	JJProjectService jJProjectService;
@@ -92,6 +97,11 @@ public class ConfigListener implements ServletContextListener {
 
 	public void setjJMessageService(JJMessageService jJMessageService) {
 		this.jJMessageService = jJMessageService;
+	}
+
+	public void setjJConfigurationService(
+			JJConfigurationService jJConfigurationService) {
+		this.jJConfigurationService = jJConfigurationService;
 	}
 
 	public void setjJProjectService(JJProjectService jJProjectService) {
@@ -177,6 +187,17 @@ public class ConfigListener implements ServletContextListener {
 				criticity.setLevelCriticity(name.length());
 				jJCriticityService.saveJJCriticity(criticity);
 			}
+		}
+
+		if (jJConfigurationService.findAllJJConfigurations().isEmpty()) {
+			JJConfiguration configuration = new JJConfiguration();
+			configuration.setName("ConfigurationManager");
+			configuration.setCreationDate(new Date());
+			configuration.setDescription("Test Configuration Manager");
+			configuration.setParam("git");
+			configuration.setVal("https://github.com/janjoon/");
+			configuration.setEnabled(true);
+			jJConfigurationService.saveJJConfiguration(configuration);
 		}
 
 		if (jJBuildService.getBuilds(null, false, true).isEmpty()) {
@@ -814,24 +835,24 @@ public class ConfigListener implements ServletContextListener {
 				}
 			}
 			if (jJMessageService.findAllJJMessages().isEmpty()) {
-				
+
 				int i = 0;
 				while (i < productList.size()) {
-					
+
 					for (int j = 0; j < 5; j++) {
-						
+
 						JJMessage mes = new JJMessage();
-						mes.setName("mes : " + j+"/"+i);
+						mes.setName("mes : " + j + "/" + i);
 						mes.setCreatedBy(manager);
 						mes.setContact(manager);
 						mes.setProduct(productList.get(i));
 						mes.setProject(projectList.get(i));
-						mes.setDescription("mesDescription : " + j+"/"+i);
+						mes.setDescription("mesDescription : " + j + "/" + i);
 						mes.setCreationDate(new Date());
 						mes.setEnabled(true);
-						mes.setMessage("message tttttt" + j+"/"+i);
+						mes.setMessage("message tttttt" + j + "/" + i);
 						jJMessageService.saveJJMessage(mes);
-						
+
 					}
 					i++;
 

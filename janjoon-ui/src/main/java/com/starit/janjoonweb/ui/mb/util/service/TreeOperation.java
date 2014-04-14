@@ -47,22 +47,29 @@ public class TreeOperation {
 
 	}
 
-	public boolean addFile(File parent, String name) {
-
-		return configManager.addFile(parent.getPath(), name, true);
+	public boolean addFile(String version,File parent, String name) {
+		if (parent != null)
+			return configManager.addFile(parent.getPath(), name, true);
+		else
+			return configManager.addFile(version, name, true);
 	}
 
-	public boolean addFolder(File parent, String name) {
+	public boolean addFolder(String version,File parent, String name) {
 
-		return configManager.addFile(parent.getPath(), name, false);
+		if (parent != null)
+			return configManager.addFile(parent.getPath(), name, false);
+		else
+			return configManager.addFile(version, name, false);
 	}
 
-	public boolean uploadFile(File parent, String uploadedFile, InputStream in)
-			{
+	public boolean uploadFile(String version,File parent, String uploadedFile, InputStream in) {
 		OutputStream out;
 		try {
-			out = new FileOutputStream(new File(parent.getPath()
-					+"/"+uploadedFile));
+			if (parent != null)
+				out = new FileOutputStream(new File(parent.getPath() + "/"
+						+ uploadedFile));
+			else
+				out = new FileOutputStream(new File("/"+configManager.getPath()+"/"+version+"/"+uploadedFile));
 			int read = 0;
 			byte[] bytes = new byte[1024];
 			try {
@@ -77,22 +84,18 @@ public class TreeOperation {
 				out.close();
 
 				System.out.println("New file created!");
-				return addFile(parent, uploadedFile);
+				return addFile(version,parent, uploadedFile);
 			} catch (IOException e) {
-				
+
 				e.printStackTrace();
 				return false;
 			}
 
-			
 		} catch (FileNotFoundException e) {
-			
+
 			e.printStackTrace();
 			return false;
 		}
-		
-
-		
 
 	}
 

@@ -14,6 +14,8 @@ public class MaonClasse {
 		contact.setName("janjoon");
 		contact.setPassword("BeHappy2012");
 		ggg.setjJContact(contact);
-		ggg.addFile("/main/opooooo", "rrrrrrrrrrrrr",false);
+		ggg.addFile("/main/opooooo", "ggggggggggggg",true);
+		String s="rrrrrrrrrrrrrrrrrrrrrrrrrrrzerfze";
+		System.out.println(s.replace("ezrzefrsdfsdfe", ""));
 	}
 }

@@ -2,6 +2,7 @@ package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,6 +11,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
 
 public class JJStatusServiceImpl implements JJStatusService {
 
@@ -76,33 +79,51 @@ public class JJStatusServiceImpl implements JJStatusService {
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
+		
+		if (names != null) {
+			if (names.isEmpty()) {
 
-		if (names.isEmpty()) {
+				select.where(criteriaBuilder.and(predicates
+						.toArray(new Predicate[] {})));
+			} else {
 
-			select.where(criteriaBuilder.and(predicates
-					.toArray(new Predicate[] {})));
-		} else {
+				List<Predicate> namePredicates = new ArrayList<Predicate>();
+				for (String name : names) {
 
-			List<Predicate> namePredicates = new ArrayList<Predicate>();
-			for (String name : names) {
+					namePredicates.add(criteriaBuilder.or(criteriaBuilder
+							.notEqual(from.get("name"), name)));
 
-				namePredicates.add(criteriaBuilder.or(criteriaBuilder.notEqual(
-						from.get("name"), name)));
+				}
 
+				Predicate namePredicate = criteriaBuilder.and(namePredicates
+						.toArray(new Predicate[] {}));
+				predicates.add(namePredicate);
+				
 			}
-
-			Predicate namePredicate = criteriaBuilder.and(namePredicates
-					.toArray(new Predicate[] {}));
-			predicates.add(namePredicate);
-			select.where(criteriaBuilder.and(predicates
-					.toArray(new Predicate[] {})));
 		}
+		select.where(criteriaBuilder.and(predicates
+				.toArray(new Predicate[] {})));
 
 		if (sortedByName) {
 			select.orderBy(criteriaBuilder.asc(from.get("name")));
 		}
 		TypedQuery<JJStatus> result = entityManager.createQuery(select);
 		return result.getResultList();
+	}
+	@Override
+	public List<String> getTablesName() {
+
+		Metamodel model = entityManager.getMetamodel();
+		model.getEntities();
+
+		List<String> tableNames = new ArrayList<String>();
+
+		Set<EntityType<?>> allEntityTypes = model.getEntities();
+		for (EntityType<?> entityType : allEntityTypes) {
+			tableNames.add(entityType.getName());
+		}
+
+		return tableNames;
 	}
 
 }

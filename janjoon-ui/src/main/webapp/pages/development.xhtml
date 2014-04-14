@@ -105,6 +105,14 @@
 													</p:treeNode>
 												</p:tree>
 											</p:scrollPanel>
+											<p:commandButton value="#{messages.dev_uploadFile}"
+												icon="ui-icon-arrowthickstop-1-n" immediate="true"
+												actionListener="#{jJDevelopment.addToRoot}"
+												oncomplete="uploadFileDialogWidget.show()" />
+											<p:commandButton value="#{messages.dev_addFile}"
+												icon="ui-icon-document" immediate="true"
+												actionListener="#{jJDevelopment.addToRoot}"
+												oncomplete="createFileDialogWidget.show()" />
 										</p:panel>
 									</p:column>
 								</p:row>

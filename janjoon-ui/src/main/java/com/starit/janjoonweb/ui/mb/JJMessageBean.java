@@ -54,11 +54,10 @@ public class JJMessageBean {
 	private boolean collapsedLayoutPanel = true;
 	private HtmlPanelGrid viewPanel;
 	private JJMessage viewedMessage;
-	
 
 	@PostConstruct
 	public void init() {
-		
+
 		columns = new ArrayList<String>();
 		columns.add("name");
 		columns.add("description");
@@ -117,6 +116,8 @@ public class JJMessageBean {
 	}
 
 	public JJMessage getViewedMessage() {
+		if (viewedMessage == null)
+			viewedMessage = new JJMessage();
 		return viewedMessage;
 	}
 
@@ -305,23 +306,24 @@ public class JJMessageBean {
 	public void createMessage(ActionEvent e) {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);		
+				.getExternalContext().getSession(false);
 
 		if (!alertOrInfo) {
 			System.out.println("info");
 
-			JJCriticity criticity = jJCriticityService.getCriticityByName("INFO",true);
+			JJCriticity criticity = jJCriticityService.getCriticityByName(
+					"INFO", true);
 			if (criticity != null)
 				message.setCriticity(criticity);
 
 		} else {
 			System.out.println("alert");
-			
-			JJCriticity criticity = jJCriticityService.getCriticityByName("ALERT",true);
+
+			JJCriticity criticity = jJCriticityService.getCriticityByName(
+					"ALERT", true);
 			if (criticity != null)
 				message.setCriticity(criticity);
 		}
-
 
 		try {
 			message.setName(message.getMessage().substring(0, 20));
@@ -456,7 +458,14 @@ public class JJMessageBean {
 
 				HtmlOutputText createdByValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				createdByValue.setValue(viewedMessage.getCreatedBy().getName());
+				createdByValue
+						.setValueExpression(
+								"value",
+								expressionFactory
+										.createValueExpression(
+												elContext,
+												"#{jJMessageBean.viewedMessage.createdBy.name}",
+												String.class));
 				htmlPanelGrid.getChildren().add(createdByValue);
 
 			}
@@ -487,7 +496,7 @@ public class JJMessageBean {
 				htmlPanelGrid.getChildren().add(updatedByLabel);
 				HtmlOutputText updatedByValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				updatedByValue.setValue(viewedMessage.getUpdatedBy().getName());
+				updatedByValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.viewedMessage.updatedBy.name}", String.class));
 				htmlPanelGrid.getChildren().add(updatedByValue);
 
 			}
@@ -531,7 +540,10 @@ public class JJMessageBean {
 
 				HtmlOutputText bugValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				bugValue.setValue(viewedMessage.getBug().getName());
+				bugValue.setValueExpression("value", expressionFactory
+						.createValueExpression(elContext,
+								"#{jJMessageBean.viewedMessage.bug.name}",
+								String.class));
 				htmlPanelGrid.getChildren().add(bugValue);
 			}
 			if (viewedMessage.getBuild() != null) {
@@ -543,7 +555,10 @@ public class JJMessageBean {
 
 				HtmlOutputText buildValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				buildValue.setValue(viewedMessage.getBuild().getName());
+				buildValue.setValueExpression("value", expressionFactory
+						.createValueExpression(elContext,
+								"#{jJMessageBean.viewedMessage.build.name}",
+								String.class));
 				htmlPanelGrid.getChildren().add(buildValue);
 			}
 
@@ -556,7 +571,10 @@ public class JJMessageBean {
 
 				HtmlOutputText chapterValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				chapterValue.setValue(viewedMessage.getChapter().getName());
+				chapterValue.setValueExpression("value", expressionFactory
+						.createValueExpression(elContext,
+								"#{jJMessageBean.viewedMessage.chapter.name}",
+								String.class));
 				htmlPanelGrid.getChildren().add(chapterValue);
 			}
 			if (viewedMessage.getContact() != null) {
@@ -568,7 +586,10 @@ public class JJMessageBean {
 
 				HtmlOutputText contactValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				contactValue.setValue(viewedMessage.getContact().getName());
+				contactValue.setValueExpression("value", expressionFactory
+						.createValueExpression(elContext,
+								"#{jJMessageBean.viewedMessage.contact.name}",
+								String.class));
 				htmlPanelGrid.getChildren().add(contactValue);
 			}
 			if (viewedMessage.getCriticity() != null) {
@@ -580,7 +601,10 @@ public class JJMessageBean {
 
 				HtmlOutputText criticityValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				criticityValue.setValue(viewedMessage.getCriticity().getName());
+				criticityValue.setValueExpression("value", expressionFactory
+						.createValueExpression(elContext,
+								"#{jJMessageBean.viewedMessage.criticity.name}",
+								String.class));
 				htmlPanelGrid.getChildren().add(criticityValue);
 			}
 			if (viewedMessage.getImportance() != null) {
@@ -592,8 +616,10 @@ public class JJMessageBean {
 
 				HtmlOutputText importanceValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				importanceValue.setValue(viewedMessage.getImportance()
-						.getName());
+				importanceValue.setValueExpression("value", expressionFactory
+						.createValueExpression(elContext,
+								"#{jJMessageBean.viewedMessage.importance.name}",
+								String.class));
 				htmlPanelGrid.getChildren().add(importanceValue);
 			}
 			if (viewedMessage.getProduct() != null) {
@@ -605,7 +631,10 @@ public class JJMessageBean {
 
 				HtmlOutputText productValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				productValue.setValue(viewedMessage.getProduct().getName());
+				productValue.setValueExpression("value", expressionFactory
+						.createValueExpression(elContext,
+								"#{jJMessageBean.viewedMessage.product.name}",
+								String.class));
 				htmlPanelGrid.getChildren().add(productValue);
 				if (viewedMessage.getVersioning() != null) {
 					HtmlOutputText versioningLabel = (HtmlOutputText) application
@@ -616,8 +645,10 @@ public class JJMessageBean {
 
 					HtmlOutputText versioningValue = (HtmlOutputText) application
 							.createComponent(HtmlOutputText.COMPONENT_TYPE);
-					versioningValue.setValue(viewedMessage.getVersioning()
-							.getName());
+					versioningValue.setValueExpression("value", expressionFactory
+							.createValueExpression(elContext,
+									"#{jJMessageBean.viewedMessage.versioning.name}",
+									String.class));
 					htmlPanelGrid.getChildren().add(versioningValue);
 				}
 
@@ -631,7 +662,10 @@ public class JJMessageBean {
 
 				HtmlOutputText projectValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				projectValue.setValue(viewedMessage.getProject().getName());
+				projectValue.setValueExpression("value", expressionFactory
+						.createValueExpression(elContext,
+								"#{jJMessageBean.viewedMessage.project.name}",
+								String.class));
 				htmlPanelGrid.getChildren().add(projectValue);
 			}
 			if (viewedMessage.getRequirement() != null) {
@@ -643,8 +677,10 @@ public class JJMessageBean {
 
 				HtmlOutputText requirementValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				requirementValue.setValue(viewedMessage.getRequirement()
-						.getName());
+				requirementValue.setValueExpression("value", expressionFactory
+						.createValueExpression(elContext,
+								"#{jJMessageBean.viewedMessage.requirement.name}",
+								String.class));
 				htmlPanelGrid.getChildren().add(requirementValue);
 			}
 			if (viewedMessage.getSprint() != null) {
@@ -656,7 +692,10 @@ public class JJMessageBean {
 
 				HtmlOutputText sprintValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				sprintValue.setValue(viewedMessage.getSprint().getName());
+				sprintValue.setValueExpression("value", expressionFactory
+						.createValueExpression(elContext,
+								"#{jJMessageBean.viewedMessage.sprint.name}",
+								String.class));
 				htmlPanelGrid.getChildren().add(sprintValue);
 			}
 			if (viewedMessage.getStatus() != null) {
@@ -668,7 +707,10 @@ public class JJMessageBean {
 
 				HtmlOutputText statusValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				statusValue.setValue(viewedMessage.getStatus().getName());
+				statusValue.setValueExpression("value", expressionFactory
+						.createValueExpression(elContext,
+								"#{jJMessageBean.viewedMessage.status.name}",
+								String.class));
 				htmlPanelGrid.getChildren().add(statusValue);
 			}
 			if (viewedMessage.getTask() != null) {
@@ -680,7 +722,10 @@ public class JJMessageBean {
 
 				HtmlOutputText taskValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				taskValue.setValue(viewedMessage.getTask().getName());
+				taskValue.setValueExpression("value", expressionFactory
+						.createValueExpression(elContext,
+								"#{jJMessageBean.viewedMessage.task.name}",
+								String.class));
 				htmlPanelGrid.getChildren().add(taskValue);
 			}
 			if (viewedMessage.getTestcase() != null) {
@@ -692,7 +737,10 @@ public class JJMessageBean {
 
 				HtmlOutputText testcaseValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				testcaseValue.setValue(viewedMessage.getTestcase().getName());
+				testcaseValue.setValueExpression("value", expressionFactory
+						.createValueExpression(elContext,
+								"#{jJMessageBean.viewedMessage.testcase.name}",
+								String.class));
 				htmlPanelGrid.getChildren().add(testcaseValue);
 			}
 			if (viewedMessage.getTeststep() != null) {
@@ -704,7 +752,10 @@ public class JJMessageBean {
 
 				HtmlOutputText teststepValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				teststepValue.setValue(viewedMessage.getTeststep().getName());
+				teststepValue.setValueExpression("value", expressionFactory
+						.createValueExpression(elContext,
+								"#{jJMessageBean.viewedMessage.teststep.name}",
+								String.class));
 				htmlPanelGrid.getChildren().add(teststepValue);
 
 			}

@@ -13,4 +13,6 @@ public interface JJStatusService {
 
 	public List<JJStatus> getStatus(String object, boolean onlyActif,
 			List<String> names, boolean sortedByName);
+
+	public List<String> getTablesName();
 }
