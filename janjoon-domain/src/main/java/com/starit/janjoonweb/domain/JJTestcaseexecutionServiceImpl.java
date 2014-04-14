@@ -1,15 +1,19 @@
 package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 public class JJTestcaseexecutionServiceImpl implements
 		JJTestcaseexecutionService {
@@ -58,6 +62,70 @@ public class JJTestcaseexecutionServiceImpl implements
 				.createQuery(select);
 
 		return result.getResultList();
+
+	}
+
+	@Override
+	public Set<JJTestcaseexecution> getTestcaseexecutions(JJChapter chapter,
+			JJBuild build, boolean onlyActif, boolean orderByCreationdate) {
+
+		Set<JJTestcaseexecution> testcaseexecutions = new HashSet<JJTestcaseexecution>();
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJTestcaseexecution> criteriaQuery = criteriaBuilder
+				.createQuery(JJTestcaseexecution.class);
+
+		Root<JJTestcaseexecution> from = criteriaQuery
+				.from(JJTestcaseexecution.class);
+
+		Path<Object> path = from.join("testcase").get("requirement");
+		from.fetch("testcase");
+		CriteriaQuery<JJTestcaseexecution> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (chapter != null) {
+
+			Subquery<JJRequirement> subquery = criteriaQuery
+					.subquery(JJRequirement.class);
+			Root<JJRequirement> fromJJRequirement = subquery
+					.from(JJRequirement.class);
+			subquery.select(fromJJRequirement);
+			subquery.where(criteriaBuilder.equal(
+					fromJJRequirement.get("chapter"), chapter));
+
+			predicates.add(criteriaBuilder.in(path).value(subquery));
+
+		}
+
+		if (build != null) {
+			predicates.add(criteriaBuilder.equal(from.get("build"), build));
+		}
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+
+		select.where(predicates.toArray(new Predicate[] {}));
+
+		if (orderByCreationdate) {
+			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
+		}
+
+		TypedQuery<JJTestcaseexecution> typedQuery = entityManager
+				.createQuery(select);
+		List<JJTestcaseexecution> result = typedQuery.getResultList();
+		System.out.println("result.size() " + result.size());
+
+		for (JJTestcaseexecution testcaseexecution : result) {
+			System.out
+					.println("testcaseexecution.getId() testcaseexecution.getName() "
+							+ testcaseexecution.getId()
+							+ " "
+							+ testcaseexecution.getName());
+			testcaseexecutions.add(testcaseexecution);
+		}
+		return testcaseexecutions;
 
 	}
 

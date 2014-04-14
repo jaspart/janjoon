@@ -1,15 +1,17 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.util.*;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import javax.annotation.*;
-import javax.faces.bean.*;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 
-import org.primefaces.model.menu.*;
-import org.springframework.beans.factory.annotation.*;
-
-import com.starit.janjoonweb.domain.*;
+import org.primefaces.model.menu.DefaultMenuItem;
+import org.primefaces.model.menu.DefaultMenuModel;
+import org.primefaces.model.menu.DefaultSubMenu;
+import org.primefaces.model.menu.MenuModel;
+import org.springframework.beans.factory.annotation.Configurable;
 
 //@RooJsfApplicationBean
 @ManagedBean

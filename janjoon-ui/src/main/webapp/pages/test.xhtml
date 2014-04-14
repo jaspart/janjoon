@@ -117,6 +117,15 @@
 								icon="ui-icon-circle-plus" />
 						</f:facet>
 					</p:dataTable>
+
+					<p:lineChart id="filled" value="#{chartBean.categoryModel}"
+						legendPosition="ne" title="Test Case Execution Statistics"
+						seriesColors="#{chartBean.seriesColors}"
+						style="height:300px;margin-top:20px" xaxisLabel="Date"
+						yaxisLabel="Test Case Execution"
+						rendered="#{jJTestcaseBean.rendredTestCaseRecaps}" />
+
+
 					<p:dataTable id="teststepRecapDataTable"
 						value="#{jJTeststepBean.teststeps}" rowKey="#{ts.name}" var="ts"
 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"

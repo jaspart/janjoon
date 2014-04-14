@@ -2,7 +2,9 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -123,7 +125,7 @@ public class JJTestcaseexecutionBean {
 
 		JJTestcaseexecution tce = jJTestcaseexecutionService
 				.findJJTestcaseexecution(testcaseexecution.getId());
-		
+
 		System.out.println("JOJO");
 		tce.setPassed(status);
 		tce.setUpdatedDate(new Date());
@@ -148,6 +150,22 @@ public class JJTestcaseexecutionBean {
 
 		jJTestcaseexecutionService.saveJJTestcaseexecution(testcaseexecution);
 
+	}
+
+	public Set<JJTestcaseexecution> getTestcaseexecutions() {
+		Set<JJTestcaseexecution> testcaseexecutions = new HashSet<JJTestcaseexecution>();
+
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJBuildBean jJBuildBean = (JJBuildBean) session
+				.getAttribute("jJBuildBean");
+
+		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
+				.getAttribute("jJTestcaseBean");
+
+		return testcaseexecutions = jJTestcaseexecutionService
+				.getTestcaseexecutions(jJTestcaseBean.getChapter(),
+						jJBuildBean.getBuild(), true, true);
 	}
 
 	public class TestCaseexecutionRecap {

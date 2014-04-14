@@ -1,6 +1,7 @@
 package com.starit.janjoonweb.domain;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.roo.addon.layers.service.RooService;
 
@@ -8,5 +9,8 @@ import org.springframework.roo.addon.layers.service.RooService;
 public interface JJTestcaseexecutionService {
 
 	public List<JJTestcaseexecution> getTestcaseexecutions(JJTestcase testcase,
+			JJBuild build, boolean onlyActif, boolean orderByCreationdate);
+
+	public Set<JJTestcaseexecution> getTestcaseexecutions(JJChapter chapter,
 			JJBuild build, boolean onlyActif, boolean orderByCreationdate);
 }
