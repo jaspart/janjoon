@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.ui.mb;
 
+import com.starit.janjoonweb.ui.mb.util.UsageChecker;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +40,11 @@ public class ApplicationBean {
 	public void init() {
 
 		System.out.println("applicationBeanINIT");
+                
+                if(!UsageChecker.check()){
+                    System.out.println("License is not correct!");
+                }
+                
 		menuModel = new DefaultMenuModel();
 
 		DefaultSubMenu submenu;

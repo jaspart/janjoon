@@ -130,8 +130,8 @@ public class DevelopmentBean implements Serializable {
 			if (product == null) {
 				FacesMessage message = new FacesMessage(
 						FacesMessage.SEVERITY_ERROR,
-						"Please Select a project and a version ",
-						"Project and version are set to null");
+						"Please, select a Project and a Version ",
+						"Product and Version are set to null");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 
 			} else {

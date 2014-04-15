@@ -48,6 +48,9 @@
 					actionListener="#{loginBean.redirectToDev}" update="growlHeader"
 					icon="ui-icon-wrench" rendered="#{loginBean.enable}" />
 
+				<p:menuitem value="Test" url="/pages/test.jsf?faces-redirect=true"
+					icon="ui-icon-check" update=":contentPanel" />
+
 				<p:menuitem value="Delivery"
 					url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
 
@@ -60,9 +63,6 @@
 				<p:menuitem value="Admin"
 					url="/pages/administration.jsf?faces-redirect=true"
 					icon="ui-icon-key" update=":contentPanel" />
-
-				<p:menuitem value="Test" url="/pages/test.jsf?faces-redirect=true"
-					update=":contentPanel" />
 
 			</p:tabMenu>
 

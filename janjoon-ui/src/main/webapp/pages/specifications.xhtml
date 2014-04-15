@@ -35,7 +35,7 @@
 
 						<td><p:dataTable id="dataTable" var="requirement"
 								value="#{tableDataModel}" paginator="true" rows="6"
-								style="width:410px"
+								style="width:99%"
 								filteredValue="#{tableDataModel.filtredRequirements}"
 								widgetVar="#{tableDataModel.nameDataModel}_dataTableWidget">
 
@@ -60,7 +60,7 @@
 														update=":specForm" />
 												</p:column>
 												<p:column colspan="4">
-													<p:inputText id="globalFilter" style="width:120px"
+													<p:inputText id="globalFilter" style="width:100%"
 														onkeyup="#{tableDataModel.nameDataModel}_dataTableWidget.filter()" />
 												</p:column>
 												<p:column colspan="1">

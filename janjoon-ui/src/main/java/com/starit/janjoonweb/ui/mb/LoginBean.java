@@ -321,8 +321,8 @@ public class LoginBean implements Serializable {
 
 			FacesMessage message = new FacesMessage(
 					FacesMessage.SEVERITY_ERROR,
-					"Please Select a project and a version ",
-					"Project or version is set to null");
+					"Please, select a Product and a Version ",
+					"Product or Version is set to null");
 			FacesContext.getCurrentInstance().addMessage(null, message);
 			System.out.println(message.getDetail());
 
