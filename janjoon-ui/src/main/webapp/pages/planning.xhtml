@@ -6,45 +6,42 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="../templates/layout.xhtml">
-	<ui:define name="content">
-		<h:form id="planningForm">
-			<f:event type="preRenderComponent"
-				listener="#{jJTaskBean.loadData()}" />
-			<p:panelGrid style="margin-top:10px">
-				<p:row>
-					<p:column style="width:50%">
-						<p:dataTable var="task" value="#{jJTaskBean.tasks}">
-							<p:column headerText="Name">
-								<h:outputText value="#{task.name}" />
-							</p:column>
-
-							<p:column headerText="Start Date">
-								<h:outputText value="#{task.startDatePlanned}" />
-							</p:column>
-
-							<p:column headerText="End Date">
-								<h:outputText value="#{task.endDatePlanned}" />
-							</p:column>
-
-							<p:column headerText="Assigned To">
-								<h:outputText value="#{task.assignedTo.name}" />
-							</p:column>
-						</p:dataTable>
-					</p:column>
-					<p:column style="width:50%">
-						<pe:timeline id="timeline" value="#{jJTaskBean.model}"
-							editable="true" eventMargin="10" eventMarginAxis="0"
-							locale="#{LocaleBean.locale}" start="#{jJTaskBean.start}"
-							end="#{jJTaskBean.end}" showNavigation="true"
-							showButtonNew="true" showMajorLabels="false" axisOnTop="true"
-							groupsChangeable="true" groupsOnRight="false" var="task">
+<ui:composition>
+	<h:form id="planningForm">
+		<f:event type="preRenderComponent" listener="#{jJTaskBean.loadData()}" />
+		<p:panelGrid style="margin-top:10px">
+			<p:row>
+				<p:column style="width:50%">
+					<p:dataTable var="task" value="#{jJTaskBean.tasks}">
+						<p:column headerText="Name">
 							<h:outputText value="#{task.name}" />
-						</pe:timeline>
-					</p:column>
-				</p:row>
-			</p:panelGrid>
-		</h:form>
-	</ui:define>
+						</p:column>
+
+						<p:column headerText="Start Date">
+							<h:outputText value="#{task.startDatePlanned}" />
+						</p:column>
+
+						<p:column headerText="End Date">
+							<h:outputText value="#{task.endDatePlanned}" />
+						</p:column>
+
+						<p:column headerText="Assigned To">
+							<h:outputText value="#{task.assignedTo.name}" />
+						</p:column>
+					</p:dataTable>
+				</p:column>
+				<p:column style="width:50%">
+					<pe:timeline id="timeline" value="#{jJTaskBean.model}"
+						editable="true" eventMargin="10" eventMarginAxis="0"
+						locale="#{LocaleBean.locale}" start="#{jJTaskBean.start}"
+						end="#{jJTaskBean.end}" showNavigation="true" showButtonNew="true"
+						showMajorLabels="false" axisOnTop="true" groupsChangeable="true"
+						groupsOnRight="false" var="task">
+						<h:outputText value="#{task.name}" />
+					</pe:timeline>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</h:form>
 </ui:composition>
 </html>

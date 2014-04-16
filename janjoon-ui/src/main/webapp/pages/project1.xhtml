@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../templates/layout.xhtml">
+	<ui:define name="content">
+		<p:tabView id="tabview" widgetVar="tabView" dynamic="true"
+			cache="true">
+			<p:tab id="tabPlanning" title="Planning">
+				<h:panelGrid columns="1" cellpadding="3">
+					<ui:insert name="planning">
+						<ui:include src="planning.xhtml" />
+					</ui:insert>
+				</h:panelGrid>
+			</p:tab>
+
+			<p:tab id="tabScrum" title="Scrum">
+				<h:panelGrid columns="1" cellpadding="3">
+					<ui:insert name="scrum">
+						<ui:include src="scrum.xhtml" />
+					</ui:insert>
+				</h:panelGrid>
+			</p:tab>
+		</p:tabView>
+
+	</ui:define>
+</ui:composition>
+</html>
