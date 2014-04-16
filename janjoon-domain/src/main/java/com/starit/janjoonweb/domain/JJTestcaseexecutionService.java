@@ -9,8 +9,8 @@ import org.springframework.roo.addon.layers.service.RooService;
 public interface JJTestcaseexecutionService {
 
 	public List<JJTestcaseexecution> getTestcaseexecutions(JJTestcase testcase,
-			JJBuild build, boolean onlyActif, boolean orderByCreationdate);
+			JJBuild build, boolean onlyActif, boolean sortedByUpdatedDate);
 
 	public Set<JJTestcaseexecution> getTestcaseexecutions(JJChapter chapter,
-			JJBuild build, boolean onlyActif, boolean orderByCreationdate);
+			JJBuild build, boolean onlyActif, boolean sortedByUpdatedDate);
 }

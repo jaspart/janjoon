@@ -192,7 +192,7 @@ public class JJTestcaseBean {
 
 		testCaseRecaps = new ArrayList<TestCaseRecap>();
 		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,
-				chapter, true, true);
+				chapter, true, true, false);
 
 		for (JJTestcase testcase : testcases) {
 			TestCaseRecap testCaseRecap = new TestCaseRecap(testcase);
@@ -513,7 +513,7 @@ public class JJTestcaseBean {
 		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
 
 		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,
-				requirement.getChapter(), false, false);
+				requirement.getChapter(), false, false, false);
 
 		for (JJTestcase testcase : testcases) {
 			elements.put(testcase.getOrdering(), testcase);
@@ -660,7 +660,7 @@ public class JJTestcaseBean {
 
 				JJRequirement requirement = (JJRequirement) entry.getValue();
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-						requirement, null, true, true);
+						requirement, null, true, true, false);
 				for (JJTestcase testcase : testcases) {
 					testcaseElements.put(testcase.getOrdering(), testcase);
 				}
@@ -786,7 +786,7 @@ public class JJTestcaseBean {
 
 				JJRequirement requirement = (JJRequirement) entry.getValue();
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-						requirement, null, true, true);
+						requirement, null, true, true, false);
 				for (JJTestcase testcase : testcases) {
 					testcaseElements.put(testcase.getOrdering(), testcase);
 				}
@@ -810,6 +810,15 @@ public class JJTestcaseBean {
 			}
 		}
 
+	}
+
+	public List<JJTestcase> getTestcases() {
+		List<JJTestcase> testcases = new ArrayList<JJTestcase>();
+
+		testcases = jJTestcaseService.getTestcases(null, chapter, true, false,
+				true);
+
+		return testcases;
 	}
 
 	public class TestCaseRecap {

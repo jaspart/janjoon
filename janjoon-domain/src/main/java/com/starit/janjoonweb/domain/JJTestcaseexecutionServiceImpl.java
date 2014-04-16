@@ -27,7 +27,7 @@ public class JJTestcaseexecutionServiceImpl implements
 
 	@Override
 	public List<JJTestcaseexecution> getTestcaseexecutions(JJTestcase testcase,
-			JJBuild build, boolean onlyActif, boolean orderByCreationdate) {
+			JJBuild build, boolean onlyActif, boolean sortedByUpdatedDate) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcaseexecution> criteriaQuery = criteriaBuilder
@@ -54,8 +54,8 @@ public class JJTestcaseexecutionServiceImpl implements
 
 		select.where(predicates.toArray(new Predicate[] {}));
 
-		if (orderByCreationdate) {
-			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
+		if (sortedByUpdatedDate) {
+			select.orderBy(criteriaBuilder.desc(from.get("updatedDate")));
 		}
 
 		TypedQuery<JJTestcaseexecution> result = entityManager
@@ -67,7 +67,7 @@ public class JJTestcaseexecutionServiceImpl implements
 
 	@Override
 	public Set<JJTestcaseexecution> getTestcaseexecutions(JJChapter chapter,
-			JJBuild build, boolean onlyActif, boolean orderByCreationdate) {
+			JJBuild build, boolean onlyActif, boolean sortedByUpdatedDate) {
 
 		Set<JJTestcaseexecution> testcaseexecutions = new HashSet<JJTestcaseexecution>();
 
@@ -99,6 +99,7 @@ public class JJTestcaseexecutionServiceImpl implements
 		}
 
 		if (build != null) {
+
 			predicates.add(criteriaBuilder.equal(from.get("build"), build));
 		}
 
@@ -108,21 +109,16 @@ public class JJTestcaseexecutionServiceImpl implements
 
 		select.where(predicates.toArray(new Predicate[] {}));
 
-		if (orderByCreationdate) {
-			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
+		if (sortedByUpdatedDate) {
+			select.orderBy(criteriaBuilder.desc(from.get("updatedDate")));
 		}
 
 		TypedQuery<JJTestcaseexecution> typedQuery = entityManager
 				.createQuery(select);
 		List<JJTestcaseexecution> result = typedQuery.getResultList();
-		System.out.println("result.size() " + result.size());
 
 		for (JJTestcaseexecution testcaseexecution : result) {
-			System.out
-					.println("testcaseexecution.getId() testcaseexecution.getName() "
-							+ testcaseexecution.getId()
-							+ " "
-							+ testcaseexecution.getName());
+
 			testcaseexecutions.add(testcaseexecution);
 		}
 		return testcaseexecutions;

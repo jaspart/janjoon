@@ -24,7 +24,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 
 	@Override
 	public List<JJTestcase> getTestcases(JJRequirement requirement,
-			JJChapter chapter, boolean onlyActif, boolean sortedByOrder) {
+			JJChapter chapter, boolean onlyActif, boolean sortedByOrder,
+			boolean sortedByCreationdate) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcase> criteriaQuery = criteriaBuilder
@@ -53,6 +54,10 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 
 		if (sortedByOrder) {
 			select.orderBy(criteriaBuilder.asc(from.get("ordering")));
+		}
+
+		if (sortedByCreationdate) {
+			select.orderBy(criteriaBuilder.asc(from.get("creationDate")));
 		}
 
 		TypedQuery<JJTestcase> result = entityManager.createQuery(select);
