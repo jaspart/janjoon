@@ -151,9 +151,10 @@ public class JJConfigurationBean {
 	}
 	
 	public void reset() {
+		
         setJJConfiguration_(null);
-        setCreateDialogVisible(false);
-        jJconfiguration=new JJConfiguration();
+        setCreateDialogVisible(false);     
+        jJconfiguration = jJConfigurationService.findAllJJConfigurations().get(0);		
     }
 	
 	public HtmlPanelGrid populatePanelCreate()

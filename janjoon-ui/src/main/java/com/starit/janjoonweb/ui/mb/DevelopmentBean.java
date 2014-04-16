@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.primefaces.component.inputtextarea.InputTextarea;
+import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
@@ -68,6 +69,7 @@ public class DevelopmentBean implements Serializable {
 	private List<JJTask> tasks;
 	private boolean check;
 	private JJTask task;
+	private int fileIndex;
 	private String createdFileName;
 	private boolean fileOrFolder = true;
 
@@ -440,6 +442,14 @@ public class DevelopmentBean implements Serializable {
 		this.fileOrFolder = fileOrFolder;
 	}
 
+	public int getFileIndex() {
+		return fileIndex;
+	}
+
+	public void setFileIndex(int fileIndex) {
+		this.fileIndex = fileIndex;
+	}
+
 	public void pull() throws FileNotFoundException, IOException {
 		if (configManager.pullRepository()) {
 			tree = configManager.listRepositoryContent(version.getName());
@@ -475,8 +485,6 @@ public class DevelopmentBean implements Serializable {
 			for (FileMap fileMap : files) {
 				configManager.setFileTexte(fileMap.getFile(),
 						fileMap.getTexte());
-				// System.out.println(fileMap.getFile().getName() + "  :"
-				// + fileMap.getTexte());
 
 			}
 			System.out.println(task.toString());
@@ -540,11 +548,10 @@ public class DevelopmentBean implements Serializable {
 	public void onSelectTree(NodeSelectEvent event) {
 
 		if (event.getTreeNode().getType().equalsIgnoreCase("file")) {
-			System.out.println("fffffffffffffffffffffffffffd");
 			selectedTree = event.getTreeNode();
 			file = (File) selectedTree.getData();
-
-			if (contains(file) == -1) {
+			int i = contains(file);
+			if (i == -1) {
 
 				FacesMessage message = new FacesMessage(
 						FacesMessage.SEVERITY_INFO, "Selected", event
@@ -553,11 +560,12 @@ public class DevelopmentBean implements Serializable {
 				try (FileInputStream inputStream = new FileInputStream(file)) {
 
 					String fileTexte = IOUtils.toString(inputStream);
-					// System.out.println(fileTexte);
-
 					FileMap filemap = new FileMap(file.getName(), fileTexte,
 							file);
 					files.add(filemap);
+					i = contains(file);
+					filemap.setIndex(i);
+					files.set(filemap.getIndex(), filemap);
 					System.out.println(filemap.getMode());
 				} catch (FileNotFoundException e) {
 					System.out.println("filenotFound");
@@ -567,48 +575,49 @@ public class DevelopmentBean implements Serializable {
 					e.printStackTrace();
 				}
 			}
-			activeTabIndex = contains(file);
+			activeTabIndex = i;
 
 		}
 
 	}
 
-	public void valueChangeHandler(AjaxBehaviorEvent event) {
-
-		System.out
-				.println("---------------------------------------------------------");
-		InputTextarea texte = (InputTextarea) event.getComponent();
-		// File f=texte.
-
-		// System.out.println(texte.getValue() + "---");
-		texte.setSubmittedValue(texte.getValue());
-	}
-
 	public void valueChangeHandlerCodeMirror(AjaxBehaviorEvent event) {
 
-		System.out
-				.println("---------------------------------------------------------");
 		CodeMirror texte = (CodeMirror) event.getComponent();
-		// File f=texte.
-		// System.out.println(texte.getValue() + "---");
-		texte.setSubmittedValue(texte.getValue());
+		files.get(activeTabIndex).setTexte((String) texte.getValue());
+		files.get(activeTabIndex).setChange(true);
+		System.out
+				.println("valueChangeHandlerCodeMirror-------------------------"
+						+ files.get(activeTabIndex).getTitle()
+						+ files.get(activeTabIndex).getIndex());
 	}
 
 	public void onCloseTab(TabCloseEvent event) {
 
 		FileMap f = (FileMap) event.getData();
 		int j = contains(f.getFile());
-		files.get(j).setTexte(f.getTexte());
-		configManager.setFileTexte(files.get(j).getFile(), files.get(j)
-				.getTexte());
-		files.remove((FileMap) event.getData());
+		System.out.println("onCloseTab-------------------------"
+				+ files.get(activeTabIndex).getTitle()
+				+ files.get(activeTabIndex).getIndex());
+		if (f.isChange()) {
+
+			fileIndex = j;
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("saveFileDialogWidget.show()");
+		} else {
+			// files.remove(f);
+			updatetabView(j, f);
+		}
+
 	}
 
 	public void onChangeTab(TabChangeEvent event) {
 
 		FileMap f = (FileMap) event.getData();
-		int j = contains(f.getFile());
-		files.get(j).setTexte(f.getTexte());
+		System.out.println("onChangeTab-------------------------"
+				+ files.get(activeTabIndex).getTitle()
+				+ files.get(activeTabIndex).getIndex());
+		files.set(activeTabIndex, f);
 
 	}
 
@@ -669,7 +678,8 @@ public class DevelopmentBean implements Serializable {
 		treeOperation.deleteFile(f);
 		int i = contains(f);
 		if (i != -1) {
-			files.remove(i);
+			// files.remove(i);
+			updatetabView(i, files.get(i));
 		}
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"File deleted", f.getName() + " supprimé avec succes");
@@ -684,6 +694,25 @@ public class DevelopmentBean implements Serializable {
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"File commited", f.getName() + " ajouté au depôt avec succes");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+
+	public void saveFile() {
+
+		configManager.setFileTexte(files.get(fileIndex).getFile(),
+				files.get(fileIndex).getTexte());
+		updatetabView(fileIndex, files.get(activeTabIndex));
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("saveFileDialogWidget.hide()");
+		fileIndex = -1;
+
+	}
+
+	public void notSaveFile() {
+
+		updatetabView(fileIndex, files.get(activeTabIndex));
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("saveFileDialogWidget.hide()");
+		fileIndex = -1;
 	}
 
 	public void CreateFile() {
@@ -804,6 +833,15 @@ public class DevelopmentBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 
+	}
+
+	private void updatetabView(int j, FileMap data) {
+		j = j + 1;
+		while (j < files.size()) {
+			files.get(j).setIndex(j - 1);
+			j++;
+		}
+		files.remove(data);
 	}
 
 	public void addToRoot(ActionEvent e) {

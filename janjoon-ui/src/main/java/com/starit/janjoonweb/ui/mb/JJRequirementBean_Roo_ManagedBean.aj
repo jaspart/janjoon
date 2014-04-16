@@ -2204,18 +2204,8 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
         return findAllJJRequirements();
-    }
-    
-    public void JJRequirementBean.reset() {
-        JJRequirement_ = null;
-        selectedBugs = null;
-        selectedTasks = null;
-        selectedMessages = null;
-        selectedRequirementLinkDown = null;
-        selectedRequirementLinkUp = null;
-        selectedTestcases = null;
-        createDialogVisible = false;
-    }
+    }   
+   
     
     public void JJRequirementBean.handleDialogClose(CloseEvent event) {
         reset();

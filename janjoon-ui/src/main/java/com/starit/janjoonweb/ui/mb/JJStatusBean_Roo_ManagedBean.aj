@@ -9,34 +9,16 @@ import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.ui.mb.JJStatusBean;
-import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-
 import javax.annotation.PostConstruct;
-import javax.el.ELContext;
-import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.DateTimeConverter;
-import javax.faces.validator.LengthValidator;
-
-import org.primefaces.component.autocomplete.AutoComplete;
-import org.primefaces.component.calendar.Calendar;
-import org.primefaces.component.inputtext.InputText;
-import org.primefaces.component.inputtextarea.InputTextarea;
-import org.primefaces.component.message.Message;
-import org.primefaces.component.outputlabel.OutputLabel;
-import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
-import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,127 +125,6 @@ privileged aspect JJStatusBean_Roo_ManagedBean {
         this.viewPanelGrid = viewPanelGrid;
     }
     
-    
-    
-    
-    
-    public HtmlPanelGrid JJStatusBean.populateViewPanel() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        javax.faces.application.Application application = facesContext.getApplication();
-        ExpressionFactory expressionFactory = application.getExpressionFactory();
-        ELContext elContext = facesContext.getELContext();
-        
-        HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
-        
-        HtmlOutputText nameLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        nameLabel.setId("nameLabel");
-        nameLabel.setValue("Name:");
-        htmlPanelGrid.getChildren().add(nameLabel);
-        
-        InputTextarea nameValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        nameValue.setId("nameValue");
-        nameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.name}", String.class));
-        nameValue.setReadonly(true);
-        nameValue.setDisabled(true);
-        htmlPanelGrid.getChildren().add(nameValue);
-        
-        HtmlOutputText descriptionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        descriptionLabel.setId("descriptionLabel");
-        descriptionLabel.setValue("Description:");
-        htmlPanelGrid.getChildren().add(descriptionLabel);
-        
-        InputTextarea descriptionValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        descriptionValue.setId("descriptionValue");
-        descriptionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.description}", String.class));
-        descriptionValue.setReadonly(true);
-        descriptionValue.setDisabled(true);
-        htmlPanelGrid.getChildren().add(descriptionValue);
-        
-        HtmlOutputText creationDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        creationDateLabel.setId("creationDateLabel");
-        creationDateLabel.setValue("Creation Date:");
-        htmlPanelGrid.getChildren().add(creationDateLabel);
-        
-        HtmlOutputText creationDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        creationDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.creationDate}", Date.class));
-        DateTimeConverter creationDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
-        creationDateValueConverter.setPattern("dd/MM/yyyy");
-        creationDateValue.setConverter(creationDateValueConverter);
-        htmlPanelGrid.getChildren().add(creationDateValue);
-        
-        HtmlOutputText createdByLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        createdByLabel.setId("createdByLabel");
-        createdByLabel.setValue("Created By:");
-        htmlPanelGrid.getChildren().add(createdByLabel);
-        
-        HtmlOutputText createdByValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        createdByValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.createdBy}", JJContact.class));
-        createdByValue.setConverter(new JJContactConverter());
-        htmlPanelGrid.getChildren().add(createdByValue);
-        
-        HtmlOutputText updatedDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        updatedDateLabel.setId("updatedDateLabel");
-        updatedDateLabel.setValue("Updated Date:");
-        htmlPanelGrid.getChildren().add(updatedDateLabel);
-        
-        HtmlOutputText updatedDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        updatedDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.updatedDate}", Date.class));
-        DateTimeConverter updatedDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
-        updatedDateValueConverter.setPattern("dd/MM/yyyy");
-        updatedDateValue.setConverter(updatedDateValueConverter);
-        htmlPanelGrid.getChildren().add(updatedDateValue);
-        
-        HtmlOutputText updatedByLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        updatedByLabel.setId("updatedByLabel");
-        updatedByLabel.setValue("Updated By:");
-        htmlPanelGrid.getChildren().add(updatedByLabel);
-        
-        HtmlOutputText updatedByValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        updatedByValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.updatedBy}", JJContact.class));
-        updatedByValue.setConverter(new JJContactConverter());
-        htmlPanelGrid.getChildren().add(updatedByValue);
-        
-        HtmlOutputText enabledLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        enabledLabel.setId("enabledLabel");
-        enabledLabel.setValue("Enabled:");
-        htmlPanelGrid.getChildren().add(enabledLabel);
-        
-        HtmlOutputText enabledValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.enabled}", String.class));
-        htmlPanelGrid.getChildren().add(enabledValue);
-        
-        HtmlOutputText objetLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        objetLabel.setId("objetLabel");
-        objetLabel.setValue("Objet:");
-        htmlPanelGrid.getChildren().add(objetLabel);
-        
-        HtmlOutputText objetValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        objetValue.setId("objetValue");
-        objetValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.objet}", String.class));
-        htmlPanelGrid.getChildren().add(objetValue);
-        
-        HtmlOutputText levelStatusLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        levelStatusLabel.setId("levelStatusLabel");
-        levelStatusLabel.setValue("Level Status:");
-        htmlPanelGrid.getChildren().add(levelStatusLabel);
-        
-        HtmlOutputText levelStatusValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        levelStatusValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJStatusBean.JJStatus_.levelStatus}", String.class));
-        htmlPanelGrid.getChildren().add(levelStatusValue);
-        
-        HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        messagesLabel.setId("messagesLabel");
-        messagesLabel.setValue("Messages:");
-        htmlPanelGrid.getChildren().add(messagesLabel);
-        
-        HtmlOutputText messagesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        messagesValue.setId("messagesValue");
-        messagesValue.setValue("This relationship is managed from the JJMessage side");
-        htmlPanelGrid.getChildren().add(messagesValue);
-        
-        return htmlPanelGrid;
-    }
-    
     public JJStatus JJStatusBean.getJJStatus_() {
         if (JJStatus_ == null) {
             JJStatus_ = new JJStatus();
@@ -360,12 +221,6 @@ privileged aspect JJStatusBean_Roo_ManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
         return findAllJJStatuses();
-    }
-    
-    public void JJStatusBean.reset() {
-        JJStatus_ = null;
-        selectedMessages = null;
-        createDialogVisible = false;
     }
     
     public void JJStatusBean.handleDialogClose(CloseEvent event) {

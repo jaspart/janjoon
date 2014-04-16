@@ -3,14 +3,18 @@ package com.starit.janjoonweb.ui.security;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import javax.servlet.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.starit.janjoonweb.domain.JJBug;
+import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJCategory;
@@ -49,6 +53,9 @@ public class ConfigListener implements ServletContextListener {
 
 	@Autowired
 	JJMessageService jJMessageService;
+
+	@Autowired
+	JJBugService jJBugService;
 
 	@Autowired
 	JJConfigurationService jJConfigurationService;
@@ -97,6 +104,10 @@ public class ConfigListener implements ServletContextListener {
 
 	public void setjJMessageService(JJMessageService jJMessageService) {
 		this.jJMessageService = jJMessageService;
+	}
+
+	public void setjJBugService(JJBugService jJBugService) {
+		this.jJBugService = jJBugService;
 	}
 
 	public void setjJConfigurationService(
@@ -181,7 +192,23 @@ public class ConfigListener implements ServletContextListener {
 				JJCriticity criticity = new JJCriticity();
 				criticity.setObjet("JJMessage");
 				criticity.setName(name);
-				criticity.setDescription("AlertCriticityDescription");
+				criticity.setDescription(name + "Message-CriticityDescription");
+				criticity.setCreationDate(new Date());
+				criticity.setEnabled(true);
+				criticity.setLevelCriticity(name.length());
+				jJCriticityService.saveJJCriticity(criticity);
+			}
+		}
+
+		if (jJCriticityService.getCriticities("JJBug", true).isEmpty()) {
+
+			String[] names = { "ALERT", "INFO" };
+
+			for (String name : names) {
+				JJCriticity criticity = new JJCriticity();
+				criticity.setObjet("JJBug");
+				criticity.setName(name);
+				criticity.setDescription(name + "Bug-CriticityDescription");
 				criticity.setCreationDate(new Date());
 				criticity.setEnabled(true);
 				criticity.setLevelCriticity(name.length());
@@ -274,6 +301,41 @@ public class ConfigListener implements ServletContextListener {
 
 				}
 			}
+		}
+
+		if (jJBugService.getBugs(null, null, null, true, true).isEmpty()) {
+			List<JJStatus> statuses = jJStatusService.getStatus("JJBug", true,
+					null, true);
+			List<JJCriticity> criticities = jJCriticityService.getCriticities(
+					"JJBug", true);
+			JJCriticity crit = null;
+			int i = 0;
+			for (JJStatus stat : statuses) {
+				JJBug bug;
+				crit = criticities.get(i);
+				bug = new JJBug();
+				bug.setName(stat.getName() + "-bug : " + crit.getName());
+				bug.setDescription(stat.getName() + "-bugDescription : "
+						+ crit.getName());
+				bug.setCreationDate(new Date());
+				bug.setEnabled(true);
+				bug.setStatus(stat);
+				bug.setCriticity(crit);
+				jJBugService.saveJJBug(bug);
+				i=(i+1)%2;		
+				crit = criticities.get(i);
+				bug = new JJBug();
+				bug.setName(stat.getName() + "-bug : " + crit.getName());
+				bug.setDescription(stat.getName() + "-bugDescription : "
+						+ crit.getName());
+				bug.setCreationDate(new Date());
+				bug.setEnabled(true);
+				bug.setStatus(stat);
+				bug.setCriticity(crit);
+				jJBugService.saveJJBug(bug);
+
+			}
+
 		}
 
 		if (jJVersionService.getVersions(true, true, null).isEmpty()) {

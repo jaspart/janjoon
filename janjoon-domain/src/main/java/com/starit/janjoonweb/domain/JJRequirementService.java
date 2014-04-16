@@ -19,5 +19,9 @@ public interface JJRequirementService {
 
 	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
 			JJChapter chapter, boolean onlyActif);
+	
+	public List<JJRequirement> getRequirements(JJStatus status);
+	
+	public Long getReqCountByStaus(JJStatus status,boolean onlyActif);
 
 }

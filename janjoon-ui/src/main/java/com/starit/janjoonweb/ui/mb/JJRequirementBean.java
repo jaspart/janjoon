@@ -754,6 +754,7 @@ public class JJRequirementBean {
 		requirement.setEnabled(false);
 		jJRequirementService.updateJJRequirement(requirement);
 		requirement = null;
+		reset();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -778,6 +779,7 @@ public class JJRequirementBean {
 			requirement.setStatus(status);
 			jJRequirementService.updateJJRequirement(requirement);
 		}
+		reset();
 
 	}
 
@@ -827,6 +829,7 @@ public class JJRequirementBean {
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJRequirement");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		reset();
 
 	}
 
@@ -936,6 +939,7 @@ public class JJRequirementBean {
 			}
 
 			jJRequirementService.saveJJRequirement(importRequirement);
+			reset();
 
 			if (format.getCopyTestcase()) {
 
@@ -1019,6 +1023,7 @@ public class JJRequirementBean {
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("dialogWidget.hide()");
 		closeDialogImport();
+		reset();
 	}
 
 	private SortedMap<Integer, JJTestcase> manageTestcaseOrder(JJChapter chapter) {
@@ -1782,6 +1787,7 @@ public class JJRequirementBean {
 
 						requirement.getRequirementLinkDown().removeAll(
 								removeList);
+						reset();
 					}
 
 					if (!addList.isEmpty()) {
@@ -1795,7 +1801,9 @@ public class JJRequirementBean {
 							req1.getRequirementLinkUp().add(req2);
 							req2.getRequirementLinkDown().add(req1);
 							jJRequirementService.updateJJRequirement(req1);
+
 						}
+						reset();
 
 					}
 
@@ -1813,7 +1821,7 @@ public class JJRequirementBean {
 					req.getRequirementLinkUp().remove(requirement);
 					jJRequirementService.updateJJRequirement(req);
 				}
-
+				reset();
 				requirement.getRequirementLinkDown().removeAll(storeMapDown);
 
 			} else if (!listDOWN.isEmpty() && storeMapDown.isEmpty()) {
@@ -1835,6 +1843,7 @@ public class JJRequirementBean {
 				}
 
 			}
+			reset();
 
 		}
 
@@ -1972,6 +1981,7 @@ public class JJRequirementBean {
 
 								jJRequirementService
 										.updateJJRequirement(requirement);
+								reset();
 							}
 
 						}
@@ -2049,6 +2059,7 @@ public class JJRequirementBean {
 					} else {
 
 						jJRequirementService.updateJJRequirement(requirement);
+						reset();
 
 					}
 				} else {
@@ -2068,6 +2079,7 @@ public class JJRequirementBean {
 					}
 
 					jJRequirementService.updateJJRequirement(requirement);
+					reset();
 
 					if (!subTestcases.isEmpty()) {
 
@@ -2117,6 +2129,7 @@ public class JJRequirementBean {
 					requirement.setOrdering(null);
 
 					jJRequirementService.updateJJRequirement(requirement);
+					reset();
 
 					subElements.remove(requirementOrder);
 
@@ -2146,6 +2159,7 @@ public class JJRequirementBean {
 
 							jJRequirementService
 									.updateJJRequirement(requirement);
+							reset();
 						}
 
 					}
@@ -2195,6 +2209,7 @@ public class JJRequirementBean {
 
 				} else {
 					jJRequirementService.updateJJRequirement(requirement);
+					reset();
 				}
 
 			}
@@ -2226,6 +2241,7 @@ public class JJRequirementBean {
 					req.setEnabled(false);
 					req.setUpdatedDate(new Date());
 					jJRequirementService.updateJJRequirement(req);
+					reset();
 				}
 
 			} else if (requirementStatus.getName().equalsIgnoreCase("MODIFIED")) {
@@ -2626,5 +2642,21 @@ public class JJRequirementBean {
 		return jJRequirementService
 				.getRequirementChildrenWithChapterSortedByOrder(chapter,
 						onlyActif);
+	}
+
+	public void reset() {
+
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJStatusBean jJStatusBean=(JJStatusBean) session.getAttribute("jJStatusBean");
+		jJStatusBean.setPieChart(null);
+		setJJRequirement_(null);
+		setSelectedBugs(null);
+		setSelectedTasks(null);
+		setSelectedMessages (null);
+		setSelectedRequirementLinkDown (null);
+		setSelectedRequirementLinkUp (null);
+		setSelectedTestcases(null);
+		setCreateDialogVisible(false);
 	}
 }

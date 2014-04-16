@@ -10,9 +10,10 @@ import org.apache.commons.io.FilenameUtils;
 
 public class FileMap {
 	
-	
+	private int index;
 	private String title;
 	private String texte;
+	private boolean change=false;
 	private File file;
 	private String mode;
 	
@@ -36,6 +37,18 @@ public class FileMap {
 		
 	}
 	
+	public FileMap() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -48,6 +61,14 @@ public class FileMap {
 	public void setTexte(String texte) {
 		this.texte = texte;
 	}
+	public boolean isChange() {
+		return change;
+	}
+
+	public void setChange(boolean change) {
+		this.change = change;
+	}
+
 	public File getFile() {
 		return file;
 	}

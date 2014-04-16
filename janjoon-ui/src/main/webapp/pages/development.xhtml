@@ -152,9 +152,9 @@
 									<p:tab title="#{tab.title}" closable="true">
 										<pe:codeMirror id="codeMirror1" mode="#{tab.mode}"
 											autoformat="true" widgetVar="myCodeMirror" theme="eclipse"
-											value="#{tab.texte}" lineNumbers="true" tabSize="150"
+											value="#{tab.texte}" lineNumbers="true" tabSize="150" 
 											extraKeys="{ 'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);}}">
-											<p:ajax event="blur"
+											<p:ajax event="blur" update=":form:tabView"
 												listener="#{jJDevelopment.valueChangeHandlerCodeMirror}" />
 										</pe:codeMirror>
 										<table>
@@ -218,6 +218,20 @@
 							oncomplete="commitFileDialogWidget.hide()" />
 						<p:commandButton id="commitNoButton" value="#{messages.label_no}"
 							onclick="commitFileDialogWidget.hide()" type="button" />
+					</h:form>
+				</p:outputPanel>
+			</p:confirmDialog>
+
+			<p:confirmDialog id="saveFileDialog" widgetVar="saveFileDialogWidget"
+				message="#{messages.label_saveFileChangeConfirm}" showEffect="fade"
+				hideEffect="explode" header="#{messages.label_saveFileChange}"
+				severity="alarm">
+				<p:outputPanel id="savePanel">
+					<h:form id="saveForm">
+						<p:commandButton id="saveYesButton" value="#{messages.label_yes}"
+							action="#{jJDevelopment.saveFile}" update=":form:tabView" />
+						<p:commandButton id="saveNoButton" value="#{messages.label_no}"							
+							action="#{jJDevelopment.notSaveFile}" update=":form:tabView"/>
 					</h:form>
 				</p:outputPanel>
 			</p:confirmDialog>
