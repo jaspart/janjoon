@@ -1,8 +1,13 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.faces.bean.ManagedBean;
@@ -15,6 +20,8 @@ import org.primefaces.model.chart.ChartSeries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import com.starit.janjoonweb.domain.JJRequirement;
+import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
 import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
 
@@ -46,10 +53,27 @@ public class ChartBean implements Serializable {
 
 	private void createCategoryModel() {
 
-		System.out.println("Start");
-
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
+
+		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
+				.getAttribute("jJTestcaseBean");
+
+		List<JJTestcase> testcases = jJTestcaseBean.getTestcases();
+
+		Set<String> datesTMP = new HashSet<String>();
+
+		for (JJTestcase testcase : testcases) {
+			Date creationdate = testcase.getCreationDate();
+			String date = creationdate.toString().substring(0, 10);
+			System.out.println(date);
+
+			datesTMP.add(date);
+
+		}
+
+		List<String> dates = new ArrayList<String>();
+		dates.addAll(datesTMP);
 
 		JJTestcaseexecutionBean jJTestcaseexecutionBean = (JJTestcaseexecutionBean) session
 				.getAttribute("jJTestcaseexecutionBean");
@@ -61,45 +85,144 @@ public class ChartBean implements Serializable {
 		Set<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionBean
 				.getTestcaseexecutions();
 
-		Set<String> dates = new HashSet<String>();
-
-		for (JJTestcaseexecution testcaseexecution : testcaseexecutions) {
-			Date creationdate = testcaseexecution.getCreationDate();
-			String dateWithoutTime = creationdate.toString();
-			System.out.println(dateWithoutTime);
-
-			dates.add(dateWithoutTime);
-
-		}
-
 		for (String date : dates) {
 			System.out.println("date " + date);
 		}
 
-		System.out.println("Fin");
+		Map<String, String> mapTotalTC = new LinkedHashMap<String, String>();
+		Map<String, String> mapSuccessTC = new LinkedHashMap<String, String>();
+		Map<String, String> mapFailedTC = new LinkedHashMap<String, String>();
 
-		categoryModel = new CartesianChartModel();
-
-		ChartSeries nonexe = new ChartSeries("NON EXE");
-
-		for (String date : dates) {
+		for (int i = 0; i < dates.size(); i++) {
+			String date = dates.get(i);
 			int compteur = 0;
-			System.out.println("date " + date);
 
-			for (JJTestcaseexecution testcaseexecution : testcaseexecutions) {
-				String creationDate = testcaseexecution.getCreationDate()
-						.toString();
-				if (creationDate.equalsIgnoreCase(date)
-						&& (testcaseexecution.getPassed() == null)) {
+			int compteurSuccess = 0;
+			int compteurFailed = 0;
+
+			for (JJTestcase testcase : testcases) {
+				String creationDate = testcase.getCreationDate().toString()
+						.substring(0, 10);
+				if (creationDate.equalsIgnoreCase(date)) {
 					compteur++;
 				}
+
 			}
-			nonexe.set(date, compteur);
+
+			if (i == 0) {
+				mapTotalTC.put(date, String.valueOf(compteur));
+
+				for (JJTestcase testcase : testcases) {
+					for (JJTestcaseexecution tce : testcaseexecutions) {
+						Date updatedDate = tce.getUpdatedDate();
+						if ((updatedDate != null)
+								&& (updatedDate.toString().substring(0, 10)
+										.equals(date))
+								&& (tce.getTestcase().equals(testcase))) {
+
+							if (tce.getPassed() != null) {
+								if (tce.getPassed()) {
+									compteurSuccess++;
+								} else {
+									compteurFailed++;
+								}
+							}
+							break;
+
+						}
+					}
+				}
+
+				mapSuccessTC.put(date, String.valueOf(compteurSuccess));
+				mapFailedTC.put(date, String.valueOf(compteurFailed));
+
+			} else {
+
+				mapTotalTC.put(
+						date,
+						String.valueOf(compteur
+								+ Integer.parseInt(mapTotalTC.get(dates
+										.get(i - 1)))));
+
+				for (JJTestcase testcase : testcases) {
+					for (JJTestcaseexecution tce : testcaseexecutions) {
+						Date updatedDate = tce.getUpdatedDate();
+						if ((updatedDate != null)
+								&& (updatedDate.toString().substring(0, 10)
+										.equals(date))
+								&& (tce.getTestcase().equals(testcase))) {
+
+							if (tce.getPassed() != null) {
+								if (tce.getPassed()) {
+									compteurSuccess++;
+									compteurFailed--;
+								} else {
+									compteurSuccess--;
+									compteurFailed++;
+								}
+							}
+							break;
+
+						}
+					}
+				}
+
+				mapSuccessTC.put(
+						date,
+						String.valueOf(compteurSuccess
+								+ Integer.parseInt(mapSuccessTC.get(dates
+										.get(i - 1)))));
+				mapFailedTC.put(
+						date,
+						String.valueOf(compteurFailed
+								+ Integer.parseInt(mapFailedTC.get(dates
+										.get(i - 1)))));
+
+			}
 		}
 
-		if (dates.isEmpty()) {
-			nonexe.set("0", 0);
-		}
+		ChartSeries totalTC = new ChartSeries("Total TC");
+		if (mapTotalTC.isEmpty()) {
+			totalTC.set("0", 0);
+		} else
+
+			for (Map.Entry<String, String> entry : mapTotalTC.entrySet()) {
+				totalTC.set(entry.getKey(), Integer.parseInt(entry.getValue()));
+			}
+
+		ChartSeries successTC = new ChartSeries("Success TC");
+		if (mapSuccessTC.isEmpty()) {
+			successTC.set("0", 0);
+		} else
+
+			for (Map.Entry<String, String> entry : mapSuccessTC.entrySet()) {
+				successTC.set(entry.getKey(),
+						Integer.parseInt(entry.getValue()));
+			}
+
+		ChartSeries failedTC = new ChartSeries("Failed TC");
+		if (mapFailedTC.isEmpty()) {
+			failedTC.set("0", 0);
+		} else
+
+			for (Map.Entry<String, String> entry : mapFailedTC.entrySet()) {
+				failedTC.set(entry.getKey(), Integer.parseInt(entry.getValue()));
+			}
+
+		// for (String date : dates) {
+		// int compteur = 0;
+		// System.out.println("date " + date);
+		//
+		// for (JJTestcaseexecution testcaseexecution : testcaseexecutions) {
+		// String creationDate = testcaseexecution.getCreationDate()
+		// .toString().substring(0, 10);
+		// if (creationDate.equalsIgnoreCase(date)
+		// && (testcaseexecution.getPassed() == null)) {
+		// compteur++;
+		// }
+		// }
+		// totalTC.set(date, compteur);
+		// }
 
 		// ChartSeries girls = new ChartSeries("Girls");
 		//
@@ -109,7 +232,10 @@ public class ChartBean implements Serializable {
 		// girls.set("2007", 135);
 		// girls.set("2008", 120);
 
-		categoryModel.addSeries(nonexe);
+		categoryModel = new CartesianChartModel();
+		categoryModel.addSeries(totalTC);
+		categoryModel.addSeries(successTC);
+		categoryModel.addSeries(failedTC);
 		// categoryModel.addSeries(girls);
 	}
 
