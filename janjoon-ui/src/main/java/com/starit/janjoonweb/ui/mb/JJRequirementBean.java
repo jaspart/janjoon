@@ -22,6 +22,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -696,6 +697,14 @@ public class JJRequirementBean {
 		initiateTask = false;
 		disabledTask = true;
 
+		requirement.setNumero(0);
+
+		FacesContext fContext = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) fContext.getExternalContext()
+				.getSession(false);
+		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
+		JJContact contact = loginBean.getContact();
+		requirement.setCreatedBy(contact);
 	}
 
 	public void editRequirement() {
@@ -746,12 +755,35 @@ public class JJRequirementBean {
 		}
 		disabledInitTask = true;
 		disabledTask = true;
+
+		FacesContext fContext = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) fContext.getExternalContext()
+				.getSession(false);
+		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
+		JJContact contact = loginBean.getContact();
+
+		int numero = requirement.getNumero() + 1;
+		requirement.setNumero(numero);
+		requirement.setUpdatedBy(contact);
+		requirement.setUpdatedDate(new Date());
 	}
 
 	public void deleteRequirement() {
 
 		System.out.println("DELETE Requirement ...");
 		requirement.setEnabled(false);
+
+		FacesContext fContext = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) fContext.getExternalContext()
+				.getSession(false);
+		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
+		JJContact contact = loginBean.getContact();
+
+		int numero = requirement.getNumero() + 1;
+		requirement.setNumero(numero);
+		requirement.setUpdatedBy(contact);
+		requirement.setUpdatedDate(new Date());
+
 		jJRequirementService.updateJJRequirement(requirement);
 		requirement = null;
 		reset();
@@ -777,6 +809,17 @@ public class JJRequirementBean {
 
 		for (JJRequirement requirement : list) {
 			requirement.setStatus(status);
+
+			FacesContext fContext = FacesContext.getCurrentInstance();
+			HttpSession session = (HttpSession) fContext.getExternalContext()
+					.getSession(false);
+			LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
+			JJContact contact = loginBean.getContact();
+
+			int numero = requirement.getNumero() + 1;
+			requirement.setNumero(numero);
+			requirement.setUpdatedBy(contact);
+
 			jJRequirementService.updateJJRequirement(requirement);
 		}
 		reset();
@@ -856,7 +899,18 @@ public class JJRequirementBean {
 			importRequirement.setName(requirement.getName() + "(i)");
 			importRequirement.setDescription(requirement.getDescription());
 			importRequirement.setCreationDate(requirement.getCreationDate());
+			importRequirement.setCreatedBy(requirement.getCreatedBy());
+
 			importRequirement.setUpdatedDate(new Date());
+
+			FacesContext fContext = FacesContext.getCurrentInstance();
+			HttpSession session = (HttpSession) fContext.getExternalContext()
+					.getSession(false);
+			LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
+			JJContact contact = loginBean.getContact();
+
+			importRequirement.setNumero(requirement.getNumero());
+			importRequirement.setUpdatedBy(contact);
 
 			importRequirement.setProject(project);
 			importRequirement.setProduct(importProduct);
