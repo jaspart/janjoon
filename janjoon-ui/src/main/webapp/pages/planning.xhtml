@@ -12,21 +12,68 @@
 		<p:panelGrid style="margin-top:10px">
 			<p:row>
 				<p:column style="width:50%">
-					<p:dataTable var="task" value="#{jJTaskBean.tasks}">
+					<p:dataTable var="taskData" value="#{jJTaskBean.tasksData}"
+						editable="true">
+						<p:ajax event="rowEdit" listener="#{jJTaskBean.onRowEdit}" />
+						<p:ajax event="rowEditCancel" listener="#{jJTaskBean.onCancel}" />
 						<p:column headerText="Name">
-							<h:outputText value="#{task.name}" />
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{taskData.task.name}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{taskData.task.name}" style="width:96%" />
+								</f:facet>
+							</p:cellEditor>
 						</p:column>
-
 						<p:column headerText="Start Date">
-							<h:outputText value="#{task.startDatePlanned}" />
-						</p:column>
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{taskData.startDate}">
+										<f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />
+									</h:outputText>
 
+								</f:facet>
+								<f:facet name="input">
+									<p:calendar value="#{taskData.startDate}" navigator="true"
+										pattern="yyyy/MM/dd HH:mm:ss" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
 						<p:column headerText="End Date">
-							<h:outputText value="#{task.endDatePlanned}" />
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{taskData.endDate}">
+										<f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />
+									</h:outputText>
+								</f:facet>
+								<f:facet name="input">
+									<p:calendar value="#{taskData.endDate}" navigator="true"
+										pattern="yyyy/MM/dd HH:mm:ss" />
+								</f:facet>
+							</p:cellEditor>
 						</p:column>
-
 						<p:column headerText="Assigned To">
-							<h:outputText value="#{task.assignedTo.name}" />
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText
+										value="#{taskData.task.assignedTo.firstname} #{taskData.task.assignedTo.name}" />
+								</f:facet>
+								<f:facet name="input">
+									<h:selectOneMenu value="#{taskData.task.assignedTo}"
+										filter="true" filterMatchMode="startsWith" style="width:100%;">
+										<f:converter
+											converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />
+										<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
+										<f:selectItems value="#{jJTaskBean.contacts}" var="contact"
+											itemLabel="#{contact.firstname} #{contact.name}"
+											itemValue="#{contact}" />
+									</h:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column style="width:6%">
+							<p:rowEditor />
 						</p:column>
 					</p:dataTable>
 				</p:column>

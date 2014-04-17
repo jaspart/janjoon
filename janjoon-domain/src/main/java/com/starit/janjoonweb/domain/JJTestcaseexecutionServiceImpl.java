@@ -27,7 +27,8 @@ public class JJTestcaseexecutionServiceImpl implements
 
 	@Override
 	public List<JJTestcaseexecution> getTestcaseexecutions(JJTestcase testcase,
-			JJBuild build, boolean onlyActif, boolean sortedByUpdatedDate) {
+			JJBuild build, boolean onlyActif, boolean sortedByUpdatedDate,
+			boolean sortedByCreationdDate) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcaseexecution> criteriaQuery = criteriaBuilder
@@ -56,6 +57,10 @@ public class JJTestcaseexecutionServiceImpl implements
 
 		if (sortedByUpdatedDate) {
 			select.orderBy(criteriaBuilder.desc(from.get("updatedDate")));
+		}
+
+		if (sortedByCreationdDate) {
+			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 		}
 
 		TypedQuery<JJTestcaseexecution> result = entityManager

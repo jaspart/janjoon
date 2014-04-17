@@ -53,7 +53,7 @@ public class JJTestcaseexecutionBean {
 		if (testcase != null && testcase.getId() != null) {
 
 			List<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionService
-					.getTestcaseexecutions(testcase, build, true, true);
+					.getTestcaseexecutions(testcase, build, true, true, false);
 
 			for (JJTestcaseexecution testcaseexecution : testcaseexecutions) {
 				testCaseexecutionRecaps.add(new TestCaseexecutionRecap(
@@ -94,7 +94,7 @@ public class JJTestcaseexecutionBean {
 		JJBuild build = jJBuildBean.getBuild();
 
 		List<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionService
-				.getTestcaseexecutions(testcase, build, true, true);
+				.getTestcaseexecutions(testcase, build, true, false, true);
 		if (!testcaseexecutions.isEmpty()) {
 			JJTestcaseexecution testcaseexecution = testcaseexecutions.get(0);
 			if (testcaseexecution.getPassed() != null) {

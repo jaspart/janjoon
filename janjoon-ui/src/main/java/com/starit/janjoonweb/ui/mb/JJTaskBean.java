@@ -1,18 +1,23 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
 import javax.faces.context.FacesContext;
+import javax.faces.model.ListDataModel;
 import javax.servlet.http.HttpSession;
 
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.extensions.model.timeline.TimelineEvent;
 import org.primefaces.extensions.model.timeline.TimelineModel;
+import org.primefaces.model.SelectableDataModel;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJTask;
 
@@ -20,20 +25,22 @@ import com.starit.janjoonweb.domain.JJTask;
 @RooJsfManagedBean(entity = JJTask.class, beanName = "jJTaskBean")
 public class JJTaskBean {
 
-	private List<JJTask> tasks;
+	private List<TaskData> tasksData;
 
 	private TimelineModel model;
 	private Date start;
 	private Date end;
 
+	private List<JJContact> contacts;
+
 	private JJProject project;
 
-	public List<JJTask> getTasks() {
-		return tasks;
+	public List<TaskData> getTasksData() {
+		return tasksData;
 	}
 
-	public void setTasks(List<JJTask> tasks) {
-		this.tasks = tasks;
+	public void setTasksData(List<TaskData> tasksData) {
+		this.tasksData = tasksData;
 	}
 
 	public TimelineModel getModel() {
@@ -46,6 +53,15 @@ public class JJTaskBean {
 
 	public Date getEnd() {
 		return end;
+	}
+
+	public List<JJContact> getContacts() {
+		contacts = jJContactService.getContacts(null, true);
+		return contacts;
+	}
+
+	public void setContacts(List<JJContact> contacts) {
+		this.contacts = contacts;
 	}
 
 	public JJProject getProject() {
@@ -64,18 +80,25 @@ public class JJTaskBean {
 	public void loadData() {
 		getProject();
 
-		tasks = jJTaskService.getTasks(project, null, null, true);
-		Date now = new Date();
+		List<JJTask> tasks = jJTaskService.getTasks(project, null, null, true);
+		Date startDate = new Date();
+
+		tasksData = new ArrayList<TaskData>();
 
 		for (JJTask task : tasks) {
-			task.setStartDatePlanned(now);
-			task.setEndDatePlanned(new Date(now.getTime()
-					+ task.getWorkloadPlanned() * 60 * 60 * 1000));
+			task.setStartDatePlanned(startDate);
+			Date endDate = new Date(startDate.getTime()
+					+ task.getWorkloadPlanned() * 60 * 60 * 1000);
+			task.setEndDatePlanned(endDate);
+
+			TaskData taskData = new TaskData(task, startDate, endDate);
+			tasksData.add(taskData);
 		}
-		createTimeLineModel(now);
+
+		createTimeLineModel(startDate, tasks);
 	}
 
-	private void createTimeLineModel(Date now) {
+	private void createTimeLineModel(Date now, List<JJTask> tasks) {
 		// Set initial start / end dates for the axis of the timeline
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
@@ -98,6 +121,88 @@ public class JJTaskBean {
 			model.add(new TimelineEvent(task, now, end, true, task.getName()));
 		}
 
+	}
+
+	public void onRowEdit(RowEditEvent event) {
+		System.out.println("row select "
+				+ ((TaskData) event.getObject()).getTask().getId());
+		// FacesMessage msg = new FacesMessage("Car Edited", ((Car)
+		// event.getObject()).getModel());
+
+	}
+
+	public void onCancel(RowEditEvent event) {
+		// System.out.println("row select " + taskData);
+		// FacesMessage msg = new FacesMessage("Car Cancelled", ((Car)
+		// event.getObject()).getModel());
+		//
+		// FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+
+	@SuppressWarnings("unchecked")
+	public class TaskDataModel extends ListDataModel<TaskData> implements
+			SelectableDataModel<TaskData> {
+
+		public TaskDataModel(List<TaskData> data) {
+			super(data);
+		}
+
+		@Override
+		public TaskData getRowData(String rowKey) {
+			// In a real app, a more efficient way like a query by rowKey should
+			// be implemented to deal with huge data
+
+			List<TaskData> tasksData = (List<TaskData>) getWrappedData();
+
+			for (TaskData taskData : tasksData) {
+				if (taskData.getTask().getName().equals(rowKey))
+					return taskData;
+			}
+
+			return null;
+		}
+
+		@Override
+		public Object getRowKey(TaskData taskData) {
+			return taskData.getTask().getName();
+		}
+	}
+
+	public class TaskData {
+		JJTask task;
+		Date startDate;
+		Date endDate;
+
+		public TaskData(JJTask task, Date startDate, Date endDate) {
+			super();
+			this.task = task;
+			this.startDate = startDate;
+			this.endDate = endDate;
+		}
+
+		public JJTask getTask() {
+			return task;
+		}
+
+		public void setTask(JJTask task) {
+			this.task = task;
+		}
+
+		public Date getStartDate() {
+			return startDate;
+		}
+
+		public void setStartDate(Date startDate) {
+			this.startDate = startDate;
+		}
+
+		public Date getEndDate() {
+			return endDate;
+		}
+
+		public void setEndDate(Date endDate) {
+			this.endDate = endDate;
+		}
 	}
 
 }

@@ -850,7 +850,8 @@ public class JJTestcaseBean {
 					disabled = false;
 
 					List<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionService
-							.getTestcaseexecutions(testcase, build, true, true);
+							.getTestcaseexecutions(testcase, build, true,
+									false, true);
 
 					if (!testcaseexecutions.isEmpty()) {
 						JJTestcaseexecution testcaseexecution = testcaseexecutions
