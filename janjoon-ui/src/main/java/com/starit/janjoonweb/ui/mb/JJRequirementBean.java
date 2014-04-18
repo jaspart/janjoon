@@ -2702,14 +2702,17 @@ public class JJRequirementBean {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		JJStatusBean jJStatusBean=(JJStatusBean) session.getAttribute("jJStatusBean");
-		jJStatusBean.setPieChart(null);
+
+		JJStatusBean jJStatusBean = (JJStatusBean) session
+				.getAttribute("jJStatusBean");
+		if (jJStatusBean != null)
+			jJStatusBean.setPieChart(null);
 		setJJRequirement_(null);
 		setSelectedBugs(null);
 		setSelectedTasks(null);
-		setSelectedMessages (null);
-		setSelectedRequirementLinkDown (null);
-		setSelectedRequirementLinkUp (null);
+		setSelectedMessages(null);
+		setSelectedRequirementLinkDown(null);
+		setSelectedRequirementLinkUp(null);
 		setSelectedTestcases(null);
 		setCreateDialogVisible(false);
 	}
