@@ -21,7 +21,6 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJTask;
-import com.starit.janjoonweb.domain.JJTaskDataOnDemand;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
