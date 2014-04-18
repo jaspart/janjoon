@@ -848,6 +848,18 @@ public class JJRequirementBean {
 			if (initiateTask) {
 				task.setName(requirement.getName());
 				task.setDescription("This Task: " + task.getName());
+				task.setEndDatePlanned(new Date(task.getStartDatePlanned()
+						.getTime() + task.getWorkloadPlanned() * 60 * 60 * 1000));
+
+				// ////
+				// task.setStartDateReal(new Date(new Date().getTime() + 2 * 60
+				// * 60 * 1000));
+				// task.setWorkloadReal(6);
+				// task.setEndDateReal(new
+				// Date(task.getStartDateReal().getTime()
+				// + task.getWorkloadReal() * 60 * 60 * 1000));
+				// ////
+
 				requirement.getTasks().add(task);
 				task.setRequirement(requirement);
 				jJRequirementService.saveJJRequirement(requirement);
@@ -1108,15 +1120,8 @@ public class JJRequirementBean {
 			task = new JJTask();
 			task.setEnabled(true);
 			task.setCreationDate(new Date());
+			task.setStartDatePlanned(new Date());
 			task.setWorkloadPlanned(8);
-
-			// HttpSession session = (HttpSession) FacesContext
-			// .getCurrentInstance().getExternalContext()
-			// .getSession(false);
-			// JJContact contact = (JJContact)
-			// session.getAttribute("JJContact");
-			//
-			// task.setAssignedTo(contact);
 		} else {
 			task = new JJTask();
 		}

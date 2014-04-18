@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.ListDataModel;
 import javax.servlet.http.HttpSession;
@@ -20,6 +21,8 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJTask;
+import com.starit.janjoonweb.domain.JJTaskDataOnDemand;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJTask.class, beanName = "jJTaskBean")
@@ -80,18 +83,27 @@ public class JJTaskBean {
 	public void loadData() {
 		getProject();
 
-		List<JJTask> tasks = jJTaskService.getTasks(project, null, null, true);
+		List<JJTask> tasks = jJTaskService.getTasks(project, null, null, true,
+				true);
 		Date startDate = new Date();
 
 		tasksData = new ArrayList<TaskData>();
 
 		for (JJTask task : tasks) {
-			task.setStartDatePlanned(startDate);
-			Date endDate = new Date(startDate.getTime()
-					+ task.getWorkloadPlanned() * 60 * 60 * 1000);
-			task.setEndDatePlanned(endDate);
+			// task.setStartDatePlanned(startDate);
+			// Date endDate = new Date(startDate.getTime()
+			// + task.getWorkloadPlanned() * 60 * 60 * 1000);
+			// task.setEndDatePlanned(endDate);
 
-			TaskData taskData = new TaskData(task, startDate, endDate);
+			// TaskData taskData = new TaskData(task, startDate, endDate);
+			TaskData taskData;
+			if (task.getStartDateReal() != null) {
+				taskData = new TaskData(task, task.getStartDateReal(),
+						task.getEndDateReal(), true);
+			} else {
+				taskData = new TaskData(task, task.getStartDatePlanned(),
+						task.getEndDatePlanned(), false);
+			}
 			tasksData.add(taskData);
 		}
 
@@ -113,30 +125,108 @@ public class JJTaskBean {
 		// Create timeline model
 		model = new TimelineModel();
 
+		List<TimelineEvent> timelineEvents = new ArrayList<TimelineEvent>();
+
 		for (JJTask task : tasks) {
 			// Date start = task.getCreationDate();
-			Date end = new Date(now.getTime() + task.getWorkloadPlanned() * 60
-					* 60 * 1000);
+			// Date end = new Date(now.getTime() + task.getWorkloadPlanned() *
+			// 60
+			// * 60 * 1000);
+			// timelineEvents.add(new TimelineEvent(task, now, end, true, task
+			// .getName()));
 
-			model.add(new TimelineEvent(task, now, end, true, task.getName()));
+			timelineEvents.add(new TimelineEvent("",
+					task.getStartDatePlanned(), task.getEndDatePlanned(), true,
+					task.getName(), "planned"));
+
+			if (task.getStartDateReal() != null) {
+				timelineEvents.add(new TimelineEvent("", task
+						.getStartDateReal(), task.getEndDateReal(), true, task
+						.getName(), "real"));
+			}
+
+			// model.add(new TimelineEvent(task, now, end, true,
+			// task.getName()));
 		}
 
+		model.addAll(timelineEvents);
 	}
 
 	public void onRowEdit(RowEditEvent event) {
+
+		String message = "";
+		FacesMessage facesMessage = null;
+
 		System.out.println("row select "
 				+ ((TaskData) event.getObject()).getTask().getId());
-		// FacesMessage msg = new FacesMessage("Car Edited", ((Car)
-		// event.getObject()).getModel());
+
+		TaskData taskData = (TaskData) event.getObject();
+
+		Date startDate = taskData.getStartDate();
+		Date endDate = taskData.getEndDate();
+
+		long startTime = startDate.getTime();
+		long endTime = endDate.getTime();
+
+		long str = endTime - startTime;
+		System.out.println("str " + str);
+
+		if (str > 0) {
+			Date SD;
+			Date ED;
+
+			JJTask task = taskData.getTask();
+
+			if (taskData.realDateType) {
+				SD = task.getStartDateReal();
+				ED = task.getEndDateReal();
+			} else {
+				SD = task.getStartDatePlanned();
+				ED = task.getEndDatePlanned();
+			}
+
+			long ST = SD.getTime();
+			long ET = ED.getTime();
+
+			System.out.println("startTime :" + startTime + " ST " + ST);
+			System.out.println("endTime :" + endTime + " ET " + ET);
+
+			if ((startTime == ST) && (endTime == ET)) {
+				System.out.println("Same Date");
+			} else {
+				task.setStartDateReal(startDate);
+				task.setEndDateReal(endDate);
+
+				int workloadReal = (int) (str / 3600000);
+				System.out.println("workloadReal " + workloadReal);
+
+				task.setWorkloadReal(workloadReal);
+			}
+
+			task.setUpdatedDate(new Date());
+			jJTaskService.updateJJTask(task);
+
+			loadData();
+
+			message = "Success Update";
+			facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					message, "JJTask");
+
+		} else {
+			message = "The End Date must be greater than the Start Date";
+			facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					message, "JJTask");
+		}
+
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
 
 	public void onCancel(RowEditEvent event) {
-		// System.out.println("row select " + taskData);
-		// FacesMessage msg = new FacesMessage("Car Cancelled", ((Car)
-		// event.getObject()).getModel());
-		//
-		// FacesContext.getCurrentInstance().addMessage(null, msg);
+
+		FacesMessage facesMessage = MessageFactory.getMessage("Cancel Edit",
+				"JJask");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -172,12 +262,15 @@ public class JJTaskBean {
 		JJTask task;
 		Date startDate;
 		Date endDate;
+		boolean realDateType;
 
-		public TaskData(JJTask task, Date startDate, Date endDate) {
+		public TaskData(JJTask task, Date startDate, Date endDate,
+				boolean realDateType) {
 			super();
 			this.task = task;
 			this.startDate = startDate;
 			this.endDate = endDate;
+			this.realDateType = realDateType;
 		}
 
 		public JJTask getTask() {
@@ -202,6 +295,14 @@ public class JJTaskBean {
 
 		public void setEndDate(Date endDate) {
 			this.endDate = endDate;
+		}
+
+		public boolean getRealDateType() {
+			return realDateType;
+		}
+
+		public void setRealDateType(boolean realDateType) {
+			this.realDateType = realDateType;
 		}
 	}
 

@@ -9,22 +9,34 @@
 <ui:composition>
 	<h:form id="planningForm">
 		<f:event type="preRenderComponent" listener="#{jJTaskBean.loadData()}" />
+		<p:growl id="msg" />
 		<p:panelGrid style="margin-top:10px">
 			<p:row>
 				<p:column style="width:50%">
-					<p:dataTable var="taskData" value="#{jJTaskBean.tasksData}"
-						editable="true">
-						<p:ajax event="rowEdit" listener="#{jJTaskBean.onRowEdit}" />
-						<p:ajax event="rowEditCancel" listener="#{jJTaskBean.onCancel}" />
+					<p:dataTable id="taskDataTable" var="taskData"
+						value="#{jJTaskBean.tasksData}" editable="true"
+						sortBy="task.requirement.chapter.name">
+						<p:ajax event="rowEdit" listener="#{jJTaskBean.onRowEdit}"
+							update="taskDataTable :projecttabview:planningForm:timeline :projecttabview:planningForm:msg"
+							process="@widgetVar(nameWidget) @widgetVar(startdateWidget) @widgetVar(enddateWidget)" />
+						<p:ajax event="rowEditCancel" listener="#{jJTaskBean.onCancel}"
+							update=":projecttabview:planningForm:msg" />
+
+
 						<p:column headerText="Name">
 							<p:cellEditor>
 								<f:facet name="output">
 									<h:outputText value="#{taskData.task.name}" />
 								</f:facet>
 								<f:facet name="input">
-									<p:inputText value="#{taskData.task.name}" style="width:96%" />
+									<p:inputText value="#{taskData.task.name}" style="width:96%"
+										required="true" label="Name" widgetVar="nameWidget"
+										requiredMessage="Task name is a required value" />
 								</f:facet>
 							</p:cellEditor>
+						</p:column>
+						<p:column headerText="Chapter" rendered="false">
+							<h:outputText value="#{taskData.task.requirement.chapter.name}" />
 						</p:column>
 						<p:column headerText="Start Date">
 							<p:cellEditor>
@@ -36,7 +48,9 @@
 								</f:facet>
 								<f:facet name="input">
 									<p:calendar value="#{taskData.startDate}" navigator="true"
-										pattern="yyyy/MM/dd HH:mm:ss" />
+										pattern="yyyy/MM/dd HH:mm:ss" required="true"
+										label="Start Date" widgetVar="startdateWidget"
+										requiredMessage="Start Date is a required value" />
 								</f:facet>
 							</p:cellEditor>
 						</p:column>
@@ -49,7 +63,9 @@
 								</f:facet>
 								<f:facet name="input">
 									<p:calendar value="#{taskData.endDate}" navigator="true"
-										pattern="yyyy/MM/dd HH:mm:ss" />
+										pattern="yyyy/MM/dd HH:mm:ss" required="true" label="End Date"
+										widgetVar="enddateWidget"
+										requiredMessage="End Date is a required value" />
 								</f:facet>
 							</p:cellEditor>
 						</p:column>
@@ -75,6 +91,12 @@
 						<p:column style="width:6%">
 							<p:rowEditor />
 						</p:column>
+						<p:summaryRow>
+							<p:column colspan="5" style="text-align:left">
+								<h:outputText
+									value="Chapter: #{taskData.task.requirement.chapter.name}" />
+							</p:column>
+						</p:summaryRow>
 					</p:dataTable>
 				</p:column>
 				<p:column style="width:50%">
@@ -82,9 +104,9 @@
 						editable="true" eventMargin="10" eventMarginAxis="0"
 						locale="#{LocaleBean.locale}" start="#{jJTaskBean.start}"
 						end="#{jJTaskBean.end}" showNavigation="true" showButtonNew="true"
-						showMajorLabels="false" axisOnTop="true" groupsChangeable="true"
-						groupsOnRight="false" var="task">
-						<h:outputText value="#{task.name}" />
+						axisOnTop="true" groupsChangeable="false" groupsOnRight="false"
+						var="task">
+						<h:outputText value="#{task}" />
 					</pe:timeline>
 				</p:column>
 			</p:row>

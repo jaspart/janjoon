@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -24,7 +25,7 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 	@Override
 	public List<JJTask> getTasks(JJProject project, JJProduct product,
-			JJContact contact, boolean onlyActif) {
+			JJContact contact, boolean onlyActif, boolean sortedByChapter) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
 				.createQuery(JJTask.class);
@@ -52,7 +53,18 @@ public class JJTaskServiceImpl implements JJTaskService {
 			predicates.add(criteriaBuilder.equal(path, product));
 		}
 
+		if (sortedByChapter) {
+			Path<Object> path = from.join("requirement").get("chapter");
+			predicates.add(criteriaBuilder.isNotNull(path));
+		}
+
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+		// if (sortedByChapter) {
+		// Path<Object> path = from.join("requirement").get("chapter");
+		// Expression<String> expression = from.get("name");
+		// select.orderBy(criteriaBuilder.desc(expression));
+		// }
 
 		TypedQuery<JJTask> result = entityManager.createQuery(select);
 

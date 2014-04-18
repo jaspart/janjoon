@@ -871,31 +871,31 @@ public class ConfigListener implements ServletContextListener {
 			List<JJProject> projectList = jJProjectService.getProjects(true);
 
 			List<JJProduct> productList = jJProductService.getProducts(true);
-			if (jJRequirementService.findAllJJRequirements().isEmpty()) {
-				JJRequirement jJRequirement;
-				for (int j = 0; j < projectList.size(); j++) {
-					jJRequirement = new JJRequirement();
-					jJRequirement.setName("Requirement " + j);
-					jJRequirement.setDescription("RequirementDescription " + j);
-					jJRequirement.setCreationDate(new Date());
-					jJRequirement.setEnabled(true);
-					jJRequirement.setProduct(productList.get(j));
-					jJRequirement.setProject(projectList.get(j));
-					jJRequirementService.saveJJRequirement(jJRequirement);
-					JJTask jJTask;
-					for (int i = 0; i < 4; i++) {
-						jJTask = new JJTask();
-						jJTask.setName("TaskName " + i + ":R-" + j);
-						jJTask.setDescription("TaskDescription " + i + ":R-"
-								+ j);
-						jJTask.setCreationDate(new Date());
-						jJTask.setEnabled(true);
-						jJTask.setRequirement(jJRequirement);
-						jJTask.setWorkloadPlanned(10);
-						jJTaskService.saveJJTask(jJTask);
-					}
-				}
-			}
+//			if (jJRequirementService.findAllJJRequirements().isEmpty()) {
+//				JJRequirement jJRequirement;
+//				for (int j = 0; j < projectList.size(); j++) {
+//					jJRequirement = new JJRequirement();
+//					jJRequirement.setName("Requirement " + j);
+//					jJRequirement.setDescription("RequirementDescription " + j);
+//					jJRequirement.setCreationDate(new Date());
+//					jJRequirement.setEnabled(true);
+//					jJRequirement.setProduct(productList.get(j));
+//					jJRequirement.setProject(projectList.get(j));
+//					jJRequirementService.saveJJRequirement(jJRequirement);
+//					JJTask jJTask;
+//					for (int i = 0; i < 4; i++) {
+//						jJTask = new JJTask();
+//						jJTask.setName("TaskName " + i + ":R-" + j);
+//						jJTask.setDescription("TaskDescription " + i + ":R-"
+//								+ j);
+//						jJTask.setCreationDate(new Date());
+//						jJTask.setEnabled(true);
+//						jJTask.setRequirement(jJRequirement);
+//						jJTask.setWorkloadPlanned(10);
+//						jJTaskService.saveJJTask(jJTask);
+//					}
+//				}
+//			}
 			if (jJMessageService.findAllJJMessages().isEmpty()) {
 
 				int i = 0;
