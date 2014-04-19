@@ -163,7 +163,27 @@ div.timeline-axis {
 	background: -moz-linear-gradient(top, #5D99C3, #3A6DA0);
 	-khtml-opacity: 1;
 	-moz-opacity: 1;
-	opacity: 1;
+	opacity: 0.8;
+	height: 35px;
+}
+
+div.timeline-navigation {
+	visibility:hidden;
+}
+timeline-navigation-new {
+	padding: 0px;
+}
+timeline-navigation-zoom-in {
+	padding: 0px;
+}
+timeline-navigation-zoom-out {
+	padding: 0px;
+}
+timeline-navigation-move-left {
+	padding: 0px;
+}
+timeline-navigation-move-right {
+	padding: 0px;
 }
 
 div.planned {
