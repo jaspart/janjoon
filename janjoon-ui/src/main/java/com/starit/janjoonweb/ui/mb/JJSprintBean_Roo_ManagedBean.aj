@@ -20,12 +20,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UISelectItems;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
@@ -38,6 +40,7 @@ import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
+import org.primefaces.component.selectmanymenu.SelectManyMenu;
 import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
@@ -82,6 +85,8 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
     
     private List<JJTask> JJSprintBean.selectedObstacles;
     
+    private List<JJContact> JJSprintBean.selectedContacts;
+    
     private List<JJMessage> JJSprintBean.selectedMessages;
     
     @PostConstruct
@@ -91,7 +96,7 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         columns.add("description");
         columns.add("creationDate");
         columns.add("updatedDate");
-        columns.add("numero");
+        columns.add("ordering");
     }
     
     public String JJSprintBean.getName() {
@@ -309,24 +314,24 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         enabledCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
         
-        OutputLabel numeroCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        numeroCreateOutput.setFor("numeroCreateInput");
-        numeroCreateOutput.setId("numeroCreateOutput");
-        numeroCreateOutput.setValue("Numero:");
-        htmlPanelGrid.getChildren().add(numeroCreateOutput);
+        OutputLabel orderingCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        orderingCreateOutput.setFor("orderingCreateInput");
+        orderingCreateOutput.setId("orderingCreateOutput");
+        orderingCreateOutput.setValue("Ordering:");
+        htmlPanelGrid.getChildren().add(orderingCreateOutput);
         
-        Spinner numeroCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
-        numeroCreateInput.setId("numeroCreateInput");
-        numeroCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJSprintBean.JJSprint_.numero}", Integer.class));
-        numeroCreateInput.setRequired(false);
+        Spinner orderingCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        orderingCreateInput.setId("orderingCreateInput");
+        orderingCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJSprintBean.JJSprint_.ordering}", Integer.class));
+        orderingCreateInput.setRequired(false);
         
-        htmlPanelGrid.getChildren().add(numeroCreateInput);
+        htmlPanelGrid.getChildren().add(orderingCreateInput);
         
-        Message numeroCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        numeroCreateInputMessage.setId("numeroCreateInputMessage");
-        numeroCreateInputMessage.setFor("numeroCreateInput");
-        numeroCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(numeroCreateInputMessage);
+        Message orderingCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        orderingCreateInputMessage.setId("orderingCreateInputMessage");
+        orderingCreateInputMessage.setFor("orderingCreateInput");
+        orderingCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(orderingCreateInputMessage);
         
         OutputLabel projectCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         projectCreateOutput.setFor("projectCreateInput");
@@ -399,6 +404,31 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         obstaclesCreateInputMessage.setFor("obstaclesCreateInput");
         obstaclesCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(obstaclesCreateInputMessage);
+        
+        OutputLabel contactsCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        contactsCreateOutput.setFor("contactsCreateInput");
+        contactsCreateOutput.setId("contactsCreateOutput");
+        contactsCreateOutput.setValue("Contacts:");
+        htmlPanelGrid.getChildren().add(contactsCreateOutput);
+        
+        SelectManyMenu contactsCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        contactsCreateInput.setId("contactsCreateInput");
+        contactsCreateInput.setConverter(new JJContactConverter());
+        contactsCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJSprintBean.selectedContacts}", List.class));
+        UISelectItems contactsCreateInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        contactsCreateInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.allJJContacts}", List.class));
+        contactsCreateInput.setRequired(false);
+        contactsCreateInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJContact", String.class));
+        contactsCreateInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJContact}", String.class));
+        contactsCreateInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJContact}", JJContact.class));
+        contactsCreateInput.getChildren().add(contactsCreateInputItems);
+        htmlPanelGrid.getChildren().add(contactsCreateInput);
+        
+        Message contactsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        contactsCreateInputMessage.setId("contactsCreateInputMessage");
+        contactsCreateInputMessage.setFor("contactsCreateInput");
+        contactsCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(contactsCreateInputMessage);
         
         HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesCreateOutput.setId("messagesCreateOutput");
@@ -574,24 +604,24 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         enabledEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledEditInputMessage);
         
-        OutputLabel numeroEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        numeroEditOutput.setFor("numeroEditInput");
-        numeroEditOutput.setId("numeroEditOutput");
-        numeroEditOutput.setValue("Numero:");
-        htmlPanelGrid.getChildren().add(numeroEditOutput);
+        OutputLabel orderingEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        orderingEditOutput.setFor("orderingEditInput");
+        orderingEditOutput.setId("orderingEditOutput");
+        orderingEditOutput.setValue("Ordering:");
+        htmlPanelGrid.getChildren().add(orderingEditOutput);
         
-        Spinner numeroEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
-        numeroEditInput.setId("numeroEditInput");
-        numeroEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJSprintBean.JJSprint_.numero}", Integer.class));
-        numeroEditInput.setRequired(false);
+        Spinner orderingEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        orderingEditInput.setId("orderingEditInput");
+        orderingEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJSprintBean.JJSprint_.ordering}", Integer.class));
+        orderingEditInput.setRequired(false);
         
-        htmlPanelGrid.getChildren().add(numeroEditInput);
+        htmlPanelGrid.getChildren().add(orderingEditInput);
         
-        Message numeroEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        numeroEditInputMessage.setId("numeroEditInputMessage");
-        numeroEditInputMessage.setFor("numeroEditInput");
-        numeroEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(numeroEditInputMessage);
+        Message orderingEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        orderingEditInputMessage.setId("orderingEditInputMessage");
+        orderingEditInputMessage.setFor("orderingEditInput");
+        orderingEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(orderingEditInputMessage);
         
         OutputLabel projectEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         projectEditOutput.setFor("projectEditInput");
@@ -664,6 +694,31 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         obstaclesEditInputMessage.setFor("obstaclesEditInput");
         obstaclesEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(obstaclesEditInputMessage);
+        
+        OutputLabel contactsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        contactsEditOutput.setFor("contactsEditInput");
+        contactsEditOutput.setId("contactsEditOutput");
+        contactsEditOutput.setValue("Contacts:");
+        htmlPanelGrid.getChildren().add(contactsEditOutput);
+        
+        SelectManyMenu contactsEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        contactsEditInput.setId("contactsEditInput");
+        contactsEditInput.setConverter(new JJContactConverter());
+        contactsEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJSprintBean.selectedContacts}", List.class));
+        UISelectItems contactsEditInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        contactsEditInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.allJJContacts}", List.class));
+        contactsEditInput.setRequired(false);
+        contactsEditInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJContact", String.class));
+        contactsEditInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJContact}", String.class));
+        contactsEditInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJContact}", JJContact.class));
+        contactsEditInput.getChildren().add(contactsEditInputItems);
+        htmlPanelGrid.getChildren().add(contactsEditInput);
+        
+        Message contactsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        contactsEditInputMessage.setId("contactsEditInputMessage");
+        contactsEditInputMessage.setFor("contactsEditInput");
+        contactsEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(contactsEditInputMessage);
         
         HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesEditOutput.setId("messagesEditOutput");
@@ -769,14 +824,14 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJSprintBean.JJSprint_.enabled}", String.class));
         htmlPanelGrid.getChildren().add(enabledValue);
         
-        HtmlOutputText numeroLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        numeroLabel.setId("numeroLabel");
-        numeroLabel.setValue("Numero:");
-        htmlPanelGrid.getChildren().add(numeroLabel);
+        HtmlOutputText orderingLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        orderingLabel.setId("orderingLabel");
+        orderingLabel.setValue("Ordering:");
+        htmlPanelGrid.getChildren().add(orderingLabel);
         
-        HtmlOutputText numeroValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        numeroValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJSprintBean.JJSprint_.numero}", String.class));
-        htmlPanelGrid.getChildren().add(numeroValue);
+        HtmlOutputText orderingValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        orderingValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJSprintBean.JJSprint_.ordering}", String.class));
+        htmlPanelGrid.getChildren().add(orderingValue);
         
         HtmlOutputText projectLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         projectLabel.setId("projectLabel");
@@ -817,6 +872,25 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         obstaclesValue.setId("obstaclesValue");
         obstaclesValue.setValue("This relationship is managed from the JJTask side");
         htmlPanelGrid.getChildren().add(obstaclesValue);
+        
+        HtmlOutputText contactsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        contactsLabel.setId("contactsLabel");
+        contactsLabel.setValue("Contacts:");
+        htmlPanelGrid.getChildren().add(contactsLabel);
+        
+        SelectManyMenu contactsValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        contactsValue.setId("contactsValue");
+        contactsValue.setConverter(new JJContactConverter());
+        contactsValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJSprintBean.selectedContacts}", List.class));
+        UISelectItems contactsValueItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        contactsValue.setReadonly(true);
+        contactsValue.setDisabled(true);
+        contactsValueItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJSprintBean.JJSprint_.contacts}", Set.class));
+        contactsValueItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJContact", String.class));
+        contactsValueItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJContact}", String.class));
+        contactsValueItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJContact}", JJContact.class));
+        contactsValue.getChildren().add(contactsValueItems);
+        htmlPanelGrid.getChildren().add(contactsValue);
         
         HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesLabel.setId("messagesLabel");
@@ -908,6 +982,17 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         this.selectedObstacles = selectedObstacles;
     }
     
+    public List<JJContact> JJSprintBean.getSelectedContacts() {
+        return selectedContacts;
+    }
+    
+    public void JJSprintBean.setSelectedContacts(List<JJContact> selectedContacts) {
+        if (selectedContacts != null) {
+            JJSprint_.setContacts(new HashSet<JJContact>(selectedContacts));
+        }
+        this.selectedContacts = selectedContacts;
+    }
+    
     public List<JJMessage> JJSprintBean.getSelectedMessages() {
         return selectedMessages;
     }
@@ -928,6 +1013,9 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         }
         if (JJSprint_ != null && JJSprint_.getObstacles() != null) {
             selectedObstacles = new ArrayList<JJTask>(JJSprint_.getObstacles());
+        }
+        if (JJSprint_ != null && JJSprint_.getContacts() != null) {
+            selectedContacts = new ArrayList<JJContact>(JJSprint_.getContacts());
         }
         if (JJSprint_ != null && JJSprint_.getMessages() != null) {
             selectedMessages = new ArrayList<JJMessage>(JJSprint_.getMessages());
@@ -987,6 +1075,7 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         selectedBuilds = null;
         selectedTasks = null;
         selectedObstacles = null;
+        selectedContacts = null;
         selectedMessages = null;
         createDialogVisible = false;
     }

@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -72,6 +73,9 @@ public class JJContact extends JJAbstractEntity {
 
 	@Lob
 	private String calendar;
+
+	@ManyToMany(mappedBy = "contacts", fetch = FetchType.EAGER)
+	private Set<JJSprint> sprints = new HashSet<JJSprint>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "contact")
 	private Set<JJPermission> permissions = new HashSet<JJPermission>();

@@ -4,6 +4,7 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJSprint;
@@ -12,12 +13,12 @@ import java.util.Set;
 
 privileged aspect JJSprint_Roo_JavaBean {
     
-    public Integer JJSprint.getNumero() {
-        return this.numero;
+    public Integer JJSprint.getOrdering() {
+        return this.ordering;
     }
     
-    public void JJSprint.setNumero(Integer numero) {
-        this.numero = numero;
+    public void JJSprint.setOrdering(Integer ordering) {
+        this.ordering = ordering;
     }
     
     public JJProject JJSprint.getProject() {
@@ -50,6 +51,14 @@ privileged aspect JJSprint_Roo_JavaBean {
     
     public void JJSprint.setObstacles(Set<JJTask> obstacles) {
         this.obstacles = obstacles;
+    }
+    
+    public Set<JJContact> JJSprint.getContacts() {
+        return this.contacts;
+    }
+    
+    public void JJSprint.setContacts(Set<JJContact> contacts) {
+        this.contacts = contacts;
     }
     
     public Set<JJMessage> JJSprint.getMessages() {

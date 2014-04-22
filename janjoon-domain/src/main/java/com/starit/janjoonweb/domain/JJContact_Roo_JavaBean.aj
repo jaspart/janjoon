@@ -10,6 +10,7 @@ import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJPermission;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJVersion;
 import java.util.Date;
 import java.util.Set;
@@ -142,6 +143,14 @@ privileged aspect JJContact_Roo_JavaBean {
     
     public void JJContact.setCalendar(String calendar) {
         this.calendar = calendar;
+    }
+    
+    public Set<JJSprint> JJContact.getSprints() {
+        return this.sprints;
+    }
+    
+    public void JJContact.setSprints(Set<JJSprint> sprints) {
+        this.sprints = sprints;
     }
     
     public Set<JJPermission> JJContact.getPermissions() {

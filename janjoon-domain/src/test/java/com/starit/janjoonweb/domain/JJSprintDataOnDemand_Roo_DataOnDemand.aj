@@ -48,7 +48,7 @@ privileged aspect JJSprintDataOnDemand_Roo_DataOnDemand {
         setDescription(obj, index);
         setEnabled(obj, index);
         setName(obj, index);
-        setNumero(obj, index);
+        setOrdering(obj, index);
         setUpdatedDate(obj, index);
         return obj;
     }
@@ -76,9 +76,9 @@ privileged aspect JJSprintDataOnDemand_Roo_DataOnDemand {
         obj.setName(name);
     }
     
-    public void JJSprintDataOnDemand.setNumero(JJSprint obj, int index) {
-        Integer numero = new Integer(index);
-        obj.setNumero(numero);
+    public void JJSprintDataOnDemand.setOrdering(JJSprint obj, int index) {
+        Integer ordering = new Integer(index);
+        obj.setOrdering(ordering);
     }
     
     public void JJSprintDataOnDemand.setUpdatedDate(JJSprint obj, int index) {

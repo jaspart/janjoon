@@ -15,6 +15,7 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProductService;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJProjectService;
+import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.JJContactBean;
@@ -94,6 +95,8 @@ privileged aspect JJContactBean_Roo_ManagedBean {
     private HtmlPanelGrid JJContactBean.viewPanelGrid;
     
     private boolean JJContactBean.createDialogVisible = false;
+    
+    private List<JJSprint> JJContactBean.selectedSprints;
     
     private List<JJPermission> JJContactBean.selectedPermissions;
     
@@ -664,6 +667,22 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         calendarCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(calendarCreateInputMessage);
         
+        HtmlOutputText sprintsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        sprintsCreateOutput.setId("sprintsCreateOutput");
+        sprintsCreateOutput.setValue("Sprints:");
+        htmlPanelGrid.getChildren().add(sprintsCreateOutput);
+        
+        HtmlOutputText sprintsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        sprintsCreateInput.setId("sprintsCreateInput");
+        sprintsCreateInput.setValue("This relationship is managed from the JJSprint side");
+        htmlPanelGrid.getChildren().add(sprintsCreateInput);
+        
+        Message sprintsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        sprintsCreateInputMessage.setId("sprintsCreateInputMessage");
+        sprintsCreateInputMessage.setFor("sprintsCreateInput");
+        sprintsCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(sprintsCreateInputMessage);
+        
         HtmlOutputText permissionsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         permissionsCreateOutput.setId("permissionsCreateOutput");
         permissionsCreateOutput.setValue("Permissions:");
@@ -1194,6 +1213,22 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         calendarEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(calendarEditInputMessage);
         
+        HtmlOutputText sprintsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        sprintsEditOutput.setId("sprintsEditOutput");
+        sprintsEditOutput.setValue("Sprints:");
+        htmlPanelGrid.getChildren().add(sprintsEditOutput);
+        
+        HtmlOutputText sprintsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        sprintsEditInput.setId("sprintsEditInput");
+        sprintsEditInput.setValue("This relationship is managed from the JJSprint side");
+        htmlPanelGrid.getChildren().add(sprintsEditInput);
+        
+        Message sprintsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        sprintsEditInputMessage.setId("sprintsEditInputMessage");
+        sprintsEditInputMessage.setFor("sprintsEditInput");
+        sprintsEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(sprintsEditInputMessage);
+        
         HtmlOutputText permissionsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         permissionsEditOutput.setId("permissionsEditOutput");
         permissionsEditOutput.setValue("Permissions:");
@@ -1478,6 +1513,16 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         calendarValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(calendarValue);
         
+        HtmlOutputText sprintsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        sprintsLabel.setId("sprintsLabel");
+        sprintsLabel.setValue("Sprints:");
+        htmlPanelGrid.getChildren().add(sprintsLabel);
+        
+        HtmlOutputText sprintsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        sprintsValue.setId("sprintsValue");
+        sprintsValue.setValue("This relationship is managed from the JJSprint side");
+        htmlPanelGrid.getChildren().add(sprintsValue);
+        
         HtmlOutputText permissionsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         permissionsLabel.setId("permissionsLabel");
         permissionsLabel.setValue("Permissions:");
@@ -1600,6 +1645,17 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         return suggestions;
     }
     
+    public List<JJSprint> JJContactBean.getSelectedSprints() {
+        return selectedSprints;
+    }
+    
+    public void JJContactBean.setSelectedSprints(List<JJSprint> selectedSprints) {
+        if (selectedSprints != null) {
+            JJContact_.setSprints(new HashSet<JJSprint>(selectedSprints));
+        }
+        this.selectedSprints = selectedSprints;
+    }
+    
     public List<JJPermission> JJContactBean.getSelectedPermissions() {
         return selectedPermissions;
     }
@@ -1623,6 +1679,9 @@ privileged aspect JJContactBean_Roo_ManagedBean {
     }
     
     public String JJContactBean.onEdit() {
+        if (JJContact_ != null && JJContact_.getSprints() != null) {
+            selectedSprints = new ArrayList<JJSprint>(JJContact_.getSprints());
+        }
         if (JJContact_ != null && JJContact_.getPermissions() != null) {
             selectedPermissions = new ArrayList<JJPermission>(JJContact_.getPermissions());
         }
@@ -1681,6 +1740,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
     
     public void JJContactBean.reset() {
         JJContact_ = null;
+        selectedSprints = null;
         selectedPermissions = null;
         selectedMessages = null;
         createDialogVisible = false;
