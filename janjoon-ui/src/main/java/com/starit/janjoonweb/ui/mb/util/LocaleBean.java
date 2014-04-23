@@ -14,47 +14,51 @@ import javax.faces.model.SelectItem;
 @ManagedBean
 @SessionScoped
 public class LocaleBean {
-    private Locale locale;
+	private Locale locale;
 
-    @PostConstruct
-    public void init() {
-        locale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
-    }
+	@PostConstruct
+	public void init() {
+		locale = FacesContext.getCurrentInstance().getExternalContext()
+				.getRequestLocale();
+	}
 
-    public Locale getLocale() {
-        return locale;
-    }
+	public Locale getLocale() {
+		return locale;
+	}
 
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
 
-    public SelectItem[] getLocales() {
-        List<SelectItem> items = new ArrayList<SelectItem>();
-        Iterator<Locale> supportedLocales = FacesContext.getCurrentInstance().getApplication().getSupportedLocales();
-        while (supportedLocales.hasNext()) {
-            Locale locale = supportedLocales.next();
-            items.add(new SelectItem(locale.toString(), locale.getDisplayName()));
-        }
-        return items.toArray(new SelectItem[] {});
-    }
+	public SelectItem[] getLocales() {
+		List<SelectItem> items = new ArrayList<SelectItem>();
+		Iterator<Locale> supportedLocales = FacesContext.getCurrentInstance()
+				.getApplication().getSupportedLocales();
+		while (supportedLocales.hasNext()) {
+			Locale locale = supportedLocales.next();
+			items.add(new SelectItem(locale.toString(), locale.getDisplayName()));
+		}
+		return items.toArray(new SelectItem[] {});
+	}
 
-    public String getSelectedLocale() {
-        return getLocale().toString();
-    }
+	public String getSelectedLocale() {
+		return getLocale().toString();
+	}
 
-    public void setSelectedLocale() {
-        setSelectedLocale(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("locale"));
-    }
-    
-   public void setSelectedLocale(String localeString) {
-        Iterator<Locale> supportedLocales = FacesContext.getCurrentInstance().getApplication().getSupportedLocales();
-        while (supportedLocales.hasNext()) {
-            Locale locale = supportedLocales.next();
-            if (locale.toString().equals(localeString)) {
-                this.locale = locale;
-                break;
-            }
-        }
-    }
+	public void setSelectedLocale() {
+		setSelectedLocale(FacesContext.getCurrentInstance()
+				.getExternalContext().getRequestParameterMap().get("locale"));
+	}
+
+	public void setSelectedLocale(String localeString) {
+		Iterator<Locale> supportedLocales = FacesContext.getCurrentInstance()
+				.getApplication().getSupportedLocales();
+		while (supportedLocales.hasNext()) {
+			Locale locale = supportedLocales.next();
+			if (locale.toString().equals(localeString)) {
+				this.locale = locale;
+				break;
+			}
+		}
+	}
 }

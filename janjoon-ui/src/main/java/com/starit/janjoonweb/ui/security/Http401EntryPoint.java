@@ -10,17 +10,19 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
-public class Http401EntryPoint implements AuthenticationEntryPoint,Serializable{
+public class Http401EntryPoint implements AuthenticationEntryPoint,
+		Serializable {
 
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	@Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
-            throws IOException, ServletException {
-        response.sendError(400);
-    }
+	public void commence(HttpServletRequest request,
+			HttpServletResponse response, AuthenticationException authException)
+			throws IOException, ServletException {
+		response.sendError(400);
+	}
 
 }

@@ -47,14 +47,14 @@ public class TreeOperation {
 
 	}
 
-	public boolean addFile(String version,File parent, String name) {
+	public boolean addFile(String version, File parent, String name) {
 		if (parent != null)
 			return configManager.addFile(parent.getPath(), name, true);
 		else
 			return configManager.addFile(version, name, true);
 	}
 
-	public boolean addFolder(String version,File parent, String name) {
+	public boolean addFolder(String version, File parent, String name) {
 
 		if (parent != null)
 			return configManager.addFile(parent.getPath(), name, false);
@@ -62,14 +62,17 @@ public class TreeOperation {
 			return configManager.addFile(version, name, false);
 	}
 
-	public boolean uploadFile(String version,File parent, String uploadedFile, InputStream in) {
+	public boolean uploadFile(String version, File parent, String uploadedFile,
+			InputStream in) {
 		OutputStream out;
 		try {
 			if (parent != null)
 				out = new FileOutputStream(new File(parent.getPath() + "/"
 						+ uploadedFile));
 			else
-				out = new FileOutputStream(new File("/"+configManager.getPath()+"/"+version+"/"+uploadedFile));
+				out = new FileOutputStream(new File("/"
+						+ configManager.getPath() + "/" + version + "/"
+						+ uploadedFile));
 			int read = 0;
 			byte[] bytes = new byte[1024];
 			try {
@@ -84,7 +87,7 @@ public class TreeOperation {
 				out.close();
 
 				System.out.println("New file created!");
-				return addFile(version,parent, uploadedFile);
+				return addFile(version, parent, uploadedFile);
 			} catch (IOException e) {
 
 				e.printStackTrace();

@@ -3,14 +3,13 @@ package com.starit.janjoonweb.ui.security;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.servlet.*;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.starit.janjoonweb.domain.JJBug;
@@ -47,7 +46,6 @@ import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
-import com.starit.janjoonweb.ui.mb.ApplicationBean;
 
 public class ConfigListener implements ServletContextListener {
 
@@ -251,7 +249,7 @@ public class ConfigListener implements ServletContextListener {
 			}
 		}
 
-		String[] objects = { "JJRequirement", "JJBug", "JJMessage" };
+		String[] objects = { "JJRequirement", "JJBug", "JJMessage", "JJTask" };
 
 		for (String object : objects) {
 
@@ -283,10 +281,13 @@ public class ConfigListener implements ServletContextListener {
 					names.add("RESOLVED");
 					names.add("VERIFIED");
 					names.add("CLOSED");
-				} else {
+				} else if (object.equalsIgnoreCase("JJMessage")) {
 					names.add("NEW");
 					names.add("CLOSED");
-
+				} else if (object.equalsIgnoreCase("JJTask")) {
+					names.add("TODO");
+					names.add("DONE");
+					names.add("IN PROGRESS");
 				}
 
 				for (String name : names) {
@@ -322,7 +323,7 @@ public class ConfigListener implements ServletContextListener {
 				bug.setStatus(stat);
 				bug.setCriticity(crit);
 				jJBugService.saveJJBug(bug);
-				i=(i+1)%2;		
+				i = (i + 1) % 2;
 				crit = criticities.get(i);
 				bug = new JJBug();
 				bug.setName(stat.getName() + "-bug : " + crit.getName());
@@ -871,31 +872,35 @@ public class ConfigListener implements ServletContextListener {
 			List<JJProject> projectList = jJProjectService.getProjects(true);
 
 			List<JJProduct> productList = jJProductService.getProducts(true);
-//			if (jJRequirementService.findAllJJRequirements().isEmpty()) {
-//				JJRequirement jJRequirement;
-//				for (int j = 0; j < projectList.size(); j++) {
-//					jJRequirement = new JJRequirement();
-//					jJRequirement.setName("Requirement " + j);
-//					jJRequirement.setDescription("RequirementDescription " + j);
-//					jJRequirement.setCreationDate(new Date());
-//					jJRequirement.setEnabled(true);
-//					jJRequirement.setProduct(productList.get(j));
-//					jJRequirement.setProject(projectList.get(j));
-//					jJRequirementService.saveJJRequirement(jJRequirement);
-//					JJTask jJTask;
-//					for (int i = 0; i < 4; i++) {
-//						jJTask = new JJTask();
-//						jJTask.setName("TaskName " + i + ":R-" + j);
-//						jJTask.setDescription("TaskDescription " + i + ":R-"
-//								+ j);
-//						jJTask.setCreationDate(new Date());
-//						jJTask.setEnabled(true);
-//						jJTask.setRequirement(jJRequirement);
-//						jJTask.setWorkloadPlanned(10);
-//						jJTaskService.saveJJTask(jJTask);
-//					}
-//				}
-//			}
+			if (jJRequirementService.findAllJJRequirements().isEmpty()) {
+				List<JJStatus> status=jJStatusService.getStatus("JJTask", true, null, true);
+				JJSprint s=jJSprintService.getSprints(true).get(0);			
+				JJRequirement jJRequirement;
+				for (int j = 0; j < projectList.size(); j++) {
+					jJRequirement = new JJRequirement();
+					jJRequirement.setName("Requirement " + j);
+					jJRequirement.setDescription("RequirementDescription " + j);
+					jJRequirement.setCreationDate(new Date());
+					jJRequirement.setEnabled(true);
+					jJRequirement.setProduct(productList.get(j));
+					jJRequirement.setProject(projectList.get(j));
+					jJRequirementService.saveJJRequirement(jJRequirement);
+					JJTask jJTask;
+					for (int i = 0; i < 4; i++) {
+						jJTask = new JJTask();
+						jJTask.setName("TaskName " + i + ":R-" + j);
+						jJTask.setDescription("TaskDescription " + i + ":R-"
+								+ j);
+						jJTask.setCreationDate(new Date());
+						jJTask.setEnabled(true);
+						jJTask.setRequirement(jJRequirement);
+						jJTask.setWorkloadPlanned(10);
+						jJTask.setSprint(s);
+						jJTask.setStatus(status.get(i%3));
+						jJTaskService.saveJJTask(jJTask);
+					}
+				}
+			}
 			if (jJMessageService.findAllJJMessages().isEmpty()) {
 
 				int i = 0;

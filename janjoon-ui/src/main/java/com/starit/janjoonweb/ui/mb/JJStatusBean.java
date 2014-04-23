@@ -12,9 +12,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.validator.LengthValidator;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.calendar.Calendar;
+import org.primefaces.component.editor.Editor;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
@@ -77,21 +79,19 @@ public class JJStatusBean {
 
 	private void initPieChart() {
 
-		
-			pieChart = new PieChartModel();
-			System.out.println("-------------------------init pieChart");
-			List<JJStatus> statReq = jJStatusService.getStatus("JJRequirement",
-					true, null, false);
-			for (JJStatus s : statReq) {
+		pieChart = new PieChartModel();
+		System.out.println("-------------------------init pieChart");
+		List<JJStatus> statReq = jJStatusService.getStatus("JJRequirement",
+				true, null, false);
+		for (JJStatus s : statReq) {
 
-				System.out.println(s.getName() + "  " + s.getObjet());
-				int i = Integer.parseInt(""
-						+ jJRequirementService.getReqCountByStaus(s, true));
-				System.out.println(i);
-				pieChart.set(s.getName(), i);
-			}
+			System.out.println(s.getName() + "  " + s.getObjet());
+			int i = Integer.parseInt(""
+					+ jJRequirementService.getReqCountByStaus(s, true));
+			System.out.println(i);
+			pieChart.set(s.getName(), i);
+		}
 
-	
 	}
 
 	public void setPieChart(PieChartModel pieChart) {
@@ -120,6 +120,24 @@ public class JJStatusBean {
 	public List<String> completeObject(String query) {
 
 		return jJStatusService.getTablesName();
+	}
+
+	public String persistStatus() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJContact contact = (JJContact) session.getAttribute("JJContact");
+		if (getJJStatus_().getId() != null) {
+			getJJStatus_().setUpdatedDate(new Date());
+			getJJStatus_().setUpdatedBy(contact);
+
+		} else {
+			getJJStatus_().setCreatedBy(contact);
+			getJJStatus_().setCreationDate(new Date());
+			getJJStatus_().setEnabled(true);
+		}
+
+		return persist();
+
 	}
 
 	public HtmlPanelGrid populateCreatePanel() {
@@ -166,8 +184,8 @@ public class JJStatusBean {
 		descriptionCreateOutput.setValue("Description:");
 		htmlPanelGrid.getChildren().add(descriptionCreateOutput);
 
-		InputTextarea descriptionCreateInput = (InputTextarea) application
-				.createComponent(InputTextarea.COMPONENT_TYPE);
+		Editor descriptionCreateInput = (Editor) application
+				.createComponent(Editor.COMPONENT_TYPE);
 		descriptionCreateInput.setId("descriptionCreateInput");
 		descriptionCreateInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
@@ -181,169 +199,6 @@ public class JJStatusBean {
 		descriptionCreateInputMessage.setFor("descriptionCreateInput");
 		descriptionCreateInputMessage.setDisplay("icon");
 		htmlPanelGrid.getChildren().add(descriptionCreateInputMessage);
-
-		OutputLabel creationDateCreateOutput = (OutputLabel) application
-				.createComponent(OutputLabel.COMPONENT_TYPE);
-		creationDateCreateOutput.setFor("creationDateCreateInput");
-		creationDateCreateOutput.setId("creationDateCreateOutput");
-		creationDateCreateOutput.setValue("Creation Date:");
-		htmlPanelGrid.getChildren().add(creationDateCreateOutput);
-
-		Calendar creationDateCreateInput = (Calendar) application
-				.createComponent(Calendar.COMPONENT_TYPE);
-		creationDateCreateInput.setId("creationDateCreateInput");
-		creationDateCreateInput.setValueExpression("value", expressionFactory
-				.createValueExpression(elContext,
-						"#{jJStatusBean.JJStatus_.creationDate}", Date.class));
-		creationDateCreateInput.setNavigator(true);
-		creationDateCreateInput.setEffect("slideDown");
-		creationDateCreateInput.setPattern("dd/MM/yyyy");
-		creationDateCreateInput.setRequired(true);
-		htmlPanelGrid.getChildren().add(creationDateCreateInput);
-
-		Message creationDateCreateInputMessage = (Message) application
-				.createComponent(Message.COMPONENT_TYPE);
-		creationDateCreateInputMessage.setId("creationDateCreateInputMessage");
-		creationDateCreateInputMessage.setFor("creationDateCreateInput");
-		creationDateCreateInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(creationDateCreateInputMessage);
-
-		OutputLabel createdByCreateOutput = (OutputLabel) application
-				.createComponent(OutputLabel.COMPONENT_TYPE);
-		createdByCreateOutput.setFor("createdByCreateInput");
-		createdByCreateOutput.setId("createdByCreateOutput");
-		createdByCreateOutput.setValue("Created By:");
-		htmlPanelGrid.getChildren().add(createdByCreateOutput);
-
-		AutoComplete createdByCreateInput = (AutoComplete) application
-				.createComponent(AutoComplete.COMPONENT_TYPE);
-		createdByCreateInput.setId("createdByCreateInput");
-		createdByCreateInput
-				.setValueExpression("value", expressionFactory
-						.createValueExpression(elContext,
-								"#{jJStatusBean.JJStatus_.createdBy}",
-								JJContact.class));
-		createdByCreateInput.setCompleteMethod(expressionFactory
-				.createMethodExpression(elContext,
-						"#{jJStatusBean.completeCreatedBy}", List.class,
-						new Class[] { String.class }));
-		createdByCreateInput.setDropdown(true);
-		createdByCreateInput.setValueExpression("var", expressionFactory
-				.createValueExpression(elContext, "createdBy", String.class));
-		createdByCreateInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{createdBy.name} #{createdBy.description} #{createdBy.creationDate} #{createdBy.updatedDate}",
-										String.class));
-		createdByCreateInput.setValueExpression("itemValue", expressionFactory
-				.createValueExpression(elContext, "#{createdBy}",
-						JJContact.class));
-		createdByCreateInput.setConverter(new JJContactConverter());
-		createdByCreateInput.setRequired(false);
-		htmlPanelGrid.getChildren().add(createdByCreateInput);
-
-		Message createdByCreateInputMessage = (Message) application
-				.createComponent(Message.COMPONENT_TYPE);
-		createdByCreateInputMessage.setId("createdByCreateInputMessage");
-		createdByCreateInputMessage.setFor("createdByCreateInput");
-		createdByCreateInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(createdByCreateInputMessage);
-
-		OutputLabel updatedDateCreateOutput = (OutputLabel) application
-				.createComponent(OutputLabel.COMPONENT_TYPE);
-		updatedDateCreateOutput.setFor("updatedDateCreateInput");
-		updatedDateCreateOutput.setId("updatedDateCreateOutput");
-		updatedDateCreateOutput.setValue("Updated Date:");
-		htmlPanelGrid.getChildren().add(updatedDateCreateOutput);
-
-		Calendar updatedDateCreateInput = (Calendar) application
-				.createComponent(Calendar.COMPONENT_TYPE);
-		updatedDateCreateInput.setId("updatedDateCreateInput");
-		updatedDateCreateInput.setValueExpression("value", expressionFactory
-				.createValueExpression(elContext,
-						"#{jJStatusBean.JJStatus_.updatedDate}", Date.class));
-		updatedDateCreateInput.setNavigator(true);
-		updatedDateCreateInput.setEffect("slideDown");
-		updatedDateCreateInput.setPattern("dd/MM/yyyy");
-		updatedDateCreateInput.setRequired(false);
-		htmlPanelGrid.getChildren().add(updatedDateCreateInput);
-
-		Message updatedDateCreateInputMessage = (Message) application
-				.createComponent(Message.COMPONENT_TYPE);
-		updatedDateCreateInputMessage.setId("updatedDateCreateInputMessage");
-		updatedDateCreateInputMessage.setFor("updatedDateCreateInput");
-		updatedDateCreateInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(updatedDateCreateInputMessage);
-
-		OutputLabel updatedByCreateOutput = (OutputLabel) application
-				.createComponent(OutputLabel.COMPONENT_TYPE);
-		updatedByCreateOutput.setFor("updatedByCreateInput");
-		updatedByCreateOutput.setId("updatedByCreateOutput");
-		updatedByCreateOutput.setValue("Updated By:");
-		htmlPanelGrid.getChildren().add(updatedByCreateOutput);
-
-		AutoComplete updatedByCreateInput = (AutoComplete) application
-				.createComponent(AutoComplete.COMPONENT_TYPE);
-		updatedByCreateInput.setId("updatedByCreateInput");
-		updatedByCreateInput
-				.setValueExpression("value", expressionFactory
-						.createValueExpression(elContext,
-								"#{jJStatusBean.JJStatus_.updatedBy}",
-								JJContact.class));
-		updatedByCreateInput.setCompleteMethod(expressionFactory
-				.createMethodExpression(elContext,
-						"#{jJStatusBean.completeUpdatedBy}", List.class,
-						new Class[] { String.class }));
-		updatedByCreateInput.setDropdown(true);
-		updatedByCreateInput.setValueExpression("var", expressionFactory
-				.createValueExpression(elContext, "updatedBy", String.class));
-		updatedByCreateInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{updatedBy.name} #{updatedBy.description} #{updatedBy.creationDate} #{updatedBy.updatedDate}",
-										String.class));
-		updatedByCreateInput.setValueExpression("itemValue", expressionFactory
-				.createValueExpression(elContext, "#{updatedBy}",
-						JJContact.class));
-		updatedByCreateInput.setConverter(new JJContactConverter());
-		updatedByCreateInput.setRequired(false);
-		htmlPanelGrid.getChildren().add(updatedByCreateInput);
-
-		Message updatedByCreateInputMessage = (Message) application
-				.createComponent(Message.COMPONENT_TYPE);
-		updatedByCreateInputMessage.setId("updatedByCreateInputMessage");
-		updatedByCreateInputMessage.setFor("updatedByCreateInput");
-		updatedByCreateInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(updatedByCreateInputMessage);
-
-		OutputLabel enabledCreateOutput = (OutputLabel) application
-				.createComponent(OutputLabel.COMPONENT_TYPE);
-		enabledCreateOutput.setFor("enabledCreateInput");
-		enabledCreateOutput.setId("enabledCreateOutput");
-		enabledCreateOutput.setValue("Enabled:");
-		htmlPanelGrid.getChildren().add(enabledCreateOutput);
-
-		SelectBooleanCheckbox enabledCreateInput = (SelectBooleanCheckbox) application
-				.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
-		enabledCreateInput.setId("enabledCreateInput");
-		enabledCreateInput.setValueExpression("value", expressionFactory
-				.createValueExpression(elContext,
-						"#{jJStatusBean.JJStatus_.enabled}", Boolean.class));
-		enabledCreateInput.setRequired(false);
-		htmlPanelGrid.getChildren().add(enabledCreateInput);
-
-		Message enabledCreateInputMessage = (Message) application
-				.createComponent(Message.COMPONENT_TYPE);
-		enabledCreateInputMessage.setId("enabledCreateInputMessage");
-		enabledCreateInputMessage.setFor("enabledCreateInput");
-		enabledCreateInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
 
 		OutputLabel objetCreateOutput = (OutputLabel) application
 				.createComponent(OutputLabel.COMPONENT_TYPE);
@@ -472,8 +327,8 @@ public class JJStatusBean {
 		descriptionEditOutput.setValue("Description:");
 		htmlPanelGrid.getChildren().add(descriptionEditOutput);
 
-		InputTextarea descriptionEditInput = (InputTextarea) application
-				.createComponent(InputTextarea.COMPONENT_TYPE);
+		Editor descriptionEditInput = (Editor) application
+				.createComponent(Editor.COMPONENT_TYPE);
 		descriptionEditInput.setId("descriptionEditInput");
 		descriptionEditInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
@@ -487,169 +342,6 @@ public class JJStatusBean {
 		descriptionEditInputMessage.setFor("descriptionEditInput");
 		descriptionEditInputMessage.setDisplay("icon");
 		htmlPanelGrid.getChildren().add(descriptionEditInputMessage);
-
-		OutputLabel creationDateEditOutput = (OutputLabel) application
-				.createComponent(OutputLabel.COMPONENT_TYPE);
-		creationDateEditOutput.setFor("creationDateEditInput");
-		creationDateEditOutput.setId("creationDateEditOutput");
-		creationDateEditOutput.setValue("Creation Date:");
-		htmlPanelGrid.getChildren().add(creationDateEditOutput);
-
-		Calendar creationDateEditInput = (Calendar) application
-				.createComponent(Calendar.COMPONENT_TYPE);
-		creationDateEditInput.setId("creationDateEditInput");
-		creationDateEditInput.setValueExpression("value", expressionFactory
-				.createValueExpression(elContext,
-						"#{jJStatusBean.JJStatus_.creationDate}", Date.class));
-		creationDateEditInput.setNavigator(true);
-		creationDateEditInput.setEffect("slideDown");
-		creationDateEditInput.setPattern("dd/MM/yyyy");
-		creationDateEditInput.setRequired(true);
-		htmlPanelGrid.getChildren().add(creationDateEditInput);
-
-		Message creationDateEditInputMessage = (Message) application
-				.createComponent(Message.COMPONENT_TYPE);
-		creationDateEditInputMessage.setId("creationDateEditInputMessage");
-		creationDateEditInputMessage.setFor("creationDateEditInput");
-		creationDateEditInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(creationDateEditInputMessage);
-
-		OutputLabel createdByEditOutput = (OutputLabel) application
-				.createComponent(OutputLabel.COMPONENT_TYPE);
-		createdByEditOutput.setFor("createdByEditInput");
-		createdByEditOutput.setId("createdByEditOutput");
-		createdByEditOutput.setValue("Created By:");
-		htmlPanelGrid.getChildren().add(createdByEditOutput);
-
-		AutoComplete createdByEditInput = (AutoComplete) application
-				.createComponent(AutoComplete.COMPONENT_TYPE);
-		createdByEditInput.setId("createdByEditInput");
-		createdByEditInput
-				.setValueExpression("value", expressionFactory
-						.createValueExpression(elContext,
-								"#{jJStatusBean.JJStatus_.createdBy}",
-								JJContact.class));
-		createdByEditInput.setCompleteMethod(expressionFactory
-				.createMethodExpression(elContext,
-						"#{jJStatusBean.completeCreatedBy}", List.class,
-						new Class[] { String.class }));
-		createdByEditInput.setDropdown(true);
-		createdByEditInput.setValueExpression("var", expressionFactory
-				.createValueExpression(elContext, "createdBy", String.class));
-		createdByEditInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{createdBy.name} #{createdBy.description} #{createdBy.creationDate} #{createdBy.updatedDate}",
-										String.class));
-		createdByEditInput.setValueExpression("itemValue", expressionFactory
-				.createValueExpression(elContext, "#{createdBy}",
-						JJContact.class));
-		createdByEditInput.setConverter(new JJContactConverter());
-		createdByEditInput.setRequired(false);
-		htmlPanelGrid.getChildren().add(createdByEditInput);
-
-		Message createdByEditInputMessage = (Message) application
-				.createComponent(Message.COMPONENT_TYPE);
-		createdByEditInputMessage.setId("createdByEditInputMessage");
-		createdByEditInputMessage.setFor("createdByEditInput");
-		createdByEditInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(createdByEditInputMessage);
-
-		OutputLabel updatedDateEditOutput = (OutputLabel) application
-				.createComponent(OutputLabel.COMPONENT_TYPE);
-		updatedDateEditOutput.setFor("updatedDateEditInput");
-		updatedDateEditOutput.setId("updatedDateEditOutput");
-		updatedDateEditOutput.setValue("Updated Date:");
-		htmlPanelGrid.getChildren().add(updatedDateEditOutput);
-
-		Calendar updatedDateEditInput = (Calendar) application
-				.createComponent(Calendar.COMPONENT_TYPE);
-		updatedDateEditInput.setId("updatedDateEditInput");
-		updatedDateEditInput.setValueExpression("value", expressionFactory
-				.createValueExpression(elContext,
-						"#{jJStatusBean.JJStatus_.updatedDate}", Date.class));
-		updatedDateEditInput.setNavigator(true);
-		updatedDateEditInput.setEffect("slideDown");
-		updatedDateEditInput.setPattern("dd/MM/yyyy");
-		updatedDateEditInput.setRequired(false);
-		htmlPanelGrid.getChildren().add(updatedDateEditInput);
-
-		Message updatedDateEditInputMessage = (Message) application
-				.createComponent(Message.COMPONENT_TYPE);
-		updatedDateEditInputMessage.setId("updatedDateEditInputMessage");
-		updatedDateEditInputMessage.setFor("updatedDateEditInput");
-		updatedDateEditInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(updatedDateEditInputMessage);
-
-		OutputLabel updatedByEditOutput = (OutputLabel) application
-				.createComponent(OutputLabel.COMPONENT_TYPE);
-		updatedByEditOutput.setFor("updatedByEditInput");
-		updatedByEditOutput.setId("updatedByEditOutput");
-		updatedByEditOutput.setValue("Updated By:");
-		htmlPanelGrid.getChildren().add(updatedByEditOutput);
-
-		AutoComplete updatedByEditInput = (AutoComplete) application
-				.createComponent(AutoComplete.COMPONENT_TYPE);
-		updatedByEditInput.setId("updatedByEditInput");
-		updatedByEditInput
-				.setValueExpression("value", expressionFactory
-						.createValueExpression(elContext,
-								"#{jJStatusBean.JJStatus_.updatedBy}",
-								JJContact.class));
-		updatedByEditInput.setCompleteMethod(expressionFactory
-				.createMethodExpression(elContext,
-						"#{jJStatusBean.completeUpdatedBy}", List.class,
-						new Class[] { String.class }));
-		updatedByEditInput.setDropdown(true);
-		updatedByEditInput.setValueExpression("var", expressionFactory
-				.createValueExpression(elContext, "updatedBy", String.class));
-		updatedByEditInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{updatedBy.name} #{updatedBy.description} #{updatedBy.creationDate} #{updatedBy.updatedDate}",
-										String.class));
-		updatedByEditInput.setValueExpression("itemValue", expressionFactory
-				.createValueExpression(elContext, "#{updatedBy}",
-						JJContact.class));
-		updatedByEditInput.setConverter(new JJContactConverter());
-		updatedByEditInput.setRequired(false);
-		htmlPanelGrid.getChildren().add(updatedByEditInput);
-
-		Message updatedByEditInputMessage = (Message) application
-				.createComponent(Message.COMPONENT_TYPE);
-		updatedByEditInputMessage.setId("updatedByEditInputMessage");
-		updatedByEditInputMessage.setFor("updatedByEditInput");
-		updatedByEditInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(updatedByEditInputMessage);
-
-		OutputLabel enabledEditOutput = (OutputLabel) application
-				.createComponent(OutputLabel.COMPONENT_TYPE);
-		enabledEditOutput.setFor("enabledEditInput");
-		enabledEditOutput.setId("enabledEditOutput");
-		enabledEditOutput.setValue("Enabled:");
-		htmlPanelGrid.getChildren().add(enabledEditOutput);
-
-		SelectBooleanCheckbox enabledEditInput = (SelectBooleanCheckbox) application
-				.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
-		enabledEditInput.setId("enabledEditInput");
-		enabledEditInput.setValueExpression("value", expressionFactory
-				.createValueExpression(elContext,
-						"#{jJStatusBean.JJStatus_.enabled}", Boolean.class));
-		enabledEditInput.setRequired(false);
-		htmlPanelGrid.getChildren().add(enabledEditInput);
-
-		Message enabledEditInputMessage = (Message) application
-				.createComponent(Message.COMPONENT_TYPE);
-		enabledEditInputMessage.setId("enabledEditInputMessage");
-		enabledEditInputMessage.setFor("enabledEditInput");
-		enabledEditInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(enabledEditInputMessage);
 
 		OutputLabel objetEditOutput = (OutputLabel) application
 				.createComponent(OutputLabel.COMPONENT_TYPE);

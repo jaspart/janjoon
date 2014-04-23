@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+
+	<h:form id="sprintCreationForm" rendered="#{jjsprint.render}">
+		<p:growl id="sprintCreationGrowl" showDetail="true" life="2000" />
+		<p:panelGrid>
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="4">Create Sprint</p:column>
+				</p:row>
+			</f:facet>
+			<p:row>
+				<p:column>
+					<p:outputLabel for="sprintCName" value="Sprint Name:" />
+				</p:column>
+				<p:column>
+					<p:inputTextarea id="sprintCName" value="#{jjsprint.sprint.name}"
+						required="true" requiredMessage="Sprint name is empty"
+						readonly="#{jjsprint.renderTaskForm}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel for="sprintcts" value="Sprint Contacts:" />
+				</p:column>
+				<p:column>
+					<p:selectManyMenu id="sprintcts"
+						value="#{jjsprint.sprint.contacts}"
+						readonly="#{jjsprint.renderTaskForm}"
+						style="width:150px;height:150px" showCheckbox="true">
+						<f:selectItems value="#{jJContactBean.contactDataTable}" var="c"
+							itemLabel="#{c.name}" itemValue="#{c}" />
+						<f:converter
+							converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />
+					</p:selectManyMenu>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:outputLabel for="sprintCSD" value="Start Date:" />
+				</p:column>
+				<p:column>
+					<p:calendar id="sprintCSD" navigator="true" effect="slideDown"
+						pattern="dd/MM/yyyy" required="true"
+						readonly="#{jjsprint.renderTaskForm}"
+						value="#{jjsprint.sprint.startDate}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel for="sprintCED" value="end Date:" />
+				</p:column>
+				<p:column>
+					<p:calendar id="sprintCED" navigator="true" effect="slideDown"
+						pattern="dd/MM/yyyy" required="true"
+						readonly="#{jjsprint.renderTaskForm}"
+						value="#{jjsprint.sprint.endDate}" />
+				</p:column>
+			</p:row>
+			<f:facet name="footer">
+				<p:row>
+					<p:column colspan="4">
+						<p:commandButton id="createSprintButton"
+							disabled="#{jjsprint.renderTaskForm}"
+							value="#{messages.label_create}"
+							actionListener="#{jJSprintBean.attrListener}"
+							action="#{jJSprintBean.createSprint}" update="@(form)">
+							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</f:facet>
+		</p:panelGrid>
+		<ui:include src="taskCreation.xhtml" />
+	</h:form>
+	<p:dialog id="createTaskDialog"
+		header="#{messages.label_create} JJTask" dynamic="true" modal="true"
+		widgetVar="createTaskDialogWidget" showEffect="fade"
+		hideEffect="explode">
+		<p:ajax event="close"
+			update=":projecttabview:SprintTabView:sprintCreationForm"
+			listener="#{jJSprintBean.handleDialogCloseEvent}" />
+		<p:outputPanel id="createTaskPanel">
+			<h:form id="createForm" enctype="multipart/form-data">
+				<h:panelGrid id="createTaskPanelGrid" columns="3"
+					binding="#{jJSprintBean.createTaskPanelGrid}" styleClass="dialog"
+					columnClasses="col1,col2,col3" />
+				<p:commandButton id="createTaskSaveButton2"
+					rendered="#{jjsprint.render}" value="#{messages.label_save}"
+					action="#{jJSprintBean.persistTask}"
+					update=":projecttabview:SprintTabView:sprintCreationForm " />
+				<p:commandButton id="createTaskSaveButton1"
+					rendered="#{!jjsprint.render}" value="#{messages.label_save}"
+					action="#{jJSprintBean.persistTask}"
+					update=":projecttabview:SprintTabView:sprintForm,:projecttabview:SprintTabView:taskSprintForm" />
+				<p:commandButton id="createTaskCloseButton"
+					value="#{messages.label_close}"
+					onclick="createTaskDialogWidget.hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+</ui:composition>
+</html>

@@ -204,6 +204,7 @@ public class JJTaskBean {
 
 			task.setUpdatedDate(new Date());
 			jJTaskService.updateJJTask(task);
+			reset();
 
 			loadData();
 
@@ -304,5 +305,30 @@ public class JJTaskBean {
 			this.realDateType = realDateType;
 		}
 	}
+	
+	public void reset() {
+		
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJSprintBean sprintBean=(JJSprintBean) session.getAttribute("jJSprintBean");
+		
+		if(sprintBean!=null)
+		{
+			if(getJJTask_().getSprint()!=null)
+			{
+				if(getJJTask_().getSprint().getProject()!=null && sprintBean.getProject()!=null)
+				{
+					if(sprintBean.getProject().equals(getJJTask_().getSprint().getProject()))
+					{
+						session.setAttribute("jJSprintBean", new JJSprintBean());
+					}
+				}
+			}
+		}
+		
+		setJJTask_(null);
+        setSelectedMessages (null);
+        setCreateDialogVisible(false);
+    }
 
 }

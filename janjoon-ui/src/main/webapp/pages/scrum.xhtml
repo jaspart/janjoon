@@ -7,8 +7,203 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition>
-	<h:form id="scrumForm">
+	<p:tabView id="SprintTabView" dynamic="true" cache="true"
+		value="#{jJSprintBean.sprintList}" var="jjsprint">
+		<p:tab>
+			<f:facet name="title">
+				<h:outputText rendered="#{!jjsprint.render}"
+					value="#{jjsprint.sprint.name}" />
+				<h:outputText rendered="#{jjsprint.render}" value="+Add New Sprint" />
+			</f:facet>
+			<ui:include src="sprint.xhtml" />
+			<h:form id="sprintForm" rendered="#{!jjsprint.render}">
+				<p:growl id="sprintGrowl" showDetail="true" life="2000" />
+				<p:panelGrid>
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="4">Sprint Information</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column>
+							<p:outputLabel for="sprintName" value="Sprint Name:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="sprintName" value="#{jjsprint.sprint.name}"
+								required="true" requiredMessage="Sprint name is empty" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<p:outputLabel for="sprintSD" value="Start Date:" />
+						</p:column>
+						<p:column>
+							<p:calendar id="sprintSD" navigator="true" effect="slideDown"
+								pattern="dd/MM/yyyy" required="true"
+								value="#{jjsprint.sprint.startDate}" />
+						</p:column>
+						<p:column>
+							<p:outputLabel for="sprintED" value="end Date:" />
+						</p:column>
+						<p:column>
+							<p:calendar id="sprintED" navigator="true" effect="slideDown"
+								pattern="dd/MM/yyyy" required="true"
+								value="#{jjsprint.sprint.endDate}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
 
-	</h:form>
+							<p:outputLabel for="sprintW" value="Total:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="sprintW" readonly="true"
+								value="#{jjsprint.workload}" />
+						</p:column>
+						<p:column>
+							<p:outputLabel for="sprintC" value="Consumed:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="sprintC" readonly="true"
+								value="#{jjsprint.consumed}" />
+						</p:column>
+					</p:row>
+					<f:facet name="footer">
+						<p:row>
+							<p:column colspan="2">
+								<p:commandButton id="editSprintButton"
+									value="#{messages.label_edit}"
+									action="#{jJSprintBean.editSprint}"
+									actionListener="#{jJSprintBean.attrListener}"
+									update=":projecttabview:SprintTabView">
+									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+								</p:commandButton>
+							</p:column>
+							<p:column colspan="2">
+								<p:commandButton value="#{messages.label_create} JJTask"
+									id="createTaskttButton" icon="ui-icon-circle-plus"									
+									update=":projecttabview:SprintTabView:sprintForm"
+									immediate="true"
+									actionListener="#{jJSprintBean.handleAddButton}"
+									title="#{messages.label_create} JJTask" >	
+									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />	
+									</p:commandButton>							
+								<p:tooltip for="createTaskttButton"
+									value="#{messages.label_create} JJTask" showEffect="fade"
+									hideEffect="fade" />
+							</p:column>
+						</p:row>
+					</f:facet>
+				</p:panelGrid>
+				<ui:include src="taskCreation.xhtml" />
+			</h:form>
+			<p:separator rendered="#{not empty jjsprint.sprint.tasks}" />
+			<h:form id="taskSprintForm"
+				rendered="#{not empty jjsprint.sprint.tasks}">
+				<p:panelGrid>
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="4">Sprint Tasks</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column>
+							<p:fieldset legend="Todo" id="todoFieldset">
+								<p:outputPanel id="tododropArea">
+									<h:outputText value="!!!Drop here!!!"
+										rendered="#{empty jjsprint.todoTask}" style="font-size:24px;" />
+									<p:dataTable id="todo" var="todo" value="#{jjsprint.todoTask}"
+										rowKey="#{todo.id}" rendered="#{not empty jjsprint.todoTask}">
+										<p:column style="width:20px">
+											<h:outputText id="todoIcon"
+												styleClass="ui-icon ui-icon-arrow-4" />
+											<p:draggable for="todoIcon" revert="true" />
+										</p:column>
+
+										<p:column style="width:80px" headerText="Task">
+											<h:outputText value="#{todo.name}" />
+										</p:column>
+
+										<p:column style="width:20px" headerText="W">
+											<h:outputText value="#{todo.workloadPlanned+''}" />
+										</p:column>
+									</p:dataTable>
+								</p:outputPanel>
+							</p:fieldset>
+						</p:column>
+						<p:column>
+							<p:fieldset legend="In Progress" id="progFieldset">
+								<p:outputPanel id="progdropArea">
+									<h:outputText value="!!!Drop here!!!"
+										rendered="#{empty jjsprint.progressTask}"
+										style="font-size:24px;" />
+									<p:dataTable id="prog" var="prog"
+										value="#{jjsprint.progressTask}" rowKey="#{prog.id}"
+										rendered="#{not empty jjsprint.progressTask}">
+
+										<p:column style="width:20px">
+											<h:outputText id="progIcon"
+												styleClass="ui-icon ui-icon-arrow-4" />
+											<p:draggable for="progIcon" revert="true" />
+										</p:column>
+
+										<p:column style="width:50px" headerText="Task">
+											<h:outputText value="#{prog.name}" />
+										</p:column>
+
+										<p:column style="width:50px" headerText="Who">
+											<h:outputText value="#{prog.assignedTo.name}" />
+										</p:column>
+									</p:dataTable>
+								</p:outputPanel>
+							</p:fieldset>
+						</p:column>
+						<p:column>
+							<p:fieldset legend="Done Tasks" id="doneFieldset">
+								<p:outputPanel id="donedropArea">
+									<h:outputText value="!!!Drop here!!!"
+										rendered="#{empty jjsprint.doneTask}" style="font-size:24px;" />
+									<p:dataTable id="done" var="done" value="#{jjsprint.doneTask}"
+										rowKey="#{done.id}" rendered="#{not empty jjsprint.doneTask}">
+										<p:column style="width:20px">
+											<h:outputText id="doneIcon"
+												styleClass="ui-icon ui-icon-arrow-4" />
+											<p:draggable for="doneIcon" revert="true" />
+										</p:column>
+
+										<p:column style="width:80px" headerText="Task">
+											<h:outputText value="#{done.name}" />
+										</p:column>
+
+										<p:column style="width:20px" headerText="Diff">
+											<h:outputText
+												value="#{done.workloadPlanned-done.workloadRevised+''}" />
+										</p:column>
+									</p:dataTable>
+								</p:outputPanel>
+							</p:fieldset>
+						</p:column>
+					</p:row>
+					<p:droppable for=":projecttabview:SprintTabView:taskSprintForm:doneFieldset" tolerance="touch"
+						activeStyleClass="ui-state-highlight"
+						datasource=":projecttabview:SprintTabView:taskSprintForm:progFieldset:prog" onDrop="handleDrop">
+						<p:ajax listener="#{jJSprintBean.addTaskToDone}"
+							update=":projecttabview:SprintTabView:taskSprintForm:doneFieldset:donedropArea :projecttabview:SprintTabView:taskSprintForm:progFieldset:progDroparea">
+							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+						</p:ajax>
+					</p:droppable>
+					<p:droppable for=":projecttabview:SprintTabView:taskSprintForm:progFieldset" tolerance="touch"
+						activeStyleClass="ui-state-highlight"
+						datasource=":projecttabview:SprintTabView:taskSprintForm:todeFieldset:tode" onDrop="handleDrop">
+						<p:ajax listener="#{jJSprintBean.addTaskToProg}"
+							update=" :projecttabview:SprintTabView:taskSprintForm:todoFieldset:tododropArea :projecttabview:SprintTabView:taskSprintForm:progFieldset:progDroparea">
+							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+						</p:ajax>
+
+					</p:droppable>
+				</p:panelGrid>				
+			</h:form>			
+		</p:tab>
+	</p:tabView>
 </ui:composition>
 </html>

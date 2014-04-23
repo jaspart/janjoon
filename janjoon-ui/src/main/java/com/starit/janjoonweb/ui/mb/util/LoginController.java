@@ -20,58 +20,63 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.web.WebAttributes;
 
-@ManagedBean(name="loginController")
+@ManagedBean(name = "loginController")
 @RequestScoped
-public class LoginController implements PhaseListener{
-    
-    private static final long serialVersionUID = 1L;
-    
-    /**
-    *
-    * Redirects the login request directly to spring security check.
-    * Leave this method as it is to properly support spring security.
-    *
-    * @return
-    * @throws ServletException
-    * @throws IOException
-    */
-    
-   public String doLogin() throws ServletException, IOException {
-       ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+public class LoginController implements PhaseListener {
 
-       RequestDispatcher dispatcher = ((ServletRequest) context.getRequest())
-               .getRequestDispatcher("/j_spring_security_check");
+	private static final long serialVersionUID = 1L;
 
-       dispatcher.forward((ServletRequest) context.getRequest(),
-               (ServletResponse) context.getResponse());
+	/**
+	 * 
+	 * Redirects the login request directly to spring security check. Leave this
+	 * method as it is to properly support spring security.
+	 * 
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 
-       FacesContext.getCurrentInstance().responseComplete();
+	public String doLogin() throws ServletException, IOException {
+		ExternalContext context = FacesContext.getCurrentInstance()
+				.getExternalContext();
 
-       return null;
-   }
+		RequestDispatcher dispatcher = ((ServletRequest) context.getRequest())
+				.getRequestDispatcher("/j_spring_security_check");
 
-    @Override
-    public void afterPhase(PhaseEvent arg0) {        
-    }
+		dispatcher.forward((ServletRequest) context.getRequest(),
+				(ServletResponse) context.getResponse());
 
-    @Override
-    public void beforePhase(PhaseEvent arg0) {
-        Exception e = (Exception) FacesContext.getCurrentInstance().
-                getExternalContext().getSessionMap().get(WebAttributes.AUTHENTICATION_EXCEPTION);
-       
-              if (e instanceof BadCredentialsException) {
-                  FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(
-                          WebAttributes.AUTHENTICATION_EXCEPTION, null);
-                  FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                      "Username or password not valid.", "Username or password not valid"));
-              }
-        
-    }
+		FacesContext.getCurrentInstance().responseComplete();
 
-    @Override
-    public PhaseId getPhaseId() {
-        return PhaseId.RENDER_RESPONSE;
-    }
-    
+		return null;
+	}
+
+	@Override
+	public void afterPhase(PhaseEvent arg0) {
+	}
+
+	@Override
+	public void beforePhase(PhaseEvent arg0) {
+		Exception e = (Exception) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap()
+				.get(WebAttributes.AUTHENTICATION_EXCEPTION);
+
+		if (e instanceof BadCredentialsException) {
+			FacesContext.getCurrentInstance().getExternalContext()
+					.getSessionMap()
+					.put(WebAttributes.AUTHENTICATION_EXCEPTION, null);
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Username or password not valid.",
+							"Username or password not valid"));
+		}
+
+	}
+
+	@Override
+	public PhaseId getPhaseId() {
+		return PhaseId.RENDER_RESPONSE;
+	}
+
 }

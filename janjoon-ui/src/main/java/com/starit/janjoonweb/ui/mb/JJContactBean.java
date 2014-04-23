@@ -150,10 +150,10 @@ public class JJContactBean {
 
 			jJContactService.updateJJContact(contactAdmin);
 			message = "message_successfully_updated";
-			
+
 			disabled = true;
-//			RequestContext context = RequestContext.getCurrentInstance();
-//			context.execute("contactDialogWidget.hide()");
+			// RequestContext context = RequestContext.getCurrentInstance();
+			// context.execute("contactDialogWidget.hide()");
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,

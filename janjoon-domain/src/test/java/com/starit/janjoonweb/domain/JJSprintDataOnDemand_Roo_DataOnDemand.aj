@@ -47,8 +47,10 @@ privileged aspect JJSprintDataOnDemand_Roo_DataOnDemand {
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
+        setEndDate(obj, index);
         setName(obj, index);
         setOrdering(obj, index);
+        setStartDate(obj, index);
         setUpdatedDate(obj, index);
         return obj;
     }
@@ -68,6 +70,11 @@ privileged aspect JJSprintDataOnDemand_Roo_DataOnDemand {
         obj.setEnabled(enabled);
     }
     
+    public void JJSprintDataOnDemand.setEndDate(JJSprint obj, int index) {
+        Date endDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setEndDate(endDate);
+    }
+    
     public void JJSprintDataOnDemand.setName(JJSprint obj, int index) {
         String name = "name_" + index;
         if (name.length() > 100) {
@@ -79,6 +86,11 @@ privileged aspect JJSprintDataOnDemand_Roo_DataOnDemand {
     public void JJSprintDataOnDemand.setOrdering(JJSprint obj, int index) {
         Integer ordering = new Integer(index);
         obj.setOrdering(ordering);
+    }
+    
+    public void JJSprintDataOnDemand.setStartDate(JJSprint obj, int index) {
+        Date startDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setStartDate(startDate);
     }
     
     public void JJSprintDataOnDemand.setUpdatedDate(JJSprint obj, int index) {

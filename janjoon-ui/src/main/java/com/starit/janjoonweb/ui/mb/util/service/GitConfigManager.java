@@ -144,7 +144,7 @@ public class GitConfigManager extends AbstractConfigManager {
 	public boolean checkIn(String message) {
 		try {
 			CommitCommand commit = git.commit();
-			//commit.setAuthor(jJContact.getName(), "");
+			// commit.setAuthor(jJContact.getName(), "");
 			commit.setMessage(message);
 			commit.setAll(true);
 			commit.call();
@@ -239,11 +239,12 @@ public class GitConfigManager extends AbstractConfigManager {
 	public TreeNode listRepositoryContent(String version) {
 
 		System.out.println(repository.getWorkTree().getPath());
-		
+
 		DefaultTreeNode root = new DefaultTreeNode("folder", repository
-				.getDirectory().getParentFile()+"/"+version, null);
-		
-		repositoryTreeNode(new File(repository.getDirectory().getParentFile()+"/"+version), root);
+				.getDirectory().getParentFile() + "/" + version, null);
+
+		repositoryTreeNode(new File(repository.getDirectory().getParentFile()
+				+ "/" + version), root);
 
 		return root;
 
@@ -283,7 +284,7 @@ public class GitConfigManager extends AbstractConfigManager {
 			CloneCommand cloneCommand = Git.cloneRepository();
 			File file = new File(path + "/" + name);
 			cloneCommand.setDirectory(file);
-			cloneCommand.setURI(url);		
+			cloneCommand.setURI(url);
 
 			if (jJContact != null) {
 				cloneCommand
@@ -319,7 +320,7 @@ public class GitConfigManager extends AbstractConfigManager {
 			return "InvalidRemoteException";
 		} catch (TransportException e) {
 
-			System.out.println("TransportException getted"+url);
+			System.out.println("TransportException getted" + url);
 			try {
 				delete(new File(path + "/" + name));
 			} catch (IOException e1) {
@@ -426,15 +427,15 @@ public class GitConfigManager extends AbstractConfigManager {
 	}
 
 	@Override
-	public boolean addFile(String path, String name,boolean isFile) {
+	public boolean addFile(String path, String name, boolean isFile) {
 
-		path=path.replace(repository.getDirectory().getParent(), "");
+		path = path.replace(repository.getDirectory().getParent(), "");
 		File myfile = new File(repository.getDirectory().getParent() + "/"
 				+ path, name);
 		try {
 
 			System.out.println(myfile.getPath());
-			if(!isFile)
+			if (!isFile)
 				myfile.mkdirs();
 			myfile.createNewFile();
 			git.add().addFilepattern(".").call();
@@ -525,7 +526,6 @@ public class GitConfigManager extends AbstractConfigManager {
 			if (file.list().length == 0) {
 
 				file.delete();
-				
 
 			} else {
 
@@ -542,13 +542,13 @@ public class GitConfigManager extends AbstractConfigManager {
 
 				// check the directory again, if empty then delete it
 				if (file.list().length == 0) {
-					file.delete();					
+					file.delete();
 				}
 			}
 
 		} else {
 			// if file, then delete it
-			file.delete();			
+			file.delete();
 		}
 	}
 

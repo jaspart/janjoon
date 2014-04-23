@@ -203,7 +203,7 @@ public class LoginBean implements Serializable {
 					.contains("productSelectOneMenu")) {
 				System.out
 						.println("---------------ProjectUpdate---------------");
-				
+
 			} else if (event.getComponent().getClientId()
 					.contains("versionSelectOneMenu")) {
 				jJVersionBean.setVersion((JJVersion) event.getNewValue());
@@ -222,15 +222,15 @@ public class LoginBean implements Serializable {
 						context.update(":contentPanel:devPanel");
 						context.update(":contentPanel:errorPanel");
 					}
-				} 
+				}
 			} else {
 				jJProjectBean.setProject((JJProject) event.getNewValue());
 				if (jJDevelopment.isRender()) {
 					System.out
 							.println("---------------ProjectUpdate---------------");
-//					jJDevelopment.setTasks(jJProductBean.getTasksByProduct(
-//							jJProductBean.getProduct(),
-//							jJProjectBean.getProject()));
+					// jJDevelopment.setTasks(jJProductBean.getTasksByProduct(
+					// jJProductBean.getProduct(),
+					// jJProjectBean.getProject()));
 					context.update(":contentPanel:devPanel:form:taskSelectOneMenu");
 				}
 			}
@@ -243,7 +243,7 @@ public class LoginBean implements Serializable {
 
 		if (!loading) {
 			loading = true;
-			
+
 			String path = FacesContext.getCurrentInstance()
 					.getExternalContext().getRequestContextPath();
 			System.out.println(path);
@@ -257,7 +257,7 @@ public class LoginBean implements Serializable {
 	}
 
 	public void loginRedirect(ComponentSystemEvent e) throws IOException {
-		
+
 		if (enable) {
 			String path = FacesContext.getCurrentInstance()
 					.getExternalContext().getRequestContextPath();

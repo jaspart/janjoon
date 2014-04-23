@@ -49,14 +49,14 @@ public class JJVersionBean {
 	}
 
 	public void setVersion(JJVersion version) {
-		
-//		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-//				.getExternalContext().getSession(false);
-//		JJBuildBean jJBuildBean = (JJBuildBean) session
-//				.getAttribute("jJBuildBean");
-//		jJBuildBean.setBuild(null);
-//		jJBuildBean.getBuildList();
-		
+
+		// HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+		// .getExternalContext().getSession(false);
+		// JJBuildBean jJBuildBean = (JJBuildBean) session
+		// .getAttribute("jJBuildBean");
+		// jJBuildBean.setBuild(null);
+		// jJBuildBean.getBuildList();
+
 		this.version = version;
 	}
 

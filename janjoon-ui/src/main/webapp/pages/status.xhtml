@@ -107,7 +107,7 @@
 					styleClass="dialog" columnClasses="col1,col2,col3" />
 				<p:commandButton id="createSaveButton"
 					value="#{messages.label_save}"
-					action="#{jJStatusBean.persist}"
+					action="#{jJStatusBean.persistStatus}"
 					update="createPanelGrid,:tabview:statusForm:statusMessage" />
 				<p:commandButton id="createCloseButton"
 					value="#{messages.label_close}" onclick="createDialogWidget.hide()"
@@ -128,7 +128,7 @@
 					binding="#{jJStatusBean.editPanelGrid}" styleClass="dialog"
 					columnClasses="col1,col2,col3" />
 				<p:commandButton id="editSaveButton" value="#{messages.label_save}"
-					action="#{jJStatusBean.persist}"
+					action="#{jJStatusBean.persistStatus}"
 					update="editPanelGrid,:tabview:statusForm:statusMessage" />
 				<p:commandButton id="editCloseButton"
 					value="#{messages.label_close}" onclick="editDialogWidget.hide()"
@@ -141,6 +141,8 @@
 		header="#{messages.label_view} JJStatus" modal="true"
 		widgetVar="viewDialogWidget" dynamic="true" resizable="true"
 		maximizable="true" showEffect="fade" hideEffect="explode">
+		<p:ajax event="close" update=":tabview:statusForm"
+			listener="#{jJStatusBean.handleDialogClose}" />
 		<p:outputPanel id="SviewPanel">
 			<h:form id="sviewForm" enctype="multipart/form-data">
 				<h:panelGrid id="viewPanelGrid" columns="2"

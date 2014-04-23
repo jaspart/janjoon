@@ -9,6 +9,7 @@ import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJTask;
+import java.util.Date;
 import java.util.Set;
 
 privileged aspect JJSprint_Roo_JavaBean {
@@ -19,6 +20,22 @@ privileged aspect JJSprint_Roo_JavaBean {
     
     public void JJSprint.setOrdering(Integer ordering) {
         this.ordering = ordering;
+    }
+    
+    public Date JJSprint.getStartDate() {
+        return this.startDate;
+    }
+    
+    public void JJSprint.setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+    
+    public Date JJSprint.getEndDate() {
+        return this.endDate;
+    }
+    
+    public void JJSprint.setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
     
     public JJProject JJSprint.getProject() {

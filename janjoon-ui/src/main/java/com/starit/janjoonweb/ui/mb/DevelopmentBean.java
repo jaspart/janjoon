@@ -31,12 +31,15 @@ import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.TabCloseEvent;
 import org.primefaces.extensions.component.codemirror.CodeMirror;
 import org.primefaces.model.TreeNode;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJStatus;
+import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.service.AbstractConfigManager;
@@ -50,6 +53,8 @@ public class DevelopmentBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private boolean render;
+	@Autowired
+	private JJStatusService jJStatusService;
 	private AbstractConfigManager configManager;
 	private TreeOperation treeOperation;
 	private String type;
@@ -72,6 +77,10 @@ public class DevelopmentBean implements Serializable {
 	private int fileIndex;
 	private String createdFileName;
 	private boolean fileOrFolder = true;
+
+	public void setjJStatusService(JJStatusService jJStatusService) {
+		this.jJStatusService = jJStatusService;
+	}
 
 	public DevelopmentBean() throws FileNotFoundException, IOException {
 		// getting value from session
@@ -113,6 +122,7 @@ public class DevelopmentBean implements Serializable {
 			render = true;
 			treeOperation = new TreeOperation(configManager);
 			tree = configManager.listRepositoryContent(version.getName());
+			files = new ArrayList<FileMap>();
 
 			selectedTree = getTree();
 			while (selectedTree.getChildCount() != 0) {
@@ -481,6 +491,8 @@ public class DevelopmentBean implements Serializable {
 
 	public void commit() {
 
+		JJStatus status = null;
+
 		if (!comment.replace(" ", "").equalsIgnoreCase("")) {
 			for (FileMap fileMap : files) {
 				configManager.setFileTexte(fileMap.getFile(),
@@ -492,6 +504,8 @@ public class DevelopmentBean implements Serializable {
 
 				task.setEndDateReal(new Date());
 				task.setCompleted(true);
+				status = jJStatusService.getOneStatus("DONE", "JJTask", true);
+				task.setStatus(status);
 
 			}
 			message.setProduct(product);
@@ -509,6 +523,21 @@ public class DevelopmentBean implements Serializable {
 			task.getMessages().add(message);
 			if (task.getStartDateReal() == null)
 				task.setStartDateReal(new Date());
+			status = jJStatusService
+					.getOneStatus("IN PROGRESS", "JJTask", true);
+			if (task.getStatus() != null) {
+				if (task.getStatus().getName().equalsIgnoreCase("TODO")) {
+					status = jJStatusService.getOneStatus("IN PROGRESS",
+							"JJTask", true);
+					task.setStatus(status);
+				}
+
+			} else {
+				status = jJStatusService.getOneStatus("IN PROGRESS", "JJTask",
+						true);
+				task.setStatus(status);
+			}
+
 			task.persist();
 
 			if (configManager.checkIn(task.getId() + ":" + task.getName()
@@ -605,7 +634,7 @@ public class DevelopmentBean implements Serializable {
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("saveFileDialogWidget.show()");
 		} else {
-			// files.remove(f);
+
 			updatetabView(j, f);
 		}
 
@@ -678,7 +707,6 @@ public class DevelopmentBean implements Serializable {
 		treeOperation.deleteFile(f);
 		int i = contains(f);
 		if (i != -1) {
-			// files.remove(i);
 			updatetabView(i, files.get(i));
 		}
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -836,12 +864,31 @@ public class DevelopmentBean implements Serializable {
 	}
 
 	private void updatetabView(int j, FileMap data) {
-		j = j + 1;
-		while (j < files.size()) {
-			files.get(j).setIndex(j - 1);
-			j++;
+		int i = j + 1;
+		while (i < files.size()) {
+			files.get(i).setIndex(i - 1);
+			i++;
 		}
 		files.remove(data);
+		if (activeTabIndex == j) {
+			boolean t = !files.isEmpty();
+			while (t) {
+				if (j < files.size()) {
+					if (j < 0)
+						t = false;
+					else {
+						activeTabIndex = j;
+						files.set(activeTabIndex, files.get(activeTabIndex));
+						t = false;
+					}
+
+				} else if (j < 0)
+					t = false;
+				j--;
+			}
+
+		}
+
 	}
 
 	public void addToRoot(ActionEvent e) {

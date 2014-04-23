@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+	<p:separator />
+	<p:panel id="paneltoUpdate" header="Task Creation"
+		rendered="#{jjsprint.renderTaskForm}">
+
+		<p:selectOneMenu id="catSelectOneMenu"
+			disabled="#{!jjsprint.renderTaskForm}"
+			value="#{jJSprintBean.category}" panelStyle="width:300px"
+			effect="fold" editable="false">
+			<f:selectItem itemValue="#{null}" itemLabel="-- select initiator--" />
+			<f:selectItems value="#{jJSprintBean.categoryList}" var="cat"
+				itemLabel="#{cat.name.concat(' Requirement')}" itemValue="#{cat}" />
+			<f:converter
+				converterId="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter" />
+			<p:ajax update="paneltoUpdate"
+				listener="#{jJSprintBean.updatereqPanel}" />
+		</p:selectOneMenu>
+		<p:panelGrid id="reqPanel">
+			<p:row>
+				<p:column colspan="3">
+					<p:panel rendered="#{jJSprintBean.category == null}"
+						header="Please Select a Category "
+						style="width:300px;height:150px" />
+					<p:panel
+						header="#{jJSprintBean.category.name.concat(' Requirement')}"
+						rendered="#{jJSprintBean.category != null}">
+						<p:selectOneListbox id="reqSelectManyMenu"
+							style="width:300px;height:150px"
+							value="#{jJSprintBean.requirement}">
+							<f:selectItems value="#{jJSprintBean.reqList}" var="req"
+								itemLabel="#{req.name}" itemValue="#{req}" />
+							<f:converter
+								converterId="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter" />
+							<p:ajax update="paneltoUpdate" />
+						</p:selectOneListbox>
+					</p:panel>
+				</p:column>
+				<p:column colspan="3">
+					<p:dataTable id="taskTable" value="#{jjsprint.taskList}"
+						var="t" scrollable="true" scrollHeight="200" style="width:350px;"
+						emptyMessage="#{messages.label_notFound}">
+
+						<p:column headerText="Name" style="width:200px">
+							<h:outputText value="#{t.name}" />
+						</p:column>
+
+						<p:column headerText="W" style="width:50px">
+							<h:outputText value="#{t.workloadPlanned}" />
+						</p:column>
+
+					</p:dataTable>
+				</p:column>
+			</p:row>
+			<f:facet name="footer">
+				<p:row>
+					<p:column colspan="3">
+						<p:commandButton value="#{messages.label_create} JJTask"
+							id="createTaskButton" icon="ui-icon-circle-plus"
+							disabled="#{jJSprintBean.requirement == null}"
+							update=":projecttabview:SprintTabView:createForm:createTaskPanelGrid"
+							immediate="true" oncomplete="createTaskDialogWidget.show()"
+							actionListener="#{jJSprintBean.attrListener}"
+							title="#{messages.label_create} JJTask" >
+								<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+								</p:commandButton>
+						<p:tooltip for="createTaskButton"
+							value="#{messages.label_create} JJTask" showEffect="fade"
+							hideEffect="fade" />
+					</p:column>
+					<p:column colspan="3">
+						<p:commandButton value="Done" id="doneButtonr" rendered="#{jjsprint.render}"
+							update=":projecttabview:SprintTabView" immediate="true"							
+							action="#{jJSprintBean.doneEvent}" 
+							actionListener="#{jJSprintBean.attrListener}">
+							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+							</p:commandButton>
+							<p:commandButton value="Done" id="doneButton" rendered="#{!jjsprint.render}"
+							update="@(parent) paneltoUpdate" immediate="true"
+							action="#{jJSprintBean.doneEvent}"
+							actionListener="#{jJSprintBean.attrListener}" >
+							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+							</p:commandButton>
+					</p:column>
+				</p:row>
+			</f:facet>
+		</p:panelGrid>
+	</p:panel>
+</ui:composition>
+</html>

@@ -10,6 +10,10 @@ import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
+import com.starit.janjoonweb.domain.JJSprint;
+import com.starit.janjoonweb.domain.JJSprintService;
+import com.starit.janjoonweb.domain.JJStatus;
+import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJTestcase;
@@ -20,6 +24,8 @@ import com.starit.janjoonweb.ui.mb.JJTaskBean;
 import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJSprintConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJStatusConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJVersionConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -73,6 +79,12 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
     
     @Autowired
     JJTestcaseService JJTaskBean.jJTestcaseService;
+    
+    @Autowired
+    JJSprintService JJTaskBean.jJSprintService;
+    
+    @Autowired
+    JJStatusService JJTaskBean.jJStatusService;
     
     private String JJTaskBean.name = "JJTasks";
     
@@ -617,6 +629,30 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         testcaseCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testcaseCreateInputMessage);
         
+        OutputLabel sprintCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        sprintCreateOutput.setFor("sprintCreateInput");
+        sprintCreateOutput.setId("sprintCreateOutput");
+        sprintCreateOutput.setValue("Sprint:");
+        htmlPanelGrid.getChildren().add(sprintCreateOutput);
+        
+        AutoComplete sprintCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        sprintCreateInput.setId("sprintCreateInput");
+        sprintCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.sprint}", JJSprint.class));
+        sprintCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeSprint}", List.class, new Class[] { String.class }));
+        sprintCreateInput.setDropdown(true);
+        sprintCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "sprint", String.class));
+        sprintCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{sprint.name} #{sprint.description} #{sprint.creationDate} #{sprint.updatedDate}", String.class));
+        sprintCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{sprint}", JJSprint.class));
+        sprintCreateInput.setConverter(new JJSprintConverter());
+        sprintCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(sprintCreateInput);
+        
+        Message sprintCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        sprintCreateInputMessage.setId("sprintCreateInputMessage");
+        sprintCreateInputMessage.setFor("sprintCreateInput");
+        sprintCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(sprintCreateInputMessage);
+        
         OutputLabel assignedToCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         assignedToCreateOutput.setFor("assignedToCreateInput");
         assignedToCreateOutput.setId("assignedToCreateOutput");
@@ -640,6 +676,30 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         assignedToCreateInputMessage.setFor("assignedToCreateInput");
         assignedToCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(assignedToCreateInputMessage);
+        
+        OutputLabel statusCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        statusCreateOutput.setFor("statusCreateInput");
+        statusCreateOutput.setId("statusCreateOutput");
+        statusCreateOutput.setValue("Status:");
+        htmlPanelGrid.getChildren().add(statusCreateOutput);
+        
+        AutoComplete statusCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        statusCreateInput.setId("statusCreateInput");
+        statusCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.status}", JJStatus.class));
+        statusCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeStatus}", List.class, new Class[] { String.class }));
+        statusCreateInput.setDropdown(true);
+        statusCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "status", String.class));
+        statusCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{status.name} #{status.description} #{status.creationDate} #{status.updatedDate}", String.class));
+        statusCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{status}", JJStatus.class));
+        statusCreateInput.setConverter(new JJStatusConverter());
+        statusCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(statusCreateInput);
+        
+        Message statusCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        statusCreateInputMessage.setId("statusCreateInputMessage");
+        statusCreateInputMessage.setFor("statusCreateInput");
+        statusCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(statusCreateInputMessage);
         
         HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesCreateOutput.setId("messagesCreateOutput");
@@ -1131,6 +1191,30 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         testcaseEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testcaseEditInputMessage);
         
+        OutputLabel sprintEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        sprintEditOutput.setFor("sprintEditInput");
+        sprintEditOutput.setId("sprintEditOutput");
+        sprintEditOutput.setValue("Sprint:");
+        htmlPanelGrid.getChildren().add(sprintEditOutput);
+        
+        AutoComplete sprintEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        sprintEditInput.setId("sprintEditInput");
+        sprintEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.sprint}", JJSprint.class));
+        sprintEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeSprint}", List.class, new Class[] { String.class }));
+        sprintEditInput.setDropdown(true);
+        sprintEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "sprint", String.class));
+        sprintEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{sprint.name} #{sprint.description} #{sprint.creationDate} #{sprint.updatedDate}", String.class));
+        sprintEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{sprint}", JJSprint.class));
+        sprintEditInput.setConverter(new JJSprintConverter());
+        sprintEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(sprintEditInput);
+        
+        Message sprintEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        sprintEditInputMessage.setId("sprintEditInputMessage");
+        sprintEditInputMessage.setFor("sprintEditInput");
+        sprintEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(sprintEditInputMessage);
+        
         OutputLabel assignedToEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         assignedToEditOutput.setFor("assignedToEditInput");
         assignedToEditOutput.setId("assignedToEditOutput");
@@ -1154,6 +1238,30 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         assignedToEditInputMessage.setFor("assignedToEditInput");
         assignedToEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(assignedToEditInputMessage);
+        
+        OutputLabel statusEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        statusEditOutput.setFor("statusEditInput");
+        statusEditOutput.setId("statusEditOutput");
+        statusEditOutput.setValue("Status:");
+        htmlPanelGrid.getChildren().add(statusEditOutput);
+        
+        AutoComplete statusEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        statusEditInput.setId("statusEditInput");
+        statusEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.status}", JJStatus.class));
+        statusEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeStatus}", List.class, new Class[] { String.class }));
+        statusEditInput.setDropdown(true);
+        statusEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "status", String.class));
+        statusEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{status.name} #{status.description} #{status.creationDate} #{status.updatedDate}", String.class));
+        statusEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{status}", JJStatus.class));
+        statusEditInput.setConverter(new JJStatusConverter());
+        statusEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(statusEditInput);
+        
+        Message statusEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        statusEditInputMessage.setId("statusEditInputMessage");
+        statusEditInputMessage.setFor("statusEditInput");
+        statusEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(statusEditInputMessage);
         
         HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesEditOutput.setId("messagesEditOutput");
@@ -1425,6 +1533,16 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         testcaseValue.setConverter(new JJTestcaseConverter());
         htmlPanelGrid.getChildren().add(testcaseValue);
         
+        HtmlOutputText sprintLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        sprintLabel.setId("sprintLabel");
+        sprintLabel.setValue("Sprint:");
+        htmlPanelGrid.getChildren().add(sprintLabel);
+        
+        HtmlOutputText sprintValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        sprintValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.sprint}", JJSprint.class));
+        sprintValue.setConverter(new JJSprintConverter());
+        htmlPanelGrid.getChildren().add(sprintValue);
+        
         HtmlOutputText assignedToLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         assignedToLabel.setId("assignedToLabel");
         assignedToLabel.setValue("Assigned To:");
@@ -1434,6 +1552,16 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         assignedToValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.assignedTo}", JJContact.class));
         assignedToValue.setConverter(new JJContactConverter());
         htmlPanelGrid.getChildren().add(assignedToValue);
+        
+        HtmlOutputText statusLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        statusLabel.setId("statusLabel");
+        statusLabel.setValue("Status:");
+        htmlPanelGrid.getChildren().add(statusLabel);
+        
+        HtmlOutputText statusValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        statusValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.status}", JJStatus.class));
+        statusValue.setConverter(new JJStatusConverter());
+        htmlPanelGrid.getChildren().add(statusValue);
         
         HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesLabel.setId("messagesLabel");
@@ -1534,12 +1662,34 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         return suggestions;
     }
     
+    public List<JJSprint> JJTaskBean.completeSprint(String query) {
+        List<JJSprint> suggestions = new ArrayList<JJSprint>();
+        for (JJSprint jJSprint : jJSprintService.findAllJJSprints()) {
+            String jJSprintStr = String.valueOf(jJSprint.getName() +  " "  + jJSprint.getDescription() +  " "  + jJSprint.getCreationDate() +  " "  + jJSprint.getUpdatedDate());
+            if (jJSprintStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJSprint);
+            }
+        }
+        return suggestions;
+    }
+    
     public List<JJContact> JJTaskBean.completeAssignedTo(String query) {
         List<JJContact> suggestions = new ArrayList<JJContact>();
         for (JJContact jJContact : jJContactService.findAllJJContacts()) {
             String jJContactStr = String.valueOf(jJContact.getName() +  " "  + jJContact.getDescription() +  " "  + jJContact.getCreationDate() +  " "  + jJContact.getUpdatedDate());
             if (jJContactStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJContact);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJStatus> JJTaskBean.completeStatus(String query) {
+        List<JJStatus> suggestions = new ArrayList<JJStatus>();
+        for (JJStatus jJStatus : jJStatusService.findAllJJStatuses()) {
+            String jJStatusStr = String.valueOf(jJStatus.getName() +  " "  + jJStatus.getDescription() +  " "  + jJStatus.getCreationDate() +  " "  + jJStatus.getUpdatedDate());
+            if (jJStatusStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJStatus);
             }
         }
         return suggestions;
@@ -1608,12 +1758,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
         return findAllJJTasks();
-    }
-    
-    public void JJTaskBean.reset() {
-        JJTask_ = null;
-        selectedMessages = null;
-        createDialogVisible = false;
     }
     
     public void JJTaskBean.handleDialogClose(CloseEvent event) {

@@ -72,6 +72,68 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 	}
 
+	public List<JJTask> getTasksByStatus(JJStatus status, JJProject project,JJSprint sprint,
+			boolean onlyActif) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
+				.createQuery(JJTask.class);
+
+		Root<JJTask> from = criteriaQuery.from(JJTask.class);
+
+		CriteriaQuery<JJTask> select = criteriaQuery.select(from);
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+
+		if (project != null) {
+			Path<Object> path = from.join("requirement").get("project");
+			predicates.add(criteriaBuilder.equal(path, project));
+		}
+
+		if (status != null) {
+			predicates.add(criteriaBuilder.equal(from.get("status"), status));
+		}
+		
+		if (sprint != null) {
+			predicates.add(criteriaBuilder.equal(from.get("sprint"), status));
+		}
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+		TypedQuery<JJTask> result = entityManager.createQuery(select);
+
+		return result.getResultList();
+
+	}
+	
+	@Override
+	public List<JJTask> getSprintTasks(JJSprint sprint)
+	{
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
+				.createQuery(JJTask.class);
+
+		Root<JJTask> from = criteriaQuery.from(JJTask.class);
+
+		CriteriaQuery<JJTask> select = criteriaQuery.select(from);
+		List<Predicate> predicates = new ArrayList<Predicate>();	
+		
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));	
+		
+		if (sprint != null) {
+			predicates.add(criteriaBuilder.equal(from.get("sprint"), sprint));
+		}
+		
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+		TypedQuery<JJTask> result = entityManager.createQuery(select);
+
+		return result.getResultList();
+		
+	}
+
 	@Override
 	public void saveTasks(Set<JJTask> tasks) {
 		jJTaskRepository.save(tasks);

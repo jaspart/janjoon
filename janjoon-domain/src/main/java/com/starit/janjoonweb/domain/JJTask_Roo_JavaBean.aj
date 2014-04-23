@@ -7,6 +7,8 @@ import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJRequirement;
+import com.starit.janjoonweb.domain.JJSprint;
+import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJVersion;
@@ -127,12 +129,28 @@ privileged aspect JJTask_Roo_JavaBean {
         this.testcase = testcase;
     }
     
+    public JJSprint JJTask.getSprint() {
+        return this.sprint;
+    }
+    
+    public void JJTask.setSprint(JJSprint sprint) {
+        this.sprint = sprint;
+    }
+    
     public JJContact JJTask.getAssignedTo() {
         return this.assignedTo;
     }
     
     public void JJTask.setAssignedTo(JJContact assignedTo) {
         this.assignedTo = assignedTo;
+    }
+    
+    public JJStatus JJTask.getStatus() {
+        return this.status;
+    }
+    
+    public void JJTask.setStatus(JJStatus status) {
+        this.status = status;
     }
     
     public Set<JJMessage> JJTask.getMessages() {

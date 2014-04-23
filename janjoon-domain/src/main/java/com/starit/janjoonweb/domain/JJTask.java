@@ -64,9 +64,15 @@ public class JJTask extends JJAbstractEntity {
 
 	@ManyToOne
 	private JJTestcase testcase;
+	
+	@ManyToOne
+	private JJSprint sprint;
 
 	@ManyToOne
 	private JJContact assignedTo;
+	
+	@ManyToOne
+	private JJStatus status;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "task")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();

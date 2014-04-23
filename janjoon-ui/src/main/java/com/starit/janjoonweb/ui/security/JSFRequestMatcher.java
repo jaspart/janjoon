@@ -8,9 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.security.web.util.RequestMatcher;
 
 @SuppressWarnings("deprecation")
-public class JSFRequestMatcher implements RequestMatcher,Serializable{
+public class JSFRequestMatcher implements RequestMatcher, Serializable {
 
-   
 	/**
 	 * 
 	 */
@@ -18,8 +17,8 @@ public class JSFRequestMatcher implements RequestMatcher,Serializable{
 
 	@SuppressWarnings("unchecked")
 	@Override
-    public boolean matches(HttpServletRequest request) {
-        System.out.println(Collections.list(request.getHeaderNames()));
-        return request.getHeader("faces-request") != null;
-    }
+	public boolean matches(HttpServletRequest request) {
+		System.out.println(Collections.list(request.getHeaderNames()));
+		return request.getHeader("faces-request") != null;
+	}
 }

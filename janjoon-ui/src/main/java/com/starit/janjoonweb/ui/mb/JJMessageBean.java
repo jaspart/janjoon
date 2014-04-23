@@ -496,7 +496,14 @@ public class JJMessageBean {
 				htmlPanelGrid.getChildren().add(updatedByLabel);
 				HtmlOutputText updatedByValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				updatedByValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJMessageBean.viewedMessage.updatedBy.name}", String.class));
+				updatedByValue
+						.setValueExpression(
+								"value",
+								expressionFactory
+										.createValueExpression(
+												elContext,
+												"#{jJMessageBean.viewedMessage.updatedBy.name}",
+												String.class));
 				htmlPanelGrid.getChildren().add(updatedByValue);
 
 			}
@@ -601,10 +608,14 @@ public class JJMessageBean {
 
 				HtmlOutputText criticityValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				criticityValue.setValueExpression("value", expressionFactory
-						.createValueExpression(elContext,
-								"#{jJMessageBean.viewedMessage.criticity.name}",
-								String.class));
+				criticityValue
+						.setValueExpression(
+								"value",
+								expressionFactory
+										.createValueExpression(
+												elContext,
+												"#{jJMessageBean.viewedMessage.criticity.name}",
+												String.class));
 				htmlPanelGrid.getChildren().add(criticityValue);
 			}
 			if (viewedMessage.getImportance() != null) {
@@ -616,10 +627,14 @@ public class JJMessageBean {
 
 				HtmlOutputText importanceValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				importanceValue.setValueExpression("value", expressionFactory
-						.createValueExpression(elContext,
-								"#{jJMessageBean.viewedMessage.importance.name}",
-								String.class));
+				importanceValue
+						.setValueExpression(
+								"value",
+								expressionFactory
+										.createValueExpression(
+												elContext,
+												"#{jJMessageBean.viewedMessage.importance.name}",
+												String.class));
 				htmlPanelGrid.getChildren().add(importanceValue);
 			}
 			if (viewedMessage.getProduct() != null) {
@@ -645,10 +660,14 @@ public class JJMessageBean {
 
 					HtmlOutputText versioningValue = (HtmlOutputText) application
 							.createComponent(HtmlOutputText.COMPONENT_TYPE);
-					versioningValue.setValueExpression("value", expressionFactory
-							.createValueExpression(elContext,
-									"#{jJMessageBean.viewedMessage.versioning.name}",
-									String.class));
+					versioningValue
+							.setValueExpression(
+									"value",
+									expressionFactory
+											.createValueExpression(
+													elContext,
+													"#{jJMessageBean.viewedMessage.versioning.name}",
+													String.class));
 					htmlPanelGrid.getChildren().add(versioningValue);
 				}
 
@@ -677,10 +696,14 @@ public class JJMessageBean {
 
 				HtmlOutputText requirementValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				requirementValue.setValueExpression("value", expressionFactory
-						.createValueExpression(elContext,
-								"#{jJMessageBean.viewedMessage.requirement.name}",
-								String.class));
+				requirementValue
+						.setValueExpression(
+								"value",
+								expressionFactory
+										.createValueExpression(
+												elContext,
+												"#{jJMessageBean.viewedMessage.requirement.name}",
+												String.class));
 				htmlPanelGrid.getChildren().add(requirementValue);
 			}
 			if (viewedMessage.getSprint() != null) {

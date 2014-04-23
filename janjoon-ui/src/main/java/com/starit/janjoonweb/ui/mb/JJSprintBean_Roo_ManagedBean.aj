@@ -1068,17 +1068,8 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
         return findAllJJSprints();
-    }
-    
-    public void JJSprintBean.reset() {
-        JJSprint_ = null;
-        selectedBuilds = null;
-        selectedTasks = null;
-        selectedObstacles = null;
-        selectedContacts = null;
-        selectedMessages = null;
-        createDialogVisible = false;
-    }
+    }    
+   
     
     public void JJSprintBean.handleDialogClose(CloseEvent event) {
         reset();

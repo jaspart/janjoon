@@ -340,16 +340,13 @@ public class JJTeststepexecutionBean {
 
 		teststepexecution = elements.get(activeIndex);
 		status = teststepexecution.getPassed();
-		
-		
+
 		Boolean status1 = teststepexecution.getPassed();
 
 		JJTeststepexecution tse = jJTeststepexecutionService
 				.findJJTeststepexecution(teststepexecution.getId());
 		tse.setPassed(status1);
 		tse.setUpdatedDate(new Date());
-		
-		
 
 		System.out.println("yy");
 		jJTeststepexecutionService.updateJJTeststepexecution(tse);
@@ -365,8 +362,8 @@ public class JJTeststepexecutionBean {
 
 				bug.setCreationDate(new Date());
 
-				JJTeststep teststep = jJTeststepService
-						.findJJTeststep(tse.getTeststep().getId());
+				JJTeststep teststep = jJTeststepService.findJJTeststep(tse
+						.getTeststep().getId());
 
 				bug.setTeststep(teststep);
 				teststep.getBugs().add(bug);

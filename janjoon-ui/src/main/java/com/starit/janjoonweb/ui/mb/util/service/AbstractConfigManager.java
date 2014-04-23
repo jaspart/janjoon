@@ -9,39 +9,36 @@ import org.primefaces.model.TreeNode;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJTask;
 
-public abstract class AbstractConfigManager implements Serializable
-{
-	
-	
+public abstract class AbstractConfigManager implements Serializable {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	private String type;	
+
+	private String type;
 	protected String url;
-	protected String path;	
+	protected String path;
 	protected JJContact jJContact;
-	
-	public AbstractConfigManager(String type, String url, String path,JJContact jJContact)
-	{		
+
+	public AbstractConfigManager(String type, String url, String path,
+			JJContact jJContact) {
 		this.type = type;
 		this.url = url;
 		this.path = path;
-		this.jJContact=jJContact;
-		
+		this.jJContact = jJContact;
+
 	}
 
 	public String getType() {
 		return type.toString();
 	}
 
-	public void setType(String type) {		
-		
-		this.type = type;
-	}	
+	public void setType(String type) {
 
-	
+		this.type = type;
+	}
+
 	public String getUrl() {
 		return url;
 	}
@@ -57,7 +54,6 @@ public abstract class AbstractConfigManager implements Serializable
 	public void setPath(String path) {
 		this.path = path;
 	}
-	
 
 	public JJContact getjJContact() {
 		return jJContact;
@@ -68,25 +64,24 @@ public abstract class AbstractConfigManager implements Serializable
 	}
 
 	public abstract boolean checkIn(String message);
-	
+
 	public abstract boolean checkOut(String branche);
-	
-	public abstract String cloneRemoteRepository(String url,String name,String path);
-	
-	public abstract boolean addFile(String Path,String name,boolean isFile);
-	
-	public abstract boolean createRepository (String path);
-	
-	public abstract TreeNode listRepositoryContent(String version);	
-	
+
+	public abstract String cloneRemoteRepository(String url, String name,
+			String path);
+
+	public abstract boolean addFile(String Path, String name, boolean isFile);
+
+	public abstract boolean createRepository(String path);
+
+	public abstract TreeNode listRepositoryContent(String version);
+
 	public abstract boolean pushRepository();
 
-	public abstract boolean pullRepository() ;
-	
-	public abstract ArrayList<String> getAllBranches();
-	
-	public abstract boolean setFileTexte(File file,String texte);
+	public abstract boolean pullRepository();
 
-	
+	public abstract ArrayList<String> getAllBranches();
+
+	public abstract boolean setFileTexte(File file, String texte);
 
 }
