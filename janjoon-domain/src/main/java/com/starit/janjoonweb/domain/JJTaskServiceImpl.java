@@ -25,7 +25,8 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 	@Override
 	public List<JJTask> getTasks(JJProject project, JJProduct product,
-			JJContact contact, boolean onlyActif, boolean sortedByChapter) {
+			JJContact contact, JJChapter chapter, boolean onlyActif,
+			boolean sortedByCreationDate) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
 				.createQuery(JJTask.class);
@@ -53,18 +54,16 @@ public class JJTaskServiceImpl implements JJTaskService {
 			predicates.add(criteriaBuilder.equal(path, product));
 		}
 
-		if (sortedByChapter) {
+		if (chapter != null) {
 			Path<Object> path = from.join("requirement").get("chapter");
-			predicates.add(criteriaBuilder.isNotNull(path));
+			predicates.add(criteriaBuilder.equal(path, chapter));
 		}
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
-		// if (sortedByChapter) {
-		// Path<Object> path = from.join("requirement").get("chapter");
-		// Expression<String> expression = from.get("name");
-		// select.orderBy(criteriaBuilder.desc(expression));
-		// }
+		if (sortedByCreationDate) {
+			select.orderBy(criteriaBuilder.asc(from.get("creationDate")));
+		}
 
 		TypedQuery<JJTask> result = entityManager.createQuery(select);
 

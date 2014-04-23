@@ -113,6 +113,37 @@ public class JJChapterServiceImpl implements JJChapterService {
 	}
 
 	@Override
+	public List<JJChapter> getChapters(JJProject project, boolean onlyActif,
+			boolean sortedByName) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJChapter> criteriaQuery = criteriaBuilder
+				.createQuery(JJChapter.class);
+
+		Root<JJChapter> from = criteriaQuery.from(JJChapter.class);
+
+		CriteriaQuery<JJChapter> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+		// Adding predicates in case of parameter not being null
+		if (project != null) {
+			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}
+
+		select.where(predicates.toArray(new Predicate[] {}));
+		if (sortedByName) {
+			select.orderBy(criteriaBuilder.asc(from.get("name")));
+		}
+		TypedQuery<JJChapter> result = entityManager.createQuery(select);
+		return result.getResultList();
+
+	}
+
+	@Override
 	public List<JJChapter> getChildrenOfParentChapter(JJChapter parent,
 			boolean onlyActif, boolean sortedByOrder) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

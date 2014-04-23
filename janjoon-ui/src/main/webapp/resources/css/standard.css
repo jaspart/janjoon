@@ -167,33 +167,35 @@ div.timeline-axis {
 	height: 35px;
 }
 
-div.timeline-navigation {
-	visibility:hidden;
+div.timeline-groups-text {
+	height: 28px;
 }
-timeline-navigation-new {
-	padding: 0px;
-}
-timeline-navigation-zoom-in {
-	padding: 0px;
-}
-timeline-navigation-zoom-out {
-	padding: 0px;
-}
-timeline-navigation-move-left {
-	padding: 0px;
-}
-timeline-navigation-move-right {
-	padding: 0px;
+
+div.timeline-navigation-delete {
+	display: none;
 }
 
 div.planned {
 	background: #5882FA none !important; /* blue */
-	border-color: #5882FA !important; /* blue */
+	border-color: white; /* white */
+	opacity: 0.6;
+	filter: alpha(opacity = 60);
 }
 
 div.real {
 	background: #FE9A2E none !important; /* orange */
-	border-color: #FE9A2E !important; /* orange */
+	border-color: black; /* black */
 	opacity: 0.4;
 	filter: alpha(opacity = 40);
+}
+
+div.chapter {
+	background: black none !important; /* black */
+	border-color: white; /* white */
+	opacity: 0.5;
+	filter: alpha(opacity = 50);
+}
+
+.task {
+	height: 28px;
 }
