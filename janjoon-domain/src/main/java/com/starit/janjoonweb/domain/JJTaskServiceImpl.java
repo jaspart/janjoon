@@ -71,8 +71,9 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 	}
 
-	public List<JJTask> getTasksByStatus(JJStatus status, JJProject project,JJSprint sprint,
-			boolean onlyActif) {
+	@Override
+	public List<JJTask> getTasksByStatus(JJStatus status, JJProject project,
+			JJSprint sprint, boolean onlyActif) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
 				.createQuery(JJTask.class);
@@ -94,7 +95,7 @@ public class JJTaskServiceImpl implements JJTaskService {
 		if (status != null) {
 			predicates.add(criteriaBuilder.equal(from.get("status"), status));
 		}
-		
+
 		if (sprint != null) {
 			predicates.add(criteriaBuilder.equal(from.get("sprint"), status));
 		}
@@ -106,10 +107,9 @@ public class JJTaskServiceImpl implements JJTaskService {
 		return result.getResultList();
 
 	}
-	
+
 	@Override
-	public List<JJTask> getSprintTasks(JJSprint sprint)
-	{
+	public List<JJTask> getSprintTasks(JJSprint sprint) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
 				.createQuery(JJTask.class);
@@ -117,20 +117,20 @@ public class JJTaskServiceImpl implements JJTaskService {
 		Root<JJTask> from = criteriaQuery.from(JJTask.class);
 
 		CriteriaQuery<JJTask> select = criteriaQuery.select(from);
-		List<Predicate> predicates = new ArrayList<Predicate>();	
-		
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));	
-		
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
 		if (sprint != null) {
 			predicates.add(criteriaBuilder.equal(from.get("sprint"), sprint));
 		}
-		
+
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		TypedQuery<JJTask> result = entityManager.createQuery(select);
 
 		return result.getResultList();
-		
+
 	}
 
 	@Override

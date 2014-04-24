@@ -70,10 +70,10 @@
 		<property name="minEvictableIdleTimeMillis" value="1800000" />
 	</bean>
 
-<!-- 	<bean id="sessionFactory" -->
-<!-- 		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean"> -->
-<!-- 		<property name="dataSource" ref="dataSource" /> -->
-<!-- 	</bean> -->
+	<!-- <bean id="sessionFactory" -->
+	<!-- class="org.springframework.orm.hibernate3.LocalSessionFactoryBean"> -->
+	<!-- <property name="dataSource" ref="dataSource" /> -->
+	<!-- </bean> -->
 
 	<bean class="org.springframework.orm.jpa.JpaTransactionManager"
 		id="transactionManager">

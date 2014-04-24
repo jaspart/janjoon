@@ -51,7 +51,7 @@ public class UsageChecker {
 	static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
 
 	static String workingdirectory = "";
-        static Document license = null;
+	static Document license = null;
 
 	static {
 		org.apache.xml.security.Init.init();
@@ -69,71 +69,73 @@ public class UsageChecker {
 	 */
 	@SuppressWarnings("finally")
 	public static boolean validate(final Document document) throws Exception {
-            boolean result = false;
-            X509Certificate usedCert = null;
-            InputStream iStream = null;
+		boolean result = false;
+		X509Certificate usedCert = null;
+		InputStream iStream = null;
 
-            try {
-                final String alias = "starit";
-                final String keystorePath = "janjoon-base.jar";
-                final String keystorpass = "JanJoon2014";
+		try {
+			final String alias = "starit";
+			final String keystorePath = "janjoon-base.jar";
+			final String keystorpass = "JanJoon2014";
 
-                try {
-                    final KeyStore keyStore = KeyStore.getInstance("JKS");
-                    iStream = new FileInputStream(workingdirectory + File.separator
-                                    + keystorePath);
-                    keyStore.load(iStream, keystorpass.toCharArray());
+			try {
+				final KeyStore keyStore = KeyStore.getInstance("JKS");
+				iStream = new FileInputStream(workingdirectory + File.separator
+						+ keystorePath);
+				keyStore.load(iStream, keystorpass.toCharArray());
 
-                    usedCert = (X509Certificate) keyStore.getCertificate(alias);
-                } catch (final IOException | KeyStoreException
-                            | NoSuchAlgorithmException | CertificateException e) {
-                    throw new IOException("Could not find certificate with alias: "
-                                    + alias);
-                } finally {
-                    if (iStream != null)
-                        closeFile(iStream);
-                }
+				usedCert = (X509Certificate) keyStore.getCertificate(alias);
+			} catch (final IOException | KeyStoreException
+					| NoSuchAlgorithmException | CertificateException e) {
+				throw new IOException("Could not find certificate with alias: "
+						+ alias);
+			} finally {
+				if (iStream != null)
+					closeFile(iStream);
+			}
 
-                // init xml signature
-                org.apache.xml.security.Init.init();
+			// init xml signature
+			org.apache.xml.security.Init.init();
 
-                final NodeList nodeList = document.getDocumentElement()
-                    .getElementsByTagNameNS(
-                            javax.xml.crypto.dsig.XMLSignature.XMLNS,
-                            "Signature");
+			final NodeList nodeList = document.getDocumentElement()
+					.getElementsByTagNameNS(
+							javax.xml.crypto.dsig.XMLSignature.XMLNS,
+							"Signature");
 
-                final Element signatureElement = (Element) nodeList.item(0);
-                if (signatureElement != null) {
-                    final org.apache.xml.security.signature.XMLSignature signer = new org.apache.xml.security.signature.XMLSignature(
-                                    signatureElement, "");
+			final Element signatureElement = (Element) nodeList.item(0);
+			if (signatureElement != null) {
+				final org.apache.xml.security.signature.XMLSignature signer = new org.apache.xml.security.signature.XMLSignature(
+						signatureElement, "");
 
-                    final org.apache.xml.security.keys.KeyInfo keyInfo = signer.getKeyInfo();
+				final org.apache.xml.security.keys.KeyInfo keyInfo = signer
+						.getKeyInfo();
 
-                    if (usedCert != null) {
-                            try {
-                                    result = signer.checkSignatureValue(usedCert);
-                            } catch (final XMLSignatureException e) {
-                                    throw new Exception(
-                                                    "Error to validate RemId signature.");
-                            }
-                    } else {
-                        if (keyInfo.containsKeyValue()) {
-                            result = signer.checkSignatureValue(keyInfo.getPublicKey());
-                        } else if (keyInfo.containsX509Data()) {
-                            result = signer.checkSignatureValue(keyInfo
-                                    .getX509Certificate());
-                        } else {
-                            throw new Exception("Verification key is not found");
-                        }
-                    }
-                } else {
-                    throw new Exception("Document is not signed");
-                }
-            } catch (Exception e) {
-                throw new Exception("Error to validate signature:" + e);
-            } finally {
-                return result;
-            }
+				if (usedCert != null) {
+					try {
+						result = signer.checkSignatureValue(usedCert);
+					} catch (final XMLSignatureException e) {
+						throw new Exception(
+								"Error to validate RemId signature.");
+					}
+				} else {
+					if (keyInfo.containsKeyValue()) {
+						result = signer.checkSignatureValue(keyInfo
+								.getPublicKey());
+					} else if (keyInfo.containsX509Data()) {
+						result = signer.checkSignatureValue(keyInfo
+								.getX509Certificate());
+					} else {
+						throw new Exception("Verification key is not found");
+					}
+				}
+			} else {
+				throw new Exception("Document is not signed");
+			}
+		} catch (Exception e) {
+			throw new Exception("Error to validate signature:" + e);
+		} finally {
+			return result;
+		}
 	}
 
 	/**
@@ -143,86 +145,89 @@ public class UsageChecker {
 	 *            : specify the xml request path value.
 	 */
 	public static void closeFile(InputStream iStream) {
-            if (iStream != null) {
-                try {
-                    iStream.close();
-                } catch (IOException e) {
-                    System.out.println("Error to close file, " + e.getMessage());
-                }
-            }
+		if (iStream != null) {
+			try {
+				iStream.close();
+			} catch (IOException e) {
+				System.out.println("Error to close file, " + e.getMessage());
+			}
+		}
 	}
 
 	public static boolean verifyFile(String filePath) {
-            boolean result = false;
-            File f = new File(filePath);
-            if (f.exists() && !f.isDirectory()) {
-                result = true;
-            }
-            return result;
+		boolean result = false;
+		File f = new File(filePath);
+		if (f.exists() && !f.isDirectory()) {
+			result = true;
+		}
+		return result;
 	}
 
 	public static Document readFile(String input) throws IOException,
-                    SAXException, ParserConfigurationException {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            dbf.setNamespaceAware(true);
-            Document doc = dbf.newDocumentBuilder().parse(
-                            new FileInputStream(input));
-            return doc;
+			SAXException, ParserConfigurationException {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		dbf.setNamespaceAware(true);
+		Document doc = dbf.newDocumentBuilder().parse(
+				new FileInputStream(input));
+		return doc;
 	}
 
 	public static void writeFile(String output, Document doc)
-                    throws IOException, TransformerException {
-            TransformerFactory tf = TransformerFactory.newInstance();
-            Transformer trans = tf.newTransformer();
-            OutputStream os;
-            os = new FileOutputStream(output);
-            trans.transform(new DOMSource(doc), new StreamResult(os));
+			throws IOException, TransformerException {
+		TransformerFactory tf = TransformerFactory.newInstance();
+		Transformer trans = tf.newTransformer();
+		OutputStream os;
+		os = new FileOutputStream(output);
+		trans.transform(new DOMSource(doc), new StreamResult(os));
 	}
-        
-        public static Date getExpiryDate(){
-            Date date = null;
-            Element root = license.getDocumentElement();
-            String expiryDate = root.getElementsByTagName("expires").item(0).getTextContent();
-            try {
-                date = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH).parse(expiryDate);
-            }
-            catch(ParseException e){
-                System.out.println("Exception : "+e);
-            }
-            return date;
-        }
-        
-        public static boolean checkExpiryDate(){
-            return getExpiryDate().after(new Date());
-        }
-        
-        public static String getStringData(String data){
-            Element root = license.getDocumentElement();
-            String result = root.getElementsByTagName(data).item(0).getTextContent();
-            return result;
-        }
-        
-        public static int getIntData(String data){
-            Element root = license.getDocumentElement();
-            String result = root.getElementsByTagName(data).item(0).getTextContent();
-            return Integer.parseInt(result);
-        }
-        
+
+	public static Date getExpiryDate() {
+		Date date = null;
+		Element root = license.getDocumentElement();
+		String expiryDate = root.getElementsByTagName("expires").item(0)
+				.getTextContent();
+		try {
+			date = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH)
+					.parse(expiryDate);
+		} catch (ParseException e) {
+			System.out.println("Exception : " + e);
+		}
+		return date;
+	}
+
+	public static boolean checkExpiryDate() {
+		return getExpiryDate().after(new Date());
+	}
+
+	public static String getStringData(String data) {
+		Element root = license.getDocumentElement();
+		String result = root.getElementsByTagName(data).item(0)
+				.getTextContent();
+		return result;
+	}
+
+	public static int getIntData(String data) {
+		Element root = license.getDocumentElement();
+		String result = root.getElementsByTagName(data).item(0)
+				.getTextContent();
+		return Integer.parseInt(result);
+	}
+
 	public static boolean check() {
-            boolean result = false;
-            workingdirectory = System.getProperty("user.dir");
-            if (!verifyFile(workingdirectory + File.separator + "janjoon-base.jar")) {
-                workingdirectory = System.getProperty("user.dir") + File.separator
-                        + "src" + File.separator + "run-distrib";
-            }
-            try {
-                license = readFile(workingdirectory + File.separator + "janjoon.lic");
-                result = UsageChecker.validate(license);
-            }
-            catch (Exception e) {
-                    System.out.println("problem=" + e);
-            }
-            return result;
+		boolean result = false;
+		workingdirectory = System.getProperty("user.dir");
+		if (!verifyFile(workingdirectory + File.separator + "janjoon-base.jar")) {
+			workingdirectory = System.getProperty("user.dir") + File.separator
+					+ "src" + File.separator + "run-distrib";
+		}
+		try {
+			license = readFile(workingdirectory + File.separator
+					+ "janjoon.lic");
+			result = UsageChecker.validate(license);
+		} catch (Exception e) {
+			System.out.println("problem=" + e);
+		}
+		return result;
 	}
 
 	public static void main(String[] args) {

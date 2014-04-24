@@ -873,8 +873,9 @@ public class ConfigListener implements ServletContextListener {
 
 			List<JJProduct> productList = jJProductService.getProducts(true);
 			if (jJRequirementService.findAllJJRequirements().isEmpty()) {
-				List<JJStatus> status=jJStatusService.getStatus("JJTask", true, null, true);
-				JJSprint s=jJSprintService.getSprints(true).get(0);			
+				List<JJStatus> status = jJStatusService.getStatus("JJTask",
+						true, null, true);
+				JJSprint s = jJSprintService.getSprints(true).get(0);
 				JJRequirement jJRequirement;
 				for (int j = 0; j < projectList.size(); j++) {
 					jJRequirement = new JJRequirement();
@@ -896,7 +897,7 @@ public class ConfigListener implements ServletContextListener {
 						jJTask.setRequirement(jJRequirement);
 						jJTask.setWorkloadPlanned(10);
 						jJTask.setSprint(s);
-						jJTask.setStatus(status.get(i%3));
+						jJTask.setStatus(status.get(i % 3));
 						jJTaskService.saveJJTask(jJTask);
 					}
 				}

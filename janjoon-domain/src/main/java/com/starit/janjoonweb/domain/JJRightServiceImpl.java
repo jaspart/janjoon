@@ -23,6 +23,7 @@ public class JJRightServiceImpl implements JJRightService {
 		this.entityManager = entityManager;
 	}
 
+	@Override
 	public List<JJRight> getRights(JJProfile profile) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJRight> criteriaQuery = criteriaBuilder

@@ -11,19 +11,17 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-
 public class JJMessageServiceImpl implements JJMessageService {
-	
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
-	
+
 	@Override
-	public List<JJMessage> getMessages(boolean onlyActif)
-	{
+	public List<JJMessage> getMessages(boolean onlyActif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJMessage> criteriaQuery = criteriaBuilder
@@ -43,6 +41,5 @@ public class JJMessageServiceImpl implements JJMessageService {
 		TypedQuery<JJMessage> result = entityManager.createQuery(select);
 		return result.getResultList();
 
-		
 	}
 }

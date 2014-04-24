@@ -3,9 +3,6 @@ package com.starit.janjoonweb.ui.mb.util.service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.commons.io.FilenameUtils;
 
 public class FileMap {

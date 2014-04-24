@@ -15,9 +15,10 @@ public interface JJTaskService {
 	public void saveTasks(Set<JJTask> tasks);
 
 	public void updateTasks(Set<JJTask> tasks);
-	
-	public List<JJTask> getTasksByStatus(JJStatus status,JJProject project,JJSprint sprint,boolean onlyActif);
-	
+
+	public List<JJTask> getTasksByStatus(JJStatus status, JJProject project,
+			JJSprint sprint, boolean onlyActif);
+
 	public List<JJTask> getSprintTasks(JJSprint sprint);
 
 }

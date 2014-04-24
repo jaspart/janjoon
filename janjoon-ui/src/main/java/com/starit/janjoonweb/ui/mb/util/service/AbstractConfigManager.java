@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import org.primefaces.model.TreeNode;
 
 import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJTask;
 
 public abstract class AbstractConfigManager implements Serializable {
 

@@ -69,8 +69,7 @@
 						<td><p:panel header="File Content"
 								style="height:530px;width:700px;">
 								<p:tabView id="tabView"
-									activeIndex="#{jJDevelopment.activeTabIndex}"
-									scrollable="true" 
+									activeIndex="#{jJDevelopment.activeTabIndex}" scrollable="true"
 									value="#{jJDevelopment.files}" var="tab">
 									<p:ajax event="tabClose" listener="#{jJDevelopment.onCloseTab}" />
 									<p:ajax event="tabChange"

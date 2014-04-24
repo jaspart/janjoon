@@ -73,6 +73,7 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
         setEndDateReal(obj, index);
         setEndDateRevised(obj, index);
         setName(obj, index);
+        setParent(obj, index);
         setStartDatePlanned(obj, index);
         setStartDateReal(obj, index);
         setStartDateRevised(obj, index);
@@ -129,6 +130,11 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
             name = name.substring(0, 100);
         }
         obj.setName(name);
+    }
+    
+    public void JJTaskDataOnDemand.setParent(JJTask obj, int index) {
+        JJTask parent = obj;
+        obj.setParent(parent);
     }
     
     public void JJTaskDataOnDemand.setStartDatePlanned(JJTask obj, int index) {

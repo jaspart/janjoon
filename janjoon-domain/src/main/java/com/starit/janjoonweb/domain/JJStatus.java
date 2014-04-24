@@ -17,13 +17,13 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity(sequenceName = "JJStatusSEQ")
 public class JJStatus extends JJAbstractEntity {
-	
+
 	@NotNull
 	@Size(max = 25)
 	private String objet;
 
 	private Integer levelStatus;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "status")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
 }

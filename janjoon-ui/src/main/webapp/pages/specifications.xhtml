@@ -233,8 +233,7 @@
 									<f:selectItems
 										value="#{jJRequirementBean.requirementProductList}" var="c"
 										itemLabel="#{c.name}" itemValue="#{c}" />
-									<p:ajax process="@this" partialSubmit="true"
-										update="version"
+									<p:ajax process="@this" partialSubmit="true" update="version"
 										listener="#{jJRequirementBean.handleSelectProduct()}" />
 								</p:selectOneMenu>
 							</p:column>

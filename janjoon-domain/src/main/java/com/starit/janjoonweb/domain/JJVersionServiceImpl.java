@@ -54,6 +54,7 @@ public class JJVersionServiceImpl implements JJVersionService {
 		return result.getResultList();
 
 	}
+
 	@Override
 	public List<JJTask> getTastksByVersion(JJVersion jJversion) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -68,10 +69,7 @@ public class JJVersionServiceImpl implements JJVersionService {
 
 		TypedQuery<JJTask> result = entityManager.createQuery(select);
 		return result.getResultList();
-		
+
 	}
 
-	
-
-	
 }

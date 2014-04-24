@@ -96,8 +96,8 @@
 		<p:outputPanel id="createPanel">
 			<h:form id="createForm" enctype="multipart/form-data">
 				<h:panelGrid id="createPanelGrid" columns="3"
-					binding="#{jJConfigurationBean.createPanel}"
-					styleClass="dialog" columnClasses="col1,col2,col3" />
+					binding="#{jJConfigurationBean.createPanel}" styleClass="dialog"
+					columnClasses="col1,col2,col3" />
 				<p:commandButton id="createSaveButton"
 					value="#{messages.label_save}"
 					action="#{jJConfigurationBean.persistConf}"

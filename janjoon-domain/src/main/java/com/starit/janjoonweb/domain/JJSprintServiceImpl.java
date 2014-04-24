@@ -85,63 +85,63 @@ public class JJSprintServiceImpl implements JJSprintService {
 
 	}
 
-//	public Integer getWorkload(JJSprint sprint, boolean onlyActif) {
-//		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-//		CriteriaQuery<Integer> criteria = criteriaBuilder
-//				.createQuery(Integer.class);
-//		Root<JJTask> from = criteria.from(JJTask.class);
-//		
-//		criteria.select(criteriaBuilder.sum(from.<Integer>get("workloadPlanned")));
-//
-//		List<Predicate> predicates = new ArrayList<Predicate>();
-//
-//		if (sprint != null) {
-//
-//			List<JJRequirement> requirements = jJRequirementService
-//					.getRequirements(sprint.getProject(), null, null);
-//			for(JJRequirement req:requirements)
-//			{
-//				predicates.add(criteriaBuilder.equal(from.get("requirement"),
-//						req));			
-//			}
-//			
-//		}
-//
-//		if (onlyActif) {
-//			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-//		}
-//
-//		return Integer.parseInt(entityManager.createQuery(criteria)
-//				.getSingleResult().toString());
-//	}
-//
-//	public Integer getConsumed(JJSprint sprint, boolean onlyActif) {
-//		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-//		CriteriaQuery<Integer> criteria = criteriaBuilder
-//				.createQuery(Integer.class);
-//		Root<JJTask> from = criteria.from(JJTask.class);
-//		
-//		criteria.select(criteriaBuilder.sum(from.<Integer>get("consumed")));
-//
-//		List<Predicate> predicates = new ArrayList<Predicate>();
-//
-//		if (sprint != null) {
-//
-//			List<JJRequirement> requirements = jJRequirementService
-//					.getRequirements(sprint.getProject(), null, null);
-//			for(JJRequirement req:requirements)
-//			{
-//				predicates.add(criteriaBuilder.equal(from.get("requirement"),
-//						req));			
-//			}
-//			
-//		}
-//
-//		if (onlyActif) {
-//			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-//		}
-//
-//		return Integer.parseInt(entityManager.createQuery(criteria)
-//				.getSingleResult().toString());
-//	}
+	// public Integer getWorkload(JJSprint sprint, boolean onlyActif) {
+	// CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+	// CriteriaQuery<Integer> criteria = criteriaBuilder
+	// .createQuery(Integer.class);
+	// Root<JJTask> from = criteria.from(JJTask.class);
+	//
+	// criteria.select(criteriaBuilder.sum(from.<Integer>get("workloadPlanned")));
+	//
+	// List<Predicate> predicates = new ArrayList<Predicate>();
+	//
+	// if (sprint != null) {
+	//
+	// List<JJRequirement> requirements = jJRequirementService
+	// .getRequirements(sprint.getProject(), null, null);
+	// for(JJRequirement req:requirements)
+	// {
+	// predicates.add(criteriaBuilder.equal(from.get("requirement"),
+	// req));
+	// }
+	//
+	// }
+	//
+	// if (onlyActif) {
+	// predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+	// }
+	//
+	// return Integer.parseInt(entityManager.createQuery(criteria)
+	// .getSingleResult().toString());
+	// }
+	//
+	// public Integer getConsumed(JJSprint sprint, boolean onlyActif) {
+	// CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+	// CriteriaQuery<Integer> criteria = criteriaBuilder
+	// .createQuery(Integer.class);
+	// Root<JJTask> from = criteria.from(JJTask.class);
+	//
+	// criteria.select(criteriaBuilder.sum(from.<Integer>get("consumed")));
+	//
+	// List<Predicate> predicates = new ArrayList<Predicate>();
+	//
+	// if (sprint != null) {
+	//
+	// List<JJRequirement> requirements = jJRequirementService
+	// .getRequirements(sprint.getProject(), null, null);
+	// for(JJRequirement req:requirements)
+	// {
+	// predicates.add(criteriaBuilder.equal(from.get("requirement"),
+	// req));
+	// }
+	//
+	// }
+	//
+	// if (onlyActif) {
+	// predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+	// }
+	//
+	// return Integer.parseInt(entityManager.createQuery(criteria)
+	// .getSingleResult().toString());
+	// }
 }

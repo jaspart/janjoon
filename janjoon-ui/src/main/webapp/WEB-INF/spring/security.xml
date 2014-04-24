@@ -26,11 +26,11 @@
 		<logout logout-url="/pages/logout.jsf" logout-success-url="/pages/login.jsf"
 			invalidate-session="true" delete-cookies="true" />
 		<form-login login-page="/pages/login.jsf" />
-		
+
 		<expression-handler ref="jsfWebExpressionHandler" />
 	</http>
 
-	
+
 	<authentication-manager alias="authenticationManager">
 		<authentication-provider ref="contactAuthentificationProvider" />
 	</authentication-manager>

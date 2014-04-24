@@ -105,7 +105,6 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 		select.orderBy(criteriaBuilder.asc(from.get("ordering")));
-		
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 		return result.getResultList();
@@ -120,34 +119,31 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 	@Override
 	public List<JJRequirement> getRequirements(JJStatus status) {
-	
-		return getRequirements(null, null, null, null, status, null, false, true, false);
+
+		return getRequirements(null, null, null, null, status, null, false,
+				true, false);
 	}
-	
 
 	@Override
-	public Long getReqCountByStaus(JJStatus status,boolean onlyActif ) {
-		
+	public Long getReqCountByStaus(JJStatus status, boolean onlyActif) {
+
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Long> select = criteriaBuilder.createQuery(Long.class);
 		Root<JJRequirement> from = select.from(JJRequirement.class);
-		select.select(criteriaBuilder.count(from));		
+		select.select(criteriaBuilder.count(from));
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		
+
 		if (status != null) {
-			predicates.add(criteriaBuilder.equal(from.get("status"), status));			
+			predicates.add(criteriaBuilder.equal(from.get("status"), status));
 		}
-		
+
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
-		
+
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 		return entityManager.createQuery(select).getSingleResult();
-		
+
 	}
-
-	
-
 
 }

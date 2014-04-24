@@ -1,6 +1,5 @@
 package com.starit.janjoonweb.ui.mb;
 
-import com.starit.janjoonweb.ui.mb.util.UsageChecker;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

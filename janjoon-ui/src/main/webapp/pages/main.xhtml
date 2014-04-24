@@ -26,16 +26,16 @@
 				type="preRenderView" />
 			<h:form id="messageForm">
 				<p:dataTable id="MessageTable2" sortMode="multiple"
-					value="#{jJMessageBean.enabledJJMessage}" rowKey="#{mes.id}" var="mes"
-					widgetVar="messageTable" scrollable="true" scrollHeight="400"
+					value="#{jJMessageBean.enabledJJMessage}" rowKey="#{mes.id}"
+					var="mes" widgetVar="messageTable" scrollable="true"
+					scrollHeight="400"
 					filteredValue="#{jJMessageBean.filteredJJMessage}"
 					emptyMessage="#{messages.label_notFound}">
 					<f:facet name="header">
 						<p:outputPanel>
 							<h:outputText value="Search all fields:" />
 							<p:inputText id="globalFilter"
-								onkeyup="PF('messageTable').filter()"
-								style="width:200px"
+								onkeyup="PF('messageTable').filter()" style="width:200px"
 								placeholder="Enter keyword" />
 						</p:outputPanel>
 					</f:facet>
@@ -43,29 +43,27 @@
 						filterMatchMode="contains" sortBy="message"
 						filterStyle="width: 90%;"
 						style="width: 10% !important;height: 5px !important;">
-						<h:outputText style="width: 90% !important;" value="#{mes.message}" />
+						<h:outputText style="width: 90% !important;"
+							value="#{mes.message}" />
 					</p:column>
 					<p:column headerText="Project" filterBy="project.name"
 						sortBy="project.name"
 						filterOptions="#{jJMessageBean.projectOptions}"
-						filterMatchMode="exact"
-						filterStyle="width: 90%;"
+						filterMatchMode="exact" filterStyle="width: 90%;"
 						style="width: 6% !important;height: 5px !important;">
 						<h:outputText value="#{mes.project.name}" />
 					</p:column>
 					<p:column headerText="Product" filterBy="product.name"
 						sortBy="product.name"
 						filterOptions="#{jJMessageBean.productOptions}"
-						filterMatchMode="exact"
-						filterStyle="width: 90%;"
+						filterMatchMode="exact" filterStyle="width: 90%;"
 						style="width: 6% !important;height: 5px !important;">
 						<h:outputText value="#{mes.product.name}" />
 					</p:column>
 					<p:column headerText="Creator" filterBy="createdBy.name"
 						sortBy="createdBy.name"
 						filterOptions="#{jJMessageBean.creatorOptions}"
-						filterMatchMode="exact"
-						filterStyle="width: 90%;"
+						filterMatchMode="exact" filterStyle="width: 90%;"
 						style="width: 6% !important;height: 5px !important;">
 						<h:outputText value="#{mes.createdBy.name}" />
 					</p:column>
@@ -111,7 +109,8 @@
 				<p:outputPanel id="deletePanel">
 					<h:form id="deleteForm">
 						<p:commandButton id="deleteYesButton"
-							value="#{messages.label_yes}" action="#{jJMessageBean.resolveJJMessage}"
+							value="#{messages.label_yes}"
+							action="#{jJMessageBean.resolveJJMessage}"
 							update=":messageForm,:notifMPT"
 							oncomplete="resolveDialogWidget.hide()" />
 						<p:commandButton id="deleteNoButton" value="#{messages.label_no}"

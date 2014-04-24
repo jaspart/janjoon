@@ -45,6 +45,7 @@ public class JJProductServiceImpl implements JJProductService {
 		return result.getResultList();
 
 	}
+
 	@Override
 	public JJProduct getJJProductWithName(String name) {
 

@@ -82,7 +82,7 @@ public class JJContact extends JJAbstractEntity {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "contact")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
-	
+
 	@Override
 	public boolean equals(Object object) {
 		return (object instanceof JJContact) && (getId() != null) ? getId()

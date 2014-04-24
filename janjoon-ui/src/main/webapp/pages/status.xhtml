@@ -38,7 +38,7 @@
 					</f:facet>
 					<h:outputText value="#{status.creationDate}" />
 				</p:column>
-				
+
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="Creation By" />
@@ -93,9 +93,8 @@
 		</p:panel>
 
 	</h:form>
-	<p:dialog id="ScreateDialog"
-		header="#{messages.label_create} JJStatus" modal="true"
-		widgetVar="createDialogWidget" dynamic="true"
+	<p:dialog id="ScreateDialog" header="#{messages.label_create} JJStatus"
+		modal="true" widgetVar="createDialogWidget" dynamic="true"
 		visible="#{jJStatusBean.createDialogVisible}" resizable="true"
 		maximizable="true" showEffect="fade" hideEffect="explode">
 		<p:ajax event="close" update=":tabview:statusForm"
@@ -103,8 +102,8 @@
 		<p:outputPanel id="ScreatePanel">
 			<h:form id="ScreateForm" enctype="multipart/form-data">
 				<h:panelGrid id="createPanelGrid" columns="3"
-					binding="#{jJStatusBean.createPanelGrid}"
-					styleClass="dialog" columnClasses="col1,col2,col3" />
+					binding="#{jJStatusBean.createPanelGrid}" styleClass="dialog"
+					columnClasses="col1,col2,col3" />
 				<p:commandButton id="createSaveButton"
 					value="#{messages.label_save}"
 					action="#{jJStatusBean.persistStatus}"
@@ -116,10 +115,10 @@
 		</p:outputPanel>
 	</p:dialog>
 
-	<p:dialog id="SeditDialog"
-		header="#{messages.label_edit} JJStatus" modal="true"
-		widgetVar="editDialogWidget" dynamic="true" resizable="true"
-		maximizable="true" showEffect="fade" hideEffect="explode">
+	<p:dialog id="SeditDialog" header="#{messages.label_edit} JJStatus"
+		modal="true" widgetVar="editDialogWidget" dynamic="true"
+		resizable="true" maximizable="true" showEffect="fade"
+		hideEffect="explode">
 		<p:ajax event="close" update=":tabview:statusForm"
 			listener="#{jJStatusBean.handleDialogClose}" />
 		<p:outputPanel id="SeditPanel">
@@ -137,10 +136,10 @@
 		</p:outputPanel>
 	</p:dialog>
 
-	<p:dialog id="SviewDialog"
-		header="#{messages.label_view} JJStatus" modal="true"
-		widgetVar="viewDialogWidget" dynamic="true" resizable="true"
-		maximizable="true" showEffect="fade" hideEffect="explode">
+	<p:dialog id="SviewDialog" header="#{messages.label_view} JJStatus"
+		modal="true" widgetVar="viewDialogWidget" dynamic="true"
+		resizable="true" maximizable="true" showEffect="fade"
+		hideEffect="explode">
 		<p:ajax event="close" update=":tabview:statusForm"
 			listener="#{jJStatusBean.handleDialogClose}" />
 		<p:outputPanel id="SviewPanel">
@@ -161,8 +160,8 @@
 		<p:outputPanel id="SdeletePanel">
 			<h:form id="sdeleteForm">
 				<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
-					action="#{jJStatusBean.deleteStatus}"
-					update=":tabview:statusForm" oncomplete="deleteDialogWidget.hide()" />
+					action="#{jJStatusBean.deleteStatus}" update=":tabview:statusForm"
+					oncomplete="deleteDialogWidget.hide()" />
 				<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
 					onclick="deleteDialogWidget.hide()" type="button" />
 			</h:form>

@@ -79,7 +79,7 @@ public class JJStatusServiceImpl implements JJStatusService {
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
-		
+
 		if (names != null) {
 			if (names.isEmpty()) {
 
@@ -98,11 +98,10 @@ public class JJStatusServiceImpl implements JJStatusService {
 				Predicate namePredicate = criteriaBuilder.and(namePredicates
 						.toArray(new Predicate[] {}));
 				predicates.add(namePredicate);
-				
+
 			}
 		}
-		select.where(criteriaBuilder.and(predicates
-				.toArray(new Predicate[] {})));
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		if (sortedByName) {
 			select.orderBy(criteriaBuilder.asc(from.get("name")));
@@ -110,6 +109,7 @@ public class JJStatusServiceImpl implements JJStatusService {
 		TypedQuery<JJStatus> result = entityManager.createQuery(select);
 		return result.getResultList();
 	}
+
 	@Override
 	public List<String> getTablesName() {
 

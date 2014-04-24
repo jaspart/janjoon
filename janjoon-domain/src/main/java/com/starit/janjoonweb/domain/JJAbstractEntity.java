@@ -42,7 +42,6 @@ public abstract class JJAbstractEntity {
 	@ManyToOne
 	private JJContact updatedBy;
 
-	private Boolean enabled;	
-	
+	private Boolean enabled;
 
 }

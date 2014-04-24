@@ -188,7 +188,7 @@ public class JJSprintBean {
 				if (sprintList == null)
 					sprintList = new ArrayList<SprintUtil>();
 
-				sprintList.add(new SprintUtil(new JJSprint(),null));
+				sprintList.add(new SprintUtil(new JJSprint(), null));
 				System.out.println("2");
 			}
 
@@ -199,7 +199,7 @@ public class JJSprintBean {
 			if (sprintList == null)
 				sprintList = new ArrayList<SprintUtil>();
 
-			sprintList.add(new SprintUtil(new JJSprint(),null));
+			sprintList.add(new SprintUtil(new JJSprint(), null));
 			System.out.println("2'");
 		}
 
@@ -228,8 +228,9 @@ public class JJSprintBean {
 	public void initJJSprintPage() {
 
 		System.out.println("3");
-		sprintList = SprintUtil.generateSprintUtilList(jJSprintService
-				.getSprintsByProjects(project, true),jJTaskService);
+		sprintList = SprintUtil.generateSprintUtilList(
+				jJSprintService.getSprintsByProjects(project, true),
+				jJTaskService);
 	}
 
 	public void editSprint() {
@@ -340,10 +341,10 @@ public class JJSprintBean {
 	public void handleAddButton(ActionEvent e) {
 		attrListener(e);
 		sprintUtil.setRenderTaskForm(!sprintUtil.isRenderTaskForm());
-		requirement=null;
-		category=null;
-		categoryList=null;
-		reqList=null;
+		requirement = null;
+		category = null;
+		categoryList = null;
+		reqList = null;
 	}
 
 	public void persistTask() {
@@ -363,12 +364,11 @@ public class JJSprintBean {
 		task.setDescription(task.getName() + " /CreatedBy:"
 				+ task.getCreatedBy().getName() + " at :"
 				+ task.getCreationDate());
-		jJTaskService.saveJJTask(task);		
-		if(!sprintUtil.isRender())
-		{
-			sprintUtil=new SprintUtil(sprintUtil.getSprint(),jJTaskService.getSprintTasks(sprintUtil.getSprint()));
-		}else
-		{
+		jJTaskService.saveJJTask(task);
+		if (!sprintUtil.isRender()) {
+			sprintUtil = new SprintUtil(sprintUtil.getSprint(),
+					jJTaskService.getSprintTasks(sprintUtil.getSprint()));
+		} else {
 			sprintUtil.getTaskList().add(task);
 		}
 		String message = "message_successfully_created";
@@ -381,25 +381,24 @@ public class JJSprintBean {
 	}
 
 	public void doneEvent() {
-	
-		if(sprintUtil.isRender())
-		{
-			HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-					.getExternalContext().getSession(false);		
+
+		if (sprintUtil.isRender()) {
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
 			session.setAttribute("jJSprintBean", new JJSprintBean());
-		}
-		else
-		{
-			
-			sprintUtil=new SprintUtil(sprintUtil.getSprint(),jJTaskService.getSprintTasks(sprintUtil.getSprint()));
+		} else {
+
+			sprintUtil = new SprintUtil(sprintUtil.getSprint(),
+					jJTaskService.getSprintTasks(sprintUtil.getSprint()));
 			System.out.println(sprintUtil.isRenderTaskForm());
-			sprintUtil.setRenderTaskForm(false);			
-			requirement=null;
-			category=null;
-			categoryList=null;
-			reqList=null;
+			sprintUtil.setRenderTaskForm(false);
+			requirement = null;
+			category = null;
+			categoryList = null;
+			reqList = null;
 		}
-		
+
 	}
 
 	public int contains(SprintUtil s) {

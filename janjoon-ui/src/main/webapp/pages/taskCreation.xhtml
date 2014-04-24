@@ -42,8 +42,8 @@
 					</p:panel>
 				</p:column>
 				<p:column colspan="3">
-					<p:dataTable id="taskTable" value="#{jjsprint.taskList}"
-						var="t" scrollable="true" scrollHeight="200" style="width:350px;"
+					<p:dataTable id="taskTable" value="#{jjsprint.taskList}" var="t"
+						scrollable="true" scrollHeight="200" style="width:350px;"
 						emptyMessage="#{messages.label_notFound}">
 
 						<p:column headerText="Name" style="width:200px">
@@ -66,26 +66,27 @@
 							update=":projecttabview:SprintTabView:createForm:createTaskPanelGrid"
 							immediate="true" oncomplete="createTaskDialogWidget.show()"
 							actionListener="#{jJSprintBean.attrListener}"
-							title="#{messages.label_create} JJTask" >
-								<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
-								</p:commandButton>
+							title="#{messages.label_create} JJTask">
+							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+						</p:commandButton>
 						<p:tooltip for="createTaskButton"
 							value="#{messages.label_create} JJTask" showEffect="fade"
 							hideEffect="fade" />
 					</p:column>
 					<p:column colspan="3">
-						<p:commandButton value="Done" id="doneButtonr" rendered="#{jjsprint.render}"
-							update=":projecttabview:SprintTabView" immediate="true"							
-							action="#{jJSprintBean.doneEvent}" 
+						<p:commandButton value="Done" id="doneButtonr"
+							rendered="#{jjsprint.render}"
+							update=":projecttabview:SprintTabView" immediate="true"
+							action="#{jJSprintBean.doneEvent}"
 							actionListener="#{jJSprintBean.attrListener}">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
-							</p:commandButton>
-							<p:commandButton value="Done" id="doneButton" rendered="#{!jjsprint.render}"
-							update="@(parent) paneltoUpdate" immediate="true"
-							action="#{jJSprintBean.doneEvent}"
-							actionListener="#{jJSprintBean.attrListener}" >
+						</p:commandButton>
+						<p:commandButton value="Done" id="doneButton"
+							rendered="#{!jjsprint.render}" update="@(parent) paneltoUpdate"
+							immediate="true" action="#{jJSprintBean.doneEvent}"
+							actionListener="#{jJSprintBean.attrListener}">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
-							</p:commandButton>
+						</p:commandButton>
 					</p:column>
 				</p:row>
 			</f:facet>

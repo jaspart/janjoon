@@ -21,7 +21,7 @@ public class JJCriticity extends JJAbstractEntity {
 	@NotNull
 	@Size(max = 25)
 	private String objet;
-	
+
 	private Integer levelCriticity;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "criticity")

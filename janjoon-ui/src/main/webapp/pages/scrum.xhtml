@@ -81,13 +81,13 @@
 							</p:column>
 							<p:column colspan="2">
 								<p:commandButton value="#{messages.label_create} JJTask"
-									id="createTaskttButton" icon="ui-icon-circle-plus"									
+									id="createTaskttButton" icon="ui-icon-circle-plus"
 									update=":projecttabview:SprintTabView:sprintForm"
 									immediate="true"
 									actionListener="#{jJSprintBean.handleAddButton}"
-									title="#{messages.label_create} JJTask" >	
-									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />	
-									</p:commandButton>							
+									title="#{messages.label_create} JJTask">
+									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+								</p:commandButton>
 								<p:tooltip for="createTaskttButton"
 									value="#{messages.label_create} JJTask" showEffect="fade"
 									hideEffect="fade" />
@@ -184,25 +184,29 @@
 							</p:fieldset>
 						</p:column>
 					</p:row>
-					<p:droppable for=":projecttabview:SprintTabView:taskSprintForm:doneFieldset" tolerance="touch"
-						activeStyleClass="ui-state-highlight"
-						datasource=":projecttabview:SprintTabView:taskSprintForm:progFieldset:prog" onDrop="handleDrop">
+					<p:droppable
+						for=":projecttabview:SprintTabView:taskSprintForm:doneFieldset"
+						tolerance="touch" activeStyleClass="ui-state-highlight"
+						datasource=":projecttabview:SprintTabView:taskSprintForm:progFieldset:prog"
+						onDrop="handleDrop">
 						<p:ajax listener="#{jJSprintBean.addTaskToDone}"
 							update=":projecttabview:SprintTabView:taskSprintForm:doneFieldset:donedropArea :projecttabview:SprintTabView:taskSprintForm:progFieldset:progDroparea">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 						</p:ajax>
 					</p:droppable>
-					<p:droppable for=":projecttabview:SprintTabView:taskSprintForm:progFieldset" tolerance="touch"
-						activeStyleClass="ui-state-highlight"
-						datasource=":projecttabview:SprintTabView:taskSprintForm:todeFieldset:tode" onDrop="handleDrop">
+					<p:droppable
+						for=":projecttabview:SprintTabView:taskSprintForm:progFieldset"
+						tolerance="touch" activeStyleClass="ui-state-highlight"
+						datasource=":projecttabview:SprintTabView:taskSprintForm:todeFieldset:tode"
+						onDrop="handleDrop">
 						<p:ajax listener="#{jJSprintBean.addTaskToProg}"
 							update=" :projecttabview:SprintTabView:taskSprintForm:todoFieldset:tododropArea :projecttabview:SprintTabView:taskSprintForm:progFieldset:progDroparea">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 						</p:ajax>
 
 					</p:droppable>
-				</p:panelGrid>				
-			</h:form>			
+				</p:panelGrid>
+			</h:form>
 		</p:tab>
 	</p:tabView>
 </ui:composition>

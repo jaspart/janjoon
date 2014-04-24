@@ -26,6 +26,7 @@ import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJSprintConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJStatusConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJTaskConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJVersionConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -33,12 +34,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UISelectItems;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
@@ -51,6 +54,7 @@ import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
+import org.primefaces.component.selectmanymenu.SelectManyMenu;
 import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
@@ -105,6 +109,12 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
     private boolean JJTaskBean.createDialogVisible = false;
     
     private List<JJMessage> JJTaskBean.selectedMessages;
+    
+    private List<JJTask> JJTaskBean.selectedTasks;
+    
+    private List<JJTask> JJTaskBean.selectedBeforeTasks;
+    
+    private List<JJTask> JJTaskBean.selectedAfterTasks;
     
     @PostConstruct
     public void JJTaskBean.init() {
@@ -735,6 +745,87 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         completedCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(completedCreateInputMessage);
         
+        OutputLabel parentCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        parentCreateOutput.setFor("parentCreateInput");
+        parentCreateOutput.setId("parentCreateOutput");
+        parentCreateOutput.setValue("Parent:");
+        htmlPanelGrid.getChildren().add(parentCreateOutput);
+        
+        AutoComplete parentCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        parentCreateInput.setId("parentCreateInput");
+        parentCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.parent}", JJTask.class));
+        parentCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeParent}", List.class, new Class[] { String.class }));
+        parentCreateInput.setDropdown(true);
+        parentCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "parent", String.class));
+        parentCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{parent.name} #{parent.description} #{parent.creationDate} #{parent.updatedDate}", String.class));
+        parentCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{parent}", JJTask.class));
+        parentCreateInput.setConverter(new JJTaskConverter());
+        parentCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(parentCreateInput);
+        
+        Message parentCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        parentCreateInputMessage.setId("parentCreateInputMessage");
+        parentCreateInputMessage.setFor("parentCreateInput");
+        parentCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(parentCreateInputMessage);
+        
+        HtmlOutputText tasksCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        tasksCreateOutput.setId("tasksCreateOutput");
+        tasksCreateOutput.setValue("Tasks:");
+        htmlPanelGrid.getChildren().add(tasksCreateOutput);
+        
+        HtmlOutputText tasksCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        tasksCreateInput.setId("tasksCreateInput");
+        tasksCreateInput.setValue("This relationship is managed from the JJTask side");
+        htmlPanelGrid.getChildren().add(tasksCreateInput);
+        
+        Message tasksCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        tasksCreateInputMessage.setId("tasksCreateInputMessage");
+        tasksCreateInputMessage.setFor("tasksCreateInput");
+        tasksCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(tasksCreateInputMessage);
+        
+        HtmlOutputText beforeTasksCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        beforeTasksCreateOutput.setId("beforeTasksCreateOutput");
+        beforeTasksCreateOutput.setValue("Before Tasks:");
+        htmlPanelGrid.getChildren().add(beforeTasksCreateOutput);
+        
+        HtmlOutputText beforeTasksCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        beforeTasksCreateInput.setId("beforeTasksCreateInput");
+        beforeTasksCreateInput.setValue("This relationship is managed from the JJTask side");
+        htmlPanelGrid.getChildren().add(beforeTasksCreateInput);
+        
+        Message beforeTasksCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        beforeTasksCreateInputMessage.setId("beforeTasksCreateInputMessage");
+        beforeTasksCreateInputMessage.setFor("beforeTasksCreateInput");
+        beforeTasksCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(beforeTasksCreateInputMessage);
+        
+        OutputLabel afterTasksCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        afterTasksCreateOutput.setFor("afterTasksCreateInput");
+        afterTasksCreateOutput.setId("afterTasksCreateOutput");
+        afterTasksCreateOutput.setValue("After Tasks:");
+        htmlPanelGrid.getChildren().add(afterTasksCreateOutput);
+        
+        SelectManyMenu afterTasksCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        afterTasksCreateInput.setId("afterTasksCreateInput");
+        afterTasksCreateInput.setConverter(new JJTaskConverter());
+        afterTasksCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.selectedAfterTasks}", List.class));
+        UISelectItems afterTasksCreateInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        afterTasksCreateInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.allJJTasks}", List.class));
+        afterTasksCreateInput.setRequired(false);
+        afterTasksCreateInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJTask", String.class));
+        afterTasksCreateInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJTask}", String.class));
+        afterTasksCreateInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJTask}", JJTask.class));
+        afterTasksCreateInput.getChildren().add(afterTasksCreateInputItems);
+        htmlPanelGrid.getChildren().add(afterTasksCreateInput);
+        
+        Message afterTasksCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        afterTasksCreateInputMessage.setId("afterTasksCreateInputMessage");
+        afterTasksCreateInputMessage.setFor("afterTasksCreateInput");
+        afterTasksCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(afterTasksCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -1297,6 +1388,87 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         completedEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(completedEditInputMessage);
         
+        OutputLabel parentEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        parentEditOutput.setFor("parentEditInput");
+        parentEditOutput.setId("parentEditOutput");
+        parentEditOutput.setValue("Parent:");
+        htmlPanelGrid.getChildren().add(parentEditOutput);
+        
+        AutoComplete parentEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        parentEditInput.setId("parentEditInput");
+        parentEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.parent}", JJTask.class));
+        parentEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeParent}", List.class, new Class[] { String.class }));
+        parentEditInput.setDropdown(true);
+        parentEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "parent", String.class));
+        parentEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{parent.name} #{parent.description} #{parent.creationDate} #{parent.updatedDate}", String.class));
+        parentEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{parent}", JJTask.class));
+        parentEditInput.setConverter(new JJTaskConverter());
+        parentEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(parentEditInput);
+        
+        Message parentEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        parentEditInputMessage.setId("parentEditInputMessage");
+        parentEditInputMessage.setFor("parentEditInput");
+        parentEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(parentEditInputMessage);
+        
+        HtmlOutputText tasksEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        tasksEditOutput.setId("tasksEditOutput");
+        tasksEditOutput.setValue("Tasks:");
+        htmlPanelGrid.getChildren().add(tasksEditOutput);
+        
+        HtmlOutputText tasksEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        tasksEditInput.setId("tasksEditInput");
+        tasksEditInput.setValue("This relationship is managed from the JJTask side");
+        htmlPanelGrid.getChildren().add(tasksEditInput);
+        
+        Message tasksEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        tasksEditInputMessage.setId("tasksEditInputMessage");
+        tasksEditInputMessage.setFor("tasksEditInput");
+        tasksEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(tasksEditInputMessage);
+        
+        HtmlOutputText beforeTasksEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        beforeTasksEditOutput.setId("beforeTasksEditOutput");
+        beforeTasksEditOutput.setValue("Before Tasks:");
+        htmlPanelGrid.getChildren().add(beforeTasksEditOutput);
+        
+        HtmlOutputText beforeTasksEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        beforeTasksEditInput.setId("beforeTasksEditInput");
+        beforeTasksEditInput.setValue("This relationship is managed from the JJTask side");
+        htmlPanelGrid.getChildren().add(beforeTasksEditInput);
+        
+        Message beforeTasksEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        beforeTasksEditInputMessage.setId("beforeTasksEditInputMessage");
+        beforeTasksEditInputMessage.setFor("beforeTasksEditInput");
+        beforeTasksEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(beforeTasksEditInputMessage);
+        
+        OutputLabel afterTasksEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        afterTasksEditOutput.setFor("afterTasksEditInput");
+        afterTasksEditOutput.setId("afterTasksEditOutput");
+        afterTasksEditOutput.setValue("After Tasks:");
+        htmlPanelGrid.getChildren().add(afterTasksEditOutput);
+        
+        SelectManyMenu afterTasksEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        afterTasksEditInput.setId("afterTasksEditInput");
+        afterTasksEditInput.setConverter(new JJTaskConverter());
+        afterTasksEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.selectedAfterTasks}", List.class));
+        UISelectItems afterTasksEditInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        afterTasksEditInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.allJJTasks}", List.class));
+        afterTasksEditInput.setRequired(false);
+        afterTasksEditInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJTask", String.class));
+        afterTasksEditInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJTask}", String.class));
+        afterTasksEditInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJTask}", JJTask.class));
+        afterTasksEditInput.getChildren().add(afterTasksEditInputItems);
+        htmlPanelGrid.getChildren().add(afterTasksEditInput);
+        
+        Message afterTasksEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        afterTasksEditInputMessage.setId("afterTasksEditInputMessage");
+        afterTasksEditInputMessage.setFor("afterTasksEditInput");
+        afterTasksEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(afterTasksEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -1582,6 +1754,55 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         completedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.completed}", String.class));
         htmlPanelGrid.getChildren().add(completedValue);
         
+        HtmlOutputText parentLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        parentLabel.setId("parentLabel");
+        parentLabel.setValue("Parent:");
+        htmlPanelGrid.getChildren().add(parentLabel);
+        
+        HtmlOutputText parentValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        parentValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.parent}", JJTask.class));
+        parentValue.setConverter(new JJTaskConverter());
+        htmlPanelGrid.getChildren().add(parentValue);
+        
+        HtmlOutputText tasksLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        tasksLabel.setId("tasksLabel");
+        tasksLabel.setValue("Tasks:");
+        htmlPanelGrid.getChildren().add(tasksLabel);
+        
+        HtmlOutputText tasksValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        tasksValue.setId("tasksValue");
+        tasksValue.setValue("This relationship is managed from the JJTask side");
+        htmlPanelGrid.getChildren().add(tasksValue);
+        
+        HtmlOutputText beforeTasksLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        beforeTasksLabel.setId("beforeTasksLabel");
+        beforeTasksLabel.setValue("Before Tasks:");
+        htmlPanelGrid.getChildren().add(beforeTasksLabel);
+        
+        HtmlOutputText beforeTasksValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        beforeTasksValue.setId("beforeTasksValue");
+        beforeTasksValue.setValue("This relationship is managed from the JJTask side");
+        htmlPanelGrid.getChildren().add(beforeTasksValue);
+        
+        HtmlOutputText afterTasksLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        afterTasksLabel.setId("afterTasksLabel");
+        afterTasksLabel.setValue("After Tasks:");
+        htmlPanelGrid.getChildren().add(afterTasksLabel);
+        
+        SelectManyMenu afterTasksValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        afterTasksValue.setId("afterTasksValue");
+        afterTasksValue.setConverter(new JJTaskConverter());
+        afterTasksValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.selectedAfterTasks}", List.class));
+        UISelectItems afterTasksValueItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        afterTasksValue.setReadonly(true);
+        afterTasksValue.setDisabled(true);
+        afterTasksValueItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.afterTasks}", Set.class));
+        afterTasksValueItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJTask", String.class));
+        afterTasksValueItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJTask}", String.class));
+        afterTasksValueItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJTask}", JJTask.class));
+        afterTasksValue.getChildren().add(afterTasksValueItems);
+        htmlPanelGrid.getChildren().add(afterTasksValue);
+        
         return htmlPanelGrid;
     }
     
@@ -1706,9 +1927,62 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         this.selectedMessages = selectedMessages;
     }
     
+    public List<JJTask> JJTaskBean.completeParent(String query) {
+        List<JJTask> suggestions = new ArrayList<JJTask>();
+        for (JJTask jJTask : jJTaskService.findAllJJTasks()) {
+            String jJTaskStr = String.valueOf(jJTask.getName() +  " "  + jJTask.getDescription() +  " "  + jJTask.getCreationDate() +  " "  + jJTask.getUpdatedDate());
+            if (jJTaskStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJTask);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJTask> JJTaskBean.getSelectedTasks() {
+        return selectedTasks;
+    }
+    
+    public void JJTaskBean.setSelectedTasks(List<JJTask> selectedTasks) {
+        if (selectedTasks != null) {
+            JJTask_.setTasks(new HashSet<JJTask>(selectedTasks));
+        }
+        this.selectedTasks = selectedTasks;
+    }
+    
+    public List<JJTask> JJTaskBean.getSelectedBeforeTasks() {
+        return selectedBeforeTasks;
+    }
+    
+    public void JJTaskBean.setSelectedBeforeTasks(List<JJTask> selectedBeforeTasks) {
+        if (selectedBeforeTasks != null) {
+            JJTask_.setBeforeTasks(new HashSet<JJTask>(selectedBeforeTasks));
+        }
+        this.selectedBeforeTasks = selectedBeforeTasks;
+    }
+    
+    public List<JJTask> JJTaskBean.getSelectedAfterTasks() {
+        return selectedAfterTasks;
+    }
+    
+    public void JJTaskBean.setSelectedAfterTasks(List<JJTask> selectedAfterTasks) {
+        if (selectedAfterTasks != null) {
+            JJTask_.setAfterTasks(new HashSet<JJTask>(selectedAfterTasks));
+        }
+        this.selectedAfterTasks = selectedAfterTasks;
+    }
+    
     public String JJTaskBean.onEdit() {
         if (JJTask_ != null && JJTask_.getMessages() != null) {
             selectedMessages = new ArrayList<JJMessage>(JJTask_.getMessages());
+        }
+        if (JJTask_ != null && JJTask_.getTasks() != null) {
+            selectedTasks = new ArrayList<JJTask>(JJTask_.getTasks());
+        }
+        if (JJTask_ != null && JJTask_.getBeforeTasks() != null) {
+            selectedBeforeTasks = new ArrayList<JJTask>(JJTask_.getBeforeTasks());
+        }
+        if (JJTask_ != null && JJTask_.getAfterTasks() != null) {
+            selectedAfterTasks = new ArrayList<JJTask>(JJTask_.getAfterTasks());
         }
         return null;
     }

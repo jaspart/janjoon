@@ -24,7 +24,7 @@ public class GitConfigManager extends AbstractConfigManager {
 	private Repository repository;
 
 	public Repository getRepository() {
-		return (Repository) repository;
+		return repository;
 	}
 
 	public void setRepository() {

@@ -50,7 +50,7 @@ public class JJCriticityServiceImpl implements JJCriticityService {
 
 	@Override
 	public JJCriticity getCriticityByName(String name, boolean onlyActif) {
-		
+
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJCriticity> criteriaQuery = criteriaBuilder
 				.createQuery(JJCriticity.class);

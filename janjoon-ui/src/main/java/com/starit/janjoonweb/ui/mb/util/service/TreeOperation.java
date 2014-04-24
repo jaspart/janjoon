@@ -2,10 +2,6 @@ package com.starit.janjoonweb.ui.mb.util.service;
 
 import java.io.*;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.primefaces.model.UploadedFile;
-
 public class TreeOperation {
 
 	private AbstractConfigManager configManager;

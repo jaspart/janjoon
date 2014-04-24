@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.access.expression.WebSecurityExpressionHandler;
-import org.springframework.stereotype.Component;
 
 @SuppressWarnings("deprecation")
 public class JsfDefaultWebSecurityExpressionhandler implements
