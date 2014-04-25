@@ -21,6 +21,9 @@ public class JJVersion extends JJAbstractEntity {
 	private JJProduct product;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "versioning")
+	private Set<JJTask> tasks = new HashSet<JJTask>();
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "versioning")
 	private Set<JJBuild> builds = new HashSet<JJBuild>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "versioning")

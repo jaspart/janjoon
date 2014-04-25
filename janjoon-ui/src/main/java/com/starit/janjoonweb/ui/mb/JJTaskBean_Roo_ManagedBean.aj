@@ -112,9 +112,9 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
     
     private List<JJTask> JJTaskBean.selectedTasks;
     
-    private List<JJTask> JJTaskBean.selectedBeforeTasks;
-    
     private List<JJTask> JJTaskBean.selectedAfterTasks;
+    
+    private List<JJTask> JJTaskBean.selectedBeforeTasks;
     
     @PostConstruct
     public void JJTaskBean.init() {
@@ -785,39 +785,14 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         tasksCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(tasksCreateInputMessage);
         
-        HtmlOutputText beforeTasksCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        beforeTasksCreateOutput.setId("beforeTasksCreateOutput");
-        beforeTasksCreateOutput.setValue("Before Tasks:");
-        htmlPanelGrid.getChildren().add(beforeTasksCreateOutput);
-        
-        HtmlOutputText beforeTasksCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        beforeTasksCreateInput.setId("beforeTasksCreateInput");
-        beforeTasksCreateInput.setValue("This relationship is managed from the JJTask side");
-        htmlPanelGrid.getChildren().add(beforeTasksCreateInput);
-        
-        Message beforeTasksCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        beforeTasksCreateInputMessage.setId("beforeTasksCreateInputMessage");
-        beforeTasksCreateInputMessage.setFor("beforeTasksCreateInput");
-        beforeTasksCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(beforeTasksCreateInputMessage);
-        
-        OutputLabel afterTasksCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        afterTasksCreateOutput.setFor("afterTasksCreateInput");
+        HtmlOutputText afterTasksCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         afterTasksCreateOutput.setId("afterTasksCreateOutput");
         afterTasksCreateOutput.setValue("After Tasks:");
         htmlPanelGrid.getChildren().add(afterTasksCreateOutput);
         
-        SelectManyMenu afterTasksCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        HtmlOutputText afterTasksCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         afterTasksCreateInput.setId("afterTasksCreateInput");
-        afterTasksCreateInput.setConverter(new JJTaskConverter());
-        afterTasksCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.selectedAfterTasks}", List.class));
-        UISelectItems afterTasksCreateInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        afterTasksCreateInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.allJJTasks}", List.class));
-        afterTasksCreateInput.setRequired(false);
-        afterTasksCreateInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJTask", String.class));
-        afterTasksCreateInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJTask}", String.class));
-        afterTasksCreateInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJTask}", JJTask.class));
-        afterTasksCreateInput.getChildren().add(afterTasksCreateInputItems);
+        afterTasksCreateInput.setValue("This relationship is managed from the JJTask side");
         htmlPanelGrid.getChildren().add(afterTasksCreateInput);
         
         Message afterTasksCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -825,6 +800,31 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         afterTasksCreateInputMessage.setFor("afterTasksCreateInput");
         afterTasksCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(afterTasksCreateInputMessage);
+        
+        OutputLabel beforeTasksCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        beforeTasksCreateOutput.setFor("beforeTasksCreateInput");
+        beforeTasksCreateOutput.setId("beforeTasksCreateOutput");
+        beforeTasksCreateOutput.setValue("Before Tasks:");
+        htmlPanelGrid.getChildren().add(beforeTasksCreateOutput);
+        
+        SelectManyMenu beforeTasksCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        beforeTasksCreateInput.setId("beforeTasksCreateInput");
+        beforeTasksCreateInput.setConverter(new JJTaskConverter());
+        beforeTasksCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.selectedBeforeTasks}", List.class));
+        UISelectItems beforeTasksCreateInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        beforeTasksCreateInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.allJJTasks}", List.class));
+        beforeTasksCreateInput.setRequired(false);
+        beforeTasksCreateInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJTask", String.class));
+        beforeTasksCreateInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJTask}", String.class));
+        beforeTasksCreateInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJTask}", JJTask.class));
+        beforeTasksCreateInput.getChildren().add(beforeTasksCreateInputItems);
+        htmlPanelGrid.getChildren().add(beforeTasksCreateInput);
+        
+        Message beforeTasksCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        beforeTasksCreateInputMessage.setId("beforeTasksCreateInputMessage");
+        beforeTasksCreateInputMessage.setFor("beforeTasksCreateInput");
+        beforeTasksCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(beforeTasksCreateInputMessage);
         
         return htmlPanelGrid;
     }
@@ -1428,39 +1428,14 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         tasksEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(tasksEditInputMessage);
         
-        HtmlOutputText beforeTasksEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        beforeTasksEditOutput.setId("beforeTasksEditOutput");
-        beforeTasksEditOutput.setValue("Before Tasks:");
-        htmlPanelGrid.getChildren().add(beforeTasksEditOutput);
-        
-        HtmlOutputText beforeTasksEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        beforeTasksEditInput.setId("beforeTasksEditInput");
-        beforeTasksEditInput.setValue("This relationship is managed from the JJTask side");
-        htmlPanelGrid.getChildren().add(beforeTasksEditInput);
-        
-        Message beforeTasksEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        beforeTasksEditInputMessage.setId("beforeTasksEditInputMessage");
-        beforeTasksEditInputMessage.setFor("beforeTasksEditInput");
-        beforeTasksEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(beforeTasksEditInputMessage);
-        
-        OutputLabel afterTasksEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        afterTasksEditOutput.setFor("afterTasksEditInput");
+        HtmlOutputText afterTasksEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         afterTasksEditOutput.setId("afterTasksEditOutput");
         afterTasksEditOutput.setValue("After Tasks:");
         htmlPanelGrid.getChildren().add(afterTasksEditOutput);
         
-        SelectManyMenu afterTasksEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        HtmlOutputText afterTasksEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         afterTasksEditInput.setId("afterTasksEditInput");
-        afterTasksEditInput.setConverter(new JJTaskConverter());
-        afterTasksEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.selectedAfterTasks}", List.class));
-        UISelectItems afterTasksEditInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        afterTasksEditInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.allJJTasks}", List.class));
-        afterTasksEditInput.setRequired(false);
-        afterTasksEditInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJTask", String.class));
-        afterTasksEditInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJTask}", String.class));
-        afterTasksEditInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJTask}", JJTask.class));
-        afterTasksEditInput.getChildren().add(afterTasksEditInputItems);
+        afterTasksEditInput.setValue("This relationship is managed from the JJTask side");
         htmlPanelGrid.getChildren().add(afterTasksEditInput);
         
         Message afterTasksEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -1468,6 +1443,31 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         afterTasksEditInputMessage.setFor("afterTasksEditInput");
         afterTasksEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(afterTasksEditInputMessage);
+        
+        OutputLabel beforeTasksEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        beforeTasksEditOutput.setFor("beforeTasksEditInput");
+        beforeTasksEditOutput.setId("beforeTasksEditOutput");
+        beforeTasksEditOutput.setValue("Before Tasks:");
+        htmlPanelGrid.getChildren().add(beforeTasksEditOutput);
+        
+        SelectManyMenu beforeTasksEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        beforeTasksEditInput.setId("beforeTasksEditInput");
+        beforeTasksEditInput.setConverter(new JJTaskConverter());
+        beforeTasksEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.selectedBeforeTasks}", List.class));
+        UISelectItems beforeTasksEditInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        beforeTasksEditInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.allJJTasks}", List.class));
+        beforeTasksEditInput.setRequired(false);
+        beforeTasksEditInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJTask", String.class));
+        beforeTasksEditInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJTask}", String.class));
+        beforeTasksEditInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJTask}", JJTask.class));
+        beforeTasksEditInput.getChildren().add(beforeTasksEditInputItems);
+        htmlPanelGrid.getChildren().add(beforeTasksEditInput);
+        
+        Message beforeTasksEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        beforeTasksEditInputMessage.setId("beforeTasksEditInputMessage");
+        beforeTasksEditInputMessage.setFor("beforeTasksEditInput");
+        beforeTasksEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(beforeTasksEditInputMessage);
         
         return htmlPanelGrid;
     }
@@ -1774,34 +1774,34 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         tasksValue.setValue("This relationship is managed from the JJTask side");
         htmlPanelGrid.getChildren().add(tasksValue);
         
-        HtmlOutputText beforeTasksLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        beforeTasksLabel.setId("beforeTasksLabel");
-        beforeTasksLabel.setValue("Before Tasks:");
-        htmlPanelGrid.getChildren().add(beforeTasksLabel);
-        
-        HtmlOutputText beforeTasksValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        beforeTasksValue.setId("beforeTasksValue");
-        beforeTasksValue.setValue("This relationship is managed from the JJTask side");
-        htmlPanelGrid.getChildren().add(beforeTasksValue);
-        
         HtmlOutputText afterTasksLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         afterTasksLabel.setId("afterTasksLabel");
         afterTasksLabel.setValue("After Tasks:");
         htmlPanelGrid.getChildren().add(afterTasksLabel);
         
-        SelectManyMenu afterTasksValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        HtmlOutputText afterTasksValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         afterTasksValue.setId("afterTasksValue");
-        afterTasksValue.setConverter(new JJTaskConverter());
-        afterTasksValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.selectedAfterTasks}", List.class));
-        UISelectItems afterTasksValueItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        afterTasksValue.setReadonly(true);
-        afterTasksValue.setDisabled(true);
-        afterTasksValueItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.afterTasks}", Set.class));
-        afterTasksValueItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJTask", String.class));
-        afterTasksValueItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJTask}", String.class));
-        afterTasksValueItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJTask}", JJTask.class));
-        afterTasksValue.getChildren().add(afterTasksValueItems);
+        afterTasksValue.setValue("This relationship is managed from the JJTask side");
         htmlPanelGrid.getChildren().add(afterTasksValue);
+        
+        HtmlOutputText beforeTasksLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        beforeTasksLabel.setId("beforeTasksLabel");
+        beforeTasksLabel.setValue("Before Tasks:");
+        htmlPanelGrid.getChildren().add(beforeTasksLabel);
+        
+        SelectManyMenu beforeTasksValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        beforeTasksValue.setId("beforeTasksValue");
+        beforeTasksValue.setConverter(new JJTaskConverter());
+        beforeTasksValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.selectedBeforeTasks}", List.class));
+        UISelectItems beforeTasksValueItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        beforeTasksValue.setReadonly(true);
+        beforeTasksValue.setDisabled(true);
+        beforeTasksValueItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.beforeTasks}", Set.class));
+        beforeTasksValueItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJTask", String.class));
+        beforeTasksValueItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJTask}", String.class));
+        beforeTasksValueItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJTask}", JJTask.class));
+        beforeTasksValue.getChildren().add(beforeTasksValueItems);
+        htmlPanelGrid.getChildren().add(beforeTasksValue);
         
         return htmlPanelGrid;
     }
@@ -1949,17 +1949,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         this.selectedTasks = selectedTasks;
     }
     
-    public List<JJTask> JJTaskBean.getSelectedBeforeTasks() {
-        return selectedBeforeTasks;
-    }
-    
-    public void JJTaskBean.setSelectedBeforeTasks(List<JJTask> selectedBeforeTasks) {
-        if (selectedBeforeTasks != null) {
-            JJTask_.setBeforeTasks(new HashSet<JJTask>(selectedBeforeTasks));
-        }
-        this.selectedBeforeTasks = selectedBeforeTasks;
-    }
-    
     public List<JJTask> JJTaskBean.getSelectedAfterTasks() {
         return selectedAfterTasks;
     }
@@ -1971,6 +1960,17 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         this.selectedAfterTasks = selectedAfterTasks;
     }
     
+    public List<JJTask> JJTaskBean.getSelectedBeforeTasks() {
+        return selectedBeforeTasks;
+    }
+    
+    public void JJTaskBean.setSelectedBeforeTasks(List<JJTask> selectedBeforeTasks) {
+        if (selectedBeforeTasks != null) {
+            JJTask_.setBeforeTasks(new HashSet<JJTask>(selectedBeforeTasks));
+        }
+        this.selectedBeforeTasks = selectedBeforeTasks;
+    }
+    
     public String JJTaskBean.onEdit() {
         if (JJTask_ != null && JJTask_.getMessages() != null) {
             selectedMessages = new ArrayList<JJMessage>(JJTask_.getMessages());
@@ -1978,11 +1978,11 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         if (JJTask_ != null && JJTask_.getTasks() != null) {
             selectedTasks = new ArrayList<JJTask>(JJTask_.getTasks());
         }
-        if (JJTask_ != null && JJTask_.getBeforeTasks() != null) {
-            selectedBeforeTasks = new ArrayList<JJTask>(JJTask_.getBeforeTasks());
-        }
         if (JJTask_ != null && JJTask_.getAfterTasks() != null) {
             selectedAfterTasks = new ArrayList<JJTask>(JJTask_.getAfterTasks());
+        }
+        if (JJTask_ != null && JJTask_.getBeforeTasks() != null) {
+            selectedBeforeTasks = new ArrayList<JJTask>(JJTask_.getBeforeTasks());
         }
         return null;
     }

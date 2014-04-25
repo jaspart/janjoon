@@ -185,20 +185,20 @@ privileged aspect JJTask_Roo_JavaBean {
         this.tasks = tasks;
     }
     
-    public Set<JJTask> JJTask.getBeforeTasks() {
-        return this.beforeTasks;
-    }
-    
-    public void JJTask.setBeforeTasks(Set<JJTask> beforeTasks) {
-        this.beforeTasks = beforeTasks;
-    }
-    
     public Set<JJTask> JJTask.getAfterTasks() {
         return this.afterTasks;
     }
     
     public void JJTask.setAfterTasks(Set<JJTask> afterTasks) {
         this.afterTasks = afterTasks;
+    }
+    
+    public Set<JJTask> JJTask.getBeforeTasks() {
+        return this.beforeTasks;
+    }
+    
+    public void JJTask.setBeforeTasks(Set<JJTask> beforeTasks) {
+        this.beforeTasks = beforeTasks;
     }
     
 }

@@ -87,12 +87,12 @@ public class JJTask extends JJAbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent")
 	private Set<JJTask> tasks = new HashSet<JJTask>();
 
-	@ManyToMany(mappedBy = "afterTasks", fetch = FetchType.EAGER)
-	private Set<JJTask> beforeTasks = new HashSet<JJTask>();
+	@ManyToMany(mappedBy = "beforeTasks", fetch = FetchType.EAGER)
+	private Set<JJTask> afterTasks = new HashSet<JJTask>();
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "JJTaskLink", joinColumns = { @javax.persistence.JoinColumn(name = "BeforeTask_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "AfterTask_ID", referencedColumnName = "id") })
-	private Set<JJTask> afterTasks = new HashSet<JJTask>();
+	@JoinTable(name = "JJTaskLink", joinColumns = { @javax.persistence.JoinColumn(name = "AfterTask_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "BeforeTask_ID", referencedColumnName = "id") })
+	private Set<JJTask> beforeTasks = new HashSet<JJTask>();
 
 	@Override
 	public boolean equals(Object object) {

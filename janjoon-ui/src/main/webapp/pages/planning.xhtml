@@ -13,18 +13,18 @@
 		<p:panelGrid style="margin-top:10px">
 			<p:row>
 				<p:column style="width:50%">
-					<p:scrollPanel style="width:500px;height:350px">
+					<p:scrollPanel id="scrollPanel" style="width:500px;height:350px">
+						<p:remoteCommand name="onCellEditTableComplete"
+							update=":projecttabview:planningForm:taskDataTable " />
 						<p:dataTable id="taskDataTable" var="taskData"
-							style="width:1200px;" value="#{jJTaskBean.tasksData}"
+							style="width:1300px;" value="#{jJTaskBean.tasksData}"
 							editable="true" editMode="cell"
 							sortBy="task.requirement.chapter.name">
-							<!-- 						<p:ajax event="rowEdit" listener="#{jJTaskBean.onRowEdit}" -->
-							<!-- 							update="taskDataTable :projecttabview:planningForm:timeline :projecttabview:planningForm:msg" -->
-							<!-- 							process="@widgetVar(nameWidget) @widgetVar(startdateWidget) @widgetVar(enddateWidget)" /> -->
-							<!-- 						<p:ajax event="rowEditCancel" listener="#{jJTaskBean.onCancel}" -->
-							<!-- 							update=":projecttabview:planningForm:msg" /> -->
-							<p:ajax event="cellEdit" listener="#{jJTaskBean.onCellEdit}" />
-							<p:column styleClass="task" headerText="Name">
+							<p:ajax event="cellEdit" listener="#{jJTaskBean.onCellEdit}"
+								process="@widgetVar(nameWidget)"
+								oncomplete="onCellEditTableComplete()"
+								update="taskDataTable :projecttabview:planningForm:timeline :projecttabview:planningForm:msg" />
+							<p:column id="name" styleClass="task" headerText="Name">
 								<p:cellEditor>
 									<f:facet name="output">
 										<h:outputText value="#{taskData.task.name}" />
@@ -46,13 +46,9 @@
 										<p:calendar value="#{taskData.startDate}" navigator="true"
 											pattern="yyyy/MM/dd HH:mm:ss" />
 									</f:facet>
-
 									<f:facet name="input">
 										<p:calendar value="#{taskData.startDate}" navigator="true"
-											pattern="yyyy/MM/dd HH:mm:ss" required="true"
-											label="Start Date" widgetVar="startdateWidget"
-											showButtonPanel="true"
-											requiredMessage="Start Date is a required value" />
+											pattern="yyyy/MM/dd HH:mm:ss" />
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
@@ -64,14 +60,10 @@
 									</f:facet>
 									<f:facet name="input">
 										<p:calendar value="#{taskData.endDate}" navigator="true"
-											pattern="yyyy/MM/dd HH:mm:ss" required="true"
-											label="End Date" widgetVar="enddateWidget"
-											showButtonPanel="true"
-											requiredMessage="End Date is a required value" />
+											pattern="yyyy/MM/dd HH:mm:ss" />
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-
 							<p:column styleClass="task" headerText="Workload Planned/Revised">
 								<p:cellEditor>
 									<f:facet name="output">
@@ -82,20 +74,15 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-
 							<p:column styleClass="task" headerText="Start Date Real">
 								<p:cellEditor>
 									<f:facet name="output">
 										<p:calendar value="#{taskData.task.startDateReal}"
 											navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
 									</f:facet>
-
 									<f:facet name="input">
 										<p:calendar value="#{taskData.task.startDateReal}"
-											navigator="true" pattern="yyyy/MM/dd HH:mm:ss"
-											required="true" label="Start Date"
-											widgetVar="startdateWidget" showButtonPanel="true"
-											requiredMessage="Start Date is a required value" />
+											navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
@@ -107,14 +94,10 @@
 									</f:facet>
 									<f:facet name="input">
 										<p:calendar value="#{taskData.task.endDateReal}"
-											navigator="true" pattern="yyyy/MM/dd HH:mm:ss"
-											required="true" label="End Date" widgetVar="enddateWidget"
-											showButtonPanel="true"
-											requiredMessage="End Date is a required value" />
+											navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-
 							<p:column styleClass="task" headerText="Workload Real">
 								<p:cellEditor>
 									<f:facet name="output">
@@ -126,8 +109,6 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-
-
 							<p:column styleClass="task" headerText="Assigned To">
 								<p:cellEditor>
 									<f:facet name="output">
@@ -149,15 +130,34 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-
+							<p:column styleClass="task" headerText="Before Task">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="Clic to show" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectManyMenu value="#{taskData.selectedTasks}"
+											style="width:150px;height:100px" var="p" showCheckbox="true">
+											<f:selectItems value="#{taskData.tasks}" var="p"
+												itemLabel="#{p}" itemValue="#{p}" />
+											<p:column>
+												<h:outputText value=" #{p} " />
+											</p:column>
+										</p:selectManyMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
 							<p:column>
-								<p:commandButton id="duplicate" icon="ui-icon-copy" />
+								<p:commandButton id="duplicate" icon="ui-icon-copy"
+									oncomplete="duplicateTaskDialogWidget.show()">
+									<f:setPropertyActionListener value="#{taskData.task}"
+										target="#{jJTaskBean.task}" />
+								</p:commandButton>
 								<p:tooltip for="duplicate" value="Duplicate this task"
 									showEffect="fade" hideEffect="fade" />
 							</p:column>
-
 							<p:summaryRow>
-								<p:column styleClass="task" colspan="9" style="text-align:left">
+								<p:column styleClass="task" colspan="10" style="text-align:left">
 									<h:outputText
 										value="Chapter: #{taskData.task.requirement.chapter.name}" />
 								</p:column>
@@ -176,9 +176,26 @@
 						<h:outputText value="" />
 					</pe:timeline>
 				</p:column>
-
 			</p:row>
 		</p:panelGrid>
 	</h:form>
+
+	<p:confirmDialog id="duplicateTaskDialog"
+		widgetVar="duplicateTaskDialogWidget"
+		message="Are you sure you want duplicate this task?" showEffect="fade"
+		hideEffect="explode" header="Confirm Duplication" severity="alarm">
+		<p:outputPanel id="duplicateTaskPanel">
+			<h:form id="duplicateTaskForm">
+				<p:commandButton id="duplicateYesButton"
+					value="#{messages.label_yes}" action="#{jJTaskBean.duplicateTask}"
+					update=":projecttabview:planningForm"
+					oncomplete="duplicateTaskDialogWidget.hide()" />
+				<p:commandButton id="duplicateNoButton" value="#{messages.label_no}"
+					onclick="duplicateTaskDialogWidget.hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:confirmDialog>
+
+
 </ui:composition>
 </html>

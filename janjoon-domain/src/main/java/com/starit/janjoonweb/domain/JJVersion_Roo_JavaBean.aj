@@ -6,6 +6,7 @@ package com.starit.janjoonweb.domain;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJVersion;
 import java.util.Set;
 
@@ -17,6 +18,14 @@ privileged aspect JJVersion_Roo_JavaBean {
     
     public void JJVersion.setProduct(JJProduct product) {
         this.product = product;
+    }
+    
+    public Set<JJTask> JJVersion.getTasks() {
+        return this.tasks;
+    }
+    
+    public void JJVersion.setTasks(Set<JJTask> tasks) {
+        this.tasks = tasks;
     }
     
     public Set<JJBuild> JJVersion.getBuilds() {

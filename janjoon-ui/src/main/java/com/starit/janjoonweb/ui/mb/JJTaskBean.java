@@ -3,7 +3,7 @@ package com.starit.janjoonweb.ui.mb;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,28 +12,28 @@ import java.util.TreeMap;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.model.ListDataModel;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.component.api.UIColumn;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
-import org.primefaces.extensions.event.timeline.TimelineModificationEvent;
-import org.primefaces.extensions.event.timeline.TimelineRangeEvent;
 import org.primefaces.extensions.model.timeline.TimelineEvent;
 import org.primefaces.extensions.model.timeline.TimelineModel;
-import org.primefaces.model.SelectableDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJChapterService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJRequirement;
+import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJTask;
-import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.domain.JJTestcase;
+import com.starit.janjoonweb.domain.JJVersion;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJTask.class, beanName = "jJTaskBean")
@@ -47,8 +47,10 @@ public class JJTaskBean {
 	}
 
 	private List<TaskData> tasksData;
+	private JJTask task;
 
 	private TimelineModel model;
+
 	private Date start;
 	private Date end;
 
@@ -62,6 +64,14 @@ public class JJTaskBean {
 
 	public void setTasksData(List<TaskData> tasksData) {
 		this.tasksData = tasksData;
+	}
+
+	public JJTask getTask() {
+		return task;
+	}
+
+	public void setTask(JJTask task) {
+		this.task = task;
 	}
 
 	public TimelineModel getModel() {
@@ -100,6 +110,7 @@ public class JJTaskBean {
 
 	public void loadData() {
 
+		System.out.println("loadData");
 		// Set initial start / end dates for the axis of the timeline
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
@@ -141,23 +152,32 @@ public class JJTaskBean {
 				String group = "<span style=display:none>" + c + "</span>"
 						+ task.getName();
 
-				TimelineEvent event = new TimelineEvent(task,
-						task.getStartDatePlanned(), task.getEndDatePlanned(),
-						true, group, "planned");
-				model.add(event);
 				if (task.getStartDateReal() != null) {
-					event = new TimelineEvent(task, task.getStartDateReal(),
-							task.getEndDateReal(), true, group, "real");
+					TimelineEvent event = new TimelineEvent(task,
+							task.getStartDateReal(), task.getEndDateReal(),
+							true, group, "real");
 					model.add(event);
 				}
 
 				TaskData taskData;
 
 				if (task.getStartDateRevised() != null) {
+
+					TimelineEvent event = new TimelineEvent(task,
+							task.getStartDateRevised(),
+							task.getEndDateRevised(), true, group, "planned");
+					model.add(event);
+
 					taskData = new TaskData(task, task.getStartDateRevised(),
 							task.getEndDateRevised(),
 							task.getWorkloadRevised(), true);
 				} else {
+
+					TimelineEvent event = new TimelineEvent(task,
+							task.getStartDatePlanned(),
+							task.getEndDatePlanned(), true, group, "planned");
+					model.add(event);
+
 					taskData = new TaskData(task, task.getStartDatePlanned(),
 							task.getEndDatePlanned(),
 							task.getWorkloadPlanned(), false);
@@ -229,173 +249,349 @@ public class JJTaskBean {
 
 		}
 
-	}
-
-	// public void onChange(TimelineRangeEvent e){
-	// System.out.println("toto");
-	// }
-
-	public void onChange(TimelineModificationEvent e) {
-		System.out.println("vovo");
-		// get clone of the TimelineEvent to be changed with new start / end
-		// dates
-
-		// event = e.getTimelineEvent();
-
-		// update booking in DB...
-
-		// if everything was ok, no UI update is required. Only the model should
-		// be updated
-		// model.update(event);
-
-		// FacesMessage msg =
-		// new FacesMessage(FacesMessage.SEVERITY_INFO, "The booking dates " +
-		// getRoom() + " have been updated", null);
-		// FacesContext.getCurrentInstance().addMessage(null, msg);
-
-		// otherwise (if DB operation failed) a rollback can be done with the
-		// same response as follows:
-		// TimelineEvent oldEvent = model.getEvent(model.getIndex(event));
-		// TimelineUpdater timelineUpdater =
-		// TimelineUpdater.getCurrentInstance(":mainForm:timeline");
-		// model.update(oldEvent, timelineUpdater);
+		task = null;
 	}
 
 	public void onCellEdit(CellEditEvent event) {
 		UIColumn column = event.getColumn();
 		String headerText = column.getHeaderText();
 		System.out.println("headerText " + headerText);
-		System.out.println(event.getSource());
-		if (event.getSource() instanceof DataTable) {
-			DataTable dataTable = (DataTable) event.getSource();
-			if (dataTable.getRowData() instanceof TaskData) {
-				System.out.println("yes");
-			}
-		}
-	}
 
-	public void onRowEdit(RowEditEvent event) {
+		DataTable dataTable = (DataTable) event.getSource();
+		TaskData taskData = (TaskData) dataTable.getRowData();
+		JJTask task = taskData.getTask();
+
+		Object newValue = event.getNewValue();
 
 		String message = "";
 		FacesMessage facesMessage = null;
 
-		System.out.println("row select "
-				+ ((TaskData) event.getObject()).getTask().getId());
+		boolean valid = true;
 
-		TaskData taskData = (TaskData) event.getObject();
-
-		Date startDate = taskData.getStartDate();
-		Date endDate = taskData.getEndDate();
-
-		long startTime = startDate.getTime();
-		long endTime = endDate.getTime();
-
-		long str = endTime - startTime;
-		System.out.println("str " + str);
-
-		if (str > 0) {
-			Date SD;
-			Date ED;
-
-			JJTask task = taskData.getTask();
-
-			if (taskData.revisedDate) {
-				SD = task.getStartDateReal();
-				ED = task.getEndDateReal();
-			} else {
-				SD = task.getStartDatePlanned();
-				ED = task.getEndDatePlanned();
+		if (headerText.equalsIgnoreCase("Start Date Planned/Revised")) {
+			if (newValue != null) {
+				Date date = (Date) newValue;
+				if (taskData.getEndDate() != null) {
+					long startTime = date.getTime();
+					long endTime = taskData.getEndDate().getTime();
+					long str = endTime - startTime;
+					if (str >= 0) {
+						int workloadRevised = (int) (str / 3600000);
+						task.setStartDateRevised(date);
+						task.setWorkloadRevised(workloadRevised);
+						task.setEndDateRevised(taskData.getEndDate());
+					} else {
+						valid = false;
+						message += "\nStart Date Revised doit être < End Date Revised";
+					}
+				} else {
+					if (taskData.getWorkload() != null) {
+						Date endDateRevised = new Date(date.getTime()
+								+ taskData.getWorkload() * 3600000);
+						task.setEndDateRevised(endDateRevised);
+						task.setWorkloadRevised(taskData.getWorkload());
+						task.setStartDateRevised(date);
+					}
+				}
 			}
 
-			long ST = SD.getTime();
-			long ET = ED.getTime();
+		} else if (headerText.equalsIgnoreCase("End Date Planned/Revised")) {
+			if (newValue != null) {
+				Date date = (Date) newValue;
+				if (taskData.getStartDate() != null) {
+					long startTime = taskData.getStartDate().getTime();
+					long endTime = date.getTime();
+					long str = endTime - startTime;
+					if (str >= 0) {
+						int workloadRevised = (int) (str / 3600000);
+						task.setEndDateRevised(date);
+						task.setWorkloadRevised(workloadRevised);
+						task.setStartDateRevised(taskData.getStartDate());
+					} else {
+						valid = false;
+						message += "\nEnd Date Revised doit être > Start Date Revised";
+					}
+				} else {
+					if (taskData.getWorkload() != null) {
+						Date startDateRevised = new Date(date.getTime()
+								- taskData.getWorkload() * 3600000);
 
-			System.out.println("startTime :" + startTime + " ST " + ST);
-			System.out.println("endTime :" + endTime + " ET " + ET);
+						task.setStartDateRevised(startDateRevised);
+						task.setWorkloadRevised(taskData.getWorkload());
+						task.setEndDateRevised(date);
+					}
+				}
+			}
 
-			if ((startTime == ST) && (endTime == ET)) {
-				System.out.println("Same Date");
-			} else {
-				task.setStartDateReal(startDate);
-				task.setEndDateReal(endDate);
+		} else if (headerText.equalsIgnoreCase("Workload Planned/Revised")) {
 
-				int workloadReal = (int) (str / 3600000);
-				System.out.println("workloadReal " + workloadReal);
+			if (newValue != null) {
+				int workloadRevised = (int) newValue;
+				task.setWorkloadRevised(workloadRevised);
+				if ((taskData.getStartDate() != null && taskData.getEndDate() != null)
+						|| (taskData.getStartDate() != null)) {
+					Date endDateRevised = new Date(taskData.getStartDate()
+							.getTime() + workloadRevised * 3600000);
 
+					task.setEndDateRevised(endDateRevised);
+					task.setStartDateRevised(taskData.getStartDate());
+
+				} else if (taskData.getEndDate() != null) {
+					Date startDateRevised = new Date(taskData.getEndDate()
+							.getTime() - workloadRevised * 3600000);
+					task.setStartDateRevised(startDateRevised);
+					task.setEndDateRevised(taskData.getEndDate());
+				}
+
+			}
+
+		} else if (headerText.equalsIgnoreCase("Start Date Real")) {
+			if (newValue != null) {
+				Date date = (Date) newValue;
+				if (task.getEndDateReal() != null) {
+					long startTime = date.getTime();
+					long endTime = task.getEndDateReal().getTime();
+					long str = endTime - startTime;
+					if (str >= 0) {
+						int workloadReal = (int) (str / 3600000);
+						task.setStartDateReal(date);
+						task.setWorkloadReal(workloadReal);
+					} else {
+						valid = false;
+						message += "\nStart Date Real doit être < End Date Real";
+					}
+				} else {
+					if (task.getWorkloadReal() != null) {
+						Date endDateReal = new Date(task.getStartDateReal()
+								.getTime() + task.getWorkloadReal() * 3600000);
+						task.setEndDateReal(endDateReal);
+					}
+				}
+			}
+
+		} else if (headerText.equalsIgnoreCase("End Date Real")) {
+			if (newValue != null) {
+				Date date = (Date) newValue;
+				if (task.getStartDateReal() != null) {
+					long startTime = task.getStartDateReal().getTime();
+					long endTime = date.getTime();
+					long str = endTime - startTime;
+					if (str >= 0) {
+						int workloadReal = (int) (str / 3600000);
+						task.setEndDateReal(date);
+						task.setWorkloadReal(workloadReal);
+					} else {
+						valid = false;
+						message += "\nEnd Date Real doit être > Start Date Real";
+					}
+				} else {
+					if (task.getWorkloadReal() != null) {
+						Date startDateReal = new Date(task.getEndDateReal()
+								.getTime() - task.getWorkloadReal() * 3600000);
+						task.setStartDateReal(startDateReal);
+					}
+				}
+			}
+		} else if (headerText.equalsIgnoreCase("Workload Real")) {
+			if (newValue != null) {
+				int workloadReal = (int) newValue;
 				task.setWorkloadReal(workloadReal);
+				if ((task.getStartDateReal() != null && task.getEndDateReal() != null)
+						|| (task.getStartDateReal() != null)) {
+					Date endDateReal = new Date(task.getStartDateReal()
+							.getTime() + task.getWorkloadReal() * 3600000);
+					task.setEndDateReal(endDateReal);
+
+				} else if (task.getEndDateReal() != null) {
+					Date startDateReal = new Date(task.getEndDateReal()
+							.getTime() - task.getWorkloadReal() * 3600000);
+					task.setStartDateReal(startDateReal);
+				}
+
+			}
+		} else if (headerText.equalsIgnoreCase("Before Task")) {
+
+			List<JJTask> newList = new ArrayList<JJTask>();
+			List<JJTask> oldList = taskData.getStoreTasks();
+
+			List<String> list = taskData.getSelectedTasks();
+			for (String string : list) {
+				long id = Long.valueOf(taskData.splitString(string, "-", 0));
+				JJTask Task = jJTaskService.findJJTask(id);
+				newList.add(Task);
 			}
 
+			if (!newList.isEmpty() && !oldList.isEmpty()) {
+
+				for (JJTask Task : oldList) {
+					if (!newList.contains(Task)) {
+						Task.getAfterTasks().remove(task);
+						task.getBeforeTasks().remove(Task);
+					}
+				}
+
+				for (JJTask Task : newList) {
+					if (!oldList.contains(Task)) {
+						Task.getAfterTasks().add(task);
+						task.getBeforeTasks().add(Task);
+					}
+				}
+
+			} else if (oldList.isEmpty()) {
+
+				for (JJTask Task : newList) {
+					Task.getAfterTasks().add(task);
+					task.getBeforeTasks().add(Task);
+				}
+
+			} else {
+				for (JJTask Task : oldList) {
+					Task.getAfterTasks().remove(task);
+					task.getBeforeTasks().remove(Task);
+				}
+
+			}
+
+		}
+
+		if (valid) {
 			task.setUpdatedDate(new Date());
 			jJTaskService.updateJJTask(task);
 			reset();
 
-			loadData();
-
 			message = "Success Update";
 			facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					message, "JJTask");
-
 		} else {
-			message = "The End Date must be greater than the Start Date";
 			facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					message, "JJTask");
 		}
 
+		loadData();
+
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
 
-	public void onCancel(RowEditEvent event) {
+	public void duplicateTask() {
+		System.out.println("in duplicate");
 
-		FacesMessage facesMessage = MessageFactory.getMessage("Cancel Edit",
-				"JJask");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-	}
+		task = jJTaskService.findJJTask(task.getId());
 
-	@SuppressWarnings("unchecked")
-	public class TaskDataModel extends ListDataModel<TaskData> implements
-			SelectableDataModel<TaskData> {
+		JJTask duplicatedTask = new JJTask();
+		duplicatedTask.setParent(task);
 
-		public TaskDataModel(List<TaskData> data) {
-			super(data);
+		task.getTasks().add(duplicatedTask);
+
+		duplicatedTask.setName(task.getName() + " duplicated");
+		duplicatedTask.setDescription(task.getDescription());
+		duplicatedTask.setCreationDate(task.getCreationDate());
+		duplicatedTask.setCreatedBy(task.getCreatedBy());
+		duplicatedTask.setUpdatedDate(task.getUpdatedDate());
+		duplicatedTask.setUpdatedBy(task.getUpdatedBy());
+		duplicatedTask.setEnabled(true);
+
+		duplicatedTask.setCompleted(task.getCompleted());
+		duplicatedTask.setStatus(task.getStatus());
+
+		duplicatedTask.setStartDatePlanned(task.getStartDatePlanned());
+		duplicatedTask.setStartDateReal(task.getStartDateReal());
+		duplicatedTask.setStartDateRevised(task.getStartDateRevised());
+
+		duplicatedTask.setEndDatePlanned(task.getEndDatePlanned());
+		duplicatedTask.setEndDateReal(task.getEndDateReal());
+		duplicatedTask.setEndDateRevised(task.getEndDateRevised());
+
+		duplicatedTask.setWorkloadPlanned(task.getWorkloadPlanned());
+		duplicatedTask.setWorkloadReal(task.getWorkloadReal());
+		duplicatedTask.setWorkloadRevised(task.getWorkloadRevised());
+
+		duplicatedTask.setConsumed(task.getConsumed());
+
+		if (task.getRequirement() != null) {
+			JJRequirement requirement = jJRequirementService
+					.findJJRequirement(task.getRequirement().getId());
+			duplicatedTask.setRequirement(requirement);
+			requirement.getTasks().add(duplicatedTask);
 		}
 
-		@Override
-		public TaskData getRowData(String rowKey) {
-			// In a real app, a more efficient way like a query by rowKey should
-			// be implemented to deal with huge data
-
-			List<TaskData> tasksData = (List<TaskData>) getWrappedData();
-
-			for (TaskData taskData : tasksData) {
-				if (taskData.getTask().getName().equals(rowKey))
-					return taskData;
-			}
-
-			return null;
+		if (task.getTestcase() != null) {
+			JJTestcase testcase = jJTestcaseService.findJJTestcase(task
+					.getTestcase().getId());
+			duplicatedTask.setTestcase(testcase);
+			testcase.getTasks().add(duplicatedTask);
 		}
 
-		@Override
-		public Object getRowKey(TaskData taskData) {
-			return taskData.getTask().getName();
+		if (task.getSprint() != null) {
+			JJSprint sprint = jJSprintService.findJJSprint(task.getSprint()
+					.getId());
+			duplicatedTask.setSprint(sprint);
+			sprint.getTasks().add(duplicatedTask);
 		}
+
+		if (task.getBug() != null) {
+			JJBug bug = jJBugService.findJJBug(task.getBug().getId());
+			duplicatedTask.setBug(bug);
+			bug.getTasks().add(duplicatedTask);
+		}
+
+		if (task.getVersioning() != null) {
+			JJVersion version = jJVersionService.findJJVersion(task
+					.getVersioning().getId());
+			duplicatedTask.setVersioning(version);
+			version.getTasks().add(duplicatedTask);
+		}
+
+		jJTaskService.saveJJTask(duplicatedTask);
+
+		duplicatedTask = null;
+		loadData();
+
+		reset();
+
+		System.out.println("end duplication");
 	}
 
 	public class TaskData {
-		JJTask task;
-		Date startDate;
-		Date endDate;
-		int workload;
-		boolean revisedDate;
+		private JJTask task;
+		private Date startDate;
+		private Date endDate;
+		private Integer workload;
+		private boolean revisedDate;
+
+		private List<String> tasks;
+		private List<String> selectedTasks;
+
+		private List<JJTask> storeTasks;
 
 		public TaskData(JJTask task, Date startDate, Date endDate,
-				int workload, boolean revisedDate) {
+				Integer workload, boolean revisedDate) {
 			super();
 			this.task = task;
 			this.startDate = startDate;
 			this.endDate = endDate;
 			this.workload = workload;
 			this.revisedDate = revisedDate;
+
+			storeTasks = new ArrayList<JJTask>();
+			Set<JJTask> taskList = task.getBeforeTasks();
+			for (JJTask Task : taskList) {
+				if (Task.getEnabled()
+						&& Task.getRequirement().getChapter()
+								.equals(task.getRequirement().getChapter())) {
+					storeTasks.add(Task);
+				}
+			}
+
+			List<JJTask> list = new ArrayList<JJTask>();
+			list.addAll(jJTaskService.getTasks(project, null, null, task
+					.getRequirement().getChapter(), true, false));
+
+			list.remove(task);
+
+			tasks = convertTaskListToStringList(list);
+
+			selectedTasks = convertTaskListToStringList(storeTasks);
 		}
 
 		public JJTask getTask() {
@@ -422,11 +618,11 @@ public class JJTaskBean {
 			this.endDate = endDate;
 		}
 
-		public int getWorkload() {
+		public Integer getWorkload() {
 			return workload;
 		}
 
-		public void setWorkload(int workload) {
+		public void setWorkload(Integer workload) {
 			this.workload = workload;
 		}
 
@@ -436,6 +632,45 @@ public class JJTaskBean {
 
 		public void setRevisedDate(boolean revisedDate) {
 			this.revisedDate = revisedDate;
+		}
+
+		public List<String> getTasks() {
+			return tasks;
+		}
+
+		public void setTasks(List<String> tasks) {
+			this.tasks = tasks;
+		}
+
+		public List<String> getSelectedTasks() {
+			return selectedTasks;
+		}
+
+		public void setSelectedTasks(List<String> selectedTasks) {
+			this.selectedTasks = selectedTasks;
+		}
+
+		public List<JJTask> getStoreTasks() {
+			return storeTasks;
+		}
+
+		public void setStoreTasks(List<JJTask> storeTasks) {
+			this.storeTasks = storeTasks;
+		}
+
+		private String splitString(String s, String regex, int index) {
+			String[] result = s.split(regex);
+			return result[index];
+		}
+
+		private List<String> convertTaskListToStringList(List<JJTask> tasks) {
+			List<String> list = new ArrayList<String>();
+			for (JJTask task : tasks) {
+				String entry = task.getId() + "-" + task.getName();
+				list.add(entry);
+			}
+
+			return list;
 		}
 	}
 
