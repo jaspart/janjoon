@@ -255,19 +255,20 @@ public class JJSprintBean {
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
 
-		setJJSprint_(sprintUtil.getSprint());
-		for (JJContact c : getJJSprint_().getContacts()) {
+		
+		for (JJContact c : sprintUtil.getSprint().getContacts()) {
 			System.out.println(c.getName());
 		}
-		System.out.println(getJJSprint_().getId() + ":"
-				+ getJJSprint_().getName());
+		System.out.println(sprintUtil.getSprint().getId() + ":"
+				+ sprintUtil.getSprint().getName());
 
-		getJJSprint_().setUpdatedBy(contact);
-		getJJSprint_().setUpdatedDate(new Date());
-		jJSprintService.updateJJSprint(getJJSprint_());
-		System.out.println(getJJSprint_().getId() + ":"
-				+ getJJSprint_().getName());
-		sprintUtil.setSprint(getJJSprint_());
+		sprintUtil.getSprint().setUpdatedBy(contact);
+		sprintUtil.getSprint().setUpdatedDate(new Date());
+		jJSprintService.updateJJSprint(sprintUtil.getSprint());
+		sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil.getSprint().getId()));
+		System.out.println(sprintUtil.getSprint().getId() + ":"
+				+ sprintUtil.getSprint().getName());
+		sprintUtil=new SprintUtil(sprintUtil.getSprint(),jJTaskService.getSprintTasks(sprintUtil.getSprint()));
 		sprintList.set(contains(sprintUtil), sprintUtil);
 
 		String message = "message_successfully_updated";
@@ -333,20 +334,18 @@ public class JJSprintBean {
 
 		if (ddevent.getDragId().contains(":todoIcon")) {
 			JJTask dropedTask = (JJTask) ddevent.getData();
-			System.out.println(ddevent.getDragId() + ":" + ddevent.getDropId());
+		
 			JJStatus status = jJStatusService.getOneStatus("IN PROGRESS",
 					"JJTask", true);
 			System.out.println("addTaskToProg:"
 					+ dropedTask.getStatus().getName());
 			sprintUtil = SprintUtil.getSprintUtil(dropedTask.getSprint()
 					.getId(), sprintList);
-			dropedTask.setStartDateReal(new Date());
 			dropedTask.setStatus(status);
-			jJTaskService.updateJJTask(dropedTask);
-			System.out
-					.println("IN PROGRESS" + sprintUtil.getSprint().getName());
-			sprintUtil.getProgressTask().add(dropedTask);
-			sprintUtil.getTodoTask().remove(dropedTask);
+			dropedTask.setCompleted(false);
+			jJTaskService.updateJJTask(dropedTask);	
+			sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil.getSprint().getId()));
+			sprintUtil=new SprintUtil(sprintUtil.getSprint(),jJTaskService.getSprintTasks(sprintUtil.getSprint()));
 			sprintList.set(contains(sprintUtil), sprintUtil);
 			String message = "message_successfully_updated";
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
@@ -384,9 +383,8 @@ public class JJSprintBean {
 			jJTaskService.updateJJTask(dropedTask);
 
 			System.out.println("DONE" + sprintUtil.getSprint().getName());
-			sprintUtil.getDoneTask().add(dropedTask);
-			sprintUtil.getProgressTask().remove(dropedTask);
-
+			sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil.getSprint().getId()));
+			sprintUtil=new SprintUtil(sprintUtil.getSprint(),jJTaskService.getSprintTasks(sprintUtil.getSprint()));
 			sprintList.set(contains(sprintUtil), sprintUtil);
 			String message = "message_successfully_updated";
 			FacesMessage facesMessage = MessageFactory.getMessage(message,

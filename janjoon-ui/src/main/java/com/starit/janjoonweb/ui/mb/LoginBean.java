@@ -190,9 +190,7 @@ public class LoginBean implements Serializable {
 			HttpSession session = (HttpSession) ctx.getExternalContext()
 					.getSession(false);
 
-			JJSprintBean jJSprintBean = (JJSprintBean) session
-					.getAttribute("jJSprintBean");
-			jJSprintBean=null;
+			session.setAttribute("jJSprintBean", new JJSprintBean());
 		}
 
 		if (viewId.contains("development")) {
