@@ -63,14 +63,15 @@ public class SprintUtil {
 	}
 
 	public List<JJTask> getTaskList() {
-
-		if (taskList == null) {
-			taskList = new ArrayList<JJTask>();
-			for (JJTask t : sprint.getTasks()) {
-				if (t.getEnabled())
+		
+			if (taskList == null) {
+				taskList = new ArrayList<JJTask>();
+				for (JJTask t : sprint.getTasks()) {
+					if (t.getEnabled())
 					taskList.add(t);
-			}
-		}
+				}
+			}		
+		
 		return taskList;
 	}
 

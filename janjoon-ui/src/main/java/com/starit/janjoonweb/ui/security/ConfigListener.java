@@ -841,15 +841,16 @@ public class ConfigListener implements ServletContextListener {
 			}
 
 		}
+		List<JJContact> contacts = jJContactService.getContacts(
+				"janjoon.mailer@gmail.com", true);
+		JJContact manager = null;
+		if (contacts.size() > 0) {
+			manager = contacts.get(0);
+		}
 
 		if (jJProjectService.getProjects(true).isEmpty()) {
-			JJContact manager = null;
-			List<JJContact> contacts = jJContactService.getContacts(
-					"janjoon.mailer@gmail.com", true);
-
-			if (contacts.size() > 0) {
-				manager = contacts.get(0);
-			}
+			
+			
 			JJProject project;
 			project = new JJProject();
 			project.setName("Default Project");
@@ -867,7 +868,7 @@ public class ConfigListener implements ServletContextListener {
 				project.setManager(manager);
 
 				jJProjectService.saveJJProject(project);
-			}
+			}}
 
 			List<JJProject> projectList = jJProjectService.getProjects(true);
 
@@ -927,8 +928,6 @@ public class ConfigListener implements ServletContextListener {
 				}
 			}
 		}
-
-	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {

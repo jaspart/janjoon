@@ -16,10 +16,10 @@
 		<f:event listener="#{jJDevelopment.reloadRepository}"
 			type="preRenderView" />
 		<br />
-		<p:panel id="errorPanel" header="Error"
+		<p:panel id="errorPanel" header="#{messages['dev.errorPanel.panel']}"
 			style="width: 100%;valign: top;" rendered="#{!jJDevelopment.render}">
 			<p:growl id="error" showDetail="true" life="2000" />
-			<H1>#{messages.label_productNotFound}</H1>
+			<H1>#{messages['dev.errorPanel.title']}</H1>
 		</p:panel>
 
 
@@ -32,13 +32,13 @@
 						<td><p:panelGrid style="margin-top:10px">
 								<p:row>
 									<p:column>
-										<h:outputText for="taskSelectOneMenu" value="Task :" />
+										<h:outputText for="taskSelectOneMenu" value="#{messages['dev.taskSelectOneMenu.label']}" />
 										<p:selectOneMenu id="taskSelectOneMenu"
 											value="#{jJDevelopment.task}" panelStyle="width:150px"
 											effect="fold" editable="false" style="width:160px"
 											required="true" requiredMessage="Select task to commit">
 											<f:selectItem itemValue="#{null}"
-												itemLabel="-- select one --" />
+												itemLabel="-- #{messages['dev.taskSelectOneMenu.labelitem']} --" />
 											<f:selectItems value="#{jJDevelopment.tasks}" var="t"
 												itemLabel="#{t.name}" itemValue="#{t}" />
 											<f:converter
@@ -57,30 +57,30 @@
 										<p:message for="taskSelectOneMenu" id="taskmessage"
 											closable="true" />
 										<p:growl id="messages" showDetail="true" life="2000" />
-										<p:panel header="Project Explorer">
+										<p:panel header="#{messages['devs.projectexplorer.label']}">
 
 											<p:scrollPanel id="fileTreeScrollPanel" style="height:250px;"
 												mode="native">
 												<p:contextMenu for="fileTree" nodeType="folder">
-													<p:menuitem value="#{messages.dev_deleteFolder}"
+													<p:menuitem value="#{messages['dev.menuitem.deleteFolder.label']}"
 														icon="ui-icon-trash" immediate="true"
 														oncomplete="deleteFileDialogWidget.show()" />
-													<p:menuitem value="#{messages.dev_addFile}"
+													<p:menuitem value="#{messages['dev.menuitem.addFile.label']}"
 														icon="ui-icon-document" immediate="true"
 														oncomplete="createFileDialogWidget.show()" />
-													<p:menuitem value="#{messages.dev_uploadFile}"
+													<p:menuitem value="#{messages['dev.menuitem.uploadFile.label']}"
 														icon="ui-icon-arrowthickstop-1-n" immediate="true"
 														oncomplete="uploadFileDialogWidget.show()" />
-													<p:menuitem value="commit"
+													<p:menuitem value="#{messages['dev.menuitem.commit.label']}"
 														icon="ui-icon-arrowthickstop-1-e" immediate="true"
 														oncomplete="commitFileDialogWidget.show()" />
 												</p:contextMenu>
 
 												<p:contextMenu for="fileTree" nodeType="file">
-													<p:menuitem value="#{messages.dev_deleteFile}"
+													<p:menuitem value="#{messages['dev.menuitem.deleteFile.label']}"
 														icon="ui-icon-trash" immediate="true"
 														oncomplete="deleteFileDialogWidget.show()" />
-													<p:menuitem value="commit"
+													<p:menuitem value="#{messages['dev.menuitem.commit.label']}"
 														icon="ui-icon-arrowthickstop-1-e" immediate="true"
 														oncomplete="commitFileDialogWidget.show()" />
 												</p:contextMenu>
@@ -105,11 +105,11 @@
 													</p:treeNode>
 												</p:tree>
 											</p:scrollPanel>
-											<p:commandButton value="#{messages.dev_uploadFile}"
+											<p:commandButton value="#{messages['dev.menuitem.uploadFile.label']}"
 												icon="ui-icon-arrowthickstop-1-n" immediate="true"
 												actionListener="#{jJDevelopment.addToRoot}"
 												oncomplete="uploadFileDialogWidget.show()" />
-											<p:commandButton value="#{messages.dev_addFile}"
+											<p:commandButton value="#{messages['dev.menuitem.addFile.label']}"
 												icon="ui-icon-document" immediate="true"
 												actionListener="#{jJDevelopment.addToRoot}"
 												oncomplete="createFileDialogWidget.show()" />
@@ -118,11 +118,11 @@
 								</p:row>
 								<p:row>
 									<p:column colspan="2">
-										<p:outputLabel for="textMess" value="Comment : " />
+										<p:outputLabel for="textMess" value="#{messages['dev.comment.label']}" />
 										<br />
 										<p:inputTextarea id="textMess"
 											value="#{jJDevelopment.comment}" required="true"
-											requiredMessage="Set Comment to commit" rows="5" cols="40"
+											requiredMessage="#{messages['dev.comment.requiredMessage']}" rows="5" cols="40"
 											autoResize="false" />
 										<p:message for="textMess" id="commentmessage" closable="true" />
 									</p:column>
@@ -131,16 +131,16 @@
 									<p:column>
 										<p:selectBooleanCheckbox value="#{jJDevelopment.check}"
 											id="Marcasdone" />
-										<h:outputLabel value="Marc as done" for="Marcasdone" />
+										<h:outputLabel value="#{messages['dev.Marcasdone.label']}" for="Marcasdone" />
 									</p:column>
 									<p:column>
-										<p:commandButton value="Commit" id="submit"
+										<p:commandButton value="#{messages['dev.submit.button']}" id="submit"
 											icon="ui-icon-disk" actionListener="#{jJDevelopment.commit}"
 											update=":form:messages,:form:tabView,:form:fileTree,:form:taskmessage,:form:commentmessage" />
 									</p:column>
 								</p:row>
 							</p:panelGrid></td>
-						<td><p:panel header="File Content"
+						<td><p:panel header="#{messages['dev.fileContent.panel']}"
 								style="height:530px;width:700px;">
 								<p:tabView id="tabView" effect="Fade" effectDuration="slow"
 									activeIndex="#{jJDevelopment.activeTabIndex}" scrollable="true"
@@ -156,19 +156,7 @@
 											extraKeys="{ 'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);}}">
 											<p:ajax event="blur" update=":form:tabView"
 												listener="#{jJDevelopment.valueChangeHandlerCodeMirror}" />
-										</pe:codeMirror>
-										<table>
-											<tbody>
-												<tr>
-													<td><a href="javascript:autoFormatSelection()">
-															Autoformat Selected </a></td>
-													<td><a href="javascript:commentSelection(true)">
-															Comment Selected </a></td>
-													<td><a href="javascript:commentSelection(false)">
-															Uncomment Selected </a></td>
-												</tr>
-											</tbody>
-										</table>
+										</pe:codeMirror>										
 									</p:tab>
 								</p:tabView>
 							</p:panel></td>
@@ -191,9 +179,9 @@
 			</h:form>
 			<p:confirmDialog id="deletFileDialog"
 				widgetVar="deleteFileDialogWidget"
-				message="#{messages.label_delete_record}" showEffect="fade"
-				hideEffect="explode" header="#{messages.label_confirm_deletion}"
-				severity="alarm">
+				message="#{messages['dev.deletFileDialog.title']}" showEffect="fade"
+				hideEffect="explode" header="#{messages['dev.deletFileDialog.header']}"
+				severity="alarm">label_confirm_deletion
 				<p:outputPanel id="deletePanel">
 					<h:form id="deleteForm">
 						<p:commandButton id="deleteYesButton"
@@ -207,8 +195,8 @@
 			</p:confirmDialog>
 			<p:confirmDialog id="commitFileDialog"
 				widgetVar="commitFileDialogWidget"
-				message="#{messages.label_commit_record}" showEffect="fade"
-				hideEffect="explode" header="#{messages.label_confirm_commit}"
+				message="#{messages['dev.commitFileDialog.title']}" showEffect="fade"
+				hideEffect="explode" header="#{messages['dev.commitFileDialog.header']}"
 				severity="alarm">
 				<p:outputPanel id="commitPanel">
 					<h:form id="commitForm">
@@ -223,8 +211,8 @@
 			</p:confirmDialog>
 
 			<p:confirmDialog id="saveFileDialog" widgetVar="saveFileDialogWidget"
-				message="#{messages.label_saveFileChangeConfirm}" showEffect="fade"
-				hideEffect="explode" header="#{messages.label_saveFileChange}"
+				message="#{messages['dev.saveFileDialog.title']}" showEffect="fade"
+				hideEffect="explode" header="#{messages['dev.saveFileDialog.header']}"
 				severity="alarm">
 				<p:outputPanel id="savePanel">
 					<h:form id="saveForm">
@@ -262,7 +250,7 @@
 				</p:outputPanel>
 			</p:dialog>
 
-			<p:dialog id="uploadFileDialog" header="Upload File"
+			<p:dialog id="uploadFileDialog" header="#{messages['dev.uploadFileDialog.title']}"
 				widgetVar="uploadFileDialogWidget" resizable="true"
 				showEffect="fade" hideEffect="explode">
 				<p:outputPanel id="uploadFilePanel">

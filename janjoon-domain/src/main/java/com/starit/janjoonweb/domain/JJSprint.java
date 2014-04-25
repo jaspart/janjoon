@@ -37,20 +37,20 @@ public class JJSprint extends JJAbstractEntity {
 	@ManyToOne
 	private JJProject project;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<JJBuild> builds = new HashSet<JJBuild>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "sprint")
 	private Set<JJTask> tasks = new HashSet<JJTask>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<JJTask> obstacles = new HashSet<JJTask>();
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "JJSprintLinkJJContact", joinColumns = { @javax.persistence.JoinColumn(name = "Sprint_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Contact_ID", referencedColumnName = "id") })
 	private Set<JJContact> contacts = new HashSet<JJContact>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "sprint")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "sprint")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
 
 	@Override

@@ -2536,12 +2536,18 @@ public class JJRequirementBean {
 				boolean isCompleted = false;
 				for (JJTask task : tasks) {
 					if (task.getEnabled()) {
-						if (task.getCompleted()) {
-							isCompleted = true;
+						if (task.getCompleted() != null) {
+							if (task.getCompleted()) {
+								isCompleted = true;
+							} else {
+								isCompleted = false;
+								break;
+							}
 						} else {
 							isCompleted = false;
 							break;
 						}
+
 					}
 				}
 				if (isCompleted) {

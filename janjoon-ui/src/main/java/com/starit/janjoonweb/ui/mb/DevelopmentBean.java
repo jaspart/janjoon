@@ -42,6 +42,7 @@ import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.service.AbstractConfigManager;
 import com.starit.janjoonweb.ui.mb.util.service.FileMap;
 import com.starit.janjoonweb.ui.mb.util.service.GitConfigManager;
@@ -139,32 +140,23 @@ public class DevelopmentBean implements Serializable {
 
 		} else {
 			render = false;
+			String growlMessage = "";
 			if (product == null) {
-				FacesMessage message = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Please, select a Project and a Version ",
-						"Product and Version are set to null");
-				FacesContext.getCurrentInstance().addMessage(null, message);
-
+				growlMessage = "dev.nullProject.label";
 			} else {
 				if (version == null) {
-
-					FacesMessage message = new FacesMessage(
-							FacesMessage.SEVERITY_ERROR,
-							"Please Select a version ",
-							"Version is set to null");
-					FacesContext.getCurrentInstance().addMessage(null, message);
+					growlMessage = "dev.nullVersion.label";
 
 				} else {
-					FacesMessage message = new FacesMessage(
-							FacesMessage.SEVERITY_ERROR,
-							"Product not available on the version control manager.",
-							"Project  not available");
-					FacesContext.getCurrentInstance().addMessage(null, message);
+					growlMessage = "dev.notAvailableProject.label";
 
 				}
 			}
+			FacesMessage facesMessage = MessageFactory.getMessage(growlMessage,
+					FacesMessage.SEVERITY_ERROR, "");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
+
 		session.setAttribute("jJDevelopment", this);
 	}
 
@@ -196,25 +188,20 @@ public class DevelopmentBean implements Serializable {
 
 			} else {
 
+				String growlMessage = "";
 				if (product == null) {
-					FacesMessage message = new FacesMessage(
-							FacesMessage.SEVERITY_ERROR,
-							"Please Select a project and a version ",
-							"Project and version are set to null");
-					FacesContext.getCurrentInstance().addMessage(null, message);
-
+					growlMessage = "dev.nullProject.label";
 				} else {
 					if (version == null) {
-
-						FacesMessage message = new FacesMessage(
-								FacesMessage.SEVERITY_ERROR,
-								"Please Select a version ",
-								"Version is set to null");
-						FacesContext.getCurrentInstance().addMessage(null,
-								message);
+						growlMessage = "dev.nullVersion.label";
 
 					}
 				}
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						growlMessage, FacesMessage.SEVERITY_ERROR, "");
+				FacesContext.getCurrentInstance()
+						.addMessage(null, facesMessage);
+
 			}
 		} else {
 			JJProjectBean jJProjectBean = (JJProjectBean) session
@@ -226,11 +213,11 @@ public class DevelopmentBean implements Serializable {
 						prodbean.getProduct(), jJProjectBean.getProject()));
 			}
 			if (!render) {
-				FacesMessage message = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Product not available on the version control manager.",
-						"Project  not available");
-				FacesContext.getCurrentInstance().addMessage(null, message);
+				String growlMessage = "dev.notAvailableProject.label";
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						growlMessage, FacesMessage.SEVERITY_ERROR, "");
+				FacesContext.getCurrentInstance()
+						.addMessage(null, facesMessage);
 
 			}
 		}
@@ -461,6 +448,7 @@ public class DevelopmentBean implements Serializable {
 	}
 
 	public void pull() throws FileNotFoundException, IOException {
+		FacesMessage growlMessage = null;
 		if (configManager.pullRepository()) {
 			tree = configManager.listRepositoryContent(version.getName());
 
@@ -476,102 +464,87 @@ public class DevelopmentBean implements Serializable {
 				FileMap filemap = new FileMap(file.getName(), fileTexte, file);
 				files.add(filemap);
 			}
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Updated To Head", configManager.getPath());
-			FacesContext.getCurrentInstance().addMessage(null, message);
-
+			growlMessage = MessageFactory.getMessage("dev.updateToHead.label",
+					FacesMessage.SEVERITY_INFO, configManager.getUrl());
 		} else {
-			FacesMessage message = new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, "Error with Synchronisation",
-					configManager.getPath());
-			FacesContext.getCurrentInstance().addMessage(null, message);
-		}
+			growlMessage = MessageFactory.getMessage("dev.errorSynchro.label",
+					FacesMessage.SEVERITY_ERROR, configManager.getUrl());
 
+		}
+		FacesContext.getCurrentInstance().addMessage(null, growlMessage);
 	}
 
 	public void commit() {
 
 		JJStatus status = null;
+		for (FileMap fileMap : files) {
+			configManager.setFileTexte(fileMap.getFile(), fileMap.getTexte());
 
-		if (!comment.replace(" ", "").equalsIgnoreCase("")) {
-			for (FileMap fileMap : files) {
-				configManager.setFileTexte(fileMap.getFile(),
-						fileMap.getTexte());
+		}
+		System.out.println(task.toString());
+		if (check) {
 
-			}
-			System.out.println(task.toString());
-			if (check) {
+			task.setEndDateReal(new Date());
+			task.setCompleted(true);
+			status = jJStatusService.getOneStatus("DONE", "JJTask", true);
+			task.setStatus(status);
 
-				task.setEndDateReal(new Date());
-				task.setCompleted(true);
-				status = jJStatusService.getOneStatus("DONE", "JJTask", true);
-				task.setStatus(status);
-
-			}
-			message.setProduct(product);
-			message.setContact(contact);
-			message.setProject(project);
-			message.setVersioning(version);
-			message.setCreatedBy(contact);
-			message.setCreationDate(new Date());
-			message.setEnabled(true);
-			message.setMessage(comment);
-			message.setDescription("JJmessage For" + task.getName() + "nl"
-					+ task.getDescription());
-			message.setName("JJmessage For" + task.getName());
-			messageBean.save(message);
-			task.getMessages().add(message);
-			if (task.getStartDateReal() == null)
-				task.setStartDateReal(new Date());
-			status = jJStatusService
-					.getOneStatus("IN PROGRESS", "JJTask", true);
-			if (task.getStatus() != null) {
-				if (task.getStatus().getName().equalsIgnoreCase("TODO")) {
-					status = jJStatusService.getOneStatus("IN PROGRESS",
-							"JJTask", true);
-					task.setStatus(status);
-				}
-
-			} else {
+		}
+		message.setProduct(product);
+		message.setContact(contact);
+		message.setProject(project);
+		message.setVersioning(version);
+		message.setCreatedBy(contact);
+		message.setCreationDate(new Date());
+		message.setEnabled(true);
+		message.setMessage(comment);
+		message.setDescription("JJmessage For" + task.getName() + "nl"
+				+ task.getDescription());
+		message.setName("JJmessage For" + task.getName());
+		messageBean.save(message);
+		task.getMessages().add(message);
+		if (task.getStartDateReal() == null)
+			task.setStartDateReal(new Date());
+		status = jJStatusService.getOneStatus("IN PROGRESS", "JJTask", true);
+		if (task.getStatus() != null) {
+			if (task.getStatus().getName().equalsIgnoreCase("TODO")) {
 				status = jJStatusService.getOneStatus("IN PROGRESS", "JJTask",
 						true);
 				task.setStatus(status);
 			}
 
-			task.persist();
+		} else {
+			status = jJStatusService
+					.getOneStatus("IN PROGRESS", "JJTask", true);
+			task.setStatus(status);
+		}
 
-			if (configManager.checkIn(task.getId() + ":" + task.getName()
-					+ " : " + comment)) {
-				FacesMessage message = new FacesMessage(
-						FacesMessage.SEVERITY_INFO, "Commited",
-						configManager.getPath());
-				FacesContext.getCurrentInstance().addMessage(null, message);
-				if (configManager.pushRepository()) {
-					message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Pushed to remote Repository",
-							configManager.getPath());
-					FacesContext.getCurrentInstance().addMessage(null, message);
-					comment = "";
-				} else {
-					message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Probleme Lors du Fetch ", configManager.getPath());
-					FacesContext.getCurrentInstance().addMessage(null, message);
-				}
+		task.persist();
+		FacesMessage growlMessage = null;
 
+		if (configManager.checkIn(task.getId() + ":" + task.getName() + " : "
+				+ comment)) {
+			FacesMessage commitMessage = MessageFactory.getMessage(
+					"dev.commitSuccess.label", FacesMessage.SEVERITY_ERROR, "");
+			FacesContext.getCurrentInstance().addMessage(null, commitMessage);
+			if (configManager.pushRepository()) {
+				growlMessage = MessageFactory.getMessage(
+						"dev.pushSucces.label", FacesMessage.SEVERITY_INFO, "");
+
+				comment = "";
 			} else {
-
-				FacesMessage message = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR, "Probleme Lors du Commit",
-						configManager.getPath());
-				FacesContext.getCurrentInstance().addMessage(null, message);
+				growlMessage = MessageFactory.getMessage("dev.pushError.label",
+						FacesMessage.SEVERITY_ERROR, "");
 			}
+
 		} else {
 
-			FacesMessage message = new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, "Probleme Lors du Commit",
-					"You Have to create comment before commiting");
-			FacesContext.getCurrentInstance().addMessage(null, message);
+			growlMessage = MessageFactory.getMessage("dev.commitError.label",
+					FacesMessage.SEVERITY_ERROR, "");
+
 		}
+		FacesContext.getCurrentInstance().addMessage(null, growlMessage);
+
 	}
 
 	public void onSelectTree(NodeSelectEvent event) {
@@ -582,10 +555,6 @@ public class DevelopmentBean implements Serializable {
 			int i = contains(file);
 			if (i == -1) {
 
-				FacesMessage message = new FacesMessage(
-						FacesMessage.SEVERITY_INFO, "Selected", event
-								.getTreeNode().toString());
-				FacesContext.getCurrentInstance().addMessage(null, message);
 				try (FileInputStream inputStream = new FileInputStream(file)) {
 
 					String fileTexte = IOUtils.toString(inputStream);
@@ -669,13 +638,12 @@ public class DevelopmentBean implements Serializable {
 			if (task.getStartDateReal() == null)
 				task.setStartDateReal(new Date());
 			task.persist();
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Message created", message.getName());
+			msg = MessageFactory.getMessage("message_successfully_created",
+					FacesMessage.SEVERITY_INFO, message.getName());
 		} else {
 			loggedIn = false;
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN,
-					"Creation Error",
-					"one or more  requeired field are set to null");
+			msg = MessageFactory.getMessage("message_unsuccessfully_created",
+					FacesMessage.SEVERITY_ERROR, message.getName());
 		}
 
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -709,8 +677,9 @@ public class DevelopmentBean implements Serializable {
 		if (i != -1) {
 			updatetabView(i, files.get(i));
 		}
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"File deleted", f.getName() + " supprimé avec succes");
+		FacesMessage msg = MessageFactory.getMessage(
+				"dev.file_successfully_deleted", FacesMessage.SEVERITY_INFO,
+				f.getName());
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 
 	}
@@ -719,8 +688,9 @@ public class DevelopmentBean implements Serializable {
 		File f = (File) selectedTree.getData();
 		configManager.checkIn("commitFile" + f.getName());
 		System.out.println("commitFile");
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"File commited", f.getName() + " ajouté au depôt avec succes");
+		FacesMessage msg = MessageFactory.getMessage(
+				"dev.file_successfully_commited", FacesMessage.SEVERITY_INFO,
+				f.getName());
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 
@@ -750,35 +720,32 @@ public class DevelopmentBean implements Serializable {
 			if (fileOrFolder) {
 				if (treeOperation.addFile(version.getName(),
 						(File) selectedTree.getData(), createdFileName)) {
-					msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"File Created", createdFileName
-									+ " créé avec succes");
+					msg = MessageFactory.getMessage(
+							"dev.file_successfully_created",
+							FacesMessage.SEVERITY_INFO, createdFileName);
 					tree = configManager.listRepositoryContent(version
 							.getName());
 					System.out.println("kamalna file ");
 				} else {
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Problem in File Creation",
-							"erreur lors de la création du fichier "
-									+ createdFileName);
+					msg = MessageFactory.getMessage(
+							"dev.file_unsuccessfully_created",
+							FacesMessage.SEVERITY_ERROR, createdFileName);
 
 				}
 
 			} else {
 				if (treeOperation.addFolder(version.getName(),
 						(File) selectedTree.getData(), createdFileName)) {
-					msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Folder Created", createdFileName
-									+ " créé avec succes");
+					msg = MessageFactory.getMessage(
+							"dev.file_successfully_created",
+							FacesMessage.SEVERITY_INFO, createdFileName);
 					tree = configManager.listRepositoryContent(version
 							.getName());
 					System.out.println("kamalna Folder ");
 				} else {
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Problem in Folder Creation",
-							"erreur lors de la création du dossier "
-									+ createdFileName);
-
+					msg = MessageFactory.getMessage(
+							"dev.file_unsuccessfully_created",
+							FacesMessage.SEVERITY_ERROR, createdFileName);
 				}
 			}
 
@@ -786,34 +753,32 @@ public class DevelopmentBean implements Serializable {
 			if (fileOrFolder) {
 				if (treeOperation.addFile(version.getName(), null,
 						createdFileName)) {
-					msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"File Created", createdFileName
-									+ " créé avec succes");
+					msg = MessageFactory.getMessage(
+							"dev.file_successfully_created",
+							FacesMessage.SEVERITY_INFO, createdFileName);
 					tree = configManager.listRepositoryContent(version
 							.getName());
 					System.out.println("kamalna file ");
 				} else {
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Problem in File Creation",
-							"erreur lors de la création du fichier "
-									+ createdFileName);
+					msg = MessageFactory.getMessage(
+							"dev.file_unsuccessfully_created",
+							FacesMessage.SEVERITY_ERROR, createdFileName);
 
 				}
 
 			} else {
 				if (treeOperation.addFolder(version.getName(), null,
 						createdFileName)) {
-					msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Folder Created", createdFileName
-									+ " créé avec succes");
+					msg = MessageFactory.getMessage(
+							"dev.file_successfully_created",
+							FacesMessage.SEVERITY_INFO, createdFileName);
 					tree = configManager.listRepositoryContent(version
 							.getName());
 					System.out.println("kamalna Folder ");
 				} else {
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Problem in Folder Creation",
-							"erreur lors de la création du dossier "
-									+ createdFileName);
+					msg = MessageFactory.getMessage(
+							"dev.file_unsuccessfully_created",
+							FacesMessage.SEVERITY_ERROR, createdFileName);
 
 				}
 			}
@@ -841,23 +806,26 @@ public class DevelopmentBean implements Serializable {
 								.getInputstream());
 
 			if (upload) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"Succesful", event.getFile().getFileName()
-								+ " is uploaded.");
+				FacesMessage msg = MessageFactory.getMessage(
+						"dev.file_successfully_uploaded",
+						FacesMessage.SEVERITY_INFO, event.getFile()
+								.getFileName());
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 				tree = configManager.listRepositoryContent(version.getName());
 				RequestContext context = RequestContext.getCurrentInstance();
 				context.execute("createFileDialogWidget.hide()");
 			} else {
-				FacesMessage msg = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR, "Error", event.getFile()
-								.getFileName() + " is not uploaded.");
+				FacesMessage msg = MessageFactory.getMessage(
+						"dev.file_unsuccessfully_uploaded",
+						FacesMessage.SEVERITY_ERROR, event.getFile()
+								.getFileName());
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}
 		} catch (IOException e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Error", event.getFile().getFileName()
-							+ " is not uploaded.");
+			FacesMessage msg = MessageFactory.getMessage(
+					"dev.file_unsuccessfully_uploaded",
+					FacesMessage.SEVERITY_ERROR, event.getFile()
+							.getFileName());
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 

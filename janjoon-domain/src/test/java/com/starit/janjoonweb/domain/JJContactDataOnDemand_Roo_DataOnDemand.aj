@@ -3,15 +3,15 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJCompanyDataOnDemand;
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJContactRepository;
 import com.starit.janjoonweb.domain.JJContactService;
-import com.starit.janjoonweb.domain.JJJobDataOnDemand;
-import com.starit.janjoonweb.domain.JJProductDataOnDemand;
-import com.starit.janjoonweb.domain.JJProjectDataOnDemand;
-import com.starit.janjoonweb.domain.JJVersionDataOnDemand;
+import com.starit.janjoonweb.domain.JJJob;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJVersion;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,21 +34,6 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
     private List<JJContact> JJContactDataOnDemand.data;
     
     @Autowired
-    JJCompanyDataOnDemand JJContactDataOnDemand.jJCompanyDataOnDemand;
-    
-    @Autowired
-    JJJobDataOnDemand JJContactDataOnDemand.jJJobDataOnDemand;
-    
-    @Autowired
-    JJProductDataOnDemand JJContactDataOnDemand.jJProductDataOnDemand;
-    
-    @Autowired
-    JJProjectDataOnDemand JJContactDataOnDemand.jJProjectDataOnDemand;
-    
-    @Autowired
-    JJVersionDataOnDemand JJContactDataOnDemand.jJVersionDataOnDemand;
-    
-    @Autowired
     JJContactService JJContactDataOnDemand.jJContactService;
     
     @Autowired
@@ -59,6 +44,7 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
         setAccountNonExpired(obj, index);
         setAccountNonLocked(obj, index);
         setCalendar(obj, index);
+        setCompany(obj, index);
         setCreatedBy(obj, index);
         setCreationDate(obj, index);
         setCredentialsNonExpired(obj, index);
@@ -67,6 +53,10 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
         setEmail(obj, index);
         setEnabled(obj, index);
         setFirstname(obj, index);
+        setJob(obj, index);
+        setLastProduct(obj, index);
+        setLastProject(obj, index);
+        setLastVersion(obj, index);
         setLdap(obj, index);
         setManager(obj, index);
         setName(obj, index);
@@ -90,6 +80,11 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
     public void JJContactDataOnDemand.setCalendar(JJContact obj, int index) {
         String calendar = "calendar_" + index;
         obj.setCalendar(calendar);
+    }
+    
+    public void JJContactDataOnDemand.setCompany(JJContact obj, int index) {
+        JJCompany company = null;
+        obj.setCompany(company);
     }
     
     public void JJContactDataOnDemand.setCreatedBy(JJContact obj, int index) {
@@ -133,6 +128,26 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
             firstname = firstname.substring(0, 100);
         }
         obj.setFirstname(firstname);
+    }
+    
+    public void JJContactDataOnDemand.setJob(JJContact obj, int index) {
+        JJJob job = null;
+        obj.setJob(job);
+    }
+    
+    public void JJContactDataOnDemand.setLastProduct(JJContact obj, int index) {
+        JJProduct lastProduct = null;
+        obj.setLastProduct(lastProduct);
+    }
+    
+    public void JJContactDataOnDemand.setLastProject(JJContact obj, int index) {
+        JJProject lastProject = null;
+        obj.setLastProject(lastProject);
+    }
+    
+    public void JJContactDataOnDemand.setLastVersion(JJContact obj, int index) {
+        JJVersion lastVersion = null;
+        obj.setLastVersion(lastVersion);
     }
     
     public void JJContactDataOnDemand.setLdap(JJContact obj, int index) {

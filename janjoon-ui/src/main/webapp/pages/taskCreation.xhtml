@@ -5,12 +5,11 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition>
-	<p:separator />
+	<p:separator rendered="#{jjsprint.renderTaskForm}" />
 	<p:panel id="paneltoUpdate" header="Task Creation"
 		rendered="#{jjsprint.renderTaskForm}">
 
 		<p:selectOneMenu id="catSelectOneMenu"
-			disabled="#{!jjsprint.renderTaskForm}"
 			value="#{jJSprintBean.category}" panelStyle="width:300px"
 			effect="fold" editable="false">
 			<f:selectItem itemValue="#{null}" itemLabel="-- select initiator--" />
@@ -23,7 +22,7 @@
 		</p:selectOneMenu>
 		<p:panelGrid id="reqPanel">
 			<p:row>
-				<p:column colspan="3">
+				<p:column >
 					<p:panel rendered="#{jJSprintBean.category == null}"
 						header="Please Select a Category "
 						style="width:300px;height:150px" />
@@ -33,6 +32,8 @@
 						<p:selectOneListbox id="reqSelectManyMenu"
 							style="width:300px;height:150px"
 							value="#{jJSprintBean.requirement}">
+							<f:selectItem itemValue="#{null}"
+								itemLabel="-- selelect one Requirement --" />
 							<f:selectItems value="#{jJSprintBean.reqList}" var="req"
 								itemLabel="#{req.name}" itemValue="#{req}" />
 							<f:converter
@@ -41,9 +42,9 @@
 						</p:selectOneListbox>
 					</p:panel>
 				</p:column>
-				<p:column colspan="3">
+				<p:column rendered="#{jjsprint.render}">
 					<p:dataTable id="taskTable" value="#{jjsprint.taskList}" var="t"
-						scrollable="true" scrollHeight="200" style="width:350px;"
+						scrollable="true" scrollHeight="200" style="width:350px;" rowKey="#{t.id}"
 						emptyMessage="#{messages.label_notFound}">
 
 						<p:column headerText="Name" style="width:200px">
@@ -59,7 +60,7 @@
 			</p:row>
 			<f:facet name="footer">
 				<p:row>
-					<p:column colspan="3">
+					<p:column >
 						<p:commandButton value="#{messages.label_create} JJTask"
 							id="createTaskButton" icon="ui-icon-circle-plus"
 							disabled="#{jJSprintBean.requirement == null}"
@@ -73,18 +74,20 @@
 							value="#{messages.label_create} JJTask" showEffect="fade"
 							hideEffect="fade" />
 					</p:column>
-					<p:column colspan="3">
+					<p:column >
 						<p:commandButton value="Done" id="doneButtonr"
 							rendered="#{jjsprint.render}"
 							update=":projecttabview:SprintTabView" immediate="true"
 							action="#{jJSprintBean.doneEvent}"
 							actionListener="#{jJSprintBean.attrListener}">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+
 						</p:commandButton>
 						<p:commandButton value="Done" id="doneButton"
-							rendered="#{!jjsprint.render}" update="@(parent) paneltoUpdate"
-							immediate="true" action="#{jJSprintBean.doneEvent}"
-							actionListener="#{jJSprintBean.attrListener}">
+							rendered="#{!jjsprint.render}"
+							update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm"
+							immediate="true" actionListener="#{jJSprintBean.doneEvent}">
+
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 						</p:commandButton>
 					</p:column>

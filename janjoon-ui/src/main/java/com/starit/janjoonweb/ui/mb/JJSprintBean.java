@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.calendar.Calendar;
+import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
@@ -23,11 +24,24 @@ import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.primefaces.event.DragDropEvent;
+import org.primefaces.event.TreeDragDropEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
-import com.starit.janjoonweb.domain.*;
+import com.starit.janjoonweb.domain.JJBug;
+import com.starit.janjoonweb.domain.JJBugService;
+import com.starit.janjoonweb.domain.JJCategory;
+import com.starit.janjoonweb.domain.JJCategoryService;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJRequirement;
+import com.starit.janjoonweb.domain.JJRequirementService;
+import com.starit.janjoonweb.domain.JJSprint;
+import com.starit.janjoonweb.domain.JJStatus;
+import com.starit.janjoonweb.domain.JJStatusService;
+import com.starit.janjoonweb.domain.JJTask;
+import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -129,8 +143,6 @@ public class JJSprintBean {
 
 	public List<JJRequirement> getReqList() {
 
-		reqList = jJRequirementService.getRequirements(category, project, null,
-				null, null, null, false, true, true);
 		return reqList;
 	}
 
@@ -161,10 +173,6 @@ public class JJSprintBean {
 		reqList = null;
 		requirement = null;
 
-	}
-
-	public void updatereqPanel() {
-		requirement = null;
 	}
 
 	public List<SprintUtil> getSprintList() {
@@ -225,6 +233,14 @@ public class JJSprintBean {
 				.get("sprintUtilValue");
 	}
 
+	public void updatereqPanel() {
+		reqList = jJRequirementService.getRequirements(category, project, null,
+				null, null, null, false, true, true);
+		requirement = null;
+		if (!reqList.isEmpty())
+			requirement = reqList.get(0);
+	}
+
 	public void initJJSprintPage() {
 
 		System.out.println("3");
@@ -240,19 +256,26 @@ public class JJSprintBean {
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
 
 		setJJSprint_(sprintUtil.getSprint());
-		System.out.println(getJJSprint_().getId());
+		for (JJContact c : getJJSprint_().getContacts()) {
+			System.out.println(c.getName());
+		}
+		System.out.println(getJJSprint_().getId() + ":"
+				+ getJJSprint_().getName());
+
 		getJJSprint_().setUpdatedBy(contact);
 		getJJSprint_().setUpdatedDate(new Date());
 		jJSprintService.updateJJSprint(getJJSprint_());
+		System.out.println(getJJSprint_().getId() + ":"
+				+ getJJSprint_().getName());
+		sprintUtil.setSprint(getJJSprint_());
+		sprintList.set(contains(sprintUtil), sprintUtil);
+
 		String message = "message_successfully_updated";
 		System.out.println(sprintUtil.getSprint().getName());
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJSprint");
-
-		reset();
-		System.out.println("reset");
-		findAllJJSprints();
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		System.out.println("reset");
 
 	}
 
@@ -306,45 +329,94 @@ public class JJSprintBean {
 
 	}
 
-	public void addTaskToProg(DragDropEvent ddEvent) {
+	public void addTaskToProg(DragDropEvent ddevent) {
 
-		System.out.println("addTaskToProg");
-		JJTask task = (JJTask) ddEvent.getData();
-		attrListener(null);
-		sprintUtil.getTodoTask().remove(task);
-		task.setStartDateReal(new Date());
-		jJTaskService.updateJJTask(task);
-		sprintUtil.getProgressTask().add(task);
-		String message = "message_successfully_updated";
-		FacesMessage facesMessage = MessageFactory
-				.getMessage(message, "JJTask");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		if (ddevent.getDragId().contains(":todoIcon")) {
+			JJTask dropedTask = (JJTask) ddevent.getData();
+			System.out.println(ddevent.getDragId() + ":" + ddevent.getDropId());
+			JJStatus status = jJStatusService.getOneStatus("IN PROGRESS",
+					"JJTask", true);
+			System.out.println("addTaskToProg:"
+					+ dropedTask.getStatus().getName());
+			sprintUtil = SprintUtil.getSprintUtil(dropedTask.getSprint()
+					.getId(), sprintList);
+			dropedTask.setStartDateReal(new Date());
+			dropedTask.setStatus(status);
+			jJTaskService.updateJJTask(dropedTask);
+			System.out
+					.println("IN PROGRESS" + sprintUtil.getSprint().getName());
+			sprintUtil.getProgressTask().add(dropedTask);
+			sprintUtil.getTodoTask().remove(dropedTask);
+			sprintList.set(contains(sprintUtil), sprintUtil);
+			String message = "message_successfully_updated";
+			FacesMessage facesMessage = MessageFactory.getMessage(message,
+					"JJTask");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
+
+		else {
+
+			FacesMessage facesMessage = new FacesMessage(
+					FacesMessage.SEVERITY_WARN, "non autorisée", "");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
 
 	}
 
 	public void addTaskToDone(DragDropEvent ddevent) {
-		System.out.println("addTaskToDone");
-		JJTask task = (JJTask) ddevent.getData();
-		attrListener(null);
-		sprintUtil.getProgressTask().remove(task);
-		task.setEndDateReal(new Date());
-		task.setCompleted(true);
-		jJTaskService.updateJJTask(task);
-		sprintUtil.getDoneTask().add(task);
-		String message = "message_successfully_updated";
-		FacesMessage facesMessage = MessageFactory
-				.getMessage(message, "JJTask");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+		if (ddevent.getDragId().contains(":progIcon")) {
+			JJTask dropedTask = (JJTask) ddevent.getData();
+
+			System.out.println(ddevent.getDragId() + ":" + ddevent.getDropId());
+
+			JJStatus status = jJStatusService.getOneStatus("DONE", "JJTask",
+					true);
+			System.out.println("addTaskToDone:"
+					+ dropedTask.getStatus().getName());
+
+			sprintUtil = SprintUtil.getSprintUtil(dropedTask.getSprint()
+					.getId(), sprintList);
+
+			dropedTask.setEndDateReal(new Date());
+			dropedTask.setCompleted(true);
+			dropedTask.setStatus(status);
+			jJTaskService.updateJJTask(dropedTask);
+
+			System.out.println("DONE" + sprintUtil.getSprint().getName());
+			sprintUtil.getDoneTask().add(dropedTask);
+			sprintUtil.getProgressTask().remove(dropedTask);
+
+			sprintList.set(contains(sprintUtil), sprintUtil);
+			String message = "message_successfully_updated";
+			FacesMessage facesMessage = MessageFactory.getMessage(message,
+					"JJTask");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+		} else {
+			FacesMessage facesMessage = new FacesMessage(
+					FacesMessage.SEVERITY_WARN, "non autorisée", "");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
 
 	}
 
 	public void handleAddButton(ActionEvent e) {
 		attrListener(e);
 		sprintUtil.setRenderTaskForm(!sprintUtil.isRenderTaskForm());
-		requirement = null;
-		category = null;
-		categoryList = null;
-		reqList = null;
+
+		if (sprintUtil.isRenderTaskForm()) {
+			categoryList = null;
+			getCategoryList();
+			getReqList();
+
+		} else {
+			requirement = null;
+			category = null;
+			categoryList = null;
+			reqList = null;
+		}
+
 	}
 
 	public void persistTask() {
@@ -364,11 +436,18 @@ public class JJSprintBean {
 		task.setDescription(task.getName() + " /CreatedBy:"
 				+ task.getCreatedBy().getName() + " at :"
 				+ task.getCreationDate());
+
 		jJTaskService.saveJJTask(task);
 		if (!sprintUtil.isRender()) {
 			sprintUtil = new SprintUtil(sprintUtil.getSprint(),
 					jJTaskService.getSprintTasks(sprintUtil.getSprint()));
+			System.out.println(sprintUtil.isRenderTaskForm());
+			sprintUtil.setRenderTaskForm(true);
+			sprintUtil.setTaskList(null);
+			sprintList.set(contains(sprintUtil), sprintUtil);
+
 		} else {
+
 			sprintUtil.getTaskList().add(task);
 		}
 		String message = "message_successfully_created";
@@ -380,24 +459,28 @@ public class JJSprintBean {
 
 	}
 
+	public void doneEvent(ActionEvent e) {
+
+		attrListener(e);
+		sprintUtil = new SprintUtil(sprintUtil.getSprint(),
+				jJTaskService.getSprintTasks(sprintUtil.getSprint()));
+
+		System.out.println(sprintUtil.isRenderTaskForm());
+
+		sprintUtil.setRenderTaskForm(false);
+		sprintList.set(contains(sprintUtil), sprintUtil);
+		requirement = null;
+		category = null;
+		categoryList = null;
+		reqList = null;
+
+	}
+
 	public void doneEvent() {
 
-		if (sprintUtil.isRender()) {
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			session.setAttribute("jJSprintBean", new JJSprintBean());
-		} else {
-
-			sprintUtil = new SprintUtil(sprintUtil.getSprint(),
-					jJTaskService.getSprintTasks(sprintUtil.getSprint()));
-			System.out.println(sprintUtil.isRenderTaskForm());
-			sprintUtil.setRenderTaskForm(false);
-			requirement = null;
-			category = null;
-			categoryList = null;
-			reqList = null;
-		}
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		session.setAttribute("jJSprintBean", new JJSprintBean());
 
 	}
 

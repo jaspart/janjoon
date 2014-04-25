@@ -30,6 +30,7 @@
 					<p:selectManyMenu id="sprintcts"
 						value="#{jjsprint.sprint.contacts}"
 						readonly="#{jjsprint.renderTaskForm}"
+						disabled="#{jjsprint.renderTaskForm}"
 						style="width:150px;height:150px" showCheckbox="true">
 						<f:selectItems value="#{jJContactBean.contactDataTable}" var="c"
 							itemLabel="#{c.name}" itemValue="#{c}" />
@@ -46,6 +47,7 @@
 					<p:calendar id="sprintCSD" navigator="true" effect="slideDown"
 						pattern="dd/MM/yyyy" required="true"
 						readonly="#{jjsprint.renderTaskForm}"
+						disabled="#{jjsprint.renderTaskForm}"
 						value="#{jjsprint.sprint.startDate}" />
 				</p:column>
 				<p:column>
@@ -54,6 +56,7 @@
 				<p:column>
 					<p:calendar id="sprintCED" navigator="true" effect="slideDown"
 						pattern="dd/MM/yyyy" required="true"
+						disabled="#{jjsprint.renderTaskForm}"
 						readonly="#{jjsprint.renderTaskForm}"
 						value="#{jjsprint.sprint.endDate}" />
 				</p:column>
@@ -93,7 +96,7 @@
 				<p:commandButton id="createTaskSaveButton1"
 					rendered="#{!jjsprint.render}" value="#{messages.label_save}"
 					action="#{jJSprintBean.persistTask}"
-					update=":projecttabview:SprintTabView:sprintForm,:projecttabview:SprintTabView:taskSprintForm" />
+					update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm" />
 				<p:commandButton id="createTaskCloseButton"
 					value="#{messages.label_close}"
 					onclick="createTaskDialogWidget.hide()" type="button" />

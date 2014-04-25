@@ -108,7 +108,16 @@ public class JJContactBean {
 			System.out.println(contactAdmin.getName());
 
 			contactAdmin.setEnabled(false);
-			jJContactService.updateJJContact(contactAdmin);
+			if(!jJContactService.updateJJContactTransaction(contactAdmin))
+			{
+				
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"jjcontact_unsuccessfully_created",
+						FacesMessage.SEVERITY_ERROR, "JJContact");
+				contactAdmin.setEmail("");
+				contactAdmin.setPassword("");
+				FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+			}
 
 		}
 	}
@@ -125,7 +134,7 @@ public class JJContactBean {
 
 	public void save(JJPermissionBean jJPermissionBean) {
 		System.out.println("SAVING Contact...");
-		String message = "";
+		FacesMessage facesMessage = null;
 
 		if (contactAdmin.getId() == null) {
 			System.out.println("IS a new JJContact");
@@ -133,31 +142,42 @@ public class JJContactBean {
 					+ contactAdmin.getFirstname() + " "
 					+ contactAdmin.getName());
 
-			jJContactService.saveJJContact(contactAdmin);
-
-			message = "message_successfully_created";
-
-			JJContact contact = jJContactService.findJJContact(contactAdmin
-					.getId());
-
-			jJPermissionBean.setContact(contact);
-
-			disabled = true;
+			if (jJContactService.saveJJContactTransaction(contactAdmin)) {
+				facesMessage = MessageFactory.getMessage(
+						"message_successfully_created",
+						FacesMessage.SEVERITY_INFO, "JJContact");
+				JJContact contact = jJContactService.findJJContact(contactAdmin
+						.getId());
+				jJPermissionBean.setContact(contact);
+				disabled = true;
+			} else {
+				
+				facesMessage = MessageFactory.getMessage(
+						"jjcontact_unsuccessfully_created",
+						FacesMessage.SEVERITY_ERROR, "JJContact");
+				contactAdmin.setEmail("");
+				contactAdmin.setPassword("");
+			}
 
 		} else {
 
 			contactAdmin.setUpdatedDate(new Date());
-
-			jJContactService.updateJJContact(contactAdmin);
-			message = "message_successfully_updated";
-
-			disabled = true;
-			// RequestContext context = RequestContext.getCurrentInstance();
-			// context.execute("contactDialogWidget.hide()");
-		}
-
-		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJContact");
+			if(jJContactService.updateJJContactTransaction(contactAdmin))
+			{
+				facesMessage = MessageFactory.getMessage(
+						"message_successfully_updated", FacesMessage.SEVERITY_INFO,
+						"JJContact");
+				disabled = true;
+			}else
+			{
+				facesMessage = MessageFactory.getMessage(
+						"jjcontact_unsuccessfully_created",
+						FacesMessage.SEVERITY_ERROR, "JJContact");
+				contactAdmin.setEmail("");
+				contactAdmin.setPassword("");
+			}
+			}
+			
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}

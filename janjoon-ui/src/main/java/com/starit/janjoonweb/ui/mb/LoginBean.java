@@ -32,6 +32,7 @@ import org.springframework.stereotype.Component;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @Scope("session")
 @Component("loginBean")
@@ -104,7 +105,7 @@ public class LoginBean implements Serializable {
 
 			FacesMessage message = new FacesMessage(
 					FacesMessage.SEVERITY_ERROR,
-					"Invalid username/password. Reason ",
+					"Invalid username/password. Reason :",
 					loginError.getMessage());
 			FacesContext.getCurrentInstance().addMessage("login", message);
 
@@ -182,12 +183,22 @@ public class LoginBean implements Serializable {
 
 		FacesContext ctx = FacesContext.getCurrentInstance();
 		String viewId = ctx.getViewRoot().getViewId();
+		
+		if (event.getComponent().getClientId()
+				.contains("projectSelectOneMenu")) 
+		{
+			HttpSession session = (HttpSession) ctx.getExternalContext()
+					.getSession(false);
+
+			JJSprintBean jJSprintBean = (JJSprintBean) session
+					.getAttribute("jJSprintBean");
+			jJSprintBean=null;
+		}
 
 		if (viewId.contains("development")) {
 
-			RequestContext context = RequestContext.getCurrentInstance();
-			FacesContext fContext = FacesContext.getCurrentInstance();
-			HttpSession session = (HttpSession) fContext.getExternalContext()
+			RequestContext context = RequestContext.getCurrentInstance();			
+			HttpSession session = (HttpSession) ctx.getExternalContext()
 					.getSession(false);
 
 			JJVersionBean jJVersionBean = (JJVersionBean) session
@@ -319,10 +330,7 @@ public class LoginBean implements Serializable {
 
 		} else {
 
-			FacesMessage message = new FacesMessage(
-					FacesMessage.SEVERITY_ERROR,
-					"Please, select a Product and a Version ",
-					"Product or Version is set to null");
+			FacesMessage message =MessageFactory.getMessage("dev.nullProject.label", FacesMessage.SEVERITY_ERROR, "");
 			FacesContext.getCurrentInstance().addMessage(null, message);
 			System.out.println(message.getDetail());
 
