@@ -230,6 +230,23 @@ public class UsageChecker {
 		return result;
 	}
 
+	public static boolean check(String file) {
+		boolean result = false;
+		workingdirectory = System.getProperty("user.dir");
+		if (!verifyFile(workingdirectory + File.separator + "janjoon-base.jar")) {
+			workingdirectory = System.getProperty("user.dir") + File.separator
+					+ "src" + File.separator + "run-distrib";
+		}
+		try {
+			license = readFile(workingdirectory + File.separator
+					+ file);
+			result = UsageChecker.validate(license);
+		} catch (Exception e) {
+			System.out.println("problem=" + e);
+		}
+		return result;
+	}
+
 	public static void main(String[] args) {
 		check();
 	}
