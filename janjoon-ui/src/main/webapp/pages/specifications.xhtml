@@ -25,7 +25,8 @@
 					<p:commandButton id="commandButton" value="Import"
 						style="float: right;"
 						actionListener="#{jJRequirementBean.loadImportFormat()}"
-						update=":dialog" oncomplete="dialogWidget.show()" />
+						update=":requirementImportDialog"
+						oncomplete="requirementImportDialogWidget.show()" />
 				</tr>
 				<tr />
 
@@ -56,8 +57,9 @@
 													<p:commandButton id="releaseRequirementButton"
 														icon=".ui-icon-carat-2-n-s"
 														title="Release All Requirements"
-														actionListener="#{jJRequirementBean.releaseRequirement(tableDataModel.categoryId)}"
-														update=":specForm" />
+														actionListener="#{jJRequirementBean.preReleaseRequirement(tableDataModel.categoryId)}"
+														oncomplete="requirementReleaseDialogWidget.show()" />
+
 												</p:column>
 												<p:column colspan="4">
 													<p:inputText id="globalFilter" style="width:100%"
@@ -71,10 +73,6 @@
 														oncomplete="requirementDialogWidget.show()" />
 												</p:column>
 												<p:column colspan="1">
-													<!-- 													<p:commandButton id="exportButton" icon="ui-icon-clipboard" type="button" ajax="false" /> -->
-													<!-- 													<p:menu overlay="true" trigger="exportButton" my="left top" -->
-													<!-- 														at="left bottom"> -->
-													<!-- 														<p:menuitem> -->
 													<h:commandLink id="pdf"
 														actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}">
 														<p:graphicImage value="/resources/images/pdf.png" />
@@ -84,8 +82,6 @@
 													</h:commandLink>
 													<p:tooltip for="pdf" value="export to PDF"
 														showEffect="fade" hideEffect="fade" />
-													<!-- 														</p:menuitem> -->
-													<!-- 													</p:menu> -->
 												</p:column>
 											</p:row>
 										</f:facet>
@@ -169,209 +165,212 @@
 			<p:outputPanel id="requirementDialogPanel">
 				<h:form id="requirementDialogForm">
 					<p:growl id="msg" />
-					<p:panelGrid style="margin-top:10px">
-						<p:row>
-							<p:column>
-								<p:inputText id="name"
-									value="#{jJRequirementBean.requirement.name}" required="true"
-									widgetVar="nameWidget" label="Requirement Name"
-									requiredMessage="Requirement Name is a required value">
-								</p:inputText>
-								<p:message for="name" id="msgName" />
-								<p:watermark for="name" value="Name *" />
-							</p:column>
-							<p:column>
-								<h:outputText for="status" value="Status:" />
-								<p:selectOneMenu id="status"
-									value="#{jJRequirementBean.requirementStatus}"
-									panelStyle="width:150px" effect="fade" style="width:150px"
-									filter="true" filterMatchMode="startsWith"
-									disabled="#{jJRequirementBean.disabledStatus}">
-									<f:converter
-										converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
-									<f:selectItem
-										itemLabel="#{jJRequirementBean.requirementStatus.name}"
-										itemValue="#{jJRequirementBean.requirementStatus}" />
-									<f:selectItems
-										value="#{jJRequirementBean.requirementStatusList}" var="c"
-										itemLabel="#{c.name}" itemValue="#{c}" />
-									<p:ajax process="@this" partialSubmit="true"
-										listener="#{jJRequirementBean.handleSelectStatus()}" />
-								</p:selectOneMenu>
-							</p:column>
-							<p:column>
-								<h:outputText for="project" value="Project:" />
-								<p:selectOneMenu id="project"
-									value="#{jJRequirementBean.requirementProject}"
-									panelStyle="width:150px" effect="fade" style="width:150px"
-									filter="true" filterMatchMode="startsWith" disabled="true">
-									<f:converter
-										converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
-									<f:selectItem
-										itemLabel="#{jJRequirementBean.requirementProject.name}"
-										itemValue="#{jJRequirementBean.requirementProject}" />
-									<f:selectItems
-										value="#{jJRequirementBean.requirementProjectList}" var="c"
-										itemLabel="#{c.name}" itemValue="#{c}" />
-									<p:ajax process="@this" partialSubmit="true"
-										listener="#{jJRequirementBean.handleSelectProject()}" />
-								</p:selectOneMenu>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column>
-								<h:outputText for="product" value="Product:" />
-								<p:selectOneMenu id="product"
-									value="#{jJRequirementBean.requirementProduct}"
-									panelStyle="width:150px" effect="fade" style="width:150px"
-									filter="true" filterMatchMode="startsWith">
-									<f:converter
-										converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
-									<f:selectItem
-										itemLabel="#{jJRequirementBean.requirementProduct.name}"
-										itemValue="#{jJRequirementBean.requirementProduct}" />
-									<f:selectItems
-										value="#{jJRequirementBean.requirementProductList}" var="c"
-										itemLabel="#{c.name}" itemValue="#{c}" />
-									<p:ajax process="@this" partialSubmit="true" update="version"
-										listener="#{jJRequirementBean.handleSelectProduct()}" />
-								</p:selectOneMenu>
-							</p:column>
-							<p:column>
-								<h:outputText for="version" value="Version:" />
-								<p:selectOneMenu id="version"
-									value="#{jJRequirementBean.requirementVersion}"
-									panelStyle="width:150px" effect="fade" style="width:150px"
-									filter="true" filterMatchMode="startsWith"
-									disabled="#{jJRequirementBean.disabledVersion}">
-									<f:converter
-										converterId="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter" />
-									<f:selectItem
-										itemLabel="#{jJRequirementBean.requirementVersion.name}"
-										itemValue="#{jJRequirementBean.requirementVersion}" />
-									<f:selectItems
-										value="#{jJRequirementBean.requirementVersionList}" var="c"
-										itemLabel="#{c.name}" itemValue="#{c}" />
-									<p:ajax process="@this" partialSubmit="true"
-										listener="#{jJRequirementBean.handleSelectVersion()}" />
-								</p:selectOneMenu>
-							</p:column>
-							<p:column>
-								<h:outputText for="chapter" value="Chapter:" />
-								<p:selectOneMenu id="chapter"
-									value="#{jJRequirementBean.requirementChapter}"
-									panelStyle="width:150px" effect="fade" style="width:150px"
-									filter="true" filterMatchMode="startsWith">
-									<f:converter
-										converterId="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter" />
-									<f:selectItem
-										itemLabel="#{jJRequirementBean.requirementChapter.name}"
-										itemValue="#{jJRequirementBean.requirementChapter}" />
-									<f:selectItems
-										value="#{jJRequirementBean.requirementChapterList}" var="c"
-										itemLabel="#{c.name}" itemValue="#{c}" />
-									<p:ajax process="@this" partialSubmit="true"
-										listener="#{jJRequirementBean.handleSelectChapter()}" />
-								</p:selectOneMenu>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column>
-								<p:selectCheckboxMenu
-									value="#{jJRequirementBean.selectedLowRequirementsList}"
-									label="#{jJRequirementBean.lowCategoryName}" filter="true"
-									filterText="Filter" filterMatchMode="contains"
-									panelStyle="width:220px"
-									disabled="#{jJRequirementBean.disabledLowRequirements}">
-									<f:selectItems value="#{jJRequirementBean.lowRequirementsList}" />
-								</p:selectCheckboxMenu>
-							</p:column>
-							<p:column>
-								<p:selectCheckboxMenu
-									value="#{jJRequirementBean.selectedMediumRequirementsList}"
-									label="#{jJRequirementBean.mediumCategoryName}" filter="true"
-									filterText="Filter" filterMatchMode="contains"
-									panelStyle="width:220px"
-									disabled="#{jJRequirementBean.disabledMediumRequirements}">
-									<f:selectItems
-										value="#{jJRequirementBean.mediumRequirementsList}" />
-								</p:selectCheckboxMenu>
-							</p:column>
-							<p:column>
-								<p:selectCheckboxMenu
-									value="#{jJRequirementBean.selectedHighRequirementsList}"
-									label="#{jJRequirementBean.highCategoryName}" filter="true"
-									filterText="Filter" filterMatchMode="contains"
-									panelStyle="width:220px"
-									disabled="#{jJRequirementBean.disabledHighRequirements}">
-									<f:selectItems
-										value="#{jJRequirementBean.highRequirementsList}" />
-								</p:selectCheckboxMenu>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<h:outputText value="Description : *" />
-								<p:editor id="description" widgetVar="descriptionWidget"
-									style="width:680px"
-									value="#{jJRequirementBean.requirement.description}"
-									required="true"
-									requiredMessage="Requirement Description is a required value">
-								</p:editor>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column>
-								<h:outputText value="Initiate Task: " />
-								<p:selectBooleanCheckbox
-									value="#{jJRequirementBean.initiateTask}"
-									disabled="#{jJRequirementBean.disabledInitTask}">
-									<p:ajax listener="#{jJRequirementBean.loadTask()}"
-										update="outputPanel completion" />
-								</p:selectBooleanCheckbox>
-							</p:column>
-							<p:column>
-								<h:outputLabel for="workload" value="Workload: " />
-								<p:outputPanel id="outputPanel">
-									<p:spinner id="workload"
-										value="#{jJRequirementBean.task.workloadPlanned}"
-										stepFactor="1" min="0"
-										disabled="#{jJRequirementBean.disabledTask}">
-										<p:ajax update="workloadvalue" process="@this" />
-									</p:spinner>
-									<h:outputText id="workloadvalue"
-										value="#{jJRequirementBean.task.workloadPlanned} h" />
-								</p:outputPanel>
-							</p:column>
-
-							<p:column>
-								<h:outputText value="Complete Task: " />
-								<p:selectBooleanCheckbox id="completion"
-									value="#{jJRequirementBean.task.completed}"
-									disabled="#{jJRequirementBean.disabledTask}">
-									<p:ajax listener="#{jJRequirementBean.checkCompleteTask()}" />
-								</p:selectBooleanCheckbox>
-							</p:column>
-
-						</p:row>
-						<p:row>
-							<p:column rowspan="3" colspan="3">
-								<p:inputTextarea id="note" rows="3" cols="100"
-									value="#{jJRequirementBean.requirement.note}"
-									autoResize="false" />
-								<p:watermark for="note" value="Note" />
-							</p:column>
-						</p:row>
-						<f:facet name="footer">
+					<p:scrollPanel style="width:760px;height:450px" mode="native">
+						<p:panelGrid style="margin-top:10px">
 							<p:row>
-								<p:column colspan="3">
-									<p:commandButton value="Save"
-										action="#{jJRequirementBean.save()}" process="@form"
-										update="requirementDialogForm" />
+								<p:column>
+									<p:inputText id="name"
+										value="#{jJRequirementBean.requirement.name}" required="true"
+										widgetVar="nameWidget" label="Requirement Name"
+										requiredMessage="Requirement Name is a required value">
+									</p:inputText>
+									<p:message for="name" id="msgName" />
+									<p:watermark for="name" value="Name *" />
+								</p:column>
+								<p:column>
+									<h:outputText for="status" value="Status:" />
+									<p:selectOneMenu id="status"
+										value="#{jJRequirementBean.requirementStatus}"
+										panelStyle="width:150px" effect="fade" style="width:150px"
+										filter="true" filterMatchMode="startsWith"
+										disabled="#{jJRequirementBean.disabledStatus}">
+										<f:converter
+											converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
+										<f:selectItem
+											itemLabel="#{jJRequirementBean.requirementStatus.name}"
+											itemValue="#{jJRequirementBean.requirementStatus}" />
+										<f:selectItems
+											value="#{jJRequirementBean.requirementStatusList}" var="c"
+											itemLabel="#{c.name}" itemValue="#{c}" />
+										<p:ajax process="@this" partialSubmit="true"
+											listener="#{jJRequirementBean.handleSelectStatus()}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column>
+									<h:outputText for="project" value="Project:" />
+									<p:selectOneMenu id="project"
+										value="#{jJRequirementBean.requirementProject}"
+										panelStyle="width:150px" effect="fade" style="width:150px"
+										filter="true" filterMatchMode="startsWith" disabled="true">
+										<f:converter
+											converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
+										<f:selectItem
+											itemLabel="#{jJRequirementBean.requirementProject.name}"
+											itemValue="#{jJRequirementBean.requirementProject}" />
+										<f:selectItems
+											value="#{jJRequirementBean.requirementProjectList}" var="c"
+											itemLabel="#{c.name}" itemValue="#{c}" />
+										<p:ajax process="@this" partialSubmit="true"
+											listener="#{jJRequirementBean.handleSelectProject()}" />
+									</p:selectOneMenu>
 								</p:column>
 							</p:row>
-						</f:facet>
-					</p:panelGrid>
+							<p:row>
+								<p:column>
+									<h:outputText for="product" value="Product:" />
+									<p:selectOneMenu id="product"
+										value="#{jJRequirementBean.requirementProduct}"
+										panelStyle="width:150px" effect="fade" style="width:150px"
+										filter="true" filterMatchMode="startsWith">
+										<f:converter
+											converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
+										<f:selectItem
+											itemLabel="#{jJRequirementBean.requirementProduct.name}"
+											itemValue="#{jJRequirementBean.requirementProduct}" />
+										<f:selectItems
+											value="#{jJRequirementBean.requirementProductList}" var="c"
+											itemLabel="#{c.name}" itemValue="#{c}" />
+										<p:ajax process="@this" partialSubmit="true" update="version"
+											listener="#{jJRequirementBean.handleSelectProduct()}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column>
+									<h:outputText for="version" value="Version:" />
+									<p:selectOneMenu id="version"
+										value="#{jJRequirementBean.requirementVersion}"
+										panelStyle="width:150px" effect="fade" style="width:150px"
+										filter="true" filterMatchMode="startsWith"
+										disabled="#{jJRequirementBean.disabledVersion}">
+										<f:converter
+											converterId="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter" />
+										<f:selectItem
+											itemLabel="#{jJRequirementBean.requirementVersion.name}"
+											itemValue="#{jJRequirementBean.requirementVersion}" />
+										<f:selectItems
+											value="#{jJRequirementBean.requirementVersionList}" var="c"
+											itemLabel="#{c.name}" itemValue="#{c}" />
+										<p:ajax process="@this" partialSubmit="true"
+											listener="#{jJRequirementBean.handleSelectVersion()}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column>
+									<h:outputText for="chapter" value="Chapter:" />
+									<p:selectOneMenu id="chapter"
+										value="#{jJRequirementBean.requirementChapter}"
+										panelStyle="width:150px" effect="fade" style="width:150px"
+										filter="true" filterMatchMode="startsWith">
+										<f:converter
+											converterId="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter" />
+										<f:selectItem
+											itemLabel="#{jJRequirementBean.requirementChapter.name}"
+											itemValue="#{jJRequirementBean.requirementChapter}" />
+										<f:selectItems
+											value="#{jJRequirementBean.requirementChapterList}" var="c"
+											itemLabel="#{c.name}" itemValue="#{c}" />
+										<p:ajax process="@this" partialSubmit="true"
+											listener="#{jJRequirementBean.handleSelectChapter()}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<p:selectCheckboxMenu
+										value="#{jJRequirementBean.selectedLowRequirementsList}"
+										label="#{jJRequirementBean.lowCategoryName}" filter="true"
+										filterText="Filter" filterMatchMode="contains"
+										panelStyle="width:220px"
+										disabled="#{jJRequirementBean.disabledLowRequirements}">
+										<f:selectItems
+											value="#{jJRequirementBean.lowRequirementsList}" />
+									</p:selectCheckboxMenu>
+								</p:column>
+								<p:column>
+									<p:selectCheckboxMenu
+										value="#{jJRequirementBean.selectedMediumRequirementsList}"
+										label="#{jJRequirementBean.mediumCategoryName}" filter="true"
+										filterText="Filter" filterMatchMode="contains"
+										panelStyle="width:220px"
+										disabled="#{jJRequirementBean.disabledMediumRequirements}">
+										<f:selectItems
+											value="#{jJRequirementBean.mediumRequirementsList}" />
+									</p:selectCheckboxMenu>
+								</p:column>
+								<p:column>
+									<p:selectCheckboxMenu
+										value="#{jJRequirementBean.selectedHighRequirementsList}"
+										label="#{jJRequirementBean.highCategoryName}" filter="true"
+										filterText="Filter" filterMatchMode="contains"
+										panelStyle="width:220px"
+										disabled="#{jJRequirementBean.disabledHighRequirements}">
+										<f:selectItems
+											value="#{jJRequirementBean.highRequirementsList}" />
+									</p:selectCheckboxMenu>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column colspan="3">
+									<h:outputText value="Description : *" />
+									<p:editor id="description" widgetVar="descriptionWidget"
+										style="width:680px"
+										value="#{jJRequirementBean.requirement.description}"
+										required="true"
+										requiredMessage="Requirement Description is a required value">
+									</p:editor>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText value="Initiate Task: " />
+									<p:selectBooleanCheckbox
+										value="#{jJRequirementBean.initiateTask}"
+										disabled="#{jJRequirementBean.disabledInitTask}">
+										<p:ajax listener="#{jJRequirementBean.loadTask()}"
+											update="outputPanel completion" />
+									</p:selectBooleanCheckbox>
+								</p:column>
+								<p:column>
+									<h:outputLabel for="workload" value="Workload: " />
+									<p:outputPanel id="outputPanel">
+										<p:spinner id="workload"
+											value="#{jJRequirementBean.task.workloadPlanned}"
+											stepFactor="1" min="0"
+											disabled="#{jJRequirementBean.disabledTask}">
+											<p:ajax update="workloadvalue" process="@this" />
+										</p:spinner>
+										<h:outputText id="workloadvalue"
+											value="#{jJRequirementBean.task.workloadPlanned} h" />
+									</p:outputPanel>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="Complete Task: " />
+									<p:selectBooleanCheckbox id="completion"
+										value="#{jJRequirementBean.task.completed}"
+										disabled="#{jJRequirementBean.disabledTask}">
+										<p:ajax listener="#{jJRequirementBean.checkCompleteTask()}" />
+									</p:selectBooleanCheckbox>
+								</p:column>
+
+							</p:row>
+							<p:row>
+								<p:column rowspan="3" colspan="3">
+									<p:inputTextarea id="note" rows="3" cols="100"
+										value="#{jJRequirementBean.requirement.note}"
+										autoResize="false" />
+									<p:watermark for="note" value="Note" />
+								</p:column>
+							</p:row>
+							<f:facet name="footer">
+								<p:row>
+									<p:column colspan="3">
+										<p:commandButton value="Save"
+											action="#{jJRequirementBean.save()}" process="@form"
+											update="requirementDialogForm" />
+									</p:column>
+								</p:row>
+							</f:facet>
+						</p:panelGrid>
+					</p:scrollPanel>
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
@@ -500,7 +499,7 @@
 
 		<p:confirmDialog id="requirementDeleteDialog"
 			widgetVar="requirementDeleteDialogWidget"
-			message="Are you sure you want to delete this requirement?"
+			message="Are you sure that you want to delete this requirement?"
 			showEffect="fade" hideEffect="explode"
 			header="#{messages.label_confirm_deletion}" severity="alarm">
 			<p:outputPanel id="requirementDeletePanel">
@@ -514,12 +513,31 @@
 			</p:outputPanel>
 		</p:confirmDialog>
 
-		<p:dialog id="dialog" header="#{jJRequirementBean.message}"
-			modal="true" widgetVar="dialogWidget" dynamic="true"
+		<p:confirmDialog id="requirementReleaseDialog"
+			widgetVar="requirementReleaseDialogWidget"
+			message="Are you sure that you want to release all requirements?"
+			showEffect="fade" hideEffect="explode" header="Confirim Release"
+			severity="alarm">
+			<p:outputPanel id="requirementReleasePanel">
+				<h:form id="requirementReleaseForm">
+					<p:commandButton id="releaseYesButton"
+						value="#{messages.label_yes}"
+						action="#{jJRequirementBean.releaseRequirement}"
+						update=":specForm"
+						oncomplete="requirementReleaseDialogWidget.hide()" />
+					<p:commandButton id="releaseNoButton" value="#{messages.label_no}"
+						onclick="requirementReleaseDialogWidget.hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
+
+		<p:dialog id="requirementImportDialog"
+			header="#{jJRequirementBean.message}" modal="true"
+			widgetVar="requirementImportDialogWidget" dynamic="true"
 			resizable="false">
 			<p:ajax event="close" update=":specForm"
 				listener="#{jJRequirementBean.closeDialogImport}" />
-			<p:layout id="importlayout" style="min-width:700px;min-height:450px;">
+			<p:layout id="importlayout" style="min-width:500px;min-height:500px;">
 				<p:layoutUnit position="center">
 					<p:outputPanel id="dialogPanel">
 						<h:form id="dialogForm">
@@ -544,6 +562,29 @@
 												update="formatDataTable" />
 										</p:selectOneMenu>
 									</p:column>
+									<p:column>
+										<h:outputText value="Category :" />
+										<p:selectOneMenu id="categorySelectOneMenu"
+											value="#{jJRequirementBean.importCategory}"
+											panelStyle="width:150px" effect="fade" style="width:160px"
+											filter="true" filterMatchMode="startsWith">
+											<f:converter
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter" />
+											<f:selectItem
+												itemLabel="#{jJRequirementBean.importCategory.name}"
+												itemValue="#{jJRequirementBean.importCategory}" />
+											<f:selectItems
+												value="#{jJRequirementBean.importCategoryList}" var="p"
+												itemLabel="#{p.name}" itemValue="#{p}" />
+											<p:ajax process="@this" partialSubmit="true"
+												listener="#{jJRequirementBean.handelSelectImportCategory}"
+												update="formatDataTable" />
+										</p:selectOneMenu>
+									</p:column>
+
+								</p:row>
+								<p:row>
+
 									<p:column>
 										<h:outputText value="Product :" />
 										<p:selectOneMenu id="productSelectOneMenu"
@@ -586,25 +627,6 @@
 								</p:row>
 								<p:row>
 									<p:column>
-										<h:outputText value="Category :" />
-										<p:selectOneMenu id="categorySelectOneMenu"
-											value="#{jJRequirementBean.importCategory}"
-											panelStyle="width:150px" effect="fade" style="width:160px"
-											filter="true" filterMatchMode="startsWith">
-											<f:converter
-												converterId="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter" />
-											<f:selectItem
-												itemLabel="#{jJRequirementBean.importCategory.name}"
-												itemValue="#{jJRequirementBean.importCategory}" />
-											<f:selectItems
-												value="#{jJRequirementBean.importCategoryList}" var="p"
-												itemLabel="#{p.name}" itemValue="#{p}" />
-											<p:ajax process="@this" partialSubmit="true"
-												listener="#{jJRequirementBean.handelSelectImportCategory}"
-												update="formatDataTable" />
-										</p:selectOneMenu>
-									</p:column>
-									<p:column>
 										<h:outputText value="Status :" />
 										<p:selectOneMenu id="statusSelectOneMenu"
 											value="#{jJRequirementBean.importStatus}"
@@ -622,56 +644,48 @@
 												update="formatDataTable" />
 										</p:selectOneMenu>
 									</p:column>
-
 								</p:row>
 							</p:panelGrid>
-							<p:dataTable id="formatDataTable" var="format" editable="true"
-								value="#{jJRequirementBean.formatDataModel}" paginator="true"
-								rows="10" selection="#{jJRequirementBean.selectedFormats}">
-
-
-								<f:facet name="header">  
-            						Checkbox Based Selection  
-        						</f:facet>
-
-								<p:column selectionMode="multiple" style="width:2%" />
-
-								<p:column headerText="Requirement" style="width:30%">  
-            						#{format.requirement.name}  
-        						</p:column>
-
-								<p:column headerText="Copy Testcase" style="width:25%">
-									<p:cellEditor>
-										<f:facet name="output">
-											<h:outputText value="#{format.copyTestcase}" />
-										</f:facet>
-										<f:facet name="input">
-											<p:selectBooleanCheckbox value="#{format.copyTestcase}" />
-										</f:facet>
-									</p:cellEditor>
-								</p:column>
-
-
-								<p:column headerText="Copy Chapter" style="width:25%">
-									<p:cellEditor>
-										<f:facet name="output">
-											<h:outputText value="#{format.copyChapter}" />
-										</f:facet>
-										<f:facet name="input">
-											<p:selectBooleanCheckbox value="#{format.copyChapter}">
-												<p:ajax process="@this"
-													listener="#{jJRequirementBean.copyChapter}" />
-											</p:selectBooleanCheckbox>
-										</f:facet>
-									</p:cellEditor>
-								</p:column>
-								<p:column style="width:18%">
-									<p:rowEditor />
-								</p:column>
-
-							</p:dataTable>
-
-							<p:commandButton value="Import"
+							<p:scrollPanel style="width:500px;height:350px">
+								<p:dataTable id="formatDataTable" var="format" editable="true"
+									value="#{jJRequirementBean.formatDataModel}"
+									selection="#{jJRequirementBean.selectedFormats}">
+									<p:ajax event="rowEdit" listener="#{jJRequirementBean.onEdit}" />
+									<p:ajax event="rowEditCancel"
+										listener="#{jJRequirementBean.onCancel}" />
+									<f:facet name="header">
+										<h:outputText value="CheckBox Based Selection" />
+									</f:facet>
+									<p:column selectionMode="multiple" style="width:2%" />
+									<p:column headerText="Requirement" style="width:30%">
+										<h:outputText value="#{format.requirement.name}" />
+									</p:column>
+									<p:column headerText="Copy Testcase" style="width:25%">
+										<p:cellEditor>
+											<f:facet name="output">
+												<h:outputText value="#{format.copyTestcase}" />
+											</f:facet>
+											<f:facet name="input">
+												<p:selectBooleanCheckbox value="#{format.copyTestcase}" />
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+									<p:column headerText="Copy Chapter" style="width:25%">
+										<p:cellEditor>
+											<f:facet name="output">
+												<h:outputText value="#{format.copyChapter}" />
+											</f:facet>
+											<f:facet name="input">
+												<p:selectBooleanCheckbox value="#{format.copyChapter}"/>
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+									<p:column style="width:18%">
+										<p:rowEditor />
+									</p:column>
+								</p:dataTable>
+							</p:scrollPanel>
+							<p:commandButton value="Import" style="float: right;"
 								action="#{jJRequirementBean.importRequirement()}" />
 						</h:form>
 					</p:outputPanel>

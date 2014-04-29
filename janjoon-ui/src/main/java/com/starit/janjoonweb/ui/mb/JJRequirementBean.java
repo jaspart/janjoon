@@ -15,6 +15,7 @@ import javax.faces.model.ListDataModel;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.SelectableDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
@@ -124,6 +125,8 @@ public class JJRequirementBean {
 	private List<JJRequirement> storeMapUp;
 	private List<JJRequirement> storeMapDown;
 	private List<String> namesList;
+
+	private long categoryId;
 
 	public JJCategory getLowCategory() {
 		return lowCategory;
@@ -699,8 +702,8 @@ public class JJRequirementBean {
 
 		requirement.setNumero(0);
 
-		FacesContext fContext = FacesContext.getCurrentInstance();
-		HttpSession session = (HttpSession) fContext.getExternalContext()
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) facesContext.getExternalContext()
 				.getSession(false);
 		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
 		JJContact contact = loginBean.getContact();
@@ -756,8 +759,8 @@ public class JJRequirementBean {
 		disabledInitTask = true;
 		disabledTask = true;
 
-		FacesContext fContext = FacesContext.getCurrentInstance();
-		HttpSession session = (HttpSession) fContext.getExternalContext()
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) facesContext.getExternalContext()
 				.getSession(false);
 		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
 		JJContact contact = loginBean.getContact();
@@ -773,8 +776,8 @@ public class JJRequirementBean {
 		System.out.println("DELETE Requirement ...");
 		requirement.setEnabled(false);
 
-		FacesContext fContext = FacesContext.getCurrentInstance();
-		HttpSession session = (HttpSession) fContext.getExternalContext()
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) facesContext.getExternalContext()
 				.getSession(false);
 		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
 		JJContact contact = loginBean.getContact();
@@ -789,13 +792,18 @@ public class JJRequirementBean {
 		reset();
 	}
 
+	public void preReleaseRequirement(long id) {
+		categoryId = id;
+	}
+
 	@SuppressWarnings("unchecked")
-	public void releaseRequirement(long id) {
+	public void releaseRequirement() {
 
 		System.out.println("RELEASE Requirements ...");
+
 		List<JJRequirement> list = new ArrayList<JJRequirement>();
 		for (CategoryDataModel requirementDataModel : tableDataModelList) {
-			if (requirementDataModel.getCategoryId() == id) {
+			if (requirementDataModel.getCategoryId() == categoryId) {
 				List<JJRequirement> temp = (List<JJRequirement>) requirementDataModel
 						.getWrappedData();
 				list.addAll(temp);
@@ -808,21 +816,26 @@ public class JJRequirementBean {
 				"JJRequirement", true);
 
 		for (JJRequirement requirement : list) {
-			requirement.setStatus(status);
+			if (requirement.getStatus() != status) {
+				requirement.setStatus(status);
 
-			FacesContext fContext = FacesContext.getCurrentInstance();
-			HttpSession session = (HttpSession) fContext.getExternalContext()
-					.getSession(false);
-			LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
-			JJContact contact = loginBean.getContact();
+				FacesContext facesContext = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) facesContext
+						.getExternalContext().getSession(false);
+				LoginBean loginBean = (LoginBean) session
+						.getAttribute("loginBean");
+				JJContact contact = loginBean.getContact();
 
-			int numero = requirement.getNumero() + 1;
-			requirement.setNumero(numero);
-			requirement.setUpdatedBy(contact);
+				int numero = requirement.getNumero() + 1;
+				requirement.setNumero(numero);
+				requirement.setUpdatedBy(contact);
 
-			jJRequirementService.updateJJRequirement(requirement);
+				jJRequirementService.updateJJRequirement(requirement);
+			}
 		}
 		reset();
+
+		System.out.println("end");
 
 	}
 
@@ -915,9 +928,9 @@ public class JJRequirementBean {
 
 			importRequirement.setUpdatedDate(new Date());
 
-			FacesContext fContext = FacesContext.getCurrentInstance();
-			HttpSession session = (HttpSession) fContext.getExternalContext()
-					.getSession(false);
+			FacesContext facesContext = FacesContext.getCurrentInstance();
+			HttpSession session = (HttpSession) facesContext
+					.getExternalContext().getSession(false);
 			LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
 			JJContact contact = loginBean.getContact();
 
@@ -1087,7 +1100,7 @@ public class JJRequirementBean {
 		}
 
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("dialogWidget.hide()");
+		context.execute("requirementImportDialogWidget.hide()");
 		closeDialogImport();
 		reset();
 	}
@@ -2438,16 +2451,17 @@ public class JJRequirementBean {
 					boolean linkUp = false;
 					boolean linkDown = false;
 
-					for (JJRequirement req : requirement.getRequirementLinkUp()) {
+					for (JJRequirement req : requirement
+							.getRequirementLinkDown()) {
 						if (req.getEnabled()) {
-							linkUp = true;
+							linkDown = true;
 							break;
 						}
 					}
 
 					for (JJTask task : requirement.getTasks()) {
 						if (task.getEnabled()) {
-							linkDown = true;
+							linkUp = true;
 							break;
 						}
 					}
@@ -2633,6 +2647,17 @@ public class JJRequirementBean {
 			return format.getId();
 		}
 	}
+
+	public void onEdit(RowEditEvent event) {  
+		
+		ImportFormat importFormat = (ImportFormat) event.getObject();
+		System.out.println("toot");
+        System.out.println(importFormat.getRequirement().getName());
+    }  
+      
+    public void onCancel(RowEditEvent event) {  
+        
+    }  
 
 	public class ImportFormat {
 
