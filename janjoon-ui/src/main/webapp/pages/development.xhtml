@@ -16,10 +16,10 @@
 		<f:event listener="#{jJDevelopment.reloadRepository}"
 			type="preRenderView" />
 		<br />
-		<p:panel id="errorPanel" header="#{messages['dev.errorPanel.panel']}"
+		<p:panel id="errorPanel" header="#{messages['dev.panel.error.header']}"
 			style="width: 100%;valign: top;" rendered="#{!jJDevelopment.render}">
 			<p:growl id="error" showDetail="true" life="2000" />
-			<H1>#{messages['dev.errorPanel.title']}</H1>
+			<H1>#{messages['dev.panel.error.title']}</H1>
 		</p:panel>
 
 
@@ -164,15 +164,15 @@
 				</table>
 
 				<p:blockUI block="form" trigger=":form:submit">  
-        				Commiting source code changes ...<br />
+        				#{messages['dev.block.commit.label']}<br />
 					<p:graphicImage library="images" name="ajax-loader.gif" />
 				</p:blockUI>
 				<p:blockUI block="form" trigger=":form:fetchFromRepo">  
-        				Fetching source code repository ...<br />
+        				#{messages['dev.block.fetch.label']}<br />
 					<p:graphicImage library="images" name="ajax-loader.gif" />
 				</p:blockUI>
 				<p:blockUI block="form" trigger=":headerForm:projectSelectOneMenu">
-					Updating source code repository ...<br />
+					#{messages['dev.block.update.label']}<br />
 					<p:graphicImage library="images" name="ajax-loader.gif" />
 				</p:blockUI>
 
@@ -181,7 +181,7 @@
 				widgetVar="deleteFileDialogWidget"
 				message="#{messages['dev.deletFileDialog.title']}" showEffect="fade"
 				hideEffect="explode" header="#{messages['dev.deletFileDialog.header']}"
-				severity="alarm">label_confirm_deletion
+				severity="alarm">#{messages['dev.delete.confirm.label']}
 				<p:outputPanel id="deletePanel">
 					<h:form id="deleteForm">
 						<p:commandButton id="deleteYesButton"
@@ -264,30 +264,30 @@
 			</p:dialog>
 			<p:blockUI block=":devPanel"
 				trigger=":uploadFileForm:uploadFileButton">  
-        				Uploading file  ...<br />
+        				#{messages['dev.block.upload.label']}<br />
 				<p:graphicImage library="images" name="ajax-loader.gif" />
 			</p:blockUI>
 			<p:blockUI block=":devPanel"
 				trigger=":createFileForm:createSaveButton">  
-        				Creating file  ...<br />
+        				#{messages['dev.block.create.label']}<br />
 				<p:graphicImage library="images" name="ajax-loader.gif" />
 			</p:blockUI>
 			<p:blockUI block=":devPanel" trigger=":commitForm:commitYesButton">  
-        				Commiting file changes ...<br />
+        				#{messages['dev.block.commit.label']}<br />
 				<p:graphicImage library="images" name="ajax-loader.gif" />
 			</p:blockUI>
 		</p:panel>
 		<p:blockUI block=":devPanel"
 			trigger=":headerForm:versionSelectOneMenu"
 			rendered="#{jJDevelopment.render}">
-			Rendering source code ...<br />
+			#{messages['dev.block.render.label']}<br />
 			<p:graphicImage library="images" name="ajax-loader.gif" />
 		</p:blockUI>
 
 		<p:blockUI block=":errorPanel"
 			trigger=":headerForm:versionSelectOneMenu"
 			rendered="#{!jJDevelopment.render}">
-			Rendering source code - Error message ...<br />
+			#{messages['dev.block.error.label']}<br />
 			<p:graphicImage library="images" name="ajax-loader.gif" />
 		</p:blockUI>
 

@@ -6,28 +6,26 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="../templates/layout.xhtml">
-	<ui:define name="title">
-		JanJoon Login
-	</ui:define>
+	<ui:define name="title">#{messages.login_title}</ui:define>
 	<ui:define name="content">
 		<f:event listener="#{loginBean.loginRedirect}" type="preRenderView" />
 		<h5>BeHappy2012</h5>
-		<p:panel id="loginPanel" header="Please login..."
+		<p:panel id="loginPanel" header="#{messages.login_pleaseLogin_header}"
 			style="margin-top:50px;margin-bottom:50px;width:30%;margin-left:auto !important;margin-right:auto !important;">
 			<h:form id="login" method="post">
-				<h:outputLabel for="username" value="Username:"
+				<h:outputLabel for="username" value="#{messages.login_username_label}:"
 					style="margin-top:20px;" />
 				<p:inputText id="username" value="#{loginBean.username}"
-					required="true" requiredMessage="Username is required" />
+					required="true" requiredMessage="#{messages.login_necessaryUsername_label}" />
 				<p:message for="username" id="mail" closable="true" />
 
-				<h:outputLabel for="password" value="Password :"
+				<h:outputLabel for="password" value="#{messages.login_password_label}:"
 					style="margin-top:20px;" />
 				<p:password id="password" value="#{loginBean.password}"
-					required="true" requiredMessage="Password is required" />
+					required="true" requiredMessage="#{messages.login_necessaryPassword_label}" />
 				<p:message for="password" id="mdp" closable="true" />
 
-				<p:commandButton id="submit" value="Login"
+				<p:commandButton id="submit" value="#{messages.login_login_button}"
 					action="#{loginBean.login}" style="margin-top:20px;"
 					update=":login:mdp,:login:mail,:auth" />
 

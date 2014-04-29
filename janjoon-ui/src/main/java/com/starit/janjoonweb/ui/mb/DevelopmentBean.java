@@ -142,13 +142,13 @@ public class DevelopmentBean implements Serializable {
 			render = false;
 			String growlMessage = "";
 			if (product == null) {
-				growlMessage = "dev.nullProject.label";
+				growlMessage = "dev.nullProduct.label";
 			} else {
 				if (version == null) {
 					growlMessage = "dev.nullVersion.label";
 
 				} else {
-					growlMessage = "dev.notAvailableProject.label";
+					growlMessage = "dev.notAvailableProduct.label";
 
 				}
 			}
@@ -190,7 +190,7 @@ public class DevelopmentBean implements Serializable {
 
 				String growlMessage = "";
 				if (product == null) {
-					growlMessage = "dev.nullProject.label";
+					growlMessage = "dev.nullProduct.label";
 				} else {
 					if (version == null) {
 						growlMessage = "dev.nullVersion.label";
@@ -213,7 +213,7 @@ public class DevelopmentBean implements Serializable {
 						prodbean.getProduct(), jJProjectBean.getProject()));
 			}
 			if (!render) {
-				String growlMessage = "dev.notAvailableProject.label";
+				String growlMessage = "dev.notAvailableProduct.label";
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						growlMessage, FacesMessage.SEVERITY_ERROR, "");
 				FacesContext.getCurrentInstance()

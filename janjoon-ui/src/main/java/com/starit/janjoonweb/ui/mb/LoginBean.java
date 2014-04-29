@@ -328,7 +328,7 @@ public class LoginBean implements Serializable {
 
 		} else {
 
-			FacesMessage message =MessageFactory.getMessage("dev.nullProject.label", FacesMessage.SEVERITY_ERROR, "");
+			FacesMessage message =MessageFactory.getMessage("dev.nullProduct.label", FacesMessage.SEVERITY_ERROR, "");
 			FacesContext.getCurrentInstance().addMessage(null, message);
 			System.out.println(message.getDetail());
 

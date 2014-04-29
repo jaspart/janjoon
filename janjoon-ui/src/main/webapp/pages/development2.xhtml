@@ -13,9 +13,9 @@
 		href="/syntaxhighlighter/standard.css" />
 	<ui:define name="content">
 		<br />
-		<p:panel header="Error" style="width: 100%;valign: top;"
+		<p:panel header=">#{messages['dev.panel.error.header']}" style="width: 100%;valign: top;"
 			rendered="#{!jJDevelopment.render}">
-			<H1>Product not available on the version control manager.</H1>
+			<H1>>#{messages['dev.panel.error.title']}</H1>
 		</p:panel>
 
 
