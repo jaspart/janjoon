@@ -2425,31 +2425,68 @@ public class JJRequirementBean {
 			float compteur = 0;
 			List<JJRequirement> dataList = (List<JJRequirement>) getWrappedData();
 
-			List<JJCategory> categoryList = jJCategoryService.getCategories(
-					null, false, true, true);
+			// List<JJCategory> categoryList = jJCategoryService.getCategories(
+			// null, false, true, true);
 
-			boolean sizeIsOne = false;
-
-			if (categoryId == categoryList.get(0).getId()) {
+			// boolean sizeIsOne = false;
+			//
+			// if (categoryId == categoryList.get(0).getId()) {
+			//
+			// for (JJRequirement requirement : dataList) {
+			//
+			// for (JJRequirement req : requirement.getRequirementLinkUp()) {
+			// if (req.getEnabled()) {
+			// compteur++;
+			// break;
+			// }
+			// }
+			//
+			// }
+			//
+			// sizeIsOne = true;
+			// } else if (categoryId == categoryList.get(categoryList.size() -
+			// 1)
+			// .getId() && !sizeIsOne) {
+			//
+			// for (JJRequirement requirement : dataList) {
+			// boolean linkUp = false;
+			// boolean linkDown = false;
+			//
+			// for (JJRequirement req : requirement
+			// .getRequirementLinkDown()) {
+			// if (req.getEnabled()) {
+			// linkDown = true;
+			// break;
+			// }
+			// }
+			//
+			// for (JJTask task : requirement.getTasks()) {
+			// if (task.getEnabled()) {
+			// linkUp = true;
+			// break;
+			// }
+			// }
+			//
+			// if (linkUp && linkDown) {
+			// compteur++;
+			// } else if (linkUp || linkDown) {
+			// compteur += 0.5;
+			// }
+			//
+			// }
+			// } else {
 
 				for (JJRequirement requirement : dataList) {
+
+					boolean linkUp = false;
+					boolean linkDown = false;
 
 					for (JJRequirement req : requirement.getRequirementLinkUp()) {
 						if (req.getEnabled()) {
-							compteur++;
+							linkUp = true;
 							break;
 						}
 					}
-
-				}
-
-				sizeIsOne = true;
-			} else if (categoryId == categoryList.get(categoryList.size() - 1)
-					.getId() && !sizeIsOne) {
-
-				for (JJRequirement requirement : dataList) {
-					boolean linkUp = false;
-					boolean linkDown = false;
 
 					for (JJRequirement req : requirement
 							.getRequirementLinkDown()) {
@@ -2462,34 +2499,6 @@ public class JJRequirementBean {
 					for (JJTask task : requirement.getTasks()) {
 						if (task.getEnabled()) {
 							linkUp = true;
-							break;
-						}
-					}
-
-					if (linkUp && linkDown) {
-						compteur++;
-					} else if (linkUp || linkDown) {
-						compteur += 0.5;
-					}
-
-				}
-			} else {
-
-				for (JJRequirement requirement : dataList) {
-
-					boolean linkUp = false;
-					boolean linkDown = false;
-
-					for (JJRequirement req : requirement.getRequirementLinkUp()) {
-						if (req.getEnabled()) {
-							linkUp = true;
-							break;
-						}
-					}
-
-					for (JJRequirement req : requirement
-							.getRequirementLinkDown()) {
-						if (req.getEnabled()) {
 							linkDown = true;
 							break;
 						}
@@ -2501,7 +2510,7 @@ public class JJRequirementBean {
 						compteur += 0.5;
 					}
 				}
-			}
+//			}
 
 			if (dataList.isEmpty()) {
 				coverageProgress = 0;
@@ -2648,16 +2657,16 @@ public class JJRequirementBean {
 		}
 	}
 
-	public void onEdit(RowEditEvent event) {  
-		
+	public void onEdit(RowEditEvent event) {
+
 		ImportFormat importFormat = (ImportFormat) event.getObject();
 		System.out.println("toot");
-        System.out.println(importFormat.getRequirement().getName());
-    }  
-      
-    public void onCancel(RowEditEvent event) {  
-        
-    }  
+		System.out.println(importFormat.getRequirement().getName());
+	}
+
+	public void onCancel(RowEditEvent event) {
+
+	}
 
 	public class ImportFormat {
 
