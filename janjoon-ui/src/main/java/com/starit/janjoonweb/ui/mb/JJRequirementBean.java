@@ -15,7 +15,6 @@ import javax.faces.model.ListDataModel;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.SelectableDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
@@ -506,10 +505,6 @@ public class JJRequirementBean {
 	private JJStatus importStatus;
 	private List<JJStatus> importStatusList;
 
-	private FormatDataModel formatDataModel;
-
-	private List<ImportFormat> selectedFormats;
-
 	private boolean disableImportVersion;
 
 	public JJProject getImportProject() {
@@ -624,23 +619,6 @@ public class JJRequirementBean {
 
 	public void setImportStatusList(List<JJStatus> importStatusList) {
 		this.importStatusList = importStatusList;
-	}
-
-	public FormatDataModel getFormatDataModel() {
-
-		return formatDataModel;
-	}
-
-	public void setFormatDataModel(FormatDataModel formatDataModel) {
-		this.formatDataModel = formatDataModel;
-	}
-
-	public List<ImportFormat> getSelectedFormats() {
-		return selectedFormats;
-	}
-
-	public void setSelectedFormats(List<ImportFormat> selectedFormats) {
-		this.selectedFormats = selectedFormats;
 	}
 
 	public boolean getDisableImportVersion() {
@@ -907,187 +885,202 @@ public class JJRequirementBean {
 
 		System.out.println("In import action");
 
-		System.out.println("selectedFormats.size() " + selectedFormats.size());
+		System.out.println("importFormats.size() " + importFormats.size());
 
-		for (ImportFormat format : selectedFormats) {
+		for (ImportFormat format : importFormats) {
 
-			JJStatus status = jJStatusService.getOneStatus("NEW",
-					"JJRequirement", true);
+			if (format.getCopyRequirement()) {
 
-			JJRequirement req = format.getRequirement();
+				JJStatus status = jJStatusService.getOneStatus("NEW",
+						"JJRequirement", true);
 
-			JJRequirement requirement = jJRequirementService
-					.findJJRequirement(req.getId());
+				JJRequirement req = format.getRequirement();
 
-			JJRequirement importRequirement = new JJRequirement();
+				JJRequirement requirement = jJRequirementService
+						.findJJRequirement(req.getId());
 
-			importRequirement.setName(requirement.getName() + "(i)");
-			importRequirement.setDescription(requirement.getDescription());
-			importRequirement.setCreationDate(requirement.getCreationDate());
-			importRequirement.setCreatedBy(requirement.getCreatedBy());
+				JJRequirement importRequirement = new JJRequirement();
 
-			importRequirement.setUpdatedDate(new Date());
+				importRequirement.setName(requirement.getName() + "(i)");
+				importRequirement.setDescription(requirement.getDescription());
+				importRequirement
+						.setCreationDate(requirement.getCreationDate());
+				importRequirement.setCreatedBy(requirement.getCreatedBy());
 
-			FacesContext facesContext = FacesContext.getCurrentInstance();
-			HttpSession session = (HttpSession) facesContext
-					.getExternalContext().getSession(false);
-			LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
-			JJContact contact = loginBean.getContact();
+				importRequirement.setUpdatedDate(new Date());
 
-			importRequirement.setNumero(requirement.getNumero());
-			importRequirement.setUpdatedBy(contact);
+				FacesContext facesContext = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) facesContext
+						.getExternalContext().getSession(false);
+				LoginBean loginBean = (LoginBean) session
+						.getAttribute("loginBean");
+				JJContact contact = loginBean.getContact();
 
-			importRequirement.setProject(project);
-			importRequirement.setProduct(importProduct);
-			importRequirement.setVersioning(importVersion);
-			importRequirement.setEnabled(true);
-			importRequirement.setCategory(requirement.getCategory());
-			importRequirement.setNote(requirement.getNote());
-			importRequirement.setStatus(status);
+				importRequirement.setNumero(requirement.getNumero());
+				importRequirement.setUpdatedBy(contact);
 
-			JJChapter chapter = requirement.getChapter();
+				importRequirement.setProject(project);
+				importRequirement.setProduct(importProduct);
+				importRequirement.setVersioning(importVersion);
+				importRequirement.setEnabled(true);
+				importRequirement.setCategory(requirement.getCategory());
+				importRequirement.setNote(requirement.getNote());
+				importRequirement.setStatus(status);
 
-			if (chapter == null) {
-				importRequirement.setChapter(chapter);
-				importRequirement.setOrdering(null);
-			} else {
+				JJChapter chapter = requirement.getChapter();
 
-				if (format.getCopyChapter()) {
-					JJChapter importChapter = null;
+				if (chapter == null) {
+					importRequirement.setChapter(chapter);
+					importRequirement.setOrdering(null);
+				} else {
 
-					if (chapters.containsKey(Integer.valueOf(chapter.getId()
-							.intValue()))) {
+					if (format.getCopyChapter()) {
+						JJChapter importChapter = null;
 
-						long id = chapters.get(
-								Integer.valueOf(chapter.getId().intValue()))
-								.longValue();
+						if (chapters.containsKey(Integer.valueOf(chapter
+								.getId().intValue()))) {
 
-						importChapter = jJChapterService.findJJChapter(id);
+							long id = chapters
+									.get(Integer.valueOf(chapter.getId()
+											.intValue())).longValue();
 
-					} else {
+							importChapter = jJChapterService.findJJChapter(id);
 
-						importChapter = new JJChapter();
-						importChapter.setName(chapter.getName() + "(i)");
-						importChapter.setDescription(chapter.getDescription());
-						importChapter
-								.setCreationDate(chapter.getCreationDate());
-						importChapter.setEnabled(true);
-						importChapter.setCategory(chapter.getCategory());
-						importChapter.setProject(project);
-						importChapter.setUpdatedDate(new Date());
-						importChapter.setParent(null);
+						} else {
 
-						elements = getSortedElements(null,
+							importChapter = new JJChapter();
+							importChapter.setName(chapter.getName() + "(i)");
+							importChapter.setDescription(chapter
+									.getDescription());
+							importChapter.setCreationDate(chapter
+									.getCreationDate());
+							importChapter.setEnabled(true);
+							importChapter.setCategory(chapter.getCategory());
+							importChapter.setProject(project);
+							importChapter.setUpdatedDate(new Date());
+							importChapter.setParent(null);
+
+							elements = getSortedElements(null,
+									requirement.getProject(),
+									requirement.getCategory(), false);
+							if (elements.isEmpty()) {
+								importChapter.setOrdering(0);
+							} else {
+								importChapter
+										.setOrdering(elements.lastKey() + 1);
+							}
+
+							jJChapterService.saveJJChapter(importChapter);
+
+							chapters.put(Integer.valueOf(chapter.getId()
+									.intValue()), Integer.valueOf(importChapter
+									.getId().intValue()));
+
+						}
+
+						importRequirement.setChapter(importChapter);
+						elements = getSortedElements(importChapter,
 								requirement.getProject(),
 								requirement.getCategory(), false);
 						if (elements.isEmpty()) {
-							importChapter.setOrdering(0);
+							importRequirement.setOrdering(0);
 						} else {
-							importChapter.setOrdering(elements.lastKey() + 1);
+							importRequirement
+									.setOrdering(elements.lastKey() + 1);
 						}
 
-						jJChapterService.saveJJChapter(importChapter);
-
-						chapters.put(Integer
-								.valueOf(chapter.getId().intValue()), Integer
-								.valueOf(importChapter.getId().intValue()));
-
-					}
-
-					importRequirement.setChapter(importChapter);
-					elements = getSortedElements(importChapter,
-							requirement.getProject(),
-							requirement.getCategory(), false);
-					if (elements.isEmpty()) {
-						importRequirement.setOrdering(0);
 					} else {
-						importRequirement.setOrdering(elements.lastKey() + 1);
-					}
-
-				} else {
-					importRequirement.setChapter(chapter);
-					elements = getSortedElements(chapter,
-							requirement.getProject(),
-							requirement.getCategory(), false);
-					if (elements.isEmpty()) {
-						importRequirement.setOrdering(0);
-					} else {
-						importRequirement.setOrdering(elements.lastKey() + 1);
+						importRequirement.setChapter(chapter);
+						elements = getSortedElements(chapter,
+								requirement.getProject(),
+								requirement.getCategory(), false);
+						if (elements.isEmpty()) {
+							importRequirement.setOrdering(0);
+						} else {
+							importRequirement
+									.setOrdering(elements.lastKey() + 1);
+						}
 					}
 				}
-			}
 
-			jJRequirementService.saveJJRequirement(importRequirement);
-			reset();
+				jJRequirementService.saveJJRequirement(importRequirement);
+				reset();
 
-			if (format.getCopyTestcase()) {
+				if (format.getCopyTestcase()) {
 
-				Set<JJTestcase> testcases = requirement.getTestcases();
+					Set<JJTestcase> testcases = requirement.getTestcases();
 
-				if (testcases != null && !testcases.isEmpty()) {
+					if (testcases != null && !testcases.isEmpty()) {
 
-					for (JJTestcase tc : testcases) {
+						for (JJTestcase tc : testcases) {
 
-						JJRequirement req1 = jJRequirementService
-								.findJJRequirement(importRequirement.getId());
+							JJRequirement req1 = jJRequirementService
+									.findJJRequirement(importRequirement
+											.getId());
 
-						JJTestcase importTestcase = new JJTestcase();
+							JJTestcase importTestcase = new JJTestcase();
 
-						JJTestcase testcase = jJTestcaseService
-								.findJJTestcase(tc.getId());
+							JJTestcase testcase = jJTestcaseService
+									.findJJTestcase(tc.getId());
 
-						SortedMap<Integer, JJTestcase> testcaseElements = manageTestcaseOrder(req1
-								.getChapter());
+							SortedMap<Integer, JJTestcase> testcaseElements = manageTestcaseOrder(req1
+									.getChapter());
 
-						if (testcaseElements.isEmpty()) {
+							if (testcaseElements.isEmpty()) {
 
-							importTestcase.setOrdering(0);
-						} else {
-							importTestcase.setOrdering(testcaseElements
-									.lastKey() + 1);
-						}
+								importTestcase.setOrdering(0);
+							} else {
+								importTestcase.setOrdering(testcaseElements
+										.lastKey() + 1);
+							}
 
-						importTestcase.setRequirement(req1);
-						req1.getTestcases().add(importTestcase);
+							importTestcase.setRequirement(req1);
+							req1.getTestcases().add(importTestcase);
 
-						importTestcase.setName(testcase.getName() + " (i)");
-						importTestcase
-								.setDescription(testcase.getDescription());
-						importTestcase.setCreationDate(testcase
-								.getCreationDate());
-						importTestcase.setUpdatedDate(new Date());
-						importTestcase.setAutomatic(testcase.getAutomatic());
-						importTestcase.setEnabled(true);
-
-						jJTestcaseService.saveJJTestcase(importTestcase);
-
-						Set<JJTeststep> teststeps = testcase.getTeststeps();
-
-						for (JJTeststep teststep : teststeps) {
-
-							JJTestcase tc1 = jJTestcaseService
-									.findJJTestcase(importTestcase.getId());
-
-							JJTeststep importTeststep = new JJTeststep();
-
-							importTeststep.setOrdering(teststep.getOrdering());
-
-							importTeststep.setTestcase(tc1);
-							tc1.getTeststeps().add(importTeststep);
-
-							importTeststep.setName(teststep.getName() + " (i)");
-							importTeststep.setDescription(teststep
+							importTestcase.setName(testcase.getName() + " (i)");
+							importTestcase.setDescription(testcase
 									.getDescription());
-							importTeststep.setCreationDate(teststep
+							importTestcase.setCreationDate(testcase
 									.getCreationDate());
-							importTeststep.setUpdatedDate(new Date());
-							importTeststep.setActionstep(teststep
-									.getActionstep() + " (i)");
-							importTeststep.setResultstep(teststep
-									.getResultstep() + " (i)");
-							importTeststep.setEnabled(true);
+							importTestcase.setUpdatedDate(new Date());
+							importTestcase
+									.setAutomatic(testcase.getAutomatic());
+							importTestcase.setEnabled(true);
 
-							jJTeststepService.saveJJTeststep(importTeststep);
+							jJTestcaseService.saveJJTestcase(importTestcase);
+
+							Set<JJTeststep> teststeps = testcase.getTeststeps();
+
+							for (JJTeststep teststep : teststeps) {
+
+								JJTestcase tc1 = jJTestcaseService
+										.findJJTestcase(importTestcase.getId());
+
+								JJTeststep importTeststep = new JJTeststep();
+
+								importTeststep.setOrdering(teststep
+										.getOrdering());
+
+								importTeststep.setTestcase(tc1);
+								tc1.getTeststeps().add(importTeststep);
+
+								importTeststep.setName(teststep.getName()
+										+ " (i)");
+								importTeststep.setDescription(teststep
+										.getDescription());
+								importTeststep.setCreationDate(teststep
+										.getCreationDate());
+								importTeststep.setUpdatedDate(new Date());
+								importTeststep.setActionstep(teststep
+										.getActionstep() + " (i)");
+								importTeststep.setResultstep(teststep
+										.getResultstep() + " (i)");
+								importTeststep.setEnabled(true);
+
+								jJTeststepService
+										.saveJJTeststep(importTeststep);
+
+							}
 
 						}
 
@@ -1096,7 +1089,6 @@ public class JJRequirementBean {
 				}
 
 			}
-
 		}
 
 		RequestContext context = RequestContext.getCurrentInstance();
@@ -1145,19 +1137,33 @@ public class JJRequirementBean {
 		System.out.println("task.getCompletion() " + task.getCompleted());
 	}
 
+	private List<ImportFormat> importFormats;
+
+	public List<ImportFormat> getImportFormats() {
+		return importFormats;
+	}
+
+	public void setImportFormats(List<ImportFormat> importFormats) {
+		this.importFormats = importFormats;
+	}
+
 	public void fillTableImport() {
-		List<ImportFormat> data = new ArrayList<ImportFormat>();
+		importFormats = new ArrayList<ImportFormat>();
+
+		copyTestcases = false;
+		copyChapters = false;
+		copyRequirements = false;
+		disableImportButton = true;
 
 		int i = 0;
 		for (JJRequirement requirement : jJRequirementService.getRequirements(
 				importCategory, importProject, importProduct, importVersion,
 				importStatus, null, false, true, true)) {
-			data.add(new ImportFormat(String.valueOf(i), requirement, false,
-					false));
+			importFormats.add(new ImportFormat(String.valueOf(i), requirement,
+					copyRequirements, copyTestcases, copyChapters));
 			i++;
 		}
 
-		formatDataModel = new FormatDataModel(data);
 	}
 
 	public void loadImportFormat() {
@@ -1183,7 +1189,7 @@ public class JJRequirementBean {
 
 	public void handelSelectImportProject() {
 		fillTableImport();
-		selectedFormats = null;
+
 	}
 
 	public void handelSelectImportProduct() {
@@ -1196,22 +1202,22 @@ public class JJRequirementBean {
 
 		}
 		fillTableImport();
-		selectedFormats = null;
+
 	}
 
 	public void handelSelectImportVersion() {
 		fillTableImport();
-		selectedFormats = null;
+
 	}
 
 	public void handelSelectImportCategory() {
 		fillTableImport();
-		selectedFormats = null;
+
 	}
 
 	public void handelSelectImportStatus() {
 		fillTableImport();
-		selectedFormats = null;
+
 	}
 
 	public void closeDialog() {
@@ -1250,8 +1256,7 @@ public class JJRequirementBean {
 
 	public void closeDialogImport() {
 		message = null;
-		formatDataModel = null;
-		selectedFormats = null;
+		importFormats = null;
 		importCategory = null;
 		importProduct = null;
 		importProject = null;
@@ -2392,6 +2397,120 @@ public class JJRequirementBean {
 
 	}
 
+	private boolean copyTestcases;
+	private boolean copyChapters;
+	private boolean copyRequirements;
+	private boolean disableImportButton;
+
+	public boolean getCopyTestcases() {
+		return copyTestcases;
+	}
+
+	public void setCopyTestcases(boolean copyTestcases) {
+		this.copyTestcases = copyTestcases;
+	}
+
+	public boolean getCopyChapters() {
+		return copyChapters;
+	}
+
+	public void setCopyChapters(boolean copyChapters) {
+		this.copyChapters = copyChapters;
+	}
+
+	public boolean getCopyRequirements() {
+		return copyRequirements;
+	}
+
+	public void setCopyRequirements(boolean copyRequirements) {
+		this.copyRequirements = copyRequirements;
+	}
+
+	public boolean getDisableImportButton() {
+		return disableImportButton;
+	}
+
+	public void setDisableImportButton(boolean disableImportButton) {
+		this.disableImportButton = disableImportButton;
+	}
+
+	public void copyTestcases() {
+
+		for (ImportFormat importFormat : importFormats) {
+			importFormat.setCopyTestcase(copyTestcases);
+		}
+
+	}
+
+	public void copyTestcase() {
+
+		boolean copyAll = true;
+		for (ImportFormat importFormat : importFormats) {
+
+			if (!importFormat.getCopyTestcase()) {
+				copyAll = false;
+				break;
+			}
+
+		}
+		copyTestcases = copyAll;
+	}
+
+	public void copyChapters() {
+
+		for (ImportFormat importFormat : importFormats) {
+			importFormat.setCopyChapter(copyChapters);
+		}
+
+	}
+
+	public void copyChapter() {
+
+		boolean copyAll = true;
+		for (ImportFormat importFormat : importFormats) {
+			if (!importFormat.getCopyChapter()) {
+				copyAll = false;
+				break;
+			}
+
+		}
+		copyChapters = copyAll;
+	}
+
+	public void copyRequirements() {
+
+		for (ImportFormat importFormat : importFormats) {
+			importFormat.setCopyRequirement(copyRequirements);
+		}
+
+		disableImportButton = !copyRequirements;
+
+	}
+
+	public void copyRequirement() {
+
+		boolean copyAll = true;
+		for (ImportFormat importFormat : importFormats) {
+			if (!importFormat.getCopyRequirement()) {
+				copyAll = false;
+				break;
+			}
+
+		}
+
+		copyRequirements = copyAll;
+
+		for (ImportFormat importFormat : importFormats) {
+			if (importFormat.getCopyRequirement()) {
+				disableImportButton = false;
+				break;
+			} else {
+				disableImportButton = true;
+			}
+
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public class CategoryDataModel extends ListDataModel<JJRequirement>
 			implements SelectableDataModel<JJRequirement> {
@@ -2425,56 +2544,55 @@ public class JJRequirementBean {
 			float compteur = 0;
 			List<JJRequirement> dataList = (List<JJRequirement>) getWrappedData();
 
-			// List<JJCategory> categoryList = jJCategoryService.getCategories(
-			// null, false, true, true);
+			List<JJCategory> categoryList = jJCategoryService.getCategories(
+					null, false, true, true);
 
-			// boolean sizeIsOne = false;
-			//
-			// if (categoryId == categoryList.get(0).getId()) {
-			//
-			// for (JJRequirement requirement : dataList) {
-			//
-			// for (JJRequirement req : requirement.getRequirementLinkUp()) {
-			// if (req.getEnabled()) {
-			// compteur++;
-			// break;
-			// }
-			// }
-			//
-			// }
-			//
-			// sizeIsOne = true;
-			// } else if (categoryId == categoryList.get(categoryList.size() -
-			// 1)
-			// .getId() && !sizeIsOne) {
-			//
-			// for (JJRequirement requirement : dataList) {
-			// boolean linkUp = false;
-			// boolean linkDown = false;
-			//
-			// for (JJRequirement req : requirement
-			// .getRequirementLinkDown()) {
-			// if (req.getEnabled()) {
-			// linkDown = true;
-			// break;
-			// }
-			// }
-			//
-			// for (JJTask task : requirement.getTasks()) {
-			// if (task.getEnabled()) {
-			// linkUp = true;
-			// break;
-			// }
-			// }
-			//
-			// if (linkUp && linkDown) {
-			// compteur++;
-			// } else if (linkUp || linkDown) {
-			// compteur += 0.5;
-			// }
-			//
-			// }
-			// } else {
+			boolean sizeIsOne = false;
+
+			if (categoryId == categoryList.get(0).getId()) {
+
+				for (JJRequirement requirement : dataList) {
+
+					for (JJRequirement req : requirement.getRequirementLinkUp()) {
+						if (req.getEnabled()) {
+							compteur++;
+							break;
+						}
+					}
+
+				}
+
+				sizeIsOne = true;
+			} else if (categoryId == categoryList.get(categoryList.size() - 1)
+					.getId() && !sizeIsOne) {
+
+				for (JJRequirement requirement : dataList) {
+					boolean linkUp = false;
+					boolean linkDown = false;
+
+					for (JJRequirement req : requirement
+							.getRequirementLinkDown()) {
+						if (req.getEnabled()) {
+							linkDown = true;
+							break;
+						}
+					}
+
+					for (JJTask task : requirement.getTasks()) {
+						if (task.getEnabled()) {
+							linkUp = true;
+							break;
+						}
+					}
+
+					if (linkUp && linkDown) {
+						compteur++;
+					} else if (linkUp || linkDown) {
+						compteur += 0.5;
+					}
+
+				}
+			} else {
 
 				for (JJRequirement requirement : dataList) {
 
@@ -2496,21 +2614,13 @@ public class JJRequirementBean {
 						}
 					}
 
-					for (JJTask task : requirement.getTasks()) {
-						if (task.getEnabled()) {
-							linkUp = true;
-							linkDown = true;
-							break;
-						}
-					}
-
 					if (linkUp && linkDown) {
 						compteur++;
 					} else if (linkUp || linkDown) {
 						compteur += 0.5;
 					}
 				}
-//			}
+			}
 
 			if (dataList.isEmpty()) {
 				coverageProgress = 0;
@@ -2625,53 +2735,11 @@ public class JJRequirementBean {
 		}
 	}
 
-	private class FormatDataModel extends ListDataModel<ImportFormat> implements
-			SelectableDataModel<ImportFormat> {
-
-		public FormatDataModel() {
-		}
-
-		public FormatDataModel(List<ImportFormat> data) {
-			super(data);
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		public ImportFormat getRowData(String rowKey) {
-			// In a real app, a more efficient way like a query by rowKey should
-			// be implemented to deal with huge data
-
-			List<ImportFormat> formats = (List<ImportFormat>) getWrappedData();
-
-			for (ImportFormat format : formats) {
-				if (format.getId().equals(rowKey))
-					return format;
-			}
-
-			return null;
-		}
-
-		@Override
-		public Object getRowKey(ImportFormat format) {
-			return format.getId();
-		}
-	}
-
-	public void onEdit(RowEditEvent event) {
-
-		ImportFormat importFormat = (ImportFormat) event.getObject();
-		System.out.println("toot");
-		System.out.println(importFormat.getRequirement().getName());
-	}
-
-	public void onCancel(RowEditEvent event) {
-
-	}
-
 	public class ImportFormat {
 
 		private String id;
 		private JJRequirement requirement;
+		private boolean copyRequirement;
 		private boolean copyTestcase;
 		private boolean copyChapter;
 
@@ -2680,10 +2748,12 @@ public class JJRequirementBean {
 		}
 
 		public ImportFormat(String id, JJRequirement requirement,
-				boolean copyTestcase, boolean copyChapter) {
+				boolean copyRequirement, boolean copyTestcase,
+				boolean copyChapter) {
 			super();
 			this.id = id;
 			this.requirement = requirement;
+			this.copyRequirement = copyRequirement;
 			this.copyTestcase = copyTestcase;
 			this.copyChapter = copyChapter;
 		}
@@ -2702,6 +2772,14 @@ public class JJRequirementBean {
 
 		public void setRequirement(JJRequirement requirement) {
 			this.requirement = requirement;
+		}
+
+		public boolean getCopyRequirement() {
+			return copyRequirement;
+		}
+
+		public void setCopyRequirement(boolean copyRequirement) {
+			this.copyRequirement = copyRequirement;
 		}
 
 		public boolean getCopyTestcase() {
