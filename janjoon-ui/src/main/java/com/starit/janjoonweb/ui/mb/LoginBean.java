@@ -25,7 +25,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 
@@ -72,6 +71,8 @@ public class LoginBean implements Serializable {
 				String s = savedRequest.getRedirectUrl();
 				s = s.substring(s.lastIndexOf("/") + 1);
 				s = s.replace(s.substring(s.indexOf(".")), "");
+				if(s.contains("development"))
+					s="main";
 				return s;
 			}
 		}
@@ -183,22 +184,17 @@ public class LoginBean implements Serializable {
 
 		FacesContext ctx = FacesContext.getCurrentInstance();
 		String viewId = ctx.getViewRoot().getViewId();
-		
-		if (event.getComponent().getClientId()
-				.contains("projectSelectOneMenu")) 
-		{
-			HttpSession session = (HttpSession) ctx.getExternalContext()
-					.getSession(false);
+		HttpSession session = (HttpSession) ctx.getExternalContext()
+				.getSession(false);
+
+		if (event.getComponent().getClientId().contains("projectSelectOneMenu")) {
 
 			session.setAttribute("jJSprintBean", new JJSprintBean());
 		}
 
 		if (viewId.contains("development")) {
 
-			RequestContext context = RequestContext.getCurrentInstance();			
-			HttpSession session = (HttpSession) ctx.getExternalContext()
-					.getSession(false);
-
+			RequestContext context = RequestContext.getCurrentInstance();
 			JJVersionBean jJVersionBean = (JJVersionBean) session
 					.getAttribute("jJVersionBean");
 			JJProductBean jJProductBean = (JJProductBean) session
@@ -211,13 +207,21 @@ public class LoginBean implements Serializable {
 			if (event.getComponent().getClientId()
 					.contains("productSelectOneMenu")) {
 				System.out
-						.println("---------------ProjectUpdate---------------");
+						.println("---------------ProductUpdate---------------");
+
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"dev.nullVersion.label", FacesMessage.SEVERITY_ERROR,
+						"");
+				FacesContext.getCurrentInstance()
+						.addMessage(null, facesMessage);
 
 			} else if (event.getComponent().getClientId()
 					.contains("versionSelectOneMenu")) {
 				jJVersionBean.setVersion((JJVersion) event.getNewValue());
 				if (jJVersionBean.getVersion() != null) {
-					// jJDevelopment = new DevelopmentBean();
+
+					jJDevelopment.reloadRepository();;
+
 					if (jJDevelopment.isRender()) {
 						System.out
 								.println("---------------versionUpdate---------------");
@@ -237,9 +241,10 @@ public class LoginBean implements Serializable {
 				if (jJDevelopment.isRender()) {
 					System.out
 							.println("---------------ProjectUpdate---------------");
-					// jJDevelopment.setTasks(jJProductBean.getTasksByProduct(
-					// jJProductBean.getProduct(),
-					// jJProjectBean.getProject()));
+					jJDevelopment.setProject(jJProjectBean.getProject());
+					jJDevelopment.setTasks(jJProductBean.getTasksByProduct(
+							jJProductBean.getProduct(),
+							jJProjectBean.getProject()));
 					context.update(":contentPanel:devPanel:form:taskSelectOneMenu");
 				}
 			}
@@ -263,6 +268,19 @@ public class LoginBean implements Serializable {
 							path + "/pages/development.jsf?faces-redirect=true");
 
 		}
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		DevelopmentBean jJDevelopment = (DevelopmentBean) session
+				.getAttribute("jJDevelopment");
+
+		if(jJDevelopment!=null)
+		{
+			if (!jJDevelopment.isInit()) {
+				jJDevelopment.initJJDevlopment();
+			}
+		}
+		
+
 	}
 
 	public void loginRedirect(ComponentSystemEvent e) throws IOException {
@@ -296,7 +314,26 @@ public class LoginBean implements Serializable {
 
 			}
 
+			String viewId = FacesContext.getCurrentInstance().getViewRoot()
+					.getViewId();
+			if (!viewId.contains("development")) {
+				HttpSession session = (HttpSession) FacesContext
+						.getCurrentInstance().getExternalContext()
+						.getSession(false);
+				DevelopmentBean jJDevelopment = (DevelopmentBean) session
+						.getAttribute("jJDevelopment");
+				if(jJDevelopment!=null)
+				{
+					if (jJDevelopment.isInit()) {
+						session.setAttribute("jJDevelopment", new DevelopmentBean(
+								jJDevelopment));
+					}
+				}		
+
+			}
+
 		}
+
 	}
 
 	public void redirectToDev(ActionEvent e) throws IOException {
@@ -304,8 +341,7 @@ public class LoginBean implements Serializable {
 		JJVersionBean jjVersionBean = (JJVersionBean) findBean("jJVersionBean");
 		JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
 
-		System.out.println("------------------------------------");
-		if (jjVersionBean.getVersion() != null && jJProductBean != null) {
+		if (jjVersionBean.getVersion() != null && jJProductBean.getProduct() != null) {
 
 			if (!FacesContext.getCurrentInstance().getViewRoot().getViewId()
 					.contains("development")) {
@@ -328,9 +364,20 @@ public class LoginBean implements Serializable {
 
 		} else {
 
-			FacesMessage message =MessageFactory.getMessage("dev.nullProduct.label", FacesMessage.SEVERITY_ERROR, "");
-			FacesContext.getCurrentInstance().addMessage(null, message);
-			System.out.println(message.getDetail());
+			if(jJProductBean.getProduct() == null)
+			{
+				FacesMessage message = MessageFactory.getMessage(
+						"dev.nullProduct.label", FacesMessage.SEVERITY_ERROR, "");
+				FacesContext.getCurrentInstance().addMessage(null, message);
+				System.out.println(message.getDetail());
+			}
+			else
+			{
+				FacesMessage message = MessageFactory.getMessage(
+						"dev.nullVersion.label", FacesMessage.SEVERITY_ERROR, "");
+				FacesContext.getCurrentInstance().addMessage(null, message);
+				System.out.println(message.getDetail());
+			}
 
 		}
 	}

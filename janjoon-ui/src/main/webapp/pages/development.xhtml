@@ -13,10 +13,9 @@
 		href="/syntaxhighlighter/standard.css" />
 	<ui:define name="content">
 		<f:event listener="#{loginBean.loadingPage}" type="preRenderView" />
-		<f:event listener="#{jJDevelopment.reloadRepository}"
-			type="preRenderView" />
 		<br />
-		<p:panel id="errorPanel" header="#{messages['dev.panel.error.header']}"
+		<p:panel id="errorPanel"
+			header="#{messages['dev.panel.error.header']}"
 			style="width: 100%;valign: top;" rendered="#{!jJDevelopment.render}">
 			<p:growl id="error" showDetail="true" life="2000" />
 			<H1>#{messages['dev.panel.error.title']}</H1>
@@ -32,7 +31,8 @@
 						<td><p:panelGrid style="margin-top:10px">
 								<p:row>
 									<p:column>
-										<h:outputText for="taskSelectOneMenu" value="#{messages['dev.taskSelectOneMenu.label']}" />
+										<h:outputText for="taskSelectOneMenu"
+											value="#{messages['dev.taskSelectOneMenu.label']}" />
 										<p:selectOneMenu id="taskSelectOneMenu"
 											value="#{jJDevelopment.task}" panelStyle="width:150px"
 											effect="fold" editable="false" style="width:160px"
@@ -43,13 +43,42 @@
 												itemLabel="#{t.name}" itemValue="#{t}" />
 											<f:converter
 												converterId="com.starit.janjoonweb.ui.mb.converter.JJTaskConverter" />
+											<p:ajax update="startTaskPanel" />
 										</p:selectOneMenu>
+
 									</p:column>
+
 									<p:column>
-										<p:commandButton value="UpdateToHead" id="fetchFromRepo"
-											immediate="true" icon="ui-icon-disk"
+										<p:commandButton
+											value="#{messages['dev.updateToHead.button']}"
+											id="fetchFromRepo" immediate="true" icon="ui-icon-disk"
 											actionListener="#{jJDevelopment.pull}"
 											update=":form:messages,:form:tabView,:form:fileTree,:form" />
+
+									</p:column>
+
+								</p:row>
+								<p:row>
+									<p:column colspan="2">
+										<h:panelGroup id="startTaskPanel">
+
+											<p:commandButton value="#{messages['dev.startTache.button']}"
+												immediate="true" icon="ui-icon-play"
+												disabled="#{jJDevelopment.task == null or jJDevelopment.task.startDateReal != null}"
+												actionListener="#{jJDevelopment.startTask}"
+												update=":form:taskSelectOneMenu startTaskPanel" />
+											<br />
+											<p:outputLabel
+												rendered="#{jJDevelopment.task != null and jJDevelopment.task.startDateReal != null}"
+												value="#{messages['dev.startTache.label']}"
+												style="color:red;" />
+
+											<p:outputLabel value="#{jJdevelopment.task.startDateReal}"
+												rendered="#{jJDevelopment.task != null and jJDevelopment.task.startDateReal != null}"
+												style="color:red;"/>
+												
+
+										</h:panelGroup>
 									</p:column>
 								</p:row>
 								<p:row>
@@ -62,25 +91,31 @@
 											<p:scrollPanel id="fileTreeScrollPanel" style="height:250px;"
 												mode="native">
 												<p:contextMenu for="fileTree" nodeType="folder">
-													<p:menuitem value="#{messages['dev.menuitem.deleteFolder.label']}"
+													<p:menuitem
+														value="#{messages['dev.menuitem.deleteFolder.label']}"
 														icon="ui-icon-trash" immediate="true"
 														oncomplete="deleteFileDialogWidget.show()" />
-													<p:menuitem value="#{messages['dev.menuitem.addFile.label']}"
+													<p:menuitem
+														value="#{messages['dev.menuitem.addFile.label']}"
 														icon="ui-icon-document" immediate="true"
 														oncomplete="createFileDialogWidget.show()" />
-													<p:menuitem value="#{messages['dev.menuitem.uploadFile.label']}"
+													<p:menuitem
+														value="#{messages['dev.menuitem.uploadFile.label']}"
 														icon="ui-icon-arrowthickstop-1-n" immediate="true"
 														oncomplete="uploadFileDialogWidget.show()" />
-													<p:menuitem value="#{messages['dev.menuitem.commit.label']}"
+													<p:menuitem
+														value="#{messages['dev.menuitem.commit.label']}"
 														icon="ui-icon-arrowthickstop-1-e" immediate="true"
 														oncomplete="commitFileDialogWidget.show()" />
 												</p:contextMenu>
 
 												<p:contextMenu for="fileTree" nodeType="file">
-													<p:menuitem value="#{messages['dev.menuitem.deleteFile.label']}"
+													<p:menuitem
+														value="#{messages['dev.menuitem.deleteFile.label']}"
 														icon="ui-icon-trash" immediate="true"
 														oncomplete="deleteFileDialogWidget.show()" />
-													<p:menuitem value="#{messages['dev.menuitem.commit.label']}"
+													<p:menuitem
+														value="#{messages['dev.menuitem.commit.label']}"
 														icon="ui-icon-arrowthickstop-1-e" immediate="true"
 														oncomplete="commitFileDialogWidget.show()" />
 												</p:contextMenu>
@@ -105,11 +140,13 @@
 													</p:treeNode>
 												</p:tree>
 											</p:scrollPanel>
-											<p:commandButton value="#{messages['dev.menuitem.uploadFile.label']}"
+											<p:commandButton
+												value="#{messages['dev.menuitem.uploadFile.label']}"
 												icon="ui-icon-arrowthickstop-1-n" immediate="true"
 												actionListener="#{jJDevelopment.addToRoot}"
 												oncomplete="uploadFileDialogWidget.show()" />
-											<p:commandButton value="#{messages['dev.menuitem.addFile.label']}"
+											<p:commandButton
+												value="#{messages['dev.menuitem.addFile.label']}"
 												icon="ui-icon-document" immediate="true"
 												actionListener="#{jJDevelopment.addToRoot}"
 												oncomplete="createFileDialogWidget.show()" />
@@ -118,12 +155,13 @@
 								</p:row>
 								<p:row>
 									<p:column colspan="2">
-										<p:outputLabel for="textMess" value="#{messages['dev.comment.label']}" />
+										<p:outputLabel for="textMess"
+											value="#{messages['dev.comment.label']}" />
 										<br />
 										<p:inputTextarea id="textMess"
 											value="#{jJDevelopment.comment}" required="true"
-											requiredMessage="#{messages['dev.comment.requiredMessage']}" rows="5" cols="40"
-											autoResize="false" />
+											requiredMessage="#{messages['dev.comment.requiredMessage']}"
+											rows="5" cols="40" autoResize="false" />
 										<p:message for="textMess" id="commentmessage" closable="true" />
 									</p:column>
 								</p:row>
@@ -131,12 +169,14 @@
 									<p:column>
 										<p:selectBooleanCheckbox value="#{jJDevelopment.check}"
 											id="Marcasdone" />
-										<h:outputLabel value="#{messages['dev.Marcasdone.label']}" for="Marcasdone" />
+										<h:outputLabel value="#{messages['dev.Marcasdone.label']}"
+											for="Marcasdone" />
 									</p:column>
 									<p:column>
-										<p:commandButton value="#{messages['dev.submit.button']}" id="submit"
-											icon="ui-icon-disk" actionListener="#{jJDevelopment.commit}"
-											update=":form:messages,:form:tabView,:form:fileTree,:form:taskmessage,:form:commentmessage" />
+										<p:commandButton value="#{messages['dev.submit.button']}"
+											id="submit" icon="ui-icon-disk"
+											actionListener="#{jJDevelopment.commit}"
+											update=":form:messages,:form:tabView,:form:fileTree,:form:taskmessage,:form:commentmessage,startTaskPanel" />
 									</p:column>
 								</p:row>
 							</p:panelGrid></td>
@@ -144,19 +184,22 @@
 								style="height:530px;width:700px;">
 								<p:tabView id="tabView" effect="Fade" effectDuration="slow"
 									activeIndex="#{jJDevelopment.activeTabIndex}" scrollable="true"
-									value="#{jJDevelopment.files}" var="tab">
+									value="#{jJDevelopment.files}" var="tab" dynamic="true" cache="true">
 									<p:ajax event="tabClose" listener="#{jJDevelopment.onCloseTab}"
-										update=":form:tabView" />
+										update=":devPanel"/>									
+										
 									<p:ajax event="tabChange"
-										listener="#{jJDevelopment.onChangeTab}" update=":form:tabView" />
+										listener="#{jJDevelopment.onChangeTab}" update=":devPanel"/>
+										
 									<p:tab title="#{tab.title}" closable="true">
-										<pe:codeMirror id="codeMirror1" mode="#{tab.mode}"
+										<pe:codeMirror id="codeMirror" mode="#{tab.mode}"
 											autoformat="true" widgetVar="myCodeMirror" theme="eclipse"
 											value="#{tab.texte}" lineNumbers="true" tabSize="150"
 											extraKeys="{ 'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);}}">
 											<p:ajax event="blur" update=":form:tabView"
-												listener="#{jJDevelopment.valueChangeHandlerCodeMirror}" />
-										</pe:codeMirror>										
+												listener="#{jJDevelopment.valueChangeHandlerCodeMirror}">
+												<f:attribute name="fileMapValue" value="#{tab}" /></p:ajax>
+										</pe:codeMirror>
 									</p:tab>
 								</p:tabView>
 							</p:panel></td>
@@ -180,8 +223,9 @@
 			<p:confirmDialog id="deletFileDialog"
 				widgetVar="deleteFileDialogWidget"
 				message="#{messages['dev.deletFileDialog.title']}" showEffect="fade"
-				hideEffect="explode" header="#{messages['dev.deletFileDialog.header']}"
-				severity="alarm">#{messages['dev.delete.confirm.label']}
+				hideEffect="explode"
+				header="#{messages['dev.deletFileDialog.header']}" severity="alarm">
+
 				<p:outputPanel id="deletePanel">
 					<h:form id="deleteForm">
 						<p:commandButton id="deleteYesButton"
@@ -195,9 +239,9 @@
 			</p:confirmDialog>
 			<p:confirmDialog id="commitFileDialog"
 				widgetVar="commitFileDialogWidget"
-				message="#{messages['dev.commitFileDialog.title']}" showEffect="fade"
-				hideEffect="explode" header="#{messages['dev.commitFileDialog.header']}"
-				severity="alarm">
+				message="#{messages['dev.commitFileDialog.title']}"
+				showEffect="fade" hideEffect="explode"
+				header="#{messages['dev.commitFileDialog.header']}" severity="alarm">
 				<p:outputPanel id="commitPanel">
 					<h:form id="commitForm">
 						<p:commandButton id="commitYesButton"
@@ -212,8 +256,8 @@
 
 			<p:confirmDialog id="saveFileDialog" widgetVar="saveFileDialogWidget"
 				message="#{messages['dev.saveFileDialog.title']}" showEffect="fade"
-				hideEffect="explode" header="#{messages['dev.saveFileDialog.header']}"
-				severity="alarm">
+				hideEffect="explode"
+				header="#{messages['dev.saveFileDialog.header']}" severity="alarm">
 				<p:outputPanel id="savePanel">
 					<h:form id="saveForm">
 						<p:commandButton id="saveYesButton" value="#{messages.label_yes}"
@@ -250,7 +294,8 @@
 				</p:outputPanel>
 			</p:dialog>
 
-			<p:dialog id="uploadFileDialog" header="#{messages['dev.uploadFileDialog.title']}"
+			<p:dialog id="uploadFileDialog"
+				header="#{messages['dev.uploadFileDialog.title']}"
 				widgetVar="uploadFileDialogWidget" resizable="true"
 				showEffect="fade" hideEffect="explode">
 				<p:outputPanel id="uploadFilePanel">

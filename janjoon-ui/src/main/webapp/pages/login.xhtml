@@ -10,27 +10,63 @@
 	<ui:define name="content">
 		<f:event listener="#{loginBean.loginRedirect}" type="preRenderView" />
 		<h5>BeHappy2012</h5>
-		<p:panel id="loginPanel" header="#{messages.login_pleaseLogin_header}"
-			style="margin-top:50px;margin-bottom:50px;width:30%;margin-left:auto !important;margin-right:auto !important;">
-			<h:form id="login" method="post">
-				<h:outputLabel for="username" value="#{messages.login_username_label}:"
-					style="margin-top:20px;" />
-				<p:inputText id="username" value="#{loginBean.username}"
-					required="true" requiredMessage="#{messages.login_necessaryUsername_label}" />
-				<p:message for="username" id="mail" closable="true" />
+		<h:form id="login" method="post">
+			<p:panelGrid
+				style="margin-top:50px;margin-bottom:50px;width:30%;margin-left:auto !important;margin-right:auto !important;">
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="2">
+							<p:outputLabel value="#{messages.login_pleaseLogin_header}" />
+						</p:column>
+					</p:row>
+				</f:facet>
 
-				<h:outputLabel for="password" value="#{messages.login_password_label}:"
-					style="margin-top:20px;" />
-				<p:password id="password" value="#{loginBean.password}"
-					required="true" requiredMessage="#{messages.login_necessaryPassword_label}" />
-				<p:message for="password" id="mdp" closable="true" />
-
-				<p:commandButton id="submit" value="#{messages.login_login_button}"
-					action="#{loginBean.login}" style="margin-top:20px;"
-					update=":login:mdp,:login:mail,:auth" />
-
-			</h:form>
-		</p:panel>
+				<p:row>
+					<p:column>
+						<h:outputLabel for="username"
+							value="#{messages.login_username_label}:"
+							style="margin-top:20px;" />
+					</p:column>
+					<p:column>
+						<p:inputText id="username" value="#{loginBean.username}"
+							required="true"
+							requiredMessage="#{messages.login_necessaryUsername_label}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:message for="username" id="mail" closable="true" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputLabel for="password"
+							value="#{messages.login_password_label}:"
+							style="margin-top:20px;" />
+					</p:column>
+					<p:column>
+						<p:password id="password" value="#{loginBean.password}"
+							required="true"
+							requiredMessage="#{messages.login_necessaryPassword_label}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:message for="password" id="mdp" closable="true" />
+					</p:column>
+				</p:row>
+				<f:facet name="footer">
+					<p:row>
+						<p:column colspan="2">
+							<p:commandButton id="submit"
+								value="#{messages.login_login_button}"
+								action="#{loginBean.login}" style="margin-top:20px;"
+								update=":login:mdp,:login:mail,:auth" />
+						</p:column>
+					</p:row>
+				</f:facet>
+			</p:panelGrid>
+		</h:form>
 	</ui:define>
 </ui:composition>
 </html>

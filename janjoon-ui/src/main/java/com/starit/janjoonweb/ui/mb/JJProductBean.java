@@ -235,7 +235,7 @@ public class JJProductBean {
 
 	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project) {
 		return jJTaskService
-				.getTasks(project, product, null, null, true, false);
+				.getTasksByProduct(product, project);
 	}
 
 }

@@ -132,6 +132,13 @@ public class JJTaskServiceImpl implements JJTaskService {
 		return result.getResultList();
 
 	}
+	
+	@Override
+	public List<JJTask> getTasksByProduct(JJProduct product,JJProject project)
+	{
+		return getTasks(project, product, null, null, true, false);
+		
+	}
 
 	@Override
 	public void saveTasks(Set<JJTask> tasks) {

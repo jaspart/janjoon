@@ -22,7 +22,7 @@
 		</p:selectOneMenu>
 		<p:panelGrid id="reqPanel">
 			<p:row>
-				<p:column >
+				<p:column>
 					<p:panel rendered="#{jJSprintBean.category == null}"
 						header="Please Select a Category "
 						style="width:300px;height:150px" />
@@ -44,8 +44,8 @@
 				</p:column>
 				<p:column rendered="#{jjsprint.render}">
 					<p:dataTable id="taskTable" value="#{jjsprint.taskList}" var="t"
-						scrollable="true" scrollHeight="200" style="width:350px;" rowKey="#{t.id}"
-						emptyMessage="#{messages.label_notFound}">
+						scrollable="true" scrollHeight="200" style="width:350px;"
+						rowKey="#{t.id}" emptyMessage="#{messages.label_notFound}">
 
 						<p:column headerText="Name" style="width:200px">
 							<h:outputText value="#{t.name}" />
@@ -60,7 +60,7 @@
 			</p:row>
 			<f:facet name="footer">
 				<p:row>
-					<p:column >
+					<p:column>
 						<p:commandButton value="#{messages.label_create} JJTask"
 							id="createTaskButton" icon="ui-icon-circle-plus"
 							disabled="#{jJSprintBean.requirement == null}"
@@ -73,8 +73,14 @@
 						<p:tooltip for="createTaskButton"
 							value="#{messages.label_create} JJTask" showEffect="fade"
 							hideEffect="fade" />
+						<p:commandButton value="Done" id="doneButton"
+							rendered="#{!jjsprint.render}"
+							update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm"
+							immediate="true" actionListener="#{jJSprintBean.doneEvent}">
+							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+						</p:commandButton>
 					</p:column>
-					<p:column >
+					<p:column>
 						<p:commandButton value="Done" id="doneButtonr"
 							rendered="#{jjsprint.render}"
 							update=":projecttabview:SprintTabView" immediate="true"
@@ -83,13 +89,7 @@
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 
 						</p:commandButton>
-						<p:commandButton value="Done" id="doneButton"
-							rendered="#{!jjsprint.render}"
-							update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm"
-							immediate="true" actionListener="#{jJSprintBean.doneEvent}">
 
-							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
-						</p:commandButton>
 					</p:column>
 				</p:row>
 			</f:facet>
