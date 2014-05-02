@@ -33,16 +33,18 @@
 									<p:column>
 										<h:outputText for="taskSelectOneMenu"
 											value="#{messages['dev.taskSelectOneMenu.label']}" />
+
 										<p:selectOneMenu id="taskSelectOneMenu"
 											value="#{jJDevelopment.task}" panelStyle="width:150px"
 											effect="fold" editable="false" style="width:160px"
 											required="true" requiredMessage="Select task to commit">
-											<f:selectItem itemValue="#{null}"
+											<f:selectItem itemValue="#{null}" noSelectionOption="true"
 												itemLabel="-- #{messages['dev.taskSelectOneMenu.labelitem']} --" />
 											<f:selectItems value="#{jJDevelopment.tasks}" var="t"
 												itemLabel="#{t.name}" itemValue="#{t}" />
 											<f:converter
 												converterId="com.starit.janjoonweb.ui.mb.converter.JJTaskConverter" />
+
 											<p:ajax update="startTaskPanel" />
 										</p:selectOneMenu>
 
@@ -52,9 +54,7 @@
 										<p:commandButton
 											value="#{messages['dev.updateToHead.button']}"
 											id="fetchFromRepo" immediate="true" icon="ui-icon-disk"
-											actionListener="#{jJDevelopment.pull}"
-											update=":form:messages,:form:tabView,:form:fileTree,:form" />
-
+											actionListener="#{jJDevelopment.pull}" update=":form" />
 									</p:column>
 
 								</p:row>
@@ -67,16 +67,31 @@
 												disabled="#{jJDevelopment.task == null or jJDevelopment.task.startDateReal != null}"
 												actionListener="#{jJDevelopment.startTask}"
 												update=":form:taskSelectOneMenu startTaskPanel" />
+												
+											<p:commandButton id="viewTaskButton" icon="ui-icon-zoomin"
+												value="#{messages['dev.viewTask.button']}"
+												update=":viewTaskForm:viewTaskPanelGrid"
+												disabled="#{jJDevelopment.task == null}"
+												immediate="true"
+												oncomplete="viewTaskDialogWidget.show()"
+												title="#{messages.label_view}">
+												<f:setPropertyActionListener value="#{jJDevelopment.task}"
+													target="#{jJTaskBean.JJTask_}" />
+											</p:commandButton>
+											<p:tooltip for="viewTaskButton" value="#{messages.label_view}"
+												showEffect="fade" hideEffect="fade" />
 											<br />
-											<p:outputLabel
+											<h:outputText
 												rendered="#{jJDevelopment.task != null and jJDevelopment.task.startDateReal != null}"
 												value="#{messages['dev.startTache.label']}"
 												style="color:red;" />
 
-											<p:outputLabel value="#{jJdevelopment.task.startDateReal}"
+											<h:outputText value="#{jJDevelopment.task.startDateReal}"
 												rendered="#{jJDevelopment.task != null and jJDevelopment.task.startDateReal != null}"
-												style="color:red;"/>
-												
+												style="color:red;">
+												<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+											</h:outputText>
+
 
 										</h:panelGroup>
 									</p:column>
@@ -124,8 +139,7 @@
 													var="file" animate="true"
 													selection="#{jJDevelopment.selectedTree}"
 													selectionMode="single">
-													<p:ajax event="select"
-														update=":form:messages,:form:tabView"
+													<p:ajax event="select" update=":form:tabViewPanel"
 														listener="#{jJDevelopment.onSelectTree}" />
 													<p:treeNode type="folder"
 														expandedIcon="ui-icon-folder-open"
@@ -180,26 +194,32 @@
 									</p:column>
 								</p:row>
 							</p:panelGrid></td>
-						<td><p:panel header="#{messages['dev.fileContent.panel']}"
+						<td><p:panel id="tabViewPanel"
+								header="#{messages['dev.fileContent.panel']}"
 								style="height:530px;width:700px;">
-								<p:tabView id="tabView" effect="Fade" effectDuration="slow"
-									activeIndex="#{jJDevelopment.activeTabIndex}" scrollable="true"
-									value="#{jJDevelopment.files}" var="tab" dynamic="true" cache="true">
+								<p:tabView id="tabView" effectDuration="fast"
+									rendered="#{not empty jJDevelopment.files}"
+									activeIndex="#{jJDevelopment.activeTabIndex}" effect="fade"
+									scrollable="true" value="#{jJDevelopment.files}" var="tab">
+
 									<p:ajax event="tabClose" listener="#{jJDevelopment.onCloseTab}"
-										update=":devPanel"/>									
-										
-									<p:ajax event="tabChange"
-										listener="#{jJDevelopment.onChangeTab}" update=":devPanel"/>
-										
+										update=":form:tabViewPanel" />
+
+									<p:ajax event="tabChange" update=":form:tabView" />
+
 									<p:tab title="#{tab.title}" closable="true">
+
 										<pe:codeMirror id="codeMirror" mode="#{tab.mode}"
 											autoformat="true" widgetVar="myCodeMirror" theme="eclipse"
 											value="#{tab.texte}" lineNumbers="true" tabSize="150"
 											extraKeys="{ 'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);}}">
-											<p:ajax event="blur" update=":form:tabView"
+											<p:ajax event="blur" update=":form:tabView:codeMirror"
 												listener="#{jJDevelopment.valueChangeHandlerCodeMirror}">
-												<f:attribute name="fileMapValue" value="#{tab}" /></p:ajax>
+												<f:attribute name="fileMapValue" value="#{tab}" />
+											</p:ajax>
 										</pe:codeMirror>
+										<!-- 										<p:inputTextarea id="textArea" rows="27" cols="88" -->
+										<!-- 											autoResize="false" scrollHeight="28" value="#{tab.texte}" /> -->
 									</p:tab>
 								</p:tabView>
 							</p:panel></td>
@@ -261,9 +281,9 @@
 				<p:outputPanel id="savePanel">
 					<h:form id="saveForm">
 						<p:commandButton id="saveYesButton" value="#{messages.label_yes}"
-							action="#{jJDevelopment.saveFile}" update=":form:tabView" />
+							action="#{jJDevelopment.saveFile}" update=":form:tabViewPanel" />
 						<p:commandButton id="saveNoButton" value="#{messages.label_no}"
-							action="#{jJDevelopment.notSaveFile}" update=":form:tabView" />
+							action="#{jJDevelopment.notSaveFile}" update=":form:tabViewPanel" />
 					</h:form>
 				</p:outputPanel>
 			</p:confirmDialog>
@@ -290,6 +310,22 @@
 								value="#{messages.label_close}"
 								onclick="createFileDialogWidget.hide()" type="button" />
 						</h:panelGrid>
+					</h:form>
+				</p:outputPanel>
+			</p:dialog>
+
+			<p:dialog id="viewTaskDialog" header="#{messages.label_view} JJTask"
+				modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
+				resizable="true" maximizable="true" showEffect="fade"
+				hideEffect="explode">
+				<p:outputPanel id="viewTaskPanel">
+					<h:form id="viewTaskForm" enctype="multipart/form-data">
+						<h:panelGrid id="viewTaskPanelGrid" columns="2"
+							binding="#{jJTaskBean.viewPanel}" styleClass="dialog"
+							columnClasses="col1,col2" />
+						<p:commandButton id="viewCloseButton"
+							value="#{messages.label_close}" onclick="viewTaskDialogWidget.hide()"
+							type="button" />
 					</h:form>
 				</p:outputPanel>
 			</p:dialog>

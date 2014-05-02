@@ -21,10 +21,12 @@ import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJSprintConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -36,6 +38,7 @@ import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.validator.LengthValidator;
+
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.inputtext.InputText;
@@ -163,6 +166,203 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
     public void JJTestcaseBean.setViewPanelGrid(HtmlPanelGrid viewPanelGrid) {
         this.viewPanelGrid = viewPanelGrid;
     }
+    
+    public HtmlPanelGrid  JJTestcaseBean.populateViewPanel()
+	{
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        javax.faces.application.Application application = facesContext.getApplication();
+        ExpressionFactory expressionFactory = application.getExpressionFactory();
+        ELContext elContext = facesContext.getELContext();
+        
+        HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
+        
+        HtmlOutputText nameLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        nameLabel.setId("nameLabel");
+        nameLabel.setValue("Name:");
+        htmlPanelGrid.getChildren().add(nameLabel);
+        
+        InputTextarea nameValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        nameValue.setId("nameValue");
+        nameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.name}", String.class));
+        nameValue.setReadonly(true);
+        nameValue.setDisabled(true);
+        htmlPanelGrid.getChildren().add(nameValue);
+        
+        HtmlOutputText descriptionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        descriptionLabel.setId("descriptionLabel");
+        descriptionLabel.setValue("Description:");
+        htmlPanelGrid.getChildren().add(descriptionLabel);
+        
+        InputTextarea descriptionValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        descriptionValue.setId("descriptionValue");
+        descriptionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.description}", String.class));
+        descriptionValue.setReadonly(true);
+        descriptionValue.setDisabled(true);
+        htmlPanelGrid.getChildren().add(descriptionValue);
+        
+        HtmlOutputText creationDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        creationDateLabel.setId("creationDateLabel");
+        creationDateLabel.setValue("Creation Date:");
+        htmlPanelGrid.getChildren().add(creationDateLabel);
+        
+        HtmlOutputText creationDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        creationDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.creationDate}", Date.class));
+        DateTimeConverter creationDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
+        creationDateValueConverter.setPattern("dd/MM/yyyy");
+        creationDateValue.setConverter(creationDateValueConverter);
+        htmlPanelGrid.getChildren().add(creationDateValue);
+        
+        HtmlOutputText createdByLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        createdByLabel.setId("createdByLabel");
+        createdByLabel.setValue("Created By:");
+        htmlPanelGrid.getChildren().add(createdByLabel);
+        
+        HtmlOutputText createdByValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        createdByValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.createdBy}", JJContact.class));
+        createdByValue.setConverter(new JJContactConverter());
+        htmlPanelGrid.getChildren().add(createdByValue);
+        
+        HtmlOutputText updatedDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        updatedDateLabel.setId("updatedDateLabel");
+        updatedDateLabel.setValue("Updated Date:");
+        htmlPanelGrid.getChildren().add(updatedDateLabel);
+        
+        HtmlOutputText updatedDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        updatedDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.updatedDate}", Date.class));
+        DateTimeConverter updatedDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
+        updatedDateValueConverter.setPattern("dd/MM/yyyy");
+        updatedDateValue.setConverter(updatedDateValueConverter);
+        htmlPanelGrid.getChildren().add(updatedDateValue);
+        
+        HtmlOutputText updatedByLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        updatedByLabel.setId("updatedByLabel");
+        updatedByLabel.setValue("Updated By:");
+        htmlPanelGrid.getChildren().add(updatedByLabel);
+        
+        HtmlOutputText updatedByValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        updatedByValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.updatedBy}", JJContact.class));
+        updatedByValue.setConverter(new JJContactConverter());
+        htmlPanelGrid.getChildren().add(updatedByValue);
+        
+        HtmlOutputText enabledLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        enabledLabel.setId("enabledLabel");
+        enabledLabel.setValue("Enabled:");
+        htmlPanelGrid.getChildren().add(enabledLabel);
+        
+        HtmlOutputText enabledValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.enabled}", String.class));
+        htmlPanelGrid.getChildren().add(enabledValue);
+        
+        HtmlOutputText orderingLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        orderingLabel.setId("orderingLabel");
+        orderingLabel.setValue("Ordering:");
+        htmlPanelGrid.getChildren().add(orderingLabel);
+        
+        HtmlOutputText orderingValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        orderingValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.ordering}", String.class));
+        htmlPanelGrid.getChildren().add(orderingValue);
+        
+        HtmlOutputText requirementLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        requirementLabel.setId("requirementLabel");
+        requirementLabel.setValue("Requirement:");
+        htmlPanelGrid.getChildren().add(requirementLabel);
+        
+        HtmlOutputText requirementValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        requirementValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.requirement}", JJRequirement.class));
+        requirementValue.setConverter(new JJRequirementConverter());
+        htmlPanelGrid.getChildren().add(requirementValue);
+        
+        HtmlOutputText sprintLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        sprintLabel.setId("sprintLabel");
+        sprintLabel.setValue("Sprint:");
+        htmlPanelGrid.getChildren().add(sprintLabel);
+        
+        HtmlOutputText sprintValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        sprintValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.sprint}", JJSprint.class));
+        sprintValue.setConverter(new JJSprintConverter());
+        htmlPanelGrid.getChildren().add(sprintValue);
+        
+        HtmlOutputText workloadLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        workloadLabel.setId("workloadLabel");
+        workloadLabel.setValue("Workload:");
+        htmlPanelGrid.getChildren().add(workloadLabel);
+        
+        HtmlOutputText workloadValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        workloadValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.workload}", String.class));
+        htmlPanelGrid.getChildren().add(workloadValue);
+        
+        HtmlOutputText pricepointLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        pricepointLabel.setId("pricepointLabel");
+        pricepointLabel.setValue("Pricepoint:");
+        htmlPanelGrid.getChildren().add(pricepointLabel);
+        
+        HtmlOutputText pricepointValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        pricepointValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.pricepoint}", String.class));
+        htmlPanelGrid.getChildren().add(pricepointValue);
+        
+        HtmlOutputText automaticLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        automaticLabel.setId("automaticLabel");
+        automaticLabel.setValue("Automatic:");
+        htmlPanelGrid.getChildren().add(automaticLabel);
+        
+        HtmlOutputText automaticValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        automaticValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.automatic}", String.class));
+        htmlPanelGrid.getChildren().add(automaticValue);
+        
+        HtmlOutputText softwaresLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        softwaresLabel.setId("softwaresLabel");
+        softwaresLabel.setValue("Softwares:");
+        htmlPanelGrid.getChildren().add(softwaresLabel);
+        
+        HtmlOutputText softwaresValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        softwaresValue.setId("softwaresValue");
+        softwaresValue.setValue("This relationship is managed from the JJSoftware side");
+        htmlPanelGrid.getChildren().add(softwaresValue);
+        
+        HtmlOutputText hardwaresLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        hardwaresLabel.setId("hardwaresLabel");
+        hardwaresLabel.setValue("Hardwares:");
+        htmlPanelGrid.getChildren().add(hardwaresLabel);
+        
+        HtmlOutputText hardwaresValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        hardwaresValue.setId("hardwaresValue");
+        hardwaresValue.setValue("This relationship is managed from the JJHardware side");
+        htmlPanelGrid.getChildren().add(hardwaresValue);
+        
+        HtmlOutputText teststepsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        teststepsLabel.setId("teststepsLabel");
+        teststepsLabel.setValue("Teststeps:");
+        htmlPanelGrid.getChildren().add(teststepsLabel);
+        
+        HtmlOutputText teststepsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        teststepsValue.setId("teststepsValue");
+        teststepsValue.setValue("This relationship is managed from the JJTeststep side");
+        htmlPanelGrid.getChildren().add(teststepsValue);
+        
+        HtmlOutputText tasksLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        tasksLabel.setId("tasksLabel");
+        tasksLabel.setValue("Tasks:");
+        htmlPanelGrid.getChildren().add(tasksLabel);
+        
+        HtmlOutputText tasksValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        tasksValue.setId("tasksValue");
+        tasksValue.setValue("This relationship is managed from the JJTask side");
+        htmlPanelGrid.getChildren().add(tasksValue);
+        
+        HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesLabel.setId("messagesLabel");
+        messagesLabel.setValue("Messages:");
+        htmlPanelGrid.getChildren().add(messagesLabel);
+        
+        HtmlOutputText messagesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        messagesValue.setId("messagesValue");
+        messagesValue.setValue("This relationship is managed from the JJMessage side");
+        htmlPanelGrid.getChildren().add(messagesValue);
+        
+        return htmlPanelGrid;
+    
+	}
     
     public HtmlPanelGrid JJTestcaseBean.populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -882,200 +1082,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         messagesEditInputMessage.setFor("messagesEditInput");
         messagesEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(messagesEditInputMessage);
-        
-        return htmlPanelGrid;
-    }
-    
-    public HtmlPanelGrid JJTestcaseBean.populateViewPanel() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        javax.faces.application.Application application = facesContext.getApplication();
-        ExpressionFactory expressionFactory = application.getExpressionFactory();
-        ELContext elContext = facesContext.getELContext();
-        
-        HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
-        
-        HtmlOutputText nameLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        nameLabel.setId("nameLabel");
-        nameLabel.setValue("Name:");
-        htmlPanelGrid.getChildren().add(nameLabel);
-        
-        InputTextarea nameValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        nameValue.setId("nameValue");
-        nameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.name}", String.class));
-        nameValue.setReadonly(true);
-        nameValue.setDisabled(true);
-        htmlPanelGrid.getChildren().add(nameValue);
-        
-        HtmlOutputText descriptionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        descriptionLabel.setId("descriptionLabel");
-        descriptionLabel.setValue("Description:");
-        htmlPanelGrid.getChildren().add(descriptionLabel);
-        
-        InputTextarea descriptionValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        descriptionValue.setId("descriptionValue");
-        descriptionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.description}", String.class));
-        descriptionValue.setReadonly(true);
-        descriptionValue.setDisabled(true);
-        htmlPanelGrid.getChildren().add(descriptionValue);
-        
-        HtmlOutputText creationDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        creationDateLabel.setId("creationDateLabel");
-        creationDateLabel.setValue("Creation Date:");
-        htmlPanelGrid.getChildren().add(creationDateLabel);
-        
-        HtmlOutputText creationDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        creationDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.creationDate}", Date.class));
-        DateTimeConverter creationDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
-        creationDateValueConverter.setPattern("dd/MM/yyyy");
-        creationDateValue.setConverter(creationDateValueConverter);
-        htmlPanelGrid.getChildren().add(creationDateValue);
-        
-        HtmlOutputText createdByLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        createdByLabel.setId("createdByLabel");
-        createdByLabel.setValue("Created By:");
-        htmlPanelGrid.getChildren().add(createdByLabel);
-        
-        HtmlOutputText createdByValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        createdByValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.createdBy}", JJContact.class));
-        createdByValue.setConverter(new JJContactConverter());
-        htmlPanelGrid.getChildren().add(createdByValue);
-        
-        HtmlOutputText updatedDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        updatedDateLabel.setId("updatedDateLabel");
-        updatedDateLabel.setValue("Updated Date:");
-        htmlPanelGrid.getChildren().add(updatedDateLabel);
-        
-        HtmlOutputText updatedDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        updatedDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.updatedDate}", Date.class));
-        DateTimeConverter updatedDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
-        updatedDateValueConverter.setPattern("dd/MM/yyyy");
-        updatedDateValue.setConverter(updatedDateValueConverter);
-        htmlPanelGrid.getChildren().add(updatedDateValue);
-        
-        HtmlOutputText updatedByLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        updatedByLabel.setId("updatedByLabel");
-        updatedByLabel.setValue("Updated By:");
-        htmlPanelGrid.getChildren().add(updatedByLabel);
-        
-        HtmlOutputText updatedByValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        updatedByValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.updatedBy}", JJContact.class));
-        updatedByValue.setConverter(new JJContactConverter());
-        htmlPanelGrid.getChildren().add(updatedByValue);
-        
-        HtmlOutputText enabledLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        enabledLabel.setId("enabledLabel");
-        enabledLabel.setValue("Enabled:");
-        htmlPanelGrid.getChildren().add(enabledLabel);
-        
-        HtmlOutputText enabledValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.enabled}", String.class));
-        htmlPanelGrid.getChildren().add(enabledValue);
-        
-        HtmlOutputText orderingLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        orderingLabel.setId("orderingLabel");
-        orderingLabel.setValue("Ordering:");
-        htmlPanelGrid.getChildren().add(orderingLabel);
-        
-        HtmlOutputText orderingValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        orderingValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.ordering}", String.class));
-        htmlPanelGrid.getChildren().add(orderingValue);
-        
-        HtmlOutputText requirementLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementLabel.setId("requirementLabel");
-        requirementLabel.setValue("Requirement:");
-        htmlPanelGrid.getChildren().add(requirementLabel);
-        
-        HtmlOutputText requirementValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.requirement}", JJRequirement.class));
-        requirementValue.setConverter(new JJRequirementConverter());
-        htmlPanelGrid.getChildren().add(requirementValue);
-        
-        HtmlOutputText sprintLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        sprintLabel.setId("sprintLabel");
-        sprintLabel.setValue("Sprint:");
-        htmlPanelGrid.getChildren().add(sprintLabel);
-        
-        HtmlOutputText sprintValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        sprintValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.sprint}", JJSprint.class));
-        sprintValue.setConverter(new JJSprintConverter());
-        htmlPanelGrid.getChildren().add(sprintValue);
-        
-        HtmlOutputText workloadLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        workloadLabel.setId("workloadLabel");
-        workloadLabel.setValue("Workload:");
-        htmlPanelGrid.getChildren().add(workloadLabel);
-        
-        HtmlOutputText workloadValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        workloadValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.workload}", String.class));
-        htmlPanelGrid.getChildren().add(workloadValue);
-        
-        HtmlOutputText pricepointLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        pricepointLabel.setId("pricepointLabel");
-        pricepointLabel.setValue("Pricepoint:");
-        htmlPanelGrid.getChildren().add(pricepointLabel);
-        
-        HtmlOutputText pricepointValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        pricepointValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.pricepoint}", String.class));
-        htmlPanelGrid.getChildren().add(pricepointValue);
-        
-        HtmlOutputText automaticLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        automaticLabel.setId("automaticLabel");
-        automaticLabel.setValue("Automatic:");
-        htmlPanelGrid.getChildren().add(automaticLabel);
-        
-        HtmlOutputText automaticValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        automaticValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.automatic}", String.class));
-        htmlPanelGrid.getChildren().add(automaticValue);
-        
-        HtmlOutputText softwaresLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        softwaresLabel.setId("softwaresLabel");
-        softwaresLabel.setValue("Softwares:");
-        htmlPanelGrid.getChildren().add(softwaresLabel);
-        
-        HtmlOutputText softwaresValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        softwaresValue.setId("softwaresValue");
-        softwaresValue.setValue("This relationship is managed from the JJSoftware side");
-        htmlPanelGrid.getChildren().add(softwaresValue);
-        
-        HtmlOutputText hardwaresLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        hardwaresLabel.setId("hardwaresLabel");
-        hardwaresLabel.setValue("Hardwares:");
-        htmlPanelGrid.getChildren().add(hardwaresLabel);
-        
-        HtmlOutputText hardwaresValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        hardwaresValue.setId("hardwaresValue");
-        hardwaresValue.setValue("This relationship is managed from the JJHardware side");
-        htmlPanelGrid.getChildren().add(hardwaresValue);
-        
-        HtmlOutputText teststepsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        teststepsLabel.setId("teststepsLabel");
-        teststepsLabel.setValue("Teststeps:");
-        htmlPanelGrid.getChildren().add(teststepsLabel);
-        
-        HtmlOutputText teststepsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        teststepsValue.setId("teststepsValue");
-        teststepsValue.setValue("This relationship is managed from the JJTeststep side");
-        htmlPanelGrid.getChildren().add(teststepsValue);
-        
-        HtmlOutputText tasksLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        tasksLabel.setId("tasksLabel");
-        tasksLabel.setValue("Tasks:");
-        htmlPanelGrid.getChildren().add(tasksLabel);
-        
-        HtmlOutputText tasksValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        tasksValue.setId("tasksValue");
-        tasksValue.setValue("This relationship is managed from the JJTask side");
-        htmlPanelGrid.getChildren().add(tasksValue);
-        
-        HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        messagesLabel.setId("messagesLabel");
-        messagesLabel.setValue("Messages:");
-        htmlPanelGrid.getChildren().add(messagesLabel);
-        
-        HtmlOutputText messagesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        messagesValue.setId("messagesValue");
-        messagesValue.setValue("This relationship is managed from the JJMessage side");
-        htmlPanelGrid.getChildren().add(messagesValue);
         
         return htmlPanelGrid;
     }
