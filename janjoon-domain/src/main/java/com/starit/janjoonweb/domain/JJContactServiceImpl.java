@@ -37,7 +37,8 @@ public class JJContactServiceImpl implements JJContactService {
 		}
 
 		if (email != null) {
-			predicates.add(criteriaBuilder.equal(from.get("email"), email.toLowerCase()));
+			predicates.add(criteriaBuilder.equal(from.get("email"),
+					email.toLowerCase()));
 		}
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
@@ -61,10 +62,25 @@ public class JJContactServiceImpl implements JJContactService {
 
 	@Override
 	public boolean updateJJContactTransaction(JJContact contact) {
-		
-		if (getContacts(contact.getEmail(), false).size() == 1) {
+
+		List<JJContact> ctcs = getContacts(contact.getEmail(), false);
+
+		if (ctcs.isEmpty()) {
+
 			updateJJContact(contact);
 			return true;
+
+		}
+		else if (ctcs.size() == 1)
+		 {
+				if(ctcs.get(0).getId().equals(contact.getId()))
+				{
+					updateJJContact(contact);
+					return true;
+				}else
+					return false;
+
+
 		} else {
 			return false;
 		}

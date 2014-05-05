@@ -243,7 +243,7 @@
 							<p:row>
 								<p:column colspan="3">
 									<h:outputText value="Description : *" />
-									<p:editor id="description" widgetVar="descriptionWidget"
+									<pe:ckEditor id="description" widgetVar="descriptionWidget"
 										style="width:680px;"
 										value="#{jJTestcaseBean.testcase.description}" required="true"
 										requiredMessage="Testcase Description is a required value" />
@@ -459,7 +459,7 @@
 									<p:row>
 										<p:column colspan="2">
 											<h:outputText value="Description : *" />
-											<p:editor id="description" widgetVar="descriptionWidget"
+											<pe:ckEditor id="description" widgetVar="descriptionWidget"
 												style="width:600px;"
 												value="#{jJTeststepexecutionBean.bug.description}"
 												required="true"

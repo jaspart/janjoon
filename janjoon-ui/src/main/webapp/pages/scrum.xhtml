@@ -112,9 +112,8 @@
 				<ui:include src="taskCreation.xhtml" />
 				<p:separator rendered="#{not empty jjsprint.sprint.tasks}" />
 			</h:form>
-			<h:form id="taskListForm"
-				rendered="#{not empty jjsprint.sprint.tasks}">
-				<p:panelGrid>
+			<h:form id="taskListForm" rendered="#{!jjsprint.render}">
+				<p:panelGrid rendered="#{not empty jjsprint.sprint.tasks}">
 					<f:facet name="header">
 						<p:row>
 							<p:column colspan="4">Sprint Tasks</p:column>
@@ -123,27 +122,27 @@
 					<p:row>
 						<p:column>
 							<p:fieldset legend="Todo" id="todoFieldset">
-<!-- 								<p:outputPanel id="tododropArea"> -->
-<!-- 									<h:outputText value="!!!Drop here!!!" -->
-<!-- 										rendered="#{empty jjsprint.todoTask}" style="font-size:24px;" /> -->
-									<p:dataTable scrollable="true" scrollHeight="250" id="todo"
-										var="todo" value="#{jjsprint.todoTask}" rowKey="#{todo.id}"
-										rendered="#{not empty jjsprint.todoTask}">
-										<p:column style="width:20px">
-											<h:outputText id="todoIcon"
-												styleClass="ui-icon ui-icon-arrow-4" />
-											<p:draggable for="todoIcon" revert="true"  />
-										</p:column>
+								<!-- 								<p:outputPanel id="tododropArea"> -->
+								<!-- 									<h:outputText value="!!!Drop here!!!" -->
+								<!-- 										rendered="#{empty jjsprint.todoTask}" style="font-size:24px;" /> -->
+								<p:dataTable scrollable="true" scrollHeight="250" id="todo"
+									var="todo" value="#{jjsprint.todoTask}" rowKey="#{todo.id}"
+									rendered="#{not empty jjsprint.todoTask}">
+									<p:column style="width:20px">
+										<h:outputText id="todoIcon"
+											styleClass="ui-icon ui-icon-arrow-4" />
+										<p:draggable for="todoIcon" revert="true" />
+									</p:column>
 
-										<p:column style="width:80px" headerText="Task">
-											<h:outputText value="#{todo.name}" />
-										</p:column>
+									<p:column style="width:80px" headerText="Task">
+										<h:outputText value="#{todo.name}" />
+									</p:column>
 
-										<p:column style="width:20px" headerText="W">
-											<h:outputText value="#{todo.workloadPlanned+''}" />
-										</p:column>
-									</p:dataTable>
-<!-- 								</p:outputPanel> -->
+									<p:column style="width:20px" headerText="W">
+										<h:outputText value="#{todo.workloadPlanned+''}" />
+									</p:column>
+								</p:dataTable>
+								<!-- 								</p:outputPanel> -->
 							</p:fieldset>
 						</p:column>
 						<p:column>
@@ -182,11 +181,11 @@
 									<p:dataTable id="done" var="done" value="#{jjsprint.doneTask}"
 										rowKey="#{done.id}" rendered="#{not empty jjsprint.doneTask}"
 										scrollable="true" scrollHeight="250">
-<!-- 										<p:column style="width:20px"> -->
-<!-- 											<h:outputText id="doneIcon" -->
-<!-- 												styleClass="ui-icon ui-icon-arrow-4" /> -->
-<!-- 											<p:draggable for="doneIcon" revert="true" /> -->
-<!-- 										</p:column> -->
+										<!-- 										<p:column style="width:20px"> -->
+										<!-- 											<h:outputText id="doneIcon" -->
+										<!-- 												styleClass="ui-icon ui-icon-arrow-4" /> -->
+										<!-- 											<p:draggable for="doneIcon" revert="true" /> -->
+										<!-- 										</p:column> -->
 
 										<p:column style="width:80px" headerText="Task">
 											<h:outputText value="#{done.name}" />

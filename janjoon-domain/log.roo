@@ -17,3 +17,5 @@ repository jpa --interface ~.JJWorkflowRepository --entity ~.JJWorkflow
 service type --interface ~.JJWorflowService --class ~.JJWorflowServiceImpl --entity ~.JJWorflow
 quit
 // Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 11:03:46
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-21 11:08:06
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-21 12:29:42

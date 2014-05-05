@@ -76,7 +76,7 @@ public class JJTask extends JJAbstractEntity {
 	@ManyToOne
 	private JJStatus status;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "task")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "task")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
 
 	private Boolean completed;
@@ -84,7 +84,7 @@ public class JJTask extends JJAbstractEntity {
 	@ManyToOne
 	private JJTask parent;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "parent")
 	private Set<JJTask> tasks = new HashSet<JJTask>();
 
 	@ManyToMany(mappedBy = "beforeTasks", fetch = FetchType.EAGER)

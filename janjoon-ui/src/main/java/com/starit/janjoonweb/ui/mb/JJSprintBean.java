@@ -14,9 +14,9 @@ import javax.faces.event.ComponentSystemEvent;
 import javax.faces.validator.LengthValidator;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.calendar.Calendar;
-import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
@@ -24,7 +24,6 @@ import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.primefaces.event.DragDropEvent;
-import org.primefaces.event.TreeDragDropEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -75,6 +74,8 @@ public class JJSprintBean {
 	private List<SprintUtil> sprintList;
 	private SprintUtil sprintUtil;
 	private JJTask task;
+	
+	private static final Logger logger = Logger.getLogger(JJSprintBean.class);
 
 	public void setjJTaskService(JJTaskService jJTaskService) {
 		this.jJTaskService = jJTaskService;
@@ -189,7 +190,7 @@ public class JJSprintBean {
 		jJContactBean.getContactDataTable();
 
 		if (project != null) {
-			System.out.println("1");
+			
 			if (!project.equals(jJProjectBean.getProject())) {
 				project = jJProjectBean.getProject();
 				initJJSprintPage();
@@ -197,18 +198,18 @@ public class JJSprintBean {
 					sprintList = new ArrayList<SprintUtil>();
 
 				sprintList.add(new SprintUtil(new JJSprint(), null));
-				System.out.println("2");
+				
 			}
 
 		} else {
-			System.out.println("1'");
+			
 			project = jJProjectBean.getProject();
 			initJJSprintPage();
 			if (sprintList == null)
 				sprintList = new ArrayList<SprintUtil>();
 
 			sprintList.add(new SprintUtil(new JJSprint(), null));
-			System.out.println("2'");
+			
 		}
 
 		return sprintList;
@@ -426,6 +427,9 @@ public class JJSprintBean {
 		JJStatus status = jJStatusService.getOneStatus("TODO", "JJTask", true);
 		if (status != null)
 			task.setStatus(status);
+		task.setName("Task For Requirement: "+requirement.getName());
+		task.setStartDatePlanned(sprintUtil.getSprint().getStartDate());
+		task.setEndDatePlanned(sprintUtil.getSprint().getEndDate());
 		task.setSprint(sprintUtil.getSprint());
 		task.setCreatedBy(contact);
 		task.setCreationDate(new Date());
@@ -540,87 +544,7 @@ public class JJSprintBean {
 
 		HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application
 				.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
-
-		OutputLabel nameCreateOutput = (OutputLabel) application
-				.createComponent(OutputLabel.COMPONENT_TYPE);
-		nameCreateOutput.setFor("nameCreateInput");
-		nameCreateOutput.setId("nameCreateOutput");
-		nameCreateOutput.setValue("Name:");
-		htmlPanelGrid.getChildren().add(nameCreateOutput);
-
-		InputTextarea nameCreateInput = (InputTextarea) application
-				.createComponent(InputTextarea.COMPONENT_TYPE);
-		nameCreateInput.setId("nameCreateInput");
-		nameCreateInput.setValueExpression("value", expressionFactory
-				.createValueExpression(elContext, "#{jJSprintBean.task.name}",
-						String.class));
-		LengthValidator nameCreateInputValidator = new LengthValidator();
-		nameCreateInputValidator.setMaximum(100);
-		nameCreateInput.addValidator(nameCreateInputValidator);
-		nameCreateInput.setRequired(true);
-		htmlPanelGrid.getChildren().add(nameCreateInput);
-
-		Message nameCreateInputMessage = (Message) application
-				.createComponent(Message.COMPONENT_TYPE);
-		nameCreateInputMessage.setId("nameCreateInputMessage");
-		nameCreateInputMessage.setFor("nameCreateInput");
-		nameCreateInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(nameCreateInputMessage);
-
-		OutputLabel startDatePlannedCreateOutput = (OutputLabel) application
-				.createComponent(OutputLabel.COMPONENT_TYPE);
-		startDatePlannedCreateOutput.setFor("startDatePlannedCreateInput");
-		startDatePlannedCreateOutput.setId("startDatePlannedCreateOutput");
-		startDatePlannedCreateOutput.setValue("Start Date Planned:");
-		htmlPanelGrid.getChildren().add(startDatePlannedCreateOutput);
-
-		Calendar startDatePlannedCreateInput = (Calendar) application
-				.createComponent(Calendar.COMPONENT_TYPE);
-		startDatePlannedCreateInput.setId("startDatePlannedCreateInput");
-		startDatePlannedCreateInput.setValueExpression("value",
-				expressionFactory.createValueExpression(elContext,
-						"#{jJSprintBean.task.startDatePlanned}", Date.class));
-		startDatePlannedCreateInput.setNavigator(true);
-		startDatePlannedCreateInput.setRequired(true);
-		startDatePlannedCreateInput.setEffect("slideDown");
-		startDatePlannedCreateInput.setPattern("dd/MM/yyyy");
-		htmlPanelGrid.getChildren().add(startDatePlannedCreateInput);
-
-		Message startDatePlannedCreateInputMessage = (Message) application
-				.createComponent(Message.COMPONENT_TYPE);
-		startDatePlannedCreateInputMessage
-				.setId("startDatePlannedCreateInputMessage");
-		startDatePlannedCreateInputMessage
-				.setFor("startDatePlannedCreateInput");
-		startDatePlannedCreateInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(startDatePlannedCreateInputMessage);
-
-		OutputLabel endDatePlannedCreateOutput = (OutputLabel) application
-				.createComponent(OutputLabel.COMPONENT_TYPE);
-		endDatePlannedCreateOutput.setFor("endDatePlannedCreateInput");
-		endDatePlannedCreateOutput.setId("endDatePlannedCreateOutput");
-		endDatePlannedCreateOutput.setValue("End Date Planned:");
-		htmlPanelGrid.getChildren().add(endDatePlannedCreateOutput);
-
-		Calendar endDatePlannedCreateInput = (Calendar) application
-				.createComponent(Calendar.COMPONENT_TYPE);
-		endDatePlannedCreateInput.setId("endDatePlannedCreateInput");
-		endDatePlannedCreateInput.setValueExpression("value", expressionFactory
-				.createValueExpression(elContext,
-						"#{jJSprintBean.task.endDatePlanned}", Date.class));
-		endDatePlannedCreateInput.setNavigator(true);
-		endDatePlannedCreateInput.setEffect("slideDown");
-		endDatePlannedCreateInput.setPattern("dd/MM/yyyy");
-		endDatePlannedCreateInput.setRequired(true);
-		htmlPanelGrid.getChildren().add(endDatePlannedCreateInput);
-
-		Message endDatePlannedCreateInputMessage = (Message) application
-				.createComponent(Message.COMPONENT_TYPE);
-		endDatePlannedCreateInputMessage
-				.setId("endDatePlannedCreateInputMessage");
-		endDatePlannedCreateInputMessage.setFor("endDatePlannedCreateInput");
-		endDatePlannedCreateInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(endDatePlannedCreateInputMessage);
+		
 
 		OutputLabel workloadPlannedCreateOutput = (OutputLabel) application
 				.createComponent(OutputLabel.COMPONENT_TYPE);

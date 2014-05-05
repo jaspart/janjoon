@@ -14,12 +14,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.validator.LengthValidator;
 import javax.servlet.http.HttpSession;
-
-import org.primefaces.component.editor.Editor;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
+import org.primefaces.extensions.component.ckeditor.CKEditor;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
@@ -203,8 +202,8 @@ public class JJConfigurationBean {
 		descriptionCreateOutput.setValue("Description:");
 		htmlPanelGrid.getChildren().add(descriptionCreateOutput);
 
-		Editor descriptionCreateInput = (Editor) application
-				.createComponent(Editor.COMPONENT_TYPE);
+		CKEditor descriptionCreateInput = (CKEditor) application
+				.createComponent(CKEditor.COMPONENT_TYPE);
 		descriptionCreateInput.setId("descriptionCreateInput");
 		descriptionCreateInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
@@ -324,8 +323,8 @@ public class JJConfigurationBean {
 		descriptionEditOutput.setValue("Description:");
 		htmlPanelGrid.getChildren().add(descriptionEditOutput);
 
-		Editor descriptionEditInput = (Editor) application
-				.createComponent(Editor.COMPONENT_TYPE);
+		CKEditor descriptionEditInput = (CKEditor) application
+				.createComponent(CKEditor.COMPONENT_TYPE);
 		descriptionEditInput.setId("descriptionEditInput");
 		descriptionEditInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,

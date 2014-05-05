@@ -4,7 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <ui:composition template="../templates/layout.xhtml">
 
@@ -310,12 +310,12 @@
 							<p:row>
 								<p:column colspan="3">
 									<h:outputText value="Description : *" />
-									<p:editor id="description" widgetVar="descriptionWidget"
+									<pe:ckEditor id="description" widgetVar="descriptionWidget"
 										style="width:680px"
 										value="#{jJRequirementBean.requirement.description}"
 										required="true"
 										requiredMessage="Requirement Description is a required value">
-									</p:editor>
+									</pe:ckEditor>															
 								</p:column>
 							</p:row>
 							<p:row>
@@ -414,11 +414,11 @@
 							<p:row>
 								<p:column colspan="2">
 									<h:outputText value="Description : *" />
-									<p:editor id="description" widgetVar="descriptionWidget"
+									<pe:ckEditor id="description" widgetVar="descriptionWidget"
 										style="width:388px"
 										value="#{jJChapterBean.chapter.description}" required="true"
 										requiredMessage="Chapter Description is a required value">
-									</p:editor>
+									</pe:ckEditor>
 								</p:column>
 								<p:column colspan="2">
 									<p:contextMenu for="chapterTreeSingle">
