@@ -42,4 +42,72 @@ public class JJMessageServiceImpl implements JJMessageService {
 		return result.getResultList();
 
 	}
+
+	public List<JJMessage> getActifMessages(JJProject project, JJProduct product) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJMessage> criteriaQuery = criteriaBuilder
+				.createQuery(JJMessage.class);
+
+		Root<JJMessage> from = criteriaQuery.from(JJMessage.class);
+
+		List<JJMessage> resultset = null;
+
+		if (product == null && project == null) {
+			
+			return getMessages(true);
+		} else {
+			if (product != null) {
+				CriteriaQuery<JJMessage> select = criteriaQuery.select(from);
+				List<Predicate> predicates = new ArrayList<Predicate>();
+				predicates
+						.add(criteriaBuilder.equal(from.get("enabled"), true));
+				predicates.add(criteriaBuilder.equal(from.get("product"),
+						product));
+				select.where(predicates.toArray(new Predicate[] {}));
+				TypedQuery<JJMessage> result = entityManager
+						.createQuery(select);
+				resultset = result.getResultList();
+			}
+
+			if (project != null) {
+				CriteriaQuery<JJMessage> select = criteriaQuery.select(from);
+				List<Predicate> predicates = new ArrayList<Predicate>();
+				predicates
+						.add(criteriaBuilder.equal(from.get("enabled"), true));
+				predicates.add(criteriaBuilder.equal(from.get("project"),
+						project));
+				select.where(predicates.toArray(new Predicate[] {}));
+				TypedQuery<JJMessage> result = entityManager
+						.createQuery(select);
+
+				if (resultset != null)
+					addTwoList(resultset, result.getResultList());
+				else
+					resultset = result.getResultList();
+			}
+
+			return resultset;
+		}
+
+	}
+
+	public void addTwoList(List<JJMessage> list1, List<JJMessage> list2) {
+
+		for (JJMessage message : list2) {
+			if (!contain(list1, message)) {
+				list1.add(message);
+			}
+		}
+	}
+
+	public boolean contain(List<JJMessage> list, JJMessage message) {
+		boolean contain = false;
+		int i = 0;
+		while (i < list.size() && !contain) {
+			contain = (list.get(i).equals(message));
+			i++;
+		}
+		return contain;
+	}
+
 }

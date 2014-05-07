@@ -8,4 +8,6 @@ import org.springframework.roo.addon.layers.service.RooService;
 public interface JJMessageService {
 
 	public List<JJMessage> getMessages(boolean onlyActif);
+	
+	public List<JJMessage> getActifMessages(JJProject project,JJProduct product);
 }
