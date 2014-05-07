@@ -3,7 +3,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
 
 	<h:form id="statusForm">
@@ -52,7 +53,7 @@
 
 					<p:commandButton id="viewButton" icon="ui-icon-zoomin"
 						update=":tabview:sviewForm:viewPanelGrid"
-						oncomplete="viewDialogWidget.show()"
+						oncomplete="viewSatDialogWidget.show()"
 						title="#{messages.label_view}">
 						<f:setPropertyActionListener value="#{status}"
 							target="#{jJStatusBean.JJStatus_}" />
@@ -63,7 +64,7 @@
 					<p:commandButton id="editButton" icon="ui-icon-pencil"
 						update=":tabview:seditForm:editPanelGrid"
 						action="#{jJStatusBean.onEdit}"
-						oncomplete="editDialogWidget.show()"
+						oncomplete="editSatDialogWidget.show()"
 						title="#{messages.label_edit}">
 						<f:setPropertyActionListener value="#{status}"
 							target="#{jJStatusBean.JJStatus_}" />
@@ -71,7 +72,7 @@
 					<p:tooltip for="editButton" value="#{messages.label_edit}"
 						showEffect="fade" hideEffect="fade" />
 					<p:commandButton id="deleteButton" icon="ui-icon-trash"
-						oncomplete="deleteDialogWidget.show()"
+						oncomplete="deleteSatDialogWidget.show()"
 						title="#{messages.label_delete}">
 						<f:setPropertyActionListener value="#{status}"
 							target="#{jJStatusBean.selectedStatus}" />
@@ -82,9 +83,8 @@
 				<f:facet name="footer">
 					<p:commandButton value="New" id="createButton"
 						icon="ui-icon-circle-plus"
-						update=":tabview:ScreateForm:createPanelGrid"
-						action="#{jJStatusBean.displayCreateDialogadmin}"
-						oncomplete="createDialogWidget.show()"
+						update=":tabview:ScreateForm:createPanelGrid"						
+						oncomplete="createSatDialogWidget.show()"
 						title="#{messages.label_create}" />
 					<p:tooltip for="createButton" value="#{messages.label_create}"
 						showEffect="fade" hideEffect="fade" />
@@ -94,7 +94,7 @@
 
 	</h:form>
 	<p:dialog id="ScreateDialog" header="#{messages.label_create} JJStatus"
-		modal="true" widgetVar="createDialogWidget" dynamic="true"
+		modal="true" widgetVar="createSatDialogWidget" dynamic="true"
 		visible="#{jJStatusBean.createDialogVisible}" resizable="true"
 		maximizable="true" showEffect="fade" hideEffect="explode">
 		<p:ajax event="close" update=":tabview:statusForm"
@@ -109,14 +109,14 @@
 					action="#{jJStatusBean.persistStatus}"
 					update="createPanelGrid,:tabview:statusForm:statusMessage" />
 				<p:commandButton id="createCloseButton"
-					value="#{messages.label_close}" onclick="createDialogWidget.hide()"
+					value="#{messages.label_close}" onclick="createSatDialogWidget.hide()"
 					type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
 
 	<p:dialog id="SeditDialog" header="#{messages.label_edit} JJStatus"
-		modal="true" widgetVar="editDialogWidget" dynamic="true"
+		modal="true" widgetVar="editSatDialogWidget" dynamic="true"
 		resizable="true" maximizable="true" showEffect="fade"
 		hideEffect="explode">
 		<p:ajax event="close" update=":tabview:statusForm"
@@ -130,14 +130,14 @@
 					action="#{jJStatusBean.persistStatus}"
 					update="editPanelGrid,:tabview:statusForm:statusMessage" />
 				<p:commandButton id="editCloseButton"
-					value="#{messages.label_close}" onclick="editDialogWidget.hide()"
+					value="#{messages.label_close}" onclick="editSatDialogWidget.hide()"
 					type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
 
 	<p:dialog id="SviewDialog" header="#{messages.label_view} JJStatus"
-		modal="true" widgetVar="viewDialogWidget" dynamic="true"
+		modal="true" widgetVar="viewSatDialogWidget" dynamic="true"
 		resizable="true" maximizable="true" showEffect="fade"
 		hideEffect="explode">
 		<p:ajax event="close" update=":tabview:statusForm"
@@ -148,12 +148,12 @@
 					binding="#{jJStatusBean.viewPanelGrid}" styleClass="dialog"
 					columnClasses="col1,col2" />
 				<p:commandButton id="viewCloseButton"
-					value="#{messages.label_close}" onclick="viewDialogWidget.hide()"
+					value="#{messages.label_close}" onclick="viewSatDialogWidget.hide()"
 					type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
-	<p:confirmDialog id="SdeleteDialog" widgetVar="deleteDialogWidget"
+	<p:confirmDialog id="SdeleteDialog" widgetVar="deleteSatDialogWidget"
 		message="#{messages.label_delete_record}" showEffect="fade"
 		hideEffect="explode" header="#{messages.label_confirm_deletion}"
 		severity="alarm">
@@ -161,9 +161,9 @@
 			<h:form id="sdeleteForm">
 				<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
 					action="#{jJStatusBean.deleteStatus}" update=":tabview:statusForm"
-					oncomplete="deleteDialogWidget.hide()" />
+					oncomplete="deleteSatDialogWidget.hide()" />
 				<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
-					onclick="deleteDialogWidget.hide()" type="button" />
+					onclick="deleteSatDialogWidget.hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:confirmDialog>

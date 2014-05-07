@@ -74,8 +74,8 @@ public class LoginBean implements Serializable {
 				String s = savedRequest.getRedirectUrl();
 				s = s.substring(s.lastIndexOf("/") + 1);
 				s = s.replace(s.substring(s.indexOf(".")), "");
-				if(s.contains("development"))
-					s="main";
+				if (s.contains("development"))
+					s = "main";
 				return s;
 			}
 		}
@@ -188,7 +188,12 @@ public class LoginBean implements Serializable {
 		FacesContext ctx = FacesContext.getCurrentInstance();
 		String viewId = ctx.getViewRoot().getViewId();
 		HttpSession session = (HttpSession) ctx.getExternalContext()
-				.getSession(false);
+				.getSession(false);	
+		
+		
+		session.setAttribute("jJMessageBean", new JJMessageBean());
+		
+		
 
 		if (event.getComponent().getClientId().contains("projectSelectOneMenu")) {
 
@@ -223,7 +228,8 @@ public class LoginBean implements Serializable {
 				jJVersionBean.setVersion((JJVersion) event.getNewValue());
 				if (jJVersionBean.getVersion() != null) {
 
-					jJDevelopment.reloadRepository();;
+					jJDevelopment.reloadRepository();
+					;
 
 					if (jJDevelopment.isRender()) {
 						System.out
@@ -245,9 +251,11 @@ public class LoginBean implements Serializable {
 					System.out
 							.println("---------------ProjectUpdate---------------");
 					jJDevelopment.setProject(jJProjectBean.getProject());
-					jJDevelopment.setTasks(jJProductBean.getTasksByProduct(
-							jJProductBean.getProduct(),
-							jJProjectBean.getProject()));
+					jJDevelopment.setTasks(null);
+					jJDevelopment.setTask(null);
+					// jJDevelopment.setTasks(jJProductBean.getTasksByProduct(
+					// jJProductBean.getProduct(),
+					// jJProjectBean.getProject()));
 					context.update(":contentPanel:devPanel:form:taskSelectOneMenu");
 				}
 			}
@@ -276,13 +284,11 @@ public class LoginBean implements Serializable {
 		DevelopmentBean jJDevelopment = (DevelopmentBean) session
 				.getAttribute("jJDevelopment");
 
-		if(jJDevelopment!=null)
-		{
+		if (jJDevelopment != null) {
 			if (!jJDevelopment.isInit()) {
 				jJDevelopment.initJJDevlopment();
 			}
 		}
-		
 
 	}
 
@@ -325,14 +331,12 @@ public class LoginBean implements Serializable {
 						.getSession(false);
 				DevelopmentBean jJDevelopment = (DevelopmentBean) session
 						.getAttribute("jJDevelopment");
-				if(jJDevelopment!=null)
-				{
+				if (jJDevelopment != null) {
 					if (jJDevelopment.isInit()) {
-						session.setAttribute("jJDevelopment", new DevelopmentBean(
-								jJDevelopment));
+						session.setAttribute("jJDevelopment",
+								new DevelopmentBean(jJDevelopment));
 					}
-				}		
-
+				}
 			}
 
 		}
@@ -344,7 +348,8 @@ public class LoginBean implements Serializable {
 		JJVersionBean jjVersionBean = (JJVersionBean) findBean("jJVersionBean");
 		JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
 
-		if (jjVersionBean.getVersion() != null && jJProductBean.getProduct() != null) {
+		if (jjVersionBean.getVersion() != null
+				&& jJProductBean.getProduct() != null) {
 
 			if (!FacesContext.getCurrentInstance().getViewRoot().getViewId()
 					.contains("development")) {
@@ -367,17 +372,16 @@ public class LoginBean implements Serializable {
 
 		} else {
 
-			if(jJProductBean.getProduct() == null)
-			{
+			if (jJProductBean.getProduct() == null) {
 				FacesMessage message = MessageFactory.getMessage(
-						"dev.nullProduct.label", FacesMessage.SEVERITY_ERROR, "");
+						"dev.nullProduct.label", FacesMessage.SEVERITY_ERROR,
+						"");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 				System.out.println(message.getDetail());
-			}
-			else
-			{
+			} else {
 				FacesMessage message = MessageFactory.getMessage(
-						"dev.nullVersion.label", FacesMessage.SEVERITY_ERROR, "");
+						"dev.nullVersion.label", FacesMessage.SEVERITY_ERROR,
+						"");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 				System.out.println(message.getDetail());
 			}
@@ -403,7 +407,8 @@ public class LoginBean implements Serializable {
 	}
 
 	public void handleFileUpload(FileUploadEvent event) {
-		FacesMessage msg = new FacesMessage("Successful", event.getFile().getFileName() + " is uploaded.");
+		FacesMessage msg = new FacesMessage("Successful", event.getFile()
+				.getFileName() + " is uploaded.");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 }

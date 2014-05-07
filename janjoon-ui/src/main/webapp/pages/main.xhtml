@@ -23,10 +23,10 @@
 		<p:panel id="dataPanel" rendered="#{loginBean.enable}"
 			header="#{messages.main_communication_title}">
 			<f:event listener="#{jJMessageBean.initJJmessageTable}"
-				type="preRenderView" />
+				type="preRenderView"/>
 			<h:form id="messageForm">
 				<p:dataTable id="MessageTable2" sortMode="multiple"
-					value="#{jJMessageBean.enabledJJMessage}" rowKey="#{mes.id}"
+					value="#{jJMessageBean.mainMessages}" rowKey="#{mes.id}"
 					var="mes" widgetVar="messageTable" scrollable="true"
 					scrollHeight="400"
 					filteredValue="#{jJMessageBean.filteredJJMessage}"

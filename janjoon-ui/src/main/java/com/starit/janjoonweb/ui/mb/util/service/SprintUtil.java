@@ -19,10 +19,14 @@ public class SprintUtil {
 	Integer workload;
 	private boolean render;
 	private boolean renderTaskForm;
+	private boolean renderProjectList;
+	
 
 	public SprintUtil(JJSprint sprint, List<JJTask> tasks) {
-		this.sprint = sprint;
-		renderTaskForm = false;
+		
+		this.sprint = sprint;		
+		renderTaskForm = false;	
+		renderProjectList=(sprint.getProject()==null);
 		calculateField(tasks);
 	}
 
@@ -63,15 +67,15 @@ public class SprintUtil {
 	}
 
 	public List<JJTask> getTaskList() {
-		
-			if (taskList == null) {
-				taskList = new ArrayList<JJTask>();
-				for (JJTask t : sprint.getTasks()) {
-					if (t.getEnabled())
+
+		if (taskList == null) {
+			taskList = new ArrayList<JJTask>();
+			for (JJTask t : sprint.getTasks()) {
+				if (t.getEnabled())
 					taskList.add(t);
-				}
-			}		
-		
+			}
+		}
+
 		return taskList;
 	}
 
@@ -156,7 +160,7 @@ public class SprintUtil {
 	public void setRenderTaskForm(boolean renderTaskForm) {
 		this.renderTaskForm = renderTaskForm;
 	}
-
+	
 	public static List<SprintUtil> generateSprintUtilList(
 			List<JJSprint> sprints, JJTaskService jJTaskService) {
 		List<SprintUtil> sprintUtils = null;
@@ -182,6 +186,14 @@ public class SprintUtil {
 		}
 		return s;
 
+	}
+
+	public boolean isRenderProjectList() {
+		return renderProjectList;
+	}
+
+	public void setRenderProjectList(boolean renderProjectList) {
+		this.renderProjectList = renderProjectList;
 	}
 
 }

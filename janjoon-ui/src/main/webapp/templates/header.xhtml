@@ -85,7 +85,7 @@
 
 					<f:converter
 						converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
-
+				<f:selectItem itemValue="#{null}" itemLabel="AnyProject" />
 					<f:selectItems value="#{jJProjectBean.projectList}" var="p"
 						itemLabel="#{p.name}" itemValue="#{p}" />
 
@@ -101,7 +101,7 @@
 					filterMatchMode="startsWith">
 					<f:converter
 						converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
-					<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
+					<f:selectItem itemValue="#{null}" itemLabel="AnyProduct" />
 					<f:selectItems value="#{jJProductBean.productList}" var="p"
 						itemLabel="#{p.name}" itemValue="#{p}" />
 					<p:ajax process="@this" update=":contentPanel,versionSelectOneMenu" />
@@ -117,7 +117,7 @@
 					<f:converter
 						converterId="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter" />
 
-					<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
+					<f:selectItem itemValue="#{null}" itemLabel="AnyVersion" />
 
 					<f:selectItems value="#{jJVersionBean.versionList}" var="v"
 						itemLabel="#{v.name}" itemValue="#{v}" />

@@ -123,6 +123,7 @@ public class JJTestcaseBean {
 	}
 
 	public JJProject getProject() {
+		
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJProjectBean jJProjectBean = (JJProjectBean) session

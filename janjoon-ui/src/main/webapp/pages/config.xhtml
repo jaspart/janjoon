@@ -3,7 +3,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
 
 	<h:form id="configForm">
@@ -76,7 +77,6 @@
 					<p:commandButton value="New" id="createButton"
 						icon="ui-icon-circle-plus"
 						update=":tabview:createForm:createPanelGrid"
-						action="#{jJConfigurationBean.displayCreateDialogadmin}"
 						oncomplete="createDialogWidget.show()"
 						title="#{messages.label_create}" />
 					<p:tooltip for="createButton" value="#{messages.label_create}"
@@ -130,7 +130,7 @@
 		</p:outputPanel>
 	</p:dialog>
 
-	<p:dialog id="viewDialog"
+	<p:dialog id="viewDialog" 
 		header="#{messages.label_view} JJConfiguration" modal="true"
 		widgetVar="viewDialogWidget" dynamic="true" resizable="true"
 		maximizable="true" showEffect="fade" hideEffect="explode">

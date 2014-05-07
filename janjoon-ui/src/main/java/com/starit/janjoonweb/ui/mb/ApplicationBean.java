@@ -13,6 +13,8 @@ import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import com.starit.janjoonweb.ui.mb.util.UsageChecker;
+
 //@RooJsfApplicationBean
 @ManagedBean
 @RequestScoped
@@ -38,20 +40,20 @@ public class ApplicationBean {
 	@PostConstruct
 	public void init() {
 
-		System.out.println("applicationBeanINIT");
-
-		// if(UsageChecker.check()) {
-		// System.out.println("License is correct!");
-		// }
-		// else {
-		// System.out.println("License is NOT correct!");
-		// }
-		// if(UsageChecker.checkExpiryDate()) {
-		// System.out.println("License expiry date is valid!");
-		// }
-		// else {
-		// System.out.println("License expiry date is NOT valid!");
-		// }
+//		System.out.println("applicationBeanINIT");
+//
+//		 if(UsageChecker.check()) {
+//		 System.out.println("License is correct!");
+//		 }
+//		 else {
+//		 System.out.println("License is NOT correct!");
+//		 }
+//		 if(UsageChecker.checkExpiryDate()) {
+//		 System.out.println("License expiry date is valid!");
+//		 }
+//		 else {
+//		 System.out.println("License expiry date is NOT valid!");
+//		 }
 
 		menuModel = new DefaultMenuModel();
 

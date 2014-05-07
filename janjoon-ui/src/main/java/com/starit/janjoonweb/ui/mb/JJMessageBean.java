@@ -49,6 +49,7 @@ public class JJMessageBean {
 	private List<JJMessage> enabledJJMessage;
 	private List<JJMessage> allJJMessages;
 	private List<JJMessage> filteredJJMessage;
+	private List<JJMessage> mainMessages;
 	private List<String> columns;
 	private boolean collapsedMesPanel = true;
 	private boolean collapsedLayoutPanel = true;
@@ -65,10 +66,18 @@ public class JJMessageBean {
 		columns.add("updatedDate");
 		columns.add("message");
 		allJJMessages = jJMessageService.findAllJJMessages();
-		enabledJJMessage = jJMessageService.getMessages(true);
+		//enabledJJMessage = jJMessageService.getMessages(true);
 		setMessage(new JJMessage());
-		initJJmessageTable(null);
+		//initJJmessageTable(null);
 
+	}
+
+	public List<JJMessage> getMainMessages() {
+		return mainMessages;
+	}
+
+	public void setMainMessages(List<JJMessage> mainMessages) {
+		this.mainMessages = mainMessages;
 	}
 
 	public List<String> getColumns() {
@@ -226,17 +235,31 @@ public class JJMessageBean {
 
 	public void initJJmessageTable(ComponentSystemEvent e) {
 
-		if (!loadFiltredJJmessage) {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false);
+		LoginBean login =(LoginBean) session.getAttribute("loginBean");
+		
+		if (!loadFiltredJJmessage && login!=null) {
 			List<JJAbstractEntity> criticities = new ArrayList<JJAbstractEntity>();
 			List<JJAbstractEntity> status = new ArrayList<JJAbstractEntity>();
 			List<JJAbstractEntity> productes = new ArrayList<JJAbstractEntity>();
 			List<JJAbstractEntity> projectes = new ArrayList<JJAbstractEntity>();
 			List<JJAbstractEntity> contactes = new ArrayList<JJAbstractEntity>();
-			enabledJJMessage = jJMessageService.getMessages(true);
-
+			enabledJJMessage = jJMessageService.getMessages(true);			
+			
+			JJProductBean jJProductBean = (JJProductBean) session
+					.getAttribute("jJProductBean");
+			JJProjectBean jJProjectBean = (JJProjectBean) session
+					.getAttribute("jJProjectBean");
+			
+			
+			
+				mainMessages = jJMessageService.getActifMessages(jJProjectBean.getProject(), jJProductBean.getProduct());
+			
+				
 			System.out
 					.println("----------------initJJmesTable--------------------------");
-			for (JJMessage mes : enabledJJMessage) {
+			for (JJMessage mes : mainMessages) {
 				if (mes.getCreatedBy() != null
 						&& !listContaines(contactes, mes.getCreatedBy().getId()))
 					contactes.add(mes.getCreatedBy());
@@ -260,7 +283,7 @@ public class JJMessageBean {
 			productOptions = createFilterOptions(productes);
 			creatorOptions = createFilterOptions(contactes);
 			statusOptions = createFilterOptions(status);
-			filteredJJMessage = enabledJJMessage;
+			filteredJJMessage = mainMessages;
 			loadFiltredJJmessage = true;
 
 		}
@@ -268,7 +291,7 @@ public class JJMessageBean {
 				.getExternalContext().getRequestHeaderMap().get("referer");
 		if (referrer != null) {
 			if (!referrer.contains("main")) {
-				filteredJJMessage = enabledJJMessage;
+				filteredJJMessage = mainMessages;
 			}
 		}
 

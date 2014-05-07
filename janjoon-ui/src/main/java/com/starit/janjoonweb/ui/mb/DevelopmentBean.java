@@ -9,16 +9,27 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.el.ELContext;
+import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
+
+import javax.faces.component.html.HtmlOutputText;
+import javax.faces.component.html.HtmlPanelGrid;
+
 import javax.faces.context.FacesContext;
+import javax.faces.convert.DateTimeConverter;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jgit.api.errors.JGitInternalException;
+
 import org.primefaces.context.RequestContext;
+
 import org.primefaces.event.*;
+import org.primefaces.extensions.component.codemirror.CodeMirror;
+
 import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -222,6 +233,7 @@ public class DevelopmentBean implements Serializable {
 						.getAttribute("jJDevelopment");
 				jJDevelopment.setTasks(jJTaskService.getTasksByProduct(
 						prodbean.getProduct(), jJProjectBean.getProject()));
+				jJDevelopment.setTask(null);
 			}
 			if (!render) {
 				String growlMessage = "dev.notAvailableProduct.label";
@@ -314,8 +326,9 @@ public class DevelopmentBean implements Serializable {
 	}
 
 	public List<FileMap> getFiles() {
+
 		return files;
-	}	
+	}
 
 	public void setFiles(ArrayList<FileMap> files) {
 		this.files = files;
@@ -365,7 +378,7 @@ public class DevelopmentBean implements Serializable {
 
 		if (task == null) {
 			tasks = jJTaskService.getTasksByProduct(product, project);
-
+			task=null;
 		}
 
 		return tasks;
@@ -455,10 +468,12 @@ public class DevelopmentBean implements Serializable {
 				String fileTexte = IOUtils.toString(inputStream);
 				FileMap filemap = new FileMap(file.getName(), fileTexte, file);
 				files.add(filemap);
+
 				filemap.setIndex(contains(filemap.getFile()));
-				files.set(filemap.getIndex(),filemap);
+				files.set(filemap.getIndex(), filemap);
+
 			}
-			
+
 			growlMessage = MessageFactory.getMessage("dev.updateToHead.label",
 					FacesMessage.SEVERITY_INFO, configManager.getUrl());
 		} else {
@@ -576,26 +591,45 @@ public class DevelopmentBean implements Serializable {
 				}
 			}
 			activeTabIndex = i;
-			
 
 		}
 
 	}
 
 	public void valueChangeHandlerCodeMirror(AjaxBehaviorEvent event)
-			throws InterruptedException {
-		
-		files.get(activeTabIndex).setChange(true);
+			throws InterruptedException, IOException {
+
+		CodeMirror cm = (CodeMirror) event.getComponent();
+
+		FileInputStream inputStream = new FileInputStream(files.get(
+				activeTabIndex).getFile());
+
+		String fileTexte = IOUtils.toString(inputStream);
+
+		if (cm.getValue().toString().contains(fileTexte)
+				&& fileTexte.contains(cm.getValue().toString())) {
+
+			System.out.println(activeTabIndex + ":false"
+					+ files.get(activeTabIndex).getIndex());
+
+		} else {
+
+			System.out.println(activeTabIndex + ":true"
+					+ files.get(activeTabIndex).getIndex());
+			files.get(activeTabIndex).setChange(true);
+
 		}
+
+	}
 
 	public void onCloseTab(TabCloseEvent event) {
 
 		FileMap index = (FileMap) event.getData();
 		int j = contains(index.getFile());
 		System.out.println("onCloseTab-------------------------"
-				+ files.get(j).getTitle()
-				+ files.get(j).getIndex()+":"+index.isChange());
-		
+				+ files.get(j).getTitle() + files.get(j).getIndex() + ":"
+				+ index.isChange());
+
 		if (index.isChange()) {
 
 			fileIndex = j;
@@ -605,16 +639,15 @@ public class DevelopmentBean implements Serializable {
 
 			updatetabView(j, index);
 		}
-
 	}
 
 	public void onChangeTab(TabChangeEvent event) {
 
-//		FileMap index = (FileMap) event.getData();
-//		System.out.println("onChangeTab-------------------------"
-//				+ index.getIndex() + ":" + files.get(index.getIndex()).getTitle()
-//				+ files.get(index.getIndex()).getIndex());
-//		files.set(index.getIndex(), index);
+		// FileMap index = (FileMap) event.getData();
+		// System.out.println("onChangeTab-------------------------"
+		// + index.getIndex() + ":" + files.get(index.getIndex()).getTitle()
+		// + files.get(index.getIndex()).getIndex());
+		// files.set(index.getIndex(), index);
 
 	}
 
@@ -669,6 +702,10 @@ public class DevelopmentBean implements Serializable {
 		updatetabView(fileIndex, files.get(activeTabIndex));
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("saveFileDialogWidget.hide()");
+		if (files.isEmpty())
+			context.update(":form");
+		else
+			context.update(":form:tabView");
 		fileIndex = -1;
 
 	}
@@ -795,6 +832,7 @@ public class DevelopmentBean implements Serializable {
 					FacesMessage.SEVERITY_ERROR, event.getFile().getFileName());
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
+
 	}
 
 	private void updatetabView(int j, FileMap data) {
@@ -822,8 +860,7 @@ public class DevelopmentBean implements Serializable {
 			}
 
 		}
-		if(files.size()==0)
-		{
+		if (files.size() == 0) {
 			System.out.println(":applicatinPanelGrid");
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.update("applicatinPanelGrid");
@@ -834,4 +871,5 @@ public class DevelopmentBean implements Serializable {
 	public void addToRoot(ActionEvent e) {
 		selectedTree = null;
 	}
+
 }

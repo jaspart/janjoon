@@ -201,10 +201,10 @@
 									<p:selectOneMenu id="project"
 										value="#{jJRequirementBean.requirementProject}"
 										panelStyle="width:150px" effect="fade" style="width:150px"
-										filter="true" filterMatchMode="startsWith" disabled="true">
+										filter="true" filterMatchMode="startsWith" disabled="jJRequirementBean.requirementProject != null">
 										<f:converter
 											converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
-										<f:selectItem
+										<f:selectItem 
 											itemLabel="#{jJRequirementBean.requirementProject.name}"
 											itemValue="#{jJRequirementBean.requirementProject}" />
 										<f:selectItems

@@ -340,14 +340,10 @@ public class ConfigListener implements ServletContextListener {
 		}
 
 		if (jJVersionService.getVersions(true, true, null).isEmpty()) {
+			
 			JJVersion version;
-			version = new JJVersion();
-			version.setName("Default-Version");
-			version.setDescription("Default-VersionDescription ");
-			version.setCreationDate(new Date());
-			version.setEnabled(true);
-			jJVersionService.saveJJVersion(version);
-			for (int i = 0; i < 2; i++) {
+			
+			for(int i=0;i<4;i++){
 				version = new JJVersion();
 				version.setName("VersionName " + i);
 				version.setDescription("VersionDescription " + i);
@@ -752,25 +748,14 @@ public class ConfigListener implements ServletContextListener {
 			}
 
 			JJProduct product;
-			product = new JJProduct();
-			product.setName("Default Product");
-			product.setDescription("Delault ProductDescription ");
-			product.setCreationDate(new Date());
-			product.setEnabled(true);
-			product.setExtname("ProductExtName ");
-			product.setManager(manager);
+			
 
 			List<JJVersion> jJVersionList = jJVersionService.getVersions(true,
 					true, null);
 
-			Set<JJVersion> versions = new HashSet<JJVersion>();
+			Set<JJVersion> versions = new HashSet<JJVersion>();	
 
-			jJVersionList.get(0).setProduct(product);
-			versions.add(jJVersionList.get(0));
-
-			jJProductService.saveJJProduct(product);
-			jJVersionService.updateJJVersion(jJVersionList.get(0));
-			product.setVersions(versions);
+			
 			versions = new HashSet<JJVersion>();
 			for (int i = 0; i < 2; i++) {
 				product = new JJProduct();
@@ -782,7 +767,7 @@ public class ConfigListener implements ServletContextListener {
 				product.setManager(manager);
 				int j;
 				if (i == 0) {
-					j = i + 1;
+					j = i + 0;
 					jJVersionList.get(j).setProduct(product);
 					versions.add(jJVersionList.get(j));
 					jJVersionList.get(j + 1).setProduct(product);
@@ -850,15 +835,8 @@ public class ConfigListener implements ServletContextListener {
 
 		if (jJProjectService.getProjects(true).isEmpty()) {
 			
-			
 			JJProject project;
-			project = new JJProject();
-			project.setName("Default Project");
-			project.setDescription("Delault ProjectDescription ");
-			project.setCreationDate(new Date());
-			project.setEnabled(true);
-			project.setManager(manager);
-			jJProjectService.saveJJProject(project);
+			
 			for (int i = 0; i < 2; i++) {
 				project = new JJProject();
 				project.setName("ProjectName " + i);
@@ -913,7 +891,7 @@ public class ConfigListener implements ServletContextListener {
 						JJMessage mes = new JJMessage();
 						mes.setName("mes : " + j + "/" + i);
 						mes.setCreatedBy(manager);
-						mes.setContact(manager);
+						//mes.setContact(manager);
 						mes.setProduct(productList.get(i));
 						mes.setProject(projectList.get(i));
 						mes.setDescription("mesDescription : " + j + "/" + i);

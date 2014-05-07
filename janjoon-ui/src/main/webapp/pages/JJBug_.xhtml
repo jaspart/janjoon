@@ -79,7 +79,7 @@
 						binding="#{jJBugBean.createPanelGrid}" styleClass="dialog"
 						columnClasses="col1,col2,col3" />
 					<p:commandButton id="createSaveButton"
-						value="#{messages.label_save}" action="#{jJBugBean.persist}"
+						value="#{messages.label_save}" action="#{jJBugBean.persistBug}"
 						update="createPanelGrid :growlForm:growl" />
 					<p:commandButton id="createCloseButton"
 						value="#{messages.label_close}"

@@ -11,17 +11,15 @@ import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
-import javax.faces.validator.LengthValidator;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.primefaces.component.autocomplete.AutoComplete;
-import org.primefaces.component.calendar.Calendar;
-import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.CloseEvent;
 import org.primefaces.event.DragDropEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +73,10 @@ public class JJSprintBean {
 	private SprintUtil sprintUtil;
 	private JJTask task;
 	
+
 	private static final Logger logger = Logger.getLogger(JJSprintBean.class);
+
+	
 
 	public void setjJTaskService(JJTaskService jJTaskService) {
 		this.jJTaskService = jJTaskService;
@@ -110,15 +111,10 @@ public class JJSprintBean {
 
 	public List<JJCategory> getCategoryList() {
 
-		if (project != null) {
-			if (categoryList == null)
-				categoryList = jJCategoryService.getCategories(null, false,
-						true, false);
-			for (JJCategory cat : categoryList) {
-				System.out.println(cat.getName());
-			}
+		if (categoryList == null)
+			categoryList = jJCategoryService.getCategories(null, false, true,
+					false);
 
-		}
 		return categoryList;
 	}
 
@@ -189,28 +185,31 @@ public class JJSprintBean {
 			jJContactBean = new JJContactBean();
 		jJContactBean.getContactDataTable();
 
-		if (project != null) {
-			
-			if (!project.equals(jJProjectBean.getProject())) {
-				project = jJProjectBean.getProject();
-				initJJSprintPage();
-				if (sprintList == null)
-					sprintList = new ArrayList<SprintUtil>();
+		if (jJProjectBean.getProject() == null) {
 
-				sprintList.add(new SprintUtil(new JJSprint(), null));
-				
+			if(sprintList==null)
+			{
+				project = null;
+				initJJSprintPage(null);
+			}
+			else if (project != null ) {
+
+				project = null;
+				initJJSprintPage(null);
 			}
 
-		} else {
-			
-			project = jJProjectBean.getProject();
-			initJJSprintPage();
-			if (sprintList == null)
-				sprintList = new ArrayList<SprintUtil>();
+		} else if (project != null) {
 
-			sprintList.add(new SprintUtil(new JJSprint(), null));
-			
+			if (!project.equals(jJProjectBean.getProject())) {
+				project = jJProjectBean.getProject();
+				initJJSprintPage(project);
+			} 
+		}else
+		{
+			project = jJProjectBean.getProject();
+			initJJSprintPage(project);
 		}
+		
 
 		return sprintList;
 	}
@@ -242,12 +241,44 @@ public class JJSprintBean {
 			requirement = reqList.get(0);
 	}
 
-	public void initJJSprintPage() {
+	public void onCellEditTask(CellEditEvent event) {
+
+		System.out.println(event.getNewValue());
+
+		System.out.println(jJTaskService
+				.findJJTask(Long.parseLong(event.getColumn().getColumnKey()))
+				.getSprint().getName());
+		JJTask t = jJTaskService.findJJTask(Long.parseLong(event.getColumn()
+				.getColumnKey()));
+		System.out.println(t.getName());
+		t.setAssignedTo((JJContact) event.getNewValue());
+		jJTaskService.updateJJTask(t);
+		sprintUtil = SprintUtil
+				.getSprintUtil(t.getSprint().getId(), sprintList);
+		sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil
+				.getSprint().getId()));
+		sprintUtil = new SprintUtil(sprintUtil.getSprint(),
+				jJTaskService.getSprintTasks(sprintUtil.getSprint()));
+		sprintList.set(contains(sprintUtil), sprintUtil);
+		String message = "message_successfully_updated";
+		FacesMessage facesMessage = MessageFactory
+				.getMessage(message, "JJTask");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+	}
+
+	public void initJJSprintPage(JJProject pr) {
 
 		System.out.println("3");
 		sprintList = SprintUtil.generateSprintUtilList(
-				jJSprintService.getSprintsByProjects(project, true),
-				jJTaskService);
+				jJSprintService.getSprintsByProjects(pr, true), jJTaskService);
+		
+		if (sprintList == null)
+			sprintList = new ArrayList<SprintUtil>();
+		JJSprint sp = new JJSprint();
+		sp.setProject(pr);
+		sprintList.add(new SprintUtil(sp, null));
+
 	}
 
 	public void editSprint() {
@@ -256,20 +287,22 @@ public class JJSprintBean {
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
 
-		
 		for (JJContact c : sprintUtil.getSprint().getContacts()) {
 			System.out.println(c.getName());
 		}
 		System.out.println(sprintUtil.getSprint().getId() + ":"
 				+ sprintUtil.getSprint().getName());
-
+		
+		
 		sprintUtil.getSprint().setUpdatedBy(contact);
 		sprintUtil.getSprint().setUpdatedDate(new Date());
 		jJSprintService.updateJJSprint(sprintUtil.getSprint());
-		sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil.getSprint().getId()));
+		sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil
+				.getSprint().getId()));
 		System.out.println(sprintUtil.getSprint().getId() + ":"
 				+ sprintUtil.getSprint().getName());
-		sprintUtil=new SprintUtil(sprintUtil.getSprint(),jJTaskService.getSprintTasks(sprintUtil.getSprint()));
+		sprintUtil = new SprintUtil(sprintUtil.getSprint(),
+				jJTaskService.getSprintTasks(sprintUtil.getSprint()));
 		sprintList.set(contains(sprintUtil), sprintUtil);
 
 		String message = "message_successfully_updated";
@@ -277,7 +310,6 @@ public class JJSprintBean {
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJSprint");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		System.out.println("reset");
 
 	}
 
@@ -285,11 +317,13 @@ public class JJSprintBean {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
+
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
+
 		setJJSprint_(sprintUtil.getSprint());
+		
 		getJJSprint_().setCreatedBy(contact);
 		getJJSprint_().setCreationDate(new Date());
-		getJJSprint_().setProject(project);
 		getJJSprint_().setEnabled(true);
 		getJJSprint_().setDescription(
 				getJJSprint_().getName() + " /CreatedBy:"
@@ -335,7 +369,7 @@ public class JJSprintBean {
 
 		if (ddevent.getDragId().contains(":todoIcon")) {
 			JJTask dropedTask = (JJTask) ddevent.getData();
-		
+
 			JJStatus status = jJStatusService.getOneStatus("IN PROGRESS",
 					"JJTask", true);
 			System.out.println("addTaskToProg:"
@@ -344,9 +378,11 @@ public class JJSprintBean {
 					.getId(), sprintList);
 			dropedTask.setStatus(status);
 			dropedTask.setCompleted(false);
-			jJTaskService.updateJJTask(dropedTask);	
-			sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil.getSprint().getId()));
-			sprintUtil=new SprintUtil(sprintUtil.getSprint(),jJTaskService.getSprintTasks(sprintUtil.getSprint()));
+			jJTaskService.updateJJTask(dropedTask);
+			sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil
+					.getSprint().getId()));
+			sprintUtil = new SprintUtil(sprintUtil.getSprint(),
+					jJTaskService.getSprintTasks(sprintUtil.getSprint()));
 			sprintList.set(contains(sprintUtil), sprintUtil);
 			String message = "message_successfully_updated";
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
@@ -384,8 +420,10 @@ public class JJSprintBean {
 			jJTaskService.updateJJTask(dropedTask);
 
 			System.out.println("DONE" + sprintUtil.getSprint().getName());
-			sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil.getSprint().getId()));
-			sprintUtil=new SprintUtil(sprintUtil.getSprint(),jJTaskService.getSprintTasks(sprintUtil.getSprint()));
+			sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil
+					.getSprint().getId()));
+			sprintUtil = new SprintUtil(sprintUtil.getSprint(),
+					jJTaskService.getSprintTasks(sprintUtil.getSprint()));
 			sprintList.set(contains(sprintUtil), sprintUtil);
 			String message = "message_successfully_updated";
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
@@ -401,7 +439,10 @@ public class JJSprintBean {
 	}
 
 	public void handleAddButton(ActionEvent e) {
+
 		attrListener(e);
+		System.out.println("deedededede");
+
 		sprintUtil.setRenderTaskForm(!sprintUtil.isRenderTaskForm());
 
 		if (sprintUtil.isRenderTaskForm()) {
@@ -416,6 +457,8 @@ public class JJSprintBean {
 			reqList = null;
 		}
 
+		System.out.println("deedededede");
+
 	}
 
 	public void persistTask() {
@@ -427,7 +470,7 @@ public class JJSprintBean {
 		JJStatus status = jJStatusService.getOneStatus("TODO", "JJTask", true);
 		if (status != null)
 			task.setStatus(status);
-		task.setName("Task For Requirement: "+requirement.getName());
+		task.setName("Task For Requirement: " + requirement.getName());
 		task.setStartDatePlanned(sprintUtil.getSprint().getStartDate());
 		task.setEndDatePlanned(sprintUtil.getSprint().getEndDate());
 		task.setSprint(sprintUtil.getSprint());
@@ -544,7 +587,6 @@ public class JJSprintBean {
 
 		HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application
 				.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
-		
 
 		OutputLabel workloadPlannedCreateOutput = (OutputLabel) application
 				.createComponent(OutputLabel.COMPONENT_TYPE);

@@ -12,6 +12,7 @@ import java.util.TreeMap;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
+import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItems;
@@ -62,16 +63,26 @@ public class JJTaskBean {
 
 	@Autowired
 	JJChapterService jJChapterService;
-	
+
+	private TreeNode taskTreeNode;
+
+	public TreeNode getTaskTreeNode() {
+		return taskTreeNode;
+	}
+
+	public void setTaskTreeNode(TreeNode taskTreeNode) {
+		this.taskTreeNode = taskTreeNode;
+	}
+
 	private HtmlPanelGrid viewPanel;
-	
+
 	public HtmlPanelGrid getViewPanel() {
-        return populateViewPanelGrid();
-    }
-    
-    public void setViewPanel(HtmlPanelGrid viewPanel) {
-        this.viewPanel = viewPanel;
-    }
+		return populateViewPanelGrid();
+	}
+
+	public void setViewPanel(HtmlPanelGrid viewPanel) {
+		this.viewPanel = viewPanel;
+	}
 
 	public void setJjChapterService(JJChapterService jJChapterService) {
 		this.jJChapterService = jJChapterService;
@@ -729,274 +740,338 @@ public class JJTaskBean {
 		setCreateDialogVisible(false);
 	}
 
-	public HtmlPanelGrid populateViewPanelGrid()
-	{
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        javax.faces.application.Application application = facesContext.getApplication();
-        ExpressionFactory expressionFactory = application.getExpressionFactory();
-        ELContext elContext = facesContext.getELContext();
-        
-        HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
-        
-        HtmlOutputText nameLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        nameLabel.setId("nameLabel");
-        nameLabel.setValue("Name:");
-        htmlPanelGrid.getChildren().add(nameLabel);
-        
-        InputTextarea nameValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        nameValue.setId("nameValue");
-        nameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.name}", String.class));
-        nameValue.setReadonly(true);
-        nameValue.setDisabled(true);
-        htmlPanelGrid.getChildren().add(nameValue);
-        
-        HtmlOutputText descriptionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        descriptionLabel.setId("descriptionLabel");
-        descriptionLabel.setValue("Description:");
-        htmlPanelGrid.getChildren().add(descriptionLabel);
-        
-        InputTextarea descriptionValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        descriptionValue.setId("descriptionValue");
-        descriptionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.description}", String.class));
-        descriptionValue.setReadonly(true);
-        descriptionValue.setDisabled(true);
-        htmlPanelGrid.getChildren().add(descriptionValue); 
-        
-        HtmlOutputText startDatePlannedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        startDatePlannedLabel.setId("startDatePlannedLabel");
-        startDatePlannedLabel.setValue("Start Date Planned:");
-        htmlPanelGrid.getChildren().add(startDatePlannedLabel);
-        
-        HtmlOutputText startDatePlannedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        startDatePlannedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.startDatePlanned}", Date.class));
-        DateTimeConverter startDatePlannedValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
-        startDatePlannedValueConverter.setPattern("dd/MM/yyyy");
-        startDatePlannedValue.setConverter(startDatePlannedValueConverter);
-        htmlPanelGrid.getChildren().add(startDatePlannedValue);
-        
-        HtmlOutputText endDatePlannedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        endDatePlannedLabel.setId("endDatePlannedLabel");
-        endDatePlannedLabel.setValue("End Date Planned:");
-        htmlPanelGrid.getChildren().add(endDatePlannedLabel);
-        
-        HtmlOutputText endDatePlannedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        endDatePlannedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.endDatePlanned}", Date.class));
-        DateTimeConverter endDatePlannedValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
-        endDatePlannedValueConverter.setPattern("dd/MM/yyyy");
-        endDatePlannedValue.setConverter(endDatePlannedValueConverter);
-        htmlPanelGrid.getChildren().add(endDatePlannedValue);
-        
-        HtmlOutputText workloadPlannedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        workloadPlannedLabel.setId("workloadPlannedLabel");
-        workloadPlannedLabel.setValue("Workload Planned:");
-        htmlPanelGrid.getChildren().add(workloadPlannedLabel);
-        
-        HtmlOutputText workloadPlannedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        workloadPlannedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadPlanned}", String.class));
-        htmlPanelGrid.getChildren().add(workloadPlannedValue);
-        
-        HtmlOutputText startDateRevisedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        startDateRevisedLabel.setId("startDateRevisedLabel");
-        startDateRevisedLabel.setValue("Start Date Revised:");
-        htmlPanelGrid.getChildren().add(startDateRevisedLabel);
-        
-        HtmlOutputText startDateRevisedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        startDateRevisedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.startDateRevised}", Date.class));
-        DateTimeConverter startDateRevisedValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
-        startDateRevisedValueConverter.setPattern("dd/MM/yyyy");
-        startDateRevisedValue.setConverter(startDateRevisedValueConverter);
-        htmlPanelGrid.getChildren().add(startDateRevisedValue);
-        
-        HtmlOutputText endDateRevisedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        endDateRevisedLabel.setId("endDateRevisedLabel");
-        endDateRevisedLabel.setValue("End Date Revised:");
-        htmlPanelGrid.getChildren().add(endDateRevisedLabel);
-        
-        HtmlOutputText endDateRevisedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        endDateRevisedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.endDateRevised}", Date.class));
-        DateTimeConverter endDateRevisedValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
-        endDateRevisedValueConverter.setPattern("dd/MM/yyyy");
-        endDateRevisedValue.setConverter(endDateRevisedValueConverter);
-        htmlPanelGrid.getChildren().add(endDateRevisedValue);
-        
-        HtmlOutputText workloadRevisedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        workloadRevisedLabel.setId("workloadRevisedLabel");
-        workloadRevisedLabel.setValue("Workload Revised:");
-        htmlPanelGrid.getChildren().add(workloadRevisedLabel);
-        
-        HtmlOutputText workloadRevisedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        workloadRevisedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadRevised}", String.class));
-        htmlPanelGrid.getChildren().add(workloadRevisedValue);
-        
-        HtmlOutputText startDateRealLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        startDateRealLabel.setId("startDateRealLabel");
-        startDateRealLabel.setValue("Start Date Real:");
-        htmlPanelGrid.getChildren().add(startDateRealLabel);
-        
-        HtmlOutputText startDateRealValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        startDateRealValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.startDateReal}", Date.class));
-        DateTimeConverter startDateRealValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
-        startDateRealValueConverter.setPattern("dd/MM/yyyy");
-        startDateRealValue.setConverter(startDateRealValueConverter);
-        htmlPanelGrid.getChildren().add(startDateRealValue);
-        
-        HtmlOutputText endDateRealLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        endDateRealLabel.setId("endDateRealLabel");
-        endDateRealLabel.setValue("End Date Real:");
-        htmlPanelGrid.getChildren().add(endDateRealLabel);
-        
-        HtmlOutputText endDateRealValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        endDateRealValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.endDateReal}", Date.class));
-        DateTimeConverter endDateRealValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
-        endDateRealValueConverter.setPattern("dd/MM/yyyy");
-        endDateRealValue.setConverter(endDateRealValueConverter);
-        htmlPanelGrid.getChildren().add(endDateRealValue);
-        
-        HtmlOutputText workloadRealLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        workloadRealLabel.setId("workloadRealLabel");
-        workloadRealLabel.setValue("Workload Real:");
-        htmlPanelGrid.getChildren().add(workloadRealLabel);
-        
-        HtmlOutputText workloadRealValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        workloadRealValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadReal}", String.class));
-        htmlPanelGrid.getChildren().add(workloadRealValue);
-        
-        HtmlOutputText consumedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        consumedLabel.setId("consumedLabel");
-        consumedLabel.setValue("Consumed:");
-        htmlPanelGrid.getChildren().add(consumedLabel);
-        
-        HtmlOutputText consumedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        consumedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.consumed}", String.class));
-        htmlPanelGrid.getChildren().add(consumedValue);        
-       
-        
-        HtmlOutputText bugLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        bugLabel.setId("bugLabel");
-        bugLabel.setValue("Bug:");
-        htmlPanelGrid.getChildren().add(bugLabel);
-        
-        HtmlOutputText bugValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        bugValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.bug.name}", String.class));
-        //bugValue.setConverter(new JJBugConverter());
-        htmlPanelGrid.getChildren().add(bugValue);
-        
-        HtmlOutputText requirementLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementLabel.setId("requirementLabel");
-        requirementLabel.setValue("Requirement:");
-        htmlPanelGrid.getChildren().add(requirementLabel);
-        
-        HtmlOutputText requirementValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        requirementValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.requirement.name}", String.class));
-        //requirementValue.setConverter(new JJRequirementConverter());
-        htmlPanelGrid.getChildren().add(requirementValue);
-//        if(getJJTask_()!=null)
-//        {
-//        	if(getJJTask_().getRequirement()!=null)
-//        	{
-//        		 TreeNode tree=new DefaultTreeNode(getJJTask_().getRequirement().getName(),null);
-//                 reqTreeNode(tree,getJJTask_().getRequirement());
-//                 Tree t=new Tree();
-//                 t.setValue(tree);
-//                 t.setAnimate(true);
-//                                 
-//                 htmlPanelGrid.getChildren().add(t);
-//                
-//        	}
-//        	
-//        }
-      
-        
-        HtmlOutputText testcaseLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testcaseLabel.setId("testcaseLabel");
-        testcaseLabel.setValue("Testcase:");
-        htmlPanelGrid.getChildren().add(testcaseLabel);
-        
-        HtmlOutputText testcaseValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testcaseValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.testcase.name}", String.class));
-        //testcaseValue.setConverter(new JJTestcaseConverter());
-        htmlPanelGrid.getChildren().add(testcaseValue);
-        
-        HtmlOutputText sprintLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        sprintLabel.setId("sprintLabel");
-        sprintLabel.setValue("Sprint:");
-        htmlPanelGrid.getChildren().add(sprintLabel);
-        
-        HtmlOutputText sprintValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        sprintValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.sprint.name}", String.class));
-        //sprintValue.setConverter(new JJSprintConverter());
-        htmlPanelGrid.getChildren().add(sprintValue);
-        
-        HtmlOutputText assignedToLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        assignedToLabel.setId("assignedToLabel");
-        assignedToLabel.setValue("Assigned To:");
-        htmlPanelGrid.getChildren().add(assignedToLabel);
-        
-        HtmlOutputText assignedToValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        assignedToValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.assignedTo.name}", String.class));
-        //assignedToValue.setConverter(new JJContactConverter());
-        htmlPanelGrid.getChildren().add(assignedToValue);
-        
-        HtmlOutputText statusLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        statusLabel.setId("statusLabel");
-        statusLabel.setValue("Status:");
-        htmlPanelGrid.getChildren().add(statusLabel);
-        
-        HtmlOutputText statusValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        statusValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.status.name}", String.class));
-        //statusValue.setConverter(new JJStatusConverter());
-        htmlPanelGrid.getChildren().add(statusValue);        
-       
-        HtmlOutputText completedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        completedLabel.setId("completedLabel");
-        completedLabel.setValue("Completed:");
-        htmlPanelGrid.getChildren().add(completedLabel);
-        
-        HtmlOutputText completedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        completedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.completed}", String.class));
-        htmlPanelGrid.getChildren().add(completedValue);
-        
-        HtmlOutputText parentLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        parentLabel.setId("parentLabel");
-        parentLabel.setValue("Parent:");
-        htmlPanelGrid.getChildren().add(parentLabel);
-        
-        HtmlOutputText parentValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        parentValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.parent.name}", String.class));
-        parentValue.setConverter(new JJTaskConverter());
-        htmlPanelGrid.getChildren().add(parentValue);        
-        
-        HtmlOutputText beforeTasksLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        beforeTasksLabel.setId("beforeTasksLabel");
-        beforeTasksLabel.setValue("Before Tasks:");
-        htmlPanelGrid.getChildren().add(beforeTasksLabel);
-        
-        SelectManyMenu beforeTasksValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
-        beforeTasksValue.setId("beforeTasksValue");
-        beforeTasksValue.setConverter(new JJTaskConverter());
-        beforeTasksValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.selectedBeforeTasks}", List.class));
-        UISelectItems beforeTasksValueItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        beforeTasksValue.setReadonly(true);
-        beforeTasksValue.setDisabled(true);
-        beforeTasksValueItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.beforeTasks}", Set.class));
-        beforeTasksValueItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJTask", String.class));
-        beforeTasksValueItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJTask}", String.class));
-        beforeTasksValueItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJTask}", JJTask.class));
-        beforeTasksValue.getChildren().add(beforeTasksValueItems);
-        htmlPanelGrid.getChildren().add(beforeTasksValue);
-        
-        return htmlPanelGrid;
-    }
-
-	private void reqTreeNode(TreeNode tree,JJRequirement req) {
+	public HtmlPanelGrid populateViewPanelGrid() {
 		
-	for(JJRequirement r:req.getRequirementLinkDown())
-	{
-		DefaultTreeNode son = new DefaultTreeNode(r.getName(), tree);
-		reqTreeNode(son, r);
-	}
 		
+		
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		Application application = facesContext
+				.getApplication();
+		ExpressionFactory expressionFactory = application
+				.getExpressionFactory();
+		ELContext elContext = facesContext.getELContext();
+
+		HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application
+				.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
+		
+		setJJTask_((JJTask) expressionFactory.createValueExpression(elContext,"#{jJDevelopment.task}", JJTask.class).getValue(elContext));
+		taskTreeNode=null;
+				
+
+		HtmlOutputText nameLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		nameLabel.setId("nameLabel");
+		nameLabel.setValue("Name:");
+		htmlPanelGrid.getChildren().add(nameLabel);
+
+		InputTextarea nameValue = (InputTextarea) application
+				.createComponent(InputTextarea.COMPONENT_TYPE);
+		nameValue.setId("nameValue");
+		nameValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext, "#{jJTaskBean.JJTask_.name}",
+						String.class));
+		nameValue.setReadonly(true);
+		nameValue.setDisabled(true);
+		htmlPanelGrid.getChildren().add(nameValue);
+
+		HtmlOutputText descriptionLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		descriptionLabel.setId("descriptionLabel");
+		descriptionLabel.setValue("Description:");
+		htmlPanelGrid.getChildren().add(descriptionLabel);
+
+		InputTextarea descriptionValue = (InputTextarea) application
+				.createComponent(InputTextarea.COMPONENT_TYPE);
+		descriptionValue.setId("descriptionValue");
+		descriptionValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.description}", String.class));
+		descriptionValue.setReadonly(true);
+		descriptionValue.setDisabled(true);
+		htmlPanelGrid.getChildren().add(descriptionValue);
+
+		HtmlOutputText startDatePlannedLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		startDatePlannedLabel.setId("startDatePlannedLabel");
+		startDatePlannedLabel.setValue("Start Date Planned:");
+		htmlPanelGrid.getChildren().add(startDatePlannedLabel);
+
+		HtmlOutputText startDatePlannedValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		startDatePlannedValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.startDatePlanned}", Date.class));
+		DateTimeConverter startDatePlannedValueConverter = (DateTimeConverter) application
+				.createConverter(DateTimeConverter.CONVERTER_ID);
+		startDatePlannedValueConverter.setPattern("dd/MM/yyyy");
+		startDatePlannedValue.setConverter(startDatePlannedValueConverter);
+		htmlPanelGrid.getChildren().add(startDatePlannedValue);
+
+		HtmlOutputText endDatePlannedLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		endDatePlannedLabel.setId("endDatePlannedLabel");
+		endDatePlannedLabel.setValue("End Date Planned:");
+		htmlPanelGrid.getChildren().add(endDatePlannedLabel);
+
+		HtmlOutputText endDatePlannedValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		endDatePlannedValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.endDatePlanned}", Date.class));
+		DateTimeConverter endDatePlannedValueConverter = (DateTimeConverter) application
+				.createConverter(DateTimeConverter.CONVERTER_ID);
+		endDatePlannedValueConverter.setPattern("dd/MM/yyyy");
+		endDatePlannedValue.setConverter(endDatePlannedValueConverter);
+		htmlPanelGrid.getChildren().add(endDatePlannedValue);
+
+		HtmlOutputText workloadPlannedLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		workloadPlannedLabel.setId("workloadPlannedLabel");
+		workloadPlannedLabel.setValue("Workload Planned:");
+		htmlPanelGrid.getChildren().add(workloadPlannedLabel);
+
+		HtmlOutputText workloadPlannedValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		workloadPlannedValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.workloadPlanned}", String.class));
+		htmlPanelGrid.getChildren().add(workloadPlannedValue);
+
+		HtmlOutputText startDateRevisedLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		startDateRevisedLabel.setId("startDateRevisedLabel");
+		startDateRevisedLabel.setValue("Start Date Revised:");
+		htmlPanelGrid.getChildren().add(startDateRevisedLabel);
+
+		HtmlOutputText startDateRevisedValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		startDateRevisedValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.startDateRevised}", Date.class));
+		DateTimeConverter startDateRevisedValueConverter = (DateTimeConverter) application
+				.createConverter(DateTimeConverter.CONVERTER_ID);
+		startDateRevisedValueConverter.setPattern("dd/MM/yyyy");
+		startDateRevisedValue.setConverter(startDateRevisedValueConverter);
+		htmlPanelGrid.getChildren().add(startDateRevisedValue);
+
+		HtmlOutputText endDateRevisedLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		endDateRevisedLabel.setId("endDateRevisedLabel");
+		endDateRevisedLabel.setValue("End Date Revised:");
+		htmlPanelGrid.getChildren().add(endDateRevisedLabel);
+
+		HtmlOutputText endDateRevisedValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		endDateRevisedValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.endDateRevised}", Date.class));
+		DateTimeConverter endDateRevisedValueConverter = (DateTimeConverter) application
+				.createConverter(DateTimeConverter.CONVERTER_ID);
+		endDateRevisedValueConverter.setPattern("dd/MM/yyyy");
+		endDateRevisedValue.setConverter(endDateRevisedValueConverter);
+		htmlPanelGrid.getChildren().add(endDateRevisedValue);
+
+		HtmlOutputText workloadRevisedLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		workloadRevisedLabel.setId("workloadRevisedLabel");
+		workloadRevisedLabel.setValue("Workload Revised:");
+		htmlPanelGrid.getChildren().add(workloadRevisedLabel);
+
+		HtmlOutputText workloadRevisedValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		workloadRevisedValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.workloadRevised}", String.class));
+		htmlPanelGrid.getChildren().add(workloadRevisedValue);
+
+		HtmlOutputText startDateRealLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		startDateRealLabel.setId("startDateRealLabel");
+		startDateRealLabel.setValue("Start Date Real:");
+		htmlPanelGrid.getChildren().add(startDateRealLabel);
+
+		HtmlOutputText startDateRealValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		startDateRealValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.startDateReal}", Date.class));
+		DateTimeConverter startDateRealValueConverter = (DateTimeConverter) application
+				.createConverter(DateTimeConverter.CONVERTER_ID);
+		startDateRealValueConverter.setPattern("dd/MM/yyyy");
+		startDateRealValue.setConverter(startDateRealValueConverter);
+		htmlPanelGrid.getChildren().add(startDateRealValue);
+
+		HtmlOutputText endDateRealLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		endDateRealLabel.setId("endDateRealLabel");
+		endDateRealLabel.setValue("End Date Real:");
+		htmlPanelGrid.getChildren().add(endDateRealLabel);
+
+		HtmlOutputText endDateRealValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		endDateRealValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.endDateReal}", Date.class));
+		DateTimeConverter endDateRealValueConverter = (DateTimeConverter) application
+				.createConverter(DateTimeConverter.CONVERTER_ID);
+		endDateRealValueConverter.setPattern("dd/MM/yyyy");
+		endDateRealValue.setConverter(endDateRealValueConverter);
+		htmlPanelGrid.getChildren().add(endDateRealValue);
+
+		HtmlOutputText workloadRealLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		workloadRealLabel.setId("workloadRealLabel");
+		workloadRealLabel.setValue("Workload Real:");
+		htmlPanelGrid.getChildren().add(workloadRealLabel);
+
+		HtmlOutputText workloadRealValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		workloadRealValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.workloadReal}", String.class));
+		htmlPanelGrid.getChildren().add(workloadRealValue);
+
+		HtmlOutputText consumedLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		consumedLabel.setId("consumedLabel");
+		consumedLabel.setValue("Consumed:");
+		htmlPanelGrid.getChildren().add(consumedLabel);
+
+		HtmlOutputText consumedValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		consumedValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.consumed}", String.class));
+		htmlPanelGrid.getChildren().add(consumedValue);
+
+		HtmlOutputText bugLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		bugLabel.setId("bugLabel");
+		bugLabel.setValue("Bug:");
+		htmlPanelGrid.getChildren().add(bugLabel);
+
+		HtmlOutputText bugValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		bugValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.bug.name}", String.class));
+		// bugValue.setConverter(new JJBugConverter());
+		htmlPanelGrid.getChildren().add(bugValue);		
+
+		if (getJJTask_() != null) {
+			if (getJJTask_().getRequirement() != null) {
+
+
+				
+				System.out.println("1");
+				taskTreeNode = new DefaultTreeNode("Requirement", null);				
+				JJRequirement requirement=(JJRequirement) expressionFactory.createValueExpression(elContext,"#{jJTaskBean.JJTask_.requirement}", JJRequirement.class).getValue(elContext);
+				DefaultTreeNode tree=new DefaultTreeNode(requirement.getName(),taskTreeNode);
+				reqTreeNode(tree,requirement);	
+				expressionFactory.createValueExpression(elContext, "#{jJTaskBean.taskTreeNode}", TreeNode.class).setValue(elContext, taskTreeNode);
+				
+
+			}
+
+		}
+
+		HtmlOutputText testcaseLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		testcaseLabel.setId("testcaseLabel");
+		testcaseLabel.setValue("Testcase:");
+		htmlPanelGrid.getChildren().add(testcaseLabel);
+
+		HtmlOutputText testcaseValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		testcaseValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.testcase.name}", String.class));
+		// testcaseValue.setConverter(new JJTestcaseConverter());
+		htmlPanelGrid.getChildren().add(testcaseValue);
+
+		HtmlOutputText sprintLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		sprintLabel.setId("sprintLabel");
+		sprintLabel.setValue("Sprint:");
+		htmlPanelGrid.getChildren().add(sprintLabel);
+
+		HtmlOutputText sprintValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		sprintValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.sprint.name}", String.class));
+		// sprintValue.setConverter(new JJSprintConverter());
+		htmlPanelGrid.getChildren().add(sprintValue);
+
+		HtmlOutputText assignedToLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		assignedToLabel.setId("assignedToLabel");
+		assignedToLabel.setValue("Assigned To:");
+		htmlPanelGrid.getChildren().add(assignedToLabel);
+
+		HtmlOutputText assignedToValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		assignedToValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.assignedTo.name}", String.class));
+		// assignedToValue.setConverter(new JJContactConverter());
+		htmlPanelGrid.getChildren().add(assignedToValue);
+
+		HtmlOutputText statusLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		statusLabel.setId("statusLabel");
+		statusLabel.setValue("Status:");
+		htmlPanelGrid.getChildren().add(statusLabel);
+
+		HtmlOutputText statusValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		statusValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.status.name}", String.class));
+		// statusValue.setConverter(new JJStatusConverter());
+		htmlPanelGrid.getChildren().add(statusValue);
+
+		HtmlOutputText completedLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		completedLabel.setId("completedLabel");
+		completedLabel.setValue("Completed:");
+		htmlPanelGrid.getChildren().add(completedLabel);
+
+		HtmlOutputText completedValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		completedValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.completed}", String.class));
+		htmlPanelGrid.getChildren().add(completedValue);
+
+		HtmlOutputText parentLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		parentLabel.setId("parentLabel");
+		parentLabel.setValue("Parent:");
+		htmlPanelGrid.getChildren().add(parentLabel);
+
+		HtmlOutputText parentValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		parentValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{jJTaskBean.JJTask_.parent.name}", String.class));
+		parentValue.setConverter(new JJTaskConverter());
+		htmlPanelGrid.getChildren().add(parentValue);
+		
+
+		return htmlPanelGrid;
 	}
 
-	
+	private void reqTreeNode(TreeNode tree, JJRequirement req) {
+
+		
+		for (JJRequirement r : req.getRequirementLinkDown()) {
+
+			DefaultTreeNode s = new DefaultTreeNode(r.getName(), tree);
+			if (r.getRequirementLinkDown() != null)
+				reqTreeNode(s, r);
+		}
+
+	}
+
 }

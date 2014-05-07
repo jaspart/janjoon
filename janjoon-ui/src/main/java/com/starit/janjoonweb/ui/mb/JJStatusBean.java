@@ -10,18 +10,15 @@ import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
-import javax.faces.event.ComponentSystemEvent;
 import javax.faces.validator.LengthValidator;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.component.autocomplete.AutoComplete;
-import org.primefaces.component.calendar.Calendar;
-import org.primefaces.component.editor.Editor;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
-import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
 import org.primefaces.component.spinner.Spinner;
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
@@ -126,17 +123,32 @@ public class JJStatusBean {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
+		String message = "";
+		
 		if (getJJStatus_().getId() != null) {
 			getJJStatus_().setUpdatedDate(new Date());
 			getJJStatus_().setUpdatedBy(contact);
+			jJStatusService.updateJJStatus(getJJStatus_());
+	        message = "message_successfully_updated";
 
 		} else {
 			getJJStatus_().setCreatedBy(contact);
+			getJJStatus_().setDescription("Satus : "+getJJStatus_().getName()+" for "+getJJStatus_().getObjet()+"object");
 			getJJStatus_().setCreationDate(new Date());
 			getJJStatus_().setEnabled(true);
+			jJStatusService.saveJJStatus(getJJStatus_());
+            message = "message_successfully_created";
 		}
+	        RequestContext context = RequestContext.getCurrentInstance();
+	        context.execute("createSatDialogWidget.hide()");
+	        context.execute("editSatDialogWidget.hide()");
+	        
+	        FacesMessage facesMessage = MessageFactory.getMessage(message, "JJStatus");
+	        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+	        reset();
+	        return findAllJJStatuses();
 
-		return persist();
+		
 
 	}
 
@@ -153,14 +165,14 @@ public class JJStatusBean {
 
 		OutputLabel nameCreateOutput = (OutputLabel) application
 				.createComponent(OutputLabel.COMPONENT_TYPE);
-		nameCreateOutput.setFor("nameCreateInput");
-		nameCreateOutput.setId("nameCreateOutput");
+		nameCreateOutput.setFor("nameStatCreateInput");
+		nameCreateOutput.setId("nameStatCreateOutput");
 		nameCreateOutput.setValue("Name:");
 		htmlPanelGrid.getChildren().add(nameCreateOutput);
 
 		InputTextarea nameCreateInput = (InputTextarea) application
 				.createComponent(InputTextarea.COMPONENT_TYPE);
-		nameCreateInput.setId("nameCreateInput");
+		nameCreateInput.setId("nameStatCreateInput");
 		nameCreateInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
 						"#{jJStatusBean.JJStatus_.name}", String.class));
@@ -172,44 +184,21 @@ public class JJStatusBean {
 
 		Message nameCreateInputMessage = (Message) application
 				.createComponent(Message.COMPONENT_TYPE);
-		nameCreateInputMessage.setId("nameCreateInputMessage");
-		nameCreateInputMessage.setFor("nameCreateInput");
+		nameCreateInputMessage.setId("nameStatCreateInputMessage");
+		nameCreateInputMessage.setFor("nameStatCreateInput");
 		nameCreateInputMessage.setDisplay("icon");
 		htmlPanelGrid.getChildren().add(nameCreateInputMessage);
-
-		OutputLabel descriptionCreateOutput = (OutputLabel) application
-				.createComponent(OutputLabel.COMPONENT_TYPE);
-		descriptionCreateOutput.setFor("descriptionCreateInput");
-		descriptionCreateOutput.setId("descriptionCreateOutput");
-		descriptionCreateOutput.setValue("Description:");
-		htmlPanelGrid.getChildren().add(descriptionCreateOutput);
-
-		Editor descriptionCreateInput = (Editor) application
-				.createComponent(Editor.COMPONENT_TYPE);
-		descriptionCreateInput.setId("descriptionCreateInput");
-		descriptionCreateInput.setValueExpression("value", expressionFactory
-				.createValueExpression(elContext,
-						"#{jJStatusBean.JJStatus_.description}", String.class));
-		descriptionCreateInput.setRequired(true);
-		htmlPanelGrid.getChildren().add(descriptionCreateInput);
-
-		Message descriptionCreateInputMessage = (Message) application
-				.createComponent(Message.COMPONENT_TYPE);
-		descriptionCreateInputMessage.setId("descriptionCreateInputMessage");
-		descriptionCreateInputMessage.setFor("descriptionCreateInput");
-		descriptionCreateInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(descriptionCreateInputMessage);
-
+		
 		OutputLabel objetCreateOutput = (OutputLabel) application
 				.createComponent(OutputLabel.COMPONENT_TYPE);
-		objetCreateOutput.setFor("objetCreateInput");
-		objetCreateOutput.setId("objetCreateOutput");
+		objetCreateOutput.setFor("objetStatCreateInput");
+		objetCreateOutput.setId("objetStatCreateOutput");
 		objetCreateOutput.setValue("Objet:");
 		htmlPanelGrid.getChildren().add(objetCreateOutput);
 
 		AutoComplete objetCreateInput = (AutoComplete) application
 				.createComponent(AutoComplete.COMPONENT_TYPE);
-		objetCreateInput.setId("objetCreateInput");
+		objetCreateInput.setId("objetStatCreateInput");
 		objetCreateInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
 						"#{jJStatusBean.JJStatus_.objet}", String.class));
@@ -229,8 +218,8 @@ public class JJStatusBean {
 
 		Message objetCreateInputMessage = (Message) application
 				.createComponent(Message.COMPONENT_TYPE);
-		objetCreateInputMessage.setId("objetCreateInputMessage");
-		objetCreateInputMessage.setFor("objetCreateInput");
+		objetCreateInputMessage.setId("objetStatCreateInputMessage");
+		objetCreateInputMessage.setFor("objetStatCreateInput");
 		objetCreateInputMessage.setDisplay("icon");
 		htmlPanelGrid.getChildren().add(objetCreateInputMessage);
 
@@ -262,21 +251,21 @@ public class JJStatusBean {
 
 		HtmlOutputText messagesCreateOutput = (HtmlOutputText) application
 				.createComponent(HtmlOutputText.COMPONENT_TYPE);
-		messagesCreateOutput.setId("messagesCreateOutput");
+		messagesCreateOutput.setId("messagesStatCreateOutput");
 		messagesCreateOutput.setValue("Messages:");
 		htmlPanelGrid.getChildren().add(messagesCreateOutput);
 
 		HtmlOutputText messagesCreateInput = (HtmlOutputText) application
 				.createComponent(HtmlOutputText.COMPONENT_TYPE);
-		messagesCreateInput.setId("messagesCreateInput");
+		messagesCreateInput.setId("messagesStatCreateInput");
 		messagesCreateInput
 				.setValue("This relationship is managed from the JJMessage side");
 		htmlPanelGrid.getChildren().add(messagesCreateInput);
 
 		Message messagesCreateInputMessage = (Message) application
 				.createComponent(Message.COMPONENT_TYPE);
-		messagesCreateInputMessage.setId("messagesCreateInputMessage");
-		messagesCreateInputMessage.setFor("messagesCreateInput");
+		messagesCreateInputMessage.setId("messagesStatCreateInputMessage");
+		messagesCreateInputMessage.setFor("messagesStatCreateInput");
 		messagesCreateInputMessage.setDisplay("icon");
 		htmlPanelGrid.getChildren().add(messagesCreateInputMessage);
 
@@ -296,14 +285,14 @@ public class JJStatusBean {
 
 		OutputLabel nameEditOutput = (OutputLabel) application
 				.createComponent(OutputLabel.COMPONENT_TYPE);
-		nameEditOutput.setFor("nameEditInput");
-		nameEditOutput.setId("nameEditOutput");
+		nameEditOutput.setFor("nameStatEditInput");
+		nameEditOutput.setId("nameStatEditOutput");
 		nameEditOutput.setValue("Name:");
 		htmlPanelGrid.getChildren().add(nameEditOutput);
 
 		InputTextarea nameEditInput = (InputTextarea) application
 				.createComponent(InputTextarea.COMPONENT_TYPE);
-		nameEditInput.setId("nameEditInput");
+		nameEditInput.setId("nameStatEditInput");
 		nameEditInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
 						"#{jJStatusBean.JJStatus_.name}", String.class));
@@ -315,44 +304,21 @@ public class JJStatusBean {
 
 		Message nameEditInputMessage = (Message) application
 				.createComponent(Message.COMPONENT_TYPE);
-		nameEditInputMessage.setId("nameEditInputMessage");
-		nameEditInputMessage.setFor("nameEditInput");
+		nameEditInputMessage.setId("nameStatEditInputMessage");
+		nameEditInputMessage.setFor("nameStatEditInput");
 		nameEditInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(nameEditInputMessage);
-
-		OutputLabel descriptionEditOutput = (OutputLabel) application
-				.createComponent(OutputLabel.COMPONENT_TYPE);
-		descriptionEditOutput.setFor("descriptionEditInput");
-		descriptionEditOutput.setId("descriptionEditOutput");
-		descriptionEditOutput.setValue("Description:");
-		htmlPanelGrid.getChildren().add(descriptionEditOutput);
-
-		Editor descriptionEditInput = (Editor) application
-				.createComponent(Editor.COMPONENT_TYPE);
-		descriptionEditInput.setId("descriptionEditInput");
-		descriptionEditInput.setValueExpression("value", expressionFactory
-				.createValueExpression(elContext,
-						"#{jJStatusBean.JJStatus_.description}", String.class));
-		descriptionEditInput.setRequired(true);
-		htmlPanelGrid.getChildren().add(descriptionEditInput);
-
-		Message descriptionEditInputMessage = (Message) application
-				.createComponent(Message.COMPONENT_TYPE);
-		descriptionEditInputMessage.setId("descriptionEditInputMessage");
-		descriptionEditInputMessage.setFor("descriptionEditInput");
-		descriptionEditInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(descriptionEditInputMessage);
+		htmlPanelGrid.getChildren().add(nameEditInputMessage);		
 
 		OutputLabel objetEditOutput = (OutputLabel) application
 				.createComponent(OutputLabel.COMPONENT_TYPE);
-		objetEditOutput.setFor("objetEditInput");
-		objetEditOutput.setId("objetEditOutput");
+		objetEditOutput.setFor("objetStatEditInput");
+		objetEditOutput.setId("objetStatEditOutput");
 		objetEditOutput.setValue("Objet:");
 		htmlPanelGrid.getChildren().add(objetEditOutput);
 
 		AutoComplete objetEditInput = (AutoComplete) application
 				.createComponent(AutoComplete.COMPONENT_TYPE);
-		objetEditInput.setId("objetEditInput");
+		objetEditInput.setId("objetStatEditInput");
 		objetEditInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
 						"#{jJStatusBean.JJStatus_.objet}", String.class));
@@ -372,8 +338,8 @@ public class JJStatusBean {
 
 		Message objetEditInputMessage = (Message) application
 				.createComponent(Message.COMPONENT_TYPE);
-		objetEditInputMessage.setId("objetEditInputMessage");
-		objetEditInputMessage.setFor("objetEditInput");
+		objetEditInputMessage.setId("objetStatEditInputMessage");
+		objetEditInputMessage.setFor("objetStatEditInput");
 		objetEditInputMessage.setDisplay("icon");
 		htmlPanelGrid.getChildren().add(objetEditInputMessage);
 
@@ -405,21 +371,21 @@ public class JJStatusBean {
 
 		HtmlOutputText messagesEditOutput = (HtmlOutputText) application
 				.createComponent(HtmlOutputText.COMPONENT_TYPE);
-		messagesEditOutput.setId("messagesEditOutput");
+		messagesEditOutput.setId("messagesStatEditOutput");
 		messagesEditOutput.setValue("Messages:");
 		htmlPanelGrid.getChildren().add(messagesEditOutput);
 
 		HtmlOutputText messagesEditInput = (HtmlOutputText) application
 				.createComponent(HtmlOutputText.COMPONENT_TYPE);
-		messagesEditInput.setId("messagesEditInput");
+		messagesEditInput.setId("messagesStatEditInput");
 		messagesEditInput
 				.setValue("This relationship is managed from the JJMessage side");
 		htmlPanelGrid.getChildren().add(messagesEditInput);
 
 		Message messagesEditInputMessage = (Message) application
 				.createComponent(Message.COMPONENT_TYPE);
-		messagesEditInputMessage.setId("messagesEditInputMessage");
-		messagesEditInputMessage.setFor("messagesEditInput");
+		messagesEditInputMessage.setId("messagesStatEditInputMessage");
+		messagesEditInputMessage.setFor("messagesStatEditInput");
 		messagesEditInputMessage.setDisplay("icon");
 		htmlPanelGrid.getChildren().add(messagesEditInputMessage);
 
@@ -505,7 +471,7 @@ public class JJStatusBean {
 
 		HtmlOutputText updatedDateLabel = (HtmlOutputText) application
 				.createComponent(HtmlOutputText.COMPONENT_TYPE);
-		updatedDateLabel.setId("updatedDateLabel");
+		updatedDateLabel.setId("updatedStatDateLabel");
 		updatedDateLabel.setValue("Updated Date:");
 		htmlPanelGrid.getChildren().add(updatedDateLabel);
 
@@ -522,7 +488,7 @@ public class JJStatusBean {
 
 		HtmlOutputText updatedByLabel = (HtmlOutputText) application
 				.createComponent(HtmlOutputText.COMPONENT_TYPE);
-		updatedByLabel.setId("updatedByLabel");
+		updatedByLabel.setId("updatedStatByLabel");
 		updatedByLabel.setValue("Updated By:");
 		htmlPanelGrid.getChildren().add(updatedByLabel);
 
@@ -538,7 +504,7 @@ public class JJStatusBean {
 
 		HtmlOutputText enabledLabel = (HtmlOutputText) application
 				.createComponent(HtmlOutputText.COMPONENT_TYPE);
-		enabledLabel.setId("enabledLabel");
+		enabledLabel.setId("enabledStatLabel");
 		enabledLabel.setValue("Enabled:");
 		htmlPanelGrid.getChildren().add(enabledLabel);
 

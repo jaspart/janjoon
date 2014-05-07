@@ -10,6 +10,7 @@ import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
+import javax.faces.event.ComponentSystemEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.validator.LengthValidator;
 import javax.servlet.http.HttpSession;
@@ -126,6 +127,23 @@ public class JJBugBean {
 
 	public SelectItem[] getStatusOptions() {
 		return statusOptions;
+	}
+	
+	public void initJJBug(ComponentSystemEvent e) {
+		
+		
+		List<JJBug> listOfBug=jJBugService.getBugs(null, null, null, true, true);
+		
+		if(bugList!=null)
+		{
+			if(!(bugList.contains(listOfBug)&&listOfBug.contains(bugList)))
+			{
+				System.out.println("InitJJBUG");
+				initJJBugTable();
+			}
+		}
+		
+	
 	}
 
 	public void initJJBugTable() {

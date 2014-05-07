@@ -238,8 +238,6 @@ public class GitConfigManager extends AbstractConfigManager {
 	@Override
 	public TreeNode listRepositoryContent(String version) {
 
-		System.out.println(repository.getWorkTree().getPath());
-
 		DefaultTreeNode root = new DefaultTreeNode("folder", repository
 				.getDirectory().getParentFile() + "/" + version, null);
 
