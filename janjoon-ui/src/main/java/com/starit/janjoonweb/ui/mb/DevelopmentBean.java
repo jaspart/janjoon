@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,10 +15,8 @@ import java.util.List;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
-
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
-
 import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.event.ActionEvent;
@@ -24,12 +25,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jgit.api.errors.JGitInternalException;
-
 import org.primefaces.context.RequestContext;
-
 import org.primefaces.event.*;
 import org.primefaces.extensions.component.codemirror.CodeMirror;
-
 import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -253,31 +251,38 @@ public class DevelopmentBean implements Serializable {
 				&& version != null) {
 			String url = configuration.getVal()
 					+ product.getName().replace(" ", "-") + ".git";
-			try {
-				configManager = new GitConfigManager(1, contact);
-				String path = System.getProperty("user.home") + "/git/";
+			if (testUrl(url)) {
+				try {
+					configManager = new GitConfigManager(1, contact);
+					String path = System.getProperty("user.home") + "/git/";
 
-				path = configManager.cloneRemoteRepository(url,
-						product.getName(), path);
-				if (path != null
-						&& !path.equalsIgnoreCase("InvalidRemoteException")
-						&& !path.equalsIgnoreCase("TransportException")) {
-					configManager = new GitConfigManager(url, path, contact);
-					System.out.println(path);
-				} else if (path == null) {
-					path = System.getProperty("user.home") + "/git/"
+					path = configManager.cloneRemoteRepository(url,
+							product.getName(), path);
+					if (path != null
+							&& !path.equalsIgnoreCase("InvalidRemoteException")
+							&& !path.equalsIgnoreCase("TransportException")) {
+						configManager = new GitConfigManager(url, path, contact);
+						System.out.println(path);
+					} else if (path == null) {
+						path = System.getProperty("user.home") + "/git/"
+								+ product.getName() + "/";
+						configManager = new GitConfigManager(url, path, contact);
+						System.out.println(path);
+					} else {
+						configManager = null;
+
+					}
+				} catch (JGitInternalException e) {
+					String path = System.getProperty("user.home") + "/git/"
 							+ product.getName() + "/";
 					configManager = new GitConfigManager(url, path, contact);
 					System.out.println(path);
-				} else {
-					configManager = null;
-
 				}
-			} catch (JGitInternalException e) {
-				String path = System.getProperty("user.home") + "/git/"
-						+ product.getName() + "/";
-				configManager = new GitConfigManager(url, path, contact);
-				System.out.println(path);
+			}else
+			{
+				System.out.println("badURL");
+				configManager = null;
+				
 			}
 
 		} else
@@ -378,7 +383,7 @@ public class DevelopmentBean implements Serializable {
 
 		if (task == null) {
 			tasks = jJTaskService.getTasksByProduct(product, project);
-			task=null;
+			task = null;
 		}
 
 		return tasks;
@@ -870,6 +875,35 @@ public class DevelopmentBean implements Serializable {
 
 	public void addToRoot(ActionEvent e) {
 		selectedTree = null;
+	}
+
+	public boolean testUrl(String urlPath) {
+
+		URL url;
+		try {
+			url = new URL(urlPath);
+			HttpURLConnection huc;
+			huc = (HttpURLConnection) url.openConnection();
+			huc.setRequestMethod("HEAD");         
+			int responseCode = huc.getResponseCode();
+			
+			if (responseCode != 404) {
+				System.out.println("GOOD");
+				return true;
+			} else {
+				System.out.println("BAD");
+				return false;
+			}
+		} catch (MalformedURLException e) {
+
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+
 	}
 
 }

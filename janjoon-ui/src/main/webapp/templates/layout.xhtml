@@ -38,10 +38,15 @@
 			<p:panel id="messagePanel" header="Chat" styleClass="chat"
 				toggleable="true" toggleOrientation="horizontal"
 				style="height:100%;" collapsed="#{jJMessageBean.collapsedMesPanel}">
+				
 				<p:ajax event="toggle" listener="#{jJMessageBean.handleMesToggle}"
 					update=":applicatinPanelGrid,menuPanel,messagePanel,contentPanel" />
+				
+				<f:event listener="#{jJMessageBean.initJJMessageLayout}"
+				type="preRenderView"/>	
+					
 				<p:dataTable id="dataTable1"
-					value="#{jJMessageBean.enabledJJMessage}" rowKey="#{mes.id}"
+					value="#{jJMessageBean.mainMessages}" rowKey="#{mes.id}"
 					var="mes" scrollable="true" scrollHeight="400"
 					rendered="#{loginBean.enable and !jJMessageBean.collapsedMesPanel}"
 					style="border-spacing:0px;" selectionMode="single"

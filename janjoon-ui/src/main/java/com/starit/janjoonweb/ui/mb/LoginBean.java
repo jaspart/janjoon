@@ -17,7 +17,6 @@ import javax.servlet.http.HttpSession;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
-
 import org.apache.myfaces.component.visit.FullVisitContext;
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +31,8 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJMessage;
+import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -39,9 +40,7 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 @Scope("session")
 @Component("loginBean")
 public class LoginBean implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private AuthenticationManager authenticationManager;
 	private String username = "janjoon.mailer@gmail.com";
@@ -187,13 +186,11 @@ public class LoginBean implements Serializable {
 
 		FacesContext ctx = FacesContext.getCurrentInstance();
 		String viewId = ctx.getViewRoot().getViewId();
+
 		HttpSession session = (HttpSession) ctx.getExternalContext()
-				.getSession(false);	
-		
-		
-		session.setAttribute("jJMessageBean", new JJMessageBean());
-		
-		
+				.getSession(false);
+
+		messageListener(session);
 
 		if (event.getComponent().getClientId().contains("projectSelectOneMenu")) {
 
@@ -253,14 +250,41 @@ public class LoginBean implements Serializable {
 					jJDevelopment.setProject(jJProjectBean.getProject());
 					jJDevelopment.setTasks(null);
 					jJDevelopment.setTask(null);
-					// jJDevelopment.setTasks(jJProductBean.getTasksByProduct(
-					// jJProductBean.getProduct(),
-					// jJProjectBean.getProject()));
 					context.update(":contentPanel:devPanel:form:taskSelectOneMenu");
 				}
 			}
 
 		}
+
+	}
+
+	public void messageListener(HttpSession session) {
+		JJMessageBean messageBean = (JJMessageBean) session
+				.getAttribute("jJMessageBean");
+		boolean messPanel = !messageBean.isCollapsedMesPanel();
+		boolean appPanel = !messageBean.isCollapsedLayoutPanel();
+		messageBean = new JJMessageBean();
+		RequestContext context = RequestContext.getCurrentInstance();
+
+		if (messPanel) {
+			messageBean.setCollapsedMesPanel(false);
+			context.update(":messagePanel");
+			context.update(":menuPanel");
+			context.update(":contentPanel");
+			context.update(":applicatinPanelGrid");
+
+		}
+
+		if (appPanel) {
+			messageBean.setCollapsedLayoutPanel(false);
+			context.update(":menuPanel");
+			context.update(":contentPanel");
+			context.update(":messagePanel");
+
+		}
+		System.out.println("loginlistener");
+
+		session.setAttribute("jJMessageBean", messageBean);
 
 	}
 
@@ -320,7 +344,6 @@ public class LoginBean implements Serializable {
 										+ FacesContext.getCurrentInstance()
 												.getViewRoot().getViewId()
 												.replace(".xhtml", ".jsf"));
-
 			}
 
 			String viewId = FacesContext.getCurrentInstance().getViewRoot()
@@ -340,19 +363,24 @@ public class LoginBean implements Serializable {
 			}
 
 		}
-
 	}
 
 	public void redirectToDev(ActionEvent e) throws IOException {
 
 		JJVersionBean jjVersionBean = (JJVersionBean) findBean("jJVersionBean");
 		JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
+		JJProjectBean jjProjectBean = (JJProjectBean) findBean("jJProjectBean");
 
 		if (jjVersionBean.getVersion() != null
 				&& jJProductBean.getProduct() != null) {
 
 			if (!FacesContext.getCurrentInstance().getViewRoot().getViewId()
 					.contains("development")) {
+
+				System.out.println(jJProductBean.jJContactService
+						.getContactAuthorization(contact,
+								jJProductBean.getProduct(),
+								jjProjectBean.getProject(), null).size());
 
 				String path = FacesContext.getCurrentInstance()
 						.getExternalContext().getRequestContextPath();
