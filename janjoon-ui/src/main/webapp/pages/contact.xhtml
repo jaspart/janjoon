@@ -41,15 +41,15 @@
 						<f:setPropertyActionListener value="#{contact}"
 							target="#{jJContactBean.contactAdmin}" />
 					</p:commandButton>
-					<p:tooltip for="editButton" value="#{messages.label_edit}"
+					<p:tooltip for="editButton" value="#{messages.admin_contact_edit_label}"
 						showEffect="fade" hideEffect="fade" />
 					<p:commandButton id="deleteButton" icon="ui-icon-trash"
 						oncomplete="contactDeleteDialogWidget.show()"
-						title="#{messages.label_delete}">
+						title="#{messages.admin_contact_delete_label}">
 						<f:setPropertyActionListener value="#{contact}"
 							target="#{jJContactBean.contactAdmin}" />
 					</p:commandButton>
-					<p:tooltip for="deleteButton" value="#{messages.label_delete}"
+					<p:tooltip for="deleteButton" value="#{messages.admin_contact_delete_button}"
 						showEffect="fade" hideEffect="fade" />
 				</p:column>
 				<f:facet name="footer">
@@ -230,16 +230,16 @@
 	</p:dialog>
 	<p:confirmDialog id="contactDeleteDialog"
 		widgetVar="contactDeleteDialogWidget"
-		message="#{messages.label_delete_record}" showEffect="fade"
-		hideEffect="explode" header="#{messages.label_confirm_deletion}"
+		message="#{messages.admin_contact_delete_alert}" showEffect="fade"
+		hideEffect="explode" header="#{messages.admin_contact_delete_header}"
 		severity="alarm">
 		<p:outputPanel id="contactDeletePanel">
 			<h:form id="contactDeleteForm">
-				<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+				<p:commandButton id="deleteYesButton" value="#{messages.admin_contact_yes_label}"
 					action="#{jJContactBean.deleteContact}"
 					update=":tabview:contactForm"
 					oncomplete="contactDeleteDialogWidget.hide()" />
-				<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+				<p:commandButton id="deleteNoButton" value="#{messages.admin_contact_no_label}"
 					onclick="contactDeleteDialogWidget.hide()" type="button" />
 			</h:form>
 		</p:outputPanel>

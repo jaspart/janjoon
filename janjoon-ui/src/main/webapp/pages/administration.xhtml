@@ -12,7 +12,7 @@
 		<p:tabView id="tabview" widgetVar="tabView" dynamic="true"
 			cache="true">
 
-			<p:tab id="tabUser" title="User">
+			<p:tab id="tabUser" title="#{messages.admin_user_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="contact">
 						<ui:include src="contact.xhtml" />
@@ -20,7 +20,7 @@
 				</h:panelGrid>
 			</p:tab>
 
-			<p:tab id="tabProfile" title="Profile">
+			<p:tab id="tabProfile" title="#{messages.admin_profile_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="profile">
 						<ui:include src="profile.xhtml" />
@@ -28,7 +28,7 @@
 				</h:panelGrid>
 			</p:tab>
 
-			<p:tab id="tabProduct" title="Product">
+			<p:tab id="tabProduct" title="#{messages.admin_product_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="product">
 						<ui:include src="product.xhtml" />
@@ -36,7 +36,7 @@
 				</h:panelGrid>
 			</p:tab>
 
-			<p:tab id="tabProject" title="Project">
+			<p:tab id="tabProject" title="#{messages.admin_project_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="project">
 						<ui:include src="project.xhtml" />
@@ -44,14 +44,14 @@
 				</h:panelGrid>
 			</p:tab>
 
-			<p:tab id="tabCategory" title="Category">
+			<p:tab id="tabCategory" title="#{messages.admin_category_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="category">
 						<ui:include src="category.xhtml" />
 					</ui:insert>
 				</h:panelGrid>
 			</p:tab>
-			<p:tab id="tabConfig" title="Configuration">
+			<p:tab id="tabConfig" title="#{messages.admin_configuration_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="configuration">
 						<ui:include src="config.xhtml" />
@@ -59,7 +59,7 @@
 				</h:panelGrid>
 			</p:tab>
 
-			<p:tab id="tabStatus" title="Status">
+			<p:tab id="tabStatus" title="#{messages.admin_status_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="status">
 						<ui:include src="status.xhtml" />
@@ -67,7 +67,7 @@
 				</h:panelGrid>
 			</p:tab>
 
-			<p:tab id="tabWorkflow" title="Workflow">
+			<p:tab id="tabWorkflow" title="#{messages.admin_workflow_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="workflow">
 						<ui:include src="workflow.xhtml" />
@@ -75,7 +75,7 @@
 				</h:panelGrid>
 			</p:tab>
 
-			<p:tab id="tabLicense" title="License">
+			<p:tab id="tabLicense" title="#{messages.admin_license_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="license">
 						<ui:include src="license.xhtml" />

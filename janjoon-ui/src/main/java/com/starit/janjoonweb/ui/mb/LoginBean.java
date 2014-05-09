@@ -413,7 +413,6 @@ public class LoginBean implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, message);
 				System.out.println(message.getDetail());
 			}
-
 		}
 	}
 

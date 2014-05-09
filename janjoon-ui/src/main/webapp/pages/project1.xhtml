@@ -9,7 +9,7 @@
 	<ui:define name="content">
 		<p:tabView id="projecttabview" widgetVar="tabView" dynamic="true"
 			cache="true">
-			<p:tab id="tabPlanning" title="Planning">
+			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="planning">
 						<ui:include src="planning.xhtml" />
@@ -17,7 +17,7 @@
 				</h:panelGrid>
 			</p:tab>
 
-			<p:tab title="Scrum">
+			<p:tab title="#{messages.project_scrum_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="scrum">
 						<ui:include src="scrum.xhtml" />

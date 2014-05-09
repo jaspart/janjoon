@@ -11,22 +11,22 @@
 			<p:dataTable id="productDataTable" var="product"
 				value="#{jJProductBean.productListTable}" paginator="true" rows="15"
 				style="width:550px" rowKey="#{product.id}">
-				<f:facet name="header">Product List</f:facet>
+				<f:facet name="header">#{messages.admin_product_table_title}</f:facet>
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="Internal Name" />
+						<h:outputText value="#{messages.admin_product_table_name_label}" />
 					</f:facet>
 					<h:outputText value="#{product.name}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="External Name" />
+						<h:outputText value="#{messages.admin_product_table_extname_label}" />
 					</f:facet>
 					<h:outputText value="#{product.extname}" />
 				</p:column>
 				<p:column styleClass="action-column">
 					<f:facet name="header">
-						<h:outputText value="Actions" />
+						<h:outputText value="#{messages.admin_product_table_action_label}" />
 					</f:facet>
 					<p:commandButton id="editButton" icon="ui-icon-pencil"
 						oncomplete="productDialogWidget.show()"
@@ -35,19 +35,19 @@
 						<f:setPropertyActionListener value="#{product}"
 							target="#{jJProductBean.productAdmin}" />
 					</p:commandButton>
-					<p:tooltip for="editButton" value="#{messages.label_edit}"
+					<p:tooltip for="editButton" value="#{messages.admin_product_edit_tooltip}"
 						showEffect="fade" hideEffect="fade" />
 					<p:commandButton id="deleteButton" icon="ui-icon-trash"
 						oncomplete="productDeleteDialogWidget.show()"
-						title="#{messages.label_delete}">
+						title="#{messages.admin_product_delete_tooltip}">
 						<f:setPropertyActionListener value="#{product}"
 							target="#{jJProductBean.productAdmin}" />
 					</p:commandButton>
-					<p:tooltip for="deleteButton" value="#{messages.label_delete}"
+					<p:tooltip for="deleteButton" value="#{messages.admin_product_table_delete_label}"
 						showEffect="fade" hideEffect="fade" />
 				</p:column>
 				<f:facet name="footer">
-					<p:commandButton value="New" id="newProduct"
+					<p:commandButton value="#{messages.admin_product_table_new_label}" id="newProduct"
 						actionListener="#{jJProductBean.newProduct(jJVersionBean)}"
 						update=":tabview:productDialog"
 						oncomplete="productDialogWidget.show()" icon="ui-icon-circle-plus" />
@@ -70,21 +70,21 @@
 								<p:row>
 									<p:column>
 										<p:inputText id="name"
-											value="#{jJProductBean.productAdmin.name}" label="Name"
+											value="#{jJProductBean.productAdmin.name}" label="#{messages.admin_product_new_name_title}"
 											required="true" widgetVar="nameWidget">
 											<f:validateLength maximum="100" />
 										</p:inputText>
 										<p:message for="name" id="msgName" />
-										<p:watermark for="name" value="Name *" />
+										<p:watermark for="name" value="#{messages.admin_product_new_name_watermark}" />
 									</p:column>
 									<p:column>
-										<h:outputText value="Product Manager: *" />
+										<h:outputText value="#{messages.admin_product_new_manager_title}" />
 										<p:selectOneMenu id="productManagerSelect"
 											value="#{jJProductBean.productManager}"
 											panelStyle="width:150px" effect="fade" style="width:160px"
 											filter="true" filterMatchMode="startsWith" required="true"
 											requiredMessage="Product Manager is a required value"
-											widgetVar="productManagerWidget" label="Product Manager">
+											widgetVar="productManagerWidget" label="#{messages.admin_product_new_manager_label}">
 											<f:converter
 												converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />
 											<f:selectItem
@@ -99,12 +99,12 @@
 								<p:row>
 									<p:column>
 										<p:inputText id="extname"
-											value="#{jJProductBean.productAdmin.extname}" label="Extname"
+											value="#{jJProductBean.productAdmin.extname}" label="#{messages.admin_product_new_extname_label}"
 											required="true" widgetVar="extnameWidget">
 											<f:validateLength maximum="100" />
 										</p:inputText>
 										<p:message for="extname" id="msgExtname" />
-										<p:watermark for="extname" value="External Name *" />
+										<p:watermark for="extname" value="#{messages.admin_product_new_extname_waternmark}" />
 									</p:column>
 
 									<p:column>
@@ -125,14 +125,14 @@
 											<f:validateLength maximum="100" />
 										</p:inputText>
 										<p:message for="version" id="msgVersion" />
-										<p:watermark for="version" value="Version Name *" />
+										<p:watermark for="version" value="#[{messages.admin_product_new_version_watermark}" />
 									</p:column>
 
 									<p:column>
 										<p:commandButton id="saveVersion"
 											update="version versionDataTable msg"
 											actionListener="#{jJVersionBean.save}"
-											icon="ui-icon-circle-plus" value="New Version"
+											icon="ui-icon-circle-plus" value="#{messages.admin_product_new_version_button}"
 											process="@widgetVar(versionWidget)" />
 									</p:column>
 								</p:row>
@@ -146,7 +146,7 @@
 						<p:ajax event="rowSelectCheckbox"
 							listener="#{jJVersionBean.onRowSelect}" />
 						<f:facet name="header">  
-            				Version List 
+            				#{messages.admin_product_new_version_title} 
 						</f:facet>
 						<p:column selectionMode="multiple" style="width:2%" />
 						<p:column headerText="Name" filterBy="name"
@@ -157,7 +157,7 @@
 					<f:facet name="footer">
 						<p:row>
 							<p:column colspan="3">
-								<p:commandButton id="submitButton" value="Save"
+								<p:commandButton id="submitButton" value="#{messages.admin_product_new_version_save_button}"
 									update="productDialogForm :headerForm"
 									process="@widgetVar(nameWidget) @widgetVar(extnameWidget) @widgetVar(productManagerWidget) @widgetVar(versionDataTableWidget)"
 									action="#{jJProductBean.save(jJVersionBean)}" />
@@ -170,16 +170,16 @@
 	</p:dialog>
 	<p:confirmDialog id="productDeleteDialog"
 		widgetVar="productDeleteDialogWidget"
-		message="#{messages.label_delete_record}" showEffect="fade"
-		hideEffect="explode" header="#{messages.label_confirm_deletion}"
+		message="#{messages.admin_product_delete_label}" showEffect="fade"
+		hideEffect="fade" header="#{messages.admin_product_delete_confirm_label}"
 		severity="alarm">
 		<p:outputPanel id="productDeletePanel">
 			<h:form id="productDeleteForm">
-				<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+				<p:commandButton id="deleteYesButton" value="#{messages.admin_product_new_yes_button}"
 					action="#{jJProductBean.deleteProduct}"
 					update=":tabview:productForm :headerForm"
 					oncomplete="productDeleteDialogWidget.hide()" />
-				<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+				<p:commandButton id="deleteNoButton" value="#{messages.admin_product_new_no_button}"
 					onclick="productDeleteDialogWidget.hide()" type="button" />
 			</h:form>
 		</p:outputPanel>

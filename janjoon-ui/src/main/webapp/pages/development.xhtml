@@ -52,24 +52,18 @@
 
 									<p:column>
 										<p:commandButton
-											value="#{messages['dev.updateToHead.button']}"
-											id="fetchFromRepo" immediate="true" icon="ui-icon-disk"
+											id="fetchFromRepo" immediate="true" icon="ui-icon-refresh"
 											actionListener="#{jJDevelopment.pull}" update=":form" />
-									</p:column>
 
-								</p:row>
-								<p:row>
-									<p:column colspan="2">
 										<h:panelGroup id="startTaskPanel">
 
-											<p:commandButton value="#{messages['dev.startTache.button']}"
+											<p:commandButton 
 												immediate="true" icon="ui-icon-play"
 												disabled="#{jJDevelopment.task == null or jJDevelopment.task.startDateReal != null}"
 												actionListener="#{jJDevelopment.startTask}"
 												update=":form:taskSelectOneMenu startTaskPanel" />
 
 											<p:commandButton id="viewTaskButton" icon="ui-icon-zoomin"
-												value="#{messages['dev.viewTask.button']}"
 												update=":viewTaskForm:viewTaskPanelGrid"
 												disabled="#{jJDevelopment.task == null}" immediate="true"
 												oncomplete="viewTaskDialogWidget.show()"
@@ -83,7 +77,6 @@
 											<br />
 											<h:outputText
 												rendered="#{jJDevelopment.task != null and jJDevelopment.task.startDateReal != null}"
-												value="#{messages['dev.startTache.label']}"
 												style="color:red;" />
 
 											<h:outputText value="#{jJDevelopment.task.startDateReal}"
