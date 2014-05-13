@@ -110,7 +110,9 @@
 									<p:column>
 										<p:selectBooleanButton
 											value="#{jJProductBean.productAdmin.enabled}"
-											onLabel="Enabled" offLabel="Disabled" onIcon="ui-icon-check"
+											onLabel="#{messages.admin_product_new_active_button}"
+											offLabel="#{messages.admin_product_new_inactive_button}"
+											onIcon="ui-icon-check"
 											offIcon="ui-icon-close">
 											<p:ajax update="msg" listener="#{jJProductBean.addMessage}" />
 										</p:selectBooleanButton>
@@ -125,7 +127,7 @@
 											<f:validateLength maximum="100" />
 										</p:inputText>
 										<p:message for="version" id="msgVersion" />
-										<p:watermark for="version" value="#[{messages.admin_product_new_version_watermark}" />
+										<p:watermark for="version" value="#{messages.admin_product_new_version_watermark}" />
 									</p:column>
 
 									<p:column>
@@ -146,10 +148,11 @@
 						<p:ajax event="rowSelectCheckbox"
 							listener="#{jJVersionBean.onRowSelect}" />
 						<f:facet name="header">  
-            				#{messages.admin_product_new_version_title} 
+            						#{messages.admin_product_new_version_title} 
 						</f:facet>
 						<p:column selectionMode="multiple" style="width:2%" />
-						<p:column headerText="Name" filterBy="name"
+						<p:column headerText="#{messages.admin_product_new_version_header}"
+							filterBy="name"
 							filterMatchMode="startsWith" style="width:25%">  
 							#{version.name}
 						</p:column>
@@ -157,7 +160,8 @@
 					<f:facet name="footer">
 						<p:row>
 							<p:column colspan="3">
-								<p:commandButton id="submitButton" value="#{messages.admin_product_new_version_save_button}"
+								<p:commandButton id="submitButton"
+									value="#{messages.admin_product_new_version_save_button}"
 									update="productDialogForm :headerForm"
 									process="@widgetVar(nameWidget) @widgetVar(extnameWidget) @widgetVar(productManagerWidget) @widgetVar(versionDataTableWidget)"
 									action="#{jJProductBean.save(jJVersionBean)}" />

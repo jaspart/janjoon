@@ -11,34 +11,34 @@
 			<p:dataTable id="profileDataTable" var="profile"
 				value="#{jJProfileBean.profileListTable}" paginator="true" rows="15"
 				style="width:550px" rowKey="#{profile.id}">>
-				<f:facet name="header">Profile List</f:facet>
+				<f:facet name="header">#{messages.admin_profile_table_header}</f:facet>
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="Internal Name" />
+						<h:outputText value="#{messages.admin_profile_table_name_title}" />
 					</f:facet>
 					<h:outputText value="#{profile.name}" />
 				</p:column>
 				<p:column styleClass="action-column">
 					<f:facet name="header">
-						<h:outputText value="Actions" />
+						<h:outputText value="#{messages.admin_profile_table_action_title}" />
 					</f:facet>
 					<p:commandButton id="editButton" icon="ui-icon-pencil">
 						<f:setPropertyActionListener value="#{profile}"
 							target="#{jJProfileBean.profileAdmin}" />
 					</p:commandButton>
-					<p:tooltip for="editButton" value="#{messages.label_edit}"
+					<p:tooltip for="editButton" value="#{messages.admin_profile_table_edit_tooltip}"
 						showEffect="fade" hideEffect="fade" />
 					<p:commandButton id="deleteButton" icon="ui-icon-trash"
 						oncomplete="profileDeleteDialogWidget.show()"
-						title="#{messages.label_delete}">
+						title="#{messages.admin_profile_table_edit_label}">
 						<f:setPropertyActionListener value="#{profile}"
 							target="#{jJProfileBean.profileAdmin}" />
 					</p:commandButton>
-					<p:tooltip for="deleteButton" value="#{messages.label_delete}"
+					<p:tooltip for="deleteButton" value="#{messages.admin_profile_table_delete_tooltip}"
 						showEffect="fade" hideEffect="fade" />
 				</p:column>
 				<f:facet name="footer">
-					<p:commandButton value="New" id="newProfile"
+					<p:commandButton value="#{messages.admin_profile_new_button}" id="newProfile"
 						actionListener="#{jJProfileBean.newProfile(jJRightBean)}"
 						update=":tabview:profileDialog"
 						oncomplete="profileDialogWidget.show()" icon="ui-icon-circle-plus" />
@@ -66,12 +66,13 @@
 											<f:validateLength maximum="100" />
 										</p:inputText>
 										<p:message for="name" id="msgName" />
-										<p:watermark for="name" value="Name *" />
+										<p:watermark for="name"
+											value="#{messages.admin_profile_new_name_watermark}" />
 									</p:column>
 								</p:row>
 								<p:row>
 									<p:column>
-										<h:outputText value="Object: *" />
+										<h:outputText value="#{messages.admin_profile_new_object_label}" />
 										<p:selectOneMenu id="object" value="#{jJRightBean.object}"
 											panelStyle="width:150px" effect="fade" style="width:160px"
 											filter="true" filterMatchMode="startsWith"
@@ -85,7 +86,7 @@
 										</p:selectOneMenu>
 									</p:column>
 									<p:column>
-										<h:outputText value="Category: " />
+										<h:outputText value="#{messages.admin_profile_new_category_label}" />
 										<p:selectOneMenu id="category" value="#{jJRightBean.category}"
 											panelStyle="width:150px" effect="fade" style="width:160px"
 											filter="true" filterMatchMode="startsWith">
@@ -119,8 +120,10 @@
 									<p:column>
 										<p:commandButton id="saveRight"
 											update="rightDataTable r w x category object msg"
-											actionListener="#{jJRightBean.save}" value="Add Right"
-											icon="ui-icon-circle-plus" process="@widgetVar(objectWidget)" />
+											actionListener="#{jJRightBean.save}"
+											value="#{messages.admin_profile_new_right_button}"
+											icon="ui-icon-circle-plus"
+											process="@widgetVar(objectWidget)" />
 									</p:column>
 								</p:row>
 							</p:panelGrid>
@@ -133,24 +136,29 @@
 						<p:ajax event="rowSelectCheckbox"
 							listener="#{jJRightBean.onRowSelect}" />
 						<f:facet name="header">  
-            				Right List 
+           						#{messages.admin_profile_new_table_header} 
 						</f:facet>
 						<p:column selectionMode="multiple" style="width:3%" />
-						<p:column headerText="Object" filterMatchMode="startsWith"
+						<p:column headerText="#{messages.admin_profile_new_table_object_title}"
+							filterMatchMode="startsWith"
 							style="width:25%">  
 							#{right.objet}
 						</p:column>
-						<p:column headerText="Category" filterMatchMode="startsWith"
+						<p:column headerText="#{messages.admin_profile_new_table_category_title}"
+							filterMatchMode="startsWith"
 							style="width:30%">  
 							#{right.category.name}
 						</p:column>
-						<p:column headerText="Read" style="width:14%">  
+						<p:column headerText="#{messages.admin_profile_new_table_read_title}"
+							style="width:14%">  
 							#{right.r}
 						</p:column>
-						<p:column headerText="Write" style="width:14%">  
+						<p:column headerText="#{messages.admin_profile_new_table_write_title}"
+							style="width:14%">  
 							#{right.w}
 						</p:column>
-						<p:column headerText="Execute" style="width:14%">  
+						<p:column headerText="#{messages.admin_profile_new_table_execute_title}"
+							style="width:14%">  
 							#{right.x}
 						</p:column>
 					</p:dataTable>
@@ -158,7 +166,8 @@
 					<f:facet name="footer">
 						<p:row>
 							<p:column colspan="3">
-								<p:commandButton id="submitButton" value="Save"
+								<p:commandButton id="submitButton"
+									value="#{messages.admin_profile_new_save_button}"
 									update="profileDialogForm"
 									process="@widgetVar(nameWidget) @widgetVar(rightDataTableWidget)"
 									action="#{jJProfileBean.save(jJRightBean)}" />
@@ -171,16 +180,16 @@
 	</p:dialog>
 	<p:confirmDialog id="profileDeleteDialog"
 		widgetVar="profileDeleteDialogWidget"
-		message="#{messages.label_delete_record}" showEffect="fade"
-		hideEffect="explode" header="#{messages.label_confirm_deletion}"
+		message="#{messages.admin_profile_delete_title}" showEffect="fade"
+		hideEffect="explode" header="#{messages.admin_profile_delete_label}"
 		severity="alarm">
 		<p:outputPanel id="profileDeletePanel">
 			<h:form id="profileDeleteForm">
-				<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+				<p:commandButton id="deleteYesButton" value="#{messages.admin_profile_delete_yes_label}"
 					action="#{jJProfileBean.deleteProfile}"
 					update=":tabview:profileForm"
 					oncomplete="profileDeleteDialogWidget.hide()" />
-				<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+				<p:commandButton id="deleteNoButton" value="#{messages.admin_profile_delete_no_label}"
 					onclick="profileDeleteDialogWidget.hide()" type="button" />
 			</h:form>
 		</p:outputPanel>

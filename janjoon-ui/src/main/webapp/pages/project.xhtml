@@ -11,16 +11,16 @@
 			<p:dataTable id="projectDataTable" var="project"
 				value="#{jJProjectBean.projectListTable}" paginator="true" rows="15"
 				style="width:550px" rowKey="#{project.id}">
-				<f:facet name="header">Project List</f:facet>
+				<f:facet name="header">#{messages.admin_project_table_header}</f:facet>
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="Name" />
+						<h:outputText value="#{messages.admin_project_table_name_title}" />
 					</f:facet>
 					<h:outputText value="#{project.name}" />
 				</p:column>
 				<p:column styleClass="action-column">
 					<f:facet name="header">
-						<h:outputText value="Actions" />
+						<h:outputText value="#{messages.admin_project_table_action_title}" />
 					</f:facet>
 					<p:commandButton id="editButton" icon="ui-icon-pencil"
 						oncomplete="projectDialogWidget.show()"
@@ -29,7 +29,7 @@
 						<f:setPropertyActionListener value="#{project}"
 							target="#{jJProjectBean.projectAdmin}" />
 					</p:commandButton>
-					<p:tooltip for="editButton" value="#{messages.label_edit}"
+					<p:tooltip for="editButton" value="#{messages.admin_project_table_edit_tooltip}"
 						showEffect="fade" hideEffect="fade" />
 					<p:commandButton id="deleteButton" icon="ui-icon-trash"
 						oncomplete="projectDeleteDialogWidget.show()"
@@ -37,12 +37,12 @@
 						<f:setPropertyActionListener value="#{project}"
 							target="#{jJProjectBean.projectAdmin}" />
 					</p:commandButton>
-					<p:tooltip for="deleteButton" value="#{messages.label_delete}"
+					<p:tooltip for="deleteButton" value="#{messages.admin_project_table_delete_title}"
 						showEffect="fade" hideEffect="fade" />
 				</p:column>
 				<f:facet name="footer">
-					<p:commandButton value="New" id="newProject"
-						actionListener="#{jJProjectBean.newProject}"
+					<p:commandButton value="#{messages.admin_project_new_button}"
+						actionListener="#{jJProjectBean.newProject}" id="newProject"
 						update=":tabview:projectDialog"
 						oncomplete="projectDialogWidget.show()" icon="ui-icon-circle-plus" />
 				</f:facet>
@@ -65,16 +65,16 @@
 								<f:validateLength maximum="100" />
 							</p:inputText>
 							<p:message for="name" id="msgName" />
-							<p:watermark for="name" value="Name *" />
+							<p:watermark for="name" value="#{messages.admin_project_new_name_watermark}" />
 						</p:column>
 						<p:column colspan="2">
-							<h:outputText value="Project Manager: *" />
+							<h:outputText value="#{messages.admin_project_new_manager_label}" />
 							<p:selectOneMenu id="projectManagerSelect"
 								value="#{jJProjectBean.projectManager}" panelStyle="width:150px"
 								effect="fade" style="width:160px" filter="true"
 								filterMatchMode="startsWith" required="true"
 								label="Project Manager"
-								requiredMessage="Project Manager is a required value"
+								requiredMessage="#{messages.admin_project_new_manager_alert}"
 								widgetVar="projectManagerWidget">
 								<f:converter
 									converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />
@@ -91,8 +91,10 @@
 					<p:row>
 						<p:column colspan="3">
 							<p:selectBooleanButton
-								value="#{jJProjectBean.projectAdmin.enabled}" onLabel="Enabled"
-								offLabel="Disabled" onIcon="ui-icon-check"
+								value="#{jJProjectBean.projectAdmin.enabled}"
+								onLabel="#{messages.admin_project_new_active_button}"
+								offLabel="#{messages.admin_project_new_inactive_button}"
+								onIcon="ui-icon-check"
 								offIcon="ui-icon-close">
 								<p:ajax update="msg" listener="#{jJProjectBean.addMessage}" />
 							</p:selectBooleanButton>
@@ -101,7 +103,8 @@
 					<f:facet name="footer">
 						<p:row>
 							<p:column colspan="3">
-								<p:commandButton id="submitButton" value="Save"
+								<p:commandButton id="submitButton"
+									value="#{messages.admin_project_new_save_button}"
 									update="projectDialogForm :headerForm"
 									process="@widgetVar(nameWidget) @widgetVar(projectManagerWidget)"
 									action="#{jJProjectBean.save}" />
@@ -114,16 +117,18 @@
 	</p:dialog>
 	<p:confirmDialog id="projectDeleteDialog"
 		widgetVar="projectDeleteDialogWidget"
-		message="#{messages.label_delete_record}" showEffect="fade"
-		hideEffect="explode" header="#{messages.label_confirm_deletion}"
+		message="#{messages.admin_project_delete_label}" showEffect="fade"
+		hideEffect="explode" header="#{messages.admin_project_delete_title}"
 		severity="alarm">
 		<p:outputPanel id="projectDeletePanel">
 			<h:form id="projectDeleteForm">
-				<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+				<p:commandButton id="deleteYesButton"
+					value="#{messages.admin_project_delete_yes_label}"
 					action="#{jJProjectBean.deleteProject}"
 					update=":tabview:projectForm :headerForm"
 					oncomplete="projectDeleteDialogWidget.hide()" />
-				<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+				<p:commandButton id="deleteNoButton"
+					value="#{messages.admin_project_delete_no_label}"
 					onclick="projectDeleteDialogWidget.hide()" type="button" />
 			</h:form>
 		</p:outputPanel>

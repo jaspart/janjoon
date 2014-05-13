@@ -181,7 +181,8 @@
 										requiredMessage="#{messages.specification_create_name_alert}">
 									</p:inputText>
 									<p:message for="name" id="msgName" />
-									<p:watermark for="name" value="Name *" />
+									<p:watermark for="name"
+										value="#{messages.specification_create_name_watermark}" />
 								</p:column>
 								<p:column>
 									<h:outputText for="status" value="#{messages.specification_create_status_label}" />
@@ -364,7 +365,7 @@
 									<p:inputTextarea id="note" rows="3" cols="100"
 										value="#{jJRequirementBean.requirement.note}"
 										autoResize="false" />
-									<p:watermark for="note" value="#{messages.specification_create_note_water}" />
+									<p:watermark for="note" value="#{messages.specification_create_note_watermark}" />
 								</p:column>
 							</p:row>
 							<f:facet name="footer">

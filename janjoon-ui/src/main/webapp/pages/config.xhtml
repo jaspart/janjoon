@@ -16,32 +16,32 @@
 				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,15">
 				<f:facet name="header">  
-           Configuration List  
+           #{messages.admin_config_table_header}  
         </f:facet>
 
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="Name" />
+						<h:outputText value="#{messages.admin_config_table_name_title}" />
 					</f:facet>
 					<h:outputText value="#{conf.name}" />
 				</p:column>
 
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="Parametre" />
+						<h:outputText value="#{messages.admin_config_table_parameter_title}" />
 					</f:facet>
 					<h:outputText value="#{conf.param}" />
 				</p:column>
 
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="Value" />
+						<h:outputText value="#{messages.admin_config_table_value_title}" />
 					</f:facet>
 					<h:outputText value="#{conf.val}" />
 				</p:column>
 				<p:column styleClass="action-column">
 					<f:facet name="header">
-						<h:outputText value="Actions" />
+						<h:outputText value="#{messages.admin_config_table_action_title}" />
 					</f:facet>
 
 					<p:commandButton id="viewButton" icon="ui-icon-zoomin"
@@ -58,28 +58,28 @@
 						update=":tabview:editForm:editPanelGrid"
 						action="#{jJConfigurationBean.onEdit}"
 						oncomplete="editDialogWidget.show()"
-						title="#{messages.label_edit}">
+						title="#{messages.admin_config_edit_title}">
 						<f:setPropertyActionListener value="#{conf}"
 							target="#{jJConfigurationBean.JJConfiguration_}" />
 					</p:commandButton>
-					<p:tooltip for="editButton" value="#{messages.label_edit}"
+					<p:tooltip for="editButton" value="#{messages.admin_config_table_edit_tooltip}"
 						showEffect="fade" hideEffect="fade" />
 					<p:commandButton id="deleteButton" icon="ui-icon-trash"
 						oncomplete="deleteDialogWidget.show()"
-						title="#{messages.label_delete}">
+						title="#{messages.admin_config_delete_title}">
 						<f:setPropertyActionListener value="#{conf}"
 							target="#{jJConfigurationBean.selectedConf}" />
 					</p:commandButton>
-					<p:tooltip for="deleteButton" value="#{messages.label_delete}"
+					<p:tooltip for="deleteButton" value="#{messages.admin_config_table_delete_title}"
 						showEffect="fade" hideEffect="fade" />
 				</p:column>
 				<f:facet name="footer">
-					<p:commandButton value="New" id="createButton"
+					<p:commandButton value="#{messages.admin_config_new_button}" id="createButton"
 						icon="ui-icon-circle-plus"
 						update=":tabview:createForm:createPanelGrid"
 						oncomplete="createDialogWidget.show()"
-						title="#{messages.label_create}" />
-					<p:tooltip for="createButton" value="#{messages.label_create}"
+						title="#{messages.admin_config_new_title}" />
+					<p:tooltip for="createButton" value="#{messages.admin_config_table_create_title}"
 						showEffect="fade" hideEffect="fade" />
 				</f:facet>
 			</p:dataTable>
@@ -87,7 +87,7 @@
 
 	</h:form>
 	<p:dialog id="createDialog"
-		header="#{messages.label_create} JJConfiguration" modal="true"
+		header="#{messages.admin_config_new_title}" modal="true"
 		widgetVar="createDialogWidget" dynamic="true"
 		visible="#{jJConfigurationBean.createDialogVisible}" resizable="true"
 		maximizable="true" showEffect="fade" hideEffect="explode">
@@ -99,18 +99,19 @@
 					binding="#{jJConfigurationBean.createPanel}" styleClass="dialog"
 					columnClasses="col1,col2,col3" />
 				<p:commandButton id="createSaveButton"
-					value="#{messages.label_save}"
+					value="#{messages.admin_config_new_save_button}"
 					action="#{jJConfigurationBean.persistConf}"
 					update="createPanelGrid,:tabview:configForm:ConfMessage" />
 				<p:commandButton id="createCloseButton"
-					value="#{messages.label_close}" onclick="createDialogWidget.hide()"
+					value="#{messages.admin_config_new_close_button}"
+					onclick="createDialogWidget.hide()"
 					type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
 
 	<p:dialog id="editDialog"
-		header="#{messages.label_edit} JJConfiguration" modal="true"
+		header="#{messages.admin_config_edit_title}" modal="true"
 		widgetVar="editDialogWidget" dynamic="true" resizable="true"
 		maximizable="true" showEffect="fade" hideEffect="explode">
 		<p:ajax event="close" update=":tabview:configForm"
@@ -120,18 +121,20 @@
 				<h:panelGrid id="editPanelGrid" columns="3"
 					binding="#{jJConfigurationBean.editPanel}" styleClass="dialog"
 					columnClasses="col1,col2,col3" />
-				<p:commandButton id="editSaveButton" value="#{messages.label_save}"
+				<p:commandButton id="editSaveButton"
+					value="#{messages.admin_config_edit_save_button}"
 					action="#{jJConfigurationBean.persistConf}"
 					update="editPanelGrid,:tabview:configForm:ConfMessage" />
 				<p:commandButton id="editCloseButton"
-					value="#{messages.label_close}" onclick="editDialogWidget.hide()"
+					value="#{messages.admin_config_edit_close_button}"
+					onclick="editDialogWidget.hide()"
 					type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
 
 	<p:dialog id="viewDialog" 
-		header="#{messages.label_view} JJConfiguration" modal="true"
+		header="#{messages.admin_config_view_title}" modal="true"
 		widgetVar="viewDialogWidget" dynamic="true" resizable="true"
 		maximizable="true" showEffect="fade" hideEffect="explode">
 		<p:outputPanel id="viewPanel">
@@ -140,21 +143,22 @@
 					binding="#{jJConfigurationBean.viewPanel}" styleClass="dialog"
 					columnClasses="col1,col2" />
 				<p:commandButton id="viewCloseButton"
-					value="#{messages.label_close}" onclick="viewDialogWidget.hide()"
+					value="#{messages.admin_config_view_close_button}"
+					onclick="viewDialogWidget.hide()"
 					type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
 	<p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget"
-		message="#{messages.label_delete_record}" showEffect="fade"
-		hideEffect="explode" header="#{messages.label_confirm_deletion}"
+		message="#{messages.admin_config_delete_label}" showEffect="fade"
+		hideEffect="explode" header="#{messages.admin_config_delete_title}"
 		severity="alarm">
 		<p:outputPanel id="deletePanel">
 			<h:form id="deleteForm">
-				<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+				<p:commandButton id="deleteYesButton" value="#{messages.admin_config_delete_yes_label}"
 					action="#{jJConfigurationBean.deleteConfig}"
 					update=":tabview:configForm" oncomplete="deleteDialogWidget.hide()" />
-				<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+				<p:commandButton id="deleteNoButton" value="#{messages.admin_config_delete_no_label}"
 					onclick="deleteDialogWidget.hide()" type="button" />
 			</h:form>
 		</p:outputPanel>

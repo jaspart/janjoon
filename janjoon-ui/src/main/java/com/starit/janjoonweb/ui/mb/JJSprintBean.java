@@ -441,7 +441,7 @@ public class JJSprintBean {
 	public void handleAddButton(ActionEvent e) {
 
 		attrListener(e);
-		System.out.println("deedededede");
+		logger.info("deedededede");
 
 		sprintUtil.setRenderTaskForm(!sprintUtil.isRenderTaskForm());
 
