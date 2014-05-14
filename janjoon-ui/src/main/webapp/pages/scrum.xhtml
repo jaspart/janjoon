@@ -122,9 +122,6 @@
 					<p:row>
 						<p:column>
 							<p:fieldset legend="Todo" id="todoFieldset">
-								<!-- 								<p:outputPanel id="tododropArea"> -->
-								<!-- 									<h:outputText value="!!!Drop here!!!" -->
-								<!-- 										rendered="#{empty jjsprint.todoTask}" style="font-size:24px;" /> -->
 								<p:dataTable scrollable="true" scrollHeight="250" id="todo"
 									var="todo" value="#{jjsprint.todoTask}" rowKey="#{todo.id}"
 									rendered="#{not empty jjsprint.todoTask}">
@@ -139,10 +136,9 @@
 									</p:column>
 
 									<p:column style="width:20px" headerText="W">
-										<h:outputText value="#{todo.workloadPlanned+''}" />
+										<h:outputText value="#{todo.workloadPlanned}" />
 									</p:column>
 								</p:dataTable>
-								<!-- 								</p:outputPanel> -->
 							</p:fieldset>
 						</p:column>
 						<p:column>
@@ -196,21 +192,15 @@
 										rendered="#{empty jjsprint.doneTask}" style="font-size:24px;" />
 									<p:dataTable id="done" var="done" value="#{jjsprint.doneTask}"
 										rowKey="#{done.id}" rendered="#{not empty jjsprint.doneTask}"
-										scrollable="true" scrollHeight="250">
-										<!-- 										<p:column style="width:20px"> -->
-										<!-- 											<h:outputText id="doneIcon" -->
-										<!-- 												styleClass="ui-icon ui-icon-arrow-4" /> -->
-										<!-- 											<p:draggable for="doneIcon" revert="true" /> -->
-										<!-- 										</p:column> -->
+										scrollable="true" scrollHeight="250">								
 
 										<p:column style="width:80px" headerText="Task">
 											<h:outputText value="#{done.name}" />
 										</p:column>
 
 										<p:column style="width:20px" headerText="Diff">
-											<h:outputText
-												value="#{done.workloadPlanned-done.workloadRevised+''}" />
-										</p:column>
+											<h:outputText value="#{done.workloadPlanned-done.workloadRevised}" />
+										</p:column> 
 									</p:dataTable>
 								</p:outputPanel>
 
