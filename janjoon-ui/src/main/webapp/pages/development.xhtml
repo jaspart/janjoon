@@ -11,8 +11,7 @@
 		href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
 	<link type="text/css" rel="stylesheet"
 		href="/syntaxhighlighter/standard.css" />
-	<ui:define name="content">
-		<f:event listener="#{loginBean.loadingPage}" type="preRenderView" />
+	<ui:define name="content">		
 		<br />
 		<p:panel id="errorPanel"
 			header="#{messages['dev.panel.error.header']}"

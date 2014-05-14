@@ -246,6 +246,7 @@
 									<h:outputText value="Description : *" />
 									<pe:ckEditor id="description" widgetVar="descriptionWidget"
 										style="width:680px;"
+										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
 										value="#{jJTestcaseBean.testcase.description}" required="true"
 										requiredMessage="Testcase Description is a required value" />
 									<p:message for="description" id="msgDescription" />
@@ -462,6 +463,7 @@
 											<h:outputText value="Description : *" />
 											<pe:ckEditor id="description" widgetVar="descriptionWidget"
 												style="width:600px;"
+												toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
 												value="#{jJTeststepexecutionBean.bug.description}"
 												required="true"
 												disabled="#{jJTeststepexecutionBean.disabled}"

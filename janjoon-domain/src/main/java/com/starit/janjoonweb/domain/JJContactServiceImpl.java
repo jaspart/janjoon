@@ -22,7 +22,7 @@ public class JJContactServiceImpl implements JJContactService {
 	}
 
 	@Override
-	public List<JJContact> getContacts(String email, boolean onlyActif) {
+	public JJContact getContactByEmail(String email, boolean onlyActif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJContact> criteriaQuery = criteriaBuilder
@@ -45,14 +45,40 @@ public class JJContactServiceImpl implements JJContactService {
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		TypedQuery<JJContact> result = entityManager.createQuery(select);
-		return result.getResultList();
+		if( result.getResultList().isEmpty())
+			return null;
+		else 
+			return result.getResultList().get(0);
 
+	}
+	
+	@Override
+	public List<JJContact> getContacts(boolean onlyActif)
+	{
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJContact> criteriaQuery = criteriaBuilder
+				.createQuery(JJContact.class);
+
+		Root<JJContact> from = criteriaQuery.from(JJContact.class);
+
+		CriteriaQuery<JJContact> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}		
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+		TypedQuery<JJContact> result = entityManager.createQuery(select);
+		
+		return result.getResultList();
 	}
 
 	@Override
 	public boolean saveJJContactTransaction(JJContact contact) {
 
-		if (getContacts(contact.getEmail(), false).isEmpty()) {
+		if (getContactByEmail(contact.getEmail(), false)==null) {
 			saveJJContact(contact);
 			return true;
 		} else {
@@ -64,31 +90,29 @@ public class JJContactServiceImpl implements JJContactService {
 	@Override
 	public boolean updateJJContactTransaction(JJContact contact) {
 
-		List<JJContact> ctcs = getContacts(contact.getEmail(), false);
+		JJContact ctcs = getContactByEmail(contact.getEmail(), false);
 
-		if (ctcs.isEmpty()) {
-
+		if (ctcs==null) {
+			
 			updateJJContact(contact);
 			return true;
 
-		} else if (ctcs.size() == 1) {
-			if (ctcs.get(0).getId().equals(contact.getId())) {
+		} else {
+			
+			if (ctcs.getId().equals(contact.getId())) {
 				updateJJContact(contact);
 				return true;
 			} else
 				return false;
 
-		} else {
-			return false;
 		}
 	}
 
-	public List<JJRight> getContactAuthorization(JJContact contact,
+	public List<JJRight> getContactAuthorization(String object,JJContact contact,
 			JJProduct product, JJProject project, JJCategory category) {
 
 		List<JJRight> rights = new ArrayList<JJRight>();
-
-		//Set<JJPermission> permissions = contact.getPermissions();
+		
 		List<JJPermission> permissions = getContactPermission(contact);
 		List<JJPermission> permissions1 = new ArrayList<JJPermission>();
 		
@@ -96,14 +120,13 @@ public class JJContactServiceImpl implements JJContactService {
 		for (JJPermission perm : permissions) {
 
 			boolean add = (product == null && project == null);
-			System.out.println("product == null && project == null " + add);
+			
 			if (!add && product == null) {
 				if (perm.getProject() != null)
 					add = (perm.getProject().equals(project));
 				else
-					add = true;
+					add = true;			
 
-				System.out.println("perm.getProject().equals(project)" + add);
 			}
 
 			if (!add && project == null) {
@@ -112,37 +135,27 @@ public class JJContactServiceImpl implements JJContactService {
 					add = (perm.getProduct().equals(product));
 				else
 					add = true;
-
-				System.out.println("perm.getProduct().equals(product)" + add);
+				
 			}
 
 			if (!add && product != null && project != null) {
 
 				add = (perm.getProduct() == null && perm.getProject() == null);
-
-				System.out
-						.println("perm.getProduct()==null && perm.getProject()==null "
-								+ add);
+				
 
 				if (!add) {
 					if (perm.getProduct() == null) {
 						add = (perm.getProject().equals(project));
-						System.out.println("perm.getProject().equals(project)"
-								+ add);
+						
 
 					} else if (perm.getProject() == null) {
 						add = (perm.getProduct().equals(product));
-						System.out.println("perm.getProduct().equals(product)"
-								+ add);
+						
 					} else {
 						add = ((perm.getProduct().equals(product)) && (perm
 								.getProject().equals(project)));
-						System.out
-								.println("(perm.getProduct().equals(product)) && (perm.getProject().equals(project))"
-										+ add);
-					}
-
-					System.out.println(add);
+						
+					}					
 				}
 
 			}
@@ -167,9 +180,21 @@ public class JJContactServiceImpl implements JJContactService {
 				add = add && !containRight(rights, right);
 
 				if (add) {
-					rights.add(right);
-					System.out.println(right.getProfile().getName());
-				}
+					
+					if(object!=null)
+					{
+						if(right.getObjet()!=null)
+						{
+							if(right.getObjet().equalsIgnoreCase(object))
+								rights.add(right);
+						}else
+							rights.add(right);
+					}else
+						rights.add(right);
+					}
+						
+					
+					
 
 			}
 		}
@@ -223,7 +248,7 @@ public class JJContactServiceImpl implements JJContactService {
 	public List<JJRight> getContactAuthorization(JJContact contact,
 			JJProduct product) {
 
-		return getContactAuthorization(contact, product, null, null);
+		return getContactAuthorization(null,contact, product, null, null);
 
 	}
 
@@ -231,14 +256,14 @@ public class JJContactServiceImpl implements JJContactService {
 	public List<JJRight> getContactAuthorization(JJContact contact,
 			JJProduct product, JJProject project) {
 
-		return getContactAuthorization(contact, product, project, null);
+		return getContactAuthorization(null,contact, product, project, null);
 	}
 
 	@Override
 	public List<JJRight> getContactAuthorization(JJContact contact,
 			JJProject project) {
 
-		return getContactAuthorization(contact, null, project, null);
+		return getContactAuthorization(null,contact, null, project, null);
 	}
 
 }

@@ -34,6 +34,7 @@
 	<authentication-manager alias="authenticationManager">
 		<authentication-provider ref="contactAuthentificationProvider" />
 	</authentication-manager>
+	
 
 	<b:bean id="jsfWebExpressionHandler"
 		class="com.starit.janjoonweb.ui.security.JsfDefaultWebSecurityExpressionhandler" />

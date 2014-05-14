@@ -2,6 +2,7 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -27,15 +28,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.security.AuthorizationManager;
 
 @Scope("session")
 @Component("loginBean")
@@ -43,12 +48,28 @@ public class LoginBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private AuthenticationManager authenticationManager;
+
+	@Autowired
+	private AuthorizationManager authorizationManager;
+
+	@Autowired
+	private JJContactService jJContactService;
+
 	private String username = "janjoon.mailer@gmail.com";
 	private String password;
 	private boolean loading = false;
 	private boolean loadMain = false;
 	private JJContact contact;
 	private boolean enable = false;
+
+	public void setjJContactService(JJContactService jJContactService) {
+		this.jJContactService = jJContactService;
+	}
+
+	public void setAuthorizationManager(
+			AuthorizationManager authorizationManager) {
+		this.authorizationManager = authorizationManager;
+	}
 
 	public boolean isEnable() {
 
@@ -116,8 +137,9 @@ public class LoginBean implements Serializable {
 			prevPage = "fail";
 		}
 		if (enable) {
-			JJContactBean service = new JJContactBean();
-			contact = service.getContactByEmail(username);
+
+			contact = jJContactService.getContactByEmail(username, true);
+			authorizationManager.setContact(contact);
 			FacesContext fContext = FacesContext.getCurrentInstance();
 			HttpSession session = (HttpSession) fContext.getExternalContext()
 					.getSession(false);
@@ -128,8 +150,8 @@ public class LoginBean implements Serializable {
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.getExternalContext().getFlash().setKeepMessages(true);
 			prevPage = getRedirectUrl(session);
-
 		}
+
 		System.out.println(prevPage);
 		return prevPage;
 	}
@@ -368,19 +390,14 @@ public class LoginBean implements Serializable {
 	public void redirectToDev(ActionEvent e) throws IOException {
 
 		JJVersionBean jjVersionBean = (JJVersionBean) findBean("jJVersionBean");
-		JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
-		JJProjectBean jjProjectBean = (JJProjectBean) findBean("jJProjectBean");
+		JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");		
 
 		if (jjVersionBean.getVersion() != null
 				&& jJProductBean.getProduct() != null) {
 
 			if (!FacesContext.getCurrentInstance().getViewRoot().getViewId()
 					.contains("development")) {
-
-				System.out.println(jJProductBean.jJContactService
-						.getContactAuthorization(contact,
-								jJProductBean.getProduct(),
-								jjProjectBean.getProject(), null).size());
+			
 
 				String path = FacesContext.getCurrentInstance()
 						.getExternalContext().getRequestContextPath();
@@ -416,11 +433,46 @@ public class LoginBean implements Serializable {
 		}
 	}
 
+	public void checkAuthorities(ComponentSystemEvent e) throws IOException {
+
+		if (enable) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			UIViewRoot root = context.getViewRoot();
+
+			JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
+			JJProjectBean jjProjectBean = (JJProjectBean) findBean("jJProjectBean");
+			
+			String path = FacesContext.getCurrentInstance()
+					.getExternalContext().getRequestContextPath();
+
+			if (!authorizationManager.getAuthorization(root.getViewId(),
+					jjProjectBean.getProject(), jJProductBean.getProduct())) {	
+				
+				System.out.println(false);
+				context.addMessage(null, new FacesMessage(
+						FacesMessage.SEVERITY_ERROR,
+						"You have no permission to access this resource", null));
+
+				context.getExternalContext().getFlash().setKeepMessages(true);
+				
+				System.out.println(path);
+				FacesContext.getCurrentInstance().getExternalContext()
+						.redirect(path + "/pages/main.jsf?faces-redirect=true");
+			}else if(root.getViewId().contains("development"))
+			{
+				loadingPage(e);
+			}
+
+		}
+
+	}
+
 	public UIComponent findComponent(final String id) {
 		FacesContext context = FacesContext.getCurrentInstance();
 		UIViewRoot root = context.getViewRoot();
 		final UIComponent[] found = new UIComponent[1];
 		root.visitTree(new FullVisitContext(context), new VisitCallback() {
+
 			@Override
 			public VisitResult visit(VisitContext context, UIComponent component) {
 				if (component.getId().equals(id)) {
@@ -431,11 +483,5 @@ public class LoginBean implements Serializable {
 			}
 		});
 		return found[0];
-	}
-
-	public void handleFileUpload(FileUploadEvent event) {
-		FacesMessage msg = new FacesMessage("Successful", event.getFile()
-				.getFileName() + " is uploaded.");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 }

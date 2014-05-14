@@ -36,7 +36,7 @@ public class JJContactBean {
 	}
 
 	public List<JJContact> getContactDataTable() {
-		contactDataTable = jJContactService.getContacts(null, true);
+		contactDataTable = jJContactService.getContacts(true);
 		return contactDataTable;
 	}
 
@@ -45,8 +45,7 @@ public class JJContactBean {
 	}
 
 	public ContactDataModel getContactDataModel() {
-		contactDataModel = new ContactDataModel(jJContactService.getContacts(
-				null, true));
+		contactDataModel = new ContactDataModel(jJContactService.getContacts(true));
 		return contactDataModel;
 	}
 
@@ -108,28 +107,22 @@ public class JJContactBean {
 			System.out.println(contactAdmin.getName());
 
 			contactAdmin.setEnabled(false);
-			if(!jJContactService.updateJJContactTransaction(contactAdmin))
-			{
-				
+			if (!jJContactService.updateJJContactTransaction(contactAdmin)) {
+
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"jjcontact_unsuccessfully_created",
 						FacesMessage.SEVERITY_ERROR, "JJContact");
 				contactAdmin.setEmail("");
 				contactAdmin.setPassword("");
-				FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+				FacesContext.getCurrentInstance()
+						.addMessage(null, facesMessage);
 			}
 
 		}
 	}
 
 	public JJContact getContactByEmail(String email) {
-
-		List<JJContact> contacts = jJContactService.getContacts(email, true);
-
-		if (contacts.size() > 0)
-			return contacts.get(0);
-		else
-			return null;
+		return jJContactService.getContactByEmail(email, true);
 	}
 
 	public void save(JJPermissionBean jJPermissionBean) {
@@ -151,7 +144,7 @@ public class JJContactBean {
 				jJPermissionBean.setContact(contact);
 				disabled = true;
 			} else {
-				
+
 				facesMessage = MessageFactory.getMessage(
 						"jjcontact_unsuccessfully_created",
 						FacesMessage.SEVERITY_ERROR, "JJContact");
@@ -162,22 +155,20 @@ public class JJContactBean {
 		} else {
 
 			contactAdmin.setUpdatedDate(new Date());
-			if(jJContactService.updateJJContactTransaction(contactAdmin))
-			{
+			if (jJContactService.updateJJContactTransaction(contactAdmin)) {
 				facesMessage = MessageFactory.getMessage(
-						"message_successfully_updated", FacesMessage.SEVERITY_INFO,
-						"JJContact");
+						"message_successfully_updated",
+						FacesMessage.SEVERITY_INFO, "JJContact");
 				disabled = true;
-			}else
-			{
+			} else {
 				facesMessage = MessageFactory.getMessage(
 						"jjcontact_unsuccessfully_created",
 						FacesMessage.SEVERITY_ERROR, "JJContact");
 				contactAdmin.setEmail("");
 				contactAdmin.setPassword("");
 			}
-			}
-			
+		}
+
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}

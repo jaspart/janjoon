@@ -3,7 +3,6 @@ package com.starit.janjoonweb.ui.mb;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,8 +13,6 @@ import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectItems;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
@@ -25,10 +22,7 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.component.api.UIColumn;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.inputtextarea.InputTextarea;
-import org.primefaces.component.selectmanymenu.SelectManyMenu;
-import org.primefaces.component.tree.Tree;
 import org.primefaces.event.CellEditEvent;
-import org.primefaces.event.RowEditEvent;
 import org.primefaces.extensions.model.timeline.TimelineEvent;
 import org.primefaces.extensions.model.timeline.TimelineModel;
 import org.primefaces.model.DefaultTreeNode;
@@ -44,18 +38,10 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJSprint;
-import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJSprintConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJStatusConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJTaskConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJVersionConverter;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJTask.class, beanName = "jJTaskBean")
@@ -129,7 +115,7 @@ public class JJTaskBean {
 	}
 
 	public List<JJContact> getContacts() {
-		contacts = jJContactService.getContacts(null, false);
+		contacts = jJContactService.getContacts(false);
 		return contacts;
 	}
 

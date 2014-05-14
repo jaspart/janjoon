@@ -7,13 +7,15 @@ import org.springframework.roo.addon.layers.service.RooService;
 @RooService(domainTypes = { com.starit.janjoonweb.domain.JJContact.class })
 public interface JJContactService {
 	
-	public List<JJContact> getContacts(String email, boolean onlyActif);
+	public JJContact getContactByEmail(String email, boolean onlyActif);
+	
+	public List<JJContact> getContacts(boolean onlyActif);
 	
 	public boolean saveJJContactTransaction(JJContact contact);
 	
 	public boolean updateJJContactTransaction(JJContact contact);
 	
-	public List<JJRight>  getContactAuthorization(JJContact contact,JJProduct product,JJProject project,JJCategory category);
+	public List<JJRight>  getContactAuthorization(String object,JJContact contact,JJProduct product,JJProject project,JJCategory category);
 	
 	public List<JJRight>  getContactAuthorization(JJContact contact,JJProduct product);
 	

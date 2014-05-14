@@ -382,7 +382,7 @@ public class ConfigListener implements ServletContextListener {
 		if (jJProfileService.findAllJJProfiles().isEmpty()) {
 
 			String[] names = { "ProjectManager", "ProductManager", "CEO",
-					"CTO", "Tester", "Developer" };
+					"CTO", "Tester", "Developer" ,"CustomProfile"};
 			for (String name : names) {
 				JJProfile profile = new JJProfile();
 				profile.setName(name);
@@ -411,6 +411,11 @@ public class ConfigListener implements ServletContextListener {
 			JJProfile testerProfile = jJProfileService.getOneProfile("Tester");
 			JJProfile developerProfile = jJProfileService
 					.getOneProfile("Developer");
+			JJProfile customProfile=jJProfileService.getOneProfile("CustomProfile");
+			
+			
+			
+			
 
 			// Project Manager Profile
 			JJRight right = new JJRight();
@@ -626,7 +631,28 @@ public class ConfigListener implements ServletContextListener {
 			ceoProfile.getRights().add(right);
 
 			jJRightService.saveJJRight(right);
+			//cutomProfile rights
+			right = new JJRight();
+			right.setObjet("JJBuild");
+			right.setR(false);
+			right.setW(false);
+			right.setX(false);
+			right.setProfile(customProfile);
 
+			customProfile.getRights().add(right);
+
+			jJRightService.saveJJRight(right);
+			
+			right = new JJRight();
+			right.setObjet("JJRequirement");
+			right.setR(false);
+			right.setW(false);
+			right.setX(false);
+			right.setProfile(customProfile);
+
+			customProfile.getRights().add(right);
+
+			jJRightService.saveJJRight(right);
 			// CEO Profile
 			right = new JJRight();
 			right.setObjet("*");
@@ -711,7 +737,7 @@ public class ConfigListener implements ServletContextListener {
 
 		}
 
-		if (jJContactService.getContacts(null, true).isEmpty()) {
+		if (jJContactService.getContacts(true).isEmpty()) {
 
 			JJContact contact = new JJContact();
 			contact.setName("janjoon");
@@ -736,15 +762,36 @@ public class ConfigListener implements ServletContextListener {
 				contact.getPermissions().add(permission);
 				jJPermissionService.saveJJPermission(permission);
 			}
+			
+			contact=new JJContact();
+			contact.setName("Thierry");
+			contact.setFirstname("Thierry");
+			contact.setPassword("BeHappy2012");
+			contact.setDescription("This contact is " + contact.getFirstname()
+					+ " " + contact.getName());
+			contact.setEnabled(true);
+			contact.setEmail("thierry@startit.fr");
+			contact.setCreationDate(new Date());
+
+			jJContactService.saveJJContact(contact);
+			
+			JJProfile profile=jJProfileService.getOneProfile("CustomProfile");
+			JJPermission permission = new JJPermission();
+			permission.setContact(contact);
+			permission.setProfile(profile);
+			contact.getPermissions().add(permission);
+			jJPermissionService.saveJJPermission(permission);
+			
+			
 		}
 
 		if (jJProductService.getProducts(true).isEmpty()) {
 			JJContact manager = null;
-			List<JJContact> contacts = jJContactService.getContacts(
+			JJContact contact = jJContactService.getContactByEmail(
 					"janjoon.mailer@gmail.com", true);
 
-			if (contacts.size() > 0) {
-				manager = contacts.get(0);
+			if (contact!=null) {
+				manager = contact;
 			}
 
 			JJProduct product;
@@ -826,11 +873,11 @@ public class ConfigListener implements ServletContextListener {
 			}
 
 		}
-		List<JJContact> contacts = jJContactService.getContacts(
+		JJContact contact = jJContactService.getContactByEmail(
 				"janjoon.mailer@gmail.com", true);
 		JJContact manager = null;
-		if (contacts.size() > 0) {
-			manager = contacts.get(0);
+		if (contact!=null) {
+			manager = contact;
 		}
 
 		if (jJProjectService.getProjects(true).isEmpty()) {

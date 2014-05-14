@@ -204,6 +204,7 @@ public class JJConfigurationBean {
 
 		CKEditor descriptionCreateInput = (CKEditor) application
 				.createComponent(CKEditor.COMPONENT_TYPE);
+		descriptionCreateInput.setToolbar("[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]");
 		descriptionCreateInput.setId("descriptionCreateInput");
 		descriptionCreateInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
@@ -326,6 +327,7 @@ public class JJConfigurationBean {
 		CKEditor descriptionEditInput = (CKEditor) application
 				.createComponent(CKEditor.COMPONENT_TYPE);
 		descriptionEditInput.setId("descriptionEditInput");
+		descriptionEditInput.setToolbar("[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]");		
 		descriptionEditInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
 						"#{jJConfigurationBean.JJConfiguration_.description}",

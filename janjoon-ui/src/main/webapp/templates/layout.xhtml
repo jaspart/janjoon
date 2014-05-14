@@ -6,8 +6,9 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
+<f:event listener="#{loginBean.checkAuthorities}" type="preRenderView"/>
 <f:view locale="#{localeBean.locale}" contentType="text/html">
-	<h:head>
+	<h:head>	
 	</h:head>
 	<h:body>
 		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
@@ -26,7 +27,7 @@
 					<ui:include src="header.xhtml" />
 				</ui:insert>
 
-				<p:panel id="contentPanel" styleClass="content">
+				<p:panel id="contentPanel" styleClass="content">				
 					<ui:insert name="content" />
 					<p:growl id="auth" for="login" styleClass="alert alert-error"
 						showDetail="true" life="2000" />
