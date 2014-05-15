@@ -5,8 +5,8 @@ package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJWorflowDataOnDemand;
 import com.starit.janjoonweb.domain.JJWorflowIntegrationTest;
+import com.starit.janjoonweb.domain.JJWorflowRepository;
 import com.starit.janjoonweb.domain.JJWorflowService;
-import com.starit.janjoonweb.domain.JJWorkflowRepository;
 import java.util.Iterator;
 import java.util.List;
 import javax.validation.ConstraintViolation;
@@ -34,7 +34,7 @@ privileged aspect JJWorflowIntegrationTest_Roo_IntegrationTest {
     JJWorflowService JJWorflowIntegrationTest.jJWorflowService;
     
     @Autowired
-    JJWorkflowRepository JJWorflowIntegrationTest.jJWorkflowRepository;
+    JJWorflowRepository JJWorflowIntegrationTest.jJWorflowRepository;
     
     @Test
     public void JJWorflowIntegrationTest.testCountAllJJWorflows() {
@@ -86,7 +86,7 @@ privileged aspect JJWorflowIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Find method for 'JJWorflow' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyJJWorflow(obj);
         Integer currentVersion = obj.getVersion();
-        jJWorkflowRepository.flush();
+        jJWorflowRepository.flush();
         Assert.assertTrue("Version for 'JJWorflow' failed to increment on flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
@@ -100,7 +100,7 @@ privileged aspect JJWorflowIntegrationTest_Roo_IntegrationTest {
         boolean modified =  dod.modifyJJWorflow(obj);
         Integer currentVersion = obj.getVersion();
         JJWorflow merged = (JJWorflow)jJWorflowService.updateJJWorflow(obj);
-        jJWorkflowRepository.flush();
+        jJWorflowRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'JJWorflow' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
@@ -121,7 +121,7 @@ privileged aspect JJWorflowIntegrationTest_Roo_IntegrationTest {
             }
             throw new IllegalStateException(msg.toString(), e);
         }
-        jJWorkflowRepository.flush();
+        jJWorflowRepository.flush();
         Assert.assertNotNull("Expected 'JJWorflow' identifier to no longer be null", obj.getId());
     }
     
@@ -133,7 +133,7 @@ privileged aspect JJWorflowIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'JJWorflow' failed to provide an identifier", id);
         obj = jJWorflowService.findJJWorflow(id);
         jJWorflowService.deleteJJWorflow(obj);
-        jJWorkflowRepository.flush();
+        jJWorflowRepository.flush();
         Assert.assertNull("Failed to remove 'JJWorflow' with identifier '" + id + "'", jJWorflowService.findJJWorflow(id));
     }
     

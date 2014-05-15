@@ -720,6 +720,24 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         operationCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(operationCreateInputMessage);
         
+        OutputLabel finalStateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        finalStateCreateOutput.setFor("finalStateCreateInput");
+        finalStateCreateOutput.setId("finalStateCreateOutput");
+        finalStateCreateOutput.setValue("Final State:");
+        htmlPanelGrid.getChildren().add(finalStateCreateOutput);
+        
+        SelectBooleanCheckbox finalStateCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        finalStateCreateInput.setId("finalStateCreateInput");
+        finalStateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.finalState}", Boolean.class));
+        finalStateCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(finalStateCreateInput);
+        
+        Message finalStateCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        finalStateCreateInputMessage.setId("finalStateCreateInputMessage");
+        finalStateCreateInputMessage.setFor("finalStateCreateInput");
+        finalStateCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(finalStateCreateInputMessage);
+        
         OutputLabel completionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         completionCreateOutput.setFor("completionCreateInput");
         completionCreateOutput.setId("completionCreateOutput");
@@ -1398,6 +1416,24 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         operationEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(operationEditInputMessage);
         
+        OutputLabel finalStateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        finalStateEditOutput.setFor("finalStateEditInput");
+        finalStateEditOutput.setId("finalStateEditOutput");
+        finalStateEditOutput.setValue("Final State:");
+        htmlPanelGrid.getChildren().add(finalStateEditOutput);
+        
+        SelectBooleanCheckbox finalStateEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        finalStateEditInput.setId("finalStateEditInput");
+        finalStateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.finalState}", Boolean.class));
+        finalStateEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(finalStateEditInput);
+        
+        Message finalStateEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        finalStateEditInputMessage.setId("finalStateEditInputMessage");
+        finalStateEditInputMessage.setFor("finalStateEditInput");
+        finalStateEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(finalStateEditInputMessage);
+        
         OutputLabel completionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         completionEditOutput.setFor("completionEditInput");
         completionEditOutput.setId("completionEditOutput");
@@ -1817,6 +1853,15 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         HtmlOutputText operationValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         operationValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.operation}", String.class));
         htmlPanelGrid.getChildren().add(operationValue);
+        
+        HtmlOutputText finalStateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        finalStateLabel.setId("finalStateLabel");
+        finalStateLabel.setValue("Final State:");
+        htmlPanelGrid.getChildren().add(finalStateLabel);
+        
+        HtmlOutputText finalStateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        finalStateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.finalState}", String.class));
+        htmlPanelGrid.getChildren().add(finalStateValue);
         
         HtmlOutputText completionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         completionLabel.setId("completionLabel");

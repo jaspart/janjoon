@@ -35,6 +35,8 @@ layer --class JJTeststep
 layer --class JJTestcaseexecution
 layer --class JJTeststepexecution
 layer --class JJWorflow
+layer --class JJAuditLog
+layer --class JJImputation
 
 #######################
 

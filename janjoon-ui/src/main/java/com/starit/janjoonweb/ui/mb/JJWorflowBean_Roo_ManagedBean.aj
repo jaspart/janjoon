@@ -78,7 +78,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         columns.add("description");
         columns.add("creationDate");
         columns.add("updatedDate");
-        columns.add("actionworkflow");
+        columns.add("actionWorkflow");
     }
     
     public String JJWorflowBean.getName() {
@@ -344,23 +344,23 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         targetCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(targetCreateInputMessage);
         
-        OutputLabel actionworkflowCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        actionworkflowCreateOutput.setFor("actionworkflowCreateInput");
-        actionworkflowCreateOutput.setId("actionworkflowCreateOutput");
-        actionworkflowCreateOutput.setValue("Actionworkflow:");
-        htmlPanelGrid.getChildren().add(actionworkflowCreateOutput);
+        OutputLabel actionWorkflowCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        actionWorkflowCreateOutput.setFor("actionWorkflowCreateInput");
+        actionWorkflowCreateOutput.setId("actionWorkflowCreateOutput");
+        actionWorkflowCreateOutput.setValue("Action Workflow:");
+        htmlPanelGrid.getChildren().add(actionWorkflowCreateOutput);
         
-        InputText actionworkflowCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
-        actionworkflowCreateInput.setId("actionworkflowCreateInput");
-        actionworkflowCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.actionworkflow}", String.class));
-        actionworkflowCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(actionworkflowCreateInput);
+        InputText actionWorkflowCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        actionWorkflowCreateInput.setId("actionWorkflowCreateInput");
+        actionWorkflowCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.actionWorkflow}", String.class));
+        actionWorkflowCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(actionWorkflowCreateInput);
         
-        Message actionworkflowCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        actionworkflowCreateInputMessage.setId("actionworkflowCreateInputMessage");
-        actionworkflowCreateInputMessage.setFor("actionworkflowCreateInput");
-        actionworkflowCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(actionworkflowCreateInputMessage);
+        Message actionWorkflowCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        actionWorkflowCreateInputMessage.setId("actionWorkflowCreateInputMessage");
+        actionWorkflowCreateInputMessage.setFor("actionWorkflowCreateInput");
+        actionWorkflowCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(actionWorkflowCreateInputMessage);
         
         OutputLabel actorCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         actorCreateOutput.setFor("actorCreateInput");
@@ -385,6 +385,42 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         actorCreateInputMessage.setFor("actorCreateInput");
         actorCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(actorCreateInputMessage);
+        
+        OutputLabel objetCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        objetCreateOutput.setFor("objetCreateInput");
+        objetCreateOutput.setId("objetCreateOutput");
+        objetCreateOutput.setValue("Objet:");
+        htmlPanelGrid.getChildren().add(objetCreateOutput);
+        
+        InputText objetCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        objetCreateInput.setId("objetCreateInput");
+        objetCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.objet}", String.class));
+        objetCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(objetCreateInput);
+        
+        Message objetCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        objetCreateInputMessage.setId("objetCreateInputMessage");
+        objetCreateInputMessage.setFor("objetCreateInput");
+        objetCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(objetCreateInputMessage);
+        
+        OutputLabel eventCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        eventCreateOutput.setFor("eventCreateInput");
+        eventCreateOutput.setId("eventCreateOutput");
+        eventCreateOutput.setValue("Event:");
+        htmlPanelGrid.getChildren().add(eventCreateOutput);
+        
+        InputTextarea eventCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        eventCreateInput.setId("eventCreateInput");
+        eventCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.event}", String.class));
+        eventCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(eventCreateInput);
+        
+        Message eventCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        eventCreateInputMessage.setId("eventCreateInputMessage");
+        eventCreateInputMessage.setFor("eventCreateInput");
+        eventCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(eventCreateInputMessage);
         
         return htmlPanelGrid;
     }
@@ -592,23 +628,23 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         targetEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(targetEditInputMessage);
         
-        OutputLabel actionworkflowEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        actionworkflowEditOutput.setFor("actionworkflowEditInput");
-        actionworkflowEditOutput.setId("actionworkflowEditOutput");
-        actionworkflowEditOutput.setValue("Actionworkflow:");
-        htmlPanelGrid.getChildren().add(actionworkflowEditOutput);
+        OutputLabel actionWorkflowEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        actionWorkflowEditOutput.setFor("actionWorkflowEditInput");
+        actionWorkflowEditOutput.setId("actionWorkflowEditOutput");
+        actionWorkflowEditOutput.setValue("Action Workflow:");
+        htmlPanelGrid.getChildren().add(actionWorkflowEditOutput);
         
-        InputText actionworkflowEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
-        actionworkflowEditInput.setId("actionworkflowEditInput");
-        actionworkflowEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.actionworkflow}", String.class));
-        actionworkflowEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(actionworkflowEditInput);
+        InputText actionWorkflowEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        actionWorkflowEditInput.setId("actionWorkflowEditInput");
+        actionWorkflowEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.actionWorkflow}", String.class));
+        actionWorkflowEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(actionWorkflowEditInput);
         
-        Message actionworkflowEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        actionworkflowEditInputMessage.setId("actionworkflowEditInputMessage");
-        actionworkflowEditInputMessage.setFor("actionworkflowEditInput");
-        actionworkflowEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(actionworkflowEditInputMessage);
+        Message actionWorkflowEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        actionWorkflowEditInputMessage.setId("actionWorkflowEditInputMessage");
+        actionWorkflowEditInputMessage.setFor("actionWorkflowEditInput");
+        actionWorkflowEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(actionWorkflowEditInputMessage);
         
         OutputLabel actorEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         actorEditOutput.setFor("actorEditInput");
@@ -633,6 +669,42 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         actorEditInputMessage.setFor("actorEditInput");
         actorEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(actorEditInputMessage);
+        
+        OutputLabel objetEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        objetEditOutput.setFor("objetEditInput");
+        objetEditOutput.setId("objetEditOutput");
+        objetEditOutput.setValue("Objet:");
+        htmlPanelGrid.getChildren().add(objetEditOutput);
+        
+        InputText objetEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        objetEditInput.setId("objetEditInput");
+        objetEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.objet}", String.class));
+        objetEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(objetEditInput);
+        
+        Message objetEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        objetEditInputMessage.setId("objetEditInputMessage");
+        objetEditInputMessage.setFor("objetEditInput");
+        objetEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(objetEditInputMessage);
+        
+        OutputLabel eventEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        eventEditOutput.setFor("eventEditInput");
+        eventEditOutput.setId("eventEditOutput");
+        eventEditOutput.setValue("Event:");
+        htmlPanelGrid.getChildren().add(eventEditOutput);
+        
+        InputTextarea eventEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        eventEditInput.setId("eventEditInput");
+        eventEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.event}", String.class));
+        eventEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(eventEditInput);
+        
+        Message eventEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        eventEditInputMessage.setId("eventEditInputMessage");
+        eventEditInputMessage.setFor("eventEditInput");
+        eventEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(eventEditInputMessage);
         
         return htmlPanelGrid;
     }
@@ -742,15 +814,15 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         targetValue.setConverter(new JJStatusConverter());
         htmlPanelGrid.getChildren().add(targetValue);
         
-        HtmlOutputText actionworkflowLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        actionworkflowLabel.setId("actionworkflowLabel");
-        actionworkflowLabel.setValue("Actionworkflow:");
-        htmlPanelGrid.getChildren().add(actionworkflowLabel);
+        HtmlOutputText actionWorkflowLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        actionWorkflowLabel.setId("actionWorkflowLabel");
+        actionWorkflowLabel.setValue("Action Workflow:");
+        htmlPanelGrid.getChildren().add(actionWorkflowLabel);
         
-        HtmlOutputText actionworkflowValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        actionworkflowValue.setId("actionworkflowValue");
-        actionworkflowValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.actionworkflow}", String.class));
-        htmlPanelGrid.getChildren().add(actionworkflowValue);
+        HtmlOutputText actionWorkflowValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        actionWorkflowValue.setId("actionWorkflowValue");
+        actionWorkflowValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.actionWorkflow}", String.class));
+        htmlPanelGrid.getChildren().add(actionWorkflowValue);
         
         HtmlOutputText actorLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         actorLabel.setId("actorLabel");
@@ -761,6 +833,28 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         actorValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.actor}", JJContact.class));
         actorValue.setConverter(new JJContactConverter());
         htmlPanelGrid.getChildren().add(actorValue);
+        
+        HtmlOutputText objetLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        objetLabel.setId("objetLabel");
+        objetLabel.setValue("Objet:");
+        htmlPanelGrid.getChildren().add(objetLabel);
+        
+        HtmlOutputText objetValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        objetValue.setId("objetValue");
+        objetValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.objet}", String.class));
+        htmlPanelGrid.getChildren().add(objetValue);
+        
+        HtmlOutputText eventLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        eventLabel.setId("eventLabel");
+        eventLabel.setValue("Event:");
+        htmlPanelGrid.getChildren().add(eventLabel);
+        
+        InputTextarea eventValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        eventValue.setId("eventValue");
+        eventValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.event}", String.class));
+        eventValue.setReadonly(true);
+        eventValue.setDisabled(true);
+        htmlPanelGrid.getChildren().add(eventValue);
         
         return htmlPanelGrid;
     }

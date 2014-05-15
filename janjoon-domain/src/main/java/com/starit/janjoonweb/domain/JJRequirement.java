@@ -75,6 +75,8 @@ public class JJRequirement extends JJAbstractEntity {
 
 	private Boolean operation;
 
+	private Boolean finalState;
+
 	private Boolean completion;
 
 	@ManyToOne

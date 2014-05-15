@@ -25,12 +25,12 @@ privileged aspect JJWorflow_Roo_JavaBean {
         this.target = target;
     }
     
-    public String JJWorflow.getActionworkflow() {
-        return this.actionworkflow;
+    public String JJWorflow.getActionWorkflow() {
+        return this.actionWorkflow;
     }
     
-    public void JJWorflow.setActionworkflow(String actionworkflow) {
-        this.actionworkflow = actionworkflow;
+    public void JJWorflow.setActionWorkflow(String actionWorkflow) {
+        this.actionWorkflow = actionWorkflow;
     }
     
     public JJContact JJWorflow.getActor() {
@@ -39,6 +39,22 @@ privileged aspect JJWorflow_Roo_JavaBean {
     
     public void JJWorflow.setActor(JJContact actor) {
         this.actor = actor;
+    }
+    
+    public String JJWorflow.getObjet() {
+        return this.objet;
+    }
+    
+    public void JJWorflow.setObjet(String objet) {
+        this.objet = objet;
+    }
+    
+    public String JJWorflow.getEvent() {
+        return this.event;
+    }
+    
+    public void JJWorflow.setEvent(String event) {
+        this.event = event;
     }
     
 }

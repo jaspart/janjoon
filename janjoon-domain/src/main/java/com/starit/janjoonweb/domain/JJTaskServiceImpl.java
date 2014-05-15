@@ -9,7 +9,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -25,8 +24,9 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 	@Override
 	public List<JJTask> getTasks(JJProject project, JJProduct product,
-			JJContact contact, JJChapter chapter, boolean onlyActif,
-			boolean sortedByCreationDate) {
+			JJContact contact, JJChapter chapter, JJTestcase testcase,
+			JJBuild build, boolean onlyActif, boolean sortedByCreationDate,
+			boolean withBuild) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
 				.createQuery(JJTask.class);
@@ -59,6 +59,19 @@ public class JJTaskServiceImpl implements JJTaskService {
 			predicates.add(criteriaBuilder.equal(path, chapter));
 		}
 
+		if (testcase != null) {
+			predicates
+					.add(criteriaBuilder.equal(from.get("testcase"), testcase));
+		}
+
+		if (withBuild) {
+			if (build != null) {
+				predicates.add(criteriaBuilder.equal(from.get("build"), build));
+			} else {
+				predicates.add(criteriaBuilder.isNull(from.get("build")));
+			}
+
+		}
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		if (sortedByCreationDate) {
@@ -132,12 +145,12 @@ public class JJTaskServiceImpl implements JJTaskService {
 		return result.getResultList();
 
 	}
-	
+
 	@Override
-	public List<JJTask> getTasksByProduct(JJProduct product,JJProject project)
-	{
-		return getTasks(project, product, null, null, true, false);
-		
+	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project) {
+		return getTasks(project, product, null, null, null, null, true, false,
+				false);
+
 	}
 
 	@Override

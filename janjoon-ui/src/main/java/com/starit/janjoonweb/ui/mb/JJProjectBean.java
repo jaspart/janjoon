@@ -40,9 +40,6 @@ public class JJProjectBean {
 	}
 
 	public JJProject getProject() {
-		if (project == null) {
-			project = jJProjectService.getJJProjectWithName("Default Project");
-		}
 		return project;
 	}
 
@@ -119,8 +116,7 @@ public class JJProjectBean {
 	}
 
 	public void deleteProject() {
-		// message = "Edit Contact";
-
+		
 		if (projectAdmin != null) {
 			System.out.println(projectAdmin.getName());
 

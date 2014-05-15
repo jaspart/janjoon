@@ -145,6 +145,14 @@ privileged aspect JJContact_Roo_JavaBean {
         this.calendar = calendar;
     }
     
+    public String JJContact.getPreference() {
+        return this.preference;
+    }
+    
+    public void JJContact.setPreference(String preference) {
+        this.preference = preference;
+    }
+    
     public Set<JJSprint> JJContact.getSprints() {
         return this.sprints;
     }

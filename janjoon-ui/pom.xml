@@ -483,72 +483,72 @@
 					</dependency>
 				</dependencies>
 			</plugin>
- 			<plugin>
- 				<groupId>org.codehaus.mojo</groupId>
- 				<artifactId>native2ascii-maven-plugin</artifactId>
- 				<executions>
-					<execution>
-						<id>native2ascii-utf8</id>
-						<goals>
-							<goal>native2ascii</goal>
-						</goals>
-						<configuration>
-							<encoding>UTF8</encoding>
-							<dest>target/classes/com/starit/janjoonweb/ui/mb/i18n</dest>
-							<src>src/main/resources/com/starit/janjoonweb/ui/mb/i18n</src>
-							<includes>
-								<include>messages_ko.properties</include>
-								<include>messages_ru.properties</include>
-								<include>messages_el.properties</include>
-								<include>messages_zh*.properties</include>
-							</includes>
-						</configuration>
-					</execution>
-					<execution>
-						<id>native2ascii-8859_1</id>
-						<goals>
-							<goal>native2ascii</goal>
-						</goals>
-						<configuration>
-							<encoding>8859_1</encoding>
-							<dest>target/classes/com/starit/janjoonweb/ui/mb/i18n</dest>
-							<src>src/main/resources/com/starit/janjoonweb/ui/mb/i18n</src>
-							<includes>
-								<include>messages_de.properties</include>
-								<include>messages_fr.properties</include>
-								<include>messages_nl.properties</include>
-								<include>messages_pt*.properties</include>
-							</includes>
-						</configuration>
-					</execution>
- 				</executions>
- 			    </plugin>
-<!-- 			<plugin> -->
-<!-- 				<groupId>com.github.wvengen</groupId> -->
-<!-- 				<artifactId>proguard-maven-plugin</artifactId> -->
-<!-- 				<executions> -->
-<!-- 					<execution> -->
-<!-- 						<phase>package</phase> -->
-<!-- 						<goals> -->
-<!-- 							<goal>proguard</goal> -->
-<!-- 						</goals> -->
-<!-- 					</execution> -->
-<!-- 				</executions> -->
-<!-- 				<configuration> -->
-<!-- 					<obfuscate>true</obfuscate> -->
-<!-- 					<injar>${project.build.finalName}.war</injar> -->
-<!-- 					<outjar>${project.build.finalName}.war</outjar> -->
-<!-- 					<outputDirectory>${project.build.directory}</outputDirectory> -->
-<!-- 					<options> -->
-<!-- 						<option>-allowaccessmodification</option> -->
-<!-- 						<option>-keep class com.starit.janjoonweb.ui.mb.util.LoginController</option> -->
-<!-- 						<option>-ignorewarnings</option> -->
-<!-- 					</options> -->
-<!-- 					<libs> -->
-<!-- 						<lib>${java.home}/lib/rt.jar</lib> -->
-<!-- 					</libs> -->
-<!-- 				</configuration> -->
-<!-- 			</plugin> -->
+			<!-- <plugin> -->
+			<!-- <groupId>org.codehaus.mojo</groupId> -->
+			<!-- <artifactId>native2ascii-maven-plugin</artifactId> -->
+			<!-- <executions> -->
+			<!-- <execution> -->
+			<!-- <id>native2ascii-utf8</id> -->
+			<!-- <goals> -->
+			<!-- <goal>native2ascii</goal> -->
+			<!-- </goals> -->
+			<!-- <configuration> -->
+			<!-- <encoding>UTF8</encoding> -->
+			<!-- <dest>target/classes/com/starit/janjoonweb/ui/mb/i18n</dest> -->
+			<!-- <src>src/main/resources/com/starit/janjoonweb/ui/mb/i18n</src> -->
+			<!-- <includes> -->
+			<!-- <include>messages_ko.properties</include> -->
+			<!-- <include>messages_ru.properties</include> -->
+			<!-- <include>messages_el.properties</include> -->
+			<!-- <include>messages_zh*.properties</include> -->
+			<!-- </includes> -->
+			<!-- </configuration> -->
+			<!-- </execution> -->
+			<!-- <execution> -->
+			<!-- <id>native2ascii-8859_1</id> -->
+			<!-- <goals> -->
+			<!-- <goal>native2ascii</goal> -->
+			<!-- </goals> -->
+			<!-- <configuration> -->
+			<!-- <encoding>8859_1</encoding> -->
+			<!-- <dest>target/classes/com/starit/janjoonweb/ui/mb/i18n</dest> -->
+			<!-- <src>src/main/resources/com/starit/janjoonweb/ui/mb/i18n</src> -->
+			<!-- <includes> -->
+			<!-- <include>messages_de.properties</include> -->
+			<!-- <include>messages_fr.properties</include> -->
+			<!-- <include>messages_nl.properties</include> -->
+			<!-- <include>messages_pt*.properties</include> -->
+			<!-- </includes> -->
+			<!-- </configuration> -->
+			<!-- </execution> -->
+			<!-- </executions> -->
+			<!-- </plugin> -->
+			<!-- <plugin> -->
+			<!-- <groupId>com.github.wvengen</groupId> -->
+			<!-- <artifactId>proguard-maven-plugin</artifactId> -->
+			<!-- <executions> -->
+			<!-- <execution> -->
+			<!-- <phase>package</phase> -->
+			<!-- <goals> -->
+			<!-- <goal>proguard</goal> -->
+			<!-- </goals> -->
+			<!-- </execution> -->
+			<!-- </executions> -->
+			<!-- <configuration> -->
+			<!-- <obfuscate>true</obfuscate> -->
+			<!-- <injar>${project.build.finalName}.war</injar> -->
+			<!-- <outjar>${project.build.finalName}.war</outjar> -->
+			<!-- <outputDirectory>${project.build.directory}</outputDirectory> -->
+			<!-- <options> -->
+			<!-- <option>-allowaccessmodification</option> -->
+			<!-- <option>-keep class com.starit.janjoonweb.ui.mb.util.LoginController</option> -->
+			<!-- <option>-ignorewarnings</option> -->
+			<!-- </options> -->
+			<!-- <libs> -->
+			<!-- <lib>${java.home}/lib/rt.jar</lib> -->
+			<!-- </libs> -->
+			<!-- </configuration> -->
+			<!-- </plugin> -->
 		</plugins>
 	</build>
 </project>

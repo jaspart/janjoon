@@ -82,6 +82,7 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
         setDescription(obj, index);
         setEnabled(obj, index);
         setEndDate(obj, index);
+        setFinalState(obj, index);
         setImpact(obj, index);
         setName(obj, index);
         setNote(obj, index);
@@ -117,6 +118,11 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
     public void JJRequirementDataOnDemand.setEndDate(JJRequirement obj, int index) {
         Date endDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setEndDate(endDate);
+    }
+    
+    public void JJRequirementDataOnDemand.setFinalState(JJRequirement obj, int index) {
+        Boolean finalState = Boolean.TRUE;
+        obj.setFinalState(finalState);
     }
     
     public void JJRequirementDataOnDemand.setImpact(JJRequirement obj, int index) {

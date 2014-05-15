@@ -7,8 +7,8 @@ import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJStatusDataOnDemand;
 import com.starit.janjoonweb.domain.JJWorflow;
 import com.starit.janjoonweb.domain.JJWorflowDataOnDemand;
+import com.starit.janjoonweb.domain.JJWorflowRepository;
 import com.starit.janjoonweb.domain.JJWorflowService;
-import com.starit.janjoonweb.domain.JJWorkflowRepository;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,22 +40,24 @@ privileged aspect JJWorflowDataOnDemand_Roo_DataOnDemand {
     JJWorflowService JJWorflowDataOnDemand.jJWorflowService;
     
     @Autowired
-    JJWorkflowRepository JJWorflowDataOnDemand.jJWorkflowRepository;
+    JJWorflowRepository JJWorflowDataOnDemand.jJWorflowRepository;
     
     public JJWorflow JJWorflowDataOnDemand.getNewTransientJJWorflow(int index) {
         JJWorflow obj = new JJWorflow();
-        setActionworkflow(obj, index);
+        setActionWorkflow(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
+        setEvent(obj, index);
         setName(obj, index);
+        setObjet(obj, index);
         setUpdatedDate(obj, index);
         return obj;
     }
     
-    public void JJWorflowDataOnDemand.setActionworkflow(JJWorflow obj, int index) {
-        String actionworkflow = "actionworkflow_" + index;
-        obj.setActionworkflow(actionworkflow);
+    public void JJWorflowDataOnDemand.setActionWorkflow(JJWorflow obj, int index) {
+        String actionWorkflow = "actionWorkflow_" + index;
+        obj.setActionWorkflow(actionWorkflow);
     }
     
     public void JJWorflowDataOnDemand.setCreationDate(JJWorflow obj, int index) {
@@ -73,12 +75,22 @@ privileged aspect JJWorflowDataOnDemand_Roo_DataOnDemand {
         obj.setEnabled(enabled);
     }
     
+    public void JJWorflowDataOnDemand.setEvent(JJWorflow obj, int index) {
+        String event = "event_" + index;
+        obj.setEvent(event);
+    }
+    
     public void JJWorflowDataOnDemand.setName(JJWorflow obj, int index) {
         String name = "name_" + index;
         if (name.length() > 100) {
             name = name.substring(0, 100);
         }
         obj.setName(name);
+    }
+    
+    public void JJWorflowDataOnDemand.setObjet(JJWorflow obj, int index) {
+        String objet = "objet_" + index;
+        obj.setObjet(objet);
     }
     
     public void JJWorflowDataOnDemand.setUpdatedDate(JJWorflow obj, int index) {
@@ -134,7 +146,7 @@ privileged aspect JJWorflowDataOnDemand_Roo_DataOnDemand {
                 }
                 throw new IllegalStateException(msg.toString(), e);
             }
-            jJWorkflowRepository.flush();
+            jJWorflowRepository.flush();
             data.add(obj);
         }
     }

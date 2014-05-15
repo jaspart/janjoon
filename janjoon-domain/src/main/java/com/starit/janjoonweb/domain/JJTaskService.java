@@ -9,8 +9,9 @@ import org.springframework.roo.addon.layers.service.RooService;
 public interface JJTaskService {
 
 	public List<JJTask> getTasks(JJProject project, JJProduct product,
-			JJContact contact, JJChapter chapter, boolean onlyActif,
-			boolean sortedByCreationDate);
+			JJContact contact, JJChapter chapter, JJTestcase testcase,
+			JJBuild build, boolean onlyActif, boolean sortedByCreationDate,
+			boolean withBuild);
 
 	public void saveTasks(Set<JJTask> tasks);
 
@@ -20,6 +21,7 @@ public interface JJTaskService {
 			JJSprint sprint, boolean onlyActif);
 
 	public List<JJTask> getSprintTasks(JJSprint sprint);
-	public List<JJTask> getTasksByProduct(JJProduct product,JJProject project);
+
+	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project);
 
 }

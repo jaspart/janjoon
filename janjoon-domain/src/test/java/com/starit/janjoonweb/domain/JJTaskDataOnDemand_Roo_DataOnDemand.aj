@@ -4,6 +4,7 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJBugDataOnDemand;
+import com.starit.janjoonweb.domain.JJBuildDataOnDemand;
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJRequirementDataOnDemand;
 import com.starit.janjoonweb.domain.JJSprintDataOnDemand;
@@ -42,6 +43,9 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
     JJBugDataOnDemand JJTaskDataOnDemand.jJBugDataOnDemand;
     
     @Autowired
+    JJBuildDataOnDemand JJTaskDataOnDemand.jJBuildDataOnDemand;
+    
+    @Autowired
     JJRequirementDataOnDemand JJTaskDataOnDemand.jJRequirementDataOnDemand;
     
     @Autowired
@@ -74,13 +78,18 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
         setEndDateRevised(obj, index);
         setName(obj, index);
         setParent(obj, index);
+        setSoldDate(obj, index);
         setStartDatePlanned(obj, index);
         setStartDateReal(obj, index);
         setStartDateRevised(obj, index);
         setUpdatedDate(obj, index);
+        setWarrantyDate(obj, index);
         setWorkloadPlanned(obj, index);
         setWorkloadReal(obj, index);
         setWorkloadRevised(obj, index);
+        setWorkloadRisk(obj, index);
+        setWorkloadSold(obj, index);
+        setWorkloadWarranty(obj, index);
         return obj;
     }
     
@@ -137,6 +146,11 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
         obj.setParent(parent);
     }
     
+    public void JJTaskDataOnDemand.setSoldDate(JJTask obj, int index) {
+        Date soldDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setSoldDate(soldDate);
+    }
+    
     public void JJTaskDataOnDemand.setStartDatePlanned(JJTask obj, int index) {
         Date startDatePlanned = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setStartDatePlanned(startDatePlanned);
@@ -157,6 +171,11 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
         obj.setUpdatedDate(updatedDate);
     }
     
+    public void JJTaskDataOnDemand.setWarrantyDate(JJTask obj, int index) {
+        Date warrantyDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setWarrantyDate(warrantyDate);
+    }
+    
     public void JJTaskDataOnDemand.setWorkloadPlanned(JJTask obj, int index) {
         Integer workloadPlanned = new Integer(index);
         obj.setWorkloadPlanned(workloadPlanned);
@@ -170,6 +189,21 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
     public void JJTaskDataOnDemand.setWorkloadRevised(JJTask obj, int index) {
         Integer workloadRevised = new Integer(index);
         obj.setWorkloadRevised(workloadRevised);
+    }
+    
+    public void JJTaskDataOnDemand.setWorkloadRisk(JJTask obj, int index) {
+        Integer workloadRisk = new Integer(index);
+        obj.setWorkloadRisk(workloadRisk);
+    }
+    
+    public void JJTaskDataOnDemand.setWorkloadSold(JJTask obj, int index) {
+        Integer workloadSold = new Integer(index);
+        obj.setWorkloadSold(workloadSold);
+    }
+    
+    public void JJTaskDataOnDemand.setWorkloadWarranty(JJTask obj, int index) {
+        Integer workloadWarranty = new Integer(index);
+        obj.setWorkloadWarranty(workloadWarranty);
     }
     
     public JJTask JJTaskDataOnDemand.getSpecificJJTask(int index) {

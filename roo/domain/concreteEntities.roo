@@ -299,3 +299,22 @@ field reference --fieldName target --type ~.JJStatus
 field string --fieldName actionworkflow
 field reference --fieldName actor --type ~.JJContact
 #######################
+
+#######################
+focus --class ~.JJImputation
+field date --fieldName imputationDate --type java.util.Date 
+field reference --fieldName contact --type ~.JJContact 
+field reference --fieldName task --type ~.JJTask 
+field date --fieldName startAction --type java.util.Date
+field date --fieldName endAction --type java.util.Date
+field number --fieldName workloadRemaining --type java.lang.Integer
+#######################
+
+#######################
+focus --class ~.JJAuditLog
+field date --fieldName auditLogDate --type java.util.Date 
+field reference --fieldName contact --type ~.JJContact 
+field string --fieldName objet
+field string --fieldName keyName --sizeMax 50
+field string --fieldName keyValue
+#######################

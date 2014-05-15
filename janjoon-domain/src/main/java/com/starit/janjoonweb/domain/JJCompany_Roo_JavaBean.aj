@@ -33,6 +33,14 @@ privileged aspect JJCompany_Roo_JavaBean {
         this.calendar = calendar;
     }
     
+    public String JJCompany.getPreference() {
+        return this.preference;
+    }
+    
+    public void JJCompany.setPreference(String preference) {
+        this.preference = preference;
+    }
+    
     public Integer JJCompany.getPriceload() {
         return this.priceload;
     }

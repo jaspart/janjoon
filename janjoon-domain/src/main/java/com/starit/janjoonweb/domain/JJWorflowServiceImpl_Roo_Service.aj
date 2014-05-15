@@ -4,8 +4,8 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJWorflow;
+import com.starit.janjoonweb.domain.JJWorflowRepository;
 import com.starit.janjoonweb.domain.JJWorflowServiceImpl;
-import com.starit.janjoonweb.domain.JJWorkflowRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,34 +18,34 @@ privileged aspect JJWorflowServiceImpl_Roo_Service {
     declare @type: JJWorflowServiceImpl: @Transactional;
     
     @Autowired
-    JJWorkflowRepository JJWorflowServiceImpl.jJWorkflowRepository;
+    JJWorflowRepository JJWorflowServiceImpl.jJWorflowRepository;
     
     public long JJWorflowServiceImpl.countAllJJWorflows() {
-        return jJWorkflowRepository.count();
+        return jJWorflowRepository.count();
     }
     
     public void JJWorflowServiceImpl.deleteJJWorflow(JJWorflow JJWorflow_) {
-        jJWorkflowRepository.delete(JJWorflow_);
+        jJWorflowRepository.delete(JJWorflow_);
     }
     
     public JJWorflow JJWorflowServiceImpl.findJJWorflow(Long id) {
-        return jJWorkflowRepository.findOne(id);
+        return jJWorflowRepository.findOne(id);
     }
     
     public List<JJWorflow> JJWorflowServiceImpl.findAllJJWorflows() {
-        return jJWorkflowRepository.findAll();
+        return jJWorflowRepository.findAll();
     }
     
     public List<JJWorflow> JJWorflowServiceImpl.findJJWorflowEntries(int firstResult, int maxResults) {
-        return jJWorkflowRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+        return jJWorflowRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
     public void JJWorflowServiceImpl.saveJJWorflow(JJWorflow JJWorflow_) {
-        jJWorkflowRepository.save(JJWorflow_);
+        jJWorflowRepository.save(JJWorflow_);
     }
     
     public JJWorflow JJWorflowServiceImpl.updateJJWorflow(JJWorflow JJWorflow_) {
-        return jJWorkflowRepository.save(JJWorflow_);
+        return jJWorflowRepository.save(JJWorflow_);
     }
     
 }

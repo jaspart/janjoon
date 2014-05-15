@@ -354,6 +354,24 @@ privileged aspect JJCompanyBean_Roo_ManagedBean {
         calendarCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(calendarCreateInputMessage);
         
+        OutputLabel preferenceCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        preferenceCreateOutput.setFor("preferenceCreateInput");
+        preferenceCreateOutput.setId("preferenceCreateOutput");
+        preferenceCreateOutput.setValue("Preference:");
+        htmlPanelGrid.getChildren().add(preferenceCreateOutput);
+        
+        InputTextarea preferenceCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        preferenceCreateInput.setId("preferenceCreateInput");
+        preferenceCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCompanyBean.JJCompany_.preference}", String.class));
+        preferenceCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(preferenceCreateInput);
+        
+        Message preferenceCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        preferenceCreateInputMessage.setId("preferenceCreateInputMessage");
+        preferenceCreateInputMessage.setFor("preferenceCreateInput");
+        preferenceCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(preferenceCreateInputMessage);
+        
         OutputLabel priceloadCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         priceloadCreateOutput.setFor("priceloadCreateInput");
         priceloadCreateOutput.setId("priceloadCreateOutput");
@@ -647,6 +665,24 @@ privileged aspect JJCompanyBean_Roo_ManagedBean {
         calendarEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(calendarEditInputMessage);
         
+        OutputLabel preferenceEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        preferenceEditOutput.setFor("preferenceEditInput");
+        preferenceEditOutput.setId("preferenceEditOutput");
+        preferenceEditOutput.setValue("Preference:");
+        htmlPanelGrid.getChildren().add(preferenceEditOutput);
+        
+        InputTextarea preferenceEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        preferenceEditInput.setId("preferenceEditInput");
+        preferenceEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCompanyBean.JJCompany_.preference}", String.class));
+        preferenceEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(preferenceEditInput);
+        
+        Message preferenceEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        preferenceEditInputMessage.setId("preferenceEditInputMessage");
+        preferenceEditInputMessage.setFor("preferenceEditInput");
+        preferenceEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(preferenceEditInputMessage);
+        
         OutputLabel priceloadEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         priceloadEditOutput.setFor("priceloadEditInput");
         priceloadEditOutput.setId("priceloadEditOutput");
@@ -845,6 +881,18 @@ privileged aspect JJCompanyBean_Roo_ManagedBean {
         calendarValue.setReadonly(true);
         calendarValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(calendarValue);
+        
+        HtmlOutputText preferenceLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        preferenceLabel.setId("preferenceLabel");
+        preferenceLabel.setValue("Preference:");
+        htmlPanelGrid.getChildren().add(preferenceLabel);
+        
+        InputTextarea preferenceValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        preferenceValue.setId("preferenceValue");
+        preferenceValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCompanyBean.JJCompany_.preference}", String.class));
+        preferenceValue.setReadonly(true);
+        preferenceValue.setDisabled(true);
+        htmlPanelGrid.getChildren().add(preferenceValue);
         
         HtmlOutputText priceloadLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         priceloadLabel.setId("priceloadLabel");

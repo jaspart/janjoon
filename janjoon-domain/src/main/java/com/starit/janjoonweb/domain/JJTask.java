@@ -53,10 +53,25 @@ public class JJTask extends JJAbstractEntity {
 
 	private Integer workloadReal;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "M-")
+	private Date soldDate;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "M-")
+	private Date warrantyDate;
+
+	private Integer workloadSold;
+	private Integer workloadRisk;
+	private Integer workloadWarranty;
+
 	private Integer consumed;
 
 	@ManyToOne
 	private JJVersion versioning;
+
+	@ManyToOne
+	private JJBuild build;
 
 	@ManyToOne
 	private JJBug bug;

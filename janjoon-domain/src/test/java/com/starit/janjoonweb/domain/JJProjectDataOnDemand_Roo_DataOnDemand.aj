@@ -4,7 +4,6 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJProjectDataOnDemand;
 import com.starit.janjoonweb.domain.JJProjectRepository;
@@ -31,9 +30,6 @@ privileged aspect JJProjectDataOnDemand_Roo_DataOnDemand {
     private List<JJProject> JJProjectDataOnDemand.data;
     
     @Autowired
-    JJContactDataOnDemand JJProjectDataOnDemand.jJContactDataOnDemand;
-    
-    @Autowired
     JJProjectService JJProjectDataOnDemand.jJProjectService;
     
     @Autowired
@@ -41,13 +37,20 @@ privileged aspect JJProjectDataOnDemand_Roo_DataOnDemand {
     
     public JJProject JJProjectDataOnDemand.getNewTransientJJProject(int index) {
         JJProject obj = new JJProject();
+        setCreatedBy(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
         setManager(obj, index);
         setName(obj, index);
+        setUpdatedBy(obj, index);
         setUpdatedDate(obj, index);
         return obj;
+    }
+    
+    public void JJProjectDataOnDemand.setCreatedBy(JJProject obj, int index) {
+        JJContact createdBy = null;
+        obj.setCreatedBy(createdBy);
     }
     
     public void JJProjectDataOnDemand.setCreationDate(JJProject obj, int index) {
@@ -66,7 +69,7 @@ privileged aspect JJProjectDataOnDemand_Roo_DataOnDemand {
     }
     
     public void JJProjectDataOnDemand.setManager(JJProject obj, int index) {
-        JJContact manager = jJContactDataOnDemand.getRandomJJContact();
+        JJContact manager = null;
         obj.setManager(manager);
     }
     
@@ -76,6 +79,11 @@ privileged aspect JJProjectDataOnDemand_Roo_DataOnDemand {
             name = name.substring(0, 100);
         }
         obj.setName(name);
+    }
+    
+    public void JJProjectDataOnDemand.setUpdatedBy(JJProject obj, int index) {
+        JJContact updatedBy = null;
+        obj.setUpdatedBy(updatedBy);
     }
     
     public void JJProjectDataOnDemand.setUpdatedDate(JJProject obj, int index) {

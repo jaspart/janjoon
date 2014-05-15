@@ -48,6 +48,7 @@ privileged aspect JJCompanyDataOnDemand_Roo_DataOnDemand {
         setEnabled(obj, index);
         setLogo(obj, index);
         setName(obj, index);
+        setPreference(obj, index);
         setPriceload(obj, index);
         setPricepoint(obj, index);
         setUpdatedDate(obj, index);
@@ -104,6 +105,11 @@ privileged aspect JJCompanyDataOnDemand_Roo_DataOnDemand {
             name = name.substring(0, 100);
         }
         obj.setName(name);
+    }
+    
+    public void JJCompanyDataOnDemand.setPreference(JJCompany obj, int index) {
+        String preference = "preference_" + index;
+        obj.setPreference(preference);
     }
     
     public void JJCompanyDataOnDemand.setPriceload(JJCompany obj, int index) {

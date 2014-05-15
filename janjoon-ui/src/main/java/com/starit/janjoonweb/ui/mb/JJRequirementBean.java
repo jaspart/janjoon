@@ -752,6 +752,7 @@ public class JJRequirementBean {
 	public void deleteRequirement() {
 
 		System.out.println("DELETE Requirement ...");
+
 		requirement.setEnabled(false);
 
 		FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -766,6 +767,25 @@ public class JJRequirementBean {
 		requirement.setUpdatedDate(new Date());
 
 		jJRequirementService.updateJJRequirement(requirement);
+
+		JJRequirement req = jJRequirementService.findJJRequirement(requirement
+				.getId());
+		for (JJTestcase testcase : req.getTestcases()) {
+
+			JJTestcase tc = jJTestcaseService.findJJTestcase(testcase.getId());
+			for (JJTask task : tc.getTasks()) {
+				task.setEnabled(false);
+				jJTaskService.updateJJTask(task);
+			}
+			tc.setEnabled(false);
+			jJTestcaseService.updateJJTestcase(tc);
+		}
+
+		for (JJTask task : req.getTasks()) {
+			task.setEnabled(false);
+			jJTaskService.updateJJTask(task);
+		}
+
 		requirement = null;
 		reset();
 	}

@@ -4,6 +4,7 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJBug;
+import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -89,6 +90,46 @@ privileged aspect JJTask_Roo_JavaBean {
         this.workloadReal = workloadReal;
     }
     
+    public Date JJTask.getSoldDate() {
+        return this.soldDate;
+    }
+    
+    public void JJTask.setSoldDate(Date soldDate) {
+        this.soldDate = soldDate;
+    }
+    
+    public Date JJTask.getWarrantyDate() {
+        return this.warrantyDate;
+    }
+    
+    public void JJTask.setWarrantyDate(Date warrantyDate) {
+        this.warrantyDate = warrantyDate;
+    }
+    
+    public Integer JJTask.getWorkloadSold() {
+        return this.workloadSold;
+    }
+    
+    public void JJTask.setWorkloadSold(Integer workloadSold) {
+        this.workloadSold = workloadSold;
+    }
+    
+    public Integer JJTask.getWorkloadRisk() {
+        return this.workloadRisk;
+    }
+    
+    public void JJTask.setWorkloadRisk(Integer workloadRisk) {
+        this.workloadRisk = workloadRisk;
+    }
+    
+    public Integer JJTask.getWorkloadWarranty() {
+        return this.workloadWarranty;
+    }
+    
+    public void JJTask.setWorkloadWarranty(Integer workloadWarranty) {
+        this.workloadWarranty = workloadWarranty;
+    }
+    
     public Integer JJTask.getConsumed() {
         return this.consumed;
     }
@@ -103,6 +144,14 @@ privileged aspect JJTask_Roo_JavaBean {
     
     public void JJTask.setVersioning(JJVersion versioning) {
         this.versioning = versioning;
+    }
+    
+    public JJBuild JJTask.getBuild() {
+        return this.build;
+    }
+    
+    public void JJTask.setBuild(JJBuild build) {
+        this.build = build;
     }
     
     public JJBug JJTask.getBug() {

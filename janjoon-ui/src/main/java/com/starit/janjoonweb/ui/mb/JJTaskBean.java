@@ -171,7 +171,7 @@ public class JJTaskBean {
 			Map<Date, String> max = new TreeMap<Date, String>();
 
 			List<JJTask> tasks = jJTaskService.getTasks(project, null, null,
-					chapter, true, true);
+					chapter, null, null, true, true, false);
 
 			for (JJTask task : tasks) {
 
@@ -613,7 +613,8 @@ public class JJTaskBean {
 
 			List<JJTask> list = new ArrayList<JJTask>();
 			list.addAll(jJTaskService.getTasks(project, null, null, task
-					.getRequirement().getChapter(), true, false));
+					.getRequirement().getChapter(), null, null, true, false,
+					false));
 
 			list.remove(task);
 
@@ -727,22 +728,19 @@ public class JJTaskBean {
 	}
 
 	public HtmlPanelGrid populateViewPanelGrid() {
-		
-		
-		
+
 		FacesContext facesContext = FacesContext.getCurrentInstance();
-		Application application = facesContext
-				.getApplication();
+		Application application = facesContext.getApplication();
 		ExpressionFactory expressionFactory = application
 				.getExpressionFactory();
 		ELContext elContext = facesContext.getELContext();
 
 		HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application
 				.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
-		
-		setJJTask_((JJTask) expressionFactory.createValueExpression(elContext,"#{jJDevelopment.task}", JJTask.class).getValue(elContext));
-		taskTreeNode=null;
-				
+
+		setJJTask_((JJTask) expressionFactory.createValueExpression(elContext,
+				"#{jJDevelopment.task}", JJTask.class).getValue(elContext));
+		taskTreeNode = null;
 
 		HtmlOutputText nameLabel = (HtmlOutputText) application
 				.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -942,20 +940,23 @@ public class JJTaskBean {
 				.createValueExpression(elContext,
 						"#{jJTaskBean.JJTask_.bug.name}", String.class));
 		// bugValue.setConverter(new JJBugConverter());
-		htmlPanelGrid.getChildren().add(bugValue);		
+		htmlPanelGrid.getChildren().add(bugValue);
 
 		if (getJJTask_() != null) {
 			if (getJJTask_().getRequirement() != null) {
 
-
-				
 				System.out.println("1");
-				taskTreeNode = new DefaultTreeNode("Requirement", null);				
-				JJRequirement requirement=(JJRequirement) expressionFactory.createValueExpression(elContext,"#{jJTaskBean.JJTask_.requirement}", JJRequirement.class).getValue(elContext);
-				DefaultTreeNode tree=new DefaultTreeNode(requirement.getName(),taskTreeNode);
-				reqTreeNode(tree,requirement);	
-				expressionFactory.createValueExpression(elContext, "#{jJTaskBean.taskTreeNode}", TreeNode.class).setValue(elContext, taskTreeNode);
-				
+				taskTreeNode = new DefaultTreeNode("Requirement", null);
+				JJRequirement requirement = (JJRequirement) expressionFactory
+						.createValueExpression(elContext,
+								"#{jJTaskBean.JJTask_.requirement}",
+								JJRequirement.class).getValue(elContext);
+				DefaultTreeNode tree = new DefaultTreeNode(
+						requirement.getName(), taskTreeNode);
+				reqTreeNode(tree, requirement);
+				expressionFactory.createValueExpression(elContext,
+						"#{jJTaskBean.taskTreeNode}", TreeNode.class).setValue(
+						elContext, taskTreeNode);
 
 			}
 
@@ -1043,14 +1044,12 @@ public class JJTaskBean {
 						"#{jJTaskBean.JJTask_.parent.name}", String.class));
 		parentValue.setConverter(new JJTaskConverter());
 		htmlPanelGrid.getChildren().add(parentValue);
-		
 
 		return htmlPanelGrid;
 	}
 
 	private void reqTreeNode(TreeNode tree, JJRequirement req) {
 
-		
 		for (JJRequirement r : req.getRequirementLinkDown()) {
 
 			DefaultTreeNode s = new DefaultTreeNode(r.getName(), tree);

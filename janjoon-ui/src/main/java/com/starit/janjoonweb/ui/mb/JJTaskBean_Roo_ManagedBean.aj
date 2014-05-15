@@ -5,6 +5,8 @@ package com.starit.janjoonweb.ui.mb;
 
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
+import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJMessage;
@@ -22,6 +24,7 @@ import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.JJTaskBean;
 import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJBuildConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJSprintConverter;
@@ -74,6 +77,9 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
     
     @Autowired
     JJVersionService JJTaskBean.jJVersionService;
+    
+    @Autowired
+    JJBuildService JJTaskBean.jJBuildService;
     
     @Autowired
     JJBugService JJTaskBean.jJBugService;
@@ -524,6 +530,105 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         workloadRealCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(workloadRealCreateInputMessage);
         
+        OutputLabel soldDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        soldDateCreateOutput.setFor("soldDateCreateInput");
+        soldDateCreateOutput.setId("soldDateCreateOutput");
+        soldDateCreateOutput.setValue("Sold Date:");
+        htmlPanelGrid.getChildren().add(soldDateCreateOutput);
+        
+        Calendar soldDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        soldDateCreateInput.setId("soldDateCreateInput");
+        soldDateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.soldDate}", Date.class));
+        soldDateCreateInput.setNavigator(true);
+        soldDateCreateInput.setEffect("slideDown");
+        soldDateCreateInput.setPattern("dd/MM/yyyy");
+        soldDateCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(soldDateCreateInput);
+        
+        Message soldDateCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        soldDateCreateInputMessage.setId("soldDateCreateInputMessage");
+        soldDateCreateInputMessage.setFor("soldDateCreateInput");
+        soldDateCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(soldDateCreateInputMessage);
+        
+        OutputLabel warrantyDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        warrantyDateCreateOutput.setFor("warrantyDateCreateInput");
+        warrantyDateCreateOutput.setId("warrantyDateCreateOutput");
+        warrantyDateCreateOutput.setValue("Warranty Date:");
+        htmlPanelGrid.getChildren().add(warrantyDateCreateOutput);
+        
+        Calendar warrantyDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        warrantyDateCreateInput.setId("warrantyDateCreateInput");
+        warrantyDateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.warrantyDate}", Date.class));
+        warrantyDateCreateInput.setNavigator(true);
+        warrantyDateCreateInput.setEffect("slideDown");
+        warrantyDateCreateInput.setPattern("dd/MM/yyyy");
+        warrantyDateCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(warrantyDateCreateInput);
+        
+        Message warrantyDateCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        warrantyDateCreateInputMessage.setId("warrantyDateCreateInputMessage");
+        warrantyDateCreateInputMessage.setFor("warrantyDateCreateInput");
+        warrantyDateCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(warrantyDateCreateInputMessage);
+        
+        OutputLabel workloadSoldCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        workloadSoldCreateOutput.setFor("workloadSoldCreateInput");
+        workloadSoldCreateOutput.setId("workloadSoldCreateOutput");
+        workloadSoldCreateOutput.setValue("Workload Sold:");
+        htmlPanelGrid.getChildren().add(workloadSoldCreateOutput);
+        
+        Spinner workloadSoldCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        workloadSoldCreateInput.setId("workloadSoldCreateInput");
+        workloadSoldCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadSold}", Integer.class));
+        workloadSoldCreateInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(workloadSoldCreateInput);
+        
+        Message workloadSoldCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        workloadSoldCreateInputMessage.setId("workloadSoldCreateInputMessage");
+        workloadSoldCreateInputMessage.setFor("workloadSoldCreateInput");
+        workloadSoldCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(workloadSoldCreateInputMessage);
+        
+        OutputLabel workloadRiskCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        workloadRiskCreateOutput.setFor("workloadRiskCreateInput");
+        workloadRiskCreateOutput.setId("workloadRiskCreateOutput");
+        workloadRiskCreateOutput.setValue("Workload Risk:");
+        htmlPanelGrid.getChildren().add(workloadRiskCreateOutput);
+        
+        Spinner workloadRiskCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        workloadRiskCreateInput.setId("workloadRiskCreateInput");
+        workloadRiskCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadRisk}", Integer.class));
+        workloadRiskCreateInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(workloadRiskCreateInput);
+        
+        Message workloadRiskCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        workloadRiskCreateInputMessage.setId("workloadRiskCreateInputMessage");
+        workloadRiskCreateInputMessage.setFor("workloadRiskCreateInput");
+        workloadRiskCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(workloadRiskCreateInputMessage);
+        
+        OutputLabel workloadWarrantyCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        workloadWarrantyCreateOutput.setFor("workloadWarrantyCreateInput");
+        workloadWarrantyCreateOutput.setId("workloadWarrantyCreateOutput");
+        workloadWarrantyCreateOutput.setValue("Workload Warranty:");
+        htmlPanelGrid.getChildren().add(workloadWarrantyCreateOutput);
+        
+        Spinner workloadWarrantyCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        workloadWarrantyCreateInput.setId("workloadWarrantyCreateInput");
+        workloadWarrantyCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadWarranty}", Integer.class));
+        workloadWarrantyCreateInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(workloadWarrantyCreateInput);
+        
+        Message workloadWarrantyCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        workloadWarrantyCreateInputMessage.setId("workloadWarrantyCreateInputMessage");
+        workloadWarrantyCreateInputMessage.setFor("workloadWarrantyCreateInput");
+        workloadWarrantyCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(workloadWarrantyCreateInputMessage);
+        
         OutputLabel consumedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         consumedCreateOutput.setFor("consumedCreateInput");
         consumedCreateOutput.setId("consumedCreateOutput");
@@ -566,6 +671,30 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         versioningCreateInputMessage.setFor("versioningCreateInput");
         versioningCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(versioningCreateInputMessage);
+        
+        OutputLabel buildCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        buildCreateOutput.setFor("buildCreateInput");
+        buildCreateOutput.setId("buildCreateOutput");
+        buildCreateOutput.setValue("Build:");
+        htmlPanelGrid.getChildren().add(buildCreateOutput);
+        
+        AutoComplete buildCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        buildCreateInput.setId("buildCreateInput");
+        buildCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.build}", JJBuild.class));
+        buildCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeBuild}", List.class, new Class[] { String.class }));
+        buildCreateInput.setDropdown(true);
+        buildCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "build", String.class));
+        buildCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{build.name} #{build.description} #{build.creationDate} #{build.updatedDate}", String.class));
+        buildCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{build}", JJBuild.class));
+        buildCreateInput.setConverter(new JJBuildConverter());
+        buildCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(buildCreateInput);
+        
+        Message buildCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        buildCreateInputMessage.setId("buildCreateInputMessage");
+        buildCreateInputMessage.setFor("buildCreateInput");
+        buildCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(buildCreateInputMessage);
         
         OutputLabel bugCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         bugCreateOutput.setFor("bugCreateInput");
@@ -1167,6 +1296,105 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         workloadRealEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(workloadRealEditInputMessage);
         
+        OutputLabel soldDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        soldDateEditOutput.setFor("soldDateEditInput");
+        soldDateEditOutput.setId("soldDateEditOutput");
+        soldDateEditOutput.setValue("Sold Date:");
+        htmlPanelGrid.getChildren().add(soldDateEditOutput);
+        
+        Calendar soldDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        soldDateEditInput.setId("soldDateEditInput");
+        soldDateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.soldDate}", Date.class));
+        soldDateEditInput.setNavigator(true);
+        soldDateEditInput.setEffect("slideDown");
+        soldDateEditInput.setPattern("dd/MM/yyyy");
+        soldDateEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(soldDateEditInput);
+        
+        Message soldDateEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        soldDateEditInputMessage.setId("soldDateEditInputMessage");
+        soldDateEditInputMessage.setFor("soldDateEditInput");
+        soldDateEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(soldDateEditInputMessage);
+        
+        OutputLabel warrantyDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        warrantyDateEditOutput.setFor("warrantyDateEditInput");
+        warrantyDateEditOutput.setId("warrantyDateEditOutput");
+        warrantyDateEditOutput.setValue("Warranty Date:");
+        htmlPanelGrid.getChildren().add(warrantyDateEditOutput);
+        
+        Calendar warrantyDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        warrantyDateEditInput.setId("warrantyDateEditInput");
+        warrantyDateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.warrantyDate}", Date.class));
+        warrantyDateEditInput.setNavigator(true);
+        warrantyDateEditInput.setEffect("slideDown");
+        warrantyDateEditInput.setPattern("dd/MM/yyyy");
+        warrantyDateEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(warrantyDateEditInput);
+        
+        Message warrantyDateEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        warrantyDateEditInputMessage.setId("warrantyDateEditInputMessage");
+        warrantyDateEditInputMessage.setFor("warrantyDateEditInput");
+        warrantyDateEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(warrantyDateEditInputMessage);
+        
+        OutputLabel workloadSoldEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        workloadSoldEditOutput.setFor("workloadSoldEditInput");
+        workloadSoldEditOutput.setId("workloadSoldEditOutput");
+        workloadSoldEditOutput.setValue("Workload Sold:");
+        htmlPanelGrid.getChildren().add(workloadSoldEditOutput);
+        
+        Spinner workloadSoldEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        workloadSoldEditInput.setId("workloadSoldEditInput");
+        workloadSoldEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadSold}", Integer.class));
+        workloadSoldEditInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(workloadSoldEditInput);
+        
+        Message workloadSoldEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        workloadSoldEditInputMessage.setId("workloadSoldEditInputMessage");
+        workloadSoldEditInputMessage.setFor("workloadSoldEditInput");
+        workloadSoldEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(workloadSoldEditInputMessage);
+        
+        OutputLabel workloadRiskEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        workloadRiskEditOutput.setFor("workloadRiskEditInput");
+        workloadRiskEditOutput.setId("workloadRiskEditOutput");
+        workloadRiskEditOutput.setValue("Workload Risk:");
+        htmlPanelGrid.getChildren().add(workloadRiskEditOutput);
+        
+        Spinner workloadRiskEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        workloadRiskEditInput.setId("workloadRiskEditInput");
+        workloadRiskEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadRisk}", Integer.class));
+        workloadRiskEditInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(workloadRiskEditInput);
+        
+        Message workloadRiskEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        workloadRiskEditInputMessage.setId("workloadRiskEditInputMessage");
+        workloadRiskEditInputMessage.setFor("workloadRiskEditInput");
+        workloadRiskEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(workloadRiskEditInputMessage);
+        
+        OutputLabel workloadWarrantyEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        workloadWarrantyEditOutput.setFor("workloadWarrantyEditInput");
+        workloadWarrantyEditOutput.setId("workloadWarrantyEditOutput");
+        workloadWarrantyEditOutput.setValue("Workload Warranty:");
+        htmlPanelGrid.getChildren().add(workloadWarrantyEditOutput);
+        
+        Spinner workloadWarrantyEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        workloadWarrantyEditInput.setId("workloadWarrantyEditInput");
+        workloadWarrantyEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadWarranty}", Integer.class));
+        workloadWarrantyEditInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(workloadWarrantyEditInput);
+        
+        Message workloadWarrantyEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        workloadWarrantyEditInputMessage.setId("workloadWarrantyEditInputMessage");
+        workloadWarrantyEditInputMessage.setFor("workloadWarrantyEditInput");
+        workloadWarrantyEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(workloadWarrantyEditInputMessage);
+        
         OutputLabel consumedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         consumedEditOutput.setFor("consumedEditInput");
         consumedEditOutput.setId("consumedEditOutput");
@@ -1209,6 +1437,30 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         versioningEditInputMessage.setFor("versioningEditInput");
         versioningEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(versioningEditInputMessage);
+        
+        OutputLabel buildEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        buildEditOutput.setFor("buildEditInput");
+        buildEditOutput.setId("buildEditOutput");
+        buildEditOutput.setValue("Build:");
+        htmlPanelGrid.getChildren().add(buildEditOutput);
+        
+        AutoComplete buildEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        buildEditInput.setId("buildEditInput");
+        buildEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.build}", JJBuild.class));
+        buildEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeBuild}", List.class, new Class[] { String.class }));
+        buildEditInput.setDropdown(true);
+        buildEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "build", String.class));
+        buildEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{build.name} #{build.description} #{build.creationDate} #{build.updatedDate}", String.class));
+        buildEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{build}", JJBuild.class));
+        buildEditInput.setConverter(new JJBuildConverter());
+        buildEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(buildEditInput);
+        
+        Message buildEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        buildEditInputMessage.setId("buildEditInputMessage");
+        buildEditInputMessage.setFor("buildEditInput");
+        buildEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(buildEditInputMessage);
         
         OutputLabel bugEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         bugEditOutput.setFor("bugEditInput");
@@ -1656,6 +1908,57 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         workloadRealValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadReal}", String.class));
         htmlPanelGrid.getChildren().add(workloadRealValue);
         
+        HtmlOutputText soldDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        soldDateLabel.setId("soldDateLabel");
+        soldDateLabel.setValue("Sold Date:");
+        htmlPanelGrid.getChildren().add(soldDateLabel);
+        
+        HtmlOutputText soldDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        soldDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.soldDate}", Date.class));
+        DateTimeConverter soldDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
+        soldDateValueConverter.setPattern("dd/MM/yyyy");
+        soldDateValue.setConverter(soldDateValueConverter);
+        htmlPanelGrid.getChildren().add(soldDateValue);
+        
+        HtmlOutputText warrantyDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        warrantyDateLabel.setId("warrantyDateLabel");
+        warrantyDateLabel.setValue("Warranty Date:");
+        htmlPanelGrid.getChildren().add(warrantyDateLabel);
+        
+        HtmlOutputText warrantyDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        warrantyDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.warrantyDate}", Date.class));
+        DateTimeConverter warrantyDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
+        warrantyDateValueConverter.setPattern("dd/MM/yyyy");
+        warrantyDateValue.setConverter(warrantyDateValueConverter);
+        htmlPanelGrid.getChildren().add(warrantyDateValue);
+        
+        HtmlOutputText workloadSoldLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        workloadSoldLabel.setId("workloadSoldLabel");
+        workloadSoldLabel.setValue("Workload Sold:");
+        htmlPanelGrid.getChildren().add(workloadSoldLabel);
+        
+        HtmlOutputText workloadSoldValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        workloadSoldValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadSold}", String.class));
+        htmlPanelGrid.getChildren().add(workloadSoldValue);
+        
+        HtmlOutputText workloadRiskLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        workloadRiskLabel.setId("workloadRiskLabel");
+        workloadRiskLabel.setValue("Workload Risk:");
+        htmlPanelGrid.getChildren().add(workloadRiskLabel);
+        
+        HtmlOutputText workloadRiskValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        workloadRiskValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadRisk}", String.class));
+        htmlPanelGrid.getChildren().add(workloadRiskValue);
+        
+        HtmlOutputText workloadWarrantyLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        workloadWarrantyLabel.setId("workloadWarrantyLabel");
+        workloadWarrantyLabel.setValue("Workload Warranty:");
+        htmlPanelGrid.getChildren().add(workloadWarrantyLabel);
+        
+        HtmlOutputText workloadWarrantyValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        workloadWarrantyValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.workloadWarranty}", String.class));
+        htmlPanelGrid.getChildren().add(workloadWarrantyValue);
+        
         HtmlOutputText consumedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         consumedLabel.setId("consumedLabel");
         consumedLabel.setValue("Consumed:");
@@ -1674,6 +1977,16 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         versioningValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.versioning}", JJVersion.class));
         versioningValue.setConverter(new JJVersionConverter());
         htmlPanelGrid.getChildren().add(versioningValue);
+        
+        HtmlOutputText buildLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        buildLabel.setId("buildLabel");
+        buildLabel.setValue("Build:");
+        htmlPanelGrid.getChildren().add(buildLabel);
+        
+        HtmlOutputText buildValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        buildValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.build}", JJBuild.class));
+        buildValue.setConverter(new JJBuildConverter());
+        htmlPanelGrid.getChildren().add(buildValue);
         
         HtmlOutputText bugLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugLabel.setId("bugLabel");
@@ -1845,6 +2158,17 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
             String jJVersionStr = String.valueOf(jJVersion.getName() +  " "  + jJVersion.getDescription() +  " "  + jJVersion.getCreationDate() +  " "  + jJVersion.getUpdatedDate());
             if (jJVersionStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJVersion);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJBuild> JJTaskBean.completeBuild(String query) {
+        List<JJBuild> suggestions = new ArrayList<JJBuild>();
+        for (JJBuild jJBuild : jJBuildService.findAllJJBuilds()) {
+            String jJBuildStr = String.valueOf(jJBuild.getName() +  " "  + jJBuild.getDescription() +  " "  + jJBuild.getCreationDate() +  " "  + jJBuild.getUpdatedDate());
+            if (jJBuildStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJBuild);
             }
         }
         return suggestions;

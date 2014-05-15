@@ -152,6 +152,14 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.operation = operation;
     }
     
+    public Boolean JJRequirement.getFinalState() {
+        return this.finalState;
+    }
+    
+    public void JJRequirement.setFinalState(Boolean finalState) {
+        this.finalState = finalState;
+    }
+    
     public Boolean JJRequirement.getCompletion() {
         return this.completion;
     }

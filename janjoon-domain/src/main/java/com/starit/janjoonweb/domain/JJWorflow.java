@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.domain;
 
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -17,8 +18,13 @@ public class JJWorflow extends JJAbstractEntity {
 	@ManyToOne
 	private JJStatus target;
 
-	private String actionworkflow;
+	private String actionWorkflow;
 
 	@ManyToOne
 	private JJContact actor;
+
+	private String objet;
+	
+	@Lob
+	private String event;
 }

@@ -13,8 +13,6 @@ import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.starit.janjoonweb.ui.mb.util.UsageChecker;
-
 //@RooJsfApplicationBean
 @ManagedBean
 @RequestScoped
@@ -40,26 +38,53 @@ public class ApplicationBean {
 	@PostConstruct
 	public void init() {
 
-//		System.out.println("applicationBeanINIT");
-//
-//		 if(UsageChecker.check()) {
-//		 System.out.println("License is correct!");
-//		 }
-//		 else {
-//		 System.out.println("License is NOT correct!");
-//		 }
-//		 if(UsageChecker.checkExpiryDate()) {
-//		 System.out.println("License expiry date is valid!");
-//		 }
-//		 else {
-//		 System.out.println("License expiry date is NOT valid!");
-//		 }
+		// System.out.println("applicationBeanINIT");
+		//
+		// if(UsageChecker.check()) {
+		// System.out.println("License is correct!");
+		// }
+		// else {
+		// System.out.println("License is NOT correct!");
+		// }
+		// if(UsageChecker.checkExpiryDate()) {
+		// System.out.println("License expiry date is valid!");
+		// }
+		// else {
+		// System.out.println("License expiry date is NOT valid!");
+		// }
 
 		menuModel = new DefaultMenuModel();
 
 		DefaultSubMenu submenu;
 		DefaultMenuItem item;
 
+		// ///////////
+		submenu = new DefaultSubMenu("JJAuditLog");
+		submenu.setId("jJAuditLogSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJAuditLogMenuItem");
+		item.setCommand("#{jJAuditLogBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJAuditLogMenuItem");
+		item.setCommand("#{jJAuditLogBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// ///////////
+
+		// ///////////
 		submenu = new DefaultSubMenu("JJBug");
 		submenu.setId("jJBugSubmenu");
 
@@ -291,6 +316,30 @@ public class ApplicationBean {
 		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
 		item.setId("listJJImportanceMenuItem");
 		item.setCommand("#{jJImportanceBean.displayList}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		menuModel.addElement(submenu);
+
+		// //////
+		submenu = new DefaultSubMenu("JJImputation");
+		submenu.setId("jJImputationSubmenu");
+
+		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
+		item.setId("createJJImputationMenuItem");
+		item.setCommand("#{jJImputationBean.displayCreateDialog}");
+		item.setAjax(false);
+		item.setAsync(false);
+		item.setUpdate(":dataForm:data");
+
+		submenu.addElement(item);
+
+		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
+		item.setId("listJJImputationMenuItem");
+		item.setCommand("#{jJImputationBean.displayList}");
 		item.setAjax(false);
 		item.setAsync(false);
 		item.setUpdate(":dataForm:data");

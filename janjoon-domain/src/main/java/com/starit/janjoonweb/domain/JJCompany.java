@@ -27,6 +27,9 @@ public class JJCompany extends JJAbstractEntity {
 	@Lob
 	private String calendar;
 
+	@Lob
+	private String preference;
+
 	private Integer priceload;
 
 	private Integer pricepoint;
