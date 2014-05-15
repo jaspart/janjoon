@@ -100,7 +100,16 @@ public class AuthorizationManager implements Serializable {
 			else
 			{
 				System.out.println(contactRight.get(0).getObjet());
-				return contactRight.get(0).getW();
+				
+				boolean result=false;
+				
+				for (JJRight right:contactRight)
+				{
+					
+					result=right.getW()||result;
+				}
+				
+				return result;
 			}
 		}
 

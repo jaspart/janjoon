@@ -58,6 +58,30 @@ public class TreeOperation {
 			return configManager.addFile(version, name, false);
 	}
 
+	public static boolean uploadFile(File parent, InputStream in, String name)
+			throws IOException {
+		
+		OutputStream out = new FileOutputStream(new File(parent.getPath() + "/"
+				+ name));
+		int read = 0;
+		byte[] bytes = new byte[1024];
+
+		while ((read = in.read(bytes)) != -1) {
+
+			out.write(bytes, 0, read);
+		}
+		in.close();
+
+		out.flush();
+		
+		out.close();
+
+		System.out.println("New file created!");
+		
+		return true;
+
+	}
+
 	public boolean uploadFile(String version, File parent, String uploadedFile,
 			InputStream in) {
 		OutputStream out;

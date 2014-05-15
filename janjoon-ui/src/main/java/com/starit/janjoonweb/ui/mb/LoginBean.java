@@ -1,7 +1,9 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -14,14 +16,19 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ValueChangeEvent;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.extensions.component.ckeditor.CKEditor;
 import org.primefaces.model.UploadedFile;
 import org.apache.myfaces.component.visit.FullVisitContext;
+import org.apache.myfaces.shared.resource.ResourceLoader;
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,14 +39,18 @@ import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 
+import com.starit.janjoonweb.domain.JJAbstractEntity;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.service.SprintUtil;
+import com.starit.janjoonweb.ui.mb.util.service.TreeOperation;
 import com.starit.janjoonweb.ui.security.AuthorizationManager;
 
 @Scope("session")
@@ -390,14 +401,13 @@ public class LoginBean implements Serializable {
 	public void redirectToDev(ActionEvent e) throws IOException {
 
 		JJVersionBean jjVersionBean = (JJVersionBean) findBean("jJVersionBean");
-		JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");		
+		JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
 
 		if (jjVersionBean.getVersion() != null
 				&& jJProductBean.getProduct() != null) {
 
 			if (!FacesContext.getCurrentInstance().getViewRoot().getViewId()
 					.contains("development")) {
-			
 
 				String path = FacesContext.getCurrentInstance()
 						.getExternalContext().getRequestContextPath();
@@ -441,25 +451,24 @@ public class LoginBean implements Serializable {
 
 			JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
 			JJProjectBean jjProjectBean = (JJProjectBean) findBean("jJProjectBean");
-			
+
 			String path = FacesContext.getCurrentInstance()
 					.getExternalContext().getRequestContextPath();
 
 			if (!authorizationManager.getAuthorization(root.getViewId(),
-					jjProjectBean.getProject(), jJProductBean.getProduct())) {	
-				
+					jjProjectBean.getProject(), jJProductBean.getProduct())) {
+
 				System.out.println(false);
 				context.addMessage(null, new FacesMessage(
 						FacesMessage.SEVERITY_ERROR,
 						"You have no permission to access this resource", null));
 
 				context.getExternalContext().getFlash().setKeepMessages(true);
-				
+
 				System.out.println(path);
 				FacesContext.getCurrentInstance().getExternalContext()
 						.redirect(path + "/pages/main.jsf?faces-redirect=true");
-			}else if(root.getViewId().contains("development"))
-			{
+			} else if (root.getViewId().contains("development")) {
 				loadingPage(e);
 			}
 
@@ -467,7 +476,43 @@ public class LoginBean implements Serializable {
 
 	}
 
+//	public void handleFileUpload(FileUploadEvent event) throws IOException {
+//		
+//		CKEditor description = null;		
+//		for(UIComponent component:event.getComponent().getParent().getChildren())
+//		{
+//			if(component.getId().contains("description"))
+//			{
+//				
+//				description=(CKEditor) component;
+//				
+//				break;
+//			}
+//		}			
+//		System.err.println("finded"+description.getId());
+//		
+//		ServletContext servletContext = (ServletContext) FacesContext
+//				.getCurrentInstance().getExternalContext().getContext();
+//		
+////		File targetFolder = new File(
+////				servletContext.getRealPath("/CKEditorImage"));		
+//		File targetFolder = new File(
+//				getClass().getResource("/CKEditorImage").getPath());	
+//		
+//		//servletContext.getResource("/resources/images/CKeditorImages");
+//		
+//		//System.out.println(description.getId());
+//
+//		System.out.println(targetFolder.getPath());
+//		TreeOperation.uploadFile(targetFolder, event.getFile().getInputstream(),
+//						event.getFile().getFileName());		
+//		description.setSubmittedValue(description.getValue()+"image File <img src='resources/images/CKeditorImages/"
+//			+ event.getFile().getFileName() + "' />");	
+//
+//	}
+
 	public UIComponent findComponent(final String id) {
+		
 		FacesContext context = FacesContext.getCurrentInstance();
 		UIViewRoot root = context.getViewRoot();
 		final UIComponent[] found = new UIComponent[1];

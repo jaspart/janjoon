@@ -82,6 +82,7 @@ public class LicenseBean implements Serializable {
 			out.flush();
 
 			out.close();
+			System.out.println(targetFolder.getPath());
 
 		} catch (IOException e) {
 

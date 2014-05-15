@@ -22,7 +22,8 @@
 							update=":specForm" />
 					</ui:repeat>
 
-					<p:commandButton id="commandButton" value="#{messages.specification_import_button}"
+					<p:commandButton id="commandButton"
+						value="#{messages.specification_import_button}"
 						style="float: right;"
 						actionListener="#{jJRequirementBean.loadImportFormat()}"
 						update=":requirementImportDialog"
@@ -35,127 +36,127 @@
 						var="tableDataModel" varStatus="status">
 
 						<td><p:dataTable id="dataTable" var="requirement"
-							value="#{tableDataModel}" paginator="true" rows="6"
-							style="width:99%"
-							filteredValue="#{tableDataModel.filtredRequirements}"
-							widgetVar="#{tableDataModel.nameDataModel}_dataTableWidget">
+								value="#{tableDataModel}" paginator="true" rows="6"
+								style="width:99%"
+								filteredValue="#{tableDataModel.filtredRequirements}"
+								widgetVar="#{tableDataModel.nameDataModel}_dataTableWidget">
 
-							<f:facet name="header">  
+								<f:facet name="header">  
           							#{tableDataModel.nameDataModel}
           							<p:panelGrid>
+										<f:facet name="header">
+											<p:row>
+												<p:column colspan="1">
+													<p:commandButton id="manageChapterButton"
+														icon="ui-icon-document"
+														title="Manage Chapter and Document"
+														update=":chapterDialog"
+														actionListener="#{jJChapterBean.loadData(tableDataModel.categoryId)}"
+														oncomplete="chapterDialogWidget.show()" />
+												</p:column>
+												<p:column colspan="1">
+													<p:commandButton id="releaseRequirementButton"
+														icon=".ui-icon-carat-2-n-s"
+														title="Release All Requirements"
+														actionListener="#{jJRequirementBean.preReleaseRequirement(tableDataModel.categoryId)}"
+														oncomplete="requirementReleaseDialogWidget.show()" />
+
+												</p:column>
+												<p:column colspan="4">
+													<p:inputText id="globalFilter" style="width:100%"
+														onkeyup="#{tableDataModel.nameDataModel}_dataTableWidget.filter()" />
+												</p:column>
+												<p:column colspan="1">
+													<p:commandButton id="newRequirementButton"
+														icon="ui-icon-plus" title="New Requirement"
+														actionListener="#{jJRequirementBean.newRequirement(tableDataModel.categoryId)}"
+														update=":requirementDialog"
+														oncomplete="requirementDialogWidget.show()" />
+												</p:column>
+												<p:column colspan="1">
+													<h:commandLink id="pdf"
+														actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}">
+														<p:graphicImage value="/resources/images/pdf.png" />
+														<p:dataExporter type="pdf" target="dataTable"
+															fileName="Document"
+															preProcessor="#{jJChapterBean.preProcessPDF}" />
+													</h:commandLink>
+													<p:tooltip for="pdf" value="export to PDF"
+														showEffect="fade" hideEffect="fade" />
+												</p:column>
+											</p:row>
+										</f:facet>
+									</p:panelGrid>
+								</f:facet>
+
+								<p:column filterBy="name" filterStyle="display:none"
+									style="width:25%">
 									<f:facet name="header">
-										<p:row>
-											<p:column colspan="1">
-												<p:commandButton id="manageChapterButton"
-													icon="ui-icon-document"
-													title="Manage Chapter and Document"
-													update=":chapterDialog"
-													actionListener="#{jJChapterBean.loadData(tableDataModel.categoryId)}"
-													oncomplete="chapterDialogWidget.show()" />
-											</p:column>
-											<p:column colspan="1">
-												<p:commandButton id="releaseRequirementButton"
-													icon=".ui-icon-carat-2-n-s"
-													title="Release All Requirements"
-													actionListener="#{jJRequirementBean.preReleaseRequirement(tableDataModel.categoryId)}"
-													oncomplete="requirementReleaseDialogWidget.show()" />
-
-											</p:column>
-											<p:column colspan="4">
-												<p:inputText id="globalFilter" style="width:100%"
-													onkeyup="#{tableDataModel.nameDataModel}_dataTableWidget.filter()" />
-											</p:column>
-											<p:column colspan="1">
-												<p:commandButton id="newRequirementButton"
-													icon="ui-icon-plus" title="New Requirement"
-													actionListener="#{jJRequirementBean.newRequirement(tableDataModel.categoryId)}"
-													update=":requirementDialog"
-													oncomplete="requirementDialogWidget.show()" />
-											</p:column>
-											<p:column colspan="1">
-												<h:commandLink id="pdf"
-													actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}">
-													<p:graphicImage value="/resources/images/pdf.png" />
-													<p:dataExporter type="pdf" target="dataTable"
-														fileName="Document"
-													preProcessor="#{jJChapterBean.preProcessPDF}" />
-												</h:commandLink>
-												<p:tooltip for="pdf" value="export to PDF"
-													showEffect="fade" hideEffect="fade" />
-											</p:column>
-										</p:row>
+										<h:outputText
+											value="#{messages.specification_table_requirement_title}" />
 									</f:facet>
-								</p:panelGrid>
-							</f:facet>
+									<h:outputText value="#{requirement.name}" />
+								</p:column>
 
-							<p:column filterBy="name" filterStyle="display:none"
-								style="width:25%">
-								<f:facet name="header">
-									<h:outputText
-										value="#{messages.specification_table_requirement_title}" />
-								</f:facet>
-								<h:outputText value="#{requirement.name}" />
-							</p:column>
+								<p:column filterBy="product.name" filterStyle="display:none"
+									style="width:25%">
+									<f:facet name="header">
+										<h:outputText
+											value="#{messages.specification_table_product_title}" />
+									</f:facet>
+									<h:outputText value="#{requirement.product.name}" />
+								</p:column>
 
-							<p:column filterBy="product.name" filterStyle="display:none"
-								style="width:25%">
-								<f:facet name="header">
-									<h:outputText
-										value="#{messages.specification_table_product_title}" />
-								</f:facet>
-								<h:outputText value="#{requirement.product.name}" />
-							</p:column>
+								<p:column filterBy="chapter.name" filterStyle="display:none"
+									style="width:25%">
+									<f:facet name="header">
+										<h:outputText
+											value="#{messages.specification_table_chapter_title}" />
+									</f:facet>
+									<h:outputText value="#{requirement.chapter.name}" />
+								</p:column>
 
-							<p:column filterBy="chapter.name" filterStyle="display:none"
-								style="width:25%">
-								<f:facet name="header">
-									<h:outputText
-										value="#{messages.specification_table_chapter_title}" />
-								</f:facet>
-								<h:outputText value="#{requirement.chapter.name}" />
-							</p:column>
-
-							<p:column exportable="false" styleClass="action-column">
-								<f:facet name="header">
-									<h:outputText
-										value="#{messages.specification_table_actions_title}" />
-								</f:facet>
-								<p:commandButton id="editButton" icon="ui-icon-pencil"
-									action="#{jJRequirementBean.editRequirement()}"
-									oncomplete="requirementDialogWidget.show()"
-									update=":requirementDialog"
-									disabled="#{jJRequirementBean.getDisabledEdit(requirement)}">
-									<f:setPropertyActionListener value="#{requirement}"
-										target="#{jJRequirementBean.requirement}" />
-								</p:commandButton>
-								<p:tooltip for="editButton" value="#{messages.label_edit}"
-									showEffect="fade" hideEffect="fade" />
-
-								<p:commandButton id="deleteButton" icon="ui-icon-trash"
-									oncomplete="requirementDeleteDialogWidget.show()"
-									title="#{messages.label_delete}">
-									<f:setPropertyActionListener value="#{requirement}"
-										target="#{jJRequirementBean.requirement}" />
+								<p:column exportable="false" styleClass="action-column">
+									<f:facet name="header">
+										<h:outputText
+											value="#{messages.specification_table_actions_title}" />
+									</f:facet>
+									<p:commandButton id="editButton" icon="ui-icon-pencil"
+										action="#{jJRequirementBean.editRequirement()}"
+										oncomplete="requirementDialogWidget.show()"
+										update=":requirementDialog"
+										disabled="#{jJRequirementBean.getDisabledEdit(requirement)}">
+										<f:setPropertyActionListener value="#{requirement}"
+											target="#{jJRequirementBean.requirement}" />
 									</p:commandButton>
-								<p:tooltip for="deleteButton" value="#{messages.label_delete}"
-									showEffect="fade" hideEffect="fade" />
+									<p:tooltip for="editButton" value="#{messages.label_edit}"
+										showEffect="fade" hideEffect="fade" />
 
-							</p:column>
-							<f:facet name="footer">#{messages.specification_progress_footer}
+									<p:commandButton id="deleteButton" icon="ui-icon-trash"
+										oncomplete="requirementDeleteDialogWidget.show()"
+										title="#{messages.label_delete}">
+										<f:setPropertyActionListener value="#{requirement}"
+											target="#{jJRequirementBean.requirement}" />
+									</p:commandButton>
+									<p:tooltip for="deleteButton" value="#{messages.label_delete}"
+										showEffect="fade" hideEffect="fade" />
+
+								</p:column>
+								<f:facet name="footer">#{messages.specification_progress_footer}
 								<p:row>
-									<p:progressBar id="completion" style="width:385px"
-										value="#{tableDataModel.coverageProgress}"
-										labelTemplate="#{messages.specification_coverage_progress} {value}%"
-										displayOnly="true" />
-								</p:row>
-								<p:row>
-									<p:progressBar id="coverage" style="width:385px"
-										value="#{tableDataModel.completionProgress}"
-										labelTemplate="#{messages.specification_completion_progress} {value}%"
-										displayOnly="true" />
-								</p:row>
-							</f:facet>
-						</p:dataTable></td>
+										<p:progressBar id="completion" style="width:385px"
+											value="#{tableDataModel.coverageProgress}"
+											labelTemplate="#{messages.specification_coverage_progress} {value}%"
+											displayOnly="true" />
+									</p:row>
+									<p:row>
+										<p:progressBar id="coverage" style="width:385px"
+											value="#{tableDataModel.completionProgress}"
+											labelTemplate="#{messages.specification_completion_progress} {value}%"
+											displayOnly="true" />
+									</p:row>
+								</f:facet>
+							</p:dataTable></td>
 					</ui:repeat>
 				</tr>
 			</table>
@@ -174,8 +175,7 @@
 							<p:row>
 								<p:column>
 									<p:inputText id="name"
-										value="#{jJRequirementBean.requirement.name}"
-										required="true"
+										value="#{jJRequirementBean.requirement.name}" required="true"
 										widgetVar="nameWidget"
 										label="#{messages.specification_create_name_label}"
 										requiredMessage="#{messages.specification_create_name_alert}">
@@ -185,7 +185,8 @@
 										value="#{messages.specification_create_name_watermark}" />
 								</p:column>
 								<p:column>
-									<h:outputText for="status" value="#{messages.specification_create_status_label}" />
+									<h:outputText for="status"
+										value="#{messages.specification_create_status_label}" />
 									<p:selectOneMenu id="status"
 										value="#{jJRequirementBean.requirementStatus}"
 										panelStyle="width:150px" effect="fade" style="width:150px"
@@ -204,14 +205,16 @@
 									</p:selectOneMenu>
 								</p:column>
 								<p:column>
-									<h:outputText for="project" value="#{messages.specification_create_project_label}" />
+									<h:outputText for="project"
+										value="#{messages.specification_create_project_label}" />
 									<p:selectOneMenu id="project"
 										value="#{jJRequirementBean.requirementProject}"
 										panelStyle="width:150px" effect="fade" style="width:150px"
-										filter="true" filterMatchMode="startsWith" disabled="jJRequirementBean.requirementProject != null">
+										filter="true" filterMatchMode="startsWith"
+										disabled="jJRequirementBean.requirementProject != null">
 										<f:converter
 											converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
-										<f:selectItem 
+										<f:selectItem
 											itemLabel="#{jJRequirementBean.requirementProject.name}"
 											itemValue="#{jJRequirementBean.requirementProject}" />
 										<f:selectItems
@@ -224,7 +227,8 @@
 							</p:row>
 							<p:row>
 								<p:column>
-									<h:outputText for="product" value="#{messages.specification_create_product_label}" />
+									<h:outputText for="product"
+										value="#{messages.specification_create_product_label}" />
 									<p:selectOneMenu id="product"
 										value="#{jJRequirementBean.requirementProduct}"
 										panelStyle="width:150px" effect="fade" style="width:150px"
@@ -242,7 +246,8 @@
 									</p:selectOneMenu>
 								</p:column>
 								<p:column>
-									<h:outputText for="version" value="#{messages.specification_create_version_label}" />
+									<h:outputText for="version"
+										value="#{messages.specification_create_version_label}" />
 									<p:selectOneMenu id="version"
 										value="#{jJRequirementBean.requirementVersion}"
 										panelStyle="width:150px" effect="fade" style="width:150px"
@@ -261,7 +266,8 @@
 									</p:selectOneMenu>
 								</p:column>
 								<p:column>
-									<h:outputText for="chapter" value="#{messages.specification_create_chapter_label}" />
+									<h:outputText for="chapter"
+										value="#{messages.specification_create_chapter_label}" />
 									<p:selectOneMenu id="chapter"
 										value="#{jJRequirementBean.requirementChapter}"
 										panelStyle="width:150px" effect="fade" style="width:150px"
@@ -316,19 +322,26 @@
 							</p:row>
 							<p:row>
 								<p:column colspan="3">
-									<h:outputText value="#{messages.specification_create_description_label}" />
-									<pe:ckEditor id="description" widgetVar="descriptionWidget"
+									<h:outputText
+										value="#{messages.specification_create_description_label}" />
+									<pe:ckEditor  id="description" widgetVar="descriptionWidget"
 										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
-										style="width:680px"		 								
+										style="width:680px" 
 										value="#{jJRequirementBean.requirement.description}"
 										required="true"
-										requiredMessage="Requirement Description is a required value">
-									</pe:ckEditor>															
+										requiredMessage="Requirement Description is a required value" />
+<!-- 									<p:fileUpload sizeLimit="1000000" fileLimit="3" -->
+<!-- 										allowTypes="/(\.|\/)(gif|jpe?g|png)$/" -->
+<!-- 										update="description" -->
+<!-- 										fileUploadListener="#{loginBean.handleFileUpload}" > -->
+<!-- 										<f:attribute name="field" value="#{jJRequirementBean.requirement}" /> -->
+<!-- 									</p:fileUpload> -->
 								</p:column>
 							</p:row>
 							<p:row>
 								<p:column>
-									<h:outputText value="#{messages.specification_create_initiate_label}" />
+									<h:outputText
+										value="#{messages.specification_create_initiate_label}" />
 									<p:selectBooleanCheckbox
 										value="#{jJRequirementBean.initiateTask}"
 										disabled="#{jJRequirementBean.disabledInitTask}">
@@ -352,7 +365,8 @@
 								</p:column>
 
 								<p:column>
-									<h:outputText value="#{messages.specification_create_completed_label}" />
+									<h:outputText
+										value="#{messages.specification_create_completed_label}" />
 									<p:selectBooleanCheckbox id="completion"
 										value="#{jJRequirementBean.task.completed}"
 										disabled="#{jJRequirementBean.disabledTask}">
@@ -366,13 +380,15 @@
 									<p:inputTextarea id="note" rows="3" cols="100"
 										value="#{jJRequirementBean.requirement.note}"
 										autoResize="false" />
-									<p:watermark for="note" value="#{messages.specification_create_note_watermark}" />
+									<p:watermark for="note"
+										value="#{messages.specification_create_note_watermark}" />
 								</p:column>
 							</p:row>
 							<f:facet name="footer">
 								<p:row>
 									<p:column colspan="3">
-										<p:commandButton value="#{messages.specification_create_save_button}"
+										<p:commandButton
+											value="#{messages.specification_create_save_button}"
 											action="#{jJRequirementBean.save()}" process="@form"
 											update="requirementDialogForm" />
 									</p:column>
@@ -384,7 +400,8 @@
 			</p:outputPanel>
 		</p:dialog>
 
-		<p:dialog id="chapterDialog" header="#{messages.specification_chapter_header}" modal="true"
+		<p:dialog id="chapterDialog"
+			header="#{messages.specification_chapter_header}" modal="true"
 			widgetVar="chapterDialogWidget" dynamic="true" resizable="false">
 			<p:ajax event="close" update=":specForm"
 				listener="#{jJChapterBean.closeDialog}" />
@@ -401,10 +418,12 @@
 										requiredMessage="#{message.specification_chapter_name_alert}">
 									</p:inputText>
 									<p:message for="name" id="msgName" />
-									<p:watermark for="name" value="#{messages.specification_create_name_watermark}" />
+									<p:watermark for="name"
+										value="#{messages.specification_create_name_watermark}" />
 								</p:column>
 								<p:column colspan="2">
-									<h:outputText for="parent" value="#{messages.specification_chapter_parent_label}" />
+									<h:outputText for="parent"
+										value="#{messages.specification_chapter_parent_label}" />
 									<p:selectOneMenu id="parent"
 										value="#{jJChapterBean.parentChapter}"
 										panelStyle="width:150px" effect="fade" style="width:160px"
@@ -423,7 +442,8 @@
 							</p:row>
 							<p:row>
 								<p:column colspan="2">
-									<h:outputText value="#{messages.specification_chapter_description_label}" />
+									<h:outputText
+										value="#{messages.specification_chapter_description_label}" />
 									<pe:ckEditor id="description" widgetVar="descriptionWidget"
 										style="width:388px"
 										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
@@ -433,16 +453,19 @@
 								</p:column>
 								<p:column colspan="2">
 									<p:contextMenu for="chapterTreeSingle">
-										<p:menuitem value="#{message.specification_chapter_edit_menuitem}"
+										<p:menuitem
+											value="#{message.specification_chapter_edit_menuitem}"
 											actionListener="#{jJChapterBean.editChapter()}"
 											process="@this" icon="ui-icon-pencil"
 											update="chapterDialogForm" />
-										<p:menuitem value="#{message.specification_chapter_delete_menuitem}"
+										<p:menuitem
+											value="#{message.specification_chapter_delete_menuitem}"
 											actionListener="#{jJChapterBean.deleteChapter()}"
 											process="@this" icon="ui-icon-close"
 											update="chapterDialogForm" />
 									</p:contextMenu>
-									<h:outputText value="#{message.specification_chapter_tree_label}" />
+									<h:outputText
+										value="#{message.specification_chapter_tree_label}" />
 									<p:tree id="chapterTreeSingle"
 										value="#{jJChapterBean.chapterRoot}" var="nodeChapter"
 										selectionMode="single"
@@ -459,7 +482,8 @@
 							<f:facet name="footer">
 								<p:row>
 									<p:column colspan="3">
-										<p:commandButton value="#{message.specification_chapter_save_button}"
+										<p:commandButton
+											value="#{message.specification_chapter_save_button}"
 											action="#{jJChapterBean.save()}"
 											process="@widgetVar(nameWidget) @widgetVar(parentWidget) @widgetVar(descriptionWidget)"
 											update="chapterDialogForm" />
@@ -512,9 +536,8 @@
 		<p:confirmDialog id="requirementDeleteDialog"
 			header="#{messages.specification_delete_title}"
 			message="#{messages.specification_delete_label}"
-			widgetVar="requirementDeleteDialogWidget"
-			showEffect="fade" hideEffect="fade"
-			severity="alarm">
+			widgetVar="requirementDeleteDialogWidget" showEffect="fade"
+			hideEffect="fade" severity="alarm">
 			<p:outputPanel id="requirementDeletePanel">
 				<h:form id="requirementDeleteForm">
 					<p:commandButton id="deleteYesButton"
@@ -531,9 +554,8 @@
 		<p:confirmDialog id="requirementReleaseDialog"
 			header="#{messages.specification_release_title}"
 			message="#{messages.specification_release_label}"
-			widgetVar="requirementReleaseDialogWidget"
-			showEffect="fade" hideEffect="fade"
-			severity="alarm">
+			widgetVar="requirementReleaseDialogWidget" showEffect="fade"
+			hideEffect="fade" severity="alarm">
 			<p:outputPanel id="requirementReleasePanel">
 				<h:form id="requirementReleaseForm">
 					<p:commandButton id="releaseYesButton"
@@ -562,7 +584,8 @@
 							<p:panelGrid style="margin-top:10px">
 								<p:row>
 									<p:column>
-										<h:outputText value="#{messages.specification_import_project_label}" />
+										<h:outputText
+											value="#{messages.specification_import_project_label}" />
 										<p:selectOneMenu id="projectSelectOneMenu"
 											value="#{jJRequirementBean.importProject}"
 											panelStyle="width:150px" effect="fade" style="width:160px"
@@ -580,7 +603,8 @@
 										</p:selectOneMenu>
 									</p:column>
 									<p:column>
-										<h:outputText value="#{messages.specification_import_category_label}" />
+										<h:outputText
+											value="#{messages.specification_import_category_label}" />
 										<p:selectOneMenu id="categorySelectOneMenu"
 											value="#{jJRequirementBean.importCategory}"
 											panelStyle="width:150px" effect="fade" style="width:160px"
@@ -603,7 +627,8 @@
 								<p:row>
 
 									<p:column>
-										<h:outputText value="#{messages.specification_import_product_label}" />
+										<h:outputText
+											value="#{messages.specification_import_product_label}" />
 										<p:selectOneMenu id="productSelectOneMenu"
 											value="#{jJRequirementBean.importProduct}"
 											panelStyle="width:150px" effect="fade" style="width:160px"
@@ -621,7 +646,8 @@
 										</p:selectOneMenu>
 									</p:column>
 									<p:column>
-										<h:outputText value="#{messages.specification_import_version_label}" />
+										<h:outputText
+											value="#{messages.specification_import_version_label}" />
 										<p:selectOneMenu id="versionSelectOneMenu"
 											value="#{jJRequirementBean.importVersion}"
 											panelStyle="width:150px" effect="fade" style="width:160px"
@@ -644,7 +670,8 @@
 								</p:row>
 								<p:row>
 									<p:column>
-										<h:outputText value="#{messages.specification_import_status_label}" />
+										<h:outputText
+											value="#{messages.specification_import_status_label}" />
 										<p:selectOneMenu id="statusSelectOneMenu"
 											value="#{jJRequirementBean.importStatus}"
 											panelStyle="width:150px" effect="fade" style="width:160px"
@@ -668,7 +695,8 @@
 								style="width:500px;" scrollHeight="300"
 								value="#{jJRequirementBean.importFormats}">
 								<f:facet name="header">
-									<h:outputText value="#{messages.specification_import_table_title}" />
+									<h:outputText
+										value="#{messages.specification_import_table_title}" />
 								</f:facet>
 
 								<p:column style="width:30%">
@@ -682,7 +710,8 @@
 												</p:selectBooleanCheckbox>
 											</p:column>
 											<p:column>
-												<h:outputText value="#{messages.specification_import_requirement_header}" />
+												<h:outputText
+													value="#{messages.specification_import_requirement_header}" />
 											</p:column>
 										</p:row>
 									</f:facet>
@@ -704,7 +733,8 @@
 												</p:selectBooleanCheckbox>
 											</p:column>
 											<p:column>
-												<h:outputText value="#{messages.specification_import_testcase_header}" />
+												<h:outputText
+													value="#{messages.specification_import_testcase_header}" />
 											</p:column>
 										</p:row>
 									</f:facet>
@@ -726,7 +756,8 @@
 												</p:selectBooleanCheckbox>
 											</p:column>
 											<p:column>
-												<h:outputText value="#{messages.specification_import_chapter_header}" />
+												<h:outputText
+													value="#{messages.specification_import_chapter_header}" />
 											</p:column>
 										</p:row>
 									</f:facet>
