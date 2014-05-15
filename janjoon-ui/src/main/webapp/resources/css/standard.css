@@ -126,16 +126,44 @@ a:visited {
 	z-index: 0;
 }
 
+.TestcaseWithoutTeststep {
+	background-color: #CCCCCC;
+	font-weight: bold;
+}
+
 .TestcaseNotExecuted {
-	color: blue;
+	color: #0000FF;
+	font-weight: bold;
 }
 
 .TestcaseFailed {
-	color: red;
+	color: #FF0000;
+	font-weight: bold;
+}
+
+.TestcaseFailedWithoutBuild {
+	background-color: #FF8888;
+	font-weight: bold;
+}
+
+.TestcaseNonFini {
+	color: #F7BE81;
+	font-weight: bold;
+}
+
+.TestcaseNonFiniWithoutBuild {
+	background-color: #F5D0A9;
+	font-weight: bold;
 }
 
 .TestcaseSuccess {
-	color: green;
+	color: #00FF00;
+	font-weight: bold;
+}
+
+.TestcaseSuccessWithoutBuild {
+	background-color: #88FF88;
+	font-weight: bold;
 }
 
 .TestcaseChapter {

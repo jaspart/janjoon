@@ -37,7 +37,7 @@
 
 						<td><p:dataTable id="dataTable" var="requirement"
 								value="#{tableDataModel}" paginator="true" rows="6"
-								style="width:99%"
+								style="width:99%" sortMode="multiple"
 								filteredValue="#{tableDataModel.filtredRequirements}"
 								widgetVar="#{tableDataModel.nameDataModel}_dataTableWidget">
 
@@ -90,7 +90,7 @@
 								</f:facet>
 
 								<p:column filterBy="name" filterStyle="display:none"
-									style="width:25%">
+									style="width:25%" sortBy="id">
 									<f:facet name="header">
 										<h:outputText
 											value="#{messages.specification_table_requirement_title}" />
@@ -99,7 +99,7 @@
 								</p:column>
 
 								<p:column filterBy="product.name" filterStyle="display:none"
-									style="width:25%">
+									style="width:25%" sortBy="product.name">
 									<f:facet name="header">
 										<h:outputText
 											value="#{messages.specification_table_product_title}" />
@@ -108,7 +108,7 @@
 								</p:column>
 
 								<p:column filterBy="chapter.name" filterStyle="display:none"
-									style="width:25%">
+									style="width:25%" sortBy="chapter.name">
 									<f:facet name="header">
 										<h:outputText
 											value="#{messages.specification_table_chapter_title}" />
@@ -210,8 +210,8 @@
 									<p:selectOneMenu id="project"
 										value="#{jJRequirementBean.requirementProject}"
 										panelStyle="width:150px" effect="fade" style="width:150px"
-										filter="true" filterMatchMode="startsWith"
-										disabled="jJRequirementBean.requirementProject != null">
+										filter="true" filterMatchMode="startsWith" disabled="true">
+
 										<f:converter
 											converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
 										<f:selectItem
@@ -324,18 +324,18 @@
 								<p:column colspan="3">
 									<h:outputText
 										value="#{messages.specification_create_description_label}" />
-									<pe:ckEditor  id="description" widgetVar="descriptionWidget"
+									<pe:ckEditor id="description" widgetVar="descriptionWidget"
 										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
-										style="width:680px" 
+										style="width:680px"
 										value="#{jJRequirementBean.requirement.description}"
 										required="true"
 										requiredMessage="Requirement Description is a required value" />
-<!-- 									<p:fileUpload sizeLimit="1000000" fileLimit="3" -->
-<!-- 										allowTypes="/(\.|\/)(gif|jpe?g|png)$/" -->
-<!-- 										update="description" -->
-<!-- 										fileUploadListener="#{loginBean.handleFileUpload}" > -->
-<!-- 										<f:attribute name="field" value="#{jJRequirementBean.requirement}" /> -->
-<!-- 									</p:fileUpload> -->
+									<!-- 									<p:fileUpload sizeLimit="1000000" fileLimit="3" -->
+									<!-- 										allowTypes="/(\.|\/)(gif|jpe?g|png)$/" -->
+									<!-- 										update="description" -->
+									<!-- 										fileUploadListener="#{loginBean.handleFileUpload}" > -->
+									<!-- 										<f:attribute name="field" value="#{jJRequirementBean.requirement}" /> -->
+									<!-- 									</p:fileUpload> -->
 								</p:column>
 							</p:row>
 							<p:row>

@@ -494,6 +494,10 @@ public class JJTeststepexecutionBean {
 
 		jJTestcaseexecutionBean.setTestcaseexecution(null);
 
+		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
+				.getAttribute("jJTestcaseBean");
+		jJTestcaseBean.loadData();
+
 		System.out.println("end close dialog");
 	}
 

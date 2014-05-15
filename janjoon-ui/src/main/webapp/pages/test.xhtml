@@ -29,8 +29,8 @@
 									<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
 									<f:selectItems value="#{jJBuildBean.builds}" var="c"
 										itemLabel="#{c.name}" itemValue="#{c}" />
-									<p:ajax process="@this" partialSubmit="true"
-										update=":testFormCenter" />
+									<p:ajax process="@this" partialSubmit="true" listener="#{jJTestcaseBean.loadData()}"
+										update=":testFormWest :testFormCenter"  />
 								</p:selectOneMenu>
 							</p:column>
 						</p:row>
@@ -54,9 +54,45 @@
 									<p:ajax event="select"
 										listener="#{jJTestcaseBean.onNodeSelect}"
 										update=":testFormCenter :testFormWest:exportPDF" />
+
 									<p:treeNode>
-										<h:outputText value="#{node}" />
-										<!--styleClass="#{node.styleClass}" /-->
+										<h:outputText value="#{node}" styleClass="TestcaseChapter" />
+									</p:treeNode>
+
+									<p:treeNode type="TWT">
+										<h:outputText value="#{node}"
+											styleClass="TestcaseWithoutTeststep" />
+									</p:treeNode>
+
+									<p:treeNode type="TNE">
+										<h:outputText value="#{node}" styleClass="TestcaseNotExecuted" />
+									</p:treeNode>
+
+									<p:treeNode type="TF">
+										<h:outputText value="#{node}" styleClass="TestcaseFailed" />
+									</p:treeNode>
+
+									<p:treeNode type="TFWB">
+										<h:outputText value="#{node}"
+											styleClass="TestcaseFailedWithoutBuild" />
+									</p:treeNode>
+
+									<p:treeNode type="TS">
+										<h:outputText value="#{node}" styleClass="TestcaseSuccess" />
+									</p:treeNode>
+
+									<p:treeNode type="TSWB">
+										<h:outputText value="#{node}"
+											styleClass="TestcaseSuccessWithoutBuild" />
+									</p:treeNode>
+									
+										<p:treeNode type="TNF">
+										<h:outputText value="#{node}" styleClass="TestcaseNonFini" />
+									</p:treeNode>
+
+									<p:treeNode type="TNFWB">
+										<h:outputText value="#{node}"
+											styleClass="TestcaseNonFiniWithoutBuild" />
 									</p:treeNode>
 								</p:tree>
 							</p:column>
@@ -141,12 +177,6 @@
 									<h:outputText
 										value="Requirement: #{jJTestcaseBean.testcase.requirement.name}" />
 								</p:column>
-								<!-- 							<p:column> -->
-								<!-- 								<h:outputText value="Description :" /> -->
-								<!-- 								<p:editor id="description" widgetVar="descriptionWidget" -->
-								<!-- 									style="width:500px;" -->
-								<!-- 									value="#{jJTestcaseBean.testcase.description}" disabled="true" /> -->
-								<!-- 							</p:column> -->
 								<p:column>
 									<p:commandButton id="editButton" icon="ui-icon-pencil"
 										oncomplete="testcaseDialogWidget.show()"
@@ -466,7 +496,7 @@
 												toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
 												value="#{jJTeststepexecutionBean.bug.description}"
 												required="true"
-												disabled="#{jJTeststepexecutionBean.disabled}"
+												readOnly="#{jJTeststepexecutionBean.disabled}"
 												requiredMessage="Testcase Description is a required value" />
 											<p:message for="description" id="msgDescription" />
 										</p:column>
@@ -514,15 +544,9 @@
 							</p:column>
 						</p:row>
 					</p:panelGrid>
-
-
 				</h:form>
-
 			</p:outputPanel>
-
-
 		</p:dialog>
-
 	</ui:define>
 </ui:composition>
 </html>

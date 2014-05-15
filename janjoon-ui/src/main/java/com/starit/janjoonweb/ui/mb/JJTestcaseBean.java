@@ -15,6 +15,8 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -43,7 +45,6 @@ import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTeststepService;
 import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.ui.mb.util.CustomTreeNode;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
@@ -89,8 +90,8 @@ public class JJTestcaseBean {
 
 	private JJCategory category;
 
-	private CustomTreeNode rootNode;
-	private CustomTreeNode selectedNode;
+	private TreeNode rootNode;
+	private TreeNode selectedNode;
 
 	private List<TestCaseRecap> testCaseRecaps;
 	private boolean rendredTestCaseRecaps;
@@ -123,7 +124,7 @@ public class JJTestcaseBean {
 	}
 
 	public JJProject getProject() {
-		
+
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJProjectBean jJProjectBean = (JJProjectBean) session
@@ -173,19 +174,19 @@ public class JJTestcaseBean {
 		this.category = category;
 	}
 
-	public CustomTreeNode getRootNode() {
+	public TreeNode getRootNode() {
 		return rootNode;
 	}
 
-	public void setRootNode(CustomTreeNode rootNode) {
+	public void setRootNode(TreeNode rootNode) {
 		this.rootNode = rootNode;
 	}
 
-	public CustomTreeNode getSelectedNode() {
+	public TreeNode getSelectedNode() {
 		return selectedNode;
 	}
 
-	public void setSelectedNode(CustomTreeNode selectedNode) {
+	public void setSelectedNode(TreeNode selectedNode) {
 		this.selectedNode = selectedNode;
 	}
 
@@ -325,7 +326,7 @@ public class JJTestcaseBean {
 
 	public void loadData() {
 
-		System.out.println("load data in test");
+		System.out.println("load data in testcase");
 
 		this.getProject();
 		this.getProduct();
@@ -531,12 +532,10 @@ public class JJTestcaseBean {
 
 	private void createTestcaseTree() {
 
-		rootNode = new CustomTreeNode("Root", null);
-		rootNode.setStyleClass("TestcaseChapter");
+		rootNode = new DefaultTreeNode("Root", null);
 
-		CustomTreeNode projectNode = new CustomTreeNode("P-" + project.getId()
+		TreeNode projectNode = new DefaultTreeNode("P-" + project.getId()
 				+ "- " + project.getName(), rootNode);
-		projectNode.setStyleClass("TestcaseChapter");
 
 		projectNode.setExpanded(true);
 
@@ -544,9 +543,8 @@ public class JJTestcaseBean {
 				false, true, true);
 		for (JJCategory category : categories) {
 
-			CustomTreeNode categoryNode = new CustomTreeNode("C-"
-					+ category.getId() + "- " + category.getName(), projectNode);
-			categoryNode.setStyleClass("TestcaseChapter");
+			TreeNode categoryNode = new DefaultTreeNode("C-" + category.getId()
+					+ "- " + category.getName(), projectNode);
 
 			categoryNode.setExpanded(true);
 
@@ -554,9 +552,7 @@ public class JJTestcaseBean {
 					.getParentsChapter(project, category, true, true);
 
 			for (JJChapter chapter : parentChapters) {
-				CustomTreeNode node = createTree(chapter, categoryNode,
-						category);
-				node.setStyleClass("TestcaseChapter");
+				TreeNode node = createTree(chapter, categoryNode, category);
 			}
 		}
 
@@ -635,13 +631,11 @@ public class JJTestcaseBean {
 	}
 
 	// Recursive function to create tree
-	private CustomTreeNode createTree(JJChapter chapterParent,
-			CustomTreeNode rootNode, JJCategory category) {
+	private TreeNode createTree(JJChapter chapterParent, TreeNode rootNode,
+			JJCategory category) {
 
-		CustomTreeNode newNode = new CustomTreeNode("CH-"
-				+ chapterParent.getId() + "- " + chapterParent.getName(),
-				rootNode);
-		newNode.setStyleClass("TestcaseChapter");
+		TreeNode newNode = new DefaultTreeNode("CH-" + chapterParent.getId()
+				+ "- " + chapterParent.getName(), rootNode);
 
 		SortedMap<Integer, Object> elements = getSortedElements(chapterParent,
 				project, product, category, true);
@@ -654,8 +648,7 @@ public class JJTestcaseBean {
 			if (className.equalsIgnoreCase("JJChapter")) {
 
 				JJChapter chapter = (JJChapter) entry.getValue();
-				CustomTreeNode newNode2 = createTree(chapter, newNode, category);
-				newNode2.setStyleClass("TestcaseChapter");
+				TreeNode newNode2 = createTree(chapter, newNode, category);
 
 			} else if (className.equalsIgnoreCase("JJRequirement")) {
 
@@ -671,15 +664,109 @@ public class JJTestcaseBean {
 		for (Map.Entry<Integer, JJTestcase> testcaseEntry : testcaseElements
 				.entrySet()) {
 			JJTestcase testcase = testcaseEntry.getValue();
-			CustomTreeNode newNode3 = new CustomTreeNode("TC-"
+			String type = getType(testcase);
+			TreeNode newNode3 = new DefaultTreeNode(type, "TC-"
 					+ testcase.getId() + "- " + testcase.getName(), newNode);
-			newNode3.setStyleClass("TestcaseNotExecuted");
 
 		}
 
 		newNode.setExpanded(true);
 
 		return newNode;
+	}
+
+	private String getType(JJTestcase testcase) {
+
+		JJTestcase tc = jJTestcaseService.findJJTestcase(testcase.getId());
+
+		boolean hasTS = false;
+
+		for (JJTeststep teststep : tc.getTeststeps()) {
+			if (teststep.getEnabled()) {
+				hasTS = true;
+				break;
+			}
+		}
+
+		if (hasTS) {
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+			JJBuildBean jJBuildBean = (JJBuildBean) session
+					.getAttribute("jJBuildBean");
+
+			JJBuild build = jJBuildBean.getBuild();
+
+			List<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionService
+					.getTestcaseexecutions(testcase, build, true, true, false);
+
+			if (build != null) {
+				if (testcaseexecutions.isEmpty()) {
+
+					testcaseexecutions = jJTestcaseexecutionService
+							.getTestcaseexecutions(testcase, null, true, true,
+									false);
+					if (testcaseexecutions.isEmpty()) {
+						return "TNE";
+					} else {
+						JJTestcaseexecution testcaseexecution = testcaseexecutions
+								.get(0);
+						if (testcaseexecution.getPassed() != null) {
+
+							if (testcaseexecution.getPassed()) {
+								return "TSWB";
+							} else {
+								return "TFWB";
+							}
+
+						} else {
+							return "NFWB";
+						}
+					}
+
+				} else {
+
+					JJTestcaseexecution testcaseexecution = testcaseexecutions
+							.get(0);
+					if (testcaseexecution.getPassed() != null) {
+
+						if (testcaseexecution.getPassed()) {
+							return "TS";
+						} else {
+							return "TF";
+						}
+
+					} else {
+						return "TNF";
+					}
+
+				}
+			} else {
+
+				if (testcaseexecutions.isEmpty()) {
+					return "TNE";
+				} else {
+
+					JJTestcaseexecution testcaseexecution = testcaseexecutions
+							.get(0);
+					if (testcaseexecution.getPassed() != null) {
+
+						if (testcaseexecution.getPassed()) {
+							return "TSWB";
+						} else {
+							return "TFWB";
+						}
+
+					} else {
+						return "TNFWB";
+					}
+
+				}
+			}
+		} else {
+			return "TWT";
+		}
+
 	}
 
 	public SortedMap<Integer, Object> getSortedElements(JJChapter parent,
