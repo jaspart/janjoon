@@ -16,6 +16,7 @@ import org.primefaces.model.UploadedFile;
 @ManagedBean
 @SessionScoped
 public class LicenseBean implements Serializable {
+	
 	private UploadedFile file;
 
 	public UploadedFile getFile() {

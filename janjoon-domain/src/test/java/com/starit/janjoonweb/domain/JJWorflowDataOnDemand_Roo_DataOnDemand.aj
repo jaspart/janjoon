@@ -7,8 +7,8 @@ import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJStatusDataOnDemand;
 import com.starit.janjoonweb.domain.JJWorflow;
 import com.starit.janjoonweb.domain.JJWorflowDataOnDemand;
-import com.starit.janjoonweb.domain.JJWorflowRepository;
 import com.starit.janjoonweb.domain.JJWorflowService;
+import com.starit.janjoonweb.domain.JJWorkflowRepository;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,7 +40,7 @@ privileged aspect JJWorflowDataOnDemand_Roo_DataOnDemand {
     JJWorflowService JJWorflowDataOnDemand.jJWorflowService;
     
     @Autowired
-    JJWorflowRepository JJWorflowDataOnDemand.jJWorflowRepository;
+    JJWorkflowRepository JJWorflowDataOnDemand.jJWorkflowRepository;
     
     public JJWorflow JJWorflowDataOnDemand.getNewTransientJJWorflow(int index) {
         JJWorflow obj = new JJWorflow();
@@ -146,7 +146,7 @@ privileged aspect JJWorflowDataOnDemand_Roo_DataOnDemand {
                 }
                 throw new IllegalStateException(msg.toString(), e);
             }
-            jJWorflowRepository.flush();
+            jJWorkflowRepository.flush();
             data.add(obj);
         }
     }

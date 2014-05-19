@@ -315,7 +315,7 @@
 		<!-- <dependency> <groupId>com.itextpdf</groupId> <artifactId>itextpdf</artifactId> 
 			<version>5.0.6</version> </dependency> -->
 	</dependencies>
-	<build>		
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -352,7 +352,7 @@
 						<artifactId>aspectjtools</artifactId>
 						<version>${aspectj.version}</version>
 					</dependency>
-				</dependencies>
+				</dependencies>				
 				<executions>
 					<execution>
 						<goals>
@@ -362,6 +362,12 @@
 					</execution>
 				</executions>
 				<configuration>
+<!-- 				<weaveDependencies> -->
+<!-- 						<weaveDependency> -->
+<!-- 							<groupId>com.starit.janjoonweb.domain</groupId> -->
+<!-- 							<artifactId>janjoon-domain</artifactId> -->
+<!-- 						</weaveDependency> -->
+<!-- 					</weaveDependencies> -->
 					<outxml>true</outxml>
 					<aspectLibraries>
 						<aspectLibrary>
@@ -380,6 +386,27 @@
 				<configuration>
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/run-distrib</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/run-distrib</directory>
+									<includes>
+										<include>*.lic*</include>
+										<include>janjoon-base.jar</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

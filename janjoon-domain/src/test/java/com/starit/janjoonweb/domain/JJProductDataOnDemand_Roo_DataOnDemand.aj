@@ -4,6 +4,7 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProductDataOnDemand;
 import com.starit.janjoonweb.domain.JJProductRepository;
@@ -30,6 +31,9 @@ privileged aspect JJProductDataOnDemand_Roo_DataOnDemand {
     private List<JJProduct> JJProductDataOnDemand.data;
     
     @Autowired
+    JJContactDataOnDemand JJProductDataOnDemand.jJContactDataOnDemand;
+    
+    @Autowired
     JJProductService JJProductDataOnDemand.jJProductService;
     
     @Autowired
@@ -37,21 +41,14 @@ privileged aspect JJProductDataOnDemand_Roo_DataOnDemand {
     
     public JJProduct JJProductDataOnDemand.getNewTransientJJProduct(int index) {
         JJProduct obj = new JJProduct();
-        setCreatedBy(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
         setExtname(obj, index);
         setManager(obj, index);
         setName(obj, index);
-        setUpdatedBy(obj, index);
         setUpdatedDate(obj, index);
         return obj;
-    }
-    
-    public void JJProductDataOnDemand.setCreatedBy(JJProduct obj, int index) {
-        JJContact createdBy = null;
-        obj.setCreatedBy(createdBy);
     }
     
     public void JJProductDataOnDemand.setCreationDate(JJProduct obj, int index) {
@@ -78,7 +75,7 @@ privileged aspect JJProductDataOnDemand_Roo_DataOnDemand {
     }
     
     public void JJProductDataOnDemand.setManager(JJProduct obj, int index) {
-        JJContact manager = null;
+        JJContact manager = jJContactDataOnDemand.getRandomJJContact();
         obj.setManager(manager);
     }
     
@@ -88,11 +85,6 @@ privileged aspect JJProductDataOnDemand_Roo_DataOnDemand {
             name = name.substring(0, 100);
         }
         obj.setName(name);
-    }
-    
-    public void JJProductDataOnDemand.setUpdatedBy(JJProduct obj, int index) {
-        JJContact updatedBy = null;
-        obj.setUpdatedBy(updatedBy);
     }
     
     public void JJProductDataOnDemand.setUpdatedDate(JJProduct obj, int index) {

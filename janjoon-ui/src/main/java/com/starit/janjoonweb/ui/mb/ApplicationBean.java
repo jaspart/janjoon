@@ -37,22 +37,7 @@ public class ApplicationBean {
 
 	@PostConstruct
 	public void init() {
-
-		// System.out.println("applicationBeanINIT");
-		//
-		// if(UsageChecker.check()) {
-		// System.out.println("License is correct!");
-		// }
-		// else {
-		// System.out.println("License is NOT correct!");
-		// }
-		// if(UsageChecker.checkExpiryDate()) {
-		// System.out.println("License expiry date is valid!");
-		// }
-		// else {
-		// System.out.println("License expiry date is NOT valid!");
-		// }
-
+		
 		menuModel = new DefaultMenuModel();
 
 		DefaultSubMenu submenu;

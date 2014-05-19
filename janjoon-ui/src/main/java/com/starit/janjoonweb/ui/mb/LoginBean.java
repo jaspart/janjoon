@@ -49,6 +49,7 @@ import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.UsageChecker;
 import com.starit.janjoonweb.ui.mb.util.service.SprintUtil;
 import com.starit.janjoonweb.ui.mb.util.service.TreeOperation;
 import com.starit.janjoonweb.ui.security.AuthorizationManager;
@@ -149,20 +150,46 @@ public class LoginBean implements Serializable {
 		}
 		if (enable) {
 
-			contact = jJContactService.getContactByEmail(username, true);
-			authorizationManager.setContact(contact);
-			FacesContext fContext = FacesContext.getCurrentInstance();
-			HttpSession session = (HttpSession) fContext.getExternalContext()
-					.getSession(false);
-			session.putValue("JJContact", contact);
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Welcome ", contact.getName());
-			FacesContext.getCurrentInstance().addMessage("login", message);
-			FacesContext context = FacesContext.getCurrentInstance();
-			context.getExternalContext().getFlash().setKeepMessages(true);
-			prevPage = getRedirectUrl(session);
-		}
+			System.out.println(new File("").getAbsolutePath());
 
+			if (UsageChecker.check()) {
+				System.out.println("License is correct!");
+				contact = jJContactService.getContactByEmail(username, true);
+				authorizationManager.setContact(contact);
+				FacesContext fContext = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
+				session.putValue("JJContact", contact);
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_INFO, "Welcome ",
+						contact.getName());
+				FacesContext.getCurrentInstance().addMessage("login", message);
+				FacesContext context = FacesContext.getCurrentInstance();
+				
+				
+				if (UsageChecker.checkExpiryDate()) {
+					System.out.println("License expiry date is valid!");
+				} else {
+					System.out.println("License expiry date is NOT valid!");
+					FacesMessage fExpiredMessage=new FacesMessage(FacesMessage.SEVERITY_WARN,"License expiry date is NOT valid!", null);	
+					context.addMessage(null, fExpiredMessage);
+				}
+				context.getExternalContext().getFlash().setKeepMessages(true);
+				prevPage = getRedirectUrl(session);
+			} else {
+				System.out.println("License is NOT correct!");
+				FacesContext fContext = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) fContext.getExternalContext()
+						.getSession(false);
+				session.invalidate();
+				SecurityContextHolder.clearContext();
+				FacesMessage fMessage=new FacesMessage(FacesMessage.SEVERITY_ERROR,"License is NOT correct!",null );
+				FacesContext.getCurrentInstance().addMessage(null,fMessage);
+				//FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+				prevPage = "fail";
+			}
+
+		}
 		System.out.println(prevPage);
 		return prevPage;
 	}
@@ -476,43 +503,43 @@ public class LoginBean implements Serializable {
 
 	}
 
-//	public void handleFileUpload(FileUploadEvent event) throws IOException {
-//		
-//		CKEditor description = null;		
-//		for(UIComponent component:event.getComponent().getParent().getChildren())
-//		{
-//			if(component.getId().contains("description"))
-//			{
-//				
-//				description=(CKEditor) component;
-//				
-//				break;
-//			}
-//		}			
-//		System.err.println("finded"+description.getId());
-//		
-//		ServletContext servletContext = (ServletContext) FacesContext
-//				.getCurrentInstance().getExternalContext().getContext();
-//		
-////		File targetFolder = new File(
-////				servletContext.getRealPath("/CKEditorImage"));		
-//		File targetFolder = new File(
-//				getClass().getResource("/CKEditorImage").getPath());	
-//		
-//		//servletContext.getResource("/resources/images/CKeditorImages");
-//		
-//		//System.out.println(description.getId());
-//
-//		System.out.println(targetFolder.getPath());
-//		TreeOperation.uploadFile(targetFolder, event.getFile().getInputstream(),
-//						event.getFile().getFileName());		
-//		description.setSubmittedValue(description.getValue()+"image File <img src='resources/images/CKeditorImages/"
-//			+ event.getFile().getFileName() + "' />");	
-//
-//	}
+	// public void handleFileUpload(FileUploadEvent event) throws IOException {
+	//
+	// CKEditor description = null;
+	// for(UIComponent component:event.getComponent().getParent().getChildren())
+	// {
+	// if(component.getId().contains("description"))
+	// {
+	//
+	// description=(CKEditor) component;
+	//
+	// break;
+	// }
+	// }
+	// System.err.println("finded"+description.getId());
+	//
+	// ServletContext servletContext = (ServletContext) FacesContext
+	// .getCurrentInstance().getExternalContext().getContext();
+	//
+	// // File targetFolder = new File(
+	// // servletContext.getRealPath("/CKEditorImage"));
+	// File targetFolder = new File(
+	// getClass().getResource("/CKEditorImage").getPath());
+	//
+	// //servletContext.getResource("/resources/images/CKeditorImages");
+	//
+	// //System.out.println(description.getId());
+	//
+	// System.out.println(targetFolder.getPath());
+	// TreeOperation.uploadFile(targetFolder, event.getFile().getInputstream(),
+	// event.getFile().getFileName());
+	// description.setSubmittedValue(description.getValue()+"image File <img src='resources/images/CKeditorImages/"
+	// + event.getFile().getFileName() + "' />");
+	//
+	// }
 
 	public UIComponent findComponent(final String id) {
-		
+
 		FacesContext context = FacesContext.getCurrentInstance();
 		UIViewRoot root = context.getViewRoot();
 		final UIComponent[] found = new UIComponent[1];

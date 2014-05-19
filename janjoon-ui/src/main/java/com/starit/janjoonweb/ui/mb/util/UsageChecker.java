@@ -16,6 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
@@ -187,7 +189,7 @@ public class UsageChecker {
 		String expiryDate = root.getElementsByTagName("expires").item(0)
 				.getTextContent();
 		try {
-			date = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH)
+			date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
 					.parse(expiryDate);
 		} catch (ParseException e) {
 			System.out.println("Exception : " + e);
@@ -214,11 +216,15 @@ public class UsageChecker {
 	}
 
 	public static boolean check() {
+
 		boolean result = false;
-		workingdirectory = System.getProperty("user.dir");
+
+		// workingdirectory = new File("").getAbsolutePath()+File.separator;
+		initWorkingDirectory();
+
 		if (!verifyFile(workingdirectory + File.separator + "janjoon-base.jar")) {
-			workingdirectory = System.getProperty("user.dir") + File.separator
-					+ "src" + File.separator + "run-distrib";
+			workingdirectory = workingdirectory + "src" + File.separator
+					+ "run-distrib";
 		}
 		try {
 			license = readFile(workingdirectory + File.separator
@@ -231,23 +237,34 @@ public class UsageChecker {
 	}
 
 	public static boolean check(String file) {
+
 		boolean result = false;
-		workingdirectory = System.getProperty("user.dir");
+		// workingdirectory = new File("").getAbsolutePath()+File.separator;
+		initWorkingDirectory();
 		if (!verifyFile(workingdirectory + File.separator + "janjoon-base.jar")) {
-			workingdirectory = System.getProperty("user.dir") + File.separator
-					+ "src" + File.separator + "run-distrib";
+			workingdirectory = workingdirectory + File.separator + "src"
+					+ File.separator + "run-distrib";
 		}
 		try {
-			license = readFile(workingdirectory + File.separator
-					+ file);
+			license = readFile(workingdirectory + File.separator + file);
 			result = UsageChecker.validate(license);
 		} catch (Exception e) {
 			System.out.println("problem=" + e);
+			System.out.println(workingdirectory);
 		}
 		return result;
+	}
+
+	public static void initWorkingDirectory() {
+		
+		ServletContext servletContext = (ServletContext) FacesContext
+				.getCurrentInstance().getExternalContext().getContext();
+		workingdirectory = servletContext.getRealPath("run-distrib");
+		System.out.println(workingdirectory);
 	}
 
 	public static void main(String[] args) {
 		check();
 	}
+
 }
