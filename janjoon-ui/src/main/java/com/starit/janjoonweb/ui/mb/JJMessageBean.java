@@ -44,7 +44,7 @@ public class JJMessageBean {
 	private SelectItem[] creatorOptions;
 	private SelectItem[] criticityOptions;
 	private SelectItem[] statusOptions;
-	//private List<JJMessage> enabledJJMessage;
+	// private List<JJMessage> enabledJJMessage;
 	private List<JJMessage> allJJMessages;
 	private List<JJMessage> filteredJJMessage;
 	private List<JJMessage> mainMessages;
@@ -64,15 +64,15 @@ public class JJMessageBean {
 		columns.add("updatedDate");
 		columns.add("message");
 		allJJMessages = jJMessageService.findAllJJMessages();
-		
+
 		setMessage(new JJMessage());
-		viewedMessage=new JJMessage();
-		mainMessages=null;		
+		viewedMessage = new JJMessage();
+		mainMessages = null;
 
 	}
 
 	public List<JJMessage> getMainMessages() {
-		
+
 		return mainMessages;
 	}
 
@@ -96,13 +96,13 @@ public class JJMessageBean {
 		return message;
 	}
 
-//	public List<JJMessage> getEnabledJJMessage() {
-//		return enabledJJMessage;
-//	}
-//
-//	public void setEnabledJJMessage(List<JJMessage> enabledJJMessage) {
-//		this.enabledJJMessage = enabledJJMessage;
-//	}
+	// public List<JJMessage> getEnabledJJMessage() {
+	// return enabledJJMessage;
+	// }
+	//
+	// public void setEnabledJJMessage(List<JJMessage> enabledJJMessage) {
+	// this.enabledJJMessage = enabledJJMessage;
+	// }
 
 	public void setMessage(JJMessage message) {
 		this.message = message;
@@ -232,60 +232,54 @@ public class JJMessageBean {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 	}
-	
-	public void initJJMessageLayout(ComponentSystemEvent e)
-	{
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false);
-		LoginBean login =(LoginBean) session.getAttribute("loginBean");
-		
-		if (mainMessages==null && login.isEnable() && !collapsedMesPanel) {
-			
+
+	public void initJJMessageLayout(ComponentSystemEvent e) {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		LoginBean login = (LoginBean) session.getAttribute("loginBean");
+
+		if (mainMessages == null && login.isEnable() && !collapsedMesPanel) {
+
 			JJProductBean jJProductBean = (JJProductBean) session
 					.getAttribute("jJProductBean");
 			JJProjectBean jJProjectBean = (JJProjectBean) session
-					.getAttribute("jJProjectBean");	
-			System.out.println("initLayout");
-			
-			mainMessages = jJMessageService.getActifMessages(jJProjectBean.getProject(), jJProductBean.getProduct());
-			
+					.getAttribute("jJProjectBean");
+
+			mainMessages = jJMessageService.getActifMessages(
+					jJProjectBean.getProject(), jJProductBean.getProduct());
+
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.update("messagePanel");
-				
-			
+
 		}
 	}
 
 	public void initJJmessageTable(ComponentSystemEvent e) {
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false);
-		LoginBean login =(LoginBean) session.getAttribute("loginBean");
-		
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		LoginBean login = (LoginBean) session.getAttribute("loginBean");
+
 		if (!loadFiltredJJmessage && login.isEnable()) {
 			List<JJAbstractEntity> criticities = new ArrayList<JJAbstractEntity>();
 			List<JJAbstractEntity> status = new ArrayList<JJAbstractEntity>();
 			List<JJAbstractEntity> productes = new ArrayList<JJAbstractEntity>();
 			List<JJAbstractEntity> projectes = new ArrayList<JJAbstractEntity>();
 			List<JJAbstractEntity> contactes = new ArrayList<JJAbstractEntity>();
-			//enabledJJMessage = jJMessageService.getMessages(true);			
-			
+			// enabledJJMessage = jJMessageService.getMessages(true);
+
 			JJProductBean jJProductBean = (JJProductBean) session
 					.getAttribute("jJProductBean");
 			JJProjectBean jJProjectBean = (JJProjectBean) session
-					.getAttribute("jJProjectBean");		
-			
-			
-			mainMessages = jJMessageService.getActifMessages(jJProjectBean.getProject(), jJProductBean.getProduct());
-			if(!collapsedMesPanel)
-			{
+					.getAttribute("jJProjectBean");
+
+			mainMessages = jJMessageService.getActifMessages(
+					jJProjectBean.getProject(), jJProductBean.getProduct());
+			if (!collapsedMesPanel) {
 				RequestContext context = RequestContext.getCurrentInstance();
-				context.update("messagePanel");					
-			}	
-			
-				
-			System.out
-					.println("----------------initJJmesTable--------------------------");
+				context.update("messagePanel");
+			}
+
 			for (JJMessage mes : mainMessages) {
 				if (mes.getCreatedBy() != null
 						&& !listContaines(contactes, mes.getCreatedBy().getId()))
@@ -359,7 +353,6 @@ public class JJMessageBean {
 				.getExternalContext().getSession(false);
 
 		if (!alertOrInfo) {
-			System.out.println("info");
 
 			JJCriticity criticity = jJCriticityService.getCriticityByName(
 					"INFO", true);
@@ -367,8 +360,6 @@ public class JJMessageBean {
 				message.setCriticity(criticity);
 
 		} else {
-			System.out.println("alert");
-
 			JJCriticity criticity = jJCriticityService.getCriticityByName(
 					"ALERT", true);
 			if (criticity != null)
@@ -429,8 +420,8 @@ public class JJMessageBean {
 		setJJMessage_(null);
 		setCreateDialogVisible(false);
 		loadFiltredJJmessage = false;
-		mainMessages=null;
-		//initJJmessageTable(null);
+		mainMessages = null;
+		// initJJmessageTable(null);
 	}
 
 	public HtmlPanelGrid populateMessagePanel() {

@@ -143,7 +143,7 @@ public class JJProductBean {
 	}
 
 	public void newProduct(JJVersionBean jJVersionBean) {
-		System.out.println("Initial bean product");
+
 		message = "New Product";
 		productAdmin = new JJProduct();
 		productAdmin.setEnabled(true);
@@ -155,7 +155,7 @@ public class JJProductBean {
 	}
 
 	public void editProduct(JJVersionBean jJVersionBean) {
-		System.out.println("Update bean product");
+
 		message = "Edit Product";
 		productManager = productAdmin.getManager();
 		jJVersionBean.newVersion();
@@ -164,7 +164,6 @@ public class JJProductBean {
 	public void deleteProduct() {
 
 		if (productAdmin != null) {
-			System.out.println(productAdmin.getName());
 
 			productAdmin.setEnabled(false);
 			jJProductService.updateJJProduct(productAdmin);
@@ -173,7 +172,7 @@ public class JJProductBean {
 	}
 
 	public void save(JJVersionBean jJVersionBean) {
-		System.out.println("SAVING Product...");
+
 		String message = "";
 
 		List<JJVersion> versions = jJVersionBean.getVersionListTable();
@@ -189,7 +188,6 @@ public class JJProductBean {
 		productAdmin.setManager(productManager);
 
 		if (productAdmin.getId() == null) {
-			System.out.println("IS a new JJProduct");
 
 			jJProductService.saveJJProduct(productAdmin);
 			message = "message_successfully_created";
@@ -197,7 +195,6 @@ public class JJProductBean {
 			newProduct(jJVersionBean);
 
 		} else {
-			System.out.println("UPDATING Product...");
 
 			productAdmin.setUpdatedDate(new Date());
 
@@ -223,7 +220,7 @@ public class JJProductBean {
 	}
 
 	public void closeDialog(JJVersionBean jJVersionBean) {
-		System.out.println("close dialog");
+
 		productAdmin = null;
 		productManager = null;
 		productManagerList = null;
@@ -234,8 +231,7 @@ public class JJProductBean {
 	}
 
 	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project) {
-		return jJTaskService
-				.getTasksByProduct(product, project);
+		return jJTaskService.getTasksByProduct(product, project);
 	}
 
 }

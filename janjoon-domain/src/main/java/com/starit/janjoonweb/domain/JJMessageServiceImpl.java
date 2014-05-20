@@ -53,7 +53,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 		List<JJMessage> resultset = null;
 
 		if (product == null && project == null) {
-			
+
 			return getMessages(true);
 		} else {
 			if (product != null) {

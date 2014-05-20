@@ -58,7 +58,7 @@ public class JJCategoryBean {
 	}
 
 	public void newCategory() {
-		System.out.println("Initial bean category");
+
 		message = "New Category";
 
 		categoryAdmin = new JJCategory();
@@ -69,7 +69,7 @@ public class JJCategoryBean {
 	}
 
 	public void editCategory() {
-		System.out.println("Update bean category");
+
 		message = "Edit Category";
 		disableLevel = true;
 	}
@@ -78,7 +78,6 @@ public class JJCategoryBean {
 		// message = "Edit Contact";
 
 		if (categoryAdmin != null) {
-			System.out.println(categoryAdmin.getName());
 
 			categoryAdmin.setEnabled(false);
 			jJCategoryService.updateJJCategory(categoryAdmin);
@@ -97,7 +96,6 @@ public class JJCategoryBean {
 		if (categories.isEmpty()) {
 			categoryAdmin.setName(name);
 			if (categoryAdmin.getId() == null) {
-				System.out.println("SAVING new Category...");
 
 				categoryAdmin.setDescription("This is category "
 						+ categoryAdmin.getName());
@@ -107,7 +105,6 @@ public class JJCategoryBean {
 				newCategory();
 
 			} else {
-				System.out.println("UPDATING Category...");
 
 				categoryAdmin.setUpdatedDate(new Date());
 
@@ -131,7 +128,7 @@ public class JJCategoryBean {
 	}
 
 	public void closeDialog() {
-		System.out.println("close dialog");
+
 		categoryAdmin = null;
 	}
 

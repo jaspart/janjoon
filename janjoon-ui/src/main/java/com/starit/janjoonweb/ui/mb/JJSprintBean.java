@@ -72,11 +72,8 @@ public class JJSprintBean {
 	private List<SprintUtil> sprintList;
 	private SprintUtil sprintUtil;
 	private JJTask task;
-	
 
 	private static final Logger logger = Logger.getLogger(JJSprintBean.class);
-
-	
 
 	public void setjJTaskService(JJTaskService jJTaskService) {
 		this.jJTaskService = jJTaskService;
@@ -187,12 +184,10 @@ public class JJSprintBean {
 
 		if (jJProjectBean.getProject() == null) {
 
-			if(sprintList==null)
-			{
+			if (sprintList == null) {
 				project = null;
 				initJJSprintPage(null);
-			}
-			else if (project != null ) {
+			} else if (project != null) {
 
 				project = null;
 				initJJSprintPage(null);
@@ -203,13 +198,11 @@ public class JJSprintBean {
 			if (!project.equals(jJProjectBean.getProject())) {
 				project = jJProjectBean.getProject();
 				initJJSprintPage(project);
-			} 
-		}else
-		{
+			}
+		} else {
 			project = jJProjectBean.getProject();
 			initJJSprintPage(project);
 		}
-		
 
 		return sprintList;
 	}
@@ -243,14 +236,9 @@ public class JJSprintBean {
 
 	public void onCellEditTask(CellEditEvent event) {
 
-		System.out.println(event.getNewValue());
-
-		System.out.println(jJTaskService
-				.findJJTask(Long.parseLong(event.getColumn().getColumnKey()))
-				.getSprint().getName());
 		JJTask t = jJTaskService.findJJTask(Long.parseLong(event.getColumn()
 				.getColumnKey()));
-		System.out.println(t.getName());
+
 		t.setAssignedTo((JJContact) event.getNewValue());
 		jJTaskService.updateJJTask(t);
 		sprintUtil = SprintUtil
@@ -269,10 +257,9 @@ public class JJSprintBean {
 
 	public void initJJSprintPage(JJProject pr) {
 
-		System.out.println("3");
 		sprintList = SprintUtil.generateSprintUtilList(
 				jJSprintService.getSprintsByProjects(pr, true), jJTaskService);
-		
+
 		if (sprintList == null)
 			sprintList = new ArrayList<SprintUtil>();
 		JJSprint sp = new JJSprint();
@@ -287,26 +274,16 @@ public class JJSprintBean {
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
 
-		for (JJContact c : sprintUtil.getSprint().getContacts()) {
-			System.out.println(c.getName());
-		}
-		System.out.println(sprintUtil.getSprint().getId() + ":"
-				+ sprintUtil.getSprint().getName());
-		
-		
 		sprintUtil.getSprint().setUpdatedBy(contact);
 		sprintUtil.getSprint().setUpdatedDate(new Date());
 		jJSprintService.updateJJSprint(sprintUtil.getSprint());
 		sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil
 				.getSprint().getId()));
-		System.out.println(sprintUtil.getSprint().getId() + ":"
-				+ sprintUtil.getSprint().getName());
 		sprintUtil = new SprintUtil(sprintUtil.getSprint(),
 				jJTaskService.getSprintTasks(sprintUtil.getSprint()));
 		sprintList.set(contains(sprintUtil), sprintUtil);
 
 		String message = "message_successfully_updated";
-		System.out.println(sprintUtil.getSprint().getName());
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJSprint");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -321,7 +298,7 @@ public class JJSprintBean {
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
 
 		setJJSprint_(sprintUtil.getSprint());
-		
+
 		getJJSprint_().setCreatedBy(contact);
 		getJJSprint_().setCreationDate(new Date());
 		getJJSprint_().setEnabled(true);
@@ -334,12 +311,10 @@ public class JJSprintBean {
 			c.getSprints().add(getJJSprint_());
 		}
 		String message = "message_successfully_created";
-		System.out.println(sprintUtil.getSprint().getName());
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJSprint");
 		sprintUtil.setRenderTaskForm(true);
 		sprintUtil.setSprint(getJJSprint_());
-		System.out.println("reset");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -372,8 +347,6 @@ public class JJSprintBean {
 
 			JJStatus status = jJStatusService.getOneStatus("IN PROGRESS",
 					"JJTask", true);
-			System.out.println("addTaskToProg:"
-					+ dropedTask.getStatus().getName());
 			sprintUtil = SprintUtil.getSprintUtil(dropedTask.getSprint()
 					.getId(), sprintList);
 			dropedTask.setStatus(status);
@@ -404,12 +377,8 @@ public class JJSprintBean {
 		if (ddevent.getDragId().contains(":progIcon")) {
 			JJTask dropedTask = (JJTask) ddevent.getData();
 
-			System.out.println(ddevent.getDragId() + ":" + ddevent.getDropId());
-
 			JJStatus status = jJStatusService.getOneStatus("DONE", "JJTask",
 					true);
-			System.out.println("addTaskToDone:"
-					+ dropedTask.getStatus().getName());
 
 			sprintUtil = SprintUtil.getSprintUtil(dropedTask.getSprint()
 					.getId(), sprintList);
@@ -419,7 +388,6 @@ public class JJSprintBean {
 			dropedTask.setStatus(status);
 			jJTaskService.updateJJTask(dropedTask);
 
-			System.out.println("DONE" + sprintUtil.getSprint().getName());
 			sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil
 					.getSprint().getId()));
 			sprintUtil = new SprintUtil(sprintUtil.getSprint(),
@@ -456,9 +424,6 @@ public class JJSprintBean {
 			categoryList = null;
 			reqList = null;
 		}
-
-		System.out.println("deedededede");
-
 	}
 
 	public void persistTask() {
@@ -466,7 +431,6 @@ public class JJSprintBean {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
-		System.out.println(task.getName());
 		JJStatus status = jJStatusService.getOneStatus("TODO", "JJTask", true);
 		if (status != null)
 			task.setStatus(status);
@@ -486,7 +450,6 @@ public class JJSprintBean {
 		if (!sprintUtil.isRender()) {
 			sprintUtil = new SprintUtil(sprintUtil.getSprint(),
 					jJTaskService.getSprintTasks(sprintUtil.getSprint()));
-			System.out.println(sprintUtil.isRenderTaskForm());
 			sprintUtil.setRenderTaskForm(true);
 			sprintUtil.setTaskList(null);
 			sprintList.set(contains(sprintUtil), sprintUtil);
@@ -509,8 +472,6 @@ public class JJSprintBean {
 		attrListener(e);
 		sprintUtil = new SprintUtil(sprintUtil.getSprint(),
 				jJTaskService.getSprintTasks(sprintUtil.getSprint()));
-
-		System.out.println(sprintUtil.isRenderTaskForm());
 
 		sprintUtil.setRenderTaskForm(false);
 		sprintList.set(contains(sprintUtil), sprintUtil);

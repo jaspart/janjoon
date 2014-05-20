@@ -138,7 +138,6 @@ public class JJTaskBean {
 
 	public void loadData() {
 
-		System.out.println("loadData");
 		// Set initial start / end dates for the axis of the timeline
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
@@ -252,15 +251,11 @@ public class JJTaskBean {
 				Set<Date> dates = min.keySet();
 
 				Date start = dates.iterator().next();
-				System.out.println("start " + start);
 
 				dates = max.keySet();
 				for (Date date : dates) {
 					end = date;
 				}
-
-				System.out.println("end " + end);
-
 				JJTask task = new JJTask();
 				task.setName(chapter.getName());
 
@@ -283,7 +278,6 @@ public class JJTaskBean {
 	public void onCellEdit(CellEditEvent event) {
 		UIColumn column = event.getColumn();
 		String headerText = column.getHeaderText();
-		System.out.println("headerText " + headerText);
 
 		DataTable dataTable = (DataTable) event.getSource();
 		TaskData taskData = (TaskData) dataTable.getRowData();
@@ -502,7 +496,6 @@ public class JJTaskBean {
 	}
 
 	public void duplicateTask() {
-		System.out.println("in duplicate");
 
 		task = jJTaskService.findJJTask(task.getId());
 
@@ -576,8 +569,6 @@ public class JJTaskBean {
 		loadData();
 
 		reset();
-
-		System.out.println("end duplication");
 	}
 
 	public class TaskData {
@@ -945,7 +936,6 @@ public class JJTaskBean {
 		if (getJJTask_() != null) {
 			if (getJJTask_().getRequirement() != null) {
 
-				System.out.println("1");
 				taskTreeNode = new DefaultTreeNode("Requirement", null);
 				JJRequirement requirement = (JJRequirement) expressionFactory
 						.createValueExpression(elContext,

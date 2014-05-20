@@ -90,7 +90,7 @@ public class JJRightBean {
 	}
 
 	public void newRight() {
-		System.out.println("Initial bean right");
+
 		rightAdmin = new JJRight();
 		rightAdmin.setR(false);
 		rightAdmin.setW(false);
@@ -104,11 +104,11 @@ public class JJRightBean {
 	}
 
 	public void save() {
-		System.out.println("SAVING Right...");
+
 		String message = "";
 
 		if (rightAdmin.getId() == null) {
-			System.out.println("IS a new JJRight");
+
 			rightAdmin.setCategory(category);
 			rightAdmin.setObjet(object);
 			jJRightService.saveJJRight(rightAdmin);
@@ -144,12 +144,6 @@ public class JJRightBean {
 	}
 
 	public void onRowSelect(SelectEvent event) {
-
-		System.out.println("Row selected");
-
-		if (rightListTable != null) {
-			System.out.println("la selection est non null");
-		}
 
 	}
 

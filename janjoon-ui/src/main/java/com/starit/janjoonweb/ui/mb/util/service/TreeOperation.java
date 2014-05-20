@@ -60,7 +60,7 @@ public class TreeOperation {
 
 	public static boolean uploadFile(File parent, InputStream in, String name)
 			throws IOException {
-		
+
 		OutputStream out = new FileOutputStream(new File(parent.getPath() + "/"
 				+ name));
 		int read = 0;
@@ -73,11 +73,11 @@ public class TreeOperation {
 		in.close();
 
 		out.flush();
-		
+
 		out.close();
 
 		System.out.println("New file created!");
-		
+
 		return true;
 
 	}

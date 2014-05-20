@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.extensions.component.ckeditor.CKEditor;
 import org.primefaces.model.UploadedFile;
+import org.apache.log4j.Logger;
 import org.apache.myfaces.component.visit.FullVisitContext;
 import org.apache.myfaces.shared.resource.ResourceLoader;
 import org.primefaces.context.RequestContext;
@@ -63,6 +64,8 @@ public class LoginBean implements Serializable {
 
 	@Autowired
 	private AuthorizationManager authorizationManager;
+	
+	static Logger logger = Logger.getLogger("loginBean-Logger");
 
 	@Autowired
 	private JJContactService jJContactService;
@@ -117,6 +120,7 @@ public class LoginBean implements Serializable {
 
 	public String logout() {
 		FacesContext fContext = FacesContext.getCurrentInstance();
+		logger.info("JJContact logged out");
 		HttpSession session = (HttpSession) fContext.getExternalContext()
 				.getSession(false);
 		session.invalidate();
@@ -135,7 +139,7 @@ public class LoginBean implements Serializable {
 			Authentication authentication = authenticationManager
 					.authenticate(token);
 			SecurityContext sContext = SecurityContextHolder.getContext();
-			sContext.setAuthentication(authentication);
+			sContext.setAuthentication(authentication);			
 			enable = true;
 		} catch (AuthenticationException loginError) {
 
@@ -150,10 +154,8 @@ public class LoginBean implements Serializable {
 		}
 		if (enable) {
 
-			System.out.println(new File("").getAbsolutePath());
-
 			if (UsageChecker.check()) {
-				System.out.println("License is correct!");
+
 				contact = jJContactService.getContactByEmail(username, true);
 				authorizationManager.setContact(contact);
 				FacesContext fContext = FacesContext.getCurrentInstance();
@@ -165,32 +167,34 @@ public class LoginBean implements Serializable {
 						contact.getName());
 				FacesContext.getCurrentInstance().addMessage("login", message);
 				FacesContext context = FacesContext.getCurrentInstance();
-				
-				
+				logger.info("login operation success "+contact.getName()+" logged in");
+
 				if (UsageChecker.checkExpiryDate()) {
-					System.out.println("License expiry date is valid!");
 				} else {
-					System.out.println("License expiry date is NOT valid!");
-					FacesMessage fExpiredMessage=new FacesMessage(FacesMessage.SEVERITY_WARN,"License expiry date is NOT valid!", null);	
+
+					FacesMessage fExpiredMessage = new FacesMessage(
+							FacesMessage.SEVERITY_WARN,
+							"License expiry date is NOT valid!", null);
 					context.addMessage(null, fExpiredMessage);
 				}
 				context.getExternalContext().getFlash().setKeepMessages(true);
 				prevPage = getRedirectUrl(session);
 			} else {
-				System.out.println("License is NOT correct!");
 				FacesContext fContext = FacesContext.getCurrentInstance();
-				HttpSession session = (HttpSession) fContext.getExternalContext()
-						.getSession(false);
+				HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
 				session.invalidate();
 				SecurityContextHolder.clearContext();
-				FacesMessage fMessage=new FacesMessage(FacesMessage.SEVERITY_ERROR,"License is NOT correct!",null );
-				FacesContext.getCurrentInstance().addMessage(null,fMessage);
-				//FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+				FacesMessage fMessage = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "License is NOT correct!",
+						null);
+				FacesContext.getCurrentInstance().addMessage(null, fMessage);
+				// FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 				prevPage = "fail";
 			}
 
 		}
-		System.out.println(prevPage);
+
 		return prevPage;
 	}
 
@@ -271,9 +275,6 @@ public class LoginBean implements Serializable {
 
 			if (event.getComponent().getClientId()
 					.contains("productSelectOneMenu")) {
-				System.out
-						.println("---------------ProductUpdate---------------");
-
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"dev.nullVersion.label", FacesMessage.SEVERITY_ERROR,
 						"");
@@ -289,15 +290,10 @@ public class LoginBean implements Serializable {
 					;
 
 					if (jJDevelopment.isRender()) {
-						System.out
-								.println("---------------versionUpdate---------------");
 
 						context.update(":contentPanel:devPanel:form");
 						context.update(":contentPanel:errorPanel");
 					} else {
-						System.out
-								.println("---------------versionUpdateError---------------");
-
 						context.update(":contentPanel:devPanel");
 						context.update(":contentPanel:errorPanel");
 					}
@@ -305,8 +301,6 @@ public class LoginBean implements Serializable {
 			} else {
 				jJProjectBean.setProject((JJProject) event.getNewValue());
 				if (jJDevelopment.isRender()) {
-					System.out
-							.println("---------------ProjectUpdate---------------");
 					jJDevelopment.setProject(jJProjectBean.getProject());
 					jJDevelopment.setTasks(null);
 					jJDevelopment.setTask(null);
@@ -342,7 +336,6 @@ public class LoginBean implements Serializable {
 			context.update(":messagePanel");
 
 		}
-		System.out.println("loginlistener");
 
 		session.setAttribute("jJMessageBean", messageBean);
 
@@ -352,10 +345,9 @@ public class LoginBean implements Serializable {
 
 		if (!loading) {
 			loading = true;
-
 			String path = FacesContext.getCurrentInstance()
 					.getExternalContext().getRequestContextPath();
-			System.out.println(path);
+
 			FacesContext
 					.getCurrentInstance()
 					.getExternalContext()
@@ -381,7 +373,7 @@ public class LoginBean implements Serializable {
 		if (enable) {
 			String path = FacesContext.getCurrentInstance()
 					.getExternalContext().getRequestContextPath();
-			System.out.println(path);
+
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect(path + "/pages/main.jsf?faces-redirect=true");
 		}
@@ -459,13 +451,13 @@ public class LoginBean implements Serializable {
 						"dev.nullProduct.label", FacesMessage.SEVERITY_ERROR,
 						"");
 				FacesContext.getCurrentInstance().addMessage(null, message);
-				System.out.println(message.getDetail());
+
 			} else {
 				FacesMessage message = MessageFactory.getMessage(
 						"dev.nullVersion.label", FacesMessage.SEVERITY_ERROR,
 						"");
 				FacesContext.getCurrentInstance().addMessage(null, message);
-				System.out.println(message.getDetail());
+
 			}
 		}
 	}
@@ -485,14 +477,12 @@ public class LoginBean implements Serializable {
 			if (!authorizationManager.getAuthorization(root.getViewId(),
 					jjProjectBean.getProject(), jJProductBean.getProduct())) {
 
-				System.out.println(false);
 				context.addMessage(null, new FacesMessage(
 						FacesMessage.SEVERITY_ERROR,
 						"You have no permission to access this resource", null));
 
 				context.getExternalContext().getFlash().setKeepMessages(true);
 
-				System.out.println(path);
 				FacesContext.getCurrentInstance().getExternalContext()
 						.redirect(path + "/pages/main.jsf?faces-redirect=true");
 			} else if (root.getViewId().contains("development")) {

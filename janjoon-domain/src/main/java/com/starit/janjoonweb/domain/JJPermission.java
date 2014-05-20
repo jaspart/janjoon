@@ -25,7 +25,7 @@ public class JJPermission {
 	@NotNull
 	@ManyToOne
 	private JJProfile profile;
-	
+
 	@Override
 	public boolean equals(Object object) {
 		return (object instanceof JJPermission) && (getId() != null) ? getId()

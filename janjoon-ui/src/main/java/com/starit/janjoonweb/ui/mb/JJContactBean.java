@@ -44,7 +44,8 @@ public class JJContactBean {
 	}
 
 	public ContactDataModel getContactDataModel() {
-		contactDataModel = new ContactDataModel(jJContactService.getContacts(true));
+		contactDataModel = new ContactDataModel(
+				jJContactService.getContacts(true));
 		return contactDataModel;
 	}
 
@@ -77,7 +78,7 @@ public class JJContactBean {
 	}
 
 	public void newContact(JJPermissionBean jJPermissionBean) {
-		System.out.println("Initial bean contact");
+
 		message = "New Contact";
 		disabled = false;
 		contactAdmin = new JJContact();
@@ -103,7 +104,6 @@ public class JJContactBean {
 		// message = "Edit Contact";
 
 		if (contactAdmin != null) {
-			System.out.println(contactAdmin.getName());
 
 			contactAdmin.setEnabled(false);
 			if (!jJContactService.updateJJContactTransaction(contactAdmin)) {
@@ -125,11 +125,11 @@ public class JJContactBean {
 	}
 
 	public void save(JJPermissionBean jJPermissionBean) {
-		System.out.println("SAVING Contact...");
+
 		FacesMessage facesMessage = null;
 
 		if (contactAdmin.getId() == null) {
-			System.out.println("IS a new JJContact");
+
 			contactAdmin.setDescription("This contact is "
 					+ contactAdmin.getFirstname() + " "
 					+ contactAdmin.getName());
@@ -181,7 +181,7 @@ public class JJContactBean {
 	}
 
 	public void closeDialog(JJPermissionBean jJPermissionBean) {
-		System.out.println("close dialog");
+
 		contactAdmin = null;
 		disabled = false;
 		disabledReset = false;

@@ -40,9 +40,9 @@ public class ChartBean implements Serializable {
 	private String seriesColors = "000000, 097D0B, D8115A";
 
 	public ChartBean() {
-		System.out.println("In model");
+
 		createCategoryModel();
-		System.out.println("Fin model");
+
 	}
 
 	public CartesianChartModel getCategoryModel() {
@@ -64,7 +64,6 @@ public class ChartBean implements Serializable {
 		for (JJTestcase testcase : testcases) {
 			Date creationdate = testcase.getCreationDate();
 			String date = creationdate.toString().substring(0, 10);
-			System.out.println(date);
 
 			datesTMP.add(date);
 
@@ -82,10 +81,6 @@ public class ChartBean implements Serializable {
 
 		Set<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionBean
 				.getTestcaseexecutions();
-
-		for (String date : dates) {
-			System.out.println("date " + date);
-		}
 
 		Map<String, String> mapTotalTC = new LinkedHashMap<String, String>();
 		Map<String, String> mapSuccessTC = new LinkedHashMap<String, String>();

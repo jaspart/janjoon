@@ -16,7 +16,7 @@ import org.primefaces.model.UploadedFile;
 @ManagedBean
 @SessionScoped
 public class LicenseBean implements Serializable {
-	
+
 	private UploadedFile file;
 
 	public UploadedFile getFile() {
@@ -44,10 +44,6 @@ public class LicenseBean implements Serializable {
 
 			String userHome = System.getProperty("user.home");
 			String classPath = System.getProperty("java.class.path");
-
-			System.out.println(userHome);
-
-			System.out.println(classPath);
 
 			if (classPath.startsWith(userHome)) {
 				String target = userHome + System.getProperty("file.separator")
@@ -83,7 +79,6 @@ public class LicenseBean implements Serializable {
 			out.flush();
 
 			out.close();
-			System.out.println(targetFolder.getPath());
 
 		} catch (IOException e) {
 

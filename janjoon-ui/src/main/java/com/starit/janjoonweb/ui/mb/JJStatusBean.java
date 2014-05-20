@@ -77,15 +77,12 @@ public class JJStatusBean {
 	private void initPieChart() {
 
 		pieChart = new PieChartModel();
-		System.out.println("-------------------------init pieChart");
 		List<JJStatus> statReq = jJStatusService.getStatus("JJRequirement",
 				true, null, false);
 		for (JJStatus s : statReq) {
 
-			System.out.println(s.getName() + "  " + s.getObjet());
 			int i = Integer.parseInt(""
 					+ jJRequirementService.getReqCountByStaus(s, true));
-			System.out.println(i);
 			pieChart.set(s.getName(), i);
 		}
 
@@ -124,31 +121,32 @@ public class JJStatusBean {
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
 		String message = "";
-		
+
 		if (getJJStatus_().getId() != null) {
 			getJJStatus_().setUpdatedDate(new Date());
 			getJJStatus_().setUpdatedBy(contact);
 			jJStatusService.updateJJStatus(getJJStatus_());
-	        message = "message_successfully_updated";
+			message = "message_successfully_updated";
 
 		} else {
 			getJJStatus_().setCreatedBy(contact);
-			getJJStatus_().setDescription("Satus : "+getJJStatus_().getName()+" for "+getJJStatus_().getObjet()+"object");
+			getJJStatus_().setDescription(
+					"Satus : " + getJJStatus_().getName() + " for "
+							+ getJJStatus_().getObjet() + "object");
 			getJJStatus_().setCreationDate(new Date());
 			getJJStatus_().setEnabled(true);
 			jJStatusService.saveJJStatus(getJJStatus_());
-            message = "message_successfully_created";
+			message = "message_successfully_created";
 		}
-	        RequestContext context = RequestContext.getCurrentInstance();
-	        context.execute("createSatDialogWidget.hide()");
-	        context.execute("editSatDialogWidget.hide()");
-	        
-	        FacesMessage facesMessage = MessageFactory.getMessage(message, "JJStatus");
-	        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-	        reset();
-	        return findAllJJStatuses();
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("createSatDialogWidget.hide()");
+		context.execute("editSatDialogWidget.hide()");
 
-		
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				"JJStatus");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		reset();
+		return findAllJJStatuses();
 
 	}
 
@@ -188,7 +186,7 @@ public class JJStatusBean {
 		nameCreateInputMessage.setFor("nameStatCreateInput");
 		nameCreateInputMessage.setDisplay("icon");
 		htmlPanelGrid.getChildren().add(nameCreateInputMessage);
-		
+
 		OutputLabel objetCreateOutput = (OutputLabel) application
 				.createComponent(OutputLabel.COMPONENT_TYPE);
 		objetCreateOutput.setFor("objetStatCreateInput");
@@ -308,19 +306,19 @@ public class JJStatusBean {
 		nameEditInputMessage.setId("nameStatEditInputMessage");
 		nameEditInputMessage.setFor("nameStatEditInput");
 		nameEditInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(nameEditInputMessage);		
+		htmlPanelGrid.getChildren().add(nameEditInputMessage);
 
 		OutputLabel objetEditOutput = (OutputLabel) application
 				.createComponent(OutputLabel.COMPONENT_TYPE);
 		objetEditOutput.setFor("objetStatEditInput");
-		objetEditOutput.setId("objetStatEditOutput");		
+		objetEditOutput.setId("objetStatEditOutput");
 		objetEditOutput.setValue("Objet:");
 		htmlPanelGrid.getChildren().add(objetEditOutput);
 
 		AutoComplete objetEditInput = (AutoComplete) application
 				.createComponent(AutoComplete.COMPONENT_TYPE);
 		objetEditInput.setId("objetStatEditInput");
-		//objetEditInput.
+		// objetEditInput.
 		objetEditInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
 						"#{jJStatusBean.JJStatus_.objet}", String.class));

@@ -26,6 +26,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.log4j.Logger;
 import org.apache.xml.security.signature.XMLSignatureException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -45,6 +46,7 @@ public class UsageChecker {
 	 * the jaxp schema language test.
 	 */
 	static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
+	public static Logger logger= Logger.getLogger("UsageChecker");
 
 	/**
 	 * The Constant Field <code>W3C_XML_SCHEMA</code> is used to specify the w3
@@ -151,7 +153,8 @@ public class UsageChecker {
 			try {
 				iStream.close();
 			} catch (IOException e) {
-				System.out.println("Error to close file, " + e.getMessage());
+				
+				logger.error("Error to close file, " + e.getMessage());				
 			}
 		}
 	}
@@ -192,13 +195,21 @@ public class UsageChecker {
 			date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
 					.parse(expiryDate);
 		} catch (ParseException e) {
-			System.out.println("Exception : " + e);
+			
+			logger.error("Exception : " + e);			
 		}
 		return date;
 	}
 
 	public static boolean checkExpiryDate() {
-		return getExpiryDate().after(new Date());
+		boolean result= getExpiryDate().after(new Date());
+		
+		if(result)
+			logger.info("Licence not expired");
+		else
+			logger.error("licence expired");
+		
+		return result;
 	}
 
 	public static String getStringData(String data) {
@@ -230,8 +241,13 @@ public class UsageChecker {
 			license = readFile(workingdirectory + File.separator
 					+ "janjoon.lic");
 			result = UsageChecker.validate(license);
+			
+			if(result)
+				logger.info("Licence validated");
+			else
+				logger.error("licence not validated");
 		} catch (Exception e) {
-			System.out.println("problem=" + e);
+			logger.error("problem : " + e);			
 		}
 		return result;
 	}
@@ -248,19 +264,23 @@ public class UsageChecker {
 		try {
 			license = readFile(workingdirectory + File.separator + file);
 			result = UsageChecker.validate(license);
+			if(result)
+				logger.info("Licence validated");
+			else
+				logger.error("licence not validated");
 		} catch (Exception e) {
-			System.out.println("problem=" + e);
-			System.out.println(workingdirectory);
+			logger.error("problem : " + e);	
+			
 		}
 		return result;
 	}
 
 	public static void initWorkingDirectory() {
-		
+
 		ServletContext servletContext = (ServletContext) FacesContext
 				.getCurrentInstance().getExternalContext().getContext();
 		workingdirectory = servletContext.getRealPath("run-distrib");
-		System.out.println(workingdirectory);
+		
 	}
 
 	public static void main(String[] args) {

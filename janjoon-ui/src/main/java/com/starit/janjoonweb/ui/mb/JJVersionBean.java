@@ -116,7 +116,6 @@ public class JJVersionBean {
 	}
 
 	public void newVersion() {
-		System.out.println("Initial bean version");
 
 		versionAdmin = new JJVersion();
 		versionAdmin.setEnabled(true);
@@ -127,11 +126,10 @@ public class JJVersionBean {
 	}
 
 	public void save() {
-		System.out.println("SAVING Version...");
+
 		String message = "";
 
 		if (versionAdmin.getId() == null) {
-			System.out.println("IS a new JJVersion");
 			versionAdmin.setDescription("This is version "
 					+ versionAdmin.getName());
 			jJVersionService.saveJJVersion(versionAdmin);
@@ -151,13 +149,6 @@ public class JJVersionBean {
 	}
 
 	public void onRowSelect(SelectEvent event) {
-
-		System.out.println("Row selected");
-
-		if (versionListTable != null) {
-			System.out.println("la selection est non null");
-		}
-
 	}
 
 	@SuppressWarnings("unchecked")

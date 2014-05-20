@@ -20,11 +20,9 @@ public class JJContactAuthentificationProvider implements
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	@Autowired 
+
+	@Autowired
 	JJContactService jJContactService;
-	
-	
 
 	public void setjJContactService(JJContactService jJContactService) {
 		this.jJContactService = jJContactService;
@@ -35,9 +33,9 @@ public class JJContactAuthentificationProvider implements
 			throws AuthenticationException {
 
 		String username = authentication.getName();
-		String password = (String) authentication.getCredentials();	
-		
-		JJContact contact = jJContactService.getContactByEmail(username,true);
+		String password = (String) authentication.getCredentials();
+
+		JJContact contact = jJContactService.getContactByEmail(username, true);
 
 		if (contact == null) {
 			throw new BadCredentialsException("Username not found.");

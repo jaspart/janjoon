@@ -24,7 +24,7 @@ public class JJWorflow extends JJAbstractEntity {
 	private JJContact actor;
 
 	private String objet;
-	
+
 	@Lob
 	private String event;
 }

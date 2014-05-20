@@ -630,8 +630,6 @@ public class JJRequirementBean {
 	}
 
 	public void newRequirement(long id) {
-		System.out.println("New Requirement");
-
 		message = "New Requirement";
 
 		requirementCategory = jJCategoryService.findJJCategory(id);
@@ -689,7 +687,6 @@ public class JJRequirementBean {
 	}
 
 	public void editRequirement() {
-		System.out.println("Edit Requirement");
 
 		message = "Edit Requirement";
 
@@ -751,8 +748,6 @@ public class JJRequirementBean {
 
 	public void deleteRequirement() {
 
-		System.out.println("DELETE Requirement ...");
-
 		requirement.setEnabled(false);
 
 		FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -797,8 +792,6 @@ public class JJRequirementBean {
 	@SuppressWarnings("unchecked")
 	public void releaseRequirement() {
 
-		System.out.println("RELEASE Requirements ...");
-
 		List<JJRequirement> list = new ArrayList<JJRequirement>();
 		for (CategoryDataModel requirementDataModel : tableDataModelList) {
 			if (requirementDataModel.getCategoryId() == categoryId) {
@@ -833,8 +826,6 @@ public class JJRequirementBean {
 		}
 		reset();
 
-		System.out.println("end");
-
 	}
 
 	public void save() {
@@ -854,7 +845,6 @@ public class JJRequirementBean {
 		}
 
 		if (requirement.getId() == null) {
-			System.out.println("SAVING new Requirement...");
 
 			if (initiateTask) {
 				task.setName(requirement.getName());
@@ -884,7 +874,6 @@ public class JJRequirementBean {
 			newRequirement(requirementCategory.getId());
 
 		} else {
-			System.out.println("UPDATING Requirement...");
 
 			message = "message_successfully_updated";
 			RequestContext context = RequestContext.getCurrentInstance();
@@ -902,10 +891,6 @@ public class JJRequirementBean {
 	public void importRequirement() {
 		SortedMap<Integer, Object> elements = null;
 		SortedMap<Integer, Integer> chapters = new TreeMap<Integer, Integer>();
-
-		System.out.println("In import action");
-
-		System.out.println("importFormats.size() " + importFormats.size());
 
 		for (ImportFormat format : importFormats) {
 
@@ -1121,9 +1106,6 @@ public class JJRequirementBean {
 
 		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
 
-		System.out.println("chapter.getName() " + chapter.getName() + " "
-				+ chapter.getId());
-
 		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,
 				chapter, false, false, false);
 
@@ -1136,8 +1118,6 @@ public class JJRequirementBean {
 	}
 
 	public void loadTask() {
-
-		System.out.println("initiateTask " + initiateTask);
 
 		disabledTask = !initiateTask;
 
@@ -1154,7 +1134,7 @@ public class JJRequirementBean {
 	}
 
 	public void checkCompleteTask() {
-		System.out.println("task.getCompletion() " + task.getCompleted());
+
 	}
 
 	private List<ImportFormat> importFormats;
@@ -1187,7 +1167,7 @@ public class JJRequirementBean {
 	}
 
 	public void loadImportFormat() {
-		System.out.println("Import Requirement");
+
 		message = "Import Requirement";
 
 		importProject = project;
@@ -1202,8 +1182,6 @@ public class JJRequirementBean {
 		}
 
 		fillTableImport();
-
-		System.out.println("End");
 
 	}
 
@@ -1241,7 +1219,7 @@ public class JJRequirementBean {
 	}
 
 	public void closeDialog() {
-		System.out.println("close Dialog");
+
 		message = null;
 		namesList = null;
 		lowCategoryName = null;
@@ -1322,13 +1300,10 @@ public class JJRequirementBean {
 	}
 
 	public void handleSelectStatus() {
-		System.out.println(requirementStatus.getName());
 
 	}
 
 	public void loadData() {
-
-		System.out.println("IN ReqBean load data");
 
 		getProduct();
 		getProject();
@@ -1614,9 +1589,6 @@ public class JJRequirementBean {
 			}
 
 		}
-
-		System.out.println("storeMapUp.size() " + storeMapUp.size());
-		System.out.println("storeMapDown.size() " + storeMapDown.size());
 		list = null;
 
 	}
@@ -1686,9 +1658,6 @@ public class JJRequirementBean {
 			if (!listUP.isEmpty() && !storeMapUp.isEmpty()) {
 				// Traitement elm par elem
 
-				System.out
-						.println("!listUP.isEmpty() && !storeMapUp.isEmpty()");
-
 				List<String> idListUP = new ArrayList<String>();
 				List<String> idStoreMapUp = new ArrayList<String>();
 
@@ -1747,8 +1716,6 @@ public class JJRequirementBean {
 			else if (listUP.isEmpty() && !storeMapUp.isEmpty()) {
 				// Supprimer les storeMapUp
 
-				System.out.println("listUP.isEmpty() && !storeMapUp.isEmpty()");
-
 				for (JJRequirement req : storeMapUp) {
 					req.getRequirementLinkDown().remove(requirement);
 				}
@@ -1756,8 +1723,6 @@ public class JJRequirementBean {
 
 			} else if (!listUP.isEmpty() && storeMapUp.isEmpty()) {
 				// Ajouter list Up
-
-				System.out.println("!listUP.isEmpty() && storeMapUp.isEmpty()");
 
 				for (JJRequirement req : listUP) {
 					req.getRequirementLinkDown().add(requirement);
@@ -1767,10 +1732,6 @@ public class JJRequirementBean {
 			}
 
 		}
-
-		System.out
-				.println("Fin Up" + requirement.getRequirementLinkUp().size());
-
 	}
 
 	private void getRequirementsListDOWN() {
@@ -1830,12 +1791,8 @@ public class JJRequirementBean {
 			requirement.getRequirementLinkDown().addAll(listDOWN);
 
 		} else {
-			System.out.println("requirement.getId() != null");
 			if (!listDOWN.isEmpty() && !storeMapDown.isEmpty()) {
 				// Traitement elm par elem
-
-				System.out
-						.println("!listDOWN.isEmpty() && !storeMapDown.isEmpty()");
 
 				List<String> idListDown = new ArrayList<String>();
 				List<String> idStoreMapDown = new ArrayList<String>();
@@ -1910,10 +1867,6 @@ public class JJRequirementBean {
 
 			else if (listDOWN.isEmpty() && !storeMapDown.isEmpty()) {
 				// Supprimer les storeMapDown
-
-				System.out
-						.println("listDOWN.isEmpty() && !storeMapDown.isEmpty()");
-
 				for (JJRequirement req : storeMapDown) {
 					req.getRequirementLinkUp().remove(requirement);
 					jJRequirementService.updateJJRequirement(req);
@@ -1922,8 +1875,7 @@ public class JJRequirementBean {
 				requirement.getRequirementLinkDown().removeAll(storeMapDown);
 
 			} else if (!listDOWN.isEmpty() && storeMapDown.isEmpty()) {
-				System.out
-						.println("!listDOWN.isEmpty() && storeMapDown.isEmpty()");
+
 				// Ajouter list Down
 
 				for (JJRequirement req : listDOWN) {
@@ -1943,12 +1895,6 @@ public class JJRequirementBean {
 			reset();
 
 		}
-
-		System.out
-				.println("Fin Down requirement.getRequirementLinkDown().size() "
-						+ requirement.getRequirementLinkDown().size());
-
-		System.out.println("Quit");
 
 	}
 

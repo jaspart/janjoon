@@ -92,23 +92,17 @@ public class AuthorizationManager implements Serializable {
 					pageContents.get(i).getObjects().get(0), contact, product,
 					project, null);
 
-			if (contactRight.isEmpty())
-			{
-				System.out.println("empty");
+			if (contactRight.isEmpty()) {
+				
 				return true;
-			}				
-			else
-			{
-				System.out.println(contactRight.get(0).getObjet());
-				
-				boolean result=false;
-				
-				for (JJRight right:contactRight)
-				{
-					
-					result=right.getW()||result;
+			} else {
+				boolean result = false;
+
+				for (JJRight right : contactRight) {
+
+					result = right.getW() || result;
 				}
-				
+
 				return result;
 			}
 		}

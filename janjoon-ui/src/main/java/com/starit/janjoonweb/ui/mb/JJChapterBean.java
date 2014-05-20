@@ -204,7 +204,7 @@ public class JJChapterBean {
 	}
 
 	public void loadData(long categoryId) {
-		System.out.println("Init chapterBean");
+
 		this.categoryId = categoryId;
 
 		category = jJCategoryService.findJJCategory(categoryId);
@@ -215,7 +215,6 @@ public class JJChapterBean {
 	}
 
 	private void newChapter() {
-		System.out.println("Create new chapter");
 
 		getProject();
 
@@ -247,8 +246,6 @@ public class JJChapterBean {
 
 	public void deleteChapter() {
 
-		System.out.println("Delete node");
-
 		long idSelectedChapter = Long.parseLong(getSplitFromString(
 				selectedChapterNode.getData().toString(), 1));
 
@@ -264,8 +261,6 @@ public class JJChapterBean {
 
 		elements = getSortedElements(selectedChapter, project, category, false);
 
-		System.out
-				.println("\n***** Update chapter and order for children  *****");
 		for (Map.Entry<Integer, Object> entry : elements.entrySet()) {
 			String className = entry.getValue().getClass().getSimpleName();
 			int lastOrder;
@@ -313,7 +308,6 @@ public class JJChapterBean {
 	public void save() {
 		String message = "";
 		if (chapter.getId() == null) {
-			System.out.println("Save new Chapter");
 
 			jJChapterService.saveJJChapter(chapter);
 			message = "message_successfully_created";
@@ -542,8 +536,7 @@ public class JJChapterBean {
 						fontRequirement));
 				StringReader strReader = new StringReader(
 						requirement.getDescription());
-				System.out.println("strReader = "
-						+ strReader.getClass().getName());
+
 				ArrayList arrList = HTMLWorker.parseToList(strReader, style);
 				paragraph.addAll(arrList);
 				/*
@@ -1178,7 +1171,7 @@ public class JJChapterBean {
 	}
 
 	public void closeDialog(CloseEvent event) {
-		System.out.println("close Dialog");
+
 		chapter = null;
 		parentChapter = null;
 		chapterList = null;

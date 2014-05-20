@@ -340,10 +340,10 @@ public class ConfigListener implements ServletContextListener {
 		}
 
 		if (jJVersionService.getVersions(true, true, null).isEmpty()) {
-			
+
 			JJVersion version;
-			
-			for(int i=0;i<4;i++){
+
+			for (int i = 0; i < 4; i++) {
 				version = new JJVersion();
 				version.setName("VersionName " + i);
 				version.setDescription("VersionDescription " + i);
@@ -382,7 +382,7 @@ public class ConfigListener implements ServletContextListener {
 		if (jJProfileService.findAllJJProfiles().isEmpty()) {
 
 			String[] names = { "ProjectManager", "ProductManager", "CEO",
-					"CTO", "Tester", "Developer" ,"CustomProfile"};
+					"CTO", "Tester", "Developer", "CustomProfile" };
 			for (String name : names) {
 				JJProfile profile = new JJProfile();
 				profile.setName(name);
@@ -411,11 +411,8 @@ public class ConfigListener implements ServletContextListener {
 			JJProfile testerProfile = jJProfileService.getOneProfile("Tester");
 			JJProfile developerProfile = jJProfileService
 					.getOneProfile("Developer");
-			JJProfile customProfile=jJProfileService.getOneProfile("CustomProfile");
-			
-			
-			
-			
+			JJProfile customProfile = jJProfileService
+					.getOneProfile("CustomProfile");
 
 			// Project Manager Profile
 			JJRight right = new JJRight();
@@ -631,7 +628,7 @@ public class ConfigListener implements ServletContextListener {
 			ceoProfile.getRights().add(right);
 
 			jJRightService.saveJJRight(right);
-			//cutomProfile rights
+			// cutomProfile rights
 			right = new JJRight();
 			right.setObjet("JJBuild");
 			right.setR(false);
@@ -642,7 +639,7 @@ public class ConfigListener implements ServletContextListener {
 			customProfile.getRights().add(right);
 
 			jJRightService.saveJJRight(right);
-			
+
 			right = new JJRight();
 			right.setObjet("JJRequirement");
 			right.setR(false);
@@ -762,8 +759,8 @@ public class ConfigListener implements ServletContextListener {
 				contact.getPermissions().add(permission);
 				jJPermissionService.saveJJPermission(permission);
 			}
-			
-			contact=new JJContact();
+
+			contact = new JJContact();
 			contact.setName("Thierry");
 			contact.setFirstname("Thierry");
 			contact.setPassword("BeHappy2012");
@@ -774,15 +771,14 @@ public class ConfigListener implements ServletContextListener {
 			contact.setCreationDate(new Date());
 
 			jJContactService.saveJJContact(contact);
-			
-			JJProfile profile=jJProfileService.getOneProfile("CustomProfile");
+
+			JJProfile profile = jJProfileService.getOneProfile("CustomProfile");
 			JJPermission permission = new JJPermission();
 			permission.setContact(contact);
 			permission.setProfile(profile);
 			contact.getPermissions().add(permission);
 			jJPermissionService.saveJJPermission(permission);
-			
-			
+
 		}
 
 		if (jJProductService.getProducts(true).isEmpty()) {
@@ -790,19 +786,17 @@ public class ConfigListener implements ServletContextListener {
 			JJContact contact = jJContactService.getContactByEmail(
 					"janjoon.mailer@gmail.com", true);
 
-			if (contact!=null) {
+			if (contact != null) {
 				manager = contact;
 			}
 
 			JJProduct product;
-			
 
 			List<JJVersion> jJVersionList = jJVersionService.getVersions(true,
 					true, null);
 
-			Set<JJVersion> versions = new HashSet<JJVersion>();	
+			Set<JJVersion> versions = new HashSet<JJVersion>();
 
-			
 			versions = new HashSet<JJVersion>();
 			for (int i = 0; i < 2; i++) {
 				product = new JJProduct();
@@ -876,14 +870,14 @@ public class ConfigListener implements ServletContextListener {
 		JJContact contact = jJContactService.getContactByEmail(
 				"janjoon.mailer@gmail.com", true);
 		JJContact manager = null;
-		if (contact!=null) {
+		if (contact != null) {
 			manager = contact;
 		}
 
 		if (jJProjectService.getProjects(true).isEmpty()) {
-			
+
 			JJProject project;
-			
+
 			for (int i = 0; i < 2; i++) {
 				project = new JJProject();
 				project.setName("ProjectName " + i);
@@ -893,66 +887,66 @@ public class ConfigListener implements ServletContextListener {
 				project.setManager(manager);
 
 				jJProjectService.saveJJProject(project);
-			}}
-
-			List<JJProject> projectList = jJProjectService.getProjects(true);
-
-			List<JJProduct> productList = jJProductService.getProducts(true);
-			if (jJRequirementService.findAllJJRequirements().isEmpty()) {
-				List<JJStatus> status = jJStatusService.getStatus("JJTask",
-						true, null, true);
-				JJSprint s = jJSprintService.getSprints(true).get(0);
-				JJRequirement jJRequirement;
-				for (int j = 0; j < projectList.size(); j++) {
-					jJRequirement = new JJRequirement();
-					jJRequirement.setName("Requirement " + j);
-					jJRequirement.setDescription("RequirementDescription " + j);
-					jJRequirement.setCreationDate(new Date());
-					jJRequirement.setEnabled(true);
-					jJRequirement.setProduct(productList.get(j));
-					jJRequirement.setProject(projectList.get(j));
-					jJRequirementService.saveJJRequirement(jJRequirement);
-					JJTask jJTask;
-					for (int i = 0; i < 4; i++) {
-						jJTask = new JJTask();
-						jJTask.setName("TaskName " + i + ":R-" + j);
-						jJTask.setDescription("TaskDescription " + i + ":R-"
-								+ j);
-						jJTask.setCreationDate(new Date());
-						jJTask.setEnabled(true);
-						jJTask.setRequirement(jJRequirement);
-						jJTask.setWorkloadPlanned(10);
-						jJTask.setSprint(s);
-						jJTask.setStatus(status.get(i % 3));
-						jJTaskService.saveJJTask(jJTask);
-					}
-				}
 			}
-			if (jJMessageService.findAllJJMessages().isEmpty()) {
+		}
 
-				int i = 0;
-				while (i < productList.size()) {
+		List<JJProject> projectList = jJProjectService.getProjects(true);
 
-					for (int j = 0; j < 5; j++) {
-
-						JJMessage mes = new JJMessage();
-						mes.setName("mes : " + j + "/" + i);
-						mes.setCreatedBy(manager);
-						//mes.setContact(manager);
-						mes.setProduct(productList.get(i));
-						mes.setProject(projectList.get(i));
-						mes.setDescription("mesDescription : " + j + "/" + i);
-						mes.setCreationDate(new Date());
-						mes.setEnabled(true);
-						mes.setMessage("message tttttt" + j + "/" + i);
-						jJMessageService.saveJJMessage(mes);
-
-					}
-					i++;
-
+		List<JJProduct> productList = jJProductService.getProducts(true);
+		if (jJRequirementService.findAllJJRequirements().isEmpty()) {
+			List<JJStatus> status = jJStatusService.getStatus("JJTask", true,
+					null, true);
+			JJSprint s = jJSprintService.getSprints(true).get(0);
+			JJRequirement jJRequirement;
+			for (int j = 0; j < projectList.size(); j++) {
+				jJRequirement = new JJRequirement();
+				jJRequirement.setName("Requirement " + j);
+				jJRequirement.setDescription("RequirementDescription " + j);
+				jJRequirement.setCreationDate(new Date());
+				jJRequirement.setEnabled(true);
+				jJRequirement.setProduct(productList.get(j));
+				jJRequirement.setProject(projectList.get(j));
+				jJRequirementService.saveJJRequirement(jJRequirement);
+				JJTask jJTask;
+				for (int i = 0; i < 4; i++) {
+					jJTask = new JJTask();
+					jJTask.setName("TaskName " + i + ":R-" + j);
+					jJTask.setDescription("TaskDescription " + i + ":R-" + j);
+					jJTask.setCreationDate(new Date());
+					jJTask.setEnabled(true);
+					jJTask.setRequirement(jJRequirement);
+					jJTask.setWorkloadPlanned(10);
+					jJTask.setSprint(s);
+					jJTask.setStatus(status.get(i % 3));
+					jJTaskService.saveJJTask(jJTask);
 				}
 			}
 		}
+		if (jJMessageService.findAllJJMessages().isEmpty()) {
+
+			int i = 0;
+			while (i < productList.size()) {
+
+				for (int j = 0; j < 5; j++) {
+
+					JJMessage mes = new JJMessage();
+					mes.setName("mes : " + j + "/" + i);
+					mes.setCreatedBy(manager);
+					// mes.setContact(manager);
+					mes.setProduct(productList.get(i));
+					mes.setProject(projectList.get(i));
+					mes.setDescription("mesDescription : " + j + "/" + i);
+					mes.setCreationDate(new Date());
+					mes.setEnabled(true);
+					mes.setMessage("message tttttt" + j + "/" + i);
+					jJMessageService.saveJJMessage(mes);
+
+				}
+				i++;
+
+			}
+		}
+	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {

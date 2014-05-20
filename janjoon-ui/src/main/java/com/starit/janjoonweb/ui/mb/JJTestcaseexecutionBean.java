@@ -114,24 +114,19 @@ public class JJTestcaseexecutionBean {
 
 	public void toto() {
 		testcaseexecution.setPassed(status);
-		System.out.println("testcaseexecution.getPassed() "
-				+ testcaseexecution.getPassed());
+
 	}
 
 	public void save() {
-		System.out.println("In save testcase execution");
 
 		Boolean status = testcaseexecution.getPassed();
 
 		JJTestcaseexecution tce = jJTestcaseexecutionService
 				.findJJTestcaseexecution(testcaseexecution.getId());
 
-		System.out.println("JOJO");
 		tce.setPassed(status);
 		tce.setUpdatedDate(new Date());
 		jJTestcaseexecutionService.updateJJTestcaseexecution(tce);
-
-		System.out.println("End save testcase execution");
 
 	}
 

@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.util.*;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jgit.api.*;
 import org.eclipse.jgit.api.errors.*;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
@@ -16,9 +17,8 @@ import com.starit.janjoonweb.domain.JJContact;
 
 public class GitConfigManager extends AbstractConfigManager {
 
-	/**
-	 * 
-	 */
+	private static final Logger logger = Logger
+			.getLogger(GitConfigManager.class);
 	private static final long serialVersionUID = 1L;
 	private Git git;
 	private Repository repository;
@@ -44,10 +44,11 @@ public class GitConfigManager extends AbstractConfigManager {
 					// scan up the file system tree
 					.build();
 			git = new Git(repository);
-			System.out.println("GitConfigManager created");
+
+			logger.debug("GitConfigManager created");
 
 		} catch (IOException e) {
-			System.out.println("wrong Repository Path");
+			logger.error("wrong Repository Path");
 			e.printStackTrace();
 		}
 
@@ -73,10 +74,10 @@ public class GitConfigManager extends AbstractConfigManager {
 					// scan up the file system tree
 					.build();
 			git = new Git(repository);
-			System.out.println("GitConfigManager created");
+			logger.debug("GitConfigManager created");
 
 		} catch (IOException e) {
-			System.out.println("wrong Repository Path");
+			logger.error("wrong Repository Path");
 			e.printStackTrace();
 		}
 	}
@@ -100,10 +101,10 @@ public class GitConfigManager extends AbstractConfigManager {
 					.build();
 			git = new Git(repository);
 
-			System.out.println("GitConfigManager created");
+			logger.debug("GitConfigManager created");
 
 		} catch (IOException e) {
-			System.out.println("wrong Repository Path");
+			logger.error("wrong Repository Path");
 			e.printStackTrace();
 		}
 	}
@@ -126,10 +127,10 @@ public class GitConfigManager extends AbstractConfigManager {
 					// scan up the file system tree
 					.build();
 			git = new Git(repository);
-			System.out.println("GitConfigManager created");
+			logger.debug("GitConfigManager created");
 
 		} catch (IOException e) {
-			System.out.println("wrong Repository Path");
+			logger.error("wrong Repository Path");
 			e.printStackTrace();
 		}
 
@@ -142,38 +143,42 @@ public class GitConfigManager extends AbstractConfigManager {
 	// commit a repository
 	@Override
 	public boolean checkIn(String message) {
+
+		logger.info("---commit operation started!!");
 		try {
+
 			CommitCommand commit = git.commit();
 			// commit.setAuthor(jJContact.getName(), "");
 			commit.setMessage(message);
 			commit.setAll(true);
 			commit.call();
-			System.out.println(repository.getDirectory().getName()
-					+ " Commited");
+			logger.debug(repository.getDirectory().getName() + " Commited!!!");
 			return true;
 		} catch (NoHeadException e) {
-			System.out.println("NoHeadException");
-			e.printStackTrace();
+
+			logger.error("error throw commit operation :NoHeadException"
+					+ e.getMessage());
 			return false;
 		} catch (NoMessageException e) {
-			System.out.println("NoMessageException");
-			e.printStackTrace();
+			logger.error("error throw commit operation :NoMessageException"
+					+ e.getMessage());
 			return false;
 		} catch (UnmergedPathsException e) {
-			System.out.println("UnmergedPathsException");
-			e.printStackTrace();
+			logger.error("error throw commit operation :UnmergedPathsException"
+					+ e.getMessage());
 			return false;
 		} catch (ConcurrentRefUpdateException e) {
-			System.out.println("ConcurrentRefUpdateException");
-			e.printStackTrace();
+			logger.error("error throw commit operation :ConcurrentRefUpdateException"
+					+ e.getMessage());
 			return false;
 		} catch (WrongRepositoryStateException e) {
-			System.out.println("WrongRepositoryStateException");
-			e.printStackTrace();
+			logger.error("error throw commit operation :WrongRepositoryStateException"
+					+ e.getMessage());
 			return false;
 		} catch (GitAPIException e) {
-			System.out.println("GitAPIException");
-			e.printStackTrace();
+
+			logger.error("error throw commit operation :GitAPIException"
+					+ e.getMessage());
 			return false;
 		}
 
@@ -182,33 +187,36 @@ public class GitConfigManager extends AbstractConfigManager {
 	// mettre à jour une repository par rapport au head
 	@Override
 	public boolean checkOut(String branche) {
+
+		logger.info("---checkOut operation started!!!!");
 		try {
+
 			CheckoutCommand checkOutCommand = git.checkout();
-			// checkOutCommand.setAllPaths(true);
 			checkOutCommand.setName(branche);
 			checkOutCommand.call();
-			System.out.println(repository.getDirectory().getName()
-					+ " checkedOut");
+			logger.debug(repository.getDirectory().getName()
+					+ " checked Out!!!");
 			return true;
 		} catch (RefAlreadyExistsException e) {
-			System.out.println("RefAlreadyExistsException");
-			e.printStackTrace();
+
+			logger.error("error throw check out operation :RefAlreadyExistsException "
+					+ e.getMessage());
 			return false;
 		} catch (RefNotFoundException e) {
-			System.out.println("RefNotFoundException");
-			e.printStackTrace();
+			logger.error("error throw check out operation :RefNotFoundException "
+					+ e.getMessage());
 			return false;
 		} catch (InvalidRefNameException e) {
-			System.out.println("InvalidRefNameException");
-			e.printStackTrace();
+			logger.error("error throw check out operation :InvalidRefNameException "
+					+ e.getMessage());
 			return false;
 		} catch (CheckoutConflictException e) {
-			System.out.println("CheckoutConflictException");
-			e.printStackTrace();
+			logger.error("error throw check out operation :CheckoutConflictException "
+					+ e.getMessage());
 			return false;
 		} catch (GitAPIException e) {
-			System.out.println("GitAPIException");
-			e.printStackTrace();
+			logger.error("error throw check out operation :GitAPIException "
+					+ e.getMessage());
 			return false;
 		}
 
@@ -217,6 +225,7 @@ public class GitConfigManager extends AbstractConfigManager {
 	@Override
 	public boolean createRepository(String path) {
 
+		logger.info("create repository operation started!!!!");
 		try {
 			Repository newRepo;
 			if (path.endsWith("/"))
@@ -225,11 +234,13 @@ public class GitConfigManager extends AbstractConfigManager {
 				newRepo = new FileRepository(path + "/.git");
 
 			newRepo.create();
-			System.out.println(newRepo.getDirectory().getPath() + " Created");
+
+			logger.debug(newRepo.getDirectory().getPath() + " Created!!!");
 			return true;
 		} catch (IOException e) {
-			System.out.println("IOException");
-			e.printStackTrace();
+
+			logger.error("error threw create repository operation :IOException"
+					+ e.getMessage());
 			return false;
 		}
 
@@ -254,7 +265,7 @@ public class GitConfigManager extends AbstractConfigManager {
 		int i = 0;
 		while (i < files.length) {
 			if (!files[i].getName().equalsIgnoreCase(".git")) {
-				// System.out.println(files[i].getName());
+
 				if (files[i].isDirectory()) {
 					DefaultTreeNode tree = new DefaultTreeNode("folder",
 							files[i], root);
@@ -278,6 +289,7 @@ public class GitConfigManager extends AbstractConfigManager {
 	@Override
 	public String cloneRemoteRepository(String url, String name, String path) {
 
+		logger.info("clone repository operation started !!!");
 		try {
 			CloneCommand cloneCommand = Git.cloneRepository();
 			File file = new File(path + "/" + name);
@@ -290,7 +302,6 @@ public class GitConfigManager extends AbstractConfigManager {
 								jJContact.getName(), jJContact.getPassword()));
 			}
 			cloneCommand.call();
-			System.out.println("cloneRemoteRepository getted");
 			FileRepositoryBuilder builder = new FileRepositoryBuilder();
 			Repository repo;
 			try {
@@ -298,38 +309,42 @@ public class GitConfigManager extends AbstractConfigManager {
 				repo = builder.setGitDir(file)
 				// scan up the file system tree
 						.build();
-				System.out.println("repository getted"
-						+ repo.getDirectory().getPath());
+
+				logger.debug("repository cloned !!");
 				return repo.getDirectory().getPath();
 			} catch (IOException e) {
-				e.printStackTrace();
+
+				logger.error("error throw clone operation :IOException"
+						+ e.getMessage());
 				return null;
 			}
 
 		} catch (InvalidRemoteException e) {
-			System.out.println("InvalidRemoteException getted");
-			e.printStackTrace();
+			logger.error("error throw clone operation :InvalidRemoteException"
+					+ e.getMessage());
 			try {
 				delete(new File(path + "/" + name));
 			} catch (IOException e1) {
-
-				e1.printStackTrace();
+				logger.error("error throw clone operation :IOException"
+						+ e1.getMessage());
 			}
 			return "InvalidRemoteException";
 		} catch (TransportException e) {
 
-			System.out.println("TransportException getted" + url);
+			logger.error("error throw clone operation :TransportException"
+					+ e.getMessage());
 			try {
 				delete(new File(path + "/" + name));
 			} catch (IOException e1) {
 
-				e1.printStackTrace();
+				logger.error("error throw clone operation :IOException"
+						+ e1.getMessage());
 			}
 			return "TransportException";
 		} catch (GitAPIException e) {
 
-			System.out.println("GitAPIException getted");
-			e.printStackTrace();
+			logger.error("error throw clone operation :GitAPIException"
+					+ e.getMessage());
 			return null;
 		}
 	}
@@ -337,6 +352,7 @@ public class GitConfigManager extends AbstractConfigManager {
 	@Override
 	public boolean pushRepository() {
 
+		logger.info("push repository operation started !!!");
 		try {
 			git = new Git(repository);
 
@@ -349,11 +365,11 @@ public class GitConfigManager extends AbstractConfigManager {
 						.setCredentialsProvider(new UsernamePasswordCredentialsProvider(
 								jJContact.getName(), jJContact.getPassword()));
 			pushCommand.call();
-			System.out.println("push called");
+			logger.debug("push repository operation done with success");
 			return true;
 		} catch (GitAPIException e) {
-			System.out.println("GitAPIException");
-			e.printStackTrace();
+			logger.error("error throw push operation :GitAPIException "
+					+ e.getMessage());
 			return false;
 		}
 
@@ -362,6 +378,7 @@ public class GitConfigManager extends AbstractConfigManager {
 	@Override
 	public boolean pullRepository() {
 
+		logger.info("pull repository operation started !!!");
 		try {
 			git = new Git(repository);
 			StoredConfig config = repository.getConfig();
@@ -377,48 +394,48 @@ public class GitConfigManager extends AbstractConfigManager {
 								jJContact.getName(), jJContact.getPassword()));
 
 			putchCommand.call();
-			System.out.println(repository.getDirectory().getParent()
-					+ " pulled");
+			logger.debug("pull repository operation done with success");
 			return true;
 		} catch (URISyntaxException e) {
-			System.out.println("URISyntaxException");
-			e.printStackTrace();
+
+			logger.error("error throw pull operation :URISyntaxException "
+					+ e.getMessage());
 			return false;
 		} catch (WrongRepositoryStateException e) {
-			System.out.println("WrongRepositoryStateException");
-			e.printStackTrace();
+			logger.error("error throw pull operation :WrongRepositoryStateException "
+					+ e.getMessage());
 			return false;
 		} catch (InvalidConfigurationException e) {
-			System.out.println("InvalidConfigurationException");
-			e.printStackTrace();
+			logger.error("error throw pull operation :InvalidConfigurationException "
+					+ e.getMessage());
 			return false;
 		} catch (DetachedHeadException e) {
-			System.out.println("DetachedHeadException");
-			e.printStackTrace();
+			logger.error("error throw pull operation :DetachedHeadException "
+					+ e.getMessage());
 			return false;
 		} catch (InvalidRemoteException e) {
-			System.out.println("InvalidRemoteException");
-			e.printStackTrace();
+			logger.error("error throw pull operation :InvalidRemoteException "
+					+ e.getMessage());
 			return false;
 		} catch (CanceledException e) {
-			System.out.println("CanceledException");
-			e.printStackTrace();
+			logger.error("error throw pull operation :CanceledException "
+					+ e.getMessage());
 			return false;
 		} catch (RefNotFoundException e) {
-			System.out.println("RefNotFoundException");
-			e.printStackTrace();
+			logger.error("error throw pull operation :RefNotFoundException "
+					+ e.getMessage());
 			return false;
 		} catch (NoHeadException e) {
-			System.out.println("NoHeadException");
-			e.printStackTrace();
+			logger.error("error throw pull operation :NoHeadException "
+					+ e.getMessage());
 			return false;
 		} catch (TransportException e) {
-			System.out.println("TransportException");
-			e.printStackTrace();
+			logger.error("error throw pull operation :TransportException "
+					+ e.getMessage());
 			return false;
 		} catch (GitAPIException e) {
-			System.out.println("GitAPIException");
-			e.printStackTrace();
+			logger.error("error throw pull operation :GitAPIException "
+					+ e.getMessage());
 			return false;
 		}
 
@@ -430,14 +447,14 @@ public class GitConfigManager extends AbstractConfigManager {
 		path = path.replace(repository.getDirectory().getParent(), "");
 		File myfile = new File(repository.getDirectory().getParent() + "/"
 				+ path, name);
+		logger.info("add file operation started !!!");
 		try {
 
-			System.out.println(myfile.getPath());
 			if (!isFile)
 				myfile.mkdirs();
 			myfile.createNewFile();
 			git.add().addFilepattern(".").call();
-			System.out.println("Added file " + myfile + " to repository at "
+			logger.info("Add file " + myfile + " to repository at "
 					+ repository.getDirectory());
 			return true;
 		} catch (IOException e) {
@@ -448,35 +465,39 @@ public class GitConfigManager extends AbstractConfigManager {
 					git.add().addFilepattern(".").call();
 					myfile.createNewFile();
 					git.add().addFilepattern(".").call();
-					System.out.println("Added file " + myfile
-							+ " to repository at " + repository.getDirectory());
+					logger.info("Add file " + myfile + " to repository at "
+							+ repository.getDirectory());
 					return true;
 				} catch (IOException e1) {
-					System.out.println("IOException");
-					e.printStackTrace();
+
+					logger.error("error throw add file operation :IOException"
+							+ e1.getMessage());
 					return false;
 				} catch (NoFilepatternException e1) {
-					System.out.println("NoFilepatternException");
-					e.printStackTrace();
+					logger.error("error throw add file operation :NoFilepatternException"
+							+ e1.getMessage());
+
 					return false;
 				} catch (GitAPIException e1) {
-					System.out.println("GitAPIException");
-					e.printStackTrace();
+					logger.error("error throw add file operation :GitAPIException"
+							+ e1.getMessage());
+
 					return false;
 				}
 
 			} else {
-				System.out.println("IOException");
-				e.printStackTrace();
+				logger.error("error throw add file operation :IOException"
+						+ e.getMessage());
+
 				return false;
 			}
 		} catch (NoFilepatternException e) {
-			System.out.println("NoFilepatternException");
-			e.printStackTrace();
+			logger.error("error throw add file operation :NoFilepatternException"
+					+ e.getMessage());
 			return false;
 		} catch (GitAPIException e) {
-			System.out.println("GitAPIException");
-			e.printStackTrace();
+			logger.error("error throw add file operation :GitAPIException"
+					+ e.getMessage());
 			return false;
 		}
 
@@ -505,12 +526,9 @@ public class GitConfigManager extends AbstractConfigManager {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 			writer.write(texte);
 			writer.close();
-			System.out.println("1");
 			return true;
 		} catch (IOException e) {
-			System.out.println("IOException");
-			System.out.println("2");
-			e.printStackTrace();
+
 			return false;
 		}
 

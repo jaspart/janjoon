@@ -20,13 +20,12 @@ public class SprintUtil {
 	private boolean render;
 	private boolean renderTaskForm;
 	private boolean renderProjectList;
-	
 
 	public SprintUtil(JJSprint sprint, List<JJTask> tasks) {
-		
-		this.sprint = sprint;		
-		renderTaskForm = false;	
-		renderProjectList=(sprint.getProject()==null);
+
+		this.sprint = sprint;
+		renderTaskForm = false;
+		renderProjectList = (sprint.getProject() == null);
 		calculateField(tasks);
 	}
 
@@ -160,7 +159,7 @@ public class SprintUtil {
 	public void setRenderTaskForm(boolean renderTaskForm) {
 		this.renderTaskForm = renderTaskForm;
 	}
-	
+
 	public static List<SprintUtil> generateSprintUtilList(
 			List<JJSprint> sprints, JJTaskService jJTaskService) {
 		List<SprintUtil> sprintUtils = null;

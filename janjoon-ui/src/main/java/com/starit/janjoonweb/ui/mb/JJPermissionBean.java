@@ -116,7 +116,7 @@ public class JJPermissionBean {
 	}
 
 	public void newPermission() {
-		System.out.println("Initial bean permission");
+
 		permissionAdmin = new JJPermission();
 		profile = null;
 		project = null;
@@ -124,17 +124,16 @@ public class JJPermissionBean {
 	}
 
 	public void save() {
-		System.out.println("SAVING Permission...");
+
 		String message = "";
 		FacesMessage facesMessage = null;
 		if (permissionAdmin.getId() == null) {
-			System.out.println("IS a new JJPermission");
 
 			List<JJPermission> permission = jJPermissionService.getPermissions(
 					contact, false, profile, project, product);
 
 			if (permission.isEmpty()) {
-				System.out.println("is empty");
+
 				permissionAdmin.setProfile(profile);
 				permissionAdmin.setProject(project);
 				permissionAdmin.setProduct(product);

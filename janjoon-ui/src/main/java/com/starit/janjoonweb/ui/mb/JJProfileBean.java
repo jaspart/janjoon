@@ -49,7 +49,7 @@ public class JJProfileBean {
 	}
 
 	public void newProfile(JJRightBean jJRightBean) {
-		System.out.println("Initial bean product");
+
 		message = "New Profile";
 		profileAdmin = new JJProfile();
 
@@ -60,7 +60,6 @@ public class JJProfileBean {
 	public void deleteProfile() {
 
 		if (profileAdmin != null) {
-			System.out.println(profileAdmin.getName());
 
 			// profileAdmin.setEnabled(false);
 			// jJProfileService.updateJJProfile(profileAdmin);
@@ -69,7 +68,7 @@ public class JJProfileBean {
 	}
 
 	public void save(JJRightBean jJRightBean) {
-		System.out.println("SAVING Profile...");
+
 		String message = "";
 
 		List<JJRight> rights = jJRightBean.getRightListTable();
@@ -85,7 +84,6 @@ public class JJProfileBean {
 		}
 
 		if (profileAdmin.getId() == null) {
-			System.out.println("IS a new JJProfile");
 
 			jJProfileService.saveJJProfile(profileAdmin);
 			message = "message_successfully_created";
@@ -106,7 +104,7 @@ public class JJProfileBean {
 	}
 
 	public void closeDialog(JJRightBean jJRightBean) {
-		System.out.println("close dialog");
+
 		profileAdmin = null;
 		jJRightBean.setRightAdmin(null);
 		jJRightBean.setRightListTable(null);

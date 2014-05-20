@@ -28,7 +28,7 @@ public class JJRight {
 
 	@ManyToOne
 	private JJProfile profile;
-	
+
 	@Override
 	public boolean equals(Object object) {
 		return (object instanceof JJRight) && (getId() != null) ? getId()

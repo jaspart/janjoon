@@ -44,7 +44,6 @@ public class JJConfigurationBean {
 	@PostConstruct
 	public void init() {
 
-		System.out.println("------initConfiguration------");
 		columns = new ArrayList<String>();
 		columns.add("name");
 		columns.add("description");
@@ -126,8 +125,6 @@ public class JJConfigurationBean {
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted", "JJConfiguration");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		System.out
-				.println("deleted--------------------------------------------------------");
 		configList = jJConfigurationService.getConfigs(true);
 		jJconfiguration = new JJConfiguration();
 	}
@@ -204,7 +201,8 @@ public class JJConfigurationBean {
 
 		CKEditor descriptionCreateInput = (CKEditor) application
 				.createComponent(CKEditor.COMPONENT_TYPE);
-		descriptionCreateInput.setToolbar("[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]");
+		descriptionCreateInput
+				.setToolbar("[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]");
 		descriptionCreateInput.setId("descriptionCreateInput");
 		descriptionCreateInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
@@ -327,7 +325,8 @@ public class JJConfigurationBean {
 		CKEditor descriptionEditInput = (CKEditor) application
 				.createComponent(CKEditor.COMPONENT_TYPE);
 		descriptionEditInput.setId("descriptionEditInput");
-		descriptionEditInput.setToolbar("[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]");		
+		descriptionEditInput
+				.setToolbar("[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]");
 		descriptionEditInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
 						"#{jJConfigurationBean.JJConfiguration_.description}",

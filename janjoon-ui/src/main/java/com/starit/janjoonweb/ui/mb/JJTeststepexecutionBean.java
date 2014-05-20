@@ -215,8 +215,6 @@ public class JJTeststepexecutionBean {
 
 	private void newTeststepexecutions(JJTestcaseexecution testcaseexecution) {
 
-		System.out.println("In new teststepexec");
-
 		JJTestcaseexecution tce = jJTestcaseexecutionService
 				.findJJTestcaseexecution(testcaseexecution.getId());
 
@@ -244,8 +242,6 @@ public class JJTeststepexecutionBean {
 					.saveJJTeststepexecution(teststepexecution);
 
 		}
-
-		System.out.println("End In new teststepexec");
 	}
 
 	private void newBug() {
@@ -269,16 +265,13 @@ public class JJTeststepexecutionBean {
 	}
 
 	public void toto() {
-		System.out.println("dfgdfgfg");
-		System.out.println(status);
+
 		teststepexecution.setPassed(status);
-		System.out.println(teststepexecution.getPassed());
+
 		disabled = teststepexecution.getPassed();
 	}
 
 	public void onTabChange(TabChangeEvent event) {
-		System.out.println("Active Tab: " + event.getTab().getTitle());
-		System.out.println("onTabChange tabIndex " + activeIndex);
 
 		if (activeIndex != elements.size() - 1) {
 			disabledTestcase = true;
@@ -290,9 +283,6 @@ public class JJTeststepexecutionBean {
 		teststepexecution = elements.get(activeIndex);
 
 		status = teststepexecution.getPassed();
-
-		System.out.println("name " + teststepexecution.getName());
-		System.out.println("status " + status);
 
 		if (status != null) {
 
@@ -315,8 +305,6 @@ public class JJTeststepexecutionBean {
 						jJBuildBean.getBuild(), true, true);
 
 				bug = bugs.get(0);
-
-				System.out.println("bug.getName() " + bug.getName());
 			}
 
 			disabled = status;
@@ -326,17 +314,11 @@ public class JJTeststepexecutionBean {
 			disabled = true;
 			newBug();
 		}
-
-		System.out.println("tabIndex " + activeIndex);
 	}
 
 	public void nextTab() {
 
-		System.out.println("begin next");
-
 		// Traiter le teststep précedent
-
-		System.out.println("old activeIndex " + activeIndex);
 
 		teststepexecution = elements.get(activeIndex);
 		status = teststepexecution.getPassed();
@@ -348,17 +330,10 @@ public class JJTeststepexecutionBean {
 		tse.setPassed(status1);
 		tse.setUpdatedDate(new Date());
 
-		System.out.println("yy");
 		jJTeststepexecutionService.updateJJTeststepexecution(tse);
-		System.out.println("ooo");
-
-		System.out.println("name " + tse.getName());
-		System.out.println("status " + status);
 
 		if (status1 != null && status1 == false) {
 			if (bug.getId() == null) {
-
-				System.out.println("bug.getId() == null");
 
 				bug.setCreationDate(new Date());
 
@@ -370,27 +345,18 @@ public class JJTeststepexecutionBean {
 				jJBugService.saveJJBug(bug);
 
 			} else {
-				System.out.println("bug.getId() != null");
-
 				bug.setUpdatedDate(new Date());
 				jJBugService.updateJJBug(bug);
 			}
 		}
 
-		System.out.println("Heeeere");
-
 		activeIndex++;
-
-		System.out.println("new activeIndex " + activeIndex);
 
 		// Charger le teststep courant
 
 		teststepexecution = elements.get(activeIndex);
 
 		status = teststepexecution.getPassed();
-
-		System.out.println("name++ " + teststepexecution.getName());
-		System.out.println("status++ " + status);
 
 		if (status != null) {
 
@@ -413,8 +379,6 @@ public class JJTeststepexecutionBean {
 						jJBuildBean.getBuild(), true, true);
 
 				bug = bugs.get(0);
-
-				System.out.println("bug.getName() " + bug.getName());
 			}
 
 			disabled = status;
@@ -432,12 +396,9 @@ public class JJTeststepexecutionBean {
 		}
 		disabledNext = !disabledTestcase;
 
-		System.out.println("Quit next");
-
 	}
 
 	public void quitTab() {
-		System.out.println("In quit Tab");
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
@@ -479,7 +440,6 @@ public class JJTeststepexecutionBean {
 	}
 
 	public void closeDialog() {
-		System.out.println("in close dialog");
 
 		teststepexecution = null;
 		teststepexecutions = null;
@@ -498,7 +458,6 @@ public class JJTeststepexecutionBean {
 				.getAttribute("jJTestcaseBean");
 		jJTestcaseBean.loadData();
 
-		System.out.println("end close dialog");
 	}
 
 }

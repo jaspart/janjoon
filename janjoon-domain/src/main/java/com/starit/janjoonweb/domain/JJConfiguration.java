@@ -19,6 +19,5 @@ public class JJConfiguration extends JJAbstractEntity {
 	@NotNull
 	@Size(max = 100)
 	private String val;
-	
-	
+
 }

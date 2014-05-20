@@ -12,30 +12,42 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.el.ELContext;
-import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.html.HtmlOutputText;
-import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.DateTimeConverter;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.*;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.event.TabChangeEvent;
+import org.primefaces.event.TabCloseEvent;
 import org.primefaces.extensions.component.codemirror.CodeMirror;
 import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.starit.janjoonweb.domain.*;
-import com.starit.janjoonweb.ui.mb.util.*;
-import com.starit.janjoonweb.ui.mb.util.service.*;
+import com.starit.janjoonweb.domain.JJConfiguration;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJMessage;
+import com.starit.janjoonweb.domain.JJMessageService;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJStatus;
+import com.starit.janjoonweb.domain.JJStatusService;
+import com.starit.janjoonweb.domain.JJTask;
+import com.starit.janjoonweb.domain.JJTaskService;
+import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.service.AbstractConfigManager;
+import com.starit.janjoonweb.ui.mb.util.service.FileMap;
+import com.starit.janjoonweb.ui.mb.util.service.GitConfigManager;
+import com.starit.janjoonweb.ui.mb.util.service.TreeOperation;
 
 @Scope("session")
 @Component("jJDevelopment")
@@ -43,6 +55,8 @@ public class DevelopmentBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private boolean render;
+
+	static Logger logger = Logger.getLogger(DevelopmentBean.class);
 
 	@Autowired
 	private JJStatusService jJStatusService;
@@ -97,14 +111,12 @@ public class DevelopmentBean implements Serializable {
 	public DevelopmentBean() throws FileNotFoundException, IOException {
 
 		init = false;
-		System.out.println("firstInit");
 		initJJDevlopment();
 	}
 
 	public DevelopmentBean(DevelopmentBean devBean) {
 
 		init = false;
-		System.out.println("firstInitFromInjection");
 		this.jJStatusService = devBean.jJStatusService;
 		this.jJTaskService = devBean.jJTaskService;
 		this.jJMessageService = devBean.jJMessageService;
@@ -140,8 +152,6 @@ public class DevelopmentBean implements Serializable {
 		configuration = confbean.getjJconfiguration();
 
 		if (getConfigManager() != null && version != null && product != null) {
-
-			System.out.println(contact.getName());
 
 			render = true;
 			treeOperation = new TreeOperation(configManager);
@@ -262,12 +272,12 @@ public class DevelopmentBean implements Serializable {
 							&& !path.equalsIgnoreCase("InvalidRemoteException")
 							&& !path.equalsIgnoreCase("TransportException")) {
 						configManager = new GitConfigManager(url, path, contact);
-						System.out.println(path);
+
 					} else if (path == null) {
 						path = System.getProperty("user.home") + "/git/"
 								+ product.getName() + "/";
 						configManager = new GitConfigManager(url, path, contact);
-						System.out.println(path);
+
 					} else {
 						configManager = null;
 
@@ -276,13 +286,12 @@ public class DevelopmentBean implements Serializable {
 					String path = System.getProperty("user.home") + "/git/"
 							+ product.getName() + "/";
 					configManager = new GitConfigManager(url, path, contact);
-					System.out.println(path);
+
 				}
-			}else
-			{
-				System.out.println("badURL");
+			} else {
+
 				configManager = null;
-				
+
 			}
 
 		} else
@@ -497,8 +506,6 @@ public class DevelopmentBean implements Serializable {
 
 		}
 		task = jJTaskService.findJJTask(task.getId());
-
-		System.out.println("commit");
 		if (check) {
 
 			task.setEndDateReal(new Date());
@@ -586,12 +593,11 @@ public class DevelopmentBean implements Serializable {
 					i = contains(file);
 					filemap.setIndex(i);
 					files.set(filemap.getIndex(), filemap);
-					System.out.println(filemap.getMode());
 				} catch (FileNotFoundException e) {
-					System.out.println("filenotFound");
+
 					e.printStackTrace();
 				} catch (IOException e) {
-					System.out.println("filenotFound");
+
 					e.printStackTrace();
 				}
 			}
@@ -611,16 +617,8 @@ public class DevelopmentBean implements Serializable {
 
 		String fileTexte = IOUtils.toString(inputStream);
 
-		if (cm.getValue().toString().contains(fileTexte)
+		if (!cm.getValue().toString().contains(fileTexte)
 				&& fileTexte.contains(cm.getValue().toString())) {
-
-			System.out.println(activeTabIndex + ":false"
-					+ files.get(activeTabIndex).getIndex());
-
-		} else {
-
-			System.out.println(activeTabIndex + ":true"
-					+ files.get(activeTabIndex).getIndex());
 			files.get(activeTabIndex).setChange(true);
 
 		}
@@ -631,9 +629,6 @@ public class DevelopmentBean implements Serializable {
 
 		FileMap index = (FileMap) event.getData();
 		int j = contains(index.getFile());
-		System.out.println("onCloseTab-------------------------"
-				+ files.get(j).getTitle() + files.get(j).getIndex() + ":"
-				+ index.isChange());
 
 		if (index.isChange()) {
 
@@ -676,7 +671,7 @@ public class DevelopmentBean implements Serializable {
 		selectedTree.getChildren().clear();
 		selectedTree.getParent().getChildren().remove(selectedTree);
 		selectedTree.setParent(null);
-		System.out.println("deletFile" + f.getName());
+
 		treeOperation.deleteFile(f);
 		int i = contains(f);
 		if (i != -1) {
@@ -693,7 +688,7 @@ public class DevelopmentBean implements Serializable {
 
 		File f = (File) selectedTree.getData();
 		configManager.checkIn("commitFile" + f.getName());
-		System.out.println("commitFile");
+
 		FacesMessage msg = MessageFactory.getMessage(
 				"dev.file_successfully_commited", FacesMessage.SEVERITY_INFO,
 				f.getName());
@@ -735,7 +730,7 @@ public class DevelopmentBean implements Serializable {
 							FacesMessage.SEVERITY_INFO, createdFileName);
 					tree = configManager.listRepositoryContent(version
 							.getName());
-					System.out.println("kamalna file ");
+
 				} else {
 					msg = MessageFactory.getMessage(
 							"dev.file_unsuccessfully_created",
@@ -751,7 +746,7 @@ public class DevelopmentBean implements Serializable {
 							FacesMessage.SEVERITY_INFO, createdFileName);
 					tree = configManager.listRepositoryContent(version
 							.getName());
-					System.out.println("kamalna Folder ");
+
 				} else {
 					msg = MessageFactory.getMessage(
 							"dev.file_unsuccessfully_created",
@@ -768,7 +763,7 @@ public class DevelopmentBean implements Serializable {
 							FacesMessage.SEVERITY_INFO, createdFileName);
 					tree = configManager.listRepositoryContent(version
 							.getName());
-					System.out.println("kamalna file ");
+
 				} else {
 					msg = MessageFactory.getMessage(
 							"dev.file_unsuccessfully_created",
@@ -784,7 +779,7 @@ public class DevelopmentBean implements Serializable {
 							FacesMessage.SEVERITY_INFO, createdFileName);
 					tree = configManager.listRepositoryContent(version
 							.getName());
-					System.out.println("kamalna Folder ");
+
 				} else {
 					msg = MessageFactory.getMessage(
 							"dev.file_unsuccessfully_created",
@@ -866,7 +861,7 @@ public class DevelopmentBean implements Serializable {
 
 		}
 		if (files.size() == 0) {
-			System.out.println(":applicatinPanelGrid");
+
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.update("applicatinPanelGrid");
 		}
@@ -884,14 +879,15 @@ public class DevelopmentBean implements Serializable {
 			url = new URL(urlPath);
 			HttpURLConnection huc;
 			huc = (HttpURLConnection) url.openConnection();
-			huc.setRequestMethod("HEAD");         
+			huc.setRequestMethod("HEAD");
 			int responseCode = huc.getResponseCode();
-			
+
 			if (responseCode != 404) {
-				System.out.println("GOOD");
+
+				logger.info("Valid URL");
 				return true;
 			} else {
-				System.out.println("BAD");
+				logger.error("BAD URL");
 				return false;
 			}
 		} catch (MalformedURLException e) {

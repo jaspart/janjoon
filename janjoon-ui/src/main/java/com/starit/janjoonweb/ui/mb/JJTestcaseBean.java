@@ -326,8 +326,6 @@ public class JJTestcaseBean {
 
 	public void loadData() {
 
-		System.out.println("load data in testcase");
-
 		this.getProject();
 		this.getProduct();
 		this.getVersion();
@@ -348,7 +346,6 @@ public class JJTestcaseBean {
 	}
 
 	public void newTestcase(JJTeststepBean jJTeststepBean) {
-		System.out.println("I m in new testcase");
 		message = "New Testcase";
 		testcase = new JJTestcase();
 		testcase.setEnabled(true);
@@ -379,9 +376,6 @@ public class JJTestcaseBean {
 
 	public void addMessage() {
 
-		System.out
-				.println("testcase.getAutomatic() " + testcase.getAutomatic());
-
 	}
 
 	public void loadTask() {
@@ -401,10 +395,8 @@ public class JJTestcaseBean {
 	}
 
 	public void editTestcase(JJTeststepBean jJTeststepBean) {
-		System.out.println("Edit testcase");
-		message = "Edit Testcase";
 
-		System.out.println("testcase.getName() " + testcase.getName());
+		message = "Edit Testcase";
 
 		JJTestcase tc = jJTestcaseService.findJJTestcase(testcase.getId());
 		requirement = tc.getRequirement();
@@ -428,14 +420,11 @@ public class JJTestcaseBean {
 		disabledReset = true;
 
 		jJTeststepBean.newTeststep();
-
-		System.out.println("End Edit testcase");
 	}
 
 	public void runTestcase(JJTestcaseexecutionBean jJTestcaseexecutionBean,
 			JJTeststepexecutionBean jJTeststepexecutionBean) {
-		System.out.println("In Run");
-		System.out.println(testcase.getId());
+
 		jJTestcaseexecutionBean.loadTestcaseexecution(jJTeststepexecutionBean);
 
 	}
@@ -445,7 +434,7 @@ public class JJTestcaseBean {
 	}
 
 	public void save() {
-		System.out.println("Saving ...");
+
 		String message = "";
 
 		if (testcase.getId() != null) {
@@ -484,8 +473,6 @@ public class JJTestcaseBean {
 			disabledInitTask = true;
 			disabledTask = true;
 
-			System.out.println("end saving");
-
 			message = "message_successfully_created";
 		}
 
@@ -495,7 +482,7 @@ public class JJTestcaseBean {
 	}
 
 	public void closeDialog() {
-		System.out.println("close Dialog");
+
 		testcase = null;
 		requirement = null;
 		task = null;
@@ -565,7 +552,7 @@ public class JJTestcaseBean {
 		String code = getSubString(selectedNode, 0, "-");
 
 		if (code.equalsIgnoreCase("P")) {
-			System.out.println("Project selected");
+
 			rendredTestCaseRecaps = false;
 			rendredTestCaseHistorical = false;
 
@@ -575,7 +562,6 @@ public class JJTestcaseBean {
 
 		} else if (code.equalsIgnoreCase("C")) {
 
-			System.out.println("Category selected");
 			rendredTestCaseRecaps = false;
 			rendredTestCaseHistorical = false;
 
@@ -586,7 +572,6 @@ public class JJTestcaseBean {
 			disabledExport = false;
 
 		} else if (code.equalsIgnoreCase("CH")) {
-			System.out.println("Chapter selected");
 
 			long id = Long.parseLong(getSubString(selectedNode, 1, "-"));
 
@@ -602,7 +587,6 @@ public class JJTestcaseBean {
 		}
 
 		else if (code.equalsIgnoreCase("TC")) {
-			System.out.println("Testcase selected");
 
 			long id = Long.parseLong(getSubString(selectedNode, 1, "-"));
 

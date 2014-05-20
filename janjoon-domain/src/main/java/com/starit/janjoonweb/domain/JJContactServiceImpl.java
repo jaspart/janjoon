@@ -122,8 +122,7 @@ public class JJContactServiceImpl implements JJContactService {
 
 			if (!add && product == null) {
 				if (perm.getProject() != null) {
-					System.out.println("perm.getProject().equals(project)"
-							+ perm.getProject());
+
 					add = (perm.getProject().equals(project));
 				}
 
@@ -136,8 +135,6 @@ public class JJContactServiceImpl implements JJContactService {
 
 				if (perm.getProduct() != null) {
 					add = (perm.getProduct().equals(product));
-					System.out.println("perm.getProduct().equals(product)"
-							+ perm.getProfile());
 				}
 
 				else
@@ -148,9 +145,6 @@ public class JJContactServiceImpl implements JJContactService {
 			if (!add && product != null && project != null) {
 
 				add = (perm.getProduct() == null && perm.getProject() == null);
-				System.out
-						.println("perm.getProduct() == null && perm.getProject() == null"
-								+ add);
 
 				if (!add) {
 					if (perm.getProduct() == null) {

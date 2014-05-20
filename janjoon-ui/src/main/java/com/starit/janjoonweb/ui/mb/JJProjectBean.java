@@ -100,7 +100,7 @@ public class JJProjectBean {
 	}
 
 	public void newProject() {
-		System.out.println("Initial bean project");
+
 		message = "New Project";
 		projectAdmin = new JJProject();
 		projectAdmin.setEnabled(true);
@@ -110,15 +110,14 @@ public class JJProjectBean {
 	}
 
 	public void editProject() {
-		System.out.println("Update bean project");
+
 		message = "Edit Project";
 		projectManager = projectAdmin.getManager();
 	}
 
 	public void deleteProject() {
-		
+
 		if (projectAdmin != null) {
-			System.out.println(projectAdmin.getName());
 
 			projectAdmin.setEnabled(false);
 			jJProjectService.updateJJProject(projectAdmin);
@@ -127,13 +126,12 @@ public class JJProjectBean {
 	}
 
 	public void save() {
-		System.out.println("SAVING Project...");
+
 		String message = "";
 
 		projectAdmin.setManager(projectManager);
 
 		if (projectAdmin.getId() == null) {
-			System.out.println("IS a new JJProject");
 
 			jJProjectService.saveJJProject(projectAdmin);
 			message = "message_successfully_created";
@@ -141,7 +139,6 @@ public class JJProjectBean {
 			newProject();
 
 		} else {
-			System.out.println("UPDATING Project...");
 
 			projectAdmin.setUpdatedDate(new Date());
 
@@ -171,7 +168,7 @@ public class JJProjectBean {
 	}
 
 	public void closeDialog() {
-		System.out.println("close dialog");
+
 		projectAdmin = null;
 		projectManager = null;
 		projectManagerList = null;

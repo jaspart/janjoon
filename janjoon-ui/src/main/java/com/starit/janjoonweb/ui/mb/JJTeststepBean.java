@@ -60,16 +60,13 @@ public class JJTeststepBean {
 	}
 
 	public void newTeststep() {
-		System.out.println("New test Step");
+
 		teststep = new JJTeststep();
 		teststep.setCreationDate(new Date());
 		teststep.setEnabled(true);
-		System.out.println("End New test Step");
 	}
 
 	public void save() {
-
-		System.out.println("Saving ...");
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
@@ -93,11 +90,7 @@ public class JJTeststepBean {
 					+ teststep.getResultstep() + " description");
 
 			jJTeststepService.saveJJTeststep(teststep);
-
-			System.out.println("end saving");
-
 			newTeststep();
-
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
@@ -108,15 +101,9 @@ public class JJTeststepBean {
 
 	public void insertTestStep() {
 
-		System.out.println("Insert a test Step");
-		//
-		// System.out.println("teststep.getId() " + teststep.getId());
-
 		JJTeststep ts = jJTeststepService.findJJTeststep(teststep.getId());
 
 		int ordering = ts.getOrdering();
-
-		// System.out.println("ordering " + ordering);
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
@@ -147,8 +134,6 @@ public class JJTeststepBean {
 		// System.out.println("entry.getValue().getId() "
 		// + entry.getValue().getId());
 		// }
-
-		System.out.println("begin boucle");
 
 		// teststeps = new HashSet<JJTeststep>();
 
@@ -199,14 +184,9 @@ public class JJTeststepBean {
 
 		FacesContext.getCurrentInstance().addMessage(null,
 				new FacesMessage("Test Step Inserted !"));
-
-		System.out.println("End Insert a test Step");
-
 	}
 
 	public void editTestStep(RowEditEvent event) {
-
-		System.out.println("Edit Test step");
 
 		JJTeststep ts = jJTeststepService.findJJTeststep(((JJTeststep) event
 				.getObject()).getId());
@@ -224,8 +204,6 @@ public class JJTeststepBean {
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated", "JJTeststep");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-
-		System.out.println("End Edit Test step");
 	}
 
 	public void cancelEditTestStep(RowEditEvent event) {
@@ -239,9 +217,6 @@ public class JJTeststepBean {
 	}
 
 	public void deleteTestStep() {
-		System.out.println("Delete test Step");
-
-		System.out.println("teststep.getId() " + teststep.getId());
 
 		JJTeststep ts = jJTeststepService.findJJTeststep(teststep.getId());
 
@@ -252,13 +227,9 @@ public class JJTeststepBean {
 
 		newTeststep();
 
-		System.out.println("End Delete test Step");
-
 	}
 
 	private void manageTeststepOrder(JJTestcase testcase) {
-
-		System.out.println("Manage Order");
 
 		SortedMap<Integer, JJTeststep> elements = new TreeMap<Integer, JJTeststep>();
 
@@ -276,17 +247,13 @@ public class JJTeststepBean {
 		}
 
 		if (elements.isEmpty()) {
-			System.out.println("is empty");
 			teststep.setOrdering(0);
 		} else {
-			System.out.println("not empty");
 			teststep.setOrdering(elements.lastKey() + 1);
 		}
 
 		// System.out.println("teststep.getOrdering() " +
 		// teststep.getOrdering());
-
-		System.out.println("end Order");
 
 	}
 

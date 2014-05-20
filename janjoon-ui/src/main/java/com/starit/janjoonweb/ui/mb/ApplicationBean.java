@@ -37,7 +37,7 @@ public class ApplicationBean {
 
 	@PostConstruct
 	public void init() {
-		
+
 		menuModel = new DefaultMenuModel();
 
 		DefaultSubMenu submenu;

@@ -128,22 +128,19 @@ public class JJBugBean {
 	public SelectItem[] getStatusOptions() {
 		return statusOptions;
 	}
-	
+
 	public void initJJBug(ComponentSystemEvent e) {
-		
-		
-		List<JJBug> listOfBug=jJBugService.getBugs(null, null, null, true, true);
-		
-		if(bugList!=null)
-		{
-			if(!(bugList.contains(listOfBug)&&listOfBug.contains(bugList)))
-			{
-				System.out.println("InitJJBUG");
+
+		List<JJBug> listOfBug = jJBugService.getBugs(null, null, null, true,
+				true);
+
+		if (bugList != null) {
+			if (!(bugList.contains(listOfBug) && listOfBug.contains(bugList))) {
+
 				initJJBugTable();
 			}
 		}
-		
-	
+
 	}
 
 	public void initJJBugTable() {
@@ -153,8 +150,7 @@ public class JJBugBean {
 		List<JJAbstractEntity> importances = new ArrayList<JJAbstractEntity>();
 		bugList = jJBugService.getBugs(null, null, null, true, true);
 		filteredJJBug = bugList;
-		System.out
-				.println("----------------initJJBugTable--------------------------");
+
 		for (JJBug b : bugList) {
 			if (b.getCriticity() != null
 					&& !listContaines(criticities, b.getCriticity().getId()))

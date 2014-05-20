@@ -49,7 +49,7 @@
 			<url>http://spring-roo-repository.springsource.org/release</url>
 		</pluginRepository>
 	</pluginRepositories>
-	<dependencies>
+	<dependencies>		
 		<!-- General dependencies for standard applications -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -404,36 +404,18 @@
 					</webAppConfig>
 				</configuration>
 			</plugin>
-			<!--plugin>
-				<groupId>com.github.wvengen</groupId>
-				<artifactId>proguard-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>proguard</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<obfuscate>true</obfuscate>
-					<injar>${project.build.finalName}.jar</injar>
-					<outjar>${project.build.finalName}.jar</outjar>
-					<outputDirectory>${project.build.directory}</outputDirectory>
-					<options>
-						<option>-allowaccessmodification</option>
-						<option>-keep class com.starit.janjoonweb.domain.JJProfile</option>
-						<option>-keep class com.starit.janjoonweb.domain.**</option>
-						<option>-keepclassmembers public com.starit.janjoonweb.domain.**</option>
-						<option>-keepclassmembers private com.starit.janjoonweb.domain.**</option>
-						<option>-keepclassmembers protected com.starit.janjoonweb.domain.**</option>
-						<option>-ignorewarnings</option>
-					</options>
-					<libs>
-						<lib>${java.home}/lib/rt.jar</lib>
-					</libs>
-				</configuration>
-			</plugin-->
+			<!--plugin> <groupId>com.github.wvengen</groupId> <artifactId>proguard-maven-plugin</artifactId> 
+				<executions> <execution> <phase>package</phase> <goals> <goal>proguard</goal> 
+				</goals> </execution> </executions> <configuration> <obfuscate>true</obfuscate> 
+				<injar>${project.build.finalName}.jar</injar> <outjar>${project.build.finalName}.jar</outjar> 
+				<outputDirectory>${project.build.directory}</outputDirectory> <options> <option>-allowaccessmodification</option> 
+				<option>-keep class com.starit.janjoonweb.domain.JJProfile</option> <option>-keep 
+				class com.starit.janjoonweb.domain.**</option> <option>-keepclassmembers 
+				public com.starit.janjoonweb.domain.**</option> <option>-keepclassmembers 
+				private com.starit.janjoonweb.domain.**</option> <option>-keepclassmembers 
+				protected com.starit.janjoonweb.domain.**</option> <option>-ignorewarnings</option> 
+				</options> <libs> <lib>${java.home}/lib/rt.jar</lib> </libs> </configuration> 
+				</plugin -->
 		</plugins>
 	</build>
 </project>
