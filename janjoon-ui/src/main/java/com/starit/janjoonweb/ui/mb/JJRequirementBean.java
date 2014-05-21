@@ -115,6 +115,7 @@ public class JJRequirementBean {
 	private boolean disabledVersion;
 	private boolean disabledStatus;
 	private boolean disabledTask;
+	private boolean disabledProject;
 
 	private boolean initiateTask;
 	private boolean disabledInitTask;
@@ -284,10 +285,14 @@ public class JJRequirementBean {
 	}
 
 	public List<JJChapter> getRequirementChapterList() {
-		requirementChapterList = jJChapterService.getChapters(
-				requirementProject, requirementCategory, true,
-				new ArrayList<String>());
-		return requirementChapterList;
+		if (requirementProject != null) {
+			requirementChapterList = jJChapterService.getChapters(
+					requirementProject, requirementCategory, true,
+					new ArrayList<String>());
+			return requirementChapterList;
+		} else
+			return null;
+
 	}
 
 	public void setRequirementChapterList(List<JJChapter> requirementChapterList) {
@@ -462,6 +467,14 @@ public class JJRequirementBean {
 
 	public void setDisabledTask(boolean disabledTask) {
 		this.disabledTask = disabledTask;
+	}
+
+	public boolean getDisabledProject() {
+		return disabledProject;
+	}
+
+	public void setDisabledProject(boolean disabledProject) {
+		this.disabledProject = disabledProject;
 	}
 
 	public boolean getInitiateTask() {
@@ -642,6 +655,7 @@ public class JJRequirementBean {
 		requirement.setCategory(requirementCategory);
 
 		requirementProject = project;
+		disabledProject = false;
 		requirement.setProject(requirementProject);
 
 		requirementProduct = product;
@@ -694,6 +708,7 @@ public class JJRequirementBean {
 		requirement.setUpdatedDate(new Date());
 
 		requirementProject = requirement.getProject();
+		disabledProject = true;
 
 		requirementProduct = requirement.getProduct();
 
@@ -845,6 +860,8 @@ public class JJRequirementBean {
 		}
 
 		if (requirement.getId() == null) {
+
+			requirement.setProject(requirementProject);
 
 			if (initiateTask) {
 				task.setName(requirement.getName());
@@ -1277,6 +1294,15 @@ public class JJRequirementBean {
 
 	public void handleSelectProject() {
 
+		getRequirementChapterList();
+
+		requirementChapter = null;
+
+		fullRequirementsList();
+
+		selectedLowRequirementsList = new ArrayList<String>();
+		selectedMediumRequirementsList = new ArrayList<String>();
+		selectedHighRequirementsList = new ArrayList<String>();
 	}
 
 	public void handleSelectProduct() {
@@ -1303,11 +1329,39 @@ public class JJRequirementBean {
 
 	}
 
+	private String warnMessage;
+
+	public String getWarnMessage() {
+		return warnMessage;
+	}
+
+	public void setWarnMessage(String warnMessage) {
+		this.warnMessage = warnMessage;
+	}
+
+	private boolean disabledExport;
+
+	public boolean getDisabledExport() {
+		return disabledExport;
+	}
+
+	public void setDisabledExport(boolean disabledExport) {
+		this.disabledExport = disabledExport;
+	}
+
 	public void loadData() {
 
 		getProduct();
 		getProject();
 		getVersion();
+
+		if (project == null) {
+			warnMessage = "Select a project to export PDF";
+			disabledExport = true;
+		} else {
+			warnMessage = "Export to PDF";
+			disabledExport = false;
+		}
 
 		fullTableDataModelList();
 	}
@@ -1388,18 +1442,24 @@ public class JJRequirementBean {
 		Map<String, List<JJRequirement>> mapTable = new LinkedHashMap<String, List<JJRequirement>>();
 
 		if (lowCategory != null) {
-			mapTable.put(String.valueOf(lowCategory.getId()),
-					getRequirementsList(lowCategory, product, version));
+			mapTable.put(
+					String.valueOf(lowCategory.getId()),
+					getRequirementsList(lowCategory, product, version, project,
+							true));
 		}
 
 		if (mediumCategory != null) {
-			mapTable.put(String.valueOf(mediumCategory.getId()),
-					getRequirementsList(mediumCategory, product, version));
+			mapTable.put(
+					String.valueOf(mediumCategory.getId()),
+					getRequirementsList(mediumCategory, product, version,
+							project, true));
 		}
 
 		if (highCategory != null) {
-			mapTable.put(String.valueOf(highCategory.getId()),
-					getRequirementsList(highCategory, product, version));
+			mapTable.put(
+					String.valueOf(highCategory.getId()),
+					getRequirementsList(highCategory, product, version,
+							project, true));
 		}
 
 		tableDataModelList = new ArrayList<CategoryDataModel>();
@@ -1444,13 +1504,19 @@ public class JJRequirementBean {
 		}
 
 		List<JJRequirement> list;
+		boolean withProject = true;
+
+		if (requirementProject == null) {
+			withProject = false;
+		}
 
 		if (lowCategory == null) {
 			lowCategoryName = "Low Category :";
 			disabledLowRequirements = true;
 		} else {
 			lowCategoryName = lowCategory.getName() + " :";
-			list = getRequirementsList(lowCategory, null, null);
+			list = getRequirementsList(lowCategory, null, null,
+					requirementProject, withProject);
 			lowRequirementsList = convertRequirementListToStringList(list);
 		}
 		if (mediumCategory == null) {
@@ -1458,7 +1524,8 @@ public class JJRequirementBean {
 			disabledMediumRequirements = true;
 		} else {
 			mediumCategoryName = mediumCategory.getName() + " :";
-			list = getRequirementsList(mediumCategory, null, null);
+			list = getRequirementsList(mediumCategory, null, null,
+					requirementProject, withProject);
 			mediumRequirementsList = convertRequirementListToStringList(list);
 		}
 
@@ -1467,7 +1534,8 @@ public class JJRequirementBean {
 			disabledHighRequirements = true;
 		} else {
 			highCategoryName = highCategory.getName() + " :";
-			list = getRequirementsList(highCategory, null, null);
+			list = getRequirementsList(highCategory, null, null,
+					requirementProject, withProject);
 			highRequirementsList = convertRequirementListToStringList(list);
 		}
 
@@ -1899,9 +1967,10 @@ public class JJRequirementBean {
 	}
 
 	private List<JJRequirement> getRequirementsList(JJCategory category,
-			JJProduct product, JJVersion version) {
+			JJProduct product, JJVersion version, JJProject project,
+			boolean withProject) {
 		List<JJRequirement> list = new ArrayList<JJRequirement>();
-		if (category != null) {
+		if (category != null && withProject) {
 			list = jJRequirementService.getRequirements(category, project,
 					product, version, null, null, false, true, true);
 		}

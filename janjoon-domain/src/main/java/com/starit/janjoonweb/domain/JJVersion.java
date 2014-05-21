@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
@@ -17,6 +18,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaEntity(sequenceName = "JJVersionSEQ")
 public class JJVersion extends JJAbstractEntity {
 
+	@NotNull
 	@ManyToOne
 	private JJProduct product;
 

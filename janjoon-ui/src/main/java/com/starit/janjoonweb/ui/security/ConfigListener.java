@@ -223,6 +223,43 @@ public class ConfigListener implements ServletContextListener {
 			configuration.setVal("https://github.com/janjoon/");
 			configuration.setEnabled(true);
 			jJConfigurationService.saveJJConfiguration(configuration);
+
+			configuration = new JJConfiguration();
+			configuration.setName("AdminUserDialog");
+			configuration.setCreationDate(new Date());
+			configuration.setDescription("Test AdminUserDialog");
+			configuration.setParam("admin.user.create.saveandclose");
+			configuration.setVal("true");
+			configuration.setEnabled(true);
+			jJConfigurationService.saveJJConfiguration(configuration);
+
+			configuration = new JJConfiguration();
+			configuration.setName("RequirementDialog");
+			configuration.setCreationDate(new Date());
+			configuration.setDescription("Test RequirementDialog");
+			configuration.setParam("specs.requirement.create.saveandclose");
+			configuration.setVal("true");
+			configuration.setEnabled(true);
+			jJConfigurationService.saveJJConfiguration(configuration);
+
+			configuration = new JJConfiguration();
+			configuration.setName("TestDialog");
+			configuration.setCreationDate(new Date());
+			configuration.setDescription("Test TestDialog");
+			configuration.setParam("tests.create.saveandclose");
+			configuration.setVal("true");
+			configuration.setEnabled(true);
+			jJConfigurationService.saveJJConfiguration(configuration);
+
+			configuration = new JJConfiguration();
+			configuration.setName("ChapterDialog");
+			configuration.setCreationDate(new Date());
+			configuration.setDescription("Test ChapterDialog");
+			configuration.setParam("chapter.create.saveandclose");
+			configuration.setVal("true");
+			configuration.setEnabled(true);
+			jJConfigurationService.saveJJConfiguration(configuration);
+
 		}
 
 		if (jJBuildService.getBuilds(null, false, true).isEmpty()) {
@@ -337,20 +374,6 @@ public class ConfigListener implements ServletContextListener {
 
 			}
 
-		}
-
-		if (jJVersionService.getVersions(true, true, null).isEmpty()) {
-
-			JJVersion version;
-
-			for (int i = 0; i < 4; i++) {
-				version = new JJVersion();
-				version.setName("VersionName " + i);
-				version.setDescription("VersionDescription " + i);
-				version.setCreationDate(new Date());
-				version.setEnabled(true);
-				jJVersionService.saveJJVersion(version);
-			}
 		}
 
 		if (jJCategoryService.getCategories(null, false, true, true).isEmpty()) {
@@ -790,81 +813,57 @@ public class ConfigListener implements ServletContextListener {
 				manager = contact;
 			}
 
-			JJProduct product;
-
-			List<JJVersion> jJVersionList = jJVersionService.getVersions(true,
-					true, null);
-
 			Set<JJVersion> versions = new HashSet<JJVersion>();
 
-			versions = new HashSet<JJVersion>();
-			for (int i = 0; i < 2; i++) {
-				product = new JJProduct();
-				product.setName("ProductName " + i);
-				product.setDescription("ProductDescription " + i);
-				product.setCreationDate(new Date());
-				product.setEnabled(true);
-				product.setExtname("ProductExtName " + i);
-				product.setManager(manager);
-				int j;
-				if (i == 0) {
-					j = i + 0;
-					jJVersionList.get(j).setProduct(product);
-					versions.add(jJVersionList.get(j));
-					jJVersionList.get(j + 1).setProduct(product);
-					versions.add(jJVersionList.get(j + 1));
-					jJProductService.saveJJProduct(product);
+			JJProduct product = new JJProduct();
+			product.setName("ProductName 1");
+			product.setDescription("ProductDescription 1");
+			product.setCreationDate(new Date());
+			product.setEnabled(true);
+			product.setExtname("ProductExtName 1");
+			product.setManager(manager);
 
-					jJVersionService.updateJJVersion(jJVersionList.get(j));
-					jJVersionService.updateJJVersion(jJVersionList.get(j + 1));
-					product.setVersions(versions);
+			jJProductService.saveJJProduct(product);
+			JJVersion version;
+			version = new JJVersion();
+			version.setName("main");
+			version.setDescription("VersionDescription Main");
+			version.setCreationDate(new Date());
+			version.setEnabled(true);
+			version.setProduct(product);
+			jJVersionService.saveJJVersion(version);
 
-				} else {
-					jJProductService.saveJJProduct(product);
-					JJVersion version;
-					version = new JJVersion();
-					version.setName("main");
-					version.setDescription("VersionDescription Main");
-					version.setCreationDate(new Date());
-					version.setEnabled(true);
-					version.setProduct(product);
-					jJVersionService.saveJJVersion(version);
+			versions.add(version);
+			JJVersion version1 = new JJVersion();
+			version1.setName("integ/14.1");
+			version1.setDescription("VersionDescription Integ V:14.1");
+			version1.setCreationDate(new Date());
+			version1.setEnabled(true);
+			version1.setProduct(product);
+			jJVersionService.saveJJVersion(version1);
 
-					versions.add(version);
-					JJVersion version1 = new JJVersion();
-					version1.setName("integ/14.1");
-					version1.setDescription("VersionDescription Integ V:14.1");
-					version1.setCreationDate(new Date());
-					version1.setEnabled(true);
-					version1.setProduct(product);
-					jJVersionService.saveJJVersion(version1);
+			versions.add(version1);
+			JJVersion version2 = new JJVersion();
+			version2.setName("integ/14.2");
+			version2.setDescription("VersionDescription Integ V:14.2");
+			version2.setCreationDate(new Date());
+			version2.setEnabled(true);
+			version2.setProduct(product);
+			jJVersionService.saveJJVersion(version2);
 
-					versions.add(version1);
-					JJVersion version2 = new JJVersion();
-					version2.setName("integ/14.2");
-					version2.setDescription("VersionDescription Integ V:14.2");
-					version2.setCreationDate(new Date());
-					version2.setEnabled(true);
-					version2.setProduct(product);
-					jJVersionService.saveJJVersion(version2);
+			versions.add(version2);
+			JJVersion version3 = new JJVersion();
+			version3.setName("prod/13.4");
+			version3.setDescription("VersionDescription Production V:13.4");
+			version3.setCreationDate(new Date());
+			version3.setEnabled(true);
+			version3.setProduct(product);
+			jJVersionService.saveJJVersion(version3);
 
-					versions.add(version2);
-					JJVersion version3 = new JJVersion();
-					version3.setName("prod/13.4");
-					version3.setDescription("VersionDescription Production V:13.4");
-					version3.setCreationDate(new Date());
-					version3.setEnabled(true);
-					version3.setProduct(product);
-					jJVersionService.saveJJVersion(version3);
+			versions.add(version3);
 
-					versions.add(version3);
-
-					jJProductService.saveJJProduct(product);
-					product.setVersions(versions);
-
-				}
-
-			}
+			jJProductService.saveJJProduct(product);
+			product.setVersions(versions);
 
 		}
 		JJContact contact = jJContactService.getContactByEmail(
@@ -891,37 +890,37 @@ public class ConfigListener implements ServletContextListener {
 		}
 
 		List<JJProject> projectList = jJProjectService.getProjects(true);
-
+		//
 		List<JJProduct> productList = jJProductService.getProducts(true);
-		if (jJRequirementService.findAllJJRequirements().isEmpty()) {
-			List<JJStatus> status = jJStatusService.getStatus("JJTask", true,
-					null, true);
-			JJSprint s = jJSprintService.getSprints(true).get(0);
-			JJRequirement jJRequirement;
-			for (int j = 0; j < projectList.size(); j++) {
-				jJRequirement = new JJRequirement();
-				jJRequirement.setName("Requirement " + j);
-				jJRequirement.setDescription("RequirementDescription " + j);
-				jJRequirement.setCreationDate(new Date());
-				jJRequirement.setEnabled(true);
-				jJRequirement.setProduct(productList.get(j));
-				jJRequirement.setProject(projectList.get(j));
-				jJRequirementService.saveJJRequirement(jJRequirement);
-				JJTask jJTask;
-				for (int i = 0; i < 4; i++) {
-					jJTask = new JJTask();
-					jJTask.setName("TaskName " + i + ":R-" + j);
-					jJTask.setDescription("TaskDescription " + i + ":R-" + j);
-					jJTask.setCreationDate(new Date());
-					jJTask.setEnabled(true);
-					jJTask.setRequirement(jJRequirement);
-					jJTask.setWorkloadPlanned(10);
-					jJTask.setSprint(s);
-					jJTask.setStatus(status.get(i % 3));
-					jJTaskService.saveJJTask(jJTask);
-				}
-			}
-		}
+		// if (jJRequirementService.findAllJJRequirements().isEmpty()) {
+		// List<JJStatus> status = jJStatusService.getStatus("JJTask", true,
+		// null, true);
+		// JJSprint s = jJSprintService.getSprints(true).get(0);
+		// JJRequirement jJRequirement;
+		// for (int j = 0; j < projectList.size(); j++) {
+		// jJRequirement = new JJRequirement();
+		// jJRequirement.setName("Requirement " + j);
+		// jJRequirement.setDescription("RequirementDescription " + j);
+		// jJRequirement.setCreationDate(new Date());
+		// jJRequirement.setEnabled(true);
+		// jJRequirement.setProduct(productList.get(j));
+		// jJRequirement.setProject(projectList.get(j));
+		// jJRequirementService.saveJJRequirement(jJRequirement);
+		// JJTask jJTask;
+		// for (int i = 0; i < 4; i++) {
+		// jJTask = new JJTask();
+		// jJTask.setName("TaskName " + i + ":R-" + j);
+		// jJTask.setDescription("TaskDescription " + i + ":R-" + j);
+		// jJTask.setCreationDate(new Date());
+		// jJTask.setEnabled(true);
+		// jJTask.setRequirement(jJRequirement);
+		// jJTask.setWorkloadPlanned(10);
+		// jJTask.setSprint(s);
+		// jJTask.setStatus(status.get(i % 3));
+		// jJTaskService.saveJJTask(jJTask);
+		// }
+		// }
+		// }
 		if (jJMessageService.findAllJJMessages().isEmpty()) {
 
 			int i = 0;

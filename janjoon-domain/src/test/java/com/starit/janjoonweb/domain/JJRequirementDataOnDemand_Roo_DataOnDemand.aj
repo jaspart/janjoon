@@ -9,6 +9,7 @@ import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJCriticityDataOnDemand;
 import com.starit.janjoonweb.domain.JJImportanceDataOnDemand;
 import com.starit.janjoonweb.domain.JJProductDataOnDemand;
+import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJProjectDataOnDemand;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementDataOnDemand;
@@ -89,6 +90,7 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
         setNumero(obj, index);
         setOperation(obj, index);
         setOrdering(obj, index);
+        setProject(obj, index);
         setRelation(obj, index);
         setStartDate(obj, index);
         setUpdatedDate(obj, index);
@@ -159,6 +161,11 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
     public void JJRequirementDataOnDemand.setOrdering(JJRequirement obj, int index) {
         Integer ordering = new Integer(index);
         obj.setOrdering(ordering);
+    }
+    
+    public void JJRequirementDataOnDemand.setProject(JJRequirement obj, int index) {
+        JJProject project = jJProjectDataOnDemand.getRandomJJProject();
+        obj.setProject(project);
     }
     
     public void JJRequirementDataOnDemand.setRelation(JJRequirement obj, int index) {

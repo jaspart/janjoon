@@ -96,6 +96,7 @@ public class JJTestcaseBean {
 	private List<TestCaseRecap> testCaseRecaps;
 	private boolean rendredTestCaseRecaps;
 	private boolean rendredTestCaseHistorical;
+	private boolean rendredEmptySelection;
 
 	private String message;
 
@@ -222,6 +223,14 @@ public class JJTestcaseBean {
 
 	public void setRendredTestCaseHistorical(boolean rendredTestCaseHistorical) {
 		this.rendredTestCaseHistorical = rendredTestCaseHistorical;
+	}
+
+	public boolean getRendredEmptySelection() {
+		return rendredEmptySelection;
+	}
+
+	public void setRendredEmptySelection(boolean rendredEmptySelection) {
+		this.rendredEmptySelection = rendredEmptySelection;
 	}
 
 	public String getMessage() {
@@ -542,6 +551,8 @@ public class JJTestcaseBean {
 				TreeNode node = createTree(chapter, categoryNode, category);
 			}
 		}
+		
+		rendredEmptySelection = true;
 
 	}
 
@@ -555,6 +566,7 @@ public class JJTestcaseBean {
 
 			rendredTestCaseRecaps = false;
 			rendredTestCaseHistorical = false;
+			rendredEmptySelection = false;
 
 			namefile = null;
 			category = null;
@@ -564,6 +576,7 @@ public class JJTestcaseBean {
 
 			rendredTestCaseRecaps = false;
 			rendredTestCaseHistorical = false;
+			rendredEmptySelection = false;
 
 			long id = Long.parseLong(getSubString(selectedNode, 1, "-"));
 			category = jJCategoryService.findJJCategory(id);
@@ -580,6 +593,7 @@ public class JJTestcaseBean {
 
 			rendredTestCaseRecaps = true;
 			rendredTestCaseHistorical = false;
+			rendredEmptySelection = false;
 
 			namefile = null;
 			category = null;
@@ -595,6 +609,7 @@ public class JJTestcaseBean {
 
 			rendredTestCaseRecaps = false;
 			rendredTestCaseHistorical = true;
+			rendredEmptySelection = false;
 
 			namefile = null;
 			category = null;

@@ -75,8 +75,8 @@ privileged aspect JJConfigurationDataOnDemand_Roo_DataOnDemand {
     
     public void JJConfigurationDataOnDemand.setParam(JJConfiguration obj, int index) {
         String param = "param_" + index;
-        if (param.length() > 25) {
-            param = param.substring(0, 25);
+        if (param.length() > 100) {
+            param = param.substring(0, 100);
         }
         obj.setParam(param);
     }

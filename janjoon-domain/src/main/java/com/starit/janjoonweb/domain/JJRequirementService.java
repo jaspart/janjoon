@@ -22,6 +22,7 @@ public interface JJRequirementService {
 
 	public List<JJRequirement> getRequirements(JJStatus status);
 
-	public Long getReqCountByStaus(JJStatus status, boolean onlyActif);
+	public Long getReqCountByStaus(JJProject project, JJProduct product,
+			JJVersion version,JJStatus status, boolean onlyActif);
 
 }

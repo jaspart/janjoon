@@ -1,7 +1,9 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -24,9 +26,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.starit.janjoonweb.domain.JJCategory;
+import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJStatus;
+import com.starit.janjoonweb.domain.JJTask;
+import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
@@ -39,19 +48,32 @@ public class JJStatusBean {
 	@Autowired
 	private JJRequirementService jJRequirementService;
 
+	public void setjJRequirementService(
+			JJRequirementService jJRequirementService) {
+		this.jJRequirementService = jJRequirementService;
+	}
+
+	@Autowired
+	private JJCategoryService jJCategoryService;
+
+	public void setjJCategoryService(JJCategoryService jJCategoryService) {
+		this.jJCategoryService = jJCategoryService;
+	}
+
 	private JJStatus selectedStatus;
 
 	private PieChartModel pieChart;
+
+	private JJProject project;
+	private JJProduct product;
+	private JJVersion version;
+
+	private List<CategoryDataModel> categoryDataModel;
 
 	public List<JJStatus> getStatusList() {
 
 		statusList = jJStatusService.getStatus(null, true, null, true);
 		return statusList;
-	}
-
-	public void setjJRequirementService(
-			JJRequirementService jJRequirementService) {
-		this.jJRequirementService = jJRequirementService;
 	}
 
 	public void setStatusList(List<JJStatus> statusList) {
@@ -66,15 +88,71 @@ public class JJStatusBean {
 		this.selectedStatus = selectedStatus;
 	}
 
-	public PieChartModel getPieChart() {
+	public JJProject getProject() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJProjectBean jJProjectBean = (JJProjectBean) session
+				.getAttribute("jJProjectBean");
+		this.project = jJProjectBean.getProject();
+		return project;
+	}
 
-		if (pieChart == null) {
-			initPieChart();
-		}
+	public void setProject(JJProject project) {
+		this.project = project;
+	}
+
+	public JJProduct getProduct() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJProductBean jJProductBean = (JJProductBean) session
+				.getAttribute("jJProductBean");
+		this.product = jJProductBean.getProduct();
+		return product;
+	}
+
+	public void setProduct(JJProduct product) {
+		this.product = product;
+	}
+
+	public JJVersion getVersion() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJVersionBean jJVersionBean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
+		this.version = jJVersionBean.getVersion();
+		return version;
+	}
+
+	public void setVersion(JJVersion version) {
+		this.version = version;
+	}
+
+	public List<CategoryDataModel> getCategoryDataModel() {
+		return categoryDataModel;
+	}
+
+	public void setCategoryDataModel(List<CategoryDataModel> categoryDataModel) {
+		this.categoryDataModel = categoryDataModel;
+	}
+
+	public PieChartModel getPieChart() {
 		return pieChart;
 	}
 
-	private void initPieChart() {
+	public void loadData() {
+
+		getProject();
+		getProduct();
+		getVersion();
+
+		categoryDataModel = new ArrayList<CategoryDataModel>();
+
+		List<JJCategory> categoryList = jJCategoryService.getCategories(null,
+				false, true, true);
+		
+		for (JJCategory category : categoryList) {
+			categoryDataModel.add(new CategoryDataModel(category));
+		}
 
 		pieChart = new PieChartModel();
 		List<JJStatus> statReq = jJStatusService.getStatus("JJRequirement",
@@ -82,7 +160,8 @@ public class JJStatusBean {
 		for (JJStatus s : statReq) {
 
 			int i = Integer.parseInt(""
-					+ jJRequirementService.getReqCountByStaus(s, true));
+					+ jJRequirementService.getReqCountByStaus(project, product,
+							version, s, true));
 			pieChart.set(s.getName(), i);
 		}
 
@@ -557,6 +636,192 @@ public class JJStatusBean {
 		htmlPanelGrid.getChildren().add(messagesValue);
 
 		return htmlPanelGrid;
+	}
+
+	public class CategoryDataModel {
+
+		private JJCategory category;
+
+		private float coverageProgress = 0;
+		private float completionProgress = 0;
+
+		public JJCategory getCategory() {
+			return category;
+		}
+
+		public void setCategory(JJCategory category) {
+			this.category = category;
+		}
+
+		public float getCoverageProgress() {
+
+			float compteur = 0;
+			List<JJRequirement> dataList = jJRequirementService
+					.getRequirements(category, project, product, version, null,
+							null, false, true, false);
+
+			List<JJCategory> categoryList = jJCategoryService.getCategories(
+					null, false, true, true);
+
+			boolean sizeIsOne = false;
+
+			if (category.getId() == categoryList.get(0).getId()) {
+
+				for (JJRequirement requirement : dataList) {
+
+					for (JJRequirement req : requirement.getRequirementLinkUp()) {
+						if (req.getEnabled()) {
+							compteur++;
+							break;
+						}
+					}
+
+				}
+
+				sizeIsOne = true;
+			} else if (category.getId() == categoryList.get(
+					categoryList.size() - 1).getId()
+					&& !sizeIsOne) {
+
+				for (JJRequirement requirement : dataList) {
+					boolean linkUp = false;
+					boolean linkDown = false;
+
+					for (JJRequirement req : requirement
+							.getRequirementLinkDown()) {
+						if (req.getEnabled()) {
+							linkDown = true;
+							break;
+						}
+					}
+
+					for (JJTask task : requirement.getTasks()) {
+						if (task.getEnabled()) {
+							linkUp = true;
+							break;
+						}
+					}
+
+					if (linkUp && linkDown) {
+						compteur++;
+					} else if (linkUp || linkDown) {
+						compteur += 0.5;
+					}
+
+				}
+			} else {
+
+				for (JJRequirement requirement : dataList) {
+
+					boolean linkUp = false;
+					boolean linkDown = false;
+
+					for (JJRequirement req : requirement.getRequirementLinkUp()) {
+						if (req.getEnabled()) {
+							linkUp = true;
+							break;
+						}
+					}
+
+					for (JJRequirement req : requirement
+							.getRequirementLinkDown()) {
+						if (req.getEnabled()) {
+							linkDown = true;
+							break;
+						}
+					}
+
+					if (linkUp && linkDown) {
+						compteur++;
+					} else if (linkUp || linkDown) {
+						compteur += 0.5;
+					}
+				}
+			}
+
+			if (dataList.isEmpty()) {
+				coverageProgress = 0;
+			} else {
+				coverageProgress = compteur / dataList.size();
+			}
+
+			return coverageProgress * 100;
+		}
+
+		public void setCoverageProgress(float coverageProgress) {
+			this.coverageProgress = coverageProgress;
+		}
+
+		public float getCompletionProgress() {
+			float compteur = 0;
+			List<JJRequirement> dataList = jJRequirementService
+					.getRequirements(category, project, product, version, null,
+							null, false, true, false);
+
+			for (JJRequirement requirement : dataList) {
+				compteur = compteur + calculCompletion(requirement);
+			}
+
+			if (dataList.isEmpty()) {
+				completionProgress = 0;
+			} else {
+				completionProgress = compteur / dataList.size();
+			}
+
+			return completionProgress * 100;
+		}
+
+		private float calculCompletion(JJRequirement requirement) {
+			float compteur = 0;
+			int size = 0;
+			Set<JJRequirement> linksUp = requirement.getRequirementLinkUp();
+			for (JJRequirement req : linksUp) {
+				if (req.getEnabled()) {
+					compteur = compteur + calculCompletion(req);
+					size++;
+				}
+			}
+
+			Set<JJTask> tasks = requirement.getTasks();
+			int hasTaskCompleted = 0;
+			if (!tasks.isEmpty()) {
+				boolean isCompleted = false;
+				for (JJTask task : tasks) {
+					if (task.getEnabled()) {
+						if (task.getCompleted() != null) {
+							if (task.getCompleted()) {
+								isCompleted = true;
+							} else {
+								isCompleted = false;
+								break;
+							}
+						} else {
+							isCompleted = false;
+							break;
+						}
+
+					}
+				}
+				if (isCompleted) {
+					compteur++;
+					hasTaskCompleted = 1;
+				}
+			}
+			if (size > 0) {
+				compteur = compteur / (size + hasTaskCompleted);
+			}
+
+			return compteur;
+		}
+
+		public void setCompletionProgress(float completionProgress) {
+			this.completionProgress = completionProgress;
+		}
+
+		public CategoryDataModel(JJCategory category) {
+			this.category = category;
+
+		}
 	}
 
 }

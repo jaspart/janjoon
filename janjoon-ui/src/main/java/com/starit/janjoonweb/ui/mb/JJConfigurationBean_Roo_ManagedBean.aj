@@ -25,7 +25,6 @@ import javax.faces.convert.DateTimeConverter;
 import javax.faces.validator.LengthValidator;
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.calendar.Calendar;
-import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
@@ -279,11 +278,11 @@ privileged aspect JJConfigurationBean_Roo_ManagedBean {
         paramCreateOutput.setValue("Param:");
         htmlPanelGrid.getChildren().add(paramCreateOutput);
         
-        InputText paramCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        InputTextarea paramCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         paramCreateInput.setId("paramCreateInput");
         paramCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJConfigurationBean.JJConfiguration_.param}", String.class));
         LengthValidator paramCreateInputValidator = new LengthValidator();
-        paramCreateInputValidator.setMaximum(25);
+        paramCreateInputValidator.setMaximum(100);
         paramCreateInput.addValidator(paramCreateInputValidator);
         paramCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(paramCreateInput);
@@ -479,11 +478,11 @@ privileged aspect JJConfigurationBean_Roo_ManagedBean {
         paramEditOutput.setValue("Param:");
         htmlPanelGrid.getChildren().add(paramEditOutput);
         
-        InputText paramEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        InputTextarea paramEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         paramEditInput.setId("paramEditInput");
         paramEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJConfigurationBean.JJConfiguration_.param}", String.class));
         LengthValidator paramEditInputValidator = new LengthValidator();
-        paramEditInputValidator.setMaximum(25);
+        paramEditInputValidator.setMaximum(100);
         paramEditInput.addValidator(paramEditInputValidator);
         paramEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(paramEditInput);
@@ -608,9 +607,11 @@ privileged aspect JJConfigurationBean_Roo_ManagedBean {
         paramLabel.setValue("Param:");
         htmlPanelGrid.getChildren().add(paramLabel);
         
-        HtmlOutputText paramValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputTextarea paramValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         paramValue.setId("paramValue");
         paramValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJConfigurationBean.JJConfiguration_.param}", String.class));
+        paramValue.setReadonly(true);
+        paramValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(paramValue);
         
         HtmlOutputText valLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);

@@ -7,13 +7,46 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
-		<p:panel id="statPanel" Header="Status">
-			<p:pieChart id="custom" value="#{jJStatusBean.pieChart}"
-				legendPosition="e" fill="false" showDataLabels="true"
-				title="% Requierement" style="width:400px;height:300px"
-				sliceMargin="5" diameter="150" />
-		</p:panel>
+		<h:form id="specForm">
+			<f:event type="preRenderComponent"
+				listener="#{jJStatusBean.loadData()}" />
+			<p:panel id="statPanel" Header="Status">
+				<p:pieChart id="custom" value="#{jJStatusBean.pieChart}"
+					legendPosition="e" fill="false" showDataLabels="true"
+					title="% Requierement" style="width:400px;height:300px"
+					sliceMargin="5" diameter="150" />
+			</p:panel>
+			<p:dataTable id="categoryTable" var="categoryModel"
+				value="#{jJStatusBean.categoryDataModel}">
+				<f:facet name="header">
+					<h:outputText value="Categories stats" />
+				</f:facet>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Name" />
+					</f:facet>
+					<h:outputText value="#{categoryModel.category.name}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText
+							value="#{messages.specification_completion_progress}" />
+					</f:facet>
+					<p:progressBar id="coverage" style="width:385px"
+						value="#{categoryModel.completionProgress}"
+						labelTemplate="{value}%" displayOnly="true" />
+				</p:column>
 
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages.specification_coverage_progress}" />
+					</f:facet>
+					<p:progressBar style="width:385px"
+						value="#{categoryModel.coverageProgress}" labelTemplate="{value}%"
+						displayOnly="true" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
 	</ui:define>
 </ui:composition>
 </html>

@@ -319,7 +319,7 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
         productCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{product.name} #{product.description} #{product.creationDate} #{product.updatedDate}", String.class));
         productCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{product}", JJProduct.class));
         productCreateInput.setConverter(new JJProductConverter());
-        productCreateInput.setRequired(false);
+        productCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(productCreateInput);
         
         Message productCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -549,7 +549,7 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
         productEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{product.name} #{product.description} #{product.creationDate} #{product.updatedDate}", String.class));
         productEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{product}", JJProduct.class));
         productEditInput.setConverter(new JJProductConverter());
-        productEditInput.setRequired(false);
+        productEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(productEditInput);
         
         Message productEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);

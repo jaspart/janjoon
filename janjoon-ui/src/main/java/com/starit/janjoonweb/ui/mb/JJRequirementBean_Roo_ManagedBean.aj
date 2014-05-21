@@ -420,7 +420,7 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         projectCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{project.name} #{project.description} #{project.creationDate} #{project.updatedDate}", String.class));
         projectCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{project}", JJProject.class));
         projectCreateInput.setConverter(new JJProjectConverter());
-        projectCreateInput.setRequired(false);
+        projectCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(projectCreateInput);
         
         Message projectCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -1116,7 +1116,7 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         projectEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{project.name} #{project.description} #{project.creationDate} #{project.updatedDate}", String.class));
         projectEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{project}", JJProject.class));
         projectEditInput.setConverter(new JJProjectConverter());
-        projectEditInput.setRequired(false);
+        projectEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(projectEditInput);
         
         Message projectEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);

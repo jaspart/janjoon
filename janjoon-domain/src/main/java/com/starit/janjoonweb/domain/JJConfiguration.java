@@ -13,7 +13,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 public class JJConfiguration extends JJAbstractEntity {
 
 	@NotNull
-	@Size(max = 25)
+	@Size(max = 100)
 	private String param;
 
 	@NotNull

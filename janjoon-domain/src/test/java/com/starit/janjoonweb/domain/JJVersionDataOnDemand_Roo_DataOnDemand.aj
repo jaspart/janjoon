@@ -4,6 +4,7 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProductDataOnDemand;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionDataOnDemand;
@@ -46,6 +47,7 @@ privileged aspect JJVersionDataOnDemand_Roo_DataOnDemand {
         setDescription(obj, index);
         setEnabled(obj, index);
         setName(obj, index);
+        setProduct(obj, index);
         setUpdatedBy(obj, index);
         setUpdatedDate(obj, index);
         return obj;
@@ -77,6 +79,11 @@ privileged aspect JJVersionDataOnDemand_Roo_DataOnDemand {
             name = name.substring(0, 100);
         }
         obj.setName(name);
+    }
+    
+    public void JJVersionDataOnDemand.setProduct(JJVersion obj, int index) {
+        JJProduct product = jJProductDataOnDemand.getRandomJJProduct();
+        obj.setProduct(product);
     }
     
     public void JJVersionDataOnDemand.setUpdatedBy(JJVersion obj, int index) {

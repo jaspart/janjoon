@@ -29,8 +29,9 @@
 									<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
 									<f:selectItems value="#{jJBuildBean.builds}" var="c"
 										itemLabel="#{c.name}" itemValue="#{c}" />
-									<p:ajax process="@this" partialSubmit="true" listener="#{jJTestcaseBean.loadData()}"
-										update=":testFormWest :testFormCenter"  />
+									<p:ajax process="@this" partialSubmit="true"
+										listener="#{jJTestcaseBean.loadData()}"
+										update=":testFormWest :testFormCenter" />
 								</p:selectOneMenu>
 							</p:column>
 						</p:row>
@@ -85,8 +86,8 @@
 										<h:outputText value="#{node}"
 											styleClass="TestcaseSuccessWithoutBuild" />
 									</p:treeNode>
-									
-										<p:treeNode type="TNF">
+
+									<p:treeNode type="TNF">
 										<h:outputText value="#{node}" styleClass="TestcaseNonFini" />
 									</p:treeNode>
 
@@ -103,6 +104,9 @@
 			<p:layoutUnit position="center" resizable="true"
 				style="min-height:500px;">
 				<h:form id="testFormCenter">
+					<h:outputText value="Please select a node on the tree to get view"
+						rendered="#{jJTestcaseBean.rendredEmptySelection}"
+						style="color: red;" />
 					<p:dataTable id="testcaseRecapDataTable" var="tcr"
 						value="#{jJTestcaseBean.testCaseRecaps}" paginator="true" rows="8"
 						style="width:550px;" rowKey="#{tcr.testcase.name}"

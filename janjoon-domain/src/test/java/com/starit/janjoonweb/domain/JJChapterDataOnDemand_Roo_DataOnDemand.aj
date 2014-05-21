@@ -9,6 +9,7 @@ import com.starit.janjoonweb.domain.JJChapterDataOnDemand;
 import com.starit.janjoonweb.domain.JJChapterRepository;
 import com.starit.janjoonweb.domain.JJChapterService;
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
+import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJProjectDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ privileged aspect JJChapterDataOnDemand_Roo_DataOnDemand {
         setName(obj, index);
         setOrdering(obj, index);
         setParent(obj, index);
+        setProject(obj, index);
         setUpdatedDate(obj, index);
         return obj;
     }
@@ -89,6 +91,11 @@ privileged aspect JJChapterDataOnDemand_Roo_DataOnDemand {
     public void JJChapterDataOnDemand.setParent(JJChapter obj, int index) {
         JJChapter parent = obj;
         obj.setParent(parent);
+    }
+    
+    public void JJChapterDataOnDemand.setProject(JJChapter obj, int index) {
+        JJProject project = jJProjectDataOnDemand.getRandomJJProject();
+        obj.setProject(project);
     }
     
     public void JJChapterDataOnDemand.setUpdatedDate(JJChapter obj, int index) {

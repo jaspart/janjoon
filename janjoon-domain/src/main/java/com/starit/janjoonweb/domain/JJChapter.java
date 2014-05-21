@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
@@ -19,6 +20,7 @@ public class JJChapter extends JJAbstractEntity {
 
 	private Integer ordering;
 
+	@NotNull
 	@ManyToOne
 	private JJProject project;
 
