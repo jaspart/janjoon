@@ -417,6 +417,49 @@ public class LoginBean implements Serializable {
 		}
 	}
 
+	public void redirection(ActionEvent e) throws IOException
+	{
+		JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");
+		
+		if(jJProjectBean.getProject()==null)
+		{
+			FacesMessage message = MessageFactory.getMessage(
+					"dev.nullProject.label", FacesMessage.SEVERITY_ERROR,
+					"");
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}else
+		{
+			String path = FacesContext.getCurrentInstance()
+					.getExternalContext().getRequestContextPath();
+			if(e.getComponent().getId().equalsIgnoreCase("proAction"))
+			{
+				FacesContext
+				.getCurrentInstance()
+				.getExternalContext()
+				.redirect(
+						path
+								+ "/pages/project1.jsf?faces-redirect=true");
+			}else if(e.getComponent().getId().equalsIgnoreCase("testAction"))
+			{
+				FacesContext
+				.getCurrentInstance()
+				.getExternalContext()
+				.redirect(
+						path
+								+ "/pages/test.jsf?faces-redirect=true");
+			}else
+			{
+				FacesContext
+				.getCurrentInstance()
+				.getExternalContext()
+				.redirect(
+						path
+								+ "/pages/stats.jsf?faces-redirect=true");
+			}
+		}
+		
+		
+	}
 	public void redirectToDev(ActionEvent e) throws IOException {
 
 		JJVersionBean jjVersionBean = (JJVersionBean) findBean("jJVersionBean");

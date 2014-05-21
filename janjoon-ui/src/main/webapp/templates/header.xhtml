@@ -31,15 +31,18 @@
 
 				<p:menuitem value="#{messages.header_project_menuitem}"
 					url="/pages/project1.jsf?faces-redirect=true"
-					icon="ui-icon-clipboard" update=":contentPanel" />
+					icon="ui-icon-clipboard" update=":contentPanel" rendered="#{!loginBean.enable}"/>
+					
+				<p:menuitem id="proAction" value="#{messages.header_project_menuitem}"
+					actionListener="#{loginBean.redirection}" update="growlHeader"
+					icon="ui-icon-clipboard" rendered="#{loginBean.enable}"/>
 
 				<p:menuitem value="#{messages.header_spec_menuitem}"
 					url="/pages/specifications.jsf?faces-redirect=true"
 					icon="ui-icon-document" update=":contentPanel" />
 
 				<p:menuitem value="#{messages.header_bug_menuitem}"
-					url="/pages/bugs.jsf?faces-redirect=true"
-					icon="ui-icon-gear" />
+					url="/pages/bugs.jsf?faces-redirect=true" icon="ui-icon-gear" />
 
 				<p:menuitem value="#{messages.header_dev_menuitem}"
 					url="/pages/development.jsf?faces-redirect=true"
@@ -49,19 +52,27 @@
 					actionListener="#{loginBean.redirectToDev}" update="growlHeader"
 					icon="ui-icon-wrench" rendered="#{loginBean.enable}" />
 
-				<p:menuitem value="#{messages.header_test_menuitem}" url="/pages/test.jsf?faces-redirect=true"
-					icon="ui-icon-check" update=":contentPanel" />
+				<p:menuitem value="#{messages.header_test_menuitem}"
+					url="/pages/test.jsf?faces-redirect=true" icon="ui-icon-check"
+					update=":contentPanel" rendered="#{!loginBean.enable}"/>
+					
+				<p:menuitem id="testAction" value="#{messages.header_test_menuitem}"
+					actionListener="#{loginBean.redirection}" update="growlHeader"
+					icon="ui-icon-clipboard" rendered="#{loginBean.enable}"/>
 
 				<p:menuitem value="#{messages.header_delivery_menuitem}"
 					url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
 
 				<p:menuitem value="#{messages.header_team_menuitem}"
-					url="/pages/teams.jsf?faces-redirect=true"
-					icon="ui-icon-person" />
+					url="/pages/teams.jsf?faces-redirect=true" icon="ui-icon-person" />
 
 				<p:menuitem value="#{messages.header_stat_menuitem}"
 					url="/pages/stats.jsf?faces-redirect=true"
-					icon="ui-icon-arrowreturnthick-1-n" />
+					icon="ui-icon-arrowreturnthick-1-n" rendered="#{!loginBean.enable}"/>
+					
+				<p:menuitem id="statsAction" value="#{messages.header_stat_menuitem}"
+					actionListener="#{loginBean.redirection}" update="growlHeader"
+					icon="ui-icon-clipboard" rendered="#{loginBean.enable}"/>
 
 				<p:menuitem value="#{messages.header_admin_menuitem}"
 					url="/pages/administration.jsf?faces-redirect=true"
@@ -85,7 +96,7 @@
 
 					<f:converter
 						converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
-				<f:selectItem itemValue="#{null}" itemLabel="AnyProject" />
+					<f:selectItem itemValue="#{null}" itemLabel="AnyProject" />
 					<f:selectItems value="#{jJProjectBean.projectList}" var="p"
 						itemLabel="#{p.name}" itemValue="#{p}" />
 
