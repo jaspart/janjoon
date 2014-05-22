@@ -10,7 +10,8 @@
 	<ui:define name="content">
 
 		<p:tabView id="tabview" widgetVar="tabView" dynamic="true"
-			cache="true">
+			cache="true" activeIndex="#{loginBean.activeTabAdminIndex}">
+			<p:ajax event="tabChange" listener="#{loginBean.onTabAdminChange}" update="tabview" />
 
 			<p:tab id="tabUser" title="#{messages.admin_user_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">

@@ -153,8 +153,10 @@ public class JJSprintBean {
 	}
 
 	public JJTask getTask() {
-		if (task == null)
+		if (task == null) {
 			task = new JJTask();
+			task.setWorkloadPlanned(4);
+		}
 		return task;
 	}
 

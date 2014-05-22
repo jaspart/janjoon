@@ -20,11 +20,13 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.TabChangeEvent;
 import org.primefaces.extensions.component.ckeditor.CKEditor;
 import org.primefaces.model.UploadedFile;
 import org.apache.log4j.Logger;
 import org.apache.myfaces.component.visit.FullVisitContext;
 import org.apache.myfaces.shared.resource.ResourceLoader;
+import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -64,7 +66,7 @@ public class LoginBean implements Serializable {
 
 	@Autowired
 	private AuthorizationManager authorizationManager;
-	
+
 	static Logger logger = Logger.getLogger("loginBean-Logger");
 
 	@Autowired
@@ -76,6 +78,9 @@ public class LoginBean implements Serializable {
 	private boolean loadMain = false;
 	private JJContact contact;
 	private boolean enable = false;
+	private int activeTabAdminIndex;
+	private int activeTabProjectIndex;
+	
 
 	public void setjJContactService(JJContactService jJContactService) {
 		this.jJContactService = jJContactService;
@@ -139,7 +144,7 @@ public class LoginBean implements Serializable {
 			Authentication authentication = authenticationManager
 					.authenticate(token);
 			SecurityContext sContext = SecurityContextHolder.getContext();
-			sContext.setAuthentication(authentication);			
+			sContext.setAuthentication(authentication);
 			enable = true;
 		} catch (AuthenticationException loginError) {
 
@@ -167,7 +172,8 @@ public class LoginBean implements Serializable {
 						contact.getName());
 				FacesContext.getCurrentInstance().addMessage("login", message);
 				FacesContext context = FacesContext.getCurrentInstance();
-				logger.info("login operation success "+contact.getName()+" logged in");
+				logger.info("login operation success " + contact.getName()
+						+ " logged in");
 
 				if (UsageChecker.checkExpiryDate()) {
 				} else {
@@ -240,10 +246,42 @@ public class LoginBean implements Serializable {
 		this.loadMain = loadMain;
 	}
 
+	public int getActiveTabAdminIndex() {
+		return activeTabAdminIndex;
+	}
+
+	public void setActiveTabAdminIndex(int activeTabAdminIndex) {
+		this.activeTabAdminIndex = activeTabAdminIndex;
+	}
+
+	public int getActiveTabProjectIndex() {
+		return activeTabProjectIndex;
+	}
+
+	public void setActiveTabProjectIndex(int activeTabProjectIndex) {
+		this.activeTabProjectIndex = activeTabProjectIndex;
+	}
+
 	public static Object findBean(String beanName) {
 		FacesContext context = FacesContext.getCurrentInstance();
 		return context.getApplication().evaluateExpressionGet(context,
 				"#{" + beanName + "}", Object.class);
+	}
+
+	public void onTabAdminChange(TabChangeEvent event) {
+
+		TabView tv = (TabView) event.getComponent();
+		this.activeTabAdminIndex =  tv.getChildren().indexOf(event.getTab());;
+		System.out.println("###### ACtive tab: " + activeTabAdminIndex);
+
+	}
+	
+	public void onTabProjectChange(TabChangeEvent event) {
+
+		TabView tv = (TabView) event.getComponent();
+		this.activeTabProjectIndex =  tv.getChildren().indexOf(event.getTab());;
+		System.out.println("###### ACtive tab: " + activeTabAdminIndex);
+
 	}
 
 	public void changeEvent(ValueChangeEvent event) throws IOException {
@@ -417,49 +455,36 @@ public class LoginBean implements Serializable {
 		}
 	}
 
-	public void redirection(ActionEvent e) throws IOException
-	{
+	public void redirection(ActionEvent e) throws IOException {
 		JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");
-		
-		if(jJProjectBean.getProject()==null)
-		{
+
+		if (jJProjectBean.getProject() == null) {
 			FacesMessage message = MessageFactory.getMessage(
-					"dev.nullProject.label", FacesMessage.SEVERITY_ERROR,
-					"");
+					"dev.nullProject.label", FacesMessage.SEVERITY_ERROR, "");
 			FacesContext.getCurrentInstance().addMessage(null, message);
-		}else
-		{
+		} else {
 			String path = FacesContext.getCurrentInstance()
 					.getExternalContext().getRequestContextPath();
-			if(e.getComponent().getId().equalsIgnoreCase("proAction"))
-			{
+			if (e.getComponent().getId().equalsIgnoreCase("proAction")) {
 				FacesContext
-				.getCurrentInstance()
-				.getExternalContext()
-				.redirect(
-						path
-								+ "/pages/project1.jsf?faces-redirect=true");
-			}else if(e.getComponent().getId().equalsIgnoreCase("testAction"))
-			{
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								path
+										+ "/pages/project1.jsf?faces-redirect=true");
+			} else if (e.getComponent().getId().equalsIgnoreCase("testAction")) {
+				FacesContext.getCurrentInstance().getExternalContext()
+						.redirect(path + "/pages/test.jsf?faces-redirect=true");
+			} else {
 				FacesContext
-				.getCurrentInstance()
-				.getExternalContext()
-				.redirect(
-						path
-								+ "/pages/test.jsf?faces-redirect=true");
-			}else
-			{
-				FacesContext
-				.getCurrentInstance()
-				.getExternalContext()
-				.redirect(
-						path
-								+ "/pages/stats.jsf?faces-redirect=true");
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(path + "/pages/stats.jsf?faces-redirect=true");
 			}
 		}
-		
-		
+
 	}
+
 	public void redirectToDev(ActionEvent e) throws IOException {
 
 		JJVersionBean jjVersionBean = (JJVersionBean) findBean("jJVersionBean");

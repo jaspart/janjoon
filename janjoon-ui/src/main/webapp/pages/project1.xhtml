@@ -8,7 +8,8 @@
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
 		<p:tabView id="projecttabview" widgetVar="tabView" dynamic="true"
-			cache="true">
+			cache="true" activeIndex="#{loginBean.activeTabProjectIndex}">
+			<p:ajax event="tabChange" listener="#{loginBean.onTabProjectChange}" update="projecttabview" />
 			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="planning">

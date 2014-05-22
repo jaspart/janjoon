@@ -56,7 +56,7 @@ public class DevelopmentBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean render;
 
-	static Logger logger = Logger.getLogger(DevelopmentBean.class);
+	static Logger logger = Logger.getLogger("DevelopmentBean");
 
 	@Autowired
 	private JJStatusService jJStatusService;

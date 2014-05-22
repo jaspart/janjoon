@@ -5,6 +5,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/run-distrib" source-path="/src/run-distrib"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/webapp"/>
 		<dependent-module archiveName="janjoon-domain-0.2-BUILD_NUMBER.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/janjoon-domain/janjoon-domain">
 			<dependency-type>uses</dependency-type>
 		</dependent-module>
