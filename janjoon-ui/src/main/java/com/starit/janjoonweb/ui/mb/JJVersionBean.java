@@ -1,15 +1,13 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.model.ListDataModel;
 import javax.servlet.http.HttpSession;
 
-import org.primefaces.event.SelectEvent;
-import org.primefaces.model.SelectableDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -33,15 +31,15 @@ public class JJVersionBean {
 	}
 
 	private JJVersion version;
-
 	private List<JJVersion> versionList;
+	private boolean disabled = true;
 
 	private JJVersion versionAdmin;
-	private List<JJVersion> versionListTable;
+	private List<VersionDataModel> versionDataModel;
 
-	private VersionDataModel versionDataModel;
-
-	private boolean disabled = true;
+	private boolean checkVersion;
+	private boolean checkVersions;
+	private boolean disabledCheckVersion;
 
 	public JJVersion getVersion() {
 
@@ -77,6 +75,14 @@ public class JJVersionBean {
 		this.versionList = versionList;
 	}
 
+	public boolean getDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
+
 	public JJVersion getVersionAdmin() {
 		return versionAdmin;
 	}
@@ -85,30 +91,36 @@ public class JJVersionBean {
 		this.versionAdmin = versionAdmin;
 	}
 
-	public List<JJVersion> getVersionListTable() {
-		return versionListTable;
-	}
-
-	public void setVersionListTable(List<JJVersion> versionListTable) {
-		this.versionListTable = versionListTable;
-	}
-
-	public VersionDataModel getVersionDataModel() {
-		versionDataModel = new VersionDataModel(jJVersionService.getVersions(
-				true, false, null));
+	public List<VersionDataModel> getVersionDataModel() {
 		return versionDataModel;
 	}
 
-	public void setVersionDataModel(VersionDataModel versionDataModel) {
+	public void setVersionDataModel(List<VersionDataModel> versionDataModel) {
 		this.versionDataModel = versionDataModel;
 	}
 
-	public boolean getDisabled() {
-		return disabled;
+	public boolean getCheckVersion() {
+		return checkVersion;
 	}
 
-	public void setDisabled(boolean disabled) {
-		this.disabled = disabled;
+	public void setCheckVersion(boolean checkVersion) {
+		this.checkVersion = checkVersion;
+	}
+
+	public boolean getCheckVersions() {
+		return checkVersions;
+	}
+
+	public void setCheckVersions(boolean checkVersions) {
+		this.checkVersions = checkVersions;
+	}
+
+	public boolean getDisabledCheckVersion() {
+		return disabledCheckVersion;
+	}
+
+	public void setDisabledCheckVersion(boolean disabledCheckVersion) {
+		this.disabledCheckVersion = disabledCheckVersion;
 	}
 
 	public List<JJTask> getTastksByVersion(JJVersion jJversion) {
@@ -120,9 +132,19 @@ public class JJVersionBean {
 		versionAdmin = new JJVersion();
 		versionAdmin.setEnabled(true);
 		versionAdmin.setCreationDate(new Date());
+	}
 
-		versionListTable = null;
+	public void addVersion() {
 
+		if (versionDataModel == null) {
+			versionDataModel = new ArrayList<VersionDataModel>();
+		}
+
+		versionAdmin.setDescription("This is version "
+				+ versionAdmin.getName());
+		
+		versionDataModel.add(new VersionDataModel(versionAdmin, true, false));
+		newVersion();
 	}
 
 	public void save() {
@@ -148,36 +170,79 @@ public class JJVersionBean {
 
 	}
 
-	public void onRowSelect(SelectEvent event) {
+	public void fillVersionTable(JJProduct product) {
+		versionDataModel = new ArrayList<VersionDataModel>();
+
+		List<JJVersion> versions = jJVersionService.getVersions(true, true,
+				product);
+
+		for (JJVersion version : versions) {
+			versionDataModel.add(new VersionDataModel(version, true, true));
+		}
+
+		checkVersions = true;
 	}
 
-	@SuppressWarnings("unchecked")
-	public class VersionDataModel extends ListDataModel<JJVersion> implements
-			SelectableDataModel<JJVersion> {
+	public void checkVersions() {
 
-		public VersionDataModel(List<JJVersion> data) {
-			super(data);
+		for (VersionDataModel versionModel : versionDataModel) {
+			versionModel.setCheckVersion(checkVersions);
 		}
 
-		@Override
-		public JJVersion getRowData(String rowKey) {
-			// In a real app, a more efficient way like a query by rowKey should
-			// be implemented to deal with huge data
+	}
 
-			List<JJVersion> versions = (List<JJVersion>) getWrappedData();
+	public void checkVersion() {
 
-			for (JJVersion version : versions) {
-				if (version.getName().equals(rowKey))
-					return version;
+		boolean checkAll = true;
+		for (VersionDataModel versionModel : versionDataModel) {
+
+			if (!versionModel.getCheckVersion()) {
+				checkAll = false;
+				break;
 			}
 
-			return null;
+		}
+		checkVersions = checkAll;
+	}
+
+	public class VersionDataModel {
+
+		private JJVersion version;
+		private boolean checkVersion;
+		private boolean old;
+
+		public VersionDataModel(JJVersion version, boolean checkVersion,
+				boolean old) {
+			super();
+			this.version = version;
+			this.checkVersion = checkVersion;
+			this.old = old;
 		}
 
-		@Override
-		public Object getRowKey(JJVersion version) {
-			return version.getName();
+		public JJVersion getVersion() {
+			return version;
 		}
+
+		public void setVersion(JJVersion version) {
+			this.version = version;
+		}
+
+		public boolean getCheckVersion() {
+			return checkVersion;
+		}
+
+		public void setCheckVersion(boolean checkVersion) {
+			this.checkVersion = checkVersion;
+		}
+
+		public boolean getOld() {
+			return old;
+		}
+
+		public void setOld(boolean old) {
+			this.old = old;
+		}
+
 	}
 
 }

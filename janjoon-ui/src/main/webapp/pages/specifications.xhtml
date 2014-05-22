@@ -183,8 +183,8 @@
 										value="#{jJRequirementBean.requirement.name}" required="true"
 										widgetVar="nameWidget"
 										label="#{messages.specification_create_name_label}"
-										requiredMessage="#{messages.specification_create_name_alert}">
-									</p:inputText>
+										requiredMessage="#{messages.specification_create_name_alert}" />
+
 									<p:message for="name" id="msgName" />
 									<p:watermark for="name"
 										value="#{messages.specification_create_name_watermark}" />
@@ -432,8 +432,8 @@
 									<p:inputText id="name" value="#{jJChapterBean.chapter.name}"
 										required="true" widgetVar="nameWidget"
 										label="#{message.specification_chapter_name_label}"
-										requiredMessage="#{message.specification_chapter_name_alert}">
-									</p:inputText>
+										requiredMessage="#{message.specification_chapter_name_alert}" />
+
 									<p:message for="name" id="msgName" />
 									<p:watermark for="name"
 										value="#{messages.specification_create_name_watermark}" />
@@ -521,8 +521,8 @@
 										style="width:388px"
 										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
 										value="#{jJChapterBean.chapter.description}" required="true"
-										requiredMessage="#{messages.specification_chapter_description_alert}">
-									</pe:ckEditor>
+										requiredMessage="#{messages.specification_chapter_description_alert}" />
+
 								</p:column>
 
 							</p:row>
