@@ -128,6 +128,8 @@ public class JJRequirementBean {
 
 	private long categoryId;
 
+	private boolean requirementState;
+
 	public JJCategory getLowCategory() {
 		return lowCategory;
 	}
@@ -698,6 +700,8 @@ public class JJRequirementBean {
 		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
 		JJContact contact = loginBean.getContact();
 		requirement.setCreatedBy(contact);
+
+		requirementState = true;
 	}
 
 	public void editRequirement() {
@@ -759,6 +763,8 @@ public class JJRequirementBean {
 		requirement.setNumero(numero);
 		requirement.setUpdatedBy(contact);
 		requirement.setUpdatedDate(new Date());
+
+		requirementState = false;
 	}
 
 	public void deleteRequirement() {
@@ -888,19 +894,32 @@ public class JJRequirementBean {
 
 			message = "message_successfully_created";
 
-			newRequirement(requirementCategory.getId());
-
 		} else {
 
 			message = "message_successfully_updated";
-			RequestContext context = RequestContext.getCurrentInstance();
-			context.execute("requirementDialogWidget.hide()");
-			closeDialog();
+
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJRequirement");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+		RequestContext context = RequestContext.getCurrentInstance();
+
+		if (requirementState) {
+
+			if (getRequirementDialogConfiguration()) {
+				context.execute("requirementDialogWidget.hide()");
+//				closeDialog();
+			} else {
+				newRequirement(requirementCategory.getId());
+			}
+
+		} else {
+			context.execute("requirementDialogWidget.hide()");
+//			closeDialog();
+		}
+
 		reset();
 
 	}
@@ -1237,6 +1256,7 @@ public class JJRequirementBean {
 
 	public void closeDialog() {
 
+			
 		message = null;
 		namesList = null;
 		lowCategoryName = null;
@@ -1267,6 +1287,8 @@ public class JJRequirementBean {
 
 		storeMapUp = null;
 		storeMapDown = null;
+
+		requirementState = true;
 	}
 
 	public void closeDialogImport() {
@@ -2874,4 +2896,14 @@ public class JJRequirementBean {
 		setSelectedTestcases(null);
 		setCreateDialogVisible(false);
 	}
+
+	private boolean getRequirementDialogConfiguration() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJConfigurationBean jJConfigurationBean = (JJConfigurationBean) session
+				.getAttribute("jJConfigurationBean");
+		return jJConfigurationBean.getDialogConfig("RequirementDialog",
+				"specs.requirement.create.saveandclose");
+	}
+
 }

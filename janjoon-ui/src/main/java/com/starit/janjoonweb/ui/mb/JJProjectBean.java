@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ public class JJProjectBean {
 	private Set<JJContact> projectManagerList;
 
 	private String message;
+
+	private boolean projectState;
 
 	public void setjJPermissionService(JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
@@ -99,6 +102,15 @@ public class JJProjectBean {
 		this.message = message;
 	}
 
+	private boolean getProjectDialogConfiguration() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJConfigurationBean jJConfigurationBean = (JJConfigurationBean) session
+				.getAttribute("jJConfigurationBean");
+		return jJConfigurationBean.getDialogConfig("ProjectDialog",
+				"project.create.saveandclose");
+	}
+
 	public void newProject() {
 
 		message = "New Project";
@@ -107,12 +119,16 @@ public class JJProjectBean {
 		projectAdmin.setCreationDate(new Date());
 		projectAdmin.setDescription("Defined as a Project");
 		projectManager = null;
+
+		projectState = true;
 	}
 
 	public void editProject() {
 
 		message = "Edit Project";
 		projectManager = projectAdmin.getManager();
+
+		projectState = false;
 	}
 
 	public void deleteProject() {
@@ -146,17 +162,26 @@ public class JJProjectBean {
 
 			message = "message_successfully_updated";
 
-			// closeDialog();
-
-			RequestContext context = RequestContext.getCurrentInstance();
-			context.execute("projectDialogWidget.hide()");
-
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJProject");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
+		RequestContext context = RequestContext.getCurrentInstance();
+
+		if (projectState) {
+
+			if (getProjectDialogConfiguration()) {
+				context.execute("projectDialogWidget.hide()");
+			} else {
+				newProject();
+			}
+
+		} else {
+
+			context.execute("projectDialogWidget.hide()");
+		}
 	}
 
 	public void addMessage() {
@@ -168,10 +193,12 @@ public class JJProjectBean {
 	}
 
 	public void closeDialog() {
-
+		
 		projectAdmin = null;
 		projectManager = null;
 		projectManagerList = null;
+
+		projectState = true;
 	}
 
 }

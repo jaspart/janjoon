@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
@@ -22,6 +23,8 @@ public class JJCategoryBean {
 
 	private String message;
 	private boolean disableLevel;
+
+	private boolean categoryState;
 
 	public JJCategory getCategoryAdmin() {
 		return categoryAdmin;
@@ -66,12 +69,16 @@ public class JJCategoryBean {
 		categoryAdmin.setCreationDate(new Date());
 		categoryAdmin.setStage(0);
 		disableLevel = false;
+
+		categoryState = true;
 	}
 
 	public void editCategory() {
 
 		message = "Edit Category";
 		disableLevel = true;
+
+		categoryState = false;
 	}
 
 	public void deleteCategory() {
@@ -102,20 +109,31 @@ public class JJCategoryBean {
 				jJCategoryService.saveJJCategory(categoryAdmin);
 				message = "message_successfully_created";
 
-				newCategory();
-
 			} else {
 
 				categoryAdmin.setUpdatedDate(new Date());
 
 				jJCategoryService.updateJJCategory(categoryAdmin);
 				message = "message_successfully_updated";
-				RequestContext context = RequestContext.getCurrentInstance();
-				context.execute("categoryDialogWidget.hide()");
-				closeDialog();
+
+				// closeDialog();
 			}
 
 			facesMessage = MessageFactory.getMessage(message, "JJCategory");
+
+			RequestContext context = RequestContext.getCurrentInstance();
+
+			if (categoryState) {
+				if (getCategoryDialogConfiguration()) {
+					context.execute("categoryDialogWidget.hide()");
+				} else {
+
+					newCategory();
+				}
+
+			} else {
+				context.execute("categoryDialogWidget.hide()");
+			}
 
 		} else {
 			message = "This category is already exist into the database, try to use another name";
@@ -130,6 +148,17 @@ public class JJCategoryBean {
 	public void closeDialog() {
 
 		categoryAdmin = null;
+
+		categoryState = true;
+	}
+
+	private boolean getCategoryDialogConfiguration() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJConfigurationBean jJConfigurationBean = (JJConfigurationBean) session
+				.getAttribute("jJConfigurationBean");
+		return jJConfigurationBean.getDialogConfig("CategoryDialog",
+				"category.create.saveandclose");
 	}
 
 }

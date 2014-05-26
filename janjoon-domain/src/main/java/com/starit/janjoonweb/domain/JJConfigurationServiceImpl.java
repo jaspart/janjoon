@@ -21,7 +21,8 @@ public class JJConfigurationServiceImpl implements JJConfigurationService {
 	}
 
 	@Override
-	public List<JJConfiguration> getConfigs(boolean onlyActif) {
+	public List<JJConfiguration> getConfigurations(String name, String param,
+			boolean onlyActif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJConfiguration> criteriaQuery = criteriaBuilder
@@ -31,11 +32,27 @@ public class JJConfigurationServiceImpl implements JJConfigurationService {
 
 		CriteriaQuery<JJConfiguration> select = criteriaQuery.select(from);
 
-		if (onlyActif) {
-			List<Predicate> predicates = new ArrayList<Predicate>();
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-			select.where(predicates.toArray(new Predicate[] {}));
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (name != null) {
+
+			predicates.add(criteriaBuilder.equal(from.get("name"), name));
+
 		}
+
+		if (param != null) {
+
+			predicates.add(criteriaBuilder.equal(from.get("param"), param));
+
+		}
+
+		if (onlyActif) {
+
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		}
+
+		select.where(predicates.toArray(new Predicate[] {}));
 
 		TypedQuery<JJConfiguration> result = entityManager.createQuery(select);
 		return result.getResultList();

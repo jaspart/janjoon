@@ -259,12 +259,30 @@ public class ConfigListener implements ServletContextListener {
 			configuration.setVal("true");
 			configuration.setEnabled(true);
 			jJConfigurationService.saveJJConfiguration(configuration);
-			
+
 			configuration = new JJConfiguration();
 			configuration.setName("ProductDialog");
 			configuration.setCreationDate(new Date());
 			configuration.setDescription("Test ProductDialog");
 			configuration.setParam("product.create.saveandclose");
+			configuration.setVal("true");
+			configuration.setEnabled(true);
+			jJConfigurationService.saveJJConfiguration(configuration);
+
+			configuration = new JJConfiguration();
+			configuration.setName("ProjectDialog");
+			configuration.setCreationDate(new Date());
+			configuration.setDescription("Test ProjectDialog");
+			configuration.setParam("project.create.saveandclose");
+			configuration.setVal("true");
+			configuration.setEnabled(true);
+			jJConfigurationService.saveJJConfiguration(configuration);
+
+			configuration = new JJConfiguration();
+			configuration.setName("CategoryDialog");
+			configuration.setCreationDate(new Date());
+			configuration.setDescription("Test CategoryDialog");
+			configuration.setParam("category.create.saveandclose");
 			configuration.setVal("true");
 			configuration.setEnabled(true);
 			jJConfigurationService.saveJJConfiguration(configuration);

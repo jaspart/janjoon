@@ -14,6 +14,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TreeDragDropEvent;
@@ -92,8 +93,10 @@ public class JJChapterBean {
 	private TreeNode selectedChapterNode;
 
 	private long categoryId;
-	
+
 	private String warnMessage;
+
+	private boolean chapterState;
 
 	public JJChapter getChapter() {
 		return chapter;
@@ -273,6 +276,8 @@ public class JJChapterBean {
 		parentChapter = null;
 
 		handleSelectParentChapter();
+
+		chapterState = true;
 	}
 
 	public void editChapter() {
@@ -284,6 +289,8 @@ public class JJChapterBean {
 
 		chapterProject = chapter.getProject();
 		disabledProject = true;
+
+		chapterState = false;
 	}
 
 	public void handleSelectProject() {
@@ -344,7 +351,7 @@ public class JJChapterBean {
 		 */
 		selectedChapter.setEnabled(false);
 		jJChapterService.updateJJChapter(selectedChapter);
-		
+
 		chapterProject = null;
 
 		loadData(categoryId);
@@ -373,10 +380,8 @@ public class JJChapterBean {
 			chapter.setUpdatedDate(new Date());
 			jJChapterService.updateJJChapter(chapter);
 			message = "message_successfully_updated";
-
 		}
 
-		loadData(categoryId);
 		// newChapter();
 		// chapterTree();
 		// transferTree();
@@ -384,6 +389,19 @@ public class JJChapterBean {
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJChapter");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+		RequestContext context = RequestContext.getCurrentInstance();
+
+		if (chapterState) {
+			if (getChapterDialogConfiguration()) {
+				context.execute("chapterDialogWidget.hide()");
+			} else {
+				loadData(categoryId);
+			}
+
+		} else {
+			context.execute("chapterDialogWidget.hide()");
+		}
 	}
 
 	private void chapterTree() {
@@ -1264,6 +1282,16 @@ public class JJChapterBean {
 		chapterProject = null;
 		warnMessage = null;
 
+		chapterState = true;
+
 	}
 
+	private boolean getChapterDialogConfiguration() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJConfigurationBean jJConfigurationBean = (JJConfigurationBean) session
+				.getAttribute("jJConfigurationBean");
+		return jJConfigurationBean.getDialogConfig("ChapterDialog",
+				"chapter.create.saveandclose");
+	}
 }

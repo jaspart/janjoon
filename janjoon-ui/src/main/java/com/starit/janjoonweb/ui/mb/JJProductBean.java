@@ -64,6 +64,8 @@ public class JJProductBean {
 	private boolean disabledProductMode;
 	private boolean disabledVersionMode;
 
+	private boolean productState;
+
 	public JJProduct getProduct() {
 		return product;
 	}
@@ -154,6 +156,15 @@ public class JJProductBean {
 		this.disabledVersionMode = disabledVersionMode;
 	}
 
+	private boolean getProductDialogConfiguration() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJConfigurationBean jJConfigurationBean = (JJConfigurationBean) session
+				.getAttribute("jJConfigurationBean");
+		return jJConfigurationBean.getDialogConfig("ProductDialog",
+				"product.create.saveandclose");
+	}
+
 	public void newProduct(JJVersionBean jJVersionBean) {
 
 		message = "New Product";
@@ -170,6 +181,8 @@ public class JJProductBean {
 		disabledProductMode = false;
 		disabledVersionMode = true;
 
+		productState = true;
+
 	}
 
 	public void editProduct(JJVersionBean jJVersionBean) {
@@ -183,6 +196,8 @@ public class JJProductBean {
 
 		disabledProductMode = false;
 		disabledVersionMode = false;
+
+		productState = false;
 	}
 
 	public void deleteProduct() {
@@ -279,13 +294,23 @@ public class JJProductBean {
 		System.out.println("herer");
 
 		message = "message_successfully_updated";
-		RequestContext context = RequestContext.getCurrentInstance();
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJProduct");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
-		context.execute("productDialogWidget.hide()");
+		RequestContext context = RequestContext.getCurrentInstance();
+
+		if (productState) {
+			if (getProductDialogConfiguration()) {
+				context.execute("productDialogWidget.hide()");
+			} else {
+				newProduct(jJVersionBean);
+			}
+		} else {
+			context.execute("productDialogWidget.hide()");
+		}
+
 		System.out.println("dfgdfgf");
 	}
 
@@ -299,13 +324,13 @@ public class JJProductBean {
 
 	public void closeDialog(JJVersionBean jJVersionBean) {
 
-		System.out.println("vovo");
-
 		productAdmin = null;
 		productManager = null;
 		productManagerList = null;
 		jJVersionBean.setVersionAdmin(null);
 		jJVersionBean.setVersionDataModel(null);
+
+		productState = true;
 	}
 
 	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project) {

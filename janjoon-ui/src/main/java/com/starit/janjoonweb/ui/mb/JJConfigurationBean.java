@@ -67,7 +67,7 @@ public class JJConfigurationBean {
 
 	public List<JJConfiguration> getConfigList() {
 
-		configList = jJConfigurationService.getConfigs(true);
+		configList = jJConfigurationService.getConfigurations(null, null, true);
 		return configList;
 	}
 
@@ -125,7 +125,7 @@ public class JJConfigurationBean {
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted", "JJConfiguration");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		configList = jJConfigurationService.getConfigs(true);
+		configList = jJConfigurationService.getConfigurations(null, null, true);
 		jJconfiguration = new JJConfiguration();
 	}
 
@@ -233,7 +233,7 @@ public class JJConfigurationBean {
 						"#{jJConfigurationBean.JJConfiguration_.param}",
 						String.class));
 		LengthValidator paramCreateInputValidator = new LengthValidator();
-		paramCreateInputValidator.setMaximum(25);
+		paramCreateInputValidator.setMaximum(100);
 		paramCreateInput.addValidator(paramCreateInputValidator);
 		paramCreateInput.setRequired(true);
 		htmlPanelGrid.getChildren().add(paramCreateInput);
@@ -356,7 +356,7 @@ public class JJConfigurationBean {
 						"#{jJConfigurationBean.JJConfiguration_.param}",
 						String.class));
 		LengthValidator paramEditInputValidator = new LengthValidator();
-		paramEditInputValidator.setMaximum(25);
+		paramEditInputValidator.setMaximum(100);
 		paramEditInput.addValidator(paramEditInputValidator);
 		paramEditInput.setRequired(true);
 		htmlPanelGrid.getChildren().add(paramEditInput);
@@ -564,6 +564,29 @@ public class JJConfigurationBean {
 		htmlPanelGrid.getChildren().add(valValue);
 
 		return htmlPanelGrid;
+
+	}
+
+	public boolean getDialogConfig(String name, String param) {
+
+		List<JJConfiguration> configurations = jJConfigurationService
+				.getConfigurations(name, param, true);
+
+		if (configurations.isEmpty())
+			return true;
+		else {
+			JJConfiguration configuration = configurations.get(0);
+			String val = configuration.getVal();
+			if (val != null && val.length() > 0) {
+				if (val.toLowerCase().equalsIgnoreCase("true")) {
+					return true;
+				} else if (val.toLowerCase().equalsIgnoreCase("false")) {
+					return false;
+				} else
+					return true;
+			} else
+				return true;
+		}
 
 	}
 
