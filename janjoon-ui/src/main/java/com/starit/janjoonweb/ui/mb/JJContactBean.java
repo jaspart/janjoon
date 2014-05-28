@@ -1,30 +1,44 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.model.ListDataModel;
+import javax.servlet.http.HttpSession;
 
-import org.primefaces.model.SelectableDataModel;
+import org.primefaces.context.RequestContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJPermission;
+import com.starit.janjoonweb.domain.JJPermissionService;
+import com.starit.janjoonweb.ui.mb.JJPermissionBean.PermissionDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJContact.class, beanName = "jJContactBean")
 public class JJContactBean {
 
+	@Autowired
+	JJPermissionService jJPermissionService;
+
+	public void setjJPermissionService(JJPermissionService jJPermissionService) {
+		this.jJPermissionService = jJPermissionService;
+	}
+
 	private JJContact contactAdmin;
-	private List<JJContact> contactDataTable;
-	private ContactDataModel contactDataModel;
+	private List<JJContact> contacts;
 
 	private String message;
-	private boolean disabled;
-	private boolean disabledReset;
+
+	private boolean disabledContactMode;
+	private boolean disabledPermissionMode;
+
+	private boolean contactState;
 
 	public JJContact getContactAdmin() {
 		return contactAdmin;
@@ -34,23 +48,29 @@ public class JJContactBean {
 		this.contactAdmin = contactAdmin;
 	}
 
-	public List<JJContact> getContactDataTable() {
-		contactDataTable = jJContactService.getContacts(true);
-		return contactDataTable;
+	public List<JJContact> getContacts() {
+		contacts = jJContactService.getContacts(true);
+		return contacts;
 	}
 
-	public void setContactDataTable(List<JJContact> contactDataTable) {
-		this.contactDataTable = contactDataTable;
+	public void setContacts(List<JJContact> contacts) {
+		this.contacts = contacts;
 	}
 
-	public ContactDataModel getContactDataModel() {
-		contactDataModel = new ContactDataModel(
-				jJContactService.getContacts(true));
-		return contactDataModel;
+	public boolean getDisabledContactMode() {
+		return disabledContactMode;
 	}
 
-	public void setContactDataModel(ContactDataModel contactDataModel) {
-		this.contactDataModel = contactDataModel;
+	public void setDisabledContactMode(boolean disabledContactMode) {
+		this.disabledContactMode = disabledContactMode;
+	}
+
+	public boolean getDisabledPermissionMode() {
+		return disabledPermissionMode;
+	}
+
+	public void setDisabledPermissionMode(boolean disabledPermissionMode) {
+		this.disabledPermissionMode = disabledPermissionMode;
 	}
 
 	public String getMessage() {
@@ -61,43 +81,37 @@ public class JJContactBean {
 		this.message = message;
 	}
 
-	public boolean getDisabled() {
-		return disabled;
-	}
-
-	public void setDisabled(boolean disabled) {
-		this.disabled = disabled;
-	}
-
-	public boolean getDisabledReset() {
-		return disabledReset;
-	}
-
-	public void setDisabledReset(boolean disabledReset) {
-		this.disabledReset = disabledReset;
-	}
-
 	public void newContact(JJPermissionBean jJPermissionBean) {
 
 		message = "New Contact";
-		disabled = false;
+
 		contactAdmin = new JJContact();
 		contactAdmin.setEnabled(true);
 		contactAdmin.setCreationDate(new Date());
 
-		jJPermissionBean.setContact(contactAdmin);
+		jJPermissionBean.setPermissionDataModel(null);
+		jJPermissionBean.setDisabledCheckPermission(true);
 		jJPermissionBean.newPermission();
-		disabledReset = false;
+
+		disabledContactMode = false;
+		disabledPermissionMode = true;
+
+		contactState = true;
+
 	}
 
 	public void editContact(JJPermissionBean jJPermissionBean) {
 		message = "Edit Contact";
-		disabled = false;
 
-		jJPermissionBean.setContact(contactAdmin);
+		jJPermissionBean.setDisabledCheckPermission(false);
 		jJPermissionBean.newPermission();
+		jJPermissionBean.fillPermissionTable(contactAdmin);
 
-		disabledReset = true;
+		disabledContactMode = false;
+		disabledPermissionMode = false;
+
+		contactState = false;
+
 	}
 
 	public void deleteContact() {
@@ -120,11 +134,7 @@ public class JJContactBean {
 		}
 	}
 
-	public JJContact getContactByEmail(String email) {
-		return jJContactService.getContactByEmail(email, true);
-	}
-
-	public void save(JJPermissionBean jJPermissionBean) {
+	public void addContact(JJPermissionBean jJPermissionBean) {
 
 		FacesMessage facesMessage = null;
 
@@ -135,13 +145,17 @@ public class JJContactBean {
 					+ contactAdmin.getName());
 
 			if (jJContactService.saveJJContactTransaction(contactAdmin)) {
+
+				disabledContactMode = true;
+				disabledPermissionMode = false;
+
+				jJPermissionBean
+						.setPermissionDataModel(new ArrayList<PermissionDataModel>());
+
 				facesMessage = MessageFactory.getMessage(
 						"message_successfully_created",
 						FacesMessage.SEVERITY_INFO, "JJContact");
-				JJContact contact = jJContactService.findJJContact(contactAdmin
-						.getId());
-				jJPermissionBean.setContact(contact);
-				disabled = true;
+
 			} else {
 
 				facesMessage = MessageFactory.getMessage(
@@ -151,26 +165,143 @@ public class JJContactBean {
 				contactAdmin.setPassword("");
 			}
 
-		} else {
-
-			contactAdmin.setUpdatedDate(new Date());
-			if (jJContactService.updateJJContactTransaction(contactAdmin)) {
-				facesMessage = MessageFactory.getMessage(
-						"message_successfully_updated",
-						FacesMessage.SEVERITY_INFO, "JJContact");
-				disabled = true;
-			} else {
-				facesMessage = MessageFactory.getMessage(
-						"jjcontact_unsuccessfully_created",
-						FacesMessage.SEVERITY_ERROR, "JJContact");
-				contactAdmin.setEmail("");
-				contactAdmin.setPassword("");
-			}
 		}
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
+
+	public void save(JJPermissionBean jJPermissionBean) {
+
+		System.out.println("in save permission");
+
+		contactAdmin.setUpdatedDate(new Date());
+
+		jJContactService.updateJJContact(contactAdmin);
+
+		System.out.println("pppp");
+
+		List<JJPermission> permissions = jJPermissionService.getPermissions(
+				contactAdmin, true, null, null, null);
+
+		List<PermissionDataModel> permissionDataModels = jJPermissionBean
+				.getPermissionDataModel();
+
+		List<JJPermission> selectedPermissions = new ArrayList<JJPermission>();
+		for (PermissionDataModel permissionDataModel : permissionDataModels) {
+			if (permissionDataModel.getCheckPermission()) {
+				selectedPermissions.add(permissionDataModel.getPermission());
+
+			}
+		}
+
+		if (!selectedPermissions.isEmpty() && !permissions.isEmpty()) {
+
+			for (JJPermission permission : selectedPermissions) {
+				if (permission.getId() == null) {
+
+					permission.setContact(contactAdmin);
+					contactAdmin.getPermissions().add(permission);
+					jJPermissionService.saveJJPermission(permission);
+				}
+			}
+
+			for (JJPermission permission : permissions) {
+				if (!selectedPermissions.contains(permission)) {
+
+					permission.setEnabled(false);
+					jJPermissionService.updateJJPermission(permission);
+				}
+			}
+
+		} else if (selectedPermissions.isEmpty() && !permissions.isEmpty()) {
+
+			for (JJPermission permission : permissions) {
+
+				permission.setEnabled(false);
+				jJPermissionService.updateJJPermission(permission);
+
+			}
+
+		} else if (!selectedPermissions.isEmpty() && permissions.isEmpty()) {
+
+			for (JJPermission permission : selectedPermissions) {
+				permission.setContact(contactAdmin);
+				contactAdmin.getPermissions().add(permission);
+				jJPermissionService.saveJJPermission(permission);
+			}
+
+		}
+
+		System.out.println("herer");
+
+		FacesContext.getCurrentInstance().addMessage(
+				null,
+				MessageFactory.getMessage("message_successfully_updated",
+						"JJContact"));
+
+		RequestContext context = RequestContext.getCurrentInstance();
+
+		if (contactState) {
+			if (getContactDialogConfiguration()) {
+				context.execute("contactDialogWidget.hide()");
+			} else {
+				newContact(jJPermissionBean);
+			}
+		} else {
+			context.execute("contactDialogWidget.hide()");
+		}
+
+		System.out.println("dfgdfgf");
+	}
+
+	// public void save(JJPermissionBean jJPermissionBean) {
+	//
+	// FacesMessage facesMessage = null;
+	//
+	// if (contactAdmin.getId() == null) {
+	//
+	// contactAdmin.setDescription("This contact is "
+	// + contactAdmin.getFirstname() + " "
+	// + contactAdmin.getName());
+	//
+	// if (jJContactService.saveJJContactTransaction(contactAdmin)) {
+	// facesMessage = MessageFactory.getMessage(
+	// "message_successfully_created",
+	// FacesMessage.SEVERITY_INFO, "JJContact");
+	// JJContact contact = jJContactService.findJJContact(contactAdmin
+	// .getId());
+	// jJPermissionBean.setContact(contact);
+	//
+	// } else {
+	//
+	// facesMessage = MessageFactory.getMessage(
+	// "jjcontact_unsuccessfully_created",
+	// FacesMessage.SEVERITY_ERROR, "JJContact");
+	// contactAdmin.setEmail("");
+	// contactAdmin.setPassword("");
+	// }
+	//
+	// } else {
+	//
+	// contactAdmin.setUpdatedDate(new Date());
+	// if (jJContactService.updateJJContactTransaction(contactAdmin)) {
+	// facesMessage = MessageFactory.getMessage(
+	// "message_successfully_updated",
+	// FacesMessage.SEVERITY_INFO, "JJContact");
+	//
+	// } else {
+	// facesMessage = MessageFactory.getMessage(
+	// "jjcontact_unsuccessfully_created",
+	// FacesMessage.SEVERITY_ERROR, "JJContact");
+	// contactAdmin.setEmail("");
+	// contactAdmin.setPassword("");
+	// }
+	// }
+	//
+	// FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+	//
+	// }
 
 	public void addMessage() {
 		String summary = contactAdmin.getEnabled() ? "Active Contact"
@@ -183,46 +314,31 @@ public class JJContactBean {
 	public void closeDialog(JJPermissionBean jJPermissionBean) {
 
 		contactAdmin = null;
-		disabled = false;
-		disabledReset = false;
+
 		jJPermissionBean.setPermissionAdmin(null);
-		jJPermissionBean.setPermisssionListTable(null);
+		jJPermissionBean.setPermissionDataModel(null);
 		jJPermissionBean.setProfile(null);
-		jJPermissionBean.setProfileList(null);
+		jJPermissionBean.setProfiles(null);
 		jJPermissionBean.setProject(null);
-		jJPermissionBean.setProjectList(null);
+		jJPermissionBean.setProjects(null);
 		jJPermissionBean.setProduct(null);
-		jJPermissionBean.setProductList(null);
-		jJPermissionBean.setContact(null);
+		jJPermissionBean.setProducts(null);
+
+		contactState = true;
 
 	}
 
-	private class ContactDataModel extends ListDataModel<JJContact> implements
-			SelectableDataModel<JJContact> {
+	public JJContact getContactByEmail(String email) {
+		return jJContactService.getContactByEmail(email, true);
+	}
 
-		public ContactDataModel(List<JJContact> data) {
-			super(data);
-		}
-
-		@Override
-		public JJContact getRowData(String rowKey) {
-			// In a real app, a more efficient way like a query by rowKey should
-			// be implemented to deal with huge data
-
-			List<JJContact> contacts = (List<JJContact>) getWrappedData();
-
-			for (JJContact contact : contacts) {
-				if (contact.getName().equals(rowKey))
-					return contact;
-			}
-
-			return null;
-		}
-
-		@Override
-		public Object getRowKey(JJContact contact) {
-			return contact.getName();
-		}
+	private boolean getContactDialogConfiguration() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJConfigurationBean jJConfigurationBean = (JJConfigurationBean) session
+				.getAttribute("jJConfigurationBean");
+		return jJConfigurationBean.getDialogConfig("AdminUserDialog",
+				"admin.user.create.saveandclose");
 	}
 
 }

@@ -52,6 +52,7 @@ privileged aspect JJPermissionDataOnDemand_Roo_DataOnDemand {
     public JJPermission JJPermissionDataOnDemand.getNewTransientJJPermission(int index) {
         JJPermission obj = new JJPermission();
         setContact(obj, index);
+        setEnabled(obj, index);
         setProfile(obj, index);
         return obj;
     }
@@ -59,6 +60,11 @@ privileged aspect JJPermissionDataOnDemand_Roo_DataOnDemand {
     public void JJPermissionDataOnDemand.setContact(JJPermission obj, int index) {
         JJContact contact = jJContactDataOnDemand.getRandomJJContact();
         obj.setContact(contact);
+    }
+    
+    public void JJPermissionDataOnDemand.setEnabled(JJPermission obj, int index) {
+        Boolean enabled = Boolean.TRUE;
+        obj.setEnabled(enabled);
     }
     
     public void JJPermissionDataOnDemand.setProfile(JJPermission obj, int index) {

@@ -129,7 +129,7 @@
 									<p:column colspan="2">
 										<p:commandButton id="addProduct" value="Add Product"
 											style="float: right;" update="productDialogForm"
-											disabled="#{not jJVersionBean.disabledCheckVersion}"
+											disabled="#{not jJProductBean.disabledVersionMode}"
 											process="@widgetVar(nameWidget) @widgetVar(extnameWidget) @widgetVar(productManagerWidget)"
 											action="#{jJProductBean.addProduct(jJVersionBean)}" />
 									</p:column>
@@ -203,7 +203,7 @@
 					<f:facet name="footer">
 						<p:row>
 							<p:column colspan="3">
-								<p:commandButton id="saveButton"
+								<p:commandButton id="saveButton" style="float: right;"
 									disabled="#{jJProductBean.disabledVersionMode}" value="Save"
 									update="productDialogForm :headerForm"
 									process="@widgetVar(nameWidget) @widgetVar(extnameWidget) @widgetVar(productManagerWidget)"

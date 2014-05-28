@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -16,7 +15,6 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJVersion.class, beanName = "jJVersionBean")
@@ -47,13 +45,6 @@ public class JJVersionBean {
 	}
 
 	public void setVersion(JJVersion version) {
-
-		// HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-		// .getExternalContext().getSession(false);
-		// JJBuildBean jJBuildBean = (JJBuildBean) session
-		// .getAttribute("jJBuildBean");
-		// jJBuildBean.setBuild(null);
-		// jJBuildBean.getBuildList();
 
 		this.version = version;
 	}
@@ -123,10 +114,6 @@ public class JJVersionBean {
 		this.disabledCheckVersion = disabledCheckVersion;
 	}
 
-	public List<JJTask> getTastksByVersion(JJVersion jJversion) {
-		return jJVersionService.getTastksByVersion(jJversion);
-	}
-
 	public void newVersion() {
 
 		versionAdmin = new JJVersion();
@@ -140,34 +127,11 @@ public class JJVersionBean {
 			versionDataModel = new ArrayList<VersionDataModel>();
 		}
 
-		versionAdmin.setDescription("This is version "
-				+ versionAdmin.getName());
-		
+		versionAdmin
+				.setDescription("This is version " + versionAdmin.getName());
+
 		versionDataModel.add(new VersionDataModel(versionAdmin, true, false));
 		newVersion();
-	}
-
-	public void save() {
-
-		String message = "";
-
-		if (versionAdmin.getId() == null) {
-			versionAdmin.setDescription("This is version "
-					+ versionAdmin.getName());
-			jJVersionService.saveJJVersion(versionAdmin);
-			message = "message_successfully_created";
-
-			newVersion();
-
-		} else {
-			jJVersionService.updateJJVersion(versionAdmin);
-			message = "message_successfully_updated";
-		}
-
-		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJVersion");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-
 	}
 
 	public void fillVersionTable(JJProduct product) {
@@ -245,4 +209,7 @@ public class JJVersionBean {
 
 	}
 
+	public List<JJTask> getTastksByVersion(JJVersion jJversion) {
+		return jJVersionService.getTastksByVersion(jJversion);
+	}
 }

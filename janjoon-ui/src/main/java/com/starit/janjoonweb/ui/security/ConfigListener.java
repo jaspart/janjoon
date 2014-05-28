@@ -34,7 +34,6 @@ import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJProfileService;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJProjectService;
-import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJRight;
 import com.starit.janjoonweb.domain.JJRightService;
@@ -42,7 +41,6 @@ import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJSprintService;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
-import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
@@ -806,6 +804,7 @@ public class ConfigListener implements ServletContextListener {
 				JJPermission permission = new JJPermission();
 				permission.setContact(contact);
 				permission.setProfile(profile);
+				permission.setEnabled(true);
 				contact.getPermissions().add(permission);
 				jJPermissionService.saveJJPermission(permission);
 			}
@@ -826,6 +825,7 @@ public class ConfigListener implements ServletContextListener {
 			JJPermission permission = new JJPermission();
 			permission.setContact(contact);
 			permission.setProfile(profile);
+			permission.setEnabled(true);
 			contact.getPermissions().add(permission);
 			jJPermissionService.saveJJPermission(permission);
 

@@ -182,7 +182,7 @@ public class JJSprintBean {
 				.getAttribute("jJContactBean");
 		if (jJContactBean == null)
 			jJContactBean = new JJContactBean();
-		jJContactBean.getContactDataTable();
+		jJContactBean.getContacts();
 
 		if (jJProjectBean.getProject() == null) {
 

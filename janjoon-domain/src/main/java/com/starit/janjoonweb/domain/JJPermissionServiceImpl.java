@@ -51,13 +51,19 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		subquery.where(criteriaBuilder.and(predicates
 				.toArray(new Predicate[] {})));
 
-		select.where(criteriaBuilder.in(path).value(subquery));
+		predicates = new ArrayList<Predicate>();
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		predicates.add(criteriaBuilder.in(path).value(subquery));
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		TypedQuery<JJPermission> result = entityManager.createQuery(select);
 
 		List<JJPermission> permissions = result.getResultList();
 		for (JJPermission permission : permissions) {
-			contacts.add(permission.getContact());
+			if (permission.getContact().getEnabled()) {
+				contacts.add(permission.getContact());
+			}
 		}
 
 		return contacts;
@@ -77,6 +83,9 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
 		predicates.add(criteriaBuilder.equal(from.get("contact"), contact));
 
 		if (!onlyContact) {

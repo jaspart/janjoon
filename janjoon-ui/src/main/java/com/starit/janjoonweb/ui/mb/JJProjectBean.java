@@ -126,7 +126,19 @@ public class JJProjectBean {
 	public void editProject() {
 
 		message = "Edit Project";
-		projectManager = projectAdmin.getManager();
+
+		getProjectManagerList();
+
+		if (projectManagerList.isEmpty()) {
+			projectManager = null;
+
+		} else {
+			if (projectManagerList.contains(projectAdmin.getManager())) {
+				projectManager = projectAdmin.getManager();
+			} else {
+				projectManager = null;
+			}
+		}
 
 		projectState = false;
 	}
@@ -193,7 +205,7 @@ public class JJProjectBean {
 	}
 
 	public void closeDialog() {
-		
+
 		projectAdmin = null;
 		projectManager = null;
 		projectManagerList = null;

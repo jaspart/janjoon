@@ -43,4 +43,12 @@ privileged aspect JJPermission_Roo_JavaBean {
         this.profile = profile;
     }
     
+    public Boolean JJPermission.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJPermission.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+    
 }

@@ -156,15 +156,6 @@ public class JJProductBean {
 		this.disabledVersionMode = disabledVersionMode;
 	}
 
-	private boolean getProductDialogConfiguration() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJConfigurationBean jJConfigurationBean = (JJConfigurationBean) session
-				.getAttribute("jJConfigurationBean");
-		return jJConfigurationBean.getDialogConfig("ProductDialog",
-				"product.create.saveandclose");
-	}
-
 	public void newProduct(JJVersionBean jJVersionBean) {
 
 		message = "New Product";
@@ -188,7 +179,21 @@ public class JJProductBean {
 	public void editProduct(JJVersionBean jJVersionBean) {
 
 		message = "Edit Product";
-		productManager = productAdmin.getManager();
+
+		getProductManagerList();
+
+		if (productManagerList.isEmpty()) {
+			productManager = null;
+
+		} else {
+			if (productManagerList.contains(productAdmin.getManager())) {
+				productManager = productAdmin.getManager();
+			} else {
+				productManager = null;
+			}
+		}
+
+		System.out.println("vovo");
 
 		jJVersionBean.setDisabledCheckVersion(false);
 		jJVersionBean.newVersion();
@@ -209,7 +214,7 @@ public class JJProductBean {
 	}
 
 	public void addProduct(JJVersionBean jJVersionBean) {
-		String message = "";
+
 		productAdmin.setManager(productManager);
 		if (productAdmin.getId() == null) {
 
@@ -218,20 +223,20 @@ public class JJProductBean {
 			disabledProductMode = true;
 			disabledVersionMode = false;
 
-			message = "message_successfully_created";
-			FacesMessage facesMessage = MessageFactory.getMessage(message,
-					"JJProduct");
-			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-
 			jJVersionBean
 					.setVersionDataModel(new ArrayList<VersionDataModel>());
+
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					MessageFactory.getMessage("message_successfully_created",
+							"JJProduct"));
+
 		}
 	}
 
 	public void save(JJVersionBean jJVersionBean) {
 
 		System.out.println("in save version");
-		String message = "";
 
 		productAdmin.setManager(productManager);
 		productAdmin.setUpdatedDate(new Date());
@@ -293,11 +298,10 @@ public class JJProductBean {
 
 		System.out.println("herer");
 
-		message = "message_successfully_updated";
-
-		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJProduct");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		FacesContext.getCurrentInstance().addMessage(
+				null,
+				MessageFactory.getMessage("message_successfully_updated",
+						"JJProduct"));
 
 		RequestContext context = RequestContext.getCurrentInstance();
 
@@ -335,6 +339,15 @@ public class JJProductBean {
 
 	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project) {
 		return jJTaskService.getTasksByProduct(product, project);
+	}
+
+	private boolean getProductDialogConfiguration() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJConfigurationBean jJConfigurationBean = (JJConfigurationBean) session
+				.getAttribute("jJConfigurationBean");
+		return jJConfigurationBean.getDialogConfig("ProductDialog",
+				"product.create.saveandclose");
 	}
 
 }

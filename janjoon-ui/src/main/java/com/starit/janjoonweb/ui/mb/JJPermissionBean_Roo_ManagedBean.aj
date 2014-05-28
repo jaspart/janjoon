@@ -33,6 +33,7 @@ import javax.faces.context.FacesContext;
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
+import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -245,6 +246,24 @@ privileged aspect JJPermissionBean_Roo_ManagedBean {
         profileCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(profileCreateInputMessage);
         
+        OutputLabel enabledCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        enabledCreateOutput.setFor("enabledCreateInput");
+        enabledCreateOutput.setId("enabledCreateOutput");
+        enabledCreateOutput.setValue("Enabled:");
+        htmlPanelGrid.getChildren().add(enabledCreateOutput);
+        
+        SelectBooleanCheckbox enabledCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        enabledCreateInput.setId("enabledCreateInput");
+        enabledCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJPermissionBean.JJPermission_.enabled}", Boolean.class));
+        enabledCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(enabledCreateInput);
+        
+        Message enabledCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        enabledCreateInputMessage.setId("enabledCreateInputMessage");
+        enabledCreateInputMessage.setFor("enabledCreateInput");
+        enabledCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -352,6 +371,24 @@ privileged aspect JJPermissionBean_Roo_ManagedBean {
         profileEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(profileEditInputMessage);
         
+        OutputLabel enabledEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        enabledEditOutput.setFor("enabledEditInput");
+        enabledEditOutput.setId("enabledEditOutput");
+        enabledEditOutput.setValue("Enabled:");
+        htmlPanelGrid.getChildren().add(enabledEditOutput);
+        
+        SelectBooleanCheckbox enabledEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        enabledEditInput.setId("enabledEditInput");
+        enabledEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJPermissionBean.JJPermission_.enabled}", Boolean.class));
+        enabledEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(enabledEditInput);
+        
+        Message enabledEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        enabledEditInputMessage.setId("enabledEditInputMessage");
+        enabledEditInputMessage.setFor("enabledEditInput");
+        enabledEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(enabledEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -402,6 +439,15 @@ privileged aspect JJPermissionBean_Roo_ManagedBean {
         profileValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJPermissionBean.JJPermission_.profile}", JJProfile.class));
         profileValue.setConverter(new JJProfileConverter());
         htmlPanelGrid.getChildren().add(profileValue);
+        
+        HtmlOutputText enabledLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        enabledLabel.setId("enabledLabel");
+        enabledLabel.setValue("Enabled:");
+        htmlPanelGrid.getChildren().add(enabledLabel);
+        
+        HtmlOutputText enabledValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJPermissionBean.JJPermission_.enabled}", String.class));
+        htmlPanelGrid.getChildren().add(enabledValue);
         
         return htmlPanelGrid;
     }
