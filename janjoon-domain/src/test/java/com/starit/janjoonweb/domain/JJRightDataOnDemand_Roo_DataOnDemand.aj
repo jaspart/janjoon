@@ -4,6 +4,7 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJCategoryDataOnDemand;
+import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJProfileDataOnDemand;
 import com.starit.janjoonweb.domain.JJRight;
 import com.starit.janjoonweb.domain.JJRightDataOnDemand;
@@ -41,11 +42,18 @@ privileged aspect JJRightDataOnDemand_Roo_DataOnDemand {
     
     public JJRight JJRightDataOnDemand.getNewTransientJJRight(int index) {
         JJRight obj = new JJRight();
+        setEnabled(obj, index);
         setObjet(obj, index);
+        setProfile(obj, index);
         setR(obj, index);
         setW(obj, index);
         setX(obj, index);
         return obj;
+    }
+    
+    public void JJRightDataOnDemand.setEnabled(JJRight obj, int index) {
+        Boolean enabled = Boolean.TRUE;
+        obj.setEnabled(enabled);
     }
     
     public void JJRightDataOnDemand.setObjet(JJRight obj, int index) {
@@ -54,6 +62,11 @@ privileged aspect JJRightDataOnDemand_Roo_DataOnDemand {
             objet = objet.substring(0, 25);
         }
         obj.setObjet(objet);
+    }
+    
+    public void JJRightDataOnDemand.setProfile(JJRight obj, int index) {
+        JJProfile profile = jJProfileDataOnDemand.getRandomJJProfile();
+        obj.setProfile(profile);
     }
     
     public void JJRightDataOnDemand.setR(JJRight obj, int index) {

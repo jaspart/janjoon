@@ -21,7 +21,7 @@ public class JJProfileServiceImpl implements JJProfileService {
 	}
 
 	@Override
-	public JJProfile getOneProfile(String name) {
+	public JJProfile getOneProfile(String name, boolean onlyActif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJProfile> criteriaQuery = criteriaBuilder
@@ -32,6 +32,10 @@ public class JJProfileServiceImpl implements JJProfileService {
 		CriteriaQuery<JJProfile> select = criteriaQuery.select(from);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
 
 		if (name != null) {
 			predicates.add(criteriaBuilder.equal(from.get("name"), name));
@@ -46,6 +50,29 @@ public class JJProfileServiceImpl implements JJProfileService {
 
 		else
 			return null;
+
+	}
+
+	public List<JJProfile> getProfiles(boolean onlyActif) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJProfile> criteriaQuery = criteriaBuilder
+				.createQuery(JJProfile.class);
+
+		Root<JJProfile> from = criteriaQuery.from(JJProfile.class);
+
+		CriteriaQuery<JJProfile> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+		TypedQuery<JJProfile> result = entityManager.createQuery(select);
+
+		return result.getResultList();
 
 	}
 }

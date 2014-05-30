@@ -58,4 +58,27 @@ public class JJConfigurationServiceImpl implements JJConfigurationService {
 		return result.getResultList();
 	}
 
+	public boolean getDialogConfig(String name, String param) {
+
+		List<JJConfiguration> configurations = getConfigurations(name, param,
+				true);
+
+		if (configurations.isEmpty())
+			return true;
+		else {
+			JJConfiguration configuration = configurations.get(0);
+			String val = configuration.getVal();
+			if (val != null && val.length() > 0) {
+				if (val.toLowerCase().equalsIgnoreCase("true")) {
+					return true;
+				} else if (val.toLowerCase().equalsIgnoreCase("false")) {
+					return false;
+				} else
+					return true;
+			} else
+				return true;
+		}
+
+	}
+
 }

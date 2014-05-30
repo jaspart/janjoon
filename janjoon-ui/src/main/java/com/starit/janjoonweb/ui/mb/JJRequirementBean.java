@@ -22,6 +22,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
+import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
@@ -39,6 +40,14 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 @RooSerializable
 @RooJsfManagedBean(entity = JJRequirement.class, beanName = "jJRequirementBean")
 public class JJRequirementBean {
+
+	@Autowired
+	public JJConfigurationService jJConfigurationService;
+
+	public void setjJConfigurationService(
+			JJConfigurationService jJConfigurationService) {
+		this.jJConfigurationService = jJConfigurationService;
+	}
 
 	@Autowired
 	JJTaskService jJTaskService;
@@ -910,14 +919,14 @@ public class JJRequirementBean {
 
 			if (getRequirementDialogConfiguration()) {
 				context.execute("requirementDialogWidget.hide()");
-//				closeDialog();
+				// closeDialog();
 			} else {
 				newRequirement(requirementCategory.getId());
 			}
 
 		} else {
 			context.execute("requirementDialogWidget.hide()");
-//			closeDialog();
+			// closeDialog();
 		}
 
 		reset();
@@ -1256,7 +1265,6 @@ public class JJRequirementBean {
 
 	public void closeDialog() {
 
-			
 		message = null;
 		namesList = null;
 		lowCategoryName = null;
@@ -2898,11 +2906,8 @@ public class JJRequirementBean {
 	}
 
 	private boolean getRequirementDialogConfiguration() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJConfigurationBean jJConfigurationBean = (JJConfigurationBean) session
-				.getAttribute("jJConfigurationBean");
-		return jJConfigurationBean.getDialogConfig("RequirementDialog",
+
+		return jJConfigurationService.getDialogConfig("RequirementDialog",
 				"specs.requirement.create.saveandclose");
 	}
 

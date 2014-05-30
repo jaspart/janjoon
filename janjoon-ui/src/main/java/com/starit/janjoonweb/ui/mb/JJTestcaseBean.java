@@ -14,6 +14,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -35,6 +36,7 @@ import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJChapterService;
+import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -50,6 +52,14 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 @RooSerializable
 @RooJsfManagedBean(entity = JJTestcase.class, beanName = "jJTestcaseBean")
 public class JJTestcaseBean {
+
+	@Autowired
+	public JJConfigurationService jJConfigurationService;
+
+	public void setjJConfigurationService(
+			JJConfigurationService jJConfigurationService) {
+		this.jJConfigurationService = jJConfigurationService;
+	}
 
 	@Autowired
 	JJCategoryService jJCategoryService;
@@ -105,14 +115,14 @@ public class JJTestcaseBean {
 
 	private JJTask task;
 
-	private boolean disabled;
-	private boolean disabledTeststep;
-	private boolean disabledReset;
+	private boolean disabledTestcaseMode;
+	private boolean disabledTeststepMode;
 
 	private boolean initiateTask;
 	private boolean disabledInitTask;
 	private boolean disabledTask;
 	private boolean disabledExport;
+	private boolean testcaseState;
 
 	private String namefile;
 
@@ -269,28 +279,20 @@ public class JJTestcaseBean {
 		this.task = task;
 	}
 
-	public boolean getDisabled() {
-		return disabled;
+	public boolean getDisabledTestcaseMode() {
+		return disabledTestcaseMode;
 	}
 
-	public void setDisabled(boolean disabled) {
-		this.disabled = disabled;
+	public void setDisabledTestcaseMode(boolean disabledTestcaseMode) {
+		this.disabledTestcaseMode = disabledTestcaseMode;
 	}
 
-	public boolean getDisabledTeststep() {
-		return disabledTeststep;
+	public boolean getDisabledTeststepMode() {
+		return disabledTeststepMode;
 	}
 
-	public void setDisabledTeststep(boolean disabledTeststep) {
-		this.disabledTeststep = disabledTeststep;
-	}
-
-	public boolean getDisabledReset() {
-		return disabledReset;
-	}
-
-	public void setDisabledReset(boolean disabledReset) {
-		this.disabledReset = disabledReset;
+	public void setDisabledTeststepMode(boolean disabledTeststepMode) {
+		this.disabledTeststepMode = disabledTeststepMode;
 	}
 
 	public boolean getInitiateTask() {
@@ -368,9 +370,9 @@ public class JJTestcaseBean {
 		disabledInitTask = false;
 		disabledTask = true;
 
-		disabled = false;
-		disabledTeststep = true;
-		disabledReset = false;
+		disabledTestcaseMode = false;
+		disabledTeststepMode = true;
+		testcaseState = true;
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
@@ -424,9 +426,9 @@ public class JJTestcaseBean {
 		disabledInitTask = true;
 		disabledTask = true;
 
-		disabled = false;
-		disabledTeststep = false;
-		disabledReset = true;
+		disabledTestcaseMode = false;
+		disabledTeststepMode = false;
+		testcaseState = false;
 
 		jJTeststepBean.newTeststep();
 	}
@@ -444,24 +446,7 @@ public class JJTestcaseBean {
 
 	public void save() {
 
-		String message = "";
-
-		if (testcase.getId() != null) {
-
-			testcase.setUpdatedDate(new Date());
-
-			if (!requirement.equals(testcase.getRequirement())) {
-
-				testcase.setRequirement(requirement);
-				requirement.getTestcases().add(testcase);
-			}
-
-			jJTestcaseService.updateJJTestcase(testcase);
-
-			message = "message_successfully_updated";
-		}
-
-		else {
+		if (testcase.getId() == null) {
 
 			manageTestcaseOrder(requirement);
 
@@ -477,17 +462,55 @@ public class JJTestcaseBean {
 
 			jJTestcaseService.saveJJTestcase(testcase);
 
-			disabled = true;
-			disabledTeststep = false;
 			disabledInitTask = true;
 			disabledTask = true;
 
-			message = "message_successfully_created";
+			disabledTestcaseMode = true;
+			disabledTeststepMode = false;
+
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					MessageFactory.getMessage("message_successfully_created",
+							"JJTestcase"));
+
 		}
 
-		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJTestcase");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+	}
+
+	public void saveAndclose(JJTeststepBean jJTeststepBean) {
+
+		RequestContext context = RequestContext.getCurrentInstance();
+
+		if (testcaseState) {
+
+			if (getTestcaseDialogConfiguration()) {
+				context.execute("testcaseDialogWidget.hide()");
+			} else {
+				newTestcase(jJTeststepBean);
+			}
+
+		} else {
+
+			if (testcase.getId() != null) {
+				testcase.setUpdatedDate(new Date());
+
+				if (!requirement.equals(testcase.getRequirement())) {
+
+					testcase.setRequirement(requirement);
+					requirement.getTestcases().add(testcase);
+				}
+
+				jJTestcaseService.updateJJTestcase(testcase);
+
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						MessageFactory.getMessage(
+								"message_successfully_updated", "JJTestcase"));
+
+				context.execute("testcaseDialogWidget.hide()");
+			}
+		}
+
 	}
 
 	public void closeDialog() {
@@ -551,7 +574,7 @@ public class JJTestcaseBean {
 				TreeNode node = createTree(chapter, categoryNode, category);
 			}
 		}
-		
+
 		rendredEmptySelection = true;
 
 	}
@@ -693,6 +716,10 @@ public class JJTestcaseBean {
 					.getSession(false);
 			JJBuildBean jJBuildBean = (JJBuildBean) session
 					.getAttribute("jJBuildBean");
+
+			if (jJBuildBean == null) {
+				jJBuildBean = new JJBuildBean();
+			}
 
 			JJBuild build = jJBuildBean.getBuild();
 
@@ -992,6 +1019,11 @@ public class JJTestcaseBean {
 			this.disabled = disabled;
 		}
 
+	}
+
+	private boolean getTestcaseDialogConfiguration() {
+		return jJConfigurationService.getDialogConfig("TestcaseDialog",
+				"testcases.create.saveandclose");
 	}
 
 }

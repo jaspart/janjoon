@@ -10,4 +10,6 @@ public interface JJConfigurationService {
 	public List<JJConfiguration> getConfigurations(String name, String param,
 			boolean onlyactif);
 
+	public boolean getDialogConfig(String name, String param);
+
 }

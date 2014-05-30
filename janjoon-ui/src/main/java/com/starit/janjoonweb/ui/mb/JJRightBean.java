@@ -1,33 +1,31 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.model.ListDataModel;
-
-import org.primefaces.event.SelectEvent;
-import org.primefaces.model.SelectableDataModel;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJCategory;
+import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJRight;
-import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJRight.class, beanName = "jJRightBean")
 public class JJRightBean {
 
 	private JJRight rightAdmin;
-	private List<JJRight> rightListTable;
-	private RightDataModel rightDataModel;
+	private List<RightDataModel> rightDataModel;
 
 	private JJCategory category;
-	private List<JJCategory> categoryList;
+	private List<JJCategory> categories;
 
 	private String object;
-	private List<String> objectList;
+	private List<String> objects;
+
+	private boolean checkRight;
+	private boolean checkRights;
+	private boolean disabledCheckRight;
 
 	public JJRight getRightAdmin() {
 		return rightAdmin;
@@ -37,20 +35,11 @@ public class JJRightBean {
 		this.rightAdmin = rightAdmin;
 	}
 
-	public List<JJRight> getRightListTable() {
-		return rightListTable;
-	}
-
-	public void setRightListTable(List<JJRight> rightListTable) {
-		this.rightListTable = rightListTable;
-	}
-
-	public RightDataModel getRightDataModel() {
-		rightDataModel = new RightDataModel(jJRightService.getRights(null));
+	public List<RightDataModel> getRightDataModel() {
 		return rightDataModel;
 	}
 
-	public void setRightDataModel(RightDataModel rightDataModel) {
+	public void setRightDataModel(List<RightDataModel> rightDataModel) {
 		this.rightDataModel = rightDataModel;
 	}
 
@@ -62,14 +51,13 @@ public class JJRightBean {
 		this.category = category;
 	}
 
-	public List<JJCategory> getCategoryList() {
-		categoryList = jJCategoryService.getCategories(null, false, true, true);
-
-		return categoryList;
+	public List<JJCategory> getCategories() {
+		return categories = jJCategoryService.getCategories(null, false, true,
+				true);
 	}
 
-	public void setCategoryList(List<JJCategory> categoryList) {
-		this.categoryList = categoryList;
+	public void setCategories(List<JJCategory> categories) {
+		this.categories = categories;
 	}
 
 	public String getObject() {
@@ -80,53 +68,36 @@ public class JJRightBean {
 		this.object = object;
 	}
 
-	public List<String> getObjectList() {
-		objectList = jJRightService.getTablesName();
-		return objectList;
+	public List<String> getObjects() {
+		return objects = jJRightService.getTablesName();
 	}
 
-	public void setObjectList(List<String> objectList) {
-		this.objectList = objectList;
+	public void setObjects(List<String> objects) {
+		this.objects = objects;
 	}
 
-	public void newRight() {
-
-		rightAdmin = new JJRight();
-		rightAdmin.setR(false);
-		rightAdmin.setW(false);
-		rightAdmin.setX(false);
-
-		category = null;
-		object = null;
-
-		rightListTable = null;
-
+	public boolean getCheckRight() {
+		return checkRight;
 	}
 
-	public void save() {
+	public void setCheckRight(boolean checkRight) {
+		this.checkRight = checkRight;
+	}
 
-		String message = "";
+	public boolean getCheckRights() {
+		return checkRights;
+	}
 
-		if (rightAdmin.getId() == null) {
+	public void setCheckRights(boolean checkRights) {
+		this.checkRights = checkRights;
+	}
 
-			rightAdmin.setCategory(category);
-			rightAdmin.setObjet(object);
-			jJRightService.saveJJRight(rightAdmin);
+	public boolean getDisabledCheckRight() {
+		return disabledCheckRight;
+	}
 
-			message = "message_successfully_created";
-
-			newRight();
-
-		} else {
-			jJRightService.updateJJRight(rightAdmin);
-
-			message = "message_successfully_updated";
-		}
-
-		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJRight");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-
+	public void setDisabledCheckRight(boolean disabledCheckRight) {
+		this.disabledCheckRight = disabledCheckRight;
 	}
 
 	public void addMessage() {
@@ -143,37 +114,110 @@ public class JJRightBean {
 		// System.out.println(object);
 	}
 
-	public void onRowSelect(SelectEvent event) {
+	public void newRight() {
+
+		rightAdmin = new JJRight();
+		rightAdmin.setR(false);
+		rightAdmin.setW(false);
+		rightAdmin.setX(false);
+		rightAdmin.setEnabled(true);
+
+		category = null;
+		object = null;
+	}
+
+	public void addRight() {
+
+		if (rightDataModel == null) {
+			rightDataModel = new ArrayList<RightDataModel>();
+		}
+
+		rightAdmin.setCategory(category);
+		rightAdmin.setObjet(object);
+
+		rightDataModel.add(new RightDataModel(rightAdmin, true, false));
+		newRight();
+	}
+
+	public void fillRightTable(JJProfile profile) {
+		rightDataModel = new ArrayList<RightDataModel>();
+
+		if (profile == null) {
+			System.out.println("null");
+		} else {
+			System.out.println("   sdfsdfsd " + profile.getId());
+		}
+
+		List<JJRight> rights = jJRightService.getRights(profile, true);
+
+		System.out.println("tttt " + rights.size());
+
+		for (JJRight right : rights) {
+			rightDataModel.add(new RightDataModel(right, true, true));
+		}
+
+		checkRights = true;
+	}
+
+	public void checkRights() {
+
+		for (RightDataModel rightModel : rightDataModel) {
+			rightModel.setCheckRight(checkRights);
+		}
 
 	}
 
-	@SuppressWarnings("unchecked")
-	public class RightDataModel extends ListDataModel<JJRight> implements
-			SelectableDataModel<JJRight> {
+	public void checkRight() {
 
-		public RightDataModel(List<JJRight> data) {
-			super(data);
-		}
+		boolean checkAll = true;
+		for (RightDataModel rightModel : rightDataModel) {
 
-		@Override
-		public JJRight getRowData(String rowKey) {
-			// In a real app, a more efficient way like a query by rowKey should
-			// be implemented to deal with huge data
-
-			List<JJRight> rights = (List<JJRight>) getWrappedData();
-
-			for (JJRight right : rights) {
-				if (right.getObjet().equals(rowKey))
-					return right;
+			if (!rightModel.getCheckRight()) {
+				checkAll = false;
+				break;
 			}
 
-			return null;
+		}
+		checkRights = checkAll;
+	}
+
+	public class RightDataModel {
+
+		private JJRight right;
+		private boolean checkRight;
+		private boolean old;
+
+		public RightDataModel(JJRight right, boolean checkRight, boolean old) {
+			super();
+			this.right = right;
+			this.checkRight = checkRight;
+			this.old = old;
 		}
 
-		@Override
-		public Object getRowKey(JJRight right) {
-			return right.getObjet();
+		public JJRight getRight() {
+			return right;
 		}
+
+		public void setRight(JJRight right) {
+			this.right = right;
+		}
+
+		public boolean getCheckRight() {
+			return checkRight;
+		}
+
+		public void setCheckRight(boolean checkRight) {
+			this.checkRight = checkRight;
+		}
+
+		public boolean isOld() {
+			return old;
+		}
+
+		public void setOld(boolean old) {
+			this.old = old;
+		}
+
 	}
 
 }

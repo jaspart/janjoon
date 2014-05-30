@@ -57,4 +57,12 @@ privileged aspect JJRight_Roo_JavaBean {
         this.profile = profile;
     }
     
+    public Boolean JJRight.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJRight.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+    
 }

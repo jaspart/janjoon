@@ -22,6 +22,8 @@ public class JJProfile {
 	@Size(max = 25)
 	private String name;
 
+	private Boolean enabled;
+	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "profile")
 	private Set<JJRight> rights = new HashSet<JJRight>();
 

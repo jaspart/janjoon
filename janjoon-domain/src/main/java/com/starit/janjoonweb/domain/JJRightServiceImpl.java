@@ -24,7 +24,7 @@ public class JJRightServiceImpl implements JJRightService {
 	}
 
 	@Override
-	public List<JJRight> getRights(JJProfile profile) {
+	public List<JJRight> getRights(JJProfile profile, boolean onlyActif) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJRight> criteriaQuery = criteriaBuilder
 				.createQuery(JJRight.class);
@@ -32,6 +32,10 @@ public class JJRightServiceImpl implements JJRightService {
 		CriteriaQuery<JJRight> select = criteriaQuery.select(from);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
 
 		if (profile != null) {
 			predicates.add(criteriaBuilder.equal(from.get("profile"), profile));

@@ -5,18 +5,27 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJCategory;
+import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJCategory.class, beanName = "jJCategoryBean")
 public class JJCategoryBean {
+
+	@Autowired
+	public JJConfigurationService jJConfigurationService;
+
+	public void setjJConfigurationService(
+			JJConfigurationService jJConfigurationService) {
+		this.jJConfigurationService = jJConfigurationService;
+	}
 
 	private JJCategory categoryAdmin;
 	private List<JJCategory> categoryListTable;
@@ -153,11 +162,8 @@ public class JJCategoryBean {
 	}
 
 	private boolean getCategoryDialogConfiguration() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJConfigurationBean jJConfigurationBean = (JJConfigurationBean) session
-				.getAttribute("jJConfigurationBean");
-		return jJConfigurationBean.getDialogConfig("CategoryDialog",
+
+		return jJConfigurationService.getDialogConfig("CategoryDialog",
 				"category.create.saveandclose");
 	}
 

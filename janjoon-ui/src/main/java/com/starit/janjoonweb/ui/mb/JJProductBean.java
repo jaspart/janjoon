@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
@@ -28,6 +29,14 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 @RooSerializable
 @RooJsfManagedBean(entity = JJProduct.class, beanName = "jJProductBean")
 public class JJProductBean {
+
+	@Autowired
+	public JJConfigurationService jJConfigurationService;
+
+	public void setjJConfigurationService(
+			JJConfigurationService jJConfigurationService) {
+		this.jJConfigurationService = jJConfigurationService;
+	}
 
 	@Autowired
 	JJVersionService jJVersionService;
@@ -342,11 +351,8 @@ public class JJProductBean {
 	}
 
 	private boolean getProductDialogConfiguration() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJConfigurationBean jJConfigurationBean = (JJConfigurationBean) session
-				.getAttribute("jJConfigurationBean");
-		return jJConfigurationBean.getDialogConfig("ProductDialog",
+
+		return jJConfigurationService.getDialogConfig("ProductDialog",
 				"product.create.saveandclose");
 	}
 

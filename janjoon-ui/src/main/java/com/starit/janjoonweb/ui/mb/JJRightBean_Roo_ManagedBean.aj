@@ -255,7 +255,7 @@ privileged aspect JJRightBean_Roo_ManagedBean {
         profileCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{profile.name}", String.class));
         profileCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{profile}", JJProfile.class));
         profileCreateInput.setConverter(new JJProfileConverter());
-        profileCreateInput.setRequired(false);
+        profileCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(profileCreateInput);
         
         Message profileCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -263,6 +263,24 @@ privileged aspect JJRightBean_Roo_ManagedBean {
         profileCreateInputMessage.setFor("profileCreateInput");
         profileCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(profileCreateInputMessage);
+        
+        OutputLabel enabledCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        enabledCreateOutput.setFor("enabledCreateInput");
+        enabledCreateOutput.setId("enabledCreateOutput");
+        enabledCreateOutput.setValue("Enabled:");
+        htmlPanelGrid.getChildren().add(enabledCreateOutput);
+        
+        SelectBooleanCheckbox enabledCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        enabledCreateInput.setId("enabledCreateInput");
+        enabledCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.enabled}", Boolean.class));
+        enabledCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(enabledCreateInput);
+        
+        Message enabledCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        enabledCreateInputMessage.setId("enabledCreateInputMessage");
+        enabledCreateInputMessage.setFor("enabledCreateInput");
+        enabledCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
         
         return htmlPanelGrid;
     }
@@ -389,7 +407,7 @@ privileged aspect JJRightBean_Roo_ManagedBean {
         profileEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{profile.name}", String.class));
         profileEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{profile}", JJProfile.class));
         profileEditInput.setConverter(new JJProfileConverter());
-        profileEditInput.setRequired(false);
+        profileEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(profileEditInput);
         
         Message profileEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -397,6 +415,24 @@ privileged aspect JJRightBean_Roo_ManagedBean {
         profileEditInputMessage.setFor("profileEditInput");
         profileEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(profileEditInputMessage);
+        
+        OutputLabel enabledEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        enabledEditOutput.setFor("enabledEditInput");
+        enabledEditOutput.setId("enabledEditOutput");
+        enabledEditOutput.setValue("Enabled:");
+        htmlPanelGrid.getChildren().add(enabledEditOutput);
+        
+        SelectBooleanCheckbox enabledEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        enabledEditInput.setId("enabledEditInput");
+        enabledEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.enabled}", Boolean.class));
+        enabledEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(enabledEditInput);
+        
+        Message enabledEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        enabledEditInputMessage.setId("enabledEditInputMessage");
+        enabledEditInputMessage.setFor("enabledEditInput");
+        enabledEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(enabledEditInputMessage);
         
         return htmlPanelGrid;
     }
@@ -465,6 +501,15 @@ privileged aspect JJRightBean_Roo_ManagedBean {
         profileValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.profile}", JJProfile.class));
         profileValue.setConverter(new JJProfileConverter());
         htmlPanelGrid.getChildren().add(profileValue);
+        
+        HtmlOutputText enabledLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        enabledLabel.setId("enabledLabel");
+        enabledLabel.setValue("Enabled:");
+        htmlPanelGrid.getChildren().add(enabledLabel);
+        
+        HtmlOutputText enabledValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRightBean.JJRight_.enabled}", String.class));
+        htmlPanelGrid.getChildren().add(enabledValue);
         
         return htmlPanelGrid;
     }

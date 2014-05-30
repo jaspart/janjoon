@@ -36,7 +36,9 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
 
 		Path<Object> path = from.join("profile");
+		
 		from.fetch("profile");
+		
 		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
 
 		Subquery<JJRight> subquery = criteriaQuery.subquery(JJRight.class);
@@ -47,12 +49,15 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 		predicates.add(criteriaBuilder.equal(fromRight.get("w"), true));
 		predicates.add(criteriaBuilder.equal(fromRight.get("objet"), objet));
+		predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
 
 		subquery.where(criteriaBuilder.and(predicates
 				.toArray(new Predicate[] {})));
 
 		predicates = new ArrayList<Predicate>();
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		
+				
 		predicates.add(criteriaBuilder.in(path).value(subquery));
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));

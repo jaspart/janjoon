@@ -33,8 +33,14 @@ privileged aspect JJProfileDataOnDemand_Roo_DataOnDemand {
     
     public JJProfile JJProfileDataOnDemand.getNewTransientJJProfile(int index) {
         JJProfile obj = new JJProfile();
+        setEnabled(obj, index);
         setName(obj, index);
         return obj;
+    }
+    
+    public void JJProfileDataOnDemand.setEnabled(JJProfile obj, int index) {
+        Boolean enabled = Boolean.TRUE;
+        obj.setEnabled(enabled);
     }
     
     public void JJProfileDataOnDemand.setName(JJProfile obj, int index) {

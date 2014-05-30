@@ -37,6 +37,7 @@ import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.html.simpleparser.StyleSheet;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
+import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -50,6 +51,14 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 @RooJsfManagedBean(entity = JJChapter.class, beanName = "jJChapterBean")
 @SuppressWarnings("unused")
 public class JJChapterBean {
+
+	@Autowired
+	public JJConfigurationService jJConfigurationService;
+
+	public void setjJConfigurationService(
+			JJConfigurationService jJConfigurationService) {
+		this.jJConfigurationService = jJConfigurationService;
+	}
 
 	@Autowired
 	JJRequirementService jJRequirementService;
@@ -1287,11 +1296,7 @@ public class JJChapterBean {
 	}
 
 	private boolean getChapterDialogConfiguration() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJConfigurationBean jJConfigurationBean = (JJConfigurationBean) session
-				.getAttribute("jJConfigurationBean");
-		return jJConfigurationBean.getDialogConfig("ChapterDialog",
+		return jJConfigurationService.getDialogConfig("ChapterDialog",
 				"chapter.create.saveandclose");
 	}
 }

@@ -26,8 +26,11 @@ public class JJRight {
 	@ManyToOne
 	private JJCategory category;
 
+	@NotNull
 	@ManyToOne
 	private JJProfile profile;
+
+	private Boolean enabled;
 
 	@Override
 	public boolean equals(Object object) {

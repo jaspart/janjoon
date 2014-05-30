@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProject;
@@ -21,6 +22,14 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 @RooSerializable
 @RooJsfManagedBean(entity = JJProject.class, beanName = "jJProjectBean")
 public class JJProjectBean {
+
+	@Autowired
+	public JJConfigurationService jJConfigurationService;
+
+	public void setjJConfigurationService(
+			JJConfigurationService jJConfigurationService) {
+		this.jJConfigurationService = jJConfigurationService;
+	}
 
 	@Autowired
 	JJPermissionService jJPermissionService;
@@ -100,15 +109,6 @@ public class JJProjectBean {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	private boolean getProjectDialogConfiguration() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJConfigurationBean jJConfigurationBean = (JJConfigurationBean) session
-				.getAttribute("jJConfigurationBean");
-		return jJConfigurationBean.getDialogConfig("ProjectDialog",
-				"project.create.saveandclose");
 	}
 
 	public void newProject() {
@@ -211,6 +211,12 @@ public class JJProjectBean {
 		projectManagerList = null;
 
 		projectState = true;
+	}
+
+	private boolean getProjectDialogConfiguration() {
+
+		return jJConfigurationService.getDialogConfig("ProjectDialog",
+				"project.create.saveandclose");
 	}
 
 }
