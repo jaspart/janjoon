@@ -13,13 +13,30 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class JJTaskServiceImpl implements JJTaskService {
 
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	@Autowired
+	private JJStatusService jJStatusService;
+
+	@Autowired
+	private JJRequirementService jJRequirementService;
+
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
+	}
+
+	public void setjJStatusService(JJStatusService jJStatusService) {
+		this.jJStatusService = jJStatusService;
+	}
+
+	public void setjJRequirementService(
+			JJRequirementService jJRequirementService) {
+		this.jJRequirementService = jJRequirementService;
 	}
 
 	@Override
@@ -152,6 +169,40 @@ public class JJTaskServiceImpl implements JJTaskService {
 				false);
 
 	}
+
+//	public JJTask updateJJTask(JJTask task) {
+//
+////		JJStatus status = task.getStatus();
+////		System.out.println("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+////		
+////		if (status != null) {
+////			System.err.println(status.getName());
+////			if (status.getName().equalsIgnoreCase("IN PROGRESS")) {
+////				System.err.println("IN PROGRESS");
+////				if (task.getRequirement() != null) {
+////					System.err.println(task.getRequirement().getName());
+////					if (!task.getRequirement().getStatus().getName()
+////							.equalsIgnoreCase("RELEASED")) {
+////						JJStatus reqStatus = jJStatusService.getOneStatus(
+////								"RELEASED", "JJRequirement", true);
+////						task.getRequirement().setStatus(reqStatus);
+////						jJRequirementService.updateJJRequirement(task
+////								.getRequirement());
+////
+////					}
+////				} else {
+////					System.err.println("RELEASED");
+////					JJStatus reqStatus = jJStatusService.getOneStatus(
+////							"RELEASED", "JJRequirement", true);
+////					task.getRequirement().setStatus(reqStatus);
+////					jJRequirementService.updateJJRequirement(task
+////							.getRequirement());
+////				}
+////			}
+////		}
+//
+//		return jJTaskRepository.save(task);
+//	}
 
 	@Override
 	public void saveTasks(Set<JJTask> tasks) {

@@ -1,10 +1,7 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.URISyntaxException;
-import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -16,45 +13,32 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ValueChangeEvent;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
-import org.primefaces.event.FileUploadEvent;
-import org.primefaces.event.TabChangeEvent;
-import org.primefaces.extensions.component.ckeditor.CKEditor;
-import org.primefaces.model.UploadedFile;
 import org.apache.log4j.Logger;
 import org.apache.myfaces.component.visit.FullVisitContext;
-import org.apache.myfaces.shared.resource.ResourceLoader;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.TabChangeEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 
-import com.starit.janjoonweb.domain.JJAbstractEntity;
+import com.starit.janjoonweb.domain.JJCompany;
+import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
-import com.starit.janjoonweb.domain.JJMessage;
-import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJRequirement;
-import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.UsageChecker;
-import com.starit.janjoonweb.ui.mb.util.service.SprintUtil;
-import com.starit.janjoonweb.ui.mb.util.service.TreeOperation;
 import com.starit.janjoonweb.ui.security.AuthorizationManager;
 
 @Scope("session")
@@ -70,7 +54,11 @@ public class LoginBean implements Serializable {
 	static Logger logger = Logger.getLogger("loginBean-Logger");
 
 	@Autowired
-	private JJContactService jJContactService;
+	private JJContactService jJContactService;	
+
+	@Autowired
+	JJCompanyService jJCompanyService;
+
 
 	private String username = "janjoon.mailer@gmail.com";
 	private String password;
@@ -84,6 +72,10 @@ public class LoginBean implements Serializable {
 
 	public void setjJContactService(JJContactService jJContactService) {
 		this.jJContactService = jJContactService;
+	}
+
+	public void setjJCompanyService(JJCompanyService jJCompanyService) {
+		this.jJCompanyService = jJCompanyService;
 	}
 
 	public void setAuthorizationManager(
@@ -146,6 +138,10 @@ public class LoginBean implements Serializable {
 			SecurityContext sContext = SecurityContextHolder.getContext();
 			sContext.setAuthentication(authentication);
 			enable = true;
+			for (JJCompany company:jJCompanyService.findAllJJCompanys())
+			{
+				System.out.println(company.getCalendar());
+			}
 		} catch (AuthenticationException loginError) {
 
 			FacesMessage message = new FacesMessage(

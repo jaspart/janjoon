@@ -143,7 +143,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		}
 
 		if (version != null) {
-			predicates.add(criteriaBuilder.equal(from.get("version"), version));
+			predicates.add(criteriaBuilder.equal(from.get("versioning"), version));
 		}
 
 		if (status != null) {

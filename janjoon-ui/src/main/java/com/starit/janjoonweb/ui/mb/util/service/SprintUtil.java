@@ -120,7 +120,7 @@ public class SprintUtil {
 
 					for (JJTask task : tasks) {
 
-						System.out.println(task.getSprint().getName());
+						//System.out.println(task.getSprint().getName());
 						if (task.getWorkloadPlanned() != null)
 							i = i + task.getWorkloadPlanned();
 

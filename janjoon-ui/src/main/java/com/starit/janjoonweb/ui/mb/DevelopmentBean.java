@@ -532,7 +532,10 @@ public class DevelopmentBean implements Serializable {
 
 		task.getMessages().add(message);
 		if (task.getStartDateReal() == null)
+		{
 			task.setStartDateReal(new Date());
+		}
+			
 
 		if (!task.getCompleted()) {
 			status = jJStatusService

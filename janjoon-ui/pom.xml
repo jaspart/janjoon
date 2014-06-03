@@ -250,12 +250,12 @@
 		<dependency>
 			<groupId>org.primefaces.extensions</groupId>
 			<artifactId>resources-ckeditor</artifactId>
-			<version>1.2.1</version>
+			<version>2.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces.extensions</groupId>
 			<artifactId>resources-codemirror</artifactId>
-			<version>1.2.1</version>
+			<version>2.0.0</version>
 		</dependency>
 		<!-- PDF Exporter dependencies -->
 		<dependency>
@@ -352,7 +352,7 @@
 						<artifactId>aspectjtools</artifactId>
 						<version>${aspectj.version}</version>
 					</dependency>
-				</dependencies>				
+				</dependencies>
 				<executions>
 					<execution>
 						<goals>
@@ -362,12 +362,12 @@
 					</execution>
 				</executions>
 				<configuration>
-<!-- 				<weaveDependencies> -->
-<!-- 						<weaveDependency> -->
-<!-- 							<groupId>com.starit.janjoonweb.domain</groupId> -->
-<!-- 							<artifactId>janjoon-domain</artifactId> -->
-<!-- 						</weaveDependency> -->
-<!-- 					</weaveDependencies> -->
+					<!-- <weaveDependencies> -->
+					<!-- <weaveDependency> -->
+					<!-- <groupId>com.starit.janjoonweb.domain</groupId> -->
+					<!-- <artifactId>janjoon-domain</artifactId> -->
+					<!-- </weaveDependency> -->
+					<!-- </weaveDependencies> -->
 					<outxml>true</outxml>
 					<aspectLibraries>
 						<aspectLibrary>

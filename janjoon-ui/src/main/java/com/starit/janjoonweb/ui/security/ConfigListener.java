@@ -1,9 +1,17 @@
 package com.starit.janjoonweb.ui.security;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 
 import javax.servlet.ServletContextEvent;
@@ -18,6 +26,8 @@ import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
+import com.starit.janjoonweb.domain.JJCompany;
+import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
@@ -49,6 +59,9 @@ public class ConfigListener implements ServletContextListener {
 
 	@Autowired
 	JJMessageService jJMessageService;
+
+	@Autowired
+	JJCompanyService jJCompanyService;
 
 	@Autowired
 	JJBugService jJBugService;
@@ -100,6 +113,10 @@ public class ConfigListener implements ServletContextListener {
 
 	public void setjJMessageService(JJMessageService jJMessageService) {
 		this.jJMessageService = jJMessageService;
+	}
+
+	public void setjJCompanyService(JJCompanyService jJCompanyService) {
+		this.jJCompanyService = jJCompanyService;
 	}
 
 	public void setjJBugService(JJBugService jJBugService) {
@@ -173,13 +190,54 @@ public class ConfigListener implements ServletContextListener {
 		WebApplicationContextUtils
 				.getRequiredWebApplicationContext(sce.getServletContext())
 				.getAutowireCapableBeanFactory().autowireBean(this);
-		initApplication();
+		try {
+			initApplication(true);
+		} catch (FileNotFoundException e) {
+			try {
+				initApplication(false);
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (URISyntaxException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("contextInitialized-from-ConfigListener");
 
 	}
 
-	private void initApplication() {
+	private void initApplication(boolean index) throws FileNotFoundException, URISyntaxException {
 
+		if(index)
+		{
+			if (jJCompanyService.findAllJJCompanys().isEmpty()) {
+				
+				JJCompany company = new JJCompany();
+				company.setName("StarIt");
+				company.setDescription(company.getName()
+						+ "Message-CompanyDescription");
+				company.setCreationDate(new Date());
+				company.setEnabled(true);
+				company.setCalendar(convertStreamToString(company.getName()));
+				jJCompanyService.saveJJCompany(company);
+
+				company = new JJCompany();
+				company.setName("StarConsulting");
+				company.setDescription(company.getName()
+						+ "Message-CompanyDescription");
+				company.setCreationDate(new Date());
+				company.setEnabled(true);
+				company.setCalendar(convertStreamToString(company.getName()));
+				jJCompanyService.saveJJCompany(company);
+			}
+
+		}
+		
 		if (jJCriticityService.getCriticities("JJMessage", true).isEmpty()) {
 
 			String[] names = { "ALERT", "INFO" };
@@ -1011,6 +1069,30 @@ public class ConfigListener implements ServletContextListener {
 
 			}
 		}
+	}
+
+	// public String setCompanyCalendar(String company)
+	// {
+	// StringWriter writer = new StringWriter();
+	// IOUtils.copy(ClassLoader.getSystemResourceAsStream(""), writer,
+	// encoding);
+	// String theString = writer.toString();
+	// return "";
+	// }
+
+	public String convertStreamToString(String company)
+			throws FileNotFoundException, URISyntaxException {
+
+		// InputStream
+		// is=ConfigListener.class.getResourceAsStream("/resources/Calandar"+
+		// company);
+		System.out.println(this.getClass()
+				.getResource("/Calendar" +company+".xml").toString());
+		FileInputStream inputStream = new FileInputStream(this.getClass()
+				.getResource("/Calendar" +company+".xml").getFile());
+		Scanner s = new Scanner(inputStream).useDelimiter("\\A");
+		return s.hasNext() ? s.next() : "";
+
 	}
 
 	@Override

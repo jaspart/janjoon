@@ -74,6 +74,14 @@
 		<listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
 	</listener>
 	<servlet>
+		<servlet-name>CKEditorGetImageServlet</servlet-name>
+		<servlet-class>com.starit.janjoonweb.ui.mb.util.service.CKEditorGetImageServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>CKEditorUploadServlet</servlet-name>
+		<servlet-class>com.starit.janjoonweb.ui.mb.util.service.CKEditorUploadServlet</servlet-class>
+	</servlet>
+	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
 		<init-param>
@@ -82,6 +90,14 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet-mapping>
+		<servlet-name>CKEditorUploadServlet</servlet-name>
+		<url-pattern>/ckeditor/uploadimage</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CKEditorGetImageServlet</servlet-name>
+		<url-pattern>/ckeditor/getimage</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.jsf</url-pattern>
