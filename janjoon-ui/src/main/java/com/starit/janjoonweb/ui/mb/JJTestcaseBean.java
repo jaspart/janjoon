@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -41,6 +40,7 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJTask;
+import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
 import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
@@ -88,6 +88,13 @@ public class JJTestcaseBean {
 
 	public void setjJTeststepService(JJTeststepService jJTeststepService) {
 		this.jJTeststepService = jJTeststepService;
+	}
+
+	@Autowired
+	JJTaskService jJTaskService;
+
+	public void setjJTaskService(JJTaskService jJTaskService) {
+		this.jJTaskService = jJTaskService;
 	}
 
 	private JJTestcase testcase;
@@ -397,7 +404,12 @@ public class JJTestcaseBean {
 			task = new JJTask();
 			task.setEnabled(true);
 			task.setCreationDate(new Date());
+			task.setStartDatePlanned(new Date());
 			task.setWorkloadPlanned(8);
+			task.setEndDatePlanned(new Date(task.getStartDatePlanned()
+					.getTime()
+					+ task.getWorkloadPlanned().longValue()
+					* 3600000));
 
 		} else {
 			task = new JJTask();
@@ -438,6 +450,70 @@ public class JJTestcaseBean {
 
 		jJTestcaseexecutionBean.loadTestcaseexecution(jJTeststepexecutionBean);
 
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJBuildBean jJBuildBean = (JJBuildBean) session
+				.getAttribute("jJBuildBean");
+
+		if (jJBuildBean == null) {
+			jJBuildBean = new JJBuildBean();
+		}
+
+		JJBuild build = jJBuildBean.getBuild();
+
+		List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
+				testcase, build, true, false, true);
+		if (tasks.isEmpty()) {
+			tasks = jJTaskService.getTasks(null, null, null, null, testcase,
+					null, true, false, false);
+			if (!tasks.isEmpty()) {
+
+				JJTask task1 = tasks.get(0);
+				JJTask task = new JJTask();
+
+				task.setName(testcase.getName() + "_"
+						+ build.getName().trim().toUpperCase());
+				task.setCreationDate(new Date());
+				task.setDescription("This is task " + task.getName());
+				task.setEnabled(true);
+
+				task.setStartDateReal(new Date());
+				task.setEndDateReal(null);
+				task.setWorkloadReal(null);
+
+				task.setTestcase(testcase);
+				task.setBuild(build);
+
+				task.setAssignedTo(task1.getAssignedTo());
+
+				task.setStartDateReal(new Date());
+
+				task.setStartDateRevised(task1.getStartDateRevised());
+				task.setEndDateRevised(task1.getEndDateRevised());
+				task.setWorkloadRevised(task1.getWorkloadRevised());
+
+				task.setStartDatePlanned(task1.getStartDatePlanned());
+				task.setEndDatePlanned(task1.getEndDatePlanned());
+				task.setWorkloadPlanned(task1.getWorkloadPlanned());
+
+				// task.setCompleted(task1.getCompleted());
+				// task.setConsumed(task1.getConsumed());
+
+				jJTaskService.saveJJTask(task);
+
+			}
+
+		} else {
+			JJTask task = tasks.get(0);
+			task.setName(testcase.getName() + "_"
+					+ build.getName().trim().toUpperCase());
+			task.setStartDateReal(new Date());
+			task.setEndDateReal(null);
+			task.setWorkloadReal(null);
+			task.setUpdatedDate(new Date());
+			jJTaskService.updateJJTask(task);
+		}
+
 	}
 
 	public void handleSelectRequirement() {
@@ -455,7 +531,7 @@ public class JJTestcaseBean {
 
 			if (initiateTask) {
 				task.setName(testcase.getName());
-				task.setDescription("This Task: " + task.getName());
+				task.setDescription("This is Task: " + task.getName());
 				testcase.getTasks().add(task);
 				task.setTestcase(testcase);
 			}

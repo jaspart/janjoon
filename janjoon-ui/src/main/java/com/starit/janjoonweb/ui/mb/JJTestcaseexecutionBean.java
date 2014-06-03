@@ -9,16 +9,26 @@ import java.util.Set;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJTask;
+import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJTestcaseexecution.class, beanName = "jJTestcaseexecutionBean")
 public class JJTestcaseexecutionBean {
+
+	@Autowired
+	JJTaskService jJTaskService;
+
+	public void setjJTaskService(JJTaskService jJTaskService) {
+		this.jJTaskService = jJTaskService;
+	}
 
 	private JJTestcaseexecution testcaseexecution;
 
@@ -127,6 +137,27 @@ public class JJTestcaseexecutionBean {
 		tce.setPassed(status);
 		tce.setUpdatedDate(new Date());
 		jJTestcaseexecutionService.updateJJTestcaseexecution(tce);
+
+		List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
+				tce.getTestcase(), tce.getBuild(), true, false, true);
+		if (!tasks.isEmpty()) {
+			JJTask task = tasks.get(0);
+			task.setName(tce.getTestcase().getName() + "_"
+					+ tce.getBuild().getName().trim().toUpperCase());
+
+			task.setEndDateReal(new Date());
+
+			long startTime = task.getStartDateReal().getTime();
+			long endTime = task.getEndDateReal().getTime();
+			long str = endTime - startTime;
+
+			int workloadReal = (int) (str / 3600000);
+
+			task.setWorkloadReal(workloadReal);
+			
+			task.setUpdatedDate(new Date());
+			jJTaskService.updateJJTask(task);
+		}
 
 	}
 
