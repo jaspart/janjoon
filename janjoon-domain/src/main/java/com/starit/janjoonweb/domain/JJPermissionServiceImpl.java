@@ -24,57 +24,6 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		this.entityManager = entityManager;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public Set<JJContact> getManagers(String objet) {
-
-		Set<JJContact> contacts = new HashSet<JJContact>();
-
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
-				.createQuery(JJPermission.class);
-		Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
-
-		Path<Object> path = from.join("profile");
-		
-		from.fetch("profile");
-		
-		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
-
-		Subquery<JJRight> subquery = criteriaQuery.subquery(JJRight.class);
-		Root fromRight = subquery.from(JJRight.class);
-		subquery.select(fromRight.get("profile"));
-
-		List<Predicate> predicates = new ArrayList<Predicate>();
-
-		predicates.add(criteriaBuilder.equal(fromRight.get("w"), true));
-		predicates.add(criteriaBuilder.equal(fromRight.get("objet"), objet));
-		predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
-
-		subquery.where(criteriaBuilder.and(predicates
-				.toArray(new Predicate[] {})));
-
-		predicates = new ArrayList<Predicate>();
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		
-				
-		predicates.add(criteriaBuilder.in(path).value(subquery));
-
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
-
-		TypedQuery<JJPermission> result = entityManager.createQuery(select);
-
-		List<JJPermission> permissions = result.getResultList();
-		for (JJPermission permission : permissions) {
-			if (permission.getContact().getEnabled()) {
-				contacts.add(permission.getContact());
-			}
-		}
-
-		return contacts;
-
-	}
-
 	@Override
 	public List<JJPermission> getPermissions(JJContact contact,
 			boolean onlyContact, JJProfile profile, JJProject project,
@@ -120,4 +69,225 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		return result.getResultList();
 
 	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public boolean isAuthorized(JJContact contact, JJProject project,
+			JJProduct product, String objet, JJCategory category, Boolean r,
+			Boolean w, Boolean x) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
+				.createQuery(JJPermission.class);
+		Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
+
+		Path<Object> path = from.join("profile");
+
+		from.fetch("profile");
+
+		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
+
+		Subquery<JJRight> subquery = criteriaQuery.subquery(JJRight.class);
+		Root fromRight = subquery.from(JJRight.class);
+		subquery.select(fromRight.get("profile"));
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
+
+		if (objet != null) {
+			predicates
+					.add(criteriaBuilder.equal(fromRight.get("objet"), objet));
+		}
+
+		if (category != null) {
+			predicates.add(criteriaBuilder.equal(fromRight.get("category"),
+					category));
+		}
+
+		if (r != null) {
+			predicates.add(criteriaBuilder.equal(fromRight.get("r"), r));
+
+		}
+
+		if (w != null) {
+			predicates.add(criteriaBuilder.equal(fromRight.get("w"), w));
+
+		}
+
+		if (x != null) {
+			predicates.add(criteriaBuilder.equal(fromRight.get("x"), x));
+
+		}
+
+		subquery.where(criteriaBuilder.and(predicates
+				.toArray(new Predicate[] {})));
+
+		predicates = new ArrayList<Predicate>();
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		if (contact != null) {
+			predicates.add(criteriaBuilder.equal(from.get("contact"), contact));
+		}
+
+		if (project != null) {
+			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}
+
+		if (product != null) {
+			predicates.add(criteriaBuilder.equal(from.get("product"), product));
+		}
+
+		predicates.add(criteriaBuilder.equal(path.get("enabled"), true));
+
+		predicates.add(criteriaBuilder.in(path).value(subquery));
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+		TypedQuery<JJPermission> result = entityManager.createQuery(select);
+
+		List<JJPermission> permissions = result.getResultList();
+
+		if (permissions.isEmpty()) {
+			return false;
+		} else {
+			return true;
+		}
+
+	}
+
+	@Override
+	public boolean isAuthorized(JJContact contact, String objet,
+			JJCategory category, Boolean r, Boolean w, Boolean x) {
+		return isAuthorized(contact, null, null, objet, category, r, w, x);
+	}
+
+	@Override
+	public boolean isAuthorized(JJContact contact, String objet, Boolean r,
+			Boolean w, Boolean x) {
+		return isAuthorized(contact, null, null, objet, null, r, w, x);
+	}
+
+	@Override
+	public boolean isAuthorized(JJContact contact, JJProject project,
+			JJProduct product, String objet, JJCategory category) {
+		return isAuthorized(contact, project, product, objet, category, null,
+				null, null);
+	}
+
+	@Override
+	public boolean isAuthorized(JJContact contact, JJProject project,
+			JJProduct product, String objet) {
+		return isAuthorized(contact, project, product, objet, null, null, null,
+				null);
+	}
+
+	@Override
+	public boolean isAuthorized(JJContact contact, JJProject project,
+			JJProduct product) {
+		return isAuthorized(contact, project, product, null, null, null, null,
+				null);
+	}
+
+	@Override
+	public boolean isAuthorized(JJContact contact, JJProject project) {
+		return isAuthorized(contact, project, null, null, null, null, null,
+				null);
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public Set<JJContact> areAuthorized(JJProject project, JJProduct product,
+			String objet, JJCategory category, Boolean r, Boolean w, Boolean x) {
+
+		Set<JJContact> contacts = new HashSet<JJContact>();
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
+				.createQuery(JJPermission.class);
+		Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
+
+		Path<Object> path = from.join("profile");
+
+		from.fetch("profile");
+
+		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
+
+		Subquery<JJRight> subquery = criteriaQuery.subquery(JJRight.class);
+		Root fromRight = subquery.from(JJRight.class);
+		subquery.select(fromRight.get("profile"));
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
+
+		if (objet != null) {
+			predicates
+					.add(criteriaBuilder.equal(fromRight.get("objet"), objet));
+		}
+
+		if (category != null) {
+			predicates.add(criteriaBuilder.equal(fromRight.get("category"),
+					category));
+		}
+
+		if (r != null) {
+			predicates.add(criteriaBuilder.equal(fromRight.get("r"), r));
+
+		}
+
+		if (w != null) {
+			predicates.add(criteriaBuilder.equal(fromRight.get("w"), w));
+
+		}
+
+		if (x != null) {
+			predicates.add(criteriaBuilder.equal(fromRight.get("x"), x));
+
+		}
+
+		subquery.where(criteriaBuilder.and(predicates
+				.toArray(new Predicate[] {})));
+
+		predicates = new ArrayList<Predicate>();
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		if (project != null) {
+			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}
+
+		if (product != null) {
+			predicates.add(criteriaBuilder.equal(from.get("product"), product));
+		}
+
+		predicates.add(criteriaBuilder.equal(path.get("enabled"), true));
+
+		predicates.add(criteriaBuilder.in(path).value(subquery));
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+		TypedQuery<JJPermission> result = entityManager.createQuery(select);
+
+		List<JJPermission> permissions = result.getResultList();
+
+		for (JJPermission permission : permissions) {
+			if (permission.getContact().getEnabled()) {
+				contacts.add(permission.getContact());
+			}
+		}
+
+		return contacts;
+
+	}
+
+	@Override
+	public Set<JJContact> getManagers(String objet) {
+		return areAuthorized(null, null, objet, null, null, true, null);
+	}
+
+	@Override
+	public Set<JJContact> areAuthorized(JJProject project, JJProduct product) {
+		return areAuthorized(project, product, null, null, null, null, null);
+	}
+
 }

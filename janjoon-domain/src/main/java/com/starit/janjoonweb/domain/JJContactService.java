@@ -15,19 +15,4 @@ public interface JJContactService {
 
 	public boolean updateJJContactTransaction(JJContact contact);
 
-	public List<JJRight> getContactAuthorization(String object,
-			JJContact contact, JJProduct product, JJProject project,
-			JJCategory category);
-
-	public List<JJRight> getContactAuthorization(JJContact contact,
-			JJProduct product);
-
-	public List<JJRight> getContactAuthorization(JJContact contact,
-			JJProduct product, JJProject project);
-
-	public List<JJRight> getContactAuthorization(JJContact contact,
-			JJProject project);
-
-	public List<JJPermission> getContactPermission(JJContact contact);
-
 }

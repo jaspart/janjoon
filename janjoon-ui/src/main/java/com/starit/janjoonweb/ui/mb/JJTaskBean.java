@@ -35,6 +35,8 @@ import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJChapterService;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJPermissionService;
+import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJSprint;
@@ -49,6 +51,17 @@ public class JJTaskBean {
 
 	@Autowired
 	JJChapterService jJChapterService;
+
+	public void setJjChapterService(JJChapterService jJChapterService) {
+		this.jJChapterService = jJChapterService;
+	}
+
+	@Autowired
+	JJPermissionService jJPermissionService;
+
+	public void setjJPermissionService(JJPermissionService jJPermissionService) {
+		this.jJPermissionService = jJPermissionService;
+	}
 
 	private TreeNode taskTreeNode;
 
@@ -70,10 +83,6 @@ public class JJTaskBean {
 		this.viewPanel = viewPanel;
 	}
 
-	public void setJjChapterService(JJChapterService jJChapterService) {
-		this.jJChapterService = jJChapterService;
-	}
-
 	private List<TaskData> tasksData;
 	private JJTask task;
 
@@ -82,7 +91,7 @@ public class JJTaskBean {
 	private Date start;
 	private Date end;
 
-	private List<JJContact> contacts;
+	private Set<JJContact> contacts;
 
 	private JJProject project;
 
@@ -114,12 +123,21 @@ public class JJTaskBean {
 		return end;
 	}
 
-	public List<JJContact> getContacts() {
-		contacts = jJContactService.getContacts(false);
+	public Set<JJContact> getContacts() {
+		getProject();
+		
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJProductBean jJProductBean = (JJProductBean) session
+				.getAttribute("jJProductBean");
+		JJProduct product = jJProductBean.getProduct();
+		
+		contacts = jJPermissionService.areAuthorized(project, product);
+		
 		return contacts;
 	}
 
-	public void setContacts(List<JJContact> contacts) {
+	public void setContacts(Set<JJContact> contacts) {
 		this.contacts = contacts;
 	}
 

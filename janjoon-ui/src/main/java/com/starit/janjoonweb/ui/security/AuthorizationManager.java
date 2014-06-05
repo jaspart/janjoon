@@ -1,31 +1,31 @@
 package com.starit.janjoonweb.ui.security;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJContactService;
+import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJRight;
 import com.starit.janjoonweb.ui.mb.util.PageContent;
 
 @Component("authorizationManager")
 public class AuthorizationManager implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Autowired
-	JJContactService jJContactService;
+	JJPermissionService jJPermissionService;
+
+	public void setjJPermissionService(JJPermissionService jJPermissionService) {
+		this.jJPermissionService = jJPermissionService;
+	}
 
 	JJContact contact;
-	List<JJRight> contactRight;
 
 	public static List<PageContent> pageContents = new ArrayList<PageContent>() {
 		{
@@ -57,24 +57,12 @@ public class AuthorizationManager implements Serializable {
 		}
 	};
 
-	public void setjJContactService(JJContactService jJContactService) {
-		this.jJContactService = jJContactService;
-	}
-
 	public JJContact getContact() {
 		return contact;
 	}
 
 	public void setContact(JJContact contact) {
 		this.contact = contact;
-	}
-
-	public List<JJRight> getContactRight() {
-		return contactRight;
-	}
-
-	public void setContactRight(List<JJRight> contactRight) {
-		this.contactRight = contactRight;
 	}
 
 	public AuthorizationManager() {
@@ -88,23 +76,9 @@ public class AuthorizationManager implements Serializable {
 			return true;
 		else {
 
-			contactRight = jJContactService.getContactAuthorization(
-					pageContents.get(i).getObjects().get(0), contact, product,
-					project, null);
+			return jJPermissionService.isAuthorized(contact, project, product,
+					pageContents.get(i).getObjects().get(0));
 
-			if (contactRight.isEmpty()) {
-				
-				return true;
-			} else {
-				boolean result = false;
-
-				for (JJRight right : contactRight) {
-
-					result = right.getW() || result;
-				}
-
-				return result;
-			}
 		}
 
 	}
