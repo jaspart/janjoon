@@ -386,7 +386,6 @@ public class ConfigListener implements ServletContextListener {
 				if (object.equalsIgnoreCase("JJRequirement")) {
 					names.add("NEW");
 					names.add("DELETED");
-					names.add("DISCARDED");
 					names.add("MODIFIED");
 					names.add("RELEASED");
 					names.add("FAILED");
@@ -417,7 +416,6 @@ public class ConfigListener implements ServletContextListener {
 
 				for (String name : names) {
 					JJStatus status = new JJStatus();
-
 					status.setObjet(object);
 					status.setName(name);
 					status.setCreationDate(new Date());

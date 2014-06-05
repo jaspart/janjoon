@@ -776,22 +776,7 @@ public class JJRequirementBean {
 		requirementState = false;
 	}
 
-	public void deleteRequirement() {
-
-		requirement.setEnabled(false);
-
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		HttpSession session = (HttpSession) facesContext.getExternalContext()
-				.getSession(false);
-		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
-		JJContact contact = loginBean.getContact();
-
-		int numero = requirement.getNumero() + 1;
-		requirement.setNumero(numero);
-		requirement.setUpdatedBy(contact);
-		requirement.setUpdatedDate(new Date());
-
-		jJRequirementService.updateJJRequirement(requirement);
+	private void deleteTasksAndTestcase(JJRequirement requirement) {
 
 		JJRequirement req = jJRequirementService.findJJRequirement(requirement
 				.getId());
@@ -810,6 +795,26 @@ public class JJRequirementBean {
 			task.setEnabled(false);
 			jJTaskService.updateJJTask(task);
 		}
+	}
+
+	public void deleteRequirement() {
+
+		requirement.setEnabled(false);
+
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) facesContext.getExternalContext()
+				.getSession(false);
+		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
+		JJContact contact = loginBean.getContact();
+
+		int numero = requirement.getNumero() + 1;
+		requirement.setNumero(numero);
+		requirement.setUpdatedBy(contact);
+		requirement.setUpdatedDate(new Date());
+
+		jJRequirementService.updateJJRequirement(requirement);
+
+		deleteTasksAndTestcase(requirement);
 
 		requirement = null;
 		reset();
@@ -905,8 +910,15 @@ public class JJRequirementBean {
 
 		} else {
 
-			message = "message_successfully_updated";
+			System.out.println("toto");
+//			JJRequirement req = jJRequirementService
+//					.findJJRequirement(requirement.getId());
+			if (!requirement.getEnabled()) {
+				deleteTasksAndTestcase(requirement);
+			}
 
+			message = "message_successfully_updated";
+			System.out.println("vovo");
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
@@ -1356,6 +1368,13 @@ public class JJRequirementBean {
 	}
 
 	public void handleSelectStatus() {
+
+		if (requirementStatus.getName().equalsIgnoreCase("CANCELED")
+				|| requirementStatus.getName().equalsIgnoreCase("DELETED")) {
+			requirement.setEnabled(false);
+		} else {
+			requirement.setEnabled(true);
+		}
 
 	}
 

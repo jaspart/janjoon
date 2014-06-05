@@ -63,13 +63,14 @@ public class ApplicationLogger {
 		JJStatus status = task.getStatus();
 
 		System.out.println("setStatus");
-		System.out.println(status.getName());
 
 		if (status != null) {
+
+			System.out.println(status.getName());
 			if (status.getName().equalsIgnoreCase("IN PROGRESS")) {
 
 				JJRequirement req = task.getRequirement();
-				
+
 				if (req != null) {
 					System.out.println(req.getName());
 					if (!req.getStatus().getName().equalsIgnoreCase("RELEASED")) {
