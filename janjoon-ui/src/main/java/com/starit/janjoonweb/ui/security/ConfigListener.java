@@ -889,6 +889,7 @@ public class ConfigListener implements ServletContextListener {
 			List<JJProfile> profiles = new ArrayList<JJProfile>();
 			profiles.add(jJProfileService.getOneProfile("ProjectManager", true));
 			profiles.add(jJProfileService.getOneProfile("ProductManager", true));
+			profiles.add(jJProfileService.getOneProfile("CEO", true));
 
 			for (JJProfile profile : profiles) {
 				JJPermission permission = new JJPermission();

@@ -92,17 +92,38 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		subquery.select(fromRight.get("profile"));
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> orPredicates = new ArrayList<Predicate>();
 
 		predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
 
 		if (objet != null) {
-			predicates
-					.add(criteriaBuilder.equal(fromRight.get("objet"), objet));
+
+			orPredicates = new ArrayList<Predicate>();
+
+			orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
+					objet));
+
+			orPredicates
+					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
+
+			Predicate orPredicate = criteriaBuilder.or(orPredicates
+					.toArray(new Predicate[] {}));
+			predicates.add(orPredicate);
+
 		}
 
 		if (category != null) {
-			predicates.add(criteriaBuilder.equal(fromRight.get("category"),
+
+			orPredicates = new ArrayList<Predicate>();
+
+			orPredicates.add(criteriaBuilder.equal(fromRight.get("category"),
 					category));
+
+			orPredicates.add(criteriaBuilder.isNull(fromRight.get("category")));
+
+			Predicate orPredicate = criteriaBuilder.or(orPredicates
+					.toArray(new Predicate[] {}));
+			predicates.add(orPredicate);
 		}
 
 		if (r != null) {
@@ -131,11 +152,32 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		}
 
 		if (project != null) {
-			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+
+			orPredicates = new ArrayList<Predicate>();
+
+			orPredicates
+					.add(criteriaBuilder.equal(from.get("project"), project));
+
+			orPredicates.add(criteriaBuilder.isNull(from.get("project")));
+
+			Predicate orPredicate = criteriaBuilder.or(orPredicates
+					.toArray(new Predicate[] {}));
+			predicates.add(criteriaBuilder.and(orPredicate));
+
 		}
 
 		if (product != null) {
-			predicates.add(criteriaBuilder.equal(from.get("product"), product));
+			orPredicates = new ArrayList<Predicate>();
+
+			orPredicates
+					.add(criteriaBuilder.equal(from.get("product"), product));
+
+			orPredicates.add(criteriaBuilder.isNull(from.get("product")));
+
+			Predicate orPredicate = criteriaBuilder.or(orPredicates
+					.toArray(new Predicate[] {}));
+
+			predicates.add(criteriaBuilder.and(orPredicate));
 		}
 
 		predicates.add(criteriaBuilder.equal(path.get("enabled"), true));
@@ -218,17 +260,35 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		subquery.select(fromRight.get("profile"));
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> orPredicates = new ArrayList<Predicate>();
 
 		predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
 
 		if (objet != null) {
-			predicates
-					.add(criteriaBuilder.equal(fromRight.get("objet"), objet));
+			orPredicates = new ArrayList<Predicate>();
+
+			orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
+					objet));
+
+			orPredicates
+					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
+
+			Predicate orPredicate = criteriaBuilder.or(orPredicates
+					.toArray(new Predicate[] {}));
+			predicates.add(orPredicate);
 		}
 
 		if (category != null) {
-			predicates.add(criteriaBuilder.equal(fromRight.get("category"),
+			orPredicates = new ArrayList<Predicate>();
+
+			orPredicates.add(criteriaBuilder.equal(fromRight.get("category"),
 					category));
+
+			orPredicates.add(criteriaBuilder.isNull(fromRight.get("category")));
+
+			Predicate orPredicate = criteriaBuilder.or(orPredicates
+					.toArray(new Predicate[] {}));
+			predicates.add(orPredicate);
 		}
 
 		if (r != null) {
@@ -253,11 +313,31 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		if (project != null) {
-			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+			orPredicates = new ArrayList<Predicate>();
+
+			orPredicates
+					.add(criteriaBuilder.equal(from.get("project"), project));
+
+			orPredicates.add(criteriaBuilder.isNull(from.get("project")));
+
+			Predicate orPredicate = criteriaBuilder.or(orPredicates
+					.toArray(new Predicate[] {}));
+
+			predicates.add(criteriaBuilder.and(orPredicate));
 		}
 
 		if (product != null) {
-			predicates.add(criteriaBuilder.equal(from.get("product"), product));
+			orPredicates = new ArrayList<Predicate>();
+
+			orPredicates
+					.add(criteriaBuilder.equal(from.get("product"), product));
+
+			orPredicates.add(criteriaBuilder.isNull(from.get("product")));
+
+			Predicate orPredicate = criteriaBuilder.or(orPredicates
+					.toArray(new Predicate[] {}));
+
+			predicates.add(criteriaBuilder.and(orPredicate));
 		}
 
 		predicates.add(criteriaBuilder.equal(path.get("enabled"), true));
