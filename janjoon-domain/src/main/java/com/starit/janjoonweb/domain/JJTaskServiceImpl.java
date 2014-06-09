@@ -41,9 +41,9 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 	@Override
 	public List<JJTask> getTasks(JJProject project, JJProduct product,
-			JJContact contact, JJChapter chapter, JJTestcase testcase,
-			JJBuild build, boolean onlyActif, boolean sortedByCreationDate,
-			boolean withBuild) {
+			JJContact contact, JJChapter chapter, JJRequirement requirement,
+			JJTestcase testcase, JJBuild build, boolean onlyActif,
+			boolean sortedByCreationDate, boolean withBuild) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
 				.createQuery(JJTask.class);
@@ -59,6 +59,11 @@ public class JJTaskServiceImpl implements JJTaskService {
 		if (contact != null) {
 			predicates.add(criteriaBuilder.equal(from.get("assignedTo"),
 					contact));
+		}
+
+		if (requirement != null) {
+			predicates.add(criteriaBuilder.equal(from.get("requirement"),
+					requirement));
 		}
 
 		if (project != null) {
@@ -89,6 +94,7 @@ public class JJTaskServiceImpl implements JJTaskService {
 			}
 
 		}
+
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		if (sortedByCreationDate) {
@@ -165,44 +171,45 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 	@Override
 	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project) {
-		return getTasks(project, product, null, null, null, null, true, false,
-				false);
+		return getTasks(project, product, null, null, null, null, null, true,
+				false, false);
 
 	}
 
-//	public JJTask updateJJTask(JJTask task) {
-//
-////		JJStatus status = task.getStatus();
-////		System.out.println("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-////		
-////		if (status != null) {
-////			System.err.println(status.getName());
-////			if (status.getName().equalsIgnoreCase("IN PROGRESS")) {
-////				System.err.println("IN PROGRESS");
-////				if (task.getRequirement() != null) {
-////					System.err.println(task.getRequirement().getName());
-////					if (!task.getRequirement().getStatus().getName()
-////							.equalsIgnoreCase("RELEASED")) {
-////						JJStatus reqStatus = jJStatusService.getOneStatus(
-////								"RELEASED", "JJRequirement", true);
-////						task.getRequirement().setStatus(reqStatus);
-////						jJRequirementService.updateJJRequirement(task
-////								.getRequirement());
-////
-////					}
-////				} else {
-////					System.err.println("RELEASED");
-////					JJStatus reqStatus = jJStatusService.getOneStatus(
-////							"RELEASED", "JJRequirement", true);
-////					task.getRequirement().setStatus(reqStatus);
-////					jJRequirementService.updateJJRequirement(task
-////							.getRequirement());
-////				}
-////			}
-////		}
-//
-//		return jJTaskRepository.save(task);
-//	}
+	// public JJTask updateJJTask(JJTask task) {
+	//
+	// // JJStatus status = task.getStatus();
+	// //
+	// System.out.println("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+	// //
+	// // if (status != null) {
+	// // System.err.println(status.getName());
+	// // if (status.getName().equalsIgnoreCase("IN PROGRESS")) {
+	// // System.err.println("IN PROGRESS");
+	// // if (task.getRequirement() != null) {
+	// // System.err.println(task.getRequirement().getName());
+	// // if (!task.getRequirement().getStatus().getName()
+	// // .equalsIgnoreCase("RELEASED")) {
+	// // JJStatus reqStatus = jJStatusService.getOneStatus(
+	// // "RELEASED", "JJRequirement", true);
+	// // task.getRequirement().setStatus(reqStatus);
+	// // jJRequirementService.updateJJRequirement(task
+	// // .getRequirement());
+	// //
+	// // }
+	// // } else {
+	// // System.err.println("RELEASED");
+	// // JJStatus reqStatus = jJStatusService.getOneStatus(
+	// // "RELEASED", "JJRequirement", true);
+	// // task.getRequirement().setStatus(reqStatus);
+	// // jJRequirementService.updateJJRequirement(task
+	// // .getRequirement());
+	// // }
+	// // }
+	// // }
+	//
+	// return jJTaskRepository.save(task);
+	// }
 
 	@Override
 	public void saveTasks(Set<JJTask> tasks) {

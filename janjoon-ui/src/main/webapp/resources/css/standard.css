@@ -229,7 +229,37 @@ div.chapter {
 }
 
 .old {
-	background-color: #fca752 !important;
+	background-color: #FCA752 !important;
+	background-image: none !important;
+	color: black !important;
+}
+
+.NT {
+	background-color: #CCCCCC !important;
+	background-image: none !important;
+	color: black !important;
+}
+
+.NL {
+	background-color: #FF8888 !important;
+	background-image: none !important;
+	color: black !important;
+}
+
+.IP {
+	background-color: #8888FF !important;
+	background-image: none !important;
+	color: black !important;
+}
+
+.SU {
+	background-color: #88FF88 !important;
+	background-image: none !important;
+	color: black !important;
+}
+
+.TP {
+	background-color: #88DDDD !important;
 	background-image: none !important;
 	color: black !important;
 }

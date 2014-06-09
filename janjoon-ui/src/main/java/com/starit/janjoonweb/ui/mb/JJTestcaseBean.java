@@ -462,10 +462,10 @@ public class JJTestcaseBean {
 		JJBuild build = jJBuildBean.getBuild();
 
 		List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
-				testcase, build, true, false, true);
+				null, testcase, build, true, false, true);
 		if (tasks.isEmpty()) {
-			tasks = jJTaskService.getTasks(null, null, null, null, testcase,
-					null, true, false, false);
+			tasks = jJTaskService.getTasks(null, null, null, null, null,
+					testcase, null, true, false, false);
 			if (!tasks.isEmpty()) {
 
 				JJTask task1 = tasks.get(0);

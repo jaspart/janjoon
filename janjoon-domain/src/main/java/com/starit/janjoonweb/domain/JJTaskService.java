@@ -9,9 +9,9 @@ import org.springframework.roo.addon.layers.service.RooService;
 public interface JJTaskService {
 
 	public List<JJTask> getTasks(JJProject project, JJProduct product,
-			JJContact contact, JJChapter chapter, JJTestcase testcase,
-			JJBuild build, boolean onlyActif, boolean sortedByCreationDate,
-			boolean withBuild);
+			JJContact contact, JJChapter chapter, JJRequirement requirement,
+			JJTestcase testcase, JJBuild build, boolean onlyActif,
+			boolean sortedByCreationDate, boolean withBuild);
 
 	public void saveTasks(Set<JJTask> tasks);
 

@@ -32,6 +32,8 @@ import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseService;
+import com.starit.janjoonweb.domain.JJTestcaseexecution;
+import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTeststepService;
 import com.starit.janjoonweb.domain.JJVersion;
@@ -61,6 +63,14 @@ public class JJRequirementBean {
 
 	public void setjJTestcaseService(JJTestcaseService jJTestcaseService) {
 		this.jJTestcaseService = jJTestcaseService;
+	}
+
+	@Autowired
+	JJTestcaseexecutionService jJTestcaseexecutionService;
+
+	public void setjJTestcaseexecutionService(
+			JJTestcaseexecutionService jJTestcaseexecutionService) {
+		this.jJTestcaseexecutionService = jJTestcaseexecutionService;
 	}
 
 	@Autowired
@@ -911,8 +921,8 @@ public class JJRequirementBean {
 		} else {
 
 			System.out.println("toto");
-//			JJRequirement req = jJRequirementService
-//					.findJJRequirement(requirement.getId());
+			// JJRequirement req = jJRequirementService
+			// .findJJRequirement(requirement.getId());
 			if (!requirement.getEnabled()) {
 				deleteTasksAndTestcase(requirement);
 			}
@@ -2798,6 +2808,120 @@ public class JJRequirementBean {
 			this.categoryId = categoryId;
 			this.nameDataModel = nameDataModel;
 
+		}
+
+		public String getRowStyleClass(JJRequirement requirement) {
+
+			List<JJCategory> categoryList = jJCategoryService.getCategories(
+					null, false, true, true);
+
+			boolean sizeIsOne = false;
+
+			boolean UP = false;
+			boolean DOWN = false;
+			boolean TASK = true;
+			boolean ENCOURS = false;
+			boolean FINIS = true;
+
+			if (categoryId == categoryList.get(0).getId()) {
+				DOWN = true;
+				for (JJRequirement req : requirement.getRequirementLinkUp()) {
+					if (req.getEnabled()) {
+						UP = true;
+						break;
+					}
+				}
+
+				sizeIsOne = true;
+			} else if (categoryId == categoryList.get(categoryList.size() - 1)
+					.getId() && !sizeIsOne) {
+
+				UP = true;
+
+				for (JJRequirement req : requirement.getRequirementLinkDown()) {
+					if (req.getEnabled()) {
+						DOWN = true;
+						break;
+					}
+				}
+
+			} else {
+
+				for (JJRequirement req : requirement.getRequirementLinkUp()) {
+					if (req.getEnabled()) {
+						UP = true;
+						break;
+					}
+				}
+
+				for (JJRequirement req : requirement.getRequirementLinkDown()) {
+					if (req.getEnabled()) {
+						DOWN = true;
+						break;
+					}
+				}
+
+			}
+
+			List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
+					requirement, null, null, true, false, false);
+
+			for (JJTask task : tasks) {
+				if (task.getEndDateReal() == null) {
+					ENCOURS = true;
+					FINIS = false;
+					break;
+				}
+			}
+
+			if (tasks.isEmpty()) {
+				TASK = false;
+			}
+
+			if (UP && DOWN && !TASK) {
+				return "NT";
+			} else if (UP && DOWN && TASK) {
+				if (ENCOURS && !FINIS) {
+					return "IP";
+				} else if (!ENCOURS && FINIS) {
+					List<JJTestcase> testcases = jJTestcaseService
+							.getTestcases(requirement, null, true, false, false);
+
+					boolean SUCCESS = true;
+
+					for (JJTestcase testcase : testcases) {
+
+						List<JJTestcaseexecution> testcaseExecutions = jJTestcaseexecutionService
+								.getTestcaseexecutions(testcase, null, true,
+										true, false);
+
+						if (testcaseExecutions.isEmpty()) {
+							SUCCESS = false;
+						} else {
+
+							if (testcaseExecutions.get(0).getPassed() == null
+									|| (testcaseExecutions.get(0).getPassed() != null && testcaseExecutions
+											.get(0).getPassed())) {
+								SUCCESS = false;
+								break;
+
+							}
+						}
+
+					}
+
+					if (!testcases.isEmpty() && SUCCESS) {
+						return "SU";
+					} else {
+						return "TP";
+					}
+				}
+
+			} else {
+				return "NL";
+			}
+
+			return "old";
 		}
 
 		@Override

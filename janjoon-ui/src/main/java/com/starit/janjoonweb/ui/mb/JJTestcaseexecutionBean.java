@@ -139,7 +139,7 @@ public class JJTestcaseexecutionBean {
 		jJTestcaseexecutionService.updateJJTestcaseexecution(tce);
 
 		List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
-				tce.getTestcase(), tce.getBuild(), true, false, true);
+				null, tce.getTestcase(), tce.getBuild(), true, false, true);
 		if (!tasks.isEmpty()) {
 			JJTask task = tasks.get(0);
 			task.setName(tce.getTestcase().getName() + "_"
@@ -154,7 +154,7 @@ public class JJTestcaseexecutionBean {
 			int workloadReal = (int) (str / 3600000);
 
 			task.setWorkloadReal(workloadReal);
-			
+
 			task.setUpdatedDate(new Date());
 			jJTaskService.updateJJTask(task);
 		}

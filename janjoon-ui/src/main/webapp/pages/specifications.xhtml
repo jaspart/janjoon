@@ -39,6 +39,7 @@
 						<td><p:dataTable id="dataTable" var="requirement"
 								value="#{tableDataModel}" paginator="true" rows="6"
 								style="width:99%" sortMode="multiple"
+								rowStyleClass="#{tableDataModel.getRowStyleClass(requirement)}"
 								filteredValue="#{tableDataModel.filtredRequirements}"
 								widgetVar="#{tableDataModel.nameDataModel}_dataTableWidget">
 

@@ -125,15 +125,15 @@ public class JJTaskBean {
 
 	public Set<JJContact> getContacts() {
 		getProject();
-		
+
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJProductBean jJProductBean = (JJProductBean) session
 				.getAttribute("jJProductBean");
 		JJProduct product = jJProductBean.getProduct();
-		
+
 		contacts = jJPermissionService.areAuthorized(project, product);
-		
+
 		return contacts;
 	}
 
@@ -188,7 +188,7 @@ public class JJTaskBean {
 			Map<Date, String> max = new TreeMap<Date, String>();
 
 			List<JJTask> tasks = jJTaskService.getTasks(project, null, null,
-					chapter, null, null, true, true, false);
+					chapter, null, null, null, true, true, false);
 
 			for (JJTask task : tasks) {
 
@@ -622,8 +622,8 @@ public class JJTaskBean {
 
 			List<JJTask> list = new ArrayList<JJTask>();
 			list.addAll(jJTaskService.getTasks(project, null, null, task
-					.getRequirement().getChapter(), null, null, true, false,
-					false));
+					.getRequirement().getChapter(), null, null, null, true,
+					false, false));
 
 			list.remove(task);
 
