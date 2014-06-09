@@ -5,11 +5,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="../templates/layout.xhtml">
+<ui:composition template="../templates/generic.xhtml">
 	<ui:define name="title">#{messages.login_title}</ui:define>
 	<ui:define name="content">
 		<f:event listener="#{loginBean.loginRedirect}" type="preRenderView" />
-		<h5>BeHappy2012</h5>
 		<h:form id="login" method="post">
 			<p:panelGrid
 				style="margin-top:50px;margin-bottom:50px;width:30%;margin-left:auto !important;margin-right:auto !important;">
