@@ -337,15 +337,14 @@
 									<pe:ckEditor id="description" widgetVar="descriptionWidget"
 										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
 										style="width:680px"
+										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 										value="#{jJRequirementBean.requirement.description}"
 										required="true"
-										requiredMessage="Requirement Description is a required value" />
-									<!-- 									<p:fileUpload sizeLimit="1000000" fileLimit="3" -->
-									<!-- 										allowTypes="/(\.|\/)(gif|jpe?g|png)$/" -->
-									<!-- 										update="description" -->
-									<!-- 										fileUploadListener="#{loginBean.handleFileUpload}" > -->
-									<!-- 										<f:attribute name="field" value="#{jJRequirementBean.requirement}" /> -->
-									<!-- 									</p:fileUpload> -->
+										requiredMessage="Requirement Description is a required value">
+										<p:ajax event="blur" update="editorMessageId" immediate="true" />
+									</pe:ckEditor>
+									<p:message for="description" id="editorMessageId" />
+									<h:outputLabel value="#{request.contextPath}" />
 								</p:column>
 							</p:row>
 							<p:row>
@@ -520,6 +519,7 @@
 										value="#{messages.specification_chapter_description_label}" />
 									<pe:ckEditor id="description" widgetVar="descriptionWidget"
 										style="width:388px"
+										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
 										value="#{jJChapterBean.chapter.description}" required="true"
 										requiredMessage="#{messages.specification_chapter_description_alert}" />

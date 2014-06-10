@@ -14,6 +14,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.validator.LengthValidator;
 import javax.servlet.http.HttpSession;
+
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
@@ -201,6 +202,9 @@ public class JJConfigurationBean {
 
 		CKEditor descriptionCreateInput = (CKEditor) application
 				.createComponent(CKEditor.COMPONENT_TYPE);
+		String path = FacesContext.getCurrentInstance()
+				.getExternalContext().getRequestContextPath();
+		descriptionCreateInput.setCustomConfig(path+"/resources/js/ckEditor.js");
 		descriptionCreateInput
 				.setToolbar("[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]");
 		descriptionCreateInput.setId("descriptionCreateInput");
@@ -325,6 +329,9 @@ public class JJConfigurationBean {
 		CKEditor descriptionEditInput = (CKEditor) application
 				.createComponent(CKEditor.COMPONENT_TYPE);
 		descriptionEditInput.setId("descriptionEditInput");
+		String path = FacesContext.getCurrentInstance()
+				.getExternalContext().getRequestContextPath();
+		descriptionEditInput.setCustomConfig(path+"/resources/js/ckEditor.js");
 		descriptionEditInput
 				.setToolbar("[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]");
 		descriptionEditInput.setValueExpression("value", expressionFactory

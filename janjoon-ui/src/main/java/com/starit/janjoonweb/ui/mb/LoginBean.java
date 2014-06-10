@@ -54,11 +54,10 @@ public class LoginBean implements Serializable {
 	static Logger logger = Logger.getLogger("loginBean-Logger");
 
 	@Autowired
-	private JJContactService jJContactService;	
+	private JJContactService jJContactService;
 
 	@Autowired
 	JJCompanyService jJCompanyService;
-
 
 	private String username = "janjoon.mailer@gmail.com";
 	private String password;
@@ -68,7 +67,6 @@ public class LoginBean implements Serializable {
 	private boolean enable = false;
 	private int activeTabAdminIndex;
 	private int activeTabProjectIndex;
-	
 
 	public void setjJContactService(JJContactService jJContactService) {
 		this.jJContactService = jJContactService;
@@ -138,8 +136,7 @@ public class LoginBean implements Serializable {
 			SecurityContext sContext = SecurityContextHolder.getContext();
 			sContext.setAuthentication(authentication);
 			enable = true;
-			for (JJCompany company:jJCompanyService.findAllJJCompanys())
-			{
+			for (JJCompany company : jJCompanyService.findAllJJCompanys()) {
 				System.out.println(company.getCalendar());
 			}
 		} catch (AuthenticationException loginError) {
@@ -267,15 +264,17 @@ public class LoginBean implements Serializable {
 	public void onTabAdminChange(TabChangeEvent event) {
 
 		TabView tv = (TabView) event.getComponent();
-		this.activeTabAdminIndex =  tv.getChildren().indexOf(event.getTab());;
+		this.activeTabAdminIndex = tv.getChildren().indexOf(event.getTab());
+		;
 		System.out.println("###### ACtive tab: " + activeTabAdminIndex);
 
 	}
-	
+
 	public void onTabProjectChange(TabChangeEvent event) {
 
 		TabView tv = (TabView) event.getComponent();
-		this.activeTabProjectIndex =  tv.getChildren().indexOf(event.getTab());;
+		this.activeTabProjectIndex = tv.getChildren().indexOf(event.getTab());
+		;
 		System.out.println("###### ACtive tab: " + activeTabAdminIndex);
 
 	}
@@ -300,8 +299,7 @@ public class LoginBean implements Serializable {
 			RequestContext context = RequestContext.getCurrentInstance();
 			JJVersionBean jJVersionBean = (JJVersionBean) session
 					.getAttribute("jJVersionBean");
-			JJProductBean jJProductBean = (JJProductBean) session
-					.getAttribute("jJProductBean");
+			
 			JJProjectBean jJProjectBean = (JJProjectBean) session
 					.getAttribute("jJProjectBean");
 			DevelopmentBean jJDevelopment = (DevelopmentBean) session
@@ -537,8 +535,35 @@ public class LoginBean implements Serializable {
 
 			String path = FacesContext.getCurrentInstance()
 					.getExternalContext().getRequestContextPath();
+			if (root.getViewId().contains("project1")
+					|| root.getViewId().contains("test")
+					|| root.getViewId().contains("stats")) {
+				
+				if(jjProjectBean.getProject()==null)
+				{
+					context.addMessage(null, new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"Please Select Project", null));
 
-			if (!authorizationManager.getAuthorization(root.getViewId(),
+					context.getExternalContext().getFlash().setKeepMessages(true);
+
+					FacesContext.getCurrentInstance().getExternalContext()
+							.redirect(path + "/pages/main.jsf?faces-redirect=true");
+				}
+					
+				}else if (!authorizationManager.getAuthorization(root.getViewId(),
+						jjProjectBean.getProject(), jJProductBean.getProduct())) {
+
+					context.addMessage(null, new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"You have no permission to access this resource", null));
+
+					context.getExternalContext().getFlash().setKeepMessages(true);
+
+					FacesContext.getCurrentInstance().getExternalContext()
+							.redirect(path + "/pages/main.jsf?faces-redirect=true");
+
+			} else if (!authorizationManager.getAuthorization(root.getViewId(),
 					jjProjectBean.getProject(), jJProductBean.getProduct())) {
 
 				context.addMessage(null, new FacesMessage(
