@@ -260,7 +260,7 @@ public class JJSprintBean {
 	public void initJJSprintPage(JJProject pr) {
 
 		sprintList = SprintUtil.generateSprintUtilList(
-				jJSprintService.getSprintsByProjects(pr, true), jJTaskService);
+				jJSprintService.getSprints(pr, true), jJTaskService);
 
 		if (sprintList == null)
 			sprintList = new ArrayList<SprintUtil>();

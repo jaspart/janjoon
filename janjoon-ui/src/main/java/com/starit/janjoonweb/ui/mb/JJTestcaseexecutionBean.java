@@ -139,7 +139,8 @@ public class JJTestcaseexecutionBean {
 		jJTestcaseexecutionService.updateJJTestcaseexecution(tce);
 
 		List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
-				null, tce.getTestcase(), tce.getBuild(), true, false, true);
+				null, null, tce.getTestcase(), tce.getBuild(), true, false,
+				true, null);
 		if (!tasks.isEmpty()) {
 			JJTask task = tasks.get(0);
 			task.setName(tce.getTestcase().getName() + "_"

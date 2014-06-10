@@ -8,10 +8,11 @@ import org.springframework.roo.addon.layers.service.RooService;
 @RooService(domainTypes = { com.starit.janjoonweb.domain.JJTask.class })
 public interface JJTaskService {
 
-	public List<JJTask> getTasks(JJProject project, JJProduct product,
-			JJContact contact, JJChapter chapter, JJRequirement requirement,
-			JJTestcase testcase, JJBuild build, boolean onlyActif,
-			boolean sortedByCreationDate, boolean withBuild);
+	public List<JJTask> getTasks(JJSprint sprint, JJProject project,
+			JJProduct product, JJContact contact, JJChapter chapter,
+			JJRequirement requirement, JJTestcase testcase, JJBuild build,
+			boolean onlyActif, boolean sortedByCreationDate, boolean withBuild,
+			Boolean lookAtTestcase);
 
 	public void saveTasks(Set<JJTask> tasks);
 

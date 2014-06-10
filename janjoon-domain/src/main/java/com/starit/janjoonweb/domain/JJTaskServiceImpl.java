@@ -40,10 +40,11 @@ public class JJTaskServiceImpl implements JJTaskService {
 	}
 
 	@Override
-	public List<JJTask> getTasks(JJProject project, JJProduct product,
-			JJContact contact, JJChapter chapter, JJRequirement requirement,
-			JJTestcase testcase, JJBuild build, boolean onlyActif,
-			boolean sortedByCreationDate, boolean withBuild) {
+	public List<JJTask> getTasks(JJSprint sprint, JJProject project,
+			JJProduct product, JJContact contact, JJChapter chapter,
+			JJRequirement requirement, JJTestcase testcase, JJBuild build,
+			boolean onlyActif, boolean sortedByCreationDate, boolean withBuild,
+			Boolean lookAtTestcase) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
 				.createQuery(JJTask.class);
@@ -61,6 +62,10 @@ public class JJTaskServiceImpl implements JJTaskService {
 					contact));
 		}
 
+		if (sprint != null) {
+			predicates.add(criteriaBuilder.equal(from.get("sprint"), sprint));
+		}
+
 		if (requirement != null) {
 			predicates.add(criteriaBuilder.equal(from.get("requirement"),
 					requirement));
@@ -76,9 +81,16 @@ public class JJTaskServiceImpl implements JJTaskService {
 			predicates.add(criteriaBuilder.equal(path, product));
 		}
 
-		if (chapter != null) {
-			Path<Object> path = from.join("requirement").get("chapter");
-			predicates.add(criteriaBuilder.equal(path, chapter));
+		if (chapter != null && lookAtTestcase != null) {
+			Path<Object> path;
+
+			if (lookAtTestcase) {
+				path = from.join("testcase").get("requirement").get("chapter");
+				predicates.add(criteriaBuilder.equal(path, chapter));
+			} else {
+				path = from.join("requirement").get("chapter");
+				predicates.add(criteriaBuilder.equal(path, chapter));
+			}
 		}
 
 		if (testcase != null) {
@@ -171,8 +183,8 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 	@Override
 	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project) {
-		return getTasks(project, product, null, null, null, null, null, true,
-				false, false);
+		return getTasks(null, project, product, null, null, null, null, null,
+				true, false, false, null);
 
 	}
 

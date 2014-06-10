@@ -207,12 +207,12 @@ public class ConfigListener implements ServletContextListener {
 
 	}
 
-	private void initApplication(boolean index) throws FileNotFoundException, URISyntaxException {
+	private void initApplication(boolean index) throws FileNotFoundException,
+			URISyntaxException {
 
-		if(index)
-		{
+		if (index) {
 			if (jJCompanyService.findAllJJCompanys().isEmpty()) {
-				
+
 				JJCompany company = new JJCompany();
 				company.setName("StarIt");
 				company.setDescription(company.getName()
@@ -233,7 +233,7 @@ public class ConfigListener implements ServletContextListener {
 			}
 
 		}
-		
+
 		if (jJCriticityService.getCriticities("JJMessage", true).isEmpty()) {
 
 			String[] names = { "ALERT", "INFO" };
@@ -362,17 +362,17 @@ public class ConfigListener implements ServletContextListener {
 			}
 		}
 
-		if (jJSprintService.getSprints(true).isEmpty()) {
-			JJSprint sprint;
-			for (int i = 0; i < 4; i++) {
-				sprint = new JJSprint();
-				sprint.setName("Sprint " + i);
-				sprint.setCreationDate(new Date());
-				sprint.setDescription("Sprint " + i + " Description");
-				sprint.setEnabled(true);
-				jJSprintService.saveJJSprint(sprint);
-			}
-		}
+//		if (jJSprintService.getSprints(null, true).isEmpty()) {
+//			JJSprint sprint;
+//			for (int i = 0; i < 4; i++) {
+//				sprint = new JJSprint();
+//				sprint.setName("Sprint " + i);
+//				sprint.setCreationDate(new Date());
+//				sprint.setDescription("Sprint " + i + " Description");
+//				sprint.setEnabled(true);
+//				jJSprintService.saveJJSprint(sprint);
+//			}
+//		}
 
 		String[] objects = { "JJRequirement", "JJBug", "JJMessage", "JJTask" };
 
@@ -1082,9 +1082,9 @@ public class ConfigListener implements ServletContextListener {
 		// is=ConfigListener.class.getResourceAsStream("/resources/Calandar"+
 		// company);
 		System.out.println(this.getClass()
-				.getResource("/Calendar" +company+".xml").toString());
+				.getResource("/Calendar" + company + ".xml").toString());
 		FileInputStream inputStream = new FileInputStream(this.getClass()
-				.getResource("/Calendar" +company+".xml").getFile());
+				.getResource("/Calendar" + company + ".xml").getFile());
 		Scanner s = new Scanner(inputStream).useDelimiter("\\A");
 		return s.hasNext() ? s.next() : "";
 

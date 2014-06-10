@@ -2864,7 +2864,7 @@ public class JJRequirementBean {
 			}
 
 			List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
-					requirement, null, null, true, false, false);
+					null, requirement, null, null, true, false, false, null);
 			if (tasks.isEmpty()) {
 				TASK = false;
 			}

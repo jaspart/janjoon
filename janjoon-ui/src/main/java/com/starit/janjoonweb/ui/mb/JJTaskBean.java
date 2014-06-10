@@ -2,6 +2,8 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -63,26 +65,6 @@ public class JJTaskBean {
 		this.jJPermissionService = jJPermissionService;
 	}
 
-	private TreeNode taskTreeNode;
-
-	public TreeNode getTaskTreeNode() {
-		return taskTreeNode;
-	}
-
-	public void setTaskTreeNode(TreeNode taskTreeNode) {
-		this.taskTreeNode = taskTreeNode;
-	}
-
-	private HtmlPanelGrid viewPanel;
-
-	public HtmlPanelGrid getViewPanel() {
-		return populateViewPanelGrid();
-	}
-
-	public void setViewPanel(HtmlPanelGrid viewPanel) {
-		this.viewPanel = viewPanel;
-	}
-
 	private List<TaskData> tasksData;
 	private JJTask task;
 
@@ -94,6 +76,9 @@ public class JJTaskBean {
 	private Set<JJContact> contacts;
 
 	private JJProject project;
+
+	private JJSprint sprint;
+	private List<JJSprint> sprints;
 
 	public List<TaskData> getTasksData() {
 		return tasksData;
@@ -154,7 +139,29 @@ public class JJTaskBean {
 		this.project = project;
 	}
 
+	public JJSprint getSprint() {
+		return sprint;
+	}
+
+	public void setSprint(JJSprint sprint) {
+		this.sprint = sprint;
+	}
+
+	public List<JJSprint> getSprints() {
+
+		getProject();
+		sprints = jJSprintService.getSprints(project, true);
+		sprint = null;
+		return sprints;
+	}
+
+	public void setSprints(List<JJSprint> sprints) {
+		this.sprints = sprints;
+	}
+
 	public void loadData() {
+
+		System.out.println("im i n load data");
 
 		// Set initial start / end dates for the axis of the timeline
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
@@ -187,10 +194,23 @@ public class JJTaskBean {
 			Map<Date, String> min = new TreeMap<Date, String>();
 			Map<Date, String> max = new TreeMap<Date, String>();
 
-			List<JJTask> tasks = jJTaskService.getTasks(project, null, null,
-					chapter, null, null, null, true, true, false);
+			List<JJTask> tasks = new ArrayList<JJTask>();
+			tasks.addAll(jJTaskService.getTasks(sprint, null, null, null,
+					chapter, null, null, null, true, true, false, false));
+
+			tasks.addAll(jJTaskService.getTasks(sprint, null, null, null,
+					chapter, null, null, null, true, true, false, true));
+
+			TreeMap<String, JJTask> Tasks = new TreeMap<String, JJTask>();
 
 			for (JJTask task : tasks) {
+				Tasks.put(task.getName(), task);
+			}
+
+			// Iterate over HashMap
+			for (String key : Tasks.keySet()) {
+
+				JJTask task = Tasks.get(key);
 
 				char c = (char) k;
 
@@ -213,7 +233,8 @@ public class JJTaskBean {
 							task.getEndDateRevised(), true, group, "planned");
 					model.add(event);
 
-					taskData = new TaskData(task, task.getStartDateRevised(),
+					taskData = new TaskData(task, chapter,
+							task.getStartDateRevised(),
 							task.getEndDateRevised(),
 							task.getWorkloadRevised(), true);
 				} else {
@@ -223,7 +244,8 @@ public class JJTaskBean {
 							task.getEndDatePlanned(), true, group, "planned");
 					model.add(event);
 
-					taskData = new TaskData(task, task.getStartDatePlanned(),
+					taskData = new TaskData(task, chapter,
+							task.getStartDatePlanned(),
 							task.getEndDatePlanned(),
 							task.getWorkloadPlanned(), false);
 				}
@@ -591,6 +613,7 @@ public class JJTaskBean {
 
 	public class TaskData {
 		private JJTask task;
+		private JJChapter chapter;
 		private Date startDate;
 		private Date endDate;
 		private Integer workload;
@@ -601,10 +624,11 @@ public class JJTaskBean {
 
 		private List<JJTask> storeTasks;
 
-		public TaskData(JJTask task, Date startDate, Date endDate,
-				Integer workload, boolean revisedDate) {
+		public TaskData(JJTask task, JJChapter chapter, Date startDate,
+				Date endDate, Integer workload, boolean revisedDate) {
 			super();
 			this.task = task;
+			this.chapter = chapter;
 			this.startDate = startDate;
 			this.endDate = endDate;
 			this.workload = workload;
@@ -621,9 +645,11 @@ public class JJTaskBean {
 			}
 
 			List<JJTask> list = new ArrayList<JJTask>();
-			list.addAll(jJTaskService.getTasks(project, null, null, task
-					.getRequirement().getChapter(), null, null, null, true,
-					false, false));
+			list.addAll(jJTaskService.getTasks(sprint, null, null, null,
+					chapter, null, null, null, true, false, false, false));
+
+			list.addAll(jJTaskService.getTasks(sprint, null, null, null,
+					chapter, null, null, null, true, false, false, true));
 
 			list.remove(task);
 
@@ -638,6 +664,14 @@ public class JJTaskBean {
 
 		public void setTask(JJTask task) {
 			this.task = task;
+		}
+
+		public JJChapter getChapter() {
+			return chapter;
+		}
+
+		public void setChapter(JJChapter chapter) {
+			this.chapter = chapter;
 		}
 
 		public Date getStartDate() {
@@ -734,6 +768,26 @@ public class JJTaskBean {
 		setJJTask_(null);
 		setSelectedMessages(null);
 		setCreateDialogVisible(false);
+	}
+
+	private TreeNode taskTreeNode;
+
+	public TreeNode getTaskTreeNode() {
+		return taskTreeNode;
+	}
+
+	public void setTaskTreeNode(TreeNode taskTreeNode) {
+		this.taskTreeNode = taskTreeNode;
+	}
+
+	private HtmlPanelGrid viewPanel;
+
+	public HtmlPanelGrid getViewPanel() {
+		return populateViewPanelGrid();
+	}
+
+	public void setViewPanel(HtmlPanelGrid viewPanel) {
+		this.viewPanel = viewPanel;
 	}
 
 	public HtmlPanelGrid populateViewPanelGrid() {

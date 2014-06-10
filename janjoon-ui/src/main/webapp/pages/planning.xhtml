@@ -7,6 +7,26 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition>
+	<h:form id="sprintForm">
+		<p:panelGrid style="margin-top:10px">
+			<p:row>
+				<p:column style="width:50%">
+					<h:outputText for="sprint" value="Sprint:" />
+					<p:selectOneMenu id="sprint" value="#{jJTaskBean.sprint}"
+						panelStyle="width:150px;" effect="fade" style="width:150px;"
+						filter="true" filterMatchMode="startsWith">
+						<f:converter
+							converterId="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter" />
+						<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
+						<f:selectItems value="#{jJTaskBean.sprints}" var="c"
+							itemLabel="#{c.name}" itemValue="#{c}" />
+						<p:ajax process="@this" partialSubmit="true"
+							update=":projecttabview:planningForm" />
+					</p:selectOneMenu>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</h:form>
 	<h:form id="planningForm">
 		<f:event type="preRenderComponent" listener="#{jJTaskBean.loadData()}" />
 		<p:growl id="msg" />
@@ -18,12 +38,16 @@
 							update=":projecttabview:planningForm:taskDataTable " />
 						<p:dataTable id="taskDataTable" var="taskData"
 							style="width:1300px;" value="#{jJTaskBean.tasksData}"
-							editable="true" editMode="cell"
-							sortBy="task.requirement.chapter.name">
+							editable="true" editMode="cell" sortBy="chapter.name">
 							<p:ajax event="cellEdit" listener="#{jJTaskBean.onCellEdit}"
 								process="@widgetVar(nameWidget)"
 								oncomplete="onCellEditTableComplete()"
 								update="taskDataTable :projecttabview:planningForm:timeline :projecttabview:planningForm:msg" />
+
+							<p:column styleClass="task" headerText="Chapter" rendered="false">
+								<h:outputText value="#{taskData.chapter.name}" />
+							</p:column>
+
 							<p:column id="name" styleClass="task" headerText="Name">
 								<p:cellEditor>
 									<f:facet name="output">
@@ -36,9 +60,7 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column styleClass="task" headerText="Chapter" rendered="false">
-								<h:outputText value="#{taskData.task.requirement.chapter.name}" />
-							</p:column>
+
 							<p:column styleClass="task"
 								headerText="Start Date Planned/Revised">
 								<p:cellEditor>
@@ -156,12 +178,13 @@
 								<p:tooltip for="duplicate" value="Duplicate this task"
 									showEffect="fade" hideEffect="fade" />
 							</p:column>
+
 							<p:summaryRow>
 								<p:column styleClass="task" colspan="10" style="text-align:left">
-									<h:outputText
-										value="Chapter: #{taskData.task.requirement.chapter.name}" />
+									<h:outputText value="Chapter: #{taskData.chapter.name}" />
 								</p:column>
 							</p:summaryRow>
+
 						</p:dataTable>
 					</p:scrollPanel>
 				</p:column>
