@@ -2865,7 +2865,9 @@ public class JJRequirementBean {
 
 			List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
 					requirement, null, null, true, false, false);
-
+			if (tasks.isEmpty()) {
+				TASK = false;
+			}
 			for (JJTask task : tasks) {
 				if (task.getEndDateReal() == null) {
 					ENCOURS = true;
@@ -2874,54 +2876,60 @@ public class JJRequirementBean {
 				}
 			}
 
-			if (tasks.isEmpty()) {
-				TASK = false;
-			}
+			String rowStyleClass = "";
 
-			if (UP && DOWN && !TASK) {
-				return "NT";
-			} else if (UP && DOWN && TASK) {
+			if (UP && DOWN && TASK) {
+
 				if (ENCOURS && !FINIS) {
-					return "IP";
+					rowStyleClass = "IP";
 				} else if (!ENCOURS && FINIS) {
+
 					List<JJTestcase> testcases = jJTestcaseService
 							.getTestcases(requirement, null, true, false, false);
-
 					boolean SUCCESS = true;
 
-					for (JJTestcase testcase : testcases) {
-
-						List<JJTestcaseexecution> testcaseExecutions = jJTestcaseexecutionService
-								.getTestcaseexecutions(testcase, null, true,
-										true, false);
-
-						if (testcaseExecutions.isEmpty()) {
-							SUCCESS = false;
-						} else {
-
-							if (testcaseExecutions.get(0).getPassed() == null
-									|| (testcaseExecutions.get(0).getPassed() != null && testcaseExecutions
-											.get(0).getPassed())) {
-								SUCCESS = false;
-								break;
-
-							}
-						}
-
-					}
-
-					if (!testcases.isEmpty() && SUCCESS) {
-						return "SU";
+					if (testcases.isEmpty()) {
+						SUCCESS = false;
 					} else {
-						return "TP";
+
+						for (JJTestcase testcase : testcases) {
+
+							List<JJTestcaseexecution> testcaseExecutions = jJTestcaseexecutionService
+									.getTestcaseexecutions(testcase, null,
+											true, true, false);
+
+							if (testcaseExecutions.isEmpty()) {
+								SUCCESS = false;
+							} else {
+
+								if ((testcaseExecutions.get(0).getPassed() == null)
+										|| (testcaseExecutions.get(0)
+												.getPassed() != null && !testcaseExecutions
+												.get(0).getPassed())) {
+									SUCCESS = false;
+									break;
+
+								}
+							}
+
+						}
 					}
+
+					if (SUCCESS) {
+						rowStyleClass = "SU";
+					} else {
+						rowStyleClass = "TP";
+					}
+
 				}
 
+			} else if (UP && DOWN && !TASK) {
+				rowStyleClass = "NT";
 			} else {
-				return "NL";
+				rowStyleClass = "NL";
 			}
+			return rowStyleClass;
 
-			return "old";
 		}
 
 		@Override
