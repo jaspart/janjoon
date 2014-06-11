@@ -23,6 +23,9 @@ public class JJBuild extends JJAbstractEntity {
 	@ManyToOne
 	private JJPhase phase;
 
+	@ManyToOne
+	private JJTestcase testcase;
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "build")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
 

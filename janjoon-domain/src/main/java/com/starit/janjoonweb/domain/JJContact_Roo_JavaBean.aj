@@ -41,6 +41,30 @@ privileged aspect JJContact_Roo_JavaBean {
         this.ldap = ldap;
     }
     
+    public Integer JJContact.getPriceSold() {
+        return this.priceSold;
+    }
+    
+    public void JJContact.setPriceSold(Integer priceSold) {
+        this.priceSold = priceSold;
+    }
+    
+    public Integer JJContact.getPriceReal() {
+        return this.priceReal;
+    }
+    
+    public void JJContact.setPriceReal(Integer priceReal) {
+        this.priceReal = priceReal;
+    }
+    
+    public String JJContact.getCurrency() {
+        return this.currency;
+    }
+    
+    public void JJContact.setCurrency(String currency) {
+        this.currency = currency;
+    }
+    
     public String JJContact.getFirstname() {
         return this.firstname;
     }

@@ -38,6 +38,12 @@ public class JJContact extends JJAbstractEntity {
 
 	private Integer ldap;
 
+	private Integer priceSold;
+	private Integer priceReal;
+
+	@Size(max = 3)
+	private String currency;
+
 	@NotNull
 	@Size(max = 100)
 	private String firstname;

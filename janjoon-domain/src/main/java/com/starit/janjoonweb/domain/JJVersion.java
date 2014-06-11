@@ -22,6 +22,9 @@ public class JJVersion extends JJAbstractEntity {
 	@ManyToOne
 	private JJProduct product;
 
+	@ManyToOne
+	private JJTestcase testcase;
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "versioning")
 	private Set<JJTask> tasks = new HashSet<JJTask>();
 

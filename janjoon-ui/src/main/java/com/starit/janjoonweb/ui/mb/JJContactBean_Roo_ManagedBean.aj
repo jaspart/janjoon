@@ -388,6 +388,65 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         ldapCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(ldapCreateInputMessage);
         
+        OutputLabel priceSoldCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        priceSoldCreateOutput.setFor("priceSoldCreateInput");
+        priceSoldCreateOutput.setId("priceSoldCreateOutput");
+        priceSoldCreateOutput.setValue("Price Sold:");
+        htmlPanelGrid.getChildren().add(priceSoldCreateOutput);
+        
+        Spinner priceSoldCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        priceSoldCreateInput.setId("priceSoldCreateInput");
+        priceSoldCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.priceSold}", Integer.class));
+        priceSoldCreateInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(priceSoldCreateInput);
+        
+        Message priceSoldCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        priceSoldCreateInputMessage.setId("priceSoldCreateInputMessage");
+        priceSoldCreateInputMessage.setFor("priceSoldCreateInput");
+        priceSoldCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(priceSoldCreateInputMessage);
+        
+        OutputLabel priceRealCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        priceRealCreateOutput.setFor("priceRealCreateInput");
+        priceRealCreateOutput.setId("priceRealCreateOutput");
+        priceRealCreateOutput.setValue("Price Real:");
+        htmlPanelGrid.getChildren().add(priceRealCreateOutput);
+        
+        Spinner priceRealCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        priceRealCreateInput.setId("priceRealCreateInput");
+        priceRealCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.priceReal}", Integer.class));
+        priceRealCreateInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(priceRealCreateInput);
+        
+        Message priceRealCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        priceRealCreateInputMessage.setId("priceRealCreateInputMessage");
+        priceRealCreateInputMessage.setFor("priceRealCreateInput");
+        priceRealCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(priceRealCreateInputMessage);
+        
+        OutputLabel currencyCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        currencyCreateOutput.setFor("currencyCreateInput");
+        currencyCreateOutput.setId("currencyCreateOutput");
+        currencyCreateOutput.setValue("Currency:");
+        htmlPanelGrid.getChildren().add(currencyCreateOutput);
+        
+        InputText currencyCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        currencyCreateInput.setId("currencyCreateInput");
+        currencyCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.currency}", String.class));
+        LengthValidator currencyCreateInputValidator = new LengthValidator();
+        currencyCreateInputValidator.setMaximum(3);
+        currencyCreateInput.addValidator(currencyCreateInputValidator);
+        currencyCreateInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(currencyCreateInput);
+        
+        Message currencyCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        currencyCreateInputMessage.setId("currencyCreateInputMessage");
+        currencyCreateInputMessage.setFor("currencyCreateInput");
+        currencyCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(currencyCreateInputMessage);
+        
         OutputLabel firstnameCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         firstnameCreateOutput.setFor("firstnameCreateInput");
         firstnameCreateOutput.setId("firstnameCreateOutput");
@@ -952,6 +1011,65 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         ldapEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(ldapEditInputMessage);
         
+        OutputLabel priceSoldEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        priceSoldEditOutput.setFor("priceSoldEditInput");
+        priceSoldEditOutput.setId("priceSoldEditOutput");
+        priceSoldEditOutput.setValue("Price Sold:");
+        htmlPanelGrid.getChildren().add(priceSoldEditOutput);
+        
+        Spinner priceSoldEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        priceSoldEditInput.setId("priceSoldEditInput");
+        priceSoldEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.priceSold}", Integer.class));
+        priceSoldEditInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(priceSoldEditInput);
+        
+        Message priceSoldEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        priceSoldEditInputMessage.setId("priceSoldEditInputMessage");
+        priceSoldEditInputMessage.setFor("priceSoldEditInput");
+        priceSoldEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(priceSoldEditInputMessage);
+        
+        OutputLabel priceRealEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        priceRealEditOutput.setFor("priceRealEditInput");
+        priceRealEditOutput.setId("priceRealEditOutput");
+        priceRealEditOutput.setValue("Price Real:");
+        htmlPanelGrid.getChildren().add(priceRealEditOutput);
+        
+        Spinner priceRealEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        priceRealEditInput.setId("priceRealEditInput");
+        priceRealEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.priceReal}", Integer.class));
+        priceRealEditInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(priceRealEditInput);
+        
+        Message priceRealEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        priceRealEditInputMessage.setId("priceRealEditInputMessage");
+        priceRealEditInputMessage.setFor("priceRealEditInput");
+        priceRealEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(priceRealEditInputMessage);
+        
+        OutputLabel currencyEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        currencyEditOutput.setFor("currencyEditInput");
+        currencyEditOutput.setId("currencyEditOutput");
+        currencyEditOutput.setValue("Currency:");
+        htmlPanelGrid.getChildren().add(currencyEditOutput);
+        
+        InputText currencyEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        currencyEditInput.setId("currencyEditInput");
+        currencyEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.currency}", String.class));
+        LengthValidator currencyEditInputValidator = new LengthValidator();
+        currencyEditInputValidator.setMaximum(3);
+        currencyEditInput.addValidator(currencyEditInputValidator);
+        currencyEditInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(currencyEditInput);
+        
+        Message currencyEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        currencyEditInputMessage.setId("currencyEditInputMessage");
+        currencyEditInputMessage.setFor("currencyEditInput");
+        currencyEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(currencyEditInputMessage);
+        
         OutputLabel firstnameEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         firstnameEditOutput.setFor("firstnameEditInput");
         firstnameEditOutput.setId("firstnameEditOutput");
@@ -1415,6 +1533,34 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         HtmlOutputText ldapValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         ldapValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.ldap}", String.class));
         htmlPanelGrid.getChildren().add(ldapValue);
+        
+        HtmlOutputText priceSoldLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        priceSoldLabel.setId("priceSoldLabel");
+        priceSoldLabel.setValue("Price Sold:");
+        htmlPanelGrid.getChildren().add(priceSoldLabel);
+        
+        HtmlOutputText priceSoldValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        priceSoldValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.priceSold}", String.class));
+        htmlPanelGrid.getChildren().add(priceSoldValue);
+        
+        HtmlOutputText priceRealLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        priceRealLabel.setId("priceRealLabel");
+        priceRealLabel.setValue("Price Real:");
+        htmlPanelGrid.getChildren().add(priceRealLabel);
+        
+        HtmlOutputText priceRealValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        priceRealValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.priceReal}", String.class));
+        htmlPanelGrid.getChildren().add(priceRealValue);
+        
+        HtmlOutputText currencyLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        currencyLabel.setId("currencyLabel");
+        currencyLabel.setValue("Currency:");
+        htmlPanelGrid.getChildren().add(currencyLabel);
+        
+        HtmlOutputText currencyValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        currencyValue.setId("currencyValue");
+        currencyValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.currency}", String.class));
+        htmlPanelGrid.getChildren().add(currencyValue);
         
         HtmlOutputText firstnameLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         firstnameLabel.setId("firstnameLabel");

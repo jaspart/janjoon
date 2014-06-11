@@ -7,6 +7,7 @@ import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJTask;
+import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJVersion;
 import java.util.Set;
 
@@ -18,6 +19,14 @@ privileged aspect JJVersion_Roo_JavaBean {
     
     public void JJVersion.setProduct(JJProduct product) {
         this.product = product;
+    }
+    
+    public JJTestcase JJVersion.getTestcase() {
+        return this.testcase;
+    }
+    
+    public void JJVersion.setTestcase(JJTestcase testcase) {
+        this.testcase = testcase;
     }
     
     public Set<JJTask> JJVersion.getTasks() {

@@ -62,6 +62,7 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
         setCreatedBy(obj, index);
         setCreationDate(obj, index);
         setCredentialsNonExpired(obj, index);
+        setCurrency(obj, index);
         setDateofbirth(obj, index);
         setDescription(obj, index);
         setEmail(obj, index);
@@ -73,6 +74,8 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
         setPassword(obj, index);
         setPicture(obj, index);
         setPreference(obj, index);
+        setPriceReal(obj, index);
+        setPriceSold(obj, index);
         setUpdatedBy(obj, index);
         setUpdatedDate(obj, index);
         return obj;
@@ -106,6 +109,14 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
     public void JJContactDataOnDemand.setCredentialsNonExpired(JJContact obj, int index) {
         Boolean credentialsNonExpired = Boolean.TRUE;
         obj.setCredentialsNonExpired(credentialsNonExpired);
+    }
+    
+    public void JJContactDataOnDemand.setCurrency(JJContact obj, int index) {
+        String currency = "c_" + index;
+        if (currency.length() > 3) {
+            currency = currency.substring(0, 3);
+        }
+        obj.setCurrency(currency);
     }
     
     public void JJContactDataOnDemand.setDateofbirth(JJContact obj, int index) {
@@ -173,6 +184,16 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
     public void JJContactDataOnDemand.setPreference(JJContact obj, int index) {
         String preference = "preference_" + index;
         obj.setPreference(preference);
+    }
+    
+    public void JJContactDataOnDemand.setPriceReal(JJContact obj, int index) {
+        Integer priceReal = new Integer(index);
+        obj.setPriceReal(priceReal);
+    }
+    
+    public void JJContactDataOnDemand.setPriceSold(JJContact obj, int index) {
+        Integer priceSold = new Integer(index);
+        obj.setPriceSold(priceSold);
     }
     
     public void JJContactDataOnDemand.setUpdatedBy(JJContact obj, int index) {

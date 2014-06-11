@@ -3,9 +3,10 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProductDataOnDemand;
+import com.starit.janjoonweb.domain.JJTestcaseDataOnDemand;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionDataOnDemand;
 import com.starit.janjoonweb.domain.JJVersionRepository;
@@ -32,7 +33,13 @@ privileged aspect JJVersionDataOnDemand_Roo_DataOnDemand {
     private List<JJVersion> JJVersionDataOnDemand.data;
     
     @Autowired
+    JJContactDataOnDemand JJVersionDataOnDemand.jJContactDataOnDemand;
+    
+    @Autowired
     JJProductDataOnDemand JJVersionDataOnDemand.jJProductDataOnDemand;
+    
+    @Autowired
+    JJTestcaseDataOnDemand JJVersionDataOnDemand.jJTestcaseDataOnDemand;
     
     @Autowired
     JJVersionService JJVersionDataOnDemand.jJVersionService;
@@ -42,20 +49,13 @@ privileged aspect JJVersionDataOnDemand_Roo_DataOnDemand {
     
     public JJVersion JJVersionDataOnDemand.getNewTransientJJVersion(int index) {
         JJVersion obj = new JJVersion();
-        setCreatedBy(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
         setName(obj, index);
         setProduct(obj, index);
-        setUpdatedBy(obj, index);
         setUpdatedDate(obj, index);
         return obj;
-    }
-    
-    public void JJVersionDataOnDemand.setCreatedBy(JJVersion obj, int index) {
-        JJContact createdBy = null;
-        obj.setCreatedBy(createdBy);
     }
     
     public void JJVersionDataOnDemand.setCreationDate(JJVersion obj, int index) {
@@ -84,11 +84,6 @@ privileged aspect JJVersionDataOnDemand_Roo_DataOnDemand {
     public void JJVersionDataOnDemand.setProduct(JJVersion obj, int index) {
         JJProduct product = jJProductDataOnDemand.getRandomJJProduct();
         obj.setProduct(product);
-    }
-    
-    public void JJVersionDataOnDemand.setUpdatedBy(JJVersion obj, int index) {
-        JJContact updatedBy = null;
-        obj.setUpdatedBy(updatedBy);
     }
     
     public void JJVersionDataOnDemand.setUpdatedDate(JJVersion obj, int index) {

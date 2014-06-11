@@ -10,11 +10,14 @@ import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProductService;
 import com.starit.janjoonweb.domain.JJTask;
+import com.starit.janjoonweb.domain.JJTestcase;
+import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.JJVersionBean;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJProductConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,6 +58,9 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
     
     @Autowired
     JJProductService JJVersionBean.jJProductService;
+    
+    @Autowired
+    JJTestcaseService JJVersionBean.jJTestcaseService;
     
     private String JJVersionBean.name = "JJVersions";
     
@@ -328,6 +334,30 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
         productCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(productCreateInputMessage);
         
+        OutputLabel testcaseCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        testcaseCreateOutput.setFor("testcaseCreateInput");
+        testcaseCreateOutput.setId("testcaseCreateOutput");
+        testcaseCreateOutput.setValue("Testcase:");
+        htmlPanelGrid.getChildren().add(testcaseCreateOutput);
+        
+        AutoComplete testcaseCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        testcaseCreateInput.setId("testcaseCreateInput");
+        testcaseCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJVersionBean.JJVersion_.testcase}", JJTestcase.class));
+        testcaseCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJVersionBean.completeTestcase}", List.class, new Class[] { String.class }));
+        testcaseCreateInput.setDropdown(true);
+        testcaseCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "testcase", String.class));
+        testcaseCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{testcase.name} #{testcase.description} #{testcase.creationDate} #{testcase.updatedDate}", String.class));
+        testcaseCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{testcase}", JJTestcase.class));
+        testcaseCreateInput.setConverter(new JJTestcaseConverter());
+        testcaseCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(testcaseCreateInput);
+        
+        Message testcaseCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcaseCreateInputMessage.setId("testcaseCreateInputMessage");
+        testcaseCreateInputMessage.setFor("testcaseCreateInput");
+        testcaseCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcaseCreateInputMessage);
+        
         HtmlOutputText tasksCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         tasksCreateOutput.setId("tasksCreateOutput");
         tasksCreateOutput.setValue("Tasks:");
@@ -558,6 +588,30 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
         productEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(productEditInputMessage);
         
+        OutputLabel testcaseEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        testcaseEditOutput.setFor("testcaseEditInput");
+        testcaseEditOutput.setId("testcaseEditOutput");
+        testcaseEditOutput.setValue("Testcase:");
+        htmlPanelGrid.getChildren().add(testcaseEditOutput);
+        
+        AutoComplete testcaseEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        testcaseEditInput.setId("testcaseEditInput");
+        testcaseEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJVersionBean.JJVersion_.testcase}", JJTestcase.class));
+        testcaseEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJVersionBean.completeTestcase}", List.class, new Class[] { String.class }));
+        testcaseEditInput.setDropdown(true);
+        testcaseEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "testcase", String.class));
+        testcaseEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{testcase.name} #{testcase.description} #{testcase.creationDate} #{testcase.updatedDate}", String.class));
+        testcaseEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{testcase}", JJTestcase.class));
+        testcaseEditInput.setConverter(new JJTestcaseConverter());
+        testcaseEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(testcaseEditInput);
+        
+        Message testcaseEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcaseEditInputMessage.setId("testcaseEditInputMessage");
+        testcaseEditInputMessage.setFor("testcaseEditInput");
+        testcaseEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcaseEditInputMessage);
+        
         HtmlOutputText tasksEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         tasksEditOutput.setId("tasksEditOutput");
         tasksEditOutput.setValue("Tasks:");
@@ -704,6 +758,16 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
         productValue.setConverter(new JJProductConverter());
         htmlPanelGrid.getChildren().add(productValue);
         
+        HtmlOutputText testcaseLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcaseLabel.setId("testcaseLabel");
+        testcaseLabel.setValue("Testcase:");
+        htmlPanelGrid.getChildren().add(testcaseLabel);
+        
+        HtmlOutputText testcaseValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcaseValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJVersionBean.JJVersion_.testcase}", JJTestcase.class));
+        testcaseValue.setConverter(new JJTestcaseConverter());
+        htmlPanelGrid.getChildren().add(testcaseValue);
+        
         HtmlOutputText tasksLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         tasksLabel.setId("tasksLabel");
         tasksLabel.setValue("Tasks:");
@@ -776,6 +840,17 @@ privileged aspect JJVersionBean_Roo_ManagedBean {
             String jJProductStr = String.valueOf(jJProduct.getName() +  " "  + jJProduct.getDescription() +  " "  + jJProduct.getCreationDate() +  " "  + jJProduct.getUpdatedDate());
             if (jJProductStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJProduct);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJTestcase> JJVersionBean.completeTestcase(String query) {
+        List<JJTestcase> suggestions = new ArrayList<JJTestcase>();
+        for (JJTestcase jJTestcase : jJTestcaseService.findAllJJTestcases()) {
+            String jJTestcaseStr = String.valueOf(jJTestcase.getName() +  " "  + jJTestcase.getDescription() +  " "  + jJTestcase.getCreationDate() +  " "  + jJTestcase.getUpdatedDate());
+            if (jJTestcaseStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJTestcase);
             }
         }
         return suggestions;
