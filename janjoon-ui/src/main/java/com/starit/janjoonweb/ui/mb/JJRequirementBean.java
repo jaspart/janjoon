@@ -619,11 +619,6 @@ public class JJRequirementBean {
 		importCategoryList = jJCategoryService.getCategories(null, false, true,
 				true);
 
-		// JJCategory category = new JJCategory();
-		// category.setId(Long.valueOf("0"));
-		// category.setName("Select All");
-		// importCategoryList.add(0, category);
-
 		return importCategoryList;
 	}
 
@@ -898,15 +893,6 @@ public class JJRequirementBean {
 				task.setDescription("This Task: " + task.getName());
 				task.setEndDatePlanned(new Date(task.getStartDatePlanned()
 						.getTime() + task.getWorkloadPlanned() * 60 * 60 * 1000));
-
-				// ////
-				// task.setStartDateReal(new Date(new Date().getTime() + 2 * 60
-				// * 60 * 1000));
-				// task.setWorkloadReal(6);
-				// task.setEndDateReal(new
-				// Date(task.getStartDateReal().getTime()
-				// + task.getWorkloadReal() * 60 * 60 * 1000));
-				// ////
 
 				requirement.getTasks().add(task);
 				task.setRequirement(requirement);

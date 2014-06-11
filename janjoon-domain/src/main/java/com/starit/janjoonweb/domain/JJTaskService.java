@@ -12,7 +12,10 @@ public interface JJTaskService {
 			JJProduct product, JJContact contact, JJChapter chapter,
 			JJRequirement requirement, JJTestcase testcase, JJBuild build,
 			boolean onlyActif, boolean sortedByCreationDate, boolean withBuild,
-			Boolean lookAtTestcase);
+			String objet);
+
+	public List<JJTask> getImportTasks(JJBug bug, JJRequirement requirement,
+			JJTestcase testcase, boolean onlyActif);
 
 	public void saveTasks(Set<JJTask> tasks);
 

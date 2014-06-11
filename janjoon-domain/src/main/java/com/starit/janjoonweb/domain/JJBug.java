@@ -59,7 +59,7 @@ public class JJBug extends JJAbstractEntity {
 	@ManyToOne
 	private JJBug bugUp;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bug")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "bug")
 	private Set<JJTask> tasks = new HashSet<JJTask>();
 
 	@ManyToOne

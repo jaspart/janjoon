@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+	<h:form id="importTaskDialogForm">
+		<p:panelGrid style="margin-top:10px">
+			<p:row>
+				<p:column>
+					<h:outputText value="Objet:" />
+					<p:selectOneMenu id="objetSelectOneMenu"
+						value="#{jJTaskBean.objet}" panelStyle="width:150px" effect="fade"
+						style="width:160px" filter="true" filterMatchMode="startsWith">
+
+						<f:selectItem itemLabel="#{jJTaskBean.objet}"
+							itemValue="#{jJTaskBean.objet}" />
+						<f:selectItems value="#{jJTaskBean.objets}" var="p"
+							itemLabel="#{p}" itemValue="#{p}" />
+						<p:ajax process="@this" partialSubmit="true"
+							listener="#{jJTaskBean.handleSelectObjet}"
+							update=":projecttabview:importTaskDialogForm" />
+					</p:selectOneMenu>
+				</p:column>
+
+				<p:column>
+					<h:outputText
+						value="#{messages.specification_import_category_label}" />
+					<p:selectOneMenu id="categorySelectOneMenu"
+						value="#{jJTaskBean.importCategory}" panelStyle="width:150px"
+						effect="fade" style="width:160px" filter="true"
+						filterMatchMode="startsWith"
+						disabled="#{jJTaskBean.disabledFilter}">
+						<f:converter
+							converterId="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter" />
+						<f:selectItem itemLabel="#{jJTaskBean.importCategory.name}"
+							itemValue="#{jJTaskBean.importCategory}" />
+						<f:selectItems value="#{jJTaskBean.importCategoryList}" var="p"
+							itemLabel="#{p.name}" itemValue="#{p}" />
+						<p:ajax process="@this" partialSubmit="true"
+							listener="#{jJTaskBean.handleSelectCategory}"
+							update=":projecttabview:importTaskDialogForm" />
+					</p:selectOneMenu>
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{messages.specification_import_status_label}" />
+					<p:selectOneMenu id="statusSelectOneMenu"
+						value="#{jJTaskBean.importStatus}" panelStyle="width:150px"
+						effect="fade" style="width:160px" filter="true"
+						filterMatchMode="startsWith"
+						disabled="#{jJTaskBean.disabledFilter}">
+						<f:converter
+							converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
+						<f:selectItem itemLabel="#{jJTaskBean.importStatus.name}"
+							itemValue="#{jJTaskBean.importStatus}" />
+						<f:selectItems value="#{jJTaskBean.importStatusList}" var="p"
+							itemLabel="#{p.name}" itemValue="#{p}" />
+						<p:ajax process="@this" partialSubmit="true"
+							listener="#{jJTaskBean.handleSelectStatus}"
+							update=":projecttabview:importTaskDialogForm" />
+					</p:selectOneMenu>
+				</p:column>
+
+				<p:column>
+					<h:outputText value="View All: " />
+
+					<p:selectBooleanCheckbox value="#{jJTaskBean.checkAll}">
+						<p:ajax update=":projecttabview:importTaskDialogForm"
+							listener="#{jJTaskBean.checkAll}" />
+					</p:selectBooleanCheckbox>
+				</p:column>
+
+			</p:row>
+		</p:panelGrid>
+
+		<p:dataTable id="importDataTable" var="format" scrollable="true"
+			style="width:500px;" scrollHeight="400"
+			value="#{jJTaskBean.importFormats}" editable="true" editMode="cell">
+			<f:facet name="header">
+				<h:outputText value="Import #{jJTaskBean.objet}" />
+			</f:facet>
+			<p:column style="width:20%">
+				<f:facet name="header">
+					<p:row>
+						<p:column>
+							<p:selectBooleanCheckbox value="#{jJTaskBean.copyObjets}">
+								<p:ajax
+									update="importDataTable :projecttabview:importTaskDialogForm:importButton"
+									listener="#{jJTaskBean.copyObjets}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+						<p:column>
+							<h:outputText value="Tasks" />
+						</p:column>
+					</p:row>
+				</f:facet>
+				<p:selectBooleanCheckbox value="#{format.copyObjet}">
+					<p:ajax
+						update="importDataTable :projecttabview:importTaskDialogForm:importButton"
+						listener="#{jJTaskBean.copyObjet}" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="   #{format.name}" />
+			</p:column>
+
+			<p:column style="width:40%" headerText="Start Date Planned/Revised">
+				<p:cellEditor>
+					<f:facet name="output">
+						<p:calendar value="#{format.startDate}" navigator="true"
+							pattern="yyyy/MM/dd HH:mm:ss" />
+					</f:facet>
+					<f:facet name="input">
+						<p:calendar value="#{format.startDate}" navigator="true"
+							pattern="yyyy/MM/dd HH:mm:ss" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column style="width:40%" headerText="Workload Planned/Revised">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{format.workload}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:spinner value="#{format.workload}" stepFactor="1" min="0" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+		</p:dataTable>
+
+
+		<p:commandButton id="importButton" value="Import"
+			style="float: right;" disabled="#{jJTaskBean.disabledImportButton}"
+			action="#{jJTaskBean.importTask()}" />
+	</h:form>
+</ui:composition>
+</html>

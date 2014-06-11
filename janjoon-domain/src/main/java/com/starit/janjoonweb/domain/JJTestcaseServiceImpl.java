@@ -66,6 +66,35 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 	}
 
 	@Override
+	public List<JJTestcase> getImportTestcases(JJProject project,
+			boolean onlyActif) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJTestcase> criteriaQuery = criteriaBuilder
+				.createQuery(JJTestcase.class);
+
+		Root<JJTestcase> from = criteriaQuery.from(JJTestcase.class);
+
+		CriteriaQuery<JJTestcase> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (project != null) {
+			Path<Object> path = from.join("requirement").get("project");
+			predicates.add(criteriaBuilder.equal(path, project));
+		}
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+		TypedQuery<JJTestcase> result = entityManager.createQuery(select);
+		return result.getResultList();
+
+	}
+
+	@Override
 	public void saveTestcases(Set<JJTestcase> testcases) {
 		jJTestcaseRepository.save(testcases);
 	}

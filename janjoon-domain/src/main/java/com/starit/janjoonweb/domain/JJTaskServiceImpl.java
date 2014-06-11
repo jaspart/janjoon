@@ -44,7 +44,7 @@ public class JJTaskServiceImpl implements JJTaskService {
 			JJProduct product, JJContact contact, JJChapter chapter,
 			JJRequirement requirement, JJTestcase testcase, JJBuild build,
 			boolean onlyActif, boolean sortedByCreationDate, boolean withBuild,
-			Boolean lookAtTestcase) {
+			String objet) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
 				.createQuery(JJTask.class);
@@ -81,14 +81,17 @@ public class JJTaskServiceImpl implements JJTaskService {
 			predicates.add(criteriaBuilder.equal(path, product));
 		}
 
-		if (chapter != null && lookAtTestcase != null) {
+		if (chapter != null && objet != null) {
 			Path<Object> path;
 
-			if (lookAtTestcase) {
+			if (objet.equalsIgnoreCase("JJTestcase")) {
 				path = from.join("testcase").get("requirement").get("chapter");
 				predicates.add(criteriaBuilder.equal(path, chapter));
-			} else {
+			} else if (objet.equalsIgnoreCase("JJRequirement")) {
 				path = from.join("requirement").get("chapter");
+				predicates.add(criteriaBuilder.equal(path, chapter));
+			} else if (objet.equalsIgnoreCase("JJBug")) {
+				path = from.join("bug").get("requirement").get("chapter");
 				predicates.add(criteriaBuilder.equal(path, chapter));
 			}
 		}
@@ -112,6 +115,42 @@ public class JJTaskServiceImpl implements JJTaskService {
 		if (sortedByCreationDate) {
 			select.orderBy(criteriaBuilder.asc(from.get("creationDate")));
 		}
+
+		TypedQuery<JJTask> result = entityManager.createQuery(select);
+
+		return result.getResultList();
+
+	}
+
+	public List<JJTask> getImportTasks(JJBug bug, JJRequirement requirement,
+			JJTestcase testcase, boolean onlyActif) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
+				.createQuery(JJTask.class);
+
+		Root<JJTask> from = criteriaQuery.from(JJTask.class);
+
+		CriteriaQuery<JJTask> select = criteriaQuery.select(from);
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+		if (bug != null) {
+			predicates.add(criteriaBuilder.equal(from.get("bug"), bug));
+		}
+
+		if (requirement != null) {
+			predicates.add(criteriaBuilder.equal(from.get("requirement"),
+					requirement));
+		}
+
+		if (testcase != null) {
+			predicates
+					.add(criteriaBuilder.equal(from.get("testcase"), testcase));
+		}
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		TypedQuery<JJTask> result = entityManager.createQuery(select);
 

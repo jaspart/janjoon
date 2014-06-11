@@ -2,8 +2,6 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.component.api.UIColumn;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.inputtextarea.InputTextarea;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.extensions.model.timeline.TimelineEvent;
 import org.primefaces.extensions.model.timeline.TimelineModel;
@@ -34,6 +33,8 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBug;
+import com.starit.janjoonweb.domain.JJCategory;
+import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJChapterService;
 import com.starit.janjoonweb.domain.JJContact;
@@ -42,6 +43,7 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJSprint;
+import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJVersion;
@@ -65,6 +67,13 @@ public class JJTaskBean {
 		this.jJPermissionService = jJPermissionService;
 	}
 
+	@Autowired
+	JJCategoryService jJCategoryService;
+
+	public void setjJCategoryService(JJCategoryService jJCategoryService) {
+		this.jJCategoryService = jJCategoryService;
+	}
+
 	private List<TaskData> tasksData;
 	private JJTask task;
 
@@ -76,9 +85,31 @@ public class JJTaskBean {
 	private Set<JJContact> contacts;
 
 	private JJProject project;
+	private JJProduct product;
+	private JJVersion version;
 
 	private JJSprint sprint;
 	private List<JJSprint> sprints;
+
+	private boolean disabledImportButton;
+	private boolean disabledFilter;
+	private boolean checkAll;
+
+	private JJSprint importSprint;
+	private String mode;
+
+	private JJCategory importCategory;
+	private List<JJCategory> importCategoryList;
+
+	private JJStatus importStatus;
+	private List<JJStatus> importStatusList;
+
+	private String objet;
+	private List<String> objets;
+
+	private List<ImportFormat> importFormats;
+
+	private boolean copyObjets;
 
 	public List<TaskData> getTasksData() {
 		return tasksData;
@@ -139,6 +170,34 @@ public class JJTaskBean {
 		this.project = project;
 	}
 
+	public JJProduct getProduct() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJProductBean jJProductBean = (JJProductBean) session
+				.getAttribute("jJProductBean");
+		this.product = jJProductBean.getProduct();
+
+		return product;
+	}
+
+	public void setProduct(JJProduct product) {
+		this.product = product;
+	}
+
+	public JJVersion getVersion() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJVersionBean jJVersionBean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
+		this.version = jJVersionBean.getVersion();
+
+		return version;
+	}
+
+	public void setVersion(JJVersion version) {
+		this.version = version;
+	}
+
 	public JJSprint getSprint() {
 		return sprint;
 	}
@@ -159,9 +218,125 @@ public class JJTaskBean {
 		this.sprints = sprints;
 	}
 
-	public void loadData() {
+	public boolean getDisabledImportButton() {
+		return disabledImportButton;
+	}
 
-		System.out.println("im i n load data");
+	public void setDisabledImportButton(boolean disabledImportButton) {
+		this.disabledImportButton = disabledImportButton;
+	}
+
+	public boolean getDisabledFilter() {
+		return disabledFilter;
+	}
+
+	public void setDisabledFilter(boolean disabledFilter) {
+		this.disabledFilter = disabledFilter;
+	}
+
+	public boolean getCheckAll() {
+		return checkAll;
+	}
+
+	public void setCheckAll(boolean checkAll) {
+		this.checkAll = checkAll;
+	}
+
+	public JJCategory getImportCategory() {
+		return importCategory;
+	}
+
+	public void setImportCategory(JJCategory importCategory) {
+		this.importCategory = importCategory;
+	}
+
+	public List<JJCategory> getImportCategoryList() {
+
+		if (objet != null) {
+
+			importCategoryList = jJCategoryService.getCategories(null, false,
+					true, true);
+
+		} else {
+			importCategoryList = null;
+		}
+		return importCategoryList;
+	}
+
+	public void setImportCategoryList(List<JJCategory> importCategoryList) {
+		this.importCategoryList = importCategoryList;
+	}
+
+	public JJStatus getImportStatus() {
+		return importStatus;
+	}
+
+	public void setImportStatus(JJStatus importStatus) {
+		this.importStatus = importStatus;
+	}
+
+	public List<JJStatus> getImportStatusList() {
+		if (objet != null) {
+			List<String> names = new ArrayList<String>();
+			if (objet.equalsIgnoreCase("JJBug")) {
+				names.add("CLOSED");
+			} else if (objet.equalsIgnoreCase("JJRequirement")) {
+				names.add("DELETED");
+				names.add("CANCELED");
+			} else if (objet.equalsIgnoreCase("JJTestcase")) {
+				return null;
+			}
+			importStatusList = jJStatusService.getStatus(objet, true, names,
+					true);
+			return importStatusList;
+		} else {
+			return null;
+		}
+	}
+
+	public void setImportStatusList(List<JJStatus> importStatusList) {
+		this.importStatusList = importStatusList;
+	}
+
+	public String getObjet() {
+		return objet;
+	}
+
+	public void setObjet(String objet) {
+		this.objet = objet;
+	}
+
+	public List<String> getObjets() {
+
+		objets = new ArrayList<String>();
+		objets.add("JJBug");
+		objets.add("JJRequirement");
+		objets.add("JJTestcase");
+
+		return objets;
+	}
+
+	public void setObjets(List<String> objets) {
+		this.objets = objets;
+	}
+
+	public List<ImportFormat> getImportFormats() {
+		return importFormats;
+	}
+
+	public void setImportFormats(List<ImportFormat> importFormats) {
+		this.importFormats = importFormats;
+	}
+
+	public boolean getCopyObjets() {
+		return copyObjets;
+	}
+
+	public void setCopyObjets(boolean copyObjets) {
+		this.copyObjets = copyObjets;
+	}
+
+	public void loadData() {
 
 		// Set initial start / end dates for the axis of the timeline
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
@@ -196,10 +371,14 @@ public class JJTaskBean {
 
 			List<JJTask> tasks = new ArrayList<JJTask>();
 			tasks.addAll(jJTaskService.getTasks(sprint, null, null, null,
-					chapter, null, null, null, true, true, false, false));
+					chapter, null, null, null, true, true, false,
+					"JJRequirement"));
 
 			tasks.addAll(jJTaskService.getTasks(sprint, null, null, null,
-					chapter, null, null, null, true, true, false, true));
+					chapter, null, null, null, true, true, false, "JJTestcase"));
+
+			tasks.addAll(jJTaskService.getTasks(sprint, null, null, null,
+					chapter, null, null, null, true, true, false, "JJBug"));
 
 			TreeMap<String, JJTask> Tasks = new TreeMap<String, JJTask>();
 
@@ -611,6 +790,362 @@ public class JJTaskBean {
 		reset();
 	}
 
+	public void loadImportFormat(String mode) {
+
+		this.mode = mode;
+
+		disabledImportButton = true;
+		disabledFilter = true;
+
+		checkAll = false;
+		copyObjets = false;
+
+		if (mode.equalsIgnoreCase("planning")) {
+
+			importSprint = null;
+		} else if (mode.equalsIgnoreCase("scrum")) {
+			// TODO importSprint = value in sprint bean;
+		}
+
+		getProject();
+		getProduct();
+		getVersion();
+
+		importFormats = new ArrayList<ImportFormat>();
+
+	}
+
+	public void checkAll() {
+		copyObjets = false;
+		disabledImportButton = true;
+
+		fillTableImport();
+	}
+
+	public void fillTableImport() {
+		importFormats = new ArrayList<ImportFormat>();
+		List<JJTask> tasks;
+
+		copyObjets = false;
+		disabledImportButton = true;
+
+		if (objet != null) {
+
+			if (objet.equalsIgnoreCase("JJBug")) {
+
+				for (JJBug bug : jJBugService.getImportBugs(project, version,
+						importCategory, importStatus, true)) {
+
+					if (!checkAll) {
+
+						tasks = jJTaskService.getImportTasks(bug, null, null,
+								true);
+						if (tasks.isEmpty()) {
+							importFormats.add(new ImportFormat(bug.getName(),
+									bug, copyObjets));
+						}
+
+					} else {
+						importFormats.add(new ImportFormat(bug.getName(), bug,
+								copyObjets));
+					}
+				}
+
+			} else if (objet.equalsIgnoreCase("JJRequirement")) {
+
+				for (JJRequirement requirement : jJRequirementService
+						.getRequirements(importCategory, project, product,
+								version, importStatus, null, false, true, false)) {
+
+					if (!checkAll) {
+
+						tasks = jJTaskService.getImportTasks(null, requirement,
+								null, true);
+
+						if (tasks.isEmpty()) {
+							importFormats.add(new ImportFormat(requirement
+									.getName(), requirement, copyObjets));
+						}
+					} else {
+
+						importFormats.add(new ImportFormat(requirement
+								.getName(), requirement, copyObjets));
+					}
+				}
+
+			} else if (objet.equalsIgnoreCase("JJTestcase")) {
+
+				for (JJTestcase testcase : jJTestcaseService
+						.getImportTestcases(project, true)) {
+
+					if (!checkAll) {
+						tasks = jJTaskService.getImportTasks(null, null,
+								testcase, true);
+						if (tasks.isEmpty()) {
+							importFormats.add(new ImportFormat(testcase
+									.getName(), testcase, copyObjets));
+						}
+					} else {
+
+						importFormats.add(new ImportFormat(testcase.getName(),
+								testcase, copyObjets));
+					}
+				}
+			}
+
+		} else {
+			importFormats = new ArrayList<ImportFormat>();
+		}
+	}
+
+	public void importTask() {
+
+		for (ImportFormat format : importFormats) {
+
+			if (format.getCopyObjet()) {
+
+				String name = null;
+
+				JJTask task = new JJTask();
+				task.setEnabled(true);
+				task.setCreationDate(new Date());
+				task.setSprint(importSprint);
+
+				if (format.getStartDate() == null) {
+					task.setStartDatePlanned(new Date());
+				} else {
+					task.setStartDatePlanned(format.getStartDate());
+				}
+
+				if (format.getWorkload() != null) {
+					task.setWorkloadPlanned(format.getWorkload());
+
+					task.setEndDatePlanned(new Date(task.getStartDatePlanned()
+							.getTime()
+							+ task.getWorkloadPlanned()
+							* 60
+							* 60
+							* 1000));
+				}
+
+				if (format.getObject() instanceof JJRequirement) {
+
+					JJRequirement requirement = (JJRequirement) format
+							.getObject();
+
+					name = requirement.getName() + "("
+							+ task.getCreationDate().getTime() + ")";
+
+					requirement.getTasks().add(task);
+
+					task.setRequirement(requirement);
+
+				} else if (format.getObject() instanceof JJBug) {
+
+					JJBug bug = (JJBug) format.getObject();
+
+					name = bug.getName() + "("
+							+ task.getCreationDate().getTime() + ")";
+
+					bug.getTasks().add(task);
+
+					task.setBug(bug);
+
+				} else if (format.getObject() instanceof JJTestcase) {
+					System.out.println("JJTestcase");
+					JJTestcase testcase = (JJTestcase) format.getObject();
+
+					name = testcase.getName() + "("
+							+ task.getCreationDate().getTime() + ")";
+
+					testcase.getTasks().add(task);
+
+					task.setTestcase(testcase);
+				}
+
+				task.setName(name);
+				task.setDescription("This is task " + task.getName());
+
+				jJTaskService.saveJJTask(task);
+
+			}
+		}
+
+		if (mode.equalsIgnoreCase("planning")) {
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("taskImportDialogWidget.hide()");
+		} else if (mode.equalsIgnoreCase("scrum")) {
+			// TODO by Lazher
+			closeDialogImport();
+		}
+
+	}
+
+	public void closeDialogImport() {
+		System.out.println("in close");
+		importSprint = null;
+		importCategory = null;
+		importStatus = null;
+
+		importCategoryList = null;
+		importStatusList = null;
+
+		objet = null;
+		objets = null;
+
+		importFormats = null;
+		mode = null;
+
+	}
+
+	public void handleSelectObjet() {
+
+		importCategory = null;
+		importStatus = null;
+
+		getImportCategory();
+		getImportStatus();
+
+		disabledImportButton = true;
+		copyObjets = false;
+
+		if (objet != null) {
+			if (objet.equalsIgnoreCase("JJTestcase")) {
+				disabledFilter = true;
+			} else {
+				disabledFilter = false;
+			}
+			fillTableImport();
+		} else {
+			disabledFilter = true;
+			importFormats = new ArrayList<ImportFormat>();
+
+		}
+
+	}
+
+	public void handleSelectStatus() {
+		getImportStatus();
+		disabledImportButton = true;
+		copyObjets = false;
+
+		if (objet != null) {
+			fillTableImport();
+		} else {
+			importFormats = new ArrayList<ImportFormat>();
+
+		}
+	}
+
+	public void handleSelectCategory() {
+		getImportCategory();
+
+		disabledImportButton = true;
+		copyObjets = false;
+
+		if (objet != null) {
+			fillTableImport();
+		} else {
+			importFormats = new ArrayList<ImportFormat>();
+
+		}
+	}
+
+	public void copyObjets() {
+
+		for (ImportFormat importFormat : importFormats) {
+			importFormat.setCopyObjet(copyObjets);
+		}
+
+		disabledImportButton = !copyObjets;
+
+	}
+
+	public void copyObjet() {
+
+		boolean copyAll = true;
+		for (ImportFormat importFormat : importFormats) {
+			if (!importFormat.getCopyObjet()) {
+				copyAll = false;
+				break;
+			}
+
+		}
+
+		copyObjets = copyAll;
+
+		for (ImportFormat importFormat : importFormats) {
+			if (importFormat.getCopyObjet()) {
+				disabledImportButton = false;
+				break;
+			} else {
+				disabledImportButton = true;
+			}
+
+		}
+	}
+
+	public class ImportFormat {
+
+		private String name;
+		private Object object;
+		private boolean copyObjet;
+		private Date startDate;
+		private Integer workload;
+
+		public ImportFormat() {
+			super();
+		}
+
+		public ImportFormat(String name, Object object, boolean copyObjet) {
+			super();
+			this.name = name;
+			this.object = object;
+			this.copyObjet = copyObjet;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public Object getObject() {
+			return object;
+		}
+
+		public void setObject(Object object) {
+			this.object = object;
+		}
+
+		public boolean getCopyObjet() {
+			return copyObjet;
+		}
+
+		public void setCopyObjet(boolean copyObjet) {
+			this.copyObjet = copyObjet;
+		}
+
+		public Date getStartDate() {
+			return startDate;
+		}
+
+		public void setStartDate(Date startDate) {
+			this.startDate = startDate;
+		}
+
+		public Integer getWorkload() {
+			return workload;
+		}
+
+		public void setWorkload(Integer workload) {
+			this.workload = workload;
+		}
+
+	}
+
 	public class TaskData {
 		private JJTask task;
 		private JJChapter chapter;
@@ -646,10 +1181,15 @@ public class JJTaskBean {
 
 			List<JJTask> list = new ArrayList<JJTask>();
 			list.addAll(jJTaskService.getTasks(sprint, null, null, null,
-					chapter, null, null, null, true, false, false, false));
+					chapter, null, null, null, true, false, false,
+					"JJRequirement"));
+
+			list.addAll(jJTaskService
+					.getTasks(sprint, null, null, null, chapter, null, null,
+							null, true, false, false, "JJTestcase"));
 
 			list.addAll(jJTaskService.getTasks(sprint, null, null, null,
-					chapter, null, null, null, true, false, false, true));
+					chapter, null, null, null, true, false, false, "JJBug"));
 
 			list.remove(task);
 

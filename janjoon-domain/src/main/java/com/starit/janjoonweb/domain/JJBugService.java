@@ -8,4 +8,7 @@ import org.springframework.roo.addon.layers.service.RooService;
 public interface JJBugService {
 	public List<JJBug> getBugs(JJProject project, JJTeststep teststep,
 			JJBuild build, boolean onlyActif, boolean sortedByCreationDate);
+
+	public List<JJBug> getImportBugs(JJProject project, JJVersion version,
+			JJCategory category, JJStatus status, boolean onlyActif);
 }

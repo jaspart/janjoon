@@ -11,6 +11,9 @@ public interface JJTestcaseService {
 			JJChapter chapter, boolean onlyActif, boolean sortedByOrder,
 			boolean sortedByCreationdate);
 
+	public List<JJTestcase> getImportTestcases(JJProject project,
+			boolean onlyActif);
+
 	public void saveTestcases(Set<JJTestcase> testcases);
 
 	public void updateTestcases(Set<JJTestcase> testcases);
