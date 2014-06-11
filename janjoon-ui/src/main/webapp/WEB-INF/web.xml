@@ -92,11 +92,11 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>CKEditorUploadServlet</servlet-name>
-		<url-pattern>/pages/undefined/ckeditor/uploadimage</url-pattern>
+		<url-pattern>/pages/ckeditor/uploadimage</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>CKEditorGetImageServlet</servlet-name>
-		<url-pattern>/pages/undefined/ckeditor/getimage</url-pattern>
+		<url-pattern>/pages/ckeditor/getimage</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>

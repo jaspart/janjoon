@@ -9,7 +9,7 @@
 <ui:composition template="../templates/layout.xhtml">
 
 	<ui:define name="content">
-
+	<h:outputScript library="js" name="ckEditor.js" />
 		<h:form id="specForm">
 			<f:event type="preRenderComponent"
 				listener="#{jJRequirementBean.loadData()}" />
@@ -336,7 +336,7 @@
 										value="#{messages.specification_create_description_label}" />
 									<pe:ckEditor id="description" widgetVar="descriptionWidget"
 										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
-										style="width:680px"
+										style="width:680px" 
 										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 										value="#{jJRequirementBean.requirement.description}"
 										required="true"
