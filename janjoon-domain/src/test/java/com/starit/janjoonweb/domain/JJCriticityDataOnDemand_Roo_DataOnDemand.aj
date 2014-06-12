@@ -3,7 +3,7 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJContactDataOnDemand;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJCriticityDataOnDemand;
 import com.starit.janjoonweb.domain.JJCriticityRepository;
@@ -30,9 +30,6 @@ privileged aspect JJCriticityDataOnDemand_Roo_DataOnDemand {
     private List<JJCriticity> JJCriticityDataOnDemand.data;
     
     @Autowired
-    JJContactDataOnDemand JJCriticityDataOnDemand.jJContactDataOnDemand;
-    
-    @Autowired
     JJCriticityService JJCriticityDataOnDemand.jJCriticityService;
     
     @Autowired
@@ -40,14 +37,21 @@ privileged aspect JJCriticityDataOnDemand_Roo_DataOnDemand {
     
     public JJCriticity JJCriticityDataOnDemand.getNewTransientJJCriticity(int index) {
         JJCriticity obj = new JJCriticity();
+        setCreatedBy(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
         setLevelCriticity(obj, index);
         setName(obj, index);
         setObjet(obj, index);
+        setUpdatedBy(obj, index);
         setUpdatedDate(obj, index);
         return obj;
+    }
+    
+    public void JJCriticityDataOnDemand.setCreatedBy(JJCriticity obj, int index) {
+        JJContact createdBy = null;
+        obj.setCreatedBy(createdBy);
     }
     
     public void JJCriticityDataOnDemand.setCreationDate(JJCriticity obj, int index) {
@@ -84,6 +88,11 @@ privileged aspect JJCriticityDataOnDemand_Roo_DataOnDemand {
             objet = objet.substring(0, 25);
         }
         obj.setObjet(objet);
+    }
+    
+    public void JJCriticityDataOnDemand.setUpdatedBy(JJCriticity obj, int index) {
+        JJContact updatedBy = null;
+        obj.setUpdatedBy(updatedBy);
     }
     
     public void JJCriticityDataOnDemand.setUpdatedDate(JJCriticity obj, int index) {

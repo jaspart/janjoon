@@ -24,6 +24,8 @@ import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
+import org.primefaces.extensions.event.timeline.TimelineModificationEvent;
+import org.primefaces.extensions.event.timeline.TimelineSelectEvent;
 import org.primefaces.extensions.model.timeline.TimelineEvent;
 import org.primefaces.extensions.model.timeline.TimelineModel;
 import org.primefaces.model.DefaultTreeNode;
@@ -496,7 +498,8 @@ public class JJTaskBean {
 
 	public void onCellEdit(CellEditEvent event) {
 		UIColumn column = event.getColumn();
-		String headerText = column.getHeaderText();
+
+		String columnKey = column.getColumnKey();
 
 		DataTable dataTable = (DataTable) event.getSource();
 		TaskData taskData = (TaskData) dataTable.getRowData();
@@ -509,7 +512,7 @@ public class JJTaskBean {
 
 		boolean valid = true;
 
-		if (headerText.equalsIgnoreCase("Start Date Planned/Revised")) {
+		if (columnKey.contains("sdpr")) {
 			if (newValue != null) {
 				Date date = (Date) newValue;
 				if (taskData.getEndDate() != null) {
@@ -536,7 +539,7 @@ public class JJTaskBean {
 				}
 			}
 
-		} else if (headerText.equalsIgnoreCase("End Date Planned/Revised")) {
+		} else if (columnKey.contains("edpr")) {
 			if (newValue != null) {
 				Date date = (Date) newValue;
 				if (taskData.getStartDate() != null) {
@@ -564,7 +567,7 @@ public class JJTaskBean {
 				}
 			}
 
-		} else if (headerText.equalsIgnoreCase("Workload Planned/Revised")) {
+		} else if (columnKey.contains("wpr")) {
 
 			if (newValue != null) {
 				int workloadRevised = (int) newValue;
@@ -586,7 +589,7 @@ public class JJTaskBean {
 
 			}
 
-		} else if (headerText.equalsIgnoreCase("Start Date Real")) {
+		} else if (columnKey.contains("sdr")) {
 			if (newValue != null) {
 				Date date = (Date) newValue;
 				if (task.getEndDateReal() != null) {
@@ -610,7 +613,7 @@ public class JJTaskBean {
 				}
 			}
 
-		} else if (headerText.equalsIgnoreCase("End Date Real")) {
+		} else if (columnKey.contains("edr")) {
 			if (newValue != null) {
 				Date date = (Date) newValue;
 				if (task.getStartDateReal() != null) {
@@ -633,7 +636,7 @@ public class JJTaskBean {
 					}
 				}
 			}
-		} else if (headerText.equalsIgnoreCase("Workload Real")) {
+		} else if (columnKey.contains("wr")) {
 			if (newValue != null) {
 				int workloadReal = (int) newValue;
 				task.setWorkloadReal(workloadReal);
@@ -650,7 +653,7 @@ public class JJTaskBean {
 				}
 
 			}
-		} else if (headerText.equalsIgnoreCase("Before Task")) {
+		} else if (columnKey.contains("bt")) {
 
 			List<JJTask> newList = new ArrayList<JJTask>();
 			List<JJTask> oldList = taskData.getStoreTasks();

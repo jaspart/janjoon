@@ -3,7 +3,7 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJContactDataOnDemand;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementDataOnDemand;
 import com.starit.janjoonweb.domain.JJSprintDataOnDemand;
@@ -33,9 +33,6 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     private List<JJTestcase> JJTestcaseDataOnDemand.data;
     
     @Autowired
-    JJContactDataOnDemand JJTestcaseDataOnDemand.jJContactDataOnDemand;
-    
-    @Autowired
     JJRequirementDataOnDemand JJTestcaseDataOnDemand.jJRequirementDataOnDemand;
     
     @Autowired
@@ -50,6 +47,7 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     public JJTestcase JJTestcaseDataOnDemand.getNewTransientJJTestcase(int index) {
         JJTestcase obj = new JJTestcase();
         setAutomatic(obj, index);
+        setCreatedBy(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
@@ -57,6 +55,7 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
         setOrdering(obj, index);
         setPricepoint(obj, index);
         setRequirement(obj, index);
+        setUpdatedBy(obj, index);
         setUpdatedDate(obj, index);
         setWorkload(obj, index);
         return obj;
@@ -65,6 +64,11 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     public void JJTestcaseDataOnDemand.setAutomatic(JJTestcase obj, int index) {
         Boolean automatic = Boolean.TRUE;
         obj.setAutomatic(automatic);
+    }
+    
+    public void JJTestcaseDataOnDemand.setCreatedBy(JJTestcase obj, int index) {
+        JJContact createdBy = null;
+        obj.setCreatedBy(createdBy);
     }
     
     public void JJTestcaseDataOnDemand.setCreationDate(JJTestcase obj, int index) {
@@ -103,6 +107,11 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     public void JJTestcaseDataOnDemand.setRequirement(JJTestcase obj, int index) {
         JJRequirement requirement = jJRequirementDataOnDemand.getRandomJJRequirement();
         obj.setRequirement(requirement);
+    }
+    
+    public void JJTestcaseDataOnDemand.setUpdatedBy(JJTestcase obj, int index) {
+        JJContact updatedBy = null;
+        obj.setUpdatedBy(updatedBy);
     }
     
     public void JJTestcaseDataOnDemand.setUpdatedDate(JJTestcase obj, int index) {

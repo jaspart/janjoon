@@ -173,7 +173,7 @@ a:visited {
 
 div.timeline-event-selected {
 	background: #BECEFE none !important;
-	border-color: #97B0F8 !important;
+	border-color: black !important;
 }
 
 div.timeline-event {

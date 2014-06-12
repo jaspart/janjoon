@@ -41,7 +41,7 @@
 		<p:panelGrid style="margin-top:10px">
 			<p:row>
 				<p:column style="width:50%">
-					<p:scrollPanel id="scrollPanel" style="width:500px;height:350px">
+					<p:scrollPanel id="scrollPanel" style="width:500px;">
 						<p:remoteCommand name="onCellEditTableComplete"
 							update=":projecttabview:planningForm:taskDataTable " />
 						<p:dataTable id="taskDataTable" var="taskData"
@@ -69,7 +69,7 @@
 								</p:cellEditor>
 							</p:column>
 
-							<p:column styleClass="task"
+							<p:column id="sdpr" styleClass="task"
 								headerText="Start Date Planned/Revised">
 								<p:cellEditor>
 									<f:facet name="output">
@@ -82,7 +82,8 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column styleClass="task" headerText="End Date Planned/Revised">
+							<p:column id="edpr" styleClass="task"
+								headerText="End Date Planned/Revised">
 								<p:cellEditor>
 									<f:facet name="output">
 										<p:calendar value="#{taskData.endDate}" navigator="true"
@@ -94,7 +95,8 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column styleClass="task" headerText="Workload Planned/Revised">
+							<p:column id="wpr" styleClass="task"
+								headerText="Workload Planned/Revised">
 								<p:cellEditor>
 									<f:facet name="output">
 										<h:outputText value="#{taskData.workload}" />
@@ -104,7 +106,7 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column styleClass="task" headerText="Start Date Real">
+							<p:column id="sdr" styleClass="task" headerText="Start Date Real">
 								<p:cellEditor>
 									<f:facet name="output">
 										<p:calendar value="#{taskData.task.startDateReal}"
@@ -116,7 +118,7 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column styleClass="task" headerText="End Date Real">
+							<p:column id="edr" styleClass="task" headerText="End Date Real">
 								<p:cellEditor>
 									<f:facet name="output">
 										<p:calendar value="#{taskData.task.endDateReal}"
@@ -128,7 +130,7 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column styleClass="task" headerText="Workload Real">
+							<p:column id="wr" styleClass="task" headerText="Workload Real">
 								<p:cellEditor>
 									<f:facet name="output">
 										<h:outputText value="#{taskData.task.workloadReal}" />
@@ -160,7 +162,7 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column styleClass="task" headerText="Before Task">
+							<p:column id="bt" styleClass="task" headerText="Before Task">
 								<p:cellEditor>
 									<f:facet name="output">
 										<h:outputText value="Clic to show" />
@@ -201,9 +203,8 @@
 						eventMargin="10" eventMarginAxis="0" locale="#{LocaleBean.locale}"
 						start="#{jJTaskBean.start}" end="#{jJTaskBean.end}"
 						axisOnTop="true" groupsChangeable="false" var="task"
-						style="min-width:500px;min-height:350px;">
-						<p:ajax event="change" update="@none"
-							listener="#{jJTaskBean.onChange}" />
+						style="min-width:500px;min-height:350px;" editable="true">
+
 						<h:outputText value="" />
 					</pe:timeline>
 				</p:column>
