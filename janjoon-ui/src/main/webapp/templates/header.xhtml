@@ -13,9 +13,9 @@
 	<f:event listener="#{loginBean.loadingMain}" type="preRenderView" />
 	<h:form prependId="false" id="headerForm">
 
-		<p:growl id="growlHeader" showDetail="true" sticky="true" life="2000" />
+		<p:growl id="growlHeader" showDetail="true" life="10000" />
 		<h:panelGrid id="panelMenu" columns="3" cellpadding="2"
-			style="background-color:white;">
+			style="background-color:white;width:790px;">
 
 
 			<h:link outcome="main">
@@ -31,11 +31,13 @@
 
 				<p:menuitem value="#{messages.header_project_menuitem}"
 					url="/pages/project1.jsf?faces-redirect=true"
-					icon="ui-icon-clipboard" update=":contentPanel" rendered="#{!loginBean.enable}"/>
-					
-				<p:menuitem id="proAction" value="#{messages.header_project_menuitem}"
+					icon="ui-icon-clipboard" update=":contentPanel"
+					rendered="#{!loginBean.enable}" />
+
+				<p:menuitem id="proAction"
+					value="#{messages.header_project_menuitem}"
 					actionListener="#{loginBean.redirection}" update="growlHeader"
-					icon="ui-icon-clipboard" rendered="#{loginBean.enable}"/>
+					icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
 
 				<p:menuitem value="#{messages.header_spec_menuitem}"
 					url="/pages/specifications.jsf?faces-redirect=true"
@@ -54,11 +56,11 @@
 
 				<p:menuitem value="#{messages.header_test_menuitem}"
 					url="/pages/test.jsf?faces-redirect=true" icon="ui-icon-check"
-					update=":contentPanel" rendered="#{!loginBean.enable}"/>
-					
+					update=":contentPanel" rendered="#{!loginBean.enable}" />
+
 				<p:menuitem id="testAction" value="#{messages.header_test_menuitem}"
 					actionListener="#{loginBean.redirection}" update="growlHeader"
-					icon="ui-icon-clipboard" rendered="#{loginBean.enable}"/>
+					icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
 
 				<p:menuitem value="#{messages.header_delivery_menuitem}"
 					url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
@@ -68,11 +70,12 @@
 
 				<p:menuitem value="#{messages.header_stat_menuitem}"
 					url="/pages/stats.jsf?faces-redirect=true"
-					icon="ui-icon-arrowreturnthick-1-n" rendered="#{!loginBean.enable}"/>
-					
-				<p:menuitem id="statsAction" value="#{messages.header_stat_menuitem}"
+					icon="ui-icon-arrowreturnthick-1-n" rendered="#{!loginBean.enable}" />
+
+				<p:menuitem id="statsAction"
+					value="#{messages.header_stat_menuitem}"
 					actionListener="#{loginBean.redirection}" update="growlHeader"
-					icon="ui-icon-clipboard" rendered="#{loginBean.enable}"/>
+					icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
 
 				<p:menuitem value="#{messages.header_admin_menuitem}"
 					url="/pages/administration.jsf?faces-redirect=true"

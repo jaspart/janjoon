@@ -270,6 +270,7 @@ public class JJTestcaseBean {
 
 		requirements = jJRequirementService.getRequirements(null, null, null,
 				null, null, chapter, true, true, true);
+
 		return requirements;
 	}
 
@@ -390,6 +391,7 @@ public class JJTestcaseBean {
 		jJBuildBean.setBuild(null);
 
 		jJTeststepBean.newTeststep();
+		jJTeststepBean.setActionTeststep(false);
 	}
 
 	public void addMessage() {
@@ -424,6 +426,8 @@ public class JJTestcaseBean {
 		JJTestcase tc = jJTestcaseService.findJJTestcase(testcase.getId());
 		requirement = tc.getRequirement();
 
+		chapter = requirement.getChapter();
+
 		tc.getTasks();
 
 		Set<JJTask> tasks = tc.getTasks();
@@ -443,6 +447,7 @@ public class JJTestcaseBean {
 		testcaseState = false;
 
 		jJTeststepBean.newTeststep();
+		jJTeststepBean.setActionTeststep(false);
 	}
 
 	public void runTestcase(JJTestcaseexecutionBean jJTestcaseexecutionBean,
@@ -567,24 +572,41 @@ public class JJTestcaseBean {
 
 		} else {
 
-			if (testcase.getId() != null) {
-				testcase.setUpdatedDate(new Date());
+			JJTestcase tc;
 
-				if (!requirement.equals(testcase.getRequirement())) {
+			if (jJTeststepBean.getActionTeststep()) {
+				String name = testcase.getName();
+				String description = testcase.getDescription();
+				Boolean automatic = testcase.getAutomatic();
 
-					testcase.setRequirement(requirement);
-					requirement.getTestcases().add(testcase);
-				}
+				tc = jJTestcaseService.findJJTestcase(testcase.getId());
+				tc.setName(name);
+				tc.setDescription(description);
+				tc.setAutomatic(automatic);
 
-				jJTestcaseService.updateJJTestcase(testcase);
-
-				FacesContext.getCurrentInstance().addMessage(
-						null,
-						MessageFactory.getMessage(
-								"message_successfully_updated", "JJTestcase"));
-
-				context.execute("testcaseDialogWidget.hide()");
+			} else {
+				tc = testcase;
 			}
+
+			tc.setUpdatedDate(new Date());
+
+			if (!requirement.equals(tc.getRequirement())) {
+
+				tc.setRequirement(requirement);
+
+			}
+
+			jJTestcaseService.updateJJTestcase(tc);
+
+			requirement.getTestcases().add(tc);
+
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					MessageFactory.getMessage("message_successfully_updated",
+							"JJTestcase"));
+
+			context.execute("testcaseDialogWidget.hide()");
+
 		}
 
 	}

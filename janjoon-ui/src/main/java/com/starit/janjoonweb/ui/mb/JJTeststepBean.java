@@ -28,6 +28,8 @@ public class JJTeststepBean {
 
 	private List<JJTeststep> teststeps;
 
+	private boolean actionTeststep;
+
 	public JJTeststep getTeststep() {
 		return teststep;
 	}
@@ -59,11 +61,20 @@ public class JJTeststepBean {
 		this.teststeps = teststeps;
 	}
 
+	public boolean getActionTeststep() {
+		return actionTeststep;
+	}
+
+	public void setActionTeststep(boolean actionTeststep) {
+		this.actionTeststep = actionTeststep;
+	}
+
 	public void newTeststep() {
 
 		teststep = new JJTeststep();
 		teststep.setCreationDate(new Date());
 		teststep.setEnabled(true);
+
 	}
 
 	public void save() {
@@ -91,6 +102,8 @@ public class JJTeststepBean {
 
 			jJTeststepService.saveJJTeststep(teststep);
 			newTeststep();
+
+			actionTeststep = true;
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
@@ -182,6 +195,8 @@ public class JJTeststepBean {
 
 		jJTeststepService.saveJJTeststep(ts);
 
+		actionTeststep = true;
+
 		FacesContext.getCurrentInstance().addMessage(null,
 				new FacesMessage("Test Step Inserted !"));
 	}
@@ -200,6 +215,8 @@ public class JJTeststepBean {
 		jJTeststepService.updateJJTeststep(ts);
 
 		newTeststep();
+
+		actionTeststep = true;
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated", "JJTeststep");
@@ -226,6 +243,8 @@ public class JJTeststepBean {
 		jJTeststepService.deleteJJTeststep(ts);
 
 		newTeststep();
+
+		actionTeststep = true;
 
 	}
 

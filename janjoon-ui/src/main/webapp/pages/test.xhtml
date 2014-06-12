@@ -315,7 +315,7 @@
 										icon="ui-icon-circle-plus"
 										actionListener="#{jJTestcaseBean.save()}"
 										process="@widgetVar(nameWidget) @widgetVar(requirementWidget) @widgetVar(descriptionWidget)"
-										update="testcaseDialogForm :saveButton" />
+										update="testcaseDialogForm" />
 								</p:column>
 							</p:row>
 							<p:row>
@@ -418,18 +418,14 @@
 							</p:column>
 						</p:dataTable>
 					</p:scrollPanel>
+					<p:commandButton id="saveButton" value="Save"
+						process="@widgetVar(nameWidget) @widgetVar(requirementWidget) @widgetVar(descriptionWidget)"
+						disabled="#{jJTestcaseBean.disabledTeststepMode}"
+						update="testcaseDialogForm" style="float: right;"
+						action="#{jJTestcaseBean.saveAndclose(jJTeststepBean)}" />
 				</h:form>
 			</p:outputPanel>
-			<f:facet name="footer">
-				<p:row>
-					<p:column colspan="3">
-						<p:commandButton id="saveButton" value="Save"
-							disabled="#{jJTestcaseBean.disabledTeststepMode}"
-							update=":testcaseDialogForm" style="float: right;"
-							action="#{jJTestcaseBean.saveAndclose(jJTeststepBean)}" />
-					</p:column>
-				</p:row>
-			</f:facet>
+
 		</p:dialog>
 
 		<p:dialog id="runTestcaseDialog" header="Test Case Execution"
