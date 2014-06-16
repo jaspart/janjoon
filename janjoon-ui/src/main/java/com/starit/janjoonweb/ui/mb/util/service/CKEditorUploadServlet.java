@@ -34,7 +34,7 @@ public class CKEditorUploadServlet extends HttpServlet {
 	private static final String CKEDITOR_CONTENT_TYPE = "text/html; charset=UTF-8";
 	private static final String CKEDITOR_HEADER_NAME = "Cache-Control";
 	private static final String CKEDITOR_HEADER_VALUE = "no-cache";
-	private static final String CKEDITOR_DIR= System.getProperty("user.home")+File.separator+"CkEditor"+File.separator+"images";
+	private static final String CKEDITOR_DIR= ".."+File.separator+"upload"+File.separator+"images";
 
 	private static final Pattern PATTERN = Pattern.compile("[\\w\\d]*");
 

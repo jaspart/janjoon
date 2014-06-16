@@ -28,7 +28,7 @@ public class CKEditorGetImageServlet extends HttpServlet {
 	private static final String CKEDITOR_CONTENT_DISPOSITION = "Content-Disposition";
 	private static final String CKEDITOR_CONTENT_DISPOSITION_VALUE = "inline; filename=\"";
 	private static final String CKEDITOR_HEADER_NAME = "Cache-Control";
-	private static final String CKEDITOR_DIR= System.getProperty("user.home")+File.separator+"CkEditor"+File.separator+"images";
+	private static final String CKEDITOR_DIR= ".."+File.separator+"upload"+File.separator+"images";
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
