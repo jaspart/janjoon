@@ -299,7 +299,7 @@ public class LoginBean implements Serializable {
 			RequestContext context = RequestContext.getCurrentInstance();
 			JJVersionBean jJVersionBean = (JJVersionBean) session
 					.getAttribute("jJVersionBean");
-			
+
 			JJProjectBean jJProjectBean = (JJProjectBean) session
 					.getAttribute("jJProjectBean");
 			DevelopmentBean jJDevelopment = (DevelopmentBean) session
@@ -538,48 +538,83 @@ public class LoginBean implements Serializable {
 			if (root.getViewId().contains("project1")
 					|| root.getViewId().contains("test")
 					|| root.getViewId().contains("stats")) {
-				
-				if(jjProjectBean.getProject()==null)
-				{
+
+				if (jjProjectBean.getProject() == null) {
 					context.addMessage(null, new FacesMessage(
 							FacesMessage.SEVERITY_ERROR,
 							"Please Select Project", null));
 
-					context.getExternalContext().getFlash().setKeepMessages(true);
+					context.getExternalContext().getFlash()
+							.setKeepMessages(true);
 
-					FacesContext.getCurrentInstance().getExternalContext()
-							.redirect(path + "/pages/main.jsf?faces-redirect=true");
+					FacesContext
+							.getCurrentInstance()
+							.getExternalContext()
+							.redirect(
+									path
+											+ "/pages/main.jsf?faces-redirect=true");
 				}
-					
-				}else if (!authorizationManager.getAuthorization(root.getViewId(),
-						jjProjectBean.getProject(), jJProductBean.getProduct())) {
+			} else {
+				String previos = FacesContext.getCurrentInstance()
+						.getExternalContext().getRequestHeaderMap()
+						.get("referer");
+				String viewID = FacesContext.getCurrentInstance().getViewRoot()
+						.getViewId();
+				System.out.println(previos);
+				System.out.println(viewID);
 
-					context.addMessage(null, new FacesMessage(
-							FacesMessage.SEVERITY_ERROR,
-							"You have no permission to access this resource", null));
+				if (previos != null && viewID != null) {
+					if (!previos.contains(viewID.replace(".xhtml", ".jsf"))) {
+						if (!authorizationManager.getAuthorization(
+								root.getViewId(), jjProjectBean.getProject(),
+								jJProductBean.getProduct())) {
 
-					context.getExternalContext().getFlash().setKeepMessages(true);
+							context.addMessage(
+									null,
+									new FacesMessage(
+											FacesMessage.SEVERITY_ERROR,
+											"You have no permission to access this resource",
+											null));
 
-					FacesContext.getCurrentInstance().getExternalContext()
-							.redirect(path + "/pages/main.jsf?faces-redirect=true");
+							context.getExternalContext().getFlash()
+									.setKeepMessages(true);
 
-			} else if (!authorizationManager.getAuthorization(root.getViewId(),
-					jjProjectBean.getProject(), jJProductBean.getProduct())) {
+							FacesContext
+									.getCurrentInstance()
+									.getExternalContext()
+									.redirect(
+											path
+													+ "/pages/main.jsf?faces-redirect=true");
 
-				context.addMessage(null, new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"You have no permission to access this resource", null));
+						} else if (!authorizationManager.getAuthorization(
+								root.getViewId(), jjProjectBean.getProject(),
+								jJProductBean.getProduct())) {
 
-				context.getExternalContext().getFlash().setKeepMessages(true);
+							context.addMessage(
+									null,
+									new FacesMessage(
+											FacesMessage.SEVERITY_ERROR,
+											"You have no permission to access this resource",
+											null));
 
-				FacesContext.getCurrentInstance().getExternalContext()
-						.redirect(path + "/pages/main.jsf?faces-redirect=true");
-			} else if (root.getViewId().contains("development")) {
-				loadingPage(e);
+							context.getExternalContext().getFlash()
+									.setKeepMessages(true);
+
+							FacesContext
+									.getCurrentInstance()
+									.getExternalContext()
+									.redirect(
+											path
+													+ "/pages/main.jsf?faces-redirect=true");
+						} else if (root.getViewId().contains("development")) {
+							loadingPage(e);
+						}
+					}
+
+				}
+
 			}
-
 		}
-
 	}
 
 	// public void handleFileUpload(FileUploadEvent event) throws IOException {

@@ -264,7 +264,7 @@ public class DevelopmentBean implements Serializable {
 			if (testUrl(url)) {
 				try {
 					configManager = new GitConfigManager(1, contact);
-					String path = System.getProperty("user.home") + "/git/";
+					String path = System.getProperty("user.home") + File.separator+"git"+File.separator+contact.getName()+File.separator;
 
 					path = configManager.cloneRemoteRepository(url,
 							product.getName(), path);
@@ -274,8 +274,8 @@ public class DevelopmentBean implements Serializable {
 						configManager = new GitConfigManager(url, path, contact);
 
 					} else if (path == null) {
-						path = System.getProperty("user.home") + "/git/"
-								+ product.getName() + "/";
+						path = System.getProperty("user.home") + File.separator+"git"+File.separator+contact.getName()+File.separator
+								+ product.getName() + File.separator;
 						configManager = new GitConfigManager(url, path, contact);
 
 					} else {
@@ -283,8 +283,8 @@ public class DevelopmentBean implements Serializable {
 
 					}
 				} catch (JGitInternalException e) {
-					String path = System.getProperty("user.home") + "/git/"
-							+ product.getName() + "/";
+					String path = System.getProperty("user.home") + File.separator+"git"+File.separator+contact.getName()+File.separator
+							+ product.getName() + File.separator;
 					configManager = new GitConfigManager(url, path, contact);
 
 				}

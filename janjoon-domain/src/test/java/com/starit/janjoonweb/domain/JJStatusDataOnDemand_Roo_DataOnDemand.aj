@@ -3,7 +3,7 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJContactDataOnDemand;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusDataOnDemand;
 import com.starit.janjoonweb.domain.JJStatusRepository;
@@ -30,9 +30,6 @@ privileged aspect JJStatusDataOnDemand_Roo_DataOnDemand {
     private List<JJStatus> JJStatusDataOnDemand.data;
     
     @Autowired
-    JJContactDataOnDemand JJStatusDataOnDemand.jJContactDataOnDemand;
-    
-    @Autowired
     JJStatusService JJStatusDataOnDemand.jJStatusService;
     
     @Autowired
@@ -40,14 +37,21 @@ privileged aspect JJStatusDataOnDemand_Roo_DataOnDemand {
     
     public JJStatus JJStatusDataOnDemand.getNewTransientJJStatus(int index) {
         JJStatus obj = new JJStatus();
+        setCreatedBy(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
         setLevelStatus(obj, index);
         setName(obj, index);
         setObjet(obj, index);
+        setUpdatedBy(obj, index);
         setUpdatedDate(obj, index);
         return obj;
+    }
+    
+    public void JJStatusDataOnDemand.setCreatedBy(JJStatus obj, int index) {
+        JJContact createdBy = null;
+        obj.setCreatedBy(createdBy);
     }
     
     public void JJStatusDataOnDemand.setCreationDate(JJStatus obj, int index) {
@@ -84,6 +88,11 @@ privileged aspect JJStatusDataOnDemand_Roo_DataOnDemand {
             objet = objet.substring(0, 25);
         }
         obj.setObjet(objet);
+    }
+    
+    public void JJStatusDataOnDemand.setUpdatedBy(JJStatus obj, int index) {
+        JJContact updatedBy = null;
+        obj.setUpdatedBy(updatedBy);
     }
     
     public void JJStatusDataOnDemand.setUpdatedDate(JJStatus obj, int index) {

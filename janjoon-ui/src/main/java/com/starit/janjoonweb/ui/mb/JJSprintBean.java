@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.primefaces.component.autocomplete.AutoComplete;
+import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.spinner.Spinner;
@@ -39,6 +40,7 @@ import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
+import com.starit.janjoonweb.ui.mb.JJTaskBean.TaskData;
 import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -238,9 +240,13 @@ public class JJSprintBean {
 
 	public void onCellEditTask(CellEditEvent event) {
 
-		JJTask t = jJTaskService.findJJTask(Long.parseLong(event.getColumn()
-				.getColumnKey()));
+//		JJTask t = jJTaskService.findJJTask(Long.parseLong(event.getColumn()
+//				.getColumnKey()));
+		
+		DataTable dataTable = (DataTable) event.getSource();
+		JJTask t = (JJTask) dataTable.getRowData();	
 
+		System.out.println(t);
 		t.setAssignedTo((JJContact) event.getNewValue());
 		jJTaskService.updateJJTask(t);
 		sprintUtil = SprintUtil

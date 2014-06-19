@@ -69,7 +69,7 @@ public class ApplicationLogger {
 			System.out.println(status.getName());
 			if (status.getName().equalsIgnoreCase("IN PROGRESS")) {
 
-				JJRequirement req = task.getRequirement();
+				JJRequirement req = jJRequirementService.findJJRequirement(task.getRequirement().getId());
 
 				if (req != null) {
 					System.out.println(req.getName());

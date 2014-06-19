@@ -13,14 +13,12 @@ public interface JJPermissionService {
 			JJProduct product);
 
 	public boolean isAuthorized(JJContact contact, JJProject project,
-			JJProduct product, String objet, JJCategory category, Boolean r,
-			Boolean w, Boolean x);
+			JJProduct product, String objet, JJCategory category, String operation);
 
 	public boolean isAuthorized(JJContact contact, String objet,
-			JJCategory category, Boolean r, Boolean w, Boolean x);
+			JJCategory category, String operation);
 
-	public boolean isAuthorized(JJContact contact, String objet, Boolean r,
-			Boolean w, Boolean x);
+	public boolean isAuthorized(JJContact contact, String objet, String operation);
 
 	public boolean isAuthorized(JJContact contact, JJProject project,
 			JJProduct product, String objet, JJCategory category);
@@ -39,5 +37,7 @@ public interface JJPermissionService {
 	public Set<JJContact> getManagers(String objet);
 
 	public Set<JJContact> areAuthorized(JJProject project, JJProduct product);
+
+	List<JJPermission> getContactPermission(JJContact contact);
 
 }
