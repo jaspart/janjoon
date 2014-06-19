@@ -1,5 +1,5 @@
 #!/bin/bash
-java -jar ../lib/jetty-runner-8.1.9.v20130131.jar --config jetty.xml ../lib/janjoon-ui-0.2-BUILD_NUMBER.war &> ../log/janjoon.log &
+java -jar ../lib/jetty-runner-8.1.9.v20130131.jar --config jetty.xml ../lib/janjoon-ui-0.9-BUILD_NUMBER.war &> ../log/janjoon.log &
 echo $! > /tmp/janjoon.pid
 sleep 35
 #nohup gnome-open http://localhost:8080 & 

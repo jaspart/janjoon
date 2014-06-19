@@ -74,19 +74,10 @@
 
 						<p:ajax process="@this" update=":contentPanel" />
 					</p:selectOneMenu>
-					<!--p:menuButton value="#{loginBean.contact.name}"-->
-					<p:splitButton value="#{loginBean.contact.name}"
+					<p:splitButton value="#{loginBean.contact.firstname} #{loginBean.contact.name}"
 						rendered="#{loginBean.enable}" style="float: right;">
-						<!--h:outputLink value="logout.jsf" action="#{loginBean.logout}"
-							rendered="#{loginBean.enable}">#{messages.header_logout_link}
-							</h:outputLink-->
-						<!--p:menuitem value="#{messages.header_logout_link}"
-							actionListener="#{loginBean.logout}"
-							rendered="#{loginBean.enable}"
-							update="messages" icon="ui-icon-disk" /-->
-						<!--p:menuitem value="#{messages.header_logout_link}"
-							actionListener="#{loginBean.logout}"
-							url="logout.jsf" icon="ui-icon-extlink" /-->
+						<p:menuitem value="#{messages.header_config_link}"
+							icon="ui-icon-person" />
 						<p:menuitem value="#{messages.header_logout_link}"
 							url="logout.jsf" actionListener="#{loginBean.logout}"
 							icon="ui-icon-extlink" />

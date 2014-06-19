@@ -5,7 +5,7 @@
 	<groupId>com.starit.janjoonweb</groupId>
 	<artifactId>janjoon</artifactId>
 	<packaging>pom</packaging>
-	<version>0.2-BUILD_NUMBER</version>
+	<version>0.9-BUILD_NUMBER</version>
 	<name>janjoon</name>
 	<properties>
 		<aspectj.version>1.7.2</aspectj.version>
