@@ -60,7 +60,9 @@ public class JJProjectBean {
 	}
 
 	public List<JJProject> getProjectList() {
-		projectList = jJProjectService.getProjects(true);
+		
+		if(projectList==null)
+			projectList = jJProjectService.getProjects(true);
 		return projectList;
 	}
 
@@ -149,7 +151,7 @@ public class JJProjectBean {
 
 			projectAdmin.setEnabled(false);
 			jJProjectService.updateJJProject(projectAdmin);
-
+			projectList=null;
 		}
 	}
 
@@ -162,6 +164,7 @@ public class JJProjectBean {
 		if (projectAdmin.getId() == null) {
 
 			jJProjectService.saveJJProject(projectAdmin);
+			projectList=null;
 			message = "message_successfully_created";
 
 			newProject();
@@ -171,6 +174,8 @@ public class JJProjectBean {
 			projectAdmin.setUpdatedDate(new Date());
 
 			jJProjectService.updateJJProject(projectAdmin);
+			
+			projectList=null;
 
 			message = "message_successfully_updated";
 

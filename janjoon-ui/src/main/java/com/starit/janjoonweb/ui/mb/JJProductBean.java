@@ -8,7 +8,6 @@ import java.util.Set;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
@@ -96,7 +95,9 @@ public class JJProductBean {
 	}
 
 	public List<JJProduct> getProductList() {
-		productList = jJProductService.getProducts(true);
+
+		if (productList == null)
+			productList = jJProductService.getProducts(true);
 
 		return productList;
 	}
@@ -219,6 +220,7 @@ public class JJProductBean {
 		if (productAdmin != null) {
 			productAdmin.setEnabled(false);
 			jJProductService.updateJJProduct(productAdmin);
+			resetVersionProductList();
 		}
 	}
 
@@ -228,7 +230,7 @@ public class JJProductBean {
 		if (productAdmin.getId() == null) {
 
 			jJProductService.saveJJProduct(productAdmin);
-
+			resetVersionProductList();
 			disabledProductMode = true;
 			disabledVersionMode = false;
 
@@ -251,7 +253,7 @@ public class JJProductBean {
 		productAdmin.setUpdatedDate(new Date());
 
 		jJProductService.updateJJProduct(productAdmin);
-
+		resetVersionProductList();
 		System.out.println("pppp");
 
 		List<JJVersion> versions = jJVersionService.getVersions(true, true,
@@ -344,6 +346,18 @@ public class JJProductBean {
 		jJVersionBean.setVersionDataModel(null);
 
 		productState = true;
+	}
+	
+	public void resetVersionProductList()
+	{
+		productList=null;
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJVersionBean jJVersionBean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
+		jJVersionBean.setProduct(null);
+		jJVersionBean.setVersionList(null);
+		
 	}
 
 	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project) {

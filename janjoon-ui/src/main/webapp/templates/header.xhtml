@@ -4,8 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions"
-	xmlns:sec="http://www.springframework.org/security/tags">
+	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
 	<title>#{messages.label_appName}</title>
 	<h:outputStylesheet library="css" name="standard.css" />
@@ -23,7 +22,7 @@
 		</h:link>
 		<h:panelGrid id="panelMenu" columns="1" cellpadding="2"
 			style="background-color:white;width:90%;">
-			<row style="width:100%;">
+			
 				<h:panelGrid columns="8" align="left" style="width:100%;">
 
 					<!--h:outputText value="#{messages.header_project_label}:" /-->
@@ -31,7 +30,7 @@
 						value="#{jJProjectBean.project}" panelStyle="width:120px"
 						effect="fade" style="width:160px" filter="true"
 						valueChangeListener="#{loginBean.changeEvent}"
-						filterMatchMode="startsWith">
+						filterMatchMode="startsWith" >
 
 						<f:converter
 							converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
@@ -39,7 +38,7 @@
 						<f:selectItems value="#{jJProjectBean.projectList}" var="p"
 							itemLabel="#{p.name}" itemValue="#{p}" />
 
-						<p:ajax process="@this" update=":contentPanel" />
+						<p:ajax process="@this" update=":contentPanel panelHeader" />
 
 					</p:selectOneMenu>
 
@@ -54,7 +53,7 @@
 						<f:selectItem itemValue="#{null}" itemLabel="AnyProduct" />
 						<f:selectItems value="#{jJProductBean.productList}" var="p"
 							itemLabel="#{p.name}" itemValue="#{p}" />
-						<p:ajax process="@this" update=":contentPanel,versionSelectOneMenu" />
+						<p:ajax process="@this" update=":contentPanel,versionSelectOneMenu panelHeader" />
 					</p:selectOneMenu>
 
 					<!--h:outputText value="#{messages.header_version_label}:" /-->
@@ -72,7 +71,7 @@
 						<f:selectItems value="#{jJVersionBean.versionList}" var="v"
 							itemLabel="#{v.name}" itemValue="#{v}" />
 
-						<p:ajax process="@this" update=":contentPanel" />
+						<p:ajax process="@this" update=":contentPanel panelHeader" />
 					</p:selectOneMenu>
 					<p:splitButton value="#{loginBean.contact.firstname} #{loginBean.contact.name}"
 						rendered="#{loginBean.enable}" style="float: right;">
@@ -83,8 +82,7 @@
 							icon="ui-icon-extlink" />
 					</p:splitButton>
 				</h:panelGrid>
-			</row>
-			<row>
+			
 				<p:tabMenu id="tabMenu" name="content" style="float: none;"
 					activeIndex="-1">
 
@@ -147,7 +145,7 @@
 						update=":contentPanel" />
 
 				</p:tabMenu>
-			</row>
+		
 		</h:panelGrid>
 	</h:panelGrid>
 	<!--p:sticky target="panelMenu" /-->

@@ -1484,6 +1484,7 @@ public class JJRequirementBean {
 	}
 
 	private void fullTableDataModelList() {
+		
 		Map<String, List<JJRequirement>> mapTable = new LinkedHashMap<String, List<JJRequirement>>();
 
 		if (lowCategory != null) {

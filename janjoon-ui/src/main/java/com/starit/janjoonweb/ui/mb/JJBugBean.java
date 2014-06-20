@@ -253,6 +253,17 @@ public class JJBugBean {
 		return persist();
 
 	}
+	
+	 public List<JJCriticity> completeCriticityBug(String query) {
+	        List<JJCriticity> suggestions = new ArrayList<JJCriticity>();
+	        for (JJCriticity jJCriticity : jJCriticityService.getCriticities("JJBug",true)) {
+	            String jJCriticityStr = String.valueOf(jJCriticity.getName() +  " "  + jJCriticity.getDescription() +  " "  + jJCriticity.getCreationDate() +  " "  + jJCriticity.getUpdatedDate());
+	            if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
+	                suggestions.add(jJCriticity);
+	            }
+	        }
+	        return suggestions;
+	    }
 
 	public HtmlPanelGrid populateEditPanel() {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -371,7 +382,7 @@ public class JJBugBean {
 						"#{jJBugBean.JJBug_.criticity}", JJCriticity.class));
 		criticityEditInput.setCompleteMethod(expressionFactory
 				.createMethodExpression(elContext,
-						"#{jJBugBean.completeCriticity}", List.class,
+						"#{jJBugBean.completeCriticityBug}", List.class,
 						new Class[] { String.class }));
 		criticityEditInput.setDropdown(true);
 		criticityEditInput.setValueExpression("var", expressionFactory
@@ -941,7 +952,7 @@ public class JJBugBean {
 						"#{jJBugBean.JJBug_.criticity}", JJCriticity.class));
 		criticityCreateInput.setCompleteMethod(expressionFactory
 				.createMethodExpression(elContext,
-						"#{jJBugBean.completeCriticity}", List.class,
+						"#{jJBugBean.completeCriticityBug}", List.class,
 						new Class[] { String.class }));
 		criticityCreateInput.setDropdown(true);
 		criticityCreateInput.setValueExpression("var", expressionFactory

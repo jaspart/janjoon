@@ -27,7 +27,7 @@ public class JJVersionBean {
 			JJRequirementService jJRequirementService) {
 		this.jJRequirementService = jJRequirementService;
 	}
-
+	private JJProduct product;
 	private JJVersion version;
 	private List<JJVersion> versionList;
 	private boolean disabled = true;
@@ -38,6 +38,14 @@ public class JJVersionBean {
 	private boolean checkVersion;
 	private boolean checkVersions;
 	private boolean disabledCheckVersion;
+
+	public JJProduct getProduct() {
+		return product;
+	}
+
+	public void setProduct(JJProduct product) {
+		this.product = product;
+	}
 
 	public JJVersion getVersion() {
 
@@ -55,9 +63,18 @@ public class JJVersionBean {
 				.getExternalContext().getSession(false);
 		JJProductBean jJProductBean = (JJProductBean) session
 				.getAttribute("jJProductBean");
-		JJProduct product = jJProductBean.getProduct();
-
-		versionList = jJVersionService.getVersions(true, true, product);
+		JJProduct jJproduct = jJProductBean.getProduct();
+		
+		if(product==null)
+		{
+			product=jJproduct;
+			versionList = jJVersionService.getVersions(true, true, product);
+			
+		}else if(!product.equals(jJproduct))
+		{
+			product=jJproduct;
+			versionList = jJVersionService.getVersions(true, true, product);
+		}		
 
 		return versionList;
 	}

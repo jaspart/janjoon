@@ -10,12 +10,30 @@ public class AppLogger {
 	
 	static Logger logger = Logger.getLogger("ManagedBean-Logger");
 	
-	@AfterReturning("execution(* com.starit.janjoonweb.domain.*Service.*(..))")
-	public void logAfter(JoinPoint joinPoint) {
+//	@AfterReturning("execution(* com.starit.janjoonweb.domain.*Service.*(..))")
+//	public void logAfter(JoinPoint joinPoint) {
+//		
+//		logger.info("operation : " + joinPoint.getSignature().toShortString()
+//				+ " :successful");
+//
+//	}
+	
+	@AfterReturning("execution(* com.starit.janjoonweb.ui.mb.JJProductBean.save(..))")
+	public void resetVersion(JoinPoint joinPoint)
+	{
 		
-		logger.info("operation : " + joinPoint.getSignature().toShortString()
-				+ " :successful");
-
+	}
+	
+	@AfterReturning("execution(* com.starit.janjoonweb.ui.mb.JJProductBean.save(..))")
+	public void resetProduit(JoinPoint joinPoint)
+	{
+		
+	}
+	
+	@AfterReturning("execution(* com.starit.janjoonweb.ui.mb.JJProductBean.save(..))")
+	public void resetProject(JoinPoint joinPoint)
+	{
+		
 	}
 
 }

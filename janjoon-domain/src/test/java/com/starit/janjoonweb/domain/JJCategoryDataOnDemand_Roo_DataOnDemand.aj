@@ -7,7 +7,7 @@ import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryDataOnDemand;
 import com.starit.janjoonweb.domain.JJCategoryRepository;
 import com.starit.janjoonweb.domain.JJCategoryService;
-import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +30,9 @@ privileged aspect JJCategoryDataOnDemand_Roo_DataOnDemand {
     private List<JJCategory> JJCategoryDataOnDemand.data;
     
     @Autowired
+    JJContactDataOnDemand JJCategoryDataOnDemand.jJContactDataOnDemand;
+    
+    @Autowired
     JJCategoryService JJCategoryDataOnDemand.jJCategoryService;
     
     @Autowired
@@ -37,20 +40,13 @@ privileged aspect JJCategoryDataOnDemand_Roo_DataOnDemand {
     
     public JJCategory JJCategoryDataOnDemand.getNewTransientJJCategory(int index) {
         JJCategory obj = new JJCategory();
-        setCreatedBy(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
         setName(obj, index);
         setStage(obj, index);
-        setUpdatedBy(obj, index);
         setUpdatedDate(obj, index);
         return obj;
-    }
-    
-    public void JJCategoryDataOnDemand.setCreatedBy(JJCategory obj, int index) {
-        JJContact createdBy = null;
-        obj.setCreatedBy(createdBy);
     }
     
     public void JJCategoryDataOnDemand.setCreationDate(JJCategory obj, int index) {
@@ -79,11 +75,6 @@ privileged aspect JJCategoryDataOnDemand_Roo_DataOnDemand {
     public void JJCategoryDataOnDemand.setStage(JJCategory obj, int index) {
         Integer stage = new Integer(index);
         obj.setStage(stage);
-    }
-    
-    public void JJCategoryDataOnDemand.setUpdatedBy(JJCategory obj, int index) {
-        JJContact updatedBy = null;
-        obj.setUpdatedBy(updatedBy);
     }
     
     public void JJCategoryDataOnDemand.setUpdatedDate(JJCategory obj, int index) {
