@@ -337,7 +337,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         passwordCreateInput.setId("passwordCreateInput");
         passwordCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.password}", String.class));
         LengthValidator passwordCreateInputValidator = new LengthValidator();
-        passwordCreateInputValidator.setMaximum(35);
+        passwordCreateInputValidator.setMaximum(100);
         passwordCreateInput.addValidator(passwordCreateInputValidator);
         passwordCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(passwordCreateInput);
@@ -960,7 +960,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         passwordEditInput.setId("passwordEditInput");
         passwordEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.password}", String.class));
         LengthValidator passwordEditInputValidator = new LengthValidator();
-        passwordEditInputValidator.setMaximum(35);
+        passwordEditInputValidator.setMaximum(100);
         passwordEditInput.addValidator(passwordEditInputValidator);
         passwordEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(passwordEditInput);

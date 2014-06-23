@@ -18,14 +18,16 @@ public abstract class AbstractConfigManager implements Serializable {
 	private String type;
 	protected String url;
 	protected String path;
-	protected JJContact jJContact;
+	protected String login;
+	protected String password;	
 
 	public AbstractConfigManager(String type, String url, String path,
-			JJContact jJContact) {
+			String login,String password) {
 		this.type = type;
 		this.url = url;
 		this.path = path;
-		this.jJContact = jJContact;
+		this.login=login;
+		this.password=password;
 
 	}
 
@@ -52,14 +54,22 @@ public abstract class AbstractConfigManager implements Serializable {
 
 	public void setPath(String path) {
 		this.path = path;
+	}	
+
+	public String getLogin() {
+		return login;
 	}
 
-	public JJContact getjJContact() {
-		return jJContact;
+	public void setLogin(String login) {
+		this.login = login;
 	}
 
-	public void setjJContact(JJContact jJContact) {
-		this.jJContact = jJContact;
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public abstract boolean checkIn(String message);

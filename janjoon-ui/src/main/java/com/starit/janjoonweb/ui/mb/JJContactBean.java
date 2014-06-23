@@ -11,6 +11,7 @@ import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
@@ -25,6 +26,14 @@ public class JJContactBean {
 
 	@Autowired
 	public JJConfigurationService jJConfigurationService;
+	
+	@Autowired 
+	BCryptPasswordEncoder encoder;
+
+	public void setEncoder(BCryptPasswordEncoder encoder) {
+		this.encoder = encoder;
+	}
+
 
 	public void setjJConfigurationService(
 			JJConfigurationService jJConfigurationService) {
@@ -151,6 +160,7 @@ public class JJContactBean {
 			contactAdmin.setDescription("This contact is "
 					+ contactAdmin.getFirstname() + " "
 					+ contactAdmin.getName());
+			contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword()));
 
 			if (jJContactService.saveJJContactTransaction(contactAdmin)) {
 
@@ -184,7 +194,12 @@ public class JJContactBean {
 		System.out.println("in save permission");
 
 		contactAdmin.setUpdatedDate(new Date());
-
+		
+		if(!contactAdmin.getPassword().equals(jJContactService.findJJContact(contactAdmin.getId()).getPassword()))
+		{				
+			contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword()));
+		}	
+		
 		jJContactService.updateJJContact(contactAdmin);
 
 		System.out.println("pppp");

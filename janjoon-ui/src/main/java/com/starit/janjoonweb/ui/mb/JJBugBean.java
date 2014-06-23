@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
@@ -48,6 +49,7 @@ import com.starit.janjoonweb.ui.mb.converter.JJSprintConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJStatusConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJTeststepConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJVersionConverter;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJBug.class, beanName = "jJBugBean")
@@ -59,6 +61,7 @@ public class JJBugBean {
 	private JJProject project;
 	private List<JJBug> bugList;
 	private List<JJBug> filteredJJBug;
+	private List<JJBug> selectedBugList;
 	private SelectItem[] criticityOptions;
 	private SelectItem[] importanceOptions;
 	private SelectItem[] statusOptions;
@@ -116,6 +119,14 @@ public class JJBugBean {
 		this.filteredJJBug = filteredJJBug;
 	}
 
+	public List<JJBug> getSelectedBugList() {
+		return selectedBugList;
+	}
+
+	public void setSelectedBugList(List<JJBug> selectedBugList) {
+		this.selectedBugList = selectedBugList;
+	}
+
 	public SelectItem[] getcriticityOptions() {
 		return criticityOptions;
 	}
@@ -141,6 +152,30 @@ public class JJBugBean {
 			}
 		}
 
+	}
+	
+	public void deleteMultiple()
+	{
+		for(JJBug b:selectedBugList)
+		{
+			b.setEnabled(false);
+			jJBugService.updateJJBug(b);
+		}
+		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "JJBug");
+        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+        reset();
+	}
+	
+	public void deleteSingle()
+	{
+		for(JJBug b:selectedBugList)
+		{
+			b.setEnabled(false);
+			jJBugService.updateJJBug(b);
+		}
+		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "JJBug");
+        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+        reset();
 	}
 
 	public void initJJBugTable() {
@@ -215,7 +250,8 @@ public class JJBugBean {
 
 		JJBug_ = null;
 		bugList = null;
-
+		selectedBugList=null;
+		
 		criticityOptions = null;
 		importanceOptions = null;
 		statusOptions = null;
@@ -253,17 +289,21 @@ public class JJBugBean {
 		return persist();
 
 	}
-	
-	 public List<JJCriticity> completeCriticityBug(String query) {
-	        List<JJCriticity> suggestions = new ArrayList<JJCriticity>();
-	        for (JJCriticity jJCriticity : jJCriticityService.getCriticities("JJBug",true)) {
-	            String jJCriticityStr = String.valueOf(jJCriticity.getName() +  " "  + jJCriticity.getDescription() +  " "  + jJCriticity.getCreationDate() +  " "  + jJCriticity.getUpdatedDate());
-	            if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
-	                suggestions.add(jJCriticity);
-	            }
-	        }
-	        return suggestions;
-	    }
+
+	public List<JJCriticity> completeCriticityBug(String query) {
+		List<JJCriticity> suggestions = new ArrayList<JJCriticity>();
+		for (JJCriticity jJCriticity : jJCriticityService.getCriticities(
+				"JJBug", true)) {
+			String jJCriticityStr = String.valueOf(jJCriticity.getName() + " "
+					+ jJCriticity.getDescription() + " "
+					+ jJCriticity.getCreationDate() + " "
+					+ jJCriticity.getUpdatedDate());
+			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
+				suggestions.add(jJCriticity);
+			}
+		}
+		return suggestions;
+	}
 
 	public HtmlPanelGrid populateEditPanel() {
 		FacesContext facesContext = FacesContext.getCurrentInstance();

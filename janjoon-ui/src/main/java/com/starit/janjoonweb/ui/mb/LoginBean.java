@@ -157,7 +157,9 @@ public class LoginBean implements Serializable {
 				FacesContext fContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) fContext
 					.getExternalContext().getSession(false);
+				
 				session.putValue("JJContact", contact);
+				session.putValue("password", password);
 				FacesMessage message = new FacesMessage(
 					FacesMessage.SEVERITY_INFO, "Welcome ",
 					contact.getName());

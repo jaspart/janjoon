@@ -28,7 +28,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 public class JJContact extends JJAbstractEntity {
 
 	@NotNull
-	@Size(max = 35)
+	@Size(max = 100)
 	private String password;
 
 	@NotNull

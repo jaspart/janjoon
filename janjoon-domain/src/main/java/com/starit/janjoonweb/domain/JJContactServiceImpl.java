@@ -77,6 +77,7 @@ public class JJContactServiceImpl implements JJContactService {
 	public boolean saveJJContactTransaction(JJContact contact) {
 
 		if (getContactByEmail(contact.getEmail(), false) == null) {
+			
 			saveJJContact(contact);
 			return true;
 		} else {

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,13 @@ public class JJContactAuthentificationProvider implements
 
 	@Autowired
 	JJContactService jJContactService;
+	
+	@Autowired 
+	BCryptPasswordEncoder encoder;
+
+	public void setEncoder(BCryptPasswordEncoder encoder) {
+		this.encoder = encoder;
+	}
 
 	public void setjJContactService(JJContactService jJContactService) {
 		this.jJContactService = jJContactService;
@@ -40,8 +48,8 @@ public class JJContactAuthentificationProvider implements
 		if (contact == null) {
 			throw new BadCredentialsException("Username not found.");
 		}
-
-		if (!password.equals(contact.getPassword())) {
+			
+		if (!encoder.matches(password,contact.getPassword())){
 			throw new BadCredentialsException("Wrong password.");
 		}
 

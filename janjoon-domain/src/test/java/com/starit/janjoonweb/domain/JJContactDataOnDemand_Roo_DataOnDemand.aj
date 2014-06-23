@@ -167,8 +167,8 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
     
     public void JJContactDataOnDemand.setPassword(JJContact obj, int index) {
         String password = "password_" + index;
-        if (password.length() > 35) {
-            password = password.substring(0, 35);
+        if (password.length() > 100) {
+            password = password.substring(0, 100);
         }
         obj.setPassword(password);
     }

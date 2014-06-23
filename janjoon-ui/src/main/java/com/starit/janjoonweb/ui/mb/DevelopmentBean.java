@@ -259,11 +259,15 @@ public class DevelopmentBean implements Serializable {
 
 		if (configuration.getParam().equalsIgnoreCase("git") && product != null
 				&& version != null) {
+			
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+					.getExternalContext().getSession(false);
+			
 			String url = configuration.getVal()
 					+ product.getName().replace(" ", "-") + ".git";
 			if (testUrl(url)) {
 				try {
-					configManager = new GitConfigManager(1, contact);
+					configManager = new GitConfigManager(1, contact.getName(),(String) session.getAttribute("password"));
 					String path = System.getProperty("user.home") + File.separator+"git"+File.separator+contact.getName()+File.separator;
 
 					path = configManager.cloneRemoteRepository(url,
@@ -271,12 +275,12 @@ public class DevelopmentBean implements Serializable {
 					if (path != null
 							&& !path.equalsIgnoreCase("InvalidRemoteException")
 							&& !path.equalsIgnoreCase("TransportException")) {
-						configManager = new GitConfigManager(url, path, contact);
+						configManager = new GitConfigManager(url, path, contact.getName(),(String)session.getAttribute("password"));
 
 					} else if (path == null) {
 						path = System.getProperty("user.home") + File.separator+"git"+File.separator+contact.getName()+File.separator
 								+ product.getName() + File.separator;
-						configManager = new GitConfigManager(url, path, contact);
+						configManager = new GitConfigManager(url, path,contact.getName(),(String) session.getAttribute("password"));
 
 					} else {
 						configManager = null;
@@ -285,7 +289,7 @@ public class DevelopmentBean implements Serializable {
 				} catch (JGitInternalException e) {
 					String path = System.getProperty("user.home") + File.separator+"git"+File.separator+contact.getName()+File.separator
 							+ product.getName() + File.separator;
-					configManager = new GitConfigManager(url, path, contact);
+					configManager =  new GitConfigManager(url, path,contact.getName(),(String) session.getAttribute("password"));
 
 				}
 			} else {

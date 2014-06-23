@@ -18,14 +18,11 @@ public class SprintUtil {
 	Integer consumed;
 	Integer workload;
 	private boolean render;
-	private boolean renderTaskForm;
-	private boolean renderProjectList;
-
+	private boolean renderTaskForm;	
 	public SprintUtil(JJSprint sprint, List<JJTask> tasks) {
 
 		this.sprint = sprint;
-		renderTaskForm = false;
-		renderProjectList = (sprint.getProject() == null);
+		renderTaskForm = false;		
 		calculateField(tasks);
 	}
 
@@ -184,15 +181,6 @@ public class SprintUtil {
 			}
 		}
 		return s;
-
-	}
-
-	public boolean isRenderProjectList() {
-		return renderProjectList;
-	}
-
-	public void setRenderProjectList(boolean renderProjectList) {
-		this.renderProjectList = renderProjectList;
-	}
+	}	
 
 }

@@ -8,28 +8,38 @@
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
 		<p:panel id="bugPanel" header="BUG" style="width: 100%;valign: top;">
-		<f:event listener="#{jJBugBean.initJJBug}"
-				type="preRenderView"/>
+			<f:event listener="#{jJBugBean.initJJBug}" type="preRenderView" />
 			<h:form id="bugForm">
 				<p:growl id="bugMessage" showDetail="true" />
 				<p:dataTable id="bugTable2" sortMode="multiple"
 					value="#{jJBugBean.bugList}" rowKey="#{bug.id}" var="bug"
 					widgetVar="bugTable" scrollable="true" scrollHeight="400"
 					filteredValue="#{jJBugBean.filteredJJBug}"
-					emptyMessage="#{messages.bug_table_alert}">
+					emptyMessage="#{messages.bug_table_alert}"
+					selection="#{jJBugBean.selectedBugList}">
+					<p:ajax event="rowSelectCheckbox" update="bugTable2:deleteMButton" />
+					<p:ajax event="rowUnselectCheckbox"
+						update="bugTable2:deleteMButton" />
+					<p:ajax event="toggleSelect" update="bugTable2:deleteMButton" />
+
 					<f:facet name="header">
 						<p:outputPanel>
 							<h:outputText value="#{messages.bug_table_search_label}" />
 							<p:inputText id="globalFilter" onkeyup="PF('bugTable').filter()"
-								style="width:200px" placeholder="#{messages.bug_table_search_watermark}" />
+								style="width:200px"
+								placeholder="#{messages.bug_table_search_watermark}" />
 						</p:outputPanel>
 					</f:facet>
-					<p:column headerText="#{messages.bug_table_title_title}" filterBy="name"
+
+					<p:column selectionMode="multiple" style="width:2%" />
+
+					<p:column headerText="#{messages.bug_table_title_title}"
 						filterMatchMode="contains" sortBy="name" filterStyle="width: 90%;"
-						style="width: 10% !important;height: 5px !important;">
+						style="width: 12% !important;height: 5px !important;">
 						<h:outputText value="#{bug.name}" />
 					</p:column>
-					<p:column headerText="#{messages.bug_table_creation_title}" sortBy="creationDate"
+					<p:column headerText="#{messages.bug_table_creation_title}"
+						sortBy="creationDate"
 						style="width: 10% !important;height: 5px !important;">
 						<h:outputText value="#{bug.creationDate}">
 							<f:converter converterId="extendedDateTimeConverter" />
@@ -37,22 +47,24 @@
 							<f:attribute name="timeZone" value="UCL" />
 						</h:outputText>
 					</p:column>
-					<p:column headerText="#{messages.bug_table_criticity_title}" sortBy="criticity.name"
+					<p:column headerText="#{messages.bug_table_criticity_title}"
+						sortBy="criticity.name"
 						style="width: 10% !important;height: 5px !important;"
 						filterOptions="#{jJBugBean.criticityOptions}"
 						filterMatchMode="exact" filterStyle="width: 90%;"
 						filterBy="criticity.name">
 						<h:outputText value="#{bug.criticity.name}" />
 					</p:column>
-					<p:column headerText="#{messages.bug_table_importance_title}" sortBy="importance.name"
+					<p:column headerText="#{messages.bug_table_importance_title}"
+						sortBy="importance.name"
 						style="width: 10% !important;height: 5px !important;"
 						filterOptions="#{jJBugBean.importanceOptions}"
 						filterMatchMode="exact" filterStyle="width: 90%;"
 						filterBy="importance.name">
 						<h:outputText value="#{bug.importance.name}" />
 					</p:column>
-					<p:column headerText="#{messages.bug_table_status_title}" sortBy="status.name"
-						filterBy="status.name"
+					<p:column headerText="#{messages.bug_table_status_title}"
+						sortBy="status.name" filterBy="status.name"
 						style="width: 10% !important;height: 5px !important;"
 						filterOptions="#{jJBugBean.statusOptions}" filterMatchMode="exact"
 						filterStyle="width: 90%;">
@@ -81,11 +93,21 @@
 							showEffect="fade" hideEffect="fade" />
 					</p:column>
 					<f:facet name="footer">
-						<p:commandButton value="#{messages.bug_create_button}" id="createButton"
-							icon="ui-icon-circle-plus" update=":createForm:createPanelGrid"
+						<p:commandButton value="#{messages.bug_create_button}"
+							id="createButton" icon="ui-icon-circle-plus"
+							update=":createForm:createPanelGrid"
 							oncomplete="createDialogWidget.show()"
 							title="#{messages.label_create}" />
 						<p:tooltip for="createButton" value="#{messages.label_create}"
+							showEffect="fade" hideEffect="fade" />
+
+						<p:commandButton value="#{messages.bug_delete_button}"
+							id="deleteMButton" icon="ui-icon-trash"
+							update=":createForm:createPanelGrid"
+							oncomplete="deleteMDialogWidget.show()"
+							disabled="#{empty jJBugBean.selectedBugList}"
+							title="#{messages.label_delete}" />
+						<p:tooltip for="deleteMButton" value="#{messages.label_delete}"
 							showEffect="fade" hideEffect="fade" />
 					</f:facet>
 				</p:dataTable>
@@ -123,11 +145,12 @@
 							binding="#{jJBugBean.editPanelGrid}" styleClass="dialog"
 							columnClasses="col1,col2,col3" />
 						<p:commandButton id="editSaveButton"
-							value="#{messages.bug_edit_save_button}" action="#{jJBugBean.persistBug}"
+							value="#{messages.bug_edit_save_button}"
+							action="#{jJBugBean.persistBug}"
 							update="editPanelGrid :bugForm:bugMessage :bugForm" />
 						<p:commandButton id="editCloseButton"
-							value="#{messages.bug_edit_close_button}" onclick="editDialogWidget.hide()"
-							type="button" />
+							value="#{messages.bug_edit_close_button}"
+							onclick="editDialogWidget.hide()" type="button" />
 					</h:form>
 				</p:outputPanel>
 			</p:dialog>
@@ -139,15 +162,34 @@
 				<p:outputPanel id="deletePanel">
 					<h:form id="deleteForm">
 						<p:commandButton id="deleteYesButton"
-							value="#{messages.bug_delete_yes_button}" action="#{jJBugBean.delete}"
+							value="#{messages.bug_delete_yes_button}"
+							action="#{jJBugBean.delete}"
 							update=":bugForm :bugForm:bugMessage"
 							oncomplete="deleteDialogWidget.hide()" />
-						<p:commandButton id="deleteNoButton" value="#{messages.bug_delete_no_button}"
+						<p:commandButton id="deleteNoButton"
+							value="#{messages.bug_delete_no_button}"
 							onclick="deleteDialogWidget.hide()" type="button" />
 					</h:form>
 				</p:outputPanel>
 			</p:confirmDialog>
 
+			<p:confirmDialog id="deleteMDialog" widgetVar="deleteMDialogWidget"
+				message="#{messages.bug_mdelete_title}" showEffect="fade"
+				hideEffect="explode" header="#{messages.bug_mdelete_confirm_label}"
+				severity="alarm">
+				<p:outputPanel id="deleteMPanel">
+					<h:form id="deleteMForm">
+						<p:commandButton id="deleteYesButton"
+							value="#{messages.bug_delete_yes_button}"
+							action="#{jJBugBean.deleteMultiple}"
+							update=":bugForm :bugForm:bugMessage"
+							oncomplete="deleteMDialogWidget.hide()" />
+						<p:commandButton id="deleteNoButton"
+							value="#{messages.bug_delete_no_button}"
+							onclick="deleteMDialogWidget.hide()" type="button" />
+					</h:form>
+				</p:outputPanel>
+			</p:confirmDialog>
 		</p:panel>
 	</ui:define>
 </ui:composition>

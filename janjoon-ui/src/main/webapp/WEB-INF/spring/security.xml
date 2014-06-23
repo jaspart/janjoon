@@ -31,10 +31,15 @@
 	</http>
 
 
+	<b:bean id="encoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" >
+		<b:constructor-arg name="strength" value="11" />
+		</b:bean>
+		
 	<authentication-manager alias="authenticationManager">
 		<authentication-provider ref="contactAuthentificationProvider" />
 	</authentication-manager>
-	
+
 
 	<b:bean id="jsfWebExpressionHandler"
 		class="com.starit.janjoonweb.ui.security.JsfDefaultWebSecurityExpressionhandler" />

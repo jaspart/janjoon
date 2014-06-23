@@ -6,6 +6,8 @@ import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
@@ -37,7 +39,14 @@ public class ApplicationBean {
 
 	@PostConstruct
 	public void init() {
-
+		
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false);
+		
+		JJWorflowBean jJWorflowBean=(JJWorflowBean) session.getAttribute("jJWorflowBean");
+		if(jJWorflowBean==null)
+			jJWorflowBean=new JJWorflowBean();
+		
 		menuModel = new DefaultMenuModel();
 
 		DefaultSubMenu submenu;
@@ -769,7 +778,7 @@ public class ApplicationBean {
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
 		item.setId("createJJWorkflowMenuItem");
-		item.setCommand("#{jJWorkflowBean.displayCreateDialog}");
+		item.setCommand("#{jJWorflowBean.displayCreateDialog}");
 		item.setAjax(false);
 		item.setAsync(false);
 		item.setUpdate(":dataForm:data");
@@ -778,7 +787,7 @@ public class ApplicationBean {
 
 		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
 		item.setId("listJJWorkflowMenuItem");
-		item.setCommand("#{jJWorkflowBean.displayList}");
+		item.setCommand("#{jJWorflowBean.displayList}");
 		item.setAjax(false);
 		item.setAsync(false);
 		item.setUpdate(":dataForm:data");

@@ -82,8 +82,9 @@ public class GitConfigManager extends AbstractConfigManager {
 		}
 	}
 
-	public GitConfigManager(String url, String path, JJContact jjContact) {
-		super("GIT", url, path, jjContact);
+	public GitConfigManager(String url, String path, String login,
+			String password) {
+		super("GIT", url, path, login, password);
 
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
 		try {
@@ -111,7 +112,7 @@ public class GitConfigManager extends AbstractConfigManager {
 
 	public GitConfigManager(String url, String path) {
 
-		super("GIT", url, path, null);
+		super("GIT", url, path, null, null);
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
 		try {
 			File file;
@@ -136,8 +137,8 @@ public class GitConfigManager extends AbstractConfigManager {
 
 	}
 
-	public GitConfigManager(int i, JJContact contact) {
-		super("GIT", "", "", contact);
+	public GitConfigManager(int i, String login, String password) {
+		super("GIT", "", "", login, password);
 	}
 
 	// commit a repository
@@ -296,10 +297,10 @@ public class GitConfigManager extends AbstractConfigManager {
 			cloneCommand.setDirectory(file);
 			cloneCommand.setURI(url);
 
-			if (jJContact != null) {
+			if (login != null) {
 				cloneCommand
 						.setCredentialsProvider(new UsernamePasswordCredentialsProvider(
-								jJContact.getName(), jJContact.getPassword()));
+								login, password));
 			}
 			cloneCommand.call();
 			FileRepositoryBuilder builder = new FileRepositoryBuilder();
@@ -360,10 +361,10 @@ public class GitConfigManager extends AbstractConfigManager {
 			pushCommand.setRemote(url);
 			pushCommand.setPushAll();
 			pushCommand.setForce(true);
-			if (jJContact != null)
+			if (login != null)
 				pushCommand
 						.setCredentialsProvider(new UsernamePasswordCredentialsProvider(
-								jJContact.getName(), jJContact.getPassword()));
+								login, password));
 			pushCommand.call();
 			logger.debug("push repository operation done with success");
 			return true;
@@ -388,10 +389,10 @@ public class GitConfigManager extends AbstractConfigManager {
 			remoteConfig.addURI(uri);
 			remoteConfig.update(config);
 			PullCommand putchCommand = git.pull();
-			if (jJContact != null)
+			if (login != null)
 				putchCommand
 						.setCredentialsProvider(new UsernamePasswordCredentialsProvider(
-								jJContact.getName(), jJContact.getPassword()));
+								login, password));
 
 			putchCommand.call();
 			logger.debug("pull repository operation done with success");
