@@ -32,19 +32,20 @@
 							<p:inputTextarea id="sprintName" value="#{jjsprint.sprint.name}"
 								required="true" requiredMessage="Sprint name is empty" />
 						</p:column>
-						<p:column rendered="#{jjsprint.renderProjectList}">
-							<p:outputLabel for="sprintProject" value="Project:" />
+						<p:column>
+							<p:outputLabel for="sprintcts" value="Sprint Contacts:" />
 						</p:column>
-						<p:column rendered="#{jjsprint.renderProjectList}">
-							<p:selectOneMenu id="sprintProject" style="width:140px"
-								value="#{jjsprint.sprint.project}">
-								<f:converter
-									converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
+						<p:column>
+							<p:selectManyMenu id="sprintcts"
+								value="#{jjsprint.sprint.contacts}"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
+								disabled="#{jjsprint.renderTaskForm}"
+								style="width:150px;height:150px" showCheckbox="true">
 
-								<f:selectItem itemValue="#{null}" itemLabel="AnyProject" />
-								<f:selectItems value="#{jJProjectBean.projectList}" var="p"
-									itemLabel="#{p.name}" itemValue="#{p}" />
-							</p:selectOneMenu>
+								<f:selectItems value="#{jJContactBean.contacts}" var="c"
+									itemLabel="#{c.name}" itemValue="#{c}" />						
+ 
+           			</p:selectManyMenu>
 						</p:column>
 					</p:row>
 					<p:row>
@@ -165,22 +166,7 @@
 										</p:column>
 
 										<p:column style="width:50px" headerText="Who">
-											<p:cellEditor>
-												<f:facet name="output">
-													<h:outputText value="#{prog.assignedTo.name}" />
-												</f:facet>
-												<f:facet name="input">
-													<h:selectOneMenu value="#{prog.assignedTo}"
-														style="width:100%">
-														<f:converter
-															converterId="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter" />
-														<f:selectItem  itemLabel="null" itemValue="null" />
-														<f:selectItems value="#{jjsprint.sprint.contacts}"
-															var="man" itemLabel="#{man.name}" itemValue="#{man}" />
-
-													</h:selectOneMenu>
-												</f:facet>
-											</p:cellEditor>
+											<h:outputText value="#{prog.assignedTo.name}" />
 										</p:column>
 									</p:dataTable>
 								</p:outputPanel>
@@ -193,15 +179,16 @@
 										rendered="#{empty jjsprint.doneTask}" style="font-size:24px;" />
 									<p:dataTable id="done" var="done" value="#{jjsprint.doneTask}"
 										rowKey="#{done.id}" rendered="#{not empty jjsprint.doneTask}"
-										scrollable="true" scrollHeight="250">								
+										scrollable="true" scrollHeight="250">
 
 										<p:column style="width:80px" headerText="Task">
 											<h:outputText value="#{done.name}" />
 										</p:column>
 
 										<p:column style="width:20px" headerText="Diff">
-											<h:outputText value="#{done.workloadPlanned-done.workloadRevised}" />
-										</p:column> 
+											<h:outputText
+												value="#{done.workloadPlanned-done.workloadRevised}" />
+										</p:column>
 									</p:dataTable>
 								</p:outputPanel>
 

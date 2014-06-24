@@ -289,6 +289,16 @@ public class JJBugBean {
 		return persist();
 
 	}
+	
+	public String findStyleColor(JJBug b)
+	{
+		if(b.getStatus()!=null)
+			
+			return b.getStatus().getName();
+		else
+			return "";
+		
+	}
 
 	public List<JJCriticity> completeCriticityBug(String query) {
 		List<JJCriticity> suggestions = new ArrayList<JJCriticity>();

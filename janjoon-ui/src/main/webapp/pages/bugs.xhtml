@@ -15,6 +15,7 @@
 					value="#{jJBugBean.bugList}" rowKey="#{bug.id}" var="bug"
 					widgetVar="bugTable" scrollable="true" scrollHeight="400"
 					filteredValue="#{jJBugBean.filteredJJBug}"
+					rowStyleClass="#{jJBugBean.findStyleColor(bug)}"
 					emptyMessage="#{messages.bug_table_alert}"
 					selection="#{jJBugBean.selectedBugList}">
 					<p:ajax event="rowSelectCheckbox" update="bugTable2:deleteMButton" />

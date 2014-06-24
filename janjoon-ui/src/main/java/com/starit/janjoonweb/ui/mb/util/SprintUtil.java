@@ -1,4 +1,4 @@
-package com.starit.janjoonweb.ui.mb.util.service;
+package com.starit.janjoonweb.ui.mb.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import com.starit.janjoonweb.domain.JJTaskService;
 
 public class SprintUtil {
 
-	JJSprint sprint;
+	JJSprint sprint;	
 	private List<JJTask> todoTask;
 	private List<JJTask> doneTask;
 	private List<JJTask> progressTask;
@@ -103,12 +103,15 @@ public class SprintUtil {
 		this.render = render;
 	}
 
+	
+
 	private void calculateField(List<JJTask> tasks) {
 
 		Integer i = 0;
 		Integer j = 0;
 		this.render = (sprint.getName() == null);
 		if (!render) {
+			
 			if (tasks != null) {
 				if (!tasks.isEmpty()) {
 					progressTask = new ArrayList<JJTask>();

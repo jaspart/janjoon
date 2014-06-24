@@ -263,3 +263,59 @@ div.chapter {
 	background-image: none !important;
 	color: black !important;
 }
+//bug dattable style 
+.NEW {
+	background-color: #B0DAF2 !important;
+	background-image: none !important;
+	color: black !important;
+}
+.ASSIGNED {
+	background-color: #A2D1EB !important;
+	background-image: none !important;
+	color: black !important;
+}
+.REOPENED {
+	background-color: #69A6C8 !important;
+	background-image: none !important;
+	color: black !important;
+}
+.READY {
+	background-color: #4F94B9 !important;
+	background-image: none !important;
+	color: black !important;
+}
+.FIXED {
+	background-color: #3882A9 !important;
+	background-image: none !important;
+	color: black !important;
+}
+.INVALID {
+	background-color: #1A6993 !important;
+	background-image: none !important;
+	color: black !important;
+}
+.WONTFIX {
+	background-color: #0791DC !important;
+	background-image: none !important;
+	color: black !important;
+}
+.DUPLICATE {
+	background-color: #0B9CEF !important;
+	background-image: none !important;
+	color: black !important;
+}
+.RESOLVED {
+	background-color: #1BA9F9 !important;
+	background-image: none !important;
+	color: black !important;
+}
+.VERIFIED {
+	background-color: #174597 !important;
+	background-image: none !important;
+	color: black !important;
+}
+.CLOSED {
+	background-color: #88DDDD !important;
+	background-image: none !important;
+	color: black !important;
+}

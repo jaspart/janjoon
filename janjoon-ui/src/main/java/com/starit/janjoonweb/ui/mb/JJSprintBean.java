@@ -40,11 +40,11 @@ import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
-import com.starit.janjoonweb.ui.mb.JJTaskBean.TaskData;
 import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
+import com.starit.janjoonweb.ui.mb.util.ContactUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
-import com.starit.janjoonweb.ui.mb.util.service.SprintUtil;
+import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJSprint.class, beanName = "jJSprintBean")
@@ -73,7 +73,7 @@ public class JJSprintBean {
 	private JJProject project;
 	private List<SprintUtil> sprintList;
 	private SprintUtil sprintUtil;
-	private JJTask task;
+	private JJTask task;	
 
 	private static final Logger logger = Logger.getLogger(JJSprintBean.class);
 
@@ -164,7 +164,7 @@ public class JJSprintBean {
 
 	public void setTask(JJTask task) {
 		this.task = task;
-	}
+	}	
 
 	public void loadingsprintPage(ComponentSystemEvent e) {
 		category = null;
@@ -179,12 +179,6 @@ public class JJSprintBean {
 				.getExternalContext().getSession(false);
 		JJProjectBean jJProjectBean = (JJProjectBean) session
 				.getAttribute("jJProjectBean");
-
-		JJContactBean jJContactBean = (JJContactBean) session
-				.getAttribute("jJContactBean");
-		if (jJContactBean == null)
-			jJContactBean = new JJContactBean();
-		jJContactBean.getContacts();
 
 		if (jJProjectBean.getProject() == null) {
 
@@ -217,6 +211,9 @@ public class JJSprintBean {
 
 	public SprintUtil getSprintUtil() {
 
+		getSprintList();
+		sprintUtil = sprintList.get(0);
+
 		return sprintUtil;
 	}
 
@@ -225,6 +222,8 @@ public class JJSprintBean {
 	}
 
 	public void attrListener(ActionEvent event) {
+		
+		System.out.println("sprintUtilValue");
 
 		sprintUtil = (SprintUtil) event.getComponent().getAttributes()
 				.get("sprintUtilValue");
@@ -240,11 +239,11 @@ public class JJSprintBean {
 
 	public void onCellEditTask(CellEditEvent event) {
 
-//		JJTask t = jJTaskService.findJJTask(Long.parseLong(event.getColumn()
-//				.getColumnKey()));
-		
+		// JJTask t = jJTaskService.findJJTask(Long.parseLong(event.getColumn()
+		// .getColumnKey()));
+
 		DataTable dataTable = (DataTable) event.getSource();
-		JJTask t = (JJTask) dataTable.getRowData();	
+		JJTask t = (JJTask) dataTable.getRowData();
 
 		System.out.println(t);
 		t.setAssignedTo((JJContact) event.getNewValue());
@@ -276,14 +275,16 @@ public class JJSprintBean {
 
 	}
 
-	public void editSprint() {
-
+	public void editSprint() {		
+		
+		System.out.println("edit");
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
 
 		sprintUtil.getSprint().setUpdatedBy(contact);
-		sprintUtil.getSprint().setUpdatedDate(new Date());
+		sprintUtil.getSprint().setUpdatedDate(new Date());		
+
 		jJSprintService.updateJJSprint(sprintUtil.getSprint());
 		sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil
 				.getSprint().getId()));
@@ -352,12 +353,17 @@ public class JJSprintBean {
 
 		if (ddevent.getDragId().contains(":todoIcon")) {
 			JJTask dropedTask = (JJTask) ddevent.getData();
+			
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+					.getExternalContext().getSession(false);
+			JJContact assignedTo = (JJContact) session.getAttribute("JJContact");
 
 			JJStatus status = jJStatusService.getOneStatus("IN PROGRESS",
 					"JJTask", true);
 			sprintUtil = SprintUtil.getSprintUtil(dropedTask.getSprint()
 					.getId(), sprintList);
 			dropedTask.setStatus(status);
+			dropedTask.setAssignedTo(assignedTo);
 			dropedTask.setCompleted(false);
 			jJTaskService.updateJJTask(dropedTask);
 			sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil
@@ -417,7 +423,7 @@ public class JJSprintBean {
 	public void handleAddButton(ActionEvent e) {
 
 		attrListener(e);
-		logger.info("deedededede");
+		logger.info("handleAddButton");
 
 		sprintUtil.setRenderTaskForm(!sprintUtil.isRenderTaskForm());
 
