@@ -9,38 +9,44 @@
 <ui:composition template="../templates/layout.xhtml">
 
 	<ui:define name="content">
-	<h:outputScript library="js" name="ckEditor.js" />
+		<h:outputScript library="js" name="ckEditor.js" />
+
+		<h:form id="categoryForm">
+			<ui:repeat value="#{jJRequirementBean.categoryList}" var="category">
+				<p:commandButton value="#{category.name}" update=":specForm"
+					action="#{jJRequirementBean.updateTemplate(category.id)}"
+					onstart="PF('specBlockUIWidget').block()"
+					oncomplete="PF('specBlockUIWidget').unblock()" />
+			</ui:repeat>
+			<p:commandButton id="categoryButton"
+				value="#{messages.specification_import_button}"
+				style="float: right;" disabled="#{jJRequirementBean.disabledExport}"
+				actionListener="#{jJRequirementBean.loadImportFormat()}"
+				update=":requirementImportDialog"
+				oncomplete="requirementImportDialogWidget.show()" />
+
+			<pe:blockUI widgetVar="specBlockUIWidget">
+				<h:panelGrid columns="2">
+					<p:graphicImage library="images" name="ajax-loader.gif"
+						style="vertical-align: middle;" />
+					<h:outputText value="Please wait..." style="white-space: nowrap;" />
+				</h:panelGrid>
+			</pe:blockUI>
+
+		</h:form>
+
 		<h:form id="specForm">
-			<f:event type="preRenderComponent"
-				listener="#{jJRequirementBean.loadData()}" />
-
 			<table>
-				<tr>
-					<ui:repeat value="#{jJRequirementBean.categoryList}" var="button">
-						<p:commandButton id="input#{button.name}" value="#{button.name}"
-							actionListener="#{jJRequirementBean.updateTemplate(button.id)}"
-							update=":specForm" />
-					</ui:repeat>
-
-					<p:commandButton id="commandButton"
-						value="#{messages.specification_import_button}"
-						style="float: right;"
-						disabled="#{jJRequirementBean.disabledExport}"
-						actionListener="#{jJRequirementBean.loadImportFormat()}"
-						update=":requirementImportDialog"
-						oncomplete="requirementImportDialogWidget.show()" />
-				</tr>
-				<tr />
-
 				<tr>
 					<ui:repeat value="#{jJRequirementBean.tableDataModelList}"
 						var="tableDataModel" varStatus="status">
 
-						<td><p:dataTable id="dataTable" var="requirement"
-								value="#{tableDataModel}" paginator="true" rows="6"
-								style="width:99%" sortMode="multiple"
+						<td><p:dataTable var="requirement"
+								value="#{tableDataModel.requirements}" scrollable="true"
+								scrollHeight="300" sortMode="multiple" resizableColumns="true"
 								rowStyleClass="#{tableDataModel.getRowStyleClass(requirement)}"
 								filteredValue="#{tableDataModel.filtredRequirements}"
+								rendered="#{tableDataModel.rendered}"
 								widgetVar="#{tableDataModel.nameDataModel}_dataTableWidget">
 
 								<f:facet name="header">
@@ -54,7 +60,8 @@
 														title="Manage Chapter and Document"
 														update=":chapterDialog"
 														actionListener="#{jJChapterBean.loadData(tableDataModel.categoryId)}"
-														oncomplete="chapterDialogWidget.show()" />
+														onstart="PF('specBlockUIWidget').block()"
+														oncomplete="PF('specBlockUIWidget').unblock();chapterDialogWidget.show()" />
 												</p:column>
 												<p:column colspan="1">
 													<p:commandButton id="releaseRequirementButton"
@@ -93,8 +100,7 @@
 									</p:panelGrid>
 								</f:facet>
 
-								<p:column filterBy="name" filterStyle="display:none"
-									style="width:25%" sortBy="id">
+								<p:column filterBy="name" filterStyle="display:none" sortBy="id">
 									<f:facet name="header">
 										<h:outputText
 											value="#{messages.specification_table_requirement_title}" />
@@ -103,7 +109,7 @@
 								</p:column>
 
 								<p:column filterBy="product.name" filterStyle="display:none"
-									style="width:25%" sortBy="product.name">
+									sortBy="product.name">
 									<f:facet name="header">
 										<h:outputText
 											value="#{messages.specification_table_product_title}" />
@@ -112,7 +118,7 @@
 								</p:column>
 
 								<p:column filterBy="chapter.name" filterStyle="display:none"
-									style="width:25%" sortBy="chapter.name">
+									sortBy="chapter.name">
 									<f:facet name="header">
 										<h:outputText
 											value="#{messages.specification_table_chapter_title}" />
@@ -127,7 +133,8 @@
 									</f:facet>
 									<p:commandButton id="editButton" icon="ui-icon-pencil"
 										action="#{jJRequirementBean.editRequirement()}"
-										oncomplete="requirementDialogWidget.show()"
+										onstart="PF('specBlockUIWidget').block()"
+										oncomplete="PF('specBlockUIWidget').unblock();requirementDialogWidget.show()"
 										update=":requirementDialog"
 										disabled="#{jJRequirementBean.getDisabledEdit(requirement)}">
 										<f:setPropertyActionListener value="#{requirement}"
@@ -150,13 +157,13 @@
 
 									<h:outputText value="#{messages.specification_progress_footer}" />
 									<p:row>
-										<p:progressBar id="completion" style="width:385px"
+										<p:progressBar id="completion"
 											value="#{tableDataModel.coverageProgress}"
 											labelTemplate="#{messages.specification_coverage_progress} {value}%"
 											displayOnly="true" />
 									</p:row>
 									<p:row>
-										<p:progressBar id="coverage" style="width:385px"
+										<p:progressBar id="coverage"
 											value="#{tableDataModel.completionProgress}"
 											labelTemplate="#{messages.specification_completion_progress} {value}%"
 											displayOnly="true" />
@@ -171,8 +178,7 @@
 		<p:dialog id="requirementDialog" header="#{jJRequirementBean.message}"
 			modal="true" widgetVar="requirementDialogWidget" dynamic="true"
 			resizable="false">
-			<p:ajax event="close" update=":specForm"
-				listener="#{jJRequirementBean.closeDialog}" />
+			<p:ajax event="close" update=":specForm" />
 			<p:outputPanel id="requirementDialogPanel">
 				<h:form id="requirementDialogForm">
 					<p:growl id="msg" />
@@ -185,8 +191,6 @@
 										widgetVar="nameWidget"
 										label="#{messages.specification_create_name_label}"
 										requiredMessage="#{messages.specification_create_name_alert}" />
-
-									<p:message for="name" id="msgName" />
 									<p:watermark for="name"
 										value="#{messages.specification_create_name_watermark}" />
 								</p:column>
@@ -336,7 +340,7 @@
 										value="#{messages.specification_create_description_label}" />
 									<pe:ckEditor id="description" widgetVar="descriptionWidget"
 										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
-										style="width:680px" 
+										style="width:680px"
 										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 										value="#{jJRequirementBean.requirement.description}"
 										required="true"
@@ -344,7 +348,7 @@
 										<p:ajax event="blur" update="editorMessageId" immediate="true" />
 									</pe:ckEditor>
 									<p:message for="description" id="editorMessageId" />
-									<h:outputLabel value="#{request.contextPath}" />
+									<h:outputLabel for="description" value="#{request.contextPath}" />
 								</p:column>
 							</p:row>
 							<p:row>
@@ -412,7 +416,7 @@
 		<p:dialog id="chapterDialog"
 			header="#{messages.specification_chapter_header}" modal="true"
 			widgetVar="chapterDialogWidget" dynamic="true" resizable="false">
-			<p:ajax event="close" update=":specForm"
+			<p:ajax event="close" oncomplete="window.location.reload()"
 				listener="#{jJChapterBean.closeDialog}" />
 			<p:outputPanel id="chapterDialogPanel">
 				<h:form id="chapterDialogForm">
@@ -591,7 +595,8 @@
 					<p:commandButton id="deleteYesButton"
 						value="#{messages.specification_delete_no_button}"
 						action="#{jJRequirementBean.deleteRequirement}" update=":specForm"
-						oncomplete="requirementDeleteDialogWidget.hide()" />
+						onstart="requirementDeleteDialogWidget.hide();PF('specBlockUIWidget').block()"
+						oncomplete="PF('specBlockUIWidget').unblock()" />
 					<p:commandButton id="deleteNoButton"
 						value="#{messages.specification_delete_no_button}"
 						onclick="requirementDeleteDialogWidget.hide()" type="button" />
@@ -610,7 +615,8 @@
 						value="#{messages.specification_release_yes_button}"
 						action="#{jJRequirementBean.releaseRequirement}"
 						update=":specForm"
-						oncomplete="requirementReleaseDialogWidget.hide()" />
+						onstart="requirementReleaseDialogWidget.hide();PF('specBlockUIWidget').block()"
+						oncomplete="PF('specBlockUIWidget').unblock()" />
 					<p:commandButton id="releaseNoButton"
 						value="#{messages.specification_release_no_button}"
 						onclick="requirementReleaseDialogWidget.hide()" type="button" />

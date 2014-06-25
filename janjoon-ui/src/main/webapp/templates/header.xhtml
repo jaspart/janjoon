@@ -10,19 +10,22 @@
 	<h:outputStylesheet library="css" name="standard.css" />
 	<h:outputScript library="js" name="calendar.js" />
 	<f:event listener="#{loginBean.loadingMain}" type="preRenderView" />
-	<h:form prependId="false" id="headerForm">
 
-	<p:growl id="growlHeader" showDetail="true" life="1500" />
-	<h:panelGrid id="panelHeader" columns="2" cellpadding="2"
-		style="background-color:white;width:90%;">
+	<h:form id="headerForm">
 
-		<h:link outcome="main">
-			<p:graphicImage library="images" name="janjoon_logo.png"
-				styleClass="banner" alt="JanJoon Home" style="float: left;" />
-		</h:link>
-		<h:panelGrid id="panelMenu" columns="1" cellpadding="2"
+		<p:growl id="growlHeader" showDetail="true" life="1500" />
+		<h:panelGrid id="panelHeader" columns="2" cellpadding="2"
 			style="background-color:white;width:90%;">
-			
+
+			<h:link outcome="main">
+				<p:graphicImage library="images" name="janjoon_logo.png"
+					styleClass="banner" alt="JanJoon Home" style="float: left;" />
+			</h:link>
+
+
+			<h:panelGrid id="panelMenu" columns="1" cellpadding="2"
+				style="background-color:white;width:90%;">
+
 				<h:panelGrid columns="8" align="left" style="width:100%;">
 
 					<!--h:outputText value="#{messages.header_project_label}:" /-->
@@ -30,16 +33,14 @@
 						value="#{jJProjectBean.project}" panelStyle="width:120px"
 						effect="fade" style="width:160px" filter="true"
 						valueChangeListener="#{loginBean.changeEvent}"
-						filterMatchMode="startsWith" >
-
+						filterMatchMode="startsWith">
 						<f:converter
 							converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
 						<f:selectItem itemValue="#{null}" itemLabel="AnyProject" />
 						<f:selectItems value="#{jJProjectBean.projectList}" var="p"
 							itemLabel="#{p.name}" itemValue="#{p}" />
-
-						<p:ajax process="@this" update=":contentPanel panelHeader" />
-
+						<p:ajax onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock();window.location.reload();" />
 					</p:selectOneMenu>
 
 					<!--h:outputText value="#{messages.header_product_label}:" /-->
@@ -53,7 +54,8 @@
 						<f:selectItem itemValue="#{null}" itemLabel="AnyProduct" />
 						<f:selectItems value="#{jJProductBean.productList}" var="p"
 							itemLabel="#{p.name}" itemValue="#{p}" />
-						<p:ajax process="@this" update=":contentPanel,versionSelectOneMenu panelHeader" />
+						<p:ajax onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock();window.location.reload();" />
 					</p:selectOneMenu>
 
 					<!--h:outputText value="#{messages.header_version_label}:" /-->
@@ -71,9 +73,13 @@
 						<f:selectItems value="#{jJVersionBean.versionList}" var="v"
 							itemLabel="#{v.name}" itemValue="#{v}" />
 
-						<p:ajax process="@this" update=":contentPanel panelHeader" />
+						<p:ajax onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock();window.location.reload();" />
 					</p:selectOneMenu>
-					<p:splitButton value="#{loginBean.contact.firstname} #{loginBean.contact.name}"
+
+
+					<p:splitButton
+						value="#{loginBean.contact.firstname} #{loginBean.contact.name}"
 						rendered="#{loginBean.enable}" style="float: right;">
 						<p:menuitem value="#{messages.header_config_link}"
 							icon="ui-icon-person" />
@@ -81,8 +87,9 @@
 							url="logout.jsf" actionListener="#{loginBean.logout}"
 							icon="ui-icon-extlink" />
 					</p:splitButton>
+					
 				</h:panelGrid>
-			
+
 				<p:tabMenu id="tabMenu" name="content" style="float: none;"
 					activeIndex="-1">
 
@@ -101,7 +108,7 @@
 
 					<p:menuitem value="#{messages.header_spec_menuitem}"
 						url="/pages/specifications.jsf?faces-redirect=true"
-						icon="ui-icon-document" update=":contentPanel" />
+						icon="ui-icon-document"/>
 
 					<p:menuitem value="#{messages.header_bug_menuitem}"
 						url="/pages/bugs.jsf?faces-redirect=true" icon="ui-icon-gear" />
@@ -118,7 +125,8 @@
 						url="/pages/test.jsf?faces-redirect=true" icon="ui-icon-check"
 						update=":contentPanel" rendered="#{!loginBean.enable}" />
 
-					<p:menuitem id="testAction" value="#{messages.header_test_menuitem}"
+					<p:menuitem id="testAction"
+						value="#{messages.header_test_menuitem}"
 						actionListener="#{loginBean.redirection}" update="growlHeader"
 						icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
 
@@ -130,7 +138,8 @@
 
 					<p:menuitem value="#{messages.header_stat_menuitem}"
 						url="/pages/stats.jsf?faces-redirect=true"
-						icon="ui-icon-arrowreturnthick-1-n" rendered="#{!loginBean.enable}" />
+						icon="ui-icon-arrowreturnthick-1-n"
+						rendered="#{!loginBean.enable}" />
 
 					<p:menuitem id="statsAction"
 						value="#{messages.header_stat_menuitem}"
@@ -140,15 +149,12 @@
 					<p:menuitem value="#{messages.header_admin_menuitem}"
 						url="/pages/administration.jsf?faces-redirect=true"
 						icon="ui-icon-key" update=":contentPanel" />
-					<p:menuitem value="Temporal"
-						url="/pages/tmp.jsf?faces-redirect=true" icon="ui-icon-key"
-						update=":contentPanel" />
 
 				</p:tabMenu>
-		
+
+			</h:panelGrid>
 		</h:panelGrid>
-	</h:panelGrid>
-	<!--p:sticky target="panelMenu" /-->
+		<!--p:sticky target="panelMenu" /-->
 	</h:form>
 </ui:composition>
 </html>

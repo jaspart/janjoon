@@ -5,10 +5,10 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
@@ -22,11 +22,11 @@ public class JJTeststep extends JJAbstractEntity {
 	private Integer ordering;
 
 	@NotNull
-	@Size(max = 100)
+	@Lob
 	private String actionstep;
 
 	@NotNull
-	@Size(max = 100)
+	@Lob
 	private String resultstep;
 
 	@ManyToOne

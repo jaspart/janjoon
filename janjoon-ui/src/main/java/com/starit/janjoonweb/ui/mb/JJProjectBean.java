@@ -6,7 +6,6 @@ import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +59,8 @@ public class JJProjectBean {
 	}
 
 	public List<JJProject> getProjectList() {
-		
-		if(projectList==null)
+
+		if (projectList == null)
 			projectList = jJProjectService.getProjects(true);
 		return projectList;
 	}
@@ -151,7 +150,7 @@ public class JJProjectBean {
 
 			projectAdmin.setEnabled(false);
 			jJProjectService.updateJJProject(projectAdmin);
-			projectList=null;
+			projectList = null;
 		}
 	}
 
@@ -164,7 +163,7 @@ public class JJProjectBean {
 		if (projectAdmin.getId() == null) {
 
 			jJProjectService.saveJJProject(projectAdmin);
-			projectList=null;
+			projectList = null;
 			message = "message_successfully_created";
 
 			newProject();
@@ -174,8 +173,8 @@ public class JJProjectBean {
 			projectAdmin.setUpdatedDate(new Date());
 
 			jJProjectService.updateJJProject(projectAdmin);
-			
-			projectList=null;
+
+			projectList = null;
 
 			message = "message_successfully_updated";
 

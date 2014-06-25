@@ -41,7 +41,7 @@
 		<p:panelGrid style="margin-top:10px">
 			<p:row>
 				<p:column style="width:50%">
-					<p:scrollPanel id="scrollPanel" style="width:500px;">
+					<p:scrollPanel id="scrollPanel" style="width:500px;" mode="native">
 						<p:remoteCommand name="onCellEditTableComplete"
 							update=":projecttabview:planningForm:taskDataTable " />
 						<p:dataTable id="taskDataTable" var="taskData"

@@ -1081,8 +1081,7 @@ public class ConfigListener implements ServletContextListener {
 		// InputStream
 		// is=ConfigListener.class.getResourceAsStream("/resources/Calandar"+
 		// company);
-		System.out.println(this.getClass()
-				.getResource("/Calendar" + company + ".xml").toString());
+	
 		FileInputStream inputStream = new FileInputStream(this.getClass()
 				.getResource("/Calendar" + company + ".xml").getFile());
 		Scanner s = new Scanner(inputStream).useDelimiter("\\A");

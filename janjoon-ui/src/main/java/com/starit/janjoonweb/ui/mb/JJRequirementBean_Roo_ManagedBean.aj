@@ -48,7 +48,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
@@ -141,16 +140,6 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
     private List<JJRequirement> JJRequirementBean.selectedRequirementLinkUp;
     
     private List<JJTestcase> JJRequirementBean.selectedTestcases;
-    
-    @PostConstruct
-    public void JJRequirementBean.init() {
-        columns = new ArrayList<String>();
-        columns.add("name");
-        columns.add("description");
-        columns.add("creationDate");
-        columns.add("updatedDate");
-        columns.add("ordering");
-    }
     
     public String JJRequirementBean.getName() {
         return name;

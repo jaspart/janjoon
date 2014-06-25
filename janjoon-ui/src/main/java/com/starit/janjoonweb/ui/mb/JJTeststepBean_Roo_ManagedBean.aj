@@ -332,9 +332,6 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         InputTextarea actionstepCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         actionstepCreateInput.setId("actionstepCreateInput");
         actionstepCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.actionstep}", String.class));
-        LengthValidator actionstepCreateInputValidator = new LengthValidator();
-        actionstepCreateInputValidator.setMaximum(100);
-        actionstepCreateInput.addValidator(actionstepCreateInputValidator);
         actionstepCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(actionstepCreateInput);
         
@@ -353,9 +350,6 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         InputTextarea resultstepCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         resultstepCreateInput.setId("resultstepCreateInput");
         resultstepCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.resultstep}", String.class));
-        LengthValidator resultstepCreateInputValidator = new LengthValidator();
-        resultstepCreateInputValidator.setMaximum(100);
-        resultstepCreateInput.addValidator(resultstepCreateInputValidator);
         resultstepCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(resultstepCreateInput);
         
@@ -607,9 +601,6 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         InputTextarea actionstepEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         actionstepEditInput.setId("actionstepEditInput");
         actionstepEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.actionstep}", String.class));
-        LengthValidator actionstepEditInputValidator = new LengthValidator();
-        actionstepEditInputValidator.setMaximum(100);
-        actionstepEditInput.addValidator(actionstepEditInputValidator);
         actionstepEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(actionstepEditInput);
         
@@ -628,9 +619,6 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         InputTextarea resultstepEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         resultstepEditInput.setId("resultstepEditInput");
         resultstepEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.resultstep}", String.class));
-        LengthValidator resultstepEditInputValidator = new LengthValidator();
-        resultstepEditInputValidator.setMaximum(100);
-        resultstepEditInput.addValidator(resultstepEditInputValidator);
         resultstepEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(resultstepEditInput);
         

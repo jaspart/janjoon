@@ -9,11 +9,15 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.model.ListDataModel;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.SelectableDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +46,8 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 @RooSerializable
 @RooJsfManagedBean(entity = JJRequirement.class, beanName = "jJRequirementBean")
 public class JJRequirementBean {
+
+	static Logger logger = Logger.getLogger(JJRequirementBean.class);
 
 	@Autowired
 	public JJConfigurationService jJConfigurationService;
@@ -115,7 +121,7 @@ public class JJRequirementBean {
 	private List<JJStatus> requirementStatusList;
 
 	private String templateHeader;
-	private String outputTemplateHeader;
+
 	private String message;
 	private String lowCategoryName;
 	private String mediumCategoryName;
@@ -207,11 +213,7 @@ public class JJRequirementBean {
 	}
 
 	public JJProject getProject() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJProjectBean jJProjectBean = (JJProjectBean) session
-				.getAttribute("jJProjectBean");
-		this.project = jJProjectBean.getProject();
+
 		return project;
 	}
 
@@ -237,11 +239,7 @@ public class JJRequirementBean {
 	}
 
 	public JJProduct getProduct() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJProductBean jJProductBean = (JJProductBean) session
-				.getAttribute("jJProductBean");
-		this.product = jJProductBean.getProduct();
+
 		return product;
 	}
 
@@ -267,11 +265,7 @@ public class JJRequirementBean {
 	}
 
 	public JJVersion getVersion() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJVersionBean jJVersionBean = (JJVersionBean) session
-				.getAttribute("jJVersionBean");
-		this.version = jJVersionBean.getVersion();
+
 		return version;
 	}
 
@@ -338,25 +332,6 @@ public class JJRequirementBean {
 	public void setRequirementStatusList(List<JJStatus> requirementStatusList) {
 
 		this.requirementStatusList = requirementStatusList;
-	}
-
-	public String getTemplateHeader() {
-		return templateHeader;
-	}
-
-	public void setTemplateHeader(String templateHeader) {
-		this.templateHeader = templateHeader;
-	}
-
-	public String getOutputTemplateHeader() {
-		if (templateHeader != null) {
-			outputTemplateHeader = templateHeader.replace("/", " ");
-		}
-		return outputTemplateHeader;
-	}
-
-	public void setOutputTemplateHeader(String outputTemplateHeader) {
-		this.outputTemplateHeader = outputTemplateHeader;
 	}
 
 	public String getMessage() {
@@ -821,6 +796,8 @@ public class JJRequirementBean {
 
 		deleteTasksAndTestcase(requirement);
 
+		editRowFromCategoryDataModel();
+
 		requirement = null;
 		reset();
 	}
@@ -835,9 +812,8 @@ public class JJRequirementBean {
 		List<JJRequirement> list = new ArrayList<JJRequirement>();
 		for (CategoryDataModel requirementDataModel : tableDataModelList) {
 			if (requirementDataModel.getCategoryId() == categoryId) {
-				List<JJRequirement> temp = (List<JJRequirement>) requirementDataModel
-						.getWrappedData();
-				list.addAll(temp);
+
+				list = requirementDataModel.getRequirements();
 				break;
 			}
 
@@ -862,6 +838,7 @@ public class JJRequirementBean {
 				requirement.setUpdatedBy(contact);
 
 				jJRequirementService.updateJJRequirement(requirement);
+
 			}
 		}
 		reset();
@@ -869,8 +846,6 @@ public class JJRequirementBean {
 	}
 
 	public void save() {
-
-		String message = "";
 
 		requirement.setProduct(requirementProduct);
 		requirement.setVersioning(requirementVersion);
@@ -902,39 +877,36 @@ public class JJRequirementBean {
 				jJRequirementService.saveJJRequirement(requirement);
 			}
 
-			message = "message_successfully_created";
-
 		} else {
 
-			System.out.println("toto");
 			// JJRequirement req = jJRequirementService
 			// .findJJRequirement(requirement.getId());
 			if (!requirement.getEnabled()) {
 				deleteTasksAndTestcase(requirement);
 			}
 
-			message = "message_successfully_updated";
-			System.out.println("vovo");
 		}
-
-		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJRequirement");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		RequestContext context = RequestContext.getCurrentInstance();
 
 		if (requirementState) {
 
+			addRowToCategoryDataModel();
+
 			if (getRequirementDialogConfiguration()) {
 				context.execute("requirementDialogWidget.hide()");
-				// closeDialog();
+				closeDialog();
 			} else {
 				newRequirement(requirementCategory.getId());
 			}
 
 		} else {
+
+			editRowFromCategoryDataModel();
+
 			context.execute("requirementDialogWidget.hide()");
-			// closeDialog();
+			closeDialog();
+
 		}
 
 		reset();
@@ -1394,11 +1366,7 @@ public class JJRequirementBean {
 		this.disabledExport = disabledExport;
 	}
 
-	public void loadData() {
-
-		getProduct();
-		getProject();
-		getVersion();
+	private void loadParameter() {
 
 		if (project == null) {
 			warnMessage = "Select a project to export PDF";
@@ -1407,32 +1375,140 @@ public class JJRequirementBean {
 			warnMessage = "Export to PDF";
 			disabledExport = false;
 		}
+	}
 
-		fullTableDataModelList();
+	public void addRowToCategoryDataModel() {
+		int index = 0;
+
+		long id = requirement.getCategory().getId();
+
+		if (id == lowCategory.getId()) {
+			index = 0;
+		} else if (id == mediumCategory.getId()) {
+			index = 1;
+		} else if (id == highCategory.getId()) {
+			index = 2;
+		}
+
+		for (int i = 0; i < tableDataModelList.size(); i++) {
+			CategoryDataModel categoryDataModel = tableDataModelList.get(i);
+			if (i == index) {
+				categoryDataModel.getRequirements().add(0, requirement);
+			}
+			categoryDataModel.calculCompletionProgress();
+			categoryDataModel.calculCoverageProgress();
+		}
+
+	}
+
+	public void editRowFromCategoryDataModel() {
+		int index = 0;
+
+		long id = requirement.getCategory().getId();
+
+		if (id == lowCategory.getId()) {
+			index = 0;
+		} else if (id == mediumCategory.getId()) {
+			index = 1;
+		} else if (id == highCategory.getId()) {
+			index = 2;
+		}
+
+		for (int i = 0; i < tableDataModelList.size(); i++) {
+			CategoryDataModel categoryDataModel = tableDataModelList.get(i);
+			if (i == index && !requirement.getEnabled()) {
+				categoryDataModel.getRequirements().remove(requirement);
+			}
+			categoryDataModel.calculCompletionProgress();
+			categoryDataModel.calculCoverageProgress();
+		}
+
+	}
+	
+	public void loadData() {
+
+		// Utiliser au moment du changement des couples (product/project)
+		// long t = System.currentTimeMillis();
+
+		System.out.println(System.currentTimeMillis());
+		
+		if (tableDataModelList == null) {
+
+			templateHeader = "";
+
+			fullTableDataModelList();
+		}
+
+		loadParameter();
+
+		if (project != null) {
+			System.out.println(project.getName());
+		}
+
+		if (product != null) {
+			System.out.println(product.getName());
+		}
+
+		if (version != null) {
+			System.out.println(version.getName());
+		}
+
+		String[] results = templateHeader.split("-");
+
+		for (int i = 0; i < results.length; i++) {
+
+			CategoryDataModel categoryDataModel = tableDataModelList.get(i);
+			long categoryId = categoryDataModel.getCategoryId();
+
+			if (categoryId != 0) {
+				JJCategory category = jJCategoryService
+						.findJJCategory(categoryId);
+
+				List<JJRequirement> requirements = getRequirementsList(
+						category, product, version, project, true);
+
+				categoryDataModel = new CategoryDataModel(requirements,
+						category.getId(), category.getName(), true);
+
+				categoryDataModel.calculCompletionProgress();
+				categoryDataModel.calculCoverageProgress();
+
+				tableDataModelList.set(i, categoryDataModel);
+
+			}
+
+		}
+
+
+		
+		System.out.println("end");
+		// logger.info("loadData");
+		// logger.info(System.currentTimeMillis() - t);
 	}
 
 	public void updateTemplate(long id) {
 
 		JJCategory category = jJCategoryService.findJJCategory(id);
 
-		if (templateHeader != null) {
-			String[] categories = templateHeader.split("/");
+		if (!templateHeader.isEmpty()) {
+			String[] categories = templateHeader.split("-");
 
 			switch (categories.length) {
 			case 1:
 				if (category.getStage() > lowCategory.getStage()) {
 					mediumCategory = category;
-					templateHeader += mediumCategory.getName() + "/";
+					templateHeader += String.valueOf(mediumCategory.getId())
+							+ "-";
 
 				} else if (category.getStage() < lowCategory.getStage()) {
 					mediumCategory = lowCategory;
 					lowCategory = category;
-					templateHeader = lowCategory.getName() + "/"
-							+ mediumCategory.getName() + "/";
+					templateHeader = String.valueOf(lowCategory.getId()) + "-"
+							+ String.valueOf(mediumCategory.getId()) + "-";
 
 				} else {
 					lowCategory = category;
-					templateHeader = lowCategory.getName() + "/";
+					templateHeader = String.valueOf(lowCategory.getId()) + "-";
 				}
 
 				break;
@@ -1442,17 +1518,17 @@ public class JJRequirementBean {
 				if (category.getStage() > mediumCategory.getStage()) {
 
 					highCategory = category;
-					templateHeader += highCategory.getName();
+					templateHeader += String.valueOf(highCategory.getId());
 
 				} else if (category.getStage() > lowCategory.getStage()) {
 					mediumCategory = category;
-					templateHeader = lowCategory.getName() + "/"
-							+ mediumCategory.getName() + "/";
+					templateHeader = String.valueOf(lowCategory.getId()) + "-"
+							+ String.valueOf(mediumCategory.getId()) + "-";
 
 				} else {
 					lowCategory = category;
-					templateHeader = lowCategory.getName() + "/"
-							+ mediumCategory.getName() + "/";
+					templateHeader = String.valueOf(lowCategory.getId()) + "-"
+							+ String.valueOf(mediumCategory.getId()) + "-";
 				}
 
 				break;
@@ -1468,9 +1544,9 @@ public class JJRequirementBean {
 
 				}
 
-				templateHeader = lowCategory.getName() + "/"
-						+ mediumCategory.getName() + "/"
-						+ highCategory.getName();
+				templateHeader = String.valueOf(lowCategory.getId()) + "-"
+						+ String.valueOf(mediumCategory.getId()) + "-"
+						+ String.valueOf(highCategory.getId());
 
 				break;
 
@@ -1478,54 +1554,90 @@ public class JJRequirementBean {
 
 		} else {
 			lowCategory = category;
-			templateHeader = lowCategory.getName() + "/";
+			templateHeader = String.valueOf(lowCategory.getId()) + "-";
+		}
+
+		editTableDataModelList();
+	}
+
+	private void fullTableDataModelList() {
+
+		tableDataModelList = new ArrayList<CategoryDataModel>();
+
+		for (int i = 0; i < 3; i++) {
+			CategoryDataModel requirementDataModel = new CategoryDataModel(
+					new ArrayList<JJRequirement>(), 0, "", false);
+
+			tableDataModelList.add(requirementDataModel);
 		}
 
 	}
 
-	private void fullTableDataModelList() {
-		
-		Map<String, List<JJRequirement>> mapTable = new LinkedHashMap<String, List<JJRequirement>>();
+	private void editTableDataModelList() {
 
-		if (lowCategory != null) {
-			mapTable.put(
-					String.valueOf(lowCategory.getId()),
-					getRequirementsList(lowCategory, product, version, project,
-							true));
+		long t = System.currentTimeMillis();
+
+		String[] results = templateHeader.split("-");
+
+		for (int i = 0; i < results.length; i++) {
+			String result = results[i];
+
+			JJCategory category = null;
+			if (i == 0) {
+				category = lowCategory;
+			} else if (i == 1) {
+				category = mediumCategory;
+			} else if (i == 2) {
+				category = highCategory;
+			}
+
+			CategoryDataModel categoryDataModel = tableDataModelList.get(i);
+			long categoryId = categoryDataModel.getCategoryId();
+
+			if (categoryId != Long.parseLong(result)) {
+				List<JJRequirement> requirements = getRequirementsList(
+						category, product, version, project, true);
+
+				categoryDataModel = new CategoryDataModel(requirements,
+						category.getId(), category.getName(), true);
+
+				categoryDataModel.calculCompletionProgress();
+				categoryDataModel.calculCoverageProgress();
+
+				tableDataModelList.set(i, categoryDataModel);
+
+			}
+
 		}
 
-		if (mediumCategory != null) {
-			mapTable.put(
-					String.valueOf(mediumCategory.getId()),
-					getRequirementsList(mediumCategory, product, version,
-							project, true));
-		}
+		logger.info("edit data");
 
-		if (highCategory != null) {
-			mapTable.put(
-					String.valueOf(highCategory.getId()),
-					getRequirementsList(highCategory, product, version,
-							project, true));
-		}
+		logger.info(System.currentTimeMillis() - t);
+	}
 
-		tableDataModelList = new ArrayList<CategoryDataModel>();
+	@PostConstruct
+	public void init() {
 
-		for (Map.Entry<String, List<JJRequirement>> entry : mapTable.entrySet()) {
+			
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
 
-			List<JJRequirement> value = entry.getValue();
+		JJProjectBean jJProjectBean = (JJProjectBean) session
+				.getAttribute("jJProjectBean");
+		project = jJProjectBean.getProject();
 
-			String key = entry.getKey();
+		JJProductBean jJProductBean = (JJProductBean) session
+				.getAttribute("jJProductBean");
+		product = jJProductBean.getProduct();
 
-			long categoryId = Long.parseLong(key);
+		JJVersionBean jJVersionBean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
+		version = jJVersionBean.getVersion();
 
-			JJCategory category = jJCategoryService.findJJCategory(categoryId);
-			String nameDataModel = category.getName();
+		loadParameter();
+		templateHeader = "";
 
-			CategoryDataModel requirementDataModel = new CategoryDataModel(
-					value, categoryId, nameDataModel);
-
-			tableDataModelList.add(requirementDataModel);
-		}
+		fullTableDataModelList();
 	}
 
 	private void fullRequirementsList() {
@@ -2593,8 +2705,7 @@ public class JJRequirementBean {
 	}
 
 	@SuppressWarnings("unchecked")
-	public class CategoryDataModel extends ListDataModel<JJRequirement>
-			implements SelectableDataModel<JJRequirement> {
+	public class CategoryDataModel {
 
 		private String nameDataModel;
 		private long categoryId;
@@ -2602,7 +2713,10 @@ public class JJRequirementBean {
 		private float coverageProgress = 0;
 		private float completionProgress = 0;
 
+		private List<JJRequirement> requirements;
 		private List<JJRequirement> filtredRequirements;
+
+		private boolean rendered;
 
 		public String getNameDataModel() {
 			return nameDataModel;
@@ -2620,120 +2734,143 @@ public class JJRequirementBean {
 			this.categoryId = categoryId;
 		}
 
-		public float getCoverageProgress() {
+		private void calculCoverageProgress() {
+			if (categoryId != 0) {
+				long t = System.currentTimeMillis();
 
-			float compteur = 0;
-			List<JJRequirement> dataList = (List<JJRequirement>) getWrappedData();
+				float compteur = 0;
 
-			List<JJCategory> categoryList = jJCategoryService.getCategories(
-					null, false, true, true);
+				List<JJCategory> categoryList = jJCategoryService
+						.getCategories(null, false, true, true);
 
-			boolean sizeIsOne = false;
+				JJCategory category = jJCategoryService
+						.findJJCategory(categoryId);
 
-			if (categoryId == categoryList.get(0).getId()) {
+				boolean sizeIsOne = false;
 
-				for (JJRequirement requirement : dataList) {
+				if (category.getStage() == categoryList.get(0).getStage()) {
 
-					for (JJRequirement req : requirement.getRequirementLinkUp()) {
-						if (req.getEnabled()) {
+					for (JJRequirement requirement : requirements) {
+
+						for (JJRequirement req : requirement
+								.getRequirementLinkUp()) {
+							if (req.getEnabled()) {
+								compteur++;
+								break;
+							}
+						}
+
+					}
+
+					sizeIsOne = true;
+				} else if (category.getStage() == categoryList.get(
+						categoryList.size() - 1).getStage()
+						&& !sizeIsOne) {
+
+					for (JJRequirement requirement : requirements) {
+						boolean linkUp = false;
+						boolean linkDown = false;
+
+						for (JJRequirement req : requirement
+								.getRequirementLinkDown()) {
+							if (req.getEnabled()) {
+								linkDown = true;
+								break;
+							}
+						}
+
+						for (JJTask task : requirement.getTasks()) {
+							if (task.getEnabled()) {
+								linkUp = true;
+								break;
+							}
+						}
+
+						if (linkUp && linkDown) {
 							compteur++;
-							break;
+						} else if (linkUp || linkDown) {
+							compteur += 0.5;
+						}
+
+					}
+				} else {
+
+					for (JJRequirement requirement : requirements) {
+
+						boolean linkUp = false;
+						boolean linkDown = false;
+
+						for (JJRequirement req : requirement
+								.getRequirementLinkUp()) {
+							if (req.getEnabled()) {
+								linkUp = true;
+								break;
+							}
+						}
+
+						for (JJRequirement req : requirement
+								.getRequirementLinkDown()) {
+							if (req.getEnabled()) {
+								linkDown = true;
+								break;
+							}
+						}
+
+						if (linkUp && linkDown) {
+							compteur++;
+						} else if (linkUp || linkDown) {
+							compteur += 0.5;
 						}
 					}
-
 				}
 
-				sizeIsOne = true;
-			} else if (categoryId == categoryList.get(categoryList.size() - 1)
-					.getId() && !sizeIsOne) {
-
-				for (JJRequirement requirement : dataList) {
-					boolean linkUp = false;
-					boolean linkDown = false;
-
-					for (JJRequirement req : requirement
-							.getRequirementLinkDown()) {
-						if (req.getEnabled()) {
-							linkDown = true;
-							break;
-						}
-					}
-
-					for (JJTask task : requirement.getTasks()) {
-						if (task.getEnabled()) {
-							linkUp = true;
-							break;
-						}
-					}
-
-					if (linkUp && linkDown) {
-						compteur++;
-					} else if (linkUp || linkDown) {
-						compteur += 0.5;
-					}
-
+				if (requirements.isEmpty()) {
+					coverageProgress = 0;
+				} else {
+					coverageProgress = compteur / requirements.size();
 				}
-			} else {
 
-				for (JJRequirement requirement : dataList) {
+				logger.info("getCoverageProgress ");
+				logger.info(System.currentTimeMillis() - t);
 
-					boolean linkUp = false;
-					boolean linkDown = false;
-
-					for (JJRequirement req : requirement.getRequirementLinkUp()) {
-						if (req.getEnabled()) {
-							linkUp = true;
-							break;
-						}
-					}
-
-					for (JJRequirement req : requirement
-							.getRequirementLinkDown()) {
-						if (req.getEnabled()) {
-							linkDown = true;
-							break;
-						}
-					}
-
-					if (linkUp && linkDown) {
-						compteur++;
-					} else if (linkUp || linkDown) {
-						compteur += 0.5;
-					}
-				}
+				coverageProgress = coverageProgress * 100;
 			}
+		}
 
-			if (dataList.isEmpty()) {
-				coverageProgress = 0;
-			} else {
-				coverageProgress = compteur / dataList.size();
-			}
+		public float getCoverageProgress() {
+			return coverageProgress;
 
-			return coverageProgress * 100;
 		}
 
 		public void setCoverageProgress(float coverageProgress) {
 			this.coverageProgress = coverageProgress;
 		}
 
-		public float getCompletionProgress() {
-			float compteur = 0;
-			List<JJRequirement> dataList = (List<JJRequirement>) getWrappedData();
+		private void calculCompletionProgress() {
+			if (categoryId != 0) {
+				long t = System.currentTimeMillis();
 
-			for (JJRequirement requirement : dataList) {
-				compteur = compteur + calculCompletion(requirement);
+				float compteur = 0;
+
+				for (JJRequirement requirement : requirements) {
+					compteur = compteur + calculCompletion(requirement);
+				}
+
+				if (requirements.isEmpty()) {
+					completionProgress = 0;
+				} else {
+					completionProgress = compteur / requirements.size();
+				}
+
+				logger.info("getCompletionProgress ");
+				logger.info(System.currentTimeMillis() - t);
+
+				completionProgress = completionProgress * 100;
 			}
-
-			if (dataList.isEmpty()) {
-				completionProgress = 0;
-			} else {
-				completionProgress = compteur / dataList.size();
-			}
-
-			return completionProgress * 100;
 		}
 
 		private float calculCompletion(JJRequirement requirement) {
+
 			float compteur = 0;
 			int size = 0;
 			Set<JJRequirement> linksUp = requirement.getRequirementLinkUp();
@@ -2747,24 +2884,19 @@ public class JJRequirementBean {
 			Set<JJTask> tasks = requirement.getTasks();
 			int hasTaskCompleted = 0;
 			if (!tasks.isEmpty()) {
-				boolean isCompleted = false;
+				boolean completed = false;
 				for (JJTask task : tasks) {
 					if (task.getEnabled()) {
-						if (task.getCompleted() != null) {
-							if (task.getCompleted()) {
-								isCompleted = true;
-							} else {
-								isCompleted = false;
-								break;
-							}
+						if (task.getEndDateReal() != null) {
+							completed = true;
 						} else {
-							isCompleted = false;
+							completed = false;
 							break;
 						}
 
 					}
 				}
-				if (isCompleted) {
+				if (completed) {
 					compteur++;
 					hasTaskCompleted = 1;
 				}
@@ -2776,8 +2908,21 @@ public class JJRequirementBean {
 			return compteur;
 		}
 
+		public float getCompletionProgress() {
+
+			return completionProgress;
+		}
+
 		public void setCompletionProgress(float completionProgress) {
 			this.completionProgress = completionProgress;
+		}
+
+		public List<JJRequirement> getRequirements() {
+			return requirements;
+		}
+
+		public void setRequirements(List<JJRequirement> requirements) {
+			this.requirements = requirements;
 		}
 
 		public List<JJRequirement> getFiltredRequirements() {
@@ -2789,11 +2934,20 @@ public class JJRequirementBean {
 			this.filtredRequirements = filtredRequirements;
 		}
 
+		public boolean getRendered() {
+			return rendered;
+		}
+
+		public void setRendered(boolean rendered) {
+			this.rendered = rendered;
+		}
+
 		public CategoryDataModel(List<JJRequirement> data, long categoryId,
-				String nameDataModel) {
-			super(data);
+				String nameDataModel, boolean rendered) {
+			this.requirements = data;
 			this.categoryId = categoryId;
 			this.nameDataModel = nameDataModel;
+			this.rendered = rendered;
 
 		}
 
@@ -2801,6 +2955,8 @@ public class JJRequirementBean {
 
 			List<JJCategory> categoryList = jJCategoryService.getCategories(
 					null, false, true, true);
+
+			JJCategory category = jJCategoryService.findJJCategory(categoryId);
 
 			boolean sizeIsOne = false;
 
@@ -2810,7 +2966,7 @@ public class JJRequirementBean {
 			boolean ENCOURS = false;
 			boolean FINIS = true;
 
-			if (categoryId == categoryList.get(0).getId()) {
+			if (category.getStage() == categoryList.get(0).getStage()) {
 				DOWN = true;
 				for (JJRequirement req : requirement.getRequirementLinkUp()) {
 					if (req.getEnabled()) {
@@ -2820,8 +2976,9 @@ public class JJRequirementBean {
 				}
 
 				sizeIsOne = true;
-			} else if (categoryId == categoryList.get(categoryList.size() - 1)
-					.getId() && !sizeIsOne) {
+			} else if (category.getStage() == categoryList.get(
+					categoryList.size() - 1).getStage()
+					&& !sizeIsOne) {
 
 				UP = true;
 
@@ -2875,31 +3032,25 @@ public class JJRequirementBean {
 							.getTestcases(requirement, null, true, false, false);
 					boolean SUCCESS = true;
 
-					if (testcases.isEmpty()) {
-						SUCCESS = false;
-					} else {
+					for (JJTestcase testcase : testcases) {
 
-						for (JJTestcase testcase : testcases) {
+						List<JJTestcaseexecution> testcaseExecutions = jJTestcaseexecutionService
+								.getTestcaseexecutions(testcase, null, true,
+										true, false);
 
-							List<JJTestcaseexecution> testcaseExecutions = jJTestcaseexecutionService
-									.getTestcaseexecutions(testcase, null,
-											true, true, false);
+						if (testcaseExecutions.isEmpty()) {
+							SUCCESS = false;
+						} else {
 
-							if (testcaseExecutions.isEmpty()) {
+							if ((testcaseExecutions.get(0).getPassed() == null)
+									|| (testcaseExecutions.get(0).getPassed() != null && !testcaseExecutions
+											.get(0).getPassed())) {
 								SUCCESS = false;
-							} else {
+								break;
 
-								if ((testcaseExecutions.get(0).getPassed() == null)
-										|| (testcaseExecutions.get(0)
-												.getPassed() != null && !testcaseExecutions
-												.get(0).getPassed())) {
-									SUCCESS = false;
-									break;
-
-								}
 							}
-
 						}
+
 					}
 
 					if (SUCCESS) {
@@ -2919,23 +3070,6 @@ public class JJRequirementBean {
 
 		}
 
-		@Override
-		public JJRequirement getRowData(String rowKey) {
-
-			List<JJRequirement> requirements = (List<JJRequirement>) getWrappedData();
-
-			for (JJRequirement requirement : requirements) {
-				if (requirement.getId().equals(rowKey))
-					return requirement;
-			}
-
-			return null;
-		}
-
-		@Override
-		public Object getRowKey(JJRequirement requirement) {
-			return requirement.getId();
-		}
 	}
 
 	public class ImportFormat {

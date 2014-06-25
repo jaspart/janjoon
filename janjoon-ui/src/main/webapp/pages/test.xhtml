@@ -326,7 +326,7 @@
 										disabled="#{jJTestcaseBean.disabledTeststepMode}"
 										label="Teststep Action" required="true"
 										requiredMessage="Teststep Action is a required value"
-										maxlength="100" widgetVar="actionWidget" />
+										widgetVar="actionWidget" />
 								</p:column>
 								<p:column>
 									<h:outputText for="result" value="Result: *" />
@@ -335,7 +335,7 @@
 										disabled="#{jJTestcaseBean.disabledTeststepMode}"
 										label="Teststep Result" required="true"
 										requiredMessage="Teststep Result is a required value"
-										maxlength="100" widgetVar="resultWidget" />
+										widgetVar="resultWidget" />
 								</p:column>
 								<p:column>
 									<p:commandButton id="addTestStep" value="Add Teststep"
@@ -414,7 +414,7 @@
 									hideEffect="fade" />
 							</p:column>
 							<p:column style="width:10%;">
-								<p:rowEditor />
+								<p:rowEditor/>
 							</p:column>
 						</p:dataTable>
 					</p:scrollPanel>

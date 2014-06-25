@@ -35,6 +35,7 @@ import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
+import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -117,7 +118,7 @@ public class LoginBean implements Serializable {
 		FacesContext fContext = FacesContext.getCurrentInstance();
 		logger.info("JJContact logged out");
 		HttpSession session = (HttpSession) fContext.getExternalContext()
-			.getSession(false);
+				.getSession(false);
 		session.invalidate();
 		SecurityContextHolder.clearContext();
 		return "loggedout";
@@ -127,7 +128,7 @@ public class LoginBean implements Serializable {
 	@SuppressWarnings("deprecation")
 	public String login() {
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-			username, password);
+				username, password);
 		String prevPage = "";
 		try {
 			Authentication authentication = authenticationManager
@@ -141,9 +142,9 @@ public class LoginBean implements Serializable {
 		} catch (AuthenticationException loginError) {
 
 			FacesMessage message = new FacesMessage(
-				FacesMessage.SEVERITY_ERROR,
-				"Invalid username/password. Reason :",
-				loginError.getMessage());
+					FacesMessage.SEVERITY_ERROR,
+					"Invalid username/password. Reason :",
+					loginError.getMessage());
 			FacesContext.getCurrentInstance().addMessage("login", message);
 
 			enable = false;
@@ -156,24 +157,24 @@ public class LoginBean implements Serializable {
 				authorizationManager.setContact(contact);
 				FacesContext fContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) fContext
-					.getExternalContext().getSession(false);
-				
+						.getExternalContext().getSession(false);
+
 				session.putValue("JJContact", contact);
 				session.putValue("password", password);
 				FacesMessage message = new FacesMessage(
-					FacesMessage.SEVERITY_INFO, "Welcome ",
-					contact.getName());
+						FacesMessage.SEVERITY_INFO, "Welcome ",
+						contact.getName());
 				FacesContext.getCurrentInstance().addMessage("login", message);
 				FacesContext context = FacesContext.getCurrentInstance();
 				logger.info("login operation success " + contact.getName()
-					+ " logged in");
+						+ " logged in");
 
 				if (UsageChecker.checkExpiryDate()) {
 				} else {
 
 					FacesMessage fExpiredMessage = new FacesMessage(
-						FacesMessage.SEVERITY_WARN,
-						"License expiry date is NOT valid!", null);
+							FacesMessage.SEVERITY_WARN,
+							"License expiry date is NOT valid!", null);
 					context.addMessage(null, fExpiredMessage);
 				}
 				context.getExternalContext().getFlash().setKeepMessages(true);
@@ -181,12 +182,12 @@ public class LoginBean implements Serializable {
 			} else {
 				FacesContext fContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) fContext
-					.getExternalContext().getSession(false);
+						.getExternalContext().getSession(false);
 				session.invalidate();
 				SecurityContextHolder.clearContext();
 				FacesMessage fMessage = new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, "License is NOT correct!",
-					null);
+						FacesMessage.SEVERITY_ERROR, "License is NOT correct!",
+						null);
 				FacesContext.getCurrentInstance().addMessage(null, fMessage);
 				// FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 				prevPage = "fail";
@@ -258,7 +259,7 @@ public class LoginBean implements Serializable {
 	public static Object findBean(String beanName) {
 		FacesContext context = FacesContext.getCurrentInstance();
 		return context.getApplication().evaluateExpressionGet(context,
-			"#{" + beanName + "}", Object.class);
+				"#{" + beanName + "}", Object.class);
 	}
 
 	public void onTabAdminChange(TabChangeEvent event) {
@@ -279,9 +280,12 @@ public class LoginBean implements Serializable {
 		FacesContext ctx = FacesContext.getCurrentInstance();
 		String viewId = ctx.getViewRoot().getViewId();
 
-		HttpSession session = (HttpSession) ctx.getExternalContext()
-			.getSession(false);
+		JJVersionBean jJVersionBean = (JJVersionBean) findBean("jJVersionBean");
+		JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");
+		JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
 
+		HttpSession session = (HttpSession) ctx.getExternalContext()
+				.getSession(false);
 		messageListener(session);
 
 		if (event.getComponent().getClientId().contains("projectSelectOneMenu")) {
@@ -292,20 +296,17 @@ public class LoginBean implements Serializable {
 		if (viewId.contains("development")) {
 
 			RequestContext context = RequestContext.getCurrentInstance();
-			JJVersionBean jJVersionBean = (JJVersionBean) session
-				.getAttribute("jJVersionBean");
 
-			JJProjectBean jJProjectBean = (JJProjectBean) session
-				.getAttribute("jJProjectBean");
 			DevelopmentBean jJDevelopment = (DevelopmentBean) session
-				.getAttribute("jJDevelopment");
+					.getAttribute("jJDevelopment");
 
-			if (event.getComponent().getClientId().contains("productSelectOneMenu")) {
+			if (event.getComponent().getClientId()
+					.contains("productSelectOneMenu")) {
 				FacesMessage facesMessage = MessageFactory.getMessage(
-					"dev.nullVersion.label", FacesMessage.SEVERITY_ERROR,
-					"");
+						"dev.nullVersion.label", FacesMessage.SEVERITY_ERROR,
+						"");
 				FacesContext.getCurrentInstance()
-					.addMessage(null, facesMessage);
+						.addMessage(null, facesMessage);
 
 			} else if (event.getComponent().getClientId()
 					.contains("versionSelectOneMenu")) {
@@ -333,6 +334,40 @@ public class LoginBean implements Serializable {
 				}
 			}
 
+		} else if (viewId.contains("specifications")) {
+
+			System.out.println("in spec");
+
+			JJRequirementBean jJRequirementBean = (JJRequirementBean) session
+					.getAttribute("jJRequirementBean");
+
+			if (event.getComponent().getClientId()
+					.contains("projectSelectOneMenu")) {
+
+				JJProject project = (JJProject) event.getNewValue();
+
+				jJProjectBean.setProject(project);
+				jJRequirementBean.setProject(project);
+
+			} else if (event.getComponent().getClientId()
+					.contains("productSelectOneMenu")) {
+
+				JJProduct product = (JJProduct) event.getNewValue();
+
+				jJProductBean.setProduct(product);
+
+				jJRequirementBean.setProduct(product);
+
+			} else if (event.getComponent().getClientId()
+					.contains("versionSelectOneMenu")) {
+
+				JJVersion version = (JJVersion) event.getNewValue();
+
+				jJVersionBean.setVersion(version);
+				jJRequirementBean.setVersion(version);
+			}
+
+			// jJRequirementBean.loadData();
 		}
 
 	}
@@ -371,13 +406,13 @@ public class LoginBean implements Serializable {
 		if (!loading) {
 			loading = true;
 			String path = FacesContext.getCurrentInstance()
-				.getExternalContext().getRequestContextPath();
+					.getExternalContext().getRequestContextPath();
 
 			FacesContext
-				.getCurrentInstance()
-				.getExternalContext()
-				.redirect(
-					path + "/pages/development.jsf?faces-redirect=true");
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(
+							path + "/pages/development.jsf?faces-redirect=true");
 
 		}
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
@@ -397,10 +432,10 @@ public class LoginBean implements Serializable {
 
 		if (enable) {
 			String path = FacesContext.getCurrentInstance()
-				.getExternalContext().getRequestContextPath();
+					.getExternalContext().getRequestContextPath();
 
 			FacesContext.getCurrentInstance().getExternalContext()
-				.redirect(path + "/pages/main.jsf?faces-redirect=true");
+					.redirect(path + "/pages/main.jsf?faces-redirect=true");
 		}
 	}
 
@@ -411,30 +446,30 @@ public class LoginBean implements Serializable {
 			if (!loadMain) {
 				loadMain = true;
 				String path = FacesContext.getCurrentInstance()
-					.getExternalContext().getRequestContextPath();
+						.getExternalContext().getRequestContextPath();
 
 				FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect(
-						path
-							+ FacesContext.getCurrentInstance()
-								.getViewRoot().getViewId()
-								.replace(".xhtml", ".jsf"));
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								path
+										+ FacesContext.getCurrentInstance()
+												.getViewRoot().getViewId()
+												.replace(".xhtml", ".jsf"));
 			}
 
 			String viewId = FacesContext.getCurrentInstance().getViewRoot()
-				.getViewId();
+					.getViewId();
 			if (!viewId.contains("development")) {
 				HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
+						.getCurrentInstance().getExternalContext()
+						.getSession(false);
 				DevelopmentBean jJDevelopment = (DevelopmentBean) session
-					.getAttribute("jJDevelopment");
+						.getAttribute("jJDevelopment");
 				if (jJDevelopment != null) {
 					if (jJDevelopment.isInit()) {
 						session.setAttribute("jJDevelopment",
-							new DevelopmentBean(jJDevelopment));
+								new DevelopmentBean(jJDevelopment));
 					}
 				}
 			}
@@ -447,26 +482,26 @@ public class LoginBean implements Serializable {
 
 		if (jJProjectBean.getProject() == null) {
 			FacesMessage message = MessageFactory.getMessage(
-				"dev.nullProject.label", FacesMessage.SEVERITY_ERROR, "");
+					"dev.nullProject.label", FacesMessage.SEVERITY_ERROR, "");
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		} else {
 			String path = FacesContext.getCurrentInstance()
-				.getExternalContext().getRequestContextPath();
+					.getExternalContext().getRequestContextPath();
 			if (e.getComponent().getId().equalsIgnoreCase("proAction")) {
 				FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect(
-						path
-						+ "/pages/project1.jsf?faces-redirect=true");
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								path
+										+ "/pages/project1.jsf?faces-redirect=true");
 			} else if (e.getComponent().getId().equalsIgnoreCase("testAction")) {
 				FacesContext.getCurrentInstance().getExternalContext()
-					.redirect(path + "/pages/test.jsf?faces-redirect=true");
+						.redirect(path + "/pages/test.jsf?faces-redirect=true");
 			} else {
 				FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect(path + "/pages/stats.jsf?faces-redirect=true");
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(path + "/pages/stats.jsf?faces-redirect=true");
 			}
 		}
 
@@ -481,15 +516,16 @@ public class LoginBean implements Serializable {
 				&& jJProductBean.getProduct() != null) {
 
 			if (!FacesContext.getCurrentInstance().getViewRoot().getViewId()
-				.contains("development")) {
+					.contains("development")) {
 
 				String path = FacesContext.getCurrentInstance()
-					.getExternalContext().getRequestContextPath();
+						.getExternalContext().getRequestContextPath();
 				FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect(path
-						+ "/pages/development.jsf?faces-redirect=true");
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								path
+										+ "/pages/development.jsf?faces-redirect=true");
 
 			} else {
 
@@ -501,14 +537,14 @@ public class LoginBean implements Serializable {
 
 			if (jJProductBean.getProduct() == null) {
 				FacesMessage message = MessageFactory.getMessage(
-					"dev.nullProduct.label", FacesMessage.SEVERITY_ERROR,
-					"");
+						"dev.nullProduct.label", FacesMessage.SEVERITY_ERROR,
+						"");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 
 			} else {
 				FacesMessage message = MessageFactory.getMessage(
-					"dev.nullVersion.label", FacesMessage.SEVERITY_ERROR,
-					"");
+						"dev.nullVersion.label", FacesMessage.SEVERITY_ERROR,
+						"");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 
 			}
@@ -526,32 +562,26 @@ public class LoginBean implements Serializable {
 
 			String path = FacesContext.getCurrentInstance()
 					.getExternalContext().getRequestContextPath();
-			if (root.getViewId().contains("project1")
-					|| root.getViewId().contains("test")
-					|| root.getViewId().contains("stats")) {
 
-				if (jjProjectBean.getProject() == null) {
-					context.addMessage(null, new FacesMessage(
-							FacesMessage.SEVERITY_ERROR,
-							"Please Select Project", null));
+			if (jjProjectBean.getProject() == null
+					&& (root.getViewId().contains("project1")
+							|| root.getViewId().contains("test") || root
+							.getViewId().contains("stats"))) {
+				context.addMessage(null, new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "Please Select Project",
+						null));
 
-					context.getExternalContext().getFlash()
-							.setKeepMessages(true);
+				context.getExternalContext().getFlash().setKeepMessages(true);
 
-					FacesContext
-							.getCurrentInstance()
-							.getExternalContext()
-							.redirect(path
-								+ "/pages/main.jsf?faces-redirect=true");
-				}
+				FacesContext.getCurrentInstance().getExternalContext()
+						.redirect(path + "/pages/main.jsf?faces-redirect=true");
+
 			} else {
 				String previos = FacesContext.getCurrentInstance()
-					.getExternalContext().getRequestHeaderMap()
+						.getExternalContext().getRequestHeaderMap()
 						.get("referer");
 				String viewID = FacesContext.getCurrentInstance().getViewRoot()
-					.getViewId();
-				System.out.println(previos);
-				System.out.println(viewID);
+						.getViewId();
 
 				if (previos != null && viewID != null) {
 					if (!previos.contains(viewID.replace(".xhtml", ".jsf"))) {
@@ -560,50 +590,55 @@ public class LoginBean implements Serializable {
 								jJProductBean.getProduct())) {
 
 							context.addMessage(
-								null,
-								new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"You have no permission to access this resource",
-									null));
+									null,
+									new FacesMessage(
+											FacesMessage.SEVERITY_ERROR,
+											"You have no permission to access this resource",
+											null));
 
 							context.getExternalContext().getFlash()
-								.setKeepMessages(true);
+									.setKeepMessages(true);
 
 							FacesContext
-								.getCurrentInstance()
-								.getExternalContext()
-								.redirect(
-									path
-									+ "/pages/main.jsf?faces-redirect=true");
+									.getCurrentInstance()
+									.getExternalContext()
+									.redirect(
+											path
+													+ "/pages/main.jsf?faces-redirect=true");
 
-						} else if (!authorizationManager.getAuthorization(
-							root.getViewId(), jjProjectBean.getProject(),
-							jJProductBean.getProduct())) {
+						} else if (root.getViewId().contains("specification")) {
 
-							context.addMessage(
-								null,
-								new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"You have no permission to access this resource",
-									null));
-
-							context.getExternalContext().getFlash()
-								.setKeepMessages(true);
-
-							FacesContext
-								.getCurrentInstance()
-								.getExternalContext()
-								.redirect(
-									path
-									+ "/pages/main.jsf?faces-redirect=true");
-						} else if (root.getViewId().contains("development")) {
-							loadingPage(e);
+							JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
+							jJRequirementBean.loadData();
 						}
 					}
+				} else if (!authorizationManager.getAuthorization(
+						root.getViewId(), jjProjectBean.getProject(),
+						jJProductBean.getProduct())) {
 
+					context.addMessage(null, new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"You have no permission to access this resource",
+							null));
+
+					context.getExternalContext().getFlash()
+							.setKeepMessages(true);
+
+					FacesContext
+							.getCurrentInstance()
+							.getExternalContext()
+							.redirect(
+									path
+											+ "/pages/main.jsf?faces-redirect=true");
+				} else if (root.getViewId().contains("development")) {
+					loadingPage(e);
+				} else if (root.getViewId().contains("specifications")) {
+
+					JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
+					jJRequirementBean.loadData();
 				}
-
 			}
+
 		}
 	}
 

@@ -57,9 +57,6 @@ privileged aspect JJTeststepDataOnDemand_Roo_DataOnDemand {
     
     public void JJTeststepDataOnDemand.setActionstep(JJTeststep obj, int index) {
         String actionstep = "actionstep_" + index;
-        if (actionstep.length() > 100) {
-            actionstep = actionstep.substring(0, 100);
-        }
         obj.setActionstep(actionstep);
     }
     
@@ -93,9 +90,6 @@ privileged aspect JJTeststepDataOnDemand_Roo_DataOnDemand {
     
     public void JJTeststepDataOnDemand.setResultstep(JJTeststep obj, int index) {
         String resultstep = "resultstep_" + index;
-        if (resultstep.length() > 100) {
-            resultstep = resultstep.substring(0, 100);
-        }
         obj.setResultstep(resultstep);
     }
     

@@ -96,6 +96,15 @@
 					</p:panelGrid>
 				</h:form>
 			</p:panel>
+			
+			<pe:blockUI widgetVar="blockUIWidget">
+				<h:panelGrid columns="2">
+					<p:graphicImage library="images" name="ajax-loader.gif"
+						style="vertical-align: middle;" />
+					<h:outputText value="Please wait..." style="white-space: nowrap;" />
+				</h:panelGrid>
+			</pe:blockUI>
+			
 		</h:panelGrid>
 		<script type="text/javascript">
 			jQuery("div.ui-growl").remove();
