@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
@@ -68,6 +69,8 @@ public class JJSprintBean {
 	private HtmlPanelGrid createTaskPanelGrid;
 	private JJCategory category;
 	private JJRequirement requirement;
+	private List<JJBug> bugs;
+	private JJBug bug;
 	private List<JJRequirement> reqList;
 	private JJProject project;
 	private List<SprintUtil> sprintList;
@@ -134,6 +137,26 @@ public class JJSprintBean {
 
 	public void setRequirement(JJRequirement requirement) {
 		this.requirement = requirement;
+	}
+
+	public List<JJBug> getBugs() {		
+		
+		if(bugs==null)
+			bugs=jJBugService.getBugs(project);
+		
+		return bugs;
+	}
+
+	public void setBugs(List<JJBug> bugs) {
+		this.bugs = bugs;
+	}
+
+	public JJBug getBug() {
+		return bug;
+	}
+
+	public void setBug(JJBug bug) {
+		this.bug = bug;
 	}
 
 	public List<JJRequirement> getReqList() {
@@ -229,11 +252,25 @@ public class JJSprintBean {
 	}
 
 	public void updatereqPanel() {
-		reqList = jJRequirementService.getRequirements(category, project, null,
-				null, null, null, false, true, true);
-		requirement = null;
-		if (!reqList.isEmpty())
-			requirement = reqList.get(0);
+		
+		if(category != null)
+		{
+			reqList = jJRequirementService.getRequirements(category, project, null,
+					null, null, null, false, true, true);
+			bugs=null;
+			bug=null;
+			requirement = null;
+			if (!reqList.isEmpty())
+				requirement = reqList.get(0);
+		}else
+		{
+			bugs=jJBugService.getBugs(project);
+			bug=null;
+			reqList=null;
+			requirement=null;
+			
+		}
+	
 	}
 
 	public void onCellEditTask(CellEditEvent event) {
@@ -447,13 +484,23 @@ public class JJSprintBean {
 		JJStatus status = jJStatusService.getOneStatus("TODO", "JJTask", true);
 		if (status != null)
 			task.setStatus(status);
-		task.setName("Task For Requirement: " + requirement.getName());
+		if(requirement != null)
+		{
+			task.setName("Task For Requirement: " + requirement.getName());
+			task.setRequirement(requirement);
+		}else if(bug != null)
+		{
+			task.setName("Task For Bug: "+bug.getName());
+			task.setBug(bug);
+			task.setRequirement(bug.getRequirement());
+		}
+		
 		task.setStartDatePlanned(sprintUtil.getSprint().getStartDate());
 		task.setEndDatePlanned(sprintUtil.getSprint().getEndDate());
 		task.setSprint(sprintUtil.getSprint());
 		task.setCreatedBy(contact);
 		task.setCreationDate(new Date());
-		task.setRequirement(requirement);
+		
 		task.setEnabled(true);
 		task.setDescription(task.getName() + " /CreatedBy:"
 				+ task.getCreatedBy().getName() + " at :"
@@ -551,13 +598,19 @@ public class JJSprintBean {
 	}
 
 	public HtmlPanelGrid populateCreateTaskPanel() {
-
+		
+		
+		
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		javax.faces.application.Application application = facesContext
 				.getApplication();
 		ExpressionFactory expressionFactory = application
 				.getExpressionFactory();
 		ELContext elContext = facesContext.getELContext();
+		
+		JJBug b=(JJBug) expressionFactory
+				.createValueExpression(elContext, "#{jJSprintBean.bug}",
+						JJBug.class).getValue(elContext); 
 
 		HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application
 				.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
@@ -589,6 +642,7 @@ public class JJSprintBean {
 
 		OutputLabel bugCreateOutput = (OutputLabel) application
 				.createComponent(OutputLabel.COMPONENT_TYPE);
+		bugCreateOutput.setRendered(b==null);
 		bugCreateOutput.setFor("bugCreateInput");
 		bugCreateOutput.setId("bugCreateOutput");
 		bugCreateOutput.setValue("Bug:");
@@ -597,6 +651,7 @@ public class JJSprintBean {
 		AutoComplete bugCreateInput = (AutoComplete) application
 				.createComponent(AutoComplete.COMPONENT_TYPE);
 		bugCreateInput.setId("bugCreateInput");
+		bugCreateInput.setRendered(b==null);
 		bugCreateInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext, "#{jJSprintBean.task.bug}",
 						JJBug.class));
@@ -618,6 +673,7 @@ public class JJSprintBean {
 		Message bugCreateInputMessage = (Message) application
 				.createComponent(Message.COMPONENT_TYPE);
 		bugCreateInputMessage.setId("bugCreateInputMessage");
+		bugCreateInputMessage.setRendered(b==null);
 		bugCreateInputMessage.setFor("bugCreateInput");
 		bugCreateInputMessage.setDisplay("icon");
 		htmlPanelGrid.getChildren().add(bugCreateInputMessage);

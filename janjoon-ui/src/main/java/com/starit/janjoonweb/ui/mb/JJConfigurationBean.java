@@ -206,7 +206,7 @@ public class JJConfigurationBean {
 				.getExternalContext().getRequestContextPath();
 		descriptionCreateInput.setCustomConfig(path+"/resources/js/ckEditor.js");
 		descriptionCreateInput
-				.setToolbar("[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]");
+				.setToolbar("[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table]]");
 		descriptionCreateInput.setId("descriptionCreateInput");
 		descriptionCreateInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
@@ -333,7 +333,7 @@ public class JJConfigurationBean {
 				.getExternalContext().getRequestContextPath();
 		descriptionEditInput.setCustomConfig(path+"/resources/js/ckEditor.js");
 		descriptionEditInput
-				.setToolbar("[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]");
+				.setToolbar("[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table]]");
 		descriptionEditInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
 						"#{jJConfigurationBean.JJConfiguration_.description}",

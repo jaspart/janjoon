@@ -606,7 +606,9 @@ public class LoginBean implements Serializable {
 											path
 													+ "/pages/main.jsf?faces-redirect=true");
 
+
 						} else if (root.getViewId().contains("specification")) {
+
 
 							JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
 							jJRequirementBean.loadData();
@@ -639,8 +641,10 @@ public class LoginBean implements Serializable {
 				}
 			}
 
+
 		}
 	}
+
 
 	// public void handleFileUpload(FileUploadEvent event) throws IOException {
 	//

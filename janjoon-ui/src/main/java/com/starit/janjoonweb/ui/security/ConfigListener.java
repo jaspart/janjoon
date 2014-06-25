@@ -14,6 +14,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.starit.janjoonweb.domain.JJBug;
@@ -874,12 +876,13 @@ public class ConfigListener implements ServletContextListener {
 
 		if (jJContactService.getContacts(true).isEmpty()) {
 
+			PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(11);
 			JJContact contact = new JJContact();
 			contact.setName("janjoon");
 			contact.setFirstname("mailer");
 			contact.setDescription("This contact is " + contact.getFirstname()
 					+ " " + contact.getName());
-			contact.setPassword("BeHappy2012");
+			contact.setPassword(passwordEncoder.encode("BeHappy2012"));
 			contact.setEnabled(true);
 			contact.setEmail("janjoon.mailer@gmail.com");
 			contact.setCreationDate(new Date());
@@ -903,7 +906,7 @@ public class ConfigListener implements ServletContextListener {
 			contact = new JJContact();
 			contact.setName("Thierry");
 			contact.setFirstname("Thierry");
-			contact.setPassword("BeHappy2012");
+			contact.setPassword(passwordEncoder.encode("BeHappy2012"));
 			contact.setDescription("This contact is " + contact.getFirstname()
 					+ " " + contact.getName());
 			contact.setEnabled(true);

@@ -153,29 +153,26 @@ public class JJBugBean {
 		}
 
 	}
-	
-	public void deleteMultiple()
-	{
-		for(JJBug b:selectedBugList)
-		{
+
+	public void deleteMultiple() {
+		for (JJBug b : selectedBugList) {
 			b.setEnabled(false);
 			jJBugService.updateJJBug(b);
 		}
-		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "JJBug");
-        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-        reset();
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_deleted", "JJBug");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		reset();
 	}
-	
-	public void deleteSingle()
-	{
-		for(JJBug b:selectedBugList)
-		{
-			b.setEnabled(false);
-			jJBugService.updateJJBug(b);
-		}
-		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "JJBug");
-        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-        reset();
+
+	public void deleteSingle() {
+
+		getJJBug_().setEnabled(false);
+		jJBugService.updateJJBug(getJJBug_());
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_deleted", "JJBug");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		reset();
 	}
 
 	public void initJJBugTable() {
@@ -250,8 +247,8 @@ public class JJBugBean {
 
 		JJBug_ = null;
 		bugList = null;
-		selectedBugList=null;
-		
+		selectedBugList = null;
+
 		criticityOptions = null;
 		importanceOptions = null;
 		statusOptions = null;
@@ -289,25 +286,33 @@ public class JJBugBean {
 		return persist();
 
 	}
-	
-	public String findStyleColor(JJBug b)
-	{
-		if(b.getStatus()!=null)
-			
+
+	public String findStyleColor(JJBug b) {
+		if (b.getStatus() != null)
+
 			return b.getStatus().getName();
 		else
 			return "";
-		
+
+	}
+
+	public List<JJStatus> completeStatusBug(String query) {
+		List<JJStatus> suggestions = new ArrayList<JJStatus>();
+		for (JJStatus jJStatus : jJStatusService.getStatus("JJBug", true, null,
+				true)) {
+			String jJCriticityStr = String.valueOf(jJStatus.getName());
+			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
+				suggestions.add(jJStatus);
+			}
+		}
+		return suggestions;
 	}
 
 	public List<JJCriticity> completeCriticityBug(String query) {
 		List<JJCriticity> suggestions = new ArrayList<JJCriticity>();
 		for (JJCriticity jJCriticity : jJCriticityService.getCriticities(
 				"JJBug", true)) {
-			String jJCriticityStr = String.valueOf(jJCriticity.getName() + " "
-					+ jJCriticity.getDescription() + " "
-					+ jJCriticity.getCreationDate() + " "
-					+ jJCriticity.getUpdatedDate());
+			String jJCriticityStr = String.valueOf(jJCriticity.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(jJCriticity);
 			}
@@ -395,14 +400,9 @@ public class JJBugBean {
 		categoryEditInput.setDropdown(true);
 		categoryEditInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "category", String.class));
-		categoryEditInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{category.name} #{category.description} #{category.creationDate} #{category.updatedDate}",
-										String.class));
+		categoryEditInput.setValueExpression("itemLabel", expressionFactory
+				.createValueExpression(elContext, "#{category.name}",
+						String.class));
 		categoryEditInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{category}",
 						JJCategory.class));
@@ -437,14 +437,9 @@ public class JJBugBean {
 		criticityEditInput.setDropdown(true);
 		criticityEditInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "criticity", String.class));
-		criticityEditInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{criticity.name} #{criticity.description} #{criticity.creationDate} #{criticity.updatedDate}",
-										String.class));
+		criticityEditInput.setValueExpression("itemLabel", expressionFactory
+				.createValueExpression(elContext, "#{criticity.name}",
+						String.class));
 		criticityEditInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{criticity}",
 						JJCriticity.class));
@@ -479,14 +474,9 @@ public class JJBugBean {
 		importanceEditInput.setDropdown(true);
 		importanceEditInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "importance", String.class));
-		importanceEditInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{importance.name} #{importance.description} #{importance.creationDate} #{importance.updatedDate}",
-										String.class));
+		importanceEditInput.setValueExpression("itemLabel", expressionFactory
+				.createValueExpression(elContext, "#{importance.name}",
+						String.class));
 		importanceEditInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{importance}",
 						JJImportance.class));
@@ -516,19 +506,14 @@ public class JJBugBean {
 						JJStatus.class));
 		statusEditInput.setCompleteMethod(expressionFactory
 				.createMethodExpression(elContext,
-						"#{jJBugBean.completeStatus}", List.class,
+						"#{jJBugBean.completeStatusBug}", List.class,
 						new Class[] { String.class }));
 		statusEditInput.setDropdown(true);
 		statusEditInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "status", String.class));
-		statusEditInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{status.name} #{status.description} #{status.creationDate} #{status.updatedDate}",
-										String.class));
+		statusEditInput.setValueExpression("itemLabel", expressionFactory
+				.createValueExpression(elContext, "#{status.name}",
+						String.class));
 		statusEditInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{status}", JJStatus.class));
 		statusEditInput.setConverter(new JJStatusConverter());
@@ -564,14 +549,9 @@ public class JJBugBean {
 		requirementEditInput.setDropdown(true);
 		requirementEditInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "requirement", String.class));
-		requirementEditInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{requirement.name} #{requirement.description} #{requirement.creationDate} #{requirement.updatedDate}",
-										String.class));
+		requirementEditInput.setValueExpression("itemLabel", expressionFactory
+				.createValueExpression(elContext, "#{requirement.name}",
+						String.class));
 		requirementEditInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{requirement}",
 						JJRequirement.class));
@@ -606,14 +586,9 @@ public class JJBugBean {
 		teststepEditInput.setDropdown(true);
 		teststepEditInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "teststep", String.class));
-		teststepEditInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{teststep.name} #{teststep.description} #{teststep.creationDate} #{teststep.updatedDate}",
-										String.class));
+		teststepEditInput.setValueExpression("itemLabel", expressionFactory
+				.createValueExpression(elContext, "#{teststep.name}",
+						String.class));
 		teststepEditInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{teststep}",
 						JJTeststep.class));
@@ -676,14 +651,9 @@ public class JJBugBean {
 		sprintEditInput.setDropdown(true);
 		sprintEditInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "sprint", String.class));
-		sprintEditInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{sprint.name} #{sprint.description} #{sprint.creationDate} #{sprint.updatedDate}",
-										String.class));
+		sprintEditInput.setValueExpression("itemLabel", expressionFactory
+				.createValueExpression(elContext, "#{sprint.name}",
+						String.class));
 		sprintEditInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{sprint}", JJSprint.class));
 		sprintEditInput.setConverter(new JJSprintConverter());
@@ -717,14 +687,9 @@ public class JJBugBean {
 		buildEditInput.setDropdown(true);
 		buildEditInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "build", String.class));
-		buildEditInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{build.name} #{build.description} #{build.creationDate} #{build.updatedDate}",
-										String.class));
+		buildEditInput.setValueExpression("itemLabel",
+				expressionFactory.createValueExpression(elContext,
+						"#{build.name}", String.class));
 		buildEditInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{build}", JJBuild.class));
 		buildEditInput.setConverter(new JJBuildConverter());
@@ -778,14 +743,9 @@ public class JJBugBean {
 		bugUpEditInput.setDropdown(true);
 		bugUpEditInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "bugUp", String.class));
-		bugUpEditInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{bugUp.name} #{bugUp.description} #{bugUp.creationDate} #{bugUp.updatedDate}",
-										String.class));
+		bugUpEditInput.setValueExpression("itemLabel",
+				expressionFactory.createValueExpression(elContext,
+						"#{bugUp.name}", String.class));
 		bugUpEditInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{bugUp}", JJBug.class));
 		bugUpEditInput.setConverter(new JJBugConverter());
@@ -839,14 +799,9 @@ public class JJBugBean {
 		assignedTosEditInput.setDropdown(true);
 		assignedTosEditInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "assignedTos", String.class));
-		assignedTosEditInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{assignedTos.name} #{assignedTos.description} #{assignedTos.creationDate} #{assignedTos.updatedDate}",
-										String.class));
+		assignedTosEditInput.setValueExpression("itemLabel", expressionFactory
+				.createValueExpression(elContext, "#{assignedTos.name}",
+						String.class));
 		assignedTosEditInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{assignedTos}",
 						JJContact.class));
@@ -965,14 +920,9 @@ public class JJBugBean {
 		categoryCreateInput.setDropdown(true);
 		categoryCreateInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "category", String.class));
-		categoryCreateInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{category.name} #{category.description} #{category.creationDate} #{category.updatedDate}",
-										String.class));
+		categoryCreateInput.setValueExpression("itemLabel", expressionFactory
+				.createValueExpression(elContext, "#{category.name}",
+						String.class));
 		categoryCreateInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{category}",
 						JJCategory.class));
@@ -1007,14 +957,9 @@ public class JJBugBean {
 		criticityCreateInput.setDropdown(true);
 		criticityCreateInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "criticity", String.class));
-		criticityCreateInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{criticity.name} #{criticity.description} #{criticity.creationDate} #{criticity.updatedDate}",
-										String.class));
+		criticityCreateInput.setValueExpression("itemLabel", expressionFactory
+				.createValueExpression(elContext, "#{criticity.name}",
+						String.class));
 		criticityCreateInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{criticity}",
 						JJCriticity.class));
@@ -1049,14 +994,9 @@ public class JJBugBean {
 		importanceCreateInput.setDropdown(true);
 		importanceCreateInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "importance", String.class));
-		importanceCreateInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{importance.name} #{importance.description} #{importance.creationDate} #{importance.updatedDate}",
-										String.class));
+		importanceCreateInput.setValueExpression("itemLabel", expressionFactory
+				.createValueExpression(elContext, "#{importance.name}",
+						String.class));
 		importanceCreateInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{importance}",
 						JJImportance.class));
@@ -1086,19 +1026,14 @@ public class JJBugBean {
 						JJStatus.class));
 		statusCreateInput.setCompleteMethod(expressionFactory
 				.createMethodExpression(elContext,
-						"#{jJBugBean.completeStatus}", List.class,
+						"#{jJBugBean.completeStatusBug}", List.class,
 						new Class[] { String.class }));
 		statusCreateInput.setDropdown(true);
 		statusCreateInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "status", String.class));
-		statusCreateInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{status.name} #{status.description} #{status.creationDate} #{status.updatedDate}",
-										String.class));
+		statusCreateInput.setValueExpression("itemLabel", expressionFactory
+				.createValueExpression(elContext, "#{status.name}",
+						String.class));
 		statusCreateInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{status}", JJStatus.class));
 		statusCreateInput.setConverter(new JJStatusConverter());
@@ -1134,14 +1069,9 @@ public class JJBugBean {
 		requirementCreateInput.setDropdown(true);
 		requirementCreateInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "requirement", String.class));
-		requirementCreateInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{requirement.name} #{requirement.description} #{requirement.creationDate} #{requirement.updatedDate}",
-										String.class));
+		requirementCreateInput.setValueExpression("itemLabel",
+				expressionFactory.createValueExpression(elContext,
+						"#{requirement.name}", String.class));
 		requirementCreateInput.setValueExpression("itemValue",
 				expressionFactory.createValueExpression(elContext,
 						"#{requirement}", JJRequirement.class));
@@ -1176,14 +1106,9 @@ public class JJBugBean {
 		teststepCreateInput.setDropdown(true);
 		teststepCreateInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "teststep", String.class));
-		teststepCreateInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{teststep.name} #{teststep.description} #{teststep.creationDate} #{teststep.updatedDate}",
-										String.class));
+		teststepCreateInput.setValueExpression("itemLabel", expressionFactory
+				.createValueExpression(elContext, "#{teststep.name}",
+						String.class));
 		teststepCreateInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{teststep}",
 						JJTeststep.class));
@@ -1246,14 +1171,9 @@ public class JJBugBean {
 		sprintCreateInput.setDropdown(true);
 		sprintCreateInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "sprint", String.class));
-		sprintCreateInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{sprint.name} #{sprint.description} #{sprint.creationDate} #{sprint.updatedDate}",
-										String.class));
+		sprintCreateInput.setValueExpression("itemLabel", expressionFactory
+				.createValueExpression(elContext, "#{sprint.name}",
+						String.class));
 		sprintCreateInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{sprint}", JJSprint.class));
 		sprintCreateInput.setConverter(new JJSprintConverter());
@@ -1287,14 +1207,9 @@ public class JJBugBean {
 		buildCreateInput.setDropdown(true);
 		buildCreateInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "build", String.class));
-		buildCreateInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{build.name} #{build.description} #{build.creationDate} #{build.updatedDate}",
-										String.class));
+		buildCreateInput.setValueExpression("itemLabel",
+				expressionFactory.createValueExpression(elContext,
+						"#{build.name}", String.class));
 		buildCreateInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{build}", JJBuild.class));
 		buildCreateInput.setConverter(new JJBuildConverter());
@@ -1348,14 +1263,9 @@ public class JJBugBean {
 		bugUpCreateInput.setDropdown(true);
 		bugUpCreateInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "bugUp", String.class));
-		bugUpCreateInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{bugUp.name} #{bugUp.description} #{bugUp.creationDate} #{bugUp.updatedDate}",
-										String.class));
+		bugUpCreateInput.setValueExpression("itemLabel",
+				expressionFactory.createValueExpression(elContext,
+						"#{bugUp.name}", String.class));
 		bugUpCreateInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{bugUp}", JJBug.class));
 		bugUpCreateInput.setConverter(new JJBugConverter());
@@ -1409,14 +1319,9 @@ public class JJBugBean {
 		assignedTosCreateInput.setDropdown(true);
 		assignedTosCreateInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "assignedTos", String.class));
-		assignedTosCreateInput
-				.setValueExpression(
-						"itemLabel",
-						expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{assignedTos.name} #{assignedTos.description} #{assignedTos.creationDate} #{assignedTos.updatedDate}",
-										String.class));
+		assignedTosCreateInput.setValueExpression("itemLabel",
+				expressionFactory.createValueExpression(elContext,
+						"#{assignedTos.name}", String.class));
 		assignedTosCreateInput.setValueExpression("itemValue",
 				expressionFactory.createValueExpression(elContext,
 						"#{assignedTos}", JJContact.class));

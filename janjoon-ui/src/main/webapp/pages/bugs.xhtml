@@ -164,7 +164,7 @@
 					<h:form id="deleteForm">
 						<p:commandButton id="deleteYesButton"
 							value="#{messages.bug_delete_yes_button}"
-							action="#{jJBugBean.delete}"
+							action="#{jJBugBean.deleteSingle}"
 							update=":bugForm :bugForm:bugMessage"
 							oncomplete="deleteDialogWidget.hide()" />
 						<p:commandButton id="deleteNoButton"

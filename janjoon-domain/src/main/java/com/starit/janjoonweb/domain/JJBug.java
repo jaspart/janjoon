@@ -67,5 +67,11 @@ public class JJBug extends JJAbstractEntity {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bug")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
+	
+	@Override
+	public boolean equals(Object object) {
+		return (object instanceof JJBug) && (getId() != null) ? getId()
+				.equals(((JJBug) object).getId()) : (object == this);
+	}
 
 }
