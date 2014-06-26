@@ -104,9 +104,8 @@ public class JJBugServiceImpl implements JJBugService {
 		return result.getResultList();
 
 	}
-	
-	public List<JJBug> getBugs(JJProject project)
-	{
+
+	public List<JJBug> getBugs(JJProject project) {
 		return getBugs(project, null, null, true, true);
 	}
 

@@ -41,7 +41,7 @@
 					<ui:repeat value="#{jJRequirementBean.tableDataModelList}"
 						var="tableDataModel" varStatus="status">
 
-						<td><p:dataTable var="requirement"
+						<td><p:dataTable id="categoryTable" var="requirement"
 								value="#{tableDataModel.requirements}" scrollable="true"
 								scrollHeight="300" sortMode="multiple" resizableColumns="true"
 								rowStyleClass="#{tableDataModel.getRowStyleClass(requirement)}"
@@ -80,14 +80,15 @@
 														icon="ui-icon-plus" title="New Requirement"
 														actionListener="#{jJRequirementBean.newRequirement(tableDataModel.categoryId)}"
 														update=":requirementDialog"
-														oncomplete="requirementDialogWidget.show()" />
+														onstart="PF('specBlockUIWidget').block()"
+														oncomplete="PF('specBlockUIWidget').unblock();requirementDialogWidget.show()" />
 												</p:column>
 												<p:column colspan="1">
 													<h:commandLink id="pdf"
 														disabled="#{jJRequirementBean.disabledExport}"
 														actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}">
 														<p:graphicImage value="/resources/images/pdf.png" />
-														<p:dataExporter type="pdf" target="dataTable"
+														<p:dataExporter type="pdf" target="categoryTable"
 															fileName="Document"
 															preProcessor="#{jJChapterBean.preProcessPDF}" />
 													</h:commandLink>
