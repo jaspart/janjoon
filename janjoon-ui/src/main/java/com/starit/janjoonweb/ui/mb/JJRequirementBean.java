@@ -2,7 +2,6 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -10,16 +9,11 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import javax.faces.model.ListDataModel;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
-import org.primefaces.model.SelectableDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -41,7 +35,6 @@ import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTeststepService;
 import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJRequirement.class, beanName = "jJRequirementBean")
@@ -323,9 +316,6 @@ public class JJRequirementBean {
 	}
 
 	public List<JJStatus> getRequirementStatusList() {
-
-		requirementStatusList = jJStatusService.getStatus("JJRequirement",
-				true, namesList, true);
 		return requirementStatusList;
 	}
 
@@ -544,12 +534,6 @@ public class JJRequirementBean {
 	public List<JJProduct> getImportProductList() {
 
 		importProductList = jJProductService.getProducts(true);
-
-		JJProduct product = new JJProduct();
-		product.setId(Long.valueOf("0"));
-		product.setName("Select All");
-		importProductList.add(0, product);
-
 		return importProductList;
 	}
 
@@ -569,11 +553,6 @@ public class JJRequirementBean {
 
 		importVersionList = jJVersionService.getVersions(true, true,
 				importProduct);
-
-		JJVersion version = new JJVersion();
-		version.setId(Long.valueOf("0"));
-		version.setName("Select All");
-		importVersionList.add(0, version);
 
 		return importVersionList;
 	}
@@ -665,9 +644,14 @@ public class JJRequirementBean {
 		requirement.setChapter(requirementChapter);
 		requirement.setOrdering(null);
 
-		namesList = new ArrayList<String>();
+		requirementStatusList = jJStatusService.getStatus("JJRequirement",
+				true, null, true);
+
 		requirementStatus = jJStatusService.getOneStatus("NEW",
 				"JJRequirement", true);
+
+		requirement.setStatus(requirementStatus);
+
 		disabledStatus = true;
 
 		fullRequirementsList();
@@ -717,6 +701,9 @@ public class JJRequirementBean {
 
 		namesList = new ArrayList<String>();
 		namesList.add("NEW");
+
+		requirementStatusList = jJStatusService.getStatus("JJRequirement",
+				true, namesList, true);
 
 		if (requirement.getStatus().getName().equalsIgnoreCase("NEW")) {
 			requirementStatus = jJStatusService.getOneStatus("MODIFIED",
@@ -895,7 +882,7 @@ public class JJRequirementBean {
 
 			if (getRequirementDialogConfiguration()) {
 				context.execute("requirementDialogWidget.hide()");
-				closeDialog();
+				// closeDialog();
 			} else {
 				newRequirement(requirementCategory.getId());
 			}
@@ -905,7 +892,7 @@ public class JJRequirementBean {
 			editRowFromCategoryDataModel();
 
 			context.execute("requirementDialogWidget.hide()");
-			closeDialog();
+			// closeDialog();
 
 		}
 
@@ -1123,7 +1110,6 @@ public class JJRequirementBean {
 
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("requirementImportDialogWidget.hide()");
-		closeDialogImport();
 		reset();
 	}
 
@@ -1280,6 +1266,7 @@ public class JJRequirementBean {
 	}
 
 	public void closeDialogImport() {
+
 		message = null;
 		importFormats = null;
 		importCategory = null;
@@ -1336,14 +1323,14 @@ public class JJRequirementBean {
 	}
 
 	public void handleSelectStatus() {
-
-		if (requirementStatus.getName().equalsIgnoreCase("CANCELED")
-				|| requirementStatus.getName().equalsIgnoreCase("DELETED")) {
-			requirement.setEnabled(false);
-		} else {
-			requirement.setEnabled(true);
+		if (requirementStatus != null) {
+			if (requirementStatus.getName().equalsIgnoreCase("CANCELED")
+					|| requirementStatus.getName().equalsIgnoreCase("DELETED")) {
+				requirement.setEnabled(false);
+			} else {
+				requirement.setEnabled(true);
+			}
 		}
-
 	}
 
 	private String warnMessage;
@@ -1368,12 +1355,49 @@ public class JJRequirementBean {
 
 	private void loadParameter() {
 
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		
+	
+
+		JJProjectBean jJProjectBean = (JJProjectBean) session
+				.getAttribute("jJProjectBean");
+		project = jJProjectBean.getProject();
+
+		JJProductBean jJProductBean = (JJProductBean) session
+				.getAttribute("jJProductBean");
+		product = jJProductBean.getProduct();
+
+		JJVersionBean jJVersionBean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
+		version = jJVersionBean.getVersion();
+
+		JJChapterBean jJChapterBean = (JJChapterBean) session
+				.getAttribute("jJChapterBean");
+		if (jJChapterBean == null)
+			jJChapterBean = new JJChapterBean();
+
 		if (project == null) {
+			
 			warnMessage = "Select a project to export PDF";
 			disabledExport = true;
+
+			disabledRequirement = true;
+			title = "Select a project to create requirement";
+
+			jJChapterBean.setWarnMessage("Select a project to manage document");
+			jJChapterBean.setDisabledChapter(true);
+
 		} else {
+			
 			warnMessage = "Export to PDF";
 			disabledExport = false;
+
+			disabledRequirement = false;
+			title = "New Requirement";
+
+			jJChapterBean.setWarnMessage("Manage document");
+			jJChapterBean.setDisabledChapter(false);
 		}
 	}
 
@@ -1424,14 +1448,14 @@ public class JJRequirementBean {
 		}
 
 	}
-	
+
 	public void loadData() {
 
 		// Utiliser au moment du changement des couples (product/project)
 		// long t = System.currentTimeMillis();
 
-		System.out.println(System.currentTimeMillis());
-		
+	
+
 		if (tableDataModelList == null) {
 
 			templateHeader = "";
@@ -1479,9 +1503,7 @@ public class JJRequirementBean {
 
 		}
 
-
 		
-		System.out.println("end");
 		// logger.info("loadData");
 		// logger.info(System.currentTimeMillis() - t);
 	}
@@ -1573,9 +1595,71 @@ public class JJRequirementBean {
 
 	}
 
+	public void editOneColumn(JJCategory category) {
+
+		int i = 0;
+
+		if (category.equals(lowCategory)) {
+			i = 0;
+		} else if (category.equals(mediumCategory)) {
+			i = 1;
+		} else if (category.equals(highCategory)) {
+			i = 2;
+		}
+
+		CategoryDataModel categoryDataModel = tableDataModelList.get(i);
+		List<JJRequirement> requirements = getRequirementsList(category,
+				product, version, project, true);
+
+		categoryDataModel.setRequirements(requirements);
+
+		categoryDataModel.calculCompletionProgress();
+		categoryDataModel.calculCoverageProgress();
+
+		tableDataModelList.set(i, categoryDataModel);
+	}
+
+	private boolean disabledRequirement;
+
+	public boolean getDisabledRequirement() {
+		return disabledRequirement;
+	}
+
+	public void setDisabledRequirement(boolean disabledRequirement) {
+		this.disabledRequirement = disabledRequirement;
+	}
+
+	private String title;
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	private void editTableDataModelList() {
 
 		long t = System.currentTimeMillis();
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJChapterBean jJChapterBean = (JJChapterBean) session
+				.getAttribute("jJChapterBean");
+		if (project == null) {
+			disabledRequirement = true;
+			title = "Select a project to create requirement";
+			jJChapterBean.setWarnMessage("Select a project to manage document");
+			jJChapterBean.setDisabledChapter(true);
+
+		} else {
+
+			disabledRequirement = false;
+			title = "New Requirement";
+
+			jJChapterBean.setWarnMessage("Manage document");
+			jJChapterBean.setDisabledChapter(false);
+		}
 
 		String[] results = templateHeader.split("-");
 
@@ -1618,7 +1702,6 @@ public class JJRequirementBean {
 	@PostConstruct
 	public void init() {
 
-			
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 

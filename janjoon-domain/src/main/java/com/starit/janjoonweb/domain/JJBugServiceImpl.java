@@ -105,6 +105,7 @@ public class JJBugServiceImpl implements JJBugService {
 
 	}
 
+	@Override
 	public List<JJBug> getBugs(JJProject project) {
 		return getBugs(project, null, null, true, true);
 	}

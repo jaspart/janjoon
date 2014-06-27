@@ -612,6 +612,10 @@ public class LoginBean implements Serializable {
 
 							JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
 							jJRequirementBean.loadData();
+							
+//							RequestContext ct = RequestContext.getCurrentInstance();
+//							ct.update("contentPanel:specForm");
+//							ct.update("contentPanel:categoryForm");
 						}
 					}
 				} else if (!authorizationManager.getAuthorization(
@@ -638,6 +642,10 @@ public class LoginBean implements Serializable {
 
 					JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
 					jJRequirementBean.loadData();
+					
+//					RequestContext ct = RequestContext.getCurrentInstance();
+//					ct.update("contentPanel:specForm");
+//					ct.update("contentPanel:categoryForm");
 				}
 			}
 

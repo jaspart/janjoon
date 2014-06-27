@@ -18,12 +18,12 @@
 					onstart="PF('specBlockUIWidget').block()"
 					oncomplete="PF('specBlockUIWidget').unblock()" />
 			</ui:repeat>
-			<p:commandButton id="categoryButton"
-				value="#{messages.specification_import_button}"
+			<p:commandButton value="#{messages.specification_import_button}"
 				style="float: right;" disabled="#{jJRequirementBean.disabledExport}"
 				actionListener="#{jJRequirementBean.loadImportFormat()}"
 				update=":requirementImportDialog"
-				oncomplete="requirementImportDialogWidget.show()" />
+				onstart="PF('specBlockUIWidget').block()"
+				oncomplete="PF('specBlockUIWidget').unblock();requirementImportDialogWidget.show()" />
 
 			<pe:blockUI widgetVar="specBlockUIWidget">
 				<h:panelGrid columns="2">
@@ -57,8 +57,9 @@
 												<p:column colspan="1">
 													<p:commandButton id="manageChapterButton"
 														icon="ui-icon-document"
-														title="Manage Chapter and Document"
+														title="#{jJChapterBean.warnMessage}"
 														update=":chapterDialog"
+														disabled="#{jJChapterBean.disabledChapter}"
 														actionListener="#{jJChapterBean.loadData(tableDataModel.categoryId)}"
 														onstart="PF('specBlockUIWidget').block()"
 														oncomplete="PF('specBlockUIWidget').unblock();chapterDialogWidget.show()" />
@@ -77,7 +78,8 @@
 												</p:column>
 												<p:column colspan="1">
 													<p:commandButton id="newRequirementButton"
-														icon="ui-icon-plus" title="New Requirement"
+														icon="ui-icon-plus" title="#{jJRequirementBean.title}"
+														disabled="#{jJRequirementBean.disabledRequirement}"
 														actionListener="#{jJRequirementBean.newRequirement(tableDataModel.categoryId)}"
 														update=":requirementDialog"
 														onstart="PF('specBlockUIWidget').block()"
@@ -179,8 +181,19 @@
 		<p:dialog id="requirementDialog" header="#{jJRequirementBean.message}"
 			modal="true" widgetVar="requirementDialogWidget" dynamic="true"
 			resizable="false">
-			<p:ajax event="close" update=":specForm" />
+			<p:ajax event="close" listener="#{jJRequirementBean.closeDialog}"
+				update=":specForm" />
 			<p:outputPanel id="requirementDialogPanel">
+
+				<pe:blockUI widgetVar="requirementBlockUIWidget"
+					target="requirementDialogPanel">
+					<h:panelGrid columns="2">
+						<p:graphicImage library="images" name="ajax-loader.gif"
+							style="vertical-align: middle;" />
+						<h:outputText value="Please wait..." style="white-space: nowrap;" />
+					</h:panelGrid>
+				</pe:blockUI>
+
 				<h:form id="requirementDialogForm">
 					<p:growl id="msg" />
 					<p:scrollPanel style="width:760px;height:450px" mode="native">
@@ -199,19 +212,17 @@
 									<h:outputText for="status"
 										value="#{messages.specification_create_status_label}" />
 									<p:selectOneMenu id="status"
-										value="#{jJRequirementBean.requirementStatus}"
+										value="#{jJRequirementBean.requirementStatus}" required="true"
+										requiredMessage="Requirement Status is a required value"
 										panelStyle="width:150px" effect="fade" style="width:150px"
 										filter="true" filterMatchMode="startsWith"
 										disabled="#{jJRequirementBean.disabledStatus}">
 										<f:converter
 											converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
-										<f:selectItem
-											itemLabel="#{jJRequirementBean.requirementStatus.name}"
-											itemValue="#{jJRequirementBean.requirementStatus}" />
 										<f:selectItems
 											value="#{jJRequirementBean.requirementStatusList}" var="c"
 											itemLabel="#{c.name}" itemValue="#{c}" />
-										<p:ajax process="@this" partialSubmit="true"
+										<p:ajax partialSubmit="true"
 											listener="#{jJRequirementBean.handleSelectStatus()}" />
 									</p:selectOneMenu>
 								</p:column>
@@ -220,21 +231,17 @@
 										value="#{messages.specification_create_project_label} *" />
 									<p:selectOneMenu id="project"
 										value="#{jJRequirementBean.requirementProject}"
-										required="true"
-										requiredMessage="Requirement Project is a required value"
 										panelStyle="width:150px" effect="fade" style="width:150px"
 										filter="true" filterMatchMode="startsWith"
 										disabled="#{jJRequirementBean.disabledProject}">
-
 										<f:converter
 											converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
-										<f:selectItem
-											itemLabel="#{jJRequirementBean.requirementProject.name}"
-											itemValue="#{jJRequirementBean.requirementProject}" />
 										<f:selectItems
 											value="#{jJRequirementBean.requirementProjectList}" var="c"
 											itemLabel="#{c.name}" itemValue="#{c}" />
-										<p:ajax process="@this" partialSubmit="true"
+										<p:ajax partialSubmit="true"
+											onstart="PF('requirementBlockUIWidget').block()"
+											oncomplete="PF('requirementBlockUIWidget').unblock()"
 											update="lowRequirement mediumRequirement highRequirement chapter"
 											listener="#{jJRequirementBean.handleSelectProject()}" />
 									</p:selectOneMenu>
@@ -250,13 +257,13 @@
 										filter="true" filterMatchMode="startsWith">
 										<f:converter
 											converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
-										<f:selectItem
-											itemLabel="#{jJRequirementBean.requirementProduct.name}"
-											itemValue="#{jJRequirementBean.requirementProduct}" />
+										<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
 										<f:selectItems
 											value="#{jJRequirementBean.requirementProductList}" var="c"
 											itemLabel="#{c.name}" itemValue="#{c}" />
-										<p:ajax process="@this" partialSubmit="true" update="version"
+										<p:ajax partialSubmit="true" update="version"
+											onstart="PF('requirementBlockUIWidget').block()"
+											oncomplete="PF('requirementBlockUIWidget').unblock()"
 											listener="#{jJRequirementBean.handleSelectProduct()}" />
 									</p:selectOneMenu>
 								</p:column>
@@ -270,13 +277,11 @@
 										disabled="#{jJRequirementBean.disabledVersion}">
 										<f:converter
 											converterId="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter" />
-										<f:selectItem
-											itemLabel="#{jJRequirementBean.requirementVersion.name}"
-											itemValue="#{jJRequirementBean.requirementVersion}" />
+										<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
 										<f:selectItems
 											value="#{jJRequirementBean.requirementVersionList}" var="c"
 											itemLabel="#{c.name}" itemValue="#{c}" />
-										<p:ajax process="@this" partialSubmit="true"
+										<p:ajax partialSubmit="true"
 											listener="#{jJRequirementBean.handleSelectVersion()}" />
 									</p:selectOneMenu>
 								</p:column>
@@ -289,13 +294,11 @@
 										filter="true" filterMatchMode="startsWith">
 										<f:converter
 											converterId="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter" />
-										<f:selectItem
-											itemLabel="#{jJRequirementBean.requirementChapter.name}"
-											itemValue="#{jJRequirementBean.requirementChapter}" />
+										<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
 										<f:selectItems
 											value="#{jJRequirementBean.requirementChapterList}" var="c"
 											itemLabel="#{c.name}" itemValue="#{c}" />
-										<p:ajax process="@this" partialSubmit="true"
+										<p:ajax partialSubmit="true"
 											listener="#{jJRequirementBean.handleSelectChapter()}" />
 									</p:selectOneMenu>
 								</p:column>
@@ -403,6 +406,8 @@
 									<p:column colspan="3">
 										<p:commandButton
 											value="#{messages.specification_create_save_button}"
+											onstart="PF('requirementBlockUIWidget').block()"
+											oncomplete="PF('requirementBlockUIWidget').unblock()"
 											action="#{jJRequirementBean.save()}" process="@form"
 											update="requirementDialogForm" />
 									</p:column>
@@ -417,9 +422,21 @@
 		<p:dialog id="chapterDialog"
 			header="#{messages.specification_chapter_header}" modal="true"
 			widgetVar="chapterDialogWidget" dynamic="true" resizable="false">
-			<p:ajax event="close" oncomplete="window.location.reload()"
+			<p:ajax event="close" update=":specForm"
+				onstart="PF('specBlockUIWidget').block()"
+				oncomplete="PF('specBlockUIWidget').unblock()"
 				listener="#{jJChapterBean.closeDialog}" />
 			<p:outputPanel id="chapterDialogPanel">
+
+				<pe:blockUI widgetVar="chapterBlockUIWidget"
+					target="chapterDialogPanel">
+					<h:panelGrid columns="2">
+						<p:graphicImage library="images" name="ajax-loader.gif"
+							style="vertical-align: middle;" />
+						<h:outputText value="Please wait..." style="white-space: nowrap;" />
+					</h:panelGrid>
+				</pe:blockUI>
+
 				<h:form id="chapterDialogForm">
 					<p:growl id="msg" sticky="true" />
 					<p:scrollPanel style="width:760px;height:450px" mode="native">
@@ -438,8 +455,6 @@
 										required="true" widgetVar="nameWidget"
 										label="#{message.specification_chapter_name_label}"
 										requiredMessage="#{message.specification_chapter_name_alert}" />
-
-									<p:message for="name" id="msgName" />
 									<p:watermark for="name"
 										value="#{messages.specification_create_name_watermark}" />
 								</p:column>
@@ -450,20 +465,17 @@
 									<h:outputText for="project"
 										value="#{messages.specification_create_project_label} *" />
 									<p:selectOneMenu id="project"
-										value="#{jJChapterBean.chapterProject}" required="true"
-										widgetVar="projectWidget"
-										requiredMessage="Chapter Project is a required value"
+										value="#{jJChapterBean.chapterProject}"
 										panelStyle="width:150px" effect="fade" style="width:150px"
 										filter="true" filterMatchMode="startsWith"
+										widgetVar="projectWidget"
 										disabled="#{jJChapterBean.disabledProject}">
-
 										<f:converter
 											converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
-										<f:selectItem itemLabel="#{jJChapterBean.chapterProject.name}"
-											itemValue="#{jJChapterBean.chapterProject}" />
 										<f:selectItems value="#{jJChapterBean.chapterProjectList}"
 											var="c" itemLabel="#{c.name}" itemValue="#{c}" />
-										<p:ajax process="@this" partialSubmit="true"
+										<p:ajax onstart="PF('chapterBlockUIWidget').block()"
+											oncomplete="PF('chapterBlockUIWidget').unblock()"
 											update="chapterTreeSingle parent"
 											listener="#{jJChapterBean.handleSelectProject()}" />
 									</p:selectOneMenu>
@@ -480,11 +492,12 @@
 										widgetVar="parentWidget">
 										<f:converter
 											converterId="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter" />
-										<f:selectItem itemLabel="#{jJChapterBean.parentChapter.name}"
-											itemValue="#{jJChapterBean.parentChapter}" />
+										<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
 										<f:selectItems value="#{jJChapterBean.chapterList}" var="c"
 											itemLabel="#{c.name}" itemValue="#{c}" />
-										<p:ajax process="@this" partialSubmit="true"
+										<p:ajax partialSubmit="true"
+											onstart="PF('chapterBlockUIWidget').block()"
+											oncomplete="PF('chapterBlockUIWidget').unblock()"
 											listener="#{jJChapterBean.handleSelectParentChapter()}" />
 									</p:selectOneMenu>
 								</p:column>
@@ -496,11 +509,15 @@
 											value="#{message.specification_chapter_edit_menuitem}"
 											actionListener="#{jJChapterBean.editChapter()}"
 											process="@this" icon="ui-icon-pencil"
+											onstart="PF('chapterBlockUIWidget').block()"
+											oncomplete="PF('chapterBlockUIWidget').unblock()"
 											update="chapterDialogForm" />
 										<p:menuitem
 											value="#{message.specification_chapter_delete_menuitem}"
 											actionListener="#{jJChapterBean.deleteChapter()}"
 											process="@this" icon="ui-icon-close"
+											onstart="PF('chapterBlockUIWidget').block()"
+											oncomplete="PF('chapterBlockUIWidget').unblock()"
 											update="chapterDialogForm" />
 									</p:contextMenu>
 									<h:outputText
@@ -525,7 +542,7 @@
 									<pe:ckEditor id="description" widgetVar="descriptionWidget"
 										style="width:388px"
 										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
-										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table]]"
+										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
 										value="#{jJChapterBean.chapter.description}" required="true"
 										requiredMessage="#{messages.specification_chapter_description_alert}" />
 
@@ -539,7 +556,9 @@
 											value="#{message.specification_chapter_save_button}"
 											action="#{jJChapterBean.save()}"
 											process="@widgetVar(nameWidget) @widgetVar(parentWidget) @widgetVar(descriptionWidget) @widgetVar(projectWidget)"
-											update="chapterDialogForm" />
+											update="chapterDialogForm" style="float: right;"
+											onstart="PF('chapterBlockUIWidget').block()"
+											oncomplete="PF('chapterBlockUIWidget').unblock()" />
 									</p:column>
 								</p:row>
 							</f:facet>
@@ -554,7 +573,9 @@
 										droppable="true" dragdropScope="demo" cache="false">
 										<p:ajax event="dragdrop"
 											listener="#{jJChapterBean.onDragDrop}"
-											update=":chapterDialogForm" />
+											update=":chapterDialogForm"
+											onstart="PF('chapterBlockUIWidget').block()"
+											oncomplete="PF('chapterBlockUIWidget').unblock()" />
 										<p:treeNode>
 											<h:outputText value="#{nodeLeft}" />
 										</p:treeNode>
@@ -573,7 +594,9 @@
 										cache="false">
 										<p:ajax event="dragdrop"
 											listener="#{jJChapterBean.onDragDrop}"
-											update=":chapterDialogForm" />
+											update=":chapterDialogForm"
+											onstart="PF('chapterBlockUIWidget').block()"
+											oncomplete="PF('chapterBlockUIWidget').unblock()" />
 										<p:treeNode>
 											<h:outputText value="#{nodeRight}" />
 										</p:treeNode>
@@ -629,14 +652,23 @@
 			header="#{jJRequirementBean.message}" modal="true"
 			widgetVar="requirementImportDialogWidget" dynamic="true"
 			resizable="false">
-			<p:ajax event="close" update=":specForm"
+			<p:ajax event="close"
 				listener="#{jJRequirementBean.closeDialogImport}" />
-			<p:layout style="min-width:500px;min-height:500px;">
+			<p:layout style="min-width:510px;min-height:510px;">
 				<p:layoutUnit position="center">
 					<p:outputPanel id="importPanel">
+
+						<pe:blockUI widgetVar="importBlockUIWidget" target="importPanel">
+							<h:panelGrid columns="2">
+								<p:graphicImage library="images" name="ajax-loader.gif"
+									style="vertical-align: middle;" />
+								<h:outputText value="Please wait..."
+									style="white-space: nowrap;" />
+							</h:panelGrid>
+						</pe:blockUI>
+
 						<h:form id="importForm">
-							<p:growl id="msg" />
-							<p:panelGrid style="margin-top:10px">
+							<p:panelGrid>
 								<p:row>
 									<p:column>
 										<h:outputText
@@ -647,12 +679,13 @@
 											filter="true" filterMatchMode="startsWith">
 											<f:converter
 												converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
-											<f:selectItem
-												itemLabel="#{jJRequirementBean.importProject.name}"
-												itemValue="#{jJRequirementBean.importProject}" />
+											<f:selectItem itemValue="#{null}"
+												itemLabel="-- Select One --" />
 											<f:selectItems value="#{jJRequirementBean.importProjectList}"
 												var="p" itemLabel="#{p.name}" itemValue="#{p}" />
-											<p:ajax process="@this" partialSubmit="true"
+											<p:ajax partialSubmit="true"
+												onstart="PF('importBlockUIWidget').block()"
+												oncomplete="PF('importBlockUIWidget').unblock()"
 												listener="#{jJRequirementBean.handelSelectImportProject}"
 												update="importDataTable :importForm:importButton" />
 										</p:selectOneMenu>
@@ -666,13 +699,14 @@
 											filter="true" filterMatchMode="startsWith">
 											<f:converter
 												converterId="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter" />
-											<f:selectItem
-												itemLabel="#{jJRequirementBean.importCategory.name}"
-												itemValue="#{jJRequirementBean.importCategory}" />
+											<f:selectItem itemValue="#{null}"
+												itemLabel="-- Select One --" />
 											<f:selectItems
 												value="#{jJRequirementBean.importCategoryList}" var="p"
 												itemLabel="#{p.name}" itemValue="#{p}" />
-											<p:ajax process="@this" partialSubmit="true"
+											<p:ajax partialSubmit="true"
+												onstart="PF('importBlockUIWidget').block()"
+												oncomplete="PF('importBlockUIWidget').unblock()"
 												listener="#{jJRequirementBean.handelSelectImportCategory}"
 												update="importDataTable :importForm:importButton" />
 										</p:selectOneMenu>
@@ -690,12 +724,13 @@
 											filter="true" filterMatchMode="startsWith">
 											<f:converter
 												converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
-											<f:selectItem
-												itemLabel="#{jJRequirementBean.importProduct.name}"
-												itemValue="#{jJRequirementBean.importProduct}" />
+											<f:selectItem itemValue="#{null}"
+												itemLabel="-- Select One --" />
 											<f:selectItems value="#{jJRequirementBean.importProductList}"
 												var="p" itemLabel="#{p.name}" itemValue="#{p}" />
-											<p:ajax process="@this" partialSubmit="true"
+											<p:ajax partialSubmit="true"
+												onstart="PF('importBlockUIWidget').block()"
+												oncomplete="PF('importBlockUIWidget').unblock()"
 												listener="#{jJRequirementBean.handelSelectImportProduct}"
 												update="importDataTable versionSelectOneMenu :importForm:importButton" />
 										</p:selectOneMenu>
@@ -712,12 +747,13 @@
 											<f:converter
 												converterId="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter" />
 
-											<f:selectItem
-												itemLabel="#{jJRequirementBean.importVersion.name}"
-												itemValue="#{jJRequirementBean.importVersion}" />
+											<f:selectItem itemValue="#{null}"
+												itemLabel="-- Select One --" />
 											<f:selectItems value="#{jJRequirementBean.importVersionList}"
 												var="v" itemLabel="#{v.name}" itemValue="#{v}" />
-											<p:ajax process="@this" partialSubmit="true"
+											<p:ajax partialSubmit="true"
+												onstart="PF('importBlockUIWidget').block()"
+												oncomplete="PF('importBlockUIWidget').unblock()"
 												listener="#{jJRequirementBean.handelSelectImportVersion}"
 												update="importDataTable :importForm:importButton" />
 										</p:selectOneMenu>
@@ -733,12 +769,13 @@
 											filter="true" filterMatchMode="startsWith">
 											<f:converter
 												converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
-											<f:selectItem
-												itemLabel="#{jJRequirementBean.importStatus.name}"
-												itemValue="#{jJRequirementBean.importStatus}" />
+											<f:selectItem itemValue="#{null}"
+												itemLabel="-- Select One --" />
 											<f:selectItems value="#{jJRequirementBean.importStatusList}"
 												var="p" itemLabel="#{p.name}" itemValue="#{p}" />
-											<p:ajax process="@this" partialSubmit="true"
+											<p:ajax partialSubmit="true"
+												onstart="PF('importBlockUIWidget').block()"
+												oncomplete="PF('importBlockUIWidget').unblock()"
 												listener="#{jJRequirementBean.handelSelectImportStatus}"
 												update="importDataTable :importForm:importButton" />
 										</p:selectOneMenu>
@@ -761,6 +798,8 @@
 												<p:selectBooleanCheckbox
 													value="#{jJRequirementBean.copyRequirements}">
 													<p:ajax update="importDataTable :importForm:importButton"
+														onstart="PF('importBlockUIWidget').block()"
+														oncomplete="PF('importBlockUIWidget').unblock()"
 														listener="#{jJRequirementBean.copyRequirements}" />
 												</p:selectBooleanCheckbox>
 											</p:column>
@@ -784,6 +823,8 @@
 												<p:selectBooleanCheckbox
 													value="#{jJRequirementBean.copyTestcases}">
 													<p:ajax update="importDataTable"
+														onstart="PF('importBlockUIWidget').block()"
+														oncomplete="PF('importBlockUIWidget').unblock()"
 														listener="#{jJRequirementBean.copyTestcases}" />
 												</p:selectBooleanCheckbox>
 											</p:column>
@@ -807,6 +848,8 @@
 												<p:selectBooleanCheckbox
 													value="#{jJRequirementBean.copyChapters}">
 													<p:ajax update="importDataTable"
+														onstart="PF('importBlockUIWidget').block()"
+														oncomplete="PF('importBlockUIWidget').unblock()"
 														listener="#{jJRequirementBean.copyChapters}" />
 												</p:selectBooleanCheckbox>
 											</p:column>
@@ -823,8 +866,10 @@
 									</p:selectBooleanCheckbox>
 								</p:column>
 							</p:dataTable>
-
+							<h3 style="margin-top: 0" />
 							<p:commandButton id="importButton" value="Import"
+								onstart="PF('importBlockUIWidget').block()"
+								oncomplete="PF('importBlockUIWidget').unblock();window.location.reload()"
 								style="float: right;"
 								disabled="#{jJRequirementBean.disableImportButton}"
 								action="#{jJRequirementBean.importRequirement()}" />

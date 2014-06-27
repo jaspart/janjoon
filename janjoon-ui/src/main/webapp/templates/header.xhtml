@@ -40,7 +40,7 @@
 						<f:selectItems value="#{jJProjectBean.projectList}" var="p"
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock();window.location.reload();" />
+							oncomplete="PF('blockUIWidget').unblock();window.location.reload()" />
 					</p:selectOneMenu>
 
 					<!--h:outputText value="#{messages.header_product_label}:" /-->
@@ -55,7 +55,7 @@
 						<f:selectItems value="#{jJProductBean.productList}" var="p"
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock();window.location.reload();" />
+							oncomplete="PF('blockUIWidget').unblock();window.location.reload(true)" />
 					</p:selectOneMenu>
 
 					<!--h:outputText value="#{messages.header_version_label}:" /-->
@@ -74,7 +74,7 @@
 							itemLabel="#{v.name}" itemValue="#{v}" />
 
 						<p:ajax onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock();window.location.reload();" />
+							oncomplete="PF('blockUIWidget').unblock();window.location.reload(true)" />
 					</p:selectOneMenu>
 
 
