@@ -31,11 +31,10 @@
 						value="#{jjsprint.sprint.contacts}"
 						readonly="#{jjsprint.renderTaskForm}"
 						disabled="#{jjsprint.renderTaskForm}"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
 						style="width:150px;height:150px" showCheckbox="true">
 						<f:selectItems value="#{jJContactBean.contacts}" var="c"
 							itemLabel="#{c.name}" itemValue="#{c}" />
-						<f:converter
-							converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />
 					</p:selectManyMenu>
 				</p:column>
 			</p:row>

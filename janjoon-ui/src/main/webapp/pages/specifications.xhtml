@@ -87,7 +87,7 @@
 													<h:commandLink id="pdf"
 														disabled="#{jJRequirementBean.disabledExport}"
 														actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}">
-														<p:graphicImage value="/resources/images/pdf.png" />
+														<p:graphicImage value="/resources/images/pdf.png"  />
 														<p:dataExporter type="pdf" target="categoryTable"
 															fileName="Document"
 															preProcessor="#{jJChapterBean.preProcessPDF}" />

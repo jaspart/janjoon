@@ -62,34 +62,32 @@ public class ApplicationLogger {
 		JJTask task = (JJTask) args[0];
 		JJStatus status = task.getStatus();
 
-		System.out.println("setStatus");
+		System.out.println("setStatus0");
+		
 
-		if (status != null) {
+		if (status != null && task.getRequirement()!=null) {
+			
+			
+			System.out.println("setStatus1"+task.getRequirement().getName());
+			JJRequirement req = jJRequirementService.findJJRequirement(task
+					.getRequirement().getId());
 
 			System.out.println(status.getName());
-			if (status.getName().equalsIgnoreCase("IN PROGRESS")) {
+			
+			if (status.getName().equalsIgnoreCase("IN PROGRESS") ) {
 
-				JJRequirement req = jJRequirementService.findJJRequirement(task.getRequirement().getId());
+				System.out.println(req.getName());
 
-				if (req != null) {
-					System.out.println(req.getName());
-					if (!req.getStatus().getName().equalsIgnoreCase("RELEASED")) {
-						JJStatus reqStatus = jJStatusService.getOneStatus(
-								"RELEASED", "JJRequirement", true);
-						req.setStatus(reqStatus);
-						jJRequirementService.updateJJRequirement(req);
-						System.out.println(req.getName());
+				JJStatus reqStatus = jJStatusService.getOneStatus("RELEASED",
+						"JJRequirement", true);
+				req.setStatus(reqStatus);
+				jJRequirementService.updateJJRequirement(req);
+				System.out.println(req.getName());
 
-					}
-				} else {
-					JJStatus reqStatus = jJStatusService.getOneStatus(
-							"RELEASED", "JJRequirement", true);
-					req.setStatus(reqStatus);
-					jJRequirementService.updateJJRequirement(req);
-				}
 			}
+
 		}
-
+		
+		System.out.println("setStatus2");
 	}
-
 }

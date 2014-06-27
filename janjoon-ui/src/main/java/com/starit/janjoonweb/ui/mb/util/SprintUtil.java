@@ -4,25 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.annotations.ForceDiscriminator;
+
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 
 public class SprintUtil {
 
-	JJSprint sprint;	
+	JJSprint sprint;
 	private List<JJTask> todoTask;
 	private List<JJTask> doneTask;
 	private List<JJTask> progressTask;
+	private List<JJContact> contacts;
 	private List<JJTask> taskList;
 	Integer consumed;
 	Integer workload;
 	private boolean render;
-	private boolean renderTaskForm;	
+	private boolean renderTaskForm;
+
 	public SprintUtil(JJSprint sprint, List<JJTask> tasks) {
 
 		this.sprint = sprint;
-		renderTaskForm = false;		
+		renderTaskForm = false;
 		calculateField(tasks);
 	}
 
@@ -60,6 +65,16 @@ public class SprintUtil {
 
 	public void setProgressTask(List<JJTask> progressTask) {
 		this.progressTask = progressTask;
+	}
+
+	
+
+	public List<JJContact> getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(List<JJContact> contacts) {
+		this.contacts = contacts;
 	}
 
 	public List<JJTask> getTaskList() {
@@ -103,8 +118,6 @@ public class SprintUtil {
 		this.render = render;
 	}
 
-	
-
 	private void calculateField(List<JJTask> tasks) {
 
 		Integer i = 0;
@@ -112,15 +125,18 @@ public class SprintUtil {
 		this.render = (sprint.getName() == null);
 		if (!render) {
 			
+			contacts = new ArrayList<JJContact>(sprint.getContacts());
+
 			if (tasks != null) {
 				if (!tasks.isEmpty()) {
+
 					progressTask = new ArrayList<JJTask>();
 					todoTask = new ArrayList<JJTask>();
 					doneTask = new ArrayList<JJTask>();
+					
 
 					for (JJTask task : tasks) {
-
-						//System.out.println(task.getSprint().getName());
+						
 						if (task.getWorkloadPlanned() != null)
 							i = i + task.getWorkloadPlanned();
 
@@ -184,6 +200,6 @@ public class SprintUtil {
 			}
 		}
 		return s;
-	}	
+	}
 
 }
