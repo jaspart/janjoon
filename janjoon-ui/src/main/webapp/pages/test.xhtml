@@ -11,6 +11,7 @@
 	<ui:define name="content">
 		<p:layout styleClass="content" style="min-height:500px;"
 			stateful="true">
+			
 			<f:event type="preRenderComponent"
 				listener="#{jJTestcaseBean.loadData()}" />
 
@@ -104,6 +105,56 @@
 			<p:layoutUnit position="center" resizable="true"
 				style="min-height:500px;">
 				<h:form id="testFormCenter">
+			<p:commandButton id="colorBtn" icon="ui-icon-info" type="button" style="float: right;" />
+			<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade" dynamic="true">
+				<p:panelGrid>
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="12">Code des Couleurs</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column colspan="2" styleClass="TestcaseSuccess">
+							<p:outputLabel value="Test réussi" />
+						</p:column>
+						
+						<p:column colspan="2" styleClass="TestcaseFailed">
+							<p:outputLabel value="Test échoué" />
+						</p:column>
+						
+						<p:column colspan="2" styleClass="TestcaseNotExecuted">
+							<p:outputLabel value="Test non exécuté" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2" styleClass="TestcaseWithoutTeststep">
+							<p:outputLabel value="Test sans etape" />
+						</p:column>
+					
+						<p:column colspan="2" styleClass="TestcaseNonFini">
+							<p:outputLabel value="Test non terminé" />
+						</p:column>
+
+						<p:column colspan="2" styleClass="TestcaseChapter">
+							<p:outputLabel value="Plan de test / Chapitre" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2" styleClass="TestcaseFailedWithoutBuild">
+							<p:outputLabel value="Test échoué sur un autre build" />
+						</p:column>
+						
+						<p:column colspan="2" styleClass="TestcaseNonFiniWithoutBuild">
+							<p:outputLabel value="Test non terminé sur un autre build" />
+						</p:column>
+
+						<p:column colspan="2" styleClass="TestcaseSuccessWithoutBuild">
+							<p:outputLabel value="Test réussi sur un autre build" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+			</p:overlayPanel>
+
 					<h:outputText value="Please select a node on the tree to get view"
 						rendered="#{jJTestcaseBean.rendredEmptySelection}"
 						style="color: red;" />

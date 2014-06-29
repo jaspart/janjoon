@@ -6,8 +6,8 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:p="http://primefaces.org/ui">
 
-<ui:composition>
-	<h:form id="sprintForm">
+<ui:composition style="width:100%">
+	<h:form id="sprintForm" style="width:100%">
 		<p:panelGrid style="margin-top:10px">
 			<p:row>
 				<p:column style="width:50%">
@@ -17,7 +17,7 @@
 						filter="true" filterMatchMode="startsWith">
 						<f:converter
 							converterId="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter" />
-						<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
+						<f:selectItem itemValue="#{null}" itemLabel="#{messages.project_gantt_select_label}" />
 						<f:selectItems value="#{jJTaskBean.sprints}" var="c"
 							itemLabel="#{c.name}" itemValue="#{c}" />
 						<p:ajax process="@this" partialSubmit="true"
@@ -35,11 +35,11 @@
 			</p:row>
 		</p:panelGrid>
 	</h:form>
-	<h:form id="planningForm">
+	<h:form id="planningForm" style="width:100%">
 		<f:event type="preRenderComponent" listener="#{jJTaskBean.loadData()}" />
 		<p:growl id="msg" />
-		<p:panelGrid style="margin-top:10px">
-			<p:row>
+		<p:panelGrid style="width:100%;margin-top:10px">
+			<p:row style="width:100%">
 				<p:column style="width:50%">
 					<p:scrollPanel id="scrollPanel" style="width:500px;" mode="native">
 						<p:remoteCommand name="onCellEditTableComplete"
@@ -56,7 +56,7 @@
 								<h:outputText value="#{taskData.chapter.name}" />
 							</p:column>
 
-							<p:column id="name" styleClass="task" headerText="Name">
+							<p:column id="name" styleClass="task" headerText="#{messages.project_gantt_table_name_title}">
 								<p:cellEditor>
 									<f:facet name="output">
 										<h:outputText value="#{taskData.task.name}" />
@@ -64,13 +64,13 @@
 									<f:facet name="input">
 										<p:inputText value="#{taskData.task.name}" required="true"
 											label="Name" widgetVar="nameWidget"
-											requiredMessage="Task name is a required value" />
+											requiredMessage="#{messages.project_gantt_task_alert}" />
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
 
 							<p:column id="sdpr" styleClass="task"
-								headerText="Start Date Planned/Revised">
+								headerText="#{messages.project_gantt_table_startplanned_title}">
 								<p:cellEditor>
 									<f:facet name="output">
 										<p:calendar value="#{taskData.startDate}" navigator="true"
@@ -83,7 +83,7 @@
 								</p:cellEditor>
 							</p:column>
 							<p:column id="edpr" styleClass="task"
-								headerText="End Date Planned/Revised">
+								headerText="#{messages.project_gantt_table_endplanned_title}">
 								<p:cellEditor>
 									<f:facet name="output">
 										<p:calendar value="#{taskData.endDate}" navigator="true"
@@ -96,7 +96,7 @@
 								</p:cellEditor>
 							</p:column>
 							<p:column id="wpr" styleClass="task"
-								headerText="Workload Planned/Revised">
+								headerText="#{messages.project_gantt_table_wlplanned_title}">
 								<p:cellEditor>
 									<f:facet name="output">
 										<h:outputText value="#{taskData.workload}" />
@@ -106,7 +106,7 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column id="sdr" styleClass="task" headerText="Start Date Real">
+							<p:column id="sdr" styleClass="task" headerText="#{messages.project_gantt_table_startreal_title}">
 								<p:cellEditor>
 									<f:facet name="output">
 										<p:calendar value="#{taskData.task.startDateReal}"
@@ -118,7 +118,7 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column id="edr" styleClass="task" headerText="End Date Real">
+							<p:column id="edr" styleClass="task" headerText="#{messages.project_gantt_table_endreal_title}">
 								<p:cellEditor>
 									<f:facet name="output">
 										<p:calendar value="#{taskData.task.endDateReal}"
@@ -130,7 +130,7 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column id="wr" styleClass="task" headerText="Workload Real">
+							<p:column id="wr" styleClass="task" headerText="#{messages.project_gantt_table_wlreal_title}">
 								<p:cellEditor>
 									<f:facet name="output">
 										<h:outputText value="#{taskData.task.workloadReal}" />
@@ -141,7 +141,7 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column styleClass="task" headerText="Assigned To">
+							<p:column styleClass="task" headerText="#{messages.project_gantt_table_assigned_title}">
 								<p:cellEditor>
 									<f:facet name="output">
 										<h:outputText
@@ -154,7 +154,7 @@
 											<f:converter
 												converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />
 											<f:selectItem itemValue="#{null}"
-												itemLabel="-- Select One --" />
+												itemLabel="#{messages.project_gantt_select_label}" />
 											<f:selectItems value="#{jJTaskBean.contacts}" var="contact"
 												itemLabel="#{contact.firstname} #{contact.name}"
 												itemValue="#{contact}" />
@@ -162,10 +162,10 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column id="bt" styleClass="task" headerText="Before Task">
+							<p:column id="bt" styleClass="task" headerText="#{messages.project_gantt_table_previous_title}">
 								<p:cellEditor>
 									<f:facet name="output">
-										<h:outputText value="Clic to show" />
+										<h:outputText value="#{messages.project_gantt_table_click_button}" />
 									</f:facet>
 									<f:facet name="input">
 										<p:selectManyMenu value="#{taskData.selectedTasks}"
@@ -185,7 +185,7 @@
 									<f:setPropertyActionListener value="#{taskData.task}"
 										target="#{jJTaskBean.task}" />
 								</p:commandButton>
-								<p:tooltip for="duplicate" value="Duplicate this task"
+								<p:tooltip for="duplicate" value="#{messages.project_gantt_task_dupplicate_button}"
 									showEffect="fade" hideEffect="fade" />
 							</p:column>
 

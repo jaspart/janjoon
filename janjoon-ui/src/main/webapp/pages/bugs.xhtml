@@ -9,6 +9,67 @@
 	<ui:define name="content">
 		<p:panel id="bugPanel" header="BUG" style="width: 100%;valign: top;">
 			<f:event listener="#{jJBugBean.initJJBug}" type="preRenderView" />
+
+			<p:commandButton id="colorBtn" icon="ui-icon-info" type="button" style="float: right;" />
+			<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade" dynamic="true" style="width:600px">
+				<p:panelGrid>
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="12">Code des Couleurs</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column colspan="2" style="background-color: #B0DAF2 !important;">
+							<p:outputLabel value="NEW" />
+						</p:column>
+					
+						<p:column colspan="2" style="background-color: #88DDDD !important;">
+							<p:outputLabel value="CLOSED" />
+						</p:column>
+					
+						<p:column colspan="2" style="background-color: #174597 !important;">
+							<p:outputLabel value="VERIFIED" />
+						</p:column>
+					
+						<p:column colspan="2" style="background-color: #1BA9F9 !important;">
+							<p:outputLabel value="RESOLVED" />
+						</p:column>
+					
+						<p:column colspan="2" style="background-color: #0B9CEF !important;">
+							<p:outputLabel value="DUPLICATE" />
+						</p:column>
+						
+						<p:column colspan="2" style="background-color: #0791DC !important;">
+							<p:outputLabel value="WONTFIX" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						
+					
+						<p:column colspan="2" style="background-color: #1A6993 !important;">
+							<p:outputLabel value="INVALID" />
+						</p:column>
+					
+						<p:column colspan="2" style="background-color: #3882A9 !important;">
+							<p:outputLabel value="FIXED" />
+						</p:column>
+					
+						<p:column colspan="2" style="background-color: #4F94B9 !important;">
+							<p:outputLabel value="READY" />
+						</p:column>
+					
+						<p:column colspan="2" style="background-color: #69A6C8 !important;">
+							<p:outputLabel value="REOPENED" />
+						</p:column>
+					
+						<p:column colspan="2" style="background-color: #A2D1EB !important;">
+							<p:outputLabel value="ASSIGNED" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+			</p:overlayPanel>
+			
 			<h:form id="bugForm">
 				<p:growl id="bugMessage" showDetail="true" />
 				<p:dataTable id="bugTable2" sortMode="multiple"
@@ -113,64 +174,6 @@
 					</f:facet>
 				</p:dataTable>
 			</h:form>
-			<p:separator />
-			<p:panelGrid>
-				<f:facet name="header">
-					<p:row>
-						<p:column colspan="12">Code des Couleurs</p:column>
-					</p:row>
-				</f:facet>
-				<p:row>
-					<p:column colspan="2" style="background-color: #B0DAF2 !important;">
-						<p:outputLabel value="NEW" />
-					</p:column>
-				
-					<p:column colspan="2" style="background-color: #88DDDD !important;">
-						<p:outputLabel value="CLOSED" />
-					</p:column>
-				
-					<p:column colspan="2" style="background-color: #174597 !important;">
-						<p:outputLabel value="VERIFIED" />
-					</p:column>
-				
-					<p:column colspan="2" style="background-color: #1BA9F9 !important;">
-						<p:outputLabel value="RESOLVED" />
-					</p:column>
-				
-					<p:column colspan="2" style="background-color: #0B9CEF !important;">
-						<p:outputLabel value="DUPLICATE" />
-					</p:column>
-					
-					<p:column colspan="2" style="background-color: #0791DC !important;">
-						<p:outputLabel value="WONTFIX" />
-					</p:column>
-				</p:row>
-
-				<p:row>
-					
-				
-					<p:column colspan="2" style="background-color: #1A6993 !important;">
-						<p:outputLabel value="INVALID" />
-					</p:column>
-				
-					<p:column colspan="2" style="background-color: #3882A9 !important;">
-						<p:outputLabel value="FIXED" />
-					</p:column>
-				
-					<p:column colspan="2" style="background-color: #4F94B9 !important;">
-						<p:outputLabel value="READY" />
-					</p:column>
-				
-					<p:column colspan="2" style="background-color: #69A6C8 !important;">
-						<p:outputLabel value="REOPENED" />
-					</p:column>
-				
-					<p:column colspan="2" style="background-color: #A2D1EB !important;">
-						<p:outputLabel value="ASSIGNED" />
-					</p:column>
-				</p:row>			
-			</p:panelGrid>
-
 			<p:dialog id="createDialog" header="#{messages.bug_create_title}"
 				modal="true" widgetVar="createDialogWidget" dynamic="true"
 				visible="#{jJBugBean.createDialogVisible}" resizable="true"

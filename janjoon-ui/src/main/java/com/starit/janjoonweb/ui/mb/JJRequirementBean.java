@@ -778,6 +778,8 @@ public class JJRequirementBean {
 		requirement.setNumero(numero);
 		requirement.setUpdatedBy(contact);
 		requirement.setUpdatedDate(new Date());
+		requirementStatus = jJStatusService.getOneStatus("DELETED", "JJRequirement", true);
+		requirement.setStatus(requirementStatus);
 
 		jJRequirementService.updateJJRequirement(requirement);
 
@@ -1169,7 +1171,7 @@ public class JJRequirementBean {
 		int i = 0;
 		for (JJRequirement requirement : jJRequirementService.getRequirements(
 				importCategory, importProject, importProduct, importVersion,
-				importStatus, null, false, true, true)) {
+				importStatus, null, false, false, true)) {
 			importFormats.add(new ImportFormat(String.valueOf(i), requirement,
 					copyRequirements, copyTestcases, copyChapters));
 			i++;
@@ -3108,7 +3110,7 @@ public class JJRequirementBean {
 			if (UP && DOWN && TASK) {
 
 				if (ENCOURS && !FINIS) {
-					rowStyleClass = "IP";
+					rowStyleClass = "RequirementInProcess";
 				} else if (!ENCOURS && FINIS) {
 
 					List<JJTestcase> testcases = jJTestcaseService
@@ -3137,17 +3139,17 @@ public class JJRequirementBean {
 					}
 
 					if (SUCCESS) {
-						rowStyleClass = "SU";
+						rowStyleClass = "RequirementFinishedSuccessed";
 					} else {
-						rowStyleClass = "TP";
+						rowStyleClass = "RequirementFinishedTestProcess";
 					}
 
 				}
 
 			} else if (UP && DOWN && !TASK) {
-				rowStyleClass = "NT";
+				rowStyleClass = "RequirementNoTask";
 			} else {
-				rowStyleClass = "NL";
+				rowStyleClass = "RequirementNotLinked";
 			}
 			return rowStyleClass;
 

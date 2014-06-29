@@ -25,11 +25,43 @@
 				onstart="PF('specBlockUIWidget').block()"
 				oncomplete="PF('specBlockUIWidget').unblock();requirementImportDialogWidget.show()" />
 
+			<p:commandButton id="colorBtn" icon="ui-icon-info" type="button" style="float: right;" />
+			<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade" dynamic="true" style="width:600px">
+				<p:panelGrid>
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="12">Code des Couleurs</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column colspan="2" styleClass="RequirementNotLinked">
+							<p:outputLabel value="Exigence sans liens haut ou bas" />
+						</p:column>
+					
+						<p:column colspan="2" styleClass="RequirementNoTask">
+							<p:outputLabel value="Exigence sans tache" />
+						</p:column>
+						
+						<p:column colspan="2" styleClass="RequirementInProcess">
+							<p:outputLabel value="Exigence en cours d'execution" />
+						</p:column>
+										
+						<p:column colspan="2" styleClass="RequirementFinishedTestProcess">
+							<p:outputLabel value="Exigence avec taches termines et tests en cours" />
+						</p:column>
+						
+						<p:column colspan="2" styleClass="RequirementFinishedSuccessed">
+							<p:outputLabel value="Exigence avec taches et tests termines avec succes" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+			</p:overlayPanel>
+
 			<pe:blockUI widgetVar="specBlockUIWidget">
 				<h:panelGrid columns="2">
 					<p:graphicImage library="images" name="ajax-loader.gif"
 						style="vertical-align: middle;" />
-					<h:outputText value="Please wait..." style="white-space: nowrap;" />
+					<h:outputText value="#{messages.label_refresh}" style="white-space: nowrap;" />
 				</h:panelGrid>
 			</pe:blockUI>
 
@@ -190,7 +222,7 @@
 					<h:panelGrid columns="2">
 						<p:graphicImage library="images" name="ajax-loader.gif"
 							style="vertical-align: middle;" />
-						<h:outputText value="Please wait..." style="white-space: nowrap;" />
+						<h:outputText value="#{messages.label_refresh}" style="white-space: nowrap;" />
 					</h:panelGrid>
 				</pe:blockUI>
 
@@ -257,7 +289,7 @@
 										filter="true" filterMatchMode="startsWith">
 										<f:converter
 											converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
-										<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
+										<f:selectItem itemValue="#{null}" itemLabel="#{messages.specification_create_select_label}" />
 										<f:selectItems
 											value="#{jJRequirementBean.requirementProductList}" var="c"
 											itemLabel="#{c.name}" itemValue="#{c}" />
@@ -277,7 +309,7 @@
 										disabled="#{jJRequirementBean.disabledVersion}">
 										<f:converter
 											converterId="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter" />
-										<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
+										<f:selectItem itemValue="#{null}" itemLabel="#{messages.specification_create_select_label}" />
 										<f:selectItems
 											value="#{jJRequirementBean.requirementVersionList}" var="c"
 											itemLabel="#{c.name}" itemValue="#{c}" />
@@ -294,7 +326,7 @@
 										filter="true" filterMatchMode="startsWith">
 										<f:converter
 											converterId="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter" />
-										<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
+										<f:selectItem itemValue="#{null}" itemLabel="#{messages.specification_create_select_label}" />
 										<f:selectItems
 											value="#{jJRequirementBean.requirementChapterList}" var="c"
 											itemLabel="#{c.name}" itemValue="#{c}" />
@@ -352,7 +384,7 @@
 										<p:ajax event="blur" update="editorMessageId" immediate="true" />
 									</pe:ckEditor>
 									<p:message for="description" id="editorMessageId" />
-									<h:outputLabel for="description" value="#{request.contextPath}" />
+									<!--h:outputLabel for="description" value="#{request.contextPath}" /-->
 								</p:column>
 							</p:row>
 							<p:row>
@@ -433,7 +465,7 @@
 					<h:panelGrid columns="2">
 						<p:graphicImage library="images" name="ajax-loader.gif"
 							style="vertical-align: middle;" />
-						<h:outputText value="Please wait..." style="white-space: nowrap;" />
+						<h:outputText value="#{messages.label_refresh}" style="white-space: nowrap;" />
 					</h:panelGrid>
 				</pe:blockUI>
 
@@ -492,7 +524,7 @@
 										widgetVar="parentWidget">
 										<f:converter
 											converterId="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter" />
-										<f:selectItem itemValue="#{null}" itemLabel="-- Select One --" />
+										<f:selectItem itemValue="#{null}" itemLabel="#{messages.specification_create_select_label}" />
 										<f:selectItems value="#{jJChapterBean.chapterList}" var="c"
 											itemLabel="#{c.name}" itemValue="#{c}" />
 										<p:ajax partialSubmit="true"
@@ -553,7 +585,7 @@
 								<p:row>
 									<p:column colspan="3">
 										<p:commandButton
-											value="#{message.specification_chapter_save_button}"
+											value="#{messages.specification_chapter_save_button}"
 											action="#{jJChapterBean.save()}"
 											process="@widgetVar(nameWidget) @widgetVar(parentWidget) @widgetVar(descriptionWidget) @widgetVar(projectWidget)"
 											update="chapterDialogForm" style="float: right;"
@@ -617,7 +649,7 @@
 			<p:outputPanel id="requirementDeletePanel">
 				<h:form id="requirementDeleteForm">
 					<p:commandButton id="deleteYesButton"
-						value="#{messages.specification_delete_no_button}"
+						value="#{messages.specification_delete_yes_button}"
 						action="#{jJRequirementBean.deleteRequirement}" update=":specForm"
 						onstart="requirementDeleteDialogWidget.hide();PF('specBlockUIWidget').block()"
 						oncomplete="PF('specBlockUIWidget').unblock()" />
@@ -649,7 +681,7 @@
 		</p:confirmDialog>
 
 		<p:dialog id="requirementImportDialog"
-			header="#{jJRequirementBean.message}" modal="true"
+			header="#{messages.specification_import_title}" modal="true"
 			widgetVar="requirementImportDialogWidget" dynamic="true"
 			resizable="false">
 			<p:ajax event="close"
@@ -662,7 +694,7 @@
 							<h:panelGrid columns="2">
 								<p:graphicImage library="images" name="ajax-loader.gif"
 									style="vertical-align: middle;" />
-								<h:outputText value="Please wait..."
+								<h:outputText value="#{messages.label_refresh}"
 									style="white-space: nowrap;" />
 							</h:panelGrid>
 						</pe:blockUI>
@@ -680,7 +712,7 @@
 											<f:converter
 												converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
 											<f:selectItem itemValue="#{null}"
-												itemLabel="-- Select One --" />
+												itemLabel="#{messages.specification_import_select_label}" />
 											<f:selectItems value="#{jJRequirementBean.importProjectList}"
 												var="p" itemLabel="#{p.name}" itemValue="#{p}" />
 											<p:ajax partialSubmit="true"
@@ -700,7 +732,7 @@
 											<f:converter
 												converterId="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter" />
 											<f:selectItem itemValue="#{null}"
-												itemLabel="-- Select One --" />
+												itemLabel="#{messages.specification_import_select_label}" />
 											<f:selectItems
 												value="#{jJRequirementBean.importCategoryList}" var="p"
 												itemLabel="#{p.name}" itemValue="#{p}" />
@@ -725,7 +757,7 @@
 											<f:converter
 												converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
 											<f:selectItem itemValue="#{null}"
-												itemLabel="-- Select One --" />
+												itemLabel="#{messages.specification_import_select_label}" />
 											<f:selectItems value="#{jJRequirementBean.importProductList}"
 												var="p" itemLabel="#{p.name}" itemValue="#{p}" />
 											<p:ajax partialSubmit="true"
@@ -748,7 +780,7 @@
 												converterId="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter" />
 
 											<f:selectItem itemValue="#{null}"
-												itemLabel="-- Select One --" />
+												itemLabel="#{messages.specification_import_select_label}" />
 											<f:selectItems value="#{jJRequirementBean.importVersionList}"
 												var="v" itemLabel="#{v.name}" itemValue="#{v}" />
 											<p:ajax partialSubmit="true"
@@ -770,7 +802,7 @@
 											<f:converter
 												converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
 											<f:selectItem itemValue="#{null}"
-												itemLabel="-- Select One --" />
+												itemLabel="#{messages.specification_import_select_label}" />
 											<f:selectItems value="#{jJRequirementBean.importStatusList}"
 												var="p" itemLabel="#{p.name}" itemValue="#{p}" />
 											<p:ajax partialSubmit="true"
