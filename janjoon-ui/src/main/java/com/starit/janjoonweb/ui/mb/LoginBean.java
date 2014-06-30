@@ -9,10 +9,12 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ValueChangeEvent;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -338,8 +340,7 @@ public class LoginBean implements Serializable {
 
 			System.out.println("in spec");
 
-			JJRequirementBean jJRequirementBean = (JJRequirementBean) session
-					.getAttribute("jJRequirementBean");
+			JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
 
 			if (event.getComponent().getClientId()
 					.contains("projectSelectOneMenu")) {
@@ -367,8 +368,16 @@ public class LoginBean implements Serializable {
 				jJRequirementBean.setVersion(version);
 			}
 
-			// jJRequirementBean.loadData();
+		
+			jJRequirementBean.loadData();
+			
+			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+		    ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
+			
+			
 		}
+		
+	
 
 	}
 

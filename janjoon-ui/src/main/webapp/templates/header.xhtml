@@ -40,7 +40,7 @@
 						<f:selectItems value="#{jJProjectBean.projectList}" var="p"
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock();window.location.reload()" />
+							oncomplete="PF('blockUIWidget').unblock()" />
 					</p:selectOneMenu>
 
 					<!--h:outputText value="#{messages.header_product_label}:" /-->
@@ -55,7 +55,8 @@
 						<f:selectItems value="#{jJProductBean.productList}" var="p"
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock();window.location.reload(true)" />
+							update="versionSelectOneMenu"
+							oncomplete="PF('blockUIWidget').unblock()" />
 					</p:selectOneMenu>
 
 					<!--h:outputText value="#{messages.header_version_label}:" /-->
@@ -74,7 +75,7 @@
 							itemLabel="#{v.name}" itemValue="#{v}" />
 
 						<p:ajax onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock();window.location.reload(true)" />
+							oncomplete="PF('blockUIWidget').unblock()" />
 					</p:selectOneMenu>
 
 
@@ -87,7 +88,7 @@
 							url="logout.jsf" actionListener="#{loginBean.logout}"
 							icon="ui-icon-extlink" />
 					</p:splitButton>
-					
+
 				</h:panelGrid>
 
 				<p:tabMenu id="tabMenu" name="content" style="float: none;"
@@ -108,7 +109,7 @@
 
 					<p:menuitem value="#{messages.header_spec_menuitem}"
 						url="/pages/specifications.jsf?faces-redirect=true"
-						icon="ui-icon-document"/>
+						icon="ui-icon-document" />
 
 					<p:menuitem value="#{messages.header_bug_menuitem}"
 						url="/pages/bugs.jsf?faces-redirect=true" icon="ui-icon-gear" />
