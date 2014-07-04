@@ -3,12 +3,13 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
 
 	<h:form id="sprintCreationForm" rendered="#{jjsprint.render}">
 		<p:growl id="sprintCreationGrowl" showDetail="true" life="2000" />
-		<p:panelGrid>
+		<p:panelGrid >
 			<f:facet name="header">
 				<p:row>
 					<p:column colspan="4">Create Sprint</p:column>
@@ -67,13 +68,15 @@
 							disabled="#{jjsprint.renderTaskForm}"
 							value="#{messages.label_create}"
 							actionListener="#{jJSprintBean.attrListener}"
-							action="#{jJSprintBean.createSprint}" update="@(form)">
+							action="#{jJSprintBean.createSprint}" update="@(form)"
+							onstart="PF('createSprintBlockUI').block()"
+							oncomplete="PF('createSprintBlockUI').unblock()">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 						</p:commandButton>
 					</p:column>
 				</p:row>
 			</f:facet>
-		</p:panelGrid>
+		</p:panelGrid>		
 		<ui:include src="taskCreation.xhtml" />
 	</h:form>
 	<p:dialog id="createTaskDialog"

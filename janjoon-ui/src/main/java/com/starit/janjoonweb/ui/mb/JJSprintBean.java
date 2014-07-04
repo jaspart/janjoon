@@ -465,12 +465,14 @@ public class JJSprintBean {
 		if (sprintUtil.isRenderTaskForm()) {
 			categoryList = null;
 			getCategoryList();
-			getReqList();
+			getBugs();
 
 		} else {
 			requirement = null;
 			category = null;
 			categoryList = null;
+			bug=null;
+			bugs=null;
 			reqList = null;
 		}
 	}

@@ -14,28 +14,29 @@
 			effect="fold" editable="false"
 			converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter">
 			<f:selectItem itemValue="#{null}" itemLabel="Bugs" />
-			<f:selectItems value="#{jJSprintBean.categoryList}" var="cat" 
-				itemLabel="#{cat.name.concat(' Requirement')}" itemValue="#{cat}" />			
+			<f:selectItems value="#{jJSprintBean.categoryList}" var="cat"
+				itemLabel="#{cat.name.concat(' Requirement')}" itemValue="#{cat}" />
 			<p:ajax update="paneltoUpdate"
+				onstart="PF('createSprintBlockUI').block()"
+				oncomplete="PF('createSprintBlockUI').unblock()"
 				listener="#{jJSprintBean.updatereqPanel}" />
 		</p:selectOneMenu>
 		<p:panelGrid id="reqPanel">
 			<p:row>
 				<p:column>
 					<p:panel rendered="#{jJSprintBean.category == null}"
-						header="Liste Des Bugs " >
+						header="Liste Des Bugs ">
 						<p:selectOneListbox id="bugSelectManyMenu"
-							style="width:300px;height:150px"
-							value="#{jJSprintBean.bug}"
+							style="width:300px;height:150px" value="#{jJSprintBean.bug}"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJBugConverter">
 							<f:selectItem itemValue="#{null}"
 								itemLabel="-- selelect one Bug --" />
 							<f:selectItems value="#{jJSprintBean.bugs}" var="b"
 								itemLabel="#{b.name}" itemValue="#{b}" />
-							
+
 							<p:ajax update="paneltoUpdate" />
 						</p:selectOneListbox>
-						</p:panel>
+					</p:panel>
 					<p:panel
 						header="#{jJSprintBean.category.name.concat(' Requirement')}"
 						rendered="#{jJSprintBean.category != null}">
@@ -46,7 +47,7 @@
 							<f:selectItem itemValue="#{null}"
 								itemLabel="-- selelect one Requirement --" />
 							<f:selectItems value="#{jJSprintBean.reqList}" var="req"
-								itemLabel="#{req.name}" itemValue="#{req}" />							
+								itemLabel="#{req.name}" itemValue="#{req}" />
 							<p:ajax update="paneltoUpdate" />
 						</p:selectOneListbox>
 					</p:panel>
@@ -84,6 +85,8 @@
 							hideEffect="fade" />
 						<p:commandButton value="Done" id="doneButton"
 							rendered="#{!jjsprint.render}"
+							onstart="PF('createSprintBlockUI').block()"
+							oncomplete="PF('createSprintBlockUI').unblock()"
 							update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm"
 							immediate="true" actionListener="#{jJSprintBean.doneEvent}">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
@@ -93,6 +96,8 @@
 						<p:commandButton value="Done" id="doneButtonr"
 							update=":projecttabview:SprintTabView" immediate="true"
 							action="#{jJSprintBean.doneEvent}"
+							onstart="PF('createSprintBlockUI').block()"
+							oncomplete="PF('createSprintBlockUI').unblock()"
 							actionListener="#{jJSprintBean.attrListener}">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 

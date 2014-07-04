@@ -49,6 +49,7 @@ import com.starit.janjoonweb.ui.security.AuthorizationManager;
 public class LoginBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
@@ -97,6 +98,7 @@ public class LoginBean implements Serializable {
 	public LoginBean(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
 	}
+	
 
 	protected String getRedirectUrl(HttpSession session) {
 
@@ -138,9 +140,7 @@ public class LoginBean implements Serializable {
 			SecurityContext sContext = SecurityContextHolder.getContext();
 			sContext.setAuthentication(authentication);
 			enable = true;
-			for (JJCompany company : jJCompanyService.findAllJJCompanys()) {
-				System.out.println(company.getCalendar());
-			}
+			
 		} catch (AuthenticationException loginError) {
 
 			FacesMessage message = new FacesMessage(
@@ -293,6 +293,7 @@ public class LoginBean implements Serializable {
 		if (event.getComponent().getClientId().contains("projectSelectOneMenu")) {
 
 			session.setAttribute("jJSprintBean", new JJSprintBean());
+			session.setAttribute("jJBugBean", new JJBugBean());
 		}
 
 		if (viewId.contains("development")) {
@@ -447,7 +448,7 @@ public class LoginBean implements Serializable {
 					.redirect(path + "/pages/main.jsf?faces-redirect=true");
 		}
 	}
-
+	
 	public void loadingMain(ComponentSystemEvent e) throws IOException {
 
 		if (enable) {

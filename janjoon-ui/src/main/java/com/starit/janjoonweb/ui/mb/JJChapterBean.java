@@ -608,14 +608,16 @@ public class JJChapterBean {
 				StringReader strReader = new StringReader(
 						requirement.getDescription());
 
-				ArrayList arrList = HTMLWorker.parseToList(strReader, style);
-				paragraph.addAll(arrList);
-				/*
-				 * for (int i = 0; i < arrList.size(); ++i) { Element e =
-				 * (Element) arrList.get(i);
-				 * System.out.println("ArrayElement = "
-				 * +e.getClass().getName()); paragraph.add(e); }
-				 */
+				List arrList = HTMLWorker.parseToList(strReader, style);
+				// paragraph.addAll(arrList);
+
+				for (int i = 0; i < arrList.size(); ++i) {
+					Element e = (Element) arrList.get(i);
+					System.out.println("ArrayElement = "
+							+ e.getClass().getName());
+					paragraph.add(e);
+				}
+
 				if (requirement.getNote().length() > 2) {
 					paragraph
 							.add("Note: "

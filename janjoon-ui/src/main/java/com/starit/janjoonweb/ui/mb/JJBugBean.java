@@ -86,6 +86,7 @@ public class JJBugBean {
 	}
 
 	public JJProject getProject() {
+
 		return project;
 	}
 
@@ -142,14 +143,32 @@ public class JJBugBean {
 
 	public void initJJBug(ComponentSystemEvent e) {
 
-		List<JJBug> listOfBug = jJBugService.getBugs(null, null, null, true,
-				true);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
 
-		if (bugList != null) {
-			if (!(bugList.contains(listOfBug) && listOfBug.contains(bugList))) {
+		JJProjectBean jJProjectBean = (JJProjectBean) session
+				.getAttribute("jJProjectBean");
 
+		if (jJProjectBean.getProject() == null) {
+
+			if (bugList == null) {
+				project = null;
+				initJJBugTable();
+			} else if (project != null) {
+
+				project = null;
 				initJJBugTable();
 			}
+
+		} else if (project != null) {
+
+			if (!project.equals(jJProjectBean.getProject())) {
+				project = jJProjectBean.getProject();
+				initJJBugTable();
+			}
+		} else {
+			project = jJProjectBean.getProject();
+			initJJBugTable();
 		}
 
 	}
@@ -180,7 +199,7 @@ public class JJBugBean {
 		List<JJAbstractEntity> criticities = new ArrayList<JJAbstractEntity>();
 		List<JJAbstractEntity> status = new ArrayList<JJAbstractEntity>();
 		List<JJAbstractEntity> importances = new ArrayList<JJAbstractEntity>();
-		bugList = jJBugService.getBugs(null, null, null, true, true);
+		bugList = jJBugService.getBugs(project);
 		filteredJJBug = bugList;
 
 		for (JJBug b : bugList) {
@@ -265,6 +284,8 @@ public class JJBugBean {
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
 		JJBug_.setEnabled(true);
+		if (JJBug_.getRequirement() != null)
+			JJBug_.setCategory(JJBug_.getRequirement().getCategory());
 
 		if (JJBug_.getId() != null) {
 
@@ -272,12 +293,6 @@ public class JJBugBean {
 			JJBug_.setUpdatedBy(contact);
 
 		} else {
-			JJVersionBean jJVersionBean = (JJVersionBean) session
-					.getAttribute("jJVersionBean");
-			JJProjectBean jJProjectBean = (JJProjectBean) session
-					.getAttribute("jJProjectBean");
-			JJBug_.setProject(jJProjectBean.getProject());
-			JJBug_.setVersioning(jJVersionBean.getVersion());
 			JJBug_.setCreatedBy(contact);
 			JJBug_.setCreationDate(new Date());
 			JJBug_.setEnabled(true);

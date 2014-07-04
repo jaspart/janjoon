@@ -36,8 +36,7 @@
 							<p:outputLabel for="sprintcts" value="Sprint Contacts:" />
 						</p:column>
 						<p:column>
-							<p:selectManyMenu id="sprintcts"
-								value="#{jjsprint.contacts}"
+							<p:selectManyMenu id="sprintcts" value="#{jjsprint.contacts}"
 								converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
 								disabled="#{jjsprint.renderTaskForm}"
 								style="width:150px;height:150px" showCheckbox="true">
@@ -87,6 +86,8 @@
 						<p:row>
 							<p:column colspan="2">
 								<p:commandButton id="editSprintButton"
+									onstart="PF('createSprintBlockUI').block()"
+									oncomplete="PF('createSprintBlockUI').unblock()"
 									value="#{messages.label_edit}"
 									actionListener="#{jJSprintBean.attrListener}"
 									action="#{jJSprintBean.editSprint}"
@@ -99,6 +100,8 @@
 									id="createTaskttButton" icon="ui-icon-circle-plus"
 									update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm"
 									immediate="true"
+									onstart="PF('createSprintBlockUI').block()"
+									oncomplete="PF('createSprintBlockUI').unblock()"
 									actionListener="#{jJSprintBean.handleAddButton}"
 									title="#{messages.label_create} JJTask">
 									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
@@ -199,17 +202,28 @@
 				<p:droppable id="addTaskToProg" for="progFieldset" tolerance="touch"
 					activeStyleClass="ui-state-highlight" datasource="todo">
 					<p:ajax listener="#{jJSprintBean.addTaskToProg}"
+						onstart="PF('createSprintBlockUI').block()"
+						oncomplete="PF('createSprintBlockUI').unblock()"
 						update=":projecttabview:SprintTabView:taskListForm :projecttabview:SprintTabView:sprintForm">
 					</p:ajax>
 				</p:droppable>
 				<p:droppable id="addTaskToDone" for="doneFieldset" tolerance="touch"
 					activeStyleClass="ui-state-highlight" datasource="prog">
 					<p:ajax listener="#{jJSprintBean.addTaskToDone}"
+						onstart="PF('createSprintBlockUI').block()"
+						oncomplete="PF('createSprintBlockUI').unblock()"
 						update=":projecttabview:SprintTabView:taskListForm :projecttabview:SprintTabView:sprintForm">
 					</p:ajax>
 				</p:droppable>
 			</h:form>
 		</p:tab>
 	</p:tabView>
+	<pe:blockUI target="SprintTabView" widgetVar="createSprintBlockUI">
+		<h:panelGrid columns="2">
+			<h:graphicImage library="images" name="ajax-loader.gif"
+				style="margin-right: 12px; vertical-align: middle;" />
+			<h:outputText value="Executing User operation..." style="white-space: nowrap;" />
+		</h:panelGrid>
+	</pe:blockUI>
 </ui:composition>
 </html>

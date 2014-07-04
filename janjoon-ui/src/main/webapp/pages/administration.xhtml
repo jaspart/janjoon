@@ -28,6 +28,14 @@
 					</ui:insert>
 				</h:panelGrid>
 			</p:tab>
+			
+			<p:tab id="tabCompagnies" title="#{messages.admin_compagnie_menuitem}">
+				<h:panelGrid columns="1" cellpadding="3">
+					<ui:insert name="Compagnies">
+						<ui:include src="compagnies.xhtml" />
+					</ui:insert>
+				</h:panelGrid>
+			</p:tab>
 
 			<p:tab id="tabProduct" title="#{messages.admin_product_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">

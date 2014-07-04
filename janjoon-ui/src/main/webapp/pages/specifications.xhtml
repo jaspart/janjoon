@@ -374,15 +374,14 @@
 								<p:column colspan="3">
 									<h:outputText
 										value="#{messages.specification_create_description_label}" />
-									<pe:ckEditor id="description" widgetVar="descriptionWidget"
+									<pe:ckEditor id="description" widgetVar="descriptionWidget"									
 										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
 										style="width:680px"
 										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 										value="#{jJRequirementBean.requirement.description}"
 										required="true"
-										requiredMessage="Requirement Description is a required value">
-										<p:ajax event="blur" update="editorMessageId" immediate="true" />
-									</pe:ckEditor>
+										requiredMessage="Requirement Description is a required value"/>
+										
 									<p:message for="description" id="editorMessageId" />
 									<!--h:outputLabel for="description" value="#{request.contextPath}" /-->
 								</p:column>

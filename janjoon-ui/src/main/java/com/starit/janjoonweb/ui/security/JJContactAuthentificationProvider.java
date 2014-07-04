@@ -2,6 +2,11 @@ package com.starit.janjoonweb.ui.security;
 
 import java.io.Serializable;
 
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.*;
@@ -15,7 +20,7 @@ import com.starit.janjoonweb.ui.mb.JJContactBean;
 
 @Component("contactAuthentificationProvider")
 public class JJContactAuthentificationProvider implements
-		AuthenticationProvider, Serializable {
+		AuthenticationProvider, Serializable{
 
 	/**
 	 * 
@@ -27,6 +32,8 @@ public class JJContactAuthentificationProvider implements
 	
 	@Autowired 
 	BCryptPasswordEncoder encoder;
+	
+	
 
 	public void setEncoder(BCryptPasswordEncoder encoder) {
 		this.encoder = encoder;
@@ -62,5 +69,7 @@ public class JJContactAuthentificationProvider implements
 
 		return UsernamePasswordAuthenticationToken.class.equals(authentication);
 	}
+
+	
 
 }

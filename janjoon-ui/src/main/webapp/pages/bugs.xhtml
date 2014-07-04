@@ -19,27 +19,27 @@
 						</p:row>
 					</f:facet>
 					<p:row>
-						<p:column colspan="2" style="background-color: #B0DAF2 !important;">
+						<p:column colspan="2" styleClass="NEW">
 							<p:outputLabel value="NEW" />
 						</p:column>
 					
-						<p:column colspan="2" style="background-color: #88DDDD !important;">
+						<p:column colspan="2" styleClass="CLOSED">
 							<p:outputLabel value="CLOSED" />
 						</p:column>
 					
-						<p:column colspan="2" style="background-color: #174597 !important;">
+						<p:column colspan="2" styleClass="VERIFIED">
 							<p:outputLabel value="VERIFIED" />
 						</p:column>
 					
-						<p:column colspan="2" style="background-color: #1BA9F9 !important;">
+						<p:column colspan="2" styleClass="RESOLVED">
 							<p:outputLabel value="RESOLVED" />
 						</p:column>
 					
-						<p:column colspan="2" style="background-color: #0B9CEF !important;">
+						<p:column colspan="2" styleClass="DUPLICATE">
 							<p:outputLabel value="DUPLICATE" />
 						</p:column>
 						
-						<p:column colspan="2" style="background-color: #0791DC !important;">
+						<p:column colspan="2" styleClass="WONTFIX">
 							<p:outputLabel value="WONTFIX" />
 						</p:column>
 					</p:row>
@@ -47,23 +47,23 @@
 					<p:row>
 						
 					
-						<p:column colspan="2" style="background-color: #1A6993 !important;">
+						<p:column colspan="2" styleClass="INVALID">
 							<p:outputLabel value="INVALID" />
 						</p:column>
 					
-						<p:column colspan="2" style="background-color: #3882A9 !important;">
+						<p:column colspan="2" styleClass="FIXED">
 							<p:outputLabel value="FIXED" />
 						</p:column>
 					
-						<p:column colspan="2" style="background-color: #4F94B9 !important;">
+						<p:column colspan="2" styleClass="READY">
 							<p:outputLabel value="READY" />
 						</p:column>
 					
-						<p:column colspan="2" style="background-color: #69A6C8 !important;">
+						<p:column colspan="2" styleClass="REOPENED">
 							<p:outputLabel value="REOPENED" />
 						</p:column>
 					
-						<p:column colspan="2" style="background-color: #A2D1EB !important;">
+						<p:column colspan="2" styleClass="ASSIGNED">
 							<p:outputLabel value="ASSIGNED" />
 						</p:column>
 					</p:row>
@@ -137,7 +137,7 @@
 							<h:outputText value="#{messages.bug_table_action_title}" />
 						</f:facet>
 						<p:commandButton id="editButton" icon="ui-icon-pencil"
-							update=":editForm:editPanelGrid"
+							update=":editForm"
 							oncomplete="editDialogWidget.show()"
 							title="#{messages.label_edit}">
 							<f:setPropertyActionListener value="#{bug}"
@@ -165,7 +165,7 @@
 
 						<p:commandButton value="#{messages.bug_delete_button}"
 							id="deleteMButton" icon="ui-icon-trash"
-							update=":createForm:createPanelGrid"
+							update=":createForm"
 							oncomplete="deleteMDialogWidget.show()"
 							disabled="#{empty jJBugBean.selectedBugList}"
 							title="#{messages.label_delete}" />
@@ -182,9 +182,7 @@
 					listener="#{jJBugBean.handleDialogClose}" />
 				<p:outputPanel id="createPanel">
 					<h:form id="createForm" enctype="multipart/form-data">
-						<h:panelGrid id="createPanelGrid" columns="3"
-							binding="#{jJBugBean.createPanelGrid}" styleClass="dialog"
-							columnClasses="col1,col2,col3" />
+						<ui:include src="bugDialog.xhtml"/>
 						<p:commandButton id="createSaveButton"
 							value="#{messages.label_save}" action="#{jJBugBean.persistBug}"
 							update="createPanelGrid,:bugForm:bugMessage,:bugForm" />
@@ -203,13 +201,11 @@
 					listener="#{jJBugBean.handleDialogClose}" />
 				<p:outputPanel id="editPanel">
 					<h:form id="editForm" enctype="multipart/form-data">
-						<h:panelGrid id="editPanelGrid" columns="3"
-							binding="#{jJBugBean.editPanelGrid}" styleClass="dialog"
-							columnClasses="col1,col2,col3" />
+						<ui:include src="bugDialog.xhtml"/>
 						<p:commandButton id="editSaveButton"
 							value="#{messages.bug_edit_save_button}"
 							action="#{jJBugBean.persistBug}"
-							update="editPanelGrid :bugForm:bugMessage :bugForm" />
+							update="createPanelGrid :bugForm:bugMessage :bugForm" />
 						<p:commandButton id="editCloseButton"
 							value="#{messages.bug_edit_close_button}"
 							onclick="editDialogWidget.hide()" type="button" />

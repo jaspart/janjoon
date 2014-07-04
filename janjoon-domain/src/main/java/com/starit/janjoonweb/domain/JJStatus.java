@@ -26,4 +26,10 @@ public class JJStatus extends JJAbstractEntity {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "status")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
+	
+	@Override
+	public boolean equals(Object object) {
+		return (object instanceof JJStatus) && (getId() != null) ? getId()
+				.equals(((JJStatus) object).getId()) : (object == this);
+	}
 }
