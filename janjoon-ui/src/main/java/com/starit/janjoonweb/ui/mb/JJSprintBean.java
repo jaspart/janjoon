@@ -245,7 +245,7 @@ public class JJSprintBean {
 		this.sprintUtil = sprintUtil;
 	}
 
-	public void attrListener(ActionEvent event) {		
+	public void attrListener(ActionEvent event) {
 
 		sprintUtil = (SprintUtil) event.getComponent().getAttributes()
 				.get("sprintUtilValue");
@@ -309,16 +309,16 @@ public class JJSprintBean {
 
 	public void editSprint() {
 
-		
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
 
 		sprintUtil.getSprint().setUpdatedBy(contact);
 		sprintUtil.getSprint().setUpdatedDate(new Date());
-		
-		sprintUtil.getSprint().setContacts(new HashSet<JJContact>(sprintUtil.getContacts()));
-		
+
+		sprintUtil.getSprint().setContacts(
+				new HashSet<JJContact>(sprintUtil.getContacts()));
+
 		jJSprintService.updateJJSprint(sprintUtil.getSprint());
 		sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil
 				.getSprint().getId()));
@@ -395,10 +395,10 @@ public class JJSprintBean {
 					.getAttribute("JJContact");
 
 			JJStatus status = jJStatusService.getOneStatus("IN PROGRESS",
-					"JJTask", true);			
+					"JJTask", true);
 
 			Long sprintId = dropedTask.getSprint().getId();
-			
+
 			dropedTask.setStatus(status);
 			dropedTask.setAssignedTo(assignedTo);
 			dropedTask.setCompleted(false);
@@ -406,7 +406,7 @@ public class JJSprintBean {
 
 			JJSprint s = jJSprintService.findJJSprint(sprintId);
 			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s));
-			
+
 			sprintList.set(contains(sprintUtil), sprintUtil);
 			String message = "message_successfully_updated";
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
@@ -429,9 +429,9 @@ public class JJSprintBean {
 			JJTask dropedTask = (JJTask) ddevent.getData();
 
 			JJStatus status = jJStatusService.getOneStatus("DONE", "JJTask",
-					true);			
+					true);
 
-			Long sprintId = dropedTask.getSprint().getId();			
+			Long sprintId = dropedTask.getSprint().getId();
 			dropedTask.setEndDateReal(new Date());
 			dropedTask.setCompleted(true);
 			dropedTask.setStatus(status);
@@ -439,7 +439,7 @@ public class JJSprintBean {
 
 			JJSprint s = jJSprintService.findJJSprint(sprintId);
 			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s));
-			
+
 			sprintList.set(contains(sprintUtil), sprintUtil);
 
 			String message = "message_successfully_updated";
@@ -471,8 +471,8 @@ public class JJSprintBean {
 			requirement = null;
 			category = null;
 			categoryList = null;
-			bug=null;
-			bugs=null;
+			bug = null;
+			bugs = null;
 			reqList = null;
 		}
 	}
@@ -506,6 +506,7 @@ public class JJSprintBean {
 				+ task.getCreationDate());
 
 		jJTaskService.saveJJTask(task);
+
 		if (!sprintUtil.isRender()) {
 
 			sprintUtil = new SprintUtil(jJSprintService.findJJSprint(sprintUtil
@@ -552,6 +553,30 @@ public class JJSprintBean {
 
 	}
 
+	public void deleteTask() {
+		task.setEnabled(false);
+		jJTaskService.saveJJTask(task);
+		sprintUtil = new SprintUtil(jJSprintService.findJJSprint(task
+				.getSprint().getId()),
+				jJTaskService.getSprintTasks(jJSprintService
+						.findJJSprint(task.getSprint().getId())));
+
+		//sprintUtil.setRenderTaskForm(false);
+		sprintList.set(contains(sprintUtil), sprintUtil);
+		requirement = null;
+		category = null;
+		categoryList = null;
+		reqList = null;	
+		task=null;
+
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("deleteDialogWidget.hide()");
+
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_deleted", "JJTask");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+	}
+
 	public int contains(SprintUtil s) {
 		int i = 0;
 		int j = -1;
@@ -562,7 +587,7 @@ public class JJSprintBean {
 						.equals(s.getSprint().getId())) {
 					j = i;
 					i = sprintList.size();
-				} else					
+				} else
 					i++;
 			}
 		}

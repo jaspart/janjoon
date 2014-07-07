@@ -99,8 +99,7 @@
 								<p:commandButton value="#{messages.label_create} JJTask"
 									id="createTaskttButton" icon="ui-icon-circle-plus"
 									update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm"
-									immediate="true"
-									onstart="PF('createSprintBlockUI').block()"
+									immediate="true" onstart="PF('createSprintBlockUI').block()"
 									oncomplete="PF('createSprintBlockUI').unblock()"
 									actionListener="#{jJSprintBean.handleAddButton}"
 									title="#{messages.label_create} JJTask">
@@ -129,6 +128,7 @@
 								<p:dataTable scrollable="true" scrollHeight="250" id="todo"
 									var="todo" value="#{jjsprint.todoTask}" rowKey="#{todo.id}"
 									rendered="#{not empty jjsprint.todoTask}">
+
 									<p:column style="width:20px">
 										<h:outputText id="todoIcon"
 											styleClass="ui-icon ui-icon-arrow-4" />
@@ -141,6 +141,19 @@
 
 									<p:column style="width:20px" headerText="W">
 										<h:outputText value="#{todo.workloadPlanned}" />
+									</p:column>
+									<p:column style="width:20px" styleClass="action-column">
+										<f:facet name="header">
+											<h:outputText value="#{messages.bug_table_action_title}" />
+										</f:facet>
+										<p:commandButton id="deleteButton" icon="ui-icon-trash"
+											oncomplete="deleteDialogWidget.show()"
+											title="#{messages.label_delete}">
+											<f:setPropertyActionListener value="#{todo}"
+												target="#{jJSprintBean.task}" />
+										</p:commandButton>
+										<p:tooltip for="deleteButton" value="#{messages.label_delete}"
+											showEffect="fade" hideEffect="fade" />
 									</p:column>
 								</p:dataTable>
 							</p:fieldset>
@@ -171,6 +184,20 @@
 										<p:column style="width:50px" headerText="Who">
 											<h:outputText value="#{prog.assignedTo.name}" />
 										</p:column>
+										<p:column style="width:20px" styleClass="action-column">
+											<f:facet name="header">
+												<h:outputText value="#{messages.bug_table_action_title}" />
+											</f:facet>
+											<p:commandButton id="deleteButton" icon="ui-icon-trash"
+												oncomplete="deleteDialogWidget.show()"
+												title="#{messages.label_delete}">
+												<f:setPropertyActionListener value="#{prog}"
+													target="#{jJSprintBean.task}" />
+											</p:commandButton>
+											<p:tooltip for="deleteButton"
+												value="#{messages.label_delete}" showEffect="fade"
+												hideEffect="fade" />
+										</p:column>
 									</p:dataTable>
 								</p:outputPanel>
 							</p:fieldset>
@@ -191,6 +218,20 @@
 										<p:column style="width:20px" headerText="Diff">
 											<h:outputText
 												value="#{done.workloadPlanned-done.workloadRevised}" />
+										</p:column>
+										<p:column style="width:20px" styleClass="action-column">
+											<f:facet name="header">
+												<h:outputText value="#{messages.bug_table_action_title}" />
+											</f:facet>
+											<p:commandButton id="deleteButton" icon="ui-icon-trash"
+												oncomplete="deleteDialogWidget.show()"
+												title="#{messages.label_delete}">
+												<f:setPropertyActionListener value="#{done}"
+													target="#{jJSprintBean.task}" />
+											</p:commandButton>
+											<p:tooltip for="deleteButton"
+												value="#{messages.label_delete}" showEffect="fade"
+												hideEffect="fade" />
 										</p:column>
 									</p:dataTable>
 								</p:outputPanel>
@@ -218,11 +259,13 @@
 			</h:form>
 		</p:tab>
 	</p:tabView>
+
 	<pe:blockUI target="SprintTabView" widgetVar="createSprintBlockUI">
 		<h:panelGrid columns="2">
 			<h:graphicImage library="images" name="ajax-loader.gif"
 				style="margin-right: 12px; vertical-align: middle;" />
-			<h:outputText value="Executing User operation..." style="white-space: nowrap;" />
+			<h:outputText value="Executing User operation..."
+				style="white-space: nowrap;" />
 		</h:panelGrid>
 	</pe:blockUI>
 </ui:composition>
