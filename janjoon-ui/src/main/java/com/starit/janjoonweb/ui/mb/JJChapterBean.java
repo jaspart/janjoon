@@ -583,52 +583,43 @@ public class JJChapterBean {
 			Font fontChapter, Font fontRequirement, StyleSheet style)
 			throws IOException {
 
-		paragraph.add(new Chunk("\n" + chapterParent.getName() + "\n",
-				fontChapter));
-		paragraph
-				.add(new Chunk(chapterParent.getDescription() + "\n", fontNote));
-
+		paragraph.add(new Chunk("\n" + chapterParent.getName() + "\n", fontChapter));
+		
+		StringReader strChapitre = new StringReader(chapterParent.getDescription());
+		List arrChapitre = HTMLWorker.parseToList(strChapitre, style);
+		for (int i = 0; i < arrChapitre.size(); ++i) {
+			Element e = (Element) arrChapitre.get(i);
+			System.out.println("ChapterElement = " + e.getClass().getName());
+			paragraph.setSpacingAfter(50);
+			paragraph.add(e);
+		}
+		
 		SortedMap<Integer, Object> elements = getSortedElements(chapterParent,
 				project, category, true);
 		for (Map.Entry<Integer, Object> entry : elements.entrySet()) {
 			String className = entry.getValue().getClass().getSimpleName();
 
 			if (className.equalsIgnoreCase("JJChapter")) {
-
 				JJChapter chapter = (JJChapter) entry.getValue();
 				createTreeDocument(chapter, category, paragraph, fontNote,
 						fontChapter, fontRequirement, style);
 
 			} else if (className.equalsIgnoreCase("JJRequirement")) {
-
 				JJRequirement requirement = (JJRequirement) entry.getValue();
-
-				paragraph.add(new Chunk(requirement.getName() + "\n",
-						fontRequirement));
-				StringReader strReader = new StringReader(
-						requirement.getDescription());
-
+				paragraph.add(new Chunk(requirement.getName() + "\n", fontRequirement));
+				StringReader strReader = new StringReader(requirement.getDescription());
 				List arrList = HTMLWorker.parseToList(strReader, style);
-				// paragraph.addAll(arrList);
-
 				for (int i = 0; i < arrList.size(); ++i) {
 					Element e = (Element) arrList.get(i);
-					System.out.println("ArrayElement = "
-							+ e.getClass().getName());
+					System.out.println("RequirementElement = " + e.getClass().getName());
 					paragraph.add(e);
 				}
-
 				if (requirement.getNote().length() > 2) {
-					paragraph
-							.add("Note: "
-									+ new Chunk(requirement.getNote() + "\n",
-											fontNote));
+					paragraph.add("Note: "
+						+ new Chunk(requirement.getNote() + "\n", fontNote));
 				}
-
 			}
-
 		}
-
 	}
 
 	private SortedMap<Integer, Object> getSortedElements(JJChapter parent,
