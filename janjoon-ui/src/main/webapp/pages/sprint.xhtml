@@ -92,10 +92,25 @@
 					oncomplete="deleteDialogWidget.hide()" />
 				<p:commandButton id="deleteNoButton"
 					value="#{messages.bug_delete_no_button}"
+					oncomplete="PF('createSprintBlockUI').unblock()"
 					onclick="deleteDialogWidget.hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:confirmDialog>
+	<p:dialog id="viewTaskDialog" header="#{messages.label_view} JJTask"
+				modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
+				resizable="true" maximizable="true" showEffect="fade"
+				hideEffect="explode"  draggable="false">
+		<p:outputPanel id="viewTaskPanel">
+			<h:form id="viewTaskForm" enctype="multipart/form-data">
+				<ui:include src="taskDialog.xhtml" />
+				<p:commandButton id="viewCloseButton"
+					value="#{messages.label_close}"
+					oncomplete="PF('createSprintBlockUI').unblock()"
+					onclick="viewTaskDialogWidget.hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
 	<p:dialog id="createTaskDialog"
 		header="#{messages.label_create} JJTask" dynamic="true" modal="true"
 		widgetVar="createTaskDialogWidget" showEffect="fade"
@@ -118,6 +133,7 @@
 					update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm" />
 				<p:commandButton id="createTaskCloseButton"
 					value="#{messages.label_close}"
+					onstart="PF('createSprintBlockUI').block()"					
 					onclick="createTaskDialogWidget.hide()" type="button" />
 			</h:form>
 		</p:outputPanel>

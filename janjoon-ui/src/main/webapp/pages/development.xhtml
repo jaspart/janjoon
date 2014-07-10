@@ -11,7 +11,7 @@
 		href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
 	<link type="text/css" rel="stylesheet"
 		href="/syntaxhighlighter/standard.css" />
-	<ui:define name="content">		
+	<ui:define name="content">
 		<br />
 		<p:panel id="errorPanel"
 			header="#{messages['dev.panel.error.header']}"
@@ -33,12 +33,12 @@
 										<h:outputText for="taskSelectOneMenu"
 											value="#{messages['dev.taskSelectOneMenu.label']}" />
 
-										<p:selectOneMenu id="taskSelectOneMenu"
+										<p:selectOneMenu id="taskSelectOneMenu" immediate="true"
 											value="#{jJDevelopment.task}" panelStyle="width:150px"
 											effect="fold" editable="false" style="width:160px"
 											required="true" requiredMessage="Select task to commit">
 											<f:selectItem itemValue="#{null}" noSelectionOption="true"
-												itemLabel="-- #{messages['dev.taskSelectOneMenu.labelitem']} --" />
+												itemLabel="-- #{messages['dev.taskSelectOneMenu.labelitem']} --"/>
 											<f:selectItems value="#{jJDevelopment.tasks}" var="t"
 												itemLabel="#{t.name}" itemValue="#{t}" />
 											<f:converter
@@ -50,14 +50,13 @@
 									</p:column>
 
 									<p:column>
-										<p:commandButton
-											id="fetchFromRepo" immediate="true" icon="ui-icon-refresh"
-											actionListener="#{jJDevelopment.pull}" update=":form" />
+										<p:commandButton id="fetchFromRepo" immediate="true"
+											icon="ui-icon-refresh" actionListener="#{jJDevelopment.pull}"
+											update=":form" />
 
 										<h:panelGroup id="startTaskPanel">
 
-											<p:commandButton 
-												immediate="true" icon="ui-icon-play"
+											<p:commandButton immediate="true" icon="ui-icon-play"
 												disabled="#{jJDevelopment.task == null or jJDevelopment.task.startDateReal != null}"
 												actionListener="#{jJDevelopment.startTask}"
 												update=":form:taskSelectOneMenu startTaskPanel" />
@@ -66,9 +65,12 @@
 												update=":viewTaskForm:viewTaskPanelGrid"
 												disabled="#{jJDevelopment.task == null}" immediate="true"
 												oncomplete="viewTaskDialogWidget.show()"
+												actionListener="#{jJTaskBean.gettingTaskValue}"
 												title="#{messages.label_view}">
-<!-- 												<f:setPropertyActionListener value="#{jJDevelopment.task}" -->
-<!-- 													target="#{jJTaskBean.JJTask_}" /> -->
+												<f:attribute name="taskValue" value="#{jJDevelopment.task}" />
+												
+												<!-- 												<f:setPropertyActionListener value="#{jJDevelopment.task}" -->
+												<!-- 													target="#{jJTaskBean.JJTask_}" /> -->
 											</p:commandButton>
 											<p:tooltip for="viewTaskButton"
 												value="#{messages.label_view}" showEffect="fade"
@@ -312,18 +314,20 @@
 				hideEffect="explode">
 				<p:outputPanel id="viewTaskPanel">
 					<h:form id="viewTaskForm" enctype="multipart/form-data">
-						<h:panelGrid id="viewTaskPanelGrid" columns="2"
-							binding="#{jJTaskBean.viewPanel}" styleClass="dialog"
-							columnClasses="col1,col2">
-							<h:outputLabel id="requirementLabel" value="Requirement: "
-								for="reqTree" />
-							<p:tree id="reqTree" value="#{jJTaskBean.taskTreeNode}"
-								var="node" animate="true">
-								<p:treeNode icon="ui-icon-arrowthick-1-e">
-									<h:outputText value="#{node}" />
-								</p:treeNode>
-							</p:tree>
-						</h:panelGrid>
+						<!-- 						<h:panelGrid id="viewTaskPanelGrid" columns="2" -->
+						<!-- 							styleClass="dialog" -->
+						<!-- 							columnClasses="col1,col2"> -->
+						<!-- 							<ui:include src="taskDialog.xhtml"/> -->
+						<!-- 							<h:outputLabel id="requirementLabel" value="Requirement: " -->
+						<!-- 								for="reqTree" /> -->
+						<!-- 							<p:tree id="reqTree" value="#{jJTaskBean.taskTreeNode}" -->
+						<!-- 								var="node" animate="true"> -->
+						<!-- 								<p:treeNode icon="ui-icon-arrowthick-1-e"> -->
+						<!-- 									<h:outputText value="#{node}" /> -->
+						<!-- 								</p:treeNode> -->
+						<!-- 							</p:tree> -->
+						<!-- 						</h:panelGrid> -->
+						<ui:include src="taskDialog.xhtml"/>
 						<p:commandButton id="viewCloseButton"
 							value="#{messages.label_close}"
 							onclick="viewTaskDialogWidget.hide()" type="button" />

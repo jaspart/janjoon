@@ -146,6 +146,15 @@
 										<f:facet name="header">
 											<h:outputText value="#{messages.bug_table_action_title}" />
 										</f:facet>
+										<p:commandButton id="viewTaskButton" icon="ui-icon-zoomin"
+											update=":projecttabview:SprintTabView:viewTaskForm:viewTaskPanelGrid"
+											immediate="true" oncomplete="viewTaskDialogWidget.show()"
+											actionListener="#{jJTaskBean.gettingTaskValue}"
+											title="#{messages.label_view}">
+											<f:attribute name="taskValue" value="#{todo}" />
+										</p:commandButton>
+										<p:tooltip for="viewTaskButton" value="#{messages.label_view}"
+											showEffect="fade" hideEffect="fade" />
 										<p:commandButton id="deleteButton" icon="ui-icon-trash"
 											oncomplete="deleteDialogWidget.show()"
 											title="#{messages.label_delete}">
@@ -188,6 +197,16 @@
 											<f:facet name="header">
 												<h:outputText value="#{messages.bug_table_action_title}" />
 											</f:facet>
+											<p:commandButton id="viewTaskButton" icon="ui-icon-zoomin"
+												update=":projecttabview:SprintTabView:viewTaskForm:viewTaskPanelGrid"
+												immediate="true" oncomplete="viewTaskDialogWidget.show()"
+												actionListener="#{jJTaskBean.gettingTaskValue}"
+												title="#{messages.label_view}">
+												<f:attribute name="taskValue" value="#{prog}" />
+											</p:commandButton>
+											<p:tooltip for="viewTaskButton"
+												value="#{messages.label_view}" showEffect="fade"
+												hideEffect="fade" />
 											<p:commandButton id="deleteButton" icon="ui-icon-trash"
 												oncomplete="deleteDialogWidget.show()"
 												title="#{messages.label_delete}">
@@ -223,6 +242,16 @@
 											<f:facet name="header">
 												<h:outputText value="#{messages.bug_table_action_title}" />
 											</f:facet>
+											<p:commandButton id="viewTaskButton" icon="ui-icon-zoomin"
+												update=":projecttabview:SprintTabView:viewTaskForm:viewTaskPanelGrid"
+												immediate="true" oncomplete="viewTaskDialogWidget.show()"
+												actionListener="#{jJTaskBean.gettingTaskValue}"
+												title="#{messages.label_view}">
+												<f:attribute name="taskValue" value="#{done}" />
+											</p:commandButton>
+											<p:tooltip for="viewTaskButton"
+												value="#{messages.label_view}" showEffect="fade"
+												hideEffect="fade" />
 											<p:commandButton id="deleteButton" icon="ui-icon-trash"
 												oncomplete="deleteDialogWidget.show()"
 												title="#{messages.label_delete}">

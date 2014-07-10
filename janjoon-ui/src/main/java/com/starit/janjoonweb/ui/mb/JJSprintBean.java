@@ -251,7 +251,7 @@ public class JJSprintBean {
 				.get("sprintUtilValue");
 	}
 
-	public void updatereqPanel() {
+	public void updatereqPanel() {		
 
 		if (category != null) {
 			reqList = jJRequirementService.getRequirements(category, project,
