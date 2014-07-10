@@ -239,6 +239,13 @@
 										update=":testcaseDialog" />
 									<p:tooltip for="editButton" value="#{messages.label_edit}"
 										showEffect="fade" hideEffect="fade" />
+									<p:commandButton id="runButton" icon="ui-icon-play"
+										oncomplete="runTestcaseDialogWidget.show()"
+										action="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
+										update=":runTestcaseDialog" disabled="#{jJBuildBean.build ne null ? false : true }">
+										<f:setPropertyActionListener value="#{jJTestcaseBean.testcase}"
+											target="#{jJTestcaseBean.testcase}" />
+									</p:commandButton>
 								</p:column>
 							</p:row>
 						</f:facet>
