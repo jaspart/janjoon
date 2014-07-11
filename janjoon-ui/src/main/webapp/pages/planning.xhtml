@@ -17,7 +17,8 @@
 						filter="true" filterMatchMode="startsWith">
 						<f:converter
 							converterId="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter" />
-						<f:selectItem itemValue="#{null}" itemLabel="#{messages.project_gantt_select_label}" />
+						<f:selectItem itemValue="#{null}"
+							itemLabel="#{messages.project_gantt_select_label}" />
 						<f:selectItems value="#{jJTaskBean.sprints}" var="c"
 							itemLabel="#{c.name}" itemValue="#{c}" />
 						<p:ajax process="@this" partialSubmit="true"
@@ -56,7 +57,8 @@
 								<h:outputText value="#{taskData.chapter.name}" />
 							</p:column>
 
-							<p:column id="name" styleClass="task" headerText="#{messages.project_gantt_table_name_title}">
+							<p:column id="name" styleClass="task"
+								headerText="#{messages.project_gantt_table_name_title}">
 								<p:cellEditor>
 									<f:facet name="output">
 										<h:outputText value="#{taskData.task.name}" />
@@ -106,7 +108,8 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column id="sdr" styleClass="task" headerText="#{messages.project_gantt_table_startreal_title}">
+							<p:column id="sdr" styleClass="task"
+								headerText="#{messages.project_gantt_table_startreal_title}">
 								<p:cellEditor>
 									<f:facet name="output">
 										<p:calendar value="#{taskData.task.startDateReal}"
@@ -118,7 +121,8 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column id="edr" styleClass="task" headerText="#{messages.project_gantt_table_endreal_title}">
+							<p:column id="edr" styleClass="task"
+								headerText="#{messages.project_gantt_table_endreal_title}">
 								<p:cellEditor>
 									<f:facet name="output">
 										<p:calendar value="#{taskData.task.endDateReal}"
@@ -130,7 +134,8 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column id="wr" styleClass="task" headerText="#{messages.project_gantt_table_wlreal_title}">
+							<p:column id="wr" styleClass="task"
+								headerText="#{messages.project_gantt_table_wlreal_title}">
 								<p:cellEditor>
 									<f:facet name="output">
 										<h:outputText value="#{taskData.task.workloadReal}" />
@@ -141,7 +146,8 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column styleClass="task" headerText="#{messages.project_gantt_table_assigned_title}">
+							<p:column styleClass="task"
+								headerText="#{messages.project_gantt_table_assigned_title}">
 								<p:cellEditor>
 									<f:facet name="output">
 										<h:outputText
@@ -162,10 +168,12 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column id="bt" styleClass="task" headerText="#{messages.project_gantt_table_previous_title}">
+							<p:column id="bt" styleClass="task"
+								headerText="#{messages.project_gantt_table_previous_title}">
 								<p:cellEditor>
 									<f:facet name="output">
-										<h:outputText value="#{messages.project_gantt_table_click_button}" />
+										<h:outputText
+											value="#{messages.project_gantt_table_click_button}" />
 									</f:facet>
 									<f:facet name="input">
 										<p:selectManyMenu value="#{taskData.selectedTasks}"
@@ -179,13 +187,43 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
+
+							<p:column id="ts" styleClass="task" headerText="Sprint">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText
+											value="#{taskData.task.sprint.name}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu id="sprintedit" value="#{taskData.task.sprint}"
+											panelStyle="width:150px;" effect="fade" style="width:150px;"
+											filter="true" filterMatchMode="startsWith" >
+											<f:converter
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter" />
+											<f:selectItem itemValue="#{null}" 
+												itemLabel="Select a Sprint" />
+											<f:selectItems value="#{jJTaskBean.sprints}" var="c"
+												itemLabel="#{c.name}" itemValue="#{c}" />											
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
 							<p:column>
 								<p:commandButton id="duplicate" icon="ui-icon-copy"
 									oncomplete="duplicateTaskDialogWidget.show()">
 									<f:setPropertyActionListener value="#{taskData.task}"
 										target="#{jJTaskBean.task}" />
 								</p:commandButton>
-								<p:tooltip for="duplicate" value="#{messages.project_gantt_task_dupplicate_button}"
+								<p:tooltip for="duplicate"
+									value="#{messages.project_gantt_task_dupplicate_button}"
+									showEffect="fade" hideEffect="fade" />
+								<p:commandButton id="deleteButton" icon="ui-icon-trash"
+									oncomplete="deleteDialogWidget.show()"
+									title="#{messages.label_delete}">
+									<f:setPropertyActionListener value="#{taskData}"
+										target="#{jJTaskBean.selectedTaskData}" />
+								</p:commandButton>
+								<p:tooltip for="deleteButton" value="#{messages.label_delete}"
 									showEffect="fade" hideEffect="fade" />
 							</p:column>
 

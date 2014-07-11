@@ -273,7 +273,7 @@ public class LoginBean implements Serializable {
 	public void onTabProjectChange(TabChangeEvent event) {
 		TabView tv = (TabView) event.getComponent();
 		this.activeTabProjectIndex = tv.getChildren().indexOf(event.getTab());
-		System.out.println("###### ACtive tab: " + activeTabAdminIndex);
+		System.out.println("###### ACtive tab: " + activeTabProjectIndex);
 
 	}
 

@@ -79,24 +79,7 @@
 		</p:panelGrid>
 		<ui:include src="taskCreation.xhtml" />
 	</h:form>
-	<p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget"
-		message="#{messages.task_delete_title}" showEffect="fade"
-		hideEffect="explode" header="#{messages.task_delete_confirm_label}"
-		severity="alarm">
-		<p:outputPanel id="deletePanel">
-			<h:form id="deleteForm">
-				<p:commandButton id="deleteYesButton"
-					value="#{messages.bug_delete_yes_button}"
-					action="#{jJSprintBean.deleteTask}"
-					update=":projecttabview:SprintTabView"
-					oncomplete="deleteDialogWidget.hide()" />
-				<p:commandButton id="deleteNoButton"
-					value="#{messages.bug_delete_no_button}"
-					oncomplete="PF('createSprintBlockUI').unblock()"
-					onclick="deleteDialogWidget.hide()" type="button" />
-			</h:form>
-		</p:outputPanel>
-	</p:confirmDialog>
+
 	<p:dialog id="viewTaskDialog" header="#{messages.label_view} JJTask"
 				modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
 				resizable="true" maximizable="true" showEffect="fade"

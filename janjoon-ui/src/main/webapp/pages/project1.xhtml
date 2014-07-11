@@ -3,13 +3,15 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
 		<p:tabView id="projecttabview" widgetVar="tabView" dynamic="true"
 			cache="true" activeIndex="#{loginBean.activeTabProjectIndex}">
-			<p:ajax event="tabChange" listener="#{loginBean.onTabProjectChange}" update="projecttabview" />
+			<p:ajax event="tabChange" listener="#{loginBean.onTabProjectChange}"
+				update="projecttabview :deleteForm" />
 			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="planning">
@@ -26,6 +28,39 @@
 				</h:panelGrid>
 			</p:tab>
 		</p:tabView>
-	</ui:define>	
+		<p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget"
+			message="#{messages.task_delete_title}" showEffect="fade"
+			hideEffect="explode" header="#{messages.task_delete_confirm_label}"
+			severity="alarm">
+			<p:outputPanel id="deletePanel">
+				<h:form id="deleteForm">
+					<p:commandButton id="deleteYesSprint"
+						rendered="#{loginBean.activeTabProjectIndex == 1}"
+						value="#{messages.bug_delete_yes_button}"
+						action="#{jJSprintBean.deleteTask}"
+						update=":projecttabview:SprintTabView"
+						oncomplete="deleteDialogWidget.hide()" />
+					<p:commandButton id="deleteYesPlanning"
+						rendered="#{loginBean.activeTabProjectIndex == 0}"
+						value="#{messages.bug_delete_yes_button}"
+						action="#{jJTaskBean.deleteTaskData}"
+						update=":projecttabview:planningForm"
+						oncomplete="deleteDialogWidget.hide()" />
+					<p:commandButton id="deleteNoButton"
+						value="#{messages.bug_delete_no_button}"
+						oncomplete="PF('createSprintBlockUI').unblock()"
+						onclick="deleteDialogWidget.hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
+		<pe:blockUI target="projecttabview" widgetVar="createSprintBlockUI">
+			<h:panelGrid columns="2">
+				<h:graphicImage library="images" name="ajax-loader.gif"
+					style="margin-right: 12px; vertical-align: middle;" />
+				<h:outputText value="Executing User operation..."
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+		</pe:blockUI>
+	</ui:define>
 </ui:composition>
 </html>

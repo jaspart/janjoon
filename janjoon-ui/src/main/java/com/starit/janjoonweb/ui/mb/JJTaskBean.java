@@ -1,6 +1,5 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,7 +50,7 @@ import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.converter.JJTaskConverter;
-import com.starit.janjoonweb.ui.mb.util.SprintUtil;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJTask.class, beanName = "jJTaskBean")
@@ -59,6 +58,8 @@ public class JJTaskBean {
 
 	@Autowired
 	JJChapterService jJChapterService;
+	
+	TaskData selectedTaskData;
 
 	public void setJjChapterService(JJChapterService jJChapterService) {
 		this.jJChapterService = jJChapterService;
@@ -77,6 +78,8 @@ public class JJTaskBean {
 	public void setjJCategoryService(JJCategoryService jJCategoryService) {
 		this.jJCategoryService = jJCategoryService;
 	}
+	
+	
 
 	private List<TaskData> tasksData;
 	private JJTask task;
@@ -116,6 +119,34 @@ public class JJTaskBean {
 	private boolean copyObjets;
 
 	public List<TaskData> getTasksData() {
+		
+//		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+//				.getExternalContext().getSession(false);
+//		JJProjectBean jJProjectBean = (JJProjectBean) session
+//				.getAttribute("jJProjectBean");
+//
+//		if (jJProjectBean.getProject() == null) {
+//
+//			if (tasksData == null) {
+//				project = null;
+//				loadData();
+//			} else if (project != null) {
+//
+//				project = null;
+//				loadData();
+//			}
+//
+//		} else if (project != null) {
+//
+//			if (!project.equals(jJProjectBean.getProject())) {
+//				project = jJProjectBean.getProject();
+//				loadData();
+//			}
+//		} else {
+//			project = jJProjectBean.getProject();
+//			loadData();
+//		}
+
 		return tasksData;
 	}
 
@@ -357,9 +388,7 @@ public class JJTaskBean {
 		end = cal.getTime();
 
 		// Create timeline model
-		model = new TimelineModel();
-
-		List<TimelineEvent> timelineEvents = new ArrayList<TimelineEvent>();
+		model = new TimelineModel();		
 
 		getProject();
 		tasksData = new ArrayList<TaskData>();
@@ -972,14 +1001,20 @@ public class JJTaskBean {
 				task.setName(name);
 				task.setDescription("This is task " + task.getName());
 
-				jJTaskService.saveJJTask(task);
+				jJTaskService.saveJJTask(task);	
+				
 
 			}
+			
 		}
 
 		if (mode.equalsIgnoreCase("planning")) {
+			
+			project=null;
+			tasksData=null;			
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("taskImportDialogWidget.hide()");
+			
 		} else if (mode.equalsIgnoreCase("scrum")) {
 			// TODO by Lazher
 			closeDialogImport();
@@ -1169,6 +1204,7 @@ public class JJTaskBean {
 				Date endDate, Integer workload, boolean revisedDate) {
 			super();
 			this.task = task;
+			
 			this.chapter = chapter;
 			this.startDate = startDate;
 			this.endDate = endDate;
@@ -1332,6 +1368,41 @@ public class JJTaskBean {
 			selectedTree = event.getTreeNode();			
 			selectedReq= (JJRequirement) selectedTree.getData();
 			System.out.println(selectedReq.getName());	
+	}
+	
+	public void deleteTaskData()
+	{
+		System.out.println(selectedTaskData.getTask().getName());		
+		
+		selectedTaskData.getTask().setEnabled(false);
+		jJTaskService.updateJJTask(selectedTaskData.getTask());
+		tasksData.remove(contain(selectedTaskData.getTask()));
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_deleted", "JJTask");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+	}
+	
+	public TaskData getSelectedTaskData() {
+		return selectedTaskData;
+	}
+
+	public void setSelectedTaskData(TaskData selectedTaskData) {
+		this.selectedTaskData = selectedTaskData;
+	}
+
+	public int contain(JJTask t)
+	{
+		int j= -1;
+		int i=0;
+	
+		while (i < tasksData.size()) {
+			if (tasksData.get(i).getTask().equals(t)) {
+				j = i;
+				i = tasksData.size();
+			} else
+				i++;
+		}
+		return j;
 	}
 
 	public JJRequirement getSelectedReq() {
