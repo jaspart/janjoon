@@ -12,16 +12,6 @@
 	</h:head>
 	<h:body>
 		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
-			<p:panel id="menuPanel" header="Menu" styleClass="menu"
-				toggleable="true" toggleOrientation="horizontal"
-				collapsed="#{jJMessageBean.collapsedLayoutPanel}">
-				<p:ajax event="toggle"
-					listener="#{jJMessageBean.handleLayoutToggle}"
-					update="menuPanel,contentPanel,messagePanel" />
-				<ui:insert name="menu">
-					<ui:include src="menu.xhtml" />
-				</ui:insert>
-			</p:panel>
 			<p:panel styleClass="content">
 				<ui:insert name="header">
 					<ui:include src="header.xhtml" />
@@ -41,7 +31,7 @@
 				style="height:100%;" collapsed="#{jJMessageBean.collapsedMesPanel}">
 				
 				<p:ajax event="toggle" listener="#{jJMessageBean.handleMesToggle}"
-					update=":applicatinPanelGrid,menuPanel,messagePanel,contentPanel" />
+					update=":applicatinPanelGrid,messagePanel,contentPanel" />
 				
 				<f:event listener="#{jJMessageBean.initJJMessageLayout}"
 				type="preRenderView"/>	

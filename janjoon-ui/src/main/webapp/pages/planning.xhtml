@@ -41,10 +41,10 @@
 	<h:form id="planningForm" style="width:100%">
 		<f:event type="preRenderComponent" listener="#{jJTaskBean.loadData()}" />
 		<p:growl id="msg" />
-		<p:panelGrid style="width:100%;margin-top:10px">
-			<p:row style="width:100%">
-				<p:column style="width:50%">
-					<p:scrollPanel id="scrollPanel" style="width:500px;" mode="native">
+		<p:panelGrid style="margin-top:10px">
+			<p:row>
+				<p:column>
+					<p:scrollPanel id="scrollPanel" style="width:400px;" mode="native">
 						<p:remoteCommand name="onCellEditTableComplete"
 							update=":projecttabview:planningForm:taskDataTable " />
 						<p:dataTable id="taskDataTable" var="taskData"
@@ -54,7 +54,33 @@
 								process="@widgetVar(nameWidget)"
 								oncomplete="onCellEditTableComplete()"
 								update="taskDataTable :projecttabview:planningForm:timeline :projecttabview:planningForm:msg" />
+							<p:summaryRow paginatorPosition="top">
+								<p:column styleClass="task" colspan="10" style="text-align:left">
+									<h:outputText  icon="ui-icon-arrowreturnthick-1-e" value="Chapter: #{taskData.chapter.name}" />
+								</p:column>
+							</p:summaryRow>
 
+							<p:column style="width: 7%;" headerText="Actions" >
+								<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
+									update=":projecttabview:SprintTabView:viewTaskForm:viewTaskPanelGrid"
+									immediate="true" oncomplete="viewTaskDialogWidget.show()"
+									actionListener="#{jJTaskBean.gettingTaskValue}">
+									<f:attribute name="taskValue" value="#{taskData}" />
+									<p:menuitem id="duplicate" icon="ui-icon-copy"
+										oncomplete="duplicateTaskDialogWidget.show()"
+										value="#{messages.project_gantt_task_dupplicate_button}">
+										<f:setPropertyActionListener value="#{taskData.task}"
+											target="#{jJTaskBean.task}" />
+									</p:menuitem>
+									<p:menuitem id="deleteButton" icon="ui-icon-trash"
+										oncomplete="deleteDialogWidget.show()"
+										value="#{messages.label_delete}"
+										title="#{messages.label_delete}">
+										<f:setPropertyActionListener value="#{taskData}"
+											target="#{jJTaskBean.selectedTaskData}" />
+									</p:menuitem>
+								</p:splitButton>
+							</p:column>
 							<p:column styleClass="task" headerText="Chapter" rendered="false">
 								<h:outputText value="#{taskData.chapter.name}" />
 							</p:column>
@@ -72,85 +98,9 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-
-							<p:column id="sdpr" styleClass="task"
-								headerText="#{messages.project_gantt_table_startplanned_title}">
-								<p:cellEditor>
-									<f:facet name="output">
-										<p:calendar value="#{taskData.startDate}" navigator="true"
-											pattern="yyyy/MM/dd HH:mm:ss" />
-									</f:facet>
-									<f:facet name="input">
-										<p:calendar value="#{taskData.startDate}" navigator="true"
-											pattern="yyyy/MM/dd HH:mm:ss" />
-									</f:facet>
-								</p:cellEditor>
-							</p:column>
-							<p:column id="edpr" styleClass="task"
-								headerText="#{messages.project_gantt_table_endplanned_title}">
-								<p:cellEditor>
-									<f:facet name="output">
-										<p:calendar value="#{taskData.endDate}" navigator="true"
-											pattern="yyyy/MM/dd HH:mm:ss" />
-									</f:facet>
-									<f:facet name="input">
-										<p:calendar value="#{taskData.endDate}" navigator="true"
-											pattern="yyyy/MM/dd HH:mm:ss" />
-									</f:facet>
-								</p:cellEditor>
-							</p:column>
-							<p:column id="wpr" styleClass="task"
-								headerText="#{messages.project_gantt_table_wlplanned_title}">
-								<p:cellEditor>
-									<f:facet name="output">
-										<h:outputText value="#{taskData.workload}" />
-									</f:facet>
-									<f:facet name="input">
-										<p:spinner value="#{taskData.workload}" stepFactor="1" min="0" />
-									</f:facet>
-								</p:cellEditor>
-							</p:column>
-							<p:column id="sdr" styleClass="task"
-								headerText="#{messages.project_gantt_table_startreal_title}">
-								<p:cellEditor>
-									<f:facet name="output">
-										<p:calendar value="#{taskData.task.startDateReal}"
-											navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
-									</f:facet>
-									<f:facet name="input">
-										<p:calendar value="#{taskData.task.startDateReal}"
-											navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
-									</f:facet>
-								</p:cellEditor>
-							</p:column>
-							<p:column id="edr" styleClass="task"
-								headerText="#{messages.project_gantt_table_endreal_title}">
-								<p:cellEditor>
-									<f:facet name="output">
-										<p:calendar value="#{taskData.task.endDateReal}"
-											navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
-									</f:facet>
-									<f:facet name="input">
-										<p:calendar value="#{taskData.task.endDateReal}"
-											navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
-									</f:facet>
-								</p:cellEditor>
-							</p:column>
-							<p:column id="wr" styleClass="task"
-								headerText="#{messages.project_gantt_table_wlreal_title}">
-								<p:cellEditor>
-									<f:facet name="output">
-										<h:outputText value="#{taskData.task.workloadReal}" />
-									</f:facet>
-									<f:facet name="input">
-										<p:spinner value="#{taskData.task.workloadReal}"
-											stepFactor="1" min="0" />
-									</f:facet>
-								</p:cellEditor>
-							</p:column>
 							<p:column styleClass="task"
 								headerText="#{messages.project_gantt_table_assigned_title}">
-								<p:cellEditor>
+								<p:cellEditor style="width: 112px;">
 									<f:facet name="output">
 										<h:outputText
 											value="#{taskData.task.assignedTo.firstname} #{taskData.task.assignedTo.name}" />
@@ -167,6 +117,81 @@
 												itemLabel="#{contact.firstname} #{contact.name}"
 												itemValue="#{contact}" />
 										</h:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column id="sdpr" styleClass="task"
+								headerText="#{messages.project_gantt_table_startplanned_title}">
+								<p:cellEditor style="width: 112px;">
+									<f:facet name="output">
+										<p:calendar value="#{taskData.startDate}" navigator="true"
+											pattern="yyyy/MM/dd HH:mm:ss" />
+									</f:facet>
+									<f:facet name="input">
+										<p:calendar value="#{taskData.startDate}" navigator="true"
+											pattern="yyyy/MM/dd HH:mm:ss" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column id="edpr" styleClass="task"
+								headerText="#{messages.project_gantt_table_endplanned_title}">
+								<p:cellEditor style="width: 112px;">
+									<f:facet name="output">
+										<p:calendar value="#{taskData.endDate}" navigator="true"
+											pattern="yyyy/MM/dd HH:mm:ss" />
+									</f:facet>
+									<f:facet name="input">
+										<p:calendar value="#{taskData.endDate}" navigator="true"
+											pattern="yyyy/MM/dd HH:mm:ss" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column id="wpr" styleClass="task"
+								headerText="#{messages.project_gantt_table_wlplanned_title}">
+								<p:cellEditor style="width: 50px;">
+									<f:facet name="output">
+										<h:outputText value="#{taskData.workload}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:spinner value="#{taskData.workload}" stepFactor="1" min="0" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column id="sdr" styleClass="task"
+								headerText="#{messages.project_gantt_table_startreal_title}">
+								<p:cellEditor style="width: 112px;">
+									<f:facet name="output">
+										<p:calendar value="#{taskData.task.startDateReal}"
+											navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
+									</f:facet>
+									<f:facet name="input">
+										<p:calendar value="#{taskData.task.startDateReal}"
+											navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column id="edr" styleClass="task"
+								headerText="#{messages.project_gantt_table_endreal_title}">
+								<p:cellEditor style="width: 112px;">
+									<f:facet name="output">
+										<p:calendar value="#{taskData.task.endDateReal}"
+											navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
+									</f:facet>
+									<f:facet name="input">
+										<p:calendar value="#{taskData.task.endDateReal}"
+											navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column id="wr" styleClass="task"
+								headerText="#{messages.project_gantt_table_wlreal_title}">
+								<p:cellEditor style="width: 50px;">
+									<f:facet name="output">
+										<h:outputText value="#{taskData.task.workloadReal}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:spinner value="#{taskData.task.workloadReal}"
+											stepFactor="1" min="0" />
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
@@ -209,39 +234,16 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column>
-								<p:splitButton>
-									<p:menuitem id="duplicate" icon="ui-icon-copy"
-										oncomplete="duplicateTaskDialogWidget.show()"
-										value="#{messages.project_gantt_task_dupplicate_button}">
-										<f:setPropertyActionListener value="#{taskData.task}"
-											target="#{jJTaskBean.task}" />
-									</p:menuitem>
-									<p:menuitem id="deleteButton" icon="ui-icon-trash"
-										oncomplete="deleteDialogWidget.show()"
-										value="#{messages.label_delete}"
-										title="#{messages.label_delete}">
-										<f:setPropertyActionListener value="#{taskData}"
-											target="#{jJTaskBean.selectedTaskData}" />
-									</p:menuitem>
-								</p:splitButton>
-							</p:column>
-
-							<p:summaryRow>
-								<p:column styleClass="task" colspan="10" style="text-align:left">
-									<h:outputText value="Chapter: #{taskData.chapter.name}" />
-								</p:column>
-							</p:summaryRow>
-
 						</p:dataTable>
 					</p:scrollPanel>
 				</p:column>
-				<p:column style="width:50%">
+				<p:column style="width:70%">
 					<pe:timeline id="timeline" value="#{jJTaskBean.model}"
 						eventMargin="10" eventMarginAxis="0" locale="#{LocaleBean.locale}"
 						start="#{jJTaskBean.start}" end="#{jJTaskBean.end}"
 						axisOnTop="true" groupsChangeable="false" var="task"
-						style="min-width:500px;min-height:350px;" editable="true">
+						style="min-width:500px;min-height:350px;" editable="true"
+						zoomMin="86400000" zoomMax="8035200000">
 
 						<h:outputText value="" />
 					</pe:timeline>
@@ -266,6 +268,22 @@
 		</p:outputPanel>
 	</p:confirmDialog>
 
+	<p:dialog id="viewTaskDialog" header="#{messages.label_view} JJTask"
+		modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
+		resizable="true" maximizable="true" showEffect="fade"
+		hideEffect="explode" draggable="false">
+		<p:outputPanel id="viewTaskPanel">
+			<h:form id="viewTaskForm" enctype="multipart/form-data">
+				<ui:include src="taskDialog.xhtml">
+					<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
+				</ui:include>
+				<p:commandButton id="viewCloseButton"
+					value="#{messages.label_close}"
+					oncomplete="PF('createSprintBlockUI').unblock()"
+					onclick="viewTaskDialogWidget.hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
 	<p:dialog id="taskImportDialog" header="Import Tasks" modal="true"
 		widgetVar="taskImportDialogWidget" dynamic="true" resizable="false">
 		<p:ajax event="close" update=":projecttabview:planningForm"
