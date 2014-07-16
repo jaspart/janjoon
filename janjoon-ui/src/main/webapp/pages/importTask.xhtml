@@ -15,9 +15,8 @@
 					<p:selectOneMenu id="objetSelectOneMenu"
 						value="#{jJTaskBean.objet}" panelStyle="width:150px" effect="fade"
 						style="width:160px" filter="true" filterMatchMode="startsWith">
-
-						<f:selectItem itemLabel="#{jJTaskBean.objet}"
-							itemValue="#{jJTaskBean.objet}" />
+						<f:selectItem itemValue="#{null}"
+							itemLabel="-- selelect one Object --" />
 						<f:selectItems value="#{jJTaskBean.objets}" var="p"
 							itemLabel="#{p}" itemValue="#{p}" />
 						<p:ajax process="@this" partialSubmit="true"
@@ -33,11 +32,12 @@
 						value="#{jJTaskBean.importCategory}" panelStyle="width:150px"
 						effect="fade" style="width:160px" filter="true"
 						filterMatchMode="startsWith"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter"
 						disabled="#{jJTaskBean.disabledFilter}">
-						<f:converter
-							converterId="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter" />
-						<f:selectItem itemLabel="#{jJTaskBean.importCategory.name}"
-							itemValue="#{jJTaskBean.importCategory}" />
+
+						<f:selectItem itemValue="#{null}"
+							itemLabel="-- selelect one Category --" />
+
 						<f:selectItems value="#{jJTaskBean.importCategoryList}" var="p"
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax process="@this" partialSubmit="true"
@@ -52,11 +52,11 @@
 						value="#{jJTaskBean.importStatus}" panelStyle="width:150px"
 						effect="fade" style="width:160px" filter="true"
 						filterMatchMode="startsWith"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
 						disabled="#{jJTaskBean.disabledFilter}">
-						<f:converter
-							converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
-						<f:selectItem itemLabel="#{jJTaskBean.importStatus.name}"
-							itemValue="#{jJTaskBean.importStatus}" />
+
+						<f:selectItem itemValue="#{null}"
+							itemLabel="-- selelect one Status --" />
 						<f:selectItems value="#{jJTaskBean.importStatusList}" var="p"
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax process="@this" partialSubmit="true"
@@ -78,14 +78,14 @@
 		</p:panelGrid>
 
 		<p:dataTable id="importDataTable" var="format" scrollable="true"
-			style="width:500px;" scrollHeight="400"
+			style="width:700px;" scrollHeight="400"
 			value="#{jJTaskBean.importFormats}" editable="true" editMode="cell">
 			<f:facet name="header">
 				<h:outputText value="Import #{jJTaskBean.objet}" />
 			</f:facet>
-			<p:column style="width:20%">
+			<p:column style="width:40%">
 				<f:facet name="header">
-					<p:row>
+					<p:row>#{messages.bug_delete_yes_button}
 						<p:column>
 							<p:selectBooleanCheckbox value="#{jJTaskBean.copyObjets}">
 								<p:ajax update="importDataTable"
@@ -100,23 +100,23 @@
 				<p:selectBooleanCheckbox value="#{format.copyObjet}">
 					<p:ajax update="importDataTable" listener="#{jJTaskBean.copyObjet}" />
 				</p:selectBooleanCheckbox>
-				<h:outputText value="   #{format.name}" />
+				<h:outputText value="#{format.name}" />
 			</p:column>
 
-			<p:column style="width:40%" headerText="Start Date Planned/Revised">
+			<p:column style="width:30%" headerText="Start Date Planned/Revised">
 				<p:cellEditor>
 					<f:facet name="output">
 						<p:calendar value="#{format.startDate}" navigator="true"
-							pattern="yyyy/MM/dd HH:mm:ss" />
+							pattern="yyyy/MM/dd" />
 					</f:facet>
 					<f:facet name="input">
 						<p:calendar value="#{format.startDate}" navigator="true"
-							pattern="yyyy/MM/dd HH:mm:ss" />
+							pattern="yyyy/MM/dd" />
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
 
-			<p:column style="width:40%" headerText="Workload Planned/Revised">
+			<p:column style="width:30%" headerText="Workload Planned/Revised">
 				<p:cellEditor>
 					<f:facet name="output">
 						<h:outputText value="#{format.workload}" />
@@ -130,8 +130,17 @@
 		</p:dataTable>
 
 
-		<p:commandButton id="importButton" value="Import"
-			style="float: right;" action="#{jJTaskBean.importTask()}" />
+		<p:commandButton id="importButtonSC" value="Import" rendered="#{jJTaskBean.mode == 'scrum'}"
+			style="float: right;" actionListener="#{jJTaskBean.importTask}"
+			update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm"
+			onstart="PF('createSprintBlockUI').block()"
+			oncomplete="PF('createSprintBlockUI').unblock()"/>
+			
+			<p:commandButton id="importButtonPL" value="Import" rendered="#{jJTaskBean.mode != 'scrum'}"
+			style="float: right;" actionListener="#{jJTaskBean.importTask}"			
+			onstart="PF('createSprintBlockUI').block()"
+			oncomplete="PF('createSprintBlockUI').unblock()"/>
+			
 	</h:form>
 </ui:composition>
 </html>

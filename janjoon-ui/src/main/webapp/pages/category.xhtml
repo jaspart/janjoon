@@ -26,29 +26,32 @@
 				</p:column>
 				<p:column styleClass="action-column">
 					<f:facet name="header">
-						<h:outputText value="#{messages.admin_category_table_action_title}" />
+						<h:outputText
+							value="#{messages.admin_category_table_action_title}" />
 					</f:facet>
-					<p:commandButton id="editButton" icon="ui-icon-pencil"
-						oncomplete="categoryDialogWidget.show()"
-						action="#{jJCategoryBean.editCategory}"
-						update=":tabview:categoryDialog">
-						<f:setPropertyActionListener value="#{category}"
-							target="#{jJCategoryBean.categoryAdmin}" />
-					</p:commandButton>
-					<p:tooltip for="editButton" value="#{messages.admin_category_table_edit_tooltip}"
-						showEffect="fade" hideEffect="fade" />
-					<p:commandButton id="deleteButton" icon="ui-icon-trash"
-						oncomplete="categoryDeleteDialogWidget.show()"
-						title="#{messages.label_delete}">
-						<f:setPropertyActionListener value="#{category}"
-							target="#{jJCategoryBean.categoryAdmin}" />
-					</p:commandButton>
-					<p:tooltip for="deleteButton" value="#{messages.admin_category_table_delete_tooltip}"
-						showEffect="fade" hideEffect="fade" />
+					<p:splitButton value="Action">
+						<p:menuitem id="editButton" icon="ui-icon-pencil"
+							oncomplete="categoryDialogWidget.show()"
+							value="#{messages.admin_category_table_edit_tooltip}"
+							action="#{jJCategoryBean.editCategory}"
+							update=":tabview:categoryDialog">
+							<f:setPropertyActionListener value="#{category}"
+								target="#{jJCategoryBean.categoryAdmin}" />
+						</p:menuitem>
+						
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							value="#{messages.admin_category_table_delete_tooltip}"
+							oncomplete="categoryDeleteDialogWidget.show()"
+							title="#{messages.label_delete}">
+							<f:setPropertyActionListener value="#{category}"
+								target="#{jJCategoryBean.categoryAdmin}" />
+						</p:menuitem>
+						
+					</p:splitButton>
 				</p:column>
 				<f:facet name="footer">
-					<p:commandButton value="#{messages.admin_category_new_button}" id="newCategory"
-						actionListener="#{jJCategoryBean.newCategory}"
+					<p:commandButton value="#{messages.admin_category_new_button}"
+						id="newCategory" actionListener="#{jJCategoryBean.newCategory}"
 						update=":tabview:categoryDialog"
 						oncomplete="categoryDialogWidget.show()"
 						icon="ui-icon-circle-plus" />
@@ -74,10 +77,12 @@
 								<f:validateLength maximum="100" />
 							</p:inputText>
 							<p:message for="name" id="msgName" />
-							<p:watermark for="name" value="#{messages.admin_category_new_name_watermark}" />
+							<p:watermark for="name"
+								value="#{messages.admin_category_new_name_watermark}" />
 						</p:column>
 						<p:column colspan="2">
-							<h:outputLabel for="stage" value="#{messages.admin_category_new_stage_label}" />
+							<h:outputLabel for="stage"
+								value="#{messages.admin_category_new_stage_label}" />
 							<p:outputPanel>
 								<p:spinner id="stage"
 									value="#{jJCategoryBean.categoryAdmin.stage}" min="0" max="100"
@@ -92,7 +97,8 @@
 					<f:facet name="footer">
 						<p:row>
 							<p:column colspan="3">
-								<p:commandButton id="submitButton" value="#{messages.admin_category_new_save_button}"
+								<p:commandButton id="submitButton"
+									value="#{messages.admin_category_new_save_button}"
 									update="categoryDialogForm" process="@widgetVar(nameWidget)"
 									action="#{jJCategoryBean.save}" />
 							</p:column>
@@ -109,11 +115,13 @@
 		severity="alarm">
 		<p:outputPanel id="categoryDeletePanel">
 			<h:form id="categoryDeleteForm">
-				<p:commandButton id="deleteYesButton" value="#{messages.admin_category_delete_yes_label}"
+				<p:commandButton id="deleteYesButton"
+					value="#{messages.admin_category_delete_yes_label}"
 					action="#{jJCategoryBean.deleteCategory}"
 					update=":tabview:categoryForm"
 					oncomplete="categoryDeleteDialogWidget.hide()" />
-				<p:commandButton id="deleteNoButton" value="#{messages.admin_category_delete_no_label}"
+				<p:commandButton id="deleteNoButton"
+					value="#{messages.admin_category_delete_no_label}"
 					onclick="categoryDeleteDialogWidget.hide()" type="button" />
 			</h:form>
 		</p:outputPanel>

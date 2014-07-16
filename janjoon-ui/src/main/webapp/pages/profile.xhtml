@@ -22,28 +22,25 @@
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_profile_table_action_title}" />
 					</f:facet>
-										
-					<p:commandButton id="editButton" icon="ui-icon-pencil"
-						oncomplete="profileDialogWidget.show()"
-						action="#{jJProfileBean.editProfile(jJRightBean)}"
-						update=":tabview:profileDialog">
-						<f:setPropertyActionListener value="#{profile}"
-							target="#{jJProfileBean.profileAdmin}" />
-					</p:commandButton>
-					
-					
-					<p:tooltip for="editButton"
-						value="#{messages.admin_profile_table_edit_tooltip}"
-						showEffect="fade" hideEffect="fade" />
-					<p:commandButton id="deleteButton" icon="ui-icon-trash"
-						oncomplete="profileDeleteDialogWidget.show()"
-						title="#{messages.admin_profile_table_edit_label}">
-						<f:setPropertyActionListener value="#{profile}"
-							target="#{jJProfileBean.profileAdmin}" />
-					</p:commandButton>
-					<p:tooltip for="deleteButton"
-						value="#{messages.admin_profile_table_delete_tooltip}"
-						showEffect="fade" hideEffect="fade" />
+					<p:splitButton value="Action">
+						<p:menuitem id="editButton" icon="ui-icon-pencil"
+							oncomplete="profileDialogWidget.show()"
+							action="#{jJProfileBean.editProfile(jJRightBean)}"
+							update=":tabview:profileDialog"
+							value="#{messages.admin_profile_table_edit_tooltip}">
+							<f:setPropertyActionListener value="#{profile}"
+								target="#{jJProfileBean.profileAdmin}" />
+						</p:menuitem>
+
+
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							oncomplete="profileDeleteDialogWidget.show()"
+							value="#{messages.admin_profile_table_delete_tooltip}">
+							<f:setPropertyActionListener value="#{profile}"
+								target="#{jJProfileBean.profileAdmin}" />
+						</p:menuitem>
+
+					</p:splitButton>
 				</p:column>
 				<f:facet name="footer">
 					<p:commandButton value="#{messages.admin_profile_new_button}"

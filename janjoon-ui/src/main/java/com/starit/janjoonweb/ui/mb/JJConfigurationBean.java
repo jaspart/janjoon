@@ -68,6 +68,7 @@ public class JJConfigurationBean {
 
 	public List<JJConfiguration> getConfigList() {
 
+		if(configList==null)
 		configList = jJConfigurationService.getConfigurations(null, null, true);
 		return configList;
 	}
@@ -127,13 +128,14 @@ public class JJConfigurationBean {
 				"message_successfully_deleted", "JJConfiguration");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		configList = jJConfigurationService.getConfigurations(null, null, true);
-		jJconfiguration = new JJConfiguration();
+		
 	}
 
 	public String persistConf() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
+		
 		if (getJJConfiguration_().getId() != null) {
 			getJJConfiguration_().setUpdatedDate(new Date());
 			getJJConfiguration_().setUpdatedBy(contact);
@@ -156,6 +158,8 @@ public class JJConfigurationBean {
 	}
 
 	public HtmlPanelGrid populatePanelCreate() {
+		
+		System.out.println("CreatepanelPop");
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		javax.faces.application.Application application = facesContext
 				.getApplication();
@@ -268,7 +272,7 @@ public class JJConfigurationBean {
 		valCreateInput.addValidator(valCreateInputValidator);
 		valCreateInput.setRequired(true);
 		htmlPanelGrid.getChildren().add(valCreateInput);
-
+		
 		Message valCreateInputMessage = (Message) application
 				.createComponent(Message.COMPONENT_TYPE);
 		valCreateInputMessage.setId("valCreateInputMessage");

@@ -22,23 +22,25 @@
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_project_table_action_title}" />
 					</f:facet>
-					<p:commandButton id="editButton" icon="ui-icon-pencil"
-						oncomplete="projectDialogWidget.show()"
-						action="#{jJProjectBean.editProject}"
-						update=":tabview:projectDialog">
-						<f:setPropertyActionListener value="#{project}"
-							target="#{jJProjectBean.projectAdmin}" />
-					</p:commandButton>
-					<p:tooltip for="editButton" value="#{messages.admin_project_table_edit_tooltip}"
-						showEffect="fade" hideEffect="fade" />
-					<p:commandButton id="deleteButton" icon="ui-icon-trash"
-						oncomplete="projectDeleteDialogWidget.show()"
-						title="#{messages.label_delete}">
-						<f:setPropertyActionListener value="#{project}"
-							target="#{jJProjectBean.projectAdmin}" />
-					</p:commandButton>
-					<p:tooltip for="deleteButton" value="#{messages.admin_project_table_delete_title}"
-						showEffect="fade" hideEffect="fade" />
+					<p:splitButton value="Action">
+						<p:menuitem id="editButton" icon="ui-icon-pencil"
+							oncomplete="projectDialogWidget.show()"
+							value="#{messages.admin_project_table_edit_tooltip}"
+							action="#{jJProjectBean.editProject}"
+							update=":tabview:projectDialog">
+							<f:setPropertyActionListener value="#{project}"
+								target="#{jJProjectBean.projectAdmin}" />
+						</p:menuitem>
+
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							oncomplete="projectDeleteDialogWidget.show()"
+							value="#{messages.admin_project_table_delete_title}"
+							title="#{messages.label_delete}">
+							<f:setPropertyActionListener value="#{project}"
+								target="#{jJProjectBean.projectAdmin}" />
+						</p:menuitem>
+
+					</p:splitButton>
 				</p:column>
 				<f:facet name="footer">
 					<p:commandButton value="#{messages.admin_project_new_button}"
@@ -65,7 +67,8 @@
 								<f:validateLength maximum="100" />
 							</p:inputText>
 							<p:message for="name" id="msgName" />
-							<p:watermark for="name" value="#{messages.admin_project_new_name_watermark}" />
+							<p:watermark for="name"
+								value="#{messages.admin_project_new_name_watermark}" />
 						</p:column>
 						<p:column colspan="2">
 							<h:outputText value="#{messages.admin_project_new_manager_label}" />
@@ -94,8 +97,7 @@
 								value="#{jJProjectBean.projectAdmin.enabled}"
 								onLabel="#{messages.admin_project_new_active_button}"
 								offLabel="#{messages.admin_project_new_inactive_button}"
-								onIcon="ui-icon-check"
-								offIcon="ui-icon-close">
+								onIcon="ui-icon-check" offIcon="ui-icon-close">
 								<p:ajax update="msg" listener="#{jJProjectBean.addMessage}" />
 							</p:selectBooleanButton>
 						</p:column>

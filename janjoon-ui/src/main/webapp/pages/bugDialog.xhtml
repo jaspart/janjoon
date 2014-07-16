@@ -10,13 +10,13 @@
 <p:panelGrid id="createPanelGrid">
 	<p:row>
 		<p:column colspan="1">
-			<p:inputTextarea id="jJbugName" value="#{jJBugBean.JJBug_.name}"
+			<p:inputTextarea id="jJbugName" value="#{JJBug_.name}"
 				required="true" />
 			<p:watermark for="jJbugName" value="Name : " />
 		</p:column>
 		<p:column colspan="1">
-			<p:autoComplete id="jJbugCriticity"
-				value="#{jJBugBean.JJBug_.criticity}" itemLabel="#{criticity.name}"
+			<p:autoComplete id="jJbugCriticity" scrollHeight="200"
+				value="#{JJBug_.criticity}" itemLabel="#{criticity.name}"
 				itemValue="#{criticity}"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJCriticityConverter"
 				dropdown="true" var="criticity"
@@ -24,8 +24,8 @@
 			<p:watermark for="jJbugCriticity" value="Criticity : " />
 		</p:column>
 		<p:column colspan="1">
-			<p:autoComplete id="jJbugImportance"
-				value="#{jJBugBean.JJBug_.importance}"
+			<p:autoComplete id="jJbugImportance" scrollHeight="200"
+				value="#{JJBug_.importance}"
 				itemLabel="#{importance.name}" itemValue="#{importance}"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJImportanceConverter"
 				dropdown="true" var="importance"
@@ -35,16 +35,16 @@
 	</p:row>
 	<p:row>
 		<p:column colspan="1">
-			<p:autoComplete id="jJbugStatus" value="#{jJBugBean.JJBug_.status}"
-				itemLabel="#{status.name}" itemValue="#{status}"
+			<p:autoComplete id="jJbugStatus" value="#{JJBug_.status}"
+				itemLabel="#{status.name}" itemValue="#{status}" scrollHeight="200"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
 				dropdown="true" var="status"
 				completeMethod="#{jJBugBean.completeStatusBug}" />
 			<p:watermark for="jJbugStatus" value="Status : " />
 		</p:column>
 		<p:column colspan="1">
-			<p:autoComplete id="jJbugRequirement"
-				value="#{jJBugBean.JJBug_.requirement}"
+			<p:autoComplete id="jJbugRequirement" scrollHeight="200"
+				value="#{JJBug_.requirement}"
 				itemLabel="#{requirement.name}" itemValue="#{requirement}"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
 				dropdown="true" var="requirement"
@@ -52,8 +52,8 @@
 			<p:watermark for="jJbugRequirement" value="Requirement : " />
 		</p:column>
 		<p:column colspan="1">
-			<p:autoComplete id="jJbugTeststep"
-				value="#{jJBugBean.JJBug_.teststep}" itemLabel="#{teststep.name}"
+			<p:autoComplete id="jJbugTeststep" scrollHeight="200"
+				value="#{JJBug_.teststep}" itemLabel="#{teststep.name}"
 				itemValue="#{teststep}"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJTeststepConverter"
 				dropdown="true" var="teststep"
@@ -63,24 +63,24 @@
 	</p:row>
 	<p:row>
 		<p:column colspan="1">
-			<p:autoComplete id="jJbugSprint" value="#{jJBugBean.JJBug_.sprint}"
-				itemLabel="#{sprint.name}" itemValue="#{sprint}"
+			<p:autoComplete id="jJbugSprint" value="#{JJBug_.sprint}"
+				itemLabel="#{sprint.name}" itemValue="#{sprint}" scrollHeight="200"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter"
 				dropdown="true" var="sprint"
 				completeMethod="#{jJBugBean.completeSprint}" />
 			<p:watermark for="jJbugSprint" value="Sprint : " />
 		</p:column>
 		<p:column colspan="1">
-			<p:autoComplete id="jJbugProject" value="#{jJBugBean.JJBug_.project}"
+			<p:autoComplete id="jJbugProject" value="#{JJBug_.project}"
 				itemLabel="#{project.name}" itemValue="#{project}"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter"
-				dropdown="true" var="project"
+				dropdown="true" var="project" scrollHeight="200"
 				completeMethod="#{jJBugBean.completeProject}" />
 			<p:watermark for="jJbugProject" value="Project : " />
 		</p:column>
 		<p:column colspan="1">
-			<p:autoComplete id="jJbugVersion"
-				value="#{jJBugBean.JJBug_.versioning}" itemLabel="#{version.name}"
+			<p:autoComplete id="jJbugVersion" scrollHeight="200"
+				value="#{JJBug_.versioning}" itemLabel="#{version.name}"
 				itemValue="#{version}"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
 				dropdown="true" var="version"
@@ -96,7 +96,7 @@
 				toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
 				style="width:680px"
 				customConfig="#{request.contextPath}/resources/js/ckEditor.js"
-				value="#{jJBugBean.JJBug_.description}" required="true"
+				value="#{JJBug_.description}" required="true"
 				requiredMessage="Description is a required value"/>
 		
 		</p:column>

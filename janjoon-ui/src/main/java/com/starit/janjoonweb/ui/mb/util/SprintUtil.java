@@ -14,21 +14,30 @@ import com.starit.janjoonweb.domain.JJTaskService;
 public class SprintUtil {
 
 	JJSprint sprint;
+	private boolean neditabale;
 	private List<JJTask> todoTask;
 	private List<JJTask> doneTask;
 	private List<JJTask> progressTask;
 	private List<JJContact> contacts;
-	private List<JJTask> taskList;
+	
 	Integer consumed;
 	Integer workload;
 	private boolean render;
-	private boolean renderTaskForm;
+	
 
 	public SprintUtil(JJSprint sprint, List<JJTask> tasks) {
 
 		this.sprint = sprint;
-		renderTaskForm = false;
+		this.neditabale=false;
 		calculateField(tasks);
+	}
+
+	public boolean isNeditabale() {
+		return neditabale;
+	}
+
+	public void setNeditabale(boolean neditabale) {
+		this.neditabale = neditabale;
 	}
 
 	public SprintUtil() {
@@ -75,23 +84,6 @@ public class SprintUtil {
 
 	public void setContacts(List<JJContact> contacts) {
 		this.contacts = contacts;
-	}
-
-	public List<JJTask> getTaskList() {
-
-		if (taskList == null) {
-			taskList = new ArrayList<JJTask>();
-			for (JJTask t : sprint.getTasks()) {
-				if (t.getEnabled())
-					taskList.add(t);
-			}
-		}
-
-		return taskList;
-	}
-
-	public void setTaskList(List<JJTask> tasks) {
-		this.taskList = tasks;
 	}
 
 	public Integer getConsumed() {
@@ -166,15 +158,7 @@ public class SprintUtil {
 		this.consumed = j;
 		this.workload = i;
 
-	}
-
-	public boolean isRenderTaskForm() {
-		return renderTaskForm;
-	}
-
-	public void setRenderTaskForm(boolean renderTaskForm) {
-		this.renderTaskForm = renderTaskForm;
-	}
+	}	
 
 	public static List<SprintUtil> generateSprintUtilList(
 			List<JJSprint> sprints, JJTaskService jJTaskService) {

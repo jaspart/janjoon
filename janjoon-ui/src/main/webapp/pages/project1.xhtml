@@ -53,6 +53,17 @@
 				</h:form>
 			</p:outputPanel>
 		</p:confirmDialog>
+		<p:dialog id="taskImportDialog" header="Import Tasks" modal="true"
+			widgetVar="taskImportDialogWidget" dynamic="true" resizable="false">
+			<p:ajax event="close" update=":projecttabview:planningForm"
+				listener="#{jJTaskBean.closeDialogImport}" />
+			<p:outputPanel id="importTaskDialogPanel">
+				<ui:insert name="importTask">
+					<ui:include src="importTask.xhtml" />
+				</ui:insert>
+			</p:outputPanel>
+		</p:dialog>
+
 		<pe:blockUI target="projecttabview" widgetVar="createSprintBlockUI">
 			<h:panelGrid columns="2">
 				<h:graphicImage library="images" name="ajax-loader.gif"

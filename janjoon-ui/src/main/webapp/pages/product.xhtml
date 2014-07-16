@@ -29,25 +29,24 @@
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_product_table_action_label}" />
 					</f:facet>
-					<p:commandButton id="editButton" icon="ui-icon-pencil"
-						oncomplete="productDialogWidget.show()"
-						action="#{jJProductBean.editProduct(jJVersionBean)}"
-						update=":tabview:productDialog">
-						<f:setPropertyActionListener value="#{product}"
-							target="#{jJProductBean.productAdmin}" />
-					</p:commandButton>
-					<p:tooltip for="editButton"
-						value="#{messages.admin_product_edit_tooltip}" showEffect="fade"
-						hideEffect="fade" />
-					<p:commandButton id="deleteButton" icon="ui-icon-trash"
-						oncomplete="productDeleteDialogWidget.show()"
-						title="#{messages.admin_product_delete_tooltip}">
-						<f:setPropertyActionListener value="#{product}"
-							target="#{jJProductBean.productAdmin}" />
-					</p:commandButton>
-					<p:tooltip for="deleteButton"
-						value="#{messages.admin_product_table_delete_label}"
-						showEffect="fade" hideEffect="fade" />
+					<p:splitButton value="Action">
+						<p:menuitem id="editButton" icon="ui-icon-pencil"
+							oncomplete="productDialogWidget.show()"
+							value="#{messages.admin_product_edit_tooltip}"
+							action="#{jJProductBean.editProduct(jJVersionBean)}"
+							update=":tabview:productDialog">
+							<f:setPropertyActionListener value="#{product}"
+								target="#{jJProductBean.productAdmin}" />
+						</p:menuitem>
+
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							oncomplete="productDeleteDialogWidget.show()"
+							value="#{messages.admin_product_table_delete_label}"
+							title="#{messages.admin_product_delete_tooltip}">
+							<f:setPropertyActionListener value="#{product}"
+								target="#{jJProductBean.productAdmin}" />
+						</p:menuitem>
+					</p:splitButton>
 				</p:column>
 				<f:facet name="footer">
 					<p:commandButton value="#{messages.admin_product_table_new_label}"

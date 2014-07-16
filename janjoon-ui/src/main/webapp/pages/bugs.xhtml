@@ -10,8 +10,10 @@
 		<p:panel id="bugPanel" header="BUG" style="width: 100%;valign: top;">
 			<f:event listener="#{jJBugBean.initJJBug}" type="preRenderView" />
 
-			<p:commandButton id="colorBtn" icon="ui-icon-info" type="button" style="float: right;" />
-			<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade" dynamic="true" style="width:600px">
+			<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
+				style="float: right;" />
+			<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
+				dynamic="true" style="width:600px">
 				<p:panelGrid>
 					<f:facet name="header">
 						<p:row>
@@ -22,54 +24,54 @@
 						<p:column colspan="2" styleClass="NEW">
 							<p:outputLabel value="NEW" />
 						</p:column>
-					
+
 						<p:column colspan="2" styleClass="CLOSED">
 							<p:outputLabel value="CLOSED" />
 						</p:column>
-					
+
 						<p:column colspan="2" styleClass="VERIFIED">
 							<p:outputLabel value="VERIFIED" />
 						</p:column>
-					
+
 						<p:column colspan="2" styleClass="RESOLVED">
 							<p:outputLabel value="RESOLVED" />
 						</p:column>
-					
+
 						<p:column colspan="2" styleClass="DUPLICATE">
 							<p:outputLabel value="DUPLICATE" />
 						</p:column>
-						
+
 						<p:column colspan="2" styleClass="WONTFIX">
 							<p:outputLabel value="WONTFIX" />
 						</p:column>
 					</p:row>
 
 					<p:row>
-						
-					
+
+
 						<p:column colspan="2" styleClass="INVALID">
 							<p:outputLabel value="INVALID" />
 						</p:column>
-					
+
 						<p:column colspan="2" styleClass="FIXED">
 							<p:outputLabel value="FIXED" />
 						</p:column>
-					
+
 						<p:column colspan="2" styleClass="READY">
 							<p:outputLabel value="READY" />
 						</p:column>
-					
+
 						<p:column colspan="2" styleClass="REOPENED">
 							<p:outputLabel value="REOPENED" />
 						</p:column>
-					
+
 						<p:column colspan="2" styleClass="ASSIGNED">
 							<p:outputLabel value="ASSIGNED" />
 						</p:column>
 					</p:row>
 				</p:panelGrid>
 			</p:overlayPanel>
-			
+
 			<h:form id="bugForm">
 				<p:growl id="bugMessage" showDetail="true" />
 				<p:dataTable id="bugTable2" sortMode="multiple"
@@ -136,25 +138,26 @@
 						<f:facet name="header">
 							<h:outputText value="#{messages.bug_table_action_title}" />
 						</f:facet>
-						<p:commandButton id="editButton" icon="ui-icon-pencil"
-							update=":editForm"
-							oncomplete="editDialogWidget.show()"
+						<p:splitButton value="Action" >
+						<p:menuitem id="editButton" icon="ui-icon-pencil" value="#{messages.label_edit}"
+							update=":editForm" oncomplete="editDialogWidget.show()"
 							title="#{messages.label_edit}">
 							<f:setPropertyActionListener value="#{bug}"
 								target="#{jJBugBean.JJBug_}" />
-						</p:commandButton>
-						<p:tooltip for="editButton" value="#{messages.label_edit}"
+							</p:menuitem>
+							<p:tooltip for="editButton" value="#{messages.label_edit}"
 							showEffect="fade" hideEffect="fade" />
-						<p:commandButton id="deleteButton" icon="ui-icon-trash"
-							oncomplete="deleteDialogWidget.show()"
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							oncomplete="deleteDialogWidget.show()" value="#{messages.label_delete}"
 							title="#{messages.label_delete}">
-							<f:setPropertyActionListener value="#{bug}"
-								target="#{jJBugBean.JJBug_}" />
-						</p:commandButton>
-						<p:tooltip for="deleteButton" value="#{messages.label_delete}"
+								<f:setPropertyActionListener value="#{bug}"
+									target="#{jJBugBean.JJBug_}" />
+							</p:menuitem>
+								<p:tooltip for="deleteButton" value="#{messages.label_delete}"
 							showEffect="fade" hideEffect="fade" />
+						</p:splitButton>
 					</p:column>
-					<f:facet name="footer">
+					<f:facet name="footer">	
 						<p:commandButton value="#{messages.bug_create_button}"
 							id="createButton" icon="ui-icon-circle-plus"
 							update=":createForm:createPanelGrid"
@@ -164,8 +167,7 @@
 							showEffect="fade" hideEffect="fade" />
 
 						<p:commandButton value="#{messages.bug_delete_button}"
-							id="deleteMButton" icon="ui-icon-trash"
-							update=":createForm"
+							id="deleteMButton" icon="ui-icon-trash" update=":createForm"
 							oncomplete="deleteMDialogWidget.show()"
 							disabled="#{empty jJBugBean.selectedBugList}"
 							title="#{messages.label_delete}" />
@@ -182,7 +184,9 @@
 					listener="#{jJBugBean.handleDialogClose}" />
 				<p:outputPanel id="createPanel">
 					<h:form id="createForm" enctype="multipart/form-data">
-						<ui:include src="bugDialog.xhtml"/>
+						<ui:include src="bugDialog.xhtml">
+							<ui:param name="JJBug_" value="#{jJBugBean.JJBug_}" />
+						</ui:include>
 						<p:commandButton id="createSaveButton"
 							value="#{messages.label_save}" action="#{jJBugBean.persistBug}"
 							update="createPanelGrid,:bugForm:bugMessage,:bugForm" />
@@ -201,7 +205,9 @@
 					listener="#{jJBugBean.handleDialogClose}" />
 				<p:outputPanel id="editPanel">
 					<h:form id="editForm" enctype="multipart/form-data">
-						<ui:include src="bugDialog.xhtml"/>
+							<ui:include src="bugDialog.xhtml">
+							<ui:param name="JJBug_" value="#{jJBugBean.JJBug_}" />
+						</ui:include>
 						<p:commandButton id="editSaveButton"
 							value="#{messages.bug_edit_save_button}"
 							action="#{jJBugBean.persistBug}"
