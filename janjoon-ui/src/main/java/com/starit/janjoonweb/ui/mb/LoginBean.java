@@ -71,6 +71,7 @@ public class LoginBean implements Serializable {
 	private boolean enable = false;
 	private int activeTabAdminIndex;
 	private int activeTabProjectIndex;
+	
 
 	public void setjJContactService(JJContactService jJContactService) {
 		this.jJContactService = jJContactService;
@@ -256,7 +257,7 @@ public class LoginBean implements Serializable {
 
 	public void setActiveTabProjectIndex(int activeTabProjectIndex) {
 		this.activeTabProjectIndex = activeTabProjectIndex;
-	}
+	}	
 
 	public static Object findBean(String beanName) {
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -275,7 +276,8 @@ public class LoginBean implements Serializable {
 		this.activeTabProjectIndex = tv.getChildren().indexOf(event.getTab());
 		System.out.println("###### ACtive tab: " + activeTabProjectIndex);
 
-	}
+	}	
+	
 
 	public void changeEvent(ValueChangeEvent event) throws IOException {
 

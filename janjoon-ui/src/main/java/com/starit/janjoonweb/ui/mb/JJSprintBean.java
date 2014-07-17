@@ -1,14 +1,13 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
-import javax.el.ValueExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
@@ -22,11 +21,12 @@ import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.spinner.Spinner;
+import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.CloseEvent;
 import org.primefaces.event.DragDropEvent;
-import org.primefaces.model.TreeNode;
+import org.primefaces.event.TabChangeEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -45,7 +45,6 @@ import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 
@@ -54,8 +53,8 @@ import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 public class JJSprintBean {
 
 	@Autowired
-	private JJTaskService jJTaskService;
-
+	private JJTaskService jJTaskService;	
+	
 	@Autowired
 	private JJCategoryService jJCategoryService;
 
@@ -84,7 +83,7 @@ public class JJSprintBean {
 
 	public void setjJTaskService(JJTaskService jJTaskService) {
 		this.jJTaskService = jJTaskService;
-	}
+	}	
 
 	public void setjBugService(JJBugService jjBugService) {
 		this.jJBugService = jjBugService;
@@ -532,8 +531,7 @@ public class JJSprintBean {
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJTask :" + task.getName());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-
-	}
+	}	
 
 	public void doneEvent(ActionEvent e) {
 
@@ -627,6 +625,8 @@ public class JJSprintBean {
 		return j;
 
 	}
+	
+	
 
 	public void handleDialogCloseEvent(CloseEvent event) {
 		task = null;

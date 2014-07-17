@@ -8,7 +8,9 @@
 
 <ui:composition>
 	<p:tabView id="SprintTabView" dynamic="true" cache="true"
-		value="#{jJSprintBean.sprintList}" var="jjsprint">
+		widgetVar="SprintTab" value="#{jJSprintBean.sprintList}"
+		var="jjsprint">
+		
 		<p:tab>
 			<f:facet name="title">
 				<h:outputText id="tabHeader" rendered="#{!jjsprint.render}"
@@ -37,7 +39,7 @@
 						</p:column>
 						<p:column>
 							<p:selectManyMenu id="sprintcts" value="#{jjsprint.contacts}"
-								converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"								
+								converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
 								style="width:150px;height:150px" showCheckbox="true">
 
 								<f:selectItems value="#{jJContactBean.contacts}" var="c"
@@ -57,7 +59,7 @@
 						</p:column>
 						<p:column>
 							<p:outputLabel for="sprintED" value="end Date:" />
-						</p:column>jJTaskBean.copyObjet}
+						</p:column>
 						<p:column>
 							<p:calendar id="sprintED" navigator="true" effect="slideDown"
 								pattern="dd/MM/yyyy" required="true"
@@ -95,16 +97,16 @@
 									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 								</p:commandButton>
 							</p:column>
-							<p:column colspan="2">						
+							<p:column colspan="2">
 								<p:commandButton value="#{messages.label_create} JJTask"
 									id="createTaskttButton" icon="ui-icon-circle-plus"
-									update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm"
+									update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm :taskImportDialog"
 									immediate="true" onstart="PF('createSprintBlockUI').block()"
 									oncomplete="PF('createSprintBlockUI').unblock()"
 									actionListener="#{jJTaskBean.loadImportFormat}"
 									title="#{messages.label_create} JJTask">
 									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
-									<f:attribute name="mode" value="scrum"  />
+									<f:attribute name="mode" value="scrum" />
 								</p:commandButton>
 								<p:tooltip for="createTaskttButton"
 									value="#{messages.label_create} JJTask" showEffect="fade"
@@ -113,7 +115,7 @@
 						</p:row>
 					</f:facet>
 				</p:panelGrid>
-				
+
 				<p:separator rendered="#{not empty jjsprint.sprint.tasks}" />
 			</h:form>
 			<h:form id="taskListForm" rendered="#{!jjsprint.render}">
@@ -157,7 +159,7 @@
 												immediate="true" oncomplete="viewTaskDialogWidget.show()"
 												actionListener="#{jJTaskBean.gettingTaskValue}"
 												value="#{messages.label_view}">
-												<f:attribute name="taskValue" value="#{todo}"/>
+												<f:attribute name="taskValue" value="#{todo}" />
 											</p:menuitem>
 											<p:menuitem id="deleteButton" icon="ui-icon-trash"
 												oncomplete="deleteDialogWidget.show()"
@@ -248,7 +250,8 @@
 											<f:facet name="header">
 												<h:outputText value="#{messages.bug_table_action_title}" />
 											</f:facet>
-											<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
+											<p:splitButton>
+												<p:menuitem id="viewTaskButton" icon="ui-icon-zoomin"
 													update=":projecttabview:SprintTabView:viewTaskForm:viewTaskPanelGrid"
 													immediate="true" oncomplete="viewTaskDialogWidget.show()"
 													actionListener="#{jJTaskBean.gettingTaskValue}">
@@ -267,7 +270,7 @@
 													<f:setPropertyActionListener value="#{done}"
 														target="#{jJSprintBean.task}" />
 												</p:menuitem>
-												
+
 											</p:splitButton>
 										</p:column>
 									</p:dataTable>

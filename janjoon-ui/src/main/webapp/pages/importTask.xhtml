@@ -132,7 +132,7 @@
 
 		<p:commandButton id="importButtonSC" value="Import" rendered="#{jJTaskBean.mode == 'scrum'}"
 			style="float: right;" actionListener="#{jJTaskBean.importTask}"
-			update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm"
+			update=":projecttabview:SprintTabView"
 			onstart="PF('createSprintBlockUI').block()"
 			oncomplete="PF('createSprintBlockUI').unblock()"/>
 			

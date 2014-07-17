@@ -66,7 +66,8 @@ public class JJContactBean {
 	}
 
 	public List<JJContact> getContacts() {
-		contacts = jJContactService.getContacts(true);
+		if(contacts==null)
+			contacts = jJContactService.getContacts(true);
 		return contacts;
 	}
 
@@ -149,6 +150,7 @@ public class JJContactBean {
 			}
 
 		}
+		contacts.remove(contains(contactAdmin.getId()));
 	}
 
 	public void addContact(JJPermissionBean jJPermissionBean) {
@@ -173,6 +175,7 @@ public class JJContactBean {
 				facesMessage = MessageFactory.getMessage(
 						"message_successfully_created",
 						FacesMessage.SEVERITY_INFO, "JJContact");
+				contacts.add(contactAdmin);
 
 			} else {
 
@@ -255,8 +258,11 @@ public class JJContactBean {
 			}
 
 		}
-
-		System.out.println("herer");
+		
+		if(contains(contactAdmin.getId())!=-1)
+			contacts.set(contains(contactAdmin.getId()), contactAdmin);
+		else
+			contacts.add(contactAdmin);
 
 		FacesContext.getCurrentInstance().addMessage(
 				null,
@@ -353,6 +359,24 @@ public class JJContactBean {
 
 	public JJContact getContactByEmail(String email) {
 		return jJContactService.getContactByEmail(email, true);
+	}
+	
+	public int contains(Long id) {
+		int i = 0;
+		int j = -1;
+
+		if (contacts != null) {
+			while (i < contacts.size()) {
+				if (contacts.get(i).getId().equals(id)) {
+					j = i;
+					i = contacts.size();
+				} else
+					i++;
+			}
+		}
+
+		return j;
+
 	}
 
 	private boolean getContactDialogConfiguration() {

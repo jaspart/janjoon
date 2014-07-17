@@ -1092,6 +1092,8 @@ public class JJTaskBean {
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			RequestContext context = RequestContext.getCurrentInstance();
 			
+			context.execute("SprintTab.select("+jJSprintBean.contains(jJSprintBean.getSprintUtil().getSprint().getId())+")");
+			
 			context.execute("taskImportDialogWidget.hide()");
 
 		}
