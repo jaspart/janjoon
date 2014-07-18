@@ -36,15 +36,14 @@
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_contact_table_action_label}" />
 					</f:facet>
-					<p:splitButton value="Action">
-						<p:menuitem id="editButton" icon="ui-icon-pencil"
+					<p:splitButton id="editButton" icon="ui-icon-pencil"
 							oncomplete="contactDialogWidget.show()"
 							action="#{jJContactBean.editContact(jJPermissionBean)}"
 							update=":tabview:contactDialog"
 							value="#{messages.admin_contact_edit_label}">
 							<f:setPropertyActionListener value="#{contact}"
 								target="#{jJContactBean.contactAdmin}" />
-						</p:menuitem>
+					
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
 							oncomplete="contactDeleteDialogWidget.show()"
 							value="#{messages.admin_contact_delete_button}"

@@ -29,15 +29,14 @@
 						<h:outputText
 							value="#{messages.admin_category_table_action_title}" />
 					</f:facet>
-					<p:splitButton value="Action">
-						<p:menuitem id="editButton" icon="ui-icon-pencil"
+					<p:splitButton id="editButton" icon="ui-icon-pencil"
 							oncomplete="categoryDialogWidget.show()"
 							value="#{messages.admin_category_table_edit_tooltip}"
 							action="#{jJCategoryBean.editCategory}"
 							update=":tabview:categoryDialog">
 							<f:setPropertyActionListener value="#{category}"
 								target="#{jJCategoryBean.categoryAdmin}" />
-						</p:menuitem>
+						
 						
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
 							value="#{messages.admin_category_table_delete_tooltip}"

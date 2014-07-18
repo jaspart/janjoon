@@ -29,15 +29,13 @@
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_product_table_action_label}" />
 					</f:facet>
-					<p:splitButton value="Action">
-						<p:menuitem id="editButton" icon="ui-icon-pencil"
+					<p:splitButton id="editButton" icon="ui-icon-pencil"
 							oncomplete="productDialogWidget.show()"
 							value="#{messages.admin_product_edit_tooltip}"
 							action="#{jJProductBean.editProduct(jJVersionBean)}"
 							update=":tabview:productDialog">
 							<f:setPropertyActionListener value="#{product}"
-								target="#{jJProductBean.productAdmin}" />
-						</p:menuitem>
+								target="#{jJProductBean.productAdmin}" />					
 
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
 							oncomplete="productDeleteDialogWidget.show()"

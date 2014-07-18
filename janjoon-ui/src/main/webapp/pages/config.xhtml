@@ -45,19 +45,18 @@
 						<h:outputText value="#{messages.admin_config_table_action_title}" />
 					</f:facet>
 
-					<p:splitButton value="Action">
-						<p:menuitem id="viewButton" icon="ui-icon-zoomin"
-							update=":tabview:viewForm:viewPanelGrid"
-							oncomplete="viewDialogWidget.show()"
-							value="#{messages.label_view}">
-							<f:setPropertyActionListener value="#{conf}"
-								target="#{jJConfigurationBean.JJConfiguration_}" />
-						</p:menuitem>
+					<p:splitButton id="viewButton" icon="ui-icon-zoomin"
+						update=":tabview:viewForm:viewPanelGrid"
+						oncomplete="viewDialogWidget.show()"
+						value="#{messages.label_view}">
+						<f:setPropertyActionListener value="#{conf}"
+							target="#{jJConfigurationBean.JJConfiguration_}" />
+
 
 						<p:menuitem id="editButton" icon="ui-icon-pencil"
-							update=":tabview:editForm:editPanelGrid"
+							update=":tabview:createForm:createPanelGrid"
 							action="#{jJConfigurationBean.onEdit}"
-							oncomplete="editDialogWidget.show()"
+							oncomplete="createDialogWidget.show()"
 							value="#{messages.admin_config_edit_title}">
 							<f:setPropertyActionListener value="#{conf}"
 								target="#{jJConfigurationBean.JJConfiguration_}" />
@@ -77,7 +76,10 @@
 						id="createButton" icon="ui-icon-circle-plus"
 						update=":tabview:createForm:createPanelGrid"
 						oncomplete="createDialogWidget.show()"
-						title="#{messages.admin_config_new_title}" />
+						title="#{messages.admin_config_new_title}" >
+						<f:setPropertyActionListener value="null"
+								target="#{jJConfigurationBean.JJConfiguration_}" />
+						</p:commandButton>
 					<p:tooltip for="createButton"
 						value="#{messages.admin_config_table_create_title}"
 						showEffect="fade" hideEffect="fade" />
@@ -94,41 +96,41 @@
 			listener="#{jJConfigurationBean.handleDialogClose}" />
 		<p:outputPanel id="createPanel">
 			<h:form id="createForm" enctype="multipart/form-data">
-				<h:panelGrid id="createPanelGrid" columns="3"
-					binding="#{jJConfigurationBean.createPanel}" styleClass="dialog"
-					columnClasses="col1,col2,col3" />
+				<h:panelGrid id="createPanelGrid" columns="2" styleClass="dialog"
+					columnClasses="col1,col2,col3">
+
+					<p:outputLabel for="confName" value="Name:" />
+					<p:inputTextarea
+						value="#{jJConfigurationBean.JJConfiguration_.name}" id="confName"
+						required="true" requiredMessage="Name field is requiered" />
+
+					<p:outputLabel for="confDesc" value="Description :" />
+					<pe:ckEditor id="confDesc"
+						toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
+						style="width:680px"
+						customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+						value="#{jJConfigurationBean.JJConfiguration_.description}"
+						required="true"
+						requiredMessage="Config Description is a required value" />
+
+					<p:outputLabel for="confParam" value="Parametre:" />
+					<p:inputText value="#{jJConfigurationBean.JJConfiguration_.param}"
+						id="confParam" />
+
+					<p:outputLabel for="confVal" value="Value:" />
+					<p:inputTextarea
+						value="#{jJConfigurationBean.JJConfiguration_.val}" id="confVal" />
+				</h:panelGrid>
 				<p:commandButton id="createSaveButton"
 					value="#{messages.admin_config_new_save_button}"
 					action="#{jJConfigurationBean.persistConf}"
 					update="createPanelGrid,:tabview:configForm:ConfMessage" />
-				<p:commandButton id="createCloseButton"
+				<p:commandButton idid="createCloseButton"
 					value="#{messages.admin_config_new_close_button}"
 					onclick="createDialogWidget.hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
-	</p:dialog>
-
-	<p:dialog id="editDialog" header="#{messages.admin_config_edit_title}"
-		modal="true" widgetVar="editDialogWidget" dynamic="true"
-		resizable="true" maximizable="true" showEffect="fade"
-		hideEffect="explode">
-		<p:ajax event="close" update=":tabview:configForm"
-			listener="#{jJConfigurationBean.handleDialogClose}" />
-		<p:outputPanel id="editPanel">
-			<h:form id="editForm" enctype="multipart/form-data">
-				<h:panelGrid id="editPanelGrid" columns="3"
-					binding="#{jJConfigurationBean.editPanel}" styleClass="dialog"
-					columnClasses="col1,col2,col3" />
-				<p:commandButton id="editSaveButton"
-					value="#{messages.admin_config_edit_save_button}"
-					action="#{jJConfigurationBean.persistConf}"
-					update="editPanelGrid,:tabview:configForm:ConfMessage" />
-				<p:commandButton id="editCloseButton"
-					value="#{messages.admin_config_edit_close_button}"
-					onclick="editDialogWidget.hide()" type="button" />
-			</h:form>
-		</p:outputPanel>
-	</p:dialog>
+	</p:dialog>	
 
 	<p:dialog id="viewDialog" header="#{messages.admin_config_view_title}"
 		modal="true" widgetVar="viewDialogWidget" dynamic="true"

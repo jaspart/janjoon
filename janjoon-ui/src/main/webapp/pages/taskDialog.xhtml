@@ -52,6 +52,14 @@
 					value="#{JJTask_.workloadPlanned}" />
 			</p:column>
 		</p:row>
+		<p:row >
+			<p:column colspan="6">
+				<p:outputLabel value="Bug :" for="taskBug" />
+				<p:inputText id="taskBug" readonly="true"
+					converter="JJBugConverter"
+					value="#{JJTask_.bug}" />
+			</p:column>
+		</p:row>
 		
 		<p:row  rowspan="5"  rendered="#{jJTaskBean.taskTreeNode != null}">
 			<p:column colspan="2">

@@ -34,21 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
-import com.starit.janjoonweb.domain.JJBug;
-import com.starit.janjoonweb.domain.JJCategory;
-import com.starit.janjoonweb.domain.JJCategoryService;
-import com.starit.janjoonweb.domain.JJChapter;
-import com.starit.janjoonweb.domain.JJChapterService;
-import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJPermissionService;
-import com.starit.janjoonweb.domain.JJProduct;
-import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJRequirement;
-import com.starit.janjoonweb.domain.JJSprint;
-import com.starit.janjoonweb.domain.JJStatus;
-import com.starit.janjoonweb.domain.JJTask;
-import com.starit.janjoonweb.domain.JJTestcase;
-import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.domain.*;
 import com.starit.janjoonweb.ui.mb.converter.JJTaskConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.SprintUtil;
@@ -168,6 +154,11 @@ public class JJTaskBean {
 	}
 
 	public void setTask(JJTask task) {
+		
+		taskTreeNode = null;
+		selectedReq = null;
+		selectedTree = null;
+		
 		this.task = task;
 	}
 
@@ -1526,8 +1517,10 @@ public class JJTaskBean {
 	}
 
 	public void gettingTaskValue(ActionEvent ev) {
+		
 
 		task = (JJTask) ev.getComponent().getAttributes().get("taskValue");
+		System.out.println(task.getName());
 
 		taskTreeNode = null;
 		selectedReq = null;

@@ -10,7 +10,7 @@
 	<p:tabView id="SprintTabView" dynamic="true" cache="true"
 		widgetVar="SprintTab" value="#{jJSprintBean.sprintList}"
 		var="jjsprint">
-		
+
 		<p:tab>
 			<f:facet name="title">
 				<h:outputText id="tabHeader" rendered="#{!jjsprint.render}"
@@ -150,21 +150,14 @@
 											<h:outputText value="#{messages.bug_table_action_title}" />
 										</f:facet>
 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-											update=":projecttabview:SprintTabView:viewTaskForm:viewTaskPanelGrid"
-											immediate="true" oncomplete="viewTaskDialogWidget.show()"
-											actionListener="#{jJTaskBean.gettingTaskValue}">
-											<f:attribute name="taskValue" value="#{todo}" />
-											<p:menuitem id="viewTaskButton2" icon="ui-icon-zoomin"
-												update=":projecttabview:SprintTabView:viewTaskForm:viewTaskPanelGrid"
-												immediate="true" oncomplete="viewTaskDialogWidget.show()"
-												actionListener="#{jJTaskBean.gettingTaskValue}"
-												value="#{messages.label_view}">
-												<f:attribute name="taskValue" value="#{todo}" />
-											</p:menuitem>
+											update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
+											oncomplete="viewTaskDialogWidget.show()">
+												<f:setPropertyActionListener value="#{todo}"
+													target="#{jJTaskBean.task}" />
+
 											<p:menuitem id="deleteButton" icon="ui-icon-trash"
 												oncomplete="deleteDialogWidget.show()"
-												value="#{messages.label_delete}"
-												title="#{messages.label_delete}">
+												value="#{messages.label_delete}">
 												<f:setPropertyActionListener value="#{todo}"
 													target="#{jJSprintBean.task}" />
 											</p:menuitem>
@@ -204,18 +197,10 @@
 												<h:outputText value="#{messages.bug_table_action_title}" />
 											</f:facet>
 											<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-												update=":projecttabview:SprintTabView:viewTaskForm:viewTaskPanelGrid"
-												immediate="true" oncomplete="viewTaskDialogWidget.show()"
-												actionListener="#{jJTaskBean.gettingTaskValue}">
-												<f:attribute name="taskValue" value="#{prog}" />
-
-												<p:menuitem id="viewTaskButton2" icon="ui-icon-zoomin"
-													update=":projecttabview:SprintTabView:viewTaskForm:viewTaskPanelGrid"
-													immediate="true" oncomplete="viewTaskDialogWidget.show()"
-													actionListener="#{jJTaskBean.gettingTaskValue}"
-													value="#{messages.label_view}">
-													<f:attribute name="taskValue" value="#{prog}" />
-												</p:menuitem>
+												update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
+												oncomplete="viewTaskDialogWidget.show()">
+												<f:setPropertyActionListener value="#{prog}"
+													target="#{jJTaskBean.task}" />
 
 												<p:menuitem id="deleteButton" icon="ui-icon-trash"
 													oncomplete="deleteDialogWidget.show()"
@@ -250,20 +235,12 @@
 											<f:facet name="header">
 												<h:outputText value="#{messages.bug_table_action_title}" />
 											</f:facet>
-											<p:splitButton>
-												<p:menuitem id="viewTaskButton" icon="ui-icon-zoomin"
-													update=":projecttabview:SprintTabView:viewTaskForm:viewTaskPanelGrid"
-													immediate="true" oncomplete="viewTaskDialogWidget.show()"
-													actionListener="#{jJTaskBean.gettingTaskValue}">
-													<f:attribute name="taskValue" value="#{done}" />
-												</p:menuitem>
-												<p:menuitem id="viewTaskButton2" icon="ui-icon-zoomin"
-													update=":projecttabview:SprintTabView:viewTaskForm:viewTaskPanelGrid"
-													immediate="true" oncomplete="viewTaskDialogWidget.show()"
-													actionListener="#{jJTaskBean.gettingTaskValue}"
-													value="#{messages.label_view}">
-													<f:attribute name="taskValue" value="#{done}" />
-												</p:menuitem>
+											<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
+												update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
+												oncomplete="viewTaskDialogWidget.show()">
+												<f:setPropertyActionListener value="#{done}"
+													target="#{jJTaskBean.task}" />
+
 												<p:menuitem id="deleteButton" icon="ui-icon-trash"
 													oncomplete="deleteDialogWidget.show()"
 													value="#{messages.label_delete}">

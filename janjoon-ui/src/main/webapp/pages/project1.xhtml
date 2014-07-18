@@ -53,8 +53,9 @@
 				</h:form>
 			</p:outputPanel>
 		</p:confirmDialog>
-		<p:dialog id="taskImportDialog" header="Import Tasks" modal="true" draggable="#{jJTaskBean.mode != 'scrum'}"
-					widgetVar="taskImportDialogWidget" dynamic="true" resizable="false">
+		<p:dialog id="taskImportDialog" header="Import Tasks" modal="true"
+			draggable="#{jJTaskBean.mode != 'scrum'}"
+			widgetVar="taskImportDialogWidget" dynamic="true" resizable="false">
 			<p:ajax event="close" update=":projecttabview:planningForm"
 				listener="#{jJTaskBean.closeDialogImport}" />
 			<p:outputPanel id="importTaskDialogPanel">
@@ -63,6 +64,23 @@
 				</ui:insert>
 			</p:outputPanel>
 		</p:dialog>
+
+		<p:dialog id="viewTaskDialog" header="#{messages.label_view} JJTask"
+		modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
+		resizable="true" maximizable="true" showEffect="fade"
+		hideEffect="explode" draggable="false">
+		<p:outputPanel id="viewTaskPanel">
+			<h:form id="viewTaskForm" enctype="multipart/form-data">
+				<ui:include src="taskDialog.xhtml">
+					<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
+				</ui:include>
+				<p:commandButton id="viewCloseButton"
+					value="#{messages.label_close}"
+					oncomplete="PF('createSprintBlockUI').unblock()"
+					onclick="viewTaskDialogWidget.hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>		
 
 		<pe:blockUI target="projecttabview" widgetVar="createSprintBlockUI">
 			<h:panelGrid columns="2">

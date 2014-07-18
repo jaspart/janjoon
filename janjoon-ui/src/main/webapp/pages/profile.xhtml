@@ -22,15 +22,13 @@
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_profile_table_action_title}" />
 					</f:facet>
-					<p:splitButton value="Action">
-						<p:menuitem id="editButton" icon="ui-icon-pencil"
+					<p:splitButton id="editButton" icon="ui-icon-pencil"
 							oncomplete="profileDialogWidget.show()"
 							action="#{jJProfileBean.editProfile(jJRightBean)}"
 							update=":tabview:profileDialog"
 							value="#{messages.admin_profile_table_edit_tooltip}">
 							<f:setPropertyActionListener value="#{profile}"
-								target="#{jJProfileBean.profileAdmin}" />
-						</p:menuitem>
+								target="#{jJProfileBean.profileAdmin}" />					
 
 
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"

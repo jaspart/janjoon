@@ -30,7 +30,7 @@
 						value="#{messages.specification_import_button}"
 						style="float: right;"
 						actionListener="#{jJTaskBean.loadImportFormat}"
-						update=":projecttabview:taskImportDialog"
+						update=":taskImportDialog"
 						oncomplete="taskImportDialogWidget.show()" >							
 							<f:attribute name="mode" value="planning"  />
 						</p:commandButton>
@@ -62,10 +62,11 @@
 
 							<p:column style="width: 7%;" headerText="Actions" >
 								<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-									update=":projecttabview:SprintTabView:viewTaskForm:viewTaskPanelGrid"
-									immediate="true" oncomplete="viewTaskDialogWidget.show()"
-									actionListener="#{jJTaskBean.gettingTaskValue}">
-									<f:attribute name="taskValue" value="#{taskData}" />
+									update=":viewTaskForm:viewTaskPanelGrid"									
+									immediate="true" oncomplete="viewTaskDialogWidget.show()">
+									
+									<f:setPropertyActionListener value="#{taskData.task}"
+											target="#{jJTaskBean.task}" />
 									<p:menuitem id="duplicate" icon="ui-icon-copy"
 										oncomplete="duplicateTaskDialogWidget.show()"
 										value="#{messages.project_gantt_task_dupplicate_button}">
@@ -267,33 +268,7 @@
 			</h:form>
 		</p:outputPanel>
 	</p:confirmDialog>
-
-	<p:dialog id="viewTaskDialog" header="#{messages.label_view} JJTask"
-		modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
-		resizable="true" maximizable="true" showEffect="fade"
-		hideEffect="explode" draggable="false">
-		<p:outputPanel id="viewTaskPanel">
-			<h:form id="viewTaskForm" enctype="multipart/form-data">
-				<ui:include src="taskDialog.xhtml">
-					<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
-				</ui:include>
-				<p:commandButton id="viewCloseButton"
-					value="#{messages.label_close}"
-					oncomplete="PF('createSprintBlockUI').unblock()"
-					onclick="viewTaskDialogWidget.hide()" type="button" />
-			</h:form>
-		</p:outputPanel>
-	</p:dialog>
-	<p:dialog id="taskImportDialog" header="Import Tasks" modal="true"
-		widgetVar="taskImportDialogWidget" dynamic="true" resizable="false">
-		<p:ajax event="close" update=":projecttabview:planningForm"
-			listener="#{jJTaskBean.closeDialogImport}" />
-		<p:outputPanel id="importTaskDialogPanel">
-			<ui:insert name="importTask">
-				<ui:include src="importTask.xhtml" />
-			</ui:insert>
-		</p:outputPanel>
-	</p:dialog>
+	
 
 </ui:composition>
 </html>

@@ -112,6 +112,20 @@ public class LoginBean implements Serializable {
 				s = s.replace(s.substring(s.indexOf(".")), "");
 				if (s.contains("development"))
 					s = "main";
+				else if(s.contains("project1")||s.contains("test")||s.contains("stats"))
+				{
+					JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");
+					if(jJProjectBean.getProject()==null)
+					{
+						s="main";
+						FacesMessage message = MessageFactory.getMessage(
+								"dev.nullProject.label", FacesMessage.SEVERITY_ERROR, "");
+						FacesContext.getCurrentInstance().addMessage(null, message);
+					}
+						
+					
+						
+				}
 				return s;
 			}
 		}

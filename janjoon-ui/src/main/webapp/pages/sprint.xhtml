@@ -92,8 +92,6 @@
 							title="#{messages.label_create} JJTask">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 							<f:attribute name="mode" value="scrum" />
-<!-- 							<f:setPropertyActionListener value="#{jjsprint}" -->
-<!-- 								target="#{jJSprintBean.sprintUtil}" /> -->
 						</p:commandButton>
 					</p:column>
 				</p:row>
@@ -101,49 +99,5 @@
 		</p:panelGrid>
 
 	</h:form>
-
-	<p:dialog id="viewTaskDialog" header="#{messages.label_view} JJTask"
-		modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
-		resizable="true" maximizable="true" showEffect="fade"
-		hideEffect="explode" draggable="false">
-		<p:outputPanel id="viewTaskPanel">
-			<h:form id="viewTaskForm" enctype="multipart/form-data">
-				<ui:include src="taskDialog.xhtml">
-					<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
-				</ui:include>
-				<p:commandButton id="viewCloseButton"
-					value="#{messages.label_close}"
-					oncomplete="PF('createSprintBlockUI').unblock()"
-					onclick="viewTaskDialogWidget.hide()" type="button" />
-			</h:form>
-		</p:outputPanel>
-	</p:dialog>
-	<p:dialog id="createTaskDialog"
-		header="#{messages.label_create} JJTask" dynamic="true" modal="true"
-		widgetVar="createTaskDialogWidget" showEffect="fade"
-		hideEffect="explode">
-		<p:ajax event="close"
-			update=":projecttabview:SprintTabView:sprintCreationForm"
-			listener="#{jJSprintBean.handleDialogCloseEvent}" />
-		<p:outputPanel id="createTaskPanel">
-			<h:form id="createForm" enctype="multipart/form-data">
-				<h:panelGrid id="createTaskPanelGrid" columns="3"
-					binding="#{jJSprintBean.createTaskPanelGrid}" styleClass="dialog"
-					columnClasses="col1,col2,col3" />
-				<p:commandButton id="createTaskSaveButton2"
-					rendered="#{jjsprint.render}" value="#{messages.label_save}"
-					action="#{jJSprintBean.persistTask}"
-					update=":projecttabview:SprintTabView:sprintCreationForm " />
-				<p:commandButton id="createTaskSaveButton1"
-					rendered="#{!jjsprint.render}" value="#{messages.label_save}"
-					action="#{jJSprintBean.persistTask}"
-					update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm" />
-				<p:commandButton id="createTaskCloseButton"
-					value="#{messages.label_close}"
-					onstart="PF('createSprintBlockUI').block()"
-					onclick="createTaskDialogWidget.hide()" type="button" />
-			</h:form>
-		</p:outputPanel>
-	</p:dialog>
 </ui:composition>
 </html>
