@@ -1,7 +1,9 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -9,11 +11,16 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.model.ListDataModel;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.SelectableDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -120,12 +127,12 @@ public class JJRequirementBean {
 	private String mediumCategoryName;
 	private String highCategoryName;
 
-	private List<String> lowRequirementsList;
-	private List<String> mediumRequirementsList;
-	private List<String> highRequirementsList;
-	private List<String> selectedLowRequirementsList;
-	private List<String> selectedMediumRequirementsList;
-	private List<String> selectedHighRequirementsList;
+	private List<JJRequirement> lowRequirementsList;
+	private List<JJRequirement> mediumRequirementsList;
+	private List<JJRequirement> highRequirementsList;
+	private List<JJRequirement> selectedLowRequirementsList;
+	private List<JJRequirement> selectedMediumRequirementsList;
+	private List<JJRequirement> selectedHighRequirementsList;
 
 	private boolean disabledLowRequirements;
 	private boolean disabledMediumRequirements;
@@ -134,6 +141,10 @@ public class JJRequirementBean {
 	private boolean disabledStatus;
 	private boolean disabledTask;
 	private boolean disabledProject;
+
+	private boolean changeLow;
+	private boolean changeMedium;
+	private boolean changeHigh;
 
 	private boolean initiateTask;
 	private boolean disabledInitTask;
@@ -356,54 +367,55 @@ public class JJRequirementBean {
 		this.highCategoryName = highCategoryName;
 	}
 
-	public List<String> getLowRequirementsList() {
+	public List<JJRequirement> getLowRequirementsList() {
 		return lowRequirementsList;
 	}
 
-	public void setLowRequirementsList(List<String> lowRequirementsList) {
+	public void setLowRequirementsList(List<JJRequirement> lowRequirementsList) {
 		this.lowRequirementsList = lowRequirementsList;
 	}
 
-	public List<String> getMediumRequirementsList() {
+	public List<JJRequirement> getMediumRequirementsList() {
 		return mediumRequirementsList;
 	}
 
-	public void setMediumRequirementsList(List<String> mediumRequirementsList) {
+	public void setMediumRequirementsList(
+			List<JJRequirement> mediumRequirementsList) {
 		this.mediumRequirementsList = mediumRequirementsList;
 	}
 
-	public List<String> getHighRequirementsList() {
+	public List<JJRequirement> getHighRequirementsList() {
 		return highRequirementsList;
 	}
 
-	public void setHighRequirementsList(List<String> highRequirementsList) {
+	public void setHighRequirementsList(List<JJRequirement> highRequirementsList) {
 		this.highRequirementsList = highRequirementsList;
 	}
 
-	public List<String> getSelectedLowRequirementsList() {
+	public List<JJRequirement> getSelectedLowRequirementsList() {
 		return selectedLowRequirementsList;
 	}
 
 	public void setSelectedLowRequirementsList(
-			List<String> selectedLowRequirementsList) {
+			List<JJRequirement> selectedLowRequirementsList) {
 		this.selectedLowRequirementsList = selectedLowRequirementsList;
 	}
 
-	public List<String> getSelectedMediumRequirementsList() {
+	public List<JJRequirement> getSelectedMediumRequirementsList() {
 		return selectedMediumRequirementsList;
 	}
 
 	public void setSelectedMediumRequirementsList(
-			List<String> selectedMediumRequirementsList) {
+			List<JJRequirement> selectedMediumRequirementsList) {
 		this.selectedMediumRequirementsList = selectedMediumRequirementsList;
 	}
 
-	public List<String> getSelectedHighRequirementsList() {
+	public List<JJRequirement> getSelectedHighRequirementsList() {
 		return selectedHighRequirementsList;
 	}
 
 	public void setSelectedHighRequirementsList(
-			List<String> selectedHighRequirementsList) {
+			List<JJRequirement> selectedHighRequirementsList) {
 		this.selectedHighRequirementsList = selectedHighRequirementsList;
 	}
 
@@ -657,9 +669,9 @@ public class JJRequirementBean {
 
 		fullRequirementsList();
 
-		selectedLowRequirementsList = new ArrayList<String>();
-		selectedMediumRequirementsList = new ArrayList<String>();
-		selectedHighRequirementsList = new ArrayList<String>();
+		selectedLowRequirementsList = new ArrayList<JJRequirement>();
+		selectedMediumRequirementsList = new ArrayList<JJRequirement>();
+		selectedHighRequirementsList = new ArrayList<JJRequirement>();
 
 		task = new JJTask();
 		disabledInitTask = false;
@@ -675,8 +687,12 @@ public class JJRequirementBean {
 		JJContact contact = loginBean.getContact();
 		requirement.setCreatedBy(contact);
 
+		changeLow = false;
+		changeMedium = false;
+		changeHigh = false;
+
 		requirementState = true;
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void editRequirement() {
@@ -742,8 +758,12 @@ public class JJRequirementBean {
 		requirement.setUpdatedBy(contact);
 		requirement.setUpdatedDate(new Date());
 
+		changeLow = false;
+		changeMedium = false;
+		changeHigh = false;
+
 		requirementState = false;
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	private void deleteTasksAndTestcase(JJRequirement requirement) {
@@ -765,7 +785,7 @@ public class JJRequirementBean {
 			task.setEnabled(false);
 			jJTaskService.updateJJTask(task);
 		}
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void deleteRequirement() {
@@ -782,18 +802,18 @@ public class JJRequirementBean {
 		requirement.setNumero(numero);
 		requirement.setUpdatedBy(contact);
 		requirement.setUpdatedDate(new Date());
-		requirementStatus = jJStatusService.getOneStatus("DELETED", "JJRequirement", true);
+		requirementStatus = jJStatusService.getOneStatus("DELETED",
+				"JJRequirement", true);
 		requirement.setStatus(requirementStatus);
 
 		jJRequirementService.updateJJRequirement(requirement);
 
 		deleteTasksAndTestcase(requirement);
 
-		editRowFromCategoryDataModel();
+		closeDialog();
 
-		requirement = null;
 		reset();
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void preReleaseRequirement(long id) {
@@ -804,10 +824,10 @@ public class JJRequirementBean {
 	public void releaseRequirement() {
 		long t = System.currentTimeMillis();
 		List<JJRequirement> list = new ArrayList<JJRequirement>();
-		for (CategoryDataModel requirementDataModel : tableDataModelList) {
-			if (requirementDataModel.getCategoryId() == categoryId) {
+		for (CategoryDataModel categoryDataModel : tableDataModelList) {
+			if (categoryDataModel.getCategoryId() == categoryId) {
 
-				list = requirementDataModel.getRequirements();
+				list = (List<JJRequirement>) categoryDataModel.getWrappedData();
 				break;
 			}
 
@@ -836,7 +856,7 @@ public class JJRequirementBean {
 			}
 		}
 		reset();
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void save() {
@@ -885,18 +905,21 @@ public class JJRequirementBean {
 
 		if (requirementState) {
 
-			addRowToCategoryDataModel();
+			// addRowToCategoryDataModel();
 
 			if (getRequirementDialogConfiguration()) {
 				context.execute("requirementDialogWidget.hide()");
-				// closeDialog();
 			} else {
 				newRequirement(requirementCategory.getId());
 			}
 
 		} else {
 
-			editRowFromCategoryDataModel();
+			// System.out.println("GDGDFG");
+			//
+			//
+			//
+			// System.out.println("FEFEFE");
 
 			context.execute("requirementDialogWidget.hide()");
 			// closeDialog();
@@ -904,7 +927,7 @@ public class JJRequirementBean {
 		}
 
 		reset();
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void importRequirement() {
@@ -1119,7 +1142,7 @@ public class JJRequirementBean {
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("requirementImportDialogWidget.hide()");
 		reset();
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	private SortedMap<Integer, JJTestcase> manageTestcaseOrder(JJChapter chapter) {
@@ -1132,7 +1155,7 @@ public class JJRequirementBean {
 		for (JJTestcase testcase : testcases) {
 			elements.put(testcase.getOrdering(), testcase);
 		}
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		return elements;
 	}
 
@@ -1149,7 +1172,7 @@ public class JJRequirementBean {
 		} else {
 			task = new JJTask();
 		}
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void checkCompleteTask() {
@@ -1183,7 +1206,7 @@ public class JJRequirementBean {
 					copyRequirements, copyTestcases, copyChapters));
 			i++;
 		}
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void loadImportFormat() {
@@ -1202,7 +1225,7 @@ public class JJRequirementBean {
 		}
 
 		fillTableImport();
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void handelSelectImportProject() {
@@ -1221,7 +1244,7 @@ public class JJRequirementBean {
 
 		}
 		fillTableImport();
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void handelSelectImportVersion() {
@@ -1241,6 +1264,8 @@ public class JJRequirementBean {
 
 	public void closeDialog() {
 		long t = System.currentTimeMillis();
+		System.out.println("close dialog");
+
 		message = null;
 		namesList = null;
 		lowCategoryName = null;
@@ -1273,7 +1298,14 @@ public class JJRequirementBean {
 		storeMapDown = null;
 
 		requirementState = true;
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+
+		loadData();
+		redirectPage();
+
+		System.out.println("fin");
+
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
+
 	}
 
 	public void closeDialogImport() {
@@ -1290,7 +1322,12 @@ public class JJRequirementBean {
 		importProjectList = null;
 		importVersionList = null;
 		importStatusList = null;
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+
+		loadData();
+		redirectPage();
+
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
+
 	}
 
 	public boolean getDisabledEdit(JJRequirement requirement) {
@@ -1307,10 +1344,10 @@ public class JJRequirementBean {
 		requirementChapter = null;
 		fullRequirementsList();
 
-		selectedLowRequirementsList = new ArrayList<String>();
-		selectedMediumRequirementsList = new ArrayList<String>();
-		selectedHighRequirementsList = new ArrayList<String>();
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		selectedLowRequirementsList = new ArrayList<JJRequirement>();
+		selectedMediumRequirementsList = new ArrayList<JJRequirement>();
+		selectedHighRequirementsList = new ArrayList<JJRequirement>();
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void handleSelectProduct() {
@@ -1322,7 +1359,7 @@ public class JJRequirementBean {
 			disabledVersion = true;
 			requirementVersion = null;
 		}
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void handleSelectVersion() {
@@ -1368,22 +1405,27 @@ public class JJRequirementBean {
 		long t = System.currentTimeMillis();
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		
-		JJProjectBean jJProjectBean = (JJProjectBean) session.getAttribute("jJProjectBean");
+
+		JJProjectBean jJProjectBean = (JJProjectBean) session
+				.getAttribute("jJProjectBean");
+
 		project = jJProjectBean.getProject();
 
-		JJProductBean jJProductBean = (JJProductBean) session.getAttribute("jJProductBean");
+		JJProductBean jJProductBean = (JJProductBean) session
+				.getAttribute("jJProductBean");
 		product = jJProductBean.getProduct();
 
-		JJVersionBean jJVersionBean = (JJVersionBean) session.getAttribute("jJVersionBean");
+		JJVersionBean jJVersionBean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
 		version = jJVersionBean.getVersion();
 
-		JJChapterBean jJChapterBean = (JJChapterBean) session.getAttribute("jJChapterBean");
+		JJChapterBean jJChapterBean = (JJChapterBean) session
+				.getAttribute("jJChapterBean");
 		if (jJChapterBean == null)
 			jJChapterBean = new JJChapterBean();
 
 		if (project == null) {
-			
+
 			warnMessage = "Select a project to export PDF";
 			disabledExport = true;
 
@@ -1394,7 +1436,7 @@ public class JJRequirementBean {
 			jJChapterBean.setDisabledChapter(true);
 
 		} else {
-			
+
 			warnMessage = "Export to PDF";
 			disabledExport = false;
 
@@ -1404,9 +1446,10 @@ public class JJRequirementBean {
 			jJChapterBean.setWarnMessage("Manage document");
 			jJChapterBean.setDisabledChapter(false);
 		}
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
+	@SuppressWarnings("unchecked")
 	public void addRowToCategoryDataModel() {
 		long t = System.currentTimeMillis();
 		int index = 0;
@@ -1423,14 +1466,17 @@ public class JJRequirementBean {
 		for (int i = 0; i < tableDataModelList.size(); i++) {
 			CategoryDataModel categoryDataModel = tableDataModelList.get(i);
 			if (i == index) {
-				categoryDataModel.getRequirements().add(0, requirement);
+				List<JJRequirement> requirements = (List<JJRequirement>) categoryDataModel
+						.getWrappedData();
+				requirements.add(0, requirement);
 			}
 			categoryDataModel.calculCompletionProgress();
 			categoryDataModel.calculCoverageProgress();
 		}
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
+	@SuppressWarnings("unchecked")
 	public void editRowFromCategoryDataModel() {
 		long t = System.currentTimeMillis();
 		int index = 0;
@@ -1447,15 +1493,23 @@ public class JJRequirementBean {
 		for (int i = 0; i < tableDataModelList.size(); i++) {
 			CategoryDataModel categoryDataModel = tableDataModelList.get(i);
 			if (i == index && !requirement.getEnabled()) {
-				categoryDataModel.getRequirements().remove(requirement);
+				List<JJRequirement> requirements = (List<JJRequirement>) categoryDataModel
+						.getWrappedData();
+				requirements.remove(requirement);
 			}
 			categoryDataModel.calculCompletionProgress();
 			categoryDataModel.calculCoverageProgress();
 		}
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void loadData() {
+
+		// Utiliser au moment du changement des couples (product/project)
+		// long t = System.currentTimeMillis();
+
+		System.out.println("debut load");
+
 		long t = System.currentTimeMillis();
 
 		if (tableDataModelList == null) {
@@ -1466,18 +1520,6 @@ public class JJRequirementBean {
 		}
 
 		loadParameter();
-
-		if (project != null) {
-			System.out.println(project.getName());
-		}
-
-		if (product != null) {
-			System.out.println(product.getName());
-		}
-
-		if (version != null) {
-			System.out.println(version.getName());
-		}
 
 		String[] results = templateHeader.split("-");
 
@@ -1493,6 +1535,8 @@ public class JJRequirementBean {
 				List<JJRequirement> requirements = getRequirementsList(
 						category, product, version, project, true);
 
+				System.out.println("fsdfsdfs " + requirements.size());
+
 				categoryDataModel = new CategoryDataModel(requirements,
 						category.getId(), category.getName(), true);
 
@@ -1504,7 +1548,36 @@ public class JJRequirementBean {
 			}
 
 		}
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+
+		System.out.println("fin load");
+		// logger.info("loadData");
+		// logger.info(System.currentTimeMillis() - t);
+
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
+
+	}
+
+	public void redirectPage() {
+		ExternalContext ec = FacesContext.getCurrentInstance()
+				.getExternalContext();
+		try {
+			ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void handleChangeLow() {
+		changeLow = true;
+	}
+
+	public void handleChangeMedium() {
+		changeMedium = true;
+	}
+
+	public void handleChangeHigh() {
+		changeHigh = true;
 	}
 
 	public void updateTemplate(long id) {
@@ -1576,7 +1649,7 @@ public class JJRequirementBean {
 		}
 
 		editTableDataModelList();
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	private void fullTableDataModelList() {
@@ -1588,7 +1661,7 @@ public class JJRequirementBean {
 
 			tableDataModelList.add(requirementDataModel);
 		}
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void editOneColumn(JJCategory category) {
@@ -1607,14 +1680,13 @@ public class JJRequirementBean {
 		List<JJRequirement> requirements = getRequirementsList(category,
 				product, version, project, true);
 
-		categoryDataModel.setRequirements(requirements);
-
+		categoryDataModel.setWrappedData(requirements);
 		categoryDataModel.calculCompletionProgress();
 		categoryDataModel.calculCoverageProgress();
 
 		tableDataModelList.set(i, categoryDataModel);
-		
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	private boolean disabledRequirement;
@@ -1693,7 +1765,7 @@ public class JJRequirementBean {
 
 		logger.info("edit data");
 
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	@PostConstruct
@@ -1719,7 +1791,7 @@ public class JJRequirementBean {
 		templateHeader = "";
 
 		fullTableDataModelList();
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	private void fullRequirementsList() {
@@ -1744,30 +1816,23 @@ public class JJRequirementBean {
 			disabledHighRequirements = true;
 		}
 
-		List<JJRequirement> list;
-		boolean withProject = true;
-
-		if (requirementProject == null) {
-			withProject = false;
-		}
-
 		if (lowCategory == null) {
 			lowCategoryName = "Low Category :";
 			disabledLowRequirements = true;
 		} else {
 			lowCategoryName = lowCategory.getName() + " :";
-			list = getRequirementsList(lowCategory, null, null,
-					requirementProject, withProject);
-			lowRequirementsList = convertRequirementListToStringList(list);
+			lowRequirementsList = getRequirementsList(lowCategory, null, null,
+					requirementProject, true);
+
 		}
 		if (mediumCategory == null) {
 			mediumCategoryName = "Medium Category :";
 			disabledMediumRequirements = true;
 		} else {
 			mediumCategoryName = mediumCategory.getName() + " :";
-			list = getRequirementsList(mediumCategory, null, null,
-					requirementProject, withProject);
-			mediumRequirementsList = convertRequirementListToStringList(list);
+			mediumRequirementsList = getRequirementsList(mediumCategory, null,
+					null, requirementProject, true);
+
 		}
 
 		if (highCategory == null) {
@@ -1775,13 +1840,11 @@ public class JJRequirementBean {
 			disabledHighRequirements = true;
 		} else {
 			highCategoryName = highCategory.getName() + " :";
-			list = getRequirementsList(highCategory, null, null,
-					requirementProject, withProject);
-			highRequirementsList = convertRequirementListToStringList(list);
+			highRequirementsList = getRequirementsList(highCategory, null,
+					null, requirementProject, true);
 		}
 
-		list = null;
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	private void fullSelectedRequirementsList() {
@@ -1791,9 +1854,9 @@ public class JJRequirementBean {
 		storeMapUp = new ArrayList<JJRequirement>();
 		storeMapDown = new ArrayList<JJRequirement>();
 
-		selectedLowRequirementsList = new ArrayList<String>();
-		selectedMediumRequirementsList = new ArrayList<String>();
-		selectedHighRequirementsList = new ArrayList<String>();
+		selectedLowRequirementsList = new ArrayList<JJRequirement>();
+		selectedMediumRequirementsList = new ArrayList<JJRequirement>();
+		selectedHighRequirementsList = new ArrayList<JJRequirement>();
 
 		if (lowCategory != null
 				&& requirementCategory.getId().equals(lowCategory.getId())) {
@@ -1811,7 +1874,7 @@ public class JJRequirementBean {
 						tempList.add(requirement);
 					}
 				}
-				selectedMediumRequirementsList = convertRequirementListToStringList(tempList);
+				selectedMediumRequirementsList = tempList;
 			}
 			if (highCategory != null) {
 
@@ -1824,7 +1887,7 @@ public class JJRequirementBean {
 						tempList.add(requirement);
 					}
 				}
-				selectedHighRequirementsList = convertRequirementListToStringList(tempList);
+				selectedHighRequirementsList = tempList;
 
 			}
 
@@ -1844,7 +1907,7 @@ public class JJRequirementBean {
 						tempList.add(requirement);
 					}
 				}
-				selectedLowRequirementsList = convertRequirementListToStringList(tempList);
+				selectedLowRequirementsList = tempList;
 
 			}
 
@@ -1859,8 +1922,7 @@ public class JJRequirementBean {
 						tempList.add(requirement);
 					}
 				}
-				selectedHighRequirementsList = convertRequirementListToStringList(tempList);
-
+				selectedHighRequirementsList = tempList;
 			}
 
 		}
@@ -1881,7 +1943,7 @@ public class JJRequirementBean {
 						tempList.add(requirement);
 					}
 				}
-				selectedLowRequirementsList = convertRequirementListToStringList(tempList);
+				selectedLowRequirementsList = tempList;
 
 			}
 
@@ -1896,18 +1958,18 @@ public class JJRequirementBean {
 						tempList.add(requirement);
 					}
 				}
-				selectedMediumRequirementsList = convertRequirementListToStringList(tempList);
+				selectedMediumRequirementsList = tempList;
 			}
 
 		}
 		list = null;
 
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	private void getRequirementsListUP() {
 		long t = System.currentTimeMillis();
-		
+
 		List<JJRequirement> listUP = new ArrayList<JJRequirement>();
 
 		/**
@@ -1917,29 +1979,31 @@ public class JJRequirementBean {
 
 			// List UP contains M & H
 
-			for (String entry : selectedMediumRequirementsList) {
+			if (changeMedium) {
 
-				String key = splitString(entry, "-", 0);
+				for (JJRequirement entry : selectedMediumRequirementsList) {
 
-				JJRequirement req = jJRequirementService.findJJRequirement(Long
-						.parseLong(key));
-				if (requirement.getId() == null) {
-					req.getRequirementLinkDown().add(requirement);
+					JJRequirement req = jJRequirementService
+							.findJJRequirement(entry.getId());
+					if (requirement.getId() == null) {
+						req.getRequirementLinkDown().add(requirement);
+					}
+					listUP.add(req);
 				}
-				listUP.add(req);
+
 			}
 
-			for (String entry : selectedHighRequirementsList) {
+			if (changeHigh) {
+				for (JJRequirement entry : selectedHighRequirementsList) {
 
-				String key = splitString(entry, "-", 0);
+					JJRequirement req = jJRequirementService
+							.findJJRequirement(entry.getId());
+					if (requirement.getId() == null) {
+						req.getRequirementLinkDown().add(requirement);
+					}
+					listUP.add(req);
 
-				JJRequirement req = jJRequirementService.findJJRequirement(Long
-						.parseLong(key));
-				if (requirement.getId() == null) {
-					req.getRequirementLinkDown().add(requirement);
 				}
-				listUP.add(req);
-
 			}
 		}
 
@@ -1950,16 +2014,17 @@ public class JJRequirementBean {
 
 			// List UP contains H
 
-			for (String entry : selectedHighRequirementsList) {
+			if (changeHigh) {
 
-				String key = splitString(entry, "-", 0);
+				for (JJRequirement entry : selectedHighRequirementsList) {
 
-				JJRequirement req = jJRequirementService.findJJRequirement(Long
-						.parseLong(key));
-				if (requirement.getId() == null) {
-					req.getRequirementLinkDown().add(requirement);
+					JJRequirement req = jJRequirementService
+							.findJJRequirement(entry.getId());
+					if (requirement.getId() == null) {
+						req.getRequirementLinkDown().add(requirement);
+					}
+					listUP.add(req);
 				}
-				listUP.add(req);
 			}
 
 		}
@@ -2045,7 +2110,11 @@ public class JJRequirementBean {
 			}
 
 		}
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+
+		// editRowsFromCategoryDataModel(listUP);
+
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
+
 	}
 
 	private void getRequirementsListDOWN() {
@@ -2060,15 +2129,14 @@ public class JJRequirementBean {
 
 			// List DOWN contains L
 
-			for (String entry : selectedLowRequirementsList) {
+			if (changeLow) {
+				for (JJRequirement entry : selectedLowRequirementsList) {
 
-				String key = splitString(entry, "-", 0);
-
-				JJRequirement req = jJRequirementService.findJJRequirement(Long
-						.parseLong(key));
-				listDOWN.add(req);
+					JJRequirement req = jJRequirementService
+							.findJJRequirement(entry.getId());
+					listDOWN.add(req);
+				}
 			}
-
 		}
 		/**
 		 * High Category
@@ -2077,24 +2145,26 @@ public class JJRequirementBean {
 
 			// List DOWN contains L & M
 
-			for (String entry : selectedLowRequirementsList) {
-				String key = splitString(entry, "-", 0);
+			if (changeLow) {
 
-				JJRequirement req = jJRequirementService.findJJRequirement(Long
-						.parseLong(key));
-				listDOWN.add(req);
+				for (JJRequirement entry : selectedLowRequirementsList) {
+
+					JJRequirement req = jJRequirementService
+							.findJJRequirement(entry.getId());
+					listDOWN.add(req);
+				}
 			}
 
-			for (String entry : selectedMediumRequirementsList) {
+			if (changeMedium) {
 
-				String key = splitString(entry, "-", 0);
+				for (JJRequirement entry : selectedMediumRequirementsList) {
 
-				JJRequirement req = jJRequirementService.findJJRequirement(Long
-						.parseLong(key));
+					JJRequirement req = jJRequirementService
+							.findJJRequirement(entry.getId());
 
-				listDOWN.add(req);
+					listDOWN.add(req);
+				}
 			}
-
 		}
 
 		if (requirement.getId() == null) {
@@ -2210,8 +2280,8 @@ public class JJRequirementBean {
 			reset();
 
 		}
-
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		// editRowsFromCategoryDataModel(listDOWN);
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	private List<JJRequirement> getRequirementsList(JJCategory category,
@@ -2224,24 +2294,8 @@ public class JJRequirementBean {
 			list = jJRequirementService.getRequirements(category, project,
 					product, version, null, null, false, true, true);
 		}
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		return list;
-	}
-
-	private List<String> convertRequirementListToStringList(
-			List<JJRequirement> requirementsList) {
-		List<String> list = new ArrayList<String>();
-		for (JJRequirement requirement : requirementsList) {
-			String entry = requirement.getId() + "-" + requirement.getName();
-			list.add(entry);
-		}
-
-		return list;
-	}
-
-	private String splitString(String s, String regex, int index) {
-		String[] result = s.split(regex);
-		return result[index];
 	}
 
 	private void getRequirementOrder() {
@@ -2629,7 +2683,7 @@ public class JJRequirementBean {
 
 		testcases = null;
 		subTestcases = null;
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	private SortedMap<Integer, Object> getSortedElements(JJChapter parent,
@@ -2665,7 +2719,7 @@ public class JJRequirementBean {
 			}
 		}
 
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		return elements;
 	}
 
@@ -2682,7 +2736,7 @@ public class JJRequirementBean {
 			elements.put(testcase.getOrdering(), testcase);
 		}
 
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		return elements;
 	}
 
@@ -2742,7 +2796,7 @@ public class JJRequirementBean {
 
 		}
 		copyTestcases = copyAll;
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void copyChapters() {
@@ -2750,7 +2804,7 @@ public class JJRequirementBean {
 		for (ImportFormat importFormat : importFormats) {
 			importFormat.setCopyChapter(copyChapters);
 		}
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void copyChapter() {
@@ -2763,7 +2817,7 @@ public class JJRequirementBean {
 			}
 		}
 		copyChapters = copyAll;
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void copyRequirements() {
@@ -2773,7 +2827,7 @@ public class JJRequirementBean {
 		}
 
 		disableImportButton = !copyRequirements;
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void copyRequirement() {
@@ -2797,11 +2851,70 @@ public class JJRequirementBean {
 			}
 
 		}
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
-	@SuppressWarnings("unchecked")
-	public class CategoryDataModel {
+	public void onRowDblClckSelect(SelectEvent event) {
+
+		if (event.getObject() != null
+				&& event.getObject() instanceof JJRequirement) {
+			requirement = (JJRequirement) event.getObject();
+			System.out.println(requirement.getName());
+			editRequirement();
+		}
+
+	}
+
+	public void viewLinks() {
+
+		Set<JJRequirement> downs = requirement.getRequirementLinkDown();
+		Set<JJRequirement> ups = requirement.getRequirementLinkUp();
+		Set<JJRequirement> links = new HashSet<JJRequirement>();
+		links.addAll(ups);
+		links.addAll(downs);
+
+		String[] results = templateHeader.split("-");
+
+		for (int i = 0; i < results.length; i++) {
+
+			CategoryDataModel categoryDataModel = tableDataModelList.get(i);
+			long categoryId = categoryDataModel.getCategoryId();
+
+			if (categoryId != 0) {
+
+				JJCategory category = jJCategoryService
+						.findJJCategory(categoryId);
+
+				List<JJRequirement> requirements = new ArrayList<JJRequirement>();
+
+				if (category.equals(requirement.getCategory())) {
+
+					requirements.add(requirement);
+				} else {
+
+					for (JJRequirement req : links) {
+						if (req.getCategory().equals(category))
+							requirements.add(req);
+					}
+
+				}
+
+				categoryDataModel = new CategoryDataModel(requirements,
+						category.getId(), category.getName(), true);
+
+				categoryDataModel.calculCompletionProgress();
+				categoryDataModel.calculCoverageProgress();
+
+				tableDataModelList.set(i, categoryDataModel);
+
+			}
+
+		}
+
+	}
+
+	public class CategoryDataModel extends ListDataModel<JJRequirement>
+			implements SelectableDataModel<JJRequirement> {
 
 		private String nameDataModel;
 		private long categoryId;
@@ -2809,7 +2922,6 @@ public class JJRequirementBean {
 		private float coverageProgress = 0;
 		private float completionProgress = 0;
 
-		private List<JJRequirement> requirements;
 		private List<JJRequirement> filtredRequirements;
 
 		private boolean rendered;
@@ -2830,6 +2942,51 @@ public class JJRequirementBean {
 			this.categoryId = categoryId;
 		}
 
+		public float getCoverageProgress() {
+			return coverageProgress;
+
+		}
+
+		public void setCoverageProgress(float coverageProgress) {
+			this.coverageProgress = coverageProgress;
+		}
+
+		public float getCompletionProgress() {
+
+			return completionProgress;
+		}
+
+		public void setCompletionProgress(float completionProgress) {
+			this.completionProgress = completionProgress;
+		}
+
+		public List<JJRequirement> getFiltredRequirements() {
+			return filtredRequirements;
+		}
+
+		public void setFiltredRequirements(
+				List<JJRequirement> filtredRequirements) {
+			this.filtredRequirements = filtredRequirements;
+		}
+
+		public boolean getRendered() {
+			return rendered;
+		}
+
+		public void setRendered(boolean rendered) {
+			this.rendered = rendered;
+		}
+
+		public CategoryDataModel(List<JJRequirement> data, long categoryId,
+				String nameDataModel, boolean rendered) {
+			super(data);
+			this.categoryId = categoryId;
+			this.nameDataModel = nameDataModel;
+			this.rendered = rendered;
+
+		}
+
+		@SuppressWarnings("unchecked")
 		private void calculCoverageProgress() {
 			long t = System.currentTimeMillis();
 			if (categoryId != 0) {
@@ -2843,6 +3000,8 @@ public class JJRequirementBean {
 						.findJJCategory(categoryId);
 
 				boolean sizeIsOne = false;
+
+				List<JJRequirement> requirements = (List<JJRequirement>) getWrappedData();
 
 				if (category.getStage() == categoryList.get(0).getStage()) {
 
@@ -2928,24 +3087,17 @@ public class JJRequirementBean {
 
 				coverageProgress = coverageProgress * 100;
 			}
-			logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+			logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		}
 
-		public float getCoverageProgress() {
-			return coverageProgress;
-
-		}
-
-		public void setCoverageProgress(float coverageProgress) {
-			this.coverageProgress = coverageProgress;
-		}
-
+		@SuppressWarnings("unchecked")
 		private void calculCompletionProgress() {
 			long t = System.currentTimeMillis();
 			if (categoryId != 0) {
 
 				float compteur = 0;
 
+				List<JJRequirement> requirements = (List<JJRequirement>) getWrappedData();
 				for (JJRequirement requirement : requirements) {
 					compteur = compteur + calculCompletion(requirement);
 				}
@@ -2958,7 +3110,7 @@ public class JJRequirementBean {
 
 				completionProgress = completionProgress * 100;
 			}
-			logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+			logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		}
 
 		private float calculCompletion(JJRequirement requirement) {
@@ -2996,50 +3148,8 @@ public class JJRequirementBean {
 			if (size > 0) {
 				compteur = compteur / (size + hasTaskCompleted);
 			}
-			logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+			logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 			return compteur;
-		}
-
-		public float getCompletionProgress() {
-			return completionProgress;
-		}
-
-		public void setCompletionProgress(float completionProgress) {
-			this.completionProgress = completionProgress;
-		}
-
-		public List<JJRequirement> getRequirements() {
-			return requirements;
-		}
-
-		public void setRequirements(List<JJRequirement> requirements) {
-			this.requirements = requirements;
-		}
-
-		public List<JJRequirement> getFiltredRequirements() {
-			return filtredRequirements;
-		}
-
-		public void setFiltredRequirements(
-				List<JJRequirement> filtredRequirements) {
-			this.filtredRequirements = filtredRequirements;
-		}
-
-		public boolean getRendered() {
-			return rendered;
-		}
-
-		public void setRendered(boolean rendered) {
-			this.rendered = rendered;
-		}
-
-		public CategoryDataModel(List<JJRequirement> data, long categoryId,
-				String nameDataModel, boolean rendered) {
-			this.requirements = data;
-			this.categoryId = categoryId;
-			this.nameDataModel = nameDataModel;
-			this.rendered = rendered;
-
 		}
 
 		public String getRowStyleClass(JJRequirement requirement) {
@@ -3157,9 +3267,29 @@ public class JJRequirementBean {
 			} else {
 				rowStyleClass = "RequirementNotLinked";
 			}
-			logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+			logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 			return rowStyleClass;
 		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public JJRequirement getRowData(String rowKey) {
+
+			List<JJRequirement> requirements = (List<JJRequirement>) getWrappedData();
+
+			for (JJRequirement requirement : requirements) {
+				if (requirement.getId().toString().equals(rowKey))
+					return requirement;
+			}
+
+			return null;
+		}
+
+		@Override
+		public Object getRowKey(JJRequirement requirement) {
+			return requirement.getId().toString();
+		}
+
 	}
 
 	public class ImportFormat {
@@ -3185,7 +3315,7 @@ public class JJRequirementBean {
 			this.copyRequirement = copyRequirement;
 			this.copyTestcase = copyTestcase;
 			this.copyChapter = copyChapter;
-			logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+			logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		}
 
 		public String getId() {
@@ -3268,7 +3398,7 @@ public class JJRequirementBean {
 		setSelectedRequirementLinkUp(null);
 		setSelectedTestcases(null);
 		setCreateDialogVisible(false);
-		logger.info("TaskTracker="+(System.currentTimeMillis() - t));
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	private boolean getRequirementDialogConfiguration() {

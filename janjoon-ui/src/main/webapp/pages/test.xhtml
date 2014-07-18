@@ -9,16 +9,43 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
+
+		<f:event type="preRenderComponent"
+			listener="#{jJTestcaseBean.loadData()}" />
+
+		<pe:blockUI widgetVar="testBlockUIWidget">
+			<h:panelGrid columns="2">
+				<p:graphicImage library="images" name="ajax-loader.gif"
+					style="vertical-align: middle;" />
+				<h:outputText value="#{messages.label_refresh}"
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+		</pe:blockUI>
+
 		<p:layout styleClass="content" style="min-height:500px;"
 			stateful="true">
-			
-			<f:event type="preRenderComponent"
-				listener="#{jJTestcaseBean.loadData()}" />
+
+			<p:layoutUnit position="north" style="min-height:30px;">
+				<h:form id="testFormNorth">
+					<ui:repeat value="#{jJTestcaseBean.categoryList}" var="category">
+						<p:commandButton value="#{category.name}"
+							update=":testFormWest :testFormCenter"
+							action="#{jJTestcaseBean.loadData()}"
+							onstart="PF('testBlockUIWidget').block()"
+							oncomplete="PF('testBlockUIWidget').unblock()">
+							<f:setPropertyActionListener value="#{category}"
+								target="#{jJTestcaseBean.category}" />
+						</p:commandButton>
+					</ui:repeat>
+
+
+				</h:form>
+			</p:layoutUnit>
 
 			<p:layoutUnit position="west"
 				style="min-width:200px;min-height:500px;" resizable="true">
 				<h:form id="testFormWest">
-					<p:panelGrid style="margin-top:10px;">
+					<p:panelGrid>
 						<p:row>
 							<p:column>
 								<h:outputText for="build" value="Build:" />
@@ -32,14 +59,15 @@
 										itemLabel="#{c.name}" itemValue="#{c}" />
 									<p:ajax process="@this" partialSubmit="true"
 										listener="#{jJTestcaseBean.loadData()}"
-										update=":testFormWest :testFormCenter" />
+										update=":testFormWest :testFormCenter"
+										onstart="PF('testBlockUIWidget').block()"
+										oncomplete="PF('testBlockUIWidget').unblock()" />
 								</p:selectOneMenu>
 							</p:column>
-						</p:row>
-						<p:row>
 							<p:column>
 								<h:commandLink id="exportPDF" title="Export category to PDF"
-									disabled="#{jJTestcaseBean.disabledExport}">
+									disabled="#{jJTestcaseBean.disabledExport}"
+									style="float: right;">
 									<p:graphicImage value="/resources/images/pdf.png" />
 									<p:dataExporter type="pdf"
 										target=":testFormCenter:testcaseRecapDataTable"
@@ -49,13 +77,15 @@
 							</p:column>
 						</p:row>
 						<p:row>
-							<p:column>
+							<p:column colspan="2">
 								<p:tree id="testCaseTree" value="#{jJTestcaseBean.rootNode}"
 									var="node" selectionMode="single"
 									selection="#{jJTestcaseBean.selectedNode}" dynamic="true">
 									<p:ajax event="select"
 										listener="#{jJTestcaseBean.onNodeSelect}"
-										update=":testFormCenter :testFormWest:exportPDF" />
+										update=":testFormCenter"
+										onstart="PF('testBlockUIWidget').block()"
+										oncomplete="PF('testBlockUIWidget').unblock()" />
 
 									<p:treeNode>
 										<h:outputText value="#{node}" styleClass="TestcaseChapter" />
@@ -105,55 +135,57 @@
 			<p:layoutUnit position="center" resizable="true"
 				style="min-height:500px;">
 				<h:form id="testFormCenter">
-			<p:commandButton id="colorBtn" icon="ui-icon-info" type="button" style="float: right;" />
-			<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade" dynamic="true">
-				<p:panelGrid>
-					<f:facet name="header">
-						<p:row>
-							<p:column colspan="12">Code des Couleurs</p:column>
-						</p:row>
-					</f:facet>
-					<p:row>
-						<p:column colspan="2" styleClass="TestcaseSuccess">
-							<p:outputLabel value="Test réussi" />
-						</p:column>
-						
-						<p:column colspan="2" styleClass="TestcaseFailed">
-							<p:outputLabel value="Test échoué" />
-						</p:column>
-						
-						<p:column colspan="2" styleClass="TestcaseNotExecuted">
-							<p:outputLabel value="Test non exécuté" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column colspan="2" styleClass="TestcaseWithoutTeststep">
-							<p:outputLabel value="Test sans etape" />
-						</p:column>
-					
-						<p:column colspan="2" styleClass="TestcaseNonFini">
-							<p:outputLabel value="Test non terminé" />
-						</p:column>
+					<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
+						style="float: right;" />
+					<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
+						dynamic="true">
+						<p:panelGrid>
+							<f:facet name="header">
+								<p:row>
+									<p:column colspan="12">Code des Couleurs</p:column>
+								</p:row>
+							</f:facet>
+							<p:row>
+								<p:column colspan="2" styleClass="TestcaseSuccess">
+									<p:outputLabel value="Test réussi" />
+								</p:column>
 
-						<p:column colspan="2" styleClass="TestcaseChapter">
-							<p:outputLabel value="Plan de test / Chapitre" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column colspan="2" styleClass="TestcaseFailedWithoutBuild">
-							<p:outputLabel value="Test échoué sur un autre build" />
-						</p:column>
-						
-						<p:column colspan="2" styleClass="TestcaseNonFiniWithoutBuild">
-							<p:outputLabel value="Test non terminé sur un autre build" />
-						</p:column>
+								<p:column colspan="2" styleClass="TestcaseFailed">
+									<p:outputLabel value="Test échoué" />
+								</p:column>
 
-						<p:column colspan="2" styleClass="TestcaseSuccessWithoutBuild">
-							<p:outputLabel value="Test réussi sur un autre build" />
-						</p:column>
-					</p:row>
-				</p:panelGrid>
-			</p:overlayPanel>
+								<p:column colspan="2" styleClass="TestcaseNotExecuted">
+									<p:outputLabel value="Test non exécuté" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column colspan="2" styleClass="TestcaseWithoutTeststep">
+									<p:outputLabel value="Test sans etape" />
+								</p:column>
+
+								<p:column colspan="2" styleClass="TestcaseNonFini">
+									<p:outputLabel value="Test non terminé" />
+								</p:column>
+
+								<p:column colspan="2" styleClass="TestcaseChapter">
+									<p:outputLabel value="Plan de test / Chapitre" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column colspan="2" styleClass="TestcaseFailedWithoutBuild">
+									<p:outputLabel value="Test échoué sur un autre build" />
+								</p:column>
+
+								<p:column colspan="2" styleClass="TestcaseNonFiniWithoutBuild">
+									<p:outputLabel value="Test non terminé sur un autre build" />
+								</p:column>
+
+								<p:column colspan="2" styleClass="TestcaseSuccessWithoutBuild">
+									<p:outputLabel value="Test réussi sur un autre build" />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:overlayPanel>
 
 					<h:outputText value="Please select a node on the tree to get view"
 						rendered="#{jJTestcaseBean.rendredEmptySelection}"
@@ -242,8 +274,10 @@
 									<p:commandButton id="runButton" icon="ui-icon-play"
 										oncomplete="runTestcaseDialogWidget.show()"
 										action="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
-										update=":runTestcaseDialog" disabled="#{jJBuildBean.build ne null ? false : true }">
-										<f:setPropertyActionListener value="#{jJTestcaseBean.testcase}"
+										update=":runTestcaseDialog"
+										disabled="#{jJBuildBean.build ne null ? false : true }">
+										<f:setPropertyActionListener
+											value="#{jJTestcaseBean.testcase}"
 											target="#{jJTestcaseBean.testcase}" />
 									</p:commandButton>
 								</p:column>
@@ -472,7 +506,7 @@
 									hideEffect="fade" />
 							</p:column>
 							<p:column style="width:10%;">
-								<p:rowEditor/>
+								<p:rowEditor />
 							</p:column>
 						</p:dataTable>
 					</p:scrollPanel>
@@ -510,10 +544,18 @@
 								<p:panelGrid style="margin-top:10px;">
 									<p:row>
 										<p:column>
-											<h:outputText value="#{tse.teststep.actionstep}" />
+											<pe:ckEditor
+												toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
+												value="#{tse.teststep.actionstep}" required="true"
+												customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+												readOnly="true" />
 										</p:column>
 										<p:column>
-											<h:outputText value="#{tse.teststep.resultstep}" />
+											<pe:ckEditor
+												toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
+												value="#{tse.teststep.resultstep}" required="true"
+												customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+												readOnly="true" />
 										</p:column>
 									</p:row>
 									<p:row>
@@ -523,8 +565,8 @@
 										</p:column>
 										<p:column>
 											<p:selectOneButton value="#{jJTeststepexecutionBean.status}">
-												<p:ajax update="name description"
-													listener="#{jJTeststepexecutionBean.toto()}" />
+												<p:ajax update=":bugForm:createPanelGrid" 
+													listener="#{jJTeststepexecutionBean.handleStatus()}" />
 												<f:selectItem itemLabel="Passed" itemValue="true" />
 												<f:selectItem itemLabel="Failed" itemValue="false" />
 											</p:selectOneButton>
@@ -604,6 +646,27 @@
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
+
+		<p:dialog header="#{messages.bug_create_title}"
+			modal="true" widgetVar="bugTestDialogWidget" dynamic="true"
+			resizable="true" maximizable="true" showEffect="fade"
+			hideEffect="explode">
+			<p:ajax event="close" 
+				listener="#{jJBugBean.handleDialogClose}" />
+			<p:outputPanel id="createPanel">
+				<h:form id="bugForm" enctype="multipart/form-data">
+					<ui:include src="bugDialog.xhtml">
+						<ui:param name="JJBug_" value="#{jJTeststepexecutionBean.bug}" />
+						</ui:include>
+						<p:commandButton id="saveBug"
+							value="#{messages.label_save}" action="#{jJBugBean.saveBug}"
+							oncomplete="bugTestDialogWidget.hide()" />
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+
+
+
 	</ui:define>
 </ui:composition>
 </html>

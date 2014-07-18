@@ -153,10 +153,14 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
-
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 		return entityManager.createQuery(select).getSingleResult();
 
+	}
+	
+	@Override
+	public void refreshRequirement(JJRequirement requirement){
+		entityManager.refresh(requirement);
 	}
 
 }

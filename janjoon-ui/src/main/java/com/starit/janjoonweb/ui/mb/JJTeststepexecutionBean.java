@@ -259,16 +259,32 @@ public class JJTeststepexecutionBean {
 		JJProjectBean jJProjectBean = (JJProjectBean) session
 				.getAttribute("jJProjectBean");
 
+		JJVersionBean jJVersionBean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
+
+		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
+				.getAttribute("jJTestcaseBean");
+
 		bug.setBuild(jJBuildBean.getBuild());
 		bug.setProject(jJProjectBean.getProject());
+		bug.setVersioning(jJVersionBean.getVersion());
+		bug.setCategory(jJTestcaseBean.getCategory());
 
 	}
 
-	public void toto() {
+	public void handleStatus() {
 
 		teststepexecution.setPassed(status);
 
 		disabled = teststepexecution.getPassed();
+
+		if (!teststepexecution.getPassed()) {
+
+			bug.setTeststep(teststepexecution.getTeststep());
+			
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("bugTestDialogWidget.show()");
+		}
 	}
 
 	public void onTabChange(TabChangeEvent event) {
@@ -332,23 +348,23 @@ public class JJTeststepexecutionBean {
 
 		jJTeststepexecutionService.updateJJTeststepexecution(tse);
 
-		if (status1 != null && status1 == false) {
-			if (bug.getId() == null) {
-
-				bug.setCreationDate(new Date());
-
-				JJTeststep teststep = jJTeststepService.findJJTeststep(tse
-						.getTeststep().getId());
-
-				bug.setTeststep(teststep);
-				teststep.getBugs().add(bug);
-				jJBugService.saveJJBug(bug);
-
-			} else {
-				bug.setUpdatedDate(new Date());
-				jJBugService.updateJJBug(bug);
-			}
-		}
+//		if (status1 != null && status1 == false) {
+//			if (bug.getId() == null) {
+//
+//				bug.setCreationDate(new Date());
+//
+//				JJTeststep teststep = jJTeststepService.findJJTeststep(tse
+//						.getTeststep().getId());
+//
+//				bug.setTeststep(teststep);
+//				teststep.getBugs().add(bug);
+//				jJBugService.saveJJBug(bug);
+//
+//			} else {
+//				bug.setUpdatedDate(new Date());
+//				jJBugService.updateJJBug(bug);
+//			}
+//		}
 
 		activeIndex++;
 

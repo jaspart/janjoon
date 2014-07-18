@@ -20,6 +20,7 @@ import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
+import org.primefaces.context.RequestContext;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
@@ -278,11 +279,38 @@ public class JJBugBean {
 		setCreateDialogVisible(false);
 	}
 
-	public String persistBug() {
-
+	public void saveBug(){
+		
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
+		
+		if (JJBug_.getId() == null) {
+			JJBug_.setCreationDate(new Date());
+			JJBug_.setCreatedBy(contact);
+
+			JJTeststep teststep = jJTeststepService.findJJTeststep(JJBug_
+					.getTeststep().getId());
+
+			JJBug_.setTeststep(teststep);
+			teststep.getBugs().add(JJBug_);
+			jJBugService.saveJJBug(JJBug_);
+
+		} else {
+			JJBug_.setUpdatedDate(new Date());
+			JJBug_.setUpdatedBy(contact);
+			jJBugService.updateJJBug(JJBug_);
+		}
+		
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("bugTestDialogWidget.hide()");
+	}
+	
+	public String persistBug() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJContact contact = (JJContact) session.getAttribute("JJContact");
+		
 		JJBug_.setEnabled(true);
 		if (JJBug_.getRequirement() != null)
 			JJBug_.setCategory(JJBug_.getRequirement().getCategory());

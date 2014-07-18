@@ -133,6 +133,8 @@ public class JJTestcaseBean {
 
 	private String namefile;
 
+	private List<JJCategory> categoryList;
+
 	public JJTestcase getTestcase() {
 		return testcase;
 	}
@@ -343,6 +345,15 @@ public class JJTestcaseBean {
 		this.namefile = namefile;
 	}
 
+	public List<JJCategory> getCategoryList() {
+		categoryList = jJCategoryService.getCategories(null, false, true, true);
+		return categoryList;
+	}
+
+	public void setCategoryList(List<JJCategory> categoryList) {
+		this.categoryList = categoryList;
+	}
+
 	public void loadData() {
 
 		this.getProject();
@@ -358,7 +369,16 @@ public class JJTestcaseBean {
 		disabledExport = true;
 
 		namefile = null;
-		category = null;
+
+		if (category != null) {
+			namefile = category.getName().trim();
+			disabledExport = false;
+		} else {
+
+			namefile = null;
+			disabledExport = true;
+
+		}
 
 		createTestcaseTree();
 
@@ -656,9 +676,7 @@ public class JJTestcaseBean {
 
 		projectNode.setExpanded(true);
 
-		List<JJCategory> categories = jJCategoryService.getCategories(null,
-				false, true, true);
-		for (JJCategory category : categories) {
+		if (category != null) {
 
 			TreeNode categoryNode = new DefaultTreeNode("C-" + category.getId()
 					+ "- " + category.getName(), projectNode);
@@ -671,8 +689,8 @@ public class JJTestcaseBean {
 			for (JJChapter chapter : parentChapters) {
 				TreeNode node = createTree(chapter, categoryNode, category);
 			}
-		}
 
+		}
 		rendredEmptySelection = true;
 
 	}
@@ -689,21 +707,11 @@ public class JJTestcaseBean {
 			rendredTestCaseHistorical = false;
 			rendredEmptySelection = false;
 
-			namefile = null;
-			category = null;
-			disabledExport = true;
-
 		} else if (code.equalsIgnoreCase("C")) {
 
 			rendredTestCaseRecaps = false;
 			rendredTestCaseHistorical = false;
 			rendredEmptySelection = false;
-
-			long id = Long.parseLong(getSubString(selectedNode, 1, "-"));
-			category = jJCategoryService.findJJCategory(id);
-
-			namefile = category.getName().trim();
-			disabledExport = false;
 
 		} else if (code.equalsIgnoreCase("CH")) {
 
@@ -715,10 +723,6 @@ public class JJTestcaseBean {
 			rendredTestCaseRecaps = true;
 			rendredTestCaseHistorical = false;
 			rendredEmptySelection = false;
-
-			namefile = null;
-			category = null;
-			disabledExport = true;
 		}
 
 		else if (code.equalsIgnoreCase("TC")) {
@@ -732,17 +736,7 @@ public class JJTestcaseBean {
 			rendredTestCaseHistorical = true;
 			rendredEmptySelection = false;
 
-			namefile = null;
-			category = null;
-			disabledExport = true;
-
 		}
-
-		// FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-		// "Selected " + event.getTreeNode().toString(), event
-		// .getTreeNode().toString());
-		//
-		// FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
 	private String getSubString(String s, int index, String c) {

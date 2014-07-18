@@ -24,10 +24,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
-import com.lowagie.text.*;
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Chunk;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.html.simpleparser.StyleSheet;
-import com.starit.janjoonweb.domain.*;
+import com.starit.janjoonweb.domain.JJCategory;
+import com.starit.janjoonweb.domain.JJChapter;
+import com.starit.janjoonweb.domain.JJConfigurationService;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJRequirement;
+import com.starit.janjoonweb.domain.JJRequirementService;
+import com.starit.janjoonweb.domain.JJTestcase;
+import com.starit.janjoonweb.domain.JJTestcaseService;
+import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
@@ -64,9 +82,6 @@ public class JJChapterBean {
 
 	private JJProject project;
 	private JJCategory category;
-
-	private JJProject chapterProject;
-	private List<JJProject> chapterProjectList;
 
 	private boolean disabledProject;
 
@@ -111,16 +126,16 @@ public class JJChapterBean {
 	public List<JJChapter> getChapterList() {
 
 		if (chapter.getId() == null) {
-			chapterList = jJChapterService.getChapters(chapterProject,
-					category, true, new ArrayList<String>());
+			chapterList = jJChapterService.getChapters(project, category, true,
+					new ArrayList<String>());
 		}
 
 		else {
 			List<String> list = getChildren(chapter);
 			list.add(String.valueOf(chapter.getId()));
 
-			chapterList = jJChapterService.getChapters(chapterProject,
-					category, true, list);
+			chapterList = jJChapterService.getChapters(project, category, true,
+					list);
 		}
 
 		return chapterList;
@@ -224,23 +239,6 @@ public class JJChapterBean {
 		this.disabledChapter = disabledChapter;
 	}
 
-	public JJProject getChapterProject() {
-		return chapterProject;
-	}
-
-	public void setChapterProject(JJProject chapterProject) {
-		this.chapterProject = chapterProject;
-	}
-
-	public List<JJProject> getChapterProjectList() {
-		chapterProjectList = jJProjectService.getProjects(true);
-		return chapterProjectList;
-	}
-
-	public void setChapterProjectList(List<JJProject> chapterProjectList) {
-		this.chapterProjectList = chapterProjectList;
-	}
-
 	public boolean isDisabledProject() {
 		return disabledProject;
 	}
@@ -270,7 +268,6 @@ public class JJChapterBean {
 		chapter.setEnabled(true);
 		chapter.setCategory(category);
 
-		chapterProject = project;
 		disabledProject = false;
 
 		chapter.setDescription(null);
@@ -289,19 +286,9 @@ public class JJChapterBean {
 		chapter = jJChapterService.findJJChapter(idChapter);
 		parentChapter = chapter.getParent();
 
-		chapterProject = chapter.getProject();
 		disabledProject = true;
 
 		chapterState = false;
-	}
-
-	public void handleSelectProject() {
-		chapterTree();
-		getChapterList();
-
-		parentChapter = null;
-		chapter.setParent(null);
-		handleSelectParentChapter();
 	}
 
 	public void deleteChapter() {
@@ -315,12 +302,11 @@ public class JJChapterBean {
 		JJChapter parentSelectedChapter = selectedChapter.getParent();
 
 		SortedMap<Integer, Object> elements = getSortedElements(
-				parentSelectedChapter, chapterProject, category, false);
+				parentSelectedChapter, project, category, false);
 
 		int increment = elements.lastKey() + 1;
 
-		elements = getSortedElements(selectedChapter, chapterProject, category,
-				false);
+		elements = getSortedElements(selectedChapter, project, category, false);
 
 		for (Map.Entry<Integer, Object> entry : elements.entrySet()) {
 			String className = entry.getValue().getClass().getSimpleName();
@@ -368,7 +354,7 @@ public class JJChapterBean {
 		String message = "";
 		if (chapter.getId() == null) {
 
-			chapter.setProject(chapterProject);
+			chapter.setProject(project);
 
 			jJChapterService.saveJJChapter(chapter);
 			message = "message_successfully_created";
@@ -393,7 +379,6 @@ public class JJChapterBean {
 			}
 
 		} else {
-			editCategoryTable();
 			context.execute("chapterDialogWidget.hide()");
 		}
 	}
@@ -403,11 +388,11 @@ public class JJChapterBean {
 		chapterRoot = new DefaultTreeNode("RootChapter", null);
 
 		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(
-				chapterProject, category, true, true);
+				project, category, true, true);
 
 		for (JJChapter chapter : parentChapters) {
-			TreeNode node = createTree(chapter, chapterRoot, chapterProject,
-					category, 0);
+			TreeNode node = createTree(chapter, chapterRoot, project, category,
+					0);
 		}
 
 	}
@@ -682,7 +667,7 @@ public class JJChapterBean {
 	public void handleSelectParentChapter() {
 
 		SortedMap<Integer, Object> elements = getSortedElements(parentChapter,
-				chapterProject, category, false);
+				project, category, false);
 
 		chapter.setParent(parentChapter);
 
@@ -1231,7 +1216,6 @@ public class JJChapterBean {
 		testcases = null;
 		subTestcases = null;
 
-		editCategoryTable();
 	}
 
 	private void editCategoryTable() {
@@ -1243,6 +1227,8 @@ public class JJChapterBean {
 	}
 
 	public void closeDialog(CloseEvent event) {
+
+		editCategoryTable();
 
 		chapter = null;
 		parentChapter = null;
@@ -1258,9 +1244,6 @@ public class JJChapterBean {
 
 		chapterRoot = null;
 		selectedChapterNode = null;
-
-		chapterProject = null;
-		warnMessage = null;
 
 		chapterState = true;
 
