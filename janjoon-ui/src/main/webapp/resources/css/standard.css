@@ -174,15 +174,15 @@ div.timeline-event-range {
 	height: 15px !important;
 }
 div.timeline-groups-axis {
-	width: 0px;
-	display: none;
-	visibility: hidden;
+	width: 10px;
+	/*display: none;
+	visibility: hidden;*/
 	height: 15px !important;
 }
 div.timeline-groups-axis-onleft {
-	width: 0px;
-	display: none;
-	visibility: hidden;
+	width: 10px;
+	/*display: none;
+	visibility: hidden;*/
 	height: 15px !important;
 }
 div.timeline-event-selected {
