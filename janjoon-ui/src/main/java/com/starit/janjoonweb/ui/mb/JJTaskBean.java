@@ -165,7 +165,7 @@ public class JJTaskBean {
 	public TimelineModel getModel() {
 		return model;
 	}
-
+	
 	public Date getStart() {
 		return start;
 	}
@@ -416,7 +416,8 @@ public class JJTaskBean {
 			TreeMap<String, JJTask> Tasks = new TreeMap<String, JJTask>();
 
 			for (JJTask task : tasks) {
-				Tasks.put(task.getName(), task);
+				//Tasks.put(task.getName(), task);
+				Tasks.put(" ", task);
 			}
 
 			// Iterate over HashMap
@@ -426,8 +427,8 @@ public class JJTaskBean {
 
 				char c = (char) k;
 
-				String group = "<span style=display:none>" + c + "</span>"
-						+ task.getName();
+				String group = "<span style=display:none>" + c + "</span>";
+						//+ task.getName();
 
 				if (task.getStartDateReal() != null) {
 					TimelineEvent event = new TimelineEvent(task,
@@ -509,12 +510,13 @@ public class JJTaskBean {
 					end = date;
 				}
 				JJTask task = new JJTask();
-				task.setName(chapter.getName());
+				//task.setName(chapter.getName());
+				task.setName(" ");
 
 				char c = (char) k;
 
-				String group = "<span style=display:none>" + c + "</span>"
-						+ task.getName();
+				String group = "<span style=display:none>" + c + "</span>";
+						//+ task.getName();
 				TimelineEvent event = new TimelineEvent(task, start, end, true,
 						group, "chapter");
 				k++;

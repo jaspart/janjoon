@@ -175,15 +175,11 @@ div.timeline-event-range {
 }
 div.timeline-groups-axis {
 	width: 10px;
-	/*display: none;
-	visibility: hidden;*/
-	height: 15px !important;
+	height: 52px !important;
 }
 div.timeline-groups-axis-onleft {
-	width: 10px;
-	/*display: none;
-	visibility: hidden;*/
-	height: 15px !important;
+	width: 10px !important;
+	height: 52px !important;
 }
 div.timeline-event-selected {
 	background: #BECEFE none !important;
@@ -193,10 +189,10 @@ div.timeline-event-selected {
 div.timeline-event {
 	color: black !important;
 	border-radius: 5px !important;
-	height: 15px !important;
+	height: 25px !important;
 }
 div.timeline-event-line {
-	height: 15px !important;
+	height: 55px !important;
 }
 div.timeline-event-content {
 	height: 13px !important;
@@ -211,7 +207,7 @@ div.timeline-axis {
 	-khtml-opacity: 1;
 	-moz-opacity: 1;
 	opacity: 0.8;
-	height: 15px !important;
+	height: -1px !important;
 }
 div.timeline-axis-grid {
 	height: 15px !important;

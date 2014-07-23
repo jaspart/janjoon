@@ -83,7 +83,7 @@
 								</p:splitButton>
 							</p:column>
 							<p:column styleClass="task" headerText="Chapter" rendered="false">
-								<h:outputText value="#{taskData.chapter.name}" />
+								<h:outputText value="#{taskData.chapter.name}"/>
 							</p:column>
 
 							<p:column id="name" styleClass="task"
@@ -243,8 +243,8 @@
 						eventMargin="10" eventMarginAxis="0" locale="#{LocaleBean.locale}"
 						start="#{jJTaskBean.start}" end="#{jJTaskBean.end}"
 						axisOnTop="true" groupsChangeable="false" var="task"
-						style="min-width:500px;min-height:350px;" editable="true"
-						zoomMin="86400000" zoomMax="8035200000" >
+						style="min-width:500px;min-height:350px;left:0px;width:100%;"
+						editable="true" zoomMin="86400000" zoomMax="8035200000">
 
 						<h:outputText style="height:35px;" value="a" />
 					</pe:timeline>
