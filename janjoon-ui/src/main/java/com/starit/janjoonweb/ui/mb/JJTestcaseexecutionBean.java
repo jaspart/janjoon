@@ -122,14 +122,14 @@ public class JJTestcaseexecutionBean {
 
 	}
 
-	public void toto() {
+	public void handleStatus() {
 		testcaseexecution.setPassed(status);
 
 	}
 
 	public void save() {
 
-		Boolean status = testcaseexecution.getPassed();
+//		Boolean status = testcaseexecution.getPassed();
 
 		JJTestcaseexecution tce = jJTestcaseexecutionService
 				.findJJTestcaseexecution(testcaseexecution.getId());

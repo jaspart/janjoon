@@ -279,24 +279,46 @@ public class JJBugBean {
 		setCreateDialogVisible(false);
 	}
 
-	public void saveBug(){
-		
+	public void saveBug() {
+		System.out.println("in save");
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
-		
+		JJTeststepexecutionBean jJTeststepexecutionBean = (JJTeststepexecutionBean) session
+				.getAttribute("jJTeststepexecutionBean");
+		System.out.println("jkpoj");
+		if (JJBug_ == null) {
+			System.out.println("null");
+		} else {
+			System.out.println("not null");
+		}
+
 		if (JJBug_.getId() == null) {
+			System.out.println("popopo");
 			JJBug_.setCreationDate(new Date());
 			JJBug_.setCreatedBy(contact);
 
-			JJTeststep teststep = jJTeststepService.findJJTeststep(JJBug_
-					.getTeststep().getId());
+			System.out.println("pppop");
+
+			JJTeststep teststep = jJTeststepService
+					.findJJTeststep(jJTeststepexecutionBean
+							.getTeststepexecution().getTeststep().getId());
+
+			System.out.println("mmm");
 
 			JJBug_.setTeststep(teststep);
 			teststep.getBugs().add(JJBug_);
+
+			System.out.println("gugug");
+
 			jJBugService.saveJJBug(JJBug_);
 
+			System.out.println("sdfsdfsdfsdfmmm");
+
 		} else {
+
+			System.out.println("sfsdfdsfsdfsdfsfdfdf");
+
 			JJBug_.setUpdatedDate(new Date());
 			JJBug_.setUpdatedBy(contact);
 			jJBugService.updateJJBug(JJBug_);
@@ -304,13 +326,22 @@ public class JJBugBean {
 		
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("bugTestDialogWidget.hide()");
+
+		if (jJTeststepexecutionBean.getDisabledTestcase()) {
+			jJTeststepexecutionBean.nextTab();
+			jJTeststepexecutionBean.onTabChange();
+		} else {
+			jJTeststepexecutionBean.changeTestcaseStatus();
+		}
+
+		
 	}
-	
+
 	public String persistBug() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
-		
+
 		JJBug_.setEnabled(true);
 		if (JJBug_.getRequirement() != null)
 			JJBug_.setCategory(JJBug_.getRequirement().getCategory());

@@ -529,7 +529,7 @@
 				<h:form id="runForm">
 					<p:growl id="msg" />
 
-					<p:scrollPanel style="width:670px;height:450px;" mode="native">
+					<p:scrollPanel style="width:720px;height:450px;" mode="native">
 
 						<p:tabView id="teststepTabView" widgetVar="teststepTabViewWidget"
 							activeIndex="#{jJTeststepexecutionBean.activeIndex}"
@@ -538,108 +538,74 @@
 
 							<p:ajax event="tabChange"
 								listener="#{jJTeststepexecutionBean.onTabChange}"
-								update="teststepTabView :runForm:testcaseexecutionStatus :runForm:quitButton :runForm:nextButton" />
+								update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton" />
 
 							<p:tab title="#{tse.teststep.ordering}">
-								<p:panelGrid style="margin-top:10px;">
+								<p:panelGrid>
 									<p:row>
 										<p:column>
-											<pe:ckEditor
-												toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
-												value="#{tse.teststep.actionstep}" required="true"
-												customConfig="#{request.contextPath}/resources/js/ckEditor.js"
-												readOnly="true" />
+											<h:outputText value="Action: " />
 										</p:column>
 										<p:column>
 											<pe:ckEditor
 												toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
-												value="#{tse.teststep.resultstep}" required="true"
+												value="#{tse.teststep.actionstep}"
 												customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 												readOnly="true" />
 										</p:column>
+
 									</p:row>
 									<p:row>
 										<p:column>
+											<h:outputText value="Result: " />
+										</p:column>
+										<p:column>
+											<pe:ckEditor
+												toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
+												value="#{tse.teststep.resultstep}"
+												customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+												readOnly="true" />
+										</p:column>
 
+									</p:row>
+									<p:row>
+										<p:column>
 											<h:outputText value="Status: " />
 										</p:column>
 										<p:column>
 											<p:selectOneButton value="#{jJTeststepexecutionBean.status}">
-												<p:ajax update=":bugForm:createPanelGrid" 
+												<p:ajax
+													update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton :bugForm:createPanelGrid"
 													listener="#{jJTeststepexecutionBean.handleStatus()}" />
 												<f:selectItem itemLabel="Passed" itemValue="true" />
 												<f:selectItem itemLabel="Failed" itemValue="false" />
 											</p:selectOneButton>
 										</p:column>
 									</p:row>
-									<p:row>
-										<p:column>
-											<h:outputText value="Name : *" />
-										</p:column>
-										<p:column>
-											<p:inputText id="name"
-												disabled="#{jJTeststepexecutionBean.disabled}"
-												value="#{jJTeststepexecutionBean.bug.name}" required="true"
-												widgetVar="nameWidget" label="Testcase Name"
-												requiredMessage="Testcase Name is a required value">
-											</p:inputText>
-											<p:message for="name" id="msgName" />
-										</p:column>
-									</p:row>
-									<p:row>
-										<p:column colspan="2">
-											<h:outputText value="Description : *" />
-											<pe:ckEditor id="description" widgetVar="descriptionWidget"
-												style="width:600px;"
-												toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
-												value="#{jJTeststepexecutionBean.bug.description}"
-												required="true"
-												customConfig="#{request.contextPath}/resources/js/ckEditor.js"
-												readOnly="#{jJTeststepexecutionBean.disabled}"
-												requiredMessage="Testcase Description is a required value" />
-											<p:message for="description" id="msgDescription" />
-										</p:column>
-									</p:row>
 								</p:panelGrid>
 							</p:tab>
-
 						</p:tabView>
 
 					</p:scrollPanel>
 
-					<p:panelGrid style="margin-top:10px;">
+					<p:panelGrid>
 						<p:row>
-							<p:column>
-								<h:outputText
-									value="Would you like to fix the status of this test case execution as :" />
-							</p:column>
 							<p:column>
 								<p:selectOneButton id="testcaseexecutionStatus"
 									value="#{jJTestcaseexecutionBean.status}"
 									disabled="#{jJTeststepexecutionBean.disabledTestcase}">
-									<p:ajax listener="#{jJTestcaseexecutionBean.toto()}" />
+									<p:ajax listener="#{jJTestcaseexecutionBean.handleStatus()}" />
 									<f:selectItem itemLabel="Passed" itemValue="true" />
 									<f:selectItem itemLabel="Failed" itemValue="false" />
 								</p:selectOneButton>
 							</p:column>
 							<p:column>
-								<p:commandButton id="quitButton" value="Quit"
-									icon="ui-icon-circle-close"
+								<p:commandButton id="validateButton" value="Validate"
+									icon="ui-icon-circle-check"
 									update=":testFormCenter :testFormWest"
-									process="@widgetVar(name) @widgetVar(description)"
-									actionListener="#{jJTeststepexecutionBean.quitTab()}"
+									actionListener="#{jJTeststepexecutionBean.validateTab()}"
 									style="float: right;"
 									disabled="#{jJTeststepexecutionBean.disabledTestcase}" />
-							</p:column>
-
-							<p:column>
-								<p:commandButton id="nextButton" value="Next"
-									icon="ui-icon-circle-arrow-e"
-									update="teststepTabView testcaseexecutionStatus quitButton nextButton"
-									process="@widgetVar(name) @widgetVar(description)"
-									actionListener="#{jJTeststepexecutionBean.nextTab()}"
-									style="float: right;"
-									disabled="#{jJTeststepexecutionBean.disabledNext}" />
 							</p:column>
 						</p:row>
 					</p:panelGrid>
@@ -647,25 +613,22 @@
 			</p:outputPanel>
 		</p:dialog>
 
-		<p:dialog header="#{messages.bug_create_title}"
-			modal="true" widgetVar="bugTestDialogWidget" dynamic="true"
-			resizable="true" maximizable="true" showEffect="fade"
-			hideEffect="explode">
-			<p:ajax event="close" 
-				listener="#{jJBugBean.handleDialogClose}" />
+		<p:dialog header="#{messages.bug_create_title}" modal="true"
+			widgetVar="bugTestDialogWidget" dynamic="true" resizable="true"
+			maximizable="true" showEffect="fade" hideEffect="explode">
+			<p:ajax event="close" listener="#{jJBugBean.handleDialogClose}" />
 			<p:outputPanel id="createPanel">
 				<h:form id="bugForm" enctype="multipart/form-data">
 					<ui:include src="bugDialog.xhtml">
 						<ui:param name="JJBug_" value="#{jJTeststepexecutionBean.bug}" />
-						</ui:include>
-						<p:commandButton id="saveBug"
-							value="#{messages.label_save}" action="#{jJBugBean.saveBug}"
-							oncomplete="bugTestDialogWidget.hide()" />
+					</ui:include>
+					<p:commandButton id="saveBug" value="#{messages.label_save}"
+						action="#{jJBugBean.saveBug}"
+						update=":runForm:teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton"
+						oncomplete="bugTestDialogWidget.hide()" />
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
-
-
 
 	</ui:define>
 </ui:composition>

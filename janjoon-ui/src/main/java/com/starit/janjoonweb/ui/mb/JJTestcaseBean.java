@@ -838,7 +838,7 @@ public class JJTestcaseBean {
 							}
 
 						} else {
-							return "NFWB";
+							return "TNFWB";
 						}
 					}
 

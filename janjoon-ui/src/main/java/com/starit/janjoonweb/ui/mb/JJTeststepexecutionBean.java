@@ -11,7 +11,6 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.TabChangeEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -41,11 +40,7 @@ public class JJTeststepexecutionBean {
 
 	private int activeIndex;
 
-	private boolean disabled;
-
 	private boolean disabledTestcase;
-
-	private boolean disabledNext;
 
 	private Boolean status;
 
@@ -84,28 +79,12 @@ public class JJTeststepexecutionBean {
 		this.activeIndex = activeIndex;
 	}
 
-	public boolean getDisabled() {
-		return disabled;
-	}
-
-	public void setDisabled(boolean disabled) {
-		this.disabled = disabled;
-	}
-
 	public boolean getDisabledTestcase() {
 		return disabledTestcase;
 	}
 
 	public void setDisabledTestcase(boolean disabledTestcase) {
 		this.disabledTestcase = disabledTestcase;
-	}
-
-	public boolean getDisabledNext() {
-		return disabledNext;
-	}
-
-	public void setDisabledNext(boolean disabledNext) {
-		this.disabledNext = disabledNext;
 	}
 
 	public Boolean getStatus() {
@@ -171,9 +150,9 @@ public class JJTeststepexecutionBean {
 
 		if (activeIndex != -1) {
 			status = null;
-			disabled = true;
 			newBug();
 			teststepexecution = elements.get(activeIndex);
+
 		} else {
 			activeIndex = elements.size() - 1;
 
@@ -195,21 +174,22 @@ public class JJTeststepexecutionBean {
 						jJProjectBean.getProject(),
 						teststepexecution.getTeststep(),
 						jJBuildBean.getBuild(), true, true);
-
-				bug = bugs.get(0);
+				if (bugs.isEmpty()) {
+					newBug();
+				} else {
+					bug = bugs.get(0);
+				}
 			}
 
-			disabled = status;
-
 		}
+
+		changeTestcaseStatus();
 
 		if (activeIndex != elements.size() - 1) {
 			disabledTestcase = true;
 		} else {
 			disabledTestcase = false;
 		}
-
-		disabledNext = !disabledTestcase;
 
 	}
 
@@ -249,6 +229,7 @@ public class JJTeststepexecutionBean {
 		bug.setName("Insert a bug name");
 		bug.setDescription("Insert a bug description");
 		bug.setEnabled(true);
+		bug.setCreationDate(new Date());
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
@@ -269,152 +250,50 @@ public class JJTeststepexecutionBean {
 		bug.setProject(jJProjectBean.getProject());
 		bug.setVersioning(jJVersionBean.getVersion());
 		bug.setCategory(jJTestcaseBean.getCategory());
-
 	}
 
 	public void handleStatus() {
 
 		teststepexecution.setPassed(status);
 
-		disabled = teststepexecution.getPassed();
+		teststepexecution.setUpdatedDate(new Date());
 
-		if (!teststepexecution.getPassed()) {
+		jJTeststepexecutionService.updateJJTeststepexecution(teststepexecution);
 
+		teststepexecution = jJTeststepexecutionService
+				.findJJTeststepexecution(teststepexecution.getId());
+
+		elements.put(activeIndex, teststepexecution);
+
+		if (teststepexecution.getPassed()) {
+
+			nextTab();
+			onTabChange();
+
+		} else {
+
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+					.getExternalContext().getSession(false);
+
+			JJBugBean jJBugBean = (JJBugBean) session
+					.getAttribute("jJBugBean");
+			
 			bug.setTeststep(teststepexecution.getTeststep());
+			
+			jJBugBean.setJJBug_(bug);
 			
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("bugTestDialogWidget.show()");
 		}
+
+		if (activeIndex == elements.size() - 1) {
+			System.out.println("qsfsdfsd");
+			changeTestcaseStatus();
+		}
+		System.out.println("dddd");
 	}
 
-	public void onTabChange(TabChangeEvent event) {
-
-		if (activeIndex != elements.size() - 1) {
-			disabledTestcase = true;
-		} else {
-			disabledTestcase = false;
-		}
-		disabledNext = !disabledTestcase;
-
-		teststepexecution = elements.get(activeIndex);
-
-		status = teststepexecution.getPassed();
-
-		if (status != null) {
-
-			if (status) {
-				newBug();
-			} else {
-
-				HttpSession session = (HttpSession) FacesContext
-						.getCurrentInstance().getExternalContext()
-						.getSession(false);
-				JJBuildBean jJBuildBean = (JJBuildBean) session
-						.getAttribute("jJBuildBean");
-
-				JJProjectBean jJProjectBean = (JJProjectBean) session
-						.getAttribute("jJProjectBean");
-
-				List<JJBug> bugs = jJBugService.getBugs(
-						jJProjectBean.getProject(),
-						teststepexecution.getTeststep(),
-						jJBuildBean.getBuild(), true, true);
-
-				bug = bugs.get(0);
-			}
-
-			disabled = status;
-
-		} else {
-
-			disabled = true;
-			newBug();
-		}
-	}
-
-	public void nextTab() {
-
-		// Traiter le teststep précedent
-
-		teststepexecution = elements.get(activeIndex);
-		status = teststepexecution.getPassed();
-
-		Boolean status1 = teststepexecution.getPassed();
-
-		JJTeststepexecution tse = jJTeststepexecutionService
-				.findJJTeststepexecution(teststepexecution.getId());
-		tse.setPassed(status1);
-		tse.setUpdatedDate(new Date());
-
-		jJTeststepexecutionService.updateJJTeststepexecution(tse);
-
-//		if (status1 != null && status1 == false) {
-//			if (bug.getId() == null) {
-//
-//				bug.setCreationDate(new Date());
-//
-//				JJTeststep teststep = jJTeststepService.findJJTeststep(tse
-//						.getTeststep().getId());
-//
-//				bug.setTeststep(teststep);
-//				teststep.getBugs().add(bug);
-//				jJBugService.saveJJBug(bug);
-//
-//			} else {
-//				bug.setUpdatedDate(new Date());
-//				jJBugService.updateJJBug(bug);
-//			}
-//		}
-
-		activeIndex++;
-
-		// Charger le teststep courant
-
-		teststepexecution = elements.get(activeIndex);
-
-		status = teststepexecution.getPassed();
-
-		if (status != null) {
-
-			if (status) {
-				newBug();
-			} else {
-
-				HttpSession session = (HttpSession) FacesContext
-						.getCurrentInstance().getExternalContext()
-						.getSession(false);
-				JJBuildBean jJBuildBean = (JJBuildBean) session
-						.getAttribute("jJBuildBean");
-
-				JJProjectBean jJProjectBean = (JJProjectBean) session
-						.getAttribute("jJProjectBean");
-
-				List<JJBug> bugs = jJBugService.getBugs(
-						jJProjectBean.getProject(),
-						teststepexecution.getTeststep(),
-						jJBuildBean.getBuild(), true, true);
-
-				bug = bugs.get(0);
-			}
-
-			disabled = status;
-
-		} else {
-
-			disabled = true;
-			newBug();
-		}
-
-		if (activeIndex != elements.size() - 1) {
-			disabledTestcase = true;
-		} else {
-			disabledTestcase = false;
-		}
-		disabledNext = !disabledTestcase;
-
-	}
-
-	public void quitTab() {
+	public void changeTestcaseStatus() {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
@@ -422,34 +301,87 @@ public class JJTeststepexecutionBean {
 		JJTestcaseexecutionBean jJTestcaseexecutionBean = (JJTestcaseexecutionBean) session
 				.getAttribute("jJTestcaseexecutionBean");
 
-		jJTestcaseexecutionBean.save();
+		List<JJTeststepexecution> teststepexecutions = jJTeststepexecutionService
+				.getTeststepexecutions(
+						jJTestcaseexecutionBean.getTestcaseexecution(), true);
 
-		teststepexecution = elements.get(elements.lastKey());
-		Boolean status = teststepexecution.getPassed();
+		for (JJTeststepexecution teststepexecution : teststepexecutions) {
 
-		JJTeststepexecution tse = jJTeststepexecutionService
-				.findJJTeststepexecution(teststepexecution.getId());
-		tse.setPassed(status);
-		tse.setUpdatedDate(new Date());
-		jJTeststepexecutionService.updateJJTeststepexecution(tse);
-
-		if (status != null && status == false) {
-			if (bug.getId() == null) {
-				bug.setCreationDate(new Date());
-
-				JJTeststep teststep = jJTeststepService.findJJTeststep(tse
-						.getTeststep().getId());
-
-				bug.setTeststep(teststep);
-				teststep.getBugs().add(bug);
-				jJBugService.saveJJBug(bug);
+			if (teststepexecution.getPassed() != null) {
+				if (teststepexecution.getPassed()) {
+					jJTestcaseexecutionBean.setStatus(true);
+				} else {
+					jJTestcaseexecutionBean.setStatus(false);
+					break;
+				}
 
 			} else {
-				bug.setUpdatedDate(new Date());
-				jJBugService.updateJJBug(bug);
+				jJTestcaseexecutionBean.setStatus(null);
 			}
+
+		}
+	}
+
+	public void onTabChange() {
+
+		if (activeIndex != elements.size() - 1) {
+			disabledTestcase = true;
+		} else {
+			disabledTestcase = false;
+
+			changeTestcaseStatus();
 		}
 
+		teststepexecution = elements.get(activeIndex);
+
+		status = teststepexecution.getPassed();
+
+		if (status != null) {
+
+			if (status) {
+				newBug();
+			} else {
+
+				HttpSession session = (HttpSession) FacesContext
+						.getCurrentInstance().getExternalContext()
+						.getSession(false);
+				JJBuildBean jJBuildBean = (JJBuildBean) session
+						.getAttribute("jJBuildBean");
+
+				JJProjectBean jJProjectBean = (JJProjectBean) session
+						.getAttribute("jJProjectBean");
+
+				List<JJBug> bugs = jJBugService.getBugs(
+						jJProjectBean.getProject(),
+						teststepexecution.getTeststep(),
+						jJBuildBean.getBuild(), true, true);
+
+				if (bugs.isEmpty()) {
+					newBug();
+				} else {
+					bug = bugs.get(0);
+				}
+			}
+
+		} else {
+			newBug();
+		}
+	}
+
+	public void nextTab() {
+		activeIndex++;
+	}
+
+	public void validateTab() {
+
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+
+		JJTestcaseexecutionBean jJTestcaseexecutionBean = (JJTestcaseexecutionBean) session
+				.getAttribute("jJTestcaseexecutionBean");
+System.out.println("fqdqsds");
+		jJTestcaseexecutionBean.save();
+		System.out.println("pppp");
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("runTestcaseDialogWidget.hide()");
 		closeDialog();
