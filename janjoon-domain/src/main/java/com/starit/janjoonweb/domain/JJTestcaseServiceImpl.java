@@ -103,4 +103,16 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 	public void updateTestcases(Set<JJTestcase> testcases) {
 		jJTestcaseRepository.save(testcases);
 	}
+	
+public void saveJJTestcase(JJTestcase JJTestcase_) {
+		
+        jJTestcaseRepository.save(JJTestcase_);
+        JJTestcase_=jJTestcaseRepository.findOne(JJTestcase_.getId());
+    }
+    
+    public JJTestcase updateJJTestcase(JJTestcase JJTestcase_) {
+        jJTestcaseRepository.save(JJTestcase_);
+        JJTestcase_=jJTestcaseRepository.findOne(JJTestcase_.getId());
+        return JJTestcase_;
+    }
 }

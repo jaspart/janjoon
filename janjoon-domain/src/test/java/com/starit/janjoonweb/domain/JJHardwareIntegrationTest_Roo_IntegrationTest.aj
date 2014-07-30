@@ -99,7 +99,7 @@ privileged aspect JJHardwareIntegrationTest_Roo_IntegrationTest {
         obj = jJHardwareService.findJJHardware(id);
         boolean modified =  dod.modifyJJHardware(obj);
         Integer currentVersion = obj.getVersion();
-        JJHardware merged = (JJHardware)jJHardwareService.updateJJHardware(obj);
+        JJHardware merged = jJHardwareService.updateJJHardware(obj);
         jJHardwareRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'JJHardware' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

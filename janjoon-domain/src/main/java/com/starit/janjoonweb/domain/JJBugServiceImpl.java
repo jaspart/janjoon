@@ -109,5 +109,16 @@ public class JJBugServiceImpl implements JJBugService {
 	public List<JJBug> getBugs(JJProject project) {
 		return getBugs(project, null, null, true, true);
 	}
+	
+	public void saveJJBug(JJBug JJBug_) {
+        jJBugRepository.save(JJBug_);
+        JJBug_= jJBugRepository.findOne(JJBug_.getId());
+    }
+    
+    public JJBug updateJJBug(JJBug JJBug_) {
+        jJBugRepository.save(JJBug_);
+        JJBug_= jJBugRepository.findOne(JJBug_.getId());
+        return JJBug_;
+    }
 
 }

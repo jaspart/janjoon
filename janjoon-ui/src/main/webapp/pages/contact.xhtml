@@ -6,11 +6,11 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition>
 	<h:form id="contactForm">
-		<p:panel id="contactPanel" style="width:600px" columns="1"
+		<p:panel id="contactPanel" style="width:700px" columns="1"
 			cellpadding="6">
 			<p:dataTable id="contactDataTable" var="contact"
 				value="#{jJContactBean.contacts}" paginator="true" rows="15"
-				style="width:550px" rowKey="#{contact.id}">
+				rowKey="#{contact.id}">
 				<f:facet name="header">#{messages.admin_contact_table_title}</f:facet>
 				<p:column>
 					<f:facet name="header">

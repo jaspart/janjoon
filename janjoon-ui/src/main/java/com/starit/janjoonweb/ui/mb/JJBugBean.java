@@ -16,6 +16,7 @@ import javax.faces.model.SelectItem;
 import javax.faces.validator.LengthValidator;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.hssf.record.chart.DatRecord;
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
@@ -24,7 +25,6 @@ import org.primefaces.context.RequestContext;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
-import com.starit.janjoonweb.domain.JJAbstractEntity;
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
@@ -33,6 +33,7 @@ import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJImportance;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
+import com.starit.janjoonweb.domain.JJSoftware;
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJTeststep;
@@ -197,24 +198,23 @@ public class JJBugBean {
 
 	public void initJJBugTable() {
 
-		List<JJAbstractEntity> criticities = new ArrayList<JJAbstractEntity>();
-		List<JJAbstractEntity> status = new ArrayList<JJAbstractEntity>();
-		List<JJAbstractEntity> importances = new ArrayList<JJAbstractEntity>();
+		List<JJCriticity> criticities = new ArrayList<JJCriticity>();
+		List<JJStatus> status = new ArrayList<JJStatus>();
+		List<JJImportance> importances = new ArrayList<JJImportance>();
 		bugList = jJBugService.getBugs(project);
 		filteredJJBug = bugList;
 
 		for (JJBug b : bugList) {
 			if (b.getCriticity() != null
-					&& !listContaines(criticities, b.getCriticity().getId()))
+					&& !listContaines(criticities, b.getCriticity()))
 				criticities.add(b.getCriticity());
 
-			if (b.getStatus() != null
-					&& !listContaines(status, b.getStatus().getId()))
+			if (b.getStatus() != null && !listContaines(status, b.getStatus()))
 				status.add(b.getStatus());
 
 			if (b.getImportance() != null
-					&& !listContaines(importances, b.getImportance().getId()))
-				status.add(b.getImportance());
+					&& !listContaines(importances, b.getImportance()))
+				importances.add(b.getImportance());
 
 		}
 		criticityOptions = createFilterOptions(criticities);
@@ -223,28 +223,76 @@ public class JJBugBean {
 
 	}
 
-	private SelectItem[] createFilterOptions(List<JJAbstractEntity> data) {
+	private SelectItem[] createFilterOptions(Object objet) {
+
+		List<Object> data = (List<Object>) objet;
+
 		SelectItem[] options = new SelectItem[data.size() + 1];
 
 		options[0] = new SelectItem("", "Select");
 		for (int i = 0; i < data.size(); i++) {
-			options[i + 1] = new SelectItem(data.get(i).getName(), data.get(i)
-					.getName());
+
+			if (data.get(i) instanceof JJCriticity) {
+				JJCriticity criticity = (JJCriticity) data.get(i);
+				options[i + 1] = new SelectItem(criticity.getName(),
+						criticity.getName());
+			} else if (data.get(i) instanceof JJStatus) {
+				JJStatus status = (JJStatus) data.get(i);
+				options[i + 1] = new SelectItem(status.getName(),
+						status.getName());
+
+			} else if (data.get(i) instanceof JJImportance) {
+				JJImportance importance = (JJImportance) data.get(i);
+				options[i + 1] = new SelectItem(importance.getName(),
+						importance.getName());
+			}
+
 		}
 		return options;
+
 	}
 
-	public boolean listContaines(List<JJAbstractEntity> list, Long long1) {
-		int i = 0;
+	public boolean listContaines(Object objet, Object find) {
 
-		boolean contain = false;
+		if (find instanceof JJStatus) {
+			List<JJStatus> list = (List<JJStatus>) objet;
+			int i = 0;
+			JJStatus status = (JJStatus) find;
+			boolean contain = false;
 
-		while (i < list.size() && !contain) {
-			contain = (list.get(i).getId() == long1);
-			i++;
-		}
+			while (i < list.size() && !contain) {
+				contain = (list.get(i).equals(status));
+				i++;
+			}
 
-		return contain;
+			return contain;
+		} else if (find instanceof JJImportance) {
+			List<JJImportance> list = (List<JJImportance>) objet;
+			int i = 0;
+			JJImportance importance = (JJImportance) find;
+			boolean contain = false;
+
+			while (i < list.size() && !contain) {
+				contain = (list.get(i).equals(importance));
+				i++;
+			}
+
+			return contain;
+		} else if (find instanceof JJCriticity) {
+			List<JJCriticity> list = (List<JJCriticity>) objet;
+			int i = 0;
+			JJCriticity criticity = (JJCriticity) find;
+			boolean contain = false;
+
+			while (i < list.size() && !contain) {
+				contain = (list.get(i).equals(criticity));
+				i++;
+			}
+
+			return contain;
+		} else
+			return false;
+
 	}
 
 	public void createJJBug(JJTeststep jJTeststep) {
@@ -257,8 +305,7 @@ public class JJBugBean {
 		bug.setProject(project);
 		bug.setTeststep(jJTeststep);
 
-		jJBugService.saveJJBug(bug);
-		bug = jJBugService.findJJBug(bug.getId());
+		jJBugService.saveJJBug(bug);		
 		reset();
 
 	}
@@ -279,11 +326,14 @@ public class JJBugBean {
 		setCreateDialogVisible(false);
 	}
 
+
 	public void saveBug() {
 		System.out.println("in save");
+
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
+
 		JJTeststepexecutionBean jJTeststepexecutionBean = (JJTeststepexecutionBean) session
 				.getAttribute("jJTeststepexecutionBean");
 		System.out.println("jkpoj");
@@ -292,6 +342,7 @@ public class JJBugBean {
 		} else {
 			System.out.println("not null");
 		}
+
 
 		if (JJBug_.getId() == null) {
 			System.out.println("popopo");
@@ -309,9 +360,11 @@ public class JJBugBean {
 			JJBug_.setTeststep(teststep);
 			teststep.getBugs().add(JJBug_);
 
+
 			System.out.println("gugug");
 
 			jJBugService.saveJJBug(JJBug_);
+
 
 			System.out.println("sdfsdfsdfsdfmmm");
 
@@ -323,7 +376,7 @@ public class JJBugBean {
 			JJBug_.setUpdatedBy(contact);
 			jJBugService.updateJJBug(JJBug_);
 		}
-		
+
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("bugTestDialogWidget.hide()");
 

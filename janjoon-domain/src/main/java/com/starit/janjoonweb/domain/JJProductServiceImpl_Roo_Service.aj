@@ -40,12 +40,4 @@ privileged aspect JJProductServiceImpl_Roo_Service {
         return jJProductRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJProductServiceImpl.saveJJProduct(JJProduct JJProduct_) {
-        jJProductRepository.save(JJProduct_);
-    }
-    
-    public JJProduct JJProductServiceImpl.updateJJProduct(JJProduct JJProduct_) {
-        return jJProductRepository.save(JJProduct_);
-    }
-    
 }

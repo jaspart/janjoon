@@ -5,9 +5,66 @@ package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
+import java.util.Date;
 import java.util.Set;
 
 privileged aspect JJCompany_Roo_JavaBean {
+    
+    public String JJCompany.getName() {
+        return this.name;
+    }
+    
+    public void JJCompany.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJCompany.getDescription() {
+        return this.description;
+    }
+    
+    public void JJCompany.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJCompany.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJCompany.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJCompany.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJCompany.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJCompany.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJCompany.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJCompany.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJCompany.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJCompany.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJCompany.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
     
     public String JJCompany.getLogo() {
         return this.logo;

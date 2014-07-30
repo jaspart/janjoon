@@ -40,12 +40,4 @@ privileged aspect JJPhaseServiceImpl_Roo_Service {
         return jJPhaseRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJPhaseServiceImpl.saveJJPhase(JJPhase JJPhase_) {
-        jJPhaseRepository.save(JJPhase_);
-    }
-    
-    public JJPhase JJPhaseServiceImpl.updateJJPhase(JJPhase JJPhase_) {
-        return jJPhaseRepository.save(JJPhase_);
-    }
-    
 }

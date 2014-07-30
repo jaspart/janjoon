@@ -319,8 +319,7 @@ public class JJSprintBean {
 				new HashSet<JJContact>(sprintUtil.getContacts()));
 
 		jJSprintService.updateJJSprint(sprintUtil.getSprint());
-		sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil
-				.getSprint().getId()));
+		sprintUtil.setSprint(sprintUtil.getSprint());
 		sprintUtil = new SprintUtil(sprintUtil.getSprint(),
 				jJTaskService.getSprintTasks(sprintUtil.getSprint()));
 		sprintList.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
@@ -331,6 +330,19 @@ public class JJSprintBean {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
+	
+	public void onTabSprintChange(TabChangeEvent event) {
+		
+		SprintUtil su=(SprintUtil) event.getData();		
+		if(!su.isRender())
+		{
+			JJSprint s=jJSprintService.findJJSprint(su.getSprint().getId());
+			sprintList.set(contains(su.getSprint().getId()),new SprintUtil(s,jJTaskService.getSprintTasks(s)));
+			
+		}
+		
+	}
+
 
 	public void createSprint() {
 
@@ -605,7 +617,12 @@ public class JJSprintBean {
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted", "JJTask");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);	
+
+		context.execute("SprintTab.select("
+				+ contains(sprintUtil.getSprint().getId()) + ")");
+
+		context.execute("deleteDialogWidget.hide()");
 	}
 
 	public int contains(Long id) {
@@ -633,6 +650,7 @@ public class JJSprintBean {
 	}
 
 	public List<JJBug> completeBug(String query) {
+		
 		List<JJBug> suggestions = new ArrayList<JJBug>();
 		for (JJBug jJBug : jJBugService
 				.getBugs(project, null, null, true, true)) {

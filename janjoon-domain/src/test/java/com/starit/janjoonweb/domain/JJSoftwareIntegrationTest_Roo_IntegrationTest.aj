@@ -99,7 +99,7 @@ privileged aspect JJSoftwareIntegrationTest_Roo_IntegrationTest {
         obj = jJSoftwareService.findJJSoftware(id);
         boolean modified =  dod.modifyJJSoftware(obj);
         Integer currentVersion = obj.getVersion();
-        JJSoftware merged = (JJSoftware)jJSoftwareService.updateJJSoftware(obj);
+        JJSoftware merged = jJSoftwareService.updateJJSoftware(obj);
         jJSoftwareRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'JJSoftware' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

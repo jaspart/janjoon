@@ -47,7 +47,6 @@ public class JJTaskBean {
 	JJChapterService jJChapterService;
 
 	TaskData selectedTaskData;
-	
 
 	public void setJjChapterService(JJChapterService jJChapterService) {
 		this.jJChapterService = jJChapterService;
@@ -154,18 +153,19 @@ public class JJTaskBean {
 	}
 
 	public void setTask(JJTask task) {
-		
+
 		taskTreeNode = null;
 		selectedReq = null;
 		selectedTree = null;
-		
+		System.out.println(taskTreeNode == null);
+
 		this.task = task;
 	}
 
 	public TimelineModel getModel() {
 		return model;
 	}
-	
+
 	public Date getStart() {
 		return start;
 	}
@@ -416,7 +416,7 @@ public class JJTaskBean {
 			TreeMap<String, JJTask> Tasks = new TreeMap<String, JJTask>();
 
 			for (JJTask task : tasks) {
-				//Tasks.put(task.getName(), task);
+				// Tasks.put(task.getName(), task);
 				Tasks.put(" ", task);
 			}
 
@@ -428,7 +428,7 @@ public class JJTaskBean {
 				char c = (char) k;
 
 				String group = "<span style=display:none>" + c + "</span>";
-						//+ task.getName();
+				// + task.getName();
 
 				if (task.getStartDateReal() != null) {
 					TimelineEvent event = new TimelineEvent(task,
@@ -510,13 +510,13 @@ public class JJTaskBean {
 					end = date;
 				}
 				JJTask task = new JJTask();
-				//task.setName(chapter.getName());
+				// task.setName(chapter.getName());
 				task.setName(" ");
 
 				char c = (char) k;
 
 				String group = "<span style=display:none>" + c + "</span>";
-						//+ task.getName();
+				// + task.getName();
 				TimelineEvent event = new TimelineEvent(task, start, end, true,
 						group, "chapter");
 				k++;
@@ -848,8 +848,11 @@ public class JJTaskBean {
 			JJSprintBean jJSprintBean = (JJSprintBean) session
 					.getAttribute("jJSprintBean");
 			jJSprintBean.attrListener(e);
-			System.out.println("JJTASk"+((SprintUtil) e.getComponent().getAttributes().get("sprintUtilValue")).getSprint().getName());
-			System.out.println("JJTASk"+jJSprintBean.getSprintUtil().getSprint().getName());
+			System.out.println("JJTASk"
+					+ ((SprintUtil) e.getComponent().getAttributes()
+							.get("sprintUtilValue")).getSprint().getName());
+			System.out.println("JJTASk"
+					+ jJSprintBean.getSprintUtil().getSprint().getName());
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("taskImportDialogWidget.show()");
 		}
@@ -952,6 +955,8 @@ public class JJTaskBean {
 			if (format.getCopyObjet()) {
 
 				String name = null;
+				if (mode == null)
+					mode = "planning";
 
 				JJTask task = new JJTask();
 				task.setEnabled(true);
@@ -984,6 +989,9 @@ public class JJTaskBean {
 					name = requirement.getName() + "("
 							+ task.getCreationDate().getTime() + ")";
 
+					requirement = jJRequirementService
+							.findJJRequirement(requirement.getId());
+
 					requirement.getTasks().add(task);
 
 					task.setRequirement(requirement);
@@ -995,6 +1003,7 @@ public class JJTaskBean {
 					name = bug.getName() + "("
 							+ task.getCreationDate().getTime() + ")";
 
+					bug = jJBugService.findJJBug(bug.getId());
 					bug.getTasks().add(task);
 
 					task.setBug(bug);
@@ -1005,6 +1014,9 @@ public class JJTaskBean {
 
 					name = testcase.getName() + "("
 							+ task.getCreationDate().getTime() + ")";
+
+					testcase = jJTestcaseService.findJJTestcase(testcase
+							.getId());
 
 					testcase.getTasks().add(task);
 
@@ -1021,18 +1033,23 @@ public class JJTaskBean {
 							.getSession(false);
 					JJSprintBean jJSprintBean = (JJSprintBean) session
 							.getAttribute("jJSprintBean");
-					JJContact contact = (JJContact) session.getAttribute("JJContact");
-					JJStatus status = jJStatusService.getOneStatus("TODO", "JJTask", true);
+					JJContact contact = (JJContact) session
+							.getAttribute("JJContact");
+					JJStatus status = jJStatusService.getOneStatus("TODO",
+							"JJTask", true);
 					if (status != null)
 						task.setStatus(status);
-					
-					System.out.println(jJSprintBean.getSprintUtil().getSprint().getName());
+
+					System.out.println(jJSprintBean.getSprintUtil().getSprint()
+							.getName());
 					task.setEnabled(true);
 					task.setSprint(jJSprintBean.getSprintUtil().getSprint());
-					task.setEndDatePlanned(jJSprintBean.getSprintUtil().getSprint().getEndDate());
+					task.setEndDatePlanned(jJSprintBean.getSprintUtil()
+							.getSprint().getEndDate());
 					task.setCreatedBy(contact);
 					task.setCreationDate(new Date());
-					System.out.println("reateTask(HttpSession session) finiched");			
+					System.out
+							.println("reateTask(HttpSession session) finiched");
 				}
 
 				jJTaskService.saveJJTask(task);
@@ -1055,38 +1072,36 @@ public class JJTaskBean {
 					.getSession(false);
 			JJSprintBean jJSprintBean = (JJSprintBean) session
 					.getAttribute("jJSprintBean");
-			System.out.println("reloadSprintUtil started");			
+			System.out.println("reloadSprintUtil started");
 
 			if (!jJSprintBean.getSprintUtil().isRender()) {
-			
-				jJSprintBean.setSprintUtil(new SprintUtil(
-						jJSprintService
-								.findJJSprint(jJSprintBean.getSprintUtil().getSprint().getId()),
-						jJTaskService.getSprintTasks(jJSprintService
-								.findJJSprint(jJSprintBean.getSprintUtil().getSprint().getId()))));
-				System.out.println(jJTaskService.getSprintTasks(
-						jJSprintService
-								.findJJSprint(jJSprintBean.getSprintUtil().getSprint().getId()))
-						.size());
 
-				jJSprintBean.getSprintList()
-						.set(jJSprintBean.contains(jJSprintBean.getSprintUtil().getSprint().getId()), jJSprintBean.getSprintUtil());
-				System.out.println(jJSprintBean.contains(jJSprintBean.getSprintUtil().getSprint().getId()));
+				JJSprint sprint = jJSprintService.findJJSprint(jJSprintBean
+						.getSprintUtil().getSprint().getId());
+				SprintUtil sprintUtil = new SprintUtil(sprint,
+						new ArrayList<JJTask>(sprint.getTasks()));
+				jJSprintBean.setSprintUtil(sprintUtil);
+				jJSprintBean.getSprintList().set(
+						jJSprintBean.contains(sprint.getId()), sprintUtil);
+				System.out.println(jJSprintBean.contains(jJSprintBean
+						.getSprintUtil().getSprint().getId()));
 
-			}			
-			
+			}
+
 			project = null;
 			tasksData = null;
 			closeDialogImport();
 			String message = "message_successfully_created";
-			
+
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
 					"JJTask");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			RequestContext context = RequestContext.getCurrentInstance();
-			
-			context.execute("SprintTab.select("+jJSprintBean.contains(jJSprintBean.getSprintUtil().getSprint().getId())+")");
-			
+
+			context.execute("SprintTab.select("
+					+ jJSprintBean.contains(jJSprintBean.getSprintUtil()
+							.getSprint().getId()) + ")");
+
 			context.execute("taskImportDialogWidget.hide()");
 
 		}
@@ -1427,6 +1442,10 @@ public class JJTaskBean {
 	private JJRequirement selectedReq;
 
 	public TreeNode getSelectedTree() {
+		
+		if(selectedTree== null)
+			selectedTree=taskTreeNode;
+		
 		return selectedTree;
 	}
 
@@ -1477,6 +1496,8 @@ public class JJTaskBean {
 	}
 
 	public void setSelectedReq(JJRequirement selectedReq) {
+		if (selectedReq == null)
+			selectedReq = (JJRequirement) selectedTree.getData();
 		this.selectedReq = selectedReq;
 	}
 
@@ -1496,6 +1517,7 @@ public class JJTaskBean {
 
 					reqTreeNode(tree, requirement);
 					selectedTree = taskTreeNode;
+
 					selectedReq = task.getRequirement();
 				}
 
@@ -1519,7 +1541,6 @@ public class JJTaskBean {
 	}
 
 	public void gettingTaskValue(ActionEvent ev) {
-		
 
 		task = (JJTask) ev.getComponent().getAttributes().get("taskValue");
 		System.out.println(task.getName());
@@ -1532,9 +1553,12 @@ public class JJTaskBean {
 
 	private void reqTreeNode(TreeNode tree, JJRequirement req) {
 
+		System.out.println("reqTreeNode" + req.getName());
+
 		for (JJRequirement r : req.getRequirementLinkDown()) {
 
 			DefaultTreeNode s = new DefaultTreeNode(r, tree);
+			System.out.println(r.getName() + ":" + req.getName());
 			if (r.getRequirementLinkDown() != null)
 				reqTreeNode(s, r);
 		}
@@ -1551,10 +1575,6 @@ public class JJTaskBean {
 
 		HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application
 				.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
-
-		setJJTask_((JJTask) expressionFactory.createValueExpression(elContext,
-				"#{jJDevelopment.task}", JJTask.class).getValue(elContext));
-		taskTreeNode = null;
 
 		HtmlOutputText nameLabel = (HtmlOutputText) application
 				.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1754,25 +1774,6 @@ public class JJTaskBean {
 						"#{jJTaskBean.JJTask_.bug.name}", String.class));
 		// bugValue.setConverter(new JJBugConverter());
 		htmlPanelGrid.getChildren().add(bugValue);
-
-		if (getJJTask_() != null) {
-			if (getJJTask_().getRequirement() != null) {
-
-				taskTreeNode = new DefaultTreeNode("Requirement", null);
-				JJRequirement requirement = (JJRequirement) expressionFactory
-						.createValueExpression(elContext,
-								"#{jJTaskBean.JJTask_.requirement}",
-								JJRequirement.class).getValue(elContext);
-				DefaultTreeNode tree = new DefaultTreeNode(
-						requirement.getName(), taskTreeNode);
-				reqTreeNode(tree, requirement);
-				expressionFactory.createValueExpression(elContext,
-						"#{jJTaskBean.taskTreeNode}", TreeNode.class).setValue(
-						elContext, taskTreeNode);
-
-			}
-
-		}
 
 		HtmlOutputText testcaseLabel = (HtmlOutputText) application
 				.createComponent(HtmlOutputText.COMPONENT_TYPE);

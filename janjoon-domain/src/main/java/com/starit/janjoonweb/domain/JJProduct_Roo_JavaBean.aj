@@ -7,9 +7,66 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJVersion;
+import java.util.Date;
 import java.util.Set;
 
 privileged aspect JJProduct_Roo_JavaBean {
+    
+    public String JJProduct.getName() {
+        return this.name;
+    }
+    
+    public void JJProduct.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJProduct.getDescription() {
+        return this.description;
+    }
+    
+    public void JJProduct.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJProduct.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJProduct.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJProduct.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJProduct.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJProduct.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJProduct.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJProduct.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJProduct.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJProduct.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJProduct.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
     
     public String JJProduct.getExtname() {
         return this.extname;

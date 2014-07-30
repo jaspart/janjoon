@@ -40,12 +40,4 @@ privileged aspect JJImputationServiceImpl_Roo_Service {
         return jJImputationRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJImputationServiceImpl.saveJJImputation(JJImputation JJImputation_) {
-        jJImputationRepository.save(JJImputation_);
-    }
-    
-    public JJImputation JJImputationServiceImpl.updateJJImputation(JJImputation JJImputation_) {
-        return jJImputationRepository.save(JJImputation_);
-    }
-    
 }

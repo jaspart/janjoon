@@ -24,11 +24,7 @@ import org.primefaces.event.ToggleEvent;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
-import com.starit.janjoonweb.domain.JJAbstractEntity;
-import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJCriticity;
-import com.starit.janjoonweb.domain.JJMessage;
-import com.starit.janjoonweb.domain.JJStatus;
+import com.starit.janjoonweb.domain.*;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
@@ -196,15 +192,41 @@ public class JJMessageBean {
 		return statusOptions;
 	}
 
-	private SelectItem[] createFilterOptions(List<JJAbstractEntity> data) {
+	private SelectItem[] createFilterOptions(Object objet) {
+
+		List<Object> data = (List<Object>) objet;
+
 		SelectItem[] options = new SelectItem[data.size() + 1];
 
 		options[0] = new SelectItem("", "Select");
 		for (int i = 0; i < data.size(); i++) {
-			options[i + 1] = new SelectItem(data.get(i).getName(), data.get(i)
-					.getName());
+
+			if (data.get(i) instanceof JJCriticity) {
+				JJCriticity criticity = (JJCriticity) data.get(i);
+				options[i + 1] = new SelectItem(criticity.getName(),
+						criticity.getName());
+			} else if (data.get(i) instanceof JJStatus) {
+				JJStatus status = (JJStatus) data.get(i);
+				options[i + 1] = new SelectItem(status.getName(),
+						status.getName());
+
+			} else if (data.get(i) instanceof JJContact) {
+				JJContact contact = (JJContact) data.get(i);
+				options[i + 1] = new SelectItem(contact.getName(),
+						contact.getName());
+			} else if (data.get(i) instanceof JJProduct) {
+				JJProduct product = (JJProduct) data.get(i);
+				options[i + 1] = new SelectItem(product.getName(),
+						product.getName());
+			} else if (data.get(i) instanceof JJProject) {
+				JJProject project = (JJProject) data.get(i);
+				options[i + 1] = new SelectItem(project.getName(),
+						project.getName());
+			}
+
 		}
 		return options;
+
 	}
 
 	public void handleMesToggle(ToggleEvent event) {
@@ -261,11 +283,11 @@ public class JJMessageBean {
 		LoginBean login = (LoginBean) session.getAttribute("loginBean");
 
 		if (!loadFiltredJJmessage && login.isEnable()) {
-			List<JJAbstractEntity> criticities = new ArrayList<JJAbstractEntity>();
-			List<JJAbstractEntity> status = new ArrayList<JJAbstractEntity>();
-			List<JJAbstractEntity> productes = new ArrayList<JJAbstractEntity>();
-			List<JJAbstractEntity> projectes = new ArrayList<JJAbstractEntity>();
-			List<JJAbstractEntity> contactes = new ArrayList<JJAbstractEntity>();
+			List<JJCriticity> criticities = new ArrayList<JJCriticity>();
+			List<JJStatus> status = new ArrayList<JJStatus>();
+			List<JJProduct> productes = new ArrayList<JJProduct>();
+			List<JJProject> projectes = new ArrayList<JJProject>();
+			List<JJContact> contactes = new ArrayList<JJContact>();
 			// enabledJJMessage = jJMessageService.getMessages(true);
 
 			JJProductBean jJProductBean = (JJProductBean) session
@@ -282,20 +304,19 @@ public class JJMessageBean {
 
 			for (JJMessage mes : mainMessages) {
 				if (mes.getCreatedBy() != null
-						&& !listContaines(contactes, mes.getCreatedBy().getId()))
+						&& !listContaines(contactes, mes.getCreatedBy()))
 					contactes.add(mes.getCreatedBy());
 				if (mes.getProduct() != null
-						&& !listContaines(productes, mes.getProduct().getId()))
+						&& !listContaines(productes, mes.getProduct()))
 					productes.add(mes.getProduct());
 				if (mes.getProject() != null
-						&& !listContaines(projectes, mes.getProject().getId()))
+						&& !listContaines(projectes, mes.getProject()))
 					projectes.add(mes.getProject());
 				if (mes.getCriticity() != null
-						&& !listContaines(criticities, mes.getCriticity()
-								.getId()))
+						&& !listContaines(criticities, mes.getCriticity()))
 					criticities.add(mes.getCriticity());
 				if (mes.getStatus() != null
-						&& !listContaines(status, mes.getStatus().getId()))
+						&& !listContaines(status, mes.getStatus()))
 					status.add(mes.getStatus());
 
 			}
@@ -318,17 +339,73 @@ public class JJMessageBean {
 
 	}
 
-	public boolean listContaines(Object list, Long long1) {
-		int i = 0;
-		@SuppressWarnings("unchecked")
-		List<JJAbstractEntity> list2 = (List<JJAbstractEntity>) list;
-		boolean contain = false;
-		while (i < list2.size() && !contain) {
-			contain = (list2.get(i).getId() == long1);
-			i++;
-		}
+	public boolean listContaines(Object objet, Object find) {
 
-		return contain;
+		if (find instanceof JJStatus) {
+			List<JJStatus> list = (List<JJStatus>) objet;
+			int i = 0;
+			JJStatus status = (JJStatus) find;
+			boolean contain = false;
+
+			while (i < list.size() && !contain) {
+				contain = (list.get(i).equals(status));
+				i++;
+			}
+
+			return contain;
+		} else if (find instanceof JJContact) {
+
+			List<JJContact> list = (List<JJContact>) objet;
+			int i = 0;
+			JJContact contact = (JJContact) find;
+			boolean contain = false;
+
+			while (i < list.size() && !contain) {
+				contain = (list.get(i).equals(contact));
+				i++;
+			}
+
+			return contain;
+		} else if (find instanceof JJCriticity) {
+			List<JJCriticity> list = (List<JJCriticity>) objet;
+			int i = 0;
+			JJCriticity criticity = (JJCriticity) find;
+			boolean contain = false;
+
+			while (i < list.size() && !contain) {
+				contain = (list.get(i).equals(criticity));
+				i++;
+			}
+
+			return contain;
+		} else if (find instanceof JJProduct) {
+			List<JJProduct> list = (List<JJProduct>) objet;
+			int i = 0;
+			JJProduct product = (JJProduct) find;
+			boolean contain = false;
+
+			while (i < list.size() && !contain) {
+				contain = (list.get(i).equals(product));
+				i++;
+			}
+
+			return contain;
+		} else if (find instanceof JJProject) {
+
+			List<JJProject> list = (List<JJProject>) objet;
+			int i = 0;
+			JJProject project = (JJProject) find;
+			boolean contain = false;
+
+			while (i < list.size() && !contain) {
+				contain = (list.get(i).equals(project));
+				i++;
+			}
+
+			return contain;
+		} else
+			return false;
+
 	}
 
 	public void save(JJMessage mes) {

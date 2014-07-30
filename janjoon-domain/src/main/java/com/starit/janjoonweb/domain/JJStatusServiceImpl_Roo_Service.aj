@@ -40,12 +40,4 @@ privileged aspect JJStatusServiceImpl_Roo_Service {
         return jJStatusRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJStatusServiceImpl.saveJJStatus(JJStatus JJStatus_) {
-        jJStatusRepository.save(JJStatus_);
-    }
-    
-    public JJStatus JJStatusServiceImpl.updateJJStatus(JJStatus JJStatus_) {
-        return jJStatusRepository.save(JJStatus_);
-    }
-    
 }

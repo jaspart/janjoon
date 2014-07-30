@@ -5,12 +5,70 @@ package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
+import java.util.Date;
 import java.util.Set;
 
 privileged aspect JJChapter_Roo_JavaBean {
+    
+    public String JJChapter.getName() {
+        return this.name;
+    }
+    
+    public void JJChapter.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJChapter.getDescription() {
+        return this.description;
+    }
+    
+    public void JJChapter.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJChapter.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJChapter.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJChapter.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJChapter.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJChapter.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJChapter.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJChapter.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJChapter.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJChapter.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJChapter.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
     
     public Integer JJChapter.getOrdering() {
         return this.ordering;

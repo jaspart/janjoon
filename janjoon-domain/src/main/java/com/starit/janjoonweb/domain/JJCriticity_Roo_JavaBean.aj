@@ -3,11 +3,69 @@
 
 package com.starit.janjoonweb.domain;
 
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJMessage;
+import java.util.Date;
 import java.util.Set;
 
 privileged aspect JJCriticity_Roo_JavaBean {
+    
+    public String JJCriticity.getName() {
+        return this.name;
+    }
+    
+    public void JJCriticity.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJCriticity.getDescription() {
+        return this.description;
+    }
+    
+    public void JJCriticity.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJCriticity.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJCriticity.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJCriticity.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJCriticity.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJCriticity.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJCriticity.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJCriticity.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJCriticity.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJCriticity.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJCriticity.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
     
     public String JJCriticity.getObjet() {
         return this.objet;

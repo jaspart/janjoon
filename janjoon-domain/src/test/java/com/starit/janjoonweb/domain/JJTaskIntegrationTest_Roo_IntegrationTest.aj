@@ -99,7 +99,7 @@ privileged aspect JJTaskIntegrationTest_Roo_IntegrationTest {
         obj = jJTaskService.findJJTask(id);
         boolean modified =  dod.modifyJJTask(obj);
         Integer currentVersion = obj.getVersion();
-        JJTask merged = (JJTask)jJTaskService.updateJJTask(obj);
+        JJTask merged = jJTaskService.updateJJTask(obj);
         jJTaskRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'JJTask' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

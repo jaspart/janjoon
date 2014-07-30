@@ -99,7 +99,7 @@ privileged aspect JJCategoryIntegrationTest_Roo_IntegrationTest {
         obj = jJCategoryService.findJJCategory(id);
         boolean modified =  dod.modifyJJCategory(obj);
         Integer currentVersion = obj.getVersion();
-        JJCategory merged = (JJCategory)jJCategoryService.updateJJCategory(obj);
+        JJCategory merged = jJCategoryService.updateJJCategory(obj);
         jJCategoryRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'JJCategory' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

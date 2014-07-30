@@ -6,8 +6,65 @@ package com.starit.janjoonweb.domain;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJWorflow;
+import java.util.Date;
 
 privileged aspect JJWorflow_Roo_JavaBean {
+    
+    public String JJWorflow.getName() {
+        return this.name;
+    }
+    
+    public void JJWorflow.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJWorflow.getDescription() {
+        return this.description;
+    }
+    
+    public void JJWorflow.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJWorflow.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJWorflow.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJWorflow.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJWorflow.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJWorflow.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJWorflow.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJWorflow.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJWorflow.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJWorflow.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJWorflow.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
     
     public JJStatus JJWorflow.getSource() {
         return this.source;

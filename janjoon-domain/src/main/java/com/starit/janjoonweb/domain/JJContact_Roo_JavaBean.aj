@@ -17,6 +17,62 @@ import java.util.Set;
 
 privileged aspect JJContact_Roo_JavaBean {
     
+    public String JJContact.getName() {
+        return this.name;
+    }
+    
+    public void JJContact.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJContact.getDescription() {
+        return this.description;
+    }
+    
+    public void JJContact.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJContact.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJContact.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJContact.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJContact.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJContact.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJContact.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJContact.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJContact.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJContact.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJContact.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+    
     public String JJContact.getPassword() {
         return this.password;
     }

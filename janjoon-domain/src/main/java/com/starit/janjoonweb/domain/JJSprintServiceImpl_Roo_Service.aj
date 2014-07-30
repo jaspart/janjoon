@@ -40,12 +40,4 @@ privileged aspect JJSprintServiceImpl_Roo_Service {
         return jJSprintRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJSprintServiceImpl.saveJJSprint(JJSprint JJSprint_) {
-        jJSprintRepository.save(JJSprint_);
-    }
-    
-    public JJSprint JJSprintServiceImpl.updateJJSprint(JJSprint JJSprint_) {
-        return jJSprintRepository.save(JJSprint_);
-    }
-    
 }

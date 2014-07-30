@@ -25,7 +25,32 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJContactSEQ")
-public class JJContact extends JJAbstractEntity {
+public class JJContact  {
+	
+	@NotNull
+	@Size(max = 100)
+	private String name;
+
+	@NotNull
+	@Lob
+	private String description;
+
+	@NotNull
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "M-")
+	private Date creationDate;
+
+	@ManyToOne
+	private JJContact createdBy;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "M-")
+	private Date updatedDate;
+
+	@ManyToOne
+	private JJContact updatedBy;
+
+	private Boolean enabled;
 
 	@NotNull
 	@Size(max = 100)
@@ -85,13 +110,13 @@ public class JJContact extends JJAbstractEntity {
 	@Lob
 	private String preference;
 
-	@ManyToMany(mappedBy = "contacts", fetch = FetchType.EAGER)
+	@ManyToMany(mappedBy = "contacts", fetch = FetchType.LAZY)
 	private Set<JJSprint> sprints = new HashSet<JJSprint>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "contact")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "contact")
 	private Set<JJPermission> permissions = new HashSet<JJPermission>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "contact")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "contact")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
 
 	@Override

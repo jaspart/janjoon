@@ -40,12 +40,4 @@ privileged aspect JJImportanceServiceImpl_Roo_Service {
         return jJImportanceRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJImportanceServiceImpl.saveJJImportance(JJImportance JJImportance_) {
-        jJImportanceRepository.save(JJImportance_);
-    }
-    
-    public JJImportance JJImportanceServiceImpl.updateJJImportance(JJImportance JJImportance_) {
-        return jJImportanceRepository.save(JJImportance_);
-    }
-    
 }

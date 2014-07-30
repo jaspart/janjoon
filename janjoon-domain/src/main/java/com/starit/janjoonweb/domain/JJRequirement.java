@@ -27,8 +27,32 @@ import com.starit.janjoonweb.domain.reference.JJRelationship;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJRequirementSEQ")
-public class JJRequirement extends JJAbstractEntity {
+public class JJRequirement {
+	
+	@NotNull
+	@Size(max = 100)
+	private String name;
 
+	@NotNull
+	@Lob
+	private String description;
+
+	@NotNull
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "M-")
+	private Date creationDate;
+
+	@ManyToOne
+	private JJContact createdBy;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "M-")
+	private Date updatedDate;
+
+	@ManyToOne
+	private JJContact updatedBy;
+
+	private Boolean enabled;
 	private Integer ordering;
 
 	private Integer numero;
@@ -90,20 +114,20 @@ public class JJRequirement extends JJAbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
 	private Set<JJBug> bugs = new HashSet<JJBug>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "requirement")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
 	private Set<JJTask> tasks = new HashSet<JJTask>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
 
-	@ManyToMany(mappedBy = "requirementLinkUp", fetch = FetchType.EAGER)
+	@ManyToMany(mappedBy = "requirementLinkUp", fetch = FetchType.LAZY)
 	private Set<JJRequirement> requirementLinkDown = new HashSet<JJRequirement>();
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "JJRequirementLink", joinColumns = { @javax.persistence.JoinColumn(name = "ReqLinkDOWN_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "ReqLinkUP_ID", referencedColumnName = "id") })
 	private Set<JJRequirement> requirementLinkUp = new HashSet<JJRequirement>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "requirement")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
 	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
 
 	@Override

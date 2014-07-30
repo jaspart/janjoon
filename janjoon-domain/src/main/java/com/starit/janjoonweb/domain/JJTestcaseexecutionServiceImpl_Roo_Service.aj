@@ -40,12 +40,4 @@ privileged aspect JJTestcaseexecutionServiceImpl_Roo_Service {
         return jJTestcaseexecutionRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJTestcaseexecutionServiceImpl.saveJJTestcaseexecution(JJTestcaseexecution JJTestcaseexecution_) {
-        jJTestcaseexecutionRepository.save(JJTestcaseexecution_);
-    }
-    
-    public JJTestcaseexecution JJTestcaseexecutionServiceImpl.updateJJTestcaseexecution(JJTestcaseexecution JJTestcaseexecution_) {
-        return jJTestcaseexecutionRepository.save(JJTestcaseexecution_);
-    }
-    
 }

@@ -40,12 +40,4 @@ privileged aspect JJPermissionServiceImpl_Roo_Service {
         return jJPermissionRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJPermissionServiceImpl.saveJJPermission(JJPermission JJPermission_) {
-        jJPermissionRepository.save(JJPermission_);
-    }
-    
-    public JJPermission JJPermissionServiceImpl.updateJJPermission(JJPermission JJPermission_) {
-        return jJPermissionRepository.save(JJPermission_);
-    }
-    
 }

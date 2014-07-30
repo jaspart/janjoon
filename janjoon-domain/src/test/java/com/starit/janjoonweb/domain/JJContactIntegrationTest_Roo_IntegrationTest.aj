@@ -99,7 +99,7 @@ privileged aspect JJContactIntegrationTest_Roo_IntegrationTest {
         obj = jJContactService.findJJContact(id);
         boolean modified =  dod.modifyJJContact(obj);
         Integer currentVersion = obj.getVersion();
-        JJContact merged = (JJContact)jJContactService.updateJJContact(obj);
+        JJContact merged = jJContactService.updateJJContact(obj);
         jJContactRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'JJContact' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

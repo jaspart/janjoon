@@ -3,11 +3,69 @@
 
 package com.starit.janjoonweb.domain;
 
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJImportance;
 import com.starit.janjoonweb.domain.JJMessage;
+import java.util.Date;
 import java.util.Set;
 
 privileged aspect JJImportance_Roo_JavaBean {
+    
+    public String JJImportance.getName() {
+        return this.name;
+    }
+    
+    public void JJImportance.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJImportance.getDescription() {
+        return this.description;
+    }
+    
+    public void JJImportance.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJImportance.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJImportance.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJImportance.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJImportance.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJImportance.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJImportance.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJImportance.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJImportance.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJImportance.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJImportance.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
     
     public String JJImportance.getObjet() {
         return this.objet;

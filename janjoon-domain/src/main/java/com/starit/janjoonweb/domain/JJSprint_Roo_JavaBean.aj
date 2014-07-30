@@ -14,6 +14,62 @@ import java.util.Set;
 
 privileged aspect JJSprint_Roo_JavaBean {
     
+    public String JJSprint.getName() {
+        return this.name;
+    }
+    
+    public void JJSprint.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJSprint.getDescription() {
+        return this.description;
+    }
+    
+    public void JJSprint.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJSprint.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJSprint.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJSprint.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJSprint.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJSprint.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJSprint.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJSprint.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJSprint.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJSprint.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJSprint.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+    
     public Integer JJSprint.getOrdering() {
         return this.ordering;
     }

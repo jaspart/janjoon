@@ -40,12 +40,4 @@ privileged aspect JJRightServiceImpl_Roo_Service {
         return jJRightRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJRightServiceImpl.saveJJRight(JJRight JJRight_) {
-        jJRightRepository.save(JJRight_);
-    }
-    
-    public JJRight JJRightServiceImpl.updateJJRight(JJRight JJRight_) {
-        return jJRightRepository.save(JJRight_);
-    }
-    
 }

@@ -578,8 +578,7 @@ public class DevelopmentBean implements Serializable {
 	public void startTask() {
 		task.setStartDateReal(new Date());
 		jJTaskService.saveJJTask(task);
-		tasks = jJTaskService.getTasksByProduct(product, project);
-		task = jJTaskService.findJJTask(task.getId());
+		tasks = jJTaskService.getTasksByProduct(product, project);	
 
 	}
 

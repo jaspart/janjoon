@@ -4,12 +4,70 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJBug;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTeststep;
+import java.util.Date;
 import java.util.Set;
 
 privileged aspect JJTeststep_Roo_JavaBean {
+    
+    public String JJTeststep.getName() {
+        return this.name;
+    }
+    
+    public void JJTeststep.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJTeststep.getDescription() {
+        return this.description;
+    }
+    
+    public void JJTeststep.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJTeststep.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJTeststep.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJTeststep.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJTeststep.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJTeststep.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJTeststep.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJTeststep.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJTeststep.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJTeststep.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJTeststep.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
     
     public Integer JJTeststep.getOrdering() {
         return this.ordering;

@@ -40,12 +40,4 @@ privileged aspect JJProfileServiceImpl_Roo_Service {
         return jJProfileRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJProfileServiceImpl.saveJJProfile(JJProfile JJProfile_) {
-        jJProfileRepository.save(JJProfile_);
-    }
-    
-    public JJProfile JJProfileServiceImpl.updateJJProfile(JJProfile JJProfile_) {
-        return jJProfileRepository.save(JJProfile_);
-    }
-    
 }

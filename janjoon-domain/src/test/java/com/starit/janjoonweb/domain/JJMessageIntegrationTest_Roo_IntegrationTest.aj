@@ -99,7 +99,7 @@ privileged aspect JJMessageIntegrationTest_Roo_IntegrationTest {
         obj = jJMessageService.findJJMessage(id);
         boolean modified =  dod.modifyJJMessage(obj);
         Integer currentVersion = obj.getVersion();
-        JJMessage merged = (JJMessage)jJMessageService.updateJJMessage(obj);
+        JJMessage merged = jJMessageService.updateJJMessage(obj);
         jJMessageRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'JJMessage' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

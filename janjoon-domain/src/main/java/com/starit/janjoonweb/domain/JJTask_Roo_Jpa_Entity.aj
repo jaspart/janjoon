@@ -4,10 +4,42 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJTask;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Version;
 
 privileged aspect JJTask_Roo_Jpa_Entity {
     
     declare @type: JJTask: @Entity;
+    
+    @Id
+    @SequenceGenerator(name = "jJTaskGen", sequenceName = "JJTaskSEQ")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "jJTaskGen")
+    @Column(name = "id")
+    private Long JJTask.id;
+    
+    @Version
+    @Column(name = "version")
+    private Integer JJTask.version;
+    
+    public Long JJTask.getId() {
+        return this.id;
+    }
+    
+    public void JJTask.setId(Long id) {
+        this.id = id;
+    }
+    
+    public Integer JJTask.getVersion() {
+        return this.version;
+    }
+    
+    public void JJTask.setVersion(Integer version) {
+        this.version = version;
+    }
     
 }

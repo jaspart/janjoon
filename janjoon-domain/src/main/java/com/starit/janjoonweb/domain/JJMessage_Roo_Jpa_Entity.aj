@@ -4,10 +4,42 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJMessage;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Version;
 
 privileged aspect JJMessage_Roo_Jpa_Entity {
     
     declare @type: JJMessage: @Entity;
+    
+    @Id
+    @SequenceGenerator(name = "jJMessageGen", sequenceName = "JJMessageSEQ")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "jJMessageGen")
+    @Column(name = "id")
+    private Long JJMessage.id;
+    
+    @Version
+    @Column(name = "version")
+    private Integer JJMessage.version;
+    
+    public Long JJMessage.getId() {
+        return this.id;
+    }
+    
+    public void JJMessage.setId(Long id) {
+        this.id = id;
+    }
+    
+    public Integer JJMessage.getVersion() {
+        return this.version;
+    }
+    
+    public void JJMessage.setVersion(Integer version) {
+        this.version = version;
+    }
     
 }

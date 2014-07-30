@@ -40,12 +40,4 @@ privileged aspect JJChapterServiceImpl_Roo_Service {
         return jJChapterRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJChapterServiceImpl.saveJJChapter(JJChapter JJChapter_) {
-        jJChapterRepository.save(JJChapter_);
-    }
-    
-    public JJChapter JJChapterServiceImpl.updateJJChapter(JJChapter JJChapter_) {
-        return jJChapterRepository.save(JJChapter_);
-    }
-    
 }

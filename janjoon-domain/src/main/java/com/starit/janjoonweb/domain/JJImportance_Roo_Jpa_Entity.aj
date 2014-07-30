@@ -4,10 +4,42 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJImportance;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Version;
 
 privileged aspect JJImportance_Roo_Jpa_Entity {
     
     declare @type: JJImportance: @Entity;
+    
+    @Id
+    @SequenceGenerator(name = "jJImportanceGen", sequenceName = "JJImportanceSEQ")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "jJImportanceGen")
+    @Column(name = "id")
+    private Long JJImportance.id;
+    
+    @Version
+    @Column(name = "version")
+    private Integer JJImportance.version;
+    
+    public Long JJImportance.getId() {
+        return this.id;
+    }
+    
+    public void JJImportance.setId(Long id) {
+        this.id = id;
+    }
+    
+    public Integer JJImportance.getVersion() {
+        return this.version;
+    }
+    
+    public void JJImportance.setVersion(Integer version) {
+        this.version = version;
+    }
     
 }

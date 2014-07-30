@@ -4,13 +4,71 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJVersion;
+import java.util.Date;
 import java.util.Set;
 
 privileged aspect JJBuild_Roo_JavaBean {
+    
+    public String JJBuild.getName() {
+        return this.name;
+    }
+    
+    public void JJBuild.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJBuild.getDescription() {
+        return this.description;
+    }
+    
+    public void JJBuild.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJBuild.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJBuild.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJBuild.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJBuild.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJBuild.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJBuild.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJBuild.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJBuild.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJBuild.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJBuild.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
     
     public JJVersion JJBuild.getVersioning() {
         return this.versioning;

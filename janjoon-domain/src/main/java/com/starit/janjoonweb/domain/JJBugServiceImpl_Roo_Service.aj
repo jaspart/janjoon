@@ -40,12 +40,4 @@ privileged aspect JJBugServiceImpl_Roo_Service {
         return jJBugRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJBugServiceImpl.saveJJBug(JJBug JJBug_) {
-        jJBugRepository.save(JJBug_);
-    }
-    
-    public JJBug JJBugServiceImpl.updateJJBug(JJBug JJBug_) {
-        return jJBugRepository.save(JJBug_);
-    }
-    
 }

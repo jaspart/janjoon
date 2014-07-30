@@ -40,12 +40,4 @@ privileged aspect JJCriticityServiceImpl_Roo_Service {
         return jJCriticityRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJCriticityServiceImpl.saveJJCriticity(JJCriticity JJCriticity_) {
-        jJCriticityRepository.save(JJCriticity_);
-    }
-    
-    public JJCriticity JJCriticityServiceImpl.updateJJCriticity(JJCriticity JJCriticity_) {
-        return jJCriticityRepository.save(JJCriticity_);
-    }
-    
 }

@@ -99,7 +99,7 @@ privileged aspect JJSprintIntegrationTest_Roo_IntegrationTest {
         obj = jJSprintService.findJJSprint(id);
         boolean modified =  dod.modifyJJSprint(obj);
         Integer currentVersion = obj.getVersion();
-        JJSprint merged = (JJSprint)jJSprintService.updateJJSprint(obj);
+        JJSprint merged = jJSprintService.updateJJSprint(obj);
         jJSprintRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'JJSprint' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

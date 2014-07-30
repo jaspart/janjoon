@@ -18,8 +18,65 @@ import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJVersion;
+import java.util.Date;
 
 privileged aspect JJMessage_Roo_JavaBean {
+    
+    public String JJMessage.getName() {
+        return this.name;
+    }
+    
+    public void JJMessage.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJMessage.getDescription() {
+        return this.description;
+    }
+    
+    public void JJMessage.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJMessage.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJMessage.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJMessage.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJMessage.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJMessage.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJMessage.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJMessage.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJMessage.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJMessage.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJMessage.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
     
     public String JJMessage.getMessage() {
         return this.message;

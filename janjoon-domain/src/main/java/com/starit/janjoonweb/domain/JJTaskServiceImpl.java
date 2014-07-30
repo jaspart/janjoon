@@ -271,5 +271,17 @@ public class JJTaskServiceImpl implements JJTaskService {
 	public void updateTasks(Set<JJTask> tasks) {
 		jJTaskRepository.save(tasks);
 	}
+	
+public void saveJJTask(JJTask JJTask_) {
+		
+        jJTaskRepository.save(JJTask_);
+        JJTask_=jJTaskRepository.findOne(JJTask_.getId());
+    }
+    
+    public JJTask updateJJTask(JJTask JJTask_) {
+        jJTaskRepository.save(JJTask_);
+        JJTask_=jJTaskRepository.findOne(JJTask_.getId());
+        return JJTask_;
+    }
 
 }

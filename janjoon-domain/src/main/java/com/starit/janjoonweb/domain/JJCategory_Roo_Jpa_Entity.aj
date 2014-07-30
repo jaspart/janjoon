@@ -4,10 +4,42 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJCategory;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Version;
 
 privileged aspect JJCategory_Roo_Jpa_Entity {
     
     declare @type: JJCategory: @Entity;
+    
+    @Id
+    @SequenceGenerator(name = "jJCategoryGen", sequenceName = "JJCategorySEQ")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "jJCategoryGen")
+    @Column(name = "id")
+    private Long JJCategory.id;
+    
+    @Version
+    @Column(name = "version")
+    private Integer JJCategory.version;
+    
+    public Long JJCategory.getId() {
+        return this.id;
+    }
+    
+    public void JJCategory.setId(Long id) {
+        this.id = id;
+    }
+    
+    public Integer JJCategory.getVersion() {
+        return this.version;
+    }
+    
+    public void JJCategory.setVersion(Integer version) {
+        this.version = version;
+    }
     
 }

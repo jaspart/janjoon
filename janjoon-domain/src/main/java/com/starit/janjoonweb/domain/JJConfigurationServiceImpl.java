@@ -80,5 +80,17 @@ public class JJConfigurationServiceImpl implements JJConfigurationService {
 		}
 
 	}
+	
+	public void saveJJConfiguration(JJConfiguration JJConfiguration_) {
+		
+        jJConfigurationRepository.save(JJConfiguration_);
+        JJConfiguration_=jJConfigurationRepository.findOne(JJConfiguration_.getId());
+    }
+    
+    public JJConfiguration updateJJConfiguration(JJConfiguration JJConfiguration_) {
+        jJConfigurationRepository.save(JJConfiguration_);
+        JJConfiguration_=jJConfigurationRepository.findOne(JJConfiguration_.getId());
+        return JJConfiguration_;
+    }
 
 }

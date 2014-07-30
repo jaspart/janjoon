@@ -11,6 +11,9 @@
 		widgetVar="SprintTab" value="#{jJSprintBean.sprintList}"
 		var="jjsprint">
 
+		<p:ajax event="tabChange" listener="#{jJSprintBean.onTabSprintChange}"
+			update="SprintTabView" />
+
 		<p:tab>
 			<f:facet name="title">
 				<h:outputText id="tabHeader" rendered="#{!jjsprint.render}"
@@ -152,8 +155,8 @@
 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
 											update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
 											oncomplete="viewTaskDialogWidget.show()">
-												<f:setPropertyActionListener value="#{todo}"
-													target="#{jJTaskBean.task}" />
+											<f:setPropertyActionListener value="#{todo}"
+												target="#{jJTaskBean.task}" />
 
 											<p:menuitem id="deleteButton" icon="ui-icon-trash"
 												oncomplete="deleteDialogWidget.show()"

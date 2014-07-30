@@ -162,5 +162,17 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	public void refreshRequirement(JJRequirement requirement){
 		entityManager.refresh(requirement);
 	}
+	
+	public void saveJJRequirement(JJRequirement JJRequirement_) {
+		
+        jJRequirementRepository.save(JJRequirement_);
+        JJRequirement_=jJRequirementRepository.findOne(JJRequirement_.getId());
+    }
+    
+    public JJRequirement updateJJRequirement(JJRequirement JJRequirement_) {
+        jJRequirementRepository.save(JJRequirement_);
+        JJRequirement_=jJRequirementRepository.findOne(JJRequirement_.getId());
+        return JJRequirement_;
+    }
 
 }

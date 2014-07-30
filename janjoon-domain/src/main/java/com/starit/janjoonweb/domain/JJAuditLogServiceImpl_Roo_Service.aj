@@ -40,12 +40,4 @@ privileged aspect JJAuditLogServiceImpl_Roo_Service {
         return jJAuditLogRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJAuditLogServiceImpl.saveJJAuditLog(JJAuditLog JJAuditLog_) {
-        jJAuditLogRepository.save(JJAuditLog_);
-    }
-    
-    public JJAuditLog JJAuditLogServiceImpl.updateJJAuditLog(JJAuditLog JJAuditLog_) {
-        return jJAuditLogRepository.save(JJAuditLog_);
-    }
-    
 }

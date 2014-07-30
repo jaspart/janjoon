@@ -40,12 +40,4 @@ privileged aspect JJCategoryServiceImpl_Roo_Service {
         return jJCategoryRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJCategoryServiceImpl.saveJJCategory(JJCategory JJCategory_) {
-        jJCategoryRepository.save(JJCategory_);
-    }
-    
-    public JJCategory JJCategoryServiceImpl.updateJJCategory(JJCategory JJCategory_) {
-        return jJCategoryRepository.save(JJCategory_);
-    }
-    
 }

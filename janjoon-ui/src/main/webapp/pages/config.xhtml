@@ -54,12 +54,14 @@
 
 
 						<p:menuitem id="editButton" icon="ui-icon-pencil"
-							update=":tabview:createForm:createPanelGrid"
+							update=":tabview:createForm:createPanelGrid :tabview:createDialog"
 							action="#{jJConfigurationBean.onEdit}"
 							oncomplete="createDialogWidget.show()"
 							value="#{messages.admin_config_edit_title}">
 							<f:setPropertyActionListener value="#{conf}"
 								target="#{jJConfigurationBean.JJConfiguration_}" />
+							<f:setPropertyActionListener
+								target="#{jJConfigurationBean.renderCreate}" value="false" />
 						</p:menuitem>
 
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
@@ -74,12 +76,12 @@
 				<f:facet name="footer">
 					<p:commandButton value="#{messages.admin_config_new_button}"
 						id="createButton" icon="ui-icon-circle-plus"
-						update=":tabview:createForm:createPanelGrid"
-						oncomplete="createDialogWidget.show()"
-						title="#{messages.admin_config_new_title}" >
-						<f:setPropertyActionListener value="null"
-								target="#{jJConfigurationBean.JJConfiguration_}" />
-						</p:commandButton>
+						update=":tabview:createForm:createPanelGrid :tabview:createDialog"
+						actionListener="#{jJConfigurationBean.beforeDialogShow}"
+						title="#{messages.admin_config_new_title}">
+						<f:setPropertyActionListener
+								target="#{jJConfigurationBean.renderCreate}" value="true" />
+					</p:commandButton>
 					<p:tooltip for="createButton"
 						value="#{messages.admin_config_table_create_title}"
 						showEffect="fade" hideEffect="fade" />
@@ -88,12 +90,19 @@
 		</p:panel>
 
 	</h:form>
-	<p:dialog id="createDialog" header="#{messages.admin_config_new_title}"
-		modal="true" widgetVar="createDialogWidget" dynamic="true"
-		visible="#{jJConfigurationBean.createDialogVisible}" resizable="true"
-		maximizable="true" showEffect="fade" hideEffect="explode">
+	<p:dialog id="createDialog" modal="true" widgetVar="createDialogWidget"
+		dynamic="true" visible="#{jJConfigurationBean.createDialogVisible}"
+		resizable="true" maximizable="true" showEffect="fade"
+		hideEffect="explode">
 		<p:ajax event="close" update=":tabview:configForm"
 			listener="#{jJConfigurationBean.handleDialogClose}" />
+		<f:facet name="header">
+			<p:outputLabel rendered="#{jJConfigurationBean.renderCreate}"
+				value="#{messages.admin_config_new_title}" />
+
+			<p:outputLabel rendered="#{!jJConfigurationBean.renderCreate}"
+				value="#{messages.admin_config_edit_title}" />
+		</f:facet>
 		<p:outputPanel id="createPanel">
 			<h:form id="createForm" enctype="multipart/form-data">
 				<h:panelGrid id="createPanelGrid" columns="2" styleClass="dialog"
@@ -130,7 +139,7 @@
 					onclick="createDialogWidget.hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
-	</p:dialog>	
+	</p:dialog>
 
 	<p:dialog id="viewDialog" header="#{messages.admin_config_view_title}"
 		modal="true" widgetVar="viewDialogWidget" dynamic="true"

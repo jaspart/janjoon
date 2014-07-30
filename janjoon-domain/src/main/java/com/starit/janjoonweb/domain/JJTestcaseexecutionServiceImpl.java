@@ -129,5 +129,17 @@ public class JJTestcaseexecutionServiceImpl implements
 		return testcaseexecutions;
 
 	}
+	
+public void saveJJTestcaseexecution(JJTestcaseexecution JJTestcaseexecution_) {
+		
+        jJTestcaseexecutionRepository.save(JJTestcaseexecution_);
+        JJTestcaseexecution_=jJTestcaseexecutionRepository.findOne(JJTestcaseexecution_.getId());
+    }
+    
+    public JJTestcaseexecution updateJJTestcaseexecution(JJTestcaseexecution JJTestcaseexecution_) {
+        jJTestcaseexecutionRepository.save(JJTestcaseexecution_);
+        JJTestcaseexecution_=jJTestcaseexecutionRepository.findOne(JJTestcaseexecution_.getId());
+        return JJTestcaseexecution_;
+    }
 
 }

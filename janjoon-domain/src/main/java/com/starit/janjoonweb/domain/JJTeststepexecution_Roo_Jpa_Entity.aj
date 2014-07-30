@@ -4,10 +4,42 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJTeststepexecution;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Version;
 
 privileged aspect JJTeststepexecution_Roo_Jpa_Entity {
     
     declare @type: JJTeststepexecution: @Entity;
+    
+    @Id
+    @SequenceGenerator(name = "jJTeststepexecutionGen", sequenceName = "JJTeststepexecutionSEQ")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "jJTeststepexecutionGen")
+    @Column(name = "id")
+    private Long JJTeststepexecution.id;
+    
+    @Version
+    @Column(name = "version")
+    private Integer JJTeststepexecution.version;
+    
+    public Long JJTeststepexecution.getId() {
+        return this.id;
+    }
+    
+    public void JJTeststepexecution.setId(Long id) {
+        this.id = id;
+    }
+    
+    public Integer JJTeststepexecution.getVersion() {
+        return this.version;
+    }
+    
+    public void JJTeststepexecution.setVersion(Integer version) {
+        this.version = version;
+    }
     
 }

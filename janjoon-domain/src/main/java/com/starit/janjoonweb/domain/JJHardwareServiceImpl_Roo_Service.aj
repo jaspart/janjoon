@@ -40,12 +40,4 @@ privileged aspect JJHardwareServiceImpl_Roo_Service {
         return jJHardwareRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJHardwareServiceImpl.saveJJHardware(JJHardware JJHardware_) {
-        jJHardwareRepository.save(JJHardware_);
-    }
-    
-    public JJHardware JJHardwareServiceImpl.updateJJHardware(JJHardware JJHardware_) {
-        return jJHardwareRepository.save(JJHardware_);
-    }
-    
 }

@@ -12,6 +12,7 @@ import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
+import javax.faces.event.ActionEvent;
 import javax.faces.validator.LengthValidator;
 import javax.servlet.http.HttpSession;
 
@@ -19,6 +20,7 @@ import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
+import org.primefaces.context.RequestContext;
 import org.primefaces.extensions.component.ckeditor.CKEditor;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -34,7 +36,8 @@ public class JJConfigurationBean {
 	private List<JJConfiguration> configList;
 	private JJConfiguration selectedConf;
 	private List<String> columns;
-	private JJConfiguration jJconfiguration;
+	private JJConfiguration jJconfiguration;	
+	private boolean renderCreate;
 
 	private HtmlPanelGrid createPanel;
 
@@ -68,8 +71,9 @@ public class JJConfigurationBean {
 
 	public List<JJConfiguration> getConfigList() {
 
-		if(configList==null)
-		configList = jJConfigurationService.getConfigurations(null, null, true);
+		if (configList == null)
+			configList = jJConfigurationService.getConfigurations(null, null,
+					true);
 		return configList;
 	}
 
@@ -120,6 +124,15 @@ public class JJConfigurationBean {
 		return columns;
 	}
 
+	public boolean isRenderCreate() {
+		return renderCreate;
+	}
+
+	public void setRenderCreate(boolean renderCreate) {
+		System.out.println("jJConfigurationBean renderCreate"+renderCreate);
+		this.renderCreate = renderCreate;
+	}
+
 	public void deleteConfig() {
 
 		selectedConf.setEnabled(false);
@@ -128,14 +141,14 @@ public class JJConfigurationBean {
 				"message_successfully_deleted", "JJConfiguration");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		configList = jJConfigurationService.getConfigurations(null, null, true);
-		
+
 	}
 
 	public String persistConf() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
-		
+
 		if (getJJConfiguration_().getId() != null) {
 			getJJConfiguration_().setUpdatedDate(new Date());
 			getJJConfiguration_().setUpdatedBy(contact);
@@ -157,8 +170,19 @@ public class JJConfigurationBean {
 				0);
 	}
 
-	public HtmlPanelGrid populatePanelCreate() {
+	public void beforeDialogShow(ActionEvent event) {		
+
+
+		setJJConfiguration_(new JJConfiguration());	
+		renderCreate=true;
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("createDialogWidget.show()");
 		
+
+	}
+
+	public HtmlPanelGrid populatePanelCreate() {
+
 		System.out.println("CreatepanelPop");
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		javax.faces.application.Application application = facesContext
@@ -206,9 +230,10 @@ public class JJConfigurationBean {
 
 		CKEditor descriptionCreateInput = (CKEditor) application
 				.createComponent(CKEditor.COMPONENT_TYPE);
-		String path = FacesContext.getCurrentInstance()
-				.getExternalContext().getRequestContextPath();
-		descriptionCreateInput.setCustomConfig(path+"/resources/js/ckEditor.js");
+		String path = FacesContext.getCurrentInstance().getExternalContext()
+				.getRequestContextPath();
+		descriptionCreateInput.setCustomConfig(path
+				+ "/resources/js/ckEditor.js");
 		descriptionCreateInput
 				.setToolbar("[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table]]");
 		descriptionCreateInput.setId("descriptionCreateInput");
@@ -272,7 +297,7 @@ public class JJConfigurationBean {
 		valCreateInput.addValidator(valCreateInputValidator);
 		valCreateInput.setRequired(true);
 		htmlPanelGrid.getChildren().add(valCreateInput);
-		
+
 		Message valCreateInputMessage = (Message) application
 				.createComponent(Message.COMPONENT_TYPE);
 		valCreateInputMessage.setId("valCreateInputMessage");
@@ -333,9 +358,10 @@ public class JJConfigurationBean {
 		CKEditor descriptionEditInput = (CKEditor) application
 				.createComponent(CKEditor.COMPONENT_TYPE);
 		descriptionEditInput.setId("descriptionEditInput");
-		String path = FacesContext.getCurrentInstance()
-				.getExternalContext().getRequestContextPath();
-		descriptionEditInput.setCustomConfig(path+"/resources/js/ckEditor.js");
+		String path = FacesContext.getCurrentInstance().getExternalContext()
+				.getRequestContextPath();
+		descriptionEditInput
+				.setCustomConfig(path + "/resources/js/ckEditor.js");
 		descriptionEditInput
 				.setToolbar("[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table]]");
 		descriptionEditInput.setValueExpression("value", expressionFactory

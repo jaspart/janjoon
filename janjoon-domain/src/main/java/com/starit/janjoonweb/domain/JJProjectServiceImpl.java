@@ -44,5 +44,17 @@ public class JJProjectServiceImpl implements JJProjectService {
 		return result.getResultList();
 
 	}
+	
+public void saveJJProject(JJProject JJProject_) {
+		
+        jJProjectRepository.save(JJProject_);
+        JJProject_=jJProjectRepository.findOne(JJProject_.getId());
+    }
+    
+    public JJProject updateJJProject(JJProject JJProject_) {
+        jJProjectRepository.save(JJProject_);
+        JJProject_=jJProjectRepository.findOne(JJProject_.getId());
+        return JJProject_;
+    }
 
 }

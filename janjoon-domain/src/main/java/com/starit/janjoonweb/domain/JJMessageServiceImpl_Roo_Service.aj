@@ -40,12 +40,4 @@ privileged aspect JJMessageServiceImpl_Roo_Service {
         return jJMessageRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJMessageServiceImpl.saveJJMessage(JJMessage JJMessage_) {
-        jJMessageRepository.save(JJMessage_);
-    }
-    
-    public JJMessage JJMessageServiceImpl.updateJJMessage(JJMessage JJMessage_) {
-        return jJMessageRepository.save(JJMessage_);
-    }
-    
 }

@@ -40,12 +40,4 @@ privileged aspect JJContactServiceImpl_Roo_Service {
         return jJContactRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJContactServiceImpl.saveJJContact(JJContact JJContact_) {
-        jJContactRepository.save(JJContact_);
-    }
-    
-    public JJContact JJContactServiceImpl.updateJJContact(JJContact JJContact_) {
-        return jJContactRepository.save(JJContact_);
-    }
-    
 }

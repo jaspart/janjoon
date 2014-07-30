@@ -40,12 +40,4 @@ privileged aspect JJRequirementServiceImpl_Roo_Service {
         return jJRequirementRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJRequirementServiceImpl.saveJJRequirement(JJRequirement JJRequirement_) {
-        jJRequirementRepository.save(JJRequirement_);
-    }
-    
-    public JJRequirement JJRequirementServiceImpl.updateJJRequirement(JJRequirement JJRequirement_) {
-        return jJRequirementRepository.save(JJRequirement_);
-    }
-    
 }

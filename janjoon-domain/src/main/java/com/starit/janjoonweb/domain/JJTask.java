@@ -7,11 +7,14 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -21,7 +24,32 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJTaskSEQ")
-public class JJTask extends JJAbstractEntity {
+public class JJTask {
+	
+	@NotNull
+	@Size(max = 100)
+	private String name;
+
+	@NotNull
+	@Lob
+	private String description;
+
+	@NotNull
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "M-")
+	private Date creationDate;
+
+	@ManyToOne
+	private JJContact createdBy;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "M-")
+	private Date updatedDate;
+
+	@ManyToOne
+	private JJContact updatedBy;
+
+	private Boolean enabled;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(style = "M-")
@@ -91,7 +119,7 @@ public class JJTask extends JJAbstractEntity {
 	@ManyToOne
 	private JJStatus status;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "task")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "task")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
 
 	private Boolean completed;
@@ -99,13 +127,13 @@ public class JJTask extends JJAbstractEntity {
 	@ManyToOne
 	private JJTask parent;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "parent")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent")
 	private Set<JJTask> tasks = new HashSet<JJTask>();
 
-	@ManyToMany(mappedBy = "beforeTasks", fetch = FetchType.EAGER)
+	@ManyToMany(mappedBy = "beforeTasks", fetch = FetchType.LAZY)
 	private Set<JJTask> afterTasks = new HashSet<JJTask>();
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "JJTaskLink", joinColumns = { @javax.persistence.JoinColumn(name = "AfterTask_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "BeforeTask_ID", referencedColumnName = "id") })
 	private Set<JJTask> beforeTasks = new HashSet<JJTask>();
 

@@ -5,4 +5,11 @@
 
 	<repositories base-package="com.starit.janjoonweb.domain" />
 
+	<beans:bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<beans:property name="locations">
+			<beans:value>classpath*:META-INF/spring/*.properties</beans:value>
+		</beans:property>
+	</beans:bean>
+
 </beans:beans>

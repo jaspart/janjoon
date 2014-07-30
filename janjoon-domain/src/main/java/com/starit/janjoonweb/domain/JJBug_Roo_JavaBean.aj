@@ -18,9 +18,66 @@ import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.reference.JJRelationship;
+import java.util.Date;
 import java.util.Set;
 
 privileged aspect JJBug_Roo_JavaBean {
+    
+    public String JJBug.getName() {
+        return this.name;
+    }
+    
+    public void JJBug.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJBug.getDescription() {
+        return this.description;
+    }
+    
+    public void JJBug.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJBug.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJBug.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJBug.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJBug.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJBug.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJBug.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJBug.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJBug.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJBug.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJBug.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
     
     public JJProject JJBug.getProject() {
         return this.project;

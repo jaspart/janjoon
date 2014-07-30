@@ -40,12 +40,4 @@ privileged aspect JJBuildServiceImpl_Roo_Service {
         return jJBuildRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJBuildServiceImpl.saveJJBuild(JJBuild JJBuild_) {
-        jJBuildRepository.save(JJBuild_);
-    }
-    
-    public JJBuild JJBuildServiceImpl.updateJJBuild(JJBuild JJBuild_) {
-        return jJBuildRepository.save(JJBuild_);
-    }
-    
 }

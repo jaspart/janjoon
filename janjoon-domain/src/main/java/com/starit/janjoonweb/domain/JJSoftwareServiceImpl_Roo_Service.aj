@@ -40,12 +40,4 @@ privileged aspect JJSoftwareServiceImpl_Roo_Service {
         return jJSoftwareRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJSoftwareServiceImpl.saveJJSoftware(JJSoftware JJSoftware_) {
-        jJSoftwareRepository.save(JJSoftware_);
-    }
-    
-    public JJSoftware JJSoftwareServiceImpl.updateJJSoftware(JJSoftware JJSoftware_) {
-        return jJSoftwareRepository.save(JJSoftware_);
-    }
-    
 }

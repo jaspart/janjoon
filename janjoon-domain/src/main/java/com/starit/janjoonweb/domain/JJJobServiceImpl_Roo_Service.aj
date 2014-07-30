@@ -40,12 +40,4 @@ privileged aspect JJJobServiceImpl_Roo_Service {
         return jJJobRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJJobServiceImpl.saveJJJob(JJJob JJJob_) {
-        jJJobRepository.save(JJJob_);
-    }
-    
-    public JJJob JJJobServiceImpl.updateJJJob(JJJob JJJob_) {
-        return jJJobRepository.save(JJJob_);
-    }
-    
 }

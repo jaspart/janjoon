@@ -75,4 +75,16 @@ public class JJProfileServiceImpl implements JJProfileService {
 		return result.getResultList();
 
 	}
+	
+public void saveJJProfile(JJProfile JJProfile_) {
+		
+        jJProfileRepository.save(JJProfile_);
+        JJProfile_=jJProfileRepository.findOne(JJProfile_.getId());
+    }
+    
+    public JJProfile updateJJProfile(JJProfile JJProfile_) {
+        jJProfileRepository.save(JJProfile_);
+        JJProfile_=jJProfileRepository.findOne(JJProfile_.getId());
+        return JJProfile_;
+    }
 }

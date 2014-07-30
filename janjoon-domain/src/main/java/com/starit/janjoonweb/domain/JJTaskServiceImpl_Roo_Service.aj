@@ -40,12 +40,4 @@ privileged aspect JJTaskServiceImpl_Roo_Service {
         return jJTaskRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJTaskServiceImpl.saveJJTask(JJTask JJTask_) {
-        jJTaskRepository.save(JJTask_);
-    }
-    
-    public JJTask JJTaskServiceImpl.updateJJTask(JJTask JJTask_) {
-        return jJTaskRepository.save(JJTask_);
-    }
-    
 }

@@ -369,5 +369,17 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 	public Set<JJContact> areAuthorized(JJProject project, JJProduct product) {
 		return areAuthorized(project, product, null, null, null, null, null);
 	}
+	
+public void saveJJPermission(JJPermission JJPermission_) {
+		
+        jJPermissionRepository.save(JJPermission_);
+        JJPermission_=jJPermissionRepository.findOne(JJPermission_.getId());
+    }
+    
+    public JJPermission updateJJPermission(JJPermission JJPermission_) {
+        jJPermissionRepository.save(JJPermission_);
+        JJPermission_=jJPermissionRepository.findOne(JJPermission_.getId());
+        return JJPermission_;
+    }
 
 }

@@ -64,5 +64,17 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 	public void updateTeststeps(Set<JJTeststep> teststeps) {
 		jJTeststepRepository.save(teststeps);
 	}
+	
+public void saveJJTeststep(JJTeststep JJTeststep_) {
+		
+        jJTeststepRepository.save(JJTeststep_);
+        JJTeststep_=jJTeststepRepository.findOne(JJTeststep_.getId());
+    }
+    
+    public JJTeststep updateJJTeststep(JJTeststep JJTeststep_) {
+        jJTeststepRepository.save(JJTeststep_);
+        JJTeststep_=jJTeststepRepository.findOne(JJTeststep_.getId());
+        return JJTeststep_;
+    }
 
 }

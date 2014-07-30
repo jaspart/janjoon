@@ -3,7 +3,7 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJImportance;
 import com.starit.janjoonweb.domain.JJImportanceDataOnDemand;
 import com.starit.janjoonweb.domain.JJImportanceRepository;
@@ -30,6 +30,9 @@ privileged aspect JJImportanceDataOnDemand_Roo_DataOnDemand {
     private List<JJImportance> JJImportanceDataOnDemand.data;
     
     @Autowired
+    JJContactDataOnDemand JJImportanceDataOnDemand.jJContactDataOnDemand;
+    
+    @Autowired
     JJImportanceService JJImportanceDataOnDemand.jJImportanceService;
     
     @Autowired
@@ -37,21 +40,14 @@ privileged aspect JJImportanceDataOnDemand_Roo_DataOnDemand {
     
     public JJImportance JJImportanceDataOnDemand.getNewTransientJJImportance(int index) {
         JJImportance obj = new JJImportance();
-        setCreatedBy(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
         setLevelImportance(obj, index);
         setName(obj, index);
         setObjet(obj, index);
-        setUpdatedBy(obj, index);
         setUpdatedDate(obj, index);
         return obj;
-    }
-    
-    public void JJImportanceDataOnDemand.setCreatedBy(JJImportance obj, int index) {
-        JJContact createdBy = null;
-        obj.setCreatedBy(createdBy);
     }
     
     public void JJImportanceDataOnDemand.setCreationDate(JJImportance obj, int index) {
@@ -88,11 +84,6 @@ privileged aspect JJImportanceDataOnDemand_Roo_DataOnDemand {
             objet = objet.substring(0, 25);
         }
         obj.setObjet(objet);
-    }
-    
-    public void JJImportanceDataOnDemand.setUpdatedBy(JJImportance obj, int index) {
-        JJContact updatedBy = null;
-        obj.setUpdatedBy(updatedBy);
     }
     
     public void JJImportanceDataOnDemand.setUpdatedDate(JJImportance obj, int index) {

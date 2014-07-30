@@ -109,5 +109,17 @@ public class JJMessageServiceImpl implements JJMessageService {
 		}
 		return contain;
 	}
+	
+	public void saveJJMessage(JJMessage JJMessage_) {
+		
+        jJMessageRepository.save(JJMessage_);
+        JJMessage_=jJMessageRepository.findOne(JJMessage_.getId());
+    }
+    
+    public JJMessage updateJJMessage(JJMessage JJMessage_) {
+        jJMessageRepository.save(JJMessage_);
+        JJMessage_=jJMessageRepository.findOne(JJMessage_.getId());
+        return JJMessage_;
+    }
 
 }

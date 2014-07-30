@@ -64,5 +64,17 @@ public class JJRightServiceImpl implements JJRightService {
 
 		return tableNames;
 	}
+	
+	public void saveJJRight(JJRight JJRight_) {
+		
+        jJRightRepository.save(JJRight_);
+        JJRight_=jJRightRepository.findOne(JJRight_.getId());
+    }
+    
+    public JJRight updateJJRight(JJRight JJRight_) {
+        jJRightRepository.save(JJRight_);
+        JJRight_=jJRightRepository.findOne(JJRight_.getId());
+        return JJRight_;
+    }
 
 }

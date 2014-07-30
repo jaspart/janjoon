@@ -3,9 +3,6 @@ package com.starit.janjoonweb.ui.mb.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import org.hibernate.annotations.ForceDiscriminator;
-
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJTask;

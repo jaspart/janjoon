@@ -71,5 +71,17 @@ public class JJVersionServiceImpl implements JJVersionService {
 		return result.getResultList();
 
 	}
+	
+public void saveJJVersion(JJVersion JJVersion_) {
+		
+        jJVersionRepository.save(JJVersion_);
+        JJVersion_=jJVersionRepository.findOne(JJVersion_.getId());
+    }
+    
+    public JJVersion updateJJVersion(JJVersion JJVersion_) {
+        jJVersionRepository.save(JJVersion_);
+        JJVersion_=jJVersionRepository.findOne(JJVersion_.getId());
+        return JJVersion_;
+    }
 
 }

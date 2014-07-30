@@ -38,8 +38,7 @@
 						rendered="#{loginBean.activeTabProjectIndex == 1}"
 						value="#{messages.bug_delete_yes_button}"
 						action="#{jJSprintBean.deleteTask}"
-						update=":projecttabview:SprintTabView"
-						oncomplete="deleteDialogWidget.hide()" />
+						update=":projecttabview:SprintTabView"/>
 					<p:commandButton id="deleteYesPlanning"
 						rendered="#{loginBean.activeTabProjectIndex == 0}"
 						value="#{messages.bug_delete_yes_button}"

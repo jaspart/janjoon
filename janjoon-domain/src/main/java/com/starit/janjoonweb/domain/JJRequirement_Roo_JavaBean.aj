@@ -24,6 +24,62 @@ import java.util.Set;
 
 privileged aspect JJRequirement_Roo_JavaBean {
     
+    public String JJRequirement.getName() {
+        return this.name;
+    }
+    
+    public void JJRequirement.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJRequirement.getDescription() {
+        return this.description;
+    }
+    
+    public void JJRequirement.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJRequirement.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJRequirement.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJRequirement.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJRequirement.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJRequirement.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJRequirement.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJRequirement.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJRequirement.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJRequirement.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJRequirement.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+    
     public Integer JJRequirement.getOrdering() {
         return this.ordering;
     }

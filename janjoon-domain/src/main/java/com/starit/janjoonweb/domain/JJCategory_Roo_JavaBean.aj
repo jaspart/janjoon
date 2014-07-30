@@ -5,9 +5,67 @@ package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
+import com.starit.janjoonweb.domain.JJContact;
+import java.util.Date;
 import java.util.Set;
 
 privileged aspect JJCategory_Roo_JavaBean {
+    
+    public String JJCategory.getName() {
+        return this.name;
+    }
+    
+    public void JJCategory.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJCategory.getDescription() {
+        return this.description;
+    }
+    
+    public void JJCategory.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJCategory.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJCategory.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJCategory.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJCategory.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJCategory.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJCategory.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJCategory.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJCategory.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJCategory.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJCategory.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
     
     public Integer JJCategory.getStage() {
         return this.stage;

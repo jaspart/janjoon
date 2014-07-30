@@ -40,12 +40,4 @@ privileged aspect JJConfigurationServiceImpl_Roo_Service {
         return jJConfigurationRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJConfigurationServiceImpl.saveJJConfiguration(JJConfiguration JJConfiguration_) {
-        jJConfigurationRepository.save(JJConfiguration_);
-    }
-    
-    public JJConfiguration JJConfigurationServiceImpl.updateJJConfiguration(JJConfiguration JJConfiguration_) {
-        return jJConfigurationRepository.save(JJConfiguration_);
-    }
-    
 }

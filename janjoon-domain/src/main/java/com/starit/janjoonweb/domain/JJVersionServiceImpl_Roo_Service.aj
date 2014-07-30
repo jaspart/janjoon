@@ -40,12 +40,4 @@ privileged aspect JJVersionServiceImpl_Roo_Service {
         return jJVersionRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJVersionServiceImpl.saveJJVersion(JJVersion JJVersion_) {
-        jJVersionRepository.save(JJVersion_);
-    }
-    
-    public JJVersion JJVersionServiceImpl.updateJJVersion(JJVersion JJVersion_) {
-        return jJVersionRepository.save(JJVersion_);
-    }
-    
 }

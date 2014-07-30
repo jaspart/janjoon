@@ -203,9 +203,7 @@ public class JJContactBean {
 			contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword()));
 		}	
 		
-		jJContactService.updateJJContact(contactAdmin);
-
-		System.out.println("pppp");
+		jJContactService.updateJJContact(contactAdmin);		
 
 		List<JJPermission> permissions = jJPermissionService.getPermissions(
 				contactAdmin, true, null, null, null);
@@ -259,6 +257,7 @@ public class JJContactBean {
 
 		}
 		
+		contactAdmin=jJContactService.findJJContact(contactAdmin.getId());
 		if(contains(contactAdmin.getId())!=-1)
 			contacts.set(contains(contactAdmin.getId()), contactAdmin);
 		else

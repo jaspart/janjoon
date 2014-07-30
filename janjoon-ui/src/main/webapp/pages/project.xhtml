@@ -10,7 +10,7 @@
 			cellpadding="6">
 			<p:dataTable id="projectDataTable" var="project"
 				value="#{jJProjectBean.projectListTable}" paginator="true" rows="15"
-				style="width:550px" rowKey="#{project.id}">
+				rowKey="#{project.id}">
 				<f:facet name="header">#{messages.admin_project_table_header}</f:facet>
 				<p:column>
 					<f:facet name="header">

@@ -4,10 +4,42 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJContact;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Version;
 
 privileged aspect JJContact_Roo_Jpa_Entity {
     
     declare @type: JJContact: @Entity;
+    
+    @Id
+    @SequenceGenerator(name = "jJContactGen", sequenceName = "JJContactSEQ")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "jJContactGen")
+    @Column(name = "id")
+    private Long JJContact.id;
+    
+    @Version
+    @Column(name = "version")
+    private Integer JJContact.version;
+    
+    public Long JJContact.getId() {
+        return this.id;
+    }
+    
+    public void JJContact.setId(Long id) {
+        this.id = id;
+    }
+    
+    public Integer JJContact.getVersion() {
+        return this.version;
+    }
+    
+    public void JJContact.setVersion(Integer version) {
+        this.version = version;
+    }
     
 }

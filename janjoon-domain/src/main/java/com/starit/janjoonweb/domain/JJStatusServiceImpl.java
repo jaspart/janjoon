@@ -125,5 +125,17 @@ public class JJStatusServiceImpl implements JJStatusService {
 
 		return tableNames;
 	}
+	
+public void saveJJStatus(JJStatus JJStatus_) {
+		
+        jJStatusRepository.save(JJStatus_);
+        JJStatus_=jJStatusRepository.findOne(JJStatus_.getId());
+    }
+    
+    public JJStatus updateJJStatus(JJStatus JJStatus_) {
+        jJStatusRepository.save(JJStatus_);
+        JJStatus_=jJStatusRepository.findOne(JJStatus_.getId());
+        return JJStatus_;
+    }
 
 }

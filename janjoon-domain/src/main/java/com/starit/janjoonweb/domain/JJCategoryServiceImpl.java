@@ -78,5 +78,16 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 		TypedQuery<JJCategory> result = entityManager.createQuery(select);
 		return result.getResultList();
 	}
+	
+	public void saveJJCategory(JJCategory JJCategory_) {
+        jJCategoryRepository.save(JJCategory_);
+        JJCategory_=jJCategoryRepository.findOne(JJCategory_.getId());
+    }
+    
+    public JJCategory updateJJCategory(JJCategory JJCategory_) {
+        jJCategoryRepository.save(JJCategory_);
+        JJCategory_=jJCategoryRepository.findOne(JJCategory_.getId());
+        return JJCategory_;
+    }
 
 }

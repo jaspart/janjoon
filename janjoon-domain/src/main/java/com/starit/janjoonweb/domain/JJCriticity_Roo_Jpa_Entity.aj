@@ -4,10 +4,42 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJCriticity;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Version;
 
 privileged aspect JJCriticity_Roo_Jpa_Entity {
     
     declare @type: JJCriticity: @Entity;
+    
+    @Id
+    @SequenceGenerator(name = "jJCriticityGen", sequenceName = "JJCriticitySEQ")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "jJCriticityGen")
+    @Column(name = "id")
+    private Long JJCriticity.id;
+    
+    @Version
+    @Column(name = "version")
+    private Integer JJCriticity.version;
+    
+    public Long JJCriticity.getId() {
+        return this.id;
+    }
+    
+    public void JJCriticity.setId(Long id) {
+        this.id = id;
+    }
+    
+    public Integer JJCriticity.getVersion() {
+        return this.version;
+    }
+    
+    public void JJCriticity.setVersion(Integer version) {
+        this.version = version;
+    }
     
 }

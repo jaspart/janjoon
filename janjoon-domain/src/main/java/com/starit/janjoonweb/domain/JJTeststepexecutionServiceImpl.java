@@ -106,5 +106,17 @@ public class JJTeststepexecutionServiceImpl implements
 			List<JJTeststepexecution> teststepexecutions) {
 		jJTeststepexecutionRepository.save(teststepexecutions);
 	}
+	
+	public void saveJJTeststepexecution(JJTeststepexecution JJTeststepexecution_) {
+		
+        jJTeststepexecutionRepository.save(JJTeststepexecution_);
+        JJTeststepexecution_=jJTeststepexecutionRepository.findOne(JJTeststepexecution_.getId());
+    }
+    
+    public JJTeststepexecution updateJJTeststepexecution(JJTeststepexecution JJTeststepexecution_) {
+        jJTeststepexecutionRepository.save(JJTeststepexecution_);
+        JJTeststepexecution_=jJTeststepexecutionRepository.findOne(JJTeststepexecution_.getId());
+        return JJTeststepexecution_;
+    }
 
 }

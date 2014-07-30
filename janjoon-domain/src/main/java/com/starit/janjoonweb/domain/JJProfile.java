@@ -24,7 +24,7 @@ public class JJProfile {
 
 	private Boolean enabled;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "profile")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")
 	private Set<JJRight> rights = new HashSet<JJRight>();
 
 }

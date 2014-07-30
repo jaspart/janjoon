@@ -170,5 +170,18 @@ public class JJChapterServiceImpl implements JJChapterService {
 		TypedQuery<JJChapter> result = entityManager.createQuery(select);
 		return result.getResultList();
 	}
+	
+	 public void saveJJChapter(JJChapter JJChapter_) {
+		 
+	        jJChapterRepository.save(JJChapter_);
+	        JJChapter_=jJChapterRepository.findOne(JJChapter_.getId());
+	    }
+	    
+	    public JJChapter updateJJChapter(JJChapter JJChapter_) {
+	    	
+	        jJChapterRepository.save(JJChapter_);
+	        JJChapter_=jJChapterRepository.findOne(JJChapter_.getId());
+	        return JJChapter_;
+	    }
 
 }

@@ -53,4 +53,18 @@ public class JJBuildServiceImpl implements JJBuildService {
 		return result.getResultList();
 
 	}
+	
+	 public void saveJJBuild(JJBuild JJBuild_) {
+		 
+	        jJBuildRepository.save(JJBuild_);
+	        JJBuild_=jJBuildRepository.findOne(JJBuild_.getId());
+	    }
+	    
+	    public JJBuild updateJJBuild(JJBuild JJBuild_) {
+	    	
+	        jJBuildRepository.save(JJBuild_);
+	        
+	        JJBuild_=jJBuildRepository.findOne(JJBuild_.getId());
+	        return JJBuild_;
+	    }
 }

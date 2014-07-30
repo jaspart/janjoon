@@ -18,6 +18,62 @@ import java.util.Set;
 
 privileged aspect JJTask_Roo_JavaBean {
     
+    public String JJTask.getName() {
+        return this.name;
+    }
+    
+    public void JJTask.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJTask.getDescription() {
+        return this.description;
+    }
+    
+    public void JJTask.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJTask.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJTask.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJTask.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJTask.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJTask.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJTask.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJTask.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJTask.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJTask.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJTask.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+    
     public Date JJTask.getStartDatePlanned() {
         return this.startDatePlanned;
     }

@@ -40,12 +40,4 @@ privileged aspect JJCompanyServiceImpl_Roo_Service {
         return jJCompanyRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJCompanyServiceImpl.saveJJCompany(JJCompany JJCompany_) {
-        jJCompanyRepository.save(JJCompany_);
-    }
-    
-    public JJCompany JJCompanyServiceImpl.updateJJCompany(JJCompany JJCompany_) {
-        return jJCompanyRepository.save(JJCompany_);
-    }
-    
 }

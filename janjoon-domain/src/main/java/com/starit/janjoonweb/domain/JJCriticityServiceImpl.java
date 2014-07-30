@@ -73,5 +73,17 @@ public class JJCriticityServiceImpl implements JJCriticityService {
 		TypedQuery<JJCriticity> result = entityManager.createQuery(select);
 		return result.getResultList().get(0);
 	}
+	
+	public void saveJJCriticity(JJCriticity JJCriticity_) {
+		
+        jJCriticityRepository.save(JJCriticity_);
+        JJCriticity_=jJCriticityRepository.findOne(JJCriticity_.getId());
+    }
+    
+    public JJCriticity updateJJCriticity(JJCriticity JJCriticity_) {
+        jJCriticityRepository.save(JJCriticity_);
+        JJCriticity_=jJCriticityRepository.findOne(JJCriticity_.getId());
+        return JJCriticity_;
+    }
 
 }

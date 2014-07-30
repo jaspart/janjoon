@@ -4,11 +4,69 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTeststepexecution;
+import java.util.Date;
 
 privileged aspect JJTeststepexecution_Roo_JavaBean {
+    
+    public String JJTeststepexecution.getName() {
+        return this.name;
+    }
+    
+    public void JJTeststepexecution.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJTeststepexecution.getDescription() {
+        return this.description;
+    }
+    
+    public void JJTeststepexecution.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJTeststepexecution.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJTeststepexecution.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJTeststepexecution.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJTeststepexecution.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJTeststepexecution.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJTeststepexecution.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJTeststepexecution.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJTeststepexecution.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJTeststepexecution.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJTeststepexecution.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
     
     public JJBuild JJTeststepexecution.getBuild() {
         return this.build;

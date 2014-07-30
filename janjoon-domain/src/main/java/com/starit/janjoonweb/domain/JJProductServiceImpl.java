@@ -70,5 +70,17 @@ public class JJProductServiceImpl implements JJProductService {
 			return null;
 
 	}
+	
+public void saveJJProduct(JJProduct JJProduct_) {
+		
+        jJProductRepository.save(JJProduct_);
+        JJProduct_=jJProductRepository.findOne(JJProduct_.getId());
+    }
+    
+    public JJProduct updateJJProduct(JJProduct JJProduct_) {
+        jJProductRepository.save(JJProduct_);
+        JJProduct_=jJProductRepository.findOne(JJProduct_.getId());
+        return JJProduct_;
+    }
 
 }

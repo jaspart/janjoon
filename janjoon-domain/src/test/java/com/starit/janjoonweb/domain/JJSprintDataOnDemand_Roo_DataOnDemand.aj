@@ -3,7 +3,7 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJProjectDataOnDemand;
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJSprintDataOnDemand;
@@ -31,6 +31,9 @@ privileged aspect JJSprintDataOnDemand_Roo_DataOnDemand {
     private List<JJSprint> JJSprintDataOnDemand.data;
     
     @Autowired
+    JJContactDataOnDemand JJSprintDataOnDemand.jJContactDataOnDemand;
+    
+    @Autowired
     JJProjectDataOnDemand JJSprintDataOnDemand.jJProjectDataOnDemand;
     
     @Autowired
@@ -41,7 +44,6 @@ privileged aspect JJSprintDataOnDemand_Roo_DataOnDemand {
     
     public JJSprint JJSprintDataOnDemand.getNewTransientJJSprint(int index) {
         JJSprint obj = new JJSprint();
-        setCreatedBy(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
@@ -49,14 +51,8 @@ privileged aspect JJSprintDataOnDemand_Roo_DataOnDemand {
         setName(obj, index);
         setOrdering(obj, index);
         setStartDate(obj, index);
-        setUpdatedBy(obj, index);
         setUpdatedDate(obj, index);
         return obj;
-    }
-    
-    public void JJSprintDataOnDemand.setCreatedBy(JJSprint obj, int index) {
-        JJContact createdBy = null;
-        obj.setCreatedBy(createdBy);
     }
     
     public void JJSprintDataOnDemand.setCreationDate(JJSprint obj, int index) {
@@ -95,11 +91,6 @@ privileged aspect JJSprintDataOnDemand_Roo_DataOnDemand {
     public void JJSprintDataOnDemand.setStartDate(JJSprint obj, int index) {
         Date startDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setStartDate(startDate);
-    }
-    
-    public void JJSprintDataOnDemand.setUpdatedBy(JJSprint obj, int index) {
-        JJContact updatedBy = null;
-        obj.setUpdatedBy(updatedBy);
     }
     
     public void JJSprintDataOnDemand.setUpdatedDate(JJSprint obj, int index) {

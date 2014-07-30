@@ -77,7 +77,7 @@ public class JJContactServiceImpl implements JJContactService {
 	public boolean saveJJContactTransaction(JJContact contact) {
 
 		if (getContactByEmail(contact.getEmail(), false) == null) {
-			
+
 			saveJJContact(contact);
 			return true;
 		} else {
@@ -105,6 +105,18 @@ public class JJContactServiceImpl implements JJContactService {
 				return false;
 
 		}
+	}
+
+	public void saveJJContact(JJContact JJContact_) {
+
+		jJContactRepository.save(JJContact_);
+		JJContact_ = jJContactRepository.findOne(JJContact_.getId());
+	}
+
+	public JJContact updateJJContact(JJContact JJContact_) {
+		jJContactRepository.save(JJContact_);
+		JJContact_ = jJContactRepository.findOne(JJContact_.getId());
+		return JJContact_;
 	}
 
 }

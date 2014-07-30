@@ -3,10 +3,68 @@
 
 package com.starit.janjoonweb.domain;
 
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJSoftware;
 import com.starit.janjoonweb.domain.JJTestcase;
+import java.util.Date;
 
 privileged aspect JJSoftware_Roo_JavaBean {
+    
+    public String JJSoftware.getName() {
+        return this.name;
+    }
+    
+    public void JJSoftware.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJSoftware.getDescription() {
+        return this.description;
+    }
+    
+    public void JJSoftware.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJSoftware.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJSoftware.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJSoftware.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJSoftware.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJSoftware.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJSoftware.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJSoftware.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJSoftware.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJSoftware.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJSoftware.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
     
     public JJTestcase JJSoftware.getTestcase() {
         return this.testcase;

@@ -4,10 +4,42 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJPhase;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Version;
 
 privileged aspect JJPhase_Roo_Jpa_Entity {
     
     declare @type: JJPhase: @Entity;
+    
+    @Id
+    @SequenceGenerator(name = "jJPhaseGen", sequenceName = "JJPhaseSEQ")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "jJPhaseGen")
+    @Column(name = "id")
+    private Long JJPhase.id;
+    
+    @Version
+    @Column(name = "version")
+    private Integer JJPhase.version;
+    
+    public Long JJPhase.getId() {
+        return this.id;
+    }
+    
+    public void JJPhase.setId(Long id) {
+        this.id = id;
+    }
+    
+    public Integer JJPhase.getVersion() {
+        return this.version;
+    }
+    
+    public void JJPhase.setVersion(Integer version) {
+        this.version = version;
+    }
     
 }

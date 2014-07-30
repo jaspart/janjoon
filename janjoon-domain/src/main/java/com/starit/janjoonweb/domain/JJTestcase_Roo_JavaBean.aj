@@ -4,6 +4,7 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJHardware;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -13,9 +14,66 @@ import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJVersion;
+import java.util.Date;
 import java.util.Set;
 
 privileged aspect JJTestcase_Roo_JavaBean {
+    
+    public String JJTestcase.getName() {
+        return this.name;
+    }
+    
+    public void JJTestcase.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJTestcase.getDescription() {
+        return this.description;
+    }
+    
+    public void JJTestcase.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJTestcase.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJTestcase.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJTestcase.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJTestcase.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJTestcase.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJTestcase.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJTestcase.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJTestcase.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJTestcase.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJTestcase.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
     
     public Integer JJTestcase.getOrdering() {
         return this.ordering;

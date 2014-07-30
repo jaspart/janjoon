@@ -40,12 +40,4 @@ privileged aspect JJTeststepServiceImpl_Roo_Service {
         return jJTeststepRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void JJTeststepServiceImpl.saveJJTeststep(JJTeststep JJTeststep_) {
-        jJTeststepRepository.save(JJTeststep_);
-    }
-    
-    public JJTeststep JJTeststepServiceImpl.updateJJTeststep(JJTeststep JJTeststep_) {
-        return jJTeststepRepository.save(JJTeststep_);
-    }
-    
 }

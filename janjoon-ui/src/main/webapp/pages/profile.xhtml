@@ -10,7 +10,7 @@
 			cellpadding="6">
 			<p:dataTable id="profileDataTable" var="profile"
 				value="#{jJProfileBean.profileListTable}" paginator="true" rows="15"
-				style="width:550px" rowKey="#{profile.id}">>
+				rowKey="#{profile.id}">>
 				<f:facet name="header">#{messages.admin_profile_table_header}</f:facet>
 				<p:column>
 					<f:facet name="header">

@@ -7,9 +7,66 @@ import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJProject;
+import java.util.Date;
 import java.util.Set;
 
 privileged aspect JJProject_Roo_JavaBean {
+    
+    public String JJProject.getName() {
+        return this.name;
+    }
+    
+    public void JJProject.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJProject.getDescription() {
+        return this.description;
+    }
+    
+    public void JJProject.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJProject.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJProject.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJProject.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJProject.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJProject.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJProject.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJProject.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJProject.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJProject.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJProject.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
     
     public Set<JJChapter> JJProject.getChapters() {
         return this.chapters;

@@ -18,40 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.starit.janjoonweb.domain.JJBug;
-import com.starit.janjoonweb.domain.JJBugService;
-import com.starit.janjoonweb.domain.JJBuild;
-import com.starit.janjoonweb.domain.JJBuildService;
-import com.starit.janjoonweb.domain.JJCategory;
-import com.starit.janjoonweb.domain.JJCategoryService;
-import com.starit.janjoonweb.domain.JJCompany;
-import com.starit.janjoonweb.domain.JJCompanyService;
-import com.starit.janjoonweb.domain.JJConfiguration;
-import com.starit.janjoonweb.domain.JJConfigurationService;
-import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJContactService;
-import com.starit.janjoonweb.domain.JJCriticity;
-import com.starit.janjoonweb.domain.JJCriticityService;
-import com.starit.janjoonweb.domain.JJMessage;
-import com.starit.janjoonweb.domain.JJMessageService;
-import com.starit.janjoonweb.domain.JJPermission;
-import com.starit.janjoonweb.domain.JJPermissionService;
-import com.starit.janjoonweb.domain.JJProduct;
-import com.starit.janjoonweb.domain.JJProductService;
-import com.starit.janjoonweb.domain.JJProfile;
-import com.starit.janjoonweb.domain.JJProfileService;
-import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJProjectService;
-import com.starit.janjoonweb.domain.JJRequirementService;
-import com.starit.janjoonweb.domain.JJRight;
-import com.starit.janjoonweb.domain.JJRightService;
-import com.starit.janjoonweb.domain.JJSprint;
-import com.starit.janjoonweb.domain.JJSprintService;
-import com.starit.janjoonweb.domain.JJStatus;
-import com.starit.janjoonweb.domain.JJStatusService;
-import com.starit.janjoonweb.domain.JJTaskService;
-import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.domain.JJVersionService;
+import com.starit.janjoonweb.domain.*;
 
 public class ConfigListener implements ServletContextListener {
 
