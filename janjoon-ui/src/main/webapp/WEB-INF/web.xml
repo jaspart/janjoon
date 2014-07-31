@@ -112,8 +112,5 @@
 	<login-config>
 		<auth-method>BASIC</auth-method>
 		<realm-name>JanjoonSecurityRealm</realm-name>
-	</login-config>
-	<listener>
-		<listener-class>com.starit.janjoonweb.ui.security.ConfigListener</listener-class>
-	</listener>
+	</login-config>	
 </web-app>

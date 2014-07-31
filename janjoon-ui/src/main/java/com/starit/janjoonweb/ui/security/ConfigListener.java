@@ -502,11 +502,10 @@ public class ConfigListener implements ServletContextListener {
 			right.setX(true);
 			right.setEnabled(true);
 			right.setProfile(projectManagerProfile);
-
-			projectManagerProfile.getRights().add(right);
-
-			jJRightService.saveJJRight(right);
-
+			
+			
+			jJRightService.saveJJRight(right);			
+			
 			right = new JJRight();
 			right.setObjet("JJRequirement");
 			right.setCategory(businessCategory);
@@ -514,11 +513,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(projectManagerProfile);
+			right.setProfile(projectManagerProfile);		
 
-			projectManagerProfile.getRights().add(right);
-
-			jJRightService.saveJJRight(right);
+			jJRightService.saveJJRight(right);			
 
 			right = new JJRight();
 			right.setObjet("JJRequirement");
@@ -529,10 +526,10 @@ public class ConfigListener implements ServletContextListener {
 			right.setEnabled(true);
 			right.setProfile(projectManagerProfile);
 
-			projectManagerProfile.getRights().add(right);
+			
 
 			jJRightService.saveJJRight(right);
-
+			
 			right = new JJRight();
 			right.setObjet("JJRequirement");
 			right.setCategory(technicalCategory);
@@ -540,11 +537,11 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(false);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(projectManagerProfile);
-
-			projectManagerProfile.getRights().add(right);
+			right.setProfile(projectManagerProfile);			
 
 			jJRightService.saveJJRight(right);
+			
+			
 
 			right = new JJRight();
 			right.setObjet("JJRequirement");
@@ -553,12 +550,11 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(false);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(projectManagerProfile);
-
-			projectManagerProfile.getRights().add(right);
+			right.setProfile(projectManagerProfile);		
 
 			jJRightService.saveJJRight(right);
-
+			
+			
 			right = new JJRight();
 			right.setObjet("JJPlanning");
 			right.setCategory(architectureCategory);
@@ -566,11 +562,10 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(projectManagerProfile);
-
-			projectManagerProfile.getRights().add(right);
+			right.setProfile(projectManagerProfile);			
 
 			jJRightService.saveJJRight(right);
+			
 
 			right = new JJRight();
 			right.setObjet("JJPlanning");
@@ -579,11 +574,10 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(projectManagerProfile);
-
-			projectManagerProfile.getRights().add(right);
+			right.setProfile(projectManagerProfile);			
 
 			jJRightService.saveJJRight(right);
+			
 
 			right = new JJRight();
 			right.setObjet("JJTest");
@@ -591,23 +585,20 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(false);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(projectManagerProfile);
-
-			projectManagerProfile.getRights().add(right);
+			right.setProfile(projectManagerProfile);		
 
 			jJRightService.saveJJRight(right);
-
+			
 			right = new JJRight();
 			right.setObjet("JJProduct");
 			right.setR(true);
 			right.setW(false);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(projectManagerProfile);
-
-			projectManagerProfile.getRights().add(right);
+			right.setProfile(projectManagerProfile);			
 
 			jJRightService.saveJJRight(right);
+			
 
 			// Product Manager Profile
 
@@ -618,11 +609,10 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(productManagerProfile);
-
-			productManagerProfile.getRights().add(right);
+			right.setProfile(productManagerProfile);		
 
 			jJRightService.saveJJRight(right);
+		
 
 			right = new JJRight();
 			right.setObjet("JJRequirement");
@@ -631,11 +621,10 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(false);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(productManagerProfile);
-
-			productManagerProfile.getRights().add(right);
+			right.setProfile(productManagerProfile);			
 
 			jJRightService.saveJJRight(right);
+			
 
 			right = new JJRight();
 			right.setObjet("JJRequirement");
@@ -644,11 +633,10 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(productManagerProfile);
-
-			productManagerProfile.getRights().add(right);
+			right.setProfile(productManagerProfile);		
 
 			jJRightService.saveJJRight(right);
+			
 
 			right = new JJRight();
 			right.setObjet("JJRequirement");
@@ -657,9 +645,7 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(productManagerProfile);
-
-			productManagerProfile.getRights().add(right);
+			right.setProfile(productManagerProfile);			
 
 			jJRightService.saveJJRight(right);
 
@@ -670,9 +656,7 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(productManagerProfile);
-
-			productManagerProfile.getRights().add(right);
+			right.setProfile(productManagerProfile);		
 
 			jJRightService.saveJJRight(right);
 
@@ -684,11 +668,11 @@ public class ConfigListener implements ServletContextListener {
 			right.setX(true);
 			right.setEnabled(true);
 			right.setProfile(productManagerProfile);
-
-			productManagerProfile.getRights().add(right);
+		
 
 			jJRightService.saveJJRight(right);
 
+			
 			right = new JJRight();
 			right.setObjet("JJPlanning");
 			right.setCategory(technicalCategory);
@@ -696,11 +680,10 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(productManagerProfile);
-
-			productManagerProfile.getRights().add(right);
+			right.setProfile(productManagerProfile);		
 
 			jJRightService.saveJJRight(right);
+	
 
 			right = new JJRight();
 			right.setObjet("JJTest");
@@ -708,11 +691,10 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(productManagerProfile);
-
-			productManagerProfile.getRights().add(right);
+			right.setProfile(productManagerProfile);			
 
 			jJRightService.saveJJRight(right);
+
 
 			// CEO Profile
 			right = new JJRight();
@@ -721,11 +703,11 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(ceoProfile);
-
-			ceoProfile.getRights().add(right);
+			right.setProfile(ceoProfile);			
 
 			jJRightService.saveJJRight(right);
+	
+			
 			// cutomProfile rights
 			right = new JJRight();
 			right.setObjet("JJBuild");
@@ -733,11 +715,10 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(false);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(customProfile);
-
-			customProfile.getRights().add(right);
+			right.setProfile(customProfile);			
 
 			jJRightService.saveJJRight(right);
+	
 
 			right = new JJRight();
 			right.setObjet("JJRequirement");
@@ -745,11 +726,11 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(false);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(customProfile);
-
-			customProfile.getRights().add(right);
+			right.setProfile(customProfile);			
 
 			jJRightService.saveJJRight(right);
+		
+			
 			// CEO Profile
 			right = new JJRight();
 			right.setObjet("*");
@@ -757,11 +738,10 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(ctoProfile);
-
-			ctoProfile.getRights().add(right);
+			right.setProfile(ctoProfile);			
 
 			jJRightService.saveJJRight(right);
+	
 
 			// Tester Profile
 			right = new JJRight();
@@ -770,11 +750,10 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(testerProfile);
-
-			testerProfile.getRights().add(right);
+			right.setProfile(testerProfile);			
 
 			jJRightService.saveJJRight(right);
+
 
 			right = new JJRight();
 			right.setObjet("JJRequirement");
@@ -782,11 +761,10 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(false);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(testerProfile);
-
-			testerProfile.getRights().add(right);
+			right.setProfile(testerProfile);		
 
 			jJRightService.saveJJRight(right);
+	
 
 			right = new JJRight();
 			right.setObjet("JJProduct");
@@ -797,9 +775,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setEnabled(true);
 			right.setProfile(testerProfile);
 
-			testerProfile.getRights().add(right);
-
 			jJRightService.saveJJRight(right);
+	
+
 
 			// Developer Profile
 			right = new JJRight();
@@ -810,9 +788,10 @@ public class ConfigListener implements ServletContextListener {
 			right.setEnabled(true);
 			right.setProfile(developerProfile);
 
-			developerProfile.getRights().add(right);
+			
 
 			jJRightService.saveJJRight(right);
+
 
 			right = new JJRight();
 			right.setObjet("JJRequirement");
@@ -820,9 +799,7 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(false);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(developerProfile);
-
-			developerProfile.getRights().add(right);
+			right.setProfile(developerProfile);			
 
 			jJRightService.saveJJRight(right);
 
@@ -833,11 +810,11 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(developerProfile);
-
-			developerProfile.getRights().add(right);
+			right.setProfile(developerProfile);		
+			
 
 			jJRightService.saveJJRight(right);
+		
 
 		}
 
