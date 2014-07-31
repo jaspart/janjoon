@@ -49,7 +49,7 @@ import com.starit.janjoonweb.ui.security.AuthorizationManager;
 public class LoginBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
@@ -71,7 +71,6 @@ public class LoginBean implements Serializable {
 	private boolean enable = false;
 	private int activeTabAdminIndex;
 	private int activeTabProjectIndex;
-	
 
 	public void setjJContactService(JJContactService jJContactService) {
 		this.jJContactService = jJContactService;
@@ -99,7 +98,6 @@ public class LoginBean implements Serializable {
 	public LoginBean(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
 	}
-	
 
 	protected String getRedirectUrl(HttpSession session) {
 
@@ -112,19 +110,18 @@ public class LoginBean implements Serializable {
 				s = s.replace(s.substring(s.indexOf(".")), "");
 				if (s.contains("development"))
 					s = "main";
-				else if(s.contains("project1")||s.contains("test")||s.contains("stats"))
-				{
+				else if (s.contains("project1") || s.contains("test")
+						|| s.contains("stats")) {
 					JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");
-					if(jJProjectBean.getProject()==null)
-					{
-						s="main";
+					if (jJProjectBean.getProject() == null) {
+						s = "main";
 						FacesMessage message = MessageFactory.getMessage(
-								"dev.nullProject.label", FacesMessage.SEVERITY_ERROR, "");
-						FacesContext.getCurrentInstance().addMessage(null, message);
+								"dev.nullProject.label",
+								FacesMessage.SEVERITY_ERROR, "");
+						FacesContext.getCurrentInstance().addMessage(null,
+								message);
 					}
-						
-					
-						
+
 				}
 				return s;
 			}
@@ -155,7 +152,7 @@ public class LoginBean implements Serializable {
 			SecurityContext sContext = SecurityContextHolder.getContext();
 			sContext.setAuthentication(authentication);
 			enable = true;
-			
+
 		} catch (AuthenticationException loginError) {
 
 			FacesMessage message = new FacesMessage(
@@ -271,7 +268,7 @@ public class LoginBean implements Serializable {
 
 	public void setActiveTabProjectIndex(int activeTabProjectIndex) {
 		this.activeTabProjectIndex = activeTabProjectIndex;
-	}	
+	}
 
 	public static Object findBean(String beanName) {
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -290,8 +287,7 @@ public class LoginBean implements Serializable {
 		this.activeTabProjectIndex = tv.getChildren().indexOf(event.getTab());
 		System.out.println("###### ACtive tab: " + activeTabProjectIndex);
 
-	}	
-	
+	}
 
 	public void changeEvent(ValueChangeEvent event) throws IOException {
 
@@ -385,20 +381,18 @@ public class LoginBean implements Serializable {
 				jJRequirementBean.setVersion(version);
 			}
 
-		
 			jJRequirementBean.loadData();
-			
-			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-		    ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
-			
-			
+
+			ExternalContext ec = FacesContext.getCurrentInstance()
+					.getExternalContext();
+			ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
+
 		}
-		
-	
 
 	}
 
 	public void messageListener(HttpSession session) {
+
 		JJMessageBean messageBean = (JJMessageBean) session
 				.getAttribute("jJMessageBean");
 		boolean messPanel = !messageBean.isCollapsedMesPanel();
@@ -464,7 +458,7 @@ public class LoginBean implements Serializable {
 					.redirect(path + "/pages/main.jsf?faces-redirect=true");
 		}
 	}
-	
+
 	public void loadingMain(ComponentSystemEvent e) throws IOException {
 
 		if (enable) {
@@ -632,53 +626,55 @@ public class LoginBean implements Serializable {
 											path
 													+ "/pages/main.jsf?faces-redirect=true");
 
-
-						} else if (root.getViewId().contains("specification")) {
-
+						} else if (viewID.contains("specification")) {
 
 							JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
 							jJRequirementBean.loadData();
+
+							// RequestContext ct =
+							// RequestContext.getCurrentInstance();
+							// ct.update("contentPanel:specForm");
+							// ct.update("contentPanel:categoryForm");
+						} else if (viewID.contains("development")) {
 							
-//							RequestContext ct = RequestContext.getCurrentInstance();
-//							ct.update("contentPanel:specForm");
-//							ct.update("contentPanel:categoryForm");
+							loadingPage(e);
 						}
 					}
-				} else if (!authorizationManager.getAuthorization(
-						root.getViewId(), jjProjectBean.getProject(),
-						jJProductBean.getProduct())) {
+				} else {
+					if (!authorizationManager.getAuthorization(
+							root.getViewId(), jjProjectBean.getProject(),
+							jJProductBean.getProduct())) {
 
-					context.addMessage(null, new FacesMessage(
-							FacesMessage.SEVERITY_ERROR,
-							"You have no permission to access this resource",
-							null));
+						context.addMessage(
+								null,
+								new FacesMessage(
+										FacesMessage.SEVERITY_ERROR,
+										"You have no permission to access this resource",
+										null));
 
-					context.getExternalContext().getFlash()
-							.setKeepMessages(true);
+						context.getExternalContext().getFlash()
+								.setKeepMessages(true);
 
-					FacesContext
-							.getCurrentInstance()
-							.getExternalContext()
-							.redirect(
-									path
-											+ "/pages/main.jsf?faces-redirect=true");
-				} else if (root.getViewId().contains("development")) {
-					loadingPage(e);
-				} else if (root.getViewId().contains("specifications")) {
+						FacesContext
+								.getCurrentInstance()
+								.getExternalContext()
+								.redirect(
+										path
+												+ "/pages/main.jsf?faces-redirect=true");
+					} else {
 
-					JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
-					jJRequirementBean.loadData();
-					
-//					RequestContext ct = RequestContext.getCurrentInstance();
-//					ct.update("contentPanel:specForm");
-//					ct.update("contentPanel:categoryForm");
+						if (root.getViewId().contains("specifications")) {
+
+							JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
+							jJRequirementBean.loadData();
+
+						}
+					}
 				}
 			}
 
-
 		}
 	}
-
 
 	// public void handleFileUpload(FileUploadEvent event) throws IOException {
 	//
