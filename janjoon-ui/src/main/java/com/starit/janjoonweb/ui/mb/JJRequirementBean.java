@@ -627,7 +627,7 @@ public class JJRequirementBean {
 
 	public void newRequirement(long id) {
 		long t = System.currentTimeMillis();
-		message = "New Requirement";
+		message = "specification_create_header";
 
 		requirementCategory = jJCategoryService.findJJCategory(id);
 
@@ -698,7 +698,7 @@ public class JJRequirementBean {
 
 	public void editRequirement() {
 		long t = System.currentTimeMillis();
-		message = "Edit Requirement";
+		message = "specification_edit_header";
 
 		requirementCategory = requirement.getCategory();
 		requirement.setUpdatedDate(new Date());
@@ -1212,7 +1212,6 @@ public class JJRequirementBean {
 
 	public void loadImportFormat() {
 		long t = System.currentTimeMillis();
-		message = "Import Requirement";
 
 		importProject = project;
 		importProduct = product;

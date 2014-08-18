@@ -22,8 +22,7 @@ public class JJCategoryBean {
 	@Autowired
 	public JJConfigurationService jJConfigurationService;
 
-	public void setjJConfigurationService(
-			JJConfigurationService jJConfigurationService) {
+	public void setjJConfigurationService(JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
 	}
 
@@ -70,23 +69,19 @@ public class JJCategoryBean {
 	}
 
 	public void newCategory() {
-
-		message = "New Category";
+		message = "admin_category_new_title";
 
 		categoryAdmin = new JJCategory();
 		categoryAdmin.setEnabled(true);
 		categoryAdmin.setCreationDate(new Date());
 		categoryAdmin.setStage(0);
 		disableLevel = false;
-
 		categoryState = true;
 	}
 
 	public void editCategory() {
-
-		message = "Edit Category";
+		message = "admin_category_edit_title";
 		disableLevel = true;
-
 		categoryState = false;
 	}
 
@@ -94,10 +89,8 @@ public class JJCategoryBean {
 		// message = "Edit Contact";
 
 		if (categoryAdmin != null) {
-
 			categoryAdmin.setEnabled(false);
 			jJCategoryService.updateJJCategory(categoryAdmin);
-
 		}
 	}
 
@@ -118,7 +111,8 @@ public class JJCategoryBean {
 				jJCategoryService.saveJJCategory(categoryAdmin);
 				message = "message_successfully_created";
 
-			} else {
+			}
+			else {
 
 				categoryAdmin.setUpdatedDate(new Date());
 
@@ -129,42 +123,37 @@ public class JJCategoryBean {
 			}
 
 			facesMessage = MessageFactory.getMessage(message, "JJCategory");
-
 			RequestContext context = RequestContext.getCurrentInstance();
 
 			if (categoryState) {
 				if (getCategoryDialogConfiguration()) {
 					context.execute("categoryDialogWidget.hide()");
-				} else {
+				}
+				else {
 
 					newCategory();
 				}
 
-			} else {
+			}
+			else {
 				context.execute("categoryDialogWidget.hide()");
 			}
-
-		} else {
+		}
+		else {
 			message = "This category is already exist into the database, try to use another name";
 			facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					message, "JJCategory");
 		}
-
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-
 	}
 
 	public void closeDialog() {
-
 		categoryAdmin = null;
-
 		categoryState = true;
 	}
 
 	private boolean getCategoryDialogConfiguration() {
-
 		return jJConfigurationService.getDialogConfig("CategoryDialog",
 				"category.create.saveandclose");
 	}
-
 }

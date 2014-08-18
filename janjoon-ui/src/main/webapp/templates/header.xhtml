@@ -89,64 +89,99 @@
 				</h:panelGrid>
 
 				<p:tabMenu id="tabMenu" name="content" style="float: none;"
-					activeIndex="-1">
+					activeIndex="#{param.menuIndex}">
 
 					<p:menuitem value="" icon="ui-icon-home"
-						url="/pages/main.jsf?faces-redirect=true" />
+						url="/pages/main.jsf?faces-redirect=true">
+						<f:param name="menuIndex" value="0" />
+					</p:menuitem>
 
 					<p:menuitem value="#{messages.header_project_menuitem}"
 						url="/pages/project1.jsf?faces-redirect=true"
 						icon="ui-icon-clipboard" update=":contentPanel"
-						rendered="#{!loginBean.enable}" />
+						rendered="#{!loginBean.enable}" >
+						<f:param name="menuIndex" value="1" />
+					</p:menuitem>
 
 					<p:menuitem id="proAction"
 						value="#{messages.header_project_menuitem}"
-						actionListener="#{loginBean.redirection}" update="growlHeader"
-						icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
+						actionListener="#{loginBean.redirection}"
+						update="growlHeader"
+						icon="ui-icon-clipboard" rendered="#{loginBean.enable}" >
+						<f:param name="menuIndex" value="2" />
+					</p:menuitem>
 
 					<p:menuitem value="#{messages.header_spec_menuitem}"
 						url="/pages/specifications.jsf?faces-redirect=true"
-						icon="ui-icon-document" />
+						icon="ui-icon-document" >
+						<f:param name="menuIndex" value="3" />
+					</p:menuitem>
 
 					<p:menuitem value="#{messages.header_bug_menuitem}"
-						url="/pages/bugs.jsf?faces-redirect=true" icon="ui-icon-gear" />
+						url="/pages/bugs.jsf?faces-redirect=true"
+						icon="ui-icon-gear" >
+						<f:param name="menuIndex" value="4" />
+					</p:menuitem>
 
 					<p:menuitem value="#{messages.header_dev_menuitem}"
 						url="/pages/development.jsf?faces-redirect=true"
-						icon="ui-icon-wrench" rendered="#{!loginBean.enable}" />
+						icon="ui-icon-wrench" rendered="#{!loginBean.enable}" >
+						<f:param name="menuIndex" value="5" />
+					</p:menuitem>
 
 					<p:menuitem id="devAction" value="#{messages.header_dev_menuitem}"
-						actionListener="#{loginBean.redirectToDev}" update="growlHeader"
-						icon="ui-icon-wrench" rendered="#{loginBean.enable}" />
+						actionListener="#{loginBean.redirectToDev}"
+						update="growlHeader"
+						icon="ui-icon-wrench" rendered="#{loginBean.enable}" >
+						<f:param name="menuIndex" value="6" />
+					</p:menuitem>
 
 					<p:menuitem value="#{messages.header_test_menuitem}"
-						url="/pages/test.jsf?faces-redirect=true" icon="ui-icon-check"
-						update=":contentPanel" rendered="#{!loginBean.enable}" />
+						url="/pages/test.jsf?faces-redirect=true"
+						icon="ui-icon-check"
+						update=":contentPanel" rendered="#{!loginBean.enable}" >
+						<f:param name="menuIndex" value="7" />
+					</p:menuitem>
 
 					<p:menuitem id="testAction"
 						value="#{messages.header_test_menuitem}"
 						actionListener="#{loginBean.redirection}" update="growlHeader"
-						icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
+						icon="ui-icon-clipboard" rendered="#{loginBean.enable}" >
+						<f:param name="menuIndex" value="8" />
+					</p:menuitem>
 
 					<p:menuitem value="#{messages.header_delivery_menuitem}"
-						url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
+						url="/pages/delivery.jsf?faces-redirect=true"
+						icon="ui-icon-star" >
+						<f:param name="menuIndex" value="9" />
+					</p:menuitem>
 
 					<p:menuitem value="#{messages.header_team_menuitem}"
-						url="/pages/teams.jsf?faces-redirect=true" icon="ui-icon-person" />
+						url="/pages/teams.jsf?faces-redirect=true"
+						icon="ui-icon-person" >
+						<f:param name="menuIndex" value="10" />
+					</p:menuitem>
 
 					<p:menuitem value="#{messages.header_stat_menuitem}"
 						url="/pages/stats.jsf?faces-redirect=true"
 						icon="ui-icon-arrowreturnthick-1-n"
-						rendered="#{!loginBean.enable}" />
+						rendered="#{!loginBean.enable}" >
+						<f:param name="menuIndex" value="11" />
+					</p:menuitem>
 
 					<p:menuitem id="statsAction"
 						value="#{messages.header_stat_menuitem}"
-						actionListener="#{loginBean.redirection}" update="growlHeader"
-						icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
+						actionListener="#{loginBean.redirection}"
+						update="growlHeader"
+						icon="ui-icon-clipboard" rendered="#{loginBean.enable}" >
+						<f:param name="menuIndex" value="12" />
+					</p:menuitem>
 
 					<p:menuitem value="#{messages.header_admin_menuitem}"
 						url="/pages/administration.jsf?faces-redirect=true"
-						icon="ui-icon-key" update=":contentPanel" />
+						icon="ui-icon-key" update=":contentPanel" >
+						<f:param name="menuIndex" value="13" />
+					</p:menuitem>
 
 				</p:tabMenu>
 

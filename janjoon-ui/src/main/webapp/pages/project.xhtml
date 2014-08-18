@@ -49,7 +49,7 @@
 			</p:dataTable>
 		</p:panel>
 	</h:form>
-	<p:dialog id="projectDialog" header="#{jJProjectBean.message}"
+	<p:dialog id="projectDialog" header="#{messages[jJProjectBean.message]}"
 		modal="true" widgetVar="projectDialogWidget" dynamic="true"
 		showEffect="fade" hideEffect="explode" resizable="false">
 		<p:ajax event="close" update=":tabview:projectForm :headerForm"

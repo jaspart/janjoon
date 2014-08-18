@@ -89,8 +89,8 @@ public class JJProfileBean {
 	}
 
 	public void newProfile(JJRightBean jJRightBean) {
-
-		message = "New Profile";
+		message = "admin_profile_new_title";
+		
 		profileAdmin = new JJProfile();
 		profileAdmin.setEnabled(true);
 
@@ -102,12 +102,10 @@ public class JJProfileBean {
 		disabledRightMode = true;
 
 		profileState = true;
-
 	}
 
 	public void editProfile(JJRightBean jJRightBean) {
-
-		message = "Edit Profile";
+		message = "admin_profile_edit_title";
 
 		jJRightBean.setDisabledCheckRight(false);
 		jJRightBean.newRight();

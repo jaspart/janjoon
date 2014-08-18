@@ -50,7 +50,7 @@
 			</p:dataTable>
 		</p:panel>
 	</h:form>
-	<p:dialog id="profileDialog" header="#{jJProfileBean.message}"
+	<p:dialog id="profileDialog" header="#{messages[jJProfileBean.message]}"
 		modal="true" widgetVar="profileDialogWidget" dynamic="true"
 		showEffect="fade" hideEffect="explode" resizable="false">
 		<p:ajax event="close" update=":tabview:profileForm"

@@ -113,34 +113,32 @@ public class JJProjectBean {
 	}
 
 	public void newProject() {
-
-		message = "New Project";
+		message = "admin_project_new_title";
+		
 		projectAdmin = new JJProject();
 		projectAdmin.setEnabled(true);
 		projectAdmin.setCreationDate(new Date());
 		projectAdmin.setDescription("Defined as a Project");
 		projectManager = null;
-
 		projectState = true;
 	}
 
 	public void editProject() {
-
-		message = "Edit Project";
+		message = "admin_project_edit_title";
 
 		getProjectManagerList();
-
 		if (projectManagerList.isEmpty()) {
 			projectManager = null;
 
-		} else {
+		}
+		else {
 			if (projectManagerList.contains(projectAdmin.getManager())) {
 				projectManager = projectAdmin.getManager();
-			} else {
+			}
+			else {
 				projectManager = null;
 			}
 		}
-
 		projectState = false;
 	}
 

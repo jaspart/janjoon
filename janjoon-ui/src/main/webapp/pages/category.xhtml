@@ -58,7 +58,7 @@
 			</p:dataTable>
 		</p:panel>
 	</h:form>
-	<p:dialog id="categoryDialog" header="#{jJCategoryBean.message}"
+	<p:dialog id="categoryDialog" header="#{messages[jJCategoryBean.message]}"
 		modal="true" widgetVar="categoryDialogWidget" dynamic="true"
 		showEffect="fade" hideEffect="explode" resizable="false">
 		<p:ajax event="close" update=":tabview:categoryForm"

@@ -167,8 +167,7 @@ public class JJProductBean {
 	}
 
 	public void newProduct(JJVersionBean jJVersionBean) {
-
-		message = "New Product";
+		message = "admin_product_new_title";
 		productAdmin = new JJProduct();
 		productAdmin.setEnabled(true);
 		productAdmin.setCreationDate(new Date());
@@ -183,27 +182,23 @@ public class JJProductBean {
 		disabledVersionMode = true;
 
 		productState = true;
-
 	}
 
 	public void editProduct(JJVersionBean jJVersionBean) {
-
-		message = "Edit Product";
-
+		message = "admin_product_edit_title";
 		getProductManagerList();
-
 		if (productManagerList.isEmpty()) {
 			productManager = null;
 
-		} else {
+		}
+		else {
 			if (productManagerList.contains(productAdmin.getManager())) {
 				productManager = productAdmin.getManager();
-			} else {
+			}
+			else {
 				productManager = null;
 			}
 		}
-
-		System.out.println("vovo");
 
 		jJVersionBean.setDisabledCheckVersion(false);
 		jJVersionBean.newVersion();
@@ -216,7 +211,6 @@ public class JJProductBean {
 	}
 
 	public void deleteProduct() {
-
 		if (productAdmin != null) {
 			productAdmin.setEnabled(false);
 			jJProductService.updateJJProduct(productAdmin);
@@ -225,7 +219,6 @@ public class JJProductBean {
 	}
 
 	public void addProduct(JJVersionBean jJVersionBean) {
-
 		productAdmin.setManager(productManager);
 		if (productAdmin.getId() == null) {
 
@@ -234,19 +227,16 @@ public class JJProductBean {
 			disabledProductMode = true;
 			disabledVersionMode = false;
 
-			jJVersionBean
-					.setVersionDataModel(new ArrayList<VersionDataModel>());
+			jJVersionBean.setVersionDataModel(new ArrayList<VersionDataModel>());
 
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					MessageFactory.getMessage("message_successfully_created",
 							"JJProduct"));
-
 		}
 	}
 
 	public void save(JJVersionBean jJVersionBean) {
-
 		System.out.println("in save version");
 
 		productAdmin.setManager(productManager);
@@ -254,7 +244,6 @@ public class JJProductBean {
 
 		jJProductService.updateJJProduct(productAdmin);
 		resetVersionProductList();
-		System.out.println("pppp");
 
 		List<JJVersion> versions = jJVersionService.getVersions(true, true,
 				productAdmin);
@@ -289,25 +278,19 @@ public class JJProductBean {
 			}
 
 		} else if (selectedVersions.isEmpty() && !versions.isEmpty()) {
-
 			for (JJVersion version : versions) {
 				version.setEnabled(false);
 				version.setUpdatedDate(new Date());
 				jJVersionService.updateJJVersion(version);
 			}
-
 		} else if (!selectedVersions.isEmpty() && versions.isEmpty()) {
-
 			for (JJVersion version : selectedVersions) {
 				version.setProduct(productAdmin);
 
 				productAdmin.getVersions().add(version);
 				jJVersionService.saveJJVersion(version);
 			}
-
 		}
-
-		System.out.println("herer");
 
 		FacesContext.getCurrentInstance().addMessage(
 				null,
@@ -319,14 +302,14 @@ public class JJProductBean {
 		if (productState) {
 			if (getProductDialogConfiguration()) {
 				context.execute("productDialogWidget.hide()");
-			} else {
+			}
+			else {
 				newProduct(jJVersionBean);
 			}
-		} else {
+		}
+		else {
 			context.execute("productDialogWidget.hide()");
 		}
-
-		System.out.println("dfgdfgf");
 	}
 
 	public void addMessage() {

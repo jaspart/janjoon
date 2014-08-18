@@ -56,7 +56,7 @@
 			</p:dataTable>
 		</p:panel>
 	</h:form>
-	<p:dialog id="productDialog" header="#{jJProductBean.message}"
+	<p:dialog id="productDialog" header="#{messages[jJProductBean.message]}"
 		modal="true" widgetVar="productDialogWidget" dynamic="true"
 		showEffect="fade" hideEffect="explode" resizable="false">
 		<p:ajax event="close" update=":tabview:productForm :headerForm"

@@ -385,7 +385,7 @@ public class JJTestcaseBean {
 	}
 
 	public void newTestcase(JJTeststepBean jJTeststepBean) {
-		message = "New Testcase";
+		message = "test_create_header";
 		testcase = new JJTestcase();
 		testcase.setEnabled(true);
 		testcase.setCreationDate(new Date());
@@ -441,7 +441,7 @@ public class JJTestcaseBean {
 
 	public void editTestcase(JJTeststepBean jJTeststepBean) {
 
-		message = "Edit Testcase";
+		message = "test_edit_header";
 
 		JJTestcase tc = jJTestcaseService.findJJTestcase(testcase.getId());
 		requirement = tc.getRequirement();

@@ -101,7 +101,7 @@ public class JJContactBean {
 
 	public void newContact(JJPermissionBean jJPermissionBean) {
 
-		message = "New Contact";
+		message = "admin_contact_new_title";
 
 		contactAdmin = new JJContact();
 		contactAdmin.setEnabled(true);
@@ -119,7 +119,7 @@ public class JJContactBean {
 	}
 
 	public void editContact(JJPermissionBean jJPermissionBean) {
-		message = "Edit Contact";
+		message = "admin_contact_edit_title";
 
 		jJPermissionBean.setDisabledCheckPermission(false);
 		jJPermissionBean.newPermission();
@@ -379,9 +379,7 @@ public class JJContactBean {
 	}
 
 	private boolean getContactDialogConfiguration() {
-
 		return jJConfigurationService.getDialogConfig("AdminUserDialog",
 				"admin.user.create.saveandclose");
 	}
-
 }
