@@ -8,7 +8,10 @@
 	<beans:bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<beans:property name="locations">
-			<beans:value>classpath*:META-INF/spring/*.properties</beans:value>
+			<beans:list>
+				<beans:value>classpath*:META-INF/spring/*.properties</beans:value>
+				<beans:value>file:///${HOME}/db/*.properties</beans:value>
+			</beans:list>
 		</beans:property>
 	</beans:bean>
 
