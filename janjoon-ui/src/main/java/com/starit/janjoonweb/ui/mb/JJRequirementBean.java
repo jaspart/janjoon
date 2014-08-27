@@ -208,6 +208,20 @@ public class JJRequirementBean {
 	public void setTableDataModelList(List<CategoryDataModel> tableDataModelList) {
 		this.tableDataModelList = tableDataModelList;
 	}
+	
+	public String getTableDataModelSizePct() {
+		int nbOpenedTables = 0;
+		for(int i = 0 ; i < tableDataModelList.size() ; i++){
+			if(tableDataModelList.get(i).getCategoryId() != 0){
+				nbOpenedTables++;
+			}
+		}
+		double tableDataModelSizePct = 0;
+		if(nbOpenedTables > 0){
+			tableDataModelSizePct = 100/nbOpenedTables;
+		}
+		return tableDataModelSizePct+"%";
+	}
 
 	public JJRequirement getRequirement() {
 		return requirement;

@@ -63,7 +63,7 @@ public class LoginBean implements Serializable {
 	@Autowired
 	JJCompanyService jJCompanyService;
 
-	private String username = "janjoon.mailer@gmail.com";
+	private String username = "";//"janjoon.mailer@gmail.com";
 	private String password;
 	private boolean loading = false;
 	private boolean loadMain = false;

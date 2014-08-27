@@ -9,6 +9,17 @@
 <f:event listener="#{loginBean.checkAuthorities}" type="preRenderView" />
 <f:view locale="#{localeBean.locale}" contentType="text/html">
 	<h:head>
+		<script type="text/javascript">
+			function centerDialog() {
+				var top, left;
+				top = Math.max($(window).height() - $("#frame").outerHeight(), 0) / 2;
+				left = Math.max($(window).width() - $("#frame").outerWidth(), 0) / 2;
+				$("#frame").css({
+					top: top,
+					left: left
+				});
+			}
+		</script>
 	</h:head>
 	<h:body>
 		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
