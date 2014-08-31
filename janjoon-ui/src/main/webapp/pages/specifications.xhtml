@@ -209,29 +209,33 @@
 							</p:splitButton>
 						</p:column>
 						<f:facet name="footer">
-
-							<h:outputText value="#{messages.specification_progress_footer}" />
-							<p:row>
-								<p:progressBar id="completion"
-									value="#{tableDataModel.coverageProgress}"
-									labelTemplate="#{messages.specification_coverage_progress} {value}%"
-									displayOnly="true" />
-							</p:row>
-							<p:row>
-								<p:progressBar id="coverage"
-									value="#{tableDataModel.completionProgress}"
-									labelTemplate="#{messages.specification_completion_progress} {value}%"
-									displayOnly="true" />
-							</p:row>
+							<p:accordionPanel dynamic="true" cache="true" activeIndex="-1">
+								<p:tab title="#{messages.specification_progress_footer}">
+									<p:row>
+										<p:progressBar id="coverage"
+											value="#{tableDataModel.coverageProgress}"
+											labelTemplate="#{messages.specification_coverage_progress} {value}%"
+											displayOnly="true" />
+									</p:row>
+									<p:row>
+										<p:progressBar id="completion"
+											value="#{tableDataModel.completionProgress}"
+											labelTemplate="#{messages.specification_completion_progress} {value}%"
+											displayOnly="true" />
+									</p:row>
+								</p:tab>
+							</p:accordionPanel>
 						</f:facet>
 					</p:dataTable>
 				</div>
 			</ui:repeat>
 		</h:form>
 
+		<p:hotkey bind="esc" handler="requirementDialogWidget.hide()" />
+		<p:hotkey bind="alt+enter" handler="requirementSaveWidget.jq.click()"/>
 		<p:dialog id="requirementDialog" header="#{messages[jJRequirementBean.message]}"
 			modal="true" widgetVar="requirementDialogWidget" dynamic="true"
-			resizable="false" position="center" height="510px" width="750px">
+			resizable="false" position="center" style="padding:0px;top:70px !important;">
 			<p:ajax event="close" listener="#{jJRequirementBean.closeDialog}"
 				update=":specForm" onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock()" />
@@ -247,10 +251,10 @@
 					</h:panelGrid>
 				</pe:blockUI>
 
-				<h:form id="requirementDialogForm">
+				<h:form id="requirementDialogForm" style="padding:0px;">
 					<p:growl id="msg" />
 					<p:scrollPanel mode="native">
-						<p:panelGrid style="margin-top:10px">
+						<p:panelGrid style="margin-top:0px">
 							<p:row>
 								<p:column>
 									<p:inputText id="name"
@@ -415,7 +419,7 @@
 										value="#{messages.specification_create_description_label}" />
 									<pe:ckEditor id="description" widgetVar="descriptionWidget"
 										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
-										style="width:680px;height:150px;"
+										style="width:680px;height:150px;margin-left:auto;margin-right:auto;"
 										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 										value="#{jJRequirementBean.requirement.description}"
 										required="true"
@@ -466,7 +470,8 @@
 								<p:column rowspan="3" colspan="3">
 									<p:inputTextarea id="note" rows="3" cols="100"
 										value="#{jJRequirementBean.requirement.note}"
-										autoResize="false" />
+										autoResize="false"
+										style="width: 600px;margin-left:auto;margin-right:auto;"/>
 									<p:watermark for="note"
 										value="#{messages.specification_create_note_watermark}" />
 								</p:column>
@@ -479,6 +484,7 @@
 											onstart="PF('requirementBlockUIWidget').block()"
 											oncomplete="PF('requirementBlockUIWidget').unblock()"
 											action="#{jJRequirementBean.save()}" process="@form"
+											widgetVar="requirementSaveWidget"
 											update="requirementDialogForm" />
 									</p:column>
 								</p:row>
@@ -489,6 +495,7 @@
 			</p:outputPanel>
 		</p:dialog>
 
+		<p:hotkey bind="esc" handler="chapterDialogWidget.hide()" />
 		<p:dialog id="chapterDialog"
 			header="#{messages.specification_chapter_header}" modal="true"
 			widgetVar="chapterDialogWidget" dynamic="true" resizable="false">
@@ -687,6 +694,7 @@
 			</p:outputPanel>
 		</p:confirmDialog>
 
+		<p:hotkey bind="esc" handler="requirementImportDialogWidget.hide()" />
 		<p:dialog id="requirementImportDialog"
 			header="#{messages.specification_import_title}" modal="true"
 			widgetVar="requirementImportDialogWidget" dynamic="true"

@@ -174,6 +174,17 @@ a:visited {
 	color: black;
 	font-weight: bold;
 }
+.TestcaseExec .ui-button:nth-child(1) {
+	background-color: #77F177;
+	background-image: -webkit-linear-gradient(top, #ffffff, #6DEB62);
+	background-image: -moz-linear-gradient(top,  #ccc,  #6DEB62);
+}
+.TestcaseExec .ui-button:nth-child(2) {
+	background-color: #F17777;
+	background-image: -webkit-linear-gradient(top, #ffffff, #EB7D62);
+	background-image: -moz-linear-gradient(top,  #ffffff, #EB7D62);
+}
+
 div.timeline-event-range {
 	height: 15px !important;
 }
