@@ -235,7 +235,7 @@
 		<p:hotkey bind="alt+enter" handler="requirementSaveWidget.jq.click()"/>
 		<p:dialog id="requirementDialog" header="#{messages[jJRequirementBean.message]}"
 			modal="true" widgetVar="requirementDialogWidget" dynamic="true"
-			resizable="false" position="center" style="padding:0px;top:70px !important;">
+			resizable="false" position="center" style="padding:0px;top:40px !important;">
 			<p:ajax event="close" listener="#{jJRequirementBean.closeDialog}"
 				update=":specForm" onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock()" />

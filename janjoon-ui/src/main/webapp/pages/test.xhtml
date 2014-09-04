@@ -323,6 +323,7 @@
 			</p:layoutUnit>
 		</p:layout>
 
+		<p:hotkey bind="esc" handler="testcaseDialogWidget.hide()" />
 		<p:dialog id="testcaseDialog" header="#{messages[jJTestcaseBean.message]}"
 			modal="true" widgetVar="testcaseDialogWidget" dynamic="true"
 			resizable="false" style="top: 30px;">
@@ -525,12 +526,13 @@
 			</p:outputPanel>
 		</p:dialog>
 
-		<p:hotkey bind="esc" handler="runTestcaseDialogWidget.hide()" />
-		<p:hotkey bind="enter" handler="TestcaseExecWidget.buttons[0].jq.click()"/>
-		<p:hotkey bind="F" handler="TestcaseExecWidget.buttons[1].jq.click()"/>
 		<p:dialog id="runTestcaseDialog" header="#{messages.test_exec_title}"
 			modal="true" widgetVar="runTestcaseDialogWidget" width="500px" height="375px"
 			style="top: 30px;" dynamic="true" resizable="false">
+			<p:hotkey bind="esc" handler="runTestcaseDialogWidget.hide()" />
+			<p:hotkey bind="space" handler="TestcaseExecSuccessButton.jq.click()"/>
+			<p:hotkey bind="S" handler="TestcaseExecSuccessButton.jq.click()"/>
+			<p:hotkey bind="F" handler="TestcaseExecFailedButton.jq.click()"/>
 			<p:ajax event="close" update=":testFormCenter :testFormWest"
 				listener="#{jJTeststepexecutionBean.closeDialog()}" />
 			<p:outputPanel id="runTestcaseDialogPanel">
@@ -580,7 +582,7 @@
 										<p:column>
 											<h:outputText value="Status: " />
 										</p:column>
-										<p:column>
+<!--										<p:column>
 											<p:selectOneButton styleClass="TestcaseExec"
 												value="#{jJTeststepexecutionBean.status}"
 												widgetVar="TestcaseExecWidget">
@@ -590,6 +592,26 @@
 												<f:selectItem itemLabel="Passed" itemValue="true" />
 												<f:selectItem itemLabel="Failed" itemValue="false" />
 											</p:selectOneButton>
+										</p:column>-->
+										<p:column>
+											<p:commandButton id="testExecSuccessButton"
+												value="#{messages.test_graph_success_label}"
+												icon="ui-icon-circle-check"
+												styleClass="TestcaseExecSuccess"
+												actionListener="#{jJTeststepexecutionBean.setStatus('true')}"
+												action="#{jJTeststepexecutionBean.handleStatus()}"
+												widgetVar="TestcaseExecSuccessButton"
+												update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton :bugForm:createPanelGrid"
+												async="true" ajax="true" />
+											<p:commandButton id="testExecFailedButton"
+												value="#{messages.test_graph_failed_label}"
+												icon="ui-icon-circle-close"
+												styleClass="TestcaseExecFailed"
+												actionListener="#{jJTeststepexecutionBean.setStatus('false')}"
+												action="#{jJTeststepexecutionBean.handleStatus()}"
+												widgetVar="TestcaseExecFailedButton"
+												update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton :bugForm:createPanelGrid"
+												async="true" ajax="true" />
 										</p:column>
 									</p:row>
 								</p:panelGrid>
