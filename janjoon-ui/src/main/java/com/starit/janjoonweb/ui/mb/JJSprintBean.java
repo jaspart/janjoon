@@ -187,6 +187,8 @@ public class JJSprintBean {
 	}
 
 	public void setTask(JJTask task) {
+		
+		System.out.println("f:setPropertyActionListener:"+task.getName());
 		this.task = task;
 	}
 
@@ -597,6 +599,10 @@ public class JJSprintBean {
 	}
 
 	public void deleteTask() {
+		
+		
+		System.out.println("deleteTask");	
+		task=jJTaskService.findJJTask(task.getId());
 		task.setEnabled(false);
 		jJTaskService.saveJJTask(task);
 		sprintUtil = new SprintUtil(jJSprintService.findJJSprint(task
@@ -612,15 +618,16 @@ public class JJSprintBean {
 		reqList = null;
 		task = null;
 
-		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("deleteDialogWidget.hide()");
+		RequestContext context = RequestContext.getCurrentInstance();	
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted", "JJTask");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);	
-
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		
+		context.execute("projectTabView.select("+1+")");
+		
 		context.execute("SprintTab.select("
-				+ contains(sprintUtil.getSprint().getId()) + ")");
+				+ contains(sprintUtil.getSprint().getId()) + ")");		
 
 		context.execute("deleteDialogWidget.hide()");
 	}

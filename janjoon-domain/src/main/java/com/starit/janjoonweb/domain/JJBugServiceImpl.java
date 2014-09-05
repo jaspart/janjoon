@@ -2,7 +2,6 @@ package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -92,7 +91,7 @@ public class JJBugServiceImpl implements JJBugService {
 			predicates.add(criteriaBuilder.equal(from.get("status"), status));
 		}
 
-		predicates.add(criteriaBuilder.isNotNull(from.get("requirement")));
+		//predicates.add(criteriaBuilder.isNotNull(from.get("requirement")));
 
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));

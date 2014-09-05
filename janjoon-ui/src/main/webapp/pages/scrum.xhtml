@@ -161,8 +161,13 @@
 											<p:menuitem id="deleteButton" icon="ui-icon-trash"
 												oncomplete="deleteDialogWidget.show()"
 												value="#{messages.label_delete}">
+												
 												<f:setPropertyActionListener value="#{todo}"
 													target="#{jJSprintBean.task}" />
+													
+												<f:setPropertyActionListener target="#{jJTaskBean.mode}"
+														value="scrum" />
+														
 											</p:menuitem>
 										</p:splitButton>
 									</p:column>
@@ -210,6 +215,8 @@
 													value="#{messages.label_delete}">
 													<f:setPropertyActionListener value="#{prog}"
 														target="#{jJSprintBean.task}" />
+														<f:setPropertyActionListener target="#{jJTaskBean.mode}"
+														value="scrum" />
 												</p:menuitem>
 											</p:splitButton>
 										</p:column>
@@ -249,6 +256,8 @@
 													value="#{messages.label_delete}">
 													<f:setPropertyActionListener value="#{done}"
 														target="#{jJSprintBean.task}" />
+													<f:setPropertyActionListener target="#{jJTaskBean.mode}"
+														value="scrum" />
 												</p:menuitem>
 
 											</p:splitButton>

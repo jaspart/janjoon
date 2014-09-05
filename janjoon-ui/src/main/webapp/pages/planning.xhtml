@@ -39,7 +39,7 @@
 		</p:panelGrid>
 	</h:form>
 	<h:form id="planningForm" style="width:100%">
-		<f:event type="preRenderComponent" listener="#{jJTaskBean.loadData()}" />
+		<f:event type="preRenderComponent" listener="#{jJTaskBean.loadingData()}" />
 		<p:growl id="msg" />
 		<p:panelGrid style="margin-top:10px">
 			<p:row>
@@ -79,6 +79,8 @@
 										title="#{messages.label_delete}">
 										<f:setPropertyActionListener value="#{taskData}"
 											target="#{jJTaskBean.selectedTaskData}" />
+											<f:setPropertyActionListener target="#{jJTaskBean.mode}"
+														value="planning" />
 									</p:menuitem>
 								</p:splitButton>
 							</p:column>

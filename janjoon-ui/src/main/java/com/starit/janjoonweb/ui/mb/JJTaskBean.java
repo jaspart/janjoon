@@ -144,6 +144,7 @@ public class JJTaskBean {
 	}
 
 	public void setMode(String mode) {
+		System.out.println("f:setPropertyActionListener :" + mode);
 		this.mode = mode;
 	}
 
@@ -220,10 +221,12 @@ public class JJTaskBean {
 	}
 
 	public JJVersion getVersion() {
+
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJVersionBean jJVersionBean = (JJVersionBean) session
 				.getAttribute("jJVersionBean");
+
 		this.version = jJVersionBean.getVersion();
 
 		return version;
@@ -371,6 +374,23 @@ public class JJTaskBean {
 		this.copyObjets = copyObjets;
 	}
 
+	public void loadingData() {
+
+		if (tasksData == null) {
+			getProject();
+			loadData();
+		} else {
+			if (tasksData.size() != 0) {
+				if (!tasksData.get(0).getChapter().getProject().equals(project)) {
+					loadData();
+				}
+			} else {
+				loadData();
+			}
+		}
+
+	}
+
 	public void loadData() {
 
 		// Set initial start / end dates for the axis of the timeline
@@ -398,6 +418,8 @@ public class JJTaskBean {
 		List<JJChapter> chapters = jJChapterService.getChapters(project, true,
 				true);
 
+		System.out.println(chapters.size());
+
 		for (JJChapter chapter : chapters) {
 			Map<Date, String> min = new TreeMap<Date, String>();
 			Map<Date, String> max = new TreeMap<Date, String>();
@@ -416,8 +438,9 @@ public class JJTaskBean {
 			TreeMap<String, JJTask> Tasks = new TreeMap<String, JJTask>();
 
 			for (JJTask task : tasks) {
+
 				// Tasks.put(task.getName(), task);
-				Tasks.put(" ", task);
+				Tasks.put(task.getId() + "", task);
 			}
 
 			// Iterate over HashMap
@@ -734,20 +757,68 @@ public class JJTaskBean {
 		if (valid) {
 			task.setUpdatedDate(new Date());
 			jJTaskService.updateJJTask(task);
+
+			int i = containTaskData(task.getId());
+			if (i != -1) {
+				TaskData tskst = new TaskData(task, tasksData.get(i)
+						.getChapter(), task.getStartDatePlanned(),
+						task.getEndDatePlanned(), task.getWorkloadPlanned(),
+						false);
+				System.out.println("containTaskData"+task.getDescription());
+
+				tasksData.set(i, tskst);
+			}
+
+			if (task.getSprint() != null) {
+
+				HttpSession session = (HttpSession) FacesContext
+						.getCurrentInstance().getExternalContext()
+						.getSession(false);
+				JJSprintBean jJSprintBean = (JJSprintBean) session
+						.getAttribute("jJSprintBean");
+				SprintUtil s = SprintUtil.getSprintUtil(task.getSprint()
+						.getId(), jJSprintBean.getSprintList());
+				if (s != null) {
+					s = new SprintUtil(jJSprintService.findJJSprint(task
+							.getSprint().getId()),
+							jJTaskService.getSprintTasks(jJSprintService
+									.findJJSprint(task.getSprint().getId())));
+
+					// sprintUtil.setRenderTaskForm(false);
+					jJSprintBean.getSprintList().set(
+							jJSprintBean.contains(s.getSprint().getId()), s);
+				}
+			}
 			reset();
 
 			message = "Success Update";
 			facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					message, "JJTask");
+			
 		} else {
 			facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					message, "JJTask");
 		}
 
-		loadData();
-
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
+	}
+
+	public int containTaskData(long id) {
+		int i = 0;
+		int j = -1;
+
+		if (tasksData != null) {
+			while (i < tasksData.size()) {
+				if (tasksData.get(i).getTask().getId().equals(id)) {
+					j = i;
+					i = tasksData.size();
+				} else
+					i++;
+			}
+		}
+
+		return j;
 	}
 
 	public void duplicateTask() {
@@ -829,8 +900,6 @@ public class JJTaskBean {
 	public void loadImportFormat(ActionEvent e) {
 
 		this.mode = (String) e.getComponent().getAttributes().get("mode");
-		;
-
 		disabledImportButton = true;
 		disabledFilter = true;
 
@@ -873,9 +942,9 @@ public class JJTaskBean {
 	}
 
 	public void fillTableImport() {
+
 		importFormats = new ArrayList<ImportFormat>();
 		List<JJTask> tasks;
-
 		copyObjets = false;
 		disabledImportButton = true;
 
@@ -885,6 +954,8 @@ public class JJTaskBean {
 
 				for (JJBug bug : jJBugService.getImportBugs(project, version,
 						importCategory, importStatus, true)) {
+
+					System.out.println(bug.getName());
 
 					if (!checkAll) {
 
@@ -1442,10 +1513,10 @@ public class JJTaskBean {
 	private JJRequirement selectedReq;
 
 	public TreeNode getSelectedTree() {
-		
-		if(selectedTree== null)
-			selectedTree=taskTreeNode;
-		
+
+		if (selectedTree == null)
+			selectedTree = taskTreeNode;
+
 		return selectedTree;
 	}
 
@@ -1461,12 +1532,46 @@ public class JJTaskBean {
 
 	public void deleteTaskData() {
 
-		selectedTaskData.getTask().setEnabled(false);
-		jJTaskService.updateJJTask(selectedTaskData.getTask());
-		tasksData.remove(contain(selectedTaskData.getTask()));
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_deleted", "JJTask");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		RequestContext context = RequestContext.getCurrentInstance();
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJSprintBean jJSprintBean = (JJSprintBean) session
+				.getAttribute("jJSprintBean");
+		JJTask tJjTask = null;
+
+		if (!mode.equalsIgnoreCase("scrum")) {
+			System.out.println(mode);
+			tJjTask = jJTaskService.findJJTask(selectedTaskData.getTask()
+					.getId());
+			tJjTask.setEnabled(false);
+			jJTaskService.updateJJTask(tJjTask);
+			tasksData.remove(contain(tJjTask));
+			if (tJjTask.getSprint() != null) {
+				SprintUtil s = SprintUtil.getSprintUtil(tJjTask.getSprint()
+						.getId(), jJSprintBean.getSprintList());
+				if (s != null) {
+					s = new SprintUtil(jJSprintService.findJJSprint(tJjTask
+							.getSprint().getId()),
+							jJTaskService.getSprintTasks(jJSprintService
+									.findJJSprint(tJjTask.getSprint().getId())));
+
+					// sprintUtil.setRenderTaskForm(false);
+					jJSprintBean.getSprintList().set(
+							jJSprintBean.contains(s.getSprint().getId()), s);
+				}
+			}
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"message_successfully_deleted", "JJTask");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+			context.execute("deleteDialogWidget.hide()");
+		} else {
+
+			tJjTask = jJSprintBean.getTask();
+			jJSprintBean.deleteTask();
+			tasksData.remove(contain(tJjTask));
+
+		}
+
 	}
 
 	public TaskData getSelectedTaskData() {

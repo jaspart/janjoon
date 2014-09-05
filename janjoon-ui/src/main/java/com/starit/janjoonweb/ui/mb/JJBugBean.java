@@ -83,8 +83,8 @@ public class JJBugBean {
 		return JJBug_;
 	}
 
-	public void setJJBug_(JJBug JJBug_) {
-		this.JJBug_ = JJBug_;
+	public void setJJBug_(JJBug JJBug_) {		
+		this.JJBug_ =JJBug_;
 	}
 
 	public JJProject getProject() {
@@ -395,9 +395,12 @@ public class JJBugBean {
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
 
-		JJBug_.setEnabled(true);
 		if (JJBug_.getRequirement() != null)
+		{
+			System.out.println(JJBug_.getRequirement().getName());
 			JJBug_.setCategory(JJBug_.getRequirement().getCategory());
+		}
+			
 
 		if (JJBug_.getId() != null) {
 
@@ -408,10 +411,24 @@ public class JJBugBean {
 			JJBug_.setCreatedBy(contact);
 			JJBug_.setCreationDate(new Date());
 			JJBug_.setEnabled(true);
-		}
-		setJJBug_(JJBug_);
-		return persist();
-
+		}		
+		
+		if (JJBug_.getRequirement() != null)
+			System.out.println(JJBug_.getRequirement().getName());			
+		
+		String message = "";
+        if (JJBug_.getId() != null) {
+            jJBugService.updateJJBug(JJBug_);
+            message = "message_successfully_updated";
+        } else {
+            jJBugService.saveJJBug(JJBug_);
+            message = "message_successfully_created";
+        }
+       
+        FacesMessage facesMessage = MessageFactory.getMessage(message, "JJBug");
+        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+        reset();
+        return "";
 	}
 
 	public String findStyleColor(JJBug b) {

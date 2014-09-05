@@ -142,7 +142,7 @@
 						<p:menuitem id="editButton" icon="ui-icon-pencil" value="#{messages.label_edit}"
 							update=":editForm" oncomplete="editDialogWidget.show()"
 							title="#{messages.label_edit}">
-							<f:setPropertyActionListener value="#{bug}"
+							<f:setPropertyActionListener value="#{bug}" 
 								target="#{jJBugBean.JJBug_}" />
 							</p:menuitem>
 							<p:tooltip for="editButton" value="#{messages.label_edit}"
@@ -211,6 +211,7 @@
 						<p:commandButton id="editSaveButton"
 							value="#{messages.bug_edit_save_button}"
 							action="#{jJBugBean.persistBug}"
+							onsuccess="editDialogWidget.hide()"
 							update="createPanelGrid :bugForm:bugMessage :bugForm" />
 						<p:commandButton id="editCloseButton"
 							value="#{messages.bug_edit_close_button}"
@@ -229,7 +230,7 @@
 							value="#{messages.bug_delete_yes_button}"
 							action="#{jJBugBean.deleteSingle}"
 							update=":bugForm :bugForm:bugMessage"
-							oncomplete="deleteDialogWidget.hide()" />
+							onsuccess="deleteDialogWidget.hide()" />
 						<p:commandButton id="deleteNoButton"
 							value="#{messages.bug_delete_no_button}"
 							onclick="deleteDialogWidget.hide()" type="button" />
@@ -247,7 +248,7 @@
 							value="#{messages.bug_delete_yes_button}"
 							action="#{jJBugBean.deleteMultiple}"
 							update=":bugForm :bugForm:bugMessage"
-							oncomplete="deleteMDialogWidget.hide()" />
+							onsuccess="deleteMDialogWidget.hide()" />
 						<p:commandButton id="deleteNoButton"
 							value="#{messages.bug_delete_no_button}"
 							onclick="deleteMDialogWidget.hide()" type="button" />

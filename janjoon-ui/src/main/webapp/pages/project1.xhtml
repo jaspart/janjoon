@@ -8,16 +8,17 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
-		<p:tabView id="projecttabview" widgetVar="tabView" dynamic="true"
+		<p:tabView id="projecttabview" widgetVar="projectTabView" dynamic="false"
 			cache="true" activeIndex="#{loginBean.activeTabProjectIndex}">
 			<p:ajax event="tabChange" listener="#{loginBean.onTabProjectChange}"
-				update="projecttabview :deleteForm" />
+				update="projecttabview  :deleteForm" />
 			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3" style="width:100%">
 					<ui:insert name="planning">
 						<ui:include src="planning.xhtml" />
 					</ui:insert>
 				</h:panelGrid>
+				
 			</p:tab>
 
 			<p:tab title="#{messages.project_scrum_menuitem}">
@@ -34,17 +35,15 @@
 			severity="alarm">
 			<p:outputPanel id="deletePanel">
 				<h:form id="deleteForm">
-					<p:commandButton id="deleteYesSprint"
-						rendered="#{loginBean.activeTabProjectIndex == 1}"
-						value="#{messages.bug_delete_yes_button}"
-						action="#{jJSprintBean.deleteTask}"
-						update=":projecttabview:SprintTabView"/>
-					<p:commandButton id="deleteYesPlanning"
-						rendered="#{loginBean.activeTabProjectIndex == 0}"
-						value="#{messages.bug_delete_yes_button}"
-						action="#{jJTaskBean.deleteTaskData}"
-						update=":projecttabview:planningForm"
-						oncomplete="deleteDialogWidget.hide()" />
+<!-- 					<p:commandButton id="deleteYesSprint" -->
+<!-- 						rendered="#{jJTaskBean.mode == 'scrum'}" -->
+<!-- 						value="#{messages.bug_delete_yes_button}" -->
+<!-- 						action="#{jJSprintBean.deleteTask}" -->
+<!-- 						update=":projecttabview:SprintTabView"/> -->
+					<p:commandButton id="deleteYesPlanning"						
+						value="#{messages.bug_delete_yes_button}"						
+						action="#{jJTaskBean.deleteTaskData}" 
+						update=":projecttabview"/>
 					<p:commandButton id="deleteNoButton"
 						value="#{messages.bug_delete_no_button}"
 						oncomplete="PF('createSprintBlockUI').unblock()"

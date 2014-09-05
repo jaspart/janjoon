@@ -285,6 +285,12 @@ public class LoginBean implements Serializable {
 	public void onTabProjectChange(TabChangeEvent event) {
 		TabView tv = (TabView) event.getComponent();
 		this.activeTabProjectIndex = tv.getChildren().indexOf(event.getTab());
+		if(activeTabProjectIndex==0)
+		{
+			JJTaskBean jJTaskBean = (JJTaskBean) findBean("jJTaskBean");
+			jJTaskBean.loadData();
+			System.out.println("jJTaskBean");
+		}
 		System.out.println("###### ACtive tab: " + activeTabProjectIndex);
 
 	}
@@ -305,6 +311,7 @@ public class LoginBean implements Serializable {
 		if (event.getComponent().getClientId().contains("projectSelectOneMenu")) {
 
 			session.setAttribute("jJSprintBean", new JJSprintBean());
+			session.setAttribute("jJTaskBean", new JJTaskBean());
 			session.setAttribute("jJBugBean", new JJBugBean());
 		}
 
