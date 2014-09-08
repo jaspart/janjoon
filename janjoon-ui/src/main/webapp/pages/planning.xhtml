@@ -63,7 +63,7 @@
 							<p:column style="width: 7%;" headerText="Actions" >
 								<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
 									update=":viewTaskForm:viewTaskPanelGrid"									
-									immediate="true" oncomplete="viewTaskDialogWidget.show()">
+									immediate="true" action="#{jJTaskBean.initiateReqTreeNode}">
 									
 									<f:setPropertyActionListener value="#{taskData.task}"
 											target="#{jJTaskBean.task}" />

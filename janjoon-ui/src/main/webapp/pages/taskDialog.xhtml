@@ -66,21 +66,19 @@
 				<h:outputLabel id="requirementLabel" value="Requirement: "
 					for="reqTree" />
 				<p:tree id="reqTree" value="#{jJTaskBean.taskTreeNode}" var="node"
-					animate="true" selection="#{jJTaskBean.selectedTree}"
+					animate="true" selection="#{jJTaskBean.selectedTree}" 
 					selectionMode="single">
-					<p:ajax event="select" update="@form"
-						listener="#{jJTaskBean.onSelectTreeNode}" />
+					<p:ajax event="select" update="@form" listener="#{jJTaskBean.onSelectTreeNode}" />
 					<p:treeNode icon="ui-icon-arrowthick-1-e">
 						<h:outputText value="#{node.name}" />
 					</p:treeNode>
 				</p:tree>
 			</p:column>
 			<p:column colspan="4">				
-					<p:panelGrid style="margin-top:10px" >
+					<p:panelGrid style="margin-top:10px">
 						<f:facet name="header">
 							<p:row>
-								<p:column colspan="2">Requirement : <p:outputLabel
-										value="#{jJTaskBean.selectedReq.name}" />
+								<p:column colspan="2">Requirement : <p:outputLabel value="#{jJTaskBean.selectedReq.name}" />
 								</p:column>
 							</p:row>
 						</f:facet>

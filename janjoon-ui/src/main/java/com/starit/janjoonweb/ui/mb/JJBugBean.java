@@ -328,7 +328,7 @@ public class JJBugBean {
 
 
 	public void saveBug() {
-		System.out.println("in save");
+		
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
@@ -336,41 +336,27 @@ public class JJBugBean {
 
 		JJTeststepexecutionBean jJTeststepexecutionBean = (JJTeststepexecutionBean) session
 				.getAttribute("jJTeststepexecutionBean");
-		System.out.println("jkpoj");
-		if (JJBug_ == null) {
-			System.out.println("null");
-		} else {
-			System.out.println("not null");
-		}
+		
+//		if (JJBug_ == null) {
+//			System.out.println("null");
+//		} else {
+//			System.out.println("not null");
+//		}
 
 
 		if (JJBug_.getId() == null) {
-			System.out.println("popopo");
+			
 			JJBug_.setCreationDate(new Date());
 			JJBug_.setCreatedBy(contact);
-
-			System.out.println("pppop");
-
 			JJTeststep teststep = jJTeststepService
 					.findJJTeststep(jJTeststepexecutionBean
-							.getTeststepexecution().getTeststep().getId());
-
-			System.out.println("mmm");
+							.getTeststepexecution().getTeststep().getId());		
 
 			JJBug_.setTeststep(teststep);
 			teststep.getBugs().add(JJBug_);
 
-
-			System.out.println("gugug");
-
 			jJBugService.saveJJBug(JJBug_);
-
-
-			System.out.println("sdfsdfsdfsdfmmm");
-
-		} else {
-
-			System.out.println("sfsdfdsfsdfsdfsfdfdf");
+		} else {		
 
 			JJBug_.setUpdatedDate(new Date());
 			JJBug_.setUpdatedBy(contact);
@@ -397,7 +383,7 @@ public class JJBugBean {
 
 		if (JJBug_.getRequirement() != null)
 		{
-			System.out.println(JJBug_.getRequirement().getName());
+			
 			JJBug_.setCategory(JJBug_.getRequirement().getCategory());
 		}
 			
@@ -413,8 +399,8 @@ public class JJBugBean {
 			JJBug_.setEnabled(true);
 		}		
 		
-		if (JJBug_.getRequirement() != null)
-			System.out.println(JJBug_.getRequirement().getName());			
+//		if (JJBug_.getRequirement() != null)
+//			System.out.println(JJBug_.getRequirement().getName());			
 		
 		String message = "";
         if (JJBug_.getId() != null) {

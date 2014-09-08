@@ -154,7 +154,7 @@
 										</f:facet>
 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
 											update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
-											oncomplete="viewTaskDialogWidget.show()">
+											action="#{jJTaskBean.initiateReqTreeNode}">
 											<f:setPropertyActionListener value="#{todo}"
 												target="#{jJTaskBean.task}" />
 
@@ -206,7 +206,7 @@
 											</f:facet>
 											<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
 												update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
-												oncomplete="viewTaskDialogWidget.show()">
+												action="#{jJTaskBean.initiateReqTreeNode}"	>
 												<f:setPropertyActionListener value="#{prog}"
 													target="#{jJTaskBean.task}" />
 
@@ -247,7 +247,7 @@
 											</f:facet>
 											<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
 												update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
-												oncomplete="viewTaskDialogWidget.show()">
+												action="#{jJTaskBean.initiateReqTreeNode}">
 												<f:setPropertyActionListener value="#{done}"
 													target="#{jJTaskBean.task}" />
 

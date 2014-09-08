@@ -58,6 +58,7 @@ public class JJContactBean {
 	private boolean contactState;
 
 	public JJContact getContactAdmin() {
+	
 		return contactAdmin;
 	}
 
@@ -218,14 +219,14 @@ public class JJContactBean {
 
 			}
 		}
-
+		
 		if (!selectedPermissions.isEmpty() && !permissions.isEmpty()) {
 
 			for (JJPermission permission : selectedPermissions) {
 				if (permission.getId() == null) {
 
 					permission.setContact(contactAdmin);
-					contactAdmin.getPermissions().add(permission);
+					//contactAdmin.getPermissions().add(permission);
 					jJPermissionService.saveJJPermission(permission);
 				}
 			}
@@ -251,11 +252,12 @@ public class JJContactBean {
 
 			for (JJPermission permission : selectedPermissions) {
 				permission.setContact(contactAdmin);
-				contactAdmin.getPermissions().add(permission);
+				//contactAdmin.getPermissions().add(permission);
 				jJPermissionService.saveJJPermission(permission);
 			}
 
 		}
+		
 		
 		contactAdmin=jJContactService.findJJContact(contactAdmin.getId());
 		if(contains(contactAdmin.getId())!=-1)

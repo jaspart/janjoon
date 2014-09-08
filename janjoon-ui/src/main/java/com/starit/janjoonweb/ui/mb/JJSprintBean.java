@@ -186,9 +186,8 @@ public class JJSprintBean {
 		return task;
 	}
 
-	public void setTask(JJTask task) {
-		
-		System.out.println("f:setPropertyActionListener:"+task.getName());
+	public void setTask(JJTask task) {	
+	
 		this.task = task;
 	}
 
