@@ -19,6 +19,9 @@ public interface JJRequirementService {
 
 	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
 			JJChapter chapter, boolean onlyActif);
+	
+	public List<JJRequirement> getMineRequirements(JJContact creator,JJProduct produit,JJProject projet,JJCategory category,JJVersion version,
+			boolean onlyActif, boolean orderByCreationdate);
 
 	public List<JJRequirement> getRequirements(JJStatus status);
 

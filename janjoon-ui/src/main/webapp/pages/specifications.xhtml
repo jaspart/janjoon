@@ -111,7 +111,7 @@
 												actionListener="#{jJRequirementBean.preReleaseRequirement(tableDataModel.categoryId)}"
 												oncomplete="requirementReleaseDialogWidget.show()" />
 										</p:column>
-										<p:column colspan="4">
+										<p:column colspan="3">
 											<p:inputText id="globalFilter" style="width:100%"
 												onkeyup="dataTable_#{loop.index}_Widget.filter()" />
 										</p:column>
@@ -123,6 +123,12 @@
 												update=":requirementDialog"
 												onstart="PF('specBlockUIWidget').block()"
 												oncomplete="PF('specBlockUIWidget').unblock();requirementDialogWidget.show()" />
+										</p:column>
+												<p:column colspan="1">
+											<p:selectBooleanButton id="mineSpec" value="#{tableDataModel.mine}" onLabel="Mine"
+												offLabel="All" onIcon="ui-icon-check" offIcon="ui-icon-close">
+												<p:ajax listener="#{jJRequirementBean.mineChangeEvent(tableDataModel)}" update=":specForm" />
+											</p:selectBooleanButton>
 										</p:column>
 										<p:column colspan="1">
 											<h:commandLink id="pdf"
@@ -209,7 +215,7 @@
 							</p:splitButton>
 						</p:column>
 						<f:facet name="footer">
-							<p:accordionPanel dynamic="true" cache="true" activeIndex="-1">
+							<p:accordionPanel dynamic="true" cache="true" activeIndex="-1" >
 								<p:tab title="#{messages.specification_progress_footer}">
 									<p:row>
 										<p:progressBar id="coverage"
@@ -236,7 +242,7 @@
 		<p:dialog id="requirementDialog" header="#{messages[jJRequirementBean.message]}"
 			modal="true" widgetVar="requirementDialogWidget" dynamic="true"
 			resizable="false" position="center" style="padding:0px;top:40px !important;">
-			<p:ajax event="close" listener="#{jJRequirementBean.closeDialog}"
+			<p:ajax event="close" listener="#{jJRequirementBean.closeDialog}" disabled="#{jJRequirementBean.requirement.id != null}"
 				update=":specForm" onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock()" />
 			<p:outputPanel id="requirementDialogPanel">

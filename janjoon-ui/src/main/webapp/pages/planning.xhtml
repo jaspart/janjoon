@@ -16,7 +16,7 @@
 						panelStyle="width:150px;" effect="fade" style="width:150px;"
 						filter="true" filterMatchMode="startsWith"
 						converter="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter">
-						
+
 						<f:selectItem itemValue="#{null}"
 							itemLabel="#{messages.project_gantt_select_label}" />
 						<f:selectItems value="#{jJTaskBean.sprints}" var="c"
@@ -31,15 +31,16 @@
 						style="float: right;"
 						actionListener="#{jJTaskBean.loadImportFormat}"
 						update=":taskImportDialog"
-						oncomplete="taskImportDialogWidget.show()" >							
-							<f:attribute name="mode" value="planning"  />
-						</p:commandButton>
+						oncomplete="taskImportDialogWidget.show()">
+						<f:attribute name="mode" value="planning" />
+					</p:commandButton>
 				</p:column>
 			</p:row>
 		</p:panelGrid>
 	</h:form>
 	<h:form id="planningForm" style="width:100%">
-		<f:event type="preRenderComponent" listener="#{jJTaskBean.loadingData()}" />
+		<f:event type="preRenderComponent"
+			listener="#{jJTaskBean.loadingData()}" />
 		<p:growl id="msg" />
 		<p:panelGrid style="margin-top:10px">
 			<p:row>
@@ -53,20 +54,21 @@
 							<p:ajax event="cellEdit" listener="#{jJTaskBean.onCellEdit}"
 								process="@widgetVar(nameWidget)"
 								oncomplete="onCellEditTableComplete()"
-								update="taskDataTable :projecttabview:planningForm:timeline :projecttabview:planningForm:msg" />
+								update="taskDataTable :projecttabview:planningForm:timeline :projecttabview:planningForm:msg :projecttabview:SprintTabView" />
 							<p:summaryRow paginatorPosition="top">
 								<p:column styleClass="task" colspan="10" style="text-align:left">
-									<h:outputText  icon="ui-icon-arrowreturnthick-1-e" value="Chapter: #{taskData.chapter.name}" />
+									<h:outputText icon="ui-icon-arrowreturnthick-1-e"
+										value="Chapter: #{taskData.chapter.name}" />
 								</p:column>
 							</p:summaryRow>
 
-							<p:column style="width: 7%;" headerText="Actions" >
+							<p:column style="width: 7%;" headerText="Actions">
 								<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-									update=":viewTaskForm:viewTaskPanelGrid"									
-									immediate="true" action="#{jJTaskBean.initiateReqTreeNode}">
-									
+									update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
+									action="#{jJTaskBean.initiateReqTreeNode}">
+
 									<f:setPropertyActionListener value="#{taskData.task}"
-											target="#{jJTaskBean.task}" />
+										target="#{jJTaskBean.task}" />
 									<p:menuitem id="duplicate" icon="ui-icon-copy"
 										oncomplete="duplicateTaskDialogWidget.show()"
 										value="#{messages.project_gantt_task_dupplicate_button}">
@@ -79,13 +81,13 @@
 										title="#{messages.label_delete}">
 										<f:setPropertyActionListener value="#{taskData}"
 											target="#{jJTaskBean.selectedTaskData}" />
-											<f:setPropertyActionListener target="#{jJTaskBean.mode}"
-														value="planning" />
+										<f:setPropertyActionListener target="#{jJTaskBean.mode}"
+											value="planning" />
 									</p:menuitem>
 								</p:splitButton>
 							</p:column>
 							<p:column styleClass="task" headerText="Chapter" rendered="false">
-								<h:outputText value="#{taskData.chapter.name}"/>
+								<h:outputText value="#{taskData.chapter.name}" />
 							</p:column>
 
 							<p:column id="name" styleClass="task"
@@ -244,11 +246,33 @@
 					<pe:timeline id="timeline" value="#{jJTaskBean.model}"
 						eventMargin="10" eventMarginAxis="0" locale="#{LocaleBean.locale}"
 						start="#{jJTaskBean.start}" end="#{jJTaskBean.end}"
-						axisOnTop="true" groupsChangeable="false" var="task"
+						widgetVar="timelineWdgt" axisOnTop="true" groupsChangeable="false"
+						var="task" showButtonNew="true"
 						style="min-width:500px;min-height:350px;left:0px;width:100%;"
 						editable="true" zoomMin="86400000" zoomMax="8035200000">
 
-						<h:outputText style="height:35px;" value="a" />
+						<p:ajax event="delete"
+							listener="#{jJTaskBean.onDeleteTimelineEvent}"
+							onstart="PF('timelineWdgt').cancelDelete()"
+							oncomplete="PF('deleteDialogWidget').show()" />
+
+						<p:ajax event="add" update=":taskImportDialog"
+							listener="#{jJTaskBean.onCreateTimelineEvent}"
+							oncomplete="PF('taskImportDialogWidget').show()" />
+
+						<p:ajax event="change"
+							update=":projecttabview:planningForm:timeline :projecttabview:planningForm:taskDataTable :projecttabview:SprintTabView :projecttabview:planningForm:msg"
+							listener="#{jJTaskBean.onChangeTimelineEvent}"
+							onstart="PF('createSprintBlockUI').block()"
+							oncomplete="PF('createSprintBlockUI').unblock()" />
+						<p:ajax event="edit" update=":viewTaskForm:viewTaskPanelGrid"
+							listener="#{jJTaskBean.onEditTimelineEvent}" 
+							onstart="PF('createSprintBlockUI').block()"
+							oncomplete="PF('createSprintBlockUI').unblock()"/>															
+
+								
+
+						<h:outputText style="height:30px;" value="#{task.name}" />
 					</pe:timeline>
 				</p:column>
 			</p:row>
@@ -263,14 +287,14 @@
 			<h:form id="duplicateTaskForm">
 				<p:commandButton id="duplicateYesButton"
 					value="#{messages.label_yes}" action="#{jJTaskBean.duplicateTask}"
-					update=":projecttabview:planningForm"
+					update=":projecttabview:planningForm :projecttabview:SprintTabView"
 					oncomplete="duplicateTaskDialogWidget.hide()" />
 				<p:commandButton id="duplicateNoButton" value="#{messages.label_no}"
 					onclick="duplicateTaskDialogWidget.hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:confirmDialog>
-	
+
 
 </ui:composition>
 </html>

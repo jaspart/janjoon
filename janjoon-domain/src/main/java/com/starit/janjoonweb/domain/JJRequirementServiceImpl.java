@@ -143,7 +143,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		}
 
 		if (version != null) {
-			predicates.add(criteriaBuilder.equal(from.get("versioning"), version));
+			predicates.add(criteriaBuilder.equal(from.get("versioning"),
+					version));
 		}
 
 		if (status != null) {
@@ -157,22 +158,80 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		return entityManager.createQuery(select).getSingleResult();
 
 	}
-	
+
 	@Override
-	public void refreshRequirement(JJRequirement requirement){
+	public List<JJRequirement> getMineRequirements(JJContact creator,
+			JJProduct product, JJProject project, JJCategory category,JJVersion version,
+			boolean onlyActif, boolean orderByCreationdate) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
+				.createQuery(JJRequirement.class);
+
+		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
+
+		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+
+		if (category != null) {
+			predicates
+					.add(criteriaBuilder.equal(from.get("category"), category));
+		}
+
+		if (project != null) {
+			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}
+
+		if (product != null) {
+			predicates.add(criteriaBuilder.equal(from.get("product"), product));
+		}
+
+		if (version != null) {
+			predicates.add(criteriaBuilder.equal(from.get("versioning"),
+					version));			
+		}		
+		
+		if(creator !=null)
+		{
+			Predicate condition1 = criteriaBuilder.equal(from.get("createdBy"), creator);
+		    Predicate condition2 = criteriaBuilder.equal(from.get("updatedBy"), creator);
+			predicates.add(criteriaBuilder.or(condition1,condition2));			
+		}
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+		if (orderByCreationdate) {
+			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
+		}
+
+		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
+
+		System.out.println("RESULT LIST SIZE"+result.getResultList().size());
+		return result.getResultList();
+
+	}
+
+	@Override
+	public void refreshRequirement(JJRequirement requirement) {
 		entityManager.refresh(requirement);
 	}
-	
+
 	public void saveJJRequirement(JJRequirement JJRequirement_) {
-		
-        jJRequirementRepository.save(JJRequirement_);
-        JJRequirement_=jJRequirementRepository.findOne(JJRequirement_.getId());
-    }
-    
-    public JJRequirement updateJJRequirement(JJRequirement JJRequirement_) {
-        jJRequirementRepository.save(JJRequirement_);
-        JJRequirement_=jJRequirementRepository.findOne(JJRequirement_.getId());
-        return JJRequirement_;
-    }
+
+		jJRequirementRepository.save(JJRequirement_);
+		JJRequirement_ = jJRequirementRepository
+				.findOne(JJRequirement_.getId());
+	}
+
+	public JJRequirement updateJJRequirement(JJRequirement JJRequirement_) {
+		jJRequirementRepository.save(JJRequirement_);
+		JJRequirement_ = jJRequirementRepository
+				.findOne(JJRequirement_.getId());
+		return JJRequirement_;
+	}
 
 }

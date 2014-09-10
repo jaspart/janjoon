@@ -13,8 +13,7 @@ import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.html.HtmlOutputText;
-import javax.faces.component.html.HtmlPanelGrid;
+import javax.faces.component.html.*;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.event.ActionEvent;
@@ -26,8 +25,8 @@ import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.extensions.model.timeline.TimelineEvent;
-import org.primefaces.extensions.model.timeline.TimelineModel;
+import org.primefaces.extensions.event.timeline.*;
+import org.primefaces.extensions.model.timeline.*;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +43,8 @@ import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 public class JJTaskBean {
 
 	@Autowired
-	JJChapterService jJChapterService;	
-	
+	JJChapterService jJChapterService;
+
 	TaskData selectedTaskData;
 
 	public void setJjChapterService(JJChapterService jJChapterService) {
@@ -453,6 +452,7 @@ public class JJTaskBean {
 					TimelineEvent event = new TimelineEvent(task,
 							task.getStartDateReal(), task.getEndDateReal(),
 							true, group, "real");
+
 					model.add(event);
 				}
 
@@ -765,6 +765,12 @@ public class JJTaskBean {
 			}
 
 			if (task.getSprint() != null) {
+				
+				int k=65;				
+				char c = (char) k;
+				String group = "<span style=display:none>" + c + "</span>";
+				model.delete(model.getEvent(findInEventTimeLine(task)));
+				model.add(new TimelineEvent(task, task.getStartDatePlanned(), task.getEndDatePlanned(),true,group,"real"));
 
 				HttpSession session = (HttpSession) FacesContext
 						.getCurrentInstance().getExternalContext()
@@ -885,6 +891,8 @@ public class JJTaskBean {
 		}
 
 		jJTaskService.saveJJTask(duplicatedTask);
+		
+		
 
 		duplicatedTask = null;
 		loadData();
@@ -1506,7 +1514,8 @@ public class JJTaskBean {
 					.getId());
 			tJjTask.setEnabled(false);
 			jJTaskService.updateJJTask(tJjTask);
-			tasksData.remove(contain(tJjTask));
+			tasksData.remove(containTaskData(tJjTask.getId()));
+			model.delete(model.getEvent(findInEventTimeLine(tJjTask)));
 			if (tJjTask.getSprint() != null) {
 				SprintUtil s = SprintUtil.getSprintUtil(tJjTask.getSprint()
 						.getId(), jJSprintBean.getSprintList());
@@ -1529,7 +1538,8 @@ public class JJTaskBean {
 
 			tJjTask = jJSprintBean.getTask();
 			jJSprintBean.deleteTask();
-			tasksData.remove(contain(tJjTask));
+			tasksData.remove(containTaskData(tJjTask.getId()));
+			model.delete(model.getEvent(findInEventTimeLine(tJjTask)));
 
 		}
 
@@ -1541,20 +1551,6 @@ public class JJTaskBean {
 
 	public void setSelectedTaskData(TaskData selectedTaskData) {
 		this.selectedTaskData = selectedTaskData;
-	}
-
-	public int contain(JJTask t) {
-		int j = -1;
-		int i = 0;
-
-		while (i < tasksData.size()) {
-			if (tasksData.get(i).getTask().equals(t)) {
-				j = i;
-				i = tasksData.size();
-			} else
-				i++;
-		}
-		return j;
 	}
 
 	private HtmlPanelGrid viewPanel;
@@ -1652,10 +1648,10 @@ public class JJTaskBean {
 	}
 
 	private void reqTreeNode(TreeNode tree, JJRequirement req) {
-		
+
 		req = jJRequirementService.findJJRequirement(req.getId());
-				
-		for (JJRequirement r : req.getRequirementLinkDown()) {			
+
+		for (JJRequirement r : req.getRequirementLinkDown()) {
 
 			DefaultTreeNode s = new DefaultTreeNode(r, tree);
 
@@ -1670,11 +1666,120 @@ public class JJTaskBean {
 
 	public void initiateReqTreeNode() {
 
-		getTaskTreeNode();	
+		getTaskTreeNode();
 
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("viewTaskDialogWidget.show()");
 
+	}
+
+	// Timeline operation
+	public int findInEventTimeLine(JJTask t) {
+		int j = -1;
+		int i = 0;
+		while (i < model.getEvents().size()) {
+			if (t.equals((JJTask) model.getEvent(i).getData())) {
+				j = i;
+				i = model.getEvents().size();
+			}
+
+			i++;
+		}
+		return j;
+	}
+
+	public void onDeleteTimelineEvent(TimelineModificationEvent e) {
+		// get clone of the TimelineEvent to be deleted
+
+		selectedTaskData = tasksData.get(containTaskData(((JJTask) e
+				.getTimelineEvent().getData()).getId()));
+		mode = "planning";
+	}
+
+	public void onCreateTimelineEvent(TimelineAddEvent event) {
+		
+		this.mode = "planning";
+		disabledImportButton = true;
+		disabledFilter = true;
+		checkAll = false;
+		copyObjets = false;
+		importSprint = null;
+		getProject();
+		getProduct();
+		getVersion();
+
+		importFormats = new ArrayList<ImportFormat>();
+	}
+	
+	public void onEditTimelineEvent(TimelineModificationEvent e)
+	{
+		this.task=(JJTask) e.getTimelineEvent().getData();
+		taskTreeNode = null;
+		selectedReq = null;
+		selectedTree = null;
+		this.mode="planning";
+		initiateReqTreeNode();
+	}
+	
+	public void onChangeTimelineEvent(TimelineModificationEvent ev)
+	{
+		JJTask tt=(JJTask) ev.getTimelineEvent().getData();
+		tt=jJTaskService.findJJTask(tt.getId());
+		tt.setStartDatePlanned(ev.getTimelineEvent().getStartDate());
+		tt.setEndDatePlanned(ev.getTimelineEvent().getEndDate());		
+		
+		tt.setUpdatedDate(new Date());
+		jJTaskService.updateJJTask(tt);
+
+		int i = containTaskData(tt.getId());
+		if (i != -1) {		
+			
+			TaskData tskst = new TaskData(tt, tasksData.get(i)
+					.getChapter(), tt.getStartDatePlanned(),
+					tt.getEndDatePlanned(), tt.getWorkloadPlanned(),
+					false);
+
+			tasksData.set(i, tskst);
+		}		
+		
+		if(findInEventTimeLine(tt)!=-1)
+		{
+			int k=65;				
+			char c = (char) k;
+			String group = "<span style=display:none>" + c + "</span>";
+			System.out.println(group);
+			model.delete(model.getEvent(findInEventTimeLine(tt)));
+			model.add(new TimelineEvent(tt, tt.getStartDatePlanned(), tt.getEndDatePlanned(),true,group,"real"));
+		}
+		
+
+		if (tt.getSprint() != null) {
+
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+			JJSprintBean jJSprintBean = (JJSprintBean) session
+					.getAttribute("jJSprintBean");
+			SprintUtil s = SprintUtil.getSprintUtil(tt.getSprint()
+					.getId(), jJSprintBean.getSprintList());
+			if (s != null) {
+				s = new SprintUtil(jJSprintService.findJJSprint(tt
+						.getSprint().getId()),
+						jJTaskService.getSprintTasks(jJSprintService
+								.findJJSprint(tt.getSprint().getId())));				
+				jJSprintBean.getSprintList().set(
+						jJSprintBean.contains(s.getSprint().getId()), s);
+			}}
+		
+		reset();
+		String message = "";
+		FacesMessage facesMessage = null;
+
+
+		message = "Success Update";
+		facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO,message, "JJTask");	
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);		
+		
 	}
 
 	public HtmlPanelGrid populateViewPanelGrid() {

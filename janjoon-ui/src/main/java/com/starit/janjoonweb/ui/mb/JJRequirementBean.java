@@ -13,12 +13,12 @@ import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.ListDataModel;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.SelectableDataModel;
@@ -805,6 +805,7 @@ public class JJRequirementBean {
 
 	public void deleteRequirement() {
 		long t = System.currentTimeMillis();
+		requirement=jJRequirementService.findJJRequirement(requirement.getId());
 		requirement.setEnabled(false);
 
 		FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -848,12 +849,14 @@ public class JJRequirementBean {
 
 		}
 
+		System.out.println("LIST Size "+list.size());
 		JJStatus status = jJStatusService.getOneStatus("RELEASED",
 				"JJRequirement", true);
 
-		for (JJRequirement requirement : list) {
-			if (requirement.getStatus() != status) {
-				requirement.setStatus(status);
+		for (JJRequirement req : list) {
+			req=jJRequirementService.findJJRequirement(req.getId());
+			if (req.getStatus() != status) {
+				req.setStatus(status);
 
 				FacesContext facesContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) facesContext
@@ -862,11 +865,11 @@ public class JJRequirementBean {
 						.getAttribute("loginBean");
 				JJContact contact = loginBean.getContact();
 
-				int numero = requirement.getNumero() + 1;
-				requirement.setNumero(numero);
-				requirement.setUpdatedBy(contact);
+				int numero = req.getNumero() + 1;
+				req.setNumero(numero);
+				req.setUpdatedBy(contact);
 
-				jJRequirementService.updateJJRequirement(requirement);
+				jJRequirementService.updateJJRequirement(req);
 
 			}
 		}
@@ -2939,6 +2942,16 @@ public class JJRequirementBean {
 		private List<JJRequirement> filtredRequirements;
 
 		private boolean rendered;
+		
+		boolean mine;
+
+		public boolean isMine() {
+			return mine;
+		}
+
+		public void setMine(boolean mine) {
+			this.mine = mine;
+		}
 
 		public String getNameDataModel() {
 			return nameDataModel;
@@ -2993,10 +3006,11 @@ public class JJRequirementBean {
 
 		public CategoryDataModel(List<JJRequirement> data, long categoryId,
 				String nameDataModel, boolean rendered) {
-			super(data);
+			super(data);			
 			this.categoryId = categoryId;
 			this.nameDataModel = nameDataModel;
 			this.rendered = rendered;
+			this.mine=false;
 
 		}
 
@@ -3420,5 +3434,38 @@ public class JJRequirementBean {
 		return jJConfigurationService.getDialogConfig("RequirementDialog",
 				"specs.requirement.create.saveandclose");
 	}
+	
+	//la partie mine 	
+
+	
+	public void mineChangeEvent(CategoryDataModel tableDataModel)	
+	{
+		System.out.println("gdfgjdsfmgksdklMINE"+tableDataModel.categoryId);
+		System.out.println("mienEvent "+tableDataModel.isMine());
+		if(!tableDataModel.isMine())
+		{
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+					.getSession(false);	
+			tableDataModel.setMine(true);
+			tableDataModel.setFiltredRequirements(jJRequirementService.getMineRequirements((JJContact) session.getAttribute("JJContact"),product , project, jJCategoryService.findJJCategory(tableDataModel.getCategoryId()), importVersion, true, true));
+			
+		}else
+		{
+			JJCategory category=jJCategoryService.findJJCategory(tableDataModel.getCategoryId());
+			List<JJRequirement> requirements = getRequirementsList(
+					category, product, version, project, true);
+
+			CategoryDataModel categoryDataModel = new CategoryDataModel(requirements,
+					category.getId(), category.getName(), true);
+
+			categoryDataModel.calculCompletionProgress();
+			categoryDataModel.calculCoverageProgress();
+			
+			tableDataModelList.set(tableDataModelList.indexOf(tableDataModel), categoryDataModel);
+
+		
+		}
+	}
+	
 
 }
