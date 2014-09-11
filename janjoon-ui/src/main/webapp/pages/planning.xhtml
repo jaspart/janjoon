@@ -112,14 +112,23 @@
 									</f:facet>
 									<f:facet name="input">
 										<h:selectOneMenu value="#{taskData.task.assignedTo}"
-											filter="true" filterMatchMode="startsWith"
-											style="width:100%;">
-											<f:converter
-												converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />
+											filter="true" filterMatchMode="startsWith" rendered="#{taskData.task.sprint == null}"
+											style="width:100%;" converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" >
+											
 											<f:selectItem itemValue="#{null}"
 												itemLabel="#{messages.project_gantt_select_label}" />
 											<f:selectItems value="#{jJTaskBean.contacts}" var="contact"
-												itemLabel="#{contact.firstname} #{contact.name}"
+												itemLabel="#{contact.firstname} #{contact.name}" 
+												itemValue="#{contact}" />
+										</h:selectOneMenu>
+										<h:selectOneMenu value="#{taskData.task.assignedTo}"
+											filter="true" filterMatchMode="startsWith" rendered="#{taskData.task.sprint != null}"
+											style="width:100%;" converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter">
+											
+											<f:selectItem itemValue="#{null}"
+												itemLabel="#{messages.project_gantt_select_label}" />
+											<f:selectItems value="#{taskData.task.sprint.contacts}" var="contact"
+												itemLabel="#{contact.firstname} #{contact.name}" 
 												itemValue="#{contact}" />
 										</h:selectOneMenu>
 									</f:facet>
@@ -247,7 +256,7 @@
 						eventMargin="10" eventMarginAxis="0" locale="#{LocaleBean.locale}"
 						start="#{jJTaskBean.start}" end="#{jJTaskBean.end}"
 						widgetVar="timelineWdgt" axisOnTop="true" groupsChangeable="false"
-						var="task" showButtonNew="true"
+						var="task" showButtonNew="true" 
 						style="min-width:500px;min-height:350px;left:0px;width:100%;"
 						editable="true" zoomMin="86400000" zoomMax="8035200000">
 

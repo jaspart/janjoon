@@ -448,38 +448,43 @@ public class JJTaskBean {
 				String group = "<span style=display:none>" + c + "</span>";
 				// + task.getName();
 
+				TaskData taskData;
 				if (task.getStartDateReal() != null) {
 					TimelineEvent event = new TimelineEvent(task,
 							task.getStartDateReal(), task.getEndDateReal(),
 							true, group, "real");
 
 					model.add(event);
-				}
-
-				TaskData taskData;
-
-				if (task.getStartDateRevised() != null) {
-
-					TimelineEvent event = new TimelineEvent(task,
-							task.getStartDateRevised(),
-							task.getEndDateRevised(), true, group, "planned");
-					model.add(event);
 
 					taskData = new TaskData(task, chapter,
-							task.getStartDateRevised(),
-							task.getEndDateRevised(),
-							task.getWorkloadRevised(), true);
+							task.getStartDateReal(), task.getEndDateReal(),
+							task.getWorkloadReal(), false);
 				} else {
+					if (task.getStartDateRevised() != null) {
 
-					TimelineEvent event = new TimelineEvent(task,
-							task.getStartDatePlanned(),
-							task.getEndDatePlanned(), true, group, "planned");
-					model.add(event);
+						TimelineEvent event = new TimelineEvent(task,
+								task.getStartDateRevised(),
+								task.getEndDateRevised(), true, group,
+								"planned");
+						model.add(event);
 
-					taskData = new TaskData(task, chapter,
-							task.getStartDatePlanned(),
-							task.getEndDatePlanned(),
-							task.getWorkloadPlanned(), false);
+						taskData = new TaskData(task, chapter,
+								task.getStartDateRevised(),
+								task.getEndDateRevised(),
+								task.getWorkloadRevised(), true);
+					} else {
+
+						TimelineEvent event = new TimelineEvent(task,
+								task.getStartDatePlanned(),
+								task.getEndDatePlanned(), true, group,
+								"planned");
+						model.add(event);
+
+						taskData = new TaskData(task, chapter,
+								task.getStartDatePlanned(),
+								task.getEndDatePlanned(),
+								task.getWorkloadPlanned(), false);
+					}
 				}
 
 				tasksData.add(taskData);
@@ -754,23 +759,19 @@ public class JJTaskBean {
 			task.setUpdatedDate(new Date());
 			jJTaskService.updateJJTask(task);
 
-			int i = containTaskData(task.getId());
-			if (i != -1) {
-				TaskData tskst = new TaskData(task, tasksData.get(i)
-						.getChapter(), task.getStartDatePlanned(),
-						task.getEndDatePlanned(), task.getWorkloadPlanned(),
-						false);
-
-				tasksData.set(i, tskst);
-			}
+			// int i = containTaskData(task.getId());
+			// if (i != -1) {
+			// TaskData tskst = new TaskData(task, tasksData.get(i)
+			// .getChapter(), task.getStartDatePlanned(),
+			// task.getEndDatePlanned(), task.getWorkloadPlanned(),
+			// false);
+			//
+			// tasksData.set(i, tskst);
+			// replaceTimeLineEvent(task);
+			// }
+			replaceTimeLineEvent(task);
 
 			if (task.getSprint() != null) {
-				
-				int k=65;				
-				char c = (char) k;
-				String group = "<span style=display:none>" + c + "</span>";
-				model.delete(model.getEvent(findInEventTimeLine(task)));
-				model.add(new TimelineEvent(task, task.getStartDatePlanned(), task.getEndDatePlanned(),true,group,"real"));
 
 				HttpSession session = (HttpSession) FacesContext
 						.getCurrentInstance().getExternalContext()
@@ -891,8 +892,6 @@ public class JJTaskBean {
 		}
 
 		jJTaskService.saveJJTask(duplicatedTask);
-		
-		
 
 		duplicatedTask = null;
 		loadData();
@@ -1675,6 +1674,7 @@ public class JJTaskBean {
 
 	// Timeline operation
 	public int findInEventTimeLine(JJTask t) {
+
 		int j = -1;
 		int i = 0;
 		while (i < model.getEvents().size()) {
@@ -1697,7 +1697,7 @@ public class JJTaskBean {
 	}
 
 	public void onCreateTimelineEvent(TimelineAddEvent event) {
-		
+
 		this.mode = "planning";
 		disabledImportButton = true;
 		disabledFilter = true;
@@ -1710,48 +1710,35 @@ public class JJTaskBean {
 
 		importFormats = new ArrayList<ImportFormat>();
 	}
-	
-	public void onEditTimelineEvent(TimelineModificationEvent e)
-	{
-		this.task=(JJTask) e.getTimelineEvent().getData();
+
+	public void onEditTimelineEvent(TimelineModificationEvent e) {
+		this.task = (JJTask) e.getTimelineEvent().getData();
 		taskTreeNode = null;
 		selectedReq = null;
 		selectedTree = null;
-		this.mode="planning";
+		this.mode = "planning";
 		initiateReqTreeNode();
 	}
-	
-	public void onChangeTimelineEvent(TimelineModificationEvent ev)
-	{
-		JJTask tt=(JJTask) ev.getTimelineEvent().getData();
-		tt=jJTaskService.findJJTask(tt.getId());
+
+	public void onChangeTimelineEvent(TimelineModificationEvent ev) {
+		JJTask tt = (JJTask) ev.getTimelineEvent().getData();
+		tt = jJTaskService.findJJTask(tt.getId());
 		tt.setStartDatePlanned(ev.getTimelineEvent().getStartDate());
-		tt.setEndDatePlanned(ev.getTimelineEvent().getEndDate());		
-		
+		tt.setEndDatePlanned(ev.getTimelineEvent().getEndDate());
+
 		tt.setUpdatedDate(new Date());
 		jJTaskService.updateJJTask(tt);
 
-		int i = containTaskData(tt.getId());
-		if (i != -1) {		
-			
-			TaskData tskst = new TaskData(tt, tasksData.get(i)
-					.getChapter(), tt.getStartDatePlanned(),
-					tt.getEndDatePlanned(), tt.getWorkloadPlanned(),
-					false);
-
-			tasksData.set(i, tskst);
-		}		
-		
-		if(findInEventTimeLine(tt)!=-1)
-		{
-			int k=65;				
-			char c = (char) k;
-			String group = "<span style=display:none>" + c + "</span>";
-			System.out.println(group);
-			model.delete(model.getEvent(findInEventTimeLine(tt)));
-			model.add(new TimelineEvent(tt, tt.getStartDatePlanned(), tt.getEndDatePlanned(),true,group,"real"));
-		}
-		
+//		int i = containTaskData(tt.getId());
+//		if (i != -1) {
+//
+//			TaskData tskst = new TaskData(tt, tasksData.get(i).getChapter(),
+//					tt.getStartDatePlanned(), tt.getEndDatePlanned(),
+//					tt.getWorkloadPlanned(), false);
+//
+//			tasksData.set(i, tskst);
+//		}
+		replaceTimeLineEvent(tt);
 
 		if (tt.getSprint() != null) {
 
@@ -1760,28 +1747,79 @@ public class JJTaskBean {
 					.getSession(false);
 			JJSprintBean jJSprintBean = (JJSprintBean) session
 					.getAttribute("jJSprintBean");
-			SprintUtil s = SprintUtil.getSprintUtil(tt.getSprint()
-					.getId(), jJSprintBean.getSprintList());
+			SprintUtil s = SprintUtil.getSprintUtil(tt.getSprint().getId(),
+					jJSprintBean.getSprintList());
 			if (s != null) {
-				s = new SprintUtil(jJSprintService.findJJSprint(tt
-						.getSprint().getId()),
-						jJTaskService.getSprintTasks(jJSprintService
-								.findJJSprint(tt.getSprint().getId())));				
+				s = new SprintUtil(jJSprintService.findJJSprint(tt.getSprint()
+						.getId()), jJTaskService.getSprintTasks(jJSprintService
+						.findJJSprint(tt.getSprint().getId())));
 				jJSprintBean.getSprintList().set(
 						jJSprintBean.contains(s.getSprint().getId()), s);
-			}}
-		
+			}
+		}
+
 		reset();
 		String message = "";
 		FacesMessage facesMessage = null;
 
-
 		message = "Success Update";
-		facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO,message, "JJTask");	
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);		
-		
+		facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, message,
+				"JJTask");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
 	}
 
+	public void replaceTimeLineEvent(JJTask tt) {
+		
+		int j = findInEventTimeLine(tt);
+		int i = containTaskData(tt.getId());
+		int workLoad=0;
+		
+		Date startDate, endDate;
+		
+		if (tt.getStartDateReal() != null) {
+
+			startDate = tt.getStartDateReal();
+			endDate = tt.getEndDateReal();
+			workLoad=tt.getWorkloadReal();
+
+		} else {
+			if (tt.getStartDateRevised() != null) {
+
+				startDate = tt.getStartDateRevised();
+				endDate = tt.getEndDateRevised();
+				workLoad=tt.getWorkloadRevised();
+
+			} else {
+
+				endDate = tt.getEndDatePlanned();
+				startDate = tt.getStartDatePlanned();
+				workLoad=tt.getWorkloadPlanned();
+
+			}}
+		
+
+		if (j != -1) {
+
+			String style = model.getEvent(j).getStyleClass();
+			String group = model.getEvent(j).getGroup();
+			model.delete(model.getEvent(j));
+			model.add(new TimelineEvent(tt, startDate, endDate, true, group,
+					style));
+			}
+			
+			
+		if (i != -1) {
+			TaskData tskst = new TaskData(tt, tasksData.get(i).getChapter(),
+					startDate, endDate, workLoad,
+					tt.getStartDateRevised() != null);
+
+			tasksData.set(i, tskst);
+
+		}
+
+		}
+	
 	public HtmlPanelGrid populateViewPanelGrid() {
 
 		FacesContext facesContext = FacesContext.getCurrentInstance();
