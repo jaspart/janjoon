@@ -16,7 +16,6 @@ import javax.faces.model.SelectItem;
 import javax.faces.validator.LengthValidator;
 import javax.servlet.http.HttpSession;
 
-import org.apache.poi.hssf.record.chart.DatRecord;
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
@@ -31,9 +30,9 @@ import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJImportance;
+import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
-import com.starit.janjoonweb.domain.JJSoftware;
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJTeststep;
@@ -60,6 +59,8 @@ public class JJBugBean {
 	private JJBug bug;
 	private JJBug JJBug_;
 
+	private JJProject bugProjectSelected;
+
 	private JJProject project;
 	private List<JJBug> bugList;
 	private List<JJBug> filteredJJBug;
@@ -68,7 +69,16 @@ public class JJBugBean {
 	private SelectItem[] importanceOptions;
 	private SelectItem[] statusOptions;
 
+	public JJProject getBugProjectSelected() {
+		return bugProjectSelected;
+	}
+
+	public void setBugProjectSelected(JJProject bugProjectSelected) {
+		this.bugProjectSelected = bugProjectSelected;
+	}
+
 	public JJBug getBug() {
+
 		return bug;
 	}
 
@@ -79,12 +89,13 @@ public class JJBugBean {
 	public JJBug getJJBug_() {
 		if (JJBug_ == null) {
 			JJBug_ = new JJBug();
+			bugProjectSelected = project;
 		}
 		return JJBug_;
 	}
 
-	public void setJJBug_(JJBug JJBug_) {		
-		this.JJBug_ =JJBug_;
+	public void setJJBug_(JJBug JJBug_) {
+		this.JJBug_ = JJBug_;
 	}
 
 	public JJProject getProject() {
@@ -305,7 +316,7 @@ public class JJBugBean {
 		bug.setProject(project);
 		bug.setTeststep(jJTeststep);
 
-		jJBugService.saveJJBug(bug);		
+		jJBugService.saveJJBug(bug);
 		reset();
 
 	}
@@ -313,6 +324,7 @@ public class JJBugBean {
 	public void reset() {
 
 		JJBug_ = null;
+		bugProjectSelected = null;
 		bugList = null;
 		selectedBugList = null;
 
@@ -326,9 +338,7 @@ public class JJBugBean {
 		setCreateDialogVisible(false);
 	}
 
-
 	public void saveBug() {
-		
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
@@ -336,27 +346,26 @@ public class JJBugBean {
 
 		JJTeststepexecutionBean jJTeststepexecutionBean = (JJTeststepexecutionBean) session
 				.getAttribute("jJTeststepexecutionBean");
-		
-//		if (JJBug_ == null) {
-//			System.out.println("null");
-//		} else {
-//			System.out.println("not null");
-//		}
 
+		// if (JJBug_ == null) {
+		// System.out.println("null");
+		// } else {
+		// System.out.println("not null");
+		// }
 
 		if (JJBug_.getId() == null) {
-			
+
 			JJBug_.setCreationDate(new Date());
 			JJBug_.setCreatedBy(contact);
 			JJTeststep teststep = jJTeststepService
 					.findJJTeststep(jJTeststepexecutionBean
-							.getTeststepexecution().getTeststep().getId());		
+							.getTeststepexecution().getTeststep().getId());
 
 			JJBug_.setTeststep(teststep);
 			teststep.getBugs().add(JJBug_);
 
 			jJBugService.saveJJBug(JJBug_);
-		} else {		
+		} else {
 
 			JJBug_.setUpdatedDate(new Date());
 			JJBug_.setUpdatedBy(contact);
@@ -373,20 +382,31 @@ public class JJBugBean {
 			jJTeststepexecutionBean.changeTestcaseStatus();
 		}
 
-		
 	}
 
 	public String persistBug() {
+
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
-
-		if (JJBug_.getRequirement() != null)
-		{
+		if (project == null) {
 			
+			// if(JJBug_.getProject() !=null && bugProjectSelected != null)
+			// {
+			// if (!JJBug_.getProject().equals(bugProjectSelected)) {
+			// JJBug_.setProject(bugProjectSelected);
+			// }
+			// }
+
+			JJBug_.setProject(bugProjectSelected);
+
+		} else
+			JJBug_.setProject(project);
+
+		if (JJBug_.getRequirement() != null) {
+
 			JJBug_.setCategory(JJBug_.getRequirement().getCategory());
 		}
-			
 
 		if (JJBug_.getId() != null) {
 
@@ -397,24 +417,24 @@ public class JJBugBean {
 			JJBug_.setCreatedBy(contact);
 			JJBug_.setCreationDate(new Date());
 			JJBug_.setEnabled(true);
-		}		
-		
-//		if (JJBug_.getRequirement() != null)
-//			System.out.println(JJBug_.getRequirement().getName());			
-		
+		}
+
+		// if (JJBug_.getRequirement() != null)
+		// System.out.println(JJBug_.getRequirement().getName());
+
 		String message = "";
-        if (JJBug_.getId() != null) {
-            jJBugService.updateJJBug(JJBug_);
-            message = "message_successfully_updated";
-        } else {
-            jJBugService.saveJJBug(JJBug_);
-            message = "message_successfully_created";
-        }
-       
-        FacesMessage facesMessage = MessageFactory.getMessage(message, "JJBug");
-        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-        reset();
-        return "";
+		if (JJBug_.getId() != null) {
+			jJBugService.updateJJBug(JJBug_);
+			message = "message_successfully_updated";
+		} else {
+			jJBugService.saveJJBug(JJBug_);
+			message = "message_successfully_created";
+		}
+
+		FacesMessage facesMessage = MessageFactory.getMessage(message, "JJBug");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		reset();
+		return "";
 	}
 
 	public String findStyleColor(JJBug b) {
@@ -424,6 +444,51 @@ public class JJBugBean {
 		else
 			return "";
 
+	}
+
+	public List<JJRequirement> completeReqBug(String query) {
+
+		List<JJRequirement> suggestions = new ArrayList<JJRequirement>();
+		for (JJRequirement req : jJRequirementService.getRequirements(
+				bugProjectSelected, null, null)) {
+			String jJCriticityStr = String.valueOf(req.getName());
+			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
+				suggestions.add(req);
+			}
+		}
+		return suggestions;
+	}
+
+	public List<JJVersion> completeVersioningBug(String query) {
+
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+
+		JJProduct prod = ((JJProductBean) session.getAttribute("jJProductBean"))
+				.getProduct();
+
+		List<JJVersion> suggestions = new ArrayList<JJVersion>();
+
+		for (JJVersion req : jJVersionService.getVersions(true, prod != null,
+				prod)) {
+			String jJCriticityStr = String.valueOf(req.getName());
+			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
+				suggestions.add(req);
+			}
+		}
+		return suggestions;
+	}
+
+	public List<JJSprint> completeSprintBug(String query) {
+		List<JJSprint> suggestions = new ArrayList<JJSprint>();
+		for (JJSprint req : jJSprintService
+				.getSprints(bugProjectSelected, true)) {
+			String jJCriticityStr = String.valueOf(req.getName());
+			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
+				suggestions.add(req);
+			}
+		}
+		return suggestions;
 	}
 
 	public List<JJStatus> completeStatusBug(String query) {

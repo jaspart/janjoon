@@ -144,6 +144,8 @@
 							title="#{messages.label_edit}">
 							<f:setPropertyActionListener value="#{bug}" 
 								target="#{jJBugBean.JJBug_}" />
+								<f:setPropertyActionListener value="#{bug.project}" 
+								target="#{jJBugBean.bugProjectSelected}" />
 							</p:menuitem>
 							<p:tooltip for="editButton" value="#{messages.label_edit}"
 							showEffect="fade" hideEffect="fade" />

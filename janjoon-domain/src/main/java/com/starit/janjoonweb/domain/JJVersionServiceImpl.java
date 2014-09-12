@@ -41,12 +41,11 @@ public class JJVersionServiceImpl implements JJVersionService {
 		}
 
 		if (withProduct) {
-			if (product != null) {
+			if (product != null)
 				predicates.add(criteriaBuilder.equal(from.get("product"),
 						product));
-			}
-		} else {
-			predicates.add(criteriaBuilder.isNull(from.get("product")));
+			else
+				predicates.add(criteriaBuilder.isNull(from.get("product")));
 		}
 		select.where(predicates.toArray(new Predicate[] {}));
 
@@ -71,17 +70,17 @@ public class JJVersionServiceImpl implements JJVersionService {
 		return result.getResultList();
 
 	}
-	
-public void saveJJVersion(JJVersion JJVersion_) {
-		
-        jJVersionRepository.save(JJVersion_);
-        JJVersion_=jJVersionRepository.findOne(JJVersion_.getId());
-    }
-    
-    public JJVersion updateJJVersion(JJVersion JJVersion_) {
-        jJVersionRepository.save(JJVersion_);
-        JJVersion_=jJVersionRepository.findOne(JJVersion_.getId());
-        return JJVersion_;
-    }
+
+	public void saveJJVersion(JJVersion JJVersion_) {
+
+		jJVersionRepository.save(JJVersion_);
+		JJVersion_ = jJVersionRepository.findOne(JJVersion_.getId());
+	}
+
+	public JJVersion updateJJVersion(JJVersion JJVersion_) {
+		jJVersionRepository.save(JJVersion_);
+		JJVersion_ = jJVersionRepository.findOne(JJVersion_.getId());
+		return JJVersion_;
+	}
 
 }
