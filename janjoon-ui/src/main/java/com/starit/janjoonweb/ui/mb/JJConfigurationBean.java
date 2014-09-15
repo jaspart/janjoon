@@ -36,7 +36,7 @@ public class JJConfigurationBean {
 	private List<JJConfiguration> configList;
 	private JJConfiguration selectedConf;
 	private List<String> columns;
-	private JJConfiguration jJconfiguration;	
+	private JJConfiguration jJconfiguration;
 	private boolean renderCreate;
 
 	private HtmlPanelGrid createPanel;
@@ -71,9 +71,7 @@ public class JJConfigurationBean {
 
 	public List<JJConfiguration> getConfigList() {
 
-		if (configList == null)
-			configList = jJConfigurationService.getConfigurations(null, null,
-					true);
+		configList = jJConfigurationService.getConfigurations(null, null, true);
 		return configList;
 	}
 
@@ -129,7 +127,7 @@ public class JJConfigurationBean {
 	}
 
 	public void setRenderCreate(boolean renderCreate) {
-		System.out.println("jJConfigurationBean renderCreate"+renderCreate);
+		System.out.println("jJConfigurationBean renderCreate" + renderCreate);
 		this.renderCreate = renderCreate;
 	}
 
@@ -170,14 +168,12 @@ public class JJConfigurationBean {
 				0);
 	}
 
-	public void beforeDialogShow(ActionEvent event) {		
+	public void beforeDialogShow(ActionEvent event) {
 
-
-		setJJConfiguration_(new JJConfiguration());	
-		renderCreate=true;
+		setJJConfiguration_(new JJConfiguration());
+		renderCreate = true;
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("createDialogWidget.show()");
-		
 
 	}
 

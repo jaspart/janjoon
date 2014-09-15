@@ -67,8 +67,8 @@ public class JJContactBean {
 	}
 
 	public List<JJContact> getContacts() {
-		if(contacts==null)
-			contacts = jJContactService.getContacts(true);
+		
+		contacts = jJContactService.getContacts(true);
 		return contacts;
 	}
 

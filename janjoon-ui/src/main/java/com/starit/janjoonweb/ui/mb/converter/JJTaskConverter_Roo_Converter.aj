@@ -30,8 +30,7 @@ privileged aspect JJTaskConverter_Roo_Converter {
     }
     
     public String JJTaskConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-    	
-    	return value instanceof JJTask ? ((JJTask) value).getId().toString() : "";
+        return value instanceof JJTask ? ((JJTask) value).getId().toString() : "";
     }
     
 }

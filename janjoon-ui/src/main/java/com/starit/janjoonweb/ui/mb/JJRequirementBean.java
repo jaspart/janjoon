@@ -208,19 +208,19 @@ public class JJRequirementBean {
 	public void setTableDataModelList(List<CategoryDataModel> tableDataModelList) {
 		this.tableDataModelList = tableDataModelList;
 	}
-	
+
 	public String getTableDataModelSizePct() {
 		int nbOpenedTables = 0;
-		for(int i = 0 ; i < tableDataModelList.size() ; i++){
-			if(tableDataModelList.get(i).getCategoryId() != 0){
+		for (int i = 0; i < tableDataModelList.size(); i++) {
+			if (tableDataModelList.get(i).getCategoryId() != 0) {
 				nbOpenedTables++;
 			}
 		}
 		double tableDataModelSizePct = 0;
-		if(nbOpenedTables > 0){
-			tableDataModelSizePct = 100/nbOpenedTables;
+		if (nbOpenedTables > 0) {
+			tableDataModelSizePct = 100 / nbOpenedTables;
 		}
-		return tableDataModelSizePct+"%";
+		return tableDataModelSizePct + "%";
 	}
 
 	public JJRequirement getRequirement() {
@@ -805,7 +805,8 @@ public class JJRequirementBean {
 
 	public void deleteRequirement() {
 		long t = System.currentTimeMillis();
-		requirement=jJRequirementService.findJJRequirement(requirement.getId());
+		requirement = jJRequirementService.findJJRequirement(requirement
+				.getId());
 		requirement.setEnabled(false);
 
 		FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -849,12 +850,11 @@ public class JJRequirementBean {
 
 		}
 
-		System.out.println("LIST Size "+list.size());
 		JJStatus status = jJStatusService.getOneStatus("RELEASED",
 				"JJRequirement", true);
 
 		for (JJRequirement req : list) {
-			req=jJRequirementService.findJJRequirement(req.getId());
+			req = jJRequirementService.findJJRequirement(req.getId());
 			if (req.getStatus() != status) {
 				req.setStatus(status);
 
@@ -945,6 +945,9 @@ public class JJRequirementBean {
 		}
 
 		reset();
+		System.out.println("replaceInDataModelList");
+		replaceInDataModelList(requirement);
+		System.out.println("replaceInDataModelList2");
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
@@ -1552,8 +1555,6 @@ public class JJRequirementBean {
 				List<JJRequirement> requirements = getRequirementsList(
 						category, product, version, project, true);
 
-				System.out.println("fsdfsdfs " + requirements.size());
-
 				categoryDataModel = new CategoryDataModel(requirements,
 						category.getId(), category.getName(), true);
 
@@ -1727,6 +1728,7 @@ public class JJRequirementBean {
 	}
 
 	private void editTableDataModelList() {
+
 		long t = System.currentTimeMillis();
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
@@ -2316,6 +2318,7 @@ public class JJRequirementBean {
 	}
 
 	private void getRequirementOrder() {
+
 		long t = System.currentTimeMillis();
 		SortedMap<Integer, Object> elements = null;
 		SortedMap<Integer, Object> subElements = null;
@@ -2406,15 +2409,14 @@ public class JJRequirementBean {
 							} else if (className
 									.equalsIgnoreCase("JJRequirement")) {
 
-								JJRequirement requirement = (JJRequirement) entry
+								JJRequirement r = (JJRequirement) entry
 										.getValue();
 
-								int lastOrder = requirement.getOrdering();
-								requirement.setOrdering(lastOrder - 1);
-								requirement.setUpdatedDate(new Date());
+								int lastOrder = r.getOrdering();
+								r.setOrdering(lastOrder - 1);
+								r.setUpdatedDate(new Date());
 
-								jJRequirementService
-										.updateJJRequirement(requirement);
+								jJRequirementService.updateJJRequirement(r);
 								reset();
 							}
 
@@ -2876,7 +2878,6 @@ public class JJRequirementBean {
 		if (event.getObject() != null
 				&& event.getObject() instanceof JJRequirement) {
 			requirement = (JJRequirement) event.getObject();
-			System.out.println(requirement.getName());
 			editRequirement();
 		}
 
@@ -2884,11 +2885,17 @@ public class JJRequirementBean {
 
 	public void viewLinks() {
 
+		requirement = jJRequirementService.findJJRequirement(requirement
+				.getId());
+
 		Set<JJRequirement> downs = requirement.getRequirementLinkDown();
 		Set<JJRequirement> ups = requirement.getRequirementLinkUp();
 		Set<JJRequirement> links = new HashSet<JJRequirement>();
-		links.addAll(ups);
-		links.addAll(downs);
+
+		if (ups != null)
+			links.addAll(ups);
+		if (downs != null)
+			links.addAll(downs);
 
 		String[] results = templateHeader.split("-");
 
@@ -2904,13 +2911,32 @@ public class JJRequirementBean {
 
 				List<JJRequirement> requirements = new ArrayList<JJRequirement>();
 
-				if (category.equals(requirement.getCategory())) {
+				if (category.equals(requirement.getCategory())
+						&& !listContain(requirement, requirements)) {
 
 					requirements.add(requirement);
 				} else {
 
 					for (JJRequirement req : links) {
-						if (req.getCategory().equals(category))
+
+						Set<JJRequirement> downsREQ = req
+								.getRequirementLinkDown();
+						Set<JJRequirement> upsREQ = req.getRequirementLinkUp();
+						Set<JJRequirement> linksREQ = new HashSet<JJRequirement>();
+
+						if (upsREQ != null)
+							linksREQ.addAll(upsREQ);
+						if (downs != null)
+							linksREQ.addAll(downsREQ);
+
+						for (JJRequirement r : linksREQ) {
+							if (r.getCategory().equals(category)
+									&& !listContain(r, requirements))
+								requirements.add(r);
+						}
+
+						if (req.getCategory().equals(category)
+								&& !listContain(req, requirements))
 							requirements.add(req);
 					}
 
@@ -2942,7 +2968,7 @@ public class JJRequirementBean {
 		private List<JJRequirement> filtredRequirements;
 
 		private boolean rendered;
-		
+
 		boolean mine;
 
 		public boolean isMine() {
@@ -3006,11 +3032,11 @@ public class JJRequirementBean {
 
 		public CategoryDataModel(List<JJRequirement> data, long categoryId,
 				String nameDataModel, boolean rendered) {
-			super(data);			
+			super(data);
 			this.categoryId = categoryId;
 			this.nameDataModel = nameDataModel;
 			this.rendered = rendered;
-			this.mine=false;
+			this.mine = false;
 
 		}
 
@@ -3128,6 +3154,7 @@ public class JJRequirementBean {
 				List<JJRequirement> requirements = (List<JJRequirement>) getWrappedData();
 				for (JJRequirement requirement : requirements) {
 					compteur = compteur + calculCompletion(requirement);
+
 				}
 
 				if (requirements.isEmpty()) {
@@ -3145,12 +3172,16 @@ public class JJRequirementBean {
 			long t = System.currentTimeMillis();
 			float compteur = 0;
 			int size = 0;
+			requirement = jJRequirementService.findJJRequirement(requirement
+					.getId());
 			Set<JJRequirement> linksUp = requirement.getRequirementLinkUp();
 			for (JJRequirement req : linksUp) {
+
 				if (req.getEnabled()) {
 					compteur = compteur + calculCompletion(req);
 					size++;
 				}
+
 			}
 
 			Set<JJTask> tasks = requirement.getTasks();
@@ -3418,6 +3449,7 @@ public class JJRequirementBean {
 				.getAttribute("jJStatusBean");
 		if (jJStatusBean != null)
 			jJStatusBean.setPieChart(null);
+
 		setJJRequirement_(null);
 		setSelectedBugs(null);
 		setSelectedTasks(null);
@@ -3434,38 +3466,77 @@ public class JJRequirementBean {
 		return jJConfigurationService.getDialogConfig("RequirementDialog",
 				"specs.requirement.create.saveandclose");
 	}
-	
-	//la partie mine 	
 
-	
-	public void mineChangeEvent(CategoryDataModel tableDataModel)	
-	{
-		System.out.println("gdfgjdsfmgksdklMINE"+tableDataModel.categoryId);
-		System.out.println("mienEvent "+tableDataModel.isMine());
-		if(!tableDataModel.isMine())
-		{
-			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-					.getSession(false);	
+	// la partie mine
+
+	public void replaceInDataModelList(JJRequirement req) {
+		boolean repl = false;
+		int i = 0;
+
+		while (i < tableDataModelList.size() && !repl) {
+
+			repl = tableDataModelList.get(i).getCategoryId() == req
+					.getCategory().getId();
+			if (!repl)
+				i++;
+		}
+
+		List<JJRequirement> requirements = getRequirementsList(
+				req.getCategory(), product, version, project, true);
+
+		CategoryDataModel categoryDataModel = new CategoryDataModel(
+				requirements, req.getCategory().getId(), req.getCategory()
+						.getName(), true);
+
+		categoryDataModel.calculCompletionProgress();
+		categoryDataModel.calculCoverageProgress();
+
+		tableDataModelList.set(i, categoryDataModel);
+
+	}
+
+	public boolean listContain(JJRequirement r, List<JJRequirement> list) {
+		boolean exist = false;
+		int i = 0;
+		while (i < list.size() && !exist) {
+
+			exist = list.get(i).equals(r);
+			i++;
+		}
+		return exist;
+
+	}
+
+	public void mineChangeEvent(CategoryDataModel tableDataModel) {
+
+		if (!tableDataModel.isMine()) {
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
 			tableDataModel.setMine(true);
-			tableDataModel.setFiltredRequirements(jJRequirementService.getMineRequirements((JJContact) session.getAttribute("JJContact"),product , project, jJCategoryService.findJJCategory(tableDataModel.getCategoryId()), importVersion, true, true));
-			
-		}else
-		{
-			JJCategory category=jJCategoryService.findJJCategory(tableDataModel.getCategoryId());
-			List<JJRequirement> requirements = getRequirementsList(
-					category, product, version, project, true);
+			tableDataModel.setFiltredRequirements(jJRequirementService
+					.getMineRequirements((JJContact) session
+							.getAttribute("JJContact"), product, project,
+							jJCategoryService.findJJCategory(tableDataModel
+									.getCategoryId()), importVersion, true,
+							true));
 
-			CategoryDataModel categoryDataModel = new CategoryDataModel(requirements,
-					category.getId(), category.getName(), true);
+		} else {
+			JJCategory category = jJCategoryService
+					.findJJCategory(tableDataModel.getCategoryId());
+			List<JJRequirement> requirements = getRequirementsList(category,
+					product, version, project, true);
+
+			CategoryDataModel categoryDataModel = new CategoryDataModel(
+					requirements, category.getId(), category.getName(), true);
 
 			categoryDataModel.calculCompletionProgress();
 			categoryDataModel.calculCoverageProgress();
-			
-			tableDataModelList.set(tableDataModelList.indexOf(tableDataModel), categoryDataModel);
 
-		
+			tableDataModelList.set(tableDataModelList.indexOf(tableDataModel),
+					categoryDataModel);
+
 		}
 	}
-	
 
 }
