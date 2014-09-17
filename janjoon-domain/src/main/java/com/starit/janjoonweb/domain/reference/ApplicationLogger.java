@@ -1,5 +1,8 @@
 package com.starit.janjoonweb.domain.reference;
 
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -52,6 +55,43 @@ public class ApplicationLogger {
 				+ ex.getMessage());
 
 	}
+	
+	@After("execution(* com.starit.janjoonweb.domain.JJTask.setEndDateReal(..))")
+	public void setJJTaskWorkLoadReal(JoinPoint joinPoint)
+	{
+	
+		JJTask t=(JJTask) joinPoint.getThis();
+		if(t.getEndDateReal()!=null && t.getStartDateReal()!=null)
+		{
+			Date s=t.getStartDateReal();
+			Date f=t.getEndDateReal();
+			System.out.println(s+"/"+f);
+			
+			long w=f.getTime() - s.getTime();
+			
+			t.setWorkloadReal(Math.round(TimeUnit.MILLISECONDS.toHours(w/3)));
+		}
+		
+	}
+	
+	@After("execution(* com.starit.janjoonweb.domain.JJTask.setEndDateRevised(..))")
+	public void setJJTaskWorkLoadRevised(JoinPoint joinPoint)
+	{
+	
+		JJTask t=(JJTask) joinPoint.getThis();
+		
+		if(t.getStartDateRevised()!=null && t.getEndDateRevised()!=null)
+		{			
+			Date s=t.getStartDateRevised();
+			Date f=t.getEndDateRevised();
+			System.out.println(s+"/"+f);
+			
+			long w=f.getTime() - s.getTime();
+			
+			t.setWorkloadRevised(Math.round(TimeUnit.MILLISECONDS.toHours(w/3)));
+		}
+		
+	}
 
 	@After("execution(* com.starit.janjoonweb.domain.JJTaskService.updateJJTask(..))")
 	public void startRequirement(JoinPoint joinPoint) {
@@ -60,15 +100,12 @@ public class ApplicationLogger {
 		Object[] args = joinPoint.getArgs();
 		// JJStatus status=(JJStatus) args[0];
 		JJTask task = (JJTask) args[0];
-		JJStatus status = task.getStatus();
-
-		System.out.println("setStatus0");
+		JJStatus status = task.getStatus();	
 		
 
-		if (status != null && task.getRequirement()!=null) {
+		if (status != null && task.getRequirement()!=null) {		
 			
-			
-			System.out.println("setStatus1"+task.getRequirement().getName());
+		
 			JJRequirement req = jJRequirementService.findJJRequirement(task
 					.getRequirement().getId());
 
@@ -76,18 +113,15 @@ public class ApplicationLogger {
 			
 			if (status.getName().equalsIgnoreCase("IN PROGRESS") ) {
 
-				System.out.println(req.getName());
-
 				JJStatus reqStatus = jJStatusService.getOneStatus("RELEASED",
 						"JJRequirement", true);
 				req.setStatus(reqStatus);
-				jJRequirementService.updateJJRequirement(req);
-				System.out.println(req.getName());
+				jJRequirementService.updateJJRequirement(req);			
 
 			}
 
 		}
 		
-		System.out.println("setStatus2");
+		
 	}
 }

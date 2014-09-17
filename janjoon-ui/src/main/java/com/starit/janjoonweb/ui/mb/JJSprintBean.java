@@ -53,8 +53,8 @@ import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 public class JJSprintBean {
 
 	@Autowired
-	private JJTaskService jJTaskService;	
-	
+	private JJTaskService jJTaskService;
+
 	@Autowired
 	private JJCategoryService jJCategoryService;
 
@@ -83,7 +83,7 @@ public class JJSprintBean {
 
 	public void setjJTaskService(JJTaskService jJTaskService) {
 		this.jJTaskService = jJTaskService;
-	}	
+	}
 
 	public void setjBugService(JJBugService jjBugService) {
 		this.jJBugService = jjBugService;
@@ -186,8 +186,8 @@ public class JJSprintBean {
 		return task;
 	}
 
-	public void setTask(JJTask task) {	
-	
+	public void setTask(JJTask task) {
+
 		this.task = task;
 	}
 
@@ -234,7 +234,7 @@ public class JJSprintBean {
 		this.sprintList = sprintList;
 	}
 
-	public SprintUtil getSprintUtil() {	
+	public SprintUtil getSprintUtil() {
 
 		return sprintUtil;
 	}
@@ -247,8 +247,8 @@ public class JJSprintBean {
 
 		sprintUtil = (SprintUtil) event.getComponent().getAttributes()
 				.get("sprintUtilValue");
-		System.out.println("JJSPRINT  :" + sprintUtil.getSprint().getName());	
-		
+		System.out.println("JJSPRINT  :" + sprintUtil.getSprint().getName());
+
 	}
 
 	public void updatereqPanel() {
@@ -331,19 +331,18 @@ public class JJSprintBean {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
-	
-	public void onTabSprintChange(TabChangeEvent event) {
-		
-		SprintUtil su=(SprintUtil) event.getData();		
-		if(!su.isRender())
-		{
-			JJSprint s=jJSprintService.findJJSprint(su.getSprint().getId());
-			sprintList.set(contains(su.getSprint().getId()),new SprintUtil(s,jJTaskService.getSprintTasks(s)));
-			
-		}
-		
-	}
 
+	public void onTabSprintChange(TabChangeEvent event) {
+
+		SprintUtil su = (SprintUtil) event.getData();
+		if (!su.isRender()) {
+			JJSprint s = jJSprintService.findJJSprint(su.getSprint().getId());
+			sprintList.set(contains(su.getSprint().getId()), new SprintUtil(s,
+					jJTaskService.getSprintTasks(s)));
+
+		}
+
+	}
 
 	public void createSprint() {
 
@@ -417,6 +416,7 @@ public class JJSprintBean {
 			dropedTask.setAssignedTo(assignedTo);
 			dropedTask.setCompleted(false);
 			jJTaskService.updateJJTask(dropedTask);
+			resetJJTaskBean();
 
 			JJSprint s = jJSprintService.findJJSprint(sprintId);
 			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s));
@@ -436,6 +436,13 @@ public class JJSprintBean {
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
 
+		RequestContext context = RequestContext.getCurrentInstance();
+
+		context.execute("projectTabView.select(" + 1 + ")");
+
+		context.execute("SprintTab.select("
+				+ contains(sprintUtil.getSprint().getId()) + ")");
+
 	}
 
 	public void addTaskToDone(DragDropEvent ddevent) {
@@ -449,13 +456,9 @@ public class JJSprintBean {
 			Long sprintId = dropedTask.getSprint().getId();
 			dropedTask.setEndDateReal(new Date());
 			dropedTask.setCompleted(true);
-			final long HOUR_IN_MILLIS = 1000 * 60 * 60;
-			dropedTask
-					.setWorkloadReal((int) ((dropedTask.getEndDateReal()
-							.getTime() - dropedTask.getStartDateReal()
-							.getTime()) / HOUR_IN_MILLIS));
 			dropedTask.setStatus(status);
 			jJTaskService.updateJJTask(dropedTask);
+			resetJJTaskBean();
 
 			JJSprint s = jJSprintService.findJJSprint(sprintId);
 			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s));
@@ -473,6 +476,13 @@ public class JJSprintBean {
 					FacesMessage.SEVERITY_WARN, "non autorisée", "");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
+
+		RequestContext context = RequestContext.getCurrentInstance();
+
+		context.execute("projectTabView.select(" + 1 + ")");
+
+		context.execute("SprintTab.select("
+				+ contains(sprintUtil.getSprint().getId()) + ")");
 
 	}
 
@@ -544,7 +554,7 @@ public class JJSprintBean {
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJTask :" + task.getName());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-	}	
+	}
 
 	public void doneEvent(ActionEvent e) {
 
@@ -569,13 +579,10 @@ public class JJSprintBean {
 	}
 
 	public void reloadSprintUtil() {
-		
-		System.out.println("reloadSprintUtil started");	
 
 		if (!sprintUtil.isRender()) {
 
 			System.out.println("!jJSprintBean.getSprintUtil().isRender()");
-
 			System.out.println(sprintUtil.getSprint().getName());
 			setSprintUtil(new SprintUtil(
 					jJSprintService
@@ -592,16 +599,15 @@ public class JJSprintBean {
 			System.out.println(contains(sprintUtil.getSprint().getId()));
 
 		}
-		
+
 		System.out.println("reloadSprintUtil finiched");
 
 	}
 
 	public void deleteTask() {
-		
-		
-		System.out.println("deleteTask");	
-		task=jJTaskService.findJJTask(task.getId());
+
+		System.out.println("deleteTask");
+		task = jJTaskService.findJJTask(task.getId());
 		task.setEnabled(false);
 		jJTaskService.saveJJTask(task);
 		sprintUtil = new SprintUtil(jJSprintService.findJJSprint(task
@@ -616,19 +622,29 @@ public class JJSprintBean {
 		categoryList = null;
 		reqList = null;
 		task = null;
+		resetJJTaskBean();
 
-		RequestContext context = RequestContext.getCurrentInstance();	
+		RequestContext context = RequestContext.getCurrentInstance();
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted", "JJTask");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		
-		context.execute("projectTabView.select("+1+")");
-		
+
+		context.execute("projectTabView.select(" + 1 + ")");
+
 		context.execute("SprintTab.select("
-				+ contains(sprintUtil.getSprint().getId()) + ")");		
+				+ contains(sprintUtil.getSprint().getId()) + ")");
 
 		context.execute("deleteDialogWidget.hide()");
+	}
+
+	public void resetJJTaskBean() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJTaskBean jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
+		jJTaskBean.setProject(null);
+		jJTaskBean.setTasksData(null);
+		jJTaskBean.setModel(null);
 	}
 
 	public int contains(Long id) {
@@ -648,15 +664,13 @@ public class JJSprintBean {
 		return j;
 
 	}
-	
-	
 
 	public void handleDialogCloseEvent(CloseEvent event) {
 		task = null;
 	}
 
 	public List<JJBug> completeBug(String query) {
-		
+
 		List<JJBug> suggestions = new ArrayList<JJBug>();
 		for (JJBug jJBug : jJBugService
 				.getBugs(project, null, null, true, true)) {

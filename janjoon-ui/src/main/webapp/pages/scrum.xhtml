@@ -274,7 +274,7 @@
 					<p:ajax listener="#{jJSprintBean.addTaskToProg}"
 						onstart="PF('createSprintBlockUI').block()"
 						oncomplete="PF('createSprintBlockUI').unblock()"
-						update=":projecttabview:SprintTabView:taskListForm :projecttabview:SprintTabView:sprintForm">
+						update=":projecttabview">
 					</p:ajax>
 				</p:droppable>
 				<p:droppable id="addTaskToDone" for="doneFieldset" tolerance="touch"
@@ -282,7 +282,7 @@
 					<p:ajax listener="#{jJSprintBean.addTaskToDone}"
 						onstart="PF('createSprintBlockUI').block()"
 						oncomplete="PF('createSprintBlockUI').unblock()"
-						update=":projecttabview:SprintTabView:taskListForm :projecttabview:SprintTabView:sprintForm">
+						update=":projecttabview">
 					</p:ajax>
 				</p:droppable>
 			</h:form>

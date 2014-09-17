@@ -261,7 +261,15 @@ div.real {
 }
 
 div.chapter {
-	background: black none !important; /* black */
+	background: #888611 none !important; /* black */
+	border-color: white; /* white */
+	opacity: 0.5;
+	filter: alpha(opacity = 50);
+	height: 20px !important;
+}
+
+div.revised {
+	background: #EEEC5E none !important; /* black */
 	border-color: white; /* white */
 	opacity: 0.5;
 	filter: alpha(opacity = 50);

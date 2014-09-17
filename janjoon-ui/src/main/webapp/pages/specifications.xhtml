@@ -70,10 +70,9 @@
 				</h:panelGrid>
 			</pe:blockUI>
 		</h:form>
-
 		<h:form id="specForm" style="overflow:hidden;width:101%">
 		<ui:repeat value="#{jJRequirementBean.tableDataModelList}" var="tableDataModel" varStatus="loop">
-				<div style="width:#{jJRequirementBean.tableDataModelSizePct};float:left;">			
+				<div style="width:#{jJRequirementBean.tableDataModelSizePct};float:left;">				
 					<p:dataTable id="categoryTable" var="requirement"
 						value="#{tableDataModel}" scrollable="true" scrollHeight="300"
 						sortMode="multiple" resizableColumns="true"
@@ -186,22 +185,33 @@
 							<f:facet name="header">
 								<h:outputText value="Actions" />
 							</f:facet>
-							<p:splitButton id="editButton" icon="ui-icon-pencil"
+							<p:splitButton id="viewButton" value="View" icon="ui-icon-search"
+									onstart="PF('specBlockUIWidget').block()"
+									action="#{jJRequirementBean.viewLinks()}"
+									oncomplete="PF('specBlockUIWidget').unblock()"
+									update=":specForm">
+								<p:menuitem id="editButton" icon="ui-icon-pencil"
 								action="#{jJRequirementBean.editRequirement()}"
 								onstart="PF('specBlockUIWidget').block()"
 								oncomplete="PF('specBlockUIWidget').unblock();requirementDialogWidget.show()"
 								update=":requirementDialog" value="Edit"
 								disabled="#{jJRequirementBean.getDisabledEdit(requirement)}">
-								<p:menuitem id="viewButton"  value="View" icon="ui-icon-search"
-									onstart="PF('specBlockUIWidget').block()"
-									action="#{jJRequirementBean.viewLinks()}"
-									oncomplete="PF('specBlockUIWidget').unblock()"
-									update=":specForm">
 									<f:setPropertyActionListener value="#{requirement}"
 										target="#{jJRequirementBean.requirement}" />
 								</p:menuitem>
-								<p:tooltip for="viewButton" value="View" showEffect="fade"
+								<p:tooltip for="editButton" value="Edit" showEffect="fade"
 									hideEffect="fade" />
+
+								<p:menuitem id="mindMapButton" value="View ReqMap"
+									icon="ui-icon-search" onstart="PF('specBlockUIWidget').block()"
+									action="#{jJRequirementBean.initReqMindMap}"
+									oncomplete="PF('specBlockUIWidget').unblock()" update=":mindMapForm">
+									<f:setPropertyActionListener value="#{requirement}"
+										target="#{jJRequirementBean.requirement}" />
+								</p:menuitem>
+								<p:tooltip for="mindMapButton" value="ReqMap" showEffect="fade"
+									hideEffect="fade" />
+
 								<p:menuitem id="deleteButton" icon="ui-icon-trash"
 									oncomplete="requirementDeleteDialogWidget.show()"
 									value="Delete">
@@ -244,7 +254,6 @@
 			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"
 			position="center" style="padding:0px;top:40px !important;">
 			<p:ajax event="close" listener="#{jJRequirementBean.closeDialog}"
-				disabled="#{jJRequirementBean.requirement.id != null}"
 				update=":specForm" onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock()" />
 			<p:outputPanel id="requirementDialogPanel">
@@ -302,8 +311,8 @@
 										panelStyle="width:150px" effect="fade" style="width:150px"
 										filter="true" filterMatchMode="startsWith"
 										disabled="#{jJRequirementBean.disabledProject}"
-										converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" >
-										
+										converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
+
 										<f:selectItems
 											value="#{jJRequirementBean.requirementProjectList}" var="c"
 											itemLabel="#{c.name}" itemValue="#{c}" />
@@ -324,7 +333,7 @@
 										panelStyle="width:150px" effect="fade" style="width:150px"
 										filter="true" filterMatchMode="startsWith"
 										converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
-										
+
 										<f:selectItem itemValue="#{null}"
 											itemLabel="#{messages.specification_create_select_label}" />
 										<f:selectItems
@@ -345,7 +354,7 @@
 										filter="true" filterMatchMode="startsWith"
 										disabled="#{jJRequirementBean.disabledVersion}"
 										converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
-										
+
 										<f:selectItem itemValue="#{null}"
 											itemLabel="#{messages.specification_create_select_label}" />
 										<f:selectItems
@@ -362,8 +371,8 @@
 										value="#{jJRequirementBean.requirementChapter}"
 										panelStyle="width:150px" effect="fade" style="width:150px"
 										filter="true" filterMatchMode="startsWith"
-										converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter" >
-								
+										converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter">
+
 										<f:selectItem itemValue="#{null}"
 											itemLabel="#{messages.specification_create_select_label}" />
 										<f:selectItems
@@ -491,9 +500,8 @@
 											value="#{messages.specification_create_save_button}"
 											onstart="PF('requirementBlockUIWidget').block()"
 											oncomplete="PF('requirementBlockUIWidget').unblock()"
-											action="#{jJRequirementBean.save()}" process="@form"
-											widgetVar="requirementSaveWidget"
-											update="requirementDialogForm :specForm :categoryForm" />
+											action="#{jJRequirementBean.save()}"
+											widgetVar="requirementSaveWidget" update=":contentPanel" />
 									</p:column>
 								</p:row>
 							</f:facet>
@@ -545,7 +553,7 @@
 										filter="true" filterMatchMode="startsWith"
 										widgetVar="parentWidget"
 										converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter">
-									
+
 										<f:selectItem itemValue="#{null}"
 											itemLabel="#{messages.specification_create_select_label}" />
 										<f:selectItems value="#{jJChapterBean.chapterList}" var="c"
@@ -735,8 +743,8 @@
 											value="#{jJRequirementBean.importProject}"
 											panelStyle="width:150px" effect="fade" style="width:160px"
 											filter="true" filterMatchMode="startsWith"
-											converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" >
-								
+											converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
+
 											<f:selectItem itemValue="#{null}"
 												itemLabel="#{messages.specification_import_select_label}" />
 											<f:selectItems value="#{jJRequirementBean.importProjectList}"
@@ -755,8 +763,8 @@
 											value="#{jJRequirementBean.importCategory}"
 											panelStyle="width:150px" effect="fade" style="width:160px"
 											filter="true" filterMatchMode="startsWith"
-											converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter" >
-											
+											converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter">
+
 											<f:selectItem itemValue="#{null}"
 												itemLabel="#{messages.specification_import_select_label}" />
 											<f:selectItems
@@ -781,7 +789,7 @@
 											panelStyle="width:150px" effect="fade" style="width:160px"
 											filter="true" filterMatchMode="startsWith"
 											converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
-											
+
 											<f:selectItem itemValue="#{null}"
 												itemLabel="#{messages.specification_import_select_label}" />
 											<f:selectItems value="#{jJRequirementBean.importProductList}"
@@ -801,7 +809,7 @@
 											panelStyle="width:150px" effect="fade" style="width:160px"
 											filter="true" filterMatchMode="startsWith"
 											disabled="#{jJRequirementBean.disableImportVersion}"
-											converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">											
+											converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
 
 											<f:selectItem itemValue="#{null}"
 												itemLabel="#{messages.specification_import_select_label}" />
@@ -824,11 +832,11 @@
 											panelStyle="width:150px" effect="fade" style="width:160px"
 											filter="true" filterMatchMode="startsWith"
 											converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter">
-											
+
 											<f:selectItem itemValue="#{null}"
 												itemLabel="#{messages.specification_import_select_label}" />
 											<f:selectItems value="#{jJRequirementBean.importStatusList}"
-												var="p" itemLabel="#{p.name}" itemValue="#{p}" />
+												var="p" itemLabel="#{p.name}" itemValue="#{p}" />أميمة طالب
 											<p:ajax partialSubmit="true"
 												onstart="PF('importBlockUIWidget').block()"
 												oncomplete="PF('importBlockUIWidget').unblock()"
@@ -933,6 +941,16 @@
 					</p:outputPanel>
 				</p:layoutUnit>
 			</p:layout>
+		</p:dialog>
+
+		<p:dialog id="requirementMindMap"
+			header="#{messages.specification_import_title}" modal="true"
+			width="75%"
+			widgetVar="requirementMindMap" dynamic="true" resizable="true">
+			<p:ajax event="close" update=":categoryForm :specForm mindMapForm" />
+			<p:panel>
+				<ui:include src="mindMapReq.xhtml" />
+			</p:panel>
 		</p:dialog>
 	</ui:define>
 </ui:composition>

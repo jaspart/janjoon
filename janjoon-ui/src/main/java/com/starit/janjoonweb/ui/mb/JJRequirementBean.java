@@ -19,9 +19,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.primefaces.component.mindmap.Mindmap;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.SelectableDataModel;
+import org.primefaces.model.mindmap.DefaultMindmapNode;
+import org.primefaces.model.mindmap.MindmapNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -895,19 +898,21 @@ public class JJRequirementBean {
 
 			requirement.setProject(requirementProject);
 
-			if (initiateTask) {
-				task.setName(requirement.getName());
-				task.setDescription("This Task: " + task.getName());
-				task.setEndDatePlanned(new Date(task.getStartDatePlanned()
-						.getTime() + task.getWorkloadPlanned() * 60 * 60 * 1000));
+			// if (initiateTask) {
+			// task.setName(requirement.getName());
+			// task.setDescription("This Task: " + task.getName());
+			// task.setEndDatePlanned(new Date(task.getStartDatePlanned()
+			// .getTime() + task.getWorkloadPlanned() * 60 * 60 * 1000));
+			//
+			// requirement.getTasks().add(task);
+			// task.setRequirement(requirement);
+			// jJRequirementService.saveJJRequirement(requirement);
+			// jJTaskService.saveJJTask(task);
+			// } else {
+			// jJRequirementService.saveJJRequirement(requirement);
+			// }
 
-				requirement.getTasks().add(task);
-				task.setRequirement(requirement);
-				jJRequirementService.saveJJRequirement(requirement);
-				jJTaskService.saveJJTask(task);
-			} else {
-				jJRequirementService.saveJJRequirement(requirement);
-			}
+			jJRequirementService.saveJJRequirement(requirement);
 
 		} else {
 
@@ -944,11 +949,13 @@ public class JJRequirementBean {
 
 		}
 
-		reset();
+		reset();		
 		System.out.println("replaceInDataModelList");
 		replaceInDataModelList(requirement);
 		System.out.println("replaceInDataModelList2");
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
+		redirectPage();
+		
 	}
 
 	public void importRequirement() {
@@ -1283,6 +1290,7 @@ public class JJRequirementBean {
 	}
 
 	public void closeDialog() {
+		
 		long t = System.currentTimeMillis();
 		System.out.println("close dialog");
 
@@ -1319,8 +1327,8 @@ public class JJRequirementBean {
 
 		requirementState = true;
 
-		loadData();
-		redirectPage();
+//		loadData();
+//		redirectPage();
 
 		System.out.println("fin");
 
@@ -3539,4 +3547,52 @@ public class JJRequirementBean {
 		}
 	}
 
+	//mindMap part 
+	
+	private MindmapNode reqRoot;
+
+	public MindmapNode getReqRoot() {
+		return reqRoot;
+	}
+
+	public void setReqRoot(MindmapNode reqRoot) {
+		this.reqRoot = reqRoot;
+	}
+	
+	public void initReqMindMap()
+	{
+		requirement=jJRequirementService.findJJRequirement(requirement.getId());
+		reqRoot = new DefaultMindmapNode(requirement.getName(), requirement, "FFCC00", false);
+		for(JJRequirement r:requirement.getRequirementLinkDown())
+		{
+			MindmapNode linkDownNode=new DefaultMindmapNode(r.getName(), r, "#00A8E8", false);
+			System.out.println("linkDownNode "+linkDownNode.getLabel());
+			reqRoot.addNode(linkDownNode);
+			
+		}
+		
+		for(JJRequirement r:requirement.getRequirementLinkUp())
+		{
+			MindmapNode linkUpNode=new DefaultMindmapNode(r.getName(), r, "#026B93", false);
+			System.out.println("linkUpNode "+linkUpNode.getLabel());
+			reqRoot.addNode(linkUpNode);
+			
+		}
+		
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("requirementMindMap.show()");
+		
+		
+	}
+	
+	 public void onNodeDblselect(SelectEvent event) {
+	        this.requirement=(JJRequirement) ((MindmapNode)event.getObject()).getData();    
+	        RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("requirementMindMap.hide()");
+			editRequirement();
+			context.execute("requirementDialogWidget.show()");
+	    }
+	
+
+	
 }
