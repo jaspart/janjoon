@@ -3,6 +3,8 @@ package com.starit.janjoonweb.ui.mb;
 import java.io.IOException;
 import java.io.Serializable;
 
+import javassist.bytecode.Mnemonic;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -63,7 +65,7 @@ public class LoginBean implements Serializable {
 	@Autowired
 	JJCompanyService jJCompanyService;
 
-	private String username = "";//"janjoon.mailer@gmail.com";
+	private String username = "";// "janjoon.mailer@gmail.com";
 	private String password;
 	private boolean loading = false;
 	private boolean loadMain = false;
@@ -71,6 +73,7 @@ public class LoginBean implements Serializable {
 	private boolean enable = false;
 	private int activeTabAdminIndex;
 	private int activeTabProjectIndex;
+	private int menuIndex;
 
 	public void setjJContactService(JJContactService jJContactService) {
 		this.jJContactService = jJContactService;
@@ -270,6 +273,69 @@ public class LoginBean implements Serializable {
 		this.activeTabProjectIndex = activeTabProjectIndex;
 	}
 
+	public int getMenuIndex() {
+		return menuIndex;
+	}
+
+	public void setMenuIndex(int menuIndex) {
+
+		this.menuIndex = menuIndex;
+	}
+
+	public void initMenuIndexvalue(ComponentSystemEvent e) {
+
+		FacesContext ctx = FacesContext.getCurrentInstance();
+		String viewId = ctx.getViewRoot().getViewId();
+		String path = FacesContext.getCurrentInstance().getExternalContext()
+				.getRequestContextPath();		
+		String view = viewId.replace(path, "");
+		view = view.replace("/pages/", "");
+		view = view.replace(".jsf?faces-redirect=true", "");
+		view = view.replace(".jsf", "");
+		view = view.replace(".xhtml", "");
+		String referrer = FacesContext.getCurrentInstance()
+				.getExternalContext().getRequestHeaderMap().get("referer");
+		if (!referrer.contains(view)) {
+			switch (view) {
+			case "main":
+				menuIndex = 0;
+				break;
+			case "project1":
+				menuIndex = 1;
+				break;
+			case "specifications":
+				menuIndex = 2;
+				break;
+			case "bugs":
+				menuIndex = 3;
+				break;
+			case "development":
+				menuIndex = 4;
+				break;
+			case "test":
+				menuIndex = 5;
+				break;
+			case "delivery":
+				menuIndex = 6;
+				break;
+			case "teams":
+				menuIndex = 7;
+				break;
+			case "stats":
+				menuIndex = 8;
+				break;
+			case "administration":
+				menuIndex = 9;
+				break;
+
+			default:
+				menuIndex = 0;
+				break;
+			}
+		}
+
+	}
+
 	public static Object findBean(String beanName) {
 		FacesContext context = FacesContext.getCurrentInstance();
 		return context.getApplication().evaluateExpressionGet(context,
@@ -285,8 +351,7 @@ public class LoginBean implements Serializable {
 	public void onTabProjectChange(TabChangeEvent event) {
 		TabView tv = (TabView) event.getComponent();
 		this.activeTabProjectIndex = tv.getChildren().indexOf(event.getTab());
-		if(activeTabProjectIndex==0)
-		{
+		if (activeTabProjectIndex == 0) {
 			JJTaskBean jJTaskBean = (JJTaskBean) findBean("jJTaskBean");
 			jJTaskBean.loadData();
 			System.out.println("jJTaskBean");
@@ -643,7 +708,7 @@ public class LoginBean implements Serializable {
 							// ct.update("contentPanel:specForm");
 							// ct.update("contentPanel:categoryForm");
 						} else if (viewID.contains("development")) {
-							
+
 							loadingPage(e);
 						}
 					}

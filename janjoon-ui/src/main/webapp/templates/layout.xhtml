@@ -41,6 +41,7 @@
 				</ui:insert>
 
 				<p:panel id="contentPanel" styleClass="content">
+					<f:event listener="#{loginBean.initMenuIndexvalue}" type="preRenderView"/>
 					<ui:insert name="content" />
 					<p:growl id="auth" for="login" styleClass="alert alert-error"
 						showDetail="true" life="2000" />

@@ -29,23 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
-import com.starit.janjoonweb.domain.JJCategory;
-import com.starit.janjoonweb.domain.JJChapter;
-import com.starit.janjoonweb.domain.JJConfigurationService;
-import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJProduct;
-import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJRequirement;
-import com.starit.janjoonweb.domain.JJStatus;
-import com.starit.janjoonweb.domain.JJTask;
-import com.starit.janjoonweb.domain.JJTaskService;
-import com.starit.janjoonweb.domain.JJTestcase;
-import com.starit.janjoonweb.domain.JJTestcaseService;
-import com.starit.janjoonweb.domain.JJTestcaseexecution;
-import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
-import com.starit.janjoonweb.domain.JJTeststep;
-import com.starit.janjoonweb.domain.JJTeststepService;
-import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.domain.*;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJRequirement.class, beanName = "jJRequirementBean")
@@ -701,8 +685,7 @@ public class JJRequirementBean {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) facesContext.getExternalContext()
 				.getSession(false);
-		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
-		JJContact contact = loginBean.getContact();
+		JJContact contact = (JJContact) session.getAttribute("JJContact");
 		requirement.setCreatedBy(contact);
 
 		changeLow = false;
@@ -768,8 +751,8 @@ public class JJRequirementBean {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) facesContext.getExternalContext()
 				.getSession(false);
-		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
-		JJContact contact = loginBean.getContact();
+		JJContact contact = (JJContact) session.getAttribute("JJContact");
+		
 
 		int numero = requirement.getNumero() + 1;
 		requirement.setNumero(numero);
@@ -815,8 +798,7 @@ public class JJRequirementBean {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) facesContext.getExternalContext()
 				.getSession(false);
-		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
-		JJContact contact = loginBean.getContact();
+		JJContact contact = (JJContact) session.getAttribute("JJContact");
 
 		int numero = requirement.getNumero() + 1;
 		requirement.setNumero(numero);
@@ -864,9 +846,7 @@ public class JJRequirementBean {
 				FacesContext facesContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) facesContext
 						.getExternalContext().getSession(false);
-				LoginBean loginBean = (LoginBean) session
-						.getAttribute("loginBean");
-				JJContact contact = loginBean.getContact();
+				JJContact contact = (JJContact) session.getAttribute("JJContact");
 
 				int numero = req.getNumero() + 1;
 				req.setNumero(numero);
@@ -949,13 +929,13 @@ public class JJRequirementBean {
 
 		}
 
-		reset();		
+		reset();
 		System.out.println("replaceInDataModelList");
 		replaceInDataModelList(requirement);
 		System.out.println("replaceInDataModelList2");
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		redirectPage();
-		
+
 	}
 
 	public void importRequirement() {
@@ -988,9 +968,7 @@ public class JJRequirementBean {
 				FacesContext facesContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) facesContext
 						.getExternalContext().getSession(false);
-				LoginBean loginBean = (LoginBean) session
-						.getAttribute("loginBean");
-				JJContact contact = loginBean.getContact();
+				JJContact contact = (JJContact) session.getAttribute("JJContact");
 
 				importRequirement.setNumero(requirement.getNumero());
 				importRequirement.setUpdatedBy(contact);
@@ -1290,7 +1268,7 @@ public class JJRequirementBean {
 	}
 
 	public void closeDialog() {
-		
+
 		long t = System.currentTimeMillis();
 		System.out.println("close dialog");
 
@@ -1327,8 +1305,8 @@ public class JJRequirementBean {
 
 		requirementState = true;
 
-//		loadData();
-//		redirectPage();
+		// loadData();
+		// redirectPage();
 
 		System.out.println("fin");
 
@@ -3547,8 +3525,8 @@ public class JJRequirementBean {
 		}
 	}
 
-	//mindMap part 
-	
+	// mindMap part
+
 	private MindmapNode reqRoot;
 
 	public MindmapNode getReqRoot() {
@@ -3558,41 +3536,44 @@ public class JJRequirementBean {
 	public void setReqRoot(MindmapNode reqRoot) {
 		this.reqRoot = reqRoot;
 	}
-	
-	public void initReqMindMap()
-	{
-		requirement=jJRequirementService.findJJRequirement(requirement.getId());
-		reqRoot = new DefaultMindmapNode(requirement.getName(), requirement, "FFCC00", false);
-		for(JJRequirement r:requirement.getRequirementLinkDown())
-		{
-			MindmapNode linkDownNode=new DefaultMindmapNode(r.getName(), r, "#00A8E8", false);
-			System.out.println("linkDownNode "+linkDownNode.getLabel());
-			reqRoot.addNode(linkDownNode);
-			
+
+	public void initReqMindMap() {
+		requirement = jJRequirementService.findJJRequirement(requirement
+				.getId());
+		reqRoot = new DefaultMindmapNode(requirement.getName(), requirement,
+				"FFCC00", true);
+		for (JJRequirement r : requirement.getRequirementLinkDown()) {
+			MindmapNode linkDownNode = new DefaultMindmapNode(r.getName(), r,
+					"#00A8E8", true);
+			System.out.println("linkDownNode " + linkDownNode.getLabel());
+			if (r.getEnabled())
+				reqRoot.addNode(linkDownNode);
+
 		}
-		
-		for(JJRequirement r:requirement.getRequirementLinkUp())
-		{
-			MindmapNode linkUpNode=new DefaultMindmapNode(r.getName(), r, "#026B93", false);
-			System.out.println("linkUpNode "+linkUpNode.getLabel());
-			reqRoot.addNode(linkUpNode);
-			
+
+		for (JJRequirement r : requirement.getRequirementLinkUp()) {
+			MindmapNode linkUpNode = new DefaultMindmapNode(r.getName(), r,
+					"#026B93", true);
+			System.out.println("linkUpNode " + linkUpNode.getLabel());
+			if (r.getEnabled())
+				reqRoot.addNode(linkUpNode);
+
 		}
-		
+
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("requirementMindMap.show()");
-		
-		
-	}
-	
-	 public void onNodeDblselect(SelectEvent event) {
-	        this.requirement=(JJRequirement) ((MindmapNode)event.getObject()).getData();    
-	        RequestContext context = RequestContext.getCurrentInstance();
-			context.execute("requirementMindMap.hide()");
-			editRequirement();
-			context.execute("requirementDialogWidget.show()");
-	    }
-	
 
-	
+	}
+
+	public void onNodeDblselect(SelectEvent event) {
+		this.requirement = (JJRequirement) ((MindmapNode) event.getObject())
+				.getData();
+		this.requirement=jJRequirementService.findJJRequirement(requirement.getId());
+		System.out.println("dfgdfgdg"+requirement.getName());
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("requirementMindMap.hide()");
+		editRequirement();
+		context.execute("requirementDialogWidget.show()");
+	}
+
 }

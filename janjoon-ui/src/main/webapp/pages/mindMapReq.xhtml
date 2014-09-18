@@ -13,7 +13,7 @@
 			<!--         <p:ajax event="select" listener="#{mindmapView.onNodeSelect}" /> -->
 			<p:ajax event="dblselect" onstart="PF('specBlockUIWidget').block()"
 				oncomplete="PF('specBlockUIWidget').unblock();"
-				update=":requirementDialog"
+				update=":requirementDialog"			
 				listener="#{jJRequirementBean.onNodeDblselect}" />
 		</p:mindmap>
 
