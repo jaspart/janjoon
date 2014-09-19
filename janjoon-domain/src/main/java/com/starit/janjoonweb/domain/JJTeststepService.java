@@ -14,4 +14,12 @@ public interface JJTeststepService {
 	public void saveTeststeps(Set<JJTeststep> teststeps);
 
 	public void updateTeststeps(Set<JJTeststep> teststeps);
+	
+	public List<JJTeststep> getJJtestSteps(JJRequirement requirement);
+	
+	public List<JJTeststep> getJJtestSteps(JJProject project);
+	
+	public List<JJTeststep> getJJtestSteps(JJRequirement requirement,JJProject project);
+	
+	
 }

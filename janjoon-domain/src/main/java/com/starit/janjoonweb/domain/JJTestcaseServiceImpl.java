@@ -98,6 +98,12 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 	public void saveTestcases(Set<JJTestcase> testcases) {
 		jJTestcaseRepository.save(testcases);
 	}
+	
+	@Override
+	public List<JJTestcase> getJJtestCases(JJRequirement requirement)
+	{
+		return getTestcases(requirement, null, true, true, true);
+	}
 
 	@Override
 	public void updateTestcases(Set<JJTestcase> testcases) {

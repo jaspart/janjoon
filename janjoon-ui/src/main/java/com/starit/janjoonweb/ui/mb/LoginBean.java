@@ -295,6 +295,8 @@ public class LoginBean implements Serializable {
 		view = view.replace(".xhtml", "");
 		String referrer = FacesContext.getCurrentInstance()
 				.getExternalContext().getRequestHeaderMap().get("referer");
+		if(referrer==null)
+			referrer="";
 		if (!referrer.contains(view)) {
 			switch (view) {
 			case "main":
