@@ -1,1 +1,1 @@
-kill -TERM $(cat /tmp/janjoon.pid)
+kill -TERM $(cat $HOME/bin/janjoon.pid)
