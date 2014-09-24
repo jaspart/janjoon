@@ -11,7 +11,7 @@
 		<p:panelGrid style="margin-top:10px">
 			<p:row>
 				<p:column style="width:50%">
-					<h:outputText for="sprint" value="Sprint:" />
+					<h:outputText for="sprint" value="Sprint:"  />
 					<p:selectOneMenu id="sprint" value="#{jJTaskBean.sprint}"
 						panelStyle="width:150px;" effect="fade" style="width:150px;"
 						filter="true" filterMatchMode="startsWith"
@@ -45,18 +45,18 @@
 		<p:panelGrid style="margin-top:10px">
 			<p:row>
 				<p:column>
-					<p:scrollPanel id="scrollPanel" style="width:400px;" mode="native">
-						<p:remoteCommand name="onCellEditTableComplete"
+					<p:scrollPanel id="scrollPanel" style="width:700px;" mode="native">
+						<p:remoteCommand name="onCellEditTableComplete"  
 							update=":projecttabview:planningForm:taskDataTable " />
-						<p:dataTable id="taskDataTable" var="taskData"
-							style="width:1300px;" value="#{jJTaskBean.tasksData}"
+						<p:dataTable id="taskDataTable" var="taskData" scrollable="true" scrollHeight="600" 
+							style="width:1300px;" value="#{jJTaskBean.tasksData}" 
 							editable="true" editMode="cell" sortBy="chapter.name">
 							<p:ajax event="cellEdit" listener="#{jJTaskBean.onCellEdit}"
-								process="@widgetVar(nameWidget)"
+								process="@widgetVar(nameWidget)" 
 								oncomplete="onCellEditTableComplete()"
 								update="taskDataTable :projecttabview:planningForm:timeline :projecttabview:planningForm:msg :projecttabview:SprintTabView" />
 							<p:summaryRow paginatorPosition="top">
-								<p:column styleClass="task" colspan="10" style="text-align:left">
+								<p:column styleClass="task" colspan="11" style="text-align:left">
 									<h:outputText icon="ui-icon-arrowreturnthick-1-e"
 										value="Chapter: #{taskData.chapter.name}" />
 								</p:column>
@@ -250,15 +250,16 @@
 							</p:column>
 						</p:dataTable>
 					</p:scrollPanel>
-				</p:column>
-				<p:column style="width:70%">
-					<pe:timeline id="timeline" value="#{jJTaskBean.model}"
+				</p:column >
+				<p:column style="width:70%">				
+				<p:scrollPanel id="scrollPanel2" style="width:700px;height:600px;" mode="native" >
+					<pe:timeline id="timeline" value="#{jJTaskBean.model}" 
 						eventMargin="10" eventMarginAxis="0" locale="#{LocaleBean.locale}"
 						start="#{jJTaskBean.start}" end="#{jJTaskBean.end}"
 						widgetVar="timelineWdgt" axisOnTop="true" groupsChangeable="false"
-						var="task" showButtonNew="true"
+						var="task" showButtonNew="true" stackEvents="true" 
 						style="min-width:500px;min-height:350px;left:0px;width:100%;"
-						editable="true" zoomMin="86400000" zoomMax="8035200000">
+						editable="true" zoomMin="#{jJTaskBean.zoomMin}" >
 
 						<p:ajax event="delete"
 							listener="#{jJTaskBean.onDeleteTimelineEvent}"
@@ -278,12 +279,11 @@
 						<p:ajax event="edit" update=":viewTaskForm:viewTaskPanelGrid"
 							listener="#{jJTaskBean.onEditTimelineEvent}" 
 							onstart="PF('createSprintBlockUI').block()"
-							oncomplete="PF('createSprintBlockUI').unblock()"/>															
-
-								
+							oncomplete="PF('createSprintBlockUI').unblock()"/>		
 
 						<h:outputText style="height:30px;" value="#{task.name}" />
 					</pe:timeline>
+					</p:scrollPanel>					
 				</p:column>
 			</p:row>
 		</p:panelGrid>

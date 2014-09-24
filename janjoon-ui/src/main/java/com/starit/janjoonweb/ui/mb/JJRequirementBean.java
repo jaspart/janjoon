@@ -13,13 +13,11 @@ import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.ListDataModel;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.primefaces.component.mindmap.Mindmap;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.SelectableDataModel;
@@ -29,7 +27,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
-import com.starit.janjoonweb.domain.*;
+import com.starit.janjoonweb.domain.JJCategory;
+import com.starit.janjoonweb.domain.JJChapter;
+import com.starit.janjoonweb.domain.JJConfigurationService;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJRequirement;
+import com.starit.janjoonweb.domain.JJStatus;
+import com.starit.janjoonweb.domain.JJTask;
+import com.starit.janjoonweb.domain.JJTaskService;
+import com.starit.janjoonweb.domain.JJTestcase;
+import com.starit.janjoonweb.domain.JJTestcaseService;
+import com.starit.janjoonweb.domain.JJTestcaseexecution;
+import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
+import com.starit.janjoonweb.domain.JJTeststep;
+import com.starit.janjoonweb.domain.JJTeststepService;
+import com.starit.janjoonweb.domain.JJVersion;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJRequirement.class, beanName = "jJRequirementBean")
@@ -752,7 +766,6 @@ public class JJRequirementBean {
 		HttpSession session = (HttpSession) facesContext.getExternalContext()
 				.getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
-		
 
 		int numero = requirement.getNumero() + 1;
 		requirement.setNumero(numero);
@@ -846,7 +859,8 @@ public class JJRequirementBean {
 				FacesContext facesContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) facesContext
 						.getExternalContext().getSession(false);
-				JJContact contact = (JJContact) session.getAttribute("JJContact");
+				JJContact contact = (JJContact) session
+						.getAttribute("JJContact");
 
 				int numero = req.getNumero() + 1;
 				req.setNumero(numero);
@@ -968,7 +982,8 @@ public class JJRequirementBean {
 				FacesContext facesContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) facesContext
 						.getExternalContext().getSession(false);
-				JJContact contact = (JJContact) session.getAttribute("JJContact");
+				JJContact contact = (JJContact) session
+						.getAttribute("JJContact");
 
 				importRequirement.setNumero(requirement.getNumero());
 				importRequirement.setUpdatedBy(contact);
@@ -1309,8 +1324,10 @@ public class JJRequirementBean {
 		// redirectPage();
 
 		System.out.println("fin");
+		
 
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
+		redirectPage();
 
 	}
 
@@ -2334,8 +2351,11 @@ public class JJRequirementBean {
 
 		} else {
 
-			subTestcases = getSortedTestcases(requirement, null);
-			testcases = getSortedTestcases(null, requirement.getChapter());
+			subTestcases = getSortedTestcases(
+					jJRequirementService.findJJRequirement(requirement.getId()),
+					null);
+			testcases = getSortedTestcases(null, jJRequirementService
+					.findJJRequirement(requirement.getId()).getChapter());
 
 			// Mode Edit Requirement
 
@@ -2738,7 +2758,11 @@ public class JJRequirementBean {
 				requirement, chapter, false, true, false);
 
 		for (JJTestcase testcase : testcases) {
-			elements.put(testcase.getOrdering(), testcase);
+			if (testcase.getOrdering() != null)
+				elements.put(testcase.getOrdering(), testcase);
+			else
+				elements.put(0, testcase);
+
 		}
 
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
@@ -3538,13 +3562,16 @@ public class JJRequirementBean {
 	}
 
 	public void initReqMindMap() {
+
 		requirement = jJRequirementService.findJJRequirement(requirement
 				.getId());
-		reqRoot = new DefaultMindmapNode(requirement.getName(), requirement,
-				"FFCC00", true);
+		reqRoot = new DefaultMindmapNode(requirement.getCategory().getName()
+				.toUpperCase()
+				+ " : " + requirement.getName(), requirement, "FFCC00", true);
 		for (JJRequirement r : requirement.getRequirementLinkDown()) {
-			MindmapNode linkDownNode = new DefaultMindmapNode(r.getName(), r,
-					"#00A8E8", true);
+			MindmapNode linkDownNode = new DefaultMindmapNode(r.getCategory()
+					.getName().toUpperCase()
+					+ " : " + r.getName(), r, "#00A8E8", true);
 			System.out.println("linkDownNode " + linkDownNode.getLabel());
 			if (r.getEnabled())
 				reqRoot.addNode(linkDownNode);
@@ -3552,8 +3579,9 @@ public class JJRequirementBean {
 		}
 
 		for (JJRequirement r : requirement.getRequirementLinkUp()) {
-			MindmapNode linkUpNode = new DefaultMindmapNode(r.getName(), r,
-					"#026B93", true);
+			MindmapNode linkUpNode = new DefaultMindmapNode(r.getCategory()
+					.getName().toUpperCase()
+					+ " : " + r.getName(), r, "#6e9ebf", true);
 			System.out.println("linkUpNode " + linkUpNode.getLabel());
 			if (r.getEnabled())
 				reqRoot.addNode(linkUpNode);
@@ -3568,12 +3596,46 @@ public class JJRequirementBean {
 	public void onNodeDblselect(SelectEvent event) {
 		this.requirement = (JJRequirement) ((MindmapNode) event.getObject())
 				.getData();
-		this.requirement=jJRequirementService.findJJRequirement(requirement.getId());
-		System.out.println("dfgdfgdg"+requirement.getName());
+		this.requirement = jJRequirementService.findJJRequirement(requirement
+				.getId());
+		System.out.println("dfgdfgdg" + requirement.getName());
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("requirementMindMap.hide()");
 		editRequirement();
 		context.execute("requirementDialogWidget.show()");
+	}
+
+	public void onNodeSelect(SelectEvent event) {
+
+		this.requirement = (JJRequirement) ((MindmapNode) event.getObject())
+				.getData();
+		this.requirement = jJRequirementService.findJJRequirement(requirement
+				.getId());
+		MindmapNode node = (MindmapNode) event.getObject();
+
+		if (node.getChildren().isEmpty()) {
+
+			for (JJRequirement r : requirement.getRequirementLinkDown()) {
+				MindmapNode linkDownNode = new DefaultMindmapNode(r
+						.getCategory().getName().toUpperCase()
+						+ " : " + r.getName(), r, "#00A8E8", true);
+				System.out.println("linkDownNode " + linkDownNode.getLabel());
+				if (r.getEnabled())
+					node.addNode(linkDownNode);
+
+			}
+
+			for (JJRequirement r : requirement.getRequirementLinkUp()) {
+				MindmapNode linkUpNode = new DefaultMindmapNode(r.getCategory()
+						.getName().toUpperCase()
+						+ " : " + r.getName(), r, "#6e9ebf", true);
+				System.out.println("linkUpNode " + linkUpNode.getLabel());
+				if (r.getEnabled())
+					node.addNode(linkUpNode);
+
+			}
+
+		}
 	}
 
 }

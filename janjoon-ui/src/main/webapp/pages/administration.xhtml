@@ -9,7 +9,7 @@
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
 
-		<p:tabView id="tabview" widgetVar="tabView" dynamic="true"
+		<p:tabView id="tabview" widgetVar="tabView" dynamic="true" 
 			cache="true" activeIndex="#{loginBean.activeTabAdminIndex}">
 			<p:ajax event="tabChange" listener="#{loginBean.onTabAdminChange}" update="tabview" />
 

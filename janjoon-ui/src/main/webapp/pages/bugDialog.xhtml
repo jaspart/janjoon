@@ -80,7 +80,7 @@
 			</p:column>
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugProject"
-					onchange="jJbugSprintWV.val('');jJbugRequirementWV.val('');jJbugTeststepWV.val('');"
+					onchange="jJbugRequirementWV.val('');jJbugSprintWV.val('');"
 					value="#{jJBugBean.bugProjectSelected}" itemLabel="#{project.name}"
 					itemValue="#{project}" rendered="#{jJProjectBean.project == null}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter"
@@ -88,10 +88,8 @@
 					completeMethod="#{jJBugBean.completeProject}">
 
 					<p:ajax event="itemSelect"
-						update="jJbugSprint jJbugRequirement jJbugTeststep" />
+						update="jJbugSprint jJbugRequirement jJbugTeststep jJbugProject" />
 
-					<p:ajax event="itemUnselect"
-						update="jJbugSprint jJbugRequirement jJbugTeststep" />
 				</p:autoComplete>
 				<p:selectOneMenu id="jJbugProject2" value="#{JJBug_.project}"
 					rendered="#{jJProjectBean.project != null}"

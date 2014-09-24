@@ -254,7 +254,7 @@
 			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"
 			position="center" style="padding:0px;top:40px !important;">
 			<p:ajax event="close" listener="#{jJRequirementBean.closeDialog}"
-				update=":specForm" onstart="PF('blockUIWidget').block()"
+				 onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock()" />
 			<p:outputPanel id="requirementDialogPanel">
 
@@ -501,7 +501,7 @@
 											onstart="PF('requirementBlockUIWidget').block()"
 											oncomplete="PF('requirementBlockUIWidget').unblock()"
 											action="#{jJRequirementBean.save()}"
-											widgetVar="requirementSaveWidget" update=":contentPanel" />
+											widgetVar="requirementSaveWidget" update="@form :contentPanel" />
 									</p:column>
 								</p:row>
 							</f:facet>
@@ -836,7 +836,7 @@
 											<f:selectItem itemValue="#{null}"
 												itemLabel="#{messages.specification_import_select_label}" />
 											<f:selectItems value="#{jJRequirementBean.importStatusList}"
-												var="p" itemLabel="#{p.name}" itemValue="#{p}" />أميمة طالب
+												var="p" itemLabel="#{p.name}" itemValue="#{p}" />
 											<p:ajax partialSubmit="true"
 												onstart="PF('importBlockUIWidget').block()"
 												oncomplete="PF('importBlockUIWidget').unblock()"
@@ -944,10 +944,10 @@
 		</p:dialog>
 
 		<p:dialog id="requirementMindMap"
-			header="#{messages.specification_import_title}" modal="true"
+			header="#{messages.specification_MindMap_title}" modal="true"
 			width="75%"
 			widgetVar="requirementMindMap" dynamic="true" resizable="true">
-			<p:ajax event="close" update=":categoryForm :specForm mindMapForm" />
+			<p:ajax event="close" listener="#{jJRequirementBean.closeDialog}" />
 			<p:panel>
 				<ui:include src="mindMapReq.xhtml" />
 			</p:panel>

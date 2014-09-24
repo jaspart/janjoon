@@ -1,116 +1,96 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-	<description>Janjoon FrontEnd Web Application</description>
-	<display-name>janjoon-ui</display-name>
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath*:META-INF/spring/applicationContext*.xml
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
+  <description>Janjoon FrontEnd Web Application</description>
+  <display-name>janjoon-ui</display-name>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath*:META-INF/spring/applicationContext*.xml
 					/WEB-INF/spring/*.xml</param-value>
-	</context-param>
-	<context-param>
-		<param-name>defaultHtmlEscape</param-name>
-		<param-value>true</param-value>
-	</context-param>
-	<context-param>
-		<param-name>facelets.SKIP_COMMENTS</param-name>
-		<param-value>true</param-value>
-	</context-param>
-	<context-param>
-		<param-name>org.apache.myfaces.SERIALIZE_STATE_IN_SESSION</param-name>
-		<param-value>false</param-value>
-	</context-param>
-	<context-param>
-		<param-name>primefaces.CLIENT_SIDE_VALIDATION</param-name>
-		<param-value>true</param-value>
-	</context-param>
-	<!-- PrimeFaces -->
-	<context-param>
-		<param-name>primefaces.THEME</param-name>
-		<param-value>bootstrap</param-value>
-	</context-param>
-	<filter>
-		<filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
-		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
-		<init-param>
-			<param-name>singleSession</param-name>
-			<param-value>false</param-value>
-		</init-param>
-	</filter>
-	<filter>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-	</filter>
-	<filter>
-		<filter-name>PrimeFaces FileUpload Filter</filter-name>
-		<filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
-	</filter>
-	<!-- Spring Framework -->
-	<filter-mapping>
-		<filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>PrimeFaces FileUpload Filter</filter-name>
-		<servlet-name>Faces Servlet</servlet-name>
-	</filter-mapping>
-
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-	<listener>
-		<listener-class>com.starit.janjoonweb.ui.security.ConfigListener</listener-class>
-	</listener>
-	<listener>
-		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-	</listener>	
-	<!-- Java Server Faces -->
-	<listener>
-		<listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
-	</listener>
-	<servlet>
-		<servlet-name>CKEditorGetImageServlet</servlet-name>
-		<servlet-class>com.starit.janjoonweb.ui.mb.util.service.CKEditorGetImageServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>CKEditorUploadServlet</servlet-name>
-		<servlet-class>com.starit.janjoonweb.ui.mb.util.service.CKEditorUploadServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>Faces Servlet</servlet-name>
-		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-		<init-param>
-			<param-name>keepgenerated</param-name>
-			<param-value>true</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>CKEditorUploadServlet</servlet-name>
-		<url-pattern>/pages/ckeditor/uploadimage</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>CKEditorGetImageServlet</servlet-name>
-		<url-pattern>/pages/ckeditor/getimage</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>Faces Servlet</servlet-name>
-		<url-pattern>*.jsf</url-pattern>
-	</servlet-mapping>
-	<session-config>
-		<session-timeout>120</session-timeout>
-	</session-config>
-	<welcome-file-list>
-		<welcome-file>/index.html</welcome-file>
-	</welcome-file-list>
-
-	<login-config>
-		<auth-method>BASIC</auth-method>
-		<realm-name>JanjoonSecurityRealm</realm-name>
-	</login-config>	
+  </context-param>
+  <context-param>
+    <param-name>defaultHtmlEscape</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <context-param>
+    <param-name>facelets.SKIP_COMMENTS</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <context-param>
+    <param-name>org.apache.myfaces.SERIALIZE_STATE_IN_SESSION</param-name>
+    <param-value>false</param-value>
+  </context-param>
+  <context-param>
+    <param-name>primefaces.CLIENT_SIDE_VALIDATION</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <context-param>
+    <param-name>primefaces.THEME</param-name>
+    <param-value>bootstrap</param-value>
+  </context-param>
+  <filter>
+    <filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
+    <filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+    <init-param>
+      <param-name>singleSession</param-name>
+      <param-value>false</param-value>
+    </init-param>
+  </filter>
+  <filter>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+  <filter>
+    <filter-name>PrimeFaces FileUpload Filter</filter-name>
+    <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>PrimeFaces FileUpload Filter</filter-name>
+    <servlet-name>Faces Servlet</servlet-name>
+  </filter-mapping>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>com.starit.janjoonweb.ui.security.ConfigListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
+  </listener>
+  <servlet>
+    <servlet-name>CKEditorGetImageServlet</servlet-name>
+    <servlet-class>com.starit.janjoonweb.ui.mb.util.service.CKEditorGetImageServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CKEditorUploadServlet</servlet-name>
+    <servlet-class>com.starit.janjoonweb.ui.mb.util.service.CKEditorUploadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CKEditorUploadServlet</servlet-name>
+    <url-pattern>/pages/ckeditor/uploadimage</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CKEditorGetImageServlet</servlet-name>
+    <url-pattern>/pages/ckeditor/getimage</url-pattern>
+  </servlet-mapping>
+  <session-config>
+    <session-timeout>120</session-timeout>
+  </session-config>
+  <welcome-file-list>
+    <welcome-file>/index.html</welcome-file>
+  </welcome-file-list>
+  <login-config>
+    <auth-method>BASIC</auth-method>
+    <realm-name>JanjoonSecurityRealm</realm-name>
+  </login-config>
 </web-app>
