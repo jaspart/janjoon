@@ -3,8 +3,6 @@ package com.starit.janjoonweb.ui.mb;
 import java.io.IOException;
 import java.io.Serializable;
 
-import javassist.bytecode.Mnemonic;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -20,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.myfaces.component.visit.FullVisitContext;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
@@ -35,7 +32,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 
-import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
@@ -45,6 +41,7 @@ import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.UsageChecker;
 import com.starit.janjoonweb.ui.security.AuthorizationManager;
+import com.sun.faces.component.visit.FullVisitContext;
 
 @Scope("session")
 @Component("loginBean")

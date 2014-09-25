@@ -64,9 +64,9 @@
   <listener>
     <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
   </listener>
-  <listener>
-    <listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
-  </listener>
+<!--   <listener> -->
+<!--     <listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class> -->
+<!--   </listener> -->
   <servlet>
     <servlet-name>CKEditorGetImageServlet</servlet-name>
     <servlet-class>com.starit.janjoonweb.ui.mb.util.service.CKEditorGetImageServlet</servlet-class>
@@ -75,6 +75,7 @@
     <servlet-name>CKEditorUploadServlet</servlet-name>
     <servlet-class>com.starit.janjoonweb.ui.mb.util.service.CKEditorUploadServlet</servlet-class>
   </servlet>
+  
   <servlet-mapping>
     <servlet-name>CKEditorUploadServlet</servlet-name>
     <url-pattern>/pages/ckeditor/uploadimage</url-pattern>
