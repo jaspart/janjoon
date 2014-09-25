@@ -561,38 +561,17 @@
 											<p:scrollPanel mode="native" style="height:200px;width:180px;">
 											<h:outputText escape="true" value="#{tse.teststep.actionstep}"/>
 											</p:scrollPanel>
-<!--											<pe:ckEditor
-												toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
-												value="#{tse.teststep.actionstep}"
-												customConfig="#{request.contextPath}/resources/js/ckEditor.js"
-												readOnly="true" />-->
 										</p:column>
 										<p:column>
 											<p:scrollPanel mode="native" style="height:200px;width:180px;">
 											<h:outputText escape="true" value="#{tse.teststep.resultstep}"/>
 											</p:scrollPanel>
-<!--											<pe:ckEditor
-												toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
-												value="#{tse.teststep.resultstep}"
-												customConfig="#{request.contextPath}/resources/js/ckEditor.js"
-												readOnly="true" />-->
 										</p:column>
 									</p:row>
 									<p:row>
 										<p:column>
 											<h:outputText value="Status: " />
 										</p:column>
-<!--										<p:column>
-											<p:selectOneButton styleClass="TestcaseExec"
-												value="#{jJTeststepexecutionBean.status}"
-												widgetVar="TestcaseExecWidget">
-												<p:ajax
-													update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton :bugForm:createPanelGrid"
-													listener="#{jJTeststepexecutionBean.handleStatus()}" />
-												<f:selectItem itemLabel="Passed" itemValue="true" />
-												<f:selectItem itemLabel="Failed" itemValue="false" />
-											</p:selectOneButton>
-										</p:column>-->
 										<p:column>
 											<p:commandButton id="testExecSuccessButton"
 												value="#{messages.test_graph_success_label}"
@@ -618,7 +597,7 @@
 							</p:tab>
 						</p:tabView>
 					</p:scrollPanel>
-					<p:panelGrid>
+					<p:panelGrid rendered="#{ ! jJTeststepexecutionBean.disabledTestcase}">
 						<p:row>
 							<p:column>
 								<p:selectOneButton id="testcaseexecutionStatus"
