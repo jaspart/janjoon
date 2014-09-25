@@ -197,7 +197,7 @@ a:visited {
 }
 
 div.timeline-event-range {
-	height: 15px !important;
+	height:45px !important;
 }
 div.timeline-groups-axis {
 	width: 10px;
@@ -205,7 +205,7 @@ div.timeline-groups-axis {
 }
 div.timeline-groups-axis-onleft {
 	width: 10px !important;
-	height: 52px !important;
+	height: 50px !important;
 }
 div.timeline-event-selected {
 	background: #BECEFE none !important;
@@ -221,7 +221,10 @@ div.timeline-event-line {
 	height: 55px !important;
 }
 div.timeline-event-content {
-	height: 13px !important;
+	
+}
+div.timeline-event-content span{
+	height: 15px;
 }
 
 div.timeline-axis {
@@ -236,10 +239,11 @@ div.timeline-axis {
 	height: -1px !important;
 }
 div.timeline-axis-grid {
-	height: 15px !important;
+	height: 10px !important;
 }
+
 div.timeline-groups-text {
-	height: 28px;
+	height: 35px;
 }
 
 div.timeline-navigation-delete {
@@ -251,6 +255,7 @@ div.planned {
 	border-color: white; /* white */
 	opacity: 0.6;
 	filter: alpha(opacity = 60);
+	height: 30px !important;
 }
 
 div.real {
@@ -258,6 +263,7 @@ div.real {
 	border-color: black; /* black */
 	opacity: 0.6;
 	filter: alpha(opacity = 60);
+	height: 30px !important;
 }
 
 div.chapter {
@@ -265,7 +271,7 @@ div.chapter {
 	border-color: white; /* white */
 	opacity: 0.5;
 	filter: alpha(opacity = 50);
-	height: 20px !important;
+	height: 30px !important;
 }
 
 div.revised {
@@ -273,7 +279,7 @@ div.revised {
 	border-color: white; /* white */
 	opacity: 0.5;
 	filter: alpha(opacity = 50);
-	height: 20px !important;
+	height: 30px !important;
 }
 
 .task {
