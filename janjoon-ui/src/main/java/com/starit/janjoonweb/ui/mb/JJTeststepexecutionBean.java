@@ -112,23 +112,18 @@ public class JJTeststepexecutionBean {
 		elements = new TreeMap<Integer, JJTeststepexecution>();
 
 		if (teststepexecutions.isEmpty()) {
-
 			newTeststepexecutions(testcaseexecution);
-
 		}
 
-		teststepexecutions = jJTeststepexecutionService.getTeststepexecutions(
-				testcaseexecution, true);
+		teststepexecutions = jJTeststepexecutionService.getTeststepexecutions(testcaseexecution, true);
 
 		this.teststepexecutions = new ArrayList<JJTeststepexecution>();
 
 		for (JJTeststepexecution teststepexecution : teststepexecutions) {
-			elements.put(teststepexecution.getTeststep().getOrdering(),
-					teststepexecution);
+			elements.put(teststepexecution.getTeststep().getOrdering(), teststepexecution);
 		}
 
-		for (Map.Entry<Integer, JJTeststepexecution> teststepexecutionEntry : elements
-				.entrySet()) {
+		for (Map.Entry<Integer, JJTeststepexecution> teststepexecutionEntry : elements.entrySet()) {
 			this.teststepexecutions.add(teststepexecutionEntry.getValue());
 		}
 
@@ -153,22 +148,17 @@ public class JJTeststepexecutionBean {
 			newBug();
 			teststepexecution = elements.get(activeIndex);
 
-		} else {
+		}
+		else {
 			activeIndex = elements.size() - 1;
-
 			teststepexecution = elements.get(activeIndex);
-
 			status = teststepexecution.getPassed();
 
 			if (status) {
 				newBug();
 			} else {
-
-				JJBuildBean jJBuildBean = (JJBuildBean) session
-						.getAttribute("jJBuildBean");
-
-				JJProjectBean jJProjectBean = (JJProjectBean) session
-						.getAttribute("jJProjectBean");
+				JJBuildBean jJBuildBean = (JJBuildBean) session.getAttribute("jJBuildBean");
+				JJProjectBean jJProjectBean = (JJProjectBean) session.getAttribute("jJProjectBean");
 
 				List<JJBug> bugs = jJBugService.getBugs(
 						jJProjectBean.getProject(),
@@ -176,11 +166,11 @@ public class JJTeststepexecutionBean {
 						jJBuildBean.getBuild(), true, true);
 				if (bugs.isEmpty()) {
 					newBug();
-				} else {
+				}
+				else {
 					bug = bugs.get(0);
 				}
 			}
-
 		}
 
 		changeTestcaseStatus();

@@ -200,11 +200,11 @@ div.timeline-event-range {
 	height:45px !important;
 }
 div.timeline-groups-axis {
-	width: 10px;
+	width: 00px;
 	height: 52px !important;
 }
 div.timeline-groups-axis-onleft {
-	width: 10px !important;
+	width: 00px !important;
 	height: 30px !important;
 }
 div.timeline-event-selected {
@@ -282,9 +282,14 @@ div.revised {
 	height: 30px !important;
 }
 
-.task {
-	height: 28px;
-}
+/*.task {
+	width:180px !important;
+	height:30,8px !important;
+	padding: 0px 6px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	-webkit-line-clamp: 2;
+}*/
 
 .old {
 	background-color: #FCA752 !important;

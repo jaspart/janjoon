@@ -10,13 +10,16 @@
 	<style type="text/css">
 .ui-datatable .ui-datatable-data tr {
 	height: 45px;
+	overflow: hidden;
 }
 
 .ui-datatable .ui-datatable-data th {
-	height: 30,9px;
+	height: 37px;
+	overflow: hidden;
 }
 .ui-datatable .ui-datatable-data tr td {
-	height: 30,9px;
+	height: 30,8px;
+	overflow: hidden;
 }
 </style>
 	<h:form id="sprintForm" style="width:100%">
@@ -107,7 +110,7 @@
 									</p:column>
 
 									<p:column id="name" styleClass="task"
-										style="width:180px !important;height:30,9px !important;"
+										style="width:180px !important;height:30,8px !important;	overflow:hidden;"
 										headerText="#{messages.project_gantt_table_name_title}">
 										<p:cellEditor>
 											<f:facet name="output">
