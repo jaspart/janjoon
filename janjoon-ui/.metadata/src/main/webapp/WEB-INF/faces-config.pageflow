@@ -1,2 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pageflow:Pageflow xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13950744793370" configfile="/janjoon-ui/src/main/webapp/WEB-INF/faces-config.xml"/>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13950744793370" configfile="/janjoon-ui/src/main/webapp/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="pages/login" x="122" y="178" id="pf14119866334390" referenceLink="//@navigationRule.1/@fromViewId|" outlinks="pf14119866334391 pf14119866334392" inlinks="pf14119866334391" path="/pages/login.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/bugs" id="pf14119866334393" referenceLink="//@navigationRule.1/@navigationCase.0/@toViewId|" inlinks="pf14119866334392" path="/pages/bugs.xhtml"/>
+  <links id="pf14119866334391" target="pf14119866334390" source="pf14119866334390" outcome="fail" fromaction="#{loginBean.login}">
+    <bendPoints d1Height="-36" d2Height="-36"/>
+    <bendPoints d1Width="-64" d1Height="-36" d2Width="-64" d2Height="-36"/>
+    <bendPoints d1Width="-64" d2Width="-64"/>
+  </links>
+  <links id="pf14119866334392" target="pf14119866334393" source="pf14119866334390" outcome="bug" fromaction="#{jJBugBean.persistBug}"/>
+</pageflow:Pageflow>

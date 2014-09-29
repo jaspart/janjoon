@@ -227,6 +227,7 @@ public class JJBugBean {
 		filteredJJBug = bugList;
 
 		for (JJBug b : bugList) {
+			
 			if (b.getCriticity() != null
 					&& !listContaines(criticities, b.getCriticity()))
 				criticities.add(b.getCriticity());
@@ -334,20 +335,25 @@ public class JJBugBean {
 
 	public void reset() {
 
-		JJBug_ = null;
-		bugProjectSelected = null;
-		bugRequirementSelected = null;
-		bugList = null;
-		selectedBugList = null;
-
-		criticityOptions = null;
-		importanceOptions = null;
-		statusOptions = null;
-
-		setSelectedBugs(null);
-		setSelectedTasks(null);
-		setSelectedMessages(null);
-		setCreateDialogVisible(false);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		
+		session.setAttribute("jJBugBean",new JJBugBean());
+//		JJBug_ = null;
+//		bugProjectSelected = null;
+//		bugRequirementSelected = null;
+//		bugList = null;
+//		selectedBugList = null;
+//		filteredJJBug=null;
+//
+//		criticityOptions = null;
+//		importanceOptions = null;
+//		statusOptions = null;
+//
+//		setSelectedBugs(null);
+//		setSelectedTasks(null);
+//		setSelectedMessages(null);
+//		setCreateDialogVisible(false);
 	}
 
 	public void saveBug() {
@@ -446,7 +452,8 @@ public class JJBugBean {
 		FacesMessage facesMessage = MessageFactory.getMessage(message, "JJBug");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
-		return "";
+		System.err.println(facesMessage.getDetail());
+		return "bug";
 	}
 
 	public String findStyleColor(JJBug b) {

@@ -30,5 +30,13 @@
            <to-view-id>/pages/login.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>   
+     <navigation-rule>
+        <from-view-id>/pages/login.xhtml</from-view-id>
+        <navigation-case>
+           <from-action>#{jJBugBean.persistBug}</from-action>
+           <from-outcome>bug</from-outcome>
+           <to-view-id>/pages/bugs.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>   
 
 </faces-config>

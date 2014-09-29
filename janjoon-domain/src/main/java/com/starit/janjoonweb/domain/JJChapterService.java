@@ -16,6 +16,8 @@ public interface JJChapterService {
 
 	public List<JJChapter> getChapters(JJProject project, boolean onlyActif,
 			boolean sortedByName);
+	
+	public List<JJChapter> getChapters(JJProject project, boolean sotedByDate);
 
 	public List<JJChapter> getChildrenOfParentChapter(JJChapter parent,
 			boolean onlyActif, boolean sortedByOrder);

@@ -205,7 +205,7 @@ div.timeline-groups-axis {
 }
 div.timeline-groups-axis-onleft {
 	width: 10px !important;
-	height: 50px !important;
+	height: 30px !important;
 }
 div.timeline-event-selected {
 	background: #BECEFE none !important;
@@ -239,16 +239,16 @@ div.timeline-axis {
 	height: -1px !important;
 }
 div.timeline-axis-grid {
-	height: 10px !important;
+	height: 9.5px !important;
 }
 
 div.timeline-groups-text {
-	height: 35px;
+	height: 36px;
 }
 
-div.timeline-navigation-delete {
-	display: none;
-}
+/* div.timeline-navigation-delete { */
+/* 	display: none; */
+/* } */
 
 div.planned {
 	background: #5882FA none !important; /* blue */

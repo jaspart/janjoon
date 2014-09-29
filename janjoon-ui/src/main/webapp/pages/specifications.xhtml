@@ -613,8 +613,7 @@
 									<p:column colspan="3">
 										<p:commandButton
 											value="#{messages.specification_chapter_save_button}"
-											action="#{jJChapterBean.save()}"
-											process="@widgetVar(nameWidget) @widgetVar(parentWidget) @widgetVar(descriptionWidget) @widgetVar(projectWidget)"
+											action="#{jJChapterBean.save}"
 											update="chapterDialogForm" style="float: right;"
 											onstart="PF('chapterBlockUIWidget').block()"
 											oncomplete="PF('chapterBlockUIWidget').unblock()" />

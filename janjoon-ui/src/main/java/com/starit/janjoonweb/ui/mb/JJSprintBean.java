@@ -324,11 +324,19 @@ public class JJSprintBean {
 		sprintUtil = new SprintUtil(sprintUtil.getSprint(),
 				jJTaskService.getSprintTasks(sprintUtil.getSprint()));
 		sprintList.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
+		JJTaskBean jjTaskBean=(JJTaskBean) session.getAttribute("jJTaskBean");
+		jjTaskBean.onSprintUpdate(sprintUtil.getSprint());
 
 		String message = "message_successfully_updated";
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJSprint");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		RequestContext context = RequestContext.getCurrentInstance();
+
+		context.execute("projectTabView.select(" + 1 + ")");
+
+		context.execute("SprintTab.select("
+				+ contains(sprintUtil.getSprint().getId()) + ")");
 
 	}
 

@@ -7,6 +7,16 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
 
+		<pe:blockUI widgetVar="bugBlockUIWidget"
+					target="createPanelGrid">
+					<h:panelGrid columns="2">
+						<p:graphicImage library="images" name="ajax-loader.gif"
+							style="vertical-align: middle;" />
+						<h:outputText value="#{messages.label_refresh}"
+							style="white-space: nowrap;" />
+					</h:panelGrid>
+				</pe:blockUI>
+
 	<p:panelGrid id="createPanelGrid">
 		<p:row>
 			<p:column colspan="1">

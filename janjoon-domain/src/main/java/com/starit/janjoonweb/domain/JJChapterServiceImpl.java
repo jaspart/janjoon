@@ -111,6 +111,35 @@ public class JJChapterServiceImpl implements JJChapterService {
 		return result.getResultList();
 
 	}
+	
+	@Override
+	public List<JJChapter> getChapters(JJProject project, boolean sotedByDate)
+	{
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJChapter> criteriaQuery = criteriaBuilder
+				.createQuery(JJChapter.class);
+
+		Root<JJChapter> from = criteriaQuery.from(JJChapter.class);
+
+		CriteriaQuery<JJChapter> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		
+		// Adding predicates in case of parameter not being null
+		if (project != null) {
+			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}
+
+		select.where(predicates.toArray(new Predicate[] {}));
+		if (sotedByDate) {
+			select.orderBy(criteriaBuilder.asc(from.get("creationDate")));
+		}
+		TypedQuery<JJChapter> result = entityManager.createQuery(select);
+		return result.getResultList();
+	}
 
 	@Override
 	public List<JJChapter> getChapters(JJProject project, boolean onlyActif,
