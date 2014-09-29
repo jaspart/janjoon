@@ -324,8 +324,8 @@ public class JJSprintBean {
 		sprintUtil = new SprintUtil(sprintUtil.getSprint(),
 				jJTaskService.getSprintTasks(sprintUtil.getSprint()));
 		sprintList.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
-		JJTaskBean jjTaskBean=(JJTaskBean) session.getAttribute("jJTaskBean");
-		jjTaskBean.onSprintUpdate(sprintUtil.getSprint());
+//		JJTaskBean jjTaskBean=(JJTaskBean) session.getAttribute("jJTaskBean");
+//		jjTaskBean.onSprintUpdate(sprintUtil.getSprint());
 
 		String message = "message_successfully_updated";
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
