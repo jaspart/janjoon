@@ -6,7 +6,7 @@
 	<groupId>com.starit.janjoonweb.ui</groupId>
 	<artifactId>janjoon-ui</artifactId>
 	<packaging>war</packaging>
-	<version>1.0-BUILD_NUMBER</version>
+	<version>1.1-BUILD_NUMBER</version>
 	<name>janjoon-ui</name>
 
 	<properties>
@@ -341,7 +341,7 @@
 		<dependency>
 			<groupId>com.starit.janjoonweb.domain</groupId>
 			<artifactId>janjoon-domain</artifactId>
-			<version>1.0-BUILD_NUMBER</version>
+			<version>1.1-BUILD_NUMBER</version>
 		</dependency>
 
 		<!-- <dependency> <groupId>com.itextpdf</groupId> <artifactId>itextpdf</artifactId> 

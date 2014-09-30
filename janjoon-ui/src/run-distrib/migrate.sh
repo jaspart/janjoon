@@ -11,11 +11,11 @@ fi
 rm -rdf save/$1
 mkdir save/$1
 mv bin db janjoon-ui lib log license upload save/$1/
-unzip janjoon-ui-1.0-$2-distrib.zip
-mv lib/janjoon-ui-1.0-$2.war lib/janjoon-ui-1.0-$2.war.zip
-mkdir lib/janjoon-ui-1.0-$2.war
-unzip lib/janjoon-ui-1.0-$2.war.zip -d lib/janjoon-ui-1.0-$2.war/
-cd lib/janjoon-ui-1.0-$2.war/
+unzip janjoon-ui-1.1-$2-distrib.zip
+mv lib/janjoon-ui-1.1-$2.war lib/janjoon-ui-1.1-$2.war.zip
+mkdir lib/janjoon-ui-1.1-$2.war
+unzip lib/janjoon-ui-1.1-$2.war.zip -d lib/janjoon-ui-1.1-$2.war/
+cd lib/janjoon-ui-1.1-$2.war/
 ln -s ../../upload/images images
 cd -
 sed -i 's/9999/$3/g' bin/start.sh

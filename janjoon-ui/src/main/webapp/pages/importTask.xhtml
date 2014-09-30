@@ -130,16 +130,16 @@
 		</p:dataTable>
 
 
-		<p:commandButton id="importButtonSC" value="Import" rendered="#{jJTaskBean.mode == 'scrum'}"
+		<p:commandButton id="importButtonSC" value="Import" 
 			style="float: right;" actionListener="#{jJTaskBean.importTask}"
-			update=":projecttabview:SprintTabView"
+			update=":projecttabview"
 			onstart="PF('createSprintBlockUI').block()"
 			oncomplete="PF('createSprintBlockUI').unblock()"/>
 			
-			<p:commandButton id="importButtonPL" value="Import" rendered="#{jJTaskBean.mode != 'scrum'}"
-			style="float: right;" actionListener="#{jJTaskBean.importTask}"			
-			onstart="PF('createSprintBlockUI').block()"
-			oncomplete="PF('createSprintBlockUI').unblock()"/>
+<!-- 			<p:commandButton id="importButtonPL" value="Import" rendered="#{jJTaskBean.mode != 'scrum'}" -->
+<!-- 			style="float: right;" actionListener="#{jJTaskBean.importTask}"			 -->
+<!-- 			onstart="PF('createSprintBlockUI').block()" -->
+<!-- 			oncomplete="PF('createSprintBlockUI').unblock()"/> -->
 			
 	</h:form>
 </ui:composition>
