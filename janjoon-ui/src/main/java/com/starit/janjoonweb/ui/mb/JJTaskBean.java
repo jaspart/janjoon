@@ -18,6 +18,7 @@ import javax.faces.component.html.*;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.HttpSession;
 import javax.swing.text.StyledEditorKit.BoldAction;
 
@@ -1289,6 +1290,11 @@ public class JJTaskBean {
 			importFormats = new ArrayList<ImportFormat>();
 
 		}
+	}
+	
+	public void sprintSelectionChanged(final AjaxBehaviorEvent event)
+	{
+		tasksData=null;
 	}
 
 	public void copyObjets() {

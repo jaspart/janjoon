@@ -8,7 +8,16 @@
 
 <ui:composition>
 	<h:form id="importTaskDialogForm">
-		<p:panelGrid style="margin-top:10px">
+
+		<pe:blockUI widgetVar="taskBlockUIWidget" target="importTaskDialogForm">
+			<h:panelGrid columns="2" layout="grid" >
+				<p:graphicImage library="images" name="ajax-loader.gif"
+					style="vertical-align: middle;" />
+				<h:outputText value="#{messages.label_refresh}"
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+		</pe:blockUI>
+		<p:panelGrid style="margin-top:10px" >
 			<p:row>
 				<p:column>
 					<h:outputText value="Objet:" />
@@ -130,17 +139,16 @@
 		</p:dataTable>
 
 
-		<p:commandButton id="importButtonSC" value="Import" 
+		<p:commandButton id="importButtonSC" value="Import"
 			style="float: right;" actionListener="#{jJTaskBean.importTask}"
-			update=":projecttabview"
-			onstart="PF('createSprintBlockUI').block()"
-			oncomplete="PF('createSprintBlockUI').unblock()"/>
-			
-<!-- 			<p:commandButton id="importButtonPL" value="Import" rendered="#{jJTaskBean.mode != 'scrum'}" -->
-<!-- 			style="float: right;" actionListener="#{jJTaskBean.importTask}"			 -->
-<!-- 			onstart="PF('createSprintBlockUI').block()" -->
-<!-- 			oncomplete="PF('createSprintBlockUI').unblock()"/> -->
-			
+			update=":projecttabview" onstart="PF('taskBlockUIWidget').block()"
+			oncomplete="PF('taskBlockUIWidget').unblock()" />
+
+		<!-- 			<p:commandButton id="importButtonPL" value="Import" rendered="#{jJTaskBean.mode != 'scrum'}" -->
+		<!-- 			style="float: right;" actionListener="#{jJTaskBean.importTask}"			 -->
+		<!-- 			onstart="PF('createSprintBlockUI').block()" -->
+		<!-- 			oncomplete="PF('createSprintBlockUI').unblock()"/> -->
+
 	</h:form>
 </ui:composition>
 </html>

@@ -9,6 +9,7 @@
 <f:event listener="#{loginBean.checkAuthorities}" type="preRenderView" />
 <f:view locale="#{localeBean.locale}" contentType="text/html">
 	<h:head>	
+		<h:outputScript library="primefaces" name="jquery/jquery.js" />
 		<script type="text/javascript">
 			function centerDialog() {
 				var top, left;
@@ -24,12 +25,14 @@
 			function centerAndShowDialog(dialog) {
 				$(dialog).css(
 						"top",
-						Math.max(0, (($(window).height() - $(dialog).outerHeight()) / 2)
+						Math.max(0, (($(window).height() - $(dialog)
+								.outerHeight()) / 2)
 								+ $(window).scrollTop())
 								+ "px");
 				$(dialog).css(
 						"left",
-						Math.max(0, (($(window).width() - $(dialog).outerWidth()) / 2)
+						Math.max(0, (($(window).width() - $(dialog)
+								.outerWidth()) / 2)
 								+ $(window).scrollLeft())
 								+ "px");
 				dialog.show();

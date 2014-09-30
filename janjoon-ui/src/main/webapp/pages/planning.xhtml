@@ -13,7 +13,7 @@
 	overflow: hidden;
 }
 
-.ui-datatable .ui-datatable-data th {	
+.ui-datatable .ui-datatable-data th {
 	height: 37px;
 	overflow: hidden;
 }
@@ -21,7 +21,6 @@
 .ui-datatable .ui-datatable-data tr td {
 	height: 30, 8px;
 	overflow: hidden;
-	
 }
 </style>
 	<h:form id="sprintForm" style="width:100%">
@@ -38,7 +37,12 @@
 							itemLabel="#{messages.project_gantt_select_label}" />
 						<f:selectItems value="#{jJTaskBean.sprints}" var="c"
 							itemLabel="#{c.name}" itemValue="#{c}" />
-						<p:ajax partialSubmit="true" update=":projecttabview:planningForm" />
+						<p:ajax onstart="PF('blockUIWidget').block()"
+							event="change"
+							listener="#{jJTaskBean.sprintSelectionChanged}"
+							update=":projecttabview:planningForm "
+							oncomplete="PF('blockUIWidget').unblock()" />
+
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
