@@ -1291,10 +1291,9 @@ public class JJTaskBean {
 
 		}
 	}
-	
-	public void sprintSelectionChanged(final AjaxBehaviorEvent event)
-	{
-		tasksData=null;
+
+	public void sprintSelectionChanged(final AjaxBehaviorEvent event) {
+		tasksData = null;
 	}
 
 	public void copyObjets() {
@@ -1765,16 +1764,10 @@ public class JJTaskBean {
 		List<JJTask> listTasks = new ArrayList<JJTask>();
 
 		int i = 0;
-		while (i < model.getEvents().size()) {
-
-			if (model.getEvent(i).getData() instanceof JJTask
-					&& !model.getEvent(i).getStyleClass()
-							.equalsIgnoreCase("real")) {
-				if (((JJTask) model.getEvent(i).getData()).getRequirement()
-						.getChapter().equals(chapter))
-					listTasks.add((JJTask) model.getEvent(i).getData());
-
-			}
+		
+		while (i < tasksData.size()) {
+			if (tasksData.get(i).getChapter().equals(chapter))
+				listTasks.add(tasksData.get(i).getTask());
 			i++;
 		}
 
@@ -1944,7 +1937,7 @@ public class JJTaskBean {
 
 		for (JJTask tt : jJTaskService.getSprintTasks(jJSprintService
 				.findJJSprint(sprint.getId()))) {
-			
+
 			if (containTaskData(tt.getId()) != -1)
 				updateView(tt, false);
 		}
@@ -2082,7 +2075,9 @@ public class JJTaskBean {
 			model.delete(model.getEvent(j));
 		}
 
-		updateChapterTimeLineEvent(tt.getRequirement().getChapter());
+		int k=containTaskData(tt.getId());
+		if(k != -1)
+		updateChapterTimeLineEvent(tasksData.get(k).getChapter());
 	}
 
 	// }
