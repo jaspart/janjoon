@@ -825,7 +825,7 @@ public class JJRequirementBean {
 
 		deleteTasksAndTestcase(requirement);
 
-		closeDialog();
+		closeDialog(false);
 
 		reset();
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
@@ -1282,7 +1282,7 @@ public class JJRequirementBean {
 
 	}
 
-	public void closeDialog() {
+	public void closeDialog(boolean save) {
 
 		long t = System.currentTimeMillis();
 		System.out.println("close dialog");
@@ -1292,6 +1292,7 @@ public class JJRequirementBean {
 		lowCategoryName = null;
 		mediumCategoryName = null;
 		highCategoryName = null;
+		if(!save)
 		requirement = null;
 		requirementChapter = null;
 		requirementChapterList = null;

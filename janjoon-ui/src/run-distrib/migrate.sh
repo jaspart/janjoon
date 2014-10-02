@@ -10,7 +10,7 @@ exit 2
 fi
 rm -rdf save/$1
 mkdir save/$1
-mv bin db janjoon-ui lib log license upload save/$1/
+mv bin janjoon-ui lib log license upload save/$1/
 unzip janjoon-ui-1.1-$2-distrib.zip
 mv lib/janjoon-ui-1.1-$2.war lib/janjoon-ui-1.1-$2.war.zip
 mkdir lib/janjoon-ui-1.1-$2.war

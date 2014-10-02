@@ -13,14 +13,6 @@
 		<f:event type="preRenderComponent"
 			listener="#{jJTestcaseBean.loadData()}" />
 
-		<pe:blockUI widgetVar="testBlockUIWidget">
-			<h:panelGrid columns="2">
-				<p:graphicImage library="images" name="ajax-loader.gif"
-					style="vertical-align: middle;" />
-				<h:outputText value="#{messages.label_refresh}"
-					style="white-space: nowrap;" />
-			</h:panelGrid>
-		</pe:blockUI>
 
 		<p:layout styleClass="content" style="min-height:500px;"
 			stateful="true">
@@ -31,8 +23,8 @@
 						<p:commandButton value="#{category.name}"
 							update=":testFormWest :testFormCenter"
 							action="#{jJTestcaseBean.loadData()}"
-							onstart="PF('testBlockUIWidget').block()"
-							oncomplete="PF('testBlockUIWidget').unblock()">
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()">
 							<f:setPropertyActionListener value="#{category}"
 								target="#{jJTestcaseBean.category}" />
 						</p:commandButton>
@@ -60,8 +52,8 @@
 									<p:ajax process="@this" partialSubmit="true"
 										listener="#{jJTestcaseBean.loadData()}"
 										update=":testFormWest :testFormCenter"
-										onstart="PF('testBlockUIWidget').block()"
-										oncomplete="PF('testBlockUIWidget').unblock()" />
+										onstart="PF('blockUIWidget').block()"
+										oncomplete="PF('blockUIWidget').unblock()" />
 								</p:selectOneMenu>
 							</p:column>
 							<p:column>
@@ -84,8 +76,8 @@
 									<p:ajax event="select"
 										listener="#{jJTestcaseBean.onNodeSelect}"
 										update=":testFormCenter"
-										onstart="PF('testBlockUIWidget').block()"
-										oncomplete="PF('testBlockUIWidget').unblock()" />
+										onstart="PF('blockUIWidget').block()"
+										oncomplete="PF('blockUIWidget').unblock()" />
 
 									<p:treeNode>
 										<h:outputText value="#{node}" styleClass="TestcaseChapter" />

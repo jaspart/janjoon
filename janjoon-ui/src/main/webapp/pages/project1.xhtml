@@ -46,7 +46,7 @@
 						update=":projecttabview"/>
 					<p:commandButton id="deleteNoButton"
 						value="#{messages.bug_delete_no_button}"
-						oncomplete="PF('createSprintBlockUI').unblock()"
+						oncomplete="PF('blockUIWidget').unblock()"
 						onclick="deleteDialogWidget.hide()" type="button" />
 				</h:form>
 			</p:outputPanel>
@@ -74,20 +74,11 @@
 				</ui:include>
 				<p:commandButton id="viewCloseButton"
 					value="#{messages.label_close}"
-					oncomplete="PF('createSprintBlockUI').unblock()"
+					oncomplete="PF('blockUIWidget').unblock()"
 					onclick="viewTaskDialogWidget.hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
-	</p:dialog>		
-
-		<pe:blockUI target="projecttabview" widgetVar="createSprintBlockUI">
-			<h:panelGrid columns="2">
-				<h:graphicImage library="images" name="ajax-loader.gif"
-					style="margin-right: 12px; vertical-align: middle;" />
-				<h:outputText value="Executing User operation..."
-					style="white-space: nowrap;" />
-			</h:panelGrid>
-		</pe:blockUI>
+	</p:dialog>				
 	</ui:define>
 </ui:composition>
 </html>

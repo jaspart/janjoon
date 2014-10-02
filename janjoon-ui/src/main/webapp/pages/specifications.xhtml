@@ -15,15 +15,15 @@
 			<ui:repeat value="#{jJRequirementBean.categoryList}" var="category">
 				<p:commandButton value="#{category.name}" update=":specForm @form"
 					action="#{jJRequirementBean.updateTemplate(category.id)}"
-					onstart="PF('specBlockUIWidget').block()"
-					oncomplete="PF('specBlockUIWidget').unblock()" />
+					onstart="PF('blockUIWidget').block()"
+					oncomplete="PF('blockUIWidget').unblock()" />
 			</ui:repeat>
 			<p:commandButton value="#{messages.specification_import_button}"
 				style="float: right;" disabled="#{jJRequirementBean.disabledExport}"
 				actionListener="#{jJRequirementBean.loadImportFormat()}"
 				update=":requirementImportDialog"
-				onstart="PF('specBlockUIWidget').block()"
-				oncomplete="PF('specBlockUIWidget').unblock();requirementImportDialogWidget.show()" />
+				onstart="PF('blockUIWidget').block()"
+				oncomplete="PF('blockUIWidget').unblock();requirementImportDialogWidget.show()" />
 
 			<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
 				style="float: right;" />
@@ -59,16 +59,7 @@
 						</p:column>
 					</p:row>
 				</p:panelGrid>
-			</p:overlayPanel>
-
-			<pe:blockUI widgetVar="specBlockUIWidget">
-				<h:panelGrid columns="2">
-					<p:graphicImage library="images" name="ajax-loader.gif"
-						style="vertical-align: middle;" />
-					<h:outputText value="#{messages.label_refresh}"
-						style="white-space: nowrap;" />
-				</h:panelGrid>
-			</pe:blockUI>
+			</p:overlayPanel>		
 		</h:form>
 		<h:form id="specForm" style="overflow:hidden;width:101%">
 		<ui:repeat value="#{jJRequirementBean.tableDataModelList}" var="tableDataModel" varStatus="loop">
@@ -81,8 +72,8 @@
 						rendered="#{tableDataModel.rendered}" selectionMode="single"
 						widgetVar="dataTable_#{loop.index}_Widget">
 						<p:ajax event="rowDblselect"
-							onstart="PF('specBlockUIWidget').block()"
-							oncomplete="PF('specBlockUIWidget').unblock();requirementDialogWidget.show()"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()"
 							update=":requirementDialog"
 							listener="#{jJRequirementBean.onRowDblClckSelect}" />
 						<p:ajax event="contextMenu"
@@ -99,8 +90,8 @@
 												update=":chapterDialog"
 												disabled="#{jJChapterBean.disabledChapter}"
 												actionListener="#{jJChapterBean.loadData(tableDataModel.categoryId)}"
-												onstart="PF('specBlockUIWidget').block()"
-												oncomplete="PF('specBlockUIWidget').unblock();chapterDialogWidget.show()" />
+												onstart="PF('blockUIWidget').block()"
+												oncomplete="PF('blockUIWidget').unblock();chapterDialogWidget.show()" />
 										</p:column>
 										<p:column colspan="1">
 											<p:commandButton id="releaseRequirementButton"
@@ -118,8 +109,8 @@
 												disabled="#{jJRequirementBean.disabledRequirement}"
 												actionListener="#{jJRequirementBean.newRequirement(tableDataModel.categoryId)}"
 												update=":requirementDialog"
-												onstart="PF('specBlockUIWidget').block()"
-												oncomplete="PF('specBlockUIWidget').unblock();requirementDialogWidget.show()" />
+												onstart="PF('blockUIWidget').block()"
+												oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()" />
 										</p:column>
 										<p:column colspan="1">
 											<p:selectBooleanButton id="mineSpec"
@@ -186,14 +177,14 @@
 								<h:outputText value="Actions" />
 							</f:facet>
 							<p:splitButton id="viewButton" value="View" icon="ui-icon-search"
-									onstart="PF('specBlockUIWidget').block()"
+									onstart="PF('blockUIWidget').block()"
 									action="#{jJRequirementBean.viewLinks()}"
-									oncomplete="PF('specBlockUIWidget').unblock()"
+									oncomplete="PF('blockUIWidget').unblock()"
 									update=":specForm">
 								<p:menuitem id="editButton" icon="ui-icon-pencil"
 								action="#{jJRequirementBean.editRequirement()}"
-								onstart="PF('specBlockUIWidget').block()"
-								oncomplete="PF('specBlockUIWidget').unblock();requirementDialogWidget.show()"
+								onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()"
 								update=":requirementDialog" value="Edit"
 								disabled="#{jJRequirementBean.getDisabledEdit(requirement)}">
 									<f:setPropertyActionListener value="#{requirement}"
@@ -203,9 +194,9 @@
 									hideEffect="fade" />
 
 								<p:menuitem id="mindMapButton" value="View ReqMap"
-									icon="ui-icon-search" onstart="PF('specBlockUIWidget').block()"
+									icon="ui-icon-search" onstart="PF('blockUIWidget').block()"
 									action="#{jJRequirementBean.initReqMindMap}"
-									oncomplete="PF('specBlockUIWidget').unblock()" update=":mindMapForm">
+									oncomplete="PF('blockUIWidget').unblock()" update=":mindMapForm">
 									<f:setPropertyActionListener value="#{requirement}"
 										target="#{jJRequirementBean.requirement}" />
 								</p:menuitem>
@@ -252,8 +243,8 @@
 		<p:dialog id="requirementDialog"
 			header="#{messages[jJRequirementBean.message]}" modal="true"
 			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"
-			position="center" style="padding:0px;top:40px !important;">
-			<p:ajax event="close" listener="#{jJRequirementBean.closeDialog}"
+			position="center" style="padding:0px;">
+			<p:ajax event="close" listener="#{jJRequirementBean.closeDialog(false)}"
 				 onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock()" />
 			<p:outputPanel id="requirementDialogPanel">
@@ -944,9 +935,9 @@
 
 		<p:dialog id="requirementMindMap"
 			header="#{messages.specification_MindMap_title}" modal="true"
-			width="75%"
+			width="75%" draggable="true"
 			widgetVar="requirementMindMap" dynamic="true" resizable="true">
-			<p:ajax event="close" listener="#{jJRequirementBean.closeDialog}" />
+			<p:ajax event="close" update=":contentPanel" />
 			<p:panel>
 				<ui:include src="mindMapReq.xhtml" />
 			</p:panel>

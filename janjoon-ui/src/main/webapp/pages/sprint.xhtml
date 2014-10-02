@@ -66,8 +66,8 @@
 							disabled="#{jjsprint.neditabale}"
 							actionListener="#{jJSprintBean.attrListener}"
 							action="#{jJSprintBean.createSprint}" update="@(form)"
-							onstart="PF('createSprintBlockUI').block()"
-							oncomplete="PF('createSprintBlockUI').unblock()">
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 						</p:commandButton>
 					</p:column>
@@ -76,8 +76,8 @@
 							update=":projecttabview:SprintTabView" immediate="true"
 							disabled="#{!jjsprint.neditabale}"
 							action="#{jJSprintBean.doneEvent}"
-							onstart="PF('createSprintBlockUI').block()"
-							oncomplete="PF('createSprintBlockUI').unblock()"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
 							actionListener="#{jJSprintBean.attrListener}">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 						</p:commandButton>
@@ -86,8 +86,8 @@
 						<p:commandButton value="#{messages.label_create} JJTask"
 							disabled="#{!jjsprint.neditabale}" id="createTaskttButton"
 							icon="ui-icon-circle-plus" immediate="true"
-							onstart="PF('createSprintBlockUI').block()"
-							oncomplete="PF('createSprintBlockUI').unblock()"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
 							actionListener="#{jJTaskBean.loadImportFormat}"
 							title="#{messages.label_create} JJTask">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />

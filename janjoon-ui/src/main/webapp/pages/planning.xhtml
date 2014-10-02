@@ -304,13 +304,13 @@
 								<p:ajax event="change"
 									update=":projecttabview:planningForm:timeline :projecttabview:planningForm:taskDataTable :projecttabview:SprintTabView :projecttabview:planningForm:msg"
 									listener="#{jJTaskBean.onChangeTimelineEvent}"
-									onstart="PF('createSprintBlockUI').block()"
-									oncomplete="PF('createSprintBlockUI').unblock()" />
+									onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()" />
 
 								<p:ajax event="edit" update=":viewTaskForm:viewTaskPanelGrid"
 									listener="#{jJTaskBean.onEditTimelineEvent}"
-									onstart="PF('createSprintBlockUI').block()"
-									oncomplete="PF('createSprintBlockUI').unblock()" />
+									onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()" />
 
 								<h:outputText style="height:30px;" value="#{task.name}" />
 							</pe:timeline>

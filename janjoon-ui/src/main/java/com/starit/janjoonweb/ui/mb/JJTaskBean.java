@@ -1724,7 +1724,7 @@ public class JJTaskBean {
 
 		getTaskTreeNode();
 
-		RequestContext context = RequestContext.getCurrentInstance();
+		RequestContext context = RequestContext.getCurrentInstance();		
 		context.execute("viewTaskDialogWidget.show()");
 
 	}
