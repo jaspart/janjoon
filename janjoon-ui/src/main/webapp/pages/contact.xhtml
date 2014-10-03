@@ -81,7 +81,7 @@
 										<p:inputText id="firstname"
 											value="#{jJContactBean.contactAdmin.firstname}"
 											label="#{messages.admin_contact_new_firstname_label}"
-											required="true" widgetVar="firstnameWidget"
+											required="true"
 											disabled="#{jJContactBean.disabledContactMode}" />
 										<p:watermark for="firstname"
 											value="#{messages.admin_contact_new_firstname_watermark}" />
@@ -89,7 +89,7 @@
 									<p:column>
 										<p:inputText id="lastname"
 											value="#{jJContactBean.contactAdmin.name}" label="Lastname"
-											required="true" widgetVar="lastnameWidget"
+											required="true" 
 											disabled="#{jJContactBean.disabledContactMode}" />
 										<p:watermark for="lastname"
 											value="#{messages.admin_contact_new_lastname_watermark}" />
@@ -99,7 +99,7 @@
 										<p:inputText id="email"
 											value="#{jJContactBean.contactAdmin.email}"
 											label="#{messages.admin_contact_new_email_label}"
-											required="true" widgetVar="emailWidget"
+											required="true"
 											disabled="#{jJContactBean.disabledContactMode}" />
 										<p:watermark for="email"
 											value="#{messages.admin_contact_new_email_watermark}" />
@@ -113,7 +113,7 @@
 											value="#{jJContactBean.contactAdmin.password}"
 											feedback="true"
 											label="#{messages.admin_contact_new_password_label}"
-											redisplay="true" required="true" widgetVar="passwordWidget"
+											redisplay="true" required="true" 
 											disabled="#{jJContactBean.disabledContactMode}" />
 									</p:column>
 
@@ -137,7 +137,7 @@
 									<p:column colspan="4">
 										<p:commandButton id="addContact" value="Add Contact"
 											style="float: right;" update="contactDialogForm"
-											process="@widgetVar(firstnameWidget) @widgetVar(lastnameWidget) @widgetVar(emailWidget) @widgetVar(passwordWidget)"
+											process="@this,firstname,lastname,email,password"
 											action="#{jJContactBean.addContact(jJPermissionBean)}"
 											disabled="#{not jJContactBean.disabledPermissionMode}" />
 									</p:column>
@@ -203,7 +203,7 @@
 											update="profile project product permissionDataTable msg"
 											actionListener="#{jJPermissionBean.addPermission}"
 											icon="ui-icon-circle-plus"
-											process="@widgetVar(profileWidget) @widgetVar(projectWidget) @widgetVar(productWidget)"
+											process="@this,profile,project,product"
 											disabled="#{jJContactBean.disabledPermissionMode}" />
 									</p:column>
 
@@ -286,7 +286,7 @@
 							<p:column colspan="4">
 								<p:commandButton id="saveButton" value="Save"
 									update="contactDialogForm" style="float: right;"
-									process="@widgetVar(firstnameWidget) @widgetVar(lastnameWidget) @widgetVar(emailWidget) @widgetVar(passwordWidget)"
+									process="@this,firstname,lastname,email,password"
 									disabled="#{jJContactBean.disabledPermissionMode}"
 									action="#{jJContactBean.save(jJPermissionBean)}" />
 							</p:column>

@@ -46,11 +46,10 @@
 
 											<p:ajax update="startTaskPanel" />
 										</p:selectOneMenu>
-
 									</p:column>
 
 									<p:column>
-										<p:commandButton id="fetchFromRepo" immediate="true"
+										<p:commandButton id="fetchFromRepo" immediate="true" process="@this"
 											icon="ui-icon-refresh" actionListener="#{jJDevelopment.pull}"
 											update=":form" />
 

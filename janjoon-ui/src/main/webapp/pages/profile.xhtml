@@ -67,7 +67,7 @@
 										<p:inputText id="name"
 											disabled="#{jJProfileBean.disabledProfileMode}"
 											value="#{jJProfileBean.profileAdmin.name}" label="Name"
-											required="true" widgetVar="nameWidget" />
+											required="true" />
 										<p:watermark for="name"
 											value="#{messages.admin_profile_new_name_watermark}" />
 									</p:column>
@@ -75,7 +75,7 @@
 										<p:commandButton id="addProfile" value="Add Profile"
 											style="float: right;" update="profileDialogForm"
 											disabled="#{not jJProfileBean.disabledRightMode}"
-											process="@widgetVar(nameWidget)" icon="ui-icon-circle-plus"
+											process="@this,name" icon="ui-icon-circle-plus"
 											action="#{jJProfileBean.addProfile(jJRightBean)}" />
 									</p:column>
 								</p:row>
@@ -139,7 +139,7 @@
 											update="rightDataTable r w x category object"
 											actionListener="#{jJRightBean.addRight}"
 											value="#{messages.admin_profile_new_right_button}"
-											icon="ui-icon-circle-plus" process="@widgetVar(objectWidget)" />
+											icon="ui-icon-circle-plus" process="@this,object" />
 									</p:column>
 								</p:row>
 							</p:panelGrid>
@@ -234,7 +234,7 @@
 								<p:commandButton id="saveButton" style="float: right;"
 									value="Save" update="profileDialogForm"
 									disabled="#{jJProfileBean.disabledRightMode}"
-									process="@widgetVar(nameWidget)"
+									process="@this,name"
 									action="#{jJProfileBean.save(jJRightBean)}" />
 							</p:column>
 						</p:row>

@@ -402,7 +402,7 @@
 										disabled="#{not jJTestcaseBean.disabledTeststepMode}"
 										icon="ui-icon-circle-plus"
 										actionListener="#{jJTestcaseBean.save()}"
-										process="@widgetVar(nameWidget) @widgetVar(requirementWidget) @widgetVar(descriptionWidget)"
+										process="@this,name,requirement,description"
 										update="testcaseDialogForm" />
 								</p:column>
 							</p:row>
@@ -432,7 +432,7 @@
 										actionListener="#{jJTeststepBean.save()}"
 										icon="ui-icon-circle-plus"
 										update="action result testStepDataTable msg"
-										process="@widgetVar(actionWidget) @widgetVar(resultWidget)" />
+										process="@this,action,result" />
 								</p:column>
 							</p:row>
 						</p:panelGrid>
@@ -442,7 +442,7 @@
 							rowKey="#{ts.name}" editable="true">
 							<p:ajax event="rowEdit" listener="#{jJTeststepBean.editTestStep}"
 								update=":testcaseDialogForm:msg"
-								process="@widgetVar(actionInputWidget) @widgetVar(resultInputWidget)" />
+								process="@this,actionInputWidget,resultInputWidget" />
 							<p:ajax event="rowEditCancel"
 								listener="#{jJTeststepBean.cancelEditTestStep}"
 								update=":testcaseDialogForm:msg" />
@@ -461,7 +461,7 @@
 										<p:inputText value="#{ts.actionstep}" style="width:90%"
 											required="true"
 											label="#{messages.test_new_table_action_label}"
-											widgetVar="actionInputWidget"
+											id="actionInputWidget"
 											requiredMessage="#{messages.test_new_table_action_alert}">
 										</p:inputText>
 									</f:facet>
@@ -475,7 +475,7 @@
 									<f:facet name="input">
 										<p:inputText value="#{ts.resultstep}" style="width:90%"
 											required="true" label="#{messages.test_new_table_result_label}"
-											widgetVar="resultInputWidget"
+											id="resultInputWidget"
 											requiredMessage="#{messages.test_new_table_result_alert}">
 										</p:inputText>
 									</f:facet>
@@ -510,7 +510,7 @@
 						</p:dataTable>
 					</p:scrollPanel>
 					<p:commandButton id="saveButton" value="Save"
-						process="@widgetVar(nameWidget) @widgetVar(requirementWidget) @widgetVar(descriptionWidget)"
+						process="@this,name,requirement,description"
 						disabled="#{jJTestcaseBean.disabledTeststepMode}"
 						update="testcaseDialogForm" style="float: right;"
 						action="#{jJTestcaseBean.saveAndclose(jJTeststepBean)}" />

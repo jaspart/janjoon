@@ -127,7 +127,7 @@
 										<p:commandButton id="addProduct" value="Add Product"
 											style="float: right;" update="productDialogForm"
 											disabled="#{not jJProductBean.disabledVersionMode}"
-											process="@widgetVar(nameWidget) @widgetVar(extnameWidget) @widgetVar(productManagerWidget)"
+											process="@this,name,extname,productManagerSelect"
 											action="#{jJProductBean.addProduct(jJVersionBean)}" />
 									</p:column>
 								</p:row>
@@ -149,7 +149,7 @@
 											actionListener="#{jJVersionBean.addVersion}"
 											icon="ui-icon-circle-plus"
 											value="#{messages.admin_product_new_version_button}"
-											process="@widgetVar(versionWidget)" />
+											process="@this,version" />
 									</p:column>
 								</p:row>
 							</p:panelGrid>
@@ -203,7 +203,7 @@
 								<p:commandButton id="saveButton" style="float: right;"
 									disabled="#{jJProductBean.disabledVersionMode}" value="Save"
 									update="productDialogForm :headerForm"
-									process="@widgetVar(nameWidget) @widgetVar(extnameWidget) @widgetVar(productManagerWidget)"
+									process="@this,name,extname,productManagerSelect"
 									action="#{jJProductBean.save(jJVersionBean)}" />
 							</p:column>
 						</p:row>

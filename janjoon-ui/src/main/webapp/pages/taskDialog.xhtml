@@ -69,7 +69,7 @@
 				<h:outputLabel id="requirementLabel" value="Requirement: "
 					for="reqTree" />
 				<p:tree id="reqTree" value="#{jJTaskBean.taskTreeNode}" var="node"
-					selection="#{jJTaskBean.selectedTree}"
+					selection="#{jJTaskBean.selectedTree}" animate="true"
 					selectionMode="single">
 					<p:ajax event="select" update=":viewTaskForm:taskTreePanelGrid"
 						listener="#{jJTaskBean.onSelectTreeNode}" />

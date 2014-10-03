@@ -106,7 +106,7 @@
 								<p:commandButton id="submitButton"
 									value="#{messages.admin_project_new_save_button}"
 									update="projectDialogForm :headerForm"
-									process="@widgetVar(nameWidget) @widgetVar(projectManagerWidget)"
+									process="@this,name,projectManagerSelect"
 									action="#{jJProjectBean.save}" />
 							</p:column>
 						</p:row>
