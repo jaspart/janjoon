@@ -10,7 +10,7 @@
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
 
-		<f:event type="preRenderComponent"
+		<f:event type="preRenderComponent" oncomplete="PF('blockUIWidget').unblock()"
 			listener="#{jJTestcaseBean.loadData()}" />
 
 

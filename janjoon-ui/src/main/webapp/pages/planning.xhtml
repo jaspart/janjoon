@@ -59,7 +59,7 @@
 		</p:panelGrid>
 	</h:form>
 	<h:form id="planningForm" style="width:100%">
-		<f:event type="preRenderComponent"
+		<f:event type="preRenderComponent" oncomplete="PF('blockUIWidget').unblock()"
 			listener="#{jJTaskBean.loadingData()}" />
 		<p:growl id="msg" />
 		<p:panelGrid style="margin-top:10px">

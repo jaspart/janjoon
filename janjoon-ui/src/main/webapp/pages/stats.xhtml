@@ -8,7 +8,7 @@
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
 		<h:form id="specForm">
-			<f:event type="preRenderComponent"
+			<f:event type="preRenderComponent" oncomplete="PF('blockUIWidget').unblock()"
 				listener="#{jJStatusBean.loadData()}" />
 			<p:panel id="statPanel" Header="Status">
 				<p:pieChart id="custom" value="#{jJStatusBean.pieChart}"

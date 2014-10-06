@@ -453,7 +453,7 @@ public class JJBugBean {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 		System.err.println(facesMessage.getDetail());
-		return "bug";
+		return "";
 	}
 
 	public String findStyleColor(JJBug b) {

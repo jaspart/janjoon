@@ -12,7 +12,8 @@
 		var="jjsprint">
 
 		<p:ajax event="tabChange" listener="#{jJSprintBean.onTabSprintChange}"
-			update="SprintTabView" />
+			onstart="PF('blockUIWidget').block()"
+			oncomplete="PF('blockUIWidget').unblock()" update="SprintTabView" />
 
 		<p:tab>
 			<f:facet name="title">
@@ -95,8 +96,7 @@
 									oncomplete="PF('blockUIWidget').unblock()"
 									value="#{messages.label_edit}"
 									actionListener="#{jJSprintBean.attrListener}"
-									action="#{jJSprintBean.editSprint}"
-									update=":projecttabview">
+									action="#{jJSprintBean.editSprint}" update=":projecttabview">
 									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 								</p:commandButton>
 							</p:column>
@@ -161,13 +161,13 @@
 											<p:menuitem id="deleteButton" icon="ui-icon-trash"
 												oncomplete="deleteDialogWidget.show()"
 												value="#{messages.label_delete}">
-												
+
 												<f:setPropertyActionListener value="#{todo}"
 													target="#{jJSprintBean.task}" />
-													
+
 												<f:setPropertyActionListener target="#{jJTaskBean.mode}"
-														value="scrum" />
-														
+													value="scrum" />
+
 											</p:menuitem>
 										</p:splitButton>
 									</p:column>
@@ -206,7 +206,7 @@
 											</f:facet>
 											<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
 												update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
-												action="#{jJTaskBean.initiateReqTreeNode}"	>
+												action="#{jJTaskBean.initiateReqTreeNode}">
 												<f:setPropertyActionListener value="#{prog}"
 													target="#{jJTaskBean.task}" />
 
@@ -215,7 +215,7 @@
 													value="#{messages.label_delete}">
 													<f:setPropertyActionListener value="#{prog}"
 														target="#{jJSprintBean.task}" />
-														<f:setPropertyActionListener target="#{jJTaskBean.mode}"
+													<f:setPropertyActionListener target="#{jJTaskBean.mode}"
 														value="scrum" />
 												</p:menuitem>
 											</p:splitButton>

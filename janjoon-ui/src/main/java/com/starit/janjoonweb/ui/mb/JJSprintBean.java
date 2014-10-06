@@ -78,7 +78,7 @@ public class JJSprintBean {
 	private List<SprintUtil> sprintList;
 	private SprintUtil sprintUtil;
 	private JJTask task;
-
+	
 	private static final Logger logger = Logger.getLogger(JJSprintBean.class);
 
 	public void setjJTaskService(JJTaskService jJTaskService) {
@@ -159,7 +159,7 @@ public class JJSprintBean {
 
 	public void setBug(JJBug bug) {
 		this.bug = bug;
-	}
+	}	
 
 	public List<JJRequirement> getReqList() {
 
@@ -454,10 +454,12 @@ public class JJSprintBean {
 	}
 
 	public void addTaskToDone(DragDropEvent ddevent) {
+		
+		Long id=null;
 
 		if (ddevent.getDragId().contains(":progIcon")) {
 			JJTask dropedTask = (JJTask) ddevent.getData();
-
+			id=dropedTask.getId();
 			JJStatus status = jJStatusService.getOneStatus("DONE", "JJTask",
 					true);
 
@@ -491,6 +493,24 @@ public class JJSprintBean {
 
 		context.execute("SprintTab.select("
 				+ contains(sprintUtil.getSprint().getId()) + ")");
+		if(id!=null)
+		{
+			if(jJTaskService.findJJTask(id).getBug() != null)
+			{
+				
+				HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+						.getExternalContext().getSession(false);
+				JJBugBean jJBugBean = (JJBugBean) session.getAttribute("jJBugBean");
+					
+				jJBugBean.setJJBug_(jJBugService.findJJBug(jJTaskService.findJJTask(id).getBug().getId()));
+				jJBugBean.setBugRequirementSelected(jJBugBean.getJJBug_().getRequirement());
+				
+				context.execute("PF('blockUIWidget').block()");
+				context.execute("editBugDialogWidget.show()");
+			}
+			
+		}		
+		
 
 	}
 
@@ -659,7 +679,7 @@ public class JJSprintBean {
 		int i = 0;
 		int j = -1;
 
-		if (sprintList != null) {
+		if (sprintList != null && id!=null) {
 			while (i < sprintList.size()) {
 				if (sprintList.get(i).getSprint().getId().equals(id)) {
 					j = i;

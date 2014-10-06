@@ -8,8 +8,9 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
-		<p:tabView id="projecttabview" widgetVar="projectTabView" dynamic="false"
-			cache="true" activeIndex="#{loginBean.activeTabProjectIndex}">
+		<p:tabView id="projecttabview" widgetVar="projectTabView"
+			dynamic="false" cache="true"
+			activeIndex="#{loginBean.activeTabProjectIndex}">
 			<p:ajax event="tabChange" listener="#{loginBean.onTabProjectChange}"
 				update="projecttabview  :deleteForm" />
 			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}">
@@ -18,7 +19,7 @@
 						<ui:include src="planning.xhtml" />
 					</ui:insert>
 				</h:panelGrid>
-				
+
 			</p:tab>
 
 			<p:tab title="#{messages.project_scrum_menuitem}">
@@ -35,15 +36,14 @@
 			severity="alarm">
 			<p:outputPanel id="deletePanel">
 				<h:form id="deleteForm">
-<!-- 					<p:commandButton id="deleteYesSprint" -->
-<!-- 						rendered="#{jJTaskBean.mode == 'scrum'}" -->
-<!-- 						value="#{messages.bug_delete_yes_button}" -->
-<!-- 						action="#{jJSprintBean.deleteTask}" -->
-<!-- 						update=":projecttabview:SprintTabView"/> -->
-					<p:commandButton id="deleteYesPlanning"						
-						value="#{messages.bug_delete_yes_button}"						
-						action="#{jJTaskBean.deleteTaskData}" 
-						update=":projecttabview"/>
+					<!-- 					<p:commandButton id="deleteYesSprint" -->
+					<!-- 						rendered="#{jJTaskBean.mode == 'scrum'}" -->
+					<!-- 						value="#{messages.bug_delete_yes_button}" -->
+					<!-- 						action="#{jJSprintBean.deleteTask}" -->
+					<!-- 						update=":projecttabview:SprintTabView"/> -->
+					<p:commandButton id="deleteYesPlanning"
+						value="#{messages.bug_delete_yes_button}"
+						action="#{jJTaskBean.deleteTaskData}" update=":projecttabview" />
 					<p:commandButton id="deleteNoButton"
 						value="#{messages.bug_delete_no_button}"
 						oncomplete="PF('blockUIWidget').unblock()"
@@ -64,21 +64,53 @@
 		</p:dialog>
 
 		<p:dialog id="viewTaskDialog" header="#{messages.label_view} JJTask"
-		modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
-		resizable="true" maximizable="true" showEffect="fade"
-		hideEffect="explode" draggable="#{jJTaskBean.mode eq 'planning'}">
-		<p:outputPanel id="viewTaskPanel">
-			<h:form id="viewTaskForm" enctype="multipart/form-data">
-				<ui:include src="taskDialog.xhtml">
-					<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
-				</ui:include>
-				<p:commandButton id="viewCloseButton"
-					value="#{messages.label_close}"
-					oncomplete="PF('blockUIWidget').unblock()"
-					onclick="viewTaskDialogWidget.hide()" type="button" />
-			</h:form>
-		</p:outputPanel>
-	</p:dialog>				
+			modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
+			resizable="true" maximizable="true" showEffect="fade"
+			hideEffect="explode" draggable="#{jJTaskBean.mode eq 'planning'}">
+			<p:outputPanel id="viewTaskPanel">
+				<h:form id="viewTaskForm" enctype="multipart/form-data">
+					<ui:include src="taskDialog.xhtml">
+						<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
+					</ui:include>
+					<p:commandButton id="viewCloseButton"
+						value="#{messages.label_close}"
+						oncomplete="PF('blockUIWidget').unblock()"
+						onclick="viewTaskDialogWidget.hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+		<p:dialog id="editBugDialog" header="#{messages.label_edit} JJBug"
+			modal="true" widgetVar="editBugDialogWidget" dynamic="true"
+			resizable="true" maximizable="true" showEffect="fade" draggable="false"
+			hideEffect="explode">
+			<p:outputPanel id="editBugPanel">
+				<h:form id="editBugForm" enctype="multipart/form-data">
+					<p:panelGrid columns="2">
+						<p:outputLabel value="BUG :" for="taskBugName" />
+						<p:inputText id="taskBugName" readonly="true"
+							converter="JJBugConverter" value="#{jJBugBean.JJBug_}" />
+						<p:outputLabel for="taskBugStatus" value="Status : " />
+						<p:autoComplete id="taskBugStatus"
+							value="#{jJBugBean.JJBug_.status}" itemLabel="#{status.name}"
+							itemValue="#{status}" scrollHeight="200"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+							dropdown="true" var="status"
+							completeMethod="#{jJBugBean.completeStatusBug}" />
+						<p:commandButton id="taskBugSaveButton"
+							value="#{messages.bug_edit_save_button}"
+							action="#{jJBugBean.persistBug}"
+							update=":projecttabview:SprintTabView:sprintForm"
+							oncomplete="PF('blockUIWidget').unblock()"
+							onsuccess="editBugDialogWidget.hide()">						
+						</p:commandButton>
+						<p:commandButton id="taskBugCloseButton"
+							value="#{messages.bug_edit_close_button}"
+							oncomplete="PF('blockUIWidget').unblock()"
+							onclick="editBugDialogWidget.hide()" type="button" />
+					</p:panelGrid>
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
 	</ui:define>
 </ui:composition>
 </html>

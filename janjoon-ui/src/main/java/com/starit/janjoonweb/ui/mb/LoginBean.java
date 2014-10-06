@@ -208,8 +208,15 @@ public class LoginBean implements Serializable {
 			}
 
 		}
-
-		return prevPage;
+		try {
+			return prevPage;
+			
+		} catch (Exception e) {
+			System.err.println(e.getMessage()+prevPage);
+			prevPage="main";
+			return prevPage;
+		}
+		
 	}
 
 	public String getUsername() {
@@ -284,53 +291,48 @@ public class LoginBean implements Serializable {
 		FacesContext ctx = FacesContext.getCurrentInstance();
 		String viewId = ctx.getViewRoot().getViewId();
 		String path = FacesContext.getCurrentInstance().getExternalContext()
-				.getRequestContextPath();		
+				.getRequestContextPath();
 		String view = viewId.replace(path, "");
 		view = view.replace("/pages/", "");
 		view = view.replace(".jsf?faces-redirect=true", "");
 		view = view.replace(".jsf", "");
 		view = view.replace(".xhtml", "");
-		String referrer = FacesContext.getCurrentInstance()
-				.getExternalContext().getRequestHeaderMap().get("referer");
-		if(referrer==null)
-			referrer="";
-		if (!referrer.contains(view)) {
-			switch (view) {
-			case "main":
-				menuIndex = 0;
-				break;
-			case "project1":
-				menuIndex = 1;
-				break;
-			case "specifications":
-				menuIndex = 2;
-				break;
-			case "bugs":
-				menuIndex = 3;
-				break;
-			case "development":
-				menuIndex = 4;
-				break;
-			case "test":
-				menuIndex = 5;
-				break;
-			case "delivery":
-				menuIndex = 6;
-				break;
-			case "teams":
-				menuIndex = 7;
-				break;
-			case "stats":
-				menuIndex = 8;
-				break;
-			case "administration":
-				menuIndex = 9;
-				break;
 
-			default:
-				menuIndex = 0;
-				break;
-			}
+		switch (view) {
+		case "main":
+			menuIndex = 0;
+			break;
+		case "project1":
+			menuIndex = 1;
+			break;
+		case "specifications":
+			menuIndex = 2;
+			break;
+		case "bugs":
+			menuIndex = 3;
+			break;
+		case "development":
+			menuIndex = 4;
+			break;
+		case "test":
+			menuIndex = 5;
+			break;
+		case "delivery":
+			menuIndex = 6;
+			break;
+		case "teams":
+			menuIndex = 7;
+			break;
+		case "stats":
+			menuIndex = 8;
+			break;
+		case "administration":
+			menuIndex = 9;
+			break;
+
+		default:
+			menuIndex = 0;
+			break;
 		}
 
 	}
@@ -563,6 +565,9 @@ public class LoginBean implements Serializable {
 								new DevelopmentBean(jJDevelopment));
 					}
 				}
+				RequestContext context = RequestContext.getCurrentInstance();
+				context.execute("PF('blockUIWidget').unblock()");
+				
 			}
 
 		}
