@@ -3,7 +3,7 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJWorflow;
+import com.starit.janjoonweb.domain.JJWorkflow;
 import com.starit.janjoonweb.domain.JJWorkflowRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -11,9 +11,9 @@ import org.springframework.stereotype.Repository;
 
 privileged aspect JJWorkflowRepository_Roo_Jpa_Repository {
     
-    declare parents: JJWorkflowRepository extends JpaRepository<JJWorflow, Long>;
+    declare parents: JJWorkflowRepository extends JpaRepository<JJWorkflow, Long>;
     
-    declare parents: JJWorkflowRepository extends JpaSpecificationExecutor<JJWorflow>;
+    declare parents: JJWorkflowRepository extends JpaSpecificationExecutor<JJWorkflow>;
     
     declare @type: JJWorkflowRepository: @Repository;
     

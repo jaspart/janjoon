@@ -52,3 +52,18 @@ PrimeFaces.locales['de'] = {
         day: 'Tag',
         allDayText: 'Ganzer Tag'
     };
+
+$(document).ready(function(){
+    $("#rowToggler").click(function(){
+           $("#rowExpansion").slideUp("fast");
+            $('.active').removeClass('active');       
+        return false;
+    });
+//        $(".slide-btn2").click(function(){
+//             $("#panel1").slideUp("fast");
+//           $('.active').removeClass('active');
+//        $("#panel2").slideToggle("slow");
+//        $(this).toggleClass("active");
+//        return false;
+//    });
+});

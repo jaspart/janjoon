@@ -14,19 +14,19 @@
 		<h:form prependId="false" id="dataForm">
 			<p:panel id="data" toggleable="true" toggleSpeed="250">
 				<f:facet name="header">
-					<h:outputText value="#{jJWorflowBean.name}" />
+					<h:outputText value="#{jJWorkflowBean.name}" />
 				</f:facet>
 				<h:outputFormat id="noRecordsFound"
 					value="#{messages.label_no_records_found}"
-					rendered="#{!jJWorflowBean.dataVisible}">
+					rendered="#{!jJWorkflowBean.dataVisible}">
 					<f:param value="JJWorflows" />
 				</h:outputFormat>
-				<p:dataTable id="list" value="#{jJWorflowBean.allJJWorflows}"
-					var="JJWorflow_" rendered="#{jJWorflowBean.dataVisible}"
+				<p:dataTable id="list" value="#{jJWorkflowBean.allJJWorflows}"
+					var="JJWorflow_" rendered="#{jJWorkflowBean.dataVisible}"
 					resizableColumns="false" paginator="true"
 					paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 					rowsPerPageTemplate="5,10,25,50" rows="10">
-					<p:columns value="#{jJWorflowBean.columns}" var="column"
+					<p:columns value="#{jJWorkflowBean.columns}" var="column"
 						columnIndexVar="colIndex">
 						<f:facet name="header">
 							<h:outputText value="#{applicationBean.getColumnName(column)}" />
@@ -42,16 +42,16 @@
 							oncomplete="viewDialogWidget.show()"
 							title="#{messages.label_view}">
 							<f:setPropertyActionListener value="#{JJWorflow_}"
-								target="#{jJWorflowBean.JJWorflow_}" />
+								target="#{jJWorkflowBean.JJWorflow_}" />
 						</p:commandButton>
 						<p:tooltip for="viewButton" value="#{messages.label_view}"
 							showEffect="fade" hideEffect="fade" />
 						<p:commandButton id="editButton" icon="ui-icon-pencil"
-							update=":editForm:editPanelGrid" action="#{jJWorflowBean.onEdit}"
+							update=":editForm:editPanelGrid" action="#{jJWorkflowBean.onEdit}"
 							oncomplete="editDialogWidget.show()"
 							title="#{messages.label_edit}">
 							<f:setPropertyActionListener value="#{JJWorflow_}"
-								target="#{jJWorflowBean.JJWorflow_}" />
+								target="#{jJWorkflowBean.JJWorflow_}" />
 						</p:commandButton>
 						<p:tooltip for="editButton" value="#{messages.label_edit}"
 							showEffect="fade" hideEffect="fade" />
@@ -59,7 +59,7 @@
 							oncomplete="deleteDialogWidget.show()"
 							title="#{messages.label_delete}">
 							<f:setPropertyActionListener value="#{JJWorflow_}"
-								target="#{jJWorflowBean.JJWorflow_}" />
+								target="#{jJWorkflowBean.JJWorflow_}" />
 						</p:commandButton>
 						<p:tooltip for="deleteButton" value="#{messages.label_delete}"
 							showEffect="fade" hideEffect="fade" />
@@ -70,17 +70,17 @@
 		<p:dialog id="createDialog"
 			header="#{messages.label_create} JJWorflow" modal="true"
 			widgetVar="createDialogWidget" dynamic="true"
-			visible="#{jJWorflowBean.createDialogVisible}" resizable="true"
+			visible="#{jJWorkflowBean.createDialogVisible}" resizable="true"
 			maximizable="true" showEffect="fade" hideEffect="explode">
 			<p:ajax event="close" update=":dataForm:data"
-				listener="#{jJWorflowBean.handleDialogClose}" />
+				listener="#{jJWorkflowBean.handleDialogClose}" />
 			<p:outputPanel id="createPanel">
 				<h:form id="createForm" enctype="multipart/form-data">
 					<h:panelGrid id="createPanelGrid" columns="3"
-						binding="#{jJWorflowBean.createPanelGrid}" styleClass="dialog"
+						binding="#{jJWorkflowBean.createPanelGrid}" styleClass="dialog"
 						columnClasses="col1,col2,col3" />
 					<p:commandButton id="createSaveButton"
-						value="#{messages.label_save}" action="#{jJWorflowBean.persist}"
+						value="#{messages.label_save}" action="#{jJWorkflowBean.persist}"
 						update="createPanelGrid :growlForm:growl" />
 					<p:commandButton id="createCloseButton"
 						value="#{messages.label_close}"
@@ -93,14 +93,14 @@
 			resizable="true" maximizable="true" showEffect="fade"
 			hideEffect="explode">
 			<p:ajax event="close" update=":dataForm:data"
-				listener="#{jJWorflowBean.handleDialogClose}" />
+				listener="#{jJWorkflowBean.handleDialogClose}" />
 			<p:outputPanel id="editPanel">
 				<h:form id="editForm" enctype="multipart/form-data">
 					<h:panelGrid id="editPanelGrid" columns="3"
-						binding="#{jJWorflowBean.editPanelGrid}" styleClass="dialog"
+						binding="#{jJWorkflowBean.editPanelGrid}" styleClass="dialog"
 						columnClasses="col1,col2,col3" />
 					<p:commandButton id="editSaveButton" value="#{messages.label_save}"
-						action="#{jJWorflowBean.persist}"
+						action="#{jJWorkflowBean.persist}"
 						update="editPanelGrid :growlForm:growl" />
 					<p:commandButton id="editCloseButton"
 						value="#{messages.label_close}" onclick="editDialogWidget.hide()"
@@ -115,7 +115,7 @@
 			<p:outputPanel id="viewPanel">
 				<h:form id="viewForm" enctype="multipart/form-data">
 					<h:panelGrid id="viewPanelGrid" columns="2"
-						binding="#{jJWorflowBean.viewPanelGrid}" styleClass="dialog"
+						binding="#{jJWorkflowBean.viewPanelGrid}" styleClass="dialog"
 						columnClasses="col1,col2" />
 					<p:commandButton id="viewCloseButton"
 						value="#{messages.label_close}" onclick="viewDialogWidget.hide()"
@@ -130,7 +130,7 @@
 			<p:outputPanel id="deletePanel">
 				<h:form id="deleteForm">
 					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
-						action="#{jJWorflowBean.delete}"
+						action="#{jJWorkflowBean.delete}"
 						update=":dataForm:data :growlForm:growl"
 						oncomplete="deleteDialogWidget.hide()" />
 					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"

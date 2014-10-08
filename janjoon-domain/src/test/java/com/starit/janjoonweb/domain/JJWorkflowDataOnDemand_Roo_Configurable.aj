@@ -3,11 +3,11 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJWorflowIntegrationTest;
+import com.starit.janjoonweb.domain.JJWorkflowDataOnDemand;
 import org.springframework.beans.factory.annotation.Configurable;
 
-privileged aspect JJWorflowIntegrationTest_Roo_Configurable {
+privileged aspect JJWorkflowDataOnDemand_Roo_Configurable {
     
-    declare @type: JJWorflowIntegrationTest: @Configurable;
+    declare @type: JJWorkflowDataOnDemand: @Configurable;
     
 }

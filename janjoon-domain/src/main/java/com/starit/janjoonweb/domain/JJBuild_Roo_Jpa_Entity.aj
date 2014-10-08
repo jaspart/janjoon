@@ -23,8 +23,8 @@ privileged aspect JJBuild_Roo_Jpa_Entity {
     private Long JJBuild.id;
     
     @Version
-    @Column(name = "version")
-    private Integer JJBuild.version;
+    @Column(name = "version_")
+    private Integer JJBuild.version_;
     
     public Long JJBuild.getId() {
         return this.id;
@@ -34,12 +34,12 @@ privileged aspect JJBuild_Roo_Jpa_Entity {
         this.id = id;
     }
     
-    public Integer JJBuild.getVersion() {
-        return this.version;
+    public Integer JJBuild.getVersion_() {
+        return this.version_;
     }
     
-    public void JJBuild.setVersion(Integer version) {
-        this.version = version;
+    public void JJBuild.setVersion_(Integer version) {
+        this.version_ = version;
     }
     
 }

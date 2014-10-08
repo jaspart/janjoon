@@ -43,9 +43,9 @@ public class ApplicationBean {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
 				.getSession(false);
 		
-		JJWorflowBean jJWorflowBean=(JJWorflowBean) session.getAttribute("jJWorflowBean");
-		if(jJWorflowBean==null)
-			jJWorflowBean=new JJWorflowBean();
+		JJWorkflowBean jJWorkflowBean=(JJWorkflowBean) session.getAttribute("jJWorkflowBean");
+		if(jJWorkflowBean==null)
+			jJWorkflowBean=new JJWorkflowBean();
 		
 		menuModel = new DefaultMenuModel();
 
@@ -778,7 +778,7 @@ public class ApplicationBean {
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
 		item.setId("createJJWorkflowMenuItem");
-		item.setCommand("#{jJWorflowBean.displayCreateDialog}");
+		item.setCommand("#{jJWorkflowBean.displayCreateDialog}");
 		item.setAjax(false);
 		item.setAsync(false);
 		item.setUpdate(":dataForm:data");
@@ -787,7 +787,7 @@ public class ApplicationBean {
 
 		item = new DefaultMenuItem("List All", "ui-icon ui-icon-folder-open");
 		item.setId("listJJWorkflowMenuItem");
-		item.setCommand("#{jJWorflowBean.displayList}");
+		item.setCommand("#{jJWorkflowBean.displayList}");
 		item.setAjax(false);
 		item.setAsync(false);
 		item.setUpdate(":dataForm:data");

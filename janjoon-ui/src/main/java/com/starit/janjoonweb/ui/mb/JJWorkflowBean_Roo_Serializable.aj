@@ -3,13 +3,13 @@
 
 package com.starit.janjoonweb.ui.mb;
 
-import com.starit.janjoonweb.ui.mb.JJWorflowBean;
+import com.starit.janjoonweb.ui.mb.JJWorkflowBean;
 import java.io.Serializable;
 
-privileged aspect JJWorflowBean_Roo_Serializable {
+privileged aspect JJWorkflowBean_Roo_Serializable {
     
-    declare parents: JJWorflowBean implements Serializable;
+    declare parents: JJWorkflowBean implements Serializable;
     
-    private static final long JJWorflowBean.serialVersionUID = 1L;
+    private static final long JJWorkflowBean.serialVersionUID = 1L;
     
 }

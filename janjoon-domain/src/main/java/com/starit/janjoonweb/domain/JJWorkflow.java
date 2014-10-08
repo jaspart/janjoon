@@ -16,8 +16,8 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
-@RooJpaEntity(sequenceName = "JJWorflowSEQ")
-public class JJWorflow {
+@RooJpaEntity(sequenceName = "JJWorkflowSEQ")
+public class JJWorkflow {
 	
 	@NotNull
 	@Size(max = 100)

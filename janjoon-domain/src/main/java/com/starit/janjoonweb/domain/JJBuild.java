@@ -51,7 +51,7 @@ public class JJBuild {
 
 
 	@ManyToOne
-	private JJVersion versioning;
+	private JJVersion version;
 
 	@ManyToOne
 	private JJPhase phase;

@@ -40,10 +40,10 @@ public class JJBuildServiceImpl implements JJBuildService {
 
 		if (withVersion) {
 			if (version != null) {
-				predicates.add(criteriaBuilder.equal(from.get("versioning"),
+				predicates.add(criteriaBuilder.equal(from.get("version"),
 						version));
 			} else {
-				predicates.add(criteriaBuilder.isNull(from.get("versioning")));
+				predicates.add(criteriaBuilder.isNull(from.get("version")));
 			}
 		}
 

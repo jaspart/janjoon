@@ -320,11 +320,13 @@ public class JJProductBean {
 				new FacesMessage(summary));
 	}
 
-	public void closeDialog(JJVersionBean jJVersionBean) {
+	public void closeDialog(JJVersionBean jJVersionBean,JJBuildBean jJBuildBean) {
 
 		productAdmin = null;
 		productManager = null;
 		productManagerList = null;
+		jJBuildBean.setBuildUtils(null);
+		jJBuildBean.setIndex(-1);
 		jJVersionBean.setVersionAdmin(null);
 		jJVersionBean.setVersionDataModel(null);
 

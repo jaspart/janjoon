@@ -5,10 +5,10 @@ package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJStatusDataOnDemand;
-import com.starit.janjoonweb.domain.JJWorflow;
-import com.starit.janjoonweb.domain.JJWorflowDataOnDemand;
-import com.starit.janjoonweb.domain.JJWorflowService;
+import com.starit.janjoonweb.domain.JJWorkflow;
+import com.starit.janjoonweb.domain.JJWorkflowDataOnDemand;
 import com.starit.janjoonweb.domain.JJWorkflowRepository;
+import com.starit.janjoonweb.domain.JJWorkflowService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,28 +22,28 @@ import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-privileged aspect JJWorflowDataOnDemand_Roo_DataOnDemand {
+privileged aspect JJWorkflowDataOnDemand_Roo_DataOnDemand {
     
-    declare @type: JJWorflowDataOnDemand: @Component;
+    declare @type: JJWorkflowDataOnDemand: @Component;
     
-    private Random JJWorflowDataOnDemand.rnd = new SecureRandom();
+    private Random JJWorkflowDataOnDemand.rnd = new SecureRandom();
     
-    private List<JJWorflow> JJWorflowDataOnDemand.data;
-    
-    @Autowired
-    JJContactDataOnDemand JJWorflowDataOnDemand.jJContactDataOnDemand;
+    private List<JJWorkflow> JJWorkflowDataOnDemand.data;
     
     @Autowired
-    JJStatusDataOnDemand JJWorflowDataOnDemand.jJStatusDataOnDemand;
+    JJContactDataOnDemand JJWorkflowDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    JJWorflowService JJWorflowDataOnDemand.jJWorflowService;
+    JJStatusDataOnDemand JJWorkflowDataOnDemand.jJStatusDataOnDemand;
     
     @Autowired
-    JJWorkflowRepository JJWorflowDataOnDemand.jJWorkflowRepository;
+    JJWorkflowService JJWorkflowDataOnDemand.jJWorkflowService;
     
-    public JJWorflow JJWorflowDataOnDemand.getNewTransientJJWorflow(int index) {
-        JJWorflow obj = new JJWorflow();
+    @Autowired
+    JJWorkflowRepository JJWorkflowDataOnDemand.jJWorkflowRepository;
+    
+    public JJWorkflow JJWorkflowDataOnDemand.getNewTransientJJWorkflow(int index) {
+        JJWorkflow obj = new JJWorkflow();
         setActionWorkflow(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
@@ -55,32 +55,32 @@ privileged aspect JJWorflowDataOnDemand_Roo_DataOnDemand {
         return obj;
     }
     
-    public void JJWorflowDataOnDemand.setActionWorkflow(JJWorflow obj, int index) {
+    public void JJWorkflowDataOnDemand.setActionWorkflow(JJWorkflow obj, int index) {
         String actionWorkflow = "actionWorkflow_" + index;
         obj.setActionWorkflow(actionWorkflow);
     }
     
-    public void JJWorflowDataOnDemand.setCreationDate(JJWorflow obj, int index) {
+    public void JJWorkflowDataOnDemand.setCreationDate(JJWorkflow obj, int index) {
         Date creationDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setCreationDate(creationDate);
     }
     
-    public void JJWorflowDataOnDemand.setDescription(JJWorflow obj, int index) {
+    public void JJWorkflowDataOnDemand.setDescription(JJWorkflow obj, int index) {
         String description = "description_" + index;
         obj.setDescription(description);
     }
     
-    public void JJWorflowDataOnDemand.setEnabled(JJWorflow obj, int index) {
+    public void JJWorkflowDataOnDemand.setEnabled(JJWorkflow obj, int index) {
         Boolean enabled = Boolean.TRUE;
         obj.setEnabled(enabled);
     }
     
-    public void JJWorflowDataOnDemand.setEvent(JJWorflow obj, int index) {
+    public void JJWorkflowDataOnDemand.setEvent(JJWorkflow obj, int index) {
         String event = "event_" + index;
         obj.setEvent(event);
     }
     
-    public void JJWorflowDataOnDemand.setName(JJWorflow obj, int index) {
+    public void JJWorkflowDataOnDemand.setName(JJWorkflow obj, int index) {
         String name = "name_" + index;
         if (name.length() > 100) {
             name = name.substring(0, 100);
@@ -88,17 +88,17 @@ privileged aspect JJWorflowDataOnDemand_Roo_DataOnDemand {
         obj.setName(name);
     }
     
-    public void JJWorflowDataOnDemand.setObjet(JJWorflow obj, int index) {
+    public void JJWorkflowDataOnDemand.setObjet(JJWorkflow obj, int index) {
         String objet = "objet_" + index;
         obj.setObjet(objet);
     }
     
-    public void JJWorflowDataOnDemand.setUpdatedDate(JJWorflow obj, int index) {
+    public void JJWorkflowDataOnDemand.setUpdatedDate(JJWorkflow obj, int index) {
         Date updatedDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setUpdatedDate(updatedDate);
     }
     
-    public JJWorflow JJWorflowDataOnDemand.getSpecificJJWorflow(int index) {
+    public JJWorkflow JJWorkflowDataOnDemand.getSpecificJJWorkflow(int index) {
         init();
         if (index < 0) {
             index = 0;
@@ -106,38 +106,38 @@ privileged aspect JJWorflowDataOnDemand_Roo_DataOnDemand {
         if (index > (data.size() - 1)) {
             index = data.size() - 1;
         }
-        JJWorflow obj = data.get(index);
+        JJWorkflow obj = data.get(index);
         Long id = obj.getId();
-        return jJWorflowService.findJJWorflow(id);
+        return jJWorkflowService.findJJWorkflow(id);
     }
     
-    public JJWorflow JJWorflowDataOnDemand.getRandomJJWorflow() {
+    public JJWorkflow JJWorkflowDataOnDemand.getRandomJJWorkflow() {
         init();
-        JJWorflow obj = data.get(rnd.nextInt(data.size()));
+        JJWorkflow obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return jJWorflowService.findJJWorflow(id);
+        return jJWorkflowService.findJJWorkflow(id);
     }
     
-    public boolean JJWorflowDataOnDemand.modifyJJWorflow(JJWorflow obj) {
+    public boolean JJWorkflowDataOnDemand.modifyJJWorkflow(JJWorkflow obj) {
         return false;
     }
     
-    public void JJWorflowDataOnDemand.init() {
+    public void JJWorkflowDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = jJWorflowService.findJJWorflowEntries(from, to);
+        data = jJWorkflowService.findJJWorkflowEntries(from, to);
         if (data == null) {
-            throw new IllegalStateException("Find entries implementation for 'JJWorflow' illegally returned null");
+            throw new IllegalStateException("Find entries implementation for 'JJWorkflow' illegally returned null");
         }
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<JJWorflow>();
+        data = new ArrayList<JJWorkflow>();
         for (int i = 0; i < 10; i++) {
-            JJWorflow obj = getNewTransientJJWorflow(i);
+            JJWorkflow obj = getNewTransientJJWorkflow(i);
             try {
-                jJWorflowService.saveJJWorflow(obj);
+                jJWorkflowService.saveJJWorkflow(obj);
             } catch (final ConstraintViolationException e) {
                 final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

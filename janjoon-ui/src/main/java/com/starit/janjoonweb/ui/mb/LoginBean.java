@@ -107,7 +107,12 @@ public class LoginBean implements Serializable {
 			if (savedRequest != null) {
 				String s = savedRequest.getRedirectUrl();
 				s = s.substring(s.lastIndexOf("/") + 1);
-				s = s.replace(s.substring(s.indexOf(".")), "");
+				int index=s.indexOf(".");
+				if(index != -1)
+				{
+					s = s.replace(s.substring(index), "");
+				}
+				
 				if (s.contains("development"))
 					s = "main";
 				else if (s.contains("project1") || s.contains("test")

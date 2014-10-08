@@ -3,14 +3,15 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
 	<h:form id="productForm">
 		<p:panel id="productPanel" style="width:650px" columns="1"
 			cellpadding="6">
 			<p:dataTable id="productDataTable" var="product"
 				value="#{jJProductBean.productListTable}" paginator="true" rows="15"
-				 rowKey="#{product.id}">
+				rowKey="#{product.id}">
 				<f:facet name="header">#{messages.admin_product_table_title}</f:facet>
 				<p:column>
 					<f:facet name="header">
@@ -30,12 +31,12 @@
 						<h:outputText value="#{messages.admin_product_table_action_label}" />
 					</f:facet>
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
-							oncomplete="productDialogWidget.show()"
-							value="#{messages.admin_product_edit_tooltip}"
-							action="#{jJProductBean.editProduct(jJVersionBean)}"
-							update=":tabview:productDialog">
-							<f:setPropertyActionListener value="#{product}"
-								target="#{jJProductBean.productAdmin}" />					
+						oncomplete="productDialogWidget.show()"
+						value="#{messages.admin_product_edit_tooltip}"
+						action="#{jJProductBean.editProduct(jJVersionBean)}"
+						update=":tabview:productDialog">
+						<f:setPropertyActionListener value="#{product}"
+							target="#{jJProductBean.productAdmin}" />
 
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
 							oncomplete="productDeleteDialogWidget.show()"
@@ -56,11 +57,21 @@
 			</p:dataTable>
 		</p:panel>
 	</h:form>
-	<p:dialog id="productDialog" header="#{messages[jJProductBean.message]}"
-		modal="true" widgetVar="productDialogWidget" dynamic="true"
-		showEffect="fade" hideEffect="explode" resizable="false">
+	<p:dialog id="productDialog" draggable="false"
+		header="#{messages[jJProductBean.message]}" modal="true"
+		widgetVar="productDialogWidget" dynamic="true" showEffect="fade"
+		hideEffect="explode" resizable="false">
 		<p:ajax event="close" update=":tabview:productForm :headerForm"
-			listener="#{jJProductBean.closeDialog(jJVersionBean)}" />
+			listener="#{jJProductBean.closeDialog(jJVersionBean,jJBuildBean)}" />
+		<pe:blockUI widgetVar="versionBlockUIWidget"
+			target="productDialogPanel">
+			<h:panelGrid columns="2" layout="grid">
+				<p:graphicImage library="images" name="ajax-loader.gif"
+					style="vertical-align: middle;" />
+				<h:outputText value="#{messages.label_refresh}"
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+		</pe:blockUI>
 		<p:outputPanel id="productDialogPanel">
 			<h:form id="productDialogForm">
 				<p:growl id="msg" />
@@ -137,6 +148,7 @@
 											disabled="#{jJProductBean.disabledVersionMode}"
 											value="#{jJVersionBean.versionAdmin.name}"
 											label="Version Name" required="true"
+											requiredMessage="Version Name is required"
 											widgetVar="versionWidget" />
 										<p:watermark for="version"
 											value="#{messages.admin_product_new_version_watermark}" />
@@ -144,8 +156,10 @@
 
 									<p:column>
 										<p:commandButton id="addVersion"
+											onstart="PF('versionBlockUIWidget').block()"
+											oncomplete="PF('versionBlockUIWidget').unblock()"
 											disabled="#{jJProductBean.disabledVersionMode}"
-											update="version versionDataTable"
+											update="version versionDataTable msg"
 											actionListener="#{jJVersionBean.addVersion}"
 											icon="ui-icon-circle-plus"
 											value="#{messages.admin_product_new_version_button}"
@@ -157,14 +171,19 @@
 					</p:row>
 
 					<p:dataTable id="versionDataTable" var="versionModel"
-						scrollable="true" style="width:300px;" scrollHeight="300"
+						scrollable="true" style="width:350px;" scrollHeight="400"
 						value="#{jJVersionBean.versionDataModel}"
 						rowStyleClass="#{versionModel.old ? 'old' : null}">
+
+						<p:ajax event="rowToggle" listener="#{jJBuildBean.rowToggle}"
+							update="versionDataTable"
+							onstart="updateRowExapansion();" />
+
 						<f:facet name="header">
 							<h:outputText value="#{messages.admin_product_new_version_title}" />
 						</f:facet>
 
-						<p:column style="width:10%">
+						<p:column style="width:20%">
 							<f:facet name="header">
 								<p:row>
 									<p:column>
@@ -183,8 +202,9 @@
 								<p:ajax update="versionDataTable"
 									listener="#{jJVersionBean.checkVersion}" />
 							</p:selectBooleanCheckbox>
+							<p:rowToggler />
 						</p:column>
-						<p:column style="width:90%">
+						<p:column style="width:80%">
 							<f:facet name="header">
 								<p:row>
 									<p:column>
@@ -195,12 +215,72 @@
 							</f:facet>
 							<h:outputText value="#{versionModel.version.name}" />
 						</p:column>
+
+						<p:rowExpansion styleClass="rowExpansion">
+							<f:event type="preRenderComponent" update="versionDataTable"
+								onstart="PF('versionBlockUIWidget').block()"
+								oncomplete="PF('versionBlockUIWidget').unblock()"
+								listener="#{jJBuildBean.loadingRowExpansion(versionModel.version.id)}" />
+
+							<p:dataTable id="buildDataTable" var="build" style="width:300px;"
+								selection="#{jJBuildBean.buildUtils.get(jJBuildBean.index).versionSelectedBuilds}"
+								rowKey="#{build.id}" emptyMessage="That version have no builds"
+								value="#{jJBuildBean.buildUtils.get(jJBuildBean.index).versionBuilds}">
+
+								<p:column selectionMode="multiple"
+									style="width:30%;text-align:center" />
+								<p:column style="width:70%">
+									<f:facet name="header">
+										<p:row>
+											<p:column>
+												<h:outputText value="Name:" />
+											</p:column>
+										</p:row>
+									</f:facet>
+									<h:outputText value="#{build.name}" />
+								</p:column>
+								<f:facet name="footer">
+									<p:commandButton
+										onstart="PF('versionBlockUIWidget').block()"
+										oncomplete="PF('versionBlockUIWidget').unblock()"
+										update="buildDataTable :tabview:productDialogForm:msg"
+										process="buildDataTable" value="Update"
+										action="#{jJBuildBean.updateVersionBuilds(versionModel.version.id)}" />
+
+
+								</f:facet>
+							</p:dataTable>
+							<p:panelGrid>
+								<p:row>
+									<p:column>
+										<p:inputText id="build" style="width:100%;"
+											value="#{jJBuildBean.buildName}" label="Build Name"
+											required="true" requiredMessage="Build Name is required" />
+										<p:watermark for="build" value="Build Name" />
+									</p:column>
+
+									<p:column>
+										<p:commandButton id="addBuild"
+											onstart="PF('versionBlockUIWidget').block()"
+											oncomplete="PF('versionBlockUIWidget').unblock()"
+											style="font-size: 1.0em !important;width:100%;height:100%"
+											update="build buildDataTable :tabview:productDialogForm:msg"
+											action="#{jJBuildBean.addBuild(versionModel.version.id)}"
+											value="#{messages.admin_product_new_build_button}"
+											process="@this,build">
+										</p:commandButton>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:rowExpansion>
 					</p:dataTable>
 
 					<f:facet name="footer">
 						<p:row>
 							<p:column colspan="3">
 								<p:commandButton id="saveButton" style="float: right;"
+									onstart="PF('versionBlockUIWidget').block()"
+									oncomplete="PF('versionBlockUIWidget').unblock()"
 									disabled="#{jJProductBean.disabledVersionMode}" value="Save"
 									update="productDialogForm :headerForm"
 									process="@this,name,extname,productManagerSelect"

@@ -70,12 +70,12 @@ privileged aspect JJBuild_Roo_JavaBean {
         this.enabled = enabled;
     }
     
-    public JJVersion JJBuild.getVersioning() {
-        return this.versioning;
+    public JJVersion JJBuild.getVersion() {
+        return this.version;
     }
     
-    public void JJBuild.setVersioning(JJVersion versioning) {
-        this.versioning = versioning;
+    public void JJBuild.setVersion(JJVersion version) {
+        this.version = version;
     }
     
     public JJPhase JJBuild.getPhase() {

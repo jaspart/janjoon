@@ -85,9 +85,9 @@ privileged aspect JJBuildIntegrationTest_Roo_IntegrationTest {
         obj = jJBuildService.findJJBuild(id);
         Assert.assertNotNull("Find method for 'JJBuild' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyJJBuild(obj);
-        Integer currentVersion = obj.getVersion();
+        Integer currentVersion = obj.getVersion_();
         jJBuildRepository.flush();
-        Assert.assertTrue("Version for 'JJBuild' failed to increment on flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
+        Assert.assertTrue("Version for 'JJBuild' failed to increment on flush directive", (currentVersion != null && obj.getVersion_() > currentVersion) || !modified);
     }
     
     @Test
@@ -98,11 +98,11 @@ privileged aspect JJBuildIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'JJBuild' failed to provide an identifier", id);
         obj = jJBuildService.findJJBuild(id);
         boolean modified =  dod.modifyJJBuild(obj);
-        Integer currentVersion = obj.getVersion();
+        Integer currentVersion = obj.getVersion_();
         JJBuild merged = jJBuildService.updateJJBuild(obj);
         jJBuildRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
-        Assert.assertTrue("Version for 'JJBuild' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
+        Assert.assertTrue("Version for 'JJBuild' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion_() > currentVersion) || !modified);
     }
     
     @Test

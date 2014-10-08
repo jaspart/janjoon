@@ -3,7 +3,7 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJWorflow;
+import com.starit.janjoonweb.domain.JJWorkflow;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,33 +12,33 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
-privileged aspect JJWorflow_Roo_Jpa_Entity {
+privileged aspect JJWorkflow_Roo_Jpa_Entity {
     
-    declare @type: JJWorflow: @Entity;
+    declare @type: JJWorkflow: @Entity;
     
     @Id
-    @SequenceGenerator(name = "jJWorflowGen", sequenceName = "JJWorflowSEQ")
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "jJWorflowGen")
+    @SequenceGenerator(name = "jJWorkflowGen", sequenceName = "JJWorkflowSEQ")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "jJWorkflowGen")
     @Column(name = "id")
-    private Long JJWorflow.id;
+    private Long JJWorkflow.id;
     
     @Version
     @Column(name = "version")
-    private Integer JJWorflow.version;
+    private Integer JJWorkflow.version;
     
-    public Long JJWorflow.getId() {
+    public Long JJWorkflow.getId() {
         return this.id;
     }
     
-    public void JJWorflow.setId(Long id) {
+    public void JJWorkflow.setId(Long id) {
         this.id = id;
     }
     
-    public Integer JJWorflow.getVersion() {
+    public Integer JJWorkflow.getVersion() {
         return this.version;
     }
     
-    public void JJWorflow.setVersion(Integer version) {
+    public void JJWorkflow.setVersion(Integer version) {
         this.version = version;
     }
     

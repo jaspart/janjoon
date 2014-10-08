@@ -3,13 +3,13 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJWorflow;
+import com.starit.janjoonweb.domain.JJWorkflow;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-privileged aspect JJWorflow_Roo_ToString {
+privileged aspect JJWorkflow_Roo_ToString {
     
-    public String JJWorflow.toString() {
+    public String JJWorkflow.toString() {
         return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
     

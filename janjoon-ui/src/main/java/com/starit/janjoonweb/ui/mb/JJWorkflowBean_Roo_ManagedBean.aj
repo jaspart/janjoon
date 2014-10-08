@@ -7,9 +7,9 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
-import com.starit.janjoonweb.domain.JJWorflow;
-import com.starit.janjoonweb.domain.JJWorflowService;
-import com.starit.janjoonweb.ui.mb.JJWorflowBean;
+import com.starit.janjoonweb.domain.JJWorkflow;
+import com.starit.janjoonweb.domain.JJWorkflowService;
+import com.starit.janjoonweb.ui.mb.JJWorkflowBean;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJStatusConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -38,41 +38,41 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
-privileged aspect JJWorflowBean_Roo_ManagedBean {
+privileged aspect JJWorkflowBean_Roo_ManagedBean {
     
-    declare @type: JJWorflowBean: @ManagedBean(name = "jJWorflowBean");
+    declare @type: JJWorkflowBean: @ManagedBean(name = "jJWorkflowBean");
     
-    declare @type: JJWorflowBean: @SessionScoped;
-    
-    @Autowired
-    JJWorflowService JJWorflowBean.jJWorflowService;
+    declare @type: JJWorkflowBean: @SessionScoped;
     
     @Autowired
-    JJContactService JJWorflowBean.jJContactService;
+    JJWorkflowService JJWorkflowBean.jJWorkflowService;
     
     @Autowired
-    JJStatusService JJWorflowBean.jJStatusService;
+    JJContactService JJWorkflowBean.jJContactService;
     
-    private String JJWorflowBean.name = "JJWorflows";
+    @Autowired
+    JJStatusService JJWorkflowBean.jJStatusService;
     
-    private JJWorflow JJWorflowBean.JJWorflow_;
+    private String JJWorkflowBean.name = "JJWorkflows";
     
-    private List<JJWorflow> JJWorflowBean.allJJWorflows;
+    private JJWorkflow JJWorkflowBean.JJWorkflow_;
     
-    private boolean JJWorflowBean.dataVisible = false;
+    private List<JJWorkflow> JJWorkflowBean.allJJWorkflows;
     
-    private List<String> JJWorflowBean.columns;
+    private boolean JJWorkflowBean.dataVisible = false;
     
-    private HtmlPanelGrid JJWorflowBean.createPanelGrid;
+    private List<String> JJWorkflowBean.columns;
     
-    private HtmlPanelGrid JJWorflowBean.editPanelGrid;
+    private HtmlPanelGrid JJWorkflowBean.createPanelGrid;
     
-    private HtmlPanelGrid JJWorflowBean.viewPanelGrid;
+    private HtmlPanelGrid JJWorkflowBean.editPanelGrid;
     
-    private boolean JJWorflowBean.createDialogVisible = false;
+    private HtmlPanelGrid JJWorkflowBean.viewPanelGrid;
+    
+    private boolean JJWorkflowBean.createDialogVisible = false;
     
     @PostConstruct
-    public void JJWorflowBean.init() {
+    public void JJWorkflowBean.init() {
         columns = new ArrayList<String>();
         columns.add("name");
         columns.add("description");
@@ -81,67 +81,67 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         columns.add("actionWorkflow");
     }
     
-    public String JJWorflowBean.getName() {
+    public String JJWorkflowBean.getName() {
         return name;
     }
     
-    public List<String> JJWorflowBean.getColumns() {
+    public List<String> JJWorkflowBean.getColumns() {
         return columns;
     }
     
-    public List<JJWorflow> JJWorflowBean.getAllJJWorflows() {
-        return allJJWorflows;
+    public List<JJWorkflow> JJWorkflowBean.getAllJJWorkflows() {
+        return allJJWorkflows;
     }
     
-    public void JJWorflowBean.setAllJJWorflows(List<JJWorflow> allJJWorflows) {
-        this.allJJWorflows = allJJWorflows;
+    public void JJWorkflowBean.setAllJJWorkflows(List<JJWorkflow> allJJWorkflows) {
+        this.allJJWorkflows = allJJWorkflows;
     }
     
-    public String JJWorflowBean.findAllJJWorflows() {
-        allJJWorflows = jJWorflowService.findAllJJWorflows();
-        dataVisible = !allJJWorflows.isEmpty();
+    public String JJWorkflowBean.findAllJJWorkflows() {
+        allJJWorkflows = jJWorkflowService.findAllJJWorkflows();
+        dataVisible = !allJJWorkflows.isEmpty();
         return null;
     }
     
-    public boolean JJWorflowBean.isDataVisible() {
+    public boolean JJWorkflowBean.isDataVisible() {
         return dataVisible;
     }
     
-    public void JJWorflowBean.setDataVisible(boolean dataVisible) {
+    public void JJWorkflowBean.setDataVisible(boolean dataVisible) {
         this.dataVisible = dataVisible;
     }
     
-    public HtmlPanelGrid JJWorflowBean.getCreatePanelGrid() {
+    public HtmlPanelGrid JJWorkflowBean.getCreatePanelGrid() {
         if (createPanelGrid == null) {
             createPanelGrid = populateCreatePanel();
         }
         return createPanelGrid;
     }
     
-    public void JJWorflowBean.setCreatePanelGrid(HtmlPanelGrid createPanelGrid) {
+    public void JJWorkflowBean.setCreatePanelGrid(HtmlPanelGrid createPanelGrid) {
         this.createPanelGrid = createPanelGrid;
     }
     
-    public HtmlPanelGrid JJWorflowBean.getEditPanelGrid() {
+    public HtmlPanelGrid JJWorkflowBean.getEditPanelGrid() {
         if (editPanelGrid == null) {
             editPanelGrid = populateEditPanel();
         }
         return editPanelGrid;
     }
     
-    public void JJWorflowBean.setEditPanelGrid(HtmlPanelGrid editPanelGrid) {
+    public void JJWorkflowBean.setEditPanelGrid(HtmlPanelGrid editPanelGrid) {
         this.editPanelGrid = editPanelGrid;
     }
     
-    public HtmlPanelGrid JJWorflowBean.getViewPanelGrid() {
+    public HtmlPanelGrid JJWorkflowBean.getViewPanelGrid() {
         return populateViewPanel();
     }
     
-    public void JJWorflowBean.setViewPanelGrid(HtmlPanelGrid viewPanelGrid) {
+    public void JJWorkflowBean.setViewPanelGrid(HtmlPanelGrid viewPanelGrid) {
         this.viewPanelGrid = viewPanelGrid;
     }
     
-    public HtmlPanelGrid JJWorflowBean.populateCreatePanel() {
+    public HtmlPanelGrid JJWorkflowBean.populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
@@ -157,7 +157,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         InputTextarea nameCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         nameCreateInput.setId("nameCreateInput");
-        nameCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.name}", String.class));
+        nameCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.name}", String.class));
         LengthValidator nameCreateInputValidator = new LengthValidator();
         nameCreateInputValidator.setMaximum(100);
         nameCreateInput.addValidator(nameCreateInputValidator);
@@ -178,7 +178,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         InputTextarea descriptionCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         descriptionCreateInput.setId("descriptionCreateInput");
-        descriptionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.description}", String.class));
+        descriptionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.description}", String.class));
         descriptionCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionCreateInput);
         
@@ -196,7 +196,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         Calendar creationDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
         creationDateCreateInput.setId("creationDateCreateInput");
-        creationDateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.creationDate}", Date.class));
+        creationDateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.creationDate}", Date.class));
         creationDateCreateInput.setNavigator(true);
         creationDateCreateInput.setEffect("slideDown");
         creationDateCreateInput.setPattern("dd/MM/yyyy");
@@ -217,8 +217,8 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         AutoComplete createdByCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
         createdByCreateInput.setId("createdByCreateInput");
-        createdByCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.createdBy}", JJContact.class));
-        createdByCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorflowBean.completeCreatedBy}", List.class, new Class[] { String.class }));
+        createdByCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.createdBy}", JJContact.class));
+        createdByCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorkflowBean.completeCreatedBy}", List.class, new Class[] { String.class }));
         createdByCreateInput.setDropdown(true);
         createdByCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "createdBy", String.class));
         createdByCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{createdBy.name} #{createdBy.description} #{createdBy.creationDate} #{createdBy.updatedDate}", String.class));
@@ -241,7 +241,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         Calendar updatedDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
         updatedDateCreateInput.setId("updatedDateCreateInput");
-        updatedDateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.updatedDate}", Date.class));
+        updatedDateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.updatedDate}", Date.class));
         updatedDateCreateInput.setNavigator(true);
         updatedDateCreateInput.setEffect("slideDown");
         updatedDateCreateInput.setPattern("dd/MM/yyyy");
@@ -262,8 +262,8 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         AutoComplete updatedByCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
         updatedByCreateInput.setId("updatedByCreateInput");
-        updatedByCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.updatedBy}", JJContact.class));
-        updatedByCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorflowBean.completeUpdatedBy}", List.class, new Class[] { String.class }));
+        updatedByCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.updatedBy}", JJContact.class));
+        updatedByCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorkflowBean.completeUpdatedBy}", List.class, new Class[] { String.class }));
         updatedByCreateInput.setDropdown(true);
         updatedByCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "updatedBy", String.class));
         updatedByCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{updatedBy.name} #{updatedBy.description} #{updatedBy.creationDate} #{updatedBy.updatedDate}", String.class));
@@ -286,7 +286,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         SelectBooleanCheckbox enabledCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
         enabledCreateInput.setId("enabledCreateInput");
-        enabledCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.enabled}", Boolean.class));
+        enabledCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.enabled}", Boolean.class));
         enabledCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(enabledCreateInput);
         
@@ -304,8 +304,8 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         AutoComplete sourceCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
         sourceCreateInput.setId("sourceCreateInput");
-        sourceCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.source}", JJStatus.class));
-        sourceCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorflowBean.completeSource}", List.class, new Class[] { String.class }));
+        sourceCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.source}", JJStatus.class));
+        sourceCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorkflowBean.completeSource}", List.class, new Class[] { String.class }));
         sourceCreateInput.setDropdown(true);
         sourceCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "source", String.class));
         sourceCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{source.name} #{source.description} #{source.creationDate} #{source.updatedDate}", String.class));
@@ -328,8 +328,8 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         AutoComplete targetCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
         targetCreateInput.setId("targetCreateInput");
-        targetCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.target}", JJStatus.class));
-        targetCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorflowBean.completeTarget}", List.class, new Class[] { String.class }));
+        targetCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.target}", JJStatus.class));
+        targetCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorkflowBean.completeTarget}", List.class, new Class[] { String.class }));
         targetCreateInput.setDropdown(true);
         targetCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "target", String.class));
         targetCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{target.name} #{target.description} #{target.creationDate} #{target.updatedDate}", String.class));
@@ -352,7 +352,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         InputText actionWorkflowCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         actionWorkflowCreateInput.setId("actionWorkflowCreateInput");
-        actionWorkflowCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.actionWorkflow}", String.class));
+        actionWorkflowCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.actionWorkflow}", String.class));
         actionWorkflowCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(actionWorkflowCreateInput);
         
@@ -370,8 +370,8 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         AutoComplete actorCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
         actorCreateInput.setId("actorCreateInput");
-        actorCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.actor}", JJContact.class));
-        actorCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorflowBean.completeActor}", List.class, new Class[] { String.class }));
+        actorCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.actor}", JJContact.class));
+        actorCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorkflowBean.completeActor}", List.class, new Class[] { String.class }));
         actorCreateInput.setDropdown(true);
         actorCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "actor", String.class));
         actorCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{actor.name} #{actor.description} #{actor.creationDate} #{actor.updatedDate}", String.class));
@@ -394,7 +394,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         InputText objetCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         objetCreateInput.setId("objetCreateInput");
-        objetCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.objet}", String.class));
+        objetCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.objet}", String.class));
         objetCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(objetCreateInput);
         
@@ -412,7 +412,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         InputTextarea eventCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         eventCreateInput.setId("eventCreateInput");
-        eventCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.event}", String.class));
+        eventCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.event}", String.class));
         eventCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(eventCreateInput);
         
@@ -425,7 +425,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         return htmlPanelGrid;
     }
     
-    public HtmlPanelGrid JJWorflowBean.populateEditPanel() {
+    public HtmlPanelGrid JJWorkflowBean.populateEditPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
@@ -441,7 +441,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         InputTextarea nameEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         nameEditInput.setId("nameEditInput");
-        nameEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.name}", String.class));
+        nameEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.name}", String.class));
         LengthValidator nameEditInputValidator = new LengthValidator();
         nameEditInputValidator.setMaximum(100);
         nameEditInput.addValidator(nameEditInputValidator);
@@ -462,7 +462,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         InputTextarea descriptionEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         descriptionEditInput.setId("descriptionEditInput");
-        descriptionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.description}", String.class));
+        descriptionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.description}", String.class));
         descriptionEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(descriptionEditInput);
         
@@ -480,7 +480,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         Calendar creationDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
         creationDateEditInput.setId("creationDateEditInput");
-        creationDateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.creationDate}", Date.class));
+        creationDateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.creationDate}", Date.class));
         creationDateEditInput.setNavigator(true);
         creationDateEditInput.setEffect("slideDown");
         creationDateEditInput.setPattern("dd/MM/yyyy");
@@ -501,8 +501,8 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         AutoComplete createdByEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
         createdByEditInput.setId("createdByEditInput");
-        createdByEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.createdBy}", JJContact.class));
-        createdByEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorflowBean.completeCreatedBy}", List.class, new Class[] { String.class }));
+        createdByEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.createdBy}", JJContact.class));
+        createdByEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorkflowBean.completeCreatedBy}", List.class, new Class[] { String.class }));
         createdByEditInput.setDropdown(true);
         createdByEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "createdBy", String.class));
         createdByEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{createdBy.name} #{createdBy.description} #{createdBy.creationDate} #{createdBy.updatedDate}", String.class));
@@ -525,7 +525,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         Calendar updatedDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
         updatedDateEditInput.setId("updatedDateEditInput");
-        updatedDateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.updatedDate}", Date.class));
+        updatedDateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.updatedDate}", Date.class));
         updatedDateEditInput.setNavigator(true);
         updatedDateEditInput.setEffect("slideDown");
         updatedDateEditInput.setPattern("dd/MM/yyyy");
@@ -546,8 +546,8 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         AutoComplete updatedByEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
         updatedByEditInput.setId("updatedByEditInput");
-        updatedByEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.updatedBy}", JJContact.class));
-        updatedByEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorflowBean.completeUpdatedBy}", List.class, new Class[] { String.class }));
+        updatedByEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.updatedBy}", JJContact.class));
+        updatedByEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorkflowBean.completeUpdatedBy}", List.class, new Class[] { String.class }));
         updatedByEditInput.setDropdown(true);
         updatedByEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "updatedBy", String.class));
         updatedByEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{updatedBy.name} #{updatedBy.description} #{updatedBy.creationDate} #{updatedBy.updatedDate}", String.class));
@@ -570,7 +570,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         SelectBooleanCheckbox enabledEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
         enabledEditInput.setId("enabledEditInput");
-        enabledEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.enabled}", Boolean.class));
+        enabledEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.enabled}", Boolean.class));
         enabledEditInput.setRequired(false);
         htmlPanelGrid.getChildren().add(enabledEditInput);
         
@@ -588,8 +588,8 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         AutoComplete sourceEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
         sourceEditInput.setId("sourceEditInput");
-        sourceEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.source}", JJStatus.class));
-        sourceEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorflowBean.completeSource}", List.class, new Class[] { String.class }));
+        sourceEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.source}", JJStatus.class));
+        sourceEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorkflowBean.completeSource}", List.class, new Class[] { String.class }));
         sourceEditInput.setDropdown(true);
         sourceEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "source", String.class));
         sourceEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{source.name} #{source.description} #{source.creationDate} #{source.updatedDate}", String.class));
@@ -612,8 +612,8 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         AutoComplete targetEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
         targetEditInput.setId("targetEditInput");
-        targetEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.target}", JJStatus.class));
-        targetEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorflowBean.completeTarget}", List.class, new Class[] { String.class }));
+        targetEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.target}", JJStatus.class));
+        targetEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorkflowBean.completeTarget}", List.class, new Class[] { String.class }));
         targetEditInput.setDropdown(true);
         targetEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "target", String.class));
         targetEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{target.name} #{target.description} #{target.creationDate} #{target.updatedDate}", String.class));
@@ -636,7 +636,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         InputText actionWorkflowEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         actionWorkflowEditInput.setId("actionWorkflowEditInput");
-        actionWorkflowEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.actionWorkflow}", String.class));
+        actionWorkflowEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.actionWorkflow}", String.class));
         actionWorkflowEditInput.setRequired(false);
         htmlPanelGrid.getChildren().add(actionWorkflowEditInput);
         
@@ -654,8 +654,8 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         AutoComplete actorEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
         actorEditInput.setId("actorEditInput");
-        actorEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.actor}", JJContact.class));
-        actorEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorflowBean.completeActor}", List.class, new Class[] { String.class }));
+        actorEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.actor}", JJContact.class));
+        actorEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJWorkflowBean.completeActor}", List.class, new Class[] { String.class }));
         actorEditInput.setDropdown(true);
         actorEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "actor", String.class));
         actorEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{actor.name} #{actor.description} #{actor.creationDate} #{actor.updatedDate}", String.class));
@@ -678,7 +678,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         InputText objetEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         objetEditInput.setId("objetEditInput");
-        objetEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.objet}", String.class));
+        objetEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.objet}", String.class));
         objetEditInput.setRequired(false);
         htmlPanelGrid.getChildren().add(objetEditInput);
         
@@ -696,7 +696,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         InputTextarea eventEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         eventEditInput.setId("eventEditInput");
-        eventEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.event}", String.class));
+        eventEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.event}", String.class));
         eventEditInput.setRequired(false);
         htmlPanelGrid.getChildren().add(eventEditInput);
         
@@ -709,7 +709,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         return htmlPanelGrid;
     }
     
-    public HtmlPanelGrid JJWorflowBean.populateViewPanel() {
+    public HtmlPanelGrid JJWorkflowBean.populateViewPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
@@ -724,7 +724,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         InputTextarea nameValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         nameValue.setId("nameValue");
-        nameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.name}", String.class));
+        nameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.name}", String.class));
         nameValue.setReadonly(true);
         nameValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(nameValue);
@@ -736,7 +736,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         InputTextarea descriptionValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         descriptionValue.setId("descriptionValue");
-        descriptionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.description}", String.class));
+        descriptionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.description}", String.class));
         descriptionValue.setReadonly(true);
         descriptionValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(descriptionValue);
@@ -747,7 +747,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(creationDateLabel);
         
         HtmlOutputText creationDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        creationDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.creationDate}", Date.class));
+        creationDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.creationDate}", Date.class));
         DateTimeConverter creationDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
         creationDateValueConverter.setPattern("dd/MM/yyyy");
         creationDateValue.setConverter(creationDateValueConverter);
@@ -759,7 +759,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(createdByLabel);
         
         HtmlOutputText createdByValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        createdByValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.createdBy}", JJContact.class));
+        createdByValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.createdBy}", JJContact.class));
         createdByValue.setConverter(new JJContactConverter());
         htmlPanelGrid.getChildren().add(createdByValue);
         
@@ -769,7 +769,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(updatedDateLabel);
         
         HtmlOutputText updatedDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        updatedDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.updatedDate}", Date.class));
+        updatedDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.updatedDate}", Date.class));
         DateTimeConverter updatedDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
         updatedDateValueConverter.setPattern("dd/MM/yyyy");
         updatedDateValue.setConverter(updatedDateValueConverter);
@@ -781,7 +781,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(updatedByLabel);
         
         HtmlOutputText updatedByValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        updatedByValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.updatedBy}", JJContact.class));
+        updatedByValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.updatedBy}", JJContact.class));
         updatedByValue.setConverter(new JJContactConverter());
         htmlPanelGrid.getChildren().add(updatedByValue);
         
@@ -791,7 +791,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(enabledLabel);
         
         HtmlOutputText enabledValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.enabled}", String.class));
+        enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.enabled}", String.class));
         htmlPanelGrid.getChildren().add(enabledValue);
         
         HtmlOutputText sourceLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -800,7 +800,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(sourceLabel);
         
         HtmlOutputText sourceValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        sourceValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.source}", JJStatus.class));
+        sourceValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.source}", JJStatus.class));
         sourceValue.setConverter(new JJStatusConverter());
         htmlPanelGrid.getChildren().add(sourceValue);
         
@@ -810,7 +810,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(targetLabel);
         
         HtmlOutputText targetValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        targetValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.target}", JJStatus.class));
+        targetValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.target}", JJStatus.class));
         targetValue.setConverter(new JJStatusConverter());
         htmlPanelGrid.getChildren().add(targetValue);
         
@@ -821,7 +821,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         HtmlOutputText actionWorkflowValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         actionWorkflowValue.setId("actionWorkflowValue");
-        actionWorkflowValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.actionWorkflow}", String.class));
+        actionWorkflowValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.actionWorkflow}", String.class));
         htmlPanelGrid.getChildren().add(actionWorkflowValue);
         
         HtmlOutputText actorLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -830,7 +830,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(actorLabel);
         
         HtmlOutputText actorValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        actorValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.actor}", JJContact.class));
+        actorValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.actor}", JJContact.class));
         actorValue.setConverter(new JJContactConverter());
         htmlPanelGrid.getChildren().add(actorValue);
         
@@ -841,7 +841,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         HtmlOutputText objetValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         objetValue.setId("objetValue");
-        objetValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.objet}", String.class));
+        objetValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.objet}", String.class));
         htmlPanelGrid.getChildren().add(objetValue);
         
         HtmlOutputText eventLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -851,7 +851,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         
         InputTextarea eventValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         eventValue.setId("eventValue");
-        eventValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorflowBean.JJWorflow_.event}", String.class));
+        eventValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJWorkflowBean.JJWorkflow_.event}", String.class));
         eventValue.setReadonly(true);
         eventValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(eventValue);
@@ -859,18 +859,18 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         return htmlPanelGrid;
     }
     
-    public JJWorflow JJWorflowBean.getJJWorflow_() {
-        if (JJWorflow_ == null) {
-            JJWorflow_ = new JJWorflow();
+    public JJWorkflow JJWorkflowBean.getJJWorkflow_() {
+        if (JJWorkflow_ == null) {
+            JJWorkflow_ = new JJWorkflow();
         }
-        return JJWorflow_;
+        return JJWorkflow_;
     }
     
-    public void JJWorflowBean.setJJWorflow_(JJWorflow JJWorflow_) {
-        this.JJWorflow_ = JJWorflow_;
+    public void JJWorkflowBean.setJJWorkflow_(JJWorkflow JJWorkflow_) {
+        this.JJWorkflow_ = JJWorkflow_;
     }
     
-    public List<JJContact> JJWorflowBean.completeCreatedBy(String query) {
+    public List<JJContact> JJWorkflowBean.completeCreatedBy(String query) {
         List<JJContact> suggestions = new ArrayList<JJContact>();
         for (JJContact jJContact : jJContactService.findAllJJContacts()) {
             String jJContactStr = String.valueOf(jJContact.getName() +  " "  + jJContact.getDescription() +  " "  + jJContact.getCreationDate() +  " "  + jJContact.getUpdatedDate());
@@ -881,7 +881,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJContact> JJWorflowBean.completeUpdatedBy(String query) {
+    public List<JJContact> JJWorkflowBean.completeUpdatedBy(String query) {
         List<JJContact> suggestions = new ArrayList<JJContact>();
         for (JJContact jJContact : jJContactService.findAllJJContacts()) {
             String jJContactStr = String.valueOf(jJContact.getName() +  " "  + jJContact.getDescription() +  " "  + jJContact.getCreationDate() +  " "  + jJContact.getUpdatedDate());
@@ -892,7 +892,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJStatus> JJWorflowBean.completeSource(String query) {
+    public List<JJStatus> JJWorkflowBean.completeSource(String query) {
         List<JJStatus> suggestions = new ArrayList<JJStatus>();
         for (JJStatus jJStatus : jJStatusService.findAllJJStatuses()) {
             String jJStatusStr = String.valueOf(jJStatus.getName() +  " "  + jJStatus.getDescription() +  " "  + jJStatus.getCreationDate() +  " "  + jJStatus.getUpdatedDate());
@@ -903,7 +903,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJStatus> JJWorflowBean.completeTarget(String query) {
+    public List<JJStatus> JJWorkflowBean.completeTarget(String query) {
         List<JJStatus> suggestions = new ArrayList<JJStatus>();
         for (JJStatus jJStatus : jJStatusService.findAllJJStatuses()) {
             String jJStatusStr = String.valueOf(jJStatus.getName() +  " "  + jJStatus.getDescription() +  " "  + jJStatus.getCreationDate() +  " "  + jJStatus.getUpdatedDate());
@@ -914,7 +914,7 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJContact> JJWorflowBean.completeActor(String query) {
+    public List<JJContact> JJWorkflowBean.completeActor(String query) {
         List<JJContact> suggestions = new ArrayList<JJContact>();
         for (JJContact jJContact : jJContactService.findAllJJContacts()) {
             String jJContactStr = String.valueOf(jJContact.getName() +  " "  + jJContact.getDescription() +  " "  + jJContact.getCreationDate() +  " "  + jJContact.getUpdatedDate());
@@ -925,63 +925,63 @@ privileged aspect JJWorflowBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public String JJWorflowBean.onEdit() {
+    public String JJWorkflowBean.onEdit() {
         return null;
     }
     
-    public boolean JJWorflowBean.isCreateDialogVisible() {
+    public boolean JJWorkflowBean.isCreateDialogVisible() {
         return createDialogVisible;
     }
     
-    public void JJWorflowBean.setCreateDialogVisible(boolean createDialogVisible) {
+    public void JJWorkflowBean.setCreateDialogVisible(boolean createDialogVisible) {
         this.createDialogVisible = createDialogVisible;
     }
     
-    public String JJWorflowBean.displayList() {
+    public String JJWorkflowBean.displayList() {
         createDialogVisible = false;
-        findAllJJWorflows();
-        return "JJWorflow_";
+        findAllJJWorkflows();
+        return "JJWorkflow_";
     }
     
-    public String JJWorflowBean.displayCreateDialog() {
-        JJWorflow_ = new JJWorflow();
+    public String JJWorkflowBean.displayCreateDialog() {
+        JJWorkflow_ = new JJWorkflow();
         createDialogVisible = true;
-        return "JJWorflow_";
+        return "JJWorkflow_";
     }
     
-    public String JJWorflowBean.persist() {
+    public String JJWorkflowBean.persist() {
         String message = "";
-        if (JJWorflow_.getId() != null) {
-            jJWorflowService.updateJJWorflow(JJWorflow_);
+        if (JJWorkflow_.getId() != null) {
+            jJWorkflowService.updateJJWorkflow(JJWorkflow_);
             message = "message_successfully_updated";
         } else {
-            jJWorflowService.saveJJWorflow(JJWorflow_);
+            jJWorkflowService.saveJJWorkflow(JJWorkflow_);
             message = "message_successfully_created";
         }
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("createDialogWidget.hide()");
         context.execute("editDialogWidget.hide()");
         
-        FacesMessage facesMessage = MessageFactory.getMessage(message, "JJWorflow");
+        FacesMessage facesMessage = MessageFactory.getMessage(message, "JJWorkflow");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
-        return findAllJJWorflows();
+        return findAllJJWorkflows();
     }
     
-    public String JJWorflowBean.delete() {
-        jJWorflowService.deleteJJWorflow(JJWorflow_);
-        FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "JJWorflow");
+    public String JJWorkflowBean.delete() {
+        jJWorkflowService.deleteJJWorkflow(JJWorkflow_);
+        FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "JJWorkflow");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
-        return findAllJJWorflows();
+        return findAllJJWorkflows();
     }
     
-    public void JJWorflowBean.reset() {
-        JJWorflow_ = null;
+    public void JJWorkflowBean.reset() {
+        JJWorkflow_ = null;
         createDialogVisible = false;
     }
     
-    public void JJWorflowBean.handleDialogClose(CloseEvent event) {
+    public void JJWorkflowBean.handleDialogClose(CloseEvent event) {
         reset();
     }
     
