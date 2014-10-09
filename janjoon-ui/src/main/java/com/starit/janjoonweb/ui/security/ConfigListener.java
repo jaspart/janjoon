@@ -319,17 +319,17 @@ public class ConfigListener implements ServletContextListener {
 
 		}
 
-		if (jJBuildService.getBuilds(null, false, true).isEmpty()) {
-			JJBuild build;
-			for (int i = 0; i < 4; i++) {
-				build = new JJBuild();
-				build.setName("Build 0." + i);
-				build.setCreationDate(new Date());
-				build.setDescription("Build 0." + i + " Description");
-				build.setEnabled(true);
-				jJBuildService.saveJJBuild(build);
-			}
-		}
+//		if (jJBuildService.getBuilds(null, false, true).isEmpty()) {
+//			JJBuild build;
+//			for (int i = 0; i < 4; i++) {
+//				build = new JJBuild();
+//				build.setName("Build 0." + i);
+//				build.setCreationDate(new Date());
+//				build.setDescription("Build 0." + i + " Description");
+//				build.setEnabled(true);
+//				jJBuildService.saveJJBuild(build);
+//			}
+//		}
 
 //		if (jJSprintService.getSprints(null, true).isEmpty()) {
 //			JJSprint sprint;
