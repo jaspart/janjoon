@@ -107,12 +107,11 @@ public class LoginBean implements Serializable {
 			if (savedRequest != null) {
 				String s = savedRequest.getRedirectUrl();
 				s = s.substring(s.lastIndexOf("/") + 1);
-				int index=s.indexOf(".");
-				if(index != -1)
-				{
+				int index = s.indexOf(".");
+				if (index != -1) {
 					s = s.replace(s.substring(index), "");
 				}
-				
+
 				if (s.contains("development"))
 					s = "main";
 				else if (s.contains("project1") || s.contains("test")
@@ -183,8 +182,10 @@ public class LoginBean implements Serializable {
 				FacesMessage message = new FacesMessage(
 						FacesMessage.SEVERITY_INFO, "Welcome ",
 						contact.getName());
-				FacesContext.getCurrentInstance().addMessage("login", message);
+				
 				FacesContext context = FacesContext.getCurrentInstance();
+				context.addMessage("login", message);
+				
 				logger.info("login operation success " + contact.getName()
 						+ " logged in");
 
@@ -215,13 +216,13 @@ public class LoginBean implements Serializable {
 		}
 		try {
 			return prevPage;
-			
+
 		} catch (Exception e) {
-			System.err.println(e.getMessage()+prevPage);
-			prevPage="main";
+			System.err.println(e.getMessage() + prevPage);
+			prevPage = "main";
 			return prevPage;
 		}
-		
+
 	}
 
 	public String getUsername() {
@@ -368,105 +369,112 @@ public class LoginBean implements Serializable {
 
 	public void changeEvent(ValueChangeEvent event) throws IOException {
 
-		FacesContext ctx = FacesContext.getCurrentInstance();
-		String viewId = ctx.getViewRoot().getViewId();
+		if (enable) {
+			FacesContext ctx = FacesContext.getCurrentInstance();
+			String viewId = ctx.getViewRoot().getViewId();
 
-		JJVersionBean jJVersionBean = (JJVersionBean) findBean("jJVersionBean");
-		JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");
-		JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
+			JJVersionBean jJVersionBean = (JJVersionBean) findBean("jJVersionBean");
+			JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");
+			JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
 
-		HttpSession session = (HttpSession) ctx.getExternalContext()
-				.getSession(false);
-		messageListener(session);
-
-		if (event.getComponent().getClientId().contains("projectSelectOneMenu")) {
-
-			session.setAttribute("jJSprintBean", new JJSprintBean());
-			session.setAttribute("jJTaskBean", new JJTaskBean());
-			session.setAttribute("jJBugBean", new JJBugBean());
-		}
-
-		if (viewId.contains("development")) {
-
-			RequestContext context = RequestContext.getCurrentInstance();
-
-			DevelopmentBean jJDevelopment = (DevelopmentBean) session
-					.getAttribute("jJDevelopment");
+			HttpSession session = (HttpSession) ctx.getExternalContext()
+					.getSession(false);
+			if (enable)
+				messageListener(session);
 
 			if (event.getComponent().getClientId()
-					.contains("productSelectOneMenu")) {
-				FacesMessage facesMessage = MessageFactory.getMessage(
-						"dev.nullVersion.label", FacesMessage.SEVERITY_ERROR,
-						"");
-				FacesContext.getCurrentInstance()
-						.addMessage(null, facesMessage);
+					.contains("projectSelectOneMenu")
+					&& enable) {
 
-			} else if (event.getComponent().getClientId()
-					.contains("versionSelectOneMenu")) {
-				jJVersionBean.setVersion((JJVersion) event.getNewValue());
-				if (jJVersionBean.getVersion() != null) {
+				session.setAttribute("jJSprintBean", new JJSprintBean());
+				session.setAttribute("jJTaskBean", new JJTaskBean());
+				session.setAttribute("jJBugBean", new JJBugBean());
+				session.setAttribute("jJRequirementBean",
+						new JJRequirementBean());
+			}
 
-					jJDevelopment.reloadRepository();
+			if (viewId.contains("development")) {
 
+				RequestContext context = RequestContext.getCurrentInstance();
+
+				DevelopmentBean jJDevelopment = (DevelopmentBean) session
+						.getAttribute("jJDevelopment");
+
+				if (event.getComponent().getClientId()
+						.contains("productSelectOneMenu")) {
+					FacesMessage facesMessage = MessageFactory.getMessage(
+							"dev.nullVersion.label",
+							FacesMessage.SEVERITY_ERROR, "");
+					FacesContext.getCurrentInstance().addMessage(null,
+							facesMessage);
+
+				} else if (event.getComponent().getClientId()
+						.contains("versionSelectOneMenu")) {
+					jJVersionBean.setVersion((JJVersion) event.getNewValue());
+					if (jJVersionBean.getVersion() != null) {
+
+						jJDevelopment.reloadRepository();
+
+						if (jJDevelopment.isRender()) {
+
+							context.update(":contentPanel:devPanel:form");
+							context.update(":contentPanel:errorPanel");
+						} else {
+							context.update(":contentPanel:devPanel");
+							context.update(":contentPanel:errorPanel");
+						}
+					}
+				} else {
+					jJProjectBean.setProject((JJProject) event.getNewValue());
 					if (jJDevelopment.isRender()) {
-
-						context.update(":contentPanel:devPanel:form");
-						context.update(":contentPanel:errorPanel");
-					} else {
-						context.update(":contentPanel:devPanel");
-						context.update(":contentPanel:errorPanel");
+						jJDevelopment.setProject(jJProjectBean.getProject());
+						jJDevelopment.setTasks(null);
+						jJDevelopment.setTask(null);
+						context.update(":contentPanel:devPanel:form:taskSelectOneMenu");
 					}
 				}
-			} else {
-				jJProjectBean.setProject((JJProject) event.getNewValue());
-				if (jJDevelopment.isRender()) {
-					jJDevelopment.setProject(jJProjectBean.getProject());
-					jJDevelopment.setTasks(null);
-					jJDevelopment.setTask(null);
-					context.update(":contentPanel:devPanel:form:taskSelectOneMenu");
+			} else if (viewId.contains("specifications")) {
+
+				System.out.println("in spec");
+
+				JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
+
+				if (event.getComponent().getClientId()
+						.contains("projectSelectOneMenu")) {
+
+					JJProject project = (JJProject) event.getNewValue();
+
+					jJProjectBean.setProject(project);
+					jJRequirementBean.setProject(project);
+
+				} else if (event.getComponent().getClientId()
+						.contains("productSelectOneMenu")) {
+
+					JJProduct product = (JJProduct) event.getNewValue();
+
+					jJProductBean.setProduct(product);
+
+					jJRequirementBean.setProduct(product);
+
+				} else if (event.getComponent().getClientId()
+						.contains("versionSelectOneMenu")) {
+
+					JJVersion version = (JJVersion) event.getNewValue();
+
+					jJVersionBean.setVersion(version);
+					jJRequirementBean.setVersion(version);
 				}
+
+				jJRequirementBean.loadData();
+
+				ExternalContext ec = FacesContext.getCurrentInstance()
+						.getExternalContext();
+				ec.redirect(((HttpServletRequest) ec.getRequest())
+						.getRequestURI());
+
 			}
-
-		} else if (viewId.contains("specifications")) {
-
-			System.out.println("in spec");
-
-			JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
-
-			if (event.getComponent().getClientId()
-					.contains("projectSelectOneMenu")) {
-
-				JJProject project = (JJProject) event.getNewValue();
-
-				jJProjectBean.setProject(project);
-				jJRequirementBean.setProject(project);
-
-			} else if (event.getComponent().getClientId()
-					.contains("productSelectOneMenu")) {
-
-				JJProduct product = (JJProduct) event.getNewValue();
-
-				jJProductBean.setProduct(product);
-
-				jJRequirementBean.setProduct(product);
-
-			} else if (event.getComponent().getClientId()
-					.contains("versionSelectOneMenu")) {
-
-				JJVersion version = (JJVersion) event.getNewValue();
-
-				jJVersionBean.setVersion(version);
-				jJRequirementBean.setVersion(version);
-			}
-
-			jJRequirementBean.loadData();
-
-			ExternalContext ec = FacesContext.getCurrentInstance()
-					.getExternalContext();
-			ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
 
 		}
-
 	}
 
 	public void messageListener(HttpSession session) {
@@ -572,7 +580,7 @@ public class LoginBean implements Serializable {
 				}
 				RequestContext context = RequestContext.getCurrentInstance();
 				context.execute("PF('blockUIWidget').unblock()");
-				
+
 			}
 
 		}

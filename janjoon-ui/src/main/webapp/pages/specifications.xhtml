@@ -113,10 +113,12 @@
 												oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()" />
 										</p:column>
 										<p:column colspan="1">
-											<p:selectBooleanButton id="mineSpec"
+											<p:selectBooleanButton id="mineSpec"												
 												value="#{tableDataModel.mine}" onLabel="Mine" offLabel="All"
 												onIcon="ui-icon-check" offIcon="ui-icon-close">
-												<p:ajax
+												<p:ajax		
+													onstart="PF('blockUIWidget').block()"
+													oncomplete="PF('blockUIWidget').unblock()"												
 													listener="#{jJRequirementBean.mineChangeEvent(tableDataModel)}"
 													update=":specForm" />
 											</p:selectBooleanButton>
@@ -203,7 +205,7 @@
 								<p:tooltip for="mindMapButton" value="ReqMap" showEffect="fade"
 									hideEffect="fade" />
 
-								<p:menuitem id="deleteButton" icon="ui-icon-trash"
+								<p:menuitem id="deleteButton" icon="ui-icon-trash"									
 									oncomplete="requirementDeleteDialogWidget.show()"
 									value="Delete">
 									<f:setPropertyActionListener value="#{requirement}"
@@ -216,7 +218,11 @@
 							</p:splitButton>
 						</p:column>
 						<f:facet name="footer">
-							<p:accordionPanel dynamic="true" cache="true" activeIndex="-1">
+							<p:accordionPanel dynamic="true" activeIndex="#{tableDataModel.activeIndex}" cache="false" >
+							<p:ajax event="tabClose" listener="#{jJRequirementBean.onTabClose(tableDataModel.categoryId)}" />
+							<p:ajax event="tabChange" listener="#{jJRequirementBean.calculateCovCom(tableDataModel.categoryId)}"
+							 				onstart="PF('blockUIWidget').block()"
+											oncomplete="PF('blockUIWidget').unblock()" />
 								<p:tab title="#{messages.specification_progress_footer}">
 									<p:row>
 										<p:progressBar id="coverage"

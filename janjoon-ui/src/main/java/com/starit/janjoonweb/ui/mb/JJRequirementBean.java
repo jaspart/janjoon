@@ -1494,8 +1494,8 @@ public class JJRequirementBean {
 						.getWrappedData();
 				requirements.add(0, requirement);
 			}
-			categoryDataModel.calculCompletionProgress();
-			categoryDataModel.calculCoverageProgress();
+			//categoryDataModel.calculCompletionProgress();
+			//categoryDataModel.calculCoverageProgress();
 		}
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
@@ -1521,8 +1521,8 @@ public class JJRequirementBean {
 						.getWrappedData();
 				requirements.remove(requirement);
 			}
-			categoryDataModel.calculCompletionProgress();
-			categoryDataModel.calculCoverageProgress();
+			//categoryDataModel.calculCompletionProgress();
+			//categoryDataModel.calculCoverageProgress();
 		}
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
@@ -1562,8 +1562,8 @@ public class JJRequirementBean {
 				categoryDataModel = new CategoryDataModel(requirements,
 						category.getId(), category.getName(), true);
 
-				categoryDataModel.calculCompletionProgress();
-				categoryDataModel.calculCoverageProgress();
+				//categoryDataModel.calculCompletionProgress();
+				//categoryDataModel.calculCoverageProgress();
 
 				tableDataModelList.set(i, categoryDataModel);
 
@@ -1703,8 +1703,8 @@ public class JJRequirementBean {
 				product, version, project, true);
 
 		categoryDataModel.setWrappedData(requirements);
-		categoryDataModel.calculCompletionProgress();
-		categoryDataModel.calculCoverageProgress();
+		//categoryDataModel.calculCompletionProgress();
+		//categoryDataModel.calculCoverageProgress();
 
 		tableDataModelList.set(i, categoryDataModel);
 
@@ -1777,8 +1777,8 @@ public class JJRequirementBean {
 				categoryDataModel = new CategoryDataModel(requirements,
 						category.getId(), category.getName(), true);
 
-				categoryDataModel.calculCompletionProgress();
-				categoryDataModel.calculCoverageProgress();
+				//categoryDataModel.calculCompletionProgress();
+				//categoryDataModel.calculCoverageProgress();
 
 				tableDataModelList.set(i, categoryDataModel);
 
@@ -2956,8 +2956,8 @@ public class JJRequirementBean {
 				categoryDataModel = new CategoryDataModel(requirements,
 						category.getId(), category.getName(), true);
 
-				categoryDataModel.calculCompletionProgress();
-				categoryDataModel.calculCoverageProgress();
+				//categoryDataModel.calculCompletionProgress();
+				//categoryDataModel.calculCoverageProgress();
 
 				tableDataModelList.set(i, categoryDataModel);
 
@@ -2972,7 +2972,7 @@ public class JJRequirementBean {
 
 		private String nameDataModel;
 		private long categoryId;
-
+		private int activeIndex;
 		private float coverageProgress = 0;
 		private float completionProgress = 0;
 
@@ -2988,6 +2988,14 @@ public class JJRequirementBean {
 
 		public void setMine(boolean mine) {
 			this.mine = mine;
+		}
+
+		public int getActiveIndex() {
+			return activeIndex;
+		}
+
+		public void setActiveIndex(int activeIndex) {
+			this.activeIndex = activeIndex;
 		}
 
 		public String getNameDataModel() {
@@ -3048,6 +3056,7 @@ public class JJRequirementBean {
 			this.nameDataModel = nameDataModel;
 			this.rendered = rendered;
 			this.mine = false;
+			this.activeIndex=-1;
 
 		}
 
@@ -3072,6 +3081,7 @@ public class JJRequirementBean {
 
 					for (JJRequirement requirement : requirements) {
 
+						requirement=jJRequirementService.findJJRequirement(requirement.getId());
 						for (JJRequirement req : requirement
 								.getRequirementLinkUp()) {
 							if (req.getEnabled()) {
@@ -3090,7 +3100,7 @@ public class JJRequirementBean {
 					for (JJRequirement requirement : requirements) {
 						boolean linkUp = false;
 						boolean linkDown = false;
-
+						requirement=jJRequirementService.findJJRequirement(requirement.getId());
 						for (JJRequirement req : requirement
 								.getRequirementLinkDown()) {
 							if (req.getEnabled()) {
@@ -3098,7 +3108,7 @@ public class JJRequirementBean {
 								break;
 							}
 						}
-
+						
 						for (JJTask task : requirement.getTasks()) {
 							if (task.getEnabled()) {
 								linkUp = true;
@@ -3116,7 +3126,7 @@ public class JJRequirementBean {
 				} else {
 
 					for (JJRequirement requirement : requirements) {
-
+						requirement=jJRequirementService.findJJRequirement(requirement.getId());
 						boolean linkUp = false;
 						boolean linkDown = false;
 
@@ -3236,9 +3246,10 @@ public class JJRequirementBean {
 			boolean TASK = true;
 			boolean ENCOURS = false;
 			boolean FINIS = true;
-
+			requirement=jJRequirementService.findJJRequirement(requirement.getId());
 			if (category.getStage() == categoryList.get(0).getStage()) {
 				DOWN = true;
+				
 				for (JJRequirement req : requirement.getRequirementLinkUp()) {
 					if (req.getEnabled()) {
 						UP = true;
@@ -3253,6 +3264,7 @@ public class JJRequirementBean {
 
 				UP = true;
 
+				
 				for (JJRequirement req : requirement.getRequirementLinkDown()) {
 					if (req.getEnabled()) {
 						DOWN = true;
@@ -3262,6 +3274,7 @@ public class JJRequirementBean {
 
 			} else {
 
+				
 				for (JJRequirement req : requirement.getRequirementLinkUp()) {
 					if (req.getEnabled()) {
 						UP = true;
@@ -3499,8 +3512,8 @@ public class JJRequirementBean {
 				requirements, req.getCategory().getId(), req.getCategory()
 						.getName(), true);
 
-		categoryDataModel.calculCompletionProgress();
-		categoryDataModel.calculCoverageProgress();
+		//categoryDataModel.calculCompletionProgress();
+		//categoryDataModel.calculCoverageProgress();
 
 		tableDataModelList.set(i, categoryDataModel);
 
@@ -3520,7 +3533,8 @@ public class JJRequirementBean {
 
 	public void mineChangeEvent(CategoryDataModel tableDataModel) {
 
-		if (!tableDataModel.isMine()) {
+		System.out.println(tableDataModel.isMine());
+		if (tableDataModel.isMine()) {
 			HttpSession session = (HttpSession) FacesContext
 					.getCurrentInstance().getExternalContext()
 					.getSession(false);
@@ -3541,8 +3555,8 @@ public class JJRequirementBean {
 			CategoryDataModel categoryDataModel = new CategoryDataModel(
 					requirements, category.getId(), category.getName(), true);
 
-			categoryDataModel.calculCompletionProgress();
-			categoryDataModel.calculCoverageProgress();
+			//categoryDataModel.calculCompletionProgress();
+			//categoryDataModel.calculCoverageProgress();
 
 			tableDataModelList.set(tableDataModelList.indexOf(tableDataModel),
 					categoryDataModel);
@@ -3639,4 +3653,53 @@ public class JJRequirementBean {
 		}
 	}
 
+	
+	public void calculateCovCom(long id)
+	{
+		int i=0;
+		int j=-1;
+		while (i<tableDataModelList.size())
+		{
+			if(tableDataModelList.get(i).getCategoryId() == id)
+			{
+				j=i;
+				i=tableDataModelList.size();
+			}
+			i++;
+		}
+		
+		if(j!=-1)
+		{
+			tableDataModelList.get(j).setActiveIndex(0);
+			if(tableDataModelList.get(j).getCoverageProgress()==0)
+			{
+				tableDataModelList.get(j).calculCompletionProgress();
+				tableDataModelList.get(j).calculCoverageProgress();
+			}
+			
+		}
+		
+	}
+	
+	public void onTabClose(long id)
+	{
+		int i=0;
+		int j=-1;
+		while (i<tableDataModelList.size())
+		{
+			if(tableDataModelList.get(i).getCategoryId() == id)
+			{
+				j=i;
+				i=tableDataModelList.size();
+			}
+			i++;
+		}
+		
+		if(j!=-1)
+		{
+			System.err.println("eeeeeeeeeeeeeeeeee");
+			tableDataModelList.get(j).setActiveIndex(-1);
+		}
+	}
+	
 }

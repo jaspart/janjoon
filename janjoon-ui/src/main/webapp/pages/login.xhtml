@@ -3,7 +3,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <ui:composition template="../templates/generic.xhtml">
 	<ui:define name="title">#{messages.login_title}</ui:define>
@@ -66,6 +67,14 @@
 				</f:facet>
 			</p:panelGrid>
 		</h:form>
+		<pe:blockUI widgetVar="blockUIWidget">
+			<h:panelGrid columns="2">
+				<p:graphicImage library="images" name="ajax-loader.gif"
+					style="vertical-align: middle;" />
+				<h:outputText value="#{messages.label_refresh}"
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+		</pe:blockUI>
 	</ui:define>
 </ui:composition>
 </html>
