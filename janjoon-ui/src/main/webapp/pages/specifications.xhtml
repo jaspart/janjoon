@@ -61,19 +61,17 @@
 				</p:panelGrid>
 			</p:overlayPanel>		
 		</h:form>
-		<h:form id="specForm" style="overflow:hidden;width:101%">
+		<h:form id="specForm" style="overflow:hidden;width:100%">
 		<ui:repeat value="#{jJRequirementBean.tableDataModelList}" var="tableDataModel" varStatus="loop">
-				<div style="width:#{jJRequirementBean.tableDataModelSizePct};float:left;">				
+				<div style="width:#{jJRequirementBean.tableDataModelSizePct};float:left;">	
 					<p:dataTable id="categoryTable" var="requirement"
 						value="#{tableDataModel}" scrollable="true" scrollHeight="300"
 						sortMode="multiple" resizableColumns="true"
 						rowStyleClass="#{tableDataModel.getRowStyleClass(requirement)}"
 						filteredValue="#{tableDataModel.filtredRequirements}"
-						rowKey="#{requirement.id}"
-						rendered="#{tableDataModel.rendered}" selectionMode="single"
-						widgetVar="dataTable_#{loop.index}_Widget">
-						<p:ajax event="rowDblselect"
-							onstart="PF('blockUIWidget').block()"
+						rowKey="#{requirement.id}" rendered="#{tableDataModel.rendered}"
+						selectionMode="single" widgetVar="dataTable_#{loop.index}_Widget">
+						<p:ajax event="rowDblselect" onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()"
 							update=":requirementDialog"
 							disabled="#{!jJRequirementBean.haveSpecPermission}"
@@ -96,7 +94,7 @@
 												oncomplete="PF('blockUIWidget').unblock();chapterDialogWidget.show()" />
 										</p:column>
 										<p:column colspan="1">
-											<p:commandButton id="releaseRequirementButton"												
+											<p:commandButton id="releaseRequirementButton"
 												icon=".ui-icon-carat-2-n-s" title="Release All Requirements"
 												actionListener="#{jJRequirementBean.preReleaseRequirement(tableDataModel.categoryId)}"
 												oncomplete="requirementReleaseDialogWidget.show()" />
@@ -107,7 +105,7 @@
 										</p:column>
 										<p:column colspan="1">
 											<p:commandButton id="newRequirementButton"
-												icon="ui-icon-plus" title="#{jJRequirementBean.title}"												
+												icon="ui-icon-plus" title="#{jJRequirementBean.title}"
 												disabled="#{jJRequirementBean.disabledRequirement or !jJRequirementBean.haveSpecPermission}"
 												actionListener="#{jJRequirementBean.newRequirement(tableDataModel.categoryId)}"
 												update=":requirementDialog"
@@ -115,12 +113,11 @@
 												oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()" />
 										</p:column>
 										<p:column colspan="1">
-											<p:selectBooleanButton id="mineSpec"												
+											<p:selectBooleanButton id="mineSpec"
 												value="#{tableDataModel.mine}" onLabel="Mine" offLabel="All"
 												onIcon="ui-icon-check" offIcon="ui-icon-close">
-												<p:ajax		
-													onstart="PF('blockUIWidget').block()"
-													oncomplete="PF('blockUIWidget').unblock()"												
+												<p:ajax onstart="PF('blockUIWidget').block()"
+													oncomplete="PF('blockUIWidget').unblock()"
 													listener="#{jJRequirementBean.mineChangeEvent(tableDataModel)}"
 													update=":specForm" />
 											</p:selectBooleanButton>
@@ -155,7 +152,34 @@
 								<h:outputText
 									value="#{messages.specification_table_requirement_title}" />
 							</f:facet>
-							<h:outputText value="#{requirement.name}" />
+							<h:outputText id="reqContent" value="#{requirement.name}" />
+							<p:tooltip id="toolTipContent" for="reqContent" showEffect="clip" hideEffect="explode">
+								<p:panelGrid>
+									<f:facet name="header">
+										<p:row>
+											<p:column>
+												<h:outputText style="font-weight: bold;"
+													value="Requirement: #{requirement.name}" />
+											</p:column>
+										</p:row>
+									</f:facet>
+									<p:row>
+										<p:column>
+											<p:outputLabel style="font-weight: bold;" for="tolDesc" value="Description :" />
+											<br />	
+											<h:outputText id="tolDesc" readonly="true"  escape="false"
+												style="width:300px" value="#{requirement.description}"/> 								
+										</p:column>
+									</p:row>
+									<p:row rendered="#{requirement.sprint != null}">
+										<p:column >
+											<p:outputLabel for="tolSprint" value="Sprint :" />
+											<p:inputText id="tolSprint" readonly="true" size="10" 
+												converter="JJSprintConverter" value="#{requirement.sprint}" />								
+										</p:column>
+									</p:row>
+								</p:panelGrid>
+							</p:tooltip>
 						</p:column>
 
 						<p:column filterBy="product.name" filterStyle="display:none"
@@ -181,16 +205,15 @@
 								<h:outputText value="Actions" />
 							</f:facet>
 							<p:splitButton id="viewButton" value="View" icon="ui-icon-search"
-									onstart="PF('blockUIWidget').block()"
-									action="#{jJRequirementBean.viewLinks()}"
-									oncomplete="PF('blockUIWidget').unblock()"
-									update=":specForm">
-								<p:menuitem id="editButton" icon="ui-icon-pencil"
-								action="#{jJRequirementBean.editRequirement()}"
 								onstart="PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()"
-								update=":requirementDialog" value="Edit"
-								disabled="#{jJRequirementBean.getDisabledEdit(requirement) or !jJRequirementBean.haveSpecPermission}">
+								action="#{jJRequirementBean.viewLinks()}"
+								oncomplete="PF('blockUIWidget').unblock()" update=":specForm">
+								<p:menuitem id="editButton" icon="ui-icon-pencil"
+									action="#{jJRequirementBean.editRequirement()}"
+									onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()"
+									update=":requirementDialog" value="Edit"
+									disabled="#{jJRequirementBean.getDisabledEdit(requirement) or !jJRequirementBean.haveSpecPermission}">
 									<f:setPropertyActionListener value="#{requirement}"
 										target="#{jJRequirementBean.requirement}" />
 								</p:menuitem>
@@ -200,14 +223,15 @@
 								<p:menuitem id="mindMapButton" value="View ReqMap"
 									icon="ui-icon-search" onstart="PF('blockUIWidget').block()"
 									action="#{jJRequirementBean.initReqMindMap}"
-									oncomplete="PF('blockUIWidget').unblock()" update=":mindMapForm">
+									oncomplete="PF('blockUIWidget').unblock()"
+									update=":mindMapForm">
 									<f:setPropertyActionListener value="#{requirement}"
 										target="#{jJRequirementBean.requirement}" />
 								</p:menuitem>
 								<p:tooltip for="mindMapButton" value="ReqMap" showEffect="fade"
 									hideEffect="fade" />
 
-								<p:menuitem id="deleteButton" icon="ui-icon-trash"									
+								<p:menuitem id="deleteButton" icon="ui-icon-trash"
 									oncomplete="requirementDeleteDialogWidget.show()"
 									value="Delete">
 									<f:setPropertyActionListener value="#{requirement}"
@@ -220,11 +244,14 @@
 							</p:splitButton>
 						</p:column>
 						<f:facet name="footer">
-							<p:accordionPanel dynamic="true" activeIndex="#{tableDataModel.activeIndex}" cache="false" >
-							<p:ajax event="tabClose" listener="#{jJRequirementBean.onTabClose(tableDataModel.categoryId)}" />
-							<p:ajax event="tabChange" listener="#{jJRequirementBean.calculateCovCom(tableDataModel.categoryId)}"
-							 				onstart="PF('blockUIWidget').block()"
-											oncomplete="PF('blockUIWidget').unblock()" />
+							<p:accordionPanel dynamic="true"
+								activeIndex="#{tableDataModel.activeIndex}" cache="false">
+								<p:ajax event="tabClose"
+									listener="#{jJRequirementBean.onTabClose(tableDataModel.categoryId)}" />
+								<p:ajax event="tabChange"
+									listener="#{jJRequirementBean.calculateCovCom(tableDataModel.categoryId)}"
+									onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()" />
 								<p:tab title="#{messages.specification_progress_footer}">
 									<p:row>
 										<p:progressBar id="coverage"
