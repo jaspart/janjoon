@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class JJProjectBean {
 	@Autowired
 	public JJConfigurationService jJConfigurationService;
 
+	
 	public void setjJConfigurationService(
 			JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
@@ -45,9 +47,39 @@ public class JJProjectBean {
 	private String message;
 
 	private boolean projectState;
+	
+	private boolean haveTaskPermision;
+	
+	private String warmMessage;
 
 	public void setjJPermissionService(JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
+	}
+
+	public boolean isProjectState() {
+		return projectState;
+	}
+
+	public void setProjectState(boolean projectState) {
+		this.projectState = projectState;
+	}
+
+	public boolean isHaveTaskPermision() {				
+		return haveTaskPermision;
+	}
+
+	public void setHaveTaskPermision(boolean haveTaskPermision) {
+		this.haveTaskPermision = haveTaskPermision;
+	}
+
+	public String getWarmMessage() {
+		if(warmMessage==null)
+			checkPersmission();
+		return warmMessage;
+	}
+
+	public void setWarmMessage(String warmMessage) {
+		this.warmMessage = warmMessage;
 	}
 
 	public JJProject getProject() {
@@ -110,6 +142,20 @@ public class JJProjectBean {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	
+	public void checkPersmission()
+	{
+		
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false);
+		JJContact contact = (JJContact) session.getAttribute("JJContact");
+		haveTaskPermision=jJPermissionService.isAuthorized(contact, project, null, "JJTask");
+		
+		if (!haveTaskPermision)
+			warmMessage = "You Have no permisson to access this Category";
+		else
+			warmMessage = "Project";
 	}
 
 	public void newProject() {

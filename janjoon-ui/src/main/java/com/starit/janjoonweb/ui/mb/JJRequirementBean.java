@@ -31,6 +31,7 @@ import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -53,10 +54,16 @@ public class JJRequirementBean {
 
 	@Autowired
 	public JJConfigurationService jJConfigurationService;
+	@Autowired
+	public JJPermissionService jJPermissionService;
 
 	public void setjJConfigurationService(
 			JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
+	}
+
+	public void setjJPermissionService(JJPermissionService jJPermissionService) {
+		this.jJPermissionService = jJPermissionService;
 	}
 
 	@Autowired
@@ -137,6 +144,7 @@ public class JJRequirementBean {
 	private List<JJRequirement> selectedHighRequirementsList;
 
 	private boolean disabledLowRequirements;
+	private boolean	haveSpecPermission;
 	private boolean disabledMediumRequirements;
 	private boolean disabledHighRequirements;
 	private boolean disabledVersion;
@@ -160,6 +168,14 @@ public class JJRequirementBean {
 	private long categoryId;
 
 	private boolean requirementState;
+	
+	public boolean isHaveSpecPermission() {
+		return haveSpecPermission;
+	}
+
+	public void setHaveSpecPermission(boolean haveSpecPermission) {
+		this.haveSpecPermission = haveSpecPermission;
+	}
 
 	public JJCategory getLowCategory() {
 		return lowCategory;
@@ -714,6 +730,7 @@ public class JJRequirementBean {
 		long t = System.currentTimeMillis();
 		message = "specification_edit_header";
 
+		requirement=jJRequirementService.findJJRequirement(requirement.getId());
 		requirementCategory = requirement.getCategory();
 		requirement.setUpdatedDate(new Date());
 
@@ -749,6 +766,7 @@ public class JJRequirementBean {
 		fullRequirementsList();
 		fullSelectedRequirementsList();
 
+		
 		Set<JJTask> tasks = requirement.getTasks();
 		if (tasks.isEmpty()) {
 			initiateTask = false;
@@ -1454,6 +1472,7 @@ public class JJRequirementBean {
 			disabledExport = true;
 
 			disabledRequirement = true;
+			haveSpecPermission = true;
 			title = "Select a project to create requirement";
 
 			jJChapterBean.setWarnMessage("Select a project to manage document");
@@ -1465,7 +1484,15 @@ public class JJRequirementBean {
 			disabledExport = false;
 
 			disabledRequirement = false;
-			title = "New Requirement";
+			haveSpecPermission = jJPermissionService.isAuthorized(
+					(JJContact) session.getAttribute("JJContact"), project,
+					product, "JJRequirement");
+			if (!haveSpecPermission)
+				title = "You Have no permisson to do this action";
+			else
+				title = "New Requirement";
+
+			System.err.println(title + haveSpecPermission);
 
 			jJChapterBean.setWarnMessage("Manage document");
 			jJChapterBean.setDisabledChapter(false);
@@ -1736,22 +1763,6 @@ public class JJRequirementBean {
 		long t = System.currentTimeMillis();
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		JJChapterBean jJChapterBean = (JJChapterBean) session
-				.getAttribute("jJChapterBean");
-		if (project == null) {
-			disabledRequirement = true;
-			title = "Select a project to create requirement";
-			jJChapterBean.setWarnMessage("Select a project to manage document");
-			jJChapterBean.setDisabledChapter(true);
-
-		} else {
-
-			disabledRequirement = false;
-			title = "New Requirement";
-
-			jJChapterBean.setWarnMessage("Manage document");
-			jJChapterBean.setDisabledChapter(false);
-		}
 
 		String[] results = templateHeader.split("-");
 

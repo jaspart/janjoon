@@ -69,12 +69,14 @@
 						sortMode="multiple" resizableColumns="true"
 						rowStyleClass="#{tableDataModel.getRowStyleClass(requirement)}"
 						filteredValue="#{tableDataModel.filtredRequirements}"
+						rowKey="#{requirement.id}"
 						rendered="#{tableDataModel.rendered}" selectionMode="single"
 						widgetVar="dataTable_#{loop.index}_Widget">
 						<p:ajax event="rowDblselect"
 							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()"
 							update=":requirementDialog"
+							disabled="#{!jJRequirementBean.haveSpecPermission}"
 							listener="#{jJRequirementBean.onRowDblClckSelect}" />
 						<p:ajax event="contextMenu"
 							listener="#{jJRequirementBean.onContextMenuSelect}" />
@@ -94,7 +96,7 @@
 												oncomplete="PF('blockUIWidget').unblock();chapterDialogWidget.show()" />
 										</p:column>
 										<p:column colspan="1">
-											<p:commandButton id="releaseRequirementButton"
+											<p:commandButton id="releaseRequirementButton"												
 												icon=".ui-icon-carat-2-n-s" title="Release All Requirements"
 												actionListener="#{jJRequirementBean.preReleaseRequirement(tableDataModel.categoryId)}"
 												oncomplete="requirementReleaseDialogWidget.show()" />
@@ -105,8 +107,8 @@
 										</p:column>
 										<p:column colspan="1">
 											<p:commandButton id="newRequirementButton"
-												icon="ui-icon-plus" title="#{jJRequirementBean.title}"
-												disabled="#{jJRequirementBean.disabledRequirement}"
+												icon="ui-icon-plus" title="#{jJRequirementBean.title}"												
+												disabled="#{jJRequirementBean.disabledRequirement or !jJRequirementBean.haveSpecPermission}"
 												actionListener="#{jJRequirementBean.newRequirement(tableDataModel.categoryId)}"
 												update=":requirementDialog"
 												onstart="PF('blockUIWidget').block()"
@@ -188,7 +190,7 @@
 								onstart="PF('blockUIWidget').block()"
 								oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()"
 								update=":requirementDialog" value="Edit"
-								disabled="#{jJRequirementBean.getDisabledEdit(requirement)}">
+								disabled="#{jJRequirementBean.getDisabledEdit(requirement) or !jJRequirementBean.haveSpecPermission}">
 									<f:setPropertyActionListener value="#{requirement}"
 										target="#{jJRequirementBean.requirement}" />
 								</p:menuitem>
@@ -246,13 +248,13 @@
 
 		<p:hotkey bind="esc" handler="requirementDialogWidget.hide()" />
 		<p:hotkey bind="alt+enter" handler="requirementSaveWidget.jq.click()" />
-		<p:dialog id="requirementDialog"
+		<p:dialog id="requirementDialog" draggable="false"
 			header="#{messages[jJRequirementBean.message]}" modal="true"
 			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"
 			position="center" style="padding:0px;">
 			<p:ajax event="close" listener="#{jJRequirementBean.closeDialog(false)}"
-				 onstart="PF('blockUIWidget').block()"
-				oncomplete="PF('blockUIWidget').unblock()" />
+				 	onstart="PF('blockUIWidget').block()"
+					oncomplete="PF('blockUIWidget').unblock()" />
 			<p:outputPanel id="requirementDialogPanel">
 
 				<pe:blockUI widgetVar="requirementBlockUIWidget"
@@ -941,9 +943,8 @@
 
 		<p:dialog id="requirementMindMap"
 			header="#{messages.specification_MindMap_title}" modal="true"
-			width="75%" draggable="true"
-			widgetVar="requirementMindMap" dynamic="true" resizable="true">
-			<p:ajax event="close" update=":contentPanel" />
+			style="width:75% !important;" draggable="false"
+			widgetVar="requirementMindMap" dynamic="true" resizable="true">			
 			<p:panel>
 				<ui:include src="mindMapReq.xhtml" />
 			</p:panel>

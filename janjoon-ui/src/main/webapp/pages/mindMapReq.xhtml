@@ -14,6 +14,7 @@
 			<p:ajax event="dblselect" onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock();"
 				update=":requirementDialog"
+				disabled="#{jJRequirementBean.havePermission}"
 				listener="#{jJRequirementBean.onNodeDblselect}" />
 		</p:mindmap>
 

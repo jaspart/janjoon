@@ -103,6 +103,8 @@
 
 					<p:menuitem id="proAction"
 						value="#{messages.header_project_menuitem}"
+						disabled="#{!jJProjectBean.haveTaskPermision}"
+						title="#{jJProjectBean.warmMessage}"
 						onstart="PF('blockUIWidget').block()"						
 						actionListener="#{loginBean.redirection}" update="growlHeader"
 						icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
