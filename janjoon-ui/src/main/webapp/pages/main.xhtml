@@ -23,12 +23,11 @@
 		<p:panel id="dataPanel" rendered="#{loginBean.enable}"
 			header="#{messages.main_communication_title}">
 			<f:event listener="#{jJMessageBean.initJJmessageTable}"
-				type="preRenderView"/>
+				type="preRenderView" />
 			<h:form id="messageForm">
 				<p:dataTable id="MessageTable2" sortMode="multiple"
-					value="#{jJMessageBean.mainMessages}" rowKey="#{mes.id}"
-					var="mes" widgetVar="messageTable" scrollable="true"
-					scrollHeight="400"
+					value="#{jJMessageBean.mainMessages}" rowKey="#{mes.id}" var="mes"
+					widgetVar="messageTable" scrollable="true" scrollHeight="200"
 					filteredValue="#{jJMessageBean.filteredJJMessage}"
 					emptyMessage="#{messages.label_notFound}">
 					<f:facet name="header">
@@ -128,6 +127,87 @@
 			</p:confirmDialog>
 		</p:panel>
 
+		<p:panel id="taskPanel" rendered="#{loginBean.enable}"
+			header="To do Tasks">
+			<f:event listener="#{jJTaskBean.initToDoTasks}" type="preRenderView" />
+			<h:form id="taskForm">
+				<p:dataTable id="taskTable" value="#{jJTaskBean.toDoTasks}"
+					rowKey="#{task.id}" var="task" widgetVar="taskTable"
+					scrollable="true" scrollHeight="200"
+					emptyMessage="There is no Task to do,See all in project View">
+
+					<p:column headerText="Task" colspan="2">
+						<h:outputText value="#{task}" converter="JJTaskConverter" />
+					</p:column>
+
+					<p:column headerText="Specification">
+						<h:outputText value="#{task.requirement}"
+							converter="JJRequirementConverter" />
+					</p:column>
+
+					<p:column headerText="Bug">
+						<h:outputText value="#{task.bug}" converter="JJBugConverter" />
+					</p:column>
+
+					<p:column headerText="Project">
+					
+						<h:outputText value="#{task.requirement.project}"
+							converter="JJProjectConverter"
+							rendered="#{task.requirement != null}" />
+
+
+						<h:outputText value="#{task.bug.project}"
+							converter="JJProjectConverter"
+							rendered="#{task.requirement == null and task.bug != null }" />
+							
+							<h:outputText value="#{task.sprint.project}"
+							converter="JJProjectConverter"
+							rendered="#{task.requirement == null and task.bug == null and task.sprint != null}" />
+							
+					</p:column>
+
+					<p:column headerText="Start Date :">
+						<h:outputText value="#{task.startDateReal}">
+							<f:converter converterId="extendedDateTimeConverter" />
+							<f:attribute name="pattern" value="dd/MM/yyyy" />
+							<f:attribute name="timeZone" value="UCL" />
+						</h:outputText>
+					</p:column>
+
+
+					<p:column headerText="WorkLoad">
+						<h:outputText value="#{task.workloadPlanned}" />
+					</p:column>
+
+					<p:column styleClass="action-column"
+						headerText="#{messages.bug_table_action_title}">
+						<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
+							update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
+							action="#{jJTaskBean.initiateReqTreeNode}">
+							<f:setPropertyActionListener value="#{task}"
+								target="#{jJTaskBean.task}" />
+
+						</p:splitButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+			<p:dialog id="viewTaskDialog" header="#{messages.label_view} JJTask"
+				modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
+				resizable="true" maximizable="true" showEffect="fade"
+				hideEffect="explode" draggable="false">
+				<p:outputPanel id="viewTaskPanel">
+					<h:form id="viewTaskForm" enctype="multipart/form-data">
+						<ui:include src="taskDialog.xhtml">
+							<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
+						</ui:include>
+						<p:commandButton id="viewCloseButton"
+							value="#{messages.label_close}"
+							oncomplete="PF('blockUIWidget').unblock()"
+							onclick="viewTaskDialogWidget.hide()" type="button" />
+					</h:form>
+				</p:outputPanel>
+			</p:dialog>
+		</p:panel>
 
 	</ui:define>
 </ui:composition>

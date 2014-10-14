@@ -170,7 +170,8 @@ public class LoginBean implements Serializable {
 			prevPage = "fail";
 		}
 		if (enable) {
-			Flash flash=FacesContext.getCurrentInstance().getExternalContext().getFlash();
+			Flash flash = FacesContext.getCurrentInstance()
+					.getExternalContext().getFlash();
 			flash.setKeepMessages(true);
 			if (UsageChecker.check()) {
 				contact = jJContactService.getContactByEmail(username, true);
@@ -184,8 +185,8 @@ public class LoginBean implements Serializable {
 				FacesMessage message = new FacesMessage(
 						FacesMessage.SEVERITY_INFO, "Welcome ",
 						contact.getName());
-				
-				flash.putNow("login", message);
+
+				flash.putNow("main", message);
 
 				logger.info("login operation success " + contact.getName()
 						+ " logged in");
@@ -198,7 +199,7 @@ public class LoginBean implements Serializable {
 							"License expiry date is NOT valid!", null);
 					flash.putNow(null, fExpiredMessage);
 				}
-				
+
 				prevPage = getRedirectUrl(session);
 			} else {
 				FacesContext fContext = FacesContext.getCurrentInstance();
@@ -209,7 +210,7 @@ public class LoginBean implements Serializable {
 				FacesMessage fMessage = new FacesMessage(
 						FacesMessage.SEVERITY_ERROR, "License is NOT correct!",
 						null);
-				flash.putNow(null, fMessage);		
+				flash.putNow(null, fMessage);
 				prevPage = "fail";
 			}
 			flash.setRedirect(true);
@@ -665,9 +666,7 @@ public class LoginBean implements Serializable {
 	public void checkAuthorities(ComponentSystemEvent e) throws IOException {
 
 		if (enable) {
-			FacesContext context = FacesContext.getCurrentInstance();
-			Flash flash=FacesContext.getCurrentInstance().getExternalContext().getFlash();
-			flash.setKeepMessages(true);
+			FacesContext context = FacesContext.getCurrentInstance();			
 			UIViewRoot root = context.getViewRoot();
 
 			JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
@@ -680,10 +679,10 @@ public class LoginBean implements Serializable {
 					&& (root.getViewId().contains("project1")
 							|| root.getViewId().contains("test") || root
 							.getViewId().contains("stats"))) {
-				flash.putNow(null, new FacesMessage(
-						FacesMessage.SEVERITY_ERROR, "Please Select Project",
-						null));
-				flash.setRedirect(true);
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR,
+								"Please Select Project", null));
 				FacesContext.getCurrentInstance().getExternalContext()
 						.redirect(path + "/pages/main.jsf?faces-redirect=true");
 
@@ -700,7 +699,7 @@ public class LoginBean implements Serializable {
 								root.getViewId(), jjProjectBean.getProject(),
 								jJProductBean.getProduct())) {
 
-							flash.putNow(
+							FacesContext.getCurrentInstance().addMessage(
 									null,
 									new FacesMessage(
 											FacesMessage.SEVERITY_ERROR,
@@ -726,9 +725,10 @@ public class LoginBean implements Serializable {
 						} else if (viewID.contains("development")) {
 
 							loadingPage(e);
-						}else if (!jjProjectBean.isHaveTaskPermision() && root.getViewId().contains("project1")) {
+						} else if (!jjProjectBean.isHaveTaskPermision()
+								&& root.getViewId().contains("project1")) {
 
-							flash.putNow(
+							FacesContext.getCurrentInstance().addMessage(
 									null,
 									new FacesMessage(
 											FacesMessage.SEVERITY_ERROR,
@@ -748,7 +748,7 @@ public class LoginBean implements Serializable {
 							root.getViewId(), jjProjectBean.getProject(),
 							jJProductBean.getProduct())) {
 
-						flash.putNow(
+						FacesContext.getCurrentInstance().addMessage(
 								null,
 								new FacesMessage(
 										FacesMessage.SEVERITY_ERROR,
@@ -762,15 +762,15 @@ public class LoginBean implements Serializable {
 										path
 												+ "/pages/main.jsf?faces-redirect=true");
 					} else {
-						if (!jjProjectBean.isHaveTaskPermision() && root.getViewId().contains("project1")) {
+						if (!jjProjectBean.isHaveTaskPermision()
+								&& root.getViewId().contains("project1")) {
 
-							flash.putNow(
+							FacesContext.getCurrentInstance().addMessage(
 									null,
 									new FacesMessage(
 											FacesMessage.SEVERITY_ERROR,
 											"You have no permission to access this resource",
 											null));//
-						
 
 							FacesContext
 									.getCurrentInstance()
@@ -778,7 +778,7 @@ public class LoginBean implements Serializable {
 									.redirect(
 											path
 													+ "/pages/main.jsf?faces-redirect=true");
-						}else if (root.getViewId().contains("specifications")) {
+						} else if (root.getViewId().contains("specifications")) {
 
 							JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
 							jJRequirementBean.loadData();
@@ -787,8 +787,8 @@ public class LoginBean implements Serializable {
 					}
 				}
 			}
+
 			
-			flash.setRedirect(true);
 
 		}
 	}

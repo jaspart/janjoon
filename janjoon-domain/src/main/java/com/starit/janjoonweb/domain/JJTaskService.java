@@ -27,5 +27,7 @@ public interface JJTaskService {
 	public List<JJTask> getSprintTasks(JJSprint sprint);
 
 	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project);
+	
+	public List<JJTask> getToDoTasks(JJContact contact);
 
 }

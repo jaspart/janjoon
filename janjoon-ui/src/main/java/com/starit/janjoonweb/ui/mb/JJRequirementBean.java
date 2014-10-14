@@ -3713,4 +3713,11 @@ public class JJRequirementBean {
 		}
 	}
 	
+	public void reloadPage()
+	{
+		loadData();
+		closeDialog(false);
+		//oncomplete="PF('blockUIWidget').unblock();"
+	}
+	
 }

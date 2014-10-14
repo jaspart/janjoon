@@ -226,6 +226,35 @@ public class JJTaskServiceImpl implements JJTaskService {
 				true, false, false, null);
 
 	}
+	
+	public List<JJTask> getToDoTasks(JJContact contact)
+	{		
+
+		if (contact != null) {
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
+					.createQuery(JJTask.class);
+
+			Root<JJTask> from = criteriaQuery.from(JJTask.class);
+
+			CriteriaQuery<JJTask> select = criteriaQuery.select(from);
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+			predicates.add(criteriaBuilder.equal(from.get("assignedTo"), contact));
+			predicates.add(criteriaBuilder.isNull(from.get("endDateReal")));
+			
+			select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+			TypedQuery<JJTask> result = entityManager.createQuery(select);
+
+			return result.getResultList();
+		}
+
+		else 
+			return null;
+		
+	}
 
 	// public JJTask updateJJTask(JJTask task) {
 	//

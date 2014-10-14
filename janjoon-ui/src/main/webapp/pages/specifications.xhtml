@@ -25,6 +25,9 @@
 				onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock();requirementImportDialogWidget.show()" />
 
+			<p:commandButton id="reloadBtn" icon="ui-icon-refresh" onstart="PF('blockUIWidget').block()"				
+				style="float: right;" actionListener="#{jJRequirementBean.reloadPage}" />
+				
 			<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
 				style="float: right;" />
 			<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
@@ -153,8 +156,8 @@
 									value="#{messages.specification_table_requirement_title}" />
 							</f:facet>
 							<h:outputText id="reqContent" value="#{requirement.name}" />
-							<p:tooltip id="toolTipContent" for="reqContent" showEffect="clip" hideEffect="explode">
-								<p:panelGrid>
+							<p:tooltip id="toolTipContent" for="reqContent" showEffect="clip" hideEffect="explode" style="width:300px">
+								<p:panelGrid style="width:300px">
 									<f:facet name="header">
 										<p:row>
 											<p:column>

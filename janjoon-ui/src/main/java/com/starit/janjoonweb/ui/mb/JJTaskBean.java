@@ -19,6 +19,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.ComponentSystemEvent;
 import javax.servlet.http.HttpSession;
 import javax.swing.text.StyledEditorKit.BoldAction;
 
@@ -87,6 +88,7 @@ public class JJTaskBean {
 
 	private JJSprint sprint;
 	private List<JJSprint> sprints;
+	private List<JJTask> toDoTasks;
 
 	private boolean disabledImportButton;
 	private boolean disabledFilter;
@@ -142,6 +144,14 @@ public class JJTaskBean {
 
 	public void setTasksData(List<TaskData> tasksData) {
 		this.tasksData = tasksData;
+	}
+
+	public List<JJTask> getToDoTasks() {
+		return toDoTasks;
+	}
+
+	public void setToDoTasks(List<JJTask> toDoTasks) {
+		this.toDoTasks = toDoTasks;
 	}
 
 	public String getMode() {
@@ -2240,6 +2250,18 @@ public class JJTaskBean {
 	// }
 	//
 	// }
+	
+	//ToDoTask Layout
+	public void initToDoTasks(ComponentSystemEvent e) {
+		
+		HttpSession session = (HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext()
+				.getSession(false);		
+		JJContact contact = (JJContact) session
+				.getAttribute("JJContact");		
+		toDoTasks=jJTaskService.getToDoTasks(contact);
+		
+	}
 
 	public HtmlPanelGrid populateViewPanelGrid() {
 

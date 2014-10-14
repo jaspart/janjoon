@@ -3,14 +3,21 @@ package com.starit.janjoonweb.domain.reference;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
@@ -27,6 +34,14 @@ public class ApplicationLogger {
 
 	@Autowired
 	JJStatusService jJStatusService;
+	
+	@PersistenceContext
+	private EntityManager entityManager;
+
+	public void setEntityManager(EntityManager entityManager) {
+		this.entityManager = entityManager;
+
+	}
 
 	public void setjJRequirementService(
 			JJRequirementService jJRequirementService) {
@@ -53,6 +68,29 @@ public class ApplicationLogger {
 		logger.error("exception throw operation : "
 				+ joinPoint.getSignature().toShortString() + " :rised "
 				+ ex.getMessage());
+		if(ex instanceof EntityNotFoundException)
+		{
+			System.err.println("EntityNotFoundException");
+			//Query query=entityManager.createQuery("");
+		}
+		
+		if(ex instanceof JpaObjectRetrievalFailureException)
+		{
+			System.err.println("JpaObjectRetrievalFailureException");
+			
+//			for(String tableName:jJStatusService.getTablesName())
+//			{
+//				Query query=entityManager.createQuery("UPDATE "+tableName+" r SET  version = NULL WHERE  r.version =0");			
+//				query.executeUpdate();
+//			}
+//			
+			System.err.println(joinPoint.getThis().toString());
+			System.err.println(joinPoint.getKind()+"/"+joinPoint.getTarget().toString());		
+			
+			
+			
+			
+		}
 
 	}
 	

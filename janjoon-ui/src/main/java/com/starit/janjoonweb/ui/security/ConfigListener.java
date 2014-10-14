@@ -317,31 +317,32 @@ public class ConfigListener implements ServletContextListener {
 			configuration.setEnabled(true);
 			jJConfigurationService.saveJJConfiguration(configuration);
 
+		}		
+
+
+		if (jJBuildService.getBuilds(null, false, true).isEmpty()) {
+			JJBuild build;
+			for (int i = 0; i < 4; i++) {
+				build = new JJBuild();
+				build.setName("Build 0." + i);
+				build.setCreationDate(new Date());
+				build.setDescription("Build 0." + i + " Description");
+				build.setEnabled(true);
+				jJBuildService.saveJJBuild(build);
+			}
 		}
 
-//		if (jJBuildService.getBuilds(null, false, true).isEmpty()) {
-//			JJBuild build;
-//			for (int i = 0; i < 4; i++) {
-//				build = new JJBuild();
-//				build.setName("Build 0." + i);
-//				build.setCreationDate(new Date());
-//				build.setDescription("Build 0." + i + " Description");
-//				build.setEnabled(true);
-//				jJBuildService.saveJJBuild(build);
-//			}
-//		}
-
-//		if (jJSprintService.getSprints(null, true).isEmpty()) {
-//			JJSprint sprint;
-//			for (int i = 0; i < 4; i++) {
-//				sprint = new JJSprint();
-//				sprint.setName("Sprint " + i);
-//				sprint.setCreationDate(new Date());
-//				sprint.setDescription("Sprint " + i + " Description");
-//				sprint.setEnabled(true);
-//				jJSprintService.saveJJSprint(sprint);
-//			}
-//		}
+		if (jJSprintService.getSprints(null, true).isEmpty()) {
+			JJSprint sprint;
+			for (int i = 0; i < 4; i++) {
+				sprint = new JJSprint();
+				sprint.setName("Sprint " + i);
+				sprint.setCreationDate(new Date());
+				sprint.setDescription("Sprint " + i + " Description");
+				sprint.setEnabled(true);
+				jJSprintService.saveJJSprint(sprint);
+			}
+		}
 
 		String[] objects = { "JJRequirement", "JJBug", "JJMessage", "JJTask" };
 
