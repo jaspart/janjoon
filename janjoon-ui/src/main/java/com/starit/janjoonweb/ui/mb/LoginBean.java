@@ -2,6 +2,7 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -38,6 +39,7 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.UsageChecker;
@@ -390,8 +392,14 @@ public class LoginBean implements Serializable {
 				session.setAttribute("jJSprintBean", new JJSprintBean());
 				session.setAttribute("jJTaskBean", new JJTaskBean());
 				session.setAttribute("jJBugBean", new JJBugBean());
-				session.setAttribute("jJRequirementBean",
-						new JJRequirementBean());
+				if(session.getAttribute("jJRequirementBean") != null)
+				{
+					List<JJRequirement> req=((JJRequirementBean)session.getAttribute("jJRequirementBean")).getNoCouvretReq();
+					session.setAttribute("jJRequirementBean",
+							new JJRequirementBean());
+					((JJRequirementBean)session.getAttribute("jJRequirementBean")).setNoCouvretReq(req);
+				}
+				
 				jJProjectBean.setWarmMessage(null);
 				jJProjectBean.checkPersmission();
 			}
@@ -666,7 +674,7 @@ public class LoginBean implements Serializable {
 	public void checkAuthorities(ComponentSystemEvent e) throws IOException {
 
 		if (enable) {
-			FacesContext context = FacesContext.getCurrentInstance();			
+			FacesContext context = FacesContext.getCurrentInstance();
 			UIViewRoot root = context.getViewRoot();
 
 			JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
@@ -699,12 +707,14 @@ public class LoginBean implements Serializable {
 								root.getViewId(), jjProjectBean.getProject(),
 								jJProductBean.getProduct())) {
 
-							FacesContext.getCurrentInstance().addMessage(
-									null,
-									new FacesMessage(
-											FacesMessage.SEVERITY_ERROR,
-											"You have no permission to access this resource",
-											null));
+							FacesContext
+									.getCurrentInstance()
+									.addMessage(
+											null,
+											new FacesMessage(
+													FacesMessage.SEVERITY_ERROR,
+													"You have no permission to access this resource",
+													null));
 
 							FacesContext
 									.getCurrentInstance()
@@ -728,12 +738,14 @@ public class LoginBean implements Serializable {
 						} else if (!jjProjectBean.isHaveTaskPermision()
 								&& root.getViewId().contains("project1")) {
 
-							FacesContext.getCurrentInstance().addMessage(
-									null,
-									new FacesMessage(
-											FacesMessage.SEVERITY_ERROR,
-											"You have no permission to access this resource",
-											null));
+							FacesContext
+									.getCurrentInstance()
+									.addMessage(
+											null,
+											new FacesMessage(
+													FacesMessage.SEVERITY_ERROR,
+													"You have no permission to access this resource",
+													null));
 
 							FacesContext
 									.getCurrentInstance()
@@ -748,12 +760,14 @@ public class LoginBean implements Serializable {
 							root.getViewId(), jjProjectBean.getProject(),
 							jJProductBean.getProduct())) {
 
-						FacesContext.getCurrentInstance().addMessage(
-								null,
-								new FacesMessage(
-										FacesMessage.SEVERITY_ERROR,
-										"You have no permission to access this resource",
-										null));
+						FacesContext
+								.getCurrentInstance()
+								.addMessage(
+										null,
+										new FacesMessage(
+												FacesMessage.SEVERITY_ERROR,
+												"You have no permission to access this resource",
+												null));
 
 						FacesContext
 								.getCurrentInstance()
@@ -765,12 +779,14 @@ public class LoginBean implements Serializable {
 						if (!jjProjectBean.isHaveTaskPermision()
 								&& root.getViewId().contains("project1")) {
 
-							FacesContext.getCurrentInstance().addMessage(
-									null,
-									new FacesMessage(
-											FacesMessage.SEVERITY_ERROR,
-											"You have no permission to access this resource",
-											null));//
+							FacesContext
+									.getCurrentInstance()
+									.addMessage(
+											null,
+											new FacesMessage(
+													FacesMessage.SEVERITY_ERROR,
+													"You have no permission to access this resource",
+													null));//
 
 							FacesContext
 									.getCurrentInstance()
@@ -787,8 +803,6 @@ public class LoginBean implements Serializable {
 					}
 				}
 			}
-
-			
 
 		}
 	}

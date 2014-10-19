@@ -60,6 +60,7 @@
 						<p:column colspan="2">
 							<p:commandButton id="submit"
 								value="#{messages.login_login_button}"
+								onstart="PF('blockUIWidget').block()"
 								action="#{loginBean.login}" style="margin-top:20px;"
 								update=":login:mdp,:login:mail,:auth" />
 						</p:column>

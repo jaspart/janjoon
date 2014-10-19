@@ -397,16 +397,16 @@ public class ConfigListener implements ServletContextListener {
 			}
 		}
 
-		if (jJBugService.getBugs(null, null, null, true, true).isEmpty()) {
+/*		if (jJBugService.getBugs(null, null, null, true, true).isEmpty()) {*/
 			List<JJStatus> statuses = jJStatusService.getStatus("JJBug", true,
 					null, true);
 			List<JJCriticity> criticities = jJCriticityService.getCriticities(
 					"JJBug", true);
 			JJCriticity crit = null;
-			int i = 0;
+			int iCrit = 0;
 			for (JJStatus stat : statuses) {
 				JJBug bug;
-				crit = criticities.get(i);
+				crit = criticities.get(iCrit);
 				bug = new JJBug();
 				bug.setName(stat.getName() + "-bug : " + crit.getName());
 				bug.setDescription(stat.getName() + "-bugDescription : "
@@ -416,8 +416,8 @@ public class ConfigListener implements ServletContextListener {
 				bug.setStatus(stat);
 				bug.setCriticity(crit);
 				jJBugService.saveJJBug(bug);
-				i = (i + 1) % 2;
-				crit = criticities.get(i);
+				iCrit = (iCrit + 1) % 2;
+				crit = criticities.get(iCrit);
 				bug = new JJBug();
 				bug.setName(stat.getName() + "-bug : " + crit.getName());
 				bug.setDescription(stat.getName() + "-bugDescription : "
@@ -430,7 +430,7 @@ public class ConfigListener implements ServletContextListener {
 
 			}
 
-		}
+		//}
 
 		if (jJCategoryService.getCategories(null, false, true, true).isEmpty()) {
 			String[] names = { "BUSINESS", "FUNCTIONAL", "TECHNICAL",

@@ -2,12 +2,16 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TimeZone;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import javax.el.ELContext;
@@ -39,6 +43,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.lowagie.text.Chapter;
 import com.starit.janjoonweb.domain.*;
 import com.starit.janjoonweb.ui.mb.converter.JJTaskConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -79,6 +84,8 @@ public class JJTaskBean {
 	private Date start;
 	private Date end;
 	private long zoomMin;
+	private String sortMode;
+	private String sortBy;
 
 	private Set<JJContact> contacts;
 
@@ -109,6 +116,22 @@ public class JJTaskBean {
 	private List<ImportFormat> importFormats;
 
 	private boolean copyObjets;
+
+	public String getSortMode() {
+		return sortMode;
+	}
+
+	public void setSortMode(String sortMode) {
+		this.sortMode = sortMode;
+	}
+
+	public String getSortBy() {
+		return sortBy;
+	}
+
+	public void setSortBy(String sortBy) {
+		this.sortBy = sortBy;
+	}
 
 	public List<TaskData> getTasksData() {
 
@@ -430,6 +453,18 @@ public class JJTaskBean {
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
 		Date now = new Date();
+		if (sortMode == null) {
+			sortMode = "chapter";
+			sortBy = "chapter.creationDate";
+
+		} else if (sortMode.isEmpty()) {
+			sortMode = "chapter";
+			sortBy = "chapter.creationDate";
+
+		}else if(sortMode.equalsIgnoreCase("chapter"))
+			sortBy="chapter.creationDate";
+		else
+			sortBy=null;
 
 		// Before 4 hours for now
 		cal.setTimeInMillis(now.getTime() - 24 * 60 * 60 * 1000);
@@ -452,6 +487,9 @@ public class JJTaskBean {
 		int k = 65;
 
 		List<JJChapter> chapters = jJChapterService.getChapters(project, true);
+		List<JJTask> allJJtask = null;
+		if (!sortMode.equalsIgnoreCase("chapter"))
+			allJJtask = new ArrayList<JJTask>();
 
 		for (JJChapter chapter : chapters) {
 			Map<Date, String> min = new TreeMap<Date, String>();
@@ -469,6 +507,13 @@ public class JJTaskBean {
 					chapter, null, null, null, true, true, false, "JJBug"));
 
 			TreeMap<String, JJTask> Tasks = new TreeMap<String, JJTask>();
+			// TreeMap<String, JJTask> Tasks = new TreeMap<String, JJTask>(new
+			// Comparator<JJTask>() {
+			// public int compare(JJTask t1, JJTask t2) {
+			// return
+			// t1.getStartDatePlanned().compareTo(t2.getStartDatePlanned());
+			// }
+			// });
 
 			for (JJTask tt : tasks) {
 
@@ -476,137 +521,412 @@ public class JJTaskBean {
 				Tasks.put(tt.getId() + "", tt);
 			}
 
+			if (!sortMode.equalsIgnoreCase("chapter"))
+				for (String key : Tasks.keySet())
+					allJJtask.add(Tasks.get(key));
+
 			// Iterate over HashMap
-			for (String key : Tasks.keySet()) {
+			if (sortMode.equalsIgnoreCase("chapter")) {
+				for (String key : Tasks.keySet()) {
 
-				if (k == 92)
-					k++;
+					if (k == 92)
+						k++;
 
-				JJTask tt = Tasks.get(key);
+					JJTask tt = Tasks.get(key);
 
-				char c = (char) k;
+					char c = (char) k;
+					String group = "<span style=display:none>" + c + "</span>";
+					// + task.getName();
 
-				System.err.println(k + ":" + c + ":" + tt.getName());
-				String group = "<span style=display:none>" + c + "</span>";
-				// + task.getName();
+					TaskData taskData = null;
+					boolean add = false;
 
-				TaskData taskData = null;
-				boolean add = false;
+					if (tt.getStartDateReal() != null) {
 
-				if (tt.getStartDateReal() != null) {
+						Date endDate;
+						if (tt.getEndDateReal() == null)
+							endDate = tt.getEndDatePlanned();
+						else
+							endDate = tt.getEndDateReal();
 
-					Date endDate;
-					if (tt.getEndDateReal() == null)
-						endDate = tt.getEndDatePlanned();
-					else
-						endDate = tt.getEndDateReal();
+						TimelineEvent event = new TimelineEvent(tt,
+								tt.getStartDateReal(), endDate, true, group,
+								"real");
 
-					TimelineEvent event = new TimelineEvent(tt,
-							tt.getStartDateReal(), endDate, true, group, "real");
+						model.add(event);
 
-					model.add(event);
-
-					taskData = new TaskData(tt, chapter, tt.getStartDateReal(),
-							endDate, tt.getWorkloadReal(), false);
-					add = true;
-				}
-				if (tt.getStartDateRevised() != null) {
-
-					Date endDate;
-					if (tt.getEndDateRevised() == null)
-						endDate = tt.getEndDatePlanned();
-					else
-						endDate = tt.getEndDateRevised();
-
-					TimelineEvent event = new TimelineEvent(tt,
-							tt.getStartDateRevised(), endDate, true, group,
-							"revised");
-					model.add(event);
-
-					if (!add)
 						taskData = new TaskData(tt, chapter,
-								tt.getStartDateRevised(), endDate,
-								tt.getWorkloadRevised(), true);
-				} else {
+								tt.getStartDateReal(), endDate,
+								tt.getWorkloadReal(), false);
+						add = true;
+					}
+					if (tt.getStartDateRevised() != null) {
 
-					TimelineEvent event = new TimelineEvent(tt,
-							tt.getStartDatePlanned(), tt.getEndDatePlanned(),
-							true, group, "planned");
-					model.add(event);
+						Date endDate;
+						if (tt.getEndDateRevised() == null)
+							endDate = tt.getEndDatePlanned();
+						else
+							endDate = tt.getEndDateRevised();
 
-					if (!add)
-						taskData = new TaskData(tt, chapter,
+						TimelineEvent event = new TimelineEvent(tt,
+								tt.getStartDateRevised(), endDate, true, group,
+								"revised");
+						model.add(event);
+
+						if (!add)
+							taskData = new TaskData(tt, chapter,
+									tt.getStartDateRevised(), endDate,
+									tt.getWorkloadRevised(), true);
+					} else {
+
+						TimelineEvent event = new TimelineEvent(tt,
 								tt.getStartDatePlanned(),
-								tt.getEndDatePlanned(),
-								tt.getWorkloadPlanned(), false);
+								tt.getEndDatePlanned(), true, group, "planned");
+						model.add(event);
+
+						if (!add)
+							taskData = new TaskData(tt, chapter,
+									tt.getStartDatePlanned(),
+									tt.getEndDatePlanned(),
+									tt.getWorkloadPlanned(), false);
+					}
+
+					tasksData.add(taskData);
+
+					if (tt.getStartDatePlanned() != null) {
+						min.put(tt.getStartDatePlanned(), tt
+								.getStartDatePlanned().toString());
+					}
+
+					if (tt.getStartDateRevised() != null) {
+						min.put(tt.getStartDateRevised(), tt
+								.getStartDateRevised().toString());
+					}
+
+					if (tt.getStartDateReal() != null) {
+						min.put(tt.getStartDateReal(), tt.getStartDateReal()
+								.toString());
+					}
+
+					if (tt.getEndDatePlanned() != null) {
+						max.put(tt.getEndDatePlanned(), tt.getEndDatePlanned()
+								.toString());
+					}
+
+					if (tt.getEndDateRevised() != null) {
+						max.put(tt.getEndDateRevised(), tt.getEndDateRevised()
+								.toString());
+					}
+
+					if (tt.getEndDateReal() != null) {
+						max.put(tt.getEndDateReal(), tt.getEndDateReal()
+								.toString());
+					}
+
+					k++;
 				}
 
-				tasksData.add(taskData);
+				if (!min.isEmpty() && !max.isEmpty()) {
 
-				if (tt.getStartDatePlanned() != null) {
-					min.put(tt.getStartDatePlanned(), tt.getStartDatePlanned()
-							.toString());
-				}
+					if (k == 92)
+						k++;
 
-				if (tt.getStartDateRevised() != null) {
-					min.put(tt.getStartDateRevised(), tt.getStartDateRevised()
-							.toString());
-				}
+					Date end = null;
+					Set<Date> dates = min.keySet();
 
-				if (tt.getStartDateReal() != null) {
-					min.put(tt.getStartDateReal(), tt.getStartDateReal()
-							.toString());
-				}
+					Date start = dates.iterator().next();
 
-				if (tt.getEndDatePlanned() != null) {
-					max.put(tt.getEndDatePlanned(), tt.getEndDatePlanned()
-							.toString());
-				}
+					dates = max.keySet();
+					for (Date date : dates) {
+						end = date;
+					}
+					JJTask task = new JJTask();
+					// task.setName(chapter.getName());
+					task.setName(" ");
 
-				if (tt.getEndDateRevised() != null) {
-					max.put(tt.getEndDateRevised(), tt.getEndDateRevised()
-							.toString());
-				}
+					char c = (char) k;
 
-				if (tt.getEndDateReal() != null) {
-					max.put(tt.getEndDateReal(), tt.getEndDateReal().toString());
-				}
-
-				k++;
-			}
-
-			if (!min.isEmpty() && !max.isEmpty()) {
-
-				if (k == 92)
+					String group = "<span style=display:none>" + c + "</span>";
+					// + task.getName();
+					TimelineEvent event = new TimelineEvent(chapter, start,
+							end, false, group, "chapter");
 					k++;
 
-				Date end = null;
-				Set<Date> dates = min.keySet();
-
-				Date start = dates.iterator().next();
-
-				dates = max.keySet();
-				for (Date date : dates) {
-					end = date;
+					model.add(event);
 				}
-				JJTask task = new JJTask();
-				// task.setName(chapter.getName());
-				task.setName(" ");
-
-				char c = (char) k;
-
-				String group = "<span style=display:none>" + c + "</span>";
-				// + task.getName();
-				TimelineEvent event = new TimelineEvent(chapter, start, end,
-						false, group, "chapter");
-				k++;
-
-				model.add(event);
 			}
 
 		}
+		if (!sortMode.equalsIgnoreCase("chapter"))
+			loadSortedData(allJJtask, k);
 
 		task = null;
+	}
+
+	// }
+	//
+	// public void replaceTimeLineEventReal(JJTask tt, boolean delete) {
+	// int i = containTaskData(tt.getId());
+	//
+	// int workLoad = 0;
+	// Date startDate = null, endDate = null;
+	// int j = findInEventTimeLine(tt, true);
+	//
+	// if (!delete && i != -1) {
+	// if (tt.getStartDateReal() != null) {
+	//
+	// startDate = tt.getStartDateReal();
+	// if (tt.getEndDateReal() == null)
+	// endDate = tt.getEndDatePlanned();
+	// else
+	// endDate = tt.getEndDateReal();
+	// workLoad = tt.getWorkloadReal();
+	//
+	// }
+	// }
+	//
+	// if (j != -1) {
+	//
+	// String style = model.getEvent(j).getStyleClass();
+	// String group = model.getEvent(j).getGroup();
+	// model.delete(model.getEvent(j));
+	//
+	// if (!delete && startDate != null)
+	// model.add(new TimelineEvent(tt, startDate, endDate, true,
+	// group, style));
+	//
+	// int in = findInEventTimeLine(tt, false);
+	//
+	// if (in != -1) {
+	//
+	// model.delete(model.getEvent(in));
+	//
+	// if (!delete) {
+	//
+	// startDate = null;
+	// endDate = null;
+	//
+	// if (!delete && i != -1) {
+	// if (tt.getStartDateRevised() != null) {
+	//
+	// startDate = tt.getStartDateRevised();
+	// style = "revised";
+	// if (tt.getEndDateRevised() == null)
+	// endDate = tt.getEndDatePlanned();
+	// else
+	// endDate = tt.getEndDateRevised();
+	// workLoad = tt.getWorkloadRevised();
+	//
+	// } else {
+	//
+	// style = "planned";
+	// endDate = tt.getEndDatePlanned();
+	// startDate = tt.getStartDatePlanned();
+	// workLoad = tt.getWorkloadPlanned();
+	//
+	// }
+	// }
+	//
+	// TimelineEvent event = new TimelineEvent(tt, startDate,
+	// endDate, true, group, style);
+	//
+	// model.add(event);
+	// }
+	// }
+	//
+	// }
+	//
+	// if (i != -1) {
+	// if (!delete) {
+	// TaskData tskst = new TaskData(tt,
+	// tasksData.get(i).getChapter(), startDate, endDate,
+	// workLoad, tt.getStartDateRevised() != null);
+	//
+	// tasksData.set(i, tskst);
+	// } else
+	// tasksData.remove(i);
+	//
+	// }
+	//
+	// }
+	//
+	// public void replaceTimeLineEvent(JJTask tt, boolean delete,
+	// String styleClass) {
+	//
+	// int i = containTaskData(tt.getId());
+	//
+	// int workLoad = 0;
+	// Date startDate = null, endDate = null;
+	//
+	// int j = findInEventTimeLine(tt, styleClass.equalsIgnoreCase("real"));
+	//
+	// if (!delete && i != -1) {
+	// if (tt.getStartDateRevised() != null) {
+	//
+	// styleClass = "revised";
+	// startDate = tt.getStartDateRevised();
+	// if (tt.getEndDateRevised() == null)
+	// endDate = tt.getEndDatePlanned();
+	// else
+	// endDate = tt.getEndDateRevised();
+	// workLoad = tt.getWorkloadRevised();
+	//
+	// } else {
+	//
+	// styleClass = "planned";
+	// endDate = tt.getEndDatePlanned();
+	// startDate = tt.getStartDatePlanned();
+	// workLoad = tt.getWorkloadPlanned();
+	//
+	// }
+	// }
+	//
+	// if (j != -1) {
+	//
+	// String group = model.getEvent(j).getGroup();
+	// model.delete(model.getEvent(j));
+	// if (!delete)
+	// model.add(new TimelineEvent(tt, startDate, endDate, true,
+	// group, styleClass));
+	// int in = findInEventTimeLine(tt, true);
+	// if (in != -1)
+	// model.delete(model.getEvent(in));
+	//
+	// if (tt.getStartDateReal() != null && !delete) {
+	//
+	// Date endDatereal;
+	//
+	// if (tt.getEndDateReal() == null)
+	// endDatereal = tt.getEndDatePlanned();
+	// else
+	// endDatereal = tt.getEndDateReal();
+	//
+	// TimelineEvent event = new TimelineEvent(tt,
+	// tt.getStartDateReal(), endDatereal, true, group, "real");
+	//
+	// model.add(event);
+	//
+	// }
+	//
+	// }
+	//
+	// if (i != -1) {
+	// if (!delete) {
+	// TaskData tskst = new TaskData(tt,
+	// tasksData.get(i).getChapter(), startDate, endDate,
+	// workLoad, tt.getStartDateRevised() != null);
+	//
+	// tasksData.set(i, tskst);
+	// } else
+	// tasksData.remove(i);
+	//
+	// }
+	//
+	// }
+
+	// sortedData
+	public void loadSortedData(List<JJTask> allTasks, int k) {
+		Collections.sort(allTasks, new Comparator<JJTask>() {
+
+			@Override
+			public int compare(JJTask o1, JJTask o2) {
+				if (sortMode.equalsIgnoreCase("StartDatePlanned")) {
+					return o1.getStartDatePlanned().compareTo(
+							o2.getStartDatePlanned());
+
+				} else if (sortMode.equalsIgnoreCase("StartDateReal")) {
+					Date o1Date, o2Date;
+					if (o1.getStartDateReal() == null)
+						o1Date = o1.getStartDatePlanned();
+					else
+						o1Date = o1.getStartDateReal();
+
+					if (o2.getStartDateReal() == null)
+						o2Date = o2.getStartDatePlanned();
+					else
+						o2Date = o2.getStartDateReal();
+
+					return o1Date.compareTo(o2Date);
+				} else
+					return 0;
+
+			}
+		});
+		System.err.println("Boucle For");
+
+		for (JJTask tt : allTasks) {
+			if (k == 92)
+				k++;
+
+			char c = (char) k;
+			String group = "<span style=display:none>" + c + "</span>";
+			boolean add = false;
+			JJChapter chapter = null;
+
+			TaskData taskData = null;
+			System.err.println(group + "/" + tt.getName());
+
+			if (tt.getRequirement() != null)
+				chapter = tt.getRequirement().getChapter();
+			else if (tt.getBug() != null) {
+				if (tt.getBug().getRequirement() != null)
+					chapter = tt.getBug().getRequirement().getChapter();
+			} else if (tt.getTestcase() != null) {
+				if (tt.getTestcase().getRequirement() != null)
+					chapter = tt.getTestcase().getRequirement().getChapter();
+			}
+
+			if (tt.getStartDateReal() != null) {
+
+				Date endDate;
+				if (tt.getEndDateReal() == null)
+					endDate = tt.getEndDatePlanned();
+				else
+					endDate = tt.getEndDateReal();
+
+				TimelineEvent event = new TimelineEvent(tt,
+						tt.getStartDateReal(), endDate, true, group, "real");
+
+				model.add(event);
+
+				taskData = new TaskData(tt, chapter, tt.getStartDateReal(),
+						endDate, tt.getWorkloadReal(), false);
+				add = true;
+			}
+			if (tt.getStartDateRevised() != null) {
+
+				Date endDate;
+				if (tt.getEndDateRevised() == null)
+					endDate = tt.getEndDatePlanned();
+				else
+					endDate = tt.getEndDateRevised();
+
+				TimelineEvent event = new TimelineEvent(tt,
+						tt.getStartDateRevised(), endDate, true, group,
+						"revised");
+				model.add(event);
+
+				if (!add)
+					taskData = new TaskData(tt, chapter,
+							tt.getStartDateRevised(), endDate,
+							tt.getWorkloadRevised(), true);
+			} else {
+
+				TimelineEvent event = new TimelineEvent(tt,
+						tt.getStartDatePlanned(), tt.getEndDatePlanned(), true,
+						group, "planned");
+				model.add(event);
+
+				if (!add)
+					taskData = new TaskData(tt, chapter,
+							tt.getStartDatePlanned(), tt.getEndDatePlanned(),
+							tt.getWorkloadPlanned(), false);
+			}
+
+			tasksData.add(taskData);
+			k++;
+		}
+
 	}
 
 	public void onCellEdit(CellEditEvent event) {
@@ -1304,6 +1624,7 @@ public class JJTaskBean {
 
 	public void sprintSelectionChanged(final AjaxBehaviorEvent event) {
 		tasksData = null;
+		model = null;
 	}
 
 	public void copyObjets() {
@@ -1734,7 +2055,7 @@ public class JJTaskBean {
 
 		getTaskTreeNode();
 
-		RequestContext context = RequestContext.getCurrentInstance();		
+		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("viewTaskDialogWidget.show()");
 
 	}
@@ -1774,7 +2095,7 @@ public class JJTaskBean {
 		List<JJTask> listTasks = new ArrayList<JJTask>();
 
 		int i = 0;
-		
+
 		while (i < tasksData.size()) {
 			if (tasksData.get(i).getChapter().equals(chapter))
 				listTasks.add(tasksData.get(i).getTask());
@@ -2085,182 +2406,28 @@ public class JJTaskBean {
 			model.delete(model.getEvent(j));
 		}
 
-		int k=containTaskData(tt.getId());
-		if(k != -1)
-		updateChapterTimeLineEvent(tasksData.get(k).getChapter());
+		int k = containTaskData(tt.getId());
+		if (k != -1)
+			updateChapterTimeLineEvent(tasksData.get(k).getChapter());
 	}
 
-	// }
-	//
-	// public void replaceTimeLineEventReal(JJTask tt, boolean delete) {
-	// int i = containTaskData(tt.getId());
-	//
-	// int workLoad = 0;
-	// Date startDate = null, endDate = null;
-	// int j = findInEventTimeLine(tt, true);
-	//
-	// if (!delete && i != -1) {
-	// if (tt.getStartDateReal() != null) {
-	//
-	// startDate = tt.getStartDateReal();
-	// if (tt.getEndDateReal() == null)
-	// endDate = tt.getEndDatePlanned();
-	// else
-	// endDate = tt.getEndDateReal();
-	// workLoad = tt.getWorkloadReal();
-	//
-	// }
-	// }
-	//
-	// if (j != -1) {
-	//
-	// String style = model.getEvent(j).getStyleClass();
-	// String group = model.getEvent(j).getGroup();
-	// model.delete(model.getEvent(j));
-	//
-	// if (!delete && startDate != null)
-	// model.add(new TimelineEvent(tt, startDate, endDate, true,
-	// group, style));
-	//
-	// int in = findInEventTimeLine(tt, false);
-	//
-	// if (in != -1) {
-	//
-	// model.delete(model.getEvent(in));
-	//
-	// if (!delete) {
-	//
-	// startDate = null;
-	// endDate = null;
-	//
-	// if (!delete && i != -1) {
-	// if (tt.getStartDateRevised() != null) {
-	//
-	// startDate = tt.getStartDateRevised();
-	// style = "revised";
-	// if (tt.getEndDateRevised() == null)
-	// endDate = tt.getEndDatePlanned();
-	// else
-	// endDate = tt.getEndDateRevised();
-	// workLoad = tt.getWorkloadRevised();
-	//
-	// } else {
-	//
-	// style = "planned";
-	// endDate = tt.getEndDatePlanned();
-	// startDate = tt.getStartDatePlanned();
-	// workLoad = tt.getWorkloadPlanned();
-	//
-	// }
-	// }
-	//
-	// TimelineEvent event = new TimelineEvent(tt, startDate,
-	// endDate, true, group, style);
-	//
-	// model.add(event);
-	// }
-	// }
-	//
-	// }
-	//
-	// if (i != -1) {
-	// if (!delete) {
-	// TaskData tskst = new TaskData(tt,
-	// tasksData.get(i).getChapter(), startDate, endDate,
-	// workLoad, tt.getStartDateRevised() != null);
-	//
-	// tasksData.set(i, tskst);
-	// } else
-	// tasksData.remove(i);
-	//
-	// }
-	//
-	// }
-	//
-	// public void replaceTimeLineEvent(JJTask tt, boolean delete,
-	// String styleClass) {
-	//
-	// int i = containTaskData(tt.getId());
-	//
-	// int workLoad = 0;
-	// Date startDate = null, endDate = null;
-	//
-	// int j = findInEventTimeLine(tt, styleClass.equalsIgnoreCase("real"));
-	//
-	// if (!delete && i != -1) {
-	// if (tt.getStartDateRevised() != null) {
-	//
-	// styleClass = "revised";
-	// startDate = tt.getStartDateRevised();
-	// if (tt.getEndDateRevised() == null)
-	// endDate = tt.getEndDatePlanned();
-	// else
-	// endDate = tt.getEndDateRevised();
-	// workLoad = tt.getWorkloadRevised();
-	//
-	// } else {
-	//
-	// styleClass = "planned";
-	// endDate = tt.getEndDatePlanned();
-	// startDate = tt.getStartDatePlanned();
-	// workLoad = tt.getWorkloadPlanned();
-	//
-	// }
-	// }
-	//
-	// if (j != -1) {
-	//
-	// String group = model.getEvent(j).getGroup();
-	// model.delete(model.getEvent(j));
-	// if (!delete)
-	// model.add(new TimelineEvent(tt, startDate, endDate, true,
-	// group, styleClass));
-	// int in = findInEventTimeLine(tt, true);
-	// if (in != -1)
-	// model.delete(model.getEvent(in));
-	//
-	// if (tt.getStartDateReal() != null && !delete) {
-	//
-	// Date endDatereal;
-	//
-	// if (tt.getEndDateReal() == null)
-	// endDatereal = tt.getEndDatePlanned();
-	// else
-	// endDatereal = tt.getEndDateReal();
-	//
-	// TimelineEvent event = new TimelineEvent(tt,
-	// tt.getStartDateReal(), endDatereal, true, group, "real");
-	//
-	// model.add(event);
-	//
-	// }
-	//
-	// }
-	//
-	// if (i != -1) {
-	// if (!delete) {
-	// TaskData tskst = new TaskData(tt,
-	// tasksData.get(i).getChapter(), startDate, endDate,
-	// workLoad, tt.getStartDateRevised() != null);
-	//
-	// tasksData.set(i, tskst);
-	// } else
-	// tasksData.remove(i);
-	//
-	// }
-	//
-	// }
-	
-	//ToDoTask Layout
+	public void SortBySelectionChanged(final AjaxBehaviorEvent event) {
+		System.err.println("sortMode " + sortMode);
+		tasksData = null;
+		sortBy=null;
+		model = null;
+	}
+
+	// ToDoTask Layout
 	public void initToDoTasks(ComponentSystemEvent e) {
-		
-		HttpSession session = (HttpSession) FacesContext
-				.getCurrentInstance().getExternalContext()
-				.getSession(false);		
-		JJContact contact = (JJContact) session
-				.getAttribute("JJContact");		
-		toDoTasks=jJTaskService.getToDoTasks(contact);
-		
+
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJContact contact = (JJContact) session.getAttribute("JJContact");
+
+		if (contact != null)
+			toDoTasks = jJTaskService.getToDoTasks(contact);
+
 	}
 
 	public HtmlPanelGrid populateViewPanelGrid() {

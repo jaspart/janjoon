@@ -67,20 +67,18 @@
 		<h:form id="specForm" style="overflow:hidden;width:100%">
 		<ui:repeat value="#{jJRequirementBean.tableDataModelList}" var="tableDataModel" varStatus="loop">
 				<div style="width:#{jJRequirementBean.tableDataModelSizePct};float:left;">	
-					<p:dataTable id="categoryTable" var="requirement"
+					<p:dataTable id="categoryTable" var="reqUtil"
 						value="#{tableDataModel}" scrollable="true" scrollHeight="300"
 						sortMode="multiple" resizableColumns="true"
-						rowStyleClass="#{tableDataModel.getRowStyleClass(requirement)}"
+						rowStyleClass="#{reqUtil.style}"
 						filteredValue="#{tableDataModel.filtredRequirements}"
-						rowKey="#{requirement.id}" rendered="#{tableDataModel.rendered}"
+						rowKey="#{reqUtil.requirement.id}" rendered="#{tableDataModel.rendered}"
 						selectionMode="single" widgetVar="dataTable_#{loop.index}_Widget">
 						<p:ajax event="rowDblselect" onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()"
 							update=":requirementDialog"
 							disabled="#{!jJRequirementBean.haveSpecPermission}"
-							listener="#{jJRequirementBean.onRowDblClckSelect}" />
-						<p:ajax event="contextMenu"
-							listener="#{jJRequirementBean.onContextMenuSelect}" />
+							listener="#{jJRequirementBean.onRowDblClckSelect}" />						
 
 						<f:facet name="header">
 							<h:outputText value="#{tableDataModel.nameDataModel}" />
@@ -147,7 +145,7 @@
 							<f:facet name="header">
 								<h:outputText value="Id" />
 							</f:facet>
-							<h:outputText value="#{requirement.id}" />
+							<h:outputText value="#{reqUtil.requirement.id}" />
 						</p:column>
 
 						<p:column filterBy="name" filterStyle="display:none" sortBy="id">
@@ -155,14 +153,14 @@
 								<h:outputText
 									value="#{messages.specification_table_requirement_title}" />
 							</f:facet>
-							<h:outputText id="reqContent" value="#{requirement.name}" />
+							<h:outputText id="reqContent" value="#{reqUtil.requirement.name}" />
 							<p:tooltip id="toolTipContent" for="reqContent" showEffect="clip" hideEffect="explode" style="width:300px">
 								<p:panelGrid style="width:300px">
 									<f:facet name="header">
 										<p:row>
 											<p:column>
 												<h:outputText style="font-weight: bold;"
-													value="Requirement: #{requirement.name}" />
+													value="Requirement: #{reqUtil.requirement.name}" />
 											</p:column>
 										</p:row>
 									</f:facet>
@@ -171,16 +169,9 @@
 											<p:outputLabel style="font-weight: bold;" for="tolDesc" value="Description :" />
 											<br />	
 											<h:outputText id="tolDesc" readonly="true"  escape="false"
-												style="width:300px" value="#{requirement.description}"/> 								
+												style="width:300px" value="#{reqUtil.requirement.description}"/> 								
 										</p:column>
-									</p:row>
-									<p:row rendered="#{requirement.sprint != null}">
-										<p:column >
-											<p:outputLabel for="tolSprint" value="Sprint :" />
-											<p:inputText id="tolSprint" readonly="true" size="10" 
-												converter="JJSprintConverter" value="#{requirement.sprint}" />								
-										</p:column>
-									</p:row>
+									</p:row>								
 								</p:panelGrid>
 							</p:tooltip>
 						</p:column>
@@ -191,7 +182,7 @@
 								<h:outputText
 									value="#{messages.specification_table_product_title}" />
 							</f:facet>
-							<h:outputText value="#{requirement.product.name}" />
+							<h:outputText value="#{reqUtil.requirement.product.name}" />
 						</p:column>
 
 						<p:column filterBy="chapter.name" filterStyle="display:none"
@@ -200,7 +191,7 @@
 								<h:outputText
 									value="#{messages.specification_table_chapter_title}" />
 							</f:facet>
-							<h:outputText value="#{requirement.chapter.name}" />
+							<h:outputText value="#{reqUtil.requirement.chapter.name}" />
 						</p:column>
 
 						<p:column exportable="false" styleClass="action-column">
@@ -216,8 +207,8 @@
 									onstart="PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()"
 									update=":requirementDialog" value="Edit"
-									disabled="#{jJRequirementBean.getDisabledEdit(requirement) or !jJRequirementBean.haveSpecPermission}">
-									<f:setPropertyActionListener value="#{requirement}"
+									disabled="#{jJRequirementBean.getDisabledEdit(reqUtil.requirement) or !jJRequirementBean.haveSpecPermission}">
+									<f:setPropertyActionListener value="#{reqUtil.requirement}"
 										target="#{jJRequirementBean.requirement}" />
 								</p:menuitem>
 								<p:tooltip for="editButton" value="Edit" showEffect="fade"
@@ -228,7 +219,7 @@
 									action="#{jJRequirementBean.initReqMindMap}"
 									oncomplete="PF('blockUIWidget').unblock()"
 									update=":mindMapForm">
-									<f:setPropertyActionListener value="#{requirement}"
+									<f:setPropertyActionListener value="#{reqUtil.requirement}"
 										target="#{jJRequirementBean.requirement}" />
 								</p:menuitem>
 								<p:tooltip for="mindMapButton" value="ReqMap" showEffect="fade"
@@ -237,12 +228,12 @@
 								<p:menuitem id="deleteButton" icon="ui-icon-trash"
 									oncomplete="requirementDeleteDialogWidget.show()"
 									value="Delete">
-									<f:setPropertyActionListener value="#{requirement}"
+									<f:setPropertyActionListener value="#{reqUtil.requirement}"
 										target="#{jJRequirementBean.requirement}" />
 								</p:menuitem>
 								<p:tooltip for="deleteButton" value="Delete" showEffect="fade"
 									hideEffect="fade" />
-								<f:setPropertyActionListener value="#{requirement}"
+								<f:setPropertyActionListener value="#{reqUtil.requirement}"
 									target="#{jJRequirementBean.requirement}" />
 							</p:splitButton>
 						</p:column>
