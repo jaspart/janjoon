@@ -105,7 +105,7 @@
 						value="#{messages.header_project_menuitem}"
 						disabled="#{!jJProjectBean.haveTaskPermision}"
 						title="#{jJProjectBean.warmMessage}"
-						onstart="PF('blockUIWidget').block()"						
+						onstart="PF('blockUIWidget').block()"
 						actionListener="#{loginBean.redirection}" update="growlHeader"
 						icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
 
@@ -121,7 +121,7 @@
 						icon="ui-icon-wrench" rendered="#{!loginBean.enable}" />
 
 					<p:menuitem id="devAction" value="#{messages.header_dev_menuitem}"
-						onstart="PF('blockUIWidget').block()"						
+						onstart="PF('blockUIWidget').block()"
 						actionListener="#{loginBean.redirectToDev}" update="growlHeader"
 						icon="ui-icon-wrench" rendered="#{loginBean.enable}" />
 
@@ -131,7 +131,7 @@
 
 					<p:menuitem id="testAction"
 						value="#{messages.header_test_menuitem}"
-						onstart="PF('blockUIWidget').block()"						
+						onstart="PF('blockUIWidget').block()"
 						actionListener="#{loginBean.redirection}" update="growlHeader"
 						icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
 

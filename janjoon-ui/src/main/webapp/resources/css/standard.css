@@ -46,7 +46,7 @@ a:visited {
 	word-wrap: break-word;
 }
 
-.rowExpansion{
+.rowExpansion {
 	
 }
 
@@ -87,7 +87,7 @@ a:visited {
 	margin: auto;
 }
 
-.ui-datatable .ui-datatable-footer{
+.ui-datatable .ui-datatable-footer {
 	text-align: left !important;
 }
 
@@ -107,7 +107,6 @@ a:visited {
 .cleanTab .ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem.ui-state-default {
 	padding: 5px 1px;
 }
-
 
 .ui-selectmanymenu {
 	width: 155px !important;

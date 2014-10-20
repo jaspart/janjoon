@@ -9,9 +9,10 @@
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
 
-		<p:tabView id="tabview" widgetVar="tabView" dynamic="true" 
+		<p:tabView id="tabview" widgetVar="tabView" dynamic="true"
 			cache="true" activeIndex="#{loginBean.activeTabAdminIndex}">
-			<p:ajax event="tabChange" listener="#{loginBean.onTabAdminChange}" update="tabview" />
+			<p:ajax event="tabChange" listener="#{loginBean.onTabAdminChange}"
+				update="tabview" />
 
 			<p:tab id="tabUser" title="#{messages.admin_user_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
@@ -28,7 +29,7 @@
 					</ui:insert>
 				</h:panelGrid>
 			</p:tab>
-			
+
 			<p:tab id="tabCompagnies" title="#{messages.admin_company_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="Compagnies">
@@ -60,7 +61,8 @@
 					</ui:insert>
 				</h:panelGrid>
 			</p:tab>
-			<p:tab id="tabConfig" title="#{messages.admin_configuration_menuitem}">
+			<p:tab id="tabConfig"
+				title="#{messages.admin_configuration_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="configuration">
 						<ui:include src="config.xhtml" />

@@ -10,7 +10,7 @@
 			cellpadding="6">
 			<p:dataTable id="categoryDataTable" var="category"
 				value="#{jJCategoryBean.categoryListTable}" paginator="true"
-				rows="15"  rowKey="#{category.id}">
+				rows="15" rowKey="#{category.id}">
 				<f:facet name="header">#{messages.admin_category_table_header}</f:facet>
 				<p:column>
 					<f:facet name="header">
@@ -30,14 +30,14 @@
 							value="#{messages.admin_category_table_action_title}" />
 					</f:facet>
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
-							oncomplete="categoryDialogWidget.show()"
-							value="#{messages.admin_category_table_edit_tooltip}"
-							action="#{jJCategoryBean.editCategory}"
-							update=":tabview:categoryDialog">
-							<f:setPropertyActionListener value="#{category}"
-								target="#{jJCategoryBean.categoryAdmin}" />
-						
-						
+						oncomplete="categoryDialogWidget.show()"
+						value="#{messages.admin_category_table_edit_tooltip}"
+						action="#{jJCategoryBean.editCategory}"
+						update=":tabview:categoryDialog">
+						<f:setPropertyActionListener value="#{category}"
+							target="#{jJCategoryBean.categoryAdmin}" />
+
+
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
 							value="#{messages.admin_category_table_delete_tooltip}"
 							oncomplete="categoryDeleteDialogWidget.show()"
@@ -45,7 +45,7 @@
 							<f:setPropertyActionListener value="#{category}"
 								target="#{jJCategoryBean.categoryAdmin}" />
 						</p:menuitem>
-						
+
 					</p:splitButton>
 				</p:column>
 				<f:facet name="footer">
@@ -58,9 +58,10 @@
 			</p:dataTable>
 		</p:panel>
 	</h:form>
-	<p:dialog id="categoryDialog" header="#{messages[jJCategoryBean.message]}"
-		modal="true" widgetVar="categoryDialogWidget" dynamic="true"
-		showEffect="fade" hideEffect="explode" resizable="false">
+	<p:dialog id="categoryDialog"
+		header="#{messages[jJCategoryBean.message]}" modal="true"
+		widgetVar="categoryDialogWidget" dynamic="true" showEffect="fade"
+		hideEffect="explode" resizable="false">
 		<p:ajax event="close" update=":tabview:categoryForm"
 			listener="#{jJCategoryBean.closeDialog}" />
 		<p:outputPanel id="categoryDialogPanel">
@@ -98,8 +99,7 @@
 							<p:column colspan="3">
 								<p:commandButton id="submitButton"
 									value="#{messages.admin_category_new_save_button}"
-									update="categoryDialogForm" 
-									action="#{jJCategoryBean.save}" />
+									update="categoryDialogForm" action="#{jJCategoryBean.save}" />
 							</p:column>
 						</p:row>
 					</f:facet>

@@ -176,8 +176,7 @@
 						rowStyleClass="#{versionModel.old ? 'old' : null}">
 
 						<p:ajax event="rowToggle" listener="#{jJBuildBean.rowToggle}"
-							update="versionDataTable"
-							onstart="updateRowExapansion();" />
+							update="versionDataTable" onstart="updateRowExapansion();" />
 
 						<f:facet name="header">
 							<h:outputText value="#{messages.admin_product_new_version_title}" />
@@ -240,8 +239,7 @@
 									<h:outputText value="#{build.name}" />
 								</p:column>
 								<f:facet name="footer">
-									<p:commandButton
-										onstart="PF('versionBlockUIWidget').block()"
+									<p:commandButton onstart="PF('versionBlockUIWidget').block()"
 										oncomplete="PF('versionBlockUIWidget').unblock()"
 										update="buildDataTable :tabview:productDialogForm:msg"
 										process="buildDataTable" value="Update"

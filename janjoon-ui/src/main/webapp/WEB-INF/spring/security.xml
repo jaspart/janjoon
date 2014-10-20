@@ -32,10 +32,10 @@
 
 
 	<b:bean id="encoder"
-		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" >
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
 		<b:constructor-arg name="strength" value="11" />
-		</b:bean>
-		
+	</b:bean>
+
 	<authentication-manager alias="authenticationManager">
 		<authentication-provider ref="contactAuthentificationProvider" />
 	</authentication-manager>

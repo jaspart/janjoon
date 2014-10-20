@@ -72,13 +72,14 @@
 						sortMode="multiple" resizableColumns="true"
 						rowStyleClass="#{reqUtil.style}"
 						filteredValue="#{tableDataModel.filtredRequirements}"
-						rowKey="#{reqUtil.requirement.id}" rendered="#{tableDataModel.rendered}"
-						selectionMode="single" widgetVar="dataTable_#{loop.index}_Widget">
+						rowKey="#{reqUtil.requirement.id}"
+						rendered="#{tableDataModel.rendered}" selectionMode="single"
+						widgetVar="dataTable_#{loop.index}_Widget">
 						<p:ajax event="rowDblselect" onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()"
 							update=":requirementDialog"
 							disabled="#{!jJRequirementBean.haveSpecPermission}"
-							listener="#{jJRequirementBean.onRowDblClckSelect}" />						
+							listener="#{jJRequirementBean.onRowDblClckSelect}" />
 
 						<f:facet name="header">
 							<h:outputText value="#{tableDataModel.nameDataModel}" />
@@ -154,7 +155,8 @@
 									value="#{messages.specification_table_requirement_title}" />
 							</f:facet>
 							<h:outputText id="reqContent" value="#{reqUtil.requirement.name}" />
-							<p:tooltip id="toolTipContent" for="reqContent" showEffect="clip" hideEffect="explode" style="width:300px">
+							<p:tooltip id="toolTipContent" for="reqContent" showEffect="clip"
+								hideEffect="explode" style="width:300px">
 								<p:panelGrid style="width:300px">
 									<f:facet name="header">
 										<p:row>
@@ -166,12 +168,14 @@
 									</f:facet>
 									<p:row>
 										<p:column>
-											<p:outputLabel style="font-weight: bold;" for="tolDesc" value="Description :" />
-											<br />	
-											<h:outputText id="tolDesc" readonly="true"  escape="false"
-												style="width:300px" value="#{reqUtil.requirement.description}"/> 								
+											<p:outputLabel style="font-weight: bold;" for="tolDesc"
+												value="Description :" />
+											<br />
+											<h:outputText id="tolDesc" readonly="true" escape="false"
+												style="width:300px"
+												value="#{reqUtil.requirement.description}" />
 										</p:column>
-									</p:row>								
+									</p:row>
 								</p:panelGrid>
 							</p:tooltip>
 						</p:column>

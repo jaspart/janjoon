@@ -81,8 +81,8 @@
 		</p:dialog>
 		<p:dialog id="editBugDialog" header="#{messages.label_edit} JJBug"
 			modal="true" widgetVar="editBugDialogWidget" dynamic="true"
-			resizable="true" maximizable="true" showEffect="fade" draggable="false"
-			hideEffect="explode">
+			resizable="true" maximizable="true" showEffect="fade"
+			draggable="false" hideEffect="explode">
 			<p:outputPanel id="editBugPanel">
 				<h:form id="editBugForm" enctype="multipart/form-data">
 					<p:panelGrid columns="2">
@@ -101,7 +101,7 @@
 							action="#{jJBugBean.persistBug}"
 							update=":projecttabview:SprintTabView:sprintForm"
 							oncomplete="PF('blockUIWidget').unblock()"
-							onsuccess="editBugDialogWidget.hide()">						
+							onsuccess="editBugDialogWidget.hide()">
 						</p:commandButton>
 						<p:commandButton id="taskBugCloseButton"
 							value="#{messages.bug_edit_close_button}"

@@ -47,7 +47,8 @@
 						<p:tooltip for="viewButton" value="#{messages.label_view}"
 							showEffect="fade" hideEffect="fade" />
 						<p:commandButton id="editButton" icon="ui-icon-pencil"
-							update=":editForm:editPanelGrid" action="#{jJWorkflowBean.onEdit}"
+							update=":editForm:editPanelGrid"
+							action="#{jJWorkflowBean.onEdit}"
 							oncomplete="editDialogWidget.show()"
 							title="#{messages.label_edit}">
 							<f:setPropertyActionListener value="#{JJWorflow_}"

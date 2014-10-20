@@ -182,7 +182,7 @@
 					</f:facet>
 				</p:dataTable>
 			</h:form>
-			<p:dialog id="createDialog" header="#{messages.bug_create_title}" 
+			<p:dialog id="createDialog" header="#{messages.bug_create_title}"
 				modal="true" widgetVar="createDialogWidget" dynamic="true"
 				visible="#{jJBugBean.createDialogVisible}" resizable="true"
 				maximizable="true" showEffect="fade" hideEffect="explode">
@@ -208,7 +208,7 @@
 			<p:dialog id="editDialog" header="#{messages.bug_edit_title}"
 				modal="true" widgetVar="editDialogWidget" dynamic="true"
 				resizable="true" maximizable="true" showEffect="fade"
-				hideEffect="explode" >
+				hideEffect="explode">
 				<p:ajax event="close" update=":bugForm"
 					listener="#{jJBugBean.handleDialogClose}" />
 				<p:outputPanel id="editPanel">
@@ -233,7 +233,7 @@
 			<p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget"
 				message="#{messages.bug_delete_title}" showEffect="fade"
 				hideEffect="explode" header="#{messages.bug_delete_confirm_label}"
-				severity="alarm" >
+				severity="alarm">
 				<p:outputPanel id="deletePanel">
 					<h:form id="deleteForm">
 						<p:commandButton id="deleteYesButton"
@@ -251,7 +251,7 @@
 			<p:confirmDialog id="deleteMDialog" widgetVar="deleteMDialogWidget"
 				message="#{messages.bug_mdelete_title}" showEffect="fade"
 				hideEffect="explode" header="#{messages.bug_mdelete_confirm_label}"
-				severity="alarm" >
+				severity="alarm">
 				<p:outputPanel id="deleteMPanel">
 					<h:form id="deleteMForm">
 						<p:commandButton id="deleteYesButton"

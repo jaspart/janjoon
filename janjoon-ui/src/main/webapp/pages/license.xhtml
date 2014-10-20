@@ -6,17 +6,19 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition>
 	<h:form id="licenseForm">
-		<p:panel id="licenseForm" style="width:600px" columns="1" cellpadding="6">
+		<p:panel id="licenseForm" style="width:600px" columns="1"
+			cellpadding="6">
 			<h:panelGrid columns="1" cellpadding="5">
-				<h:outputLabel for="licenseForm" value="Only upload .lic or .license files"
-					style="font-weight:bold"/>
-			
-				<h:outputLabel for="licenseForm" value="Datatable : featureKey | featureValue"/>
+				<h:outputLabel for="licenseForm"
+					value="Only upload .lic or .license files" style="font-weight:bold" />
+
+				<h:outputLabel for="licenseForm"
+					value="Datatable : featureKey | featureValue" />
 
 				<p:fileUpload fileUploadListener="#{licenseBean.handleFileUpload}"
-					mode="advanced" dragDropSupport="true"
-					update="messages" sizeLimit="100000" allowTypes="/(\.|\/)(lic|license)$/" />
-				<p:growl id="messages" showDetail="true"/>
+					mode="advanced" dragDropSupport="true" update="messages"
+					sizeLimit="100000" allowTypes="/(\.|\/)(lic|license)$/" />
+				<p:growl id="messages" showDetail="true" />
 			</h:panelGrid>
 		</p:panel>
 	</h:form>

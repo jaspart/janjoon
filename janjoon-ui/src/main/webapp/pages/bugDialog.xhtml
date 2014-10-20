@@ -7,15 +7,14 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
 
-		<pe:blockUI widgetVar="bugBlockUIWidget"
-					target="createPanelGrid">
-					<h:panelGrid columns="2" layout="grid">
-						<p:graphicImage library="images" name="ajax-loader.gif"
-							style="vertical-align: middle;" />
-						<h:outputText value="#{messages.label_refresh}"
-							style="white-space: nowrap;" />
-					</h:panelGrid>
-				</pe:blockUI>
+	<pe:blockUI widgetVar="bugBlockUIWidget" target="createPanelGrid">
+		<h:panelGrid columns="2" layout="grid">
+			<p:graphicImage library="images" name="ajax-loader.gif"
+				style="vertical-align: middle;" />
+			<h:outputText value="#{messages.label_refresh}"
+				style="white-space: nowrap;" />
+		</h:panelGrid>
+	</pe:blockUI>
 
 	<p:panelGrid id="createPanelGrid">
 		<p:row>
@@ -59,7 +58,8 @@
 					disabled="#{jJBugBean.bugProjectSelected==null and jJProjectBean.project == null}"
 					itemLabel="#{requirement.name}" itemValue="#{requirement}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
-					dropdown="true" var="requirement" onchange="jJbugTeststepWV.val('');"
+					dropdown="true" var="requirement"
+					onchange="jJbugTeststepWV.val('');"
 					completeMethod="#{jJBugBean.completeReqBug}">
 					<p:ajax event="itemSelect" update="jJbugRequirement jJbugTeststep" />
 				</p:autoComplete>
@@ -80,8 +80,8 @@
 		<p:row>
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugSprint" value="#{JJBug_.sprint}"
-				widgetVar="jJbugSprintWV"
-					itemLabel="#{sprint.name}" itemValue="#{sprint}" scrollHeight="200"
+					widgetVar="jJbugSprintWV" itemLabel="#{sprint.name}"
+					itemValue="#{sprint}" scrollHeight="200"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter"
 					dropdown="true" var="sprint"
 					disabled="#{jJBugBean.bugProjectSelected == null and jJProjectBean.project == null}"

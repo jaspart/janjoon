@@ -37,13 +37,13 @@
 						<h:outputText value="#{messages.admin_contact_table_action_label}" />
 					</f:facet>
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
-							oncomplete="contactDialogWidget.show()"
-							action="#{jJContactBean.editContact(jJPermissionBean)}"
-							update=":tabview:contactDialog"
-							value="#{messages.admin_contact_edit_label}">
-							<f:setPropertyActionListener value="#{contact}"
-								target="#{jJContactBean.contactAdmin}" />
-					
+						oncomplete="contactDialogWidget.show()"
+						action="#{jJContactBean.editContact(jJPermissionBean)}"
+						update=":tabview:contactDialog"
+						value="#{messages.admin_contact_edit_label}">
+						<f:setPropertyActionListener value="#{contact}"
+							target="#{jJContactBean.contactAdmin}" />
+
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
 							oncomplete="contactDeleteDialogWidget.show()"
 							value="#{messages.admin_contact_delete_button}"
@@ -64,9 +64,10 @@
 			</p:dataTable>
 		</p:panel>
 	</h:form>
-	<p:dialog id="contactDialog" header="#{messages[jJContactBean.message]}"
-		modal="true" widgetVar="contactDialogWidget" dynamic="true"
-		showEffect="fade" hideEffect="explode" resizable="false">
+	<p:dialog id="contactDialog"
+		header="#{messages[jJContactBean.message]}" modal="true"
+		widgetVar="contactDialogWidget" dynamic="true" showEffect="fade"
+		hideEffect="explode" resizable="false">
 		<p:ajax event="close" update=":tabview:contactForm"
 			listener="#{jJContactBean.closeDialog(jJPermissionBean)}" />
 		<p:outputPanel id="contactDialogPanel">
@@ -89,7 +90,7 @@
 									<p:column>
 										<p:inputText id="lastname"
 											value="#{jJContactBean.contactAdmin.name}" label="Lastname"
-											required="true" 
+											required="true"
 											disabled="#{jJContactBean.disabledContactMode}" />
 										<p:watermark for="lastname"
 											value="#{messages.admin_contact_new_lastname_watermark}" />
@@ -113,7 +114,7 @@
 											value="#{jJContactBean.contactAdmin.password}"
 											feedback="true"
 											label="#{messages.admin_contact_new_password_label}"
-											redisplay="true" required="true" 
+											redisplay="true" required="true"
 											disabled="#{jJContactBean.disabledContactMode}" />
 									</p:column>
 

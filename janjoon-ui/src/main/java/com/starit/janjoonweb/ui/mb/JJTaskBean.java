@@ -36,6 +36,7 @@ import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.extensions.component.timeline.Timeline;
 import org.primefaces.extensions.event.timeline.*;
+import org.primefaces.extensions.model.layout.LayoutOptions;
 import org.primefaces.extensions.model.timeline.*;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -58,19 +59,19 @@ public class JJTaskBean {
 
 	TaskData selectedTaskData;
 
+	@Autowired
+	JJPermissionService jJPermissionService;
+
+	@Autowired
+	JJCategoryService jJCategoryService;
+
 	public void setJjChapterService(JJChapterService jJChapterService) {
 		this.jJChapterService = jJChapterService;
 	}
 
-	@Autowired
-	JJPermissionService jJPermissionService;
-
 	public void setjJPermissionService(JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
 	}
-
-	@Autowired
-	JJCategoryService jJCategoryService;
 
 	public void setjJCategoryService(JJCategoryService jJCategoryService) {
 		this.jJCategoryService = jJCategoryService;
@@ -432,6 +433,7 @@ public class JJTaskBean {
 
 	public void loadingData() {
 
+		initLayoutOptions();
 		if (tasksData == null) {
 			getProject();
 			loadData();
@@ -2428,6 +2430,47 @@ public class JJTaskBean {
 		if (contact != null)
 			toDoTasks = jJTaskService.getToDoTasks(contact);
 
+	}
+	
+	//layout options 
+	private LayoutOptions layoutOptionsOne;  
+	private String stateOne;
+
+	public LayoutOptions getLayoutOptionsOne() {
+		return layoutOptionsOne;
+	}
+
+	public void setLayoutOptionsOne(LayoutOptions layoutOptionsOne) {
+		this.layoutOptionsOne = layoutOptionsOne;
+	}
+	
+	public String getStateOne() {
+		return stateOne;
+	}
+
+	public void setStateOne(String stateOne) {
+		this.stateOne = stateOne;
+	}
+
+	public void initLayoutOptions()
+	{
+		LayoutOptions panes = new LayoutOptions();  
+		layoutOptionsOne =new LayoutOptions();
+        panes.addOption("slidable", true);  
+        panes.addOption("resizeWhileDragging", true); 
+        layoutOptionsOne.setPanesOptions(panes);  
+        panes=new LayoutOptions();  
+        panes.addOption("size", 800);   
+        panes.addOption("maxSize", 1200);
+        panes.addOption("minsize", 300);
+        layoutOptionsOne.setWestOptions(panes);  
+        panes=new LayoutOptions();  
+        panes.addOption("size", 500); 
+        panes.addOption("closable", true);
+        panes.addOption("maxSize", 1200);
+        panes.addOption("minsize", 300);
+        layoutOptionsOne.setCenterOptions(panes);  
+        
 	}
 
 	public HtmlPanelGrid populateViewPanelGrid() {

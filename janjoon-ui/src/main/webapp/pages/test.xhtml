@@ -10,7 +10,8 @@
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
 
-		<f:event type="preRenderComponent" oncomplete="PF('blockUIWidget').unblock()"
+		<f:event type="preRenderComponent"
+			oncomplete="PF('blockUIWidget').unblock()"
 			listener="#{jJTestcaseBean.loadData()}" />
 
 
@@ -46,7 +47,8 @@
 									filter="true" filterMatchMode="startsWith">
 									<f:converter
 										converterId="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter" />
-									<f:selectItem itemValue="#{null}" itemLabel="#{messages.test_build_select}" />
+									<f:selectItem itemValue="#{null}"
+										itemLabel="#{messages.test_build_select}" />
 									<f:selectItems value="#{jJBuildBean.builds}" var="c"
 										itemLabel="#{c.name}" itemValue="#{c}" />
 									<p:ajax process="@this" partialSubmit="true"
@@ -57,7 +59,8 @@
 								</p:selectOneMenu>
 							</p:column>
 							<p:column>
-								<h:commandLink id="exportPDF" title="#{messages.test_export_tooltip}"
+								<h:commandLink id="exportPDF"
+									title="#{messages.test_export_tooltip}"
 									disabled="#{jJTestcaseBean.disabledExport}"
 									style="float: right;">
 									<p:graphicImage value="/resources/images/pdf.png" />
@@ -75,8 +78,7 @@
 									selection="#{jJTestcaseBean.selectedNode}" dynamic="true">
 									<p:ajax event="select"
 										listener="#{jJTestcaseBean.onNodeSelect}"
-										update=":testFormCenter"
-										onstart="PF('blockUIWidget').block()"
+										update=":testFormCenter" onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()" />
 
 									<p:treeNode>
@@ -139,41 +141,50 @@
 							</f:facet>
 							<p:row>
 								<p:column colspan="2" styleClass="TestcaseSuccess">
-									<p:outputLabel value="#{messages.test_color_TestcaseSuccess_title}" />
+									<p:outputLabel
+										value="#{messages.test_color_TestcaseSuccess_title}" />
 								</p:column>
 
 								<p:column colspan="2" styleClass="TestcaseFailed">
-									<p:outputLabel value="#{messages.test_color_TestcaseFailed_title}" />
+									<p:outputLabel
+										value="#{messages.test_color_TestcaseFailed_title}" />
 								</p:column>
 
 								<p:column colspan="2" styleClass="TestcaseNotExecuted">
-									<p:outputLabel value="#{messages.test_color_TestcaseNotExecuted_title}" />
+									<p:outputLabel
+										value="#{messages.test_color_TestcaseNotExecuted_title}" />
 								</p:column>
 							</p:row>
 							<p:row>
 								<p:column colspan="2" styleClass="TestcaseWithoutTeststep">
-									<p:outputLabel value="#{messages.test_color_TestcaseNotExecuted_title}" />
+									<p:outputLabel
+										value="#{messages.test_color_TestcaseNotExecuted_title}" />
 								</p:column>
 
 								<p:column colspan="2" styleClass="TestcaseNonFini">
-									<p:outputLabel value="#{messages.test_color_TestcaseNonFini_title}" />
+									<p:outputLabel
+										value="#{messages.test_color_TestcaseNonFini_title}" />
 								</p:column>
 
 								<p:column colspan="2" styleClass="TestcaseChapter">
-									<p:outputLabel value="#{messages.test_color_TestcaseChapter_title}" />
+									<p:outputLabel
+										value="#{messages.test_color_TestcaseChapter_title}" />
 								</p:column>
 							</p:row>
 							<p:row>
 								<p:column colspan="2" styleClass="TestcaseFailedWithoutBuild">
-									<p:outputLabel value="#{messages.test_color_TestcaseFailedWithoutBuild_title}" />
+									<p:outputLabel
+										value="#{messages.test_color_TestcaseFailedWithoutBuild_title}" />
 								</p:column>
 
 								<p:column colspan="2" styleClass="TestcaseNonFiniWithoutBuild">
-									<p:outputLabel value="#{messages.test_color_TestcaseNonFiniWithoutBuild_title}" />
+									<p:outputLabel
+										value="#{messages.test_color_TestcaseNonFiniWithoutBuild_title}" />
 								</p:column>
 
 								<p:column colspan="2" styleClass="TestcaseSuccessWithoutBuild">
-									<p:outputLabel value="#{messages.test_color_TestcaseSuccessWithoutBuild_title}" />
+									<p:outputLabel
+										value="#{messages.test_color_TestcaseSuccessWithoutBuild_title}" />
 								</p:column>
 							</p:row>
 						</p:panelGrid>
@@ -226,7 +237,8 @@
 								showEffect="fade" hideEffect="fade" />
 						</p:column>
 						<f:facet name="footer">
-							<p:commandButton value="#{messages.test_create_button}" id="newTestcase"
+							<p:commandButton value="#{messages.test_create_button}"
+								id="newTestcase"
 								actionListener="#{jJTestcaseBean.newTestcase(jJTeststepBean)}"
 								update=":testcaseDialog"
 								oncomplete="testcaseDialogWidget.show()"
@@ -239,8 +251,7 @@
 						seriesColors="#{chartBean.seriesColors}"
 						style="height:300px;margin-top:20px;"
 						xaxisLabel="#{messages.test_graph_ordinate_label}"
-						yaxisLabel="#{messages.test_graph_abscissa_label}"
-						animate="true"
+						yaxisLabel="#{messages.test_graph_abscissa_label}" animate="true"
 						rendered="#{jJTestcaseBean.rendredTestCaseRecaps}" />
 
 					<p:dataTable id="teststepRecapDataTable"
@@ -316,9 +327,10 @@
 		</p:layout>
 
 		<p:hotkey bind="esc" handler="testcaseDialogWidget.hide()" />
-		<p:dialog id="testcaseDialog" header="#{messages[jJTestcaseBean.message]}"
-			modal="true" widgetVar="testcaseDialogWidget" dynamic="true"
-			resizable="false" style="top: 30px;">
+		<p:dialog id="testcaseDialog"
+			header="#{messages[jJTestcaseBean.message]}" modal="true"
+			widgetVar="testcaseDialogWidget" dynamic="true" resizable="false"
+			style="top: 30px;">
 			<p:ajax event="close" update=":testFormCenter :testFormWest"
 				listener="#{jJTestcaseBean.closeDialog()}" />
 			<p:outputPanel id="testcaseDialogPanel">
@@ -333,10 +345,12 @@
 										label="#{messages.test_new_name_label}"
 										requiredMessage="#{messages.test_new_name_alert}"
 										disabled="#{jJTestcaseBean.disabledTestcaseMode}" />
-									<p:watermark for="name" value="#{messages.test_new_name_watermark}" />
+									<p:watermark for="name"
+										value="#{messages.test_new_name_watermark}" />
 								</p:column>
 								<p:column>
-									<h:outputText for="requirement" value="#{messages.test_new_requirement_label}" />
+									<h:outputText for="requirement"
+										value="#{messages.test_new_requirement_label}" />
 									<p:selectOneMenu id="requirement"
 										value="#{jJTestcaseBean.requirement}"
 										panelStyle="width:150px;" effect="fade" style="width:150px;"
@@ -386,7 +400,8 @@
 									</p:selectBooleanCheckbox>
 								</p:column>
 								<p:column>
-									<h:outputLabel for="workload" value="#{messages.test_new_workload_label}" />
+									<h:outputLabel for="workload"
+										value="#{messages.test_new_workload_label}" />
 									<p:outputPanel id="outputPanel">
 										<p:spinner id="workload"
 											value="#{jJTestcaseBean.task.workloadPlanned}" stepFactor="1"
@@ -398,7 +413,8 @@
 									</p:outputPanel>
 								</p:column>
 								<p:column>
-									<p:commandButton id="addTestcase" value="#{messages.test_new_addtest_label}"
+									<p:commandButton id="addTestcase"
+										value="#{messages.test_new_addtest_label}"
 										disabled="#{not jJTestcaseBean.disabledTeststepMode}"
 										icon="ui-icon-circle-plus"
 										actionListener="#{jJTestcaseBean.save()}"
@@ -408,7 +424,8 @@
 							</p:row>
 							<p:row>
 								<p:column>
-									<h:outputText for="action" value="#{messages.test_new_action_label}*" />
+									<h:outputText for="action"
+										value="#{messages.test_new_action_label}*" />
 									<p:inputText id="action"
 										value="#{jJTeststepBean.teststep.actionstep}"
 										disabled="#{jJTestcaseBean.disabledTeststepMode}"
@@ -417,7 +434,8 @@
 										widgetVar="actionWidget" />
 								</p:column>
 								<p:column>
-									<h:outputText for="result" value="#{messages.test_new_result_label}*" />
+									<h:outputText for="result"
+										value="#{messages.test_new_result_label}*" />
 									<p:inputText id="result"
 										value="#{jJTeststepBean.teststep.resultstep}"
 										disabled="#{jJTestcaseBean.disabledTeststepMode}"
@@ -449,10 +467,12 @@
 							<f:facet name="header">  
             						#{messages.test_new_teststep_title}  
         					</f:facet>
-							<p:column headerText="#{messages.test_new_table_order_label}" style="width:9%;">
+							<p:column headerText="#{messages.test_new_table_order_label}"
+								style="width:9%;">
 								<h:outputText value="#{ts.ordering}" />
 							</p:column>
-							<p:column headerText="#{messages.test_new_table_action_header}" style="width:33%;">
+							<p:column headerText="#{messages.test_new_table_action_header}"
+								style="width:33%;">
 								<p:cellEditor>
 									<f:facet name="output">
 										<h:outputText value="#{ts.actionstep}" />
@@ -467,21 +487,24 @@
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column headerText="#{messages.test_new_table_result_header}" style="width:33%;">
+							<p:column headerText="#{messages.test_new_table_result_header}"
+								style="width:33%;">
 								<p:cellEditor>
 									<f:facet name="output">
 										<h:outputText value="#{ts.resultstep}" />
 									</f:facet>
 									<f:facet name="input">
 										<p:inputText value="#{ts.resultstep}" style="width:90%"
-											required="true" label="#{messages.test_new_table_result_label}"
+											required="true"
+											label="#{messages.test_new_table_result_label}"
 											id="resultInputWidget"
 											requiredMessage="#{messages.test_new_table_result_alert}">
 										</p:inputText>
 									</f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column headerText="#{messages.test_new_table_actions_label}" style="width:15%;">
+							<p:column headerText="#{messages.test_new_table_actions_label}"
+								style="width:15%;">
 								<p:commandButton id="insertTestStep" update="testStepDataTable"
 									action="#{jJTeststepBean.insertTestStep()}"
 									icon="ui-icon-circle-triangle-n" process="@this"
@@ -489,7 +512,8 @@
 									<f:setPropertyActionListener value="#{ts}"
 										target="#{jJTeststepBean.teststep}" />
 								</p:commandButton>
-								<p:tooltip for="insertTestStep" value="#{messages.test_new_teststep_insert_tooltip}"
+								<p:tooltip for="insertTestStep"
+									value="#{messages.test_new_teststep_insert_tooltip}"
 									showEffect="fade" hideEffect="fade" />
 
 								<p:commandButton id="deleteTestStep" update="testStepDataTable"
@@ -501,8 +525,7 @@
 								</p:commandButton>
 								<p:tooltip for="deleteTestStep"
 									value="#{messages.test_new_teststep_delete_tooltip}"
-									showEffect="fade"
-									hideEffect="fade" />
+									showEffect="fade" hideEffect="fade" />
 							</p:column>
 							<p:column style="width:10%;">
 								<p:rowEditor />
@@ -519,12 +542,12 @@
 		</p:dialog>
 
 		<p:dialog id="runTestcaseDialog" header="#{messages.test_exec_title}"
-			modal="true" widgetVar="runTestcaseDialogWidget" width="500px" height="375px"
-			style="top: 30px;" dynamic="true" resizable="false">
+			modal="true" widgetVar="runTestcaseDialogWidget" width="500px"
+			height="375px" style="top: 30px;" dynamic="true" resizable="false">
 			<p:hotkey bind="esc" handler="runTestcaseDialogWidget.hide()" />
-			<p:hotkey bind="space" handler="TestcaseExecSuccessButton.jq.click()"/>
-			<p:hotkey bind="S" handler="TestcaseExecSuccessButton.jq.click()"/>
-			<p:hotkey bind="F" handler="TestcaseExecFailedButton.jq.click()"/>
+			<p:hotkey bind="space" handler="TestcaseExecSuccessButton.jq.click()" />
+			<p:hotkey bind="S" handler="TestcaseExecSuccessButton.jq.click()" />
+			<p:hotkey bind="F" handler="TestcaseExecFailedButton.jq.click()" />
 			<p:ajax event="close" update=":testFormCenter :testFormWest"
 				listener="#{jJTeststepexecutionBean.closeDialog()}" />
 			<p:outputPanel id="runTestcaseDialogPanel">
@@ -550,13 +573,17 @@
 									</p:row>
 									<p:row>
 										<p:column>
-											<p:scrollPanel mode="native" style="height:200px;width:180px;">
-											<h:outputText escape="true" value="#{tse.teststep.actionstep}"/>
+											<p:scrollPanel mode="native"
+												style="height:200px;width:180px;">
+												<h:outputText escape="true"
+													value="#{tse.teststep.actionstep}" />
 											</p:scrollPanel>
 										</p:column>
 										<p:column>
-											<p:scrollPanel mode="native" style="height:200px;width:180px;">
-											<h:outputText escape="true" value="#{tse.teststep.resultstep}"/>
+											<p:scrollPanel mode="native"
+												style="height:200px;width:180px;">
+												<h:outputText escape="true"
+													value="#{tse.teststep.resultstep}" />
 											</p:scrollPanel>
 										</p:column>
 									</p:row>
@@ -567,8 +594,7 @@
 										<p:column>
 											<p:commandButton id="testExecSuccessButton"
 												value="#{messages.test_graph_success_label}"
-												icon="ui-icon-circle-check"
-												styleClass="TestcaseExecSuccess"
+												icon="ui-icon-circle-check" styleClass="TestcaseExecSuccess"
 												actionListener="#{jJTeststepexecutionBean.setStatus('true')}"
 												action="#{jJTeststepexecutionBean.handleStatus()}"
 												widgetVar="TestcaseExecSuccessButton"
@@ -576,8 +602,7 @@
 												async="true" ajax="true" />
 											<p:commandButton id="testExecFailedButton"
 												value="#{messages.test_graph_failed_label}"
-												icon="ui-icon-circle-close"
-												styleClass="TestcaseExecFailed"
+												icon="ui-icon-circle-close" styleClass="TestcaseExecFailed"
 												actionListener="#{jJTeststepexecutionBean.setStatus('false')}"
 												action="#{jJTeststepexecutionBean.handleStatus()}"
 												widgetVar="TestcaseExecFailedButton"
@@ -589,14 +614,15 @@
 							</p:tab>
 						</p:tabView>
 					</p:scrollPanel>
-					<p:panelGrid rendered="#{ ! jJTeststepexecutionBean.disabledTestcase}">
+					<p:panelGrid
+						rendered="#{ ! jJTeststepexecutionBean.disabledTestcase}">
 						<p:row>
 							<p:column>
 								<p:selectOneButton id="testcaseexecutionStatus"
 									value="#{jJTestcaseexecutionBean.status}"
 									disabled="#{jJTeststepexecutionBean.disabledTestcase}">
 									<p:ajax listener="#{jJTestcaseexecutionBean.handleStatus()}" />
-									<f:selectItem itemValue="true" 
+									<f:selectItem itemValue="true"
 										itemLabel="#{messages.test_exec_status_passed_label}" />
 									<f:selectItem itemValue="false"
 										itemLabel="#{messages.test_exec_status_failed_label}" />
@@ -619,7 +645,8 @@
 
 		<p:dialog header="#{messages.bug_create_title}" modal="true"
 			widgetVar="bugTestDialogWidget" dynamic="true" resizable="true"
-			maximizable="true" showEffect="fade" hideEffect="explode" style="top: 30px;">
+			maximizable="true" showEffect="fade" hideEffect="explode"
+			style="top: 30px;">
 			<p:ajax event="close" listener="#{jJBugBean.handleDialogClose}" />
 			<p:outputPanel id="createPanel">
 				<h:form id="bugForm" enctype="multipart/form-data">

@@ -12,7 +12,7 @@
 					<WorkingTime>
 						<FromTime>20:00:00</FromTime>
 						<ToTime>00:00:00</ToTime>
-					</WorkingTime>					
+					</WorkingTime>
 				</WorkingTimes>
 			</WeekDay>
 			<WeekDay>
@@ -22,7 +22,7 @@
 					<WorkingTime>
 						<FromTime>20:00:00</FromTime>
 						<ToTime>00:00:00</ToTime>
-					</WorkingTime>	
+					</WorkingTime>
 				</WorkingTimes>
 			</WeekDay>
 			<WeekDay>
@@ -32,7 +32,7 @@
 					<WorkingTime>
 						<FromTime>20:00:00</FromTime>
 						<ToTime>00:00:00</ToTime>
-					</WorkingTime>	
+					</WorkingTime>
 				</WorkingTimes>
 			</WeekDay>
 			<WeekDay>
@@ -42,7 +42,7 @@
 					<WorkingTime>
 						<FromTime>20:00:00</FromTime>
 						<ToTime>00:00:00</ToTime>
-					</WorkingTime>	
+					</WorkingTime>
 				</WorkingTimes>
 			</WeekDay>
 			<WeekDay>
@@ -52,7 +52,7 @@
 					<WorkingTime>
 						<FromTime>20:00:00</FromTime>
 						<ToTime>00:00:00</ToTime>
-					</WorkingTime>	
+					</WorkingTime>
 				</WorkingTimes>
 			</WeekDay>
 			<WeekDay>
@@ -62,11 +62,11 @@
 					<WorkingTime>
 						<FromTime>10:00:00</FromTime>
 						<ToTime>12:00:00</ToTime>
-					</WorkingTime>	
+					</WorkingTime>
 					<WorkingTime>
 						<FromTime>14:00:00</FromTime>
 						<ToTime>16:00:00</ToTime>
-					</WorkingTime>	
+					</WorkingTime>
 				</WorkingTimes>
 			</WeekDay>
 			<WeekDay>
@@ -76,11 +76,11 @@
 					<WorkingTime>
 						<FromTime>10:00:00</FromTime>
 						<ToTime>12:00:00</ToTime>
-					</WorkingTime>	
+					</WorkingTime>
 					<WorkingTime>
 						<FromTime>14:00:00</FromTime>
 						<ToTime>16:00:00</ToTime>
-					</WorkingTime>	
+					</WorkingTime>
 				</WorkingTimes>
 			</WeekDay>
 		</WeekDays>

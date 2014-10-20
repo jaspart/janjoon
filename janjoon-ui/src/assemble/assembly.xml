@@ -39,12 +39,12 @@
 				<include>jetty-runner-8.1.9.v20130131.jar</include>
 			</includes>
 		</fileSet>
-		
-		
+
+
 
 		<fileSet>
 			<directory>src/log</directory>
-			<outputDirectory>/log</outputDirectory>			
+			<outputDirectory>/log</outputDirectory>
 		</fileSet>
 
 		<fileSet>

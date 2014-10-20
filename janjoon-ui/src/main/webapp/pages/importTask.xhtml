@@ -9,15 +9,16 @@
 <ui:composition>
 	<h:form id="importTaskDialogForm">
 
-		<pe:blockUI widgetVar="taskBlockUIWidget" target="importTaskDialogForm">
-			<h:panelGrid columns="2" layout="grid" >
+		<pe:blockUI widgetVar="taskBlockUIWidget"
+			target="importTaskDialogForm">
+			<h:panelGrid columns="2" layout="grid">
 				<p:graphicImage library="images" name="ajax-loader.gif"
 					style="vertical-align: middle;" />
 				<h:outputText value="#{messages.label_refresh}"
 					style="white-space: nowrap;" />
 			</h:panelGrid>
 		</pe:blockUI>
-		<p:panelGrid style="margin-top:10px" >
+		<p:panelGrid style="margin-top:10px">
 			<p:row>
 				<p:column>
 					<h:outputText value="Objet:" />

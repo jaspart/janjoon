@@ -150,7 +150,7 @@
 					</p:column>
 
 					<p:column headerText="Project">
-					
+
 						<h:outputText value="#{task.requirement.project}"
 							converter="JJProjectConverter"
 							rendered="#{task.requirement != null}" />
@@ -159,11 +159,11 @@
 						<h:outputText value="#{task.bug.project}"
 							converter="JJProjectConverter"
 							rendered="#{task.requirement == null and task.bug != null }" />
-							
-							<h:outputText value="#{task.sprint.project}"
+
+						<h:outputText value="#{task.sprint.project}"
 							converter="JJProjectConverter"
 							rendered="#{task.requirement == null and task.bug == null and task.sprint != null}" />
-							
+
 					</p:column>
 
 					<p:column headerText="Start Date :">
@@ -207,6 +207,47 @@
 					</h:form>
 				</p:outputPanel>
 			</p:dialog>
+		</p:panel>
+
+		<p:panel id="specpanel" header="Spécification non couverte "
+			rendered="#{loginBean.enable}">
+
+			<f:event listener="#{jJRequirementBean.initNonCouvretSpec}"
+				type="preRenderView" />
+			<h:form id="specForm">
+				<p:dataTable id="specTable"
+					value="#{jJRequirementBean.noCouvretReq}" rowKey="#{req.id}"
+					var="req" widgetVar="taskTable" scrollable="true"
+					scrollHeight="200"
+					emptyMessage="There is no Task to do,See all in project View">
+
+					<p:column headerText="Specification" colspan="2">
+						<h:outputText value="#{req}" converter="JJRequirementConverter" />
+					</p:column>
+
+					<p:column headerText="Chapter">
+						<h:outputText value="#{req.chapter}"
+							converter="JJChapterConverter" />
+					</p:column>
+
+					<p:column headerText="Project">
+						<h:outputText value="#{req.project}"
+							converter="JJProjectConverter" />
+
+					</p:column>
+
+					<p:column headerText="Version">
+						<h:outputText value="#{req.versioning}"
+							converter="JJVersionConverter" />
+
+					</p:column>
+
+					<p:column headerText="Status">
+						<h:outputText value="#{req.status}" converter="JJStatusConverter" />
+
+					</p:column>
+				</p:dataTable>
+			</h:form>
 		</p:panel>
 
 	</ui:define>
