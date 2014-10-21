@@ -4,7 +4,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:pe="http://primefaces.org/ui/extensions"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 <ui:composition style="width:100%">
 	<style type="text/css">
@@ -12,14 +13,21 @@
 /* 	height: 45px; */
 /* 	overflow: hidden; */
 /* } */
-
+.ui-datatable table{
+table-layout: fixed;
+border-collapse: separate;
+}
 .ui-datatable .ui-datatable-data th {
 	height: 37px;
 	overflow: hidden;
 }
 
-.ui-datatable .ui-datatable-data tr td {
-	height: 30,8px !important;
+ .ui-datatable .ui-datatable-data td {	
+ 	overflow: hidden; 
+ } 
+
+.ui-datatable .ui-datatable-data tr {
+	height: 44px;
 	overflow: hidden;
 }
 </style>
@@ -88,32 +96,31 @@
 				<p:column>
 					<p:remoteCommand name="onCellEditTableComplete"
 						update=":projecttabview " />
-					<p:scrollPanel style="width:1300px;" mode="native">
-						<pe:layout fullPage="false" style="width:1300px;height:800px;"
+					<p:scrollPanel style="width:1400px;" mode="native"  >
+						<pe:layout  fullPage="false" style="width:1400px;height:800px;" 
 							options="#{jJTaskBean.layoutOptionsOne}" 
 							state="#{jJTaskBean.stateOne}">
 
-							<pe:layoutPane id="west" position="west">
+							<pe:layoutPane  position="west" id="westLayout" styleContent="overflow-y: hidden;">
 								<f:facet name="header">  
                        					Task Data Table 
                     			</f:facet>
-								<p:dataTable id="taskDataTable" var="taskData" frozenColumns="2"
+								<p:dataTable id="taskDataTable" var="taskData"									
 									sortBy="#{jJTaskBean.sortBy}" value="#{jJTaskBean.tasksData}"
-									editable="true" editMode="cell">
+									 editable="true" editMode="cell">
 
 									<p:ajax event="cellEdit" listener="#{jJTaskBean.onCellEdit}"
 										process="@widgetVar(nameWidget)"
 										oncomplete="onCellEditTableComplete()"
 										update="taskDataTable :projecttabview:planningForm:timeline :projecttabview:planningForm:msg :projecttabview:SprintTabView" />
 									<p:summaryRow paginatorPosition="top">
-										<p:column styleClass="task" colspan="11"
-											style="text-align:left">
+										<p:column colspan="11" style="text-align:left">
 											<h:outputText icon="ui-icon-arrowreturnthick-1-e"
 												value="Chapter: #{taskData.chapter.name}" />
 										</p:column>
 									</p:summaryRow>
 
-									<p:column style="width: 80px;" headerText="Actions">
+									<p:column headerText="Actions" style="width:120px;">
 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
 											update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
 											action="#{jJTaskBean.initiateReqTreeNode}">
@@ -137,17 +144,17 @@
 											</p:menuitem>
 										</p:splitButton>
 									</p:column>
-									<p:column style="width: 130px;" styleClass="task"
-										rendered="false" headerText="Chapter">
+									<p:column style="width: 130px;" rendered="false"
+										headerText="Chapter">
 										<h:outputText value="#{taskData.chapter.name}" />
 									</p:column>
 
-									<p:column id="name" styleClass="task"
-										style="width:180px !important;height:30,8px !important;	overflow:hidden;"
+									<p:column id="name"
+										style="width:180px !important; overflow:hidden;"
 										headerText="#{messages.project_gantt_table_name_title}">
 										<p:cellEditor>
 											<f:facet name="output">
-												<h:outputText value="#{taskData.task.name}" />
+												<h:outputText value="#{fn:substring(taskData.task.name,0,60)}" />
 											</f:facet>
 											<f:facet name="input">
 												<p:inputText value="#{taskData.task.name}" required="true"
@@ -156,7 +163,7 @@
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
-									<p:column style="width: 130px;" styleClass="task"
+									<p:column style="width: 130px;"
 										headerText="#{messages.project_gantt_table_assigned_title}">
 										<p:cellEditor style="width: 112px;">
 											<f:facet name="output">
@@ -192,7 +199,7 @@
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
-									<p:column style="width: 120px;" id="sdpr" styleClass="task"
+									<p:column style="width: 120px;" id="sdpr"
 										headerText="#{messages.project_gantt_table_startplanned_title}">
 										<p:cellEditor style="width: 112px;">
 											<f:facet name="output">
@@ -205,7 +212,7 @@
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
-									<p:column style="width: 120px;" id="edpr" styleClass="task"
+									<p:column style="width: 120px;" id="edpr"
 										headerText="#{messages.project_gantt_table_endplanned_title}">
 										<p:cellEditor style="width: 112px;">
 											<f:facet name="output">
@@ -218,7 +225,7 @@
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
-									<p:column style="width: 60px;" id="wpr" styleClass="task"
+									<p:column style="width: 60px;" id="wpr"
 										headerText="#{messages.project_gantt_table_wlplanned_title}">
 										<p:cellEditor style="width: 50px;">
 											<f:facet name="output">
@@ -230,7 +237,7 @@
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
-									<p:column style="width: 120px;" id="sdr" styleClass="task"
+									<p:column style="width: 120px;" id="sdr"
 										headerText="#{messages.project_gantt_table_startreal_title}">
 										<p:cellEditor style="width: 112px;">
 											<f:facet name="output">
@@ -243,7 +250,7 @@
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
-									<p:column style="width: 120px;" id="edr" styleClass="task"
+									<p:column style="width: 120px;" id="edr"
 										headerText="#{messages.project_gantt_table_endreal_title}">
 										<p:cellEditor style="width: 112px;">
 											<f:facet name="output">
@@ -256,7 +263,7 @@
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
-									<p:column style="width: 60px;" id="wr" styleClass="task"
+									<p:column style="width: 60px;" id="wr"
 										headerText="#{messages.project_gantt_table_wlreal_title}">
 										<p:cellEditor style="width: 50px;">
 											<f:facet name="output">
@@ -268,7 +275,7 @@
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
-									<p:column style="width: 160px;" id="bt" styleClass="task"
+									<p:column style="width: 160px;" id="bt"
 										headerText="#{messages.project_gantt_table_previous_title}">
 										<p:cellEditor>
 											<f:facet name="output">
@@ -289,8 +296,7 @@
 										</p:cellEditor>
 									</p:column>
 
-									<p:column style="width: 160px;" id="ts" styleClass="task"
-										headerText="Sprint">
+									<p:column style="width: 160px;" id="ts" headerText="Sprint">
 										<p:cellEditor>
 											<f:facet name="output">
 												<h:outputText value="#{taskData.task.sprint.name}" />
@@ -313,7 +319,7 @@
 								</p:dataTable>
 							</pe:layoutPane>
 
-							<pe:layoutPane id="center" position="center">
+							<pe:layoutPane position="center" id="centerLayout" >
 
 								<f:facet name="header">  
                        					Task TimeLine 

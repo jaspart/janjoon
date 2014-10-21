@@ -2453,7 +2453,7 @@ public class JJTaskBean {
 	}
 
 	public void initLayoutOptions()
-	{
+	{		
 		LayoutOptions panes = new LayoutOptions();  
 		layoutOptionsOne =new LayoutOptions();
         panes.addOption("slidable", true);  
@@ -2467,7 +2467,7 @@ public class JJTaskBean {
         panes=new LayoutOptions();  
         panes.addOption("size", 500); 
         panes.addOption("closable", true);
-        panes.addOption("maxSize", 1200);
+        panes.addOption("maxSize", 1000);
         panes.addOption("minsize", 300);
         layoutOptionsOne.setCenterOptions(panes);  
         

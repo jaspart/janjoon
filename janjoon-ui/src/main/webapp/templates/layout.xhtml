@@ -27,13 +27,24 @@
 				$(".rowExpansion").slideUp("fast");
 
 			}
-			$("#west").on('scroll', function () {
-			    $("#center").scrollTop($(this).scrollTop());
-			});
 			
-			$("#center").on('scroll', function () {
-			    $("#west").scrollTop($(this).scrollTop());
-			});
+			$(function(){
+
+			    $(".ui-layout-content").scroll(function(){
+			        $(".ui-layout-content").scrollTop($(this).scrollTop());    
+			    })
+
+			})
+			
+			$(function(){
+
+			    $(".pe-layout-pane-content").scroll(function(){
+			        $(".pe-layout-pane-content").scrollTop($(this).scrollTop());    
+			    })
+
+			})
+					
+			
 		</script>
 	</h:head>
 	<h:body>
