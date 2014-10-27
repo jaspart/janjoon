@@ -47,6 +47,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 import com.lowagie.text.Chapter;
 import com.starit.janjoonweb.domain.*;
 import com.starit.janjoonweb.ui.mb.converter.JJTaskConverter;
+import com.starit.janjoonweb.ui.mb.util.CalendarUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 
@@ -555,12 +556,11 @@ public class JJTaskBean {
 								tt.getStartDateReal(), endDate, true, group,
 								"real");
 
-						model.add(event);
+						model.add(event);				
+						
 
-						taskData = new TaskData(tt, chapter,
-								tt.getStartDateReal(), endDate,
-								tt.getWorkloadReal(), false);
-						add = true;
+						
+						
 					}
 					if (tt.getStartDateRevised() != null) {
 
@@ -574,11 +574,18 @@ public class JJTaskBean {
 								tt.getStartDateRevised(), endDate, true, group,
 								"revised");
 						model.add(event);
+						
+						int workload=0;
+						
+						if (tt.getWorkloadRevised() == null)
+							workload = tt.getWorkloadPlanned();
+						else
+							workload = tt.getWorkloadRevised();
 
 						if (!add)
 							taskData = new TaskData(tt, chapter,
 									tt.getStartDateRevised(), endDate,
-									tt.getWorkloadRevised(), true);
+									workload, true);
 					} else {
 
 						TimelineEvent event = new TimelineEvent(tt,
@@ -890,10 +897,7 @@ public class JJTaskBean {
 						tt.getStartDateReal(), endDate, true, group, "real");
 
 				model.add(event);
-
-				taskData = new TaskData(tt, chapter, tt.getStartDateReal(),
-						endDate, tt.getWorkloadReal(), false);
-				add = true;
+		
 			}
 			if (tt.getStartDateRevised() != null) {
 
@@ -907,11 +911,18 @@ public class JJTaskBean {
 						tt.getStartDateRevised(), endDate, true, group,
 						"revised");
 				model.add(event);
+				
+				int workload=0;
+				
+				if (tt.getWorkloadRevised() == null)
+					workload = tt.getWorkloadPlanned();
+				else
+					workload = tt.getWorkloadRevised();
 
 				if (!add)
 					taskData = new TaskData(tt, chapter,
 							tt.getStartDateRevised(), endDate,
-							tt.getWorkloadRevised(), true);
+							workload, true);
 			} else {
 
 				TimelineEvent event = new TimelineEvent(tt,
@@ -1135,7 +1146,7 @@ public class JJTaskBean {
 
 		if (valid) {
 			task.setUpdatedDate(new Date());
-			jJTaskService.updateJJTask(task);
+			saveJJTask(task,true);
 			task = jJTaskService.findJJTask(task.getId());
 
 			// if (columnKey.contains("ts")) {
@@ -1276,7 +1287,7 @@ public class JJTaskBean {
 			version.getTasks().add(duplicatedTask);
 		}
 
-		jJTaskService.saveJJTask(duplicatedTask);
+		saveJJTask(duplicatedTask,false);
 
 		duplicatedTask = null;
 		loadData();
@@ -1500,7 +1511,7 @@ public class JJTaskBean {
 
 				}
 
-				jJTaskService.saveJJTask(task);
+				saveJJTask(task,false);
 
 			}
 
@@ -1637,6 +1648,17 @@ public class JJTaskBean {
 
 		disabledImportButton = !copyObjets;
 
+	}
+	
+	public void saveJJTask (JJTask ttt,boolean update)
+	{
+		if(update)
+			jJTaskService.updateJJTask(ttt);
+		else
+			jJTaskService.saveJJTask(ttt);
+		
+		ttt=jJTaskService.findJJTask(ttt.getId());
+		
 	}
 
 	public void copyObjet() {
@@ -1903,7 +1925,7 @@ public class JJTaskBean {
 			tJjTask = jJTaskService.findJJTask(selectedTaskData.getTask()
 					.getId());
 			tJjTask.setEnabled(false);
-			jJTaskService.updateJJTask(tJjTask);
+			saveJJTask(tJjTask,true);
 			updateView(tJjTask, true);
 
 			if (tJjTask.getSprint() != null) {
@@ -2223,7 +2245,7 @@ public class JJTaskBean {
 			tt.setStartDateReal(ev.getTimelineEvent().getStartDate());
 			tt.setEndDateReal(ev.getTimelineEvent().getEndDate());
 			tt.setUpdatedDate(new Date());
-			jJTaskService.updateJJTask(tt);
+			saveJJTask(tt,true);
 			tt = jJTaskService.findJJTask(tt.getId());
 			updateView(tt, false);
 
@@ -2232,7 +2254,7 @@ public class JJTaskBean {
 			tt.setStartDateRevised(ev.getTimelineEvent().getStartDate());
 			tt.setEndDateRevised(ev.getTimelineEvent().getEndDate());
 			tt.setUpdatedDate(new Date());
-			jJTaskService.updateJJTask(tt);
+			saveJJTask(tt,true);
 			tt = jJTaskService.findJJTask(tt.getId());
 			updateView(tt, false);
 
@@ -2285,34 +2307,28 @@ public class JJTaskBean {
 			if (!delete) {
 				Date startDate = null, endDate = null;
 				int workLoad = 0;
-				if (tt.getStartDateReal() != null) {
-					startDate = tt.getStartDateReal();
-					if (tt.getWorkloadReal() == null)
-						workLoad = tt.getWorkloadPlanned();
-					else
-						workLoad = tt.getWorkloadReal();
-					if (tt.getEndDateReal() != null)
-						endDate = tt.getEndDateReal();
-					else
-						endDate = tt.getEndDatePlanned();
-				} else {
+	
 					if (tt.getStartDateRevised() != null) {
 						startDate = tt.getStartDateRevised();
-						if (tt.getWorkloadRevised() == null)
-							workLoad = tt.getWorkloadPlanned();
-						else
-							workLoad = tt.getWorkloadRevised();
+						
 						if (tt.getEndDateRevised() != null)
 							endDate = tt.getEndDateRevised();
 						else
 							endDate = tt.getEndDatePlanned();
+						
+						if (tt.getWorkloadRevised() == null)
+							workLoad = tt.getWorkloadPlanned();
+						else
+							workLoad = tt.getWorkloadRevised();
 					} else {
 						startDate = tt.getStartDatePlanned();
-						endDate = tt.getEndDatePlanned();
+						endDate = tt.getEndDatePlanned();		
 						workLoad = tt.getWorkloadPlanned();
 					}
-				}
-
+				
+				
+				
+				
 				TaskData tskst = new TaskData(tt,
 						tasksData.get(i).getChapter(), startDate, endDate,
 						workLoad, tt.getStartDateRevised() != null);
@@ -2453,14 +2469,15 @@ public class JJTaskBean {
 	}
 
 	public void initLayoutOptions()
-	{		
+	{	
 		LayoutOptions panes = new LayoutOptions();  
 		layoutOptionsOne =new LayoutOptions();
         panes.addOption("slidable", true);  
+        panes.addOption("closable", true);
         panes.addOption("resizeWhileDragging", true); 
         layoutOptionsOne.setPanesOptions(panes);  
         panes=new LayoutOptions();  
-        panes.addOption("size", 800);   
+        panes.addOption("size", 800);
         panes.addOption("maxSize", 1200);
         panes.addOption("minsize", 300);
         layoutOptionsOne.setWestOptions(panes);  

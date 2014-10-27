@@ -357,6 +357,16 @@ public class LoginBean implements Serializable {
 		TabView tv = (TabView) event.getComponent();
 		this.activeTabAdminIndex = tv.getChildren().indexOf(event.getTab());
 		System.out.println("###### ACtive tab: " + activeTabAdminIndex);
+		if(activeTabAdminIndex==2)
+		{
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+					.getSession(false);
+			JJCompanyBean companyBean=(JJCompanyBean) session.getAttribute("jJCompanyBean");
+			if (companyBean==null)
+				companyBean=new JJCompanyBean();
+			companyBean.initCalendar();
+					
+		}
 	}
 
 	public void onTabProjectChange(TabChangeEvent event) {

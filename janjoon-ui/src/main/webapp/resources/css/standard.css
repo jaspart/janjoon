@@ -258,6 +258,9 @@ div.timeline-event-content {
 div.timeline-event-content span {
 	height: 15px;
 }
+.timeline-frame div{
+	left: 0px;
+}
 
 div.timeline-axis {
 	border-color: #F5F5F5;
@@ -270,6 +273,7 @@ div.timeline-axis {
 	-khtml-opacity: 1;
 	-moz-opacity: 1;
 	opacity: 0.8;	
+	height: 0px;
 	top:37px;
 }
 

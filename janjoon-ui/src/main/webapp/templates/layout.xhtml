@@ -8,7 +8,7 @@
 
 <f:event listener="#{loginBean.checkAuthorities}" type="preRenderView" />
 <f:view locale="#{localeBean.locale}" contentType="text/html">
-	<h:head>
+	<h:head >
 		<h:outputScript library="primefaces" name="jquery/jquery.js" />
 		<script type="text/javascript">
 			function centerDialog() {
@@ -21,30 +21,12 @@
 					top : top,
 					left : left
 				});
-			}
-
+			}	
+			
 			function updateRowExapansion() {
 				$(".rowExpansion").slideUp("fast");
 
 			}
-			
-			$(function(){
-
-			    $(".ui-layout-content").scroll(function(){
-			        $(".ui-layout-content").scrollTop($(this).scrollTop());    
-			    })
-
-			})
-			
-			$(function(){
-
-			    $(".pe-layout-pane-content").scroll(function(){
-			        $(".pe-layout-pane-content").scrollTop($(this).scrollTop());    
-			    })
-
-			})
-					
-			
 		</script>
 	</h:head>
 	<h:body>

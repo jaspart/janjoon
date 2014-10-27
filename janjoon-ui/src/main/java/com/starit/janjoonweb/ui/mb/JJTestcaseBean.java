@@ -479,6 +479,7 @@ public class JJTestcaseBean {
 				.getExternalContext().getSession(false);
 		JJBuildBean jJBuildBean = (JJBuildBean) session
 				.getAttribute("jJBuildBean");
+		JJTaskBean jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
 
 		if (jJBuildBean == null) {
 			jJBuildBean = new JJBuildBean();
@@ -524,7 +525,7 @@ public class JJTestcaseBean {
 				// task.setCompleted(task1.getCompleted());
 				// task.setConsumed(task1.getConsumed());
 
-				jJTaskService.saveJJTask(task);
+				jJTaskBean.saveJJTask(task,false);
 
 			}
 
@@ -536,7 +537,7 @@ public class JJTestcaseBean {
 			task.setEndDateReal(null);
 			task.setWorkloadReal(null);
 			task.setUpdatedDate(new Date());
-			jJTaskService.updateJJTask(task);
+			jJTaskBean.saveJJTask(task,true);
 		}
 
 	}

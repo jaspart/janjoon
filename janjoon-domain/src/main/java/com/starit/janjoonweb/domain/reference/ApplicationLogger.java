@@ -94,42 +94,42 @@ public class ApplicationLogger {
 
 	}
 	
-	@After("execution(* com.starit.janjoonweb.domain.JJTask.setEndDateReal(..))")
-	public void setJJTaskWorkLoadReal(JoinPoint joinPoint)
-	{
+//	@After("execution(* com.starit.janjoonweb.domain.JJTask.setEndDateReal(..))")
+//	public void setJJTaskWorkLoadReal(JoinPoint joinPoint)
+//	{
+//	
+//		JJTask t=(JJTask) joinPoint.getThis();
+//		if(t.getEndDateReal()!=null && t.getStartDateReal()!=null)
+//		{
+//			Date s=t.getStartDateReal();
+//			Date f=t.getEndDateReal();
+//			System.out.println(s+"/"+f);
+//			
+//			long w=f.getTime() - s.getTime();
+//			
+//			t.setWorkloadReal(Math.round(TimeUnit.MILLISECONDS.toHours(w/3)));
+//		}
+//		
+//	}
 	
-		JJTask t=(JJTask) joinPoint.getThis();
-		if(t.getEndDateReal()!=null && t.getStartDateReal()!=null)
-		{
-			Date s=t.getStartDateReal();
-			Date f=t.getEndDateReal();
-			System.out.println(s+"/"+f);
-			
-			long w=f.getTime() - s.getTime();
-			
-			t.setWorkloadReal(Math.round(TimeUnit.MILLISECONDS.toHours(w/3)));
-		}
-		
-	}
-	
-	@After("execution(* com.starit.janjoonweb.domain.JJTask.setEndDateRevised(..))")
-	public void setJJTaskWorkLoadRevised(JoinPoint joinPoint)
-	{
-	
-		JJTask t=(JJTask) joinPoint.getThis();
-		
-		if(t.getStartDateRevised()!=null && t.getEndDateRevised()!=null)
-		{			
-			Date s=t.getStartDateRevised();
-			Date f=t.getEndDateRevised();
-			System.out.println(s+"/"+f);
-			
-			long w=f.getTime() - s.getTime();
-			
-			t.setWorkloadRevised(Math.round(TimeUnit.MILLISECONDS.toHours(w/3)));
-		}
-		
-	}
+//	@After("execution(* com.starit.janjoonweb.domain.JJTask.setEndDateRevised(..))")
+//	public void setJJTaskWorkLoadRevised(JoinPoint joinPoint)
+//	{
+//	
+//		JJTask t=(JJTask) joinPoint.getThis();
+//		
+//		if(t.getStartDateRevised()!=null && t.getEndDateRevised()!=null)
+//		{			
+//			Date s=t.getStartDateRevised();
+//			Date f=t.getEndDateRevised();
+//			System.out.println(s+"/"+f);
+//			
+//			long w=f.getTime() - s.getTime();
+//			
+//			t.setWorkloadRevised(Math.round(TimeUnit.MILLISECONDS.toHours(w/3)));
+//		}
+//		
+//	}
 
 	@After("execution(* com.starit.janjoonweb.domain.JJTaskService.updateJJTask(..))")
 	public void startRequirement(JoinPoint joinPoint) {

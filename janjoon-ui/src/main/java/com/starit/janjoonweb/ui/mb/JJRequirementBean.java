@@ -56,6 +56,13 @@ public class JJRequirementBean {
 
 	@Autowired
 	public JJConfigurationService jJConfigurationService;
+
+	private JJTaskBean jJTaskBean;
+
+	public void setjJTaskBean(JJTaskBean jJTaskBean) {
+		this.jJTaskBean = jJTaskBean;
+	}
+
 	@Autowired
 	public JJPermissionService jJPermissionService;
 
@@ -810,6 +817,14 @@ public class JJRequirementBean {
 	}
 
 	private void deleteTasksAndTestcase(JJRequirement requirement) {
+
+		if (jJTaskBean == null) {
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+			jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
+		}
+
 		long t = System.currentTimeMillis();
 		JJRequirement req = jJRequirementService.findJJRequirement(requirement
 				.getId());
@@ -818,7 +833,7 @@ public class JJRequirementBean {
 			JJTestcase tc = jJTestcaseService.findJJTestcase(testcase.getId());
 			for (JJTask task : tc.getTasks()) {
 				task.setEnabled(false);
-				jJTaskService.updateJJTask(task);
+				jJTaskBean.saveJJTask(task,true);
 			}
 			tc.setEnabled(false);
 			jJTestcaseService.updateJJTestcase(tc);
@@ -826,7 +841,7 @@ public class JJRequirementBean {
 
 		for (JJTask task : req.getTasks()) {
 			task.setEnabled(false);
-			jJTaskService.updateJJTask(task);
+			jJTaskBean.saveJJTask(task,true);
 		}
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
@@ -1744,7 +1759,8 @@ public class JJRequirementBean {
 		List<JJRequirement> requirements = getRequirementsList(category,
 				product, version, project, true);
 
-		categoryDataModel.setWrappedData(getListOfRequiremntUtils(requirements));
+		categoryDataModel
+				.setWrappedData(getListOfRequiremntUtils(requirements));
 		// categoryDataModel.calculCompletionProgress();
 		// categoryDataModel.calculCoverageProgress();
 
@@ -1820,7 +1836,6 @@ public class JJRequirementBean {
 
 	@PostConstruct
 	public void init() {
-		
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
@@ -2354,6 +2369,14 @@ public class JJRequirementBean {
 	}
 
 	private void getRequirementOrder() {
+		
+		if (jJTaskBean == null) {
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+			jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
+		}
+
 
 		long t = System.currentTimeMillis();
 		SortedMap<Integer, Object> elements = null;
@@ -2702,7 +2725,7 @@ public class JJRequirementBean {
 				for (JJTask task : tasks) {
 					task.setEnabled(false);
 					task.setUpdatedDate(new Date());
-					jJTaskService.updateJJTask(task);
+					jJTaskBean.saveJJTask(task,true);
 				}
 
 				testcaseList = req.getTestcases();
@@ -2724,7 +2747,7 @@ public class JJRequirementBean {
 				for (JJTask task : tasks) {
 					task.setEnabled(true);
 					task.setUpdatedDate(new Date());
-					jJTaskService.updateJJTask(task);
+					jJTaskBean.saveJJTask(task,true);
 				}
 
 				testcaseList = req.getTestcases();
@@ -2920,7 +2943,8 @@ public class JJRequirementBean {
 
 		if (event.getObject() != null
 				&& event.getObject() instanceof RequirementUtil) {
-			requirement = ((RequirementUtil) event.getObject()).getRequirement();
+			requirement = ((RequirementUtil) event.getObject())
+					.getRequirement();
 			editRequirement();
 		}
 

@@ -157,6 +157,10 @@ public class JJTestcaseexecutionBean {
 			task.setWorkloadReal(workloadReal);
 
 			task.setUpdatedDate(new Date());
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+			JJTaskBean jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
 			jJTaskService.updateJJTask(task);
 		}
 

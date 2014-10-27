@@ -5,7 +5,7 @@
 	<groupId>com.starit.janjoonweb.domain</groupId>
 	<artifactId>janjoon-domain</artifactId>
 	<packaging>jar</packaging>
-	<version>1.1-BUILD_NUMBER</version>
+	<version>1.2-${build.number}</version>
 	<name>janjoon-domain</name>
 	<properties>
 		<aspectj.version>1.7.2</aspectj.version>
@@ -14,6 +14,7 @@
 		<roo.version>1.2.5.RELEASE</roo.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<spring.version>3.2.8.RELEASE</spring.version>
+		<build.number>SNAPSHOT</build.number>
 	</properties>
 	<repositories>
 		<repository>

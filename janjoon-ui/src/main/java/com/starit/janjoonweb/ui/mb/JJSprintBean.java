@@ -54,6 +54,8 @@ public class JJSprintBean {
 
 	@Autowired
 	private JJTaskService jJTaskService;
+	
+	private JJTaskBean jJTaskBean;
 
 	@Autowired
 	private JJCategoryService jJCategoryService;
@@ -80,6 +82,10 @@ public class JJSprintBean {
 	private JJTask task;
 	
 	private static final Logger logger = Logger.getLogger(JJSprintBean.class);
+
+	public void setjJTaskBean(JJTaskBean jJTaskBean) {
+		this.jJTaskBean = jJTaskBean;
+	}
 
 	public void setjJTaskService(JJTaskService jJTaskService) {
 		this.jJTaskService = jJTaskService;
@@ -204,7 +210,10 @@ public class JJSprintBean {
 				.getExternalContext().getSession(false);
 		JJProjectBean jJProjectBean = (JJProjectBean) session
 				.getAttribute("jJProjectBean");
-
+		
+		if(jJTaskBean == null)
+			jJTaskBean=(JJTaskBean) session.getAttribute("jJTaskBean");
+			
 		if (jJProjectBean.getProject() == null) {
 
 			if (sprintList == null) {
@@ -279,7 +288,7 @@ public class JJSprintBean {
 		DataTable dataTable = (DataTable) event.getSource();
 		JJTask t = (JJTask) dataTable.getRowData();
 		t.setAssignedTo((JJContact) event.getNewValue());
-		jJTaskService.updateJJTask(t);
+		jJTaskBean.saveJJTask(t,true);
 		sprintUtil = SprintUtil
 				.getSprintUtil(t.getSprint().getId(), sprintList);
 		sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil
@@ -423,7 +432,7 @@ public class JJSprintBean {
 			dropedTask.setStartDateReal(new Date());
 			dropedTask.setAssignedTo(assignedTo);
 			dropedTask.setCompleted(false);
-			jJTaskService.updateJJTask(dropedTask);
+			jJTaskBean.saveJJTask(dropedTask,true);
 			resetJJTaskBean();
 
 			JJSprint s = jJSprintService.findJJSprint(sprintId);
@@ -467,7 +476,7 @@ public class JJSprintBean {
 			dropedTask.setEndDateReal(new Date());
 			dropedTask.setCompleted(true);
 			dropedTask.setStatus(status);
-			jJTaskService.updateJJTask(dropedTask);
+			jJTaskBean.saveJJTask(dropedTask,true);
 			resetJJTaskBean();
 
 			JJSprint s = jJSprintService.findJJSprint(sprintId);
@@ -564,7 +573,7 @@ public class JJSprintBean {
 				+ task.getCreatedBy().getName() + " at :"
 				+ task.getCreationDate());
 
-		jJTaskService.saveJJTask(task);
+		jJTaskBean.saveJJTask(task,false);
 
 		if (!sprintUtil.isRender()) {
 
@@ -637,7 +646,7 @@ public class JJSprintBean {
 		System.out.println("deleteTask");
 		task = jJTaskService.findJJTask(task.getId());
 		task.setEnabled(false);
-		jJTaskService.saveJJTask(task);
+		jJTaskBean.saveJJTask(task,false);
 		sprintUtil = new SprintUtil(jJSprintService.findJJSprint(task
 				.getSprint().getId()),
 				jJTaskService.getSprintTasks(jJSprintService.findJJSprint(task

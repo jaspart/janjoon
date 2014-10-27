@@ -60,6 +60,8 @@ public class DevelopmentBean implements Serializable {
 
 	@Autowired
 	private JJStatusService jJStatusService;
+	
+	private JJTaskBean jJTaskBean;
 
 	@Autowired
 	private JJTaskService jJTaskService;
@@ -100,6 +102,10 @@ public class DevelopmentBean implements Serializable {
 		this.jJStatusService = jJStatusService;
 	}
 
+	public void setjJTaskBean(JJTaskBean jJTaskBean) {
+		this.jJTaskBean = jJTaskBean;
+	}
+
 	public void setjJTaskService(JJTaskService jJTaskService) {
 		this.jJTaskService = jJTaskService;
 	}
@@ -115,6 +121,12 @@ public class DevelopmentBean implements Serializable {
 	}
 
 	public DevelopmentBean(DevelopmentBean devBean) {
+		
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);		
+		
+		if(jJTaskBean == null)
+			jJTaskBean=(JJTaskBean) session.getAttribute("jJTaskBean");
 
 		init = false;
 		this.jJStatusService = devBean.jJStatusService;
@@ -125,8 +137,12 @@ public class DevelopmentBean implements Serializable {
 	public void initJJDevlopment() throws FileNotFoundException, IOException {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		contact = (JJContact) session.getAttribute("JJContact");
+				.getExternalContext().getSession(false);		
+		
+		if(jJTaskBean == null)
+			jJTaskBean=(JJTaskBean) session.getAttribute("jJTaskBean");
+		
+		contact = (JJContact) session.getAttribute("JJContact");	
 		JJVersionBean verbean = (JJVersionBean) session
 				.getAttribute("jJVersionBean");
 		JJConfigurationBean confbean = (JJConfigurationBean) session
@@ -547,7 +563,7 @@ public class DevelopmentBean implements Serializable {
 			task.setStatus(status);
 		}
 
-		jJTaskService.saveJJTask(task);
+		jJTaskBean.saveJJTask(task,false);
 		FacesMessage growlMessage = null;
 
 		if (configManager.checkIn(task.getId() + ":" + task.getName() + " : "
@@ -577,7 +593,7 @@ public class DevelopmentBean implements Serializable {
 
 	public void startTask() {
 		task.setStartDateReal(new Date());
-		jJTaskService.saveJJTask(task);
+		jJTaskBean.saveJJTask(task,false);
 		tasks = jJTaskService.getTasksByProduct(product, project);	
 
 	}
