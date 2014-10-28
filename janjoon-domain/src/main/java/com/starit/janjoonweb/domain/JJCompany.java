@@ -70,4 +70,10 @@ public class JJCompany  {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "company")
 	private Set<JJContact> contacts = new HashSet<JJContact>();
+	
+	@Override
+	public boolean equals(Object object) {
+		return (object instanceof JJCompany) && (getId() != null) ? getId()
+				.equals(((JJCompany) object).getId()) : (object == this);
+	}
 }

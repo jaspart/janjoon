@@ -101,7 +101,9 @@
 											value="#{jJContactBean.contactAdmin.email}"
 											label="#{messages.admin_contact_new_email_label}"
 											required="true"
-											disabled="#{jJContactBean.disabledContactMode}" />
+											disabled="#{jJContactBean.disabledContactMode}" >
+											<f:validator validatorId="emailValidator"/>
+											</p:inputText>
 										<p:watermark for="email"
 											value="#{messages.admin_contact_new_email_watermark}" />
 										<h:outputText value="#{jJContactBean.contactAdmin.email}" />
@@ -122,6 +124,19 @@
 
 								<p:row>
 									<p:column>
+										<p:outputLabel for="company"
+											value="Company: " />
+										<p:selectOneMenu id="company"
+											value="#{jJContactBean.contactAdmin.company}" panelStyle="width:150px"
+											effect="fade" style="width:160px" filter="true" required="true"
+											filterMatchMode="startsWith" converter="com.starit.janjoonweb.ui.mb.converter.JJCompanyConverter"
+											label="Company">
+																						
+											<f:selectItems value="#{jJCompanyBean.companies}" var="c"
+												itemLabel="#{c.name}" itemValue="#{c}" />
+										</p:selectOneMenu>
+									</p:column>
+									<p:column>
 										<p:selectBooleanButton
 											value="#{jJContactBean.contactAdmin.enabled}"
 											onLabel="#{messages.admin_contact_new_active_button}"
@@ -138,7 +153,7 @@
 									<p:column colspan="4">
 										<p:commandButton id="addContact" value="Add Contact"
 											style="float: right;" update="contactDialogForm"
-											process="@this,firstname,lastname,email,password"
+											process="@this,firstname,lastname,email,password,company"
 											action="#{jJContactBean.addContact(jJPermissionBean)}"
 											disabled="#{not jJContactBean.disabledPermissionMode}" />
 									</p:column>
@@ -287,7 +302,7 @@
 							<p:column colspan="4">
 								<p:commandButton id="saveButton" value="Save"
 									update="contactDialogForm" style="float: right;"
-									process="@this,firstname,lastname,email,password"
+									process="@this,firstname,lastname,email,password,company"
 									disabled="#{jJContactBean.disabledPermissionMode}"
 									action="#{jJContactBean.save(jJPermissionBean)}" />
 							</p:column>

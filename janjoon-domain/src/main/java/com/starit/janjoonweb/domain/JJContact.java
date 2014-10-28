@@ -101,6 +101,7 @@ public class JJContact  {
 	@ManyToOne
 	private JJContact manager;
 
+	@NotNull
 	@ManyToOne
 	private JJCompany company;
 

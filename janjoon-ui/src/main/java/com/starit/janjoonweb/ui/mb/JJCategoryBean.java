@@ -91,6 +91,11 @@ public class JJCategoryBean {
 		if (categoryAdmin != null) {
 			categoryAdmin.setEnabled(false);
 			jJCategoryService.updateJJCategory(categoryAdmin);
+			
+			String message = "message_successfully_deleted";
+			FacesMessage facesMessage = MessageFactory.getMessage(message, "JJCategory");		
+
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
 	}
 

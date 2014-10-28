@@ -2,6 +2,7 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -41,6 +42,8 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.ui.mb.util.CalendarUtil;
+import com.starit.janjoonweb.ui.mb.util.ContactCalendarUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.UsageChecker;
 import com.starit.janjoonweb.ui.security.AuthorizationManager;
@@ -356,17 +359,7 @@ public class LoginBean implements Serializable {
 	public void onTabAdminChange(TabChangeEvent event) {
 		TabView tv = (TabView) event.getComponent();
 		this.activeTabAdminIndex = tv.getChildren().indexOf(event.getTab());
-		System.out.println("###### ACtive tab: " + activeTabAdminIndex);
-		if(activeTabAdminIndex==2)
-		{
-			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			JJCompanyBean companyBean=(JJCompanyBean) session.getAttribute("jJCompanyBean");
-			if (companyBean==null)
-				companyBean=new JJCompanyBean();
-			companyBean.initCalendar();
-					
-		}
+		System.out.println("###### ACtive tab: " + activeTabAdminIndex);			
 	}
 
 	public void onTabProjectChange(TabChangeEvent event) {

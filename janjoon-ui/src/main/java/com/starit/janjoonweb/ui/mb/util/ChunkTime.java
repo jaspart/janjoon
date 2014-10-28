@@ -26,7 +26,6 @@ public class ChunkTime {
 		this.chunkWorkLoad=0;
 	}
 
-	@SuppressWarnings("deprecation")
 	public ChunkTime(int dayNumber, Date startDate1, Date endDate1,
 			Date startDate2, Date endDate2) {
 		super();

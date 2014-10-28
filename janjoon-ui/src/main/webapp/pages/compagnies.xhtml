@@ -6,7 +6,145 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
+	<h:form id="companyForm">
+		<p:panel id="companyPanel" style="width:500px" columns="1"
+			cellpadding="6">
+			<p:dataTable id="companyDataTable" var="company"
+				value="#{jJCompanyBean.companies}" paginator="true" rows="15"
+				rowKey="#{company.id}">
+				<f:facet name="header">#{messages.admin_company_table_header}</f:facet>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_company_table_name_title}" />
+					</f:facet>
+					<h:outputText value="#{company.name}" />
+				</p:column>
+				<p:column styleClass="action-column">
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_company_table_action_title}" />
+					</f:facet>
+					<p:splitButton id="editButton" icon="ui-icon-pencil"
+						oncomplete="companyDialogWidget.show()"
+						value="#{messages.admin_company_table_edit_tooltip}"
+						update=":tabview:companyDialog">
+						<f:setPropertyActionListener value="#{company}"
+							target="#{jJCompanyBean.companie}" />
+						<f:setPropertyActionListener
+							target="#{jJCompanyBean.headerMessage}"
+							value="admin_company_edit_title" />
 
 
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							value="#{messages.admin_company_table_delete_tooltip}"
+							oncomplete="companyDeleteDialogWidget.show()"
+							title="#{messages.label_delete}">
+							<f:setPropertyActionListener value="#{company}"
+								target="#{jJCompanyBean.companie}" />
+
+						</p:menuitem>
+
+					</p:splitButton>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton value="#{messages.admin_company_new_button}"
+						id="newCompany" update=":tabview:companyDialog"
+						oncomplete="companyDialogWidget.show()" icon="ui-icon-circle-plus">
+						<f:setPropertyActionListener
+							target="#{jJCompanyBean.headerMessage}"
+							value="admin_company_new_title" />
+						<f:setPropertyActionListener value="#{null}"
+							target="#{jJCompanyBean.companie}" />
+					</p:commandButton>
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+	<p:dialog id="companyDialog"
+		header="#{messages[jJCompanyBean.headerMessage]}" modal="true"
+		widgetVar="companyDialogWidget" dynamic="true" showEffect="fade"
+		hideEffect="explode" resizable="false">
+		<p:ajax event="close" update=":tabview:companyForm"
+			listener="#{jJCompanyBean.closeDialog}" />
+		<p:outputPanel id="companyDialogPanel">
+			<h:form id="companyDialogForm">
+				<p:growl id="msg" />
+				<p:panelGrid style="margin-top:10px">
+					<p:row>
+						<p:column colspan="1">
+							<p:outputLabel value="Name :" for="name" />
+						</p:column>
+						<p:column colspan="2">
+							<p:inputText id="name" value="#{jJCompanyBean.companie.name}"
+								label="#{messages.admin_company_new_name_label}" required="true"
+								widgetVar="nameWidget">
+								<f:validateLength maximum="100" />
+							</p:inputText>
+							<p:message for="name" id="msgName" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="1">
+							<h:outputLabel for="calendar" value="Calendrier" />
+						</p:column>
+						<p:column colspan="2">
+							<p:fileUpload id="calendar" fileLimit="1"
+								required="#{jJCompanyBean.update}"
+								fileUploadListener="#{jJCompanyBean.handleFileUpload}"
+								mode="advanced" dragDropSupport="true"
+								update="msg valValue" sizeLimit="100000"
+								allowTypes="/(\.|\/)(properties)$/" />
+							
+							<h:inputHidden id="valValue" value="#{jJCompanyBean.calendar}"
+								required="#{jJCompanyBean.update}"
+								requiredMessage="You Have Not Uploaded the Calendar of the Company" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="3">
+							<p:outputLabel value="Description" for="jJCompanyDescription" />
+							<br />
+							<pe:ckEditor id="jJCompanyDescription"
+								toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
+								style="width:680px"
+								customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+								value="#{jJCompanyBean.companie.description}" required="true"
+								requiredMessage="Description is a required value" />
+
+						</p:column>
+					</p:row>
+					<f:facet name="footer">
+						<p:row>
+							<p:column colspan="3">
+								<p:commandButton id="submitButton"
+									value="#{messages.admin_company_new_save_button}"
+									update="companyDialogForm"
+									action="#{jJCompanyBean.saveCompany}" />
+								<p:commandButton id="cancelButton" value="Annuler"
+									onclick="companyDialogWidget.hide()" type="button" />
+							</p:column>
+						</p:row>
+					</f:facet>
+				</p:panelGrid>
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+	<p:confirmDialog id="companyDeleteDialog"
+		widgetVar="companyDeleteDialogWidget"
+		message="#{messages.admin_company_delete_label}" showEffect="fade"
+		hideEffect="explode" header="#{messages.admin_company_delete_title}"
+		severity="alarm">
+		<p:outputPanel id="companyDeletePanel">
+			<h:form id="companyDeleteForm">
+				<p:commandButton id="deleteYesButton"
+					value="#{messages.admin_company_delete_yes_label}"
+					action="#{jJCompanyBean.deleteCompany}"
+					update=":tabview:companyForm"
+					oncomplete="companyDeleteDialogWidget.hide()" />
+				<p:commandButton id="deleteNoButton"
+					value="#{messages.admin_company_delete_no_label}"
+					onclick="companyDeleteDialogWidget.hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:confirmDialog>
 </ui:composition>
 </html>

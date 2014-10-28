@@ -1,12 +1,27 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
+
+import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCompany;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.ui.mb.util.CalendarUtil;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
@@ -14,11 +29,31 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 @RooJsfManagedBean(entity = JJCompany.class, beanName = "jJCompanyBean")
 public class JJCompanyBean {
 	
+	private String calendar;
+	private boolean update;
 	private List<JJCompany> companies;
-	
+	private String headerMessage;
+	private JJCompany companie;	
+	public String getCalendar() {
+		return calendar;
+	}
+
+	public void setCalendar(String calendar) {
+		this.calendar = calendar;
+	}
+
+	public boolean isUpdate() {
+		return update;
+	}
+
+	public void setUpdate(boolean update) {
+		this.update = update;
+	}
+
 	private CalendarUtil companyCalendar;
 
 	public CalendarUtil getCompanyCalendar() {
+		
 		if(companyCalendar == null)
 			companyCalendar=new CalendarUtil(jJCompanyService.findAllJJCompanys().get(0));
 		return companyCalendar;
@@ -28,7 +63,37 @@ public class JJCompanyBean {
 		this.companyCalendar = companyCalendar;
 	}
 
+	public String getHeaderMessage() {
+		return headerMessage;
+	}
+
+	public void setHeaderMessage(String headerMessage) {
+		this.headerMessage = headerMessage;
+	}
+
+	public JJCompany getCompanie() {
+		
+		if(companie==null)
+		{
+			companie=new JJCompany();
+			update=true;
+		}else if(companie.getId()==null)
+			update=true;
+		else 
+			update=false;
+		
+		return companie;
+	}
+
+	public void setCompanie(JJCompany companie) {
+		this.companie = companie;
+	}
+
 	public List<JJCompany> getCompanies() {
+			
+		
+		if(companies == null)
+			companies=jJCompanyService.getActifCompanies();
 		return companies;
 	}
 
@@ -61,4 +126,72 @@ public class JJCompanyBean {
 		}
 	}
 	
+	public void closeDialog() {
+		companie=null;
+	}
+	
+	public void deleteCompany()
+	{
+		if (companie != null) {
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+
+			JJContact contact = (JJContact) session
+					.getAttribute("JJContact");
+			companie.setUpdatedBy(contact);
+			companie.setEnabled(false);
+			jJCompanyService.updateJJCompany(companie);
+			companies=null;
+			
+			String message = "message_successfully_deleted";
+			FacesMessage facesMessage = MessageFactory.getMessage(message, "JJCompany");			
+
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
+	}
+	public void saveCompany()
+	{
+		HttpSession session = (HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext()
+				.getSession(false);
+
+		JJContact contact = (JJContact) session
+				.getAttribute("JJContact");
+		String message = "";
+		FacesMessage facesMessage = null;
+		if(calendar != null)
+			companie.setCalendar(calendar);
+	
+			if (companie.getId() == null) {
+				companie.setEnabled(true);
+				companie.setCreationDate(new Date());
+				jJCompanyService.saveJJCompany(companie);
+				message = "message_successfully_created";
+
+			}
+			else {
+
+				companie.setUpdatedDate(new Date());
+				companie.setUpdatedBy(contact);
+				jJCompanyService.updateJJCompany(companie);
+				message = "message_successfully_updated";
+			
+			}
+			companies=null;
+			
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("companyDialogWidget.hide()");
+
+			facesMessage = MessageFactory.getMessage(message, "JJCompany");			
+
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+	
+	}
+	
+	public void handleFileUpload(FileUploadEvent event) throws IOException {
+	
+		Scanner s = new Scanner(event.getFile().getInputstream()).useDelimiter("\\A");
+		calendar=(s.hasNext() ? s.next() : "");
+	}
 }
