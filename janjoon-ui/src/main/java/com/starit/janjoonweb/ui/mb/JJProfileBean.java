@@ -160,7 +160,7 @@ public class JJProfileBean {
 
 		jJProfileService.updateJJProfile(profileAdmin);
 
-		System.out.println("pppp");
+		profileAdmin=jJProfileService.findJJProfile(profileAdmin.getId());
 
 		List<JJRight> rights = jJRightService.getRights(profileAdmin, true);
 

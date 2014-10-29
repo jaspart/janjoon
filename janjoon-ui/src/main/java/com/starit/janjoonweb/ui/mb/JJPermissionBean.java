@@ -62,7 +62,7 @@ public class JJPermissionBean {
 	}
 
 	public List<JJProfile> getProfiles() {
-		profiles = jJProfileService.findAllJJProfiles();
+		profiles = jJProfileService.getProfiles(true);
 		return profiles;
 	}
 
