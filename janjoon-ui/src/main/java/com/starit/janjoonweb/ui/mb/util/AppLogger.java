@@ -61,9 +61,13 @@ public class AppLogger {
 		JJTask task = (JJTask) args[0];
 
 		ContactCalendarUtil calendarUtil;
-		
+		boolean assignedTo=false;
+
 		if (task.getAssignedTo() != null)
+		{
 			calendarUtil = new ContactCalendarUtil(task.getAssignedTo());
+			assignedTo=!task.getAssignedTo().equals(jJTaskService.findJJTask(task.getId()).getAssignedTo());
+		}			
 		else {
 			calendarUtil = new ContactCalendarUtil(jJProjectService
 					.findJJProject(
@@ -73,43 +77,91 @@ public class AppLogger {
 									.getAttribute("jJProjectBean"))
 									.getProject().getId()).getManager()
 					.getCompany());
+			assignedTo=jJTaskService.findJJTask(task.getId()).getAssignedTo()!=null;
 		}
 
-		if (task.getStartDatePlanned() != null)
-			task.setStartDatePlanned(calendarUtil.nextWorkingDate(task
-					.getStartDatePlanned()));
+		boolean planned = false;
+		boolean real = false;
+		boolean revised = false;
 
-		if (task.getEndDatePlanned() != null)
-			task.setEndDatePlanned(calendarUtil.nextWorkingDate(task
-					.getEndDatePlanned()));
+		if (task.getStartDatePlanned() != null) {
 
-		if (task.getStartDateReal() != null)
-			task.setStartDateReal(calendarUtil.nextWorkingDate(task
-					.getStartDateReal()));
+			if ((!task.getStartDatePlanned().equals(
+					jJTaskService.findJJTask(task.getId())
+							.getStartDatePlanned()))||assignedTo) {
+				task.setStartDatePlanned(calendarUtil.nextWorkingDate(task
+						.getStartDatePlanned()));
+				planned = true;
+				System.err.println("getStartDatePlanned Date modified");
+			}
 
-		if (task.getEndDateReal() != null)
-			task.setEndDateReal(calendarUtil.nextWorkingDate(task
-					.getEndDateReal()));
+		}
 
-		if (task.getStartDateRevised() != null)
-			task.setStartDateRevised(calendarUtil.nextWorkingDate(task
-					.getStartDateRevised()));
+		if (task.getEndDatePlanned() != null) {
 
-		if (task.getEndDateRevised() != null)
-			task.setEndDateRevised(calendarUtil.nextWorkingDate(task
-					.getEndDateRevised()));
+			if ((!task.getEndDatePlanned().equals(
+					jJTaskService.findJJTask(task.getId()).getEndDatePlanned()))||assignedTo) {
+				task.setEndDatePlanned(calendarUtil.nextWorkingDate(task
+						.getEndDatePlanned()));
+				planned = true;
+				System.err.println("getEndDatePlanned Date modified");
+			}
+
+		}
 
 		if (task.getEndDatePlanned() != null
-				&& task.getStartDatePlanned() != null)
+				&& task.getStartDatePlanned() != null && planned)
 			task.setWorkloadPlanned(calendarUtil.calculateWorkLoad(
 					task.getStartDatePlanned(), task.getEndDatePlanned()));
 
-		if (task.getEndDateReal() != null && task.getStartDateReal() != null)
+		if (task.getStartDateReal() != null) {
+			if ((!task.getStartDateReal().equals(
+					jJTaskService.findJJTask(task.getId()).getStartDateReal()))||assignedTo) {
+				task.setStartDateReal(calendarUtil.nextWorkingDate(task
+						.getStartDateReal()));
+				System.err.println("getStartDateReal Date modified");
+				real = true;
+			}
+		}
+
+		if (task.getEndDateReal() != null) {
+			if ((!task.getEndDateReal().equals(
+					jJTaskService.findJJTask(task.getId()).getEndDateReal()))||assignedTo) {
+				task.setEndDateReal(calendarUtil.nextWorkingDate(task
+						.getEndDateReal()));
+				System.err.println("getEndDateReal Date modified");
+				real = true;
+			}
+		}
+
+		if (task.getEndDateReal() != null && task.getStartDateReal() != null
+				&& real)
 			task.setWorkloadReal(calendarUtil.calculateWorkLoad(
 					task.getStartDateReal(), task.getEndDateReal()));
 
+		if (task.getStartDateRevised() != null) {
+			if ((!task.getStartDateRevised().equals(
+					jJTaskService.findJJTask(task.getId())
+							.getStartDateRevised()))||assignedTo) {
+				task.setStartDateRevised(calendarUtil.nextWorkingDate(task
+						.getStartDateRevised()));
+				System.err.println("getStartDateRevised Date modified");
+				revised = true;
+			}
+		}
+
+		if (task.getEndDateRevised() != null) {
+			if ((!task.getEndDateRevised().equals(
+					jJTaskService.findJJTask(task.getId()).getEndDateRevised()))||assignedTo) {
+				task.setEndDateRevised(calendarUtil.nextWorkingDate(task
+						.getEndDateRevised()));
+				System.err.println("getEndDateRevised Date modified");
+				revised = true;
+			}
+		}
+
 		if (task.getEndDateRevised() != null
-				&& task.getStartDateRevised() != null)
+				&& task.getStartDateRevised() != null && revised)
 			task.setWorkloadRevised(calendarUtil.calculateWorkLoad(
 					task.getStartDateRevised(), task.getEndDateRevised()));
 

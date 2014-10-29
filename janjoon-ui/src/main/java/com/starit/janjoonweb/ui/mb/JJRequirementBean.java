@@ -833,7 +833,7 @@ public class JJRequirementBean {
 			JJTestcase tc = jJTestcaseService.findJJTestcase(testcase.getId());
 			for (JJTask task : tc.getTasks()) {
 				task.setEnabled(false);
-				jJTaskBean.saveJJTask(task,true);
+				jJTaskBean.saveJJTask(task, true);
 			}
 			tc.setEnabled(false);
 			jJTestcaseService.updateJJTestcase(tc);
@@ -841,7 +841,7 @@ public class JJRequirementBean {
 
 		for (JJTask task : req.getTasks()) {
 			task.setEnabled(false);
-			jJTaskBean.saveJJTask(task,true);
+			jJTaskBean.saveJJTask(task, true);
 		}
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
@@ -1548,7 +1548,7 @@ public class JJRequirementBean {
 				List<RequirementUtil> requirements = (List<RequirementUtil>) categoryDataModel
 						.getWrappedData();
 				requirements.add(0, new RequirementUtil(requirement,
-						getRowStyleClass(requirement)));
+						getRowStyleClass(requirement,true)));
 			}
 			// categoryDataModel.calculCompletionProgress();
 			// categoryDataModel.calculCoverageProgress();
@@ -2369,14 +2369,13 @@ public class JJRequirementBean {
 	}
 
 	private void getRequirementOrder() {
-		
+
 		if (jJTaskBean == null) {
 			HttpSession session = (HttpSession) FacesContext
 					.getCurrentInstance().getExternalContext()
 					.getSession(false);
 			jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
 		}
-
 
 		long t = System.currentTimeMillis();
 		SortedMap<Integer, Object> elements = null;
@@ -2725,7 +2724,7 @@ public class JJRequirementBean {
 				for (JJTask task : tasks) {
 					task.setEnabled(false);
 					task.setUpdatedDate(new Date());
-					jJTaskBean.saveJJTask(task,true);
+					jJTaskBean.saveJJTask(task, true);
 				}
 
 				testcaseList = req.getTestcases();
@@ -2747,7 +2746,7 @@ public class JJRequirementBean {
 				for (JJTask task : tasks) {
 					task.setEnabled(true);
 					task.setUpdatedDate(new Date());
-					jJTaskBean.saveJJTask(task,true);
+					jJTaskBean.saveJJTask(task, true);
 				}
 
 				testcaseList = req.getTestcases();
@@ -3644,7 +3643,7 @@ public class JJRequirementBean {
 		// oncomplete="PF('blockUIWidget').unblock();"
 	}
 
-	public String getRowStyleClass(JJRequirement requirement) {
+	public String getRowStyleClass(JJRequirement requirement,boolean NotMain) {
 
 		long t = System.currentTimeMillis();
 		List<JJCategory> categoryList = jJCategoryService.getCategories(null,
@@ -3709,17 +3708,20 @@ public class JJRequirementBean {
 		if (tasks.isEmpty()) {
 			TASK = false;
 		}
-		for (JJTask task : tasks) {
-			if (task.getEndDateReal() == null) {
-				ENCOURS = true;
-				FINIS = false;
-				break;
+		if(NotMain)
+		{
+			for (JJTask task : tasks) {
+				if (task.getEndDateReal() == null) {
+					ENCOURS = true;
+					FINIS = false;
+					break;
+				}
 			}
-		}
+		}	
 
 		String rowStyleClass = "";
 
-		if (UP && DOWN && TASK) {
+		if (UP && DOWN && TASK && NotMain) {
 
 			if (ENCOURS && !FINIS) {
 				rowStyleClass = "RequirementInProcess";
@@ -3758,9 +3760,10 @@ public class JJRequirementBean {
 
 			}
 
-		} else if (UP && DOWN && !TASK) {
+		} else if (UP && DOWN && !TASK ) {
 			rowStyleClass = "RequirementNoTask";
 		} else {
+			if(!(UP && DOWN && TASK))
 			rowStyleClass = "RequirementNotLinked";
 		}
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
@@ -3778,7 +3781,7 @@ public class JJRequirementBean {
 			for (JJRequirement req : jJRequirementService
 					.findAllJJRequirements()) {
 				if (req.getEnabled() && req.getCategory() != null) {
-					if (isRequirementNotLinked(req))
+					if (getRowStyleClass(req,false).equalsIgnoreCase("RequirementNotLinked"))
 						noCouvretReq.add(req);
 				}
 			}
@@ -3786,81 +3789,12 @@ public class JJRequirementBean {
 
 	}
 
-	public boolean isRequirementNotLinked(JJRequirement req) {
-		List<JJCategory> categoryList = jJCategoryService.getCategories(null,
-				false, true, true);
-
-		JJCategory category = jJCategoryService.findJJCategory(req
-				.getCategory().getId());
-
-		boolean sizeIsOne = false;
-
-		boolean UP = false;
-		boolean DOWN = false;
-		boolean TASK = true;
-
-		req = jJRequirementService.findJJRequirement(req.getId());
-
-		if (jJTaskService.getTasks(null, null, null, null, null, req, null,
-				null, true, false, false, null).isEmpty()) {
-			TASK = false;
-		}
-		if (!TASK) {
-
-			if (category.getStage() == categoryList.get(0).getStage()) {
-				DOWN = true;
-
-				for (JJRequirement r : req.getRequirementLinkUp()) {
-					if (r.getEnabled()) {
-						UP = true;
-						break;
-					}
-				}
-
-				sizeIsOne = true;
-			} else if (category.getStage() == categoryList.get(
-					categoryList.size() - 1).getStage()
-					&& !sizeIsOne) {
-
-				UP = true;
-
-				for (JJRequirement r : req.getRequirementLinkDown()) {
-					if (r.getEnabled()) {
-						DOWN = true;
-						break;
-					}
-				}
-
-			} else {
-
-				for (JJRequirement r : req.getRequirementLinkUp()) {
-					if (r.getEnabled()) {
-						UP = true;
-						break;
-					}
-				}
-
-				if (UP) {
-					for (JJRequirement r : req.getRequirementLinkDown()) {
-						if (r.getEnabled()) {
-							DOWN = true;
-							break;
-						}
-					}
-				}
-
-			}
-		}
-
-		return UP && DOWN && !TASK;
-	}
-
 	public List<RequirementUtil> getListOfRequiremntUtils(
 			List<JJRequirement> requirments) {
 		List<RequirementUtil> requirementUtils = new ArrayList<RequirementUtil>();
 		for (JJRequirement req : requirments) {
 			requirementUtils
-					.add(new RequirementUtil(req, getRowStyleClass(req)));
+					.add(new RequirementUtil(req, getRowStyleClass(req,true)));
 		}
 		return requirementUtils;
 	}

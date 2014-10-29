@@ -219,7 +219,7 @@
 					value="#{jJRequirementBean.noCouvretReq}" rowKey="#{req.id}"
 					var="req" widgetVar="taskTable" scrollable="true"
 					scrollHeight="200"
-					emptyMessage="There is no Task to do,See all in project View">
+					emptyMessage="There is no Requirement non couvered,See all in Spec View">
 
 					<p:column headerText="Specification" colspan="2">
 						<h:outputText value="#{req}" converter="JJRequirementConverter" />
@@ -233,6 +233,11 @@
 					<p:column headerText="Project">
 						<h:outputText value="#{req.project}"
 							converter="JJProjectConverter" />
+
+					</p:column>
+							<p:column headerText="Category">
+						<h:outputText value="#{req.category}"
+							converter="JJCategoryConverter" />
 
 					</p:column>
 

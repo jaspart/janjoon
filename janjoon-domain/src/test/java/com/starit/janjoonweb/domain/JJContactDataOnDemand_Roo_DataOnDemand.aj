@@ -3,6 +3,7 @@
 
 package com.starit.janjoonweb.domain;
 
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJCompanyDataOnDemand;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
@@ -59,6 +60,7 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
         setAccountNonExpired(obj, index);
         setAccountNonLocked(obj, index);
         setCalendar(obj, index);
+        setCompany(obj, index);
         setCreatedBy(obj, index);
         setCreationDate(obj, index);
         setCredentialsNonExpired(obj, index);
@@ -94,6 +96,11 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
     public void JJContactDataOnDemand.setCalendar(JJContact obj, int index) {
         String calendar = "calendar_" + index;
         obj.setCalendar(calendar);
+    }
+    
+    public void JJContactDataOnDemand.setCompany(JJContact obj, int index) {
+        JJCompany company = jJCompanyDataOnDemand.getRandomJJCompany();
+        obj.setCompany(company);
     }
     
     public void JJContactDataOnDemand.setCreatedBy(JJContact obj, int index) {
