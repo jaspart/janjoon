@@ -8,13 +8,14 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
-
-		<p:tabView id="tabview" widgetVar="tabView" dynamic="true"
+		<p:tabView id="tabview" widgetVar="AdmintabView" dynamic="true"
 			cache="true" activeIndex="#{loginBean.activeTabAdminIndex}">
 			<p:ajax event="tabChange" listener="#{loginBean.onTabAdminChange}"
-				update="tabview" />
+				update="tabview " />
 
-			<p:tab id="tabUser" title="#{messages.admin_user_menuitem}">
+			<p:tab id="tabUser" title="#{messages.admin_user_menuitem}"
+				titletip="#{jJContactBean.warnMessage}"
+				disabled="#{!jJContactBean.renderContactAdminTab}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="contact">
 						<ui:include src="contact.xhtml" />
@@ -22,7 +23,9 @@
 				</h:panelGrid>
 			</p:tab>
 
-			<p:tab id="tabProfile" title="#{messages.admin_profile_menuitem}">
+			<p:tab id="tabProfile" title="#{messages.admin_profile_menuitem}"
+			titletip="#{jJContactBean.warnMessage}"
+				disabled="#{!jJContactBean.renderContactAdminTab}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="profile">
 						<ui:include src="profile.xhtml" />
@@ -30,7 +33,9 @@
 				</h:panelGrid>
 			</p:tab>
 
-			<p:tab id="tabCompagnies" title="#{messages.admin_company_menuitem}">
+			<p:tab id="tabCompagnies" title="#{messages.admin_company_menuitem}"
+			titletip="#{jJContactBean.warnMessage}"
+				disabled="#{!jJContactBean.renderContactAdminTab}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="Compagnies">
 						<ui:include src="compagnies.xhtml" />

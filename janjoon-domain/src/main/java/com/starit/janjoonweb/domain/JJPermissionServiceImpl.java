@@ -97,34 +97,33 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
 
 		if (objet != null) {
-
-			orPredicates = new ArrayList<Predicate>();
-
 			orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
 					objet));
-
 			orPredicates
 					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
 
-			Predicate orPredicate = criteriaBuilder.or(orPredicates
-					.toArray(new Predicate[] {}));
-			predicates.add(orPredicate);
+		} else
+			orPredicates
+					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
 
-		}
+		Predicate orPredicate = criteriaBuilder.or(orPredicates
+				.toArray(new Predicate[] {}));
+		predicates.add(orPredicate);
 
-		if (category != null) {
+		orPredicates = new ArrayList<Predicate>();
 
-			orPredicates = new ArrayList<Predicate>();
+		if (category != null)
 
+		{
 			orPredicates.add(criteriaBuilder.equal(fromRight.get("category"),
 					category));
-
+			orPredicates.add(criteriaBuilder.isNull(fromRight.get("category")));
+		} else
 			orPredicates.add(criteriaBuilder.isNull(fromRight.get("category")));
 
-			Predicate orPredicate = criteriaBuilder.or(orPredicates
-					.toArray(new Predicate[] {}));
-			predicates.add(orPredicate);
-		}
+		orPredicate = criteriaBuilder.or(orPredicates
+				.toArray(new Predicate[] {}));
+		predicates.add(orPredicate);
 
 		if (r != null) {
 			predicates.add(criteriaBuilder.equal(fromRight.get("r"), r));
@@ -150,35 +149,32 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		if (contact != null) {
 			predicates.add(criteriaBuilder.equal(from.get("contact"), contact));
 		}
+		orPredicates = new ArrayList<Predicate>();
 
 		if (project != null) {
-
-			orPredicates = new ArrayList<Predicate>();
-
 			orPredicates
 					.add(criteriaBuilder.equal(from.get("project"), project));
-
+			orPredicates.add(criteriaBuilder.isNull(from.get("project")));
+		} else
 			orPredicates.add(criteriaBuilder.isNull(from.get("project")));
 
-			Predicate orPredicate = criteriaBuilder.or(orPredicates
-					.toArray(new Predicate[] {}));
-			predicates.add(criteriaBuilder.and(orPredicate));
+		orPredicate = criteriaBuilder.or(orPredicates
+				.toArray(new Predicate[] {}));
+		predicates.add(criteriaBuilder.and(orPredicate));
 
-		}
+		orPredicates = new ArrayList<Predicate>();
 
 		if (product != null) {
-			orPredicates = new ArrayList<Predicate>();
-
 			orPredicates
 					.add(criteriaBuilder.equal(from.get("product"), product));
-
+			orPredicates.add(criteriaBuilder.isNull(from.get("product")));
+		} else
 			orPredicates.add(criteriaBuilder.isNull(from.get("product")));
 
-			Predicate orPredicate = criteriaBuilder.or(orPredicates
-					.toArray(new Predicate[] {}));
+		orPredicate = criteriaBuilder.or(orPredicates
+				.toArray(new Predicate[] {}));
 
-			predicates.add(criteriaBuilder.and(orPredicate));
-		}
+		predicates.add(criteriaBuilder.and(orPredicate));
 
 		predicates.add(criteriaBuilder.equal(path.get("enabled"), true));
 
@@ -265,31 +261,31 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
 
 		if (objet != null) {
-			orPredicates = new ArrayList<Predicate>();
-
 			orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
 					objet));
+			orPredicates
+					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
+		} else
 
 			orPredicates
 					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
 
-			Predicate orPredicate = criteriaBuilder.or(orPredicates
-					.toArray(new Predicate[] {}));
-			predicates.add(orPredicate);
-		}
+		Predicate orPredicate = criteriaBuilder.or(orPredicates
+				.toArray(new Predicate[] {}));
+		predicates.add(orPredicate);
 
-		if (category != null) {
-			orPredicates = new ArrayList<Predicate>();
+		orPredicates = new ArrayList<Predicate>();
+
+		if (category != null)
 
 			orPredicates.add(criteriaBuilder.equal(fromRight.get("category"),
 					category));
-
+		else
 			orPredicates.add(criteriaBuilder.isNull(fromRight.get("category")));
 
-			Predicate orPredicate = criteriaBuilder.or(orPredicates
-					.toArray(new Predicate[] {}));
-			predicates.add(orPredicate);
-		}
+		orPredicate = criteriaBuilder.or(orPredicates
+				.toArray(new Predicate[] {}));
+		predicates.add(orPredicate);
 
 		if (r != null) {
 			predicates.add(criteriaBuilder.equal(fromRight.get("r"), r));
@@ -312,33 +308,32 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		predicates = new ArrayList<Predicate>();
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
-		if (project != null) {
-			orPredicates = new ArrayList<Predicate>();
+		orPredicates = new ArrayList<Predicate>();
+
+		if (project != null)
 
 			orPredicates
 					.add(criteriaBuilder.equal(from.get("project"), project));
-
+		else
 			orPredicates.add(criteriaBuilder.isNull(from.get("project")));
 
-			Predicate orPredicate = criteriaBuilder.or(orPredicates
-					.toArray(new Predicate[] {}));
+		orPredicate = criteriaBuilder.or(orPredicates
+				.toArray(new Predicate[] {}));
 
-			predicates.add(criteriaBuilder.and(orPredicate));
-		}
+		predicates.add(criteriaBuilder.and(orPredicate));
 
-		if (product != null) {
-			orPredicates = new ArrayList<Predicate>();
+		orPredicates = new ArrayList<Predicate>();
+		if (product != null)
 
 			orPredicates
 					.add(criteriaBuilder.equal(from.get("product"), product));
-
+		else
 			orPredicates.add(criteriaBuilder.isNull(from.get("product")));
 
-			Predicate orPredicate = criteriaBuilder.or(orPredicates
-					.toArray(new Predicate[] {}));
+		orPredicate = criteriaBuilder.or(orPredicates
+				.toArray(new Predicate[] {}));
 
-			predicates.add(criteriaBuilder.and(orPredicate));
-		}
+		predicates.add(criteriaBuilder.and(orPredicate));
 
 		predicates.add(criteriaBuilder.equal(path.get("enabled"), true));
 
@@ -369,17 +364,17 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 	public Set<JJContact> areAuthorized(JJProject project, JJProduct product) {
 		return areAuthorized(project, product, null, null, null, null, null);
 	}
-	
-public void saveJJPermission(JJPermission JJPermission_) {
-		
-        jJPermissionRepository.save(JJPermission_);
-        JJPermission_=jJPermissionRepository.findOne(JJPermission_.getId());
-    }
-    
-    public JJPermission updateJJPermission(JJPermission JJPermission_) {
-        jJPermissionRepository.save(JJPermission_);
-        JJPermission_=jJPermissionRepository.findOne(JJPermission_.getId());
-        return JJPermission_;
-    }
+
+	public void saveJJPermission(JJPermission JJPermission_) {
+
+		jJPermissionRepository.save(JJPermission_);
+		JJPermission_ = jJPermissionRepository.findOne(JJPermission_.getId());
+	}
+
+	public JJPermission updateJJPermission(JJPermission JJPermission_) {
+		jJPermissionRepository.save(JJPermission_);
+		JJPermission_ = jJPermissionRepository.findOne(JJPermission_.getId());
+		return JJPermission_;
+	}
 
 }

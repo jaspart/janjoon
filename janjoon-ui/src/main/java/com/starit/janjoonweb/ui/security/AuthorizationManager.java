@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
@@ -67,6 +68,13 @@ public class AuthorizationManager implements Serializable {
 
 	public AuthorizationManager() {
 
+	}
+	
+	public boolean isAuthorized(JJContact contact, JJProject project,
+			JJProduct product, String objet, JJCategory category, Boolean r,
+			Boolean w, Boolean x)
+	{
+		return jJPermissionService.isAuthorized(contact, project, product,objet, category, r, w, x);
 	}
 
 	public boolean getAuthorization(String page, JJProject project,

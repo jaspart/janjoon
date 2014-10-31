@@ -85,19 +85,24 @@
 					<p:row>
 						<p:column colspan="1">
 							<h:outputLabel for="calendar" value="Calendrier" />
-						</p:column>
-						<p:column colspan="2">
-							<p:fileUpload id="calendar" fileLimit="1"
-								required="#{jJCompanyBean.update}"
-								fileUploadListener="#{jJCompanyBean.handleFileUpload}"
-								mode="advanced" dragDropSupport="true"
-								update="msg valValue" sizeLimit="100000"
-								allowTypes="/(\.|\/)(properties)$/" />
+						</p:column>		
+						<p:column>
+							<p:inputTextarea id="calendar" value="#{jJCompanyBean.companie.calendar}" 
+									required="true" requiredMessage="Calendar Field is Required"
+									rows="8" cols="37" autoResize="false" />
+						</p:column>			
+<!-- 						<p:column colspan="2"> -->
+<!-- 							<p:fileUpload id="calendar" fileLimit="1" -->
+<!-- 								required="#{jJCompanyBean.update}" -->
+<!-- 								fileUploadListener="#{jJCompanyBean.handleFileUpload}" -->
+<!-- 								mode="advanced" dragDropSupport="true" -->
+<!-- 								update="msg valValue" sizeLimit="100000" -->
+<!-- 								allowTypes="/(\.|\/)(properties)$/" /> -->
 							
-							<h:inputHidden id="valValue" value="#{jJCompanyBean.calendar}"
-								required="#{jJCompanyBean.update}"
-								requiredMessage="You Have Not Uploaded the Calendar of the Company" />
-						</p:column>
+<!-- 							<h:inputHidden id="valValue" value="#{jJCompanyBean.calendar}" -->
+<!-- 								required="#{jJCompanyBean.update}" -->
+<!-- 								requiredMessage="You Have Not Uploaded the Calendar of the Company" /> -->
+<!-- 						</p:column> -->					
 					</p:row>
 					<p:row>
 						<p:column colspan="3">

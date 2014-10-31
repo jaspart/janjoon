@@ -1514,7 +1514,7 @@ public class JJRequirementBean {
 			disabledRequirement = false;
 			haveSpecPermission = jJPermissionService.isAuthorized(
 					(JJContact) session.getAttribute("JJContact"), project,
-					product, "JJRequirement");
+					product, "JJRequirement",null,null,true,null);
 			if (!haveSpecPermission)
 				title = "You Have no permisson to do this action";
 			else

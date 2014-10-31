@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,24 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 public class JJContactBean {
 
 	@Autowired
-	public JJConfigurationService jJConfigurationService;
+	private JJConfigurationService jJConfigurationService;
 	
 	@Autowired 
-	BCryptPasswordEncoder encoder;
+	private BCryptPasswordEncoder encoder;
+
+	@Autowired
+	private JJPermissionService jJPermissionService;
+
+	private JJContact contactAdmin;
+	private List<JJContact> contacts;
+
+	private String message;
+	private String warnMessage;
+
+	private boolean disabledContactMode;
+	private boolean disabledPermissionMode;
+	private boolean contactState;
+	private boolean renderContactAdminTab;
 
 	public void setEncoder(BCryptPasswordEncoder encoder) {
 		this.encoder = encoder;
@@ -40,22 +55,11 @@ public class JJContactBean {
 		this.jJConfigurationService = jJConfigurationService;
 	}
 
-	@Autowired
-	JJPermissionService jJPermissionService;
 
 	public void setjJPermissionService(JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
 	}
 
-	private JJContact contactAdmin;
-	private List<JJContact> contacts;
-
-	private String message;
-
-	private boolean disabledContactMode;
-	private boolean disabledPermissionMode;
-
-	private boolean contactState;
 
 	public JJContact getContactAdmin() {
 	
@@ -65,6 +69,16 @@ public class JJContactBean {
 	public void setContactAdmin(JJContact contactAdmin) {
 		this.contactAdmin = contactAdmin;
 	}
+
+	public String getWarnMessage() {
+		return warnMessage;
+	}
+
+
+	public void setWarnMessage(String warnMessage) {
+		this.warnMessage = warnMessage;
+	}
+
 
 	public List<JJContact> getContacts() {
 		
@@ -99,6 +113,24 @@ public class JJContactBean {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
+	public boolean isRenderContactAdminTab() {
+		
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false);
+		renderContactAdminTab=jJPermissionService.isAuthorized((JJContact) session.getAttribute("JJContact"), null, null, "JJContact", null, true, null,null);
+		if(renderContactAdminTab)
+			warnMessage="";
+		else
+			warnMessage="Permission Denied";
+		return renderContactAdminTab;
+	}
+
+
+	public void setRenderContactAdminTab(boolean renderContactAdminTab) {
+		this.renderContactAdminTab = renderContactAdminTab;
+	}
+
 
 	public void newContact(JJPermissionBean jJPermissionBean) {
 

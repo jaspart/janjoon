@@ -34,6 +34,7 @@ public class JJCompanyBean {
 	private List<JJCompany> companies;
 	private String headerMessage;
 	private JJCompany companie;	
+	
 	public String getCalendar() {
 		return calendar;
 	}
@@ -160,8 +161,8 @@ public class JJCompanyBean {
 				.getAttribute("JJContact");
 		String message = "";
 		FacesMessage facesMessage = null;
-		if(calendar != null)
-			companie.setCalendar(calendar);
+//		if(calendar != null)
+//			companie.setCalendar(calendar);
 	
 			if (companie.getId() == null) {
 				companie.setEnabled(true);

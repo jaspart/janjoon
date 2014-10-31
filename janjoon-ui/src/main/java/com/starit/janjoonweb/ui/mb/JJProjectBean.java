@@ -145,12 +145,11 @@ public class JJProjectBean {
 	}
 	
 	public void checkPersmission()
-	{
-		
+	{		
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
 				.getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
-		haveTaskPermision=jJPermissionService.isAuthorized(contact, project, null, "JJTask");
+		haveTaskPermision=jJPermissionService.isAuthorized(contact, project, null, "JJTask", null,true, null, null);
 		
 		if (!haveTaskPermision)
 			warmMessage = "You Have no permisson to access this Category";

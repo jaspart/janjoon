@@ -34,7 +34,12 @@ public class ChunkTime {
 		this.endDate1 = CalendarUtil.getZeroDate(endDate1);
 		this.startDate2 = CalendarUtil.getZeroDate(startDate2);
 		this.endDate2 = CalendarUtil.getZeroDate(endDate2);
-		this.chunkWorkLoad=((endDate1.getTime()-startDate1.getTime())+(endDate2.getTime()-startDate2.getTime()))/(60 * 60 * 1000) % 24;
+		long l;
+		if(startDate2 != null)
+			l=endDate2.getTime()-startDate2.getTime();
+		else 
+			l=0;
+		this.chunkWorkLoad=((endDate1.getTime()-startDate1.getTime())+(l))/(60 * 60 * 1000) % 24;
 	}
 
 	public int getDayNumber() {

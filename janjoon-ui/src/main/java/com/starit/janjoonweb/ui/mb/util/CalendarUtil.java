@@ -21,6 +21,7 @@ public class CalendarUtil {
 	private static String HOLIDAYS = "holiday";
 
 	private JJCompany company;
+	private String hour_format;
 	private List<Date> holidays;
 	private List<ChunkTime> workDays;
 
@@ -45,7 +46,7 @@ public class CalendarUtil {
 		// initWorkDays
 		int i = 0;
 		workDays = new ArrayList<ChunkTime>();
-		String hour_format = properties.getProperty("hour.format");
+		hour_format = properties.getProperty("hour.format");
 		while (i < 7) {
 			String workDay = properties.getProperty(WORK_DAYS + "." + i);			
 
@@ -69,13 +70,13 @@ public class CalendarUtil {
 				try {
 					staDate2 = new SimpleDateFormat(hour_format).parse(workDay
 							.substring(14, 19));
-				} catch (ParseException e) {
+				} catch (ParseException |StringIndexOutOfBoundsException e) {
 					staDate2 = null;
 				}
 				try {
 					endDate2 = new SimpleDateFormat(hour_format).parse(workDay
 							.substring(20, 25));
-				} catch (ParseException e) {
+				} catch (ParseException | StringIndexOutOfBoundsException e) {
 					endDate2 = null;
 				}
 				workDays.add(new ChunkTime(i, staDate1, enDate1, staDate2,
@@ -117,6 +118,14 @@ public class CalendarUtil {
 
 	public void setCompany(JJCompany company) {
 		this.company = company;
+	}
+
+	public String getHour_format() {
+		return hour_format;
+	}
+
+	public void setHour_format(String hour_format) {
+		this.hour_format = hour_format;
 	}
 
 	public void setjCompanyService(JJCompanyService jCompanyService) {
@@ -165,11 +174,17 @@ public class CalendarUtil {
 
 
 	public static Date getZeroDate(Date date) {
-		Calendar calendar = Calendar.getInstance();
+		if (date != null)
+		{
+			Calendar calendar = Calendar.getInstance();
 
-		calendar.setTime(date);
-		calendar.set(1970, 0, 1);
-		return calendar.getTime();
+			calendar.setTime(date);
+			calendar.set(1970, 0, 1);
+			return calendar.getTime();
 
+		}else
+			return null;
+	
+		
 	}	
 }

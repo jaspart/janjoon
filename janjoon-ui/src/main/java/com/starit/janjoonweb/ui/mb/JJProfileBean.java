@@ -90,7 +90,7 @@ public class JJProfileBean {
 
 	public void newProfile(JJRightBean jJRightBean) {
 		message = "admin_profile_new_title";
-		
+
 		profileAdmin = new JJProfile();
 		profileAdmin.setEnabled(true);
 
@@ -109,14 +109,13 @@ public class JJProfileBean {
 
 		jJRightBean.setDisabledCheckRight(false);
 		jJRightBean.newRight();
-		
+
 		if (profileAdmin == null) {
 			System.out.println("null");
 		} else {
 			System.out.println("111111   sdfsdfsd " + profileAdmin.getId());
 		}
 
-		
 		jJRightBean.fillRightTable(profileAdmin);
 
 		disabledProfileMode = false;
@@ -160,7 +159,7 @@ public class JJProfileBean {
 
 		jJProfileService.updateJJProfile(profileAdmin);
 
-		profileAdmin=jJProfileService.findJJProfile(profileAdmin.getId());
+		profileAdmin = jJProfileService.findJJProfile(profileAdmin.getId());
 
 		List<JJRight> rights = jJRightService.getRights(profileAdmin, true);
 
@@ -184,18 +183,30 @@ public class JJProfileBean {
 				}
 			}
 
+			List<Long> longs = new ArrayList<Long>();
 			for (JJRight right : rights) {
 				if (!selectedRights.contains(right)) {
-					right.setEnabled(false);
-					jJRightService.updateJJRight(right);
+					longs.add(right.getId());
 				}
+			}
+			for (long l : longs) {
+				JJRight r=jJRightService.findJJRight(l);
+				r.setEnabled(false);
+				jJRightService.updateJJRight(r);
 			}
 
 		} else if (selectedRights.isEmpty() && !rights.isEmpty()) {
 
+			List<Long> longs = new ArrayList<Long>();
 			for (JJRight right : rights) {
-				right.setEnabled(false);
-				jJRightService.updateJJRight(right);
+
+				longs.add(right.getId());
+
+			}
+			for (long l : longs) {
+				JJRight r=jJRightService.findJJRight(l);
+				r.setEnabled(false);
+				jJRightService.updateJJRight(r);
 			}
 
 		} else if (!selectedRights.isEmpty() && rights.isEmpty()) {

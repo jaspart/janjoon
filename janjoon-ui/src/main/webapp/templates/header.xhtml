@@ -41,7 +41,7 @@
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()"
-							update=":contentPanel " />
+							update=":contentPanel tabMenu " />
 					</p:selectOneMenu>
 
 					<!--h:outputText value="#{messages.header_product_label}:" /-->

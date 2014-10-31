@@ -2,7 +2,6 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -42,8 +41,6 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.ui.mb.util.CalendarUtil;
-import com.starit.janjoonweb.ui.mb.util.ContactCalendarUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.UsageChecker;
 import com.starit.janjoonweb.ui.security.AuthorizationManager;
@@ -357,9 +354,13 @@ public class LoginBean implements Serializable {
 	}
 
 	public void onTabAdminChange(TabChangeEvent event) {
+
 		TabView tv = (TabView) event.getComponent();
+		System.out.println(this.activeTabAdminIndex);		
 		this.activeTabAdminIndex = tv.getChildren().indexOf(event.getTab());
-		System.out.println("###### ACtive tab: " + activeTabAdminIndex);			
+		System.out.println("###### ACtive tab: " + activeTabAdminIndex);
+		
+
 	}
 
 	public void onTabProjectChange(TabChangeEvent event) {
@@ -392,19 +393,26 @@ public class LoginBean implements Serializable {
 			if (event.getComponent().getClientId()
 					.contains("projectSelectOneMenu")) {
 
+				JJProject project = (JJProject) event.getNewValue();
+
+				jJProjectBean.setProject(project);
+				jJProjectBean.setWarmMessage(null);
+				jJProjectBean.checkPersmission();
+
 				session.setAttribute("jJSprintBean", new JJSprintBean());
 				session.setAttribute("jJTaskBean", new JJTaskBean());
 				session.setAttribute("jJBugBean", new JJBugBean());
-				if(session.getAttribute("jJRequirementBean") != null)
-				{
-					List<JJRequirement> req=((JJRequirementBean)session.getAttribute("jJRequirementBean")).getNoCouvretReq();
+				if (session.getAttribute("jJRequirementBean") != null) {
+					List<JJRequirement> req = ((JJRequirementBean) session
+							.getAttribute("jJRequirementBean"))
+							.getNoCouvretReq();
 					session.setAttribute("jJRequirementBean",
 							new JJRequirementBean());
-					((JJRequirementBean)session.getAttribute("jJRequirementBean")).setNoCouvretReq(req);
+					((JJRequirementBean) session
+							.getAttribute("jJRequirementBean"))
+							.setNoCouvretReq(req);
 				}
-				
-				jJProjectBean.setWarmMessage(null);
-				jJProjectBean.checkPersmission();
+
 			}
 
 			if (viewId.contains("development")) {
@@ -455,10 +463,10 @@ public class LoginBean implements Serializable {
 
 				if (event.getComponent().getClientId()
 						.contains("projectSelectOneMenu")) {
-
 					JJProject project = (JJProject) event.getNewValue();
 
 					jJProjectBean.setProject(project);
+
 					jJRequirementBean.setProject(project);
 
 				} else if (event.getComponent().getClientId()
@@ -596,6 +604,32 @@ public class LoginBean implements Serializable {
 				context.execute("PF('blockUIWidget').unblock()");
 
 			}
+			String previos = FacesContext.getCurrentInstance()
+					.getExternalContext().getRequestHeaderMap().get("referer");
+			if (previos == null)
+				previos = "";
+			if (viewId.contains("administration")&& !previos.contains("administration")) {
+
+				if (activeTabAdminIndex == 0 || activeTabAdminIndex == 1
+						|| activeTabAdminIndex == 2) {
+					HttpSession session = (HttpSession) FacesContext
+							.getCurrentInstance().getExternalContext()
+							.getSession(false);
+					JJContactBean contactBean = (JJContactBean) session
+							.getAttribute("jJContactBean");
+					if (contactBean == null)
+						contactBean = new JJContactBean();
+					if (!(contactBean).isRenderContactAdminTab()) {
+						activeTabAdminIndex = 3;
+
+						RequestContext context = RequestContext
+								.getCurrentInstance();
+						context.execute("AdmintabView.select("
+								+ activeTabAdminIndex + ")");
+					}
+				}
+
+			}
 
 		}
 	}
@@ -706,27 +740,7 @@ public class LoginBean implements Serializable {
 
 				if (previos != null && viewID != null) {
 					if (!previos.contains(viewID.replace(".xhtml", ".jsf"))) {
-						if (!authorizationManager.getAuthorization(
-								root.getViewId(), jjProjectBean.getProject(),
-								jJProductBean.getProduct())) {
-
-							FacesContext
-									.getCurrentInstance()
-									.addMessage(
-											null,
-											new FacesMessage(
-													FacesMessage.SEVERITY_ERROR,
-													"You have no permission to access this resource",
-													null));
-
-							FacesContext
-									.getCurrentInstance()
-									.getExternalContext()
-									.redirect(
-											path
-													+ "/pages/main.jsf?faces-redirect=true");
-
-						} else if (viewID.contains("specification")) {
+						if (viewID.contains("specification")) {
 
 							JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
 							jJRequirementBean.loadData();
@@ -759,9 +773,9 @@ public class LoginBean implements Serializable {
 						}
 					}
 				} else {
-					if (!authorizationManager.getAuthorization(
-							root.getViewId(), jjProjectBean.getProject(),
-							jJProductBean.getProduct())) {
+
+					if (!jjProjectBean.isHaveTaskPermision()
+							&& root.getViewId().contains("project1")) {
 
 						FacesContext
 								.getCurrentInstance()
@@ -770,7 +784,7 @@ public class LoginBean implements Serializable {
 										new FacesMessage(
 												FacesMessage.SEVERITY_ERROR,
 												"You have no permission to access this resource",
-												null));
+												null));//
 
 						FacesContext
 								.getCurrentInstance()
@@ -778,33 +792,14 @@ public class LoginBean implements Serializable {
 								.redirect(
 										path
 												+ "/pages/main.jsf?faces-redirect=true");
-					} else {
-						if (!jjProjectBean.isHaveTaskPermision()
-								&& root.getViewId().contains("project1")) {
+					} else if (root.getViewId().contains("specifications")) {
 
-							FacesContext
-									.getCurrentInstance()
-									.addMessage(
-											null,
-											new FacesMessage(
-													FacesMessage.SEVERITY_ERROR,
-													"You have no permission to access this resource",
-													null));//
+						JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
+						jJRequirementBean.loadData();
 
-							FacesContext
-									.getCurrentInstance()
-									.getExternalContext()
-									.redirect(
-											path
-													+ "/pages/main.jsf?faces-redirect=true");
-						} else if (root.getViewId().contains("specifications")) {
-
-							JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
-							jJRequirementBean.loadData();
-
-						}
 					}
 				}
+
 			}
 
 		}
