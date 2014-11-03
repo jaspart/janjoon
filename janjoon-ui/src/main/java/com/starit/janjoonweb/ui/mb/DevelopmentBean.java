@@ -33,6 +33,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.starit.janjoonweb.domain.JJConfiguration;
+import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJMessageService;
@@ -61,6 +62,13 @@ public class DevelopmentBean implements Serializable {
 	@Autowired
 	private JJStatusService jJStatusService;
 	
+	private JJConfigurationService jJConfigurationService;
+	
+	public void setjJConfigurationService(
+			JJConfigurationService jJConfigurationService) {
+		this.jJConfigurationService = jJConfigurationService;
+	}
+
 	private JJTaskBean jJTaskBean;
 
 	@Autowired
@@ -116,19 +124,28 @@ public class DevelopmentBean implements Serializable {
 
 	public DevelopmentBean() throws FileNotFoundException, IOException {
 
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJConfigurationBean configurationBean=(JJConfigurationBean)session.getAttribute("jJConfigurationBean");
+		if(configurationBean == null)
+			configurationBean=new JJConfigurationBean();
+		jJConfigurationService=((JJConfigurationBean)session.getAttribute("jJConfigurationBean")).getJjConfigurationService();
 		init = false;
 		initJJDevlopment();
 	}
 
 	public DevelopmentBean(DevelopmentBean devBean) {
 		
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);		
 		
 		if(jJTaskBean == null)
+		{
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+					.getExternalContext().getSession(false);
 			jJTaskBean=(JJTaskBean) session.getAttribute("jJTaskBean");
+		}		
 
 		init = false;
+		this.jJConfigurationService=devBean.jJConfigurationService;
 		this.jJStatusService = devBean.jJStatusService;
 		this.jJTaskService = devBean.jJTaskService;
 		this.jJMessageService = devBean.jJMessageService;
@@ -145,8 +162,7 @@ public class DevelopmentBean implements Serializable {
 		contact = (JJContact) session.getAttribute("JJContact");	
 		JJVersionBean verbean = (JJVersionBean) session
 				.getAttribute("jJVersionBean");
-		JJConfigurationBean confbean = (JJConfigurationBean) session
-				.getAttribute("jJConfigurationBean");
+	
 		JJProjectBean projbean = (JJProjectBean) session
 				.getAttribute("jJProjectBean");
 
@@ -162,10 +178,9 @@ public class DevelopmentBean implements Serializable {
 		product = prodbean.getProduct();
 		project = projbean.getProject();
 
-		if (confbean == null)
-			confbean = new JJConfigurationBean();
 
-		configuration = confbean.getjJconfiguration();
+
+		configuration = jJConfigurationService.getConfigurations("ConfigurationManager", "git", true).get(0);
 
 		if (getConfigManager() != null && version != null && product != null) {
 

@@ -26,6 +26,7 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJConfiguration;
+import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
@@ -55,10 +56,11 @@ public class JJConfigurationBean {
 		columns.add("updatedDate");
 		columns.add("param");
 		columns.add("val");
-
-		jJconfiguration = jJConfigurationService.findAllJJConfigurations().get(
-				0);
-
+	}
+	
+	public JJConfigurationService getJjConfigurationService()
+	{
+		return jJConfigurationService;
 	}
 
 	public JJConfiguration getjJconfiguration() {
@@ -164,8 +166,7 @@ public class JJConfigurationBean {
 
 		setJJConfiguration_(null);
 		setCreateDialogVisible(false);
-		jJconfiguration = jJConfigurationService.findAllJJConfigurations().get(
-				0);
+		jJconfiguration =jJConfigurationService.getConfigurations("ConfigurationManager", "git", true).get(0);
 	}
 
 	public void beforeDialogShow(ActionEvent event) {

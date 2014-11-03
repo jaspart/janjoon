@@ -103,15 +103,23 @@
 
 					<p:menuitem id="proAction"
 						value="#{messages.header_project_menuitem}"
-						disabled="#{!jJProjectBean.haveTaskPermision}"
-						title="#{jJProjectBean.warmMessage}"
+						disabled="#{!loginBean.authorisationService.rProject}"
+						title="#{loginBean.authorisationService.rProjectMSG}"
 						onstart="PF('blockUIWidget').block()"
 						actionListener="#{loginBean.redirection}" update="growlHeader"
 						icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
 
 					<p:menuitem value="#{messages.header_spec_menuitem}"
+						disabled="#{!loginBean.authorisationService.rRequiement}"
+						title="#{loginBean.authorisationService.rRequiementMSG}"
 						url="/pages/specifications.jsf?faces-redirect=true"
-						icon="ui-icon-document" />
+						icon="ui-icon-document" 
+						rendered="#{loginBean.enable}"/>
+						
+						<p:menuitem value="#{messages.header_spec_menuitem}"
+						url="/pages/specifications.jsf?faces-redirect=true"
+						icon="ui-icon-document" 
+						rendered="#{!loginBean.enable}"/>
 
 					<p:menuitem value="#{messages.header_bug_menuitem}"
 						url="/pages/bugs.jsf?faces-redirect=true" icon="ui-icon-gear" />
@@ -122,6 +130,8 @@
 
 					<p:menuitem id="devAction" value="#{messages.header_dev_menuitem}"
 						onstart="PF('blockUIWidget').block()"
+						disabled="#{!loginBean.authorisationService.rwDev}"
+						title="#{loginBean.authorisationService.rwDevMSG}"
 						actionListener="#{loginBean.redirectToDev}" update="growlHeader"
 						icon="ui-icon-wrench" rendered="#{loginBean.enable}" />
 
@@ -130,12 +140,21 @@
 						update=":contentPanel" rendered="#{!loginBean.enable}" />
 
 					<p:menuitem id="testAction"
+						disabled="#{!loginBean.authorisationService.rwxTest}"
+						title="#{loginBean.authorisationService.rwxTestMSG}"
 						value="#{messages.header_test_menuitem}"
 						onstart="PF('blockUIWidget').block()"
 						actionListener="#{loginBean.redirection}" update="growlHeader"
 						icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
 
 					<p:menuitem value="#{messages.header_delivery_menuitem}"
+						disabled="#{!loginBean.authorisationService.rBuild}"
+						title="#{loginBean.authorisationService.rBuildMSG}"
+						rendered="#{loginBean.enable}"
+						url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
+						
+						<p:menuitem value="#{messages.header_delivery_menuitem}"						
+						rendered="#{!loginBean.enable}"
 						url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
 
 					<p:menuitem value="#{messages.header_team_menuitem}"

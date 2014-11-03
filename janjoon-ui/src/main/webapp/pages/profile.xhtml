@@ -233,7 +233,7 @@
 						<p:row>
 							<p:column colspan="3">
 								<p:commandButton id="saveButton" style="float: right;"
-									value="Save" update="profileDialogForm"
+									value="Save" update="profileDialogForm :headerForm"
 									disabled="#{jJProfileBean.disabledRightMode}"
 									process="@this,name"
 									action="#{jJProfileBean.save(jJRightBean)}" />

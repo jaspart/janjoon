@@ -14,8 +14,8 @@
 				update="tabview " />
 
 			<p:tab id="tabUser" title="#{messages.admin_user_menuitem}"
-				titletip="#{jJContactBean.warnMessage}"
-				disabled="#{!jJContactBean.renderContactAdminTab}">
+				titletip="#{loginBean.authorisationService.adminContactProfilMSG}"
+				disabled="#{!loginBean.authorisationService.adminContactProfil}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="contact">
 						<ui:include src="contact.xhtml" />
@@ -24,8 +24,8 @@
 			</p:tab>
 
 			<p:tab id="tabProfile" title="#{messages.admin_profile_menuitem}"
-			titletip="#{jJContactBean.warnMessage}"
-				disabled="#{!jJContactBean.renderContactAdminTab}">
+			titletip="#{loginBean.authorisationService.adminContactProfilMSG}"
+				disabled="#{!loginBean.authorisationService.adminContactProfil}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="profile">
 						<ui:include src="profile.xhtml" />
@@ -34,8 +34,8 @@
 			</p:tab>
 
 			<p:tab id="tabCompagnies" title="#{messages.admin_company_menuitem}"
-			titletip="#{jJContactBean.warnMessage}"
-				disabled="#{!jJContactBean.renderContactAdminTab}">
+			titletip="#{loginBean.authorisationService.adminCompanyMSG}"
+				disabled="#{!loginBean.authorisationService.adminCompany}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="Compagnies">
 						<ui:include src="compagnies.xhtml" />

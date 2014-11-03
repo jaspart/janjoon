@@ -32,7 +32,6 @@ import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -62,17 +61,10 @@ public class JJRequirementBean {
 	public void setjJTaskBean(JJTaskBean jJTaskBean) {
 		this.jJTaskBean = jJTaskBean;
 	}
-
-	@Autowired
-	public JJPermissionService jJPermissionService;
-
+	
 	public void setjJConfigurationService(
 			JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
-	}
-
-	public void setjJPermissionService(JJPermissionService jJPermissionService) {
-		this.jJPermissionService = jJPermissionService;
 	}
 
 	@Autowired
@@ -154,7 +146,6 @@ public class JJRequirementBean {
 	private List<JJRequirement> selectedHighRequirementsList;
 
 	private boolean disabledLowRequirements;
-	private boolean haveSpecPermission;
 	private boolean disabledMediumRequirements;
 	private boolean disabledHighRequirements;
 	private boolean disabledVersion;
@@ -187,13 +178,7 @@ public class JJRequirementBean {
 		this.noCouvretReq = noCouvretReq;
 	}
 
-	public boolean isHaveSpecPermission() {
-		return haveSpecPermission;
-	}
-
-	public void setHaveSpecPermission(boolean haveSpecPermission) {
-		this.haveSpecPermission = haveSpecPermission;
-	}
+	
 
 	public JJCategory getLowCategory() {
 		return lowCategory;
@@ -1500,9 +1485,6 @@ public class JJRequirementBean {
 			disabledExport = true;
 
 			disabledRequirement = true;
-			haveSpecPermission = true;
-			title = "Select a project to create requirement";
-
 			jJChapterBean.setWarnMessage("Select a project to manage document");
 			jJChapterBean.setDisabledChapter(true);
 
@@ -1511,16 +1493,8 @@ public class JJRequirementBean {
 			warnMessage = "Export to PDF";
 			disabledExport = false;
 
-			disabledRequirement = false;
-			haveSpecPermission = jJPermissionService.isAuthorized(
-					(JJContact) session.getAttribute("JJContact"), project,
-					product, "JJRequirement",null,null,true,null);
-			if (!haveSpecPermission)
-				title = "You Have no permisson to do this action";
-			else
-				title = "New Requirement";
-
-			System.err.println(title + haveSpecPermission);
+			disabledRequirement = false;		
+			
 
 			jJChapterBean.setWarnMessage("Manage document");
 			jJChapterBean.setDisabledChapter(false);
@@ -1777,16 +1751,6 @@ public class JJRequirementBean {
 
 	public void setDisabledRequirement(boolean disabledRequirement) {
 		this.disabledRequirement = disabledRequirement;
-	}
-
-	private String title;
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
 	}
 
 	private void editTableDataModelList() {

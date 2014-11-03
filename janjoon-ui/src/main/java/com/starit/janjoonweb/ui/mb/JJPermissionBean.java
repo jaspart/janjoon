@@ -11,6 +11,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermission;
+import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJProject;
@@ -35,6 +36,11 @@ public class JJPermissionBean {
 	private boolean checkPermission;
 	private boolean checkPermissions;
 	private boolean disabledCheckPermission;
+
+	public JJPermissionService getJJPermissionService()
+	{
+		return this.jJPermissionService;
+	}
 
 	public JJPermission getPermissionAdmin() {
 		return permissionAdmin;
@@ -184,12 +190,11 @@ public class JJPermissionBean {
 		}
 
 	}
-
 	public void fillPermissionTable(JJContact contact) {
 		permissionDataModel = new ArrayList<PermissionDataModel>();
 
 		List<JJPermission> permissions = jJPermissionService.getPermissions(
-				contact, true, null, null, null);
+				contact, true, null, null, null);		
 
 		for (JJPermission permission : permissions) {
 			permissionDataModel.add(new PermissionDataModel(permission,

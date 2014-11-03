@@ -37,12 +37,14 @@ import org.springframework.stereotype.Component;
 import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
+import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.UsageChecker;
+import com.starit.janjoonweb.ui.security.AuthorisationService;
 import com.starit.janjoonweb.ui.security.AuthorizationManager;
 import com.sun.faces.component.visit.FullVisitContext;
 
@@ -53,9 +55,7 @@ public class LoginBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private AuthenticationManager authenticationManager;
-
-	@Autowired
-	private AuthorizationManager authorizationManager;
+	private AuthorisationService authorisationService;
 
 	static Logger logger = Logger.getLogger("loginBean-Logger");
 
@@ -75,17 +75,21 @@ public class LoginBean implements Serializable {
 	private int activeTabProjectIndex;
 	private int menuIndex;
 
+	public AuthorisationService getAuthorisationService() {
+		return authorisationService;
+	}
+
+	public void setAuthorisationService(
+			AuthorisationService authorisationService) {
+		this.authorisationService = authorisationService;
+	}
+
 	public void setjJContactService(JJContactService jJContactService) {
 		this.jJContactService = jJContactService;
 	}
 
 	public void setjJCompanyService(JJCompanyService jJCompanyService) {
 		this.jJCompanyService = jJCompanyService;
-	}
-
-	public void setAuthorizationManager(
-			AuthorizationManager authorizationManager) {
-		this.authorizationManager = authorizationManager;
 	}
 
 	public boolean isEnable() {
@@ -177,11 +181,11 @@ public class LoginBean implements Serializable {
 			flash.setKeepMessages(true);
 			if (UsageChecker.check()) {
 				contact = jJContactService.getContactByEmail(username, true);
-				authorizationManager.setContact(contact);
 				FacesContext fContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) fContext
 						.getExternalContext().getSession(false);
-
+				authorisationService = new AuthorisationService(session,
+						contact);
 				session.putValue("JJContact", contact);
 				session.putValue("password", password);
 				FacesMessage message = new FacesMessage(
@@ -194,6 +198,7 @@ public class LoginBean implements Serializable {
 						+ " logged in");
 
 				if (UsageChecker.checkExpiryDate()) {
+
 				} else {
 
 					FacesMessage fExpiredMessage = new FacesMessage(
@@ -356,10 +361,9 @@ public class LoginBean implements Serializable {
 	public void onTabAdminChange(TabChangeEvent event) {
 
 		TabView tv = (TabView) event.getComponent();
-		System.out.println(this.activeTabAdminIndex);		
+		System.out.println(this.activeTabAdminIndex);
 		this.activeTabAdminIndex = tv.getChildren().indexOf(event.getTab());
 		System.out.println("###### ACtive tab: " + activeTabAdminIndex);
-		
 
 	}
 
@@ -387,7 +391,7 @@ public class LoginBean implements Serializable {
 
 			HttpSession session = (HttpSession) ctx.getExternalContext()
 					.getSession(false);
-
+			authorisationService = new AuthorisationService(session, contact);
 			messageListener(session);
 
 			if (event.getComponent().getClientId()
@@ -396,8 +400,7 @@ public class LoginBean implements Serializable {
 				JJProject project = (JJProject) event.getNewValue();
 
 				jJProjectBean.setProject(project);
-				jJProjectBean.setWarmMessage(null);
-				jJProjectBean.checkPersmission();
+				authorisationService.initFields();
 
 				session.setAttribute("jJSprintBean", new JJSprintBean());
 				session.setAttribute("jJTaskBean", new JJTaskBean());
@@ -608,18 +611,12 @@ public class LoginBean implements Serializable {
 					.getExternalContext().getRequestHeaderMap().get("referer");
 			if (previos == null)
 				previos = "";
-			if (viewId.contains("administration")&& !previos.contains("administration")) {
+			if (viewId.contains("administration")
+					&& !previos.contains("administration")) {
 
-				if (activeTabAdminIndex == 0 || activeTabAdminIndex == 1
-						|| activeTabAdminIndex == 2) {
-					HttpSession session = (HttpSession) FacesContext
-							.getCurrentInstance().getExternalContext()
-							.getSession(false);
-					JJContactBean contactBean = (JJContactBean) session
-							.getAttribute("jJContactBean");
-					if (contactBean == null)
-						contactBean = new JJContactBean();
-					if (!(contactBean).isRenderContactAdminTab()) {
+				if (activeTabAdminIndex == 0 || activeTabAdminIndex == 1) {
+
+					if (!authorisationService.isAdminContactProfil()) {
 						activeTabAdminIndex = 3;
 
 						RequestContext context = RequestContext
@@ -627,6 +624,13 @@ public class LoginBean implements Serializable {
 						context.execute("AdmintabView.select("
 								+ activeTabAdminIndex + ")");
 					}
+				} else if (activeTabAdminIndex == 2) {
+					if (!authorisationService.isAdminCompany())
+						activeTabAdminIndex = 3;
+					RequestContext context = RequestContext
+							.getCurrentInstance();
+					context.execute("AdmintabView.select("
+							+ activeTabAdminIndex + ")");
 				}
 
 			}
@@ -635,6 +639,7 @@ public class LoginBean implements Serializable {
 	}
 
 	public void redirection(ActionEvent e) throws IOException {
+
 		JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");
 
 		if (jJProjectBean.getProject() == null) {
@@ -714,7 +719,6 @@ public class LoginBean implements Serializable {
 			FacesContext context = FacesContext.getCurrentInstance();
 			UIViewRoot root = context.getViewRoot();
 
-			JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
 			JJProjectBean jjProjectBean = (JJProjectBean) findBean("jJProjectBean");
 
 			String path = FacesContext.getCurrentInstance()
@@ -741,18 +745,50 @@ public class LoginBean implements Serializable {
 				if (previos != null && viewID != null) {
 					if (!previos.contains(viewID.replace(".xhtml", ".jsf"))) {
 						if (viewID.contains("specification")) {
+							if (authorisationService.isrRequiement()) {
+								JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
+								jJRequirementBean.loadData();
+							} else {
+								FacesContext
+										.getCurrentInstance()
+										.addMessage(
+												null,
+												new FacesMessage(
+														FacesMessage.SEVERITY_ERROR,
+														"You have no permission to access this resource",
+														null));
 
-							JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
-							jJRequirementBean.loadData();
+								FacesContext
+										.getCurrentInstance()
+										.getExternalContext()
+										.redirect(
+												path
+														+ "/pages/main.jsf?faces-redirect=true");
+							}
 
-							// RequestContext ct =
-							// RequestContext.getCurrentInstance();
-							// ct.update("contentPanel:specForm");
-							// ct.update("contentPanel:categoryForm");
 						} else if (viewID.contains("development")) {
+							if (authorisationService.isRwDev())
+								loadingPage(e);
+							else {
+								FacesContext
+										.getCurrentInstance()
+										.addMessage(
+												null,
+												new FacesMessage(
+														FacesMessage.SEVERITY_ERROR,
+														"You have no permission to access this resource",
+														null));
 
-							loadingPage(e);
-						} else if (!jjProjectBean.isHaveTaskPermision()
+								FacesContext
+										.getCurrentInstance()
+										.getExternalContext()
+										.redirect(
+												path
+														+ "/pages/main.jsf?faces-redirect=true");
+
+							}
+
+						} else if (!authorisationService.isrProject()
 								&& root.getViewId().contains("project1")) {
 
 							FacesContext
@@ -771,11 +807,60 @@ public class LoginBean implements Serializable {
 											path
 													+ "/pages/main.jsf?faces-redirect=true");
 						}
+					} else {
+						if (viewID.contains("development")) {
+							if (authorisationService.isRwDev())
+								loadingPage(e);
+							else {
+								FacesContext
+										.getCurrentInstance()
+										.addMessage(
+												null,
+												new FacesMessage(
+														FacesMessage.SEVERITY_ERROR,
+														"You have no permission to access this resource",
+														null));
+
+								FacesContext
+										.getCurrentInstance()
+										.getExternalContext()
+										.redirect(
+												path
+														+ "/pages/main.jsf?faces-redirect=true");
+
+							}
+						} else if ((!authorisationService.isrProject() && root
+								.getViewId().contains("project1"))
+								|| (!authorisationService.isrBuild() && viewID
+										.contains("delivery"))
+								|| (!authorisationService.isRwxTest() && viewID
+										.contains("test"))) {
+
+							FacesContext
+									.getCurrentInstance()
+									.addMessage(
+											null,
+											new FacesMessage(
+													FacesMessage.SEVERITY_ERROR,
+													"You have no permission to access this resource",
+													null));//
+
+							FacesContext
+									.getCurrentInstance()
+									.getExternalContext()
+									.redirect(
+											path
+													+ "/pages/main.jsf?faces-redirect=true");
+						}
 					}
 				} else {
 
-					if (!jjProjectBean.isHaveTaskPermision()
-							&& root.getViewId().contains("project1")) {
+					if ((!authorisationService.isrProject() && root.getViewId()
+							.contains("project1"))
+							|| (!authorisationService.isrBuild() && viewID
+									.contains("delivery"))
+							|| (!authorisationService.isRwxTest() && viewID
+									.contains("test"))) {
 
 						FacesContext
 								.getCurrentInstance()
@@ -794,9 +879,48 @@ public class LoginBean implements Serializable {
 												+ "/pages/main.jsf?faces-redirect=true");
 					} else if (root.getViewId().contains("specifications")) {
 
-						JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
-						jJRequirementBean.loadData();
+						if (authorisationService.isrRequiement()) {
+							JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
+							jJRequirementBean.loadData();
+						} else {
+							FacesContext
+									.getCurrentInstance()
+									.addMessage(
+											null,
+											new FacesMessage(
+													FacesMessage.SEVERITY_ERROR,
+													"You have no permission to access this resource",
+													null));//
 
+							FacesContext
+									.getCurrentInstance()
+									.getExternalContext()
+									.redirect(
+											path
+													+ "/pages/main.jsf?faces-redirect=true");
+						}
+
+					} else if (viewID.contains("development")) {
+						if (authorisationService.isRwDev())
+							loadingPage(e);
+						else {
+							FacesContext
+									.getCurrentInstance()
+									.addMessage(
+											null,
+											new FacesMessage(
+													FacesMessage.SEVERITY_ERROR,
+													"You have no permission to access this resource",
+													null));
+
+							FacesContext
+									.getCurrentInstance()
+									.getExternalContext()
+									.redirect(
+											path
+													+ "/pages/main.jsf?faces-redirect=true");
+
+						}
 					}
 				}
 

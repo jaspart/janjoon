@@ -27,8 +27,8 @@ public class JJContactBean {
 
 	@Autowired
 	private JJConfigurationService jJConfigurationService;
-	
-	@Autowired 
+
+	@Autowired
 	private BCryptPasswordEncoder encoder;
 
 	@Autowired
@@ -36,33 +36,26 @@ public class JJContactBean {
 
 	private JJContact contactAdmin;
 	private List<JJContact> contacts;
-
 	private String message;
-	private String warnMessage;
-
 	private boolean disabledContactMode;
 	private boolean disabledPermissionMode;
 	private boolean contactState;
-	private boolean renderContactAdminTab;
 
 	public void setEncoder(BCryptPasswordEncoder encoder) {
 		this.encoder = encoder;
 	}
-
 
 	public void setjJConfigurationService(
 			JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
 	}
 
-
 	public void setjJPermissionService(JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
 	}
 
-
 	public JJContact getContactAdmin() {
-	
+
 		return contactAdmin;
 	}
 
@@ -70,18 +63,8 @@ public class JJContactBean {
 		this.contactAdmin = contactAdmin;
 	}
 
-	public String getWarnMessage() {
-		return warnMessage;
-	}
-
-
-	public void setWarnMessage(String warnMessage) {
-		this.warnMessage = warnMessage;
-	}
-
-
 	public List<JJContact> getContacts() {
-		
+
 		contacts = jJContactService.getContacts(true);
 		return contacts;
 	}
@@ -113,24 +96,6 @@ public class JJContactBean {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-
-	public boolean isRenderContactAdminTab() {
-		
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false);
-		renderContactAdminTab=jJPermissionService.isAuthorized((JJContact) session.getAttribute("JJContact"), null, null, "JJContact", null, true, null,null);
-		if(renderContactAdminTab)
-			warnMessage="";
-		else
-			warnMessage="Permission Denied";
-		return renderContactAdminTab;
-	}
-
-
-	public void setRenderContactAdminTab(boolean renderContactAdminTab) {
-		this.renderContactAdminTab = renderContactAdminTab;
-	}
-
 
 	public void newContact(JJPermissionBean jJPermissionBean) {
 
@@ -195,7 +160,8 @@ public class JJContactBean {
 			contactAdmin.setDescription("This contact is "
 					+ contactAdmin.getFirstname() + " "
 					+ contactAdmin.getName());
-			contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword()));
+			contactAdmin
+					.setPassword(encoder.encode(contactAdmin.getPassword()));
 
 			if (jJContactService.saveJJContactTransaction(contactAdmin)) {
 
@@ -204,6 +170,13 @@ public class JJContactBean {
 
 				jJPermissionBean
 						.setPermissionDataModel(new ArrayList<PermissionDataModel>());
+				HttpSession session = (HttpSession) FacesContext
+						.getCurrentInstance().getExternalContext()
+						.getSession(false);
+				LoginBean loginBean = (LoginBean) session
+						.getAttribute("loginBean");
+				if (contactAdmin.equals(loginBean.getContact()))
+					loginBean.getAuthorisationService().setSession(session);
 
 				facesMessage = MessageFactory.getMessage(
 						"message_successfully_created",
@@ -230,13 +203,15 @@ public class JJContactBean {
 		System.out.println("in save permission");
 
 		contactAdmin.setUpdatedDate(new Date());
-		
-		if(!contactAdmin.getPassword().equals(jJContactService.findJJContact(contactAdmin.getId()).getPassword()))
-		{				
-			contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword()));
-		}	
-		
-		jJContactService.updateJJContact(contactAdmin);		
+
+		if (!contactAdmin.getPassword().equals(
+				jJContactService.findJJContact(contactAdmin.getId())
+						.getPassword())) {
+			contactAdmin
+					.setPassword(encoder.encode(contactAdmin.getPassword()));
+		}
+
+		jJContactService.updateJJContact(contactAdmin);
 
 		List<JJPermission> permissions = jJPermissionService.getPermissions(
 				contactAdmin, true, null, null, null);
@@ -251,14 +226,14 @@ public class JJContactBean {
 
 			}
 		}
-		
+
 		if (!selectedPermissions.isEmpty() && !permissions.isEmpty()) {
 
 			for (JJPermission permission : selectedPermissions) {
 				if (permission.getId() == null) {
 
 					permission.setContact(contactAdmin);
-					//contactAdmin.getPermissions().add(permission);
+					// contactAdmin.getPermissions().add(permission);
 					jJPermissionService.saveJJPermission(permission);
 				}
 			}
@@ -284,18 +259,25 @@ public class JJContactBean {
 
 			for (JJPermission permission : selectedPermissions) {
 				permission.setContact(contactAdmin);
-				//contactAdmin.getPermissions().add(permission);
+				// contactAdmin.getPermissions().add(permission);
 				jJPermissionService.saveJJPermission(permission);
 			}
 
 		}
-		
-		
-		contactAdmin=jJContactService.findJJContact(contactAdmin.getId());
-		if(contains(contactAdmin.getId())!=-1)
+
+		contactAdmin = jJContactService.findJJContact(contactAdmin.getId());
+		if (contains(contactAdmin.getId()) != -1)
 			contacts.set(contains(contactAdmin.getId()), contactAdmin);
 		else
 			contacts.add(contactAdmin);
+		
+		HttpSession session = (HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext()
+				.getSession(false);
+		LoginBean loginBean = (LoginBean) session
+				.getAttribute("loginBean");
+		if (contactAdmin.equals(loginBean.getContact()))
+			loginBean.getAuthorisationService().setSession(session);
 
 		FacesContext.getCurrentInstance().addMessage(
 				null,
@@ -393,7 +375,7 @@ public class JJContactBean {
 	public JJContact getContactByEmail(String email) {
 		return jJContactService.getContactByEmail(email, true);
 	}
-	
+
 	public int contains(Long id) {
 		int i = 0;
 		int j = -1;

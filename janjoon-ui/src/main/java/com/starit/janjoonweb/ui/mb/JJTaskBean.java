@@ -457,10 +457,10 @@ public class JJTaskBean {
 		HttpSession session = (HttpSession) FacesContext
 				.getCurrentInstance().getExternalContext()
 				.getSession(false);
-		JJProjectBean jJProjectBean = (JJProjectBean) session
-				.getAttribute("jJProjectBean");
+		LoginBean loginBean = (LoginBean) session
+				.getAttribute("loginBean");
 
-		if(jJProjectBean.isHaveTaskPermision())
+		if(loginBean.getAuthorisationService().isrProject())
 		{
 			Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 

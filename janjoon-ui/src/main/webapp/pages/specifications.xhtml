@@ -78,7 +78,7 @@
 						<p:ajax event="rowDblselect" onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()"
 							update=":requirementDialog"
-							disabled="#{!jJRequirementBean.haveSpecPermission}"
+							disabled="#{!loginBean.authorisationService.wRequiement}"
 							listener="#{jJRequirementBean.onRowDblClckSelect}" />
 
 						<f:facet name="header">
@@ -107,8 +107,8 @@
 										</p:column>
 										<p:column colspan="1">
 											<p:commandButton id="newRequirementButton"
-												icon="ui-icon-plus" title="#{jJRequirementBean.title}"
-												disabled="#{jJRequirementBean.disabledRequirement or !jJRequirementBean.haveSpecPermission}"
+												icon="ui-icon-plus" title="#{loginBean.authorisationService.wRequiementMSG}"
+												disabled="#{jJRequirementBean.disabledRequirement or !loginBean.authorisationService.wRequiement}"
 												actionListener="#{jJRequirementBean.newRequirement(tableDataModel.categoryId)}"
 												update=":requirementDialog"
 												onstart="PF('blockUIWidget').block()"
@@ -211,7 +211,7 @@
 									onstart="PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()"
 									update=":requirementDialog" value="Edit"
-									disabled="#{jJRequirementBean.getDisabledEdit(reqUtil.requirement) or !jJRequirementBean.haveSpecPermission}">
+									disabled="#{jJRequirementBean.getDisabledEdit(reqUtil.requirement) or !loginBean.authorisationService.wRequiement}">
 									<f:setPropertyActionListener value="#{reqUtil.requirement}"
 										target="#{jJRequirementBean.requirement}" />
 								</p:menuitem>

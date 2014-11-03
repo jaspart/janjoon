@@ -301,7 +301,7 @@
 						<p:row>
 							<p:column colspan="4">
 								<p:commandButton id="saveButton" value="Save"
-									update="contactDialogForm" style="float: right;"
+									update="contactDialogForm :headerForm" style="float: right;"
 									process="@this,firstname,lastname,email,password,company"
 									disabled="#{jJContactBean.disabledPermissionMode}"
 									action="#{jJContactBean.save(jJPermissionBean)}" />
