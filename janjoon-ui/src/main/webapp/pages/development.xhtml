@@ -63,7 +63,7 @@
 											<p:commandButton id="viewTaskButton" icon="ui-icon-zoomin"
 												update=":viewTaskForm:viewTaskPanelGrid"
 												disabled="#{jJDevelopment.task == null}" immediate="true"
-												oncomplete="viewTaskDialogWidget.show()"
+												oncomplete="PF('viewTaskDialogWidget').show()"
 												actionListener="#{jJTaskBean.gettingTaskValue}"
 												title="#{messages.label_view}">
 												<f:attribute name="taskValue" value="#{jJDevelopment.task}" />
@@ -102,30 +102,30 @@
 													<p:menuitem
 														value="#{messages['dev.menuitem.deleteFolder.label']}"
 														icon="ui-icon-trash" immediate="true"
-														oncomplete="deleteFileDialogWidget.show()" />
+														oncomplete="PF('deleteFileDialogWidget').show()" />
 													<p:menuitem
 														value="#{messages['dev.menuitem.addFile.label']}"
 														icon="ui-icon-document" immediate="true"
-														oncomplete="createFileDialogWidget.show()" />
+														oncomplete="PF('createFileDialogWidget').show()" />
 													<p:menuitem
 														value="#{messages['dev.menuitem.uploadFile.label']}"
 														icon="ui-icon-arrowthickstop-1-n" immediate="true"
-														oncomplete="uploadFileDialogWidget.show()" />
+														oncomplete="PF('uploadFileDialogWidget').show()" />
 													<p:menuitem
 														value="#{messages['dev.menuitem.commit.label']}"
 														icon="ui-icon-arrowthickstop-1-e" immediate="true"
-														oncomplete="commitFileDialogWidget.show()" />
+														oncomplete="PF('commitFileDialogWidget').show()" />
 												</p:contextMenu>
 
 												<p:contextMenu for="fileTree" nodeType="file">
 													<p:menuitem
 														value="#{messages['dev.menuitem.deleteFile.label']}"
 														icon="ui-icon-trash" immediate="true"
-														oncomplete="deleteFileDialogWidget.show()" />
+														oncomplete="PF('deleteFileDialogWidget').show()" />
 													<p:menuitem
 														value="#{messages['dev.menuitem.commit.label']}"
 														icon="ui-icon-arrowthickstop-1-e" immediate="true"
-														oncomplete="commitFileDialogWidget.show()" />
+														oncomplete="PF('commitFileDialogWidget').show()" />
 												</p:contextMenu>
 
 												<p:tree id="fileTree" value="#{jJDevelopment.tree}"
@@ -151,12 +151,12 @@
 												value="#{messages['dev.menuitem.uploadFile.label']}"
 												icon="ui-icon-arrowthickstop-1-n" immediate="true"
 												actionListener="#{jJDevelopment.addToRoot}"
-												oncomplete="uploadFileDialogWidget.show()" />
+												oncomplete="PF('uploadFileDialogWidget').show()" />
 											<p:commandButton
 												value="#{messages['dev.menuitem.addFile.label']}"
 												icon="ui-icon-document" immediate="true"
 												actionListener="#{jJDevelopment.addToRoot}"
-												oncomplete="createFileDialogWidget.show()" />
+												oncomplete="PF('createFileDialogWidget').show()" />
 										</p:panel>
 									</p:column>
 								</p:row>
@@ -244,9 +244,9 @@
 						<p:commandButton id="deleteYesButton"
 							value="#{messages.label_yes}"
 							action="#{jJDevelopment.deleteFile}" update=":form"
-							oncomplete="deleteFileDialogWidget.hide()" />
+							oncomplete="PF('deleteFileDialogWidget').hide()" />
 						<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
-							onclick="deleteFileDialogWidget.hide()" type="button" />
+							onclick="PF('deleteFileDialogWidget').hide()" type="button" />
 					</h:form>
 				</p:outputPanel>
 			</p:confirmDialog>
@@ -260,9 +260,9 @@
 						<p:commandButton id="commitYesButton"
 							value="#{messages.label_yes}"
 							action="#{jJDevelopment.commitFile}" update=":form"
-							oncomplete="commitFileDialogWidget.hide()" />
+							oncomplete="PF('commitFileDialogWidget').hide()" />
 						<p:commandButton id="commitNoButton" value="#{messages.label_no}"
-							onclick="commitFileDialogWidget.hide()" type="button" />
+							onclick="PF('commitFileDialogWidget').hide()" type="button" />
 					</h:form>
 				</p:outputPanel>
 			</p:confirmDialog>
@@ -301,7 +301,7 @@
 								action="#{jJDevelopment.CreateFile}" />
 							<p:commandButton id="createCloseButton"
 								value="#{messages.label_close}"
-								onclick="createFileDialogWidget.hide()" type="button" />
+								onclick="PF('createFileDialogWidget').hide()" type="button" />
 						</h:panelGrid>
 					</h:form>
 				</p:outputPanel>
@@ -318,7 +318,7 @@
 						</ui:include>
 						<p:commandButton id="viewCloseButton"
 							value="#{messages.label_close}"
-							onclick="viewTaskDialogWidget.hide()" type="button" />
+							onclick="PF('viewTaskDialogWidget').hide()" type="button" />
 					</h:form>
 				</p:outputPanel>
 			</p:dialog>

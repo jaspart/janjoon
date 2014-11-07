@@ -23,7 +23,7 @@
 				actionListener="#{jJRequirementBean.loadImportFormat()}"
 				update=":requirementImportDialog"
 				onstart="PF('blockUIWidget').block()"
-				oncomplete="PF('blockUIWidget').unblock();requirementImportDialogWidget.show()" />
+				oncomplete="PF('blockUIWidget').unblock();PF('requirementImportDialogWidget').show()" />
 
 			<p:commandButton id="reloadBtn" icon="ui-icon-refresh" onstart="PF('blockUIWidget').block()"				
 				style="float: right;" actionListener="#{jJRequirementBean.reloadPage}" />
@@ -76,7 +76,7 @@
 						rendered="#{tableDataModel.rendered}" selectionMode="single"
 						widgetVar="dataTable_#{loop.index}_Widget">
 						<p:ajax event="rowDblselect" onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()"
+							oncomplete="PF('blockUIWidget').unblock();PF('requirementDialogWidget').show()"
 							update=":requirementDialog"
 							disabled="#{!loginBean.authorisationService.wRequiement}"
 							listener="#{jJRequirementBean.onRowDblClckSelect}" />
@@ -93,13 +93,13 @@
 												disabled="#{jJChapterBean.disabledChapter}"
 												actionListener="#{jJChapterBean.loadData(tableDataModel.categoryId)}"
 												onstart="PF('blockUIWidget').block()"
-												oncomplete="PF('blockUIWidget').unblock();chapterDialogWidget.show()" />
+												oncomplete="PF('blockUIWidget').unblock();PF('chapterDialogWidget').show()" />
 										</p:column>
 										<p:column colspan="1">
 											<p:commandButton id="releaseRequirementButton"
 												icon=".ui-icon-carat-2-n-s" title="Release All Requirements"
 												actionListener="#{jJRequirementBean.preReleaseRequirement(tableDataModel.categoryId)}"
-												oncomplete="requirementReleaseDialogWidget.show()" />
+												oncomplete="PF('requirementReleaseDialogWidget').show()" />
 										</p:column>
 										<p:column colspan="3">
 											<p:inputText id="globalFilter" style="width:100%"
@@ -112,7 +112,7 @@
 												actionListener="#{jJRequirementBean.newRequirement(tableDataModel.categoryId)}"
 												update=":requirementDialog"
 												onstart="PF('blockUIWidget').block()"
-												oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()" />
+												oncomplete="PF('blockUIWidget').unblock();PF('requirementDialogWidget').show()" />
 										</p:column>
 										<p:column colspan="1">
 											<p:selectBooleanButton id="mineSpec"
@@ -209,7 +209,7 @@
 								<p:menuitem id="editButton" icon="ui-icon-pencil"
 									action="#{jJRequirementBean.editRequirement()}"
 									onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock();requirementDialogWidget.show()"
+									oncomplete="PF('blockUIWidget').unblock();PF('requirementDialogWidget').show()"
 									update=":requirementDialog" value="Edit"
 									disabled="#{jJRequirementBean.getDisabledEdit(reqUtil.requirement) or !loginBean.authorisationService.wRequiement}">
 									<f:setPropertyActionListener value="#{reqUtil.requirement}"
@@ -230,7 +230,7 @@
 									hideEffect="fade" />
 
 								<p:menuitem id="deleteButton" icon="ui-icon-trash"
-									oncomplete="requirementDeleteDialogWidget.show()"
+									oncomplete="PF('requirementDeleteDialogWidget').show()"
 									value="Delete">
 									<f:setPropertyActionListener value="#{reqUtil.requirement}"
 										target="#{jJRequirementBean.requirement}" />
@@ -271,7 +271,7 @@
 			</ui:repeat>
 		</h:form>
 
-		<p:hotkey bind="esc" handler="requirementDialogWidget.hide()" />
+		<p:hotkey bind="esc" handler="PF('requirementDialogWidget').hide()" />
 		<p:hotkey bind="alt+enter" handler="requirementSaveWidget.jq.click()" />
 		<p:dialog id="requirementDialog" draggable="false"
 			header="#{messages[jJRequirementBean.message]}" modal="true"
@@ -535,7 +535,7 @@
 			</p:outputPanel>
 		</p:dialog>
 
-		<p:hotkey bind="esc" handler="chapterDialogWidget.hide()" />
+		<p:hotkey bind="esc" handler="PF('chapterDialogWidget').hide()" />
 		<p:dialog id="chapterDialog"
 			header="#{messages.specification_chapter_header}" modal="true"
 			widgetVar="chapterDialogWidget" dynamic="true" resizable="false">
@@ -706,11 +706,11 @@
 					<p:commandButton id="deleteYesButton"
 						value="#{messages.specification_delete_yes_button}"
 						action="#{jJRequirementBean.deleteRequirement}" update=":specForm"
-						onstart="requirementDeleteDialogWidget.hide();PF('blockUIWidget').block()"
+						onstart="PF('requirementDeleteDialogWidget').hide();PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock()" />
 					<p:commandButton id="deleteNoButton"
 						value="#{messages.specification_delete_no_button}"
-						onclick="requirementDeleteDialogWidget.hide()" type="button" />
+						onclick="PF('requirementDeleteDialogWidget').hide()" type="button" />
 				</h:form>
 			</p:outputPanel>
 		</p:confirmDialog>
@@ -726,16 +726,16 @@
 						value="#{messages.specification_release_yes_button}"
 						action="#{jJRequirementBean.releaseRequirement}"
 						update=":specForm"
-						onstart="requirementReleaseDialogWidget.hide();PF('blockUIWidget').block()"
+						onstart="PF('requirementReleaseDialogWidget').hide();PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock()" />
 					<p:commandButton id="releaseNoButton"
 						value="#{messages.specification_release_no_button}"
-						onclick="requirementReleaseDialogWidget.hide()" type="button" />
+						onclick="PF('requirementReleaseDialogWidget').hide()" type="button" />
 				</h:form>
 			</p:outputPanel>
 		</p:confirmDialog>
 
-		<p:hotkey bind="esc" handler="requirementImportDialogWidget.hide()" />
+		<p:hotkey bind="esc" handler="PF('requirementImportDialogWidget').hide()" />
 		<p:dialog id="requirementImportDialog"
 			header="#{messages.specification_import_title}" modal="true"
 			widgetVar="requirementImportDialogWidget" dynamic="true"

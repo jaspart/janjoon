@@ -24,7 +24,7 @@
 						<h:outputText value="#{messages.admin_company_table_action_title}" />
 					</f:facet>
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
-						oncomplete="companyDialogWidget.show()"
+						oncomplete="PF('companyDialogWidget').show()"
 						value="#{messages.admin_company_table_edit_tooltip}"
 						update=":tabview:companyDialog">
 						<f:setPropertyActionListener value="#{company}"
@@ -36,7 +36,7 @@
 
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
 							value="#{messages.admin_company_table_delete_tooltip}"
-							oncomplete="companyDeleteDialogWidget.show()"
+							oncomplete="PF('companyDeleteDialogWidget').show()"
 							title="#{messages.label_delete}">
 							<f:setPropertyActionListener value="#{company}"
 								target="#{jJCompanyBean.companie}" />
@@ -48,7 +48,7 @@
 				<f:facet name="footer">
 					<p:commandButton value="#{messages.admin_company_new_button}"
 						id="newCompany" update=":tabview:companyDialog"
-						oncomplete="companyDialogWidget.show()" icon="ui-icon-circle-plus">
+						oncomplete="PF('companyDialogWidget').show()" icon="ui-icon-circle-plus">
 						<f:setPropertyActionListener
 							target="#{jJCompanyBean.headerMessage}"
 							value="admin_company_new_title" />
@@ -125,7 +125,7 @@
 									update="companyDialogForm"
 									action="#{jJCompanyBean.saveCompany}" />
 								<p:commandButton id="cancelButton" value="Annuler"
-									onclick="companyDialogWidget.hide()" type="button" />
+									onclick="PF('companyDialogWidget').hide()" type="button" />
 							</p:column>
 						</p:row>
 					</f:facet>
@@ -144,10 +144,10 @@
 					value="#{messages.admin_company_delete_yes_label}"
 					action="#{jJCompanyBean.deleteCompany}"
 					update=":tabview:companyForm"
-					oncomplete="companyDeleteDialogWidget.hide()" />
+					oncomplete="PF('companyDeleteDialogWidget').hide()" />
 				<p:commandButton id="deleteNoButton"
 					value="#{messages.admin_company_delete_no_label}"
-					onclick="companyDeleteDialogWidget.hide()" type="button" />
+					onclick="PF('companyDeleteDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:confirmDialog>

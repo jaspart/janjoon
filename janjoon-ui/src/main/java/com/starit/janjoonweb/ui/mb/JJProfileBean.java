@@ -240,12 +240,12 @@ public class JJProfileBean {
 
 		if (profileState) {
 			if (getProfileDialogConfiguration()) {
-				context.execute("profileDialogWidget.hide()");
+				context.execute("PF('profileDialogWidget').hide()");
 			} else {
 				newProfile(jJRightBean);
 			}
 		} else {
-			context.execute("profileDialogWidget.hide()");
+			context.execute("PF('profileDialogWidget').hide()");
 		}
 
 		System.out.println("dfgdfgf");

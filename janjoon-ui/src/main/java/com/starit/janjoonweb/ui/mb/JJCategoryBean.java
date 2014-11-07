@@ -132,7 +132,7 @@ public class JJCategoryBean {
 
 			if (categoryState) {
 				if (getCategoryDialogConfiguration()) {
-					context.execute("categoryDialogWidget.hide()");
+					context.execute("PF('categoryDialogWidget').hide()");
 				}
 				else {
 
@@ -141,7 +141,7 @@ public class JJCategoryBean {
 
 			}
 			else {
-				context.execute("categoryDialogWidget.hide()");
+				context.execute("PF('categoryDialogWidget').hide()");
 			}
 		}
 		else {

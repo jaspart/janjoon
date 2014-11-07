@@ -37,7 +37,7 @@
 						<h:outputText value="#{messages.admin_contact_table_action_label}" />
 					</f:facet>
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
-						oncomplete="contactDialogWidget.show()"
+						oncomplete="PF('contactDialogWidget').show()"
 						action="#{jJContactBean.editContact(jJPermissionBean)}"
 						update=":tabview:contactDialog"
 						value="#{messages.admin_contact_edit_label}">
@@ -45,7 +45,7 @@
 							target="#{jJContactBean.contactAdmin}" />
 
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
-							oncomplete="contactDeleteDialogWidget.show()"
+							oncomplete="PF('contactDeleteDialogWidget').show()"
 							value="#{messages.admin_contact_delete_button}"
 							title="#{messages.admin_contact_delete_label}">
 							<f:setPropertyActionListener value="#{contact}"
@@ -59,7 +59,7 @@
 						id="newContact"
 						actionListener="#{jJContactBean.newContact(jJPermissionBean)}"
 						update=":tabview:contactDialog"
-						oncomplete="contactDialogWidget.show()" icon="ui-icon-circle-plus" />
+						oncomplete="PF('contactDialogWidget').show()" icon="ui-icon-circle-plus" />
 				</f:facet>
 			</p:dataTable>
 		</p:panel>
@@ -323,10 +323,10 @@
 					value="#{messages.admin_contact_delete_yes_label}"
 					action="#{jJContactBean.deleteContact}"
 					update=":tabview:contactForm"
-					oncomplete="contactDeleteDialogWidget.hide()" />
+					oncomplete="PF('contactDeleteDialogWidget').hide()" />
 				<p:commandButton id="deleteNoButton"
 					value="#{messages.admin_contact_delete_no_label}"
-					onclick="contactDeleteDialogWidget.hide()" type="button" />
+					onclick="PF('contactDeleteDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:confirmDialog>

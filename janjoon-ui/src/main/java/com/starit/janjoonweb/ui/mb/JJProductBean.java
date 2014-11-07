@@ -301,14 +301,14 @@ public class JJProductBean {
 
 		if (productState) {
 			if (getProductDialogConfiguration()) {
-				context.execute("productDialogWidget.hide()");
+				context.execute("PF('productDialogWidget').hide()");
 			}
 			else {
 				newProduct(jJVersionBean);
 			}
 		}
 		else {
-			context.execute("productDialogWidget.hide()");
+			context.execute("PF('productDialogWidget').hide()");
 		}
 	}
 

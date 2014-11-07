@@ -14,6 +14,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 public class JJTaskServiceImpl implements JJTaskService {
 
@@ -301,12 +302,14 @@ public class JJTaskServiceImpl implements JJTaskService {
 		jJTaskRepository.save(tasks);
 	}
 	
-public void saveJJTask(JJTask JJTask_) {
+	
+	public void saveJJTask(JJTask JJTask_) {
 		
         jJTaskRepository.save(JJTask_);
         JJTask_=jJTaskRepository.findOne(JJTask_.getId());
     }
     
+	
     public JJTask updateJJTask(JJTask JJTask_) {
         jJTaskRepository.save(JJTask_);
         JJTask_=jJTaskRepository.findOne(JJTask_.getId());

@@ -141,7 +141,7 @@
 						<p:splitButton value="Action">
 							<p:menuitem id="editButton" icon="ui-icon-pencil"
 								value="#{messages.label_edit}" update=":editForm"
-								oncomplete="editDialogWidget.show()"
+								oncomplete="PF('editDialogWidget').show()"
 								title="#{messages.label_edit}">
 								<f:setPropertyActionListener value="#{bug}"
 									target="#{jJBugBean.JJBug_}" />
@@ -153,7 +153,7 @@
 							<p:tooltip for="editButton" value="#{messages.label_edit}"
 								showEffect="fade" hideEffect="fade" />
 							<p:menuitem id="deleteButton" icon="ui-icon-trash"
-								oncomplete="deleteDialogWidget.show()"
+								oncomplete="PF('deleteDialogWidget').show()"
 								value="#{messages.label_delete}"
 								title="#{messages.label_delete}">
 								<f:setPropertyActionListener value="#{bug}"
@@ -167,14 +167,14 @@
 						<p:commandButton value="#{messages.bug_create_button}"
 							id="createButton" icon="ui-icon-circle-plus"
 							update=":createForm:createPanelGrid"
-							oncomplete="createDialogWidget.show()"
+							oncomplete="PF('createDialogWidget').show()"
 							title="#{messages.label_create}" />
 						<p:tooltip for="createButton" value="#{messages.label_create}"
 							showEffect="fade" hideEffect="fade" />
 
 						<p:commandButton value="#{messages.bug_delete_button}"
 							id="deleteMButton" icon="ui-icon-trash" update=":createForm"
-							oncomplete="deleteMDialogWidget.show()"
+							oncomplete="PF('deleteMDialogWidget').show()"
 							disabled="#{empty jJBugBean.selectedBugList}"
 							title="#{messages.label_delete}" />
 						<p:tooltip for="deleteMButton" value="#{messages.label_delete}"
@@ -200,7 +200,7 @@
 							update="createPanelGrid,:bugForm:bugMessage,:bugForm" />
 						<p:commandButton id="createCloseButton"
 							value="#{messages.label_close}"
-							onclick="createDialogWidget.hide()" type="button" />
+							onclick="PF('createDialogWidget').hide()" type="button" />
 					</h:form>
 				</p:outputPanel>
 			</p:dialog>
@@ -221,11 +221,11 @@
 							oncomplete="PF('bugBlockUIWidget').unblock()"
 							value="#{messages.bug_edit_save_button}"
 							action="#{jJBugBean.persistBug}"
-							onsuccess="editDialogWidget.hide()"
+							onsuccess="PF('editDialogWidget').hide()"
 							update="createPanelGrid :bugForm:bugMessage :bugForm" />
 						<p:commandButton id="editCloseButton"
 							value="#{messages.bug_edit_close_button}"
-							onclick="editDialogWidget.hide()" type="button" />
+							onclick="PF('editDialogWidget').hide()" type="button" />
 					</h:form>
 				</p:outputPanel>
 			</p:dialog>
@@ -240,10 +240,10 @@
 							value="#{messages.bug_delete_yes_button}"
 							action="#{jJBugBean.deleteSingle}"
 							update=":bugForm :bugForm:bugMessage"
-							onsuccess="deleteDialogWidget.hide()" />
+							onsuccess="PF('deleteDialogWidget').hide()" />
 						<p:commandButton id="deleteNoButton"
 							value="#{messages.bug_delete_no_button}"
-							onclick="deleteDialogWidget.hide()" type="button" />
+							onclick="PF('deleteDialogWidget').hide()" type="button" />
 					</h:form>
 				</p:outputPanel>
 			</p:confirmDialog>
@@ -258,10 +258,10 @@
 							value="#{messages.bug_delete_yes_button}"
 							action="#{jJBugBean.deleteMultiple}"
 							update=":bugForm :bugForm:bugMessage"
-							onsuccess="deleteMDialogWidget.hide()" />
+							onsuccess="PF('deleteMDialogWidget').hide()" />
 						<p:commandButton id="deleteNoButton"
 							value="#{messages.bug_delete_no_button}"
-							onclick="deleteMDialogWidget.hide()" type="button" />
+							onclick="PF('deleteMDialogWidget').hide()" type="button" />
 					</h:form>
 				</p:outputPanel>
 			</p:confirmDialog>

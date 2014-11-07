@@ -54,7 +54,7 @@
 					<p:splitButton id="viewButton" icon="ui-icon-zoomin"
 						update=":tabview:sviewForm:viewPanelGrid"
 						value="#{messages.admin_status_table_view_tooltip}"
-						oncomplete="viewSatDialogWidget.show()">
+						oncomplete="PF('viewSatDialogWidget').show()">
 						<f:setPropertyActionListener value="#{status}"
 							target="#{jJStatusBean.JJStatus_}" />
 
@@ -62,14 +62,14 @@
 						<p:menuitem id="editButton" icon="ui-icon-pencil"
 							update=":tabview:seditForm:editPanelGrid"
 							action="#{jJStatusBean.onEdit}"
-							oncomplete="editSatDialogWidget.show()"
+							oncomplete="PF('viewSatDialogWidget').show()"
 							value="#{messages.admin_status_table_edit_tooltip}">
 							<f:setPropertyActionListener value="#{status}"
 								target="#{jJStatusBean.JJStatus_}" />
 						</p:menuitem>
 
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
-							oncomplete="deleteSatDialogWidget.show()"
+							oncomplete="PF('deleteSatDialogWidget').show()"
 							value="#{messages.admin_status_table_delete_tooltip}"
 							title="#{messages.admin_status_table_delete_title}">
 							<f:setPropertyActionListener value="#{status}"
@@ -82,7 +82,7 @@
 					<p:commandButton value="#{messages.admin_status_new_button}"
 						id="createButton" icon="ui-icon-circle-plus"
 						update=":tabview:ScreateForm:createPanelGrid"
-						oncomplete="createSatDialogWidget.show()"
+						oncomplete="PF('createSatDialogWidget').show()"
 						title="#{messages.admin_status_new_button}" />
 					<p:tooltip for="createButton"
 						value="#{messages.admin_status_new_tooltip}" showEffect="fade"
@@ -110,7 +110,7 @@
 					update="createPanelGrid,:tabview:statusForm:statusMessage" />
 				<p:commandButton id="createCloseButton"
 					value="#{messages.admin_status_new_close_button}"
-					onclick="createSatDialogWidget.hide()" type="button" />
+					onclick="PF('createSatDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
@@ -132,7 +132,7 @@
 					update="editPanelGrid,:tabview:statusForm:statusMessage" />
 				<p:commandButton id="editCloseButton"
 					value="#{messages.admin_status_edit_close_button}"
-					onclick="editSatDialogWidget.hide()" type="button" />
+					onclick="PF('viewSatDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
@@ -150,7 +150,7 @@
 					columnClasses="col1,col2" />
 				<p:commandButton id="viewCloseButton"
 					value="#{messages.admin_status_view_close_button}"
-					onclick="viewSatDialogWidget.hide()" type="button" />
+					onclick="PF('viewSatDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
@@ -163,10 +163,10 @@
 				<p:commandButton id="deleteYesButton"
 					value="#{messages.admin_status_delete_yes_label}"
 					action="#{jJStatusBean.deleteStatus}" update=":tabview:statusForm"
-					oncomplete="deleteSatDialogWidget.hide()" />
+					oncomplete="PF('deleteSatDialogWidget').hide()" />
 				<p:commandButton id="deleteNoButton"
 					value="#{messages.admin_status_delete_no_label}"
-					onclick="deleteSatDialogWidget.hide()" type="button" />
+					onclick="PF('deleteSatDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:confirmDialog>

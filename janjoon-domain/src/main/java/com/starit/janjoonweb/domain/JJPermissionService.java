@@ -38,6 +38,6 @@ public interface JJPermissionService {
 
 	public Set<JJContact> getManagers(String objet);
 
-	public Set<JJContact> areAuthorized(JJProject project, JJProduct product);
+	public Set<JJContact> areAuthorized(JJProject project, JJProduct product,String objet);
 
 }

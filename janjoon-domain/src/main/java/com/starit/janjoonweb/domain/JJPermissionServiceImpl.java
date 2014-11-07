@@ -266,7 +266,6 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 			orPredicates
 					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
 		} else
-
 			orPredicates
 					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
 
@@ -280,7 +279,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 			orPredicates.add(criteriaBuilder.equal(fromRight.get("category"),
 					category));
-		else
+		
 			orPredicates.add(criteriaBuilder.isNull(fromRight.get("category")));
 
 		orPredicate = criteriaBuilder.or(orPredicates
@@ -311,10 +310,9 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		orPredicates = new ArrayList<Predicate>();
 
 		if (project != null)
-
 			orPredicates
 					.add(criteriaBuilder.equal(from.get("project"), project));
-		else
+		
 			orPredicates.add(criteriaBuilder.isNull(from.get("project")));
 
 		orPredicate = criteriaBuilder.or(orPredicates
@@ -324,10 +322,9 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 		orPredicates = new ArrayList<Predicate>();
 		if (product != null)
-
 			orPredicates
 					.add(criteriaBuilder.equal(from.get("product"), product));
-		else
+		
 			orPredicates.add(criteriaBuilder.isNull(from.get("product")));
 
 		orPredicate = criteriaBuilder.or(orPredicates
@@ -361,8 +358,8 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 	}
 
 	@Override
-	public Set<JJContact> areAuthorized(JJProject project, JJProduct product) {
-		return areAuthorized(project, product, null, null, null, null, null);
+	public Set<JJContact> areAuthorized(JJProject project, JJProduct product,String objet) {
+		return areAuthorized(project, product, objet, null, null, null, null);
 	}
 
 	public void saveJJPermission(JJPermission JJPermission_) {

@@ -33,7 +33,7 @@ public class CalendarUtil {
 		try {
 			initCompanyCalendar();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			workDays =new ArrayList<ChunkTime>();
 			e.printStackTrace();
 		}
 	}
@@ -168,6 +168,14 @@ public class CalendarUtil {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		cal.add(Calendar.DAY_OF_MONTH, -1);
+		return getZeroTimeDate(cal.getTime());
+	}
+	
+	public static Date getAfterDay(Date date)
+	{
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.DAY_OF_MONTH, 1);
 		return getZeroTimeDate(cal.getTime());
 	}
 

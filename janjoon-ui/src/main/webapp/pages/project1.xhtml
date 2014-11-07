@@ -11,9 +11,9 @@
 		<p:tabView id="projecttabview" widgetVar="projectTabView"
 			dynamic="false" cache="true"
 			activeIndex="#{loginBean.activeTabProjectIndex}">
-			<p:ajax event="tabChange" listener="#{loginBean.onTabProjectChange}"
-				update="projecttabview  :deleteForm" />
-			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}">
+<!-- 			<p:ajax event="tabChange" listener="#{loginBean.onTabProjectChange}" -->
+<!-- 				update="projecttabview  :deleteForm" /> -->
+			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}" >
 				<h:panelGrid columns="1" cellpadding="3" style="width:100%">
 					<ui:insert name="planning">
 						<ui:include src="planning.xhtml" />
@@ -47,14 +47,14 @@
 					<p:commandButton id="deleteNoButton"
 						value="#{messages.bug_delete_no_button}"
 						oncomplete="PF('blockUIWidget').unblock()"
-						onclick="deleteDialogWidget.hide()" type="button" />
+						onclick="PF('deleteDialogWidget').hide()" type="button" />
 				</h:form>
 			</p:outputPanel>
 		</p:confirmDialog>
 		<p:dialog id="taskImportDialog" header="Import Tasks" modal="true"
 			draggable="#{jJTaskBean.mode != 'scrum'}"
 			widgetVar="taskImportDialogWidget" dynamic="true" resizable="false">
-			<p:ajax event="close" update=":projecttabview:planningForm"
+			<p:ajax event="close" update=":projecttabview"
 				listener="#{jJTaskBean.closeDialogImport}" />
 			<p:outputPanel id="importTaskDialogPanel">
 				<ui:insert name="importTask">
@@ -75,7 +75,7 @@
 					<p:commandButton id="viewCloseButton"
 						value="#{messages.label_close}"
 						oncomplete="PF('blockUIWidget').unblock()"
-						onclick="viewTaskDialogWidget.hide()" type="button" />
+						onclick="PF('viewTaskDialogWidget').hide()" type="button" />
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
@@ -101,12 +101,12 @@
 							action="#{jJBugBean.persistBug}"
 							update=":projecttabview:SprintTabView:sprintForm"
 							oncomplete="PF('blockUIWidget').unblock()"
-							onsuccess="editBugDialogWidget.hide()">
+							onsuccess="PF('editBugDialogWidget').hide()">
 						</p:commandButton>
 						<p:commandButton id="taskBugCloseButton"
 							value="#{messages.bug_edit_close_button}"
 							oncomplete="PF('blockUIWidget').unblock()"
-							onclick="editBugDialogWidget.hide()" type="button" />
+							onclick="PF('editBugDialogWidget').hide()" type="button" />
 					</p:panelGrid>
 				</h:form>
 			</p:outputPanel>

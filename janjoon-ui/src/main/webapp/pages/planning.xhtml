@@ -13,18 +13,19 @@
 /* 	height: 45px; */
 /* 	overflow: hidden; */
 /* } */
-.ui-datatable table{
-table-layout: fixed;
-border-collapse: separate;
+.ui-datatable table {
+	table-layout: fixed;
+	border-collapse: separate;
 }
+
 .ui-datatable .ui-datatable-data th {
 	height: 37px;
 	overflow: hidden;
 }
 
- .ui-datatable .ui-datatable-data td {	
- 	overflow: hidden; 
- } 
+.ui-datatable .ui-datatable-data td {
+	overflow: hidden;
+}
 
 .ui-datatable .ui-datatable-data tr {
 	height: 44px;
@@ -58,7 +59,7 @@ border-collapse: separate;
 						style="float: right;"
 						actionListener="#{jJTaskBean.loadImportFormat}"
 						update=":taskImportDialog"
-						oncomplete="taskImportDialogWidget.show()">
+						oncomplete="PF('taskImportDialogWidget').show()">
 						<f:attribute name="mode" value="planning" />
 					</p:commandButton>
 				</p:column>
@@ -87,34 +88,36 @@ border-collapse: separate;
 		</p:panelGrid>
 	</h:form>
 	<h:form id="planningForm" style="width:100%">
-	<h:outputScript library="js" name="scrollTab.js" />
+		<h:outputScript library="js" name="scrollTab.js" />
 		<f:event type="preRenderComponent"
 			oncomplete="PF('blockUIWidget').unblock();"
 			listener="#{jJTaskBean.loadingData()}" />
-		<p:growl id="msg" />
+		<p:growl id="msg" sticky="true" life="3000" autoUpdate="true" />
 		<p:panelGrid style="margin-top:10px">
 			<p:row>
 				<p:column>
-					<p:remoteCommand name="onCellEditTableComplete" 
-						update=":projecttabview " oncomplete="PF('blockUIWidget').unblock()" />
-					<p:scrollPanel style="width:1400px;" mode="native"  >
-						<pe:layout  fullPage="false" style="width:1400px;height:600px;" 
-							options="#{jJTaskBean.layoutOptionsOne}" 
+					<p:remoteCommand name="onCellEditTableComplete"
+						update=":projecttabview "
+						oncomplete="PF('blockUIWidget').unblock()" />
+					<p:scrollPanel style="width:1400px;" mode="native">
+						<pe:layout fullPage="false" style="width:1400px;height:600px;"
+							options="#{jJTaskBean.layoutOptionsOne}"
 							state="#{jJTaskBean.stateOne}">
 
-							<pe:layoutPane  position="west" id="westLayout" styleContent="overflow-y: hidden;">
+							<pe:layoutPane position="west" id="westLayout"
+								styleContent="overflow-y: hidden;">
 								<f:facet name="header">  
                        					Task Data Table 
                     			</f:facet>
-								<p:dataTable id="taskDataTable" var="taskData"									
+								<p:dataTable id="taskDataTable" var="taskData"
 									sortBy="#{jJTaskBean.sortBy}" value="#{jJTaskBean.tasksData}"
-									 editable="true" editMode="cell">
+									editable="true" editMode="cell">
 
 									<p:ajax event="cellEdit" listener="#{jJTaskBean.onCellEdit}"
 										process="@widgetVar(nameWidget)"
-										onstart="PF('blockUIWidget').block()"										
-										oncomplete="onCellEditTableComplete()"
-										update="taskDataTable :projecttabview:planningForm:timeline :projecttabview:planningForm:msg :projecttabview:SprintTabView" />
+										onstart="PF('blockUIWidget').block()"
+										onsuccess="onCellEditTableComplete()"
+										update="taskDataTable :projecttabview:planningForm:timeline :projecttabview:planningForm:msg" />
 									<p:summaryRow paginatorPosition="top">
 										<p:column colspan="11" style="text-align:left">
 											<h:outputText icon="ui-icon-arrowreturnthick-1-e"
@@ -130,13 +133,13 @@ border-collapse: separate;
 											<f:setPropertyActionListener value="#{taskData.task}"
 												target="#{jJTaskBean.task}" />
 											<p:menuitem id="duplicate" icon="ui-icon-copy"
-												oncomplete="duplicateTaskDialogWidget.show()"
+												oncomplete="PF('duplicateTaskDialogWidget').show()"
 												value="#{messages.project_gantt_task_dupplicate_button}">
 												<f:setPropertyActionListener value="#{taskData.task}"
 													target="#{jJTaskBean.task}" />
 											</p:menuitem>
 											<p:menuitem id="deleteButton" icon="ui-icon-trash"
-												oncomplete="deleteDialogWidget.show()"
+												oncomplete="PF('deleteDialogWidget').show()"
 												value="#{messages.label_delete}"
 												title="#{messages.label_delete}">
 												<f:setPropertyActionListener value="#{taskData}"
@@ -156,7 +159,8 @@ border-collapse: separate;
 										headerText="#{messages.project_gantt_table_name_title}">
 										<p:cellEditor>
 											<f:facet name="output">
-												<h:outputText value="#{fn:substring(taskData.task.name,0,60)}" />
+												<h:outputText
+													value="#{fn:substring(taskData.task.name,0,60)}" />
 											</f:facet>
 											<f:facet name="input">
 												<p:inputText value="#{taskData.task.name}" required="true"
@@ -206,11 +210,17 @@ border-collapse: separate;
 										<p:cellEditor style="width: 112px;">
 											<f:facet name="output">
 												<p:calendar value="#{taskData.startDate}" navigator="true"
-													pattern="yyyy/MM/dd HH:mm:ss" style="width:90px"/>
+													pattern="yyyy/MM/dd HH:mm:ss" style="width:90px" />
 											</f:facet>
 											<f:facet name="input">
-												<p:calendar style="width:90px" value="#{taskData.startDate}" navigator="true"
-													pattern="yyyy/MM/dd HH:mm:ss" />
+												<p:calendar style="width:90px" value="#{taskData.startDate}"
+													navigator="true" pattern="yyyy/MM/dd HH:mm:ss">													
+													<f:validator validatorId="dateRangeValidator" />
+													<f:attribute name="taskData"
+														value="#{taskData}" />
+													<f:attribute name="edition" value="startDate" />
+														
+												</p:calendar>
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
@@ -218,12 +228,17 @@ border-collapse: separate;
 										headerText="#{messages.project_gantt_table_endplanned_title}">
 										<p:cellEditor style="width: 112px;">
 											<f:facet name="output">
-												<p:calendar style="width:90px" value="#{taskData.endDate}" navigator="true"
-													pattern="yyyy/MM/dd HH:mm:ss" />
+												<p:calendar style="width:90px" value="#{taskData.endDate}"
+													navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
 											</f:facet>
 											<f:facet name="input">
-												<p:calendar style="width:90px" value="#{taskData.endDate}" navigator="true"
-													pattern="yyyy/MM/dd HH:mm:ss" />
+												<p:calendar style="width:90px" value="#{taskData.endDate}"
+													navigator="true" pattern="yyyy/MM/dd HH:mm:ss" >
+													<f:validator validatorId="dateRangeValidator" />
+													<f:attribute name="taskData"
+														value="#{taskData}" />
+														<f:attribute name="edition" value="endDate" />
+												</p:calendar>
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
@@ -243,12 +258,19 @@ border-collapse: separate;
 										headerText="#{messages.project_gantt_table_startreal_title}">
 										<p:cellEditor style="width: 112px;">
 											<f:facet name="output">
-												<p:calendar style="width:90px" value="#{taskData.task.startDateReal}"
-													navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
+												<p:calendar style="width:90px"
+													value="#{taskData.task.startDateReal}" navigator="true"
+													pattern="yyyy/MM/dd HH:mm:ss" />
 											</f:facet>
 											<f:facet name="input">
-												<p:calendar style="width:90px" value="#{taskData.task.startDateReal}"
-													navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
+												<p:calendar style="width:90px"
+													value="#{taskData.task.startDateReal}" navigator="true"
+													pattern="yyyy/MM/dd HH:mm:ss" >
+													<f:validator validatorId="dateRangeValidator" />
+													<f:attribute name="taskData"
+														value="#{taskData}" />
+													<f:attribute name="edition" value="startDateReal" />
+												</p:calendar>
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
@@ -256,12 +278,19 @@ border-collapse: separate;
 										headerText="#{messages.project_gantt_table_endreal_title}">
 										<p:cellEditor style="width: 112px;">
 											<f:facet name="output">
-												<p:calendar style="width:90px" value="#{taskData.task.endDateReal}"
-													navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
+												<p:calendar style="width:90px"
+													value="#{taskData.task.endDateReal}" navigator="true"
+													pattern="yyyy/MM/dd HH:mm:ss" />
 											</f:facet>
 											<f:facet name="input">
-												<p:calendar style="width:90px" value="#{taskData.task.endDateReal}"
-													navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
+												<p:calendar style="width:90px"
+													value="#{taskData.task.endDateReal}" navigator="true"
+													pattern="yyyy/MM/dd HH:mm:ss" >
+													<f:validator validatorId="dateRangeValidator" />
+													<f:attribute name="edition" value="endDateReal" />
+													<f:attribute name="taskData"
+														value="#{taskData}" />
+												</p:calendar>
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
@@ -321,19 +350,18 @@ border-collapse: separate;
 								</p:dataTable>
 							</pe:layoutPane>
 
-							<pe:layoutPane position="center" id="centerLayout" >
+							<pe:layoutPane position="center" id="centerLayout">
 
 								<f:facet name="header">  
                        					Task TimeLine 
                     			</f:facet>
 								<pe:timeline id="timeline" value="#{jJTaskBean.model}"
-									eventMargin="10" eventMarginAxis="0"
+									eventMargin="10" eventMarginAxis="0" 
 									locale="#{LocaleBean.locale}" start="#{jJTaskBean.start}"
 									end="#{jJTaskBean.end}" widgetVar="timelineWdgt"
 									axisOnTop="true" groupsChangeable="false" var="task"
-									stackEvents="true"
-									style="width:1200px;min-height:350px;" editable="true"
-									zoomMin="#{jJTaskBean.zoomMin}">
+									stackEvents="true" style="width:1200px;min-height:350px;"
+									editable="true" zoomMin="#{jJTaskBean.zoomMin}">
 
 									<p:ajax event="delete"
 										listener="#{jJTaskBean.onDeleteTimelineEvent}"
@@ -344,11 +372,14 @@ border-collapse: separate;
 										listener="#{jJTaskBean.onCreateTimelineEvent}"
 										oncomplete="PF('taskImportDialogWidget').show()" />
 
-									<p:ajax event="change"
+									<p:ajax event="change" 
 										update=":projecttabview:planningForm:timeline :projecttabview:planningForm:taskDataTable :projecttabview:SprintTabView :projecttabview:planningForm:msg"
 										listener="#{jJTaskBean.onChangeTimelineEvent}"
 										onstart="PF('blockUIWidget').block()"
-										oncomplete="PF('blockUIWidget').unblock()" />
+										oncomplete="PF('blockUIWidget').unblock()"  >
+										
+										</p:ajax>
+										
 
 									<p:ajax event="edit" update=":viewTaskForm:viewTaskPanelGrid"
 										listener="#{jJTaskBean.onEditTimelineEvent}"
@@ -375,9 +406,9 @@ border-collapse: separate;
 				<p:commandButton id="duplicateYesButton"
 					value="#{messages.label_yes}" action="#{jJTaskBean.duplicateTask}"
 					update=":projecttabview:planningForm :projecttabview:SprintTabView"
-					oncomplete="duplicateTaskDialogWidget.hide()" />
+					oncomplete="PF('duplicateTaskDialogWidget').hide()" />
 				<p:commandButton id="duplicateNoButton" value="#{messages.label_no}"
-					onclick="duplicateTaskDialogWidget.hide()" type="button" />
+					onclick="PF('duplicateTaskDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:confirmDialog>

@@ -379,13 +379,13 @@ public class JJChapterBean {
 
 		if (chapterState) {
 			if (getChapterDialogConfiguration()) {
-				context.execute("chapterDialogWidget.hide()");
+				context.execute("PF('chapterDialogWidget').hide()");
 			} else {
 				loadData(categoryId);
 			}
 
 		} else {
-			context.execute("chapterDialogWidget.hide()");
+			context.execute("PF('chapterDialogWidget').hide()");
 		}
 	}
 

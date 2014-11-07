@@ -7,7 +7,7 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition>
-	<h:form id="importTaskDialogForm">
+	<h:form id="importTaskDialogForm" >
 
 		<pe:blockUI widgetVar="taskBlockUIWidget"
 			target="importTaskDialogForm">
@@ -93,12 +93,12 @@
 			<f:facet name="header">
 				<h:outputText value="Import #{jJTaskBean.objet}" />
 			</f:facet>
-			<p:column style="width:40%">
+			<p:column style="width:40%" id="checkBox">
 				<f:facet name="header">
 					<p:row>
 						<p:column>
-							<p:selectBooleanCheckbox value="#{jJTaskBean.copyObjets}">
-								<p:ajax update="importDataTable"
+							<p:selectBooleanCheckbox value="#{jJTaskBean.copyObjets}" id="checkAll">
+								<p:ajax update="importDataTable" process="@this,checkAll"
 									listener="#{jJTaskBean.copyObjets}" />
 							</p:selectBooleanCheckbox>
 						</p:column>
@@ -107,8 +107,8 @@
 						</p:column>
 					</p:row>
 				</f:facet>
-				<p:selectBooleanCheckbox value="#{format.copyObjet}">
-					<p:ajax update="importDataTable" listener="#{jJTaskBean.copyObjet}" />
+				<p:selectBooleanCheckbox value="#{format.copyObjet}" id="checkOne">
+					<p:ajax update="importDataTable" listener="#{jJTaskBean.copyObjet}" process="@this,checkAll"/>
 				</p:selectBooleanCheckbox>
 				<h:outputText value="#{format.name}" />
 			</p:column>
@@ -117,11 +117,14 @@
 				<p:cellEditor>
 					<f:facet name="output">
 						<p:calendar value="#{format.startDate}" navigator="true"
-							pattern="yyyy/MM/dd" />
+							pattern="yyyy/MM/dd HH:mm" required="true"/>
 					</f:facet>
 					<f:facet name="input">
-						<p:calendar value="#{format.startDate}" navigator="true"
-							pattern="yyyy/MM/dd" />
+						<p:calendar  value="#{format.startDate}" navigator="true" required="true"
+							pattern="yyyy/MM/dd HH:mm" >
+							<f:validator validatorId="dateRangeValidator" />
+							<f:attribute name="mode" value="#{jJTaskBean.mode}" />							
+						</p:calendar>
 					</f:facet>
 				</p:cellEditor>
 			</p:column>

@@ -288,12 +288,12 @@ public class JJContactBean {
 
 		if (contactState) {
 			if (getContactDialogConfiguration()) {
-				context.execute("contactDialogWidget.hide()");
+				context.execute("PF('contactDialogWidget').hide()");
 			} else {
 				newContact(jJPermissionBean);
 			}
 		} else {
-			context.execute("contactDialogWidget.hide()");
+			context.execute("PF('contactDialogWidget').hide()");
 		}
 
 		System.out.println("dfgdfgf");

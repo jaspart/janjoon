@@ -142,6 +142,8 @@ public class DevelopmentBean implements Serializable {
 			HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 					.getExternalContext().getSession(false);
 			jJTaskBean=(JJTaskBean) session.getAttribute("jJTaskBean");
+			if(jJTaskBean == null)
+				jJTaskBean =new JJTaskBean();
 		}		
 
 		init = false;
@@ -158,6 +160,8 @@ public class DevelopmentBean implements Serializable {
 		
 		if(jJTaskBean == null)
 			jJTaskBean=(JJTaskBean) session.getAttribute("jJTaskBean");
+		if(jJTaskBean == null)
+			jJTaskBean=new JJTaskBean();
 		
 		contact = (JJContact) session.getAttribute("JJContact");	
 		JJVersionBean verbean = (JJVersionBean) session
@@ -671,7 +675,7 @@ public class DevelopmentBean implements Serializable {
 
 			fileIndex = j;
 			RequestContext context = RequestContext.getCurrentInstance();
-			context.execute("saveFileDialogWidget.show()");
+			context.execute("PF('saveFileDialogWidget').show()");
 		} else {
 
 			updatetabView(j, index);
@@ -738,7 +742,7 @@ public class DevelopmentBean implements Serializable {
 				files.get(fileIndex).getTexte());
 		updatetabView(fileIndex, files.get(activeTabIndex));
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("saveFileDialogWidget.hide()");
+		context.execute("PF('saveFileDialogWidget').hide()");
 		if (files.isEmpty())
 			context.update(":form");
 		else
@@ -751,7 +755,7 @@ public class DevelopmentBean implements Serializable {
 
 		updatetabView(fileIndex, files.get(activeTabIndex));
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("saveFileDialogWidget.hide()");
+		context.execute("PF('saveFileDialogWidget').hide()");
 		fileIndex = -1;
 	}
 
@@ -829,7 +833,7 @@ public class DevelopmentBean implements Serializable {
 		createdFileName = "";
 		fileOrFolder = true;
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("createFileDialogWidget.hide()");
+		context.execute("PF('createFileDialogWidget').hide()");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 
@@ -855,7 +859,7 @@ public class DevelopmentBean implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 				tree = configManager.listRepositoryContent(version.getName());
 				RequestContext context = RequestContext.getCurrentInstance();
-				context.execute("createFileDialogWidget.hide()");
+				context.execute("PF('createFileDialogWidget').hide()");
 			} else {
 				FacesMessage msg = MessageFactory.getMessage(
 						"dev.file_unsuccessfully_uploaded",

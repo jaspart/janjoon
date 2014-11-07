@@ -174,7 +174,7 @@ public class JJConfigurationBean {
 		setJJConfiguration_(new JJConfiguration());
 		renderCreate = true;
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("createDialogWidget.show()");
+		context.execute("PF('createDialogWidget').show()");
 
 	}
 

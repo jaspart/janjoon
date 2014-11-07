@@ -31,7 +31,7 @@
 						<h:outputText value="#{messages.admin_product_table_action_label}" />
 					</f:facet>
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
-						oncomplete="productDialogWidget.show()"
+						oncomplete="PF('deleteDialogWidget').show()"
 						value="#{messages.admin_product_edit_tooltip}"
 						action="#{jJProductBean.editProduct(jJVersionBean)}"
 						update=":tabview:productDialog">
@@ -39,7 +39,7 @@
 							target="#{jJProductBean.productAdmin}" />
 
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
-							oncomplete="productDeleteDialogWidget.show()"
+							oncomplete="PF('productDeleteDialogWidget').show()"
 							value="#{messages.admin_product_table_delete_label}"
 							title="#{messages.admin_product_delete_tooltip}">
 							<f:setPropertyActionListener value="#{product}"
@@ -52,7 +52,7 @@
 						id="newProduct"
 						actionListener="#{jJProductBean.newProduct(jJVersionBean)}"
 						update=":tabview:productDialog"
-						oncomplete="productDialogWidget.show()" icon="ui-icon-circle-plus" />
+						oncomplete="PF('deleteDialogWidget').show()" icon="ui-icon-circle-plus" />
 				</f:facet>
 			</p:dataTable>
 		</p:panel>
@@ -302,10 +302,10 @@
 					value="#{messages.admin_product_new_yes_button}"
 					action="#{jJProductBean.deleteProduct}"
 					update=":tabview:productForm :headerForm"
-					oncomplete="productDeleteDialogWidget.hide()" />
+					oncomplete="PF('productDeleteDialogWidget').hide()" />
 				<p:commandButton id="deleteNoButton"
 					value="#{messages.admin_product_new_no_button}"
-					onclick="productDeleteDialogWidget.hide()" type="button" />
+					onclick="PF('productDeleteDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:confirmDialog>

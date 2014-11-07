@@ -197,14 +197,14 @@ public class JJProjectBean {
 		if (projectState) {
 
 			if (getProjectDialogConfiguration()) {
-				context.execute("projectDialogWidget.hide()");
+				context.execute("PF('projectDialogWidget').hide()");
 			} else {
 				newProject();
 			}
 
 		} else {
 
-			context.execute("projectDialogWidget.hide()");
+			context.execute("PF('projectDialogWidget').hide()");
 		}
 	}
 

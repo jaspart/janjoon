@@ -78,7 +78,7 @@
 
 					<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
 						listener="#{jJMessageBean.onRowSelect}"
-						oncomplete="viewDialogWidget1.show()" />
+						oncomplete="PF('viewDialogWidget1').show()" />
 					<p:column headerText="Messages" sortBy="creationDate">
 						<h:outputText id="viewButton" value="#{mes.message}" />
 						<p:tooltip for="viewButton"
@@ -97,7 +97,7 @@
 								columnClasses="col1,col2" />
 							<p:commandButton id="viewCloseButton1"
 								value="#{messages.label_close}"
-								onclick="viewDialogWidget1.hide()" type="button" />
+								onclick="PF('viewDialogWidget1').hide()" type="button" />
 						</h:form>
 					</p:outputPanel>
 				</p:dialog>

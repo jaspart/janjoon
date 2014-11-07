@@ -1,13 +1,7 @@
 package com.starit.janjoonweb.ui.mb.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.w3c.dom.ls.LSInput;
-
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJRequirement;
-import com.starit.janjoonweb.ui.mb.JJRequirementBean;
 
 public class RequirementUtil {
 

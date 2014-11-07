@@ -44,7 +44,7 @@
 				</p:column>
 				<p:column>
 					<p:calendar id="sprintCSD" navigator="true" effect="slideDown"
-						pattern="dd/MM/yyyy" required="true"
+						pattern="dd/MM/yyyy" required="true" binding="#{startDateCreation}"
 						disabled="#{jjsprint.neditabale}"
 						value="#{jjsprint.sprint.startDate}" />
 				</p:column>
@@ -55,7 +55,10 @@
 					<p:calendar id="sprintCED" navigator="true" effect="slideDown"
 						pattern="dd/MM/yyyy" required="true"
 						disabled="#{jjsprint.neditabale}"
-						value="#{jjsprint.sprint.endDate}" />
+						value="#{jjsprint.sprint.endDate}" >
+						<f:validator validatorId="dateRangeValidator" />
+    					<f:attribute name="startDateComponent" value="#{startDateCreation}" />
+						</p:calendar>
 				</p:column>
 			</p:row>
 			<f:facet name="footer">
@@ -64,16 +67,19 @@
 						<p:commandButton id="createSprintButton"
 							value="#{messages.label_create}"
 							disabled="#{jjsprint.neditabale}"
-							actionListener="#{jJSprintBean.attrListener}"
-							action="#{jJSprintBean.createSprint}" update="@(form)"
-							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()">
+							actionListener="#{jJSprintBean.attrListener}"						
+							update=":projecttabview:SprintTabView:sprintCreationForm">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+							<f:attribute name="create" value="create"/>
 						</p:commandButton>
+						<p:remoteCommand name="createSprint" update=":projecttabview"
+							action="#{jJSprintBean.createSprint}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock();"/>
 					</p:column>
 					<p:column>
 						<p:commandButton value="Done" id="doneButtonr"
-							update=":projecttabview:SprintTabView" immediate="true"
+							update=":projecttabview" immediate="true"
 							disabled="#{!jjsprint.neditabale}"
 							action="#{jJSprintBean.doneEvent}"
 							onstart="PF('blockUIWidget').block()"

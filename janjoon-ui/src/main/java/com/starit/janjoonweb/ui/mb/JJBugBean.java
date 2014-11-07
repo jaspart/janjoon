@@ -391,7 +391,7 @@ public class JJBugBean {
 		}
 
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("bugTestDialogWidget.hide()");
+		context.execute("PF('bugTestDialogWidget').hide()");
 
 		if (jJTeststepexecutionBean.getDisabledTestcase()) {
 			jJTeststepexecutionBean.nextTab();

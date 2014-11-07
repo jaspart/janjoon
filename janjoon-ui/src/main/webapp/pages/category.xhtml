@@ -30,7 +30,7 @@
 							value="#{messages.admin_category_table_action_title}" />
 					</f:facet>
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
-						oncomplete="categoryDialogWidget.show()"
+						oncomplete="PF('categoryDialogWidget').show()"
 						value="#{messages.admin_category_table_edit_tooltip}"
 						action="#{jJCategoryBean.editCategory}"
 						update=":tabview:categoryDialog">
@@ -40,7 +40,7 @@
 
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
 							value="#{messages.admin_category_table_delete_tooltip}"
-							oncomplete="categoryDeleteDialogWidget.show()"
+							oncomplete="PF('categoryDeleteDialogWidget').show()"
 							title="#{messages.label_delete}">
 							<f:setPropertyActionListener value="#{category}"
 								target="#{jJCategoryBean.categoryAdmin}" />
@@ -52,7 +52,7 @@
 					<p:commandButton value="#{messages.admin_category_new_button}"
 						id="newCategory" actionListener="#{jJCategoryBean.newCategory}"
 						update=":tabview:categoryDialog"
-						oncomplete="categoryDialogWidget.show()"
+						oncomplete="PF('categoryDialogWidget').show()"
 						icon="ui-icon-circle-plus" />
 				</f:facet>
 			</p:dataTable>
@@ -118,10 +118,10 @@
 					value="#{messages.admin_category_delete_yes_label}"
 					action="#{jJCategoryBean.deleteCategory}"
 					update=":tabview:categoryForm"
-					oncomplete="categoryDeleteDialogWidget.hide()" />
+					oncomplete="PF('categoryDeleteDialogWidget').hide()" />
 				<p:commandButton id="deleteNoButton"
 					value="#{messages.admin_category_delete_no_label}"
-					onclick="categoryDeleteDialogWidget.hide()" type="button" />
+					onclick="PF('categoryDeleteDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:confirmDialog>

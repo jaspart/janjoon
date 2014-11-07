@@ -47,7 +47,7 @@
 
 					<p:splitButton id="viewButton" icon="ui-icon-zoomin"
 						update=":tabview:viewForm:viewPanelGrid"
-						oncomplete="viewDialogWidget.show()"
+						oncomplete="PF('viewDialogWidget').show()"
 						value="#{messages.label_view}">
 						<f:setPropertyActionListener value="#{conf}"
 							target="#{jJConfigurationBean.JJConfiguration_}" />
@@ -56,7 +56,7 @@
 						<p:menuitem id="editButton" icon="ui-icon-pencil"
 							update=":tabview:createForm:createPanelGrid :tabview:createDialog"
 							action="#{jJConfigurationBean.onEdit}"
-							oncomplete="createDialogWidget.show()"
+							oncomplete="PF('createDialogWidget').show()"
 							value="#{messages.admin_config_edit_title}">
 							<f:setPropertyActionListener value="#{conf}"
 								target="#{jJConfigurationBean.JJConfiguration_}" />
@@ -65,7 +65,7 @@
 						</p:menuitem>
 
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
-							oncomplete="deleteDialogWidget.show()"
+							oncomplete="PF('deleteDialogWidget').show()"
 							value="#{messages.admin_config_delete_title}">
 							<f:setPropertyActionListener value="#{conf}"
 								target="#{jJConfigurationBean.selectedConf}" />
@@ -136,7 +136,7 @@
 					update="createPanelGrid,:tabview:configForm:ConfMessage" />
 				<p:commandButton idid="createCloseButton"
 					value="#{messages.admin_config_new_close_button}"
-					onclick="createDialogWidget.hide()" type="button" />
+					onclick="PF('createDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
@@ -152,7 +152,7 @@
 					columnClasses="col1,col2" />
 				<p:commandButton id="viewCloseButton"
 					value="#{messages.admin_config_view_close_button}"
-					onclick="viewDialogWidget.hide()" type="button" />
+					onclick="PF('viewDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
@@ -165,10 +165,10 @@
 				<p:commandButton id="deleteYesButton"
 					value="#{messages.admin_config_delete_yes_label}"
 					action="#{jJConfigurationBean.deleteConfig}"
-					update=":tabview:configForm" oncomplete="deleteDialogWidget.hide()" />
+					update=":tabview:configForm" oncomplete="PF('deleteDialogWidget').hide()" />
 				<p:commandButton id="deleteNoButton"
 					value="#{messages.admin_config_delete_no_label}"
-					onclick="deleteDialogWidget.hide()" type="button" />
+					onclick="PF('deleteDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:confirmDialog>

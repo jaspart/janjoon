@@ -218,8 +218,8 @@ public class JJStatusBean {
 			message = "message_successfully_created";
 		}
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("createSatDialogWidget.hide()");
-		context.execute("editSatDialogWidget.hide()");
+		context.execute("PF('createSatDialogWidget').hide()");
+		context.execute("PF('editSatDialogWidget').hide()");
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJStatus");

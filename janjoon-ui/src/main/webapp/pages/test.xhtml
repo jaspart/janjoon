@@ -218,7 +218,7 @@
 								<h:outputText value="#{messages.test_table_action_title}" />
 							</f:facet>
 							<p:commandButton id="runButton" icon="ui-icon-play"
-								oncomplete="runTestcaseDialogWidget.show()"
+								oncomplete="runPF('testcaseDialogWidget').show()"
 								action="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
 								update=":runTestcaseDialog" disabled="#{tcr.disabled}">
 								<f:setPropertyActionListener value="#{tcr.testcase}"
@@ -227,7 +227,7 @@
 							<p:tooltip for="runButton" value="Run #{tcr.testcase.name}"
 								showEffect="fade" hideEffect="fade" />
 							<p:commandButton id="editButton" icon="ui-icon-pencil"
-								oncomplete="testcaseDialogWidget.show()"
+								oncomplete="PF('testcaseDialogWidget').show()"
 								action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
 								update=":testcaseDialog">
 								<f:setPropertyActionListener value="#{tcr.testcase}"
@@ -241,7 +241,7 @@
 								id="newTestcase"
 								actionListener="#{jJTestcaseBean.newTestcase(jJTeststepBean)}"
 								update=":testcaseDialog"
-								oncomplete="testcaseDialogWidget.show()"
+								oncomplete="PF('testcaseDialogWidget').show()"
 								icon="ui-icon-circle-plus" />
 						</f:facet>
 					</p:dataTable>
@@ -271,13 +271,13 @@
 								</p:column>
 								<p:column>
 									<p:commandButton id="editButton" icon="ui-icon-pencil"
-										oncomplete="testcaseDialogWidget.show()"
+										oncomplete="PF('testcaseDialogWidget').show()"
 										action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
 										update=":testcaseDialog" />
 									<p:tooltip for="editButton" value="#{messages.label_edit}"
 										showEffect="fade" hideEffect="fade" />
 									<p:commandButton id="runButton" icon="ui-icon-play"
-										oncomplete="runTestcaseDialogWidget.show()"
+										oncomplete="runPF('testcaseDialogWidget').show()"
 										action="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
 										update=":runTestcaseDialog"
 										disabled="#{jJBuildBean.build ne null ? false : true }">
@@ -326,7 +326,7 @@
 			</p:layoutUnit>
 		</p:layout>
 
-		<p:hotkey bind="esc" handler="testcaseDialogWidget.hide()" />
+		<p:hotkey bind="esc" handler="PF('testcaseDialogWidget').hide()" />
 		<p:dialog id="testcaseDialog"
 			header="#{messages[jJTestcaseBean.message]}" modal="true"
 			widgetVar="testcaseDialogWidget" dynamic="true" resizable="false"
@@ -544,7 +544,7 @@
 		<p:dialog id="runTestcaseDialog" header="#{messages.test_exec_title}"
 			modal="true" widgetVar="runTestcaseDialogWidget" width="500px"
 			height="375px" style="top: 30px;" dynamic="true" resizable="false">
-			<p:hotkey bind="esc" handler="runTestcaseDialogWidget.hide()" />
+			<p:hotkey bind="esc" handler="runPF('testcaseDialogWidget').hide()" />
 			<p:hotkey bind="space" handler="TestcaseExecSuccessButton.jq.click()" />
 			<p:hotkey bind="S" handler="TestcaseExecSuccessButton.jq.click()" />
 			<p:hotkey bind="F" handler="TestcaseExecFailedButton.jq.click()" />
@@ -656,7 +656,7 @@
 					<p:commandButton id="saveBug" value="#{messages.label_save}"
 						action="#{jJBugBean.saveBug}"
 						update=":runForm:teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton"
-						oncomplete="bugTestDialogWidget.hide()" />
+						oncomplete="PF('bugTestDialogWidget').hide()" />
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>

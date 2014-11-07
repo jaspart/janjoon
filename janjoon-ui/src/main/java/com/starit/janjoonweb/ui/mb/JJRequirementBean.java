@@ -61,7 +61,7 @@ public class JJRequirementBean {
 	public void setjJTaskBean(JJTaskBean jJTaskBean) {
 		this.jJTaskBean = jJTaskBean;
 	}
-	
+
 	public void setjJConfigurationService(
 			JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
@@ -177,8 +177,6 @@ public class JJRequirementBean {
 	public void setNoCouvretReq(List<JJRequirement> noCouvretReq) {
 		this.noCouvretReq = noCouvretReq;
 	}
-
-	
 
 	public JJCategory getLowCategory() {
 		return lowCategory;
@@ -808,6 +806,8 @@ public class JJRequirementBean {
 					.getCurrentInstance().getExternalContext()
 					.getSession(false);
 			jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
+			if(jJTaskBean == null)
+				jJTaskBean=new JJTaskBean();
 		}
 
 		long t = System.currentTimeMillis();
@@ -907,80 +907,133 @@ public class JJRequirementBean {
 	}
 
 	public void save() {
+
 		long t = System.currentTimeMillis();
 		requirement.setProduct(requirementProduct);
 		requirement.setVersioning(requirementVersion);
 		requirement.setStatus(requirementStatus);
 
-		getRequirementsListUP();
+		
+		// getRequirementsListUP();
 
 		getRequirementOrder();
 
-		if (!requirementCategory.getId().equals(lowCategory.getId())) {
-			getRequirementsListDOWN();
-		}
+		// if (!requirementCategory.getId().equals(lowCategory.getId())) {
+		// getRequirementsListDOWN();
+		// }
 
 		if (requirement.getId() == null) {
-
 			requirement.setProject(requirementProject);
-
-			// if (initiateTask) {
-			// task.setName(requirement.getName());
-			// task.setDescription("This Task: " + task.getName());
-			// task.setEndDatePlanned(new Date(task.getStartDatePlanned()
-			// .getTime() + task.getWorkloadPlanned() * 60 * 60 * 1000));
-			//
-			// requirement.getTasks().add(task);
-			// task.setRequirement(requirement);
-			// jJRequirementService.saveJJRequirement(requirement);
-			// jJTaskService.saveJJTask(task);
-			// } else {
-			// jJRequirementService.saveJJRequirement(requirement);
-			// }
-
 			jJRequirementService.saveJJRequirement(requirement);
 
 		} else {
 
-			// JJRequirement req = jJRequirementService
-			// .findJJRequirement(requirement.getId());
 			if (!requirement.getEnabled()) {
 				deleteTasksAndTestcase(requirement);
 			}
 
 		}
+		requirement=jJRequirementService.findJJRequirement(requirement.getId());
+		if (requirement.getCategory().equals(lowCategory)) {
+
+			List<JJRequirement> listReq = new ArrayList<JJRequirement>(
+					requirement.getRequirementLinkUp());
+			for (JJRequirement req : listReq) {
+				if (req.getCategory().equals(mediumCategory)
+						|| req.getCategory().equals(highCategory)) {
+					requirement.getRequirementLinkUp().remove(req);
+				}
+			}
+			requirement.getRequirementLinkUp().addAll(new HashSet<JJRequirement>(
+					selectedMediumRequirementsList));
+			requirement.getRequirementLinkUp().addAll(new HashSet<JJRequirement>(
+					selectedHighRequirementsList));
+
+		} else if (requirement.getCategory().equals(mediumCategory)) {
+
+			List<JJRequirement> listReq = new ArrayList<JJRequirement>(
+					requirement.getRequirementLinkDown());
+			for (JJRequirement req : listReq) {
+				if (req.getCategory().equals(lowCategory)) {
+					
+					//requirement.getRequirementLinkDown().remove(req);
+					req=jJRequirementService.findJJRequirement(req.getId());
+					req.getRequirementLinkUp().remove(requirement);
+					jJRequirementService.updateJJRequirement(req);
+				}
+			}
+			for(JJRequirement req:selectedLowRequirementsList)
+			{
+				req=jJRequirementService.findJJRequirement(req.getId());
+				req.getRequirementLinkUp().add(requirement);
+				jJRequirementService.updateJJRequirement(req);
+			}			
+			
+			listReq = new ArrayList<JJRequirement>(requirement.getRequirementLinkUp());
+			for (JJRequirement req : listReq) {
+				if (req.getCategory().equals(highCategory)) {
+					requirement.getRequirementLinkUp().remove(req);
+				}
+			}
+			requirement.getRequirementLinkUp().addAll(new HashSet<JJRequirement>(
+					selectedHighRequirementsList));
+
+		} else if (requirement.getCategory().equals(highCategory)) {
+			List<JJRequirement> listReq = new ArrayList<JJRequirement>(
+					requirement.getRequirementLinkDown());
+			for (JJRequirement req : listReq) {
+				if (req.getCategory().equals(mediumCategory)
+						|| req.getCategory().equals(lowCategory)) {
+					//requirement.getRequirementLinkDown().remove(req);
+					req=jJRequirementService.findJJRequirement(req.getId());
+					req.getRequirementLinkUp().remove(requirement);
+					jJRequirementService.updateJJRequirement(req);
+				}
+			}
+			
+			for(JJRequirement req:selectedLowRequirementsList)
+			{
+				req=jJRequirementService.findJJRequirement(req.getId());
+				req.getRequirementLinkUp().add(requirement);
+				jJRequirementService.updateJJRequirement(req);
+			}	
+			
+			for(JJRequirement req:selectedMediumRequirementsList)
+			{
+				req=jJRequirementService.findJJRequirement(req.getId());
+				req.getRequirementLinkUp().add(requirement);
+				jJRequirementService.updateJJRequirement(req);
+			}	
+//			requirement.getRequirementLinkDown().addAll(new HashSet<JJRequirement>(
+//					selectedMediumRequirementsList));
+//			requirement.getRequirementLinkDown().addAll(new HashSet<JJRequirement>(
+//					selectedLowRequirementsList));
+
+		}
+		jJRequirementService.updateJJRequirement(requirement);
+
 
 		RequestContext context = RequestContext.getCurrentInstance();
 
 		if (requirementState) {
-
-			// addRowToCategoryDataModel();
-
 			if (getRequirementDialogConfiguration()) {
-				context.execute("requirementDialogWidget.hide()");
+				context.execute("PF('requirementDialogWidget').hide()");
 			} else {
 				newRequirement(requirementCategory.getId());
 			}
 
 		} else {
 
-			// System.out.println("GDGDFG");
-			//
-			//
-			//
-			// System.out.println("FEFEFE");
-
-			context.execute("requirementDialogWidget.hide()");
-			// closeDialog();
+			context.execute("PF('requirementDialogWidget').hide()");
 
 		}
 
 		reset();
 		System.out.println("replaceInDataModelList");
-		replaceInDataModelList(requirement);
+		//replaceInDataModelList(requirement);
 		System.out.println("replaceInDataModelList2");
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
-		redirectPage();
+		reloadPage();
 
 	}
 
@@ -1193,7 +1246,7 @@ public class JJRequirementBean {
 		}
 
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("requirementImportDialogWidget.hide()");
+		context.execute("PF('requirementImportDialogWidget').hide()");
 		reset();
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
@@ -1493,8 +1546,7 @@ public class JJRequirementBean {
 			warnMessage = "Export to PDF";
 			disabledExport = false;
 
-			disabledRequirement = false;		
-			
+			disabledRequirement = false;
 
 			jJChapterBean.setWarnMessage("Manage document");
 			jJChapterBean.setDisabledChapter(false);
@@ -1522,7 +1574,7 @@ public class JJRequirementBean {
 				List<RequirementUtil> requirements = (List<RequirementUtil>) categoryDataModel
 						.getWrappedData();
 				requirements.add(0, new RequirementUtil(requirement,
-						getRowStyleClass(requirement,true)));
+						getRowStyleClass(requirement, true)));
 			}
 			// categoryDataModel.calculCompletionProgress();
 			// categoryDataModel.calculCoverageProgress();
@@ -2090,6 +2142,8 @@ public class JJRequirementBean {
 						if (!idListUP.contains(key)) {
 							for (JJRequirement req : storeMapUp) {
 								if (req.getId().equals(Long.parseLong(key))) {
+									req = jJRequirementService
+											.findJJRequirement(req.getId());
 									req.getRequirementLinkDown().remove(
 											requirement);
 									removeList.add(req);
@@ -2129,6 +2183,7 @@ public class JJRequirementBean {
 				// Supprimer les storeMapUp
 
 				for (JJRequirement req : storeMapUp) {
+					req = jJRequirementService.findJJRequirement(req.getId());
 					req.getRequirementLinkDown().remove(requirement);
 				}
 				requirement.getRequirementLinkUp().removeAll(storeMapUp);
@@ -2339,6 +2394,8 @@ public class JJRequirementBean {
 					.getCurrentInstance().getExternalContext()
 					.getSession(false);
 			jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
+			if(jJTaskBean == null)
+				jJTaskBean=new JJTaskBean();
 		}
 
 		long t = System.currentTimeMillis();
@@ -3218,13 +3275,13 @@ public class JJRequirementBean {
 			logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		}
 
-		private float calculCompletion(JJRequirement requirement) {
+		private float calculCompletion(JJRequirement r) {
 			long t = System.currentTimeMillis();
 			float compteur = 0;
 			int size = 0;
-			requirement = jJRequirementService.findJJRequirement(requirement
+			r = jJRequirementService.findJJRequirement(r
 					.getId());
-			Set<JJRequirement> linksUp = requirement.getRequirementLinkUp();
+			Set<JJRequirement> linksUp = r.getRequirementLinkUp();
 			for (JJRequirement req : linksUp) {
 
 				if (req.getEnabled()) {
@@ -3234,7 +3291,7 @@ public class JJRequirementBean {
 
 			}
 
-			Set<JJTask> tasks = requirement.getTasks();
+			Set<JJTask> tasks = r.getTasks();
 			int hasTaskCompleted = 0;
 			if (!tasks.isEmpty()) {
 				boolean completed = false;
@@ -3514,7 +3571,7 @@ public class JJRequirementBean {
 		}
 
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("requirementMindMap.show()");
+		context.execute("PF('requirementMindMap').show()");
 
 	}
 
@@ -3525,9 +3582,9 @@ public class JJRequirementBean {
 				.getId());
 
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("requirementMindMap.hide()");
+		context.execute("PF('requirementMindMap').hide()");
 		editRequirement();
-		context.execute("requirementDialogWidget.show()");
+		context.execute("PF('requirementDialogWidget').show()");
 	}
 
 	public void onNodeSelect(SelectEvent event) {
@@ -3607,7 +3664,7 @@ public class JJRequirementBean {
 		// oncomplete="PF('blockUIWidget').unblock();"
 	}
 
-	public String getRowStyleClass(JJRequirement requirement,boolean NotMain) {
+	public String getRowStyleClass(JJRequirement requirement, boolean NotMain) {
 
 		long t = System.currentTimeMillis();
 		List<JJCategory> categoryList = jJCategoryService.getCategories(null,
@@ -3672,8 +3729,7 @@ public class JJRequirementBean {
 		if (tasks.isEmpty()) {
 			TASK = false;
 		}
-		if(NotMain)
-		{
+		if (NotMain) {
 			for (JJTask task : tasks) {
 				if (task.getEndDateReal() == null) {
 					ENCOURS = true;
@@ -3681,7 +3737,7 @@ public class JJRequirementBean {
 					break;
 				}
 			}
-		}	
+		}
 
 		String rowStyleClass = "";
 
@@ -3724,11 +3780,11 @@ public class JJRequirementBean {
 
 			}
 
-		} else if (UP && DOWN && !TASK ) {
+		} else if (UP && DOWN && !TASK) {
 			rowStyleClass = "RequirementNoTask";
 		} else {
-			if(!(UP && DOWN && TASK))
-			rowStyleClass = "RequirementNotLinked";
+			if (!(UP && DOWN && TASK))
+				rowStyleClass = "RequirementNotLinked";
 		}
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		return rowStyleClass;
@@ -3745,7 +3801,8 @@ public class JJRequirementBean {
 			for (JJRequirement req : jJRequirementService
 					.findAllJJRequirements()) {
 				if (req.getEnabled() && req.getCategory() != null) {
-					if (getRowStyleClass(req,false).equalsIgnoreCase("RequirementNotLinked"))
+					if (getRowStyleClass(req, false).equalsIgnoreCase(
+							"RequirementNotLinked"))
 						noCouvretReq.add(req);
 				}
 			}
@@ -3757,8 +3814,8 @@ public class JJRequirementBean {
 			List<JJRequirement> requirments) {
 		List<RequirementUtil> requirementUtils = new ArrayList<RequirementUtil>();
 		for (JJRequirement req : requirments) {
-			requirementUtils
-					.add(new RequirementUtil(req, getRowStyleClass(req,true)));
+			requirementUtils.add(new RequirementUtil(req, getRowStyleClass(req,
+					true)));
 		}
 		return requirementUtils;
 	}

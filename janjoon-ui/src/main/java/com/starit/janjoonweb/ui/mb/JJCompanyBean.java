@@ -182,7 +182,7 @@ public class JJCompanyBean {
 			companies=null;
 			
 			RequestContext context = RequestContext.getCurrentInstance();
-			context.execute("companyDialogWidget.hide()");
+			context.execute("PF('companyDialogWidget').hide()");
 
 			facesMessage = MessageFactory.getMessage(message, "JJCompany");			
 

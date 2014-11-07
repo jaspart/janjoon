@@ -23,7 +23,7 @@
 						<h:outputText value="#{messages.admin_profile_table_action_title}" />
 					</f:facet>
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
-						oncomplete="profileDialogWidget.show()"
+						oncomplete="PF('profileDialogWidget').show()"
 						action="#{jJProfileBean.editProfile(jJRightBean)}"
 						update=":tabview:profileDialog"
 						value="#{messages.admin_profile_table_edit_tooltip}">
@@ -32,7 +32,7 @@
 
 
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
-							oncomplete="profileDeleteDialogWidget.show()"
+							oncomplete="PF('profileDeleteDialogWidget').show()"
 							value="#{messages.admin_profile_table_delete_tooltip}">
 							<f:setPropertyActionListener value="#{profile}"
 								target="#{jJProfileBean.profileAdmin}" />
@@ -45,7 +45,7 @@
 						id="newProfile"
 						actionListener="#{jJProfileBean.newProfile(jJRightBean)}"
 						update=":tabview:profileDialog"
-						oncomplete="profileDialogWidget.show()" icon="ui-icon-circle-plus" />
+						oncomplete="PF('profileDialogWidget').show()" icon="ui-icon-circle-plus" />
 				</f:facet>
 			</p:dataTable>
 		</p:panel>
@@ -255,10 +255,10 @@
 					value="#{messages.admin_profile_delete_yes_label}"
 					action="#{jJProfileBean.deleteProfile}"
 					update=":tabview:profileForm"
-					oncomplete="profileDeleteDialogWidget.hide()" />
+					oncomplete="PF('profileDeleteDialogWidget').hide()" />
 				<p:commandButton id="deleteNoButton"
 					value="#{messages.admin_profile_delete_no_label}"
-					onclick="profileDeleteDialogWidget.hide()" type="button" />
+					onclick="PF('profileDeleteDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:confirmDialog>

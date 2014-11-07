@@ -354,8 +354,14 @@ public class LoginBean implements Serializable {
 
 	public static Object findBean(String beanName) {
 		FacesContext context = FacesContext.getCurrentInstance();
-		return context.getApplication().evaluateExpressionGet(context,
-				"#{" + beanName + "}", Object.class);
+		HttpSession session = (HttpSession) context.getExternalContext()
+				.getSession(false);
+		if (session.getAttribute(beanName) != null)
+			return session.getAttribute(beanName);
+		else
+			return context.getApplication().evaluateExpressionGet(context,
+					"#{" + beanName + "}", Object.class);
+
 	}
 
 	public void onTabAdminChange(TabChangeEvent event) {

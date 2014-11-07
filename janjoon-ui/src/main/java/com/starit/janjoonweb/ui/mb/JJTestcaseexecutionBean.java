@@ -161,7 +161,8 @@ public class JJTestcaseexecutionBean {
 					.getCurrentInstance().getExternalContext()
 					.getSession(false);
 			JJTaskBean jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
-			jJTaskService.updateJJTask(task);
+			jJTaskBean.saveJJTask(task, true);
+			
 		}
 
 	}

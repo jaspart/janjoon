@@ -23,7 +23,7 @@
 						<h:outputText value="#{messages.admin_project_table_action_title}" />
 					</f:facet>
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
-						oncomplete="projectDialogWidget.show()"
+						oncomplete="PF('projectDialogWidget').show()"
 						value="#{messages.admin_project_table_edit_tooltip}"
 						action="#{jJProjectBean.editProject}"
 						update=":tabview:projectDialog">
@@ -31,7 +31,7 @@
 							target="#{jJProjectBean.projectAdmin}" />
 
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
-							oncomplete="projectDeleteDialogWidget.show()"
+							oncomplete="PF('projectDeleteDialogWidget').show()"
 							value="#{messages.admin_project_table_delete_title}"
 							title="#{messages.label_delete}">
 							<f:setPropertyActionListener value="#{project}"
@@ -44,7 +44,7 @@
 					<p:commandButton value="#{messages.admin_project_new_button}"
 						actionListener="#{jJProjectBean.newProject}" id="newProject"
 						update=":tabview:projectDialog"
-						oncomplete="projectDialogWidget.show()" icon="ui-icon-circle-plus" />
+						oncomplete="PF('projectDialogWidget').show()" icon="ui-icon-circle-plus" />
 				</f:facet>
 			</p:dataTable>
 		</p:panel>
@@ -127,10 +127,10 @@
 					value="#{messages.admin_project_delete_yes_label}"
 					action="#{jJProjectBean.deleteProject}"
 					update=":tabview:projectForm :headerForm"
-					oncomplete="projectDeleteDialogWidget.hide()" />
+					oncomplete="PF('projectDeleteDialogWidget').hide()" />
 				<p:commandButton id="deleteNoButton"
 					value="#{messages.admin_project_delete_no_label}"
-					onclick="projectDeleteDialogWidget.hide()" type="button" />
+					onclick="PF('projectDeleteDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:confirmDialog>

@@ -98,7 +98,7 @@
 						style="width:5% !important;">
 						<p:commandButton id="resolveButton"
 							value="#{messages.main_communication_resolve_button}"
-							oncomplete="resolveDialogWidget.show()"
+							oncomplete="PF('resolveDialogWidget').show()"
 							title="#{messages.label_disable}">
 							<f:setPropertyActionListener value="#{mes}"
 								target="#{jJMessageBean.resolvedJJMessage}" />
@@ -119,9 +119,9 @@
 							value="#{messages.label_yes}"
 							action="#{jJMessageBean.resolveJJMessage}"
 							update=":messageForm,:notifMPT"
-							oncomplete="resolveDialogWidget.hide()" />
+							oncomplete="PF('resolveDialogWidget').hide()" />
 						<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
-							onclick="resolveDialogWidget.hide()" type="button" />
+							onclick="PF('resolveDialogWidget').hide()" type="button" />
 					</h:form>
 				</p:outputPanel>
 			</p:confirmDialog>
@@ -203,7 +203,7 @@
 						<p:commandButton id="viewCloseButton"
 							value="#{messages.label_close}"
 							oncomplete="PF('blockUIWidget').unblock()"
-							onclick="viewTaskDialogWidget.hide()" type="button" />
+							onclick="PF('viewTaskDialogWidget').hide()" type="button" />
 					</h:form>
 				</p:outputPanel>
 			</p:dialog>

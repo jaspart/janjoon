@@ -480,6 +480,8 @@ public class JJTestcaseBean {
 		JJBuildBean jJBuildBean = (JJBuildBean) session
 				.getAttribute("jJBuildBean");
 		JJTaskBean jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
+		if(jJTaskBean == null)
+			jJTaskBean=new JJTaskBean();
 
 		if (jJBuildBean == null) {
 			jJBuildBean = new JJBuildBean();
@@ -586,7 +588,7 @@ public class JJTestcaseBean {
 		if (testcaseState) {
 
 			if (getTestcaseDialogConfiguration()) {
-				context.execute("testcaseDialogWidget.hide()");
+				context.execute("PF('testcaseDialogWidget').hide()");
 			} else {
 				newTestcase(jJTeststepBean);
 			}
@@ -626,7 +628,7 @@ public class JJTestcaseBean {
 					MessageFactory.getMessage("message_successfully_updated",
 							"JJTestcase"));
 
-			context.execute("testcaseDialogWidget.hide()");
+			context.execute("PF('testcaseDialogWidget').hide()");
 
 		}
 
