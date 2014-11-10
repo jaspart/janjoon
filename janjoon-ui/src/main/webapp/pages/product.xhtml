@@ -9,7 +9,7 @@
 	<h:form id="productForm">
 		<p:panel id="productPanel" style="width:650px" columns="1"
 			cellpadding="6">
-			<p:dataTable id="productDataTable" var="product"
+			<p:dataTable id="productDataTable" var="product" lazy="true"
 				value="#{jJProductBean.productListTable}" paginator="true" rows="15"
 				rowKey="#{product.id}">
 				<f:facet name="header">#{messages.admin_product_table_title}</f:facet>
@@ -85,7 +85,9 @@
 											disabled="#{jJProductBean.disabledProductMode}"
 											value="#{jJProductBean.productAdmin.name}"
 											label="#{messages.admin_product_new_name_title}"
-											required="true" widgetVar="nameWidget" />
+											required="true" widgetVar="nameWidget">
+											<f:validateLength maximum="100" />
+										</p:inputText>
 										<p:watermark for="name"
 											value="#{messages.admin_product_new_name_watermark}" />
 									</p:column>
@@ -117,7 +119,9 @@
 											disabled="#{jJProductBean.disabledProductMode}"
 											value="#{jJProductBean.productAdmin.extname}"
 											label="#{messages.admin_product_new_extname_label}"
-											required="true" widgetVar="extnameWidget" />
+											required="true" widgetVar="extnameWidget" >
+					<f:validateLength maximum="100" />
+				</p:inputText>
 										<p:watermark for="extname"
 											value="#{messages.admin_product_new_extname_waternmark}" />
 									</p:column>
@@ -149,7 +153,9 @@
 											value="#{jJVersionBean.versionAdmin.name}"
 											label="Version Name" required="true"
 											requiredMessage="Version Name is required"
-											widgetVar="versionWidget" />
+											widgetVar="versionWidget" >
+					<f:validateLength maximum="100" />
+				</p:inputText>
 										<p:watermark for="version"
 											value="#{messages.admin_product_new_version_watermark}" />
 									</p:column>
@@ -253,8 +259,10 @@
 									<p:column>
 										<p:inputText id="build" style="width:100%;"
 											value="#{jJBuildBean.buildName}" label="Build Name"
-											required="true" requiredMessage="Build Name is required" />
-										<p:watermark for="build" value="Build Name" />
+											required="true" requiredMessage="Build Name is required" >										
+										<f:validateLength maximum="100" />
+									</p:inputText>
+									<p:watermark for="build" value="Build Name" />
 									</p:column>
 
 									<p:column>

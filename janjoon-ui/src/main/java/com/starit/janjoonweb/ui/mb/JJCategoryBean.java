@@ -13,6 +13,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJConfigurationService;
+import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyCategoryDataTable;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
@@ -27,7 +28,7 @@ public class JJCategoryBean {
 	}
 
 	private JJCategory categoryAdmin;
-	private List<JJCategory> categoryListTable;
+	private LazyCategoryDataTable categoryListTable;
 
 	private String message;
 	private boolean disableLevel;
@@ -42,13 +43,13 @@ public class JJCategoryBean {
 		this.categoryAdmin = categoryAdmin;
 	}
 
-	public List<JJCategory> getCategoryListTable() {
-		categoryListTable = jJCategoryService.getCategories(null, false, true,
-				true);
+	public LazyCategoryDataTable getCategoryListTable() {
+		if(categoryListTable == null)
+		categoryListTable = new LazyCategoryDataTable(jJCategoryService);
 		return categoryListTable;
 	}
 
-	public void setCategoryListTable(List<JJCategory> categoryListTable) {
+	public void setCategoryListTable(LazyCategoryDataTable categoryListTable) {
 		this.categoryListTable = categoryListTable;
 	}
 
@@ -91,6 +92,7 @@ public class JJCategoryBean {
 		if (categoryAdmin != null) {
 			categoryAdmin.setEnabled(false);
 			jJCategoryService.updateJJCategory(categoryAdmin);
+			categoryListTable=null;
 			
 			String message = "message_successfully_deleted";
 			FacesMessage facesMessage = MessageFactory.getMessage(message, "JJCategory");		
@@ -126,6 +128,7 @@ public class JJCategoryBean {
 
 				// closeDialog();
 			}
+			categoryListTable=null;
 
 			facesMessage = MessageFactory.getMessage(message, "JJCategory");
 			RequestContext context = RequestContext.getCurrentInstance();

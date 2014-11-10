@@ -10,4 +10,6 @@ public interface JJProfileService {
 	public JJProfile getOneProfile(String name, boolean onlyActif);
 
 	public List<JJProfile> getProfiles(boolean onlyActif);
+
+	public List<JJProfile> load(int first, int pageSize);
 }

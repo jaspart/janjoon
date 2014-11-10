@@ -550,6 +550,7 @@ public class JJSprintBean {
 						.findJJTask(id).getBug().getId()));
 				jJBugBean.setBugRequirementSelected(jJBugBean.getJJBug_()
 						.getRequirement());
+				jJBugBean.setBugProjectSelected(project);
 
 				context.execute("PF('blockUIWidget').block()");
 				context.execute("PF('editBugDialogWidget').show()");

@@ -165,7 +165,9 @@
 											<f:facet name="input">
 												<p:inputText value="#{taskData.task.name}" required="true"
 													label="Name" widgetVar="nameWidget"
-													requiredMessage="#{messages.project_gantt_task_alert}" />
+													requiredMessage="#{messages.project_gantt_task_alert}">
+													<f:validateLength maximum="100" />
+												</p:inputText>
 											</f:facet>
 										</p:cellEditor>
 									</p:column>

@@ -19,6 +19,7 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermission;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.ui.mb.JJPermissionBean.PermissionDataModel;
+import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyContactDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
@@ -36,10 +37,21 @@ public class JJContactBean {
 
 	private JJContact contactAdmin;
 	private List<JJContact> contacts;
+	private LazyContactDataModel  contactsLazyModel;
 	private String message;
 	private boolean disabledContactMode;
 	private boolean disabledPermissionMode;
 	private boolean contactState;
+
+	public LazyContactDataModel getContactsLazyModel() {
+		if(contactsLazyModel == null)
+			contactsLazyModel=new LazyContactDataModel(jJContactService);
+		return contactsLazyModel;
+	}
+
+	public void setContactsLazyModel(LazyContactDataModel contactsLazyModel) {
+		this.contactsLazyModel = contactsLazyModel;
+	}
 
 	public void setEncoder(BCryptPasswordEncoder encoder) {
 		this.encoder = encoder;
@@ -149,6 +161,7 @@ public class JJContactBean {
 
 		}
 		contacts.remove(contains(contactAdmin.getId()));
+		contactsLazyModel=null;
 	}
 
 	public void addContact(JJPermissionBean jJPermissionBean) {
@@ -193,6 +206,7 @@ public class JJContactBean {
 			}
 
 		}
+		contactsLazyModel=null;
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
@@ -297,6 +311,7 @@ public class JJContactBean {
 		}
 
 		System.out.println("dfgdfgf");
+		contactsLazyModel=null;
 	}
 
 	// public void save(JJPermissionBean jJPermissionBean) {

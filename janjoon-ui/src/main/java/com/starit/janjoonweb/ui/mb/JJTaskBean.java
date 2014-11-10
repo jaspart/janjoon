@@ -1506,7 +1506,7 @@ public class JJTaskBean {
 				}
 
 				if (task.getWorkloadPlanned() == null) {
-					task.setWorkloadPlanned(0);
+					task.setWorkloadPlanned(3);
 					calendarUtil.getEndDate(task, "planned");
 				}
 				saveJJTask(task, false);
@@ -2402,42 +2402,46 @@ public class JJTaskBean {
 	public void updateView(JJTask tt, boolean delete) {
 
 		replaceTaskData(tt, delete);
-		replaceRealTimelineEvent(tt, delete);
+		if(model != null)
+		{
+			replaceRealTimelineEvent(tt, delete);
 
-		int j = findInEventTimeLine(tt, false);
-		String styleClass = "";
-		Date startDate = null, endDate = null;
+			int j = findInEventTimeLine(tt, false);
+			String styleClass = "";
+			Date startDate = null, endDate = null;
 
-		if (!delete && j != -1) {
+			if (!delete && j != -1) {
 
-			if (tt.getStartDateRevised() != null) {
+				if (tt.getStartDateRevised() != null) {
 
-				styleClass = "revised";
-				startDate = tt.getStartDateRevised();
-				if (tt.getEndDateRevised() == null)
+					styleClass = "revised";
+					startDate = tt.getStartDateRevised();
+					if (tt.getEndDateRevised() == null)
+						endDate = tt.getEndDatePlanned();
+					else
+						endDate = tt.getEndDateRevised();
+
+				} else {
+
+					styleClass = "planned";
 					endDate = tt.getEndDatePlanned();
-				else
-					endDate = tt.getEndDateRevised();
+					startDate = tt.getStartDatePlanned();
 
-			} else {
+				}
+				String group = model.getEvent(j).getGroup();
+				model.delete(model.getEvent(j));
+				model.add(new TimelineEvent(tt, startDate, endDate, true, group,
+						styleClass));
 
-				styleClass = "planned";
-				endDate = tt.getEndDatePlanned();
-				startDate = tt.getStartDatePlanned();
-
+			} else if (j != -1) {
+				model.delete(model.getEvent(j));
 			}
-			String group = model.getEvent(j).getGroup();
-			model.delete(model.getEvent(j));
-			model.add(new TimelineEvent(tt, startDate, endDate, true, group,
-					styleClass));
 
-		} else if (j != -1) {
-			model.delete(model.getEvent(j));
+			int k = containTaskData(tt.getId());
+			if (k != -1)
+				updateChapterTimeLineEvent(tasksData.get(k).getChapter());
 		}
-
-		int k = containTaskData(tt.getId());
-		if (k != -1)
-			updateChapterTimeLineEvent(tasksData.get(k).getChapter());
+		
 	}
 
 	public void SortBySelectionChanged(final AjaxBehaviorEvent event) {

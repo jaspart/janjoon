@@ -344,7 +344,9 @@
 										required="true" widgetVar="nameWidget"
 										label="#{messages.test_new_name_label}"
 										requiredMessage="#{messages.test_new_name_alert}"
-										disabled="#{jJTestcaseBean.disabledTestcaseMode}" />
+										disabled="#{jJTestcaseBean.disabledTestcaseMode}" >
+										<f:validateLength maximum="100" />
+									</p:inputText>	
 									<p:watermark for="name"
 										value="#{messages.test_new_name_watermark}" />
 								</p:column>

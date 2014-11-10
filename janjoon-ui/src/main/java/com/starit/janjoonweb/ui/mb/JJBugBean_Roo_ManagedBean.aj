@@ -242,18 +242,8 @@ privileged aspect JJBugBean_Roo_ManagedBean {
             }
         }
         return suggestions;
-    }
-    
-    public List<JJImportance> JJBugBean.completeImportance(String query) {
-        List<JJImportance> suggestions = new ArrayList<JJImportance>();
-        for (JJImportance jJImportance : jJImportanceService.findAllJJImportances()) {
-            String jJImportanceStr = String.valueOf(jJImportance.getName() +  " "  + jJImportance.getDescription() +  " "  + jJImportance.getCreationDate() +  " "  + jJImportance.getUpdatedDate());
-            if (jJImportanceStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJImportance);
-            }
-        }
-        return suggestions;
-    }
+    }  
+   
     
     public List<JJStatus> JJBugBean.completeStatus(String query) {
         List<JJStatus> suggestions = new ArrayList<JJStatus>();

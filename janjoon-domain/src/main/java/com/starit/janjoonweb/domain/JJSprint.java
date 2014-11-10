@@ -16,6 +16,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.Hibernate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
@@ -85,4 +86,9 @@ public class JJSprint {
 		return (object instanceof JJSprint) && (getId() != null) ? getId()
 				.equals(((JJSprint) object).getId()) : (object == this);
 	}
+	
+	public void setTasks(Set<JJTask> tasks) {
+    	Hibernate.initialize(this.getTasks());
+        this.tasks = tasks;
+    }
 }

@@ -20,6 +20,45 @@ public class JJConfigurationServiceImpl implements JJConfigurationService {
 		this.entityManager = entityManager;
 	}
 
+	public List<JJConfiguration> load(int first, int pageSize, String name,
+			String param, boolean onlyactif) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJConfiguration> criteriaQuery = criteriaBuilder
+				.createQuery(JJConfiguration.class);
+
+		Root<JJConfiguration> from = criteriaQuery.from(JJConfiguration.class);
+
+		CriteriaQuery<JJConfiguration> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (name != null) {
+
+			predicates.add(criteriaBuilder.equal(from.get("name"), name));
+
+		}
+
+		if (param != null) {
+
+			predicates.add(criteriaBuilder.equal(from.get("param"), param));
+
+		}
+
+		if (onlyactif) {
+
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		}
+
+		select.where(predicates.toArray(new Predicate[] {}));
+
+		TypedQuery<JJConfiguration> result = entityManager.createQuery(select);
+		result.setFirstResult(first);
+		result.setMaxResults(pageSize);
+		return result.getResultList();
+	}
+
 	@Override
 	public List<JJConfiguration> getConfigurations(String name, String param,
 			boolean onlyActif) {
@@ -80,17 +119,20 @@ public class JJConfigurationServiceImpl implements JJConfigurationService {
 		}
 
 	}
-	
+
 	public void saveJJConfiguration(JJConfiguration JJConfiguration_) {
-		
-        jJConfigurationRepository.save(JJConfiguration_);
-        JJConfiguration_=jJConfigurationRepository.findOne(JJConfiguration_.getId());
-    }
-    
-    public JJConfiguration updateJJConfiguration(JJConfiguration JJConfiguration_) {
-        jJConfigurationRepository.save(JJConfiguration_);
-        JJConfiguration_=jJConfigurationRepository.findOne(JJConfiguration_.getId());
-        return JJConfiguration_;
-    }
+
+		jJConfigurationRepository.save(JJConfiguration_);
+		JJConfiguration_ = jJConfigurationRepository.findOne(JJConfiguration_
+				.getId());
+	}
+
+	public JJConfiguration updateJJConfiguration(
+			JJConfiguration JJConfiguration_) {
+		jJConfigurationRepository.save(JJConfiguration_);
+		JJConfiguration_ = jJConfigurationRepository.findOne(JJConfiguration_
+				.getId());
+		return JJConfiguration_;
+	}
 
 }

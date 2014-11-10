@@ -15,4 +15,6 @@ public interface JJContactService {
 
 	public boolean updateJJContactTransaction(JJContact contact);
 
+	public List<JJContact> load(int first, int pageSize);
+
 }

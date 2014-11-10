@@ -25,6 +25,7 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.*;
+import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyMessageDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
@@ -42,8 +43,7 @@ public class JJMessageBean {
 	private SelectItem[] statusOptions;
 	// private List<JJMessage> enabledJJMessage;
 	private List<JJMessage> allJJMessages;
-	private List<JJMessage> filteredJJMessage;
-	private List<JJMessage> mainMessages;
+	private LazyMessageDataModel mainMessages;
 	private List<String> columns;
 	private boolean collapsedMesPanel = true;
 	private boolean collapsedLayoutPanel = true;
@@ -67,12 +67,12 @@ public class JJMessageBean {
 
 	}
 
-	public List<JJMessage> getMainMessages() {
+	public LazyMessageDataModel getMainMessages() {
 
 		return mainMessages;
 	}
 
-	public void setMainMessages(List<JJMessage> mainMessages) {
+	public void setMainMessages(LazyMessageDataModel mainMessages) {
 		this.mainMessages = mainMessages;
 	}
 
@@ -128,15 +128,7 @@ public class JJMessageBean {
 
 	public void setViewedMessage(JJMessage viewedMessage) {
 		this.viewedMessage = viewedMessage;
-	}
-
-	public List<JJMessage> getFilteredJJMessage() {
-		return filteredJJMessage;
-	}
-
-	public void setFilteredJJMessage(List<JJMessage> filteredJJMessage) {
-		this.filteredJJMessage = filteredJJMessage;
-	}
+	}	
 
 	public boolean isLoadFiltredJJmessage() {
 		return loadFiltredJJmessage;
@@ -265,7 +257,7 @@ public class JJMessageBean {
 			JJProductBean jJProductBean = (JJProductBean) session.getAttribute("jJProductBean");
 			JJProjectBean jJProjectBean = (JJProjectBean) session.getAttribute("jJProjectBean");
 
-			mainMessages = jJMessageService.getActifMessages(
+			mainMessages = new LazyMessageDataModel(jJMessageService,
 					jJProjectBean.getProject(), jJProductBean.getProduct());
 
 			RequestContext context = RequestContext.getCurrentInstance();
@@ -290,14 +282,14 @@ public class JJMessageBean {
 			JJProductBean jJProductBean = (JJProductBean) session.getAttribute("jJProductBean");
 			JJProjectBean jJProjectBean = (JJProjectBean) session.getAttribute("jJProjectBean");
 
-			mainMessages = jJMessageService.getActifMessages(
+			mainMessages = new LazyMessageDataModel(jJMessageService,
 					jJProjectBean.getProject(), jJProductBean.getProduct());
 			if (!collapsedMesPanel) {
 				RequestContext context = RequestContext.getCurrentInstance();
 				context.update("messagePanel");
 			}
 
-			for (JJMessage mes : mainMessages) {
+			for (JJMessage mes : jJMessageService.getActifMessages(jJProjectBean.getProject(),jJProductBean.getProduct())) {
 				if (mes.getCreatedBy() != null
 						&& !listContaines(contactes, mes.getCreatedBy()))
 					contactes.add(mes.getCreatedBy());
@@ -319,17 +311,10 @@ public class JJMessageBean {
 			projectOptions = createFilterOptions(projectes);
 			productOptions = createFilterOptions(productes);
 			creatorOptions = createFilterOptions(contactes);
-			statusOptions = createFilterOptions(status);
-			filteredJJMessage = mainMessages;
+			statusOptions = createFilterOptions(status);			
 			loadFiltredJJmessage = true;
 		}
-		String referrer = FacesContext.getCurrentInstance()
-				.getExternalContext().getRequestHeaderMap().get("referer");
-		if (referrer != null) {
-			if (!referrer.contains("main")) {
-				filteredJJMessage = mainMessages;
-			}
-		}
+		
 	}
 
 	public boolean listContaines(Object objet, Object find) {

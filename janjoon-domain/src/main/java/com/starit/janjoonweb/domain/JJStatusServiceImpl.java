@@ -23,6 +23,29 @@ public class JJStatusServiceImpl implements JJStatusService {
 		this.entityManager = entityManager;
 	}
 
+	public List<JJStatus> load(int first, int pageSize) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJStatus> criteriaQuery = criteriaBuilder
+				.createQuery(JJStatus.class);
+
+		Root<JJStatus> from = criteriaQuery.from(JJStatus.class);
+
+		CriteriaQuery<JJStatus> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+		TypedQuery<JJStatus> result = entityManager.createQuery(select);
+
+		result.setFirstResult(first);
+		result.setMaxResults(pageSize);
+		return result.getResultList();
+	}
+
 	// New Generic
 
 	@Override
@@ -53,7 +76,7 @@ public class JJStatusServiceImpl implements JJStatusService {
 
 		TypedQuery<JJStatus> result = entityManager.createQuery(select);
 		System.out.println(result.getResultList().get(0).getName());
-		
+
 		if (result.getResultList().size() == 0)
 			return null;
 		else
@@ -127,17 +150,17 @@ public class JJStatusServiceImpl implements JJStatusService {
 
 		return tableNames;
 	}
-	
-public void saveJJStatus(JJStatus JJStatus_) {
-		
-        jJStatusRepository.save(JJStatus_);
-        JJStatus_=jJStatusRepository.findOne(JJStatus_.getId());
-    }
-    
-    public JJStatus updateJJStatus(JJStatus JJStatus_) {
-        jJStatusRepository.save(JJStatus_);
-        JJStatus_=jJStatusRepository.findOne(JJStatus_.getId());
-        return JJStatus_;
-    }
+
+	public void saveJJStatus(JJStatus JJStatus_) {
+
+		jJStatusRepository.save(JJStatus_);
+		JJStatus_ = jJStatusRepository.findOne(JJStatus_.getId());
+	}
+
+	public JJStatus updateJJStatus(JJStatus JJStatus_) {
+		jJStatusRepository.save(JJStatus_);
+		JJStatus_ = jJStatusRepository.findOne(JJStatus_.getId());
+		return JJStatus_;
+	}
 
 }

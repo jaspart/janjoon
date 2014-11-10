@@ -37,6 +37,7 @@ import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
+import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyStatusDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
@@ -44,6 +45,17 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 public class JJStatusBean {
 
 	private List<JJStatus> statusList;
+	private LazyStatusDataModel lazyStatusList;
+
+	public LazyStatusDataModel getLazyStatusList() {
+		if(lazyStatusList == null)
+			lazyStatusList= new LazyStatusDataModel(jJStatusService);
+		return lazyStatusList;
+	}
+
+	public void setLazyStatusList(LazyStatusDataModel lazyStatusList) {
+		this.lazyStatusList = lazyStatusList;
+	}
 
 	@Autowired
 	private JJRequirementService jJRequirementService;
@@ -72,6 +84,7 @@ public class JJStatusBean {
 
 	public List<JJStatus> getStatusList() {
 
+		if(statusList ==null)
 		statusList = jJStatusService.getStatus(null, true, null, true);
 		return statusList;
 	}
@@ -178,13 +191,16 @@ public class JJStatusBean {
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted", "JJStatus");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		statusList = jJStatusService.getStatus(null, true, null, true);
+		statusList = null;
 		pieChart = null;
+		lazyStatusList=null;
 
 	}
 
 	public void reset() {
 		setJJStatus_(null);
+		lazyStatusList=null;
+		statusList=null;
 		pieChart = null;
 		setSelectedMessages(null);
 		setCreateDialogVisible(false);

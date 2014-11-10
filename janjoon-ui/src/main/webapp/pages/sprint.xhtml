@@ -22,7 +22,9 @@
 				<p:column>
 					<p:inputTextarea id="sprintCName" value="#{jjsprint.sprint.name}"
 						required="true" requiredMessage="Sprint name is empty"
-						readonly="#{jjsprint.neditabale}" />
+						readonly="#{jjsprint.neditabale}" >
+										<f:validateLength maximum="100" />
+									</p:inputTextarea>
 				</p:column>
 				<p:column>
 					<p:outputLabel for="sprintcts" value="Sprint Contacts:" />

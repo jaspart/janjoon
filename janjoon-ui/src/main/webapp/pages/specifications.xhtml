@@ -141,15 +141,15 @@
 							</p:panelGrid>
 						</f:facet>
 
-						<p:column rendered="false" exportable="false" filterBy="id"
-							filterStyle="display:none" sortBy="id">
+						<p:column rendered="false" exportable="false" filterBy="requirement.id"
+							filterStyle="display:none" sortBy="requirement.id">
 							<f:facet name="header">
 								<h:outputText value="Id" />
 							</f:facet>
 							<h:outputText value="#{reqUtil.requirement.id}" />
 						</p:column>
 
-						<p:column filterBy="name" filterStyle="display:none" sortBy="id">
+						<p:column filterBy="name" filterStyle="display:none" sortBy="requirement.id">
 							<f:facet name="header">
 								<h:outputText
 									value="#{messages.specification_table_requirement_title}" />
@@ -181,7 +181,7 @@
 						</p:column>
 
 						<p:column filterBy="product.name" filterStyle="display:none"
-							sortBy="product.name">
+							sortBy="requirement.product.name">
 							<f:facet name="header">
 								<h:outputText
 									value="#{messages.specification_table_product_title}" />
@@ -190,7 +190,7 @@
 						</p:column>
 
 						<p:column filterBy="chapter.name" filterStyle="display:none"
-							sortBy="chapter.name">
+							sortBy="requirement.chapter.name">
 							<f:facet name="header">
 								<h:outputText
 									value="#{messages.specification_table_chapter_title}" />
@@ -302,7 +302,9 @@
 										value="#{jJRequirementBean.requirement.name}" required="true"
 										widgetVar="nameWidget"
 										label="#{messages.specification_create_name_label}"
-										requiredMessage="#{messages.specification_create_name_alert}" />
+										requiredMessage="#{messages.specification_create_name_alert}" >
+											<f:validateLength maximum="100" />
+									</p:inputText>
 									<p:watermark for="name"
 										value="#{messages.specification_create_name_watermark}" />
 								</p:column>
@@ -564,7 +566,9 @@
 									<p:inputText id="name" value="#{jJChapterBean.chapter.name}"
 										required="true" widgetVar="nameWidget"
 										label="#{message.specification_chapter_name_label}"
-										requiredMessage="#{message.specification_chapter_name_alert}" />
+										requiredMessage="#{message.specification_chapter_name_alert}" >
+										<f:validateLength maximum="100" />
+									</p:inputText>
 									<p:watermark for="name"
 										value="#{messages.specification_create_name_watermark}" />
 								</p:column>

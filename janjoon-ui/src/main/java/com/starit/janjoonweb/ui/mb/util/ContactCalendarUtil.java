@@ -297,6 +297,8 @@ public class ContactCalendarUtil {
 		
 		if(champ.equalsIgnoreCase("revised"))
 		{
+			if(task.getWorkloadRevised() == null)
+				task.setWorkloadRevised(task.getWorkloadPlanned());
 			int workload=task.getWorkloadRevised();
 			Date end=nextWorkingDate(task.getEndDateRevised());
 			task.setEndDateRevised(end);
@@ -305,6 +307,8 @@ public class ContactCalendarUtil {
 		
 		if(champ.equalsIgnoreCase("real"))
 		{
+			if(task.getWorkloadReal() == null)
+				task.setWorkloadReal(task.getWorkloadPlanned());
 			int workload=task.getWorkloadReal();
 			Date end=nextWorkingDate(task.getEndDateReal());
 			task.setEndDateReal(end);
@@ -353,6 +357,8 @@ public class ContactCalendarUtil {
 		
 		if(champ.equalsIgnoreCase("revised"))
 		{
+			if(task.getWorkloadRevised() == null)
+				task.setWorkloadRevised(task.getWorkloadPlanned());
 			int workload=task.getWorkloadRevised();
 			Date start=nextWorkingDate(task.getStartDateRevised());
 			task.setStartDateRevised(start);
@@ -361,6 +367,8 @@ public class ContactCalendarUtil {
 		
 		if(champ.equalsIgnoreCase("real"))
 		{
+			if(task.getWorkloadReal() == null)
+				task.setWorkloadReal(task.getWorkloadPlanned());
 			int workload=task.getWorkloadReal();
 			Date start=nextWorkingDate(task.getStartDateReal());
 			task.setStartDateReal(start);

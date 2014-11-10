@@ -16,6 +16,7 @@ import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJRight;
 import com.starit.janjoonweb.domain.JJRightService;
 import com.starit.janjoonweb.ui.mb.JJRightBean.RightDataModel;
+import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyProfileDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
 
@@ -39,7 +40,7 @@ public class JJProfileBean {
 	}
 
 	private JJProfile profileAdmin;
-	private List<JJProfile> profileListTable;
+	private LazyProfileDataModel profileListTable;
 
 	private String message;
 
@@ -56,13 +57,14 @@ public class JJProfileBean {
 		this.profileAdmin = profileAdmin;
 	}
 
-	public List<JJProfile> getProfileListTable() {
+	public LazyProfileDataModel getProfileListTable() {
 
-		profileListTable = jJProfileService.getProfiles(true);
+		if(profileListTable == null)
+			profileListTable=new LazyProfileDataModel(jJProfileService);		
 		return profileListTable;
 	}
 
-	public void setProfileListTable(List<JJProfile> profileListTable) {
+	public void setProfileListTable(LazyProfileDataModel profileListTable) {
 		this.profileListTable = profileListTable;
 	}
 
@@ -129,6 +131,7 @@ public class JJProfileBean {
 					.getSession(false);
 			LoginBean loginBean=(LoginBean) session.getAttribute("loginBean");
 			loginBean.getAuthorisationService().setSession(session);
+			profileListTable=null;
 
 		}
 	}
@@ -153,6 +156,7 @@ public class JJProfileBean {
 					null,
 					MessageFactory.getMessage("message_successfully_created",
 							"JJProfile"));
+			profileListTable=null;
 
 		}
 	}
@@ -249,6 +253,7 @@ public class JJProfileBean {
 		}
 
 		System.out.println("dfgdfgf");
+		profileListTable=null;
 	}
 
 	public void closeDialog(JJRightBean jJRightBean) {

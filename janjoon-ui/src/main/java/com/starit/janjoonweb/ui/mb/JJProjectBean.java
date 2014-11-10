@@ -17,6 +17,7 @@ import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyProjectDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
@@ -39,7 +40,7 @@ public class JJProjectBean {
 	private List<JJProject> projectList;
 
 	private JJProject projectAdmin;
-	private List<JJProject> projectListTable;
+	private LazyProjectDataModel projectListTable;
 
 	private JJContact projectManager;
 	private Set<JJContact> projectManagerList;
@@ -87,12 +88,13 @@ public class JJProjectBean {
 		this.projectAdmin = projectAdmin;
 	}
 
-	public List<JJProject> getProjectListTable() {
-		projectListTable = jJProjectService.getProjects(true);
+	public LazyProjectDataModel getProjectListTable() {
+		if(projectListTable == null)
+		projectListTable = new LazyProjectDataModel(jJProjectService);
 		return projectListTable;
 	}
 
-	public void setProjectListTable(List<JJProject> projectListTable) {
+	public void setProjectListTable(LazyProjectDataModel projectListTable) {
 		this.projectListTable = projectListTable;
 	}
 
@@ -159,6 +161,7 @@ public class JJProjectBean {
 			projectAdmin.setEnabled(false);
 			jJProjectService.updateJJProject(projectAdmin);
 			projectList = null;
+			projectListTable=null;
 		}
 	}
 
@@ -172,6 +175,7 @@ public class JJProjectBean {
 
 			jJProjectService.saveJJProject(projectAdmin);
 			projectList = null;
+			projectListTable=null;
 			message = "message_successfully_created";
 
 			newProject();
@@ -183,6 +187,7 @@ public class JJProjectBean {
 			jJProjectService.updateJJProject(projectAdmin);
 
 			projectList = null;
+			projectListTable=null;
 
 			message = "message_successfully_updated";
 

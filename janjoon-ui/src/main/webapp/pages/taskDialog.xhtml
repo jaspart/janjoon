@@ -30,7 +30,7 @@
 				<p:inputText id="taskStartDatePlanned" readonly="true"
 					value="#{JJTask_.startDatePlanned}">
 					<f:converter converterId="extendedDateTimeConverter" />
-					<f:attribute name="pattern" value="dd/MM/yyyy" />
+					<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
 					<f:attribute name="timeZone" value="UCL" />
 				</p:inputText>
 			</p:column>
@@ -39,7 +39,7 @@
 				<p:inputText id="taskEndDatePlanned" readonly="true"
 					value="#{JJTask_.endDatePlanned}">
 					<f:converter converterId="extendedDateTimeConverter" />
-					<f:attribute name="pattern" value="dd/MM/yyyy" />
+					<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
 					<f:attribute name="timeZone" value="UCL" />
 				</p:inputText>
 			</p:column>

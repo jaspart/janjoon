@@ -19,6 +19,31 @@ public class JJProfileServiceImpl implements JJProfileService {
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
+	
+	public List<JJProfile> load(int first, int pageSize)
+	{
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJProfile> criteriaQuery = criteriaBuilder
+				.createQuery(JJProfile.class);
+
+		Root<JJProfile> from = criteriaQuery.from(JJProfile.class);
+
+		CriteriaQuery<JJProfile> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+		TypedQuery<JJProfile> result = entityManager.createQuery(select);
+		result.setFirstResult(first);
+		result.setMaxResults(pageSize);
+		return result.getResultList();
+
+	}
 
 	@Override
 	public JJProfile getOneProfile(String name, boolean onlyActif) {

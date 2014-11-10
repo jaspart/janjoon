@@ -9,4 +9,5 @@ public interface JJProjectService {
 
 	// New Generic
 	public List<JJProject> getProjects(boolean onlyActif);
+	public List<JJProject> load(int first, int pageSize);
 }

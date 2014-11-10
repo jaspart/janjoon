@@ -24,6 +24,9 @@ public class ConfigListener implements ServletContextListener {
 
 	@Autowired
 	JJMessageService jJMessageService;
+	
+	@Autowired
+	JJImportanceService jJImportanceService;
 
 	@Autowired
 	JJCompanyService jJCompanyService;
@@ -120,6 +123,10 @@ public class ConfigListener implements ServletContextListener {
 	public void setjJVersionService(JJVersionService jJVersionService) {
 		this.jJVersionService = jJVersionService;
 	}
+	
+	public void setjJImportanceService(JJImportanceService importanceService) {
+		this.jJImportanceService = importanceService;
+	}
 
 	public void setjJCategoryService(JJCategoryService jJCategoryService) {
 		this.jJCategoryService = jJCategoryService;
@@ -201,6 +208,25 @@ public class ConfigListener implements ServletContextListener {
 				jJCompanyService.saveJJCompany(company);
 			}
 
+		}
+		
+		if(jJImportanceService.findAllJJImportances().isEmpty())
+		{
+			String[] names ={"High","Medium","Low"};
+			Integer i=3;
+			
+			for (String name : names) {
+				JJImportance importance=new JJImportance();
+				importance.setCreationDate(new Date());
+				importance.setEnabled(true);
+				importance.setObjet("JJBug");
+				importance.setLevelImportance(i);
+				importance.setName(name);
+				importance.setDescription(name+" :JJBug Importance Description");
+				jJImportanceService.saveJJImportance(importance);
+				i--;
+				
+			}
 		}
 
 		if (jJCriticityService.getCriticities("JJMessage", true).isEmpty()) {
@@ -397,7 +423,7 @@ public class ConfigListener implements ServletContextListener {
 			}
 		}
 
-/*		if (jJBugService.getBugs(null, null, null, true, true).isEmpty()) {*/
+		if (jJBugService.getBugs(null, null, null, true, true).isEmpty()) {
 			List<JJStatus> statuses = jJStatusService.getStatus("JJBug", true,
 					null, true);
 			List<JJCriticity> criticities = jJCriticityService.getCriticities(
@@ -430,7 +456,7 @@ public class ConfigListener implements ServletContextListener {
 
 			}
 
-		//}
+		}
 
 		if (jJCategoryService.getCategories(null, false, true, true).isEmpty()) {
 			String[] names = { "BUSINESS", "FUNCTIONAL", "TECHNICAL",

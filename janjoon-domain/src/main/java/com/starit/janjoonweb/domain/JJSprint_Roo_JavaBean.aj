@@ -9,8 +9,11 @@ import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJTask;
+
 import java.util.Date;
 import java.util.Set;
+
+import org.hibernate.Hibernate;
 
 privileged aspect JJSprint_Roo_JavaBean {
     
@@ -112,11 +115,8 @@ privileged aspect JJSprint_Roo_JavaBean {
     
     public Set<JJTask> JJSprint.getTasks() {
         return this.tasks;
-    }
+    }   
     
-    public void JJSprint.setTasks(Set<JJTask> tasks) {
-        this.tasks = tasks;
-    }
     
     public Set<JJTask> JJSprint.getObstacles() {
         return this.obstacles;

@@ -3,7 +3,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
@@ -73,18 +74,35 @@
 			</p:overlayPanel>
 
 			<h:form id="bugForm">
+				<pe:blockUI target="bugTable2" content="blockUIContent"
+					widgetVar="blockUIWidget2" />
+				<h:panelGrid id="blockUIContent" columns="2"
+					style="display:none;table-layout:auto;">
+					<h:graphicImage library="images" name="ajax-loader1.gif"
+						style="margin-right: 12px; vertical-align: middle;" />
+					<h:outputText value="Please wait, data is being processed..."
+						style="white-space: nowrap;" />
+				</h:panelGrid>
 				<p:growl id="bugMessage" showDetail="true" />
 				<p:dataTable id="bugTable2" sortMode="multiple"
-					value="#{jJBugBean.bugList}" rowKey="#{bug.id}" var="bug"
-					widgetVar="bugTable" scrollable="true" scrollHeight="400"
-					filteredValue="#{jJBugBean.filteredJJBug}"
+					style="table-layout: fixed;" value="#{jJBugBean.bugList}"
+					rowKey="#{bug.id}" var="bug" widgetVar="bugTable" lazy="true"
 					rowStyleClass="#{bug.status.name}"
 					emptyMessage="#{messages.bug_table_alert}"
-					selection="#{jJBugBean.selectedBugList}">
+					selection="#{jJBugBean.selectedBugList}" paginator="true" rows="10"
+					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					rowsPerPageTemplate="5,10,20">
 					<p:ajax event="rowSelectCheckbox" update="bugTable2:deleteMButton" />
 					<p:ajax event="rowUnselectCheckbox"
 						update="bugTable2:deleteMButton" />
 					<p:ajax event="toggleSelect" update="bugTable2:deleteMButton" />
+					<p:ajax event="page" onstart="PF('blockUIWidget2').block()"
+						oncomplete="PF('blockUIWidget2').unblock()" />
+					<p:ajax event="sort" onstart="PF('blockUIWidget2').block()"
+						oncomplete="PF('blockUIWidget2').unblock()" />
+
+					<p:ajax event="filter" onstart="PF('blockUIWidget2').block()"
+						oncomplete="PF('blockUIWidget2').unblock()" />
 
 					<f:facet name="header">
 						<p:outputPanel>
@@ -99,12 +117,12 @@
 
 					<p:column headerText="#{messages.bug_table_title_title}"
 						filterMatchMode="contains" sortBy="name" filterStyle="width: 90%;"
-						style="width: 12% !important;height: 5px !important;">
+						style="width: 25% !important;height: 5px !important;">
 						<h:outputText value="#{bug.name}" />
 					</p:column>
 					<p:column headerText="#{messages.bug_table_creation_title}"
 						sortBy="creationDate"
-						style="width: 10% !important;height: 5px !important;">
+						style="width: 15% !important;height: 5px !important;">
 						<h:outputText value="#{bug.creationDate}">
 							<f:converter converterId="extendedDateTimeConverter" />
 							<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />

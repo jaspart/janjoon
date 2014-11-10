@@ -25,6 +25,7 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBug;
+import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJContact;
@@ -36,7 +37,6 @@ import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJTeststep;
-import com.starit.janjoonweb.domain.JJTeststepService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.reference.JJRelationship;
 import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
@@ -51,6 +51,7 @@ import com.starit.janjoonweb.ui.mb.converter.JJSprintConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJStatusConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJTeststepConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJVersionConverter;
+import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyBugDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
@@ -64,7 +65,7 @@ public class JJBugBean {
 	private JJRequirement bugRequirementSelected;
 
 	private JJProject project;
-	private List<JJBug> bugList;
+	private LazyBugDataModel bugList;
 	private List<JJBug> filteredJJBug;
 	private List<JJBug> selectedBugList;
 	private SelectItem[] criticityOptions;
@@ -118,13 +119,13 @@ public class JJBugBean {
 		this.project = project;
 	}
 
-	public List<JJBug> getBugList() {
+	public LazyBugDataModel getBugList() {
 		if (bugList == null)
-			initJJBugTable();
+			bugList = new LazyBugDataModel(jJBugService,project);
 		return bugList;
 	}
 
-	public void setBugList(List<JJBug> bugList) {
+	public void setBugList(LazyBugDataModel bugList) {
 		this.bugList = bugList;
 	}
 
@@ -134,7 +135,7 @@ public class JJBugBean {
 				.getExternalContext().getRequestHeaderMap().get("referer");
 		if (referrer != null) {
 			if (!referrer.contains("bugs")) {
-				filteredJJBug = bugList;
+				filteredJJBug = (List<JJBug>) bugList.getWrappedData();
 			}
 		}
 		return filteredJJBug;
@@ -177,10 +178,12 @@ public class JJBugBean {
 
 			if (bugList == null) {
 				project = null;
+				bugList = new LazyBugDataModel(jJBugService,project);
 				initJJBugTable();
 			} else if (project != null) {
 
 				project = null;
+				bugList = new LazyBugDataModel(jJBugService,project);
 				initJJBugTable();
 			}
 
@@ -188,10 +191,12 @@ public class JJBugBean {
 
 			if (!project.equals(jJProjectBean.getProject())) {
 				project = jJProjectBean.getProject();
+				bugList = new LazyBugDataModel(jJBugService,project);
 				initJJBugTable();
 			}
 		} else {
 			project = jJProjectBean.getProject();
+			bugList = new LazyBugDataModel(jJBugService,project);
 			initJJBugTable();
 		}
 
@@ -218,16 +223,15 @@ public class JJBugBean {
 		reset();
 	}
 
-	public void initJJBugTable() {
+	public void initJJBugTable() {	
 
 		List<JJCriticity> criticities = new ArrayList<JJCriticity>();
 		List<JJStatus> status = new ArrayList<JJStatus>();
 		List<JJImportance> importances = new ArrayList<JJImportance>();
-		bugList = jJBugService.getBugs(project);
-		filteredJJBug = bugList;
+		
+		List<JJBug> data=jJBugService.getBugs(project);
+		for (JJBug b : data) {
 
-		for (JJBug b : bugList) {
-			
 			if (b.getCriticity() != null
 					&& !listContaines(criticities, b.getCriticity()))
 				criticities.add(b.getCriticity());
@@ -337,23 +341,23 @@ public class JJBugBean {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		
-		session.setAttribute("jJBugBean",new JJBugBean());
-//		JJBug_ = null;
-//		bugProjectSelected = null;
-//		bugRequirementSelected = null;
-//		bugList = null;
-//		selectedBugList = null;
-//		filteredJJBug=null;
-//
-//		criticityOptions = null;
-//		importanceOptions = null;
-//		statusOptions = null;
-//
-//		setSelectedBugs(null);
-//		setSelectedTasks(null);
-//		setSelectedMessages(null);
-//		setCreateDialogVisible(false);
+
+		session.setAttribute("jJBugBean", new JJBugBean());
+		// JJBug_ = null;
+		// bugProjectSelected = null;
+		// bugRequirementSelected = null;
+		// bugList = null;
+		// selectedBugList = null;
+		// filteredJJBug=null;
+		//
+		// criticityOptions = null;
+		// importanceOptions = null;
+		// statusOptions = null;
+		//
+		// setSelectedBugs(null);
+		// setSelectedTasks(null);
+		// setSelectedMessages(null);
+		// setCreateDialogVisible(false);
 	}
 
 	public void saveBug() {
@@ -408,7 +412,7 @@ public class JJBugBean {
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
 		JJBug_.setRequirement(bugRequirementSelected);
-		if (project == null) {			
+		if (project == null) {
 			// if(JJBug_.getProject() !=null && bugProjectSelected != null)
 			// {
 			// if (!JJBug_.getProject().equals(bugProjectSelected)) {
@@ -468,7 +472,7 @@ public class JJBugBean {
 	public List<JJRequirement> completeReqBug(String query) {
 
 		List<JJRequirement> suggestions = new ArrayList<JJRequirement>();
-		
+
 		for (JJRequirement req : jJRequirementService.getRequirements(
 				bugProjectSelected, null, null)) {
 			String jJCriticityStr = String.valueOf(req.getName());
@@ -478,13 +482,23 @@ public class JJBugBean {
 		}
 		return suggestions;
 	}
-	
-	public List<JJTeststep> completeTestStepsBug(String query)
-	{
+
+	public List<JJImportance> completeImportance(String query) {
+		List<JJImportance> suggestions = new ArrayList<JJImportance>();
+		for (JJImportance jJImportance : jJImportanceService.getBugImportance()) {
+			String jJImportanceStr = String.valueOf(jJImportance.getName());
+			if (jJImportanceStr.toLowerCase().startsWith(query.toLowerCase())) {
+				suggestions.add(jJImportance);
+			}
+		}
+		return suggestions;
+	}
+
+	public List<JJTeststep> completeTestStepsBug(String query) {
 		List<JJTeststep> suggestions = new ArrayList<JJTeststep>();
-		
-		
-		for (JJTeststep testStep : jJTeststepService.getJJtestSteps(bugRequirementSelected,bugProjectSelected)) {
+
+		for (JJTeststep testStep : jJTeststepService.getJJtestSteps(
+				bugRequirementSelected, bugProjectSelected)) {
 			String jJCriticityStr = String.valueOf(testStep.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(testStep);
@@ -502,7 +516,6 @@ public class JJBugBean {
 				.getProduct();
 
 		List<JJVersion> suggestions = new ArrayList<JJVersion>();
-		
 
 		for (JJVersion req : jJVersionService.getVersions(true, prod != null,
 				prod)) {
@@ -516,7 +529,7 @@ public class JJBugBean {
 
 	public List<JJSprint> completeSprintBug(String query) {
 		List<JJSprint> suggestions = new ArrayList<JJSprint>();
-		
+
 		for (JJSprint req : jJSprintService
 				.getSprints(bugProjectSelected, true)) {
 			String jJCriticityStr = String.valueOf(req.getName());
@@ -529,7 +542,7 @@ public class JJBugBean {
 
 	public List<JJStatus> completeStatusBug(String query) {
 		List<JJStatus> suggestions = new ArrayList<JJStatus>();
-		
+
 		for (JJStatus jJStatus : jJStatusService.getStatus("JJBug", true, null,
 				true)) {
 			String jJCriticityStr = String.valueOf(jJStatus.getName());
@@ -542,7 +555,7 @@ public class JJBugBean {
 
 	public List<JJCriticity> completeCriticityBug(String query) {
 		List<JJCriticity> suggestions = new ArrayList<JJCriticity>();
-		
+
 		for (JJCriticity jJCriticity : jJCriticityService.getCriticities(
 				"JJBug", true)) {
 			String jJCriticityStr = String.valueOf(jJCriticity.getName());

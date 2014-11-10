@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
@@ -23,6 +24,7 @@ import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.JJVersionBean.VersionDataModel;
+import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyProductDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
@@ -62,7 +64,7 @@ public class JJProductBean {
 	private List<JJProduct> productList;
 
 	private JJProduct productAdmin;
-	private List<JJProduct> productListTable;
+	private LazyProductDataModel productListTable;
 
 	private JJContact productManager;
 	private Set<JJContact> productManagerList;
@@ -114,12 +116,13 @@ public class JJProductBean {
 		this.productAdmin = productAdmin;
 	}
 
-	public List<JJProduct> getProductListTable() {
-		productListTable = jJProductService.getProducts(true);
+	public LazyProductDataModel getProductListTable() {
+		if(productListTable==null)
+		productListTable = new LazyProductDataModel(jJProductService);
 		return productListTable;
 	}
 
-	public void setProductListTable(List<JJProduct> productListTable) {
+	public void setProductListTable(LazyProductDataModel productListTable) {
 		this.productListTable = productListTable;
 	}
 
@@ -336,6 +339,7 @@ public class JJProductBean {
 	public void resetVersionProductList()
 	{
 		productList=null;
+		productListTable=null;
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJVersionBean jJVersionBean = (JJVersionBean) session

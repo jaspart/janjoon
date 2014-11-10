@@ -8,7 +8,7 @@
 	<h:form id="projectForm">
 		<p:panel id="projectForm" style="width:600px" columns="1"
 			cellpadding="6">
-			<p:dataTable id="projectDataTable" var="project"
+			<p:dataTable id="projectDataTable" var="project" lazy="true"
 				value="#{jJProjectBean.projectListTable}" paginator="true" rows="15"
 				rowKey="#{project.id}">
 				<f:facet name="header">#{messages.admin_project_table_header}</f:facet>

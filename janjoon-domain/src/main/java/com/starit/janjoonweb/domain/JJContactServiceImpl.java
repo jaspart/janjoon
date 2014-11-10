@@ -85,6 +85,30 @@ public class JJContactServiceImpl implements JJContactService {
 		}
 
 	}
+	
+	public List<JJContact> load(int first, int pageSize)
+	{
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJContact> criteriaQuery = criteriaBuilder
+				.createQuery(JJContact.class);
+
+		Root<JJContact> from = criteriaQuery.from(JJContact.class);
+
+		CriteriaQuery<JJContact> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+		TypedQuery<JJContact> result = entityManager.createQuery(select);
+		result.setFirstResult(first);
+		result.setMaxResults(pageSize);
+		return result.getResultList();
+
+	}
 
 	@Override
 	public boolean updateJJContactTransaction(JJContact contact) {

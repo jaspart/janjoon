@@ -11,7 +11,7 @@
 		<p:growl id="ConfMessage" showDetail="true" />
 		<p:panel id="configPanel" style="width:800px" columns="1"
 			cellpadding="6">
-			<p:dataTable id="dataTable" var="conf"
+			<p:dataTable id="dataTable" var="conf" lazy="true"
 				value="#{jJConfigurationBean.configList}" paginator="true" rows="10"
 				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,15">
@@ -111,7 +111,9 @@
 					<p:outputLabel for="confName" value="Name:" />
 					<p:inputTextarea
 						value="#{jJConfigurationBean.JJConfiguration_.name}" id="confName"
-						required="true" requiredMessage="Name field is requiered" />
+						required="true" requiredMessage="Name field is requiered">
+						<f:validateLength maximum="100" />
+					</p:inputTextarea>
 
 					<p:outputLabel for="confDesc" value="Description :" />
 					<pe:ckEditor id="confDesc"
@@ -124,11 +126,15 @@
 
 					<p:outputLabel for="confParam" value="Parametre:" />
 					<p:inputText value="#{jJConfigurationBean.JJConfiguration_.param}"
-						id="confParam" />
+						id="confParam" >
+					<f:validateLength maximum="100" />
+					</p:inputText>
 
 					<p:outputLabel for="confVal" value="Value:" />
 					<p:inputTextarea
-						value="#{jJConfigurationBean.JJConfiguration_.val}" id="confVal" />
+						value="#{jJConfigurationBean.JJConfiguration_.val}" id="confVal">
+					<f:validateLength maximum="100" />
+				</p:inputTextarea>
 				</h:panelGrid>
 				<p:commandButton id="createSaveButton"
 					value="#{messages.admin_config_new_save_button}"
@@ -165,7 +171,8 @@
 				<p:commandButton id="deleteYesButton"
 					value="#{messages.admin_config_delete_yes_label}"
 					action="#{jJConfigurationBean.deleteConfig}"
-					update=":tabview:configForm" oncomplete="PF('deleteDialogWidget').hide()" />
+					update=":tabview:configForm"
+					oncomplete="PF('deleteDialogWidget').hide()" />
 				<p:commandButton id="deleteNoButton"
 					value="#{messages.admin_config_delete_no_label}"
 					onclick="PF('deleteDialogWidget').hide()" type="button" />

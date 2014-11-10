@@ -11,8 +11,8 @@
 		<p:growl id="statusMessage" showDetail="true" />
 		<p:panel id="statusPanel" style="width:750px" columns="1"
 			cellpadding="6">
-			<p:dataTable id="dataTable" var="status"
-				value="#{jJStatusBean.statusList}" paginator="true" rows="10"
+			<p:dataTable id="dataTable" var="status" lazy="true"
+				value="#{jJStatusBean.lazyStatusList}" paginator="true" rows="10"
 				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,15">
 				<f:facet name="header">  

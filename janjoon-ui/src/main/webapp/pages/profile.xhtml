@@ -8,9 +8,9 @@
 	<h:form id="profileForm">
 		<p:panel id="profilePanel" style="width:600px" columns="1"
 			cellpadding="6">
-			<p:dataTable id="profileDataTable" var="profile"
+			<p:dataTable id="profileDataTable" var="profile" lazy="true"
 				value="#{jJProfileBean.profileListTable}" paginator="true" rows="15"
-				rowKey="#{profile.id}">>
+				rowKey="#{profile.id}">
 				<f:facet name="header">#{messages.admin_profile_table_header}</f:facet>
 				<p:column>
 					<f:facet name="header">
@@ -45,7 +45,8 @@
 						id="newProfile"
 						actionListener="#{jJProfileBean.newProfile(jJRightBean)}"
 						update=":tabview:profileDialog"
-						oncomplete="PF('profileDialogWidget').show()" icon="ui-icon-circle-plus" />
+						oncomplete="PF('profileDialogWidget').show()"
+						icon="ui-icon-circle-plus" />
 				</f:facet>
 			</p:dataTable>
 		</p:panel>
@@ -68,7 +69,9 @@
 										<p:inputText id="name"
 											disabled="#{jJProfileBean.disabledProfileMode}"
 											value="#{jJProfileBean.profileAdmin.name}" label="Name"
-											required="true" />
+											required="true">
+											<f:validateLength maximum="100" />
+										</p:inputText>
 										<p:watermark for="name"
 											value="#{messages.admin_profile_new_name_watermark}" />
 									</p:column>

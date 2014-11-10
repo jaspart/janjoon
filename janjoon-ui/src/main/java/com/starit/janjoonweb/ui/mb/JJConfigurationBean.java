@@ -28,13 +28,14 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyConfDataTable;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJConfiguration.class, beanName = "jJConfigurationBean")
 public class JJConfigurationBean {
 
-	private List<JJConfiguration> configList;
+	private LazyConfDataTable configList;
 	private JJConfiguration selectedConf;
 	private List<String> columns;
 	private JJConfiguration jJconfiguration;
@@ -71,13 +72,13 @@ public class JJConfigurationBean {
 		this.jJconfiguration = jJconfiguration;
 	}
 
-	public List<JJConfiguration> getConfigList() {
-
-		configList = jJConfigurationService.getConfigurations(null, null, true);
+	public LazyConfDataTable getConfigList() {
+		if(configList ==null)
+			configList=new LazyConfDataTable(jJConfigurationService);	
 		return configList;
 	}
 
-	public void setConfigList(List<JJConfiguration> configList) {
+	public void setConfigList(LazyConfDataTable configList) {
 		this.configList = configList;
 	}
 
@@ -140,7 +141,7 @@ public class JJConfigurationBean {
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted", "JJConfiguration");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		configList = jJConfigurationService.getConfigurations(null, null, true);
+		configList = null;
 
 	}
 
@@ -165,6 +166,7 @@ public class JJConfigurationBean {
 	public void reset() {
 
 		setJJConfiguration_(null);
+		configList= null;
 		setCreateDialogVisible(false);
 		jJconfiguration =jJConfigurationService.getConfigurations("ConfigurationManager", "git", true).get(0);
 	}

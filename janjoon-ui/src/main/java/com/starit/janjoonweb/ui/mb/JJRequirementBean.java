@@ -3049,7 +3049,7 @@ public class JJRequirementBean {
 
 		private String nameDataModel;
 		private long categoryId;
-		private int activeIndex;
+		private int activeIndex;		
 		private float coverageProgress = 0;
 		private float completionProgress = 0;
 

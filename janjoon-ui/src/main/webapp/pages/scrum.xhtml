@@ -36,7 +36,9 @@
 						</p:column>
 						<p:column>
 							<p:inputTextarea id="sprintName" value="#{jjsprint.sprint.name}"
-								required="true" requiredMessage="Sprint name is empty" />
+								required="true" requiredMessage="Sprint name is empty">
+								<f:validateLength maximum="100" />
+							</p:inputTextarea>
 						</p:column>
 						<p:column>
 							<p:outputLabel for="sprintcts" value="Sprint Contacts:" />
@@ -58,7 +60,8 @@
 						</p:column>
 						<p:column>
 							<p:calendar id="sprintSD" navigator="true" effect="slideDown"
-								pattern="dd/MM/yyyy HH:mm" required="true" binding="#{startDateEdition}"
+								pattern="dd/MM/yyyy HH:mm" required="true"
+								binding="#{startDateEdition}"
 								value="#{jjsprint.sprint.startDate}" />
 						</p:column>
 						<p:column>
@@ -292,7 +295,7 @@
 					<p:ajax listener="#{jJSprintBean.addTaskToDone}"
 						onstart="PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock()"
-						update=":projecttabview">
+						update=":projecttabview :editBugDialog">
 					</p:ajax>
 				</p:droppable>
 			</h:form>

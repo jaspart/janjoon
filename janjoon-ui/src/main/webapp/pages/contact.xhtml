@@ -8,8 +8,8 @@
 	<h:form id="contactForm">
 		<p:panel id="contactPanel" style="width:700px" columns="1"
 			cellpadding="6">
-			<p:dataTable id="contactDataTable" var="contact"
-				value="#{jJContactBean.contacts}" paginator="true" rows="15"
+			<p:dataTable id="contactDataTable" var="contact" lazy="true"
+				value="#{jJContactBean.contactsLazyModel}" paginator="true" rows="15"
 				rowKey="#{contact.id}">
 				<f:facet name="header">#{messages.admin_contact_table_title}</f:facet>
 				<p:column>
@@ -83,7 +83,9 @@
 											value="#{jJContactBean.contactAdmin.firstname}"
 											label="#{messages.admin_contact_new_firstname_label}"
 											required="true"
-											disabled="#{jJContactBean.disabledContactMode}" />
+											disabled="#{jJContactBean.disabledContactMode}">
+											<f:validateLength maximum="100" />
+										</p:inputText>
 										<p:watermark for="firstname"
 											value="#{messages.admin_contact_new_firstname_watermark}" />
 									</p:column>
@@ -91,7 +93,9 @@
 										<p:inputText id="lastname"
 											value="#{jJContactBean.contactAdmin.name}" label="Lastname"
 											required="true"
-											disabled="#{jJContactBean.disabledContactMode}" />
+											disabled="#{jJContactBean.disabledContactMode}" >
+					<f:validateLength maximum="100" />
+				</p:inputText>
 										<p:watermark for="lastname"
 											value="#{messages.admin_contact_new_lastname_watermark}" />
 									</p:column>

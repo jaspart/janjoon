@@ -19,6 +19,28 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
+	
+	public List<JJCategory> load(int first, int pageSize)
+	{
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder
+				.createQuery(JJCategory.class);
+
+		Root<JJCategory> from = criteriaQuery.from(JJCategory.class);
+
+		CriteriaQuery<JJCategory> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();		
+
+		
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));	
+
+		TypedQuery<JJCategory> result = entityManager.createQuery(select);	
+		result.setFirstResult(first);
+		result.setMaxResults(pageSize);
+		return result.getResultList();
+	
+	}
 
 	@Override
 	public JJCategory getCategory(String name, boolean onlyActif) {
