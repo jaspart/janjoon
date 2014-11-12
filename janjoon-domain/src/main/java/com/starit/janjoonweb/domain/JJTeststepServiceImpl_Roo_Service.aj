@@ -22,11 +22,7 @@ privileged aspect JJTeststepServiceImpl_Roo_Service {
     
     public long JJTeststepServiceImpl.countAllJJTeststeps() {
         return jJTeststepRepository.count();
-    }
-    
-    public void JJTeststepServiceImpl.deleteJJTeststep(JJTeststep JJTeststep_) {
-        jJTeststepRepository.delete(JJTeststep_);
-    }
+    } 
     
     public JJTeststep JJTeststepServiceImpl.findJJTeststep(Long id) {
         return jJTeststepRepository.findOne(id);

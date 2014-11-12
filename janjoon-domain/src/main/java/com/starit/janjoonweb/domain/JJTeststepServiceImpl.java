@@ -4,14 +4,19 @@ import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.hibernate.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public class JJTeststepServiceImpl implements JJTeststepService {
 
 	@PersistenceContext
@@ -88,6 +93,7 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 	}
 
 	public JJTeststep updateJJTeststep(JJTeststep JJTeststep_) {
+		
 		jJTeststepRepository.save(JJTeststep_);
 		JJTeststep_ = jJTeststepRepository.findOne(JJTeststep_.getId());
 		return JJTeststep_;
@@ -130,6 +136,14 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 			}
 		}
 		return jjTeststeps;
+	}
+	
+	
+	public void deleteJJTeststep(JJTeststep JJTeststep_) {		
+		//entityManager.remove(JJTeststep_);
+		Query query=entityManager.createQuery("DELETE FROM JJTeststep c WHERE c.id = :p");
+		query.setParameter("p", JJTeststep_.getId()).executeUpdate();
+		
 	}
 
 	@Override

@@ -23,6 +23,7 @@ import javax.faces.convert.DateTimeConverter;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ComponentSystemEvent;
+import javax.faces.validator.ValidatorException;
 import javax.servlet.http.HttpSession;
 
 import org.hibernate.Hibernate;
@@ -1304,6 +1305,108 @@ public class JJTaskBean {
 
 		importFormats = new ArrayList<ImportFormat>();
 
+	}
+	
+	public void validateTaskField()
+	{
+		boolean validationFailed=false;
+		int i=0;
+		FacesMessage message=null;
+		while(i<importFormats.size()&& !validationFailed)
+		{
+			ImportFormat format=importFormats.get(i);
+			if(format.getCopyObjet())
+			{
+				Date startDate=format.getStartDate();
+				if(format.getStartDate() == null)	
+				{
+					validationFailed=true;
+					message = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"start date is requierd", null);
+					
+				}					
+				else
+				{
+					if(mode.equalsIgnoreCase("scrum"))
+					{
+						if(startDate.before(((JJSprintBean)LoginBean.findBean("jJSprintBean")).getSprintUtil().getSprint().getStartDate()))
+						{
+							validationFailed=true;							
+							message =new FacesMessage(
+									FacesMessage.SEVERITY_ERROR,
+									"Start Date may not be before Sprint Start Date.",
+									null);
+						}else if(startDate.after(((JJSprintBean)LoginBean.findBean("jJSprintBean")).getSprintUtil().getSprint().getEndDate()))
+						{
+							validationFailed=true;
+						
+							message =new FacesMessage(
+									FacesMessage.SEVERITY_ERROR,
+									"Start Date may not be after Sprint end Date.",
+									null);
+						}
+					}else
+					{
+						if(sprint != null)
+						{
+							if(startDate.before(sprint.getStartDate()))
+							{
+								validationFailed=true;
+
+								message =new FacesMessage(
+										FacesMessage.SEVERITY_ERROR,
+										"Start Date may not be before Sprint Start Date.",
+										null);
+							}else if(startDate.after(sprint.getEndDate()))
+							{
+								validationFailed=true;
+								message =new FacesMessage(
+										FacesMessage.SEVERITY_ERROR,
+										"Start Date may not be after Sprint end Date.",
+										null);
+							}
+						
+						
+						}
+					}
+					
+				}if(!validationFailed )
+				{
+
+					Integer workload=format.getWorkload();
+					if(workload == null)
+					{
+						
+						validationFailed=true;
+						message =new FacesMessage(
+								FacesMessage.SEVERITY_ERROR,
+								"Workload is requierd", null);
+					}					
+					else if(workload <= 0)
+					{
+						
+						validationFailed=true;
+						message =new FacesMessage(
+								FacesMessage.SEVERITY_ERROR,
+								"Please set Workload More than 0", null);
+					}
+						
+				
+				}
+					
+			
+			}i++;
+		}
+		if(!validationFailed)
+		RequestContext.getCurrentInstance().execute("importTask()");
+		else
+		{
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			RequestContext.getCurrentInstance().execute("PF('taskImportDialogWidget').jq.effect('shake', {times:5}, 100)");			
+		}
+			
+			
 	}
 
 	public void checkAll() {
