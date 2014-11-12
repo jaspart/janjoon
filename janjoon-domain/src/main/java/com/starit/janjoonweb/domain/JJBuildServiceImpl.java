@@ -20,6 +20,48 @@ public class JJBuildServiceImpl implements JJBuildService {
 		this.entityManager = entityManager;
 
 	}
+	
+	public List<JJBuild> getBuilds(JJProduct product,JJVersion version,boolean onlyActif){
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJBuild> criteriaQuery = criteriaBuilder
+				.createQuery(JJBuild.class);
+
+		Root<JJBuild> from = criteriaQuery.from(JJBuild.class);
+
+		CriteriaQuery<JJBuild> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+		
+		if (version != null) {
+			predicates.add(criteriaBuilder.equal(from.get("version"),
+						version));			
+		}else if(product != null)
+		{
+			List<Predicate> orPredicates = new ArrayList<Predicate>();
+			for(JJVersion v:product.getVersions())
+			{
+				if(v.getEnabled())
+					orPredicates.add(criteriaBuilder.equal(from.get("version"),
+							v));
+			}
+			Predicate orPredicate = criteriaBuilder.or(orPredicates
+					.toArray(new Predicate[] {}));
+			predicates.add(orPredicate);
+			
+		}
+
+		select.where(predicates.toArray(new Predicate[] {}));
+
+		TypedQuery<JJBuild> result = entityManager.createQuery(select);
+		return result.getResultList();
+
+	
+	}
 
 	@Override
 	public List<JJBuild> getBuilds(JJVersion version, boolean withVersion,

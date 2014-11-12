@@ -82,15 +82,17 @@
 		<p:row>		
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugProject"
-					onchange="jJbugRequirementWV.val('');"
+					onchange="jJbugRequirementWV.val('');" 
 					value="#{jJBugBean.bugProjectSelected}" itemLabel="#{project.name}"
 					itemValue="#{project}" rendered="#{jJProjectBean.project == null}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter"
 					dropdown="true" var="project" scrollHeight="200"
 					completeMethod="#{jJBugBean.completeProject}">
-
-					<p:ajax event="itemSelect"
-						update="jJbugRequirement jJbugTeststep jJbugProject" />
+				
+					<p:ajax event="itemSelect" listener="#{jJBugBean.changeEvent}"
+						update="jJbugRequirement jJbugTeststep jJbugProject" >
+						<f:setPropertyActionListener target="#{jJBugBean.bugRequirementSelected}" value="#{null}"/>
+						</p:ajax>
 
 				</p:autoComplete>
 				<p:selectOneMenu id="jJbugProject2" value="#{JJBug_.project}"
@@ -106,22 +108,37 @@
 
 			</p:column>
 			<p:column colspan="1">
-				<p:autoComplete id="jJbugVersion" scrollHeight="200"
-					value="#{JJBug_.versioning}" itemLabel="#{version.name}"
-					itemValue="#{version}" rendered="#{jJVersionBean.version == null}"
+				<p:autoComplete id="jJbugVersion" scrollHeight="200" onchange="jJbugBuild.val('');jJbugRequirementWV.val('');"
+					value="#{jJBugBean.bugVersionSelected}" itemLabel="#{version.name} : #{version.product.name}"
+					itemValue="#{version}" rendered="#{jJVersionBean.version == null}"  
 					converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
 					dropdown="true" var="version"
-					completeMethod="#{jJBugBean.completeVersioningBug}" />
-				<p:selectOneMenu id="jJbugVersion2" value="#{JJBug_.versioning}"
+					completeMethod="#{jJBugBean.completeVersioningBug}">
+					<p:ajax event="itemSelect"
+						update="jJbugVersion jJbugBuild" />
+				</p:autoComplete>
+				<p:selectOneMenu id="jJbugVersion2" value="#{jJBugBean.bugVersionSelected}"
 					rendered="#{jJVersionBean.version != null}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
 					<f:selectItem itemValue="#{jJVersionBean.version}"
-						itemDisabled="true" itemLabel="#{jJVersionBean.version.name}" />
+						itemDisabled="true" itemLabel="#{jJVersionBean.version.name} : #{jJVersionBean.version.product.name}" />
 				</p:selectOneMenu>
 				<p:watermark for="jJbugVersion" value="Version : "
 					rendered="#{jJVersionBean.version == null}" />
 				<p:watermark for="jJbugVersion2" value="Version : "
 					rendered="#{jJVersionBean.version != null}" />
+			</p:column>
+			<p:column colspan="1">
+				<p:autoComplete id="jJbugBuild" scrollHeight="200" 
+					widgetVar="jJbugBuildWV" value="#{JJBug_.build}"
+					itemLabel="#{build.name}" itemValue="#{build}"
+					converter="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter"					
+					dropdown="true" var="build"
+					completeMethod="#{jJBugBean.completeBuildBug}" >
+						<f:validator validatorId="bugValidator"/>
+						<f:attribute name="jJbugVersion" value="#{jJBugBean.bugVersionSelected}"/>
+					</p:autoComplete>
+				<p:watermark for="jJbugBuild" value="Build : " />
 			</p:column>
 		</p:row>
 		<p:row>

@@ -117,14 +117,16 @@
 				<p:cellEditor>
 					<f:facet name="output">
 						<p:calendar value="#{format.startDate}" navigator="true"
-							pattern="yyyy/MM/dd HH:mm" required="true"/>
+							pattern="yyyy/MM/dd HH:mm" />
 					</f:facet>
 					<f:facet name="input">
-						<p:calendar  value="#{format.startDate}" navigator="true" required="true"
-							pattern="yyyy/MM/dd HH:mm" >
-							<f:validator validatorId="dateRangeValidator" />
-							<f:attribute name="mode" value="#{jJTaskBean.mode}" />							
-						</p:calendar>
+						<p:calendar  value="#{format.startDate}" navigator="true"
+							pattern="yyyy/MM/dd HH:mm">
+							<f:validator validatorId="onSubmitTaskValidator" />
+							<f:attribute name="type" value="startDate" />
+							<p:ajax event="blur" update=":importTaskDialogForm:importButtonSC" />			
+							</p:calendar>
+							
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
@@ -132,27 +134,28 @@
 			<p:column style="width:30%" headerText="Workload Planned/Revised">
 				<p:cellEditor>
 					<f:facet name="output">
-						<h:outputText value="#{format.workload}" />
+						<h:outputText value="#{format.workload}"/>
+							
 					</f:facet>
 					<f:facet name="input">
-						<p:spinner value="#{format.workload}" stepFactor="1" min="0" />
+						<p:spinner value="#{format.workload}" stepFactor="1" min="0">
+						<f:validator validatorId="onSubmitTaskValidator"/>
+							<f:attribute name="type" value="workload" />
+							<p:ajax event="blur" update=":importTaskDialogForm:importButtonSC" />							
+						</p:spinner>
+							
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
 
 		</p:dataTable>
 
-
-		<p:commandButton id="importButtonSC" value="Import"
+		<p:commandButton id="importButtonSC" value="Import" 
 			style="float: right;" actionListener="#{jJTaskBean.importTask}"
 			update=":projecttabview" onstart="PF('taskBlockUIWidget').block()"
-			oncomplete="PF('taskBlockUIWidget').unblock()" />
-
-		<!-- 			<p:commandButton id="importButtonPL" value="Import" rendered="#{jJTaskBean.mode != 'scrum'}" -->
-		<!-- 			style="float: right;" actionListener="#{jJTaskBean.importTask}"			 -->
-		<!-- 			onstart="PF('createSprintBlockUI').block()" -->
-		<!-- 			oncomplete="PF('createSprintBlockUI').unblock()"/> -->
-
+			oncomplete="PF('taskBlockUIWidget').unblock()"  />
+			<p:commandButton  value="Annuler" style="float: right;" 
+			oncomplete="PF('taskImportDialogWidget').hide()"   />
 	</h:form>
 </ui:composition>
 </html>

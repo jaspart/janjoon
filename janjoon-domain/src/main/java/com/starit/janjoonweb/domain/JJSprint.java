@@ -87,8 +87,13 @@ public class JJSprint {
 				.equals(((JJSprint) object).getId()) : (object == this);
 	}
 	
-	public void setTasks(Set<JJTask> tasks) {
-    	Hibernate.initialize(this.getTasks());
-        this.tasks = tasks;
+	 public Set<JJContact> getContacts() {		 
+	       return this.contacts;
+	 }
+	
+	public Set<JJTask> getTasks() {
+		Hibernate.initialize(this.tasks);
+        return this.tasks;
     }
+	
 }

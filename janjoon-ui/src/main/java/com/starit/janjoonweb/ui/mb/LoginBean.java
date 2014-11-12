@@ -399,7 +399,7 @@ public class LoginBean implements Serializable {
 					.getSession(false);
 			authorisationService = new AuthorisationService(session, contact);
 			messageListener(session);
-
+			session.setAttribute("jJBugBean", new JJBugBean());
 			if (event.getComponent().getClientId()
 					.contains("projectSelectOneMenu")) {
 
@@ -409,8 +409,7 @@ public class LoginBean implements Serializable {
 				authorisationService.initFields();
 
 				session.setAttribute("jJSprintBean", new JJSprintBean());
-				session.setAttribute("jJTaskBean", new JJTaskBean());
-				session.setAttribute("jJBugBean", new JJBugBean());
+				session.setAttribute("jJTaskBean", new JJTaskBean());				
 				if (session.getAttribute("jJRequirementBean") != null) {
 					List<JJRequirement> req = ((JJRequirementBean) session
 							.getAttribute("jJRequirementBean"))

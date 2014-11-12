@@ -109,7 +109,7 @@ public class JJBugServiceImpl implements JJBugService {
 
 	}
 	
-	public List<JJBug> load(int first, int pageSize,List<SortMeta> multiSortMeta, Map<String, String> filters,JJProject project)
+	public List<JJBug> load(int first, int pageSize,List<SortMeta> multiSortMeta, Map<String, String> filters,JJProject project,JJProduct product,JJVersion version)
 	{
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
@@ -124,7 +124,24 @@ public class JJBugServiceImpl implements JJBugService {
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
-		}	
+		}
+		
+		if (version != null) {
+			predicates.add(criteriaBuilder.equal(from.get("versioning"),
+					version));
+		}else if(product != null)
+		{
+			List<Predicate> orPredicates = new ArrayList<Predicate>();
+			for(JJVersion v:product.getVersions())
+			{
+				if(v.getEnabled())
+					orPredicates.add(criteriaBuilder.equal(from.get("versioning"),
+							v));
+			}
+			Predicate orPredicate = criteriaBuilder.or(orPredicates
+					.toArray(new Predicate[] {}));
+			predicates.add(orPredicate);
+		}
 		
 
 		if(filters != null)
@@ -231,8 +248,45 @@ public class JJBugServiceImpl implements JJBugService {
 	}
 
 	@Override
-	public List<JJBug> getBugs(JJProject project) {
-		return getBugs(project, null, null, true, false);
+	public List<JJBug> getBugs(JJProject project,JJProduct product,JJVersion version) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
+				.createQuery(JJBug.class);
+
+		Root<JJBug> from = criteriaQuery.from(JJBug.class);
+
+		CriteriaQuery<JJBug> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();		
+			
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));	
+
+		if (project != null) {
+			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}
+
+		if (version != null) {
+			predicates.add(criteriaBuilder.equal(from.get("versioning"),
+					version));
+		}else if(product != null)
+		{
+			List<Predicate> orPredicates = new ArrayList<Predicate>();
+			for(JJVersion v:product.getVersions())
+			{
+				if(v.getEnabled())
+					orPredicates.add(criteriaBuilder.equal(from.get("versioning"),
+							v));
+			}
+			Predicate orPredicate = criteriaBuilder.or(orPredicates
+					.toArray(new Predicate[] {}));
+			predicates.add(orPredicate);
+		}		
+
+		select.where(predicates.toArray(new Predicate[] {}));		
+
+		TypedQuery<JJBug> result = entityManager.createQuery(select);
+		return result.getResultList();
+
 	}
 	
 	public void saveJJBug(JJBug JJBug_) {

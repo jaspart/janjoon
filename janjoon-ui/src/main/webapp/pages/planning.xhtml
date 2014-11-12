@@ -79,7 +79,7 @@
 
 						<p:ajax onstart="PF('blockUIWidget').block()" event="change"
 							listener="#{jJTaskBean.SortBySelectionChanged}"
-							update=":projecttabview:planningForm "
+							update=":projecttabview:planningForm :projecttabview:sprintForm"
 							oncomplete="PF('blockUIWidget').unblock()" />
 
 					</p:selectOneMenu>

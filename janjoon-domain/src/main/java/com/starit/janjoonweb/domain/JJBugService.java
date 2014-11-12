@@ -15,7 +15,7 @@ public interface JJBugService {
 	public List<JJBug> getImportBugs(JJProject project, JJVersion version,
 			JJCategory category, JJStatus status, boolean onlyActif);
 
-	public List<JJBug> getBugs(JJProject project);
+	public List<JJBug> getBugs(JJProject project,JJProduct product,JJVersion version);
 	
-	public List<JJBug> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, String> filters,JJProject project);
+	public List<JJBug> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, String> filters,JJProject project,JJProduct product,JJVersion version);
 }

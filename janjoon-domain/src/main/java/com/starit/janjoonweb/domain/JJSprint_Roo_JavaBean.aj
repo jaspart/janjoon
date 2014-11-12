@@ -113,8 +113,8 @@ privileged aspect JJSprint_Roo_JavaBean {
         this.builds = builds;
     }
     
-    public Set<JJTask> JJSprint.getTasks() {
-        return this.tasks;
+    public void JJSprint.setTasks(Set<JJTask> tasks) {    	
+        this.tasks = tasks;
     }   
     
     
@@ -124,11 +124,8 @@ privileged aspect JJSprint_Roo_JavaBean {
     
     public void JJSprint.setObstacles(Set<JJTask> obstacles) {
         this.obstacles = obstacles;
-    }
-    
-    public Set<JJContact> JJSprint.getContacts() {
-        return this.contacts;
-    }
+    }  
+ 
     
     public void JJSprint.setContacts(Set<JJContact> contacts) {
         this.contacts = contacts;

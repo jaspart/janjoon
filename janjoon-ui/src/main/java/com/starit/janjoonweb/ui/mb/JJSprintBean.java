@@ -164,7 +164,7 @@ public class JJSprintBean {
 	public List<JJBug> getBugs() {
 
 		if (bugs == null)
-			bugs = jJBugService.getBugs(project);
+			bugs = jJBugService.getBugs(project,null,null);
 
 		return bugs;
 	}
@@ -293,7 +293,7 @@ public class JJSprintBean {
 			if (!reqList.isEmpty())
 				requirement = reqList.get(0);
 		} else {
-			bugs = jJBugService.getBugs(project);
+			bugs = jJBugService.getBugs(project,null,null);
 			bug = null;
 			reqList = null;
 			requirement = null;
@@ -363,6 +363,8 @@ public class JJSprintBean {
 		String message = "message_successfully_updated";
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"JJSprint");
+		jJTaskBean.setSprints(null);
+		jJTaskBean.setSprint(null);
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		RequestContext context = RequestContext.getCurrentInstance();
 
@@ -414,6 +416,8 @@ public class JJSprintBean {
 
 		sprintUtil.setSprint(getJJSprint_());
 		sprintUtil.setNeditabale(true);
+		jJTaskBean.setSprints(null);
+		jJTaskBean.setSprint(null);
 		RequestContext context = RequestContext.getCurrentInstance();
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -551,7 +555,8 @@ public class JJSprintBean {
 				jJBugBean.setBugRequirementSelected(jJBugBean.getJJBug_()
 						.getRequirement());
 				jJBugBean.setBugProjectSelected(project);
-
+				jJBugBean.setBugVersionSelected(jJBugBean.getJJBug_().getVersioning());
+				
 				context.execute("PF('blockUIWidget').block()");
 				context.execute("PF('editBugDialogWidget').show()");
 			}

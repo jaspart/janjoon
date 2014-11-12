@@ -158,7 +158,7 @@
 						</f:facet>
 						<p:splitButton value="Action">
 							<p:menuitem id="editButton" icon="ui-icon-pencil"
-								value="#{messages.label_edit}" update=":editForm"
+								value="#{messages.label_edit}" update=":editForm :bugForm"
 								oncomplete="PF('editDialogWidget').show()"
 								title="#{messages.label_edit}">
 								<f:setPropertyActionListener value="#{bug}"
@@ -167,6 +167,8 @@
 									target="#{jJBugBean.bugProjectSelected}" />
 								<f:setPropertyActionListener value="#{bug.requirement}"
 									target="#{jJBugBean.bugRequirementSelected}" />
+									<f:setPropertyActionListener value="#{bug.versioning}"
+									target="#{jJBugBean.bugVersionSelected}" />
 							</p:menuitem>
 							<p:tooltip for="editButton" value="#{messages.label_edit}"
 								showEffect="fade" hideEffect="fade" />
@@ -184,7 +186,7 @@
 					<f:facet name="footer">
 						<p:commandButton value="#{messages.bug_create_button}"
 							id="createButton" icon="ui-icon-circle-plus"
-							update=":createForm:createPanelGrid"
+							update=":createForm :bugForm"
 							oncomplete="PF('createDialogWidget').show()"
 							title="#{messages.label_create}" />
 						<p:tooltip for="createButton" value="#{messages.label_create}"
@@ -204,7 +206,7 @@
 				modal="true" widgetVar="createDialogWidget" dynamic="true"
 				visible="#{jJBugBean.createDialogVisible}" resizable="true"
 				maximizable="true" showEffect="fade" hideEffect="explode">
-				<p:ajax event="close" update="createForm"
+				<p:ajax event="close" update="createForm :bugForm"
 					listener="#{jJBugBean.handleDialogClose}" />
 				<p:outputPanel id="createPanel">
 					<h:form id="createForm" enctype="multipart/form-data">
@@ -227,7 +229,7 @@
 				modal="true" widgetVar="editDialogWidget" dynamic="true"
 				resizable="true" maximizable="true" showEffect="fade"
 				hideEffect="explode">
-				<p:ajax event="close" update=":bugForm"
+				<p:ajax event="close" update=":bugForm editForm"
 					listener="#{jJBugBean.handleDialogClose}" />
 				<p:outputPanel id="editPanel">
 					<h:form id="editForm" enctype="multipart/form-data">

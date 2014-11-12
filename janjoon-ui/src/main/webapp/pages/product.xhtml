@@ -31,7 +31,7 @@
 						<h:outputText value="#{messages.admin_product_table_action_label}" />
 					</f:facet>
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
-						oncomplete="PF('deleteDialogWidget').show()"
+						oncomplete="PF('productDialogWidget').show()"
 						value="#{messages.admin_product_edit_tooltip}"
 						action="#{jJProductBean.editProduct(jJVersionBean)}"
 						update=":tabview:productDialog">
@@ -52,7 +52,7 @@
 						id="newProduct"
 						actionListener="#{jJProductBean.newProduct(jJVersionBean)}"
 						update=":tabview:productDialog"
-						oncomplete="PF('deleteDialogWidget').show()" icon="ui-icon-circle-plus" />
+						oncomplete="PF('productDialogWidget').show()" icon="ui-icon-circle-plus" />
 				</f:facet>
 			</p:dataTable>
 		</p:panel>
@@ -120,8 +120,8 @@
 											value="#{jJProductBean.productAdmin.extname}"
 											label="#{messages.admin_product_new_extname_label}"
 											required="true" widgetVar="extnameWidget" >
-					<f:validateLength maximum="100" />
-				</p:inputText>
+											<f:validateLength maximum="100" />
+										</p:inputText>
 										<p:watermark for="extname"
 											value="#{messages.admin_product_new_extname_waternmark}" />
 									</p:column>
@@ -154,8 +154,8 @@
 											label="Version Name" required="true"
 											requiredMessage="Version Name is required"
 											widgetVar="versionWidget" >
-					<f:validateLength maximum="100" />
-				</p:inputText>
+									<f:validateLength maximum="100" />
+									</p:inputText>
 										<p:watermark for="version"
 											value="#{messages.admin_product_new_version_watermark}" />
 									</p:column>

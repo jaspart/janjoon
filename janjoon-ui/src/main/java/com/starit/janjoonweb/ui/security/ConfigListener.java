@@ -857,6 +857,7 @@ public class ConfigListener implements ServletContextListener {
 			contact.setEnabled(true);
 			contact.setEmail("janjoon.mailer@gmail.com");
 			contact.setCreationDate(new Date());
+			contact.setCompany(jJCompanyService.getActifCompanies().get(0));
 
 			jJContactService.saveJJContact(contact);
 
@@ -883,7 +884,7 @@ public class ConfigListener implements ServletContextListener {
 			contact.setEnabled(true);
 			contact.setEmail("thierry@startit.fr");
 			contact.setCreationDate(new Date());
-
+			contact.setCompany(jJCompanyService.getActifCompanies().get(0));
 			jJContactService.saveJJContact(contact);
 
 			JJProfile profile = jJProfileService.getOneProfile("CustomProfile",

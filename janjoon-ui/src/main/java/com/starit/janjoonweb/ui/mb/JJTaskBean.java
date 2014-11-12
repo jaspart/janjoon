@@ -42,7 +42,6 @@ import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJCategory;
@@ -326,9 +325,11 @@ public class JJTaskBean {
 
 	public List<JJSprint> getSprints() {
 
-		getProject();
-		sprints = jJSprintService.getSprints(project, true);
-		sprint = null;
+		if(sprints ==null)
+		{
+			getProject();
+			sprints = jJSprintService.getSprints(project, true);	
+		}			
 		return sprints;
 	}
 
@@ -456,7 +457,7 @@ public class JJTaskBean {
 
 	public void loadingData() {
 
-		initLayoutOptions();
+		initLayoutOptions();		
 		if (tasksData == null) {
 			getProject();
 			loadData();
@@ -711,7 +712,8 @@ public class JJTaskBean {
 
 				e.printStackTrace();
 			}
-		}
+		}	
+			
 
 	}
 
@@ -1518,9 +1520,11 @@ public class JJTaskBean {
 		if (mode.equalsIgnoreCase("planning")) {
 
 			project = null;
-			tasksData = null;
+			tasksData = null;			
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('taskImportDialogWidget').hide()");
+			if(sprint != null)
+			Hibernate.initialize(sprint.getContacts());
 
 		} else if (mode.equalsIgnoreCase("scrum")) {
 
