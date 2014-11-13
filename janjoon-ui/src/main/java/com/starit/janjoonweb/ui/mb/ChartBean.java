@@ -202,34 +202,12 @@ public class ChartBean implements Serializable {
 				failedTC.set(entry.getKey(), Integer.parseInt(entry.getValue()));
 			}
 
-		// for (String date : dates) {
-		// int compteur = 0;
-		// System.out.println("date " + date);
-		//
-		// for (JJTestcaseexecution testcaseexecution : testcaseexecutions) {
-		// String creationDate = testcaseexecution.getCreationDate()
-		// .toString().substring(0, 10);
-		// if (creationDate.equalsIgnoreCase(date)
-		// && (testcaseexecution.getPassed() == null)) {
-		// compteur++;
-		// }
-		// }
-		// totalTC.set(date, compteur);
-		// }
-
-		// ChartSeries girls = new ChartSeries("Girls");
-		//
-		// girls.set("2004", 52);
-		// girls.set("2005", 60);
-		// girls.set("2006", 110);
-		// girls.set("2007", 135);
-		// girls.set("2008", 120);
 
 		categoryModel = new CartesianChartModel();
 		categoryModel.addSeries(totalTC);
 		categoryModel.addSeries(successTC);
 		categoryModel.addSeries(failedTC);
-		// categoryModel.addSeries(girls);
+		
 	}
 
 	public String getSeriesColors() {

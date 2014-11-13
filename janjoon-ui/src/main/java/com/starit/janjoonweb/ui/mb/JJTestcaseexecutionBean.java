@@ -96,7 +96,7 @@ public class JJTestcaseexecutionBean {
 		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
 				.getAttribute("jJTestcaseBean");
 
-		JJTestcase testcase = jJTestcaseBean.getTestcase();
+		JJTestcase testcase = jJTestcaseBean.getTestcase();	
 
 		JJBuildBean jJBuildBean = (JJBuildBean) session
 				.getAttribute("jJBuildBean");

@@ -141,6 +141,11 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 	
 	public void deleteJJTeststep(JJTeststep JJTeststep_) {		
 		//entityManager.remove(JJTeststep_);
+		//JJTeststepexecution teststep	
+		Query q=entityManager.createQuery("DELETE FROM JJTeststepexecution c WHERE c.teststep = :p");
+		q.setParameter("p", JJTeststep_).executeUpdate();
+		q=entityManager.createQuery("DELETE FROM JJBug c WHERE c.teststep = :p");
+		q.setParameter("p", JJTeststep_).executeUpdate();		
 		Query query=entityManager.createQuery("DELETE FROM JJTeststep c WHERE c.id = :p");
 		query.setParameter("p", JJTeststep_.getId()).executeUpdate();
 		
