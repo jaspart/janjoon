@@ -193,9 +193,9 @@
 					<h:outputText value="#{messages.test_select_alert}"
 						rendered="#{jJTestcaseBean.rendredEmptySelection}"
 						style="color: red;" />
-					<p:dataTable id="testcaseRecapDataTable" var="tcr"
+					<p:dataTable id="testcaseRecapDataTable" var="tcr" paginatorPosition="buttom"
 						value="#{jJTestcaseBean.testCaseRecaps}" paginator="true" rows="8"
-						style="width:550px;" rowKey="#{tcr.testcase.name}"
+						style="width:550px;" rowKey="#{tcr.testcase.name}" 
 						rendered="#{jJTestcaseBean.rendredTestCaseRecaps}">
 						<f:facet name="header">
 							<h:outputText value="#{jJTestcaseBean.chapter.name}" />
@@ -218,8 +218,8 @@
 								<h:outputText value="#{messages.test_table_action_title}" />
 							</f:facet>
 							<p:commandButton id="runButton" icon="ui-icon-play"
-								oncomplete="runPF('testcaseDialogWidget').show()"
-								action="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
+								oncomplete="PF('testcaseDialogWidget').show()"
+								actionListener="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
 								update=":runTestcaseDialog" disabled="#{tcr.disabled}">
 								<f:setPropertyActionListener value="#{tcr.testcase}"
 									target="#{jJTestcaseBean.testcase}" />
@@ -228,7 +228,7 @@
 								showEffect="fade" hideEffect="fade" />
 							<p:commandButton id="editButton" icon="ui-icon-pencil"
 								oncomplete="PF('testcaseDialogWidget').show()"
-								action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
+								actionListener="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
 								update=":testcaseDialog">
 								<f:setPropertyActionListener value="#{tcr.testcase}"
 									target="#{jJTestcaseBean.testcase}" />
@@ -254,7 +254,7 @@
 						yaxisLabel="#{messages.test_graph_abscissa_label}" animate="true"
 						rendered="#{jJTestcaseBean.rendredTestCaseRecaps}" />
 
-					<p:dataTable id="teststepRecapDataTable"
+					<p:dataTable id="teststepRecapDataTable" paginatorPosition="buttom"
 						value="#{jJTeststepBean.teststeps}" rowKey="#{ts.name}" var="ts"
 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
 						paginator="true" rows="8" style="width:650px;">
@@ -277,8 +277,8 @@
 									<p:tooltip for="editButton" value="#{messages.label_edit}"
 										showEffect="fade" hideEffect="fade" />
 									<p:commandButton id="runButton" icon="ui-icon-play"
-										oncomplete="runPF('testcaseDialogWidget').show()"
-										action="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
+										oncomplete="PF('testcaseDialogWidget').show()"
+										actionListener="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
 										update=":runTestcaseDialog"
 										disabled="#{jJBuildBean.build ne null ? false : true }">
 										<f:setPropertyActionListener
@@ -303,7 +303,7 @@
 
 					<p:dataTable id="testexecutionRecapDataTable"
 						value="#{jJTestcaseexecutionBean.testCaseexecutionRecaps}"
-						rowKey="#{tce.name}" var="tce"
+						rowKey="#{tce.name}" var="tce" paginatorPosition="buttom"
 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
 						paginator="true" rows="8" style="width:650px;">
 						<p:column headerText="Id">
@@ -546,7 +546,7 @@
 		<p:dialog id="runTestcaseDialog" header="#{messages.test_exec_title}"
 			modal="true" widgetVar="runTestcaseDialogWidget" width="500px"
 			height="375px" style="top: 30px;" dynamic="true" resizable="false">
-			<p:hotkey bind="esc" handler="runPF('testcaseDialogWidget').hide()" />
+			<p:hotkey bind="esc" handler="PF('testcaseDialogWidget').hide()" />
 			<p:hotkey bind="space" handler="TestcaseExecSuccessButton.jq.click()" />
 			<p:hotkey bind="S" handler="TestcaseExecSuccessButton.jq.click()" />
 			<p:hotkey bind="F" handler="TestcaseExecFailedButton.jq.click()" />

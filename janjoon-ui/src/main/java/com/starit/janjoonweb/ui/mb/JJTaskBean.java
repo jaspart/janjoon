@@ -594,6 +594,13 @@ public class JJTaskBean {
 						if (tt.getStartDateRevised() != null) {
 
 							Date endDate;
+							String styleClass;
+							
+							if(tt.getStartDateReal()==null)
+								styleClass="revised1";
+							else
+								styleClass="revised2";
+							
 							if (tt.getEndDateRevised() == null)
 								endDate = tt.getEndDatePlanned();
 							else
@@ -601,7 +608,7 @@ public class JJTaskBean {
 
 							TimelineEvent event = new TimelineEvent(tt,
 									tt.getStartDateRevised(), endDate, true,
-									group, "revised");
+									group, styleClass);
 							model.add(event);
 
 							int workload = 0;
@@ -618,10 +625,15 @@ public class JJTaskBean {
 										workload, true);
 						} else {
 
+							String style=null;
+							if(tt.getStartDateReal()==null)
+								style="planned1";
+							else
+								style="planned2";
 							TimelineEvent event = new TimelineEvent(tt,
 									tt.getStartDatePlanned(),
 									tt.getEndDatePlanned(), true, group,
-									"planned");
+									style);
 							model.add(event);
 
 							if (!add)
@@ -952,10 +964,18 @@ public class JJTaskBean {
 					endDate = tt.getEndDatePlanned();
 				else
 					endDate = tt.getEndDateRevised();
+				
+				String styleClass;
+				
+				if(tt.getStartDateReal()==null)
+					styleClass="revised1";
+				else
+					styleClass="revised2";
+				
 
 				TimelineEvent event = new TimelineEvent(tt,
 						tt.getStartDateRevised(), endDate, true, group,
-						"revised");
+						styleClass);
 				model.add(event);
 
 				int workload = 0;
@@ -970,10 +990,16 @@ public class JJTaskBean {
 					taskData = new TaskData(tt, chapter,
 							tt.getStartDateRevised(), endDate, workload, true);
 			} else {
+				
+				String style=null;
+				if(tt.getStartDateReal()==null)
+					style="planned1";
+				else
+					style="planned2";
 
 				TimelineEvent event = new TimelineEvent(tt,
 						tt.getStartDatePlanned(), tt.getEndDatePlanned(), true,
-						group, "planned");
+						group, style);
 				model.add(event);
 
 				if (!add)
@@ -2521,16 +2547,24 @@ public class JJTaskBean {
 
 				if (tt.getStartDateRevised() != null) {
 
-					styleClass = "revised";
+					if(tt.getStartDateReal()==null)
+						styleClass="revised1";
+					else
+						styleClass="revised2";
+					
 					startDate = tt.getStartDateRevised();
 					if (tt.getEndDateRevised() == null)
 						endDate = tt.getEndDatePlanned();
 					else
 						endDate = tt.getEndDateRevised();
 
-				} else {
-
-					styleClass = "planned";
+				} else {					
+					
+					if(tt.getStartDateReal()==null)
+						styleClass="planned1";
+					else
+						styleClass="planned2";
+					
 					endDate = tt.getEndDatePlanned();
 					startDate = tt.getStartDatePlanned();
 

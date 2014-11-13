@@ -252,11 +252,12 @@ div.timeline-event-line {
 }
 
 div.timeline-event-content {
-	
+	text-align: center;
 }
 
 div.timeline-event-content span {
-	height: 15px;
+	height: 15px !important;
+	
 }
 .timeline-frame div{
 	left: 0px;
@@ -289,12 +290,19 @@ div.timeline-navigation-delete {
 	display: none;
 }
 
-div.planned {
+div.planned1 {
 	background: #5882FA none !important; /* blue */
 	border-color: white; /* white */
 	opacity: 0.6;
 	filter: alpha(opacity = 60);
 	height: 30px !important;
+}
+div.planned2 {
+	background: #5882FA none !important; /* blue */
+	border-color: white; /* white */
+	opacity: 0.6;
+	filter: alpha(opacity = 60);
+	height: 19px !important;
 }
 
 div.real {
@@ -302,7 +310,8 @@ div.real {
 	border-color: black; /* black */
 	opacity: 0.6;
 	filter: alpha(opacity = 60);
-	height: 30px !important;
+	height: 19px !important;
+	transform: translate(0px, 20px);
 }
 
 div.chapter {
@@ -313,12 +322,20 @@ div.chapter {
 	height: 30px !important;
 }
 
-div.revised {
+div.revised1 {
 	background: #EEEC5E none !important; /* black */
 	border-color: white; /* white */
 	opacity: 0.5;
 	filter: alpha(opacity = 50);
 	height: 30px !important;
+}
+
+div.revised2 {
+	background: #EEEC5E none !important; /* black */
+	border-color: white; /* white */
+	opacity: 0.5;
+	filter: alpha(opacity = 50);
+	height: 19px !important;
 }
 
 /*.task {
