@@ -918,8 +918,7 @@ public class JJTaskBean {
 					return 0;
 
 			}
-		});
-		System.err.println("Boucle For");
+		});		
 
 		for (JJTask tt : allTasks) {
 			if (k == 92)
