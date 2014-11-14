@@ -898,94 +898,94 @@ public class ConfigListener implements ServletContextListener {
 
 		}
 
-		if (jJProductService.getProducts(true).isEmpty()) {
-			JJContact manager = null;
-			JJContact contact = jJContactService.getContactByEmail(
-					"janjoon.mailer@gmail.com", true);
+//		if (jJProductService.getProducts(true).isEmpty()) {
+//			JJContact manager = null;
+//			JJContact contact = jJContactService.getContactByEmail(
+//					"janjoon.mailer@gmail.com", true);
+//
+//			if (contact != null) {
+//				manager = contact;
+//			}
+//
+//			Set<JJVersion> versions = new HashSet<JJVersion>();
+//
+//			JJProduct product = new JJProduct();
+//			product.setName("ProductName 1");
+//			product.setDescription("ProductDescription 1");
+//			product.setCreationDate(new Date());
+//			product.setEnabled(true);
+//			product.setExtname("ProductExtName 1");
+//			product.setManager(manager);
+//
+//			jJProductService.saveJJProduct(product);
+//			JJVersion version;
+//			version = new JJVersion();
+//			version.setName("main");
+//			version.setDescription("VersionDescription Main");
+//			version.setCreationDate(new Date());
+//			version.setEnabled(true);
+//			version.setProduct(product);
+//			jJVersionService.saveJJVersion(version);
+//
+//			versions.add(version);
+//			JJVersion version1 = new JJVersion();
+//			version1.setName("integ/14.1");
+//			version1.setDescription("VersionDescription Integ V:14.1");
+//			version1.setCreationDate(new Date());
+//			version1.setEnabled(true);
+//			version1.setProduct(product);
+//			jJVersionService.saveJJVersion(version1);
+//
+//			versions.add(version1);
+//			JJVersion version2 = new JJVersion();
+//			version2.setName("integ/14.2");
+//			version2.setDescription("VersionDescription Integ V:14.2");
+//			version2.setCreationDate(new Date());
+//			version2.setEnabled(true);
+//			version2.setProduct(product);
+//			jJVersionService.saveJJVersion(version2);
+//
+//			versions.add(version2);
+//			JJVersion version3 = new JJVersion();
+//			version3.setName("prod/13.4");
+//			version3.setDescription("VersionDescription Production V:13.4");
+//			version3.setCreationDate(new Date());
+//			version3.setEnabled(true);
+//			version3.setProduct(product);
+//			jJVersionService.saveJJVersion(version3);
+//
+//			versions.add(version3);
+//
+//			jJProductService.saveJJProduct(product);
+//			product.setVersions(versions);
+//
+//		}
+//		JJContact contact = jJContactService.getContactByEmail(
+//				"janjoon.mailer@gmail.com", true);
+//		JJContact manager = null;
+//		if (contact != null) {
+//			manager = contact;
+//		}
 
-			if (contact != null) {
-				manager = contact;
-			}
+//		if (jJProjectService.getProjects(true).isEmpty()) {
+//
+//			JJProject project;
+//
+//			for (int i = 0; i < 2; i++) {
+//				project = new JJProject();
+//				project.setName("ProjectName " + i);
+//				project.setDescription("ProjectDescription " + i);
+//				project.setCreationDate(new Date());
+//				project.setEnabled(true);
+//				project.setManager(manager);
+//
+//				jJProjectService.saveJJProject(project);
+//			}
+//		}
 
-			Set<JJVersion> versions = new HashSet<JJVersion>();
-
-			JJProduct product = new JJProduct();
-			product.setName("ProductName 1");
-			product.setDescription("ProductDescription 1");
-			product.setCreationDate(new Date());
-			product.setEnabled(true);
-			product.setExtname("ProductExtName 1");
-			product.setManager(manager);
-
-			jJProductService.saveJJProduct(product);
-			JJVersion version;
-			version = new JJVersion();
-			version.setName("main");
-			version.setDescription("VersionDescription Main");
-			version.setCreationDate(new Date());
-			version.setEnabled(true);
-			version.setProduct(product);
-			jJVersionService.saveJJVersion(version);
-
-			versions.add(version);
-			JJVersion version1 = new JJVersion();
-			version1.setName("integ/14.1");
-			version1.setDescription("VersionDescription Integ V:14.1");
-			version1.setCreationDate(new Date());
-			version1.setEnabled(true);
-			version1.setProduct(product);
-			jJVersionService.saveJJVersion(version1);
-
-			versions.add(version1);
-			JJVersion version2 = new JJVersion();
-			version2.setName("integ/14.2");
-			version2.setDescription("VersionDescription Integ V:14.2");
-			version2.setCreationDate(new Date());
-			version2.setEnabled(true);
-			version2.setProduct(product);
-			jJVersionService.saveJJVersion(version2);
-
-			versions.add(version2);
-			JJVersion version3 = new JJVersion();
-			version3.setName("prod/13.4");
-			version3.setDescription("VersionDescription Production V:13.4");
-			version3.setCreationDate(new Date());
-			version3.setEnabled(true);
-			version3.setProduct(product);
-			jJVersionService.saveJJVersion(version3);
-
-			versions.add(version3);
-
-			jJProductService.saveJJProduct(product);
-			product.setVersions(versions);
-
-		}
-		JJContact contact = jJContactService.getContactByEmail(
-				"janjoon.mailer@gmail.com", true);
-		JJContact manager = null;
-		if (contact != null) {
-			manager = contact;
-		}
-
-		if (jJProjectService.getProjects(true).isEmpty()) {
-
-			JJProject project;
-
-			for (int i = 0; i < 2; i++) {
-				project = new JJProject();
-				project.setName("ProjectName " + i);
-				project.setDescription("ProjectDescription " + i);
-				project.setCreationDate(new Date());
-				project.setEnabled(true);
-				project.setManager(manager);
-
-				jJProjectService.saveJJProject(project);
-			}
-		}
-
-		List<JJProject> projectList = jJProjectService.getProjects(true);
-		//
-		List<JJProduct> productList = jJProductService.getProducts(true);
+//		List<JJProject> projectList = jJProjectService.getProjects(true);
+//		//
+//		List<JJProduct> productList = jJProductService.getProducts(true);
 		// if (jJRequirementService.findAllJJRequirements().isEmpty()) {
 		// List<JJStatus> status = jJStatusService.getStatus("JJTask", true,
 		// null, true);
@@ -1015,30 +1015,30 @@ public class ConfigListener implements ServletContextListener {
 		// }
 		// }
 		// }
-		if (jJMessageService.findAllJJMessages().isEmpty()) {
-
-			int i = 0;
-			while (i < productList.size()) {
-
-				for (int j = 0; j < 5; j++) {
-
-					JJMessage mes = new JJMessage();
-					mes.setName("mes : " + j + "/" + i);
-					mes.setCreatedBy(manager);
-					// mes.setContact(manager);
-					mes.setProduct(productList.get(i));
-					mes.setProject(projectList.get(i));
-					mes.setDescription("mesDescription : " + j + "/" + i);
-					mes.setCreationDate(new Date());
-					mes.setEnabled(true);
-					mes.setMessage("message tttttt" + j + "/" + i);
-					jJMessageService.saveJJMessage(mes);
-
-				}
-				i++;
-
-			}
-		}
+//		if (jJMessageService.findAllJJMessages().isEmpty()) {
+//
+//			int i = 0;
+//			while (i < productList.size()) {
+//
+//				for (int j = 0; j < 5; j++) {
+//
+//					JJMessage mes = new JJMessage();
+//					mes.setName("mes : " + j + "/" + i);
+//					mes.setCreatedBy(manager);
+//					// mes.setContact(manager);
+//					mes.setProduct(productList.get(i));
+//					mes.setProject(projectList.get(i));
+//					mes.setDescription("mesDescription : " + j + "/" + i);
+//					mes.setCreationDate(new Date());
+//					mes.setEnabled(true);
+//					mes.setMessage("message tttttt" + j + "/" + i);
+//					jJMessageService.saveJJMessage(mes);
+//
+//				}
+//				i++;
+//
+//			}
+//		}
 	}
 
 	// public String setCompanyCalendar(String company)
