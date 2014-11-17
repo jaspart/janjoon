@@ -210,7 +210,7 @@ public class AuthorisationService implements Serializable {
 		
 
 		adminContactProfil = jJPermissionService.isAuthorized(contact, null,
-				null, "JJContact", null, true, true, true);
+				null, "Contact", null, true, true, true);
 
 		if (!adminContactProfil)
 			adminContactProfilMSG = "Permission Denied";
@@ -218,7 +218,7 @@ public class AuthorisationService implements Serializable {
 			adminContactProfilMSG = "";
 		
 		adminCompany = jJPermissionService.isAuthorized(contact, null, null,
-				"JJCompany", null, true, true, true);
+				"Company", null, true, true, true);
 
 		if (!adminCompany)
 			adminCompanyMSG = "Permission Denied";
@@ -226,7 +226,7 @@ public class AuthorisationService implements Serializable {
 			adminCompanyMSG = "";
 		
 		rRequiement = jJPermissionService.isAuthorized(contact, project,
-				product, "JJRequirement", null, true, null, null);
+				product, "Requirement", null, true, null, null);
 		
 		if (!rRequiement)
 			rRequiementMSG = "Permission Denied";
@@ -234,14 +234,14 @@ public class AuthorisationService implements Serializable {
 			rRequiementMSG =MessageFactory.getMessage("header_spec_menuitem", "").getDetail();
 		
 		rwxTest = jJPermissionService.isAuthorized(contact, project, product,
-				"JJTestcase", null, true, true, true);
+				"Testcase", null, true, true, true);
 		
 		if (!rwxTest)
 			rwxTestMSG = "Permission Denied";
 		else
 			rwxTestMSG = MessageFactory.getMessage("header_test_menuitem", "").getDetail();
 		rwDev = jJPermissionService.isAuthorized(contact, project, product,
-				"JJVersion", null, true, true, null);
+				"Version", null, true, true, null);
 		
 		if (!rwDev)
 
@@ -250,14 +250,14 @@ public class AuthorisationService implements Serializable {
 			rwDevMSG = MessageFactory.getMessage("header_dev_menuitem", "").getDetail();
 		
 		rProject = jJPermissionService.isAuthorized(contact, project, null,
-				"JJTask", null, true, null, null);
+				"Task", null, true, null, null);
 		
 		if (!rProject)
 			rProjectMSG = "You Have no permisson to access this Category";
 		else
 			rProjectMSG =  MessageFactory.getMessage("header_project_menuitem", "").getDetail();
 		rBuild = jJPermissionService.isAuthorized(contact, project, product,
-				"JJBuild", null, true, null, null);
+				"Build", null, true, null, null);
 		if (!rBuild)
 			rBuildMSG = "You Have no permisson to access this Category";
 		else
@@ -266,7 +266,7 @@ public class AuthorisationService implements Serializable {
 		if(project != null)
 		{
 			wRequiement = jJPermissionService.isAuthorized(contact, project,
-					product, "JJRequirement", null, null, true, null);
+					product, "Requirement", null, null, true, null);
 			if (!wRequiement)
 				wRequiementMSG = "You Have no permisson to do this action";
 			else

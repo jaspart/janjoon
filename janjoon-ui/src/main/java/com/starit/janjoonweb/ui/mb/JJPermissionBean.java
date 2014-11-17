@@ -186,7 +186,7 @@ public class JJPermissionBean {
 							new FacesMessage(
 									FacesMessage.SEVERITY_ERROR,
 									"This permission is already attributed to this contact",
-									"JJPermission"));
+									"Permission"));
 		}
 
 	}

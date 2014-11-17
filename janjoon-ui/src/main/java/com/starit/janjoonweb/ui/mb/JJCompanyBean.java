@@ -146,7 +146,7 @@ public class JJCompanyBean {
 			companies=null;
 			
 			String message = "message_successfully_deleted";
-			FacesMessage facesMessage = MessageFactory.getMessage(message, "JJCompany");			
+			FacesMessage facesMessage = MessageFactory.getMessage(message, "Company");			
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
@@ -184,7 +184,7 @@ public class JJCompanyBean {
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('companyDialogWidget').hide()");
 
-			facesMessage = MessageFactory.getMessage(message, "JJCompany");			
+			facesMessage = MessageFactory.getMessage(message, "Company");			
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	

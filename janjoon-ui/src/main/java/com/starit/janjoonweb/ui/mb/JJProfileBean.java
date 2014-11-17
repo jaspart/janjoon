@@ -155,7 +155,7 @@ public class JJProfileBean {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					MessageFactory.getMessage("message_successfully_created",
-							"JJProfile"));
+							"Profile"));
 			profileListTable=null;
 
 		}
@@ -233,7 +233,7 @@ public class JJProfileBean {
 		FacesContext.getCurrentInstance().addMessage(
 				null,
 				MessageFactory.getMessage("message_successfully_updated",
-						"JJProfile"));
+						"Profile"));
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
 				.getSession(false);
 		LoginBean loginBean=(LoginBean) session.getAttribute("loginBean");

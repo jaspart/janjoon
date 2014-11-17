@@ -136,7 +136,7 @@ public class JJProductBean {
 
 	public Set<JJContact> getProductManagerList() {
 
-		productManagerList = jJPermissionService.getManagers("JJProduct");
+		productManagerList = jJPermissionService.getManagers("Product");
 
 		return productManagerList;
 	}
@@ -235,7 +235,7 @@ public class JJProductBean {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					MessageFactory.getMessage("message_successfully_created",
-							"JJProduct"));
+							"Product"));
 		}
 	}
 
@@ -298,7 +298,7 @@ public class JJProductBean {
 		FacesContext.getCurrentInstance().addMessage(
 				null,
 				MessageFactory.getMessage("message_successfully_updated",
-						"JJProduct"));
+						"Product"));
 
 		RequestContext context = RequestContext.getCurrentInstance();
 

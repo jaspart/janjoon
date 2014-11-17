@@ -107,7 +107,7 @@ public class JJTeststepBean {
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_created", "JJTeststep");
+				"message_successfully_created", "Teststep");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -219,14 +219,14 @@ public class JJTeststepBean {
 		actionTeststep = true;
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "JJTeststep");
+				"message_successfully_updated", "Teststep");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 
 	public void cancelEditTestStep(RowEditEvent event) {
 
 		FacesMessage facesMessage = MessageFactory.getMessage("Cancel Edit",
-				"JJTeststep");
+				"Teststep");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		newTeststep();

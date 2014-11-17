@@ -139,7 +139,7 @@ public class JJConfigurationBean {
 		selectedConf.setEnabled(false);
 		jJConfigurationService.updateJJConfiguration(selectedConf);
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_deleted", "JJConfiguration");
+				"message_successfully_deleted", "Configuration");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		configList = null;
 

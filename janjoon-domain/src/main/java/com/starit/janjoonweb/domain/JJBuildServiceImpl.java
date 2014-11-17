@@ -43,6 +43,7 @@ public class JJBuildServiceImpl implements JJBuildService {
 		}else if(product != null)
 		{
 			List<Predicate> orPredicates = new ArrayList<Predicate>();
+			product=entityManager.find(JJProduct.class, product.getId());
 			for(JJVersion v:product.getVersions())
 			{
 				if(v.getEnabled())

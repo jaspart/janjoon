@@ -65,7 +65,16 @@ public class JJStatusServiceImpl implements JJStatusService {
 		}
 
 		if (object != null) {
-			predicates.add(criteriaBuilder.equal(from.get("objet"), object));
+			List<Predicate> orPredicates = new ArrayList<Predicate>();
+			
+			orPredicates.add(criteriaBuilder.equal(from.get("objet"), object));			
+			if(!object.contains("*"))
+				orPredicates.add(criteriaBuilder.equal(from.get("objet"),
+						"JJ"+object));
+			
+			Predicate orPredicate = criteriaBuilder.or(orPredicates
+					.toArray(new Predicate[] {}));
+			predicates.add(orPredicate);
 		}
 
 		if (onlyActif) {
@@ -98,7 +107,16 @@ public class JJStatusServiceImpl implements JJStatusService {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		if (object != null) {
-			predicates.add(criteriaBuilder.equal(from.get("objet"), object));
+			List<Predicate> orPredicates = new ArrayList<Predicate>();
+			
+			orPredicates.add(criteriaBuilder.equal(from.get("objet"), object));			
+			if(!object.contains("*"))
+				orPredicates.add(criteriaBuilder.equal(from.get("objet"),
+						"JJ"+object));
+			
+			Predicate orPredicate = criteriaBuilder.or(orPredicates
+					.toArray(new Predicate[] {}));
+			predicates.add(orPredicate);
 		}
 
 		if (onlyActif) {
@@ -141,11 +159,10 @@ public class JJStatusServiceImpl implements JJStatusService {
 		Metamodel model = entityManager.getMetamodel();
 		model.getEntities();
 
-		List<String> tableNames = new ArrayList<String>();
-
+		List<String> tableNames = new ArrayList<String>();		
 		Set<EntityType<?>> allEntityTypes = model.getEntities();
 		for (EntityType<?> entityType : allEntityTypes) {
-			tableNames.add(entityType.getName());
+			tableNames.add(entityType.getName().substring(2));
 		}
 
 		return tableNames;

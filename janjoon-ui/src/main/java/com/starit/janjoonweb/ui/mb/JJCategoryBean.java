@@ -95,7 +95,7 @@ public class JJCategoryBean {
 			categoryListTable=null;
 			
 			String message = "message_successfully_deleted";
-			FacesMessage facesMessage = MessageFactory.getMessage(message, "JJCategory");		
+			FacesMessage facesMessage = MessageFactory.getMessage(message, "Category");		
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
@@ -130,7 +130,7 @@ public class JJCategoryBean {
 			}
 			categoryListTable=null;
 
-			facesMessage = MessageFactory.getMessage(message, "JJCategory");
+			facesMessage = MessageFactory.getMessage(message, "Category");
 			RequestContext context = RequestContext.getCurrentInstance();
 
 			if (categoryState) {
@@ -150,7 +150,7 @@ public class JJCategoryBean {
 		else {
 			message = "This category is already exist into the database, try to use another name";
 			facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					message, "JJCategory");
+					message, "Category");
 		}
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}

@@ -639,7 +639,7 @@ public class JJRequirementBean {
 		names.add("FAILED");
 		names.add("PASSED");
 
-		importStatusList = jJStatusService.getStatus("JJRequirement", true,
+		importStatusList = jJStatusService.getStatus("Requirement", true,
 				names, true);
 
 		return importStatusList;
@@ -690,11 +690,11 @@ public class JJRequirementBean {
 		requirement.setChapter(requirementChapter);
 		requirement.setOrdering(null);
 
-		requirementStatusList = jJStatusService.getStatus("JJRequirement",
+		requirementStatusList = jJStatusService.getStatus("Requirement",
 				true, null, true);
 
 		requirementStatus = jJStatusService.getOneStatus("NEW",
-				"JJRequirement", true);
+				"Requirement", true);
 
 		requirement.setStatus(requirementStatus);
 
@@ -754,12 +754,12 @@ public class JJRequirementBean {
 		namesList = new ArrayList<String>();
 		namesList.add("NEW");
 
-		requirementStatusList = jJStatusService.getStatus("JJRequirement",
+		requirementStatusList = jJStatusService.getStatus("Requirement",
 				true, namesList, true);
 
 		if (requirement.getStatus().getName().equalsIgnoreCase("NEW")) {
 			requirementStatus = jJStatusService.getOneStatus("MODIFIED",
-					"JJRequirement", true);
+					"Requirement", true);
 		} else {
 			requirementStatus = requirement.getStatus();
 		}
@@ -847,7 +847,7 @@ public class JJRequirementBean {
 		requirement.setUpdatedBy(contact);
 		requirement.setUpdatedDate(new Date());
 		requirementStatus = jJStatusService.getOneStatus("DELETED",
-				"JJRequirement", true);
+				"Requirement", true);
 		requirement.setStatus(requirementStatus);
 
 		jJRequirementService.updateJJRequirement(requirement);
@@ -881,7 +881,7 @@ public class JJRequirementBean {
 		}
 
 		JJStatus status = jJStatusService.getOneStatus("RELEASED",
-				"JJRequirement", true);
+				"Requirement", true);
 
 		for (JJRequirement req : list) {
 			req = jJRequirementService.findJJRequirement(req.getId());
@@ -1047,7 +1047,7 @@ public class JJRequirementBean {
 			if (format.getCopyRequirement()) {
 
 				JJStatus status = jJStatusService.getOneStatus("NEW",
-						"JJRequirement", true);
+						"Requirement", true);
 
 				JJRequirement req = format.getRequirement();
 

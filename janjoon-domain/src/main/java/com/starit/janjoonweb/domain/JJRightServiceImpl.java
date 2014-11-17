@@ -56,10 +56,10 @@ public class JJRightServiceImpl implements JJRightService {
 		model.getEntities();
 
 		List<String> tableNames = new ArrayList<String>();
-
+		tableNames.add("*");
 		Set<EntityType<?>> allEntityTypes = model.getEntities();
 		for (EntityType<?> entityType : allEntityTypes) {
-			tableNames.add(entityType.getName());
+			tableNames.add(entityType.getName().substring(2));
 		}
 
 		return tableNames;

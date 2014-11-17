@@ -133,11 +133,13 @@ public class JJContactServiceImpl implements JJContactService {
 
 	public void saveJJContact(JJContact JJContact_) {
 
+		JJContact_.setEmail(JJContact_.getEmail().toLowerCase());
 		jJContactRepository.save(JJContact_);
 		JJContact_ = jJContactRepository.findOne(JJContact_.getId());
 	}
 
 	public JJContact updateJJContact(JJContact JJContact_) {
+		JJContact_.setEmail(JJContact_.getEmail().toLowerCase());
 		jJContactRepository.save(JJContact_);
 		JJContact_ = jJContactRepository.findOne(JJContact_.getId());
 		return JJContact_;

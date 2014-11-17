@@ -272,7 +272,7 @@ public class JJSprintBean {
 
 		sprintUtil = (SprintUtil) event.getComponent().getAttributes()
 				.get("sprintUtilValue");
-		System.out.println("JJSPRINT  :" + sprintUtil.getSprint().getName());
+		System.out.println("SPRINT  :" + sprintUtil.getSprint().getName());
 		String create = (String) event.getComponent().getAttributes()
 				.get("create");
 		if (create != null)
@@ -320,7 +320,7 @@ public class JJSprintBean {
 		sprintList.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
 		String message = "message_successfully_updated";
 		FacesMessage facesMessage = MessageFactory
-				.getMessage(message, "JJTask");
+				.getMessage(message, "Task");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -362,7 +362,7 @@ public class JJSprintBean {
 
 		String message = "message_successfully_updated";
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJSprint");
+				"Sprint");
 		jJTaskBean.setSprints(null);
 		jJTaskBean.setSprint(null);
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -412,7 +412,7 @@ public class JJSprintBean {
 		}
 		String message = "message_successfully_created";
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJSprint");
+				"Sprint");
 
 		sprintUtil.setSprint(getJJSprint_());
 		sprintUtil.setNeditabale(true);
@@ -463,7 +463,7 @@ public class JJSprintBean {
 					.getAttribute("JJContact");
 
 			JJStatus status = jJStatusService.getOneStatus("IN PROGRESS",
-					"JJTask", true);
+					"Task", true);
 
 			Long sprintId = dropedTask.getSprint().getId();
 
@@ -481,7 +481,7 @@ public class JJSprintBean {
 					.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
 			String message = "message_successfully_updated";
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
-					"JJTask");
+					"Task");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
 
@@ -508,7 +508,7 @@ public class JJSprintBean {
 		if (ddevent.getDragId().contains(":progIcon")) {
 			JJTask dropedTask = (JJTask) ddevent.getData();
 			id = dropedTask.getId();
-			JJStatus status = jJStatusService.getOneStatus("DONE", "JJTask",
+			JJStatus status = jJStatusService.getOneStatus("DONE", "Task",
 					true);
 
 			Long sprintId = dropedTask.getSprint().getId();
@@ -526,7 +526,7 @@ public class JJSprintBean {
 
 			String message = "message_successfully_updated";
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
-					"JJTask");
+					"Task");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		} else {
@@ -592,7 +592,7 @@ public class JJSprintBean {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
-		JJStatus status = jJStatusService.getOneStatus("TODO", "JJTask", true);
+		JJStatus status = jJStatusService.getOneStatus("TODO", "Task", true);
 		if (status != null)
 			task.setStatus(status);
 		if (requirement != null) {
@@ -631,7 +631,7 @@ public class JJSprintBean {
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('createTaskDialogWidget').hide()");
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJTask :" + task.getName());
+				"Task :" + task.getName());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 
@@ -718,7 +718,7 @@ public class JJSprintBean {
 		RequestContext context = RequestContext.getCurrentInstance();
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_deleted", "JJTask");
+				"message_successfully_deleted", "Task");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		context.execute("projectTabView.select(" + 1 + ")");

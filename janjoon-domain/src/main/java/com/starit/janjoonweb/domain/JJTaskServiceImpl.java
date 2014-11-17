@@ -62,6 +62,7 @@ public class JJTaskServiceImpl implements JJTaskService {
 			predicates.add(criteriaBuilder.equal(from.get("assignedTo"),
 					contact));
 		}
+	
 
 		if (sprint != null) {
 			predicates.add(criteriaBuilder.equal(from.get("sprint"), sprint));
@@ -73,8 +74,20 @@ public class JJTaskServiceImpl implements JJTaskService {
 		}
 
 		if (project != null) {
+			
+			List<Predicate> orPredicates = new ArrayList<Predicate>();
 			Path<Object> path = from.join("requirement").get("project");
-			predicates.add(criteriaBuilder.equal(path, project));
+//			orPredicates.add(criteriaBuilder.equal(path, project));
+//			Path<Object> path1=from.join("bug").get("project");
+//			orPredicates.add(criteriaBuilder.equal(path1, project));
+//		
+//			Path<Object> path2 = from.join("testcase").get("requirement").get("project");
+//			orPredicates.add(criteriaBuilder.equal(path2, project));
+//			
+			Predicate orPredicate = criteriaBuilder.or(orPredicates
+					.toArray(new Predicate[] {}));
+			
+			predicates.add(orPredicate);
 		}
 
 		if (product != null) {
@@ -85,16 +98,37 @@ public class JJTaskServiceImpl implements JJTaskService {
 		if (chapter != null && objet != null) {
 			Path<Object> path;
 
-			if (objet.equalsIgnoreCase("JJTestcase")) {
+			if (objet.equalsIgnoreCase("JJTestcase")
+					|| objet.equalsIgnoreCase("Testcase")) {
 				path = from.join("testcase").get("requirement").get("chapter");
 				predicates.add(criteriaBuilder.equal(path, chapter));
-			} else if (objet.equalsIgnoreCase("JJRequirement")) {
+			} else if (objet.equalsIgnoreCase("JJRequirement")
+					|| objet.equalsIgnoreCase("Requirement")) {
 				path = from.join("requirement").get("chapter");
 				predicates.add(criteriaBuilder.equal(path, chapter));
-			} else if (objet.equalsIgnoreCase("JJBug")) {
+			} else if (objet.equalsIgnoreCase("JJBug")
+					|| objet.equalsIgnoreCase("Bug")) {
 				path = from.join("bug").get("requirement").get("chapter");
 				predicates.add(criteriaBuilder.equal(path, chapter));
 			}
+		} else if (objet != null && chapter == null && objet.equals("*")) {
+			Path<Object> path;
+
+			List<Predicate> orPredicates = new ArrayList<Predicate>();
+
+			path = from.join("testcase").get("requirement").get("chapter");
+			orPredicates.add(criteriaBuilder.isNull(path));
+
+			path = from.join("requirement").get("chapter");
+			orPredicates.add(criteriaBuilder.isNull(path));
+
+			path = from.join("bug").get("requirement").get("chapter");
+			orPredicates.add(criteriaBuilder.isNull(path));
+
+			Predicate orPredicate = criteriaBuilder.or(orPredicates
+					.toArray(new Predicate[] {}));
+			
+			predicates.add(orPredicate);
 		}
 
 		if (testcase != null) {
@@ -227,12 +261,12 @@ public class JJTaskServiceImpl implements JJTaskService {
 				true, false, false, null);
 
 	}
-	
-	public List<JJTask> getToDoTasks(JJContact contact)
-	{		
+
+	public List<JJTask> getToDoTasks(JJContact contact) {
 
 		if (contact != null) {
-			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+			CriteriaBuilder criteriaBuilder = entityManager
+					.getCriteriaBuilder();
 			CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
 					.createQuery(JJTask.class);
 
@@ -242,19 +276,21 @@ public class JJTaskServiceImpl implements JJTaskService {
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-			predicates.add(criteriaBuilder.equal(from.get("assignedTo"), contact));
+			predicates.add(criteriaBuilder.equal(from.get("assignedTo"),
+					contact));
 			predicates.add(criteriaBuilder.isNull(from.get("endDateReal")));
-			
-			select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+			select.where(criteriaBuilder.and(predicates
+					.toArray(new Predicate[] {})));
 
 			TypedQuery<JJTask> result = entityManager.createQuery(select);
 
 			return result.getResultList();
 		}
 
-		else 
+		else
 			return null;
-		
+
 	}
 
 	// public JJTask updateJJTask(JJTask task) {
@@ -301,19 +337,17 @@ public class JJTaskServiceImpl implements JJTaskService {
 	public void updateTasks(Set<JJTask> tasks) {
 		jJTaskRepository.save(tasks);
 	}
-	
-	
+
 	public void saveJJTask(JJTask JJTask_) {
-		
-        jJTaskRepository.save(JJTask_);
-        JJTask_=jJTaskRepository.findOne(JJTask_.getId());
-    }
-    
-	
-    public JJTask updateJJTask(JJTask JJTask_) {
-        jJTaskRepository.save(JJTask_);
-        JJTask_=jJTaskRepository.findOne(JJTask_.getId());
-        return JJTask_;
-    }
+
+		jJTaskRepository.save(JJTask_);
+		JJTask_ = jJTaskRepository.findOne(JJTask_.getId());
+	}
+
+	public JJTask updateJJTask(JJTask JJTask_) {
+		jJTaskRepository.save(JJTask_);
+		JJTask_ = jJTaskRepository.findOne(JJTask_.getId());
+		return JJTask_;
+	}
 
 }

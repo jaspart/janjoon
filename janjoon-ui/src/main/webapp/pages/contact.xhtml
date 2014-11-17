@@ -9,8 +9,8 @@
 		<p:panel id="contactPanel" style="width:700px" columns="1"
 			cellpadding="6">
 			<p:dataTable id="contactDataTable" var="contact" lazy="true"
-				value="#{jJContactBean.contactsLazyModel}" paginator="true" rows="15"
-				rowKey="#{contact.id}">
+				value="#{jJContactBean.contactsLazyModel}" paginator="true"
+				rows="15" rowKey="#{contact.id}">
 				<f:facet name="header">#{messages.admin_contact_table_title}</f:facet>
 				<p:column>
 					<f:facet name="header">
@@ -59,7 +59,8 @@
 						id="newContact"
 						actionListener="#{jJContactBean.newContact(jJPermissionBean)}"
 						update=":tabview:contactDialog"
-						oncomplete="PF('contactDialogWidget').show()" icon="ui-icon-circle-plus" />
+						oncomplete="PF('contactDialogWidget').show()"
+						icon="ui-icon-circle-plus" />
 				</f:facet>
 			</p:dataTable>
 		</p:panel>
@@ -93,9 +94,9 @@
 										<p:inputText id="lastname"
 											value="#{jJContactBean.contactAdmin.name}" label="Lastname"
 											required="true"
-											disabled="#{jJContactBean.disabledContactMode}" >
-					<f:validateLength maximum="100" />
-				</p:inputText>
+											disabled="#{jJContactBean.disabledContactMode}">
+											<f:validateLength maximum="100" />
+										</p:inputText>
 										<p:watermark for="lastname"
 											value="#{messages.admin_contact_new_lastname_watermark}" />
 									</p:column>
@@ -105,9 +106,10 @@
 											value="#{jJContactBean.contactAdmin.email}"
 											label="#{messages.admin_contact_new_email_label}"
 											required="true"
-											disabled="#{jJContactBean.disabledContactMode}" >
-											<f:validator validatorId="emailValidator"/>
-											</p:inputText>
+											disabled="#{jJContactBean.disabledContactMode}">
+											<f:validator validatorId="emailValidator" />
+											<f:attribute name="contact" value="#{jJContactBean.contactAdmin}"/>
+										</p:inputText>
 										<p:watermark for="email"
 											value="#{messages.admin_contact_new_email_watermark}" />
 										<h:outputText value="#{jJContactBean.contactAdmin.email}" />
@@ -128,14 +130,14 @@
 
 								<p:row>
 									<p:column>
-										<p:outputLabel for="company"
-											value="Company: " />
+										<p:outputLabel for="company" value="Company: " />
 										<p:selectOneMenu id="company"
-											value="#{jJContactBean.contactAdmin.company}" panelStyle="width:150px"
-											effect="fade" style="width:160px" filter="true" required="true"
-											filterMatchMode="startsWith" converter="com.starit.janjoonweb.ui.mb.converter.JJCompanyConverter"
+											value="#{jJContactBean.contactAdmin.company}"
+											panelStyle="width:150px" effect="fade" style="width:160px"
+											filter="true" required="true" filterMatchMode="startsWith"
+											converter="com.starit.janjoonweb.ui.mb.converter.JJCompanyConverter"
 											label="Company">
-																						
+
 											<f:selectItems value="#{jJCompanyBean.companies}" var="c"
 												itemLabel="#{c.name}" itemValue="#{c}" />
 										</p:selectOneMenu>

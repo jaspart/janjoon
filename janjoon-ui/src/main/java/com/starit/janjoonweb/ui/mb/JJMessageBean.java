@@ -235,7 +235,7 @@ public class JJMessageBean {
 	public void resolveJJMessage() {
 
 		resolvedJJMessage.setEnabled(false);
-		JJStatus status = jJStatusService.getOneStatus("CLOSED", "JJMessage", true);
+		JJStatus status = jJStatusService.getOneStatus("CLOSED", "Message", true);
 		if (status != null) {
 			resolvedJJMessage.setStatus(status);
 		}
@@ -391,7 +391,7 @@ public class JJMessageBean {
 			message = "message_successfully_created";
 		}
 
-		FacesMessage facesMessage = MessageFactory.getMessage(message, "JJMessage");
+		FacesMessage facesMessage = MessageFactory.getMessage(message, "Message");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 	}
@@ -423,7 +423,7 @@ public class JJMessageBean {
 		}
 		// set attribute
 		JJStatus status = jJStatusService
-			.getOneStatus("NEW", "JJMessage", true);
+			.getOneStatus("NEW", "Message", true);
 
 		if (status != null) {
 			message.setStatus(status);

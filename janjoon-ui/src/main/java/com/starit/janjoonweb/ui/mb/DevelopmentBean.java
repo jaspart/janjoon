@@ -129,7 +129,7 @@ public class DevelopmentBean implements Serializable {
 		JJConfigurationBean configurationBean=(JJConfigurationBean)session.getAttribute("jJConfigurationBean");
 		if(configurationBean == null)
 			configurationBean=new JJConfigurationBean();
-		jJConfigurationService=((JJConfigurationBean)session.getAttribute("jJConfigurationBean")).getJjConfigurationService();
+		jJConfigurationService=configurationBean.getJjConfigurationService();
 		init = false;
 		initJJDevlopment();
 	}
@@ -549,7 +549,7 @@ public class DevelopmentBean implements Serializable {
 
 			task.setEndDateReal(new Date());
 			task.setCompleted(true);
-			status = jJStatusService.getOneStatus("DONE", "JJTask", true);
+			status = jJStatusService.getOneStatus("DONE", "Task", true);
 			task.setStatus(status);
 
 		} else {
@@ -564,9 +564,9 @@ public class DevelopmentBean implements Serializable {
 		message.setCreationDate(new Date());
 		message.setEnabled(true);
 		message.setMessage(comment);
-		message.setDescription("JJmessage For" + task.getName() + "nl"
+		message.setDescription("Message For" + task.getName() + "nl"
 				+ task.getDescription());
-		message.setName("JJmessage For" + task.getName());
+		message.setName("Message For" + task.getName());
 		jJMessageService.saveJJMessage(message);
 
 		task.getMessages().add(message);
@@ -578,7 +578,7 @@ public class DevelopmentBean implements Serializable {
 
 		if (!task.getCompleted()) {
 			status = jJStatusService
-					.getOneStatus("IN PROGRESS", "JJTask", true);
+					.getOneStatus("IN PROGRESS", "Task", true);
 			task.setStatus(status);
 		}
 

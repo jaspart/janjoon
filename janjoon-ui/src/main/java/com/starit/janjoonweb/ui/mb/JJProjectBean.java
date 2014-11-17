@@ -108,7 +108,7 @@ public class JJProjectBean {
 
 	public Set<JJContact> getProjectManagerList() {
 
-		projectManagerList = jJPermissionService.getManagers("JJProject");
+		projectManagerList = jJPermissionService.getManagers("Project");
 		return projectManagerList;
 	}
 
@@ -194,7 +194,7 @@ public class JJProjectBean {
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJProject");
+				"Project");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		RequestContext context = RequestContext.getCurrentInstance();

@@ -264,7 +264,7 @@ public class JJTaskBean {
 		JJProduct product = jJProductBean.getProduct();
 
 		contacts = jJPermissionService
-				.areAuthorized(project, product, "JJTask");
+				.areAuthorized(project, product, "Task");
 
 		return contacts;
 	}
@@ -398,12 +398,12 @@ public class JJTaskBean {
 	public List<JJStatus> getImportStatusList() {
 		if (objet != null) {
 			List<String> names = new ArrayList<String>();
-			if (objet.equalsIgnoreCase("JJBug")) {
+			if (objet.equalsIgnoreCase("Bug")) {
 				names.add("CLOSED");
-			} else if (objet.equalsIgnoreCase("JJRequirement")) {
+			} else if (objet.equalsIgnoreCase("Requirement")) {
 				names.add("DELETED");
 				names.add("CANCELED");
-			} else if (objet.equalsIgnoreCase("JJTestcase")) {
+			} else if (objet.equalsIgnoreCase("Testcase")) {
 				return null;
 			}
 			importStatusList = jJStatusService.getStatus(objet, true, names,
@@ -429,9 +429,9 @@ public class JJTaskBean {
 	public List<String> getObjets() {
 
 		objets = new ArrayList<String>();
-		objets.add("JJBug");
-		objets.add("JJRequirement");
-		objets.add("JJTestcase");
+		objets.add("Bug");
+		objets.add("Requirement");
+		objets.add("Testcase");
 
 		return objets;
 	}
@@ -528,16 +528,16 @@ public class JJTaskBean {
 				Map<Date, String> max = new TreeMap<Date, String>();
 
 				List<JJTask> tasks = new ArrayList<JJTask>();
-				tasks.addAll(jJTaskService.getTasks(sprint, null, null, null,
+				tasks.addAll(jJTaskService.getTasks(sprint, project, null, null,
 						chapter, null, null, null, true, true, false,
-						"JJRequirement"));
+						"Requirement"));
 
-				tasks.addAll(jJTaskService.getTasks(sprint, null, null, null,
+				tasks.addAll(jJTaskService.getTasks(sprint, project, null, null,
 						chapter, null, null, null, true, true, false,
-						"JJTestcase"));
+						"Testcase"));
 
-				tasks.addAll(jJTaskService.getTasks(sprint, null, null, null,
-						chapter, null, null, null, true, true, false, "JJBug"));
+				tasks.addAll(jJTaskService.getTasks(sprint, project, null, null,
+						chapter, null, null, null, true, true, false, "Bug"));
 
 				TreeMap<String, JJTask> Tasks = new TreeMap<String, JJTask>();
 				// TreeMap<String, JJTask> Tasks = new TreeMap<String,
@@ -893,6 +893,14 @@ public class JJTaskBean {
 
 	// sortedData
 	public void loadSortedData(List<JJTask> allTasks, int k) {
+		
+//		List<JJTask> jsdfsdjkf=jJTaskService.getTasks(sprint,project, null, null,
+//				null, null, null, null, true, true, false,
+//				null);
+		allTasks=jJTaskService.getTasks(sprint,project, null, null,
+				null, null, null, null, true, true, false,
+				"");
+		
 		Collections.sort(allTasks, new Comparator<JJTask>() {
 
 			@Override
@@ -1195,11 +1203,11 @@ public class JJTaskBean {
 
 			message = "Success Update";
 			facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					message, "JJTask");
+					message, "Task");
 
 		} else {
 			facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					message, "JJTask");
+					message, "Task");
 		}
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -1450,7 +1458,7 @@ public class JJTaskBean {
 
 		if (objet != null) {
 
-			if (objet.equalsIgnoreCase("JJBug")) {
+			if (objet.equalsIgnoreCase("Bug")) {
 
 				for (JJBug bug : jJBugService.getImportBugs(project, version,
 						importCategory, importStatus, true)) {
@@ -1470,7 +1478,7 @@ public class JJTaskBean {
 					}
 				}
 
-			} else if (objet.equalsIgnoreCase("JJRequirement")) {
+			} else if (objet.equalsIgnoreCase("Requirement")) {
 
 				for (JJRequirement requirement : jJRequirementService
 						.getRequirements(importCategory, project, product,
@@ -1492,7 +1500,7 @@ public class JJTaskBean {
 					}
 				}
 
-			} else if (objet.equalsIgnoreCase("JJTestcase")) {
+			} else if (objet.equalsIgnoreCase("Testcase")) {
 
 				for (JJTestcase testcase : jJTestcaseService
 						.getImportTestcases(project, true)) {
@@ -1620,7 +1628,7 @@ public class JJTaskBean {
 					JJSprintBean jJSprintBean = (JJSprintBean) session
 							.getAttribute("jJSprintBean");
 					JJStatus status = jJStatusService.getOneStatus("TODO",
-							"JJTask", true);
+							"Task", true);
 					if (status != null)
 						task.setStatus(status);
 					task.setEnabled(true);
@@ -1680,7 +1688,7 @@ public class JJTaskBean {
 			String message = "message_successfully_created";
 
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
-					"JJTask");
+					"Task");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			RequestContext context = RequestContext.getCurrentInstance();
 
@@ -1738,7 +1746,7 @@ public class JJTaskBean {
 		copyObjets = false;
 
 		if (objet != null) {
-			if (objet.equalsIgnoreCase("JJTestcase")) {
+			if (objet.equalsIgnoreCase("Testcase")) {
 				disabledFilter = true;
 			} else {
 				disabledFilter = false;
@@ -1926,14 +1934,14 @@ public class JJTaskBean {
 			List<JJTask> list = new ArrayList<JJTask>();
 			list.addAll(jJTaskService.getTasks(sprint, null, null, null,
 					chapter, null, null, null, true, false, false,
-					"JJRequirement"));
+					"Requirement"));
 
 			list.addAll(jJTaskService
 					.getTasks(sprint, null, null, null, chapter, null, null,
-							null, true, false, false, "JJTestcase"));
+							null, true, false, false, "Testcase"));
 
 			list.addAll(jJTaskService.getTasks(sprint, null, null, null,
-					chapter, null, null, null, true, false, false, "JJBug"));
+					chapter, null, null, null, true, false, false, "Bug"));
 
 			list.remove(task);
 
@@ -2087,7 +2095,7 @@ public class JJTaskBean {
 				}
 			}
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_successfully_deleted", "JJTask");
+					"message_successfully_deleted", "Task");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			context.execute("PF('deleteDialogWidget').hide()");
 		} else {
@@ -2428,7 +2436,7 @@ public class JJTaskBean {
 
 		message = "Success Update " + group + " Date";
 		facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, message,
-				"JJTask");
+				"Task");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 

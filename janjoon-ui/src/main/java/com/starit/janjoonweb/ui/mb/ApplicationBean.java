@@ -53,7 +53,7 @@ public class ApplicationBean {
 		DefaultMenuItem item;
 
 		// ///////////
-		submenu = new DefaultSubMenu("JJAuditLog");
+		submenu = new DefaultSubMenu("AuditLog");
 		submenu.setId("jJAuditLogSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -79,7 +79,7 @@ public class ApplicationBean {
 		// ///////////
 
 		// ///////////
-		submenu = new DefaultSubMenu("JJBug");
+		submenu = new DefaultSubMenu("Bug");
 		submenu.setId("jJBugSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -103,7 +103,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// ///////////
-		submenu = new DefaultSubMenu("JJBuild");
+		submenu = new DefaultSubMenu("Build");
 		submenu.setId("jJBuildSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -127,7 +127,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// ////////////
-		submenu = new DefaultSubMenu("JJCategory");
+		submenu = new DefaultSubMenu("Category");
 		submenu.setId("jJCategorySubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -151,7 +151,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// ///////
-		submenu = new DefaultSubMenu("JJChapter");
+		submenu = new DefaultSubMenu("Chapter");
 		submenu.setId("jJChapterSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -175,7 +175,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// ///////
-		submenu = new DefaultSubMenu("JJCompany");
+		submenu = new DefaultSubMenu("Company");
 		submenu.setId("jJCompanySubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -199,7 +199,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// ///////
-		submenu = new DefaultSubMenu("JJConfiguration");
+		submenu = new DefaultSubMenu("Configuration");
 		submenu.setId("jJConfigurationSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -223,7 +223,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// //////
-		submenu = new DefaultSubMenu("JJContact");
+		submenu = new DefaultSubMenu("Contact");
 		submenu.setId("jJContactSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -247,7 +247,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// //////
-		submenu = new DefaultSubMenu("JJCriticity");
+		submenu = new DefaultSubMenu("Criticity");
 		submenu.setId("jJCriticitySubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -271,7 +271,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// //////
-		submenu = new DefaultSubMenu("JJHardware");
+		submenu = new DefaultSubMenu("Hardware");
 		submenu.setId("jJHardwareSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -295,7 +295,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// ///////
-		submenu = new DefaultSubMenu("JJImportance");
+		submenu = new DefaultSubMenu("Importance");
 		submenu.setId("jJImportanceSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -319,7 +319,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// //////
-		submenu = new DefaultSubMenu("JJImputation");
+		submenu = new DefaultSubMenu("Imputation");
 		submenu.setId("jJImputationSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -343,7 +343,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// //////
-		submenu = new DefaultSubMenu("JJJob");
+		submenu = new DefaultSubMenu("Job");
 		submenu.setId("jJJobSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -367,7 +367,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// /////
-		submenu = new DefaultSubMenu("JJMessage");
+		submenu = new DefaultSubMenu("Message");
 		submenu.setId("jJMessageSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -391,7 +391,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// ////////
-		submenu = new DefaultSubMenu("JJPermission");
+		submenu = new DefaultSubMenu("Permission");
 		submenu.setId("jJPermissionSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -415,7 +415,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// ///////
-		submenu = new DefaultSubMenu("JJPhase");
+		submenu = new DefaultSubMenu("Phase");
 		submenu.setId("jJPhaseSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -439,7 +439,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// ///
-		submenu = new DefaultSubMenu("JJProduct");
+		submenu = new DefaultSubMenu("Product");
 		submenu.setId("jJProductSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -463,7 +463,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// ///////
-		submenu = new DefaultSubMenu("JJProfile");
+		submenu = new DefaultSubMenu("Profile");
 		submenu.setId("jJProfileSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -487,7 +487,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// ///////
-		submenu = new DefaultSubMenu("JJProject");
+		submenu = new DefaultSubMenu("Project");
 		submenu.setId("jJProjectSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -511,7 +511,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// /////
-		submenu = new DefaultSubMenu("JJRequirement");
+		submenu = new DefaultSubMenu("Requirement");
 		submenu.setId("jJRequirementSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -535,7 +535,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// ///
-		submenu = new DefaultSubMenu("JJRight");
+		submenu = new DefaultSubMenu("Right");
 		submenu.setId("jJRightSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -559,7 +559,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// /////
-		submenu = new DefaultSubMenu("JJSoftware");
+		submenu = new DefaultSubMenu("Software");
 		submenu.setId("jJSoftwareSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -583,7 +583,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// ////
-		submenu = new DefaultSubMenu("JJSprint");
+		submenu = new DefaultSubMenu("Sprint");
 		submenu.setId("jJSprintSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -607,7 +607,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// /////
-		submenu = new DefaultSubMenu("JJStatus");
+		submenu = new DefaultSubMenu("Status");
 		submenu.setId("jJStatusSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -631,7 +631,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// //
-		submenu = new DefaultSubMenu("JJTask");
+		submenu = new DefaultSubMenu("Task");
 		submenu.setId("jJTaskSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -655,7 +655,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// ///
-		submenu = new DefaultSubMenu("JJTestcase");
+		submenu = new DefaultSubMenu("Testcase");
 		submenu.setId("jJTestcaseSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -679,7 +679,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// ////
-		submenu = new DefaultSubMenu("JJTestcaseExecution");
+		submenu = new DefaultSubMenu("TestcaseExecution");
 		submenu.setId("jJTestcaseexecutionSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -703,7 +703,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// //
-		submenu = new DefaultSubMenu("JJTeststep");
+		submenu = new DefaultSubMenu("Teststep");
 		submenu.setId("jJTeststepSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -727,7 +727,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// //
-		submenu = new DefaultSubMenu("JJTeststepExecution");
+		submenu = new DefaultSubMenu("TeststepExecution");
 		submenu.setId("jJTeststepexecutionSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -751,7 +751,7 @@ public class ApplicationBean {
 		menuModel.addElement(submenu);
 
 		// ////
-		submenu = new DefaultSubMenu("JJVersion");
+		submenu = new DefaultSubMenu("Version");
 		submenu.setId("jJVersionSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");
@@ -773,7 +773,7 @@ public class ApplicationBean {
 		submenu.addElement(item);
 		menuModel.addElement(submenu);
 		// ////
-		submenu = new DefaultSubMenu("JJWorkflow");
+		submenu = new DefaultSubMenu("Workflow");
 		submenu.setId("jJWorkflowSubmenu");
 
 		item = new DefaultMenuItem("Create", "ui-icon ui-icon-document");

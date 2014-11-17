@@ -197,17 +197,45 @@ public class ConfigListener implements ServletContextListener {
 				company.setEnabled(true);
 				company.setCalendar(convertStreamToString(company.getName()));
 				jJCompanyService.saveJJCompany(company);
-
-				company = new JJCompany();
-				company.setName("StarConsulting");
-				company.setDescription(company.getName()
-						+ "Message-CompanyDescription");
-				company.setCreationDate(new Date());
-				company.setEnabled(true);
-				company.setCalendar(convertStreamToString(company.getName()));
-				jJCompanyService.saveJJCompany(company);
+//
+//				company = new JJCompany();
+//				company.setName("StarConsulting");
+//				company.setDescription(company.getName()
+//						+ "Message-CompanyDescription");
+//				company.setCreationDate(new Date());
+//				company.setEnabled(true);
+//				company.setCalendar(convertStreamToString(company.getName()));
+//				jJCompanyService.saveJJCompany(company);
 			}
 
+		}
+		
+		for(JJRight right:jJRightService.findAllJJRights())
+		{
+			if(right.getObjet().startsWith("JJ"))
+			{
+				right.setObjet(right.getObjet().substring(2));
+				jJRightService.saveJJRight(right);
+			}
+				
+		}
+		
+		for(JJCriticity criticity:jJCriticityService.findAllJJCriticitys())
+		{
+			if(criticity.getObjet().startsWith("JJ"))
+			{
+				criticity.setObjet(criticity.getObjet().substring(2));
+				jJCriticityService.saveJJCriticity(criticity);
+			}
+		}
+		
+		for(JJStatus status:jJStatusService.findAllJJStatuses())
+		{
+			if(status.getObjet().startsWith("JJ"))
+			{
+				status.setObjet(status.getObjet().substring(2));
+				jJStatusService.saveJJStatus(status);
+			}
 		}
 		
 		if(jJImportanceService.findAllJJImportances().isEmpty())
@@ -219,23 +247,23 @@ public class ConfigListener implements ServletContextListener {
 				JJImportance importance=new JJImportance();
 				importance.setCreationDate(new Date());
 				importance.setEnabled(true);
-				importance.setObjet("JJBug");
+				importance.setObjet("Bug");
 				importance.setLevelImportance(i);
 				importance.setName(name);
-				importance.setDescription(name+" :JJBug Importance Description");
+				importance.setDescription(name+" :Bug Importance Description");
 				jJImportanceService.saveJJImportance(importance);
 				i--;
 				
 			}
 		}
 
-		if (jJCriticityService.getCriticities("JJMessage", true).isEmpty()) {
+		if (jJCriticityService.getCriticities("Message", true).isEmpty()) {
 
 			String[] names = { "ALERT", "INFO" };
 
 			for (String name : names) {
 				JJCriticity criticity = new JJCriticity();
-				criticity.setObjet("JJMessage");
+				criticity.setObjet("Message");
 				criticity.setName(name);
 				criticity.setDescription(name + "Message-CriticityDescription");
 				criticity.setCreationDate(new Date());
@@ -245,13 +273,13 @@ public class ConfigListener implements ServletContextListener {
 			}
 		}
 
-		if (jJCriticityService.getCriticities("JJBug", true).isEmpty()) {
+		if (jJCriticityService.getCriticities("Bug", true).isEmpty()) {
 
 			String[] names = { "ALERT", "INFO" };
 
 			for (String name : names) {
 				JJCriticity criticity = new JJCriticity();
-				criticity.setObjet("JJBug");
+				criticity.setObjet("Bug");
 				criticity.setName(name);
 				criticity.setDescription(name + "Bug-CriticityDescription");
 				criticity.setCreationDate(new Date());
@@ -346,31 +374,31 @@ public class ConfigListener implements ServletContextListener {
 		}		
 
 
-		if (jJBuildService.getBuilds(null, false, true).isEmpty()) {
-			JJBuild build;
-			for (int i = 0; i < 4; i++) {
-				build = new JJBuild();
-				build.setName("Build 0." + i);
-				build.setCreationDate(new Date());
-				build.setDescription("Build 0." + i + " Description");
-				build.setEnabled(true);
-				jJBuildService.saveJJBuild(build);
-			}
-		}
+//		if (jJBuildService.getBuilds(null, false, true).isEmpty()) {
+//			JJBuild build;
+//			for (int i = 0; i < 4; i++) {
+//				build = new JJBuild();
+//				build.setName("Build 0." + i);
+//				build.setCreationDate(new Date());
+//				build.setDescription("Build 0." + i + " Description");
+//				build.setEnabled(true);
+//				jJBuildService.saveJJBuild(build);
+//			}
+//		}
+//
+//		if (jJSprintService.getSprints(null, true).isEmpty()) {
+//			JJSprint sprint;
+//			for (int i = 0; i < 4; i++) {
+//				sprint = new JJSprint();
+//				sprint.setName("Sprint " + i);
+//				sprint.setCreationDate(new Date());
+//				sprint.setDescription("Sprint " + i + " Description");
+//				sprint.setEnabled(true);
+//				jJSprintService.saveJJSprint(sprint);
+//			}
+//		}
 
-		if (jJSprintService.getSprints(null, true).isEmpty()) {
-			JJSprint sprint;
-			for (int i = 0; i < 4; i++) {
-				sprint = new JJSprint();
-				sprint.setName("Sprint " + i);
-				sprint.setCreationDate(new Date());
-				sprint.setDescription("Sprint " + i + " Description");
-				sprint.setEnabled(true);
-				jJSprintService.saveJJSprint(sprint);
-			}
-		}
-
-		String[] objects = { "JJRequirement", "JJBug", "JJMessage", "JJTask" };
+		String[] objects = { "Requirement", "Bug", "Message", "Task" };
 
 		for (String object : objects) {
 
@@ -379,7 +407,7 @@ public class ConfigListener implements ServletContextListener {
 			if (jJStatusService.getStatus(object, true,
 					new ArrayList<String>(), false).isEmpty()) {
 
-				if (object.equalsIgnoreCase("JJRequirement")) {
+				if (object.equalsIgnoreCase("Requirement")) {
 					names.add("NEW");
 					names.add("DELETED");
 					names.add("MODIFIED");
@@ -389,7 +417,7 @@ public class ConfigListener implements ServletContextListener {
 					names.add("CANCELED");
 					names.add("RUNNING");
 
-				} else if (object.equalsIgnoreCase("JJBug")) {
+				} else if (object.equalsIgnoreCase("Bug")) {
 					names.add("NEW");
 					names.add("ASSIGNED");
 					names.add("REOPENED");
@@ -401,10 +429,10 @@ public class ConfigListener implements ServletContextListener {
 					names.add("RESOLVED");
 					names.add("VERIFIED");
 					names.add("CLOSED");
-				} else if (object.equalsIgnoreCase("JJMessage")) {
+				} else if (object.equalsIgnoreCase("Message")) {
 					names.add("NEW");
 					names.add("CLOSED");
-				} else if (object.equalsIgnoreCase("JJTask")) {
+				} else if (object.equalsIgnoreCase("Task")) {
 					names.add("TODO");
 					names.add("DONE");
 					names.add("IN PROGRESS");
@@ -423,40 +451,40 @@ public class ConfigListener implements ServletContextListener {
 			}
 		}
 
-		if (jJBugService.getBugs(null, null, null, true, true).isEmpty()) {
-			List<JJStatus> statuses = jJStatusService.getStatus("JJBug", true,
-					null, true);
-			List<JJCriticity> criticities = jJCriticityService.getCriticities(
-					"JJBug", true);
-			JJCriticity crit = null;
-			int iCrit = 0;
-			for (JJStatus stat : statuses) {
-				JJBug bug;
-				crit = criticities.get(iCrit);
-				bug = new JJBug();
-				bug.setName(stat.getName() + "-bug : " + crit.getName());
-				bug.setDescription(stat.getName() + "-bugDescription : "
-						+ crit.getName());
-				bug.setCreationDate(new Date());
-				bug.setEnabled(true);
-				bug.setStatus(stat);
-				bug.setCriticity(crit);
-				jJBugService.saveJJBug(bug);
-				iCrit = (iCrit + 1) % 2;
-				crit = criticities.get(iCrit);
-				bug = new JJBug();
-				bug.setName(stat.getName() + "-bug : " + crit.getName());
-				bug.setDescription(stat.getName() + "-bugDescription : "
-						+ crit.getName());
-				bug.setCreationDate(new Date());
-				bug.setEnabled(true);
-				bug.setStatus(stat);
-				bug.setCriticity(crit);
-				jJBugService.saveJJBug(bug);
-
-			}
-
-		}
+//		if (jJBugService.getBugs(null, null, null, true, true).isEmpty()) {
+//			List<JJStatus> statuses = jJStatusService.getStatus("Bug", true,
+//					null, true);
+//			List<JJCriticity> criticities = jJCriticityService.getCriticities(
+//					"Bug", true);
+//			JJCriticity crit = null;
+//			int iCrit = 0;
+//			for (JJStatus stat : statuses) {
+//				JJBug bug;
+//				crit = criticities.get(iCrit);
+//				bug = new JJBug();
+//				bug.setName(stat.getName() + "-bug : " + crit.getName());
+//				bug.setDescription(stat.getName() + "-bugDescription : "
+//						+ crit.getName());
+//				bug.setCreationDate(new Date());
+//				bug.setEnabled(true);
+//				bug.setStatus(stat);
+//				bug.setCriticity(crit);
+//				jJBugService.saveJJBug(bug);
+//				iCrit = (iCrit + 1) % 2;
+//				crit = criticities.get(iCrit);
+//				bug = new JJBug();
+//				bug.setName(stat.getName() + "-bug : " + crit.getName());
+//				bug.setDescription(stat.getName() + "-bugDescription : "
+//						+ crit.getName());
+//				bug.setCreationDate(new Date());
+//				bug.setEnabled(true);
+//				bug.setStatus(stat);
+//				bug.setCriticity(crit);
+//				jJBugService.saveJJBug(bug);
+//
+//			}
+//
+//		}
 
 		if (jJCategoryService.getCategories(null, false, true, true).isEmpty()) {
 			String[] names = { "BUSINESS", "FUNCTIONAL", "TECHNICAL",
@@ -523,7 +551,7 @@ public class ConfigListener implements ServletContextListener {
 
 			// Project Manager Profile
 			JJRight right = new JJRight();
-			right.setObjet("JJProject");
+			right.setObjet("Project");
 			right.setR(true);
 			right.setW(true);
 			right.setX(true);
@@ -534,7 +562,7 @@ public class ConfigListener implements ServletContextListener {
 			jJRightService.saveJJRight(right);			
 			
 			right = new JJRight();
-			right.setObjet("JJRequirement");
+			right.setObjet("Requirement");
 			right.setCategory(businessCategory);
 			right.setR(true);
 			right.setW(true);
@@ -545,7 +573,7 @@ public class ConfigListener implements ServletContextListener {
 			jJRightService.saveJJRight(right);			
 
 			right = new JJRight();
-			right.setObjet("JJRequirement");
+			right.setObjet("Requirement");
 			right.setCategory(functionalCategory);
 			right.setR(true);
 			right.setW(false);
@@ -558,7 +586,7 @@ public class ConfigListener implements ServletContextListener {
 			jJRightService.saveJJRight(right);
 			
 			right = new JJRight();
-			right.setObjet("JJRequirement");
+			right.setObjet("Requirement");
 			right.setCategory(technicalCategory);
 			right.setR(true);
 			right.setW(false);
@@ -571,7 +599,7 @@ public class ConfigListener implements ServletContextListener {
 			
 
 			right = new JJRight();
-			right.setObjet("JJRequirement");
+			right.setObjet("Requirement");
 			right.setCategory(architectureCategory);
 			right.setR(true);
 			right.setW(false);
@@ -583,7 +611,7 @@ public class ConfigListener implements ServletContextListener {
 			
 			
 			right = new JJRight();
-			right.setObjet("JJPlanning");
+			right.setObjet("Planning");
 			right.setCategory(architectureCategory);
 			right.setR(true);
 			right.setW(true);
@@ -595,7 +623,7 @@ public class ConfigListener implements ServletContextListener {
 			
 
 			right = new JJRight();
-			right.setObjet("JJPlanning");
+			right.setObjet("Planning");
 			right.setCategory(technicalCategory);
 			right.setR(true);
 			right.setW(true);
@@ -607,7 +635,7 @@ public class ConfigListener implements ServletContextListener {
 			
 
 			right = new JJRight();
-			right.setObjet("JJTest");
+			right.setObjet("Test");
 			right.setR(true);
 			right.setW(false);
 			right.setX(false);
@@ -617,7 +645,7 @@ public class ConfigListener implements ServletContextListener {
 			jJRightService.saveJJRight(right);
 			
 			right = new JJRight();
-			right.setObjet("JJProduct");
+			right.setObjet("Product");
 			right.setR(true);
 			right.setW(false);
 			right.setX(false);
@@ -630,7 +658,7 @@ public class ConfigListener implements ServletContextListener {
 			// Product Manager Profile
 
 			right = new JJRight();
-			right.setObjet("JJProduct");
+			right.setObjet("Product");
 			right.setCategory(functionalCategory);
 			right.setR(true);
 			right.setW(true);
@@ -642,7 +670,7 @@ public class ConfigListener implements ServletContextListener {
 		
 
 			right = new JJRight();
-			right.setObjet("JJRequirement");
+			right.setObjet("Requirement");
 			right.setCategory(businessCategory);
 			right.setR(true);
 			right.setW(false);
@@ -654,7 +682,7 @@ public class ConfigListener implements ServletContextListener {
 			
 
 			right = new JJRight();
-			right.setObjet("JJRequirement");
+			right.setObjet("Requirement");
 			right.setCategory(functionalCategory);
 			right.setR(true);
 			right.setW(true);
@@ -666,7 +694,7 @@ public class ConfigListener implements ServletContextListener {
 			
 
 			right = new JJRight();
-			right.setObjet("JJRequirement");
+			right.setObjet("Requirement");
 			right.setCategory(technicalCategory);
 			right.setR(true);
 			right.setW(true);
@@ -677,7 +705,7 @@ public class ConfigListener implements ServletContextListener {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("JJRequirement");
+			right.setObjet("Requirement");
 			right.setCategory(architectureCategory);
 			right.setR(true);
 			right.setW(true);
@@ -688,7 +716,7 @@ public class ConfigListener implements ServletContextListener {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("JJPlanning");
+			right.setObjet("Planning");
 			right.setCategory(architectureCategory);
 			right.setR(true);
 			right.setW(true);
@@ -701,7 +729,7 @@ public class ConfigListener implements ServletContextListener {
 
 			
 			right = new JJRight();
-			right.setObjet("JJPlanning");
+			right.setObjet("Planning");
 			right.setCategory(technicalCategory);
 			right.setR(true);
 			right.setW(true);
@@ -713,7 +741,7 @@ public class ConfigListener implements ServletContextListener {
 	
 
 			right = new JJRight();
-			right.setObjet("JJTest");
+			right.setObjet("Test");
 			right.setR(true);
 			right.setW(true);
 			right.setX(false);
@@ -737,7 +765,7 @@ public class ConfigListener implements ServletContextListener {
 			
 			// cutomProfile rights
 			right = new JJRight();
-			right.setObjet("JJBuild");
+			right.setObjet("Build");
 			right.setR(false);
 			right.setW(false);
 			right.setX(false);
@@ -748,7 +776,7 @@ public class ConfigListener implements ServletContextListener {
 	
 
 			right = new JJRight();
-			right.setObjet("JJRequirement");
+			right.setObjet("Requirement");
 			right.setR(false);
 			right.setW(false);
 			right.setX(false);
@@ -772,7 +800,7 @@ public class ConfigListener implements ServletContextListener {
 
 			// Tester Profile
 			right = new JJRight();
-			right.setObjet("JJTest");
+			right.setObjet("Test");
 			right.setR(true);
 			right.setW(true);
 			right.setX(true);
@@ -783,7 +811,7 @@ public class ConfigListener implements ServletContextListener {
 
 
 			right = new JJRight();
-			right.setObjet("JJRequirement");
+			right.setObjet("Requirement");
 			right.setR(true);
 			right.setW(false);
 			right.setX(true);
@@ -794,7 +822,7 @@ public class ConfigListener implements ServletContextListener {
 	
 
 			right = new JJRight();
-			right.setObjet("JJProduct");
+			right.setObjet("Product");
 			right.setCategory(technicalCategory);
 			right.setR(false);
 			right.setW(false);
@@ -808,7 +836,7 @@ public class ConfigListener implements ServletContextListener {
 
 			// Developer Profile
 			right = new JJRight();
-			right.setObjet("JJTest");
+			right.setObjet("Test");
 			right.setR(true);
 			right.setW(true);
 			right.setX(false);
@@ -821,7 +849,7 @@ public class ConfigListener implements ServletContextListener {
 
 
 			right = new JJRight();
-			right.setObjet("JJRequirement");
+			right.setObjet("Requirement");
 			right.setR(true);
 			right.setW(false);
 			right.setX(false);
@@ -831,7 +859,7 @@ public class ConfigListener implements ServletContextListener {
 			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
-			right.setObjet("JJProduct");
+			right.setObjet("Product");
 			right.setCategory(technicalCategory);
 			right.setR(true);
 			right.setW(true);
@@ -862,9 +890,9 @@ public class ConfigListener implements ServletContextListener {
 			jJContactService.saveJJContact(contact);
 
 			List<JJProfile> profiles = new ArrayList<JJProfile>();
-			profiles.add(jJProfileService.getOneProfile("ProjectManager", true));
-			profiles.add(jJProfileService.getOneProfile("ProductManager", true));
-			profiles.add(jJProfileService.getOneProfile("CEO", true));
+			//profiles.add(jJProfileService.getOneProfile("ProjectManager", true));
+			//profiles.add(jJProfileService.getOneProfile("ProductManager", true));
+			profiles.add(jJProfileService.getOneProfile("CTO", true));
 
 			for (JJProfile profile : profiles) {
 				JJPermission permission = new JJPermission();
@@ -875,26 +903,26 @@ public class ConfigListener implements ServletContextListener {
 				jJPermissionService.saveJJPermission(permission);
 			}
 
-			contact = new JJContact();
-			contact.setName("Thierry");
-			contact.setFirstname("Thierry");
-			contact.setPassword(passwordEncoder.encode("BeHappy2012"));
-			contact.setDescription("This contact is " + contact.getFirstname()
-					+ " " + contact.getName());
-			contact.setEnabled(true);
-			contact.setEmail("thierry@startit.fr");
-			contact.setCreationDate(new Date());
-			contact.setCompany(jJCompanyService.getActifCompanies().get(0));
-			jJContactService.saveJJContact(contact);
-
-			JJProfile profile = jJProfileService.getOneProfile("CustomProfile",
-					true);
-			JJPermission permission = new JJPermission();
-			permission.setContact(contact);
-			permission.setProfile(profile);
-			permission.setEnabled(true);
-			contact.getPermissions().add(permission);
-			jJPermissionService.saveJJPermission(permission);
+//			contact = new JJContact();
+//			contact.setName("Thierry");
+//			contact.setFirstname("Thierry");
+//			contact.setPassword(passwordEncoder.encode("BeHappy2012"));
+//			contact.setDescription("This contact is " + contact.getFirstname()
+//					+ " " + contact.getName());
+//			contact.setEnabled(true);
+//			contact.setEmail("thierry@startit.fr");
+//			contact.setCreationDate(new Date());
+//			contact.setCompany(jJCompanyService.getActifCompanies().get(0));
+//			jJContactService.saveJJContact(contact);
+//
+//			JJProfile profile = jJProfileService.getOneProfile("CustomProfile",
+//					true);
+//			JJPermission permission = new JJPermission();
+//			permission.setContact(contact);
+//			permission.setProfile(profile);
+//			permission.setEnabled(true);
+//			contact.getPermissions().add(permission);
+//			jJPermissionService.saveJJPermission(permission);
 
 		}
 
@@ -987,7 +1015,7 @@ public class ConfigListener implements ServletContextListener {
 //		//
 //		List<JJProduct> productList = jJProductService.getProducts(true);
 		// if (jJRequirementService.findAllJJRequirements().isEmpty()) {
-		// List<JJStatus> status = jJStatusService.getStatus("JJTask", true,
+		// List<JJStatus> status = jJStatusService.getStatus("Task", true,
 		// null, true);
 		// JJSprint s = jJSprintService.getSprints(true).get(0);
 		// JJRequirement jJRequirement;

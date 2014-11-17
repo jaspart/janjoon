@@ -132,6 +132,7 @@ public class JJBugServiceImpl implements JJBugService {
 		}else if(product != null)
 		{
 			List<Predicate> orPredicates = new ArrayList<Predicate>();
+			product=entityManager.find(JJProduct.class, product.getId());
 			for(JJVersion v:product.getVersions())
 			{
 				if(v.getEnabled())
@@ -271,6 +272,7 @@ public class JJBugServiceImpl implements JJBugService {
 		}else if(product != null)
 		{
 			List<Predicate> orPredicates = new ArrayList<Predicate>();
+			product=entityManager.find(JJProduct.class, product.getId());
 			for(JJVersion v:product.getVersions())
 			{
 				if(v.getEnabled())

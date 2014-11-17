@@ -575,7 +575,7 @@ public class JJTestcaseBean {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					MessageFactory.getMessage("message_successfully_created",
-							"JJTestcase"));
+							"Testcase"));
 
 		}
 
@@ -626,7 +626,7 @@ public class JJTestcaseBean {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					MessageFactory.getMessage("message_successfully_updated",
-							"JJTestcase"));
+							"Testcase"));
 
 			context.execute("PF('testcaseDialogWidget').hide()");
 

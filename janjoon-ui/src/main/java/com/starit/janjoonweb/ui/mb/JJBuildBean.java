@@ -118,7 +118,7 @@ public class JJBuildBean {
 		buildUtils.set(i, new BuildUtil(buildutil.getVersion(), jJBuildService.getBuilds(buildutil.getVersion(), true,
 						true)));
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "JJVersion");
+				"message_successfully_updated", "Version");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		
 		
@@ -151,7 +151,7 @@ public class JJBuildBean {
 
 		index=i;
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_created", "JJBug");
+				"message_successfully_created", "Bug");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}

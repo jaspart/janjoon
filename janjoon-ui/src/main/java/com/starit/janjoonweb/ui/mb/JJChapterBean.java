@@ -372,7 +372,7 @@ public class JJChapterBean {
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJChapter");
+				"Chapter");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		RequestContext context = RequestContext.getCurrentInstance();

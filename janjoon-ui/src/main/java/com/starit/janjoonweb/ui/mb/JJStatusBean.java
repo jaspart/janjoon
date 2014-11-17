@@ -168,7 +168,7 @@ public class JJStatusBean {
 		}
 
 		pieChart = new PieChartModel();
-		List<JJStatus> statReq = jJStatusService.getStatus("JJRequirement",
+		List<JJStatus> statReq = jJStatusService.getStatus("Requirement",
 				true, null, false);
 		for (JJStatus s : statReq) {
 
@@ -189,7 +189,7 @@ public class JJStatusBean {
 		selectedStatus.setEnabled(false);
 		jJStatusService.updateJJStatus(selectedStatus);
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_deleted", "JJStatus");
+				"message_successfully_deleted", "Status");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		statusList = null;
 		pieChart = null;
@@ -238,7 +238,7 @@ public class JJStatusBean {
 		context.execute("PF('editSatDialogWidget').hide()");
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"JJStatus");
+				"Status");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 		return findAllJJStatuses();

@@ -118,7 +118,7 @@ public class JJBugBean {
 			if(jjVersionBean == null)
 				jjVersionBean =new JJVersionBean();
 			bugVersionSelected=jjVersionBean.getVersion();
-			JJBug_.setStatus(jJStatusService.getOneStatus("NEW", "JJBUG", true));
+			JJBug_.setStatus(jJStatusService.getOneStatus("NEW", "BUG", true));
 		}
 		return JJBug_;
 	}
@@ -307,7 +307,7 @@ public class JJBugBean {
 			jJBugService.updateJJBug(b);
 		}
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_deleted", "JJBug");
+				"message_successfully_deleted", "Bug");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 	}
@@ -317,7 +317,7 @@ public class JJBugBean {
 		getJJBug_().setEnabled(false);
 		jJBugService.updateJJBug(getJJBug_());
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_deleted", "JJBug");
+				"message_successfully_deleted", "Bug");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 	}
@@ -554,7 +554,7 @@ public class JJBugBean {
 			message = "message_successfully_created";
 		}
 
-		FacesMessage facesMessage = MessageFactory.getMessage(message, "JJBug");
+		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 		System.err.println(facesMessage.getDetail());
@@ -687,7 +687,7 @@ public class JJBugBean {
 	public List<JJStatus> completeStatusBug(String query) {
 		List<JJStatus> suggestions = new ArrayList<JJStatus>();
 		suggestions.add(null);
-		for (JJStatus jJStatus : jJStatusService.getStatus("JJBug", true, null,
+		for (JJStatus jJStatus : jJStatusService.getStatus("Bug", true, null,
 				true)) {
 			String jJCriticityStr = String.valueOf(jJStatus.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
@@ -701,7 +701,7 @@ public class JJBugBean {
 		List<JJCriticity> suggestions = new ArrayList<JJCriticity>();
 		suggestions.add(null);
 		for (JJCriticity jJCriticity : jJCriticityService.getCriticities(
-				"JJBug", true)) {
+				"Bug", true)) {
 			String jJCriticityStr = String.valueOf(jJCriticity.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(jJCriticity);

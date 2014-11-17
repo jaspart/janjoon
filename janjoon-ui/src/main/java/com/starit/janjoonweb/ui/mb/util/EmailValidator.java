@@ -2,13 +2,17 @@ package com.starit.janjoonweb.ui.mb.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
- 
+
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
+
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.ui.mb.JJContactBean;
+import com.starit.janjoonweb.ui.mb.LoginBean;
  
 @FacesValidator("emailValidator")
 public class EmailValidator implements Validator {
@@ -35,7 +39,16 @@ public class EmailValidator implements Validator {
             FacesMessage msg = new FacesMessage("Invalid email value!", "Email Validation Error");
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(msg);
-        }
-         
+        }        
+        JJContact con=(JJContact) c.getAttributes().get("contact");
+        if(con!=null)
+        {
+        	 if(!((JJContactBean)LoginBean.findBean("jJContactBean")).emailValid(o.toString(), con))
+             {
+             	FacesMessage msg = new FacesMessage("Email Already Exist!", "Email Validation Error");
+                 msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                 throw new ValidatorException(msg);
+             }
+        } 
     }
 }

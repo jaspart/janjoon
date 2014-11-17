@@ -33,7 +33,7 @@ public class AuthorizationManager implements Serializable {
 			List<String> objects = new ArrayList<String>() {
 
 				{
-					add("JJBuild");
+					add("Build");
 				}
 
 			};
@@ -41,7 +41,7 @@ public class AuthorizationManager implements Serializable {
 
 			objects = new ArrayList<String>() {
 				{
-					add("JJRequirement");
+					add("Requirement");
 				}
 
 			};
@@ -49,8 +49,8 @@ public class AuthorizationManager implements Serializable {
 
 			objects = new ArrayList<String>() {
 				{
-					add("JJSprint");
-					add("JJTask");
+					add("Sprint");
+					add("Task");
 				}
 
 			};

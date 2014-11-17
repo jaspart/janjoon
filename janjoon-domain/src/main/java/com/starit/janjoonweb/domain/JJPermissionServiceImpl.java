@@ -99,6 +99,9 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		if (objet != null) {
 			orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
 					objet));
+			if(!objet.contains("*"))
+				orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
+						"JJ"+objet));
 			orPredicates
 					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
 
@@ -263,6 +266,9 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		if (objet != null) {
 			orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
 					objet));
+			if(!objet.contains("*"))
+				orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
+						"JJ"+objet));
 			orPredicates
 					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
 		} else

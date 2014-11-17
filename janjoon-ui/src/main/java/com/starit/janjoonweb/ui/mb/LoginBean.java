@@ -143,7 +143,7 @@ public class LoginBean implements Serializable {
 
 	public String logout() {
 		FacesContext fContext = FacesContext.getCurrentInstance();
-		logger.info("JJContact logged out");
+		logger.info("Contact logged out");
 		HttpSession session = (HttpSession) fContext.getExternalContext()
 				.getSession(false);
 		session.invalidate();
