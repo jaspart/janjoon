@@ -93,7 +93,8 @@ public class CKEditorUploadServlet extends HttpServlet {
 	   callback = "";
 	   errorMessage = ERROR_INVALID_CALLBACK;
 	  }
-	  String pathToFile = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath() + "/pages/ckeditor/getimage?imageId=" + uploadedFile.getName();
+	  String pathToFile = "https"+"://"+request.getServerName()+request.getContextPath() + "/pages/ckeditor/getimage?imageId=" + uploadedFile.getName();
+	  
 	  System.out.println(uploadedFile.getPath()+"--"+pathToFile);
 	  //String pathToFile =uploadedFile.getPath();
 	  out.println("<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" + 
