@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -54,7 +55,7 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 		CriteriaQuery<JJTask> select = criteriaQuery.select(from);
 		List<Predicate> predicates = new ArrayList<Predicate>();
-
+		
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
@@ -73,21 +74,32 @@ public class JJTaskServiceImpl implements JJTaskService {
 					requirement));
 		}
 
-		if (project != null) {
+		if (objet != null && project != null && chapter == null) {	
+		
+
+			if(objet.equalsIgnoreCase("bug"))
+			{
+				List<Predicate> andPredicates = new ArrayList<Predicate>();
+				andPredicates.add(criteriaBuilder.isNotNull(from.get("bug")));
+				andPredicates.add(criteriaBuilder.equal(from.join("bug").get("project"), project));
+				andPredicates.add(criteriaBuilder.equal(from.join("bug").get("enabled"), true));
+				predicates.add(criteriaBuilder.and(andPredicates.toArray(new Predicate[] {})));
+			}else if(objet.equalsIgnoreCase("requirement"))
+			{
+				List<Predicate> andPredicates = new ArrayList<Predicate>();
+				andPredicates.add(criteriaBuilder.isNotNull(from.get("requirement")));
+				andPredicates.add(criteriaBuilder.equal(from.join("requirement").get("project"), project));
+				andPredicates.add(criteriaBuilder.equal(from.join("requirement").get("enabled"), true));
+				predicates.add(criteriaBuilder.and(andPredicates.toArray(new Predicate[] {})));		
+			}else if(objet.equalsIgnoreCase("testcase"))
+			{
+				List<Predicate> andPredicates = new ArrayList<Predicate>();
+				andPredicates.add(criteriaBuilder.isNotNull(from.get("testcase")));
+				andPredicates.add(criteriaBuilder.equal(from.join("testcase").join("requirement").get("project"), project));
+				andPredicates.add(criteriaBuilder.equal(from.join("testcase").get("enabled"), true));
+				predicates.add(criteriaBuilder.and(andPredicates.toArray(new Predicate[] {})));
+			}
 			
-			List<Predicate> orPredicates = new ArrayList<Predicate>();
-			Path<Object> path = from.join("requirement").get("project");
-//			orPredicates.add(criteriaBuilder.equal(path, project));
-//			Path<Object> path1=from.join("bug").get("project");
-//			orPredicates.add(criteriaBuilder.equal(path1, project));
-//		
-//			Path<Object> path2 = from.join("testcase").get("requirement").get("project");
-//			orPredicates.add(criteriaBuilder.equal(path2, project));
-//			
-			Predicate orPredicate = criteriaBuilder.or(orPredicates
-					.toArray(new Predicate[] {}));
-			
-			predicates.add(orPredicate);
 		}
 
 		if (product != null) {
@@ -96,39 +108,43 @@ public class JJTaskServiceImpl implements JJTaskService {
 		}
 
 		if (chapter != null && objet != null) {
-			Path<Object> path;
+			
 
 			if (objet.equalsIgnoreCase("JJTestcase")
-					|| objet.equalsIgnoreCase("Testcase")) {
-				path = from.join("testcase").get("requirement").get("chapter");
-				predicates.add(criteriaBuilder.equal(path, chapter));
+					|| objet.equalsIgnoreCase("Testcase")) {				
+				predicates.add(criteriaBuilder.equal(from.join("testcase").join("requirement").get("chapter"), chapter));
 			} else if (objet.equalsIgnoreCase("JJRequirement")
 					|| objet.equalsIgnoreCase("Requirement")) {
-				path = from.join("requirement").get("chapter");
-				predicates.add(criteriaBuilder.equal(path, chapter));
+				
+				predicates.add(criteriaBuilder.equal(from.join("requirement").get("chapter"), chapter));
 			} else if (objet.equalsIgnoreCase("JJBug")
 					|| objet.equalsIgnoreCase("Bug")) {
-				path = from.join("bug").get("requirement").get("chapter");
-				predicates.add(criteriaBuilder.equal(path, chapter));
-			}
-		} else if (objet != null && chapter == null && objet.equals("*")) {
-			Path<Object> path;
-
-			List<Predicate> orPredicates = new ArrayList<Predicate>();
-
-			path = from.join("testcase").get("requirement").get("chapter");
-			orPredicates.add(criteriaBuilder.isNull(path));
-
-			path = from.join("requirement").get("chapter");
-			orPredicates.add(criteriaBuilder.isNull(path));
-
-			path = from.join("bug").get("requirement").get("chapter");
-			orPredicates.add(criteriaBuilder.isNull(path));
-
-			Predicate orPredicate = criteriaBuilder.or(orPredicates
-					.toArray(new Predicate[] {}));
 			
-			predicates.add(orPredicate);
+				predicates.add(criteriaBuilder.equal(from.join("bug").join("requirement").get("chapter"), chapter));
+			}
+		} else if (objet != null && chapter == null) {
+			
+			
+			if(objet.equalsIgnoreCase("bug"))
+			{
+				List<Predicate> orPredicates = new ArrayList<Predicate>();
+				orPredicates.add(criteriaBuilder.isNull(from.get("bug")));
+				orPredicates.add(criteriaBuilder.isNull(from.join("bug").get("requirement")));			
+				orPredicates.add(criteriaBuilder.isNull(from.join("bug").join("requirement").get("chapter")));
+				predicates.add(criteriaBuilder.or(orPredicates.toArray(new Predicate[] {})));
+			}else if(objet.equalsIgnoreCase("requirement"))
+			{
+				List<Predicate> orPredicates = new ArrayList<Predicate>();
+				orPredicates.add(criteriaBuilder.isNull(from.get("requirement")));			
+				orPredicates.add(criteriaBuilder.isNull(from.join("requirement").get("chapter")));
+				predicates.add(criteriaBuilder.or(orPredicates.toArray(new Predicate[] {})));			
+			}else if(objet.equalsIgnoreCase("testcase"))
+			{
+				List<Predicate> orPredicates = new ArrayList<Predicate>();
+				orPredicates.add(criteriaBuilder.isNull(from.get("testcase")));							
+				orPredicates.add(criteriaBuilder.isNull(from.join("testcase").join("requirement").get("chapter")));
+				predicates.add(criteriaBuilder.or(orPredicates.toArray(new Predicate[] {})));
+			}
 		}
 
 		if (testcase != null) {

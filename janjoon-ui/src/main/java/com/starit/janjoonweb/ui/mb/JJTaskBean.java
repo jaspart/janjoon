@@ -464,7 +464,7 @@ public class JJTaskBean {
 			loadData();
 		} else {
 			if (tasksData.size() != 0) {
-				if (!tasksData.get(0).getChapter().getProject().equals(project)) {
+				if (!project.equals(((JJProjectBean)LoginBean.findBean("jJProjectBean")).getProject())) {
 					loadData();
 				}
 			} else {
@@ -528,15 +528,15 @@ public class JJTaskBean {
 				Map<Date, String> max = new TreeMap<Date, String>();
 
 				List<JJTask> tasks = new ArrayList<JJTask>();
-				tasks.addAll(jJTaskService.getTasks(sprint, project, null, null,
+				tasks.addAll(jJTaskService.getTasks(sprint, null, null, null,
 						chapter, null, null, null, true, true, false,
 						"Requirement"));
 
-				tasks.addAll(jJTaskService.getTasks(sprint, project, null, null,
+				tasks.addAll(jJTaskService.getTasks(sprint, null, null, null,
 						chapter, null, null, null, true, true, false,
 						"Testcase"));
 
-				tasks.addAll(jJTaskService.getTasks(sprint, project, null, null,
+				tasks.addAll(jJTaskService.getTasks(sprint, null, null, null,
 						chapter, null, null, null, true, true, false, "Bug"));
 
 				TreeMap<String, JJTask> Tasks = new TreeMap<String, JJTask>();
@@ -894,12 +894,12 @@ public class JJTaskBean {
 	// sortedData
 	public void loadSortedData(List<JJTask> allTasks, int k) {
 		
-//		List<JJTask> jsdfsdjkf=jJTaskService.getTasks(sprint,project, null, null,
-//				null, null, null, null, true, true, false,
-//				null);
-		allTasks=jJTaskService.getTasks(sprint,project, null, null,
-				null, null, null, null, true, true, false,
-				"");
+		allTasks.addAll(jJTaskService.getTasks(sprint, project, null, null,
+				null, null, null, null, true, false, false,
+				"Requirement"));
+		allTasks.addAll(jJTaskService.getTasks(sprint, project, null, null,
+				null, null, null, null, true, false, false,
+				"Bug"));
 		
 		Collections.sort(allTasks, new Comparator<JJTask>() {
 

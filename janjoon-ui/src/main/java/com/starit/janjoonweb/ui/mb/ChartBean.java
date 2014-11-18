@@ -85,10 +85,15 @@ public class ChartBean implements Serializable {
 				.getTestcaseexecutions();	
 
 		for (JJTestcaseexecution tce : testcaseexecutions) {
-			Date creationdate = tce.getUpdatedDate();
-			String date = creationdate.toString().substring(0, 10);
+			
+			if(tce.getEnabled() && tce.getUpdatedDate()!=null)
+			{
+				Date creationdate = tce.getUpdatedDate();
+				String date = creationdate.toString().substring(0, 10);
 
-			datesTMP.add(date);
+				datesTMP.add(date);
+			}
+			
 		}
 		List<String> dates = new ArrayList<String>();
 		dates.addAll(datesTMP);	

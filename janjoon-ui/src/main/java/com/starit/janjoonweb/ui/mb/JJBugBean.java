@@ -467,12 +467,13 @@ public class JJBugBean {
 
 		JJTeststepexecutionBean jJTeststepexecutionBean = (JJTeststepexecutionBean) session
 				.getAttribute("jJTeststepexecutionBean");
+		JJBug_.setVersioning(bugVersionSelected);
 
-		// if (JJBug_ == null) {
-		// System.out.println("null");
-		// } else {
-		// System.out.println("not null");
-		// }
+		JJBug_.setVersioning(bugVersionSelected);
+		
+		JJBug_.setRequirement(bugRequirementSelected);
+	
+		JJBug_.setProject(bugProjectSelected);
 
 		if (JJBug_.getId() == null) {
 
@@ -595,7 +596,7 @@ public class JJBugBean {
 		suggestions.add(null);
 
 		for (JJRequirement req : jJRequirementService.getRequirements(
-				bugProjectSelected,prod, bugVersionSelected)) {
+				bugProjectSelected,prod, null)) {
 			String jJCriticityStr = String.valueOf(req.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(req);
