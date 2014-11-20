@@ -197,9 +197,7 @@ public class LoginBean implements Serializable {
 				logger.info("login operation success " + contact.getName()
 						+ " logged in");
 
-				if (UsageChecker.checkExpiryDate()) {
-
-				} else {
+				if (!UsageChecker.checkExpiryDate()) {
 
 					FacesMessage fExpiredMessage = new FacesMessage(
 							FacesMessage.SEVERITY_WARN,

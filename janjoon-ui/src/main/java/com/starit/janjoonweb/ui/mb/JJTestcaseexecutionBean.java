@@ -14,6 +14,8 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJTestcase;
@@ -135,8 +137,7 @@ public class JJTestcaseexecutionBean {
 				.findJJTestcaseexecution(testcaseexecution.getId());
 
 		tce.setPassed(status);
-		tce.setUpdatedDate(new Date());
-		jJTestcaseexecutionService.updateJJTestcaseexecution(tce);
+		updateJJTestcaseexecution(tce);
 
 		List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
 				null, null, tce.getTestcase(), tce.getBuild(), true, false,
@@ -155,8 +156,6 @@ public class JJTestcaseexecutionBean {
 			int workloadReal = (int) (str / 3600000);
 
 			task.setWorkloadReal(workloadReal);
-
-			task.setUpdatedDate(new Date());
 			HttpSession session = (HttpSession) FacesContext
 					.getCurrentInstance().getExternalContext()
 					.getSession(false);
@@ -171,8 +170,7 @@ public class JJTestcaseexecutionBean {
 
 		testcaseexecution = new JJTestcaseexecution();
 		testcaseexecution.setName(testcase.getName());
-		testcaseexecution.setDescription(testcase.getDescription());
-		testcaseexecution.setCreationDate(new Date());
+		testcaseexecution.setDescription(testcase.getDescription());		
 		testcaseexecution.setEnabled(true);
 		testcaseexecution.setTestcase(testcase);
 
@@ -180,7 +178,7 @@ public class JJTestcaseexecutionBean {
 
 		testcaseexecution.setBuild(build);
 
-		jJTestcaseexecutionService.saveJJTestcaseexecution(testcaseexecution);
+		saveJJTestcaseexecution(testcaseexecution);
 
 	}
 
@@ -198,6 +196,23 @@ public class JJTestcaseexecutionBean {
 		return testcaseexecutions = jJTestcaseexecutionService
 				.getTestcaseexecutions(jJTestcaseBean.getChapter(),
 						jJBuildBean.getBuild(), true, true);
+	}
+	public void saveJJTestcaseexecution(JJTestcaseexecution b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setCreatedBy(contact);
+		b.setCreationDate(new Date());
+		jJTestcaseexecutionService.saveJJTestcaseexecution(b);
+	}
+	
+	public void updateJJTestcaseexecution(JJTestcaseexecution b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJTestcaseexecutionService.updateJJTestcaseexecution(b);
 	}
 
 	public class TestCaseexecutionRecap {

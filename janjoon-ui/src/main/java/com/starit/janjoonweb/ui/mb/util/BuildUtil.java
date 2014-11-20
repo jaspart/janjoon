@@ -5,6 +5,7 @@ import java.util.List;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.ui.mb.JJBuildBean;
 
 public class BuildUtil {
 
@@ -38,14 +39,14 @@ public class BuildUtil {
 		this.versionSelectedBuilds = versionSelectedBuilds;
 	}
 	
-	public void updateVersionBuilds(JJBuildService jjBuildService)
+	public void updateVersionBuilds(JJBuildBean bean)
 	{
 		for(JJBuild build:versionBuilds)
 		{
 			if(!contain(build))
 			{
 				build.setVersion(null);
-				jjBuildService.updateJJBuild(build);
+				bean.updateJJBuild(build);
 			}			
 			
 		}		

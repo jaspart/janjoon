@@ -239,7 +239,7 @@ public class UsageChecker {
 		}
 		try {
 			license = readFile(workingdirectory + File.separator
-					+ "janjoon.lic");
+					+ "janjoon-2015-03-01.lic");
 			result = UsageChecker.validate(license);
 			
 			if(result)

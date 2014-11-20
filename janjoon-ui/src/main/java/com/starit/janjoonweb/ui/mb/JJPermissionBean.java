@@ -1,15 +1,18 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJJob;
 import com.starit.janjoonweb.domain.JJPermission;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
@@ -211,6 +214,15 @@ public class JJPermissionBean {
 			permissionModel.setCheckPermission(checkPermissions);
 		}
 
+	}
+	public void saveJJPermission(JJPermission b)
+	{	
+		jJPermissionService.saveJJPermission(b);
+	}
+	
+	public void updateJJPermission(JJPermission b)
+	{
+		jJPermissionService.updateJJPermission(b);
 	}
 
 	public void checkPermission() {

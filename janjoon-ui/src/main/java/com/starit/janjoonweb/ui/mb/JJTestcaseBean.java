@@ -36,6 +36,8 @@ import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJChapterService;
 import com.starit.janjoonweb.domain.JJConfigurationService;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -387,8 +389,7 @@ public class JJTestcaseBean {
 	public void newTestcase(JJTeststepBean jJTeststepBean) {
 		message = "test_create_header";
 		testcase = new JJTestcase();
-		testcase.setEnabled(true);
-		testcase.setCreationDate(new Date());
+		testcase.setEnabled(true);		
 		testcase.setAutomatic(false);
 		requirement = null;
 
@@ -424,8 +425,7 @@ public class JJTestcaseBean {
 
 		if (initiateTask) {
 			task = new JJTask();
-			task.setEnabled(true);
-			task.setCreationDate(new Date());
+			task.setEnabled(true);			
 			task.setStartDatePlanned(new Date());
 			task.setWorkloadPlanned(8);
 			task.setEndDatePlanned(new Date(task.getStartDatePlanned()
@@ -500,8 +500,7 @@ public class JJTestcaseBean {
 				JJTask task = new JJTask();
 
 				task.setName(testcase.getName() + "_"
-						+ build.getName().trim().toUpperCase());
-				task.setCreationDate(new Date());
+						+ build.getName().trim().toUpperCase());				
 				task.setDescription("This is task " + task.getName());
 				task.setEnabled(true);
 
@@ -538,7 +537,6 @@ public class JJTestcaseBean {
 			task.setStartDateReal(new Date());
 			task.setEndDateReal(null);
 			task.setWorkloadReal(null);
-			task.setUpdatedDate(new Date());
 			jJTaskBean.saveJJTask(task,true);
 		}
 
@@ -564,7 +562,7 @@ public class JJTestcaseBean {
 				task.setTestcase(testcase);
 			}
 
-			jJTestcaseService.saveJJTestcase(testcase);
+			saveJJTestcase(testcase);
 
 			disabledInitTask = true;
 			disabledTask = true;
@@ -609,9 +607,7 @@ public class JJTestcaseBean {
 
 			} else {
 				tc = testcase;
-			}
-
-			tc.setUpdatedDate(new Date());
+			}		
 
 			if (!requirement.equals(tc.getRequirement())) {
 
@@ -619,7 +615,7 @@ public class JJTestcaseBean {
 
 			}
 
-			jJTestcaseService.updateJJTestcase(tc);
+			updateJJTestcase(tc);
 
 			requirement.getTestcases().add(tc);
 
@@ -1114,6 +1110,24 @@ public class JJTestcaseBean {
 			this.disabled = disabled;
 		}
 
+	}
+	
+	public void saveJJTestcase(JJTestcase b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setCreatedBy(contact);
+		b.setCreationDate(new Date());
+		jJTestcaseService.saveJJTestcase(b);
+	}
+	
+	public void updateJJTestcase(JJTestcase b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJTestcaseService.updateJJTestcase(b);
 	}
 
 	private boolean getTestcaseDialogConfiguration() {

@@ -16,6 +16,8 @@ import org.primefaces.event.RowEditEvent;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -100,7 +102,7 @@ public class JJTeststepBean {
 			teststep.setDescription("This is " + teststep.getActionstep() + " "
 					+ teststep.getResultstep() + " description");
 
-			jJTeststepService.saveJJTeststep(teststep);
+			saveJJTeststep(teststep);
 			newTeststep();
 
 			actionTeststep = true;
@@ -159,8 +161,7 @@ public class JJTeststepBean {
 
 			int order = teststep.getOrdering();
 
-			teststep.setOrdering(order + 1);
-			teststep.setUpdatedDate(new Date());
+			teststep.setOrdering(order + 1);		
 
 			// System.out.println("teststep.getName() " + teststep.getName());
 			// System.out.println("teststep.getOrdering() "
@@ -168,7 +169,7 @@ public class JJTeststepBean {
 
 			teststeps.add(teststep);
 
-			jJTeststepService.updateJJTeststep(teststep);
+			updateJJTeststep(teststep);
 			// System.out.println("toto");
 		}
 		// System.out.println("end boucle");
@@ -193,7 +194,7 @@ public class JJTeststepBean {
 		ts.setDescription("This is " + ts.getActionstep() + " "
 				+ ts.getResultstep() + " ts");
 
-		jJTeststepService.saveJJTeststep(ts);
+		saveJJTeststep(ts);
 
 		actionTeststep = true;
 
@@ -206,13 +207,12 @@ public class JJTeststepBean {
 		JJTeststep ts = jJTeststepService.findJJTeststep(((JJTeststep) event
 				.getObject()).getId());
 
-		ts.setUpdatedDate(new Date());
 		ts.setName(ts.getActionstep() + " " + ts.getResultstep());
 
 		ts.setDescription("This is " + ts.getActionstep() + " "
 				+ ts.getResultstep() + " description");
 
-		jJTeststepService.updateJJTeststep(ts);
+		updateJJTeststep(ts);
 
 		newTeststep();
 
@@ -232,14 +232,29 @@ public class JJTeststepBean {
 		newTeststep();
 
 	}
+	
+	public void saveJJTeststep(JJTeststep b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setCreatedBy(contact);
+		b.setCreationDate(new Date());
+		jJTeststepService.saveJJTeststep(b);
+	}
+	
+	public void updateJJTeststep(JJTeststep b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJTeststepService.updateJJTeststep(b);
+	}
 
 	public void deleteTestStep() {
 
-		JJTeststep ts = jJTeststepService.findJJTeststep(teststep.getId());
-
-		ts.setUpdatedDate(new Date());
+		JJTeststep ts = jJTeststepService.findJJTeststep(teststep.getId());		
 		ts.setEnabled(false);
-
 		jJTeststepService.deleteJJTeststep(ts);
 
 		newTeststep();

@@ -43,6 +43,7 @@ import org.apache.log4j.Logger;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJConfigurationService;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -270,7 +271,6 @@ public class JJChapterBean {
 		getProject();
 
 		chapter = new JJChapter();
-		chapter.setCreationDate(new Date());
 		chapter.setEnabled(true);
 		chapter.setCategory(category);
 
@@ -298,6 +298,12 @@ public class JJChapterBean {
 	}
 
 	public void deleteChapter() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJRequirementBean jJRequirementBean = (JJRequirementBean) session
+				.getAttribute("jJRequirementBean");
+		if(jJRequirementBean == null)
+			jJRequirementBean=new JJRequirementBean();
 
 		long idSelectedChapter = Long.parseLong(getSplitFromString(
 				selectedChapterNode.getData().toString(), 1));
@@ -325,7 +331,7 @@ public class JJChapterBean {
 					lastOrder = chapter.getOrdering();
 					chapter.setOrdering(lastOrder + increment);
 					chapter.setParent(parentSelectedChapter);
-					jJChapterService.updateJJChapter(chapter);
+					updateJJChapter(chapter);
 				}
 			} else if (className.equalsIgnoreCase("JJRequirement")) {
 
@@ -335,7 +341,7 @@ public class JJChapterBean {
 					lastOrder = requirement.getOrdering();
 					requirement.setOrdering(lastOrder + increment);
 					requirement.setChapter(parentSelectedChapter);
-					jJRequirementService.updateJJRequirement(requirement);
+					jJRequirementBean.updateJJRequirement(requirement);
 				}
 			}
 
@@ -345,7 +351,7 @@ public class JJChapterBean {
 		 * Make the selectedChapter as inactif
 		 */
 		selectedChapter.setEnabled(false);
-		jJChapterService.updateJJChapter(selectedChapter);
+		updateJJChapter(selectedChapter);
 
 		loadData(categoryId);
 
@@ -362,12 +368,11 @@ public class JJChapterBean {
 
 			chapter.setProject(project);
 
-			jJChapterService.saveJJChapter(chapter);
+			saveJJChapter(chapter);
 			message = "message_successfully_created";
 
 		} else {
-			chapter.setUpdatedDate(new Date());
-			jJChapterService.updateJJChapter(chapter);
+			updateJJChapter(chapter);
 			message = "message_successfully_updated";
 		}
 
@@ -711,6 +716,18 @@ public class JJChapterBean {
 	}
 
 	public void onDragDrop(TreeDragDropEvent event) {
+		
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJRequirementBean jJRequirementBean = (JJRequirementBean) session
+				.getAttribute("jJRequirementBean");
+		if(jJRequirementBean == null)
+			jJRequirementBean=new JJRequirementBean();
+		
+		JJTestcaseBean testcaseBean=(JJTestcaseBean) session.getAttribute("jJTestcaseBean");
+		if(testcaseBean == null)
+			testcaseBean=new JJTestcaseBean();
+
 
 		String dragNodeData = event.getDragNode().getData().toString();
 		String dropNodeData = event.getDropNode().getData().toString();
@@ -751,9 +768,8 @@ public class JJChapterBean {
 
 					REQUIREMENT.setChapter(null);
 					REQUIREMENT.setOrdering(null);
-					REQUIREMENT.setUpdatedDate(new Date());
 
-					jJRequirementService.updateJJRequirement(REQUIREMENT);
+					jJRequirementBean.updateJJRequirement(REQUIREMENT);
 
 					subElements.remove(requirementOrder);
 
@@ -767,10 +783,9 @@ public class JJChapterBean {
 							JJChapter chapter = (JJChapter) entry.getValue();
 
 							int lastOrder = chapter.getOrdering();
-							chapter.setOrdering(lastOrder - 1);
-							chapter.setUpdatedDate(new Date());
+							chapter.setOrdering(lastOrder - 1);						
 
-							jJChapterService.updateJJChapter(chapter);
+							updateJJChapter(chapter);
 
 						} else if (className.equalsIgnoreCase("JJRequirement")) {
 
@@ -779,9 +794,8 @@ public class JJChapterBean {
 
 							int lastOrder = requirement.getOrdering();
 							requirement.setOrdering(lastOrder - 1);
-							requirement.setUpdatedDate(new Date());
-
-							jJRequirementService
+							
+							jJRequirementBean
 									.updateJJRequirement(requirement);
 						}
 
@@ -804,9 +818,8 @@ public class JJChapterBean {
 
 							testcases.remove(testcaseOrder);
 
-							testcase.setOrdering(null);
-							testcase.setUpdatedDate(new Date());
-							jJTestcaseService.updateJJTestcase(testcase);
+							testcase.setOrdering(null);							
+							testcaseBean.updateJJTestcase(testcase);
 
 							testcase = null;
 
@@ -817,8 +830,7 @@ public class JJChapterBean {
 								int lastOrder = testcase.getOrdering();
 
 								testcase.setOrdering(lastOrder - 1);
-								testcase.setUpdatedDate(new Date());
-								jJTestcaseService.updateJJTestcase(testcase);
+								testcaseBean.updateJJTestcase(testcase);
 
 								testcase = null;
 
@@ -871,9 +883,8 @@ public class JJChapterBean {
 
 								int lastOrder = chapter.getOrdering();
 								chapter.setOrdering(lastOrder + 1);
-								chapter.setUpdatedDate(new Date());
 
-								jJChapterService.updateJJChapter(chapter);
+								updateJJChapter(chapter);
 
 							} else if (className
 									.equalsIgnoreCase("JJRequirement")) {
@@ -883,9 +894,8 @@ public class JJChapterBean {
 
 								int lastOrder = requirement.getOrdering();
 								requirement.setOrdering(lastOrder + 1);
-								requirement.setUpdatedDate(new Date());
 
-								jJRequirementService
+								jJRequirementBean
 										.updateJJRequirement(requirement);
 							}
 
@@ -901,9 +911,8 @@ public class JJChapterBean {
 				}
 
 				REQUIREMENT.setChapter(CHAPTER);
-				REQUIREMENT.setUpdatedDate(new Date());
 
-				jJRequirementService.updateJJRequirement(REQUIREMENT);
+				jJRequirementBean.updateJJRequirement(REQUIREMENT);
 
 				if (!subTestcases.isEmpty()) {
 
@@ -924,8 +933,7 @@ public class JJChapterBean {
 						JJTestcase testcase = entry.getValue();
 
 						testcase.setOrdering(order);
-						testcase.setUpdatedDate(new Date());
-						jJTestcaseService.updateJJTestcase(testcase);
+						testcaseBean.updateJJTestcase(testcase);
 
 						i++;
 
@@ -957,9 +965,8 @@ public class JJChapterBean {
 
 					REQUIREMENT.setChapter(null);
 					REQUIREMENT.setOrdering(null);
-					REQUIREMENT.setUpdatedDate(new Date());
 
-					jJRequirementService.updateJJRequirement(REQUIREMENT);
+					jJRequirementBean.updateJJRequirement(REQUIREMENT);
 
 					subElements.remove(requirementOrder);
 
@@ -973,10 +980,9 @@ public class JJChapterBean {
 							JJChapter chapter = (JJChapter) entry.getValue();
 
 							int lastOrder = chapter.getOrdering();
-							chapter.setOrdering(lastOrder - 1);
-							chapter.setUpdatedDate(new Date());
+							chapter.setOrdering(lastOrder - 1);				
 
-							jJChapterService.updateJJChapter(chapter);
+							updateJJChapter(chapter);
 
 						} else if (className.equalsIgnoreCase("JJRequirement")) {
 
@@ -985,9 +991,8 @@ public class JJChapterBean {
 
 							int lastOrder = requirement.getOrdering();
 							requirement.setOrdering(lastOrder - 1);
-							requirement.setUpdatedDate(new Date());
 
-							jJRequirementService
+							jJRequirementBean
 									.updateJJRequirement(requirement);
 						}
 
@@ -1022,8 +1027,7 @@ public class JJChapterBean {
 									int lastOrder = testcase.getOrdering();
 
 									testcase.setOrdering(lastOrder - 1);
-									testcase.setUpdatedDate(new Date());
-									jJTestcaseService
+									testcaseBean
 											.updateJJTestcase(testcase);
 								}
 
@@ -1108,9 +1112,8 @@ public class JJChapterBean {
 						null, project, category, false);
 
 				CHAPTER.setOrdering(tmpElements.lastKey() + 1);
-				CHAPTER.setUpdatedDate(new Date());
 
-				jJChapterService.updateJJChapter(CHAPTER);
+				updateJJChapter(CHAPTER);
 
 				subElements.remove(chapterOrder);
 
@@ -1124,9 +1127,8 @@ public class JJChapterBean {
 
 						int lastOrder = chapter.getOrdering();
 						chapter.setOrdering(lastOrder - 1);
-						chapter.setUpdatedDate(new Date());
 
-						jJChapterService.updateJJChapter(chapter);
+						updateJJChapter(chapter);
 
 					} else if (className.equalsIgnoreCase("JJRequirement")) {
 
@@ -1135,9 +1137,8 @@ public class JJChapterBean {
 
 						int lastOrder = requirement.getOrdering();
 						requirement.setOrdering(lastOrder - 1);
-						requirement.setUpdatedDate(new Date());
 
-						jJRequirementService.updateJJRequirement(requirement);
+						jJRequirementBean.updateJJRequirement(requirement);
 					}
 
 				}
@@ -1182,9 +1183,8 @@ public class JJChapterBean {
 
 								int lastOrder = chapter.getOrdering();
 								chapter.setOrdering(lastOrder + 1);
-								chapter.setUpdatedDate(new Date());
 
-								jJChapterService.updateJJChapter(chapter);
+								updateJJChapter(chapter);
 
 							} else if (className
 									.equalsIgnoreCase("JJRequirement")) {
@@ -1194,9 +1194,8 @@ public class JJChapterBean {
 
 								int lastOrder = requirement.getOrdering();
 								requirement.setOrdering(lastOrder + 1);
-								requirement.setUpdatedDate(new Date());
 
-								jJRequirementService
+								jJRequirementBean
 										.updateJJRequirement(requirement);
 							}
 
@@ -1209,8 +1208,7 @@ public class JJChapterBean {
 				}
 
 				CHAPTER.setParent(newChapterPARENT);
-				CHAPTER.setUpdatedDate(new Date());
-				jJChapterService.updateJJChapter(CHAPTER);
+				updateJJChapter(CHAPTER);
 
 			} else if (dropNodeData.startsWith("R-")
 					|| dropNodeData.equalsIgnoreCase("leftRoot")) {
@@ -1271,6 +1269,24 @@ public class JJChapterBean {
 
 		chapterState = true;
 
+	}
+	
+	public void saveJJChapter(JJChapter b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setCreatedBy(contact);
+		b.setCreationDate(new Date());
+		jJChapterService.saveJJChapter(b);
+	}
+	
+	public void updateJJChapter(JJChapter b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJChapterService.updateJJChapter(b);
 	}
 
 	private boolean getChapterDialogConfiguration() {

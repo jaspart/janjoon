@@ -497,13 +497,21 @@ public class JJTaskBean {
 			else
 				sortBy = null;
 
-			// Before 4 hours for now
-			cal.setTimeInMillis(now.getTime() - 24 * 60 * 60 * 1000);
-			start = cal.getTime();
+			if(sprint == null)
+			{
+				// Before 4 hours for now
+				cal.setTimeInMillis(now.getTime() - 24 * 60 * 60 * 1000);
+				start = cal.getTime();
 
-			// After 8 hours for now
-			cal.setTimeInMillis(now.getTime() + 24 * 60 * 60 * 1000);
-			end = cal.getTime();
+				// After 8 hours for now
+				cal.setTimeInMillis(now.getTime() + 24 * 60 * 60 * 1000);
+				end = cal.getTime();
+			}else
+			{
+				start=sprint.getStartDate();
+				end=sprint.getEndDate();
+			}
+	
 
 			// one day in milliseconds for zoomMin
 			zoomMin = 1000L * 60 * 60 * 24;
@@ -896,10 +904,10 @@ public class JJTaskBean {
 		
 		allTasks.addAll(jJTaskService.getTasks(sprint, project, null, null,
 				null, null, null, null, true, false, false,
-				"Requirement"));
+				"requirement"));
 		allTasks.addAll(jJTaskService.getTasks(sprint, project, null, null,
 				null, null, null, null, true, false, false,
-				"Bug"));
+				"bug"));
 		
 		Collections.sort(allTasks, new Comparator<JJTask>() {
 
@@ -1172,8 +1180,7 @@ public class JJTaskBean {
 
 		}
 		
-		if (valid) {
-			task.setUpdatedDate(new Date());
+		if (valid) {			
 			saveJJTask(task, true);
 			task = jJTaskService.findJJTask(task.getId());
 			updateView(task, false);
@@ -1241,11 +1248,7 @@ public class JJTaskBean {
 		task.getTasks().add(duplicatedTask);
 
 		duplicatedTask.setName(task.getName() + " duplicated");
-		duplicatedTask.setDescription(task.getDescription());
-		duplicatedTask.setCreationDate(task.getCreationDate());
-		duplicatedTask.setCreatedBy(task.getCreatedBy());
-		duplicatedTask.setUpdatedDate(task.getUpdatedDate());
-		duplicatedTask.setUpdatedBy(task.getUpdatedBy());
+		duplicatedTask.setDescription(task.getDescription());		
 		duplicatedTask.setEnabled(true);
 
 		duplicatedTask.setCompleted(task.getCompleted());
@@ -1546,8 +1549,7 @@ public class JJTaskBean {
 					mode = "planning";
 
 				JJTask task = new JJTask();
-				task.setEnabled(true);
-				task.setCreationDate(new Date());
+				task.setEnabled(true);				
 				if (mode.equalsIgnoreCase("planning"))
 					task.setSprint(this.sprint);
 
@@ -1618,11 +1620,8 @@ public class JJTaskBean {
 				task.setDescription("This is task " + task.getName());
 				HttpSession session = (HttpSession) FacesContext
 						.getCurrentInstance().getExternalContext()
-						.getSession(false);
-				JJContact contact = (JJContact) session
-						.getAttribute("JJContact");
-				task.setCreatedBy(contact);
-
+						.getSession(false);			
+				
 				if (mode.equalsIgnoreCase("scrum")) {
 
 					JJSprintBean jJSprintBean = (JJSprintBean) session
@@ -1804,10 +1803,22 @@ public class JJTaskBean {
 
 	public void saveJJTask(JJTask ttt, boolean update) {
 
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		
 		if (update)
+		{			
+			ttt.setUpdatedBy(contact);
+			ttt.setUpdatedDate(new Date());
 			jJTaskService.updateJJTask(ttt);
+		}			
 		else
+		{
+			ttt.setCreatedBy(contact);
+			ttt.setCreationDate(new Date());
 			jJTaskService.saveJJTask(ttt);
+		}
+			
 
 		ttt = jJTaskService.findJJTask(ttt.getId());		
 
@@ -2396,7 +2407,6 @@ public class JJTaskBean {
 
 			tt.setStartDateReal(ev.getTimelineEvent().getStartDate());
 			tt.setEndDateReal(ev.getTimelineEvent().getEndDate());
-			tt.setUpdatedDate(new Date());
 			saveJJTask(tt, true);
 			tt = jJTaskService.findJJTask(tt.getId());
 			updateView(tt, false);
@@ -2404,8 +2414,7 @@ public class JJTaskBean {
 		} else {
 
 			tt.setStartDateRevised(ev.getTimelineEvent().getStartDate());
-			tt.setEndDateRevised(ev.getTimelineEvent().getEndDate());
-			tt.setUpdatedDate(new Date());
+			tt.setEndDateRevised(ev.getTimelineEvent().getEndDate());			
 			saveJJTask(tt, true);
 			tt = jJTaskService.findJJTask(tt.getId());
 			updateView(tt, false);
@@ -2586,7 +2595,7 @@ public class JJTaskBean {
 			}
 
 			int k = containTaskData(tt.getId());
-			if (k != -1)
+			if (k != -1 && tasksData.get(k).getChapter() != null)
 				updateChapterTimeLineEvent(tasksData.get(k).getChapter());
 		}
 		

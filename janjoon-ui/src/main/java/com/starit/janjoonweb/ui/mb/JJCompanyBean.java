@@ -1,11 +1,7 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -14,16 +10,15 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
-import com.starit.janjoonweb.domain.JJCategory;
-import com.starit.janjoonweb.domain.JJCompany;
-import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.ui.mb.util.CalendarUtil;
-import com.starit.janjoonweb.ui.mb.util.MessageFactory;
-
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
+
+import com.starit.janjoonweb.domain.JJCompany;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.ui.mb.util.CalendarUtil;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJCompany.class, beanName = "jJCompanyBean")
@@ -140,9 +135,8 @@ public class JJCompanyBean {
 
 			JJContact contact = (JJContact) session
 					.getAttribute("JJContact");
-			companie.setUpdatedBy(contact);
 			companie.setEnabled(false);
-			jJCompanyService.updateJJCompany(companie);
+			updateJJCompany(companie);
 			companies=null;
 			
 			String message = "message_successfully_deleted";
@@ -166,16 +160,12 @@ public class JJCompanyBean {
 	
 			if (companie.getId() == null) {
 				companie.setEnabled(true);
-				companie.setCreationDate(new Date());
-				jJCompanyService.saveJJCompany(companie);
+				saveJJCompany(companie);
 				message = "message_successfully_created";
 
 			}
 			else {
-
-				companie.setUpdatedDate(new Date());
-				companie.setUpdatedBy(contact);
-				jJCompanyService.updateJJCompany(companie);
+				updateJJCompany(companie);
 				message = "message_successfully_updated";
 			
 			}
@@ -188,6 +178,23 @@ public class JJCompanyBean {
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	
+	}
+	public void saveJJCompany(JJCompany b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setCreatedBy(contact);
+		b.setCreationDate(new Date());
+		jJCompanyService.saveJJCompany(b);
+	}
+	
+	public void updateJJCompany(JJCompany b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJCompanyService.updateJJCompany(b);
 	}
 	
 	public void handleFileUpload(FileUploadEvent event) throws IOException {

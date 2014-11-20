@@ -1,6 +1,7 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -12,13 +13,13 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJConfigurationService;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJRight;
 import com.starit.janjoonweb.domain.JJRightService;
 import com.starit.janjoonweb.ui.mb.JJRightBean.RightDataModel;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyProfileDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
-import com.starit.janjoonweb.ui.security.AuthorisationService;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJProfile.class, beanName = "jJProfileBean")
@@ -126,7 +127,7 @@ public class JJProfileBean {
 		if (profileAdmin != null) {
 
 			profileAdmin.setEnabled(false);
-			jJProfileService.updateJJProfile(profileAdmin);
+			updateJJProfile(profileAdmin);
 			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
 					.getSession(false);
 			LoginBean loginBean=(LoginBean) session.getAttribute("loginBean");
@@ -141,7 +142,7 @@ public class JJProfileBean {
 		if (profileAdmin.getId() == null) {
 			
 
-			jJProfileService.saveJJProfile(profileAdmin);
+			saveJJProfile(profileAdmin);
 
 			disabledProfileMode = true;
 			disabledRightMode = false;
@@ -165,7 +166,7 @@ public class JJProfileBean {
 
 		System.out.println("in save right");
 
-		jJProfileService.updateJJProfile(profileAdmin);		
+		updateJJProfile(profileAdmin);		
 		
 		profileAdmin = jJProfileService.findJJProfile(profileAdmin.getId());
 
@@ -187,7 +188,7 @@ public class JJProfileBean {
 					right.setProfile(profileAdmin);
 
 					profileAdmin.getRights().add(right);
-					jJRightService.saveJJRight(right);
+					jJRightBean.saveJJRight(right);
 				}
 			}
 
@@ -200,7 +201,7 @@ public class JJProfileBean {
 			for (long l : longs) {
 				JJRight r=jJRightService.findJJRight(l);
 				r.setEnabled(false);
-				jJRightService.updateJJRight(r);
+				jJRightBean.updateJJRight(r);
 			}
 
 		} else if (selectedRights.isEmpty() && !rights.isEmpty()) {
@@ -214,7 +215,7 @@ public class JJProfileBean {
 			for (long l : longs) {
 				JJRight r=jJRightService.findJJRight(l);
 				r.setEnabled(false);
-				jJRightService.updateJJRight(r);
+				jJRightBean.updateJJRight(r);
 			}
 
 		} else if (!selectedRights.isEmpty() && rights.isEmpty()) {
@@ -223,7 +224,7 @@ public class JJProfileBean {
 				right.setProfile(profileAdmin);
 
 				profileAdmin.getRights().add(right);
-				jJRightService.saveJJRight(right);
+				jJRightBean.saveJJRight(right);
 			}
 
 		}
@@ -271,5 +272,15 @@ public class JJProfileBean {
 
 		return jJConfigurationService.getDialogConfig("ProfileDialog",
 				"profile.create.saveandclose");
+	}
+	
+	public void saveJJProfile(JJProfile b)
+	{		
+		jJProfileService.saveJJProfile(b);
+	}
+	
+	public void updateJJProfile(JJProfile b)
+	{
+		jJProfileService.updateJJProfile(b);
 	}
 }

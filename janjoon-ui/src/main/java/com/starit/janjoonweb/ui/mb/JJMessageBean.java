@@ -239,7 +239,7 @@ public class JJMessageBean {
 		if (status != null) {
 			resolvedJJMessage.setStatus(status);
 		}
-		jJMessageService.updateJJMessage(resolvedJJMessage);
+		updateJJMessage(resolvedJJMessage);
 		String message = "message_successfully_disabled";
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				resolvedJJMessage.getName());
@@ -384,10 +384,10 @@ public class JJMessageBean {
 	public void save(JJMessage mes) {
 		String message = "";
 		if (mes.getId() != null) {
-			jJMessageService.updateJJMessage(mes);
+			updateJJMessage(mes);
 			message = "message_successfully_updated";
 		} else {
-			jJMessageService.saveJJMessage(mes);
+			saveJJMessage(mes);
 			message = "message_successfully_created";
 		}
 
@@ -443,8 +443,6 @@ public class JJMessageBean {
 
 		message.setEnabled(true);
 		message.setContact(contact);
-		message.setCreatedBy(contact);
-		message.setCreationDate(new Date());
 		message.setDescription(message.getMessage());
 		save(message);
 		message = new JJMessage();
@@ -453,6 +451,24 @@ public class JJMessageBean {
 	public void onRowSelect(SelectEvent event) {
 		viewedMessage = (JJMessage) event.getObject();
 		viewPanel = populateMessagePanel();
+	}
+	
+	public void saveJJMessage(JJMessage b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setCreatedBy(contact);
+		b.setCreationDate(new Date());
+		jJMessageService.saveJJMessage(b);
+	}
+	
+	public void updateJJMessage(JJMessage b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJMessageService.updateJJMessage(b);
 	}
 
 	public void reset() {

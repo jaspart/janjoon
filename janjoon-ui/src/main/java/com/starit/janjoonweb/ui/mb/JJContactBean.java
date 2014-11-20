@@ -14,6 +14,7 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermission;
@@ -149,6 +150,8 @@ public class JJContactBean {
 		if (contactAdmin != null) {
 
 			contactAdmin.setEnabled(false);
+			contactAdmin.setUpdatedDate(new Date());
+			contactAdmin.setUpdatedBy(((JJContact)LoginBean.findBean("JJContact")));
 			if (!jJContactService.updateJJContactTransaction(contactAdmin)) {
 
 				FacesMessage facesMessage = MessageFactory.getMessage(
@@ -176,6 +179,8 @@ public class JJContactBean {
 					+ contactAdmin.getName());
 			contactAdmin
 					.setPassword(encoder.encode(contactAdmin.getPassword()));
+			contactAdmin.setCreationDate(new Date());
+			contactAdmin.setCreatedBy(((JJContact)LoginBean.findBean("JJContact")));
 
 			if (jJContactService.saveJJContactTransaction(contactAdmin)) {
 
@@ -217,7 +222,8 @@ public class JJContactBean {
 
 		System.out.println("in save permission");
 
-		contactAdmin.setUpdatedDate(new Date());
+		contactAdmin.setUpdatedDate(new Date());		
+		contactAdmin.setUpdatedBy(((JJContact)LoginBean.findBean("JJContact")));
 
 		if (!contactAdmin.getPassword().equals(
 				jJContactService.findJJContact(contactAdmin.getId())
@@ -249,7 +255,7 @@ public class JJContactBean {
 
 						permission.setContact(contactAdmin);
 						// contactAdmin.getPermissions().add(permission);
-						jJPermissionService.saveJJPermission(permission);
+						jJPermissionBean.saveJJPermission(permission);
 					}
 				}
 
@@ -257,7 +263,7 @@ public class JJContactBean {
 					if (!selectedPermissions.contains(permission)) {
 
 						permission.setEnabled(false);
-						jJPermissionService.updateJJPermission(permission);
+						jJPermissionBean.updateJJPermission(permission);
 					}
 				}
 
@@ -266,7 +272,7 @@ public class JJContactBean {
 				for (JJPermission permission : permissions) {
 
 					permission.setEnabled(false);
-					jJPermissionService.updateJJPermission(permission);
+					jJPermissionBean.updateJJPermission(permission);
 
 				}
 
@@ -275,7 +281,7 @@ public class JJContactBean {
 				for (JJPermission permission : selectedPermissions) {
 					permission.setContact(contactAdmin);
 					// contactAdmin.getPermissions().add(permission);
-					jJPermissionService.saveJJPermission(permission);
+					jJPermissionBean.saveJJPermission(permission);
 				}
 
 			}
@@ -432,7 +438,7 @@ public class JJContactBean {
 		}
 		return valid;
 	}
-
+	
 	private boolean getContactDialogConfiguration() {
 		return jJConfigurationService.getDialogConfig("AdminUserDialog",
 				"admin.user.create.saveandclose");

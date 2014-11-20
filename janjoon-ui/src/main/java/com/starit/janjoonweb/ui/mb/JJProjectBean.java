@@ -16,6 +16,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermissionService;
+import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyProjectDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -129,7 +130,6 @@ public class JJProjectBean {
 		
 		projectAdmin = new JJProject();
 		projectAdmin.setEnabled(true);
-		projectAdmin.setCreationDate(new Date());
 		projectAdmin.setDescription("Defined as a Project");
 		projectManager = null;
 		projectState = true;
@@ -159,7 +159,7 @@ public class JJProjectBean {
 		if (projectAdmin != null) {
 
 			projectAdmin.setEnabled(false);
-			jJProjectService.updateJJProject(projectAdmin);
+			updateJJProject(projectAdmin);
 			projectList = null;
 			projectListTable=null;
 		}
@@ -173,7 +173,7 @@ public class JJProjectBean {
 
 		if (projectAdmin.getId() == null) {
 
-			jJProjectService.saveJJProject(projectAdmin);
+			saveJJProject(projectAdmin);
 			projectList = null;
 			projectListTable=null;
 			message = "message_successfully_created";
@@ -181,10 +181,7 @@ public class JJProjectBean {
 			newProject();
 
 		} else {
-
-			projectAdmin.setUpdatedDate(new Date());
-
-			jJProjectService.updateJJProject(projectAdmin);
+			updateJJProject(projectAdmin);
 
 			projectList = null;
 			projectListTable=null;
@@ -228,6 +225,24 @@ public class JJProjectBean {
 		projectManagerList = null;
 
 		projectState = true;
+	}
+	
+	public void saveJJProject(JJProject b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setCreatedBy(contact);
+		b.setCreationDate(new Date());
+		jJProjectService.saveJJProject(b);
+	}
+	
+	public void updateJJProject(JJProject b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJProjectService.updateJJProject(b);
 	}
 
 	private boolean getProjectDialogConfiguration() {

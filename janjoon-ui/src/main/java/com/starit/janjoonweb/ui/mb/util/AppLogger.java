@@ -1,5 +1,7 @@
 package com.starit.janjoonweb.ui.mb.util;
 
+import java.util.Date;
+
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -11,13 +13,12 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.starit.janjoonweb.domain.JJCompany;
-import com.starit.janjoonweb.domain.JJProductService;
+import com.starit.janjoonweb.domain.JJAuditLog;
+import com.starit.janjoonweb.domain.JJBug;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProjectService;
-import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
-import com.starit.janjoonweb.ui.mb.JJCompanyBean;
 import com.starit.janjoonweb.ui.mb.JJProjectBean;
 
 @Aspect
@@ -40,25 +41,21 @@ public class AppLogger {
 		this.jJProjectService = jJProjectService;
 	}
 
-	@AfterReturning("execution(* com.starit.janjoonweb.ui.mb.JJProductBean.save(..))")
-	public void resetVersion(JoinPoint joinPoint) {
-
-	}
-
-	@AfterReturning("execution(* com.starit.janjoonweb.ui.mb.JJProductBean.save(..))")
-	public void resetProduit(JoinPoint joinPoint) {
-
-	}
-
-	@AfterReturning("execution(* com.starit.janjoonweb.ui.mb.JJProductBean.save(..))")
-	public void resetProject(JoinPoint joinPoint) {
-
-	}
-
 	@Before("execution(* com.starit.janjoonweb.ui.mb.JJTaskBean.saveJJTask(..))")
 	public void updateJJTaskFields(JoinPoint joinPoint) {
 		Object[] args = joinPoint.getArgs();
 		JJTask task = (JJTask) args[0];
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		if(task.getId() == null)
+		{
+			task.setCreationDate(new Date());
+			task.setCreatedBy(contact);
+		}else
+		{
+			task.setUpdatedBy(contact);
+			task.setUpdatedDate(new Date());
+		}
 
 		ContactCalendarUtil calendarUtil;
 		boolean assignedTo=false;
@@ -168,5 +165,23 @@ public class AppLogger {
 		logger.info("operation : " + joinPoint.getSignature().toShortString()
 				+ " :successful " + task.getName());
 	}
+
+	//@Before("execution(* com.starit.janjoonweb.ui.mb.JJ*Bean.saveJJ*(..))")
+//	public void setCreationDate(JoinPoint joinPoint) {
+//	
+//		Object[] args = joinPoint.getArgs();
+//		Object b=args[0];
+//		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+//				.getSession(false)).getAttribute("JJContact");
+//		if(b instanceof JJBug)
+//		{
+//			JJBug a=(JJBug) b;
+//			a.setCreatedBy(contact);
+//			a.set
+//			
+//		}
+//		
+//		
+//	}
 
 }

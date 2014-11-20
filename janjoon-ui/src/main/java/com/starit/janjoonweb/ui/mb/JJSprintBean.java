@@ -37,6 +37,7 @@ import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
@@ -342,15 +343,11 @@ public class JJSprintBean {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		JJContact contact = (JJContact) session.getAttribute("JJContact");
-
-		sprintUtil.getSprint().setUpdatedBy(contact);
-		sprintUtil.getSprint().setUpdatedDate(new Date());
-
+		JJContact contact = (JJContact) session.getAttribute("JJContact");		
 		sprintUtil.getSprint().setContacts(
 				new HashSet<JJContact>(sprintUtil.getContacts()));
 
-		jJSprintService.updateJJSprint(sprintUtil.getSprint());
+		updateJJSprint(sprintUtil.getSprint());
 		sprintUtil.setSprint(sprintUtil.getSprint());
 		sprintUtil = new SprintUtil(sprintUtil.getSprint(),
 				jJTaskService.getSprintTasks(sprintUtil.getSprint()));
@@ -399,14 +396,12 @@ public class JJSprintBean {
 
 		setJJSprint_(sprintUtil.getSprint());
 
-		getJJSprint_().setCreatedBy(contact);
-		getJJSprint_().setCreationDate(new Date());
 		getJJSprint_().setEnabled(true);
 		getJJSprint_().setDescription(
 				getJJSprint_().getName() + " /CreatedBy:"
 						+ getJJSprint_().getCreatedBy().getName() + " at :"
 						+ getJJSprint_().getCreationDate());
-		jJSprintService.saveJJSprint(getJJSprint_());
+		saveJJSprint(getJJSprint_());
 		for (JJContact c : getJJSprint_().getContacts()) {
 			c.getSprints().add(getJJSprint_());
 		}
@@ -607,9 +602,6 @@ public class JJSprintBean {
 		task.setStartDatePlanned(sprintUtil.getSprint().getStartDate());
 		task.setEndDatePlanned(sprintUtil.getSprint().getEndDate());
 		task.setSprint(sprintUtil.getSprint());
-		task.setCreatedBy(contact);
-		task.setCreationDate(new Date());
-
 		task.setEnabled(true);
 		task.setDescription(task.getName() + " /CreatedBy:"
 				+ task.getCreatedBy().getName() + " at :"
@@ -787,6 +779,24 @@ public class JJSprintBean {
 			}
 		}
 		return suggestions;
+	}
+	
+	public void saveJJSprint(JJSprint b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setCreatedBy(contact);
+		b.setCreationDate(new Date());
+		jJSprintService.saveJJSprint(b);
+	}
+	
+	public void updateJJSprint(JJSprint b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJSprintService.updateJJSprint(b);
 	}
 
 	public HtmlPanelGrid populateCreateTaskPanel() {

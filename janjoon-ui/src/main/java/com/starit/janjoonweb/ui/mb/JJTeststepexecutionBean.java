@@ -17,6 +17,8 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJTeststepexecution;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
 import com.starit.janjoonweb.domain.JJTeststep;
@@ -201,7 +203,6 @@ public class JJTeststepexecutionBean {
 
 			teststepexecution.setName(teststep.getName());
 			teststepexecution.setDescription(teststep.getDescription());
-			teststepexecution.setCreationDate(new Date());
 			teststepexecution.setEnabled(true);
 
 			teststepexecution.setBuild(tce.getBuild());
@@ -223,8 +224,6 @@ public class JJTeststepexecutionBean {
 		bug.setName("Insert a bug name");
 		bug.setDescription("Insert a bug description");
 		bug.setEnabled(true);
-		bug.setCreationDate(new Date());
-
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 
@@ -249,11 +248,7 @@ public class JJTeststepexecutionBean {
 	public void handleStatus() {
 
 		teststepexecution.setPassed(status);
-
-		teststepexecution.setUpdatedDate(new Date());
-
-		jJTeststepexecutionService.updateJJTeststepexecution(teststepexecution);
-
+		updateJJTeststepexecution(teststepexecution);
 		teststepexecution = jJTeststepexecutionService
 				.findJJTeststepexecution(teststepexecution.getId());
 
@@ -384,6 +379,24 @@ public class JJTeststepexecutionBean {
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('runTestcaseDialogWidget').hide()");
 		closeDialog();
+	}
+	
+	public void saveJJTeststepexecution(JJTeststepexecution b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setCreatedBy(contact);
+		b.setCreationDate(new Date());
+		jJTeststepexecutionService.saveJJTeststepexecution(b);
+	}
+	
+	public void updateJJTeststepexecution(JJTeststepexecution b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJTeststepexecutionService.updateJJTeststepexecution(b);
 	}
 
 	public void closeDialog() {

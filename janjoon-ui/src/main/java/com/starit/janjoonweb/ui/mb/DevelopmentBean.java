@@ -559,16 +559,13 @@ public class DevelopmentBean implements Serializable {
 		message.setProduct(product);
 		message.setContact(contact);
 		message.setProject(project);
-		message.setVersioning(version);
-		message.setCreatedBy(contact);
-		message.setCreationDate(new Date());
+		message.setVersioning(version);		
 		message.setEnabled(true);
 		message.setMessage(comment);
 		message.setDescription("Message For" + task.getName() + "nl"
 				+ task.getDescription());
 		message.setName("Message For" + task.getName());
-		jJMessageService.saveJJMessage(message);
-
+		saveJJMessage(message);
 		task.getMessages().add(message);
 		if (task.getStartDateReal() == null)
 		{
@@ -907,6 +904,14 @@ public class DevelopmentBean implements Serializable {
 			context.update("applicatinPanelGrid");
 		}
 
+	}
+	public void saveJJMessage(JJMessage m)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		m.setCreatedBy(contact);
+		m.setCreationDate(new Date());
+		jJMessageService.saveJJMessage(m);
 	}
 
 	public void addToRoot(ActionEvent e) {

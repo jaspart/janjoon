@@ -114,7 +114,7 @@ public class JJBuildBean {
 
 		int i=BuildUtil.BuildUtil(jJVersionService.findJJVersion(id), buildUtils);
 		BuildUtil buildutil=buildUtils.get(i);
-		buildutil.updateVersionBuilds(jJBuildService);
+		buildutil.updateVersionBuilds(this);
 		buildUtils.set(i, new BuildUtil(buildutil.getVersion(), jJBuildService.getBuilds(buildutil.getVersion(), true,
 						true)));
 		FacesMessage facesMessage = MessageFactory.getMessage(
@@ -135,14 +135,12 @@ public class JJBuildBean {
 				.getExternalContext().getSession(false);
 		JJContact jJContact = (JJContact) session.getAttribute("JJContact");
 		JJBuild b = new JJBuild();
-		b.setName(buildName);
-		b.setCreationDate(new Date());
-		b.setEnabled(true);
-		b.setCreatedBy(jJContact);
+		b.setName(buildName);		
+		b.setEnabled(true);		
 		b.setVersion(buildUtil.getVersion());
 		b.setDescription("Build for Version " + version.getName());
 
-		jJBuildService.saveJJBuild(b);
+		saveJJBuild(b);
 		buildName = null;
 		buildUtils.set(
 				i,
@@ -154,6 +152,26 @@ public class JJBuildBean {
 				"message_successfully_created", "Bug");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
+	}
+
+	public void updateJJBuild(JJBuild b) {
+		
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJBuildService.updateJJBuild(b);
+		
+	}
+	
+	public void saveJJBuild(JJBuild b) {
+		
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setCreatedBy(contact);
+		b.setCreationDate(new Date());
+		jJBuildService.saveJJBuild(b);
+		
 	}
 
 }

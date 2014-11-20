@@ -7,6 +7,7 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJCategory;
+import com.starit.janjoonweb.domain.JJRight;
 import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJRight;
 
@@ -165,6 +166,16 @@ public class JJRightBean {
 			rightModel.setCheckRight(checkRights);
 		}
 
+	}
+	
+	public void saveJJRight(JJRight b)
+	{
+		jJRightService.saveJJRight(b);
+	}
+	
+	public void updateJJRight(JJRight b)
+	{
+		jJRightService.updateJJRight(b);
 	}
 
 	public void checkRight() {

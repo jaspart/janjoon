@@ -29,6 +29,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -187,7 +188,7 @@ public class JJStatusBean {
 	public void deleteStatus() {
 
 		selectedStatus.setEnabled(false);
-		jJStatusService.updateJJStatus(selectedStatus);
+		updateJJStatus(selectedStatus);
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted", "Status");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -218,19 +219,15 @@ public class JJStatusBean {
 		String message = "";
 
 		if (getJJStatus_().getId() != null) {
-			getJJStatus_().setUpdatedDate(new Date());
-			getJJStatus_().setUpdatedBy(contact);
-			jJStatusService.updateJJStatus(getJJStatus_());
+			updateJJStatus(getJJStatus_());
 			message = "message_successfully_updated";
 
-		} else {
-			getJJStatus_().setCreatedBy(contact);
+		} else {			
 			getJJStatus_().setDescription(
 					"Satus : " + getJJStatus_().getName() + " for "
 							+ getJJStatus_().getObjet() + "object");
-			getJJStatus_().setCreationDate(new Date());
 			getJJStatus_().setEnabled(true);
-			jJStatusService.saveJJStatus(getJJStatus_());
+			saveJJStatus(getJJStatus_());
 			message = "message_successfully_created";
 		}
 		RequestContext context = RequestContext.getCurrentInstance();
@@ -838,6 +835,24 @@ public class JJStatusBean {
 			this.category = category;
 
 		}
+	}
+	
+	public void saveJJStatus(JJStatus b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setCreatedBy(contact);
+		b.setCreationDate(new Date());
+		jJStatusService.saveJJStatus(b);
+	}
+	
+	public void updateJJStatus(JJStatus b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJStatusService.updateJJStatus(b);
 	}
 
 }

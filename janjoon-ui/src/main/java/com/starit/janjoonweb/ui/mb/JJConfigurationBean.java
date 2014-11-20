@@ -25,6 +25,7 @@ import org.primefaces.extensions.component.ckeditor.CKEditor;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
@@ -137,7 +138,7 @@ public class JJConfigurationBean {
 	public void deleteConfig() {
 
 		selectedConf.setEnabled(false);
-		jJConfigurationService.updateJJConfiguration(selectedConf);
+		updateJJConfiguration(selectedConf);
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted", "Configuration");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -150,13 +151,7 @@ public class JJConfigurationBean {
 				.getExternalContext().getSession(false);
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
 
-		if (getJJConfiguration_().getId() != null) {
-			getJJConfiguration_().setUpdatedDate(new Date());
-			getJJConfiguration_().setUpdatedBy(contact);
-
-		} else {
-			getJJConfiguration_().setCreatedBy(contact);
-			getJJConfiguration_().setCreationDate(new Date());
+		if (getJJConfiguration_().getId() == null) {			
 			getJJConfiguration_().setEnabled(true);
 		}
 
@@ -178,6 +173,24 @@ public class JJConfigurationBean {
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('createDialogWidget').show()");
 
+	}
+	
+	public void saveJJConfiguration(JJConfiguration b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setCreatedBy(contact);
+		b.setCreationDate(new Date());
+		jJConfigurationService.saveJJConfiguration(b);
+	}
+	
+	public void updateJJConfiguration(JJConfiguration b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJConfigurationService.updateJJConfiguration(b);
 	}
 
 	public HtmlPanelGrid populatePanelCreate() {

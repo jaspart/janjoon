@@ -304,7 +304,7 @@ public class JJBugBean {
 	public void deleteMultiple() {
 		for (JJBug b : selectedBugList) {
 			b.setEnabled(false);
-			jJBugService.updateJJBug(b);
+			updateJJBug(b);
 		}
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted", "Bug");
@@ -315,7 +315,7 @@ public class JJBugBean {
 	public void deleteSingle() {
 
 		getJJBug_().setEnabled(false);
-		jJBugService.updateJJBug(getJJBug_());
+		updateJJBug(getJJBug_());
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted", "Bug");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -424,14 +424,13 @@ public class JJBugBean {
 	public void createJJBug(JJTeststep jJTeststep) {
 
 		JJBug bug = new JJBug();
-		bug.setName("BUG NAME");
-		bug.setCreationDate(new Date());
+		bug.setName("BUG NAME");		
 		bug.setEnabled(true);
 		bug.setDescription("Insert a comment");
 		bug.setProject(project);
 		bug.setTeststep(jJTeststep);
 
-		jJBugService.saveJJBug(bug);
+		saveJJBug(bug);
 		reset();
 
 	}
@@ -475,10 +474,8 @@ public class JJBugBean {
 	
 		JJBug_.setProject(bugProjectSelected);
 
-		if (JJBug_.getId() == null) {
-
-			JJBug_.setCreationDate(new Date());
-			JJBug_.setCreatedBy(contact);
+		if (JJBug_.getId() == null) {		
+			
 			JJTeststep teststep = jJTeststepService
 					.findJJTeststep(jJTeststepexecutionBean
 							.getTeststepexecution().getTeststep().getId());
@@ -486,12 +483,10 @@ public class JJBugBean {
 			JJBug_.setTeststep(teststep);
 			teststep.getBugs().add(JJBug_);
 
-			jJBugService.saveJJBug(JJBug_);
+			saveJJBug(JJBug_);
 		} else {
-
-			JJBug_.setUpdatedDate(new Date());
-			JJBug_.setUpdatedBy(contact);
-			jJBugService.updateJJBug(JJBug_);
+			
+			updateJJBug(JJBug_);
 		}
 
 		RequestContext context = RequestContext.getCurrentInstance();
@@ -532,14 +527,7 @@ public class JJBugBean {
 			JJBug_.setCategory(JJBug_.getRequirement().getCategory());
 		}
 
-		if (JJBug_.getId() != null) {
-
-			JJBug_.setUpdatedDate(new Date());
-			JJBug_.setUpdatedBy(contact);
-
-		} else {
-			JJBug_.setCreatedBy(contact);
-			JJBug_.setCreationDate(new Date());
+		if (JJBug_.getId() == null) {	
 			JJBug_.setEnabled(true);
 		}
 
@@ -548,10 +536,10 @@ public class JJBugBean {
 
 		String message = "";
 		if (JJBug_.getId() != null) {
-			jJBugService.updateJJBug(JJBug_);
+			updateJJBug(JJBug_);
 			message = "message_successfully_updated";
 		} else {
-			jJBugService.saveJJBug(JJBug_);
+			saveJJBug(JJBug_);
 			message = "message_successfully_created";
 		}
 
@@ -579,6 +567,25 @@ public class JJBugBean {
 		bugRequirementSelected=null;
 		
 	}
+	
+	public void saveJJBug(JJBug b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setCreatedBy(contact);
+		b.setCreationDate(new Date());
+		jJBugService.saveJJBug(b);
+	}
+	
+	public void updateJJBug(JJBug b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJBugService.updateJJBug(b);
+	}
+	
 	
 	public void changeEvent(SelectEvent e)
 	{

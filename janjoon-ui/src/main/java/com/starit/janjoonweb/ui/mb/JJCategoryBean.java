@@ -5,14 +5,17 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJConfigurationService;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyCategoryDataTable;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
@@ -73,8 +76,7 @@ public class JJCategoryBean {
 		message = "admin_category_new_title";
 
 		categoryAdmin = new JJCategory();
-		categoryAdmin.setEnabled(true);
-		categoryAdmin.setCreationDate(new Date());
+		categoryAdmin.setEnabled(true);		
 		categoryAdmin.setStage(0);
 		disableLevel = false;
 		categoryState = true;
@@ -91,7 +93,7 @@ public class JJCategoryBean {
 
 		if (categoryAdmin != null) {
 			categoryAdmin.setEnabled(false);
-			jJCategoryService.updateJJCategory(categoryAdmin);
+			updateJJCategory(categoryAdmin);
 			categoryListTable=null;
 			
 			String message = "message_successfully_deleted";
@@ -115,7 +117,7 @@ public class JJCategoryBean {
 
 				categoryAdmin.setDescription("This is category "
 						+ categoryAdmin.getName());
-				jJCategoryService.saveJJCategory(categoryAdmin);
+				saveJJCategory(categoryAdmin);
 				message = "message_successfully_created";
 
 			}
@@ -123,7 +125,7 @@ public class JJCategoryBean {
 
 				categoryAdmin.setUpdatedDate(new Date());
 
-				jJCategoryService.updateJJCategory(categoryAdmin);
+				updateJJCategory(categoryAdmin);
 				message = "message_successfully_updated";
 
 				// closeDialog();
@@ -154,6 +156,8 @@ public class JJCategoryBean {
 		}
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
+	
+	
 
 	public void closeDialog() {
 		categoryAdmin = null;
@@ -163,5 +167,23 @@ public class JJCategoryBean {
 	private boolean getCategoryDialogConfiguration() {
 		return jJConfigurationService.getDialogConfig("CategoryDialog",
 				"category.create.saveandclose");
+	}
+	
+	public void saveJJCategory(JJCategory b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setCreatedBy(contact);
+		b.setCreationDate(new Date());
+		jJCategoryService.saveJJCategory(b);
+	}
+	
+	public void updateJJCategory(JJCategory b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJCategoryService.updateJJCategory(b);
 	}
 }

@@ -17,6 +17,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermissionService;
+import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJTask;
@@ -173,7 +174,6 @@ public class JJProductBean {
 		message = "admin_product_new_title";
 		productAdmin = new JJProduct();
 		productAdmin.setEnabled(true);
-		productAdmin.setCreationDate(new Date());
 		productAdmin.setDescription("Defined as a Product");
 		productManager = null;
 
@@ -216,7 +216,7 @@ public class JJProductBean {
 	public void deleteProduct() {
 		if (productAdmin != null) {
 			productAdmin.setEnabled(false);
-			jJProductService.updateJJProduct(productAdmin);
+			updateJJProduct(productAdmin);
 			resetVersionProductList();
 		}
 	}
@@ -225,7 +225,7 @@ public class JJProductBean {
 		productAdmin.setManager(productManager);
 		if (productAdmin.getId() == null) {
 
-			jJProductService.saveJJProduct(productAdmin);
+			saveJJProduct(productAdmin);
 			resetVersionProductList();
 			disabledProductMode = true;
 			disabledVersionMode = false;
@@ -243,9 +243,8 @@ public class JJProductBean {
 		System.out.println("in save version");
 
 		productAdmin.setManager(productManager);
-		productAdmin.setUpdatedDate(new Date());
 
-		jJProductService.updateJJProduct(productAdmin);
+		updateJJProduct(productAdmin);
 		resetVersionProductList();
 
 		List<JJVersion> versions = jJVersionService.getVersions(true, true,
@@ -268,30 +267,28 @@ public class JJProductBean {
 					version.setProduct(productAdmin);
 
 					productAdmin.getVersions().add(version);
-					jJVersionService.saveJJVersion(version);
+					jJVersionBean.saveJJVersion(version);
 				}
 			}
 
 			for (JJVersion version : versions) {
 				if (!selectedVersions.contains(version)) {
 					version.setEnabled(false);
-					version.setUpdatedDate(new Date());
-					jJVersionService.updateJJVersion(version);
+					jJVersionBean.updateJJVersion(version);
 				}
 			}
 
 		} else if (selectedVersions.isEmpty() && !versions.isEmpty()) {
 			for (JJVersion version : versions) {
 				version.setEnabled(false);
-				version.setUpdatedDate(new Date());
-				jJVersionService.updateJJVersion(version);
+				jJVersionBean.updateJJVersion(version);
 			}
 		} else if (!selectedVersions.isEmpty() && versions.isEmpty()) {
 			for (JJVersion version : selectedVersions) {
 				version.setProduct(productAdmin);
 
 				productAdmin.getVersions().add(version);
-				jJVersionService.saveJJVersion(version);
+				jJVersionBean.saveJJVersion(version);
 			}
 		}
 
@@ -357,6 +354,24 @@ public class JJProductBean {
 
 		return jJConfigurationService.getDialogConfig("ProductDialog",
 				"product.create.saveandclose");
+	}
+	
+	public void saveJJProduct(JJProduct b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setCreatedBy(contact);
+		b.setCreationDate(new Date());
+		jJProductService.saveJJProduct(b);
+	}
+	
+	public void updateJJProduct(JJProduct b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJProductService.updateJJProduct(b);
 	}
 
 }

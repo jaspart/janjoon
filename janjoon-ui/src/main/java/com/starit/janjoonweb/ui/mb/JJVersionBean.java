@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJTask;
@@ -134,8 +136,7 @@ public class JJVersionBean {
 	public void newVersion() {
 
 		versionAdmin = new JJVersion();
-		versionAdmin.setEnabled(true);
-		versionAdmin.setCreationDate(new Date());
+		versionAdmin.setEnabled(true);		
 	}
 
 	public void addVersion() {
@@ -224,6 +225,24 @@ public class JJVersionBean {
 			this.old = old;
 		}
 
+	}
+	
+	public void saveJJVersion(JJVersion b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setCreatedBy(contact);
+		b.setCreationDate(new Date());
+		jJVersionService.saveJJVersion(b);
+	}
+	
+	public void updateJJVersion(JJVersion b)
+	{
+		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("JJContact");
+		b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJVersionService.updateJJVersion(b);
 	}
 
 	public List<JJTask> getTastksByVersion(JJVersion jJversion) {
