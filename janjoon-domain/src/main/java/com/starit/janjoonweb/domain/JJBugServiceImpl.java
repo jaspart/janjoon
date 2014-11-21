@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
@@ -109,7 +110,7 @@ public class JJBugServiceImpl implements JJBugService {
 
 	}
 	
-	public List<JJBug> load(int first, int pageSize,List<SortMeta> multiSortMeta, Map<String, String> filters,JJProject project,JJProduct product,JJVersion version)
+	public List<JJBug> load(MutableInt size,int first, int pageSize,List<SortMeta> multiSortMeta, Map<String, String> filters,JJProject project,JJProduct product,JJVersion version)
 	{
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
@@ -241,9 +242,16 @@ public class JJBugServiceImpl implements JJBugService {
 		}		
 		
 
-		TypedQuery<JJBug> result = entityManager.createQuery(select);
+		TypedQuery<JJBug> result = entityManager.createQuery(select);		
 		result.setFirstResult(first);
 		result.setMaxResults(pageSize);
+		
+		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
+		cq.select(criteriaBuilder.count(cq.from(JJBug.class)));
+		entityManager.createQuery(cq);
+		cq.where(predicates.toArray(new Predicate[] {}));
+		size.setValue(entityManager.createQuery(cq).getSingleResult());
+		
 		return result.getResultList();
 		
 	}
@@ -252,8 +260,7 @@ public class JJBugServiceImpl implements JJBugService {
 	public List<JJBug> getBugs(JJProject project,JJProduct product,JJVersion version) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
-				.createQuery(JJBug.class);
-
+				.createQuery(JJBug.class);		
 		Root<JJBug> from = criteriaQuery.from(JJBug.class);
 
 		CriteriaQuery<JJBug> select = criteriaQuery.select(from);

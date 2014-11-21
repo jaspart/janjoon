@@ -12,6 +12,10 @@
 	<link type="text/css" rel="stylesheet"
 		href="/syntaxhighlighter/standard.css" />
 	<ui:define name="content">
+		<h:form>
+			<p:remoteCommand name="updateHeader"
+				oncomplete="PF('blockUIWidget').unblock()" update=":contentPanel" />
+		</h:form>
 		<br />
 		<p:panel id="errorPanel"
 			header="#{messages['dev.panel.error.header']}"

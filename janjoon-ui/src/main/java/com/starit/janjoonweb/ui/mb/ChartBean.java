@@ -1,6 +1,9 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -97,6 +100,18 @@ public class ChartBean implements Serializable {
 		}
 		List<String> dates = new ArrayList<String>();
 		dates.addAll(datesTMP);	
+		
+		Collections.sort(dates, new Comparator<String>() {
+	        DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+	        @Override
+	        public int compare(String o1, String o2) {
+	            try {
+	                return f.parse(o1).compareTo(f.parse(o2));
+	            } catch (ParseException e) {
+	                throw new IllegalArgumentException(e);
+	            }
+	        }
+	    });
 
 		Map<String, String> mapTotalTC = new LinkedHashMap<String, String>();
 		Map<String, String> mapSuccessTC = new LinkedHashMap<String, String>();

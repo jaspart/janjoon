@@ -20,6 +20,7 @@ public class LocaleBean {
 	public void init() {
 		locale = FacesContext.getCurrentInstance().getExternalContext()
 				.getRequestLocale();
+		//locale=Locale.ENGLISH;
 	}
 
 	public Locale getLocale() {

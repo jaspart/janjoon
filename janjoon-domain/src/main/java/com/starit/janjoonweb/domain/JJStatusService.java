@@ -2,6 +2,7 @@ package com.starit.janjoonweb.domain;
 
 import java.util.List;
 
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.springframework.roo.addon.layers.service.RooService;
 
 @RooService(domainTypes = { com.starit.janjoonweb.domain.JJStatus.class })
@@ -16,5 +17,5 @@ public interface JJStatusService {
 
 	public List<String> getTablesName();
 	
-	public List<JJStatus> load(int first, int pageSize);
+	public List<JJStatus> load(MutableInt size,int first, int pageSize);
 }

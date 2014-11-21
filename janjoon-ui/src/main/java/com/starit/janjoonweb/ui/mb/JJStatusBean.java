@@ -29,6 +29,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
@@ -47,7 +48,7 @@ public class JJStatusBean {
 
 	private List<JJStatus> statusList;
 	private LazyStatusDataModel lazyStatusList;
-
+	
 	public LazyStatusDataModel getLazyStatusList() {
 		if(lazyStatusList == null)
 			lazyStatusList= new LazyStatusDataModel(jJStatusService);
@@ -57,6 +58,10 @@ public class JJStatusBean {
 	public void setLazyStatusList(LazyStatusDataModel lazyStatusList) {
 		this.lazyStatusList = lazyStatusList;
 	}
+	
+    public String onEdit() {        
+        return null;
+    }
 
 	@Autowired
 	private JJRequirementService jJRequirementService;

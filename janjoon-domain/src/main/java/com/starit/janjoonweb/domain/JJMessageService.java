@@ -3,6 +3,7 @@ package com.starit.janjoonweb.domain;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.SortMeta;
 import org.springframework.roo.addon.layers.service.RooService;
 
@@ -13,5 +14,5 @@ public interface JJMessageService {
 
 	public List<JJMessage> getActifMessages(JJProject project, JJProduct product);
 	
-	public List<JJMessage> getActifMessages(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, String> filters,JJProject project,JJProduct product);
+	public List<JJMessage> getActifMessages(MutableInt size,int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, String> filters,JJProject project,JJProduct product);
 }

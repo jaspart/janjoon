@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -38,9 +39,9 @@ public class LazyConfDataTable extends LazyDataModel<JJConfiguration> {
 	public List<JJConfiguration> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
 
 		List<JJConfiguration> data = new ArrayList<JJConfiguration>();
-
-		data = configurationService.load(first, pageSize, null, null, true);
-		setRowCount(configurationService.getConfigurations(null, null, true).size());
+		MutableInt size=new MutableInt(0);
+		data = configurationService.load(size,first, pageSize, null, null, true);
+		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 
 		int dataSize = data.size();

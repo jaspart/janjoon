@@ -11,6 +11,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang3.mutable.MutableInt;
+
 public class JJContactServiceImpl implements JJContactService {
 
 	@PersistenceContext
@@ -86,7 +88,7 @@ public class JJContactServiceImpl implements JJContactService {
 
 	}
 	
-	public List<JJContact> load(int first, int pageSize)
+	public List<JJContact> load(MutableInt size,int first, int pageSize)
 	{
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJContact> criteriaQuery = criteriaBuilder
@@ -106,6 +108,13 @@ public class JJContactServiceImpl implements JJContactService {
 		TypedQuery<JJContact> result = entityManager.createQuery(select);
 		result.setFirstResult(first);
 		result.setMaxResults(pageSize);
+		
+		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
+		cq.select(criteriaBuilder.count(cq.from(JJContact.class)));
+		entityManager.createQuery(cq);
+		cq.where(predicates.toArray(new Predicate[] {}));
+		size.setValue(entityManager.createQuery(cq).getSingleResult());
+		
 		return result.getResultList();
 
 	}

@@ -676,9 +676,10 @@ public class LoginBean implements Serializable {
 
 		JJVersionBean jjVersionBean = (JJVersionBean) findBean("jJVersionBean");
 		JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
+		JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");
 
 		if (jjVersionBean.getVersion() != null
-				&& jJProductBean.getProduct() != null) {
+				&& jJProductBean.getProduct() != null && jJProjectBean.getProject() != null) {
 
 			if (!FacesContext.getCurrentInstance().getViewRoot().getViewId()
 					.contains("development")) {
@@ -695,8 +696,8 @@ public class LoginBean implements Serializable {
 			} else {
 
 				RequestContext context = RequestContext.getCurrentInstance();
-				context.update(":contentPanel:devPanel");
-				context.update(":contentPanel:errorPanel");
+				context.execute("updateHeader()");
+				
 			}
 		} else {
 
@@ -706,7 +707,14 @@ public class LoginBean implements Serializable {
 						"");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 
-			} else {
+			} else if (jJProjectBean.getProject() == null) {
+				FacesMessage message = MessageFactory.getMessage(
+						"dev.nullProject.label", FacesMessage.SEVERITY_ERROR,
+						"");
+				FacesContext.getCurrentInstance().addMessage(null, message);
+
+			}
+			else {
 				FacesMessage message = MessageFactory.getMessage(
 						"dev.nullVersion.label", FacesMessage.SEVERITY_ERROR,
 						"");

@@ -28,7 +28,6 @@ public class CKEditorGetImageServlet extends HttpServlet {
 	private static final String CKEDITOR_CONTENT_DISPOSITION = "Content-Disposition";
 	private static final String CKEDITOR_CONTENT_DISPOSITION_VALUE = "inline; filename=\"";
 	private static final String CKEDITOR_HEADER_NAME = "Cache-Control";
-	private static final String CKEDITOR_DIR= ".."+File.separator+"upload"+File.separator+"images";
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -45,7 +44,7 @@ public class CKEditorGetImageServlet extends HttpServlet {
 
 		try {
 			imageId =parameterId;
-			File uploadedFile = new File(CKEDITOR_DIR+File.separator+imageId);
+			File uploadedFile = new File(CKEditorUploadServlet.CKEDITOR_DIR+File.separator+imageId);
 			if (uploadedFile != null && uploadedFile.getTotalSpace() > 0) {
 				byte[] rb = Files.readAllBytes(uploadedFile.toPath());
 				long expiry = new Date().getTime()

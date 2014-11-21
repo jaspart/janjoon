@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
@@ -56,9 +57,9 @@ public class LazyMessageDataModel extends LazyDataModel<JJMessage> {
 			multiSortMeta.add(sort);
 		}
 		
-		
-		data = messageService.getActifMessages(first, pageSize, multiSortMeta,filters, project,product);
-		setRowCount(messageService.getActifMessages(project,product).size());
+		MutableInt size=new MutableInt(0);
+		data = messageService.getActifMessages(size,first, pageSize, multiSortMeta,filters, project,product);
+		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 
 		int dataSize = data.size();
@@ -79,9 +80,9 @@ public class LazyMessageDataModel extends LazyDataModel<JJMessage> {
 			List<SortMeta> multiSortMeta, Map<String, String> filters) {
 
 		List<JJMessage> data = new ArrayList<JJMessage>();
-
-		data = messageService.getActifMessages(first, pageSize, multiSortMeta,filters, project,product);
-		setRowCount(messageService.getActifMessages(project,product).size());
+		MutableInt size=new MutableInt(0);
+		data = messageService.getActifMessages(size,first, pageSize, multiSortMeta,filters, project,product);
+		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 
 		int dataSize = data.size();

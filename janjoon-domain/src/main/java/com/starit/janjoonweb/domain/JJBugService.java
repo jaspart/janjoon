@@ -3,6 +3,7 @@ package com.starit.janjoonweb.domain;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 import org.springframework.roo.addon.layers.service.RooService;
@@ -17,5 +18,5 @@ public interface JJBugService {
 
 	public List<JJBug> getBugs(JJProject project,JJProduct product,JJVersion version);
 	
-	public List<JJBug> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, String> filters,JJProject project,JJProduct product,JJVersion version);
+	public List<JJBug> load(MutableInt size,int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, String> filters,JJProject project,JJProduct product,JJVersion version);
 }

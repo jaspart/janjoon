@@ -85,8 +85,7 @@
 								value="#{messages.admin_category_new_stage_label}" />
 							<p:outputPanel>
 								<p:spinner id="stage"
-									value="#{jJCategoryBean.categoryAdmin.stage}" min="0" max="100"
-									disabled="#{jJCategoryBean.disableLevel}">
+									value="#{jJCategoryBean.categoryAdmin.stage}" min="0" max="100">
 									<p:ajax update="stagevalue" process="@this" />
 								</p:spinner>
 								<h:outputText id="stagevalue"

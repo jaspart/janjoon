@@ -167,14 +167,8 @@ privileged aspect JJStatusBean_Roo_ManagedBean {
             JJStatus_.setMessages(new HashSet<JJMessage>(selectedMessages));
         }
         this.selectedMessages = selectedMessages;
-    }
-    
-    public String JJStatusBean.onEdit() {
-        if (JJStatus_ != null && JJStatus_.getMessages() != null) {
-            selectedMessages = new ArrayList<JJMessage>(JJStatus_.getMessages());
-        }
-        return null;
-    }
+    }   
+
     
     public boolean JJStatusBean.isCreateDialogVisible() {
         return createDialogVisible;

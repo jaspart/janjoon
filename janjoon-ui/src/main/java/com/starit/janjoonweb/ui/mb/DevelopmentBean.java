@@ -561,12 +561,13 @@ public class DevelopmentBean implements Serializable {
 		message.setProject(project);
 		message.setVersioning(version);		
 		message.setEnabled(true);
+		message.setTask(task);
 		message.setMessage(comment);
 		message.setDescription("Message For" + task.getName() + "nl"
 				+ task.getDescription());
 		message.setName("Message For" + task.getName());
 		saveJJMessage(message);
-		task.getMessages().add(message);
+		
 		if (task.getStartDateReal() == null)
 		{
 			task.setStartDateReal(new Date());

@@ -34,7 +34,7 @@ public class CKEditorUploadServlet extends HttpServlet {
 	private static final String CKEDITOR_CONTENT_TYPE = "text/html; charset=UTF-8";
 	private static final String CKEDITOR_HEADER_NAME = "Cache-Control";
 	private static final String CKEDITOR_HEADER_VALUE = "no-cache";
-	private static final String CKEDITOR_DIR= ".."+File.separator+"upload"+File.separator+"images";
+	public static final String CKEDITOR_DIR= "upload"+File.separator+"images";
 
 	private static final Pattern PATTERN = Pattern.compile("[\\w\\d]*");
 
@@ -48,16 +48,15 @@ public class CKEditorUploadServlet extends HttpServlet {
 
 	@Override
 	 public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	 
-		ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(request.getSession().
-					getServletContext());
 	  
 	  File directory=new File(CKEDITOR_DIR);
 	  
 	  if(!directory.exists())
 		  directory.mkdirs();
 	 
-	
+	  File f =new File(".");
+	  System.out.println("getCanonicalPath : "+f.getCanonicalPath()); 
+	 
 	  PrintWriter out = response.getWriter();
 	 
 	  response.setContentType(CKEDITOR_CONTENT_TYPE);
@@ -95,7 +94,8 @@ public class CKEditorUploadServlet extends HttpServlet {
 	  }
 	  String pathToFile = "https"+"://"+request.getServerName()+request.getContextPath() + "/pages/ckeditor/getimage?imageId=" + uploadedFile.getName();
 	  
-	  System.out.println(uploadedFile.getPath()+"--"+pathToFile);
+	  System.out.println(uploadedFile.getAbsolutePath()+"--"+pathToFile);
+	  System.out.println(uploadedFile.getCanonicalPath()+"--"+pathToFile);
 	  //String pathToFile =uploadedFile.getPath();
 	  out.println("<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" + 
 			  callback + ",'" + pathToFile + "','" + errorMessage + "')");

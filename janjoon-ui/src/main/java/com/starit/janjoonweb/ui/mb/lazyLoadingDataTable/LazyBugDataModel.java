@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
@@ -75,10 +76,11 @@ public class LazyBugDataModel extends LazyDataModel<JJBug> {
 	public List<JJBug> load(int first, int pageSize,
 			List<SortMeta> multiSortMeta, Map<String, String> filters) {
 
-		List<JJBug> data = new ArrayList<JJBug>();
-
-		data = bugService.load(first, pageSize, multiSortMeta,filters, project,product,version);
-		setRowCount(bugService.getBugs(project,product,version).size());
+		
+		List<JJBug> data = new ArrayList<JJBug>();		
+		MutableInt size=new MutableInt(0);
+		data = bugService.load(size,first, pageSize, multiSortMeta,filters, project,product,version);
+		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 
 		int dataSize = data.size();

@@ -62,7 +62,7 @@
 						<p:menuitem id="editButton" icon="ui-icon-pencil"
 							update=":tabview:seditForm:editPanelGrid"
 							action="#{jJStatusBean.onEdit}"
-							oncomplete="PF('viewSatDialogWidget').show()"
+							oncomplete="PF('editSatDialogWidget').show()"
 							value="#{messages.admin_status_table_edit_tooltip}">
 							<f:setPropertyActionListener value="#{status}"
 								target="#{jJStatusBean.JJStatus_}" />
@@ -132,7 +132,7 @@
 					update="editPanelGrid,:tabview:statusForm:statusMessage" />
 				<p:commandButton id="editCloseButton"
 					value="#{messages.admin_status_edit_close_button}"
-					onclick="PF('viewSatDialogWidget').hide()" type="button" />
+					onclick="PF('editSatDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>

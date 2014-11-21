@@ -34,7 +34,6 @@ public class JJCategoryBean {
 	private LazyCategoryDataTable categoryListTable;
 
 	private String message;
-	private boolean disableLevel;
 
 	private boolean categoryState;
 
@@ -62,29 +61,18 @@ public class JJCategoryBean {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	public boolean getDisableLevel() {
-		return disableLevel;
-	}
-
-	public void setDisableLevel(boolean disableLevel) {
-		this.disableLevel = disableLevel;
-	}
-
+	}	
 	public void newCategory() {
+		
 		message = "admin_category_new_title";
-
 		categoryAdmin = new JJCategory();
 		categoryAdmin.setEnabled(true);		
-		categoryAdmin.setStage(0);
-		disableLevel = false;
+		categoryAdmin.setStage(0);		
 		categoryState = true;
 	}
 
 	public void editCategory() {
-		message = "admin_category_edit_title";
-		disableLevel = true;
+		message = "admin_category_edit_title";		
 		categoryState = false;
 	}
 
@@ -110,7 +98,15 @@ public class JJCategoryBean {
 		String name = categoryAdmin.getName().trim().toUpperCase();
 		List<JJCategory> categories = jJCategoryService.getCategories(name,
 				true, false, false);
-
+		if (categoryAdmin.getId() != null && !categories.isEmpty())
+		{
+			if(categories.size() == 1)
+			{
+				if(categories.get(0).equals(categoryAdmin))
+					categories.remove(0);
+			}
+		}
+		
 		if (categories.isEmpty()) {
 			categoryAdmin.setName(name);
 			if (categoryAdmin.getId() == null) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -38,9 +39,9 @@ public class LazyProjectDataModel extends LazyDataModel<JJProject> {
 	public List<JJProject> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
 
 		List<JJProject> data = new ArrayList<JJProject>();
-
-		data = projectService.load(first, pageSize);
-		setRowCount(projectService.getProjects(true).size());
+		MutableInt size=new MutableInt(0);
+		data = projectService.load(size,first, pageSize);
+		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 
 		int dataSize = data.size();

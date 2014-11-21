@@ -213,8 +213,7 @@ public class JJTeststepexecutionBean {
 			teststepexecution.setTestcaseexecution(tce);
 			tce.getTeststepexecutions().add(teststepexecution);
 
-			jJTeststepexecutionService
-					.saveJJTeststepexecution(teststepexecution);
+			saveJJTeststepexecution(teststepexecution);
 
 		}
 	}

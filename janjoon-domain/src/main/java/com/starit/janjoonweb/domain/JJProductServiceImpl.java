@@ -11,6 +11,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang3.mutable.MutableInt;
+
 public class JJProductServiceImpl implements JJProductService {
 
 	@PersistenceContext
@@ -22,10 +24,8 @@ public class JJProductServiceImpl implements JJProductService {
 
 	// New Generic
 	
-	public List<JJProduct> load(int first, int pageSize)
+	public List<JJProduct> load(MutableInt size,int first, int pageSize)
 	{
-
-
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJProduct> criteriaQuery = criteriaBuilder
 				.createQuery(JJProduct.class);
@@ -42,9 +42,16 @@ public class JJProductServiceImpl implements JJProductService {
 
 		select.where(predicates.toArray(new Predicate[] {}));
 
-		TypedQuery<JJProduct> result = entityManager.createQuery(select);
+		TypedQuery<JJProduct> result = entityManager.createQuery(select);		
 		result.setFirstResult(first);
 		result.setMaxResults(pageSize);
+		
+		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
+		cq.select(criteriaBuilder.count(cq.from(JJProduct.class)));
+		entityManager.createQuery(cq);
+		cq.where(predicates.toArray(new Predicate[] {}));
+		size.setValue(entityManager.createQuery(cq).getSingleResult());
+		
 		return result.getResultList();
 
 	

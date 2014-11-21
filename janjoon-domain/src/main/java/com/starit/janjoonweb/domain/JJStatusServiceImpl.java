@@ -14,6 +14,8 @@ import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 
+import org.apache.commons.lang3.mutable.MutableInt;
+
 public class JJStatusServiceImpl implements JJStatusService {
 
 	@PersistenceContext
@@ -23,7 +25,7 @@ public class JJStatusServiceImpl implements JJStatusService {
 		this.entityManager = entityManager;
 	}
 
-	public List<JJStatus> load(int first, int pageSize) {
+	public List<JJStatus> load(MutableInt size,int first, int pageSize) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJStatus> criteriaQuery = criteriaBuilder
@@ -40,9 +42,15 @@ public class JJStatusServiceImpl implements JJStatusService {
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		TypedQuery<JJStatus> result = entityManager.createQuery(select);
-
 		result.setFirstResult(first);
 		result.setMaxResults(pageSize);
+		
+		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
+		cq.select(criteriaBuilder.count(cq.from(JJStatus.class)));
+		entityManager.createQuery(cq);
+		cq.where(predicates.toArray(new Predicate[] {}));
+		size.setValue(Math.round(entityManager.createQuery(cq).getSingleResult()));	
+		
 		return result.getResultList();
 	}
 

@@ -15,6 +15,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
@@ -27,7 +28,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 		this.entityManager = entityManager;
 	}
 	
-	public List<JJMessage> getActifMessages(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, String> filters,JJProject project,JJProduct product)
+	public List<JJMessage> getActifMessages(MutableInt size,int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, String> filters,JJProject project,JJProduct product)
 	{
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJMessage> criteriaQuery = criteriaBuilder
@@ -83,7 +84,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 						predicates.add(criteriaBuilder.like(from.<String>get("name"),"%"+pairs.getValue()+"%"));
 				 
 			 }
-		}
+		}		
 		
 		if(multiSortMeta != null)
 		{
@@ -165,10 +166,14 @@ public class JJMessageServiceImpl implements JJMessageService {
 
 			
 			select.where(predicates.toArray(new Predicate[] {}));
+			
 			TypedQuery<JJMessage> result = entityManager
 					.createQuery(select);
+			size.setValue(result.getResultList().size());
 			result.setFirstResult(first);
-			result.setMaxResults(pageSize);
+			result.setMaxResults(pageSize);	
+			
+			
 			return result.getResultList();
 		}
 
