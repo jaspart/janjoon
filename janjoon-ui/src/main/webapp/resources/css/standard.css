@@ -76,6 +76,27 @@ a:visited {
 	margin-bottom: 5px;
 }
 
+.preformatted {
+	white-space: pre-wrap;
+}
+
+.login-body {
+	background-image: url('../resources/images/background.jpg') !important;
+	background-repeat:no-repeat;
+	background-size:100%;
+}
+
+.login-content {
+		height:240px;
+		width:320px;
+		position: absolute;
+		top: 0px;
+		bottom: 0px;
+		right: 0px;
+		left: 0px;
+		margin: auto;
+}
+
 .action-column {
 	text-align: center;
 	width: 140px !important;
@@ -87,7 +108,6 @@ a:visited {
 .taskDataTable table{
 	border-collapse: separate;
 	width: auto;
-	
 }
 
 .ui-datatable .ui-column-filter {

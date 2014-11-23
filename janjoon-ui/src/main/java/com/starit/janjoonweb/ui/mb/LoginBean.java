@@ -67,6 +67,7 @@ public class LoginBean implements Serializable {
 
 	private String username = "";// "janjoon.mailer@gmail.com";
 	private String password;
+	private boolean agreeTerms = false;
 	private boolean loading = false;
 	private boolean loadMain = false;
 	private JJContact contact;
@@ -99,6 +100,14 @@ public class LoginBean implements Serializable {
 
 	public void setEnable(boolean enable) {
 		this.enable = enable;
+	}
+
+	public boolean getAgreeTerms() {
+		return agreeTerms;
+	}
+
+	public void setAgreeTerms(boolean agreeTerms) {
+		this.agreeTerms = agreeTerms;
 	}
 
 	@Autowired

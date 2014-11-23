@@ -6,13 +6,12 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
-<ui:composition template="../templates/generic.xhtml">
+<ui:composition template="../templates/generic-login.xhtml">
 	<ui:define name="title">#{messages.login_title}</ui:define>
 	<ui:define name="content">
 		<f:event listener="#{loginBean.loginRedirect}" type="preRenderView" />
 		<h:form id="login" method="post">
-			<p:panelGrid
-				style="margin-top:50px;margin-bottom:50px;width:30%;margin-left:auto !important;margin-right:auto !important;">
+			<p:panelGrid style="background-color:transparent;">
 				<f:facet name="header">
 					<p:row>
 						<p:column colspan="2">
@@ -61,12 +60,20 @@
 				<f:facet name="footer">
 					<p:row>
 						<p:column colspan="2">
+							<p:selectBooleanCheckbox value="#{loginBean.agreeTerms}" />
+							<h:outputLink 
+								value="../resources/ConfidentialityTermsAndConditions_BetaUsers.pdf"
+								styleClass="preformatted">
+								<h:outputLabel value="#{messages.login_terms_label}" />
+							</h:outputLink>
+							<br/>
 							<p:commandButton id="submit"
 								value="#{messages.login_login_button}"
 								onstart="PF('blockUIWidget').block()"
 								onerror="PF('blockUIWidget').unblock()"
 								oncomplete="PF('blockUIWidget').unblock()"				
 								action="#{loginBean.login}" style="margin-top:20px;"
+								disabled="#{!(loginBean.agreeTerms)}"
 								update=":login:mdp,:login:mail,:auth" />
 						</p:column>
 					</p:row>
