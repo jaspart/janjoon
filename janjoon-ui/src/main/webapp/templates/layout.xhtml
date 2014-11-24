@@ -67,11 +67,11 @@
 			</p:panel>
 			<p:panel id="messagePanel" header="Chat" styleClass="chat"
 				toggleable="true" toggleOrientation="horizontal"
-				style="height:100%;" collapsed="#{jJMessageBean.collapsedMesPanel}">
+				style="height:100%;"
+				collapsed="#{jJMessageBean.collapsedMesPanel}">
 
 				<p:ajax event="toggle" listener="#{jJMessageBean.handleMesToggle}"
 					update=":applicatinPanelGrid,messagePanel,contentPanel" />
-
 
 				<f:event listener="#{jJMessageBean.initJJMessageLayout}"
 					type="preRenderView" />
@@ -92,8 +92,11 @@
 					</p:column>
 				</p:dataTable>
 		
-				<f:facet name="footer" >
-				<h:form id="messageCreationForm"  rendered="#{loginBean.enable and !jJMessageBean.collapsedMesPanel}">
+				<f:facet name="footer" style="position: fixed;bottom: 0;">
+				<h:form id="messageCreationForm"
+					rendered="#{loginBean.enable and !jJMessageBean.collapsedMesPanel}"
+					style="position:fixed;bottom: 0;">
+					
 					<p:growl id="creationGrowl" showDetail="true" life="2000" />
 					<p:panelGrid columns="1">
 						<p:outputLabel for="messagedsc" value="Message :" />
