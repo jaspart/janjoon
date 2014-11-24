@@ -1530,15 +1530,16 @@ public class JJTaskBean {
 
 	public void importTask() {
 
-		ContactCalendarUtil calendarUtil = new ContactCalendarUtil(
-				jJProjectService
-						.findJJProject(
-								((JJProjectBean) ((HttpSession) FacesContext
-										.getCurrentInstance()
-										.getExternalContext().getSession(false))
-										.getAttribute("jJProjectBean"))
-										.getProject().getId()).getManager()
-						.getCompany());
+		JJContact c=jJProjectService.findJJProject(((JJProjectBean) ((HttpSession) FacesContext
+								.getCurrentInstance()
+								.getExternalContext().getSession(false))
+								.getAttribute("jJProjectBean"))
+								.getProject().getId()).getManager();
+		if (c==null)
+			c=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false))
+					.getAttribute("JJContact");
+		
+		ContactCalendarUtil calendarUtil = new ContactCalendarUtil(c.getCompany());
 
 		for (ImportFormat format : importFormats) {
 
@@ -1580,7 +1581,7 @@ public class JJTaskBean {
 							.getObject();
 
 					name = requirement.getName() + "("
-							+ task.getCreationDate().getTime() + ")";
+							+ new Date().toString()+ ")";
 
 					requirement = jJRequirementService
 							.findJJRequirement(requirement.getId());
@@ -1594,7 +1595,7 @@ public class JJTaskBean {
 					JJBug bug = (JJBug) format.getObject();
 
 					name = bug.getName() + "("
-							+ task.getCreationDate().getTime() + ")";
+							+ new Date().toString() + ")";
 
 					bug = jJBugService.findJJBug(bug.getId());
 					bug.getTasks().add(task);
@@ -1606,7 +1607,7 @@ public class JJTaskBean {
 					JJTestcase testcase = (JJTestcase) format.getObject();
 
 					name = testcase.getName() + "("
-							+ task.getCreationDate().getTime() + ")";
+							+ new Date().toString() + ")";
 
 					testcase = jJTestcaseService.findJJTestcase(testcase
 							.getId());

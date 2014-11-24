@@ -149,9 +149,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
     }
     
     public HtmlPanelGrid JJBugBean.getCreatePanelGrid() {
-        if (createPanelGrid == null) {
-            createPanelGrid = populateCreatePanel();
-        }
+        
         return createPanelGrid;
     }
     
@@ -160,9 +158,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
     }
     
     public HtmlPanelGrid JJBugBean.getEditPanelGrid() {
-        if (editPanelGrid == null) {
-            editPanelGrid = populateEditPanel();
-        }
+       
         return editPanelGrid;
     }
     
@@ -171,7 +167,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
     }
     
     public HtmlPanelGrid JJBugBean.getViewPanelGrid() {
-        return populateViewPanel();
+        return null;
     }
     
     public void JJBugBean.setViewPanelGrid(HtmlPanelGrid viewPanelGrid) {

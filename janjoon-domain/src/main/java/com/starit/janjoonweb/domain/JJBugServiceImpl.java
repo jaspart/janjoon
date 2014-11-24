@@ -53,7 +53,6 @@ public class JJBugServiceImpl implements JJBugService {
 		if (build != null) {
 			predicates.add(criteriaBuilder.equal(from.get("build"), build));
 		}
-		
 
 		select.where(predicates.toArray(new Predicate[] {}));
 
@@ -72,7 +71,7 @@ public class JJBugServiceImpl implements JJBugService {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
 				.createQuery(JJBug.class);
-		
+
 		Root<JJBug> from = criteriaQuery.from(JJBug.class);
 
 		CriteriaQuery<JJBug> select = criteriaQuery.select(from);
@@ -97,7 +96,7 @@ public class JJBugServiceImpl implements JJBugService {
 			predicates.add(criteriaBuilder.equal(from.get("status"), status));
 		}
 
-		//predicates.add(criteriaBuilder.isNotNull(from.get("requirement")));
+		// predicates.add(criteriaBuilder.isNotNull(from.get("requirement")));
 
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
@@ -109,9 +108,10 @@ public class JJBugServiceImpl implements JJBugService {
 		return result.getResultList();
 
 	}
-	
-	public List<JJBug> load(MutableInt size,int first, int pageSize,List<SortMeta> multiSortMeta, Map<String, String> filters,JJProject project,JJProduct product,JJVersion version)
-	{
+
+	public List<JJBug> load(MutableInt size, int first, int pageSize,
+			List<SortMeta> multiSortMeta, Map<String, String> filters,
+			JJProject project, JJProduct product, JJVersion version) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
 				.createQuery(JJBug.class);
@@ -120,64 +120,66 @@ public class JJBugServiceImpl implements JJBugService {
 
 		CriteriaQuery<JJBug> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();		
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));	
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
 		}
-		
+
 		if (version != null) {
 			predicates.add(criteriaBuilder.equal(from.get("versioning"),
 					version));
-		}else if(product != null)
-		{
+		} else if (product != null) {
 			List<Predicate> orPredicates = new ArrayList<Predicate>();
-			product=entityManager.find(JJProduct.class, product.getId());
-			for(JJVersion v:product.getVersions())
-			{
-				if(v.getEnabled())
-					orPredicates.add(criteriaBuilder.equal(from.get("versioning"),
-							v));
+			product = entityManager.find(JJProduct.class, product.getId());
+			for (JJVersion v : product.getVersions()) {
+				if (v.getEnabled())
+					orPredicates.add(criteriaBuilder.equal(
+							from.get("versioning"), v));
 			}
 			Predicate orPredicate = criteriaBuilder.or(orPredicates
 					.toArray(new Predicate[] {}));
 			predicates.add(orPredicate);
 		}
-		
 
-		if(filters != null)
-		{
-			 Iterator<Entry<String, String>> it = filters.entrySet().iterator();
-			 while(it.hasNext())
-			 {
-				 @SuppressWarnings("rawtypes")
-				Map.Entry pairs = (Map.Entry)it.next();
-				 if(pairs.getKey().toString().contains("globalFilter"))
-				 {
-					predicates.add(criteriaBuilder.like(from.<String>get("name"), "%"+pairs.getValue()+"%"));					
-				 }
-					 
-			
-				 else if(pairs.getKey().toString().contains("importance"))
-					{
-						Join<JJBug, JJImportance> owner = from.join("importance");					
-						predicates.add(criteriaBuilder.equal(owner.<String>get("name"), pairs.getValue().toString()));					
+		if (filters != null) {
+			Iterator<Entry<String, String>> it = filters.entrySet().iterator();
+			while (it.hasNext()) {
+				@SuppressWarnings("rawtypes")
+				Map.Entry pairs = (Map.Entry) it.next();
+				if (pairs.getKey().toString().contains("globalFilter")) {
+					predicates.add(criteriaBuilder.like(
+							from.<String> get("name"), "%" + pairs.getValue()
+									+ "%"));
+				}
 
-						
-					}else if(pairs.getKey().toString().contains("criticity"))
-					{
-						Join<JJBug, JJCriticity> owner = from.join("criticity");					
-						predicates.add(criteriaBuilder.equal(owner.<String>get("name"), pairs.getValue().toString()));
-					}else if(pairs.getKey().toString().contains("status"))
-					{
-						Join<JJBug, JJStatus> owner = from.join("status");					
-						predicates.add(criteriaBuilder.equal(owner.<String>get("name"), pairs.getValue().toString()));
-					}else
-						
-				 predicates.add(criteriaBuilder.like(from.<String>get("name"),"%"+pairs.getValue()+"%"));
-				 
-			 }
+				else if (pairs.getKey().toString().contains("importance")) {
+					Join<JJBug, JJImportance> owner = from.join("importance");
+					predicates
+							.add(criteriaBuilder.equal(owner
+									.<String> get("name"), pairs.getValue()
+									.toString()));
+
+				} else if (pairs.getKey().toString().contains("criticity")) {
+					Join<JJBug, JJCriticity> owner = from.join("criticity");
+					predicates
+							.add(criteriaBuilder.equal(owner
+									.<String> get("name"), pairs.getValue()
+									.toString()));
+				} else if (pairs.getKey().toString().contains("status")) {
+					Join<JJBug, JJStatus> owner = from.join("status");
+					predicates
+							.add(criteriaBuilder.equal(owner
+									.<String> get("name"), pairs.getValue()
+									.toString()));
+				} else
+
+					predicates.add(criteriaBuilder.like(
+							from.<String> get("name"), "%" + pairs.getValue()
+									+ "%"));
+
+			}
 		}
 
 		if (project != null) {
@@ -186,88 +188,83 @@ public class JJBugServiceImpl implements JJBugService {
 
 		select.where(predicates.toArray(new Predicate[] {}));
 
-		if(multiSortMeta != null)
-		{
-			for(SortMeta sortMeta:multiSortMeta)
-			{
-				String sortField=sortMeta.getSortField();
-				SortOrder sortOrder=sortMeta.getSortOrder();
-				if(!(sortField.contains("importance") || sortField.contains("criticity") || sortField.contains("status")))
-				{
-					if(sortOrder.equals(SortOrder.DESCENDING))
+		if (multiSortMeta != null) {
+			for (SortMeta sortMeta : multiSortMeta) {
+				String sortField = sortMeta.getSortField();
+				SortOrder sortOrder = sortMeta.getSortOrder();
+				if (!(sortField.contains("importance")
+						|| sortField.contains("criticity") || sortField
+							.contains("status"))) {
+					if (sortOrder.equals(SortOrder.DESCENDING))
 						select.orderBy(criteriaBuilder.desc(from.get(sortField)));
-					else if(sortOrder.equals(SortOrder.ASCENDING))
-					{
+					else if (sortOrder.equals(SortOrder.ASCENDING)) {
 						select.orderBy(criteriaBuilder.asc(from.get(sortField)));
 					}
-				}else
-				{				
-					if(sortField.contains("importance"))
-					{					
-						Join<JJBug, JJImportance> owner = from.join("importance");
-						
-						if(sortOrder.equals(SortOrder.DESCENDING))
-							select.orderBy(criteriaBuilder.desc(owner.get("name")));
-						else if(sortOrder.equals(SortOrder.ASCENDING))
-						{
-							select.orderBy(criteriaBuilder.asc(owner.get("name")));
+				} else {
+					if (sortField.contains("importance")) {
+						Join<JJBug, JJImportance> owner = from
+								.join("importance");
+
+						if (sortOrder.equals(SortOrder.DESCENDING))
+							select.orderBy(criteriaBuilder.desc(owner
+									.get("name")));
+						else if (sortOrder.equals(SortOrder.ASCENDING)) {
+							select.orderBy(criteriaBuilder.asc(owner
+									.get("name")));
 						}
-					}else if(sortField.contains("criticity"))
-					{
+					} else if (sortField.contains("criticity")) {
 						Join<JJBug, JJCriticity> owner = from.join("criticity");
-						
-						if(sortOrder.equals(SortOrder.DESCENDING))
-							select.orderBy(criteriaBuilder.desc(owner.get("name")));
-						else if(sortOrder.equals(SortOrder.ASCENDING))
-						{
-							select.orderBy(criteriaBuilder.asc(owner.get("name")));
+
+						if (sortOrder.equals(SortOrder.DESCENDING))
+							select.orderBy(criteriaBuilder.desc(owner
+									.get("name")));
+						else if (sortOrder.equals(SortOrder.ASCENDING)) {
+							select.orderBy(criteriaBuilder.asc(owner
+									.get("name")));
 						}
-						
-					}else if(sortField.contains("status"))
-					{
+
+					} else if (sortField.contains("status")) {
 						Join<JJBug, JJStatus> owner = from.join("status");
-					
-						if(sortOrder.equals(SortOrder.DESCENDING))
-							select.orderBy(criteriaBuilder.desc(owner.get("name")));
-						else if(sortOrder.equals(SortOrder.ASCENDING))
-						{
-							select.orderBy(criteriaBuilder.asc(owner.get("name")));
+
+						if (sortOrder.equals(SortOrder.DESCENDING))
+							select.orderBy(criteriaBuilder.desc(owner
+									.get("name")));
+						else if (sortOrder.equals(SortOrder.ASCENDING)) {
+							select.orderBy(criteriaBuilder.asc(owner
+									.get("name")));
 						}
 					}
 				}
-				
-			}
-			
-				
-		}		
-		
 
-		TypedQuery<JJBug> result = entityManager.createQuery(select);		
+			}
+
+		}
+		TypedQuery<JJBug> result = entityManager.createQuery(select);
+		size.setValue(entityManager.createQuery(select).getResultList().size());
 		result.setFirstResult(first);
 		result.setMaxResults(pageSize);
 		
-		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
-		cq.select(criteriaBuilder.count(cq.from(JJBug.class)));
-		entityManager.createQuery(cq);
-		cq.where(predicates.toArray(new Predicate[] {}));
-		size.setValue(entityManager.createQuery(cq).getSingleResult());
-		
-		return result.getResultList();
-		
+		if (size.getValue() == 0 && multiSortMeta != null)
+			return load(size, first, pageSize, null, filters, project, product,
+					version);
+		else
+			return result.getResultList();
+
 	}
 
 	@Override
-	public List<JJBug> getBugs(JJProject project,JJProduct product,JJVersion version) {
+	public List<JJBug> getBugs(JJProject project, JJProduct product,
+			JJVersion version) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
-				.createQuery(JJBug.class);		
+				.createQuery(JJBug.class);
 		Root<JJBug> from = criteriaQuery.from(JJBug.class);
 
 		CriteriaQuery<JJBug> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();		
-			
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));	
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
@@ -276,37 +273,35 @@ public class JJBugServiceImpl implements JJBugService {
 		if (version != null) {
 			predicates.add(criteriaBuilder.equal(from.get("versioning"),
 					version));
-		}else if(product != null)
-		{
+		} else if (product != null) {
 			List<Predicate> orPredicates = new ArrayList<Predicate>();
-			product=entityManager.find(JJProduct.class, product.getId());
-			for(JJVersion v:product.getVersions())
-			{
-				if(v.getEnabled())
-					orPredicates.add(criteriaBuilder.equal(from.get("versioning"),
-							v));
+			product = entityManager.find(JJProduct.class, product.getId());
+			for (JJVersion v : product.getVersions()) {
+				if (v.getEnabled())
+					orPredicates.add(criteriaBuilder.equal(
+							from.get("versioning"), v));
 			}
 			Predicate orPredicate = criteriaBuilder.or(orPredicates
 					.toArray(new Predicate[] {}));
 			predicates.add(orPredicate);
-		}		
+		}
 
-		select.where(predicates.toArray(new Predicate[] {}));		
+		select.where(predicates.toArray(new Predicate[] {}));
 
 		TypedQuery<JJBug> result = entityManager.createQuery(select);
 		return result.getResultList();
 
 	}
-	
+
 	public void saveJJBug(JJBug JJBug_) {
-        jJBugRepository.save(JJBug_);
-        JJBug_= jJBugRepository.findOne(JJBug_.getId());
-    }
-    
-    public JJBug updateJJBug(JJBug JJBug_) {
-        jJBugRepository.save(JJBug_);
-        JJBug_= jJBugRepository.findOne(JJBug_.getId());
-        return JJBug_;
-    }
+		jJBugRepository.save(JJBug_);
+		JJBug_ = jJBugRepository.findOne(JJBug_.getId());
+	}
+
+	public JJBug updateJJBug(JJBug JJBug_) {
+		jJBugRepository.save(JJBug_);
+		JJBug_ = jJBugRepository.findOne(JJBug_.getId());
+		return JJBug_;
+	}
 
 }

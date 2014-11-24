@@ -74,6 +74,11 @@
 			</p:overlayPanel>
 
 			<h:form id="bugForm">
+				<p:remoteCommand name="preRenderDataTable" update="bugTable2" 
+					oncomplete="setFilterValue(#{bugDataTableOptions.importance},#{bugDataTableOptions.status},#{bugDataTableOptions.criticity})" />
+
+				<f:event type="preRenderComponent"
+					listener="#{bugDataTableOptions.dataTableInit}" />
 				<pe:blockUI target="bugTable2" content="blockUIContent"
 					widgetVar="blockUIWidget2" />
 				<h:panelGrid id="blockUIContent" columns="2"
@@ -88,6 +93,7 @@
 					style="table-layout: fixed;" value="#{jJBugBean.bugList}"
 					rowKey="#{bug.id}" var="bug" widgetVar="bugTable" lazy="true"
 					rowStyleClass="#{bug.status.name}"
+					binding="#{bugDataTableOptions.dataTable}"
 					emptyMessage="#{messages.bug_table_alert}"
 					selection="#{jJBugBean.selectedBugList}" paginator="true" rows="10"
 					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
@@ -130,7 +136,7 @@
 						</h:outputText>
 					</p:column>
 					<p:column headerText="#{messages.bug_table_criticity_title}"
-						sortBy="criticity.name"
+						sortBy="criticity.name" id="criticity" filterStyleClass="criticity"
 						style="width: 10% !important;height: 5px !important;"
 						filterOptions="#{jJBugBean.criticityOptions}"
 						filterMatchMode="exact" filterStyle="width: 90%;"
@@ -138,7 +144,7 @@
 						<h:outputText value="#{bug.criticity.name}" />
 					</p:column>
 					<p:column headerText="#{messages.bug_table_importance_title}"
-						sortBy="importance.name"
+						sortBy="importance.name" id="importance" filterStyleClass="importance"
 						style="width: 10% !important;height: 5px !important;"
 						filterOptions="#{jJBugBean.importanceOptions}"
 						filterMatchMode="exact" filterStyle="width: 90%;"
@@ -146,8 +152,8 @@
 						<h:outputText value="#{bug.importance.name}" />
 					</p:column>
 					<p:column headerText="#{messages.bug_table_status_title}"
-						sortBy="status.name" filterBy="status.name"
-						style="width: 10% !important;height: 5px !important;"
+						sortBy="status.name" filterBy="status.name" id="status"
+						style="width: 10% !important;height: 5px !important;" filterStyleClass="status" 
 						filterOptions="#{jJBugBean.statusOptions}" filterMatchMode="exact"
 						filterStyle="width: 90%;">
 						<h:outputText value="#{bug.status.name}" />
@@ -158,7 +164,7 @@
 						</f:facet>
 						<p:splitButton value="Action">
 							<p:menuitem id="editButton" icon="ui-icon-pencil"
-								value="#{messages.label_edit}" update=":editForm :bugForm"
+								value="#{messages.label_edit}" update=":editForm"
 								oncomplete="PF('editDialogWidget').show()"
 								title="#{messages.label_edit}">
 								<f:setPropertyActionListener value="#{bug}"
@@ -167,7 +173,7 @@
 									target="#{jJBugBean.bugProjectSelected}" />
 								<f:setPropertyActionListener value="#{bug.requirement}"
 									target="#{jJBugBean.bugRequirementSelected}" />
-									<f:setPropertyActionListener value="#{bug.versioning}"
+								<f:setPropertyActionListener value="#{bug.versioning}"
 									target="#{jJBugBean.bugVersionSelected}" />
 							</p:menuitem>
 							<p:tooltip for="editButton" value="#{messages.label_edit}"
@@ -186,7 +192,7 @@
 					<f:facet name="footer">
 						<p:commandButton value="#{messages.bug_create_button}"
 							id="createButton" icon="ui-icon-circle-plus"
-							update=":createForm :bugForm"
+							update=":createForm "
 							oncomplete="PF('createDialogWidget').show()"
 							title="#{messages.label_create}" />
 						<p:tooltip for="createButton" value="#{messages.label_create}"
@@ -203,11 +209,11 @@
 				</p:dataTable>
 			</h:form>
 			<p:dialog id="createDialog" header="#{messages.bug_create_title}"
-				modal="true" widgetVar="createDialogWidget" dynamic="true"
-				visible="#{jJBugBean.createDialogVisible}" resizable="true"
-				maximizable="true" showEffect="fade" hideEffect="explode">
-				<p:ajax event="close" update="createForm :bugForm"
-					listener="#{jJBugBean.handleDialogClose}" />
+				draggable="false" modal="true" widgetVar="createDialogWidget"
+				dynamic="true" visible="#{jJBugBean.createDialogVisible}"
+				resizable="true" maximizable="true" showEffect="fade"
+				hideEffect="explode">
+				<p:ajax event="close" listener="#{jJBugBean.handleDialogClose}" />
 				<p:outputPanel id="createPanel">
 					<h:form id="createForm" enctype="multipart/form-data">
 						<ui:include src="bugDialog.xhtml">
@@ -217,7 +223,7 @@
 							onstart="PF('bugBlockUIWidget').block()"
 							oncomplete="PF('bugBlockUIWidget').unblock()"
 							value="#{messages.label_save}" action="#{jJBugBean.persistBug}"
-							update="createPanelGrid,:bugForm:bugMessage,:bugForm" />
+							update="createPanelGrid,:bugForm" />
 						<p:commandButton id="createCloseButton"
 							value="#{messages.label_close}"
 							onclick="PF('createDialogWidget').hide()" type="button" />
@@ -228,9 +234,8 @@
 			<p:dialog id="editDialog" header="#{messages.bug_edit_title}"
 				modal="true" widgetVar="editDialogWidget" dynamic="true"
 				resizable="true" maximizable="true" showEffect="fade"
-				hideEffect="explode">
-				<p:ajax event="close" update=":bugForm editForm"
-					listener="#{jJBugBean.handleDialogClose}" />
+				hideEffect="explode" draggable="false">
+				<p:ajax event="close" listener="#{jJBugBean.handleDialogClose}" />
 				<p:outputPanel id="editPanel">
 					<h:form id="editForm" enctype="multipart/form-data">
 						<ui:include src="bugDialog.xhtml">
@@ -241,8 +246,7 @@
 							oncomplete="PF('bugBlockUIWidget').unblock()"
 							value="#{messages.bug_edit_save_button}"
 							action="#{jJBugBean.persistBug}"
-							onsuccess="PF('editDialogWidget').hide()"
-							update="createPanelGrid :bugForm:bugMessage :bugForm" />
+							update="createPanelGrid :bugForm" />
 						<p:commandButton id="editCloseButton"
 							value="#{messages.bug_edit_close_button}"
 							onclick="PF('editDialogWidget').hide()" type="button" />
@@ -258,8 +262,7 @@
 					<h:form id="deleteForm">
 						<p:commandButton id="deleteYesButton"
 							value="#{messages.bug_delete_yes_button}"
-							action="#{jJBugBean.deleteSingle}"
-							update=":bugForm :bugForm:bugMessage"
+							action="#{jJBugBean.deleteSingle}" update=":bugForm"
 							onsuccess="PF('deleteDialogWidget').hide()" />
 						<p:commandButton id="deleteNoButton"
 							value="#{messages.bug_delete_no_button}"
@@ -276,8 +279,7 @@
 					<h:form id="deleteMForm">
 						<p:commandButton id="deleteYesButton"
 							value="#{messages.bug_delete_yes_button}"
-							action="#{jJBugBean.deleteMultiple}"
-							update=":bugForm :bugForm:bugMessage"
+							action="#{jJBugBean.deleteMultiple}" update=":bugForm"
 							onsuccess="PF('deleteMDialogWidget').hide()" />
 						<p:commandButton id="deleteNoButton"
 							value="#{messages.bug_delete_no_button}"

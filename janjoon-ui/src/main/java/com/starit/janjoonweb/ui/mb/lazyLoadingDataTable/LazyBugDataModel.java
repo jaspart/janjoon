@@ -6,6 +6,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
@@ -17,6 +21,7 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.JJBugBean;
+import com.starit.janjoonweb.ui.mb.JJProjectBean;
 import com.starit.janjoonweb.ui.mb.LoginBean;
 
 public class LazyBugDataModel extends LazyDataModel<JJBug> {
@@ -28,7 +33,7 @@ public class LazyBugDataModel extends LazyDataModel<JJBug> {
 	JJBugService bugService;
 	JJProject project;
 	JJProduct product;
-	JJVersion version;
+	JJVersion version;	
 
 	public LazyBugDataModel(JJBugService bugService, JJProject project,JJProduct product,JJVersion version) {
 		this.project = project;
@@ -76,24 +81,26 @@ public class LazyBugDataModel extends LazyDataModel<JJBug> {
 	public List<JJBug> load(int first, int pageSize,
 			List<SortMeta> multiSortMeta, Map<String, String> filters) {
 
-		
+		System.err.println("FIRST "+first);
 		List<JJBug> data = new ArrayList<JJBug>();		
 		MutableInt size=new MutableInt(0);
 		data = bugService.load(size,first, pageSize, multiSortMeta,filters, project,product,version);
-		setRowCount(size.getValue());
-		System.err.println("SIZE :" + data.size());
+			setRowCount(size.getValue());
+			System.err.println("SIZE :" + data.size());
 
-		int dataSize = data.size();
-
-		if (dataSize > pageSize) {
-			try {
-				return data.subList(first, first + pageSize);
-			} catch (IndexOutOfBoundsException e) {
-				return data.subList(first, first + (dataSize % pageSize));
-			}
-		} else {
-			return data;
-		}
+			int dataSize = data.size();			
+			((HttpSession) FacesContext.getCurrentInstance().getExternalContext().
+			getSession(false)).setAttribute("bugDataTableOptions",new BugDataTableOptions(first, multiSortMeta, filters));
+			if (dataSize > pageSize) {
+				try {
+					return data.subList(first, first + pageSize);
+				} catch (IndexOutOfBoundsException e) {
+					return data.subList(first, first + (dataSize % pageSize));
+				}
+			} else {
+				return data;
+			}	
+		
 	}
 
 }
