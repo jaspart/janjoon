@@ -6,7 +6,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
-<ui:composition template="../templates/layout.xhtml">
+<ui:composition template="../templates/layout-login.xhtml">
 	<ui:define name="title">#{messages.login_title}</ui:define>
 	<ui:define name="content">
 		<f:event listener="#{loginBean.loginRedirect}" type="preRenderView" />
@@ -15,7 +15,7 @@
 				<f:facet name="header">
 					<p:row>
 						<p:column colspan="2">
-							<p:outputLabel value="#{messages.login_pleaseLogin_header}" />
+							<p:outputLabel value="  #{messages.login_pleaseLogin_header}"/>
 						</p:column>
 					</p:row>
 				</f:facet>
@@ -58,7 +58,7 @@
 					</p:column>
 				</p:row>
 				<f:facet name="footer">
-					<p:row>
+					<p:row style="padding: 4px 1px;">
 						<p:column colspan="2">
 							<p:selectBooleanCheckbox value="#{loginBean.agreeTerms}" >
 							<p:ajax event="change" update="submit" />

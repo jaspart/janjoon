@@ -7,69 +7,19 @@
 <ui:composition>
 	<div id="footer">
 		<h:form>
-			<p:separator style="margin-top:15px;" />
-			<h:panelGrid columns="2" cellspacing="0" cellpadding="0">
-				<h:panelGrid width="50%" cellspacing="0" cellpadding="0">
-					<!--h:panelGrid columns="5">
-						<h:outputText value="#{messages.label_language}:" />
-						<h:panelGroup>
-							<h:commandLink id="switchToEnglish">
-								<f:param name="locale" value="en" />
-								<h:graphicImage library="images" name="en.png"
-									alt="Switch language to English" />
-							</h:commandLink>
-							<p:tooltip for="switchToEnglish">
-								<h:outputFormat value="#{messages.label_language_switch}">
-									<f:param value="English" />
-								</h:outputFormat>
-							</p:tooltip>
-						</h:panelGroup>
-						<h:panelGroup>
-							<h:commandLink id="switchToGerman">
-								<f:param name="locale" value="de" />
-								<h:graphicImage library="images" name="de.png"
-									alt="Switch language to German" />
-							</h:commandLink>
-							<p:tooltip for="switchToGerman">
-								<h:outputFormat value="#{messages.label_language_switch}">
-									<f:param value="Deutsch" />
-								</h:outputFormat>
-							</p:tooltip>
-						</h:panelGroup>
-						<h:panelGroup>
-							<h:commandLink id="switchToSpanish">
-								<f:param name="locale" value="es" />
-								<h:graphicImage library="images" name="es.png"
-									alt="Switch language to Spanish" />
-							</h:commandLink>
-							<p:tooltip for="switchToSpanish">
-								<h:outputFormat value="#{messages.label_language_switch}">
-									<f:param value="Espanol" />
-								</h:outputFormat>
-							</p:tooltip>
-						</h:panelGroup>
-						<h:panelGroup>
-							<h:commandLink id="switchToFrench">
-								<f:param name="locale" value="fr" />
-								<h:graphicImage library="images" name="fr.png"
-									alt="Switch language to French" />
-							</h:commandLink>
-							<p:tooltip for="switchToFrench">
-								<h:outputFormat value="#{messages.label_language_switch}">
-									<f:param value="French" />
-								</h:outputFormat>
-							</p:tooltip>
-						</h:panelGroup>
-					</h:panelGrid-->
-				</h:panelGrid>
-				<h:panelGrid align="right">
-					<h:outputText value=" Version 1.2-BUILD_NUMBER Hydrogen Deuterium">
-						<h:outputLink value="http://www.starit.fr">
+			<p:separator style="margin-top:5px;" />
+			<h:panelGrid columns="2" cellspacing="0" cellpadding="0" width="100%">
+				<p:row>
+					<p:column width="50%">
+						<h:outputText value=" Version 1.2-BUILD_NUMBER Hydrogen Deuterium"/>
+					</p:column>
+					<p:column  width="50%" style="text-align: right;" rendered="#{loginBean.enable}">
+						<h:outputLink value="https://www.starit.fr">
 							<h:graphicImage library="images" name="starit-logo.png"
 								alt="StarIT - Janjoon" />
 						</h:outputLink>
-					</h:outputText>
-				</h:panelGrid>
+					</p:column>
+				</p:row>
 			</h:panelGrid>
 		</h:form>
 	</div>

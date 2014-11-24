@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<f:event listener="#{loginBean.checkAuthorities}" type="preRenderView" />
+<f:view locale="#{localeBean.locale}" contentType="text/html">
+	<h:head >
+		<h:outputScript library="primefaces" name="jquery/jquery.js" />
+		<script type="text/javascript">
+			function centerDialog() {
+				var top, left;
+				top = Math.max($(window).height() - $("#frame").outerHeight(),
+						0) / 2;
+				left = Math
+						.max($(window).width() - $("#frame").outerWidth(), 0) / 2;
+				$("#frame").css({
+					top : top,
+					left : left
+				});
+			}	
+			
+			function updateRowExapansion() {
+				$(".rowExpansion").slideUp("fast");
+				}
+			function setFilterValue(importance,status,criticity)
+			{
+				$(".criticity").val(criticity);
+				$(".importance").val(importance);
+				$(".status").val(status);
+				alert("dfgdfg");
+			}
+		</script>
+	</h:head>
+	<h:body styleClass="login-body">
+		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
+			<p:panel styleClass="login-content">
+				
+				<ui:insert name="header" rendered="false">
+						<ui:include src="generic-login.xhtml" />
+				</ui:insert>
+
+				<p:panel id="contentPanel" styleClass="content">
+					<f:event listener="#{loginBean.initMenuIndexvalue}"
+						type="preRenderView" />
+					<ui:insert name="content" />
+					<p:growl id="auth" for="login" styleClass="alert alert-error"
+						showDetail="true" life="2000" />
+				</p:panel>
+				<ui:insert name="footer">
+					<ui:include src="footer.xhtml" />
+				</ui:insert>
+			</p:panel>
+			<pe:blockUI widgetVar="blockUIWidget">
+				<h:panelGrid columns="2">
+					<p:graphicImage library="images" name="ajax-loader.gif"
+						style="vertical-align: middle;" />
+					<h:outputText value="#{messages.label_refresh}"
+						style="white-space: nowrap;" />
+				</h:panelGrid>
+			</pe:blockUI>
+
+		</h:panelGrid>
+		<script type="text/javascript">
+			jQuery("div.ui-growl").remove();
+		</script>
+	</h:body>
+</f:view>
+</html>

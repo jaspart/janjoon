@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+	<title>#{messages.label_appName}</title>
+	<h:outputStylesheet library="css" name="standard.css" />
+	<h:outputScript library="js" name="calendar.js" />
+	<f:event listener="#{loginBean.loadingMain}" type="preRenderView" />
+
+	<h:form id="headerForm" style="visibility: hidden;height: 0px;">
+
+		<p:growl id="growlHeader" showDetail="true" life="1500" />
+		<h:panelGrid id="panelHeader" columns="2" cellpadding="2"
+			style="background-color:white;width:100%;visibility: hidden;">
+
+			<h:panelGrid id="panelMenu" columns="1" cellpadding="2"
+				style="background-color:white;width:100%;">
+
+				<h:panelGrid columns="8" align="left" style="width:100%;">
+
+					<!--h:outputText value="#{messages.header_product_label}:" /-->
+					<p:selectOneMenu id="productSelectOneMenu"
+						value="#{jJProductBean.product}" panelStyle="width:120px"
+						effect="fade" style="width:160px" filter="true"
+						valueChangeListener="#{loginBean.changeEvent}"
+						filterMatchMode="startsWith"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
+
+						<f:selectItem itemValue="#{null}" itemLabel="AnyProduct" />
+						<f:selectItems value="#{jJProductBean.productList}" var="p"
+							itemLabel="#{p.name}" itemValue="#{p}" />
+						<p:ajax onstart="PF('blockUIWidget').block()"
+							update="versionSelectOneMenu :contentPanel "
+							oncomplete="PF('blockUIWidget').unblock()" />
+					</p:selectOneMenu>
+
+					<!--h:outputText value="#{messages.header_version_label}:" /-->
+					<p:selectOneMenu id="versionSelectOneMenu"
+						value="#{jJVersionBean.version}" panelStyle="width:120px"
+						effect="fade" style="width:160px" filter="true"
+						valueChangeListener="#{loginBean.changeEvent}"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
+						filterMatchMode="startsWith" disabled="#{jJVersionBean.disabled}">
+
+						<f:selectItem itemValue="#{null}" itemLabel="AnyVersion" />
+
+						<f:selectItems value="#{jJVersionBean.versionList}" var="v"
+							itemLabel="#{v.name}" itemValue="#{v}" />
+
+						<p:ajax onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							update=":contentPanel " />
+					</p:selectOneMenu>
+
+					<p:splitButton
+						value="#{loginBean.contact.firstname} #{loginBean.contact.name}"
+						rendered="#{loginBean.enable}" style="right: 0px;">
+						<p:menuitem value="#{messages.header_config_link}"
+							icon="ui-icon-person" />
+						<p:menuitem value="#{messages.header_logout_link}"
+							url="logout.jsf" actionListener="#{loginBean.logout}"
+							icon="ui-icon-extlink" />
+					</p:splitButton>
+
+				</h:panelGrid>
+
+			</h:panelGrid>
+		</h:panelGrid>
+		<!--p:sticky target="panelMenu" /-->
+	</h:form>
+</ui:composition>
+</html>
