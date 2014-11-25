@@ -106,8 +106,8 @@ public class BugDataTableOptions {
 		dataTable.setFirst(first);
 		dataTable.setFilters(filters);
 		dataTable.setMultiSortMeta(multiSortMeta);
-		if(importance != null)
-			RequestContext.getCurrentInstance().execute("preRenderDataTable()");
+//		if(importance != null)
+//			RequestContext.getCurrentInstance().execute("preRenderDataTable()");
 	}
 
 	public int getFirst() {

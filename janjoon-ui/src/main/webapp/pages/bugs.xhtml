@@ -74,8 +74,8 @@
 			</p:overlayPanel>
 
 			<h:form id="bugForm">
-				<p:remoteCommand name="preRenderDataTable" update="bugTable2" 
-					oncomplete="setFilterValue(#{bugDataTableOptions.importance},#{bugDataTableOptions.status},#{bugDataTableOptions.criticity})" />
+<!-- 				<p:remoteCommand name="preRenderDataTable" update="bugTable2"  -->
+<!-- 					oncomplete="setFilterValue(#{bugDataTableOptions.importance},#{bugDataTableOptions.status},#{bugDataTableOptions.criticity})" /> -->
 
 				<f:event type="preRenderComponent"
 					listener="#{bugDataTableOptions.dataTableInit}" />

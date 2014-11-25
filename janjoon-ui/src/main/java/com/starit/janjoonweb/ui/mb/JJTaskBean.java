@@ -1,6 +1,8 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -1540,6 +1542,7 @@ public class JJTaskBean {
 					.getAttribute("JJContact");
 		
 		ContactCalendarUtil calendarUtil = new ContactCalendarUtil(c.getCompany());
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH");
 
 		for (ImportFormat format : importFormats) {
 
@@ -1581,7 +1584,7 @@ public class JJTaskBean {
 							.getObject();
 
 					name = requirement.getName() + "("
-							+ new Date().toString()+ ")";
+							+ df.format(new Date())+ "h)";
 
 					requirement = jJRequirementService
 							.findJJRequirement(requirement.getId());
@@ -1595,7 +1598,7 @@ public class JJTaskBean {
 					JJBug bug = (JJBug) format.getObject();
 
 					name = bug.getName() + "("
-							+ new Date().toString() + ")";
+							+ df.format(new Date()) + "h)";
 
 					bug = jJBugService.findJJBug(bug.getId());
 					bug.getTasks().add(task);
@@ -1607,7 +1610,7 @@ public class JJTaskBean {
 					JJTestcase testcase = (JJTestcase) format.getObject();
 
 					name = testcase.getName() + "("
-							+ new Date().toString() + ")";
+							+ df.format(new Date()) + "h)";
 
 					testcase = jJTestcaseService.findJJTestcase(testcase
 							.getId());
@@ -1627,6 +1630,9 @@ public class JJTaskBean {
 
 					JJSprintBean jJSprintBean = (JJSprintBean) session
 							.getAttribute("jJSprintBean");
+					task.setCreationDate(new Date());
+					task.setCreatedBy((JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+							.getSession(false)).getAttribute("JJContact"));
 					JJStatus status = jJStatusService.getOneStatus("TODO",
 							"Task", true);
 					if (status != null)
@@ -2596,7 +2602,7 @@ public class JJTaskBean {
 			}
 
 			int k = containTaskData(tt.getId());
-			if (k != -1 && tasksData.get(k).getChapter() != null)
+			if (k != -1 && tasksData.get(k).getChapter() != null && sortMode.equalsIgnoreCase("chapter") )
 				updateChapterTimeLineEvent(tasksData.get(k).getChapter());
 		}
 		
