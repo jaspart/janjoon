@@ -15,7 +15,7 @@
 			listener="#{jJTestcaseBean.loadData()}" />
 
 
-		<p:layout styleClass="content" style="min-height:500px;"
+		<p:layout styleClass="content" style="min-height:500px;overflow:hidden !important;height:700px !important;"
 			stateful="true">
 
 			<p:layoutUnit position="north" style="min-height:30px;">
@@ -36,7 +36,7 @@
 			</p:layoutUnit>
 
 			<p:layoutUnit position="west"
-				style="min-width:200px;min-height:500px;" resizable="true">
+				style="min-width:200px;min-height:500px;height:600px !important;" resizable="true">
 				<h:form id="testFormWest">
 					<p:panelGrid>
 						<p:row>
@@ -52,8 +52,7 @@
 									<f:selectItems value="#{jJBuildBean.builds}" var="c"
 										itemLabel="#{c.name}" itemValue="#{c}" />
 									<p:ajax process="@this" partialSubmit="true"
-										listener="#{jJTestcaseBean.loadData()}"
-										update=":testFormWest :testFormCenter"
+										update=":testFormWest:build :testFormCenter"
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()" />
 								</p:selectOneMenu>
@@ -126,204 +125,207 @@
 					</p:panelGrid>
 				</h:form>
 			</p:layoutUnit>
-			<p:layoutUnit position="center" resizable="true"
-				style="min-height:500px;">
-				<h:form id="testFormCenter">
-					<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
-						style="float: right;" />
-					<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
-						dynamic="true">
-						<p:panelGrid>
+			<p:layoutUnit position="center" resizable="false"
+				style="min-height:500px;width:1060px !important;height:600px !important;">				
+					<h:form id="testFormCenter">
+						<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
+							style="float: right;" />
+						<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade">
+							<p:panelGrid>
+								<f:facet name="header">
+									<p:row>
+										<p:column colspan="12">#{messages.test_color_title}</p:column>
+									</p:row>
+								</f:facet>
+								<p:row>
+									<p:column colspan="2" styleClass="TestcaseSuccess">
+										<p:outputLabel
+											value="#{messages.test_color_TestcaseSuccess_title}" />
+									</p:column>
+
+									<p:column colspan="2" styleClass="TestcaseFailed">
+										<p:outputLabel
+											value="#{messages.test_color_TestcaseFailed_title}" />
+									</p:column>
+
+									<p:column colspan="2" styleClass="TestcaseNotExecuted">
+										<p:outputLabel
+											value="#{messages.test_color_TestcaseNotExecuted_title}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column colspan="2" styleClass="TestcaseWithoutTeststep">
+										<p:outputLabel
+											value="#{messages.test_color_TestcaseNotExecuted_title}" />
+									</p:column>
+
+									<p:column colspan="2" styleClass="TestcaseNonFini">
+										<p:outputLabel
+											value="#{messages.test_color_TestcaseNonFini_title}" />
+									</p:column>
+
+									<p:column colspan="2" styleClass="TestcaseChapter">
+										<p:outputLabel
+											value="#{messages.test_color_TestcaseChapter_title}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column colspan="2" styleClass="TestcaseFailedWithoutBuild">
+										<p:outputLabel
+											value="#{messages.test_color_TestcaseFailedWithoutBuild_title}" />
+									</p:column>
+
+									<p:column colspan="2" styleClass="TestcaseNonFiniWithoutBuild">
+										<p:outputLabel
+											value="#{messages.test_color_TestcaseNonFiniWithoutBuild_title}" />
+									</p:column>
+
+									<p:column colspan="2" styleClass="TestcaseSuccessWithoutBuild">
+										<p:outputLabel
+											value="#{messages.test_color_TestcaseSuccessWithoutBuild_title}" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:overlayPanel>
+
+						<h:outputText value="#{messages.test_select_alert}"
+							rendered="#{jJTestcaseBean.rendredEmptySelection}"
+							style="color: red;" />
+						<p:dataTable id="testcaseRecapDataTable" var="tcr"
+							paginatorPosition="bottom"
+							value="#{jJTestcaseBean.testCaseRecaps}" paginator="true"
+							rows="8" style="width:550px;" rowKey="#{tcr.testcase.name}"
+							rendered="#{jJTestcaseBean.rendredTestCaseRecaps}">
+							<f:facet name="header">
+								<h:outputText value="#{jJTestcaseBean.chapter.name}" />
+							</f:facet>
+							<p:column exportable="false">
+								<f:facet name="header">
+									<h:outputText value="#{messages.test_table_testcase_title}" />
+								</f:facet>
+								<h:outputText value="#{tcr.testcase.name}" />
+							</p:column>
+							<p:column exportable="false">
+								<f:facet name="header">
+									<h:outputText value="#{messages.test_table_status_title}" />
+								</f:facet>
+								<h:outputText value="#{tcr.status}" />
+							</p:column>
+
+							<p:column styleClass="action-column">
+								<f:facet name="header">
+									<h:outputText value="#{messages.test_table_action_title}" />
+								</f:facet>
+								<p:commandButton id="runButton" icon="ui-icon-play"
+									oncomplete="PF('runTestcaseDialogWidget').show()"
+									action="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
+									update=":runTestcaseDialog" disabled="#{tcr.disabled}">
+									<f:setPropertyActionListener value="#{tcr.testcase}"
+										target="#{jJTestcaseBean.testcase}" />
+								</p:commandButton>
+								<p:tooltip for="runButton" value="Run #{tcr.testcase.name}"
+									showEffect="fade" hideEffect="fade" />
+								<p:commandButton id="editButton" icon="ui-icon-pencil"
+									oncomplete="PF('testcaseDialogWidget').show()"
+									action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
+									update=":testcaseDialog">
+									<f:setPropertyActionListener value="#{tcr.testcase}"
+										target="#{jJTestcaseBean.testcase}" />
+								</p:commandButton>
+								<p:tooltip for="editButton" value="#{messages.label_edit}"
+									showEffect="fade" hideEffect="fade" />
+							</p:column>
+							<f:facet name="footer">
+								<p:commandButton value="#{messages.test_create_button}"
+									id="newTestcase"
+									actionListener="#{jJTestcaseBean.newTestcase(jJTeststepBean)}"
+									update=":testcaseDialog"
+									oncomplete="PF('testcaseDialogWidget').show()"
+									icon="ui-icon-circle-plus" />
+							</f:facet>
+						</p:dataTable>
+
+						<p:lineChart id="filled" value="#{chartBean.categoryModel}"
+							legendPosition="ne" title="#{messages.test_graph_testcase_title}"
+							seriesColors="#{chartBean.seriesColors}"
+							style="height:300px;margin-top:20px;"
+							xaxisLabel="#{messages.test_graph_ordinate_label}"
+							yaxisLabel="#{messages.test_graph_abscissa_label}" animate="true"
+							rendered="#{jJTestcaseBean.rendredTestCaseRecaps}" />
+
+						<p:dataTable id="teststepRecapDataTable"
+							paginatorPosition="bottom" value="#{jJTeststepBean.teststeps}"
+							rowKey="#{ts.name}" var="ts"
+							rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
+							paginator="true" rows="8" style="width:650px;">
 							<f:facet name="header">
 								<p:row>
-									<p:column colspan="12">#{messages.test_color_title}</p:column>
+									<p:column>
+										<h:outputText
+											value="TC #{jJTestcaseBean.testcase.ordering}: #{jJTestcaseBean.testcase.name}" />
+										<br />
+									</p:column>
+									<p:column>
+										<h:outputText
+											value=" Requirement: #{jJTestcaseBean.testcase.requirement.name}" />
+										<br />
+									</p:column>
+									<p:column>
+										<p:commandButton id="editButton" icon="ui-icon-pencil"
+											oncomplete="PF('testcaseDialogWidget').show()"
+											action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
+											update=":testcaseDialog" />
+										<p:tooltip for="editButton" value="#{messages.label_edit}"
+											showEffect="fade" hideEffect="fade" />
+										<p:commandButton id="runButton" icon="ui-icon-play"
+											oncomplete="PF('runTestcaseDialogWidget').show()"
+											actionListener="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
+											update=":runTestcaseDialog"
+											disabled="#{jJBuildBean.build ne null ? false : true }">
+											<f:setPropertyActionListener
+												value="#{jJTestcaseBean.testcase}"
+												target="#{jJTestcaseBean.testcase}" />
+										</p:commandButton>
+									</p:column>
 								</p:row>
+
 							</f:facet>
-							<p:row>
-								<p:column colspan="2" styleClass="TestcaseSuccess">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseSuccess_title}" />
-								</p:column>
 
-								<p:column colspan="2" styleClass="TestcaseFailed">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseFailed_title}" />
-								</p:column>
+							<p:column headerText="Order">
+								<h:outputText value="#{ts.ordering}" />
+							</p:column>
 
-								<p:column colspan="2" styleClass="TestcaseNotExecuted">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseNotExecuted_title}" />
-								</p:column>
-							</p:row>
-							<p:row>
-								<p:column colspan="2" styleClass="TestcaseWithoutTeststep">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseNotExecuted_title}" />
-								</p:column>
+							<p:column headerText="Action">
+								<h:outputText value="#{ts.actionstep}" />
+							</p:column>
+							<p:column headerText="Result">
+								<h:outputText value="#{ts.resultstep}" />
+							</p:column>
+						</p:dataTable>
 
-								<p:column colspan="2" styleClass="TestcaseNonFini">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseNonFini_title}" />
-								</p:column>
-
-								<p:column colspan="2" styleClass="TestcaseChapter">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseChapter_title}" />
-								</p:column>
-							</p:row>
-							<p:row>
-								<p:column colspan="2" styleClass="TestcaseFailedWithoutBuild">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseFailedWithoutBuild_title}" />
-								</p:column>
-
-								<p:column colspan="2" styleClass="TestcaseNonFiniWithoutBuild">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseNonFiniWithoutBuild_title}" />
-								</p:column>
-
-								<p:column colspan="2" styleClass="TestcaseSuccessWithoutBuild">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseSuccessWithoutBuild_title}" />
-								</p:column>
-							</p:row>
-						</p:panelGrid>
-					</p:overlayPanel>
-
-					<h:outputText value="#{messages.test_select_alert}"
-						rendered="#{jJTestcaseBean.rendredEmptySelection}"
-						style="color: red;" />
-					<p:dataTable id="testcaseRecapDataTable" var="tcr" paginatorPosition="bottom"
-						value="#{jJTestcaseBean.testCaseRecaps}" paginator="true" rows="8"
-						style="width:550px;" rowKey="#{tcr.testcase.name}" 
-						rendered="#{jJTestcaseBean.rendredTestCaseRecaps}">
-						<f:facet name="header">
-							<h:outputText value="#{jJTestcaseBean.chapter.name}" />
-						</f:facet>
-						<p:column exportable="false">
-							<f:facet name="header">
-								<h:outputText value="#{messages.test_table_testcase_title}" />
-							</f:facet>
-							<h:outputText value="#{tcr.testcase.name}" />
-						</p:column>
-						<p:column exportable="false">
-							<f:facet name="header">
-								<h:outputText value="#{messages.test_table_status_title}" />
-							</f:facet>
-							<h:outputText value="#{tcr.status}" />
-						</p:column>
-
-						<p:column styleClass="action-column">
-							<f:facet name="header">
-								<h:outputText value="#{messages.test_table_action_title}" />
-							</f:facet>
-							<p:commandButton id="runButton" icon="ui-icon-play"
-								oncomplete="PF('runTestcaseDialogWidget').show()"
-								action="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
-								update=":runTestcaseDialog" disabled="#{tcr.disabled}">
-								<f:setPropertyActionListener value="#{tcr.testcase}"
-									target="#{jJTestcaseBean.testcase}" />
-							</p:commandButton>
-							<p:tooltip for="runButton" value="Run #{tcr.testcase.name}"
-								showEffect="fade" hideEffect="fade" />
-							<p:commandButton id="editButton" icon="ui-icon-pencil"
-								oncomplete="PF('testcaseDialogWidget').show()"
-								action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
-								update=":testcaseDialog">
-								<f:setPropertyActionListener value="#{tcr.testcase}"
-									target="#{jJTestcaseBean.testcase}" />
-							</p:commandButton>
-							<p:tooltip for="editButton" value="#{messages.label_edit}"
-								showEffect="fade" hideEffect="fade" />
-						</p:column>
-						<f:facet name="footer">
-							<p:commandButton value="#{messages.test_create_button}"
-								id="newTestcase"
-								actionListener="#{jJTestcaseBean.newTestcase(jJTeststepBean)}"
-								update=":testcaseDialog"
-								oncomplete="PF('testcaseDialogWidget').show()"
-								icon="ui-icon-circle-plus" />
-						</f:facet>
-					</p:dataTable>
-
-					<p:lineChart id="filled" value="#{chartBean.categoryModel}"
-						legendPosition="ne" title="#{messages.test_graph_testcase_title}"
-						seriesColors="#{chartBean.seriesColors}"
-						style="height:300px;margin-top:20px;"
-						xaxisLabel="#{messages.test_graph_ordinate_label}"
-						yaxisLabel="#{messages.test_graph_abscissa_label}" animate="true"
-						rendered="#{jJTestcaseBean.rendredTestCaseRecaps}" />
-
-					<p:dataTable id="teststepRecapDataTable" paginatorPosition="bottom"
-						value="#{jJTeststepBean.teststeps}" rowKey="#{ts.name}" var="ts"
-						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}" 
-						paginator="true" rows="8" style="width:650px;">
-						<f:facet name="header" >
-							<p:row >
-								<p:column>
-									<h:outputText
-										value="TC #{jJTestcaseBean.testcase.ordering}: #{jJTestcaseBean.testcase.name}" />
-										<br/>										
-								</p:column>	
-								<p:column>
-									<h:outputText
-										value=" Requirement: #{jJTestcaseBean.testcase.requirement.name}" /><br/>	
-								</p:column>							
-								<p:column>
-									<p:commandButton id="editButton" icon="ui-icon-pencil"
-										oncomplete="PF('testcaseDialogWidget').show()"
-										action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
-										update=":testcaseDialog" />
-									<p:tooltip for="editButton" value="#{messages.label_edit}"
-										showEffect="fade" hideEffect="fade" />
-									<p:commandButton id="runButton" icon="ui-icon-play"
-										oncomplete="PF('runTestcaseDialogWidget').show()"
-										actionListener="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
-										update=":runTestcaseDialog"
-										disabled="#{jJBuildBean.build ne null ? false : true }">
-										<f:setPropertyActionListener
-											value="#{jJTestcaseBean.testcase}"
-											target="#{jJTestcaseBean.testcase}" />
-									</p:commandButton>
-								</p:column>
-							</p:row>
-			
-						</f:facet>
-
-						<p:column headerText="Order">
-							<h:outputText value="#{ts.ordering}" />
-						</p:column>
-
-						<p:column headerText="Action">
-							<h:outputText value="#{ts.actionstep}" />
-						</p:column>
-						<p:column headerText="Result">
-							<h:outputText value="#{ts.resultstep}" />
-						</p:column>
-					</p:dataTable>
-
-					<p:dataTable id="testexecutionRecapDataTable"
-						value="#{jJTestcaseexecutionBean.testCaseexecutionRecaps}"
-						rowKey="#{tce.name}" var="tce" paginatorPosition="bottom"
-						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
-						paginator="true" rows="8" style="width:650px;">
-						<p:column headerText="Id">
-							<h:outputText value="#{tce.testcaseexecution.id}" />
-						</p:column>
-						<p:column headerText="Build">
-							<h:outputText value="#{tce.testcaseexecution.build.name}" />
-						</p:column>
-						<p:column headerText="Creation Date">
-							<h:outputText value="#{tce.testcaseexecution.creationDate}" />
-						</p:column>
-						<p:column headerText="Update Date">
-							<h:outputText value="#{tce.testcaseexecution.updatedDate}" />
-						</p:column>
-						<p:column headerText="Status">
-							<h:outputText value="#{tce.status}" />
-						</p:column>
-					</p:dataTable>
-				</h:form>
+						<p:dataTable id="testexecutionRecapDataTable"
+							value="#{jJTestcaseexecutionBean.testCaseexecutionRecaps}"
+							rowKey="#{tce.name}" var="tce" paginatorPosition="bottom"
+							rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
+							paginator="true" rows="8" style="width:650px;">
+							<p:column headerText="Id">
+								<h:outputText value="#{tce.testcaseexecution.id}" />
+							</p:column>
+							<p:column headerText="Build">
+								<h:outputText value="#{tce.testcaseexecution.build.name}" />
+							</p:column>
+							<p:column headerText="Creation Date">
+								<h:outputText value="#{tce.testcaseexecution.creationDate}" />
+							</p:column>
+							<p:column headerText="Update Date">
+								<h:outputText value="#{tce.testcaseexecution.updatedDate}" />
+							</p:column>
+							<p:column headerText="Status">
+								<h:outputText value="#{tce.status}" />
+							</p:column>
+						</p:dataTable>
+					</h:form>
+				
 			</p:layoutUnit>
 		</p:layout>
 
@@ -332,8 +334,8 @@
 			header="#{messages[jJTestcaseBean.message]}" modal="true"
 			widgetVar="testcaseDialogWidget" dynamic="true" resizable="false"
 			style="top: 30px;">
-			<p:ajax event="close" update=":testFormCenter :testFormWest"
-				listener="#{jJTestcaseBean.closeDialog()}" />
+			<p:ajax event="close" update=":testFormCenter"
+				listener="#{jJTestcaseBean.closeDialog}" />
 			<p:outputPanel id="testcaseDialogPanel">
 				<h:form id="testcaseDialogForm">
 					<p:growl id="msg" />
@@ -345,9 +347,9 @@
 										required="true" widgetVar="nameWidget"
 										label="#{messages.test_new_name_label}"
 										requiredMessage="#{messages.test_new_name_alert}"
-										disabled="#{jJTestcaseBean.disabledTestcaseMode}" >
+										disabled="#{jJTestcaseBean.disabledTestcaseMode}">
 										<f:validateLength maximum="100" />
-									</p:inputText>	
+									</p:inputText>
 									<p:watermark for="name"
 										value="#{messages.test_new_name_watermark}" />
 								</p:column>
@@ -546,7 +548,8 @@
 
 		<p:dialog id="runTestcaseDialog" header="#{messages.test_exec_title}"
 			modal="true" widgetVar="runTestcaseDialogWidget" draggable="false"
-			height="375px" dynamic="true" resizable="false" style="width :500px !important">
+			height="375px" dynamic="true" resizable="false"
+			style="width :500px !important">
 			<p:hotkey bind="esc" handler="PF('testcaseDialogWidget').hide()" />
 			<p:hotkey bind="space" handler="TestcaseExecSuccessButton.jq.click()" />
 			<p:hotkey bind="S" handler="TestcaseExecSuccessButton.jq.click()" />
@@ -556,69 +559,67 @@
 			<p:outputPanel id="runTestcaseDialogPanel">
 				<h:form id="runForm">
 					<p:growl id="msg" />
-					
-						<p:tabView id="teststepTabView" widgetVar="teststepTabViewWidget"
-							activeIndex="#{jJTeststepexecutionBean.activeIndex}"
-							dynamic="true" scrollable="true"
-							value="#{jJTeststepexecutionBean.teststepexecutions}" var="tse">
-							<p:ajax event="tabChange"
-								listener="#{jJTeststepexecutionBean.onTabChange}"
-								update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton" />
-							<p:tab title="#{tse.teststep.ordering}">
-								<p:panelGrid>
-									<p:row>
-										<p:column>
-											<h:outputText value="#{messages.test_exec_action_label}" />
-										</p:column>
-										<p:column>
-											<h:outputText value="#{messages.test_exec_result_label}" />
-										</p:column>
-									</p:row>
-									<p:row>
-										<p:column>
-											<p:scrollPanel mode="native"
-												style="height:200px;width:180px;">
-												<h:outputText escape="true"
-													value="#{tse.teststep.actionstep}" />
-											</p:scrollPanel>
-										</p:column>
-										<p:column>
-											<p:scrollPanel mode="native"
-												style="height:200px;width:180px;">
-												<h:outputText escape="true"
-													value="#{tse.teststep.resultstep}" />
-											</p:scrollPanel>
-										</p:column>
-									</p:row>
-									<p:row>
-										<p:column>
-											<h:outputText value="Status: " />
-										</p:column>
-										<p:column>
-											<p:commandButton id="testExecSuccessButton"
-												value="#{messages.test_graph_success_label}"
-												icon="ui-icon-circle-check" styleClass="TestcaseExecSuccess"
-												actionListener="#{jJTeststepexecutionBean.setStatus('true')}"
-												action="#{jJTeststepexecutionBean.handleStatus()}"
-												widgetVar="TestcaseExecSuccessButton"
-												update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton :bugForm:createPanelGrid"
-												async="true" ajax="true" />
-											<p:commandButton id="testExecFailedButton"
-												value="#{messages.test_graph_failed_label}"
-												icon="ui-icon-circle-close" styleClass="TestcaseExecFailed"
-												actionListener="#{jJTeststepexecutionBean.setStatus('false')}"
-												action="#{jJTeststepexecutionBean.handleStatus()}"
-												widgetVar="TestcaseExecFailedButton"
-												update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton :bugForm:createPanelGrid"
-												async="true" ajax="true" />
-												
-												<p:remoteCommand name="remoteButton" update=":runForm"/>
-										</p:column>
-									</p:row>
-								</p:panelGrid>
-							</p:tab>
-						</p:tabView>
-					
+
+					<p:tabView id="teststepTabView" widgetVar="teststepTabViewWidget"
+						activeIndex="#{jJTeststepexecutionBean.activeIndex}"
+						dynamic="true" scrollable="true"
+						value="#{jJTeststepexecutionBean.teststepexecutions}" var="tse">
+						<p:ajax event="tabChange"
+							listener="#{jJTeststepexecutionBean.onTabChange}"
+							update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton" />
+						<p:tab title="#{tse.teststep.ordering}">
+							<p:panelGrid>
+								<p:row>
+									<p:column>
+										<h:outputText value="#{messages.test_exec_action_label}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{messages.test_exec_result_label}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:scrollPanel mode="native" style="height:200px;width:180px;">
+											<h:outputText escape="true"
+												value="#{tse.teststep.actionstep}" />
+										</p:scrollPanel>
+									</p:column>
+									<p:column>
+										<p:scrollPanel mode="native" style="height:200px;width:180px;">
+											<h:outputText escape="true"
+												value="#{tse.teststep.resultstep}" />
+										</p:scrollPanel>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText value="Status: " />
+									</p:column>
+									<p:column>
+										<p:commandButton id="testExecSuccessButton"
+											value="#{messages.test_graph_success_label}"
+											icon="ui-icon-circle-check" styleClass="TestcaseExecSuccess"
+											actionListener="#{jJTeststepexecutionBean.setStatus('true')}"
+											action="#{jJTeststepexecutionBean.handleStatus()}"
+											widgetVar="TestcaseExecSuccessButton"
+											update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton :bugForm:createPanelGrid"
+											async="true" ajax="true" />
+										<p:commandButton id="testExecFailedButton"
+											value="#{messages.test_graph_failed_label}"
+											icon="ui-icon-circle-close" styleClass="TestcaseExecFailed"
+											actionListener="#{jJTeststepexecutionBean.setStatus('false')}"
+											action="#{jJTeststepexecutionBean.handleStatus()}"
+											widgetVar="TestcaseExecFailedButton"
+											update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton :bugForm:createPanelGrid"
+											async="true" ajax="true" />
+
+										<p:remoteCommand name="remoteButton" update=":runForm" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:tab>
+					</p:tabView>
+
 					<p:panelGrid
 						rendered="#{!jJTeststepexecutionBean.disabledTestcase}">
 						<p:row>

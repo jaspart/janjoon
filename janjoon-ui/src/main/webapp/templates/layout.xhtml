@@ -92,10 +92,9 @@
 					</p:column>
 				</p:dataTable>
 		
-				<f:facet name="footer" style="position: fixed;bottom: 0;">
+				<f:facet name="footer" style="position: relative;">
 				<h:form id="messageCreationForm"
-					rendered="#{loginBean.enable and !jJMessageBean.collapsedMesPanel}"
-					style="position:fixed;bottom: 0;">
+					rendered="#{loginBean.enable and !jJMessageBean.collapsedMesPanel}">
 					
 					<p:growl id="creationGrowl" showDetail="true" life="2000" />
 					<p:panelGrid columns="1">

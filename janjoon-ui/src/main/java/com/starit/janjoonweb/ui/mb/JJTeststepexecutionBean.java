@@ -416,8 +416,9 @@ public class JJTeststepexecutionBean {
 		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
 				.getAttribute("jJTestcaseBean");
 		JJTestcase jjTestcase = jJTestcaseBean.getTestcase();
-		jJTestcaseBean.loadData();
+		jJTestcaseBean.createTestcaseTree();
 		jJTestcaseBean.setTestcase(jjTestcase);
+		jJTestcaseBean.setRendredEmptySelection(false);
 
 	}
 

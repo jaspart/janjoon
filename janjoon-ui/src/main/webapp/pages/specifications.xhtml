@@ -311,23 +311,20 @@
 								<p:column>
 									<h:outputText for="status"
 										value="#{messages.specification_create_status_label}" />
-									<!-- 									<p:selectOneMenu id="status" -->
-									<!-- 										value="#{jJRequirementBean.requirementStatus}" required="true" -->
-									<!-- 										requiredMessage="Requirement Status is a required value" -->
-									<!-- 										panelStyle="width:150px" effect="fade" style="width:150px" -->
-									<!-- 										filter="true" filterMatchMode="startsWith" -->
-									<!-- 										disabled="#{jJRequirementBean.disabledStatus}"> -->
-									<!-- 										<f:converter -->
-									<!-- 											converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" /> -->
-									<!-- 										<f:selectItem -->
-									<!-- 											itemLabel="#{jJRequirementBean.requirementStatus.name}" -->
-									<!-- 											itemValue="#{jJRequirementBean.requirementStatus}" /> -->
-									<!-- 										<f:selectItems -->
-									<!-- 											value="#{jJRequirementBean.requirementStatusList}" var="c" -->
-									<!-- 											itemLabel="#{c.name}" itemValue="#{c}" /> -->
-									<!-- 										<p:ajax partialSubmit="true" -->
-									<!-- 											listener="#{jJRequirementBean.handleSelectStatus()}" /> -->
-									<!-- 									</p:selectOneMenu> -->
+								<p:selectOneMenu id="status"
+								value="#{jJRequirementBean.requirementStatus}" required="true"
+								requiredMessage="Requirement Status is a required value"
+								panelStyle="width:150px" effect="fade" style="width:150px"
+								filter="true" filterMatchMode="startsWith"
+								disabled="#{jJRequirementBean.disabledStatus}">
+									<f:converter
+										converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />								
+									<f:selectItems
+										value="#{jJRequirementBean.requirementStatusList}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />
+									<p:ajax partialSubmit="true"
+										listener="#{jJRequirementBean.handleSelectStatus()}" />
+								</p:selectOneMenu>
 								</p:column>
 								<p:column>
 									<h:outputText for="project"
@@ -538,7 +535,7 @@
 		</p:dialog>
 
 		<p:hotkey bind="esc" handler="PF('chapterDialogWidget').hide()" />
-		<p:dialog id="chapterDialog"
+		<p:dialog id="chapterDialog" draggable="false"
 			header="#{messages.specification_chapter_header}" modal="true"
 			widgetVar="chapterDialogWidget" dynamic="true" resizable="false">
 			<p:ajax event="close" update=":specForm"
@@ -558,15 +555,14 @@
 				</pe:blockUI>
 
 				<h:form id="chapterDialogForm">
-					<p:growl id="msg" sticky="true" />
-					<p:scrollPanel style="width:760px;height:450px" mode="native">
+					<p:growl id="msg" sticky="true" />					
 						<p:panelGrid style="margin-top:10px">
 							<p:row>
 								<p:column>
 									<p:inputText id="name" value="#{jJChapterBean.chapter.name}"
 										required="true" widgetVar="nameWidget"
-										label="#{message.specification_chapter_name_label}"
-										requiredMessage="#{message.specification_chapter_name_alert}" >
+										label="#{messages.specification_chapter_name_label}"
+										requiredMessage="#{messages.specification_chapter_name_alert}" >
 										<f:validateLength maximum="100" />
 									</p:inputText>
 									<p:watermark for="name"
@@ -577,7 +573,7 @@
 										value="#{messages.specification_chapter_parent_label}" />
 									<p:selectOneMenu id="parent"
 										value="#{jJChapterBean.parentChapter}"
-										panelStyle="width:150px" effect="fade" style="width:160px"
+										panelStyle="width:140px" effect="fade" style="width:160px"
 										filter="true" filterMatchMode="startsWith"
 										widgetVar="parentWidget"
 										converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter">
@@ -598,7 +594,7 @@
 									<h:outputText
 										value="#{messages.specification_chapter_description_label}" />
 									<pe:ckEditor id="description" widgetVar="descriptionWidget"
-										style="width:320px"
+										style="width:300px"
 										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
 										value="#{jJChapterBean.chapter.description}" required="true"
@@ -607,14 +603,14 @@
 								<p:column>
 									<p:contextMenu for="chapterTreeSingle">
 										<p:menuitem
-											value="#{message.specification_chapter_edit_menuitem}"
+											value="#{messages.specification_chapter_edit_menuitem}"
 											actionListener="#{jJChapterBean.editChapter()}"
 											process="@this" icon="ui-icon-pencil"
 											onstart="PF('chapterBlockUIWidget').block()"
 											oncomplete="PF('chapterBlockUIWidget').unblock()"
 											update="chapterDialogForm" />
-										<p:menuitem
-											value="#{message.specification_chapter_delete_menuitem}"
+										<p:menuitem 
+											value="#{messages.specification_chapter_delete_menuitem}"
 											actionListener="#{jJChapterBean.deleteChapter()}"
 											process="@this" icon="ui-icon-close"
 											onstart="PF('chapterBlockUIWidget').block()"
@@ -622,8 +618,8 @@
 											update="chapterDialogForm" />
 									</p:contextMenu>
 									<h:outputText
-										value="#{message.specification_chapter_tree_label}" />
-									<p:tree id="chapterTreeSingle" style="width:320px"
+										value="#{messages.specification_chapter_tree_label}" />
+									<p:tree id="chapterTreeSingle" style="width:250px"
 										value="#{jJChapterBean.chapterRoot}" var="nodeChapter"
 										selectionMode="single"
 										selection="#{jJChapterBean.selectedChapterNode}"
@@ -652,7 +648,7 @@
 						<p:panelGrid>
 							<p:row>
 								<p:column colspan="3">
-									<p:scrollPanel style="height:250px;" mode="native">
+									<p:scrollPanel style="height:200px;" mode="native">
 										<p:tree id="leftTreeIncorporated"
 											value="#{jJChapterBean.leftRoot}" var="nodeLeft"
 											selectionMode="single"
@@ -675,7 +671,7 @@
 										name="transfer.png" />
 								</p:column>
 								<p:column colspan="3">
-									<p:scrollPanel style="height:250px;" mode="native">
+									<p:scrollPanel style="height:200px;" mode="native">
 										<p:tree id="RightTreeIncorporated"
 											value="#{jJChapterBean.rightRoot}" var="nodeRight"
 											selectionMode="single"
@@ -694,8 +690,7 @@
 									</p:scrollPanel>
 								</p:column>
 							</p:row>
-						</p:panelGrid>
-					</p:scrollPanel>
+						</p:panelGrid>					
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>

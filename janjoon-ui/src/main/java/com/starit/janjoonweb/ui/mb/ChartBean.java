@@ -59,6 +59,7 @@ public class ChartBean implements Serializable {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
+		DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 
 		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
 				.getAttribute("jJTestcaseBean");
@@ -69,11 +70,9 @@ public class ChartBean implements Serializable {
 
 		Set<String> datesTMP = new HashSet<String>();
 
-		for (TestCaseChartUtil testcase : testcases) {
-			Date creationdate = testcase.getTestcase().getCreationDate();
-			String date = creationdate.toString().substring(0, 10);
+		for (TestCaseChartUtil testcase : testcases) {			
 
-			datesTMP.add(date);
+			datesTMP.add(f.format(testcase.getTestcase().getCreationDate()));
 
 		}	
 
@@ -91,10 +90,7 @@ public class ChartBean implements Serializable {
 			
 			if(tce.getEnabled() && tce.getUpdatedDate()!=null)
 			{
-				Date creationdate = tce.getUpdatedDate();
-				String date = creationdate.toString().substring(0, 10);
-
-				datesTMP.add(date);
+				datesTMP.add(f.format(tce.getUpdatedDate()));
 			}
 			
 		}
@@ -102,11 +98,11 @@ public class ChartBean implements Serializable {
 		dates.addAll(datesTMP);	
 		
 		Collections.sort(dates, new Comparator<String>() {
-	        DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+	        DateFormat ff = new SimpleDateFormat("yyyy-MM-dd");
 	        @Override
 	        public int compare(String o1, String o2) {
 	            try {
-	                return f.parse(o1).compareTo(f.parse(o2));
+	                return ff.parse(o1).compareTo(ff.parse(o2));
 	            } catch (ParseException e) {
 	                throw new IllegalArgumentException(e);
 	            }
@@ -125,9 +121,8 @@ public class ChartBean implements Serializable {
 			int compteurFailed = 0;
 
 			for (TestCaseChartUtil testcase : testcases) {
-				String creationDate = testcase.getTestcase().getCreationDate().toString()
-						.substring(0, 10);
-				if (creationDate.equalsIgnoreCase(date)) {
+				
+				if (date.equalsIgnoreCase(f.format(testcase.getTestcase().getCreationDate()))) {
 					compteur++;
 				}
 
@@ -141,8 +136,7 @@ public class ChartBean implements Serializable {
 					for (JJTestcaseexecution tce : testcaseexecutions) {
 						Date updatedDate = tce.getUpdatedDate();
 						if ((updatedDate != null)
-								&& (updatedDate.toString().substring(0, 10)
-										.equals(date))
+								&& (date.equalsIgnoreCase(f.format(updatedDate)))
 								&& (tce.getTestcase().equals(testcase.getTestcase()))) {
 
 							if (tce.getPassed() != null) {
@@ -198,8 +192,7 @@ public class ChartBean implements Serializable {
 					for (JJTestcaseexecution tce : testcaseexecutions) {
 						Date updatedDate = tce.getUpdatedDate();
 						if ((updatedDate != null)
-								&& (updatedDate.toString().substring(0, 10)
-										.equals(date))
+								&& (date.equalsIgnoreCase(f.format(updatedDate)))
 								&& (tce.getTestcase().equals(testcase.getTestcase()))) {
 
 							if (tce.getPassed() != null) {

@@ -450,6 +450,23 @@ public class JJBugBean {
 		}
 
 	}
+	
+	public void persistBugTask()
+	{
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJSprintBean jJSprintBean=(JJSprintBean) session.getAttribute("jJSprintBean");		
+		String message = "";		
+		updateJJBug(JJBug_);
+		message = "message_successfully_updated";	
+
+		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		reset();		
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("projectTabView.select(" + 1 + ")");
+		context.execute("SprintTab.select("+jJSprintBean.contains(jJSprintBean.getSprintUtil().getSprint().getId())+ ")");
+	}
 
 	public void persistBug() {
 

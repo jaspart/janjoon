@@ -33,7 +33,7 @@ public class RequirementUtil {
 	@Override
 	public boolean equals(Object object) {
 		return (object instanceof RequirementUtil) && (requirement.getId() != null) ? requirement.getId()
-				.equals(((JJBug) object).getId()) : (object == this);
+				.equals(((RequirementUtil) object).getRequirement().getId()) : (object == this);
 	}
 
 }

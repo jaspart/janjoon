@@ -98,8 +98,8 @@
 							completeMethod="#{jJBugBean.completeStatusBug}" />
 						<p:commandButton id="taskBugSaveButton"
 							value="#{messages.bug_edit_save_button}"
-							action="#{jJBugBean.persistBug}"
-							update=":projecttabview:SprintTabView:sprintForm"
+							action="#{jJBugBean.persistBugTask}"
+							update=":projecttabview"
 							oncomplete="PF('blockUIWidget').unblock()"
 							onsuccess="PF('editBugDialogWidget').hide()">
 						</p:commandButton>

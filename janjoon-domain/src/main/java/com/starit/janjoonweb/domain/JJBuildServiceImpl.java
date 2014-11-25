@@ -38,22 +38,11 @@ public class JJBuildServiceImpl implements JJBuildService {
 		}
 		
 		if (version != null) {
-			predicates.add(criteriaBuilder.equal(from.get("version"),
-						version));			
+			predicates.add(criteriaBuilder.equal(from.get("version"),version));			
 		}else if(product != null)
 		{
-			List<Predicate> orPredicates = new ArrayList<Predicate>();
-			product=entityManager.find(JJProduct.class, product.getId());
-			for(JJVersion v:product.getVersions())
-			{
-				if(v.getEnabled())
-					orPredicates.add(criteriaBuilder.equal(from.get("version"),
-							v));
-			}
-			Predicate orPredicate = criteriaBuilder.or(orPredicates
-					.toArray(new Predicate[] {}));
-			predicates.add(orPredicate);
-			
+			predicates.add(criteriaBuilder.isNotNull(from.get("version")));
+			predicates.add(criteriaBuilder.equal(from.join("version").get("product"), product));
 		}
 
 		select.where(predicates.toArray(new Predicate[] {}));

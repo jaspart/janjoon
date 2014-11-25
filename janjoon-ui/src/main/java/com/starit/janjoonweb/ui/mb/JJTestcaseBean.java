@@ -389,7 +389,7 @@ public class JJTestcaseBean {
 	public void newTestcase(JJTeststepBean jJTeststepBean) {
 		message = "test_create_header";
 		testcase = new JJTestcase();
-		testcase.setEnabled(true);		
+		testcase.setEnabled(true);
 		testcase.setAutomatic(false);
 		requirement = null;
 
@@ -425,7 +425,7 @@ public class JJTestcaseBean {
 
 		if (initiateTask) {
 			task = new JJTask();
-			task.setEnabled(true);			
+			task.setEnabled(true);
 			task.setStartDatePlanned(new Date());
 			task.setWorkloadPlanned(8);
 			task.setEndDatePlanned(new Date(task.getStartDatePlanned()
@@ -442,7 +442,7 @@ public class JJTestcaseBean {
 	public void editTestcase(JJTeststepBean jJTeststepBean) {
 
 		message = "test_edit_header";
-		
+
 		JJTestcase tc = jJTestcaseService.findJJTestcase(testcase.getId());
 		requirement = tc.getRequirement();
 
@@ -480,8 +480,8 @@ public class JJTestcaseBean {
 		JJBuildBean jJBuildBean = (JJBuildBean) session
 				.getAttribute("jJBuildBean");
 		JJTaskBean jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
-		if(jJTaskBean == null)
-			jJTaskBean=new JJTaskBean();
+		if (jJTaskBean == null)
+			jJTaskBean = new JJTaskBean();
 
 		if (jJBuildBean == null) {
 			jJBuildBean = new JJBuildBean();
@@ -500,7 +500,7 @@ public class JJTestcaseBean {
 				JJTask task = new JJTask();
 
 				task.setName(testcase.getName() + "_"
-						+ build.getName().trim().toUpperCase());				
+						+ build.getName().trim().toUpperCase());
 				task.setDescription("This is task " + task.getName());
 				task.setEnabled(true);
 
@@ -526,7 +526,7 @@ public class JJTestcaseBean {
 				// task.setCompleted(task1.getCompleted());
 				// task.setConsumed(task1.getConsumed());
 
-				jJTaskBean.saveJJTask(task,false);
+				jJTaskBean.saveJJTask(task, false);
 
 			}
 
@@ -537,7 +537,7 @@ public class JJTestcaseBean {
 			task.setStartDateReal(new Date());
 			task.setEndDateReal(null);
 			task.setWorkloadReal(null);
-			jJTaskBean.saveJJTask(task,true);
+			jJTaskBean.saveJJTask(task, true);
 		}
 
 	}
@@ -607,7 +607,7 @@ public class JJTestcaseBean {
 
 			} else {
 				tc = testcase;
-			}		
+			}
 
 			if (!requirement.equals(tc.getRequirement())) {
 
@@ -632,11 +632,10 @@ public class JJTestcaseBean {
 
 	public void closeDialog() {
 
-		testcase = null;
-		requirement = null;
+		// testcase = null;
+		// requirement = null;
 		task = null;
-
-		createTestcaseTree();
+		// createTestcaseTree();
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
@@ -666,7 +665,7 @@ public class JJTestcaseBean {
 
 	}
 
-	private void createTestcaseTree() {
+	public void createTestcaseTree() {
 
 		rootNode = new DefaultTreeNode("Root", null);
 
@@ -1111,20 +1110,20 @@ public class JJTestcaseBean {
 		}
 
 	}
-	
-	public void saveJJTestcase(JJTestcase b)
-	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+
+	public void saveJJTestcase(JJTestcase b) {
+		JJContact contact = (JJContact) ((HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext().getSession(false))
+				.getAttribute("JJContact");
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJTestcaseService.saveJJTestcase(b);
 	}
-	
-	public void updateJJTestcase(JJTestcase b)
-	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+
+	public void updateJJTestcase(JJTestcase b) {
+		JJContact contact = (JJContact) ((HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext().getSession(false))
+				.getAttribute("JJContact");
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJTestcaseService.updateJJTestcase(b);

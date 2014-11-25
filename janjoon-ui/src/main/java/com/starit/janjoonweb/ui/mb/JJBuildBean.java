@@ -16,6 +16,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.BuildUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -61,8 +62,7 @@ public class JJBuildBean {
 				.getAttribute("jJVersionBean");
 
 		JJVersion version = jJVersionBean.getVersion();
-
-		builds = jJBuildService.getBuilds(version, true, true);
+		builds = jJBuildService.getBuilds(((JJProductBean) session.getAttribute("jJProductBean")).getProduct(),version, true);
 
 		return builds;
 	}
