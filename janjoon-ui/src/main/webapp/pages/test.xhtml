@@ -548,8 +548,8 @@
 
 		<p:dialog id="runTestcaseDialog" header="#{messages.test_exec_title}"
 			modal="true" widgetVar="runTestcaseDialogWidget" draggable="false"
-			height="375px" dynamic="true" resizable="false"
-			style="width :500px !important">
+			height="360px" dynamic="true" resizable="false"
+			style="width :370px !important">
 			<p:hotkey bind="esc" handler="PF('testcaseDialogWidget').hide()" />
 			<p:hotkey bind="space" handler="TestcaseExecSuccessButton.jq.click()" />
 			<p:hotkey bind="S" handler="TestcaseExecSuccessButton.jq.click()" />
@@ -561,9 +561,8 @@
 					<p:growl id="msg" />
 
 					<p:tabView id="teststepTabView" widgetVar="teststepTabViewWidget"
-						activeIndex="#{jJTeststepexecutionBean.activeIndex}"
-						dynamic="true" scrollable="true"
-						value="#{jJTeststepexecutionBean.teststepexecutions}" var="tse">
+						activeIndex="#{jJTeststepexecutionBean.activeIndex}" scrollable="true"
+						dynamic="true" value="#{jJTeststepexecutionBean.teststepexecutions}" var="tse">
 						<p:ajax event="tabChange"
 							listener="#{jJTeststepexecutionBean.onTabChange}"
 							update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton" />
@@ -579,13 +578,13 @@
 								</p:row>
 								<p:row>
 									<p:column>
-										<p:scrollPanel mode="native" style="height:200px;width:180px;">
+										<p:scrollPanel mode="native" style="height:150px;width:130px;">
 											<h:outputText escape="true"
 												value="#{tse.teststep.actionstep}" />
 										</p:scrollPanel>
 									</p:column>
 									<p:column>
-										<p:scrollPanel mode="native" style="height:200px;width:180px;">
+										<p:scrollPanel mode="native" style="height:150px;width:130px;">
 											<h:outputText escape="true"
 												value="#{tse.teststep.resultstep}" />
 										</p:scrollPanel>
@@ -597,6 +596,7 @@
 									</p:column>
 									<p:column>
 										<p:commandButton id="testExecSuccessButton"
+											disabled="#{tse.passed != null}"
 											value="#{messages.test_graph_success_label}"
 											icon="ui-icon-circle-check" styleClass="TestcaseExecSuccess"
 											actionListener="#{jJTeststepexecutionBean.setStatus('true')}"
@@ -605,6 +605,7 @@
 											update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton :bugForm:createPanelGrid"
 											async="true" ajax="true" />
 										<p:commandButton id="testExecFailedButton"
+											disabled="#{tse.passed != null}"
 											value="#{messages.test_graph_failed_label}"
 											icon="ui-icon-circle-close" styleClass="TestcaseExecFailed"
 											actionListener="#{jJTeststepexecutionBean.setStatus('false')}"

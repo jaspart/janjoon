@@ -52,7 +52,7 @@
 			</p:outputPanel>
 		</p:confirmDialog>
 		<p:dialog id="taskImportDialog" header="Import Tasks" modal="true"
-			draggable="false"
+			draggable="false" styleClass="disable-scroll"
 			widgetVar="taskImportDialogWidget" dynamic="true" resizable="false">
 			<p:ajax event="close" update=":projecttabview"
 				listener="#{jJTaskBean.closeDialogImport}" />

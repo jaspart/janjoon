@@ -278,6 +278,7 @@ public class JJTeststepexecutionBean {
 
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("bugTestDialogWidget.show()");
+			disabledTestcase=false;
 		}
 
 		if (activeIndex == elements.size()) {
@@ -364,7 +365,18 @@ public class JJTeststepexecutionBean {
 	}
 
 	public void nextTab() {
-		activeIndex++;
+		
+		activeIndex=teststepexecutions.size();
+		int i=0;
+		while(i<teststepexecutions.size())
+		{
+			if(teststepexecutions.get(i).getPassed() == null)
+			{
+				activeIndex=i;
+				i=teststepexecutions.size();
+			}
+			i++;
+		}
 	}
 
 	public void validateTab() {

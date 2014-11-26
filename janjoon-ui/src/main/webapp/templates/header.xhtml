@@ -82,7 +82,7 @@
 						value="#{loginBean.contact.firstname} #{loginBean.contact.name}"
 						rendered="#{loginBean.enable}" style="right: 0px;">
 						<p:menuitem value="#{messages.header_config_link}"
-							icon="ui-icon-person" />
+							icon="ui-icon-person" url="/pages/contactConfig.jsf?faces-redirect=true" />
 						<p:menuitem value="#{messages.header_logout_link}"
 							url="logout.jsf" actionListener="#{loginBean.logout}"
 							icon="ui-icon-extlink" />

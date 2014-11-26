@@ -88,7 +88,7 @@
 		</p:panelGrid>
 
 		<p:dataTable id="importDataTable" var="format" scrollable="true"
-			style="width:700px;" scrollHeight="400"
+			style="width:700px;table-layout: fixed;" scrollHeight="350"
 			value="#{jJTaskBean.importFormats}" editable="true" editMode="cell">
 			<f:facet name="header">
 				<h:outputText value="Import #{jJTaskBean.objet}" />

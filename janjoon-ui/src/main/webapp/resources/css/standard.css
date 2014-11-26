@@ -62,6 +62,10 @@ a:visited {
 	
 }
 
+.disable-scroll .ui-dialog-content {
+  overflow: hidden !important;
+}
+
 .central {
 	width: auto;
 	height: auto;
