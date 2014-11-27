@@ -99,21 +99,35 @@ a:visited {
 }
 
 .login-body {
-	background-image: url('../resources/images/background.jpg') !important;
-	background-repeat:no-repeat;
-	background-size:100%;
+	background: url('../resources/images/background.jpg') no-repeat bottom center fixed transparent;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font: inherit;
+	font-size: 100%;
+	vertical-align: baseline;
+	outline: 0;
+	direction: ltr;
+	unicode-bidi: embed;
+	display: block;
 }
 
 .login-content {
-		height:240px;
-		width:320px;
-		position: absolute;
-		top: 0px;
-		bottom: 0px;
-		right: 0px;
-		left: 0px;
-		margin: auto;
-		background:rgba(255,255,255,0.5);
+	height:240px;
+	width:320px;
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
+	left: 0px;
+	margin: auto;
+	background:rgba(255,255,255,0.5);
 }
 
 .action-column {
