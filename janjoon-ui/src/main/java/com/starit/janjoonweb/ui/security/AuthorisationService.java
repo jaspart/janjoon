@@ -8,7 +8,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.primefaces.context.RequestContext;
+
 import com.starit.janjoonweb.domain.*;
+import com.starit.janjoonweb.ui.mb.JJContactBean;
 import com.starit.janjoonweb.ui.mb.JJPermissionBean;
 import com.starit.janjoonweb.ui.mb.JJProductBean;
 import com.starit.janjoonweb.ui.mb.JJProjectBean;
@@ -21,8 +24,16 @@ public class AuthorisationService implements Serializable {
 	private HttpSession session;
 
 	public void setSession(HttpSession session) {
-		this.session = session;
+		
+		this.session = session;	
 		initFields();
+		JJContactBean contactBean=	(JJContactBean) this.session.getAttribute("jJContactBean");
+		JJProjectBean jjProjectBean=(JJProjectBean) this.session.getAttribute("jJProjectBean");
+		JJProductBean jjProductBean=(JJProductBean) this.session.getAttribute("jJProductBean");
+		contactBean.setContactsLazyModel(null);
+		jjProductBean.setProductListTable(null);
+		jjProjectBean.setProjectListTable(null);
+		RequestContext.getCurrentInstance().execute("updateAdmin()");
 	}
 
 	private JJContact contact;
@@ -30,6 +41,10 @@ public class AuthorisationService implements Serializable {
 	private String adminContactProfilMSG;
 	private boolean adminCompany;
 	private String adminCompanyMSG;
+	private boolean adminProject;
+	private String adminProjectMSG;
+	private boolean adminProduct;
+	private String adminProductMSG;
 	private boolean rRequiement;
 	private String rRequiementMSG;
 	private boolean rwxTest;
@@ -81,6 +96,38 @@ public class AuthorisationService implements Serializable {
 
 	public void setAdminCompanyMSG(String adminCompanyMSG) {
 		this.adminCompanyMSG = adminCompanyMSG;
+	}
+
+	public boolean isAdminProject() {
+		return adminProject;
+	}
+
+	public void setAdminProject(boolean adminProject) {
+		this.adminProject = adminProject;
+	}
+
+	public String getAdminProjectMSG() {
+		return adminProjectMSG;
+	}
+
+	public void setAdminProjectMSG(String adminProjectMSG) {
+		this.adminProjectMSG = adminProjectMSG;
+	}
+
+	public boolean isAdminProduct() {
+		return adminProduct;
+	}
+
+	public void setAdminProduct(boolean adminProduct) {
+		this.adminProduct = adminProduct;
+	}
+
+	public String getAdminProductMSG() {
+		return adminProductMSG;
+	}
+
+	public void setAdminProductMSG(String adminProductMSG) {
+		this.adminProductMSG = adminProductMSG;
 	}
 
 	public boolean isrRequiement() {
@@ -218,12 +265,28 @@ public class AuthorisationService implements Serializable {
 			adminContactProfilMSG = "";
 		
 		adminCompany = jJPermissionService.isAuthorized(contact, null, null,
-				"Company", null, true, true, true);
+				"Company", null, true, true, null);
 
 		if (!adminCompany)
 			adminCompanyMSG = "Permission Denied";
 		else
 			adminCompanyMSG = "";
+		
+		adminProduct = jJPermissionService.isAuthorized(contact, null, null,
+				"Product", null, true, true, null);
+
+		if (!adminProduct)
+			adminProductMSG = "Permission Denied";
+		else
+			adminProductMSG = "";
+		
+		adminProject = jJPermissionService.isAuthorized(contact, null, null,
+				"Project", null, true, true, null);
+
+		if (!adminProject)
+			adminProjectMSG = "Permission Denied";
+		else
+			adminProjectMSG = "";
 		
 		rRequiement = jJPermissionService.isAuthorized(contact, project,
 				product, "Requirement", null, true, null, null);

@@ -8,6 +8,9 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
+	<h:form>
+		<p:remoteCommand name="updateAdmin" update=":contentPanel" />
+	</h:form>
 		<p:tabView id="tabview" widgetVar="AdmintabView" dynamic="true"
 			cache="true" activeIndex="#{loginBean.activeTabAdminIndex}">
 			<p:ajax event="tabChange" listener="#{loginBean.onTabAdminChange}"
@@ -34,7 +37,7 @@
 			</p:tab>
 
 			<p:tab id="tabCompagnies" title="#{messages.admin_company_menuitem}"
-			titletip="#{loginBean.authorisationService.adminCompanyMSG}"
+				titletip="#{loginBean.authorisationService.adminCompanyMSG}"
 				disabled="#{!loginBean.authorisationService.adminCompany}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="Compagnies">
@@ -43,7 +46,9 @@
 				</h:panelGrid>
 			</p:tab>
 
-			<p:tab id="tabProduct" title="#{messages.admin_product_menuitem}">
+			<p:tab id="tabProduct" title="#{messages.admin_product_menuitem}"
+				titletip="#{loginBean.authorisationService.adminProductMSG}"
+				disabled="#{!loginBean.authorisationService.adminProduct}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="product">
 						<ui:include src="product.xhtml" />
@@ -51,7 +56,9 @@
 				</h:panelGrid>
 			</p:tab>
 
-			<p:tab id="tabProject" title="#{messages.admin_project_menuitem}">
+			<p:tab id="tabProject" title="#{messages.admin_project_menuitem}"
+				titletip="#{loginBean.authorisationService.adminProjectMSG}"
+				disabled="#{!loginBean.authorisationService.adminProject}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="project">
 						<ui:include src="project.xhtml" />

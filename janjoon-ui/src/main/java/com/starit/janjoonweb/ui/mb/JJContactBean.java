@@ -14,6 +14,7 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
@@ -45,9 +46,17 @@ public class JJContactBean {
 	private boolean contactState;
 
 	public LazyContactDataModel getContactsLazyModel() {
+		
+		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+		JJCompany company =null;
+		if(!loginBean.getAuthorisationService().isAdminCompany())			
+			company =loginBean.getContact().getCompany();
+		
 		if (contactsLazyModel == null)
-			contactsLazyModel = new LazyContactDataModel(jJContactService);
-		getContacts();
+			contactsLazyModel = new LazyContactDataModel(jJContactService,company);
+		
+			getContacts();
+		
 		return contactsLazyModel;
 	}
 

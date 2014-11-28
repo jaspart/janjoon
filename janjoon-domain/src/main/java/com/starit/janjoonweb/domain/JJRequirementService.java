@@ -9,26 +9,26 @@ public interface JJRequirementService {
 
 	// Generic request
 
-	public List<JJRequirement> getRequirements(JJCategory category,
+	public List<JJRequirement> getRequirements(JJCompany company,JJCategory category,
 			JJProject project, JJProduct product, JJVersion version,
 			JJStatus status, JJChapter chapter, boolean withChapter,
 			boolean onlyActif, boolean orderByCreationdate);
 
-	public List<JJRequirement> getRequirements(JJProject project,
+	public List<JJRequirement> getRequirements(JJCompany company,JJProject project,
 			JJProduct product, JJVersion version);
 
 	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
-			JJChapter chapter, boolean onlyActif);
+			JJCompany company,JJChapter chapter, boolean onlyActif);
 	
-	public List<JJRequirement> getMineRequirements(JJContact creator,JJProduct produit,JJProject projet,JJCategory category,JJVersion version,
+	public List<JJRequirement> getMineRequirements(JJCompany company,JJContact creator,JJProduct produit,JJProject projet,JJCategory category,JJVersion version,
 			boolean onlyActif, boolean orderByCreationdate);
 
-	public List<JJRequirement> getRequirements(JJStatus status);
+	public List<JJRequirement> getRequirements(JJCompany company,JJStatus status);
 
-	public Long getReqCountByStaus(JJProject project, JJProduct product,
+	public Long getReqCountByStaus(JJCompany company,JJProject project, JJProduct product,
 			JJVersion version,JJStatus status, boolean onlyActif);
 	
 	public void refreshRequirement(JJRequirement requirement);
-	public List<JJRequirement> getNonCouvredRequirements();
+	public List<JJRequirement> getNonCouvredRequirements(JJCompany company);
 
 }

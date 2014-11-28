@@ -17,6 +17,7 @@ import org.primefaces.model.SortOrder;
 
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJVersion;
@@ -84,7 +85,7 @@ public class LazyBugDataModel extends LazyDataModel<JJBug> {
 		System.err.println("FIRST "+first);
 		List<JJBug> data = new ArrayList<JJBug>();		
 		MutableInt size=new MutableInt(0);
-		data = bugService.load(size,first, pageSize, multiSortMeta,filters, project,product,version);
+		data = bugService.load((JJCompany) LoginBean.findBean("JJCompany"),size,first, pageSize, multiSortMeta,filters, project,product,version);
 			setRowCount(size.getValue());
 			System.err.println("SIZE :" + data.size());
 

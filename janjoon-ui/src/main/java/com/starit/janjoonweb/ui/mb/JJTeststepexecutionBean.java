@@ -17,6 +17,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJTeststepexecution;
 import com.starit.janjoonweb.domain.JJTestcase;
@@ -167,7 +168,7 @@ public class JJTeststepexecutionBean {
 				JJProjectBean jJProjectBean = (JJProjectBean) session
 						.getAttribute("jJProjectBean");
 
-				List<JJBug> bugs = jJBugService.getBugs(
+				List<JJBug> bugs = jJBugService.getBugs((JJCompany) LoginBean.findBean("JJCompany"),
 						jJProjectBean.getProject(),
 						teststepexecution.getTeststep(),
 						jJBuildBean.getBuild(), true, true);
@@ -341,7 +342,7 @@ public class JJTeststepexecutionBean {
 					JJProjectBean jJProjectBean = (JJProjectBean) session
 							.getAttribute("jJProjectBean");
 
-					List<JJBug> bugs = jJBugService.getBugs(
+					List<JJBug> bugs = jJBugService.getBugs((JJCompany) LoginBean.findBean("JJCompany"),
 							jJProjectBean.getProject(),
 							teststepexecution.getTeststep(),
 							jJBuildBean.getBuild(), true, true);

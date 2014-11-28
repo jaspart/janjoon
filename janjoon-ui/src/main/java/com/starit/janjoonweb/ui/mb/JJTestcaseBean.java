@@ -35,6 +35,7 @@ import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJChapterService;
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPhase;
@@ -272,7 +273,7 @@ public class JJTestcaseBean {
 
 	public List<JJRequirement> getRequirements() {
 
-		requirements = jJRequirementService.getRequirements(null, null, null,
+		requirements = jJRequirementService.getRequirements((JJCompany) LoginBean.findBean("JJCompany"),null, null, null,
 				null, null, chapter, true, true, true);
 
 		return requirements;
@@ -682,7 +683,7 @@ public class JJTestcaseBean {
 			categoryNode.setExpanded(true);
 
 			List<JJChapter> parentChapters = jJChapterService
-					.getParentsChapter(project, category, true, true);
+					.getParentsChapter((JJCompany) LoginBean.findBean("JJCompany"),project, category, true, true);
 
 			for (JJChapter chapter : parentChapters) {
 				TreeNode node = createTree(chapter, categoryNode, category);
@@ -901,7 +902,7 @@ public class JJTestcaseBean {
 			}
 
 			List<JJRequirement> requirements = jJRequirementService
-					.getRequirementChildrenWithChapterSortedByOrder(parent,
+					.getRequirementChildrenWithChapterSortedByOrder((JJCompany) LoginBean.findBean("JJCompany"),parent,
 							onlyActif);
 
 			for (JJRequirement requirement : requirements) {
@@ -910,7 +911,7 @@ public class JJTestcaseBean {
 			}
 		} else {
 
-			List<JJChapter> chapters = jJChapterService.getParentsChapter(
+			List<JJChapter> chapters = jJChapterService.getParentsChapter((JJCompany) LoginBean.findBean("JJCompany"),
 					project, category, onlyActif, true);
 
 			for (JJChapter chapter : chapters) {
@@ -950,7 +951,7 @@ public class JJTestcaseBean {
 		Paragraph paragraph = new Paragraph();
 		paragraph.add(phrase);
 
-		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(
+		List<JJChapter> parentChapters = jJChapterService.getParentsChapter((JJCompany) LoginBean.findBean("JJCompany"),
 				project, category, true, true);
 
 		for (JJChapter chapter : parentChapters) {

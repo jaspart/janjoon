@@ -9,6 +9,6 @@ import org.springframework.roo.addon.layers.service.RooService;
 public interface JJProjectService {
 
 	// New Generic
-	public List<JJProject> getProjects(boolean onlyActif);
-	public List<JJProject> load(MutableInt size,int first, int pageSize);
+	public List<JJProject> getProjects(JJCompany company,boolean onlyActif);
+	public List<JJProject> load(JJCompany company,MutableInt size,int first, int pageSize);
 }

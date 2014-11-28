@@ -127,7 +127,7 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 	@Override
 	public List<JJTeststep> getJJtestSteps(JJProject project) {
 		
-		List<JJRequirement> requirements=jJRequirementService.getRequirements(project, null, null);
+		List<JJRequirement> requirements=jJRequirementService.getRequirements(null,project, null, null);
 		List<JJTeststep> jjTeststeps=new ArrayList<JJTeststep>();
 		if(requirements!=null)
 		{

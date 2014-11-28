@@ -51,6 +51,7 @@ import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJChapterService;
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
@@ -527,7 +528,7 @@ public class JJTaskBean {
 			// 65 = ASCII A
 			int k = 65;
 
-			List<JJChapter> chapters = jJChapterService.getChapters(project,
+			List<JJChapter> chapters = jJChapterService.getChapters((JJCompany) LoginBean.findBean("JJCompany"),project,
 					true);
 			List<JJTask> allJJtask = null;
 			if (!sortMode.equalsIgnoreCase("chapter"))
@@ -1465,7 +1466,7 @@ public class JJTaskBean {
 
 			if (objet.equalsIgnoreCase("Bug")) {
 
-				for (JJBug bug : jJBugService.getImportBugs(project, version,
+				for (JJBug bug : jJBugService.getImportBugs((JJCompany) LoginBean.findBean("JJCompany"),project, version,
 						importCategory, importStatus, true)) {
 
 					if (!checkAll) {
@@ -1486,7 +1487,7 @@ public class JJTaskBean {
 			} else if (objet.equalsIgnoreCase("Requirement")) {
 
 				for (JJRequirement requirement : jJRequirementService
-						.getRequirements(importCategory, project, product,
+						.getRequirements((JJCompany) LoginBean.findBean("JJCompany"),importCategory, project, product,
 								version, importStatus, null, false, true, false)) {
 
 					if (!checkAll) {

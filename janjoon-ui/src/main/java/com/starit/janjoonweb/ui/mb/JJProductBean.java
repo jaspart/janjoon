@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermissionService;
@@ -99,8 +100,9 @@ public class JJProductBean {
 
 	public List<JJProduct> getProductList() {
 
-		if (productList == null)
-			productList = jJProductService.getProducts(true);
+		if (productList == null || productList.isEmpty())
+			productList = jJProductService.getProducts(
+					(JJCompany) LoginBean.findBean("JJCompany"), true);
 
 		return productList;
 	}
@@ -118,8 +120,15 @@ public class JJProductBean {
 	}
 
 	public LazyProductDataModel getProductListTable() {
-		if(productListTable==null)
-		productListTable = new LazyProductDataModel(jJProductService);
+		
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
+		JJCompany company = null;
+		if (!loginBean.getAuthorisationService().isAdminCompany())
+			company = loginBean.getContact().getCompany();
+
+		if (productListTable == null)
+			productListTable = new LazyProductDataModel(jJProductService,
+					company);
 		return productListTable;
 	}
 
@@ -193,12 +202,10 @@ public class JJProductBean {
 		if (productManagerList.isEmpty()) {
 			productManager = null;
 
-		}
-		else {
+		} else {
 			if (productManagerList.contains(productAdmin.getManager())) {
 				productManager = productAdmin.getManager();
-			}
-			else {
+			} else {
 				productManager = null;
 			}
 		}
@@ -230,7 +237,8 @@ public class JJProductBean {
 			disabledProductMode = true;
 			disabledVersionMode = false;
 
-			jJVersionBean.setVersionDataModel(new ArrayList<VersionDataModel>());
+			jJVersionBean
+					.setVersionDataModel(new ArrayList<VersionDataModel>());
 
 			FacesContext.getCurrentInstance().addMessage(
 					null,
@@ -248,7 +256,7 @@ public class JJProductBean {
 		resetVersionProductList();
 
 		List<JJVersion> versions = jJVersionService.getVersions(true, true,
-				productAdmin);
+				productAdmin, (JJCompany) LoginBean.findBean("JJCompany"));
 
 		List<VersionDataModel> versionDataModels = jJVersionBean
 				.getVersionDataModel();
@@ -302,12 +310,10 @@ public class JJProductBean {
 		if (productState) {
 			if (getProductDialogConfiguration()) {
 				context.execute("PF('productDialogWidget').hide()");
-			}
-			else {
+			} else {
 				newProduct(jJVersionBean);
 			}
-		}
-		else {
+		} else {
 			context.execute("PF('productDialogWidget').hide()");
 		}
 	}
@@ -320,7 +326,7 @@ public class JJProductBean {
 				new FacesMessage(summary));
 	}
 
-	public void closeDialog(JJVersionBean jJVersionBean,JJBuildBean jJBuildBean) {
+	public void closeDialog(JJVersionBean jJVersionBean, JJBuildBean jJBuildBean) {
 
 		productAdmin = null;
 		productManager = null;
@@ -332,18 +338,17 @@ public class JJProductBean {
 
 		productState = true;
 	}
-	
-	public void resetVersionProductList()
-	{
-		productList=null;
-		productListTable=null;
+
+	public void resetVersionProductList() {
+		productList = null;
+		productListTable = null;
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJVersionBean jJVersionBean = (JJVersionBean) session
 				.getAttribute("jJVersionBean");
 		jJVersionBean.setProduct(null);
 		jJVersionBean.setVersionList(null);
-		
+
 	}
 
 	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project) {
@@ -355,20 +360,20 @@ public class JJProductBean {
 		return jJConfigurationService.getDialogConfig("ProductDialog",
 				"product.create.saveandclose");
 	}
-	
-	public void saveJJProduct(JJProduct b)
-	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+
+	public void saveJJProduct(JJProduct b) {
+		JJContact contact = (JJContact) ((HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext().getSession(false))
+				.getAttribute("JJContact");
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJProductService.saveJJProduct(b);
 	}
-	
-	public void updateJJProduct(JJProduct b)
-	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+
+	public void updateJJProduct(JJProduct b) {
+		JJContact contact = (JJContact) ((HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext().getSession(false))
+				.getAttribute("JJContact");
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJProductService.updateJJProduct(b);

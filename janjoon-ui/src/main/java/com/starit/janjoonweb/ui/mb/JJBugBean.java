@@ -278,7 +278,7 @@ public class JJBugBean {
 		List<JJStatus> status = new ArrayList<JJStatus>();
 		List<JJImportance> importances = new ArrayList<JJImportance>();
 		
-		List<JJBug> data=jJBugService.getBugs(project,jjProduct,jjVersion);
+		List<JJBug> data=jJBugService.getBugs((JJCompany) LoginBean.findBean("JJCompany"),project,jjProduct,jjVersion);
 		for (JJBug b : data) {
 
 			if (b.getCriticity() != null
@@ -573,7 +573,7 @@ public class JJBugBean {
 				.getProduct();	
 		suggestions.add(null);
 
-		for (JJRequirement req : jJRequirementService.getRequirements(
+		for (JJRequirement req : jJRequirementService.getRequirements((JJCompany) LoginBean.findBean("JJCompany"),
 				bugProjectSelected,prod, null)) {
 			String jJCriticityStr = String.valueOf(req.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
@@ -640,7 +640,7 @@ public class JJBugBean {
 		suggestions.add(null);
 
 		for (JJVersion req : jJVersionService.getVersions(true, prod != null,
-				prod)) {
+				prod,(JJCompany)LoginBean.findBean("JJCompany"))) {
 			String jJCriticityStr = String.valueOf(req.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(req);

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -24,7 +25,7 @@ public class JJProductServiceImpl implements JJProductService {
 
 	// New Generic
 	
-	public List<JJProduct> load(MutableInt size,int first, int pageSize)
+	public List<JJProduct> load(JJCompany company,MutableInt size,int first, int pageSize)
 	{
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJProduct> criteriaQuery = criteriaBuilder
@@ -39,6 +40,8 @@ public class JJProductServiceImpl implements JJProductService {
 		
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		
+		if(company != null)
+			predicates.add(criteriaBuilder.equal(from.join("manager").get("company"), company));		
 
 		select.where(predicates.toArray(new Predicate[] {}));
 
@@ -46,11 +49,25 @@ public class JJProductServiceImpl implements JJProductService {
 		result.setFirstResult(first);
 		result.setMaxResults(pageSize);
 		
-		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
-		cq.select(criteriaBuilder.count(cq.from(JJProduct.class)));
-		entityManager.createQuery(cq);
-		cq.where(predicates.toArray(new Predicate[] {}));
-		size.setValue(entityManager.createQuery(cq).getSingleResult());
+		if(company != null)
+		{
+			String qu="SELECT COUNT(r) FROM  JJProduct r Where r.manager.company = :c "
+					+ "AND r.enabled = true ";		
+			
+			Query query =entityManager.createQuery(qu);		
+			query.setParameter("c", company);	
+			size.setValue(Math.round((long) query.getSingleResult()));
+		}else
+		{
+			String qu="SELECT COUNT(r) FROM  JJProduct r Where"
+					+ " r.enabled = true ";		
+			
+			Query query =entityManager.createQuery(qu);	
+			
+			size.setValue(Math.round((long) query.getSingleResult()));
+		}		
+		
+		
 		
 		return result.getResultList();
 
@@ -58,26 +75,32 @@ public class JJProductServiceImpl implements JJProductService {
 	}
 
 	@Override
-	public List<JJProduct> getProducts(boolean onlyActif) {
+	public List<JJProduct> getProducts(JJCompany company,boolean onlyActif) {
 
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJProduct> criteriaQuery = criteriaBuilder
-				.createQuery(JJProduct.class);
+		if(company != null)
+		{
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<JJProduct> criteriaQuery = criteriaBuilder
+					.createQuery(JJProduct.class);
 
-		Root<JJProduct> from = criteriaQuery.from(JJProduct.class);
+			Root<JJProduct> from = criteriaQuery.from(JJProduct.class);
 
-		CriteriaQuery<JJProduct> select = criteriaQuery.select(from);
+			CriteriaQuery<JJProduct> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();
+			List<Predicate> predicates = new ArrayList<Predicate>();
 
-		if (onlyActif) {
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		}
+			if (onlyActif) {
+				predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+			}
+			predicates.add(criteriaBuilder.equal(from.join("manager").get("company"), company));
 
-		select.where(predicates.toArray(new Predicate[] {}));
+			select.where(predicates.toArray(new Predicate[] {}));
 
-		TypedQuery<JJProduct> result = entityManager.createQuery(select);
-		return result.getResultList();
+			TypedQuery<JJProduct> result = entityManager.createQuery(select);
+			return result.getResultList();
+		}else
+			return null;
+		
 
 	}
 

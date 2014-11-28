@@ -25,8 +25,9 @@ public class JJBugServiceImpl implements JJBugService {
 	}
 
 	@Override
-	public List<JJBug> getBugs(JJProject project, JJTeststep teststep,
-			JJBuild build, boolean onlyActif, boolean sortedByCreationDate) {
+	public List<JJBug> getBugs(JJCompany company, JJProject project,
+			JJTeststep teststep, JJBuild build, boolean onlyActif,
+			boolean sortedByCreationDate) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
 				.createQuery(JJBug.class);
@@ -43,7 +44,7 @@ public class JJBugServiceImpl implements JJBugService {
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
-		}
+		} 
 
 		if (teststep != null) {
 			predicates
@@ -52,6 +53,10 @@ public class JJBugServiceImpl implements JJBugService {
 
 		if (build != null) {
 			predicates.add(criteriaBuilder.equal(from.get("build"), build));
+		}else if (company != null) {
+			predicates.add(criteriaBuilder.equal(
+					from.join("versioning").join("product").join("manager")
+							.get("company"), company));
 		}
 
 		select.where(predicates.toArray(new Predicate[] {}));
@@ -66,8 +71,9 @@ public class JJBugServiceImpl implements JJBugService {
 	}
 
 	@Override
-	public List<JJBug> getImportBugs(JJProject project, JJVersion version,
-			JJCategory category, JJStatus status, boolean onlyActif) {
+	public List<JJBug> getImportBugs(JJCompany company, JJProject project,
+			JJVersion version, JJCategory category, JJStatus status,
+			boolean onlyActif) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
 				.createQuery(JJBug.class);
@@ -85,6 +91,10 @@ public class JJBugServiceImpl implements JJBugService {
 		if (version != null) {
 			predicates.add(criteriaBuilder.equal(from.get("versioning"),
 					version));
+		} else if (company != null) {
+			predicates.add(criteriaBuilder.equal(
+					from.join("versioning").join("product").join("manager")
+							.get("company"), company));
 		}
 
 		if (category != null) {
@@ -109,9 +119,10 @@ public class JJBugServiceImpl implements JJBugService {
 
 	}
 
-	public List<JJBug> load(MutableInt size, int first, int pageSize,
-			List<SortMeta> multiSortMeta, Map<String, String> filters,
-			JJProject project, JJProduct product, JJVersion version) {
+	public List<JJBug> load(JJCompany company, MutableInt size, int first,
+			int pageSize, List<SortMeta> multiSortMeta,
+			Map<String, String> filters, JJProject project, JJProduct product,
+			JJVersion version) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
 				.createQuery(JJBug.class);
@@ -131,16 +142,22 @@ public class JJBugServiceImpl implements JJBugService {
 			predicates.add(criteriaBuilder.equal(from.get("versioning"),
 					version));
 		} else if (product != null) {
-			List<Predicate> orPredicates = new ArrayList<Predicate>();
-			product = entityManager.find(JJProduct.class, product.getId());
-			for (JJVersion v : product.getVersions()) {
-				if (v.getEnabled())
-					orPredicates.add(criteriaBuilder.equal(
-							from.get("versioning"), v));
-			}
-			Predicate orPredicate = criteriaBuilder.or(orPredicates
-					.toArray(new Predicate[] {}));
-			predicates.add(orPredicate);
+			// List<Predicate> orPredicates = new ArrayList<Predicate>();
+			// product = entityManager.find(JJProduct.class, product.getId());
+			// for (JJVersion v : product.getVersions()) {
+			// if (v.getEnabled())
+			// orPredicates.add(criteriaBuilder.equal(
+			// from.get("versioning"), v));
+			// }
+			// Predicate orPredicate = criteriaBuilder.or(orPredicates
+			// .toArray(new Predicate[] {}));
+			// predicates.add(orPredicate);
+			predicates.add(criteriaBuilder.equal(
+					from.join("versioning").get("product"), product));
+		} else if (company != null) {
+			predicates.add(criteriaBuilder.equal(
+					from.join("versioning").join("product").join("manager")
+							.get("company"), company));
 		}
 
 		if (filters != null) {
@@ -243,18 +260,18 @@ public class JJBugServiceImpl implements JJBugService {
 		size.setValue(entityManager.createQuery(select).getResultList().size());
 		result.setFirstResult(first);
 		result.setMaxResults(pageSize);
-		
+
 		if (size.getValue() == 0 && multiSortMeta != null)
-			return load(size, first, pageSize, null, filters, project, product,
-					version);
+			return load(company, size, first, pageSize, null, filters, project,
+					product, version);
 		else
 			return result.getResultList();
 
 	}
 
 	@Override
-	public List<JJBug> getBugs(JJProject project, JJProduct product,
-			JJVersion version) {
+	public List<JJBug> getBugs(JJCompany company, JJProject project,
+			JJProduct product, JJVersion version) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
 				.createQuery(JJBug.class);
@@ -274,16 +291,12 @@ public class JJBugServiceImpl implements JJBugService {
 			predicates.add(criteriaBuilder.equal(from.get("versioning"),
 					version));
 		} else if (product != null) {
-			List<Predicate> orPredicates = new ArrayList<Predicate>();
-			product = entityManager.find(JJProduct.class, product.getId());
-			for (JJVersion v : product.getVersions()) {
-				if (v.getEnabled())
-					orPredicates.add(criteriaBuilder.equal(
-							from.get("versioning"), v));
-			}
-			Predicate orPredicate = criteriaBuilder.or(orPredicates
-					.toArray(new Predicate[] {}));
-			predicates.add(orPredicate);
+			predicates.add(criteriaBuilder.equal(
+					from.join("versioning").get("product"), product));
+		} else if (company != null) {
+			predicates.add(criteriaBuilder.equal(
+					from.join("versioning").join("product").join("manager")
+							.get("company"), company));
 		}
 
 		select.where(predicates.toArray(new Predicate[] {}));
@@ -294,11 +307,16 @@ public class JJBugServiceImpl implements JJBugService {
 	}
 
 	public void saveJJBug(JJBug JJBug_) {
+		if (JJBug_.getVersioning() == null && JJBug_.getBuild() != null)
+			JJBug_.setVersioning(JJBug_.getBuild().getVersion());
 		jJBugRepository.save(JJBug_);
 		JJBug_ = jJBugRepository.findOne(JJBug_.getId());
 	}
 
 	public JJBug updateJJBug(JJBug JJBug_) {
+
+		if (JJBug_.getVersioning() == null && JJBug_.getBuild() != null)
+			JJBug_.setVersioning(JJBug_.getBuild().getVersion());
 		jJBugRepository.save(JJBug_);
 		JJBug_ = jJBugRepository.findOne(JJBug_.getId());
 		return JJBug_;

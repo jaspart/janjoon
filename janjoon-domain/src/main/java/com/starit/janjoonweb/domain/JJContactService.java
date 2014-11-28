@@ -16,6 +16,6 @@ public interface JJContactService {
 
 	public boolean updateJJContactTransaction(JJContact contact);
 
-	public List<JJContact> load(MutableInt size,int first, int pageSize);
+	public List<JJContact> load(JJCompany company,MutableInt size,int first, int pageSize);
 
 }

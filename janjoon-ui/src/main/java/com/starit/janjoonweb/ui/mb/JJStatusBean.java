@@ -28,6 +28,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJStatus;
@@ -179,7 +180,7 @@ public class JJStatusBean {
 		for (JJStatus s : statReq) {
 
 			int i = Integer.parseInt(""
-					+ jJRequirementService.getReqCountByStaus(project, product,
+					+ jJRequirementService.getReqCountByStaus((JJCompany) LoginBean.findBean("JJCompany"),project, product,
 							version, s, true));
 			pieChart.set(s.getName(), i);
 		}
@@ -675,7 +676,7 @@ public class JJStatusBean {
 
 			float compteur = 0;
 			List<JJRequirement> dataList = jJRequirementService
-					.getRequirements(category, project, product, version, null,
+					.getRequirements((JJCompany) LoginBean.findBean("JJCompany"),category, project, product, version, null,
 							null, false, true, false);
 
 			List<JJCategory> categoryList = jJCategoryService.getCategories(
@@ -773,7 +774,7 @@ public class JJStatusBean {
 		public float getCompletionProgress() {
 			float compteur = 0;
 			List<JJRequirement> dataList = jJRequirementService
-					.getRequirements(category, project, product, version, null,
+					.getRequirements((JJCompany) LoginBean.findBean("JJCompany"),category, project, product, version, null,
 							null, false, true, false);
 
 			for (JJRequirement requirement : dataList) {

@@ -88,7 +88,7 @@ public class JJContactServiceImpl implements JJContactService {
 
 	}
 	
-	public List<JJContact> load(MutableInt size,int first, int pageSize)
+	public List<JJContact> load(JJCompany company,MutableInt size,int first, int pageSize)
 	{
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJContact> criteriaQuery = criteriaBuilder
@@ -101,6 +101,9 @@ public class JJContactServiceImpl implements JJContactService {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		
+		if(company != null)
+		predicates.add(criteriaBuilder.equal(from.get("company"), company));
 		
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));

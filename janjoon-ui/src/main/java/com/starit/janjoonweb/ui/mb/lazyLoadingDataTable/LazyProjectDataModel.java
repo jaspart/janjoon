@@ -8,6 +8,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJProjectService;
 
@@ -17,11 +18,29 @@ public class LazyProjectDataModel extends LazyDataModel<JJProject> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	JJProjectService projectService;	
+	private JJProjectService projectService;	
+	private JJCompany company;
 
-	public LazyProjectDataModel(JJProjectService projectService) {
+	public LazyProjectDataModel(JJProjectService projectService,JJCompany company) {
 		
+		this.company=company;			
 		this.projectService = projectService;
+	}
+
+	public JJProjectService getProjectService() {
+		return projectService;
+	}
+
+	public void setProjectService(JJProjectService projectService) {
+		this.projectService = projectService;
+	}
+
+	public JJCompany getCompany() {
+		return company;
+	}
+
+	public void setCompany(JJCompany company) {
+		this.company = company;
 	}
 
 	@Override
@@ -40,7 +59,7 @@ public class LazyProjectDataModel extends LazyDataModel<JJProject> {
 
 		List<JJProject> data = new ArrayList<JJProject>();
 		MutableInt size=new MutableInt(0);
-		data = projectService.load(size,first, pageSize);
+		data = projectService.load(company,size,first, pageSize);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

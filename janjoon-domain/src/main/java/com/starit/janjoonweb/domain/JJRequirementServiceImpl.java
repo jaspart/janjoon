@@ -12,6 +12,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.hibernate.Hibernate;
+
 public class JJRequirementServiceImpl implements JJRequirementService {
 
 	@PersistenceContext
@@ -24,7 +26,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	// Generic Request
 
 	@Override
-	public List<JJRequirement> getRequirements(JJCategory category,
+	public List<JJRequirement> getRequirements(JJCompany company,JJCategory category,
 			JJProject project, JJProduct product, JJVersion version,
 			JJStatus status, JJChapter chapter, boolean withChapter,
 			boolean onlyActif, boolean orderByCreationdate) {
@@ -50,6 +52,9 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}else
+		{
+			predicates.add(criteriaBuilder.equal(from.join("project").join("manager").get("company"), company));
 		}
 
 		if (product != null) {
@@ -88,7 +93,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 	@Override
 	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
-			JJChapter chapter, boolean onlyActif) {
+			JJCompany company,JJChapter chapter, boolean onlyActif) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
 				.createQuery(JJRequirement.class);
@@ -112,21 +117,21 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	}
 
 	@Override
-	public List<JJRequirement> getRequirements(JJProject project,
+	public List<JJRequirement> getRequirements(JJCompany company,JJProject project,
 			JJProduct product, JJVersion version) {
-		return getRequirements(null, project, product, version, null, null,
+		return getRequirements(company,null, project, product, version, null, null,
 				false, true, true);
 	}
 
 	@Override
-	public List<JJRequirement> getRequirements(JJStatus status) {
+	public List<JJRequirement> getRequirements(JJCompany company,JJStatus status) {
 
-		return getRequirements(null, null, null, null, status, null, false,
+		return getRequirements(company,null, null, null, null, status, null, false,
 				true, false);
 	}
 
 	@Override
-	public Long getReqCountByStaus(JJProject project, JJProduct product,
+	public Long getReqCountByStaus(JJCompany company,JJProject project, JJProduct product,
 			JJVersion version, JJStatus status, boolean onlyActif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -137,6 +142,9 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}else
+		{
+			predicates.add(criteriaBuilder.equal(from.join("project").join("manager").get("company"), company));
 		}
 
 		if (product != null) {
@@ -161,7 +169,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	}
 
 	@Override
-	public List<JJRequirement> getMineRequirements(JJContact creator,
+	public List<JJRequirement> getMineRequirements(JJCompany company,JJContact creator,
 			JJProduct product, JJProject project, JJCategory category,JJVersion version,
 			boolean onlyActif, boolean orderByCreationdate) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -185,6 +193,9 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}else
+		{
+			predicates.add(criteriaBuilder.equal(from.join("project").join("manager").get("company"), company));
 		}
 
 		if (product != null) {
@@ -209,17 +220,16 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 		}
 
-		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
-
-		System.out.println("RESULT LIST SIZE"+result.getResultList().size());
+		TypedQuery<JJRequirement> result = entityManager.createQuery(select);		
 		return result.getResultList();
 
 	}
 	
-	public List<JJRequirement> getNonCouvredRequirements()
+	public List<JJRequirement> getNonCouvredRequirements(JJCompany company)
 	{
-		String qu="SELECT r FROM  JJRequirement r Where r.enabled = true AND r.category != null and r.requirementLinkDown IS empty and r.requirementLinkUp IS empty";		
-		Query query =entityManager.createQuery(qu,JJRequirement.class);
+		String qu="SELECT r FROM  JJRequirement r Where r.project.manager.company = :c AND r.enabled = true AND r.category != null and r.requirementLinkDown IS empty and r.requirementLinkUp IS empty";		
+		Query query =entityManager.createQuery(qu,JJRequirement.class);		
+		query.setParameter("c", company);
 		
 		System.out.println(qu);
 		List<JJRequirement> list = ((List<JJRequirement>)query.getResultList());

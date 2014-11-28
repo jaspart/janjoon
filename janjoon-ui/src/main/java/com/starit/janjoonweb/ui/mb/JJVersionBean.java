@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJProduct;
@@ -70,12 +71,12 @@ public class JJVersionBean {
 		if(product==null)
 		{
 			product=jJproduct;
-			versionList = jJVersionService.getVersions(true, true, product);
+			versionList = jJVersionService.getVersions(true, true, product,(JJCompany)LoginBean.findBean("JJCompany"));
 			
 		}else if(!product.equals(jJproduct))
 		{
 			product=jJproduct;
-			versionList = jJVersionService.getVersions(true, true, product);
+			versionList = jJVersionService.getVersions(true, true, product,(JJCompany)LoginBean.findBean("JJCompany"));
 		}		
 
 		return versionList;
@@ -156,7 +157,7 @@ public class JJVersionBean {
 		versionDataModel = new ArrayList<VersionDataModel>();
 
 		List<JJVersion> versions = jJVersionService.getVersions(true, true,
-				product);
+				product,(JJCompany)LoginBean.findBean("JJCompany"));
 
 		for (JJVersion version : versions) {
 			versionDataModel.add(new VersionDataModel(version, true, true));

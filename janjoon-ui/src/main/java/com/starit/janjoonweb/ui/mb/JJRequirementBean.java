@@ -30,6 +30,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPhase;
@@ -268,7 +269,7 @@ public class JJRequirementBean {
 	}
 
 	public List<JJProject> getRequirementProjectList() {
-		requirementProjectList = jJProjectService.getProjects(true);
+		requirementProjectList = jJProjectService.getProjects((JJCompany)LoginBean.findBean("JJCompany"),true);
 		return requirementProjectList;
 	}
 
@@ -294,7 +295,7 @@ public class JJRequirementBean {
 	}
 
 	public List<JJProduct> getRequirementProductList() {
-		requirementProductList = jJProductService.getProducts(true);
+		requirementProductList = jJProductService.getProducts((JJCompany)LoginBean.findBean("JJCompany"),true);
 		return requirementProductList;
 	}
 
@@ -321,7 +322,7 @@ public class JJRequirementBean {
 
 	public List<JJVersion> getRequirementVersionList() {
 		requirementVersionList = jJVersionService.getVersions(true, true,
-				requirementProduct);
+				requirementProduct,(JJCompany)LoginBean.findBean("JJCompany"));
 		return requirementVersionList;
 	}
 
@@ -339,7 +340,7 @@ public class JJRequirementBean {
 
 	public List<JJChapter> getRequirementChapterList() {
 		if (requirementProject != null) {
-			requirementChapterList = jJChapterService.getChapters(
+			requirementChapterList = jJChapterService.getChapters((JJCompany) LoginBean.findBean("JJCompany"),
 					requirementProject, requirementCategory, true,
 					new ArrayList<String>());
 			return requirementChapterList;
@@ -561,7 +562,7 @@ public class JJRequirementBean {
 	}
 
 	public List<JJProject> getImportProjectList() {
-		importProjectList = jJProjectService.getProjects(true);
+		importProjectList = jJProjectService.getProjects((JJCompany)LoginBean.findBean("JJCompany"),true);
 		return importProjectList;
 	}
 
@@ -579,7 +580,7 @@ public class JJRequirementBean {
 
 	public List<JJProduct> getImportProductList() {
 
-		importProductList = jJProductService.getProducts(true);
+		importProductList = jJProductService.getProducts((JJCompany)LoginBean.findBean("JJCompany"),true);
 		return importProductList;
 	}
 
@@ -598,7 +599,7 @@ public class JJRequirementBean {
 	public List<JJVersion> getImportVersionList() {
 
 		importVersionList = jJVersionService.getVersions(true, true,
-				importProduct);
+				importProduct,(JJCompany)LoginBean.findBean("JJCompany"));
 
 		return importVersionList;
 	}
@@ -1349,7 +1350,7 @@ public class JJRequirementBean {
 		disableImportButton = true;
 
 		int i = 0;
-		for (JJRequirement requirement : jJRequirementService.getRequirements(
+		for (JJRequirement requirement : jJRequirementService.getRequirements((JJCompany) LoginBean.findBean("JJCompany"),
 				importCategory, importProject, importProduct, importVersion,
 				importStatus, null, false, false, true)) {
 			importFormats.add(new ImportFormat(String.valueOf(i), requirement,
@@ -2424,7 +2425,7 @@ public class JJRequirementBean {
 		long t = System.currentTimeMillis();
 		List<JJRequirement> list = new ArrayList<JJRequirement>();
 		if (category != null && withProject) {
-			list = jJRequirementService.getRequirements(category, project,
+			list = jJRequirementService.getRequirements((JJCompany) LoginBean.findBean("JJCompany"),category, project,
 					product, version, null, null, false, true, true);
 		}
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
@@ -2838,7 +2839,7 @@ public class JJRequirementBean {
 			}
 
 			List<JJRequirement> requirements = jJRequirementService
-					.getRequirementChildrenWithChapterSortedByOrder(parent,
+					.getRequirementChildrenWithChapterSortedByOrder((JJCompany) LoginBean.findBean("JJCompany"),parent,
 							onlyActif);
 
 			for (JJRequirement requirement : requirements) {
@@ -2847,7 +2848,7 @@ public class JJRequirementBean {
 			}
 		} else {
 
-			List<JJChapter> chapters = jJChapterService.getParentsChapter(
+			List<JJChapter> chapters = jJChapterService.getParentsChapter((JJCompany) LoginBean.findBean("JJCompany"),
 					project, category, onlyActif, true);
 
 			for (JJChapter chapter : chapters) {
@@ -3445,20 +3446,20 @@ public class JJRequirementBean {
 			JJProject project, JJProduct product, JJVersion version,
 			JJStatus status, JJChapter chapter, boolean withChapter,
 			boolean onlyActif, boolean orderByCreationdate) {
-		return jJRequirementService.getRequirements(category, project, product,
+		return jJRequirementService.getRequirements((JJCompany) LoginBean.findBean("JJCompany"),category, project, product,
 				version, status, chapter, withChapter, onlyActif,
 				orderByCreationdate);
 	}
 
 	public List<JJRequirement> getRequirements(JJProject project,
 			JJProduct product, JJVersion version) {
-		return jJRequirementService.getRequirements(project, product, version);
+		return jJRequirementService.getRequirements((JJCompany) LoginBean.findBean("JJCompany"),project, product, version);
 	}
 
 	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
 			JJChapter chapter, boolean onlyActif) {
 		return jJRequirementService
-				.getRequirementChildrenWithChapterSortedByOrder(chapter,
+				.getRequirementChildrenWithChapterSortedByOrder((JJCompany) LoginBean.findBean("JJCompany"),chapter,
 						onlyActif);
 	}
 
@@ -3539,7 +3540,7 @@ public class JJRequirementBean {
 			tableDataModel.setMine(true);
 			tableDataModel
 					.setFiltredRequirements(getListOfRequiremntUtils(jJRequirementService
-							.getMineRequirements((JJContact) session
+							.getMineRequirements((JJCompany) LoginBean.findBean("JJCompany"),(JJContact) session
 									.getAttribute("JJContact"), product,
 									project, jJCategoryService
 											.findJJCategory(tableDataModel
@@ -3830,7 +3831,7 @@ public class JJRequirementBean {
 		LoginBean login = (LoginBean) session.getAttribute("loginBean");
 
 		if (noCouvretReq == null && login.isEnable()) {
-			noCouvretReq = jJRequirementService.getNonCouvredRequirements();
+			noCouvretReq = jJRequirementService.getNonCouvredRequirements((JJCompany) LoginBean.findBean("JJCompany"));
 
 		}
 

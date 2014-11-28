@@ -79,11 +79,7 @@
 								requiredMessage="#{messages.admin_project_new_manager_alert}"
 								widgetVar="projectManagerWidget">
 								<f:converter
-									converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />
-
-								<f:selectItem
-									itemLabel="#{jJProjectBean.projectManager.firstname} #{jJProjectBean.projectManager.name}"
-									itemValue="#{jJProjectBean.projectManager}" />
+									converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />								
 								<f:selectItems value="#{jJProjectBean.projectManagerList}"
 									var="p" itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />
 

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJJob;
 import com.starit.janjoonweb.domain.JJPermission;
@@ -88,7 +89,7 @@ public class JJPermissionBean {
 	}
 
 	public List<JJProject> getProjects() {
-		projects = jJProjectService.getProjects(true);
+		projects = jJProjectService.getProjects((JJCompany)LoginBean.findBean("JJCompany"),true);
 		return projects;
 	}
 
@@ -105,7 +106,7 @@ public class JJPermissionBean {
 	}
 
 	public List<JJProduct> getProducts() {
-		products = jJProductService.getProducts(true);
+		products = jJProductService.getProducts((JJCompany)LoginBean.findBean("JJCompany"),true);
 		return products;
 	}
 

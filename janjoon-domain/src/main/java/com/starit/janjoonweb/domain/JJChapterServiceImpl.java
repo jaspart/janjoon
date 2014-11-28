@@ -23,7 +23,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 	// New generic Request
 
 	@Override
-	public List<JJChapter> getParentsChapter(JJProject project,
+	public List<JJChapter> getParentsChapter(JJCompany company,JJProject project,
 			JJCategory category, boolean onlyActif, boolean sortedByOrder) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJChapter> criteriaQuery = criteriaBuilder
@@ -43,6 +43,9 @@ public class JJChapterServiceImpl implements JJChapterService {
 		// Adding predicates in case of parameter not being null
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}else if(company != null)
+		{
+			predicates.add(criteriaBuilder.equal(from.join("project").join("manager").get("company"), company));
 		}
 
 		if (category != null) {
@@ -61,7 +64,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 	}
 
 	@Override
-	public List<JJChapter> getChapters(JJProject project, JJCategory category,
+	public List<JJChapter> getChapters(JJCompany company,JJProject project, JJCategory category,
 			boolean onlyActif, List<String> ids) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -80,6 +83,9 @@ public class JJChapterServiceImpl implements JJChapterService {
 		// Adding predicates in case of parameter not being null
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}else if(company != null)
+		{
+			predicates.add(criteriaBuilder.equal(from.join("project").join("manager").get("company"), company));
 		}
 
 		if (category != null) {
@@ -113,7 +119,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 	}
 	
 	@Override
-	public List<JJChapter> getChapters(JJProject project, boolean sotedByDate)
+	public List<JJChapter> getChapters(JJCompany company,JJProject project, boolean sotedByDate)
 	{
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJChapter> criteriaQuery = criteriaBuilder
@@ -131,6 +137,9 @@ public class JJChapterServiceImpl implements JJChapterService {
 		// Adding predicates in case of parameter not being null
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}else if(company != null)
+		{
+			predicates.add(criteriaBuilder.equal(from.join("project").join("manager").get("company"), company));
 		}
 
 		select.where(predicates.toArray(new Predicate[] {}));
@@ -142,7 +151,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 	}
 
 	@Override
-	public List<JJChapter> getChapters(JJProject project, boolean onlyActif,
+	public List<JJChapter> getChapters(JJCompany company,JJProject project, boolean onlyActif,
 			boolean sortedByName) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -161,6 +170,9 @@ public class JJChapterServiceImpl implements JJChapterService {
 		// Adding predicates in case of parameter not being null
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}else if(company != null)
+		{
+			predicates.add(criteriaBuilder.equal(from.join("project").join("manager").get("company"), company));
 		}
 
 		select.where(predicates.toArray(new Predicate[] {}));

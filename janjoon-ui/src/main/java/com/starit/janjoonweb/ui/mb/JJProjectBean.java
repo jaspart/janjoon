@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermissionService;
@@ -71,9 +72,9 @@ public class JJProjectBean {
 	}
 
 	public List<JJProject> getProjectList() {
-
-		if (projectList == null)
-			projectList = jJProjectService.getProjects(true);
+		
+		if (projectList == null || projectList.isEmpty())
+			projectList = jJProjectService.getProjects((JJCompany)LoginBean.findBean("JJCompany"),true);
 		return projectList;
 	}
 
@@ -90,8 +91,14 @@ public class JJProjectBean {
 	}
 
 	public LazyProjectDataModel getProjectListTable() {
+		
+		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+		JJCompany company =null;
+		if(!loginBean.getAuthorisationService().isAdminCompany())			
+			company =loginBean.getContact().getCompany();
+		
 		if(projectListTable == null)
-		projectListTable = new LazyProjectDataModel(jJProjectService);
+		projectListTable = new LazyProjectDataModel(jJProjectService,company);
 		return projectListTable;
 	}
 

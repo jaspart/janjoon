@@ -36,6 +36,7 @@ import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJProject;
@@ -165,7 +166,7 @@ public class JJSprintBean {
 	public List<JJBug> getBugs() {
 
 		if (bugs == null)
-			bugs = jJBugService.getBugs(project,null,null);
+			bugs = jJBugService.getBugs((JJCompany) LoginBean.findBean("JJCompany"),project,null,null);
 
 		return bugs;
 	}
@@ -286,7 +287,7 @@ public class JJSprintBean {
 	public void updatereqPanel() {
 
 		if (category != null) {
-			reqList = jJRequirementService.getRequirements(category, project,
+			reqList = jJRequirementService.getRequirements((JJCompany) LoginBean.findBean("JJCompany"),category, project,
 					null, null, null, null, false, true, true);
 			bugs = null;
 			bug = null;
@@ -294,7 +295,7 @@ public class JJSprintBean {
 			if (!reqList.isEmpty())
 				requirement = reqList.get(0);
 		} else {
-			bugs = jJBugService.getBugs(project,null,null);
+			bugs = jJBugService.getBugs((JJCompany) LoginBean.findBean("JJCompany"),project,null,null);
 			bug = null;
 			reqList = null;
 			requirement = null;
@@ -760,7 +761,7 @@ public class JJSprintBean {
 
 		List<JJBug> suggestions = new ArrayList<JJBug>();
 		for (JJBug jJBug : jJBugService
-				.getBugs(project, null, null, true, true)) {
+				.getBugs((JJCompany) LoginBean.findBean("JJCompany"),project, null, null, true, true)) {
 			String jJBugStr = String.valueOf(jJBug.getName());
 			if (jJBugStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(jJBug);
