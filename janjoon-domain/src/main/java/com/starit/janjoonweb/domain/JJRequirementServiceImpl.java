@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -212,6 +213,17 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		System.out.println("RESULT LIST SIZE"+result.getResultList().size());
 		return result.getResultList();
+
+	}
+	
+	public List<JJRequirement> getNonCouvredRequirements()
+	{
+		String qu="SELECT r FROM  JJRequirement r Where r.enabled = true AND r.category != null and r.requirementLinkDown IS empty and r.requirementLinkUp IS empty";		
+		Query query =entityManager.createQuery(qu,JJRequirement.class);
+		
+		System.out.println(qu);
+		List<JJRequirement> list = ((List<JJRequirement>)query.getResultList());
+		return list;
 
 	}
 

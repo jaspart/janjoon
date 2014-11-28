@@ -33,11 +33,11 @@ public interface JJPermissionService {
 
 	public boolean isAuthorized(JJContact contact, JJProject project);
 
-	public Set<JJContact> areAuthorized(JJProject project, JJProduct product,
+	public List<JJContact> areAuthorized(JJProject project, JJProduct product,
 			String objet, JJCategory category, Boolean r, Boolean w, Boolean x);
 
-	public Set<JJContact> getManagers(String objet);
+	public List<JJContact> getManagers(String objet);
 
-	public Set<JJContact> areAuthorized(JJProject project, JJProduct product,String objet);
+	public List<JJContact> areAuthorized(JJProject project, JJProduct product,String objet);
 
 }

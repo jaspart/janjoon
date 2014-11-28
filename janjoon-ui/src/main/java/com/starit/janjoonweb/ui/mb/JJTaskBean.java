@@ -112,7 +112,7 @@ public class JJTaskBean {
 	private String sortMode;
 	private String sortBy;
 
-	private Set<JJContact> contacts;
+	private List<JJContact> contacts;
 
 	private JJProject project;
 	private JJProduct product;
@@ -256,7 +256,7 @@ public class JJTaskBean {
 		this.zoomMin = zoomMin;
 	}
 
-	public Set<JJContact> getContacts() {
+	public List<JJContact> getContacts() {
 		getProject();
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
@@ -271,7 +271,7 @@ public class JJTaskBean {
 		return contacts;
 	}
 
-	public void setContacts(Set<JJContact> contacts) {
+	public void setContacts(List<JJContact> contacts) {
 		this.contacts = contacts;
 	}
 

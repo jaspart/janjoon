@@ -238,10 +238,10 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Set<JJContact> areAuthorized(JJProject project, JJProduct product,
+	public List<JJContact> areAuthorized(JJProject project, JJProduct product,
 			String objet, JJCategory category, Boolean r, Boolean w, Boolean x) {
 
-		Set<JJContact> contacts = new HashSet<JJContact>();
+		List<JJContact> contacts = new ArrayList<JJContact>();
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
@@ -359,12 +359,12 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 	}
 
 	@Override
-	public Set<JJContact> getManagers(String objet) {
+	public List<JJContact> getManagers(String objet) {
 		return areAuthorized(null, null, objet, null, null, true, null);
 	}
 
 	@Override
-	public Set<JJContact> areAuthorized(JJProject project, JJProduct product,String objet) {
+	public List<JJContact> areAuthorized(JJProject project, JJProduct product,String objet) {
 		return areAuthorized(project, product, objet, null, null, null, null);
 	}
 

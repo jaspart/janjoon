@@ -103,10 +103,7 @@
 											widgetVar="productManagerWidget"
 											label="#{messages.admin_product_new_manager_label}">
 											<f:converter
-												converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />
-											<f:selectItem
-												itemLabel="#{jJProductBean.productManager.firstname} #{jJProductBean.productManager.name}"
-												itemValue="#{jJProductBean.productManager}" />
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />											
 											<f:selectItems value="#{jJProductBean.productManagerList}"
 												var="p" itemLabel="#{p.firstname} #{p.name}"
 												itemValue="#{p}" />

@@ -44,7 +44,7 @@ public class JJProjectBean {
 	private LazyProjectDataModel projectListTable;
 
 	private JJContact projectManager;
-	private Set<JJContact> projectManagerList;
+	private List<JJContact> projectManagerList;
 
 	private String message;
 
@@ -107,13 +107,13 @@ public class JJProjectBean {
 		this.projectManager = projectManager;
 	}
 
-	public Set<JJContact> getProjectManagerList() {
+	public List<JJContact> getProjectManagerList() {
 
 		projectManagerList = jJPermissionService.getManagers("Project");
 		return projectManagerList;
 	}
 
-	public void setProjectManagerList(Set<JJContact> projectManagerList) {
+	public void setProjectManagerList(List<JJContact> projectManagerList) {
 		this.projectManagerList = projectManagerList;
 	}
 

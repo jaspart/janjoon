@@ -411,23 +411,11 @@ public class LoginBean implements Serializable {
 					.contains("projectSelectOneMenu")) {
 
 				JJProject project = (JJProject) event.getNewValue();
-
 				jJProjectBean.setProject(project);
 				authorisationService.initFields();
-
 				session.setAttribute("jJSprintBean", new JJSprintBean());
-				session.setAttribute("jJTaskBean", new JJTaskBean());				
-				if (session.getAttribute("jJRequirementBean") != null) {
-					List<JJRequirement> req = ((JJRequirementBean) session
-							.getAttribute("jJRequirementBean"))
-							.getNoCouvretReq();
-					session.setAttribute("jJRequirementBean",
-							new JJRequirementBean());
-					((JJRequirementBean) session
-							.getAttribute("jJRequirementBean"))
-							.setNoCouvretReq(req);
-				}
-
+				session.setAttribute("jJTaskBean", new JJTaskBean());
+				session.setAttribute("jJRequirementBean",new JJRequirementBean());
 			}
 
 			if (viewId.contains("development")) {

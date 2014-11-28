@@ -29,5 +29,6 @@ public interface JJRequirementService {
 			JJVersion version,JJStatus status, boolean onlyActif);
 	
 	public void refreshRequirement(JJRequirement requirement);
+	public List<JJRequirement> getNonCouvredRequirements();
 
 }

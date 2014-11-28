@@ -68,7 +68,7 @@ public class JJProductBean {
 	private LazyProductDataModel productListTable;
 
 	private JJContact productManager;
-	private Set<JJContact> productManagerList;
+	private List<JJContact> productManagerList;
 
 	private String message;
 
@@ -135,14 +135,14 @@ public class JJProductBean {
 		this.productManager = productManager;
 	}
 
-	public Set<JJContact> getProductManagerList() {
+	public List<JJContact> getProductManagerList() {
 
 		productManagerList = jJPermissionService.getManagers("Product");
 
 		return productManagerList;
 	}
 
-	public void setProductManagerList(Set<JJContact> productManagerList) {
+	public void setProductManagerList(List<JJContact> productManagerList) {
 		this.productManagerList = productManagerList;
 	}
 

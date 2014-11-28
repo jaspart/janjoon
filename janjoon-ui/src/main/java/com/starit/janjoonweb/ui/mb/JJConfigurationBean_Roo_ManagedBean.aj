@@ -684,26 +684,8 @@ privileged aspect JJConfigurationBean_Roo_ManagedBean {
         JJConfiguration_ = new JJConfiguration();
         createDialogVisible = true;
         return "JJConfiguration_";
-    }
+    }   
     
-    public String JJConfigurationBean.persist() {
-        String message = "";
-        if (JJConfiguration_.getId() != null) {
-            jJConfigurationService.updateJJConfiguration(JJConfiguration_);
-            message = "message_successfully_updated";
-        } else {
-            jJConfigurationService.saveJJConfiguration(JJConfiguration_);
-            message = "message_successfully_created";
-        }
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("createDialogWidget.hide()");
-        context.execute("editDialogWidget.hide()");
-        
-        FacesMessage facesMessage = MessageFactory.getMessage(message, "JJConfiguration");
-        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-        reset();
-        return findAllJJConfigurations();
-    }
     
     public String JJConfigurationBean.delete() {
         jJConfigurationService.deleteJJConfiguration(JJConfiguration_);

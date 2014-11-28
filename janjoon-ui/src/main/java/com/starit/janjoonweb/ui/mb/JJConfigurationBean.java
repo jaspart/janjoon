@@ -157,6 +157,25 @@ public class JJConfigurationBean {
 
 		return persist();
 	}
+	public String persist() {
+		
+        String message = "";
+        if (getJJConfiguration_().getId() != null) {
+            jJConfigurationService.updateJJConfiguration(getJJConfiguration_());
+            message = "message_successfully_updated";
+        } else {
+            jJConfigurationService.saveJJConfiguration(getJJConfiguration_());
+            message = "message_successfully_created";
+        }
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("createDialogWidget.hide()");
+        
+        
+        FacesMessage facesMessage = MessageFactory.getMessage(message, "Configuration");
+        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+        reset();
+        return findAllJJConfigurations();
+    }
 
 	public void reset() {
 

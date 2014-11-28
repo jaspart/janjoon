@@ -881,20 +881,17 @@ public class JJRequirementBean {
 				if (aur == 2)
 					listRes.set(
 							listRes.indexOf(new RequirementUtil(req, null)),
-							new RequirementUtil(req,
-									getRowStyleClass(req, true)));
+							new RequirementUtil(req, getRowStyleClass(req)));
 				else if (aur == 3)
 					listRes.remove(listRes.indexOf(new RequirementUtil(req,
 							null)));
 				else if (aur == 1)
-					listRes.add(new RequirementUtil(req, getRowStyleClass(req,
-							true)));
+					listRes.add(new RequirementUtil(req, getRowStyleClass(req)));
 
 				tableDataModelList.get(i).setCompletionProgress(0);
 				tableDataModelList.get(i).setCoverageProgress(0);
 				tableDataModelList.get(i).setActiveIndex(-1);
 				i = tableDataModelList.size();
-				
 
 			}
 			i++;
@@ -952,12 +949,12 @@ public class JJRequirementBean {
 		requirement.setVersioning(requirementVersion);
 		requirement.setStatus(requirementStatus);
 		getRequirementOrder();
-		int u=2;
+		int u = 2;
 
 		if (requirement.getId() == null) {
 			requirement.setProject(requirementProject);
 			saveJJRequirement(requirement);
-			u=1;
+			u = 1;
 
 		} else {
 
@@ -986,15 +983,14 @@ public class JJRequirementBean {
 				if (!selectedHighRequirementsList.contains(req)
 						&& !selectedMediumRequirementsList.contains(req))
 					updateDataTable(req, 2);
-			
+
 			for (JJRequirement req : selectedHighRequirementsList)
-				
-					updateDataTable(req, 2);
-			
+
+				updateDataTable(req, 2);
+
 			for (JJRequirement req : selectedMediumRequirementsList)
-	
-					updateDataTable(req, 2);
-			
+
+				updateDataTable(req, 2);
 
 		} else if (requirement.getCategory().equals(mediumCategory)) {
 
@@ -1006,7 +1002,7 @@ public class JJRequirementBean {
 					req = jJRequirementService.findJJRequirement(req.getId());
 					req.getRequirementLinkUp().remove(requirement);
 					updateJJRequirement(req);
-					
+
 				}
 			}
 			for (JJRequirement req : selectedLowRequirementsList) {
@@ -1015,14 +1011,13 @@ public class JJRequirementBean {
 				updateJJRequirement(req);
 				updateDataTable(req, 2);
 			}
-			
+
 			for (JJRequirement req : listReq)
 				if (!selectedLowRequirementsList.contains(req))
 					updateDataTable(req, 2);
-			
-			for (JJRequirement req : selectedLowRequirementsList)				
-					updateDataTable(req, 2);
-			
+
+			for (JJRequirement req : selectedLowRequirementsList)
+				updateDataTable(req, 2);
 
 			listReq = new ArrayList<JJRequirement>(
 					requirement.getRequirementLinkUp());
@@ -1033,13 +1028,13 @@ public class JJRequirementBean {
 			}
 			requirement.getRequirementLinkUp().addAll(
 					new HashSet<JJRequirement>(selectedHighRequirementsList));
-			
+
 			for (JJRequirement req : listReq)
 				if (!selectedHighRequirementsList.contains(req))
 					updateDataTable(req, 2);
-			
-			for (JJRequirement req : selectedHighRequirementsList)				
-					updateDataTable(req, 2);
+
+			for (JJRequirement req : selectedHighRequirementsList)
+				updateDataTable(req, 2);
 
 		} else if (requirement.getCategory().equals(highCategory)) {
 			List<JJRequirement> listReq = new ArrayList<JJRequirement>(
@@ -1067,7 +1062,7 @@ public class JJRequirementBean {
 				updateJJRequirement(req);
 				updateDataTable(req, 2);
 			}
-			
+
 			for (JJRequirement req : listReq)
 				if (!selectedLowRequirementsList.contains(req)
 						&& !selectedMediumRequirementsList.contains(req))
@@ -1623,7 +1618,7 @@ public class JJRequirementBean {
 				List<RequirementUtil> requirements = (List<RequirementUtil>) categoryDataModel
 						.getWrappedData();
 				requirements.add(0, new RequirementUtil(requirement,
-						getRowStyleClass(requirement, true)));
+						getRowStyleClass(requirement)));
 			}
 			// categoryDataModel.calculCompletionProgress();
 			// categoryDataModel.calculCoverageProgress();
@@ -3703,7 +3698,7 @@ public class JJRequirementBean {
 		// oncomplete="PF('blockUIWidget').unblock();"
 	}
 
-	public String getRowStyleClass(JJRequirement requirement, boolean NotMain) {
+	public String getRowStyleClass(JJRequirement requirement) {
 
 		long t = System.currentTimeMillis();
 		List<JJCategory> categoryList = jJCategoryService.getCategories(null,
@@ -3768,19 +3763,18 @@ public class JJRequirementBean {
 		if (tasks.isEmpty()) {
 			TASK = false;
 		}
-		if (NotMain) {
-			for (JJTask task : tasks) {
-				if (task.getEndDateReal() == null) {
-					ENCOURS = true;
-					FINIS = false;
-					break;
-				}
+
+		for (JJTask task : tasks) {
+			if (task.getEndDateReal() == null) {
+				ENCOURS = true;
+				FINIS = false;
+				break;
 			}
 		}
 
 		String rowStyleClass = "";
 
-		if (UP && DOWN && TASK && NotMain) {
+		if (UP && DOWN && TASK) {
 
 			if (ENCOURS && !FINIS) {
 				rowStyleClass = "RequirementInProcess";
@@ -3836,15 +3830,8 @@ public class JJRequirementBean {
 		LoginBean login = (LoginBean) session.getAttribute("loginBean");
 
 		if (noCouvretReq == null && login.isEnable()) {
-			noCouvretReq = new ArrayList<JJRequirement>();
-			for (JJRequirement req : jJRequirementService
-					.findAllJJRequirements()) {
-				if (req.getEnabled() && req.getCategory() != null) {
-					if (getRowStyleClass(req, false).equalsIgnoreCase(
-							"RequirementNotLinked"))
-						noCouvretReq.add(req);
-				}
-			}
+			noCouvretReq = jJRequirementService.getNonCouvredRequirements();
+
 		}
 
 	}
@@ -3871,8 +3858,8 @@ public class JJRequirementBean {
 			List<JJRequirement> requirments) {
 		List<RequirementUtil> requirementUtils = new ArrayList<RequirementUtil>();
 		for (JJRequirement req : requirments) {
-			requirementUtils.add(new RequirementUtil(req, getRowStyleClass(req,
-					true)));
+			requirementUtils
+					.add(new RequirementUtil(req, getRowStyleClass(req)));
 		}
 		return requirementUtils;
 	}

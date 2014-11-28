@@ -78,7 +78,6 @@ public class JJCategoryBean {
 
 	public void deleteCategory() {
 		// message = "Edit Contact";
-
 		if (categoryAdmin != null) {
 			categoryAdmin.setEnabled(false);
 			updateJJCategory(categoryAdmin);

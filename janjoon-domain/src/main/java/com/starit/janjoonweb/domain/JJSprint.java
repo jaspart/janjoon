@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
@@ -92,7 +93,14 @@ public class JJSprint {
 	 }
 	
 	public Set<JJTask> getTasks() {
-		Hibernate.initialize(this.tasks);
+		try
+		{
+			Hibernate.initialize(this.tasks);
+		}catch(HibernateException e)
+		{
+			System.err.println(e.getMessage());
+		}
+		
         return this.tasks;
     }
 	
