@@ -72,7 +72,7 @@
 						sortMode="multiple" resizableColumns="true"
 						rowStyleClass="#{reqUtil.style}"
 						filteredValue="#{tableDataModel.filtredRequirements}"
-						rowKey="#{reqUtil.requirement.id}"
+						rowKey="#{reqUtil.requirement.id}" 
 						rendered="#{tableDataModel.rendered}" selectionMode="single"
 						widgetVar="dataTable_#{loop.index}_Widget">
 						<p:ajax event="rowDblselect" onstart="PF('blockUIWidget').block()"
@@ -90,7 +90,7 @@
 											<p:commandButton id="manageChapterButton"
 												icon="ui-icon-document" title="#{jJChapterBean.warnMessage}"
 												update=":chapterDialog"
-												disabled="#{jJChapterBean.disabledChapter}"
+												disabled="#{jJChapterBean.disabledChapter or jJProjectBean.project == null}"
 												actionListener="#{jJChapterBean.loadData(tableDataModel.categoryId)}"
 												onstart="PF('blockUIWidget').block()"
 												oncomplete="PF('blockUIWidget').unblock();PF('chapterDialogWidget').show()" />
@@ -102,8 +102,9 @@
 												oncomplete="PF('requirementReleaseDialogWidget').show()" />
 										</p:column>
 										<p:column colspan="3">
-											<p:inputText id="globalFilter" style="width:100%"
+											<p:inputText id="globalFilter" style="width:100%" 
 												onkeyup="dataTable_#{loop.index}_Widget.filter()" />
+											<p:watermark value="#{messages.specification_table_requirement_filter}" for="globalFilter"/>
 										</p:column>
 										<p:column colspan="1">
 											<p:commandButton id="newRequirementButton"
@@ -128,7 +129,7 @@
 											<h:commandLink id="pdf"
 												disabled="#{jJRequirementBean.disabledExport}"
 												actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}">
-												<p:graphicImage value="/resources/images/pdf.png" />
+												<p:graphicImage vfilteralue="/resources/images/pdf.png" />
 												<p:dataExporter type="pdf" target="categoryTable"
 													fileName="Document"
 													preProcessor="#{jJChapterBean.preProcessPDF}" />
@@ -149,7 +150,7 @@
 							<h:outputText value="#{reqUtil.requirement.id}" />
 						</p:column>
 
-						<p:column filterBy="name" filterStyle="display:none" sortBy="requirement.id">
+						<p:column filterBy="requirement.name" filterStyle="display:none" sortBy="requirement.id">
 							<f:facet name="header">
 								<h:outputText
 									value="#{messages.specification_table_requirement_title}" />
@@ -180,7 +181,7 @@
 							</p:tooltip>
 						</p:column>
 
-						<p:column filterBy="product.name" filterStyle="display:none"
+						<p:column filterBy="requirement.product.name" filterStyle="display:none"
 							sortBy="requirement.product.name">
 							<f:facet name="header">
 								<h:outputText
@@ -189,7 +190,7 @@
 							<h:outputText value="#{reqUtil.requirement.product.name}" />
 						</p:column>
 
-						<p:column filterBy="chapter.name" filterStyle="display:none"
+						<p:column filterBy="requirement.chapter.name" filterStyle="display:none"
 							sortBy="requirement.chapter.name">
 							<f:facet name="header">
 								<h:outputText
@@ -252,13 +253,13 @@
 									oncomplete="PF('blockUIWidget').unblock()" />
 								<p:tab title="#{messages.specification_progress_footer}">
 									<p:row>
-										<p:progressBar id="coverage"
+										<p:progressBar id="coverage" 											
 											value="#{tableDataModel.coverageProgress}"
 											labelTemplate="#{messages.specification_coverage_progress} {value}%"
 											displayOnly="true" />
 									</p:row>
 									<p:row>
-										<p:progressBar id="completion"
+										<p:progressBar id="completion" 											
 											value="#{tableDataModel.completionProgress}"
 											labelTemplate="#{messages.specification_completion_progress} {value}%"
 											displayOnly="true" />
@@ -524,7 +525,7 @@
 											onstart="PF('requirementBlockUIWidget').block()"
 											oncomplete="PF('requirementBlockUIWidget').unblock()"
 											action="#{jJRequirementBean.save()}"
-											widgetVar="requirementSaveWidget" update="@form :contentPanel" />
+											widgetVar="requirementSaveWidget" update="@form :specForm :specForm" />
 									</p:column>
 								</p:row>
 							</f:facet>
@@ -553,14 +554,16 @@
 							style="white-space: nowrap;" />
 					</h:panelGrid>
 				</pe:blockUI>
-
-				<h:form id="chapterDialogForm">
-					<p:growl id="msg" sticky="true" />					
-						<p:panelGrid style="margin-top:10px">
+			
+				<h:form id="chapterDialogForm">				
+					<p:growl id="msg" sticky="true" />
+					<p:tabView widgetVar="chapterTabView">	
+					<p:tab title="Chapitre" >				
+						<p:panelGrid style="margin-top:10px;height: 400px;">
 							<p:row>
 								<p:column>
 									<p:inputText id="name" value="#{jJChapterBean.chapter.name}"
-										required="true" widgetVar="nameWidget"
+										required="true" widgetVar="nameWidget"  style="margin-top:10px;margin-left: 20px;"
 										label="#{messages.specification_chapter_name_label}"
 										requiredMessage="#{messages.specification_chapter_name_alert}" >
 										<f:validateLength maximum="100" />
@@ -608,14 +611,14 @@
 											process="@this" icon="ui-icon-pencil"
 											onstart="PF('chapterBlockUIWidget').block()"
 											oncomplete="PF('chapterBlockUIWidget').unblock()"
-											update="chapterDialogForm" />
+											update=":chapterDialogForm" />
 										<p:menuitem 
 											value="#{messages.specification_chapter_delete_menuitem}"
 											actionListener="#{jJChapterBean.deleteChapter()}"
 											process="@this" icon="ui-icon-close"
 											onstart="PF('chapterBlockUIWidget').block()"
 											oncomplete="PF('chapterBlockUIWidget').unblock()"
-											update="chapterDialogForm" />
+											update=":chapterDialogForm" />
 									</p:contextMenu>
 									<h:outputText
 										value="#{messages.specification_chapter_tree_label}" />
@@ -638,28 +641,30 @@
 										<p:commandButton
 											value="#{messages.specification_chapter_save_button}"
 											action="#{jJChapterBean.save}"
-											update="chapterDialogForm" style="float: right;"
+											update=":chapterDialogForm" style="float: right;"
 											onstart="PF('chapterBlockUIWidget').block()"
 											oncomplete="PF('chapterBlockUIWidget').unblock()" />
 									</p:column>
 								</p:row>
 							</f:facet>
 						</p:panelGrid>
-						<p:panelGrid>
+					</p:tab>
+					<p:tab title="Gestion Des Chapitres">	
+						<p:panelGrid style="margin-top:10px;height: 400px;width: 895px;">
 							<p:row>
 								<p:column colspan="3">
-									<p:scrollPanel style="height:200px;" mode="native">
-										<p:tree id="leftTreeIncorporated"
+									<p:scrollPanel style="height:350px;" mode="native">
+										<p:tree id="leftTreeIncorporated" 
 											value="#{jJChapterBean.leftRoot}" var="nodeLeft"
-											selectionMode="single"
+											selectionMode="single" style="width: 350px !important;"
 											selection="#{jJChapterBean.selectedLeftNode}"
 											draggable="true" droppable="true" dragdropScope="demo"
-											cache="false">
+											cache="false"  >
 											<p:ajax event="dragdrop"
 												listener="#{jJChapterBean.onDragDrop}"
 												update=":chapterDialogForm"
 												onstart="PF('chapterBlockUIWidget').block()"
-												oncomplete="PF('chapterBlockUIWidget').unblock()" />
+												oncomplete="PF('chapterBlockUIWidget').unblock();chapterTabView.select(1);" />
 											<p:treeNode>
 												<h:outputText value="#{nodeLeft}" />
 											</p:treeNode>
@@ -671,10 +676,10 @@
 										name="transfer.png" />
 								</p:column>
 								<p:column colspan="3">
-									<p:scrollPanel style="height:200px;" mode="native">
+									<p:scrollPanel style="height:350px;" mode="native">
 										<p:tree id="RightTreeIncorporated"
 											value="#{jJChapterBean.rightRoot}" var="nodeRight"
-											selectionMode="single"
+											selectionMode="single" style="width: 350px !important;"
 											selection="#{jJChapterBean.selectedRightNode}"
 											draggable="true" droppable="true" dragdropScope="demo"
 											cache="false">
@@ -682,7 +687,7 @@
 												listener="#{jJChapterBean.onDragDrop}"
 												update=":chapterDialogForm"
 												onstart="PF('chapterBlockUIWidget').block()"
-												oncomplete="PF('chapterBlockUIWidget').unblock()" />
+												oncomplete="PF('chapterBlockUIWidget').unblock();chapterTabView.select(1);" />
 											<p:treeNode>
 												<h:outputText value="#{nodeRight}" />
 											</p:treeNode>
@@ -691,6 +696,7 @@
 								</p:column>
 							</p:row>
 						</p:panelGrid>					
+				</p:tab></p:tabView>
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>

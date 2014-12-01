@@ -1075,20 +1075,27 @@ public class JJRequirementBean {
 		RequestContext context = RequestContext.getCurrentInstance();
 
 		if (requirementState) {
-			if (getRequirementDialogConfiguration()) {
+			boolean r=getRequirementDialogConfiguration();
+			if (r) {
 				context.execute("PF('requirementDialogWidget').hide()");
+				reset();
+				closeDialog(false);
+				
 			} else {
 				newRequirement(requirementCategory.getId());
 			}
 
 		} else {
-
 			context.execute("PF('requirementDialogWidget').hide()");
+			reset();
+			closeDialog(false);
+			
 		}
-
-		reset();
+		
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
-		closeDialog(false);
+		
+
+		
 
 	}
 
@@ -1099,7 +1106,6 @@ public class JJRequirementBean {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) facesContext.getExternalContext()
 				.getSession(false);
-		JJContact contact = (JJContact) session.getAttribute("JJContact");
 		JJTestcaseBean testcaseBean = (JJTestcaseBean) session
 				.getAttribute("jJTestcaseBean");
 		JJTeststepBean testStepBean = (JJTeststepBean) session
@@ -3486,8 +3492,9 @@ public class JJRequirementBean {
 
 	private boolean getRequirementDialogConfiguration() {
 
-		return jJConfigurationService.getDialogConfig("RequirementDialog",
+		boolean r=jJConfigurationService.getDialogConfig("RequirementDialog",
 				"specs.requirement.create.saveandclose");
+		return r;
 	}
 
 	// la partie mine

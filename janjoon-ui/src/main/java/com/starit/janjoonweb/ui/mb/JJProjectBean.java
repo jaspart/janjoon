@@ -116,7 +116,12 @@ public class JJProjectBean {
 
 	public List<JJContact> getProjectManagerList() {
 
-		projectManagerList = jJPermissionService.getManagers("Project");
+		if(projectAdmin.getId()==null)
+		projectManagerList = jJPermissionService.getManagers((JJCompany) LoginBean.findBean("JJCompany"),
+				(JJContact) LoginBean.findBean("JJContact"),"Project");
+		else
+			projectManagerList=jJPermissionService.getManagers(projectAdmin.getManager().getCompany(),
+					(JJContact) LoginBean.findBean("JJContact"),"Product");;
 		return projectManagerList;
 	}
 

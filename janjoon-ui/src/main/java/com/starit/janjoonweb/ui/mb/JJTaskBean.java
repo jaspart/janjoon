@@ -258,8 +258,8 @@ public class JJTaskBean {
 	}
 
 	public List<JJContact> getContacts() {
+		
 		getProject();
-
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJProductBean jJProductBean = (JJProductBean) session
@@ -267,7 +267,7 @@ public class JJTaskBean {
 		JJProduct product = jJProductBean.getProduct();
 
 		contacts = jJPermissionService
-				.areAuthorized(project, product, "Task");
+				.areAuthorized(project.getManager().getCompany(),null,project, product, "Task");
 
 		return contacts;
 	}

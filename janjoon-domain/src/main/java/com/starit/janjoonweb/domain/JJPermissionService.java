@@ -30,14 +30,16 @@ public interface JJPermissionService {
 
 	public boolean isAuthorized(JJContact contact, JJProject project,
 			JJProduct product);
+	
+	public boolean isSuperAdmin(JJContact contact);
 
 	public boolean isAuthorized(JJContact contact, JJProject project);
 
-	public List<JJContact> areAuthorized(JJProject project, JJProduct product,
+	public List<JJContact> areAuthorized(JJCompany company,JJContact contact,JJProject project, JJProduct product,
 			String objet, JJCategory category, Boolean r, Boolean w, Boolean x);
 
-	public List<JJContact> getManagers(String objet);
+	public List<JJContact> getManagers(JJCompany company,JJContact contact,String objet);
 
-	public List<JJContact> areAuthorized(JJProject project, JJProduct product,String objet);
+	public List<JJContact> areAuthorized(JJCompany company,JJContact contact,JJProject project, JJProduct product,String objet);
 
 }

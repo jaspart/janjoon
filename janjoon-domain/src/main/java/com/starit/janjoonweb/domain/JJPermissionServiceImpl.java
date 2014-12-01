@@ -99,9 +99,9 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		if (objet != null) {
 			orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
 					objet));
-			if(!objet.contains("*"))
+			if (!objet.contains("*"))
 				orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
-						"JJ"+objet));
+						"JJ" + objet));
 			orPredicates
 					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
 
@@ -238,8 +238,9 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public List<JJContact> areAuthorized(JJProject project, JJProduct product,
-			String objet, JJCategory category, Boolean r, Boolean w, Boolean x) {
+	public List<JJContact> areAuthorized(JJCompany company, JJContact contact,
+			JJProject project, JJProduct product, String objet,
+			JJCategory category, Boolean r, Boolean w, Boolean x) {
 
 		List<JJContact> contacts = new ArrayList<JJContact>();
 
@@ -266,9 +267,9 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		if (objet != null) {
 			orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
 					objet));
-			if(!objet.contains("*"))
+			if (!objet.contains("*"))
 				orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
-						"JJ"+objet));
+						"JJ" + objet));
 			orPredicates
 					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
 		} else
@@ -285,8 +286,8 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 			orPredicates.add(criteriaBuilder.equal(fromRight.get("category"),
 					category));
-		
-			orPredicates.add(criteriaBuilder.isNull(fromRight.get("category")));
+
+		orPredicates.add(criteriaBuilder.isNull(fromRight.get("category")));
 
 		orPredicate = criteriaBuilder.or(orPredicates
 				.toArray(new Predicate[] {}));
@@ -318,8 +319,8 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		if (project != null)
 			orPredicates
 					.add(criteriaBuilder.equal(from.get("project"), project));
-		
-			orPredicates.add(criteriaBuilder.isNull(from.get("project")));
+
+		orPredicates.add(criteriaBuilder.isNull(from.get("project")));
 
 		orPredicate = criteriaBuilder.or(orPredicates
 				.toArray(new Predicate[] {}));
@@ -330,8 +331,8 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		if (product != null)
 			orPredicates
 					.add(criteriaBuilder.equal(from.get("product"), product));
-		
-			orPredicates.add(criteriaBuilder.isNull(from.get("product")));
+
+		orPredicates.add(criteriaBuilder.isNull(from.get("product")));
 
 		orPredicate = criteriaBuilder.or(orPredicates
 				.toArray(new Predicate[] {}));
@@ -348,9 +349,37 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 		List<JJPermission> permissions = result.getResultList();
 
-		for (JJPermission permission : permissions) {
-			if (permission.getContact().getEnabled()) {
-				contacts.add(permission.getContact());
+		if (company == null)
+			for (JJPermission permission : permissions) {
+				if (permission.getContact().getEnabled()) {
+					contacts.add(permission.getContact());
+				}
+			}
+		else {
+			if (contact == null)
+				for (JJPermission permission : permissions) {
+					if (permission.getContact().getEnabled()
+							&& permission.getContact().getCompany()
+									.equals(company)) {
+						contacts.add(permission.getContact());
+					}
+				}
+			else {
+				if (isSuperAdmin(contact))
+					for (JJPermission permission : permissions) {
+						if (permission.getContact().getEnabled()) {
+							contacts.add(permission.getContact());
+						}
+					}
+				else
+					for (JJPermission permission : permissions) {
+						if (permission.getContact().getEnabled()
+								&& permission.getContact().getCompany()
+										.equals(company)) {
+							contacts.add(permission.getContact());
+						}
+					}
+
 			}
 		}
 
@@ -358,14 +387,23 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 	}
 
-	@Override
-	public List<JJContact> getManagers(String objet) {
-		return areAuthorized(null, null, objet, null, null, true, null);
+	public boolean isSuperAdmin(JJContact contact) {
+		return isAuthorized(contact, null, null, "Company", null, true, true,
+				null);
 	}
 
 	@Override
-	public List<JJContact> areAuthorized(JJProject project, JJProduct product,String objet) {
-		return areAuthorized(project, product, objet, null, null, null, null);
+	public List<JJContact> getManagers(JJCompany company, JJContact contact,
+			String objet) {
+		return areAuthorized(company, contact, null, null, objet, null, null,
+				true, null);
+	}
+
+	@Override
+	public List<JJContact> areAuthorized(JJCompany company, JJContact contact,
+			JJProject project, JJProduct product, String objet) {
+		return areAuthorized(company, contact, project, product, objet, null,
+				null, null, null);
 	}
 
 	public void saveJJPermission(JJPermission JJPermission_) {

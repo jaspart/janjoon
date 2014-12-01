@@ -146,7 +146,12 @@ public class JJProductBean {
 
 	public List<JJContact> getProductManagerList() {
 
-		productManagerList = jJPermissionService.getManagers("Product");
+		if(productAdmin.getId() == null)
+			productManagerList = jJPermissionService.getManagers((JJCompany) LoginBean.findBean("JJCompany"),
+					(JJContact) LoginBean.findBean("JJContact"),"Product");
+		else
+			productManagerList = jJPermissionService.getManagers(productAdmin.getManager().getCompany(),
+					(JJContact) LoginBean.findBean("JJContact"),"Product");
 
 		return productManagerList;
 	}
@@ -272,9 +277,7 @@ public class JJProductBean {
 
 			for (JJVersion version : selectedVersions) {
 				if (version.getId() == null) {
-					version.setProduct(productAdmin);
-
-					productAdmin.getVersions().add(version);
+					version.setProduct(productAdmin);					
 					jJVersionBean.saveJJVersion(version);
 				}
 			}
@@ -293,9 +296,7 @@ public class JJProductBean {
 			}
 		} else if (!selectedVersions.isEmpty() && versions.isEmpty()) {
 			for (JJVersion version : selectedVersions) {
-				version.setProduct(productAdmin);
-
-				productAdmin.getVersions().add(version);
+				version.setProduct(productAdmin);				
 				jJVersionBean.saveJJVersion(version);
 			}
 		}

@@ -79,14 +79,23 @@ public class JJBuildBean {
 		this.buildUtils = buildUtils;
 	}
 
-	public void loadingRowExpansion(Long l) {
+	public void loadingRowExpansion(JJVersion v) {
 
 		if (buildUtils == null)
 			buildUtils = new ArrayList<BuildUtil>();
 
 		JJVersion version = null;
-		if (l != null)
-			version = jJVersionService.findJJVersion(l);
+		
+		if(v.getId() != null)
+			version = jJVersionService.findJJVersion(v.getId());
+		
+		if(version == null)
+		{
+			v.setProduct(((JJProductBean) LoginBean.findBean("jJProductBean")).getProductAdmin());
+			((JJVersionBean)LoginBean.findBean("jJVersionBean")).saveJJVersion(v);
+			version = jJVersionService.findJJVersion(v.getId());
+		}
+		long l=version.getId();
 
 		if (version == null) {
 			buildUtils.add(new BuildUtil(version, null));
@@ -132,8 +141,7 @@ public class JJBuildBean {
 		BuildUtil buildUtil = buildUtils.get(i);
 		JJVersion version = buildUtil.getVersion();
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJContact jJContact = (JJContact) session.getAttribute("JJContact");
+				.getExternalContext().getSession(false);		
 		JJBuild b = new JJBuild();
 		b.setName(buildName);		
 		b.setEnabled(true);		

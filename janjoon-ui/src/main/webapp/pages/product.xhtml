@@ -222,7 +222,7 @@
 							<f:event type="preRenderComponent" update="versionDataTable"
 								onstart="PF('versionBlockUIWidget').block()"
 								oncomplete="PF('versionBlockUIWidget').unblock()"
-								listener="#{jJBuildBean.loadingRowExpansion(versionModel.version.id)}" />
+								listener="#{jJBuildBean.loadingRowExpansion(versionModel.version)}" />
 
 							<p:dataTable id="buildDataTable" var="build" style="width:300px;"
 								selection="#{jJBuildBean.buildUtils.get(jJBuildBean.index).versionSelectedBuilds}"

@@ -30,6 +30,7 @@ public class RequirementUtil {
 		this.style = style;
 	}
 	
+	
 	@Override
 	public boolean equals(Object object) {
 		return (object instanceof RequirementUtil) && (requirement.getId() != null) ? requirement.getId()

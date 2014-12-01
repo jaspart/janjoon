@@ -395,13 +395,13 @@ public class JJSprintBean {
 
 		JJContact contact = (JJContact) session.getAttribute("JJContact");
 
-		setJJSprint_(sprintUtil.getSprint());
-
+		setJJSprint_(sprintUtil.getSprint());		
+		
 		getJJSprint_().setEnabled(true);
 		getJJSprint_().setDescription(
 				getJJSprint_().getName() + " /CreatedBy:"
-						+ getJJSprint_().getCreatedBy().getName() + " at :"
-						+ getJJSprint_().getCreationDate());
+						+ contact.getName() + " at :"
+						+ new Date());
 		saveJJSprint(getJJSprint_());
 		for (JJContact c : getJJSprint_().getContacts()) {
 			c.getSprints().add(getJJSprint_());
@@ -605,8 +605,8 @@ public class JJSprintBean {
 		task.setSprint(sprintUtil.getSprint());
 		task.setEnabled(true);
 		task.setDescription(task.getName() + " /CreatedBy:"
-				+ task.getCreatedBy().getName() + " at :"
-				+ task.getCreationDate());
+				+ contact.getName() + " at :"
+				+ new Date());
 
 		jJTaskBean.saveJJTask(task, false);
 
@@ -786,7 +786,7 @@ public class JJSprintBean {
 	{
 		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
 				.getSession(false)).getAttribute("JJContact");
-		b.setCreatedBy(contact);
+		b.setCreatedBy(contact);		
 		b.setCreationDate(new Date());
 		jJSprintService.saveJJSprint(b);
 	}
