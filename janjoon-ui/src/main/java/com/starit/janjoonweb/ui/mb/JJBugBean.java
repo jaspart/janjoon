@@ -411,8 +411,7 @@ public class JJBugBean {
 	public void saveBug() {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJContact contact = (JJContact) session.getAttribute("JJContact");
+				.getExternalContext().getSession(false);	
 
 		JJTeststepexecutionBean jJTeststepexecutionBean = (JJTeststepexecutionBean) session
 				.getAttribute("jJTeststepexecutionBean");
@@ -471,8 +470,7 @@ public class JJBugBean {
 	public void persistBug() {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJContact contact = (JJContact) session.getAttribute("JJContact");
+				.getExternalContext().getSession(false);		
 		if(session.getAttribute("jJVersionBean") != null)
 		{
 			if(((JJVersionBean)session.getAttribute("jJVersionBean")).getVersion() != null)

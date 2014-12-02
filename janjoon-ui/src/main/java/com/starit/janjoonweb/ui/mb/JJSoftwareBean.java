@@ -18,8 +18,7 @@ public class JJSoftwareBean {
 	
 	public void saveJJSoftware(JJSoftware b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJSoftwareService.saveJJSoftware(b);
@@ -27,8 +26,7 @@ public class JJSoftwareBean {
 	
 	public void updateJJSoftware(JJSoftware b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJSoftwareService.updateJJSoftware(b);

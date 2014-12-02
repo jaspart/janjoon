@@ -15,6 +15,7 @@ import com.starit.janjoonweb.ui.mb.JJContactBean;
 import com.starit.janjoonweb.ui.mb.JJPermissionBean;
 import com.starit.janjoonweb.ui.mb.JJProductBean;
 import com.starit.janjoonweb.ui.mb.JJProjectBean;
+import com.starit.janjoonweb.ui.mb.LoginBean;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 public class AuthorisationService implements Serializable {
@@ -30,7 +31,11 @@ public class AuthorisationService implements Serializable {
 		JJContactBean contactBean=	(JJContactBean) this.session.getAttribute("jJContactBean");
 		JJProjectBean jjProjectBean=(JJProjectBean) this.session.getAttribute("jJProjectBean");
 		JJProductBean jjProductBean=(JJProductBean) this.session.getAttribute("jJProductBean");
+		LoginBean loginBean=(LoginBean) this.session.getAttribute("loginBean");
+		loginBean.setContact(null);
 		contactBean.setContactsLazyModel(null);
+		jjProjectBean.setProjectList(null);
+		jjProductBean.setProductList(null);
 		jjProductBean.setProductListTable(null);
 		jjProjectBean.setProjectListTable(null);
 		RequestContext.getCurrentInstance().execute("updateAdmin()");

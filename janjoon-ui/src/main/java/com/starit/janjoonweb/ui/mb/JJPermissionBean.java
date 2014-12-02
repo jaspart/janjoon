@@ -89,7 +89,8 @@ public class JJPermissionBean {
 	}
 
 	public List<JJProject> getProjects() {
-		projects = jJProjectService.getProjects((JJCompany)LoginBean.findBean("JJCompany"),true);
+		projects = jJProjectService.getProjects(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
+				((LoginBean) LoginBean.findBean("loginBean")).getContact(),true);
 		return projects;
 	}
 
@@ -106,7 +107,8 @@ public class JJPermissionBean {
 	}
 
 	public List<JJProduct> getProducts() {
-		products = jJProductService.getProducts((JJCompany)LoginBean.findBean("JJCompany"),true);
+		products = jJProductService.getProducts(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
+				((LoginBean) LoginBean.findBean("loginBean")).getContact(),true);
 		return products;
 	}
 

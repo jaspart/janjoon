@@ -18,8 +18,7 @@ public class JJImportanceBean {
 	
 	public void saveJJImportance(JJImportance b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJImportanceService.saveJJImportance(b);
@@ -27,8 +26,7 @@ public class JJImportanceBean {
 	
 	public void updateJJImportance(JJImportance b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJImportanceService.updateJJImportance(b);

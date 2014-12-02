@@ -70,30 +70,65 @@ public class JJProjectServiceImpl implements JJProjectService {
 	}
 
 	@Override
-	public List<JJProject> getProjects(JJCompany company, boolean onlyActif) {
+	public List<JJProject> getProjects(JJCompany company,JJContact contact,boolean onlyActif) {
 		
 		if (company != null) {
+			List<JJProject> projects=new ArrayList<JJProject>();
 			CriteriaBuilder criteriaBuilder = entityManager
 					.getCriteriaBuilder();
-			CriteriaQuery<JJProject> criteriaQuery = criteriaBuilder
-					.createQuery(JJProject.class);
+			if(contact != null)
+			{
+				CriteriaQuery<JJPermission> criteriaPermission=criteriaBuilder
+						.createQuery(JJPermission.class);
+				Root<JJPermission> fromPermission = criteriaPermission.from(JJPermission.class);
+				List<Predicate> predicatesPermion = new ArrayList<Predicate>();
+				predicatesPermion
+				.add(criteriaBuilder.equal(fromPermission.get("enabled"), true));
+				
+				predicatesPermion
+				.add(criteriaBuilder.equal(fromPermission.get("contact"), contact));
+				CriteriaQuery<JJPermission> selectPermission = criteriaPermission.select(fromPermission);
+				selectPermission.where(predicatesPermion.toArray(new Predicate[] {}));
 
-			Root<JJProject> from = criteriaQuery.from(JJProject.class);
-
-			CriteriaQuery<JJProject> select = criteriaQuery.select(from);
-
-			List<Predicate> predicates = new ArrayList<Predicate>();
-
-			if (onlyActif) {
-				predicates
-						.add(criteriaBuilder.equal(from.get("enabled"), true));
+				TypedQuery<JJPermission> resultPermission = entityManager.createQuery(selectPermission);
+				
+				for(JJPermission permission:resultPermission.getResultList())
+				{
+					if(permission.getProject() != null)
+					{
+						projects.add(permission.getProject());
+					}else
+					{
+						projects=new ArrayList<JJProject>();
+						break;
+					}
+				}			
+				
 			}
-			predicates.add(criteriaBuilder.equal(
-					from.join("manager").get("company"), company));
-			select.where(predicates.toArray(new Predicate[] {}));
+			if(projects.isEmpty())
+			{
+				CriteriaQuery<JJProject> criteriaQuery = criteriaBuilder
+						.createQuery(JJProject.class);
 
-			TypedQuery<JJProject> result = entityManager.createQuery(select);
-			return result.getResultList();
+				Root<JJProject> from = criteriaQuery.from(JJProject.class);
+
+				CriteriaQuery<JJProject> select = criteriaQuery.select(from);
+
+				List<Predicate> predicates = new ArrayList<Predicate>();
+
+				if (onlyActif) {
+					predicates
+							.add(criteriaBuilder.equal(from.get("enabled"), true));
+				}
+				predicates.add(criteriaBuilder.equal(
+						from.join("manager").get("company"), company));
+				select.where(predicates.toArray(new Predicate[] {}));
+
+				TypedQuery<JJProject> result = entityManager.createQuery(select);
+				projects=result.getResultList();
+			}
+			
+			return projects;
 		} else
 			return null;
 

@@ -100,9 +100,12 @@ public class JJProductBean {
 
 	public List<JJProduct> getProductList() {
 
-		if (productList == null || productList.isEmpty())
-			productList = jJProductService.getProducts(
-					(JJCompany) LoginBean.findBean("JJCompany"), true);
+		if(((LoginBean) LoginBean.findBean("loginBean")).getContact() != null)
+		{
+			if (productList == null || productList.isEmpty())
+				productList = jJProductService.getProducts(
+						((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),((LoginBean) LoginBean.findBean("loginBean")).getContact(), true);
+		}	
 
 		return productList;
 	}
@@ -147,11 +150,11 @@ public class JJProductBean {
 	public List<JJContact> getProductManagerList() {
 
 		if(productAdmin.getId() == null)
-			productManagerList = jJPermissionService.getManagers((JJCompany) LoginBean.findBean("JJCompany"),
-					(JJContact) LoginBean.findBean("JJContact"),"Product");
+			productManagerList = jJPermissionService.getManagers(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
+					((LoginBean) LoginBean.findBean("loginBean")).getContact(),"Product");
 		else
 			productManagerList = jJPermissionService.getManagers(productAdmin.getManager().getCompany(),
-					(JJContact) LoginBean.findBean("JJContact"),"Product");
+					((LoginBean) LoginBean.findBean("loginBean")).getContact(),"Product");
 
 		return productManagerList;
 	}
@@ -261,7 +264,7 @@ public class JJProductBean {
 		resetVersionProductList();
 
 		List<JJVersion> versions = jJVersionService.getVersions(true, true,
-				productAdmin, (JJCompany) LoginBean.findBean("JJCompany"));
+				productAdmin, ((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany());
 
 		List<VersionDataModel> versionDataModels = jJVersionBean
 				.getVersionDataModel();
@@ -363,18 +366,14 @@ public class JJProductBean {
 	}
 
 	public void saveJJProduct(JJProduct b) {
-		JJContact contact = (JJContact) ((HttpSession) FacesContext
-				.getCurrentInstance().getExternalContext().getSession(false))
-				.getAttribute("JJContact");
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJProductService.saveJJProduct(b);
 	}
 
 	public void updateJJProduct(JJProduct b) {
-		JJContact contact = (JJContact) ((HttpSession) FacesContext
-				.getCurrentInstance().getExternalContext().getSession(false))
-				.getAttribute("JJContact");
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJProductService.updateJJProduct(b);

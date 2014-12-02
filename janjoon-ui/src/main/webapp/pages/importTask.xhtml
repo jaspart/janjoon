@@ -7,7 +7,14 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition>
-	<h:form id="importTaskDialogForm" >
+	<style type="text/css">
+.ui-datatable-header {
+	text-align: center !important;
+	position: relative;
+	height: 25px;
+}
+</style>
+	<h:form id="importTaskDialogForm">
 
 		<pe:blockUI widgetVar="taskBlockUIWidget"
 			target="importTaskDialogForm">
@@ -91,13 +98,27 @@
 			style="width:700px;table-layout: fixed;" scrollHeight="350"
 			value="#{jJTaskBean.importFormats}" editable="true" editMode="cell">
 			<f:facet name="header">
-				<h:outputText value="Import #{jJTaskBean.objet}" />
+				<p:row>
+					<p:column style="width: 40%">
+						<p:commandButton id="importDate" value="Remplir Les Dates"
+							onstart="PF('taskBlockUIWidget').block()"							
+							disabled="#{jJTaskBean.fillInDate}" style="position: absolute;left: 10px;"
+							oncomplete="PF('taskBlockUIWidget').unblock()"
+							actionListener="#{jJTaskBean.fillInDates}"
+							update="importDataTable" />
+					</p:column>
+					<p:column style="width: 20%" ></p:column>
+					<p:column style="width: 40%" >
+						<h:outputText value="Import #{jJTaskBean.objet}" style="position: absolute;right: 10px;" />
+					</p:column>
+				</p:row>
 			</f:facet>
 			<p:column style="width:40%" id="checkBox">
 				<f:facet name="header">
 					<p:row>
 						<p:column>
-							<p:selectBooleanCheckbox value="#{jJTaskBean.copyObjets}" id="checkAll">
+							<p:selectBooleanCheckbox value="#{jJTaskBean.copyObjets}"
+								id="checkAll">
 								<p:ajax update="importDataTable" process="@this,checkAll"
 									listener="#{jJTaskBean.copyObjets}" />
 							</p:selectBooleanCheckbox>
@@ -108,52 +129,55 @@
 					</p:row>
 				</f:facet>
 				<p:selectBooleanCheckbox value="#{format.copyObjet}" id="checkOne">
-					<p:ajax update="importDataTable" listener="#{jJTaskBean.copyObjet}" process="@this,checkAll"/>
+					<p:ajax update="importDataTable" listener="#{jJTaskBean.copyObjet}"
+						process="@this,checkAll" />
 				</p:selectBooleanCheckbox>
 				<h:outputText value="#{format.name}" />
 			</p:column>
 
-			<p:column style="width:30%" headerText="Start Date Planned/Revised">
+			<p:column style="width:40%" headerText="Start Date Planned/Revised">
 				<p:cellEditor>
 					<f:facet name="output">
 						<p:calendar value="#{format.startDate}" navigator="true"
 							pattern="yyyy/MM/dd HH:mm" />
 					</f:facet>
 					<f:facet name="input">
-						<p:calendar  value="#{format.startDate}" navigator="true"
-							pattern="yyyy/MM/dd HH:mm">		
-							</p:calendar>
-							
+						<p:calendar value="#{format.startDate}" navigator="true"
+							pattern="yyyy/MM/dd HH:mm">
+						</p:calendar>
+
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
 
-			<p:column style="width:30%" headerText="Workload Planned/Revised">
+			<p:column style="width:20%" headerText="Workload Planned/Revised">
 				<p:cellEditor>
 					<f:facet name="output">
-						<h:outputText value="#{format.workload}"/>
-							
+						<h:outputText value="#{format.workload}" />
+
 					</f:facet>
 					<f:facet name="input">
-						<p:spinner value="#{format.workload}" stepFactor="1" min="0">												
+						<p:spinner value="#{format.workload}" stepFactor="1" min="0">
 						</p:spinner>
-							
+
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
 
 		</p:dataTable>
 
-			<p:remoteCommand actionListener="#{jJTaskBean.importTask}" name="importTask" update=":projecttabview"
-			 	onstart="PF('taskBlockUIWidget').block()" 
-				oncomplete="PF('taskBlockUIWidget').unblock()"/>
-		
-		<p:commandButton id="importButtonSC" value="Import" onstart="PF('taskBlockUIWidget').block()" 
-				oncomplete="PF('taskBlockUIWidget').unblock()"
-			style="float: right;" actionListener="#{jJTaskBean.validateTaskField}"
+		<p:remoteCommand actionListener="#{jJTaskBean.importTask}"
+			name="importTask" update=":projecttabview"
+			onstart="PF('taskBlockUIWidget').block()"
+			oncomplete="PF('taskBlockUIWidget').unblock()" />
+
+		<p:commandButton id="importButtonSC" value="Import"
+			onstart="PF('taskBlockUIWidget').block()"
+			oncomplete="PF('taskBlockUIWidget').unblock()" style="float: right;"
+			actionListener="#{jJTaskBean.validateTaskField}"
 			update=":projecttabview:planningForm:msg" />
-			<p:commandButton  value="Annuler" style="float: right;"
-			oncomplete="PF('taskImportDialogWidget').hide()"   />
-	</h:form>	
+		<p:commandButton value="Annuler" style="float: right;"
+			oncomplete="PF('taskImportDialogWidget').hide()" />
+	</h:form>
 </ui:composition>
 </html>

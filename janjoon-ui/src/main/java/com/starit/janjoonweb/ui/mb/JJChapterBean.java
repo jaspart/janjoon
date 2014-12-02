@@ -134,7 +134,7 @@ public class JJChapterBean {
 	public List<JJChapter> getChapterList() {
 
 		if (chapter.getId() == null) {
-			chapterList = jJChapterService.getChapters((JJCompany) LoginBean.findBean("JJCompany"),project, category, true,
+			chapterList = jJChapterService.getChapters(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),project, category, true,
 					new ArrayList<String>());
 		}
 
@@ -142,7 +142,7 @@ public class JJChapterBean {
 			List<String> list = getChildren(chapter);
 			list.add(String.valueOf(chapter.getId()));
 
-			chapterList = jJChapterService.getChapters((JJCompany) LoginBean.findBean("JJCompany"),project, category, true,
+			chapterList = jJChapterService.getChapters(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),project, category, true,
 					list);
 		}
 
@@ -399,7 +399,7 @@ public class JJChapterBean {
 
 		chapterRoot = new DefaultTreeNode("RootChapter", null);
 
-		List<JJChapter> parentChapters = jJChapterService.getParentsChapter((JJCompany) LoginBean.findBean("JJCompany"),
+		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
 				project, category, true, true);
 
 		for (JJChapter chapter : parentChapters) {
@@ -426,7 +426,7 @@ public class JJChapterBean {
 		JJProduct product = jJProductBean.getProduct();
 
 		List<JJRequirement> jJRequirementList = jJRequirementService
-				.getRequirements((JJCompany) LoginBean.findBean("JJCompany"),category, project, product, version, null,
+				.getRequirements(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),category, project, product, version, null,
 						null, true, true, false);
 
 		for (JJRequirement requirement : jJRequirementList) {
@@ -439,7 +439,7 @@ public class JJChapterBean {
 		// null
 		rightRoot = new DefaultTreeNode("rightRoot", null);
 
-		List<JJChapter> parentChapters = jJChapterService.getParentsChapter((JJCompany) LoginBean.findBean("JJCompany"),
+		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
 				project, category, true, true);
 
 		for (JJChapter chapter : parentChapters) {
@@ -559,7 +559,7 @@ public class JJChapterBean {
 		Paragraph paragraph = new Paragraph();
 		paragraph.add(phrase);
 
-		List<JJChapter> parentChapters = jJChapterService.getParentsChapter((JJCompany) LoginBean.findBean("JJCompany"),
+		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
 			project, category, true, true);
 
 		for (JJChapter chapter : parentChapters) {
@@ -652,7 +652,7 @@ public class JJChapterBean {
 			}
 
 			List<JJRequirement> requirements = jJRequirementService
-					.getRequirementChildrenWithChapterSortedByOrder((JJCompany) LoginBean.findBean("JJCompany"),parent,
+					.getRequirementChildrenWithChapterSortedByOrder(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),parent,
 							onlyActif);
 
 			for (JJRequirement requirement : requirements) {
@@ -661,7 +661,7 @@ public class JJChapterBean {
 			}
 		} else {
 
-			List<JJChapter> chapters = jJChapterService.getParentsChapter((JJCompany) LoginBean.findBean("JJCompany"),
+			List<JJChapter> chapters = jJChapterService.getParentsChapter(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
 					project, category, onlyActif, true);
 
 			for (JJChapter chapter : chapters) {
@@ -1274,8 +1274,7 @@ public class JJChapterBean {
 	
 	public void saveJJChapter(JJChapter b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJChapterService.saveJJChapter(b);
@@ -1283,8 +1282,7 @@ public class JJChapterBean {
 	
 	public void updateJJChapter(JJChapter b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJChapterService.updateJJChapter(b);

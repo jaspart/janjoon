@@ -528,7 +528,8 @@ public class JJTaskBean {
 			// 65 = ASCII A
 			int k = 65;
 
-			List<JJChapter> chapters = jJChapterService.getChapters((JJCompany) LoginBean.findBean("JJCompany"),project,
+			List<JJChapter> chapters = jJChapterService.getChapters(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany()
+					,project,
 					true);
 			List<JJTask> allJJtask = null;
 			if (!sortMode.equalsIgnoreCase("chapter"))
@@ -1466,7 +1467,8 @@ public class JJTaskBean {
 
 			if (objet.equalsIgnoreCase("Bug")) {
 
-				for (JJBug bug : jJBugService.getImportBugs((JJCompany) LoginBean.findBean("JJCompany"),project, version,
+				for (JJBug bug : jJBugService.getImportBugs(((LoginBean) LoginBean.findBean("loginBean")).getContact()
+						.getCompany(),project, version,
 						importCategory, importStatus, true)) {
 
 					if (!checkAll) {
@@ -1487,7 +1489,8 @@ public class JJTaskBean {
 			} else if (objet.equalsIgnoreCase("Requirement")) {
 
 				for (JJRequirement requirement : jJRequirementService
-						.getRequirements((JJCompany) LoginBean.findBean("JJCompany"),importCategory, project, product,
+						.getRequirements(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany()
+								,importCategory, project, product,
 								version, importStatus, null, false, true, false)) {
 
 					if (!checkAll) {
@@ -1530,6 +1533,40 @@ public class JJTaskBean {
 			importFormats = new ArrayList<ImportFormat>();
 		}
 	}
+	public void fillInDates ()
+	{
+		for (ImportFormat format : importFormats) {
+			if (format.getCopyObjet()) {
+				if (this.sprint != null
+						&& mode.equalsIgnoreCase("planning"))
+					format.setStartDate(sprint.getStartDate());
+				else if(mode.equalsIgnoreCase("planning"))
+					format.setStartDate(new Date());
+				else 
+					format.setStartDate(((JJSprintBean)LoginBean.findBean("jJSprintBean")).getSprintUtil().
+							getSprint().getStartDate());
+			}
+		}
+	}
+	
+	private boolean fillInDate;
+	
+
+	public boolean isFillInDate() {
+		
+		fillInDate=true;
+		for (ImportFormat format : importFormats) {
+			if (format.getCopyObjet()) {
+				fillInDate=false;
+				break;
+			}
+		}
+		return fillInDate;
+	}
+
+	public void setFillInDate(boolean fillInDate) {
+		this.fillInDate = fillInDate;
+	}
 
 	public void importTask() {
 
@@ -1539,8 +1576,7 @@ public class JJTaskBean {
 								.getAttribute("jJProjectBean"))
 								.getProject().getId()).getManager();
 		if (c==null)
-			c=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false))
-					.getAttribute("JJContact");
+			c=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		
 		ContactCalendarUtil calendarUtil = new ContactCalendarUtil(c.getCompany());
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH");
@@ -1632,8 +1668,7 @@ public class JJTaskBean {
 					JJSprintBean jJSprintBean = (JJSprintBean) session
 							.getAttribute("jJSprintBean");
 					task.setCreationDate(new Date());
-					task.setCreatedBy((JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-							.getSession(false)).getAttribute("JJContact"));
+					task.setCreatedBy(((LoginBean) LoginBean.findBean("loginBean")).getContact());
 					JJStatus status = jJStatusService.getOneStatus("TODO",
 							"Task", true);
 					if (status != null)
@@ -1811,8 +1846,7 @@ public class JJTaskBean {
 
 	public void saveJJTask(JJTask ttt, boolean update) {
 
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		
 		if (update)
 		{			
@@ -2619,9 +2653,7 @@ public class JJTaskBean {
 	// ToDoTask Layout
 	public void initToDoTasks(ComponentSystemEvent e) {
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJContact contact = (JJContact) session.getAttribute("JJContact");
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 
 		if (contact != null)
 			toDoTasks = jJTaskService.getToDoTasks(contact);

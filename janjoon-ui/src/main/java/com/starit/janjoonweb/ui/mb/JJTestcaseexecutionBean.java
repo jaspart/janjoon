@@ -199,8 +199,7 @@ public class JJTestcaseexecutionBean {
 	}
 	public void saveJJTestcaseexecution(JJTestcaseexecution b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJTestcaseexecutionService.saveJJTestcaseexecution(b);
@@ -208,8 +207,7 @@ public class JJTestcaseexecutionBean {
 	
 	public void updateJJTestcaseexecution(JJTestcaseexecution b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJTestcaseexecutionService.updateJJTestcaseexecution(b);

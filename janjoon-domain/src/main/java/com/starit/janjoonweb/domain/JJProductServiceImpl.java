@@ -24,9 +24,9 @@ public class JJProductServiceImpl implements JJProductService {
 	}
 
 	// New Generic
-	
-	public List<JJProduct> load(JJCompany company,MutableInt size,int first, int pageSize)
-	{
+
+	public List<JJProduct> load(JJCompany company, MutableInt size, int first,
+			int pageSize) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJProduct> criteriaQuery = criteriaBuilder
 				.createQuery(JJProduct.class);
@@ -37,49 +37,79 @@ public class JJProductServiceImpl implements JJProductService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		
-		if(company != null)
-			predicates.add(criteriaBuilder.equal(from.join("manager").get("company"), company));		
+
+		if (company != null)
+			predicates.add(criteriaBuilder.equal(
+					from.join("manager").get("company"), company));
 
 		select.where(predicates.toArray(new Predicate[] {}));
 
-		TypedQuery<JJProduct> result = entityManager.createQuery(select);		
+		TypedQuery<JJProduct> result = entityManager.createQuery(select);
 		result.setFirstResult(first);
 		result.setMaxResults(pageSize);
-		
-		if(company != null)
-		{
-			String qu="SELECT COUNT(r) FROM  JJProduct r Where r.manager.company = :c "
-					+ "AND r.enabled = true ";		
-			
-			Query query =entityManager.createQuery(qu);		
-			query.setParameter("c", company);	
+
+		if (company != null) {
+			String qu = "SELECT COUNT(r) FROM  JJProduct r Where r.manager.company = :c "
+					+ "AND r.enabled = true ";
+
+			Query query = entityManager.createQuery(qu);
+			query.setParameter("c", company);
 			size.setValue(Math.round((long) query.getSingleResult()));
-		}else
-		{
-			String qu="SELECT COUNT(r) FROM  JJProduct r Where"
-					+ " r.enabled = true ";		
-			
-			Query query =entityManager.createQuery(qu);	
-			
+		} else {
+			String qu = "SELECT COUNT(r) FROM  JJProduct r Where"
+					+ " r.enabled = true ";
+
+			Query query = entityManager.createQuery(qu);
+
 			size.setValue(Math.round((long) query.getSingleResult()));
-		}		
-		
-		
-		
+		}
+
 		return result.getResultList();
 
-	
 	}
 
 	@Override
-	public List<JJProduct> getProducts(JJCompany company,boolean onlyActif) {
+	public List<JJProduct> getProducts(JJCompany company, JJContact contact,
+			boolean onlyActif) {
 
-		if(company != null)
-		{
-			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		if (company != null) {
+			
+			List<JJProduct> products=new ArrayList<JJProduct>();
+			CriteriaBuilder criteriaBuilder = entityManager
+					.getCriteriaBuilder();
+			
+			if (contact != null) {
+				CriteriaQuery<JJPermission> criteriaPermission = criteriaBuilder
+						.createQuery(JJPermission.class);
+				Root<JJPermission> fromPermission = criteriaPermission
+						.from(JJPermission.class);
+				List<Predicate> predicatesPermion = new ArrayList<Predicate>();
+				predicatesPermion.add(criteriaBuilder.equal(
+						fromPermission.get("enabled"), true));
+
+				predicatesPermion.add(criteriaBuilder.equal(
+						fromPermission.get("contact"), contact));
+				CriteriaQuery<JJPermission> selectPermission = criteriaPermission
+						.select(fromPermission);
+				selectPermission.where(predicatesPermion
+						.toArray(new Predicate[] {}));
+
+				TypedQuery<JJPermission> resultPermission = entityManager
+						.createQuery(selectPermission);
+
+				for (JJPermission permission : resultPermission.getResultList()) {
+					if (permission.getProject() != null) {
+						products.add(permission.getProduct());
+					} else {
+						products = new ArrayList<JJProduct>();
+						break;
+					}
+				}
+
+			}
+			if(products.isEmpty())
+			{
 			CriteriaQuery<JJProduct> criteriaQuery = criteriaBuilder
 					.createQuery(JJProduct.class);
 
@@ -90,17 +120,21 @@ public class JJProductServiceImpl implements JJProductService {
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
 			if (onlyActif) {
-				predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+				predicates
+						.add(criteriaBuilder.equal(from.get("enabled"), true));
 			}
-			predicates.add(criteriaBuilder.equal(from.join("manager").get("company"), company));
+			predicates.add(criteriaBuilder.equal(
+					from.join("manager").get("company"), company));
 
 			select.where(predicates.toArray(new Predicate[] {}));
 
 			TypedQuery<JJProduct> result = entityManager.createQuery(select);
-			return result.getResultList();
-		}else
+			products=result.getResultList();
+			}
+			
+			return products;
+		} else
 			return null;
-		
 
 	}
 
@@ -128,17 +162,17 @@ public class JJProductServiceImpl implements JJProductService {
 			return null;
 
 	}
-	
-public void saveJJProduct(JJProduct JJProduct_) {
-		
-        jJProductRepository.save(JJProduct_);
-        JJProduct_=jJProductRepository.findOne(JJProduct_.getId());
-    }
-    
-    public JJProduct updateJJProduct(JJProduct JJProduct_) {
-        jJProductRepository.save(JJProduct_);
-        JJProduct_=jJProductRepository.findOne(JJProduct_.getId());
-        return JJProduct_;
-    }
+
+	public void saveJJProduct(JJProduct JJProduct_) {
+
+		jJProductRepository.save(JJProduct_);
+		JJProduct_ = jJProductRepository.findOne(JJProduct_.getId());
+	}
+
+	public JJProduct updateJJProduct(JJProduct JJProduct_) {
+		jJProductRepository.save(JJProduct_);
+		JJProduct_ = jJProductRepository.findOne(JJProduct_.getId());
+		return JJProduct_;
+	}
 
 }

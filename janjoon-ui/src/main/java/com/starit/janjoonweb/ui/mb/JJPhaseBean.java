@@ -18,8 +18,7 @@ public class JJPhaseBean {
 	
 	public void saveJJPhase(JJPhase b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJPhaseService.saveJJPhase(b);
@@ -27,8 +26,7 @@ public class JJPhaseBean {
 	
 	public void updateJJPhase(JJPhase b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJPhaseService.updateJJPhase(b);

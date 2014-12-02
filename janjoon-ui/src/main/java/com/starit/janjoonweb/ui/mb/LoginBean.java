@@ -190,13 +190,13 @@ public class LoginBean implements Serializable {
 			flash.setKeepMessages(true);
 			if (UsageChecker.check()) {
 				contact = jJContactService.getContactByEmail(username, true);
+				contact = jJContactService.findJJContact(contact.getId());
 				FacesContext fContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) fContext
 						.getExternalContext().getSession(false);
 				authorisationService = new AuthorisationService(session,
 						contact);
-				session.putValue("JJCompany",contact.getCompany());
-				session.putValue("JJContact", contact);
+
 				session.putValue("password", password);
 				FacesMessage message = new FacesMessage(
 						FacesMessage.SEVERITY_INFO, "Welcome ",
@@ -260,8 +260,19 @@ public class LoginBean implements Serializable {
 	}
 
 	public JJContact getContact() {
-		enable = !(contact == null || contact.getEmail().equals(""));
-		return contact;
+
+		if (contact != null) {
+			enable = !(contact == null || contact.getEmail().equals(""));
+			return contact;
+		} else if (enable && !username.isEmpty()) {
+			contact = jJContactService.getContactByEmail(username, true);
+			return contact;
+		}
+
+		else
+
+			return null;
+
 	}
 
 	public void setContact(JJContact contact) {
@@ -416,7 +427,8 @@ public class LoginBean implements Serializable {
 				authorisationService.initFields();
 				session.setAttribute("jJSprintBean", new JJSprintBean());
 				session.setAttribute("jJTaskBean", new JJTaskBean());
-				session.setAttribute("jJRequirementBean",new JJRequirementBean());
+				session.setAttribute("jJRequirementBean",
+						new JJRequirementBean());
 			}
 
 			if (viewId.contains("development")) {
@@ -464,6 +476,7 @@ public class LoginBean implements Serializable {
 				System.out.println("in spec");
 
 				JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
+				jJRequirementBean.setViewButton(null);
 
 				if (event.getComponent().getClientId()
 						.contains("projectSelectOneMenu")) {
@@ -677,7 +690,8 @@ public class LoginBean implements Serializable {
 		JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");
 
 		if (jjVersionBean.getVersion() != null
-				&& jJProductBean.getProduct() != null && jJProjectBean.getProject() != null) {
+				&& jJProductBean.getProduct() != null
+				&& jJProjectBean.getProject() != null) {
 
 			if (!FacesContext.getCurrentInstance().getViewRoot().getViewId()
 					.contains("development")) {
@@ -695,7 +709,7 @@ public class LoginBean implements Serializable {
 
 				RequestContext context = RequestContext.getCurrentInstance();
 				context.execute("updateHeader()");
-				
+
 			}
 		} else {
 
@@ -711,8 +725,7 @@ public class LoginBean implements Serializable {
 						"");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 
-			}
-			else {
+			} else {
 				FacesMessage message = MessageFactory.getMessage(
 						"dev.nullVersion.label", FacesMessage.SEVERITY_ERROR,
 						"");

@@ -166,7 +166,7 @@ public class JJSprintBean {
 	public List<JJBug> getBugs() {
 
 		if (bugs == null)
-			bugs = jJBugService.getBugs((JJCompany) LoginBean.findBean("JJCompany"),project,null,null);
+			bugs = jJBugService.getBugs(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),project,null,null);
 
 		return bugs;
 	}
@@ -287,7 +287,8 @@ public class JJSprintBean {
 	public void updatereqPanel() {
 
 		if (category != null) {
-			reqList = jJRequirementService.getRequirements((JJCompany) LoginBean.findBean("JJCompany"),category, project,
+			reqList = jJRequirementService.getRequirements(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany()
+					,category, project,
 					null, null, null, null, false, true, true);
 			bugs = null;
 			bug = null;
@@ -295,7 +296,8 @@ public class JJSprintBean {
 			if (!reqList.isEmpty())
 				requirement = reqList.get(0);
 		} else {
-			bugs = jJBugService.getBugs((JJCompany) LoginBean.findBean("JJCompany"),project,null,null);
+			bugs = jJBugService.getBugs(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
+					project,null,null);
 			bug = null;
 			reqList = null;
 			requirement = null;
@@ -344,7 +346,7 @@ public class JJSprintBean {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		JJContact contact = (JJContact) session.getAttribute("JJContact");		
+		
 		sprintUtil.getSprint().setContacts(
 				new HashSet<JJContact>(sprintUtil.getContacts()));
 
@@ -393,7 +395,7 @@ public class JJSprintBean {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 
-		JJContact contact = (JJContact) session.getAttribute("JJContact");
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 
 		setJJSprint_(sprintUtil.getSprint());		
 		
@@ -455,8 +457,7 @@ public class JJSprintBean {
 			HttpSession session = (HttpSession) FacesContext
 					.getCurrentInstance().getExternalContext()
 					.getSession(false);
-			JJContact assignedTo = (JJContact) session
-					.getAttribute("JJContact");
+			JJContact assignedTo = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 
 			JJStatus status = jJStatusService.getOneStatus("IN PROGRESS",
 					"Task", true);
@@ -587,7 +588,7 @@ public class JJSprintBean {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		JJContact contact = (JJContact) session.getAttribute("JJContact");
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		JJStatus status = jJStatusService.getOneStatus("TODO", "Task", true);
 		if (status != null)
 			task.setStatus(status);
@@ -761,7 +762,7 @@ public class JJSprintBean {
 
 		List<JJBug> suggestions = new ArrayList<JJBug>();
 		for (JJBug jJBug : jJBugService
-				.getBugs((JJCompany) LoginBean.findBean("JJCompany"),project, null, null, true, true)) {
+				.getBugs(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),project, null, null, true, true)) {
 			String jJBugStr = String.valueOf(jJBug.getName());
 			if (jJBugStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(jJBug);
@@ -784,8 +785,7 @@ public class JJSprintBean {
 	
 	public void saveJJSprint(JJSprint b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);		
 		b.setCreationDate(new Date());
 		jJSprintService.saveJJSprint(b);
@@ -793,8 +793,7 @@ public class JJSprintBean {
 	
 	public void updateJJSprint(JJSprint b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJSprintService.updateJJSprint(b);

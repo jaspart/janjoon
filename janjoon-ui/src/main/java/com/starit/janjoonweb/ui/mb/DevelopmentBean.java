@@ -163,7 +163,7 @@ public class DevelopmentBean implements Serializable {
 		if(jJTaskBean == null)
 			jJTaskBean=new JJTaskBean();
 		
-		contact = (JJContact) session.getAttribute("JJContact");	
+		contact = ((LoginBean) session.getAttribute("loginBean")).getContact();	
 		JJVersionBean verbean = (JJVersionBean) session
 				.getAttribute("jJVersionBean");
 	
@@ -908,8 +908,8 @@ public class DevelopmentBean implements Serializable {
 	}
 	public void saveJJMessage(JJMessage m)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false)).getAttribute("loginBean")).getContact();
 		m.setCreatedBy(contact);
 		m.setCreationDate(new Date());
 		jJMessageService.saveJJMessage(m);

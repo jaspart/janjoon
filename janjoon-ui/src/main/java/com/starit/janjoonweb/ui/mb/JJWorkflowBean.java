@@ -18,8 +18,7 @@ public class JJWorkflowBean {
 	
 	public void saveJJWorkflow(JJWorkflow b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJWorkflowService.saveJJWorkflow(b);
@@ -27,8 +26,7 @@ public class JJWorkflowBean {
 	
 	public void updateJJWorkflow(JJWorkflow b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJWorkflowService.updateJJWorkflow(b);

@@ -432,7 +432,7 @@ public class JJMessageBean {
 		JJVersionBean jJVersionBean = (JJVersionBean) session.getAttribute("jJVersionBean");
 		JJProductBean jJProductBean = (JJProductBean) session.getAttribute("jJProductBean");
 		JJProjectBean jJProjectBean = (JJProjectBean) session.getAttribute("jJProjectBean");
-		JJContact contact = (JJContact) session.getAttribute("JJContact");
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 
 		if (jJProductBean.getProduct() != null)
 			message.setProduct(jJProductBean.getProduct());
@@ -455,8 +455,7 @@ public class JJMessageBean {
 	
 	public void saveJJMessage(JJMessage b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJMessageService.saveJJMessage(b);
@@ -464,8 +463,7 @@ public class JJMessageBean {
 	
 	public void updateJJMessage(JJMessage b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJMessageService.updateJJMessage(b);

@@ -168,9 +168,8 @@ public class JJTeststepexecutionBean {
 				JJProjectBean jJProjectBean = (JJProjectBean) session
 						.getAttribute("jJProjectBean");
 
-				List<JJBug> bugs = jJBugService.getBugs((JJCompany) LoginBean.findBean("JJCompany"),
-						jJProjectBean.getProject(),
-						teststepexecution.getTeststep(),
+				List<JJBug> bugs = jJBugService.getBugs(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany()
+						,jJProjectBean.getProject(),teststepexecution.getTeststep(),
 						jJBuildBean.getBuild(), true, true);
 				if (bugs.isEmpty()) {
 					newBug();
@@ -342,7 +341,7 @@ public class JJTeststepexecutionBean {
 					JJProjectBean jJProjectBean = (JJProjectBean) session
 							.getAttribute("jJProjectBean");
 
-					List<JJBug> bugs = jJBugService.getBugs((JJCompany) LoginBean.findBean("JJCompany"),
+					List<JJBug> bugs = jJBugService.getBugs(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
 							jJProjectBean.getProject(),
 							teststepexecution.getTeststep(),
 							jJBuildBean.getBuild(), true, true);
@@ -395,8 +394,7 @@ public class JJTeststepexecutionBean {
 	
 	public void saveJJTeststepexecution(JJTeststepexecution b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJTeststepexecutionService.saveJJTeststepexecution(b);
@@ -404,8 +402,7 @@ public class JJTeststepexecutionBean {
 	
 	public void updateJJTeststepexecution(JJTeststepexecution b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJTeststepexecutionService.updateJJTeststepexecution(b);

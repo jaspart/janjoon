@@ -180,7 +180,7 @@ public class JJStatusBean {
 		for (JJStatus s : statReq) {
 
 			int i = Integer.parseInt(""
-					+ jJRequirementService.getReqCountByStaus((JJCompany) LoginBean.findBean("JJCompany"),project, product,
+					+ jJRequirementService.getReqCountByStaus(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),project, product,
 							version, s, true));
 			pieChart.set(s.getName(), i);
 		}
@@ -220,8 +220,7 @@ public class JJStatusBean {
 
 	public String persistStatus() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJContact contact = (JJContact) session.getAttribute("JJContact");
+				.getExternalContext().getSession(false);		
 		String message = "";
 
 		if (getJJStatus_().getId() != null) {
@@ -676,7 +675,8 @@ public class JJStatusBean {
 
 			float compteur = 0;
 			List<JJRequirement> dataList = jJRequirementService
-					.getRequirements((JJCompany) LoginBean.findBean("JJCompany"),category, project, product, version, null,
+					.getRequirements(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany()
+							,category, project, product, version, null,
 							null, false, true, false);
 
 			List<JJCategory> categoryList = jJCategoryService.getCategories(
@@ -774,7 +774,8 @@ public class JJStatusBean {
 		public float getCompletionProgress() {
 			float compteur = 0;
 			List<JJRequirement> dataList = jJRequirementService
-					.getRequirements((JJCompany) LoginBean.findBean("JJCompany"),category, project, product, version, null,
+					.getRequirements(((LoginBean) LoginBean.findBean("loginBean")).getContact().
+							getCompany(),category, project, product, version, null,
 							null, false, true, false);
 
 			for (JJRequirement requirement : dataList) {
@@ -845,8 +846,7 @@ public class JJStatusBean {
 	
 	public void saveJJStatus(JJStatus b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJStatusService.saveJJStatus(b);
@@ -854,8 +854,7 @@ public class JJStatusBean {
 	
 	public void updateJJStatus(JJStatus b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJStatusService.updateJJStatus(b);

@@ -67,17 +67,22 @@ public class JJVersionBean {
 		JJProductBean jJProductBean = (JJProductBean) session
 				.getAttribute("jJProductBean");
 		JJProduct jJproduct = jJProductBean.getProduct();
-		
-		if(product==null)
+		if(((LoginBean) LoginBean.findBean("loginBean")).getContact()!=null)
 		{
-			product=jJproduct;
-			versionList = jJVersionService.getVersions(true, true, product,(JJCompany)LoginBean.findBean("JJCompany"));
+			if(product==null)
+			{
+				product=jJproduct;
+				versionList = jJVersionService.getVersions(true, true, product,
+						((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany());
+				
+			}else if(!product.equals(jJproduct))
+			{
+				product=jJproduct;
+				versionList = jJVersionService.getVersions(true, true, product,
+						((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany());
+			}	
+		}
 			
-		}else if(!product.equals(jJproduct))
-		{
-			product=jJproduct;
-			versionList = jJVersionService.getVersions(true, true, product,(JJCompany)LoginBean.findBean("JJCompany"));
-		}		
 
 		return versionList;
 	}
@@ -157,7 +162,7 @@ public class JJVersionBean {
 		versionDataModel = new ArrayList<VersionDataModel>();
 
 		List<JJVersion> versions = jJVersionService.getVersions(true, true,
-				product,(JJCompany)LoginBean.findBean("JJCompany"));
+				product,((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany());
 
 		for (JJVersion version : versions) {
 			versionDataModel.add(new VersionDataModel(version, true, true));
@@ -230,8 +235,7 @@ public class JJVersionBean {
 	
 	public void saveJJVersion(JJVersion b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJVersionService.saveJJVersion(b);
@@ -239,8 +243,7 @@ public class JJVersionBean {
 	
 	public void updateJJVersion(JJVersion b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJVersionService.updateJJVersion(b);

@@ -235,8 +235,7 @@ public class JJTeststepBean {
 	
 	public void saveJJTeststep(JJTeststep b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJTeststepService.saveJJTeststep(b);
@@ -244,8 +243,7 @@ public class JJTeststepBean {
 	
 	public void updateJJTeststep(JJTeststep b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJTeststepService.updateJJTeststep(b);

@@ -9,7 +9,7 @@
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
 	<h:form>
-		<p:remoteCommand name="updateAdmin" update=":contentPanel" />
+		<p:remoteCommand name="updateAdmin" update=":contentPanel :headerForm" />
 	</h:form>
 		<p:tabView id="tabview" widgetVar="AdmintabView" dynamic="true"
 			cache="true" activeIndex="#{loginBean.activeTabAdminIndex}">

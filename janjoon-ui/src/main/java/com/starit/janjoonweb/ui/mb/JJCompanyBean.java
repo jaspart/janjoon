@@ -131,10 +131,7 @@ public class JJCompanyBean {
 		if (companie != null) {
 			HttpSession session = (HttpSession) FacesContext
 					.getCurrentInstance().getExternalContext()
-					.getSession(false);
-
-			JJContact contact = (JJContact) session
-					.getAttribute("JJContact");
+					.getSession(false);			
 			companie.setEnabled(false);
 			updateJJCompany(companie);
 			companies=null;
@@ -150,9 +147,6 @@ public class JJCompanyBean {
 		HttpSession session = (HttpSession) FacesContext
 				.getCurrentInstance().getExternalContext()
 				.getSession(false);
-
-		JJContact contact = (JJContact) session
-				.getAttribute("JJContact");
 		String message = "";
 		FacesMessage facesMessage = null;
 //		if(calendar != null)
@@ -181,8 +175,7 @@ public class JJCompanyBean {
 	}
 	public void saveJJCompany(JJCompany b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJCompanyService.saveJJCompany(b);
@@ -190,8 +183,7 @@ public class JJCompanyBean {
 	
 	public void updateJJCompany(JJCompany b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJCompanyService.updateJJCompany(b);

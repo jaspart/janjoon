@@ -160,7 +160,7 @@ public class JJContactBean {
 
 			contactAdmin.setEnabled(false);
 			contactAdmin.setUpdatedDate(new Date());
-			contactAdmin.setUpdatedBy(((JJContact)LoginBean.findBean("JJContact")));
+			contactAdmin.setUpdatedBy(((LoginBean) LoginBean.findBean("loginBean")).getContact());
 			if (!jJContactService.updateJJContactTransaction(contactAdmin)) {
 
 				FacesMessage facesMessage = MessageFactory.getMessage(
@@ -189,7 +189,7 @@ public class JJContactBean {
 			contactAdmin
 					.setPassword(encoder.encode(contactAdmin.getPassword()));
 			contactAdmin.setCreationDate(new Date());
-			contactAdmin.setCreatedBy(((JJContact)LoginBean.findBean("JJContact")));
+			contactAdmin.setCreatedBy(((LoginBean) LoginBean.findBean("loginBean")).getContact());
 
 			if (jJContactService.saveJJContactTransaction(contactAdmin)) {
 
@@ -232,7 +232,7 @@ public class JJContactBean {
 		System.out.println("in save permission");
 
 		contactAdmin.setUpdatedDate(new Date());		
-		contactAdmin.setUpdatedBy(((JJContact)LoginBean.findBean("JJContact")));
+		contactAdmin.setUpdatedBy(((LoginBean) LoginBean.findBean("loginBean")).getContact());
 
 		if (!contactAdmin.getPassword().equals(
 				jJContactService.findJJContact(contactAdmin.getId())

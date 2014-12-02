@@ -273,7 +273,8 @@ public class JJTestcaseBean {
 
 	public List<JJRequirement> getRequirements() {
 
-		requirements = jJRequirementService.getRequirements((JJCompany) LoginBean.findBean("JJCompany"),null, null, null,
+		requirements = jJRequirementService.getRequirements(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany()
+				,null, null, null,
 				null, null, chapter, true, true, true);
 
 		return requirements;
@@ -683,7 +684,8 @@ public class JJTestcaseBean {
 			categoryNode.setExpanded(true);
 
 			List<JJChapter> parentChapters = jJChapterService
-					.getParentsChapter((JJCompany) LoginBean.findBean("JJCompany"),project, category, true, true);
+					.getParentsChapter(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany()
+							,project, category, true, true);
 
 			for (JJChapter chapter : parentChapters) {
 				TreeNode node = createTree(chapter, categoryNode, category);
@@ -902,8 +904,8 @@ public class JJTestcaseBean {
 			}
 
 			List<JJRequirement> requirements = jJRequirementService
-					.getRequirementChildrenWithChapterSortedByOrder((JJCompany) LoginBean.findBean("JJCompany"),parent,
-							onlyActif);
+					.getRequirementChildrenWithChapterSortedByOrder(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany()
+							,parent,onlyActif);
 
 			for (JJRequirement requirement : requirements) {
 				elements.put(requirement.getOrdering(), requirement);
@@ -911,7 +913,7 @@ public class JJTestcaseBean {
 			}
 		} else {
 
-			List<JJChapter> chapters = jJChapterService.getParentsChapter((JJCompany) LoginBean.findBean("JJCompany"),
+			List<JJChapter> chapters = jJChapterService.getParentsChapter(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
 					project, category, onlyActif, true);
 
 			for (JJChapter chapter : chapters) {
@@ -951,7 +953,7 @@ public class JJTestcaseBean {
 		Paragraph paragraph = new Paragraph();
 		paragraph.add(phrase);
 
-		List<JJChapter> parentChapters = jJChapterService.getParentsChapter((JJCompany) LoginBean.findBean("JJCompany"),
+		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
 				project, category, true, true);
 
 		for (JJChapter chapter : parentChapters) {
@@ -1113,18 +1115,14 @@ public class JJTestcaseBean {
 	}
 
 	public void saveJJTestcase(JJTestcase b) {
-		JJContact contact = (JJContact) ((HttpSession) FacesContext
-				.getCurrentInstance().getExternalContext().getSession(false))
-				.getAttribute("JJContact");
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJTestcaseService.saveJJTestcase(b);
 	}
 
 	public void updateJJTestcase(JJTestcase b) {
-		JJContact contact = (JJContact) ((HttpSession) FacesContext
-				.getCurrentInstance().getExternalContext().getSession(false))
-				.getAttribute("JJContact");
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJTestcaseService.updateJJTestcase(b);

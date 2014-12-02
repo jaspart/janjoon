@@ -21,8 +21,7 @@ public class JJCriticityBean {
 	
 	public void saveJJCriticity(JJCriticity b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJCriticityService.saveJJCriticity(b);
@@ -30,8 +29,7 @@ public class JJCriticityBean {
 	
 	public void updateJJCriticity(JJCriticity b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJCriticityService.updateJJCriticity(b);

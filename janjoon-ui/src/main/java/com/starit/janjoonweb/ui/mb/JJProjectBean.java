@@ -29,12 +29,6 @@ public class JJProjectBean {
 	@Autowired
 	public JJConfigurationService jJConfigurationService;
 
-	
-	public void setjJConfigurationService(
-			JJConfigurationService jJConfigurationService) {
-		this.jJConfigurationService = jJConfigurationService;
-	}
-
 	@Autowired
 	JJPermissionService jJPermissionService;
 
@@ -50,6 +44,11 @@ public class JJProjectBean {
 	private String message;
 
 	private boolean projectState;
+
+	public void setjJConfigurationService(
+			JJConfigurationService jJConfigurationService) {
+		this.jJConfigurationService = jJConfigurationService;
+	}
 
 	public void setjJPermissionService(JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
@@ -72,9 +71,15 @@ public class JJProjectBean {
 	}
 
 	public List<JJProject> getProjectList() {
-		
-		if (projectList == null || projectList.isEmpty())
-			projectList = jJProjectService.getProjects((JJCompany)LoginBean.findBean("JJCompany"),true);
+
+		if (((LoginBean) LoginBean.findBean("loginBean")).getContact() != null) {
+			if (projectList == null || projectList.isEmpty())
+				projectList = jJProjectService.getProjects(
+						((LoginBean) LoginBean.findBean("loginBean"))
+								.getContact().getCompany(),
+						((LoginBean) LoginBean.findBean("loginBean"))
+								.getContact(), true);
+		}
 		return projectList;
 	}
 
@@ -91,14 +96,15 @@ public class JJProjectBean {
 	}
 
 	public LazyProjectDataModel getProjectListTable() {
-		
-		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
-		JJCompany company =null;
-		if(!loginBean.getAuthorisationService().isAdminCompany())			
-			company =loginBean.getContact().getCompany();
-		
-		if(projectListTable == null)
-		projectListTable = new LazyProjectDataModel(jJProjectService,company);
+
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
+		JJCompany company = null;
+		if (!loginBean.getAuthorisationService().isAdminCompany())
+			company = loginBean.getContact().getCompany();
+
+		if (projectListTable == null)
+			projectListTable = new LazyProjectDataModel(jJProjectService,
+					company);
 		return projectListTable;
 	}
 
@@ -116,12 +122,16 @@ public class JJProjectBean {
 
 	public List<JJContact> getProjectManagerList() {
 
-		if(projectAdmin.getId()==null)
-		projectManagerList = jJPermissionService.getManagers((JJCompany) LoginBean.findBean("JJCompany"),
-				(JJContact) LoginBean.findBean("JJContact"),"Project");
+		if (projectAdmin.getId() == null)
+			projectManagerList = jJPermissionService.getManagers(
+					((LoginBean) LoginBean.findBean("loginBean")).getContact()
+							.getCompany(), ((LoginBean) LoginBean
+							.findBean("loginBean")).getContact(), "Project");
 		else
-			projectManagerList=jJPermissionService.getManagers(projectAdmin.getManager().getCompany(),
-					(JJContact) LoginBean.findBean("JJContact"),"Product");;
+			projectManagerList = jJPermissionService.getManagers(projectAdmin
+					.getManager().getCompany(), ((LoginBean) LoginBean
+					.findBean("loginBean")).getContact(), "Product");
+		;
 		return projectManagerList;
 	}
 
@@ -135,11 +145,11 @@ public class JJProjectBean {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}	
+	}
 
 	public void newProject() {
 		message = "admin_project_new_title";
-		
+
 		projectAdmin = new JJProject();
 		projectAdmin.setEnabled(true);
 		projectAdmin.setDescription("Defined as a Project");
@@ -154,12 +164,10 @@ public class JJProjectBean {
 		if (projectManagerList.isEmpty()) {
 			projectManager = null;
 
-		}
-		else {
+		} else {
 			if (projectManagerList.contains(projectAdmin.getManager())) {
 				projectManager = projectAdmin.getManager();
-			}
-			else {
+			} else {
 				projectManager = null;
 			}
 		}
@@ -173,7 +181,7 @@ public class JJProjectBean {
 			projectAdmin.setEnabled(false);
 			updateJJProject(projectAdmin);
 			projectList = null;
-			projectListTable=null;
+			projectListTable = null;
 		}
 	}
 
@@ -187,7 +195,7 @@ public class JJProjectBean {
 
 			saveJJProject(projectAdmin);
 			projectList = null;
-			projectListTable=null;
+			projectListTable = null;
 			message = "message_successfully_created";
 
 			newProject();
@@ -196,7 +204,7 @@ public class JJProjectBean {
 			updateJJProject(projectAdmin);
 
 			projectList = null;
-			projectListTable=null;
+			projectListTable = null;
 
 			message = "message_successfully_updated";
 
@@ -238,20 +246,18 @@ public class JJProjectBean {
 
 		projectState = true;
 	}
-	
-	public void saveJJProject(JJProject b)
-	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+
+	public void saveJJProject(JJProject b) {
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJProjectService.saveJJProject(b);
 	}
-	
-	public void updateJJProject(JJProject b)
-	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+
+	public void updateJJProject(JJProject b) {
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJProjectService.updateJJProject(b);

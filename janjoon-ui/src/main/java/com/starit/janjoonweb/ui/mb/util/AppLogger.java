@@ -20,6 +20,7 @@ import com.starit.janjoonweb.domain.JJProjectService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.ui.mb.JJProjectBean;
+import com.starit.janjoonweb.ui.mb.LoginBean;
 
 @Aspect
 @Configurable
@@ -45,8 +46,7 @@ public class AppLogger {
 	public void updateJJTaskFields(JoinPoint joinPoint) {
 		Object[] args = joinPoint.getArgs();
 		JJTask task = (JJTask) args[0];
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		if(task.getId() == null)
 		{
 			task.setCreationDate(new Date());

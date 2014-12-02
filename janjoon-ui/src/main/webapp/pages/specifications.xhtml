@@ -203,7 +203,7 @@
 							<f:facet name="header">
 								<h:outputText value="Actions" />
 							</f:facet>
-							<p:splitButton id="viewButton" value="View" icon="ui-icon-search"
+							<p:splitButton id="viewButton" value="#{messages[jJRequirementBean.viewButton]}" icon="ui-icon-search"
 								onstart="PF('blockUIWidget').block()"
 								action="#{jJRequirementBean.viewLinks()}"
 								oncomplete="PF('blockUIWidget').unblock()" update=":specForm">
@@ -307,7 +307,7 @@
 											<f:validateLength maximum="100" />
 									</p:inputText>
 									<p:watermark for="name"
-										value="#{messages.specification_create_name_watermark}" />
+										value="#{messages.chapter_create_name_watermark}" />
 								</p:column>
 								<p:column>
 									<h:outputText for="status"

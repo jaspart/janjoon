@@ -148,8 +148,7 @@ public class JJConfigurationBean {
 
 	public String persistConf() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJContact contact = (JJContact) session.getAttribute("JJContact");
+				.getExternalContext().getSession(false);	
 
 		if (getJJConfiguration_().getId() == null) {			
 			getJJConfiguration_().setEnabled(true);
@@ -196,8 +195,7 @@ public class JJConfigurationBean {
 	
 	public void saveJJConfiguration(JJConfiguration b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJConfigurationService.saveJJConfiguration(b);
@@ -205,8 +203,7 @@ public class JJConfigurationBean {
 	
 	public void updateJJConfiguration(JJConfiguration b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJConfigurationService.updateJJConfiguration(b);
