@@ -370,9 +370,11 @@
 										onstart="PF('timelineWdgt').cancelDelete()"
 										oncomplete="PF('deleteDialogWidget').show()" />
 
-									<p:ajax event="add" update=":taskImportDialog"
-										listener="#{jJTaskBean.onCreateTimelineEvent}"
-										oncomplete="PF('taskImportDialogWidget').show()" />
+									<!-- 									<p:ajax event="add" update=":taskImportDialog" -->
+									<!-- 										listener="#{jJTaskBean.onCreateTimelineEvent}" -->
+									<!-- 										oncomplete="PF('taskImportDialogWidget').show()" /> -->
+									<p:ajax event="add" update="@none"										
+										onstart="PF('timelineWdgt').cancelAdd()" />
 
 									<p:ajax event="change" 
 										update=":projecttabview:planningForm:timeline :projecttabview:planningForm:taskDataTable :projecttabview:SprintTabView :projecttabview:planningForm:msg"

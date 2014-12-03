@@ -273,9 +273,10 @@ public class JJTestcaseBean {
 
 	public List<JJRequirement> getRequirements() {
 
-		requirements = jJRequirementService.getRequirements(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany()
-				,null, null, null,
-				null, null, chapter, true, true, true);
+		requirements = jJRequirementService.getRequirements(
+				((LoginBean) LoginBean.findBean("loginBean")).getContact()
+						.getCompany(), null, null, null, null, null, chapter,
+				true, true, true);
 
 		return requirements;
 	}
@@ -360,31 +361,38 @@ public class JJTestcaseBean {
 
 	public void loadData() {
 
-		this.getProject();
-		this.getProduct();
-		this.getVersion();
 
-		chapter = null;
-		testcase = null;
-		rendredTestCaseRecaps = false;
-		rendredTestCaseHistorical = false;
-		requirement = null;
+		if(project == null)
+		{
+			this.getProject();
+			this.getProduct();
+			this.getVersion();
 
-		disabledExport = true;
+			chapter = null;
+			testcase = null;
+			rendredTestCaseRecaps = false;
+			rendredTestCaseHistorical = false;
+			requirement = null;
 
-		namefile = null;
-
-		if (category != null) {
-			namefile = category.getName().trim();
-			disabledExport = false;
-		} else {
-
-			namefile = null;
 			disabledExport = true;
 
+			namefile = null;
+
+			if (category != null) {
+				namefile = category.getName().trim();
+				disabledExport = false;
+			} else {
+
+				namefile = null;
+				disabledExport = true;
+
+			}
+
+			createTestcaseTree();
+			rendredEmptySelection = true;
 		}
 
-		createTestcaseTree();
+
 
 	}
 
@@ -405,13 +413,13 @@ public class JJTestcaseBean {
 		disabledTeststepMode = true;
 		testcaseState = true;
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-
-		JJBuildBean jJBuildBean = (JJBuildBean) session
-				.getAttribute("jJBuildBean");
-
-		jJBuildBean.setBuild(null);
+		// HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+		// .getExternalContext().getSession(false);
+		//
+		// JJBuildBean jJBuildBean = (JJBuildBean) session
+		// .getAttribute("jJBuildBean");
+		//
+		// jJBuildBean.setBuild(null);
 
 		jJTeststepBean.newTeststep();
 		jJTeststepBean.setActionTeststep(false);
@@ -684,15 +692,15 @@ public class JJTestcaseBean {
 			categoryNode.setExpanded(true);
 
 			List<JJChapter> parentChapters = jJChapterService
-					.getParentsChapter(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany()
-							,project, category, true, true);
+					.getParentsChapter(((LoginBean) LoginBean
+							.findBean("loginBean")).getContact().getCompany(),
+							project, category, true, true);
 
 			for (JJChapter chapter : parentChapters) {
 				TreeNode node = createTree(chapter, categoryNode, category);
 			}
 
 		}
-		rendredEmptySelection = true;
 
 	}
 
@@ -904,8 +912,10 @@ public class JJTestcaseBean {
 			}
 
 			List<JJRequirement> requirements = jJRequirementService
-					.getRequirementChildrenWithChapterSortedByOrder(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany()
-							,parent,onlyActif);
+					.getRequirementChildrenWithChapterSortedByOrder(
+							((LoginBean) LoginBean.findBean("loginBean"))
+									.getContact().getCompany(), parent,
+							onlyActif);
 
 			for (JJRequirement requirement : requirements) {
 				elements.put(requirement.getOrdering(), requirement);
@@ -913,8 +923,9 @@ public class JJTestcaseBean {
 			}
 		} else {
 
-			List<JJChapter> chapters = jJChapterService.getParentsChapter(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
-					project, category, onlyActif, true);
+			List<JJChapter> chapters = jJChapterService.getParentsChapter(
+					((LoginBean) LoginBean.findBean("loginBean")).getContact()
+							.getCompany(), project, category, onlyActif, true);
 
 			for (JJChapter chapter : chapters) {
 				elements.put(chapter.getOrdering(), chapter);
@@ -953,8 +964,9 @@ public class JJTestcaseBean {
 		Paragraph paragraph = new Paragraph();
 		paragraph.add(phrase);
 
-		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
-				project, category, true, true);
+		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(
+				((LoginBean) LoginBean.findBean("loginBean")).getContact()
+						.getCompany(), project, category, true, true);
 
 		for (JJChapter chapter : parentChapters) {
 			createTreeDocument(chapter, category, paragraph, fontTeststep,
@@ -1115,14 +1127,16 @@ public class JJTestcaseBean {
 	}
 
 	public void saveJJTestcase(JJTestcase b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJTestcaseService.saveJJTestcase(b);
 	}
 
 	public void updateJJTestcase(JJTestcase b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJTestcaseService.updateJJTestcase(b);

@@ -28,6 +28,7 @@
 							oncomplete="PF('blockUIWidget').unblock()">
 							<f:setPropertyActionListener value="#{category}"
 								target="#{jJTestcaseBean.category}" />
+							<f:setPropertyActionListener target="#{jJTestcaseBean.project}" value="#{null}"/>
 						</p:commandButton>
 					</ui:repeat>
 
@@ -52,7 +53,8 @@
 									<f:selectItems value="#{jJBuildBean.builds}" var="c"
 										itemLabel="#{c.name}" itemValue="#{c}" />
 									<p:ajax process="@this" partialSubmit="true"
-										update=":testFormWest:build :testFormCenter"
+										listener="#{jJTestcaseBean.createTestcaseTree()}"
+										update=":testFormWest :testFormCenter "
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()" />
 								</p:selectOneMenu>
@@ -194,7 +196,7 @@
 						<p:dataTable id="testcaseRecapDataTable" var="tcr"
 							paginatorPosition="bottom"
 							value="#{jJTestcaseBean.testCaseRecaps}" paginator="true"
-							rows="8" style="width:550px;" rowKey="#{tcr.testcase.name}"
+							rows="5" style="width:550px;" rowKey="#{tcr.testcase.name}"
 							rendered="#{jJTestcaseBean.rendredTestCaseRecaps}">
 							<f:facet name="header">
 								<h:outputText value="#{jJTestcaseBean.chapter.name}" />
@@ -334,7 +336,7 @@
 			header="#{messages[jJTestcaseBean.message]}" modal="true"
 			widgetVar="testcaseDialogWidget" dynamic="true" resizable="false"
 			style="top: 30px;">
-			<p:ajax event="close" update=":testFormCenter"
+			<p:ajax event="close" update=":testFormCenter :testFormWest"
 				listener="#{jJTestcaseBean.closeDialog}" />
 			<p:outputPanel id="testcaseDialogPanel">
 				<h:form id="testcaseDialogForm">

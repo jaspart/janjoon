@@ -105,7 +105,7 @@
 										<p:inputText id="email"
 											value="#{jJContactBean.contactAdmin.email}"
 											label="#{messages.admin_contact_new_email_label}"
-											required="true"
+											required="true" readonly="#{jJContactBean.contactAdmin.id != null}"
 											disabled="#{jJContactBean.disabledContactMode}">
 											<f:validator validatorId="emailValidator" />
 											<f:attribute name="contact" value="#{jJContactBean.contactAdmin}"/>

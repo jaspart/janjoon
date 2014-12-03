@@ -416,6 +416,8 @@ public class LoginBean implements Serializable {
 
 			HttpSession session = (HttpSession) ctx.getExternalContext()
 					.getSession(false);
+			if (session.getAttribute("jJTestcaseBean") != null)
+				session.setAttribute("jJTestcaseBean", new JJTestcaseBean());
 			authorisationService = new AuthorisationService(session, contact);
 			messageListener(session);
 			session.setAttribute("jJBugBean", new JJBugBean());
