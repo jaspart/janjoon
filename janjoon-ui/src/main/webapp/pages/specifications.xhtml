@@ -89,11 +89,10 @@
 										<p:column colspan="1">
 											<p:commandButton id="manageChapterButton"
 												icon="ui-icon-document" title="#{jJChapterBean.warnMessage}"
-												update=":chapterDialog"
+												update=":chapterDialogPanel"
 												disabled="#{jJChapterBean.disabledChapter or jJProjectBean.project == null}"
-												actionListener="#{jJChapterBean.loadData(tableDataModel.categoryId)}"
-												onstart="PF('blockUIWidget').block()"
-												oncomplete="PF('blockUIWidget').unblock();PF('chapterDialogWidget').show()" />
+												actionListener="#{jJChapterBean.loadData(tableDataModel.categoryId)}"												
+												oncomplete="chapterDialogWidget.show()" />
 										</p:column>
 										<p:column colspan="1">
 											<p:commandButton id="releaseRequirementButton"
@@ -129,7 +128,7 @@
 											<h:commandLink id="pdf"
 												disabled="#{jJRequirementBean.disabledExport}"
 												actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}">
-												<p:graphicImage vfilteralue="/resources/images/pdf.png" />
+												<p:graphicImage value="/resources/images/pdf.png" />
 												<p:dataExporter type="pdf" target="categoryTable"
 													fileName="Document"
 													preProcessor="#{jJChapterBean.preProcessPDF}" />
@@ -536,7 +535,7 @@
 		</p:dialog>
 
 		<p:hotkey bind="esc" handler="PF('chapterDialogWidget').hide()" />
-		<p:dialog id="chapterDialog" draggable="false"
+		<p:dialog id="chapterDialog" draggable="false" appendTo="@(body)"
 			header="#{messages.specification_chapter_header}" modal="true"
 			widgetVar="chapterDialogWidget" dynamic="true" resizable="false">
 			<p:ajax event="close" update=":specForm"
