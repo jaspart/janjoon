@@ -92,7 +92,8 @@
 												update=":chapterDialogPanel"
 												disabled="#{jJChapterBean.disabledChapter or jJProjectBean.project == null}"
 												actionListener="#{jJChapterBean.loadData(tableDataModel.categoryId)}"												
-												oncomplete="chapterDialogWidget.show()" />
+												onstart="PF('blockUIWidget').block()"
+												oncomplete="PF('blockUIWidget').unblock();PF('chapterDialogWidget').show()" />
 										</p:column>
 										<p:column colspan="1">
 											<p:commandButton id="releaseRequirementButton"
@@ -297,16 +298,14 @@
 					<p:scrollPanel mode="native">
 						<p:panelGrid style="margin-top:0px">
 							<p:row>
-								<p:column>
-									<p:inputText id="name"
+								<p:column>														
+									<p:inputText id="nameReq"  label="#{messages.specification_create_name_label}"
 										value="#{jJRequirementBean.requirement.name}" required="true"
-										widgetVar="nameWidget"
-										label="#{messages.specification_create_name_label}"
 										requiredMessage="#{messages.specification_create_name_alert}" >
 											<f:validateLength maximum="100" />
 									</p:inputText>
-									<p:watermark for="name"
-										value="#{messages.chapter_create_name_watermark}" />
+									<p:watermark for="nameReq"
+										value="#{messages.specification_create_name_watermark}" />
 								</p:column>
 								<p:column>
 									<h:outputText for="status"
@@ -562,13 +561,13 @@
 							<p:row>
 								<p:column>
 									<p:inputText id="name" value="#{jJChapterBean.chapter.name}"
-										required="true" widgetVar="nameWidget"  style="margin-top:10px;margin-left: 20px;"
+										required="true" style="margin: 15px;" 
 										label="#{messages.specification_chapter_name_label}"
 										requiredMessage="#{messages.specification_chapter_name_alert}" >
 										<f:validateLength maximum="100" />
 									</p:inputText>
 									<p:watermark for="name"
-										value="#{messages.specification_create_name_watermark}" />
+										value="#{messages.chapter_create_name_watermark}" />
 								</p:column>
 								<p:column>
 									<h:outputText for="parent"

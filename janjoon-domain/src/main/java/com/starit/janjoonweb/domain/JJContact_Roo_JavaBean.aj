@@ -3,6 +3,7 @@
 
 package com.starit.janjoonweb.domain;
 
+import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJJob;
@@ -199,6 +200,14 @@ privileged aspect JJContact_Roo_JavaBean {
     
     public void JJContact.setLastVersion(JJVersion lastVersion) {
         this.lastVersion = lastVersion;
+    }
+    
+    public JJCategory JJContact.getLastCategorie() {
+        return this.lastCategorie;
+    }
+    
+    public void JJContact.setLastCategorie(JJCategory lastCategorie) {
+        this.lastCategorie = lastCategorie;
     }
     
     public JJContact JJContact.getManager() {

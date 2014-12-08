@@ -97,6 +97,9 @@ public class JJContact  {
 
 	@ManyToOne
 	private JJVersion lastVersion;
+	
+	@ManyToOne
+	private JJCategory lastCategorie;
 
 	@ManyToOne
 	private JJContact manager;

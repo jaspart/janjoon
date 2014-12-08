@@ -20,6 +20,8 @@ import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermission;
 import com.starit.janjoonweb.domain.JJPermissionService;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.JJPermissionBean.PermissionDataModel;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyContactDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -39,6 +41,7 @@ public class JJContactBean {
 
 	private JJContact contactAdmin;
 	private List<JJContact> contacts;
+	private List<JJVersion> versionList;
 	private LazyContactDataModel contactsLazyModel;
 	private String message;
 	private boolean disabledContactMode;
@@ -94,6 +97,21 @@ public class JJContactBean {
 
 	public void setContacts(List<JJContact> contacts) {
 		this.contacts = contacts;
+	}
+
+	public List<JJVersion> getVersionList() {
+		
+
+		if(((LoginBean) LoginBean.findBean("loginBean")).getContact()!=null)
+		{
+			JJContact c=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+			versionList = jJVersionService.getVersions(true, true, c.getLastProduct(),c.getCompany());
+		}	
+		return versionList;
+	}
+
+	public void setVersionList(List<JJVersion> versionList) {
+		this.versionList = versionList;
 	}
 
 	public boolean getDisabledContactMode() {
@@ -226,6 +244,24 @@ public class JJContactBean {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
+	
+	public void updateUserConfiguration(JJContact jJContact)
+	{
+		jJContact.setUpdatedDate(new Date());		
+		jJContactService.updateJJContact(jJContact);
+		HttpSession session = (HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext()
+				.getSession(false);
+		LoginBean loginBean = (LoginBean) session
+				.getAttribute("loginBean");
+		loginBean.getAuthorisationService().setSession(session);
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_updated",
+				FacesMessage.SEVERITY_INFO, "Contact "+jJContact.getName());
+		
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+	}
+	
 
 	public void save(JJPermissionBean jJPermissionBean) {
 

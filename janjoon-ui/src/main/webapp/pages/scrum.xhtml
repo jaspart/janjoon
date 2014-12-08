@@ -138,11 +138,11 @@
 				<p:panelGrid>
 					<f:facet name="header">
 						<p:row>
-							<p:column colspan="4">Sprint Tasks</p:column>
+							<p:column colspan="6">Sprint Tasks</p:column>
 						</p:row>
 					</f:facet>
 					<p:row>
-						<p:column>
+						<p:column style="width: 33%;">
 							<p:fieldset legend="Todo" id="todoFieldset">
 								<p:dataTable scrollable="true" scrollHeight="250" id="todo"
 									var="todo" value="#{jjsprint.todoTask}" rowKey="#{todo.id}"
@@ -153,15 +153,22 @@
 											styleClass="ui-icon ui-icon-arrow-4" />
 										<p:draggable for="todoIcon" revert="true" />
 									</p:column>
-
 									<p:column style="width:80px" headerText="Task">
+										<p:graphicImage rendered="#{todo.bug != null}"
+											library="images" name="bug.ico" width="16" height="16" />
+										<p:graphicImage
+											rendered="#{todo.bug == null and todo.requirement != null}"
+											library="images" name="function.ico" width="16" height="16" />
+										<p:graphicImage title="TestCase"
+											rendered="#{todo.bug == null and todo.requirement == null and todo.testcase != null}"
+											library="images" name="test.ico" width="16" height="16" />
 										<h:outputText value="#{todo.name}" />
 									</p:column>
 
 									<p:column style="width:20px" headerText="W">
 										<h:outputText value="#{todo.workloadPlanned}" />
 									</p:column>
-									<p:column style="width:20px" styleClass="action-column">
+									<p:column style="width:20px" >
 										<f:facet name="header">
 											<h:outputText value="#{messages.bug_table_action_title}" />
 										</f:facet>
@@ -187,7 +194,7 @@
 								</p:dataTable>
 							</p:fieldset>
 						</p:column>
-						<p:column>
+						<p:column style="width: 33%;">
 							<p:fieldset legend="In Progress" id="progFieldset">
 								<p:outputPanel id="progdropArea">
 									<h:outputText value="!!!Drop here!!!"
@@ -207,13 +214,21 @@
 										</p:column>
 
 										<p:column style="width:50px" headerText="Task">
+											<p:graphicImage rendered="#{prog.bug != null}"
+												library="images" name="bug.ico" width="16" height="16" />
+											<p:graphicImage
+												rendered="#{prog.bug == null and prog.requirement != null}"
+												library="images" name="function.ico" width="16" height="16" />
+											<p:graphicImage
+												rendered="#{prog.bug == null and prog.requirement == null and prog.testcase != null}"
+												library="images" name="test.ico" width="16" height="16" />
 											<h:outputText value="#{prog.name}" />
 										</p:column>
 
 										<p:column style="width:50px" headerText="Who">
 											<h:outputText value="#{prog.assignedTo.name}" />
 										</p:column>
-										<p:column style="width:20px" styleClass="action-column">
+										<p:column style="width:20px" >
 											<f:facet name="header">
 												<h:outputText value="#{messages.bug_table_action_title}" />
 											</f:facet>
@@ -237,7 +252,7 @@
 								</p:outputPanel>
 							</p:fieldset>
 						</p:column>
-						<p:column>
+						<p:column  style="width: 33%;">
 							<p:fieldset legend="Done Tasks" id="doneFieldset">
 								<p:outputPanel id="donedropArea">
 									<h:outputText value="!!!Drop here!!!"
@@ -247,6 +262,15 @@
 										scrollable="true" scrollHeight="250">
 
 										<p:column style="width:80px" headerText="Task">
+											<p:graphicImage rendered="#{done.bug != null}"
+												library="images" name="bug.ico" width="16" height="16" />
+											<p:graphicImage
+												rendered="#{done.bug == null and done.requirement != null}"
+												library="images" name="function.ico" width="16" height="16" />
+											<p:graphicImage
+												rendered="#{done.bug == null and done.requirement == null and done.testcase != null}"
+												library="images" name="test.ico" width="16" height="16" />
+
 											<h:outputText value="#{done.name}" />
 										</p:column>
 
@@ -254,7 +278,7 @@
 											<h:outputText
 												value="#{done.workloadPlanned-done.workloadReal}" />
 										</p:column>
-										<p:column style="width:20px" styleClass="action-column">
+										<p:column style="width:20px" >
 											<f:facet name="header">
 												<h:outputText value="#{messages.bug_table_action_title}" />
 											</f:facet>

@@ -2,6 +2,7 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -42,6 +43,7 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.ui.mb.util.ContactCalendarUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.UsageChecker;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
@@ -56,6 +58,9 @@ public class LoginBean implements Serializable {
 
 	private AuthenticationManager authenticationManager;
 	private AuthorisationService authorisationService;
+	private ContactCalendarUtil calendarUtil;
+	private Date startDate;
+	private Date endDate;
 
 	static Logger logger = Logger.getLogger("loginBean-Logger");
 
@@ -85,6 +90,16 @@ public class LoginBean implements Serializable {
 		this.authorisationService = authorisationService;
 	}
 
+	public ContactCalendarUtil getCalendarUtil() {
+		if(calendarUtil == null)
+			calendarUtil=new ContactCalendarUtil(getContact());
+		return calendarUtil;
+	}
+
+	public void setCalendarUtil(ContactCalendarUtil calendarUtil) {
+		this.calendarUtil = calendarUtil;
+	}
+
 	public void setjJContactService(JJContactService jJContactService) {
 		this.jJContactService = jJContactService;
 	}
@@ -108,6 +123,22 @@ public class LoginBean implements Serializable {
 
 	public void setAgreeTerms(boolean agreeTerms) {
 		this.agreeTerms = agreeTerms;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
 	@Autowired
@@ -206,6 +237,29 @@ public class LoginBean implements Serializable {
 
 				logger.info("login operation success " + contact.getName()
 						+ " logged in");
+				if(session.getAttribute("jJProjectBean") == null)
+					session.setAttribute("jJProjectBean",new JJProjectBean());
+					
+				if(session.getAttribute("jJProductBean") == null)
+					session.setAttribute("jJProductBean",new JJProductBean());
+					
+				if(session.getAttribute("jJVersionBean") == null)
+					session.setAttribute("jJVersionBean",new JJVersionBean());
+				
+				JJProjectBean jjProjectBean=(JJProjectBean) session.getAttribute("jJProjectBean");
+				JJProductBean jjProductBean=(JJProductBean) session.getAttribute("jJProductBean");
+				JJVersionBean jjVersionBean=(JJVersionBean) session.getAttribute("jJVersionBean");
+				
+				jjProjectBean.getProjectList();
+				jjProjectBean.setProject(contact.getLastProject());
+				
+				jjProductBean.getProductList();
+				jjProductBean.setProduct(contact.getLastProduct());
+				
+				jjVersionBean.getVersionList();
+				jjVersionBean.setVersion(contact.getLastVersion());
+				
+				
 
 				if (!UsageChecker.checkExpiryDate()) {
 
@@ -265,6 +319,7 @@ public class LoginBean implements Serializable {
 			enable = !(contact == null || contact.getEmail().equals(""));
 			return contact;
 		} else if (enable && !username.isEmpty()) {
+			calendarUtil=null;
 			contact = jJContactService.getContactByEmail(username, true);
 			return contact;
 		}
@@ -735,6 +790,21 @@ public class LoginBean implements Serializable {
 
 			}
 		}
+	}
+	
+	public void addVacation()
+	{	
+		calendarUtil.addVacation(startDate, endDate, jJContactService);
+		startDate=null;
+		endDate=null;
+		HttpSession session = (HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext()
+				.getSession(false);	
+		getAuthorisationService().setSession(session);
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_updated",
+				FacesMessage.SEVERITY_INFO, "Contact "+getContact().getName());		
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 
 	public void checkAuthorities(ComponentSystemEvent e) throws IOException {

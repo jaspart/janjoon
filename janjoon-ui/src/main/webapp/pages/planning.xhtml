@@ -126,6 +126,7 @@
 									</p:summaryRow>
 
 									<p:column headerText="Actions" style="width:100px;">
+									<p:graphicImage library="images" name="#{taskData.icone}" width="16" height="16"/>
 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
 											update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
 											action="#{jJTaskBean.initiateReqTreeNode}">

@@ -114,10 +114,9 @@ public class ContactCalendarUtil {
 
 					while (!nullPointerException) {
 						try {
+							String v=VACATION + "."+ String.format("%02d", i);
 							String hol = properties
-									.getProperty(
-											VACATION + "."
-													+ String.format("%02d", i))
+									.getProperty(v)
 									.toString().trim();
 							int index = hol.indexOf("to");
 							Date date1 = new SimpleDateFormat("dd/MM/yyyy")
@@ -176,11 +175,11 @@ public class ContactCalendarUtil {
 		String nl = "";
 		StringBuilder calendar;
 		if (date1.before(date2)) {
-			nl = VACATION + "." + vacation.size() + 1 + "=" + df.format(date1)
+			nl = VACATION + "." + String.format("%02d", vacation.size() + 1) + "=" + df.format(date1)
 					+ " to " + df.format(date2);
 
 		} else {
-			nl = VACATION + "." + vacation.size() + 1 + "=" + df.format(date2)
+			nl = VACATION + "." + String.format("%02d", vacation.size() + 1) + "=" + df.format(date2)
 					+ " to " + df.format(date1);
 		}
 		if (contact.getCalendar() != null) {
@@ -191,6 +190,7 @@ public class ContactCalendarUtil {
 
 		calendar.append(nl);
 		contact.setCalendar(calendar.toString());
+		contact.setUpdatedDate(new Date());
 		jJContactService.updateJJContact(contact);
 	}
 

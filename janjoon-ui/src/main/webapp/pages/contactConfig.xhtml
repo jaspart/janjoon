@@ -8,7 +8,174 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
-	
+		<h:form id="configForm">
+			<p:remoteCommand name="updateAdmin" />
+			<p:growl id="msg" />
+			<p:panelGrid style="margin:20px;float:left;">
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="4">#{loginBean.contact.name} Configuration</p:column>
+					</p:row>
+				</f:facet>
+				<p:row>
+					<p:column colspan="2">
+						<p:outputLabel for="firstname"
+							value="#{messages.contact_firstname}" />
+
+					</p:column>
+					<p:column colspan="2">
+						<p:inputText id="firstname" value="#{loginBean.contact.firstname}"
+							required="true">
+							<f:validateLength maximum="100" />
+						</p:inputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:outputLabel for="name" value="#{messages.contact_name}" />
+
+					</p:column>
+					<p:column colspan="2">
+						<p:inputText id="name" value="#{loginBean.contact.name}"
+							required="true">
+							<f:validateLength maximum="100" />
+						</p:inputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:outputLabel for="email" value="#{messages.contact_email}" />
+					</p:column>
+					<p:column colspan="2">
+						<p:inputText id="email" value="#{loginBean.contact.email}"
+							readonly="true" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:outputLabel for="lastproject"
+							value="#{messages.contact_lastproject}" />
+					</p:column>
+					<p:column colspan="2">
+						<p:selectOneMenu id="lastproject"
+							value="#{loginBean.contact.lastProject}" panelStyle="width:120px"
+							effect="fade" style="width:160px" filter="true"
+							filterMatchMode="startsWith"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
+
+							<f:selectItem itemValue="#{null}"
+								itemLabel="#{messages.contact_anyProject}" />
+							<f:selectItems value="#{jJProjectBean.projectList}" var="p"
+								itemLabel="#{p.name}" itemValue="#{p}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:outputLabel for="lastproduct"
+							value="#{messages.contact_lastproduct}" />
+					</p:column>
+					<p:column colspan="2">
+						<p:selectOneMenu id="lastproduct"
+							value="#{loginBean.contact.lastProduct}" panelStyle="width:120px"
+							effect="fade" style="width:160px" filter="true"
+							filterMatchMode="startsWith"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
+
+							<f:selectItem itemValue="#{null}"
+								itemLabel="#{messages.contact_anyProduct}" />
+							<f:selectItems value="#{jJProductBean.productList}" var="p"
+								itemLabel="#{p.name}" itemValue="#{p}" />
+							<p:ajax onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock()" update="lastversion" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:outputLabel for="lastversion"
+							value="#{messages.contact_lastversion}" />
+					</p:column>
+					<p:column colspan="2">
+						<p:selectOneMenu id="lastversion"
+							value="#{loginBean.contact.lastVersion}" panelStyle="width:120px"
+							effect="fade" style="width:160px" filter="true"
+							filterMatchMode="startsWith"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
+
+							<f:selectItem itemValue="#{null}"
+								itemLabel="#{messages.contact_anyVersion}" />
+							<f:selectItems value="#{jJContactBean.versionList}" var="p"
+								itemLabel="#{p.name}" itemValue="#{p}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<f:facet name="footer">
+					<p:row>
+						<p:column colspan="4" style="text-align: right">
+							<p:commandButton id="submit" update="configForm"
+								value="#{messages.contact_submit}"
+								action="#{jJContactBean.updateUserConfiguration(loginBean.contact)}" />
+
+						</p:column>
+					</p:row>
+				</f:facet>
+			</p:panelGrid>
+			<p:panelGrid style="margin:20px;float:left;">
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="2">
+            			#{loginBean.contact.name} #{messages.contact_vacances}</p:column>
+					</p:row>
+				</f:facet>
+				<p:row>
+					<p:column colspan="2">
+						<p:dataList var="vacation"
+							value="#{loginBean.calendarUtil.vacation}" type="ordered">
+
+							<p:outputLabel value="#{messages.contact_from} :" />
+							<p:inputText readonly="true" value="#{vacation.startVacation}">
+								<f:converter converterId="extendedDateTimeConverter" />
+								<f:attribute name="pattern" value="dd/MM/yyyy" />
+								<f:attribute name="timeZone" value="UCL" />
+							</p:inputText>
+							<p:outputLabel value=" #{messages.contact_to} :" />
+							<p:inputText readonly="true" value="#{vacation.endVacation}">
+								<f:converter converterId="extendedDateTimeConverter" />
+								<f:attribute name="pattern" value="dd/MM/yyyy" />
+								<f:attribute name="timeZone" value="UCL" />
+							</p:inputText>
+						</p:dataList>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel for="start" value="#{messages.contact_from}:" />
+						<p:calendar id="start" navigator="true" effect="slideDown"
+							pattern="dd/MM/yyyy" binding="#{startDateCreation}"
+							value="#{loginBean.startDate}" />
+					</p:column>
+					<p:column>
+						<p:outputLabel for="end" value="#{messages.contact_to}:" />
+						<p:calendar id="end" navigator="true" effect="slideDown"
+							pattern="dd/MM/yyyy" value="#{loginBean.endDate}">
+							<f:validator validatorId="dateRangeValidator" />
+							<f:attribute name="startDateComponent"
+								value="#{startDateCreation}" />
+						</p:calendar>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:commandButton id="addVacation"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" update="configForm"
+							action="#{loginBean.addVacation}"
+							value="#{messages.contact_new_vacation}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
 	</ui:define>
 </ui:composition>
 </html>
