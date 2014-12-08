@@ -18,6 +18,11 @@
 					onstart="PF('blockUIWidget').block()"
 					oncomplete="PF('blockUIWidget').unblock()" />
 			</ui:repeat>
+			
+			<p:commandButton value="#{messages.specification_video_help_title}"
+				id="videoHelpBtn" icon="ui-icon-video" onclick="PF('videoHelpWidget').show()"
+				style="float:none;position:relative;left:30%;" type="button" />
+				
 			<p:commandButton value="#{messages.specification_import_button}"
 				style="float: right;" disabled="#{jJRequirementBean.disabledExport}"
 				actionListener="#{jJRequirementBean.loadImportFormat()}"
@@ -737,6 +742,17 @@
 				</h:form>
 			</p:outputPanel>
 		</p:confirmDialog>
+
+		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
+		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget" position="center"
+			header="#{messages.specification_video_help_title}" style="padding:0px;"
+			resizable="false" draggable="false" minHeight="500" minWidth="500"
+			showEffect="fade" hideEffect="fade">
+			<video width="100%" height="100%" controls="true">
+				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4"/>
+			</video>
+		</p:dialog>
+
 
 		<p:hotkey bind="esc" handler="PF('requirementImportDialogWidget').hide()" />
 		<p:dialog id="requirementImportDialog" draggable="false"
