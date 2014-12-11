@@ -6,7 +6,9 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -50,6 +52,9 @@ public class JJCategory {
 	private Boolean enabled;
 
 	private Integer stage;
+	
+	@ManyToMany(mappedBy="categories",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<JJContact> contacts = new HashSet<JJContact>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "category")
 	private Set<JJChapter> chapters = new HashSet<JJChapter>();

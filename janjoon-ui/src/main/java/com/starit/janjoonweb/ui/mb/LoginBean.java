@@ -3,7 +3,7 @@ package com.starit.janjoonweb.ui.mb;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -35,19 +35,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 
+import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
-import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.ContactCalendarUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.UsageChecker;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
-import com.starit.janjoonweb.ui.security.AuthorizationManager;
 import com.sun.faces.component.visit.FullVisitContext;
 
 @Scope("session")
@@ -58,10 +56,6 @@ public class LoginBean implements Serializable {
 
 	private AuthenticationManager authenticationManager;
 	private AuthorisationService authorisationService;
-	private ContactCalendarUtil calendarUtil;
-	private Date startDate;
-	private Date endDate;
-
 	static Logger logger = Logger.getLogger("loginBean-Logger");
 
 	@Autowired
@@ -88,17 +82,7 @@ public class LoginBean implements Serializable {
 	public void setAuthorisationService(
 			AuthorisationService authorisationService) {
 		this.authorisationService = authorisationService;
-	}
-
-	public ContactCalendarUtil getCalendarUtil() {
-		if(calendarUtil == null)
-			calendarUtil=new ContactCalendarUtil(getContact());
-		return calendarUtil;
-	}
-
-	public void setCalendarUtil(ContactCalendarUtil calendarUtil) {
-		this.calendarUtil = calendarUtil;
-	}
+	}	
 
 	public void setjJContactService(JJContactService jJContactService) {
 		this.jJContactService = jJContactService;
@@ -124,23 +108,7 @@ public class LoginBean implements Serializable {
 	public void setAgreeTerms(boolean agreeTerms) {
 		this.agreeTerms = agreeTerms;
 	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
+	
 	@Autowired
 	public LoginBean(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
@@ -318,8 +286,7 @@ public class LoginBean implements Serializable {
 		if (contact != null) {
 			enable = !(contact == null || contact.getEmail().equals(""));
 			return contact;
-		} else if (enable && !username.isEmpty()) {
-			calendarUtil=null;
+		} else if (enable && !username.isEmpty()) {			
 			contact = jJContactService.getContactByEmail(username, true);
 			return contact;
 		}
@@ -331,6 +298,7 @@ public class LoginBean implements Serializable {
 	}
 
 	public void setContact(JJContact contact) {
+		
 		this.contact = contact;
 	}
 
@@ -791,21 +759,7 @@ public class LoginBean implements Serializable {
 			}
 		}
 	}
-	
-	public void addVacation()
-	{	
-		calendarUtil.addVacation(startDate, endDate, jJContactService);
-		startDate=null;
-		endDate=null;
-		HttpSession session = (HttpSession) FacesContext
-				.getCurrentInstance().getExternalContext()
-				.getSession(false);	
-		getAuthorisationService().setSession(session);
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated",
-				FacesMessage.SEVERITY_INFO, "Contact "+getContact().getName());		
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-	}
+
 
 	public void checkAuthorities(ComponentSystemEvent e) throws IOException {
 

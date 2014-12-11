@@ -202,14 +202,6 @@ privileged aspect JJContact_Roo_JavaBean {
         this.lastVersion = lastVersion;
     }
     
-    public JJCategory JJContact.getLastCategorie() {
-        return this.lastCategorie;
-    }
-    
-    public void JJContact.setLastCategorie(JJCategory lastCategorie) {
-        this.lastCategorie = lastCategorie;
-    }
-    
     public JJContact JJContact.getManager() {
         return this.manager;
     }
@@ -248,6 +240,14 @@ privileged aspect JJContact_Roo_JavaBean {
     
     public void JJContact.setSprints(Set<JJSprint> sprints) {
         this.sprints = sprints;
+    }
+    
+    public Set<JJCategory> JJContact.getCategories() {
+        return this.categories;
+    }
+    
+    public void JJContact.setCategories(Set<JJCategory> categories) {
+        this.categories = categories;
     }
     
     public Set<JJPermission> JJContact.getPermissions() {

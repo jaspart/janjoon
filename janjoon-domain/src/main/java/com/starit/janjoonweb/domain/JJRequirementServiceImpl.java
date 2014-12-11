@@ -229,9 +229,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	{
 		String qu="SELECT r FROM  JJRequirement r Where r.project.manager.company = :c AND r.enabled = true AND r.category != null and r.requirementLinkDown IS empty and r.requirementLinkUp IS empty";		
 		Query query =entityManager.createQuery(qu,JJRequirement.class);		
-		query.setParameter("c", company);
+		query.setParameter("c", company);	
 		
-		System.out.println(qu);
 		List<JJRequirement> list = ((List<JJRequirement>)query.getResultList());
 		return list;
 

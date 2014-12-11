@@ -5,11 +5,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 
@@ -141,7 +139,7 @@ public class JJContactServiceImpl implements JJContactService {
 				return false;
 
 		}
-	}
+	}	
 
 	public void saveJJContact(JJContact JJContact_) {
 
@@ -151,7 +149,7 @@ public class JJContactServiceImpl implements JJContactService {
 	}
 
 	public JJContact updateJJContact(JJContact JJContact_) {
-		JJContact_.setEmail(JJContact_.getEmail().toLowerCase());
+		
 		jJContactRepository.save(JJContact_);
 		JJContact_ = jJContactRepository.findOne(JJContact_.getId());
 		return JJContact_;

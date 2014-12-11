@@ -189,9 +189,7 @@ public class ContactCalendarUtil {
 			calendar = new StringBuilder();
 
 		calendar.append(nl);
-		contact.setCalendar(calendar.toString());
-		contact.setUpdatedDate(new Date());
-		jJContactService.updateJJContact(contact);
+		contact.setCalendar(calendar.toString());		
 	}
 
 	

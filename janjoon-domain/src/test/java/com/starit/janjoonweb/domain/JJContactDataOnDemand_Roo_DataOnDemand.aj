@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJCategoryDataOnDemand;
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJCompanyDataOnDemand;
 import com.starit.janjoonweb.domain.JJContact;
@@ -40,9 +39,6 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     JJJobDataOnDemand JJContactDataOnDemand.jJJobDataOnDemand;
-    
-    @Autowired
-    JJCategoryDataOnDemand JJContactDataOnDemand.jJCategoryDataOnDemand;
     
     @Autowired
     JJProductDataOnDemand JJContactDataOnDemand.jJProductDataOnDemand;

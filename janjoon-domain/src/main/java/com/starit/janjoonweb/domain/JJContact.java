@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -96,10 +97,8 @@ public class JJContact  {
 	private JJProduct lastProduct;
 
 	@ManyToOne
-	private JJVersion lastVersion;
+	private JJVersion lastVersion;	
 	
-	@ManyToOne
-	private JJCategory lastCategorie;
 
 	@ManyToOne
 	private JJContact manager;
@@ -116,6 +115,10 @@ public class JJContact  {
 
 	@ManyToMany(mappedBy = "contacts", fetch = FetchType.LAZY)
 	private Set<JJSprint> sprints = new HashSet<JJSprint>();
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "JJCategoryLinkJJContact", joinColumns = { @javax.persistence.JoinColumn(name = "Contact_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Category_ID", referencedColumnName = "id") })	
+	private Set<JJCategory> categories = new HashSet<JJCategory>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "contact")
 	private Set<JJPermission> permissions = new HashSet<JJPermission>();

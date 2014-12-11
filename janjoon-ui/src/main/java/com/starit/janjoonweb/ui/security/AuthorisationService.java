@@ -28,16 +28,23 @@ public class AuthorisationService implements Serializable {
 		
 		this.session = session;	
 		initFields();
-		JJContactBean contactBean=	(JJContactBean) this.session.getAttribute("jJContactBean");
+		
 		JJProjectBean jjProjectBean=(JJProjectBean) this.session.getAttribute("jJProjectBean");
 		JJProductBean jjProductBean=(JJProductBean) this.session.getAttribute("jJProductBean");
+		JJContactBean jjContactBean=(JJContactBean) this.session.getAttribute("jJContactBean");
 		LoginBean loginBean=(LoginBean) this.session.getAttribute("loginBean");
 		loginBean.setContact(null);
-		contactBean.setContactsLazyModel(null);
+		jjContactBean.setCalendarUtil(null);
+		jjContactBean.setContactsLazyModel(null);
+		jjContactBean.setContactUtil(null);
+		
 		jjProjectBean.setProjectList(null);
 		jjProductBean.setProductList(null);
 		jjProductBean.setProductListTable(null);
 		jjProjectBean.setProjectListTable(null);
+		jjContactBean.setCategories(null);
+		jjContactBean.setVersionList(null);
+		jjContactBean.setLoggedContactCategories(null);
 		RequestContext.getCurrentInstance().execute("updateAdmin()");
 	}
 

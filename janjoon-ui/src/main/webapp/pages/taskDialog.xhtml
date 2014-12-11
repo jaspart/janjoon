@@ -6,6 +6,15 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
+	<pe:blockUI widgetVar="viewtaskBlockUIWidget"
+		target="viewTaskPanelGrid">
+		<h:panelGrid columns="2" layout="grid">
+			<p:graphicImage library="images" name="ajax-loader.gif"
+				style="vertical-align: middle;" />
+			<h:outputText value="#{messages.label_refresh}"
+				style="white-space: nowrap;" />
+		</h:panelGrid>
+	</pe:blockUI>
 	<p:panelGrid id="viewTaskPanelGrid">
 		<p:row>
 			<p:column colspan="2">
@@ -72,7 +81,9 @@
 					selection="#{jJTaskBean.selectedTree}" animate="true"
 					selectionMode="single">
 					<p:ajax event="select" update=":viewTaskForm:taskTreePanelGrid"
-						listener="#{jJTaskBean.onSelectTreeNode}" />
+						listener="#{jJTaskBean.onSelectTreeNode}"
+						onstart="PF('viewtaskBlockUIWidget').block()"
+						oncomplete="PF('viewtaskBlockUIWidget').unblock()" />
 					<p:treeNode icon="ui-icon-arrowthick-1-e">
 						<h:outputText value="#{node.name}" />
 					</p:treeNode>

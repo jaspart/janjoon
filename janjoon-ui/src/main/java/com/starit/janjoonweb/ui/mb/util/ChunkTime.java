@@ -1,11 +1,15 @@
 package com.starit.janjoonweb.ui.mb.util;
 
+import java.text.DateFormatSymbols;
+import java.util.Calendar;
 import java.util.Date;
+
+import javax.faces.context.FacesContext;
 
 public class ChunkTime {
 
 	int dayNumber;
-	
+	String day;
 	Date startDate1;
 	Date endDate1;
 	Date startDate2;
@@ -18,7 +22,9 @@ public class ChunkTime {
 	
 	public ChunkTime(int i) {
 		
+		
 		this.dayNumber = i;
+		this.day=capitalizeDay(dayNumber);
 		this.startDate1 = null;
 		this.endDate1 = null;
 		this.startDate2 = null;
@@ -39,14 +45,18 @@ public class ChunkTime {
 			l=endDate2.getTime()-startDate2.getTime();
 		else 
 			l=0;
-		this.chunkWorkLoad=((endDate1.getTime()-startDate1.getTime())+(l))/(60 * 60 * 1000) % 24;
+		this.chunkWorkLoad=((endDate1.getTime()-startDate1.getTime())+(l))/(60 * 60 * 1000) % 24;		
+	    this.day=capitalizeDay(dayNumber);
+		
 	}
 
 	public int getDayNumber() {
 		return dayNumber;
 	}
 	public void setDayNumber(int dayNumber) {
-		this.dayNumber = dayNumber;
+		
+		this.dayNumber = dayNumber;		
+	    this.day=capitalizeDay(dayNumber);
 	}
 	public Date getStartDate1() {
 		return startDate1;
@@ -81,9 +91,27 @@ public class ChunkTime {
 		this.chunkWorkLoad = chunkWorkLoad;
 	}
 
+	public String getDay() {
+		return day;
+	}
+
+	public void setDay(String day) {
+		this.day = day;
+	}
+
 	public boolean isWeekEnd()
 	{
 		return startDate1==null && startDate2==null;
+	}
+	
+	public String capitalizeDay(int i)
+	{
+		DateFormatSymbols dfs = new DateFormatSymbols(FacesContext.getCurrentInstance().getExternalContext()
+				.getRequestLocale());
+	    String weekdays[] = dfs.getWeekdays();
+	    String s=weekdays[i+1];
+	    
+	    return s.substring(0, 1).toUpperCase() + s.substring(1);
 	}
 	
 }

@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -185,7 +186,6 @@ public class CalendarUtil {
 		if (date != null)
 		{
 			Calendar calendar = Calendar.getInstance();
-
 			calendar.setTime(date);
 			calendar.set(1970, 0, 1);
 			return calendar.getTime();

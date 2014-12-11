@@ -75,6 +75,14 @@ privileged aspect JJCategory_Roo_JavaBean {
         this.stage = stage;
     }
     
+    public Set<JJContact> JJCategory.getContacts() {
+        return this.contacts;
+    }
+    
+    public void JJCategory.setContacts(Set<JJContact> contacts) {
+        this.contacts = contacts;
+    }
+    
     public Set<JJChapter> JJCategory.getChapters() {
         return this.chapters;
     }

@@ -8,12 +8,7 @@ import javax.faces.context.ResponseWriter;
 import org.primefaces.component.progressbar.*;
 
 public class ProgressBarRendererImpl extends ProgressBarRenderer {
-	
-	
-	
-	public ProgressBarRendererImpl() {
-		System.err.println("ProgressBarRendererImpl");
-	}
+
 
 	@Override
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
