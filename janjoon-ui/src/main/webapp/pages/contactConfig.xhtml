@@ -162,20 +162,20 @@
 					</f:facet>
 					<p:row>
 						<p:column colspan="2">
-							<p:dataList var="vacation" paginator="true" rows="9"  paginatorPosition="bottom"
+							<p:dataList var="vacation" paginator="true" rows="9"  paginatorPosition="bottom" emptyMessage="#{messages.contact_empty_vacation}"
 								value="#{jJContactBean.calendarUtil.vacation}" type="ordered">
 
 								<p:outputLabel value="#{messages.contact_from} :" />
 								<p:inputText readonly="true" value="#{vacation.startVacation}"
 									style="width: 137px;">
 									<f:converter converterId="extendedDateTimeConverter" />
-									<f:attribute name="pattern" value="dd/MM/yyyy" />
+									<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
 								</p:inputText>
 								<p:outputLabel value=" #{messages.contact_to} :"
 									style="-webkit-padding-start: 30px;" />
 								<p:inputText readonly="true" value="#{vacation.endVacation}">
 									<f:converter converterId="extendedDateTimeConverter" />
-									<f:attribute name="pattern" value="dd/MM/yyyy" />
+									<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
 
 								</p:inputText>
 							</p:dataList>
@@ -185,13 +185,13 @@
 						<p:column>
 							<p:outputLabel for="start" value="#{messages.contact_from}:" />
 							<p:calendar id="start" navigator="true" effect="slideDown"
-								required="true" pattern="dd/MM/yyyy"
+								required="true" pattern="dd/MM/yyyy HH:mm"
 								binding="#{startDateCreation}" value="#{jJContactBean.startDate}" />
 						</p:column>
 						<p:column>
 							<p:outputLabel for="end" value="#{messages.contact_to}:" />
 							<p:calendar id="end" navigator="true" effect="slideDown"
-								required="true" pattern="dd/MM/yyyy"
+								required="true" pattern="dd/MM/yyyy HH:mm"
 								value="#{jJContactBean.endDate}">
 								<f:validator validatorId="dateRangeValidator" />
 								<f:attribute name="startDateComponent"

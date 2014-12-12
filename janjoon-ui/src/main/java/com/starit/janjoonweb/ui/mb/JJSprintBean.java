@@ -38,6 +38,7 @@ import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -57,6 +58,9 @@ public class JJSprintBean {
 
 	@Autowired
 	private JJTaskService jJTaskService;
+	
+	@Autowired
+	private JJPermissionService jJPermissionService;
 
 	private JJTaskBean jJTaskBean;
 
@@ -73,6 +77,7 @@ public class JJSprintBean {
 	private JJBugService jJBugService;
 
 	private List<JJCategory> categoryList;
+	private List<JJContact> contacts;
 	private HtmlPanelGrid createTaskPanelGrid;
 	private JJCategory category;
 	private JJRequirement requirement;
@@ -105,6 +110,10 @@ public class JJSprintBean {
 
 	public void setjJTaskService(JJTaskService jJTaskService) {
 		this.jJTaskService = jJTaskService;
+	}
+
+	public void setjJPermissionService(JJPermissionService jJPermissionService) {
+		this.jJPermissionService = jJPermissionService;
 	}
 
 	public void setjBugService(JJBugService jjBugService) {
@@ -268,6 +277,21 @@ public class JJSprintBean {
 
 	public void setSprintUtil(SprintUtil sprintUtil) {
 		this.sprintUtil = sprintUtil;
+	}
+
+	public List<JJContact> getContacts() {
+		
+		if(contacts == null)
+		{
+			JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+			contacts=jJPermissionService.areAuthorized(contact.getCompany(),contact, ((JJProjectBean) LoginBean.findBean("jJProjectBean")).getProject(), 
+					null, "sprintContact");
+		}
+		return contacts;
+	}
+
+	public void setContacts(List<JJContact> contacts) {
+		this.contacts = contacts;
 	}
 
 	public void attrListener(ActionEvent event) {
@@ -440,8 +464,7 @@ public class JJSprintBean {
 		sprintUtil = null;
 		category = null;
 		setJJSprint_(null);
-		setSelectedBuilds(null);
-		setSelectedTasks(null);
+		setSelectedBuilds(null);		
 		setSelectedObstacles(null);
 		setSelectedMessages(null);
 		setCreateDialogVisible(false);

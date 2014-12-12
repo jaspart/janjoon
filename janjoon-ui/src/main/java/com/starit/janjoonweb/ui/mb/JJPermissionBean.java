@@ -41,8 +41,7 @@ public class JJPermissionBean {
 	private boolean checkPermissions;
 	private boolean disabledCheckPermission;
 
-	public JJPermissionService getJJPermissionService()
-	{
+	public JJPermissionService getJJPermissionService() {
 		return this.jJPermissionService;
 	}
 
@@ -89,8 +88,13 @@ public class JJPermissionBean {
 	}
 
 	public List<JJProject> getProjects() {
-		projects = jJProjectService.getProjects(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
-				((LoginBean) LoginBean.findBean("loginBean")).getContact(),true);
+		JJContact contact = ((JJContactBean) LoginBean
+				.findBean("jJContactBean")).getContactAdmin();
+		if (contact.getId() != null)
+			projects = jJProjectService.getProjects(((JJContactBean) LoginBean
+					.findBean("jJContactBean")).getContactAdmin().getCompany(),
+					((JJContactBean) LoginBean.findBean("jJContactBean"))
+							.getContactAdmin(), true);
 		return projects;
 	}
 
@@ -107,8 +111,13 @@ public class JJPermissionBean {
 	}
 
 	public List<JJProduct> getProducts() {
-		products = jJProductService.getProducts(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
-				((LoginBean) LoginBean.findBean("loginBean")).getContact(),true);
+		JJContact contact = ((JJContactBean) LoginBean
+				.findBean("jJContactBean")).getContactAdmin();
+		if (contact.getId() != null)
+			products = jJProductService.getProducts(((JJContactBean) LoginBean
+					.findBean("jJContactBean")).getContactAdmin().getCompany(),
+					((JJContactBean) LoginBean.findBean("jJContactBean"))
+							.getContactAdmin(), true);
 		return products;
 	}
 
@@ -196,11 +205,12 @@ public class JJPermissionBean {
 		}
 
 	}
+
 	public void fillPermissionTable(JJContact contact) {
 		permissionDataModel = new ArrayList<PermissionDataModel>();
 
 		List<JJPermission> permissions = jJPermissionService.getPermissions(
-				contact, true, null, null, null);		
+				contact, true, null, null, null);
 
 		for (JJPermission permission : permissions) {
 			permissionDataModel.add(new PermissionDataModel(permission,
@@ -218,13 +228,12 @@ public class JJPermissionBean {
 		}
 
 	}
-	public void saveJJPermission(JJPermission b)
-	{	
+
+	public void saveJJPermission(JJPermission b) {
 		jJPermissionService.saveJJPermission(b);
 	}
-	
-	public void updateJJPermission(JJPermission b)
-	{
+
+	public void updateJJPermission(JJPermission b) {
 		jJPermissionService.updateJJPermission(b);
 	}
 

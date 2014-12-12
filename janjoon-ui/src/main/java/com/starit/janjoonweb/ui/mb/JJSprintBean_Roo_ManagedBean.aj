@@ -79,9 +79,8 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
     
     private boolean JJSprintBean.createDialogVisible = false;
     
-    private List<JJBuild> JJSprintBean.selectedBuilds;
-    
-    private List<JJTask> JJSprintBean.selectedTasks;
+    private List<JJBuild> JJSprintBean.selectedBuilds;   
+   
     
     private List<JJTask> JJSprintBean.selectedObstacles;
     
@@ -1066,18 +1065,8 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
             JJSprint_.setBuilds(new HashSet<JJBuild>(selectedBuilds));
         }
         this.selectedBuilds = selectedBuilds;
-    }
-    
-    public List<JJTask> JJSprintBean.getSelectedTasks() {
-        return selectedTasks;
-    }
-    
-    public void JJSprintBean.setSelectedTasks(List<JJTask> selectedTasks) {
-        if (selectedTasks != null) {
-            JJSprint_.setTasks(new HashSet<JJTask>(selectedTasks));
-        }
-        this.selectedTasks = selectedTasks;
-    }
+    }   
+   
     
     public List<JJTask> JJSprintBean.getSelectedObstacles() {
         return selectedObstacles;
@@ -1115,10 +1104,7 @@ privileged aspect JJSprintBean_Roo_ManagedBean {
     public String JJSprintBean.onEdit() {
         if (JJSprint_ != null && JJSprint_.getBuilds() != null) {
             selectedBuilds = new ArrayList<JJBuild>(JJSprint_.getBuilds());
-        }
-        if (JJSprint_ != null && JJSprint_.getTasks() != null) {
-            selectedTasks = new ArrayList<JJTask>(JJSprint_.getTasks());
-        }
+        }       
         if (JJSprint_ != null && JJSprint_.getObstacles() != null) {
             selectedObstacles = new ArrayList<JJTask>(JJSprint_.getObstacles());
         }

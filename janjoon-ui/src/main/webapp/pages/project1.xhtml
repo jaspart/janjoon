@@ -30,6 +30,15 @@
 				</h:panelGrid>
 			</p:tab>
 		</p:tabView>
+		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
+		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget" position="center"
+			header="#{messages.specification_video_help_title}" style="padding:0px;"
+			resizable="false" draggable="false" minHeight="500" minWidth="500"
+			showEffect="fade" hideEffect="fade">
+			<video width="100%" height="100%" controls="true">
+				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4"/>
+			</video>
+		</p:dialog>
 		<p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget"
 			message="#{messages.task_delete_title}" showEffect="fade"
 			hideEffect="explode" header="#{messages.task_delete_confirm_label}"

@@ -1,12 +1,16 @@
 package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -264,7 +268,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 		predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
 
-		if (objet != null) {
+		if (objet != null || !objet.equalsIgnoreCase("sprintContact")) {
 			orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
 					objet));
 			if (!objet.contains("*"))
@@ -365,13 +369,24 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 					}
 				}
 			else {
-				if (isSuperAdmin(contact))
-					for (JJPermission permission : permissions) {
-						if (permission.getContact().getEnabled()) {
-							contacts.add(permission.getContact());
+				if (isSuperAdmin(contact)) {
+					if (objet != null
+							&& objet.equalsIgnoreCase("sprintContact")) {
+						for (JJPermission permission : permissions) {
+							if (permission.getContact().getEnabled()
+									&& permission.getContact().getCompany()
+											.equals(company)) {
+								contacts.add(permission.getContact());
+							}
 						}
-					}
-				else
+
+					} else
+						for (JJPermission permission : permissions) {
+							if (permission.getContact().getEnabled()) {
+								contacts.add(permission.getContact());
+							}
+						}
+				} else
 					for (JJPermission permission : permissions) {
 						if (permission.getContact().getEnabled()
 								&& permission.getContact().getCompany()
@@ -384,6 +399,121 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		}
 
 		return contacts;
+
+	}
+
+	public JJProject getDefaultProject(JJContact contact) {
+		String qu = "SELECT r FROM  JJPermission r Where r.project IS NOT NULL AND r.project.manager.company = :c "
+				+ "AND r.enabled = true " + "AND r.contact = :contact";
+
+		Query query = entityManager.createQuery(qu, JJPermission.class);
+		query.setParameter("c", contact.getCompany());
+		query.setParameter("contact", contact);
+
+		List<JJPermission> permissions = ((List<JJPermission>) query
+				.getResultList());
+		// return list;
+
+		// CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		// CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
+		// .createQuery(JJPermission.class);
+		// Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
+		// CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
+		// List<Predicate> predicates = new ArrayList<Predicate>();
+		// predicates.add(criteriaBuilder.isNotNull(from.get("product")));
+		// predicates.add(criteriaBuilder.equal(from.join("project").get("manager"),contact.getCompany()));
+		//
+		// select.where(criteriaBuilder.and(predicates.toArray(new Predicate[]
+		// {})));
+		//
+		// TypedQuery<JJPermission> result = entityManager.createQuery(select);
+		//
+		// List<JJPermission> permissions = result.getResultList();
+
+		if (!permissions.isEmpty()) {
+			List<JJProject> projects = new ArrayList<JJProject>();
+
+			for (JJPermission permission : permissions) {
+				if (permission.getProject() != null)
+					projects.add(permission.getProject());
+			}
+
+			Map<JJProject, Integer> map = new HashMap<>();
+
+			for (JJProject t : projects) {
+				Integer val = map.get(t);
+				map.put(t, val == null ? 1 : val + 1);
+			}
+
+			Entry<JJProject, Integer> max = null;
+
+			for (Entry<JJProject, Integer> e : map.entrySet()) {
+				if (max == null || e.getValue() > max.getValue())
+					max = e;
+			}
+
+			return max.getKey();
+		} else
+			return null;
+
+	}
+
+	public JJProduct getDefaultProduct(JJContact contact) {
+
+		String qu = "SELECT r FROM  JJPermission r Where r.product IS NOT NULL AND r.product.manager.company = :c "
+				+ "AND r.enabled = true " + "AND r.contact = :contact";
+
+		Query query = entityManager.createQuery(qu, JJPermission.class);
+		query.setParameter("c", contact.getCompany());
+		query.setParameter("contact", contact);
+
+		List<JJPermission> permissions = ((List<JJPermission>) query
+				.getResultList());
+
+		// CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		// CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
+		// .createQuery(JJPermission.class);
+		// Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
+		// CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
+		// List<Predicate> predicates = new ArrayList<Predicate>();
+		//
+		// predicates.add(criteriaBuilder.equal(from.get("contact"),contact));
+		// predicates.add(criteriaBuilder.equal(from.get("enabled"),true));
+		// predicates.add(criteriaBuilder.isNotNull(from.get("product")));
+		// predicates.add(criteriaBuilder.equal(from.join("product").get("manager"),contact.getCompany()));
+		//
+		// select.where(criteriaBuilder.and(predicates.toArray(new Predicate[]
+		// {})));
+		//
+		// TypedQuery<JJPermission> result = entityManager.createQuery(select);
+		//
+		// List<JJPermission> permissions = result.getResultList();
+		//
+		if (!permissions.isEmpty()) {
+			List<JJProduct> products = new ArrayList<JJProduct>();
+
+			for (JJPermission permission : permissions) {
+				if (permission.getProduct() != null)
+					products.add(permission.getProduct());
+			}
+
+			Map<JJProduct, Integer> map = new HashMap<>();
+
+			for (JJProduct t : products) {
+				Integer val = map.get(t);
+				map.put(t, val == null ? 1 : val + 1);
+			}
+
+			Entry<JJProduct, Integer> max = null;
+
+			for (Entry<JJProduct, Integer> e : map.entrySet()) {
+				if (max == null || e.getValue() > max.getValue())
+					max = e;
+			}
+
+			return max.getKey();
+		} else
+			return null;
 
 	}
 

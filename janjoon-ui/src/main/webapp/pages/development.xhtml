@@ -27,7 +27,9 @@
 
 		<p:panel header="#{jJDevelopment.product.name}" id="devPanel"
 			style="width: 100%;valign: top;" rendered="#{jJDevelopment.render}">
-			<h:link value="TestWith TexteArea" outcome="development2" />
+			<p:commandButton value="#{messages.specification_video_help_title}"
+				id="videoHelpBtn" icon="ui-icon-video"
+				onclick="PF('videoHelpWidget').show()" type="button" />
 			<h:form id="form">
 				<table>
 					<tr>
@@ -355,6 +357,15 @@
 				<p:graphicImage library="images" name="ajax-loader.gif" />
 			</p:blockUI>
 		</p:panel>
+		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
+		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
+			position="center" header="#{messages.specification_video_help_title}"
+			style="padding:0px;" resizable="false" draggable="false"
+			minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
+			<video width="100%" height="100%" controls="true">
+				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
+			</video>
+		</p:dialog>
 		<p:blockUI block=":devPanel"
 			trigger=":headerForm:versionSelectOneMenu"
 			rendered="#{jJDevelopment.render}">

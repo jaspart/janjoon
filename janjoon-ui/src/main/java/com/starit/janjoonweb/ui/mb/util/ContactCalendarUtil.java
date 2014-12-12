@@ -114,17 +114,24 @@ public class ContactCalendarUtil {
 
 					while (!nullPointerException) {
 						try {
+							String pattern="dd/MM/yyyy HH:mm";
 							String v=VACATION + "."+ String.format("%02d", i);
 							String hol = properties
 									.getProperty(v)
 									.toString().trim();
 							int index = hol.indexOf("to");
-							Date date1 = new SimpleDateFormat("dd/MM/yyyy")
-									.parse(hol.substring(0, index - 1));
-							Date date2 = new SimpleDateFormat("dd/MM/yyyy")
-									.parse(hol.substring(index + 2, index + 13));
+							String s=hol.substring(0, index - 1);
+							if(s.length() < pattern.length())
+								s=s+" 09:00";
+							Date date1 = new SimpleDateFormat("dd/MM/yyyy HH:mm")
+									.parse(s);
+							
+							s=hol.substring(index + 2, hol.length());
+							if(s.length() < pattern.length())
+								s=s+" 18:00";
+							Date date2 = new SimpleDateFormat("dd/MM/yyyy HH:mm")
+									.parse(s);
 							vacation.add(new ChunkPeriod(date1, date2));
-
 							i++;
 
 						} catch (NullPointerException e) {
@@ -171,7 +178,7 @@ public class ContactCalendarUtil {
 	public void addVacation(Date date1, Date date2,
 			JJContactService jJContactService) {
 
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		String nl = "";
 		StringBuilder calendar;
 		if (date1.before(date2)) {

@@ -399,9 +399,8 @@ public class JJContactBean {
 			HttpSession session = (HttpSession) FacesContext
 					.getCurrentInstance().getExternalContext()
 					.getSession(false);
-			LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
-			if (contactAdmin.equals(loginBean.getContact()))
-				loginBean.getAuthorisationService().setSession(session);
+			LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");			
+			loginBean.getAuthorisationService().setSession(session);
 
 			FacesContext.getCurrentInstance().addMessage(
 					null,

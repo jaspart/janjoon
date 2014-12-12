@@ -140,6 +140,10 @@
 
 											<f:selectItems value="#{jJCompanyBean.companies}" var="c"
 												itemLabel="#{c.name}" itemValue="#{c}" />
+											<p:ajax update="product project" >
+											<f:setPropertyActionListener target="#{jJPermissionBean.projects}" value="#{null}"/>
+											<f:setPropertyActionListener target="#{jJPermissionBean.products}" value="#{null}"/>
+											</p:ajax>
 										</p:selectOneMenu>
 									</p:column>
 									<p:column>
@@ -178,9 +182,7 @@
 											widgetVar="profileWidget" label="Profile"
 											disabled="#{jJContactBean.disabledPermissionMode}">
 											<f:converter
-												converterId="com.starit.janjoonweb.ui.mb.converter.JJProfileConverter" />
-											<f:selectItem itemLabel="#{jJPermissionBean.profile.name}"
-												itemValue="#{jJPermissionBean.profile}" />
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJProfileConverter" />											
 											<f:selectItems value="#{jJPermissionBean.profiles}" var="p"
 												itemLabel="#{p.name}" itemValue="#{p}" />
 										</p:selectOneMenu>
@@ -195,9 +197,9 @@
 											filterMatchMode="startsWith" widgetVar="projectWidget"
 											disabled="#{jJContactBean.disabledPermissionMode}">
 											<f:converter
-												converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
-											<f:selectItem itemLabel="#{jJPermissionBean.project.name}"
-												itemValue="#{jJPermissionBean.project}" />
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />	
+											<f:selectItem itemValue="#{null}"
+														itemLabel="#{messages.contact_anyProject}" />									
 											<f:selectItems value="#{jJPermissionBean.projects}" var="p"
 												itemLabel="#{p.name}" itemValue="#{p}" />
 										</p:selectOneMenu>
@@ -212,9 +214,9 @@
 											filterMatchMode="startsWith" widgetVar="productWidget"
 											disabled="#{jJContactBean.disabledPermissionMode}">
 											<f:converter
-												converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
-											<f:selectItem itemLabel="#{jJPermissionBean.product.name}"
-												itemValue="#{jJPermissionBean.product}" />
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />	
+											<f:selectItem itemValue="#{null}"
+														itemLabel="#{messages.contact_anyProduct}" />										
 											<f:selectItems value="#{jJPermissionBean.products}" var="p"
 												itemLabel="#{p.name}" itemValue="#{p}" />
 										</p:selectOneMenu>

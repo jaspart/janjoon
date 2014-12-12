@@ -67,10 +67,7 @@ public class JJSprint {
 	private JJProject project;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<JJBuild> builds = new HashSet<JJBuild>();
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "sprint")
-	private Set<JJTask> tasks = new HashSet<JJTask>();
+	private Set<JJBuild> builds = new HashSet<JJBuild>();	
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<JJTask> obstacles = new HashSet<JJTask>();
@@ -88,20 +85,7 @@ public class JJSprint {
 				.equals(((JJSprint) object).getId()) : (object == this);
 	}
 	
-	 public Set<JJContact> getContacts() {		 
+	public Set<JJContact> getContacts() {		 
 	       return this.contacts;
 	 }
-	
-	public Set<JJTask> getTasks() {
-		try
-		{
-			Hibernate.initialize(this.tasks);
-		}catch(HibernateException e)
-		{
-			System.err.println(e.getMessage());
-		}
-		
-        return this.tasks;
-    }
-	
 }

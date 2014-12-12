@@ -110,10 +110,6 @@ privileged aspect JJSprint_Roo_JavaBean {
         this.builds = builds;
     }
     
-    public void JJSprint.setTasks(Set<JJTask> tasks) {
-        this.tasks = tasks;
-    }
-    
     public Set<JJTask> JJSprint.getObstacles() {
         return this.obstacles;
     }

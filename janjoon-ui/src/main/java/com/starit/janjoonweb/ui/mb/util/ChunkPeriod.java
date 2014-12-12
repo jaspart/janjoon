@@ -11,12 +11,12 @@ public class ChunkPeriod {
 		
 		if(startVacation.before(endVacation))
 		{
-			this.startVacation = CalendarUtil.getZeroTimeDate(startVacation);
-			this.endVacation = CalendarUtil.getZeroTimeDate(endVacation);	
+			this.startVacation = startVacation;
+			this.endVacation = endVacation;	
 		}else
 		{
-			this.startVacation = CalendarUtil.getZeroTimeDate(endVacation);
-			this.endVacation = CalendarUtil.getZeroTimeDate(startVacation);	
+			this.startVacation =endVacation;
+			this.endVacation = startVacation;	
 		}
 			
 	}

@@ -13,6 +13,10 @@
 
 			<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
 				style="float: right;" />
+			<p:commandButton value="#{messages.specification_video_help_title}"
+				id="videoHelpBtn" icon="ui-icon-video"
+				onclick="PF('videoHelpWidget').show()"
+				style="float: right;position: relative;" type="button" />
 			<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
 				dynamic="true" style="width:600px">
 				<p:panelGrid>
@@ -74,8 +78,8 @@
 			</p:overlayPanel>
 
 			<h:form id="bugForm">
-<!-- 				<p:remoteCommand name="preRenderDataTable" update="bugTable2"  -->
-<!-- 					oncomplete="setFilterValue(#{bugDataTableOptions.importance},#{bugDataTableOptions.status},#{bugDataTableOptions.criticity})" /> -->
+				<!-- 				<p:remoteCommand name="preRenderDataTable" update="bugTable2"  -->
+				<!-- 					oncomplete="setFilterValue(#{bugDataTableOptions.importance},#{bugDataTableOptions.status},#{bugDataTableOptions.criticity})" /> -->
 
 				<f:event type="preRenderComponent"
 					listener="#{bugDataTableOptions.dataTableInit}" />
@@ -136,7 +140,8 @@
 						</h:outputText>
 					</p:column>
 					<p:column headerText="#{messages.bug_table_criticity_title}"
-						sortBy="criticity.name" id="criticity" filterStyleClass="criticity"
+						sortBy="criticity.name" id="criticity"
+						filterStyleClass="criticity"
 						style="width: 10% !important;height: 5px !important;"
 						filterOptions="#{jJBugBean.criticityOptions}"
 						filterMatchMode="exact" filterStyle="width: 90%;"
@@ -144,7 +149,8 @@
 						<h:outputText value="#{bug.criticity.name}" />
 					</p:column>
 					<p:column headerText="#{messages.bug_table_importance_title}"
-						sortBy="importance.name" id="importance" filterStyleClass="importance"
+						sortBy="importance.name" id="importance"
+						filterStyleClass="importance"
 						style="width: 10% !important;height: 5px !important;"
 						filterOptions="#{jJBugBean.importanceOptions}"
 						filterMatchMode="exact" filterStyle="width: 90%;"
@@ -153,7 +159,8 @@
 					</p:column>
 					<p:column headerText="#{messages.bug_table_status_title}"
 						sortBy="status.name" filterBy="status.name" id="status"
-						style="width: 10% !important;height: 5px !important;" filterStyleClass="status" 
+						style="width: 10% !important;height: 5px !important;"
+						filterStyleClass="status"
 						filterOptions="#{jJBugBean.statusOptions}" filterMatchMode="exact"
 						filterStyle="width: 90%;">
 						<h:outputText value="#{bug.status.name}" />
@@ -229,6 +236,17 @@
 							onclick="PF('createDialogWidget').hide()" type="button" />
 					</h:form>
 				</p:outputPanel>
+			</p:dialog>
+
+			<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
+			<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
+				position="center"
+				header="#{messages.specification_video_help_title}"
+				style="padding:0px;" resizable="false" draggable="false"
+				minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
+				<video width="100%" height="100%" controls="true">
+					<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
+				</video>
 			</p:dialog>
 
 			<p:dialog id="editDialog" header="#{messages.bug_edit_title}"

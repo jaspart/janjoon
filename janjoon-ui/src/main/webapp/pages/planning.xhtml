@@ -84,6 +84,12 @@
 
 					</p:selectOneMenu>
 				</p:column>
+				<p:column>
+					<p:commandButton value="#{messages.specification_video_help_title}"
+						id="videoHelpBtn" icon="ui-icon-video"
+						onclick="PF('videoHelpWidget').show()"
+						style="float:none;position:relative;" type="button" />
+				</p:column>
 			</p:row>
 		</p:panelGrid>
 	</h:form>
@@ -126,7 +132,8 @@
 									</p:summaryRow>
 
 									<p:column headerText="Actions" style="width:100px;">
-									<p:graphicImage library="images" name="#{taskData.icone}" width="16" height="16"/>
+										<p:graphicImage library="images" name="#{taskData.icone}"
+											width="16" height="16" />
 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
 											update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
 											action="#{jJTaskBean.initiateReqTreeNode}">
@@ -188,7 +195,7 @@
 
 													<f:selectItem itemValue="#{null}"
 														itemLabel="#{messages.project_gantt_select_label}" />
-													<f:selectItems value="#{jJTaskBean.contacts}" var="contact"
+													<f:selectItems value="#{jJSprintBean.contacts}" var="contact"
 														itemLabel="#{contact.firstname} #{contact.name}"
 														itemValue="#{contact}" />
 												</h:selectOneMenu>
@@ -217,12 +224,11 @@
 											</f:facet>
 											<f:facet name="input">
 												<p:calendar style="width:90px" value="#{taskData.startDate}"
-													navigator="true" pattern="yyyy/MM/dd HH:mm:ss">													
+													navigator="true" pattern="yyyy/MM/dd HH:mm:ss">
 													<f:validator validatorId="dateRangeValidator" />
-													<f:attribute name="taskData"
-														value="#{taskData}" />
+													<f:attribute name="taskData" value="#{taskData}" />
 													<f:attribute name="edition" value="startDate" />
-														
+
 												</p:calendar>
 											</f:facet>
 										</p:cellEditor>
@@ -236,11 +242,10 @@
 											</f:facet>
 											<f:facet name="input">
 												<p:calendar style="width:90px" value="#{taskData.endDate}"
-													navigator="true" pattern="yyyy/MM/dd HH:mm:ss" >
+													navigator="true" pattern="yyyy/MM/dd HH:mm:ss">
 													<f:validator validatorId="dateRangeValidator" />
-													<f:attribute name="taskData"
-														value="#{taskData}" />
-														<f:attribute name="edition" value="endDate" />
+													<f:attribute name="taskData" value="#{taskData}" />
+													<f:attribute name="edition" value="endDate" />
 												</p:calendar>
 											</f:facet>
 										</p:cellEditor>
@@ -268,10 +273,9 @@
 											<f:facet name="input">
 												<p:calendar style="width:90px"
 													value="#{taskData.task.startDateReal}" navigator="true"
-													pattern="yyyy/MM/dd HH:mm:ss" >
+													pattern="yyyy/MM/dd HH:mm:ss">
 													<f:validator validatorId="dateRangeValidator" />
-													<f:attribute name="taskData"
-														value="#{taskData}" />
+													<f:attribute name="taskData" value="#{taskData}" />
 													<f:attribute name="edition" value="startDateReal" />
 												</p:calendar>
 											</f:facet>
@@ -288,11 +292,10 @@
 											<f:facet name="input">
 												<p:calendar style="width:90px"
 													value="#{taskData.task.endDateReal}" navigator="true"
-													pattern="yyyy/MM/dd HH:mm:ss" >
+													pattern="yyyy/MM/dd HH:mm:ss">
 													<f:validator validatorId="dateRangeValidator" />
 													<f:attribute name="edition" value="endDateReal" />
-													<f:attribute name="taskData"
-														value="#{taskData}" />
+													<f:attribute name="taskData" value="#{taskData}" />
 												</p:calendar>
 											</f:facet>
 										</p:cellEditor>
@@ -359,7 +362,7 @@
                        					Task TimeLine 
                     			</f:facet>
 								<pe:timeline id="timeline" value="#{jJTaskBean.model}"
-									eventMargin="10" eventMarginAxis="0" 
+									eventMargin="10" eventMarginAxis="0"
 									locale="#{LocaleBean.locale}" start="#{jJTaskBean.start}"
 									end="#{jJTaskBean.end}" widgetVar="timelineWdgt"
 									axisOnTop="true" groupsChangeable="false" var="task"
@@ -374,17 +377,17 @@
 									<!-- 									<p:ajax event="add" update=":taskImportDialog" -->
 									<!-- 										listener="#{jJTaskBean.onCreateTimelineEvent}" -->
 									<!-- 										oncomplete="PF('taskImportDialogWidget').show()" /> -->
-									<p:ajax event="add" update="@none"										
+									<p:ajax event="add" update="@none"
 										onstart="PF('timelineWdgt').cancelAdd()" />
 
-									<p:ajax event="change" 
+									<p:ajax event="change"
 										update=":projecttabview:planningForm:timeline :projecttabview:planningForm:taskDataTable :projecttabview:SprintTabView :projecttabview:planningForm:msg"
 										listener="#{jJTaskBean.onChangeTimelineEvent}"
 										onstart="PF('blockUIWidget').block()"
-										oncomplete="PF('blockUIWidget').unblock()"  >
-										
-										</p:ajax>
-										
+										oncomplete="PF('blockUIWidget').unblock()">
+
+									</p:ajax>
+
 
 									<p:ajax event="edit" update=":viewTaskForm:viewTaskPanelGrid"
 										listener="#{jJTaskBean.onEditTimelineEvent}"

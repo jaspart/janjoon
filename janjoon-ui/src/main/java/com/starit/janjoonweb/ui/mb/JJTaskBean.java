@@ -1181,8 +1181,7 @@ public class JJTaskBean {
 			task = jJTaskService.findJJTask(task.getId());
 			updateView(task, false);
 
-			if (task.getSprint() != null) {
-				Hibernate.initialize(task.getSprint().getTasks());
+			if (task.getSprint() != null) {			
 
 				HttpSession session = (HttpSession) FacesContext
 						.getCurrentInstance().getExternalContext()
@@ -1281,8 +1280,7 @@ public class JJTaskBean {
 		if (task.getSprint() != null) {
 			JJSprint sprint = jJSprintService.findJJSprint(task.getSprint()
 					.getId());
-			duplicatedTask.setSprint(sprint);
-			sprint.getTasks().add(duplicatedTask);
+			duplicatedTask.setSprint(sprint);			
 		}
 
 		if (task.getBug() != null) {
@@ -1695,8 +1693,7 @@ public class JJTaskBean {
 
 				JJSprint sprint = jJSprintService.findJJSprint(jJSprintBean
 						.getSprintUtil().getSprint().getId());
-				SprintUtil sprintUtil = new SprintUtil(sprint,
-						new ArrayList<JJTask>(sprint.getTasks()));
+				SprintUtil sprintUtil = new SprintUtil(sprint,jJTaskService.getSprintTasks(sprint));
 				jJSprintBean.setSprintUtil(sprintUtil);
 				jJSprintBean.getSprintList().set(
 						jJSprintBean.contains(sprint.getId()), sprintUtil);

@@ -39,6 +39,7 @@ import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
+import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJVersion;
@@ -64,6 +65,9 @@ public class LoginBean implements Serializable {
 	@Autowired
 	JJCompanyService jJCompanyService;
 
+	@Autowired
+	JJPermissionService jJPermissionService;
+
 	private String username = "";// "janjoon.mailer@gmail.com";
 	private String password;
 	private boolean agreeTerms = false;
@@ -82,10 +86,14 @@ public class LoginBean implements Serializable {
 	public void setAuthorisationService(
 			AuthorisationService authorisationService) {
 		this.authorisationService = authorisationService;
-	}	
+	}
 
 	public void setjJContactService(JJContactService jJContactService) {
 		this.jJContactService = jJContactService;
+	}
+
+	public void setjJPermissionService(JJPermissionService jJPermissionService) {
+		this.jJPermissionService = jJPermissionService;
 	}
 
 	public void setjJCompanyService(JJCompanyService jJCompanyService) {
@@ -108,7 +116,7 @@ public class LoginBean implements Serializable {
 	public void setAgreeTerms(boolean agreeTerms) {
 		this.agreeTerms = agreeTerms;
 	}
-	
+
 	@Autowired
 	public LoginBean(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
@@ -205,29 +213,49 @@ public class LoginBean implements Serializable {
 
 				logger.info("login operation success " + contact.getName()
 						+ " logged in");
-				if(session.getAttribute("jJProjectBean") == null)
-					session.setAttribute("jJProjectBean",new JJProjectBean());
-					
-				if(session.getAttribute("jJProductBean") == null)
-					session.setAttribute("jJProductBean",new JJProductBean());
-					
-				if(session.getAttribute("jJVersionBean") == null)
-					session.setAttribute("jJVersionBean",new JJVersionBean());
-				
-				JJProjectBean jjProjectBean=(JJProjectBean) session.getAttribute("jJProjectBean");
-				JJProductBean jjProductBean=(JJProductBean) session.getAttribute("jJProductBean");
-				JJVersionBean jjVersionBean=(JJVersionBean) session.getAttribute("jJVersionBean");
+				if (session.getAttribute("jJProjectBean") == null)
+					session.setAttribute("jJProjectBean", new JJProjectBean());
+
+				if (session.getAttribute("jJProductBean") == null)
+					session.setAttribute("jJProductBean", new JJProductBean());
+
+				if (session.getAttribute("jJVersionBean") == null)
+					session.setAttribute("jJVersionBean", new JJVersionBean());
+
+				JJProjectBean jjProjectBean = (JJProjectBean) session
+						.getAttribute("jJProjectBean");
+				JJProductBean jjProductBean = (JJProductBean) session
+						.getAttribute("jJProductBean");
+				JJVersionBean jjVersionBean = (JJVersionBean) session
+						.getAttribute("jJVersionBean");
+
+				boolean save = false;
+
+				if (contact.getLastProject() == null) {
+					save = true;
+					contact.setLastProject(jJPermissionService
+							.getDefaultProject(contact));
+				}
+
+				if (contact.getLastProduct() == null) {
+					save = true;
+					contact.setLastProduct(jJPermissionService
+							.getDefaultProduct(contact));
+				}
+				if (save) {
+					jJContactService.updateJJContact(contact);
+					contact = jJContactService
+							.getContactByEmail(username, true);
+				}
 				
 				jjProjectBean.getProjectList();
 				jjProjectBean.setProject(contact.getLastProject());
-				
+
 				jjProductBean.getProductList();
 				jjProductBean.setProduct(contact.getLastProduct());
-				
+
 				jjVersionBean.getVersionList();
 				jjVersionBean.setVersion(contact.getLastVersion());
-				
-				
 
 				if (!UsageChecker.checkExpiryDate()) {
 
@@ -286,7 +314,7 @@ public class LoginBean implements Serializable {
 		if (contact != null) {
 			enable = !(contact == null || contact.getEmail().equals(""));
 			return contact;
-		} else if (enable && !username.isEmpty()) {			
+		} else if (enable && !username.isEmpty()) {
 			contact = jJContactService.getContactByEmail(username, true);
 			return contact;
 		}
@@ -298,7 +326,7 @@ public class LoginBean implements Serializable {
 	}
 
 	public void setContact(JJContact contact) {
-		
+
 		this.contact = contact;
 	}
 
@@ -759,7 +787,6 @@ public class LoginBean implements Serializable {
 			}
 		}
 	}
-
 
 	public void checkAuthorities(ComponentSystemEvent e) throws IOException {
 
