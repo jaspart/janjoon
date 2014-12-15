@@ -76,6 +76,7 @@ public class JJProjectServiceImpl implements JJProjectService {
 			List<JJProject> projects=new ArrayList<JJProject>();
 			CriteriaBuilder criteriaBuilder = entityManager
 					.getCriteriaBuilder();
+			boolean all = false;
 			if(contact != null)
 			{
 				CriteriaQuery<JJPermission> criteriaPermission=criteriaBuilder
@@ -99,13 +100,12 @@ public class JJProjectServiceImpl implements JJProjectService {
 						projects.add(permission.getProject());
 					}else
 					{
-						projects=new ArrayList<JJProject>();
-						break;
+						all=true;
 					}
 				}			
 				
 			}
-			if(projects.isEmpty())
+			if(all)
 			{
 				CriteriaQuery<JJProject> criteriaQuery = criteriaBuilder
 						.createQuery(JJProject.class);
@@ -125,7 +125,11 @@ public class JJProjectServiceImpl implements JJProjectService {
 				select.where(predicates.toArray(new Predicate[] {}));
 
 				TypedQuery<JJProject> result = entityManager.createQuery(select);
-				projects=result.getResultList();
+				
+				for (JJProject proj : result.getResultList()) {
+					if(!projects.contains(proj))
+						projects.add(proj);
+				}
 			}
 			
 			return projects;

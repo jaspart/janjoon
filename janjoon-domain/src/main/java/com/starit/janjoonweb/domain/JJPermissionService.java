@@ -41,6 +41,8 @@ public interface JJPermissionService {
 
 	public List<JJContact> areAuthorized(JJCompany company,JJContact contact,JJProject project, JJProduct product,
 			String objet, JJCategory category, Boolean r, Boolean w, Boolean x);
+	
+	public List<JJContact> areSprintAuthorized(JJCompany company,JJProject project);
 
 	public List<JJContact> getManagers(JJCompany company,JJContact contact,String objet);
 

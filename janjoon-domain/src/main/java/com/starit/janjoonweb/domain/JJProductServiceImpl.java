@@ -74,11 +74,12 @@ public class JJProductServiceImpl implements JJProductService {
 			boolean onlyActif) {
 
 		if (company != null) {
-			
-			List<JJProduct> products=new ArrayList<JJProduct>();
+
+			List<JJProduct> products = new ArrayList<JJProduct>();
 			CriteriaBuilder criteriaBuilder = entityManager
 					.getCriteriaBuilder();
-			
+			boolean all = false;
+
 			if (contact != null) {
 				CriteriaQuery<JJPermission> criteriaPermission = criteriaBuilder
 						.createQuery(JJPermission.class);
@@ -102,36 +103,39 @@ public class JJProductServiceImpl implements JJProductService {
 					if (permission.getProject() != null) {
 						products.add(permission.getProduct());
 					} else {
-						products = new ArrayList<JJProduct>();
-						break;
+						all = true;
 					}
 				}
 
 			}
-			if(products.isEmpty())
-			{
-			CriteriaQuery<JJProduct> criteriaQuery = criteriaBuilder
-					.createQuery(JJProduct.class);
+			if (all) {
+				CriteriaQuery<JJProduct> criteriaQuery = criteriaBuilder
+						.createQuery(JJProduct.class);
 
-			Root<JJProduct> from = criteriaQuery.from(JJProduct.class);
+				Root<JJProduct> from = criteriaQuery.from(JJProduct.class);
 
-			CriteriaQuery<JJProduct> select = criteriaQuery.select(from);
+				CriteriaQuery<JJProduct> select = criteriaQuery.select(from);
 
-			List<Predicate> predicates = new ArrayList<Predicate>();
+				List<Predicate> predicates = new ArrayList<Predicate>();
 
-			if (onlyActif) {
-				predicates
-						.add(criteriaBuilder.equal(from.get("enabled"), true));
+				if (onlyActif) {
+					predicates.add(criteriaBuilder.equal(from.get("enabled"),
+							true));
+				}
+				predicates.add(criteriaBuilder.equal(
+						from.join("manager").get("company"), company));
+
+				select.where(predicates.toArray(new Predicate[] {}));
+
+				TypedQuery<JJProduct> result = entityManager
+						.createQuery(select);
+				for (JJProduct prod : result.getResultList()) {
+					if(!products.contains(prod))
+						products.add(prod);
+				}
+
 			}
-			predicates.add(criteriaBuilder.equal(
-					from.join("manager").get("company"), company));
 
-			select.where(predicates.toArray(new Predicate[] {}));
-
-			TypedQuery<JJProduct> result = entityManager.createQuery(select);
-			products=result.getResultList();
-			}
-			
 			return products;
 		} else
 			return null;

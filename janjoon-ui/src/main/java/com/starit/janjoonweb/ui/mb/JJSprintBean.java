@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -16,13 +15,11 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.spinner.Spinner;
-import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.CloseEvent;
@@ -36,10 +33,8 @@ import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
-import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermissionService;
-import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
@@ -284,8 +279,7 @@ public class JJSprintBean {
 		if(contacts == null)
 		{
 			JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
-			contacts=jJPermissionService.areAuthorized(contact.getCompany(),contact, ((JJProjectBean) LoginBean.findBean("jJProjectBean")).getProject(), 
-					null, "sprintContact");
+			contacts=jJPermissionService.areSprintAuthorized(contact.getCompany(),((JJProjectBean) LoginBean.findBean("jJProjectBean")).getProject());
 		}
 		return contacts;
 	}

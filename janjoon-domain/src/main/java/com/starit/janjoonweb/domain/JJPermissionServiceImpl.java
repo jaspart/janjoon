@@ -240,6 +240,46 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 				null);
 	}
 
+	public List<JJContact> areSprintAuthorized(JJCompany company,JJProject project) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
+				.createQuery(JJPermission.class);
+		Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
+		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);		
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> orPredicates = new ArrayList<Predicate>();
+
+		if (project != null)
+			orPredicates
+					.add(criteriaBuilder.equal(from.get("project"), project));
+
+		orPredicates.add(criteriaBuilder.isNull(from.get("project")));
+
+		Predicate orPredicate = criteriaBuilder.or(orPredicates
+				.toArray(new Predicate[] {}));
+
+		predicates.add(criteriaBuilder.and(orPredicate));
+		
+		predicates.add(criteriaBuilder.equal(from.join("contact").get("company"),company));
+		predicates.add(criteriaBuilder.equal(from.get("enabled"),true));
+		predicates.add(criteriaBuilder.equal(from.join("contact").get("enabled"),true));
+		
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+		TypedQuery<JJPermission> result = entityManager.createQuery(select);
+
+		List<JJPermission> permissions = result.getResultList();
+		List<JJContact> contacts = new ArrayList<JJContact>();
+		for(JJPermission permission:permissions)
+		{
+			if(!contacts.contains(permission.getContact()))
+				contacts.add(permission.getContact());
+		}
+		
+		return contacts;
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public List<JJContact> areAuthorized(JJCompany company, JJContact contact,
@@ -331,17 +371,19 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 		predicates.add(criteriaBuilder.and(orPredicate));
 
-		orPredicates = new ArrayList<Predicate>();
-		if (product != null)
-			orPredicates
-					.add(criteriaBuilder.equal(from.get("product"), product));
+		if (!(objet != null && objet.equalsIgnoreCase("sprintContact"))) {
+			orPredicates = new ArrayList<Predicate>();
+			if (product != null)
+				orPredicates.add(criteriaBuilder.equal(from.get("product"),
+						product));
 
-		orPredicates.add(criteriaBuilder.isNull(from.get("product")));
+			orPredicates.add(criteriaBuilder.isNull(from.get("product")));
 
-		orPredicate = criteriaBuilder.or(orPredicates
-				.toArray(new Predicate[] {}));
+			orPredicate = criteriaBuilder.or(orPredicates
+					.toArray(new Predicate[] {}));
 
-		predicates.add(criteriaBuilder.and(orPredicate));
+			predicates.add(criteriaBuilder.and(orPredicate));
+		}
 
 		predicates.add(criteriaBuilder.equal(path.get("enabled"), true));
 
@@ -355,7 +397,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 		if (company == null)
 			for (JJPermission permission : permissions) {
-				if (permission.getContact().getEnabled()) {
+				if (permission.getContact().getEnabled() && !contacts.contains(permission.getContact())) {
 					contacts.add(permission.getContact());
 				}
 			}
@@ -364,7 +406,8 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 				for (JJPermission permission : permissions) {
 					if (permission.getContact().getEnabled()
 							&& permission.getContact().getCompany()
-									.equals(company)) {
+									.equals(company)
+							&& !contacts.contains(permission.getContact())) {
 						contacts.add(permission.getContact());
 					}
 				}
@@ -375,14 +418,16 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 						for (JJPermission permission : permissions) {
 							if (permission.getContact().getEnabled()
 									&& permission.getContact().getCompany()
-											.equals(company)) {
+											.equals(company)
+									&& !contacts.contains(permission.getContact())) {
 								contacts.add(permission.getContact());
 							}
 						}
 
 					} else
 						for (JJPermission permission : permissions) {
-							if (permission.getContact().getEnabled()) {
+							if (permission.getContact().getEnabled()
+									&& !contacts.contains(permission.getContact())) {
 								contacts.add(permission.getContact());
 							}
 						}
@@ -390,7 +435,8 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 					for (JJPermission permission : permissions) {
 						if (permission.getContact().getEnabled()
 								&& permission.getContact().getCompany()
-										.equals(company)) {
+										.equals(company)
+								&& !contacts.contains(permission.getContact())) {
 							contacts.add(permission.getContact());
 						}
 					}
