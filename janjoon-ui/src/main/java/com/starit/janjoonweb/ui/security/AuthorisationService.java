@@ -24,6 +24,7 @@ public class AuthorisationService implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private HttpSession session;
+	private JJCategory category;
 
 	public void setSession(HttpSession session) {
 		
@@ -81,6 +82,14 @@ public class AuthorisationService implements Serializable {
 
 	public void setContact(JJContact contact) {
 		this.contact = contact;
+	}
+
+	public JJCategory getCategory() {
+		return category;
+	}
+
+	public void setCategory(JJCategory category) {
+		this.category = category;
 	}
 
 	public boolean isAdminContactProfil() {
@@ -263,18 +272,19 @@ public class AuthorisationService implements Serializable {
 		
 		JJPermissionService jJPermissionService=permissionBean.getJJPermissionService();		
 		
+		if(category == null)
+			category=jJPermissionService.getDefaultCategory(((LoginBean) LoginBean.findBean("loginBean")).getContact());
 		
 		if(projectBean==null)
 			projectBean=new JJProjectBean();
+		
 		if(productBean ==null)
 			productBean=new JJProductBean();
 
 		JJProject project = projectBean.getProject();
-		JJProduct product = productBean.getProduct();		
+		JJProduct product = productBean.getProduct();
 		
-
-		adminContactProfil = jJPermissionService.isAuthorized(contact, null,
-				null, "Contact", null, true, true, true);
+		adminContactProfil = jJPermissionService.isAuthorized(contact,null,null,"Contact",null,true,true,true);
 
 		if (!adminContactProfil)
 			adminContactProfilMSG = "Permission Denied";

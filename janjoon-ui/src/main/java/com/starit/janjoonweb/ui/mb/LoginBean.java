@@ -230,6 +230,13 @@ public class LoginBean implements Serializable {
 						.getAttribute("jJVersionBean");
 
 				boolean save = false;
+				
+				if(contact.getCategories() == null || contact.getCategories().isEmpty())
+				{
+					save=true;
+					contact.setCategories(new HashSet<JJCategory>(jJPermissionService.getDefaultCategories(contact)));
+					
+				}
 
 				if (contact.getLastProject() == null) {
 					save = true;
@@ -479,6 +486,7 @@ public class LoginBean implements Serializable {
 				jJProjectBean.setProject(project);
 				authorisationService.initFields();
 				session.setAttribute("jJSprintBean", new JJSprintBean());
+				session.setAttribute("jJStatusBean", new JJStatusBean());
 				session.setAttribute("jJTaskBean", new JJTaskBean());
 				session.setAttribute("jJRequirementBean",
 						new JJRequirementBean());

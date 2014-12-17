@@ -1808,9 +1808,22 @@ public class JJRequirementBean {
 	private void fullTableDataModelList() {
 		long t = System.currentTimeMillis();
 		tableDataModelList = new ArrayList<CategoryDataModel>();
+		JJContact contact =((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		List<JJCategory> categories=new ArrayList<JJCategory>(contact.getCategories());
 		for (int i = 0; i < 3; i++) {
+			
+			long l=0;
+			if(categories.size()>i)
+				l=categories.get(i).getId();
 			CategoryDataModel requirementDataModel = new CategoryDataModel(
-					new ArrayList<RequirementUtil>(), 0, "", false);
+					new ArrayList<RequirementUtil>(),0,"", false);
+			if(l != 0)
+			{
+				JJCategory category=jJCategoryService.findJJCategory(l);
+				requirementDataModel=new CategoryDataModel(
+						getListOfRequiremntUtils(getRequirementsList(category, product, version, project, true)),
+						category.getId(), category.getName(), true);
+			}
 
 			tableDataModelList.add(requirementDataModel);
 		}

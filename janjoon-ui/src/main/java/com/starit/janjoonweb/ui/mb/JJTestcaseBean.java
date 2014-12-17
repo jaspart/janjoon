@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +39,7 @@ import com.starit.janjoonweb.domain.JJChapterService;
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
@@ -360,8 +362,7 @@ public class JJTestcaseBean {
 	}
 
 	public void loadData() {
-
-
+		
 		if(project == null)
 		{
 			this.getProject();
@@ -377,7 +378,15 @@ public class JJTestcaseBean {
 			disabledExport = true;
 
 			namefile = null;
-
+			
+			
+			
+			if(category == null)
+			{	
+				
+				category=((LoginBean) LoginBean.findBean("loginBean")).getAuthorisationService().getCategory();		
+			}
+			
 			if (category != null) {
 				namefile = category.getName().trim();
 				disabledExport = false;
@@ -387,7 +396,6 @@ public class JJTestcaseBean {
 				disabledExport = true;
 
 			}
-
 			createTestcaseTree();
 			rendredEmptySelection = true;
 		}
