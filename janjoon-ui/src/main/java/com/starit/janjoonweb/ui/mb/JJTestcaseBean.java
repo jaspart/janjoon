@@ -107,6 +107,15 @@ public class JJTestcaseBean {
 	private JJProject project;
 	private JJProduct product;
 	private JJVersion version;
+	private float reqCoverage;
+
+	public float getReqCoverage() {
+		return reqCoverage;
+	}
+
+	public void setReqCoverage(float reqCoverage) {
+		this.reqCoverage = reqCoverage;
+	}
 
 	private JJChapter chapter;
 
@@ -645,6 +654,8 @@ public class JJTestcaseBean {
 			context.execute("PF('testcaseDialogWidget').hide()");
 
 		}
+		createTestcaseTree();
+		
 
 	}
 
@@ -704,8 +715,10 @@ public class JJTestcaseBean {
 							.findBean("loginBean")).getContact().getCompany(),
 							project, category, true, true);
 
-			for (JJChapter chapter : parentChapters) {
-				TreeNode node = createTree(chapter, categoryNode, category);
+			for (JJChapter ch : parentChapters) {
+				TreeNode node = createTree(ch, categoryNode, category);
+				if(chapter != null && ch.equals(chapter))
+					selectedNode=node;
 			}
 
 		}
@@ -735,6 +748,19 @@ public class JJTestcaseBean {
 			long id = Long.parseLong(getSubString(selectedNode, 1, "-"));
 
 			chapter = jJChapterService.findJJChapter(id);
+			List<JJRequirement> rqs= jJRequirementService.getRequirements(
+					((LoginBean) LoginBean.findBean("loginBean")).getContact()
+							.getCompany(), null, null, null, null, null, chapter,
+					true, true, true);
+			
+			int i=0;
+			for(JJRequirement r:rqs)
+			{
+				if(jJRequirementService.haveTestcase(r))
+					i=i+1;
+			}
+			
+			reqCoverage=(float)(i*100/rqs.size());
 			testcase = null;
 
 			rendredTestCaseRecaps = true;

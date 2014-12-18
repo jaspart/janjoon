@@ -25,6 +25,24 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 	// Generic Request
 
+	public boolean haveTestcase(JJRequirement requirement)
+	{
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJTestcase> criteriaQuery = criteriaBuilder
+				.createQuery(JJTestcase.class);
+
+		Root<JJTestcase> from = criteriaQuery.from(JJTestcase.class);
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		
+		predicates.add(criteriaBuilder.equal(from.get("requirement"), requirement));
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
+		cq.select(criteriaBuilder.count(cq.from(JJTestcase.class)));
+		entityManager.createQuery(cq);
+		cq.where(predicates.toArray(new Predicate[] {}));
+		boolean have= entityManager.createQuery(cq).getSingleResult()>0;
+		return have;		
+	}
 	@Override
 	public List<JJRequirement> getRequirements(JJCompany company,JJCategory category,
 			JJProject project, JJProduct product, JJVersion version,

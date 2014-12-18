@@ -13,6 +13,8 @@ public interface JJRequirementService {
 			JJProject project, JJProduct product, JJVersion version,
 			JJStatus status, JJChapter chapter, boolean withChapter,
 			boolean onlyActif, boolean orderByCreationdate);
+	
+	public boolean haveTestcase(JJRequirement requirement);
 
 	public List<JJRequirement> getRequirements(JJCompany company,JJProject project,
 			JJProduct product, JJVersion version);

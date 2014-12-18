@@ -77,6 +77,8 @@
 				</p:panelGrid>
 			</p:overlayPanel>
 
+			<br />
+			<br />
 			<h:form id="bugForm">
 				<!-- 				<p:remoteCommand name="preRenderDataTable" update="bugTable2"  -->
 				<!-- 					oncomplete="setFilterValue(#{bugDataTableOptions.importance},#{bugDataTableOptions.status},#{bugDataTableOptions.criticity})" /> -->
@@ -94,12 +96,13 @@
 				</h:panelGrid>
 				<p:growl id="bugMessage" showDetail="true" />
 				<p:dataTable id="bugTable2" sortMode="multiple"
-					style="table-layout: fixed;" value="#{jJBugBean.bugList}"
-					rowKey="#{bug.id}" var="bug" widgetVar="bugTable" lazy="true"
-					rowStyleClass="#{bug.status.name}"
+					styleClass="bugDataTable" style="table-layout: fixed;"
+					value="#{jJBugBean.bugList}" rowKey="#{bug.id}" var="bug"
+					widgetVar="bugTable" lazy="true" rowStyleClass="#{bug.status.name}"
 					binding="#{bugDataTableOptions.dataTable}"
 					emptyMessage="#{messages.bug_table_alert}"
 					selection="#{jJBugBean.selectedBugList}" paginator="true" rows="10"
+					paginatorPosition="bottom"
 					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 					rowsPerPageTemplate="5,10,20">
 					<p:ajax event="rowSelectCheckbox" update="bugTable2:deleteMButton" />
@@ -116,10 +119,17 @@
 
 					<f:facet name="header">
 						<p:outputPanel>
-							<h:outputText value="#{messages.bug_table_search_label}" />
+							<h:outputText value="#{messages.bug_table_search_label}"
+								style="vertical-align: middle !important;" />
 							<p:inputText id="globalFilter" onkeyup="PF('bugTable').filter()"
 								style="width:200px"
 								placeholder="#{messages.bug_table_search_watermark}" />
+							<p:commandButton id="createButton" icon="ui-icon-circle-plus"
+								update=":createForm "
+								oncomplete="PF('createDialogWidget').show()"
+								title="#{messages.label_create}" />
+							<p:tooltip for="createButton" value="#{messages.label_create}"
+								showEffect="fade" hideEffect="fade" />
 						</p:outputPanel>
 					</f:facet>
 
@@ -197,14 +207,6 @@
 						</p:splitButton>
 					</p:column>
 					<f:facet name="footer">
-						<p:commandButton value="#{messages.bug_create_button}"
-							id="createButton" icon="ui-icon-circle-plus"
-							update=":createForm "
-							oncomplete="PF('createDialogWidget').show()"
-							title="#{messages.label_create}" />
-						<p:tooltip for="createButton" value="#{messages.label_create}"
-							showEffect="fade" hideEffect="fade" />
-
 						<p:commandButton value="#{messages.bug_delete_button}"
 							id="deleteMButton" icon="ui-icon-trash" update=":createForm"
 							oncomplete="PF('deleteMDialogWidget').show()"

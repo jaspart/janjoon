@@ -2,7 +2,6 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashSet;
 
 import javax.faces.application.FacesMessage;
@@ -43,7 +42,6 @@ import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.ui.mb.util.ContactCalendarUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.UsageChecker;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
@@ -230,12 +228,13 @@ public class LoginBean implements Serializable {
 						.getAttribute("jJVersionBean");
 
 				boolean save = false;
-				
-				if(contact.getCategories() == null || contact.getCategories().isEmpty())
-				{
-					save=true;
-					contact.setCategories(new HashSet<JJCategory>(jJPermissionService.getDefaultCategories(contact)));
-					
+
+				if (contact.getCategories() == null
+						|| contact.getCategories().isEmpty()) {
+					save = true;
+					contact.setCategories(new HashSet<JJCategory>(
+							jJPermissionService.getDefaultCategories(contact)));
+
 				}
 
 				if (contact.getLastProject() == null) {
@@ -254,7 +253,7 @@ public class LoginBean implements Serializable {
 					contact = jJContactService
 							.getContactByEmail(username, true);
 				}
-				
+
 				jjProjectBean.getProjectList();
 				jjProjectBean.setProject(contact.getLastProject());
 

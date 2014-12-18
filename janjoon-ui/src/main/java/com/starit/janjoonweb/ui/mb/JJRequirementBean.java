@@ -2,6 +2,8 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -1810,22 +1812,37 @@ public class JJRequirementBean {
 		tableDataModelList = new ArrayList<CategoryDataModel>();
 		JJContact contact =((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		List<JJCategory> categories=new ArrayList<JJCategory>(contact.getCategories());
+		Collections.sort(categories, new Comparator<JJCategory>() {
+			@Override
+			public int compare(JJCategory o1, JJCategory o2) {
+				return o1.getStage().compareTo(o2.getStage());
+
+			}
+		});
 		for (int i = 0; i < 3; i++) {
 			
-			long l=0;
-			if(categories.size()>i)
-				l=categories.get(i).getId();
-			CategoryDataModel requirementDataModel = new CategoryDataModel(
-					new ArrayList<RequirementUtil>(),0,"", false);
-			if(l != 0)
-			{
-				JJCategory category=jJCategoryService.findJJCategory(l);
-				requirementDataModel=new CategoryDataModel(
-						getListOfRequiremntUtils(getRequirementsList(category, product, version, project, true)),
-						category.getId(), category.getName(), true);
-			}
-
-			tableDataModelList.add(requirementDataModel);
+//			long l=0;
+//			if(categories.size()>i)
+//				l=categories.get(i).getId();			
+//			if(l != 0)
+//			{
+////				JJCategory category=jJCategoryService.findJJCategory(l);
+////				requirementDataModel=new CategoryDataModel(
+////						getListOfRequiremntUtils(getRequirementsList(category, product, version, project, true)),
+////						category.getId(), category.getName(), true);
+//				updateTemplate(categories.get(i).getId());
+//			}else
+//			{
+				CategoryDataModel requirementDataModel = new CategoryDataModel(
+						new ArrayList<RequirementUtil>(),0,"", false);
+				tableDataModelList.add(requirementDataModel);
+//			}
+				
+		}
+		
+		for(JJCategory cat:categories)
+		{
+			updateTemplate(cat.getId());
 		}
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
@@ -1868,9 +1885,7 @@ public class JJRequirementBean {
 
 	private void editTableDataModelList() {
 
-		long t = System.currentTimeMillis();
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
+		long t = System.currentTimeMillis();	
 
 		String[] results = templateHeader.split("-");
 

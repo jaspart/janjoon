@@ -20,7 +20,9 @@ import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.spinner.Spinner;
+import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
@@ -28,10 +30,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
-import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJMessage;
-import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -158,33 +157,61 @@ public class JJStatusBean {
 	public PieChartModel getPieChart() {
 		return pieChart;
 	}
+	private boolean first;
+	
+	public void onTabStatChange(TabChangeEvent event) {
+		
+		TabView tv = (TabView) event.getComponent();
+		if (tv.getChildren().indexOf(event.getTab()) == 1 && first) {
+			//JJSprintBean jJSprintBean = (JJSprintBean) LoginBean.findBean("jJSprintBean");
+			// RequestContext.getCurrentInstance().execute("barChart_"+jJSprintBean.getSprintChartList().
+			// get(0).getSprint().getId()+"_Widget.plot()");
+			RequestContext.getCurrentInstance().execute(
+					"statsTabView.select(0)");
+//			try {
+//				Object lock = new Object();
+//				synchronized (lock) {
+//
+//					lock.wait(200);
+//				}
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+			RequestContext.getCurrentInstance().execute("statsTabView.select(1)");
+			first =false;
+		}
+	}
 
 	public void loadData() {
-
-		getProject();
-		getProduct();
-		getVersion();
-
-		categoryDataModel = new ArrayList<CategoryDataModel>();
-
-		List<JJCategory> categoryList = jJCategoryService.getCategories(null,
-				false, true, true);
 		
-		for (JJCategory category : categoryList) {
-			categoryDataModel.add(new CategoryDataModel(category));
+		if(project == null)
+		{
+			first=true;
+			((JJSprintBean) LoginBean.findBean("jJSprintBean")).iniSprintChart();
+			getProject();
+			getProduct();
+			getVersion();
+			categoryDataModel = new ArrayList<CategoryDataModel>();
+
+			List<JJCategory> categoryList = jJCategoryService.getCategories(null,
+					false, true, true);
+			
+			for (JJCategory category : categoryList) {
+				categoryDataModel.add(new CategoryDataModel(category));
+			}
+
+			pieChart = new PieChartModel();
+			List<JJStatus> statReq = jJStatusService.getStatus("Requirement",
+					true, null, false);
+			for (JJStatus s : statReq) {
+
+				int i = Integer.parseInt(""
+						+ jJRequirementService.getReqCountByStaus(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),project, product,
+								version, s, true));
+				pieChart.set(s.getName(), i);
+			}
 		}
-
-		pieChart = new PieChartModel();
-		List<JJStatus> statReq = jJStatusService.getStatus("Requirement",
-				true, null, false);
-		for (JJStatus s : statReq) {
-
-			int i = Integer.parseInt(""
-					+ jJRequirementService.getReqCountByStaus(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),project, product,
-							version, s, true));
-			pieChart.set(s.getName(), i);
-		}
-
 	}
 
 	public void setPieChart(PieChartModel pieChart) {
@@ -218,9 +245,7 @@ public class JJStatusBean {
 		return jJStatusService.getTablesName();
 	}
 
-	public String persistStatus() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);		
+	public String persistStatus() {		
 		String message = "";
 
 		if (getJJStatus_().getId() != null) {

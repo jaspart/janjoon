@@ -7,47 +7,75 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
-		<h:form id="specForm">
-			<f:event type="preRenderComponent"
-				oncomplete="PF('blockUIWidget').unblock()"
-				listener="#{jJStatusBean.loadData()}" />
-			<p:panel id="statPanel" Header="Status">
-				<p:pieChart id="custom" value="#{jJStatusBean.pieChart}"
-					legendPosition="e" fill="false" showDataLabels="true"
-					title="% Requierement" style="width:400px;height:300px"
-					sliceMargin="5" diameter="150" />
-			</p:panel>
-			<p:dataTable id="categoryTable" var="categoryModel"
-				value="#{jJStatusBean.categoryDataModel}">
-				<f:facet name="header">
-					<h:outputText value="Categories stats" />
-				</f:facet>
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="Name" />
-					</f:facet>
-					<h:outputText value="#{categoryModel.category.name}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">
-						<h:outputText
-							value="#{messages.specification_completion_progress}" />
-					</f:facet>
-					<p:progressBar id="coverage" style="width:385px"
-						value="#{categoryModel.completionProgress}"
-						labelTemplate="{value}%" displayOnly="true" />
-				</p:column>
-
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{messages.specification_coverage_progress}" />
-					</f:facet>
-					<p:progressBar style="width:385px"
-						value="#{categoryModel.coverageProgress}" labelTemplate="{value}%"
-						displayOnly="true" />
-				</p:column>
-			</p:dataTable>
-		</h:form>
+		<p:commandButton value="#{messages.specification_video_help_title}"
+			id="videoHelpBtn" icon="ui-icon-video"
+			onclick="PF('videoHelpWidget').show()" type="button" />
+		<f:event type="preRenderView"
+			oncomplete="PF('blockUIWidget').unblock()"
+			listener="#{jJStatusBean.loadData()}" />
+		<p:tabView id="statsTabView" widgetVar="statsTabView" dynamic="true">
+			<p:ajax event="tabChange" listener="#{jJStatusBean.onTabStatChange}"
+				update="SprintTabView" onstart="PF('blockUIWidget').block()"
+				oncomplete="PF('blockUIWidget').unblock();" />
+			<p:tab id="specTab" title="Status">
+				<h:form id="specForm">
+					<p:panel id="statPanel" Header="Status">
+						<p:pieChart id="custom" value="#{jJStatusBean.pieChart}"
+							legendPosition="e" fill="false" showDataLabels="true"
+							title="% Requierement" style="width:400px;height:300px"
+							sliceMargin="5" diameter="150" />
+					</p:panel>
+					<p:dataTable id="categoryTable" var="categoryModel"
+						value="#{jJStatusBean.categoryDataModel}">
+						<f:facet name="header">
+							<h:outputText value="Categories stats" />
+						</f:facet>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Name" />
+							</f:facet>
+							<h:outputText value="#{categoryModel.category.name}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText
+									value="#{messages.specification_completion_progress}" />
+							</f:facet>
+							<p:progressBar id="coverage" style="width:385px"
+								value="#{categoryModel.completionProgress}"
+								labelTemplate="{value}%" displayOnly="true" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText
+									value="#{messages.specification_coverage_progress}" />
+							</f:facet>
+							<p:progressBar style="width:385px"
+								value="#{categoryModel.coverageProgress}"
+								labelTemplate="{value}%" displayOnly="true" />
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</p:tab>
+			<p:tab id="sprintTab" title="Sprint" rendered="#{not empty jJSprintBean.sprintChartList}">
+				<p:tabView id="SprintTabView" dynamic="true" widgetVar="SprintTab"
+					value="#{jJSprintBean.sprintChartList}" var="jjsprint">
+					<p:tab title="#{jjsprint.sprint.name}">
+						<p:barChart value="#{jjsprint.chartModel}" legendPosition="e" widgetVar="barChart_#{jjsprint.sprint.id}_Widget"
+							minY="0" xaxisLabel="Date" yaxisLabel="WorkLoad" />
+					</p:tab>
+				</p:tabView>
+			</p:tab>
+		</p:tabView>
+		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
+		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
+			position="center" header="#{messages.specification_video_help_title}"
+			style="padding:0px;" resizable="false" draggable="false"
+			minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
+			<video width="100%" height="100%" controls="true">
+				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
+			</video>
+		</p:dialog>
 	</ui:define>
 </ui:composition>
 </html>

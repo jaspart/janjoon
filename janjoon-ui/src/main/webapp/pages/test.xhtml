@@ -201,6 +201,18 @@
 					<h:outputText value="#{messages.test_select_alert}"
 						rendered="#{jJTestcaseBean.rendredEmptySelection}"
 						style="color: red;" />
+					<p:panelGrid columns="1"
+						rendered="#{jJTestcaseBean.rendredTestCaseRecaps}"
+						style="float: right;width: 40%;margin-right: 20px;">
+						<f:facet name="header">
+								#{messages.test_requirement_progressBarHeader}
+						</f:facet>
+						<p:progressBar id="completion"
+							rendered="#{jJTestcaseBean.rendredTestCaseRecaps}"
+							value="#{jJTestcaseBean.reqCoverage}"
+							labelTemplate="#{messages.specification_completion_progress} {value}%"
+							displayOnly="true" />
+					</p:panelGrid>
 					<p:dataTable id="testcaseRecapDataTable" var="tcr"
 						paginatorPosition="bottom"
 						value="#{jJTestcaseBean.testCaseRecaps}" paginator="true" rows="5"
@@ -442,8 +454,8 @@
 										disabled="#{not jJTestcaseBean.disabledTeststepMode}"
 										icon="ui-icon-circle-plus"
 										actionListener="#{jJTestcaseBean.save()}"
-										process="@this,name,requirement,description"
-										update="testcaseDialogForm" />
+										process="@this,name,requirement,description "
+										update="testcaseDialogForm :testFormWest" />
 								</p:column>
 							</p:row>
 							<p:row>
@@ -473,7 +485,7 @@
 										disabled="#{jJTestcaseBean.disabledTeststepMode}"
 										actionListener="#{jJTeststepBean.save()}"
 										icon="ui-icon-circle-plus"
-										update="action result testStepDataTable msg"
+										update="action result testStepDataTable msg "
 										process="@this,action,result" />
 								</p:column>
 							</p:row>
@@ -559,7 +571,7 @@
 					<p:commandButton id="saveButton" value="Save"
 						process="@this,name,requirement,description"
 						disabled="#{jJTestcaseBean.disabledTeststepMode}"
-						update="testcaseDialogForm" style="float: right;"
+						update="testcaseDialogForm :testFormWest" style="float: right;"
 						action="#{jJTestcaseBean.saveAndclose(jJTeststepBean)}" />
 				</h:form>
 			</p:outputPanel>

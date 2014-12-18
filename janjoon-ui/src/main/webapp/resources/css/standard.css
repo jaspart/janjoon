@@ -152,6 +152,12 @@ a:visited {
 .ui-datatable .ui-datatable-footer {
 	text-align: left !important;
 }
+.bugDataTable{
+	table-layout: fixed;
+}
+.bugDataTable .ui-datatable-header{
+	text-align: center !important;
+}
 
 .ui-datatable-header {
 	text-align: right !important;
