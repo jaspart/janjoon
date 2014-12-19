@@ -578,7 +578,8 @@ public class JJSprintBean {
 		context.execute("SprintTab.select("
 				+ contains(sprintUtil.getSprint().getId()) + ")");
 		if (id != null) {
-			if (jJTaskService.findJJTask(id).getBug() != null) {
+			JJTask t=jJTaskService.findJJTask(id);
+			if (t.getBug() != null) {
 
 				HttpSession session = (HttpSession) FacesContext
 						.getCurrentInstance().getExternalContext()
@@ -586,8 +587,7 @@ public class JJSprintBean {
 				JJBugBean jJBugBean = (JJBugBean) session
 						.getAttribute("jJBugBean");
 
-				jJBugBean.setJJBug_(jJBugService.findJJBug(jJTaskService
-						.findJJTask(id).getBug().getId()));
+				jJBugBean.setJJBug_(t.getBug());
 				jJBugBean.setBugRequirementSelected(jJBugBean.getJJBug_()
 						.getRequirement());
 				jJBugBean.setBugProjectSelected(project);

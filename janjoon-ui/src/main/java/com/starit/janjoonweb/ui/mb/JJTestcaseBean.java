@@ -103,11 +103,13 @@ public class JJTestcaseBean {
 	}
 
 	private JJTestcase testcase;
-
+	private int width;
 	private JJProject project;
 	private JJProduct product;
 	private JJVersion version;
 	private float reqCoverage;
+	private List<Object> rowNames = new ArrayList<Object>();
+	private List<JJTestcase> colNames = new ArrayList<JJTestcase>();	
 
 	public float getReqCoverage() {
 		return reqCoverage;
@@ -144,10 +146,50 @@ public class JJTestcaseBean {
 	private boolean disabledTask;
 	private boolean disabledExport;
 	private boolean testcaseState;
-
 	private String namefile;
-
 	private List<JJCategory> categoryList;
+
+
+	public boolean isTestcaseState() {
+		return testcaseState;
+	}
+
+	public void setTestcaseState(boolean testcaseState) {
+		this.testcaseState = testcaseState;
+	}
+
+	public List<Object> getRowNames() {
+		
+		if(rowNames == null || rowNames.isEmpty())
+		{
+			
+			colNames=jJTestcaseService.getImportTestcases(category,project, true);
+			
+			if(colNames != null && !colNames.isEmpty())
+			{
+				rowNames=new ArrayList<Object>(((JJBuildBean)LoginBean.findBean("jJBuildBean")).getBuilds());
+				if(rowNames == null)
+					rowNames=new ArrayList<Object>(((JJVersionBean)LoginBean.findBean("jJVersionBean")).getVersionList());
+				else
+					rowNames.addAll(((JJVersionBean)LoginBean.findBean("jJVersionBean")).getVersionList());
+			}
+			width = 170 +(colNames.size()*70);
+			if(width>1000)
+				width=1000;
+		}		return rowNames;
+	}
+
+	public void setRowNames(List<Object> rowNames) {
+		this.rowNames = rowNames;
+	}
+
+	public List<JJTestcase> getColNames() {
+		return colNames;
+	}
+
+	public void setColNames(List<JJTestcase> colNames) {
+		this.colNames = colNames;
+	}
 
 	public JJTestcase getTestcase() {
 		return testcase;
@@ -155,6 +197,14 @@ public class JJTestcaseBean {
 
 	public void setTestcase(JJTestcase testcase) {
 		this.testcase = testcase;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
 	}
 
 	public JJProject getProject() {
@@ -382,31 +432,50 @@ public class JJTestcaseBean {
 			testcase = null;
 			rendredTestCaseRecaps = false;
 			rendredTestCaseHistorical = false;
-			requirement = null;
-
+			requirement = null;	
+			rowNames=null;
+			colNames=null;
 			disabledExport = true;
 
-			namefile = null;
-			
+			namefile = null;	
 			
 			
 			if(category == null)
-			{	
-				
-				category=((LoginBean) LoginBean.findBean("loginBean")).getAuthorisationService().getCategory();		
+			{						
+				category=((LoginBean) LoginBean.findBean("loginBean")).getAuthorisationService().getCategory();						
 			}
 			
 			if (category != null) {
 				namefile = category.getName().trim();
 				disabledExport = false;
-			} else {
 
+			} else {
+					
 				namefile = null;
 				disabledExport = true;
 
 			}
 			createTestcaseTree();
 			rendredEmptySelection = true;
+			
+			if(rowNames == null || rowNames.isEmpty())
+			{
+				
+				colNames=jJTestcaseService.getImportTestcases(category,project, true);
+				
+				if(colNames != null && !colNames.isEmpty())
+				{
+					rowNames=new ArrayList<Object>(((JJBuildBean)LoginBean.findBean("jJBuildBean")).getBuilds());
+					if(rowNames == null)
+						rowNames=new ArrayList<Object>(((JJVersionBean)LoginBean.findBean("jJVersionBean")).getVersionList());
+					else
+						rowNames.addAll(((JJVersionBean)LoginBean.findBean("jJVersionBean")).getVersionList());
+					
+					width = 170 +(colNames.size()*70);
+					if(width>1000)
+						width=1000;
+				}
+			}
 		}
 
 
@@ -655,6 +724,8 @@ public class JJTestcaseBean {
 
 		}
 		createTestcaseTree();
+		colNames=null;
+		rowNames=null;
 		
 
 	}
@@ -753,14 +824,18 @@ public class JJTestcaseBean {
 							.getCompany(), null, null, null, null, null, chapter,
 					true, true, true);
 			
-			int i=0;
-			for(JJRequirement r:rqs)
+			if(rqs.size()>0)
 			{
-				if(jJRequirementService.haveTestcase(r))
-					i=i+1;
-			}
+				int i=0;
+				for(JJRequirement r:rqs)
+				{
+					if(jJRequirementService.haveTestcase(r))
+						i=i+1;
+				}			
+				reqCoverage=(float)(i*100/rqs.size());
+			}else 
+				reqCoverage=0;
 			
-			reqCoverage=(float)(i*100/rqs.size());
 			testcase = null;
 
 			rendredTestCaseRecaps = true;

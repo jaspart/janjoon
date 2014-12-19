@@ -130,8 +130,6 @@ public class JJRequirementBean {
 	private JJChapter requirementChapter;
 
 	private List<JJChapter> requirementChapterList;
-	private List<JJRequirement> noCouvretReq;
-
 	private JJStatus requirementStatus;
 
 	private List<JJStatus> requirementStatusList;
@@ -184,14 +182,6 @@ public class JJRequirementBean {
 
 	public void setViewButton(String viewButton) {
 		this.viewButton = viewButton;
-	}
-
-	public List<JJRequirement> getNoCouvretReq() {
-		return noCouvretReq;
-	}
-
-	public void setNoCouvretReq(List<JJRequirement> noCouvretReq) {
-		this.noCouvretReq = noCouvretReq;
 	}
 
 	public JJCategory getLowCategory() {
@@ -1953,7 +1943,8 @@ public class JJRequirementBean {
 
 			fullTableDataModelList();
 			logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
-		}
+		}else
+			session.setAttribute("jJRequirementBean",null);
 	}
 
 	private void fullRequirementsList() {
@@ -3893,20 +3884,7 @@ public class JJRequirementBean {
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		return rowStyleClass;
 	}
-
-	public void initNonCouvretSpec(ComponentSystemEvent e) {
-
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		LoginBean login = (LoginBean) session.getAttribute("loginBean");
-
-		if (noCouvretReq == null && login.isEnable()) {
-			noCouvretReq = jJRequirementService.getNonCouvredRequirements(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany());
-
-		}
-
-	}
-
+	
 	public void saveJJRequirement(JJRequirement b) {
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);

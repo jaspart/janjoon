@@ -66,7 +66,7 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 	}
 
 	@Override
-	public List<JJTestcase> getImportTestcases(JJProject project,
+	public List<JJTestcase> getImportTestcases(JJCategory category,JJProject project,
 			boolean onlyActif) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcase> criteriaQuery = criteriaBuilder
@@ -81,6 +81,12 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 		if (project != null) {
 			Path<Object> path = from.join("requirement").get("project");
 			predicates.add(criteriaBuilder.equal(path, project));
+		}
+		
+		if(category != null)
+		{
+			predicates.add(criteriaBuilder.isNotNull(from.join("requirement").get("category")));
+			predicates.add(criteriaBuilder.equal(from.join("requirement").get("category"), category));
 		}
 
 		if (onlyActif) {

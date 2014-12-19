@@ -3,6 +3,7 @@ package com.starit.janjoonweb.ui.mb;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -41,6 +42,8 @@ import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJRequirement;
+import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.UsageChecker;
@@ -56,15 +59,23 @@ public class LoginBean implements Serializable {
 	private AuthenticationManager authenticationManager;
 	private AuthorisationService authorisationService;
 	static Logger logger = Logger.getLogger("loginBean-Logger");
+	private List<JJRequirement> noCouvretReq;
 
 	@Autowired
 	private JJContactService jJContactService;
+	
+	@Autowired
+	private JJRequirementService jJRequirementService;
+
+	public void setjJRequirementService(JJRequirementService jJRequirementService) {
+		this.jJRequirementService = jJRequirementService;
+	}
 
 	@Autowired
-	JJCompanyService jJCompanyService;
+	private JJCompanyService jJCompanyService;
 
 	@Autowired
-	JJPermissionService jJPermissionService;
+	private JJPermissionService jJPermissionService;
 
 	private String username = "";// "janjoon.mailer@gmail.com";
 	private String password;
@@ -198,9 +209,7 @@ public class LoginBean implements Serializable {
 				contact = jJContactService.findJJContact(contact.getId());
 				FacesContext fContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) fContext
-						.getExternalContext().getSession(false);
-				authorisationService = new AuthorisationService(session,
-						contact);
+						.getExternalContext().getSession(false);			
 
 				session.putValue("password", password);
 				FacesMessage message = new FacesMessage(
@@ -262,6 +271,9 @@ public class LoginBean implements Serializable {
 
 				jjVersionBean.getVersionList();
 				jjVersionBean.setVersion(contact.getLastVersion());
+				
+				authorisationService = new AuthorisationService(session,
+						contact);
 
 				if (!UsageChecker.checkExpiryDate()) {
 
@@ -1045,6 +1057,23 @@ public class LoginBean implements Serializable {
 	// + event.getFile().getFileName() + "' />");
 	//
 	// }
+	
+	public List<JJRequirement> getNoCouvretReq() {
+		return noCouvretReq;
+	}
+
+	public void setNoCouvretReq(List<JJRequirement> noCouvretReq) {
+		this.noCouvretReq = noCouvretReq;
+	}
+	
+	public void initNonCouvretSpec(ComponentSystemEvent e) {		
+
+		if (noCouvretReq == null && isEnable()) {
+			noCouvretReq = jJRequirementService.getNonCouvredRequirements(getContact().getCompany());
+
+		}
+
+	}
 
 	public UIComponent findComponent(final String id) {
 

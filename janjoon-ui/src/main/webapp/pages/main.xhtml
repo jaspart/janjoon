@@ -213,11 +213,11 @@
 		<p:panel id="specpanel" header="Spécification non couverte "
 			rendered="#{loginBean.enable}">
 
-			<f:event listener="#{jJRequirementBean.initNonCouvretSpec}"
+			<f:event listener="#{loginBean.initNonCouvretSpec}"
 				type="preRenderView" />
 			<h:form id="specForm">
 				<p:dataTable id="specTable" 
-					value="#{jJRequirementBean.noCouvretReq}" rowKey="#{req.id}"
+					value="#{loginBean.noCouvretReq}" rowKey="#{req.id}"
 					var="req" widgetVar="taskTable" scrollable="true"
 					scrollHeight="200"
 					emptyMessage="There is no Requirement non couvered,See all in Spec View">

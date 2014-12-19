@@ -201,6 +201,28 @@
 					<h:outputText value="#{messages.test_select_alert}"
 						rendered="#{jJTestcaseBean.rendredEmptySelection}"
 						style="color: red;" />
+
+					<p:dataTable var="rowName" value="#{jJTestcaseBean.rowNames}" scrollable="true" scrollHeight="500"
+						rowIndexVar="rowIdx" style="table-layout: fixed;width:#{jJTestcaseBean.width}px"
+						rendered="#{!jJTestcaseBean.rendredTestCaseRecaps and !jJTestcaseBean.rendredTestCaseHistorical and jJTestcaseBean.rowNames != null}">
+						<p:column headerText="Build/Version" styleClass="ui-widget-header" width="100">
+							<h:outputText value="#{rowName.name}" />
+						</p:column>
+
+						<p:columns var="columnName" value="#{jJTestcaseBean.colNames}" width="50"
+							headerText="#{columnName.name}" columnIndexVar="colIdx">
+
+							<p:panel>
+								<p:selectBooleanCheckbox value="false" disabled="true"
+									rendered="#{rowName.testcase == null}" />
+								<p:selectBooleanCheckbox
+									value="#{rowName.testcase == columnName}" disabled="true"
+									rendered="#{rowName.testcase != null}" />
+							</p:panel>
+
+						</p:columns>
+					</p:dataTable>
+
 					<p:panelGrid columns="1"
 						rendered="#{jJTestcaseBean.rendredTestCaseRecaps}"
 						style="float: right;width: 40%;margin-right: 20px;">
