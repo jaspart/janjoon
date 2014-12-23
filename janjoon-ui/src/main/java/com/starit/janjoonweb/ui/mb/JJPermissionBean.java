@@ -88,10 +88,11 @@ public class JJPermissionBean {
 	}
 
 	public List<JJProject> getProjects() {
-		JJContact contact = ((JJContactBean) LoginBean
+		JJContact contactAdmin = ((JJContactBean) LoginBean
 				.findBean("jJContactBean")).getContactAdmin();
-		if (contact.getId() != null) {
-			boolean admin = jJPermissionService.isSuperAdmin(contact);
+		if (contactAdmin.getId() != null) {
+			boolean admin = jJPermissionService.isSuperAdmin(((LoginBean) LoginBean
+					.findBean("loginBean")).getContact());
 			if (!admin)
 				projects = jJProjectService.getProjects(
 						((JJContactBean) LoginBean.findBean("jJContactBean"))
@@ -118,10 +119,12 @@ public class JJPermissionBean {
 	}
 
 	public List<JJProduct> getProducts() {
-		JJContact contact = ((JJContactBean) LoginBean
+		JJContact contactAdmin = ((JJContactBean) LoginBean
 				.findBean("jJContactBean")).getContactAdmin();
-		if (contact.getId() != null)
-			if (contact.getId() != null) {
+		if (contactAdmin.getId() != null)
+			if (contactAdmin.getId() != null) {
+				JJContact contact = ((LoginBean) LoginBean
+						.findBean("loginBean")).getContact();
 				boolean admin = jJPermissionService.isSuperAdmin(contact);
 				if (!admin)
 					products = jJProductService.getProducts(

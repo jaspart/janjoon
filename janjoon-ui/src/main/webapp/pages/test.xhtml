@@ -260,10 +260,10 @@
 							<f:facet name="header">
 								<h:outputText value="#{messages.test_table_action_title}" />
 							</f:facet>
-							<p:commandButton id="runButton" icon="ui-icon-play"
+							<p:commandButton id="runButton" icon="ui-icon-play" 
 								oncomplete="PF('runTestcaseDialogWidget').show()"
 								action="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
-								update=":runTestcaseDialog" disabled="#{tcr.disabled}">
+								update=":runTestcaseDialog" disabled="#{tcr.disabled or !loginBean.authorisationService.xTest}">
 								<f:setPropertyActionListener value="#{tcr.testcase}"
 									target="#{jJTestcaseBean.testcase}" />
 							</p:commandButton>
@@ -272,7 +272,7 @@
 							<p:commandButton id="editButton" icon="ui-icon-pencil"
 								oncomplete="PF('testcaseDialogWidget').show()"
 								action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
-								update=":testcaseDialog">
+								update=":testcaseDialog" disabled="#{!loginBean.authorisationService.wTest}">
 								<f:setPropertyActionListener value="#{tcr.testcase}"
 									target="#{jJTestcaseBean.testcase}" />
 							</p:commandButton>
@@ -281,7 +281,7 @@
 						</p:column>
 						<f:facet name="footer">
 							<p:commandButton value="#{messages.test_create_button}"
-								id="newTestcase"
+								id="newTestcase" disabled="#{!loginBean.authorisationService.wTest}"
 								actionListener="#{jJTestcaseBean.newTestcase(jJTeststepBean)}"
 								update=":testcaseDialog"
 								oncomplete="PF('testcaseDialogWidget').show()"
@@ -315,7 +315,7 @@
 								</p:column>
 								<p:column>
 									<p:commandButton id="editButton" icon="ui-icon-pencil"
-										oncomplete="PF('testcaseDialogWidget').show()"
+										oncomplete="PF('testcaseDialogWidget').show()" disabled="#{!loginBean.authorisationService.wTest}"
 										action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
 										update=":testcaseDialog" />
 									<p:tooltip for="editButton" value="#{messages.label_edit}"
@@ -324,7 +324,7 @@
 										oncomplete="PF('runTestcaseDialogWidget').show()"
 										actionListener="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
 										update=":runTestcaseDialog"
-										disabled="#{jJBuildBean.build ne null ? false : true }">
+										disabled="#{jJBuildBean.build == null or !loginBean.authorisationService.xTest}">
 										<f:setPropertyActionListener
 											value="#{jJTestcaseBean.testcase}"
 											target="#{jJTestcaseBean.testcase}" />

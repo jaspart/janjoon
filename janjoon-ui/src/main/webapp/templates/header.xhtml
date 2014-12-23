@@ -142,8 +142,8 @@
 						update=":contentPanel" rendered="#{!loginBean.enable}" />
 
 					<p:menuitem id="testAction"
-						disabled="#{!loginBean.authorisationService.rwxTest}"
-						title="#{loginBean.authorisationService.rwxTestMSG}"
+						disabled="#{!loginBean.authorisationService.rTest}"
+						title="#{loginBean.authorisationService.rTestMSG}"
 						value="#{messages.header_test_menuitem}"
 						onstart="PF('blockUIWidget').block()"
 						actionListener="#{loginBean.redirection}" update="growlHeader"

@@ -439,6 +439,7 @@ public class LoginBean implements Serializable {
 			menuIndex = 0;
 			break;
 		}
+		menuIndex++;
 
 	}
 
@@ -929,7 +930,7 @@ public class LoginBean implements Serializable {
 								.getViewId().contains("project1"))
 								|| (!authorisationService.isrBuild() && viewID
 										.contains("delivery"))
-								|| (!authorisationService.isRwxTest() && viewID
+								|| ((!authorisationService.isrTest()) && viewID
 										.contains("test"))) {
 
 							FacesContext
@@ -955,7 +956,7 @@ public class LoginBean implements Serializable {
 							.contains("project1"))
 							|| (!authorisationService.isrBuild() && viewID
 									.contains("delivery"))
-							|| (!authorisationService.isRwxTest() && viewID
+							|| (!authorisationService.isrTest() && viewID
 									.contains("test"))) {
 
 						FacesContext
@@ -1024,41 +1025,6 @@ public class LoginBean implements Serializable {
 
 		}
 	}
-
-	// public void handleFileUpload(FileUploadEvent event) throws IOException {
-	//
-	// CKEditor description = null;
-	// for(UIComponent component:event.getComponent().getParent().getChildren())
-	// {
-	// if(component.getId().contains("description"))
-	// {
-	//
-	// description=(CKEditor) component;
-	//
-	// break;
-	// }
-	// }
-	// System.err.println("finded"+description.getId());
-	//
-	// ServletContext servletContext = (ServletContext) FacesContext
-	// .getCurrentInstance().getExternalContext().getContext();
-	//
-	// // File targetFolder = new File(
-	// // servletContext.getRealPath("/CKEditorImage"));
-	// File targetFolder = new File(
-	// getClass().getResource("/CKEditorImage").getPath());
-	//
-	// //servletContext.getResource("/resources/images/CKeditorImages");
-	//
-	// //System.out.println(description.getId());
-	//
-	// System.out.println(targetFolder.getPath());
-	// TreeOperation.uploadFile(targetFolder, event.getFile().getInputstream(),
-	// event.getFile().getFileName());
-	// description.setSubmittedValue(description.getValue()+"image File <img src='resources/images/CKeditorImages/"
-	// + event.getFile().getFileName() + "' />");
-	//
-	// }
 	
 	public List<JJRequirement> getNoCouvretReq() {
 		return noCouvretReq;
@@ -1074,9 +1040,8 @@ public class LoginBean implements Serializable {
 			noCouvretReq = jJRequirementService.getNonCouvredRequirements(getContact().getCompany());
 
 		}
-
 	}
-
+	
 	public UIComponent findComponent(final String id) {
 
 		FacesContext context = FacesContext.getCurrentInstance();

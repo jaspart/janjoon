@@ -527,6 +527,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		String qu = "SELECT r FROM  JJPermission r Where "
 				+ "r.enabled = true " + "AND r.contact = :contact";
 
+		List<JJCategory> categories = new ArrayList<JJCategory>();
 		Query query = entityManager.createQuery(qu, JJPermission.class);
 		query.setParameter("contact", contact);
 
@@ -540,8 +541,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 				if (permission.getProfile().getRights() != null)
 					rights.addAll(new ArrayList<JJRight>(permission
 							.getProfile().getRights()));
-			}
-			List<JJCategory> categories = new ArrayList<JJCategory>();
+			}			
 			for (JJRight right : rights) {
 				if (right.getCategory() != null)
 					categories.add(right.getCategory());
@@ -553,9 +553,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 					Integer val = map.get(t);
 					map.put(t, val == null ? 1 : val + 1);
 				}
-				categories = new ArrayList<JJCategory>();
-
-				int i = 0;
+				categories = new ArrayList<JJCategory>();			
 
 				Entry<JJCategory, Integer> max = null;
 
@@ -566,12 +564,43 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 				}
 				return max.getKey();
-			}
+			}else 
+			{
+				int i = 1;
 
-			return null;
+				while (categories.size() < 3) {
+					qu = "SELECT r FROM  JJCategory r Where "
+							+ "r.enabled = true " + "AND r.stage =" + i;
+					query = entityManager.createQuery(qu, JJCategory.class);
+
+					if (!query.getResultList().isEmpty()) {
+						categories.add((JJCategory) query.getResultList()
+								.get(0));
+
+					}
+					i++;
+				}
+				return categories.get(0);
+			}	
 
 		} else
-			return null;
+		{
+			int i = 1;
+
+			while (categories.size() < 1) {
+				qu = "SELECT r FROM  JJCategory r Where "
+						+ "r.enabled = true " + "AND r.stage =" + i;
+				query = entityManager.createQuery(qu, JJCategory.class);
+
+				if (!query.getResultList().isEmpty()) {
+					categories.add((JJCategory) query.getResultList()
+							.get(0));
+
+				}
+				i++;
+			}return categories.get(0);
+		}
+			
 	}
 
 	public List<JJCategory> getDefaultCategories(JJContact contact) {

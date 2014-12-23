@@ -1,16 +1,16 @@
 package com.starit.janjoonweb.ui.security;
 
 import java.io.Serializable;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 
-import com.starit.janjoonweb.domain.*;
+import com.starit.janjoonweb.domain.JJCategory;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJPermissionService;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.ui.mb.JJContactBean;
 import com.starit.janjoonweb.ui.mb.JJPermissionBean;
 import com.starit.janjoonweb.ui.mb.JJProductBean;
@@ -65,8 +65,10 @@ public class AuthorisationService implements Serializable {
 	private String adminProductMSG;
 	private boolean rRequiement;
 	private String rRequiementMSG;
-	private boolean rwxTest;
-	private String rwxTestMSG;
+	private boolean rTest;
+	private String rTestMSG;
+	private boolean wTest;
+	private boolean xTest;
 	private boolean rwDev;
 	private String rwDevMSG;
 	private boolean rProject;
@@ -171,21 +173,42 @@ public class AuthorisationService implements Serializable {
 	public void setrRequiementMSG(String rRequiementMSG) {
 		this.rRequiementMSG = rRequiementMSG;
 	}
+	
 
-	public boolean isRwxTest() {
-		return rwxTest;
+	public boolean isrTest() {
+		return rTest;
 	}
 
-	public void setRwxTest(boolean rwxTest) {
-		this.rwxTest = rwxTest;
+	public void setrTest(boolean rTest) {
+		this.rTest = rTest;
 	}
 
-	public String getRwxTestMSG() {
-		return rwxTestMSG;
+	public String getrTestMSG() {
+		return rTestMSG;
 	}
 
-	public void setRwxTestMSG(String rwxTestMSG) {
-		this.rwxTestMSG = rwxTestMSG;
+	public void setrTestMSG(String rTestMSG) {
+		this.rTestMSG = rTestMSG;
+	}
+
+	public boolean iswTest() {
+		return wTest;
+	}
+
+	public void setwTest(boolean wTest) {
+		this.wTest = wTest;
+	}
+
+	public boolean isxTest() {
+		return xTest;
+	}
+
+	public void setxTest(boolean xTest) {
+		this.xTest = xTest;
+	}
+
+	public HttpSession getSession() {
+		return session;
 	}
 
 	public boolean isRwDev() {
@@ -323,13 +346,19 @@ public class AuthorisationService implements Serializable {
 		else
 			rRequiementMSG =MessageFactory.getMessage("header_spec_menuitem", "").getDetail();
 		
-		rwxTest = jJPermissionService.isAuthorized(contact, project, product,
-				"Testcase", null, true, true, true);
+		rTest = jJPermissionService.isAuthorized(contact, project, product,
+				"Testcase", null, true, null, null);
 		
-		if (!rwxTest)
-			rwxTestMSG = "Permission Denied";
+		wTest = jJPermissionService.isAuthorized(contact, project, product,
+				"Testcase", null, null, true, null);
+		
+		xTest = jJPermissionService.isAuthorized(contact, project, product,
+				"Testcase", null, null, null, true);
+		
+		if (!rTest)
+			rTestMSG = "Permission Denied";
 		else
-			rwxTestMSG = MessageFactory.getMessage("header_test_menuitem", "").getDetail();
+			rTestMSG = MessageFactory.getMessage("header_test_menuitem", "").getDetail();
 		rwDev = jJPermissionService.isAuthorized(contact, project, product,
 				"Version", null, true, true, null);
 		
