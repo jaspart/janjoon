@@ -13,4 +13,6 @@ public interface JJProductService {
 	public List<JJProduct> load(JJCompany company,MutableInt size,int first, int pageSize);
 
 	public JJProduct getJJProductWithName(String name);
+	
+	public List<JJProduct> getAdminListProducts();
 }

@@ -8,8 +8,8 @@
 
 <f:event listener="#{loginBean.checkAuthorities}" type="preRenderView" />
 <f:view locale="#{localeBean.locale}" contentType="text/html">
-	<h:head >
-		<h:outputScript library="primefaces" name="jquery/jquery.js" />		
+	<h:head>
+		<h:outputScript library="primefaces" name="jquery/jquery.js" />
 		<script type="text/javascript">
 			function centerDialog() {
 				var top, left;
@@ -21,18 +21,18 @@
 					top : top,
 					left : left
 				});
-			}	
-			
+			}
+
 			function updateRowExapansion() {
 				$(".rowExpansion").slideUp("fast");
-				}
-// 			function setFilterValue(importance,status,criticity)
-// 			{
-// 				$(".criticity").val(criticity);
-// 				$(".importance").val(importance);
-// 				$(".status").val(status);
-// 				alert("dfgdfg");
-// 			}
+			}
+			// 			function setFilterValue(importance,status,criticity)
+			// 			{
+			// 				$(".criticity").val(criticity);
+			// 				$(".importance").val(importance);
+			// 				$(".status").val(status);
+			// 				alert("dfgdfg");
+			// 			}
 		</script>
 	</h:head>
 	<h:body>
@@ -67,8 +67,7 @@
 			</p:panel>
 			<p:panel id="messagePanel" header="Chat" styleClass="chat"
 				toggleable="true" toggleOrientation="horizontal"
-				style="height:100%;"
-				collapsed="#{jJMessageBean.collapsedMesPanel}">
+				style="height:100%;" collapsed="#{jJMessageBean.collapsedMesPanel}">
 
 				<p:ajax event="toggle" listener="#{jJMessageBean.handleMesToggle}"
 					update=":applicatinPanelGrid,messagePanel,contentPanel" />
@@ -76,11 +75,12 @@
 				<f:event listener="#{jJMessageBean.initJJMessageLayout}"
 					type="preRenderView" />
 
-				<p:dataTable id="dataTable1" value="#{jJMessageBean.mainMessages}" 
-					rowKey="#{mes.id}" var="mes" paginator="true" paginatorPosition="bottom"
+				<p:dataTable id="dataTable1" value="#{jJMessageBean.mainMessages}"
+					rowKey="#{mes.id}" var="mes" paginator="true"
+					paginatorPosition="bottom"
 					rendered="#{loginBean.enable and !jJMessageBean.collapsedMesPanel}"
-					style="border-spacing:0px;" selectionMode="single" rows="10" lazy="true"
-					sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
+					style="border-spacing:0px;" selectionMode="single" rows="10"
+					lazy="true" sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
 					<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
 						listener="#{jJMessageBean.onRowSelect}"
 						oncomplete="PF('viewDialogWidget1').show()" />
@@ -91,27 +91,27 @@
 							hideEffect="fade" />
 					</p:column>
 				</p:dataTable>
-		
+
 				<f:facet name="footer" style="position: relative;">
-				<h:form id="messageCreationForm"
-					rendered="#{loginBean.enable and !jJMessageBean.collapsedMesPanel}">
-					
-					<p:growl id="creationGrowl" showDetail="true" life="2000" />
-					<p:panelGrid columns="1">
-						<p:outputLabel for="messagedsc" value="Message :" />
-						<p:inputTextarea id="messagedsc" cols="14" rows="6"
-							value="#{jJMessageBean.message.message}" required="true" />
-						<p:panelGrid columns="2">
-							<p:selectBooleanButton value="#{jJMessageBean.alertOrInfo}"
-								onLabel="Alert" offLabel="Info" onIcon="ui-icon-alert"
-								offIcon="ui-icon-info">
-							</p:selectBooleanButton>
-							<p:commandButton id="submitMes" value="OK"
-								actionListener="#{jJMessageBean.createMessage}"
-								update=":messageCreationForm,creationGrowl" />
+					<h:form id="messageCreationForm"
+						rendered="#{loginBean.enable and !jJMessageBean.collapsedMesPanel}">
+
+						<p:growl id="creationGrowl" showDetail="true" life="2000" />
+						<p:panelGrid columns="1">
+							<p:outputLabel for="messagedsc" value="Message :" />
+							<p:inputTextarea id="messagedsc" cols="14" rows="6"
+								value="#{jJMessageBean.message.message}" required="true" />
+							<p:panelGrid columns="2">
+								<p:selectBooleanButton value="#{jJMessageBean.alertOrInfo}"
+									onLabel="Alert" offLabel="Info" onIcon="ui-icon-alert"
+									offIcon="ui-icon-info">
+								</p:selectBooleanButton>
+								<p:commandButton id="submitMes" value="OK"
+									actionListener="#{jJMessageBean.createMessage}"
+									update=":messageCreationForm,creationGrowl" />
+							</p:panelGrid>
 						</p:panelGrid>
-					</p:panelGrid>
-				</h:form>
+					</h:form>
 				</f:facet>
 				<p:dialog id="viewDialog1" header="#{messages.label_view} JJMessage"
 					modal="true" widgetVar="viewDialogWidget1" dynamic="true"
@@ -143,6 +143,23 @@
 		<script type="text/javascript">
 			jQuery("div.ui-growl").remove();
 		</script>
+
+		<p:dialog header="Header" widgetVar="appMenu" showEffect="pop" style="width:75% !important;height: 75% !important">
+			<h:outputText value="What we do in life, echoes in eternity!" />
+			<p:panelGrid columns="3" style="width:100% !important;height: 100% !important">
+				<p:commandButton value="A" type="button" />
+				<p:commandButton value="B" type="button" />
+				<p:commandButton value="C" type="button" />
+
+				<p:commandButton value="D" type="button" />
+				<p:commandButton value="E" type="button" />
+				<p:commandButton value="F" type="button" />
+
+				<p:commandButton value="G" type="button" />
+				<p:commandButton value="H" type="button" />
+				<p:commandButton value="I" type="button" />
+			</p:panelGrid>
+		</p:dialog>
 	</h:body>
 </f:view>
 </html>

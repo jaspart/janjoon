@@ -487,13 +487,43 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 			}
 
 			return max.getKey();
-		} else
-			return null;
+		} else {
+			List<JJProject> projects = new ArrayList<JJProject>();
+			CriteriaBuilder criteriaBuilder = entityManager
+					.getCriteriaBuilder();
+
+			CriteriaQuery<JJProject> criteriaQuery = criteriaBuilder
+					.createQuery(JJProject.class);
+
+			Root<JJProject> from = criteriaQuery.from(JJProject.class);
+
+			CriteriaQuery<JJProject> select = criteriaQuery.select(from);
+
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+			predicates.add(criteriaBuilder.equal(
+					from.join("manager").get("company"), contact.getCompany()));
+			select.where(predicates.toArray(new Predicate[] {}));
+
+			TypedQuery<JJProject> result = entityManager.createQuery(select);
+
+			for (JJProject proj : result.getResultList()) {
+				if (!projects.contains(proj))
+					projects.add(proj);
+			}
+
+			if (!projects.isEmpty())
+				return projects.get(0);
+			else
+				return null;
+		}
 
 	}
 
 	public JJCategory getDefaultCategory(JJContact contact) {
-		
+
 		String qu = "SELECT r FROM  JJPermission r Where "
 				+ "r.enabled = true " + "AND r.contact = :contact";
 
@@ -545,6 +575,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 	}
 
 	public List<JJCategory> getDefaultCategories(JJContact contact) {
+
 		String qu = "SELECT r FROM  JJPermission r Where "
 				+ "r.enabled = true " + "AND r.contact = :contact";
 
@@ -553,6 +584,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 		List<JJPermission> permissions = ((List<JJPermission>) query
 				.getResultList());
+		List<JJCategory> categories = new ArrayList<JJCategory>();
 
 		if (!permissions.isEmpty()) {
 			List<JJRight> rights = new ArrayList<JJRight>();
@@ -562,7 +594,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 					rights.addAll(new ArrayList<JJRight>(permission
 							.getProfile().getRights()));
 			}
-			List<JJCategory> categories = new ArrayList<JJCategory>();
+
 			for (JJRight right : rights) {
 				if (right.getCategory() != null)
 					categories.add(right.getCategory());
@@ -589,12 +621,42 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 					categories.add(max.getKey());
 					map.remove(max);
 				}
+			} else {
+				int i = 1;
+
+				while (categories.size() < 3) {
+					qu = "SELECT r FROM  JJCategory r Where "
+							+ "r.enabled = true " + "AND r.stage =" + i;
+					query = entityManager.createQuery(qu, JJCategory.class);
+
+					if (!query.getResultList().isEmpty()) {
+						categories.add((JJCategory) query.getResultList()
+								.get(0));
+
+					}
+					i++;
+				}
 			}
 
 			return categories;
 
-		} else
-			return new ArrayList<JJCategory>();
+		} else {
+			int i = 1;
+
+			while (categories.size() < 3) {
+				
+				qu = "SELECT r FROM  JJCategory r Where " + "r.enabled = true "
+						+ "AND r.stage =" + i;
+				query = entityManager.createQuery(qu, JJCategory.class);
+
+				if (!query.getResultList().isEmpty()) {
+					categories.add((JJCategory) query.getResultList().get(0));
+
+				}
+				i++;
+			}
+			return categories;
+		}
 	}
 
 	public JJProduct getDefaultProduct(JJContact contact) {
@@ -606,28 +668,8 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		query.setParameter("c", contact.getCompany());
 		query.setParameter("contact", contact);
 
-		List<JJPermission> permissions = ((List<JJPermission>) query
-				.getResultList());
+		List<JJPermission> permissions = ((List<JJPermission>) query.getResultList());
 
-		// CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		// CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
-		// .createQuery(JJPermission.class);
-		// Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
-		// CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
-		// List<Predicate> predicates = new ArrayList<Predicate>();
-		//
-		// predicates.add(criteriaBuilder.equal(from.get("contact"),contact));
-		// predicates.add(criteriaBuilder.equal(from.get("enabled"),true));
-		// predicates.add(criteriaBuilder.isNotNull(from.get("product")));
-		// predicates.add(criteriaBuilder.equal(from.join("product").get("manager"),contact.getCompany()));
-		//
-		// select.where(criteriaBuilder.and(predicates.toArray(new Predicate[]
-		// {})));
-		//
-		// TypedQuery<JJPermission> result = entityManager.createQuery(select);
-		//
-		// List<JJPermission> permissions = result.getResultList();
-		//
 		if (!permissions.isEmpty()) {
 			List<JJProduct> products = new ArrayList<JJProduct>();
 
@@ -651,8 +693,39 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 			}
 
 			return max.getKey();
-		} else
-			return null;
+		} else {
+
+			List<JJProduct> products = new ArrayList<JJProduct>();
+			CriteriaBuilder criteriaBuilder = entityManager
+					.getCriteriaBuilder();
+
+			CriteriaQuery<JJProduct> criteriaQuery = criteriaBuilder
+					.createQuery(JJProduct.class);
+
+			Root<JJProduct> from = criteriaQuery.from(JJProduct.class);
+
+			CriteriaQuery<JJProduct> select = criteriaQuery.select(from);
+
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+			predicates.add(criteriaBuilder.equal(
+					from.join("manager").get("company"), contact.getCompany()));
+			select.where(predicates.toArray(new Predicate[] {}));
+
+			TypedQuery<JJProduct> result = entityManager.createQuery(select);
+
+			for (JJProduct proj : result.getResultList()) {
+				if (!products.contains(proj))
+					products.add(proj);
+			}
+
+			if (!products.isEmpty())
+				return products.get(0);
+			else
+				return null;
+		}
 
 	}
 

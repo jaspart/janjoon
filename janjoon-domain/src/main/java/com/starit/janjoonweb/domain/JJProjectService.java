@@ -10,5 +10,8 @@ public interface JJProjectService {
 
 	// New Generic
 	public List<JJProject> getProjects(JJCompany company,JJContact contact,boolean onlyActif);
+	
+	public List<JJProject> getAdminListProjects();
+	
 	public List<JJProject> load(JJCompany company,MutableInt size,int first, int pageSize);
 }

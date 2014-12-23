@@ -137,7 +137,7 @@
 					scrollable="true" scrollHeight="200"
 					emptyMessage="There is no Task to do,See all in project View">
 
-					<p:column headerText="Task" colspan="2">
+					<p:column headerText="Task" >
 						<h:outputText value="#{task}" converter="JJTaskConverter" />
 					</p:column>
 
@@ -222,7 +222,7 @@
 					scrollHeight="200"
 					emptyMessage="There is no Requirement non couvered,See all in Spec View">
 
-					<p:column headerText="Specification" colspan="2">
+					<p:column headerText="Specification">
 						<h:outputText value="#{req}" converter="JJRequirementConverter" />
 					</p:column>
 

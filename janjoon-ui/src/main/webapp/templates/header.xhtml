@@ -82,7 +82,8 @@
 						value="#{loginBean.contact.firstname} #{loginBean.contact.name}"
 						rendered="#{loginBean.enable}" style="right: 0px;">
 						<p:menuitem value="#{messages.header_config_link}"
-							icon="ui-icon-person" url="/pages/contactConfig.jsf?faces-redirect=true" />
+							icon="ui-icon-person"
+							url="/pages/contactConfig.jsf?faces-redirect=true" />
 						<p:menuitem value="#{messages.header_logout_link}"
 							url="logout.jsf" actionListener="#{loginBean.logout}"
 							icon="ui-icon-extlink" />
@@ -93,8 +94,11 @@
 				<p:tabMenu id="tabMenu" name="content" style="float: none;"
 					activeIndex="#{loginBean.menuIndex}">
 
+					<p:menuitem value="&#9776;" onclick="PF('appMenu').show();" style="font-weight: bold;"/>
+					
+					
 					<p:menuitem value="" icon="ui-icon-home"
-						url="/pages/main.jsf?faces-redirect=true" />
+						url="/pages/main.jsf?faces-redirect=true" />					
 
 					<p:menuitem value="#{messages.header_project_menuitem}"
 						url="/pages/project1.jsf?faces-redirect=true"
@@ -112,14 +116,12 @@
 					<p:menuitem value="#{messages.header_spec_menuitem}"
 						disabled="#{!loginBean.authorisationService.rRequiement}"
 						title="#{loginBean.authorisationService.rRequiementMSG}"
-						url="/pages/specifications.jsf?faces-redirect=true"						
-						icon="ui-icon-document" 
-						rendered="#{loginBean.enable}"/>
-						
-						<p:menuitem value="#{messages.header_spec_menuitem}"
 						url="/pages/specifications.jsf?faces-redirect=true"
-						icon="ui-icon-document" 
-						rendered="#{!loginBean.enable}"/>
+						icon="ui-icon-document" rendered="#{loginBean.enable}" />
+
+					<p:menuitem value="#{messages.header_spec_menuitem}"
+						url="/pages/specifications.jsf?faces-redirect=true"
+						icon="ui-icon-document" rendered="#{!loginBean.enable}" />
 
 					<p:menuitem value="#{messages.header_bug_menuitem}"
 						url="/pages/bugs.jsf?faces-redirect=true" icon="ui-icon-gear" />
@@ -152,8 +154,8 @@
 						title="#{loginBean.authorisationService.rBuildMSG}"
 						rendered="#{loginBean.enable}"
 						url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
-						
-						<p:menuitem value="#{messages.header_delivery_menuitem}"						
+
+					<p:menuitem value="#{messages.header_delivery_menuitem}"
 						rendered="#{!loginBean.enable}"
 						url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
 
@@ -180,6 +182,6 @@
 			</h:panelGrid>
 		</h:panelGrid>
 		<!--p:sticky target="panelMenu" /-->
-	</h:form>
+	</h:form>	
 </ui:composition>
 </html>

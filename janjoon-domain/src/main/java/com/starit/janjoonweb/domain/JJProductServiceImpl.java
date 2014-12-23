@@ -24,7 +24,27 @@ public class JJProductServiceImpl implements JJProductService {
 	}
 
 	// New Generic
+	public List<JJProduct> getAdminListProducts() {
 
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJProduct> criteriaQuery = criteriaBuilder
+				.createQuery(JJProduct.class);
+
+		Root<JJProduct> from = criteriaQuery.from(JJProduct.class);
+
+		CriteriaQuery<JJProduct> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		select.where(predicates.toArray(new Predicate[] {}));
+
+		TypedQuery<JJProduct> result = entityManager.createQuery(select);
+
+		return result.getResultList();
+
+	}
 	public List<JJProduct> load(JJCompany company, MutableInt size, int first,
 			int pageSize) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

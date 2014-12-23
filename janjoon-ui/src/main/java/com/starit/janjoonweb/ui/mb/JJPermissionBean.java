@@ -90,11 +90,18 @@ public class JJPermissionBean {
 	public List<JJProject> getProjects() {
 		JJContact contact = ((JJContactBean) LoginBean
 				.findBean("jJContactBean")).getContactAdmin();
-		if (contact.getId() != null)
-			projects = jJProjectService.getProjects(((JJContactBean) LoginBean
-					.findBean("jJContactBean")).getContactAdmin().getCompany(),
-					((JJContactBean) LoginBean.findBean("jJContactBean"))
-							.getContactAdmin(), true);
+		if (contact.getId() != null) {
+			boolean admin = jJPermissionService.isSuperAdmin(contact);
+			if (!admin)
+				projects = jJProjectService.getProjects(
+						((JJContactBean) LoginBean.findBean("jJContactBean"))
+								.getContactAdmin().getCompany(),
+						((JJContactBean) LoginBean.findBean("jJContactBean"))
+								.getContactAdmin(), true);
+			else
+				projects = jJProjectService.getAdminListProjects();
+		}
+
 		return projects;
 	}
 
@@ -114,10 +121,19 @@ public class JJPermissionBean {
 		JJContact contact = ((JJContactBean) LoginBean
 				.findBean("jJContactBean")).getContactAdmin();
 		if (contact.getId() != null)
-			products = jJProductService.getProducts(((JJContactBean) LoginBean
-					.findBean("jJContactBean")).getContactAdmin().getCompany(),
-					((JJContactBean) LoginBean.findBean("jJContactBean"))
-							.getContactAdmin(), true);
+			if (contact.getId() != null) {
+				boolean admin = jJPermissionService.isSuperAdmin(contact);
+				if (!admin)
+					products = jJProductService.getProducts(
+							((JJContactBean) LoginBean
+									.findBean("jJContactBean"))
+									.getContactAdmin().getCompany(),
+							((JJContactBean) LoginBean
+									.findBean("jJContactBean"))
+									.getContactAdmin(), true);
+				else
+					products=jJProductService.getAdminListProducts();
+			}
 		return products;
 	}
 
