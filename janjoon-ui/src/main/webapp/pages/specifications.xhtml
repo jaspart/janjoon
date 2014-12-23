@@ -18,11 +18,12 @@
 					onstart="PF('blockUIWidget').block()"
 					oncomplete="PF('blockUIWidget').unblock()" />
 			</ui:repeat>
-			
+
 			<p:commandButton value="#{messages.specification_video_help_title}"
-				id="videoHelpBtn" icon="ui-icon-video" onclick="PF('videoHelpWidget').show()"
+				id="videoHelpBtn" icon="ui-icon-video"
+				onclick="PF('videoHelpWidget').show()"
 				style="float:none;position:relative;left:30%;" type="button" />
-				
+
 			<p:commandButton value="#{messages.specification_import_button}"
 				style="float: right;" disabled="#{jJRequirementBean.disabledExport}"
 				actionListener="#{jJRequirementBean.loadImportFormat()}"
@@ -30,9 +31,10 @@
 				onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock();PF('requirementImportDialogWidget').show()" />
 
-			<p:commandButton id="reloadBtn" icon="ui-icon-refresh" onstart="PF('blockUIWidget').block()"				
-				style="float: right;" actionListener="#{jJRequirementBean.reloadPage}" />
-				
+			<p:commandButton id="reloadBtn" icon="ui-icon-refresh"
+				onstart="PF('blockUIWidget').block()" style="float: right;"
+				actionListener="#{jJRequirementBean.reloadPage}" />
+
 			<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
 				style="float: right;" />
 			<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
@@ -67,17 +69,19 @@
 						</p:column>
 					</p:row>
 				</p:panelGrid>
-			</p:overlayPanel>		
+			</p:overlayPanel>
 		</h:form>
 		<h:form id="specForm" style="overflow:hidden;width:100%">
-		<ui:repeat value="#{jJRequirementBean.tableDataModelList}" var="tableDataModel" varStatus="loop">
-				<div style="width:#{jJRequirementBean.tableDataModelSizePct};float:left;">	
+			<ui:repeat value="#{jJRequirementBean.tableDataModelList}"
+				var="tableDataModel" varStatus="loop">
+				<div
+					style="float: left; width: #{jJRequirementBean.tableDataModelSizePct}">
 					<p:dataTable id="categoryTable" var="reqUtil"
 						value="#{tableDataModel}" scrollable="true" scrollHeight="300"
 						sortMode="multiple" resizableColumns="true"
 						rowStyleClass="#{reqUtil.style}"
 						filteredValue="#{tableDataModel.filtredRequirements}"
-						rowKey="#{reqUtil.requirement.id}" 
+						rowKey="#{reqUtil.requirement.id}"
 						rendered="#{tableDataModel.rendered}" selectionMode="single"
 						widgetVar="dataTable_#{loop.index}_Widget">
 						<p:ajax event="rowDblselect" onstart="PF('blockUIWidget').block()"
@@ -96,7 +100,7 @@
 												icon="ui-icon-document" title="#{jJChapterBean.warnMessage}"
 												update=":chapterDialogPanel"
 												disabled="#{jJChapterBean.disabledChapter or jJProjectBean.project == null}"
-												actionListener="#{jJChapterBean.loadData(tableDataModel.categoryId)}"												
+												actionListener="#{jJChapterBean.loadData(tableDataModel.categoryId)}"
 												onstart="PF('blockUIWidget').block()"
 												oncomplete="PF('blockUIWidget').unblock();PF('chapterDialogWidget').show()" />
 										</p:column>
@@ -107,13 +111,16 @@
 												oncomplete="PF('requirementReleaseDialogWidget').show()" />
 										</p:column>
 										<p:column colspan="3">
-											<p:inputText id="globalFilter" style="width:100%" 
+											<p:inputText id="globalFilter" style="width:100%"
 												onkeyup="dataTable_#{loop.index}_Widget.filter()" />
-											<p:watermark value="#{messages.specification_table_requirement_filter}" for="globalFilter"/>
+											<p:watermark
+												value="#{messages.specification_table_requirement_filter}"
+												for="globalFilter" />
 										</p:column>
 										<p:column colspan="1">
 											<p:commandButton id="newRequirementButton"
-												icon="ui-icon-plus" title="#{loginBean.authorisationService.wRequiementMSG}"
+												icon="ui-icon-plus"
+												title="#{loginBean.authorisationService.wRequiementMSG}"
 												disabled="#{jJRequirementBean.disabledRequirement or !loginBean.authorisationService.wRequiement}"
 												actionListener="#{jJRequirementBean.newRequirement(tableDataModel.categoryId)}"
 												update=":requirementDialog"
@@ -147,15 +154,17 @@
 							</p:panelGrid>
 						</f:facet>
 
-						<p:column rendered="false" exportable="false" filterBy="requirement.id"
-							filterStyle="display:none" sortBy="requirement.id">
+						<p:column rendered="false" exportable="false"
+							filterBy="requirement.id" filterStyle="display:none"
+							sortBy="requirement.id">
 							<f:facet name="header">
 								<h:outputText value="Id" />
 							</f:facet>
 							<h:outputText value="#{reqUtil.requirement.id}" />
 						</p:column>
 
-						<p:column filterBy="requirement.name" filterStyle="display:none" sortBy="requirement.id">
+						<p:column filterBy="requirement.name" filterStyle="display:none"
+							sortBy="requirement.id">
 							<f:facet name="header">
 								<h:outputText
 									value="#{messages.specification_table_requirement_title}" />
@@ -186,8 +195,8 @@
 							</p:tooltip>
 						</p:column>
 
-						<p:column filterBy="requirement.product.name" filterStyle="display:none"
-							sortBy="requirement.product.name">
+						<p:column filterBy="requirement.product.name"
+							filterStyle="display:none" sortBy="requirement.product.name">
 							<f:facet name="header">
 								<h:outputText
 									value="#{messages.specification_table_product_title}" />
@@ -195,8 +204,8 @@
 							<h:outputText value="#{reqUtil.requirement.product.name}" />
 						</p:column>
 
-						<p:column filterBy="requirement.chapter.name" filterStyle="display:none"
-							sortBy="requirement.chapter.name">
+						<p:column filterBy="requirement.chapter.name"
+							filterStyle="display:none" sortBy="requirement.chapter.name">
 							<f:facet name="header">
 								<h:outputText
 									value="#{messages.specification_table_chapter_title}" />
@@ -208,8 +217,9 @@
 							<f:facet name="header">
 								<h:outputText value="Actions" />
 							</f:facet>
-							<p:splitButton id="viewButton" value="#{messages[jJRequirementBean.viewButton]}" icon="ui-icon-search"
-								onstart="PF('blockUIWidget').block()"
+							<p:splitButton id="viewButton"
+								value="#{messages[jJRequirementBean.viewButton]}"
+								icon="ui-icon-search" onstart="PF('blockUIWidget').block()"
 								action="#{jJRequirementBean.viewLinks()}"
 								oncomplete="PF('blockUIWidget').unblock()" update=":specForm">
 								<p:menuitem id="editButton" icon="ui-icon-pencil"
@@ -258,13 +268,13 @@
 									oncomplete="PF('blockUIWidget').unblock()" />
 								<p:tab title="#{messages.specification_progress_footer}">
 									<p:row>
-										<p:progressBar id="coverage" 											
+										<p:progressBar id="coverage"
 											value="#{tableDataModel.coverageProgress}"
 											labelTemplate="#{messages.specification_coverage_progress} {value}%"
 											displayOnly="true" />
 									</p:row>
 									<p:row>
-										<p:progressBar id="completion" 											
+										<p:progressBar id="completion"
 											value="#{tableDataModel.completionProgress}"
 											labelTemplate="#{messages.specification_completion_progress} {value}%"
 											displayOnly="true" />
@@ -283,9 +293,10 @@
 			header="#{messages[jJRequirementBean.message]}" modal="true"
 			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"
 			position="center" style="padding:0px;">
-			<p:ajax event="close" listener="#{jJRequirementBean.closeDialog(false)}"
-				 	onstart="PF('blockUIWidget').block()"
-					oncomplete="PF('blockUIWidget').unblock()" />
+			<p:ajax event="close"
+				listener="#{jJRequirementBean.closeDialog(false)}"
+				onstart="PF('blockUIWidget').block()"
+				oncomplete="PF('blockUIWidget').unblock()" />
 			<p:outputPanel id="requirementDialogPanel">
 
 				<pe:blockUI widgetVar="requirementBlockUIWidget"
@@ -303,11 +314,12 @@
 					<p:scrollPanel mode="native">
 						<p:panelGrid style="margin-top:0px">
 							<p:row>
-								<p:column>														
-									<p:inputText id="nameReq"  label="#{messages.specification_create_name_label}"
+								<p:column>
+									<p:inputText id="nameReq"
+										label="#{messages.specification_create_name_label}"
 										value="#{jJRequirementBean.requirement.name}" required="true"
-										requiredMessage="#{messages.specification_create_name_alert}" >
-											<f:validateLength maximum="100" />
+										requiredMessage="#{messages.specification_create_name_alert}">
+										<f:validateLength maximum="100" />
 									</p:inputText>
 									<p:watermark for="nameReq"
 										value="#{messages.specification_create_name_watermark}" />
@@ -315,20 +327,20 @@
 								<p:column>
 									<h:outputText for="status"
 										value="#{messages.specification_create_status_label}" />
-								<p:selectOneMenu id="status"
-								value="#{jJRequirementBean.requirementStatus}" required="true"
-								requiredMessage="Requirement Status is a required value"
-								panelStyle="width:150px" effect="fade" style="width:150px"
-								filter="true" filterMatchMode="startsWith"
-								disabled="#{jJRequirementBean.disabledStatus}">
-									<f:converter
-										converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />								
-									<f:selectItems
-										value="#{jJRequirementBean.requirementStatusList}" var="c"
-										itemLabel="#{c.name}" itemValue="#{c}" />
-									<p:ajax partialSubmit="true"
-										listener="#{jJRequirementBean.handleSelectStatus()}" />
-								</p:selectOneMenu>
+									<p:selectOneMenu id="status"
+										value="#{jJRequirementBean.requirementStatus}" required="true"
+										requiredMessage="Requirement Status is a required value"
+										panelStyle="width:150px" effect="fade" style="width:150px"
+										filter="true" filterMatchMode="startsWith"
+										disabled="#{jJRequirementBean.disabledStatus}">
+										<f:converter
+											converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
+										<f:selectItems
+											value="#{jJRequirementBean.requirementStatusList}" var="c"
+											itemLabel="#{c.name}" itemValue="#{c}" />
+										<p:ajax partialSubmit="true"
+											listener="#{jJRequirementBean.handleSelectStatus()}" />
+									</p:selectOneMenu>
 								</p:column>
 								<p:column>
 									<h:outputText for="project"
@@ -458,7 +470,7 @@
 								</p:column>
 							</p:row>
 							<p:row>
-								<p:column colspan="3">
+								<p:column colspan="#{jJRequirementBean.colspan}">
 									<h:outputText
 										value="#{messages.specification_create_description_label}" />
 									<pe:ckEditor id="description" widgetVar="descriptionWidget"
@@ -471,6 +483,51 @@
 
 									<p:message for="description" id="editorMessageId" />
 									<!--h:outputLabel for="description" value="#{request.contextPath}" /-->
+								</p:column>
+								<p:column rendered="#{jJRequirementBean.requirement.id != null}">
+									<p:dataTable id="testCaseDataTable" var="testCaseModel"
+										selection="#{jJRequirementBean.reqSelectedtestCases}"
+										rowKey="#{testCaseModel.id}"
+										emptyMessage="That Requirement have no Testcase"
+										scrollable="true" style="width:350px;" scrollHeight="200"
+										value="#{jJRequirementBean.reqtestCases}">
+										<p:column selectionMode="multiple"
+											style="width:30%;text-align:center" />
+										<p:column style="width:70%">
+											<f:facet name="header">
+												<p:row>
+													<p:column>
+														<h:outputText value="TestCases :" />
+													</p:column>
+												</p:row>
+											</f:facet>
+											<h:outputText value="#{testCaseModel.name}" />
+										</p:column>
+										<f:facet name="footer">											
+												<p:commandButton
+													onstart="PF('requirementBlockUIWidget').block()"
+													oncomplete="PF('requirementBlockUIWidget').unblock()"
+													disabled="#{empty jJRequirementBean.reqtestCases}"
+													update="testCaseDataTable :requirementDialogForm:msg"
+													process="testCaseDataTable" value="Update"
+													action="#{jJRequirementBean.updateReqTestCases(jJTestcaseBean)}" />										
+											<br />
+											<p:inputText id="testcase" style="width:50%;"
+												value="#{jJRequirementBean.testCaseName}"
+												label="TestCase Name" required="true"
+												requiredMessage="TestCase Name is required">
+												<f:validateLength maximum="100" />
+											</p:inputText>
+											<p:watermark for="testcase" value="TestCase Name" />
+											<p:commandButton id="addTestCase"
+												onstart="PF('requirementBlockUIWidget').block()"
+												oncomplete="PF('requirementBlockUIWidget').unblock()"
+												style="font-size: 1.0em !important;float:right;top: -3px;"
+												update="testcase testCaseDataTable :requirementDialogForm:msg"
+												action="#{jJRequirementBean.addTestCase(jJTestcaseBean)}"
+												value="Ajouter TestCase" process="@this,testcase" />
+										</f:facet>
+									</p:dataTable>								
 								</p:column>
 							</p:row>
 							<!--							<p:row>
@@ -527,8 +584,10 @@
 											value="#{messages.specification_create_save_button}"
 											onstart="PF('requirementBlockUIWidget').block()"
 											oncomplete="PF('requirementBlockUIWidget').unblock()"
-											action="#{jJRequirementBean.save()}"
-											widgetVar="requirementSaveWidget" update="@form :specForm :specForm" />
+											action="#{jJRequirementBean.save}"
+											process="@this,nameReq,status,project,product,version,chapter,description,lowRequirement,mediumRequirement,highRequirement"
+											widgetVar="requirementSaveWidget"
+											update="@form :specForm :specForm" />
 									</p:column>
 								</p:row>
 							</f:facet>
@@ -557,149 +616,150 @@
 							style="white-space: nowrap;" />
 					</h:panelGrid>
 				</pe:blockUI>
-			
-				<h:form id="chapterDialogForm">				
-					<p:growl id="msg" sticky="true" />
-					<p:tabView widgetVar="chapterTabView">	
-					<p:tab title="Chapitre" >				
-						<p:panelGrid style="margin-top:10px;height: 400px;">
-							<p:row>
-								<p:column>
-									<p:inputText id="name" value="#{jJChapterBean.chapter.name}"
-										required="true" style="margin: 15px;" 
-										label="#{messages.specification_chapter_name_label}"
-										requiredMessage="#{messages.specification_chapter_name_alert}" >
-										<f:validateLength maximum="100" />
-									</p:inputText>
-									<p:watermark for="name"
-										value="#{messages.chapter_create_name_watermark}" />
-								</p:column>
-								<p:column>
-									<h:outputText for="parent"
-										value="#{messages.specification_chapter_parent_label}" />
-									<p:selectOneMenu id="parent"
-										value="#{jJChapterBean.parentChapter}"
-										panelStyle="width:140px" effect="fade" style="width:160px"
-										filter="true" filterMatchMode="startsWith"
-										widgetVar="parentWidget"
-										converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter">
 
-										<f:selectItem itemValue="#{null}"
-											itemLabel="#{messages.specification_create_select_label}" />
-										<f:selectItems value="#{jJChapterBean.chapterList}" var="c"
-											itemLabel="#{c.name}" itemValue="#{c}" />
-										<p:ajax partialSubmit="true"
-											onstart="PF('chapterBlockUIWidget').block()"
-											oncomplete="PF('chapterBlockUIWidget').unblock()"
-											listener="#{jJChapterBean.handleSelectParentChapter()}" />
-									</p:selectOneMenu>
-								</p:column>
-							</p:row>
-							<p:row>
-								<p:column>
-									<h:outputText
-										value="#{messages.specification_chapter_description_label}" />
-									<pe:ckEditor id="description" widgetVar="descriptionWidget"
-										style="width:300px"
-										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
-										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
-										value="#{jJChapterBean.chapter.description}" required="true"
-										requiredMessage="#{messages.specification_chapter_description_alert}" />
-								</p:column>
-								<p:column>
-									<p:contextMenu for="chapterTreeSingle">
-										<p:menuitem
-											value="#{messages.specification_chapter_edit_menuitem}"
-											actionListener="#{jJChapterBean.editChapter()}"
-											process="@this" icon="ui-icon-pencil"
-											onstart="PF('chapterBlockUIWidget').block()"
-											oncomplete="PF('chapterBlockUIWidget').unblock()"
-											update=":chapterDialogForm" />
-										<p:menuitem 
-											value="#{messages.specification_chapter_delete_menuitem}"
-											actionListener="#{jJChapterBean.deleteChapter()}"
-											process="@this" icon="ui-icon-close"
-											onstart="PF('chapterBlockUIWidget').block()"
-											oncomplete="PF('chapterBlockUIWidget').unblock()"
-											update=":chapterDialogForm" />
-									</p:contextMenu>
-									<h:outputText
-										value="#{messages.specification_chapter_tree_label}" />
-									<p:tree id="chapterTreeSingle" style="width:250px"
-										value="#{jJChapterBean.chapterRoot}" var="nodeChapter"
-										selectionMode="single"
-										selection="#{jJChapterBean.selectedChapterNode}"
-										dynamic="true" cache="false">
-										<p:ajax event="select"
-											listener="#{jJChapterBean.onNodeSelect}" />
-										<p:treeNode>
-											<h:outputText value="#{nodeChapter}" />
-										</p:treeNode>
-									</p:tree>
-								</p:column>
-							</p:row>
-							<f:facet name="footer">
+				<h:form id="chapterDialogForm">
+					<p:growl id="msg" sticky="true" />
+					<p:tabView widgetVar="chapterTabView">
+						<p:tab title="Chapitre">
+							<p:panelGrid style="margin-top:10px;height: 400px;">
 								<p:row>
-									<p:column colspan="3">
-										<p:commandButton
-											value="#{messages.specification_chapter_save_button}"
-											action="#{jJChapterBean.save}"
-											update=":chapterDialogForm" style="float: right;"
-											onstart="PF('chapterBlockUIWidget').block()"
-											oncomplete="PF('chapterBlockUIWidget').unblock()" />
+									<p:column>
+										<p:inputText id="name" value="#{jJChapterBean.chapter.name}"
+											required="true" style="margin: 15px;"
+											label="#{messages.specification_chapter_name_label}"
+											requiredMessage="#{messages.specification_chapter_name_alert}">
+											<f:validateLength maximum="100" />
+										</p:inputText>
+										<p:watermark for="name"
+											value="#{messages.chapter_create_name_watermark}" />
+									</p:column>
+									<p:column>
+										<h:outputText for="parent"
+											value="#{messages.specification_chapter_parent_label}" />
+										<p:selectOneMenu id="parent"
+											value="#{jJChapterBean.parentChapter}"
+											panelStyle="width:140px" effect="fade" style="width:160px"
+											filter="true" filterMatchMode="startsWith"
+											widgetVar="parentWidget"
+											converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter">
+
+											<f:selectItem itemValue="#{null}"
+												itemLabel="#{messages.specification_create_select_label}" />
+											<f:selectItems value="#{jJChapterBean.chapterList}" var="c"
+												itemLabel="#{c.name}" itemValue="#{c}" />
+											<p:ajax partialSubmit="true"
+												onstart="PF('chapterBlockUIWidget').block()"
+												oncomplete="PF('chapterBlockUIWidget').unblock()"
+												listener="#{jJChapterBean.handleSelectParentChapter()}" />
+										</p:selectOneMenu>
 									</p:column>
 								</p:row>
-							</f:facet>
-						</p:panelGrid>
-					</p:tab>
-					<p:tab title="Gestion Des Chapitres">	
-						<p:panelGrid style="margin-top:10px;height: 400px;width: 895px;">
-							<p:row>
-								<p:column colspan="3">
-									<p:scrollPanel style="height:350px;" mode="native">
-										<p:tree id="leftTreeIncorporated" 
-											value="#{jJChapterBean.leftRoot}" var="nodeLeft"
-											selectionMode="single" style="width: 350px !important;"
-											selection="#{jJChapterBean.selectedLeftNode}"
-											draggable="true" droppable="true" dragdropScope="demo"
-											cache="false"  >
-											<p:ajax event="dragdrop"
-												listener="#{jJChapterBean.onDragDrop}"
-												update=":chapterDialogForm"
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{messages.specification_chapter_description_label}" />
+										<pe:ckEditor id="description" widgetVar="descriptionWidget"
+											style="width:300px"
+											customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+											toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
+											value="#{jJChapterBean.chapter.description}" required="true"
+											requiredMessage="#{messages.specification_chapter_description_alert}" />
+									</p:column>
+									<p:column>
+										<p:contextMenu for="chapterTreeSingle">
+											<p:menuitem
+												value="#{messages.specification_chapter_edit_menuitem}"
+												actionListener="#{jJChapterBean.editChapter()}"
+												process="@this" icon="ui-icon-pencil"
 												onstart="PF('chapterBlockUIWidget').block()"
-												oncomplete="PF('chapterBlockUIWidget').unblock();chapterTabView.select(1);" />
+												oncomplete="PF('chapterBlockUIWidget').unblock()"
+												update=":chapterDialogForm" />
+											<p:menuitem
+												value="#{messages.specification_chapter_delete_menuitem}"
+												actionListener="#{jJChapterBean.deleteChapter()}"
+												process="@this" icon="ui-icon-close"
+												onstart="PF('chapterBlockUIWidget').block()"
+												oncomplete="PF('chapterBlockUIWidget').unblock()"
+												update=":chapterDialogForm" />
+										</p:contextMenu>
+										<h:outputText
+											value="#{messages.specification_chapter_tree_label}" />
+										<p:tree id="chapterTreeSingle" style="width:250px"
+											value="#{jJChapterBean.chapterRoot}" var="nodeChapter"
+											selectionMode="single"
+											selection="#{jJChapterBean.selectedChapterNode}"
+											dynamic="true" cache="false">
+											<p:ajax event="select"
+												listener="#{jJChapterBean.onNodeSelect}" />
 											<p:treeNode>
-												<h:outputText value="#{nodeLeft}" />
+												<h:outputText value="#{nodeChapter}" />
 											</p:treeNode>
 										</p:tree>
-									</p:scrollPanel>
-								</p:column>
-								<p:column colspan="3">
-									<p:graphicImage alt="Transfer" library="images"
-										name="transfer.png" />
-								</p:column>
-								<p:column colspan="3">
-									<p:scrollPanel style="height:350px;" mode="native">
-										<p:tree id="RightTreeIncorporated"
-											value="#{jJChapterBean.rightRoot}" var="nodeRight"
-											selectionMode="single" style="width: 350px !important;"
-											selection="#{jJChapterBean.selectedRightNode}"
-											draggable="true" droppable="true" dragdropScope="demo"
-											cache="false">
-											<p:ajax event="dragdrop"
-												listener="#{jJChapterBean.onDragDrop}"
-												update=":chapterDialogForm"
+									</p:column>
+								</p:row>
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="3">
+											<p:commandButton
+												value="#{messages.specification_chapter_save_button}"
+												action="#{jJChapterBean.save}" update=":chapterDialogForm"
+												style="float: right;"
 												onstart="PF('chapterBlockUIWidget').block()"
-												oncomplete="PF('chapterBlockUIWidget').unblock();chapterTabView.select(1);" />
-											<p:treeNode>
-												<h:outputText value="#{nodeRight}" />
-											</p:treeNode>
-										</p:tree>
-									</p:scrollPanel>
-								</p:column>
-							</p:row>
-						</p:panelGrid>					
-				</p:tab></p:tabView>
+												oncomplete="PF('chapterBlockUIWidget').unblock()" />
+										</p:column>
+									</p:row>
+								</f:facet>
+							</p:panelGrid>
+						</p:tab>
+						<p:tab title="Gestion Des Chapitres">
+							<p:panelGrid style="margin-top:10px;height: 400px;width: 895px;">
+								<p:row>
+									<p:column colspan="3">
+										<p:scrollPanel style="height:350px;" mode="native">
+											<p:tree id="leftTreeIncorporated"
+												value="#{jJChapterBean.leftRoot}" var="nodeLeft"
+												selectionMode="single" style="width: 350px !important;"
+												selection="#{jJChapterBean.selectedLeftNode}"
+												draggable="true" droppable="true" dragdropScope="demo"
+												cache="false">
+												<p:ajax event="dragdrop"
+													listener="#{jJChapterBean.onDragDrop}"
+													update=":chapterDialogForm"
+													onstart="PF('chapterBlockUIWidget').block()"
+													oncomplete="PF('chapterBlockUIWidget').unblock();chapterTabView.select(1);" />
+												<p:treeNode>
+													<h:outputText value="#{nodeLeft}" />
+												</p:treeNode>
+											</p:tree>
+										</p:scrollPanel>
+									</p:column>
+									<p:column colspan="3">
+										<p:graphicImage alt="Transfer" library="images"
+											name="transfer.png" />
+									</p:column>
+									<p:column colspan="3">
+										<p:scrollPanel style="height:350px;" mode="native">
+											<p:tree id="RightTreeIncorporated"
+												value="#{jJChapterBean.rightRoot}" var="nodeRight"
+												selectionMode="single" style="width: 350px !important;"
+												selection="#{jJChapterBean.selectedRightNode}"
+												draggable="true" droppable="true" dragdropScope="demo"
+												cache="false">
+												<p:ajax event="dragdrop"
+													listener="#{jJChapterBean.onDragDrop}"
+													update=":chapterDialogForm"
+													onstart="PF('chapterBlockUIWidget').block()"
+													oncomplete="PF('chapterBlockUIWidget').unblock();chapterTabView.select(1);" />
+												<p:treeNode>
+													<h:outputText value="#{nodeRight}" />
+												</p:treeNode>
+											</p:tree>
+										</p:scrollPanel>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:tab>
+					</p:tabView>
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
@@ -738,23 +798,25 @@
 						oncomplete="PF('blockUIWidget').unblock()" />
 					<p:commandButton id="releaseNoButton"
 						value="#{messages.specification_release_no_button}"
-						onclick="PF('requirementReleaseDialogWidget').hide()" type="button" />
+						onclick="PF('requirementReleaseDialogWidget').hide()"
+						type="button" />
 				</h:form>
 			</p:outputPanel>
 		</p:confirmDialog>
 
 		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
-		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget" position="center"
-			header="#{messages.specification_video_help_title}" style="padding:0px;"
-			resizable="false" draggable="false" minHeight="500" minWidth="500"
-			showEffect="fade" hideEffect="fade">
+		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
+			position="center" header="#{messages.specification_video_help_title}"
+			style="padding:0px;" resizable="false" draggable="false"
+			minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
 			<video width="100%" height="100%" controls="true">
-				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4"/>
+				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
 			</video>
 		</p:dialog>
 
 
-		<p:hotkey bind="esc" handler="PF('requirementImportDialogWidget').hide()" />
+		<p:hotkey bind="esc"
+			handler="PF('requirementImportDialogWidget').hide()" />
 		<p:dialog id="requirementImportDialog" draggable="false"
 			header="#{messages.specification_import_title}" modal="true"
 			widgetVar="requirementImportDialogWidget" dynamic="true"
@@ -988,7 +1050,7 @@
 		<p:dialog id="requirementMindMap"
 			header="#{messages.specification_MindMap_title}" modal="true"
 			style="width:75% !important;" draggable="false"
-			widgetVar="requirementMindMap" dynamic="true" resizable="true">			
+			widgetVar="requirementMindMap" dynamic="true" resizable="true">
 			<p:panel>
 				<ui:include src="mindMapReq.xhtml" />
 			</p:panel>

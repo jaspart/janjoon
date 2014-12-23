@@ -65,6 +65,7 @@ import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.converter.JJTaskConverter;
 import com.starit.janjoonweb.ui.mb.util.ContactCalendarUtil;
+import com.starit.janjoonweb.ui.mb.util.MailingService;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 
@@ -73,15 +74,16 @@ import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 public class JJTaskBean {
 
 	@Autowired
-	JJChapterService jJChapterService;
+	private JJChapterService jJChapterService;
+	private MailingService mailingService;
 
-	TaskData selectedTaskData;
-
-	@Autowired
-	JJPermissionService jJPermissionService;
+	private TaskData selectedTaskData;
 
 	@Autowired
-	JJProjectService jJProjectService;
+	private JJPermissionService jJPermissionService;
+
+	@Autowired
+	private JJProjectService jJProjectService;
 
 	public void setjJProjectService(JJProjectService jJProjectService) {
 		this.jJProjectService = jJProjectService;
@@ -100,6 +102,10 @@ public class JJTaskBean {
 
 	public void setjJCategoryService(JJCategoryService jJCategoryService) {
 		this.jJCategoryService = jJCategoryService;
+	}
+
+	public void setMailingService(MailingService mailingService) {
+		this.mailingService = mailingService;
 	}
 
 	private List<TaskData> tasksData;
@@ -1826,6 +1832,34 @@ public class JJTaskBean {
 				.getContact();
 
 		if (update) {
+			
+			//check_if_realendDate_not_null
+			if(ttt.getEndDateReal() != null)
+			{
+				if(jJTaskService.findJJTask(ttt.getId()).getEndDateReal() == null)
+				{
+					if(mailingService == null)
+						mailingService =new MailingService();
+					
+					String subject ="";	
+					if(ttt.getRequirement() != null)
+						subject=ttt.getRequirement().getDescription();
+					else
+						if(ttt.getBug() != null)
+							subject=ttt.getBug().getDescription();
+						else 
+							if(ttt.getTestcase() != null)
+							subject=ttt.getTestcase().getDescription();
+					
+					for(JJContact c:jJPermissionService.areAuthorized(contact.getCompany(), null, project, product, "sprintContact"))
+					{
+						System.out.println(c.getEmail()+subject);						
+						mailingService.sendMail(c.getEmail(), ttt, subject);
+					}
+						
+				}
+			}			
+			
 			ttt.setUpdatedBy(contact);
 			ttt.setUpdatedDate(new Date());
 			jJTaskService.updateJJTask(ttt);

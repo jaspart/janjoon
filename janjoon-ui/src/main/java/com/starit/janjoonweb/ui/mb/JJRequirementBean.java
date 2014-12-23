@@ -14,6 +14,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
@@ -31,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJCompany;
@@ -50,6 +52,8 @@ import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTeststepService;
 import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.ui.mb.util.BuildUtil;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.RequirementUtil;
 
 @RooSerializable
@@ -59,7 +63,12 @@ public class JJRequirementBean {
 	static Logger logger = Logger.getLogger(JJRequirementBean.class);
 
 	@Autowired
-	public JJConfigurationService jJConfigurationService;
+	private JJConfigurationService jJConfigurationService;
+	
+	private List<JJTestcase> reqtestCases;
+	private List<JJTestcase> reqSelectedtestCases;
+	private String testCaseName;
+	private int colspan;
 
 	private JJTaskBean jJTaskBean;
 
@@ -73,21 +82,21 @@ public class JJRequirementBean {
 	}
 
 	@Autowired
-	JJTaskService jJTaskService;
+	private JJTaskService jJTaskService;
 
 	public void setjJTaskService(JJTaskService jJTaskService) {
 		this.jJTaskService = jJTaskService;
 	}
 
 	@Autowired
-	JJTestcaseService jJTestcaseService;
+	private JJTestcaseService jJTestcaseService;
 
 	public void setjJTestcaseService(JJTestcaseService jJTestcaseService) {
 		this.jJTestcaseService = jJTestcaseService;
 	}
 
 	@Autowired
-	JJTestcaseexecutionService jJTestcaseexecutionService;
+	private JJTestcaseexecutionService jJTestcaseexecutionService;
 
 	public void setjJTestcaseexecutionService(
 			JJTestcaseexecutionService jJTestcaseexecutionService) {
@@ -673,6 +682,7 @@ public class JJRequirementBean {
 
 		requirementCategory = jJCategoryService.findJJCategory(id);
 
+		colspan=3;
 		requirement = new JJRequirement();
 		requirement.setEnabled(true);
 		requirement.setDescription(null);
@@ -714,6 +724,9 @@ public class JJRequirementBean {
 		selectedLowRequirementsList = new ArrayList<JJRequirement>();
 		selectedMediumRequirementsList = new ArrayList<JJRequirement>();
 		selectedHighRequirementsList = new ArrayList<JJRequirement>();
+		testCaseName="";
+		reqtestCases=new ArrayList<JJTestcase>();
+		reqSelectedtestCases=new ArrayList<JJTestcase>();
 
 		task = new JJTask();
 		disabledInitTask = false;
@@ -728,6 +741,38 @@ public class JJRequirementBean {
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
+	public List<JJTestcase> getReqtestCases() {
+		return reqtestCases;
+	}
+
+	public void setReqtestCases(List<JJTestcase> reqtestCases) {
+		this.reqtestCases = reqtestCases;
+	}
+
+	public String getTestCaseName() {
+		return testCaseName;
+	}
+
+	public void setTestCaseName(String testCaseName) {
+		this.testCaseName = testCaseName;
+	}
+
+	public int getColspan() {
+		return colspan;
+	}
+
+	public void setColspan(int colspan) {
+		this.colspan = colspan;
+	}
+
+	public List<JJTestcase> getReqSelectedtestCases() {
+		return reqSelectedtestCases;
+	}
+
+	public void setReqSelectedtestCases(List<JJTestcase> reqSelectedtestCases) {
+		this.reqSelectedtestCases = reqSelectedtestCases;
+	}
+
 	public void editRequirement() {
 		long t = System.currentTimeMillis();
 		message = "specification_edit_header";
@@ -736,6 +781,7 @@ public class JJRequirementBean {
 				.getId());
 		requirementCategory = requirement.getCategory();
 
+		colspan=2;
 		requirementProject = requirement.getProject();
 		disabledProject = true;
 
@@ -783,7 +829,8 @@ public class JJRequirementBean {
 
 		int numero = requirement.getNumero() + 1;
 		requirement.setNumero(numero);
-
+		reqtestCases=jJTestcaseService.getJJtestCases(requirement);
+		reqSelectedtestCases=reqtestCases;
 		changeLow = false;
 		changeMedium = false;
 		changeHigh = false;
@@ -791,7 +838,44 @@ public class JJRequirementBean {
 		requirementState = false;
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
+	
+	public void addTestCase(JJTestcaseBean jjTestcaseBean)
+	{
+		JJTestcase b = new JJTestcase();
+		b.setName(testCaseName);		
+		b.setEnabled(true);		
+		b.setRequirement(jJRequirementService.findJJRequirement(requirement.getId()));
+		b.setDescription("TestCase for Requirement " + requirement.getName());
+		b.setOrdering(reqtestCases.size());
+		b.setAutomatic(false);
+		jjTestcaseBean.saveJJTestcase(b);
+		testCaseName = null;
+		
+		reqtestCases=jJTestcaseService.getJJtestCases(requirement);
+		reqSelectedtestCases=reqtestCases;
+		
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_created", "TestCase");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
+	}
+
+	public void updateReqTestCases(JJTestcaseBean jjTestcaseBean)
+	{
+		for(JJTestcase test:reqtestCases)
+		{
+			if(!reqSelectedtestCases.contains(test))
+			{
+				test.setEnabled(false);
+				jjTestcaseBean.updateJJTestcase(test);
+			}			
+			
+		}		
+		reqtestCases=jJTestcaseService.getJJtestCases(requirement);
+		reqSelectedtestCases=reqtestCases;
+	}
+	
+	
 	private void deleteTasksAndTestcase(JJRequirement requirement) {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
@@ -1412,6 +1496,7 @@ public class JJRequirementBean {
 		long t = System.currentTimeMillis();
 		System.out.println("close dialog");
 
+		colspan=0;
 		message = null;
 		namesList = null;
 		lowCategoryName = null;
@@ -1440,6 +1525,10 @@ public class JJRequirementBean {
 		disabledMediumRequirements = true;
 		disabledHighRequirements = true;
 		task = null;
+		
+		reqtestCases=null;
+		reqSelectedtestCases=reqtestCases;
+		testCaseName=null;
 
 		storeMapUp = null;
 		storeMapDown = null;

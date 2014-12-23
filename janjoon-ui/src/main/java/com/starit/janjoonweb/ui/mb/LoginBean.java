@@ -45,6 +45,7 @@ import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.ui.mb.util.MailingService;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.UsageChecker;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
@@ -273,7 +274,8 @@ public class LoginBean implements Serializable {
 				jjVersionBean.setVersion(contact.getLastVersion());
 				
 				authorisationService = new AuthorisationService(session,
-						contact);
+						contact);		
+				
 
 				if (!UsageChecker.checkExpiryDate()) {
 

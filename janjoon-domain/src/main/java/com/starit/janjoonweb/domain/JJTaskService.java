@@ -18,6 +18,7 @@ public interface JJTaskService {
 			JJTestcase testcase, boolean onlyActif);
 
 	public void saveTasks(Set<JJTask> tasks);
+	
 
 	public void updateTasks(Set<JJTask> tasks);
 

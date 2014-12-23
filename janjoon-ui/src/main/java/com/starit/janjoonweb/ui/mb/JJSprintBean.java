@@ -76,10 +76,10 @@ public class JJSprintBean {
 	private List<JJContact> contacts;
 	private HtmlPanelGrid createTaskPanelGrid;
 	private JJCategory category;
-	private JJRequirement requirement;
-	private List<JJBug> bugs;
+	//private JJRequirement requirement;
+	//private List<JJBug> bugs;
 	private JJBug bug;
-	private List<JJRequirement> reqList;
+	//private List<JJRequirement> reqList;
 	private JJProject project;
 	private List<SprintUtil> sprintList;
 	private List<SprintChart> sprintChartList;
@@ -162,27 +162,27 @@ public class JJSprintBean {
 		this.category = category;
 	}
 
-	public JJRequirement getRequirement() {
-		return requirement;
-	}
+//	public JJRequirement getRequirement() {
+//		return requirement;
+//	}
+//
+//	public void setRequirement(JJRequirement requirement) {
+//		this.requirement = requirement;
+//	}
 
-	public void setRequirement(JJRequirement requirement) {
-		this.requirement = requirement;
-	}
-
-	public List<JJBug> getBugs() {
-
-		if (bugs == null)
-			bugs = jJBugService.getBugs(((LoginBean) LoginBean
-					.findBean("loginBean")).getContact().getCompany(), project,
-					null, null);
-
-		return bugs;
-	}
-
-	public void setBugs(List<JJBug> bugs) {
-		this.bugs = bugs;
-	}
+//	public List<JJBug> getBugs() {
+//
+//		if (bugs == null)
+//			bugs = jJBugService.getBugs(((LoginBean) LoginBean
+//					.findBean("loginBean")).getContact().getCompany(), project,
+//					null, null);
+//
+//		return bugs;
+//	}
+//
+//	public void setBugs(List<JJBug> bugs) {
+//		this.bugs = bugs;
+//	}
 
 	public JJBug getBug() {
 		return bug;
@@ -192,14 +192,14 @@ public class JJSprintBean {
 		this.bug = bug;
 	}
 
-	public List<JJRequirement> getReqList() {
-
-		return reqList;
-	}
-
-	public void setReqList(List<JJRequirement> reqList) {
-		this.reqList = reqList;
-	}
+//	public List<JJRequirement> getReqList() {
+//
+//		return reqList;
+//	}
+//
+//	public void setReqList(List<JJRequirement> reqList) {
+//		this.reqList = reqList;
+//	}
 
 	public JJProject getProject() {
 		return project;
@@ -224,8 +224,8 @@ public class JJSprintBean {
 
 	public void loadingsprintPage(ComponentSystemEvent e) {
 		category = null;
-		reqList = null;
-		requirement = null;
+		//reqList = null;
+		//requirement = null;
 
 	}
 
@@ -265,7 +265,7 @@ public class JJSprintBean {
 
 		return sprintList;
 	}
-
+	
 	public void setSprintList(List<SprintUtil> sprintList) {
 		this.sprintList = sprintList;
 	}
@@ -326,29 +326,29 @@ public class JJSprintBean {
 				RequestContext.getCurrentInstance().execute("editSprint()");
 	}
 
-	public void updatereqPanel() {
-
-		if (category != null) {
-			reqList = jJRequirementService.getRequirements(
-					((LoginBean) LoginBean.findBean("loginBean")).getContact()
-							.getCompany(), category, project, null, null, null,
-					null, false, true, true);
-			bugs = null;
-			bug = null;
-			requirement = null;
-			if (!reqList.isEmpty())
-				requirement = reqList.get(0);
-		} else {
-			bugs = jJBugService.getBugs(((LoginBean) LoginBean
-					.findBean("loginBean")).getContact().getCompany(), project,
-					null, null);
-			bug = null;
-			reqList = null;
-			requirement = null;
-
-		}
-
-	}
+//	public void updatereqPanel() {
+//
+//		if (category != null) {
+//			reqList = jJRequirementService.getRequirements(
+//					((LoginBean) LoginBean.findBean("loginBean")).getContact()
+//							.getCompany(), category, project, null, null, null,
+//					null, false, true, true);
+//			bugs = null;
+//			bug = null;
+//			requirement = null;
+//			if (!reqList.isEmpty())
+//				requirement = reqList.get(0);
+//		} else {
+//			bugs = jJBugService.getBugs(((LoginBean) LoginBean
+//					.findBean("loginBean")).getContact().getCompany(), project,
+//					null, null);
+//			bug = null;
+//			reqList = null;
+//			requirement = null;
+//
+//		}
+//
+//	}
 
 	public void onCellEditTask(CellEditEvent event) {
 
@@ -580,20 +580,8 @@ public class JJSprintBean {
 		if (id != null) {
 			JJTask t=jJTaskService.findJJTask(id);
 			if (t.getBug() != null) {
-
-				HttpSession session = (HttpSession) FacesContext
-						.getCurrentInstance().getExternalContext()
-						.getSession(false);
-				JJBugBean jJBugBean = (JJBugBean) session
-						.getAttribute("jJBugBean");
-
-				jJBugBean.setJJBug_(t.getBug());
-				jJBugBean.setBugRequirementSelected(jJBugBean.getJJBug_()
-						.getRequirement());
-				jJBugBean.setBugProjectSelected(project);
-				jJBugBean.setBugVersionSelected(jJBugBean.getJJBug_()
-						.getVersioning());
-
+				
+				bug=t.getBug();				
 				context.execute("PF('blockUIWidget').block()");
 				context.execute("PF('editBugDialogWidget').show()");
 			}
@@ -624,47 +612,47 @@ public class JJSprintBean {
 	// }
 	// }
 
-	public void persistTask() {	
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
-		JJStatus status = jJStatusService.getOneStatus("TODO", "Task", true);
-		if (status != null)
-			task.setStatus(status);
-		if (requirement != null) {
-			task.setName(requirement.getName());
-			task.setRequirement(requirement);
-		} else if (bug != null) {
-			task.setName(bug.getName());
-			task.setBug(bug);
-			task.setRequirement(bug.getRequirement());
-		}
-
-		task.setStartDatePlanned(sprintUtil.getSprint().getStartDate());
-		task.setEndDatePlanned(sprintUtil.getSprint().getEndDate());
-		task.setSprint(sprintUtil.getSprint());
-		task.setEnabled(true);
-		task.setDescription(task.getName() + " /CreatedBy:" + contact.getName()
-				+ " at :" + new Date());
-
-		jJTaskBean.saveJJTask(task, false);
-
-		if (!sprintUtil.isRender()) {
-
-			sprintUtil = new SprintUtil(jJSprintService.findJJSprint(sprintUtil
-					.getSprint().getId()),
-					jJTaskService.getSprintTasks(jJSprintService
-							.findJJSprint(sprintUtil.getSprint().getId())));
-			sprintList
-					.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
-
-		}
-		String message = "message_successfully_created";
-		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('createTaskDialogWidget').hide()");
-		FacesMessage facesMessage = MessageFactory.getMessage(message, "Task :"
-				+ task.getName());
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-	}
+//	public void persistTask() {	
+//		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+//				.getContact();
+//		JJStatus status = jJStatusService.getOneStatus("TODO", "Task", true);
+//		if (status != null)
+//			task.setStatus(status);
+//		if (requirement != null) {
+//			task.setName(requirement.getName());
+//			task.setRequirement(requirement);
+//		} else if (bug != null) {
+//			task.setName(bug.getName());
+//			task.setBug(bug);
+//			task.setRequirement(bug.getRequirement());
+//		}
+//
+//		task.setStartDatePlanned(sprintUtil.getSprint().getStartDate());
+//		task.setEndDatePlanned(sprintUtil.getSprint().getEndDate());
+//		task.setSprint(sprintUtil.getSprint());
+//		task.setEnabled(true);
+//		task.setDescription(task.getName() + " /CreatedBy:" + contact.getName()
+//				+ " at :" + new Date());
+//
+//		jJTaskBean.saveJJTask(task, false);
+//
+//		if (!sprintUtil.isRender()) {
+//
+//			sprintUtil = new SprintUtil(jJSprintService.findJJSprint(sprintUtil
+//					.getSprint().getId()),
+//					jJTaskService.getSprintTasks(jJSprintService
+//							.findJJSprint(sprintUtil.getSprint().getId())));
+//			sprintList
+//					.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
+//
+//		}
+//		String message = "message_successfully_created";
+//		RequestContext context = RequestContext.getCurrentInstance();
+//		context.execute("PF('createTaskDialogWidget').hide()");
+//		FacesMessage facesMessage = MessageFactory.getMessage(message, "Task :"
+//				+ task.getName());
+//		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+//	}
 
 	public void doneEvent(ActionEvent e) {
 
@@ -673,10 +661,10 @@ public class JJSprintBean {
 				jJTaskService.getSprintTasks(sprintUtil.getSprint()));
 
 		sprintList.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
-		requirement = null;
+		//requirement = null;
 		category = null;
 		categoryList = null;
-		reqList = null;
+		//reqList = null;
 		RequestContext context = RequestContext.getCurrentInstance();
 
 		context.execute("projectTabView.select(" + 1 + ")");
@@ -739,10 +727,10 @@ public class JJSprintBean {
 
 		// sprintUtil.setRenderTaskForm(false);
 		sprintList.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
-		requirement = null;
+		//requirement = null;
 		category = null;
 		categoryList = null;
-		reqList = null;
+		//reqList = null;
 		task = null;
 		resetJJTaskBean();
 
@@ -835,6 +823,23 @@ public class JJSprintBean {
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJSprintService.updateJJSprint(b);
+	}
+	
+	public void persistBugTask() {	
+		
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJBugBean jJbugBean=(JJBugBean) session.getAttribute("jJBugBean");
+		String message = "";		
+		jJbugBean.updateJJBug(bug);
+		message = "message_successfully_updated";	
+
+		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		jJbugBean.reset();		
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("projectTabView.select(" + 1 + ")");
+		context.execute("SprintTab.select("+contains(getSprintUtil().getSprint().getId())+ ")");		
 	}
 
 	public HtmlPanelGrid populateCreateTaskPanel() {

@@ -19,4 +19,6 @@ public interface JJTestcaseService {
 	public void updateTestcases(Set<JJTestcase> testcases);
 	
 	public List<JJTestcase> getJJtestCases(JJRequirement requirement);
+	
+	public List<String> getReqTesCases(JJRequirement requirement);
 }

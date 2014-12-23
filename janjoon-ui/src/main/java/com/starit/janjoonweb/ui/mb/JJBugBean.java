@@ -119,9 +119,8 @@ public class JJBugBean {
 		return bugList;
 	}
 
-	public void setBugList(LazyBugDataModel bugList) {
-		
-		DataTable table;		
+	public void setBugList(LazyBugDataModel bugList) {	
+	
 		this.bugList = bugList;
 	}
 	

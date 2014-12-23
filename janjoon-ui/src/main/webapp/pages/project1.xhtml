@@ -97,17 +97,17 @@
 					<p:panelGrid columns="2">
 						<p:outputLabel value="BUG :" for="taskBugName" />
 						<p:inputText id="taskBugName" readonly="true"
-							converter="JJBugConverter" value="#{jJBugBean.JJBug_}" />
+							converter="JJBugConverter" value="#{jJSprintBean.bug}" />
 						<p:outputLabel for="taskBugStatus" value="Status : " />
 						<p:autoComplete id="taskBugStatus"
-							value="#{jJBugBean.JJBug_.status}" itemLabel="#{status.name}"
+							value="#{jJSprintBean.bug.status}" itemLabel="#{status.name}"
 							itemValue="#{status}" scrollHeight="200"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
 							dropdown="true" var="status"
 							completeMethod="#{jJBugBean.completeStatusBug}" />
 						<p:commandButton id="taskBugSaveButton"
 							value="#{messages.bug_edit_save_button}"
-							action="#{jJBugBean.persistBugTask}"
+							action="#{jJSprintBean.persistBugTask}"
 							update=":projecttabview"
 							oncomplete="PF('blockUIWidget').unblock()"
 							onsuccess="PF('editBugDialogWidget').hide()">
