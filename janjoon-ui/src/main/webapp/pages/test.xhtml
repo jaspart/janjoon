@@ -20,10 +20,13 @@
 			stateful="true">
 
 			<p:layoutUnit position="north" style="min-height:30px;">
-				<h:form id="testFormNorth">
+
+				<h:form id="testFormNorth" >
+					<p:remoteCommand name="hideEvent" update="@form" />
 					<ui:repeat value="#{jJTestcaseBean.categoryList}" var="category">
 						<p:commandButton value="#{category.name}"
 							update=":testFormWest :testFormCenter"
+							rendered="#{!loginBean.mobile}"
 							action="#{jJTestcaseBean.loadData()}"
 							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()">
@@ -34,11 +37,34 @@
 						</p:commandButton>
 					</ui:repeat>
 
+					<p:commandButton value="&#9776;" id="overlayPanel"
+						style="font-weight:bold; float:none; position:relative; left:30%;"
+						rendered="#{loginBean.mobile}" />
+
+					<p:overlayPanel id="categoryPanel" for="overlayPanel"
+						widgetVar="pnl-category" onHide="hideEvent()"
+						showEffect="overlay"
+						style="position: fixed;top: 5% !important;right: 5% !important;"
+						rendered="#{loginBean.mobile}" showCloseIcon="true">
+						<ui:repeat value="#{jJTestcaseBean.categoryList}" var="category">
+							<p:commandButton value="#{category.name}"
+								update=":testFormWest :testFormCenter"
+								action="#{jJTestcaseBean.loadData()}"
+								style="width: 120px;margin-left: 20px;height: 100px;"
+								onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock()">
+								<f:setPropertyActionListener value="#{category}"
+									target="#{jJTestcaseBean.category}" />
+								<f:setPropertyActionListener target="#{jJTestcaseBean.project}"
+									value="#{null}" />
+							</p:commandButton>
+						</ui:repeat>
+					</p:overlayPanel>
+
 					<p:commandButton value="#{messages.specification_video_help_title}"
 						id="videoHelpBtn" icon="ui-icon-video"
 						onclick="PF('videoHelpWidget').show()"
 						style="float:none;position:relative;left:30%;" type="button" />
-
 
 				</h:form>
 			</p:layoutUnit>
@@ -202,15 +228,18 @@
 						rendered="#{jJTestcaseBean.rendredEmptySelection}"
 						style="color: red;" />
 
-					<p:dataTable var="rowName" value="#{jJTestcaseBean.rowNames}" scrollable="true" scrollHeight="500"
-						rowIndexVar="rowIdx" style="table-layout: fixed;width:#{jJTestcaseBean.width}px"
+					<p:dataTable var="rowName" value="#{jJTestcaseBean.rowNames}"
+						scrollable="true" scrollHeight="500" rowIndexVar="rowIdx"
+						style="table-layout: fixed;width:#{jJTestcaseBean.width}px"
 						rendered="#{!jJTestcaseBean.rendredTestCaseRecaps and !jJTestcaseBean.rendredTestCaseHistorical and jJTestcaseBean.rowNames != null}">
-						<p:column headerText="Build/Version" styleClass="ui-widget-header" width="100">
+						<p:column headerText="Build/Version" styleClass="ui-widget-header"
+							width="100">
 							<h:outputText value="#{rowName.name}" />
 						</p:column>
 
-						<p:columns var="columnName" value="#{jJTestcaseBean.colNames}" width="50"
-							headerText="#{columnName.name}" columnIndexVar="colIdx">
+						<p:columns var="columnName" value="#{jJTestcaseBean.colNames}"
+							width="50" headerText="#{columnName.name}"
+							columnIndexVar="colIdx">
 
 							<p:panel>
 								<p:selectBooleanCheckbox value="false" disabled="true"
@@ -260,10 +289,11 @@
 							<f:facet name="header">
 								<h:outputText value="#{messages.test_table_action_title}" />
 							</f:facet>
-							<p:commandButton id="runButton" icon="ui-icon-play" 
+							<p:commandButton id="runButton" icon="ui-icon-play"
 								oncomplete="PF('runTestcaseDialogWidget').show()"
 								action="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
-								update=":runTestcaseDialog" disabled="#{tcr.disabled or !loginBean.authorisationService.xTest}">
+								update=":runTestcaseDialog"
+								disabled="#{tcr.disabled or !loginBean.authorisationService.xTest}">
 								<f:setPropertyActionListener value="#{tcr.testcase}"
 									target="#{jJTestcaseBean.testcase}" />
 							</p:commandButton>
@@ -272,7 +302,8 @@
 							<p:commandButton id="editButton" icon="ui-icon-pencil"
 								oncomplete="PF('testcaseDialogWidget').show()"
 								action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
-								update=":testcaseDialog" disabled="#{!loginBean.authorisationService.wTest}">
+								update=":testcaseDialog"
+								disabled="#{!loginBean.authorisationService.wTest}">
 								<f:setPropertyActionListener value="#{tcr.testcase}"
 									target="#{jJTestcaseBean.testcase}" />
 							</p:commandButton>
@@ -281,7 +312,8 @@
 						</p:column>
 						<f:facet name="footer">
 							<p:commandButton value="#{messages.test_create_button}"
-								id="newTestcase" disabled="#{!loginBean.authorisationService.wTest}"
+								id="newTestcase"
+								disabled="#{!loginBean.authorisationService.wTest}"
 								actionListener="#{jJTestcaseBean.newTestcase(jJTeststepBean)}"
 								update=":testcaseDialog"
 								oncomplete="PF('testcaseDialogWidget').show()"
@@ -315,7 +347,8 @@
 								</p:column>
 								<p:column>
 									<p:commandButton id="editButton" icon="ui-icon-pencil"
-										oncomplete="PF('testcaseDialogWidget').show()" disabled="#{!loginBean.authorisationService.wTest}"
+										oncomplete="PF('testcaseDialogWidget').show()"
+										disabled="#{!loginBean.authorisationService.wTest}"
 										action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
 										update=":testcaseDialog" />
 									<p:tooltip for="editButton" value="#{messages.label_edit}"

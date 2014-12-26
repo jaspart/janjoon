@@ -163,21 +163,8 @@ public class JJStatusBean {
 		
 		TabView tv = (TabView) event.getComponent();
 		if (tv.getChildren().indexOf(event.getTab()) == 1 && first) {
-			//JJSprintBean jJSprintBean = (JJSprintBean) LoginBean.findBean("jJSprintBean");
-			// RequestContext.getCurrentInstance().execute("barChart_"+jJSprintBean.getSprintChartList().
-			// get(0).getSprint().getId()+"_Widget.plot()");
 			RequestContext.getCurrentInstance().execute(
 					"statsTabView.select(0)");
-//			try {
-//				Object lock = new Object();
-//				synchronized (lock) {
-//
-//					lock.wait(200);
-//				}
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
 			RequestContext.getCurrentInstance().execute("statsTabView.select(1)");
 			first =false;
 		}
@@ -185,9 +172,10 @@ public class JJStatusBean {
 
 	public void loadData() {
 		
+		first=true;
+		
 		if(project == null)
-		{
-			first=true;
+		{		
 			((JJSprintBean) LoginBean.findBean("jJSprintBean")).iniSprintChart();
 			getProject();
 			getProduct();

@@ -61,6 +61,7 @@ public class LoginBean implements Serializable {
 	private AuthorisationService authorisationService;
 	static Logger logger = Logger.getLogger("loginBean-Logger");
 	private List<JJRequirement> noCouvretReq;
+	private boolean mobile;
 
 	@Autowired
 	private JJContactService jJContactService;
@@ -125,15 +126,18 @@ public class LoginBean implements Serializable {
 
 	public void setAgreeTerms(boolean agreeTerms) {
 		this.agreeTerms = agreeTerms;
+		
 	}
 
 	@Autowired
 	public LoginBean(AuthenticationManager authenticationManager) {
-		this.authenticationManager = authenticationManager;
-	}
+		this.authenticationManager = authenticationManager;		
+		this.mobile=(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
+					.getRequest()).getHeader("User-Agent").indexOf("Mobile")) != -1; 
+//		this.mobile=true;	
+		}
 
 	protected String getRedirectUrl(HttpSession session) {
-
 		if (session != null) {
 			SavedRequest savedRequest = (SavedRequest) session
 					.getAttribute("SPRING_SECURITY_SAVED_REQUEST");
@@ -391,6 +395,16 @@ public class LoginBean implements Serializable {
 		this.menuIndex = menuIndex;
 	}
 
+	public boolean isMobile() {
+		
+			
+		return mobile;
+	}
+
+	public void setMobile(boolean mobile) {
+		this.mobile = mobile;
+	}
+
 	public void initMenuIndexvalue(ComponentSystemEvent e) {
 
 		FacesContext ctx = FacesContext.getCurrentInstance();
@@ -439,7 +453,7 @@ public class LoginBean implements Serializable {
 			menuIndex = 0;
 			break;
 		}
-		menuIndex++;
+		//menuIndex++;
 
 	}
 

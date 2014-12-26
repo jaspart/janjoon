@@ -12,12 +12,32 @@
 		<h:outputScript library="js" name="ckEditor.js" />
 
 		<h:form id="categoryForm">
+		<p:remoteCommand name="hideEvent" update="@form"/>
+
 			<ui:repeat value="#{jJRequirementBean.categoryList}" var="category">
 				<p:commandButton value="#{category.name}" update=":specForm @form"
+					rendered="#{!loginBean.mobile}"
 					action="#{jJRequirementBean.updateTemplate(category.id)}"
 					onstart="PF('blockUIWidget').block()"
 					oncomplete="PF('blockUIWidget').unblock()" />
 			</ui:repeat>
+
+			<p:commandButton value="&#9776;" id="overlayPanel" 
+				style="font-weight:bold; float:none; position:relative; left:30%;"
+				rendered="#{loginBean.mobile}" />
+
+			<p:overlayPanel widgetVar="categoryPanel" id="categoryPanel" at="right" onHide="hideEvent()" 
+				for="overlayPanel" showEffect="overlay" style="left:5%;top:20%;"
+				rendered="#{loginBean.mobile}" dismissable="false">
+				<ui:repeat value="#{jJRequirementBean.categoryList}" var="category">
+					<p:commandButton value="#{category.name}" update=":specForm @form"
+						rendered="#{loginBean.mobile}" style="width: 120px;margin-left: 20px;height: 100px;"
+						action="#{jJRequirementBean.updateTemplate(category.id)}"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()" />
+				</ui:repeat>				
+			</p:overlayPanel>
+
 
 			<p:commandButton value="#{messages.specification_video_help_title}"
 				id="videoHelpBtn" icon="ui-icon-video"
@@ -503,14 +523,14 @@
 											</f:facet>
 											<h:outputText value="#{testCaseModel.name}" />
 										</p:column>
-										<f:facet name="footer">											
-												<p:commandButton
-													onstart="PF('requirementBlockUIWidget').block()"
-													oncomplete="PF('requirementBlockUIWidget').unblock()"
-													disabled="#{empty jJRequirementBean.reqtestCases}"
-													update="testCaseDataTable :requirementDialogForm:msg"
-													process="testCaseDataTable" value="Update"
-													action="#{jJRequirementBean.updateReqTestCases(jJTestcaseBean)}" />										
+										<f:facet name="footer">
+											<p:commandButton
+												onstart="PF('requirementBlockUIWidget').block()"
+												oncomplete="PF('requirementBlockUIWidget').unblock()"
+												disabled="#{empty jJRequirementBean.reqtestCases}"
+												update="testCaseDataTable :requirementDialogForm:msg"
+												process="testCaseDataTable" value="Update"
+												action="#{jJRequirementBean.updateReqTestCases(jJTestcaseBean)}" />
 											<br />
 											<p:inputText id="testcase" style="width:50%;"
 												value="#{jJRequirementBean.testCaseName}"
@@ -527,7 +547,7 @@
 												action="#{jJRequirementBean.addTestCase(jJTestcaseBean)}"
 												value="Ajouter TestCase" process="@this,testcase" />
 										</f:facet>
-									</p:dataTable>								
+									</p:dataTable>
 								</p:column>
 							</p:row>
 							<!--							<p:row>

@@ -46,7 +46,7 @@ public class ViewExpiredExceptionExceptionHandler extends
 					// the page
 					requestMap.put("currentViewId", vee.getViewId());
 					navigationHandler.handleNavigation(facesContext, null,
-							"/viewExpired");
+							"pages/login");
 					facesContext.renderResponse();
 				} finally {
 					i.remove();

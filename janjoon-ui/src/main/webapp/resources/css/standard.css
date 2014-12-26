@@ -50,20 +50,20 @@ a:visited {
 	
 }
 
-.criticity{
+.criticity {
 	
 }
 
-.importance{
+.importance {
 	
 }
 
-.status{
+.status {
 	
 }
 
 .disable-scroll .ui-dialog-content {
-  overflow: hidden !important;
+	overflow: hidden !important;
 }
 
 .central {
@@ -99,7 +99,8 @@ a:visited {
 }
 
 .login-body {
-	background: url('../resources/images/background.jpg') no-repeat bottom center fixed transparent;
+	background: url('../resources/images/background.jpg') no-repeat bottom
+		center fixed transparent;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
@@ -119,15 +120,15 @@ a:visited {
 }
 
 .login-content {
-	height:240px;
-	width:320px;
+	height: 240px;
+	width: 320px;
 	position: absolute;
 	top: 0px;
 	bottom: 0px;
 	right: 0px;
 	left: 0px;
 	margin: auto;
-	background:rgba(255,255,255,0.5);
+	background: rgba(255, 255, 255, 0.5);
 }
 
 .action-column {
@@ -136,9 +137,10 @@ a:visited {
 }
 
 .taskDataTable td:nth-child(1) {
-    width: 160px;    
+	width: 160px;
 }
-.taskDataTable table{
+
+.taskDataTable table {
 	border-collapse: separate;
 	width: auto;
 }
@@ -152,10 +154,12 @@ a:visited {
 .ui-datatable .ui-datatable-footer {
 	text-align: left !important;
 }
-.bugDataTable{
+
+.bugDataTable {
 	table-layout: fixed;
 }
-.bugDataTable .ui-datatable-header{
+
+.bugDataTable .ui-datatable-header {
 	text-align: center !important;
 }
 
@@ -183,9 +187,9 @@ a:visited {
 
 .ui-dialog {
 	width: auto !important;
-	transform: translate(-50%, -50%);
 }
 
+}
 .reqdiv {
 	float: left;
 }
@@ -277,7 +281,8 @@ a:visited {
 		!important;
 	background-image: -moz-linear-gradient(top, #ffffff, #EB7D62) !important;
 }
-div.timeline-axis-text{
+
+div.timeline-axis-text {
 	top: 10px;
 }
 
@@ -316,9 +321,9 @@ div.timeline-event-content {
 
 div.timeline-event-content span {
 	height: 15px !important;
-	
 }
-.timeline-frame div{
+
+.timeline-frame div {
 	left: 0px;
 }
 
@@ -332,9 +337,9 @@ div.timeline-axis {
 	background: -moz-linear-gradient(top, #F5F5F5, #E6E6E6);
 	-khtml-opacity: 1;
 	-moz-opacity: 1;
-	opacity: 0.8;	
+	opacity: 0.8;
 	height: 0px;
-	top:37px;
+	top: 37px;
 }
 
 div.timeline-axis-grid {
@@ -356,6 +361,7 @@ div.planned1 {
 	filter: alpha(opacity = 60);
 	height: 30px !important;
 }
+
 div.planned2 {
 	background: #5882FA none !important; /* blue */
 	border-color: white; /* white */
