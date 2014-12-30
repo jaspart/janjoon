@@ -19,10 +19,27 @@
 			style="min-height:500px;overflow:hidden !important;height:700px !important;"
 			stateful="true">
 
-			<p:layoutUnit position="north" style="min-height:30px;">
-
-				<h:form id="testFormNorth" >
-					<p:remoteCommand name="hideEvent" update="@form" />
+			<h:form id="testFormNorth">
+				<p:overlayPanel id="categoryPanel" for="overlayPanel"
+					widgetVar="pnl-category" onHide="hideEvent()" showEffect="overlay"
+					style="position: fixed;top: 5% !important;" dismissable="false"
+					rendered="#{loginBean.mobile}" showCloseIcon="true">
+					<ui:repeat value="#{jJTestcaseBean.categoryList}" var="category">
+						<p:commandButton value="#{category.name}"
+							update=":testFormWest :testFormCenter :testFormNorth:categoryPanel"
+							action="#{jJTestcaseBean.loadData()}"
+							style="width: 120px;margin-left: 20px;height: 100px;"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()">
+							<f:setPropertyActionListener value="#{category}"
+								target="#{jJTestcaseBean.category}" />
+							<f:setPropertyActionListener target="#{jJTestcaseBean.project}"
+								value="#{null}" />
+						</p:commandButton>
+					</ui:repeat>
+				</p:overlayPanel>
+				<p:layoutUnit position="north" style="min-height:30px;">				
+					<p:remoteCommand name="hideEvent" update="categoryPanel" />
 					<ui:repeat value="#{jJTestcaseBean.categoryList}" var="category">
 						<p:commandButton value="#{category.name}"
 							update=":testFormWest :testFormCenter"
@@ -41,34 +58,14 @@
 						style="font-weight:bold; float:none; position:relative; left:30%;"
 						rendered="#{loginBean.mobile}" />
 
-					<p:overlayPanel id="categoryPanel" for="overlayPanel"
-						widgetVar="pnl-category" onHide="hideEvent()"
-						showEffect="overlay"
-						style="position: fixed;top: 5% !important;right: 5% !important;"
-						rendered="#{loginBean.mobile}" showCloseIcon="true">
-						<ui:repeat value="#{jJTestcaseBean.categoryList}" var="category">
-							<p:commandButton value="#{category.name}"
-								update=":testFormWest :testFormCenter"
-								action="#{jJTestcaseBean.loadData()}"
-								style="width: 120px;margin-left: 20px;height: 100px;"
-								onstart="PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock()">
-								<f:setPropertyActionListener value="#{category}"
-									target="#{jJTestcaseBean.category}" />
-								<f:setPropertyActionListener target="#{jJTestcaseBean.project}"
-									value="#{null}" />
-							</p:commandButton>
-						</ui:repeat>
-					</p:overlayPanel>
-
 					<p:commandButton value="#{messages.specification_video_help_title}"
 						id="videoHelpBtn" icon="ui-icon-video"
 						onclick="PF('videoHelpWidget').show()"
 						style="float:none;position:relative;left:30%;" type="button" />
 
-				</h:form>
-			</p:layoutUnit>
 
+				</p:layoutUnit>
+			</h:form>
 			<p:layoutUnit position="west"
 				style="min-width:200px;min-height:500px;height:600px !important;"
 				resizable="true">

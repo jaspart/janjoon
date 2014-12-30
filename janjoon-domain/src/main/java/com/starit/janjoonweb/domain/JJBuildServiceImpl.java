@@ -20,8 +20,9 @@ public class JJBuildServiceImpl implements JJBuildService {
 		this.entityManager = entityManager;
 
 	}
-	
-	public List<JJBuild> getBuilds(JJProduct product,JJVersion version,boolean onlyActif){
+
+	public List<JJBuild> getBuilds(JJProduct product, JJVersion version,
+			boolean onlyActif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBuild> criteriaQuery = criteriaBuilder
@@ -36,13 +37,13 @@ public class JJBuildServiceImpl implements JJBuildService {
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
-		
+
 		if (version != null) {
-			predicates.add(criteriaBuilder.equal(from.get("version"),version));			
-		}else if(product != null)
-		{
+			predicates.add(criteriaBuilder.equal(from.get("version"), version));
+		} else if (product != null) {
 			predicates.add(criteriaBuilder.isNotNull(from.get("version")));
-			predicates.add(criteriaBuilder.equal(from.join("version").get("product"), product));
+			predicates.add(criteriaBuilder.equal(
+					from.join("version").get("product"), product));
 		}
 
 		select.where(predicates.toArray(new Predicate[] {}));
@@ -50,7 +51,32 @@ public class JJBuildServiceImpl implements JJBuildService {
 		TypedQuery<JJBuild> result = entityManager.createQuery(select);
 		return result.getResultList();
 
-	
+	}
+
+	public JJBuild getBuildByName(JJVersion version, String buildName) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJBuild> criteriaQuery = criteriaBuilder
+				.createQuery(JJBuild.class);
+
+		Root<JJBuild> from = criteriaQuery.from(JJBuild.class);
+
+		CriteriaQuery<JJBuild> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		predicates.add(criteriaBuilder.equal(from.get("version"), version));
+		predicates.add(criteriaBuilder.equal(from.get("name"), buildName));
+
+		select.where(predicates.toArray(new Predicate[] {}));
+
+		TypedQuery<JJBuild> result = entityManager.createQuery(select);
+		if(result.getResultList() != null && !result.getResultList().isEmpty())			
+			return result.getResultList().get(0);
+		else
+			return null;
+
 	}
 
 	@Override
@@ -85,18 +111,18 @@ public class JJBuildServiceImpl implements JJBuildService {
 		return result.getResultList();
 
 	}
-	
-	 public void saveJJBuild(JJBuild JJBuild_) {
-		 
-	        jJBuildRepository.save(JJBuild_);
-	        JJBuild_=jJBuildRepository.findOne(JJBuild_.getId());
-	    }
-	    
-	    public JJBuild updateJJBuild(JJBuild JJBuild_) {
-	    	
-	        jJBuildRepository.save(JJBuild_);
-	        
-	        JJBuild_=jJBuildRepository.findOne(JJBuild_.getId());
-	        return JJBuild_;
-	    }
+
+	public void saveJJBuild(JJBuild JJBuild_) {
+
+		jJBuildRepository.save(JJBuild_);
+		JJBuild_ = jJBuildRepository.findOne(JJBuild_.getId());
+	}
+
+	public JJBuild updateJJBuild(JJBuild JJBuild_) {
+
+		jJBuildRepository.save(JJBuild_);
+
+		JJBuild_ = jJBuildRepository.findOne(JJBuild_.getId());
+		return JJBuild_;
+	}
 }

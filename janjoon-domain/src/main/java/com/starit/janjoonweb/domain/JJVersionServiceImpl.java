@@ -24,7 +24,7 @@ public class JJVersionServiceImpl implements JJVersionService {
 
 	@Override
 	public List<JJVersion> getVersions(boolean onlyActif, boolean withProduct,
-			JJProduct product,JJCompany company) {
+			JJProduct product, JJCompany company) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJVersion> criteriaQuery = criteriaBuilder
@@ -44,15 +44,17 @@ public class JJVersionServiceImpl implements JJVersionService {
 			if (product != null)
 				predicates.add(criteriaBuilder.equal(from.get("product"),
 						product));
-			else
-			{
+			else {
 				predicates.add(criteriaBuilder.isNotNull(from.get("product")));
-				if(company != null)
-				predicates.add(criteriaBuilder.equal(from.join("product").join("manager").get("company"),company));
-			}			
-		}else if(company != null)
-			predicates.add(criteriaBuilder.equal(from.join("product").join("manager").get("company"),company));
-		
+				if (company != null)
+					predicates.add(criteriaBuilder.equal(from.join("product")
+							.join("manager").get("company"), company));
+			}
+		} else if (company != null)
+			predicates.add(criteriaBuilder.equal(
+					from.join("product").join("manager").get("company"),
+					company));
+
 		select.where(predicates.toArray(new Predicate[] {}));
 
 		TypedQuery<JJVersion> result = entityManager.createQuery(select);
@@ -74,6 +76,34 @@ public class JJVersionServiceImpl implements JJVersionService {
 
 		TypedQuery<JJTask> result = entityManager.createQuery(select);
 		return result.getResultList();
+
+	}
+
+	public JJVersion getVersionByName(String jJversion, JJProduct product) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJVersion> criteriaQuery = criteriaBuilder
+				.createQuery(JJVersion.class);
+
+		Root<JJVersion> from = criteriaQuery.from(JJVersion.class);
+
+		CriteriaQuery<JJVersion> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		if (product != null)
+			predicates.add(criteriaBuilder.equal(from.get("product"), product));
+		
+		predicates.add(criteriaBuilder.equal(from.get("name"), jJversion));
+
+		select.where(predicates.toArray(new Predicate[] {}));
+
+		TypedQuery<JJVersion> result = entityManager.createQuery(select);
+		
+		if(result.getResultList() != null && !result.getResultList().isEmpty())			
+			return result.getResultList().get(0);
+		else
+			return null;
 
 	}
 

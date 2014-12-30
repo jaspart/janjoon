@@ -13,6 +13,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -22,6 +24,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJBuildSEQ")
+@XmlRootElement
 public class JJBuild {
 	
 	@NotNull
@@ -60,8 +63,27 @@ public class JJBuild {
 	private JJTestcase testcase;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "build")
-	private Set<JJMessage> messages = new HashSet<JJMessage>();
+	private Set<JJMessage> messages = new HashSet<JJMessage>();	
 
+	@XmlAttribute
+    public String getName() {
+        return this.name;
+    }
+    
+    @XmlAttribute
+    public String getDescription() {
+        return this.description;
+    }
+    
+    @XmlAttribute
+    public Date getCreationDate() {
+        return this.creationDate;
+    }
+    @XmlAttribute
+    public Boolean getEnabled() {
+        return this.enabled;
+    }
+    
 	@Override
 	public boolean equals(Object object) {
 		return (object instanceof JJBuild) && (getId() != null) ? getId()

@@ -48,20 +48,20 @@ public class JJStatusBean {
 
 	private List<JJStatus> statusList;
 	private LazyStatusDataModel lazyStatusList;
-	
+
 	public LazyStatusDataModel getLazyStatusList() {
-		if(lazyStatusList == null)
-			lazyStatusList= new LazyStatusDataModel(jJStatusService);
+		if (lazyStatusList == null)
+			lazyStatusList = new LazyStatusDataModel(jJStatusService);
 		return lazyStatusList;
 	}
 
 	public void setLazyStatusList(LazyStatusDataModel lazyStatusList) {
 		this.lazyStatusList = lazyStatusList;
 	}
-	
-    public String onEdit() {        
-        return null;
-    }
+
+	public String onEdit() {
+		return null;
+	}
 
 	@Autowired
 	private JJRequirementService jJRequirementService;
@@ -90,8 +90,8 @@ public class JJStatusBean {
 
 	public List<JJStatus> getStatusList() {
 
-		if(statusList ==null)
-		statusList = jJStatusService.getStatus(null, true, null, true);
+		if (statusList == null)
+			statusList = jJStatusService.getStatus(null, true, null, true);
 		return statusList;
 	}
 
@@ -157,34 +157,35 @@ public class JJStatusBean {
 	public PieChartModel getPieChart() {
 		return pieChart;
 	}
+
 	private boolean first;
-	
+
 	public void onTabStatChange(TabChangeEvent event) {
-		
+
 		TabView tv = (TabView) event.getComponent();
 		if (tv.getChildren().indexOf(event.getTab()) == 1 && first) {
 			RequestContext.getCurrentInstance().execute(
 					"statsTabView.select(0)");
-			RequestContext.getCurrentInstance().execute("statsTabView.select(1)");
-			first =false;
+			RequestContext.getCurrentInstance().execute(
+					"statsTabView.select(1)");
+			first = false;
 		}
 	}
 
 	public void loadData() {
-		
-		first=true;
-		
-		if(project == null)
-		{		
-			((JJSprintBean) LoginBean.findBean("jJSprintBean")).iniSprintChart();
+
+		if (project == null) {
+			first = true;
+			((JJSprintBean) LoginBean.findBean("jJSprintBean"))
+					.iniSprintChart();
 			getProject();
 			getProduct();
 			getVersion();
 			categoryDataModel = new ArrayList<CategoryDataModel>();
 
-			List<JJCategory> categoryList = jJCategoryService.getCategories(null,
-					false, true, true);
-			
+			List<JJCategory> categoryList = jJCategoryService.getCategories(
+					null, false, true, true);
+
 			for (JJCategory category : categoryList) {
 				categoryDataModel.add(new CategoryDataModel(category));
 			}
@@ -195,10 +196,14 @@ public class JJStatusBean {
 			for (JJStatus s : statReq) {
 
 				int i = Integer.parseInt(""
-						+ jJRequirementService.getReqCountByStaus(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),project, product,
-								version, s, true));
+						+ jJRequirementService.getReqCountByStaus(
+								((LoginBean) LoginBean.findBean("loginBean"))
+										.getContact().getCompany(), project,
+								product, version, s, true));
 				pieChart.set(s.getName(), i);
 			}
+		} else {
+			first = !LoginBean.isEqualPreviousPage("stats");
 		}
 	}
 
@@ -215,14 +220,14 @@ public class JJStatusBean {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		statusList = null;
 		pieChart = null;
-		lazyStatusList=null;
+		lazyStatusList = null;
 
 	}
 
 	public void reset() {
 		setJJStatus_(null);
-		lazyStatusList=null;
-		statusList=null;
+		lazyStatusList = null;
+		statusList = null;
 		pieChart = null;
 		setSelectedMessages(null);
 		setCreateDialogVisible(false);
@@ -233,14 +238,14 @@ public class JJStatusBean {
 		return jJStatusService.getTablesName();
 	}
 
-	public String persistStatus() {		
+	public String persistStatus() {
 		String message = "";
 
 		if (getJJStatus_().getId() != null) {
 			updateJJStatus(getJJStatus_());
 			message = "message_successfully_updated";
 
-		} else {			
+		} else {
 			getJJStatus_().setDescription(
 					"Satus : " + getJJStatus_().getName() + " for "
 							+ getJJStatus_().getObjet() + "object");
@@ -252,8 +257,8 @@ public class JJStatusBean {
 		context.execute("PF('createSatDialogWidget').hide()");
 		context.execute("PF('editSatDialogWidget').hide()");
 
-		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"Status");
+		FacesMessage facesMessage = MessageFactory
+				.getMessage(message, "Status");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 		return findAllJJStatuses();
@@ -688,9 +693,10 @@ public class JJStatusBean {
 
 			float compteur = 0;
 			List<JJRequirement> dataList = jJRequirementService
-					.getRequirements(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany()
-							,category, project, product, version, null,
-							null, false, true, false);
+					.getRequirements(((LoginBean) LoginBean
+							.findBean("loginBean")).getContact().getCompany(),
+							category, project, product, version, null, null,
+							false, true, false);
 
 			List<JJCategory> categoryList = jJCategoryService.getCategories(
 					null, false, true, true);
@@ -787,9 +793,10 @@ public class JJStatusBean {
 		public float getCompletionProgress() {
 			float compteur = 0;
 			List<JJRequirement> dataList = jJRequirementService
-					.getRequirements(((LoginBean) LoginBean.findBean("loginBean")).getContact().
-							getCompany(),category, project, product, version, null,
-							null, false, true, false);
+					.getRequirements(((LoginBean) LoginBean
+							.findBean("loginBean")).getContact().getCompany(),
+							category, project, product, version, null, null,
+							false, true, false);
 
 			for (JJRequirement requirement : dataList) {
 				compteur = compteur + calculCompletion(requirement);
@@ -856,18 +863,18 @@ public class JJStatusBean {
 
 		}
 	}
-	
-	public void saveJJStatus(JJStatus b)
-	{
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+
+	public void saveJJStatus(JJStatus b) {
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJStatusService.saveJJStatus(b);
 	}
-	
-	public void updateJJStatus(JJStatus b)
-	{
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+
+	public void updateJJStatus(JJStatus b) {
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJStatusService.updateJJStatus(b);

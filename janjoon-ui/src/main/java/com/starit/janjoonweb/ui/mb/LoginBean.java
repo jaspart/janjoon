@@ -11,7 +11,6 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.faces.event.ActionEvent;
@@ -40,12 +39,10 @@ import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJPermissionService;
-import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.ui.mb.util.MailingService;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.UsageChecker;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
@@ -134,7 +131,7 @@ public class LoginBean implements Serializable {
 		this.authenticationManager = authenticationManager;		
 		this.mobile=(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
 					.getRequest()).getHeader("User-Agent").indexOf("Mobile")) != -1; 
-//		this.mobile=true;	
+		//this.mobile=true;	
 		}
 
 	protected String getRedirectUrl(HttpSession session) {
@@ -516,8 +513,7 @@ public class LoginBean implements Serializable {
 				session.setAttribute("jJSprintBean", new JJSprintBean());
 				session.setAttribute("jJStatusBean", new JJStatusBean());
 				session.setAttribute("jJTaskBean", new JJTaskBean());
-				session.setAttribute("jJRequirementBean",
-						new JJRequirementBean());
+				session.setAttribute("jJRequirementBean",null);
 			}
 
 			if (viewId.contains("development")) {
@@ -562,43 +558,45 @@ public class LoginBean implements Serializable {
 				}
 			} else if (viewId.contains("specifications")) {
 
-				System.out.println("in spec");
-
-				JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
-				jJRequirementBean.setViewButton(null);
-
-				if (event.getComponent().getClientId()
-						.contains("projectSelectOneMenu")) {
-					JJProject project = (JJProject) event.getNewValue();
-
-					jJProjectBean.setProject(project);
-
-					jJRequirementBean.setProject(project);
-
-				} else if (event.getComponent().getClientId()
-						.contains("productSelectOneMenu")) {
-
-					JJProduct product = (JJProduct) event.getNewValue();
-
-					jJProductBean.setProduct(product);
-
-					jJRequirementBean.setProduct(product);
-
-				} else if (event.getComponent().getClientId()
-						.contains("versionSelectOneMenu")) {
-
-					JJVersion version = (JJVersion) event.getNewValue();
-
-					jJVersionBean.setVersion(version);
-					jJRequirementBean.setVersion(version);
-				}
-
-				jJRequirementBean.loadData();
-
-				ExternalContext ec = FacesContext.getCurrentInstance()
-						.getExternalContext();
-				ec.redirect(((HttpServletRequest) ec.getRequest())
-						.getRequestURI());
+//				System.out.println("in spec");
+//
+//				JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
+//				jJRequirementBean.setViewButton(null);
+//
+//				if (event.getComponent().getClientId()
+//						.contains("projectSelectOneMenu")) {
+//					JJProject project = (JJProject) event.getNewValue();
+//
+//					jJProjectBean.setProject(project);
+//
+//					jJRequirementBean.setProject(project);
+//
+//				} else if (event.getComponent().getClientId()
+//						.contains("productSelectOneMenu")) {
+//
+//					JJProduct product = (JJProduct) event.getNewValue();
+//
+//					jJProductBean.setProduct(product);
+//
+//					jJRequirementBean.setProduct(product);
+//
+//				} else if (event.getComponent().getClientId()
+//						.contains("versionSelectOneMenu")) {
+//
+//					JJVersion version = (JJVersion) event.getNewValue();
+//
+//					jJVersionBean.setVersion(version);
+//					jJRequirementBean.setVersion(version);
+//				}
+//
+//				jJRequirementBean.loadData();
+//
+//				ExternalContext ec = FacesContext.getCurrentInstance()
+//						.getExternalContext();
+//				ec.redirect(((HttpServletRequest) ec.getRequest())
+//						.getRequestURI());
+				
+				session.setAttribute("jJRequirementBean",new JJRequirementBean());
 
 			}
 
@@ -710,10 +708,8 @@ public class LoginBean implements Serializable {
 				context.execute("PF('blockUIWidget').unblock()");
 
 			}
-			String previos = FacesContext.getCurrentInstance()
-					.getExternalContext().getRequestHeaderMap().get("referer");
-			if (previos == null)
-				previos = "";
+			String previos = getPreviousPage();
+			
 			if (viewId.contains("administration")
 					&& !previos.contains("administration")) {
 
@@ -857,8 +853,8 @@ public class LoginBean implements Serializable {
 					if (!previos.contains(viewID.replace(".xhtml", ".jsf"))) {
 						if (viewID.contains("specification")) {
 							if (authorisationService.isrRequiement()) {
-								JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
-								jJRequirementBean.loadData();
+//								JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
+//								jJRequirementBean.loadData();
 							} else {
 								FacesContext
 										.getCurrentInstance()
@@ -991,8 +987,8 @@ public class LoginBean implements Serializable {
 					} else if (root.getViewId().contains("specifications")) {
 
 						if (authorisationService.isrRequiement()) {
-							JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
-							jJRequirementBean.loadData();
+//							JJRequirementBean jJRequirementBean = (JJRequirementBean) findBean("jJRequirementBean");
+//							jJRequirementBean.loadData();
 						} else {
 							FacesContext
 									.getCurrentInstance()
@@ -1055,6 +1051,28 @@ public class LoginBean implements Serializable {
 
 		}
 	}
+	
+	public static boolean isEqualPreviousPage(String page)
+	{
+		String referer = FacesContext.getCurrentInstance()
+				.getExternalContext().getRequestHeaderMap().get("referer");
+		if (referer == null)
+			referer = "";
+		
+		return referer.contains(page);
+	}
+	
+	public static String getPreviousPage()
+	{
+		String referer = FacesContext.getCurrentInstance()
+				.getExternalContext().getRequestHeaderMap().get("referer");
+		if (referer == null)
+			referer = "";
+		
+		return referer;
+	}
+	
+	
 	
 	public UIComponent findComponent(final String id) {
 

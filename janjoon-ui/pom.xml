@@ -16,7 +16,7 @@
 		<roo.version>1.2.5.RELEASE</roo.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<spring.version>3.2.8.RELEASE</spring.version>
-		<spring-sec.version>3.2.1.RELEASE</spring-sec.version>
+		<spring-sec.version>3.2.5.RELEASE</spring-sec.version>
 		<build.number>SNAPSHOT</build.number>
 	</properties>
 	<repositories>
@@ -60,6 +60,43 @@
 		</pluginRepository>
 	</pluginRepositories>
 	<dependencies>
+		<!--Restful WS -->
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>1.8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey.contribs</groupId>
+			<artifactId>jersey-spring</artifactId>
+			<version>1.8</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-aop</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-web</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 		<!--Git&&SVN dependencies -->
 		<dependency>
 			<groupId>org.tmatesoft.svnkit</groupId>
@@ -282,6 +319,11 @@
 			<artifactId>all-themes</artifactId>
 			<version>1.0.10</version>
 		</dependency>
+		<dependency>
+			<groupId>com.starit.janjoonweb</groupId>
+			<artifactId>janjoon-theme</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 		<!-- PrimeFaces Extension dependencies -->
 		<dependency>
 			<groupId>org.primefaces.extensions</groupId>
@@ -445,7 +487,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.12</version>
-				<configuration>					
+				<configuration>
 					<printSummary>false</printSummary>
 					<redirectTestOutputToFile>true</redirectTestOutputToFile>
 					<excludes>

@@ -12,26 +12,15 @@ import com.starit.janjoonweb.domain.JJVersion;
 import java.util.Date;
 import java.util.Set;
 
-privileged aspect JJBuild_Roo_JavaBean {
-    
-    public String JJBuild.getName() {
-        return this.name;
-    }
+privileged aspect JJBuild_Roo_JavaBean {   
+   
     
     public void JJBuild.setName(String name) {
         this.name = name;
     }
     
-    public String JJBuild.getDescription() {
-        return this.description;
-    }
-    
     public void JJBuild.setDescription(String description) {
         this.description = description;
-    }
-    
-    public Date JJBuild.getCreationDate() {
-        return this.creationDate;
     }
     
     public void JJBuild.setCreationDate(Date creationDate) {
@@ -60,10 +49,6 @@ privileged aspect JJBuild_Roo_JavaBean {
     
     public void JJBuild.setUpdatedBy(JJContact updatedBy) {
         this.updatedBy = updatedBy;
-    }
-    
-    public Boolean JJBuild.getEnabled() {
-        return this.enabled;
     }
     
     public void JJBuild.setEnabled(Boolean enabled) {

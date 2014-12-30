@@ -28,7 +28,7 @@
 	</context-param>
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
-		<param-value>bootstrap</param-value>
+		<param-value>janjoon</param-value>
 	</context-param>
 	<filter>
 		<filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
@@ -78,6 +78,21 @@
 		<servlet-name>CKEditorUploadServlet</servlet-name>
 		<servlet-class>com.starit.janjoonweb.ui.mb.util.service.CKEditorUploadServlet</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>jersey-serlvet</servlet-name>
+		<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+		<init-param>
+		     <param-name>com.sun.jersey.config.property.packages</param-name>
+		     <param-value>com.starit.janjoonweb.ui.mb.webService</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>jersey-serlvet</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>CKEditorUploadServlet</servlet-name>
@@ -87,6 +102,7 @@
 		<servlet-name>CKEditorGetImageServlet</servlet-name>
 		<url-pattern>/pages/ckeditor/getimage</url-pattern>
 	</servlet-mapping>
+
 	<session-config>
 		<session-timeout>120</session-timeout>
 	</session-config>

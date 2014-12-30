@@ -360,6 +360,7 @@ div.planned1 {
 	opacity: 0.6;
 	filter: alpha(opacity = 60);
 	height: 30px !important;
+	border-radius: 0px !important;
 }
 
 div.planned2 {
@@ -368,6 +369,7 @@ div.planned2 {
 	opacity: 0.6;
 	filter: alpha(opacity = 60);
 	height: 19px !important;
+	border-radius: 0px !important;
 }
 
 div.real {
@@ -377,6 +379,7 @@ div.real {
 	filter: alpha(opacity = 60);
 	height: 19px !important;
 	transform: translate(0px, 20px);
+	border-radius: 0px !important;
 }
 
 div.chapter {
@@ -385,6 +388,7 @@ div.chapter {
 	opacity: 0.5;
 	filter: alpha(opacity = 50);
 	height: 30px !important;
+	border-radius: 0px !important;
 }
 
 div.revised1 {
@@ -393,6 +397,7 @@ div.revised1 {
 	opacity: 0.5;
 	filter: alpha(opacity = 50);
 	height: 30px !important;
+	border-radius: 0px !important;
 }
 
 div.revised2 {
@@ -401,6 +406,7 @@ div.revised2 {
 	opacity: 0.5;
 	filter: alpha(opacity = 50);
 	height: 19px !important;
+	border-radius: 0px !important;
 }
 
 /*.task {
