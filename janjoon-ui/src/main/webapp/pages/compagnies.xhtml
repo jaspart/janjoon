@@ -106,12 +106,17 @@
 					</p:row>
 					<p:row>
 						<p:column colspan="3">
-							<p:outputLabel value="Description" for="jJCompanyDescription" />
+							<p:outputLabel value="Description" for="jJCompanyDescription" rendered="#{!loginBean.mobile}" />
+							<p:outputLabel value="Description" for="jJCompanyMobileDescription" rendered="#{loginBean.mobile}" />
 							<br />
 							<pe:ckEditor id="jJCompanyDescription"
 								toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
-								style="width:680px"
+								style="width:680px" rendered="#{!loginBean.mobile}"
 								customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+								value="#{jJCompanyBean.companie.description}" required="true"
+								requiredMessage="Description is a required value" />
+							<p:editor id="jJCompanyMobileDescription" style="width:680px"
+								rendered="#{loginBean.mobile}"
 								value="#{jJCompanyBean.companie.description}" required="true"
 								requiredMessage="Description is a required value" />
 

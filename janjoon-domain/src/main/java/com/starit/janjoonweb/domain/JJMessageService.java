@@ -14,5 +14,7 @@ public interface JJMessageService {
 
 	public List<JJMessage> getActifMessages(JJProject project, JJProduct product);
 	
+	public List<JJMessage> getAlertMessages(JJProject project, JJProduct product);
+	
 	public List<JJMessage> getActifMessages(MutableInt size,int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, String> filters,JJProject project,JJProduct product);
 }

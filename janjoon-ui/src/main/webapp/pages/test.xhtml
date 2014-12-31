@@ -38,7 +38,7 @@
 						</p:commandButton>
 					</ui:repeat>
 				</p:overlayPanel>
-				<p:layoutUnit position="north" style="min-height:30px;">				
+				<p:layoutUnit position="north" style="min-height:30px;">
 					<p:remoteCommand name="hideEvent" update="categoryPanel" />
 					<ui:repeat value="#{jJTestcaseBean.categoryList}" var="category">
 						<p:commandButton value="#{category.name}"
@@ -422,8 +422,8 @@
 			<p:outputPanel id="testcaseDialogPanel">
 				<h:form id="testcaseDialogForm">
 					<p:growl id="msg" />
-					<p:scrollPanel style="width:720px;height:500px;" mode="native">
-						<p:panelGrid style="margin-top:10px;">
+<!-- 					<p:scrollPanel style="width:720px;height:500px;" mode="native"> -->
+						<p:panelGrid style="margin-top:10px;width:720px;height:500px;">
 							<p:row>
 								<p:column>
 									<p:inputText id="name" value="#{jJTestcaseBean.testcase.name}"
@@ -469,10 +469,15 @@
 								<p:column colspan="3">
 									<h:outputText value="#{messages.test_new_description_label}" />
 									<pe:ckEditor id="description" widgetVar="descriptionWidget"
-										style="width:680px;"
+										style="width:680px;" rendered="#{!loginBean.mobile}"
 										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 										readOnly="#{jJTestcaseBean.disabledTestcaseMode}"
 										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
+										value="#{jJTestcaseBean.testcase.description}" required="true"
+										requiredMessage="#{messages.test_new_description_alert}" />
+									<p:editor id="descriptionMobile" style="width:680px;"
+										rendered="#{loginBean.mobile}"
+										readOnly="#{jJTestcaseBean.disabledTestcaseMode}"
 										value="#{jJTestcaseBean.testcase.description}" required="true"
 										requiredMessage="#{messages.test_new_description_alert}" />
 								</p:column>
@@ -501,12 +506,17 @@
 									</p:outputPanel>
 								</p:column>
 								<p:column>
-									<p:commandButton id="addTestcase"
-										value="#{messages.test_new_addtest_label}"
+									<p:commandButton value="#{messages.test_new_addtest_label}"
 										disabled="#{not jJTestcaseBean.disabledTeststepMode}"
-										icon="ui-icon-circle-plus"
+										icon="ui-icon-circle-plus" rendered="#{!loginBean.mobile}"
 										actionListener="#{jJTestcaseBean.save()}"
 										process="@this,name,requirement,description "
+										update="testcaseDialogForm :testFormWest" />
+									<p:commandButton value="#{messages.test_new_addtest_label}"
+										disabled="#{not jJTestcaseBean.disabledTeststepMode}"
+										icon="ui-icon-circle-plus" rendered="#{loginBean.mobile}"
+										actionListener="#{jJTestcaseBean.save()}"
+										process="@this,name,requirement,descriptionMobile "
 										update="testcaseDialogForm :testFormWest" />
 								</p:column>
 							</p:row>
@@ -619,10 +629,15 @@
 								<p:rowEditor />
 							</p:column>
 						</p:dataTable>
-					</p:scrollPanel>
-					<p:commandButton id="saveButton" value="Save"
-						process="@this,name,requirement,description"
+<!-- 					</p:scrollPanel> -->
+					<p:commandButton value="Save"
+						process="@this,name,requirement,description" rendered="#{!loginBean.mobile}"
 						disabled="#{jJTestcaseBean.disabledTeststepMode}"
+						update="testcaseDialogForm :testFormWest" style="float: right;"
+						action="#{jJTestcaseBean.saveAndclose(jJTeststepBean)}" />
+						<p:commandButton  value="Save"
+						process="@this,name,requirement,descriptionMobile"
+						disabled="#{jJTestcaseBean.disabledTeststepMode}" rendered="#{loginBean.mobile}"
 						update="testcaseDialogForm :testFormWest" style="float: right;"
 						action="#{jJTestcaseBean.saveAndclose(jJTeststepBean)}" />
 				</h:form>

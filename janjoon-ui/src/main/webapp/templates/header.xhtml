@@ -41,7 +41,7 @@
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()"
-							update=":contentPanel tabMenu " />
+							update=":contentPanel tabMenu :scrollRight :messagePanel " />
 					</p:selectOneMenu>
 
 					<!--h:outputText value="#{messages.header_product_label}:" /-->
@@ -56,7 +56,7 @@
 						<f:selectItems value="#{jJProductBean.productList}" var="p"
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax onstart="PF('blockUIWidget').block()"
-							update="versionSelectOneMenu :contentPanel "
+							update="versionSelectOneMenu :contentPanel :scrollRight :messagePanel"
 							oncomplete="PF('blockUIWidget').unblock()" />
 					</p:selectOneMenu>
 

@@ -27,7 +27,7 @@
 			<h:form id="messageForm">
 				<p:dataTable id="MessageTable2" sortMode="multiple" 
 					value="#{jJMessageBean.mainMessages}" rowKey="#{mes.id}" var="mes"
-					widgetVar="messageTable"  paginator="true" rows="6"
+					widgetVar="messageTable"  paginator="true" rows="6" paginatorPosition="bottom"
 					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 					lazy="true"					
 					emptyMessage="#{messages.label_notFound}">

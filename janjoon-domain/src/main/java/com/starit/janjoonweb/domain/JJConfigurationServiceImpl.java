@@ -83,9 +83,7 @@ public class JJConfigurationServiceImpl implements JJConfigurationService {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		if (name != null) {
-
 			predicates.add(criteriaBuilder.equal(from.get("name"), name));
-
 		}
 
 		if (param != null) {

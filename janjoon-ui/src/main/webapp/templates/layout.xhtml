@@ -9,7 +9,7 @@
 <f:event listener="#{loginBean.checkAuthorities}" type="preRenderView" />
 <f:view locale="#{localeBean.locale}" contentType="text/html">
 	<h:head>
-		<h:outputScript library="primefaces" name="jquery/jquery.js"  />		
+		<h:outputScript library="primefaces" name="jquery/jquery.js" />
 		<script type="text/javascript">
 			function centerDialog() {
 				var top, left;
@@ -149,6 +149,16 @@
 					<ui:include src="header.xhtml" />
 				</ui:insert>
 
+				<p:imageSwitch id="scrollRight" effect="scrollRight"
+					style="width:100%;height:25px;" speed="10000" slideshowSpeed="250"
+					rendered="#{loginBean.showMarquee == 'true'}">
+					<ui:repeat var="data" value="#{jJMessageBean.alertMessages}">
+						<p:outputPanel style="width:100px;">
+							<h:outputText style="color:red;" value="Alert: #{data.name}" />
+						</p:outputPanel>
+					</ui:repeat>
+				</p:imageSwitch>
+
 				<p:panel id="contentPanel" styleClass="content">
 					<f:event listener="#{loginBean.initMenuIndexvalue}"
 						type="preRenderView" />
@@ -163,9 +173,9 @@
 			</p:panel>
 			<p:panel id="messagePanel" header="Chat" styleClass="chat"
 				toggleable="true" toggleOrientation="horizontal"
-				style="height:100%;" collapsed="#{jJMessageBean.collapsedMesPanel}">
+				style="height:100%;" collapsed="#{loginBean.collapsedMesPanel}">
 
-				<p:ajax event="toggle" listener="#{jJMessageBean.handleMesToggle}"
+				<p:ajax event="toggle" listener="#{loginBean.handleMesToggle}"
 					update=":applicatinPanelGrid,messagePanel,contentPanel" />
 
 				<f:event listener="#{jJMessageBean.initJJMessageLayout}"
@@ -174,7 +184,7 @@
 				<p:dataTable id="dataTable1" value="#{jJMessageBean.mainMessages}"
 					rowKey="#{mes.id}" var="mes" paginator="true"
 					paginatorPosition="bottom"
-					rendered="#{loginBean.enable and !jJMessageBean.collapsedMesPanel}"
+					rendered="#{loginBean.enable and !loginBean.collapsedMesPanel}"
 					style="border-spacing:0px;" selectionMode="single" rows="10"
 					lazy="true" sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
 					<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
@@ -190,7 +200,7 @@
 
 				<f:facet name="footer" style="position: relative;">
 					<h:form id="messageCreationForm"
-						rendered="#{loginBean.enable and !jJMessageBean.collapsedMesPanel}">
+						rendered="#{loginBean.enable and !loginBean.collapsedMesPanel}">
 
 						<p:growl id="creationGrowl" showDetail="true" life="2000" />
 						<p:panelGrid columns="1">
@@ -204,7 +214,7 @@
 								</p:selectBooleanButton>
 								<p:commandButton id="submitMes" value="OK"
 									actionListener="#{jJMessageBean.createMessage}"
-									update=":messageCreationForm,creationGrowl" />
+									update=":messageCreationForm,creationGrowl,:scrollRight" />
 							</p:panelGrid>
 						</p:panelGrid>
 					</h:form>

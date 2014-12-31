@@ -79,20 +79,21 @@
 				<p:watermark for="jJbugTeststep" value="Teststep : " />
 			</p:column>
 		</p:row>
-		<p:row>		
+		<p:row>
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugProject"
-					onchange="jJbugRequirementWV.val('');" 
+					onchange="jJbugRequirementWV.val('');"
 					value="#{jJBugBean.bugProjectSelected}" itemLabel="#{project.name}"
 					itemValue="#{project}" rendered="#{jJProjectBean.project == null}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter"
 					dropdown="true" var="project" scrollHeight="200"
 					completeMethod="#{jJBugBean.completeProject}">
-				
+
 					<p:ajax event="itemSelect" listener="#{jJBugBean.changeEvent}"
-						update="jJbugRequirement jJbugTeststep jJbugProject" >
-						<f:setPropertyActionListener target="#{jJBugBean.bugRequirementSelected}" value="#{null}"/>
-						</p:ajax>
+						update="jJbugRequirement jJbugTeststep jJbugProject">
+						<f:setPropertyActionListener
+							target="#{jJBugBean.bugRequirementSelected}" value="#{null}" />
+					</p:ajax>
 
 				</p:autoComplete>
 				<p:selectOneMenu id="jJbugProject2" value="#{JJBug_.project}"
@@ -108,20 +109,23 @@
 
 			</p:column>
 			<p:column colspan="1">
-				<p:autoComplete id="jJbugVersion" scrollHeight="200" onchange="jJbugBuild.val('');jJbugRequirementWV.val('');"
-					value="#{jJBugBean.bugVersionSelected}" itemLabel="#{version.name} : #{version.product.name}"
-					itemValue="#{version}" rendered="#{jJVersionBean.version == null}"  
+				<p:autoComplete id="jJbugVersion" scrollHeight="200"
+					onchange="jJbugBuild.val('');jJbugRequirementWV.val('');"
+					value="#{jJBugBean.bugVersionSelected}"
+					itemLabel="#{version.name} : #{version.product.name}"
+					itemValue="#{version}" rendered="#{jJVersionBean.version == null}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
 					dropdown="true" var="version"
 					completeMethod="#{jJBugBean.completeVersioningBug}">
-					<p:ajax event="itemSelect"
-						update="jJbugVersion jJbugBuild" />
+					<p:ajax event="itemSelect" update="jJbugVersion jJbugBuild" />
 				</p:autoComplete>
-				<p:selectOneMenu id="jJbugVersion2" value="#{jJBugBean.bugVersionSelected}"
+				<p:selectOneMenu id="jJbugVersion2"
+					value="#{jJBugBean.bugVersionSelected}"
 					rendered="#{jJVersionBean.version != null}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
 					<f:selectItem itemValue="#{jJVersionBean.version}"
-						itemDisabled="true" itemLabel="#{jJVersionBean.version.name} : #{jJVersionBean.version.product.name}" />
+						itemDisabled="true"
+						itemLabel="#{jJVersionBean.version.name} : #{jJVersionBean.version.product.name}" />
 				</p:selectOneMenu>
 				<p:watermark for="jJbugVersion" value="Version : "
 					rendered="#{jJVersionBean.version == null}" />
@@ -129,28 +133,35 @@
 					rendered="#{jJVersionBean.version != null}" />
 			</p:column>
 			<p:column colspan="1">
-				<p:autoComplete id="jJbugBuild" scrollHeight="200" 
+				<p:autoComplete id="jJbugBuild" scrollHeight="200"
 					widgetVar="jJbugBuildWV" value="#{JJBug_.build}"
 					itemLabel="#{build.name}" itemValue="#{build}"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter"					
+					converter="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter"
 					dropdown="true" var="build"
-					completeMethod="#{jJBugBean.completeBuildBug}" >
-						<f:validator validatorId="bugValidator"/>
-						<f:attribute name="jJbugVersion" value="#{jJBugBean.bugVersionSelected}"/>
-					</p:autoComplete>
+					completeMethod="#{jJBugBean.completeBuildBug}">
+					<f:validator validatorId="bugValidator" />
+					<f:attribute name="jJbugVersion"
+						value="#{jJBugBean.bugVersionSelected}" />
+				</p:autoComplete>
 				<p:watermark for="jJbugBuild" value="Build : " />
 			</p:column>
 		</p:row>
 		<p:row>
 			<p:column colspan="3">
-				<p:outputLabel value="Description" for="jJBugDescription" />
+				<p:outputLabel value="Description" for="jJBugDescription"
+					rendered="#{!loginBean.mobile}" />
+				<p:outputLabel value="Description" for="jJBugMobileDescription"
+					rendered="#{loginBean.mobile}" />
 				<br />
 				<pe:ckEditor id="jJBugDescription"
 					toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
-					style="width:680px"
+					style="width:680px" rendered="#{!loginBean.mobile}"
 					customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 					value="#{JJBug_.description}" required="true"
 					requiredMessage="Description is a required value" />
+				<p:editor id="jJBugMobileDescription" style="width:680px"
+					rendered="#{loginBean.mobile}" value="#{JJBug_.description}"
+					required="true" requiredMessage="Description is a required value" />
 
 			</p:column>
 		</p:row>

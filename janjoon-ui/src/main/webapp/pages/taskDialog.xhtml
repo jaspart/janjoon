@@ -65,11 +65,14 @@
 					value="#{JJTask_.bug}" />
 			</p:column>
 			<p:column colspan="4" rendered="#{jJTaskBean.taskTreeNode == null}">
-				<p:outputLabel for="Bugdescription" value="Description :" />
+				<p:outputLabel value="Description :" />
 				<br />
 				<pe:ckEditor id="Bugdescription" toolbar="[['Copy']]"
 					style="width:680px" value="#{JJTask_.bug.description}"
-					readOnly="true" />
+					readOnly="true" rendered="#{!loginBean.mobile}" />
+				<p:editor id="BugMobiledescription" 
+					style="width:680px" value="#{JJTask_.bug.description}"
+					readOnly="true" rendered="#{loginBean.mobile}"/>
 			</p:column>
 		</p:row>
 
@@ -121,10 +124,14 @@
 					</p:row>
 					<p:row>
 						<p:column colspan="2">
-							<p:outputLabel for="description" value="Description :" />
+							<p:outputLabel value="Description :" />
 							<br />
 							<pe:ckEditor id="description" toolbar="[['Copy']]"
-								style="width:680px"
+								style="width:680px" rendered="#{!loginBean.mobile}"
+								value="#{jJTaskBean.selectedReq.description}" readOnly="true" />
+
+							<p:editor id="descriptionMobile" style="width:680px"
+								rendered="#{loginBean.mobile}"
 								value="#{jJTaskBean.selectedReq.description}" readOnly="true" />
 						</p:column>
 					</p:row>

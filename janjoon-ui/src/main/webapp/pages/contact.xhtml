@@ -8,7 +8,7 @@
 	<h:form id="contactForm">
 		<p:panel id="contactPanel" style="width:700px" columns="1"
 			cellpadding="6">
-			<p:dataTable id="contactDataTable" var="contact" lazy="true"
+			<p:dataTable id="contactDataTable" var="contact" lazy="true" paginatorPosition="bottom"
 				value="#{jJContactBean.contactsLazyModel}" paginator="true"
 				rows="15" rowKey="#{contact.id}">
 				<f:facet name="header">#{messages.admin_contact_table_title}</f:facet>

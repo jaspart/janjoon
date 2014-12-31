@@ -2,6 +2,7 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
+import org.primefaces.event.ToggleEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,6 +38,8 @@ import org.springframework.stereotype.Component;
 
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCompanyService;
+import com.starit.janjoonweb.domain.JJConfiguration;
+import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJPermissionService;
@@ -59,6 +63,8 @@ public class LoginBean implements Serializable {
 	static Logger logger = Logger.getLogger("loginBean-Logger");
 	private List<JJRequirement> noCouvretReq;
 	private boolean mobile;
+	private boolean collapsedMesPanel = true;
+	private String showMarquee;
 
 	@Autowired
 	private JJContactService jJContactService;
@@ -66,15 +72,14 @@ public class LoginBean implements Serializable {
 	@Autowired
 	private JJRequirementService jJRequirementService;
 
-	public void setjJRequirementService(JJRequirementService jJRequirementService) {
-		this.jJRequirementService = jJRequirementService;
-	}
-
 	@Autowired
 	private JJCompanyService jJCompanyService;
 
 	@Autowired
 	private JJPermissionService jJPermissionService;
+	
+	@Autowired
+	private JJConfigurationService jJConfigurationService;
 
 	private String username = "";// "janjoon.mailer@gmail.com";
 	private String password;
@@ -84,8 +89,26 @@ public class LoginBean implements Serializable {
 	private JJContact contact;
 	private boolean enable = false;
 	private int activeTabAdminIndex;
+	
+
 	private int activeTabProjectIndex;
 	private int menuIndex;
+
+	@Autowired
+	public LoginBean(AuthenticationManager authenticationManager) {
+		this.authenticationManager = authenticationManager;		
+		this.mobile=(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
+					.getRequest()).getHeader("User-Agent").indexOf("Mobile")) != -1; 
+		//this.mobile=true;	
+		}
+	
+	public boolean isCollapsedMesPanel() {
+		return collapsedMesPanel;
+	}
+
+	public void setCollapsedMesPanel(boolean collapsedMesPanel) {
+		this.collapsedMesPanel = collapsedMesPanel;
+	}
 
 	public AuthorisationService getAuthorisationService() {
 		return authorisationService;
@@ -96,12 +119,21 @@ public class LoginBean implements Serializable {
 		this.authorisationService = authorisationService;
 	}
 
+	public void setjJRequirementService(JJRequirementService jJRequirementService) {
+		this.jJRequirementService = jJRequirementService;
+	}
+
 	public void setjJContactService(JJContactService jJContactService) {
 		this.jJContactService = jJContactService;
 	}
 
 	public void setjJPermissionService(JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
+	}
+
+	public void setjJConfigurationService(
+			JJConfigurationService jJConfigurationService) {
+		this.jJConfigurationService = jJConfigurationService;
 	}
 
 	public void setjJCompanyService(JJCompanyService jJCompanyService) {
@@ -125,14 +157,6 @@ public class LoginBean implements Serializable {
 		this.agreeTerms = agreeTerms;
 		
 	}
-
-	@Autowired
-	public LoginBean(AuthenticationManager authenticationManager) {
-		this.authenticationManager = authenticationManager;		
-		this.mobile=(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
-					.getRequest()).getHeader("User-Agent").indexOf("Mobile")) != -1; 
-		//this.mobile=true;	
-		}
 
 	protected String getRedirectUrl(HttpSession session) {
 		if (session != null) {
@@ -166,151 +190,6 @@ public class LoginBean implements Serializable {
 		}
 
 		return "main";
-	}
-
-	public String logout() {
-		FacesContext fContext = FacesContext.getCurrentInstance();
-		logger.info("Contact logged out");
-		HttpSession session = (HttpSession) fContext.getExternalContext()
-				.getSession(false);
-		session.invalidate();
-		SecurityContextHolder.clearContext();
-		return "loggedout";
-
-	}
-
-	@SuppressWarnings("deprecation")
-	public String login() {
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-				username, password);
-		String prevPage = "";
-		try {
-			Authentication authentication = authenticationManager
-					.authenticate(token);
-			SecurityContext sContext = SecurityContextHolder.getContext();
-			sContext.setAuthentication(authentication);
-			enable = true;
-
-		} catch (AuthenticationException loginError) {
-
-			FacesMessage message = new FacesMessage(
-					FacesMessage.SEVERITY_ERROR,
-					"Invalid username/password. Reason :",
-					loginError.getMessage());
-			FacesContext.getCurrentInstance().addMessage("login", message);
-
-			enable = false;
-			prevPage = "fail";
-		}
-		if (enable) {
-			Flash flash = FacesContext.getCurrentInstance()
-					.getExternalContext().getFlash();
-			flash.setKeepMessages(true);
-			if (UsageChecker.check()) {
-				contact = jJContactService.getContactByEmail(username, true);
-				contact = jJContactService.findJJContact(contact.getId());
-				FacesContext fContext = FacesContext.getCurrentInstance();
-				HttpSession session = (HttpSession) fContext
-						.getExternalContext().getSession(false);			
-
-				session.putValue("password", password);
-				FacesMessage message = new FacesMessage(
-						FacesMessage.SEVERITY_INFO, "Welcome ",
-						contact.getName());
-
-				flash.putNow("main", message);
-
-				logger.info("login operation success " + contact.getName()
-						+ " logged in");
-				if (session.getAttribute("jJProjectBean") == null)
-					session.setAttribute("jJProjectBean", new JJProjectBean());
-
-				if (session.getAttribute("jJProductBean") == null)
-					session.setAttribute("jJProductBean", new JJProductBean());
-
-				if (session.getAttribute("jJVersionBean") == null)
-					session.setAttribute("jJVersionBean", new JJVersionBean());
-
-				JJProjectBean jjProjectBean = (JJProjectBean) session
-						.getAttribute("jJProjectBean");
-				JJProductBean jjProductBean = (JJProductBean) session
-						.getAttribute("jJProductBean");
-				JJVersionBean jjVersionBean = (JJVersionBean) session
-						.getAttribute("jJVersionBean");
-
-				boolean save = false;
-
-				if (contact.getCategories() == null
-						|| contact.getCategories().isEmpty()) {
-					save = true;
-					contact.setCategories(new HashSet<JJCategory>(
-							jJPermissionService.getDefaultCategories(contact)));
-
-				}
-
-				if (contact.getLastProject() == null) {
-					save = true;
-					contact.setLastProject(jJPermissionService
-							.getDefaultProject(contact));
-				}
-
-				if (contact.getLastProduct() == null) {
-					save = true;
-					contact.setLastProduct(jJPermissionService
-							.getDefaultProduct(contact));
-				}
-				if (save) {
-					jJContactService.updateJJContact(contact);
-					contact = jJContactService
-							.getContactByEmail(username, true);
-				}
-
-				jjProjectBean.getProjectList();
-				jjProjectBean.setProject(contact.getLastProject());
-
-				jjProductBean.getProductList();
-				jjProductBean.setProduct(contact.getLastProduct());
-
-				jjVersionBean.getVersionList();
-				jjVersionBean.setVersion(contact.getLastVersion());
-				
-				authorisationService = new AuthorisationService(session,
-						contact);		
-				
-
-				if (!UsageChecker.checkExpiryDate()) {
-
-					FacesMessage fExpiredMessage = new FacesMessage(
-							FacesMessage.SEVERITY_WARN,
-							"License expiry date is NOT valid!", null);
-					flash.putNow(null, fExpiredMessage);
-				}
-
-				prevPage = getRedirectUrl(session);
-			} else {
-				FacesContext fContext = FacesContext.getCurrentInstance();
-				HttpSession session = (HttpSession) fContext
-						.getExternalContext().getSession(false);
-				session.invalidate();
-				SecurityContextHolder.clearContext();
-				FacesMessage fMessage = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR, "License is NOT correct!",
-						null);
-				flash.putNow(null, fMessage);
-				prevPage = "fail";
-			}
-			flash.setRedirect(true);
-
-		}
-		try {
-			return prevPage;
-
-		} catch (Exception e) {
-			System.err.println(e.getMessage() + prevPage);
-			prevPage = "main";
-			return prevPage;
-		}
-
 	}
 
 	public String getUsername() {
@@ -400,6 +279,180 @@ public class LoginBean implements Serializable {
 
 	public void setMobile(boolean mobile) {
 		this.mobile = mobile;
+	}
+
+	public String getShowMarquee() {
+		
+		if(showMarquee == null)
+			if(jJConfigurationService.getConfigurations("MarqueeAlertMessage", null, true).isEmpty())
+			{
+				JJConfiguration config=new JJConfiguration();
+				config.setName("MarqueeAlertMessage");
+				config.setEnabled(true);
+				config.setCreatedBy(getContact());
+				config.setCreationDate(new Date());
+				config.setDescription("Marquee Alert Message configuration");
+				config.setVal("true");
+				config.setParam("header.showMarquee");
+				jJConfigurationService.saveJJConfiguration(config);
+				showMarquee="true";
+			}else
+			{
+				if(jJConfigurationService.getConfigurations("MarqueeAlertMessage", null, true).get(0).getVal().equalsIgnoreCase("true"))
+					showMarquee="true";
+				else
+					showMarquee="false";
+			}
+		return showMarquee;
+	}
+
+	public void setShowMarquee(String showMarquee) {
+		this.showMarquee = showMarquee;
+	}
+
+	public String logout() {
+		FacesContext fContext = FacesContext.getCurrentInstance();
+		logger.info("Contact logged out");
+		HttpSession session = (HttpSession) fContext.getExternalContext()
+				.getSession(false);
+		session.invalidate();
+		SecurityContextHolder.clearContext();
+		return "loggedout";
+	
+	}
+
+	@SuppressWarnings("deprecation")
+	public String login() {
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+				username, password);
+		String prevPage = "";
+		try {
+			Authentication authentication = authenticationManager
+					.authenticate(token);
+			SecurityContext sContext = SecurityContextHolder.getContext();
+			sContext.setAuthentication(authentication);
+			enable = true;
+	
+		} catch (AuthenticationException loginError) {
+	
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR,
+					"Invalid username/password. Reason :",
+					loginError.getMessage());
+			FacesContext.getCurrentInstance().addMessage("login", message);
+	
+			enable = false;
+			prevPage = "fail";
+		}
+		if (enable) {
+			Flash flash = FacesContext.getCurrentInstance()
+					.getExternalContext().getFlash();
+			flash.setKeepMessages(true);
+			if (UsageChecker.check()) {
+				contact = jJContactService.getContactByEmail(username, true);
+				contact = jJContactService.findJJContact(contact.getId());
+				FacesContext fContext = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);			
+	
+				session.putValue("password", password);
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_INFO, "Welcome ",
+						contact.getName());
+	
+				flash.putNow("main", message);
+	
+				logger.info("login operation success " + contact.getName()
+						+ " logged in");
+				if (session.getAttribute("jJProjectBean") == null)
+					session.setAttribute("jJProjectBean", new JJProjectBean());
+	
+				if (session.getAttribute("jJProductBean") == null)
+					session.setAttribute("jJProductBean", new JJProductBean());
+	
+				if (session.getAttribute("jJVersionBean") == null)
+					session.setAttribute("jJVersionBean", new JJVersionBean());
+	
+				JJProjectBean jjProjectBean = (JJProjectBean) session
+						.getAttribute("jJProjectBean");
+				JJProductBean jjProductBean = (JJProductBean) session
+						.getAttribute("jJProductBean");
+				JJVersionBean jjVersionBean = (JJVersionBean) session
+						.getAttribute("jJVersionBean");
+	
+				boolean save = false;
+	
+				if (contact.getCategories() == null
+						|| contact.getCategories().isEmpty()) {
+					save = true;
+					contact.setCategories(new HashSet<JJCategory>(
+							jJPermissionService.getDefaultCategories(contact)));
+	
+				}
+	
+				if (contact.getLastProject() == null) {
+					save = true;
+					contact.setLastProject(jJPermissionService
+							.getDefaultProject(contact));
+				}
+	
+				if (contact.getLastProduct() == null) {
+					save = true;
+					contact.setLastProduct(jJPermissionService
+							.getDefaultProduct(contact));
+				}
+				if (save) {
+					jJContactService.updateJJContact(contact);
+					contact = jJContactService
+							.getContactByEmail(username, true);
+				}
+	
+				jjProjectBean.getProjectList();
+				jjProjectBean.setProject(contact.getLastProject());
+	
+				jjProductBean.getProductList();
+				jjProductBean.setProduct(contact.getLastProduct());
+	
+				jjVersionBean.getVersionList();
+				jjVersionBean.setVersion(contact.getLastVersion());
+				
+				authorisationService = new AuthorisationService(session,
+						contact);		
+				
+	
+				if (!UsageChecker.checkExpiryDate()) {
+	
+					FacesMessage fExpiredMessage = new FacesMessage(
+							FacesMessage.SEVERITY_WARN,
+							"License expiry date is NOT valid!", null);
+					flash.putNow(null, fExpiredMessage);
+				}
+	
+				prevPage = getRedirectUrl(session);
+			} else {
+				FacesContext fContext = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
+				session.invalidate();
+				SecurityContextHolder.clearContext();
+				FacesMessage fMessage = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "License is NOT correct!",
+						null);
+				flash.putNow(null, fMessage);
+				prevPage = "fail";
+			}
+			flash.setRedirect(true);
+	
+		}
+		try {
+			return prevPage;
+	
+		} catch (Exception e) {
+			System.err.println(e.getMessage() + prevPage);
+			prevPage = "main";
+			return prevPage;
+		}
+	
 	}
 
 	public void initMenuIndexvalue(ComponentSystemEvent e) {
@@ -494,8 +547,7 @@ public class LoginBean implements Serializable {
 			String viewId = ctx.getViewRoot().getViewId();
 
 			JJVersionBean jJVersionBean = (JJVersionBean) findBean("jJVersionBean");
-			JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");
-			JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
+			JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");		
 
 			HttpSession session = (HttpSession) ctx.getExternalContext()
 					.getSession(false);
@@ -504,6 +556,8 @@ public class LoginBean implements Serializable {
 			authorisationService = new AuthorisationService(session, contact);
 			messageListener(session);
 			session.setAttribute("jJBugBean", new JJBugBean());
+			session.setAttribute("jJMessageBean", null);
+			session.setAttribute("jJRequirementBean",null);
 			if (event.getComponent().getClientId()
 					.contains("projectSelectOneMenu")) {
 
@@ -513,7 +567,7 @@ public class LoginBean implements Serializable {
 				session.setAttribute("jJSprintBean", new JJSprintBean());
 				session.setAttribute("jJStatusBean", new JJStatusBean());
 				session.setAttribute("jJTaskBean", new JJTaskBean());
-				session.setAttribute("jJRequirementBean",null);
+				
 			}
 
 			if (viewId.contains("development")) {
@@ -607,13 +661,13 @@ public class LoginBean implements Serializable {
 
 		JJMessageBean messageBean = (JJMessageBean) session
 				.getAttribute("jJMessageBean");
-		boolean messPanel = !messageBean.isCollapsedMesPanel();
+		boolean messPanel = collapsedMesPanel;
 		boolean appPanel = !messageBean.isCollapsedLayoutPanel();
 		messageBean = new JJMessageBean();
 		RequestContext context = RequestContext.getCurrentInstance();
 
 		if (messPanel) {
-			messageBean.setCollapsedMesPanel(false);
+			setCollapsedMesPanel(false);
 			context.update(":messagePanel");
 			context.update(":menuPanel");
 			context.update(":contentPanel");
@@ -1072,6 +1126,11 @@ public class LoginBean implements Serializable {
 		return referer;
 	}
 	
+	public void handleMesToggle(ToggleEvent event) {
+
+		this.collapsedMesPanel = !this.collapsedMesPanel;
+
+	}
 	
 	
 	public UIComponent findComponent(final String id) {
