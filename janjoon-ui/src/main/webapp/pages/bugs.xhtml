@@ -50,10 +50,7 @@
 							<p:outputLabel value="WONTFIX" />
 						</p:column>
 					</p:row>
-
 					<p:row>
-
-
 						<p:column colspan="2" styleClass="INVALID">
 							<p:outputLabel value="INVALID" />
 						</p:column>
@@ -101,10 +98,10 @@
 					widgetVar="bugTable" lazy="true" rowStyleClass="#{bug.status.name}"
 					binding="#{bugDataTableOptions.dataTable}"
 					emptyMessage="#{messages.bug_table_alert}"
-					selection="#{jJBugBean.selectedBugList}" paginator="true" rows="10"
+					selection="#{jJBugBean.selectedBugList}" paginator="true" rows="50"
 					paginatorPosition="bottom"
 					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-					rowsPerPageTemplate="5,10,20">
+					rowsPerPageTemplate="50,100,200">
 					<p:ajax event="rowSelectCheckbox" update="bugTable2:deleteMButton" />
 					<p:ajax event="rowUnselectCheckbox"
 						update="bugTable2:deleteMButton" />
@@ -119,17 +116,23 @@
 
 					<f:facet name="header">
 						<p:outputPanel>
-							<h:outputText value="#{messages.bug_table_search_label}"
-								style="vertical-align: middle !important;" />
-							<p:inputText id="globalFilter" onkeyup="PF('bugTable').filter()"
-								style="width:200px"
-								placeholder="#{messages.bug_table_search_watermark}" />
-							<p:commandButton id="createButton" icon="ui-icon-circle-plus"
-								update=":createForm "
-								oncomplete="PF('createDialogWidget').show()"
-								title="#{messages.label_create}" />
-							<p:tooltip for="createButton" value="#{messages.label_create}"
-								showEffect="fade" hideEffect="fade" />
+							<p:row>
+								<p:column colspan="1">
+									<h:outputText value="#{messages.bug_table_search_label}"
+										style="vertical-align: middle !important;" />
+									<p:inputText id="globalFilter" onkeyup="PF('bugTable').filter()"
+										style="width:200px"
+										placeholder="#{messages.bug_table_search_watermark}" />
+								</p:column>
+								<p:column colspan="1">
+									<p:commandButton id="createButton" icon="ui-icon-circle-plus"
+										update=":createForm "
+										oncomplete="PF('createDialogWidget').show()"
+										title="#{messages.label_create}" />
+									<p:tooltip for="createButton" value="#{messages.label_create}"
+										showEffect="fade" hideEffect="fade" />
+								</p:column>
+							</p:row>
 						</p:outputPanel>
 					</f:facet>
 

@@ -191,52 +191,38 @@ public class JJMessageBean {
 	}
 
 	private SelectItem[] createFilterOptions(Object objet) {
-
 		List<Object> data = (List<Object>) objet;
-
 		SelectItem[] options = new SelectItem[data.size() + 1];
-
 		options[0] = new SelectItem("", "Select");
 		for (int i = 0; i < data.size(); i++) {
-
 			if (data.get(i) instanceof JJCriticity) {
 				JJCriticity criticity = (JJCriticity) data.get(i);
-				options[i + 1] = new SelectItem(criticity.getName(),
-						criticity.getName());
+				options[i + 1] = new SelectItem(criticity.getName(), criticity.getName());
 			} else if (data.get(i) instanceof JJStatus) {
 				JJStatus status = (JJStatus) data.get(i);
-				options[i + 1] = new SelectItem(status.getName(),
-						status.getName());
-
+				options[i + 1] = new SelectItem(status.getName(), status.getName());
 			} else if (data.get(i) instanceof JJContact) {
 				JJContact contact = (JJContact) data.get(i);
-				options[i + 1] = new SelectItem(contact.getName(),
-						contact.getName());
+				options[i + 1] = new SelectItem(contact.getFirstname()+" "+contact.getName(),
+						contact.getFirstname()+" "+contact.getName());
 			} else if (data.get(i) instanceof JJProduct) {
 				JJProduct product = (JJProduct) data.get(i);
-				options[i + 1] = new SelectItem(product.getName(),
-						product.getName());
+				options[i + 1] = new SelectItem(product.getName(), product.getName());
 			} else if (data.get(i) instanceof JJProject) {
 				JJProject project = (JJProject) data.get(i);
-				options[i + 1] = new SelectItem(project.getName(),
-						project.getName());
+				options[i + 1] = new SelectItem(project.getName(), project.getName());
 			}
-
 		}
 		return options;
-
 	}	
 
 	public void handleLayoutToggle(ToggleEvent event) {
-
 		this.collapsedLayoutPanel = !this.collapsedLayoutPanel;
 	}
 
 	public void resolveJJMessage() {
-
 		resolvedJJMessage.setEnabled(false);
-		JJStatus status = jJStatusService.getOneStatus("CLOSED", "Message",
-				true);
+		JJStatus status = jJStatusService.getOneStatus("CLOSED", "Message", true);
 		if (status != null) {
 			resolvedJJMessage.setStatus(status);
 		}
@@ -255,10 +241,8 @@ public class JJMessageBean {
 
 		if (mainMessages == null && login.isEnable() && !login.isCollapsedMesPanel()) {
 
-			JJProductBean jJProductBean = (JJProductBean) session
-					.getAttribute("jJProductBean");
-			JJProjectBean jJProjectBean = (JJProjectBean) session
-					.getAttribute("jJProjectBean");
+			JJProductBean jJProductBean = (JJProductBean) session.getAttribute("jJProductBean");
+			JJProjectBean jJProjectBean = (JJProjectBean) session.getAttribute("jJProjectBean");
 
 			mainMessages = new LazyMessageDataModel(jJMessageService,
 					jJProjectBean.getProject(), jJProductBean.getProduct());
@@ -282,10 +266,8 @@ public class JJMessageBean {
 			List<JJContact> contactes = new ArrayList<JJContact>();
 			// enabledJJMessage = jJMessageService.getMessages(true);
 
-			JJProductBean jJProductBean = (JJProductBean) session
-					.getAttribute("jJProductBean");
-			JJProjectBean jJProjectBean = (JJProjectBean) session
-					.getAttribute("jJProjectBean");
+			JJProductBean jJProductBean = (JJProductBean) session.getAttribute("jJProductBean");
+			JJProjectBean jJProjectBean = (JJProjectBean) session.getAttribute("jJProjectBean");
 
 			mainMessages = new LazyMessageDataModel(jJMessageService,
 					jJProjectBean.getProject(), jJProductBean.getProduct());
@@ -296,22 +278,16 @@ public class JJMessageBean {
 
 			for (JJMessage mes : jJMessageService.getActifMessages(
 					jJProjectBean.getProject(), jJProductBean.getProduct())) {
-				if (mes.getCreatedBy() != null
-						&& !listContaines(contactes, mes.getCreatedBy()))
+				if (mes.getCreatedBy() != null && !listContaines(contactes, mes.getCreatedBy()))
 					contactes.add(mes.getCreatedBy());
-				if (mes.getProduct() != null
-						&& !listContaines(productes, mes.getProduct()))
+				if (mes.getProduct() != null && !listContaines(productes, mes.getProduct()))
 					productes.add(mes.getProduct());
-				if (mes.getProject() != null
-						&& !listContaines(projectes, mes.getProject()))
+				if (mes.getProject() != null && !listContaines(projectes, mes.getProject()))
 					projectes.add(mes.getProject());
-				if (mes.getCriticity() != null
-						&& !listContaines(criticities, mes.getCriticity()))
+				if (mes.getCriticity() != null && !listContaines(criticities, mes.getCriticity()))
 					criticities.add(mes.getCriticity());
-				if (mes.getStatus() != null
-						&& !listContaines(status, mes.getStatus()))
+				if (mes.getStatus() != null && !listContaines(status, mes.getStatus()))
 					status.add(mes.getStatus());
-
 			}
 			criticityOptions = createFilterOptions(criticities);
 			projectOptions = createFilterOptions(projectes);
@@ -320,7 +296,6 @@ public class JJMessageBean {
 			statusOptions = createFilterOptions(status);
 			loadFiltredJJmessage = true;
 		}
-
 	}
 
 	public boolean listContaines(Object objet, Object find) {
@@ -394,8 +369,7 @@ public class JJMessageBean {
 			message = "message_successfully_created";
 		}
 
-		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"Message");
+		FacesMessage facesMessage = MessageFactory.getMessage(message, "Message");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 	}
@@ -406,14 +380,12 @@ public class JJMessageBean {
 
 		if (!alertOrInfo) {
 
-			JJCriticity criticity = jJCriticityService.getCriticityByName(
-					"INFO", true);
+			JJCriticity criticity = jJCriticityService.getCriticityByName("INFO", true);
 			if (criticity != null)
 				message.setCriticity(criticity);
 
 		} else {
-			JJCriticity criticity = jJCriticityService.getCriticityByName(
-					"ALERT", true);
+			JJCriticity criticity = jJCriticityService.getCriticityByName("ALERT", true);
 			if (criticity != null)
 				message.setCriticity(criticity);
 		}
@@ -430,14 +402,10 @@ public class JJMessageBean {
 			message.setStatus(status);
 		}
 
-		JJVersionBean jJVersionBean = (JJVersionBean) session
-				.getAttribute("jJVersionBean");
-		JJProductBean jJProductBean = (JJProductBean) session
-				.getAttribute("jJProductBean");
-		JJProjectBean jJProjectBean = (JJProjectBean) session
-				.getAttribute("jJProjectBean");
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJVersionBean jJVersionBean = (JJVersionBean) session.getAttribute("jJVersionBean");
+		JJProductBean jJProductBean = (JJProductBean) session.getAttribute("jJProductBean");
+		JJProjectBean jJProjectBean = (JJProjectBean) session.getAttribute("jJProjectBean");
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 
 		if (jJProductBean.getProduct() != null)
 			message.setProduct(jJProductBean.getProduct());
@@ -460,16 +428,14 @@ public class JJMessageBean {
 	}
 
 	public void saveJJMessage(JJMessage b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJMessageService.saveJJMessage(b);
 	}
 
 	public void updateJJMessage(JJMessage b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJMessageService.updateJJMessage(b);
@@ -479,8 +445,7 @@ public class JJMessageBean {
 		setAllJJMessages(jJMessageService.findAllJJMessages());
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.update("messagePanel");
-		if (FacesContext.getCurrentInstance().getViewRoot().getViewId()
-				.contains("main")) {
+		if (FacesContext.getCurrentInstance().getViewRoot().getViewId().contains("main")) {
 			context.update("contentPanel");
 		}
 		setJJMessage_(null);
@@ -513,9 +478,8 @@ public class JJMessageBean {
 			InputTextarea nameValue = (InputTextarea) application
 					.createComponent(InputTextarea.COMPONENT_TYPE);
 			nameValue.setId("nameValue");
-			nameValue.setValueExpression("value",
-					expressionFactory
-							.createValueExpression(elContext,
+			nameValue.setValueExpression("value", expressionFactory
+					.createValueExpression(elContext,
 									"#{jJMessageBean.viewedMessage.name}",
 									String.class));
 			nameValue.setReadonly(true);
@@ -567,13 +531,11 @@ public class JJMessageBean {
 				HtmlOutputText createdByValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
 				createdByValue
-						.setValueExpression(
-								"value",
-								expressionFactory
-										.createValueExpression(
-												elContext,
-												"#{jJMessageBean.viewedMessage.createdBy.name}",
-												String.class));
+						.setValueExpression("value", expressionFactory
+								.createValueExpression(
+										elContext,
+										"#{jJMessageBean.viewedMessage.createdBy.name}",
+										String.class));
 				htmlPanelGrid.getChildren().add(createdByValue);
 			}
 
@@ -603,14 +565,11 @@ public class JJMessageBean {
 				htmlPanelGrid.getChildren().add(updatedByLabel);
 				HtmlOutputText updatedByValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				updatedByValue
-						.setValueExpression(
-								"value",
-								expressionFactory
-										.createValueExpression(
-												elContext,
-												"#{jJMessageBean.viewedMessage.updatedBy.name}",
-												String.class));
+				updatedByValue.setValueExpression("value",
+						expressionFactory.createValueExpression(
+								elContext,
+								"#{jJMessageBean.viewedMessage.updatedBy.name}",
+								String.class));
 				htmlPanelGrid.getChildren().add(updatedByValue);
 
 			}

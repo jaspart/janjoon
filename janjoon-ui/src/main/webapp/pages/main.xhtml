@@ -6,9 +6,10 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
-		<p:panel id="mainPanel" toggleable="true" toggleSpeed="250">
-			<p:growl id="notif" showDetail="true" life="2000" />
-			<p:growl id="dev" showDetail="true" life="2000" />
+		<p:growl id="notif" showDetail="true" life="2000" />
+		<p:growl id="dev" showDetail="true" life="2000" />
+		
+		<!--p:panel id="mainPanel" toggleable="true" toggleSpeed="250">
 			<f:facet name="header">
 				<h:outputFormat value="#{messages.main_welcome_title}">
 					<f:param value="#{messages.label_appName}" />
@@ -17,9 +18,9 @@
 			<p />
 			<h:outputText id="welcomeText" value="#{messages.label_welcome_text}" />
 			<p />
-
 		</p:panel>
-		<br />
+		<br /-->
+		
 		<p:panel id="dataPanel" rendered="#{loginBean.enable}"
 			header="#{messages.main_communication_title}" style="height: 400px;">
 			<f:event listener="#{jJMessageBean.initJJmessageTable}"
@@ -39,12 +40,23 @@
 								placeholder="#{messages.main_communication_search_watermark}" />
 						</p:outputPanel>
 					</f:facet>
-					<p:column headerText="#{messages.main_communication_message_title}"
-						filterBy="message" filterMatchMode="contains" sortBy="message"
-						filterStyle="width: 90%;"
-						style="width: 10% !important;height: 5px !important;">
-						<h:outputText style="width: 90% !important;"
-							value="#{mes.message}" />
+					<p:column headerText="#{messages.main_communication_creator_title}"
+						filterBy="createdBy.name" sortBy="createdBy.name"
+						filterOptions="#{jJMessageBean.creatorOptions}"
+						filterMatchMode="exact" filterStyle="width: 90%;"
+						style="width: 6% !important;height: 5px !important;">
+						<h:outputText value="#{mes.createdBy.firstname} #{mes.createdBy.name}" />
+					</p:column>
+					<p:column
+						headerText="#{messages.main_communication_creation_title}"
+						sortBy="creationDate"
+						style="width: 6% !important;height: 5px !important;">
+						<h:outputText value="#{mes.creationDate}">
+							<f:converter converterId="extendedDateTimeConverter" />
+							<f:attribute name="pattern" value="dd/MM/yyyy" />
+							<f:attribute name="timeZone" value="UCL" />
+
+						</h:outputText>
 					</p:column>
 					<p:column headerText="#{messages.main_communication_project_title}"
 						filterBy="project.name" sortBy="project.name"
@@ -60,14 +72,14 @@
 						style="width: 6% !important;height: 5px !important;">
 						<h:outputText value="#{mes.product.name}" />
 					</p:column>
-					<p:column headerText="#{messages.main_communication_creator_title}"
-						filterBy="createdBy.name" sortBy="createdBy.name"
-						filterOptions="#{jJMessageBean.creatorOptions}"
-						filterMatchMode="exact" filterStyle="width: 90%;"
-						style="width: 6% !important;height: 5px !important;">
-						<h:outputText value="#{mes.createdBy.name}" />
+					<p:column headerText="#{messages.main_communication_message_title}"
+						filterBy="message" filterMatchMode="contains" sortBy="message"
+						filterStyle="width: 90%;"
+						style="width: 10% !important;height: 5px !important;">
+						<h:outputText style="width: 90% !important;"
+							value="#{mes.message}" />
 					</p:column>
-					<p:column
+					<!--p:column
 						headerText="#{messages.main_communication_criticity_title}"
 						filterBy="criticity.name" sortBy="criticity.name"
 						filterMatchMode="exact"
@@ -75,27 +87,16 @@
 						filterOptions="#{jJMessageBean.criticityOptions}"
 						filterStyle="width: 90%;">
 						<h:outputText value="#{mes.criticity.name}" />
-					</p:column>
-					<p:column headerText="#{messages.main_communication_status_title}"
+					</p:column-->
+					<!--p:column headerText="#{messages.main_communication_status_title}"
 						sortBy="status.name" filterBy="status.name"
 						filterMatchMode="exact"
 						filterOptions="#{jJMessageBean.statusOptions}"
 						style="width: 6% !important;height: 5px !important;"
 						filterStyle="width: 90%;">
 						<h:outputText value="#{mes.status.name}" />
-					</p:column>
-					<p:column
-						headerText="#{messages.main_communication_creation_title}"
-						sortBy="creationDate"
-						style="width: 6% !important;height: 5px !important;">
-						<h:outputText value="#{mes.creationDate}">
-							<f:converter converterId="extendedDateTimeConverter" />
-							<f:attribute name="pattern" value="dd/MM/yyyy" />
-							<f:attribute name="timeZone" value="UCL" />
-
-						</h:outputText>
-					</p:column>
-					<p:column headerText="#{messages.main_communication_resolve_title}"
+					</p:column-->
+					<!--p:column headerText="#{messages.main_communication_resolve_title}"
 						style="width:5% !important;">
 						<p:commandButton id="resolveButton"
 							value="#{messages.main_communication_resolve_button}"
@@ -106,7 +107,7 @@
 						</p:commandButton>
 						<p:tooltip for="resolveButton" value="#{messages.label_disable}"
 							showEffect="fade" hideEffect="fade" />
-					</p:column>
+					</p:column-->
 				</p:dataTable>
 			</h:form>
 			<p:growl id="notifMPT" showDetail="true" life="2000" />
@@ -128,22 +129,20 @@
 			</p:confirmDialog>
 		</p:panel>
 
-		<p:panel id="taskPanel" rendered="#{loginBean.enable}"
-			header="To do Tasks">
+		<p:panel id="taskPanel" rendered="#{loginBean.enable}" header="To do Tasks">
 			<f:event listener="#{jJTaskBean.initToDoTasks}" type="preRenderView" />
 			<h:form id="taskForm">
 				<p:dataTable id="taskTable" value="#{jJTaskBean.toDoTasks}"
 					rowKey="#{task.id}" var="task" widgetVar="taskTable"
 					scrollable="true" scrollHeight="200"
-					emptyMessage="There is no Task to do,See all in project View">
+					emptyMessage="There is no Task to do, dee more in project View">
 
 					<p:column headerText="Task" >
 						<h:outputText value="#{task}" converter="JJTaskConverter" />
 					</p:column>
 
 					<p:column headerText="Specification">
-						<h:outputText value="#{task.requirement}"
-							converter="JJRequirementConverter" />
+						<h:outputText value="#{task.requirement}" converter="JJRequirementConverter" />
 					</p:column>
 
 					<p:column headerText="Bug">
@@ -151,11 +150,9 @@
 					</p:column>
 
 					<p:column headerText="Project">
-
 						<h:outputText value="#{task.requirement.project}"
 							converter="JJProjectConverter"
 							rendered="#{task.requirement != null}" />
-
 
 						<h:outputText value="#{task.bug.project}"
 							converter="JJProjectConverter"
@@ -164,7 +161,6 @@
 						<h:outputText value="#{task.sprint.project}"
 							converter="JJProjectConverter"
 							rendered="#{task.requirement == null and task.bug == null and task.sprint != null}" />
-
 					</p:column>
 
 					<p:column headerText="Start Date :">
@@ -187,7 +183,6 @@
 							action="#{jJTaskBean.initiateReqTreeNode}">
 							<f:setPropertyActionListener value="#{task}"
 								target="#{jJTaskBean.task}" />
-
 						</p:splitButton>
 					</p:column>
 				</p:dataTable>
@@ -227,30 +222,23 @@
 					</p:column>
 
 					<p:column headerText="Chapter">
-						<h:outputText value="#{req.chapter}"
-							converter="JJChapterConverter" />
+						<h:outputText value="#{req.chapter}" converter="JJChapterConverter" />
 					</p:column>
 
 					<p:column headerText="Project">
-						<h:outputText value="#{req.project}"
-							converter="JJProjectConverter" />
-
+						<h:outputText value="#{req.project}" converter="JJProjectConverter" />
 					</p:column>
-							<p:column headerText="Category">
-						<h:outputText value="#{req.category}"
-							converter="JJCategoryConverter" />
-
+					
+					<p:column headerText="Category">
+						<h:outputText value="#{req.category}" converter="JJCategoryConverter" />
 					</p:column>
 
 					<p:column headerText="Version">
-						<h:outputText value="#{req.versioning}"
-							converter="JJVersionConverter" />
-
+						<h:outputText value="#{req.versioning}" converter="JJVersionConverter" />
 					</p:column>
 
 					<p:column headerText="Status">
 						<h:outputText value="#{req.status}" converter="JJStatusConverter" />
-
 					</p:column>
 				</p:dataTable>
 			</h:form>
