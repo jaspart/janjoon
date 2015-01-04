@@ -271,16 +271,14 @@ public class JJSprintBean {
 	}
 
 	public List<SprintChart> getSprintChartList() {
-
 		return sprintChartList;
 	}
 
 	public void iniSprintChart() {
-		
-				sprintChartList = SprintChart.generateSprintChartList(jJSprintService
+		sprintChartList = SprintChart.generateSprintChartList(jJSprintService
 				.getSprints(((JJProjectBean) LoginBean
-						.findBean("jJProjectBean")).getProject(), true),
-				jJTaskService);
+				.findBean("jJProjectBean")).getProject(), true),
+					jJTaskService);
 	}
 
 	public void setSprintChartList(List<SprintChart> sprintChartList) {
@@ -288,7 +286,6 @@ public class JJSprintBean {
 	}
 
 	public SprintUtil getSprintUtil() {
-
 		return sprintUtil;
 	}
 

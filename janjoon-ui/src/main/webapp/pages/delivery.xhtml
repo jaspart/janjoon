@@ -3,9 +3,24 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <ui:composition template="../templates/layout.xhtml">
-	<ui:define name="content"></ui:define>
+	<ui:define name="content">
+		<p:panel id="deliveryPanel">
+			<h:form id="deliveryFormNorth">
+				<p:layoutUnit position="north" style="min-height:30px;">
+
+					<p:commandButton value="#{messages.specification_video_help_title}"
+						style="float: right;"
+						id="videoHelpBtn" icon="ui-icon-video"
+						onclick="PF('videoHelpWidget').show()"
+						type="button" />
+						
+				</p:layoutUnit>
+			</h:form>
+		</p:panel>
+	</ui:define>
 </ui:composition>
 </html>

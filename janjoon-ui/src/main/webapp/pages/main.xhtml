@@ -22,7 +22,8 @@
 		<br /-->
 		
 		<p:panel id="dataPanel" rendered="#{loginBean.enable}"
-			header="#{messages.main_communication_title}" style="height: 400px;">
+			header="#{messages.main_communication_title}"
+			styleClass="customTitleBar">
 			<f:event listener="#{jJMessageBean.initJJmessageTable}"
 				type="preRenderView" />
 

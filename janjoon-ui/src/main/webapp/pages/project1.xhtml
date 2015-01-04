@@ -9,10 +9,10 @@
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
 		<p:tabView id="projecttabview" widgetVar="projectTabView"
-			dynamic="false" cache="true" style="width:80%"
+			dynamic="false" cache="true" style="width:97% !important;"
 			activeIndex="#{loginBean.activeTabProjectIndex}">
 			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}" >
-				<h:panelGrid columns="1" cellpadding="3" style="width:80%">
+				<h:panelGrid id="projectpanel" columns="1" cellpadding="3" style="width:97% !important;">
 					<ui:insert name="planning">
 						<ui:include src="planning.xhtml" />
 					</ui:insert>

@@ -150,6 +150,7 @@ public class JJRequirementBean {
 	private String mediumCategoryName;
 	private String highCategoryName;
 	private String viewButton;
+	private String filterButton;
 
 	private List<JJRequirement> lowRequirementsList;
 	private List<JJRequirement> mediumRequirementsList;
@@ -185,12 +186,22 @@ public class JJRequirementBean {
 
 	public String getViewButton() {
 		if(viewButton == null)			
-			viewButton="specification_filter_button";
+			viewButton="specification_view_button";
 		return viewButton;
 	}
 
 	public void setViewButton(String viewButton) {
 		this.viewButton = viewButton;
+	}
+	
+	public String getFilterButton() {
+		if(filterButton == null)			
+			filterButton="specification_filter_button";
+		return filterButton;
+	}
+
+	public void setFilterButton(String filterButton) {
+		this.filterButton = filterButton;
 	}
 
 	public JJCategory getLowCategory() {
@@ -3119,9 +3130,9 @@ public class JJRequirementBean {
 
 	public void viewLinks() {
 
-		if(viewButton.equalsIgnoreCase("specification_filter_button"))
+		if(filterButton.equalsIgnoreCase("specification_filter_button"))
 		{
-			viewButton="specification_showAll_button";
+			filterButton="specification_showAll_button";
 			requirement = jJRequirementService.findJJRequirement(requirement
 					.getId());
 
@@ -3224,7 +3235,7 @@ public class JJRequirementBean {
 
 		}else
 		{
-			viewButton=null;
+			filterButton=null;
 			reloadPage();
 		}
 		

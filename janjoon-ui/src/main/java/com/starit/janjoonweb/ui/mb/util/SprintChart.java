@@ -29,7 +29,7 @@ public class SprintChart {
 	public SprintChart(JJSprint sprint, List<JJTask> tasks) {
 		this.chartModel=new CartesianChartModel();		
 		this.sprint = sprint;			
-		initChartModel(tasks);
+		if(tasks != null) initChartModel(tasks);
 	}
 	private void initChartModel(List<JJTask> tasks) {
 		

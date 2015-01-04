@@ -8,6 +8,8 @@ import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 
+import com.starit.janjoonweb.ui.mb.util.SprintChart;
+
 public class SprintUtil {
 
 	JJSprint sprint;
@@ -21,11 +23,12 @@ public class SprintUtil {
 	Integer workload;
 	private boolean render;
 	
-
+	private SprintChart chart;
+	
 	public SprintUtil(JJSprint sprint, List<JJTask> tasks) {
-
 		this.sprint = sprint;
 		this.neditabale=false;
+		this.chart = new SprintChart(sprint, tasks);
 		calculateField(tasks);
 	}
 
@@ -72,9 +75,7 @@ public class SprintUtil {
 	public void setProgressTask(List<JJTask> progressTask) {
 		this.progressTask = progressTask;
 	}
-
 	
-
 	public List<JJContact> getContacts() {
 		return contacts;
 	}
@@ -106,9 +107,16 @@ public class SprintUtil {
 	public void setRender(boolean render) {
 		this.render = render;
 	}
-
+	
+	public void setChart(JJSprint sprint, List<JJTask> tasks){
+		this.chart = new SprintChart(sprint, tasks);
+	}
+	
+	public SprintChart getChart(){
+		return this.chart;
+	}
+	
 	private void calculateField(List<JJTask> tasks) {
-
 		Integer i = 0;
 		Integer j = 0;
 		this.render = (sprint.getName() == null);
@@ -148,9 +156,7 @@ public class SprintUtil {
 						}
 					}
 				}
-
 			}
-
 		}
 		this.consumed = j;
 		this.workload = i;
@@ -177,10 +183,9 @@ public class SprintUtil {
 			if (l.getSprint().getId() == id) {
 				s = l;
 				break;
-
 			}
 		}
 		return s;
 	}
-
+	
 }

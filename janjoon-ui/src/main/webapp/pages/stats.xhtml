@@ -9,7 +9,7 @@
 	<ui:define name="content">
 		<p:commandButton value="#{messages.specification_video_help_title}"
 			id="videoHelpBtn" icon="ui-icon-video"
-			onclick="PF('videoHelpWidget').show()" type="button" />
+			onclick="PF('videoHelpWidget').show()" type="button" style="float: right;" />
 		<f:event type="preRenderView"
 			oncomplete="PF('blockUIWidget').unblock()"
 			listener="#{jJStatusBean.loadData()}" />
