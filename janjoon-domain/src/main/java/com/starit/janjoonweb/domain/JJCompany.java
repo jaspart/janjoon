@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -25,7 +26,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 public class JJCompany  {
 	
 	@NotNull
-	@Size(max = 100)
+	@Size(max = 100)	
 	private String name;
 
 	@NotNull

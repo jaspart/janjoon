@@ -11,6 +11,10 @@
 		<p:tabView id="projecttabview" widgetVar="projectTabView"
 			dynamic="false" cache="true" style="width:97% !important;"
 			activeIndex="#{loginBean.activeTabProjectIndex}">
+			
+			<p:ajax event="tabChange" listener="#{jJSprintBean.onTabSprintChange}"
+			onstart="PF('blockUIWidget').block()"
+			oncomplete="PF('blockUIWidget').unblock()"  />
 			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}" >
 				<h:panelGrid id="projectpanel" columns="1" cellpadding="3" style="width:97% !important;">
 					<ui:insert name="planning">

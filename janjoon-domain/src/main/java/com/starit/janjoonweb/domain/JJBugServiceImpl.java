@@ -121,7 +121,7 @@ public class JJBugServiceImpl implements JJBugService {
 
 	public List<JJBug> load(JJCompany company, MutableInt size, int first,
 			int pageSize, List<SortMeta> multiSortMeta,
-			Map<String, String> filters, JJProject project, JJProduct product,
+			Map<String, Object> filters, JJProject project, JJProduct product,
 			JJVersion version) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
@@ -161,7 +161,7 @@ public class JJBugServiceImpl implements JJBugService {
 		}
 
 		if (filters != null) {
-			Iterator<Entry<String, String>> it = filters.entrySet().iterator();
+			Iterator<Entry<String, Object>> it = filters.entrySet().iterator();
 			while (it.hasNext()) {
 				@SuppressWarnings("rawtypes")
 				Map.Entry pairs = (Map.Entry) it.next();

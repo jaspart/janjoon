@@ -25,11 +25,17 @@ public class JJCompanyServiceImpl implements JJCompanyService {
 		jJCompanyRepository.save(JJCompany_);
 		JJCompany_ = jJCompanyRepository.findOne(JJCompany_.getId());
 	}
+	
+	public Long getMaxId()
+	{
+		Long r=(Long) entityManager.createQuery("select max(e.id) from JJCompany e").getSingleResult();
+		return r+1;
+	}
 
 	public JJCompany updateJJCompany(JJCompany JJCompany_) {
 
 		jJCompanyRepository.save(JJCompany_);
-		JJCompany_ = jJCompanyRepository.findOne(JJCompany_.getId());
+		JJCompany_ = jJCompanyRepository.findOne(JJCompany_.getId());		
 		return JJCompany_;
 	}
 	

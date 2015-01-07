@@ -165,9 +165,9 @@ public class JJStatusBean {
 		TabView tv = (TabView) event.getComponent();
 		if (tv.getChildren().indexOf(event.getTab()) == 1 && first) {
 			RequestContext.getCurrentInstance().execute(
-					"statsTabView.select(0)");
+					"PF('statsTabView').select(0)");
 			RequestContext.getCurrentInstance().execute(
-					"statsTabView.select(1)");
+					"PF('statsTabView').select(1)");
 			first = false;
 		}
 	}

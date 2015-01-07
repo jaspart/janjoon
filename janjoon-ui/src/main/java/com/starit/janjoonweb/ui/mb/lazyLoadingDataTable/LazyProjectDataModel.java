@@ -55,7 +55,7 @@ public class LazyProjectDataModel extends LazyDataModel<JJProject> {
 	}
 
 	@Override
-	public List<JJProject> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
+	public List<JJProject> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {
 
 		List<JJProject> data = new ArrayList<JJProject>();
 		MutableInt size=new MutableInt(0);

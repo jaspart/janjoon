@@ -20,6 +20,25 @@
 </style>
 		<p:panel style="height:600px;"
 			header="#{messages.contact_panel_header}">
+
+			<h:form id="licenseForm">
+				<p:growl id="messages" showDetail="true" />
+				<h:panelGrid columns="2" style="margin-left:20px;" border="1">
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="2">#{loginBean.contact.name} Picture</p:column>
+						</p:row>
+					</f:facet>
+					<p:graphicImage value="#{loginBean.pictureUrl}"
+						rendered="#{loginBean.pictureUrl != null}" styleClass="banner"
+						style="height: 150px;width: 150px;" />
+					<p:fileUpload
+						fileUploadListener="#{licenseBean.handleContactFileUpload}"
+						mode="advanced" dragDropSupport="true"
+						update="messages :vacationForm :configForm :workdaysCalendar licenseForm"
+						sizeLimit="100000" allowTypes="/(gif|png|ico|jpeg|jpg)$/" />
+				</h:panelGrid>
+			</h:form>
 			<h:form id="configForm">
 				<p:remoteCommand name="updateAdmin" />
 				<p:growl id="msg" />
@@ -59,8 +78,8 @@
 							<p:outputLabel for="email" value="#{messages.contact_email}" />
 						</p:column>
 						<p:column colspan="2">
-							<p:inputText id="email" value="#{jJContactBean.contactUtil.email}"
-								readonly="true" />
+							<p:inputText id="email"
+								value="#{jJContactBean.contactUtil.email}" readonly="true" />
 						</p:column>
 					</p:row>
 					<p:row>
@@ -128,19 +147,21 @@
 								value="#{messages.contact_categories}" />
 						</p:column>
 						<p:column colspan="2">
-							<p:selectManyMenu id="categories" value="#{jJContactBean.loggedContactCategories}" 
+							<p:selectManyMenu id="categories"
+								value="#{jJContactBean.loggedContactCategories}"
 								converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter"
 								style="width:150px;height:150px" showCheckbox="true">
 								<f:selectItems value="#{jJContactBean.categories}" var="c"
-									itemLabel="#{c.name}" itemValue="#{c}" />	
-							<f:validator validatorId="listCategoriesValidator" />					
+									itemLabel="#{c.name}" itemValue="#{c}" />
+								<f:validator validatorId="listCategoriesValidator" />					
            			</p:selectManyMenu>
 						</p:column>
 					</p:row>
 					<f:facet name="footer">
 						<p:row>
 							<p:column colspan="4" style="text-align: right">
-								<p:commandButton id="submit" update=":vacationForm configForm :workdaysCalendar"
+								<p:commandButton id="submit"
+									update=":vacationForm configForm :workdaysCalendar :licenseForm"
 									onstart="PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock()"
 									value="#{messages.contact_submit}"
@@ -162,7 +183,9 @@
 					</f:facet>
 					<p:row>
 						<p:column colspan="2">
-							<p:dataList var="vacation" paginator="true" rows="9"  paginatorPosition="bottom" emptyMessage="#{messages.contact_empty_vacation}"
+							<p:dataList var="vacation" paginator="true" rows="9"
+								paginatorPosition="bottom"
+								emptyMessage="#{messages.contact_empty_vacation}"
 								value="#{jJContactBean.calendarUtil.vacation}" type="ordered">
 
 								<p:outputLabel value="#{messages.contact_from} :" />
@@ -186,7 +209,8 @@
 							<p:outputLabel for="start" value="#{messages.contact_from}:" />
 							<p:calendar id="start" navigator="true" effect="slideDown"
 								required="true" pattern="dd/MM/yyyy HH:mm"
-								binding="#{startDateCreation}" value="#{jJContactBean.startDate}" />
+								binding="#{startDateCreation}"
+								value="#{jJContactBean.startDate}" />
 						</p:column>
 						<p:column>
 							<p:outputLabel for="end" value="#{messages.contact_to}:" />
@@ -204,7 +228,7 @@
 							<p:commandButton id="addVacation"
 								onstart="PF('blockUIWidget').block()"
 								oncomplete="PF('blockUIWidget').unblock()"
-								update="vacationForm :configForm :workdaysCalendar"
+								update="vacationForm :configForm :workdaysCalendar :licenseForm"
 								action="#{jJContactBean.addVacation(loginBean,loginBean.contact)}"
 								value="#{messages.contact_new_vacation}" />
 						</p:column>
@@ -213,8 +237,8 @@
 			</h:form>
 			<h:form id="workdaysCalendar"
 				style="margin-top: 0px;float: left;margin-left: 20px;">
-				<p:dataTable value="#{jJContactBean.calendarUtil.workDays}" var="day"
-					style="width: 600px;">
+				<p:dataTable value="#{jJContactBean.calendarUtil.workDays}"
+					var="day" style="width: 600px;">
 
 					<p:columnGroup type="header">
 						<p:row>

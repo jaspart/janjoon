@@ -44,7 +44,11 @@
 	</filter>
 	<filter>
 		<filter-name>PrimeFaces FileUpload Filter</filter-name>
-		<filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+		<filter-class>com.starit.janjoonweb.ui.mb.util.FileUploadFilter</filter-class>
+		<init-param>
+			<param-name>thresholdSize</param-name>
+			<param-value>51200</param-value>
+		</init-param>
 	</filter>
 	<filter-mapping>
 		<filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
@@ -78,17 +82,17 @@
 		<servlet-name>CKEditorUploadServlet</servlet-name>
 		<servlet-class>com.starit.janjoonweb.ui.mb.util.service.CKEditorUploadServlet</servlet-class>
 	</servlet>
-	
+
 	<servlet>
 		<servlet-name>jersey-serlvet</servlet-name>
 		<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
 		<init-param>
-		     <param-name>com.sun.jersey.config.property.packages</param-name>
-		     <param-value>com.starit.janjoonweb.ui.mb.webService</param-value>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>com.starit.janjoonweb.ui.mb.webService</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
- 
+
 	<servlet-mapping>
 		<servlet-name>jersey-serlvet</servlet-name>
 		<url-pattern>/rest/*</url-pattern>

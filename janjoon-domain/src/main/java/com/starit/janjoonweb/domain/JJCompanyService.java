@@ -8,4 +8,6 @@ import org.springframework.roo.addon.layers.service.RooService;
 public interface JJCompanyService {
 	
 	public List<JJCompany> getActifCompanies();
+	
+	public Long getMaxId();
 }

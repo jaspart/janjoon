@@ -19,7 +19,11 @@
 
 			<h:link outcome="main">
 				<p:graphicImage library="images" name="janjoon_logo.png"
-					styleClass="banner" alt="JanJoon Home" style="float: left;" />
+					rendered="#{loginBean.logoUrl == null}" styleClass="banner"
+					alt="JanJoon Home" style="float: left;" />
+				<p:graphicImage value="#{loginBean.logoUrl}"
+					rendered="#{loginBean.logoUrl != null}" styleClass="banner"
+					style="float: left;height: 100px;width: 100px;" />
 			</h:link>
 
 
@@ -81,6 +85,9 @@
 					<p:splitButton
 						value="#{loginBean.contact.firstname} #{loginBean.contact.name}"
 						rendered="#{loginBean.enable}" style="right: 0px;">
+						<p:graphicImage value="#{loginBean.pictureUrl}"
+							rendered="#{loginBean.pictureUrl != null}" 
+							style="float: left;height: 50px;width: 50px;" />
 						<p:menuitem value="#{messages.header_config_link}"
 							icon="ui-icon-person"
 							url="/pages/contactConfig.jsf?faces-redirect=true" />
@@ -94,9 +101,10 @@
 				<p:tabMenu id="tabMenu" name="content" style="float: none;"
 					activeIndex="#{loginBean.menuIndex}">
 
-					<p:menuitem value="&#9776;" id="pnl-basic" onclick="PF('pnl-basic').show('#{component.clientId}')"
+					<p:menuitem value="&#9776;" id="pnl-basic"
+						onclick="PF('pnl-basic').show('#{component.clientId}')"
 						style="font-weight: bold;" rendered="#{loginBean.mobile}"
-						update=":overlayPanel" />		
+						update=":overlayPanel" />
 
 					<p:menuitem value="" icon="ui-icon-home"
 						rendered="#{!loginBean.mobile}"

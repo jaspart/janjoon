@@ -36,7 +36,7 @@ public class LazyCategoryDataTable extends LazyDataModel<JJCategory> {
 	}
 
 	@Override
-	public List<JJCategory> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
+	public List<JJCategory> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {
 
 		List<JJCategory> data = new ArrayList<JJCategory>();
 		MutableInt size=new MutableInt(0);

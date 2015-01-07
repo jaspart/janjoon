@@ -106,13 +106,12 @@
 							options="#{jJTaskBean.layoutOptionsOne}"
 							state="#{jJTaskBean.stateOne}">
 
-							<pe:layoutPane position="west" id="westLayout"
-								styleContent="overflow-y: hidden;">
+							<pe:layoutPane position="west" id="westLayout">
 								<f:facet name="header">  
                        					Task Data Table 
                     			</f:facet>
-								<p:dataTable id="taskDataTable" var="taskData"
-									sortBy="#{jJTaskBean.sortBy}" value="#{jJTaskBean.tasksData}"
+								<p:dataTable id="taskDataTable" var="taskData" sortFunction="#{jJTaskBean.sortFunction}"
+									sortBy="#{taskData.chapter}" value="#{jJTaskBean.tasksData}"
 									editable="true" editMode="cell">
 
 									<p:ajax event="cellEdit" listener="#{jJTaskBean.onCellEdit}"
@@ -120,7 +119,8 @@
 										onstart="PF('blockUIWidget').block()"
 										onsuccess="onCellEditTableComplete()"
 										update="taskDataTable :projecttabview:planningForm:timeline :projecttabview:planningForm:msg" />
-									<p:summaryRow paginatorPosition="top">
+										
+									<p:summaryRow paginatorPosition="top" rendered="#{jJTaskBean.sortMode == 'chapter'}">
 										<p:column colspan="11" style="text-align:left">
 											<h:outputText icon="ui-icon-arrowreturnthick-1-e"
 												value="Chapter: #{taskData.chapter.name}" />
@@ -352,18 +352,18 @@
 								</p:dataTable>
 							</pe:layoutPane>
 
-							<pe:layoutPane position="center" id="centerLayout">
+							<pe:layoutPane position="center" styleContent="overflow-y: hidden;" id="centerLayout">
 
 								<f:facet name="header">  
                        					Task TimeLine 
                     			</f:facet>
 								<pe:timeline id="timeline" value="#{jJTaskBean.model}"
-									eventMargin="10" eventMarginAxis="0"
+									eventMargin="10"  eventMarginAxis="0" themable="false"
 									locale="#{LocaleBean.locale}" start="#{jJTaskBean.start}"
 									end="#{jJTaskBean.end}" widgetVar="timelineWdgt"
 									axisOnTop="true" groupsChangeable="false" var="task"
-									stackEvents="true" style="width:1200px;min-height:350px;"
-									editable="true" zoomMin="#{jJTaskBean.zoomMin}">
+									stackEvents="false" style="width:1200px;min-height:350px;"
+									editable="true" zoomMin="#{jJTaskBean.zoomMin}" zoomMax="#{jJTaskBean.zoomMax}">
 
 									<p:ajax event="delete"
 										listener="#{jJTaskBean.onDeleteTimelineEvent}"

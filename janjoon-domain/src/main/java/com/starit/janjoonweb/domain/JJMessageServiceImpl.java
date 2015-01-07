@@ -30,7 +30,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 
 	public List<JJMessage> getActifMessages(MutableInt size, int first,
 			int pageSize, List<SortMeta> multiSortMeta,
-			Map<String, String> filters, JJProject project, JJProduct product) {
+			Map<String, Object> filters, JJProject project, JJProduct product) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJMessage> criteriaQuery = criteriaBuilder
 				.createQuery(JJMessage.class);
@@ -47,7 +47,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
 
 		if (filters != null) {
-			Iterator<Entry<String, String>> it = filters.entrySet().iterator();
+			Iterator<Entry<String, Object>> it = filters.entrySet().iterator();
 			while (it.hasNext()) {
 				@SuppressWarnings("rawtypes")
 				Map.Entry pairs = (Map.Entry) it.next();

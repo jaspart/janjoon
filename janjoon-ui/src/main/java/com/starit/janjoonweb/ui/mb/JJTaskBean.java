@@ -116,9 +116,8 @@ public class JJTaskBean {
 	private Date start;
 	private Date end;
 	private long zoomMin;
+	private long zoomMax;
 	private String sortMode;
-	private String sortBy;
-
 	private List<JJContact> contacts;
 
 	private JJProject project;
@@ -156,15 +155,7 @@ public class JJTaskBean {
 	public void setSortMode(String sortMode) {
 		this.sortMode = sortMode;
 	}
-
-	public String getSortBy() {
-		return sortBy;
-	}
-
-	public void setSortBy(String sortBy) {
-		this.sortBy = sortBy;
-	}
-
+	
 	public List<TaskData> getTasksData() {
 
 		// HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
@@ -261,6 +252,14 @@ public class JJTaskBean {
 
 	public void setZoomMin(long zoomMin) {
 		this.zoomMin = zoomMin;
+	}
+
+	public long getZoomMax() {
+		return zoomMax;
+	}
+
+	public void setZoomMax(long zoomMax) {
+		this.zoomMax = zoomMax;
 	}
 
 	public List<JJContact> getContacts() {
@@ -495,16 +494,12 @@ public class JJTaskBean {
 			Date now = new Date();
 			if (sortMode == null) {
 				sortMode = "chapter";
-				sortBy = "chapter.creationDate";
-
+				
 			} else if (sortMode.isEmpty()) {
 				sortMode = "chapter";
-				sortBy = "chapter.creationDate";
 
-			} else if (sortMode.equalsIgnoreCase("chapter"))
-				sortBy = "chapter.creationDate";
-			else
-				sortBy = null;
+			} 
+				
 
 			if (sprint == null) {
 				// Before 4 hours for now
@@ -522,6 +517,10 @@ public class JJTaskBean {
 			// one day in milliseconds for zoomMin
 			zoomMin = 1000L * 60 * 60 * 24;
 
+			// one day in milliseconds for zoomMax
+			zoomMax = 1000L * 60 * 60 * 24 * 31 * 5;
+			
+			
 			// Create timeline model
 			model = new TimelineModel();
 
@@ -1187,7 +1186,7 @@ public class JJTaskBean {
 			task = jJTaskService.findJJTask(task.getId());
 			updateView(task, false);
 
-			if (task.getSprint() != null) {			
+			if (task.getSprint() != null) {
 
 				HttpSession session = (HttpSession) FacesContext
 						.getCurrentInstance().getExternalContext()
@@ -1286,7 +1285,7 @@ public class JJTaskBean {
 		if (task.getSprint() != null) {
 			JJSprint sprint = jJSprintService.findJJSprint(task.getSprint()
 					.getId());
-			duplicatedTask.setSprint(sprint);			
+			duplicatedTask.setSprint(sprint);
 		}
 
 		if (task.getBug() != null) {
@@ -1495,7 +1494,7 @@ public class JJTaskBean {
 			} else if (objet.equalsIgnoreCase("Testcase")) {
 
 				for (JJTestcase testcase : jJTestcaseService
-						.getImportTestcases(null,project, true)) {
+						.getImportTestcases(null, project, true)) {
 
 					if (!checkAll) {
 						tasks = jJTaskService.getImportTasks(null, null,
@@ -1699,7 +1698,8 @@ public class JJTaskBean {
 
 				JJSprint sprint = jJSprintService.findJJSprint(jJSprintBean
 						.getSprintUtil().getSprint().getId());
-				SprintUtil sprintUtil = new SprintUtil(sprint,jJTaskService.getSprintTasks(sprint));
+				SprintUtil sprintUtil = new SprintUtil(sprint,
+						jJTaskService.getSprintTasks(sprint));
 				jJSprintBean.setSprintUtil(sprintUtil);
 				jJSprintBean.getSprintList().set(
 						jJSprintBean.contains(sprint.getId()), sprintUtil);
@@ -1716,8 +1716,8 @@ public class JJTaskBean {
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			RequestContext context = RequestContext.getCurrentInstance();
 
-			context.execute("projectTabView.select(" + 1 + ")");
-			context.execute("SprintTab.select("
+			context.execute("PF('projectTabView').select(" + 1 + ")");
+			context.execute("PF('SprintTab').select("
 					+ jJSprintBean.contains(jJSprintBean.getSprintUtil()
 							.getSprint().getId()) + ")");
 
@@ -1748,9 +1748,9 @@ public class JJTaskBean {
 					.getAttribute("jJSprintBean");
 			RequestContext context = RequestContext.getCurrentInstance();
 
-			context.execute("projectTabView.select(" + 1 + ")");
+			context.execute("PF('projectTabView').select(" + 1 + ")");
 
-			context.execute("SprintTab.select("
+			context.execute("PF('SprintTab').select("
 					+ jJSprintBean.contains(jJSprintBean.getSprintUtil()
 							.getSprint().getId()) + ")");
 		}
@@ -1832,34 +1832,31 @@ public class JJTaskBean {
 				.getContact();
 
 		if (update) {
-			
-			//check_if_realendDate_not_null
-			if(ttt.getEndDateReal() != null)
-			{
-				if(jJTaskService.findJJTask(ttt.getId()).getEndDateReal() == null)
-				{
-					if(mailingService == null)
-						mailingService =new MailingService();
-					
-					String subject ="";	
-					if(ttt.getRequirement() != null)
-						subject=ttt.getRequirement().getDescription();
-					else
-						if(ttt.getBug() != null)
-							subject=ttt.getBug().getDescription();
-						else 
-							if(ttt.getTestcase() != null)
-							subject=ttt.getTestcase().getDescription();
-					
-					for(JJContact c:jJPermissionService.areAuthorized(contact.getCompany(), null, project, product, "sprintContact"))
-					{
-						System.out.println(c.getEmail()+subject);						
+
+			// check_if_realendDate_not_null
+			if (ttt.getEndDateReal() != null) {
+				if (jJTaskService.findJJTask(ttt.getId()).getEndDateReal() == null) {
+					if (mailingService == null)
+						mailingService = new MailingService();
+
+					String subject = "";
+					if (ttt.getRequirement() != null)
+						subject = ttt.getRequirement().getDescription();
+					else if (ttt.getBug() != null)
+						subject = ttt.getBug().getDescription();
+					else if (ttt.getTestcase() != null)
+						subject = ttt.getTestcase().getDescription();
+
+					for (JJContact c : jJPermissionService.areAuthorized(
+							contact.getCompany(), null, project, product,
+							"sprintContact")) {
+						System.out.println(c.getEmail() + subject);
 						mailingService.sendMail(c.getEmail(), ttt, subject);
 					}
-						
+
 				}
-			}			
-			
+			}
+
 			ttt.setUpdatedBy(contact);
 			ttt.setUpdatedDate(new Date());
 			jJTaskService.updateJJTask(ttt);
@@ -2678,9 +2675,21 @@ public class JJTaskBean {
 	public void SortBySelectionChanged(final AjaxBehaviorEvent event) {
 		System.err.println("sortMode " + sortMode);
 		tasksData = null;
-		sortBy = null;
 		model = null;
 	}
+	
+	public int sortFunction(Object taskData1, Object taskData2) {
+		
+		
+		 if(sortMode.equalsIgnoreCase("chapter"))
+		 {
+			 
+			 return ((JJChapter)taskData1).getCreationDate().compareTo(((JJChapter)taskData2).getCreationDate());
+
+			 
+		 }else return 1;
+		
+		}
 
 	// ToDoTask Layout
 	public void initToDoTasks(ComponentSystemEvent e) {

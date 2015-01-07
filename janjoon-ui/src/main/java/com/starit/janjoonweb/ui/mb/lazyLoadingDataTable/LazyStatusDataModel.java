@@ -36,7 +36,7 @@ public class LazyStatusDataModel extends LazyDataModel<JJStatus> {
 	}
 
 	@Override
-	public List<JJStatus> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
+	public List<JJStatus> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {
 
 		List<JJStatus> data = new ArrayList<JJStatus>();
 		MutableInt size=new MutableInt(0);

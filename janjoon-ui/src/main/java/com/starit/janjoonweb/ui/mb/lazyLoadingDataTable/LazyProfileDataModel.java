@@ -36,7 +36,7 @@ public class LazyProfileDataModel extends LazyDataModel<JJProfile> {
 	}
 
 	@Override
-	public List<JJProfile> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
+	public List<JJProfile> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {
 
 		List<JJProfile> data = new ArrayList<JJProfile>();
 		MutableInt size=new MutableInt(0);

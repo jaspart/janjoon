@@ -7,6 +7,9 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition>
+	<h:form>
+	<p:remoteCommand update=":projecttabview:SprintTabView" name="updateTabSprint"/>
+	</h:form>
 	<p:tabView id="SprintTabView" dynamic="true" cache="true"
 		widgetVar="SprintTab" value="#{jJSprintBean.sprintList}"
 		var="jjsprint" style="width:100%;">
@@ -22,7 +25,7 @@
 			</f:facet>
 			<ui:include src="sprint.xhtml" />
 			<h:form id="sprintForm" rendered="#{!jjsprint.render}" style="width:100% important;">
-				<p:growl id="sprintGrowl" showDetail="true" life="2000" />
+				<p:growl id="sprintGrowl" showDetail="true" life="2000" />				
 				<p:panelGrid id="sprintPanelGrid" style="width:100% important;">
 					<f:facet name="header">
 						<p:row>

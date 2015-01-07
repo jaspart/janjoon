@@ -56,7 +56,7 @@ public class LazyProductDataModel extends LazyDataModel<JJProduct> {
 	}
 
 	@Override
-	public List<JJProduct> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
+	public List<JJProduct> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {
 
 		List<JJProduct> data = new ArrayList<JJProduct>();
 		MutableInt size=new MutableInt(0);

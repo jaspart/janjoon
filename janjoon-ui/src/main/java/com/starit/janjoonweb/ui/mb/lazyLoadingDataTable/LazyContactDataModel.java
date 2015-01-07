@@ -56,7 +56,7 @@ public class LazyContactDataModel extends LazyDataModel<JJContact> {
 	}
 
 	@Override
-	public List<JJContact> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
+	public List<JJContact> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {
 
 		List<JJContact> data = new ArrayList<JJContact>();
 		MutableInt size=new MutableInt(0);

@@ -80,7 +80,7 @@ public class LazyBugDataModel extends LazyDataModel<JJBug> {
 
 	@Override
 	public List<JJBug> load(int first, int pageSize,
-			List<SortMeta> multiSortMeta, Map<String, String> filters) {
+			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
 
 		System.err.println("FIRST "+first);
 		List<JJBug> data = new ArrayList<JJBug>();		

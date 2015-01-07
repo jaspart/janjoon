@@ -25,7 +25,7 @@ public class BugDataTableOptions {
 
 	private int first;
 	private List<SortMeta> multiSortMeta;
-	private Map<String, String> filters;
+	private Map<String, Object> filters;
 	private DataTable dataTable;
 	private String importance;
 	private String status;
@@ -74,7 +74,7 @@ public class BugDataTableOptions {
 	}
 
 	public BugDataTableOptions(int first, List<SortMeta> multiSortMeta,
-			Map<String, String> filters) {
+			Map<String, Object> filters) {
 
 		this.first = first;
 		this.multiSortMeta = multiSortMeta;
@@ -83,7 +83,7 @@ public class BugDataTableOptions {
 		status="selected";
 		criticity="selected";
 		if (filters != null) {
-			Iterator<Entry<String, String>> it = filters.entrySet().iterator();
+			Iterator<Entry<String, Object>> it = filters.entrySet().iterator();
 			while (it.hasNext()) {
 				@SuppressWarnings("rawtypes")
 				Map.Entry pairs = (Map.Entry) it.next();
@@ -126,11 +126,11 @@ public class BugDataTableOptions {
 		this.multiSortMeta = multiSortMeta;
 	}
 
-	public Map<String, String> getFilters() {
+	public Map<String, Object> getFilters() {
 		return filters;
 	}
 
-	public void setFilters(Map<String, String> filters) {
+	public void setFilters(Map<String, Object> filters) {
 		this.filters = filters;
 	}
 

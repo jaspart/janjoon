@@ -190,7 +190,7 @@
 					<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
 						listener="#{jJMessageBean.onRowSelect}"
 						oncomplete="PF('viewDialogWidget1').show()" />
-					<p:column headerText="Messages" sortBy="creationDate">
+					<p:column headerText="Messages" sortBy="#{mes.creationDate}">
 						<h:outputText id="viewButton" value="#{mes.message}" />
 						<p:tooltip for="viewButton"
 							value="#{messages.label_view} #{mes.name}" showEffect="fade"

@@ -76,6 +76,10 @@ public class JJMessageBean {
 		columns.add("message");
 		allJJMessages = jJMessageService.findAllJJMessages();
 		setMessage(new JJMessage());
+		alertMessages = jJMessageService.getAlertMessages(
+				((JJProjectBean) LoginBean.findBean("jJProjectBean"))
+						.getProject(), ((JJProductBean) LoginBean
+						.findBean("jJProductBean")).getProduct());
 		viewedMessage = new JJMessage();
 		mainMessages = null;
 

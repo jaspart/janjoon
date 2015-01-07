@@ -139,12 +139,12 @@
 					<p:column selectionMode="multiple" style="width:2%" />
 
 					<p:column headerText="#{messages.bug_table_title_title}"
-						filterMatchMode="contains" sortBy="name" filterStyle="width: 90%;"
+						filterMatchMode="contains" sortBy="#{bug.name}" filterStyle="width: 90%;"
 						style="width: 25% !important;height: 5px !important;">
 						<h:outputText value="#{bug.name}" />
 					</p:column>
 					<p:column headerText="#{messages.bug_table_creation_title}"
-						sortBy="creationDate"
+						sortBy="#{bug.creationDate}"
 						style="width: 15% !important;height: 5px !important;">
 						<h:outputText value="#{bug.creationDate}">
 							<f:converter converterId="extendedDateTimeConverter" />
@@ -153,25 +153,25 @@
 						</h:outputText>
 					</p:column>
 					<p:column headerText="#{messages.bug_table_criticity_title}"
-						sortBy="criticity.name" id="criticity"
+						sortBy="#{bug.criticity.name}" id="criticity"
 						filterStyleClass="criticity"
 						style="width: 10% !important;height: 5px !important;"
 						filterOptions="#{jJBugBean.criticityOptions}"
 						filterMatchMode="exact" filterStyle="width: 90%;"
-						filterBy="criticity.name">
+						filterBy="#{bug.criticity.name}">
 						<h:outputText value="#{bug.criticity.name}" />
 					</p:column>
 					<p:column headerText="#{messages.bug_table_importance_title}"
-						sortBy="importance.name" id="importance"
+						sortBy="#{bug.importance.name}" id="importance"
 						filterStyleClass="importance"
 						style="width: 10% !important;height: 5px !important;"
 						filterOptions="#{jJBugBean.importanceOptions}"
 						filterMatchMode="exact" filterStyle="width: 90%;"
-						filterBy="importance.name">
+						filterBy="#{bug.importance.name}">
 						<h:outputText value="#{bug.importance.name}" />
 					</p:column>
 					<p:column headerText="#{messages.bug_table_status_title}"
-						sortBy="status.name" filterBy="status.name" id="status"
+						sortBy="#{bug.status.name}" filterBy="#{bug.status.name}" id="status"
 						style="width: 10% !important;height: 5px !important;"
 						filterStyleClass="status"
 						filterOptions="#{jJBugBean.statusOptions}" filterMatchMode="exact"

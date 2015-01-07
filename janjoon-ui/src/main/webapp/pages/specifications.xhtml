@@ -136,7 +136,7 @@
 										</p:column-->
 										<p:column colspan="3">
 											<p:inputText id="globalFilter" style="width:100%"
-												onkeyup="dataTable_#{loop.index}_Widget.filter()" />
+												onkeyup="PF('dataTable_#{loop.index}_Widget').filter()" />
 											<p:watermark
 												value="#{messages.specification_table_requirement_filter}"
 												for="globalFilter" />
@@ -179,16 +179,16 @@
 						</f:facet>
 
 						<p:column rendered="false" exportable="false"
-							filterBy="requirement.id" filterStyle="display:none"
-							sortBy="requirement.id">
+							filterBy="#{reqUtil.requirement.id}" filterStyle="display:none"
+							sortBy="#{reqUtil.requirement.id}">
 							<f:facet name="header">
 								<h:outputText value="Id" />
 							</f:facet>
 							<h:outputText value="#{reqUtil.requirement.id}" />
 						</p:column>
 
-						<p:column filterBy="requirement.name" filterStyle="display:none"
-							styleClass="requirement-column" sortBy="requirement.id">
+						<p:column filterBy="#{reqUtil.requirement.name}" filterStyle="display:none"
+							styleClass="requirement-column" sortBy="#{reqUtil.requirement.id}">
 							<f:facet name="header">
 								<h:outputText
 									value="#{messages.specification_table_requirement_title}" />
@@ -219,8 +219,8 @@
 							</p:tooltip>
 						</p:column>
 
-						<p:column filterBy="requirement.product.name" styleClass="product-column"
-							filterStyle="display:none" sortBy="requirement.product.name">
+						<p:column filterBy="#{reqUtil.requirement.product.name}" styleClass="product-column"
+							filterStyle="display:none" sortBy="#{reqUtil.requirement.product.name}">
 							<f:facet name="header">
 								<h:outputText
 									value="#{messages.specification_table_product_title}" />
@@ -228,8 +228,8 @@
 							<h:outputText value="#{reqUtil.requirement.product.name}" />
 						</p:column>
 
-						<p:column filterBy="requirement.chapter.name" styleClass="chapter-column"
-							filterStyle="display:none" sortBy="requirement.chapter.name">
+						<p:column filterBy="#{reqUtil.requirement.chapter.name}" styleClass="chapter-column"
+							filterStyle="display:none" sortBy="#{reqUtil.requirement.chapter.name}">
 							<f:facet name="header">
 								<h:outputText
 									value="#{messages.specification_table_chapter_title}" />
@@ -243,11 +243,7 @@
 							</f:facet>
 							<p:splitButton id="viewButton"
 								value="#{messages[jJRequirementBean.viewButton]}"
-								icon="ui-icon-search">
-								<!--onstart="PF('blockUIWidget').block()"
-								action="#{jJRequirementBean.viewLinks()}"
-								oncomplete="PF('blockUIWidget').unblock()"
-								update=":specForm"-->
+								icon="ui-icon-search">							
 								
 								<p:menuitem id="filterButton"
 									value="#{messages[jJRequirementBean.filterButton]}"
@@ -255,8 +251,9 @@
 									onstart="PF('blockUIWidget').block()"
 									action="#{jJRequirementBean.viewLinks()}"
 									oncomplete="PF('blockUIWidget').unblock()"
-									update=":specForm"
-									>
+									update=":specForm">
+									<f:setPropertyActionListener value="#{reqUtil.requirement}"
+									target="#{jJRequirementBean.requirement}" />
 								</p:menuitem>
 								<p:tooltip for="filterButton" value="Edit" showEffect="fade"
 									hideEffect="fade" />
@@ -327,7 +324,7 @@
 		</h:form>
 
 		<p:hotkey bind="esc" handler="PF('requirementDialogWidget').hide()" />
-		<p:hotkey bind="alt+enter" handler="requirementSaveWidget.jq.click()" />
+		<p:hotkey bind="alt+enter" handler="PF('requirementSaveWidget').jq.click()" />
 		<p:dialog id="requirementDialog" draggable="false"
 			header="#{messages[jJRequirementBean.message]}" modal="true"
 			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"
@@ -785,7 +782,7 @@
 													listener="#{jJChapterBean.onDragDrop}"
 													update=":chapterDialogForm"
 													onstart="PF('chapterBlockUIWidget').block()"
-													oncomplete="PF('chapterBlockUIWidget').unblock();chapterTabView.select(1);" />
+													oncomplete="PF('chapterBlockUIWidget').unblock();PF('chapterTabView').select(1);" />
 												<p:treeNode>
 													<h:outputText value="#{nodeLeft}" />
 												</p:treeNode>

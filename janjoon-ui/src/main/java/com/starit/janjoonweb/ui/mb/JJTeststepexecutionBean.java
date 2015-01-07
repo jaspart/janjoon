@@ -277,7 +277,7 @@ public class JJTeststepexecutionBean {
 					.getAttribute("jJProjectBean")).getProject());
 
 			RequestContext context = RequestContext.getCurrentInstance();
-			context.execute("bugTestDialogWidget.show()");
+			context.execute("PF('bugTestDialogWidget').show()");
 			disabledTestcase=false;
 		}
 

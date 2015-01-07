@@ -43,7 +43,7 @@ public class LazyMessageDataModel extends LazyDataModel<JJMessage> {
 	
 	@Override
 	public List<JJMessage> load(int first, int pageSize, String sortField,
-			SortOrder sortOrder, Map<String, String> filters) {
+			SortOrder sortOrder, Map<String, Object> filters) {
 
 		List<JJMessage> data = new ArrayList<JJMessage>();
 
@@ -77,7 +77,7 @@ public class LazyMessageDataModel extends LazyDataModel<JJMessage> {
 
 	@Override
 	public List<JJMessage> load(int first, int pageSize,
-			List<SortMeta> multiSortMeta, Map<String, String> filters) {
+			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
 
 		List<JJMessage> data = new ArrayList<JJMessage>();
 		MutableInt size=new MutableInt(0);

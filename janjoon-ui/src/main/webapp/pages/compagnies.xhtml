@@ -48,7 +48,8 @@
 				<f:facet name="footer">
 					<p:commandButton value="#{messages.admin_company_new_button}"
 						id="newCompany" update=":tabview:companyDialog"
-						oncomplete="PF('companyDialogWidget').show()" icon="ui-icon-circle-plus">
+						oncomplete="PF('companyDialogWidget').show()"
+						icon="ui-icon-circle-plus">
 						<f:setPropertyActionListener
 							target="#{jJCompanyBean.headerMessage}"
 							value="admin_company_new_title" />
@@ -66,48 +67,61 @@
 		<p:ajax event="close" update=":tabview:companyForm"
 			listener="#{jJCompanyBean.closeDialog}" />
 		<p:outputPanel id="companyDialogPanel">
-			<h:form id="companyDialogForm">
+			<h:form id="companyDialogForm" enctype="multipart/form-data">
 				<p:growl id="msg" />
 				<p:panelGrid style="margin-top:10px">
 					<p:row>
 						<p:column colspan="1">
 							<p:outputLabel value="Name :" for="name" />
 						</p:column>
-						<p:column colspan="2">
+						<p:column colspan="1">
 							<p:inputText id="name" value="#{jJCompanyBean.companie.name}"
 								label="#{messages.admin_company_new_name_label}" required="true"
 								widgetVar="nameWidget">
 								<f:validateLength maximum="100" />
+								<p:ajax event="blur" update="compLogo" />
 							</p:inputText>
 							<p:message for="name" id="msgName" />
+						</p:column>
+						<p:column colspan="1">
+							<h:outputLabel for="compLogo" value="Logo:" />
+
+							<p:fileUpload id="compLogo"
+								disabled="#{empty jJCompanyBean.companie.name}"
+								fileUploadListener="#{licenseBean.handleCompLogoUpload}"
+								mode="advanced" dragDropSupport="true" update="msg"
+								sizeLimit="1000000" allowTypes="/(gif|png|ico|jpeg)$/" />
 						</p:column>
 					</p:row>
 					<p:row>
 						<p:column colspan="1">
 							<h:outputLabel for="calendar" value="Calendrier" />
-						</p:column>		
+						</p:column>
 						<p:column>
-							<p:inputTextarea id="calendar" value="#{jJCompanyBean.companie.calendar}" 
-									required="true" requiredMessage="Calendar Field is Required"
-									rows="8" cols="37" autoResize="false" />
-						</p:column>			
-<!-- 						<p:column colspan="2"> -->
-<!-- 							<p:fileUpload id="calendar" fileLimit="1" -->
-<!-- 								required="#{jJCompanyBean.update}" -->
-<!-- 								fileUploadListener="#{jJCompanyBean.handleFileUpload}" -->
-<!-- 								mode="advanced" dragDropSupport="true" -->
-<!-- 								update="msg valValue" sizeLimit="100000" -->
-<!-- 								allowTypes="/(\.|\/)(properties)$/" /> -->
-							
-<!-- 							<h:inputHidden id="valValue" value="#{jJCompanyBean.calendar}" -->
-<!-- 								required="#{jJCompanyBean.update}" -->
-<!-- 								requiredMessage="You Have Not Uploaded the Calendar of the Company" /> -->
-<!-- 						</p:column> -->					
+							<p:inputTextarea id="calendar"
+								value="#{jJCompanyBean.companie.calendar}" required="true"
+								requiredMessage="Calendar Field is Required" rows="8" cols="37"
+								autoResize="false" />
+						</p:column>
+						<!-- 						<p:column colspan="2"> -->
+						<!-- 							<p:fileUpload id="calendar" fileLimit="1" -->
+						<!-- 								required="#{jJCompanyBean.update}" -->
+						<!-- 								fileUploadListener="#{jJCompanyBean.handleFileUpload}" -->
+						<!-- 								mode="advanced" dragDropSupport="true" -->
+						<!-- 								update="msg valValue" sizeLimit="100000" -->
+						<!-- 								allowTypes="/(\.|\/)(properties)$/" /> -->
+
+						<!-- 							<h:inputHidden id="valValue" value="#{jJCompanyBean.calendar}" -->
+						<!-- 								required="#{jJCompanyBean.update}" -->
+						<!-- 								requiredMessage="You Have Not Uploaded the Calendar of the Company" /> -->
+						<!-- 						</p:column> -->
 					</p:row>
 					<p:row>
 						<p:column colspan="3">
-							<p:outputLabel value="Description" for="jJCompanyDescription" rendered="#{!loginBean.mobile}" />
-							<p:outputLabel value="Description" for="jJCompanyMobileDescription" rendered="#{loginBean.mobile}" />
+							<p:outputLabel value="Description" for="jJCompanyDescription"
+								rendered="#{!loginBean.mobile}" />
+							<p:outputLabel value="Description"
+								for="jJCompanyMobileDescription" rendered="#{loginBean.mobile}" />
 							<br />
 							<pe:ckEditor id="jJCompanyDescription"
 								toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"

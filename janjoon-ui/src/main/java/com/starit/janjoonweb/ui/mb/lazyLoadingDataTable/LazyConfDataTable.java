@@ -36,7 +36,7 @@ public class LazyConfDataTable extends LazyDataModel<JJConfiguration> {
 	}
 
 	@Override
-	public List<JJConfiguration> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
+	public List<JJConfiguration> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {
 
 		List<JJConfiguration> data = new ArrayList<JJConfiguration>();
 		MutableInt size=new MutableInt(0);

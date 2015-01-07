@@ -462,8 +462,8 @@ public class JJBugBean {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();		
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("projectTabView.select(" + 1 + ")");
-		context.execute("SprintTab.select("+jJSprintBean.contains(jJSprintBean.getSprintUtil().getSprint().getId())+ ")");
+		context.execute("PF('projectTabView').select(" + 1 + ")");
+		context.execute("PF('SprintTab').select("+jJSprintBean.contains(jJSprintBean.getSprintUtil().getSprint().getId())+ ")");
 	}
 
 	public void persistBug() {
