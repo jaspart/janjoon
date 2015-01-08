@@ -9,7 +9,8 @@
 	<ui:define name="content">
 		<p:commandButton value="#{messages.specification_video_help_title}"
 			id="videoHelpBtn" icon="ui-icon-video"
-			onclick="PF('videoHelpWidget').show()" type="button" style="float: right;" />
+			onclick="PF('videoHelpWidget').show()" type="button"
+			style="float: right;" />
 		<f:event type="preRenderView"
 			oncomplete="PF('blockUIWidget').unblock()"
 			listener="#{jJStatusBean.loadData()}" />
@@ -57,12 +58,14 @@
 					</p:dataTable>
 				</h:form>
 			</p:tab>
-			<p:tab id="sprintTab" title="Sprint" rendered="#{not empty jJSprintBean.sprintChartList}">
+			<p:tab id="sprintTab" title="Sprint"
+				rendered="#{not empty jJSprintBean.sprintChartList}">
 				<p:tabView id="SprintTabView" dynamic="true" widgetVar="SprintTab"
 					value="#{jJSprintBean.sprintChartList}" var="jjsprint">
 					<p:tab title="#{jjsprint.sprint.name}">
-						<p:barChart value="#{jjsprint.chartModel}" legendPosition="e" widgetVar="barChart_#{jjsprint.sprint.id}_Widget"
-							minY="0" xaxisLabel="Date" yaxisLabel="WorkLoad" />
+						<p:barChart value="#{jjsprint.chartModel}" legendPosition="e"
+							widgetVar="barChart_#{jjsprint.sprint.id}_Widget" minY="0"
+							xaxisLabel="Date" yaxisLabel="WorkLoad" />
 					</p:tab>
 				</p:tabView>
 			</p:tab>

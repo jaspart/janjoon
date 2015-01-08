@@ -42,10 +42,8 @@
 
 
 			<p:commandButton value="#{messages.specification_video_help_title}"
-				style="float: right;"
-				id="videoHelpBtn" icon="ui-icon-video"
-				onclick="PF('videoHelpWidget').show()"
-				type="button" />
+				style="float: right;" id="videoHelpBtn" icon="ui-icon-video"
+				onclick="PF('videoHelpWidget').show()" type="button" />
 
 			<p:commandButton value="#{messages.specification_import_button}"
 				style="float: right;" disabled="#{jJRequirementBean.disabledExport}"
@@ -102,8 +100,7 @@
 					<p:dataTable id="categoryTable" var="reqUtil"
 						value="#{tableDataModel}" scrollable="true" scrollHeight="300"
 						sortMode="multiple" resizableColumns="true"
-						rowStyleClass="#{reqUtil.style}"
-						styleClass="requirement-table"
+						rowStyleClass="#{reqUtil.style}" styleClass="requirement-table"
 						filteredValue="#{tableDataModel.filtredRequirements}"
 						rowKey="#{reqUtil.requirement.id}"
 						rendered="#{tableDataModel.rendered}" selectionMode="single"
@@ -127,6 +124,21 @@
 												actionListener="#{jJChapterBean.loadData(tableDataModel.categoryId)}"
 												onstart="PF('blockUIWidget').block()"
 												oncomplete="PF('blockUIWidget').unblock();PF('chapterDialogWidget').show()" />
+										</p:column>
+										<p:column>
+											<p:dialog modal="true" widgetVar="statusDialog"
+												header="Status" draggable="false" closable="false"
+												resizable="false">
+												<p:graphicImage library="images" name="ajaxloadingbar.gif"
+													style="vertical-align: middle;" />
+											</p:dialog>
+											<p:commandButton ajax="false" id="xml"
+												onclick="PrimeFaces.monitorDownload(start, stop);"
+												icon="ui-icon-arrowthick-1-s">
+												<p:fileDownload value="#{tableDataModel.file}" />
+											</p:commandButton>
+											<p:tooltip for="xml" value="Export To XML" showEffect="fade"
+												hideEffect="fade" />
 										</p:column>
 										<!--p:column colspan="1">
 											<p:commandButton id="releaseRequirementButton"
@@ -187,8 +199,9 @@
 							<h:outputText value="#{reqUtil.requirement.id}" />
 						</p:column>
 
-						<p:column filterBy="#{reqUtil.requirement.name}" filterStyle="display:none"
-							styleClass="requirement-column" sortBy="#{reqUtil.requirement.id}">
+						<p:column filterBy="#{reqUtil.requirement.name}"
+							filterStyle="display:none" styleClass="requirement-column"
+							sortBy="#{reqUtil.requirement.id}">
 							<f:facet name="header">
 								<h:outputText
 									value="#{messages.specification_table_requirement_title}" />
@@ -219,8 +232,9 @@
 							</p:tooltip>
 						</p:column>
 
-						<p:column filterBy="#{reqUtil.requirement.product.name}" styleClass="product-column"
-							filterStyle="display:none" sortBy="#{reqUtil.requirement.product.name}">
+						<p:column filterBy="#{reqUtil.requirement.product.name}"
+							styleClass="product-column" filterStyle="display:none"
+							sortBy="#{reqUtil.requirement.product.name}">
 							<f:facet name="header">
 								<h:outputText
 									value="#{messages.specification_table_product_title}" />
@@ -228,8 +242,9 @@
 							<h:outputText value="#{reqUtil.requirement.product.name}" />
 						</p:column>
 
-						<p:column filterBy="#{reqUtil.requirement.chapter.name}" styleClass="chapter-column"
-							filterStyle="display:none" sortBy="#{reqUtil.requirement.chapter.name}">
+						<p:column filterBy="#{reqUtil.requirement.chapter.name}"
+							styleClass="chapter-column" filterStyle="display:none"
+							sortBy="#{reqUtil.requirement.chapter.name}">
 							<f:facet name="header">
 								<h:outputText
 									value="#{messages.specification_table_chapter_title}" />
@@ -243,17 +258,15 @@
 							</f:facet>
 							<p:splitButton id="viewButton"
 								value="#{messages[jJRequirementBean.viewButton]}"
-								icon="ui-icon-search">							
-								
+								icon="ui-icon-search">
+
 								<p:menuitem id="filterButton"
 									value="#{messages[jJRequirementBean.filterButton]}"
-									icon="ui-icon-search"
-									onstart="PF('blockUIWidget').block()"
+									icon="ui-icon-search" onstart="PF('blockUIWidget').block()"
 									action="#{jJRequirementBean.viewLinks()}"
-									oncomplete="PF('blockUIWidget').unblock()"
-									update=":specForm">
+									oncomplete="PF('blockUIWidget').unblock()" update=":specForm">
 									<f:setPropertyActionListener value="#{reqUtil.requirement}"
-									target="#{jJRequirementBean.requirement}" />
+										target="#{jJRequirementBean.requirement}" />
 								</p:menuitem>
 								<p:tooltip for="filterButton" value="Edit" showEffect="fade"
 									hideEffect="fade" />
@@ -324,7 +337,8 @@
 		</h:form>
 
 		<p:hotkey bind="esc" handler="PF('requirementDialogWidget').hide()" />
-		<p:hotkey bind="alt+enter" handler="PF('requirementSaveWidget').jq.click()" />
+		<p:hotkey bind="alt+enter"
+			handler="PF('requirementSaveWidget').jq.click()" />
 		<p:dialog id="requirementDialog" draggable="false"
 			header="#{messages[jJRequirementBean.message]}" modal="true"
 			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"
@@ -716,8 +730,8 @@
 											toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
 											value="#{jJChapterBean.chapter.description}" required="true"
 											requiredMessage="#{messages.specification_chapter_description_alert}" />
-										<p:editor id="descriptionMobile" style="width:600px !important"
-											rendered="#{loginBean.mobile}"
+										<p:editor id="descriptionMobile"
+											style="width:600px !important" rendered="#{loginBean.mobile}"
 											value="#{jJChapterBean.chapter.description}" required="true"
 											requiredMessage="#{messages.specification_chapter_description_alert}" />
 									</p:column>

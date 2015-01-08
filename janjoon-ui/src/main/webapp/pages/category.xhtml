@@ -8,7 +8,8 @@
 	<h:form id="categoryForm">
 		<p:panel id="categoryPanel" style="width:650px" columns="1"
 			cellpadding="6">
-			<p:dataTable id="categoryDataTable" var="category" lazy="true" paginatorPosition="bottom"
+			<p:dataTable id="categoryDataTable" var="category" lazy="true"
+				paginatorPosition="bottom"
 				value="#{jJCategoryBean.categoryListTable}" paginator="true"
 				rows="15" rowKey="#{category.id}">
 				<f:facet name="header">#{messages.admin_category_table_header}</f:facet>
@@ -69,7 +70,8 @@
 				<p:growl id="msg" />
 				<p:panelGrid style="margin-top:10px">
 					<p:row>
-						<p:column colspan="2"><br/>						
+						<p:column colspan="2">
+							<br />
 							<p:inputText id="name"
 								value="#{jJCategoryBean.categoryAdmin.name}"
 								label="#{messages.admin_category_new_name_label}"

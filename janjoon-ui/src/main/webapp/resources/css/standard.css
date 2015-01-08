@@ -131,48 +131,56 @@ a:visited {
 	background: rgba(255, 255, 255, 0.5);
 }
 
-.customTitleBar > .ui-panel-titlebar {
+.customTitleBar>.ui-panel-titlebar {
 	background: #6699FF;
 	max-height: 400px;
 }
-.customTitleBar > .ui-widget-content {
+
+.customTitleBar>.ui-widget-content {
 	background: #DDEEFF;
 }
-.order-table-odd-row{
-	text-align:left;
-	background:none repeat scroll 0 0 #FFFFFFF;
-	border-top:1px solid #BBBBBB;
+
+.order-table-odd-row {
+	text-align: left;
+	background: none repeat scroll 0 0 #FFFFFFF;
+	border-top: 1px solid #BBBBBB;
 }
 
-.order-table-even-row{
-	text-align:left;
-	background:none repeat scroll 0 0 #F0F0F0;
-	border-top:1px solid #BBBBBB;
+.order-table-even-row {
+	text-align: left;
+	background: none repeat scroll 0 0 #F0F0F0;
+	border-top: 1px solid #BBBBBB;
 }
+
 .ui-datatable .ui-sortable-column div.ui-dt-c {
 	padding-right: 15px !important;
 }
+
 .requirement-table {
 	margin: auto;
 	width: 100%;
 	min-width: 270px !important;
 	margin: auto;
 }
+
 .requirement-column {
 	text-align: left;
 	width: 40%;
 	min-width: 200px !important;
 }
+
 .product-column {
 	text-align: left;
 	width: 20%;
 	min-width: 0px !important;
 }
+
 .chapter-column {
 	text-align: left;
 	width: 20%;
 	min-width: 0px !important;
 }
+
 .action-column {
 	text-align: left;
 	width: 20%;

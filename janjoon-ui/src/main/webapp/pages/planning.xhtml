@@ -9,25 +9,25 @@
 
 <ui:composition style="width:100%">
 	<style type="text/css">
-		.ui-datatable table {
-			table-layout: fixed;
-			border-collapse: separate;
-		}
+.ui-datatable table {
+	table-layout: fixed;
+	border-collapse: separate;
+}
 
-		.ui-datatable .ui-datatable-data th {
-			height: 37px;
-			overflow: hidden;
-		}
+.ui-datatable .ui-datatable-data th {
+	height: 37px;
+	overflow: hidden;
+}
 
-		.ui-datatable .ui-datatable-data td {
-			overflow: hidden;
-		}
+.ui-datatable .ui-datatable-data td {
+	overflow: hidden;
+}
 
-		.ui-datatable .ui-datatable-data tr {
-			height: 44px;
-			overflow: hidden;
-		}
-	</style>
+.ui-datatable .ui-datatable-data tr {
+	height: 44px;
+	overflow: hidden;
+}
+</style>
 	<h:form id="sprintForm" style="width:80%">
 		<p:panelGrid style="margin-top:10px">
 			<p:row>
@@ -110,7 +110,8 @@
 								<f:facet name="header">  
                        					Task Data Table 
                     			</f:facet>
-								<p:dataTable id="taskDataTable" var="taskData" sortFunction="#{jJTaskBean.sortFunction}"
+								<p:dataTable id="taskDataTable" var="taskData"
+									sortFunction="#{jJTaskBean.sortFunction}"
 									sortBy="#{taskData.chapter}" value="#{jJTaskBean.tasksData}"
 									editable="true" editMode="cell">
 
@@ -119,8 +120,9 @@
 										onstart="PF('blockUIWidget').block()"
 										onsuccess="onCellEditTableComplete()"
 										update="taskDataTable :projecttabview:planningForm:timeline :projecttabview:planningForm:msg" />
-										
-									<p:summaryRow paginatorPosition="top" rendered="#{jJTaskBean.sortMode == 'chapter'}">
+
+									<p:summaryRow paginatorPosition="top"
+										rendered="#{jJTaskBean.sortMode == 'chapter'}">
 										<p:column colspan="11" style="text-align:left">
 											<h:outputText icon="ui-icon-arrowreturnthick-1-e"
 												value="Chapter: #{taskData.chapter.name}" />
@@ -191,7 +193,8 @@
 
 													<f:selectItem itemValue="#{null}"
 														itemLabel="#{messages.project_gantt_select_label}" />
-													<f:selectItems value="#{jJSprintBean.contacts}" var="contact"
+													<f:selectItems value="#{jJSprintBean.contacts}"
+														var="contact"
 														itemLabel="#{contact.firstname} #{contact.name}"
 														itemValue="#{contact}" />
 												</h:selectOneMenu>
@@ -352,18 +355,20 @@
 								</p:dataTable>
 							</pe:layoutPane>
 
-							<pe:layoutPane position="center" styleContent="overflow-y: hidden;" id="centerLayout">
+							<pe:layoutPane position="center"
+								styleContent="overflow-y: hidden;" id="centerLayout">
 
 								<f:facet name="header">  
                        					Task TimeLine 
                     			</f:facet>
 								<pe:timeline id="timeline" value="#{jJTaskBean.model}"
-									eventMargin="10"  eventMarginAxis="0" themable="false"
+									eventMargin="10" eventMarginAxis="0" themable="false"
 									locale="#{LocaleBean.locale}" start="#{jJTaskBean.start}"
 									end="#{jJTaskBean.end}" widgetVar="timelineWdgt"
 									axisOnTop="true" groupsChangeable="false" var="task"
 									stackEvents="false" style="width:1200px;min-height:350px;"
-									editable="true" zoomMin="#{jJTaskBean.zoomMin}" zoomMax="#{jJTaskBean.zoomMax}">
+									editable="true" zoomMin="#{jJTaskBean.zoomMin}"
+									zoomMax="#{jJTaskBean.zoomMax}">
 
 									<p:ajax event="delete"
 										listener="#{jJTaskBean.onDeleteTimelineEvent}"

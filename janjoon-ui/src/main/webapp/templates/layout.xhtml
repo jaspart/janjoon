@@ -247,27 +247,16 @@
 
 		</h:panelGrid>
 		<script type="text/javascript">
+			function start() {
+				PF('statusDialog').show();
+			}
+
+			function stop() {
+				PF('statusDialog').hide();
+			}
+
 			jQuery("div.ui-growl").remove();
 		</script>
-
-		<p:dialog header="Header" widgetVar="appMenu" showEffect="pop"
-			style="width:75% !important;height: 75% !important">
-			<h:outputText value="What we do in life, echoes in eternity!" />
-			<p:panelGrid columns="3"
-				style="width:100% !important;height: 100% !important">
-				<p:commandButton value="A" type="button" />
-				<p:commandButton value="B" type="button" />
-				<p:commandButton value="C" type="button" />
-
-				<p:commandButton value="D" type="button" />
-				<p:commandButton value="E" type="button" />
-				<p:commandButton value="F" type="button" />
-
-				<p:commandButton value="G" type="button" />
-				<p:commandButton value="H" type="button" />
-				<p:commandButton value="I" type="button" />
-			</p:panelGrid>
-		</p:dialog>
 	</h:body>
 </f:view>
 </html>

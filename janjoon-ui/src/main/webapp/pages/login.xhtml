@@ -15,7 +15,7 @@
 				<f:facet name="header">
 					<p:row>
 						<p:column colspan="2">
-							<p:outputLabel value="  #{messages.login_pleaseLogin_header}"/>
+							<p:outputLabel value="  #{messages.login_pleaseLogin_header}" />
 						</p:column>
 					</p:row>
 				</f:facet>
@@ -29,10 +29,10 @@
 					<p:column>
 						<p:inputText id="username" value="#{loginBean.username}"
 							required="true"
-							requiredMessage="#{messages.login_necessaryUsername_label}" >
-							<f:validator validatorId="emailValidator"/>
-							</p:inputText>
-							
+							requiredMessage="#{messages.login_necessaryUsername_label}">
+							<f:validator validatorId="emailValidator" />
+						</p:inputText>
+
 					</p:column>
 				</p:row>
 				<p:row>
@@ -60,20 +60,20 @@
 				<f:facet name="footer">
 					<p:row style="padding: 4px 1px;">
 						<p:column colspan="2">
-							<p:selectBooleanCheckbox value="#{loginBean.agreeTerms}" >
-							<p:ajax event="change" update="submit" />
+							<p:selectBooleanCheckbox value="#{loginBean.agreeTerms}">
+								<p:ajax event="change" update="submit" />
 							</p:selectBooleanCheckbox>
-							<h:outputLink  target="_blank"
+							<h:outputLink target="_blank"
 								value="../resources/ConfidentialityTermsAndConditions_BetaUsers.pdf"
 								styleClass="preformatted">
 								<h:outputLabel value="#{messages.login_terms_label}" />
 							</h:outputLink>
-							<br/>
+							<br />
 							<p:commandButton id="submit"
 								value="#{messages.login_login_button}"
 								onstart="PF('blockUIWidget').block()"
 								onerror="PF('blockUIWidget').unblock()"
-								oncomplete="PF('blockUIWidget').unblock()"				
+								oncomplete="PF('blockUIWidget').unblock()"
 								action="#{loginBean.login}" style="margin-top:20px;"
 								disabled="#{!loginBean.agreeTerms}"
 								update=":login:mdp,:login:mail,:auth" />

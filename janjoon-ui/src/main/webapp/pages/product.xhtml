@@ -52,7 +52,8 @@
 						id="newProduct"
 						actionListener="#{jJProductBean.newProduct(jJVersionBean)}"
 						update=":tabview:productDialog"
-						oncomplete="PF('productDialogWidget').show()" icon="ui-icon-circle-plus" />
+						oncomplete="PF('productDialogWidget').show()"
+						icon="ui-icon-circle-plus" />
 				</f:facet>
 			</p:dataTable>
 		</p:panel>
@@ -103,7 +104,7 @@
 											widgetVar="productManagerWidget"
 											label="#{messages.admin_product_new_manager_label}">
 											<f:converter
-												converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />											
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />
 											<f:selectItems value="#{jJProductBean.productManagerList}"
 												var="p" itemLabel="#{p.firstname} #{p.name}"
 												itemValue="#{p}" />
@@ -116,7 +117,7 @@
 											disabled="#{jJProductBean.disabledProductMode}"
 											value="#{jJProductBean.productAdmin.extname}"
 											label="#{messages.admin_product_new_extname_label}"
-											required="true" widgetVar="extnameWidget" >
+											required="true" widgetVar="extnameWidget">
 											<f:validateLength maximum="100" />
 										</p:inputText>
 										<p:watermark for="extname"
@@ -150,9 +151,9 @@
 											value="#{jJVersionBean.versionAdmin.name}"
 											label="Version Name" required="true"
 											requiredMessage="Version Name is required"
-											widgetVar="versionWidget" >
-									<f:validateLength maximum="100" />
-									</p:inputText>
+											widgetVar="versionWidget">
+											<f:validateLength maximum="100" />
+										</p:inputText>
 										<p:watermark for="version"
 											value="#{messages.admin_product_new_version_watermark}" />
 									</p:column>
@@ -256,10 +257,10 @@
 									<p:column>
 										<p:inputText id="build" style="width:100%;"
 											value="#{jJBuildBean.buildName}" label="Build Name"
-											required="true" requiredMessage="Build Name is required" >										
-										<f:validateLength maximum="100" />
-									</p:inputText>
-									<p:watermark for="build" value="Build Name" />
+											required="true" requiredMessage="Build Name is required">
+											<f:validateLength maximum="100" />
+										</p:inputText>
+										<p:watermark for="build" value="Build Name" />
 									</p:column>
 
 									<p:column>

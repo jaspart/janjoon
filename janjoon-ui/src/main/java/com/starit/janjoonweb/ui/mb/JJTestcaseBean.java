@@ -1,7 +1,10 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.awt.Color;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -16,7 +19,9 @@ import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
@@ -26,10 +31,12 @@ import com.lowagie.text.BadElementException;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
+import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.html.simpleparser.StyleSheet;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
@@ -53,6 +60,7 @@ import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTeststepService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.RequirementUtil;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJTestcase.class, beanName = "jJTestcaseBean")
@@ -163,7 +171,8 @@ public class JJTestcaseBean {
 		if(rowNames == null || rowNames.isEmpty())
 		{
 			
-			colNames=jJTestcaseService.getImportTestcases(category,project, true);
+			colNames=jJTestcaseService.getImportTestcases(category,project,((JJProductBean)LoginBean.findBean("jJProductBean")).getProduct()
+					,true);
 			
 			if(colNames != null && !colNames.isEmpty())
 			{
@@ -461,7 +470,8 @@ public class JJTestcaseBean {
 			if(rowNames == null || rowNames.isEmpty())
 			{
 				
-				colNames=jJTestcaseService.getImportTestcases(category,project, true);
+				colNames=jJTestcaseService.getImportTestcases(category,project,((JJProductBean)LoginBean.findBean("jJProductBean")).getProduct()
+						,true);
 				
 				if(colNames != null && !colNames.isEmpty())
 				{
@@ -1254,6 +1264,49 @@ public class JJTestcaseBean {
 	private boolean getTestcaseDialogConfiguration() {
 		return jJConfigurationService.getDialogConfig("TestcaseDialog",
 				"testcases.create.saveandclose");
+	}
+	// import as XML
+	private StreamedContent file;
+	
+	public StreamedContent getFile() {
+		
+		if(category != null)
+		{
+			String buffer="<category name=\""+category.getName().toUpperCase()+"\">";
+			List<JJTestcase> tests=jJTestcaseService.getImportTestcases(category, project,((JJProductBean)LoginBean.findBean("jJProductBean")).getProduct()
+					, true);
+			for(JJTestcase ttt:tests)
+			{	
+				String description="";
+				StringReader strReader = new StringReader(ttt.getDescription());
+				List arrList=null;
+				try {
+					arrList = HTMLWorker.parseToList(strReader, null);
+				} catch (Exception e) {
+					
+				}
+				for (int i = 0; i < arrList.size(); ++i) {
+					description=description+((Element)arrList.get(i)).toString();				
+				}
+				description=description.replace("[", " ").replace("]", "");
+				String s="<testcase name=\""+ttt.getName()+"\""+System.getProperty("line.separator")+
+						"description=\""+description+"\""+System.getProperty("line.separator")+
+						"enabled=\"1\""+System.getProperty("line.separator")
+						+"Automatic=\""+((ttt.getAutomatic()) ? 1 : 0)+"\""+System.getProperty("line.separator")+
+						"Requirement=\""+ttt.getRequirement().getName()+"\" >";
+				for(JJTeststep sss:ttt.getTeststeps())
+				{
+					String t="<teststep actionstep=\""+sss.getActionstep()+"\" resultstep=\""+sss.getResultstep()+"\" />";
+					s=s+System.getProperty("line.separator")+t;
+				}
+				s=s+System.getProperty("line.separator")+"</testcase>";
+				buffer=buffer+System.getProperty("line.separator")+s;
+			}
+			buffer=buffer+System.getProperty("line.separator")+"</category>";
+			InputStream stream =new ByteArrayInputStream( buffer.getBytes() );
+	        file = new DefaultStreamedContent(stream, "xml", category.getName()+"-Tests.xml");
+		}		
+		return file;
 	}
 
 }

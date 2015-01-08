@@ -8,7 +8,7 @@
 
 <f:event listener="#{loginBean.checkAuthorities}" type="preRenderView" />
 <f:view locale="#{localeBean.locale}" contentType="text/html">
-	<h:head >
+	<h:head>
 		<h:outputScript library="primefaces" name="jquery/jquery.js" />
 		<script type="text/javascript">
 			function centerDialog() {
@@ -38,9 +38,9 @@
 	<h:body styleClass="login-body">
 		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
 			<p:panel styleClass="login-content">
-				
+
 				<ui:insert name="header" rendered="false">
-						<ui:include src="generic-login.xhtml" />
+					<ui:include src="generic-login.xhtml" />
 				</ui:insert>
 
 				<p:panel id="contentPanel" styleClass="content">

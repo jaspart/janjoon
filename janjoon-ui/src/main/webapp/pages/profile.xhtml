@@ -8,9 +8,9 @@
 	<h:form id="profileForm">
 		<p:panel id="profilePanel" style="width:600px" columns="1"
 			cellpadding="6">
-			<p:dataTable id="profileDataTable" var="profile" lazy="true" paginatorPosition="bottom"
-				value="#{jJProfileBean.profileListTable}" paginator="true" rows="15"
-				rowKey="#{profile.id}">
+			<p:dataTable id="profileDataTable" var="profile" lazy="true"
+				paginatorPosition="bottom" value="#{jJProfileBean.profileListTable}"
+				paginator="true" rows="15" rowKey="#{profile.id}">
 				<f:facet name="header">#{messages.admin_profile_table_header}</f:facet>
 				<p:column>
 					<f:facet name="header">

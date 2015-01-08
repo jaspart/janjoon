@@ -59,15 +59,13 @@
 						rendered="#{loginBean.mobile}" />
 
 					<p:commandButton value="#{messages.specification_video_help_title}"
-						style="float: right;"
-						id="videoHelpBtn" icon="ui-icon-video"
-						onclick="PF('videoHelpWidget').show()"
-						type="button" />
-						
+						style="float: right;" id="videoHelpBtn" icon="ui-icon-video"
+						onclick="PF('videoHelpWidget').show()" type="button" />
+
 				</p:layoutUnit>
 			</h:form>
 			<p:layoutUnit position="west"
-				style="min-width:200px;min-height:500px;height:600px !important;"
+				style="min-width:200px;min-height:500px;height:600px !important;width:320px !important;"
 				resizable="true">
 				<h:form id="testFormWest">
 					<p:panelGrid>
@@ -75,7 +73,7 @@
 							<p:column>
 								<h:outputText for="build" value="#{messages.test_build_label}" />
 								<p:selectOneMenu id="build" value="#{jJBuildBean.build}"
-									panelStyle="width:150px;" effect="fade" style="width:150px;"
+									panelStyle="width:100px;" effect="fade" style="width:100px;"
 									filter="true" filterMatchMode="startsWith">
 									<f:converter
 										converterId="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter" />
@@ -91,6 +89,20 @@
 								</p:selectOneMenu>
 							</p:column>
 							<p:column>
+								<p:dialog modal="true" widgetVar="statusDialog" header="Status"
+									draggable="false" closable="false" resizable="false">
+									<p:graphicImage library="images" name="ajaxloadingbar.gif"
+										style="vertical-align: middle;" />
+								</p:dialog>
+								<p:commandButton ajax="false" id="xml"
+									onclick="PrimeFaces.monitorDownload(start, stop);"
+									icon="ui-icon-arrowthick-1-s">
+									<p:fileDownload value="#{jJTestcaseBean.file}" />
+								</p:commandButton>
+								<p:tooltip for="xml" value="Export To XML" showEffect="fade"
+									hideEffect="fade" />
+							</p:column>
+							<p:column>
 								<h:commandLink id="exportPDF"
 									title="#{messages.test_export_tooltip}"
 									disabled="#{jJTestcaseBean.disabledExport}"
@@ -104,7 +116,7 @@
 							</p:column>
 						</p:row>
 						<p:row>
-							<p:column colspan="2">
+							<p:column colspan="3">
 								<p:tree id="testCaseTree" value="#{jJTestcaseBean.rootNode}"
 									var="node" selectionMode="single"
 									selection="#{jJTestcaseBean.selectedNode}" dynamic="true">
@@ -422,222 +434,224 @@
 			<p:outputPanel id="testcaseDialogPanel">
 				<h:form id="testcaseDialogForm">
 					<p:growl id="msg" />
-<!-- 					<p:scrollPanel style="width:720px;height:500px;" mode="native"> -->
-						<p:panelGrid style="margin-top:10px;width:720px;height:500px;">
-							<p:row>
-								<p:column>
-									<p:inputText id="name" value="#{jJTestcaseBean.testcase.name}"
-										required="true" widgetVar="nameWidget"
-										label="#{messages.test_new_name_label}"
-										requiredMessage="#{messages.test_new_name_alert}"
-										disabled="#{jJTestcaseBean.disabledTestcaseMode}">
-										<f:validateLength maximum="100" />
-									</p:inputText>
-									<p:watermark for="name"
-										value="#{messages.test_new_name_watermark}" />
-								</p:column>
-								<p:column>
-									<h:outputText for="requirement"
-										value="#{messages.test_new_requirement_label}" />
-									<p:selectOneMenu id="requirement"
-										value="#{jJTestcaseBean.requirement}"
-										panelStyle="width:150px;" effect="fade" style="width:150px;"
-										filter="true" required="true" filterMatchMode="startsWith"
-										widgetVar="requirementWidget"
-										disabled="#{jJTestcaseBean.disabledTestcaseMode}"
-										requiredMessage="#{messages.test_new_name_alert}">
-										<f:converter
-											converterId="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter" />
-										<f:selectItem itemLabel="#{jJTestcaseBean.requirement.name}"
-											itemValue="#{jJTestcaseBean.requirement}" />
-										<f:selectItems value="#{jJTestcaseBean.requirements}" var="c"
-											itemLabel="#{c.name}" itemValue="#{c}" />
-										<p:ajax process="@this" partialSubmit="true"
-											listener="#{jJTestcaseBean.handleSelectRequirement()}" />
-									</p:selectOneMenu>
-								</p:column>
-								<p:column>
-									<h:outputText value="#{messages.test_new_automatic_label}" />
-									<p:selectBooleanCheckbox
-										disabled="#{jJTestcaseBean.disabledTestcaseMode}"
-										value="#{jJTestcaseBean.testcase.automatic}">
-										<p:ajax listener="#{jJTestcaseBean.addMessage}" />
-									</p:selectBooleanCheckbox>
-								</p:column>
-							</p:row>
-							<p:row>
-								<p:column colspan="3">
-									<h:outputText value="#{messages.test_new_description_label}" />
-									<pe:ckEditor id="description" widgetVar="descriptionWidget"
-										style="width:680px;" rendered="#{!loginBean.mobile}"
-										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
-										readOnly="#{jJTestcaseBean.disabledTestcaseMode}"
-										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
-										value="#{jJTestcaseBean.testcase.description}" required="true"
-										requiredMessage="#{messages.test_new_description_alert}" />
-									<p:editor id="descriptionMobile" style="width:680px;"
-										rendered="#{loginBean.mobile}"
-										readOnly="#{jJTestcaseBean.disabledTestcaseMode}"
-										value="#{jJTestcaseBean.testcase.description}" required="true"
-										requiredMessage="#{messages.test_new_description_alert}" />
-								</p:column>
-							</p:row>
-							<p:row>
-								<p:column>
-									<h:outputText value="#{messages.test_new_task_label}" />
-									<p:selectBooleanCheckbox id="initiateTask"
-										value="#{jJTestcaseBean.initiateTask}"
-										disabled="#{jJTestcaseBean.disabledInitTask}">
-										<p:ajax listener="#{jJTestcaseBean.loadTask()}"
-											update="outputPanel" />
-									</p:selectBooleanCheckbox>
-								</p:column>
-								<p:column>
-									<h:outputLabel for="workload"
-										value="#{messages.test_new_workload_label}" />
-									<p:outputPanel id="outputPanel">
-										<p:spinner id="workload"
-											value="#{jJTestcaseBean.task.workloadPlanned}" stepFactor="1"
-											min="0" disabled="#{jJTestcaseBean.disabledTask}">
-											<p:ajax update="workloadvalue" process="@this" />
-										</p:spinner>
-										<h:outputText id="workloadvalue"
-											value="#{jJTestcaseBean.task.workloadPlanned} #{messages.test_new_increment_label}" />
-									</p:outputPanel>
-								</p:column>
-								<p:column>
-									<p:commandButton value="#{messages.test_new_addtest_label}"
-										disabled="#{not jJTestcaseBean.disabledTeststepMode}"
-										icon="ui-icon-circle-plus" rendered="#{!loginBean.mobile}"
-										actionListener="#{jJTestcaseBean.save()}"
-										process="@this,name,requirement,description "
-										update="testcaseDialogForm :testFormWest" />
-									<p:commandButton value="#{messages.test_new_addtest_label}"
-										disabled="#{not jJTestcaseBean.disabledTeststepMode}"
-										icon="ui-icon-circle-plus" rendered="#{loginBean.mobile}"
-										actionListener="#{jJTestcaseBean.save()}"
-										process="@this,name,requirement,descriptionMobile "
-										update="testcaseDialogForm :testFormWest" />
-								</p:column>
-							</p:row>
-							<p:row>
-								<p:column>
-									<h:outputText for="action"
-										value="#{messages.test_new_action_label}*" />
-									<p:inputText id="action"
-										value="#{jJTeststepBean.teststep.actionstep}"
-										disabled="#{jJTestcaseBean.disabledTeststepMode}"
-										label="#{messages.test_new_action_label}" required="true"
-										requiredMessage="#{messages.test_new_action_alert}"
-										widgetVar="actionWidget" />
-								</p:column>
-								<p:column>
-									<h:outputText for="result"
-										value="#{messages.test_new_result_label}*" />
-									<p:inputText id="result"
-										value="#{jJTeststepBean.teststep.resultstep}"
-										disabled="#{jJTestcaseBean.disabledTeststepMode}"
-										label="#{messages.test_new_result_label}" required="true"
-										requiredMessage="#{messages.test_new_result_alert}"
-										widgetVar="resultWidget" />
-								</p:column>
-								<p:column>
-									<p:commandButton id="addTestStep"
-										value="#{messages.test_new_addteststep_label}"
-										disabled="#{jJTestcaseBean.disabledTeststepMode}"
-										actionListener="#{jJTeststepBean.save()}"
-										icon="ui-icon-circle-plus"
-										update="action result testStepDataTable msg "
-										process="@this,action,result" />
-								</p:column>
-							</p:row>
-						</p:panelGrid>
-						<p:dataTable id="testStepDataTable" var="ts"
-							value="#{jJTeststepBean.teststeps}" scrollRows="10"
-							scrollable="true" scrollHeight="100" style="width:700px;"
-							rowKey="#{ts.name}" editable="true">
-							<p:ajax event="rowEdit" listener="#{jJTeststepBean.editTestStep}"
-								update=":testcaseDialogForm:msg"
-								process="@this,actionInputWidget,resultInputWidget" />
-							<p:ajax event="rowEditCancel"
-								listener="#{jJTeststepBean.cancelEditTestStep}"
-								update=":testcaseDialogForm:msg" />
-							<f:facet name="header">  
+					<!-- 					<p:scrollPanel style="width:720px;height:500px;" mode="native"> -->
+					<p:panelGrid style="margin-top:10px;width:720px;height:500px;">
+						<p:row>
+							<p:column>
+								<p:inputText id="name" value="#{jJTestcaseBean.testcase.name}"
+									required="true" widgetVar="nameWidget"
+									label="#{messages.test_new_name_label}"
+									requiredMessage="#{messages.test_new_name_alert}"
+									disabled="#{jJTestcaseBean.disabledTestcaseMode}">
+									<f:validateLength maximum="100" />
+								</p:inputText>
+								<p:watermark for="name"
+									value="#{messages.test_new_name_watermark}" />
+							</p:column>
+							<p:column>
+								<h:outputText for="requirement"
+									value="#{messages.test_new_requirement_label}" />
+								<p:selectOneMenu id="requirement"
+									value="#{jJTestcaseBean.requirement}" panelStyle="width:150px;"
+									effect="fade" style="width:150px;" filter="true"
+									required="true" filterMatchMode="startsWith"
+									widgetVar="requirementWidget"
+									disabled="#{jJTestcaseBean.disabledTestcaseMode}"
+									requiredMessage="#{messages.test_new_name_alert}">
+									<f:converter
+										converterId="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter" />
+									<f:selectItem itemLabel="#{jJTestcaseBean.requirement.name}"
+										itemValue="#{jJTestcaseBean.requirement}" />
+									<f:selectItems value="#{jJTestcaseBean.requirements}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />
+									<p:ajax process="@this" partialSubmit="true"
+										listener="#{jJTestcaseBean.handleSelectRequirement()}" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+								<h:outputText value="#{messages.test_new_automatic_label}" />
+								<p:selectBooleanCheckbox
+									disabled="#{jJTestcaseBean.disabledTestcaseMode}"
+									value="#{jJTestcaseBean.testcase.automatic}">
+									<p:ajax listener="#{jJTestcaseBean.addMessage}" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="3">
+								<h:outputText value="#{messages.test_new_description_label}" />
+								<pe:ckEditor id="description" widgetVar="descriptionWidget"
+									style="width:680px;" rendered="#{!loginBean.mobile}"
+									customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+									readOnly="#{jJTestcaseBean.disabledTestcaseMode}"
+									toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
+									value="#{jJTestcaseBean.testcase.description}" required="true"
+									requiredMessage="#{messages.test_new_description_alert}" />
+								<p:editor id="descriptionMobile" style="width:680px;"
+									rendered="#{loginBean.mobile}"
+									readOnly="#{jJTestcaseBean.disabledTestcaseMode}"
+									value="#{jJTestcaseBean.testcase.description}" required="true"
+									requiredMessage="#{messages.test_new_description_alert}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{messages.test_new_task_label}" />
+								<p:selectBooleanCheckbox id="initiateTask"
+									value="#{jJTestcaseBean.initiateTask}"
+									disabled="#{jJTestcaseBean.disabledInitTask}">
+									<p:ajax listener="#{jJTestcaseBean.loadTask()}"
+										update="outputPanel" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+							<p:column>
+								<h:outputLabel for="workload"
+									value="#{messages.test_new_workload_label}" />
+								<p:outputPanel id="outputPanel">
+									<p:spinner id="workload"
+										value="#{jJTestcaseBean.task.workloadPlanned}" stepFactor="1"
+										min="0" disabled="#{jJTestcaseBean.disabledTask}">
+										<p:ajax update="workloadvalue" process="@this" />
+									</p:spinner>
+									<h:outputText id="workloadvalue"
+										value="#{jJTestcaseBean.task.workloadPlanned} #{messages.test_new_increment_label}" />
+								</p:outputPanel>
+							</p:column>
+							<p:column>
+								<p:commandButton value="#{messages.test_new_addtest_label}"
+									disabled="#{not jJTestcaseBean.disabledTeststepMode}"
+									icon="ui-icon-circle-plus" rendered="#{!loginBean.mobile}"
+									actionListener="#{jJTestcaseBean.save()}"
+									process="@this,name,requirement,description "
+									update="testcaseDialogForm :testFormWest" />
+								<p:commandButton value="#{messages.test_new_addtest_label}"
+									disabled="#{not jJTestcaseBean.disabledTeststepMode}"
+									icon="ui-icon-circle-plus" rendered="#{loginBean.mobile}"
+									actionListener="#{jJTestcaseBean.save()}"
+									process="@this,name,requirement,descriptionMobile "
+									update="testcaseDialogForm :testFormWest" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText for="action"
+									value="#{messages.test_new_action_label}*" />
+								<p:inputText id="action"
+									value="#{jJTeststepBean.teststep.actionstep}"
+									disabled="#{jJTestcaseBean.disabledTeststepMode}"
+									label="#{messages.test_new_action_label}" required="true"
+									requiredMessage="#{messages.test_new_action_alert}"
+									widgetVar="actionWidget" />
+							</p:column>
+							<p:column>
+								<h:outputText for="result"
+									value="#{messages.test_new_result_label}*" />
+								<p:inputText id="result"
+									value="#{jJTeststepBean.teststep.resultstep}"
+									disabled="#{jJTestcaseBean.disabledTeststepMode}"
+									label="#{messages.test_new_result_label}" required="true"
+									requiredMessage="#{messages.test_new_result_alert}"
+									widgetVar="resultWidget" />
+							</p:column>
+							<p:column>
+								<p:commandButton id="addTestStep"
+									value="#{messages.test_new_addteststep_label}"
+									disabled="#{jJTestcaseBean.disabledTeststepMode}"
+									actionListener="#{jJTeststepBean.save()}"
+									icon="ui-icon-circle-plus"
+									update="action result testStepDataTable msg "
+									process="@this,action,result" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<p:dataTable id="testStepDataTable" var="ts"
+						value="#{jJTeststepBean.teststeps}" scrollRows="10"
+						scrollable="true" scrollHeight="100" style="width:700px;"
+						rowKey="#{ts.name}" editable="true">
+						<p:ajax event="rowEdit" listener="#{jJTeststepBean.editTestStep}"
+							update=":testcaseDialogForm:msg"
+							process="@this,actionInputWidget,resultInputWidget" />
+						<p:ajax event="rowEditCancel"
+							listener="#{jJTeststepBean.cancelEditTestStep}"
+							update=":testcaseDialogForm:msg" />
+						<f:facet name="header">  
             						#{messages.test_new_teststep_title}  
         					</f:facet>
-							<p:column headerText="#{messages.test_new_table_order_label}"
-								style="width:9%;">
-								<h:outputText value="#{ts.ordering}" />
-							</p:column>
-							<p:column headerText="#{messages.test_new_table_action_header}"
-								style="width:33%;">
-								<p:cellEditor>
-									<f:facet name="output">
-										<h:outputText value="#{ts.actionstep}" />
-									</f:facet>
-									<f:facet name="input">
-										<p:inputText value="#{ts.actionstep}" style="width:90%"
-											required="true"
-											label="#{messages.test_new_table_action_label}"
-											id="actionInputWidget"
-											requiredMessage="#{messages.test_new_table_action_alert}">
-										</p:inputText>
-									</f:facet>
-								</p:cellEditor>
-							</p:column>
-							<p:column headerText="#{messages.test_new_table_result_header}"
-								style="width:33%;">
-								<p:cellEditor>
-									<f:facet name="output">
-										<h:outputText value="#{ts.resultstep}" />
-									</f:facet>
-									<f:facet name="input">
-										<p:inputText value="#{ts.resultstep}" style="width:90%"
-											required="true"
-											label="#{messages.test_new_table_result_label}"
-											id="resultInputWidget"
-											requiredMessage="#{messages.test_new_table_result_alert}">
-										</p:inputText>
-									</f:facet>
-								</p:cellEditor>
-							</p:column>
-							<p:column headerText="#{messages.test_new_table_actions_label}"
-								style="width:15%;">
-								<p:commandButton id="insertTestStep" update="testStepDataTable"
-									action="#{jJTeststepBean.insertTestStep()}"
-									icon="ui-icon-circle-triangle-n" process="@this"
-									style="align:center;">
-									<f:setPropertyActionListener value="#{ts}"
-										target="#{jJTeststepBean.teststep}" />
-								</p:commandButton>
-								<p:tooltip for="insertTestStep"
-									value="#{messages.test_new_teststep_insert_tooltip}"
-									showEffect="fade" hideEffect="fade" />
+						<p:column headerText="#{messages.test_new_table_order_label}"
+							style="width:9%;">
+							<h:outputText value="#{ts.ordering}" />
+						</p:column>
+						<p:column headerText="#{messages.test_new_table_action_header}"
+							style="width:33%;">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{ts.actionstep}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{ts.actionstep}" style="width:90%"
+										required="true"
+										label="#{messages.test_new_table_action_label}"
+										id="actionInputWidget"
+										requiredMessage="#{messages.test_new_table_action_alert}">
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column headerText="#{messages.test_new_table_result_header}"
+							style="width:33%;">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{ts.resultstep}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{ts.resultstep}" style="width:90%"
+										required="true"
+										label="#{messages.test_new_table_result_label}"
+										id="resultInputWidget"
+										requiredMessage="#{messages.test_new_table_result_alert}">
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column headerText="#{messages.test_new_table_actions_label}"
+							style="width:15%;">
+							<p:commandButton id="insertTestStep" update="testStepDataTable"
+								action="#{jJTeststepBean.insertTestStep()}"
+								icon="ui-icon-circle-triangle-n" process="@this"
+								style="align:center;">
+								<f:setPropertyActionListener value="#{ts}"
+									target="#{jJTeststepBean.teststep}" />
+							</p:commandButton>
+							<p:tooltip for="insertTestStep"
+								value="#{messages.test_new_teststep_insert_tooltip}"
+								showEffect="fade" hideEffect="fade" />
 
-								<p:commandButton id="deleteTestStep" update="testStepDataTable"
-									action="#{jJTeststepBean.deleteTestStep()}"
-									icon="ui-icon-circle-minus" process="@this"
-									style="align:center;">
-									<f:setPropertyActionListener value="#{ts}"
-										target="#{jJTeststepBean.teststep}" />
-								</p:commandButton>
-								<p:tooltip for="deleteTestStep"
-									value="#{messages.test_new_teststep_delete_tooltip}"
-									showEffect="fade" hideEffect="fade" />
-							</p:column>
-							<p:column style="width:10%;">
-								<p:rowEditor />
-							</p:column>
-						</p:dataTable>
-<!-- 					</p:scrollPanel> -->
+							<p:commandButton id="deleteTestStep" update="testStepDataTable"
+								action="#{jJTeststepBean.deleteTestStep()}"
+								icon="ui-icon-circle-minus" process="@this"
+								style="align:center;">
+								<f:setPropertyActionListener value="#{ts}"
+									target="#{jJTeststepBean.teststep}" />
+							</p:commandButton>
+							<p:tooltip for="deleteTestStep"
+								value="#{messages.test_new_teststep_delete_tooltip}"
+								showEffect="fade" hideEffect="fade" />
+						</p:column>
+						<p:column style="width:10%;">
+							<p:rowEditor />
+						</p:column>
+					</p:dataTable>
+					<!-- 					</p:scrollPanel> -->
 					<p:commandButton value="Save"
-						process="@this,name,requirement,description" rendered="#{!loginBean.mobile}"
+						process="@this,name,requirement,description"
+						rendered="#{!loginBean.mobile}"
 						disabled="#{jJTestcaseBean.disabledTeststepMode}"
 						update="testcaseDialogForm :testFormWest" style="float: right;"
 						action="#{jJTestcaseBean.saveAndclose(jJTeststepBean)}" />
-						<p:commandButton  value="Save"
+					<p:commandButton value="Save"
 						process="@this,name,requirement,descriptionMobile"
-						disabled="#{jJTestcaseBean.disabledTeststepMode}" rendered="#{loginBean.mobile}"
+						disabled="#{jJTestcaseBean.disabledTeststepMode}"
+						rendered="#{loginBean.mobile}"
 						update="testcaseDialogForm :testFormWest" style="float: right;"
 						action="#{jJTestcaseBean.saveAndclose(jJTeststepBean)}" />
 				</h:form>

@@ -1,6 +1,9 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,6 +15,8 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import com.lowagie.text.html.simpleparser.HTMLWorker;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -25,13 +30,17 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.SelectableDataModel;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.mindmap.DefaultMindmapNode;
 import org.primefaces.model.mindmap.MindmapNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.lowagie.text.Element;
+import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
@@ -3275,11 +3284,8 @@ public class JJRequirementBean {
 		private int activeIndex;
 		private float coverageProgress = 0;
 		private float completionProgress = 0;
-
 		private List<RequirementUtil> filtredRequirements;
-
 		private boolean rendered;
-
 		boolean mine;
 
 		public boolean isMine() {
@@ -3557,6 +3563,41 @@ public class JJRequirementBean {
 		@Override
 		public Object getRowKey(RequirementUtil req) {
 			return req.getRequirement().getId().toString();
+		}
+
+		// import as XML
+		private StreamedContent file;
+
+		public StreamedContent getFile() {
+			
+			String buffer="<category name=\""+nameDataModel.toUpperCase()+"\">";
+			List<RequirementUtil> requirements = (List<RequirementUtil>) getWrappedData();
+			for(RequirementUtil rrr:requirements)
+			{	
+				String description="";
+				StringReader strReader = new StringReader(rrr.getRequirement().getDescription());
+				List arrList=null;
+				try {
+					arrList = HTMLWorker.parseToList(strReader, null);
+				} catch (Exception e) {
+					
+				}
+				for (int i = 0; i < arrList.size(); ++i) {
+					description=description+((Element)arrList.get(i)).toString();				
+				}
+				
+				description=description.replace("[", " ").replace("]", "");
+				String s="<requirement name=\""+rrr.getRequirement().getName()+"\""+System.getProperty("line.separator")+
+						"description=\""+description+"\""+System.getProperty("line.separator")+
+						"enabled=\"1\""+System.getProperty("line.separator")
+						+"note=\""+rrr.getRequirement().getNote()+"\""+System.getProperty("line.separator")+
+						"chapter=\""+rrr.getRequirement().getChapter().getName()+"\" />";
+				buffer=buffer+System.getProperty("line.separator")+s;
+			}
+			buffer=buffer+System.getProperty("line.separator")+"</category>";
+			InputStream stream =new ByteArrayInputStream( buffer.getBytes() );
+	        file = new DefaultStreamedContent(stream, "xml", nameDataModel.toUpperCase()+"-Spec.xml");
+			return file;
 		}
 
 	}
