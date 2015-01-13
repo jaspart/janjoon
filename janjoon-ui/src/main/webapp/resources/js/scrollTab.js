@@ -14,3 +14,10 @@ $(function(){
 
 });
 
+$(function(){
+    $(".wmd-view-topscroll").scroll(function(){
+        $(".ui-tree")
+            .scrollLeft($(".wmd-view-topscroll").scrollLeft());
+    });    
+});
+

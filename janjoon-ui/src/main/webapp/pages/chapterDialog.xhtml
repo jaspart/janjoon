@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+	<style type="text/css">
+.ui-tree {
+	height: 350px;
+	width: 350px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	border: rgba(255, 0, 0, 0);
+}
+</style>
+	<pe:blockUI widgetVar="chapterBlockUIWidget"
+		target="chapterDialogPanel">
+		<h:panelGrid columns="2">
+			<p:graphicImage library="images" name="ajax-loader.gif"
+				style="vertical-align: middle;" />
+			<h:outputText value="#{messages.label_refresh}"
+				style="white-space: nowrap;" />
+		</h:panelGrid>
+	</pe:blockUI>
+	<h:form id="chapterDialogForm">
+		<p:growl id="msg" sticky="true" />
+		<p:tabView widgetVar="chapterTabView">
+			<p:tab title="Chapitre">
+				<p:panelGrid style="margin-top:10px;height: 400px;">
+					<p:row>
+						<p:column>
+							<p:inputText id="name" value="#{jJChapterBean.chapter.name}"
+								required="true" style="margin: 15px;"
+								label="#{messages.specification_chapter_name_label}"
+								requiredMessage="#{messages.specification_chapter_name_alert}">
+								<f:validateLength maximum="100" />
+							</p:inputText>
+							<p:watermark for="name"
+								value="#{messages.chapter_create_name_watermark}" />
+						</p:column>
+						<p:column>
+							<h:outputText for="parent"
+								value="#{messages.specification_chapter_parent_label}" />
+							<p:selectOneMenu id="parent"
+								value="#{jJChapterBean.parentChapter}" panelStyle="width:140px"
+								effect="fade" style="width:160px" filter="true"
+								filterMatchMode="startsWith" widgetVar="parentWidget"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter">
+
+								<f:selectItem itemValue="#{null}"
+									itemLabel="#{messages.specification_create_select_label}" />
+								<f:selectItems value="#{jJChapterBean.chapterList}" var="c"
+									itemLabel="#{c.name}" itemValue="#{c}" />
+								<p:ajax partialSubmit="true"
+									onstart="PF('chapterBlockUIWidget').block()"
+									oncomplete="PF('chapterBlockUIWidget').unblock()"
+									listener="#{jJChapterBean.handleSelectParentChapter()}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputText
+								value="#{messages.specification_chapter_description_label}" />
+							<pe:ckEditor id="description" style="width:300px"
+								rendered="#{!loginBean.mobile}"
+								customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+								toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
+								value="#{jJChapterBean.chapter.description}" required="true"
+								requiredMessage="#{messages.specification_chapter_description_alert}" />
+							<p:editor id="descriptionMobile" style="width:600px !important"
+								rendered="#{loginBean.mobile}"
+								value="#{jJChapterBean.chapter.description}" required="true"
+								requiredMessage="#{messages.specification_chapter_description_alert}" />
+						</p:column>
+						<p:column>
+							<p:contextMenu for="chapterTreeSingle">
+								<p:menuitem
+									value="#{messages.specification_chapter_edit_menuitem}"
+									actionListener="#{jJChapterBean.editChapter()}" process="@this"
+									icon="ui-icon-pencil"
+									onstart="PF('chapterBlockUIWidget').block()"
+									oncomplete="PF('chapterBlockUIWidget').unblock()"
+									update=":chapterDialogForm" />
+								<p:menuitem
+									value="#{messages.specification_chapter_delete_menuitem}"
+									actionListener="#{jJChapterBean.deleteChapter()}"
+									process="@this" icon="ui-icon-close"
+									onstart="PF('chapterBlockUIWidget').block()"
+									oncomplete="PF('chapterBlockUIWidget').unblock()"
+									update=":chapterDialogForm" />
+							</p:contextMenu>
+							<h:outputText
+								value="#{messages.specification_chapter_tree_label}" />
+							<p:tree id="chapterTreeSingle" style="width:250px"
+								value="#{jJChapterBean.chapterRoot}" var="nodeChapter"
+								selectionMode="single"
+								selection="#{jJChapterBean.selectedChapterNode}" dynamic="true"
+								cache="false">
+								<p:ajax event="select" listener="#{jJChapterBean.onNodeSelect}" />
+								<p:treeNode>
+									<h:outputText value="#{nodeChapter}" />
+								</p:treeNode>
+							</p:tree>
+						</p:column>
+					</p:row>
+					<f:facet name="footer">
+						<p:row>
+							<p:column colspan="3">
+								<p:commandButton
+									value="#{messages.specification_chapter_save_button}"
+									action="#{jJChapterBean.save}" update=":chapterDialogForm"
+									style="float: right;"
+									onstart="PF('chapterBlockUIWidget').block()"
+									oncomplete="PF('chapterBlockUIWidget').unblock()" />
+							</p:column>
+						</p:row>
+					</f:facet>
+				</p:panelGrid>
+			</p:tab>
+			<p:tab title="Gestion Des Chapitres">
+				<p:panelGrid style="margin-top:10px;height: 400px;width: 895px;">
+					<p:row>
+						<p:column colspan="3">
+<!-- 							<p:scrollPanel style="height:350px;" mode="native"> -->
+								<p:tree id="leftTreeIncorporated"
+									value="#{jJChapterBean.leftRoot}" var="nodeLeft"
+									selectionMode="single" style="width: 350px !important;"
+									selection="#{jJChapterBean.selectedLeftNode}" draggable="true"
+									droppable="true" dragdropScope="demo" cache="false">
+									<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
+										update=":chapterDialogForm"
+										onstart="PF('chapterBlockUIWidget').block()"
+										oncomplete="PF('chapterBlockUIWidget').unblock();PF('chapterTabView').select(1);" />
+									<p:treeNode>
+										<h:outputText value="#{nodeLeft}" />
+									</p:treeNode>
+								</p:tree>
+<!-- 							</p:scrollPanel> -->
+						</p:column>
+						<p:column colspan="3">
+							<p:graphicImage alt="Transfer" library="images"
+								name="transfer.png" />
+						</p:column>
+						<p:column colspan="3">
+<!-- 							<p:scrollPanel style="height:350px;" mode="native"> -->
+								<p:tree id="RightTreeIncorporated"
+									value="#{jJChapterBean.rightRoot}" var="nodeRight"
+									selectionMode="single" style="width: 350px !important;"
+									selection="#{jJChapterBean.selectedRightNode}" draggable="true"
+									droppable="true" dragdropScope="demo" cache="false">
+									<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
+										update=":chapterDialogForm"
+										onstart="PF('chapterBlockUIWidget').block()"
+										oncomplete="PF('chapterBlockUIWidget').unblock();PF('chapterTabView').select(1);" />
+									<p:treeNode>
+										<h:outputText value="#{nodeRight}" />
+									</p:treeNode>
+								</p:tree>
+<!-- 							</p:scrollPanel> -->
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+			</p:tab>
+		</p:tabView>
+	</h:form>
+</ui:composition>
+</html>

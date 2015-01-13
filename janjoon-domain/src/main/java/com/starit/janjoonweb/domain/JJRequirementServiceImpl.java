@@ -25,29 +25,29 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 	// Generic Request
 
-	public boolean haveTestcase(JJRequirement requirement)
-	{
+	public boolean haveTestcase(JJRequirement requirement) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcase> criteriaQuery = criteriaBuilder
 				.createQuery(JJTestcase.class);
 
 		Root<JJTestcase> from = criteriaQuery.from(JJTestcase.class);
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		
-		predicates.add(criteriaBuilder.equal(from.get("requirement"), requirement));
+
+		predicates.add(criteriaBuilder.equal(from.get("requirement"),
+				requirement));
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJTestcase.class)));
 		entityManager.createQuery(cq);
 		cq.where(predicates.toArray(new Predicate[] {}));
-		boolean have= entityManager.createQuery(cq).getSingleResult()>0;
-		return have;		
+		boolean have = entityManager.createQuery(cq).getSingleResult() > 0;
+		return have;
 	}
-	@Override
-	public List<JJRequirement> getRequirements(JJCompany company,JJCategory category,
-			JJProject project, JJProduct product, JJVersion version,
-			JJStatus status, JJChapter chapter, boolean withChapter,
-			boolean onlyActif, boolean orderByCreationdate) {
+
+	public List<JJRequirement> getRequirementsWithOutChapter(JJCompany company,
+			JJCategory category, JJProject project, JJProduct product,
+			JJVersion version, JJStatus status, boolean onlyActif,
+			boolean orderByCreationdate) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
@@ -70,9 +70,68 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
-		}else
-		{
-			predicates.add(criteriaBuilder.equal(from.join("project").join("manager").get("company"), company));
+		} else {
+			predicates.add(criteriaBuilder.equal(
+					from.join("project").join("manager").get("company"),
+					company));
+		}
+
+		if (product != null) {
+			predicates.add(criteriaBuilder.equal(from.get("product"), product));
+		}
+
+		if (version != null) {
+			predicates.add(criteriaBuilder.equal(from.get("versioning"),
+					version));
+		}
+
+		if (status != null) {
+			predicates.add(criteriaBuilder.equal(from.get("status"), status));
+		}
+
+		predicates.add(criteriaBuilder.isNull(from.get("chapter")));
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+		if (orderByCreationdate) {
+			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
+		}
+
+		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
+
+		return result.getResultList();
+	}
+
+	@Override
+	public List<JJRequirement> getRequirements(JJCompany company,
+			JJCategory category, JJProject project, JJProduct product,
+			JJVersion version, JJStatus status, JJChapter chapter,
+			boolean withChapter, boolean onlyActif, boolean orderByCreationdate) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
+				.createQuery(JJRequirement.class);
+
+		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
+
+		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+
+		if (category != null) {
+			predicates
+					.add(criteriaBuilder.equal(from.get("category"), category));
+		}
+
+		if (project != null) {
+			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		} else {
+			predicates.add(criteriaBuilder.equal(
+					from.join("project").join("manager").get("company"),
+					company));
 		}
 
 		if (product != null) {
@@ -111,7 +170,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 	@Override
 	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
-			JJCompany company,JJChapter chapter, boolean onlyActif) {
+			JJCompany company, JJChapter chapter, boolean onlyActif) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
 				.createQuery(JJRequirement.class);
@@ -135,22 +194,24 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	}
 
 	@Override
-	public List<JJRequirement> getRequirements(JJCompany company,JJProject project,
-			JJProduct product, JJVersion version) {
-		return getRequirements(company,null, project, product, version, null, null,
-				false, true, true);
+	public List<JJRequirement> getRequirements(JJCompany company,
+			JJProject project, JJProduct product, JJVersion version) {
+		return getRequirements(company, null, project, product, version, null,
+				null, false, true, true);
 	}
 
 	@Override
-	public List<JJRequirement> getRequirements(JJCompany company,JJStatus status) {
+	public List<JJRequirement> getRequirements(JJCompany company,
+			JJStatus status) {
 
-		return getRequirements(company,null, null, null, null, status, null, false,
-				true, false);
+		return getRequirements(company, null, null, null, null, status, null,
+				false, true, false);
 	}
 
 	@Override
-	public Long getReqCountByStaus(JJCompany company,JJProject project, JJProduct product,
-			JJVersion version, JJStatus status, boolean onlyActif) {
+	public Long getReqCountByStaus(JJCompany company, JJProject project,
+			JJProduct product, JJVersion version, JJStatus status,
+			boolean onlyActif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Long> select = criteriaBuilder.createQuery(Long.class);
@@ -160,9 +221,10 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
-		}else
-		{
-			predicates.add(criteriaBuilder.equal(from.join("project").join("manager").get("company"), company));
+		} else {
+			predicates.add(criteriaBuilder.equal(
+					from.join("project").join("manager").get("company"),
+					company));
 		}
 
 		if (product != null) {
@@ -187,9 +249,10 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	}
 
 	@Override
-	public List<JJRequirement> getMineRequirements(JJCompany company,JJContact creator,
-			JJProduct product, JJProject project, JJCategory category,JJVersion version,
-			boolean onlyActif, boolean orderByCreationdate) {
+	public List<JJRequirement> getMineRequirements(JJCompany company,
+			JJContact creator, JJProduct product, JJProject project,
+			JJCategory category, JJVersion version, boolean onlyActif,
+			boolean orderByCreationdate) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
 				.createQuery(JJRequirement.class);
@@ -211,9 +274,10 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
-		}else
-		{
-			predicates.add(criteriaBuilder.equal(from.join("project").join("manager").get("company"), company));
+		} else {
+			predicates.add(criteriaBuilder.equal(
+					from.join("project").join("manager").get("company"),
+					company));
 		}
 
 		if (product != null) {
@@ -222,14 +286,15 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		if (version != null) {
 			predicates.add(criteriaBuilder.equal(from.get("versioning"),
-					version));			
-		}		
-		
-		if(creator !=null)
-		{
-			Predicate condition1 = criteriaBuilder.equal(from.get("createdBy"), creator);
-		    Predicate condition2 = criteriaBuilder.equal(from.get("updatedBy"), creator);
-			predicates.add(criteriaBuilder.or(condition1,condition2));			
+					version));
+		}
+
+		if (creator != null) {
+			Predicate condition1 = criteriaBuilder.equal(from.get("createdBy"),
+					creator);
+			Predicate condition2 = criteriaBuilder.equal(from.get("updatedBy"),
+					creator);
+			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
@@ -238,18 +303,17 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 		}
 
-		TypedQuery<JJRequirement> result = entityManager.createQuery(select);		
+		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 		return result.getResultList();
 
 	}
-	
-	public List<JJRequirement> getNonCouvredRequirements(JJCompany company)
-	{
-		String qu="SELECT r FROM  JJRequirement r Where r.project.manager.company = :c AND r.enabled = true AND r.category != null and r.requirementLinkDown IS empty and r.requirementLinkUp IS empty";		
-		Query query =entityManager.createQuery(qu,JJRequirement.class);		
-		query.setParameter("c", company);	
-		
-		List<JJRequirement> list = ((List<JJRequirement>)query.getResultList());
+
+	public List<JJRequirement> getNonCouvredRequirements(JJCompany company) {
+		String qu = "SELECT r FROM  JJRequirement r Where r.project.manager.company = :c AND r.enabled = true AND r.category != null and r.requirementLinkDown IS empty and r.requirementLinkUp IS empty";
+		Query query = entityManager.createQuery(qu, JJRequirement.class);
+		query.setParameter("c", company);
+
+		List<JJRequirement> list = ((List<JJRequirement>) query.getResultList());
 		return list;
 
 	}

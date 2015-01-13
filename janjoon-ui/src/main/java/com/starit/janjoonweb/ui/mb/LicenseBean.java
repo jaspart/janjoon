@@ -10,7 +10,9 @@ import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.event.FileUploadEvent;
@@ -88,9 +90,12 @@ public class LicenseBean implements Serializable {
 			((LoginBean)LoginBean.findBean("loginBean")).getAuthorisationService().setSession((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
 					.getSession(false));
 			((LoginBean)LoginBean.findBean("loginBean")).setPictureUrl(null);
+			((LoginBean)LoginBean.findBean("loginBean")).getPictureUrl();
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					"message_successfully_uploded", "Photo");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+			
+			
 
 		} catch (IOException e) {
 
@@ -138,7 +143,7 @@ public class LicenseBean implements Serializable {
 			((JJCompanyBean) LoginBean.findBean("jJCompanyBean"))
 					.setLogo(company.getName() + id);
 			((LoginBean)LoginBean.findBean("loginBean")).setLogoUrl(null);
-
+			
 			int read = 0;
 			byte[] bytes = new byte[1024];
 			while ((read = inputStream.read(bytes)) != -1) {
@@ -148,7 +153,7 @@ public class LicenseBean implements Serializable {
 			inputStream.close();
 			out.flush();
 			out.close();
-
+			
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					"message_successfully_uploded", "Logo");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);

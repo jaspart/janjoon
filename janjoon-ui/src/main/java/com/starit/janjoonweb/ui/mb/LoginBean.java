@@ -626,6 +626,10 @@ public class LoginBean implements Serializable {
 			session.setAttribute("jJBugBean", new JJBugBean());
 			session.setAttribute("jJMessageBean", null);
 			session.setAttribute("jJRequirementBean", null);
+			if(session.getAttribute("requirementBean") != null)
+				((RequirementBean)session.getAttribute("requirementBean")).setRootNode(null);
+			
+			
 			if (event.getComponent().getClientId()
 					.contains("projectSelectOneMenu")) {
 
@@ -689,46 +693,16 @@ public class LoginBean implements Serializable {
 						context.update(":contentPanel:devPanel:form:taskSelectOneMenu");
 					}
 				}
-			} else if (viewId.contains("specifications")) {
+			} else if (viewId.contains("specifications")) {		
 
-				// System.out.println("in spec");
-				//
-				// JJRequirementBean jJRequirementBean = (JJRequirementBean)
-				// findBean("jJRequirementBean");
-				// jJRequirementBean.setViewButton(null);
-				//
-				// if (event.getComponent().getClientId()
-				// .contains("projectSelectOneMenu")) {
-				// JJProject project = (JJProject) event.getNewValue();
-				//
-				// jJProjectBean.setProject(project);
-				//
-				// jJRequirementBean.setProject(project);
-				//
-				// } else if (event.getComponent().getClientId()
-				// .contains("productSelectOneMenu")) {
-				//
-				// JJProduct product = (JJProduct) event.getNewValue();
-				//
-				// jJProductBean.setProduct(product);
-				//
-				// jJRequirementBean.setProduct(product);
-				//
-				// } else if (event.getComponent().getClientId()
-				// .contains("versionSelectOneMenu")) {
-				//
-				// JJVersion version = (JJVersion) event.getNewValue();
-				//
-				// jJVersionBean.setVersion(version);
-				// jJRequirementBean.setVersion(version);
-				// }
-				//
-				// jJRequirementBean.loadData();
-				//
 				
 
-				session.setAttribute("jJRequirementBean",
-						new JJRequirementBean());
+				JJRequirementBean requirementBean=(JJRequirementBean) findBean("jJRequirementBean");
+				if(requirementBean == null)
+					requirementBean=new JJRequirementBean();
+				if(requirementBean.getTableDataModelList() == null)
+				requirementBean.fullTableDataModelList();
+			
 				 ExternalContext ec = FacesContext.getCurrentInstance()
 				 .getExternalContext();
 				 ec.redirect(((HttpServletRequest) ec.getRequest())
@@ -987,12 +961,15 @@ public class LoginBean implements Serializable {
 
 				if (previos != null && viewID != null) {
 					if (!previos.contains(viewID.replace(".xhtml", ".jsf"))) {
-						if (viewID.contains("specification")) {
+						if (viewID.contains("specifications")) {
 							if (authorisationService.isrRequiement()) {
-								// JJRequirementBean jJRequirementBean =
-								// (JJRequirementBean)
-								// findBean("jJRequirementBean");
-								// jJRequirementBean.loadData();
+
+								JJRequirementBean requirementBean=(JJRequirementBean) findBean("jJRequirementBean");
+								if(requirementBean == null)
+									requirementBean=new JJRequirementBean();
+								if(requirementBean.getTableDataModelList() == null)
+								requirementBean.fullTableDataModelList();
+							
 							} else {
 								FacesContext
 										.getCurrentInstance()
@@ -1125,10 +1102,11 @@ public class LoginBean implements Serializable {
 					} else if (root.getViewId().contains("specifications")) {
 
 						if (authorisationService.isrRequiement()) {
-							// JJRequirementBean jJRequirementBean =
-							// (JJRequirementBean)
-							// findBean("jJRequirementBean");
-							// jJRequirementBean.loadData();
+							JJRequirementBean requirementBean=(JJRequirementBean) findBean("jJRequirementBean");
+							if(requirementBean == null)
+								requirementBean=new JJRequirementBean();
+							if(requirementBean.getTableDataModelList() == null)
+							requirementBean.fullTableDataModelList();
 						} else {
 							FacesContext
 									.getCurrentInstance()

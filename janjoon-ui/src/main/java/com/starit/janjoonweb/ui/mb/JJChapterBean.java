@@ -11,7 +11,10 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
@@ -134,16 +137,18 @@ public class JJChapterBean {
 	public List<JJChapter> getChapterList() {
 
 		if (chapter.getId() == null) {
-			chapterList = jJChapterService.getChapters(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),project, category, true,
-					new ArrayList<String>());
+			chapterList = jJChapterService.getChapters(((LoginBean) LoginBean
+					.findBean("loginBean")).getContact().getCompany(), project,
+					category, true, new ArrayList<String>());
 		}
 
 		else {
 			List<String> list = getChildren(chapter);
 			list.add(String.valueOf(chapter.getId()));
 
-			chapterList = jJChapterService.getChapters(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),project, category, true,
-					list);
+			chapterList = jJChapterService.getChapters(((LoginBean) LoginBean
+					.findBean("loginBean")).getContact().getCompany(), project,
+					category, true, list);
 		}
 
 		return chapterList;
@@ -303,8 +308,15 @@ public class JJChapterBean {
 				.getExternalContext().getSession(false);
 		JJRequirementBean jJRequirementBean = (JJRequirementBean) session
 				.getAttribute("jJRequirementBean");
-		if(jJRequirementBean == null)
-			jJRequirementBean=new JJRequirementBean();
+
+		if (jJRequirementBean == null)
+			jJRequirementBean = new JJRequirementBean();
+
+		RequirementBean requirementBean = (RequirementBean) session
+				.getAttribute("requirementBean");
+
+		if (requirementBean != null)
+			requirementBean.setRootNode(null);
 
 		long idSelectedChapter = Long.parseLong(getSplitFromString(
 				selectedChapterNode.getData().toString(), 1));
@@ -392,6 +404,9 @@ public class JJChapterBean {
 
 		} else {
 			context.execute("PF('chapterDialogWidget').hide()");
+			RequirementBean requirementBean=(RequirementBean) LoginBean.findBean("requirementBean");
+			if(requirementBean != null)
+				requirementBean.setRootNode(null);
 		}
 	}
 
@@ -399,8 +414,9 @@ public class JJChapterBean {
 
 		chapterRoot = new DefaultTreeNode("RootChapter", null);
 
-		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
-				project, category, true, true);
+		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(
+				((LoginBean) LoginBean.findBean("loginBean")).getContact()
+						.getCompany(), project, category, true, true);
 
 		for (JJChapter chapter : parentChapters) {
 			TreeNode node = createTree(chapter, chapterRoot, project, category,
@@ -426,8 +442,9 @@ public class JJChapterBean {
 		JJProduct product = jJProductBean.getProduct();
 
 		List<JJRequirement> jJRequirementList = jJRequirementService
-				.getRequirements(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),category, project, product, version, null,
-						null, true, true, false);
+				.getRequirements(((LoginBean) LoginBean.findBean("loginBean"))
+						.getContact().getCompany(), category, project, product,
+						version, null, null, true, true, false);
 
 		for (JJRequirement requirement : jJRequirementList) {
 			TreeNode node = new DefaultTreeNode("R-" + requirement.getId()
@@ -439,8 +456,9 @@ public class JJChapterBean {
 		// null
 		rightRoot = new DefaultTreeNode("rightRoot", null);
 
-		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
-				project, category, true, true);
+		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(
+				((LoginBean) LoginBean.findBean("loginBean")).getContact()
+						.getCompany(), project, category, true, true);
 
 		for (JJChapter chapter : parentChapters) {
 			TreeNode node = createTree(chapter, rightRoot, project, category, 1);
@@ -553,34 +571,36 @@ public class JJChapterBean {
 		JJCategory category = jJCategoryService.findJJCategory(categoryId);
 
 		Phrase phrase = new Phrase(20, new Chunk("\n" + category.getName()
-			+ " Specification \n" + project.getName() + "\n" + "\n" + "\n",
-			fontChapter));
+				+ " Specification \n" + project.getName() + "\n" + "\n" + "\n",
+				fontChapter));
 
 		Paragraph paragraph = new Paragraph();
 		paragraph.add(phrase);
 
-		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
-			project, category, true, true);
+		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(
+				((LoginBean) LoginBean.findBean("loginBean")).getContact()
+						.getCompany(), project, category, true, true);
 
 		for (JJChapter chapter : parentChapters) {
 			createTreeDocument(chapter, category, paragraph, fontNote,
-				fontChapter, fontRequirement, style);
+					fontChapter, fontRequirement, style);
 		}
 
 		paragraph.add(phrase);
 		pdf.add(paragraph);
 	}
 
-	private void createTreeDocument(JJChapter chapterParent, JJCategory category,
-		Paragraph paragraph, Font fontNote, Font fontChapter,
-		Font fontRequirement, StyleSheet style) throws IOException {
+	private void createTreeDocument(JJChapter chapterParent,
+			JJCategory category, Paragraph paragraph, Font fontNote,
+			Font fontChapter, Font fontRequirement, StyleSheet style)
+			throws IOException {
 
-		paragraph.add(new Chunk("\n" + chapterParent.getName() + "\n", fontChapter));
-		
-		StringReader strChapitre = new StringReader(
-			chapterParent.getDescription().replace(
-				"/pages/ckeditor/getimage?imageId=",
-				"/images/"));
+		paragraph.add(new Chunk("\n" + chapterParent.getName() + "\n",
+				fontChapter));
+
+		StringReader strChapitre = new StringReader(chapterParent
+				.getDescription().replace("/pages/ckeditor/getimage?imageId=",
+						"/images/"));
 		List arrChapitre = HTMLWorker.parseToList(strChapitre, style);
 		for (int i = 0; i < arrChapitre.size(); ++i) {
 			Element e = (Element) arrChapitre.get(i);
@@ -588,50 +608,55 @@ public class JJChapterBean {
 			paragraph.setSpacingAfter(50);
 			paragraph.add(e);
 		}
-		
-		SortedMap<Integer, Object> elements = getSortedElements(chapterParent, project, category, true);
+
+		SortedMap<Integer, Object> elements = getSortedElements(chapterParent,
+				project, category, true);
 		for (Map.Entry<Integer, Object> entry : elements.entrySet()) {
 			String className = entry.getValue().getClass().getSimpleName();
 
 			if (className.equalsIgnoreCase("JJChapter")) {
 				JJChapter chapter = (JJChapter) entry.getValue();
 				createTreeDocument(chapter, category, paragraph, fontNote,
-					fontChapter, fontRequirement, style);
+						fontChapter, fontRequirement, style);
 
 			} else if (className.equalsIgnoreCase("JJRequirement")) {
 				JJRequirement requirement = (JJRequirement) entry.getValue();
-				paragraph.add(new Chunk(requirement.getName() + "\n", fontRequirement));
-				StringReader strReader = new StringReader(
-					requirement.getDescription().replace(
-						"/pages/ckeditor/getimage?imageId=",
-						"/images/"));
-				System.out.println("ExportPDF req : "+
-					requirement.getDescription().replace(
-						"/pages/ckeditor/getimage?imageId=",
-						"/images/"));
+				paragraph.add(new Chunk(requirement.getName() + "\n",
+						fontRequirement));
+				StringReader strReader = new StringReader(requirement
+						.getDescription()
+						.replace("/pages/ckeditor/getimage?imageId=",
+								"/images/"));
+				System.out.println("ExportPDF req : "
+						+ requirement.getDescription()
+								.replace("/pages/ckeditor/getimage?imageId=",
+										"/images/"));
 				List arrList = HTMLWorker.parseToList(strReader, style);
 				for (int i = 0; i < arrList.size(); ++i) {
-					/*String chunk = (String) arrList.get(i);
-					String imageIndicator = "<img src='data:image/png;base64,";
-					logger.info("Chunk of HTMLWorker : "+chunk);
-					if(chunk.startsWith(imageIndicator)){
-						Image img = null;
-						String base64Data = "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";
-						base64Data = chunk.substring(imageIndicator.length(), chunk.length()-2);
-						try {
-							img = Image.getInstance(Base64.decode(base64Data));
-							paragraph.add(img);
-						} catch (Exception exception) {
-							logger.warn("Problem with decoding b64 image ("+base64Data+") instance while exporting in pdf");
-						}
-					}
-					else {*/
-						Element e = (Element) arrList.get(i);
-						paragraph.add(e);
-					/*}*/
+					/*
+					 * String chunk = (String) arrList.get(i); String
+					 * imageIndicator = "<img src='data:image/png;base64,";
+					 * logger.info("Chunk of HTMLWorker : "+chunk);
+					 * if(chunk.startsWith(imageIndicator)){ Image img = null;
+					 * String base64Data =
+					 * "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"
+					 * ; base64Data = chunk.substring(imageIndicator.length(),
+					 * chunk.length()-2); try { img =
+					 * Image.getInstance(Base64.decode(base64Data));
+					 * paragraph.add(img); } catch (Exception exception) {
+					 * logger
+					 * .warn("Problem with decoding b64 image ("+base64Data
+					 * +") instance while exporting in pdf"); } } else {
+					 */
+					Element e = (Element) arrList.get(i);
+					paragraph.add(e);
+					/* } */
 				}
 				if (requirement.getNote().length() > 2) {
-					paragraph.add("Note: "+ new Chunk(requirement.getNote() + "\n", fontNote));
+					paragraph
+							.add("Note: "
+									+ new Chunk(requirement.getNote() + "\n",
+											fontNote));
 				}
 			}
 		}
@@ -652,7 +677,9 @@ public class JJChapterBean {
 			}
 
 			List<JJRequirement> requirements = jJRequirementService
-					.getRequirementChildrenWithChapterSortedByOrder(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),parent,
+					.getRequirementChildrenWithChapterSortedByOrder(
+							((LoginBean) LoginBean.findBean("loginBean"))
+									.getContact().getCompany(), parent,
 							onlyActif);
 
 			for (JJRequirement requirement : requirements) {
@@ -661,8 +688,9 @@ public class JJChapterBean {
 			}
 		} else {
 
-			List<JJChapter> chapters = jJChapterService.getParentsChapter(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
-					project, category, onlyActif, true);
+			List<JJChapter> chapters = jJChapterService.getParentsChapter(
+					((LoginBean) LoginBean.findBean("loginBean")).getContact()
+							.getCompany(), project, category, onlyActif, true);
 
 			for (JJChapter chapter : chapters) {
 				elements.put(chapter.getOrdering(), chapter);
@@ -717,18 +745,23 @@ public class JJChapterBean {
 	}
 
 	public void onDragDrop(TreeDragDropEvent event) {
-		
+
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJRequirementBean jJRequirementBean = (JJRequirementBean) session
 				.getAttribute("jJRequirementBean");
-		if(jJRequirementBean == null)
-			jJRequirementBean=new JJRequirementBean();
-		
-		JJTestcaseBean testcaseBean=(JJTestcaseBean) session.getAttribute("jJTestcaseBean");
-		if(testcaseBean == null)
-			testcaseBean=new JJTestcaseBean();
+		if (jJRequirementBean == null)
+			jJRequirementBean = new JJRequirementBean();
 
+		RequirementBean requirementBean = (RequirementBean) session
+				.getAttribute("requirementBean");
+		if (requirementBean != null)
+			requirementBean.setRootNode(null);
+
+		JJTestcaseBean testcaseBean = (JJTestcaseBean) session
+				.getAttribute("jJTestcaseBean");
+		if (testcaseBean == null)
+			testcaseBean = new JJTestcaseBean();
 
 		String dragNodeData = event.getDragNode().getData().toString();
 		String dropNodeData = event.getDropNode().getData().toString();
@@ -784,7 +817,7 @@ public class JJChapterBean {
 							JJChapter chapter = (JJChapter) entry.getValue();
 
 							int lastOrder = chapter.getOrdering();
-							chapter.setOrdering(lastOrder - 1);						
+							chapter.setOrdering(lastOrder - 1);
 
 							updateJJChapter(chapter);
 
@@ -795,9 +828,8 @@ public class JJChapterBean {
 
 							int lastOrder = requirement.getOrdering();
 							requirement.setOrdering(lastOrder - 1);
-							
-							jJRequirementBean
-									.updateJJRequirement(requirement);
+
+							jJRequirementBean.updateJJRequirement(requirement);
 						}
 
 					}
@@ -819,7 +851,7 @@ public class JJChapterBean {
 
 							testcases.remove(testcaseOrder);
 
-							testcase.setOrdering(null);							
+							testcase.setOrdering(null);
 							testcaseBean.updateJJTestcase(testcase);
 
 							testcase = null;
@@ -981,7 +1013,7 @@ public class JJChapterBean {
 							JJChapter chapter = (JJChapter) entry.getValue();
 
 							int lastOrder = chapter.getOrdering();
-							chapter.setOrdering(lastOrder - 1);				
+							chapter.setOrdering(lastOrder - 1);
 
 							updateJJChapter(chapter);
 
@@ -993,8 +1025,7 @@ public class JJChapterBean {
 							int lastOrder = requirement.getOrdering();
 							requirement.setOrdering(lastOrder - 1);
 
-							jJRequirementBean
-									.updateJJRequirement(requirement);
+							jJRequirementBean.updateJJRequirement(requirement);
 						}
 
 					}
@@ -1028,8 +1059,7 @@ public class JJChapterBean {
 									int lastOrder = testcase.getOrdering();
 
 									testcase.setOrdering(lastOrder - 1);
-									testcaseBean
-											.updateJJTestcase(testcase);
+									testcaseBean.updateJJTestcase(testcase);
 								}
 
 								testcase = null;
@@ -1246,6 +1276,7 @@ public class JJChapterBean {
 				.getExternalContext().getSession(false);
 		JJRequirementBean jJRequirementBean = (JJRequirementBean) session
 				.getAttribute("jJRequirementBean");
+		if(jJRequirementBean != null)
 		jJRequirementBean.editOneColumn(category);
 	}
 
@@ -1268,21 +1299,35 @@ public class JJChapterBean {
 		chapterRoot = null;
 		selectedChapterNode = null;
 
-		chapterState = true;
+		chapterState = true;		
+
+		if (FacesContext.getCurrentInstance().getViewRoot().getViewId()
+				.contains("specifications")) {
+			ExternalContext ec = FacesContext.getCurrentInstance()
+					.getExternalContext();
+			try {
+				ec.redirect(((HttpServletRequest) ec.getRequest())
+						.getRequestURI());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
 
 	}
-	
-	public void saveJJChapter(JJChapter b)
-	{
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+
+	public void saveJJChapter(JJChapter b) {
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJChapterService.saveJJChapter(b);
 	}
-	
-	public void updateJJChapter(JJChapter b)
-	{
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+
+	public void updateJJChapter(JJChapter b) {
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJChapterService.updateJJChapter(b);

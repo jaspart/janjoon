@@ -13,32 +13,51 @@
 	-webkit-padding-start: 15px;
 }
 
+.ui-fileupload-progress{
+display: none;
+}
+.ui-fileupload-cancel{
+display: none;
+}
+
+.ui-fileupload-files {
+	margin: 1px 0;
+	width: 150px !important;
+	display: inline-block;
+	height: 50px;
+}
+
 .ui-datatable table {
 	border-collapse: collapse;
 	table-layout: fixed;
 }
 </style>
-		<p:panel style="height:600px;"
+		<p:panel style="height:650px;"
 			header="#{messages.contact_panel_header}">
 
-			<h:form id="licenseForm">
-				<p:growl id="messages" showDetail="true" />
-				<h:panelGrid columns="2" style="margin-left:20px;" border="1">
-					<f:facet name="header">
-						<p:row>
-							<p:column colspan="2">#{loginBean.contact.name} Picture</p:column>
-						</p:row>
-					</f:facet>
-					<p:graphicImage value="#{loginBean.pictureUrl}"
-						rendered="#{loginBean.pictureUrl != null}" styleClass="banner"
-						style="height: 150px;width: 150px;" />
-					<p:fileUpload
-						fileUploadListener="#{licenseBean.handleContactFileUpload}"
-						mode="advanced" dragDropSupport="true"
-						update="messages :vacationForm :configForm :workdaysCalendar licenseForm"
-						sizeLimit="100000" allowTypes="/(gif|png|ico|jpeg|jpg)$/" />
-				</h:panelGrid>
-			</h:form>
+			<!-- 			<h:form id="licenseForm"> -->
+			<!-- 				<p:growl id="messages" showDetail="true" /> -->
+			<!-- 				<h:panelGrid columns="1" style="margin-left:20px;"> -->
+			<!-- 					<f:facet name="header"> -->
+			<!-- 						<p:row> -->
+			<!-- 							<p:column colspan="1">#{loginBean.contact.name} Picture</p:column> -->
+			<!-- 						</p:row> -->
+			<!-- 						<p:row> -->
+			<!-- 							<p:column colspan="1"> -->
+			<!-- 								<p:graphicImage value="#{loginBean.pictureUrl}" -->
+			<!-- 									rendered="#{loginBean.pictureUrl != null}" styleClass="banner" -->
+			<!-- 									style="height: 150px;width: 150px;" /> -->
+			<!-- 							</p:column> -->
+			<!-- 						</p:row> -->
+			<!-- 					</f:facet> -->
+
+			<!-- 					<p:fileUpload -->
+			<!-- 						fileUploadListener="#{licenseBean.handleContactFileUpload}" -->
+			<!-- 						mode="advanced" dragDropSupport="true" -->
+			<!-- 						update="messages :vacationForm :configForm :workdaysCalendar licenseForm" -->
+			<!-- 						sizeLimit="100000" allowTypes="/(gif|png|ico|jpeg|jpg)$/" /> -->
+			<!-- 				</h:panelGrid> -->
+			<!-- 			</h:form> -->
 			<h:form id="configForm">
 				<p:remoteCommand name="updateAdmin" />
 				<p:growl id="msg" />
@@ -46,6 +65,13 @@
 					<f:facet name="header">
 						<p:row>
 							<p:column colspan="4">#{loginBean.contact.name} Configuration</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="4">
+								<p:graphicImage value="#{loginBean.pictureUrl}"
+									rendered="#{loginBean.pictureUrl != null}"
+									style="height: 100px;width: 100px;" />
+							</p:column>
 						</p:row>
 					</f:facet>
 					<p:row>
@@ -157,11 +183,22 @@
            			</p:selectManyMenu>
 						</p:column>
 					</p:row>
+					<p:row>
+						<p:column colspan="4">
+							<p:fileUpload
+								fileUploadListener="#{licenseBean.handleContactFileUpload}"
+								mode="advanced" dragDropSupport="true"
+								onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock();"
+								update=":vacationForm configForm :workdaysCalendar "
+								sizeLimit="100000" allowTypes="/(gif|png|ico|jpeg|jpg)$/" />
+						</p:column>
+					</p:row>
 					<f:facet name="footer">
 						<p:row>
 							<p:column colspan="4" style="text-align: right">
 								<p:commandButton id="submit"
-									update=":vacationForm configForm :workdaysCalendar :licenseForm"
+									update=":vacationForm configForm :workdaysCalendar "
 									onstart="PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock()"
 									value="#{messages.contact_submit}"
@@ -228,7 +265,7 @@
 							<p:commandButton id="addVacation"
 								onstart="PF('blockUIWidget').block()"
 								oncomplete="PF('blockUIWidget').unblock()"
-								update="vacationForm :configForm :workdaysCalendar :licenseForm"
+								update="vacationForm :configForm :workdaysCalendar "
 								action="#{jJContactBean.addVacation(loginBean,loginBean.contact)}"
 								value="#{messages.contact_new_vacation}" />
 						</p:column>
