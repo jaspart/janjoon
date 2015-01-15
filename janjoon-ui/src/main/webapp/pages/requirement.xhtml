@@ -16,6 +16,16 @@
 	-webkit-padding-start: 2px;
 }
 
+.testCaseDataTable {
+	
+}
+.testCaseDataTable tbody td {
+	padding: 0px 0px;
+	overflow: hidden;
+	border-width: 1px;
+	border-style: none;
+}
+
 .ui-tree {
 	height: 500px;
 	width: 350px;
@@ -47,6 +57,41 @@
 		<h:outputScript library="js" name="scrollTab.js" />
 		<p:panel style="height:900px;">
 			<h:form id="treeForm">
+			<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
+				style="float: right;" />
+			<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
+				dynamic="true" style="width:600px">
+				<p:panelGrid>
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="12">Code des Couleurs</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column colspan="2" styleClass="RequirementNotLinked">
+							<p:outputLabel value="Exigence sans liens haut ou bas" />
+						</p:column>
+
+						<p:column colspan="2" styleClass="RequirementNoTask">
+							<p:outputLabel value="Exigence sans tache" />
+						</p:column>
+
+						<p:column colspan="2" styleClass="RequirementInProcess">
+							<p:outputLabel value="Exigence en cours d'execution" />
+						</p:column>
+
+						<p:column colspan="2" styleClass="RequirementFinishedTestProcess">
+							<p:outputLabel
+								value="Exigence avec taches termines et tests en cours" />
+						</p:column>
+
+						<p:column colspan="2" styleClass="RequirementFinishedSuccessed">
+							<p:outputLabel
+								value="Exigence avec taches et tests termines avec succes" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+			</p:overlayPanel>
 				<p:panelGrid style="float: left;">
 					<f:facet name="header">
 						<p:row>
@@ -310,49 +355,51 @@
 					<h:outputText value="#{task.id}-#{fn:substring(task.name,0,30)}" />
 				</p:dataList>
 
-			<h:form id="testCaseForm">
-			<p:growl id="msg" />
-				<p:dataTable id="testCaseDataTable" var="testCaseModel"
-					selection="#{requirementBean.reqSelectedtestCases}"
-					rowKey="#{testCaseModel.id}"
-					emptyMessage="That Requirement have no Testcase" scrollable="true"
-					style="width:350px;" scrollHeight="100"
-					value="#{requirementBean.reqtestCases}">
-					<p:column selectionMode="multiple"
-						style="width:30%;text-align:center" />
-					<p:column style="width:70%">
-						<f:facet name="header">
-							<p:row>
-								<p:column>
-									<h:outputText value="TestCases :" />
-								</p:column>
-							</p:row>
+				<h:form id="testCaseForm">
+					<p:growl id="msg" />
+					<p:dataTable id="testCaseDataTable" var="testCaseModel"
+						selection="#{requirementBean.reqSelectedtestCases}"
+						rowKey="#{testCaseModel.id}" styleClass="testCaseDataTable"
+						emptyMessage="That Requirement have no Testcase" scrollable="true"
+						style="width:350px;" scrollHeight="100"
+						value="#{requirementBean.reqtestCases}">
+						<p:column selectionMode="multiple"
+							style="width:30%;text-align:center;" />
+						<p:column style="width:70%">
+							<f:facet name="header">
+								<p:row>
+									<p:column >
+										<h:outputText value="TestCases:" />
+									</p:column>
+								</p:row>
+							</f:facet>
+							<h:outputText value="#{testCaseModel.name}" />
+						</p:column>
+						<f:facet name="footer">
+							<p:commandButton onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock()"	id="update"							
+								disabled="#{empty requirementBean.reqtestCases}" 
+								update="testCaseDataTable :testCaseForm:msg"
+								value="Update" process="testCaseDataTable"
+								action="#{requirementBean.updateReqTestCases(jJTestcaseBean)}" />
+								
+							<br />
+							<br />
+							<p:inputText id="testcase" style="width:50%;" 
+								value="#{requirementBean.testCaseName}" label="TestCase Name">
+								<f:validateLength maximum="100" />
+								<p:ajax event="keyup" update="addTestCase" />
+							</p:inputText>
+							<p:watermark for="testcase" value="TestCase Name" />							
+							<p:commandButton id="addTestCase"
+								onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock()"
+								style="font-size: 1.0em !important;float:right;top: -3px;"
+								update="@form" disabled="#{empty requirementBean.testCaseName}"
+								action="#{requirementBean.addTestCase(jJTestcaseBean)}"
+								value="Ajouter TestCase" />
 						</f:facet>
-						<h:outputText value="#{testCaseModel.name}" />
-					</p:column>
-					<f:facet name="footer">
-						<p:commandButton onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()"
-							disabled="#{empty requirementBean.reqtestCases}"
-							update="@form"
-							immediate="true" value="Update"
-							action="#{requirementBean.updateReqTestCases(jJTestcaseBean)}" />
-						<br />
-						<p:inputText id="testcase" style="width:50%;"
-							value="#{requirementBean.testCaseName}" label="TestCase Name"
-							required="true" requiredMessage="TestCase Name is required">
-							<f:validateLength maximum="100" />
-						</p:inputText>
-						<p:watermark for="testcase" value="TestCase Name" />
-						<p:commandButton id="addTestCase"
-							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()"
-							style="font-size: 1.0em !important;float:right;top: -3px;"
-							update="@form"
-							action="#{requirementBean.addTestCase(jJTestcaseBean)}"
-							value="Ajouter TestCase"  />
-					</f:facet>
-				</p:dataTable>
+					</p:dataTable>
 				</h:form>
 			</p:panelGrid>
 

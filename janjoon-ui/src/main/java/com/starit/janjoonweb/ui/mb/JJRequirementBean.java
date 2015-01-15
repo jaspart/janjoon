@@ -65,6 +65,7 @@ import com.starit.janjoonweb.domain.JJTeststepService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.BuildUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.ReadXMLFile;
 import com.starit.janjoonweb.ui.mb.util.RequirementUtil;
 
 @RooSerializable
@@ -907,6 +908,28 @@ public class JJRequirementBean {
 		}
 		reqtestCases = jJTestcaseService.getJJtestCases(requirement);
 		reqSelectedtestCases = reqtestCases;
+	}
+	
+	public void requirementInfo() throws IOException 
+	{
+	
+//		String url=FacesContext.getCurrentInstance().getExternalContext()
+//				.getRequestContextPath()
+//				+ "/pages/requirement.jsf?requirement="
+//				+ id
+//				+ "&faces-redirect=true";
+		FacesContext
+				.getCurrentInstance()
+				.getExternalContext()
+				.redirect(
+						FacesContext.getCurrentInstance().getExternalContext()
+								.getRequestContextPath()
+								+ "/pages/requirement.jsf?requirement="
+								+ requirement.getId()
+								+ "&faces-redirect=true");
+		
+//		RequestContext context = RequestContext.getCurrentInstance();
+//		context.execute("window.open('"+url+"', '_newtab')");
 	}
 
 	private void deleteTasksAndTestcase(JJRequirement requirement) {
@@ -3622,7 +3645,9 @@ public class JJRequirementBean {
 							+ ((Element) arrList.get(i)).toString();
 				}
 
-				description = description.replace("[", " ").replace("]", "");
+				description = description.replace("[", " ").replace("]", "").replace("&#39;", "'").replace("\"","'").replace("&&", "and").
+						replace("<", "").replace(">", "");
+				
 				String chapterName = "";
 				if (rrr.getRequirement().getChapter() != null)
 					chapterName = rrr.getRequirement().getChapter().getName();
@@ -3643,6 +3668,7 @@ public class JJRequirementBean {
 			InputStream stream = new ByteArrayInputStream(buffer.getBytes());
 			file = new DefaultStreamedContent(stream, "xml",
 					nameDataModel.toUpperCase() + "-Spec.xml");
+			//ReadXMLFile.getRequirementsFromXml(stream);
 			return file;
 		}
 

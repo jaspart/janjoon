@@ -283,6 +283,7 @@ public class RequirementBean {
 	}
 	
 	public void updateReqTestCases(JJTestcaseBean jjTestcaseBean) {
+		
 		for (JJTestcase test : reqtestCases) {
 			if (!reqSelectedtestCases.contains(test)) {
 				test.setEnabled(false);
@@ -292,29 +293,38 @@ public class RequirementBean {
 		}
 		reqtestCases = jJTestcaseService.getJJtestCases(requirement);
 		reqSelectedtestCases = reqtestCases;
+		testCaseName=null;
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated", "Requirement");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 	
 	public void addTestCase(JJTestcaseBean jjTestcaseBean) {
-		JJTestcase b = new JJTestcase();
-		b.setName(testCaseName);
-		b.setEnabled(true);
-		b.setRequirement(jJRequirementService.findJJRequirement(requirement
-				.getId()));
-		b.setDescription("TestCase for Requirement " + requirement.getName());
-		b.setOrdering(reqtestCases.size());
-		b.setAutomatic(false);
-		jjTestcaseBean.saveJJTestcase(b);
-		testCaseName = "";
+		
+		if(!testCaseName.isEmpty())
+		{
+			JJTestcase b = new JJTestcase();
+			b.setName(testCaseName);
+			b.setEnabled(true);
+			b.setRequirement(jJRequirementService.findJJRequirement(requirement
+					.getId()));
+			b.setDescription("TestCase for Requirement " + requirement.getName());
+			b.setOrdering(reqtestCases.size());
+			b.setAutomatic(false);
+			jjTestcaseBean.saveJJTestcase(b);
+			testCaseName = "";
 
-		reqtestCases = jJTestcaseService.getJJtestCases(requirement);
-		reqSelectedtestCases = reqtestCases;
+			reqtestCases = jJTestcaseService.getJJtestCases(requirement);
+			reqSelectedtestCases = reqtestCases;
 
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_created", "TestCase");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"message_successfully_created", "TestCase");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}else
+		{
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "TestCase Name is required", ""));
+		}
+		
 
 	}
 

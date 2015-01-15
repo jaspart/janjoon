@@ -19,9 +19,7 @@ public class JJVersionServiceImpl implements JJVersionService {
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
-
-	// New Generic
-
+	
 	@Override
 	public List<JJVersion> getVersions(boolean onlyActif, boolean withProduct,
 			JJProduct product, JJCompany company) {

@@ -30,6 +30,7 @@ public class JJVersionBean {
 			JJRequirementService jJRequirementService) {
 		this.jJRequirementService = jJRequirementService;
 	}
+
 	private JJProduct product;
 	private JJVersion version;
 	private List<JJVersion> versionList;
@@ -67,22 +68,20 @@ public class JJVersionBean {
 		JJProductBean jJProductBean = (JJProductBean) session
 				.getAttribute("jJProductBean");
 		JJProduct jJproduct = jJProductBean.getProduct();
-		if(((LoginBean) LoginBean.findBean("loginBean")).getContact()!=null)
-		{
-			if(product==null)
-			{
-				product=jJproduct;
+		if (((LoginBean) LoginBean.findBean("loginBean")).getContact() != null) {
+			if (product == null) {
+				product = jJproduct;
 				versionList = jJVersionService.getVersions(true, true, product,
-						((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany());
-				
-			}else if(!product.equals(jJproduct))
-			{
-				product=jJproduct;
+						((LoginBean) LoginBean.findBean("loginBean"))
+								.getContact().getCompany());
+
+			} else if (!product.equals(jJproduct)) {
+				product = jJproduct;
 				versionList = jJVersionService.getVersions(true, true, product,
-						((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany());
-			}	
+						((LoginBean) LoginBean.findBean("loginBean"))
+								.getContact().getCompany());
+			}
 		}
-			
 
 		return versionList;
 	}
@@ -142,7 +141,7 @@ public class JJVersionBean {
 	public void newVersion() {
 
 		versionAdmin = new JJVersion();
-		versionAdmin.setEnabled(true);		
+		versionAdmin.setEnabled(true);
 	}
 
 	public void addVersion() {
@@ -162,7 +161,8 @@ public class JJVersionBean {
 		versionDataModel = new ArrayList<VersionDataModel>();
 
 		List<JJVersion> versions = jJVersionService.getVersions(true, true,
-				product,((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany());
+				product, ((LoginBean) LoginBean.findBean("loginBean"))
+						.getContact().getCompany());
 
 		for (JJVersion version : versions) {
 			versionDataModel.add(new VersionDataModel(version, true, true));
@@ -232,21 +232,51 @@ public class JJVersionBean {
 		}
 
 	}
-	
-	public void saveJJVersion(JJVersion b)
-	{
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
-		b.setCreatedBy(contact);
-		b.setCreationDate(new Date());
-		jJVersionService.saveJJVersion(b);
+
+	public boolean versionNameExist(String name, JJProduct prod) {
+		return jJVersionService.getVersionByName(name, prod) != null;
 	}
-	
-	public void updateJJVersion(JJVersion b)
-	{
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
-		b.setUpdatedBy(contact);
-		b.setUpdatedDate(new Date());
-		jJVersionService.updateJJVersion(b);
+
+	public boolean saveJJVersion(JJVersion b) {
+		
+		if(!versionNameExist(b.getName(), b.getProduct()))
+		{
+			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+					.getContact();
+			b.setCreatedBy(contact);
+			b.setCreationDate(new Date());
+			jJVersionService.saveJJVersion(b);
+			return true;
+		}else
+			return false;
+		
+	}
+
+	public boolean updateJJVersion(JJVersion b) {
+		
+		JJVersion v=jJVersionService.getVersionByName(b.getName(), b.getProduct());
+		if(v != null)
+		{
+			if(v.getId().equals(b.getId()))
+			{
+				JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+						.getContact();
+				b.setUpdatedBy(contact);
+				b.setUpdatedDate(new Date());
+				jJVersionService.updateJJVersion(b);
+				return true;
+			}else
+				return false;
+		}else 
+		{
+			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+					.getContact();
+			b.setUpdatedBy(contact);
+			b.setUpdatedDate(new Date());
+			jJVersionService.updateJJVersion(b);
+			return true;
+		}
+		
 	}
 
 	public List<JJTask> getTastksByVersion(JJVersion jJversion) {

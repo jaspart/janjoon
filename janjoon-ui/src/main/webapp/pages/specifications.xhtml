@@ -252,15 +252,14 @@
 							<h:outputText value="#{reqUtil.requirement.chapter.name}" />
 						</p:column>
 
-						<p:column exportable="false" styleClass="action-column">
+						<p:column exportable="false" styleClass="action-column" >
 							<f:facet name="header">
 								<h:outputText value="Actions" />
 							</f:facet>
-							<p:splitButton id="viewButton"
-								value="#{messages[jJRequirementBean.viewButton]}"
-								icon="ui-icon-search">
-
-								<p:menuitem id="filterButton"
+							<p:splitButton id="viewButton" action="#{jJRequirementBean.requirementInfo}"						
+								value="#{messages[jJRequirementBean.viewButton]}" ajax="false"								
+								icon="ui-icon-search" onclick="target='_blank'">																
+								<p:menuitem id="filterButton" 
 									value="#{messages[jJRequirementBean.filterButton]}"
 									icon="ui-icon-search" onstart="PF('blockUIWidget').block()"
 									action="#{jJRequirementBean.viewLinks()}"

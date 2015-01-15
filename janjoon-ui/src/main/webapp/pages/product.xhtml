@@ -153,6 +153,9 @@
 											requiredMessage="Version Name is required"
 											widgetVar="versionWidget">
 											<f:validateLength maximum="100" />
+											<f:validator validatorId="unicityNameValidator" />
+											<f:attribute name="product" value="#{jJProductBean.productAdmin}" />
+											<f:attribute name="versionBean" value="#{jJVersionBean}" />
 										</p:inputText>
 										<p:watermark for="version"
 											value="#{messages.admin_product_new_version_watermark}" />
@@ -249,7 +252,6 @@
 										process="buildDataTable" value="Update"
 										action="#{jJBuildBean.updateVersionBuilds(versionModel.version.id)}" />
 
-
 								</f:facet>
 							</p:dataTable>
 							<p:panelGrid>
@@ -259,6 +261,9 @@
 											value="#{jJBuildBean.buildName}" label="Build Name"
 											required="true" requiredMessage="Build Name is required">
 											<f:validateLength maximum="100" />
+											<f:validator validatorId="unicityNameValidator" />
+											<f:attribute name="version" value="#{versionModel.version}" />
+											<f:attribute name="buildBean" value="#{jJBuildBean}" />
 										</p:inputText>
 										<p:watermark for="build" value="Build Name" />
 									</p:column>

@@ -338,12 +338,12 @@ public class LoginBean implements Serializable {
 	}
 
 	public void setLogoUrl(StreamedContent logoUrl) {
-		
+
 		this.logoUrl = logoUrl;
 	}
 
 	public StreamedContent getPictureUrl() {
-		
+
 		if (getContact().getPicture() != null) {
 			try {
 				pictureUrl = new DefaultStreamedContent(new FileInputStream(
@@ -355,7 +355,7 @@ public class LoginBean implements Serializable {
 			} catch (FileNotFoundException e) {
 				pictureUrl = null;
 			}
-		}		
+		}
 		return pictureUrl;
 	}
 
@@ -413,7 +413,7 @@ public class LoginBean implements Serializable {
 										+ "CompaniesLogo"
 										+ System.getProperty("file.separator")
 										+ contact.getCompany().getLogo())));
-						
+
 					} catch (FileNotFoundException e) {
 						logoUrl = null;
 					}
@@ -618,18 +618,18 @@ public class LoginBean implements Serializable {
 			JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");
 
 			HttpSession session = (HttpSession) ctx.getExternalContext()
-					.getSession(false);			
+					.getSession(false);
 			if (session.getAttribute("jJTestcaseBean") != null)
 				session.setAttribute("jJTestcaseBean", new JJTestcaseBean());
 			authorisationService = new AuthorisationService(session, contact);
-			//messageListener(session);
+			// messageListener(session);
 			session.setAttribute("jJBugBean", new JJBugBean());
 			session.setAttribute("jJMessageBean", null);
 			session.setAttribute("jJRequirementBean", null);
-			if(session.getAttribute("requirementBean") != null)
-				((RequirementBean)session.getAttribute("requirementBean")).setRootNode(null);
-			
-			
+			if (session.getAttribute("requirementBean") != null)
+				((RequirementBean) session.getAttribute("requirementBean"))
+						.setRootNode(null);
+
 			if (event.getComponent().getClientId()
 					.contains("projectSelectOneMenu")) {
 
@@ -640,15 +640,13 @@ public class LoginBean implements Serializable {
 				session.setAttribute("jJStatusBean", new JJStatusBean());
 				session.setAttribute("jJTaskBean", new JJTaskBean());
 
-			}else if(event.getComponent().getClientId()
-					.contains("productSelectOneMenu"))
-			{
-				JJProductBean productBean=(JJProductBean) findBean("jJProductBean");
+			} else if (event.getComponent().getClientId()
+					.contains("productSelectOneMenu")) {
+				JJProductBean productBean = (JJProductBean) findBean("jJProductBean");
 				productBean.setProduct((JJProduct) event.getNewValue());
-				
-			}else if(event.getComponent().getClientId()
-					.contains("versionSelectOneMenu"))
-			{
+
+			} else if (event.getComponent().getClientId()
+					.contains("versionSelectOneMenu")) {
 				jJVersionBean.getVersionList();
 				jJVersionBean.setVersion((JJVersion) event.getNewValue());
 			}
@@ -693,20 +691,18 @@ public class LoginBean implements Serializable {
 						context.update(":contentPanel:devPanel:form:taskSelectOneMenu");
 					}
 				}
-			} else if (viewId.contains("specifications")) {		
+			} else if (viewId.contains("specifications")) {
 
-				
+				JJRequirementBean requirementBean = (JJRequirementBean) findBean("jJRequirementBean");
+				if (requirementBean == null)
+					requirementBean = new JJRequirementBean();
+				if (requirementBean.getTableDataModelList() == null)
+					requirementBean.fullTableDataModelList();
 
-				JJRequirementBean requirementBean=(JJRequirementBean) findBean("jJRequirementBean");
-				if(requirementBean == null)
-					requirementBean=new JJRequirementBean();
-				if(requirementBean.getTableDataModelList() == null)
-				requirementBean.fullTableDataModelList();
-			
-				 ExternalContext ec = FacesContext.getCurrentInstance()
-				 .getExternalContext();
-				 ec.redirect(((HttpServletRequest) ec.getRequest())
-				 .getRequestURI());
+				ExternalContext ec = FacesContext.getCurrentInstance()
+						.getExternalContext();
+				ec.redirect(((HttpServletRequest) ec.getRequest())
+						.getRequestURI());
 
 			}
 
@@ -964,12 +960,12 @@ public class LoginBean implements Serializable {
 						if (viewID.contains("specifications")) {
 							if (authorisationService.isrRequiement()) {
 
-								JJRequirementBean requirementBean=(JJRequirementBean) findBean("jJRequirementBean");
-								if(requirementBean == null)
-									requirementBean=new JJRequirementBean();
-								if(requirementBean.getTableDataModelList() == null)
-								requirementBean.fullTableDataModelList();
-							
+								JJRequirementBean requirementBean = (JJRequirementBean) findBean("jJRequirementBean");
+								if (requirementBean == null)
+									requirementBean = new JJRequirementBean();
+								if (requirementBean.getTableDataModelList() == null)
+									requirementBean.fullTableDataModelList();
+
 							} else {
 								FacesContext
 										.getCurrentInstance()
@@ -1028,6 +1024,24 @@ public class LoginBean implements Serializable {
 									.redirect(
 											path
 													+ "/pages/main.jsf?faces-redirect=true");
+						}else if (viewID.contains("requirement")) {
+							if (!authorisationService.isrRequiement()) {
+								FacesContext
+										.getCurrentInstance()
+										.addMessage(
+												null,
+												new FacesMessage(
+														FacesMessage.SEVERITY_ERROR,
+														"You have no permission to access this resource",
+														null));
+								FacesContext
+										.getCurrentInstance()
+										.getExternalContext()
+										.redirect(
+												path
+														+ "/pages/main.jsf?faces-redirect=true");
+
+							}
 						}
 					} else {
 						if (viewID.contains("development")) {
@@ -1102,11 +1116,11 @@ public class LoginBean implements Serializable {
 					} else if (root.getViewId().contains("specifications")) {
 
 						if (authorisationService.isrRequiement()) {
-							JJRequirementBean requirementBean=(JJRequirementBean) findBean("jJRequirementBean");
-							if(requirementBean == null)
-								requirementBean=new JJRequirementBean();
-							if(requirementBean.getTableDataModelList() == null)
-							requirementBean.fullTableDataModelList();
+							JJRequirementBean requirementBean = (JJRequirementBean) findBean("jJRequirementBean");
+							if (requirementBean == null)
+								requirementBean = new JJRequirementBean();
+							if (requirementBean.getTableDataModelList() == null)
+								requirementBean.fullTableDataModelList();
 						} else {
 							FacesContext
 									.getCurrentInstance()
@@ -1138,6 +1152,24 @@ public class LoginBean implements Serializable {
 													"You have no permission to access this resource",
 													null));
 
+							FacesContext
+									.getCurrentInstance()
+									.getExternalContext()
+									.redirect(
+											path
+													+ "/pages/main.jsf?faces-redirect=true");
+
+						}
+					} else if (viewID.contains("requirement")) {
+						if (!authorisationService.isrRequiement()) {
+							FacesContext
+									.getCurrentInstance()
+									.addMessage(
+											null,
+											new FacesMessage(
+													FacesMessage.SEVERITY_ERROR,
+													"You have no permission to access this resource",
+													null));
 							FacesContext
 									.getCurrentInstance()
 									.getExternalContext()

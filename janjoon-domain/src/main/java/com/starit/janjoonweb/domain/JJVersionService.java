@@ -14,4 +14,5 @@ public interface JJVersionService {
 	public List<JJTask> getTastksByVersion(JJVersion jJversion);
 	
 	public JJVersion getVersionByName(String jJversion,JJProduct product);
+	
 }
