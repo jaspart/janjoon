@@ -72,6 +72,7 @@ public class LoginBean implements Serializable {
 	private boolean mobile;
 	private boolean collapsedMesPanel = true;
 	private String showMarquee;
+	private FacesMessage facesMessage;
 	@Autowired
 	private JJContactService jJContactService;
 
@@ -170,6 +171,14 @@ public class LoginBean implements Serializable {
 
 	}
 
+	public FacesMessage getFacesMessage() {
+		return facesMessage;
+	}
+
+	public void setFacesMessage(FacesMessage facesMessage) {
+		this.facesMessage = facesMessage;
+	}
+
 	protected String getRedirectUrl(HttpSession session) {
 		if (session != null) {
 			SavedRequest savedRequest = (SavedRequest) session
@@ -189,11 +198,9 @@ public class LoginBean implements Serializable {
 					JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");
 					if (jJProjectBean.getProject() == null) {
 						s = "main";
-						FacesMessage message = MessageFactory.getMessage(
+						facesMessage = MessageFactory.getMessage(
 								"dev.nullProject.label",
 								FacesMessage.SEVERITY_ERROR, "");
-						FacesContext.getCurrentInstance().addMessage(null,
-								message);
 					}
 
 				}
@@ -398,9 +405,7 @@ public class LoginBean implements Serializable {
 			prevPage = "fail";
 		}
 		if (enable) {
-			Flash flash = FacesContext.getCurrentInstance()
-					.getExternalContext().getFlash();
-			flash.setKeepMessages(true);
+			
 			if (UsageChecker.check()) {
 				contact = jJContactService.getContactByEmail(username, true);
 				contact = jJContactService.findJJContact(contact.getId());
@@ -425,11 +430,9 @@ public class LoginBean implements Serializable {
 						.getExternalContext().getSession(false);
 
 				session.putValue("password", password);
-				FacesMessage message = new FacesMessage(
+				facesMessage = new FacesMessage(
 						FacesMessage.SEVERITY_INFO, "Welcome ",
-						contact.getName());
-
-				flash.putNow("main", message);
+						contact.getName());			
 
 				logger.info("login operation success " + contact.getName()
 						+ " logged in");
@@ -490,10 +493,9 @@ public class LoginBean implements Serializable {
 
 				if (!UsageChecker.checkExpiryDate()) {
 
-					FacesMessage fExpiredMessage = new FacesMessage(
+					facesMessage= new FacesMessage(
 							FacesMessage.SEVERITY_WARN,
-							"License expiry date is NOT valid!", null);
-					flash.putNow(null, fExpiredMessage);
+							"License expiry date is NOT valid!", null);					
 				}
 
 				prevPage = getRedirectUrl(session);
@@ -503,13 +505,12 @@ public class LoginBean implements Serializable {
 						.getExternalContext().getSession(false);
 				session.invalidate();
 				SecurityContextHolder.clearContext();
-				FacesMessage fMessage = new FacesMessage(
+				facesMessage= new FacesMessage(
 						FacesMessage.SEVERITY_ERROR, "License is NOT correct!",
 						null);
-				flash.putNow(null, fMessage);
+				
 				prevPage = "fail";
-			}
-			flash.setRedirect(true);
+			}		
 
 		}
 		try {
@@ -929,6 +930,8 @@ public class LoginBean implements Serializable {
 	public void checkAuthorities(ComponentSystemEvent e) throws IOException {
 
 		if (enable) {
+			
+			RequestContext.getCurrentInstance().execute("updateGrowl()");
 			FacesContext context = FacesContext.getCurrentInstance();
 			UIViewRoot root = context.getViewRoot();
 
@@ -941,10 +944,8 @@ public class LoginBean implements Serializable {
 					&& (root.getViewId().contains("project1")
 							|| root.getViewId().contains("test") || root
 							.getViewId().contains("stats"))) {
-				FacesContext.getCurrentInstance().addMessage(
-						null,
-						new FacesMessage(FacesMessage.SEVERITY_ERROR,
-								"Please Select Project", null));
+				facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+								"Please Select Project", null);
 				FacesContext.getCurrentInstance().getExternalContext()
 						.redirect(path + "/pages/main.jsf?faces-redirect=true");
 
@@ -967,14 +968,10 @@ public class LoginBean implements Serializable {
 									requirementBean.fullTableDataModelList();
 
 							} else {
-								FacesContext
-										.getCurrentInstance()
-										.addMessage(
-												null,
-												new FacesMessage(
+								facesMessage = new FacesMessage(
 														FacesMessage.SEVERITY_ERROR,
 														"You have no permission to access this resource",
-														null));
+														null);
 
 								FacesContext
 										.getCurrentInstance()
@@ -988,14 +985,10 @@ public class LoginBean implements Serializable {
 							if (authorisationService.isRwDev())
 								loadingPage(e);
 							else {
-								FacesContext
-										.getCurrentInstance()
-										.addMessage(
-												null,
-												new FacesMessage(
+								facesMessage = new FacesMessage(
 														FacesMessage.SEVERITY_ERROR,
 														"You have no permission to access this resource",
-														null));
+														null);
 
 								FacesContext
 										.getCurrentInstance()
@@ -1009,14 +1002,10 @@ public class LoginBean implements Serializable {
 						} else if (!authorisationService.isrProject()
 								&& root.getViewId().contains("project1")) {
 
-							FacesContext
-									.getCurrentInstance()
-									.addMessage(
-											null,
-											new FacesMessage(
+							facesMessage = new FacesMessage(
 													FacesMessage.SEVERITY_ERROR,
 													"You have no permission to access this resource",
-													null));
+													null);
 
 							FacesContext
 									.getCurrentInstance()
@@ -1024,16 +1013,12 @@ public class LoginBean implements Serializable {
 									.redirect(
 											path
 													+ "/pages/main.jsf?faces-redirect=true");
-						}else if (viewID.contains("requirement")) {
+						} else if (viewID.contains("requirement")) {
 							if (!authorisationService.isrRequiement()) {
-								FacesContext
-										.getCurrentInstance()
-										.addMessage(
-												null,
-												new FacesMessage(
+								facesMessage = new FacesMessage(
 														FacesMessage.SEVERITY_ERROR,
 														"You have no permission to access this resource",
-														null));
+														null);
 								FacesContext
 										.getCurrentInstance()
 										.getExternalContext()
@@ -1048,14 +1033,10 @@ public class LoginBean implements Serializable {
 							if (authorisationService.isRwDev())
 								loadingPage(e);
 							else {
-								FacesContext
-										.getCurrentInstance()
-										.addMessage(
-												null,
-												new FacesMessage(
+								facesMessage = new FacesMessage(
 														FacesMessage.SEVERITY_ERROR,
 														"You have no permission to access this resource",
-														null));
+														null);
 
 								FacesContext
 										.getCurrentInstance()
@@ -1072,14 +1053,10 @@ public class LoginBean implements Serializable {
 								|| ((!authorisationService.isrTest()) && viewID
 										.contains("test"))) {
 
-							FacesContext
-									.getCurrentInstance()
-									.addMessage(
-											null,
-											new FacesMessage(
+							facesMessage = new FacesMessage(
 													FacesMessage.SEVERITY_ERROR,
 													"You have no permission to access this resource",
-													null));//
+													null);//
 
 							FacesContext
 									.getCurrentInstance()
@@ -1098,14 +1075,10 @@ public class LoginBean implements Serializable {
 							|| (!authorisationService.isrTest() && viewID
 									.contains("test"))) {
 
-						FacesContext
-								.getCurrentInstance()
-								.addMessage(
-										null,
-										new FacesMessage(
+						facesMessage = new FacesMessage(
 												FacesMessage.SEVERITY_ERROR,
 												"You have no permission to access this resource",
-												null));//
+												null);//
 
 						FacesContext
 								.getCurrentInstance()
@@ -1122,14 +1095,10 @@ public class LoginBean implements Serializable {
 							if (requirementBean.getTableDataModelList() == null)
 								requirementBean.fullTableDataModelList();
 						} else {
-							FacesContext
-									.getCurrentInstance()
-									.addMessage(
-											null,
-											new FacesMessage(
+							facesMessage = new FacesMessage(
 													FacesMessage.SEVERITY_ERROR,
 													"You have no permission to access this resource",
-													null));//
+													null);//
 
 							FacesContext
 									.getCurrentInstance()
@@ -1143,14 +1112,10 @@ public class LoginBean implements Serializable {
 						if (authorisationService.isRwDev())
 							loadingPage(e);
 						else {
-							FacesContext
-									.getCurrentInstance()
-									.addMessage(
-											null,
-											new FacesMessage(
+							facesMessage = new FacesMessage(
 													FacesMessage.SEVERITY_ERROR,
 													"You have no permission to access this resource",
-													null));
+													null);
 
 							FacesContext
 									.getCurrentInstance()
@@ -1162,14 +1127,10 @@ public class LoginBean implements Serializable {
 						}
 					} else if (viewID.contains("requirement")) {
 						if (!authorisationService.isrRequiement()) {
-							FacesContext
-									.getCurrentInstance()
-									.addMessage(
-											null,
-											new FacesMessage(
-													FacesMessage.SEVERITY_ERROR,
-													"You have no permission to access this resource",
-													null));
+							facesMessage = new FacesMessage(
+									FacesMessage.SEVERITY_ERROR,
+									"You have no permission to access this resource",
+									null);
 							FacesContext
 									.getCurrentInstance()
 									.getExternalContext()
@@ -1224,6 +1185,16 @@ public class LoginBean implements Serializable {
 	public void handleMesToggle(ToggleEvent event) {
 
 		this.collapsedMesPanel = !this.collapsedMesPanel;
+
+	}
+
+	public void updateGrowl() {
+		
+		if(facesMessage != null)
+		{
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+			facesMessage = null;
+		}
 
 	}
 

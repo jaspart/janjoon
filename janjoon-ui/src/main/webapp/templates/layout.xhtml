@@ -36,18 +36,7 @@
 		</script>
 	</h:head>
 	<h:body>
-		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
-
-			<!-- 			<p:panel id="menuPanel" header="Menu" styleClass="menu" -->
-			<!-- 				toggleable="true" toggleOrientation="horizontal" -->
-			<!-- 				collapsed="#{jJMessageBean.collapsedLayoutPanel}"> -->
-			<!-- 				<p:ajax event="toggle" -->
-			<!-- 					listener="#{jJMessageBean.handleLayoutToggle}" -->
-			<!-- 					update="menuPanel,contentPanel,messagePanel" /> -->
-			<!-- 				<ui:insert name="menu"> -->
-			<!-- 					<ui:include src="menu.xhtml" /> -->
-			<!-- 				</ui:insert> -->
-			<!-- 			</p:panel> -->
+		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">		
 
 			<p:panel styleClass="content">
 				<p:overlayPanel id="overlayPanel" for="headerForm:pnl-basic"
@@ -163,8 +152,11 @@
 					<f:event listener="#{loginBean.initMenuIndexvalue}"
 						type="preRenderView" />
 					<ui:insert name="content" />
+					<h:form>
+					<p:remoteCommand name="updateGrowl" update="@form" actionListener="#{loginBean.updateGrowl}"/>
 					<p:growl id="auth" for="login" styleClass="alert alert-error"
 						showDetail="true" life="2000" />
+						</h:form>
 				</p:panel>
 				<ui:insert name="footer">
 					<ui:include src="footer.xhtml" />

@@ -193,7 +193,7 @@
 
 		<p:panel id="taskPanel" rendered="#{loginBean.enable}"
 			header="To do Tasks">
-			<f:event listener="#{jJTaskBean.initToDoTasks}" type="preRenderView" />
+			<f:event listener="#{jJTaskBean.initToDoTasks}" type="preRenderComponent" />
 			<h:form id="taskForm">
 				<p:dataTable id="taskTable" value="#{jJTaskBean.toDoTasks}"
 					rowKey="#{task.id}" var="task" widgetVar="taskTable"
