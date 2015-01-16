@@ -36,7 +36,13 @@
 		</script>
 	</h:head>
 	<h:body>
-		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">		
+		<h:form>
+			<f:event listener="#{loginBean.updateGrowl}"
+				type="preRenderComponent" />
+			<p:remoteCommand name="updateGrowl" update="auth" />
+			<p:growl id="auth" showDetail="true" life="2000" />
+		</h:form>
+		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
 
 			<p:panel styleClass="content">
 				<p:overlayPanel id="overlayPanel" for="headerForm:pnl-basic"
@@ -152,11 +158,6 @@
 					<f:event listener="#{loginBean.initMenuIndexvalue}"
 						type="preRenderView" />
 					<ui:insert name="content" />
-					<h:form>
-					<p:remoteCommand name="updateGrowl" update="@form" actionListener="#{loginBean.updateGrowl}"/>
-					<p:growl id="auth" for="login" styleClass="alert alert-error"
-						showDetail="true" life="2000" />
-						</h:form>
 				</p:panel>
 				<ui:insert name="footer">
 					<ui:include src="footer.xhtml" />

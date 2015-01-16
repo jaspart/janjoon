@@ -16,10 +16,10 @@
 
 			<ui:repeat value="#{jJRequirementBean.categoryList}" var="category">
 				<p:commandButton value="#{category.name}" update=":specForm @form"
-					rendered="#{!loginBean.mobile}"
+					rendered="#{!loginBean.mobile}" 
 					action="#{jJRequirementBean.updateTemplate(category.id)}"
-					onstart="PF('blockUIWidget').block()"
-					oncomplete="PF('blockUIWidget').unblock()" />
+					onstart="PF('blockUIWidget').block()" title="#{category.name}"
+					oncomplete="PF('blockUIWidget').unblock()" />					
 			</ui:repeat>
 
 			<p:commandButton value="&#9776;" id="overlayPanel"
@@ -51,6 +51,12 @@
 				update=":requirementImportDialog"
 				onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock();PF('requirementImportDialogWidget').show()" />
+
+			<p:commandButton value="#{messages.specification_import_button} XML"
+				style="float: right;" disabled="#{jJProjectBean.project == null}"
+				update=":importXMLForm"
+				onstart="PF('blockUIWidget').block()"
+				oncomplete="PF('blockUIWidget').unblock();PF('requirementImportXMLDialogWidget').show()" />
 
 			<p:commandButton id="reloadBtn" icon="ui-icon-refresh"
 				onstart="PF('blockUIWidget').block()" style="float: right;"
@@ -201,7 +207,7 @@
 
 						<p:column filterBy="#{reqUtil.requirement.name}"
 							filterStyle="display:none" styleClass="requirement-column"
-							sortBy="#{reqUtil.requirement.id}">
+							sortBy="#{reqUtil.requirement.name}">
 							<f:facet name="header">
 								<h:outputText
 									value="#{messages.specification_table_requirement_title}" />
@@ -252,14 +258,15 @@
 							<h:outputText value="#{reqUtil.requirement.chapter.name}" />
 						</p:column>
 
-						<p:column exportable="false" styleClass="action-column" >
+						<p:column exportable="false" styleClass="action-column">
 							<f:facet name="header">
 								<h:outputText value="Actions" />
 							</f:facet>
-							<p:splitButton id="viewButton" action="#{jJRequirementBean.requirementInfo}"						
-								value="#{messages[jJRequirementBean.viewButton]}" ajax="false"								
-								icon="ui-icon-search" onclick="target='_blank'">																
-								<p:menuitem id="filterButton" 
+							<p:splitButton id="viewButton"
+								action="#{jJRequirementBean.requirementInfo}"
+								value="#{messages[jJRequirementBean.viewButton]}" ajax="false"
+								icon="ui-icon-search" onclick="target='_blank'">
+								<p:menuitem id="filterButton"
 									value="#{messages[jJRequirementBean.filterButton]}"
 									icon="ui-icon-search" onstart="PF('blockUIWidget').block()"
 									action="#{jJRequirementBean.viewLinks()}"
@@ -355,8 +362,7 @@
 		<p:dialog id="chapterDialog" draggable="false" appendTo="@(body)"
 			header="#{messages.specification_chapter_header}" modal="true"
 			widgetVar="chapterDialogWidget" dynamic="true" resizable="false">
-			<p:ajax event="close"
-				onstart="PF('blockUIWidget').block()"
+			<p:ajax event="close" onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock()"
 				listener="#{jJChapterBean.closeDialog}" />
 			<p:outputPanel id="chapterDialogPanel">
@@ -417,6 +423,21 @@
 
 		<p:hotkey bind="esc"
 			handler="PF('requirementImportDialogWidget').hide()" />
+		<p:dialog id="requirementImportXMLDialog" draggable="false"
+			header="#{messages.specification_import_title} XML" modal="true"
+			widgetVar="requirementImportXMLDialogWidget" dynamic="true"
+			resizable="false">
+			<p:outputPanel id="importXMLPanel">
+				<h:form id="importXMLForm">
+					<p:fileUpload
+						fileUploadListener="#{jJRequirementBean.handleImportXML}"
+						mode="advanced" dragDropSupport="false" update="messages :specForm :categoryForm"
+						sizeLimit="100000" fileLimit="3"
+						allowTypes="/(\.|\/)(xml)$/" />
+					<p:growl id="messages" showDetail="true" />
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
 		<p:dialog id="requirementImportDialog" draggable="false"
 			header="#{messages.specification_import_title}" modal="true"
 			widgetVar="requirementImportDialogWidget" dynamic="true"

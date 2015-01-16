@@ -58,6 +58,12 @@
 						style="font-weight:bold; float:none; position:relative; left:30%;"
 						rendered="#{loginBean.mobile}" />
 
+					<p:commandButton
+						value="#{messages.specification_import_button} XML"
+						style="float: right;" disabled="#{jJProjectBean.project == null}"
+						update=":importXMLForm" onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock();PF('testImportXMLDialogWidget').show()" />
+
 					<p:commandButton value="#{messages.specification_video_help_title}"
 						style="float: right;" id="videoHelpBtn" icon="ui-icon-video"
 						onclick="PF('videoHelpWidget').show()" type="button" />
@@ -423,6 +429,24 @@
 				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
 			</video>
 		</p:dialog>
+		
+		<p:dialog id="testImportXMLDialog" draggable="false"
+			header="#{messages.specification_import_title} XML" modal="true"
+			widgetVar="testImportXMLDialogWidget" dynamic="true"
+			resizable="false">
+			<p:ajax event="close"
+				listener="#{jJTestcaseBean.closeXMLDialog}" />
+			<p:outputPanel id="importXMLPanel">
+				<h:form id="importXMLForm">
+					<p:fileUpload
+						fileUploadListener="#{jJTestcaseBean.handleImportXML}"
+						mode="advanced" dragDropSupport="false" update="messages :testFormCenter :testFormWest :testFormNorth"
+						sizeLimit="100000" fileLimit="3"
+						allowTypes="/(\.|\/)(xml)$/" />
+					<p:growl id="messages" showDetail="true" />
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
 
 		<p:hotkey bind="esc" handler="PF('testcaseDialogWidget').hide()" />
 		<p:dialog id="testcaseDialog"
@@ -660,8 +684,8 @@
 
 		<p:dialog id="runTestcaseDialog" header="#{messages.test_exec_title}"
 			modal="true" widgetVar="runTestcaseDialogWidget" draggable="false"
-			height="360px" dynamic="true" resizable="false"
-			style="width :370px !important">
+			height="360px" dynamic="true" resizable="false" width="360px"
+			style="width :400px !important">
 			<p:hotkey bind="esc" handler="PF('testcaseDialogWidget').hide()" />
 			<p:hotkey bind="space" handler="TestcaseExecSuccessButton.jq.click()" />
 			<p:hotkey bind="S" handler="TestcaseExecSuccessButton.jq.click()" />

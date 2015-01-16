@@ -14,10 +14,14 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DefaultTreeNode;
@@ -60,6 +64,7 @@ import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTeststepService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.ReadXMLFile;
 import com.starit.janjoonweb.ui.mb.util.RequirementUtil;
 
 @RooSerializable
@@ -117,7 +122,7 @@ public class JJTestcaseBean {
 	private JJVersion version;
 	private float reqCoverage;
 	private List<Object> rowNames = new ArrayList<Object>();
-	private List<JJTestcase> colNames = new ArrayList<JJTestcase>();	
+	private List<JJTestcase> colNames = new ArrayList<JJTestcase>();
 
 	public float getReqCoverage() {
 		return reqCoverage;
@@ -157,7 +162,6 @@ public class JJTestcaseBean {
 	private String namefile;
 	private List<JJCategory> categoryList;
 
-
 	public boolean isTestcaseState() {
 		return testcaseState;
 	}
@@ -167,25 +171,31 @@ public class JJTestcaseBean {
 	}
 
 	public List<Object> getRowNames() {
-		
-		if(rowNames == null || rowNames.isEmpty())
-		{
-			
-			colNames=jJTestcaseService.getImportTestcases(category,project,((JJProductBean)LoginBean.findBean("jJProductBean")).getProduct()
-					,true);
-			
-			if(colNames != null && !colNames.isEmpty())
-			{
-				rowNames=new ArrayList<Object>(((JJBuildBean)LoginBean.findBean("jJBuildBean")).getBuilds());
-				if(rowNames == null)
-					rowNames=new ArrayList<Object>(((JJVersionBean)LoginBean.findBean("jJVersionBean")).getVersionList());
+
+		if (rowNames == null || rowNames.isEmpty()) {
+
+			colNames = jJTestcaseService.getImportTestcases(category, project,
+					((JJProductBean) LoginBean.findBean("jJProductBean"))
+							.getProduct(), true);
+
+			if (colNames != null && !colNames.isEmpty()) {
+				rowNames = new ArrayList<Object>(
+						((JJBuildBean) LoginBean.findBean("jJBuildBean"))
+								.getBuilds());
+				if (rowNames == null)
+					rowNames = new ArrayList<Object>(
+							((JJVersionBean) LoginBean
+									.findBean("jJVersionBean"))
+									.getVersionList());
 				else
-					rowNames.addAll(((JJVersionBean)LoginBean.findBean("jJVersionBean")).getVersionList());
+					rowNames.addAll(((JJVersionBean) LoginBean
+							.findBean("jJVersionBean")).getVersionList());
 			}
-			width = 170 +(colNames.size()*70);
-			if(width>1000)
-				width=1000;
-		}		return rowNames;
+			width = 170 + (colNames.size() * 70);
+			if (width > 1000)
+				width = 1000;
+		}
+		return rowNames;
 	}
 
 	public void setRowNames(List<Object> rowNames) {
@@ -430,9 +440,8 @@ public class JJTestcaseBean {
 	}
 
 	public void loadData() {
-		
-		if(project == null)
-		{
+
+		if (project == null) {
 			this.getProject();
 			this.getProduct();
 			this.getVersion();
@@ -441,54 +450,56 @@ public class JJTestcaseBean {
 			testcase = null;
 			rendredTestCaseRecaps = false;
 			rendredTestCaseHistorical = false;
-			requirement = null;	
-			rowNames=null;
-			colNames=null;
+			requirement = null;
+			rowNames = null;
+			colNames = null;
 			disabledExport = true;
 
-			namefile = null;	
-			
-			
-			if(category == null)
-			{						
-				category=((LoginBean) LoginBean.findBean("loginBean")).getAuthorisationService().getCategory();						
+			namefile = null;
+
+			if (category == null) {
+				category = ((LoginBean) LoginBean.findBean("loginBean"))
+						.getAuthorisationService().getCategory();
 			}
-			
+
 			if (category != null) {
 				namefile = category.getName().trim();
 				disabledExport = false;
 
 			} else {
-					
+
 				namefile = null;
 				disabledExport = true;
 
 			}
 			createTestcaseTree();
 			rendredEmptySelection = true;
-			
-			if(rowNames == null || rowNames.isEmpty())
-			{
-				
-				colNames=jJTestcaseService.getImportTestcases(category,project,((JJProductBean)LoginBean.findBean("jJProductBean")).getProduct()
-						,true);
-				
-				if(colNames != null && !colNames.isEmpty())
-				{
-					rowNames=new ArrayList<Object>(((JJBuildBean)LoginBean.findBean("jJBuildBean")).getBuilds());
-					if(rowNames == null)
-						rowNames=new ArrayList<Object>(((JJVersionBean)LoginBean.findBean("jJVersionBean")).getVersionList());
+
+			if (rowNames == null || rowNames.isEmpty()) {
+
+				colNames = jJTestcaseService.getImportTestcases(category,
+						project, ((JJProductBean) LoginBean
+								.findBean("jJProductBean")).getProduct(), true);
+
+				if (colNames != null && !colNames.isEmpty()) {
+					rowNames = new ArrayList<Object>(
+							((JJBuildBean) LoginBean.findBean("jJBuildBean"))
+									.getBuilds());
+					if (rowNames == null)
+						rowNames = new ArrayList<Object>(
+								((JJVersionBean) LoginBean
+										.findBean("jJVersionBean"))
+										.getVersionList());
 					else
-						rowNames.addAll(((JJVersionBean)LoginBean.findBean("jJVersionBean")).getVersionList());
-					
-					width = 170 +(colNames.size()*70);
-					if(width>1000)
-						width=1000;
+						rowNames.addAll(((JJVersionBean) LoginBean
+								.findBean("jJVersionBean")).getVersionList());
+
+					width = 170 + (colNames.size() * 70);
+					if (width > 1000)
+						width = 1000;
 				}
 			}
 		}
-
-
 
 	}
 
@@ -734,9 +745,8 @@ public class JJTestcaseBean {
 
 		}
 		createTestcaseTree();
-		colNames=null;
-		rowNames=null;
-		
+		colNames = null;
+		rowNames = null;
 
 	}
 
@@ -798,8 +808,8 @@ public class JJTestcaseBean {
 
 			for (JJChapter ch : parentChapters) {
 				TreeNode node = createTree(ch, categoryNode, category);
-				if(chapter != null && ch.equals(chapter))
-					selectedNode=node;
+				if (chapter != null && ch.equals(chapter))
+					selectedNode = node;
 			}
 
 		}
@@ -829,23 +839,21 @@ public class JJTestcaseBean {
 			long id = Long.parseLong(getSubString(selectedNode, 1, "-"));
 
 			chapter = jJChapterService.findJJChapter(id);
-			List<JJRequirement> rqs= jJRequirementService.getRequirements(
+			List<JJRequirement> rqs = jJRequirementService.getRequirements(
 					((LoginBean) LoginBean.findBean("loginBean")).getContact()
-							.getCompany(), null, null, null, null, null, chapter,
-					true, true, true);
-			
-			if(rqs.size()>0)
-			{
-				int i=0;
-				for(JJRequirement r:rqs)
-				{
-					if(jJRequirementService.haveTestcase(r))
-						i=i+1;
-				}			
-				reqCoverage=(float)(i*100/rqs.size());
-			}else 
-				reqCoverage=0;
-			
+							.getCompany(), null, null, null, null, null,
+					chapter, true, true, true);
+
+			if (rqs.size() > 0) {
+				int i = 0;
+				for (JJRequirement r : rqs) {
+					if (jJRequirementService.haveTestcase(r))
+						i = i + 1;
+				}
+				reqCoverage = (float) (i * 100 / rqs.size());
+			} else
+				reqCoverage = 0;
+
 			testcase = null;
 
 			rendredTestCaseRecaps = true;
@@ -1027,7 +1035,10 @@ public class JJTestcaseBean {
 					.getChildrenOfParentChapter(parent, onlyActif, true);
 
 			for (JJChapter chapter : chapters) {
-				elements.put(chapter.getOrdering(), chapter);
+				if (chapter.getOrdering() != null)
+					elements.put(chapter.getOrdering(), chapter);
+				else
+					elements.put(0, chapter);
 			}
 
 			List<JJRequirement> requirements = jJRequirementService
@@ -1037,7 +1048,10 @@ public class JJTestcaseBean {
 							onlyActif);
 
 			for (JJRequirement requirement : requirements) {
-				elements.put(requirement.getOrdering(), requirement);
+				if (requirement.getOrdering() != null)
+					elements.put(requirement.getOrdering(), requirement);
+				else
+					elements.put(0, requirement);
 
 			}
 		} else {
@@ -1265,48 +1279,111 @@ public class JJTestcaseBean {
 		return jJConfigurationService.getDialogConfig("TestcaseDialog",
 				"testcases.create.saveandclose");
 	}
+
+	public void closeXMLDialog() {
+		ExternalContext ec = FacesContext.getCurrentInstance()
+				.getExternalContext();
+		try {
+			ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	// import as XML
-	private StreamedContent file;
-	
+
+	public void handleImportXML(FileUploadEvent event) throws IOException {
+
+		JJProduct prod = ((JJProductBean) LoginBean.findBean("jJProductBean"))
+				.getProduct();
+
+		JJProject proj = ((JJProjectBean) LoginBean.findBean("jJProjectBean"))
+				.getProject();
+		List<Object> objects = ReadXMLFile.getTestcasesFromXml(event.getFile()
+				.getInputstream(), jJTestcaseService, jJCategoryService,
+				jJRequirementService, proj, prod);
+		@SuppressWarnings("unchecked")
+		List<JJTestcase> testcases = (List<JJTestcase>) objects.get(0);
+		@SuppressWarnings("unchecked")
+		List<JJTeststep> teststeps = (List<JJTeststep>) objects.get(1);
+
+		if (testcases.isEmpty()) {
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"No TestCase Found in This File",
+					FacesMessage.SEVERITY_WARN, "TestCase");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		} else {
+			for (JJTestcase r : testcases) {
+				saveJJTestcase(r);
+			}
+			for (JJTeststep s : teststeps) {
+				JJTeststepBean jJTeststepBean = ((JJTeststepBean) LoginBean
+						.findBean("jJTeststepBean"));
+				if (jJTeststepBean == null)
+					jJTeststepBean = new JJTeststepBean();
+				jJTeststepBean.saveJJTeststep(s);
+			}
+			project = null;
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					testcases.size() + " TestCase and " + teststeps.size()
+							+ " TestStep Successfuly added",
+					FacesMessage.SEVERITY_INFO, "");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
+
+	}
+
 	public StreamedContent getFile() {
-		
-		if(category != null)
-		{
-			String buffer="<category name=\""+category.getName().toUpperCase()+"\">";
-			List<JJTestcase> tests=jJTestcaseService.getImportTestcases(category, project,((JJProductBean)LoginBean.findBean("jJProductBean")).getProduct()
-					, true);
-			for(JJTestcase ttt:tests)
-			{	
-				String description="";
+
+		if (category != null) {
+			String buffer = "<category name=\""
+					+ category.getName().toUpperCase() + "\">";
+			List<JJTestcase> tests = jJTestcaseService.getImportTestcases(
+					category, project, ((JJProductBean) LoginBean
+							.findBean("jJProductBean")).getProduct(), true);
+			for (JJTestcase ttt : tests) {
+				String description = "";
 				StringReader strReader = new StringReader(ttt.getDescription());
-				List arrList=null;
+				List arrList = null;
 				try {
 					arrList = HTMLWorker.parseToList(strReader, null);
 				} catch (Exception e) {
-					
+
 				}
 				for (int i = 0; i < arrList.size(); ++i) {
-					description=description+((Element)arrList.get(i)).toString();				
+					description = description
+							+ ((Element) arrList.get(i)).toString();
 				}
-				description=description.replace("[", " ").replace("]", "");
-				String s="<testcase name=\""+ttt.getName()+"\""+System.getProperty("line.separator")+
-						"description=\""+description+"\""+System.getProperty("line.separator")+
-						"enabled=\"1\""+System.getProperty("line.separator")
-						+"Automatic=\""+((ttt.getAutomatic()) ? 1 : 0)+"\""+System.getProperty("line.separator")+
-						"Requirement=\""+ttt.getRequirement().getName()+"\" >";
-				for(JJTeststep sss:ttt.getTeststeps())
-				{
-					String t="<teststep actionstep=\""+sss.getActionstep()+"\" resultstep=\""+sss.getResultstep()+"\" />";
-					s=s+System.getProperty("line.separator")+t;
+				description = description.replace("[", " ").replace("]", "")
+						.replace("&#39;", "'").replace("\"", "'")
+						.replace("&&", "and").replace("<", "").replace(">", "");
+				String s = "<testcase name=\"" + ttt.getName() + "\""
+						+ System.getProperty("line.separator")
+						+ "description=\"" + description + "\""
+						+ System.getProperty("line.separator")
+						+ "enabled=\"1\""
+						+ System.getProperty("line.separator") + "Automatic=\""
+						+ ((ttt.getAutomatic()) ? 1 : 0) + "\""
+						+ System.getProperty("line.separator")
+						+ "Requirement=\"" + ttt.getRequirement().getName()
+						+ "\" >";
+				for (JJTeststep sss : ttt.getTeststeps()) {
+					String t = "<teststep actionstep=\"" + sss.getActionstep()
+							+ "\" resultstep=\"" + sss.getResultstep()
+							+ "\" />";
+					s = s + System.getProperty("line.separator") + t;
 				}
-				s=s+System.getProperty("line.separator")+"</testcase>";
-				buffer=buffer+System.getProperty("line.separator")+s;
+				s = s + System.getProperty("line.separator") + "</testcase>";
+				buffer = buffer + System.getProperty("line.separator") + s;
 			}
-			buffer=buffer+System.getProperty("line.separator")+"</category>";
-			InputStream stream =new ByteArrayInputStream( buffer.getBytes() );
-	        file = new DefaultStreamedContent(stream, "xml", category.getName()+"-Tests.xml");
-		}		
-		return file;
+			buffer = buffer + System.getProperty("line.separator")
+					+ "</category>";
+			InputStream stream = new ByteArrayInputStream(buffer.getBytes());
+			return new DefaultStreamedContent(stream, "xml", category.getName()
+					+ "-Tests.xml");
+		} else
+			return null;
 	}
 
 }

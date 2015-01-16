@@ -25,6 +25,56 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 	// Generic Request
 
+	public JJRequirement getRequirementByName(JJCategory category,JJProject project,JJProduct product,String name,JJCompany company)
+	{
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
+				.createQuery(JJRequirement.class);
+
+		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
+
+		CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		
+
+		if (category != null) {
+			predicates
+					.add(criteriaBuilder.equal(from.get("category"), category));
+		}
+
+		if (project != null) {
+			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		} else {
+			predicates.add(criteriaBuilder.equal(
+					from.join("project").join("manager").get("company"),
+					company));
+		}
+
+		if (product != null) {
+			predicates.add(criteriaBuilder.equal(from.get("product"), product));
+		}	
+		
+		if(name != null)
+		{
+			predicates.add(criteriaBuilder.equal(criteriaBuilder.upper(from.<String>get("name")), name.toUpperCase()));
+		}	
+		
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+
+		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
+
+		if( result.getResultList() != null)
+			return result.getResultList().get(0);
+		else return null;
+		
+		
+	}
+
 	public boolean haveTestcase(JJRequirement requirement) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcase> criteriaQuery = criteriaBuilder

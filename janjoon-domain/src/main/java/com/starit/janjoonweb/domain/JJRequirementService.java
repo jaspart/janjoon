@@ -36,6 +36,7 @@ public interface JJRequirementService {
 			JJVersion version,JJStatus status, boolean onlyActif);
 	
 	public void refreshRequirement(JJRequirement requirement);
+	public JJRequirement getRequirementByName(JJCategory catgory,JJProject project,JJProduct produit,String name,JJCompany company);
 	public List<JJRequirement> getNonCouvredRequirements(JJCompany company);
 
 }

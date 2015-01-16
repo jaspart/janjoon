@@ -429,10 +429,7 @@ public class LoginBean implements Serializable {
 				HttpSession session = (HttpSession) fContext
 						.getExternalContext().getSession(false);
 
-				session.putValue("password", password);
-				facesMessage = new FacesMessage(
-						FacesMessage.SEVERITY_INFO, "Welcome ",
-						contact.getName());			
+				session.putValue("password", password);				
 
 				logger.info("login operation success " + contact.getName()
 						+ " logged in");
@@ -490,6 +487,10 @@ public class LoginBean implements Serializable {
 
 				authorisationService = new AuthorisationService(session,
 						contact);
+				
+				facesMessage = new FacesMessage(
+						FacesMessage.SEVERITY_INFO, "Welcome ",
+						getContact().getName());		
 
 				if (!UsageChecker.checkExpiryDate()) {
 
@@ -914,7 +915,7 @@ public class LoginBean implements Serializable {
 			} else if (jJProjectBean.getProject() == null) {
 				FacesMessage message = MessageFactory.getMessage(
 						"dev.nullProject.label", FacesMessage.SEVERITY_ERROR,
-						"");
+						"Project");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 
 			} else {
@@ -929,9 +930,8 @@ public class LoginBean implements Serializable {
 
 	public void checkAuthorities(ComponentSystemEvent e) throws IOException {
 
-		if (enable) {
+		if (enable) {		
 			
-			RequestContext.getCurrentInstance().execute("updateGrowl()");
 			FacesContext context = FacesContext.getCurrentInstance();
 			UIViewRoot root = context.getViewRoot();
 
@@ -944,8 +944,9 @@ public class LoginBean implements Serializable {
 					&& (root.getViewId().contains("project1")
 							|| root.getViewId().contains("test") || root
 							.getViewId().contains("stats"))) {
-				facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-								"Please Select Project", null);
+				facesMessage =  MessageFactory.getMessage(
+						"dev.nullProject.label", FacesMessage.SEVERITY_ERROR,
+						"Project");
 				FacesContext.getCurrentInstance().getExternalContext()
 						.redirect(path + "/pages/main.jsf?faces-redirect=true");
 
@@ -1188,15 +1189,17 @@ public class LoginBean implements Serializable {
 
 	}
 
-	public void updateGrowl() {
+	public void updateGrowl(ComponentSystemEvent e){
 		
 		if(facesMessage != null)
-		{
-			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-			facesMessage = null;
+		{	
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);		
+			RequestContext.getCurrentInstance().execute("updateGrowl()");
+			facesMessage =null;
 		}
 
 	}
+	
 
 	public UIComponent findComponent(final String id) {
 

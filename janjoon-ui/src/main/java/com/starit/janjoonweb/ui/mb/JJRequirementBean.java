@@ -25,6 +25,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.SelectableDataModel;
@@ -40,6 +41,7 @@ import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
+import com.starit.janjoonweb.domain.JJChapterService;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProduct;
@@ -57,6 +59,7 @@ import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTeststepService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.ReadXMLFile;
 import com.starit.janjoonweb.ui.mb.util.RequirementUtil;
 
 @RooSerializable
@@ -900,15 +903,14 @@ public class JJRequirementBean {
 		reqtestCases = jJTestcaseService.getJJtestCases(requirement);
 		reqSelectedtestCases = reqtestCases;
 	}
-	
-	public void requirementInfo() throws IOException 
-	{
-	
-//		String url=FacesContext.getCurrentInstance().getExternalContext()
-//				.getRequestContextPath()
-//				+ "/pages/requirement.jsf?requirement="
-//				+ id
-//				+ "&faces-redirect=true";
+
+	public void requirementInfo() throws IOException {
+
+		// String url=FacesContext.getCurrentInstance().getExternalContext()
+		// .getRequestContextPath()
+		// + "/pages/requirement.jsf?requirement="
+		// + id
+		// + "&faces-redirect=true";
 		FacesContext
 				.getCurrentInstance()
 				.getExternalContext()
@@ -916,11 +918,10 @@ public class JJRequirementBean {
 						FacesContext.getCurrentInstance().getExternalContext()
 								.getRequestContextPath()
 								+ "/pages/requirement.jsf?requirement="
-								+ requirement.getId()
-								+ "&faces-redirect=true");
-		
-//		RequestContext context = RequestContext.getCurrentInstance();
-//		context.execute("window.open('"+url+"', '_newtab')");
+								+ requirement.getId() + "&faces-redirect=true");
+
+		// RequestContext context = RequestContext.getCurrentInstance();
+		// context.execute("window.open('"+url+"', '_newtab')");
 	}
 
 	private void deleteTasksAndTestcase(JJRequirement requirement) {
@@ -1328,7 +1329,7 @@ public class JJRequirementBean {
 
 							elements = getSortedElements(null,
 									requirement.getProject(),
-									requirement.getCategory(), false);
+									requirement.getCategory(), false,jJChapterService,jJRequirementService);
 							if (elements.isEmpty()) {
 								importChapter.setOrdering(0);
 							} else {
@@ -1349,7 +1350,7 @@ public class JJRequirementBean {
 						importRequirement.setChapter(importChapter);
 						elements = getSortedElements(importChapter,
 								requirement.getProject(),
-								requirement.getCategory(), false);
+								requirement.getCategory(), false,jJChapterService,jJRequirementService);
 						if (elements.isEmpty()) {
 							importRequirement.setOrdering(0);
 						} else {
@@ -1361,7 +1362,7 @@ public class JJRequirementBean {
 						importRequirement.setChapter(chapter);
 						elements = getSortedElements(chapter,
 								requirement.getProject(),
-								requirement.getCategory(), false);
+								requirement.getCategory(), false,jJChapterService,jJRequirementService);
 						if (elements.isEmpty()) {
 							importRequirement.setOrdering(0);
 						} else {
@@ -1652,11 +1653,15 @@ public class JJRequirementBean {
 	}
 
 	public boolean getDisabledEdit(JJRequirement requirement) {
-		if (requirement.getStatus().getName().equalsIgnoreCase("RELEASED")) {
-			return true;
-		} else {
-			return false;
-		}
+		if(requirement.getStatus() != null)
+		{
+			if (requirement.getStatus().getName().equalsIgnoreCase("RELEASED")) {
+				return true;
+			} else {
+				return false;
+			}
+		}else return false;
+		
 	}
 
 	public void handleSelectProject() {
@@ -2657,7 +2662,7 @@ public class JJRequirementBean {
 			if (requirementChapter != null) {
 				elements = getSortedElements(requirementChapter,
 						requirement.getProject(), requirement.getCategory(),
-						false);
+						false,jJChapterService,jJRequirementService);
 
 				if (elements.isEmpty()) {
 					requirement.setOrdering(0);
@@ -2694,7 +2699,7 @@ public class JJRequirementBean {
 
 						elements = getSortedElements(requirement.getChapter(),
 								requirement.getProject(),
-								requirement.getCategory(), false);
+								requirement.getCategory(), false,jJChapterService,jJRequirementService);
 
 						subElements = elements.tailMap(requirementOrder);
 
@@ -2702,7 +2707,7 @@ public class JJRequirementBean {
 
 						elements = getSortedElements(requirementChapter,
 								requirement.getProject(),
-								requirement.getCategory(), false);
+								requirement.getCategory(), false,jJChapterService,jJRequirementService);
 
 						if (elements.isEmpty()) {
 							requirement.setOrdering(0);
@@ -2827,7 +2832,7 @@ public class JJRequirementBean {
 
 					elements = getSortedElements(requirementChapter,
 							requirement.getProject(),
-							requirement.getCategory(), false);
+							requirement.getCategory(), false,jJChapterService,jJRequirementService);
 					if (elements.isEmpty()) {
 						requirement.setOrdering(0);
 					} else {
@@ -2876,7 +2881,7 @@ public class JJRequirementBean {
 
 					elements = getSortedElements(requirement.getChapter(),
 							requirement.getProject(),
-							requirement.getCategory(), false);
+							requirement.getCategory(), false,jJChapterService,jJRequirementService);
 
 					subElements = elements.tailMap(requirementOrder);
 
@@ -3017,8 +3022,8 @@ public class JJRequirementBean {
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
-	private SortedMap<Integer, Object> getSortedElements(JJChapter parent,
-			JJProject project, JJCategory category, boolean onlyActif) {
+	public static SortedMap<Integer, Object> getSortedElements(JJChapter parent,
+			JJProject project, JJCategory category, boolean onlyActif,JJChapterService jJChapterService,JJRequirementService jJRequirementService) {
 
 		long t = System.currentTimeMillis();
 		SortedMap<Integer, Object> elements = new TreeMap<Integer, Object>();
@@ -3199,6 +3204,39 @@ public class JJRequirementBean {
 			requirement = ((RequirementUtil) event.getObject())
 					.getRequirement();
 			editRequirement();
+		}
+
+	}
+
+	public void handleImportXML(FileUploadEvent event) throws IOException {
+
+		JJProduct prod = ((JJProductBean) LoginBean.findBean("jJProductBean"))
+				.getProduct();
+		JJVersion vers = ((JJVersionBean) LoginBean.findBean("jJVersionBean"))
+				.getVersion();
+		JJProject proj = ((JJProjectBean) LoginBean.findBean("jJProjectBean"))
+				.getProject();
+
+		List<JJRequirement> requirements = ReadXMLFile.getRequirementsFromXml(
+				event.getFile().getInputstream(), jJCategoryService,jJRequirementService,
+				jJChapterService , proj, null, prod, vers,jJStatusService.getOneStatus("NEW", "Requirement",
+						true));
+
+		if (requirements.isEmpty()) {
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"No Requirement Found in This File",
+					FacesMessage.SEVERITY_WARN, "Requirement");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		} else {
+			for (JJRequirement r : requirements) {
+				saveJJRequirement(r);
+				updateDataTable(r, 1);
+			}
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					requirements.size() + " Requirement Successfuly added",
+					FacesMessage.SEVERITY_INFO, "Requirement");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+			
 		}
 
 	}
@@ -3613,9 +3651,6 @@ public class JJRequirementBean {
 			return req.getRequirement().getId().toString();
 		}
 
-		// import as XML
-		private StreamedContent file;
-
 		public StreamedContent getFile() {
 
 			String buffer = "<category name=\"" + nameDataModel.toUpperCase()
@@ -3636,9 +3671,16 @@ public class JJRequirementBean {
 							+ ((Element) arrList.get(i)).toString();
 				}
 
-				description = description.replace("[", " ").replace("]", "").replace("&#39;", "'").replace("\"","'").replace("&&", "and").
-						replace("<", "").replace(">", "");
-				
+				description = description.replace("[", " ").replace("]", "")
+						.replace("&#39;", "'").replace("\"", "'")
+						.replace("&&", "and").replace("<", "").replace(">", "");
+				String note = rrr.getRequirement().getNote();
+				if (note != null)
+					note = note.replace("[", " ").replace("]", "")
+							.replace("&#39;", "'").replace("\"", "'")
+							.replace("&&", "and").replace("<", "")
+							.replace(">", "");
+
 				String chapterName = "";
 				if (rrr.getRequirement().getChapter() != null)
 					chapterName = rrr.getRequirement().getChapter().getName();
@@ -3649,18 +3691,17 @@ public class JJRequirementBean {
 						+ System.getProperty("line.separator")
 						+ "enabled=\"1\""
 						+ System.getProperty("line.separator") + "note=\""
-						+ rrr.getRequirement().getNote() + "\""
-						+ System.getProperty("line.separator") + "chapter=\""
-						+ chapterName + "\" />";
+						+ note + "\"" + System.getProperty("line.separator")
+						+ "chapter=\"" + chapterName + "\" />";
 				buffer = buffer + System.getProperty("line.separator") + s;
 			}
 			buffer = buffer + System.getProperty("line.separator")
 					+ "</category>";
 			InputStream stream = new ByteArrayInputStream(buffer.getBytes());
-			file = new DefaultStreamedContent(stream, "xml",
+
+			return new DefaultStreamedContent(stream, "xml",
 					nameDataModel.toUpperCase() + "-Spec.xml");
-			//ReadXMLFile.getRequirementsFromXml(stream);
-			return file;
+
 		}
 
 	}

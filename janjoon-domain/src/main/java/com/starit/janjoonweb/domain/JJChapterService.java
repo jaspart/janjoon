@@ -21,5 +21,7 @@ public interface JJChapterService {
 
 	public List<JJChapter> getChildrenOfParentChapter(JJChapter parent,
 			boolean onlyActif, boolean sortedByOrder);
+	
+	public JJChapter getChapterByName(JJCategory category,String name,JJProject project,JJCompany company);
 
 }

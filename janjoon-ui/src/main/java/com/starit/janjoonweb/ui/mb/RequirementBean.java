@@ -409,8 +409,7 @@ public class RequirementBean {
 					.equalsIgnoreCase("technical"))
 				technicalRequirements = null;
 
-		} catch (NumberFormatException ex) {
-			System.err.println("NumberFormatException");
+		} catch (NumberFormatException ex) {			
 		}
 
 	}

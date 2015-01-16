@@ -62,7 +62,7 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		predicates.add(criteriaBuilder.equal(from.get("name"), name));
+		predicates.add(criteriaBuilder.equal(criteriaBuilder.upper(from.<String>get("name")), name.toUpperCase()));
 
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
