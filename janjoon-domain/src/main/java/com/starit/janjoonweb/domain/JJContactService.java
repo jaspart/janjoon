@@ -10,6 +10,8 @@ public interface JJContactService {
 
 	public JJContact getContactByEmail(String email, boolean onlyActif);
 
+	public JJContact getContactById(Long id);
+
 	public List<JJContact> getContacts(boolean onlyActif);
 
 	public boolean saveJJContactTransaction(JJContact contact);

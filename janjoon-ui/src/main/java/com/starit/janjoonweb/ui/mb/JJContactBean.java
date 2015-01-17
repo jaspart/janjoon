@@ -3,13 +3,20 @@ package com.starit.janjoonweb.ui.mb;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.List;
+import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+import javax.annotation.PostConstruct;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -584,4 +591,21 @@ public class JJContactBean {
 		return jJConfigurationService.getDialogConfig("AdminUserDialog",
 				"admin.user.create.saveandclose");
 	}
+	
+	@PostConstruct
+	public StreamedContent getPicture() throws IOException {
+		FacesContext context = FacesContext.getCurrentInstance();
+		for(Map.Entry<String, String> entry : context.getExternalContext().getRequestParameterMap().entrySet()) {
+			System.out.println("Displays ==== "+entry.getKey()+" : "+entry.getValue());
+		}
+		String contactId = context.getExternalContext().getRequestParameterMap().get("contactId");
+		System.out.println("Displays contactId : "+contactId);
+		if(contactId==null) {
+			contactId="1";
+		}
+		JJContact contact = jJContactService.getContactById(Long.valueOf(contactId));
+		System.out.println("Displays picture : "+contact.getPicture());
+		return new DefaultStreamedContent(new ByteArrayInputStream(contact.getPicture().getBytes()));
+	}
+
 }

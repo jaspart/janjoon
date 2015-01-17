@@ -95,7 +95,7 @@ field string --fieldName email --regexp "[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+
 field number --fieldName ldap --type java.lang.Integer
 field string --fieldName firstname --sizeMax 100 --notNull
 field date --fieldName dateofbirth --type java.util.Date
-field string --fieldName picture --sizeMax 25
+field string --fieldName picture
 field reference --fieldName job --type ~.JJJob
 field reference --fieldName manager --type ~.JJContact
 field reference --fieldName lastProject --type ~.JJProject

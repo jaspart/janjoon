@@ -80,7 +80,7 @@ public class JJContact  {
 	@DateTimeFormat(style = "M-")
 	private Date dateofbirth;
 
-	@Size(max = 25)
+	@Lob
 	private String picture;
 
 	@ManyToOne

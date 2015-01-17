@@ -45,9 +45,14 @@
 								placeholder="#{messages.main_communication_search_watermark}" />
 						</p:outputPanel>
 					</f:facet-->
-					<p:column>
-						<p:graphicImage library="images" name="default-user-2.jpg"
-							height="37px" alt="Sample user image" style="float: left;" />
+					<p:column style="width: 10%;min-width: 180px !important; ">
+						<!--p:graphicImage library="images" name="default-user-2.jpg"
+							height="37px" alt="Sample user image" style="float: left;" /-->
+						<h:outputText value="#{mes.createdBy.id}" />
+						<!--p:graphicImage style="width:80px; height:80px" value="#{mes.createdBy.picture}" /-->
+						<p:graphicImage style="width:80px; height:80px" value="#{jJContactBean.picture}">
+							<f:param id="contactId" name="contactId" value="#{mes.createdBy.id}" />
+						</p:graphicImage>
 					</p:column>
 					<p:column style="width: 10%;min-width: 180px !important; ">
 						<h:outputText

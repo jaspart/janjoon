@@ -325,22 +325,25 @@ a:visited {
 
 .TestcaseExecSuccess {
 	background-color: #77F177 !important;
-	background-image: -webkit-linear-gradient(top, #ffffff, #6DEB62)
-		!important;
+	background-image: -webkit-linear-gradient(top, #ffffff, #6DEB62) !important;
 	background-image: -moz-linear-gradient(top, #ccc, #6DEB62) !important;
 }
 
 .TestcaseExecFailed {
 	background-color: #F17777 !important;
-	background-image: -webkit-linear-gradient(top, #ffffff, #EB7D62)
-		!important;
+	background-image: -webkit-linear-gradient(top, #ffffff, #EB7D62) !important;
 	background-image: -moz-linear-gradient(top, #ffffff, #EB7D62) !important;
 }
 
 div.timeline-axis-text {
 	top: 10px;
 }
-
+div.timeline-axis-grid {
+	top: 200px;
+}
+div.timeline-event {
+	top: 500px;
+}
 div.timeline-event-range {
 	height: 45px !important;
 }

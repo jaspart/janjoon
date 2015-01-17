@@ -50,6 +50,31 @@ public class JJContactServiceImpl implements JJContactService {
 			return result.getResultList().get(0);
 
 	}
+	@Override
+	
+	public JJContact getContactById(Long id) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJContact> criteriaQuery = criteriaBuilder
+				.createQuery(JJContact.class);
+
+		Root<JJContact> from = criteriaQuery.from(JJContact.class);
+
+		CriteriaQuery<JJContact> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(from.get("id"), id));
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+		TypedQuery<JJContact> result = entityManager.createQuery(select);
+		if (result.getResultList().isEmpty())
+			return null;
+		else
+			return result.getResultList().get(0);
+
+	}
 
 	@Override
 	public List<JJContact> getContacts(boolean onlyActif) {
@@ -86,8 +111,7 @@ public class JJContactServiceImpl implements JJContactService {
 
 	}
 	
-	public List<JJContact> load(JJCompany company,MutableInt size,int first, int pageSize)
-	{
+	public List<JJContact> load(JJCompany company,MutableInt size,int first, int pageSize) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJContact> criteriaQuery = criteriaBuilder
 				.createQuery(JJContact.class);

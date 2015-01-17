@@ -90,7 +90,6 @@ display: none;
 					<p:row>
 						<p:column colspan="2">
 							<p:outputLabel for="name" value="#{messages.contact_name}" />
-
 						</p:column>
 						<p:column colspan="2">
 							<p:inputText id="name" value="#{jJContactBean.contactUtil.name}"
@@ -179,8 +178,8 @@ display: none;
 								style="width:150px;height:150px" showCheckbox="true">
 								<f:selectItems value="#{jJContactBean.categories}" var="c"
 									itemLabel="#{c.name}" itemValue="#{c}" />
-								<f:validator validatorId="listCategoriesValidator" />					
-           			</p:selectManyMenu>
+								<f:validator validatorId="listCategoriesValidator" />
+							</p:selectManyMenu>
 						</p:column>
 					</p:row>
 					<p:row>
