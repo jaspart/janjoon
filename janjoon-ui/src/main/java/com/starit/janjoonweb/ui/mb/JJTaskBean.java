@@ -1,6 +1,7 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,6 +47,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.lowagie.text.Element;
+import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
@@ -1839,14 +1842,28 @@ public class JJTaskBean {
 					if (mailingService == null)
 						mailingService = new MailingService();
 
-					String subject = "";
+					StringReader description = null ;
 					if (ttt.getRequirement() != null)
-						subject = ttt.getRequirement().getDescription();
+						description = new StringReader (ttt.getRequirement().getDescription());
 					else if (ttt.getBug() != null)
-						subject = ttt.getBug().getDescription();
+						description = new StringReader (ttt.getBug().getDescription());
 					else if (ttt.getTestcase() != null)
-						subject = ttt.getTestcase().getDescription();
+						description = new StringReader (ttt.getTestcase().getDescription());
 
+					String subject = "";					
+					List arrList = null;
+					try {
+						arrList = HTMLWorker.parseToList(description, null);
+					} catch (Exception e) {
+
+					}
+					for (int i = 0; i < arrList.size(); ++i) {
+						subject = subject
+								+ ((Element) arrList.get(i)).toString();
+					}
+
+					subject = subject.replace("[", " ").replace("]", "");
+					
 					for (JJContact c : jJPermissionService.areAuthorized(
 							contact.getCompany(), null, project, product,
 							"sprintContact")) {

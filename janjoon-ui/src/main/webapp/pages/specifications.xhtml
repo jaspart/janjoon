@@ -16,10 +16,10 @@
 
 			<ui:repeat value="#{jJRequirementBean.categoryList}" var="category">
 				<p:commandButton value="#{category.name}" update=":specForm @form"
-					rendered="#{!loginBean.mobile}" 
+					rendered="#{!loginBean.mobile}"
 					action="#{jJRequirementBean.updateTemplate(category.id)}"
 					onstart="PF('blockUIWidget').block()" title="#{category.name}"
-					oncomplete="PF('blockUIWidget').unblock()" />					
+					oncomplete="PF('blockUIWidget').unblock()" />
 			</ui:repeat>
 
 			<p:commandButton value="&#9776;" id="overlayPanel"
@@ -54,8 +54,7 @@
 
 			<p:commandButton value="#{messages.specification_import_button} XML"
 				style="float: right;" disabled="#{jJProjectBean.project == null}"
-				update=":importXMLForm"
-				onstart="PF('blockUIWidget').block()"
+				update=":importXMLForm" onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock();PF('requirementImportXMLDialogWidget').show()" />
 
 			<p:commandButton id="reloadBtn" icon="ui-icon-refresh"
@@ -431,9 +430,9 @@
 				<h:form id="importXMLForm">
 					<p:fileUpload
 						fileUploadListener="#{jJRequirementBean.handleImportXML}"
-						mode="advanced" dragDropSupport="false" update="messages :specForm :categoryForm"
-						sizeLimit="100000" fileLimit="3"
-						allowTypes="/(\.|\/)(xml)$/" />
+						mode="advanced" dragDropSupport="false"
+						update="messages :specForm :categoryForm" sizeLimit="100000"
+						fileLimit="3" allowTypes="/(\.|\/)(xml)$/" />
 					<p:growl id="messages" showDetail="true" />
 				</h:form>
 			</p:outputPanel>

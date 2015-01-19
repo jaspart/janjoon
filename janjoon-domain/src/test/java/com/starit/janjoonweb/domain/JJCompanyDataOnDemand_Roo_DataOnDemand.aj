@@ -92,10 +92,7 @@ privileged aspect JJCompanyDataOnDemand_Roo_DataOnDemand {
     }
     
     public void JJCompanyDataOnDemand.setLogo(JJCompany obj, int index) {
-        String logo = "logo_" + index;
-        if (logo.length() > 200) {
-            logo = logo.substring(0, 200);
-        }
+        byte[] logo = String.valueOf(index).getBytes();
         obj.setLogo(logo);
     }
     

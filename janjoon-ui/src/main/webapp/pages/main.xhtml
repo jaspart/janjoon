@@ -50,9 +50,11 @@
 							height="37px" alt="Sample user image" style="float: left;" /-->
 						<h:outputText value="#{mes.createdBy.id}" />
 						<!--p:graphicImage style="width:80px; height:80px" value="#{mes.createdBy.picture}" /-->
-						<p:graphicImage style="width:80px; height:80px" value="#{jJContactBean.picture}">
-							<f:param id="contactId" name="contactId" value="#{mes.createdBy.id}" />
+						<p:graphicImage style="width:80px; height:80px"
+							value="#{imageStreamer.image}">
+							<f:param name="contactId" value="#{mes.createdBy.id}" />
 						</p:graphicImage>
+
 					</p:column>
 					<p:column style="width: 10%;min-width: 180px !important; ">
 						<h:outputText
@@ -198,7 +200,8 @@
 
 		<p:panel id="taskPanel" rendered="#{loginBean.enable}"
 			header="To do Tasks">
-			<f:event listener="#{jJTaskBean.initToDoTasks}" type="preRenderComponent" />
+			<f:event listener="#{jJTaskBean.initToDoTasks}"
+				type="preRenderComponent" />
 			<h:form id="taskForm">
 				<p:dataTable id="taskTable" value="#{jJTaskBean.toDoTasks}"
 					rowKey="#{task.id}" var="task" widgetVar="taskTable"
@@ -286,10 +289,11 @@
 					emptyMessage="There is no Requirement non couvered,See all in Spec View">
 
 					<p:column headerText="Specification">
-<!-- 						<h:outputText value="#{req}" converter="JJRequirementConverter" /> -->
-						<p:commandLink target="_blank" value="#{req.name}" action="#{jJRequirementBean.requirementInfo}" ajax="false">
-						<f:setPropertyActionListener value="#{req}"
-										target="#{jJRequirementBean.requirement}" />
+						<!-- 						<h:outputText value="#{req}" converter="JJRequirementConverter" /> -->
+						<p:commandLink target="_blank" value="#{req.name}"
+							action="#{jJRequirementBean.requirementInfo}" ajax="false">
+							<f:setPropertyActionListener value="#{req}"
+								target="#{jJRequirementBean.requirement}" />
 						</p:commandLink>
 					</p:column>
 

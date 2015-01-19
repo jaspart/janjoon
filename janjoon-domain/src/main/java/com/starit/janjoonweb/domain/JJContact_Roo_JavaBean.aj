@@ -138,11 +138,11 @@ privileged aspect JJContact_Roo_JavaBean {
         this.dateofbirth = dateofbirth;
     }
     
-    public String JJContact.getPicture() {
+    public byte[] JJContact.getPicture() {
         return this.picture;
     }
     
-    public void JJContact.setPicture(String picture) {
+    public void JJContact.setPicture(byte[] picture) {
         this.picture = picture;
     }
     

@@ -30,7 +30,7 @@ public class JJCompanyBean {
 	private List<JJCompany> companies;
 	private String headerMessage;
 	private JJCompany companie;
-	private String logo;
+	private byte[] logo;
 
 	public String getCalendar() {
 		return calendar;
@@ -103,11 +103,11 @@ public class JJCompanyBean {
 		this.companies = companies;
 	}
 
-	public String getLogo() {
+	public byte[] getLogo() {
 		return logo;
 	}
 
-	public void setLogo(String logo) {
+	public void setLogo(byte[] logo) {
 		this.logo = logo;
 	}
 

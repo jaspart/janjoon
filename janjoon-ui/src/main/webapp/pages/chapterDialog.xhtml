@@ -124,42 +124,42 @@
 				<p:panelGrid style="margin-top:10px;height: 400px;width: 895px;">
 					<p:row>
 						<p:column colspan="3">
-<!-- 							<p:scrollPanel style="height:350px;" mode="native"> -->
-								<p:tree id="leftTreeIncorporated"
-									value="#{jJChapterBean.leftRoot}" var="nodeLeft"
-									selectionMode="single" style="width: 350px !important;"
-									selection="#{jJChapterBean.selectedLeftNode}" draggable="true"
-									droppable="true" dragdropScope="demo" cache="false">
-									<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
-										update=":chapterDialogForm"
-										onstart="PF('chapterBlockUIWidget').block()"
-										oncomplete="PF('chapterBlockUIWidget').unblock();PF('chapterTabView').select(1);" />
-									<p:treeNode>
-										<h:outputText value="#{nodeLeft}" />
-									</p:treeNode>
-								</p:tree>
-<!-- 							</p:scrollPanel> -->
+							<!-- 							<p:scrollPanel style="height:350px;" mode="native"> -->
+							<p:tree id="leftTreeIncorporated"
+								value="#{jJChapterBean.leftRoot}" var="nodeLeft"
+								selectionMode="single" style="width: 350px !important;"
+								selection="#{jJChapterBean.selectedLeftNode}" draggable="true"
+								droppable="true" dragdropScope="demo" cache="false">
+								<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
+									update=":chapterDialogForm"
+									onstart="PF('chapterBlockUIWidget').block()"
+									oncomplete="PF('chapterBlockUIWidget').unblock();PF('chapterTabView').select(1);" />
+								<p:treeNode>
+									<h:outputText value="#{nodeLeft}" />
+								</p:treeNode>
+							</p:tree>
+							<!-- 							</p:scrollPanel> -->
 						</p:column>
 						<p:column colspan="3">
 							<p:graphicImage alt="Transfer" library="images"
 								name="transfer.png" />
 						</p:column>
 						<p:column colspan="3">
-<!-- 							<p:scrollPanel style="height:350px;" mode="native"> -->
-								<p:tree id="RightTreeIncorporated"
-									value="#{jJChapterBean.rightRoot}" var="nodeRight"
-									selectionMode="single" style="width: 350px !important;"
-									selection="#{jJChapterBean.selectedRightNode}" draggable="true"
-									droppable="true" dragdropScope="demo" cache="false">
-									<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
-										update=":chapterDialogForm"
-										onstart="PF('chapterBlockUIWidget').block()"
-										oncomplete="PF('chapterBlockUIWidget').unblock();PF('chapterTabView').select(1);" />
-									<p:treeNode>
-										<h:outputText value="#{nodeRight}" />
-									</p:treeNode>
-								</p:tree>
-<!-- 							</p:scrollPanel> -->
+							<!-- 							<p:scrollPanel style="height:350px;" mode="native"> -->
+							<p:tree id="RightTreeIncorporated"
+								value="#{jJChapterBean.rightRoot}" var="nodeRight"
+								selectionMode="single" style="width: 350px !important;"
+								selection="#{jJChapterBean.selectedRightNode}" draggable="true"
+								droppable="true" dragdropScope="demo" cache="false">
+								<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
+									update=":chapterDialogForm"
+									onstart="PF('chapterBlockUIWidget').block()"
+									oncomplete="PF('chapterBlockUIWidget').unblock();PF('chapterTabView').select(1);" />
+								<p:treeNode>
+									<h:outputText value="#{nodeRight}" />
+								</p:treeNode>
+							</p:tree>
+							<!-- 							</p:scrollPanel> -->
 						</p:column>
 					</p:row>
 				</p:panelGrid>

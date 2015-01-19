@@ -13,11 +13,12 @@
 	-webkit-padding-start: 15px;
 }
 
-.ui-fileupload-progress{
-display: none;
+.ui-fileupload-progress {
+	display: none;
 }
-.ui-fileupload-cancel{
-display: none;
+
+.ui-fileupload-cancel {
+	display: none;
 }
 
 .ui-fileupload-files {
@@ -68,9 +69,10 @@ display: none;
 						</p:row>
 						<p:row>
 							<p:column colspan="4">
-								<p:graphicImage value="#{loginBean.pictureUrl}"
-									rendered="#{loginBean.pictureUrl != null}"
-									style="height: 100px;width: 100px;" />
+								<p:graphicImage style="width:100px; height:100px"
+									value="#{imageStreamer.image}">
+									<f:param name="contactId" value="#{loginBean.contact.id}" />
+								</p:graphicImage>
 							</p:column>
 						</p:row>
 					</f:facet>

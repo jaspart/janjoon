@@ -131,6 +131,14 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 		return result.getResultList();
 
 	}
+	
+	public Integer getMaxOrdering(JJRequirement requirement)
+	{
+		Integer r=(Integer) entityManager.createQuery("select max(e.ordering) from JJTestcase e Where e.requirement.chapter = :c").
+				setParameter("c", requirement.getChapter()).getSingleResult();
+		
+		return r+1;
+	}
 
 	@Override
 	public void saveTestcases(Set<JJTestcase> testcases) {

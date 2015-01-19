@@ -19,11 +19,15 @@
 
 			<h:link outcome="main">
 				<p:graphicImage library="images" name="janjoon_logo.png"
-					rendered="#{loginBean.logoUrl == null}" styleClass="banner"
-					alt="JanJoon Home" style="float: left;" />
-				<p:graphicImage value="#{loginBean.logoUrl}"
-					rendered="#{loginBean.logoUrl != null}" styleClass="banner"
-					style="float: left;height: 100px;width: 100px;" />
+					rendered="#{loginBean.contact.company.logo == null}"
+					styleClass="banner" alt="JanJoon Home" style="float: left;" />
+
+
+				<p:graphicImage style="width:100px; height:100px"
+					value="#{imageStreamer.image}">
+					<f:param name="contactId" value="#{loginBean.contact.id}" />
+					<f:param name="company" value="true" />
+				</p:graphicImage>
 			</h:link>
 
 
@@ -85,9 +89,9 @@
 					<p:splitButton
 						value="#{loginBean.contact.firstname} #{loginBean.contact.name}"
 						rendered="#{loginBean.enable}" style="right: 0px;">
-						<p:graphicImage value="#{loginBean.pictureUrl}"
-							rendered="#{loginBean.pictureUrl != null}"
-							style="float: left;height: 50px;width: 50px;" />
+						<!-- 						<p:graphicImage value="#{loginBean.pictureUrl}" -->
+						<!-- 							rendered="#{loginBean.pictureUrl != null}" -->
+						<!-- 							style="float: left;height: 50px;width: 50px;" /> -->
 						<p:menuitem value="#{messages.header_config_link}"
 							icon="ui-icon-person"
 							url="/pages/contactConfig.jsf?faces-redirect=true" />

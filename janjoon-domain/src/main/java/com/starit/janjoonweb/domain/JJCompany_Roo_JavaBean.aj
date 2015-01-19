@@ -66,11 +66,11 @@ privileged aspect JJCompany_Roo_JavaBean {
         this.enabled = enabled;
     }
     
-    public String JJCompany.getLogo() {
+    public byte[] JJCompany.getLogo() {
         return this.logo;
     }
     
-    public void JJCompany.setLogo(String logo) {
+    public void JJCompany.setLogo(byte[] logo) {
         this.logo = logo;
     }
     

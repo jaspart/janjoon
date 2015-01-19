@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -95,9 +96,7 @@ public class LoginBean implements Serializable {
 	private boolean loadMain = false;
 	private JJContact contact;
 	private boolean enable = false;
-	private int activeTabAdminIndex;
-	private StreamedContent logoUrl;
-	private StreamedContent pictureUrl;
+	private int activeTabAdminIndex;	
 	private int activeTabProjectIndex;
 	private int menuIndex;
 
@@ -326,50 +325,6 @@ public class LoginBean implements Serializable {
 		this.showMarquee = showMarquee;
 	}
 
-	public StreamedContent getLogoUrl() {
-
-		if (getContact().getCompany().getLogo() != null) {
-			try {
-				logoUrl = new DefaultStreamedContent(new FileInputStream(
-						new File(System.getProperty("user.home")
-								+ System.getProperty("file.separator")
-								+ "CompaniesLogo"
-								+ System.getProperty("file.separator")
-								+ contact.getCompany().getLogo())));
-			} catch (FileNotFoundException e) {
-				logoUrl = null;
-			}
-		}
-
-		return logoUrl;
-	}
-
-	public void setLogoUrl(StreamedContent logoUrl) {
-
-		this.logoUrl = logoUrl;
-	}
-
-	public StreamedContent getPictureUrl() {
-
-		if (getContact().getPicture() != null) {
-			try {
-				pictureUrl = new DefaultStreamedContent(new FileInputStream(
-						new File(System.getProperty("user.home")
-								+ System.getProperty("file.separator")
-								+ "ContactPhoto"
-								+ System.getProperty("file.separator")
-								+ contact.getPicture())));
-			} catch (FileNotFoundException e) {
-				pictureUrl = null;
-			}
-		}
-		return pictureUrl;
-	}
-
-	public void setPictureUrl(StreamedContent pictureUrl) {
-		this.pictureUrl = pictureUrl;
-	}
-
 	public String logout() {
 		FacesContext fContext = FacesContext.getCurrentInstance();
 		logger.info("Contact logged out");
@@ -408,22 +363,7 @@ public class LoginBean implements Serializable {
 			
 			if (UsageChecker.check()) {
 				contact = jJContactService.getContactByEmail(username, true);
-				contact = jJContactService.findJJContact(contact.getId());
-				if (contact.getCompany().getLogo() != null) {
-					try {
-						logoUrl = new DefaultStreamedContent(
-								new FileInputStream(new File(System
-										.getProperty("user.home")
-										+ System.getProperty("file.separator")
-										+ "CompaniesLogo"
-										+ System.getProperty("file.separator")
-										+ contact.getCompany().getLogo())));
-
-					} catch (FileNotFoundException e) {
-						logoUrl = null;
-					}
-
-				}
+				contact = jJContactService.findJJContact(contact.getId());			
 
 				FacesContext fContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) fContext

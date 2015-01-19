@@ -50,8 +50,8 @@ public class JJCompany  {
 
 	private Boolean enabled;
 
-	@Size(max = 200)
-	private String logo;
+	@Lob
+	private byte[] logo;
 
 	@Size(max = 200)
 	private String banner;

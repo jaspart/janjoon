@@ -30,6 +30,7 @@ import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
+import org.xml.sax.SAXParseException;
 
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Chunk;
@@ -70,9 +71,9 @@ import com.starit.janjoonweb.ui.mb.util.RequirementUtil;
 @RooSerializable
 @RooJsfManagedBean(entity = JJTestcase.class, beanName = "jJTestcaseBean")
 public class JJTestcaseBean {
-
+	
 	@Autowired
-	public JJConfigurationService jJConfigurationService;
+	private JJConfigurationService jJConfigurationService;
 
 	public void setjJConfigurationService(
 			JJConfigurationService jJConfigurationService) {
@@ -80,21 +81,21 @@ public class JJTestcaseBean {
 	}
 
 	@Autowired
-	JJCategoryService jJCategoryService;
+	private JJCategoryService jJCategoryService;
 
 	public void setjJCategoryService(JJCategoryService jJCategoryService) {
 		this.jJCategoryService = jJCategoryService;
 	}
 
 	@Autowired
-	JJChapterService jJChapterService;
+	private JJChapterService jJChapterService;
 
 	public void setjJChapterService(JJChapterService jJChapterService) {
 		this.jJChapterService = jJChapterService;
 	}
 
 	@Autowired
-	JJTestcaseexecutionService jJTestcaseexecutionService;
+	private JJTestcaseexecutionService jJTestcaseexecutionService;
 
 	public void setjJTestcaseexecutionService(
 			JJTestcaseexecutionService jJTestcaseexecutionService) {
@@ -102,14 +103,14 @@ public class JJTestcaseBean {
 	}
 
 	@Autowired
-	JJTeststepService jJTeststepService;
+	private JJTeststepService jJTeststepService;
 
 	public void setjJTeststepService(JJTeststepService jJTeststepService) {
 		this.jJTeststepService = jJTeststepService;
 	}
 
 	@Autowired
-	JJTaskService jJTaskService;
+	private JJTaskService jJTaskService;
 
 	public void setjJTaskService(JJTaskService jJTaskService) {
 		this.jJTaskService = jJTaskService;
@@ -1299,38 +1300,44 @@ public class JJTestcaseBean {
 				.getProduct();
 
 		JJProject proj = ((JJProjectBean) LoginBean.findBean("jJProjectBean"))
-				.getProject();
-		List<Object> objects = ReadXMLFile.getTestcasesFromXml(event.getFile()
-				.getInputstream(), jJTestcaseService, jJCategoryService,
-				jJRequirementService, proj, prod);
-		@SuppressWarnings("unchecked")
-		List<JJTestcase> testcases = (List<JJTestcase>) objects.get(0);
-		@SuppressWarnings("unchecked")
-		List<JJTeststep> teststeps = (List<JJTeststep>) objects.get(1);
+				.getProject();		
+		try {
+			List<Object> objects = ReadXMLFile.getTestcasesFromXml(this,event.getFile()
+					.getInputstream(), jJTestcaseService, jJCategoryService,
+					jJRequirementService, proj, prod);
+			@SuppressWarnings("unchecked")
+			List<JJTestcase> testcases = (List<JJTestcase>) objects.get(0);
+			@SuppressWarnings("unchecked")
+			List<JJTeststep> teststeps = (List<JJTeststep>) objects.get(1);
 
-		if (testcases.isEmpty()) {
+			if (testcases.isEmpty()) {
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"No TestCase Found in This File",
+						FacesMessage.SEVERITY_WARN, "TestCase");
+				FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+			} else {
+				
+				for (JJTeststep s : teststeps) {
+					JJTeststepBean jJTeststepBean = ((JJTeststepBean) LoginBean
+							.findBean("jJTeststepBean"));
+					if (jJTeststepBean == null)
+						jJTeststepBean = new JJTeststepBean();
+					jJTeststepBean.saveJJTeststep(s);
+				}
+				project = null;
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						testcases.size() + " TestCase and " + teststeps.size()
+								+ " TestStep Successfuly added",
+						FacesMessage.SEVERITY_INFO, "");
+				FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+			}
+		} catch (SAXParseException e) {
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"No TestCase Found in This File",
+					"Error While Parsing File",
 					FacesMessage.SEVERITY_WARN, "TestCase");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		} else {
-			for (JJTestcase r : testcases) {
-				saveJJTestcase(r);
-			}
-			for (JJTeststep s : teststeps) {
-				JJTeststepBean jJTeststepBean = ((JJTeststepBean) LoginBean
-						.findBean("jJTeststepBean"));
-				if (jJTeststepBean == null)
-					jJTeststepBean = new JJTeststepBean();
-				jJTeststepBean.saveJJTeststep(s);
-			}
-			project = null;
-			FacesMessage facesMessage = MessageFactory.getMessage(
-					testcases.size() + " TestCase and " + teststeps.size()
-							+ " TestStep Successfuly added",
-					FacesMessage.SEVERITY_INFO, "");
-			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
+		
 
 	}
 

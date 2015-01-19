@@ -232,7 +232,7 @@
 						</f:facet>
 					</p:dataTable>
 				</p:column>
-			</p:row>			
+			</p:row>
 			<p:row>
 				<p:column rowspan="3" colspan="3">
 					<p:inputTextarea id="note" rows="3" cols="100"
@@ -252,16 +252,14 @@
 							action="#{jJRequirementBean.save}"
 							rendered="#{!loginBean.mobile}"
 							process="@this,nameReq,status,project,product,version,chapter,description,lowRequirement,mediumRequirement,highRequirement"
-							widgetVar="requirementSaveWidget"
-							update="@form" />
+							widgetVar="requirementSaveWidget" update="@form" />
 						<p:commandButton
 							value="#{messages.specification_create_save_button}"
 							onstart="PF('requirementBlockUIWidget').block()"
 							oncomplete="PF('requirementBlockUIWidget').unblock()"
 							action="#{jJRequirementBean.save}" rendered="#{loginBean.mobile}"
 							process="@this,nameReq,status,project,product,version,chapter,descriptionMobile,lowRequirement,mediumRequirement,highRequirement"
-							widgetVar="requirementSaveWidget"
-							update="@form" />
+							widgetVar="requirementSaveWidget" update="@form" />
 					</p:column>
 				</p:row>
 			</f:facet>

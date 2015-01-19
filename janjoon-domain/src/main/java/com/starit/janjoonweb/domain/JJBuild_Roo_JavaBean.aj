@@ -12,8 +12,7 @@ import com.starit.janjoonweb.domain.JJVersion;
 import java.util.Date;
 import java.util.Set;
 
-privileged aspect JJBuild_Roo_JavaBean {   
-   
+privileged aspect JJBuild_Roo_JavaBean {
     
     public void JJBuild.setName(String name) {
         this.name = name;

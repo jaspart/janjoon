@@ -35,6 +35,7 @@ import org.primefaces.model.mindmap.MindmapNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
+import org.xml.sax.SAXParseException;
 
 import com.lowagie.text.Element;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
@@ -3215,29 +3216,36 @@ public class JJRequirementBean {
 		JJVersion vers = ((JJVersionBean) LoginBean.findBean("jJVersionBean"))
 				.getVersion();
 		JJProject proj = ((JJProjectBean) LoginBean.findBean("jJProjectBean"))
-				.getProject();
-
-		List<JJRequirement> requirements = ReadXMLFile.getRequirementsFromXml(
-				event.getFile().getInputstream(), jJCategoryService,jJRequirementService,
-				jJChapterService , proj, null, prod, vers,jJStatusService.getOneStatus("NEW", "Requirement",
-						true));
-
-		if (requirements.isEmpty()) {
+				.getProject();		 
+		try {
+			List<JJRequirement> requirements = ReadXMLFile.getRequirementsFromXml(
+					event.getFile().getInputstream(), jJCategoryService,jJRequirementService,
+					jJChapterService , proj, null, prod, vers,jJStatusService.getOneStatus("NEW", "Requirement",
+							true));
+			if (requirements.isEmpty()) {
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"No Requirement Found in This File",
+						FacesMessage.SEVERITY_WARN, "Requirement");
+				FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+			} else {
+				for (JJRequirement r : requirements) {
+					saveJJRequirement(r);
+					updateDataTable(r, 1);
+				}
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						requirements.size() + " Requirement Successfuly added",
+						FacesMessage.SEVERITY_INFO, "Requirement");
+				FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+				
+			}
+		} catch (SAXParseException e) {
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"No Requirement Found in This File",
+					"Error While Parsing File",
 					FacesMessage.SEVERITY_WARN, "Requirement");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		} else {
-			for (JJRequirement r : requirements) {
-				saveJJRequirement(r);
-				updateDataTable(r, 1);
-			}
-			FacesMessage facesMessage = MessageFactory.getMessage(
-					requirements.size() + " Requirement Successfuly added",
-					FacesMessage.SEVERITY_INFO, "Requirement");
-			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-			
 		}
+
+	
 
 	}
 

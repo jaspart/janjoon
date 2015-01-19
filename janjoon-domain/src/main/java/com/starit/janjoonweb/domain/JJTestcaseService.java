@@ -21,4 +21,6 @@ public interface JJTestcaseService {
 	public List<JJTestcase> getJJtestCases(JJRequirement requirement);
 	
 	public List<String> getReqTesCases(JJRequirement requirement);
+	
+	public Integer getMaxOrdering(JJRequirement requirement);
 }

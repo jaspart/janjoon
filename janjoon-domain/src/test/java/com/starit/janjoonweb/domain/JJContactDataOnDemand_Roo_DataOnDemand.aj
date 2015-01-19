@@ -181,10 +181,7 @@ privileged aspect JJContactDataOnDemand_Roo_DataOnDemand {
     }
     
     public void JJContactDataOnDemand.setPicture(JJContact obj, int index) {
-        String picture = "picture_" + index;
-        if (picture.length() > 25) {
-            picture = picture.substring(0, 25);
-        }
+        byte[] picture = String.valueOf(index).getBytes();
         obj.setPicture(picture);
     }
     

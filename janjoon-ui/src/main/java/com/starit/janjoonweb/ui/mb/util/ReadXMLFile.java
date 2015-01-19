@@ -9,6 +9,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,14 +33,16 @@ import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.JJRequirementBean;
+import com.starit.janjoonweb.ui.mb.JJTestcaseBean;
 
 public class ReadXMLFile {
 
 	public static List<JJRequirement> getRequirementsFromXml(InputStream file,
-			JJCategoryService jJCategoryService,JJRequirementService jJRequirementService,
+			JJCategoryService jJCategoryService,
+			JJRequirementService jJRequirementService,
 			JJChapterService jJChapterService, JJProject project,
 			JJCompany company, JJProduct product, JJVersion version,
-			JJStatus status) {
+			JJStatus status) throws SAXParseException {
 		List<JJRequirement> requirements = new ArrayList<JJRequirement>();
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
@@ -71,7 +74,7 @@ public class ReadXMLFile {
 
 					Element eElement = (Element) nNode;
 					JJRequirement requirement = new JJRequirement();
-					JJChapter chapter=jJChapterService.getChapterByName(
+					JJChapter chapter = jJChapterService.getChapterByName(
 							category, eElement.getAttribute("chapter"),
 							project, company);
 					requirement.setName(eElement.getAttribute("name"));
@@ -87,8 +90,11 @@ public class ReadXMLFile {
 					requirement.setVersioning(version);
 					requirements.add(requirement);
 					requirement.setStatus(status);
-					SortedMap<Integer, Object> elements = JJRequirementBean.getSortedElements(chapter, project, category, true, jJChapterService, jJRequirementService);
-					requirement.setOrdering(elements.lastKey()+1);
+					SortedMap<Integer, Object> elements = JJRequirementBean
+							.getSortedElements(chapter, project, category,
+									true, jJChapterService,
+									jJRequirementService);
+					requirement.setOrdering(elements.lastKey() + 1);
 
 					System.out.println("name : "
 							+ eElement.getAttribute("name"));
@@ -109,15 +115,18 @@ public class ReadXMLFile {
 		return requirements;
 	}
 
-	public static List<Object> getTestcasesFromXml(InputStream stream,JJTestcaseService jjTestcaseService,
-			JJCategoryService jJCategoryService,JJRequirementService jJRequirementService,JJProject project,JJProduct product) {
-		
+	public static List<Object> getTestcasesFromXml(JJTestcaseBean testCaseBean,
+			InputStream stream, JJTestcaseService jjTestcaseService,
+			JJCategoryService jJCategoryService,
+			JJRequirementService jJRequirementService, JJProject project,
+			JJProduct product) throws SAXParseException{
+
 		List<JJTestcase> testests = new ArrayList<JJTestcase>();
-		List<JJTeststep> teststeps=new ArrayList<JJTeststep>();
+		List<JJTeststep> teststeps = new ArrayList<JJTeststep>();
 
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
-		try {
+		try {			
 			dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(stream);
 			doc.getDocumentElement().normalize();
@@ -136,61 +145,74 @@ public class ReadXMLFile {
 				System.out.println("\nCurrent Element :" + nNode.getNodeName());
 
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-					
-					
+
 					Element eElement = (Element) nNode;
-					JJRequirement requirement=jJRequirementService.getRequirementByName(category, project, product, eElement.getAttribute("Requirement"), null);
-					if(requirement != null)
-					{
-						JJTestcase testcase=new JJTestcase();
+					JJRequirement requirement = jJRequirementService
+							.getRequirementByName(category, project, product,
+									eElement.getAttribute("Requirement"), null);
+					if (requirement != null) {
+						JJTestcase testcase = new JJTestcase();
 						testcase.setName(eElement.getAttribute("name"));
-						testcase.setDescription(eElement.getAttribute("description"));
+						testcase.setDescription(eElement
+								.getAttribute("description"));
 						testcase.setRequirement(requirement);
-						testcase.setEnabled(!eElement.getAttribute("enabled").equalsIgnoreCase("0"));
-						testcase.setAutomatic(!eElement.getAttribute("Automatic").equalsIgnoreCase("0"));
-						testcase.setOrdering(jjTestcaseService.getJJtestCases(requirement).size());
-					
-					
-					
-					System.out.println("name : "
-							+ eElement.getAttribute("name"));
-					System.out.println("description : "
-							+ eElement.getAttribute("description"));
-					System.out.println("enabled : "
-							+ eElement.getAttribute("enabled"));
-					System.out.println("note : "
-							+ eElement.getAttribute("Automatic"));
-					System.out.println("chapter : "
-							+ eElement.getAttribute("Requirement"));
-					
+						testcase.setEnabled(!eElement.getAttribute("enabled")
+								.equalsIgnoreCase("0"));
+						testcase.setAutomatic(!eElement.getAttribute(
+								"Automatic").equalsIgnoreCase("0"));
+						testcase.setOrdering(jjTestcaseService
+								.getMaxOrdering(requirement));
+						testCaseBean.saveJJTestcase(testcase);
+						testcase = jjTestcaseService.findJJTestcase(testcase
+								.getId());
 
-					NodeList tList = eElement.getElementsByTagName("teststep");
-					
-					for (int i = 0; i < tList.getLength(); i++) {
+						System.out.println("name : "
+								+ eElement.getAttribute("name"));
+						System.out.println("description : "
+								+ eElement.getAttribute("description"));
+						System.out.println("enabled : "
+								+ eElement.getAttribute("enabled"));
+						System.out.println("note : "
+								+ eElement.getAttribute("Automatic"));
+						System.out.println("chapter : "
+								+ eElement.getAttribute("Requirement"));
 
-						Node tNode = tList.item(i);
+						NodeList tList = eElement
+								.getElementsByTagName("teststep");
 
-						System.out.println("\nCurrent Element :" + tNode.getNodeName());
+						for (int i = 0; i < tList.getLength(); i++) {
 
-						if (tNode.getNodeType() == Node.ELEMENT_NODE) {
-							
-							Element tElement = (Element) tNode;
-							JJTeststep teststep=new JJTeststep();
-							teststep.setTestcase(testcase);
-							teststep.setActionstep(tElement.getAttribute("actionstep"));
-							teststep.setResultstep(tElement.getAttribute("actionstep"));
-							teststep.setEnabled(true);
-							teststep.setName(teststep.getActionstep() + " "
-									+ teststep.getResultstep());
-							teststep.setDescription("This is " + teststep.getActionstep() + " "
-									+ teststep.getResultstep() + " description");
+							Node tNode = tList.item(i);
+
+							System.out.println("\nCurrent Element :"
+									+ tNode.getNodeName());
+
+							if (tNode.getNodeType() == Node.ELEMENT_NODE) {
+
+								Element tElement = (Element) tNode;
+								JJTeststep teststep = new JJTeststep();
+								teststep.setTestcase(testcase);
+								teststep.setActionstep(tElement
+										.getAttribute("actionstep"));
+								teststep.setResultstep(tElement
+										.getAttribute("actionstep"));
+								teststep.setEnabled(true);
+								teststep.setName(teststep.getActionstep() + " "
+										+ teststep.getResultstep());
+								teststep.setDescription("This is "
+										+ teststep.getActionstep() + " "
+										+ teststep.getResultstep()
+										+ " description");
+								// testests.add(testcase);
+								teststeps.add(teststep);
+								System.out.println("actionstep : "
+										+ tElement.getAttribute("actionstep"));
+								System.out.println("resultstep : "
+										+ tElement.getAttribute("resultstep"));
+							}
 							testests.add(testcase);
-							teststeps.add(teststep);
-							System.out.println("actionstep : "
-									+ tElement.getAttribute("actionstep"));
-							System.out.println("resultstep : "
-									+ tElement.getAttribute("resultstep"));
-						}}}
+						}
+					}
 				}
 			}
 
@@ -204,12 +226,13 @@ public class ReadXMLFile {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 
-		List<Object> objects=new ArrayList<Object>();
+		List<Object> objects = new ArrayList<Object>();
 		objects.add(testests);
 		objects.add(teststeps);
 		return objects;
 	}
-	
-	//ordering a completr
+
+	// ordering a completr
 }

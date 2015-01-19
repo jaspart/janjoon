@@ -81,7 +81,7 @@ public class JJContact  {
 	private Date dateofbirth;
 
 	@Lob
-	private String picture;
+	private byte[] picture;
 
 	@ManyToOne
 	private JJJob job;
