@@ -23,8 +23,8 @@
 					styleClass="banner" alt="JanJoon Home" style="float: left;" />
 
 
-				<p:graphicImage style="width:100px; height:100px"
-					value="#{imageStreamer.image}">
+				<p:graphicImage style="width:100px; height:100px;float: left;" styleClass="banner"
+					value="#{imageStreamer.image}" rendered="#{loginBean.contact.company.logo != null}">
 					<f:param name="contactId" value="#{loginBean.contact.id}" />
 					<f:param name="company" value="true" />
 				</p:graphicImage>

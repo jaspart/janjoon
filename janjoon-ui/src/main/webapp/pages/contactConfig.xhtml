@@ -59,10 +59,10 @@
 			<!-- 						sizeLimit="100000" allowTypes="/(gif|png|ico|jpeg|jpg)$/" /> -->
 			<!-- 				</h:panelGrid> -->
 			<!-- 			</h:form> -->
-			<h:form id="configForm">
+			<h:form id="configForm" style="margin-left:20px;float:left;">
 				<p:remoteCommand name="updateAdmin" />
 				<p:growl id="msg" />
-				<p:panelGrid style="margin-left:20px;float:left;">
+				<p:panelGrid>
 					<f:facet name="header">
 						<p:row>
 							<p:column colspan="4">#{loginBean.contact.name} Configuration</p:column>
@@ -193,6 +193,7 @@
 								oncomplete="PF('blockUIWidget').unblock();"
 								update=":vacationForm configForm :workdaysCalendar "
 								sizeLimit="100000" allowTypes="/(gif|png|ico|jpeg|jpg)$/" />
+
 						</p:column>
 					</p:row>
 					<f:facet name="footer">
@@ -210,9 +211,9 @@
 					</f:facet>
 				</p:panelGrid>
 			</h:form>
-			<h:form id="vacationForm">
+			<h:form id="vacationForm" style="float: left;margin-left: 20px;">
 				<p:growl id="msg" />
-				<p:panelGrid style="margin-left:20px;float:left;">
+				<p:panelGrid>
 					<f:facet name="header">
 						<p:row>
 							<p:column colspan="2">
@@ -273,8 +274,7 @@
 					</p:row>
 				</p:panelGrid>
 			</h:form>
-			<h:form id="workdaysCalendar"
-				style="margin-top: 0px;float: left;margin-left: 20px;">
+			<h:form id="workdaysCalendar" style="float: left;margin-left: 20px;">
 				<p:dataTable value="#{jJContactBean.calendarUtil.workDays}"
 					var="day" style="width: 600px;">
 
@@ -339,6 +339,31 @@
 					</p:column>
 				</p:dataTable>
 			</h:form>
+<!-- 			<h:form enctype="multipart/form-data" -->
+<!-- 				style="margin-top: 500px;margin-left: 20px;"> -->
+<!-- 				<p:panelGrid> -->
+<!-- 					<f:facet name="header"> -->
+<!-- 						<p:row> -->
+<!-- 							<p:column colspan="2"> -->
+<!--             			#{loginBean.contact.name} Picture</p:column> -->
+<!-- 						</p:row> -->
+<!-- 					</f:facet> -->
+<!-- 					<p:row> -->
+<!-- 						<p:column colspan="1"> -->
+<!-- 							<h:inputFile id="file" value="#{licenseBean.fileUplaod}" -->
+<!-- 								label="file" required="true" -->
+<!-- 								requiredMessage="No File selected !!"> -->
+<!-- 								<f:validator validatorId="fileUploadValidator" /> -->
+<!-- 								<f:attribute name="fileType" value="image" /> -->
+<!-- 							</h:inputFile> -->
+<!-- 						</p:column> -->
+<!-- 						<p:column colspan="1"> -->
+<!-- 							<h:commandButton value="Upload" -->
+<!-- 								actionListener="#{licenseBean.uploadTest}" /> -->
+<!-- 						</p:column> -->
+<!-- 					</p:row> -->
+<!-- 				</p:panelGrid> -->
+<!-- 			</h:form> -->
 		</p:panel>
 	</ui:define>
 </ui:composition>

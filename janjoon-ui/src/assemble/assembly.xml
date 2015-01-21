@@ -36,7 +36,7 @@
 			<directory>src/run-distrib</directory>
 			<outputDirectory>/lib</outputDirectory>
 			<includes>
-				<include>jetty-runner-8.1.9.v20130131.jar</include>
+				<include>jetty-runner-8.1.14.v20131031.jar</include>
 			</includes>
 		</fileSet>
 

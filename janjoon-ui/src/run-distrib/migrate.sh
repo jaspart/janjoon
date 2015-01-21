@@ -13,6 +13,7 @@ else
     $HOME/bin/stop.sh
     rm -rf $HOME/bin/janjoon.pid
     rm -rf $HOME/log/janjoon.log
+    rm -rf $HOME/lib/jetty-runner-8.1.9.v20130131.jar
     rm -rf $HOME/save/$1
     mkdir $HOME/save/$1
     mv $HOME/bin $HOME/janjoon-ui $HOME/lib $HOME/log $HOME/license $HOME/upload $HOME/save/$1/

@@ -1,6 +1,5 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.awt.Image;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Map;
@@ -42,15 +41,19 @@ public class ImageStreamer {
     		String contactId = context.getExternalContext().getRequestParameterMap().get("contactId");
     		System.out.println("Displays contactId : "+contactId);
     		if(contactId==null) {
-    			contactId="1";
+    			return new DefaultStreamedContent(new ByteArrayInputStream(((LoginBean) LoginBean.findBean("loginBean")).getContact().getPicture()));
     		}
-             String company = context.getExternalContext().getRequestParameterMap().get("company");
-             if(company == null)
-            return new DefaultStreamedContent(new ByteArrayInputStream(jJContactService.findJJContact(Long.valueOf(contactId)).
-    				getPicture()));
-             else 
-            	 return new DefaultStreamedContent(new ByteArrayInputStream(jJContactService.findJJContact(Long.valueOf(contactId)).
-         				getCompany().getLogo()));
+    		else
+    		{
+    			String company = context.getExternalContext().getRequestParameterMap().get("company");
+                if(company == null)
+               return new DefaultStreamedContent(new ByteArrayInputStream(jJContactService.findJJContact(Long.valueOf(contactId)).
+       				getPicture()));
+                else 
+               	 return new DefaultStreamedContent(new ByteArrayInputStream(jJContactService.findJJContact(Long.valueOf(contactId)).
+            				getCompany().getLogo()));
+    		}
+             
         }
     }
 

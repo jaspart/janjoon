@@ -1,7 +1,6 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,16 +11,14 @@ import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
 import com.starit.janjoonweb.domain.JJCompany;
-import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
@@ -33,6 +30,7 @@ public class LicenseBean implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private UploadedFile file;
+	private Part fileUplaod;
 
 	public UploadedFile getFile() {
 		return file;
@@ -42,6 +40,14 @@ public class LicenseBean implements Serializable {
 		this.file = file;
 	}
 
+	public Part getFileUplaod() {
+		return fileUplaod;
+	}
+
+	public void setFileUplaod(Part fileUplaod) {
+		this.fileUplaod = fileUplaod;
+	}
+
 	public void upload() {
 		if (file != null) {
 
@@ -49,6 +55,56 @@ public class LicenseBean implements Serializable {
 					+ " is uploaded.");
 
 		}
+	}
+	
+	public void uploadTest() throws IOException
+	{
+		System.out.println("STARTING_OPERATION");
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
+		
+		byte[] bFile = new byte[(int) fileUplaod.getSize()];
+
+		InputStream inputStream;
+		FacesMessage facesMessage=null;
+		try {
+			inputStream = fileUplaod.getInputStream();
+			inputStream.read(bFile);
+			inputStream.close();
+
+			contact.setPicture(bFile);
+			((LoginBean) LoginBean.findBean("loginBean")).getjJContactService()
+					.updateJJContact(contact);
+			((LoginBean) LoginBean.findBean("loginBean"))
+					.getAuthorisationService().setSession(
+							(HttpSession) FacesContext.getCurrentInstance()
+									.getExternalContext().getSession(false));			
+			facesMessage = MessageFactory.getMessage(
+					"message_successfully_uploded", "Photo");
+			
+		} catch (FileNotFoundException e) {
+			
+		}
+		// convert file into array of bytes
+		catch (IOException e) {
+			
+		}
+	
+		
+		if(facesMessage == null)
+			facesMessage=new FacesMessage(FacesMessage.SEVERITY_WARN, "Error while File Upload", "Photo");		
+			
+		((LoginBean) LoginBean.findBean("loginBean")).setFacesMessage(facesMessage);
+		FacesContext
+		.getCurrentInstance()
+		.getExternalContext()
+		.redirect(
+				FacesContext.getCurrentInstance().getExternalContext()
+						.getRequestContextPath()
+						+ "/pages/contactConfig.jsf?&faces-redirect=true");
+		
+		
+		
 	}
 
 	public void handleContactFileUpload(FileUploadEvent event) {
