@@ -279,9 +279,9 @@ public class RequirementBean {
 		rootNode = null;
 		selectedNode = null;
 	}
-	
+
 	public void updateReqTestCases(JJTestcaseBean jjTestcaseBean) {
-		
+
 		for (JJTestcase test : reqtestCases) {
 			if (!reqSelectedtestCases.contains(test)) {
 				test.setEnabled(false);
@@ -291,22 +291,22 @@ public class RequirementBean {
 		}
 		reqtestCases = jJTestcaseService.getJJtestCases(requirement);
 		reqSelectedtestCases = reqtestCases;
-		testCaseName=null;
+		testCaseName = null;
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated", "Requirement");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
-	
+
 	public void addTestCase(JJTestcaseBean jjTestcaseBean) {
-		
-		if(!testCaseName.isEmpty())
-		{
+
+		if (!testCaseName.isEmpty()) {
 			JJTestcase b = new JJTestcase();
 			b.setName(testCaseName);
 			b.setEnabled(true);
 			b.setRequirement(jJRequirementService.findJJRequirement(requirement
 					.getId()));
-			b.setDescription("TestCase for Requirement " + requirement.getName());
+			b.setDescription("TestCase for Requirement "
+					+ requirement.getName());
 			b.setOrdering(reqtestCases.size());
 			b.setAutomatic(false);
 			jjTestcaseBean.saveJJTestcase(b);
@@ -318,11 +318,12 @@ public class RequirementBean {
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					"message_successfully_created", "TestCase");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		}else
-		{
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "TestCase Name is required", ""));
+		} else {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"TestCase Name is required", ""));
 		}
-		
 
 	}
 
@@ -334,82 +335,154 @@ public class RequirementBean {
 		try {
 			long id = Long.parseLong(value);
 			categoryName = null;
-			requirementTasks=new ArrayList<JJTask>();
-			
+			requirementTasks = new ArrayList<JJTask>();
+			JJProductBean jJProductBean = ((JJProductBean) LoginBean
+					.findBean("jJProductBean"));
+			JJVersionBean jJVersionBean = ((JJVersionBean) LoginBean
+					.findBean("jJVersionBean"));
+			JJProjectBean jJProjectBean = ((JJProjectBean) LoginBean
+					.findBean("jJProjectBean"));
+
 			requirement = jJRequirementService.findJJRequirement(id);
-			reqtestCases = jJTestcaseService.getJJtestCases(requirement);
-			reqSelectedtestCases=reqtestCases;
-			testCaseName="";
-			requirementTasks=jJTaskService.getImportTasks(null, requirement, null, true);
-			technicalRequirements = new ArrayList<JJRequirement>();
-			businessRequirements = new ArrayList<JJRequirement>();
-			securityRequirements = new ArrayList<JJRequirement>();
-			functionalRequirements = new ArrayList<JJRequirement>();
-			architucturalRequirements = new ArrayList<JJRequirement>();
+			boolean show = requirement !=  null;
 
-			for (JJRequirement req : requirement.getRequirementLinkDown()) {
+			if (show && !jJProjectBean.getProjectList().contains(
+					requirement.getProject()))
+				show = false;
 
-				if (req.getCategory().getName().equalsIgnoreCase("business")
-						&& req.getEnabled())
-					businessRequirements.add(req);
-				else if (req.getCategory().getName()
-						.equalsIgnoreCase("functional")
-						&& req.getEnabled())
-					functionalRequirements.add(req);
-				else if (req.getCategory().getName()
-						.equalsIgnoreCase("security")
-						&& req.getEnabled())
-					securityRequirements.add(req);
-				else if (req.getCategory().getName()
-						.equalsIgnoreCase("architecture")
-						&& req.getEnabled())
-					architucturalRequirements.add(req);
-				else if (req.getCategory().getName()
-						.equalsIgnoreCase("technical")
-						&& req.getEnabled())
-					technicalRequirements.add(req);
+			if (show) {
+				boolean change = false;
+
+				if (jJProjectBean.getProject() == null) {
+					change = true;
+					jJProjectBean.setProject(requirement.getProject());
+					jJProductBean.setProduct(requirement.getProduct());
+					jJVersionBean.getVersionList();
+					jJVersionBean.setVersion(requirement.getVersioning());
+				} else if (!jJProjectBean.getProject().equals(
+						requirement.getProject())) {
+					change = true;
+					jJProjectBean.setProject(requirement.getProject());
+					jJProductBean.setProduct(requirement.getProduct());
+					jJVersionBean.getVersionList();
+					jJVersionBean.setVersion(requirement.getVersioning());
+				} else if (requirement.getProduct() != null
+						&& jJProductBean.getProduct() != null) {
+					if (!requirement.getProduct().equals(
+							jJProductBean.getProduct())) {
+						change = true;
+						jJProductBean.setProduct(requirement.getProduct());
+						jJVersionBean.getVersionList();
+						jJVersionBean.setVersion(requirement.getVersioning());
+					} else if (requirement.getVersioning() != null
+							&& jJVersionBean.getVersion() != null) {
+						if (!requirement.getVersioning().equals(
+								jJVersionBean.getVersion())) {
+							change = true;
+							jJVersionBean.getVersionList();
+							jJVersionBean.setVersion(requirement
+									.getVersioning());
+						}
+					}
+				}
+
+				if (change) {
+					((LoginBean) LoginBean.findBean("loginBean"))
+							.changeEvent(null);
+					rootNode = null;
+				}
+
+				if (!getCategory().equals(requirement.getCategory()))
+
+				{
+					category = requirement.getCategory();
+					rootNode = null;
+				}
+
+				reqtestCases = jJTestcaseService.getJJtestCases(requirement);
+				reqSelectedtestCases = reqtestCases;
+				testCaseName = "";
+				requirementTasks = jJTaskService.getImportTasks(null,
+						requirement, null, true);
+				technicalRequirements = new ArrayList<JJRequirement>();
+				businessRequirements = new ArrayList<JJRequirement>();
+				securityRequirements = new ArrayList<JJRequirement>();
+				functionalRequirements = new ArrayList<JJRequirement>();
+				architucturalRequirements = new ArrayList<JJRequirement>();
+
+				for (JJRequirement req : requirement.getRequirementLinkDown()) {
+
+					if (req.getCategory().getName()
+							.equalsIgnoreCase("business")
+							&& req.getEnabled())
+						businessRequirements.add(req);
+					else if (req.getCategory().getName()
+							.equalsIgnoreCase("functional")
+							&& req.getEnabled())
+						functionalRequirements.add(req);
+					else if (req.getCategory().getName()
+							.equalsIgnoreCase("security")
+							&& req.getEnabled())
+						securityRequirements.add(req);
+					else if (req.getCategory().getName()
+							.equalsIgnoreCase("architecture")
+							&& req.getEnabled())
+						architucturalRequirements.add(req);
+					else if (req.getCategory().getName()
+							.equalsIgnoreCase("technical")
+							&& req.getEnabled())
+						technicalRequirements.add(req);
+				}
+
+				for (JJRequirement req : requirement.getRequirementLinkUp()) {
+
+					if (req.getCategory().getName()
+							.equalsIgnoreCase("business")
+							&& req.getEnabled())
+						businessRequirements.add(req);
+					else if (req.getCategory().getName()
+							.equalsIgnoreCase("functional")
+							&& req.getEnabled())
+						functionalRequirements.add(req);
+					else if (req.getCategory().getName()
+							.equalsIgnoreCase("security")
+							&& req.getEnabled())
+						securityRequirements.add(req);
+					else if (req.getCategory().getName()
+							.equalsIgnoreCase("architecture")
+							&& req.getEnabled())
+						architucturalRequirements.add(req);
+					else if (req.getCategory().getName()
+							.equalsIgnoreCase("technical")
+							&& req.getEnabled())
+						technicalRequirements.add(req);
+				}
+
+				if (requirement.getCategory().getName()
+						.equalsIgnoreCase("business"))
+					businessRequirements = null;
+				else if (requirement.getCategory().getName()
+						.equalsIgnoreCase("functional"))
+					functionalRequirements = null;
+				else if (requirement.getCategory().getName()
+						.equalsIgnoreCase("security"))
+					securityRequirements = null;
+				else if (requirement.getCategory().getName()
+						.equalsIgnoreCase("architecture"))
+					architucturalRequirements = null;
+				else if (requirement.getCategory().getName()
+						.equalsIgnoreCase("technical"))
+					technicalRequirements = null;
+			} else {
+				requirement = null;
+				((LoginBean) LoginBean.findBean("loginBean"))
+						.setFacesMessage(new FacesMessage(
+								FacesMessage.SEVERITY_WARN,
+								"This Requirement is not among your company Specs",
+								"Requirement"));
 			}
 
-			for (JJRequirement req : requirement.getRequirementLinkUp()) {
-
-				if (req.getCategory().getName().equalsIgnoreCase("business")
-						&& req.getEnabled())
-					businessRequirements.add(req);
-				else if (req.getCategory().getName()
-						.equalsIgnoreCase("functional")
-						&& req.getEnabled())
-					functionalRequirements.add(req);
-				else if (req.getCategory().getName()
-						.equalsIgnoreCase("security")
-						&& req.getEnabled())
-					securityRequirements.add(req);
-				else if (req.getCategory().getName()
-						.equalsIgnoreCase("architecture")
-						&& req.getEnabled())
-					architucturalRequirements.add(req);
-				else if (req.getCategory().getName()
-						.equalsIgnoreCase("technical")
-						&& req.getEnabled())
-					technicalRequirements.add(req);
-			}
-
-			if (requirement.getCategory().getName()
-					.equalsIgnoreCase("business"))
-				businessRequirements = null;
-			else if (requirement.getCategory().getName()
-					.equalsIgnoreCase("functional"))
-				functionalRequirements = null;
-			else if (requirement.getCategory().getName()
-					.equalsIgnoreCase("security"))
-				securityRequirements = null;
-			else if (requirement.getCategory().getName()
-					.equalsIgnoreCase("architecture"))
-				architucturalRequirements = null;
-			else if (requirement.getCategory().getName()
-					.equalsIgnoreCase("technical"))
-				technicalRequirements = null;
-
-		} catch (NumberFormatException ex) {			
+		} catch (NumberFormatException ex) {
 		}
 
 	}

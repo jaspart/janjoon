@@ -1,10 +1,6 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -140,12 +136,12 @@ public class JJTestcaseexecutionBean {
 		updateJJTestcaseexecution(tce);
 
 		List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
-				null, null, tce.getTestcase(), tce.getBuild(), true, false,
+				null, null, tce.getTestcase(), tce.getTestcase().getBuild(), true, false,
 				true, null);
 		if (!tasks.isEmpty()) {
 			JJTask task = tasks.get(0);
 			task.setName(tce.getTestcase().getName() + "_"
-					+ tce.getBuild().getName().trim().toUpperCase());
+					+ tce.getTestcase().getBuild().getName().trim().toUpperCase());
 
 			task.setEndDateReal(new Date());
 
@@ -173,11 +169,7 @@ public class JJTestcaseexecutionBean {
 		testcaseexecution.setDescription(testcase.getDescription());		
 		testcaseexecution.setEnabled(true);
 		testcaseexecution.setTestcase(testcase);
-
 		testcaseexecution.setPassed(null);
-
-		testcaseexecution.setBuild(build);
-
 		saveJJTestcaseexecution(testcaseexecution);
 
 	}

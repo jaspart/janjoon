@@ -91,12 +91,12 @@ privileged aspect JJTestcase_Roo_JavaBean {
         this.requirement = requirement;
     }
     
-    public Set<JJBuild> JJTestcase.getBuilds() {
-        return this.builds;
+    public JJBuild JJTestcase.getBuild() {
+        return this.build;
     }
     
-    public void JJTestcase.setBuilds(Set<JJBuild> builds) {
-        this.builds = builds;
+    public void JJTestcase.setBuild(JJBuild build) {
+        this.build = build;
     }
     
     public Set<JJVersion> JJTestcase.getVersions() {

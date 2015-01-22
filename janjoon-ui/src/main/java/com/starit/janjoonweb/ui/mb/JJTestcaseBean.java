@@ -117,13 +117,13 @@ public class JJTestcaseBean {
 	}
 
 	private JJTestcase testcase;
-	private int width;
+//	private int width;
 	private JJProject project;
 	private JJProduct product;
 	private JJVersion version;
 	private float reqCoverage;
-	private List<Object> rowNames = new ArrayList<Object>();
-	private List<JJTestcase> colNames = new ArrayList<JJTestcase>();
+//	private List<Object> rowNames = new ArrayList<Object>();
+//	private List<JJTestcase> colNames = new ArrayList<JJTestcase>();
 
 	public float getReqCoverage() {
 		return reqCoverage;
@@ -171,45 +171,45 @@ public class JJTestcaseBean {
 		this.testcaseState = testcaseState;
 	}
 
-	public List<Object> getRowNames() {
-
-		if (rowNames == null || rowNames.isEmpty()) {
-
-			colNames = jJTestcaseService.getImportTestcases(category, project,
-					((JJProductBean) LoginBean.findBean("jJProductBean"))
-							.getProduct(), true);
-
-			if (colNames != null && !colNames.isEmpty()) {
-				rowNames = new ArrayList<Object>(
-						((JJBuildBean) LoginBean.findBean("jJBuildBean"))
-								.getBuilds());
-				if (rowNames == null)
-					rowNames = new ArrayList<Object>(
-							((JJVersionBean) LoginBean
-									.findBean("jJVersionBean"))
-									.getVersionList());
-				else
-					rowNames.addAll(((JJVersionBean) LoginBean
-							.findBean("jJVersionBean")).getVersionList());
-			}
-			width = 170 + (colNames.size() * 70);
-			if (width > 1000)
-				width = 1000;
-		}
-		return rowNames;
-	}
-
-	public void setRowNames(List<Object> rowNames) {
-		this.rowNames = rowNames;
-	}
-
-	public List<JJTestcase> getColNames() {
-		return colNames;
-	}
-
-	public void setColNames(List<JJTestcase> colNames) {
-		this.colNames = colNames;
-	}
+//	public List<Object> getRowNames() {
+//
+//		if (rowNames == null || rowNames.isEmpty()) {
+//
+//			colNames = jJTestcaseService.getImportTestcases(category, project,
+//					((JJProductBean) LoginBean.findBean("jJProductBean"))
+//							.getProduct(), true);
+//
+//			if (colNames != null && !colNames.isEmpty()) {
+//				rowNames = new ArrayList<Object>(
+//						((JJBuildBean) LoginBean.findBean("jJBuildBean"))
+//								.getBuilds());
+//				if (rowNames == null)
+//					rowNames = new ArrayList<Object>(
+//							((JJVersionBean) LoginBean
+//									.findBean("jJVersionBean"))
+//									.getVersionList());
+//				else
+//					rowNames.addAll(((JJVersionBean) LoginBean
+//							.findBean("jJVersionBean")).getVersionList());
+//			}
+//			width = 170 + (colNames.size() * 70);
+//			if (width > 1000)
+//				width = 1000;
+//		}
+//		return rowNames;
+//	}
+//
+//	public void setRowNames(List<Object> rowNames) {
+//		this.rowNames = rowNames;
+//	}
+//
+//	public List<JJTestcase> getColNames() {
+//		return colNames;
+//	}
+//
+//	public void setColNames(List<JJTestcase> colNames) {
+//		this.colNames = colNames;
+//	}
 
 	public JJTestcase getTestcase() {
 		return testcase;
@@ -219,13 +219,13 @@ public class JJTestcaseBean {
 		this.testcase = testcase;
 	}
 
-	public int getWidth() {
-		return width;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
+//	public int getWidth() {
+//		return width;
+//	}
+//
+//	public void setWidth(int width) {
+//		this.width = width;
+//	}
 
 	public JJProject getProject() {
 
@@ -297,7 +297,8 @@ public class JJTestcaseBean {
 	public List<TestCaseRecap> getTestCaseRecaps() {
 
 		testCaseRecaps = new ArrayList<TestCaseRecap>();
-		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,
+		JJBuild build=((JJBuildBean) LoginBean.findBean("jJBuildBean")).getBuild();
+		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,build,
 				chapter, true, true, false);
 
 		for (JJTestcase testcase : testcases) {
@@ -452,8 +453,8 @@ public class JJTestcaseBean {
 			rendredTestCaseRecaps = false;
 			rendredTestCaseHistorical = false;
 			requirement = null;
-			rowNames = null;
-			colNames = null;
+//			rowNames = null;
+//			colNames = null;
 			disabledExport = true;
 
 			namefile = null;
@@ -476,30 +477,30 @@ public class JJTestcaseBean {
 			createTestcaseTree();
 			rendredEmptySelection = true;
 
-			if (rowNames == null || rowNames.isEmpty()) {
-
-				colNames = jJTestcaseService.getImportTestcases(category,
-						project, ((JJProductBean) LoginBean
-								.findBean("jJProductBean")).getProduct(), true);
-
-				if (colNames != null && !colNames.isEmpty()) {
-					rowNames = new ArrayList<Object>(
-							((JJBuildBean) LoginBean.findBean("jJBuildBean"))
-									.getBuilds());
-					if (rowNames == null)
-						rowNames = new ArrayList<Object>(
-								((JJVersionBean) LoginBean
-										.findBean("jJVersionBean"))
-										.getVersionList());
-					else
-						rowNames.addAll(((JJVersionBean) LoginBean
-								.findBean("jJVersionBean")).getVersionList());
-
-					width = 170 + (colNames.size() * 70);
-					if (width > 1000)
-						width = 1000;
-				}
-			}
+//			if (rowNames == null || rowNames.isEmpty()) {
+//
+//				colNames = jJTestcaseService.getImportTestcases(category,
+//						project, ((JJProductBean) LoginBean
+//								.findBean("jJProductBean")).getProduct(), true);
+//
+//				if (colNames != null && !colNames.isEmpty()) {
+//					rowNames = new ArrayList<Object>(
+//							((JJBuildBean) LoginBean.findBean("jJBuildBean"))
+//									.getBuilds());
+//					if (rowNames == null)
+//						rowNames = new ArrayList<Object>(
+//								((JJVersionBean) LoginBean
+//										.findBean("jJVersionBean"))
+//										.getVersionList());
+//					else
+//						rowNames.addAll(((JJVersionBean) LoginBean
+//								.findBean("jJVersionBean")).getVersionList());
+//
+//					width = 170 + (colNames.size() * 70);
+//					if (width > 1000)
+//						width = 1000;
+//				}
+//			}
 		}
 
 	}
@@ -711,31 +712,34 @@ public class JJTestcaseBean {
 
 		} else {
 
-			JJTestcase tc;
+			//JJTestcase tc;
 
-			if (jJTeststepBean.getActionTeststep()) {
-				String name = testcase.getName();
-				String description = testcase.getDescription();
-				Boolean automatic = testcase.getAutomatic();
+//			if (jJTeststepBean.getActionTeststep()) {
+//				String name = testcase.getName();
+//				String description = testcase.getDescription();
+//				Boolean automatic = testcase.getAutomatic();
+//				JJBuild build =testcase.getBuild();
+//
+//				tc = jJTestcaseService.findJJTestcase(testcase.getId());
+//				tc.setName(name);
+//				tc.setBuild(build);
+//				tc.setDescription(description);
+//				tc.setAutomatic(automatic);
+//
+//			} else {
+//				tc = testcase;
+//			}
 
-				tc = jJTestcaseService.findJJTestcase(testcase.getId());
-				tc.setName(name);
-				tc.setDescription(description);
-				tc.setAutomatic(automatic);
+			if (!requirement.equals(testcase.getRequirement())) {
 
-			} else {
-				tc = testcase;
+				testcase.setRequirement(requirement);
+
 			}
 
-			if (!requirement.equals(tc.getRequirement())) {
-
-				tc.setRequirement(requirement);
-
-			}
-
-			updateJJTestcase(tc);
-
-			requirement.getTestcases().add(tc);
+			updateJJTestcase(testcase);
+			testcase =jJTestcaseService.findJJTestcase(testcase.getId());
+			requirement.getTestcases().add(testcase);
+			
 
 			FacesContext.getCurrentInstance().addMessage(
 					null,
@@ -746,8 +750,8 @@ public class JJTestcaseBean {
 
 		}
 		createTestcaseTree();
-		colNames = null;
-		rowNames = null;
+//		colNames = null;
+//		rowNames = null;
 
 	}
 
@@ -770,7 +774,9 @@ public class JJTestcaseBean {
 
 		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
 
-		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,
+		JJBuild build=((JJBuildBean) LoginBean.findBean("jJBuildBean")).getBuild();
+		
+		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,build,
 				requirement.getChapter(), false, false, false);
 
 		for (JJTestcase testcase : testcases) {
@@ -790,6 +796,7 @@ public class JJTestcaseBean {
 
 		rootNode = new DefaultTreeNode("Root", null);
 
+		JJBuild build=((JJBuildBean) LoginBean.findBean("jJBuildBean")).getBuild();
 		TreeNode projectNode = new DefaultTreeNode("P-" + project.getId()
 				+ "- " + project.getName(), rootNode);
 
@@ -808,7 +815,7 @@ public class JJTestcaseBean {
 							project, category, true, true);
 
 			for (JJChapter ch : parentChapters) {
-				TreeNode node = createTree(ch, categoryNode, category);
+				TreeNode node = createTree(ch, categoryNode, category,build);
 				if (chapter != null && ch.equals(chapter))
 					selectedNode = node;
 			}
@@ -883,13 +890,13 @@ public class JJTestcaseBean {
 
 	// Recursive function to create tree
 	private TreeNode createTree(JJChapter chapterParent, TreeNode rootNode,
-			JJCategory category) {
+			JJCategory category,JJBuild build) {
 
 		TreeNode newNode = new DefaultTreeNode("CH-" + chapterParent.getId()
 				+ "- " + chapterParent.getName(), rootNode);
 
 		SortedMap<Integer, Object> elements = getSortedElements(chapterParent,
-				project, product, category, true);
+				project, product, category, true);		
 
 		SortedMap<Integer, JJTestcase> testcaseElements = new TreeMap<Integer, JJTestcase>();
 
@@ -899,13 +906,13 @@ public class JJTestcaseBean {
 			if (className.equalsIgnoreCase("JJChapter")) {
 
 				JJChapter chapter = (JJChapter) entry.getValue();
-				TreeNode newNode2 = createTree(chapter, newNode, category);
+				TreeNode newNode2 = createTree(chapter, newNode, category,build);
 
 			} else if (className.equalsIgnoreCase("JJRequirement")) {
 
 				JJRequirement requirement = (JJRequirement) entry.getValue();
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-						requirement, null, true, true, false);
+						requirement, build,null, true, true, false);
 				for (JJTestcase testcase : testcases) {
 					testcaseElements.put(testcase.getOrdering(), testcase);
 				}
@@ -1102,8 +1109,9 @@ public class JJTestcaseBean {
 				((LoginBean) LoginBean.findBean("loginBean")).getContact()
 						.getCompany(), project, category, true, true);
 
+		JJBuild build=((JJBuildBean) LoginBean.findBean("jJBuildBean")).getBuild();
 		for (JJChapter chapter : parentChapters) {
-			createTreeDocument(chapter, category, paragraph, fontTeststep,
+			createTreeDocument(chapter,build, category, paragraph, fontTeststep,
 					fontChapter, fontTestcase, style);
 		}
 
@@ -1113,7 +1121,7 @@ public class JJTestcaseBean {
 
 	}
 
-	private void createTreeDocument(JJChapter chapterParent,
+	private void createTreeDocument(JJChapter chapterParent,JJBuild build,
 			JJCategory category, Paragraph paragraph, Font fontTeststep,
 			Font fontChapter, Font fontTestcase, StyleSheet style)
 			throws IOException {
@@ -1132,14 +1140,14 @@ public class JJTestcaseBean {
 			if (className.equalsIgnoreCase("JJChapter")) {
 
 				JJChapter chapter = (JJChapter) entry.getValue();
-				createTreeDocument(chapter, category, paragraph, fontTeststep,
+				createTreeDocument(chapter,build, category, paragraph, fontTeststep,
 						fontChapter, fontTestcase, style);
 
 			} else if (className.equalsIgnoreCase("JJRequirement")) {
 
 				JJRequirement requirement = (JJRequirement) entry.getValue();
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-						requirement, null, true, true, false);
+						requirement, build,null, true, true, false);
 				for (JJTestcase testcase : testcases) {
 					testcaseElements.put(testcase.getOrdering(), testcase);
 				}
@@ -1166,9 +1174,10 @@ public class JJTestcaseBean {
 	}
 
 	public List<JJTestcase> getTestcases() {
+		
 		List<JJTestcase> testcases = new ArrayList<JJTestcase>();
-
-		testcases = jJTestcaseService.getTestcases(null, chapter, true, false,
+		JJBuild build=((JJBuildBean) LoginBean.findBean("jJBuildBean")).getBuild();
+		testcases = jJTestcaseService.getTestcases(null,build, chapter, true, false,
 				true);
 
 		return testcases;
@@ -1344,11 +1353,12 @@ public class JJTestcaseBean {
 	public StreamedContent getFile() {
 
 		if (category != null) {
+			JJBuild build=((JJBuildBean) LoginBean.findBean("jJBuildBean")).getBuild();
 			String buffer = "<category name=\""
 					+ category.getName().toUpperCase() + "\">";
 			List<JJTestcase> tests = jJTestcaseService.getImportTestcases(
 					category, project, ((JJProductBean) LoginBean
-							.findBean("jJProductBean")).getProduct(), true);
+							.findBean("jJProductBean")).getProduct(),build, true);
 			for (JJTestcase ttt : tests) {
 				String description = "";
 				StringReader strReader = new StringReader(ttt.getDescription());

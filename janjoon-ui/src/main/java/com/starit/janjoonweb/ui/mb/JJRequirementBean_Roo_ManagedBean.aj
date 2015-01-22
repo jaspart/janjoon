@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb;
 
-import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
@@ -14,7 +13,6 @@ import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJCriticityService;
 import com.starit.janjoonweb.domain.JJImportance;
 import com.starit.janjoonweb.domain.JJImportanceService;
-import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProductService;
 import com.starit.janjoonweb.domain.JJProject;
@@ -129,11 +127,7 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
     
     private boolean JJRequirementBean.createDialogVisible = false;
     
-    private List<JJBug> JJRequirementBean.selectedBugs;
-    
     private List<JJTask> JJRequirementBean.selectedTasks;
-    
-    private List<JJMessage> JJRequirementBean.selectedMessages;
     
     private List<JJRequirement> JJRequirementBean.selectedRequirementLinkDown;
     
@@ -789,14 +783,16 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         relationCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(relationCreateInputMessage);
         
-        HtmlOutputText bugsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel bugsCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        bugsCreateOutput.setFor("bugsCreateInput");
         bugsCreateOutput.setId("bugsCreateOutput");
         bugsCreateOutput.setValue("Bugs:");
         htmlPanelGrid.getChildren().add(bugsCreateOutput);
         
-        HtmlOutputText bugsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputText bugsCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         bugsCreateInput.setId("bugsCreateInput");
-        bugsCreateInput.setValue("This relationship is managed from the JJBug side");
+        bugsCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.bugs}", Set.class));
+        bugsCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(bugsCreateInput);
         
         Message bugsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -821,14 +817,16 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         tasksCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(tasksCreateInputMessage);
         
-        HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel messagesCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        messagesCreateOutput.setFor("messagesCreateInput");
         messagesCreateOutput.setId("messagesCreateOutput");
         messagesCreateOutput.setValue("Messages:");
         htmlPanelGrid.getChildren().add(messagesCreateOutput);
         
-        HtmlOutputText messagesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputText messagesCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         messagesCreateInput.setId("messagesCreateInput");
-        messagesCreateInput.setValue("This relationship is managed from the JJMessage side");
+        messagesCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.messages}", Set.class));
+        messagesCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(messagesCreateInput);
         
         Message messagesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -1485,14 +1483,16 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         relationEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(relationEditInputMessage);
         
-        HtmlOutputText bugsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel bugsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        bugsEditOutput.setFor("bugsEditInput");
         bugsEditOutput.setId("bugsEditOutput");
         bugsEditOutput.setValue("Bugs:");
         htmlPanelGrid.getChildren().add(bugsEditOutput);
         
-        HtmlOutputText bugsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputText bugsEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         bugsEditInput.setId("bugsEditInput");
-        bugsEditInput.setValue("This relationship is managed from the JJBug side");
+        bugsEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.bugs}", Set.class));
+        bugsEditInput.setRequired(false);
         htmlPanelGrid.getChildren().add(bugsEditInput);
         
         Message bugsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -1517,14 +1517,16 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         tasksEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(tasksEditInputMessage);
         
-        HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel messagesEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        messagesEditOutput.setFor("messagesEditInput");
         messagesEditOutput.setId("messagesEditOutput");
         messagesEditOutput.setValue("Messages:");
         htmlPanelGrid.getChildren().add(messagesEditOutput);
         
-        HtmlOutputText messagesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputText messagesEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         messagesEditInput.setId("messagesEditInput");
-        messagesEditInput.setValue("This relationship is managed from the JJMessage side");
+        messagesEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.messages}", Set.class));
+        messagesEditInput.setRequired(false);
         htmlPanelGrid.getChildren().add(messagesEditInput);
         
         Message messagesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -1886,8 +1888,7 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(bugsLabel);
         
         HtmlOutputText bugsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        bugsValue.setId("bugsValue");
-        bugsValue.setValue("This relationship is managed from the JJBug side");
+        bugsValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.bugs}", String.class));
         htmlPanelGrid.getChildren().add(bugsValue);
         
         HtmlOutputText tasksLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1906,8 +1907,7 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(messagesLabel);
         
         HtmlOutputText messagesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        messagesValue.setId("messagesValue");
-        messagesValue.setValue("This relationship is managed from the JJMessage side");
+        messagesValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.messages}", String.class));
         htmlPanelGrid.getChildren().add(messagesValue);
         
         HtmlOutputText requirementLinkDownLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -2105,17 +2105,6 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJBug> JJRequirementBean.getSelectedBugs() {
-        return selectedBugs;
-    }
-    
-    public void JJRequirementBean.setSelectedBugs(List<JJBug> selectedBugs) {
-        if (selectedBugs != null) {
-            JJRequirement_.setBugs(new HashSet<JJBug>(selectedBugs));
-        }
-        this.selectedBugs = selectedBugs;
-    }
-    
     public List<JJTask> JJRequirementBean.getSelectedTasks() {
         return selectedTasks;
     }
@@ -2125,17 +2114,6 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
             JJRequirement_.setTasks(new HashSet<JJTask>(selectedTasks));
         }
         this.selectedTasks = selectedTasks;
-    }
-    
-    public List<JJMessage> JJRequirementBean.getSelectedMessages() {
-        return selectedMessages;
-    }
-    
-    public void JJRequirementBean.setSelectedMessages(List<JJMessage> selectedMessages) {
-        if (selectedMessages != null) {
-            JJRequirement_.setMessages(new HashSet<JJMessage>(selectedMessages));
-        }
-        this.selectedMessages = selectedMessages;
     }
     
     public List<JJRequirement> JJRequirementBean.getSelectedRequirementLinkDown() {
@@ -2172,14 +2150,8 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
     }
     
     public String JJRequirementBean.onEdit() {
-        if (JJRequirement_ != null && JJRequirement_.getBugs() != null) {
-            selectedBugs = new ArrayList<JJBug>(JJRequirement_.getBugs());
-        }
         if (JJRequirement_ != null && JJRequirement_.getTasks() != null) {
             selectedTasks = new ArrayList<JJTask>(JJRequirement_.getTasks());
-        }
-        if (JJRequirement_ != null && JJRequirement_.getMessages() != null) {
-            selectedMessages = new ArrayList<JJMessage>(JJRequirement_.getMessages());
         }
         if (JJRequirement_ != null && JJRequirement_.getRequirementLinkDown() != null) {
             selectedRequirementLinkDown = new ArrayList<JJRequirement>(JJRequirement_.getRequirementLinkDown());

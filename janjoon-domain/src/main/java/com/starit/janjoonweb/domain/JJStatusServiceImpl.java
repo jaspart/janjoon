@@ -91,8 +91,7 @@ public class JJStatusServiceImpl implements JJStatusService {
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
-		TypedQuery<JJStatus> result = entityManager.createQuery(select);
-		System.out.println(result.getResultList().get(0).getName());
+		TypedQuery<JJStatus> result = entityManager.createQuery(select);		
 
 		if (result.getResultList().size() == 0)
 			return null;

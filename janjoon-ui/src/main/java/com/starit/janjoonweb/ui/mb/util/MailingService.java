@@ -109,7 +109,7 @@ public class MailingService {
 				System.out.println("Done");
 
 			} catch (MessagingException e) {
-				throw new RuntimeException(e);
+				System.out.println(new RuntimeException(e).getMessage());
 			}
 		}
 	}

@@ -29,7 +29,6 @@ import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -684,8 +683,7 @@ privileged aspect JJConfigurationBean_Roo_ManagedBean {
         JJConfiguration_ = new JJConfiguration();
         createDialogVisible = true;
         return "JJConfiguration_";
-    }   
-    
+    }
     
     public String JJConfigurationBean.delete() {
         jJConfigurationService.deleteJJConfiguration(JJConfiguration_);

@@ -1467,7 +1467,7 @@ public class JJRequirementBean {
 		long t = System.currentTimeMillis();
 		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
 
-		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,
+		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,null,
 				chapter, false, false, false);
 
 		for (JJTestcase testcase : testcases) {
@@ -3079,7 +3079,7 @@ public class JJRequirementBean {
 		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
 
 		List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-				requirement, chapter, false, true, false);
+				requirement, null,chapter, false, true, false);
 
 		for (JJTestcase testcase : testcases) {
 			if (testcase.getOrdering() != null)
@@ -3833,9 +3833,7 @@ public class JJRequirementBean {
 			jJStatusBean.setPieChart(null);
 
 		setJJRequirement_(null);
-		setSelectedBugs(null);
-		setSelectedTasks(null);
-		setSelectedMessages(null);
+		setSelectedTasks(null);		
 		setSelectedRequirementLinkDown(null);
 		setSelectedRequirementLinkUp(null);
 		setSelectedTestcases(null);
@@ -4171,7 +4169,7 @@ public class JJRequirementBean {
 			} else if (!ENCOURS && FINIS) {
 
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-						requirement, null, true, false, false);
+						requirement, null,null, true, false, false);
 				boolean SUCCESS = true;
 
 				for (JJTestcase testcase : testcases) {

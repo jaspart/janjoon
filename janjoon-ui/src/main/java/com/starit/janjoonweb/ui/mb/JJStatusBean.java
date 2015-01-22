@@ -229,7 +229,6 @@ public class JJStatusBean {
 		lazyStatusList = null;
 		statusList = null;
 		pieChart = null;
-		setSelectedMessages(null);
 		setCreateDialogVisible(false);
 	}
 

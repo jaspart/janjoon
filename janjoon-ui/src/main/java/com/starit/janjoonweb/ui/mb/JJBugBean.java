@@ -463,6 +463,7 @@ public class JJBugBean {
 		reset();		
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('projectTabView').select(" + 1 + ")");
+		jJSprintBean.setUpdate(false);
 		context.execute("PF('SprintTab').select("+jJSprintBean.contains(jJSprintBean.getSprintUtil().getSprint().getId())+ ")");
 	}
 

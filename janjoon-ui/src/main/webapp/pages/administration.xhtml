@@ -10,8 +10,9 @@
 	<ui:define name="content">
 		<h:form>
 			<p:remoteCommand name="updateAdmin"
-				update=":contentPanel :headerForm" />
+				update=":contentPanel :headerForm" />			
 		</h:form>
+
 		<p:commandButton value="#{messages.specification_video_help_title}"
 			id="videoHelpBtn" icon="ui-icon-video"
 			onclick="PF('videoHelpWidget').show()" type="button"

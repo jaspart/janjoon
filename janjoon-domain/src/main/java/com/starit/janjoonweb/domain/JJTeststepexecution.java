@@ -43,10 +43,7 @@ public class JJTeststepexecution {
 	private JJContact updatedBy;
 
 	private Boolean enabled;
-
-	@ManyToOne
-	private JJBuild build;
-
+	
 	@ManyToOne
 	private JJTeststep teststep;
 

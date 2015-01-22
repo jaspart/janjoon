@@ -318,9 +318,9 @@
 				resizable="true" maximizable="true" showEffect="fade"
 				hideEffect="explode" draggable="false">
 				<p:outputPanel id="viewTaskPanel">
-					<h:form id="viewTaskForm" enctype="multipart/form-data">
+					<h:form id="viewTaskForm" enctype="multipart/form-data" >
 						<ui:include src="taskDialog.xhtml">
-							<ui:param name="JJTask_" value="#{jJDevelopment.task}" />
+							<ui:param name="JJTask_" value="#{jJDevelopment.task}" />							
 						</ui:include>
 						<p:commandButton id="viewCloseButton"
 							value="#{messages.label_close}"

@@ -43,10 +43,11 @@ public class JJTestcaseexecutionServiceImpl implements
 		if (testcase != null) {
 			predicates
 					.add(criteriaBuilder.equal(from.get("testcase"), testcase));
-		}
+		} else
 
 		if (build != null) {
-			predicates.add(criteriaBuilder.equal(from.get("build"), build));
+			predicates.add(criteriaBuilder.equal(
+					from.join("testcase").get("build"), build));
 		}
 
 		if (onlyActif) {
@@ -105,7 +106,7 @@ public class JJTestcaseexecutionServiceImpl implements
 
 		if (build != null) {
 
-			predicates.add(criteriaBuilder.equal(from.get("build"), build));
+			predicates.add(criteriaBuilder.equal(from.join("testcase").get("build"), build));
 		}
 
 		if (onlyActif) {
@@ -129,17 +130,20 @@ public class JJTestcaseexecutionServiceImpl implements
 		return testcaseexecutions;
 
 	}
-	
-public void saveJJTestcaseexecution(JJTestcaseexecution JJTestcaseexecution_) {
-		
-        jJTestcaseexecutionRepository.save(JJTestcaseexecution_);
-        JJTestcaseexecution_=jJTestcaseexecutionRepository.findOne(JJTestcaseexecution_.getId());
-    }
-    
-    public JJTestcaseexecution updateJJTestcaseexecution(JJTestcaseexecution JJTestcaseexecution_) {
-        jJTestcaseexecutionRepository.save(JJTestcaseexecution_);
-        JJTestcaseexecution_=jJTestcaseexecutionRepository.findOne(JJTestcaseexecution_.getId());
-        return JJTestcaseexecution_;
-    }
+
+	public void saveJJTestcaseexecution(JJTestcaseexecution JJTestcaseexecution_) {
+
+		jJTestcaseexecutionRepository.save(JJTestcaseexecution_);
+		JJTestcaseexecution_ = jJTestcaseexecutionRepository
+				.findOne(JJTestcaseexecution_.getId());
+	}
+
+	public JJTestcaseexecution updateJJTestcaseexecution(
+			JJTestcaseexecution JJTestcaseexecution_) {
+		jJTestcaseexecutionRepository.save(JJTestcaseexecution_);
+		JJTestcaseexecution_ = jJTestcaseexecutionRepository
+				.findOne(JJTestcaseexecution_.getId());
+		return JJTestcaseexecution_;
+	}
 
 }

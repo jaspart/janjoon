@@ -1,11 +1,6 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -205,8 +200,6 @@ public class JJTeststepexecutionBean {
 			teststepexecution.setDescription(teststep.getDescription());
 			teststepexecution.setEnabled(true);
 
-			teststepexecution.setBuild(tce.getBuild());
-
 			teststepexecution.setTeststep(teststep);
 			teststepexecution.setPassed(null);
 
@@ -271,7 +264,7 @@ public class JJTeststepexecutionBean {
 			jJBugBean.setJJBug_(bug);
 			jJBugBean.setBugRequirementSelected(teststepexecution.getTeststep()
 					.getTestcase().getRequirement());
-			jJBugBean.setBugVersionSelected(teststepexecution.getBuild()
+			jJBugBean.setBugVersionSelected(teststepexecution.getTeststep().getTestcase().getBuild()
 					.getVersion());
 			jJBugBean.setBugProjectSelected(((JJProjectBean) session
 					.getAttribute("jJProjectBean")).getProject());

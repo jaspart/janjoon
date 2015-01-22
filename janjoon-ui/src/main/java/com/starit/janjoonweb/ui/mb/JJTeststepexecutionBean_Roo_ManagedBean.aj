@@ -3,8 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb;
 
-import com.starit.janjoonweb.domain.JJBuild;
-import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
@@ -14,7 +12,6 @@ import com.starit.janjoonweb.domain.JJTeststepService;
 import com.starit.janjoonweb.domain.JJTeststepexecution;
 import com.starit.janjoonweb.domain.JJTeststepexecutionService;
 import com.starit.janjoonweb.ui.mb.JJTeststepexecutionBean;
-import com.starit.janjoonweb.ui.mb.converter.JJBuildConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJTestcaseexecutionConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJTeststepConverter;
@@ -54,9 +51,6 @@ privileged aspect JJTeststepexecutionBean_Roo_ManagedBean {
     
     @Autowired
     JJContactService JJTeststepexecutionBean.jJContactService;
-    
-    @Autowired
-    JJBuildService JJTeststepexecutionBean.jJBuildService;
     
     @Autowired
     JJTeststepService JJTeststepexecutionBean.jJTeststepService;
@@ -306,30 +300,6 @@ privileged aspect JJTeststepexecutionBean_Roo_ManagedBean {
         enabledCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
         
-        OutputLabel buildCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        buildCreateOutput.setFor("buildCreateInput");
-        buildCreateOutput.setId("buildCreateOutput");
-        buildCreateOutput.setValue("Build:");
-        htmlPanelGrid.getChildren().add(buildCreateOutput);
-        
-        AutoComplete buildCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        buildCreateInput.setId("buildCreateInput");
-        buildCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepexecutionBean.JJTeststepexecution_.build}", JJBuild.class));
-        buildCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTeststepexecutionBean.completeBuild}", List.class, new Class[] { String.class }));
-        buildCreateInput.setDropdown(true);
-        buildCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "build", String.class));
-        buildCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{build.name} #{build.description} #{build.creationDate} #{build.updatedDate}", String.class));
-        buildCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{build}", JJBuild.class));
-        buildCreateInput.setConverter(new JJBuildConverter());
-        buildCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(buildCreateInput);
-        
-        Message buildCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        buildCreateInputMessage.setId("buildCreateInputMessage");
-        buildCreateInputMessage.setFor("buildCreateInput");
-        buildCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(buildCreateInputMessage);
-        
         OutputLabel teststepCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         teststepCreateOutput.setFor("teststepCreateInput");
         teststepCreateOutput.setId("teststepCreateOutput");
@@ -554,30 +524,6 @@ privileged aspect JJTeststepexecutionBean_Roo_ManagedBean {
         enabledEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledEditInputMessage);
         
-        OutputLabel buildEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        buildEditOutput.setFor("buildEditInput");
-        buildEditOutput.setId("buildEditOutput");
-        buildEditOutput.setValue("Build:");
-        htmlPanelGrid.getChildren().add(buildEditOutput);
-        
-        AutoComplete buildEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        buildEditInput.setId("buildEditInput");
-        buildEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepexecutionBean.JJTeststepexecution_.build}", JJBuild.class));
-        buildEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTeststepexecutionBean.completeBuild}", List.class, new Class[] { String.class }));
-        buildEditInput.setDropdown(true);
-        buildEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "build", String.class));
-        buildEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{build.name} #{build.description} #{build.creationDate} #{build.updatedDate}", String.class));
-        buildEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{build}", JJBuild.class));
-        buildEditInput.setConverter(new JJBuildConverter());
-        buildEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(buildEditInput);
-        
-        Message buildEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        buildEditInputMessage.setId("buildEditInputMessage");
-        buildEditInputMessage.setFor("buildEditInput");
-        buildEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(buildEditInputMessage);
-        
         OutputLabel teststepEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         teststepEditOutput.setFor("teststepEditInput");
         teststepEditOutput.setId("teststepEditOutput");
@@ -732,16 +678,6 @@ privileged aspect JJTeststepexecutionBean_Roo_ManagedBean {
         enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepexecutionBean.JJTeststepexecution_.enabled}", String.class));
         htmlPanelGrid.getChildren().add(enabledValue);
         
-        HtmlOutputText buildLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        buildLabel.setId("buildLabel");
-        buildLabel.setValue("Build:");
-        htmlPanelGrid.getChildren().add(buildLabel);
-        
-        HtmlOutputText buildValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        buildValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepexecutionBean.JJTeststepexecution_.build}", JJBuild.class));
-        buildValue.setConverter(new JJBuildConverter());
-        htmlPanelGrid.getChildren().add(buildValue);
-        
         HtmlOutputText teststepLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         teststepLabel.setId("teststepLabel");
         teststepLabel.setValue("Teststep:");
@@ -802,17 +738,6 @@ privileged aspect JJTeststepexecutionBean_Roo_ManagedBean {
             String jJContactStr = String.valueOf(jJContact.getName() +  " "  + jJContact.getDescription() +  " "  + jJContact.getCreationDate() +  " "  + jJContact.getUpdatedDate());
             if (jJContactStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJContact);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<JJBuild> JJTeststepexecutionBean.completeBuild(String query) {
-        List<JJBuild> suggestions = new ArrayList<JJBuild>();
-        for (JJBuild jJBuild : jJBuildService.findAllJJBuilds()) {
-            String jJBuildStr = String.valueOf(jJBuild.getName() +  " "  + jJBuild.getDescription() +  " "  + jJBuild.getCreationDate() +  " "  + jJBuild.getUpdatedDate());
-            if (jJBuildStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJBuild);
             }
         }
         return suggestions;

@@ -707,7 +707,7 @@ public class JJChapterBean {
 		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
 
 		List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-				requirement, chapter, false, true, false);
+				requirement, null,chapter, false, true, false);
 
 		for (JJTestcase testcase : testcases) {
 			elements.put(testcase.getOrdering(), testcase);

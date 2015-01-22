@@ -88,7 +88,7 @@ public class JJTeststepexecutionServiceImpl implements
 		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
 		Predicate predicate2 = criteriaBuilder.equal(from.get("teststep"),
 				teststep);
-		Predicate predicate3 = criteriaBuilder.equal(from.get("build"), build);
+		Predicate predicate3 = criteriaBuilder.equal(from.join("teststep").join("testcase").get("build"), build);
 
 		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3));
 

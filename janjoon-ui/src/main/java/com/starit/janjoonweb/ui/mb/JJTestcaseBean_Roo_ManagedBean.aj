@@ -4,10 +4,10 @@
 package com.starit.janjoonweb.ui.mb;
 
 import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJHardware;
-import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJSoftware;
@@ -19,14 +19,12 @@ import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.JJTestcaseBean;
+import com.starit.janjoonweb.ui.mb.converter.JJBuildConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJSprintConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -66,6 +64,9 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
     JJRequirementService JJTestcaseBean.jJRequirementService;
     
     @Autowired
+    JJBuildService JJTestcaseBean.jJBuildService;
+    
+    @Autowired
     JJSprintService JJTestcaseBean.jJSprintService;
     
     private String JJTestcaseBean.name = "JJTestcases";
@@ -86,8 +87,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
     
     private boolean JJTestcaseBean.createDialogVisible = false;
     
-    private List<JJBuild> JJTestcaseBean.selectedBuilds;
-    
     private List<JJVersion> JJTestcaseBean.selectedVersions;
     
     private List<JJSoftware> JJTestcaseBean.selectedSoftwares;
@@ -97,8 +96,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
     private List<JJTeststep> JJTestcaseBean.selectedTeststeps;
     
     private List<JJTask> JJTestcaseBean.selectedTasks;
-    
-    private List<JJMessage> JJTestcaseBean.selectedMessages;
     
     @PostConstruct
     public void JJTestcaseBean.init() {
@@ -368,21 +365,29 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         requirementCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementCreateInputMessage);
         
-        HtmlOutputText buildsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        buildsCreateOutput.setId("buildsCreateOutput");
-        buildsCreateOutput.setValue("Builds:");
-        htmlPanelGrid.getChildren().add(buildsCreateOutput);
+        OutputLabel buildCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        buildCreateOutput.setFor("buildCreateInput");
+        buildCreateOutput.setId("buildCreateOutput");
+        buildCreateOutput.setValue("Build:");
+        htmlPanelGrid.getChildren().add(buildCreateOutput);
         
-        HtmlOutputText buildsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        buildsCreateInput.setId("buildsCreateInput");
-        buildsCreateInput.setValue("This relationship is managed from the JJBuild side");
-        htmlPanelGrid.getChildren().add(buildsCreateInput);
+        AutoComplete buildCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        buildCreateInput.setId("buildCreateInput");
+        buildCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.build}", JJBuild.class));
+        buildCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseBean.completeBuild}", List.class, new Class[] { String.class }));
+        buildCreateInput.setDropdown(true);
+        buildCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "build", String.class));
+        buildCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{build.name} #{build.description} #{build.creationDate} #{build.updatedDate}", String.class));
+        buildCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{build}", JJBuild.class));
+        buildCreateInput.setConverter(new JJBuildConverter());
+        buildCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(buildCreateInput);
         
-        Message buildsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        buildsCreateInputMessage.setId("buildsCreateInputMessage");
-        buildsCreateInputMessage.setFor("buildsCreateInput");
-        buildsCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(buildsCreateInputMessage);
+        Message buildCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        buildCreateInputMessage.setId("buildCreateInputMessage");
+        buildCreateInputMessage.setFor("buildCreateInput");
+        buildCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(buildCreateInputMessage);
         
         HtmlOutputText versionsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         versionsCreateOutput.setId("versionsCreateOutput");
@@ -544,14 +549,16 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         tasksCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(tasksCreateInputMessage);
         
-        HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel messagesCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        messagesCreateOutput.setFor("messagesCreateInput");
         messagesCreateOutput.setId("messagesCreateOutput");
         messagesCreateOutput.setValue("Messages:");
         htmlPanelGrid.getChildren().add(messagesCreateOutput);
         
-        HtmlOutputText messagesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputText messagesCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         messagesCreateInput.setId("messagesCreateInput");
-        messagesCreateInput.setValue("This relationship is managed from the JJMessage side");
+        messagesCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.messages}", Set.class));
+        messagesCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(messagesCreateInput);
         
         Message messagesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -761,21 +768,29 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         requirementEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementEditInputMessage);
         
-        HtmlOutputText buildsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        buildsEditOutput.setId("buildsEditOutput");
-        buildsEditOutput.setValue("Builds:");
-        htmlPanelGrid.getChildren().add(buildsEditOutput);
+        OutputLabel buildEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        buildEditOutput.setFor("buildEditInput");
+        buildEditOutput.setId("buildEditOutput");
+        buildEditOutput.setValue("Build:");
+        htmlPanelGrid.getChildren().add(buildEditOutput);
         
-        HtmlOutputText buildsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        buildsEditInput.setId("buildsEditInput");
-        buildsEditInput.setValue("This relationship is managed from the JJBuild side");
-        htmlPanelGrid.getChildren().add(buildsEditInput);
+        AutoComplete buildEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        buildEditInput.setId("buildEditInput");
+        buildEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.build}", JJBuild.class));
+        buildEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseBean.completeBuild}", List.class, new Class[] { String.class }));
+        buildEditInput.setDropdown(true);
+        buildEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "build", String.class));
+        buildEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{build.name} #{build.description} #{build.creationDate} #{build.updatedDate}", String.class));
+        buildEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{build}", JJBuild.class));
+        buildEditInput.setConverter(new JJBuildConverter());
+        buildEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(buildEditInput);
         
-        Message buildsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        buildsEditInputMessage.setId("buildsEditInputMessage");
-        buildsEditInputMessage.setFor("buildsEditInput");
-        buildsEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(buildsEditInputMessage);
+        Message buildEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        buildEditInputMessage.setId("buildEditInputMessage");
+        buildEditInputMessage.setFor("buildEditInput");
+        buildEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(buildEditInputMessage);
         
         HtmlOutputText versionsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         versionsEditOutput.setId("versionsEditOutput");
@@ -937,14 +952,16 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         tasksEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(tasksEditInputMessage);
         
-        HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel messagesEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        messagesEditOutput.setFor("messagesEditInput");
         messagesEditOutput.setId("messagesEditOutput");
         messagesEditOutput.setValue("Messages:");
         htmlPanelGrid.getChildren().add(messagesEditOutput);
         
-        HtmlOutputText messagesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputText messagesEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         messagesEditInput.setId("messagesEditInput");
-        messagesEditInput.setValue("This relationship is managed from the JJMessage side");
+        messagesEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.messages}", Set.class));
+        messagesEditInput.setRequired(false);
         htmlPanelGrid.getChildren().add(messagesEditInput);
         
         Message messagesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -1060,15 +1077,15 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         requirementValue.setConverter(new JJRequirementConverter());
         htmlPanelGrid.getChildren().add(requirementValue);
         
-        HtmlOutputText buildsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        buildsLabel.setId("buildsLabel");
-        buildsLabel.setValue("Builds:");
-        htmlPanelGrid.getChildren().add(buildsLabel);
+        HtmlOutputText buildLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        buildLabel.setId("buildLabel");
+        buildLabel.setValue("Build:");
+        htmlPanelGrid.getChildren().add(buildLabel);
         
-        HtmlOutputText buildsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        buildsValue.setId("buildsValue");
-        buildsValue.setValue("This relationship is managed from the JJBuild side");
-        htmlPanelGrid.getChildren().add(buildsValue);
+        HtmlOutputText buildValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        buildValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.build}", JJBuild.class));
+        buildValue.setConverter(new JJBuildConverter());
+        htmlPanelGrid.getChildren().add(buildValue);
         
         HtmlOutputText versionsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         versionsLabel.setId("versionsLabel");
@@ -1163,8 +1180,7 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(messagesLabel);
         
         HtmlOutputText messagesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        messagesValue.setId("messagesValue");
-        messagesValue.setValue("This relationship is managed from the JJMessage side");
+        messagesValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.messages}", String.class));
         htmlPanelGrid.getChildren().add(messagesValue);
         
         return htmlPanelGrid;
@@ -1214,15 +1230,15 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJBuild> JJTestcaseBean.getSelectedBuilds() {
-        return selectedBuilds;
-    }
-    
-    public void JJTestcaseBean.setSelectedBuilds(List<JJBuild> selectedBuilds) {
-        if (selectedBuilds != null) {
-            JJTestcase_.setBuilds(new HashSet<JJBuild>(selectedBuilds));
+    public List<JJBuild> JJTestcaseBean.completeBuild(String query) {
+        List<JJBuild> suggestions = new ArrayList<JJBuild>();
+        for (JJBuild jJBuild : jJBuildService.findAllJJBuilds()) {
+            String jJBuildStr = String.valueOf(jJBuild.getName() +  " "  + jJBuild.getDescription() +  " "  + jJBuild.getCreationDate() +  " "  + jJBuild.getUpdatedDate());
+            if (jJBuildStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJBuild);
+            }
         }
-        this.selectedBuilds = selectedBuilds;
+        return suggestions;
     }
     
     public List<JJVersion> JJTestcaseBean.getSelectedVersions() {
@@ -1291,21 +1307,7 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         this.selectedTasks = selectedTasks;
     }
     
-    public List<JJMessage> JJTestcaseBean.getSelectedMessages() {
-        return selectedMessages;
-    }
-    
-    public void JJTestcaseBean.setSelectedMessages(List<JJMessage> selectedMessages) {
-        if (selectedMessages != null) {
-            JJTestcase_.setMessages(new HashSet<JJMessage>(selectedMessages));
-        }
-        this.selectedMessages = selectedMessages;
-    }
-    
     public String JJTestcaseBean.onEdit() {
-        if (JJTestcase_ != null && JJTestcase_.getBuilds() != null) {
-            selectedBuilds = new ArrayList<JJBuild>(JJTestcase_.getBuilds());
-        }
         if (JJTestcase_ != null && JJTestcase_.getVersions() != null) {
             selectedVersions = new ArrayList<JJVersion>(JJTestcase_.getVersions());
         }
@@ -1320,9 +1322,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         }
         if (JJTestcase_ != null && JJTestcase_.getTasks() != null) {
             selectedTasks = new ArrayList<JJTask>(JJTestcase_.getTasks());
-        }
-        if (JJTestcase_ != null && JJTestcase_.getMessages() != null) {
-            selectedMessages = new ArrayList<JJMessage>(JJTestcase_.getMessages());
         }
         return null;
     }
@@ -1376,13 +1375,11 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
     
     public void JJTestcaseBean.reset() {
         JJTestcase_ = null;
-        selectedBuilds = null;
         selectedVersions = null;
         selectedSoftwares = null;
         selectedHardwares = null;
         selectedTeststeps = null;
         selectedTasks = null;
-        selectedMessages = null;
         createDialogVisible = false;
     }
     

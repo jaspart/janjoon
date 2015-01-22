@@ -152,7 +152,7 @@ public class ApplicationLogger {
 			if (status.getName().equalsIgnoreCase("IN PROGRESS") ) {
 
 				JJStatus reqStatus = jJStatusService.getOneStatus("RELEASED",
-						"JJRequirement", true);
+						"Requirement", true);
 				req.setStatus(reqStatus);
 				jJRequirementService.updateJJRequirement(req);			
 

@@ -3,13 +3,13 @@
 
 package com.starit.janjoonweb.ui.mb;
 
+import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJJob;
 import com.starit.janjoonweb.domain.JJJobService;
-import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJPermission;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProductService;
@@ -19,6 +19,7 @@ import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.JJContactBean;
+import com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJCompanyConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJJobConverter;
@@ -30,12 +31,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UISelectItems;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
@@ -49,6 +52,7 @@ import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
+import org.primefaces.component.selectmanymenu.SelectManyMenu;
 import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
@@ -98,9 +102,9 @@ privileged aspect JJContactBean_Roo_ManagedBean {
     
     private List<JJSprint> JJContactBean.selectedSprints;
     
-    private List<JJPermission> JJContactBean.selectedPermissions;
+    private List<JJCategory> JJContactBean.selectedCategories;
     
-    private List<JJMessage> JJContactBean.selectedMessages;
+    private List<JJPermission> JJContactBean.selectedPermissions;
     
     @PostConstruct
     public void JJContactBean.init() {
@@ -358,7 +362,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         emailCreateInput.setId("emailCreateInput");
         emailCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.email}", String.class));
         RegexValidator emailCreateInputRegexValidator = new RegexValidator();
-        emailCreateInputRegexValidator.setPattern("[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})");
+        emailCreateInputRegexValidator.setPattern("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
         emailCreateInput.addValidator(emailCreateInputRegexValidator);
         emailCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(emailCreateInput);
@@ -497,11 +501,8 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         InputText pictureCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         pictureCreateInput.setId("pictureCreateInput");
-        pictureCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.picture}", String.class));
-        LengthValidator pictureCreateInputValidator = new LengthValidator();
-        pictureCreateInputValidator.setMaximum(25);
-        pictureCreateInput.addValidator(pictureCreateInputValidator);
-        pictureCreateInput.setRequired(true);
+        pictureCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.picture}", Byte.class));
+        pictureCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(pictureCreateInput);
         
         Message pictureCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -699,7 +700,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         companyCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{company.name} #{company.description} #{company.creationDate} #{company.updatedDate}", String.class));
         companyCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{company}", JJCompany.class));
         companyCreateInput.setConverter(new JJCompanyConverter());
-        companyCreateInput.setRequired(false);
+        companyCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(companyCreateInput);
         
         Message companyCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -760,6 +761,31 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         sprintsCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(sprintsCreateInputMessage);
         
+        OutputLabel categoriesCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        categoriesCreateOutput.setFor("categoriesCreateInput");
+        categoriesCreateOutput.setId("categoriesCreateOutput");
+        categoriesCreateOutput.setValue("Categories:");
+        htmlPanelGrid.getChildren().add(categoriesCreateOutput);
+        
+        SelectManyMenu categoriesCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        categoriesCreateInput.setId("categoriesCreateInput");
+        categoriesCreateInput.setConverter(new JJCategoryConverter());
+        categoriesCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedCategories}", List.class));
+        UISelectItems categoriesCreateInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        categoriesCreateInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCategoryBean.allJJCategorys}", List.class));
+        categoriesCreateInput.setRequired(false);
+        categoriesCreateInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJCategory", String.class));
+        categoriesCreateInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJCategory}", String.class));
+        categoriesCreateInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJCategory}", JJCategory.class));
+        categoriesCreateInput.getChildren().add(categoriesCreateInputItems);
+        htmlPanelGrid.getChildren().add(categoriesCreateInput);
+        
+        Message categoriesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        categoriesCreateInputMessage.setId("categoriesCreateInputMessage");
+        categoriesCreateInputMessage.setFor("categoriesCreateInput");
+        categoriesCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(categoriesCreateInputMessage);
+        
         HtmlOutputText permissionsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         permissionsCreateOutput.setId("permissionsCreateOutput");
         permissionsCreateOutput.setValue("Permissions:");
@@ -776,14 +802,16 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         permissionsCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(permissionsCreateInputMessage);
         
-        HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel messagesCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        messagesCreateOutput.setFor("messagesCreateInput");
         messagesCreateOutput.setId("messagesCreateOutput");
         messagesCreateOutput.setValue("Messages:");
         htmlPanelGrid.getChildren().add(messagesCreateOutput);
         
-        HtmlOutputText messagesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputText messagesCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         messagesCreateInput.setId("messagesCreateInput");
-        messagesCreateInput.setValue("This relationship is managed from the JJMessage side");
+        messagesCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.messages}", Set.class));
+        messagesCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(messagesCreateInput);
         
         Message messagesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -981,7 +1009,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         emailEditInput.setId("emailEditInput");
         emailEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.email}", String.class));
         RegexValidator emailEditInputRegexValidator = new RegexValidator();
-        emailEditInputRegexValidator.setPattern("[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})");
+        emailEditInputRegexValidator.setPattern("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
         emailEditInput.addValidator(emailEditInputRegexValidator);
         emailEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(emailEditInput);
@@ -1120,11 +1148,8 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         
         InputText pictureEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         pictureEditInput.setId("pictureEditInput");
-        pictureEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.picture}", String.class));
-        LengthValidator pictureEditInputValidator = new LengthValidator();
-        pictureEditInputValidator.setMaximum(25);
-        pictureEditInput.addValidator(pictureEditInputValidator);
-        pictureEditInput.setRequired(true);
+        pictureEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.picture}", Byte.class));
+        pictureEditInput.setRequired(false);
         htmlPanelGrid.getChildren().add(pictureEditInput);
         
         Message pictureEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -1322,7 +1347,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         companyEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{company.name} #{company.description} #{company.creationDate} #{company.updatedDate}", String.class));
         companyEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{company}", JJCompany.class));
         companyEditInput.setConverter(new JJCompanyConverter());
-        companyEditInput.setRequired(false);
+        companyEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(companyEditInput);
         
         Message companyEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -1383,6 +1408,31 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         sprintsEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(sprintsEditInputMessage);
         
+        OutputLabel categoriesEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        categoriesEditOutput.setFor("categoriesEditInput");
+        categoriesEditOutput.setId("categoriesEditOutput");
+        categoriesEditOutput.setValue("Categories:");
+        htmlPanelGrid.getChildren().add(categoriesEditOutput);
+        
+        SelectManyMenu categoriesEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        categoriesEditInput.setId("categoriesEditInput");
+        categoriesEditInput.setConverter(new JJCategoryConverter());
+        categoriesEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedCategories}", List.class));
+        UISelectItems categoriesEditInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        categoriesEditInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCategoryBean.allJJCategorys}", List.class));
+        categoriesEditInput.setRequired(false);
+        categoriesEditInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJCategory", String.class));
+        categoriesEditInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJCategory}", String.class));
+        categoriesEditInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJCategory}", JJCategory.class));
+        categoriesEditInput.getChildren().add(categoriesEditInputItems);
+        htmlPanelGrid.getChildren().add(categoriesEditInput);
+        
+        Message categoriesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        categoriesEditInputMessage.setId("categoriesEditInputMessage");
+        categoriesEditInputMessage.setFor("categoriesEditInput");
+        categoriesEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(categoriesEditInputMessage);
+        
         HtmlOutputText permissionsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         permissionsEditOutput.setId("permissionsEditOutput");
         permissionsEditOutput.setValue("Permissions:");
@@ -1399,14 +1449,16 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         permissionsEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(permissionsEditInputMessage);
         
-        HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel messagesEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        messagesEditOutput.setFor("messagesEditInput");
         messagesEditOutput.setId("messagesEditOutput");
         messagesEditOutput.setValue("Messages:");
         htmlPanelGrid.getChildren().add(messagesEditOutput);
         
-        HtmlOutputText messagesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputText messagesEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         messagesEditInput.setId("messagesEditInput");
-        messagesEditInput.setValue("This relationship is managed from the JJMessage side");
+        messagesEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.messages}", Set.class));
+        messagesEditInput.setRequired(false);
         htmlPanelGrid.getChildren().add(messagesEditInput);
         
         Message messagesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -1592,7 +1644,6 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(pictureLabel);
         
         HtmlOutputText pictureValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        pictureValue.setId("pictureValue");
         pictureValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.picture}", String.class));
         htmlPanelGrid.getChildren().add(pictureValue);
         
@@ -1717,6 +1768,25 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         sprintsValue.setValue("This relationship is managed from the JJSprint side");
         htmlPanelGrid.getChildren().add(sprintsValue);
         
+        HtmlOutputText categoriesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        categoriesLabel.setId("categoriesLabel");
+        categoriesLabel.setValue("Categories:");
+        htmlPanelGrid.getChildren().add(categoriesLabel);
+        
+        SelectManyMenu categoriesValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        categoriesValue.setId("categoriesValue");
+        categoriesValue.setConverter(new JJCategoryConverter());
+        categoriesValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedCategories}", List.class));
+        UISelectItems categoriesValueItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        categoriesValue.setReadonly(true);
+        categoriesValue.setDisabled(true);
+        categoriesValueItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.categories}", Set.class));
+        categoriesValueItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJCategory", String.class));
+        categoriesValueItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJCategory}", String.class));
+        categoriesValueItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJCategory}", JJCategory.class));
+        categoriesValue.getChildren().add(categoriesValueItems);
+        htmlPanelGrid.getChildren().add(categoriesValue);
+        
         HtmlOutputText permissionsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         permissionsLabel.setId("permissionsLabel");
         permissionsLabel.setValue("Permissions:");
@@ -1733,8 +1803,7 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(messagesLabel);
         
         HtmlOutputText messagesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        messagesValue.setId("messagesValue");
-        messagesValue.setValue("This relationship is managed from the JJMessage side");
+        messagesValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.messages}", String.class));
         htmlPanelGrid.getChildren().add(messagesValue);
         
         return htmlPanelGrid;
@@ -1850,6 +1919,17 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         this.selectedSprints = selectedSprints;
     }
     
+    public List<JJCategory> JJContactBean.getSelectedCategories() {
+        return selectedCategories;
+    }
+    
+    public void JJContactBean.setSelectedCategories(List<JJCategory> selectedCategories) {
+        if (selectedCategories != null) {
+            JJContact_.setCategories(new HashSet<JJCategory>(selectedCategories));
+        }
+        this.selectedCategories = selectedCategories;
+    }
+    
     public List<JJPermission> JJContactBean.getSelectedPermissions() {
         return selectedPermissions;
     }
@@ -1861,26 +1941,15 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         this.selectedPermissions = selectedPermissions;
     }
     
-    public List<JJMessage> JJContactBean.getSelectedMessages() {
-        return selectedMessages;
-    }
-    
-    public void JJContactBean.setSelectedMessages(List<JJMessage> selectedMessages) {
-        if (selectedMessages != null) {
-            JJContact_.setMessages(new HashSet<JJMessage>(selectedMessages));
-        }
-        this.selectedMessages = selectedMessages;
-    }
-    
     public String JJContactBean.onEdit() {
         if (JJContact_ != null && JJContact_.getSprints() != null) {
             selectedSprints = new ArrayList<JJSprint>(JJContact_.getSprints());
         }
+        if (JJContact_ != null && JJContact_.getCategories() != null) {
+            selectedCategories = new ArrayList<JJCategory>(JJContact_.getCategories());
+        }
         if (JJContact_ != null && JJContact_.getPermissions() != null) {
             selectedPermissions = new ArrayList<JJPermission>(JJContact_.getPermissions());
-        }
-        if (JJContact_ != null && JJContact_.getMessages() != null) {
-            selectedMessages = new ArrayList<JJMessage>(JJContact_.getMessages());
         }
         return null;
     }
@@ -1935,8 +2004,8 @@ privileged aspect JJContactBean_Roo_ManagedBean {
     public void JJContactBean.reset() {
         JJContact_ = null;
         selectedSprints = null;
+        selectedCategories = null;
         selectedPermissions = null;
-        selectedMessages = null;
         createDialogVisible = false;
     }
     

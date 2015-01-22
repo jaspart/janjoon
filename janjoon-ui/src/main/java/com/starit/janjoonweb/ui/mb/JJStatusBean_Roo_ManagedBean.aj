@@ -5,13 +5,11 @@ package com.starit.janjoonweb.ui.mb;
 
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
-import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.ui.mb.JJStatusBean;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -52,8 +50,6 @@ privileged aspect JJStatusBean_Roo_ManagedBean {
     private HtmlPanelGrid JJStatusBean.viewPanelGrid;
     
     private boolean JJStatusBean.createDialogVisible = false;
-    
-    private List<JJMessage> JJStatusBean.selectedMessages;
     
     @PostConstruct
     public void JJStatusBean.init() {
@@ -157,18 +153,6 @@ privileged aspect JJStatusBean_Roo_ManagedBean {
         }
         return suggestions;
     }
-    
-    public List<JJMessage> JJStatusBean.getSelectedMessages() {
-        return selectedMessages;
-    }
-    
-    public void JJStatusBean.setSelectedMessages(List<JJMessage> selectedMessages) {
-        if (selectedMessages != null) {
-            JJStatus_.setMessages(new HashSet<JJMessage>(selectedMessages));
-        }
-        this.selectedMessages = selectedMessages;
-    }   
-
     
     public boolean JJStatusBean.isCreateDialogVisible() {
         return createDialogVisible;

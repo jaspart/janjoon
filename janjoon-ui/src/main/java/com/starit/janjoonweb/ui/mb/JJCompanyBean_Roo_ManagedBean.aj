@@ -76,7 +76,7 @@ privileged aspect JJCompanyBean_Roo_ManagedBean {
         columns.add("description");
         columns.add("creationDate");
         columns.add("updatedDate");
-        columns.add("logo");
+        columns.add("banner");
     }
     
     public String JJCompanyBean.getName() {
@@ -300,13 +300,10 @@ privileged aspect JJCompanyBean_Roo_ManagedBean {
         logoCreateOutput.setValue("Logo:");
         htmlPanelGrid.getChildren().add(logoCreateOutput);
         
-        InputTextarea logoCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        InputText logoCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         logoCreateInput.setId("logoCreateInput");
-        logoCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCompanyBean.JJCompany_.logo}", String.class));
-        LengthValidator logoCreateInputValidator = new LengthValidator();
-        logoCreateInputValidator.setMaximum(200);
-        logoCreateInput.addValidator(logoCreateInputValidator);
-        logoCreateInput.setRequired(true);
+        logoCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCompanyBean.JJCompany_.logo}", Byte.class));
+        logoCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(logoCreateInput);
         
         Message logoCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -611,13 +608,10 @@ privileged aspect JJCompanyBean_Roo_ManagedBean {
         logoEditOutput.setValue("Logo:");
         htmlPanelGrid.getChildren().add(logoEditOutput);
         
-        InputTextarea logoEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        InputText logoEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         logoEditInput.setId("logoEditInput");
-        logoEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCompanyBean.JJCompany_.logo}", String.class));
-        LengthValidator logoEditInputValidator = new LengthValidator();
-        logoEditInputValidator.setMaximum(200);
-        logoEditInput.addValidator(logoEditInputValidator);
-        logoEditInput.setRequired(true);
+        logoEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCompanyBean.JJCompany_.logo}", Byte.class));
+        logoEditInput.setRequired(false);
         htmlPanelGrid.getChildren().add(logoEditInput);
         
         Message logoEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -851,11 +845,8 @@ privileged aspect JJCompanyBean_Roo_ManagedBean {
         logoLabel.setValue("Logo:");
         htmlPanelGrid.getChildren().add(logoLabel);
         
-        InputTextarea logoValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        logoValue.setId("logoValue");
+        HtmlOutputText logoValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         logoValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCompanyBean.JJCompany_.logo}", String.class));
-        logoValue.setReadonly(true);
-        logoValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(logoValue);
         
         HtmlOutputText bannerLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);

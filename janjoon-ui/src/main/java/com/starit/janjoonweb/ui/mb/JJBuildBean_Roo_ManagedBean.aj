@@ -10,21 +10,14 @@ import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJPhaseService;
 import com.starit.janjoonweb.domain.JJTestcase;
-import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.JJBuildBean;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJPhaseConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJVersionConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
+import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -36,7 +29,6 @@ import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.validator.LengthValidator;
-
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.inputtext.InputText;
@@ -66,9 +58,6 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
     @Autowired
     JJPhaseService JJBuildBean.jJPhaseService;
     
-    @Autowired
-    JJTestcaseService JJBuildBean.jJTestcaseService;
-    
     private String JJBuildBean.name = "JJBuilds";
     
     private JJBuild JJBuildBean.JJBuild_;
@@ -86,6 +75,8 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
     private HtmlPanelGrid JJBuildBean.viewPanelGrid;
     
     private boolean JJBuildBean.createDialogVisible = false;
+    
+    private List<JJTestcase> JJBuildBean.selectedTestcases;
     
     @PostConstruct
     public void JJBuildBean.init() {
@@ -224,6 +215,24 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         creationDateCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(creationDateCreateInputMessage);
         
+        OutputLabel enabledCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        enabledCreateOutput.setFor("enabledCreateInput");
+        enabledCreateOutput.setId("enabledCreateOutput");
+        enabledCreateOutput.setValue("Enabled:");
+        htmlPanelGrid.getChildren().add(enabledCreateOutput);
+        
+        SelectBooleanCheckbox enabledCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        enabledCreateInput.setId("enabledCreateInput");
+        enabledCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.enabled}", Boolean.class));
+        enabledCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(enabledCreateInput);
+        
+        Message enabledCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        enabledCreateInputMessage.setId("enabledCreateInputMessage");
+        enabledCreateInputMessage.setFor("enabledCreateInput");
+        enabledCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
+        
         OutputLabel createdByCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         createdByCreateOutput.setFor("createdByCreateInput");
         createdByCreateOutput.setId("createdByCreateOutput");
@@ -293,24 +302,6 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         updatedByCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(updatedByCreateInputMessage);
         
-        OutputLabel enabledCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        enabledCreateOutput.setFor("enabledCreateInput");
-        enabledCreateOutput.setId("enabledCreateOutput");
-        enabledCreateOutput.setValue("Enabled:");
-        htmlPanelGrid.getChildren().add(enabledCreateOutput);
-        
-        SelectBooleanCheckbox enabledCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
-        enabledCreateInput.setId("enabledCreateInput");
-        enabledCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.enabled}", Boolean.class));
-        enabledCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(enabledCreateInput);
-        
-        Message enabledCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        enabledCreateInputMessage.setId("enabledCreateInputMessage");
-        enabledCreateInputMessage.setFor("enabledCreateInput");
-        enabledCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
-        
         OutputLabel versionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         versionCreateOutput.setFor("versionCreateInput");
         versionCreateOutput.setId("versionCreateOutput");
@@ -359,29 +350,21 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         phaseCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(phaseCreateInputMessage);
         
-        OutputLabel testcaseCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        testcaseCreateOutput.setFor("testcaseCreateInput");
-        testcaseCreateOutput.setId("testcaseCreateOutput");
-        testcaseCreateOutput.setValue("Testcase:");
-        htmlPanelGrid.getChildren().add(testcaseCreateOutput);
+        HtmlOutputText testcasesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesCreateOutput.setId("testcasesCreateOutput");
+        testcasesCreateOutput.setValue("Testcases:");
+        htmlPanelGrid.getChildren().add(testcasesCreateOutput);
         
-        AutoComplete testcaseCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        testcaseCreateInput.setId("testcaseCreateInput");
-        testcaseCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.testcase}", JJTestcase.class));
-        testcaseCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJBuildBean.completeTestcase}", List.class, new Class[] { String.class }));
-        testcaseCreateInput.setDropdown(true);
-        testcaseCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "testcase", String.class));
-        testcaseCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{testcase.name} #{testcase.description} #{testcase.creationDate} #{testcase.updatedDate}", String.class));
-        testcaseCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{testcase}", JJTestcase.class));
-        testcaseCreateInput.setConverter(new JJTestcaseConverter());
-        testcaseCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(testcaseCreateInput);
+        HtmlOutputText testcasesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesCreateInput.setId("testcasesCreateInput");
+        testcasesCreateInput.setValue("This relationship is managed from the JJTestcase side");
+        htmlPanelGrid.getChildren().add(testcasesCreateInput);
         
-        Message testcaseCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        testcaseCreateInputMessage.setId("testcaseCreateInputMessage");
-        testcaseCreateInputMessage.setFor("testcaseCreateInput");
-        testcaseCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(testcaseCreateInputMessage);
+        Message testcasesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcasesCreateInputMessage.setId("testcasesCreateInputMessage");
+        testcasesCreateInputMessage.setFor("testcasesCreateInput");
+        testcasesCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcasesCreateInputMessage);
         
         OutputLabel messagesCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         messagesCreateOutput.setFor("messagesCreateInput");
@@ -472,6 +455,24 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         creationDateEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(creationDateEditInputMessage);
         
+        OutputLabel enabledEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        enabledEditOutput.setFor("enabledEditInput");
+        enabledEditOutput.setId("enabledEditOutput");
+        enabledEditOutput.setValue("Enabled:");
+        htmlPanelGrid.getChildren().add(enabledEditOutput);
+        
+        SelectBooleanCheckbox enabledEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        enabledEditInput.setId("enabledEditInput");
+        enabledEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.enabled}", Boolean.class));
+        enabledEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(enabledEditInput);
+        
+        Message enabledEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        enabledEditInputMessage.setId("enabledEditInputMessage");
+        enabledEditInputMessage.setFor("enabledEditInput");
+        enabledEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(enabledEditInputMessage);
+        
         OutputLabel createdByEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         createdByEditOutput.setFor("createdByEditInput");
         createdByEditOutput.setId("createdByEditOutput");
@@ -541,24 +542,6 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         updatedByEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(updatedByEditInputMessage);
         
-        OutputLabel enabledEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        enabledEditOutput.setFor("enabledEditInput");
-        enabledEditOutput.setId("enabledEditOutput");
-        enabledEditOutput.setValue("Enabled:");
-        htmlPanelGrid.getChildren().add(enabledEditOutput);
-        
-        SelectBooleanCheckbox enabledEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
-        enabledEditInput.setId("enabledEditInput");
-        enabledEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.enabled}", Boolean.class));
-        enabledEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(enabledEditInput);
-        
-        Message enabledEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        enabledEditInputMessage.setId("enabledEditInputMessage");
-        enabledEditInputMessage.setFor("enabledEditInput");
-        enabledEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(enabledEditInputMessage);
-        
         OutputLabel versionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         versionEditOutput.setFor("versionEditInput");
         versionEditOutput.setId("versionEditOutput");
@@ -607,29 +590,21 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         phaseEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(phaseEditInputMessage);
         
-        OutputLabel testcaseEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        testcaseEditOutput.setFor("testcaseEditInput");
-        testcaseEditOutput.setId("testcaseEditOutput");
-        testcaseEditOutput.setValue("Testcase:");
-        htmlPanelGrid.getChildren().add(testcaseEditOutput);
+        HtmlOutputText testcasesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesEditOutput.setId("testcasesEditOutput");
+        testcasesEditOutput.setValue("Testcases:");
+        htmlPanelGrid.getChildren().add(testcasesEditOutput);
         
-        AutoComplete testcaseEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        testcaseEditInput.setId("testcaseEditInput");
-        testcaseEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.testcase}", JJTestcase.class));
-        testcaseEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJBuildBean.completeTestcase}", List.class, new Class[] { String.class }));
-        testcaseEditInput.setDropdown(true);
-        testcaseEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "testcase", String.class));
-        testcaseEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{testcase.name} #{testcase.description} #{testcase.creationDate} #{testcase.updatedDate}", String.class));
-        testcaseEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{testcase}", JJTestcase.class));
-        testcaseEditInput.setConverter(new JJTestcaseConverter());
-        testcaseEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(testcaseEditInput);
+        HtmlOutputText testcasesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesEditInput.setId("testcasesEditInput");
+        testcasesEditInput.setValue("This relationship is managed from the JJTestcase side");
+        htmlPanelGrid.getChildren().add(testcasesEditInput);
         
-        Message testcaseEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        testcaseEditInputMessage.setId("testcaseEditInputMessage");
-        testcaseEditInputMessage.setFor("testcaseEditInput");
-        testcaseEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(testcaseEditInputMessage);
+        Message testcasesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcasesEditInputMessage.setId("testcasesEditInputMessage");
+        testcasesEditInputMessage.setFor("testcasesEditInput");
+        testcasesEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcasesEditInputMessage);
         
         OutputLabel messagesEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         messagesEditOutput.setFor("messagesEditInput");
@@ -696,6 +671,15 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         creationDateValue.setConverter(creationDateValueConverter);
         htmlPanelGrid.getChildren().add(creationDateValue);
         
+        HtmlOutputText enabledLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        enabledLabel.setId("enabledLabel");
+        enabledLabel.setValue("Enabled:");
+        htmlPanelGrid.getChildren().add(enabledLabel);
+        
+        HtmlOutputText enabledValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.enabled}", String.class));
+        htmlPanelGrid.getChildren().add(enabledValue);
+        
         HtmlOutputText createdByLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         createdByLabel.setId("createdByLabel");
         createdByLabel.setValue("Created By:");
@@ -728,15 +712,6 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         updatedByValue.setConverter(new JJContactConverter());
         htmlPanelGrid.getChildren().add(updatedByValue);
         
-        HtmlOutputText enabledLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        enabledLabel.setId("enabledLabel");
-        enabledLabel.setValue("Enabled:");
-        htmlPanelGrid.getChildren().add(enabledLabel);
-        
-        HtmlOutputText enabledValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.enabled}", String.class));
-        htmlPanelGrid.getChildren().add(enabledValue);
-        
         HtmlOutputText versionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         versionLabel.setId("versionLabel");
         versionLabel.setValue("Version:");
@@ -757,15 +732,15 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         phaseValue.setConverter(new JJPhaseConverter());
         htmlPanelGrid.getChildren().add(phaseValue);
         
-        HtmlOutputText testcaseLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testcaseLabel.setId("testcaseLabel");
-        testcaseLabel.setValue("Testcase:");
-        htmlPanelGrid.getChildren().add(testcaseLabel);
+        HtmlOutputText testcasesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesLabel.setId("testcasesLabel");
+        testcasesLabel.setValue("Testcases:");
+        htmlPanelGrid.getChildren().add(testcasesLabel);
         
-        HtmlOutputText testcaseValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        testcaseValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.testcase}", JJTestcase.class));
-        testcaseValue.setConverter(new JJTestcaseConverter());
-        htmlPanelGrid.getChildren().add(testcaseValue);
+        HtmlOutputText testcasesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesValue.setId("testcasesValue");
+        testcasesValue.setValue("This relationship is managed from the JJTestcase side");
+        htmlPanelGrid.getChildren().add(testcasesValue);
         
         HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesLabel.setId("messagesLabel");
@@ -834,18 +809,21 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJTestcase> JJBuildBean.completeTestcase(String query) {
-        List<JJTestcase> suggestions = new ArrayList<JJTestcase>();
-        for (JJTestcase jJTestcase : jJTestcaseService.findAllJJTestcases()) {
-            String jJTestcaseStr = String.valueOf(jJTestcase.getName() +  " "  + jJTestcase.getDescription() +  " "  + jJTestcase.getCreationDate() +  " "  + jJTestcase.getUpdatedDate());
-            if (jJTestcaseStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJTestcase);
-            }
+    public List<JJTestcase> JJBuildBean.getSelectedTestcases() {
+        return selectedTestcases;
+    }
+    
+    public void JJBuildBean.setSelectedTestcases(List<JJTestcase> selectedTestcases) {
+        if (selectedTestcases != null) {
+            JJBuild_.setTestcases(new HashSet<JJTestcase>(selectedTestcases));
         }
-        return suggestions;
+        this.selectedTestcases = selectedTestcases;
     }
     
     public String JJBuildBean.onEdit() {
+        if (JJBuild_ != null && JJBuild_.getTestcases() != null) {
+            selectedTestcases = new ArrayList<JJTestcase>(JJBuild_.getTestcases());
+        }
         return null;
     }
     
@@ -898,6 +876,7 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
     
     public void JJBuildBean.reset() {
         JJBuild_ = null;
+        selectedTestcases = null;
         createDialogVisible = false;
     }
     

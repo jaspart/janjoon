@@ -243,29 +243,29 @@
 						rendered="#{jJTestcaseBean.rendredEmptySelection}"
 						style="color: red;" />
 
-					<p:dataTable var="rowName" value="#{jJTestcaseBean.rowNames}"
-						scrollable="true" scrollHeight="500" rowIndexVar="rowIdx"
-						style="table-layout: fixed;width:#{jJTestcaseBean.width}px"
-						rendered="#{!jJTestcaseBean.rendredTestCaseRecaps and !jJTestcaseBean.rendredTestCaseHistorical and jJTestcaseBean.rowNames != null}">
-						<p:column headerText="Build/Version" styleClass="ui-widget-header"
-							width="100">
-							<h:outputText value="#{rowName.name}" />
-						</p:column>
+<!-- 					<p:dataTable var="rowName" value="#{jJTestcaseBean.rowNames}" -->
+<!-- 						scrollable="true" scrollHeight="500" rowIndexVar="rowIdx" -->
+<!-- 						style="table-layout: fixed;width:#{jJTestcaseBean.width}px" -->
+<!-- 						rendered="#{!jJTestcaseBean.rendredTestCaseRecaps and !jJTestcaseBean.rendredTestCaseHistorical and jJTestcaseBean.rowNames != null}"> -->
+<!-- 						<p:column headerText="Build/Version" styleClass="ui-widget-header" -->
+<!-- 							width="100"> -->
+<!-- 							<h:outputText value="#{rowName.name}" /> -->
+<!-- 						</p:column> -->
 
-						<p:columns var="columnName" value="#{jJTestcaseBean.colNames}"
-							width="50" headerText="#{columnName.name}"
-							columnIndexVar="colIdx">
+<!-- 						<p:columns var="columnName" value="#{jJTestcaseBean.colNames}" -->
+<!-- 							width="50" headerText="#{columnName.name}" -->
+<!-- 							columnIndexVar="colIdx"> -->
 
-							<p:panel>
-								<p:selectBooleanCheckbox value="false" disabled="true"
-									rendered="#{rowName.testcase == null}" />
-								<p:selectBooleanCheckbox
-									value="#{rowName.testcase == columnName}" disabled="true"
-									rendered="#{rowName.testcase != null}" />
-							</p:panel>
+<!-- 							<p:panel> -->
+<!-- 								<p:selectBooleanCheckbox value="false" disabled="true" -->
+<!-- 									rendered="#{rowName.testcase == null}" /> -->
+<!-- 								<p:selectBooleanCheckbox -->
+<!-- 									value="#{rowName.testcase == columnName}" disabled="true" -->
+<!-- 									rendered="#{rowName.testcase != null}" /> -->
+<!-- 							</p:panel> -->
 
-						</p:columns>
-					</p:dataTable>
+<!-- 						</p:columns> -->
+<!-- 					</p:dataTable> -->
 
 					<p:panelGrid columns="1"
 						rendered="#{jJTestcaseBean.rendredTestCaseRecaps}"
@@ -403,7 +403,7 @@
 							<h:outputText value="#{tce.testcaseexecution.id}" />
 						</p:column>
 						<p:column headerText="Build">
-							<h:outputText value="#{tce.testcaseexecution.build.name}" />
+							<h:outputText value="#{tce.testcaseexecution.testcase.build.name}" />
 						</p:column>
 						<p:column headerText="Creation Date">
 							<h:outputText value="#{tce.testcaseexecution.creationDate}" />
@@ -458,7 +458,7 @@
 				<h:form id="testcaseDialogForm">
 					<p:growl id="msg" />
 					<!-- 					<p:scrollPanel style="width:720px;height:500px;" mode="native"> -->
-					<p:panelGrid style="margin-top:10px;width:720px;height:500px;">
+					<p:panelGrid style="margin-top:10px;width:700px;height:500px;">
 						<p:row>
 							<p:column>
 								<p:inputText id="name" value="#{jJTestcaseBean.testcase.name}"
@@ -471,26 +471,28 @@
 								<p:watermark for="name"
 									value="#{messages.test_new_name_watermark}" />
 							</p:column>
-							<p:column>
+							<p:column colspan="2">
 								<h:outputText for="requirement"
 									value="#{messages.test_new_requirement_label}" />
 								<p:selectOneMenu id="requirement"
 									value="#{jJTestcaseBean.requirement}" panelStyle="width:150px;"
-									effect="fade" style="width:150px;" filter="true"
+									effect="fade" style="width:200px;" filter="true"
 									required="true" filterMatchMode="startsWith"
 									widgetVar="requirementWidget"
 									disabled="#{jJTestcaseBean.disabledTestcaseMode}"
 									requiredMessage="#{messages.test_new_name_alert}">
 									<f:converter
 										converterId="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter" />
-									<f:selectItem itemLabel="#{jJTestcaseBean.requirement.name}"
-										itemValue="#{jJTestcaseBean.requirement}" />
+									<f:selectItem itemValue="#{null}"
+										itemLabel="#{messages.test_build_select}" />								
 									<f:selectItems value="#{jJTestcaseBean.requirements}" var="c"
 										itemLabel="#{c.name}" itemValue="#{c}" />
 									<p:ajax process="@this" partialSubmit="true"
 										listener="#{jJTestcaseBean.handleSelectRequirement()}" />
 								</p:selectOneMenu>
 							</p:column>
+							</p:row>
+							<p:row>
 							<p:column>
 								<h:outputText value="#{messages.test_new_automatic_label}" />
 								<p:selectBooleanCheckbox
@@ -498,6 +500,24 @@
 									value="#{jJTestcaseBean.testcase.automatic}">
 									<p:ajax listener="#{jJTestcaseBean.addMessage}" />
 								</p:selectBooleanCheckbox>
+							</p:column>
+							<p:column colspan="2">
+							<h:outputText for="build"
+									value="Build :" />
+								<p:selectOneMenu id="build"
+									value="#{jJTestcaseBean.testcase.build}" panelStyle="width:150px;"
+									effect="fade" style="width:200px;margin-left: 20px;" filter="true"
+									required="true" filterMatchMode="startsWith"
+									widgetVar="buildWidget"
+									disabled="#{jJTestcaseBean.disabledTestcaseMode}"
+									requiredMessage="#{messages.test_new_name_alert}">
+									<f:converter
+										converterId="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter" />
+									<f:selectItem itemValue="#{null}"
+										itemLabel="#{messages.test_build_select}" />
+									<f:selectItems value="#{jJBuildBean.builds}" var="c"
+										itemLabel="#{c.name}" itemValue="#{c}" />						
+								</p:selectOneMenu>
 							</p:column>
 						</p:row>
 						<p:row>
@@ -545,13 +565,13 @@
 									disabled="#{not jJTestcaseBean.disabledTeststepMode}"
 									icon="ui-icon-circle-plus" rendered="#{!loginBean.mobile}"
 									actionListener="#{jJTestcaseBean.save()}"
-									process="@this,name,requirement,description "
+									process="@this,name,requirement,description,build "
 									update="testcaseDialogForm :testFormWest" />
 								<p:commandButton value="#{messages.test_new_addtest_label}"
 									disabled="#{not jJTestcaseBean.disabledTeststepMode}"
 									icon="ui-icon-circle-plus" rendered="#{loginBean.mobile}"
 									actionListener="#{jJTestcaseBean.save()}"
-									process="@this,name,requirement,descriptionMobile "
+									process="@this,name,requirement,descriptionMobile,build "
 									update="testcaseDialogForm :testFormWest" />
 							</p:column>
 						</p:row>
@@ -666,13 +686,13 @@
 					</p:dataTable>
 					<!-- 					</p:scrollPanel> -->
 					<p:commandButton value="Save"
-						process="@this,name,requirement,description"
+						process="@this,name,requirement,description,build"
 						rendered="#{!loginBean.mobile}"
 						disabled="#{jJTestcaseBean.disabledTeststepMode}"
 						update="testcaseDialogForm :testFormWest" style="float: right;"
 						action="#{jJTestcaseBean.saveAndclose(jJTeststepBean)}" />
 					<p:commandButton value="Save"
-						process="@this,name,requirement,descriptionMobile"
+						process="@this,name,requirement,descriptionMobile,build"
 						disabled="#{jJTestcaseBean.disabledTeststepMode}"
 						rendered="#{loginBean.mobile}"
 						update="testcaseDialogForm :testFormWest" style="float: right;"

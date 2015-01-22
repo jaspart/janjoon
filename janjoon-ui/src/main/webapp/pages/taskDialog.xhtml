@@ -15,7 +15,8 @@
 				style="white-space: nowrap;" />
 		</h:panelGrid>
 	</pe:blockUI>
-	<p:panelGrid id="viewTaskPanelGrid">
+	<p:panelGrid id="viewTaskPanelGrid"
+		style="height: #{jJTaskBean.height}px ; width: #{jJTaskBean.width}px;">
 		<p:row>
 			<p:column colspan="2">
 				<p:outputLabel value="Sprint :" for="taskSprint" />
@@ -72,6 +73,24 @@
 					readOnly="true" rendered="#{!loginBean.mobile}" />
 				<p:editor id="BugMobiledescription" style="width:680px"
 					value="#{JJTask_.bug.description}" readOnly="true"
+					rendered="#{loginBean.mobile}" />
+			</p:column>
+		</p:row>
+		<p:row rowspan="5"
+			rendered="#{JJTask_.testcase != null and jJTaskBean.taskTreeNode == null}">
+			<p:column colspan="2">
+				<p:outputLabel value="TestCase :" for="taskTestCase" />
+				<p:inputText id="taskTestCase" readonly="true"
+					converter="JJTestcaseConverter" value="#{JJTask_.testcase}" />
+			</p:column>
+			<p:column colspan="4">
+				<p:outputLabel value="Description :" />
+				<br />
+				<pe:ckEditor id="testCasedescription" toolbar="[['Copy']]"
+					style="width:680px" value="#{JJTask_.testcase.description}"
+					readOnly="true" rendered="#{!loginBean.mobile}" />
+				<p:editor id="testcaseMobiledescription" style="width:680px"
+					value="#{JJTask_.testcase.description}" readOnly="true"
 					rendered="#{loginBean.mobile}" />
 			</p:column>
 		</p:row>

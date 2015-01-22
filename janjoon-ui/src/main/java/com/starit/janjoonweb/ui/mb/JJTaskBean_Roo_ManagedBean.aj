@@ -9,7 +9,6 @@ import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
-import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJSprint;
@@ -113,8 +112,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
     private HtmlPanelGrid JJTaskBean.viewPanelGrid;
     
     private boolean JJTaskBean.createDialogVisible = false;
-    
-    private List<JJMessage> JJTaskBean.selectedMessages;
     
     private List<JJTask> JJTaskBean.selectedTasks;
     
@@ -840,14 +837,16 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         statusCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(statusCreateInputMessage);
         
-        HtmlOutputText messagesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel messagesCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        messagesCreateOutput.setFor("messagesCreateInput");
         messagesCreateOutput.setId("messagesCreateOutput");
         messagesCreateOutput.setValue("Messages:");
         htmlPanelGrid.getChildren().add(messagesCreateOutput);
         
-        HtmlOutputText messagesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputText messagesCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         messagesCreateInput.setId("messagesCreateInput");
-        messagesCreateInput.setValue("This relationship is managed from the JJMessage side");
+        messagesCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.messages}", Set.class));
+        messagesCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(messagesCreateInput);
         
         Message messagesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -1606,14 +1605,16 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         statusEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(statusEditInputMessage);
         
-        HtmlOutputText messagesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel messagesEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        messagesEditOutput.setFor("messagesEditInput");
         messagesEditOutput.setId("messagesEditOutput");
         messagesEditOutput.setValue("Messages:");
         htmlPanelGrid.getChildren().add(messagesEditOutput);
         
-        HtmlOutputText messagesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputText messagesEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         messagesEditInput.setId("messagesEditInput");
-        messagesEditInput.setValue("This relationship is managed from the JJMessage side");
+        messagesEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.messages}", Set.class));
+        messagesEditInput.setRequired(false);
         htmlPanelGrid.getChildren().add(messagesEditInput);
         
         Message messagesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -2054,8 +2055,7 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(messagesLabel);
         
         HtmlOutputText messagesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        messagesValue.setId("messagesValue");
-        messagesValue.setValue("This relationship is managed from the JJMessage side");
+        messagesValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.messages}", String.class));
         htmlPanelGrid.getChildren().add(messagesValue);
         
         HtmlOutputText completedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -2240,17 +2240,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJMessage> JJTaskBean.getSelectedMessages() {
-        return selectedMessages;
-    }
-    
-    public void JJTaskBean.setSelectedMessages(List<JJMessage> selectedMessages) {
-        if (selectedMessages != null) {
-            JJTask_.setMessages(new HashSet<JJMessage>(selectedMessages));
-        }
-        this.selectedMessages = selectedMessages;
-    }
-    
     public List<JJTask> JJTaskBean.completeParent(String query) {
         List<JJTask> suggestions = new ArrayList<JJTask>();
         for (JJTask jJTask : jJTaskService.findAllJJTasks()) {
@@ -2296,9 +2285,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
     }
     
     public String JJTaskBean.onEdit() {
-        if (JJTask_ != null && JJTask_.getMessages() != null) {
-            selectedMessages = new ArrayList<JJMessage>(JJTask_.getMessages());
-        }
         if (JJTask_ != null && JJTask_.getTasks() != null) {
             selectedTasks = new ArrayList<JJTask>(JJTask_.getTasks());
         }

@@ -75,7 +75,7 @@
 			resizable="true" maximizable="true" showEffect="fade"
 			hideEffect="explode" draggable="#{jJTaskBean.mode eq 'planning'}">
 			<p:outputPanel id="viewTaskPanel">
-				<h:form id="viewTaskForm" enctype="multipart/form-data">
+				<h:form id="viewTaskForm" enctype="multipart/form-data" >
 					<ui:include src="taskDialog.xhtml">
 						<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
 					</ui:include>

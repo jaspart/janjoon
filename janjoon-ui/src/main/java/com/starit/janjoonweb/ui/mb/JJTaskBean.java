@@ -1497,7 +1497,7 @@ public class JJTaskBean {
 			} else if (objet.equalsIgnoreCase("Testcase")) {
 
 				for (JJTestcase testcase : jJTestcaseService
-						.getImportTestcases(null, project,((JJProductBean)LoginBean.findBean("jJProductBean")).getProduct(), true)) {
+						.getImportTestcases(null, project,((JJProductBean)LoginBean.findBean("jJProductBean")).getProduct(),null, true)) {
 
 					if (!checkAll) {
 						tasks = jJTaskService.getImportTasks(null, null,
@@ -1720,6 +1720,7 @@ public class JJTaskBean {
 			RequestContext context = RequestContext.getCurrentInstance();
 
 			context.execute("PF('projectTabView').select(" + 1 + ")");
+			jJSprintBean.setUpdate(false);
 			context.execute("PF('SprintTab').select("
 					+ jJSprintBean.contains(jJSprintBean.getSprintUtil()
 							.getSprint().getId()) + ")");
@@ -1752,7 +1753,7 @@ public class JJTaskBean {
 			RequestContext context = RequestContext.getCurrentInstance();
 
 			context.execute("PF('projectTabView').select(" + 1 + ")");
-
+			jJSprintBean.setUpdate(false);
 			context.execute("PF('SprintTab').select("
 					+ jJSprintBean.contains(jJSprintBean.getSprintUtil()
 							.getSprint().getId()) + ")");
@@ -2157,8 +2158,7 @@ public class JJTaskBean {
 			}
 		}
 
-		setJJTask_(null);
-		setSelectedMessages(null);
+		setJJTask_(null);		
 		setCreateDialogVisible(false);
 	}
 
@@ -2759,6 +2759,25 @@ public class JJTaskBean {
 		layoutOptionsOne.setCenterOptions(panes);
 
 	}
+	
+	//taskDialog.xhtml
+
+	public int getWidth() {
+		
+		if(taskTreeNode != null)
+			return 970;
+		else
+			return 810;
+		
+	}	
+
+	public int getHeight() {
+		
+		if(taskTreeNode != null)
+			return 490;
+		else
+			return 410;
+	}	
 
 	public HtmlPanelGrid populateViewPanelGrid() {
 
