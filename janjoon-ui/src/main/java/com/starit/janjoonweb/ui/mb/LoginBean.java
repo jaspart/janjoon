@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.primefaces.component.dialog.Dialog;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
@@ -103,10 +104,10 @@ public class LoginBean implements Serializable {
 	@Autowired
 	public LoginBean(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
-		this.mobile = (((HttpServletRequest) FacesContext.getCurrentInstance()
-				.getExternalContext().getRequest()).getHeader("User-Agent")
-				.indexOf("Mobile")) != -1;
-		// this.mobile=true;
+//		this.mobile = (((HttpServletRequest) FacesContext.getCurrentInstance()
+//				.getExternalContext().getRequest()).getHeader("User-Agent")
+//				.indexOf("Mobile")) != -1;
+		this.mobile=true;		
 	}
 
 	public boolean isCollapsedMesPanel() {
@@ -797,6 +798,7 @@ public class LoginBean implements Serializable {
 			FacesMessage message = MessageFactory.getMessage(
 					"dev.nullProject.label", FacesMessage.SEVERITY_ERROR, "");
 			FacesContext.getCurrentInstance().addMessage(null, message);
+			RequestContext.getCurrentInstance().execute("PF('blockUIWidget').unblock()");
 		} else {
 			String path = FacesContext.getCurrentInstance()
 					.getExternalContext().getRequestContextPath();
@@ -810,7 +812,7 @@ public class LoginBean implements Serializable {
 			} else if (e.getComponent().getId().equalsIgnoreCase("testAction")) {
 				FacesContext.getCurrentInstance().getExternalContext()
 						.redirect(path + "/pages/test.jsf?faces-redirect=true");
-			} else {
+			} else if (e.getComponent().getId().equalsIgnoreCase("statsAction")){
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
@@ -880,6 +882,7 @@ public class LoginBean implements Serializable {
 			UIViewRoot root = context.getViewRoot();
 
 			JJProjectBean jjProjectBean = (JJProjectBean) findBean("jJProjectBean");
+			JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
 
 			if (authorisationService == null)
 				authorisationService = new AuthorisationService(
@@ -890,10 +893,19 @@ public class LoginBean implements Serializable {
 			String path = FacesContext.getCurrentInstance()
 					.getExternalContext().getRequestContextPath();
 
+			if(jJProductBean.getProduct() == null && root.getViewId().contains("development"))
+			{
+				facesMessage = MessageFactory.getMessage(
+						"dev.nullProduct.label", FacesMessage.SEVERITY_ERROR,
+						"Project");
+				FacesContext.getCurrentInstance().getExternalContext()
+						.redirect(path + "/pages/main.jsf?faces-redirect=true");
+				
+			}else 
 			if (jjProjectBean.getProject() == null
 					&& (root.getViewId().contains("project1")
 							|| root.getViewId().contains("test") || root
-							.getViewId().contains("stats"))) {
+							.getViewId().contains("stats")||root.getViewId().contains("development"))) {
 				facesMessage = MessageFactory.getMessage(
 						"dev.nullProject.label", FacesMessage.SEVERITY_ERROR,
 						"Project");
@@ -1148,7 +1160,7 @@ public class LoginBean implements Serializable {
 		}
 
 	}
-
+	
 	public UIComponent findComponent(final String id) {
 
 		FacesContext context = FacesContext.getCurrentInstance();

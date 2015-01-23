@@ -44,11 +44,11 @@
 		</h:form>
 		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
 
-			<p:panel styleClass="content">
-				<p:overlayPanel id="overlayPanel" for="headerForm:pnl-basic"
-					widgetVar="pnl-basic" at="right" showEffect="overlay"
-					dismissable="false" style="right:5%;top:5%;"
-					rendered="#{loginBean.mobile}" showCloseIcon="true">
+			<p:panel styleClass="content">		
+				
+				<p:dialog widgetVar="headerPanel" id="headerPanel"
+				styleClass="overlayPanelDialog"				
+				rendered="#{loginBean.mobile}" closable="true">
 					<h:form>
 						<p:menu>
 							<p:menuitem value="" icon="ui-icon-home"
@@ -137,9 +137,10 @@
 							<p:menuitem value="#{messages.header_admin_menuitem}"
 								url="/pages/administration.jsf?faces-redirect=true"
 								icon="ui-icon-key" update=":contentPanel" />
-						</p:menu>
-					</h:form>
-				</p:overlayPanel>
+						</p:menu>	
+						</h:form>				
+				</p:dialog>
+				
 				<ui:insert name="header">
 					<ui:include src="header.xhtml" />
 				</ui:insert>

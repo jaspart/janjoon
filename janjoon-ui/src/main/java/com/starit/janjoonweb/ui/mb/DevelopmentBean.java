@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.aspectj.apache.bcel.classfile.Unknown;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
@@ -919,7 +920,7 @@ public class DevelopmentBean implements Serializable {
 		selectedTree = null;
 	}
 
-	public boolean testUrl(String urlPath) {
+	public boolean testUrl(String urlPath)  {
 
 		URL url;
 		try {
@@ -927,6 +928,7 @@ public class DevelopmentBean implements Serializable {
 			HttpURLConnection huc;
 			huc = (HttpURLConnection) url.openConnection();
 			huc.setRequestMethod("HEAD");
+			
 			int responseCode = huc.getResponseCode();
 
 			if (responseCode != 404) {

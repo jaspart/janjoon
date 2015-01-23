@@ -24,21 +24,23 @@
 
 			<p:commandButton value="&#9776;" id="overlayPanel"
 				style="font-weight:bold; float:none; position:relative; left:30%;"
-				rendered="#{loginBean.mobile}" />
+				actionListener="#{PF('categoryPanel').show()}"
+				rendered="#{loginBean.mobile}"/>
+			
 
-			<p:overlayPanel widgetVar="categoryPanel" id="categoryPanel"
-				at="right" onHide="hideEvent()" for="overlayPanel"
-				showEffect="overlay" style="left:5%;top:20%;"
-				rendered="#{loginBean.mobile}" dismissable="false">
+			<p:dialog widgetVar="categoryPanel" id="categoryPanel"
+				onHide="hideEvent()" styleClass="overlayPanelDialog"
+				rendered="#{loginBean.mobile}" closable="true">
 				<ui:repeat value="#{jJRequirementBean.categoryList}" var="category">
-					<p:commandButton value="#{category.name}" update=":specForm @form"
-						rendered="#{loginBean.mobile}"
-						style="width: 120px;margin-left: 20px;height: 100px;"
+					<p:commandButton value="#{category.name}"
+						update=":categoryForm :specForm" rendered="#{loginBean.mobile}"
+						style="width: 150px;margin-left: 20px;height: 100px;margin-top: 20px;"
 						action="#{jJRequirementBean.updateTemplate(category.id)}"
 						onstart="PF('blockUIWidget').block()"
-						oncomplete="PF('blockUIWidget').unblock()" />
+						oncomplete="PF('blockUIWidget').unblock();PF('categoryPanel').hide()" />
+					<br />
 				</ui:repeat>
-			</p:overlayPanel>
+			</p:dialog>
 
 
 			<p:commandButton value="#{messages.specification_video_help_title}"

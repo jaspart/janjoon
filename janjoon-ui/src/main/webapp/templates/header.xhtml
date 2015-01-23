@@ -13,7 +13,7 @@
 
 	<h:form id="headerForm">
 
-		<p:growl id="growlHeader" showDetail="true" life="1500" />
+		<p:growl id="growlHeader" showDetail="true" life="1500" />		
 		<h:panelGrid id="panelHeader" columns="2" cellpadding="2"
 			style="background-color:white;width:100%;">
 
@@ -101,14 +101,12 @@
 					</p:splitButton>
 
 				</h:panelGrid>
-
+								
 				<p:tabMenu id="tabMenu" name="content" style="float: none;"
 					activeIndex="#{loginBean.menuIndex}">
 
-					<p:menuitem value="&#9776;" id="pnl-basic"
-						onclick="PF('pnl-basic').show('#{component.clientId}')"
-						style="font-weight: bold;" rendered="#{loginBean.mobile}"
-						update=":overlayPanel" />
+					<p:menuitem value="&#9776;" id="pnl-basic"	oncomplete="PF('headerPanel').show();"								
+						style="font-weight: bold;" rendered="#{loginBean.mobile}"/>
 
 					<p:menuitem value="" icon="ui-icon-home"
 						rendered="#{!loginBean.mobile}"
