@@ -104,10 +104,13 @@ public class LoginBean implements Serializable {
 	@Autowired
 	public LoginBean(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
-//		this.mobile = (((HttpServletRequest) FacesContext.getCurrentInstance()
-//				.getExternalContext().getRequest()).getHeader("User-Agent")
-//				.indexOf("Mobile")) != -1;
-		this.mobile=true;		
+		if(true) {
+			this.mobile = (((HttpServletRequest) FacesContext.getCurrentInstance()
+					.getExternalContext().getRequest()).getHeader("User-Agent")
+					.indexOf("Mobile")) != -1;
+		} else {
+			this.mobile=true;
+		}
 	}
 
 	public boolean isCollapsedMesPanel() {

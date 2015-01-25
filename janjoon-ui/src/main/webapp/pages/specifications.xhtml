@@ -26,7 +26,6 @@
 				style="font-weight:bold; float:none; position:relative; left:30%;"
 				actionListener="PF('categoryPanel').show()"
 				rendered="#{loginBean.mobile}"/>
-			
 
 			<p:dialog widgetVar="categoryPanel" id="categoryPanel"
 				onHide="hideEvent()" styleClass="overlayPanelDialog"
@@ -73,29 +72,23 @@
 							<p:column colspan="12">Code des Couleurs</p:column>
 						</p:row>
 					</f:facet>
-					<p:row>
-						<p:column colspan="2" styleClass="RequirementNotLinked">
-							<p:outputLabel value="Exigence sans liens haut ou bas" />
-						</p:column>
-
-						<p:column colspan="2" styleClass="RequirementNoTask">
-							<p:outputLabel value="Exigence sans tache" />
-						</p:column>
-
-						<p:column colspan="2" styleClass="RequirementInProcess">
-							<p:outputLabel value="Exigence en cours d'execution" />
-						</p:column>
-
-						<p:column colspan="2" styleClass="RequirementFinishedTestProcess">
-							<p:outputLabel
-								value="Exigence avec taches termines et tests en cours" />
-						</p:column>
-
-						<p:column colspan="2" styleClass="RequirementFinishedSuccessed">
-							<p:outputLabel
-								value="Exigence avec taches et tests termines avec succes" />
-						</p:column>
-					</p:row>
+						<p:row>
+							<p:column colspan="2" styleClass="RequirementNotLinked">
+								<p:outputLabel value="#{messages.specification_color_RequirementNotLinked_label}" />
+							</p:column>
+							<p:column colspan="2" styleClass="RequirementNoTask">
+								<p:outputLabel value="#{messages.specification_color_RequirementNoTask_label}" />
+							</p:column>
+							<p:column colspan="2" styleClass="RequirementInProcess">
+								<p:outputLabel value="#{messages.specification_color_RequirementInProcess_label}" />
+							</p:column>
+							<p:column colspan="2" styleClass="RequirementFinishedTestProcess">
+								<p:outputLabel value="#{messages.specification_color_RequirementFinishedTestProcess_label}" />
+							</p:column>
+							<p:column colspan="2" styleClass="RequirementFinishedSuccessed">
+								<p:outputLabel value="#{messages.specification_color_RequirementFinishedSuccessed_label}" />
+							</p:column>
+						</p:row>
 				</p:panelGrid>
 			</p:overlayPanel>
 		</h:form>
@@ -103,7 +96,8 @@
 			<ui:repeat value="#{jJRequirementBean.tableDataModelList}"
 				var="tableDataModel" varStatus="loop">
 				<div
-					style="float: left; width: #{jJRequirementBean.tableDataModelSizePct}">
+					style="width: #{jJRequirementBean.tableDataModelSizePct};min-width:450px;
+							float: #{jJRequirementBean.tableDataModelFloatLeft};">
 					<p:dataTable id="categoryTable" var="reqUtil"
 						value="#{tableDataModel}" scrollable="true" scrollHeight="300"
 						sortMode="multiple" resizableColumns="true"
@@ -241,20 +235,20 @@
 
 						<p:column filterBy="#{reqUtil.requirement.product.name}"
 							styleClass="product-column" filterStyle="display:none"
-							sortBy="#{reqUtil.requirement.product.name}">
+							sortBy="#{reqUtil.requirement.product.name}"
+							rendered="#{!loginBean.enable and !loginBean.mobile}">
 							<f:facet name="header">
-								<h:outputText
-									value="#{messages.specification_table_product_title}" />
+								<h:outputText value="#{messages.specification_table_product_title}" />
 							</f:facet>
 							<h:outputText value="#{reqUtil.requirement.product.name}" />
 						</p:column>
 
 						<p:column filterBy="#{reqUtil.requirement.chapter.name}"
 							styleClass="chapter-column" filterStyle="display:none"
-							sortBy="#{reqUtil.requirement.chapter.name}">
+							sortBy="#{reqUtil.requirement.chapter.name}"
+							rendered="#{!loginBean.enable and !loginBean.mobile}">
 							<f:facet name="header">
-								<h:outputText
-									value="#{messages.specification_table_chapter_title}" />
+								<h:outputText value="#{messages.specification_table_chapter_title}" />
 							</f:facet>
 							<h:outputText value="#{reqUtil.requirement.chapter.name}" />
 						</p:column>
@@ -503,10 +497,9 @@
 												update="importDataTable :importForm:importButton" />
 										</p:selectOneMenu>
 									</p:column>
-
 								</p:row>
+								
 								<p:row>
-
 									<p:column>
 										<h:outputText
 											value="#{messages.specification_import_product_label}" />
@@ -549,6 +542,7 @@
 										</p:selectOneMenu>
 									</p:column>
 								</p:row>
+								
 								<p:row>
 									<p:column>
 										<h:outputText
@@ -577,8 +571,7 @@
 								style="width:500px;" scrollHeight="300"
 								value="#{jJRequirementBean.importFormats}">
 								<f:facet name="header">
-									<h:outputText
-										value="#{messages.specification_import_table_title}" />
+									<h:outputText value="#{messages.specification_import_table_title}" />
 								</f:facet>
 
 								<p:column style="width:30%">
@@ -599,13 +592,13 @@
 											</p:column>
 										</p:row>
 									</f:facet>
-
 									<p:selectBooleanCheckbox value="#{format.copyRequirement}">
 										<p:ajax update="importDataTable :importForm:importButton"
 											listener="#{jJRequirementBean.copyRequirement}" />
 									</p:selectBooleanCheckbox>
 									<h:outputText value="#{format.requirement.name}" />
 								</p:column>
+								
 								<p:column style="width:30%">
 									<f:facet name="header">
 										<p:row>
@@ -624,13 +617,12 @@
 											</p:column>
 										</p:row>
 									</f:facet>
-
 									<p:selectBooleanCheckbox value="#{format.copyTestcase}">
 										<p:ajax update="importDataTable"
 											listener="#{jJRequirementBean.copyTestcase}" />
 									</p:selectBooleanCheckbox>
-
 								</p:column>
+								
 								<p:column style="width:30%">
 									<f:facet name="header">
 										<p:row>
@@ -649,13 +641,13 @@
 											</p:column>
 										</p:row>
 									</f:facet>
-
 									<p:selectBooleanCheckbox value="#{format.copyChapter}">
 										<p:ajax update="importDataTable"
 											listener="#{jJRequirementBean.copyChapter}" />
 									</p:selectBooleanCheckbox>
 								</p:column>
 							</p:dataTable>
+							
 							<h3 style="margin-top: 0" />
 							<p:commandButton id="importButton" value="Import"
 								update=":specForm" onstart="PF('importBlockUIWidget').block()"

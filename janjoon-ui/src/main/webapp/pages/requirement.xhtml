@@ -61,35 +61,29 @@
 					<p:panelGrid>
 						<f:facet name="header">
 							<p:row>
-								<p:column colspan="12">Code des Couleurs</p:column>
+								<p:column colspan="12">#{messages.specification_color_title}</p:column>
 							</p:row>
 						</f:facet>
 						<p:row>
 							<p:column colspan="2" styleClass="RequirementNotLinked">
-								<p:outputLabel value="Exigence sans liens haut ou bas" />
+								<p:outputLabel value="#{messages.specification_color_RequirementNotLinked_label}" />
 							</p:column>
-
 							<p:column colspan="2" styleClass="RequirementNoTask">
-								<p:outputLabel value="Exigence sans tache" />
+								<p:outputLabel value="#{messages.specification_color_RequirementNoTask_label}" />
 							</p:column>
-
 							<p:column colspan="2" styleClass="RequirementInProcess">
-								<p:outputLabel value="Exigence en cours d'execution" />
+								<p:outputLabel value="#{messages.specification_color_RequirementInProcess_label}" />
 							</p:column>
-
 							<p:column colspan="2" styleClass="RequirementFinishedTestProcess">
-								<p:outputLabel
-									value="Exigence avec taches termines et tests en cours" />
+								<p:outputLabel value="#{messages.specification_color_RequirementFinishedTestProcess_label}" />
 							</p:column>
-
 							<p:column colspan="2" styleClass="RequirementFinishedSuccessed">
-								<p:outputLabel
-									value="Exigence avec taches et tests termines avec succes" />
+								<p:outputLabel value="#{messages.specification_color_RequirementFinishedSuccessed_label}" />
 							</p:column>
 						</p:row>
 					</p:panelGrid>
 				</p:overlayPanel>
-				<p:panelGrid style="float: left;">
+				<p:panelGrid style="float: left;height: 824px;">
 					<f:facet name="header">
 						<p:row>
 							<p:column colspan="2">
@@ -142,22 +136,18 @@
 								<p:treeNode type="projet">
 									<h:outputText value="P-#{node.id}-#{node.name}" />
 								</p:treeNode>
-
 								<p:treeNode type="chapter">
 									<h:outputText value="CH-#{node.id}-#{node.name}" />
 								</p:treeNode>
-
 								<p:treeNode type="category">
 									<h:outputText value="C-#{node.id}-#{node.name}" />
 								</p:treeNode>
-
 								<p:treeNode type="Requirement">
 									<h:outputText
 										value="R-#{node.requirement.id}-#{node.requirement.name}"
 										styleClass="#{node.style}" />
 								</p:treeNode>
 							</p:tree>
-
 						</p:column>
 					</p:row>
 				</p:panelGrid>
@@ -165,7 +155,7 @@
 
 			<h:form id="requirementForm">
 				<p:panelGrid rendered="#{requirementBean.requirement != null}"
-					style="float: left;margin-left:20px">
+					style="float: left;margin-left: -1px;width: 64%;">
 					<f:facet name="header">
 						<p:row>
 							<p:column colspan="2">
@@ -184,27 +174,27 @@
 							<p:inputText id="nameReq"
 								label="#{messages.specification_create_name_label}"
 								value="#{requirementBean.requirement.name}" required="true"
-								requiredMessage="#{messages.specification_create_name_alert}">
+								requiredMessage="#{messages.specification_create_name_alert}"
+								style="width: 97%;">
 								<f:validateLength maximum="100" />
 							</p:inputText>
 						</p:column>
 					</p:row>
 					<p:row>
 						<p:column>
-							<h:outputText
-								value="#{messages.specification_create_description_label}" />
+							<h:outputText value="#{messages.specification_create_description_label}" />
 						</p:column>
 						<p:column>
 							<pe:ckEditor id="description"
 								toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
-								style="width:680px;margin-left:auto;margin-right:auto;"
+								style="width: 98%;;margin-left:auto;margin-right:auto;"
 								customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 								value="#{requirementBean.requirement.description}"
 								required="true" rendered="#{!loginBean.mobile}"
 								requiredMessage="Requirement Description is a required value" />
 
 							<p:editor id="descriptionMobile"
-								style="width:680px;height:150px;margin-left:auto;margin-right:auto;"
+								style="width: 97%;height:150px;margin-left:auto;margin-right:auto;"
 								value="#{requirementBean.requirement.description}"
 								required="true" rendered="#{loginBean.mobile}"
 								requiredMessage="Requirement Description is a required value" />
@@ -215,13 +205,12 @@
 					</p:row>
 					<p:row>
 						<p:column>
-							<p:outputLabel for="note"
-								value="#{messages.specification_create_note_watermark}" />
+							<p:outputLabel for="note" value="#{messages.specification_create_note_watermark}" />
 						</p:column>
 						<p:column>
 							<p:inputTextarea id="note" rows="3" cols="100"
 								value="#{requirementBean.requirement.note}" autoResize="false"
-								style="width: 600px;margin-left:auto;margin-right:auto;" />
+								style="width: 97%; margin-left:auto; margin-right:auto;" />
 						</p:column>
 					</p:row>
 					<f:facet name="footer">
@@ -230,7 +219,8 @@
 								<p:commandButton id="manageChapterButton"
 									onstart="PF('blockUIWidget').block()"
 									action="#{requirementBean.save}"
-									oncomplete="PF('blockUIWidget').unblock()" value="Edit"
+									oncomplete="PF('blockUIWidget').unblock()"
+									value="#{messages.specification_create_save_button}"
 									style="float:right;" />
 							</p:column>
 						</p:row>
@@ -239,12 +229,13 @@
 			</h:form>
 
 			<p:panelGrid columns="4" styleClass="customPanel"
-				rendered="#{requirementBean.requirement != null}">
+				rendered="#{requirementBean.requirement != null}"
+				style="float: left;margin-left: -1px;width: 64%;">
 				<f:facet name="header">
 					<h:outputText value="Links" />
 				</f:facet>
 				<p:dataList value="#{requirementBean.businessRequirements}"
-					style="width:200px" var="req" type="unordered"
+					style="width:150px" var="req" type="unordered"
 					paginatorPosition="bottom"
 					rendered="#{requirementBean.businessRequirements != null}"
 					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} "
@@ -262,7 +253,7 @@
 					</f:facet>
 				</p:dataList>
 				<p:dataList value="#{requirementBean.securityRequirements}"
-					style="width:200px"
+					style="width:150px"
 					rendered="#{requirementBean.securityRequirements != null}"
 					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} "
 					var="req" type="unordered" paginatorPosition="bottom"
@@ -280,7 +271,7 @@
 					</f:facet>
 				</p:dataList>
 				<p:dataList value="#{requirementBean.functionalRequirements}"
-					style="width:200px"
+					style="width:150px"
 					rendered="#{requirementBean.functionalRequirements != null}"
 					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} "
 					var="req" type="unordered" paginatorPosition="bottom"
@@ -298,7 +289,7 @@
 					</f:facet>
 				</p:dataList>
 				<p:dataList value="#{requirementBean.architucturalRequirements}"
-					style="width:200px"
+					style="width:150px"
 					rendered="#{requirementBean.architucturalRequirements != null}"
 					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} "
 					var="req" type="unordered" paginatorPosition="bottom"
@@ -316,7 +307,7 @@
 					</f:facet>
 				</p:dataList>
 				<p:dataList value="#{requirementBean.technicalRequirements}"
-					style="width:200px"
+					style="width:150px"
 					rendered="#{requirementBean.technicalRequirements != null}"
 					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} "
 					var="req" type="unordered" paginatorPosition="bottom"
@@ -336,72 +327,77 @@
 			</p:panelGrid>
 
 			<p:panelGrid columns="2"
-				style="margin-left: 390px;height: 150px;width: 600px;"
+				style="height: 150px;width: 64%;margin-left: -1px;"
 				rendered="#{requirementBean.requirement != null}">
 				<f:facet name="header">
 					<h:outputText value="Relations" />
 				</f:facet>
-				<p:dataList value="#{requirementBean.requirementTasks}"
-					style="width:300px" var="task" type="unordered"
-					paginatorPosition="bottom"
-					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} "
-					itemType="none" paginator="true" rows="5" styleClass="paginated">
-					<f:facet name="header">
-           				 Task
-       				 </f:facet>
-					<h:outputText value="#{task.id}-#{fn:substring(task.name,0,30)}" />
-				</p:dataList>
-
-				<h:form id="testCaseForm">
-					<p:growl id="msg" />
-					<p:dataTable id="testCaseDataTable" var="testCaseModel"
-						selection="#{requirementBean.reqSelectedtestCases}"
-						rowKey="#{testCaseModel.id}" styleClass="testCaseDataTable"
-						emptyMessage="That Requirement have no Testcase" scrollable="true"
-						style="width:350px;" scrollHeight="100"
-						value="#{requirementBean.reqtestCases}">
-						<p:column selectionMode="multiple"
-							style="width:30%;text-align:center;" />
-						<p:column style="width:70%">
-							<f:facet name="header">
-								<p:row>
-									<p:column>
-										<h:outputText value="TestCases:" />
-									</p:column>
-								</p:row>
-							</f:facet>
-							<h:outputText value="#{testCaseModel.name}" />
-						</p:column>
-						<f:facet name="footer">
-							<p:commandButton onstart="PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock()" id="update"
-								disabled="#{empty requirementBean.reqtestCases}"
-								update="testCaseDataTable :testCaseForm:msg" value="Update"
-								process="testCaseDataTable"
-								action="#{requirementBean.updateReqTestCases(jJTestcaseBean)}" />
-
-							<br />
-							<br />
-							<p:inputText id="testcase" style="width:50%;"
-								value="#{requirementBean.testCaseName}" label="TestCase Name">
-								<f:validateLength maximum="100" />
-								<p:ajax event="keyup" update="addTestCase" />
-							</p:inputText>
-							<p:watermark for="testcase" value="TestCase Name" />
-							<p:commandButton id="addTestCase"
-								onstart="PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock()"
-								style="font-size: 1.0em !important;float:right;top: -3px;"
-								update="@form" disabled="#{empty requirementBean.testCaseName}"
-								action="#{requirementBean.addTestCase(jJTestcaseBean)}"
-								value="Ajouter TestCase" />
+				<p:row>
+				<p:column style="width:50%;">
+					<p:dataList id="taskDatalist"
+						value="#{requirementBean.requirementTasks}"
+						var="task" type="unordered"
+						paginatorPosition="bottom"
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} "
+						itemType="none" paginator="true" rows="5" styleClass="paginated">
+						<f:facet name="header">
+							Task
 						</f:facet>
-					</p:dataTable>
-				</h:form>
+						<h:outputText value="#{task.id}-#{fn:substring(task.name,0,30)}" />
+					</p:dataList>
+				</p:column>
+
+				<p:column style="width:50%;">
+					<h:form id="testCaseForm" style="width:50%;" >
+						<p:growl id="msg" />
+						<p:dataTable id="testCaseDataTable" var="testCaseModel"
+							selection="#{requirementBean.reqSelectedtestCases}"
+							rowKey="#{testCaseModel.id}" styleClass="testCaseDataTable"
+							emptyMessage="That Requirement have no Testcase" scrollable="true"
+							scrollHeight="100"
+							value="#{requirementBean.reqtestCases}">
+							<p:column selectionMode="multiple"
+								style="width:30%;text-align:center;" />
+							<p:column style="width:70%">
+								<f:facet name="header">
+									<p:row>
+										<p:column>
+											<h:outputText value="TestCases:" />
+										</p:column>
+									</p:row>
+								</f:facet>
+								<h:outputText value="#{testCaseModel.name}" />
+							</p:column>
+							<f:facet name="footer">
+								<p:commandButton onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()" id="update"
+									disabled="#{empty requirementBean.reqtestCases}"
+									update="testCaseDataTable :testCaseForm:msg" value="Update"
+									process="testCaseDataTable"
+									action="#{requirementBean.updateReqTestCases(jJTestcaseBean)}" />
+								<br />
+								<br />
+								<p:inputText id="testcase" style="width:50%;"
+									value="#{requirementBean.testCaseName}" label="TestCase Name">
+									<f:validateLength maximum="100" />
+									<p:ajax event="keyup" update="addTestCase" />
+								</p:inputText>
+								<p:watermark for="testcase" value="TestCase Name" />
+								<p:commandButton id="addTestCase"
+									onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()"
+									style="font-size: 1.0em !important;float:right;top: -3px;"
+									update="@form" disabled="#{empty requirementBean.testCaseName}"
+									action="#{requirementBean.addTestCase(jJTestcaseBean)}"
+									value="Ajouter TestCase" />
+							</f:facet>
+						</p:dataTable>
+					</h:form>
+				</p:column>
+				</p:row>
 			</p:panelGrid>
-
-
 		</p:panel>
+
 		<p:dialog id="requirementDialog" draggable="false"
 			header="#{messages[jJRequirementBean.message]}" modal="true"
 			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"

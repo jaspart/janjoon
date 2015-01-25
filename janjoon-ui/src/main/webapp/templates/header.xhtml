@@ -22,14 +22,16 @@
 					rendered="#{loginBean.contact.company.logo == null}"
 					styleClass="banner" alt="JanJoon Home" style="float: left;" />
 
-
 				<p:graphicImage style="width:100px; height:100px;float: left;" styleClass="banner"
 					value="#{imageStreamer.image}" rendered="#{loginBean.contact.company.logo != null}">
 					<f:param name="contactId" value="#{loginBean.contact.id}" />
 					<f:param name="company" value="true" />
 				</p:graphicImage>
 			</h:link>
-
+			
+			<p:commandButton value="&#9776;" id="pnl-basic"	oncomplete="PF('headerPanel').show();"
+					style="font-weight: bold;font-size: x-large;"
+					rendered="#{loginBean.mobile}"/>
 
 			<h:panelGrid id="panelMenu" columns="1" cellpadding="2"
 				style="background-color:white;width:100%;">
@@ -103,19 +105,18 @@
 				</h:panelGrid>
 								
 				<p:tabMenu id="tabMenu" name="content" style="float: none;"
-					activeIndex="#{loginBean.menuIndex}">
-
-					<p:menuitem value="&#9776;" id="pnl-basic"	oncomplete="PF('headerPanel').show();"								
-						style="font-weight: bold;" rendered="#{loginBean.mobile}"/>
+					activeIndex="#{loginBean.menuIndex}"
+					rendered="#{loginBean.enable and !loginBean.mobile}">
 
 					<p:menuitem value="" icon="ui-icon-home"
 						rendered="#{!loginBean.mobile}"
-						url="/pages/main.jsf?faces-redirect=true" />
+						url="/pages/main.jsf?faces-redirect=true"/>
 
 					<p:menuitem value="#{messages.header_project_menuitem}"
 						url="/pages/project1.jsf?faces-redirect=true"
 						icon="ui-icon-clipboard" update=":contentPanel"
-						rendered="#{!loginBean.enable and !loginBean.mobile}" />
+						rendered="#{!loginBean.enable and !loginBean.mobile}"
+						style="width: 75px;" />
 
 					<p:menuitem id="proAction"
 						value="#{messages.header_project_menuitem}"
@@ -124,28 +125,33 @@
 						onstart="PF('blockUIWidget').block()"
 						actionListener="#{loginBean.redirection}" update="growlHeader"
 						icon="ui-icon-clipboard"
-						rendered="#{loginBean.enable and !loginBean.mobile}" />
+						rendered="#{loginBean.enable and !loginBean.mobile}"
+						style="width: 75px;" />
 
 					<p:menuitem value="#{messages.header_spec_menuitem}"
 						disabled="#{!loginBean.authorisationService.rRequiement}"
 						title="#{loginBean.authorisationService.rRequiementMSG}"
 						url="/pages/specifications.jsf?faces-redirect=true"
 						icon="ui-icon-document"
-						rendered="#{loginBean.enable and !loginBean.mobile}" />
+						rendered="#{loginBean.enable and !loginBean.mobile}"
+						style="width: 75px;" />
 
 					<p:menuitem value="#{messages.header_spec_menuitem}"
 						url="/pages/specifications.jsf?faces-redirect=true"
 						icon="ui-icon-document"
-						rendered="#{!loginBean.enable and !loginBean.mobile}" />
+						rendered="#{!loginBean.enable and !loginBean.mobile}"
+						style="width: 75px;" />
 
 					<p:menuitem value="#{messages.header_bug_menuitem}"
 						rendered="#{!loginBean.mobile}"
-						url="/pages/bugs.jsf?faces-redirect=true" icon="ui-icon-gear" />
+						url="/pages/bugs.jsf?faces-redirect=true" icon="ui-icon-gear"
+						style="width: 75px;" />
 
 					<p:menuitem value="#{messages.header_dev_menuitem}"
 						url="/pages/development.jsf?faces-redirect=true"
 						icon="ui-icon-wrench"
-						rendered="#{!loginBean.enable and !loginBean.mobile}" />
+						rendered="#{!loginBean.enable and !loginBean.mobile}"
+						style="width: 75px;" />
 
 					<p:menuitem id="devAction" value="#{messages.header_dev_menuitem}"
 						onstart="PF('blockUIWidget').block()"
@@ -153,12 +159,14 @@
 						title="#{loginBean.authorisationService.rwDevMSG}"
 						actionListener="#{loginBean.redirectToDev}" update="growlHeader"
 						icon="ui-icon-wrench"
-						rendered="#{loginBean.enable and !loginBean.mobile}" />
+						rendered="#{loginBean.enable and !loginBean.mobile}"
+						style="width: 75px;" />
 
 					<p:menuitem value="#{messages.header_test_menuitem}"
 						url="/pages/test.jsf?faces-redirect=true" icon="ui-icon-check"
 						update=":contentPanel"
-						rendered="#{!loginBean.enable and !loginBean.mobile}" />
+						rendered="#{!loginBean.enable and !loginBean.mobile}"
+						style="width: 75px;" />
 
 					<p:menuitem id="testAction"
 						disabled="#{!loginBean.authorisationService.rTest}"
@@ -167,38 +175,45 @@
 						onstart="PF('blockUIWidget').block()"
 						actionListener="#{loginBean.redirection}" update="growlHeader"
 						icon="ui-icon-clipboard"
-						rendered="#{loginBean.enable and !loginBean.mobile}" />
+						rendered="#{loginBean.enable and !loginBean.mobile}"
+						style="width: 75px;" />
 
 					<p:menuitem value="#{messages.header_delivery_menuitem}"
 						disabled="#{!loginBean.authorisationService.rBuild}"
 						title="#{loginBean.authorisationService.rBuildMSG}"
 						rendered="#{loginBean.enable and !loginBean.mobile}"
-						url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
+						url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star"
+						style="width: 75px;" />
 
 					<p:menuitem value="#{messages.header_delivery_menuitem}"
 						rendered="#{!loginBean.enable and !loginBean.mobile}"
-						url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
+						url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star"
+						style="width: 75px;" />
 
 					<p:menuitem value="#{messages.header_team_menuitem}"
 						rendered="#{!loginBean.mobile}"
-						url="/pages/teams.jsf?faces-redirect=true" icon="ui-icon-person" />
+						url="/pages/teams.jsf?faces-redirect=true" icon="ui-icon-person"
+						style="width: 75px;" />
 
 					<p:menuitem value="#{messages.header_stat_menuitem}"
 						url="/pages/stats.jsf?faces-redirect=true"
 						icon="ui-icon-arrowreturnthick-1-n"
-						rendered="#{!loginBean.enable and !loginBean.mobile}" />
+						rendered="#{!loginBean.enable and !loginBean.mobile}"
+						style="width: 75px;" />
 
 					<p:menuitem id="statsAction"
 						value="#{messages.header_stat_menuitem}"
 						onstart="PF('blockUIWidget').block()"
 						actionListener="#{loginBean.redirection}" update="growlHeader"
 						icon="ui-icon-clipboard"
-						rendered="#{loginBean.enable and !loginBean.mobile}" />
+						rendered="#{loginBean.enable and !loginBean.mobile}"
+						style="width: 75px;" />
 
 					<p:menuitem value="#{messages.header_admin_menuitem}"
 						rendered="#{!loginBean.mobile}"
 						url="/pages/administration.jsf?faces-redirect=true"
-						icon="ui-icon-key" update=":contentPanel" />
+						icon="ui-icon-key" update=":contentPanel"
+						style="width: 75px;" />
 
 				</p:tabMenu>
 

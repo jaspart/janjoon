@@ -15,6 +15,8 @@ import org.primefaces.component.chart.bar.BarChart;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LineChartSeries;
+import org.primefaces.model.chart.DateAxis;
+import org.primefaces.model.chart.AxisType;
 
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJTask;
@@ -89,6 +91,9 @@ public class SprintChart {
 		}		
 		chartModel.addSeries(chartSeries);
 		chartModel.addSeries(lineSeries);
+		DateAxis axis = new DateAxis("Dates");
+		axis.setTickAngle(-50);
+		chartModel.getAxes().put(AxisType.X, axis);
 	}
 	
 	public CartesianChartModel getChartModel() {

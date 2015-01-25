@@ -177,6 +177,7 @@ a:visited {
 	width: 100%;
 	min-width: 270px !important;
 	margin: auto;
+	border: 1px solid #a4a4a4;
 }
 
 .requirement-column {
