@@ -24,7 +24,7 @@
 				style="white-space: nowrap;" />
 		</h:panelGrid>
 	</pe:blockUI>
-	<h:form id="chapterDialogForm">
+	<h:form id="chapterDialogForm" >
 		<p:growl id="msg" sticky="true" />
 		<p:tabView widgetVar="chapterTabView">
 			<p:tab title="Chapitre">
@@ -61,7 +61,7 @@
 						</p:column>
 					</p:row>
 					<p:row>
-						<p:column>
+						<p:column  style="width:600px;">
 							<h:outputText
 								value="#{messages.specification_chapter_description_label}" />
 							<pe:ckEditor id="description" style="width:300px"

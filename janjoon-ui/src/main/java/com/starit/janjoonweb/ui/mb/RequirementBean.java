@@ -35,6 +35,7 @@ import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
 import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.ui.mb.util.CategorieRequirement;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.RequirementUtil;
 
@@ -71,11 +72,7 @@ public class RequirementBean {
 	private List<JJTestcase> reqtestCases;
 	private List<JJTestcase> reqSelectedtestCases;
 	private String testCaseName;
-	private List<JJRequirement> technicalRequirements;
-	private List<JJRequirement> businessRequirements;
-	private List<JJRequirement> securityRequirements;
-	private List<JJRequirement> functionalRequirements;
-	private List<JJRequirement> architucturalRequirements;
+	private List<CategorieRequirement> categorieRequirements;
 	private List<JJRequirement> linkReqList;
 	private List<JJRequirement> linkReq;
 	private JJRequirement requirement;
@@ -179,6 +176,15 @@ public class RequirementBean {
 		this.testCaseName = testCaseName;
 	}
 
+	public List<CategorieRequirement> getCategorieRequirements() {
+		return categorieRequirements;
+	}
+
+	public void setCategorieRequirements(
+			List<CategorieRequirement> categorieRequirements) {
+		this.categorieRequirements = categorieRequirements;
+	}
+
 	public List<JJTask> getRequirementTasks() {
 		return requirementTasks;
 	}
@@ -198,49 +204,6 @@ public class RequirementBean {
 
 	public void setCategories(List<JJCategory> categories) {
 		this.categories = categories;
-	}
-
-	public List<JJRequirement> getTechnicalRequirements() {
-		return technicalRequirements;
-	}
-
-	public void setTechnicalRequirements(
-			List<JJRequirement> technicalRequirements) {
-		this.technicalRequirements = technicalRequirements;
-	}
-
-	public List<JJRequirement> getBusinessRequirements() {
-		return businessRequirements;
-	}
-
-	public void setBusinessRequirements(List<JJRequirement> businessRequirements) {
-		this.businessRequirements = businessRequirements;
-	}
-
-	public List<JJRequirement> getSecurityRequirements() {
-		return securityRequirements;
-	}
-
-	public void setSecurityRequirements(List<JJRequirement> securityRequirements) {
-		this.securityRequirements = securityRequirements;
-	}
-
-	public List<JJRequirement> getFunctionalRequirements() {
-		return functionalRequirements;
-	}
-
-	public void setFonctionalRequirements(
-			List<JJRequirement> functionalRequirements) {
-		this.functionalRequirements = functionalRequirements;
-	}
-
-	public List<JJRequirement> getArchitucturalRequirements() {
-		return architucturalRequirements;
-	}
-
-	public void setArchitucturalRequirements(
-			List<JJRequirement> architucturalRequirements) {
-		this.architucturalRequirements = architucturalRequirements;
 	}
 
 	public List<JJRequirement> getLinkReqList() {
@@ -344,10 +307,11 @@ public class RequirementBean {
 					.findBean("jJProjectBean"));
 
 			requirement = jJRequirementService.findJJRequirement(id);
-			boolean show = requirement !=  null;
+			boolean show = requirement != null;
 
-			if (show && !jJProjectBean.getProjectList().contains(
-					requirement.getProject()))
+			if (show
+					&& !jJProjectBean.getProjectList().contains(
+							requirement.getProject()))
 				show = false;
 
 			if (show) {
@@ -404,75 +368,81 @@ public class RequirementBean {
 				testCaseName = "";
 				requirementTasks = jJTaskService.getImportTasks(null,
 						requirement, null, true);
-				technicalRequirements = new ArrayList<JJRequirement>();
-				businessRequirements = new ArrayList<JJRequirement>();
-				securityRequirements = new ArrayList<JJRequirement>();
-				functionalRequirements = new ArrayList<JJRequirement>();
-				architucturalRequirements = new ArrayList<JJRequirement>();
-
-				for (JJRequirement req : requirement.getRequirementLinkDown()) {
-
-					if (req.getCategory().getName()
-							.equalsIgnoreCase("business")
-							&& req.getEnabled())
-						businessRequirements.add(req);
-					else if (req.getCategory().getName()
-							.equalsIgnoreCase("functional")
-							&& req.getEnabled())
-						functionalRequirements.add(req);
-					else if (req.getCategory().getName()
-							.equalsIgnoreCase("security")
-							&& req.getEnabled())
-						securityRequirements.add(req);
-					else if (req.getCategory().getName()
-							.equalsIgnoreCase("architecture")
-							&& req.getEnabled())
-						architucturalRequirements.add(req);
-					else if (req.getCategory().getName()
-							.equalsIgnoreCase("technical")
-							&& req.getEnabled())
-						technicalRequirements.add(req);
-				}
-
-				for (JJRequirement req : requirement.getRequirementLinkUp()) {
-
-					if (req.getCategory().getName()
-							.equalsIgnoreCase("business")
-							&& req.getEnabled())
-						businessRequirements.add(req);
-					else if (req.getCategory().getName()
-							.equalsIgnoreCase("functional")
-							&& req.getEnabled())
-						functionalRequirements.add(req);
-					else if (req.getCategory().getName()
-							.equalsIgnoreCase("security")
-							&& req.getEnabled())
-						securityRequirements.add(req);
-					else if (req.getCategory().getName()
-							.equalsIgnoreCase("architecture")
-							&& req.getEnabled())
-						architucturalRequirements.add(req);
-					else if (req.getCategory().getName()
-							.equalsIgnoreCase("technical")
-							&& req.getEnabled())
-						technicalRequirements.add(req);
-				}
-
-				if (requirement.getCategory().getName()
-						.equalsIgnoreCase("business"))
-					businessRequirements = null;
-				else if (requirement.getCategory().getName()
-						.equalsIgnoreCase("functional"))
-					functionalRequirements = null;
-				else if (requirement.getCategory().getName()
-						.equalsIgnoreCase("security"))
-					securityRequirements = null;
-				else if (requirement.getCategory().getName()
-						.equalsIgnoreCase("architecture"))
-					architucturalRequirements = null;
-				else if (requirement.getCategory().getName()
-						.equalsIgnoreCase("technical"))
-					technicalRequirements = null;
+				categorieRequirements = CategorieRequirement
+						.initCategorieRequirement(requirement,
+								jJCategoryService.getCategories(null, false,
+										true, true));
+				// technicalRequirements = new ArrayList<JJRequirement>();
+				// businessRequirements = new ArrayList<JJRequirement>();
+				// securityRequirements = new ArrayList<JJRequirement>();
+				// functionalRequirements = new ArrayList<JJRequirement>();
+				// architucturalRequirements = new ArrayList<JJRequirement>();
+				//
+				// for (JJRequirement req :
+				// requirement.getRequirementLinkDown()) {
+				//
+				// if (req.getCategory().getName()
+				// .equalsIgnoreCase("business")
+				// && req.getEnabled())
+				// businessRequirements.add(req);
+				// else if (req.getCategory().getName()
+				// .equalsIgnoreCase("functional")
+				// && req.getEnabled())
+				// functionalRequirements.add(req);
+				// else if (req.getCategory().getName()
+				// .equalsIgnoreCase("security")
+				// && req.getEnabled())
+				// securityRequirements.add(req);
+				// else if (req.getCategory().getName()
+				// .equalsIgnoreCase("architecture")
+				// && req.getEnabled())
+				// architucturalRequirements.add(req);
+				// else if (req.getCategory().getName()
+				// .equalsIgnoreCase("technical")
+				// && req.getEnabled())
+				// technicalRequirements.add(req);
+				// }
+				//
+				// for (JJRequirement req : requirement.getRequirementLinkUp())
+				// {
+				//
+				// if (req.getCategory().getName()
+				// .equalsIgnoreCase("business")
+				// && req.getEnabled())
+				// businessRequirements.add(req);
+				// else if (req.getCategory().getName()
+				// .equalsIgnoreCase("functional")
+				// && req.getEnabled())
+				// functionalRequirements.add(req);
+				// else if (req.getCategory().getName()
+				// .equalsIgnoreCase("security")
+				// && req.getEnabled())
+				// securityRequirements.add(req);
+				// else if (req.getCategory().getName()
+				// .equalsIgnoreCase("architecture")
+				// && req.getEnabled())
+				// architucturalRequirements.add(req);
+				// else if (req.getCategory().getName()
+				// .equalsIgnoreCase("technical")
+				// && req.getEnabled())
+				// technicalRequirements.add(req);
+				// }
+				//
+				// if (requirement.getCategory().getName()
+				// .equalsIgnoreCase("business"))
+				// businessRequirements = null;
+				// else if (requirement.getCategory().getName()
+				// .equalsIgnoreCase("functional"))
+				// functionalRequirements = null;
+				// else if (requirement.getCategory().getName()
+				// .equalsIgnoreCase("security"))
+				// securityRequirements = null;
+				// else if (requirement.getCategory().getName()
+				// .equalsIgnoreCase("architecture"))
+				// architucturalRequirements = null;
+				// else if (requirement.getCategory().getName()
+				// .equalsIgnoreCase("technical"))
+				// technicalRequirements = null;
 			} else {
 				requirement = null;
 				((LoginBean) LoginBean.findBean("loginBean"))
@@ -631,9 +601,9 @@ public class RequirementBean {
 
 	}
 
-	public void loadData(String catName, List<JJRequirement> list) {
+	public void loadData(CategorieRequirement cateRequirement) {
 		linkReq = new ArrayList<JJRequirement>();
-		this.categoryName = catName;
+		this.categoryName = cateRequirement.getCategory().getName();
 		linkReqList = new ArrayList<JJRequirement>();
 		JJCategory selectedCategory = jJCategoryService.getCategory(
 				categoryName, true);
@@ -642,7 +612,7 @@ public class RequirementBean {
 						.getCompany(), selectedCategory, requirement
 						.getProject(), requirement.getProduct(), requirement
 						.getVersioning(), null, null, false, true, true);
-		linkReq = list;
+		linkReq = cateRequirement.getRequirements();
 
 	}
 

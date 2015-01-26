@@ -24,12 +24,12 @@
 
 			<p:commandButton value="&#9776;" id="overlayPanel"
 				style="font-weight:bold; float:none; position:relative; left:30%;"
-				actionListener="PF('categoryPanel').show()"
+				action="#{loginBean.showAndHideDialog('categoryPanel',categoryPanel)}"
 				rendered="#{loginBean.mobile}"/>
 
 			<p:dialog widgetVar="categoryPanel" id="categoryPanel"
 				onHide="hideEvent()" styleClass="overlayPanelDialog"
-				rendered="#{loginBean.mobile}" closable="true">
+				rendered="#{loginBean.mobile}" closable="false" binding="#{categoryPanel}">
 				<ui:repeat value="#{jJRequirementBean.categoryList}" var="category">
 					<p:commandButton value="#{category.name}"
 						update=":categoryForm :specForm" rendered="#{loginBean.mobile}"

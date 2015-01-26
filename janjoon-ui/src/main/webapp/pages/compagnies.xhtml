@@ -6,6 +6,23 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
+<style type="text/css">
+.ui-fileupload-progress {
+	display: none;
+}
+
+.ui-fileupload-cancel {
+	display: none;
+}
+
+.ui-fileupload-files {
+	margin: 1px 0;
+	width: 150px !important;
+	display: inline-block;
+	height: 30px;
+}
+</style>
+
 	<h:form id="companyForm">
 		<p:panel id="companyPanel" style="width:500px" columns="1"
 			cellpadding="6">

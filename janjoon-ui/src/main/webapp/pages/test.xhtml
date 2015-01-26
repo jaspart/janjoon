@@ -22,8 +22,8 @@
 			<h:form id="testFormNorth">
 				<p:dialog widgetVar="categoryPanel" id="categoryPanel"
 					onHide="hideEvent()" styleClass="overlayPanelDialog"
-					rendered="#{loginBean.mobile}"
-					closable="true">
+					rendered="#{loginBean.mobile}" binding="#{categoryPanel}"
+					closable="false">
 					<ui:repeat value="#{jJTestcaseBean.categoryList}" var="category">
 						<p:commandButton value="#{category.name}"
 							update=":testFormWest :testFormCenter :testFormNorth:categoryPanel"
@@ -58,7 +58,7 @@
 					<p:commandButton value="&#9776;" id="overlayPanel"
 						style="font-weight:bold; float:none; position:relative; left:30%;"
 						rendered="#{loginBean.mobile}"
-						oncomplete="PF('categoryPanel').show();" />
+						action="#{loginBean.showAndHideDialog('categoryPanel',categoryPanel)}" />
 
 					<p:commandButton
 						value="#{messages.specification_import_button} XML"
@@ -478,8 +478,8 @@
 								<h:outputText for="requirement"
 									value="#{messages.test_new_requirement_label}" />
 								<p:selectOneMenu id="requirement"
-									value="#{jJTestcaseBean.requirement}" panelStyle="width:150px;"
-									effect="fade" style="width:200px;" filter="true"
+									value="#{jJTestcaseBean.requirement}" panelStyle="width:300px;"
+									effect="fade" style="width:300px;" filter="true"
 									required="true" filterMatchMode="startsWith"
 									widgetVar="requirementWidget"
 									disabled="#{jJTestcaseBean.disabledTestcaseMode}"
@@ -508,8 +508,8 @@
 								<h:outputText for="build" value="Build :" />
 								<p:selectOneMenu id="build"
 									value="#{jJTestcaseBean.testcase.build}"
-									panelStyle="width:150px;" effect="fade"
-									style="width:200px;margin-left: 20px;" filter="true"
+									panelStyle="width:300px;" effect="fade"
+									style="width:300px;margin-left: 20px;" filter="true"
 									required="true" filterMatchMode="startsWith"
 									widgetVar="buildWidget"
 									disabled="#{jJTestcaseBean.disabledTestcaseMode}"
