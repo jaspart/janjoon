@@ -25,8 +25,7 @@
 				<h:outputText rendered="#{jjsprint.render}" value="+Add New Sprint" />
 			</f:facet>
 			<ui:include src="sprint.xhtml" />
-			<h:form id="sprintForm" rendered="#{!jjsprint.render}"
-				style="width:100% important;">
+			<h:form id="sprintForm" rendered="#{!jjsprint.render}" style="width:100% !important;">
 				<p:growl id="sprintGrowl" showDetail="true" life="2000" />
 				<p:panelGrid id="sprintPanelGrid" style="width:100% important;">
 					<f:facet name="header">
@@ -145,7 +144,7 @@
 
 				<p:separator />
 			</h:form>
-			<h:form id="taskListForm" rendered="#{!jjsprint.render}">
+			<h:form id="taskListForm" rendered="#{!jjsprint.render}" style="width:100% !important;">
 				<p:panelGrid>
 					<f:facet name="header">
 						<p:row>

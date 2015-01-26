@@ -45,7 +45,24 @@ a:visited {
 	margin-right: 5px;
 	word-wrap: break-word;
 }
-
+.ui-tabmenu .ui-tabmenu-nav .ui-menuitem-link {
+	margin: 0 0 0 0;
+	width: 75px;
+}
+.ui-menuitem-link {
+	
+}
+.ui-state-default {
+	padding-top:1px !important;
+}
+.ui-state-hover {
+	border-top: 2px solid #0083D7 !important;
+	padding-top:0px !important;
+}
+.ui-state-active {
+	border-top: 2px solid #0072C6 !important;
+	padding-top:0px !important;
+}
 .rowExpansion {
 	
 }
