@@ -147,7 +147,7 @@
 			</p:column>
 		</p:row>
 		<p:row>
-			<p:column colspan="3">
+			<p:column colspan="3" style="height:300px;width:600px;">
 				<p:outputLabel value="Description" for="jJBugDescription"
 					rendered="#{!loginBean.mobile}" />
 				<p:outputLabel value="Description" for="jJBugMobileDescription"
@@ -155,7 +155,7 @@
 				<br />
 				<pe:ckEditor id="jJBugDescription"
 					toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
-					style="width:680px" rendered="#{!loginBean.mobile}"
+					style="width:600px" rendered="#{!loginBean.mobile}"
 					customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 					value="#{JJBug_.description}" required="true"
 					requiredMessage="Description is a required value" />

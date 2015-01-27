@@ -1,9 +1,5 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
@@ -18,7 +14,6 @@ import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.context.Flash;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ValueChangeEvent;
@@ -31,8 +26,6 @@ import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.ToggleEvent;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -69,8 +62,7 @@ public class LoginBean implements Serializable {
 
 	private AuthenticationManager authenticationManager;
 	private AuthorisationService authorisationService;
-	static Logger logger = Logger.getLogger("loginBean-Logger");
-	private List<JJRequirement> noCouvretReq;
+	static Logger logger = Logger.getLogger("loginBean-Logger");	
 	private boolean mobile;
 	private boolean collapsedMesPanel = true;
 	private String showMarquee;
@@ -109,9 +101,9 @@ public class LoginBean implements Serializable {
 		 FacesContext.getCurrentInstance()
 		 .getExternalContext().getRequest()).getHeader("User-Agent")
 		 .indexOf("Mobile")) != -1;
-		//this.mobile = true;
+//		this.mobile = true;
 		// } else {
-		// this.mobile=true;
+//		 this.mobile=true;
 		// }
 	}
 
@@ -329,6 +321,14 @@ public class LoginBean implements Serializable {
 
 	public void setShowMarquee(String showMarquee) {
 		this.showMarquee = showMarquee;
+	}
+	
+	public String getColumns()
+	{
+		if(mobile)
+			return "3";
+		else
+			return "2";
 	}
 
 	public String logout() {
@@ -1117,21 +1117,18 @@ public class LoginBean implements Serializable {
 	}
 
 	public List<JJRequirement> getNoCouvretReq() {
-		return noCouvretReq;
+		return jJRequirementService
+				.getNonCouvredRequirements(getContact().getCompany());
 	}
 
-	public void setNoCouvretReq(List<JJRequirement> noCouvretReq) {
-		this.noCouvretReq = noCouvretReq;
-	}
-
-	public void initNonCouvretSpec(ComponentSystemEvent e) {
-
-		if (noCouvretReq == null && isEnable()) {
-			noCouvretReq = jJRequirementService
-					.getNonCouvredRequirements(getContact().getCompany());
-
-		}
-	}
+//	public void initNonCouvretSpec(ComponentSystemEvent e) {
+//
+//		if (noCouvretReq == null && isEnable()) {
+//			noCouvretReq = jJRequirementService
+//					.getNonCouvredRequirements(getContact().getCompany());
+//
+//		}
+//	}
 
 	public static boolean isEqualPreviousPage(String page) {
 		String referer = FacesContext.getCurrentInstance().getExternalContext()

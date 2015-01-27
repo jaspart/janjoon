@@ -16,6 +16,11 @@
 	-webkit-padding-start: 2px;
 }
 
+.cke_chrome {
+	visibility: inherit;
+	width: 730px !important;
+}
+
 .testCaseDataTable {
 	
 }
@@ -160,7 +165,7 @@
 
 			<h:form id="requirementForm">
 				<p:panelGrid rendered="#{requirementBean.requirement != null}"
-					style="float: left;margin-left: -1px;width: 64%;">
+					style="float: left;margin-left: 10px;width: 64%;">
 					<f:facet name="header">
 						<p:row>
 							<p:column colspan="2">
@@ -237,7 +242,7 @@
 			<h:form>
 				<p:panelGrid columns="4" styleClass="customPanel"
 					rendered="#{requirementBean.requirement != null}"
-					style="float: left;margin-left: -1px;width: 64%;">
+					style="float: left;margin-left: 10px;width: 64%;">
 					<f:facet name="header">
 						<h:outputText value="Links" />
 					</f:facet>
@@ -343,10 +348,15 @@
 					<!-- 				</p:dataList> -->
 				</p:panelGrid>
 			</h:form>
-			<p:panelGrid style="height: 150px;width: 64%;margin-left: -1px;"
+			<p:panelGrid
+				style="height: 150px;width: 64%;margin-left: 382px;margin-top: 600px;"
 				rendered="#{requirementBean.requirement != null}">
 				<f:facet name="header">
-					<h:outputText value="Relations" />
+					<p:row>
+						<p:column colspan="2">
+							<h:outputText value="Relations" />
+						</p:column>
+					</p:row>
 				</f:facet>
 				<p:row>
 					<p:column style="width:50%">

@@ -6,6 +6,20 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
+	<style type="text/css">
+.cke_chrome {
+	visibility: inherit;
+	width: 600px !important;
+}
+
+.cke_contents {
+	height: 200px !important;
+}
+
+.cke_bottom {
+	display: block;
+}
+</style>
 	<pe:blockUI widgetVar="requirementBlockUIWidget"
 		target="requirementDialogPanel">
 		<h:panelGrid columns="2">
@@ -16,7 +30,7 @@
 		</h:panelGrid>
 	</pe:blockUI>
 
-	<h:form id="requirementDialogForm" style="padding:0px;height: 550px;" >
+	<h:form id="requirementDialogForm" style="padding:0px;">
 		<p:growl id="msg" />
 		<p:panelGrid style="margin-top:0px">
 			<p:row>
@@ -168,7 +182,8 @@
 				</p:column>
 			</p:row>
 			<p:row>
-				<p:column  colspan="#{jJRequirementBean.colspan}" style="width:600px;"> 
+				<p:column colspan="#{jJRequirementBean.colspan}"
+					style="width:600px;height:300px;">
 					<h:outputText
 						value="#{messages.specification_create_description_label}" />
 					<pe:ckEditor id="description"

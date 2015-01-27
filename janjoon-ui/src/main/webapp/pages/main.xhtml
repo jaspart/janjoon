@@ -23,17 +23,15 @@
 
 		<p:panel id="dataPanel" rendered="#{loginBean.enable}"
 			header="#{messages.main_communication_title}"
-			styleClass="customTitleBar">
+			styleClass="customTitleBar" style="height: 400px;background: #DDEEFF;">
 			<f:event listener="#{jJMessageBean.initJJmessageTable}"
 				type="preRenderView" />
-
-
 
 			<h:form id="messageForm">
 				<p:dataTable id="MessageTable2" sortMode="multiple"
 					value="#{jJMessageBean.mainMessages}" rowKey="#{mes.id}" var="mes"
-					widgetVar="messageTable" paginator="true" rows="6"
-					paginatorPosition="bottom"
+					widgetVar="messageTable" paginator="true" rows="4"
+					paginatorPosition="bottom" sortBy="#{mes.creationDate}" sortOrder="ASCENDING"
 					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 					lazy="true" emptyMessage="#{messages.label_notFound}"
 					rowClasses="order-table-odd-row,order-table-even-row">
@@ -202,13 +200,13 @@
 		</p:panel>
 
 		<p:panel id="taskPanel" rendered="#{loginBean.enable}"
-			header="To do Tasks">
+			header="To do Tasks" styleClass="customTitleBar">
 			<f:event listener="#{jJTaskBean.initToDoTasks}"
 				type="preRenderComponent" />
 			<h:form id="taskForm">
 				<p:dataTable id="taskTable" value="#{jJTaskBean.toDoTasks}"
 					rowKey="#{task.id}" var="task" widgetVar="taskTable"
-					scrollable="true" scrollHeight="200"
+					scrollable="true" scrollHeight="200" style="table-layout: fixed;"
 					emptyMessage="There is no Task to do, dee more in project View">
 
 					<p:column headerText="Task">
@@ -224,7 +222,7 @@
 						<h:outputText value="#{task.bug}" converter="JJBugConverter" />
 					</p:column>
 
-					<p:column headerText="Project">
+					<p:column headerText="Project" style="width:100px;">
 						<h:outputText value="#{task.requirement.project}"
 							converter="JJProjectConverter"
 							rendered="#{task.requirement != null}" />
@@ -238,7 +236,7 @@
 							rendered="#{task.requirement == null and task.bug == null and task.sprint != null}" />
 					</p:column>
 
-					<p:column headerText="Start Date :">
+					<p:column headerText="Start Date :" style="width:100px;">
 						<h:outputText value="#{task.startDateReal}">
 							<f:converter converterId="extendedDateTimeConverter" />
 							<f:attribute name="pattern" value="dd/MM/yyyy" />
@@ -247,11 +245,11 @@
 					</p:column>
 
 
-					<p:column headerText="WorkLoad">
+					<p:column headerText="WorkLoad" style="width:100px;">
 						<h:outputText value="#{task.workloadPlanned}" />
 					</p:column>
 
-					<p:column styleClass="action-column"
+					<p:column styleClass="action-column" style="width:100px;"
 						headerText="#{messages.bug_table_action_title}">
 						<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
 							update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
@@ -281,10 +279,10 @@
 		</p:panel>
 
 		<p:panel id="specpanel" header="Spécification non couverte "
-			rendered="#{loginBean.enable}">
+			rendered="#{loginBean.enable}" styleClass="customTitleBar">
 
-			<f:event listener="#{loginBean.initNonCouvretSpec}"
-				type="preRenderView" />
+<!-- 			<f:event listener="#{loginBean.initNonCouvretSpec}" -->
+<!-- 				type="preRenderView" /> -->
 			<h:form id="specForm">
 				<p:dataTable id="specTable" value="#{loginBean.noCouvretReq}"
 					rowKey="#{req.id}" var="req" widgetVar="taskTable"

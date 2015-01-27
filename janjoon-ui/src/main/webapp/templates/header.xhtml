@@ -13,25 +13,23 @@
 
 	<h:form id="headerForm">
 
-		<p:growl id="growlHeader" showDetail="true" life="1500" />		
-		<h:panelGrid id="panelHeader" columns="2" cellpadding="2"
-			style="background-color:white;width:100%;">
+		<p:growl id="growlHeader" showDetail="true" life="1500" />
+		<h:panelGrid id="panelHeader" columns="#{loginBean.columns}"
+			cellpadding="2" style="background-color:white;width:100%;">
 
 			<h:link outcome="main">
 				<p:graphicImage library="images" name="janjoon_logo.png"
 					rendered="#{loginBean.contact.company.logo == null}"
 					styleClass="banner" alt="JanJoon Home" style="float: left;" />
 
-				<p:graphicImage style="width:100px; height:100px;float: left;" styleClass="banner"
-					value="#{imageStreamer.image}" rendered="#{loginBean.contact.company.logo != null}">
+				<p:graphicImage style="width:100px; height:100px;float: left;"
+					styleClass="banner" value="#{imageStreamer.image}"
+					rendered="#{loginBean.contact.company.logo != null}">
 					<f:param name="contactId" value="#{loginBean.contact.id}" />
 					<f:param name="company" value="true" />
 				</p:graphicImage>
 			</h:link>
-			
-			<p:commandButton value="&#9776;" id="pnl-basic"	oncomplete="PF('headerPanel').show();"
-					style="font-weight: bold;font-size: x-large;"
-					rendered="#{loginBean.mobile}"/>
+
 
 			<h:panelGrid id="panelMenu" columns="1" cellpadding="2"
 				style="background-color:white;width:100%;">
@@ -103,15 +101,16 @@
 					</p:splitButton>
 
 				</h:panelGrid>
-								
+
+
+
 				<p:tabMenu id="tabMenu" name="content" style="float: none;"
 					activeIndex="#{loginBean.menuIndex}"
 					rendered="#{loginBean.enable and !loginBean.mobile}">
 
 					<p:menuitem value="" icon="ui-icon-home"
 						rendered="#{!loginBean.mobile}"
-						url="/pages/main.jsf?faces-redirect=true"
-						style="width: 10px;"/>
+						url="/pages/main.jsf?faces-redirect=true" style="width: 10px;" />
 
 					<p:menuitem value="#{messages.header_project_menuitem}"
 						url="/pages/project1.jsf?faces-redirect=true"
@@ -202,8 +201,11 @@
 						icon="ui-icon-key" update=":contentPanel" />
 
 				</p:tabMenu>
-
 			</h:panelGrid>
+			<p:commandButton value="&#9776;" id="pnl-basic"
+				oncomplete="PF('headerPanel').show();"
+				style="font-weight: bold;font-size: x-large;"
+				rendered="#{loginBean.mobile}" />
 		</h:panelGrid>
 		<!--p:sticky target="panelMenu" /-->
 	</h:form>

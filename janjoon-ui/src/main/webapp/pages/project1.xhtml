@@ -101,7 +101,7 @@
 							value="#{jJSprintBean.bug.status}" itemLabel="#{status.name}"
 							itemValue="#{status}" scrollHeight="200"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
-							dropdown="true" var="status"
+							dropdown="true" var="status" style="width:200px;"
 							completeMethod="#{jJBugBean.completeStatusBug}" />
 						<p:commandButton id="taskBugSaveButton"
 							value="#{messages.bug_edit_save_button}"

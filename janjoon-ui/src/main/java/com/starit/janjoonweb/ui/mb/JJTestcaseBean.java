@@ -20,6 +20,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.primefaces.component.dialog.Dialog;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
@@ -441,8 +442,10 @@ public class JJTestcaseBean {
 		this.categoryList = categoryList;
 	}
 
-	public void loadData() {
+	public void loadData(Dialog dialog) {
 
+		if(dialog != null)
+			dialog.setVisible(false);
 		if (project == null) {
 			this.getProject();
 			this.getProduct();

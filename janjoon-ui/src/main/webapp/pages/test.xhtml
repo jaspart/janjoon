@@ -12,7 +12,7 @@
 
 		<f:event type="preRenderComponent"
 			oncomplete="PF('blockUIWidget').unblock()"
-			listener="#{jJTestcaseBean.loadData()}" />
+			listener="#{jJTestcaseBean.loadData(null)}" />
 
 
 		<p:layout styleClass="content"
@@ -27,7 +27,7 @@
 					<ui:repeat value="#{jJTestcaseBean.categoryList}" var="category">
 						<p:commandButton value="#{category.name}"
 							update=":testFormWest :testFormCenter :testFormNorth:categoryPanel"
-							action="#{jJTestcaseBean.loadData()}"
+							action="#{jJTestcaseBean.loadData(categoryPanel)}"
 							style="width: 150px;margin-left: 20px;height: 100px;margin-top: 20px;"
 							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()">
@@ -45,7 +45,7 @@
 						<p:commandButton value="#{category.name}"
 							update=":testFormWest :testFormCenter"
 							rendered="#{!loginBean.mobile}"
-							action="#{jJTestcaseBean.loadData()}"
+							action="#{jJTestcaseBean.loadData(null)}"
 							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()">
 							<f:setPropertyActionListener value="#{category}"
