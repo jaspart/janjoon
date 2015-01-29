@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<ui:composition style="width:100%">
+	<style type="text/css">
+		.ui-datatable table {
+			table-layout: fixed;
+			border-collapse: separate;
+		}
+		.ui-datatable .ui-datatable-data th {
+			height: 37px;
+			overflow: hidden;
+		}
+		.ui-datatable .ui-datatable-data td {
+			overflow: hidden;
+		}
+		.ui-datatable .ui-datatable-data tr {
+			height: 44px;
+			overflow: hidden;
+		}
+	</style>
+	<h:form id="sprintForm" style="width:100%;">
+		<p:panelGrid style="margin-top:10px;width:100%;">
+			<p:row>
+				<p:column style="width:50%">
+					<h:outputText for="sprint" value="Sprint:" />
+					<p:selectOneMenu id="sprint" value="#{jJTaskBean.sprint}"
+						panelStyle="width:150px;" effect="fade" style="width:150px;"
+						filter="true" filterMatchMode="startsWith"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter">
+
+						<f:selectItem itemValue="#{null}" itemLabel="#{messages.project_gantt_select_label}" />
+						<f:selectItems value="#{jJTaskBean.sprints}" var="c" itemLabel="#{c.name}" itemValue="#{c}" />
+						<p:ajax onstart="PF('blockUIWidget').block()" event="change"
+							listener="#{jJTaskBean.sprintSelectionChanged}"
+							update=":projecttabview:planningForm "
+							oncomplete="PF('blockUIWidget').unblock()" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:commandButton id="commandButton"
+						value="#{messages.project_gantt_import_button}"
+						style="float: right;"
+						actionListener="#{jJTaskBean.loadImportFormat}"
+						update=":taskImportDialog"
+						oncomplete="PF('taskImportDialogWidget').show()">
+						<f:attribute name="mode" value="planning" />
+					</p:commandButton>
+				</p:column>
+				<p:column>
+					<p:outputLabel for="sortMode" value="Sort By: " />
+					<p:selectOneMenu id="sortMode" value="#{jJTaskBean.sortMode}"
+						panelStyle="width:150px;" effect="fade" style="width:150px;"
+						filter="true" filterMatchMode="startsWith">
+
+						<f:selectItem itemValue="chapter" itemLabel="Chapter" />
+						<f:selectItem itemValue="StartDatePlanned" itemLabel="Start Date Planned" />
+						<f:selectItem itemValue="StartDateReal" itemLabel="Start Date Real" />
+						<p:ajax onstart="PF('blockUIWidget').block()" event="change"
+							listener="#{jJTaskBean.SortBySelectionChanged}"
+							update=":projecttabview:planningForm :projecttabview:sprintForm"
+							oncomplete="PF('blockUIWidget').unblock()" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:commandButton value="#{messages.specification_video_help_title}"
+						id="videoHelpBtn" icon="ui-icon-video"
+						onclick="PF('videoHelpWidget').show()"
+						style="float:none;position:relative;" type="button" />
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</h:form>
+
+	<h:form id="planningForm" style="width:100%">
+		<h:outputScript library="js" name="scrollTab.js" />
+		<f:event type="preRenderComponent"
+			oncomplete="PF('blockUIWidget').unblock();"
+			listener="#{jJTaskBean.loadingData()}" />
+		<p:growl id="msg" sticky="true" life="3000" autoUpdate="true" />
+		<p:panelGrid style="margin-top:10px;width:100%;">
+			<p:row style="width:100%;">
+				<p:column style="width:100%;">
+					<p:remoteCommand name="onCellEditTableComplete"
+						update=":projecttabview "
+						oncomplete="PF('blockUIWidget').unblock()" />
+					<p:scrollPanel style="width:100%;" mode="native">
+						<pe:layout fullPage="false" style="width:50%;height:600px;"
+							options="#{jJTaskBean.layoutOptionsOne}"
+							state="#{jJTaskBean.stateOne}">
+
+							<pe:layoutPane position="west" id="westLayout">
+								<f:facet name="header">Task Data Table</f:facet>
+								<p:dataTable id="taskDataTable" var="taskData"
+									sortFunction="#{jJTaskBean.sortFunction}"
+									sortBy="#{taskData.chapter}" value="#{jJTaskBean.tasksData}"
+									editable="true" editMode="cell">
+
+									<p:ajax event="cellEdit" listener="#{jJTaskBean.onCellEdit}"
+										process="@widgetVar(nameWidget)"
+										onstart="PF('blockUIWidget').block()"
+										onsuccess="onCellEditTableComplete()"
+										update="taskDataTable :projecttabview:planningForm:timeline :projecttabview:planningForm:msg" />
+
+									<p:summaryRow paginatorPosition="top"
+										rendered="#{jJTaskBean.sortMode == 'chapter'}">
+										<p:column colspan="11" style="text-align:left">
+											<h:outputText icon="ui-icon-arrowreturnthick-1-e"
+												value="Chapter: #{taskData.chapter.name}" />
+										</p:column>
+									</p:summaryRow>
+
+									<p:column headerText="Actions" style="width:100px;">
+										<p:graphicImage library="images" name="#{taskData.icone}"
+											width="16" height="16" />
+										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
+											update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
+											action="#{jJTaskBean.initiateReqTreeNode}">
+											<f:setPropertyActionListener value="#{taskData.task}"
+												target="#{jJTaskBean.task}" />
+											<p:menuitem id="duplicate" icon="ui-icon-copy"
+												oncomplete="PF('duplicateTaskDialogWidget').show()"
+												value="#{messages.project_gantt_task_dupplicate_button}">
+												<f:setPropertyActionListener value="#{taskData.task}"
+													target="#{jJTaskBean.task}" />
+											</p:menuitem>
+											<p:menuitem id="deleteButton" icon="ui-icon-trash"
+												oncomplete="PF('deleteDialogWidget').show()"
+												value="#{messages.label_delete}"
+												title="#{messages.label_delete}">
+												<f:setPropertyActionListener value="#{taskData}"
+													target="#{jJTaskBean.selectedTaskData}" />
+												<f:setPropertyActionListener target="#{jJTaskBean.mode}"
+													value="planning" />
+											</p:menuitem>
+										</p:splitButton>
+									</p:column>
+
+									<p:column style="width: 130px;" rendered="false" headerText="Chapter">
+										<h:outputText value="#{taskData.chapter.name}" />
+									</p:column>
+
+									<p:column id="name"
+										style="width:180px !important; overflow:hidden;"
+										headerText="#{messages.project_gantt_table_name_title}">
+										<p:cellEditor>
+											<f:facet name="output">
+												<h:outputText
+													value="#{fn:substring(taskData.task.name,0,60)}" />
+											</f:facet>
+											<f:facet name="input">
+												<p:inputText value="#{taskData.task.name}" required="true"
+													label="Name" widgetVar="nameWidget"
+													requiredMessage="#{messages.project_gantt_task_alert}">
+													<f:validateLength maximum="100" />
+												</p:inputText>
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+
+									<p:column style="width: 130px;"
+										headerText="#{messages.project_gantt_table_assigned_title}">
+										<p:cellEditor style="width: 112px;">
+											<f:facet name="output">
+												<h:outputText
+													value="#{taskData.task.assignedTo.firstname} #{taskData.task.assignedTo.name}" />
+											</f:facet>
+											<f:facet name="input">
+												<h:selectOneMenu value="#{taskData.task.assignedTo}"
+													filter="true" filterMatchMode="startsWith"
+													rendered="#{taskData.task.sprint == null}"
+													style="width:100%;"
+													converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter">
+
+													<f:selectItem itemValue="#{null}"
+														itemLabel="#{messages.project_gantt_select_label}" />
+													<f:selectItems value="#{jJSprintBean.contacts}"
+														var="contact"
+														itemLabel="#{contact.firstname} #{contact.name}"
+														itemValue="#{contact}" />
+												</h:selectOneMenu>
+												<h:selectOneMenu value="#{taskData.task.assignedTo}"
+													filter="true" filterMatchMode="startsWith"
+													rendered="#{taskData.task.sprint != null}"
+													style="width:100%;"
+													converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter">
+
+													<f:selectItem itemValue="#{null}"
+														itemLabel="#{messages.project_gantt_select_label}" />
+													<f:selectItems value="#{taskData.task.sprint.contacts}"
+														var="contact"
+														itemLabel="#{contact.firstname} #{contact.name}"
+														itemValue="#{contact}" />
+												</h:selectOneMenu>
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+
+									<p:column style="width: 120px;" id="sdpr"
+										headerText="#{messages.project_gantt_table_startplanned_title}">
+										<p:cellEditor style="width: 112px;">
+											<f:facet name="output">
+												<p:calendar value="#{taskData.startDate}" navigator="true"
+													pattern="yyyy/MM/dd HH:mm:ss" style="width:90px" />
+											</f:facet>
+											<f:facet name="input">
+												<p:calendar style="width:90px" value="#{taskData.startDate}"
+													navigator="true" pattern="yyyy/MM/dd HH:mm:ss">
+													<f:validator validatorId="dateRangeValidator" />
+													<f:attribute name="taskData" value="#{taskData}" />
+													<f:attribute name="edition" value="startDate" />
+												</p:calendar>
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+
+									<p:column style="width: 120px;" id="edpr"
+										headerText="#{messages.project_gantt_table_endplanned_title}">
+										<p:cellEditor style="width: 112px;">
+											<f:facet name="output">
+												<p:calendar style="width:90px" value="#{taskData.endDate}"
+													navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
+											</f:facet>
+											<f:facet name="input">
+												<p:calendar style="width:90px" value="#{taskData.endDate}"
+													navigator="true" pattern="yyyy/MM/dd HH:mm:ss">
+													<f:validator validatorId="dateRangeValidator" />
+													<f:attribute name="taskData" value="#{taskData}" />
+													<f:attribute name="edition" value="endDate" />
+												</p:calendar>
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+
+									<p:column style="width: 60px;" id="wpr"
+										headerText="#{messages.project_gantt_table_wlplanned_title}">
+										<p:cellEditor style="width: 50px;">
+											<f:facet name="output">
+												<h:outputText value="#{taskData.workload}" />
+											</f:facet>
+											<f:facet name="input">
+												<p:spinner value="#{taskData.workload}" stepFactor="1"
+													min="0" />
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+
+									<p:column style="width: 120px;" id="sdr"
+										headerText="#{messages.project_gantt_table_startreal_title}">
+										<p:cellEditor style="width: 112px;">
+											<f:facet name="output">
+												<p:calendar style="width:90px"
+													value="#{taskData.task.startDateReal}" navigator="true"
+													pattern="yyyy/MM/dd HH:mm:ss" />
+											</f:facet>
+											<f:facet name="input">
+												<p:calendar style="width:90px"
+													value="#{taskData.task.startDateReal}" navigator="true"
+													pattern="yyyy/MM/dd HH:mm:ss">
+													<f:validator validatorId="dateRangeValidator" />
+													<f:attribute name="taskData" value="#{taskData}" />
+													<f:attribute name="edition" value="startDateReal" />
+												</p:calendar>
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+
+									<p:column style="width: 120px;" id="edr"
+										headerText="#{messages.project_gantt_table_endreal_title}">
+										<p:cellEditor style="width: 112px;">
+											<f:facet name="output">
+												<p:calendar style="width:90px"
+													value="#{taskData.task.endDateReal}" navigator="true"
+													pattern="yyyy/MM/dd HH:mm:ss" />
+											</f:facet>
+											<f:facet name="input">
+												<p:calendar style="width:90px"
+													value="#{taskData.task.endDateReal}" navigator="true"
+													pattern="yyyy/MM/dd HH:mm:ss">
+													<f:validator validatorId="dateRangeValidator" />
+													<f:attribute name="edition" value="endDateReal" />
+													<f:attribute name="taskData" value="#{taskData}" />
+												</p:calendar>
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+
+									<p:column style="width: 60px;" id="wr"
+										headerText="#{messages.project_gantt_table_wlreal_title}">
+										<p:cellEditor style="width: 50px;">
+											<f:facet name="output">
+												<h:outputText value="#{taskData.task.workloadReal}" />
+											</f:facet>
+											<f:facet name="input">
+												<p:spinner value="#{taskData.task.workloadReal}"
+													stepFactor="1" min="0" />
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+
+									<p:column style="width: 160px;" id="bt"
+										headerText="#{messages.project_gantt_table_previous_title}">
+										<p:cellEditor>
+											<f:facet name="output">
+												<h:outputText
+													value="#{messages.project_gantt_table_click_button}" />
+											</f:facet>
+											<f:facet name="input">
+												<p:selectManyMenu value="#{taskData.selectedTasks}"
+													style="width:150px;height:100px" var="p"
+													showCheckbox="true">
+													<f:selectItems value="#{taskData.tasks}" var="p"
+														itemLabel="#{p}" itemValue="#{p}" />
+													<p:column>
+														<h:outputText value=" #{p} " />
+													</p:column>
+												</p:selectManyMenu>
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+
+									<p:column style="width: 160px;" id="ts" headerText="Sprint">
+										<p:cellEditor>
+											<f:facet name="output">
+												<h:outputText value="#{taskData.task.sprint.name}" />
+											</f:facet>
+											<f:facet name="input">
+												<p:selectOneMenu id="sprintedit"
+													value="#{taskData.task.sprint}" panelStyle="width:150px;"
+													effect="fade" style="width:150px;" filter="true"
+													filterMatchMode="startsWith"
+													converter="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter">
+													<f:selectItem itemValue="#{null}"
+														itemLabel="Select a Sprint" />
+													<f:selectItems value="#{jJTaskBean.sprints}" var="c"
+														itemLabel="#{c.name}" itemValue="#{c}" />
+												</p:selectOneMenu>
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+								</p:dataTable>
+							</pe:layoutPane>
+
+							<pe:layoutPane position="center" styleContent="overflow-y: hidden;" id="centerLayout">
+
+								<f:facet name="header">Task TimeLine</f:facet>
+								<pe:timeline id="timeline" value="#{jJTaskBean.model}"
+									eventMargin="10" eventMarginAxis="0" themable="false"
+									locale="#{LocaleBean.locale}" start="#{jJTaskBean.start}"
+									end="#{jJTaskBean.end}" widgetVar="timelineWdgt"
+									axisOnTop="true" groupsChangeable="false" var="task"
+									stackEvents="false" style="width:100%;min-height:350px;"
+									editable="true" zoomMin="#{jJTaskBean.zoomMin}"
+									zoomMax="#{jJTaskBean.zoomMax}">
+
+									<p:ajax event="delete"
+										listener="#{jJTaskBean.onDeleteTimelineEvent}"
+										onstart="PF('timelineWdgt').cancelDelete()"
+										oncomplete="PF('deleteDialogWidget').show()" />
+<!-- 								<p:ajax event="add" update=":taskImportDialog" -->
+<!-- 									listener="#{jJTaskBean.onCreateTimelineEvent}" -->
+<!-- 									oncomplete="PF('taskImportDialogWidget').show()" /> -->
+									<p:ajax event="add" update="@none"
+										onstart="PF('timelineWdgt').cancelAdd()" />
+									<p:ajax event="change"
+										update=":projecttabview:planningForm:timeline :projecttabview:planningForm:taskDataTable :projecttabview:SprintTabView :projecttabview:planningForm:msg"
+										listener="#{jJTaskBean.onChangeTimelineEvent}"
+										onstart="PF('blockUIWidget').block()"
+										oncomplete="PF('blockUIWidget').unblock()" />
+									<p:ajax event="edit" update=":viewTaskForm:viewTaskPanelGrid"
+										listener="#{jJTaskBean.onEditTimelineEvent}"
+										onstart="PF('blockUIWidget').block()"
+										oncomplete="PF('blockUIWidget').unblock()" />
+
+									<h:outputText style="height:30px;" value="#{task.name}" />
+								</pe:timeline>
+							</pe:layoutPane>
+						</pe:layout>
+					</p:scrollPanel>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</h:form>
+
+	<p:confirmDialog id="duplicateTaskDialog"
+		widgetVar="duplicateTaskDialogWidget"
+		message="Are you sure you want duplicate this task?" showEffect="fade"
+		hideEffect="explode" header="Confirm Duplication" severity="alarm">
+		<p:outputPanel id="duplicateTaskPanel">
+			<h:form id="duplicateTaskForm">
+				<p:commandButton id="duplicateYesButton"
+					value="#{messages.label_yes}" action="#{jJTaskBean.duplicateTask}"
+					update=":projecttabview:planningForm :projecttabview:SprintTabView"
+					oncomplete="PF('duplicateTaskDialogWidget').hide()" />
+				<p:commandButton id="duplicateNoButton" value="#{messages.label_no}"
+					onclick="PF('duplicateTaskDialogWidget').hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:confirmDialog>
+</ui:composition>
+</html>

@@ -7,7 +7,7 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition>
-	<h:form>
+	<h:form style="width:100%;">
 		<p:remoteCommand update=":projecttabview:SprintTabView"
 			name="updateTabSprint" />
 	</h:form>
@@ -18,7 +18,7 @@
 			onstart="PF('blockUIWidget').block()"
 			oncomplete="PF('blockUIWidget').unblock()" update="SprintTabView" />
 
-		<p:tab>
+		<p:tab style="width:100%;">
 			<f:facet name="title">
 				<h:outputText id="tabHeader" rendered="#{!jjsprint.render}"
 					value="#{jjsprint.sprint.name}" />
@@ -107,7 +107,7 @@
 					<f:facet name="footer">
 						<p:row>
 							<p:column colspan="3"
-								style="width:20% important; min-width:400px;">
+								style="width:20% important;">
 								<p:commandButton id="editSprintButton"
 									value="#{messages.label_edit}"
 									actionListener="#{jJSprintBean.attrListener}"
@@ -123,7 +123,7 @@
 									oncomplete="PF('blockUIWidget').unblock();" />
 							</p:column>
 							<p:column colspan="2"
-								style="width:15% important; min-width:300px;">
+								style="width:15% important;">
 								<p:commandButton value="#{messages.label_create} JJTask"
 									id="createTaskttButton" icon="ui-icon-circle-plus"
 									update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm :taskImportDialog"
@@ -134,15 +134,15 @@
 									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 									<f:attribute name="mode" value="scrum" />
 								</p:commandButton>
-								<p:tooltip for="createTaskttButton"
-									value="#{messages.label_create} Task" showEffect="fade"
-									hideEffect="fade" />
+								<p:tooltip for="createTaskttButton" value="#{messages.label_create} Task"
+									showEffect="fade" hideEffect="fade" />
 							</p:column>
 						</p:row>
 					</f:facet>
 				</p:panelGrid>
 
 				<p:separator />
+
 			</h:form>
 			<h:form id="taskListForm" rendered="#{!jjsprint.render}" style="width:100% !important;">
 				<p:panelGrid style="width:100% !important;">
@@ -152,13 +152,13 @@
 						</p:row>
 					</f:facet>
 					<p:row>
-						<p:column style="width: 33%;">
+						<p:column style="width: 33.33%;">
 							<p:fieldset legend="Todo" id="todoFieldset">
 								<p:dataTable scrollable="true" scrollHeight="250" id="todo"
 									var="todo" value="#{jjsprint.todoTask}" rowKey="#{todo.id}"
 									rendered="#{not empty jjsprint.todoTask}">
 
-									<p:column style="width:20px">
+									<p:column style="width:1px">
 										<h:outputText id="todoIcon"
 											styleClass="ui-icon ui-icon-arrow-4" />
 										<p:draggable for="todoIcon" revert="true" />
@@ -169,14 +169,13 @@
 										<p:graphicImage
 											rendered="#{todo.bug == null and todo.requirement != null}"
 											library="images" name="function.ico" width="16" height="16" />
-
 										<p:graphicImage title="TestCase"
 											rendered="#{todo.bug == null and todo.requirement == null and todo.testcase != null}"
 											library="images" name="test.ico" width="16" height="16" />
 										<h:outputText value="#{todo.name}" />
 									</p:column>
 
-									<p:column style="width:20px" headerText="W">
+									<p:column style="width:10px" headerText="W">
 										<h:outputText value="#{todo.workloadPlanned}" />
 									</p:column>
 									<p:column style="width:20px">
@@ -192,20 +191,17 @@
 											<p:menuitem id="deleteButton" icon="ui-icon-trash"
 												oncomplete="PF('deleteDialogWidget').show()"
 												value="#{messages.label_delete}">
-
 												<f:setPropertyActionListener value="#{todo}"
 													target="#{jJSprintBean.task}" />
-
 												<f:setPropertyActionListener target="#{jJTaskBean.mode}"
 													value="scrum" />
-
 											</p:menuitem>
 										</p:splitButton>
 									</p:column>
 								</p:dataTable>
 							</p:fieldset>
 						</p:column>
-						<p:column style="width: 33%;">
+						<p:column style="width: 33.33%;">
 							<p:fieldset legend="In Progress" id="progFieldset">
 								<p:outputPanel id="progdropArea">
 									<h:outputText value="!!!Drop here!!!"
@@ -218,7 +214,7 @@
 										<p:ajax event="cellEdit"
 											listener="#{jJSprintBean.onCellEditTask}"
 											update=":projecttabview:SprintTabView:taskListForm :projecttabview:SprintTabView:sprintForm" />
-										<p:column style="width:20px">
+										<p:column style="width:1px">
 											<h:outputText id="progIcon"
 												styleClass="ui-icon ui-icon-arrow-4" />
 											<p:draggable for="progIcon" revert="true" />
@@ -237,7 +233,7 @@
 											<h:outputText value="#{prog.name}" />
 										</p:column>
 
-										<p:column style="width:50px" headerText="Who">
+										<p:column style="width:30px" headerText="Who">
 											<h:outputText value="#{prog.assignedTo.name}" />
 										</p:column>
 										<p:column style="width:20px">
@@ -264,7 +260,7 @@
 								</p:outputPanel>
 							</p:fieldset>
 						</p:column>
-						<p:column style="width: 33%;">
+						<p:column style="width: 33.33%;">
 							<p:fieldset legend="Done Tasks" id="doneFieldset">
 								<p:outputPanel id="donedropArea">
 									<h:outputText value="!!!Drop here!!!"
@@ -287,7 +283,7 @@
 											<h:outputText value="#{done.name}" />
 										</p:column>
 
-										<p:column style="width:20px" headerText="Diff">
+										<p:column style="width:10px" headerText="Diff">
 											<h:outputText
 												value="#{done.workloadPlanned-done.workloadReal}" />
 										</p:column>
