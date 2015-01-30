@@ -9,13 +9,22 @@
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
 		<p:tabView id="projecttabview" widgetVar="projectTabView"
-			dynamic="false" cache="true" style="width:97% !important;"
+			dynamic="false" cache="true" style="width:100% !important;"
 			activeIndex="#{loginBean.activeTabProjectIndex}">
 
 			<p:ajax event="tabChange"
 				listener="#{jJSprintBean.onTabSprintChange}"
 				onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock()" />
+			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}">
+				<h:panelGrid id="projectpanel" columns="1" cellpadding="3"
+					style="width:100% !important;">
+					<ui:insert name="gantt">
+						<ui:include src="gantt.xhtml" />
+					</ui:insert>
+				</h:panelGrid>
+			</p:tab>
+
 			<p:tab title="#{messages.project_scrum_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="scrum">
@@ -23,15 +32,6 @@
 					</ui:insert>
 				</h:panelGrid>
 			</p:tab>
-			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}">
-				<h:panelGrid id="projectpanel" columns="1" cellpadding="3"
-					style="width:97% !important;">
-					<ui:insert name="gantt">
-						<ui:include src="gantt.xhtml" />
-					</ui:insert>
-				</h:panelGrid>
-			</p:tab>
-
 		</p:tabView>
 		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
 		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"

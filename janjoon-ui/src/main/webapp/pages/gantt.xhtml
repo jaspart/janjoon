@@ -9,22 +9,29 @@
 
 <ui:composition style="width:100%">
 	<style type="text/css">
-		.ui-datatable table {
-			table-layout: fixed;
-			border-collapse: separate;
-		}
-		.ui-datatable .ui-datatable-data th {
-			height: 37px;
-			overflow: hidden;
-		}
-		.ui-datatable .ui-datatable-data td {
-			overflow: hidden;
-		}
-		.ui-datatable .ui-datatable-data tr {
-			height: 44px;
-			overflow: hidden;
-		}
-	</style>
+.ui-datatable table {
+	table-layout: fixed;
+	border-collapse: separate;
+}
+
+.pe-layout-pane-header {
+	background: #2391B2;
+}
+
+.ui-datatable .ui-datatable-data th {
+	height: 37px;
+	overflow: hidden;
+}
+
+.ui-datatable .ui-datatable-data td {
+	overflow: hidden;
+}
+
+.ui-datatable .ui-datatable-data tr {
+	height: 44px;
+	overflow: hidden;
+}
+</style>
 	<h:form id="sprintForm" style="width:100%;">
 		<p:panelGrid style="margin-top:10px;width:100%;">
 			<p:row>
@@ -35,8 +42,10 @@
 						filter="true" filterMatchMode="startsWith"
 						converter="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter">
 
-						<f:selectItem itemValue="#{null}" itemLabel="#{messages.project_gantt_select_label}" />
-						<f:selectItems value="#{jJTaskBean.sprints}" var="c" itemLabel="#{c.name}" itemValue="#{c}" />
+						<f:selectItem itemValue="#{null}"
+							itemLabel="#{messages.project_gantt_select_label}" />
+						<f:selectItems value="#{jJTaskBean.sprints}" var="c"
+							itemLabel="#{c.name}" itemValue="#{c}" />
 						<p:ajax onstart="PF('blockUIWidget').block()" event="change"
 							listener="#{jJTaskBean.sprintSelectionChanged}"
 							update=":projecttabview:planningForm "
@@ -60,8 +69,10 @@
 						filter="true" filterMatchMode="startsWith">
 
 						<f:selectItem itemValue="chapter" itemLabel="Chapter" />
-						<f:selectItem itemValue="StartDatePlanned" itemLabel="Start Date Planned" />
-						<f:selectItem itemValue="StartDateReal" itemLabel="Start Date Real" />
+						<f:selectItem itemValue="StartDatePlanned"
+							itemLabel="Start Date Planned" />
+						<f:selectItem itemValue="StartDateReal"
+							itemLabel="Start Date Real" />
 						<p:ajax onstart="PF('blockUIWidget').block()" event="change"
 							listener="#{jJTaskBean.SortBySelectionChanged}"
 							update=":projecttabview:planningForm :projecttabview:sprintForm"
@@ -91,7 +102,7 @@
 						update=":projecttabview "
 						oncomplete="PF('blockUIWidget').unblock()" />
 					<p:scrollPanel style="width:100%;" mode="native">
-						<pe:layout fullPage="false" style="width:50%;height:600px;"
+						<pe:layout fullPage="false" style="width:100%;height:600px;"
 							options="#{jJTaskBean.layoutOptionsOne}"
 							state="#{jJTaskBean.stateOne}">
 
@@ -142,7 +153,8 @@
 										</p:splitButton>
 									</p:column>
 
-									<p:column style="width: 130px;" rendered="false" headerText="Chapter">
+									<p:column style="width: 130px;" rendered="false"
+										headerText="Chapter">
 										<h:outputText value="#{taskData.chapter.name}" />
 									</p:column>
 
@@ -347,9 +359,11 @@
 								</p:dataTable>
 							</pe:layoutPane>
 
-							<pe:layoutPane position="center" styleContent="overflow-y: hidden;" id="centerLayout">
+							<pe:layoutPane position="center"
+								styleContent="overflow-y: hidden;" id="centerLayout">
 
 								<f:facet name="header">Task TimeLine</f:facet>
+								
 								<pe:timeline id="timeline" value="#{jJTaskBean.model}"
 									eventMargin="10" eventMarginAxis="0" themable="false"
 									locale="#{LocaleBean.locale}" start="#{jJTaskBean.start}"
@@ -363,9 +377,9 @@
 										listener="#{jJTaskBean.onDeleteTimelineEvent}"
 										onstart="PF('timelineWdgt').cancelDelete()"
 										oncomplete="PF('deleteDialogWidget').show()" />
-<!-- 								<p:ajax event="add" update=":taskImportDialog" -->
-<!-- 									listener="#{jJTaskBean.onCreateTimelineEvent}" -->
-<!-- 									oncomplete="PF('taskImportDialogWidget').show()" /> -->
+									<!-- 								<p:ajax event="add" update=":taskImportDialog" -->
+									<!-- 									listener="#{jJTaskBean.onCreateTimelineEvent}" -->
+									<!-- 									oncomplete="PF('taskImportDialogWidget').show()" /> -->
 									<p:ajax event="add" update="@none"
 										onstart="PF('timelineWdgt').cancelAdd()" />
 									<p:ajax event="change"
@@ -380,6 +394,7 @@
 
 									<h:outputText style="height:30px;" value="#{task.name}" />
 								</pe:timeline>
+								
 							</pe:layoutPane>
 						</pe:layout>
 					</p:scrollPanel>
