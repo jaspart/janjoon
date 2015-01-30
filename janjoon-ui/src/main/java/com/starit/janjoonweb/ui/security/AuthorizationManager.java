@@ -54,7 +54,7 @@ public class AuthorizationManager implements Serializable {
 				}
 
 			};
-			add(new PageContent("project1", objects));
+			add(new PageContent("planning", objects));
 		}
 	};
 

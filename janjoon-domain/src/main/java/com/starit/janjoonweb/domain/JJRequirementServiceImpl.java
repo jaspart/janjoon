@@ -2,6 +2,7 @@ package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.CollectionAttribute;
 
 import org.hibernate.Hibernate;
 
@@ -25,8 +27,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 	// Generic Request
 
-	public JJRequirement getRequirementByName(JJCategory category,JJProject project,JJProduct product,String name,JJCompany company)
-	{
+	public JJRequirement getRequirementByName(JJCategory category,
+			JJProject project, JJProduct product, String name, JJCompany company) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
 				.createQuery(JJRequirement.class);
@@ -37,9 +39,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		if (category != null) {
 			predicates
@@ -56,23 +56,23 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		if (product != null) {
 			predicates.add(criteriaBuilder.equal(from.get("product"), product));
-		}	
-		
-		if(name != null)
-		{
-			predicates.add(criteriaBuilder.equal(criteriaBuilder.upper(from.<String>get("name")), name.toUpperCase()));
-		}	
-		
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		}
 
+		if (name != null) {
+			predicates.add(criteriaBuilder.equal(
+					criteriaBuilder.upper(from.<String> get("name")),
+					name.toUpperCase()));
+		}
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 
-		if( result.getResultList() != null)
+		if (result.getResultList() != null)
 			return result.getResultList().get(0);
-		else return null;
-		
-		
+		else
+			return null;
+
 	}
 
 	public boolean haveTestcase(JJRequirement requirement) {
@@ -358,13 +358,73 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 	}
 
-	public List<JJRequirement> getNonCouvredRequirements(JJCompany company) {
-		String qu = "SELECT r FROM  JJRequirement r Where r.project.manager.company = :c AND r.enabled = true AND r.category != null and r.requirementLinkDown IS empty and r.requirementLinkUp IS empty";
-		Query query = entityManager.createQuery(qu, JJRequirement.class);
-		query.setParameter("c", company);
+	public List<JJRequirement> getNonCouvredRequirements(JJCompany company,
+			Map<JJProject, JJProduct> map) {
+		if (map == null) {
+			String qu = "SELECT r FROM  JJRequirement r Where r.project.manager.company = :c AND r.enabled = true AND r.category != null and r.requirementLinkDown IS empty and r.requirementLinkUp IS empty";
+			Query query = entityManager.createQuery(qu, JJRequirement.class);
+			query.setParameter("c", company);
 
-		List<JJRequirement> list = ((List<JJRequirement>) query.getResultList());
-		return list;
+			List<JJRequirement> list = ((List<JJRequirement>) query
+					.getResultList());
+			return list;
+		} else {
+			CriteriaBuilder criteriaBuilder = entityManager
+					.getCriteriaBuilder();
+			CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
+					.createQuery(JJRequirement.class);
+
+			Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
+
+			CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
+
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+			predicates.add(criteriaBuilder.equal(
+					from.join("project").join("manager").get("company"),
+					company));
+
+			predicates.add(criteriaBuilder.isEmpty(from
+					.<List<JJRequirement>> get("requirementLinkDown")));
+			predicates.add(criteriaBuilder.isEmpty(from
+					.<List<JJRequirement>> get("requirementLinkUp")));
+
+			if (!map.isEmpty()) {
+				List<Predicate> orPredicates = new ArrayList<Predicate>();
+
+				for (Map.Entry<JJProject, JJProduct> entry : map.entrySet()) {
+
+					if (entry.getValue() != null) {
+						List<Predicate> andPredicates = new ArrayList<Predicate>();
+
+						andPredicates.add(criteriaBuilder.equal(
+								from.get("project"), entry.getKey()));
+
+						andPredicates.add(criteriaBuilder.equal(
+								from.get("product"), entry.getValue()));
+
+						orPredicates.add(criteriaBuilder.and(andPredicates
+								.toArray(new Predicate[] {})));
+					}else
+						orPredicates.add(criteriaBuilder.equal(
+								from.get("project"), entry.getKey()));
+
+				}
+				predicates.add(criteriaBuilder.or(orPredicates
+						.toArray(new Predicate[] {})));
+
+				select.where(criteriaBuilder.and(predicates
+						.toArray(new Predicate[] {})));
+
+				TypedQuery<JJRequirement> result = entityManager
+						.createQuery(select);
+				return result.getResultList();
+			} else {
+				return null;
+			}
+
+		}
 
 	}
 

@@ -44,11 +44,11 @@
 		</h:form>
 		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
 
-			<p:panel styleClass="content">		
-				
+			<p:panel styleClass="content">
+
 				<p:dialog widgetVar="headerPanel" id="headerPanel"
-				styleClass="overlayPanelDialog"				
-				rendered="#{loginBean.mobile}" closable="true">
+					styleClass="overlayPanelDialog" rendered="#{loginBean.mobile}"
+					closable="true">
 					<h:form>
 						<p:menu>
 							<p:menuitem value="" icon="ui-icon-home"
@@ -137,10 +137,10 @@
 							<p:menuitem value="#{messages.header_admin_menuitem}"
 								url="/pages/administration.jsf?faces-redirect=true"
 								icon="ui-icon-key" update=":contentPanel" />
-						</p:menu>	
-						</h:form>				
+						</p:menu>
+					</h:form>
 				</p:dialog>
-				
+
 				<ui:insert name="header">
 					<ui:include src="header.xhtml" />
 				</ui:insert>
@@ -219,11 +219,14 @@
 					hideEffect="explode">
 					<p:outputPanel id="viewPanel1">
 						<h:form id="viewForm1">
-							<h:panelGrid id="viewPanelGrid1" columns="2"
-								binding="#{jJMessageBean.viewPanel}" styleClass="dialog"
-								columnClasses="col1,col2" />
+							<!-- 							<h:panelGrid id="viewPanelGrid1" columns="2" -->
+							<!-- 								binding="#{jJMessageBean.viewPanel}" styleClass="dialog" -->
+							<!-- 								columnClasses="col1,col2" /> -->
+							<ui:include src="/pages/messageDialog.xhtml">
+								<ui:param name="JJMessage" value="#{jJMessageBean.viewedMessage}" />
+							</ui:include>
 							<p:commandButton id="viewCloseButton1"
-								value="#{messages.label_close}"
+								value="#{messages.label_close}" style="margin-top: 10px;"
 								onclick="PF('viewDialogWidget1').hide()" type="button" />
 						</h:form>
 					</p:outputPanel>

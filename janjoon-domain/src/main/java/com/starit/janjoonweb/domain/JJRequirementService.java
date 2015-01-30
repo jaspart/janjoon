@@ -1,6 +1,7 @@
 package com.starit.janjoonweb.domain;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.roo.addon.layers.service.RooService;
 
@@ -36,7 +37,9 @@ public interface JJRequirementService {
 			JJVersion version,JJStatus status, boolean onlyActif);
 	
 	public void refreshRequirement(JJRequirement requirement);
-	public JJRequirement getRequirementByName(JJCategory catgory,JJProject project,JJProduct produit,String name,JJCompany company);
-	public List<JJRequirement> getNonCouvredRequirements(JJCompany company);
+	
+	public JJRequirement getRequirementByName(JJCategory catgory,JJProject project,JJProduct produit,String name,JJCompany company);	
+	
+	public List<JJRequirement> getNonCouvredRequirements(JJCompany company,Map<JJProject,JJProduct> map);
 
 }

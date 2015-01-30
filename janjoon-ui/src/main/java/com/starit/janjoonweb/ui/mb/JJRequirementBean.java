@@ -3594,6 +3594,43 @@ public class JJRequirementBean {
 		public Object getRowKey(RequirementUtil req) {
 			return req.getRequirement().getId().toString();
 		}
+		
+		public void mineChangeEvent() {
+			
+			if (mine) {
+
+				JJCategory category = jJCategoryService
+						.findJJCategory(this.getCategoryId());
+				this.setMine(true);
+				this
+						.setFiltredRequirements(getListOfRequiremntUtils(jJRequirementService
+								.getMineRequirements(((LoginBean) LoginBean
+										.findBean("loginBean")).getContact()
+										.getCompany(), ((LoginBean) LoginBean
+										.findBean("loginBean")).getContact(),
+										product, project, category,
+										importVersion, true, true)));
+
+			} else {
+				JJCategory category = jJCategoryService
+						.findJJCategory(this.getCategoryId());
+				List<JJRequirement> requirements = getRequirementsList(category,
+						product, version, project, true);
+
+//				this = new CategoryDataModel(
+//						getListOfRequiremntUtils(requirements), category.getId(),
+//						category.getName(), true);
+
+				// categoryDataModel.calculCompletionProgress();
+				// categoryDataModel.calculCoverageProgress();
+
+				tableDataModelList.set(tableDataModelList.indexOf(this),
+						new CategoryDataModel(
+								getListOfRequiremntUtils(requirements), category.getId(),
+								category.getName(), true));
+
+			}
+		}
 
 		public StreamedContent getFile() {
 
@@ -3649,6 +3686,12 @@ public class JJRequirementBean {
 			return new DefaultStreamedContent(stream, "xml",
 					nameDataModel.toUpperCase() + "-Spec.xml");
 
+		}
+
+		@Override
+		public boolean equals(Object object) {
+			return (object instanceof CategoryDataModel) && (categoryId != 0) ? categoryId==
+					((CategoryDataModel) object).getCategoryId() : (object == this);
 		}
 
 	}
@@ -3811,42 +3854,6 @@ public class JJRequirementBean {
 		return exist;
 
 	}
-
-	public void mineChangeEvent(CategoryDataModel tableDataModel) {
-
-		if (tableDataModel.isMine()) {
-
-			tableDataModel.setMine(true);
-			tableDataModel
-					.setFiltredRequirements(getListOfRequiremntUtils(jJRequirementService
-							.getMineRequirements(((LoginBean) LoginBean
-									.findBean("loginBean")).getContact()
-									.getCompany(), ((LoginBean) LoginBean
-									.findBean("loginBean")).getContact(),
-									product, project, jJCategoryService
-											.findJJCategory(tableDataModel
-													.getCategoryId()),
-									importVersion, true, true)));
-
-		} else {
-			JJCategory category = jJCategoryService
-					.findJJCategory(tableDataModel.getCategoryId());
-			List<JJRequirement> requirements = getRequirementsList(category,
-					product, version, project, true);
-
-			CategoryDataModel categoryDataModel = new CategoryDataModel(
-					getListOfRequiremntUtils(requirements), category.getId(),
-					category.getName(), true);
-
-			// categoryDataModel.calculCompletionProgress();
-			// categoryDataModel.calculCoverageProgress();
-
-			tableDataModelList.set(tableDataModelList.indexOf(tableDataModel),
-					categoryDataModel);
-
-		}
-	}
-
 	// mindMap part
 
 	private MindmapNode reqRoot;

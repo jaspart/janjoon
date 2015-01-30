@@ -170,8 +170,8 @@
 												onIcon="ui-icon-check" offIcon="ui-icon-close">
 												<p:ajax onstart="PF('blockUIWidget').block()"
 													oncomplete="PF('blockUIWidget').unblock()"
-													listener="#{jJRequirementBean.mineChangeEvent(tableDataModel)}"
-													update=":specForm" />
+													listener="#{tableDataModel.mineChangeEvent}"
+													update="categoryTable" />
 											</p:selectBooleanButton>
 										</p:column>
 										<p:column colspan="1">
@@ -663,7 +663,7 @@
 
 		<p:dialog id="requirementMindMap"
 			header="#{messages.specification_MindMap_title}" modal="true"
-			style="width:75% !important;" draggable="false"
+			draggable="false"
 			widgetVar="requirementMindMap" dynamic="true" resizable="true">
 			<p:panel>
 				<ui:include src="mindMapReq.xhtml" />

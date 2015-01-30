@@ -41,20 +41,20 @@
 					</f:facet>
 					<h:outputText value="#{conf.val}" />
 				</p:column>
-				<p:column styleClass="action-column">
+				<p:column styleClass="action-column" style="width:205px;">
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_config_table_action_title}" />
 					</f:facet>
 
-					<p:splitButton id="viewButton" icon="ui-icon-zoomin"
-						update=":tabview:viewForm:viewPanelGrid"
-						oncomplete="PF('viewDialogWidget').show()"
-						value="#{messages.label_view}">
-						<f:setPropertyActionListener value="#{conf}"
-							target="#{jJConfigurationBean.JJConfiguration_}" />
+<!-- 					<p:splitButton id="viewButton" icon="ui-icon-zoomin" -->
+<!-- 						update=":tabview:viewForm:viewPanelGrid" -->
+<!-- 						oncomplete="PF('viewDialogWidget').show()" -->
+<!-- 						value="#{messages.label_view}"> -->
+<!-- 						<f:setPropertyActionListener value="#{conf}" -->
+<!-- 							target="#{jJConfigurationBean.JJConfiguration_}" /> -->
 
 
-						<p:menuitem id="editButton" icon="ui-icon-pencil"
+						<p:splitButton id="editButton" icon="ui-icon-pencil"
 							update=":tabview:createForm:createPanelGrid :tabview:createDialog"
 							action="#{jJConfigurationBean.onEdit}"
 							oncomplete="PF('createDialogWidget').show()"
@@ -63,7 +63,7 @@
 								target="#{jJConfigurationBean.JJConfiguration_}" />
 							<f:setPropertyActionListener
 								target="#{jJConfigurationBean.renderCreate}" value="false" />
-						</p:menuitem>
+						
 
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
 							oncomplete="PF('deleteDialogWidget').show()"

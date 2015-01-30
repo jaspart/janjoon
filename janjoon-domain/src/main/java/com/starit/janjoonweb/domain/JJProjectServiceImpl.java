@@ -118,7 +118,8 @@ public class JJProjectServiceImpl implements JJProjectService {
 						.createQuery(selectPermission);
 
 				for (JJPermission permission : resultPermission.getResultList()) {
-					if (permission.getProject() != null) {
+					if (permission.getProject() != null ) {
+						if(!projects.contains(permission.getProject()))
 						projects.add(permission.getProject());
 					} else {
 						all = true;

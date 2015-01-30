@@ -52,22 +52,21 @@
 						<h:outputText value="#{messages.admin_status_table_action_title}" />
 					</f:facet>
 
-					<p:splitButton id="viewButton" icon="ui-icon-zoomin"
-						update=":tabview:sviewForm:viewPanelGrid"
-						value="#{messages.admin_status_table_view_tooltip}"
-						oncomplete="PF('viewSatDialogWidget').show()">
-						<f:setPropertyActionListener value="#{status}"
-							target="#{jJStatusBean.JJStatus_}" />
+<!-- 					<p:splitButton id="viewButton" icon="ui-icon-zoomin" -->
+<!-- 						update=":tabview:sviewForm:viewPanelGrid" -->
+<!-- 						value="#{messages.admin_status_table_view_tooltip}" -->
+<!-- 						oncomplete="PF('viewSatDialogWidget').show()"> -->
+<!-- 						<f:setPropertyActionListener value="#{status}" -->
+<!-- 							target="#{jJStatusBean.JJStatus_}" /> -->
 
 
-						<p:menuitem id="editButton" icon="ui-icon-pencil"
+						<p:splitButton id="editButton" icon="ui-icon-pencil"
 							update=":tabview:seditForm:editPanelGrid"
 							action="#{jJStatusBean.onEdit}"
 							oncomplete="PF('editSatDialogWidget').show()"
 							value="#{messages.admin_status_table_edit_tooltip}">
 							<f:setPropertyActionListener value="#{status}"
-								target="#{jJStatusBean.JJStatus_}" />
-						</p:menuitem>
+								target="#{jJStatusBean.JJStatus_}" />						
 
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
 							oncomplete="PF('deleteSatDialogWidget').show()"

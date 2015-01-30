@@ -45,6 +45,7 @@ public class JJProductServiceImpl implements JJProductService {
 		return result.getResultList();
 
 	}
+
 	public List<JJProduct> load(JJCompany company, MutableInt size, int first,
 			int pageSize) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -120,8 +121,9 @@ public class JJProductServiceImpl implements JJProductService {
 						.createQuery(selectPermission);
 
 				for (JJPermission permission : resultPermission.getResultList()) {
-					if (permission.getProject() != null) {
-						products.add(permission.getProduct());
+					if (permission.getProduct() != null) {
+						if (!products.contains(permission.getProduct()))
+							products.add(permission.getProduct());
 					} else {
 						all = true;
 					}
@@ -150,7 +152,7 @@ public class JJProductServiceImpl implements JJProductService {
 				TypedQuery<JJProduct> result = entityManager
 						.createQuery(select);
 				for (JJProduct prod : result.getResultList()) {
-					if(!products.contains(prod))
+					if (!products.contains(prod))
 						products.add(prod);
 				}
 

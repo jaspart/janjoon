@@ -2,9 +2,12 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -62,7 +65,7 @@ public class LoginBean implements Serializable {
 
 	private AuthenticationManager authenticationManager;
 	private AuthorisationService authorisationService;
-	static Logger logger = Logger.getLogger("loginBean-Logger");	
+	static Logger logger = Logger.getLogger("loginBean-Logger");
 	private boolean mobile;
 	private boolean collapsedMesPanel = true;
 	private String showMarquee;
@@ -97,13 +100,12 @@ public class LoginBean implements Serializable {
 	public LoginBean(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
 		// if(true) {
-		 this.mobile = (((HttpServletRequest)
-		 FacesContext.getCurrentInstance()
-		 .getExternalContext().getRequest()).getHeader("User-Agent")
-		 .indexOf("Mobile")) != -1;
-//		this.mobile = true;
+		this.mobile = (((HttpServletRequest) FacesContext.getCurrentInstance()
+				.getExternalContext().getRequest()).getHeader("User-Agent")
+				.indexOf("Mobile")) != -1;
+		// this.mobile = true;
 		// } else {
-//		 this.mobile=true;
+		// this.mobile=true;
 		// }
 	}
 
@@ -190,7 +192,7 @@ public class LoginBean implements Serializable {
 
 				if (s.contains("development"))
 					s = "main";
-				else if (s.contains("project1") || s.contains("test")
+				else if (s.contains("planning") || s.contains("test")
 						|| s.contains("stats")) {
 					JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");
 					if (jJProjectBean.getProject() == null) {
@@ -322,10 +324,9 @@ public class LoginBean implements Serializable {
 	public void setShowMarquee(String showMarquee) {
 		this.showMarquee = showMarquee;
 	}
-	
-	public String getColumns()
-	{
-		if(mobile)
+
+	public String getColumns() {
+		if (mobile)
 			return "3";
 		else
 			return "2";
@@ -423,13 +424,19 @@ public class LoginBean implements Serializable {
 				}
 
 				jjProjectBean.getProjectList();
-				jjProjectBean.setProject(contact.getLastProject());
+				if (jjProjectBean.getProjectList().contains(
+						contact.getLastProject()))
+					jjProjectBean.setProject(contact.getLastProject());
 
 				jjProductBean.getProductList();
-				jjProductBean.setProduct(contact.getLastProduct());
+				if (jjProductBean.getProductList().contains(
+						contact.getLastProduct()))
+					jjProductBean.setProduct(contact.getLastProduct());
 
 				jjVersionBean.getVersionList();
-				jjVersionBean.setVersion(contact.getLastVersion());
+				if (jjVersionBean.getVersionList().contains(
+						contact.getLastVersion()))
+					jjVersionBean.setVersion(contact.getLastVersion());
 
 				authorisationService = new AuthorisationService(session,
 						contact);
@@ -484,7 +491,7 @@ public class LoginBean implements Serializable {
 		case "main":
 			menuIndex = 0;
 			break;
-		case "project1":
+		case "planning":
 			menuIndex = 1;
 			break;
 		case "specifications":
@@ -774,7 +781,7 @@ public class LoginBean implements Serializable {
 				if (activeTabAdminIndex == 0 || activeTabAdminIndex == 1) {
 
 					if (!authorisationService.isAdminContactProfil()) {
-						activeTabAdminIndex = 3;
+						activeTabAdminIndex = 5;
 
 						RequestContext context = RequestContext
 								.getCurrentInstance();
@@ -783,7 +790,21 @@ public class LoginBean implements Serializable {
 					}
 				} else if (activeTabAdminIndex == 2) {
 					if (!authorisationService.isAdminCompany())
-						activeTabAdminIndex = 3;
+						activeTabAdminIndex = 5;
+					RequestContext context = RequestContext
+							.getCurrentInstance();
+					context.execute("PF('AdmintabView').select("
+							+ activeTabAdminIndex + ")");
+				} else if (activeTabAdminIndex == 3) {
+					if (!authorisationService.isAdminProduct())
+						activeTabAdminIndex = 5;
+					RequestContext context = RequestContext
+							.getCurrentInstance();
+					context.execute("PF('AdmintabView').select("
+							+ activeTabAdminIndex + ")");
+				} else if (activeTabAdminIndex == 4) {
+					if (!authorisationService.isAdminProject())
+						activeTabAdminIndex = 5;
 					RequestContext context = RequestContext
 							.getCurrentInstance();
 					context.execute("PF('AdmintabView').select("
@@ -814,7 +835,7 @@ public class LoginBean implements Serializable {
 						.getExternalContext()
 						.redirect(
 								path
-										+ "/pages/project1.jsf?faces-redirect=true");
+										+ "/pages/planning.jsf?faces-redirect=true");
 			} else if (e.getComponent().getId().equalsIgnoreCase("testAction")) {
 				FacesContext.getCurrentInstance().getExternalContext()
 						.redirect(path + "/pages/test.jsf?faces-redirect=true");
@@ -908,7 +929,7 @@ public class LoginBean implements Serializable {
 						.redirect(path + "/pages/main.jsf?faces-redirect=true");
 
 			} else if (jjProjectBean.getProject() == null
-					&& (root.getViewId().contains("project1")
+					&& (root.getViewId().contains("planning")
 							|| root.getViewId().contains("test")
 							|| root.getViewId().contains("stats") || root
 							.getViewId().contains("development"))) {
@@ -969,7 +990,7 @@ public class LoginBean implements Serializable {
 							}
 
 						} else if (!authorisationService.isrProject()
-								&& root.getViewId().contains("project1")) {
+								&& root.getViewId().contains("planning")) {
 
 							facesMessage = new FacesMessage(
 									FacesMessage.SEVERITY_ERROR,
@@ -1016,7 +1037,7 @@ public class LoginBean implements Serializable {
 
 							}
 						} else if ((!authorisationService.isrProject() && root
-								.getViewId().contains("project1"))
+								.getViewId().contains("planning"))
 								|| (!authorisationService.isrBuild() && viewID
 										.contains("delivery"))
 								|| ((!authorisationService.isrTest()) && viewID
@@ -1038,7 +1059,7 @@ public class LoginBean implements Serializable {
 				} else {
 
 					if ((!authorisationService.isrProject() && root.getViewId()
-							.contains("project1"))
+							.contains("planning"))
 							|| (!authorisationService.isrBuild() && viewID
 									.contains("delivery"))
 							|| (!authorisationService.isrTest() && viewID
@@ -1116,19 +1137,52 @@ public class LoginBean implements Serializable {
 		}
 	}
 
-	public List<JJRequirement> getNoCouvretReq() {
-		return jJRequirementService
-				.getNonCouvredRequirements(getContact().getCompany());
+	public List<JJRequirement> noCouvretReq;
+
+	public void setNoCouvretReq(List<JJRequirement> noCouvretReq) {
+		this.noCouvretReq = noCouvretReq;
 	}
 
-//	public void initNonCouvretSpec(ComponentSystemEvent e) {
-//
-//		if (noCouvretReq == null && isEnable()) {
-//			noCouvretReq = jJRequirementService
-//					.getNonCouvredRequirements(getContact().getCompany());
-//
-//		}
-//	}
+	public List<JJRequirement> getNoCouvretReq() {
+
+		if (noCouvretReq == null) {
+			if (jJPermissionService.isAuthorized(getContact(), "Requirement",
+					null, true, null, null))
+				noCouvretReq = jJRequirementService.getNonCouvredRequirements(
+						getContact().getCompany(), null);
+			else {
+
+				List<JJProject> projects = ((JJProjectBean) findBean("jJProjectBean"))
+						.getProjectList();
+				
+				List<JJProduct> products = ((JJProductBean) findBean("jJProductBean"))
+						.getProductList();
+
+				Map<JJProject,JJProduct> map = new HashMap<JJProject,JJProduct>();				
+				
+				for (JJProject p : projects) {
+					
+					if (jJPermissionService.isAuthorized(getContact(), p, null,
+							"Requirement"))
+						map.put(p, null);
+					else
+					{
+						for(JJProduct pr:products)
+							if (jJPermissionService.isAuthorized(getContact(), p, pr,
+									"Requirement"))
+								map.put(p, pr);
+							
+					}
+				}
+				noCouvretReq = jJRequirementService.getNonCouvredRequirements(
+						getContact().getCompany(), map);
+			}
+		}
+		if (noCouvretReq.isEmpty())
+			noCouvretReq = null;
+		return noCouvretReq;
+
+	}
 
 	public static boolean isEqualPreviousPage(String page) {
 		String referer = FacesContext.getCurrentInstance().getExternalContext()
@@ -1165,7 +1219,6 @@ public class LoginBean implements Serializable {
 	}
 
 	public void showAndHideDialog(String widgetVar, Dialog dialog) {
-		System.out.println("fbgfdghfsh");
 
 		if (dialog.isVisible())
 			RequestContext.getCurrentInstance().execute(

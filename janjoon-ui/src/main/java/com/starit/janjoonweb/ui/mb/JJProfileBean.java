@@ -139,17 +139,12 @@ public class JJProfileBean {
 
 	public void addProfile(JJRightBean jJRightBean) {
 
-		if (profileAdmin.getId() == null) {
-			
+		if (profileAdmin.getId() == null) {			
 
 			saveJJProfile(profileAdmin);
 
 			disabledProfileMode = true;
-			disabledRightMode = false;
-			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			LoginBean loginBean=(LoginBean) session.getAttribute("loginBean");
-			loginBean.getAuthorisationService().setSession(session);
+			disabledRightMode = false;		
 			
 			jJRightBean.setRightDataModel(new ArrayList<RightDataModel>());
 
@@ -266,6 +261,10 @@ public class JJProfileBean {
 		jJRightBean.setCategories(null);
 		jJRightBean.setObject(null);
 		jJRightBean.setObjects(null);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				.getSession(false);
+		LoginBean loginBean=(LoginBean) session.getAttribute("loginBean");
+		loginBean.getAuthorisationService().setSession(session);
 	}
 
 	private boolean getProfileDialogConfiguration() {
