@@ -125,7 +125,8 @@
 										placeholder="#{messages.bug_table_search_watermark}" />
 								</p:column>
 								<p:column colspan="1">
-									<p:commandButton id="createButton" icon="ui-icon-circle-plus"
+									<p:commandButton id="createButton" icon="ui-icon-plusthick"
+										value="#{messages.bug_table_add_label}"
 										update=":createForm "
 										oncomplete="PF('createDialogWidget').show()"
 										title="#{messages.label_create}" />

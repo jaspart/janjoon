@@ -22,8 +22,9 @@
 					rendered="#{loginBean.contact.company.logo == null}"
 					styleClass="banner" alt="JanJoon Home" style="float: left;" />
 
-				<p:graphicImage style="width:100px; height:100px;float: left;"
+				<p:graphicImage style="width:75px; height:75px;float: left;"
 					styleClass="banner" value="#{imageStreamer.image}"
+					 alt="JanJoon Home"
 					rendered="#{loginBean.contact.company.logo != null}">
 					<f:param name="contactId" value="#{loginBean.contact.id}" />
 					<f:param name="company" value="true" />
@@ -49,7 +50,8 @@
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()"
-							update=":contentPanel tabMenu :scrollRight :messagePanel " />
+							update=":contentPanel tabMenu :scrollRight  " />
+<!-- 																:messagePanel -->
 					</p:selectOneMenu>
 
 					<!--h:outputText value="#{messages.header_product_label}:" /-->
@@ -64,8 +66,9 @@
 						<f:selectItems value="#{jJProductBean.productList}" var="p"
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax onstart="PF('blockUIWidget').block()"
-							update="versionSelectOneMenu :contentPanel :scrollRight :messagePanel"
+							update="versionSelectOneMenu :contentPanel :scrollRight"
 							oncomplete="PF('blockUIWidget').unblock()" />
+<!-- 																:messagePanel -->
 					</p:selectOneMenu>
 
 					<!--h:outputText value="#{messages.header_version_label}:" /-->
@@ -99,8 +102,84 @@
 							url="logout.jsf" actionListener="#{loginBean.logout}"
 							icon="ui-icon-extlink" />
 					</p:splitButton>
+					
+<!-- 	communicationButton	: Uncommand the button to start using the communication overlayPanel -->
+					<p:commandButton id="communicationButton" icon="ui-icon-comment" value="3"
+						title="#{message.header_communication_label}"/>
+					<p:overlayPanel id="communicationPanel" for="communicationButton"
+						hideEffect="fade" dynamic="true" style="width:400px"
+						showCloseIcon="true" styleClass="communication-overlaypanel">
+<!--						<p:panel id="messagePanel" header="Chat" styleClass="chat"
+							toggleable="true" toggleOrientation="horizontal"
+							style="height:100%;">>
 
+							<p:ajax event="toggle" listener="#{loginBean.handleMesToggle}"
+								update=":applicatinPanelGrid,messagePanel,:contentPanel" /-->
+
+							<f:event listener="#{jJMessageBean.initJJMessageLayout}" type="preRenderView" />
+
+							<p:dataTable id="dataTable1" value="#{jJMessageBean.mainMessages}"
+								rowKey="#{mes.id}" var="mes" paginator="true"
+								paginatorPosition="bottom"
+								rendered="#{loginBean.enable}"
+								style="border-spacing:0px;" selectionMode="single" rows="10"
+								lazy="true" sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
+								<p:ajax event="rowSelect"
+									listener="#{jJMessageBean.onRowSelect}"
+									oncomplete="PF('viewDialogWidget1').show()" />
+<!--									update=":viewForm1:viewPanelGrid1"-->
+								<p:column headerText="Messages" sortBy="#{mes.creationDate}">
+									<h:outputText id="viewButton" value="#{mes.message}" />
+									<p:tooltip for="viewButton"
+										value="#{messages.label_view} #{mes.name}" showEffect="fade"
+										hideEffect="fade" />
+								</p:column>
+							</p:dataTable>
+
+							<f:facet name="footerMessage">
+<!-- 							style="position: relative;"> -->
+								<h:form id="messageCreationForm" rendered="true">
+<!--									rendered="#{loginBean.enable}">-->
+									<p:growl id="creationGrowl" showDetail="true" life="1000" />
+									<p:panelGrid columns="1">
+										<p:outputLabel for="messagedsc" value="Message :" />
+										<p:inputTextarea id="messagedsc" cols="14" rows="6"
+											value="#{jJMessageBean.message.message}" required="true" />
+										<p:panelGrid columns="2">
+											<p:selectBooleanButton value="#{jJMessageBean.alertOrInfo}"
+												onLabel="Alert" offLabel="Info" onIcon="ui-icon-alert"
+												offIcon="ui-icon-info">
+											</p:selectBooleanButton>
+											<p:commandButton id="submitMes" value="OK"
+												actionListener="#{jJMessageBean.createMessage}"
+												update=":messageCreationForm,creationGrowl" />
+<!--												,:scrollRight (Marquee)-->
+										</p:panelGrid>
+									</p:panelGrid>
+								</h:form>
+							</f:facet>
+							<p:dialog id="viewDialog1" header="#{messages.label_view} Message"
+								modal="true" widgetVar="viewDialogWidget1" dynamic="true"
+								resizable="true" maximizable="true" showEffect="fade"
+								hideEffect="fade">
+								<p:outputPanel id="viewPanel1">
+									<h:form id="viewForm1">
+										<!-- 							<h:panelGrid id="viewPanelGrid1" columns="2" -->
+										<!-- 								binding="#{jJMessageBean.viewPanel}" styleClass="dialog" -->
+										<!-- 								columnClasses="col1,col2" /> -->
+										<ui:include src="/pages/messageDialog.xhtml">
+											<ui:param name="JJMessage" value="#{jJMessageBean.viewedMessage}" />
+										</ui:include>
+										<p:commandButton id="viewCloseButton1"
+											value="#{messages.label_close}" style="margin-top: 10px;"
+											onclick="PF('viewDialogWidget1').hide()" type="button" />
+									</h:form>
+								</p:outputPanel>
+							</p:dialog>
+<!-- 						</p:panel> -->
+					</p:overlayPanel>
 				</h:panelGrid>
+
 
 
 
@@ -114,7 +193,7 @@
 
 					<p:menuitem value="#{messages.header_project_menuitem}"
 						url="/pages/planning.jsf?faces-redirect=true"
-						icon="ui-icon-clipboard" update=":contentPanel"
+						icon="ui-icon-calendar" update=":contentPanel"
 						rendered="#{!loginBean.enable and !loginBean.mobile}" />
 
 					<p:menuitem id="proAction"
@@ -123,7 +202,7 @@
 						title="#{loginBean.authorisationService.rProjectMSG}"
 						onstart="PF('blockUIWidget').block()"
 						actionListener="#{loginBean.redirection}" update="growlHeader"
-						icon="ui-icon-clipboard"
+						icon="ui-icon-calendar"
 						rendered="#{loginBean.enable and !loginBean.mobile}" />
 
 					<p:menuitem value="#{messages.header_spec_menuitem}"
@@ -172,7 +251,7 @@
 					<p:menuitem value="#{messages.header_delivery_menuitem}"
 						disabled="#{!loginBean.authorisationService.rBuild}"
 						title="#{loginBean.authorisationService.rBuildMSG}"
-						rendered="#{loginBean.enable and !loginBean.mobile}"
+						rendered="false"
 						url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
 
 					<p:menuitem value="#{messages.header_delivery_menuitem}"
@@ -180,7 +259,7 @@
 						url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
 
 					<p:menuitem value="#{messages.header_team_menuitem}"
-						rendered="#{!loginBean.mobile}"
+						rendered="false"
 						url="/pages/teams.jsf?faces-redirect=true" icon="ui-icon-person" />
 
 					<p:menuitem value="#{messages.header_stat_menuitem}"
@@ -192,11 +271,11 @@
 						value="#{messages.header_stat_menuitem}"
 						onstart="PF('blockUIWidget').block()"
 						actionListener="#{loginBean.redirection}" update="growlHeader"
-						icon="ui-icon-clipboard"
+						icon="ui-icon-calculator"
 						rendered="#{loginBean.enable and !loginBean.mobile}" />
 
 					<p:menuitem value="#{messages.header_admin_menuitem}"
-						rendered="#{!loginBean.mobile}"
+						rendered="false"
 						url="/pages/administration.jsf?faces-redirect=true"
 						icon="ui-icon-key" update=":contentPanel" />
 

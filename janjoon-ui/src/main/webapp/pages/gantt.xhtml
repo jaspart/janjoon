@@ -15,7 +15,7 @@
 }
 
 .pe-layout-pane-header {
-	background: #2391B2;
+/*	background: #2391B2;*/
 }
 
 .ui-datatable .ui-datatable-data th {
@@ -67,12 +67,9 @@
 					<p:selectOneMenu id="sortMode" value="#{jJTaskBean.sortMode}"
 						panelStyle="width:150px;" effect="fade" style="width:150px;"
 						filter="true" filterMatchMode="startsWith">
-
+						<f:selectItem itemValue="StartDateReal" itemLabel="Start Date Real" />
+						<f:selectItem itemValue="StartDatePlanned" itemLabel="Start Date Planned" />
 						<f:selectItem itemValue="chapter" itemLabel="Chapter" />
-						<f:selectItem itemValue="StartDatePlanned"
-							itemLabel="Start Date Planned" />
-						<f:selectItem itemValue="StartDateReal"
-							itemLabel="Start Date Real" />
 						<p:ajax onstart="PF('blockUIWidget').block()" event="change"
 							listener="#{jJTaskBean.SortBySelectionChanged}"
 							update=":projecttabview:planningForm :projecttabview:sprintForm"

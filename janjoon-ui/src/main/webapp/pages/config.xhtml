@@ -150,7 +150,8 @@
 				<p:commandButton id="createSaveButton"
 					value="#{messages.admin_config_new_save_button}"
 					action="#{jJConfigurationBean.persistConf}"
-					update="createPanelGrid,:tabview:configForm:ConfMessage :scrollRight :messagePanel" />
+					update="createPanelGrid,:tabview:configForm:ConfMessage :scrollRight" />
+<!-- 					 :messagePanel -->
 				<p:commandButton idid="createCloseButton"
 					value="#{messages.admin_config_new_close_button}"
 					onclick="PF('createDialogWidget').hide()" type="button" />
@@ -182,8 +183,9 @@
 				<p:commandButton id="deleteYesButton"
 					value="#{messages.admin_config_delete_yes_label}"
 					action="#{jJConfigurationBean.deleteConfig}"
-					update=":tabview:configForm :scrollRight :messagePanel"
+					update=":tabview:configForm :scrollRight "
 					oncomplete="PF('deleteDialogWidget').hide()" />
+<!-- 					:messagePanel -->
 				<p:commandButton id="deleteNoButton"
 					value="#{messages.admin_config_delete_no_label}"
 					onclick="PF('deleteDialogWidget').hide()" type="button" />

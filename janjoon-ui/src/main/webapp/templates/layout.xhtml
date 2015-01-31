@@ -165,6 +165,8 @@
 				</ui:insert>
 
 			</p:panel>
+			
+<!--
 			<p:panel id="messagePanel" header="Chat" styleClass="chat"
 				toggleable="true" toggleOrientation="horizontal"
 				style="height:100%;" collapsed="#{loginBean.collapsedMesPanel}">
@@ -219,9 +221,9 @@
 					hideEffect="explode">
 					<p:outputPanel id="viewPanel1">
 						<h:form id="viewForm1">
-							<!-- 							<h:panelGrid id="viewPanelGrid1" columns="2" -->
-							<!-- 								binding="#{jJMessageBean.viewPanel}" styleClass="dialog" -->
-							<!-- 								columnClasses="col1,col2" /> -->
+							<!- 							<h:panelGrid id="viewPanelGrid1" columns="2" ->
+							<!- 								binding="#{jJMessageBean.viewPanel}" styleClass="dialog" ->
+							<!- 								columnClasses="col1,col2" /> ->
 							<ui:include src="/pages/messageDialog.xhtml">
 								<ui:param name="JJMessage" value="#{jJMessageBean.viewedMessage}" />
 							</ui:include>
@@ -232,6 +234,7 @@
 					</p:outputPanel>
 				</p:dialog>
 			</p:panel>
+-->
 
 			<pe:blockUI widgetVar="blockUIWidget">
 				<h:panelGrid columns="2">

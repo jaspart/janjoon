@@ -22,12 +22,14 @@
 			<f:facet name="title">
 				<h:outputText id="tabHeader" rendered="#{!jjsprint.render}"
 					value="#{jjsprint.sprint.name}" />
-				<h:outputText rendered="#{jjsprint.render}" value="+Add New Sprint" />
+				<h:outputText rendered="#{jjsprint.render}"
+					styleClass="ui-corner-all ui-icon ui-icon-plusthick"
+					value="Add New Sprint" />
 			</f:facet>
 			<ui:include src="sprint.xhtml" />
 			<h:form id="sprintForm" rendered="#{!jjsprint.render}" style="width:100% !important;">
 				<p:growl id="sprintGrowl" showDetail="true" life="2000" />
-				<p:panelGrid id="sprintPanelGrid" style="width:100% important;">
+				<p:panelGrid id="sprintPanelGrid" style="width:100% !important;">
 					<f:facet name="header">
 						<p:row>
 							<p:column colspan="5">Sprint Information</p:column>

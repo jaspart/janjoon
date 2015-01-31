@@ -334,7 +334,7 @@
 								actionListener="#{jJTestcaseBean.newTestcase(jJTeststepBean)}"
 								update=":testcaseDialog"
 								oncomplete="PF('testcaseDialogWidget').show()"
-								icon="ui-icon-circle-plus" />
+								icon="ui-icon-plusthick" />
 						</f:facet>
 					</p:dataTable>
 
@@ -566,13 +566,13 @@
 							<p:column>
 								<p:commandButton value="#{messages.test_new_addtest_label}"
 									disabled="#{not jJTestcaseBean.disabledTeststepMode}"
-									icon="ui-icon-circle-plus" rendered="#{!loginBean.mobile}"
+									icon="ui-icon-plusthick" rendered="#{!loginBean.mobile}"
 									actionListener="#{jJTestcaseBean.save()}"
 									process="@this,name,requirement,description,build "
 									update="testcaseDialogForm :testFormWest" />
 								<p:commandButton value="#{messages.test_new_addtest_label}"
 									disabled="#{not jJTestcaseBean.disabledTeststepMode}"
-									icon="ui-icon-circle-plus" rendered="#{loginBean.mobile}"
+									icon="ui-icon-plusthick" rendered="#{loginBean.mobile}"
 									actionListener="#{jJTestcaseBean.save()}"
 									process="@this,name,requirement,descriptionMobile,build "
 									update="testcaseDialogForm :testFormWest" />

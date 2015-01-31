@@ -46,21 +46,24 @@
 				style="float: right;" id="videoHelpBtn" icon="ui-icon-video"
 				onclick="PF('videoHelpWidget').show()" type="button" />
 
-			<p:commandButton value="#{messages.specification_import_button}"
+			<p:commandButton icon="ui-icon-arrowthick-1-sw"
 				style="float: right;" disabled="#{jJRequirementBean.disabledExport}"
 				actionListener="#{jJRequirementBean.loadImportFormat()}"
 				update=":requirementImportDialog"
 				onstart="PF('blockUIWidget').block()"
-				oncomplete="PF('blockUIWidget').unblock();PF('requirementImportDialogWidget').show()" />
+				oncomplete="PF('blockUIWidget').unblock();PF('requirementImportDialogWidget').show()"
+ 				title="#{messages.specification_import_button}"  />
 
-			<p:commandButton value="#{messages.specification_import_button} XML"
+			<p:commandButton icon="ui-icon-arrowthick-1-n" value="XML"
 				style="float: right;" disabled="#{jJProjectBean.project == null}"
 				update=":importXMLForm" onstart="PF('blockUIWidget').block()"
-				oncomplete="PF('blockUIWidget').unblock();PF('requirementImportXMLDialogWidget').show()" />
+				oncomplete="PF('blockUIWidget').unblock();PF('requirementImportXMLDialogWidget').show()"
+ 				title="#{messages.specification_import_button} XML"  />
 
 			<p:commandButton id="reloadBtn" icon="ui-icon-refresh"
 				onstart="PF('blockUIWidget').block()" style="float: right;"
-				actionListener="#{jJRequirementBean.reloadPage}" />
+				actionListener="#{jJRequirementBean.reloadPage}"
+				title="#{message.label_refresh}" />
 
 			<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
 				style="float: right;" />
@@ -69,7 +72,7 @@
 				<p:panelGrid>
 					<f:facet name="header">
 						<p:row>
-							<p:column colspan="12">Code des Couleurs</p:column>
+							<p:column colspan="12">#{messages.specification_color_title}</p:column>
 						</p:row>
 					</f:facet>
 						<p:row>
@@ -96,7 +99,7 @@
 			<ui:repeat value="#{jJRequirementBean.tableDataModelList}"
 				var="tableDataModel" varStatus="loop">
 				<div
-					style="margin-top: 10px;width: #{jJRequirementBean.tableDataModelSizePct};min-width:450px;
+					style="margin-top: 10px;width: #{jJRequirementBean.tableDataModelSizePct};min-width:400px;
 							float: #{jJRequirementBean.tableDataModelFloatLeft};#{jJRequirementBean.getTableDataModelMargin(tableDataModel)}">
 					<p:dataTable id="categoryTable" var="reqUtil"
 						value="#{tableDataModel}" scrollable="true" scrollHeight="300"
@@ -156,7 +159,7 @@
 										</p:column>
 										<p:column colspan="1">
 											<p:commandButton id="newRequirementButton"
-												icon="ui-icon-plus"
+												icon="ui-icon-plusthick"
 												title="#{loginBean.authorisationService.wRequiementMSG}"
 												disabled="#{jJRequirementBean.disabledRequirement or !loginBean.authorisationService.wRequiement}"
 												actionListener="#{jJRequirementBean.newRequirement(tableDataModel.categoryId)}"
@@ -418,8 +421,8 @@
 
 		<p:hotkey bind="esc"
 			handler="PF('requirementImportDialogWidget').hide()" />
-		<p:dialog id="requirementImportXMLDialog" draggable="false"
-			header="#{messages.specification_import_title} XML" modal="true"
+		<p:dialog id="requirementImportXMLDialog" draggable="false" modal="true"
+			header="#{messages.specification_import_title} XML"
 			widgetVar="requirementImportXMLDialogWidget" dynamic="true"
 			resizable="false">
 			<p:outputPanel id="importXMLPanel">
