@@ -3,6 +3,7 @@ package com.starit.janjoonweb.ui.mb.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 import javax.faces.context.FacesContext;
@@ -15,6 +16,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletContext;
 
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJTask;
 
 public class MailingService {
@@ -29,11 +31,13 @@ public class MailingService {
 
 		ServletContext servletContext = (ServletContext) FacesContext
 				.getCurrentInstance().getExternalContext().getContext();
-		String path = servletContext.getRealPath("WEB-INF"+File.separator+"classes")+File.separator;
+		String path = servletContext.getRealPath("WEB-INF" + File.separator
+				+ "classes")
+				+ File.separator;
 		System.out.println(path);
 		Properties properties = new Properties();
 		try {
-			properties.load(new FileInputStream(path+"email.properties"));
+			properties.load(new FileInputStream(path + "email.properties"));
 			smtp_host = properties.getProperty("email.host");
 			smtp_port = properties.getProperty("email.port");
 			userName = properties.getProperty("email.username");
@@ -76,7 +80,7 @@ public class MailingService {
 		this.password = password;
 	}
 
-	public void sendMail(String mail_to, JJTask task,String subject) {
+	public void sendMail(String mail_to,List<JJContact> contacts, JJTask task, String subject) {
 
 		if (!error) {
 			Properties props = new Properties();
@@ -98,11 +102,15 @@ public class MailingService {
 			try {
 
 				Message message = new MimeMessage(session);
-				message.setRecipients(Message.RecipientType.TO,
-						InternetAddress.parse(mail_to));
-				message.setSubject("Task: "+task.getName()+" Done ");
-				message.setText("Task: "+task.getName()+" Done "
-						+ "\n\n"+subject);
+				 message.setRecipients(Message.RecipientType.TO,
+				 InternetAddress.parse(mail_to));
+				for (JJContact c : contacts)
+					if(!c.getEmail().equalsIgnoreCase(mail_to))
+					message.addRecipients(Message.RecipientType.CC,
+							InternetAddress.parse(c.getEmail()));
+				message.setSubject("Task: " + task.getName() + " Done ");
+				message.setText("Task: " + task.getName() + " Done " + "\n\n"
+						+ subject);
 
 				Transport.send(message);
 

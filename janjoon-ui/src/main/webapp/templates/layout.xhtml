@@ -140,6 +140,25 @@
 						</p:menu>
 					</h:form>
 				</p:dialog>
+				<p:dialog id="viewDialog1" header="#{messages.label_view} Message"
+					modal="true" widgetVar="viewDialogWidget1" dynamic="true"
+					resizable="true" maximizable="true" showEffect="fade"
+					hideEffect="fade">
+					<p:outputPanel id="viewPanel1">
+						<h:form id="viewForm1">
+							<!-- 							<h:panelGrid id="viewPanelGrid1" columns="2" -->
+							<!-- 								binding="#{jJMessageBean.viewPanel}" styleClass="dialog" -->
+							<!-- 								columnClasses="col1,col2" /> -->
+							<ui:include src="/pages/messageDialog.xhtml">
+								<ui:param name="JJMessage"
+									value="#{jJMessageBean.viewedMessage}" />
+							</ui:include>
+							<p:commandButton id="viewCloseButton1"
+								value="#{messages.label_close}" style="margin-top: 10px;"
+								onclick="PF('viewDialogWidget1').hide()" type="button" />
+						</h:form>
+					</p:outputPanel>
+				</p:dialog>
 
 				<ui:insert name="header">
 					<ui:include src="header.xhtml" />
@@ -165,8 +184,8 @@
 				</ui:insert>
 
 			</p:panel>
-			
-<!--
+
+			<!--
 			<p:panel id="messagePanel" header="Chat" styleClass="chat"
 				toggleable="true" toggleOrientation="horizontal"
 				style="height:100%;" collapsed="#{loginBean.collapsedMesPanel}">

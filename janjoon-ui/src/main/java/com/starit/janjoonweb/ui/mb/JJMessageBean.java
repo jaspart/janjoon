@@ -243,7 +243,7 @@ public class JJMessageBean {
 				.getExternalContext().getSession(false);
 		LoginBean login = (LoginBean) session.getAttribute("loginBean");
 
-		if (mainMessages == null && login.isEnable() && !login.isCollapsedMesPanel()) {
+		if (mainMessages == null && login.isEnable()) {
 
 			JJProductBean jJProductBean = (JJProductBean) session.getAttribute("jJProductBean");
 			JJProjectBean jJProjectBean = (JJProjectBean) session.getAttribute("jJProjectBean");
@@ -252,7 +252,7 @@ public class JJMessageBean {
 					jJProjectBean.getProject(), jJProductBean.getProduct());
 
 			RequestContext context = RequestContext.getCurrentInstance();
-			context.update("messagePanel");
+			context.update(":headerForm:dataTable1");
 		}
 	}
 
@@ -275,10 +275,10 @@ public class JJMessageBean {
 
 			mainMessages = new LazyMessageDataModel(jJMessageService,
 					jJProjectBean.getProject(), jJProductBean.getProduct());
-			if (!login.isCollapsedMesPanel()) {
-				RequestContext context = RequestContext.getCurrentInstance();
-				context.update("messagePanel");
-			}
+////			if (!login.isCollapsedMesPanel()) {
+//				RequestContext context = RequestContext.getCurrentInstance();
+//				context.update("messagePanel");
+////			}
 
 			for (JJMessage mes : jJMessageService.getActifMessages(
 					jJProjectBean.getProject(), jJProductBean.getProduct())) {
@@ -378,7 +378,7 @@ public class JJMessageBean {
 		reset();
 	}
 
-	public void createMessage(ActionEvent e) {
+	public void createMessage() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 
@@ -448,7 +448,7 @@ public class JJMessageBean {
 	public void reset() {
 		setAllJJMessages(jJMessageService.findAllJJMessages());
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.update("messagePanel");
+		context.update(":headerForm:dataTable1");
 		if (FacesContext.getCurrentInstance().getViewRoot().getViewId().contains("main")) {
 			context.update("contentPanel");
 		}

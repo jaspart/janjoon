@@ -50,7 +50,7 @@
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()"
-							update=":contentPanel tabMenu :scrollRight  " />
+							update=":contentPanel tabMenu :scrollRight headerForm:dataTable1" />
 <!-- 																:messagePanel -->
 					</p:selectOneMenu>
 
@@ -66,7 +66,7 @@
 						<f:selectItems value="#{jJProductBean.productList}" var="p"
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax onstart="PF('blockUIWidget').block()"
-							update="versionSelectOneMenu :contentPanel :scrollRight"
+							update="versionSelectOneMenu :contentPanel :scrollRight headerForm:dataTable1"
 							oncomplete="PF('blockUIWidget').unblock()" />
 <!-- 																:messagePanel -->
 					</p:selectOneMenu>
@@ -86,7 +86,7 @@
 
 						<p:ajax onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()"
-							update=":contentPanel " />
+							update=":contentPanel headerForm:dataTable1" />
 					</p:selectOneMenu>
 
 					<p:splitButton
@@ -116,7 +116,7 @@
 							<p:ajax event="toggle" listener="#{loginBean.handleMesToggle}"
 								update=":applicatinPanelGrid,messagePanel,:contentPanel" /-->
 
-							<f:event listener="#{jJMessageBean.initJJMessageLayout}" type="preRenderView" />
+							<f:event listener="#{jJMessageBean.initJJMessageLayout}" type="preRenderComponent" />
 
 							<p:dataTable id="dataTable1" value="#{jJMessageBean.mainMessages}"
 								rowKey="#{mes.id}" var="mes" paginator="true"
@@ -124,7 +124,7 @@
 								rendered="#{loginBean.enable}"
 								style="border-spacing:0px;" selectionMode="single" rows="10"
 								lazy="true" sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
-								<p:ajax event="rowSelect"
+								<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
 									listener="#{jJMessageBean.onRowSelect}"
 									oncomplete="PF('viewDialogWidget1').show()" />
 <!--									update=":viewForm1:viewPanelGrid1"-->
@@ -133,55 +133,36 @@
 									<p:tooltip for="viewButton"
 										value="#{messages.label_view} #{mes.name}" showEffect="fade"
 										hideEffect="fade" />
-								</p:column>
-							</p:dataTable>
+								</p:column>						
 
-							<f:facet name="footerMessage">
+							<f:facet name="footer">
 <!-- 							style="position: relative;"> -->
-								<h:form id="messageCreationForm" rendered="true">
+								<h:form id="messageCreationForm">
 <!--									rendered="#{loginBean.enable}">-->
 									<p:growl id="creationGrowl" showDetail="true" life="1000" />
 									<p:panelGrid columns="1">
 										<p:outputLabel for="messagedsc" value="Message :" />
-										<p:inputTextarea id="messagedsc" cols="14" rows="6"
+										<p:inputTextarea id="messagedsc" cols="40" rows="6"
 											value="#{jJMessageBean.message.message}" required="true" />
 										<p:panelGrid columns="2">
-											<p:selectBooleanButton value="#{jJMessageBean.alertOrInfo}"
+											<p:selectBooleanButton id="alert" value="#{jJMessageBean.alertOrInfo}"
 												onLabel="Alert" offLabel="Info" onIcon="ui-icon-alert"
 												offIcon="ui-icon-info">
 											</p:selectBooleanButton>
 											<p:commandButton id="submitMes" value="OK"
+												process="@this,alert,messagedsc"
 												actionListener="#{jJMessageBean.createMessage}"
-												update=":messageCreationForm,creationGrowl" />
+												update="messageCreationForm,creationGrowl,:headerForm:dataTable1" />
 <!--												,:scrollRight (Marquee)-->
 										</p:panelGrid>
 									</p:panelGrid>
 								</h:form>
 							</f:facet>
-							<p:dialog id="viewDialog1" header="#{messages.label_view} Message"
-								modal="true" widgetVar="viewDialogWidget1" dynamic="true"
-								resizable="true" maximizable="true" showEffect="fade"
-								hideEffect="fade">
-								<p:outputPanel id="viewPanel1">
-									<h:form id="viewForm1">
-										<!-- 							<h:panelGrid id="viewPanelGrid1" columns="2" -->
-										<!-- 								binding="#{jJMessageBean.viewPanel}" styleClass="dialog" -->
-										<!-- 								columnClasses="col1,col2" /> -->
-										<ui:include src="/pages/messageDialog.xhtml">
-											<ui:param name="JJMessage" value="#{jJMessageBean.viewedMessage}" />
-										</ui:include>
-										<p:commandButton id="viewCloseButton1"
-											value="#{messages.label_close}" style="margin-top: 10px;"
-											onclick="PF('viewDialogWidget1').hide()" type="button" />
-									</h:form>
-								</p:outputPanel>
-							</p:dialog>
+							</p:dataTable>
+							
 <!-- 						</p:panel> -->
 					</p:overlayPanel>
 				</h:panelGrid>
-
-
-
 
 				<p:tabMenu id="tabMenu" name="content" style="float: none;"
 					activeIndex="#{loginBean.menuIndex}"

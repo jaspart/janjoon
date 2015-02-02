@@ -400,7 +400,7 @@ public class JJSprintBean {
 				new HashSet<JJContact>(sprintUtil.getContacts()));
 
 		updateJJSprint(sprintUtil.getSprint());
-		sprintUtil.setSprint(sprintUtil.getSprint());
+		sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil.getSprint().getId()));
 		sprintUtil = new SprintUtil(sprintUtil.getSprint(),
 				jJTaskService.getSprintTasks(sprintUtil.getSprint()));
 		sprintList.set(contains(sprintUtil.getSprint().getId()), sprintUtil);

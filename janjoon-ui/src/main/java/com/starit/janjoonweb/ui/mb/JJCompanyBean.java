@@ -173,13 +173,19 @@ public class JJCompanyBean {
 			message = "message_successfully_updated";
 
 		}
+		
+		HttpSession session = (HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext()
+				.getSession(false);
+		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
+		if(loginBean.getContact().getCompany().equals(companie))
+			loginBean.getAuthorisationService().setSession(session);
+		
 		companies = null;
 		logo=null;
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('companyDialogWidget').hide()");
-
 		facesMessage = MessageFactory.getMessage(message, "Company");
-
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -202,8 +208,7 @@ public class JJCompanyBean {
 
 	public void handleFileUpload(FileUploadEvent event) throws IOException {
 
-		Scanner s = new Scanner(event.getFile().getInputstream())
-				.useDelimiter("\\A");
+		Scanner s = new Scanner(event.getFile().getInputstream()).useDelimiter("\\A");
 		calendar = (s.hasNext() ? s.next() : "");
 	}
 }

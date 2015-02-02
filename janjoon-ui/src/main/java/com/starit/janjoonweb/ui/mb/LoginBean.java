@@ -67,7 +67,7 @@ public class LoginBean implements Serializable {
 	private AuthorisationService authorisationService;
 	static Logger logger = Logger.getLogger("loginBean-Logger");
 	private boolean mobile;
-	private boolean collapsedMesPanel = true;
+//	private boolean collapsedMesPanel = true;
 	private String showMarquee;
 	private FacesMessage facesMessage;
 	@Autowired
@@ -109,13 +109,13 @@ public class LoginBean implements Serializable {
 		// }
 	}
 
-	public boolean isCollapsedMesPanel() {
-		return collapsedMesPanel;
-	}
-
-	public void setCollapsedMesPanel(boolean collapsedMesPanel) {
-		this.collapsedMesPanel = collapsedMesPanel;
-	}
+//	public boolean isCollapsedMesPanel() {
+//		return collapsedMesPanel;
+//	}
+//
+//	public void setCollapsedMesPanel(boolean collapsedMesPanel) {
+//		this.collapsedMesPanel = collapsedMesPanel;
+//	}
 
 	public AuthorisationService getAuthorisationService() {
 		return authorisationService;
@@ -668,35 +668,35 @@ public class LoginBean implements Serializable {
 
 	}
 
-	public void messageListener(HttpSession session) {
-
-		JJMessageBean messageBean = (JJMessageBean) session
-				.getAttribute("jJMessageBean");
-		boolean messPanel = collapsedMesPanel;
-		boolean appPanel = !messageBean.isCollapsedLayoutPanel();
-		messageBean = new JJMessageBean();
-		RequestContext context = RequestContext.getCurrentInstance();
-
-		if (messPanel) {
-			setCollapsedMesPanel(false);
-			context.update(":messagePanel");
-			context.update(":menuPanel");
-			context.update(":contentPanel");
-			context.update(":applicatinPanelGrid");
-
-		}
-
-		if (appPanel) {
-			messageBean.setCollapsedLayoutPanel(false);
-			context.update(":menuPanel");
-			context.update(":contentPanel");
-			context.update(":messagePanel");
-
-		}
-
-		session.setAttribute("jJMessageBean", messageBean);
-
-	}
+//	public void messageListener(HttpSession session) {
+//
+//		JJMessageBean messageBean = (JJMessageBean) session
+//				.getAttribute("jJMessageBean");
+//		boolean messPanel = collapsedMesPanel;
+//		boolean appPanel = !messageBean.isCollapsedLayoutPanel();
+//		messageBean = new JJMessageBean();
+//		RequestContext context = RequestContext.getCurrentInstance();
+//
+//		if (messPanel) {
+//			setCollapsedMesPanel(false);
+//			context.update(":messagePanel");
+//			context.update(":menuPanel");
+//			context.update(":contentPanel");
+//			context.update(":applicatinPanelGrid");
+//
+//		}
+//
+//		if (appPanel) {
+//			messageBean.setCollapsedLayoutPanel(false);
+//			context.update(":menuPanel");
+//			context.update(":contentPanel");
+//			context.update(":messagePanel");
+//
+//		}
+//
+//		session.setAttribute("jJMessageBean", messageBean);
+//
+//	}
 
 	public void loadingPage(ComponentSystemEvent e) throws IOException {
 
@@ -1202,11 +1202,11 @@ public class LoginBean implements Serializable {
 		return referer;
 	}
 
-	public void handleMesToggle(ToggleEvent event) {
-
-		this.collapsedMesPanel = !this.collapsedMesPanel;
-
-	}
+//	public void handleMesToggle(ToggleEvent event) {
+//
+//		this.collapsedMesPanel = !this.collapsedMesPanel;
+//
+//	}
 
 	public void updateGrowl(ComponentSystemEvent e) {
 

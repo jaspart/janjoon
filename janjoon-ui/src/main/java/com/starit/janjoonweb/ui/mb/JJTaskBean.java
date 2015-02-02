@@ -1875,13 +1875,16 @@ public class JJTaskBean {
 					}
 
 					subject = subject.replace("[", " ").replace("]", "");
+//					
+//					for (JJContact c : jJPermissionService.areAuthorized(
+//							contact.getCompany(), null, project, product,
+//							"sprintContact")) {
+//						System.out.println(c.getEmail() + subject);
+						mailingService.sendMail(((JJProjectBean)LoginBean.findBean("jJProjectBean")).getProject().getManager().getEmail(),
+								jJPermissionService.areAuthorized(
+								contact.getCompany(), null, project, product,
+								"sprintContact"), ttt, subject);
 					
-					for (JJContact c : jJPermissionService.areAuthorized(
-							contact.getCompany(), null, project, product,
-							"sprintContact")) {
-						System.out.println(c.getEmail() + subject);
-						mailingService.sendMail(c.getEmail(), ttt, subject);
-					}
 
 				}
 			}

@@ -42,17 +42,28 @@ public class CalendarUtil {
 	public void initCompanyCalendar() throws IOException {
 
 		Properties properties = new Properties();
-		properties.load(new StringReader(company.getCalendar()));
+		String calendar=company.getCalendar();
+		if (calendar == null) {
+			calendar="";
+		}
+		properties.load(new StringReader(calendar));
 		// properties.load(new FileInputStream(string));
 		// initWorkDays
 		int i = 0;
 		workDays = new ArrayList<ChunkTime>();
 		hour_format = properties.getProperty("hour.format");
+		
 		while (i < 7) {
-			String workDay = properties.getProperty(WORK_DAYS + "." + i);			
+			String workDay = properties.getProperty(WORK_DAYS + "." + i);				
 
-			if (workDay.contains("null"))
+			if (workDay == null || workDay.contains("null"))
+			{
+				if(workDay != null)
 				workDays.add(new ChunkTime(i));
+				else
+					workDays.add(null);
+			}
+				
 			else {
 				Date staDate1, enDate1, staDate2, endDate2;
 				try {
@@ -86,6 +97,14 @@ public class CalendarUtil {
 
 			i++;
 		}
+		
+		i=0;
+		while(i<workDays.size() && workDays.get(i)== null)
+			i++;
+		
+		if(workDays.size() == i)
+			workDays=null;
+		
 
 		// initHolidays
 		String day_format = properties.getProperty("day.format");

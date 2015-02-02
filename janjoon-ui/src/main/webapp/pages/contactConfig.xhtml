@@ -276,7 +276,7 @@
 			</h:form>
 			<h:form id="workdaysCalendar" style="float: left;margin-left: 20px;">
 				<p:dataTable value="#{jJContactBean.calendarUtil.workDays}"
-					var="day" style="width: 600px;">
+					var="day" style="width: 600px;" rendered="#{jJContactBean.calendarUtil.workDays != null}">
 
 					<p:columnGroup type="header">
 						<p:row>
