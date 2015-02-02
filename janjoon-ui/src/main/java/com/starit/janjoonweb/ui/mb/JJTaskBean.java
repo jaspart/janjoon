@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -592,6 +593,10 @@ public class JJTaskBean {
 
 						TaskData taskData = null;
 						boolean add = false;
+						
+						new GregorianCalendar(2010,1,1).getTime();
+						model.add(new TimelineEvent(null,new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR)-5,1,1).getTime(),
+								new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR)+5, 1, 1).getTime(), false, group, "invisible"));
 
 						if (tt.getStartDateReal() != null) {
 
@@ -657,7 +662,7 @@ public class JJTaskBean {
 										tt.getStartDatePlanned(),
 										tt.getEndDatePlanned(),
 										tt.getWorkloadPlanned(), false);
-						}
+						}			
 
 						tasksData.add(taskData);
 
@@ -720,6 +725,9 @@ public class JJTaskBean {
 						TimelineEvent event = new TimelineEvent(chapter, start,
 								end, false, group, "chapter");
 						k++;
+						
+						model.add(new TimelineEvent(null,new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR)-5,1,1).getTime(),
+								new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR)+5, 1, 1).getTime(), false, group, "invisible"));
 
 						model.add(event);
 					}
@@ -962,6 +970,9 @@ public class JJTaskBean {
 				if (tt.getTestcase().getRequirement() != null)
 					chapter = tt.getTestcase().getRequirement().getChapter();
 			}
+			
+			model.add(new TimelineEvent(null,new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR)-5,1,1).getTime(),
+					new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR)+5, 1, 1).getTime(), false, group, "invisible"));
 
 			if (tt.getStartDateReal() != null) {
 
@@ -2704,7 +2715,8 @@ public class JJTaskBean {
 			 return ((JJChapter)taskData1).getCreationDate().compareTo(((JJChapter)taskData2).getCreationDate());
 
 			 
-		 }else return 1;
+		 }else 
+			 return 1;
 		
 		}
 
