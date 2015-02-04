@@ -645,9 +645,30 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 								max = e;
 						}
 					}
-					categories.add(max.getKey());
-					map.remove(max);
+					if(max != null)
+					{
+						categories.add(max.getKey());
+						map.remove(max);
+					}
+					
 				}
+				
+				i = 1;
+
+				while (categories.size() < 3) {
+					qu = "SELECT r FROM  JJCategory r Where "
+							+ "r.enabled = true " + "AND r.stage =" + i;
+					query = entityManager.createQuery(qu, JJCategory.class);
+
+					if (!query.getResultList().isEmpty()) {
+						categories.add((JJCategory) query.getResultList()
+								.get(0));
+
+					}
+					i++;
+				}
+				
+				
 			} else {
 				int i = 1;
 

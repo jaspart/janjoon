@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
@@ -307,7 +308,13 @@ public class RequirementBean {
 					.findBean("jJProjectBean"));
 
 			requirement = jJRequirementService.findJJRequirement(id);
-			boolean show = requirement != null;
+			boolean show = requirement != null ;
+			if(show)
+				show=requirement.getEnabled();
+			
+			if(show)
+				show=jJPermissionService.isAuthorized(((LoginBean) LoginBean
+						.findBean("loginBean")).getContact(), requirement.getProject(), requirement.getProduct(), "Requirement");
 
 			if (show
 					&& !jJProjectBean.getProjectList().contains(
@@ -323,6 +330,12 @@ public class RequirementBean {
 					jJProductBean.setProduct(requirement.getProduct());
 					jJVersionBean.getVersionList();
 					jJVersionBean.setVersion(requirement.getVersioning());
+					
+					HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+							.getSession(false);					
+					session.setAttribute("jJSprintBean", new JJSprintBean());
+					session.setAttribute("jJStatusBean", new JJStatusBean());
+					session.setAttribute("jJTaskBean", new JJTaskBean());
 				} else if (!jJProjectBean.getProject().equals(
 						requirement.getProject())) {
 					change = true;
@@ -330,6 +343,13 @@ public class RequirementBean {
 					jJProductBean.setProduct(requirement.getProduct());
 					jJVersionBean.getVersionList();
 					jJVersionBean.setVersion(requirement.getVersioning());
+					
+					
+					HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+							.getSession(false);					
+					session.setAttribute("jJSprintBean", new JJSprintBean());
+					session.setAttribute("jJStatusBean", new JJStatusBean());
+					session.setAttribute("jJTaskBean", new JJTaskBean());
 				} else if (requirement.getProduct() != null
 						&& jJProductBean.getProduct() != null) {
 					if (!requirement.getProduct().equals(
@@ -357,7 +377,6 @@ public class RequirementBean {
 				}
 
 				if (!getCategory().equals(requirement.getCategory()))
-
 				{
 					category = requirement.getCategory();
 					rootNode = null;
@@ -372,77 +391,7 @@ public class RequirementBean {
 						.initCategorieRequirement(requirement,
 								jJCategoryService.getCategories(null, false,
 										true, true));
-				// technicalRequirements = new ArrayList<JJRequirement>();
-				// businessRequirements = new ArrayList<JJRequirement>();
-				// securityRequirements = new ArrayList<JJRequirement>();
-				// functionalRequirements = new ArrayList<JJRequirement>();
-				// architucturalRequirements = new ArrayList<JJRequirement>();
-				//
-				// for (JJRequirement req :
-				// requirement.getRequirementLinkDown()) {
-				//
-				// if (req.getCategory().getName()
-				// .equalsIgnoreCase("business")
-				// && req.getEnabled())
-				// businessRequirements.add(req);
-				// else if (req.getCategory().getName()
-				// .equalsIgnoreCase("functional")
-				// && req.getEnabled())
-				// functionalRequirements.add(req);
-				// else if (req.getCategory().getName()
-				// .equalsIgnoreCase("security")
-				// && req.getEnabled())
-				// securityRequirements.add(req);
-				// else if (req.getCategory().getName()
-				// .equalsIgnoreCase("architecture")
-				// && req.getEnabled())
-				// architucturalRequirements.add(req);
-				// else if (req.getCategory().getName()
-				// .equalsIgnoreCase("technical")
-				// && req.getEnabled())
-				// technicalRequirements.add(req);
-				// }
-				//
-				// for (JJRequirement req : requirement.getRequirementLinkUp())
-				// {
-				//
-				// if (req.getCategory().getName()
-				// .equalsIgnoreCase("business")
-				// && req.getEnabled())
-				// businessRequirements.add(req);
-				// else if (req.getCategory().getName()
-				// .equalsIgnoreCase("functional")
-				// && req.getEnabled())
-				// functionalRequirements.add(req);
-				// else if (req.getCategory().getName()
-				// .equalsIgnoreCase("security")
-				// && req.getEnabled())
-				// securityRequirements.add(req);
-				// else if (req.getCategory().getName()
-				// .equalsIgnoreCase("architecture")
-				// && req.getEnabled())
-				// architucturalRequirements.add(req);
-				// else if (req.getCategory().getName()
-				// .equalsIgnoreCase("technical")
-				// && req.getEnabled())
-				// technicalRequirements.add(req);
-				// }
-				//
-				// if (requirement.getCategory().getName()
-				// .equalsIgnoreCase("business"))
-				// businessRequirements = null;
-				// else if (requirement.getCategory().getName()
-				// .equalsIgnoreCase("functional"))
-				// functionalRequirements = null;
-				// else if (requirement.getCategory().getName()
-				// .equalsIgnoreCase("security"))
-				// securityRequirements = null;
-				// else if (requirement.getCategory().getName()
-				// .equalsIgnoreCase("architecture"))
-				// architucturalRequirements = null;
-				// else if (requirement.getCategory().getName()
-				// .equalsIgnoreCase("technical"))
-				// technicalRequirements = null;
+				
 			} else {
 				requirement = null;
 				((LoginBean) LoginBean.findBean("loginBean"))

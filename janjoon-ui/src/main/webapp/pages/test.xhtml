@@ -10,9 +10,9 @@
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
 
-		<f:event type="preRenderComponent"
+		<f:event type="preRenderView"
 			oncomplete="PF('blockUIWidget').unblock()"
-			listener="#{jJTestcaseBean.loadData(null)}" />
+			listener="#{jJTestcaseBean.loadData(null,null,false)}" />
 
 
 		<p:layout styleClass="content"
@@ -24,50 +24,73 @@
 					onHide="hideEvent()" styleClass="overlayPanelDialog"
 					rendered="#{loginBean.mobile}" binding="#{categoryPanel}"
 					closable="false">
-					<ui:repeat value="#{jJTestcaseBean.categoryList}" var="category">
-						<p:commandButton value="#{category.name}"
-							update=":testFormWest :testFormCenter :testFormNorth:categoryPanel"
-							action="#{jJTestcaseBean.loadData(categoryPanel)}"
-							style="width: 150px;margin-left: 20px;height: 100px;margin-top: 20px;"
-							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()">
-							<f:setPropertyActionListener value="#{category}"
-								target="#{jJTestcaseBean.category}" />
-							<f:setPropertyActionListener target="#{jJTestcaseBean.project}"
-								value="#{null}" />
-						</p:commandButton>
-						<br/>
-					</ui:repeat>
+					<c:forEach items="#{jJTestcaseBean.categoryList}" var="category">
+<!-- 						<p:commandButton value="#{category.category.name}" -->
+<!-- 							update=":testFormWest :testFormCenter :testFormNorth:categoryPanel" -->
+<!-- 							action="#{jJTestcaseBean.loadData(categoryPanel,null,true)}" -->
+<!-- 							style="width: 150px;margin-left: 20px;height: 100px;margin-top: 20px;visibility: visible;" -->
+<!-- 							onstart="PF('blockUIWidget').block()" -->
+<!-- 							oncomplete="PF('blockUIWidget').unblock()"> -->
+<!-- 							<f:setPropertyActionListener value="#{category.category}" -->
+<!-- 								target="#{jJTestcaseBean.category}" /> -->
+<!-- 							<f:setPropertyActionListener target="#{jJTestcaseBean.project}" -->
+<!-- 								value="#{null}" /> -->
+<!-- 						</p:commandButton> -->
+						<p:selectBooleanButton value="#{category.checked}"
+							onLabel="#{category.category.name}"
+							rendered="#{loginBean.mobile}" 
+							style="width: 150px;margin-left: 20px;height: 100px;margin-top: 20px;visibility: visible;"
+							offLabel="#{category.category.name}" onIcon="ui-icon-check"
+							offIcon="ui-icon-close">
+							<p:ajax
+								listener="#{jJTestcaseBean.loadData(categoryPanel,category.category,true)}"
+								update=":testFormWest :testFormCenter :testFormNorth:categoryPanel"
+								onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock()" />
+						</p:selectBooleanButton>
+						<br />
+					</c:forEach>
 				</p:dialog>
 				<p:layoutUnit position="north" style="min-height:30px;">
 					<p:remoteCommand name="hideEvent" update="categoryPanel" />
-					<ui:repeat value="#{jJTestcaseBean.categoryList}" var="category">
-						<p:commandButton value="#{category.name}"
-							update=":testFormWest :testFormCenter"
+					<c:forEach items="#{jJTestcaseBean.categoryList}" var="category">
+<!-- 						<p:commandButton value="#{category.category.name}" -->
+<!-- 							update=":testFormWest :testFormCenter" -->
+<!-- 							rendered="#{!loginBean.mobile}" -->
+<!-- 							action="#{jJTestcaseBean.loadData(null)}" -->
+<!-- 							onstart="PF('blockUIWidget').block()" -->
+<!-- 							oncomplete="PF('blockUIWidget').unblock()"> -->
+<!-- 							<f:setPropertyActionListener value="#{category.category}" -->
+<!-- 								target="#{jJTestcaseBean.category}" /> -->
+<!-- 							<f:setPropertyActionListener target="#{jJTestcaseBean.project}" -->
+<!-- 								value="#{null}" /> -->
+<!-- 						</p:commandButton> -->
+						<p:selectBooleanButton value="#{category.checked}"
+							onLabel="#{category.category.name}"
 							rendered="#{!loginBean.mobile}"
-							action="#{jJTestcaseBean.loadData(null)}"
-							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()">
-							<f:setPropertyActionListener value="#{category}"
-								target="#{jJTestcaseBean.category}" />
-							<f:setPropertyActionListener target="#{jJTestcaseBean.project}"
-								value="#{null}" />
-						</p:commandButton>
-					</ui:repeat>
+							style="visibility: visible;"
+							offLabel="#{category.category.name}" onIcon="ui-icon-check"
+							offIcon="ui-icon-close">
+							<p:ajax
+								listener="#{jJTestcaseBean.loadData(null,category.category,true)}"
+								update=":testFormWest :testFormCenter :testFormNorth" onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock()" />
+						</p:selectBooleanButton>
+					</c:forEach>
 
 					<p:commandButton value="&#9776;" id="overlayPanel"
-						style="font-weight:bold; float:none; position:relative; left:30%;"
+						style="font-weight:bold; float:none; position:relative; left:30%;visibility: visible;"
 						rendered="#{loginBean.mobile}"
 						action="#{loginBean.showAndHideDialog('categoryPanel',categoryPanel)}" />
 
 					<p:commandButton
 						value="#{messages.specification_import_button} XML"
-						style="float: right;" disabled="#{jJProjectBean.project == null}"
+						style="float: right;visibility: visible;" disabled="#{jJProjectBean.project == null}"
 						update=":importXMLForm" onstart="PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock();PF('testImportXMLDialogWidget').show()" />
 
 					<p:commandButton value="#{messages.specification_video_help_title}"
-						style="float: right;" id="videoHelpBtn" icon="ui-icon-video"
+						style="float: right;visibility: visible;" id="videoHelpBtn" icon="ui-icon-video"
 						onclick="PF('videoHelpWidget').show()" type="button" />
 
 				</p:layoutUnit>

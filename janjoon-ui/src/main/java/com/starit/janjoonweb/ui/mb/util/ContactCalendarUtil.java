@@ -231,73 +231,85 @@ public class ContactCalendarUtil {
 	public int calculateWorkLoad(Date start, Date end) {
 
 		final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
-		Calendar cal=Calendar.getInstance();
+		Calendar cal = Calendar.getInstance();
 		long workload = 0;
-		if(workDays == null)
-		{	
+		if (workDays == null) {
 			final long Hours_IN_MILLIS = 60 * 60 * 1000;
 			if (start.before(end))
-				return Math.round(end.getTime()/Hours_IN_MILLIS - start.getTime()/Hours_IN_MILLIS);
+				return Math.round(end.getTime() / Hours_IN_MILLIS
+						- start.getTime() / Hours_IN_MILLIS);
 			else
 				return 0;
-			
+
+		} else {
+			if (start.before(end)) {
+				cal.setTime(start);
+				ChunkTime startChunk = getWorkingChunkTime(cal
+						.get(Calendar.DAY_OF_WEEK) - 1);
+				cal.setTime(end);
+				ChunkTime endChunk = getWorkingChunkTime(cal
+						.get(Calendar.DAY_OF_WEEK) - 1);
+
+				int chunkNumber = (int) -((CalendarUtil.getZeroTimeDate(
+						new Date(start.getTime() + (1000 * 60 * 60 * 24)))
+						.getTime() - CalendarUtil.getPreviousDate(end)
+						.getTime()) / DAY_IN_MILLIS) + 1;
+
+				if (chunkNumber > 0) {
+					Date startChunkDate = CalendarUtil.getAfterDay(start);
+					cal.setTime(startChunkDate);
+					int startChunkInt = cal.get(Calendar.DAY_OF_WEEK) - 1;
+
+					int i = 0;
+					while (i < chunkNumber) {
+						if (startChunkInt == 7)
+							startChunkInt = 0;
+						if (!isHoliday(startChunkDate)
+								&& (isVacation(startChunkDate) == -1))
+							workload = workload
+									+ getWorkingChunkTime(startChunkInt)
+											.getChunkWorkLoad();
+
+						startChunkDate = CalendarUtil
+								.getAfterDay(startChunkDate);
+						startChunkInt++;
+						i++;
+					}
+				}
+				if (chunkNumber == -1) {
+					long diff = CalendarUtil.getZeroDate(end).getTime()
+							- CalendarUtil.getZeroDate(start).getTime();
+					diff = diff / (60 * 60 * 1000) % 24;
+
+					if (startChunk.getStartDate2() != null) {
+						if (CalendarUtil.getZeroDate(start).before(
+								CalendarUtil.getZeroDate(startChunk
+										.getEndDate1()))
+								&& CalendarUtil.getZeroDate(end).after(
+										CalendarUtil.getZeroDate(startChunk
+												.getEndDate1())))
+							diff = diff
+									- ((CalendarUtil.getZeroDate(
+											startChunk.getStartDate2())
+											.getTime() - CalendarUtil
+											.getZeroDate(
+													startChunk.getEndDate1())
+											.getTime())
+											/ (60 * 60 * 1000) % 24);
+					}
+
+					workload = workload + diff;
+
+				} else {
+					workload = workload
+							+ getRestOfChunk(start, startChunk, true);
+					workload = workload + getRestOfChunk(end, endChunk, false);
+				}
+
+				return Math.round(workload);
+			} else
+				return 0;
 		}
-		else{if (start.before(end)) {
-			cal.setTime(start);
-			ChunkTime startChunk = getWorkingChunkTime(cal.get(Calendar.DAY_OF_WEEK)-1);
-			cal.setTime(end);
-			ChunkTime endChunk = getWorkingChunkTime(cal.get(Calendar.DAY_OF_WEEK)-1);
-
-			int chunkNumber = (int) -((CalendarUtil.getZeroTimeDate(
-					new Date(start.getTime() + (1000 * 60 * 60 * 24)))
-					.getTime() - CalendarUtil.getPreviousDate(end).getTime()) / DAY_IN_MILLIS) + 1;
-
-			if (chunkNumber > 0) {
-				Date startChunkDate = CalendarUtil.getAfterDay(start);				
-				cal.setTime(startChunkDate);
-				int startChunkInt = cal.get(Calendar.DAY_OF_WEEK)-1;
-				
-				int i = 0;
-				while (i < chunkNumber) {
-					if (startChunkInt == 7)
-						startChunkInt = 0;
-					if (!isHoliday(startChunkDate)
-							&& (isVacation(startChunkDate) == -1))
-						workload = workload
-								+ getWorkingChunkTime(startChunkInt)
-										.getChunkWorkLoad();
-
-					startChunkDate = CalendarUtil.getAfterDay(startChunkDate);
-					startChunkInt++;
-					i++;
-				}
-			}
-			if (chunkNumber == -1) {
-				long diff = CalendarUtil.getZeroDate(end).getTime()
-						- CalendarUtil.getZeroDate(start).getTime();
-				diff = diff / (60 * 60 * 1000) % 24;
-
-				if (startChunk.getStartDate2() != null) {
-					if (CalendarUtil.getZeroDate(start).before(
-							CalendarUtil.getZeroDate(startChunk.getEndDate1()))&&CalendarUtil.getZeroDate(end).after(CalendarUtil.getZeroDate(startChunk.getEndDate1())))
-						diff = diff
-								- ((CalendarUtil.getZeroDate(
-										startChunk.getStartDate2()).getTime() - CalendarUtil
-										.getZeroDate(startChunk.getEndDate1())
-										.getTime())
-										/ (60 * 60 * 1000) % 24);					
-				}
-
-				workload = workload + diff;
-
-			} else {
-				workload = workload + getRestOfChunk(start, startChunk, true);
-				workload = workload + getRestOfChunk(end, endChunk, false);
-			}
-
-			return Math.round(workload);
-		} else
-			return 0;}
 
 	}
 

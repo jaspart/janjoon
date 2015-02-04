@@ -85,7 +85,7 @@ public class LoginBean implements Serializable {
 	@Autowired
 	private JJConfigurationService jJConfigurationService;
 
-	private String username = "";// "janjoon.mailer@gmail.com";
+	private String username = "";
 	private String password;
 	private boolean agreeTerms = false;
 	private boolean loading = false;
@@ -103,20 +103,12 @@ public class LoginBean implements Serializable {
 		this.mobile = (((HttpServletRequest) FacesContext.getCurrentInstance()
 				.getExternalContext().getRequest()).getHeader("User-Agent")
 				.indexOf("Mobile")) != -1;
-		// this.mobile = true;
+		//this.mobile = true;
 		// } else {
 		// this.mobile=true;
 		// }
 	}
-
-//	public boolean isCollapsedMesPanel() {
-//		return collapsedMesPanel;
-//	}
-//
-//	public void setCollapsedMesPanel(boolean collapsedMesPanel) {
-//		this.collapsedMesPanel = collapsedMesPanel;
-//	}
-
+	
 	public AuthorisationService getAuthorisationService() {
 		return authorisationService;
 	}
@@ -955,7 +947,14 @@ public class LoginBean implements Serializable {
 								if (requirementBean == null)
 									requirementBean = new JJRequirementBean();
 								if (requirementBean.getTableDataModelList() == null)
+								{
 									requirementBean.fullTableDataModelList();
+									ExternalContext ec = FacesContext.getCurrentInstance()
+											.getExternalContext();
+									ec.redirect(((HttpServletRequest) ec.getRequest())
+											.getRequestURI());
+								}
+									
 
 							} else {
 								facesMessage = new FacesMessage(
@@ -1083,7 +1082,13 @@ public class LoginBean implements Serializable {
 							if (requirementBean == null)
 								requirementBean = new JJRequirementBean();
 							if (requirementBean.getTableDataModelList() == null)
+							{
 								requirementBean.fullTableDataModelList();
+								ExternalContext ec = FacesContext.getCurrentInstance()
+										.getExternalContext();
+								ec.redirect(((HttpServletRequest) ec.getRequest())
+										.getRequestURI());
+							}
 						} else {
 							facesMessage = new FacesMessage(
 									FacesMessage.SEVERITY_ERROR,

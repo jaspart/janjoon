@@ -1276,7 +1276,7 @@ public class JJChapterBean {
 				.getExternalContext().getSession(false);
 		JJRequirementBean jJRequirementBean = (JJRequirementBean) session
 				.getAttribute("jJRequirementBean");
-		if(jJRequirementBean != null)
+		if(jJRequirementBean != null && jJRequirementBean.getTableDataModelList() != null)
 		jJRequirementBean.editOneColumn(category);
 	}
 

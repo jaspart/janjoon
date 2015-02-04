@@ -49,9 +49,9 @@
 							<p:outputLabel for="sprintcts" value="Sprint Contacts:" />
 						</p:column>
 						<p:column style="width:10% important; min-width:200px;">
-							<p:selectManyMenu id="sprintcts" value="#{jjsprint.contacts}"
+							<p:selectManyMenu id="sprintcts" value="#{jjsprint.contacts}" scrollHeight="150"
 								converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
-								style="width:150px;height:150px" showCheckbox="true">
+								style="width:150px;height:150px !important;" showCheckbox="true">
 
 								<f:selectItems value="#{jJSprintBean.contacts}" var="c"
 									itemLabel="#{c.firstname} #{c.name}" itemValue="#{c}" />						
