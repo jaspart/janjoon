@@ -107,12 +107,9 @@ public class JJStatusBean {
 		this.selectedStatus = selectedStatus;
 	}
 
-	public JJProject getProject() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJProjectBean jJProjectBean = (JJProjectBean) session
-				.getAttribute("jJProjectBean");
-		this.project = jJProjectBean.getProject();
+	public JJProject getProject() {	
+		
+		this.project = LoginBean.getProject();
 		return project;
 	}
 
@@ -120,12 +117,8 @@ public class JJStatusBean {
 		this.project = project;
 	}
 
-	public JJProduct getProduct() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJProductBean jJProductBean = (JJProductBean) session
-				.getAttribute("jJProductBean");
-		this.product = jJProductBean.getProduct();
+	public JJProduct getProduct() {		
+		this.product = LoginBean.getProduct();
 		return product;
 	}
 
@@ -134,11 +127,8 @@ public class JJStatusBean {
 	}
 
 	public JJVersion getVersion() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJVersionBean jJVersionBean = (JJVersionBean) session
-				.getAttribute("jJVersionBean");
-		this.version = jJVersionBean.getVersion();
+		
+		this.version = LoginBean.getVersion();
 		return version;
 	}
 

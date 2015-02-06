@@ -2,24 +2,17 @@ package com.starit.janjoonweb.ui.mb.util;
 
 import java.util.Date;
 
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.starit.janjoonweb.domain.JJAuditLog;
-import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProjectService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
-import com.starit.janjoonweb.ui.mb.JJProjectBean;
 import com.starit.janjoonweb.ui.mb.LoginBean;
 
 @Aspect
@@ -46,35 +39,30 @@ public class AppLogger {
 	public void updateJJTaskFields(JoinPoint joinPoint) {
 		Object[] args = joinPoint.getArgs();
 		JJTask task = (JJTask) args[0];
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
-		if(task.getId() == null)
-		{
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
+		if (task.getId() == null) {
 			task.setCreationDate(new Date());
 			task.setCreatedBy(contact);
-		}else
-		{
+		} else {
 			task.setUpdatedBy(contact);
 			task.setUpdatedDate(new Date());
 		}
 
 		ContactCalendarUtil calendarUtil;
-		boolean assignedTo=false;
+		boolean assignedTo = false;
 
-		if (task.getAssignedTo() != null)
-		{
+		if (task.getAssignedTo() != null) {
 			calendarUtil = new ContactCalendarUtil(task.getAssignedTo());
-			assignedTo=!task.getAssignedTo().equals(jJTaskService.findJJTask(task.getId()).getAssignedTo());
-		}			
-		else {
+			assignedTo = !task.getAssignedTo().equals(
+					jJTaskService.findJJTask(task.getId()).getAssignedTo());
+		} else {
 			calendarUtil = new ContactCalendarUtil(jJProjectService
-					.findJJProject(
-							((JJProjectBean) ((HttpSession) FacesContext
-									.getCurrentInstance().getExternalContext()
-									.getSession(false))
-									.getAttribute("jJProjectBean"))
-									.getProject().getId()).getManager()
+					.findJJProject(LoginBean.getProject().getId()).getManager()
 					.getCompany());
-			assignedTo=jJTaskService.findJJTask(task.getId()).getAssignedTo()!=null;
+			if (task.getId() != null)
+				assignedTo = jJTaskService.findJJTask(task.getId())
+						.getAssignedTo() != null;
 		}
 
 		boolean planned = false;
@@ -83,9 +71,17 @@ public class AppLogger {
 
 		if (task.getStartDatePlanned() != null) {
 
-			if ((!task.getStartDatePlanned().equals(
-					jJTaskService.findJJTask(task.getId())
-							.getStartDatePlanned()))||assignedTo) {
+			if (task.getId() != null) {
+				if ((!task.getStartDatePlanned().equals(
+						jJTaskService.findJJTask(task.getId())
+								.getStartDatePlanned()))
+						|| assignedTo) {
+					task.setStartDatePlanned(calendarUtil.nextWorkingDate(task
+							.getStartDatePlanned()));
+					planned = true;
+					System.err.println("getStartDatePlanned Date modified");
+				}
+			} else {
 				task.setStartDatePlanned(calendarUtil.nextWorkingDate(task
 						.getStartDatePlanned()));
 				planned = true;
@@ -96,8 +92,17 @@ public class AppLogger {
 
 		if (task.getEndDatePlanned() != null) {
 
-			if ((!task.getEndDatePlanned().equals(
-					jJTaskService.findJJTask(task.getId()).getEndDatePlanned()))||assignedTo) {
+			if (task.getId() != null) {
+				if ((!task.getEndDatePlanned().equals(
+						jJTaskService.findJJTask(task.getId())
+								.getEndDatePlanned()))
+						|| assignedTo) {
+					task.setEndDatePlanned(calendarUtil.nextWorkingDate(task
+							.getEndDatePlanned()));
+					planned = true;
+					System.err.println("getEndDatePlanned Date modified");
+				}
+			} else {
 				task.setEndDatePlanned(calendarUtil.nextWorkingDate(task
 						.getEndDatePlanned()));
 				planned = true;
@@ -112,8 +117,17 @@ public class AppLogger {
 					task.getStartDatePlanned(), task.getEndDatePlanned()));
 
 		if (task.getStartDateReal() != null) {
-			if ((!task.getStartDateReal().equals(
-					jJTaskService.findJJTask(task.getId()).getStartDateReal()))||assignedTo) {
+			if (task.getId() != null) {
+				if ((!task.getStartDateReal().equals(
+						jJTaskService.findJJTask(task.getId())
+								.getStartDateReal()))
+						|| assignedTo) {
+					task.setStartDateReal(calendarUtil.nextWorkingDate(task
+							.getStartDateReal()));
+					System.err.println("getStartDateReal Date modified");
+					real = true;
+				}
+			} else {
 				task.setStartDateReal(calendarUtil.nextWorkingDate(task
 						.getStartDateReal()));
 				System.err.println("getStartDateReal Date modified");
@@ -122,12 +136,20 @@ public class AppLogger {
 		}
 
 		if (task.getEndDateReal() != null) {
-			if ((!task.getEndDateReal().equals(
-					jJTaskService.findJJTask(task.getId()).getEndDateReal()))||assignedTo) {
+			if (task.getId() != null) {
+				if ((!task.getEndDateReal()
+						.equals(jJTaskService.findJJTask(task.getId())
+								.getEndDateReal()))
+						|| assignedTo) {
+					task.setEndDateReal(calendarUtil.nextWorkingDate(task
+							.getEndDateReal()));
+					System.err.println("getEndDateReal Date modified");
+					real = true;
+				}
+			} else {
 				task.setEndDateReal(calendarUtil.nextWorkingDate(task
 						.getEndDateReal()));
 				System.err.println("getEndDateReal Date modified");
-				real = true;
 			}
 		}
 
@@ -137,9 +159,17 @@ public class AppLogger {
 					task.getStartDateReal(), task.getEndDateReal()));
 
 		if (task.getStartDateRevised() != null) {
-			if ((!task.getStartDateRevised().equals(
-					jJTaskService.findJJTask(task.getId())
-							.getStartDateRevised()))||assignedTo) {
+			if (task.getId() != null) {
+				if ((!task.getStartDateRevised().equals(
+						jJTaskService.findJJTask(task.getId())
+								.getStartDateRevised()))
+						|| assignedTo) {
+					task.setStartDateRevised(calendarUtil.nextWorkingDate(task
+							.getStartDateRevised()));
+					System.err.println("getStartDateRevised Date modified");
+					revised = true;
+				}
+			} else {
 				task.setStartDateRevised(calendarUtil.nextWorkingDate(task
 						.getStartDateRevised()));
 				System.err.println("getStartDateRevised Date modified");
@@ -148,8 +178,18 @@ public class AppLogger {
 		}
 
 		if (task.getEndDateRevised() != null) {
-			if ((!task.getEndDateRevised().equals(
-					jJTaskService.findJJTask(task.getId()).getEndDateRevised()))||assignedTo) {
+
+			if (task.getId() != null) {
+				if ((!task.getEndDateRevised().equals(
+						jJTaskService.findJJTask(task.getId())
+								.getEndDateRevised()))
+						|| assignedTo) {
+					task.setEndDateRevised(calendarUtil.nextWorkingDate(task
+							.getEndDateRevised()));
+					System.err.println("getEndDateRevised Date modified");
+					revised = true;
+				}
+			} else {
 				task.setEndDateRevised(calendarUtil.nextWorkingDate(task
 						.getEndDateRevised()));
 				System.err.println("getEndDateRevised Date modified");
@@ -166,22 +206,23 @@ public class AppLogger {
 				+ " :successful " + task.getName());
 	}
 
-	//@Before("execution(* com.starit.janjoonweb.ui.mb.JJ*Bean.saveJJ*(..))")
-//	public void setCreationDate(JoinPoint joinPoint) {
-//	
-//		Object[] args = joinPoint.getArgs();
-//		Object b=args[0];
-//		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-//				.getSession(false)).getAttribute("JJContact");
-//		if(b instanceof JJBug)
-//		{
-//			JJBug a=(JJBug) b;
-//			a.setCreatedBy(contact);
-//			a.set
-//			
-//		}
-//		
-//		
-//	}
+	// @Before("execution(* com.starit.janjoonweb.ui.mb.JJ*Bean.saveJJ*(..))")
+	// public void setCreationDate(JoinPoint joinPoint) {
+	//
+	// Object[] args = joinPoint.getArgs();
+	// Object b=args[0];
+	// JJContact contact=(JJContact) ((HttpSession)
+	// FacesContext.getCurrentInstance().getExternalContext()
+	// .getSession(false)).getAttribute("JJContact");
+	// if(b instanceof JJBug)
+	// {
+	// JJBug a=(JJBug) b;
+	// a.setCreatedBy(contact);
+	// a.set
+	//
+	// }
+	//
+	//
+	// }
 
 }

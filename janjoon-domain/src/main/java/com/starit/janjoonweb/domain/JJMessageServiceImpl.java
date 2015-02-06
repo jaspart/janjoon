@@ -27,6 +27,54 @@ public class JJMessageServiceImpl implements JJMessageService {
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
+	
+	public Integer getMessagesCount(JJProject project,JJProduct product)
+	{
+//		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+//		CriteriaQuery<JJMessage> criteriaQuery = criteriaBuilder
+//				.createQuery(JJMessage.class);		
+//		
+//		Root<JJMessage> from = criteriaQuery.from(JJMessage.class);
+//		List<Predicate> predicates = new ArrayList<Predicate>();
+//		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+//
+//		if (product != null)
+//			predicates.add(criteriaBuilder.equal(from.get("product"), product));
+//
+//		if (project != null)
+//			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+//		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
+//		cq.select(criteriaBuilder.count(cq.from(JJMessage.class)));	
+//		cq.where(predicates.toArray(new Predicate[] {}));	
+//		
+//		return safeLongToInt(entityManager.createQuery(cq).getSingleResult());
+		long r=0;
+		if(project != null && product != null)
+		r=(long) entityManager.createQuery("select count(e.id) from JJMessage e Where e.enabled = true and e.project = :proj and e.product = :prod").
+				setParameter("proj", project).setParameter("prod", product).getSingleResult();
+		else
+		{
+			if(project != null)
+			r=(long) entityManager.createQuery("select count(e.id) from JJMessage e Where e.enabled = true and e.project = :proj").
+					setParameter("proj", project).getSingleResult();
+			else if(product != null)
+				r=(long) entityManager.createQuery("select count(e.id) from JJMessage e Where e.enabled = true and e.product = :prod").
+				setParameter("prod", product).getSingleResult();
+			else
+				r=(long) entityManager.createQuery("select count(e.id) from JJMessage e Where e.enabled = true").getSingleResult();
+		}
+		
+		return safeLongToInt(r);
+		
+	}
+	
+	public static Integer safeLongToInt(long l) {
+	    if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
+	        throw new IllegalArgumentException
+	            (l + " cannot be cast to int without changing its value.");
+	    }
+	    return (int) l;
+	}
 
 	public List<JJMessage> getActifMessages(MutableInt size, int first,
 			int pageSize, List<SortMeta> multiSortMeta,

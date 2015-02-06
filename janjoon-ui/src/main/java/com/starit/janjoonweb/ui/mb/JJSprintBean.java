@@ -233,16 +233,14 @@ public class JJSprintBean {
 	public List<SprintUtil> getSprintList() {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJProjectBean jJProjectBean = (JJProjectBean) session
-				.getAttribute("jJProjectBean");
+				.getExternalContext().getSession(false);		
 
 		if (jJTaskBean == null)
 			jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
 		if (jJTaskBean == null)
 			jJTaskBean = new JJTaskBean();
 
-		if (jJProjectBean.getProject() == null) {
+		if (LoginBean.getProject() == null) {
 
 			if (sprintList == null) {
 				project = null;
@@ -255,12 +253,12 @@ public class JJSprintBean {
 
 		} else if (project != null) {
 
-			if (!project.equals(jJProjectBean.getProject())) {
-				project = jJProjectBean.getProject();
+			if (!project.equals(LoginBean.getProject())) {
+				project = LoginBean.getProject();
 				initJJSprintPage(project);
 			}
 		} else {
-			project = jJProjectBean.getProject();
+			project = LoginBean.getProject();
 			initJJSprintPage(project);
 		}
 
@@ -277,8 +275,7 @@ public class JJSprintBean {
 
 	public void iniSprintChart() {
 		sprintChartList = SprintChart.generateSprintChartList(jJSprintService
-				.getSprints(((JJProjectBean) LoginBean
-						.findBean("jJProjectBean")).getProject(), true),
+				.getSprints(LoginBean.getProject(), true),
 				jJTaskService);
 	}
 
@@ -300,8 +297,7 @@ public class JJSprintBean {
 			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 					.getContact();
 			contacts = jJPermissionService.areSprintAuthorized(contact
-					.getCompany(), ((JJProjectBean) LoginBean
-					.findBean("jJProjectBean")).getProject());
+					.getCompany(), LoginBean.getProject());
 		}
 		return contacts;
 	}

@@ -20,10 +20,10 @@
 	height: 150px !important;
 }
 
-.cke_chrome {
-	visibility: inherit;
-	width: 730px !important;
-}
+/* .cke_chrome { */
+/* 	visibility: inherit; */
+/* 	width: 730px !important; */
+/* } */
 
 .testCaseDataTable {
 	
@@ -37,15 +37,15 @@
 }
 
 .ui-tree {
-	height: 500px;
-	width: 350px;
+	height: 750px;
+	width: 450px;
 	overflow-y: auto;
 	overflow-x: hidden;
 	border: rgba(255, 0, 0, 0);
 }
 
 .cke_bottom {
-	display: none;
+	display: none !important;
 }
 
 .customPanel {
@@ -56,13 +56,14 @@
 	margin-left: 20px;
 }
 
-.cke_contents {
-	height: 150px !important;
-}
+/* .cke_contents { */
+/* 	height: 150px !important; */
+/* } */
 </style>
 		<h:outputScript library="js" name="scrollTab.js" />
 		<p:panel style="height:900px;">
 			<h:form id="treeForm">
+				<p:remoteCommand name="updateTree" update="@form"/>
 				<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
 					style="float: right;" />
 				<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
@@ -202,7 +203,7 @@
 						<p:column>
 							<pe:ckEditor id="description"
 								toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
-								style="width: 708px;margin-left:auto;margin-right:auto;"
+								height="150px" width="760px"
 								customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 								value="#{requirementBean.requirement.description}"
 								required="true" rendered="#{!loginBean.mobile}"
@@ -252,7 +253,7 @@
 					</f:facet>
 					<ui:repeat value="#{requirementBean.categorieRequirements}"
 						var="categorieRequirement" varStatus="loop">
-						<div style="width: 210px; margin-left: 3px; float: left;">
+						<div style="width: 210px; margin-left: 5px; float: left;">
 							<p:dataList value="#{categorieRequirement.requirements}"
 								var="req" type="unordered" paginatorPosition="bottom"
 								rendered="#{categorieRequirement.requirements != null}"
@@ -353,7 +354,7 @@
 				</p:panelGrid>
 			</h:form>
 			<p:panelGrid
-				style="height: 150px;width: 64%;margin-left: 382px;margin-top: 670px;"
+				style="height: 150px;width: 64%;margin-left: 482px;margin-top: 602px;"
 				rendered="#{requirementBean.requirement != null}">
 				<f:facet name="header">
 					<p:row>
@@ -432,10 +433,10 @@
 			header="#{messages[jJRequirementBean.message]}" modal="true"
 			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"
 			position="center" style="padding:0px;">
-			<p:ajax event="close" update=":treeForm"
-				listener="#{jJRequirementBean.closeDialog(false)}"
+			<p:ajax event="close" 
+				listener="#{jJRequirementBean.closeDialog(false,false)}"
 				onstart="PF('requirementBlockUIWidget').block()"
-				oncomplete="PF('requirementBlockUIWidget').unblock()" />
+				oncomplete="PF('requirementBlockUIWidget').unblock();updateTree()" />
 			<p:outputPanel id="requirementDialogPanel">
 				<ui:include src="requirementDialog.xhtml" />
 			</p:outputPanel>

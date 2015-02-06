@@ -17,4 +17,6 @@ public interface JJMessageService {
 	public List<JJMessage> getAlertMessages(JJProject project, JJProduct product);
 	
 	public List<JJMessage> getActifMessages(MutableInt size,int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters,JJProject project,JJProduct product);
+	
+	public Integer getMessagesCount(JJProject project,JJProduct product);
 }

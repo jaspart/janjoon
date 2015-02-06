@@ -9,7 +9,7 @@
 <ui:composition template="../templates/layout-login.xhtml">
 	<ui:define name="title">#{messages.login_title}</ui:define>
 	<ui:define name="content">
-		<f:event listener="#{loginBean.loginRedirect}" type="preRenderView" />
+<!-- 		<f:event listener="#{loginBean.checkAuthorities}" type="preRenderView"  /> -->
 		<h:form id="login" method="post">
 			<p:panelGrid style="background-color:transparent;margin: 0 auto;">
 				<f:facet name="header">

@@ -164,24 +164,12 @@ public class DevelopmentBean implements Serializable {
 		if(jJTaskBean == null)
 			jJTaskBean=new JJTaskBean();
 		
-		contact = ((LoginBean) session.getAttribute("loginBean")).getContact();	
-		JJVersionBean verbean = (JJVersionBean) session
-				.getAttribute("jJVersionBean");
-	
-		JJProjectBean projbean = (JJProjectBean) session
-				.getAttribute("jJProjectBean");
-
-		JJProductBean prodbean = (JJProductBean) session
-				.getAttribute("jJProductBean");
-		init = true;
-
-		if (verbean != null) {
-			if (verbean.getVersion() != null) {
-				version = verbean.getVersion();
-			}
-		}
-		product = prodbean.getProduct();
-		project = projbean.getProject();
+		contact = ((LoginBean) session.getAttribute("loginBean")).getContact();		
+		
+		init = true;		
+		version = LoginBean.getVersion();		
+		product = LoginBean.getProduct();
+		project = LoginBean.getProject();
 
 
 
@@ -231,23 +219,14 @@ public class DevelopmentBean implements Serializable {
 	public void reloadRepository() throws FileNotFoundException, IOException {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
+				.getExternalContext().getSession(false);		
 
-		JJVersionBean verbean = (JJVersionBean) session
-				.getAttribute("jJVersionBean");
-
-		JJProductBean prodbean = (JJProductBean) session
-				.getAttribute("jJProductBean");
-
-		if (!(product == prodbean.getProduct() && version == verbean
+		if (!(product == LoginBean.getProduct() && version == LoginBean
 				.getVersion())) {
-			if (verbean != null) {
-				if (verbean.getVersion() != null) {
-					version = verbean.getVersion();
-				}
-			}
+			
+					version = LoginBean.getVersion();			
 
-			product = prodbean.getProduct();
+			product = LoginBean.getProduct();
 			if (version != null && product != null) {
 
 				initJJDevlopment();
@@ -270,13 +249,12 @@ public class DevelopmentBean implements Serializable {
 
 			}
 		} else {
-			JJProjectBean jJProjectBean = (JJProjectBean) session
-					.getAttribute("jJProjectBean");
-			if (project != jJProjectBean.getProject()) {
+			
+			if (project != LoginBean.getProject()) {
 				DevelopmentBean jJDevelopment = (DevelopmentBean) session
 						.getAttribute("jJDevelopment");
 				jJDevelopment.setTasks(jJTaskService.getTasksByProduct(
-						prodbean.getProduct(), jJProjectBean.getProject()));
+						LoginBean.getProduct(), LoginBean.getProject()));
 				jJDevelopment.setTask(null);
 			}
 			if (!render) {
@@ -285,7 +263,6 @@ public class DevelopmentBean implements Serializable {
 						growlMessage, FacesMessage.SEVERITY_ERROR, "");
 				FacesContext.getCurrentInstance()
 						.addMessage(null, facesMessage);
-
 			}
 		}
 

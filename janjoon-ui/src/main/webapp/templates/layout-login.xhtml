@@ -9,6 +9,7 @@
 <f:event listener="#{loginBean.checkAuthorities}" type="preRenderView" />
 <f:view locale="#{localeBean.locale}" contentType="text/html">
 	<h:head>
+		<link rel="shortcut icon" type="image/png" href="#{request.contextPath}/resources/images/janjoon_logo.ico" />
 		<h:outputScript library="primefaces" name="jquery/jquery.js" />
 		<script type="text/javascript">
 			function centerDialog() {

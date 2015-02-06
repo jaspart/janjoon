@@ -159,12 +159,10 @@ public class JJTeststepexecutionBean {
 				newBug();
 			} else {
 				JJBuildBean jJBuildBean = (JJBuildBean) session
-						.getAttribute("jJBuildBean");
-				JJProjectBean jJProjectBean = (JJProjectBean) session
-						.getAttribute("jJProjectBean");
+						.getAttribute("jJBuildBean");				
 
 				List<JJBug> bugs = jJBugService.getBugs(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany()
-						,jJProjectBean.getProject(),teststepexecution.getTeststep(),
+						,LoginBean.getProject(),teststepexecution.getTeststep(),
 						jJBuildBean.getBuild(), true, true);
 				if (bugs.isEmpty()) {
 					newBug();
@@ -220,20 +218,13 @@ public class JJTeststepexecutionBean {
 				.getExternalContext().getSession(false);
 
 		JJBuildBean jJBuildBean = (JJBuildBean) session
-				.getAttribute("jJBuildBean");
-
-		JJProjectBean jJProjectBean = (JJProjectBean) session
-				.getAttribute("jJProjectBean");
-
-		JJVersionBean jJVersionBean = (JJVersionBean) session
-				.getAttribute("jJVersionBean");
-
+				.getAttribute("jJBuildBean");		
 		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
 				.getAttribute("jJTestcaseBean");
 
 		bug.setBuild(jJBuildBean.getBuild());
-		bug.setProject(jJProjectBean.getProject());
-		bug.setVersioning(jJVersionBean.getVersion());
+		bug.setProject(LoginBean.getProject());
+		bug.setVersioning(LoginBean.getVersion());
 		bug.setCategory(jJTestcaseBean.getCategory());
 	}
 
@@ -266,8 +257,7 @@ public class JJTeststepexecutionBean {
 					.getTestcase().getRequirement());
 			jJBugBean.setBugVersionSelected(teststepexecution.getTeststep().getTestcase().getBuild()
 					.getVersion());
-			jJBugBean.setBugProjectSelected(((JJProjectBean) session
-					.getAttribute("jJProjectBean")).getProject());
+			jJBugBean.setBugProjectSelected(LoginBean.getProject());
 
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('bugTestDialogWidget').show()");
@@ -330,12 +320,10 @@ public class JJTeststepexecutionBean {
 							.getSession(false);
 					JJBuildBean jJBuildBean = (JJBuildBean) session
 							.getAttribute("jJBuildBean");
-
-					JJProjectBean jJProjectBean = (JJProjectBean) session
-							.getAttribute("jJProjectBean");
+					
 
 					List<JJBug> bugs = jJBugService.getBugs(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
-							jJProjectBean.getProject(),
+							LoginBean.getProject(),
 							teststepexecution.getTeststep(),
 							jJBuildBean.getBuild(), true, true);
 

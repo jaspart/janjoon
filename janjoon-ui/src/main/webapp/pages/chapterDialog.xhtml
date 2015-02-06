@@ -15,18 +15,18 @@
 	border: rgba(255, 0, 0, 0);
 }
 
-.cke_chrome {
-	visibility: inherit;
-	width: 600px !important;
-}
+/* .cke_chrome { */
+/* 	visibility: inherit; */
+/* 	width: 600px !important; */
+/* } */
 
 .ui-editor{
 	height: 250px !important;
 }
 
-.cke_contents {
-	height: 200px !important;
-}
+/* .cke_contents { */
+/* 	height: 200px !important; */
+/* } */
 
 .cke_bottom {
 	display: block;
@@ -81,7 +81,7 @@
 						<p:column  style="width:600px;">
 							<h:outputText
 								value="#{messages.specification_chapter_description_label}" />
-							<pe:ckEditor id="description" style="width:300px"
+							<pe:ckEditor id="description" height="250px" width="600px"
 								rendered="#{!loginBean.mobile}"
 								customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 								toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
@@ -144,7 +144,7 @@
 							<!-- 							<p:scrollPanel style="height:350px;" mode="native"> -->
 							<p:tree id="leftTreeIncorporated"
 								value="#{jJChapterBean.leftRoot}" var="nodeLeft"
-								selectionMode="single" style="width: 350px !important;"
+								selectionMode="single"
 								selection="#{jJChapterBean.selectedLeftNode}" draggable="true"
 								droppable="true" dragdropScope="demo" cache="false">
 								<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
@@ -165,7 +165,7 @@
 							<!-- 							<p:scrollPanel style="height:350px;" mode="native"> -->
 							<p:tree id="RightTreeIncorporated"
 								value="#{jJChapterBean.rightRoot}" var="nodeRight"
-								selectionMode="single" style="width: 350px !important;"
+								selectionMode="single" 
 								selection="#{jJChapterBean.selectedRightNode}" draggable="true"
 								droppable="true" dragdropScope="demo" cache="false">
 								<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"

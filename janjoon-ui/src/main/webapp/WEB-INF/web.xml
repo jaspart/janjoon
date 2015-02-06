@@ -115,7 +115,10 @@
 		<servlet-name>CKEditorGetImageServlet</servlet-name>
 		<url-pattern>/pages/ckeditor/getimage</url-pattern>
 	</servlet-mapping>
-
+	<error-page>
+		<error-code>403</error-code>
+		<location>/pages/main.jsf?faces-redirect=true</location>
+	</error-page>
 	<session-config>
 		<session-timeout>120</session-timeout>
 	</session-config>

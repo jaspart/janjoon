@@ -53,10 +53,7 @@ public class JJMessageBean {
 	public List<JJMessage> getAlertMessages() {
 
 		if (alertMessages == null) {
-			alertMessages = jJMessageService.getAlertMessages(
-					((JJProjectBean) LoginBean.findBean("jJProjectBean"))
-							.getProject(), ((JJProductBean) LoginBean
-							.findBean("jJProductBean")).getProduct());
+			alertMessages = jJMessageService.getAlertMessages(LoginBean.getProject(), LoginBean.getProduct());
 		}
 		return alertMessages;
 	}
@@ -76,12 +73,10 @@ public class JJMessageBean {
 		columns.add("message");
 		allJJMessages = jJMessageService.findAllJJMessages();
 		setMessage(new JJMessage());
-		alertMessages = jJMessageService.getAlertMessages(
-				((JJProjectBean) LoginBean.findBean("jJProjectBean"))
-						.getProject(), ((JJProductBean) LoginBean
-						.findBean("jJProductBean")).getProduct());
+		alertMessages = jJMessageService.getAlertMessages(LoginBean.getProject(), LoginBean.getProduct());
 		viewedMessage = new JJMessage();
 		mainMessages = null;
+		((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 
 	}
 
@@ -245,14 +240,11 @@ public class JJMessageBean {
 
 		if (mainMessages == null && login.isEnable()) {
 
-			JJProductBean jJProductBean = (JJProductBean) session.getAttribute("jJProductBean");
-			JJProjectBean jJProjectBean = (JJProjectBean) session.getAttribute("jJProjectBean");
-
 			mainMessages = new LazyMessageDataModel(jJMessageService,
-					jJProjectBean.getProject(), jJProductBean.getProduct());
+					LoginBean.getProject(), LoginBean.getProduct());
 
-			RequestContext context = RequestContext.getCurrentInstance();
-			context.update(":headerForm:dataTable1");
+//			RequestContext context = RequestContext.getCurrentInstance();
+//			context.update(":headerForm:dataTable1");
 		}
 	}
 
@@ -269,19 +261,17 @@ public class JJMessageBean {
 			List<JJProject> projectes = new ArrayList<JJProject>();
 			List<JJContact> contactes = new ArrayList<JJContact>();
 			// enabledJJMessage = jJMessageService.getMessages(true);
-
-			JJProductBean jJProductBean = (JJProductBean) session.getAttribute("jJProductBean");
-			JJProjectBean jJProjectBean = (JJProjectBean) session.getAttribute("jJProjectBean");
+			
 
 			mainMessages = new LazyMessageDataModel(jJMessageService,
-					jJProjectBean.getProject(), jJProductBean.getProduct());
+					LoginBean.getProject(), LoginBean.getProduct());
 ////			if (!login.isCollapsedMesPanel()) {
 //				RequestContext context = RequestContext.getCurrentInstance();
 //				context.update("messagePanel");
 ////			}
 
 			for (JJMessage mes : jJMessageService.getActifMessages(
-					jJProjectBean.getProject(), jJProductBean.getProduct())) {
+					LoginBean.getProject(), LoginBean.getProduct())) {
 				if (mes.getCreatedBy() != null && !listContaines(contactes, mes.getCreatedBy()))
 					contactes.add(mes.getCreatedBy());
 				if (mes.getProduct() != null && !listContaines(productes, mes.getProduct()))
@@ -379,9 +369,6 @@ public class JJMessageBean {
 	}
 
 	public void createMessage() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-
 		if (!alertOrInfo) {
 
 			JJCriticity criticity = jJCriticityService.getCriticityByName("INFO", true);
@@ -404,19 +391,15 @@ public class JJMessageBean {
 
 		if (status != null) {
 			message.setStatus(status);
-		}
-
-		JJVersionBean jJVersionBean = (JJVersionBean) session.getAttribute("jJVersionBean");
-		JJProductBean jJProductBean = (JJProductBean) session.getAttribute("jJProductBean");
-		JJProjectBean jJProjectBean = (JJProjectBean) session.getAttribute("jJProjectBean");
+		}		
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 
-		if (jJProductBean.getProduct() != null)
-			message.setProduct(jJProductBean.getProduct());
-		if (jJProjectBean.getProject() != null)
-			message.setProject(jJProjectBean.getProject());
-		if (jJVersionBean.getVersion() != null)
-			message.setVersioning(jJVersionBean.getVersion());
+		if (LoginBean.getProduct() != null)
+			message.setProduct(LoginBean.getProduct());
+		if (LoginBean.getProject() != null)
+			message.setProject(LoginBean.getProject());
+		if (LoginBean.getVersion() != null)
+			message.setVersioning(LoginBean.getVersion());
 
 		message.setEnabled(true);
 		message.setContact(contact);
@@ -458,6 +441,7 @@ public class JJMessageBean {
 		mainMessages = null;
 		alertMessages = null;
 		((LoginBean) LoginBean.findBean("loginBean")).setShowMarquee(null);
+		((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 		// initJJmessageTable(null);
 	}
 

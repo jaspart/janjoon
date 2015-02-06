@@ -254,11 +254,8 @@ public class JJTestcaseBean {
 	}
 
 	public JJProduct getProduct() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJProductBean jJProductBean = (JJProductBean) session
-				.getAttribute("jJProductBean");
-		this.product = jJProductBean.getProduct();
+		
+		this.product = LoginBean.getProduct();
 		return product;
 	}
 
@@ -1471,11 +1468,9 @@ public class JJTestcaseBean {
 
 	public void handleImportXML(FileUploadEvent event) throws IOException {
 
-		JJProduct prod = ((JJProductBean) LoginBean.findBean("jJProductBean"))
-				.getProduct();
+		JJProduct prod = LoginBean.getProduct();
 
-		JJProject proj = ((JJProjectBean) LoginBean.findBean("jJProjectBean"))
-				.getProject();
+		JJProject proj = LoginBean.getProject();
 		try {
 			List<Object> objects = ReadXMLFile.getTestcasesFromXml(this, event
 					.getFile().getInputstream(), jJTestcaseService,
@@ -1525,8 +1520,7 @@ public class JJTestcaseBean {
 			String buffer = "<category name=\""
 					+ category.getName().toUpperCase() + "\">";
 			List<JJTestcase> tests = jJTestcaseService.getImportTestcases(
-					category, project, ((JJProductBean) LoginBean
-							.findBean("jJProductBean")).getProduct(), build,
+					category, project, LoginBean.getProduct(), build,
 					true);
 			for (JJTestcase ttt : tests) {
 				String description = "";

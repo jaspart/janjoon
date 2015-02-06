@@ -2,7 +2,6 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,7 +27,6 @@ import org.primefaces.component.dialog.Dialog;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
-import org.primefaces.event.ToggleEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,6 +44,7 @@ import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
+import com.starit.janjoonweb.domain.JJMessageService;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
@@ -64,12 +63,14 @@ public class LoginBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private AuthenticationManager authenticationManager;
+	private Integer messageCount;
 	private AuthorisationService authorisationService;
 	static Logger logger = Logger.getLogger("loginBean-Logger");
 	private boolean mobile;
-//	private boolean collapsedMesPanel = true;
+	// private boolean collapsedMesPanel = true;
 	private String showMarquee;
 	private FacesMessage facesMessage;
+
 	@Autowired
 	private JJContactService jJContactService;
 
@@ -84,6 +85,9 @@ public class LoginBean implements Serializable {
 
 	@Autowired
 	private JJConfigurationService jJConfigurationService;
+
+	@Autowired
+	private JJMessageService jJMessageService;
 
 	private String username = "";
 	private String password;
@@ -103,12 +107,12 @@ public class LoginBean implements Serializable {
 		this.mobile = (((HttpServletRequest) FacesContext.getCurrentInstance()
 				.getExternalContext().getRequest()).getHeader("User-Agent")
 				.indexOf("Mobile")) != -1;
-		//this.mobile = true;
+		// this.mobile = true;
 		// } else {
 		// this.mobile=true;
 		// }
 	}
-	
+
 	public AuthorisationService getAuthorisationService() {
 		return authorisationService;
 	}
@@ -121,6 +125,10 @@ public class LoginBean implements Serializable {
 	public void setjJRequirementService(
 			JJRequirementService jJRequirementService) {
 		this.jJRequirementService = jJRequirementService;
+	}
+
+	public void setjJMessageService(JJMessageService jJMessageService) {
+		this.jJMessageService = jJMessageService;
 	}
 
 	public JJContactService getjJContactService() {
@@ -182,12 +190,12 @@ public class LoginBean implements Serializable {
 					s = s.replace(s.substring(index), "");
 				}
 
-				if (s.contains("development"))
+				if (s.contains("development")||s.contains("login"))
 					s = "main";
 				else if (s.contains("planning") || s.contains("test")
 						|| s.contains("stats")) {
-					JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");
-					if (jJProjectBean.getProject() == null) {
+
+					if (getProject() == null) {
 						s = "main";
 						facesMessage = MessageFactory.getMessage(
 								"dev.nullProject.label",
@@ -322,6 +330,19 @@ public class LoginBean implements Serializable {
 			return "3";
 		else
 			return "2";
+	}
+
+	public Integer getMessageCount() {
+
+		if (messageCount == null)
+			messageCount = jJMessageService.getMessagesCount(getProject(),
+					getProduct());
+
+		return messageCount;
+	}
+
+	public void setMessageCount(Integer messageCount) {
+		this.messageCount = messageCount;
 	}
 
 	public String logout() {
@@ -566,6 +587,7 @@ public class LoginBean implements Serializable {
 			if (session.getAttribute("jJTestcaseBean") != null)
 				session.setAttribute("jJTestcaseBean", new JJTestcaseBean());
 			authorisationService = new AuthorisationService(session, contact);
+			messageCount = null;
 			// messageListener(session);
 			session.setAttribute("jJBugBean", new JJBugBean());
 			session.setAttribute("jJMessageBean", null);
@@ -660,35 +682,35 @@ public class LoginBean implements Serializable {
 
 	}
 
-//	public void messageListener(HttpSession session) {
-//
-//		JJMessageBean messageBean = (JJMessageBean) session
-//				.getAttribute("jJMessageBean");
-//		boolean messPanel = collapsedMesPanel;
-//		boolean appPanel = !messageBean.isCollapsedLayoutPanel();
-//		messageBean = new JJMessageBean();
-//		RequestContext context = RequestContext.getCurrentInstance();
-//
-//		if (messPanel) {
-//			setCollapsedMesPanel(false);
-//			context.update(":messagePanel");
-//			context.update(":menuPanel");
-//			context.update(":contentPanel");
-//			context.update(":applicatinPanelGrid");
-//
-//		}
-//
-//		if (appPanel) {
-//			messageBean.setCollapsedLayoutPanel(false);
-//			context.update(":menuPanel");
-//			context.update(":contentPanel");
-//			context.update(":messagePanel");
-//
-//		}
-//
-//		session.setAttribute("jJMessageBean", messageBean);
-//
-//	}
+	// public void messageListener(HttpSession session) {
+	//
+	// JJMessageBean messageBean = (JJMessageBean) session
+	// .getAttribute("jJMessageBean");
+	// boolean messPanel = collapsedMesPanel;
+	// boolean appPanel = !messageBean.isCollapsedLayoutPanel();
+	// messageBean = new JJMessageBean();
+	// RequestContext context = RequestContext.getCurrentInstance();
+	//
+	// if (messPanel) {
+	// setCollapsedMesPanel(false);
+	// context.update(":messagePanel");
+	// context.update(":menuPanel");
+	// context.update(":contentPanel");
+	// context.update(":applicatinPanelGrid");
+	//
+	// }
+	//
+	// if (appPanel) {
+	// messageBean.setCollapsedLayoutPanel(false);
+	// context.update(":menuPanel");
+	// context.update(":contentPanel");
+	// context.update(":messagePanel");
+	//
+	// }
+	//
+	// session.setAttribute("jJMessageBean", messageBean);
+	//
+	// }
 
 	public void loadingPage(ComponentSystemEvent e) throws IOException {
 
@@ -717,16 +739,16 @@ public class LoginBean implements Serializable {
 
 	}
 
-	public void loginRedirect(ComponentSystemEvent e) throws IOException {
-
-		if (enable) {
-			String path = FacesContext.getCurrentInstance()
-					.getExternalContext().getRequestContextPath();
-
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect(path + "/pages/main.jsf?faces-redirect=true");
-		}
-	}
+//	public void loginRedirect(ComponentSystemEvent e) throws IOException {
+//
+//		if (enable) {
+//			String path = FacesContext.getCurrentInstance()
+//					.getExternalContext().getRequestContextPath();
+//
+//			FacesContext.getCurrentInstance().getExternalContext()
+//					.redirect(path + "/pages/main.jsf?faces-redirect=true");
+//		}
+//	}
 
 	public void loadingMain(ComponentSystemEvent e) throws IOException {
 
@@ -810,9 +832,7 @@ public class LoginBean implements Serializable {
 
 	public void redirection(ActionEvent e) throws IOException {
 
-		JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");
-
-		if (jJProjectBean.getProject() == null) {
+		if (getProject() == null) {
 			FacesMessage message = MessageFactory.getMessage(
 					"dev.nullProject.label", FacesMessage.SEVERITY_ERROR, "");
 			FacesContext.getCurrentInstance().addMessage(null, message);
@@ -843,13 +863,8 @@ public class LoginBean implements Serializable {
 
 	public void redirectToDev(ActionEvent e) throws IOException {
 
-		JJVersionBean jjVersionBean = (JJVersionBean) findBean("jJVersionBean");
-		JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
-		JJProjectBean jJProjectBean = (JJProjectBean) findBean("jJProjectBean");
-
-		if (jjVersionBean.getVersion() != null
-				&& jJProductBean.getProduct() != null
-				&& jJProjectBean.getProject() != null) {
+		if (getVersion() != null && getProduct() != null
+				&& getProject() != null) {
 
 			if (!FacesContext.getCurrentInstance().getViewRoot().getViewId()
 					.contains("development")) {
@@ -862,7 +877,6 @@ public class LoginBean implements Serializable {
 						.redirect(
 								path
 										+ "/pages/development.jsf?faces-redirect=true");
-
 			} else {
 
 				RequestContext context = RequestContext.getCurrentInstance();
@@ -871,13 +885,13 @@ public class LoginBean implements Serializable {
 			}
 		} else {
 
-			if (jJProductBean.getProduct() == null) {
+			if (getProduct() == null) {
 				FacesMessage message = MessageFactory.getMessage(
 						"dev.nullProduct.label", FacesMessage.SEVERITY_ERROR,
 						"");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 
-			} else if (jJProjectBean.getProject() == null) {
+			} else if (getProject() == null) {
 				FacesMessage message = MessageFactory.getMessage(
 						"dev.nullProject.label", FacesMessage.SEVERITY_ERROR,
 						"Project");
@@ -900,9 +914,6 @@ public class LoginBean implements Serializable {
 			FacesContext context = FacesContext.getCurrentInstance();
 			UIViewRoot root = context.getViewRoot();
 
-			JJProjectBean jjProjectBean = (JJProjectBean) findBean("jJProjectBean");
-			JJProductBean jJProductBean = (JJProductBean) findBean("jJProductBean");
-
 			if (authorisationService == null)
 				authorisationService = new AuthorisationService(
 						(HttpSession) FacesContext.getCurrentInstance()
@@ -911,8 +922,13 @@ public class LoginBean implements Serializable {
 
 			String path = FacesContext.getCurrentInstance()
 					.getExternalContext().getRequestContextPath();
-
-			if (jJProductBean.getProduct() == null
+//			if(root.getViewId().contains("login"))
+//			{
+//				FacesContext.getCurrentInstance().getExternalContext()
+//				.redirect(path + "/pages/main.jsf?faces-redirect=true");
+//			}
+//			else 
+					if (getProduct() == null
 					&& root.getViewId().contains("development")) {
 				facesMessage = MessageFactory.getMessage(
 						"dev.nullProduct.label", FacesMessage.SEVERITY_ERROR,
@@ -920,7 +936,7 @@ public class LoginBean implements Serializable {
 				FacesContext.getCurrentInstance().getExternalContext()
 						.redirect(path + "/pages/main.jsf?faces-redirect=true");
 
-			} else if (jjProjectBean.getProject() == null
+			} else if (getProject() == null
 					&& (root.getViewId().contains("planning")
 							|| root.getViewId().contains("test")
 							|| root.getViewId().contains("stats") || root
@@ -946,15 +962,14 @@ public class LoginBean implements Serializable {
 								JJRequirementBean requirementBean = (JJRequirementBean) findBean("jJRequirementBean");
 								if (requirementBean == null)
 									requirementBean = new JJRequirementBean();
-								if (requirementBean.getTableDataModelList() == null)
-								{
+								if (requirementBean.getTableDataModelList() == null) {
 									requirementBean.fullTableDataModelList();
-									ExternalContext ec = FacesContext.getCurrentInstance()
+									ExternalContext ec = FacesContext
+											.getCurrentInstance()
 											.getExternalContext();
-									ec.redirect(((HttpServletRequest) ec.getRequest())
-											.getRequestURI());
+									ec.redirect(((HttpServletRequest) ec
+											.getRequest()).getRequestURI());
 								}
-									
 
 							} else {
 								facesMessage = new FacesMessage(
@@ -1081,13 +1096,13 @@ public class LoginBean implements Serializable {
 							JJRequirementBean requirementBean = (JJRequirementBean) findBean("jJRequirementBean");
 							if (requirementBean == null)
 								requirementBean = new JJRequirementBean();
-							if (requirementBean.getTableDataModelList() == null)
-							{
+							if (requirementBean.getTableDataModelList() == null) {
 								requirementBean.fullTableDataModelList();
-								ExternalContext ec = FacesContext.getCurrentInstance()
+								ExternalContext ec = FacesContext
+										.getCurrentInstance()
 										.getExternalContext();
-								ec.redirect(((HttpServletRequest) ec.getRequest())
-										.getRequestURI());
+								ec.redirect(((HttpServletRequest) ec
+										.getRequest()).getRequestURI());
 							}
 						} else {
 							facesMessage = new FacesMessage(
@@ -1159,24 +1174,23 @@ public class LoginBean implements Serializable {
 
 				List<JJProject> projects = ((JJProjectBean) findBean("jJProjectBean"))
 						.getProjectList();
-				
+
 				List<JJProduct> products = ((JJProductBean) findBean("jJProductBean"))
 						.getProductList();
 
-				Map<JJProject,JJProduct> map = new HashMap<JJProject,JJProduct>();				
-				
+				Map<JJProject, JJProduct> map = new HashMap<JJProject, JJProduct>();
+
 				for (JJProject p : projects) {
-					
+
 					if (jJPermissionService.isAuthorized(getContact(), p, null,
 							"Requirement"))
 						map.put(p, null);
-					else
-					{
-						for(JJProduct pr:products)
-							if (jJPermissionService.isAuthorized(getContact(), p, pr,
-									"Requirement"))
+					else {
+						for (JJProduct pr : products)
+							if (jJPermissionService.isAuthorized(getContact(),
+									p, pr, "Requirement"))
 								map.put(p, pr);
-							
+
 					}
 				}
 				noCouvretReq = jJRequirementService.getNonCouvredRequirements(
@@ -1207,11 +1221,11 @@ public class LoginBean implements Serializable {
 		return referer;
 	}
 
-//	public void handleMesToggle(ToggleEvent event) {
-//
-//		this.collapsedMesPanel = !this.collapsedMesPanel;
-//
-//	}
+	// public void handleMesToggle(ToggleEvent event) {
+	//
+	// this.collapsedMesPanel = !this.collapsedMesPanel;
+	//
+	// }
 
 	public void updateGrowl(ComponentSystemEvent e) {
 
@@ -1233,6 +1247,29 @@ public class LoginBean implements Serializable {
 					"PF('" + widgetVar + "').show();");
 		dialog.setVisible(!dialog.isVisible());
 
+	}
+
+	public static JJProject getProject() {	
+		
+		if (((JJProjectBean) findBean("jJProjectBean")) != null)
+			return ((JJProjectBean) findBean("jJProjectBean")).getProject();
+		else
+			return null;
+	}
+
+	public static JJProduct getProduct() {
+		
+		if (((JJProductBean) findBean("jJProductBean")) != null)
+			return ((JJProductBean) findBean("jJProductBean")).getProduct();
+		else
+			return null;
+	}
+
+	public static JJVersion getVersion() {
+		if (((JJVersionBean) findBean("jJVersionBean")) != null)
+			return ((JJVersionBean) findBean("jJVersionBean")).getVersion();
+		else
+			return null;
 	}
 
 	public UIComponent findComponent(final String id) {

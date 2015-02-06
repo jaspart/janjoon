@@ -1,28 +1,21 @@
 package com.starit.janjoonweb.ui.mb.lazyLoadingDataTable;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
-import org.primefaces.model.SortOrder;
 
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
-import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.ui.mb.JJBugBean;
-import com.starit.janjoonweb.ui.mb.JJProjectBean;
 import com.starit.janjoonweb.ui.mb.LoginBean;
 
 public class LazyBugDataModel extends LazyDataModel<JJBug> {

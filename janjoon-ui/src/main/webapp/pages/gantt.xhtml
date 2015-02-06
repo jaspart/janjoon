@@ -410,7 +410,8 @@
 				<p:commandButton id="duplicateYesButton"
 					value="#{messages.label_yes}" action="#{jJTaskBean.duplicateTask}"
 					update=":projecttabview:planningForm :projecttabview:SprintTabView"
-					oncomplete="PF('duplicateTaskDialogWidget').hide()" />
+					onstart="PF('blockUIWidget').block()"
+					oncomplete="PF('blockUIWidget').unblock();PF('duplicateTaskDialogWidget').hide()" />
 				<p:commandButton id="duplicateNoButton" value="#{messages.label_no}"
 					onclick="PF('duplicateTaskDialogWidget').hide()" type="button" />
 			</h:form>

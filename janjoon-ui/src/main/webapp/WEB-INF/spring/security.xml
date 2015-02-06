@@ -20,7 +20,7 @@
 	<http security="none" pattern="../templates/**" />
 
 	<http auto-config="true" use-expressions="true" entry-point-ref="entryPoint">
-		<intercept-url pattern="/pages/login.jsf" access="permitAll" />
+		<intercept-url pattern="/pages/login.jsf" access="!isAuthenticated()"  />
 		<intercept-url pattern="/pages/**" access="isAuthenticated()" />
 		<logout logout-url="/pages/logout.jsf" logout-success-url="/pages/login.jsf"
 			invalidate-session="true" delete-cookies="true" />

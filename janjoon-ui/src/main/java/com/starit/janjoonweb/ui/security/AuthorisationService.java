@@ -37,6 +37,7 @@ public class AuthorisationService implements Serializable {
 		JJContactBean jjContactBean=(JJContactBean) this.session.getAttribute("jJContactBean");
 		LoginBean loginBean=(LoginBean) this.session.getAttribute("loginBean");
 		loginBean.setContact(null);
+		loginBean.setMessageCount(null);
 		jjContactBean.setCalendarUtil(null);
 		jjContactBean.setContactsLazyModel(null);
 		jjContactBean.setContactUtil(null);

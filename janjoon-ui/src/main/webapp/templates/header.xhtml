@@ -24,7 +24,7 @@
 
 				<p:graphicImage style="width:75px; height:75px;float: left;"
 					styleClass="banner" value="#{imageStreamer.image}"
-					 alt="JanJoon Home"
+					alt="JanJoon Home"
 					rendered="#{loginBean.contact.company.logo != null}">
 					<f:param name="contactId" value="#{loginBean.contact.id}" />
 					<f:param name="company" value="true" />
@@ -50,8 +50,8 @@
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()"
-							update=":contentPanel tabMenu :scrollRight headerForm:dataTable1" />
-<!-- 																:messagePanel -->
+							update=":contentPanel tabMenu :scrollRight :messageCreationForm communicationButton" />
+						<!-- 																:messagePanel -->
 					</p:selectOneMenu>
 
 					<!--h:outputText value="#{messages.header_product_label}:" /-->
@@ -66,9 +66,9 @@
 						<f:selectItems value="#{jJProductBean.productList}" var="p"
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax onstart="PF('blockUIWidget').block()"
-							update="versionSelectOneMenu :contentPanel :scrollRight headerForm:dataTable1"
+							update="versionSelectOneMenu :contentPanel :scrollRight :messageCreationForm communicationButton"
 							oncomplete="PF('blockUIWidget').unblock()" />
-<!-- 																:messagePanel -->
+						<!-- 																:messagePanel -->
 					</p:selectOneMenu>
 
 					<!--h:outputText value="#{messages.header_version_label}:" /-->
@@ -86,7 +86,7 @@
 
 						<p:ajax onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()"
-							update=":contentPanel headerForm:dataTable1" />
+							update=":contentPanel" />
 					</p:selectOneMenu>
 
 					<p:splitButton
@@ -102,66 +102,11 @@
 							url="logout.jsf" actionListener="#{loginBean.logout}"
 							icon="ui-icon-extlink" />
 					</p:splitButton>
-					
-<!-- 	communicationButton	: Uncommand the button to start using the communication overlayPanel -->
-					<p:commandButton id="communicationButton" icon="ui-icon-comment" value="3"
-						title="#{message.header_communication_label}"/>
-					<p:overlayPanel id="communicationPanel" for="communicationButton"
-						hideEffect="fade" dynamic="true" style="width:400px"
-						showCloseIcon="true" styleClass="communication-overlaypanel">
-<!--						<p:panel id="messagePanel" header="Chat" styleClass="chat"
-							toggleable="true" toggleOrientation="horizontal"
-							style="height:100%;">>
 
-							<p:ajax event="toggle" listener="#{loginBean.handleMesToggle}"
-								update=":applicatinPanelGrid,messagePanel,:contentPanel" /-->
-
-							<f:event listener="#{jJMessageBean.initJJMessageLayout}" type="preRenderComponent" />
-
-							<p:dataTable id="dataTable1" value="#{jJMessageBean.mainMessages}"
-								rowKey="#{mes.id}" var="mes" paginator="true"
-								paginatorPosition="bottom"
-								rendered="#{loginBean.enable}"
-								style="border-spacing:0px;" selectionMode="single" rows="10"
-								lazy="true" sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
-								<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
-									listener="#{jJMessageBean.onRowSelect}"
-									oncomplete="PF('viewDialogWidget1').show()" />
-<!--									update=":viewForm1:viewPanelGrid1"-->
-								<p:column headerText="Messages" sortBy="#{mes.creationDate}">
-									<h:outputText id="viewButton" value="#{mes.message}" />
-									<p:tooltip for="viewButton"
-										value="#{messages.label_view} #{mes.name}" showEffect="fade"
-										hideEffect="fade" />
-								</p:column>						
-
-							<f:facet name="footer">
-<!-- 							style="position: relative;"> -->
-								<h:form id="messageCreationForm">
-<!--									rendered="#{loginBean.enable}">-->
-									<p:growl id="creationGrowl" showDetail="true" life="1000" />
-									<p:panelGrid columns="1">
-										<p:outputLabel for="messagedsc" value="Message :" />
-										<p:inputTextarea id="messagedsc" cols="40" rows="6"
-											value="#{jJMessageBean.message.message}" required="true" />
-										<p:panelGrid columns="2">
-											<p:selectBooleanButton id="alert" value="#{jJMessageBean.alertOrInfo}"
-												onLabel="Alert" offLabel="Info" onIcon="ui-icon-alert"
-												offIcon="ui-icon-info">
-											</p:selectBooleanButton>
-											<p:commandButton id="submitMes" value="OK"
-												process="@this,alert,messagedsc"
-												actionListener="#{jJMessageBean.createMessage}"
-												update="messageCreationForm,creationGrowl,:headerForm:dataTable1" />
-<!--												,:scrollRight (Marquee)-->
-										</p:panelGrid>
-									</p:panelGrid>
-								</h:form>
-							</f:facet>
-							</p:dataTable>
-							
-<!-- 						</p:panel> -->
-					</p:overlayPanel>
+					<!-- 	communicationButton	: Uncommand the button to start using the communication overlayPanel -->
+					<p:commandButton id="communicationButton" icon="ui-icon-comment"
+						value="#{loginBean.messageCount}" oncomplete="PF('communicationPanel').show();"
+						title="#{message.header_communication_label}" />
 				</h:panelGrid>
 
 				<p:tabMenu id="tabMenu" name="content" style="float: none;"
@@ -232,16 +177,16 @@
 					<p:menuitem value="#{messages.header_delivery_menuitem}"
 						disabled="#{!loginBean.authorisationService.rBuild}"
 						title="#{loginBean.authorisationService.rBuildMSG}"
-						rendered="false"
-						url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
+						rendered="false" url="/pages/delivery.jsf?faces-redirect=true"
+						icon="ui-icon-star" />
 
 					<p:menuitem value="#{messages.header_delivery_menuitem}"
 						rendered="#{!loginBean.enable and !loginBean.mobile}"
 						url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
 
 					<p:menuitem value="#{messages.header_team_menuitem}"
-						rendered="false"
-						url="/pages/teams.jsf?faces-redirect=true" icon="ui-icon-person" />
+						rendered="false" url="/pages/teams.jsf?faces-redirect=true"
+						icon="ui-icon-person" />
 
 					<p:menuitem value="#{messages.header_stat_menuitem}"
 						url="/pages/stats.jsf?faces-redirect=true"

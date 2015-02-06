@@ -410,12 +410,9 @@ public class RequirementBean {
 
 		rootNode = new DefaultTreeNode("Root", null);
 
-		JJProject project = ((JJProjectBean) LoginBean
-				.findBean("jJProjectBean")).getProject();
-		JJProduct product = ((JJProductBean) LoginBean
-				.findBean("jJProductBean")).getProduct();
-		JJVersion version = ((JJVersionBean) LoginBean
-				.findBean("jJVersionBean")).getVersion();
+		JJProject project = LoginBean.getProject();
+		JJProduct product = LoginBean.getProduct();
+		JJVersion version = LoginBean.getVersion();
 
 		TreeNode projectNode = new DefaultTreeNode("projet", project, rootNode);
 
@@ -570,6 +567,32 @@ public class RequirementBean {
 		linkReqList = null;
 		this.categoryName = null;
 	}
+	
+//	public void closeDialog(boolean value,JJRequirementBean jJRequirementBean) throws IOException
+//	{
+//		if (jJRequirementBean.getRequirement() != null) {
+//			if (jJRequirementBean.getRequirement().getId() != null) {
+//				long id = jJRequirementBean.getRequirement().getId();
+//				jJRequirementBean.closeDialog(value);
+//
+//				if (jJRequirementService.findJJRequirement(id) != null) {
+//					FacesContext
+//							.getCurrentInstance()
+//							.getExternalContext()
+//							.redirect(
+//									FacesContext.getCurrentInstance()
+//											.getExternalContext()
+//											.getRequestContextPath()
+//											+ "/pages/requirement.jsf?requirement="
+//											+ id + "&faces-redirect=true");
+//					}
+//
+//			} else
+//				jJRequirementBean.closeDialog(value);
+//		} else
+//			jJRequirementBean.closeDialog(value);
+//
+//	}
 
 	public void save() throws IOException {
 		jJRequirementService.saveJJRequirement(requirement);

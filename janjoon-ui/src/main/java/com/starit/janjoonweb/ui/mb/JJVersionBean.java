@@ -63,11 +63,8 @@ public class JJVersionBean {
 
 	public List<JJVersion> getVersionList() {
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJProductBean jJProductBean = (JJProductBean) session
-				.getAttribute("jJProductBean");
-		JJProduct jJproduct = jJProductBean.getProduct();
+		
+		JJProduct jJproduct = LoginBean.getProduct();
 		if (((LoginBean) LoginBean.findBean("loginBean")).getContact() != null) {
 			if (product == null) {
 				product = jJproduct;

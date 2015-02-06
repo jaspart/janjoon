@@ -124,7 +124,7 @@
 			<c:forEach items="#{jJRequirementBean.tableDataModelList}"
 				var="tableDataModel" varStatus="loop">
 				<div
-					style="margin-top: 10px;width: #{jJRequirementBean.tableDataModelSizePct};min-width:400px;
+					style="#{jJRequirementBean.getDisplay(tableDataModel)}margin-top: 10px;width: #{jJRequirementBean.getTableDataModelSizePct(tableDataModel)};min-width:200px;
 							float: #{jJRequirementBean.tableDataModelFloatLeft};#{jJRequirementBean.getTableDataModelMargin(tableDataModel)}">
 					<p:dataTable id="categoryTable" var="reqUtil"
 						value="#{tableDataModel}" scrollable="true" scrollHeight="300"
@@ -142,7 +142,10 @@
 
 						<f:facet name="header">
 							<h:outputText value="#{tableDataModel.nameDataModel}" />
-							<p:panelGrid>
+							<p:commandButton icon="ui-icon-arrowthick-2-e-w" style="float:left;" rendered="#{!loginBean.mobile}"
+								actionListener="#{jJRequirementBean.expandTable(tableDataModel)}" 
+								title="Expand" update=":specForm" />
+							<p:panelGrid style="margin-top: 15px;">
 								<f:facet name="header">
 									<p:row>
 										<p:column colspan="1">
@@ -175,7 +178,7 @@
 												actionListener="#{jJRequirementBean.preReleaseRequirement(tableDataModel.categoryId)}"
 												oncomplete="PF('requirementReleaseDialogWidget').show()" />
 										</p:column-->
-										<p:column colspan="3">
+										<p:column colspan="3" rendered="#{!jJRequirementBean.expand or tableDataModel.expanded}">
 											<p:inputText id="globalFilter" style="width:90%"
 												onkeyup="PF('dataTable_#{loop.index}_Widget').filter()" />
 											<p:watermark
@@ -193,7 +196,8 @@
 												oncomplete="PF('blockUIWidget').unblock();PF('requirementDialogWidget').show()" />
 										</p:column>
 										<p:column colspan="1">
-											<p:selectBooleanButton id="mineSpec" style="width: 45px;left: -5px;font-size: smaller;"
+											<p:selectBooleanButton id="mineSpec"
+												style="width: 45px;left: -5px;font-size: smaller;"
 												value="#{tableDataModel.mine}" onLabel="Mine" offLabel="All"
 												onIcon="ui-icon-check" offIcon="ui-icon-close">
 												<p:ajax onstart="PF('blockUIWidget').block()"
@@ -283,7 +287,7 @@
 														value="#{reqUtil.requirement.description}" style="white-space: pre-wrap;"/>
 												</p:column>
 											</p:row>
-											<p:row rendered="#{not empty reqUtil.requirement.note}">
+											<p:row rendered="#{reqUtil.requirement.note != null}">
 												<p:column 
 													styleClass="#{reqUtil.style}">
 													<p:outputLabel style="font-weight: bold;" for="expNote"
@@ -302,7 +306,7 @@
 						<p:column filterBy="#{reqUtil.requirement.product.name}"
 							styleClass="product-column" filterStyle="display:none"
 							sortBy="#{reqUtil.requirement.product.name}"
-							rendered="#{!loginBean.enable and !loginBean.mobile}">
+							rendered="#{tableDataModel.expanded}">
 							<f:facet name="header">
 								<h:outputText value="#{messages.specification_table_product_title}" />
 							</f:facet>
@@ -312,14 +316,14 @@
 						<p:column filterBy="#{reqUtil.requirement.chapter.name}"
 							styleClass="chapter-column" filterStyle="display:none"
 							sortBy="#{reqUtil.requirement.chapter.name}"
-							rendered="#{!loginBean.enable and !loginBean.mobile}">
+							rendered="#{tableDataModel.expanded}">
 							<f:facet name="header">
 								<h:outputText value="#{messages.specification_table_chapter_title}" />
 							</f:facet>
 							<h:outputText value="#{reqUtil.requirement.chapter.name}" />
 						</p:column>
 
-						<p:column exportable="false" styleClass="action-column" style="width: 80px;">
+						<p:column exportable="false" styleClass="action-column" style="width: 80px;" rendered="#{!jJRequirementBean.expand or tableDataModel.expanded}">
 							<f:facet name="header">
 								<h:outputText value="Actions" />
 							</f:facet>
@@ -411,7 +415,7 @@
 			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"
 			position="center" style="padding:0px;">
 			<p:ajax event="close"
-				listener="#{jJRequirementBean.closeDialog(false)}"
+				listener="#{jJRequirementBean.closeDialog(false,true)}"
 				onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock()" />
 			<p:outputPanel id="requirementDialogPanel">

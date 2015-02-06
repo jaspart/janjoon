@@ -160,11 +160,8 @@ public class JJChapterBean {
 	}
 
 	public JJProject getProject() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJProjectBean jJProjectBean = (JJProjectBean) session
-				.getAttribute("jJProjectBean");
-		this.project = jJProjectBean.getProject();
+		
+		this.project = LoginBean.getProject();
 		return project;
 	}
 
@@ -428,18 +425,10 @@ public class JJChapterBean {
 	private void transferTree() {
 
 		// Requirement Tree WHERE requirment.getChapter = null
-		leftRoot = new DefaultTreeNode("leftRoot", null);
+		leftRoot = new DefaultTreeNode("leftRoot", null);	
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJVersionBean jJVersionBean = (JJVersionBean) session
-				.getAttribute("jJVersionBean");
-
-		JJVersion version = jJVersionBean.getVersion();
-
-		JJProductBean jJProductBean = (JJProductBean) session
-				.getAttribute("jJProductBean");
-		JJProduct product = jJProductBean.getProduct();
+		JJVersion version = LoginBean.getVersion();		
+		JJProduct product = LoginBean.getProduct();
 
 		List<JJRequirement> jJRequirementList = jJRequirementService
 				.getRequirements(((LoginBean) LoginBean.findBean("loginBean"))
