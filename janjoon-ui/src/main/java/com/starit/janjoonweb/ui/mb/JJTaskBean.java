@@ -36,6 +36,7 @@ import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.extensions.component.timeline.TimelineUpdater;
 import org.primefaces.extensions.event.timeline.TimelineAddEvent;
 import org.primefaces.extensions.event.timeline.TimelineModificationEvent;
 import org.primefaces.extensions.model.layout.LayoutOptions;
@@ -704,12 +705,12 @@ public class JJTaskBean {
 						// + task.getName();
 						TimelineEvent event = new TimelineEvent(chapter, start,
 								end, false, group, "chapter");
-						k++;
-						
 						model.add(new TimelineEvent(chapter,new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR)-5,1,1).getTime(),
 								new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR)+5, 1, 1).getTime(), false, group, "invisible"));
 
 						model.add(event);
+						k++;					
+						
 					}
 				}
 
@@ -2365,12 +2366,14 @@ public class JJTaskBean {
 			i++;
 
 		}
-
 		return j;
 	}
 
 	public void updateChapterTimeLineEvent(JJChapter chapter) {
 
+		List<TimelineEvent> events=model.getEvents();	
+		
+		//model.updateAll(model.getEvents(), TimelineUpdater.getCurrentInstance(":projecttabview:planningForm:timeline"));
 		List<JJTask> listTasks = new ArrayList<JJTask>();
 
 		int i = 0;
@@ -2417,22 +2420,24 @@ public class JJTaskBean {
 		i = 0;
 		int j = -1;
 		String group = "";
-		while (i < model.getEvents().size()) {
-			if (model.getEvent(i).getStyleClass().equalsIgnoreCase("chapter")) {
+		while (i < events.size()) {
+			if (events.get(i).getStyleClass().equalsIgnoreCase("chapter")) {
 
-				if (((JJChapter) model.getEvent(i).getData()).equals(chapter)) {
+				if (((JJChapter) events.get(i).getData()).equals(chapter)) {
 					j = i;
-					i = model.getEvents().size();
-					group = model.getEvent(j).getGroup();
+					group = events.get(j).getGroup();
+					i = events.size();				
 
 				}
 			}
 			i++;
 		}
 
-		if (j != -1) {
+		if (j != -1) {		
 			
-			model.delete(model.getEvent(j));
+			//TimelineUpdater timelineUpdater = TimelineUpdater.getCurrentInstance(":projecttabview:planningForm:timeline");  
+			events.remove(j);
+			//RequestContext.getCurrentInstance().execute("PF('timelineWdgt').deleteEvent("+j+")");
 			if (!min.isEmpty() && !max.isEmpty() && !listTasks.isEmpty()) {
 				Date end = null;
 				Set<Date> dates = min.keySet();
@@ -2442,32 +2447,39 @@ public class JJTaskBean {
 				dates = max.keySet();
 				for (Date date : dates) {
 					end = date;
-				}
-				
+				}				
 				
 				TimelineEvent event = new TimelineEvent(chapter, start, end,
 						false, group, "chapter");
 
-				model.add(event);
-			}else
+				events.add(event);
+//				model.addAll(events,TimelineUpdater.getCurrentInstance(":projecttabview:planningForm:timeline"));
+//				model.add(event,TimelineUpdater.getCurrentInstance(":projecttabview:planningForm:timeline"));				
+			}
+			else
 			{
 				int j1 = -1;
-					int i1 = 0;
-					while (i1 < model.getEvents().size()) {				
+				int i1 = 0;
+				while (i1 < events.size()) {
 
-						if (model.getEvent(i1).getData() instanceof JJChapter && (model.getEvent(i1).getStyleClass().equalsIgnoreCase("invisible") )) {
-							
-							if (chapter.equals((JJChapter) model.getEvent(i1).getData())) {
-								j1 = i1;
-								i1 = model.getEvents().size();
-								}
+					if (events.get(i1).getData() instanceof JJChapter
+							&& (events.get(i1).getStyleClass()
+									.equalsIgnoreCase("invisible"))) {
+
+						if (chapter.equals((JJChapter) model.getEvent(i1)
+								.getData())) {
+							j1 = i1;
+							i1 = events.size();
 						}
-						i1++;
-
 					}
-					if(j1 != -1)
-					model.delete(model.getEvent(j1));
-			}
+					i1++;
+
+				}
+				if (j1 != -1)
+					events.remove(j1);				
+				//model.addAll(events,TimelineUpdater.getCurrentInstance(":projecttabview:planningForm:timeline"));
+				}
+			model.setEvents(events);
 
 		}
 		this.start = null;

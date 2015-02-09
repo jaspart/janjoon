@@ -121,9 +121,10 @@
 			</p:overlayPanel>
 		</h:form>
 		<h:form id="specForm" style="overflow:hidden;width:100%">
+			
 			<c:forEach items="#{jJRequirementBean.tableDataModelList}"
-				var="tableDataModel" varStatus="loop">
-				<div
+				var="tableDataModel" varStatus="loop">	
+					<div
 					style="#{jJRequirementBean.getDisplay(tableDataModel)}margin-top: 10px;width: #{jJRequirementBean.getTableDataModelSizePct(tableDataModel)};min-width:200px;
 							float: #{jJRequirementBean.tableDataModelFloatLeft};#{jJRequirementBean.getTableDataModelMargin(tableDataModel)}">
 					<p:dataTable id="categoryTable" var="reqUtil"

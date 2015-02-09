@@ -225,7 +225,11 @@
 									</p:column>
 								</p:row>
 							</f:facet>
-							<h:outputText value="#{testCaseModel.name}" />
+							<!-- 							<h:outputText value="#{testCaseModel.name}" /> -->
+							<p:commandLink   target="_blank" value="#{testCaseModel.name}"
+								action="#{jJTestcaseBean.testCaseInfo(testCaseModel.id)}"
+								ajax="false" immediate="true">
+							</p:commandLink>
 						</p:column>
 						<f:facet name="footer">
 							<p:commandButton onstart="PF('requirementBlockUIWidget').block()"

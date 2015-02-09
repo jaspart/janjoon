@@ -16,7 +16,7 @@
 	-webkit-padding-start: 2px;
 }
 
-.ui-editor{
+.ui-editor {
 	height: 150px !important;
 }
 
@@ -24,7 +24,6 @@
 /* 	visibility: inherit; */
 /* 	width: 730px !important; */
 /* } */
-
 .testCaseDataTable {
 	
 }
@@ -63,7 +62,7 @@
 		<h:outputScript library="js" name="scrollTab.js" />
 		<p:panel style="height:900px;">
 			<h:form id="treeForm">
-				<p:remoteCommand name="updateTree" update="@form"/>
+				<p:remoteCommand name="updateTree" update="@form" />
 				<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
 					style="float: right;" />
 				<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
@@ -396,7 +395,10 @@
 											</p:column>
 										</p:row>
 									</f:facet>
-									<h:outputText value="#{testCaseModel.name}" />
+<!-- 									<h:outputText value="#{testCaseModel.name}" /> -->
+									<p:commandLink target="_blank" value="#{testCaseModel.name}"
+										action="#{jJTestcaseBean.testCaseInfo(testCaseModel.id)}" ajax="false">										
+									</p:commandLink>
 								</p:column>
 								<f:facet name="footer">
 									<p:commandButton onstart="PF('blockUIWidget').block()"
@@ -433,7 +435,7 @@
 			header="#{messages[jJRequirementBean.message]}" modal="true"
 			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"
 			position="center" style="padding:0px;">
-			<p:ajax event="close" 
+			<p:ajax event="close"
 				listener="#{jJRequirementBean.closeDialog(false,false)}"
 				onstart="PF('requirementBlockUIWidget').block()"
 				oncomplete="PF('requirementBlockUIWidget').unblock();updateTree()" />

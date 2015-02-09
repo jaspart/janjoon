@@ -684,6 +684,10 @@ public class JJSprintBean {
 				jJTaskService.getSprintTasks(sprintUtil.getSprint()));
 
 		sprintList.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
+		
+		JJSprint sp = new JJSprint();
+		sp.setProject(LoginBean.getProject());
+		sprintList.add(new SprintUtil(sp, null));
 		// requirement = null;
 		category = null;
 		categoryList = null;
@@ -701,13 +705,13 @@ public class JJSprintBean {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
+		long id=sprintUtil.getSprint().getId();
 		session.setAttribute("jJSprintBean", new JJSprintBean());
 		RequestContext context = RequestContext.getCurrentInstance();
 
 		context.execute("PF('projectTabView').select(" + 1 + ")");
 		update = false;
-		context.execute("PF('SprintTab').select("
-				+ contains(sprintUtil.getSprint().getId()) + ")");
+		context.execute("PF('SprintTab').select("+ contains(id) + ")");
 
 	}
 

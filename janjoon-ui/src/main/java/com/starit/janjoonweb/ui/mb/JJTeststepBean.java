@@ -94,7 +94,7 @@ public class JJTeststepBean {
 			manageTeststepOrder(tc);
 
 			teststep.setTestcase(tc);
-			tc.getTeststeps().add(teststep);
+			//tc.getTeststeps().add(teststep);
 
 			teststep.setName(teststep.getActionstep() + " "
 					+ teststep.getResultstep());

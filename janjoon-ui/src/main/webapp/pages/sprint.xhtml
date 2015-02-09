@@ -32,11 +32,12 @@
 				<p:column>
 					<p:selectManyMenu id="sprintcts" scrollHeight="150"
 						value="#{jjsprint.sprint.contacts}"
-						disabled="#{jjsprint.neditabale}"
+						disabled="#{jjsprint.neditabale}" 
 						converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
 						style="width:150px;height:150px !important;" showCheckbox="true">
 						<f:selectItems value="#{jJSprintBean.contacts}" var="c"
 							itemLabel="#{c.firstname} #{c.name}" itemValue="#{c}" />
+						<f:validator validatorId="listCategoriesValidator" />
 					</p:selectManyMenu>
 				</p:column>
 			</p:row>
@@ -84,10 +85,9 @@
 						<p:commandButton value="Done" id="doneButtonr"
 							update=":projecttabview" immediate="true"
 							disabled="#{!jjsprint.neditabale}"
-							action="#{jJSprintBean.doneEvent}"
+							actionListener="#{jJSprintBean.doneEvent}"
 							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()"
-							actionListener="#{jJSprintBean.attrListener}">
+							oncomplete="PF('blockUIWidget').unblock()">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 						</p:commandButton>
 					</p:column>

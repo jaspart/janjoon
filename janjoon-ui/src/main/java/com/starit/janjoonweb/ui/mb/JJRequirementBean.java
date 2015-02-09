@@ -981,7 +981,7 @@ public class JJRequirementBean {
 		b.setRequirement(jJRequirementService.findJJRequirement(requirement
 				.getId()));
 		b.setDescription("TestCase for Requirement " + requirement.getName());
-		b.setOrdering(reqtestCases.size());
+		b.setOrdering(jJTestcaseService.getMaxOrdering(requirement));
 		b.setAutomatic(false);
 		jjTestcaseBean.saveJJTestcase(b);
 		testCaseName = null;
@@ -1145,6 +1145,7 @@ public class JJRequirementBean {
 					tableDataModelList.get(i).setCompletionProgress(0);
 					tableDataModelList.get(i).setCoverageProgress(0);
 					tableDataModelList.get(i).setActiveIndex(-1);
+					RequestContext.getCurrentInstance().execute("PF('dataTable_"+i+"_Widget').clearFilters();");
 					i = tableDataModelList.size();
 
 				}

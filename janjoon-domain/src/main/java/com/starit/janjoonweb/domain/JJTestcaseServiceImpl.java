@@ -23,9 +23,9 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 	}
 
 	@Override
-	public List<JJTestcase> getTestcases(JJRequirement requirement,JJBuild build,
-			JJChapter chapter, boolean onlyActif, boolean sortedByOrder,
-			boolean sortedByCreationdate) {
+	public List<JJTestcase> getTestcases(JJRequirement requirement,
+			JJBuild build, JJChapter chapter, boolean onlyActif,
+			boolean sortedByOrder, boolean sortedByCreationdate) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcase> criteriaQuery = criteriaBuilder
@@ -40,9 +40,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 			predicates.add(criteriaBuilder.equal(from.get("requirement"),
 					requirement));
 		}
-		
-		if(build != null)
-		{
+
+		if (build != null) {
 			predicates.add(criteriaBuilder.equal(from.get("build"), build));
 		}
 
@@ -69,27 +68,26 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 		return result.getResultList();
 
 	}
-	
-	public List<String> getReqTesCases(JJRequirement requirement)
-	{
+
+	public List<String> getReqTesCases(JJRequirement requirement) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<String> criteriaQuery = criteriaBuilder
 				.createQuery(String.class);
 
-		Root<JJTestcase> from = criteriaQuery.from(JJTestcase.class);		
+		Root<JJTestcase> from = criteriaQuery.from(JJTestcase.class);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		if (requirement != null) {
 			predicates.add(criteriaBuilder.equal(from.get("requirement"),
 					requirement));
-		}		
+		}
 
-		
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		
+
 		criteriaQuery.multiselect(from.get("name"));
-		criteriaQuery.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));		
+		criteriaQuery.where(criteriaBuilder.and(predicates
+				.toArray(new Predicate[] {})));
 
 		TypedQuery<String> result = entityManager.createQuery(criteriaQuery);
 		return result.getResultList();
@@ -97,7 +95,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 	}
 
 	@Override
-	public List<JJTestcase> getImportTestcases(JJCategory category,JJProject project,JJProduct product,JJBuild build,
+	public List<JJTestcase> getImportTestcases(JJCategory category,
+			JJProject project, JJProduct product, JJBuild build,
 			boolean onlyActif) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcase> criteriaQuery = criteriaBuilder
@@ -113,22 +112,23 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 			Path<Object> path = from.join("requirement").get("project");
 			predicates.add(criteriaBuilder.equal(path, project));
 		}
-		
-		if(build != null)
-		{
+
+		if (build != null) {
 			predicates.add(criteriaBuilder.equal(from.get("build"), build));
 		}
-		
+
 		if (product != null) {
 			Path<Object> path = from.join("requirement").get("product");
 			predicates.add(criteriaBuilder.equal(path, product));
 		}
-		
-		if(category != null)
-		{
-			predicates.add(criteriaBuilder.isNotNull(from.join("requirement").get("category")));
-			predicates.add(criteriaBuilder.equal(from.join("requirement").get("enabled"), true));
-			predicates.add(criteriaBuilder.equal(from.join("requirement").get("category"), category));
+
+		if (category != null) {
+			predicates.add(criteriaBuilder.isNotNull(from.join("requirement")
+					.get("category")));
+			predicates.add(criteriaBuilder.equal(
+					from.join("requirement").get("enabled"), true));
+			predicates.add(criteriaBuilder.equal(
+					from.join("requirement").get("category"), category));
 		}
 
 		if (onlyActif) {
@@ -141,40 +141,51 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 		return result.getResultList();
 
 	}
-	
-	public Integer getMaxOrdering(JJRequirement requirement)
-	{
-		Integer r=(Integer) entityManager.createQuery("select max(e.ordering) from JJTestcase e Where e.requirement.chapter = :c").
-				setParameter("c", requirement.getChapter()).getSingleResult();
+
+	public Integer getMaxOrdering(JJRequirement requirement) {
 		
-		return r+1;
+		Integer r =null;
+		if(requirement.getChapter() != null)
+		r = (Integer) entityManager
+				.createQuery(
+						"select max(e.ordering) from JJTestcase e Where e.requirement.chapter = :c")
+				.setParameter("c", requirement.getChapter()).getSingleResult();
+		else
+			r = (Integer) entityManager
+			.createQuery(
+					"select max(e.ordering) from JJTestcase e Where e.requirement = :c")
+			.setParameter("c", requirement).getSingleResult();
+
+		if (r != null)
+			return r + 1;
+		else
+			return 1;
 	}
 
 	@Override
 	public void saveTestcases(Set<JJTestcase> testcases) {
 		jJTestcaseRepository.save(testcases);
 	}
-	
+
 	@Override
-	public List<JJTestcase> getJJtestCases(JJRequirement requirement)
-	{
-		return getTestcases(requirement, null,null, true, true, true);
+	public List<JJTestcase> getJJtestCases(JJRequirement requirement) {
+		return getTestcases(requirement, null, null, true, true, true);
 	}
 
 	@Override
 	public void updateTestcases(Set<JJTestcase> testcases) {
 		jJTestcaseRepository.save(testcases);
 	}
-	
-public void saveJJTestcase(JJTestcase JJTestcase_) {
-		
-        jJTestcaseRepository.save(JJTestcase_);
-        JJTestcase_=jJTestcaseRepository.findOne(JJTestcase_.getId());
-    }
-    
-    public JJTestcase updateJJTestcase(JJTestcase JJTestcase_) {
-        jJTestcaseRepository.save(JJTestcase_);
-        JJTestcase_=jJTestcaseRepository.findOne(JJTestcase_.getId());
-        return JJTestcase_;
-    }
+
+	public void saveJJTestcase(JJTestcase JJTestcase_) {
+
+		jJTestcaseRepository.save(JJTestcase_);
+		JJTestcase_ = jJTestcaseRepository.findOne(JJTestcase_.getId());
+	}
+
+	public JJTestcase updateJJTestcase(JJTestcase JJTestcase_) {
+		jJTestcaseRepository.save(JJTestcase_);
+		JJTestcase_ = jJTestcaseRepository.findOne(JJTestcase_.getId());
+		return JJTestcase_;
+	}
 }

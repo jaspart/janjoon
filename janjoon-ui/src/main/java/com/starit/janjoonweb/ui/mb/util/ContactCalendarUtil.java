@@ -242,6 +242,8 @@ public class ContactCalendarUtil {
 				return 0;
 
 		} else {
+			start=nextWorkingDate(start);
+			end=nextWorkingDate(end);
 			if (start.before(end)) {
 				cal.setTime(start);
 				ChunkTime startChunk = getWorkingChunkTime(cal

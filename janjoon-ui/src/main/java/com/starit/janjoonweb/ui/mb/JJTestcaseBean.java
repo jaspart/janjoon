@@ -1511,6 +1511,19 @@ public class JJTestcaseBean {
 		}
 
 	}
+	
+	public void testCaseInfo(long id) throws IOException
+	{
+		FacesContext
+		.getCurrentInstance()
+		.getExternalContext()
+		.redirect(
+				FacesContext.getCurrentInstance()
+						.getExternalContext()
+						.getRequestContextPath()
+						+ "/pages/test.jsf?testcase="
+						+ id + "&faces-redirect=true");
+	}
 
 	public StreamedContent getFile() {
 
