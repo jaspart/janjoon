@@ -124,10 +124,10 @@
 			
 			<c:forEach items="#{jJRequirementBean.tableDataModelList}"
 				var="tableDataModel" varStatus="loop">	
-					<div
+				<div
 					style="#{jJRequirementBean.getDisplay(tableDataModel)}margin-top: 10px;width: #{jJRequirementBean.getTableDataModelSizePct(tableDataModel)};min-width:200px;
 							float: #{jJRequirementBean.tableDataModelFloatLeft};#{jJRequirementBean.getTableDataModelMargin(tableDataModel)}">
-					<p:dataTable id="categoryTable" var="reqUtil"
+					<p:dataTable id="categoryTable_#{loop.index}" var="reqUtil"
 						value="#{tableDataModel}" scrollable="true" scrollHeight="300"
 						sortMode="multiple" resizableColumns="true"
 						rowStyleClass="#{reqUtil.style}" styleClass="requirement-table"
@@ -212,7 +212,7 @@
 												disabled="#{jJRequirementBean.disabledExport}"
 												actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}">
 												<p:graphicImage value="/resources/images/pdf.png" />
-												<p:dataExporter type="pdf" target="categoryTable"
+												<p:dataExporter type="pdf" target="categoryTable_#{loop.index}"
 													fileName="Document"
 													preProcessor="#{jJChapterBean.preProcessPDF}" />
 											</h:commandLink>

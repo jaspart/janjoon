@@ -75,15 +75,24 @@
 			modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
 			resizable="true" maximizable="true" showEffect="fade"
 			hideEffect="explode" draggable="#{jJTaskBean.mode eq 'planning'}">
+			<p:ajax event="close" update=":projecttabview" listener="#{jJTaskBean.closeEvent('planning')}"/>
 			<p:outputPanel id="viewTaskPanel">
 				<h:form id="viewTaskForm" enctype="multipart/form-data" >
 					<ui:include src="taskDialog.xhtml">
 						<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
-					</ui:include>
+					</ui:include>					
+					<p:commandButton id="updateTaskButton"  update=":viewTaskForm"
+						actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'planning')}" value="Update Task"
+						process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload"
+						onstart="PF('viewtaskBlockUIWidget').block()" style="margin-top: 5px;"
+						oncomplete="PF('viewtaskBlockUIWidget').unblock();"/>
+						
+						
 					<p:commandButton id="viewCloseButton"
-						value="#{messages.label_close}"
-						oncomplete="PF('blockUIWidget').unblock()"
+						value="#{messages.label_close}" style="margin-left: 20px;margin-top: 5px;"
+						oncomplete="PF('blockUIWidget').unblock()" onstart="PF('blockUIWidget').block()"
 						onclick="PF('viewTaskDialogWidget').hide()" type="button" />
+					
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>

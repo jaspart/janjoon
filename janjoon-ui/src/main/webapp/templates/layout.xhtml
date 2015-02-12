@@ -69,7 +69,7 @@
 								style="border-spacing:0px;" selectionMode="single" rows="10"
 								lazy="true" sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
 								<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
-									listener="#{jJMessageBean.onRowSelect}"
+									listener="#{jJMessageBean.onRowSelect}" immediate="true"
 									oncomplete="PF('viewDialogWidget1').show()" />
 <!--									update=":viewForm1:viewPanelGrid1"-->
 								<p:column headerText="Messages" sortBy="#{mes.creationDate}">
@@ -139,6 +139,8 @@
 								icon="ui-icon-document" rendered="#{!loginBean.enable}" />
 
 							<p:menuitem value="#{messages.header_bug_menuitem}"
+								disabled="#{!loginBean.authorisationService.rBug}"
+								title="#{loginBean.authorisationService.rBugMSG}"
 								url="/pages/bugs.jsf?faces-redirect=true" icon="ui-icon-gear" />
 
 							<p:menuitem value="#{messages.header_dev_menuitem}"
@@ -180,6 +182,8 @@
 								icon="ui-icon-star" />
 
 							<p:menuitem value="#{messages.header_team_menuitem}"
+								disabled="#{!loginBean.authorisationService.rContact}"
+								title="#{loginBean.authorisationService.rContactMSG}"
 								url="/pages/teams.jsf?faces-redirect=true" icon="ui-icon-person" />
 
 							<p:menuitem value="#{messages.header_stat_menuitem}"
@@ -188,6 +192,8 @@
 								rendered="#{!loginBean.enable}" />
 
 							<p:menuitem id="statsAction"
+								disabled="#{!loginBean.authorisationService.rProject}"
+								title="#{loginBean.authorisationService.rProjectMSG}"
 								value="#{messages.header_stat_menuitem}"
 								onstart="PF('blockUIWidget').block()"
 								actionListener="#{loginBean.redirection}"
@@ -195,6 +201,8 @@
 								rendered="#{loginBean.enable}" />
 
 							<p:menuitem value="#{messages.header_admin_menuitem}"
+								disabled="#{!loginBean.authorisationService.rCompany}"
+								title="#{loginBean.authorisationService.rCompanyMSG}"
 								url="/pages/administration.jsf?faces-redirect=true"
 								icon="ui-icon-key" update=":contentPanel" />
 						</p:menu>
@@ -206,9 +214,6 @@
 					hideEffect="fade">
 					<p:outputPanel id="viewPanel1">
 						<h:form id="viewForm1">
-							<!-- 							<h:panelGrid id="viewPanelGrid1" columns="2" -->
-							<!-- 								binding="#{jJMessageBean.viewPanel}" styleClass="dialog" -->
-							<!-- 								columnClasses="col1,col2" /> -->
 							<ui:include src="/pages/messageDialog.xhtml">
 								<ui:param name="JJMessage"
 									value="#{jJMessageBean.viewedMessage}" />

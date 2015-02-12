@@ -27,6 +27,7 @@ import javax.faces.convert.DateTimeConverter;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ComponentSystemEvent;
+import javax.faces.view.facelets.FaceletContext;
 import javax.servlet.http.HttpSession;
 
 import org.hibernate.Hibernate;
@@ -62,6 +63,7 @@ import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJProjectService;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJSprint;
+import com.starit.janjoonweb.domain.JJSprintService;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTestcase;
@@ -84,6 +86,7 @@ public class JJTaskBean {
 
 	@Autowired
 	private JJPermissionService jJPermissionService;
+	
 
 	@Autowired
 	private JJProjectService jJProjectService;
@@ -448,6 +451,193 @@ public class JJTaskBean {
 	public void setCopyObjets(boolean copyObjets) {
 		this.copyObjets = copyObjets;
 	}
+	
+	public void updateTask(JJTask tt,String operation)
+	{
+		JJTask beforeUpdateTT=jJTaskService.findJJTask(tt.getId());
+		JJSprint ss=beforeUpdateTT.getSprint();
+		ContactCalendarUtil calendarUtil;
+
+		if (tt.getAssignedTo() != null) {
+			calendarUtil = new ContactCalendarUtil(tt.getAssignedTo());
+
+		} else {
+
+			calendarUtil = new ContactCalendarUtil(jJProjectService
+					.findJJProject(LoginBean.getProject().getId()).getManager()
+					.getCompany());
+
+		}
+		
+		
+		if((beforeUpdateTT.getWorkloadPlanned() == null && tt.getWorkloadPlanned() != null)
+				||(tt.getWorkloadPlanned() != null && !tt.getWorkloadPlanned().equals(beforeUpdateTT.getWorkloadPlanned())))
+			calendarUtil.getEndDate(tt, "planned");	
+		else 
+		{
+			if((beforeUpdateTT.getEndDatePlanned() == null && tt.getEndDatePlanned() != null)
+					||(tt.getEndDatePlanned() != null && !tt.getEndDatePlanned().equals(beforeUpdateTT.getEndDatePlanned())))
+				calendarUtil.getStartDate(tt, "planned");	
+			else {
+				if((beforeUpdateTT.getStartDatePlanned() == null && tt.getStartDatePlanned() != null)
+						||(tt.getStartDatePlanned() != null && !tt.getStartDatePlanned().equals(beforeUpdateTT.getStartDatePlanned())))
+					calendarUtil.getEndDate(tt, "planned");	
+			}
+		}
+		
+		
+		
+		
+		
+		saveJJTask(tt, true);
+		task=tt;
+		HttpSession session = (HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext()
+				.getSession(false);
+		
+		if((ss != null || task.getSprint() != null) && session.getAttribute("jJSprintBean") != null)
+		{			
+			
+			JJSprintBean jJSprintBean = (JJSprintBean) session
+					.getAttribute("jJSprintBean");
+			
+			if(ss != null && task.getSprint() != null)
+			{
+				SprintUtil s = SprintUtil.getSprintUtil(task.getSprint()
+						.getId(), jJSprintBean.getSprintList());
+				
+				if (s != null) {
+					s = new SprintUtil(jJSprintService.findJJSprint(task
+							.getSprint().getId()),
+							jJTaskService.getSprintTasks(jJSprintService
+									.findJJSprint(task.getSprint().getId())));
+
+					// sprintUtil.setRenderTaskForm(false);
+					jJSprintBean.getSprintList().set(
+							jJSprintBean.contains(s.getSprint().getId()), s);
+				}
+				if(!ss.equals(task.getSprint()))
+				{
+					s = SprintUtil.getSprintUtil(ss.getId(), jJSprintBean.getSprintList());
+					
+					if (s != null) {
+						s = new SprintUtil(jJSprintService.findJJSprint(ss.getId()),
+								jJTaskService.getSprintTasks(jJSprintService
+										.findJJSprint(ss.getId())));
+
+						// sprintUtil.setRenderTaskForm(false);
+						jJSprintBean.getSprintList().set(
+								jJSprintBean.contains(s.getSprint().getId()), s);
+					}
+				}
+			}else 
+			{
+				if(task.getSprint() != null)
+				{
+
+					SprintUtil s = SprintUtil.getSprintUtil(task.getSprint().getId(), jJSprintBean.getSprintList());
+					
+					if (s != null) {
+						s = new SprintUtil(jJSprintService.findJJSprint(task
+								.getSprint().getId()),
+								jJTaskService.getSprintTasks(jJSprintService
+										.findJJSprint(task.getSprint().getId())));
+
+						// sprintUtil.setRenderTaskForm(false);
+						jJSprintBean.getSprintList().set(
+								jJSprintBean.contains(s.getSprint().getId()), s);
+					}
+				
+				}else
+				{
+					SprintUtil s = SprintUtil.getSprintUtil(ss.getId(), jJSprintBean.getSprintList());
+					
+					if (s != null) {
+						s = new SprintUtil(jJSprintService.findJJSprint(ss.getId()),
+								jJTaskService.getSprintTasks(jJSprintService
+										.findJJSprint(ss.getId())));
+
+						// sprintUtil.setRenderTaskForm(false);
+						jJSprintBean.getSprintList().set(
+								jJSprintBean.contains(s.getSprint().getId()), s);
+					}
+				}
+			}
+		}	
+		
+		updateView(jJTaskService.findJJTask(tt.getId()), false);
+		task=jJTaskService.findJJTask(tt.getId());
+		taskTreeNode = null;
+		selectedReq = null;
+		selectedTree = null;
+		getTaskTreeNode();
+//		FaceletContext faceletContext = (FaceletContext) FacesContext.getCurrentInstance().getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
+//		faceletContext.setAttribute("JJTask_", task);
+		
+		if(operation.equalsIgnoreCase("main"))
+		{
+			toDoTasks=null;
+			initToDoTasks(null);
+		}
+			
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_updated", "Task");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+	}
+	
+	public void closeEvent(String operation)
+	{
+		Long id=null;	
+		if(task.getSprint() != null)
+			id=task.getSprint().getId();
+		
+		task=null;
+		
+		if(mode != null && mode.equalsIgnoreCase("scrum")&& operation.equalsIgnoreCase("planning"))
+		{
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+			JJSprintBean jJSprintBean = (JJSprintBean) session
+					.getAttribute("jJSprintBean");
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("PF('projectTabView').select(" + 1 + ")");
+			jJSprintBean.setUpdate(false);
+			if(id != null)
+			context.execute("PF('SprintTab').select("
+					+ jJSprintBean.contains(id) + ")");
+		}else
+		{
+//			if(operation.equalsIgnoreCase("main"))
+//				toDoTasks=null;
+		}
+	}
+	
+	public List<JJStatus> completeStatusTask(String query) {
+		List<JJStatus> suggestions = new ArrayList<JJStatus>();
+		suggestions.add(null);
+		for (JJStatus jJStatus : jJStatusService.getStatus("Task", true, null,
+				true)) {
+			String jJCriticityStr = String.valueOf(jJStatus.getName());
+			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
+				suggestions.add(jJStatus);
+			}
+		}
+		return suggestions;
+	}
+	
+	public List<JJSprint> completeSprintTask(String query) {
+		List<JJSprint> suggestions = new ArrayList<JJSprint>();
+		suggestions.add(null);
+		for (JJSprint jJSprint : jJSprintService.getSprints(LoginBean.getProject(), true)) {
+			String jJCriticityStr = String.valueOf(jJSprint.getName());
+			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
+				suggestions.add(jJSprint);
+			}
+		}
+		return suggestions;
+	}
+	
 
 	public void loadingData() {
 
@@ -758,9 +948,9 @@ public class JJTaskBean {
 	//
 	// if (j != -1) {
 	//
-	// String style = model.getEvent(j).getStyleClass();
-	// String group = model.getEvent(j).getGroup();
-	// model.delete(model.getEvent(j));
+	// String style = model.getEvents().get(j).getStyleClass();
+	// String group = model.getEvents().get(j).getGroup();
+	// model.getEvents().remove(model.getEvents().get(j));
 	//
 	// if (!delete && startDate != null)
 	// model.add(new TimelineEvent(tt, startDate, endDate, true,
@@ -770,7 +960,7 @@ public class JJTaskBean {
 	//
 	// if (in != -1) {
 	//
-	// model.delete(model.getEvent(in));
+	// model.getEvents().remove(model.getEvents().get(in));
 	//
 	// if (!delete) {
 	//
@@ -854,14 +1044,14 @@ public class JJTaskBean {
 	//
 	// if (j != -1) {
 	//
-	// String group = model.getEvent(j).getGroup();
-	// model.delete(model.getEvent(j));
+	// String group = model.getEvents().get(j).getGroup();
+	// model.getEvents().remove(model.getEvents().get(j));
 	// if (!delete)
 	// model.add(new TimelineEvent(tt, startDate, endDate, true,
 	// group, styleClass));
 	// int in = findInEventTimeLine(tt, true);
 	// if (in != -1)
-	// model.delete(model.getEvent(in));
+	// model.getEvents().remove(model.getEvents().get(in));
 	//
 	// if (tt.getStartDateReal() != null && !delete) {
 	//
@@ -2206,7 +2396,7 @@ public class JJTaskBean {
 
 			tJjTask = jJSprintBean.getTask();
 			jJSprintBean.deleteTask();
-			updateView(tJjTask, true);
+			updateView(jJTaskService.findJJTask(tJjTask.getId()), true);
 
 		}
 
@@ -2341,25 +2531,26 @@ public class JJTaskBean {
 	}
 
 	// Timeline operation
-	public int findInEventTimeLine(JJTask t, boolean real) {
+	public int findInEventTimeLine(List<TimelineEvent> events,JJTask t, boolean real) {
 
 		int j = -1;
 		int i = 0;
-		while (i < model.getEvents().size()) {
+		while (i < events.size()) {
 
-			System.out.println(model.getEvent(i).getStyleClass()
+			System.out.println(events.get(i).getStyleClass()
 					+ ":"
-					+ !(model.getEvent(i).getStyleClass()
+					+ !(events.get(i).getStyleClass()
 							.equalsIgnoreCase("real") ^ real) + ":" + real);
 
-			if (model.getEvent(i).getData() instanceof JJTask
-					&& !(model.getEvent(i).getStyleClass()
-							.equalsIgnoreCase("real") ^ real)) {
-				JJTask tt = (JJTask) model.getEvent(i).getData();
+			if (events.get(i).getData() instanceof JJTask
+					&& !(events.get(i).getStyleClass()
+							.equalsIgnoreCase("real") ^ real) && !events.get(i).getStyleClass()
+							.equalsIgnoreCase("invisible")) {
+				JJTask tt = (JJTask) events.get(i).getData();
 				if (t.equals(tt)) {
 
 					j = i;
-					i = model.getEvents().size();
+					i = events.size();
 
 				}
 			}
@@ -2466,7 +2657,7 @@ public class JJTaskBean {
 							&& (events.get(i1).getStyleClass()
 									.equalsIgnoreCase("invisible"))) {
 
-						if (chapter.equals((JJChapter) model.getEvent(i1)
+						if (chapter.equals((JJChapter) model.getEvents().get(i1)
 								.getData())) {
 							j1 = i1;
 							i1 = events.size();
@@ -2624,13 +2815,13 @@ public class JJTaskBean {
 
 	}
 
-	public void replaceRealTimelineEvent(JJTask tt, boolean delete) {
+	public void replaceRealTimelineEvent(List<TimelineEvent> events,JJTask tt, boolean delete) {
 
-		int i = findInEventTimeLine(tt, true);
+		int i = findInEventTimeLine(events,tt, true);
 		if (i != -1) {
 
-			String group = model.getEvent(i).getGroup();
-			model.delete(model.getEvent(i));
+			String group = events.get(i).getGroup();
+			events.remove(i);
 			if (!delete) {
 
 				Date startDate = null, endDate = null;
@@ -2646,7 +2837,7 @@ public class JJTaskBean {
 				}
 
 				if (startDate != null)
-					model.add(new TimelineEvent(tt, startDate, endDate, true,
+					events.add(new TimelineEvent(tt, startDate, endDate, true,
 							group, "real"));
 
 			}
@@ -2660,10 +2851,10 @@ public class JJTaskBean {
 				endDate = tt.getEndDateReal();
 			else
 				endDate = tt.getEndDatePlanned();
-			int j = findInEventTimeLine(tt, false);
+			int j = findInEventTimeLine(events,tt, false);
 			if (j != -1) {
-				String group = model.getEvent(j).getGroup();
-				model.add(new TimelineEvent(tt, startDate, endDate, true,
+				String group = events.get(j).getGroup();
+				events.add(new TimelineEvent(tt, startDate, endDate, true,
 						group, "real"));
 			}
 
@@ -2675,18 +2866,20 @@ public class JJTaskBean {
 
 		JJChapter chapter=replaceTaskData(tt, delete);
 		if (model != null) {
-			replaceRealTimelineEvent(tt, delete);
+			List<TimelineEvent> events=model.getEvents();
+			replaceRealTimelineEvent(events,tt, delete);
+			
 			if(delete)
 			{
 				int j1 = -1;
 				int i1 = 0;
-				while (i1 < model.getEvents().size()) {				
+				while (i1 < events.size()) {				
 
-					if (model.getEvent(i1).getData() instanceof JJTask && (model.getEvent(i1).getStyleClass().equalsIgnoreCase("invisible") )) {
+					if (events.get(i1).getData() instanceof JJTask && (events.get(i1).getStyleClass().equalsIgnoreCase("invisible") )) {
 						
-						if (tt.equals((JJTask) model.getEvent(i1).getData())) {
+						if (tt.equals((JJTask) events.get(i1).getData())) {
 							j1 = i1;
-							i1 = model.getEvents().size();
+							i1 = events.size();
 
 						}
 					}
@@ -2694,10 +2887,12 @@ public class JJTaskBean {
 
 				}
 				
-				model.delete(model.getEvent(j1));
+				//model.delete(model.getEvents().get(j1));
+				if(j1 != -1)
+				events.remove(j1);
 			}
 
-			int j = findInEventTimeLine(tt, false);
+			int j = findInEventTimeLine(events,tt, false);
 			String styleClass = "";
 			Date startDate = null, endDate = null;
 
@@ -2727,15 +2922,16 @@ public class JJTaskBean {
 					startDate = tt.getStartDatePlanned();
 
 				}
-				String group = model.getEvent(j).getGroup();
-				model.delete(model.getEvent(j));
-				model.add(new TimelineEvent(tt, startDate, endDate, true,
+				String group = events.get(j).getGroup();
+				events.remove(j);
+				events.add(new TimelineEvent(tt, startDate, endDate, true,
 						group, styleClass));
 
 			} else if (j != -1) {
-				model.delete(model.getEvent(j));
+				events.remove(j);
 			}
-
+			
+			model.setEvents(events);
 			//int k = containTaskData(tt.getId());
 			if (sortMode.equalsIgnoreCase("chapter") && chapter != null)
 				updateChapterTimeLineEvent(chapter);

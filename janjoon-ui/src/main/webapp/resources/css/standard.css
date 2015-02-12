@@ -318,6 +318,10 @@ a:visited {
 	padding: 5px 1px;
 }
 
+.ui-progressbar .ui-progressbar-value{
+	background: #0072C6;
+}
+
 .ui-selectmanymenu {
 	width: 155px !important;
 	height: 100px !important;
@@ -520,6 +524,7 @@ div.planned2 {
 	opacity: 0.6;
 	filter: alpha(opacity = 60);
 	height: 17px !important;
+	transform: translate(0px, -3px);
 	border-radius: 0px !important;
 }
 
@@ -584,6 +589,7 @@ div.revised2 {
 	opacity: 0.5;
 	filter: alpha(opacity = 50);
 	height: 17px !important;
+	transform: translate(0px, -3px);
 	border-radius: 0px !important;
 }
 

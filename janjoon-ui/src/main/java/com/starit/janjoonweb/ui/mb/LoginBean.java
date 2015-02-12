@@ -190,7 +190,7 @@ public class LoginBean implements Serializable {
 					s = s.replace(s.substring(index), "");
 				}
 
-				if (s.contains("development")||s.contains("login"))
+				if (s.contains("development") || s.contains("login"))
 					s = "main";
 				else if (s.contains("planning") || s.contains("test")
 						|| s.contains("stats")) {
@@ -739,16 +739,16 @@ public class LoginBean implements Serializable {
 
 	}
 
-//	public void loginRedirect(ComponentSystemEvent e) throws IOException {
-//
-//		if (enable) {
-//			String path = FacesContext.getCurrentInstance()
-//					.getExternalContext().getRequestContextPath();
-//
-//			FacesContext.getCurrentInstance().getExternalContext()
-//					.redirect(path + "/pages/main.jsf?faces-redirect=true");
-//		}
-//	}
+	// public void loginRedirect(ComponentSystemEvent e) throws IOException {
+	//
+	// if (enable) {
+	// String path = FacesContext.getCurrentInstance()
+	// .getExternalContext().getRequestContextPath();
+	//
+	// FacesContext.getCurrentInstance().getExternalContext()
+	// .redirect(path + "/pages/main.jsf?faces-redirect=true");
+	// }
+	// }
 
 	public void loadingMain(ComponentSystemEvent e) throws IOException {
 
@@ -922,13 +922,8 @@ public class LoginBean implements Serializable {
 
 			String path = FacesContext.getCurrentInstance()
 					.getExternalContext().getRequestContextPath();
-//			if(root.getViewId().contains("login"))
-//			{
-//				FacesContext.getCurrentInstance().getExternalContext()
-//				.redirect(path + "/pages/main.jsf?faces-redirect=true");
-//			}
-//			else 
-					if (getProduct() == null
+
+			if (getProduct() == null
 					&& root.getViewId().contains("development")) {
 				facesMessage = MessageFactory.getMessage(
 						"dev.nullProduct.label", FacesMessage.SEVERITY_ERROR,
@@ -972,10 +967,9 @@ public class LoginBean implements Serializable {
 								}
 
 							} else {
-								facesMessage = new FacesMessage(
-										FacesMessage.SEVERITY_ERROR,
-										"You have no permission to access this resource",
-										null);
+								facesMessage = MessageFactory.getMessage(
+										"header_noPermission_menuitem",
+										FacesMessage.SEVERITY_ERROR, "");
 
 								FacesContext
 										.getCurrentInstance()
@@ -989,10 +983,9 @@ public class LoginBean implements Serializable {
 							if (authorisationService.isRwDev())
 								loadingPage(e);
 							else {
-								facesMessage = new FacesMessage(
-										FacesMessage.SEVERITY_ERROR,
-										"You have no permission to access this resource",
-										null);
+								facesMessage = MessageFactory.getMessage(
+										"header_noPermission_menuitem",
+										FacesMessage.SEVERITY_ERROR, "");
 
 								FacesContext
 										.getCurrentInstance()
@@ -1003,13 +996,23 @@ public class LoginBean implements Serializable {
 
 							}
 
-						} else if (!authorisationService.isrProject()
-								&& root.getViewId().contains("planning")) {
+						} else if ((!authorisationService.isrBug() && root
+								.getViewId().contains("bug"))
+								|| (!authorisationService.isrProject() && (root
+										.getViewId().contains("planning") || root
+										.getViewId().contains("stats")))
+								|| (!authorisationService.isrBuild() && viewID
+										.contains("delivery"))
+								|| ((!authorisationService.isrTest()) && viewID
+										.contains("test"))
+								|| (!authorisationService.isrContact() && root
+										.getViewId().contains("team"))
+								|| (!authorisationService.isrCompany() && root
+										.getViewId().contains("administration"))) {
 
-							facesMessage = new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"You have no permission to access this resource",
-									null);
+							facesMessage = MessageFactory.getMessage(
+									"header_noPermission_menuitem",
+									FacesMessage.SEVERITY_ERROR, "");
 
 							FacesContext
 									.getCurrentInstance()
@@ -1019,10 +1022,10 @@ public class LoginBean implements Serializable {
 													+ "/pages/main.jsf?faces-redirect=true");
 						} else if (viewID.contains("requirement")) {
 							if (!authorisationService.isrRequiement()) {
-								facesMessage = new FacesMessage(
-										FacesMessage.SEVERITY_ERROR,
-										"You have no permission to access this resource",
-										null);
+
+								facesMessage = MessageFactory.getMessage(
+										"header_noPermission_menuitem",
+										FacesMessage.SEVERITY_ERROR, "");
 								FacesContext
 										.getCurrentInstance()
 										.getExternalContext()
@@ -1037,10 +1040,9 @@ public class LoginBean implements Serializable {
 							if (authorisationService.isRwDev())
 								loadingPage(e);
 							else {
-								facesMessage = new FacesMessage(
-										FacesMessage.SEVERITY_ERROR,
-										"You have no permission to access this resource",
-										null);
+								facesMessage = MessageFactory.getMessage(
+										"header_noPermission_menuitem",
+										FacesMessage.SEVERITY_ERROR, "");
 
 								FacesContext
 										.getCurrentInstance()
@@ -1050,17 +1052,23 @@ public class LoginBean implements Serializable {
 														+ "/pages/main.jsf?faces-redirect=true");
 
 							}
-						} else if ((!authorisationService.isrProject() && root
-								.getViewId().contains("planning"))
+						} else if ((!authorisationService.isrBug() && root
+								.getViewId().contains("bug"))
+								|| (!authorisationService.isrProject() && (root
+										.getViewId().contains("planning") || root
+										.getViewId().contains("stats")))
 								|| (!authorisationService.isrBuild() && viewID
 										.contains("delivery"))
 								|| ((!authorisationService.isrTest()) && viewID
-										.contains("test"))) {
+										.contains("test"))
+								|| (!authorisationService.isrContact() && root
+										.getViewId().contains("team"))
+								|| (!authorisationService.isrCompany() && root
+										.getViewId().contains("administration"))) {
 
-							facesMessage = new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"You have no permission to access this resource",
-									null);//
+							facesMessage = MessageFactory.getMessage(
+									"header_noPermission_menuitem",
+									FacesMessage.SEVERITY_ERROR, "");
 
 							FacesContext
 									.getCurrentInstance()
@@ -1071,18 +1079,23 @@ public class LoginBean implements Serializable {
 						}
 					}
 				} else {
-
-					if ((!authorisationService.isrProject() && root.getViewId()
-							.contains("planning"))
+					if ((!authorisationService.isrBug() && root.getViewId()
+							.contains("bug"))
+							|| (!authorisationService.isrProject() && (root
+									.getViewId().contains("planning") || root
+									.getViewId().contains("stats")))
 							|| (!authorisationService.isrBuild() && viewID
 									.contains("delivery"))
-							|| (!authorisationService.isrTest() && viewID
-									.contains("test"))) {
+							|| ((!authorisationService.isrTest()) && viewID
+									.contains("test"))
+							|| (!authorisationService.isrContact() && root
+									.getViewId().contains("team"))
+							|| (!authorisationService.isrCompany() && root
+									.getViewId().contains("administration"))) {
 
-						facesMessage = new FacesMessage(
-								FacesMessage.SEVERITY_ERROR,
-								"You have no permission to access this resource",
-								null);//
+						facesMessage = MessageFactory.getMessage(
+								"header_noPermission_menuitem",
+								FacesMessage.SEVERITY_ERROR, "");//
 
 						FacesContext
 								.getCurrentInstance()
@@ -1105,10 +1118,9 @@ public class LoginBean implements Serializable {
 										.getRequest()).getRequestURI());
 							}
 						} else {
-							facesMessage = new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"You have no permission to access this resource",
-									null);//
+							facesMessage = MessageFactory.getMessage(
+									"header_noPermission_menuitem",
+									FacesMessage.SEVERITY_ERROR, "");
 
 							FacesContext
 									.getCurrentInstance()
@@ -1122,10 +1134,9 @@ public class LoginBean implements Serializable {
 						if (authorisationService.isRwDev())
 							loadingPage(e);
 						else {
-							facesMessage = new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"You have no permission to access this resource",
-									null);
+							facesMessage = MessageFactory.getMessage(
+									"header_noPermission_menuitem",
+									FacesMessage.SEVERITY_ERROR, "");
 
 							FacesContext
 									.getCurrentInstance()
@@ -1137,10 +1148,9 @@ public class LoginBean implements Serializable {
 						}
 					} else if (viewID.contains("requirement")) {
 						if (!authorisationService.isrRequiement()) {
-							facesMessage = new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"You have no permission to access this resource",
-									null);
+							facesMessage = MessageFactory.getMessage(
+									"header_noPermission_menuitem",
+									FacesMessage.SEVERITY_ERROR, "");
 							FacesContext
 									.getCurrentInstance()
 									.getExternalContext()
@@ -1221,12 +1231,6 @@ public class LoginBean implements Serializable {
 		return referer;
 	}
 
-	// public void handleMesToggle(ToggleEvent event) {
-	//
-	// this.collapsedMesPanel = !this.collapsedMesPanel;
-	//
-	// }
-
 	public void updateGrowl(ComponentSystemEvent e) {
 
 		if (facesMessage != null) {
@@ -1249,8 +1253,8 @@ public class LoginBean implements Serializable {
 
 	}
 
-	public static JJProject getProject() {	
-		
+	public static JJProject getProject() {
+
 		if (((JJProjectBean) findBean("jJProjectBean")) != null)
 			return ((JJProjectBean) findBean("jJProjectBean")).getProject();
 		else
@@ -1258,7 +1262,7 @@ public class LoginBean implements Serializable {
 	}
 
 	public static JJProduct getProduct() {
-		
+
 		if (((JJProductBean) findBean("jJProductBean")) != null)
 			return ((JJProductBean) findBean("jJProductBean")).getProduct();
 		else

@@ -6,17 +6,8 @@ import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 
-import com.starit.janjoonweb.domain.JJCategory;
-import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJPermissionService;
-import com.starit.janjoonweb.domain.JJProduct;
-import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.ui.mb.JJContactBean;
-import com.starit.janjoonweb.ui.mb.JJPermissionBean;
-import com.starit.janjoonweb.ui.mb.JJProductBean;
-import com.starit.janjoonweb.ui.mb.JJProjectBean;
-import com.starit.janjoonweb.ui.mb.JJSprintBean;
-import com.starit.janjoonweb.ui.mb.LoginBean;
+import com.starit.janjoonweb.domain.*;
+import com.starit.janjoonweb.ui.mb.*;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 public class AuthorisationService implements Serializable {
@@ -78,6 +69,13 @@ public class AuthorisationService implements Serializable {
 	private String rBuildMSG;
 	private boolean wRequiement;
 	private String wRequiementMSG;
+	private boolean rBug;
+	private String rBugMSG;
+	private boolean rContact;
+	private String rContactMSG;
+	private boolean rCompany;
+	private String rCompanyMSG;
+	
 
 	public JJContact getContact() {
 		return contact;
@@ -276,6 +274,54 @@ public class AuthorisationService implements Serializable {
 		this.wRequiementMSG = wRequiementMSG;
 	}
 
+	public boolean isrBug() {
+		return rBug;
+	}
+
+	public void setrBug(boolean rBug) {
+		this.rBug = rBug;
+	}
+
+	public String getrBugMSG() {
+		return rBugMSG;
+	}
+
+	public void setrBugMSG(String rBugMSG) {
+		this.rBugMSG = rBugMSG;
+	}
+
+	public boolean isrContact() {
+		return rContact;
+	}
+
+	public void setrContact(boolean rContact) {
+		this.rContact = rContact;
+	}
+
+	public String getrContactMSG() {
+		return rContactMSG;
+	}
+
+	public void setrContactMSG(String rContactMSG) {
+		this.rContactMSG = rContactMSG;
+	}
+
+	public String getrCompanyMSG() {
+		return rCompanyMSG;
+	}
+
+	public void setrCompanyMSG(String rCompanyMSG) {
+		this.rCompanyMSG = rCompanyMSG;
+	}
+
+	public boolean isrCompany() {
+		return rCompany;
+	}
+
+	public void setrCompany(boolean rCompany) {
+		this.rCompany = rCompany;
+	}
+
 	public AuthorisationService(HttpSession session, JJContact c) {		
 		this.session = session;
 		this.contact = c;
@@ -373,15 +419,40 @@ public class AuthorisationService implements Serializable {
 				"Task", null, true, null, null);
 		
 		if (!rProject)
-			rProjectMSG = "You Have no permisson to access this Category";
+			rProjectMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
 		else
 			rProjectMSG =  MessageFactory.getMessage("header_project_menuitem", "").getDetail();
 		rBuild = jJPermissionService.isAuthorized(contact, project, product,
 				"Build", null, true, null, null);
 		if (!rBuild)
-			rBuildMSG = "You Have no permisson to access this Category";
+			rBuildMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
 		else
 			rBuildMSG = MessageFactory.getMessage("header_delivery_menuitem", "").getDetail();
+		
+		rBug = jJPermissionService.isAuthorized(contact, project, product,
+				"Bug", null, true, null, null);		
+		
+		if (!rBug)
+			rBugMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+		else
+			rBugMSG = MessageFactory.getMessage("header_bug_menuitem", "").getDetail();
+		
+
+		rContact = jJPermissionService.isAuthorized(contact, null, null,
+				"Contact", null, true, null, null);		
+		
+		if (!rContact)
+			rContactMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+		else
+			rContactMSG = MessageFactory.getMessage("header_team_menuitem", "").getDetail();
+		
+		rCompany = jJPermissionService.isAuthorized(contact, null, null,
+				"Company", null, true, null, null);		
+		
+		if (!rCompany)
+			rCompanyMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+		else
+			rCompanyMSG = MessageFactory.getMessage("header_admin_menuitem", "").getDetail();
 		
 		if(project != null)
 		{

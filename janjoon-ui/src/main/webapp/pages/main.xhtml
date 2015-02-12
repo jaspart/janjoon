@@ -45,7 +45,14 @@
 								placeholder="#{messages.main_communication_search_watermark}" />
 						</p:outputPanel>
 					</f:facet-->
-					<p:column style="width: 70px !important;">
+					<p:column style="width: 70px !important;text-align: center;">
+						<f:facet name="header">
+							<p:commandButton id="createButton" icon="ui-icon-plusthick"
+								update=":messageDialogForm"
+								oncomplete="PF('messageDialog').show();" />
+							<!-- 							<p:tooltip for="createButton" value="#{messages.label_create}" -->
+							<!-- 								showEffect="fade" hideEffect="fade" /> -->
+						</f:facet>
 						<p:graphicImage styleClass="avatar" value="#{imageStreamer.image}">
 							<f:param name="contactId" value="#{mes.createdBy.id}" />
 						</p:graphicImage>
@@ -194,7 +201,8 @@
 		</p:panel>
 
 		<p:panel id="taskPanel" rendered="#{loginBean.enable}"
-			header="To do Tasks" styleClass="customTitleBar">
+			header="#{messages.main_taskPanel_header}"
+			styleClass="customTitleBar">
 			<f:event listener="#{jJTaskBean.initToDoTasks}"
 				type="preRenderComponent" />
 			<h:form id="taskForm">
@@ -244,40 +252,55 @@
 					</p:column>
 
 					<p:column styleClass="action-column" style="width:80px;"
-						headerText="#{messages.bug_table_action_title}">						
+						headerText="#{messages.bug_table_action_title}">
 						<p:commandButton id="viewTaskButton" icon="ui-icon-zoomin"
-							update=":viewTaskForm:viewTaskPanelGrid"
-							immediate="true" action="#{jJTaskBean.initiateReqTreeNode}">							
+							update=":viewTaskForm" immediate="true"
+							action="#{jJTaskBean.initiateReqTreeNode}">
 							<f:setPropertyActionListener value="#{task}"
-								target="#{jJTaskBean.task}" />	
+								target="#{jJTaskBean.task}" />
 						</p:commandButton>
 					</p:column>
 				</p:dataTable>
 			</h:form>
 			<p:dialog id="viewTaskDialog" header="#{messages.label_view} JJTask"
 				modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
-				resizable="true" maximizable="true" showEffect="fade"
+				resizable="true" maximizable="true"  showEffect="fade" 
 				hideEffect="explode" draggable="false">
+				<p:ajax event="close" update=":taskForm"
+					listener="#{jJTaskBean.closeEvent('main')}" />
 				<p:outputPanel id="viewTaskPanel">
 					<h:form id="viewTaskForm" enctype="multipart/form-data">
+					<p:remoteCommand name="updateForm" update=":viewTaskForm"/>
 						<ui:include src="taskDialog.xhtml">
 							<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
 						</ui:include>
+						
+						<p:commandButton id="updateTaskButton" update=":viewTaskForm"
+							actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'main')}"
+							value="Update Task"							
+							process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload"
+							onstart="PF('viewtaskBlockUIWidget').block()"
+							style="margin-top: 5px;"
+							oncomplete="PF('viewtaskBlockUIWidget').unblock();" />
+							
 						<p:commandButton id="viewCloseButton"
 							value="#{messages.label_close}"
+							style="margin-left: 20px;margin-top: 5px;"
 							oncomplete="PF('blockUIWidget').unblock()"
+							onstart="PF('blockUIWidget').block()"
 							onclick="PF('viewTaskDialogWidget').hide()" type="button" />
 					</h:form>
 				</p:outputPanel>
 			</p:dialog>
 		</p:panel>
 
-		<p:panel id="specpanel" header="Spécification non couverte "
-			rendered="#{loginBean.enable and loginBean.noCouvretReq != null}" styleClass="customTitleBar">
+		<p:panel id="specpanel" header="#{messages.main_specPanel_header}"
+			rendered="#{loginBean.enable and loginBean.noCouvretReq != null}"
+			styleClass="customTitleBar">
 
 			<!-- 			<f:event listener="#{loginBean.initNonCouvretSpec}" -->
 			<!-- 				type="preRenderView" /> -->
-			<h:form id="specForm" >
+			<h:form id="specForm">
 				<p:dataTable id="specTable" value="#{loginBean.noCouvretReq}"
 					rowKey="#{req.id}" var="req" widgetVar="taskTable"
 					scrollable="true" scrollHeight="200"
@@ -319,6 +342,28 @@
 			</h:form>
 		</p:panel>
 
+		<p:dialog widgetVar="messageDialog" id="messageDialog"
+			header="#{messages.main_message_header}" showEffect="fade"
+			dynamic="true" closable="true">
+			<h:form id="messageDialogForm">
+				<p:growl id="messageDialogFormGrowl" showDetail="true" life="1000" />
+				<p:panelGrid columns="1">
+					<p:outputLabel for="messagedsc" value="Message :" />
+					<p:inputTextarea id="messagedsc" cols="40" rows="6"
+						value="#{jJMessageBean.message.message}" required="true" />
+					<p:panelGrid columns="2">
+						<p:selectBooleanButton id="alert"
+							value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
+							offLabel="Info" onIcon="ui-icon-alert" offIcon="ui-icon-info">
+						</p:selectBooleanButton>
+						<p:commandButton id="submitMes" value="OK"
+							process="@this,alert,messagedsc"
+							actionListener="#{jJMessageBean.createMessage}"
+							update="messageDialogForm :headerForm:communicationButton" />
+					</p:panelGrid>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
 	</ui:define>
 </ui:composition>
 </html>

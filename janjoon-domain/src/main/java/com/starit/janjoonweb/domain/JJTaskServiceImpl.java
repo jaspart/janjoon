@@ -348,16 +348,20 @@ public class JJTaskServiceImpl implements JJTaskService {
 		{
 			JJTask_.setName(JJTask_.getName().substring(0, 99));
 		}
-		
+		if(JJTask_.getWorkloadPlanned() == null)
+			JJTask_.setWorkloadPlanned(0);
 		jJTaskRepository.save(JJTask_);
 		JJTask_ = jJTaskRepository.findOne(JJTask_.getId());
 	}
 
 	public JJTask updateJJTask(JJTask JJTask_) {
+		
 		if(JJTask_.getName().length()>100 )
 		{
 			JJTask_.setName(JJTask_.getName().substring(0, 99));
 		}
+		if(JJTask_.getWorkloadPlanned() == null)
+			JJTask_.setWorkloadPlanned(0);
 		jJTaskRepository.save(JJTask_);
 		JJTask_ = jJTaskRepository.findOne(JJTask_.getId());
 		return JJTask_;

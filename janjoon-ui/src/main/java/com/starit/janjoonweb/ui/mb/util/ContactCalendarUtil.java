@@ -351,20 +351,20 @@ public class ContactCalendarUtil {
 		int kk = workload;
 		while (kk > 0) {
 			kk = workload;
-			start = nextWorkingDate(CalendarUtil.getPreviousDate(start));
-			kk = workload - calculateWorkLoad(start, end);
+			start = CalendarUtil.getPreviousDate(start);
+			kk = workload - calculateWorkLoad(nextWorkingDate(start), end);
 		}
 		if (kk < 0) {
 			int i = workload - calculateWorkLoad(start, end);
-			while (i > 0) {
+			while (i < 0) {
 				cal.setTime(start);
-				cal.add(Calendar.HOUR_OF_DAY, 1);
-				start = nextWorkingDate(cal.getTime());
-				i = workload - calculateWorkLoad(start, end);
+				cal.add(Calendar.HOUR, 1);
+				start = cal.getTime();
+				i = workload - calculateWorkLoad(nextWorkingDate(start), end);
 			}
 
 		}
-		return start;
+		return nextWorkingDate(start);
 	}
 
 	public void getEndDate(JJTask task, String champ) {

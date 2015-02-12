@@ -2020,22 +2020,21 @@ public class JJRequirementBean {
 
 				switch (categories.length) {
 				case 1:
-					if (category.getStage() > lowCategory.getStage()) {
+					if (category.getStage() > lowCategory.getStage()) {						
 						mediumCategory = category;
 						templateHeader += String
 								.valueOf(mediumCategory.getId()) + "-";
-					} else if (category.getStage() < lowCategory.getStage()) {
+					} else  {						
 						mediumCategory = lowCategory;
+						tableDataModelList.set(1, tableDataModelList.get(0));
+						tableDataModelList.set(0, new CategoryDataModel(new ArrayList<RequirementUtil>(), 0, "", false));
 						lowCategory = category;
 						templateHeader = String.valueOf(lowCategory.getId())
 								+ "-" + String.valueOf(mediumCategory.getId())
 								+ "-";
+						}
 
-					} else {
-						lowCategory = category;
-						templateHeader = String.valueOf(lowCategory.getId())
-								+ "-";
-					}
+					
 					break;
 
 				case 2:
@@ -2045,6 +2044,8 @@ public class JJRequirementBean {
 					} else if (category.getStage() > lowCategory.getStage()) {
 						highCategory = mediumCategory;
 						mediumCategory = category;
+						tableDataModelList.set(2, tableDataModelList.get(1));
+						tableDataModelList.set(1, new CategoryDataModel(new ArrayList<RequirementUtil>(), 0, "", false));
 						templateHeader = String.valueOf(lowCategory.getId())
 								+ "-" + String.valueOf(mediumCategory.getId())
 								+ "-";
@@ -2052,6 +2053,9 @@ public class JJRequirementBean {
 					} else {
 						highCategory = mediumCategory;
 						mediumCategory = lowCategory;
+						tableDataModelList.set(2, tableDataModelList.get(1));
+						tableDataModelList.set(1, tableDataModelList.get(0));
+						tableDataModelList.set(0, new CategoryDataModel(new ArrayList<RequirementUtil>(), 0, "", false));
 						lowCategory = category;
 						templateHeader = String.valueOf(lowCategory.getId())
 								+ "-" + String.valueOf(mediumCategory.getId())
@@ -2087,8 +2091,17 @@ public class JJRequirementBean {
 				i++;
 
 			if (tableDataModelList.get(i).getCategoryId() == id)
-				tableDataModelList.set(i, new CategoryDataModel(
+			{
+				int j=i+1;
+				while(j < tableDataModelList.size())
+				{
+					tableDataModelList.set(j-1, tableDataModelList.get(j));
+					j++;
+				}
+				tableDataModelList.set(tableDataModelList.size()-1, new CategoryDataModel(
 						new ArrayList<RequirementUtil>(), 0, "", false));
+			}
+				
 
 			JJCategory category = jJCategoryService.findJJCategory(id);
 

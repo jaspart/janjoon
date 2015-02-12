@@ -436,6 +436,11 @@ public class JJSprintBean {
 			}
 		} else {
 			TabView tv = (TabView) event.getComponent();
+			if(tv.getChildren().indexOf(event.getTab()) == 1)
+				((JJTaskBean)LoginBean.findBean("jJTaskBean")).setMode("scrum");
+			else 
+				((JJTaskBean)LoginBean.findBean("jJTaskBean")).setMode("planning");
+			
 			if (update && tv.getChildren().indexOf(event.getTab()) == 1)
 				RequestContext.getCurrentInstance().execute("updateTabSprint()");
 			update =true;

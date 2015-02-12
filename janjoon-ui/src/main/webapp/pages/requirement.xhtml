@@ -209,7 +209,7 @@
 								requiredMessage="Requirement Description is a required value" />
 
 							<p:editor id="descriptionMobile"
-								style="width: 97%;height:150px;margin-left:auto;margin-right:auto;"
+								style="width: 98%;height:150px;"
 								value="#{requirementBean.requirement.description}"
 								required="true" rendered="#{loginBean.mobile}"
 								requiredMessage="Requirement Description is a required value" />
@@ -261,7 +261,7 @@
 								<f:facet name="header">
            				 #{categorieRequirement.category.name}
        				 </f:facet>
-								<p:commandLink target="_blank"
+								<p:commandLink 
 									value="#{req.id}-#{fn:substring(req.name,0,25)}"
 									action="#{jJRequirementBean.requirementInfo}" ajax="false">
 									<f:setPropertyActionListener value="#{req}"

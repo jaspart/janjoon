@@ -187,10 +187,12 @@
 											<h:outputText value="#{messages.bug_table_action_title}" />
 										</f:facet>
 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-											update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
+											update=":viewTaskForm" immediate="true"
 											action="#{jJTaskBean.initiateReqTreeNode}">
 											<f:setPropertyActionListener value="#{todo}"
 												target="#{jJTaskBean.task}" />
+											<f:setPropertyActionListener target="#{jJTaskBean.mode}"
+													value="scrum" />
 
 											<p:menuitem id="deleteButton" icon="ui-icon-trash"
 												oncomplete="PF('deleteDialogWidget').show()"
@@ -245,7 +247,7 @@
 												<h:outputText value="#{messages.bug_table_action_title}" />
 											</f:facet>
 											<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-												update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
+												update=":viewTaskForm" immediate="true"
 												action="#{jJTaskBean.initiateReqTreeNode}">
 												<f:setPropertyActionListener value="#{prog}"
 													target="#{jJTaskBean.task}" />
@@ -296,7 +298,7 @@
 												<h:outputText value="#{messages.bug_table_action_title}" />
 											</f:facet>
 											<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-												update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
+												update=":viewTaskForm" immediate="true"
 												action="#{jJTaskBean.initiateReqTreeNode}">
 												<f:setPropertyActionListener value="#{done}"
 													target="#{jJTaskBean.task}" />

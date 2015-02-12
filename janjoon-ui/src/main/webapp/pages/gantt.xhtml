@@ -67,9 +67,9 @@
 					<p:selectOneMenu id="sortMode" value="#{jJTaskBean.sortMode}"
 						panelStyle="width:150px;" effect="fade" style="width:150px;"
 						filter="true" filterMatchMode="startsWith">
-						<f:selectItem itemValue="StartDateReal" itemLabel="Start Date Real" />
-						<f:selectItem itemValue="StartDatePlanned" itemLabel="Start Date Planned" />
 						<f:selectItem itemValue="chapter" itemLabel="Chapter" />
+						<f:selectItem itemValue="StartDateReal" itemLabel="Start Date Real" />
+						<f:selectItem itemValue="StartDatePlanned" itemLabel="Start Date Planned" />						
 						<p:ajax onstart="PF('blockUIWidget').block()" event="change"
 							listener="#{jJTaskBean.SortBySelectionChanged}"
 							update=":projecttabview:planningForm :projecttabview:sprintForm"
@@ -128,10 +128,12 @@
 										<p:graphicImage library="images" name="#{taskData.icone}"
 											width="16" height="16" />
 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-											update=":viewTaskForm:viewTaskPanelGrid" immediate="true"
+											update=":viewTaskForm" immediate="true"
 											action="#{jJTaskBean.initiateReqTreeNode}">
 											<f:setPropertyActionListener value="#{taskData.task}"
 												target="#{jJTaskBean.task}" />
+											<f:setPropertyActionListener target="#{jJTaskBean.mode}"
+													value="planning" />
 											<p:menuitem id="duplicate" icon="ui-icon-copy"
 												oncomplete="PF('duplicateTaskDialogWidget').show()"
 												value="#{messages.project_gantt_task_dupplicate_button}">
@@ -385,7 +387,7 @@
 										listener="#{jJTaskBean.onChangeTimelineEvent}"
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()" />
-									<p:ajax event="edit" update=":viewTaskForm:viewTaskPanelGrid"
+									<p:ajax event="edit" update=":viewTaskForm"
 										listener="#{jJTaskBean.onEditTimelineEvent}"
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()" />

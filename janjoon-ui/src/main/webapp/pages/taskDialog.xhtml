@@ -15,13 +15,19 @@
 				style="white-space: nowrap;" />
 		</h:panelGrid>
 	</pe:blockUI>
+	<p:growl />
 	<p:panelGrid id="viewTaskPanelGrid"
 		style="height: #{jJTaskBean.height}px ; width: #{jJTaskBean.width}px;">
 		<p:row>
 			<p:column colspan="2">
 				<p:outputLabel value="Sprint :" for="taskSprint" />
-				<p:inputText id="taskSprint" readonly="true"
-					converter="JJSprintConverter" value="#{JJTask_.sprint}" />
+				<p:autoComplete id="taskSprint" value="#{JJTask_.sprint}"
+					itemLabel="#{sprint.name}" itemValue="#{sprint}" scrollHeight="200"
+					converter="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter"
+					dropdown="true" var="sprint" binding="#{sprintComponent}"
+					completeMethod="#{jJTaskBean.completeSprintTask}" >
+					<p:ajax event="itemSelect" update="taskStartDatePlanned taskEndDatePlanned" />
+					</p:autoComplete>
 			</p:column>
 			<p:column colspan="2">
 				<p:outputLabel value="Assigned To :" for="taskAssignedTo" />
@@ -30,39 +36,45 @@
 			</p:column>
 			<p:column colspan="2">
 				<p:outputLabel value="Status :" for="taskStatus" />
-				<p:inputText id="taskStatus" readonly="true"
-					converter="JJStatusConverter" value="#{JJTask_.status}" />
+				
+				<p:autoComplete id="taskStatus" value="#{JJTask_.status}"
+					itemLabel="#{status.name}" itemValue="#{status}" scrollHeight="200"
+					converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+					dropdown="true" var="status"
+					completeMethod="#{jJTaskBean.completeStatusTask}" />
 			</p:column>
 		</p:row>
 		<p:row>
 			<p:column colspan="2">
 				<p:outputLabel value="Start Date :" for="taskStartDatePlanned" />
-				<p:inputText id="taskStartDatePlanned" readonly="true"
-					value="#{JJTask_.startDatePlanned}">
-					<f:converter converterId="extendedDateTimeConverter" />
-					<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
-					<f:attribute name="timeZone" value="UCL" />
-				</p:inputText>
+				<p:calendar id="taskStartDatePlanned" style="width:90px" value="#{JJTask_.startDatePlanned}" 
+					navigator="true" pattern="yyyy/MM/dd HH:mm" required="true" >
+					<f:validator validatorId="dateRangeValidator" />
+					<f:attribute name="edition" value="startDatePlanned" />
+					<f:attribute name="sprintComponent" value="#{sprintComponent}"/>
+					<f:attribute name="task" value="#{JJTask_}" />
+				</p:calendar>
 			</p:column>
 			<p:column colspan="2">
-				<p:outputLabel value="End Date :" for="taskEndDatePlanned" />
-				<p:inputText id="taskEndDatePlanned" readonly="true"
-					value="#{JJTask_.endDatePlanned}">
-					<f:converter converterId="extendedDateTimeConverter" />
-					<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
-					<f:attribute name="timeZone" value="UCL" />
-				</p:inputText>
+				<p:outputLabel value="End Date :" for="taskEndDatePlanned" />				
+				<p:calendar id="taskEndDatePlanned" style="width:90px" value="#{JJTask_.endDatePlanned}" 
+					navigator="true" pattern="yyyy/MM/dd HH:mm" required="true">
+					<f:validator validatorId="dateRangeValidator" />
+					<f:attribute name="edition" value="endDatePlanned" />
+					<f:attribute name="task" value="#{JJTask_}" />
+					<f:attribute name="sprintComponent" value="#{sprintComponent}"/>
+				</p:calendar>
 			</p:column>
 			<p:column colspan="2">
-				<p:outputLabel value="Workload Planned :" for="taskWorkload" />
-				<p:inputText id="taskWorkload" readonly="true"
-					value="#{JJTask_.workloadPlanned}" />
+				<p:outputLabel value="Workload Planned :" for="taskWorkload" />				
+				<p:spinner id="taskWorkload" value="#{JJTask_.workloadPlanned}" stepFactor="1"
+					min="1" required="true" />
 			</p:column>
 		</p:row>
 		<p:row rowspan="5" rendered="#{JJTask_.bug != null}">
 			<p:column colspan="2">
 				<p:outputLabel value="Bug :" for="taskBug" />
-				<p:inputText id="taskBug" readonly="true" converter="JJBugConverter"
+				<p:inputTextarea id="taskBug" readonly="true" converter="JJBugConverter" cols="30"
 					value="#{JJTask_.bug}" />
 			</p:column>
 			<p:column colspan="4" rendered="#{jJTaskBean.taskTreeNode == null}">
@@ -80,7 +92,7 @@
 			rendered="#{JJTask_.testcase != null and jJTaskBean.taskTreeNode == null}">
 			<p:column colspan="2">
 				<p:outputLabel value="TestCase :" for="taskTestCase" />
-				<p:inputText id="taskTestCase" readonly="true"
+				<p:inputTextarea id="taskTestCase" readonly="true" cols="30"
 					converter="JJTestcaseConverter" value="#{JJTask_.testcase}" />
 			</p:column>
 			<p:column colspan="4">
@@ -130,7 +142,7 @@
 						<p:column colspan="1">
 							<h:outputText for="status" value="Status :" />
 							<p:inputText id="status" value="#{jJTaskBean.selectedReq.status}"
-								readonly="true" converter="JJStatusConverter" />
+								readonly="true" converter="JJStatusConverter" />								
 						</p:column>
 					</p:row>
 					<p:row>

@@ -411,7 +411,7 @@ public class JJMessageBean {
 
 	public void onRowSelect(SelectEvent event) {
 		viewedMessage = (JJMessage) event.getObject();
-		viewPanel = populateMessagePanel();
+		//viewPanel = populateMessagePanel();
 	}
 
 	public void saveJJMessage(JJMessage b) {

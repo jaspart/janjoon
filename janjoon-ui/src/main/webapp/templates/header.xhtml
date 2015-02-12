@@ -145,6 +145,8 @@
 
 					<p:menuitem value="#{messages.header_bug_menuitem}"
 						rendered="#{!loginBean.mobile}"
+						disabled="#{!loginBean.authorisationService.rBug}"
+						title="#{loginBean.authorisationService.rBugMSG}"
 						url="/pages/bugs.jsf?faces-redirect=true" icon="ui-icon-gear" />
 
 					<p:menuitem value="#{messages.header_dev_menuitem}"
@@ -185,6 +187,8 @@
 						url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
 
 					<p:menuitem value="#{messages.header_team_menuitem}"
+						disabled="#{!loginBean.authorisationService.rContact}"
+						title="#{loginBean.authorisationService.rContactMSG}"
 						rendered="false" url="/pages/teams.jsf?faces-redirect=true"
 						icon="ui-icon-person" />
 
@@ -194,6 +198,8 @@
 						rendered="#{!loginBean.enable and !loginBean.mobile}" />
 
 					<p:menuitem id="statsAction"
+						disabled="#{!loginBean.authorisationService.rProject}"
+						title="#{loginBean.authorisationService.rProjectMSG}"
 						value="#{messages.header_stat_menuitem}"
 						onstart="PF('blockUIWidget').block()"
 						actionListener="#{loginBean.redirection}" update="growlHeader"
@@ -202,6 +208,8 @@
 
 					<p:menuitem value="#{messages.header_admin_menuitem}"
 						rendered="false"
+						disabled="#{!loginBean.authorisationService.rCompany}"
+						title="#{loginBean.authorisationService.rCompanyMSG}"
 						url="/pages/administration.jsf?faces-redirect=true"
 						icon="ui-icon-key" update=":contentPanel" />
 
