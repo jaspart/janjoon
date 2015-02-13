@@ -28,9 +28,4 @@ privileged aspect JJCompanyConverter_Roo_Converter {
         Long id = Long.parseLong(value);
         return jJCompanyService.findJJCompany(id);
     }
-    
-    public String JJCompanyConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJCompany ? ((JJCompany) value).getId().toString() : "";
-    }
-    
 }

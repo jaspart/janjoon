@@ -29,8 +29,4 @@ privileged aspect JJSprintConverter_Roo_Converter {
         return jJSprintService.findJJSprint(id);
     }
     
-    public String JJSprintConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJSprint ? ((JJSprint) value).getId().toString() : "";
-    }
-    
 }

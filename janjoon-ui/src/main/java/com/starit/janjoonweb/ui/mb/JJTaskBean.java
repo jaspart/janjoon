@@ -578,6 +578,10 @@ public class JJTaskBean {
 		{
 			toDoTasks=null;
 			initToDoTasks(null);
+		}else if(operation.equalsIgnoreCase("dev"))
+		{
+			((DevelopmentBean)LoginBean.findBean("jJDevelopment")).setTask(null);
+			((DevelopmentBean)LoginBean.findBean("jJDevelopment")).setTasks(null);			
 		}
 			
 		FacesMessage facesMessage = MessageFactory.getMessage(

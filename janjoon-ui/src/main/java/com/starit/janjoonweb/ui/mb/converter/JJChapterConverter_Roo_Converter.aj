@@ -29,8 +29,5 @@ privileged aspect JJChapterConverter_Roo_Converter {
         return jJChapterService.findJJChapter(id);
     }
     
-    public String JJChapterConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJChapter ? ((JJChapter) value).getId().toString() : "";
-    }
     
 }

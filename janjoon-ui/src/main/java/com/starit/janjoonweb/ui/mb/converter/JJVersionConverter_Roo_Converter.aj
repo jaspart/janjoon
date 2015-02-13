@@ -27,10 +27,7 @@ privileged aspect JJVersionConverter_Roo_Converter {
         }
         Long id = Long.parseLong(value);
         return jJVersionService.findJJVersion(id);
-    }
+    }   
     
-    public String JJVersionConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJVersion ? ((JJVersion) value).getId().toString() : "";
-    }
     
 }

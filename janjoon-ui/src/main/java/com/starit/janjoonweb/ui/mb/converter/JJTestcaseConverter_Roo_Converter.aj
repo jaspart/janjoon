@@ -29,8 +29,5 @@ privileged aspect JJTestcaseConverter_Roo_Converter {
         return jJTestcaseService.findJJTestcase(id);
     }
     
-    public String JJTestcaseConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJTestcase ? ((JJTestcase) value).getId().toString() : "";
-    }
     
 }

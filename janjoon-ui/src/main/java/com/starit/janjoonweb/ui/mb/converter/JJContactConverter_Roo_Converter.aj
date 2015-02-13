@@ -27,10 +27,7 @@ privileged aspect JJContactConverter_Roo_Converter {
         }
         Long id = Long.parseLong(value);
         return jJContactService.findJJContact(id);
-    }
-    
-    public String JJContactConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJContact ? ((JJContact) value).getId().toString() : "";
-    }
+    }    
+   
     
 }

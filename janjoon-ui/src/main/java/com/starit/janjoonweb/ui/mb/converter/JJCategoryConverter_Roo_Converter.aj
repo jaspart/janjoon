@@ -29,8 +29,4 @@ privileged aspect JJCategoryConverter_Roo_Converter {
         return jJCategoryService.findJJCategory(id);
     }
     
-    public String JJCategoryConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJCategory ? ((JJCategory) value).getId().toString() : "";
-    }
-    
 }

@@ -29,8 +29,4 @@ privileged aspect JJSoftwareConverter_Roo_Converter {
         return jJSoftwareService.findJJSoftware(id);
     }
     
-    public String JJSoftwareConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJSoftware ? ((JJSoftware) value).getId().toString() : "";
-    }
-    
 }

@@ -28,9 +28,4 @@ privileged aspect JJTeststepConverter_Roo_Converter {
         Long id = Long.parseLong(value);
         return jJTeststepService.findJJTeststep(id);
     }
-    
-    public String JJTeststepConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJTeststep ? ((JJTeststep) value).getId().toString() : "";
-    }
-    
 }

@@ -29,8 +29,4 @@ privileged aspect JJTaskConverter_Roo_Converter {
         return jJTaskService.findJJTask(id);
     }
     
-    public String JJTaskConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJTask ? ((JJTask) value).getId().toString() : "";
-    }
-    
 }

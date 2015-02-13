@@ -29,8 +29,4 @@ privileged aspect JJJobConverter_Roo_Converter {
         return jJJobService.findJJJob(id);
     }
     
-    public String JJJobConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJJob ? ((JJJob) value).getId().toString() : "";
-    }
-    
 }

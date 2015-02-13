@@ -29,8 +29,6 @@ privileged aspect JJWorkflowConverter_Roo_Converter {
         return jJWorkflowService.findJJWorkflow(id);
     }
     
-    public String JJWorkflowConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJWorkflow ? ((JJWorkflow) value).getId().toString() : "";
-    }
+   
     
 }

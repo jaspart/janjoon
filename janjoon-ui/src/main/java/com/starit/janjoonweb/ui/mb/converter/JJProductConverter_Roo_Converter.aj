@@ -29,8 +29,4 @@ privileged aspect JJProductConverter_Roo_Converter {
         return jJProductService.findJJProduct(id);
     }
     
-    public String JJProductConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJProduct ? ((JJProduct) value).getId().toString() : "";
-    }
-    
 }

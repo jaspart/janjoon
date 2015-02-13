@@ -29,8 +29,4 @@ privileged aspect JJPhaseConverter_Roo_Converter {
         return jJPhaseService.findJJPhase(id);
     }
     
-    public String JJPhaseConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJPhase ? ((JJPhase) value).getId().toString() : "";
-    }
-    
 }

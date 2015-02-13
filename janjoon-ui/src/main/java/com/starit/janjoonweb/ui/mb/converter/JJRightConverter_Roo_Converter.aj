@@ -29,8 +29,4 @@ privileged aspect JJRightConverter_Roo_Converter {
         return jJRightService.findJJRight(id);
     }
     
-    public String JJRightConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJRight ? ((JJRight) value).getId().toString() : "";
-    }
-    
 }

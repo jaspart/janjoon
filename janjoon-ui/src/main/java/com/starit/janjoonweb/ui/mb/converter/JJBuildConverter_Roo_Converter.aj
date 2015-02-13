@@ -29,8 +29,4 @@ privileged aspect JJBuildConverter_Roo_Converter {
         return jJBuildService.findJJBuild(id);
     }
     
-    public String JJBuildConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJBuild ? ((JJBuild) value).getId().toString() : "";
-    }
-    
 }

@@ -12,6 +12,11 @@
 	<link type="text/css" rel="stylesheet"
 		href="/syntaxhighlighter/standard.css" />
 	<ui:define name="content">
+		<style type="text/css">
+			.CodeMirror-scroll {
+				height: 450px;
+				}
+		</style>
 		<h:form>
 			<p:remoteCommand name="updateHeader"
 				oncomplete="PF('blockUIWidget').unblock()" update=":contentPanel" />
@@ -33,7 +38,7 @@
 			<h:form id="form">
 				<table>
 					<tr>
-						<td><p:panelGrid style="margin-top:10px">
+						<td><p:panelGrid style="margin-top:10px;height: 550px;">
 								<p:row>
 									<p:column>
 										<h:outputText for="taskSelectOneMenu"
@@ -67,7 +72,7 @@
 												update=":form:taskSelectOneMenu startTaskPanel" />
 
 											<p:commandButton id="viewTaskButton" icon="ui-icon-zoomin"
-												update=":viewTaskForm:viewTaskPanelGrid"
+												update=":viewTaskForm"
 												disabled="#{jJDevelopment.task == null}" immediate="true"
 												oncomplete="PF('viewTaskDialogWidget').show()"
 												actionListener="#{jJTaskBean.gettingTaskValue}"
@@ -102,7 +107,7 @@
 										<p:growl id="messages" showDetail="true" life="2000" />
 										<p:panel header="#{messages['devs.projectexplorer.label']}">
 
-											<p:scrollPanel id="fileTreeScrollPanel" style="height:250px;"
+											<p:scrollPanel id="fileTreeScrollPanel" style="height:300px;"
 												mode="native">
 												<p:contextMenu for="fileTree" nodeType="folder">
 													<p:menuitem
@@ -195,7 +200,7 @@
 							</p:panelGrid></td>
 						<td><p:panel id="tabViewPanel"
 								header="#{messages['dev.fileContent.panel']}"
-								style="height:530px;width:700px;">
+								style="height:545px;width:700px;margin-top: 11px;margin-left: 20px;">
 								<p:tabView id="tabView" effectDuration="fast"
 									rendered="#{not empty jJDevelopment.files}"
 									activeIndex="#{jJDevelopment.activeTabIndex}" effect="fade"
@@ -317,13 +322,26 @@
 				modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
 				resizable="true" maximizable="true" showEffect="fade"
 				hideEffect="explode" draggable="false">
+				<p:ajax event="close" update=":form:taskSelectOneMenu :form:startTaskPanel"
+					listener="#{jJTaskBean.closeEvent('dev')}" />
 				<p:outputPanel id="viewTaskPanel">
 					<h:form id="viewTaskForm" enctype="multipart/form-data" >
 						<ui:include src="taskDialog.xhtml">
-							<ui:param name="JJTask_" value="#{jJDevelopment.task}" />							
+							<ui:param name="JJTask_" value="#{jJTaskBean.task}" />			
 						</ui:include>
+
+						<p:commandButton id="updateTaskButton" update=":viewTaskForm"
+							actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'dev')}"
+							value="Update Task" onstart="PF('viewtaskBlockUIWidget').block()"
+							style="margin-top: 5px;"
+							oncomplete="PF('viewtaskBlockUIWidget').unblock();"
+							process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload" />
+
 						<p:commandButton id="viewCloseButton"
 							value="#{messages.label_close}"
+							style="margin-left: 20px;margin-top: 5px;"
+							oncomplete="PF('blockUIWidget').unblock()"
+							onstart="PF('blockUIWidget').block()"
 							onclick="PF('viewTaskDialogWidget').hide()" type="button" />
 					</h:form>
 				</p:outputPanel>

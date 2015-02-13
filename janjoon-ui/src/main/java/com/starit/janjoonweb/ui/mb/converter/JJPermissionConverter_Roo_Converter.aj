@@ -29,8 +29,4 @@ privileged aspect JJPermissionConverter_Roo_Converter {
         return jJPermissionService.findJJPermission(id);
     }
     
-    public String JJPermissionConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJPermission ? ((JJPermission) value).getId().toString() : "";
-    }
-    
 }

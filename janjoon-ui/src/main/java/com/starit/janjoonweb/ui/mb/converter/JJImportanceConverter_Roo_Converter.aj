@@ -29,8 +29,4 @@ privileged aspect JJImportanceConverter_Roo_Converter {
         return jJImportanceService.findJJImportance(id);
     }
     
-    public String JJImportanceConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJImportance ? ((JJImportance) value).getId().toString() : "";
-    }
-    
 }

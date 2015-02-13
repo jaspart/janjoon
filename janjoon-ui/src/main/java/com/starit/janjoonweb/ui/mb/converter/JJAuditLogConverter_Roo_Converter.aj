@@ -29,8 +29,4 @@ privileged aspect JJAuditLogConverter_Roo_Converter {
         return jJAuditLogService.findJJAuditLog(id);
     }
     
-    public String JJAuditLogConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJAuditLog ? ((JJAuditLog) value).getId().toString() : "";
-    }
-    
 }

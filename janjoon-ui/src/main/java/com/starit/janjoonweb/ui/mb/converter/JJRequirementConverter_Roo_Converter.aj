@@ -28,9 +28,4 @@ privileged aspect JJRequirementConverter_Roo_Converter {
         Long id = Long.parseLong(value);
         return jJRequirementService.findJJRequirement(id);
     }
-    
-    public String JJRequirementConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJRequirement ? ((JJRequirement) value).getId().toString() : "";
-    }
-    
 }

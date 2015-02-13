@@ -28,9 +28,4 @@ privileged aspect JJHardwareConverter_Roo_Converter {
         Long id = Long.parseLong(value);
         return jJHardwareService.findJJHardware(id);
     }
-    
-    public String JJHardwareConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJHardware ? ((JJHardware) value).getId().toString() : "";
-    }
-    
 }

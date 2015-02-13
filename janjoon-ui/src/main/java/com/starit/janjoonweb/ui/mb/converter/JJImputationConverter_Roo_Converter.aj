@@ -29,8 +29,4 @@ privileged aspect JJImputationConverter_Roo_Converter {
         return jJImputationService.findJJImputation(id);
     }
     
-    public String JJImputationConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJImputation ? ((JJImputation) value).getId().toString() : "";
-    }
-    
 }

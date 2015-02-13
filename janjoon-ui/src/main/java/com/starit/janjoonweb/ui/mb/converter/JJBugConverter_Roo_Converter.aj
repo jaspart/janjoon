@@ -29,8 +29,4 @@ privileged aspect JJBugConverter_Roo_Converter {
         return jJBugService.findJJBug(id);
     }
     
-    public String JJBugConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJBug ? ((JJBug) value).getId().toString() : "";
-    }
-    
 }

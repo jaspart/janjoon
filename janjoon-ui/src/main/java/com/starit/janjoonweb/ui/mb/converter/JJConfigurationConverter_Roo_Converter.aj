@@ -29,8 +29,4 @@ privileged aspect JJConfigurationConverter_Roo_Converter {
         return jJConfigurationService.findJJConfiguration(id);
     }
     
-    public String JJConfigurationConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJConfiguration ? ((JJConfiguration) value).getId().toString() : "";
-    }
-    
 }

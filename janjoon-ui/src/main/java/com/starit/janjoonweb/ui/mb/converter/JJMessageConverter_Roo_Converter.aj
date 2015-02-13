@@ -29,8 +29,4 @@ privileged aspect JJMessageConverter_Roo_Converter {
         return jJMessageService.findJJMessage(id);
     }
     
-    public String JJMessageConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJMessage ? ((JJMessage) value).getId().toString() : "";
-    }
-    
 }

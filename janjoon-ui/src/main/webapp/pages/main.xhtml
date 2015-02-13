@@ -277,11 +277,11 @@
 						
 						<p:commandButton id="updateTaskButton" update=":viewTaskForm"
 							actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'main')}"
-							value="Update Task"							
-							process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload"
+							value="Update Task"	
 							onstart="PF('viewtaskBlockUIWidget').block()"
 							style="margin-top: 5px;"
-							oncomplete="PF('viewtaskBlockUIWidget').unblock();" />
+							oncomplete="PF('viewtaskBlockUIWidget').unblock();"
+							process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload" />
 							
 						<p:commandButton id="viewCloseButton"
 							value="#{messages.label_close}"

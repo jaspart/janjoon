@@ -29,8 +29,4 @@ privileged aspect JJCriticityConverter_Roo_Converter {
         return jJCriticityService.findJJCriticity(id);
     }
     
-    public String JJCriticityConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJCriticity ? ((JJCriticity) value).getId().toString() : "";
-    }
-    
 }

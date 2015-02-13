@@ -29,8 +29,4 @@ privileged aspect JJProjectConverter_Roo_Converter {
         return jJProjectService.findJJProject(id);
     }
     
-    public String JJProjectConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJProject ? ((JJProject) value).getId().toString() : "";
-    }
-    
 }

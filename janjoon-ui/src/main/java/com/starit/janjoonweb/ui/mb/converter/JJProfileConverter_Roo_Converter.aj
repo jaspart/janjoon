@@ -29,8 +29,5 @@ privileged aspect JJProfileConverter_Roo_Converter {
         return jJProfileService.findJJProfile(id);
     }
     
-    public String JJProfileConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJProfile ? ((JJProfile) value).getId().toString() : "";
-    }
     
 }

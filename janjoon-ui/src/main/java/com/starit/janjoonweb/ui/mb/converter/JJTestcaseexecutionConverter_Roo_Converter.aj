@@ -29,8 +29,4 @@ privileged aspect JJTestcaseexecutionConverter_Roo_Converter {
         return jJTestcaseexecutionService.findJJTestcaseexecution(id);
     }
     
-    public String JJTestcaseexecutionConverter.getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJTestcaseexecution ? ((JJTestcaseexecution) value).getId().toString() : "";
-    }
-    
 }
