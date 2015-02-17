@@ -25,7 +25,7 @@
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
 						oncomplete="PF('profileDialogWidget').show()"
 						action="#{jJProfileBean.editProfile(jJRightBean)}"
-						update=":tabview:profileDialog"
+						update=":tabview:profileDialog" title="#{messages.admin_profile_table_edit_tooltip}"
 						value="#{messages.admin_profile_table_edit_tooltip}">
 						<f:setPropertyActionListener value="#{profile}"
 							target="#{jJProfileBean.profileAdmin}" />
@@ -33,6 +33,7 @@
 
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
 							oncomplete="PF('profileDeleteDialogWidget').show()"
+							title="#{messages.admin_profile_table_delete_tooltip}"
 							value="#{messages.admin_profile_table_delete_tooltip}">
 							<f:setPropertyActionListener value="#{profile}"
 								target="#{jJProfileBean.profileAdmin}" />
@@ -43,6 +44,7 @@
 				<f:facet name="footer">
 					<p:commandButton value="#{messages.admin_profile_new_button}"
 						id="newProfile"
+						title="#{messages.admin_profile_new_button}"
 						actionListener="#{jJProfileBean.newProfile(jJRightBean)}"
 						update=":tabview:profileDialog"
 						oncomplete="PF('profileDialogWidget').show()"
@@ -76,8 +78,9 @@
 											value="#{messages.admin_profile_new_name_watermark}" />
 									</p:column>
 									<p:column>
-										<p:commandButton id="addProfile" value="Add Profile"
+										<p:commandButton id="addProfile" value="#{messages.admin_profile_addProfil_button}"
 											style="float: right;" update="profileDialogForm"
+											title="#{messages.admin_profile_addProfil_button}"
 											disabled="#{not jJProfileBean.disabledRightMode}"
 											process="@this,name" icon="ui-icon-circle-plus"
 											action="#{jJProfileBean.addProfile(jJRightBean)}" />
@@ -89,7 +92,7 @@
 											value="#{messages.admin_profile_new_object_label}" />
 										<p:selectOneMenu id="object" value="#{jJRightBean.object}"
 											panelStyle="width:150px" effect="fade" style="width:160px"
-											filter="true" filterMatchMode="startsWith"
+											filter="true" filterMatchMode="startsWith" 
 											disabled="#{jJProfileBean.disabledRightMode}"
 											widgetVar="objectWidget" label="Right Object" required="true">
 											<p:ajax process="@this" partialSubmit="true"
@@ -142,6 +145,7 @@
 											disabled="#{jJProfileBean.disabledRightMode}"
 											update="rightDataTable r w x category object"
 											actionListener="#{jJRightBean.addRight}"
+											title="#{messages.admin_profile_new_right_button}"
 											value="#{messages.admin_profile_new_right_button}"
 											icon="ui-icon-circle-plus" process="@this,object" />
 									</p:column>

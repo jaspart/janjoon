@@ -82,11 +82,10 @@
 						<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
 					</ui:include>					
 					<p:commandButton id="updateTaskButton"  update=":viewTaskForm"
-						actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'planning')}" value="Update Task"
+						actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'planning')}" value="#{messages.label_update} Task"
 						process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload"
 						onstart="PF('viewtaskBlockUIWidget').block()" style="margin-top: 5px;"
-						oncomplete="PF('viewtaskBlockUIWidget').unblock();"/>
-						
+						oncomplete="PF('viewtaskBlockUIWidget').unblock();"/>						
 						
 					<p:commandButton id="viewCloseButton"
 						value="#{messages.label_close}" style="margin-left: 20px;margin-top: 5px;"

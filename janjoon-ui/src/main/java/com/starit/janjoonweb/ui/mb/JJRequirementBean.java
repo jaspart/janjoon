@@ -160,6 +160,7 @@ public class JJRequirementBean {
 	private boolean disabledStatus;
 	private boolean disabledTask;
 	private boolean disabledProject;
+	private boolean mine;
 
 	private boolean changeLow;
 	private boolean changeMedium;
@@ -298,6 +299,19 @@ public class JJRequirementBean {
 
 			} else
 				return tableDataModelSizePct + "%";
+		}
+	}
+
+	public String getMarginLeft(CategoryUtil cc) {
+		int jj = categoryList.indexOf(cc);
+		if (jj == -1 || jj == 0)
+			return "";
+		else {
+			if (categoryList.get(jj - 1).getCategory().getStage()
+					.equals(cc.getCategory().getStage()))
+				return "";
+			else
+				return "margin-left: 20px;";
 		}
 	}
 
@@ -676,6 +690,14 @@ public class JJRequirementBean {
 	}
 
 	// Import Requirement
+
+	public boolean isMine() {
+		return mine;
+	}
+
+	public void setMine(boolean mine) {
+		this.mine = mine;
+	}
 
 	private JJProject importProject;
 	private List<JJProject> importProjectList;
@@ -1116,7 +1138,7 @@ public class JJRequirementBean {
 						&& req.getCategory()
 								.getId()
 								.equals(tableDataModelList.get(i)
-										.getCategoryId())) {
+										.getCategoryId()) && tableDataModelList.get(i).getRendered()) {
 					List<RequirementUtil> listRes = (List<RequirementUtil>) tableDataModelList
 							.get(i).getWrappedData();
 					if (operation.equalsIgnoreCase("UPDATE")) {
@@ -1145,7 +1167,8 @@ public class JJRequirementBean {
 					tableDataModelList.get(i).setCompletionProgress(0);
 					tableDataModelList.get(i).setCoverageProgress(0);
 					tableDataModelList.get(i).setActiveIndex(-1);
-					RequestContext.getCurrentInstance().execute("PF('dataTable_"+i+"_Widget').clearFilters();");
+					RequestContext.getCurrentInstance().execute(
+							"PF('dataTable_" + i + "_Widget').clearFilters();");
 					i = tableDataModelList.size();
 
 				}
@@ -1213,15 +1236,15 @@ public class JJRequirementBean {
 			}
 
 		}
-		boolean rrr = false;
+		boolean specPage = false;
 
 		if (((RequirementBean) LoginBean.findBean("requirementBean")) == null)
-			rrr = true;
+			specPage = true;
 		else if (((RequirementBean) LoginBean.findBean("requirementBean"))
 				.isReqDialogReqListrender())
-			rrr = true;
+			specPage = true;
 
-		if (rrr) {
+		if (specPage) {
 			requirement = jJRequirementService.findJJRequirement(requirement
 					.getId());
 			if (requirement.getCategory().equals(lowCategory)) {
@@ -1335,6 +1358,8 @@ public class JJRequirementBean {
 		}
 		updateJJRequirement(requirement);
 		updateDataTable(requirement, u);
+		this.mine=false;
+		mineChangeEvent();
 
 		RequestContext context = RequestContext.getCurrentInstance();
 
@@ -1343,7 +1368,7 @@ public class JJRequirementBean {
 			if (r) {
 				context.execute("PF('requirementDialogWidget').hide()");
 				reset();
-				if (rrr)
+				if (specPage)
 					closeDialog(false, true);
 				else {
 					closeDialog(true, false);
@@ -1354,14 +1379,14 @@ public class JJRequirementBean {
 				// if (rrr)
 
 				newRequirement(requirementCategory.getId());
-				if (!rrr)
+				if (!specPage)
 					RequestContext.getCurrentInstance().execute("updateTree()");
 			}
 
 		} else {
 			context.execute("PF('requirementDialogWidget').hide()");
 			reset();
-			if (rrr)
+			if (specPage)
 				closeDialog(false, true);
 			else {
 				closeDialog(true, false);
@@ -2020,21 +2045,23 @@ public class JJRequirementBean {
 
 				switch (categories.length) {
 				case 1:
-					if (category.getStage() > lowCategory.getStage()) {						
+					if (category.getStage() > lowCategory.getStage()) {
 						mediumCategory = category;
 						templateHeader += String
 								.valueOf(mediumCategory.getId()) + "-";
-					} else  {						
+					} else {
 						mediumCategory = lowCategory;
 						tableDataModelList.set(1, tableDataModelList.get(0));
-						tableDataModelList.set(0, new CategoryDataModel(new ArrayList<RequirementUtil>(), 0, "", false));
+						tableDataModelList
+								.set(0, new CategoryDataModel(
+										new ArrayList<RequirementUtil>(), 0,
+										"", false));
 						lowCategory = category;
 						templateHeader = String.valueOf(lowCategory.getId())
 								+ "-" + String.valueOf(mediumCategory.getId())
 								+ "-";
-						}
+					}
 
-					
 					break;
 
 				case 2:
@@ -2045,7 +2072,10 @@ public class JJRequirementBean {
 						highCategory = mediumCategory;
 						mediumCategory = category;
 						tableDataModelList.set(2, tableDataModelList.get(1));
-						tableDataModelList.set(1, new CategoryDataModel(new ArrayList<RequirementUtil>(), 0, "", false));
+						tableDataModelList
+								.set(1, new CategoryDataModel(
+										new ArrayList<RequirementUtil>(), 0,
+										"", false));
 						templateHeader = String.valueOf(lowCategory.getId())
 								+ "-" + String.valueOf(mediumCategory.getId())
 								+ "-";
@@ -2055,7 +2085,10 @@ public class JJRequirementBean {
 						mediumCategory = lowCategory;
 						tableDataModelList.set(2, tableDataModelList.get(1));
 						tableDataModelList.set(1, tableDataModelList.get(0));
-						tableDataModelList.set(0, new CategoryDataModel(new ArrayList<RequirementUtil>(), 0, "", false));
+						tableDataModelList
+								.set(0, new CategoryDataModel(
+										new ArrayList<RequirementUtil>(), 0,
+										"", false));
 						lowCategory = category;
 						templateHeader = String.valueOf(lowCategory.getId())
 								+ "-" + String.valueOf(mediumCategory.getId())
@@ -2090,18 +2123,16 @@ public class JJRequirementBean {
 					&& i < tableDataModelList.size())
 				i++;
 
-			if (tableDataModelList.get(i).getCategoryId() == id)
-			{
-				int j=i+1;
-				while(j < tableDataModelList.size())
-				{
-					tableDataModelList.set(j-1, tableDataModelList.get(j));
+			if (tableDataModelList.get(i).getCategoryId() == id) {
+				int j = i + 1;
+				while (j < tableDataModelList.size()) {
+					tableDataModelList.set(j - 1, tableDataModelList.get(j));
 					j++;
 				}
-				tableDataModelList.set(tableDataModelList.size()-1, new CategoryDataModel(
-						new ArrayList<RequirementUtil>(), 0, "", false));
+				tableDataModelList.set(tableDataModelList.size() - 1,
+						new CategoryDataModel(new ArrayList<RequirementUtil>(),
+								0, "", false));
 			}
-				
 
 			JJCategory category = jJCategoryService.findJJCategory(id);
 
@@ -2273,6 +2304,15 @@ public class JJRequirementBean {
 					categoryDataModel = new CategoryDataModel(
 							getListOfRequiremntUtils(requirements),
 							category.getId(), category.getName(), true);
+					
+					if(mine)
+						categoryDataModel.setFiltredRequirements(getListOfRequiremntUtils(jJRequirementService
+								.getMineRequirements(((LoginBean) LoginBean
+										.findBean("loginBean")).getContact()
+										.getCompany(), ((LoginBean) LoginBean
+										.findBean("loginBean")).getContact(),
+										product, project, category, version, true,
+										true)));
 
 					// categoryDataModel.calculCompletionProgress();
 					// categoryDataModel.calculCoverageProgress();
@@ -2286,11 +2326,22 @@ public class JJRequirementBean {
 				if (id == Long.parseLong(result))
 					requirements = getRequirementsList(category, product,
 							version, project, true);
+				
+
+				
 
 				categoryDataModel = new CategoryDataModel(
 						getListOfRequiremntUtils(requirements),
 						category.getId(), category.getName(),
-						requirements != null);
+						requirements != null);				
+				if(mine && requirements != null)
+					categoryDataModel.setFiltredRequirements(getListOfRequiremntUtils(jJRequirementService
+							.getMineRequirements(((LoginBean) LoginBean
+									.findBean("loginBean")).getContact()
+									.getCompany(), ((LoginBean) LoginBean
+									.findBean("loginBean")).getContact(),
+									product, project, category, version, true,
+									true)));
 				tableDataModelList.set(i, categoryDataModel);
 
 			}
@@ -3512,16 +3563,16 @@ public class JJRequirementBean {
 		private float completionProgress = 0;
 		private List<RequirementUtil> filtredRequirements;
 		private boolean rendered;
-		private boolean mine;
+		// private boolean mine;
 		private boolean expanded;
 
-		public boolean isMine() {
-			return mine;
-		}
+		// public boolean isMine() {
+		// return mine;
+		// }
 
-		public void setMine(boolean mine) {
-			this.mine = mine;
-		}
+		// public void setMine(boolean mine) {
+		// this.mine = mine;
+		// }
 
 		public boolean isExpanded() {
 			return expanded;
@@ -3596,7 +3647,7 @@ public class JJRequirementBean {
 			this.categoryId = categoryId;
 			this.nameDataModel = nameDataModel;
 			this.rendered = rendered;
-			this.mine = false;
+			// this.mine = false;
 			this.activeIndex = -1;
 			this.expanded = false;
 
@@ -3801,40 +3852,32 @@ public class JJRequirementBean {
 			return req.getRequirement().getId().toString();
 		}
 
-		public void mineChangeEvent() {
-
-			if (mine) {
-
-				JJCategory category = jJCategoryService.findJJCategory(this
-						.getCategoryId());
-				this.setMine(true);
-				this.setFiltredRequirements(getListOfRequiremntUtils(jJRequirementService
-						.getMineRequirements(((LoginBean) LoginBean
-								.findBean("loginBean")).getContact()
-								.getCompany(), ((LoginBean) LoginBean
-								.findBean("loginBean")).getContact(), product,
-								project, category, version, true, true)));
-
-			} else {
-				JJCategory category = jJCategoryService.findJJCategory(this
-						.getCategoryId());
-				List<JJRequirement> requirements = getRequirementsList(
-						category, product, version, project, true);
-
-				// this = new CategoryDataModel(
-				// getListOfRequiremntUtils(requirements), category.getId(),
-				// category.getName(), true);
-
-				// categoryDataModel.calculCompletionProgress();
-				// categoryDataModel.calculCoverageProgress();
-
-				tableDataModelList.set(tableDataModelList.indexOf(this),
-						new CategoryDataModel(
-								getListOfRequiremntUtils(requirements),
-								category.getId(), category.getName(), true));
-
-			}
-		}
+		// public void mineChangeEvent() {
+		//
+		// if (mine) {
+		//
+		// JJCategory category = jJCategoryService.findJJCategory(this
+		// .getCategoryId());
+		// //this.setMine(true);
+		// this.setFiltredRequirements(getListOfRequiremntUtils(jJRequirementService
+		// .getMineRequirements(((LoginBean) LoginBean
+		// .findBean("loginBean")).getContact()
+		// .getCompany(), ((LoginBean) LoginBean
+		// .findBean("loginBean")).getContact(), product,
+		// project, category, version, true, true)));
+		//
+		// } else {
+		// JJCategory category = jJCategoryService.findJJCategory(this
+		// .getCategoryId());
+		// List<JJRequirement> requirements = getRequirementsList(
+		// category, product, version, project, true);
+		// tableDataModelList.set(tableDataModelList.indexOf(this),
+		// new CategoryDataModel(
+		// getListOfRequiremntUtils(requirements),
+		// category.getId(), category.getName(), true));
+		//
+		// }
+		// }
 
 		public StreamedContent getFile() {
 
@@ -4377,9 +4420,50 @@ public class JJRequirementBean {
 
 	}
 
-	public boolean getCategorieChecked(JJCategory category) {
-		return true;
+	public void mineChangeEvent() {
 
+		if (mine) {
+
+			for (CategoryDataModel cc : tableDataModelList) {
+				if (cc.getCategoryId() != 0 && cc.getRendered()) {
+					JJCategory category = jJCategoryService.findJJCategory(cc
+							.getCategoryId());
+					this.setMine(true);
+					cc.setFiltredRequirements(getListOfRequiremntUtils(jJRequirementService
+							.getMineRequirements(((LoginBean) LoginBean
+									.findBean("loginBean")).getContact()
+									.getCompany(), ((LoginBean) LoginBean
+									.findBean("loginBean")).getContact(),
+									product, project, category, version, true,
+									true)));
+				}
+
+			}
+
+		} else {
+
+			for (int i=0;i<tableDataModelList.size();i++) {
+				if (tableDataModelList.get(i).getCategoryId() != 0 && tableDataModelList.get(i).getRendered()) {
+//					float cov=cc.getCoverageProgress();
+//					float cp=cc.getCompletionProgress();
+//					JJCategory category = jJCategoryService.findJJCategory(cc
+//							.getCategoryId());
+//					List<JJRequirement> requirements = getRequirementsList(
+//							category, product, version, project, true);
+//					CategoryDataModel cat=new CategoryDataModel(
+//							getListOfRequiremntUtils(requirements),
+//							category.getId(), category
+//									.getName(), true);
+//					cat.setCompletionProgress(cp);
+//					cat.setCoverageProgress(cov);
+//					tableDataModelList.set(tableDataModelList.indexOf(cc),cat);
+					tableDataModelList.get(i).setFiltredRequirements(null);
+					RequestContext.getCurrentInstance().execute(
+							"PF('dataTable_" + i + "_Widget').clearFilters();");
+				}
+			}
+
+		}
 	}
 
 }

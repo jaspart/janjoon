@@ -64,6 +64,12 @@ public class CategoryUtil  implements Serializable{
 		return categoryUtils;
 	}
 	
+	@Override
+	public boolean equals(Object object) {
+		return (object instanceof CategoryUtil) && (getCategory() != null) ? getCategory()
+				.equals(((CategoryUtil) object).getCategory()) : (object == this);
+	}
+	
 	
 	public static List<CategoryUtil> getCategoryList(List<JJCategory> categories,JJCategory category)
 	{

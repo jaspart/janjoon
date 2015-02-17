@@ -106,7 +106,7 @@
 					<!-- 	communicationButton	: Uncommand the button to start using the communication overlayPanel -->
 					<p:commandButton id="communicationButton" icon="ui-icon-comment"
 						value="#{loginBean.messageCount}" oncomplete="PF('communicationPanel').show();"
-						title="#{message.header_communication_label}" />
+						title="#{message.header_communication_label}" rendered="#{loginBean.enable}" />
 				</h:panelGrid>
 
 				<p:tabMenu id="tabMenu" name="content" style="float: none;"
@@ -206,10 +206,8 @@
 						icon="ui-icon-calculator"
 						rendered="#{loginBean.enable and !loginBean.mobile}" />
 
-					<p:menuitem value="#{messages.header_admin_menuitem}"
-						rendered="false"
-						disabled="#{!loginBean.authorisationService.rCompany}"
-						title="#{loginBean.authorisationService.rCompanyMSG}"
+					<p:menuitem value="#{messages.header_admin_menuitem}"						
+						rendered="#{!loginBean.authorisationService.renderAdmin}"						
 						url="/pages/administration.jsf?faces-redirect=true"
 						icon="ui-icon-key" update=":contentPanel" />
 

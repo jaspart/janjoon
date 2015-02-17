@@ -26,7 +26,7 @@
 			styleClass="customTitleBar"
 			style="height: 400px;background: #DDEEFF;">
 			<f:event listener="#{jJMessageBean.initJJmessageTable}"
-				type="preRenderView" />
+				type="preRenderView"/>
 
 			<h:form id="messageForm">
 				<p:dataTable id="MessageTable2" sortMode="multiple"
@@ -255,6 +255,7 @@
 						headerText="#{messages.bug_table_action_title}">
 						<p:commandButton id="viewTaskButton" icon="ui-icon-zoomin"
 							update=":viewTaskForm" immediate="true"
+							title="#{messages.project_gantt_table_actions_viewMenuItem}"
 							action="#{jJTaskBean.initiateReqTreeNode}">
 							<f:setPropertyActionListener value="#{task}"
 								target="#{jJTaskBean.task}" />
@@ -277,7 +278,7 @@
 						
 						<p:commandButton id="updateTaskButton" update=":viewTaskForm"
 							actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'main')}"
-							value="Update Task"	
+							value="#{messages.label_update} Task"
 							onstart="PF('viewtaskBlockUIWidget').block()"
 							style="margin-top: 5px;"
 							oncomplete="PF('viewtaskBlockUIWidget').unblock();"

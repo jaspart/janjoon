@@ -17,9 +17,10 @@
 
 	<h:form id="testcaseDialogForm">
 		<p:growl id="msg" />
-		<p:tabView id="testTabView" widgetVar="testTabView" >
+		<p:tabView id="testTabView" widgetVar="testTabView">
 			<p:tab title="TestCase">
-				<p:panelGrid style="margin-top:10px;width:700px;height:400px;" id="testPanel">
+				<p:panelGrid style="margin-top:10px;width:700px;height:400px;"
+					id="testPanel">
 					<p:row>
 						<p:column>
 							<p:inputText id="name" value="#{jJTestcaseBean.testcase.name}"
@@ -142,32 +143,32 @@
 					</p:row>
 				</p:panelGrid>
 			</p:tab>
-			<p:tab title="TestSteps" disabled="#{jJTestcaseBean.disabledTeststepMode}">
+			<p:tab title="TestSteps"
+				disabled="#{jJTestcaseBean.disabledTeststepMode}">
 				<p:panelGrid style="margin-top:10px;width:700px;height:200px;">
 					<p:row>
 						<p:column>
 							<p:outputLabel for="action"
 								value="#{messages.test_new_action_label}" />
-							<pe:ckEditor id="action" height="150px" width="350px"
+							<pe:ckEditor id="action" height="100px" width="350px"
 								value="#{jJTeststepBean.teststep.actionstep}"
 								toolbar="[['Bold','Italic','Underline','Image','TextColor','BGColor','Undo','Table']]"
 								readOnly="#{jJTestcaseBean.disabledTeststepMode}"
 								label="#{messages.test_new_action_label}" required="true"
-								requiredMessage="#{messages.test_new_action_alert}"
-								 />
+								requiredMessage="#{messages.test_new_action_alert}" />
 						</p:column>
 						<p:column>
 							<p:outputLabel for="result"
 								value="#{messages.test_new_result_label}" />
-							<pe:ckEditor id="result" height="150px" width="350px"
+							<pe:ckEditor id="result" height="100px" width="350px"
 								value="#{jJTeststepBean.teststep.resultstep}"
 								toolbar="[['Bold','Italic','Underline','Image','TextColor','BGColor','Undo','Table']]"
 								readOnly="#{jJTestcaseBean.disabledTeststepMode}"
 								label="#{messages.test_new_result_label}" required="true"
-								requiredMessage="#{messages.test_new_result_alert}"
-								 />
+								requiredMessage="#{messages.test_new_result_alert}" />
 						</p:column>
-						</p:row><p:row>
+					</p:row>
+					<p:row>
 						<p:column colspan="2">
 							<p:commandButton id="addTestStep"
 								value="#{messages.test_new_addteststep_label}"
@@ -183,7 +184,7 @@
 				</p:panelGrid>
 				<p:dataTable id="testStepDataTable" var="ts"
 					value="#{jJTeststepBean.teststeps}" scrollRows="10"
-					scrollable="true" scrollHeight="100" style="width:700px;"
+					scrollable="true" scrollHeight="150" style="width:750px;"
 					rowKey="#{ts.name}" editable="true">
 					<p:ajax event="rowEdit" listener="#{jJTeststepBean.editTestStep}"
 						update=":testcaseDialogForm:msg"
@@ -195,40 +196,55 @@
 						oncomplete="PF('testBlockUIWidget').unblock()"
 						listener="#{jJTeststepBean.cancelEditTestStep}"
 						update=":testcaseDialogForm:msg" />
+					<p:ajax event="rowEditInit"
+						onstart="PF('testBlockUIWidget').block()"
+						listener="#{jJTeststepBean.initCkeditor}"
+						update="actionInputWidget resultInputWidget"
+						oncomplete="PF('testBlockUIWidget').unblock();" />
 					<f:facet name="header">  
             						#{messages.test_new_teststep_title}  
         					</f:facet>
 					<p:column headerText="#{messages.test_new_table_order_label}"
-						style="width:9%;">
+						style="width:7%;">
 						<p:outputLabel value="#{ts.ordering}" />
 					</p:column>
 					<p:column headerText="#{messages.test_new_table_action_header}"
-						style="width:33%;">
+						style="width:36%;">
 						<p:cellEditor>
 							<f:facet name="output">
-								<p:outputLabel value="#{ts.actionstep}" escape="false"/>
+								<p:outputLabel value="#{ts.actionstep}" escape="false" />
 							</f:facet>
 							<f:facet name="input">
-								<p:inputText value="#{ts.actionstep}" style="width:90%"
-									required="true" label="#{messages.test_new_table_action_label}"
-									id="actionInputWidget"
-									requiredMessage="#{messages.test_new_table_action_alert}">
-								</p:inputText>
+								<!-- 								<p:inputText value="#{ts.actionstep}" style="width:90%" -->
+								<!-- 									required="true" label="#{messages.test_new_table_action_label}" -->
+								<!-- 									id="actionInputWidget" -->
+								<!-- 									requiredMessage="#{messages.test_new_table_action_alert}"> -->
+								<!-- 								</p:inputText> -->
+								<pe:ckEditor id="actionInputWidget" height="100px" width="250px"
+									value="#{ts.actionstep}" widgetVar="act_#{ts.id}"
+									toolbar="[['Image','TextColor','Undo','Table']]"
+									label="#{messages.test_new_result_label}" required="true"
+									requiredMessage="#{messages.test_new_table_action_alert}" />
 							</f:facet>
 						</p:cellEditor>
 					</p:column>
 					<p:column headerText="#{messages.test_new_table_result_header}"
-						style="width:33%;">
+						style="width:36%;">
 						<p:cellEditor>
 							<f:facet name="output">
 								<p:outputLabel value="#{ts.resultstep}" escape="false" />
 							</f:facet>
 							<f:facet name="input">
-								<p:inputText value="#{ts.resultstep}" style="width:90%"
-									required="true" label="#{messages.test_new_table_result_label}"
-									id="resultInputWidget"
-									requiredMessage="#{messages.test_new_table_result_alert}">
-								</p:inputText>
+<!-- 								<p:inputText value="#{ts.resultstep}" style="width:90%" -->
+<!-- 									required="true" label="#{messages.test_new_table_result_label}" -->
+<!-- 									id="resultInputWidget" -->
+<!-- 									requiredMessage="#{messages.test_new_table_result_alert}"/> -->
+									<pe:ckEditor id="resultInputWidget" height="100px"
+										width="250px" value="#{ts.resultstep}"
+										toolbar="[['Image','TextColor','Undo','Table']]"
+										label="#{messages.test_new_table_result_label}"
+										required="true" widgetVar="res_#{ts.id}"
+										requiredMessage="#{messages.test_new_table_result_alert}" />
 							</f:facet>
 						</p:cellEditor>
 					</p:column>
@@ -255,12 +271,18 @@
 							<f:setPropertyActionListener value="#{ts}"
 								target="#{jJTeststepBean.teststep}" />
 						</p:commandButton>
-						<p:tooltip for="deleteTestStep"
+						<p:tooltip for="deleteTestStep" 
 							value="#{messages.test_new_teststep_delete_tooltip}"
 							showEffect="fade" hideEffect="fade" />
 					</p:column>
-					<p:column style="width:10%;">
-						<p:rowEditor />
+					<p:column style="width:6%;">
+<!-- 						<p:remoteCommand name="updateCkeditor" -->
+<!-- 							onstart="PF('act_#{ts.id}').initialize();PF('res_#{ts.id}').initialize()" immediate="true" /> -->
+						<!-- 						<p:commandLink ajax="true" update="resultInputWidget actionInputWidget" immediate="true"> -->
+						<p:rowEditor/>
+<!-- 							<p:ajaxStatus onstart="PF('act_#{ts.id}').initialize();PF('res_#{ts.id}').initialize()"  /> -->
+<!-- 						</p:rowEditor> -->
+						<!-- 						</p:commandLink>						 -->
 					</p:column>
 				</p:dataTable>
 			</p:tab>

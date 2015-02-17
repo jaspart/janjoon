@@ -315,15 +315,15 @@
 		</dependency>
 		<!-- PrimeFaces Theme dependencies -->
 		<!--<dependency> -->
-		<!--	<groupId>org.primefaces.themes</groupId> -->
-		<!--	<artifactId>all-themes</artifactId> -->
-		<!--	<version>1.0.10</version> -->
+		<!-- <groupId>org.primefaces.themes</groupId> -->
+		<!-- <artifactId>all-themes</artifactId> -->
+		<!-- <version>1.0.10</version> -->
 		<!--</dependency> -->
 		<dependency>
 			<groupId>com.starit.janjoonweb</groupId>
 			<artifactId>janjoon-theme</artifactId>
 			<version>1.0-SNAPSHOT</version>
-		</dependency>
+		</dependency>		
 		<!-- PrimeFaces Extension dependencies -->
 		<dependency>
 			<groupId>org.primefaces.extensions</groupId>

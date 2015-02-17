@@ -22,18 +22,13 @@
 					top : top,
 					left : left
 				});
-			}
+			}	
+			
+			
 
 			function updateRowExapansion() {
 				$(".rowExpansion").slideUp("fast");
 			}
-			// 			function setFilterValue(importance,status,criticity)
-			// 			{
-			// 				$(".criticity").val(criticity);
-			// 				$(".importance").val(importance);
-			// 				$(".status").val(status);
-			// 				alert("dfgdfg");
-			// 			}
 		</script>
 	</h:head>
 	<h:body>
@@ -52,7 +47,7 @@
 				<!-- 						showCloseIcon="true" styleClass="communication-overlaypanel"> -->
 				<p:dialog widgetVar="communicationPanel" id="communicationPanel"
 					styleClass="overlayPanelDialog" showEffect="fade" dynamic="true" closable="true"
-					style="width:400px">
+					style="width:400px" rendered="#{loginBean.enable}">
 <!--						<p:panel id="messagePanel" header="Chat" styleClass="chat"
 							toggleable="true" toggleOrientation="horizontal"
 							style="height:100%;">>
@@ -84,11 +79,11 @@
 								
 <!--									rendered="#{loginBean.enable}">-->
 									<p:growl id="creationGrowl" showDetail="true" life="1000" />
-									<p:panelGrid columns="1">
+									<p:panelGrid columns="1" >
 										<p:outputLabel for="messagedsc" value="Message :" />
-										<p:inputTextarea id="messagedsc" cols="40" rows="6"
+										<p:inputTextarea id="messagedsc" cols="20" rows="6"
 											value="#{jJMessageBean.message.message}" required="true" />
-										<p:panelGrid columns="2">
+										<p:panelGrid columns="2" style="border:hidden;" >
 											<p:selectBooleanButton id="alert" value="#{jJMessageBean.alertOrInfo}"
 												onLabel="Alert" offLabel="Info" onIcon="ui-icon-alert"
 												offIcon="ui-icon-info">
@@ -201,8 +196,7 @@
 								rendered="#{loginBean.enable}" />
 
 							<p:menuitem value="#{messages.header_admin_menuitem}"
-								disabled="#{!loginBean.authorisationService.rCompany}"
-								title="#{loginBean.authorisationService.rCompanyMSG}"
+								rendered="#{!loginBean.authorisationService.renderAdmin}"								
 								url="/pages/administration.jsf?faces-redirect=true"
 								icon="ui-icon-key" update=":contentPanel" />
 						</p:menu>

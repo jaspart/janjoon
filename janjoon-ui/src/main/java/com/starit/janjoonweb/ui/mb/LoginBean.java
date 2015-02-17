@@ -1,6 +1,7 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ValueChangeEvent;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -27,6 +29,8 @@ import org.primefaces.component.dialog.Dialog;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -107,7 +111,7 @@ public class LoginBean implements Serializable {
 		this.mobile = (((HttpServletRequest) FacesContext.getCurrentInstance()
 				.getExternalContext().getRequest()).getHeader("User-Agent")
 				.indexOf("Mobile")) != -1;
-		// this.mobile = true;
+		//this.mobile = true;
 		// } else {
 		// this.mobile=true;
 		// }
@@ -794,7 +798,7 @@ public class LoginBean implements Serializable {
 
 				if (activeTabAdminIndex == 0 || activeTabAdminIndex == 1) {
 
-					if (!authorisationService.isAdminContactProfil()) {
+					if (!authorisationService.isAdminContact()) {
 						activeTabAdminIndex = 5;
 
 						RequestContext context = RequestContext
@@ -1007,7 +1011,7 @@ public class LoginBean implements Serializable {
 										.contains("test"))
 								|| (!authorisationService.isrContact() && root
 										.getViewId().contains("team"))
-								|| (!authorisationService.isrCompany() && root
+								|| (!authorisationService.isRenderAdmin() && root
 										.getViewId().contains("administration"))) {
 
 							facesMessage = MessageFactory.getMessage(
@@ -1063,7 +1067,7 @@ public class LoginBean implements Serializable {
 										.contains("test"))
 								|| (!authorisationService.isrContact() && root
 										.getViewId().contains("team"))
-								|| (!authorisationService.isrCompany() && root
+								|| (!authorisationService.isRenderAdmin() && root
 										.getViewId().contains("administration"))) {
 
 							facesMessage = MessageFactory.getMessage(
@@ -1090,7 +1094,7 @@ public class LoginBean implements Serializable {
 									.contains("test"))
 							|| (!authorisationService.isrContact() && root
 									.getViewId().contains("team"))
-							|| (!authorisationService.isrCompany() && root
+							|| (!authorisationService.isRenderAdmin() && root
 									.getViewId().contains("administration"))) {
 
 						facesMessage = MessageFactory.getMessage(
@@ -1294,4 +1298,10 @@ public class LoginBean implements Serializable {
 		});
 		return found[0];
 	}
+	
+//	public StreamedContent getFile()
+//	{
+//		InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("");
+//        return new DefaultStreamedContent(stream, "image/jpg", "downloaded_optimus.jpg");
+//	}
 }

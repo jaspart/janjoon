@@ -10,8 +10,11 @@ import java.util.TreeMap;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.HttpSession;
 
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -201,6 +204,24 @@ public class JJTeststepBean {
 		FacesContext.getCurrentInstance().addMessage(null,
 				new FacesMessage("Test Step Inserted !"));
 	}
+	
+	public void initCkeditor(RowEditEvent event) {		
+		
+		DataTable table = (DataTable) event.getSource();
+		int activeRow  = table.getRowIndex(); 
+		int lenth=table.getRowCount();
+		
+		//RequestContext.getCurrentInstance().execute("jQuery('span.ui-icon-pencil').eq(" + rowToEditIndex + ").each(function(){jQuery(this).click()});");
+		for(int i=0;i<lenth;i++)
+			if(i != activeRow)
+			RequestContext.getCurrentInstance().
+			execute("jQuery('.ui-datatable-data tr').last().find('span.ui-icon-close').eq(" + i + ").each(function(){jQuery(this).click()});");
+		
+		RequestContext.getCurrentInstance().execute(
+				"PF('testTabView').select(0)");
+		RequestContext.getCurrentInstance().execute(
+				"PF('testTabView').select(1)");
+	}
 
 	public void editTestStep(RowEditEvent event) {
 
@@ -225,11 +246,11 @@ public class JJTeststepBean {
 
 	public void cancelEditTestStep(RowEditEvent event) {
 
-		FacesMessage facesMessage = MessageFactory.getMessage("Cancel Edit",
-				"Teststep");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-
+//		FacesMessage facesMessage = MessageFactory.getMessage("Cancel Edit",
+//				"Teststep");
+//		FacesContext.getCurrentInstance().addMessage(null, facesMessage);	
 		newTeststep();
+		
 
 	}
 	

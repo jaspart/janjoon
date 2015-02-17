@@ -10,11 +10,11 @@
 	<ui:define name="content">
 		<h:form>
 			<p:remoteCommand name="updateAdmin"
-				update=":contentPanel :headerForm" />			
+				update=":contentPanel :headerForm" />
 		</h:form>
 
 		<p:commandButton value="#{messages.specification_video_help_title}"
-			id="videoHelpBtn" icon="ui-icon-video"
+			id="videoHelpBtn" icon="ui-icon-video" title="#{messages.specification_video_help_title}"
 			onclick="PF('videoHelpWidget').show()" type="button"
 			style="float: right;" />
 		<p:tabView id="tabview" widgetVar="AdmintabView" dynamic="true"
@@ -22,9 +22,9 @@
 			<p:ajax event="tabChange" listener="#{loginBean.onTabAdminChange}"
 				update="tabview " />
 
-			<p:tab id="tabUser" title="#{messages.admin_user_menuitem}"
-				titletip="#{loginBean.authorisationService.adminContactProfilMSG}"
-				disabled="#{!loginBean.authorisationService.adminContactProfil}">
+			<p:tab id="tabUser" title="#{messages.admin_user_menuitem}" 
+				titletip="#{loginBean.authorisationService.adminContactMSG}"
+				rendered="#{loginBean.authorisationService.adminContact}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="contact">
 						<ui:include src="contact.xhtml" />
@@ -33,8 +33,8 @@
 			</p:tab>
 
 			<p:tab id="tabProfile" title="#{messages.admin_profile_menuitem}"
-				titletip="#{loginBean.authorisationService.adminContactProfilMSG}"
-				disabled="#{!loginBean.authorisationService.adminContactProfil}">
+				titletip="#{loginBean.authorisationService.adminProfilMSG}"
+				rendered="#{loginBean.authorisationService.adminProfil}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="profile">
 						<ui:include src="profile.xhtml" />
@@ -44,7 +44,7 @@
 
 			<p:tab id="tabCompagnies" title="#{messages.admin_company_menuitem}"
 				titletip="#{loginBean.authorisationService.adminCompanyMSG}"
-				disabled="#{!loginBean.authorisationService.adminCompany}">
+				rendered="#{loginBean.authorisationService.adminCompany}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="Compagnies">
 						<ui:include src="compagnies.xhtml" />
@@ -54,7 +54,7 @@
 
 			<p:tab id="tabProduct" title="#{messages.admin_product_menuitem}"
 				titletip="#{loginBean.authorisationService.adminProductMSG}"
-				disabled="#{!loginBean.authorisationService.adminProduct}">
+				rendered="#{loginBean.authorisationService.adminProduct}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="product">
 						<ui:include src="product.xhtml" />
@@ -64,7 +64,7 @@
 
 			<p:tab id="tabProject" title="#{messages.admin_project_menuitem}"
 				titletip="#{loginBean.authorisationService.adminProjectMSG}"
-				disabled="#{!loginBean.authorisationService.adminProject}">
+				rendered="#{loginBean.authorisationService.adminProject}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="project">
 						<ui:include src="project.xhtml" />
@@ -72,7 +72,9 @@
 				</h:panelGrid>
 			</p:tab>
 
-			<p:tab id="tabCategory" title="#{messages.admin_category_menuitem}">
+			<p:tab id="tabCategory" title="#{messages.admin_category_menuitem}"
+				titletip="#{loginBean.authorisationService.adminCategoryMSG}"
+				rendered="#{loginBean.authorisationService.adminCategory}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="category">
 						<ui:include src="category.xhtml" />
@@ -80,6 +82,8 @@
 				</h:panelGrid>
 			</p:tab>
 			<p:tab id="tabConfig"
+				titletip="#{loginBean.authorisationService.adminConfigurationMSG}"
+				rendered="#{loginBean.authorisationService.adminConfiguration}"
 				title="#{messages.admin_configuration_menuitem}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="configuration">
@@ -88,7 +92,9 @@
 				</h:panelGrid>
 			</p:tab>
 
-			<p:tab id="tabStatus" title="#{messages.admin_status_menuitem}">
+			<p:tab id="tabStatus" title="#{messages.admin_status_menuitem}"
+				titletip="#{loginBean.authorisationService.adminStatusMSG}"
+				rendered="#{loginBean.authorisationService.adminStatus}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="status">
 						<ui:include src="status.xhtml" />
@@ -96,7 +102,9 @@
 				</h:panelGrid>
 			</p:tab>
 
-			<p:tab id="tabWorkflow" title="#{messages.admin_workflow_menuitem}">
+			<p:tab id="tabWorkflow" title="#{messages.admin_workflow_menuitem}"
+				titletip="#{loginBean.authorisationService.adminWorkflowMSG}"
+				rendered="#{loginBean.authorisationService.adminWorkflow}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="workflow">
 						<ui:include src="workflow.xhtml" />

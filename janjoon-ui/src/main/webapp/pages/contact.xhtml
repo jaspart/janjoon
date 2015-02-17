@@ -37,10 +37,10 @@
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_contact_table_action_label}" />
 					</f:facet>
-					<p:splitButton id="editButton" icon="ui-icon-pencil"
+					<p:splitButton  id="editButton" icon="ui-icon-pencil"
 						oncomplete="PF('contactDialogWidget').show()"
 						action="#{jJContactBean.editContact(jJPermissionBean)}"
-						update=":tabview:contactDialog"
+						update=":tabview:contactDialog" title="#{messages.admin_contact_edit_label}"
 						value="#{messages.admin_contact_edit_label}">
 						<f:setPropertyActionListener value="#{contact}"
 							target="#{jJContactBean.contactAdmin}" />
@@ -57,7 +57,7 @@
 				</p:column>
 				<f:facet name="footer">
 					<p:commandButton value="#{messages.admin_contact_new_button}"
-						id="newContact"
+						id="newContact" title="#{messages.admin_contact_new_button}"
 						actionListener="#{jJContactBean.newContact(jJPermissionBean)}"
 						update=":tabview:contactDialog"
 						oncomplete="PF('contactDialogWidget').show()"
@@ -166,8 +166,9 @@
 
 								<p:row>
 									<p:column colspan="4">
-										<p:commandButton id="addContact" value="Add Contact"
+										<p:commandButton id="addContact" value="#{messages.admin_contact_add_button}" 
 											style="float: right;" update="contactDialogForm"
+											title="#{messages.admin_contact_add_button}" 
 											process="@this,firstname,lastname,email,password,company"
 											action="#{jJContactBean.addContact(jJPermissionBean)}"
 											disabled="#{not jJContactBean.disabledPermissionMode}" />
@@ -231,7 +232,7 @@
 										<p:commandButton id="addPermission"
 											update="profile project product permissionDataTable msg"
 											actionListener="#{jJPermissionBean.addPermission}"
-											icon="ui-icon-circle-plus"
+											icon="ui-icon-circle-plus" title="#{messages.admin_contact_addPermission_button}"
 											process="@this,profile,project,product"
 											disabled="#{jJContactBean.disabledPermissionMode}" />
 									</p:column>
@@ -313,7 +314,7 @@
 					<f:facet name="footer">
 						<p:row>
 							<p:column colspan="4">
-								<p:commandButton id="saveButton" value="Save"
+								<p:commandButton id="saveButton" value="Save" title="Save"
 									update="contactDialogForm :headerForm" style="float: right;"
 									process="@this,firstname,lastname,email,password,company"
 									disabled="#{jJContactBean.disabledPermissionMode}"
@@ -334,10 +335,12 @@
 			<h:form id="contactDeleteForm">
 				<p:commandButton id="deleteYesButton"
 					value="#{messages.admin_contact_delete_yes_label}"
+					title="#{messages.admin_contact_delete_yes_label}"
 					action="#{jJContactBean.deleteContact}"
 					update=":tabview:contactForm"
 					oncomplete="PF('contactDeleteDialogWidget').hide()" />
 				<p:commandButton id="deleteNoButton"
+					title="#{messages.admin_contact_delete_no_label}"
 					value="#{messages.admin_contact_delete_no_label}"
 					onclick="PF('contactDeleteDialogWidget').hide()" type="button" />
 			</h:form>

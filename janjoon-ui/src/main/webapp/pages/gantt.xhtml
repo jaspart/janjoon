@@ -128,7 +128,8 @@
 										<p:graphicImage library="images" name="#{taskData.icone}"
 											width="16" height="16" />
 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-											update=":viewTaskForm" immediate="true"
+											update=":viewTaskForm" immediate="true" 
+											title="#{messages.project_gantt_table_actions_viewMenuItem}"
 											action="#{jJTaskBean.initiateReqTreeNode}">
 											<f:setPropertyActionListener value="#{taskData.task}"
 												target="#{jJTaskBean.task}" />
@@ -367,7 +368,7 @@
 									eventMargin="10" eventMarginAxis="0"
 									themable="false" locale="#{LocaleBean.locale}"
 									start="#{jJTaskBean.start}" end="#{jJTaskBean.end}"
-									widgetVar="timelineWdgt" axisOnTop="true"
+									widgetVar="timelineWdgt" axisOnTop="true"									
 									groupsChangeable="false" var="task" stackEvents="false"
 									style="width:100%;min-height:350px;" editable="true"
 									zoomMin="#{jJTaskBean.zoomMin}" zoomMax="#{jJTaskBean.zoomMax}"
@@ -392,7 +393,8 @@
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()" />
 
-									<h:outputText style="height:30px;" value="#{task.name}" rendered="#{task != null}"/>
+									<h:outputText id="tt" style="height:30px;" title="#{task.name}"
+										value="#{task.name}" rendered="#{task != null}" />									
 								</pe:timeline>
 
 							</pe:layoutPane>

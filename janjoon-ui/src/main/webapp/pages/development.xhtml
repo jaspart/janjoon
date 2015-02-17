@@ -76,7 +76,7 @@
 												disabled="#{jJDevelopment.task == null}" immediate="true"
 												oncomplete="PF('viewTaskDialogWidget').show()"
 												actionListener="#{jJTaskBean.gettingTaskValue}"
-												title="#{messages.label_view}">
+												title="#{messages.project_gantt_table_actions_viewMenuItem}">
 												<f:attribute name="taskValue" value="#{jJDevelopment.task}" />
 
 												<!-- 												<f:setPropertyActionListener value="#{jJDevelopment.task}" -->
@@ -332,7 +332,8 @@
 
 						<p:commandButton id="updateTaskButton" update=":viewTaskForm"
 							actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'dev')}"
-							value="Update Task" onstart="PF('viewtaskBlockUIWidget').block()"
+							value="#{messages.label_update} Task"
+							onstart="PF('viewtaskBlockUIWidget').block()"
 							style="margin-top: 5px;"
 							oncomplete="PF('viewtaskBlockUIWidget').unblock();"
 							process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload" />

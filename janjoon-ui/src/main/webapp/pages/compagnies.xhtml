@@ -26,7 +26,7 @@
 	<h:form id="companyForm">
 		<p:panel id="companyPanel" style="width:500px" columns="1"
 			cellpadding="6">
-			<p:dataTable id="companyDataTable" var="company"
+			<p:dataTable id="companyDataTable" var="company" 
 				value="#{jJCompanyBean.companies}" paginator="true" rows="15"
 				rowKey="#{company.id}">
 				<f:facet name="header">#{messages.admin_company_table_header}</f:facet>
@@ -43,6 +43,7 @@
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
 						oncomplete="PF('companyDialogWidget').show()"
 						value="#{messages.admin_company_table_edit_tooltip}"
+						title="#{messages.admin_company_table_edit_tooltip}"
 						update=":tabview:companyDialog">
 						<f:setPropertyActionListener value="#{company}"
 							target="#{jJCompanyBean.companie}" />
@@ -64,6 +65,7 @@
 				</p:column>
 				<f:facet name="footer">
 					<p:commandButton value="#{messages.admin_company_new_button}"
+						title="#{messages.admin_company_new_button}"
 						id="newCompany" update=":tabview:companyDialog"
 						oncomplete="PF('companyDialogWidget').show()"
 						icon="ui-icon-circle-plus">
@@ -140,7 +142,7 @@
 							<p:outputLabel value="Description"
 								for="jJCompanyMobileDescription" rendered="#{loginBean.mobile}" />
 							<br />
-							<pe:ckEditor id="jJCompanyDescription"
+							<pe:ckEditor id="jJCompanyDescription" 
 								toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
 								style="width:680px" rendered="#{!loginBean.mobile}"
 								customConfig="#{request.contextPath}/resources/js/ckEditor.js"
@@ -158,7 +160,7 @@
 							<p:column colspan="3">
 								<p:commandButton id="submitButton"
 									value="#{messages.admin_company_new_save_button}"
-									update="companyDialogForm"
+									update="companyDialogForm" title="#{messages.admin_company_new_save_button}"
 									action="#{jJCompanyBean.saveCompany}" />
 								<p:commandButton id="cancelButton" value="Annuler"
 									onclick="PF('companyDialogWidget').hide()" type="button" />

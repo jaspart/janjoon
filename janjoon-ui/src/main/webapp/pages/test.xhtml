@@ -17,27 +17,15 @@
 
 		<p:layout styleClass="content"
 			style="min-height:500px;overflow:hidden !important;height:700px !important;"
-			stateful="true">
-
+			stateful="true">		
 			<h:form id="testFormNorth">
 				<p:dialog widgetVar="categoryPanel" id="categoryPanel"
 					onHide="hideEvent()" styleClass="overlayPanelDialog"
 					rendered="#{loginBean.mobile}" binding="#{categoryPanel}"
 					closable="false">
 					<c:forEach items="#{jJTestcaseBean.categoryList}" var="category">
-<!-- 						<p:commandButton value="#{category.category.name}" -->
-<!-- 							update=":testFormWest :testFormCenter :testFormNorth:categoryPanel" -->
-<!-- 							action="#{jJTestcaseBean.loadData(categoryPanel,null,true)}" -->
-<!-- 							style="width: 150px;margin-left: 20px;height: 100px;margin-top: 20px;visibility: visible;" -->
-<!-- 							onstart="PF('blockUIWidget').block()" -->
-<!-- 							oncomplete="PF('blockUIWidget').unblock()"> -->
-<!-- 							<f:setPropertyActionListener value="#{category.category}" -->
-<!-- 								target="#{jJTestcaseBean.category}" /> -->
-<!-- 							<f:setPropertyActionListener target="#{jJTestcaseBean.project}" -->
-<!-- 								value="#{null}" /> -->
-<!-- 						</p:commandButton> -->
 						<p:selectBooleanButton value="#{category.checked}"
-							onLabel="#{category.category.name}"
+							onLabel="#{category.category.name}" id="Mcategory_#{category.category.id}"
 							rendered="#{loginBean.mobile}" 
 							style="width: 150px;margin-left: 20px;height: 100px;margin-top: 20px;visibility: visible;"
 							offLabel="#{category.category.name}" onIcon="ui-icon-check"
@@ -48,39 +36,33 @@
 								onstart="PF('blockUIWidget').block()"
 								oncomplete="PF('blockUIWidget').unblock()" />
 						</p:selectBooleanButton>
+						<p:tooltip for="Mcategory_#{category.category.id}" value="#{category.category.name}" 
+							showEffect="fade" hideEffect="fade" />
 						<br />
 					</c:forEach>
 				</p:dialog>
 				<p:layoutUnit position="north" style="min-height:30px;">
 					<p:remoteCommand name="hideEvent" update="categoryPanel" />
 					<c:forEach items="#{jJTestcaseBean.categoryList}" var="category">
-<!-- 						<p:commandButton value="#{category.category.name}" -->
-<!-- 							update=":testFormWest :testFormCenter" -->
-<!-- 							rendered="#{!loginBean.mobile}" -->
-<!-- 							action="#{jJTestcaseBean.loadData(null)}" -->
-<!-- 							onstart="PF('blockUIWidget').block()" -->
-<!-- 							oncomplete="PF('blockUIWidget').unblock()"> -->
-<!-- 							<f:setPropertyActionListener value="#{category.category}" -->
-<!-- 								target="#{jJTestcaseBean.category}" /> -->
-<!-- 							<f:setPropertyActionListener target="#{jJTestcaseBean.project}" -->
-<!-- 								value="#{null}" /> -->
-<!-- 						</p:commandButton> -->
+
 						<p:selectBooleanButton value="#{category.checked}"
-							onLabel="#{category.category.name}"
-							rendered="#{!loginBean.mobile}"
-							style="visibility: visible;"
+							onLabel="#{category.category.name}" id="category_#{category.category.id}"
+							rendered="#{!loginBean.mobile}" style="visibility: visible;"
 							offLabel="#{category.category.name}" onIcon="ui-icon-check"
 							offIcon="ui-icon-close">
 							<p:ajax
 								listener="#{jJTestcaseBean.loadData(null,category.category,true)}"
-								update=":testFormWest :testFormCenter :testFormNorth" onstart="PF('blockUIWidget').block()"
+								update=":testFormWest :testFormCenter :testFormNorth"
+								onstart="PF('blockUIWidget').block()"
 								oncomplete="PF('blockUIWidget').unblock()" />
 						</p:selectBooleanButton>
+						<p:tooltip for="category_#{category.category.id}" value="#{category.category.name}" 
+							showEffect="fade" hideEffect="fade" />
 					</c:forEach>
 
 					<p:commandButton value="&#9776;" id="overlayPanel"
 						style="font-weight:bold; float:none; position:relative; left:30%;visibility: visible;"
-						rendered="#{loginBean.mobile}"
+						rendered="#{loginBean.mobile}" title="Category"
 						action="#{loginBean.showAndHideDialog('categoryPanel',categoryPanel)}" />
 
 					<p:commandButton
@@ -205,7 +187,7 @@
 				style="min-height:500px;width:1060px !important;height:600px !important;">
 				<h:form id="testFormCenter">
 					<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
-						style="float: right;" />
+						style="float: right;" title="#{messages.specification_video_help_title}"/>
 					<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade">
 						<p:panelGrid>
 							<f:facet name="header">
@@ -477,13 +459,13 @@
 		<p:dialog id="testcaseDialog"
 			header="#{messages[jJTestcaseBean.message]}" modal="true"
 			widgetVar="testcaseDialogWidget" dynamic="true" resizable="false"
-			style="top: 30px;">
+			style="top: 30px;">			
 			<p:ajax event="close" update=":testFormCenter :testFormWest"
 				listener="#{jJTestcaseBean.closeDialog}" />
 			<p:outputPanel id="testcaseDialogPanel">
 				<ui:include src="testDialog.xhtml"/>
 			</p:outputPanel>
-		</p:dialog>
+		</p:dialog>	
 
 		<p:dialog id="runTestcaseDialog" header="#{messages.test_exec_title}"
 			modal="true" widgetVar="runTestcaseDialogWidget" draggable="false"
@@ -503,7 +485,7 @@
 						activeIndex="#{jJTeststepexecutionBean.activeIndex}"
 						scrollable="true" dynamic="true"
 						value="#{jJTeststepexecutionBean.teststepexecutions}" var="tse">
-						<p:ajax event="tabChange"
+						<p:ajax event="tabChange" 
 							listener="#{jJTeststepexecutionBean.onTabChange}"
 							update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton" />
 						<p:tab title="#{tse.teststep.ordering}">

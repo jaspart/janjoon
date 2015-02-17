@@ -471,8 +471,9 @@ div.timeline-event-content {
 }
 
 div.timeline-event-content span {
-	height: 15px !important;
+	height: 30px !important;
 	font-size: small;
+	width:	100%;
 	display: inline-block;
 	vertical-align: middle;
 	font-weight: bold;
