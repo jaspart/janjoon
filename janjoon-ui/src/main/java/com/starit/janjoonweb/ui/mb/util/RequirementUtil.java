@@ -24,9 +24,11 @@ public class RequirementUtil {
 		this.style = style;
 	}
 	
-		public RequirementUtil(JJRequirement requirement,JJCategoryService jJCategoryService,
-				JJRequirementService jJRequirementService,JJTaskService jJTaskService,JJTestcaseService jJTestcaseService,
-				JJTestcaseexecutionService jJTestcaseexecutionService) {
+	public RequirementUtil(JJRequirement requirement,
+			JJCategoryService jJCategoryService,
+			JJRequirementService jJRequirementService,
+			JJTaskService jJTaskService, JJTestcaseService jJTestcaseService,
+	JJTestcaseexecutionService jJTestcaseexecutionService) {
 		
 		this.requirement = requirement;
 		this.style = JJRequirementBean.getRowStyleClass(requirement, jJCategoryService, jJRequirementService, jJTaskService, jJTestcaseService, jJTestcaseexecutionService);

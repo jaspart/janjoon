@@ -21,6 +21,7 @@ import org.primefaces.model.mindmap.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
+import org.w3c.dom.ls.LSInput;
 import org.xml.sax.SAXParseException;
 
 import com.lowagie.text.Element;
@@ -63,7 +64,7 @@ public class JJRequirementBean {
 	private List<JJTestcase> reqSelectedtestCases;
 	private String testCaseName;
 	private int colspan;
-
+	private String filterValue;
 	private JJTaskBean jJTaskBean;
 
 	public void setjJTaskBean(JJTaskBean jJTaskBean) {
@@ -197,6 +198,14 @@ public class JJRequirementBean {
 
 	public void setFilterButton(String filterButton) {
 		this.filterButton = filterButton;
+	}
+
+	public String getFilterValue() {
+		return filterValue;
+	}
+
+	public void setFilterValue(String filterValue) {
+		this.filterValue = filterValue;
 	}
 
 	public JJCategory getLowCategory() {
@@ -1138,7 +1147,8 @@ public class JJRequirementBean {
 						&& req.getCategory()
 								.getId()
 								.equals(tableDataModelList.get(i)
-										.getCategoryId()) && tableDataModelList.get(i).getRendered()) {
+										.getCategoryId())
+						&& tableDataModelList.get(i).getRendered()) {
 					List<RequirementUtil> listRes = (List<RequirementUtil>) tableDataModelList
 							.get(i).getWrappedData();
 					if (operation.equalsIgnoreCase("UPDATE")) {
@@ -1176,6 +1186,61 @@ public class JJRequirementBean {
 			}
 		}
 
+	}
+
+	public void filterTable() {
+		int i = 0;
+		while (i < tableDataModelList.size()) {
+			if (tableDataModelList.get(i).getRendered()) {
+
+				if(filterValue == null || filterValue.isEmpty())
+				{
+					
+					if(this.mine)
+					{
+						JJCategory category = jJCategoryService.findJJCategory(tableDataModelList.get(i)
+								.getCategoryId());
+						this.setMine(true);
+						tableDataModelList.get(i).setFiltredRequirements(getListOfRequiremntUtils(jJRequirementService
+								.getMineRequirements(((LoginBean) LoginBean
+										.findBean("loginBean")).getContact()
+										.getCompany(), ((LoginBean) LoginBean
+										.findBean("loginBean")).getContact(),
+										product, project, category, version, true,
+										true)));					
+					}						
+					else
+						tableDataModelList.get(i).setFiltredRequirements(null);
+					
+				}else
+				{
+					if(this.mine)
+						tableDataModelList.get(i).setFiltredRequirements
+						(getFiltredListValue(tableDataModelList.get(i).getFiltredRequirements()));
+					else
+						tableDataModelList.get(i).setFiltredRequirements
+						(getFiltredListValue((List<RequirementUtil>) tableDataModelList.get(i).getWrappedData()));
+				}
+				
+			}
+			i++;
+
+		}
+	}
+
+	public List<RequirementUtil> getFiltredListValue(List<RequirementUtil> list) {
+		
+		if (filterValue == null || filterValue.isEmpty())
+			return list;
+		else {
+			List<RequirementUtil> filtredList = new ArrayList<RequirementUtil>();
+			for (RequirementUtil req : list) {
+				if (req.getRequirement().getName().toLowerCase()
+						.contains(filterValue.toLowerCase()))
+					filtredList.add(req);
+			}
+			return filtredList;
+		}
 	}
 
 	public void preReleaseRequirement(long id) {
@@ -1358,7 +1423,7 @@ public class JJRequirementBean {
 		}
 		updateJJRequirement(requirement);
 		updateDataTable(requirement, u);
-		this.mine=false;
+		this.mine = false;
 		mineChangeEvent();
 
 		RequestContext context = RequestContext.getCurrentInstance();
@@ -2304,15 +2369,44 @@ public class JJRequirementBean {
 					categoryDataModel = new CategoryDataModel(
 							getListOfRequiremntUtils(requirements),
 							category.getId(), category.getName(), true);
+
+					if (mine)
+					{
+						if(filterValue == null || filterValue.isEmpty())
+							categoryDataModel
+									.setFiltredRequirements(getListOfRequiremntUtils(jJRequirementService
+											.getMineRequirements(
+													((LoginBean) LoginBean
+															.findBean("loginBean"))
+															.getContact()
+															.getCompany(),
+													((LoginBean) LoginBean
+															.findBean("loginBean"))
+															.getContact(), product,
+													project, category, version,
+													true, true)));
+							else
+							{
+								categoryDataModel
+								.setFiltredRequirements(getFiltredListValue(getListOfRequiremntUtils(jJRequirementService
+										.getMineRequirements(
+												((LoginBean) LoginBean
+														.findBean("loginBean"))
+														.getContact()
+														.getCompany(),
+												((LoginBean) LoginBean
+														.findBean("loginBean"))
+														.getContact(), product,
+												project, category, version,
+												true, true))));
+							}
+					}else if(!(filterValue == null || filterValue.isEmpty()))
+					{
+						categoryDataModel
+						.setFiltredRequirements(getFiltredListValue((List<RequirementUtil>) categoryDataModel.getWrappedData()));
+					}
 					
-					if(mine)
-						categoryDataModel.setFiltredRequirements(getListOfRequiremntUtils(jJRequirementService
-								.getMineRequirements(((LoginBean) LoginBean
-										.findBean("loginBean")).getContact()
-										.getCompany(), ((LoginBean) LoginBean
-										.findBean("loginBean")).getContact(),
-										product, project, category, version, true,
-										true)));
+						
 
 					// categoryDataModel.calculCompletionProgress();
 					// categoryDataModel.calculCoverageProgress();
@@ -2326,22 +2420,22 @@ public class JJRequirementBean {
 				if (id == Long.parseLong(result))
 					requirements = getRequirementsList(category, product,
 							version, project, true);
-				
-
-				
 
 				categoryDataModel = new CategoryDataModel(
 						getListOfRequiremntUtils(requirements),
 						category.getId(), category.getName(),
-						requirements != null);				
-				if(mine && requirements != null)
-					categoryDataModel.setFiltredRequirements(getListOfRequiremntUtils(jJRequirementService
-							.getMineRequirements(((LoginBean) LoginBean
-									.findBean("loginBean")).getContact()
-									.getCompany(), ((LoginBean) LoginBean
-									.findBean("loginBean")).getContact(),
-									product, project, category, version, true,
-									true)));
+						requirements != null);
+				if (mine && requirements != null)
+					categoryDataModel
+							.setFiltredRequirements(getListOfRequiremntUtils(jJRequirementService
+									.getMineRequirements(((LoginBean) LoginBean
+											.findBean("loginBean"))
+											.getContact().getCompany(),
+											((LoginBean) LoginBean
+													.findBean("loginBean"))
+													.getContact(), product,
+											project, category, version, true,
+											true)));
 				tableDataModelList.set(i, categoryDataModel);
 
 			}
@@ -4429,37 +4523,54 @@ public class JJRequirementBean {
 					JJCategory category = jJCategoryService.findJJCategory(cc
 							.getCategoryId());
 					this.setMine(true);
-					cc.setFiltredRequirements(getListOfRequiremntUtils(jJRequirementService
+					cc.setFiltredRequirements(getFiltredListValue(getListOfRequiremntUtils(jJRequirementService
 							.getMineRequirements(((LoginBean) LoginBean
 									.findBean("loginBean")).getContact()
 									.getCompany(), ((LoginBean) LoginBean
 									.findBean("loginBean")).getContact(),
 									product, project, category, version, true,
-									true)));
+									true))));
 				}
 
 			}
 
 		} else {
 
-			for (int i=0;i<tableDataModelList.size();i++) {
-				if (tableDataModelList.get(i).getCategoryId() != 0 && tableDataModelList.get(i).getRendered()) {
-//					float cov=cc.getCoverageProgress();
-//					float cp=cc.getCompletionProgress();
-//					JJCategory category = jJCategoryService.findJJCategory(cc
-//							.getCategoryId());
-//					List<JJRequirement> requirements = getRequirementsList(
-//							category, product, version, project, true);
-//					CategoryDataModel cat=new CategoryDataModel(
-//							getListOfRequiremntUtils(requirements),
-//							category.getId(), category
-//									.getName(), true);
-//					cat.setCompletionProgress(cp);
-//					cat.setCoverageProgress(cov);
-//					tableDataModelList.set(tableDataModelList.indexOf(cc),cat);
-					tableDataModelList.get(i).setFiltredRequirements(null);
-					RequestContext.getCurrentInstance().execute(
-							"PF('dataTable_" + i + "_Widget').clearFilters();");
+			for (int i = 0; i < tableDataModelList.size(); i++) {
+				if (tableDataModelList.get(i).getCategoryId() != 0
+						&& tableDataModelList.get(i).getRendered()) {
+					// float cov=cc.getCoverageProgress();
+					// float cp=cc.getCompletionProgress();
+					// JJCategory category = jJCategoryService.findJJCategory(cc
+					// .getCategoryId());
+					// List<JJRequirement> requirements = getRequirementsList(
+					// category, product, version, project, true);
+					// CategoryDataModel cat=new CategoryDataModel(
+					// getListOfRequiremntUtils(requirements),
+					// category.getId(), category
+					// .getName(), true);
+					// cat.setCompletionProgress(cp);
+					// cat.setCoverageProgress(cov);
+					// tableDataModelList.set(tableDataModelList.indexOf(cc),cat);
+					if (filterValue == null || filterValue.isEmpty())
+					{
+						tableDataModelList.get(i).setFiltredRequirements(null);
+						RequestContext.getCurrentInstance().execute(
+								"PF('dataTable_" + i + "_Widget').clearFilters();");
+					}						
+					else
+					{
+//						RequestContext.getCurrentInstance().execute(
+//								"PF('dataTable_" + i + "_Widget').clearFilters();");
+						tableDataModelList
+						.get(i)
+						.setFiltredRequirements(
+								getFiltredListValue((List<RequirementUtil>) tableDataModelList
+										.get(i).getWrappedData()));
+					}
+						
+						
+					
 				}
 			}
 

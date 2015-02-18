@@ -35,9 +35,18 @@
 				<p:tooltip for="category_#{category.category.id}" value="#{category.category.name}" 
 							showEffect="fade" hideEffect="fade" />
 			</c:forEach>
+			
+			<p:remoteCommand name="filter" update=":specForm" actionListener="#{jJRequirementBean.filterTable}"/>
+			
+			<p:inputText id="globalFilter" style="margin-left: 10%;height: 20px;width: 15%;" value="#{jJRequirementBean.filterValue}"
+				onkeyup="filter()" />
+				
+			<p:watermark
+				value="#{messages.specification_table_requirement_filter}"
+				for="globalFilter" />
 
 			<p:selectBooleanButton id="mineSpec"
-				style="margin-left:100px;"
+				style="margin-left: 10%;" 
 				value="#{jJRequirementBean.mine}" onLabel="Mine" offLabel="All"
 				onIcon="ui-icon-check" offIcon="ui-icon-close">
 				<p:ajax onstart="PF('blockUIWidget').block()"
@@ -48,6 +57,8 @@
 				hideEffect="fade" />
 
 			<!-- 			</ui:repeat> -->
+
+			
 
 			<p:commandButton value="&#9776;" id="overlayPanel"
 				title="Category"
@@ -196,13 +207,13 @@
 												actionListener="#{jJRequirementBean.preReleaseRequirement(tableDataModel.categoryId)}"
 												oncomplete="PF('requirementReleaseDialogWidget').show()" />
 										</p:column-->
-										<p:column colspan="3" rendered="#{!jJRequirementBean.expand or tableDataModel.expanded}">
-											<p:inputText id="globalFilter" style="width:90%"
-												onkeyup="PF('dataTable_#{loop.index}_Widget').filter()" />
-											<p:watermark
-												value="#{messages.specification_table_requirement_filter}"
-												for="globalFilter" />
-										</p:column>
+<!-- 										<p:column colspan="3" rendered="#{!jJRequirementBean.expand or tableDataModel.expanded}"> -->
+<!-- 											<p:inputText id="globalFilter" style="width:90%" -->
+<!-- 												onkeyup="PF('dataTable_#{loop.index}_Widget').filter()" /> -->
+<!-- 											<p:watermark -->
+<!-- 												value="#{messages.specification_table_requirement_filter}" -->
+<!-- 												for="globalFilter" /> -->
+<!-- 										</p:column> -->
 										<p:column colspan="1">
 											<p:commandButton id="newRequirementButton"
 												icon="ui-icon-plusthick"

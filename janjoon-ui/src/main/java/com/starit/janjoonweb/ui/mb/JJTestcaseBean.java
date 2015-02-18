@@ -1512,6 +1512,19 @@ public class JJTestcaseBean {
 
 	}
 	
+	public String getMarginLeft(CategoryUtil cc) {
+		int jj = categoryList.indexOf(cc);
+		if (jj == -1 || jj == 0)
+			return "";
+		else {
+			if (categoryList.get(jj - 1).getCategory().getStage()
+					.equals(cc.getCategory().getStage()))
+				return "";
+			else
+				return "margin-left: 20px;";
+		}
+	}
+	
 	public void testCaseInfo(long id) throws IOException
 	{
 		FacesContext

@@ -47,7 +47,7 @@
 
 						<p:selectBooleanButton value="#{category.checked}"
 							onLabel="#{category.category.name}" id="category_#{category.category.id}"
-							rendered="#{!loginBean.mobile}" style="visibility: visible;"
+							rendered="#{!loginBean.mobile}" style="visibility: visible;#{jJTestcaseBean.getMarginLeft(category)}"
 							offLabel="#{category.category.name}" onIcon="ui-icon-check"
 							offIcon="ui-icon-close">
 							<p:ajax
