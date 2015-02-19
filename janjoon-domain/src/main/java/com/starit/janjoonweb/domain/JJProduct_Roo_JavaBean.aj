@@ -76,6 +76,14 @@ privileged aspect JJProduct_Roo_JavaBean {
         this.extname = extname;
     }
     
+    public byte[] JJProduct.getLogo() {
+        return this.logo;
+    }
+    
+    public void JJProduct.setLogo(byte[] logo) {
+        this.logo = logo;
+    }
+    
     public Set<JJVersion> JJProduct.getVersions() {
         return this.versions;
     }

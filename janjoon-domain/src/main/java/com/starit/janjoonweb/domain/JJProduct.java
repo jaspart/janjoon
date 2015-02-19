@@ -52,6 +52,9 @@ public class JJProduct {
 	@NotNull
 	@Size(max = 100)
 	private String extname;
+	
+	@Lob
+	private byte[] logo;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
 	private Set<JJVersion> versions = new HashSet<JJVersion>();

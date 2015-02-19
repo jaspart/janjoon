@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb.converter;
 
-import com.starit.janjoonweb.domain.JJTestcaseexecution;
 import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
 import com.starit.janjoonweb.ui.mb.converter.JJTestcaseexecutionConverter;
 import javax.faces.component.UIComponent;

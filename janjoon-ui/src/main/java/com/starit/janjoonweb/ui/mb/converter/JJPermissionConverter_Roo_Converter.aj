@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb.converter;
 
-import com.starit.janjoonweb.domain.JJPermission;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.ui.mb.converter.JJPermissionConverter;
 import javax.faces.component.UIComponent;

@@ -44,6 +44,7 @@ privileged aspect JJProjectDataOnDemand_Roo_DataOnDemand {
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
+        setLogo(obj, index);
         setManager(obj, index);
         setName(obj, index);
         setUpdatedDate(obj, index);
@@ -63,6 +64,11 @@ privileged aspect JJProjectDataOnDemand_Roo_DataOnDemand {
     public void JJProjectDataOnDemand.setEnabled(JJProject obj, int index) {
         Boolean enabled = Boolean.TRUE;
         obj.setEnabled(enabled);
+    }
+    
+    public void JJProjectDataOnDemand.setLogo(JJProject obj, int index) {
+        byte[] logo = String.valueOf(index).getBytes();
+        obj.setLogo(logo);
     }
     
     public void JJProjectDataOnDemand.setManager(JJProject obj, int index) {

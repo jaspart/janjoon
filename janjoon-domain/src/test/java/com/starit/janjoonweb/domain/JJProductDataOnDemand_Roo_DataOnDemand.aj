@@ -45,6 +45,7 @@ privileged aspect JJProductDataOnDemand_Roo_DataOnDemand {
         setDescription(obj, index);
         setEnabled(obj, index);
         setExtname(obj, index);
+        setLogo(obj, index);
         setManager(obj, index);
         setName(obj, index);
         setUpdatedDate(obj, index);
@@ -72,6 +73,11 @@ privileged aspect JJProductDataOnDemand_Roo_DataOnDemand {
             extname = extname.substring(0, 100);
         }
         obj.setExtname(extname);
+    }
+    
+    public void JJProductDataOnDemand.setLogo(JJProduct obj, int index) {
+        byte[] logo = String.valueOf(index).getBytes();
+        obj.setLogo(logo);
     }
     
     public void JJProductDataOnDemand.setManager(JJProduct obj, int index) {

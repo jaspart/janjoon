@@ -48,6 +48,9 @@ public class JJProject {
 	private JJContact updatedBy;
 
 	private Boolean enabled;
+	
+	@Lob
+	private byte[] logo;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "project")
 	private Set<JJChapter> chapters = new HashSet<JJChapter>();

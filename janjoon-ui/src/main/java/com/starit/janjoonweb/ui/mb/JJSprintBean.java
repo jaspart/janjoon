@@ -100,9 +100,6 @@ public class JJSprintBean {
 		this.tabIndex = tabIndex;
 	}
 
-	// private static final Logger logger =
-	// Logger.getLogger(JJSprintBean.class);
-
 	public void setjJTaskBean(JJTaskBean jJTaskBean) {
 		this.jJTaskBean = jJTaskBean;
 	}
@@ -413,8 +410,14 @@ public class JJSprintBean {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		RequestContext context = RequestContext.getCurrentInstance();
 
+		int i=0;
+		if(((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
+			i=1;
+		else
+			i=0;
+		
 		context.update(":projecttabview");
-		context.execute("PF('projectTabView').select(" + 1 + ")");
+		context.execute("PF('projectTabView').select(" + i + ")");
 		update = false;
 		context.execute("PF('SprintTab').select("
 				+ contains(sprintUtil.getSprint().getId()) + ")");
@@ -475,7 +478,12 @@ public class JJSprintBean {
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
-		context.execute("PF('projectTabView').select(" + 1 + ")");
+		int i=0;
+		if(((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
+			i=1;
+		else
+			i=0;
+		context.execute("PF('projectTabView').select(" + i + ")");
 
 		System.err.println("SprintTab.select("
 				+ contains(sprintUtil.getSprint().getId()) + ")");
@@ -549,9 +557,16 @@ public class JJSprintBean {
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
 
+		
 		RequestContext context = RequestContext.getCurrentInstance();
-
-		context.execute("PF('projectTabView').select(" + 1 + ")");
+		
+		int i=0;
+		if(((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
+			i=1;
+		else
+			i=0;
+		
+		context.execute("PF('projectTabView').select(" + i + ")");
 		update = false;
 		context.execute("PF('SprintTab').select("
 				+ contains(sprintUtil.getSprint().getId()) + ")");
@@ -598,10 +613,15 @@ public class JJSprintBean {
 					FacesMessage.SEVERITY_WARN, "non autorisée", "");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
-
+		
+		int i=0;
+		if(((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
+			i=1;
+		else
+			i=0;
 		RequestContext context = RequestContext.getCurrentInstance();
 
-		context.execute("PF('projectTabView').select(" + 1 + ")");
+		context.execute("PF('projectTabView').select(" + i + ")");
 		update = false;
 		context.execute("PF('SprintTab').select("
 				+ contains(sprintUtil.getSprint().getId()) + ")");
@@ -697,9 +717,14 @@ public class JJSprintBean {
 		category = null;
 		categoryList = null;
 		// reqList = null;
+		int i=0;
+		if(((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
+			i=1;
+		else
+			i=0;
 		RequestContext context = RequestContext.getCurrentInstance();
 
-		context.execute("PF('projectTabView').select(" + 1 + ")");
+		context.execute("PF('projectTabView').select(" + i + ")");
 		update = false;
 		context.execute("PF('SprintTab').select("
 				+ contains(sprintUtil.getSprint().getId()) + ")");
@@ -714,7 +739,12 @@ public class JJSprintBean {
 		session.setAttribute("jJSprintBean", new JJSprintBean());
 		RequestContext context = RequestContext.getCurrentInstance();
 
-		context.execute("PF('projectTabView').select(" + 1 + ")");
+		int i=0;
+		if(((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
+			i=1;
+		else
+			i=0;
+		context.execute("PF('projectTabView').select(" + i + ")");
 		update = false;
 		context.execute("PF('SprintTab').select("+ contains(id) + ")");
 
@@ -779,8 +809,13 @@ public class JJSprintBean {
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted", "Task");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-
-		context.execute("PF('projectTabView').select(" + 1 + ")");
+		
+		int i=0;
+		if(((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
+			i=1;
+		else
+			i=0;
+		context.execute("PF('projectTabView').select(" + i + ")");
 		update = false;
 		context.execute("PF('SprintTab').select("
 				+ contains(sprintUtil.getSprint().getId()) + ")");
@@ -880,7 +915,12 @@ public class JJSprintBean {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		jJbugBean.reset();
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('projectTabView').select(" + 1 + ")");
+		int i=0;
+		if(((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
+			i=1;
+		else
+			i=0;
+		context.execute("PF('projectTabView').select(" + i + ")");
 		update = false;
 		context.execute("PF('SprintTab').select("
 				+ contains(getSprintUtil().getSprint().getId()) + ")");

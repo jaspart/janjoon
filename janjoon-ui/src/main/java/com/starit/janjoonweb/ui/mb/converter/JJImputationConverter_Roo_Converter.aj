@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb.converter;
 
-import com.starit.janjoonweb.domain.JJImputation;
 import com.starit.janjoonweb.domain.JJImputationService;
 import com.starit.janjoonweb.ui.mb.converter.JJImputationConverter;
 import javax.faces.component.UIComponent;

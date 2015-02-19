@@ -5,6 +5,26 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition>
+<style type="text/css">
+.ui-fileupload-progress {
+	display: none;
+}
+
+.ui-fileupload-cancel {
+	display: none;
+}
+
+.ui-fileupload-files {
+	margin: 1px 0;
+	width: 150px !important;
+	display: inline-block;
+	height: 30px;
+}
+
+td.ui-fileupload-preview{
+	display: none;
+}
+</style>
 	<h:form id="projectForm">
 		<p:panel id="projectForm" style="width:600px" columns="1"
 			cellpadding="6">
@@ -12,6 +32,12 @@
 				paginatorPosition="bottom" value="#{jJProjectBean.projectListTable}"
 				paginator="true" rows="15" rowKey="#{project.id}">
 				<f:facet name="header">#{messages.admin_project_table_header}</f:facet>
+				<p:column style="width: 70px !important;text-align: center;">
+					<p:graphicImage styleClass="avatar" rendered="#{project.logo != null}"
+						value="#{imageStreamer.imageProj}">
+						<f:param name="ProjId" value="#{project.id}" />
+					</p:graphicImage>
+				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_project_table_name_title}" />
@@ -65,6 +91,7 @@
 							<p:inputText id="name" value="#{jJProjectBean.projectAdmin.name}"
 								label="Name" required="true" widgetVar="nameWidget">
 								<f:validateLength maximum="100" />
+								<p:ajax event="blur" update="projLogo" />
 							</p:inputText>
 							<p:message for="name" id="msgName" />
 							<p:watermark for="name"
@@ -85,6 +112,17 @@
 									var="p" itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />
 
 							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="3">
+							<h:outputLabel for="projLogo" value="Logo:" />
+
+							<p:fileUpload id="projLogo"
+								disabled="#{empty jJProjectBean.projectAdmin.name}"
+								fileUploadListener="#{licenseBean.handleProjLogoUpload}"
+								mode="advanced" dragDropSupport="true" update="msg"
+								sizeLimit="1000000" allowTypes="/(gif|png|ico|jpeg)$/" />
 						</p:column>
 					</p:row>
 					<p:row>

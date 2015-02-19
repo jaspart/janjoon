@@ -160,10 +160,10 @@ public class JJConfigurationBean {
 		
         String message = "";
         if (getJJConfiguration_().getId() != null) {
-            jJConfigurationService.updateJJConfiguration(getJJConfiguration_());
+            updateJJConfiguration(getJJConfiguration_());
             message = "message_successfully_updated";
         } else {
-            jJConfigurationService.saveJJConfiguration(getJJConfiguration_());
+            saveJJConfiguration(getJJConfiguration_());
             message = "message_successfully_created";
         }
         RequestContext context = RequestContext.getCurrentInstance();

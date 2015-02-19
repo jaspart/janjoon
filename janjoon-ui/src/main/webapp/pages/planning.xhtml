@@ -16,7 +16,7 @@
 				listener="#{jJSprintBean.onTabSprintChange}"
 				onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock()" />
-			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}">
+			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}" rendered="#{loginBean.renderGantt}">
 				<h:panelGrid id="projectpanel" columns="1" cellpadding="3"
 					style="width:100% !important;">
 					<ui:insert name="gantt">
@@ -24,7 +24,7 @@
 					</ui:insert>
 				</h:panelGrid>
 			</p:tab>
-			<p:tab title="#{messages.project_scrum_menuitem}">
+			<p:tab title="#{messages.project_scrum_menuitem}" rendered="#{loginBean.renderScrum}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="scrum">
 						<ui:include src="scrum.xhtml" />

@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb.converter;
 
-import com.starit.janjoonweb.domain.JJJob;
 import com.starit.janjoonweb.domain.JJJobService;
 import com.starit.janjoonweb.ui.mb.converter.JJJobConverter;
 import javax.faces.component.UIComponent;

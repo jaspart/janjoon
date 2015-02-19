@@ -24,6 +24,8 @@ import org.primefaces.model.UploadedFile;
 
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @ManagedBean
@@ -176,6 +178,65 @@ public class LicenseBean implements Serializable {
 		}
 
 		
+	}
+	
+	
+	public void handleProjLogoUpload(FileUploadEvent event) {
+
+		System.out.println("STARTING_OPERATION");
+		JJProject project = ((JJProjectBean) LoginBean
+				.findBean("jJProjectBean")).getProjectAdmin();
+		byte[] bFile = new byte[(int) event.getFile().getSize()];
+
+		InputStream inputStream;
+		try {
+			inputStream = event.getFile().getInputstream();
+			inputStream.read(bFile);
+			inputStream.close();
+			project.setLogo(bFile);
+
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"message_successfully_uploded", "Logo");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"message_unsuccessfully_uploded", "Logo");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+		}
+
+	}
+	
+	public void handleProdLogoUpload(FileUploadEvent event) {
+
+		System.out.println("STARTING_OPERATION");
+		JJProduct product = ((JJProductBean) LoginBean
+				.findBean("jJProductBean")).getProductAdmin();
+		byte[] bFile = new byte[(int) event.getFile().getSize()];
+
+		InputStream inputStream;
+		try {
+			inputStream = event.getFile().getInputstream();
+			inputStream.read(bFile);
+			inputStream.close();
+			product.setLogo(bFile);
+
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"message_successfully_uploded", "Logo");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"message_unsuccessfully_uploded", "Logo");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+		}
+
 	}
 
 	public void handleCompLogoUpload(FileUploadEvent event) {

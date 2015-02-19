@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb.converter;
 
-import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter;
 import javax.faces.component.UIComponent;
@@ -28,4 +27,5 @@ privileged aspect JJRequirementConverter_Roo_Converter {
         Long id = Long.parseLong(value);
         return jJRequirementService.findJJRequirement(id);
     }
+    
 }

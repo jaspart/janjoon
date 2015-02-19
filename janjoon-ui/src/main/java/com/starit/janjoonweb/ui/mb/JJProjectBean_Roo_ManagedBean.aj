@@ -11,7 +11,11 @@ import com.starit.janjoonweb.domain.JJProjectService;
 import com.starit.janjoonweb.ui.mb.JJProjectBean;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -290,6 +294,24 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         enabledCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
         
+        OutputLabel logoCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        logoCreateOutput.setFor("logoCreateInput");
+        logoCreateOutput.setId("logoCreateOutput");
+        logoCreateOutput.setValue("Logo:");
+        htmlPanelGrid.getChildren().add(logoCreateOutput);
+        
+        InputText logoCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        logoCreateInput.setId("logoCreateInput");
+        logoCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProjectBean.JJProject_.logo}", Byte.class));
+        logoCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(logoCreateInput);
+        
+        Message logoCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        logoCreateInputMessage.setId("logoCreateInputMessage");
+        logoCreateInputMessage.setFor("logoCreateInput");
+        logoCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(logoCreateInputMessage);
+        
         HtmlOutputText chaptersCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         chaptersCreateOutput.setId("chaptersCreateOutput");
         chaptersCreateOutput.setValue("Chapters:");
@@ -506,6 +528,24 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         enabledEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledEditInputMessage);
         
+        OutputLabel logoEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        logoEditOutput.setFor("logoEditInput");
+        logoEditOutput.setId("logoEditOutput");
+        logoEditOutput.setValue("Logo:");
+        htmlPanelGrid.getChildren().add(logoEditOutput);
+        
+        InputText logoEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        logoEditInput.setId("logoEditInput");
+        logoEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProjectBean.JJProject_.logo}", Byte.class));
+        logoEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(logoEditInput);
+        
+        Message logoEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        logoEditInputMessage.setId("logoEditInputMessage");
+        logoEditInputMessage.setFor("logoEditInput");
+        logoEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(logoEditInputMessage);
+        
         HtmlOutputText chaptersEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         chaptersEditOutput.setId("chaptersEditOutput");
         chaptersEditOutput.setValue("Chapters:");
@@ -651,6 +691,15 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         HtmlOutputText enabledValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProjectBean.JJProject_.enabled}", String.class));
         htmlPanelGrid.getChildren().add(enabledValue);
+        
+        HtmlOutputText logoLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        logoLabel.setId("logoLabel");
+        logoLabel.setValue("Logo:");
+        htmlPanelGrid.getChildren().add(logoLabel);
+        
+        HtmlOutputText logoValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        logoValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProjectBean.JJProject_.logo}", String.class));
+        htmlPanelGrid.getChildren().add(logoValue);
         
         HtmlOutputText chaptersLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         chaptersLabel.setId("chaptersLabel");

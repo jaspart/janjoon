@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb.converter;
 
-import com.starit.janjoonweb.domain.JJAuditLog;
 import com.starit.janjoonweb.domain.JJAuditLogService;
 import com.starit.janjoonweb.ui.mb.converter.JJAuditLogConverter;
 import javax.faces.component.UIComponent;

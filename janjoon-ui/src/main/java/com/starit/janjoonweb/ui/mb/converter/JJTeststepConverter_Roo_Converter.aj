@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb.converter;
 
-import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTeststepService;
 import com.starit.janjoonweb.ui.mb.converter.JJTeststepConverter;
 import javax.faces.component.UIComponent;
@@ -28,4 +27,5 @@ privileged aspect JJTeststepConverter_Roo_Converter {
         Long id = Long.parseLong(value);
         return jJTeststepService.findJJTeststep(id);
     }
+    
 }

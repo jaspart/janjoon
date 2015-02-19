@@ -11,7 +11,11 @@ import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.JJProductBean;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -312,6 +316,24 @@ privileged aspect JJProductBean_Roo_ManagedBean {
         extnameCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(extnameCreateInputMessage);
         
+        OutputLabel logoCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        logoCreateOutput.setFor("logoCreateInput");
+        logoCreateOutput.setId("logoCreateOutput");
+        logoCreateOutput.setValue("Logo:");
+        htmlPanelGrid.getChildren().add(logoCreateOutput);
+        
+        InputText logoCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        logoCreateInput.setId("logoCreateInput");
+        logoCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProductBean.JJProduct_.logo}", Byte.class));
+        logoCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(logoCreateInput);
+        
+        Message logoCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        logoCreateInputMessage.setId("logoCreateInputMessage");
+        logoCreateInputMessage.setFor("logoCreateInput");
+        logoCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(logoCreateInputMessage);
+        
         HtmlOutputText versionsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         versionsCreateOutput.setId("versionsCreateOutput");
         versionsCreateOutput.setValue("Versions:");
@@ -549,6 +571,24 @@ privileged aspect JJProductBean_Roo_ManagedBean {
         extnameEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(extnameEditInputMessage);
         
+        OutputLabel logoEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        logoEditOutput.setFor("logoEditInput");
+        logoEditOutput.setId("logoEditOutput");
+        logoEditOutput.setValue("Logo:");
+        htmlPanelGrid.getChildren().add(logoEditOutput);
+        
+        InputText logoEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        logoEditInput.setId("logoEditInput");
+        logoEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProductBean.JJProduct_.logo}", Byte.class));
+        logoEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(logoEditInput);
+        
+        Message logoEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        logoEditInputMessage.setId("logoEditInputMessage");
+        logoEditInputMessage.setFor("logoEditInput");
+        logoEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(logoEditInputMessage);
+        
         HtmlOutputText versionsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         versionsEditOutput.setId("versionsEditOutput");
         versionsEditOutput.setValue("Versions:");
@@ -706,6 +746,15 @@ privileged aspect JJProductBean_Roo_ManagedBean {
         extnameValue.setReadonly(true);
         extnameValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(extnameValue);
+        
+        HtmlOutputText logoLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        logoLabel.setId("logoLabel");
+        logoLabel.setValue("Logo:");
+        htmlPanelGrid.getChildren().add(logoLabel);
+        
+        HtmlOutputText logoValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        logoValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProductBean.JJProduct_.logo}", String.class));
+        htmlPanelGrid.getChildren().add(logoValue);
         
         HtmlOutputText versionsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         versionsLabel.setId("versionsLabel");

@@ -68,6 +68,14 @@ privileged aspect JJProject_Roo_JavaBean {
         this.enabled = enabled;
     }
     
+    public byte[] JJProject.getLogo() {
+        return this.logo;
+    }
+    
+    public void JJProject.setLogo(byte[] logo) {
+        this.logo = logo;
+    }
+    
     public Set<JJChapter> JJProject.getChapters() {
         return this.chapters;
     }

@@ -1279,6 +1279,40 @@ public class LoginBean implements Serializable {
 		else
 			return null;
 	}
+	
+	public boolean isRenderScrum()
+	{
+		List<JJConfiguration> conf = jJConfigurationService.getConfigurations("planning", "project.type", true);
+		if (conf != null && !conf.isEmpty())
+			return conf.get(0).getVal().toLowerCase()
+					.contains("scrum".toLowerCase());
+		else				
+			return true;
+		
+			
+	}
+	
+	public boolean isRenderGantt()
+	{
+		List<JJConfiguration> conf = jJConfigurationService.getConfigurations("planning", "project.type", true);
+		if (conf != null && !conf.isEmpty())
+			return conf.get(0).getVal().toLowerCase()
+					.contains("gantt".toLowerCase());
+		else
+		{
+			JJConfiguration configuration=new JJConfiguration();
+			configuration.setName("planning");
+			configuration.setDescription("specify available tab in planing vue");
+			configuration.setCreatedBy(getContact());
+			configuration.setCreationDate(new Date());
+			configuration.setEnabled(true);
+			configuration.setParam("project.type");
+			configuration.setVal("gantt,scrum");
+			jJConfigurationService.saveJJConfiguration(configuration);
+			return true;
+		}
+			
+	}
 
 	public UIComponent findComponent(final String id) {
 
@@ -1299,9 +1333,11 @@ public class LoginBean implements Serializable {
 		return found[0];
 	}
 	
-//	public StreamedContent getFile()
-//	{
-//		InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("");
-//        return new DefaultStreamedContent(stream, "image/jpg", "downloaded_optimus.jpg");
-//	}
+//	 public StreamedContent getFile()
+//	 {
+//	 InputStream stream =
+//	 FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/rrrr");
+//	 return new DefaultStreamedContent(stream, "image/jpg",
+//	 "downloaded_optimus.jpg");
+//	 }
 }

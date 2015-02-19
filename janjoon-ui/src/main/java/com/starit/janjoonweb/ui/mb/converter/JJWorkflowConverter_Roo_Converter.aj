@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb.converter;
 
-import com.starit.janjoonweb.domain.JJWorkflow;
 import com.starit.janjoonweb.domain.JJWorkflowService;
 import com.starit.janjoonweb.ui.mb.converter.JJWorkflowConverter;
 import javax.faces.component.UIComponent;
@@ -28,7 +27,5 @@ privileged aspect JJWorkflowConverter_Roo_Converter {
         Long id = Long.parseLong(value);
         return jJWorkflowService.findJJWorkflow(id);
     }
-    
-   
     
 }

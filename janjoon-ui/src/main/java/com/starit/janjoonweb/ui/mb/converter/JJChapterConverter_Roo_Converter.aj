@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb.converter;
 
-import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJChapterService;
 import com.starit.janjoonweb.ui.mb.converter.JJChapterConverter;
 import javax.faces.component.UIComponent;
@@ -28,6 +27,5 @@ privileged aspect JJChapterConverter_Roo_Converter {
         Long id = Long.parseLong(value);
         return jJChapterService.findJJChapter(id);
     }
-    
     
 }

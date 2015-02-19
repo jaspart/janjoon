@@ -3,6 +3,7 @@
 
 package com.starit.janjoonweb.ui.mb;
 
+import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
@@ -126,6 +127,8 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
     private HtmlPanelGrid JJRequirementBean.viewPanelGrid;
     
     private boolean JJRequirementBean.createDialogVisible = false;
+    
+    private List<JJBug> JJRequirementBean.selectedBugs;
     
     private List<JJTask> JJRequirementBean.selectedTasks;
     
@@ -783,16 +786,14 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         relationCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(relationCreateInputMessage);
         
-        OutputLabel bugsCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        bugsCreateOutput.setFor("bugsCreateInput");
+        HtmlOutputText bugsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugsCreateOutput.setId("bugsCreateOutput");
         bugsCreateOutput.setValue("Bugs:");
         htmlPanelGrid.getChildren().add(bugsCreateOutput);
         
-        InputText bugsCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        HtmlOutputText bugsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugsCreateInput.setId("bugsCreateInput");
-        bugsCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.bugs}", Set.class));
-        bugsCreateInput.setRequired(false);
+        bugsCreateInput.setValue("This relationship is managed from the JJBug side");
         htmlPanelGrid.getChildren().add(bugsCreateInput);
         
         Message bugsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -1483,16 +1484,14 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         relationEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(relationEditInputMessage);
         
-        OutputLabel bugsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        bugsEditOutput.setFor("bugsEditInput");
+        HtmlOutputText bugsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugsEditOutput.setId("bugsEditOutput");
         bugsEditOutput.setValue("Bugs:");
         htmlPanelGrid.getChildren().add(bugsEditOutput);
         
-        InputText bugsEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        HtmlOutputText bugsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugsEditInput.setId("bugsEditInput");
-        bugsEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.bugs}", Set.class));
-        bugsEditInput.setRequired(false);
+        bugsEditInput.setValue("This relationship is managed from the JJBug side");
         htmlPanelGrid.getChildren().add(bugsEditInput);
         
         Message bugsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -1888,7 +1887,8 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(bugsLabel);
         
         HtmlOutputText bugsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        bugsValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.bugs}", String.class));
+        bugsValue.setId("bugsValue");
+        bugsValue.setValue("This relationship is managed from the JJBug side");
         htmlPanelGrid.getChildren().add(bugsValue);
         
         HtmlOutputText tasksLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -2105,6 +2105,17 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         return suggestions;
     }
     
+    public List<JJBug> JJRequirementBean.getSelectedBugs() {
+        return selectedBugs;
+    }
+    
+    public void JJRequirementBean.setSelectedBugs(List<JJBug> selectedBugs) {
+        if (selectedBugs != null) {
+            JJRequirement_.setBugs(new HashSet<JJBug>(selectedBugs));
+        }
+        this.selectedBugs = selectedBugs;
+    }
+    
     public List<JJTask> JJRequirementBean.getSelectedTasks() {
         return selectedTasks;
     }
@@ -2150,6 +2161,9 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
     }
     
     public String JJRequirementBean.onEdit() {
+        if (JJRequirement_ != null && JJRequirement_.getBugs() != null) {
+            selectedBugs = new ArrayList<JJBug>(JJRequirement_.getBugs());
+        }
         if (JJRequirement_ != null && JJRequirement_.getTasks() != null) {
             selectedTasks = new ArrayList<JJTask>(JJRequirement_.getTasks());
         }

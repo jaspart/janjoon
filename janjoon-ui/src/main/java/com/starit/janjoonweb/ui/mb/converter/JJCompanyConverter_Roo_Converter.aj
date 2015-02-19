@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb.converter;
 
-import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.ui.mb.converter.JJCompanyConverter;
 import javax.faces.component.UIComponent;
@@ -28,4 +27,5 @@ privileged aspect JJCompanyConverter_Roo_Converter {
         Long id = Long.parseLong(value);
         return jJCompanyService.findJJCompany(id);
     }
+    
 }

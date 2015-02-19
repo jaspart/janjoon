@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb.converter;
 
-import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.converter.JJVersionConverter;
 import javax.faces.component.UIComponent;
@@ -27,7 +26,6 @@ privileged aspect JJVersionConverter_Roo_Converter {
         }
         Long id = Long.parseLong(value);
         return jJVersionService.findJJVersion(id);
-    }   
-    
+    }
     
 }

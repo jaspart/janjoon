@@ -53,7 +53,7 @@
 							<!-- 							<p:tooltip for="createButton" value="#{messages.label_create}" -->
 							<!-- 								showEffect="fade" hideEffect="fade" /> -->
 						</f:facet>
-						<p:graphicImage styleClass="avatar" value="#{imageStreamer.image}">
+						<p:graphicImage styleClass="avatar" value="#{imageStreamer.image}" rendered="#{mes.createdBy.picture != null}">
 							<f:param name="contactId" value="#{mes.createdBy.id}" />
 						</p:graphicImage>
 

@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb.converter;
 
-import com.starit.janjoonweb.domain.JJHardware;
 import com.starit.janjoonweb.domain.JJHardwareService;
 import com.starit.janjoonweb.ui.mb.converter.JJHardwareConverter;
 import javax.faces.component.UIComponent;
@@ -28,4 +27,5 @@ privileged aspect JJHardwareConverter_Roo_Converter {
         Long id = Long.parseLong(value);
         return jJHardwareService.findJJHardware(id);
     }
+    
 }

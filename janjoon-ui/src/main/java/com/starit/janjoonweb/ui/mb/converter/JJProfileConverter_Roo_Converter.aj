@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb.converter;
 
-import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJProfileService;
 import com.starit.janjoonweb.ui.mb.converter.JJProfileConverter;
 import javax.faces.component.UIComponent;
@@ -28,6 +27,5 @@ privileged aspect JJProfileConverter_Roo_Converter {
         Long id = Long.parseLong(value);
         return jJProfileService.findJJProfile(id);
     }
-    
     
 }

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
@@ -19,8 +20,10 @@ import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJImportance;
+import com.starit.janjoonweb.domain.JJImportanceService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -34,6 +37,13 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 @RooSerializable
 @RooJsfManagedBean(entity = JJBug.class, beanName = "jJBugBean")
 public class JJBugBean {
+	
+	@Autowired
+	private JJImportanceService jJImportanceService;
+
+	public void setjJImportanceService(JJImportanceService jJImportanceService) {
+		this.jJImportanceService = jJImportanceService;
+	}
 
 	private JJBug bug;
 	private JJBug JJBug_;
@@ -454,7 +464,14 @@ public class JJBugBean {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('projectTabView').select(" + 1 + ")");
+		
+		int i=0;
+		if(((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
+			i=1;
+		else
+			i=0;
+
+		context.execute("PF('projectTabView').select(" + i + ")");
 		jJSprintBean.setUpdate(false);
 		context.execute("PF('SprintTab').select("
 				+ jJSprintBean.contains(jJSprintBean.getSprintUtil()

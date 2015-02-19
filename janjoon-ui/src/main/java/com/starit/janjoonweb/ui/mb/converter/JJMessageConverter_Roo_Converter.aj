@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb.converter;
 
-import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJMessageService;
 import com.starit.janjoonweb.ui.mb.converter.JJMessageConverter;
 import javax.faces.component.UIComponent;

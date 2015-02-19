@@ -6,13 +6,38 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
+<style type="text/css">
+.ui-fileupload-progress {
+	display: none;
+}
+
+.ui-fileupload-cancel {
+	display: none;
+}
+
+.ui-fileupload-files {
+	margin: 1px 0;
+	width: 150px !important;
+	display: inline-block;
+	height: 30px;
+}
+td.ui-fileupload-preview{
+	display: none;
+}
+</style>
 	<h:form id="productForm">
-		<p:panel id="productPanel" style="width:650px" columns="1"
+		<p:panel id="productPanel" style="width:700px" columns="1"
 			cellpadding="6">
 			<p:dataTable id="productDataTable" var="product" lazy="true"
 				value="#{jJProductBean.productListTable}" paginator="true" rows="15"
 				rowKey="#{product.id}">
 				<f:facet name="header">#{messages.admin_product_table_title}</f:facet>
+				<p:column style="width: 70px !important;text-align: center;">
+					<p:graphicImage styleClass="avatar" rendered="#{product.logo != null}"
+						value="#{imageStreamer.imageProd}">
+						<f:param name="ProdId" value="#{product.id}" />
+					</p:graphicImage>
+				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_product_table_name_label}" />
@@ -88,6 +113,7 @@
 											label="#{messages.admin_product_new_name_title}"
 											required="true" widgetVar="nameWidget">
 											<f:validateLength maximum="100" />
+											<p:ajax event="blur" update="prodLogo" />
 										</p:inputText>
 										<p:watermark for="name"
 											value="#{messages.admin_product_new_name_watermark}" />
@@ -137,6 +163,17 @@
 								</p:row>
 								<p:row>
 									<p:column colspan="2">
+										<h:outputLabel for="prodLogo" value="Logo:" />
+
+										<p:fileUpload id="prodLogo"
+											disabled="#{empty jJProductBean.productAdmin.name}"
+											fileUploadListener="#{licenseBean.handleProdLogoUpload}"
+											mode="advanced" dragDropSupport="true" update="msg"
+											sizeLimit="1000000" allowTypes="/(gif|png|ico|jpeg)$/" />
+									</p:column>
+								</p:row>
+								<p:row rendered="#{jJProductBean.disabledVersionMode}">
+									<p:column colspan="2">
 										<p:commandButton id="addProduct" value="Add Product"
 											style="float: right;" update="productDialogForm"
 											disabled="#{not jJProductBean.disabledVersionMode}"
@@ -179,7 +216,7 @@
 					</p:row>
 
 					<p:dataTable id="versionDataTable" var="versionModel"
-						scrollable="true" style="width:350px;" scrollHeight="400"
+						scrollable="true" style="width:350px;" scrollHeight="250"
 						value="#{jJVersionBean.versionDataModel}"
 						rowStyleClass="#{versionModel.old ? 'old' : null}">
 

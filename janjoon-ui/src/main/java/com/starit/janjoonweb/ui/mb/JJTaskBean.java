@@ -605,7 +605,13 @@ public class JJTaskBean {
 			JJSprintBean jJSprintBean = (JJSprintBean) session
 					.getAttribute("jJSprintBean");
 			RequestContext context = RequestContext.getCurrentInstance();
-			context.execute("PF('projectTabView').select(" + 1 + ")");
+			int i=0;
+			if(((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
+				i=1;
+			else
+				i=0;
+
+			context.execute("PF('projectTabView').select(" + i + ")");
 			jJSprintBean.setUpdate(false);
 			if(id != null)
 			context.execute("PF('SprintTab').select("
@@ -1915,7 +1921,13 @@ public class JJTaskBean {
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			RequestContext context = RequestContext.getCurrentInstance();
 
-			context.execute("PF('projectTabView').select(" + 1 + ")");
+			int i=0;
+			if(((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
+				i=1;
+			else
+				i=0;
+
+			context.execute("PF('projectTabView').select(" + i + ")");
 			jJSprintBean.setUpdate(false);
 			context.execute("PF('SprintTab').select("
 					+ jJSprintBean.contains(jJSprintBean.getSprintUtil()
@@ -1948,7 +1960,13 @@ public class JJTaskBean {
 					.getAttribute("jJSprintBean");
 			RequestContext context = RequestContext.getCurrentInstance();
 
-			context.execute("PF('projectTabView').select(" + 1 + ")");
+			int i=0;
+			if(((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
+				i=1;
+			else
+				i=0;
+
+			context.execute("PF('projectTabView').select(" + i + ")");
 			jJSprintBean.setUpdate(false);
 			context.execute("PF('SprintTab').select("
 					+ jJSprintBean.contains(jJSprintBean.getSprintUtil()

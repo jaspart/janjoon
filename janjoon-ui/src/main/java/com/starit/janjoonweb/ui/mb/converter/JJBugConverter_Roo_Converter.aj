@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb.converter;
 
-import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
 import javax.faces.component.UIComponent;

@@ -3,6 +3,7 @@
 
 package com.starit.janjoonweb.ui.mb;
 
+import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJTestcase;
@@ -13,7 +14,11 @@ import com.starit.janjoonweb.ui.mb.JJTeststepBean;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -69,6 +74,8 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
     private HtmlPanelGrid JJTeststepBean.viewPanelGrid;
     
     private boolean JJTeststepBean.createDialogVisible = false;
+    
+    private List<JJBug> JJTeststepBean.selectedBugs;
     
     @PostConstruct
     public void JJTeststepBean.init() {
@@ -374,16 +381,14 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         testcaseCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testcaseCreateInputMessage);
         
-        OutputLabel bugsCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        bugsCreateOutput.setFor("bugsCreateInput");
+        HtmlOutputText bugsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugsCreateOutput.setId("bugsCreateOutput");
         bugsCreateOutput.setValue("Bugs:");
         htmlPanelGrid.getChildren().add(bugsCreateOutput);
         
-        InputText bugsCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        HtmlOutputText bugsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugsCreateInput.setId("bugsCreateInput");
-        bugsCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.bugs}", Set.class));
-        bugsCreateInput.setRequired(false);
+        bugsCreateInput.setValue("This relationship is managed from the JJBug side");
         htmlPanelGrid.getChildren().add(bugsCreateInput);
         
         Message bugsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -647,16 +652,14 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         testcaseEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testcaseEditInputMessage);
         
-        OutputLabel bugsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        bugsEditOutput.setFor("bugsEditInput");
+        HtmlOutputText bugsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugsEditOutput.setId("bugsEditOutput");
         bugsEditOutput.setValue("Bugs:");
         htmlPanelGrid.getChildren().add(bugsEditOutput);
         
-        InputText bugsEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        HtmlOutputText bugsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugsEditInput.setId("bugsEditInput");
-        bugsEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.bugs}", Set.class));
-        bugsEditInput.setRequired(false);
+        bugsEditInput.setValue("This relationship is managed from the JJBug side");
         htmlPanelGrid.getChildren().add(bugsEditInput);
         
         Message bugsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -820,7 +823,8 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(bugsLabel);
         
         HtmlOutputText bugsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        bugsValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTeststepBean.JJTeststep_.bugs}", String.class));
+        bugsValue.setId("bugsValue");
+        bugsValue.setValue("This relationship is managed from the JJBug side");
         htmlPanelGrid.getChildren().add(bugsValue);
         
         HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -879,7 +883,21 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
         return suggestions;
     }
     
+    public List<JJBug> JJTeststepBean.getSelectedBugs() {
+        return selectedBugs;
+    }
+    
+    public void JJTeststepBean.setSelectedBugs(List<JJBug> selectedBugs) {
+        if (selectedBugs != null) {
+            JJTeststep_.setBugs(new HashSet<JJBug>(selectedBugs));
+        }
+        this.selectedBugs = selectedBugs;
+    }
+    
     public String JJTeststepBean.onEdit() {
+        if (JJTeststep_ != null && JJTeststep_.getBugs() != null) {
+            selectedBugs = new ArrayList<JJBug>(JJTeststep_.getBugs());
+        }
         return null;
     }
     
@@ -932,6 +950,7 @@ privileged aspect JJTeststepBean_Roo_ManagedBean {
     
     public void JJTeststepBean.reset() {
         JJTeststep_ = null;
+        selectedBugs = null;
         createDialogVisible = false;
     }
     

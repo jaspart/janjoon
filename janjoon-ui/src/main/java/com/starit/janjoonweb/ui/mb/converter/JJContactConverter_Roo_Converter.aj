@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb.converter;
 
-import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import javax.faces.component.UIComponent;
@@ -27,7 +26,6 @@ privileged aspect JJContactConverter_Roo_Converter {
         }
         Long id = Long.parseLong(value);
         return jJContactService.findJJContact(id);
-    }    
-   
+    }
     
 }
