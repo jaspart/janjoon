@@ -171,27 +171,31 @@ public class JJStatusBean {
 			getProject();
 			getProduct();
 			getVersion();
-			categoryDataModel = new ArrayList<CategoryDataModel>();
+			if(project != null)
+			{
+				categoryDataModel = new ArrayList<CategoryDataModel>();
 
-			List<JJCategory> categoryList = jJCategoryService.getCategories(
-					null, false, true, true);
+				List<JJCategory> categoryList = jJCategoryService.getCategories(
+						null, false, true, true);
 
-			for (JJCategory category : categoryList) {
-				categoryDataModel.add(new CategoryDataModel(category));
+				for (JJCategory category : categoryList) {
+					categoryDataModel.add(new CategoryDataModel(category));
+				}
+
+				pieChart = new PieChartModel();
+				List<JJStatus> statReq = jJStatusService.getStatus("Requirement",
+						true, null, false);
+				for (JJStatus s : statReq) {
+
+					int i = Integer.parseInt(""
+							+ jJRequirementService.getReqCountByStaus(
+									((LoginBean) LoginBean.findBean("loginBean"))
+											.getContact().getCompany(), project,
+									product, version, s, true));
+					pieChart.set(s.getName(), i);
+				}
 			}
-
-			pieChart = new PieChartModel();
-			List<JJStatus> statReq = jJStatusService.getStatus("Requirement",
-					true, null, false);
-			for (JJStatus s : statReq) {
-
-				int i = Integer.parseInt(""
-						+ jJRequirementService.getReqCountByStaus(
-								((LoginBean) LoginBean.findBean("loginBean"))
-										.getContact().getCompany(), project,
-								product, version, s, true));
-				pieChart.set(s.getName(), i);
-			}
+			
 		} else {
 			first = !LoginBean.isEqualPreviousPage("stats");
 		}

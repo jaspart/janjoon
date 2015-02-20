@@ -642,6 +642,7 @@ public class JJTestcaseBean {
 					disabledExport = true;
 
 				}
+				if(project != null)
 				createTestcaseTree();
 				rendredEmptySelection = true;
 				categoryList = null;

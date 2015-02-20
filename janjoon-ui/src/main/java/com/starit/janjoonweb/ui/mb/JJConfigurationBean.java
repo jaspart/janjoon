@@ -203,6 +203,8 @@ public class JJConfigurationBean {
 	
 	public void updateJJConfiguration(JJConfiguration b)
 	{
+		if(b.equals(((LoginBean) LoginBean.findBean("loginBean")).getPlaningTabsConf()))
+				((LoginBean) LoginBean.findBean("loginBean")).setPlaningTabsConf(null);
 		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());

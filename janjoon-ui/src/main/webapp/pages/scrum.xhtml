@@ -7,6 +7,16 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition>
+	<style type="text/css">
+.jqplot-xaxis-label {
+	display: none;
+}
+
+.jqplot-xaxis-tick {
+	transform: rotate(45deg);
+	top: 10px;
+}
+</style>
 	<h:form style="width:100%;">
 		<p:remoteCommand update=":projecttabview:SprintTabView"
 			name="updateTabSprint" />

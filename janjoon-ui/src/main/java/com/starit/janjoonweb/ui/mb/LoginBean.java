@@ -103,6 +103,7 @@ public class LoginBean implements Serializable {
 	private int activeTabAdminIndex;
 	private int activeTabProjectIndex;
 	private int menuIndex;
+	private JJConfiguration planingTabsConf;
 
 	@Autowired
 	public LoginBean(AuthenticationManager authenticationManager) {
@@ -288,6 +289,34 @@ public class LoginBean implements Serializable {
 	public void setMenuIndex(int menuIndex) {
 
 		this.menuIndex = menuIndex;
+	}
+
+	public JJConfiguration getPlaningTabsConf() {
+		if(planingTabsConf == null)
+		{
+			List<JJConfiguration> conf = jJConfigurationService.getConfigurations("planning", "project.type", true);
+			if (conf != null && !conf.isEmpty())
+				planingTabsConf=conf.get(0);
+			else
+			{
+				JJConfiguration configuration=new JJConfiguration();
+				configuration.setName("planning");
+				configuration.setDescription("specify available tab in planing vue");
+				configuration.setCreatedBy(getContact());
+				configuration.setCreationDate(new Date());
+				configuration.setEnabled(true);
+				configuration.setParam("project.type");
+				configuration.setVal("gantt,scrum");
+				jJConfigurationService.saveJJConfiguration(configuration);
+				planingTabsConf= jJConfigurationService.getConfigurations("planning", "project.type", true).get(0);
+			}
+				
+		}
+		return planingTabsConf;
+	}
+
+	public void setPlaningTabsConf(JJConfiguration planingTabsConf) {
+		this.planingTabsConf = planingTabsConf;
 	}
 
 	public boolean isMobile() {
@@ -1279,39 +1308,17 @@ public class LoginBean implements Serializable {
 		else
 			return null;
 	}
-	
-	public boolean isRenderScrum()
-	{
-		List<JJConfiguration> conf = jJConfigurationService.getConfigurations("planning", "project.type", true);
-		if (conf != null && !conf.isEmpty())
-			return conf.get(0).getVal().toLowerCase()
-					.contains("scrum".toLowerCase());
-		else				
-			return true;
-		
-			
+
+	public boolean isRenderScrum() {
+		return getPlaningTabsConf().getVal().toLowerCase()
+				.contains("scrum".toLowerCase());
+
 	}
-	
-	public boolean isRenderGantt()
-	{
-		List<JJConfiguration> conf = jJConfigurationService.getConfigurations("planning", "project.type", true);
-		if (conf != null && !conf.isEmpty())
-			return conf.get(0).getVal().toLowerCase()
-					.contains("gantt".toLowerCase());
-		else
-		{
-			JJConfiguration configuration=new JJConfiguration();
-			configuration.setName("planning");
-			configuration.setDescription("specify available tab in planing vue");
-			configuration.setCreatedBy(getContact());
-			configuration.setCreationDate(new Date());
-			configuration.setEnabled(true);
-			configuration.setParam("project.type");
-			configuration.setVal("gantt,scrum");
-			jJConfigurationService.saveJJConfiguration(configuration);
-			return true;
-		}
-			
+
+	public boolean isRenderGantt() {
+		return getPlaningTabsConf().getVal().toLowerCase()
+				.contains("gantt".toLowerCase());
+
 	}
 
 	public UIComponent findComponent(final String id) {

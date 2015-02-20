@@ -11,12 +11,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.primefaces.component.chart.bar.BarChart;
+import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
-import org.primefaces.model.chart.LineChartSeries;
 import org.primefaces.model.chart.DateAxis;
-import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.LineChartSeries;
 
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJTask;
@@ -36,32 +35,32 @@ public class SprintChart {
 	private void initChartModel(List<JJTask> tasks) {
 		
 		DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-		List<String> dates=new ArrayList<String>();
+		//List<String> dates=new ArrayList<String>();
 		int workload=0;	int workload2=0;
-		dates.add(f.format(sprint.getEndDate()));
+		//dates.add(f.format(sprint.getEndDate()));
 		
 		for(JJTask task:tasks)
 		{
 			if(task.getWorkloadPlanned() != null)
 				workload=workload+task.getWorkloadPlanned();
-			if(task.getEndDateReal() != null)
-				dates.add(f.format(task.getEndDateReal()));
+//			if(task.getEndDateReal() != null)
+//				dates.add(f.format(task.getEndDateReal()));
 		}	
 		
-		Set<String> set=new HashSet<String>();
-		set.addAll(dates) ;
-		dates=new ArrayList<String>(set);
-		Collections.sort(dates, new Comparator<String>() {
-	        DateFormat ff = new SimpleDateFormat("yyyy-MM-dd");
-	        @Override
-	        public int compare(String o1, String o2) {
-	            try {
-	                return ff.parse(o1).compareTo(ff.parse(o2));
-	            } catch (ParseException e) {
-	                throw new IllegalArgumentException(e);
-	            }
-	        }
-	    });	
+//		Set<String> set=new HashSet<String>();
+//		set.addAll(dates) ;
+//		dates=new ArrayList<String>(set);
+//		Collections.sort(dates, new Comparator<String>() {
+//	        DateFormat ff = new SimpleDateFormat("yyyy-MM-dd");
+//	        @Override
+//	        public int compare(String o1, String o2) {
+//	            try {
+//	                return ff.parse(o1).compareTo(ff.parse(o2));
+//	            } catch (ParseException e) {
+//	                throw new IllegalArgumentException(e);
+//	            }
+//	        }
+//	    });	
 		workload2=workload;
 		ChartSeries chartSeries=new ChartSeries();		
 		LineChartSeries lineSeries=new LineChartSeries();
@@ -69,26 +68,62 @@ public class SprintChart {
 		chartSeries.set(f.format(sprint.getStartDate()), workload);
 		lineSeries.set(f.format(sprint.getStartDate()),workload2);
 		chartSeries.setLabel(sprint.getName()+" Workload");	
-		lineSeries.setLabel("BurnDown Ideal");		
-		for(String date:dates)
-		{
+		lineSeries.setLabel("BurnDown Ideal");
+		
+		Date staDate=sprint.getStartDate();
+		while(staDate.before(sprint.getEndDate()))
+		{			
 			for(JJTask task:tasks)
 			{
 				if(task.getEndDateReal() != null)
-				if(f.format(task.getEndDateReal()).equalsIgnoreCase(date) && task.getWorkloadPlanned() != null)
+				if(f.format(task.getEndDateReal()).equalsIgnoreCase(f.format(staDate)) && task.getWorkloadPlanned() != null)
 				{
 					workload=workload-task.getWorkloadPlanned();				
 				}				
 			}
-			chartSeries.set(date, workload);
-			try {
-				int diff=workload2-calendar.calculateWorkLoad(sprint.getStartDate(),calendar.nextWorkingDate(f.parse(date)));
-				if(diff<0)
-					diff=0;
-				lineSeries.set(date,diff);
-			} catch (ParseException e) {			
-			}
-		}		
+			chartSeries.set(f.format(staDate), workload);
+			int diff=workload2-calendar.calculateWorkLoad(sprint.getStartDate(),staDate);
+			if(diff<0)
+				diff=0;
+			lineSeries.set(f.format(staDate),diff);
+			staDate=CalendarUtil.getAfterDay(staDate);
+		}
+		
+		staDate=sprint.getEndDate();
+		for(JJTask task:tasks)
+		{
+			if(task.getEndDateReal() != null)
+			if(f.format(task.getEndDateReal()).equalsIgnoreCase(f.format(staDate)) && task.getWorkloadPlanned() != null)
+			{
+				workload=workload-task.getWorkloadPlanned();				
+			}				
+		}
+		chartSeries.set(f.format(staDate), workload);
+		int diff=workload2-calendar.calculateWorkLoad(sprint.getStartDate(),staDate);
+		if(diff<0)
+			diff=0;
+		lineSeries.set(f.format(staDate),diff);
+		
+		
+//		for(String date:dates)
+//		{
+//			for(JJTask task:tasks)
+//			{
+//				if(task.getEndDateReal() != null)
+//				if(f.format(task.getEndDateReal()).equalsIgnoreCase(date) && task.getWorkloadPlanned() != null)
+//				{
+//					workload=workload-task.getWorkloadPlanned();				
+//				}				
+//			}
+//			chartSeries.set(date, workload);
+////			try {
+////				int diff=workload2-calendar.calculateWorkLoad(sprint.getStartDate(),f.parse(date));
+////				if(diff<0)
+////					diff=0;
+////				lineSeries.set(date,diff);
+////			} catch (ParseException e) {			
+////			}
+//		}		
 		chartModel.addSeries(chartSeries);
 		chartModel.addSeries(lineSeries);
 		DateAxis axis = new DateAxis("Dates");

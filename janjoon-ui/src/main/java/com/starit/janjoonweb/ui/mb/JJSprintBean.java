@@ -271,6 +271,7 @@ public class JJSprintBean {
 	}
 
 	public void iniSprintChart() {
+		if(LoginBean.getProject() != null)
 		sprintChartList = SprintChart.generateSprintChartList(jJSprintService
 				.getSprints(LoginBean.getProject(), true),
 				jJTaskService);
