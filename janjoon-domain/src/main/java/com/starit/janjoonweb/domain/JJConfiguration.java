@@ -51,5 +51,11 @@ public class JJConfiguration {
 	@NotNull
 	@Size(max = 100)
 	private String val;
+	
+	@Override
+	public boolean equals(Object object) {
+		return (object instanceof JJConfiguration) && (getId() != null) ? getId()
+				.equals(((JJConfiguration) object).getId()) : (object == this);
+	}
 
 }
