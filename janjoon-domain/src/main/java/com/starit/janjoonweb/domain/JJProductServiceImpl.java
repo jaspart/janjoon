@@ -176,7 +176,7 @@ public class JJProductServiceImpl implements JJProductService {
 		CriteriaQuery<JJProduct> select = criteriaQuery.select(from);
 
 		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
-		Predicate predicate2 = criteriaBuilder.equal(from.get("name"), name);
+		Predicate predicate2 = criteriaBuilder.equal(criteriaBuilder.lower(from.<String>get("name")), name.toLowerCase());
 
 		select.where(criteriaBuilder.and(predicate1, predicate2));
 

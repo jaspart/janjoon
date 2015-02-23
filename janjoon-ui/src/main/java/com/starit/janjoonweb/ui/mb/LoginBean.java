@@ -628,8 +628,13 @@ public class LoginBean implements Serializable {
 
 			if (event != null) {
 				if (session.getAttribute("requirementBean") != null)
+				{
 					((RequirementBean) session.getAttribute("requirementBean"))
-							.setRootNode(null);
+					.setRootNode(null);
+					((RequirementBean) session.getAttribute("requirementBean"))
+					.setRequirement(null);
+				}
+				
 				if (event.getComponent().getClientId()
 						.contains("projectSelectOneMenu")) {
 
@@ -1343,8 +1348,8 @@ public class LoginBean implements Serializable {
 //	 public StreamedContent getFile()
 //	 {
 //	 InputStream stream =
-//	 FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/rrrr");
+//	 FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/aaa");
 //	 return new DefaultStreamedContent(stream, "image/jpg",
-//	 "downloaded_optimus.jpg");
+//	 "downloaded_optimus");
 //	 }
 }

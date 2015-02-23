@@ -373,8 +373,9 @@ public class RequirementBean {
 				if (change) {
 					((LoginBean) LoginBean.findBean("loginBean"))
 							.changeEvent(null);
-					rootNode = null;
-				}
+					rootNode = null;					
+				}				
+				
 
 				if (!getCategory().equals(requirement.getCategory()))
 				{
@@ -465,6 +466,8 @@ public class RequirementBean {
 					jJCategoryService, jJRequirementService, jJTaskService,
 					jJTestcaseService, jJTestcaseexecutionService), newNode);
 		}
+		if(requirement != null && requirement.getChapter() != null && requirement.getChapter().equals(chapter))
+			newNode.setExpanded(true);
 		return newNode;
 	}
 
@@ -594,6 +597,16 @@ public class RequirementBean {
 //
 //	}
 
+	public String underligne(Object node) {
+		
+		if (node instanceof RequirementUtil) {
+			if(requirement != null && ((RequirementUtil)node).getRequirement().equals(requirement))
+				return "text-decoration: underline;";
+			else
+				return "";			
+		}else
+			return "";
+	}
 	public void save() throws IOException {
 		jJRequirementService.saveJJRequirement(requirement);
 		long id = requirement.getId();

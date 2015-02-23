@@ -92,7 +92,7 @@ public class JJVersionServiceImpl implements JJVersionService {
 		if (product != null)
 			predicates.add(criteriaBuilder.equal(from.get("product"), product));
 		
-		predicates.add(criteriaBuilder.equal(from.get("name"), jJversion));
+		predicates.add(criteriaBuilder.equal(criteriaBuilder.lower(from.<String>get("name")), jJversion.toLowerCase()));
 
 		select.where(predicates.toArray(new Predicate[] {}));
 

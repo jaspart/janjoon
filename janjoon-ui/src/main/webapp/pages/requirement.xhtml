@@ -162,9 +162,9 @@
 									<h:outputText value="C-#{node.id}-#{node.name}" />
 								</p:treeNode>
 								<p:treeNode type="Requirement">
-									<h:outputText
+									<h:outputText	style="#{requirementBean.underligne(node)}"									
 										value="R-#{node.requirement.id}-#{node.requirement.name}"
-										styleClass="#{node.style}" />
+										styleClass="#{node.style}" />									
 								</p:treeNode>
 							</p:tree>
 						</p:column>

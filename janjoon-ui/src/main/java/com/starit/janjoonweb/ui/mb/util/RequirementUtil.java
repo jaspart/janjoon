@@ -1,6 +1,5 @@
 package com.starit.janjoonweb.ui.mb.util;
 
-import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;

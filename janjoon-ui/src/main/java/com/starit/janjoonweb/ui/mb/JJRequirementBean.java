@@ -271,14 +271,18 @@ public class JJRequirementBean {
 
 		int nbOpenedTables = 0;
 		int expand = -1;
-		for (int i = 0; i < tableDataModelList.size(); i++) {
-			if (tableDataModelList.get(i).getCategoryId() != 0
-					&& tableDataModelList.get(i).getRendered()) {
-				nbOpenedTables++;
-				if (tableDataModelList.get(i).isExpanded())
-					expand = i;
+		if(tableDataModelList != null)
+		{
+			for (int i = 0; i < tableDataModelList.size(); i++) {
+				if (tableDataModelList.get(i).getCategoryId() != 0
+						&& tableDataModelList.get(i).getRendered()) {
+					nbOpenedTables++;
+					if (tableDataModelList.get(i).isExpanded())
+						expand = i;
+				}
 			}
 		}
+		
 		double tableDataModelSizePct = 0;
 		if (nbOpenedTables > 0) {
 

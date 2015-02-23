@@ -216,7 +216,7 @@ td.ui-fileupload-preview{
 					</p:row>
 
 					<p:dataTable id="versionDataTable" var="versionModel"
-						scrollable="true" style="width:350px;" scrollHeight="250"
+						scrollable="true" style="width:450px;" scrollHeight="250"
 						value="#{jJVersionBean.versionDataModel}"
 						rowStyleClass="#{versionModel.old ? 'old' : null}">
 
@@ -295,7 +295,7 @@ td.ui-fileupload-preview{
 							<p:panelGrid>
 								<p:row>
 									<p:column>
-										<p:inputText id="build" style="width:100%;"
+										<p:inputText id="build" style="width:80%;"
 											value="#{jJBuildBean.buildName}" label="Build Name"
 											required="true" requiredMessage="Build Name is required">
 											<f:validateLength maximum="100" />

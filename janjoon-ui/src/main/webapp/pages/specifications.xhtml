@@ -10,6 +10,15 @@
 <ui:composition template="../templates/layout.xhtml">
 
 	<ui:define name="content">
+		<style type="text/css">
+.ui-accordion .ui-accordion-content {
+	background: #E6E6E6;
+}
+
+.ui-accordion .ui-accordion-header {
+	background: #E6E6E6;
+}
+</style>
 		<h:outputScript library="js" name="ckEditor.js" />
 
 		<h:form id="categoryForm">
@@ -153,7 +162,7 @@
 			<c:forEach items="#{jJRequirementBean.tableDataModelList}"
 				var="tableDataModel" varStatus="loop">	
 				<div
-					style="#{jJRequirementBean.getDisplay(tableDataModel)}margin-top: 10px;width: #{jJRequirementBean.getTableDataModelSizePct(tableDataModel)};min-width:200px;
+					style="min-width:200px;margin-top: 10px;width: #{jJRequirementBean.getTableDataModelSizePct(tableDataModel)};#{jJRequirementBean.getDisplay(tableDataModel)}
 							float: #{jJRequirementBean.tableDataModelFloatLeft};#{jJRequirementBean.getTableDataModelMargin(tableDataModel)}">
 					<p:dataTable id="categoryTable_#{loop.index}" var="reqUtil"
 						value="#{tableDataModel}" scrollable="true" scrollHeight="300"
@@ -309,20 +318,20 @@
 														value="Description :" />
 													<br />
 													<h:outputText id="expDesc" readonly="true" escape="false" 
-														value="#{reqUtil.requirement.description}" style="white-space: pre-wrap;"/>
+														value="#{reqUtil.requirement.description}" style="white-space: normal;"/>
 												</p:column>
 											</p:row>
-											<p:row rendered="#{reqUtil.requirement.note != null}">
-												<p:column 
-													styleClass="#{reqUtil.style}">
-													<p:outputLabel style="font-weight: bold;" for="expNote"
-														value="Note :" />
-													<br />
-													<h:outputText id="expNote" readonly="true" escape="false" style="white-space: pre-wrap;"
-														value="#{reqUtil.requirement.note}" />
-												</p:column>
-											</p:row>
-										</p:panelGrid>
+										<p:row rendered="#{reqUtil.requirement.note != null}">
+											<p:column styleClass="#{reqUtil.style}">
+												<p:outputLabel style="font-weight: bold;" for="expNote"
+													value="Note :" />
+												<br />
+												<h:outputText id="expNote" readonly="true" escape="false"
+													style="white-space: normal;max-height: 127px;display: block;width: 100px;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis"
+													value="#{reqUtil.requirement.note}" />
+											</p:column>
+										</p:row>
+									</p:panelGrid>
 									
 								</f:facet>
 							</p:cellEditor>

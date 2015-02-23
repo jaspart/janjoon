@@ -109,7 +109,7 @@ public class BuildWS {
 							else
 							{
 								String buildName = personParams.getFirst("build");
-								if(versionName == null)
+								if(buildName == null)
 									return "Null Build  Name";
 								else
 								{

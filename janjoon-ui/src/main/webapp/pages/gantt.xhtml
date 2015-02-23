@@ -164,14 +164,15 @@
 										<p:cellEditor>
 											<f:facet name="output">
 												<h:outputText
-													value="#{fn:substring(taskData.task.name,0,60)}" />
+													style="white-space: pre-wrap;max-height: 30px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis"
+													value="#{taskData.task.name}" />
 											</f:facet>
 											<f:facet name="input">
-												<p:inputText value="#{taskData.task.name}" required="true"
-													label="Name" widgetVar="nameWidget"
+												<p:inputTextarea value="#{taskData.task.name}" required="true"
+													label="Name" widgetVar="nameWidget" cols="25" rows="3"
 													requiredMessage="#{messages.project_gantt_task_alert}">
 													<f:validateLength maximum="100" />
-												</p:inputText>
+												</p:inputTextarea>
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
