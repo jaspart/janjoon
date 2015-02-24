@@ -1682,7 +1682,7 @@ public class JJTaskBean {
 								.findBean("loginBean")).getContact()
 								.getCompany(), importCategory, project,
 								product, version, importStatus, null, false,
-								true, false)) {
+								true, false,false,null)) {
 
 					if (!checkAll) {
 

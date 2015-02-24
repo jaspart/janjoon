@@ -44,6 +44,7 @@
 .ui-tree {
 	height: 750px;
 	width: 100%;
+	max-width: 450px;
 	overflow-y: auto;
 	overflow-x: hidden;
 	border: rgba(255, 0, 0, 0);
@@ -144,7 +145,7 @@
 					</f:facet>
 					<p:row>
 						<p:column colspan="2">
-							<p:tree id="testCaseTree" value="#{requirementBean.rootNode}"
+							<p:tree id="reqTree" value="#{requirementBean.rootNode}"
 								var="node" selectionMode="single"
 								selection="#{requirementBean.selectedNode}" dynamic="true">
 								<p:ajax event="select"

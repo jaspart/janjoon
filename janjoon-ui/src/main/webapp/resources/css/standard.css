@@ -38,6 +38,14 @@ a:visited {
 	overflow: scroll;
 }
 
+.panelDialog .ui-panel-title{
+	margin : 0 0 0 0;
+}
+
+.panelDialog .ui-panel-titlebar {
+	padding: 0 0 0 0;
+}
+
 .menu {
 	width: 180px;
 	vertical-align: top;
@@ -609,31 +617,31 @@ div.revised2 {
 }
 
 .RequirementNoTask {
-	background-color: #CCCCCC !important;
+	background-color: #0B9CEF !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .RequirementNotLinked {
-	background-color: #FF8888 !important;
+	background-color: #FFFFFF !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .RequirementInProcess {
-	background-color: #8888FF !important;
+	background-color: #88DDDD !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .RequirementFinishedSuccessed {
-	background-color: #88FF88 !important;
+	background-color: #69A6C8 !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .RequirementFinishedTestProcess {
-	background-color: #88DDDD !important;
+	background-color: #A2D1EB !important;
 	background-image: none !important;
 	color: black !important;
 }

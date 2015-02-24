@@ -16,8 +16,11 @@
 	</pe:blockUI>
 
 	<h:form id="testcaseDialogForm">
-		<p:growl id="msg" />
-		<p:tabView id="testTabView" widgetVar="testTabView">
+	<p:panel styleClass="panelDialog">
+			<f:facet name="header">
+				<p:messages id="msg" closable="true"/>
+			</f:facet>
+			<p:tabView id="testTabView" widgetVar="testTabView">
 			<p:tab title="TestCase">
 				<p:panelGrid style="margin-top:10px;width:700px;height:400px;"
 					id="testPanel">
@@ -292,6 +295,7 @@
 			</p:tab>
 		</p:tabView>
 		<!-- 					</p:scrollPanel> -->
+		<f:facet name="footer">
 		<p:commandButton value="Save"
 			process="@this,:testcaseDialogForm:testTabView:name,:testcaseDialogForm:testTabView:requirement,:testcaseDialogForm:testTabView:descriptionMobile,:testcaseDialogForm:testTabView:build"
 			rendered="#{!loginBean.mobile}"
@@ -307,7 +311,9 @@
 			disabled="#{jJTestcaseBean.disabledTeststepMode}"
 			rendered="#{loginBean.mobile}"
 			update=":testcaseDialogForm :testFormWest" style="float: right;"
-			action="#{jJTestcaseBean.saveAndclose(jJTeststepBean)}" />
-	</h:form>
+			action="#{jJTestcaseBean.saveAndclose(jJTeststepBean)}" />	
+			</f:facet>
+	</p:panel>
+</h:form>
 </ui:composition>
 </html>

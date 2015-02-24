@@ -368,7 +368,7 @@ public class JJTestcaseBean {
 		requirements = jJRequirementService.getRequirements(
 				((LoginBean) LoginBean.findBean("loginBean")).getContact()
 						.getCompany(), null, null, null, null, null, chapter,
-				true, true, true);
+				true, true, true,false,null);
 
 		return requirements;
 	}
@@ -998,7 +998,7 @@ public class JJTestcaseBean {
 			List<JJRequirement> rqs = jJRequirementService.getRequirements(
 					((LoginBean) LoginBean.findBean("loginBean")).getContact()
 							.getCompany(), null, null, null, null, null,
-					chapter, true, true, true);
+					chapter, true, true, true,false,null);
 
 			if (rqs.size() > 0) {
 				int i = 0;

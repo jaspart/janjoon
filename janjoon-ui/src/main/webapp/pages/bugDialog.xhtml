@@ -71,11 +71,15 @@
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugTeststep" scrollHeight="200"
 					widgetVar="jJbugTeststepWV" value="#{JJBug_.teststep}"
-					itemLabel="#{teststep.name}" itemValue="#{teststep}"
+					itemValue="#{teststep}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJTeststepConverter"
 					disabled="#{jJBugBean.bugProjectSelected == null and jJProjectBean.project == null and jJBugBean.bugRequirementSelected==null}"
-					dropdown="true" var="teststep"
-					completeMethod="#{jJBugBean.completeTestStepsBug}" />
+					dropdown="true" var="teststep" itemLabel="#{teststep.name}"
+					completeMethod="#{jJBugBean.completeTestStepsBug}" >
+					<p:column>
+						<h:outputText value="#{teststep.name}" escape="false"/>
+					</p:column>
+				</p:autoComplete>
 				<p:watermark for="jJbugTeststep" value="Teststep : " />
 			</p:column>
 		</p:row>

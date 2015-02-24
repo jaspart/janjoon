@@ -689,7 +689,7 @@ public class JJStatusBean {
 					.getRequirements(((LoginBean) LoginBean
 							.findBean("loginBean")).getContact().getCompany(),
 							category, project, product, version, null, null,
-							false, true, false);
+							false, true, false,false,null);
 
 			List<JJCategory> categoryList = jJCategoryService.getCategories(
 					null, false, true, true);
@@ -789,7 +789,7 @@ public class JJStatusBean {
 					.getRequirements(((LoginBean) LoginBean
 							.findBean("loginBean")).getContact().getCompany(),
 							category, project, product, version, null, null,
-							false, true, false);
+							false, true, false,false,null);
 
 			for (JJRequirement requirement : dataList) {
 				compteur = compteur + calculCompletion(requirement);

@@ -433,7 +433,7 @@ public class JJChapterBean {
 		List<JJRequirement> jJRequirementList = jJRequirementService
 				.getRequirements(((LoginBean) LoginBean.findBean("loginBean"))
 						.getContact().getCompany(), category, project, product,
-						version, null, null, true, true, false);
+						version, null, null, true, true, false,false,null);
 
 		for (JJRequirement requirement : jJRequirementList) {
 			TreeNode node = new DefaultTreeNode("R-" + requirement.getId()

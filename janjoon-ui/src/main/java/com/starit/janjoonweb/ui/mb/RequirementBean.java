@@ -459,7 +459,7 @@ public class RequirementBean {
 		List<JJRequirement> requirements = jJRequirementService
 				.getRequirements(((LoginBean) LoginBean.findBean("loginBean"))
 						.getContact().getCompany(), cat, project, product,
-						version, null, chapter, true, true, true);
+						version, null, chapter, true, true, true,false,null);
 
 		for (JJRequirement requirement : requirements) {
 			new DefaultTreeNode("Requirement", new RequirementUtil(requirement,
@@ -560,7 +560,7 @@ public class RequirementBean {
 				((LoginBean) LoginBean.findBean("loginBean")).getContact()
 						.getCompany(), selectedCategory, requirement
 						.getProject(), requirement.getProduct(), requirement
-						.getVersioning(), null, null, false, true, true);
+						.getVersioning(), null, null, false, true, true,false,null);
 		linkReq = cateRequirement.getRequirements();
 
 	}

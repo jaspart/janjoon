@@ -6,7 +6,7 @@
 	<groupId>com.starit.janjoonweb.ui</groupId>
 	<artifactId>janjoon-ui</artifactId>
 	<packaging>war</packaging>
-	<version>1.2-${build.number}</version>
+	<version>2.0-${build.number}</version>
 	<name>janjoon-ui</name>
 
 	<properties>
@@ -323,7 +323,7 @@
 			<groupId>com.starit.janjoonweb</groupId>
 			<artifactId>janjoon-theme</artifactId>
 			<version>1.0-SNAPSHOT</version>
-		</dependency>		
+		</dependency>
 		<!-- PrimeFaces Extension dependencies -->
 		<dependency>
 			<groupId>org.primefaces.extensions</groupId>
@@ -379,12 +379,11 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
-		</dependency>
-
+		</dependency>		
 		<dependency>
 			<groupId>com.starit.janjoonweb.domain</groupId>
 			<artifactId>janjoon-domain</artifactId>
-			<version>1.2-${build.number}</version>
+			<version>2.0-${build.number}</version>
 		</dependency>
 
 		<!-- <dependency> <groupId>com.itextpdf</groupId> <artifactId>itextpdf</artifactId> 

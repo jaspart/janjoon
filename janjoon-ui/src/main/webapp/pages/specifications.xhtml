@@ -22,8 +22,6 @@
 		<h:outputScript library="js" name="ckEditor.js" />
 
 		<h:form id="categoryForm">
-			<p:remoteCommand name="hideEvent" update="@form" />
-
 <!-- 			<ui:repeat value="#{jJRequirementBean.categoryList}" var="category"> -->
 <!-- 				<p:commandButton value="#{category.name}" update=":specForm @form" -->
 <!-- 					rendered="#{!loginBean.mobile}" -->
@@ -76,7 +74,7 @@
 				rendered="#{loginBean.mobile}"/>
 
 			<p:dialog widgetVar="categoryPanel" id="categoryPanel"
-				onHide="hideEvent()" styleClass="overlayPanelDialog"
+				styleClass="overlayPanelDialog"
 				rendered="#{loginBean.mobile}" closable="false" binding="#{categoryPanel}">
 				<c:forEach items="#{jJRequirementBean.categoryList}" var="category">
 <!-- 					<p:commandButton value="#{category.category.name}" -->
@@ -158,7 +156,7 @@
 			</p:overlayPanel>
 		</h:form>
 		<h:form id="specForm" style="overflow:hidden;width:100%">
-			
+			<p:remoteCommand name="updateDataTable" update="specForm"/>
 			<c:forEach items="#{jJRequirementBean.tableDataModelList}"
 				var="tableDataModel" varStatus="loop">	
 				<div
@@ -166,7 +164,7 @@
 							float: #{jJRequirementBean.tableDataModelFloatLeft};#{jJRequirementBean.getTableDataModelMargin(tableDataModel)}">
 					<p:dataTable id="categoryTable_#{loop.index}" var="reqUtil"
 						value="#{tableDataModel}" scrollable="true" scrollHeight="300"
-						sortMode="multiple" resizableColumns="true"
+						sortMode="multiple" resizableColumns="true" style="#{tableDataModel.tableStyle}"
 						rowStyleClass="#{reqUtil.style}" styleClass="requirement-table"
 						filteredValue="#{tableDataModel.filtredRequirements}"
 						rowKey="#{reqUtil.requirement.id}" editable="true" editMode="cell"
@@ -180,9 +178,9 @@
 
 						<f:facet name="header">
 							<h:outputText value="#{tableDataModel.nameDataModel}" />
-							<p:commandButton icon="ui-icon-arrowthick-2-e-w" style="float:left;" rendered="#{!loginBean.mobile}"
-								actionListener="#{jJRequirementBean.expandTable(tableDataModel)}" 
-								title="Expand" update=":specForm" />
+							<p:commandButton icon="ui-icon-arrowthick-2-e-w" style="float:left;" 
+							actionListener="#{jJRequirementBean.expandTable(tableDataModel)}" title="Expand"
+							 update=":specForm" />
 							<p:panelGrid style="margin-top: 15px;">
 								<f:facet name="header">
 									<p:row>
@@ -337,25 +335,25 @@
 							</p:cellEditor>
 						</p:column>
 
-						<p:column filterBy="#{reqUtil.requirement.product.name}"
-							styleClass="product-column" filterStyle="display:none"
-							sortBy="#{reqUtil.requirement.product.name}"
-							rendered="#{tableDataModel.expanded}">
-							<f:facet name="header">
-								<h:outputText value="#{messages.specification_table_product_title}" />
-							</f:facet>
-							<h:outputText value="#{reqUtil.requirement.product.name}" />
-						</p:column>
+<!-- 						<p:column filterBy="#{reqUtil.requirement.product.name}" -->
+<!-- 							styleClass="product-column" filterStyle="display:none" -->
+<!-- 							sortBy="#{reqUtil.requirement.product.name}" -->
+<!-- 							rendered="#{tableDataModel.expanded}"> -->
+<!-- 							<f:facet name="header"> -->
+<!-- 								<h:outputText value="#{messages.specification_table_product_title}" /> -->
+<!-- 							</f:facet> -->
+<!-- 							<h:outputText value="#{reqUtil.requirement.product.name}" /> -->
+<!-- 						</p:column> -->
 
-						<p:column filterBy="#{reqUtil.requirement.chapter.name}"
-							styleClass="chapter-column" filterStyle="display:none"
-							sortBy="#{reqUtil.requirement.chapter.name}"
-							rendered="#{tableDataModel.expanded}">
-							<f:facet name="header">
-								<h:outputText value="#{messages.specification_table_chapter_title}" />
-							</f:facet>
-							<h:outputText value="#{reqUtil.requirement.chapter.name}" />
-						</p:column>
+<!-- 						<p:column filterBy="#{reqUtil.requirement.chapter.name}" -->
+<!-- 							styleClass="chapter-column" filterStyle="display:none" -->
+<!-- 							sortBy="#{reqUtil.requirement.chapter.name}" -->
+<!-- 							rendered="#{tableDataModel.expanded}"> -->
+<!-- 							<f:facet name="header"> -->
+<!-- 								<h:outputText value="#{messages.specification_table_chapter_title}" /> -->
+<!-- 							</f:facet> -->
+<!-- 							<h:outputText value="#{reqUtil.requirement.chapter.name}" /> -->
+<!-- 						</p:column> -->
 
 						<p:column exportable="false" styleClass="action-column" style="width: 80px;" rendered="#{!jJRequirementBean.expand or tableDataModel.expanded}">
 							<f:facet name="header">
@@ -431,6 +429,21 @@
 							</p:accordionPanel>
 						</f:facet>
 					</p:dataTable>
+					<p:tree id="chapterTree" value="#{tableDataModel.chapterTree}" 
+						style="float: left;width: 39%;height: 460px;background: #F2F2F2;"
+						var="node" selectionMode="single" rendered="#{tableDataModel.expanded}"
+						dynamic="true">
+						<p:ajax event="select" listener="#{jJRequirementBean.onNodeSelect}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" />
+													
+						<p:treeNode type="chapter">
+							<h:outputText value="CH-#{node.id}-#{node.name}" />
+						</p:treeNode>
+						<p:treeNode type="category">
+							<h:outputText value="C-#{node.id}-#{node.name}" />
+						</p:treeNode>						
+					</p:tree>
 				</div>
 			</c:forEach>
 		</h:form>

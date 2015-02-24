@@ -9,7 +9,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
-
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -606,7 +605,7 @@ public class JJBugBean {
 		for (JJTeststep testStep : jJTeststepService.getJJtestSteps(
 				bugRequirementSelected, bugProjectSelected)) {
 			String jJCriticityStr = String.valueOf(testStep.getName());
-			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
+			if (jJCriticityStr.toLowerCase().contains(query.toLowerCase())) {
 				suggestions.add(testStep);
 			}
 		}

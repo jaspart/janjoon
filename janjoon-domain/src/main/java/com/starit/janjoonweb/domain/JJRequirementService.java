@@ -13,7 +13,7 @@ public interface JJRequirementService {
 	public List<JJRequirement> getRequirements(JJCompany company,JJCategory category,
 			JJProject project, JJProduct product, JJVersion version,
 			JJStatus status, JJChapter chapter, boolean withChapter,
-			boolean onlyActif, boolean orderByCreationdate);
+			boolean onlyActif, boolean orderByCreationdate,boolean mine,JJContact contact);
 	
 	public List<JJRequirement> getRequirementsWithOutChapter(JJCompany company,JJCategory category,
 			JJProject project, JJProduct product, JJVersion version,

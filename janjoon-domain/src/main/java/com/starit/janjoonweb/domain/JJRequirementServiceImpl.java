@@ -155,7 +155,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	public List<JJRequirement> getRequirements(JJCompany company,
 			JJCategory category, JJProject project, JJProduct product,
 			JJVersion version, JJStatus status, JJChapter chapter,
-			boolean withChapter, boolean onlyActif, boolean orderByCreationdate) {
+			boolean withChapter, boolean onlyActif, boolean orderByCreationdate,boolean mine,JJContact contact) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
@@ -195,6 +195,14 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		if (status != null) {
 			predicates.add(criteriaBuilder.equal(from.get("status"), status));
+		}
+		
+		if (contact != null && mine ) {
+			Predicate condition1 = criteriaBuilder.equal(from.get("createdBy"),
+					contact);
+			Predicate condition2 = criteriaBuilder.equal(from.get("updatedBy"),
+					contact);
+			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
 
 		if (withChapter) {
@@ -247,7 +255,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	public List<JJRequirement> getRequirements(JJCompany company,
 			JJProject project, JJProduct product, JJVersion version) {
 		return getRequirements(company, null, project, product, version, null,
-				null, false, true, true);
+				null, false, true, true,false,null);
 	}
 
 	@Override
@@ -255,7 +263,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			JJStatus status) {
 
 		return getRequirements(company, null, null, null, null, status, null,
-				false, true, false);
+				false, true, false,false,null);
 	}
 
 	@Override

@@ -394,10 +394,10 @@
 						</p:column>
 
 						<p:column headerText="Action">
-							<h:outputText value="#{ts.actionstep}" />
+							<h:outputText value="#{ts.actionstep}" escape="false"/>
 						</p:column>
 						<p:column headerText="Result">
-							<h:outputText value="#{ts.resultstep}" />
+							<h:outputText value="#{ts.resultstep}" escape="false"/>
 						</p:column>
 					</p:dataTable>
 
@@ -501,13 +501,13 @@
 								<p:row>
 									<p:column>
 										<p:scrollPanel mode="native" style="height:150px;width:130px;">
-											<h:outputText escape="true"
+											<h:outputText escape="false"
 												value="#{tse.teststep.actionstep}" />
 										</p:scrollPanel>
 									</p:column>
 									<p:column>
 										<p:scrollPanel mode="native" style="height:150px;width:130px;">
-											<h:outputText escape="true"
+											<h:outputText escape="false"
 												value="#{tse.teststep.resultstep}" />
 										</p:scrollPanel>
 									</p:column>
@@ -543,7 +543,7 @@
 						</p:tab>
 					</p:tabView>
 
-					<p:panelGrid
+					<p:panelGrid style="width: 100%;"
 						rendered="#{!jJTeststepexecutionBean.disabledTestcase}">
 						<p:row>
 							<p:column>

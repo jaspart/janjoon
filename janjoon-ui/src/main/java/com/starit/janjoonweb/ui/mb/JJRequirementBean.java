@@ -1,7 +1,19 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -15,13 +27,18 @@ import org.apache.log4j.Logger;
 import org.primefaces.component.dialog.Dialog;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.*;
-import org.primefaces.model.mindmap.*;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.SelectableDataModel;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.TreeNode;
+import org.primefaces.model.mindmap.DefaultMindmapNode;
+import org.primefaces.model.mindmap.MindmapNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
-import org.w3c.dom.ls.LSInput;
 import org.xml.sax.SAXParseException;
 
 import com.lowagie.text.Element;
@@ -353,11 +370,14 @@ public class JJRequirementBean {
 
 		for (int i = 0; i < tableDataModelList.size(); i++) {
 			if (tableDataModelList.get(i).getCategoryId() != 0) {
-
+				
+				if(tableDataModelList.get(i).isExpanded())
+					 mineChangeEvent(i);
+				
 				if (tableDataModelList.get(i).equals(dataModel))
 					tableDataModelList.get(i).setExpanded(
 							!tableDataModelList.get(i).isExpanded());
-				else {
+				else {					
 					tableDataModelList.get(i).setExpanded(false);
 				}
 
@@ -1731,7 +1751,7 @@ public class JJRequirementBean {
 				((LoginBean) LoginBean.findBean("loginBean")).getContact()
 						.getCompany(), importCategory, importProject,
 				importProduct, importVersion, importStatus, null, false, false,
-				true)) {
+				true,false,null)) {
 			importFormats.add(new ImportFormat(String.valueOf(i), requirement,
 					copyRequirements, copyTestcases, copyChapters));
 			i++;
@@ -2912,7 +2932,7 @@ public class JJRequirementBean {
 			list = jJRequirementService.getRequirements(((LoginBean) LoginBean
 					.findBean("loginBean")).getContact().getCompany(),
 					category, project, product, version, null, null, false,
-					true, true);
+					true, true,false,null);
 		}
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		return list;
@@ -3660,7 +3680,7 @@ public class JJRequirementBean {
 		private float coverageProgress = 0;
 		private float completionProgress = 0;
 		private List<RequirementUtil> filtredRequirements;
-		private boolean rendered;
+		private boolean rendered;		
 		// private boolean mine;
 		private boolean expanded;
 
@@ -3739,6 +3759,31 @@ public class JJRequirementBean {
 			this.rendered = rendered;
 		}
 
+		public TreeNode getChapterTree() {
+			
+			TreeNode chapterTree = new DefaultTreeNode("Root", null);
+
+			JJProject project = LoginBean.getProject();			
+
+				
+
+			TreeNode categoryNode = new DefaultTreeNode("category", jJCategoryService
+					.findJJCategory(categoryId),
+					chapterTree);
+
+			categoryNode.setExpanded(true);
+
+			List<JJChapter> chapters = jJChapterService.getParentsChapter(
+					((LoginBean) LoginBean.findBean("loginBean")).getContact()
+							.getCompany(), project,  jJCategoryService
+							.findJJCategory(categoryId), true, true);
+
+			for (JJChapter ch : chapters) {
+				new DefaultTreeNode("chapter", ch, categoryNode);
+			}
+			return chapterTree;
+		}
+
 		public CategoryDataModel(List<RequirementUtil> data, long categoryId,
 				String nameDataModel, boolean rendered) {
 			super(data);
@@ -3748,7 +3793,15 @@ public class JJRequirementBean {
 			// this.mine = false;
 			this.activeIndex = -1;
 			this.expanded = false;
-
+			}	
+		
+		
+		public String getTableStyle()
+		{
+			if(expanded)
+				return "float: right;width: 60%;";
+				else
+					return "";
 		}
 
 		@SuppressWarnings("unchecked")
@@ -4116,7 +4169,7 @@ public class JJRequirementBean {
 		return jJRequirementService.getRequirements(((LoginBean) LoginBean
 				.findBean("loginBean")).getContact().getCompany(), category,
 				project, product, version, status, chapter, withChapter,
-				onlyActif, orderByCreationdate);
+				onlyActif, orderByCreationdate,false,null);
 	}
 
 	public List<JJRequirement> getRequirements(JJProject project,
@@ -4517,11 +4570,85 @@ public class JJRequirementBean {
 			return null;
 
 	}
+	
+	public void onNodeSelect(NodeSelectEvent event) throws IOException {
+		
+		int i=-1;
+		
+		if (tableDataModelList != null) {
+			int j = 0;
+			while (j < tableDataModelList.size()) {
+				if (tableDataModelList.get(j).isExpanded()) {
+					i = j;
+					j = tableDataModelList.size();
 
+				}
+				j++;
+			}
+		}
+		
+		if(i != -1)
+		{
+			if (event.getTreeNode().getData() instanceof JJChapter) {
+				
+				List<JJRequirement> requirements = jJRequirementService
+						.getRequirements(((LoginBean) LoginBean.findBean("loginBean"))
+								.getContact().getCompany(), ((JJChapter)event.getTreeNode().getData()).getCategory(), project, product,
+								version, null,((JJChapter)event.getTreeNode().getData()), true, true, true,this.mine,((LoginBean) LoginBean.findBean("loginBean")).getContact());
+				tableDataModelList.get(i).setFiltredRequirements(getListOfRequiremntUtils(requirements));
+				
+			}else 
+				mineChangeEvent(i);
+			
+			
+			RequestContext.getCurrentInstance().execute("updateDataTable()");
+		}
+		
+		
+	}
+	
+	public void mineChangeEvent(int i) {
+		
+		if (mine) {
+			if (tableDataModelList.get(i).getCategoryId() != 0
+					&& tableDataModelList.get(i).getRendered()) {
+				JJCategory category = jJCategoryService
+						.findJJCategory(tableDataModelList.get(i)
+								.getCategoryId());
+				this.setMine(true);
+				tableDataModelList.get(i).setFiltredRequirements(getFiltredListValue
+						(getListOfRequiremntUtils(jJRequirementService.getMineRequirements(
+												((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
+												((LoginBean) LoginBean.findBean("loginBean")).getContact(), product,
+												project, category, version,true, true))));
+			}
+
+		} else {
+			if (tableDataModelList.get(i).getCategoryId() != 0
+					&& tableDataModelList.get(i).getRendered()) {
+
+				if (filterValue == null || filterValue.isEmpty()) {
+					tableDataModelList.get(i).setFiltredRequirements(null);
+					RequestContext.getCurrentInstance().execute(
+							"PF('dataTable_" + i + "_Widget').clearFilters();");
+				} else {
+					tableDataModelList
+							.get(i)
+							.setFiltredRequirements(
+									getFiltredListValue((List<RequirementUtil>) tableDataModelList
+											.get(i).getWrappedData()));
+				}
+
+			}
+		}
+
+	}
+
+
+	@SuppressWarnings("unchecked")
 	public void mineChangeEvent() {
 
 		if (mine) {
-
 			for (CategoryDataModel cc : tableDataModelList) {
 				if (cc.getCategoryId() != 0 && cc.getRendered()) {
 					JJCategory category = jJCategoryService.findJJCategory(cc
@@ -4543,19 +4670,7 @@ public class JJRequirementBean {
 			for (int i = 0; i < tableDataModelList.size(); i++) {
 				if (tableDataModelList.get(i).getCategoryId() != 0
 						&& tableDataModelList.get(i).getRendered()) {
-					// float cov=cc.getCoverageProgress();
-					// float cp=cc.getCompletionProgress();
-					// JJCategory category = jJCategoryService.findJJCategory(cc
-					// .getCategoryId());
-					// List<JJRequirement> requirements = getRequirementsList(
-					// category, product, version, project, true);
-					// CategoryDataModel cat=new CategoryDataModel(
-					// getListOfRequiremntUtils(requirements),
-					// category.getId(), category
-					// .getName(), true);
-					// cat.setCompletionProgress(cp);
-					// cat.setCoverageProgress(cov);
-					// tableDataModelList.set(tableDataModelList.indexOf(cc),cat);
+					
 					if (filterValue == null || filterValue.isEmpty())
 					{
 						tableDataModelList.get(i).setFiltredRequirements(null);
@@ -4564,11 +4679,7 @@ public class JJRequirementBean {
 					}						
 					else
 					{
-//						RequestContext.getCurrentInstance().execute(
-//								"PF('dataTable_" + i + "_Widget').clearFilters();");
-						tableDataModelList
-						.get(i)
-						.setFiltredRequirements(
+						tableDataModelList.get(i).setFiltredRequirements(
 								getFiltredListValue((List<RequirementUtil>) tableDataModelList
 										.get(i).getWrappedData()));
 					}
