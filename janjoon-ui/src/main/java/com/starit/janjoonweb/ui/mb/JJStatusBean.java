@@ -149,6 +149,11 @@ public class JJStatusBean {
 	}
 
 	private boolean first;
+	
+	public void setFirst(boolean bb)
+	{
+		this.first=bb;
+	}
 
 	public void onTabStatChange(TabChangeEvent event) {
 

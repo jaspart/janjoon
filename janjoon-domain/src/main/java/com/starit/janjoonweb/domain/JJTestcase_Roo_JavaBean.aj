@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.domain;
 
-import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJHardware;
 import com.starit.janjoonweb.domain.JJMessage;
@@ -13,7 +12,6 @@ import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTeststep;
-import com.starit.janjoonweb.domain.JJVersion;
 import java.util.Date;
 import java.util.Set;
 
@@ -89,22 +87,6 @@ privileged aspect JJTestcase_Roo_JavaBean {
     
     public void JJTestcase.setRequirement(JJRequirement requirement) {
         this.requirement = requirement;
-    }
-    
-    public JJBuild JJTestcase.getBuild() {
-        return this.build;
-    }
-    
-    public void JJTestcase.setBuild(JJBuild build) {
-        this.build = build;
-    }
-    
-    public Set<JJVersion> JJTestcase.getVersions() {
-        return this.versions;
-    }
-    
-    public void JJTestcase.setVersions(Set<JJVersion> versions) {
-        this.versions = versions;
     }
     
     public JJSprint JJTestcase.getSprint() {

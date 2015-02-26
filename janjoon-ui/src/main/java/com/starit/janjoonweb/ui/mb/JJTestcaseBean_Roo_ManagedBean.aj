@@ -3,8 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb;
 
-import com.starit.janjoonweb.domain.JJBuild;
-import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJHardware;
@@ -17,9 +15,7 @@ import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.domain.JJTeststep;
-import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.JJTestcaseBean;
-import com.starit.janjoonweb.ui.mb.converter.JJBuildConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJSprintConverter;
@@ -68,9 +64,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
     JJRequirementService JJTestcaseBean.jJRequirementService;
     
     @Autowired
-    JJBuildService JJTestcaseBean.jJBuildService;
-    
-    @Autowired
     JJSprintService JJTestcaseBean.jJSprintService;
     
     private String JJTestcaseBean.name = "JJTestcases";
@@ -90,8 +83,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
     private HtmlPanelGrid JJTestcaseBean.viewPanelGrid;
     
     private boolean JJTestcaseBean.createDialogVisible = false;
-    
-    private List<JJVersion> JJTestcaseBean.selectedVersions;
     
     private List<JJSoftware> JJTestcaseBean.selectedSoftwares;
     
@@ -368,46 +359,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         requirementCreateInputMessage.setFor("requirementCreateInput");
         requirementCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementCreateInputMessage);
-        
-        OutputLabel buildCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        buildCreateOutput.setFor("buildCreateInput");
-        buildCreateOutput.setId("buildCreateOutput");
-        buildCreateOutput.setValue("Build:");
-        htmlPanelGrid.getChildren().add(buildCreateOutput);
-        
-        AutoComplete buildCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        buildCreateInput.setId("buildCreateInput");
-        buildCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.build}", JJBuild.class));
-        buildCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseBean.completeBuild}", List.class, new Class[] { String.class }));
-        buildCreateInput.setDropdown(true);
-        buildCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "build", String.class));
-        buildCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{build.name} #{build.description} #{build.creationDate} #{build.updatedDate}", String.class));
-        buildCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{build}", JJBuild.class));
-        buildCreateInput.setConverter(new JJBuildConverter());
-        buildCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(buildCreateInput);
-        
-        Message buildCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        buildCreateInputMessage.setId("buildCreateInputMessage");
-        buildCreateInputMessage.setFor("buildCreateInput");
-        buildCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(buildCreateInputMessage);
-        
-        HtmlOutputText versionsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        versionsCreateOutput.setId("versionsCreateOutput");
-        versionsCreateOutput.setValue("Versions:");
-        htmlPanelGrid.getChildren().add(versionsCreateOutput);
-        
-        HtmlOutputText versionsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        versionsCreateInput.setId("versionsCreateInput");
-        versionsCreateInput.setValue("This relationship is managed from the JJVersion side");
-        htmlPanelGrid.getChildren().add(versionsCreateInput);
-        
-        Message versionsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        versionsCreateInputMessage.setId("versionsCreateInputMessage");
-        versionsCreateInputMessage.setFor("versionsCreateInput");
-        versionsCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(versionsCreateInputMessage);
         
         OutputLabel sprintCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         sprintCreateOutput.setFor("sprintCreateInput");
@@ -772,46 +723,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         requirementEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementEditInputMessage);
         
-        OutputLabel buildEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        buildEditOutput.setFor("buildEditInput");
-        buildEditOutput.setId("buildEditOutput");
-        buildEditOutput.setValue("Build:");
-        htmlPanelGrid.getChildren().add(buildEditOutput);
-        
-        AutoComplete buildEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        buildEditInput.setId("buildEditInput");
-        buildEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.build}", JJBuild.class));
-        buildEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTestcaseBean.completeBuild}", List.class, new Class[] { String.class }));
-        buildEditInput.setDropdown(true);
-        buildEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "build", String.class));
-        buildEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{build.name} #{build.description} #{build.creationDate} #{build.updatedDate}", String.class));
-        buildEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{build}", JJBuild.class));
-        buildEditInput.setConverter(new JJBuildConverter());
-        buildEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(buildEditInput);
-        
-        Message buildEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        buildEditInputMessage.setId("buildEditInputMessage");
-        buildEditInputMessage.setFor("buildEditInput");
-        buildEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(buildEditInputMessage);
-        
-        HtmlOutputText versionsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        versionsEditOutput.setId("versionsEditOutput");
-        versionsEditOutput.setValue("Versions:");
-        htmlPanelGrid.getChildren().add(versionsEditOutput);
-        
-        HtmlOutputText versionsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        versionsEditInput.setId("versionsEditInput");
-        versionsEditInput.setValue("This relationship is managed from the JJVersion side");
-        htmlPanelGrid.getChildren().add(versionsEditInput);
-        
-        Message versionsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        versionsEditInputMessage.setId("versionsEditInputMessage");
-        versionsEditInputMessage.setFor("versionsEditInput");
-        versionsEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(versionsEditInputMessage);
-        
         OutputLabel sprintEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         sprintEditOutput.setFor("sprintEditInput");
         sprintEditOutput.setId("sprintEditOutput");
@@ -1081,26 +992,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         requirementValue.setConverter(new JJRequirementConverter());
         htmlPanelGrid.getChildren().add(requirementValue);
         
-        HtmlOutputText buildLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        buildLabel.setId("buildLabel");
-        buildLabel.setValue("Build:");
-        htmlPanelGrid.getChildren().add(buildLabel);
-        
-        HtmlOutputText buildValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        buildValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.build}", JJBuild.class));
-        buildValue.setConverter(new JJBuildConverter());
-        htmlPanelGrid.getChildren().add(buildValue);
-        
-        HtmlOutputText versionsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        versionsLabel.setId("versionsLabel");
-        versionsLabel.setValue("Versions:");
-        htmlPanelGrid.getChildren().add(versionsLabel);
-        
-        HtmlOutputText versionsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        versionsValue.setId("versionsValue");
-        versionsValue.setValue("This relationship is managed from the JJVersion side");
-        htmlPanelGrid.getChildren().add(versionsValue);
-        
         HtmlOutputText sprintLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         sprintLabel.setId("sprintLabel");
         sprintLabel.setValue("Sprint:");
@@ -1234,28 +1125,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<JJBuild> JJTestcaseBean.completeBuild(String query) {
-        List<JJBuild> suggestions = new ArrayList<JJBuild>();
-        for (JJBuild jJBuild : jJBuildService.findAllJJBuilds()) {
-            String jJBuildStr = String.valueOf(jJBuild.getName() +  " "  + jJBuild.getDescription() +  " "  + jJBuild.getCreationDate() +  " "  + jJBuild.getUpdatedDate());
-            if (jJBuildStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJBuild);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<JJVersion> JJTestcaseBean.getSelectedVersions() {
-        return selectedVersions;
-    }
-    
-    public void JJTestcaseBean.setSelectedVersions(List<JJVersion> selectedVersions) {
-        if (selectedVersions != null) {
-            JJTestcase_.setVersions(new HashSet<JJVersion>(selectedVersions));
-        }
-        this.selectedVersions = selectedVersions;
-    }
-    
     public List<JJSprint> JJTestcaseBean.completeSprint(String query) {
         List<JJSprint> suggestions = new ArrayList<JJSprint>();
         for (JJSprint jJSprint : jJSprintService.findAllJJSprints()) {
@@ -1312,9 +1181,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
     }
     
     public String JJTestcaseBean.onEdit() {
-        if (JJTestcase_ != null && JJTestcase_.getVersions() != null) {
-            selectedVersions = new ArrayList<JJVersion>(JJTestcase_.getVersions());
-        }
         if (JJTestcase_ != null && JJTestcase_.getSoftwares() != null) {
             selectedSoftwares = new ArrayList<JJSoftware>(JJTestcase_.getSoftwares());
         }
@@ -1379,7 +1245,6 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
     
     public void JJTestcaseBean.reset() {
         JJTestcase_ = null;
-        selectedVersions = null;
         selectedSoftwares = null;
         selectedHardwares = null;
         selectedTeststeps = null;

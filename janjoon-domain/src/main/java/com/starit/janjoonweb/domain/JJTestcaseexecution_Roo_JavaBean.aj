@@ -3,6 +3,7 @@
 
 package com.starit.janjoonweb.domain;
 
+import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
@@ -74,6 +75,14 @@ privileged aspect JJTestcaseexecution_Roo_JavaBean {
     
     public void JJTestcaseexecution.setTestcase(JJTestcase testcase) {
         this.testcase = testcase;
+    }
+    
+    public JJBuild JJTestcaseexecution.getBuild() {
+        return this.build;
+    }
+    
+    public void JJTestcaseexecution.setBuild(JJBuild build) {
+        this.build = build;
     }
     
     public Boolean JJTestcaseexecution.getPassed() {

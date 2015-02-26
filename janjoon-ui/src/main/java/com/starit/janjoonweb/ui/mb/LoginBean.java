@@ -618,7 +618,12 @@ public class LoginBean implements Serializable {
 			HttpSession session = (HttpSession) ctx.getExternalContext()
 					.getSession(false);
 			if (session.getAttribute("jJTestcaseBean") != null)
+			{
+				JJCategory cat=((JJTestcaseBean)session.getAttribute("jJTestcaseBean")).getCategory();
 				session.setAttribute("jJTestcaseBean", new JJTestcaseBean());
+				((JJTestcaseBean)session.getAttribute("jJTestcaseBean")).setCategory(cat);
+			}
+				
 			authorisationService = new AuthorisationService(session, contact);
 			messageCount = null;
 			// messageListener(session);
@@ -649,11 +654,15 @@ public class LoginBean implements Serializable {
 						.contains("productSelectOneMenu")) {
 					JJProductBean productBean = (JJProductBean) findBean("jJProductBean");
 					productBean.setProduct((JJProduct) event.getNewValue());
+					if(session.getAttribute("jJStatusBean") != null)
+						((JJStatusBean)session.getAttribute("jJStatusBean")).setFirst(true);
 
 				} else if (event.getComponent().getClientId()
 						.contains("versionSelectOneMenu")) {
 					jJVersionBean.getVersionList();
 					jJVersionBean.setVersion((JJVersion) event.getNewValue());
+					if(session.getAttribute("jJStatusBean") != null)
+						((JJStatusBean)session.getAttribute("jJStatusBean")).setFirst(true);
 				}
 
 				if (viewId.contains("development")) {

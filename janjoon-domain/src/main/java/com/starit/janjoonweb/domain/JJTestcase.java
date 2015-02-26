@@ -55,11 +55,11 @@ public class JJTestcase {
 	@ManyToOne
 	private JJRequirement requirement;	
 	
-	@ManyToOne
-	private JJBuild build;
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
-	private Set<JJVersion> versions = new HashSet<JJVersion>();
+//	@ManyToOne
+//	private JJBuild build;
+//
+//	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
+//	private Set<JJVersion> versions = new HashSet<JJVersion>();
 
 	@ManyToOne
 	private JJSprint sprint;

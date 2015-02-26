@@ -17,7 +17,7 @@
 
 		<p:layout styleClass="content"
 			style="min-height:500px;overflow:hidden !important;height:700px !important;"
-			stateful="true">		
+			stateful="true">
 			<h:form id="testFormNorth">
 				<p:dialog widgetVar="categoryPanel" id="categoryPanel"
 					onHide="hideEvent()" styleClass="overlayPanelDialog"
@@ -25,8 +25,9 @@
 					closable="false">
 					<c:forEach items="#{jJTestcaseBean.categoryList}" var="category">
 						<p:selectBooleanButton value="#{category.checked}"
-							onLabel="#{category.category.name}" id="Mcategory_#{category.category.id}"
-							rendered="#{loginBean.mobile}" 
+							onLabel="#{category.category.name}"
+							id="Mcategory_#{category.category.id}"
+							rendered="#{loginBean.mobile}"
 							style="width: 150px;margin-left: 20px;height: 100px;margin-top: 20px;visibility: visible;"
 							offLabel="#{category.category.name}" onIcon="ui-icon-check"
 							offIcon="ui-icon-close">
@@ -36,8 +37,9 @@
 								onstart="PF('blockUIWidget').block()"
 								oncomplete="PF('blockUIWidget').unblock()" />
 						</p:selectBooleanButton>
-						<p:tooltip for="Mcategory_#{category.category.id}" value="#{category.category.name}" 
-							showEffect="fade" hideEffect="fade" />
+						<p:tooltip for="Mcategory_#{category.category.id}"
+							value="#{category.category.name}" showEffect="fade"
+							hideEffect="fade" />
 						<br />
 					</c:forEach>
 				</p:dialog>
@@ -46,8 +48,10 @@
 					<c:forEach items="#{jJTestcaseBean.categoryList}" var="category">
 
 						<p:selectBooleanButton value="#{category.checked}"
-							onLabel="#{category.category.name}" id="category_#{category.category.id}"
-							rendered="#{!loginBean.mobile}" style="visibility: visible;#{jJTestcaseBean.getMarginLeft(category)}"
+							onLabel="#{category.category.name}"
+							id="category_#{category.category.id}"
+							rendered="#{!loginBean.mobile}"
+							style="visibility: visible;#{jJTestcaseBean.getMarginLeft(category)}"
 							offLabel="#{category.category.name}" onIcon="ui-icon-check"
 							offIcon="ui-icon-close">
 							<p:ajax
@@ -56,8 +60,9 @@
 								onstart="PF('blockUIWidget').block()"
 								oncomplete="PF('blockUIWidget').unblock()" />
 						</p:selectBooleanButton>
-						<p:tooltip for="category_#{category.category.id}" value="#{category.category.name}" 
-							showEffect="fade" hideEffect="fade" />
+						<p:tooltip for="category_#{category.category.id}"
+							value="#{category.category.name}" showEffect="fade"
+							hideEffect="fade" />
 					</c:forEach>
 
 					<p:commandButton value="&#9776;" id="overlayPanel"
@@ -67,13 +72,15 @@
 
 					<p:commandButton
 						value="#{messages.specification_import_button} XML"
-						style="float: right;visibility: visible;" disabled="#{jJProjectBean.project == null}"
+						style="float: right;visibility: visible;"
+						disabled="#{jJProjectBean.project == null}"
 						update=":importXMLForm" onstart="PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock();PF('testImportXMLDialogWidget').show()" />
 
 					<p:commandButton value="#{messages.specification_video_help_title}"
-						style="float: right;visibility: visible;" id="videoHelpBtn" icon="ui-icon-video"
-						onclick="PF('videoHelpWidget').show()" type="button" />
+						style="float: right;visibility: visible;" id="videoHelpBtn"
+						icon="ui-icon-video" onclick="PF('videoHelpWidget').show()"
+						type="button" />
 
 				</p:layoutUnit>
 			</h:form>
@@ -187,7 +194,8 @@
 				style="min-height:500px;width:1060px !important;height:600px !important;">
 				<h:form id="testFormCenter">
 					<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
-						style="float: right;" title="#{messages.specification_video_help_title}"/>
+						style="float: right;"
+						title="#{messages.specification_video_help_title}" />
 					<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade">
 						<p:panelGrid>
 							<f:facet name="header">
@@ -250,29 +258,33 @@
 						rendered="#{jJTestcaseBean.rendredEmptySelection}"
 						style="color: red;" />
 
-					<!-- 					<p:dataTable var="rowName" value="#{jJTestcaseBean.rowNames}" -->
-					<!-- 						scrollable="true" scrollHeight="500" rowIndexVar="rowIdx" -->
-					<!-- 						style="table-layout: fixed;width:#{jJTestcaseBean.width}px" -->
-					<!-- 						rendered="#{!jJTestcaseBean.rendredTestCaseRecaps and !jJTestcaseBean.rendredTestCaseHistorical and jJTestcaseBean.rowNames != null}"> -->
-					<!-- 						<p:column headerText="Build/Version" styleClass="ui-widget-header" -->
-					<!-- 							width="100"> -->
-					<!-- 							<h:outputText value="#{rowName.name}" /> -->
-					<!-- 						</p:column> -->
+					<p:dataTable var="columnName" value="#{jJTestcaseBean.colNames}"
+						scrollable="true" scrollHeight="400" rowIndexVar="rowIdx"
+						style="table-layout: fixed;width:#{jJTestcaseBean.width}px"
+						rendered="#{jJTestcaseBean.rowNames != null and !jJTestcaseBean.rendredTestCaseRecaps and !jJTestcaseBean.rendredTestCaseHistorical and jJTestcaseBean.rowNames != null}">
+						<p:column styleClass="ui-widget-header" width="100">
+							<!-- 							<h:outputText value="#{columnName.name}" /> -->
+							<p:commandLink value="#{columnName.name}"
+								action="#{jJTestcaseBean.testCaseInfo(columnName.id)}"
+								ajax="false">
+							</p:commandLink>
+						</p:column>
+						<p:columns var="rowName" value="#{jJTestcaseBean.rowNames}"
+							width="50" columnIndexVar="colIdx">
+							<f:facet name="header">
+								<h:outputText value="Version #{rowName.name}"
+									rendered="#{rowName['class'].simpleName == 'JJVersion'}" />
 
-					<!-- 						<p:columns var="columnName" value="#{jJTestcaseBean.colNames}" -->
-					<!-- 							width="50" headerText="#{columnName.name}" -->
-					<!-- 							columnIndexVar="colIdx"> -->
-
-					<!-- 							<p:panel> -->
-					<!-- 								<p:selectBooleanCheckbox value="false" disabled="true" -->
-					<!-- 									rendered="#{rowName.testcase == null}" /> -->
-					<!-- 								<p:selectBooleanCheckbox -->
-					<!-- 									value="#{rowName.testcase == columnName}" disabled="true" -->
-					<!-- 									rendered="#{rowName.testcase != null}" /> -->
-					<!-- 							</p:panel> -->
-
-					<!-- 						</p:columns> -->
-					<!-- 					</p:dataTable> -->
+								<h:outputText value="Build #{rowName.name}"
+									rendered="#{rowName['class'].simpleName == 'JJBuild'}" />
+							</f:facet>
+							<p:panel>
+								<p:selectBooleanCheckbox
+									value="#{jJTestcaseBean.isChecked(rowName,columnName)}"
+									disabled="true" />
+							</p:panel>
+						</p:columns>
+					</p:dataTable>
 
 					<p:panelGrid columns="1"
 						rendered="#{jJTestcaseBean.rendredTestCaseRecaps}"
@@ -394,24 +406,23 @@
 						</p:column>
 
 						<p:column headerText="Action">
-							<h:outputText value="#{ts.actionstep}" escape="false"/>
+							<h:outputText value="#{ts.actionstep}" escape="false" />
 						</p:column>
 						<p:column headerText="Result">
-							<h:outputText value="#{ts.resultstep}" escape="false"/>
+							<h:outputText value="#{ts.resultstep}" escape="false" />
 						</p:column>
 					</p:dataTable>
-
+					
 					<p:dataTable id="testexecutionRecapDataTable"
 						value="#{jJTestcaseexecutionBean.testCaseexecutionRecaps}"
 						rowKey="#{tce.name}" var="tce" paginatorPosition="bottom"
 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
-						paginator="true" rows="8" style="width:650px;">
+						paginator="true" rows="8" style="width:650px;margin-top: 20px;">
 						<p:column headerText="Id">
 							<h:outputText value="#{tce.testcaseexecution.id}" />
 						</p:column>
 						<p:column headerText="Build">
-							<h:outputText
-								value="#{tce.testcaseexecution.testcase.build.name}" />
+							<h:outputText value="#{tce.testcaseexecution.build.name}" />
 						</p:column>
 						<p:column headerText="Creation Date">
 							<h:outputText value="#{tce.testcaseexecution.creationDate}" />
@@ -459,13 +470,13 @@
 		<p:dialog id="testcaseDialog"
 			header="#{messages[jJTestcaseBean.message]}" modal="true"
 			widgetVar="testcaseDialogWidget" dynamic="true" resizable="false"
-			style="top: 30px;">			
+			style="top: 30px;">
 			<p:ajax event="close" update=":testFormCenter :testFormWest"
 				listener="#{jJTestcaseBean.closeDialog}" />
 			<p:outputPanel id="testcaseDialogPanel">
-				<ui:include src="testDialog.xhtml"/>
+				<ui:include src="testDialog.xhtml" />
 			</p:outputPanel>
-		</p:dialog>	
+		</p:dialog>
 
 		<p:dialog id="runTestcaseDialog" header="#{messages.test_exec_title}"
 			modal="true" widgetVar="runTestcaseDialogWidget" draggable="false"
@@ -485,7 +496,7 @@
 						activeIndex="#{jJTeststepexecutionBean.activeIndex}"
 						scrollable="true" dynamic="true"
 						value="#{jJTeststepexecutionBean.teststepexecutions}" var="tse">
-						<p:ajax event="tabChange" 
+						<p:ajax event="tabChange"
 							listener="#{jJTeststepexecutionBean.onTabChange}"
 							update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton" />
 						<p:tab title="#{tse.teststep.ordering}">
@@ -522,7 +533,7 @@
 											value="#{messages.test_graph_success_label}"
 											icon="ui-icon-circle-check" styleClass="TestcaseExecSuccess"
 											actionListener="#{jJTeststepexecutionBean.setStatus('true')}"
-											action="#{jJTeststepexecutionBean.handleStatus()}"
+											action="#{jJTeststepexecutionBean.handleStatus(tse)}"
 											widgetVar="TestcaseExecSuccessButton"
 											update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton :bugForm:createPanelGrid"
 											async="true" ajax="true" />
@@ -531,7 +542,7 @@
 											value="#{messages.test_graph_failed_label}"
 											icon="ui-icon-circle-close" styleClass="TestcaseExecFailed"
 											actionListener="#{jJTeststepexecutionBean.setStatus('false')}"
-											action="#{jJTeststepexecutionBean.handleStatus()}"
+											action="#{jJTeststepexecutionBean.handleStatus(tse)}"
 											widgetVar="TestcaseExecFailedButton"
 											update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton :bugForm:createPanelGrid"
 											async="true" ajax="true" />

@@ -7,12 +7,10 @@ import org.springframework.roo.addon.layers.service.RooService;
 
 @RooService(domainTypes = { com.starit.janjoonweb.domain.JJTestcase.class })
 public interface JJTestcaseService {
-	public List<JJTestcase> getTestcases(JJRequirement requirement,JJBuild build,
-			JJChapter chapter, boolean onlyActif, boolean sortedByOrder,
-			boolean sortedByCreationdate);
+	public List<JJTestcase> getTestcases(JJRequirement requirement,JJChapter chapter,
+			boolean onlyActif, boolean sortedByOrder,boolean sortedByCreationdate);
 
-	public List<JJTestcase> getImportTestcases(JJCategory category,JJProject project,JJProduct product,JJBuild build,
-			boolean onlyActif);
+	public List<JJTestcase> getImportTestcases(JJCategory category,JJProject project,JJProduct product,boolean onlyActif);
 
 	public void saveTestcases(Set<JJTestcase> testcases);
 

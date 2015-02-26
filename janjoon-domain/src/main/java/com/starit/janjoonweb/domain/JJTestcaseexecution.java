@@ -51,6 +51,9 @@ public class JJTestcaseexecution {
 
 	@ManyToOne
 	private JJTestcase testcase;
+	
+	@ManyToOne
+	private JJBuild build;
 
 	private Boolean passed;
 

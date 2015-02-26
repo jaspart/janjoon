@@ -24,6 +24,37 @@ public class JJTestcaseexecutionServiceImpl implements
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
+	
+	public boolean haveTestcaseExec(JJTestcase testcase,JJBuild build,JJVersion version){
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJTestcaseexecution> criteriaQuery = criteriaBuilder
+				.createQuery(JJTestcaseexecution.class);
+
+		Root<JJTestcaseexecution> from = criteriaQuery.from(JJTestcaseexecution.class);
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if(testcase != null)
+		predicates.add(criteriaBuilder.equal(from.get("testcase"),
+				testcase));
+		
+		if(build != null)
+		{
+			predicates.add(criteriaBuilder.equal(from.get("build"),
+					build));
+		}else if(version != null)
+			predicates.add(criteriaBuilder.equal(from.get("build").get("version"),
+					version));
+		
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
+		cq.select(criteriaBuilder.count(cq.from(JJTestcaseexecution.class)));
+		entityManager.createQuery(cq);
+		cq.where(predicates.toArray(new Predicate[] {}));
+		boolean have = entityManager.createQuery(cq).getSingleResult() > 0;
+		return have;
+	}
+
 
 	@Override
 	public List<JJTestcaseexecution> getTestcaseexecutions(JJTestcase testcase,
@@ -47,7 +78,7 @@ public class JJTestcaseexecutionServiceImpl implements
 
 		if (build != null) {
 			predicates.add(criteriaBuilder.equal(
-					from.join("testcase").get("build"), build));
+					from.get("build"), build));
 		}
 
 		if (onlyActif) {
@@ -106,7 +137,7 @@ public class JJTestcaseexecutionServiceImpl implements
 
 		if (build != null) {
 
-			predicates.add(criteriaBuilder.equal(from.join("testcase").get("build"), build));
+			predicates.add(criteriaBuilder.equal(from.get("build"), build));
 		}
 
 		if (onlyActif) {

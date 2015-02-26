@@ -110,8 +110,37 @@ public class JJTeststepexecutionBean {
 
 		elements = new TreeMap<Integer, JJTeststepexecution>();
 
+		disabledTestcase=true;
 		if (teststepexecutions.isEmpty()) {
 			newTeststepexecutions(testcaseexecution);
+			
+		}else
+		{
+			int i=0;
+			while(i<teststepexecutions.size())
+			{
+				if(teststepexecutions.get(i).getPassed() != null && !teststepexecutions.get(i).getPassed())	
+				{
+					disabledTestcase=false;
+					i=teststepexecutions.size();
+				}
+				i++;
+			}
+			
+			if(disabledTestcase)
+			{
+				i=0;
+				disabledTestcase=false;
+				while(i<teststepexecutions.size())
+				{
+					if(teststepexecutions.get(i).getPassed() == null )	
+					{
+						disabledTestcase=true;
+						i=teststepexecutions.size();
+					}
+					i++;
+				}
+			}
 		}
 
 		teststepexecutions = jJTeststepexecutionService.getTeststepexecutions(
@@ -174,11 +203,11 @@ public class JJTeststepexecutionBean {
 
 		changeTestcaseStatus();
 
-		if (activeIndex != elements.size() - 1) {
-			disabledTestcase = true;
-		} else {
-			disabledTestcase = false;
-		}
+//		if (activeIndex != elements.size() - 1) {
+//			disabledTestcase = true;
+//		} else {
+//			disabledTestcase = false;
+//		}
 
 	}
 
@@ -228,8 +257,9 @@ public class JJTeststepexecutionBean {
 		bug.setCategory(jJTestcaseBean.getCategory());
 	}
 
-	public void handleStatus() {
+	public void handleStatus(JJTeststepexecution tse) {
 
+		teststepexecution=tse;
 		teststepexecution.setPassed(status);
 		updateJJTeststepexecution(teststepexecution);
 		teststepexecution = jJTeststepexecutionService
@@ -249,13 +279,15 @@ public class JJTeststepexecutionBean {
 					.getSession(false);
 
 			JJBugBean jJBugBean = (JJBugBean) session.getAttribute("jJBugBean");
+			if(jJBugBean == null)
+				jJBugBean=new JJBugBean();
 
 			bug.setTeststep(teststepexecution.getTeststep());
 
 			jJBugBean.setJJBug_(bug);
 			jJBugBean.setBugRequirementSelected(teststepexecution.getTeststep()
 					.getTestcase().getRequirement());
-			jJBugBean.setBugVersionSelected(teststepexecution.getTeststep().getTestcase().getBuild()
+			jJBugBean.setBugVersionSelected(teststepexecution.getTestcaseexecution().getBuild()
 					.getVersion());
 			jJBugBean.setBugProjectSelected(LoginBean.getProject());
 

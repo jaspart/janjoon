@@ -436,7 +436,10 @@
 						<p:ajax event="select" listener="#{jJRequirementBean.onNodeSelect}"
 							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()" />
-													
+
+						<p:treeNode type="withOutChapter">
+							<h:outputText value="#{messages.specification_tree_withOutChapter}" />
+						</p:treeNode>
 						<p:treeNode type="chapter">
 							<h:outputText value="CH-#{node.id}-#{node.name}" />
 						</p:treeNode>

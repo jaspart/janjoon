@@ -3,6 +3,7 @@
 
 package com.starit.janjoonweb.domain;
 
+import com.starit.janjoonweb.domain.JJBuildDataOnDemand;
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJTestcaseDataOnDemand;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
@@ -29,6 +30,9 @@ privileged aspect JJTestcaseexecutionDataOnDemand_Roo_DataOnDemand {
     private Random JJTestcaseexecutionDataOnDemand.rnd = new SecureRandom();
     
     private List<JJTestcaseexecution> JJTestcaseexecutionDataOnDemand.data;
+    
+    @Autowired
+    JJBuildDataOnDemand JJTestcaseexecutionDataOnDemand.jJBuildDataOnDemand;
     
     @Autowired
     JJContactDataOnDemand JJTestcaseexecutionDataOnDemand.jJContactDataOnDemand;

@@ -211,11 +211,10 @@ public class JJTeststepBean {
 		int activeRow  = table.getRowIndex(); 
 		int lenth=table.getRowCount();
 		
-		//RequestContext.getCurrentInstance().execute("jQuery('span.ui-icon-pencil').eq(" + rowToEditIndex + ").each(function(){jQuery(this).click()});");
 		for(int i=0;i<lenth;i++)
 			if(i != activeRow)
 			RequestContext.getCurrentInstance().
-			execute("jQuery('.ui-datatable-data tr').last().find('span.ui-icon-close').eq(" + i + ").each(function(){jQuery(this).click()});");
+			execute("jQuery('.ui-datatable-data tr').find('span.ui-icon-close').eq(" + i + ").each(function(){jQuery(this).click()});");
 		
 		RequestContext.getCurrentInstance().execute(
 				"PF('testTabView').select(0)");

@@ -59,8 +59,8 @@ public class JJBuild {
 	@ManyToOne
 	private JJPhase phase;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "build")
-	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
+//	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "build")
+//	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
 	
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "build")

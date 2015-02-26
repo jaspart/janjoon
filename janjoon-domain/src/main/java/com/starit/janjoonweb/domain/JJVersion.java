@@ -53,8 +53,8 @@ public class JJVersion {
 	@ManyToOne
 	private JJProduct product;
 
-	@ManyToOne
-	private JJTestcase testcase;
+//	@ManyToOne
+//	private JJTestcase testcase;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "versioning")
 	private Set<JJTask> tasks = new HashSet<JJTask>();

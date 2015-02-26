@@ -6,7 +6,6 @@ package com.starit.janjoonweb.domain;
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProductDataOnDemand;
-import com.starit.janjoonweb.domain.JJTestcaseDataOnDemand;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionDataOnDemand;
 import com.starit.janjoonweb.domain.JJVersionRepository;
@@ -37,9 +36,6 @@ privileged aspect JJVersionDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     JJProductDataOnDemand JJVersionDataOnDemand.jJProductDataOnDemand;
-    
-    @Autowired
-    JJTestcaseDataOnDemand JJVersionDataOnDemand.jJTestcaseDataOnDemand;
     
     @Autowired
     JJVersionService JJVersionDataOnDemand.jJVersionService;

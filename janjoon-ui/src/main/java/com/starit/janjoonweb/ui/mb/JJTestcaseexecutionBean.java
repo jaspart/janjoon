@@ -109,6 +109,7 @@ public class JJTestcaseexecutionBean {
 				newTestcaseexecution(testcase, build);
 			} else {
 				this.testcaseexecution = testcaseexecution;
+				this.testcaseexecution.setBuild(build);
 			}
 		} else {
 			newTestcaseexecution(testcase, build);
@@ -136,12 +137,12 @@ public class JJTestcaseexecutionBean {
 		updateJJTestcaseexecution(tce);
 
 		List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
-				null, null, tce.getTestcase(), tce.getTestcase().getBuild(), true, false,
+				null, null, tce.getTestcase(), tce.getBuild(), true, false,
 				true, null);
 		if (!tasks.isEmpty()) {
 			JJTask task = tasks.get(0);
 			task.setName(tce.getTestcase().getName() + "_"
-					+ tce.getTestcase().getBuild().getName().trim().toUpperCase());
+					+ tce.getBuild().getName().trim().toUpperCase());
 
 			task.setEndDateReal(new Date());
 
@@ -169,6 +170,7 @@ public class JJTestcaseexecutionBean {
 		testcaseexecution.setDescription(testcase.getDescription());		
 		testcaseexecution.setEnabled(true);
 		testcaseexecution.setTestcase(testcase);
+		testcaseexecution.setBuild(build);
 		testcaseexecution.setPassed(null);
 		saveJJTestcaseexecution(testcaseexecution);
 

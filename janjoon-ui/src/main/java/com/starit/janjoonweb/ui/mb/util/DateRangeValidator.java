@@ -10,6 +10,7 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
+import org.primefaces.component.calendar.Calendar;
 import org.primefaces.context.RequestContext;
 
 import com.starit.janjoonweb.domain.JJSprint;
@@ -152,7 +153,10 @@ public class DateRangeValidator implements Validator {
 					JJSprint sprint=(JJSprint) sprintComponent.getValue();
 					
 					if (edition.equalsIgnoreCase("startDatePlanned")) {
-						Date end = task.getEndDatePlanned();
+						
+						Calendar taskEndDatePlanned = (Calendar) component.getAttributes().get(
+								"taskEndDatePlanned");
+						Date end = (Date) taskEndDatePlanned.getValue();
 
 						if (endDate == null) {
 							return; // Let required="true" handle.
@@ -179,7 +183,11 @@ public class DateRangeValidator implements Validator {
 
 					}
 					if (edition.equalsIgnoreCase("endDatePlanned")) {
-						Date start = task.getStartDatePlanned();
+						
+						Calendar taskStartDatePlanned = (Calendar) component.getAttributes().get(
+								"taskStartDatePlanned");
+						
+						Date start = (Date) taskStartDatePlanned.getValue();
 						
 						if (endDate == null) {
 							return; // Let required="true" handle.
@@ -188,7 +196,7 @@ public class DateRangeValidator implements Validator {
 						if (endDate.before(start)) {							
 							throw new ValidatorException(new FacesMessage(
 									FacesMessage.SEVERITY_ERROR,
-									"Start date may not be after end date.",
+									"End Date may not be Before Start Date.",
 									null));
 						}
 
