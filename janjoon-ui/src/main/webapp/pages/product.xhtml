@@ -6,7 +6,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
-<style type="text/css">
+	<style type="text/css">
 .ui-fileupload-progress {
 	display: none;
 }
@@ -21,7 +21,8 @@
 	display: inline-block;
 	height: 30px;
 }
-td.ui-fileupload-preview{
+
+td.ui-fileupload-preview {
 	display: none;
 }
 </style>
@@ -33,7 +34,8 @@ td.ui-fileupload-preview{
 				rowKey="#{product.id}">
 				<f:facet name="header">#{messages.admin_product_table_title}</f:facet>
 				<p:column style="width: 70px !important;text-align: center;">
-					<p:graphicImage styleClass="avatar" rendered="#{product.logo != null}"
+					<p:graphicImage styleClass="avatar"
+						rendered="#{product.logo != null}"
 						value="#{imageStreamer.imageProd}">
 						<f:param name="ProdId" value="#{product.id}" />
 					</p:graphicImage>
@@ -100,11 +102,13 @@ td.ui-fileupload-preview{
 		</pe:blockUI>
 		<p:outputPanel id="productDialogPanel">
 			<h:form id="productDialogForm">
-				<p:growl id="msg" />
-				<p:panel style="margin-top:10px">
+				<p:panel styleClass="panelDialog">
+					<f:facet name="header">
+						<p:messages id="msg" showDetail="false" closable="true" />
+					</f:facet>
 					<p:row>
 						<p:column>
-							<p:panelGrid style="margin-top:10px">
+							<p:panelGrid>
 								<p:row>
 									<p:column>
 										<p:inputText id="name"
@@ -164,7 +168,6 @@ td.ui-fileupload-preview{
 								<p:row>
 									<p:column colspan="2">
 										<h:outputLabel for="prodLogo" value="Logo:" />
-
 										<p:fileUpload id="prodLogo"
 											disabled="#{empty jJProductBean.productAdmin.name}"
 											fileUploadListener="#{licenseBean.handleProdLogoUpload}"
@@ -214,9 +217,8 @@ td.ui-fileupload-preview{
 							</p:panelGrid>
 						</p:column>
 					</p:row>
-
 					<p:dataTable id="versionDataTable" var="versionModel"
-						scrollable="true" style="width:450px;" scrollHeight="250"
+						scrollable="true" style="width:460px;" scrollHeight="250"
 						value="#{jJVersionBean.versionDataModel}"
 						rowStyleClass="#{versionModel.old ? 'old' : null}">
 
@@ -266,7 +268,7 @@ td.ui-fileupload-preview{
 								oncomplete="PF('versionBlockUIWidget').unblock()"
 								listener="#{jJBuildBean.loadingRowExpansion(versionModel.version)}" />
 
-							<p:dataTable id="buildDataTable" var="build" style="width:300px;"
+							<p:dataTable id="buildDataTable" var="build" style="width:80%;"
 								selection="#{jJBuildBean.buildUtils.get(jJBuildBean.index).versionSelectedBuilds}"
 								rowKey="#{build.id}" emptyMessage="That version have no builds"
 								value="#{jJBuildBean.buildUtils.get(jJBuildBean.index).versionBuilds}">
@@ -292,7 +294,7 @@ td.ui-fileupload-preview{
 
 								</f:facet>
 							</p:dataTable>
-							<p:panelGrid>
+							<p:panelGrid style="width:80%;">
 								<p:row>
 									<p:column>
 										<p:inputText id="build" style="width:80%;"
@@ -323,17 +325,13 @@ td.ui-fileupload-preview{
 					</p:dataTable>
 
 					<f:facet name="footer">
-						<p:row>
-							<p:column colspan="3">
-								<p:commandButton id="saveButton" style="float: right;"
-									onstart="PF('versionBlockUIWidget').block()"
-									oncomplete="PF('versionBlockUIWidget').unblock()"
-									disabled="#{jJProductBean.disabledVersionMode}" value="Save"
-									update="productDialogForm :headerForm"
-									process="@this,name,extname,productManagerSelect"
-									action="#{jJProductBean.save(jJVersionBean)}" />
-							</p:column>
-						</p:row>
+						<p:commandButton id="saveButton" style="float: right;"
+							onstart="PF('versionBlockUIWidget').block()"
+							oncomplete="PF('versionBlockUIWidget').unblock()"
+							disabled="#{jJProductBean.disabledVersionMode}" value="Save"
+							update="productDialogForm :headerForm :growlForm"
+							process="@this,name,extname,productManagerSelect"
+							action="#{jJProductBean.save(jJVersionBean)}" />
 					</f:facet>
 				</p:panel>
 			</h:form>

@@ -133,7 +133,7 @@ public class JJTestcaseBean {
 	private JJVersion version;
 	private float reqCoverage;
 
-	private int width;
+	private String width;
 	private List<Object> rowNames = new ArrayList<Object>();
 	private List<JJTestcase> colNames = new ArrayList<JJTestcase>();
 
@@ -179,9 +179,8 @@ public class JJTestcaseBean {
 
 		if (rowNames == null || rowNames.isEmpty()) {
 
-			colNames = jJTestcaseService.getImportTestcases(category, project,
-					((JJProductBean) LoginBean.findBean("jJProductBean"))
-							.getProduct(), true);
+			colNames = jJTestcaseService.getImportTestcases(category, LoginBean.getProject(),
+					LoginBean.getProduct(), true);
 			//rowNames=new ArrayList<Object>();
 			if (colNames != null && !colNames.isEmpty()) {
 				
@@ -218,11 +217,15 @@ public class JJTestcaseBean {
 				
 			}
 			if (rowNames != null)
-				width = 170 + (rowNames.size() * 70);
-			else
-				width = 170;
-			if (width > 1000)
-				width = 1000;
+			{
+				width = 170 + (rowNames.size() * 70)+"px";
+				
+				if (170 + (rowNames.size() * 70) > 1000)
+					width = "100%";
+			}else
+				width = 170+"px";
+			
+			
 		}
 		return rowNames;
 	}
@@ -259,12 +262,28 @@ public class JJTestcaseBean {
 	public void setTestcase(JJTestcase testcase) {
 		this.testcase = testcase;
 	}
+	
+	public Integer getScrollWidth()
+	{
+		if (170 + (rowNames.size() * 70) > 1110)
+			return 1100;
+		else
+			return null;
+	}
+	
+	public Integer getScrollHeight()
+	{
+		if ((colNames.size() * 50) > 610)
+			return 600;
+		else
+			return null;
+	}
 
-	 public int getWidth() {
+	public String getWidth() {
 	 return width;
 	 }
 	
-	 public void setWidth(int width) {
+	 public void setWidth(String width) {
 	 this.width = width;
 	 }
 
@@ -861,12 +880,12 @@ public class JJTestcaseBean {
 			testcase.setRequirement(requirement);
 			requirement.getTestcases().add(testcase);
 
-			if (initiateTask) {
-				task.setName(testcase.getName());
-				task.setDescription("This is Task: " + task.getName());
-				testcase.getTasks().add(task);
-				task.setTestcase(testcase);
-			}
+//			if (initiateTask) {
+//				task.setName(testcase.getName());
+//				task.setDescription("This is Task: " + task.getName());
+//				testcase.getTasks().add(task);
+//				task.setTestcase(testcase);
+//			}
 
 			saveJJTestcase(testcase);
 
@@ -1618,8 +1637,45 @@ public class JJTestcaseBean {
 						+ "Requirement=\"" + ttt.getRequirement().getName()
 						+ "\" >";
 				for (JJTeststep sss : ttt.getTeststeps()) {
-					String t = "<teststep actionstep=\"" + sss.getActionstep()
-							+ "\" resultstep=\"" + sss.getResultstep()
+					
+					String actionStep="";
+							
+					StringReader str1 = new StringReader(sss.getActionstep());
+					List arr1 = null;
+					try {
+						arr1 = HTMLWorker.parseToList(str1, null);
+					} catch (Exception e) {
+
+					}
+					for (int i = 0; i < arr1.size(); ++i) {
+						actionStep = actionStep
+								+ ((Element) arr1.get(i)).toString();
+					}
+					actionStep = actionStep.replace("[", " ").replace("]", "")
+							.replace("&#39;", "'").replace("\"", "'")
+							.replace("&&", "and").replace("<", "").replace(">", "");
+					
+					String resulstep="";
+					
+					str1 = new StringReader(sss.getResultstep());
+					arr1 = null;
+					try {
+						arr1 = HTMLWorker.parseToList(str1, null);
+					} catch (Exception e) {
+
+					}
+					for (int i = 0; i < arr1.size(); ++i) {
+						resulstep = resulstep
+								+ ((Element) arr1.get(i)).toString();
+					}
+					resulstep = resulstep.replace("[", " ").replace("]", "")
+							.replace("&#39;", "'").replace("\"", "'")
+							.replace("&&", "and").replace("<", "").replace(">", "");
+					
+					
+					
+					String t = "<teststep actionstep=\"" + actionStep
+							+ "\" resultstep=\"" + resulstep
 							+ "\" />";
 					s = s + System.getProperty("line.separator") + t;
 				}

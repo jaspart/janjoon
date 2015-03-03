@@ -8,7 +8,7 @@ import org.springframework.roo.addon.layers.service.RooService;
 @RooService(domainTypes = { com.starit.janjoonweb.domain.JJProduct.class })
 public interface JJProductService {
 	// New Generic
-	public List<JJProduct> getProducts(JJCompany company,JJContact contact,boolean onlyActif);
+	public List<JJProduct> getProducts(JJCompany company,JJContact contact,boolean onlyActif,boolean all);
 	
 	public List<JJProduct> load(JJCompany company,MutableInt size,int first, int pageSize);
 

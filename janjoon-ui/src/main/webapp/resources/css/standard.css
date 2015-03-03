@@ -38,12 +38,21 @@ a:visited {
 	overflow: scroll;
 }
 
+.ui-messages-info, .ui-messages-warn, .ui-messages-error, .ui-messages-fatal{
+	margin: 0 0 0 0;
+}
+
+.panelDialog{
+	border: none;
+}
+
 .panelDialog .ui-panel-title{
 	margin : 0 0 0 0;
 }
 
 .panelDialog .ui-panel-titlebar {
 	padding: 0 0 0 0;
+	border: none;
 }
 
 .menu {
@@ -610,6 +619,14 @@ div.revised2 {
 	overflow: hidden;
 	-webkit-line-clamp: 2;
 }*/
+
+.noPadding {
+	padding-top: 0px !important;
+	padding-left: 0px !important;
+	padding-bottom: 0px !important;
+	padding-right: 0px !important;
+}
+
 .old {
 	background-color: #FCA752 !important;
 	background-image: none !important;

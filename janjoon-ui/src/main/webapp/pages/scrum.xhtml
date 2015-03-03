@@ -18,7 +18,7 @@
 }
 </style>
 	<h:form style="width:100%;">
-		<p:remoteCommand update=":projecttabview:SprintTabView"
+		<p:remoteCommand update=":projecttabview:SprintTabView :growlForm"
 			name="updateTabSprint" />
 	</h:form>
 	<p:tabView id="SprintTabView" dynamic="true" cache="true"
@@ -38,8 +38,7 @@
 			</f:facet>
 			<ui:include src="sprint.xhtml" />
 			<h:form id="sprintForm" rendered="#{!jjsprint.render}"
-				style="width:100% !important;">
-				<p:growl id="sprintGrowl" showDetail="true" life="2000" />
+				style="width:100% !important;">				
 				<p:panelGrid id="sprintPanelGrid" style="width:100% !important;">
 					<f:facet name="header">
 						<p:row>
@@ -126,11 +125,11 @@
 									actionListener="#{jJSprintBean.attrListener}"
 									onstart="PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock()"
-									update=":projecttabview:SprintTabView:sprintForm">
+									update=":projecttabview:SprintTabView:sprintForm :growlForm">
 									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 									<f:attribute name="create" value="edit" />
 								</p:commandButton>
-								<p:remoteCommand name="editSprint" update=":projecttabview"
+								<p:remoteCommand name="editSprint" update=":projecttabview :growlForm"
 									action="#{jJSprintBean.editSprint}" 
 									onstart="PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock();" />
@@ -138,7 +137,7 @@
 							<p:column colspan="2" style="width:15% important;">
 								<p:commandButton value="#{messages.label_create} JJTask"
 									id="createTaskttButton" icon="ui-icon-circle-plus"
-									update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm :taskImportDialog"
+									update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm :taskImportDialog :growlForm"
 									immediate="true" onstart="PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock()"
 									actionListener="#{jJTaskBean.loadImportFormat}"
@@ -230,7 +229,7 @@
 										rendered="#{not empty jjsprint.progressTask}">
 										<p:ajax event="cellEdit"
 											listener="#{jJSprintBean.onCellEditTask}"
-											update=":projecttabview:SprintTabView:taskListForm :projecttabview:SprintTabView:sprintForm" />
+											update=":growlForm :projecttabview:SprintTabView:taskListForm :projecttabview:SprintTabView:sprintForm" />
 										<p:column style="width:1px">
 											<h:outputText id="progIcon"
 												styleClass="ui-icon ui-icon-arrow-4" />
@@ -337,7 +336,7 @@
 					<p:ajax listener="#{jJSprintBean.addTaskToProg}"
 						onstart="PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock()"
-						update=":projecttabview">
+						update=":projecttabview :growlForm">
 					</p:ajax>
 				</p:droppable>
 				<p:droppable id="addTaskToDone" for="doneFieldset" tolerance="touch"
@@ -345,7 +344,7 @@
 					<p:ajax listener="#{jJSprintBean.addTaskToDone}"
 						onstart="PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock()"
-						update=":projecttabview :editBugDialog">
+						update=":projecttabview :editBugDialog :growlForm">
 					</p:ajax>
 				</p:droppable>
 			</h:form>

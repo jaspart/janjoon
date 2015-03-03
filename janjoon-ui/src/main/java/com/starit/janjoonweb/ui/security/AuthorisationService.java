@@ -36,10 +36,7 @@ public class AuthorisationService implements Serializable {
 		loginBean.setMessageCount(null);
 		jjContactBean.setCalendarUtil(null);
 		jjContactBean.setContactsLazyModel(null);
-		jjContactBean.setContactUtil(null);
-
-		jjProjectBean.setProjectList(null);
-		jjProductBean.setProductList(null);
+		jjContactBean.setContactUtil(null);	
 		jjProductBean.setProductListTable(null);
 		jjProjectBean.setProjectListTable(null);
 		jjContactBean.setCategories(null);
@@ -578,7 +575,7 @@ public class AuthorisationService implements Serializable {
 			rwDevMSG = MessageFactory.getMessage("header_dev_menuitem", "")
 					.getDetail();
 
-		rProject = jJPermissionService.isAuthorized(contact, project, null,
+		rProject = jJPermissionService.isAuthorized(contact, project, product,
 				"Task", null, true, null, null);
 
 		if (!rProject)

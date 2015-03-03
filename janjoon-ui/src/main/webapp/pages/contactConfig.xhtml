@@ -37,7 +37,7 @@
 			header="#{messages.contact_panel_header}">
 
 			<!-- 			<h:form id="licenseForm"> -->
-			<!-- 				<p:growl id="messages" showDetail="true" /> -->
+			<!-- 				<p:growl id="messages" showDetail="false" /> -->
 			<!-- 				<h:panelGrid columns="1" style="margin-left:20px;"> -->
 			<!-- 					<f:facet name="header"> -->
 			<!-- 						<p:row> -->
@@ -61,7 +61,7 @@
 			<!-- 			</h:form> -->
 			<h:form id="configForm" style="margin-left:20px;float:left;">
 				<p:remoteCommand name="updateAdmin" />
-				<p:growl id="msg" />
+<!-- 				<p:growl id="msg" /> -->
 				<p:panelGrid>
 					<f:facet name="header">
 						<p:row>
@@ -191,7 +191,7 @@
 								mode="advanced" dragDropSupport="true"
 								onstart="PF('blockUIWidget').block()"
 								oncomplete="PF('blockUIWidget').unblock();"
-								update=":vacationForm configForm :workdaysCalendar "
+								update=":vacationForm configForm :workdaysCalendar :growlForm"
 								sizeLimit="100000" allowTypes="/(gif|png|ico|jpeg|jpg)$/" />
 
 						</p:column>
@@ -200,7 +200,7 @@
 						<p:row>
 							<p:column colspan="4" style="text-align: right">
 								<p:commandButton id="submit"
-									update=":vacationForm configForm :workdaysCalendar "
+									update=":vacationForm configForm :workdaysCalendar :growlForm "
 									onstart="PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock()"
 									value="#{messages.contact_submit}"
@@ -212,7 +212,7 @@
 				</p:panelGrid>
 			</h:form>
 			<h:form id="vacationForm" style="float: left;margin-left: 20px;">
-				<p:growl id="msg" />
+<!-- 				<p:growl id="msg" /> -->
 				<p:panelGrid>
 					<f:facet name="header">
 						<p:row>
@@ -267,7 +267,7 @@
 							<p:commandButton id="addVacation"
 								onstart="PF('blockUIWidget').block()"
 								oncomplete="PF('blockUIWidget').unblock()"
-								update="vacationForm :configForm :workdaysCalendar "
+								update="vacationForm :configForm :workdaysCalendar :growlForm"
 								action="#{jJContactBean.addVacation(loginBean,loginBean.contact)}"
 								value="#{messages.contact_new_vacation}" />
 						</p:column>

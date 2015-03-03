@@ -33,9 +33,9 @@
 					value="Datatable : featureKey | featureValue" />
 
 				<p:fileUpload fileUploadListener="#{licenseBean.handleFileUpload}"
-					mode="advanced" dragDropSupport="true" update="messages"
+					mode="advanced" dragDropSupport="true" update=":growlForm"
 					sizeLimit="100000" allowTypes="/(\.|\/)(lic|license)$/" />
-				<p:growl id="messages" showDetail="true" />
+				
 			</h:panelGrid>
 		</p:panel>
 	</h:form>

@@ -500,10 +500,8 @@ public class JJContactBean {
 		jJPermissionBean.setPermissionDataModel(null);
 		jJPermissionBean.setProfile(null);
 		jJPermissionBean.setProfiles(null);
-		jJPermissionBean.setProject(null);
-		jJPermissionBean.setProjects(null);
-		jJPermissionBean.setProduct(null);
-		jJPermissionBean.setProducts(null);
+		jJPermissionBean.setProject(null);		
+		jJPermissionBean.setProduct(null);	
 
 		contactState = true;
 

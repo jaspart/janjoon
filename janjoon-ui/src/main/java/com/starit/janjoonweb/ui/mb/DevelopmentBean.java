@@ -720,9 +720,9 @@ public class DevelopmentBean implements Serializable {
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('saveFileDialogWidget').hide()");
 		if (files.isEmpty())
-			context.update(":form");
+			context.update(":form :growlForm");		
 		else
-			context.update(":form:tabView");
+			context.update(":form:tabView :growlForm");
 		fileIndex = -1;
 
 	}

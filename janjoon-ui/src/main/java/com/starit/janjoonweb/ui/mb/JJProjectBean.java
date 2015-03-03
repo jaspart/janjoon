@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +19,7 @@ import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJPhase;
+import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyProjectDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -31,18 +33,13 @@ public class JJProjectBean {
 
 	@Autowired
 	JJPermissionService jJPermissionService;
-
+	
 	private JJProject project;
-	private List<JJProject> projectList;
-
 	private JJProject projectAdmin;
 	private LazyProjectDataModel projectListTable;
-
 	private JJContact projectManager;
 	private List<JJContact> projectManagerList;
-
 	private String message;
-
 	private boolean projectState;
 
 	public void setjJConfigurationService(
@@ -71,20 +68,15 @@ public class JJProjectBean {
 	}
 
 	public List<JJProject> getProjectList() {
-
-		if (((LoginBean) LoginBean.findBean("loginBean")).getContact() != null) {
-			if (projectList == null || projectList.isEmpty())
-				projectList = jJProjectService.getProjects(
-						((LoginBean) LoginBean.findBean("loginBean"))
-								.getContact().getCompany(),
-						((LoginBean) LoginBean.findBean("loginBean"))
-								.getContact(), true);
-		}
-		return projectList;
-	}
-
-	public void setProjectList(List<JJProject> projectList) {
-		this.projectList = projectList;
+	
+		if (((LoginBean) LoginBean.findBean("loginBean")).isEnable())
+		return jJProjectService.getProjects(
+				((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact().getCompany(),
+		((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact(), true,false);
+		else
+			return new ArrayList<JJProject>();
 	}
 
 	public JJProject getProjectAdmin() {
@@ -179,8 +171,7 @@ public class JJProjectBean {
 		if (projectAdmin != null) {
 
 			projectAdmin.setEnabled(false);
-			updateJJProject(projectAdmin);
-			projectList = null;
+			updateJJProject(projectAdmin);			
 			projectListTable = null;
 		}
 	}
@@ -194,7 +185,6 @@ public class JJProjectBean {
 		if (projectAdmin.getId() == null) {
 
 			saveJJProject(projectAdmin);
-			projectList = null;
 			projectListTable = null;
 			message = "message_successfully_created";
 
@@ -202,8 +192,6 @@ public class JJProjectBean {
 
 		} else {
 			updateJJProject(projectAdmin);
-
-			projectList = null;
 			projectListTable = null;
 
 			message = "message_successfully_updated";

@@ -9,7 +9,8 @@
 <f:event listener="#{loginBean.checkAuthorities}" type="preRenderView" />
 <f:view locale="#{localeBean.locale}" contentType="text/html">
 	<h:head>
-		<link rel="shortcut icon" type="image/png" href="#{request.contextPath}/resources/images/janjoon_logo.ico" />
+		<link rel="shortcut icon" type="image/png"
+			href="#{request.contextPath}/resources/images/janjoon_logo.ico" />
 		<h:outputScript library="primefaces" name="jquery/jquery.js" />
 		<script type="text/javascript">
 			function centerDialog() {
@@ -32,74 +33,58 @@
 		</script>
 	</h:head>
 	<h:body>
-		<h:form>
-			<f:event listener="#{loginBean.updateGrowl}"
-				type="preRenderComponent" />
-			<p:remoteCommand name="updateGrowl" update="auth" />
-			<p:growl id="auth" showDetail="true" life="2000" />
-		</h:form>
+
 		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
 
 			<p:panel styleClass="content">
-
-				<!-- 				<p:overlayPanel id="communicationPanel"  -->
-				<!-- 						hideEffect="fade" dynamic="true" style="width:400px" -->
-				<!-- 						showCloseIcon="true" styleClass="communication-overlaypanel"> -->
 				<p:dialog widgetVar="communicationPanel" id="communicationPanel"
-					styleClass="overlayPanelDialog" showEffect="fade" dynamic="true" closable="true"
-					style="width:400px" rendered="#{loginBean.enable}">
-<!--						<p:panel id="messagePanel" header="Chat" styleClass="chat"
-							toggleable="true" toggleOrientation="horizontal"
-							style="height:100%;">>
-
-							<p:ajax event="toggle" listener="#{loginBean.handleMesToggle}"
-								update=":applicatinPanelGrid,messagePanel,:contentPanel" /-->
-
-							<f:event listener="#{jJMessageBean.initJJMessageLayout}" type="preRenderView" />
-							<h:form id="messageCreationForm">
-							<p:dataTable id="dataTable1" value="#{jJMessageBean.mainMessages}"
-								rowKey="#{mes.id}" var="mes" paginator="true"
-								paginatorPosition="bottom"
-								rendered="#{loginBean.enable}"
-								style="border-spacing:0px;" selectionMode="single" rows="10"
-								lazy="true" sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
-								<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
-									listener="#{jJMessageBean.onRowSelect}" immediate="true"
-									oncomplete="PF('viewDialogWidget1').show()" />
-<!--									update=":viewForm1:viewPanelGrid1"-->
-								<p:column headerText="Messages" sortBy="#{mes.creationDate}">
-									<h:outputText id="viewButton" value="#{mes.message}" />
-									<p:tooltip for="viewButton"
-										value="#{messages.label_view} #{mes.name}" showEffect="fade"
-										hideEffect="fade" />
-								</p:column>						
+					styleClass="overlayPanelDialog" showEffect="fade" dynamic="true"
+					closable="true" style="width:400px" rendered="#{loginBean.enable}">
+					<f:event listener="#{jJMessageBean.initJJMessageLayout}"
+						type="preRenderView" />
+					<h:form id="messageCreationForm">
+						<p:dataTable id="dataTable1" value="#{jJMessageBean.mainMessages}"
+							rowKey="#{mes.id}" var="mes" paginator="true"
+							paginatorPosition="bottom" rendered="#{loginBean.enable}"
+							style="border-spacing:0px;" selectionMode="single" rows="10"
+							lazy="true" sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
+							<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
+								listener="#{jJMessageBean.onRowSelect}" immediate="true"
+								oncomplete="PF('viewDialogWidget1').show()" />
+							<!--									update=":viewForm1:viewPanelGrid1"-->
+							<p:column headerText="Messages" sortBy="#{mes.creationDate}">
+								<h:outputText id="viewButton" value="#{mes.message}" />
+								<p:tooltip for="viewButton"
+									value="#{messages.label_view} #{mes.name}" showEffect="fade"
+									hideEffect="fade" />
+							</p:column>
 
 							<f:facet name="footer">
-<!-- 							style="position: relative;"> -->
-								
-<!--									rendered="#{loginBean.enable}">-->
-									<p:growl id="creationGrowl" showDetail="true" life="1000" />
-									<p:panelGrid columns="1" >
-										<p:outputLabel for="messagedsc" value="Message :" />
-										<p:inputTextarea id="messagedsc" cols="20" rows="6"
-											value="#{jJMessageBean.message.message}" required="true" />
-										<p:panelGrid columns="2" style="border:hidden;" >
-											<p:selectBooleanButton id="alert" value="#{jJMessageBean.alertOrInfo}"
-												onLabel="Alert" offLabel="Info" onIcon="ui-icon-alert"
-												offIcon="ui-icon-info">
-											</p:selectBooleanButton>
-											<p:commandButton id="submitMes" value="OK"
-												process="@this,alert,messagedsc"
-												actionListener="#{jJMessageBean.createMessage}"
-												update=":messageCreationForm :headerForm:communicationButton" />
-<!--												,:scrollRight (Marquee)-->
-										</p:panelGrid>
+								<!-- 							style="position: relative;"> -->
+
+								<!--									rendered="#{loginBean.enable}">-->
+								<!-- 									<p:growl id="creationGrowl" showDetail="true" life="1000" /> -->
+								<p:panelGrid columns="1">
+									<p:outputLabel for="messagedsc" value="Message :" />
+									<p:inputTextarea id="messagedsc" cols="20" rows="6"
+										value="#{jJMessageBean.message.message}" required="true" />
+									<p:panelGrid columns="2" style="border:hidden;">
+										<p:selectBooleanButton id="alert"
+											value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
+											offLabel="Info" onIcon="ui-icon-alert" offIcon="ui-icon-info">
+										</p:selectBooleanButton>
+										<p:commandButton id="submitMes" value="OK"
+											process="@this,alert,messagedsc"
+											actionListener="#{jJMessageBean.createMessage}"
+											update=":messageCreationForm :headerForm:communicationButton :growlForm" />
+										<!--												,:scrollRight (Marquee)-->
 									</p:panelGrid>
-								
+								</p:panelGrid>
+
 							</f:facet>
-							</p:dataTable>
-							</h:form>
-							</p:dialog>
+						</p:dataTable>
+					</h:form>
+				</p:dialog>
 
 				<p:dialog widgetVar="headerPanel" id="headerPanel"
 					styleClass="overlayPanelDialog" rendered="#{loginBean.mobile}"
@@ -120,7 +105,7 @@
 								title="#{loginBean.authorisationService.rProjectMSG}"
 								onstart="PF('blockUIWidget').block()"
 								actionListener="#{loginBean.redirection}"
-								update=":headerForm:growlHeader" icon="ui-icon-clipboard"
+								update=":growlForm" icon="ui-icon-clipboard"
 								rendered="#{loginBean.enable}" />
 
 							<p:menuitem value="#{messages.header_spec_menuitem}"
@@ -148,7 +133,7 @@
 								disabled="#{!loginBean.authorisationService.rwDev}"
 								title="#{loginBean.authorisationService.rwDevMSG}"
 								actionListener="#{loginBean.redirectToDev}"
-								update=":headerForm:growlHeader" icon="ui-icon-wrench"
+								update=":growlForm" icon="ui-icon-wrench"
 								rendered="#{loginBean.enable}" />
 
 							<p:menuitem value="#{messages.header_test_menuitem}"
@@ -161,7 +146,7 @@
 								value="#{messages.header_test_menuitem}"
 								onstart="PF('blockUIWidget').block()"
 								actionListener="#{loginBean.redirection}"
-								update=":headerForm:growlHeader" icon="ui-icon-clipboard"
+								update=":growlForm" icon="ui-icon-clipboard"
 								rendered="#{loginBean.enable}" />
 
 							<p:menuitem value="#{messages.header_delivery_menuitem}"
@@ -192,11 +177,11 @@
 								value="#{messages.header_stat_menuitem}"
 								onstart="PF('blockUIWidget').block()"
 								actionListener="#{loginBean.redirection}"
-								update=":headerForm:growlHeader" icon="ui-icon-clipboard"
+								update=":growlForm" icon="ui-icon-clipboard"
 								rendered="#{loginBean.enable}" />
 
 							<p:menuitem value="#{messages.header_admin_menuitem}"
-								rendered="#{!loginBean.authorisationService.renderAdmin}"								
+								rendered="#{loginBean.authorisationService.renderAdmin}"
 								url="/pages/administration.jsf?faces-redirect=true"
 								icon="ui-icon-key" update=":contentPanel" />
 						</p:menu>
@@ -233,6 +218,16 @@
 					</ui:repeat>
 				</p:imageSwitch>
 
+				<h:form id="growlForm">
+					<p:panel styleClass="panelDialog">
+					<f:facet name="header">
+						<f:event listener="#{loginBean.updateGrowl}"
+							type="preRenderComponent" />
+						<p:remoteCommand name="updateGrowl" />
+						<p:messages id="auth" showDetail="false" closable="true" />
+					</f:facet>
+					</p:panel>					
+				</h:form>
 				<p:panel id="contentPanel" styleClass="content">
 					<f:event listener="#{loginBean.initMenuIndexvalue}"
 						type="preRenderView" />

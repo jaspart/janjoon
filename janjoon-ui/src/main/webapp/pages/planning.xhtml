@@ -49,7 +49,7 @@
 				<h:form id="deleteForm">
 					<p:commandButton id="deleteYesPlanning"
 						value="#{messages.bug_delete_yes_button}"
-						action="#{jJTaskBean.deleteTaskData}" update=":projecttabview" 
+						action="#{jJTaskBean.deleteTaskData}" update=":projecttabview :growlForm" 
 						onstart="PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock();"/>
 					<p:commandButton id="deleteNoButton"
@@ -77,21 +77,32 @@
 			hideEffect="explode" draggable="#{jJTaskBean.mode eq 'planning'}">
 			<p:ajax event="close" update=":projecttabview" listener="#{jJTaskBean.closeEvent('planning')}"/>
 			<p:outputPanel id="viewTaskPanel">
-				<h:form id="viewTaskForm" enctype="multipart/form-data" >
-					<ui:include src="taskDialog.xhtml">
-						<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
-					</ui:include>					
-					<p:commandButton id="updateTaskButton"  update=":viewTaskForm"
-						actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'planning')}" value="#{messages.label_update} Task"
-						process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload"
-						onstart="PF('viewtaskBlockUIWidget').block()" style="margin-top: 5px;"
-						oncomplete="PF('viewtaskBlockUIWidget').unblock();"/>						
-						
-					<p:commandButton id="viewCloseButton"
-						value="#{messages.label_close}" style="margin-left: 20px;margin-top: 5px;"
-						oncomplete="PF('blockUIWidget').unblock()" onstart="PF('blockUIWidget').block()"
-						onclick="PF('viewTaskDialogWidget').hide()" type="button" />
-					
+				<h:form id="viewTaskForm" enctype="multipart/form-data">
+					<p:panel styleClass="panelDialog">
+						<f:facet name="header">
+							<p:messages id="msg" closable="true" />
+						</f:facet>
+						<ui:include src="taskDialog.xhtml">
+							<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
+						</ui:include>
+						<f:facet name="footer">
+							<p:commandButton id="updateTaskButton" update=":viewTaskForm"
+								actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'planning')}"
+								value="#{messages.label_update} Task"
+								process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload"
+								onstart="PF('viewtaskBlockUIWidget').block()"
+								style="margin-top: 5px;"
+								oncomplete="PF('viewtaskBlockUIWidget').unblock();" />
+
+							<p:commandButton id="viewCloseButton"
+								value="#{messages.label_close}"
+								style="margin-left: 20px;margin-top: 5px;"
+								oncomplete="PF('blockUIWidget').unblock()"
+								onstart="PF('blockUIWidget').block()"
+								onclick="PF('viewTaskDialogWidget').hide()" type="button" />
+						</f:facet>
+					</p:panel>
+
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
@@ -114,7 +125,7 @@
 							completeMethod="#{jJBugBean.completeStatusBug}" />
 						<p:commandButton id="taskBugSaveButton"
 							value="#{messages.bug_edit_save_button}"
-							action="#{jJSprintBean.persistBugTask}" update=":projecttabview"
+							action="#{jJSprintBean.persistBugTask}" update=":projecttabview :growlForm"
 							oncomplete="PF('blockUIWidget').unblock()"
 							onsuccess="PF('editBugDialogWidget').hide()">
 						</p:commandButton>

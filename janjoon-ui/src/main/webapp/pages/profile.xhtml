@@ -18,14 +18,15 @@
 					</f:facet>
 					<h:outputText value="#{profile.name}" />
 				</p:column>
-				<p:column style="width: 150px;" styleClass="action-column" >
+				<p:column style="width: 150px;" styleClass="action-column">
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_profile_table_action_title}" />
 					</f:facet>
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
 						oncomplete="PF('profileDialogWidget').show()"
 						action="#{jJProfileBean.editProfile(jJRightBean)}"
-						update=":tabview:profileDialog" title="#{messages.admin_profile_table_edit_tooltip}"
+						update=":tabview:profileDialog"
+						title="#{messages.admin_profile_table_edit_tooltip}"
 						value="#{messages.admin_profile_table_edit_tooltip}">
 						<f:setPropertyActionListener value="#{profile}"
 							target="#{jJProfileBean.profileAdmin}" />
@@ -43,8 +44,7 @@
 				</p:column>
 				<f:facet name="footer">
 					<p:commandButton value="#{messages.admin_profile_new_button}"
-						id="newProfile"
-						title="#{messages.admin_profile_new_button}"
+						id="newProfile" title="#{messages.admin_profile_new_button}"
 						actionListener="#{jJProfileBean.newProfile(jJRightBean)}"
 						update=":tabview:profileDialog"
 						oncomplete="PF('profileDialogWidget').show()"
@@ -61,11 +61,13 @@
 			listener="#{jJProfileBean.closeDialog(jJRightBean)}" />
 		<p:outputPanel id="profileDialogPanel">
 			<h:form id="profileDialogForm">
-				<p:growl id="msg" />
-				<p:panel style="margin-top:10px">
+				<p:panel styleClass="panelDialog">
+					<f:facet name="header">
+						<p:messages id="msg" showDetail="false" closable="true" />
+					</f:facet>
 					<p:row>
 						<p:column>
-							<p:panelGrid style="margin-top:10px">
+							<p:panelGrid>
 								<p:row>
 									<p:column colspan="3">
 										<p:inputText id="name"
@@ -78,7 +80,8 @@
 											value="#{messages.admin_profile_new_name_watermark}" />
 									</p:column>
 									<p:column>
-										<p:commandButton id="addProfile" value="#{messages.admin_profile_addProfil_button}"
+										<p:commandButton id="addProfile"
+											value="#{messages.admin_profile_addProfil_button}"
 											style="float: right;" update="profileDialogForm"
 											title="#{messages.admin_profile_addProfil_button}"
 											disabled="#{not jJProfileBean.disabledRightMode}"
@@ -92,7 +95,7 @@
 											value="#{messages.admin_profile_new_object_label}" />
 										<p:selectOneMenu id="object" value="#{jJRightBean.object}"
 											panelStyle="width:150px" effect="fade" style="width:160px"
-											filter="true" filterMatchMode="startsWith" 
+											filter="true" filterMatchMode="startsWith"
 											disabled="#{jJProfileBean.disabledRightMode}"
 											widgetVar="objectWidget" label="Right Object" required="true">
 											<p:ajax process="@this" partialSubmit="true"
@@ -143,7 +146,7 @@
 									<p:column>
 										<p:commandButton id="addRight"
 											disabled="#{jJProfileBean.disabledRightMode}"
-											update="rightDataTable r w x category object"
+											update="rightDataTable r w x category object msg"
 											actionListener="#{jJRightBean.addRight}"
 											title="#{messages.admin_profile_new_right_button}"
 											value="#{messages.admin_profile_new_right_button}"
@@ -237,15 +240,10 @@
 					</p:dataTable>
 
 					<f:facet name="footer">
-						<p:row>
-							<p:column colspan="3">
-								<p:commandButton id="saveButton" style="float: right;"
-									value="Save" update="profileDialogForm :headerForm"
-									disabled="#{jJProfileBean.disabledRightMode}"
-									process="@this,name"
-									action="#{jJProfileBean.save(jJRightBean)}" />
-							</p:column>
-						</p:row>
+						<p:commandButton id="saveButton" style="float: right;"
+							value="Save" update="profileDialogForm :growlForm"
+							disabled="#{jJProfileBean.disabledRightMode}"
+							process="@this,name" action="#{jJProfileBean.save(jJRightBean)}" />
 					</f:facet>
 				</p:panel>
 			</h:form>
@@ -261,7 +259,7 @@
 				<p:commandButton id="deleteYesButton"
 					value="#{messages.admin_profile_delete_yes_label}"
 					action="#{jJProfileBean.deleteProfile}"
-					update=":tabview:profileForm"
+					update=":tabview:profileForm :growlForm"
 					oncomplete="PF('profileDeleteDialogWidget').hide()" />
 				<p:commandButton id="deleteNoButton"
 					value="#{messages.admin_profile_delete_no_label}"

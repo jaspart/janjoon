@@ -490,7 +490,7 @@ public class RequirementBean {
 
 	}
 
-	public void updateRequirementLinks() throws IOException {
+	public void updateRequirementLinks(JJRequirementBean jJRequirementBean) throws IOException {
 
 		JJCategory linkCategory = jJCategoryService.getCategory(categoryName,
 				true);
@@ -537,7 +537,14 @@ public class RequirementBean {
 		rootNode = null;
 		selectedNode = null;
 		jJRequirementService.saveJJRequirement(requirement);
+		jJRequirementBean.updateDataTable(requirement, JJRequirementBean.UPDATE_OPERATION);;
 		long id = requirement.getId();
+		
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_updated", "Requirement");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		
+		((LoginBean)LoginBean.findBean("loginBean")).setFacesMessage(facesMessage);
 		FacesContext
 				.getCurrentInstance()
 				.getExternalContext()
@@ -607,9 +614,16 @@ public class RequirementBean {
 		}else
 			return "";
 	}
-	public void save() throws IOException {
-		jJRequirementService.saveJJRequirement(requirement);
+	public void save(JJRequirementBean jJRequirementBean) throws IOException {
+		jJRequirementBean.updateJJRequirement(requirement);
+		jJRequirementBean.updateDataTable(requirement, JJRequirementBean.UPDATE_OPERATION);;
 		long id = requirement.getId();
+		
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_updated", "Requirement");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		
+		((LoginBean)LoginBean.findBean("loginBean")).setFacesMessage(facesMessage);
 		FacesContext
 				.getCurrentInstance()
 				.getExternalContext()

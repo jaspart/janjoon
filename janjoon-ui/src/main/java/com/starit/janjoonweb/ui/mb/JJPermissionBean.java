@@ -30,13 +30,8 @@ public class JJPermissionBean {
 
 	private JJProfile profile;
 	private List<JJProfile> profiles;
-
 	private JJProject project;
-	private List<JJProject> projects;
-
 	private JJProduct product;
-	private List<JJProduct> products;
-
 	private boolean checkPermission;
 	private boolean checkPermissions;
 	private boolean disabledCheckPermission;
@@ -88,26 +83,16 @@ public class JJPermissionBean {
 	}
 
 	public List<JJProject> getProjects() {
+		
 		JJContact contactAdmin = ((JJContactBean) LoginBean
 				.findBean("jJContactBean")).getContactAdmin();
-		if (contactAdmin.getId() != null) {
-			boolean admin = jJPermissionService.isSuperAdmin(((LoginBean) LoginBean
-					.findBean("loginBean")).getContact());
-			if (!admin)
+		List<JJProject> projects=new ArrayList<JJProject>();
+		if (contactAdmin.getId() != null) {					
 				projects = jJProjectService.getProjects(
-						((JJContactBean) LoginBean.findBean("jJContactBean"))
-								.getContactAdmin().getCompany(),
-						((JJContactBean) LoginBean.findBean("jJContactBean"))
-								.getContactAdmin(), true);
-			else
-				projects = jJProjectService.getAdminListProjects();
+						contactAdmin.getCompany(),contactAdmin, true,true);		
 		}
 
 		return projects;
-	}
-
-	public void setProjects(List<JJProject> projects) {
-		this.projects = projects;
 	}
 
 	public JJProduct getProduct() {
@@ -119,29 +104,17 @@ public class JJPermissionBean {
 	}
 
 	public List<JJProduct> getProducts() {
+		
 		JJContact contactAdmin = ((JJContactBean) LoginBean
 				.findBean("jJContactBean")).getContactAdmin();
-		if (contactAdmin.getId() != null)
-			if (contactAdmin.getId() != null) {
-				JJContact contact = ((LoginBean) LoginBean
-						.findBean("loginBean")).getContact();
-				boolean admin = jJPermissionService.isSuperAdmin(contact);
-				if (!admin)
+		List<JJProduct> products=new ArrayList<JJProduct>();
+			if (contactAdmin.getId() != null) {	
+				
 					products = jJProductService.getProducts(
-							((JJContactBean) LoginBean
-									.findBean("jJContactBean"))
-									.getContactAdmin().getCompany(),
-							((JJContactBean) LoginBean
-									.findBean("jJContactBean"))
-									.getContactAdmin(), true);
-				else
-					products=jJProductService.getAdminListProducts();
+							contactAdmin.getCompany(),contactAdmin, true,true);
+				
 			}
 		return products;
-	}
-
-	public void setProducts(List<JJProduct> products) {
-		this.products = products;
 	}
 
 	public boolean getCheckPermission() {

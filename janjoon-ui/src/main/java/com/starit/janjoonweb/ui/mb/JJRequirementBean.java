@@ -73,6 +73,9 @@ import com.starit.janjoonweb.ui.mb.util.RequirementUtil;
 public class JJRequirementBean {
 
 	static Logger logger = Logger.getLogger(JJRequirementBean.class);
+	public static final String UPDATE_OPERATION = "update";
+	public static final String DELETE_OPERATION = "delete";
+	public static final String ADD_OPERATION = "add";
 
 	@Autowired
 	private JJConfigurationService jJConfigurationService;
@@ -451,7 +454,7 @@ public class JJRequirementBean {
 		requirementProjectList = jJProjectService.getProjects(
 				((LoginBean) LoginBean.findBean("loginBean")).getContact()
 						.getCompany(), ((LoginBean) LoginBean
-						.findBean("loginBean")).getContact(), true);
+						.findBean("loginBean")).getContact(), true,false);
 		return requirementProjectList;
 	}
 
@@ -480,7 +483,7 @@ public class JJRequirementBean {
 		requirementProductList = jJProductService.getProducts(
 				((LoginBean) LoginBean.findBean("loginBean")).getContact()
 						.getCompany(), ((LoginBean) LoginBean
-						.findBean("loginBean")).getContact(), true);
+						.findBean("loginBean")).getContact(), true,false);
 		return requirementProductList;
 	}
 
@@ -760,7 +763,7 @@ public class JJRequirementBean {
 		importProjectList = jJProjectService.getProjects(((LoginBean) LoginBean
 				.findBean("loginBean")).getContact().getCompany(),
 				((LoginBean) LoginBean.findBean("loginBean")).getContact(),
-				true);
+				true,false);
 		return importProjectList;
 	}
 
@@ -781,7 +784,7 @@ public class JJRequirementBean {
 		importProductList = jJProductService.getProducts(((LoginBean) LoginBean
 				.findBean("loginBean")).getContact().getCompany(),
 				((LoginBean) LoginBean.findBean("loginBean")).getContact(),
-				true);
+				true,false);
 		return importProductList;
 	}
 
@@ -1134,18 +1137,18 @@ public class JJRequirementBean {
 			req = jJRequirementService.findJJRequirement(req.getId());
 			req.getRequirementLinkUp().remove(requirement);
 			updateJJRequirement(req);
-			updateDataTable(req, "UPDATE");
+			updateDataTable(req, UPDATE_OPERATION);
 		}
 		listReq = new ArrayList<JJRequirement>(
 				requirement.getRequirementLinkUp());
 		requirement.setRequirementLinkUp(new HashSet<JJRequirement>());
 		updateJJRequirement(requirement);
-		updateDataTable(requirement, "DELETE");
+		updateDataTable(requirement, DELETE_OPERATION);
 
 		for (JJRequirement req : listReq) {
 
 			updateJJRequirement(req);
-			updateDataTable(req, "UPDATE");
+			updateDataTable(req, UPDATE_OPERATION);
 		}
 
 		deleteTasksAndTestcase(requirement);
@@ -1174,7 +1177,7 @@ public class JJRequirementBean {
 						&& tableDataModelList.get(i).getRendered()) {
 					List<RequirementUtil> listRes = (List<RequirementUtil>) tableDataModelList
 							.get(i).getWrappedData();
-					if (operation.equalsIgnoreCase("UPDATE")) {
+					if (operation.equalsIgnoreCase(UPDATE_OPERATION)) {
 						int index = listRes.indexOf(new RequirementUtil(req,
 								null));
 						if (index != -1)
@@ -1185,12 +1188,12 @@ public class JJRequirementBean {
 											jJRequirementService,
 											jJTaskService, jJTestcaseService,
 											jJTestcaseexecutionService)));
-					} else if (operation.equalsIgnoreCase("DELETE")) {
+					} else if (operation.equalsIgnoreCase(DELETE_OPERATION)) {
 						int index = listRes.indexOf(new RequirementUtil(req,
 								null));
 						if (index != -1)
 							listRes.remove(index);
-					} else if (operation.equalsIgnoreCase("ADD")) {
+					} else if (operation.equalsIgnoreCase(ADD_OPERATION)) {
 						listRes.add(new RequirementUtil(req, getRowStyleClass(
 								req, jJCategoryService, jJRequirementService,
 								jJTaskService, jJTestcaseService,
@@ -1316,12 +1319,12 @@ public class JJRequirementBean {
 		requirement.setVersioning(requirementVersion);
 		requirement.setStatus(requirementStatus);
 		getRequirementOrder();
-		String u = "UPDATE";
+		String u = UPDATE_OPERATION;
 
 		if (requirement.getId() == null) {
 			requirement.setProject(requirementProject);
 			saveJJRequirement(requirement);
-			u = "ADD";
+			u = ADD_OPERATION;
 
 		} else {
 
@@ -1360,15 +1363,15 @@ public class JJRequirementBean {
 				for (JJRequirement req : listReq)
 					if (!selectedHighRequirementsList.contains(req)
 							&& !selectedMediumRequirementsList.contains(req))
-						updateDataTable(req, "UPDATE");
+						updateDataTable(req, UPDATE_OPERATION);
 
 				for (JJRequirement req : selectedHighRequirementsList)
 
-					updateDataTable(req, "UPDATE");
+					updateDataTable(req, UPDATE_OPERATION);
 
 				for (JJRequirement req : selectedMediumRequirementsList)
 
-					updateDataTable(req, "UPDATE");
+					updateDataTable(req, UPDATE_OPERATION);
 
 			} else if (requirement.getCategory().equals(mediumCategory)) {
 
@@ -1388,15 +1391,15 @@ public class JJRequirementBean {
 					req = jJRequirementService.findJJRequirement(req.getId());
 					req.getRequirementLinkUp().add(requirement);
 					updateJJRequirement(req);
-					updateDataTable(req, "UPDATE");
+					updateDataTable(req, UPDATE_OPERATION);
 				}
 
 				for (JJRequirement req : listReq)
 					if (!selectedLowRequirementsList.contains(req))
-						updateDataTable(req, "UPDATE");
+						updateDataTable(req, UPDATE_OPERATION);
 
 				for (JJRequirement req : selectedLowRequirementsList)
-					updateDataTable(req, "UPDATE");
+					updateDataTable(req, UPDATE_OPERATION);
 
 				listReq = new ArrayList<JJRequirement>(
 						requirement.getRequirementLinkUp());
@@ -1411,10 +1414,10 @@ public class JJRequirementBean {
 
 				for (JJRequirement req : listReq)
 					if (!selectedHighRequirementsList.contains(req))
-						updateDataTable(req, "UPDATE");
+						updateDataTable(req, UPDATE_OPERATION);
 
 				for (JJRequirement req : selectedHighRequirementsList)
-					updateDataTable(req, "UPDATE");
+					updateDataTable(req, UPDATE_OPERATION);
 
 			} else if (requirement.getCategory().equals(highCategory)) {
 				List<JJRequirement> listReq = new ArrayList<JJRequirement>(
@@ -1434,20 +1437,20 @@ public class JJRequirementBean {
 					req = jJRequirementService.findJJRequirement(req.getId());
 					req.getRequirementLinkUp().add(requirement);
 					updateJJRequirement(req);
-					updateDataTable(req, "UPDATE");
+					updateDataTable(req, UPDATE_OPERATION);
 				}
 
 				for (JJRequirement req : selectedMediumRequirementsList) {
 					req = jJRequirementService.findJJRequirement(req.getId());
 					req.getRequirementLinkUp().add(requirement);
 					updateJJRequirement(req);
-					updateDataTable(req, "UPDATE");
+					updateDataTable(req, UPDATE_OPERATION);
 				}
 
 				for (JJRequirement req : listReq)
 					if (!selectedLowRequirementsList.contains(req)
 							&& !selectedMediumRequirementsList.contains(req))
-						updateDataTable(req, "UPDATE");
+						updateDataTable(req, UPDATE_OPERATION);
 			}
 		}
 		updateJJRequirement(requirement);
@@ -1471,7 +1474,6 @@ public class JJRequirementBean {
 
 			} else {
 				// if (rrr)
-
 				newRequirement(requirementCategory.getId());
 				if (!specPage)
 					RequestContext.getCurrentInstance().execute("updateTree()");
@@ -1867,7 +1869,8 @@ public class JJRequirementBean {
 
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		if (redirection)
-			redirectPage();
+			//redirectPage();
+			RequestContext.getCurrentInstance().execute("updateDataTable()");
 
 	}
 
@@ -3533,7 +3536,7 @@ public class JJRequirementBean {
 			} else {
 				for (JJRequirement r : requirements) {
 					saveJJRequirement(r);
-					updateDataTable(r, "ADD");
+					updateDataTable(r, ADD_OPERATION);
 				}
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						requirements.size() + " Requirement Successfuly added",
@@ -3793,7 +3796,7 @@ public class JJRequirementBean {
 
 		public String getTableStyle() {
 			if (expanded)
-				return "float: right;width: 60%;";
+				return "width: 65%;";
 			else
 				return "";
 		}

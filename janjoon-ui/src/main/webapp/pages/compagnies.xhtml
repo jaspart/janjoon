@@ -87,8 +87,11 @@
 			listener="#{jJCompanyBean.closeDialog}" />
 		<p:outputPanel id="companyDialogPanel">
 			<h:form id="companyDialogForm" enctype="multipart/form-data" style="height: 555px;width: 670px;">
-				<p:growl id="msg" />
-				<p:panelGrid style="margin-top:10px">
+				<p:panel styleClass="panelDialog">
+					<f:facet name="header">						
+						<p:messages id="msg" showDetail="false" closable="true" />
+					</f:facet>									
+				<p:panelGrid>
 					<p:row>
 						<p:column colspan="1">
 							<p:outputLabel value="Name :" for="name" />
@@ -155,19 +158,16 @@
 
 						</p:column>
 					</p:row>
-					<f:facet name="footer">
-						<p:row>
-							<p:column colspan="3">
+					</p:panelGrid>
+					<f:facet name="footer">						
 								<p:commandButton id="submitButton"
 									value="#{messages.admin_company_new_save_button}"
-									update="companyDialogForm" title="#{messages.admin_company_new_save_button}"
+									update="companyDialogForm :growlForm" title="#{messages.admin_company_new_save_button}"
 									action="#{jJCompanyBean.saveCompany}" />
 								<p:commandButton id="cancelButton" value="Annuler"
-									onclick="PF('companyDialogWidget').hide()" type="button" />
-							</p:column>
-						</p:row>
-					</f:facet>
-				</p:panelGrid>
+									onclick="PF('companyDialogWidget').hide()" type="button" />							
+					</f:facet>				
+				</p:panel>
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
@@ -181,7 +181,7 @@
 				<p:commandButton id="deleteYesButton"
 					value="#{messages.admin_company_delete_yes_label}"
 					action="#{jJCompanyBean.deleteCompany}"
-					update=":tabview:companyForm"
+					update=":tabview:companyForm :growlForm"
 					oncomplete="PF('companyDeleteDialogWidget').hide()" />
 				<p:commandButton id="deleteNoButton"
 					value="#{messages.admin_company_delete_no_label}"

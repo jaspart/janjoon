@@ -112,7 +112,7 @@ public class LoginBean implements Serializable {
 		this.mobile = (((HttpServletRequest) FacesContext.getCurrentInstance()
 				.getExternalContext().getRequest()).getHeader("User-Agent")
 				.indexOf("Mobile")) != -1;
-		//this.mobile = true;
+		// this.mobile = true;
 		// } else {
 		// this.mobile=true;
 		// }
@@ -292,25 +292,26 @@ public class LoginBean implements Serializable {
 	}
 
 	public JJConfiguration getPlaningTabsConf() {
-		if(planingTabsConf == null)
-		{
-			List<JJConfiguration> conf = jJConfigurationService.getConfigurations("planning", "project.type", true);
+		if (planingTabsConf == null) {
+			List<JJConfiguration> conf = jJConfigurationService
+					.getConfigurations("planning", "project.type", true);
 			if (conf != null && !conf.isEmpty())
-				planingTabsConf=conf.get(0);
-			else
-			{
-				JJConfiguration configuration=new JJConfiguration();
+				planingTabsConf = conf.get(0);
+			else {
+				JJConfiguration configuration = new JJConfiguration();
 				configuration.setName("planning");
-				configuration.setDescription("specify available tab in planing vue");
+				configuration
+						.setDescription("specify available tab in planing vue");
 				configuration.setCreatedBy(getContact());
 				configuration.setCreationDate(new Date());
 				configuration.setEnabled(true);
 				configuration.setParam("project.type");
 				configuration.setVal("gantt,scrum");
 				jJConfigurationService.saveJJConfiguration(configuration);
-				planingTabsConf= jJConfigurationService.getConfigurations("planning", "project.type", true).get(0);
+				planingTabsConf = jJConfigurationService.getConfigurations(
+						"planning", "project.type", true).get(0);
 			}
-				
+
 		}
 		return planingTabsConf;
 	}
@@ -617,14 +618,16 @@ public class LoginBean implements Serializable {
 
 			HttpSession session = (HttpSession) ctx.getExternalContext()
 					.getSession(false);
-			if (session.getAttribute("jJTestcaseBean") != null)
-			{
-				JJCategory cat=((JJTestcaseBean)session.getAttribute("jJTestcaseBean")).getCategory();
+			if (session.getAttribute("jJTestcaseBean") != null) {
+				JJCategory cat = ((JJTestcaseBean) session
+						.getAttribute("jJTestcaseBean")).getCategory();
 				session.setAttribute("jJTestcaseBean", new JJTestcaseBean());
-				((JJTestcaseBean)session.getAttribute("jJTestcaseBean")).setCategory(cat);
+				((JJTestcaseBean) session.getAttribute("jJTestcaseBean"))
+						.setCategory(cat);
 			}
-				
-			authorisationService = new AuthorisationService(session, contact);
+
+			// authorisationService = new AuthorisationService(session,
+			// contact);
 			messageCount = null;
 			// messageListener(session);
 			session.setAttribute("jJBugBean", new JJBugBean());
@@ -632,20 +635,19 @@ public class LoginBean implements Serializable {
 			session.setAttribute("jJRequirementBean", null);
 
 			if (event != null) {
-				if (session.getAttribute("requirementBean") != null)
-				{
+				if (session.getAttribute("requirementBean") != null) {
 					((RequirementBean) session.getAttribute("requirementBean"))
-					.setRootNode(null);
+							.setRootNode(null);
 					((RequirementBean) session.getAttribute("requirementBean"))
-					.setRequirement(null);
+							.setRequirement(null);
 				}
-				
+
 				if (event.getComponent().getClientId()
 						.contains("projectSelectOneMenu")) {
 
 					JJProject project = (JJProject) event.getNewValue();
 					jJProjectBean.setProject(project);
-					authorisationService.initFields();
+					// authorisationService.initFields();
 					session.setAttribute("jJSprintBean", new JJSprintBean());
 					session.setAttribute("jJStatusBean", new JJStatusBean());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
@@ -654,15 +656,17 @@ public class LoginBean implements Serializable {
 						.contains("productSelectOneMenu")) {
 					JJProductBean productBean = (JJProductBean) findBean("jJProductBean");
 					productBean.setProduct((JJProduct) event.getNewValue());
-					if(session.getAttribute("jJStatusBean") != null)
-						((JJStatusBean)session.getAttribute("jJStatusBean")).setFirst(true);
+					if (session.getAttribute("jJStatusBean") != null)
+						((JJStatusBean) session.getAttribute("jJStatusBean"))
+								.setFirst(true);
 
 				} else if (event.getComponent().getClientId()
 						.contains("versionSelectOneMenu")) {
 					jJVersionBean.getVersionList();
 					jJVersionBean.setVersion((JJVersion) event.getNewValue());
-					if(session.getAttribute("jJStatusBean") != null)
-						((JJStatusBean)session.getAttribute("jJStatusBean")).setFirst(true);
+					if (session.getAttribute("jJStatusBean") != null)
+						((JJStatusBean) session.getAttribute("jJStatusBean"))
+								.setFirst(true);
 				}
 
 				if (viewId.contains("development")) {
@@ -693,11 +697,22 @@ public class LoginBean implements Serializable {
 
 								context.update(":contentPanel:devPanel:form");
 								context.update(":contentPanel:errorPanel");
+								context.update(":growlForm");
 							} else {
 								context.update(":contentPanel:devPanel");
 								context.update(":contentPanel:errorPanel");
+								context.update(":growlForm");
 							}
+						}else
+						{
+							FacesMessage facesMessage = MessageFactory.getMessage(
+									"dev.nullVersion.label",
+									FacesMessage.SEVERITY_ERROR, "");
+							FacesContext.getCurrentInstance().addMessage(null,
+									facesMessage);
 						}
+						
+						
 					} else {
 						jJProjectBean.setProject((JJProject) event
 								.getNewValue());
@@ -725,6 +740,8 @@ public class LoginBean implements Serializable {
 				}
 
 			}
+			authorisationService = null;
+
 		}
 
 	}
@@ -1045,7 +1062,7 @@ public class LoginBean implements Serializable {
 
 						} else if ((!authorisationService.isrBug() && root
 								.getViewId().contains("bug"))
-								|| (!authorisationService.isrProject() && (root
+								|| ((!authorisationService.isrProject()) && (root
 										.getViewId().contains("planning") || root
 										.getViewId().contains("stats")))
 								|| (!authorisationService.isrBuild() && viewID
@@ -1101,7 +1118,7 @@ public class LoginBean implements Serializable {
 							}
 						} else if ((!authorisationService.isrBug() && root
 								.getViewId().contains("bug"))
-								|| (!authorisationService.isrProject() && (root
+								|| ((!authorisationService.isrProject()) && (root
 										.getViewId().contains("planning") || root
 										.getViewId().contains("stats")))
 								|| (!authorisationService.isrBuild() && viewID
@@ -1111,7 +1128,11 @@ public class LoginBean implements Serializable {
 								|| (!authorisationService.isrContact() && root
 										.getViewId().contains("team"))
 								|| (!authorisationService.isRenderAdmin() && root
-										.getViewId().contains("administration"))) {
+										.getViewId().contains("administration"))
+								|| (!authorisationService.isrRequiement() && root
+										.getViewId().contains("specifications"))
+								|| (!authorisationService.isrRequiement() && root
+										.getViewId().contains("requirement"))) {
 
 							facesMessage = MessageFactory.getMessage(
 									"header_noPermission_menuitem",
@@ -1128,7 +1149,7 @@ public class LoginBean implements Serializable {
 				} else {
 					if ((!authorisationService.isrBug() && root.getViewId()
 							.contains("bug"))
-							|| (!authorisationService.isrProject() && (root
+							|| ((!authorisationService.isrProject()) && (root
 									.getViewId().contains("planning") || root
 									.getViewId().contains("stats")))
 							|| (!authorisationService.isrBuild() && viewID
@@ -1254,7 +1275,7 @@ public class LoginBean implements Serializable {
 						getContact().getCompany(), map);
 			}
 		}
-		if (noCouvretReq.isEmpty())
+		if (noCouvretReq == null || noCouvretReq.isEmpty())
 			noCouvretReq = null;
 		return noCouvretReq;
 
@@ -1353,11 +1374,11 @@ public class LoginBean implements Serializable {
 		});
 		return found[0];
 	}
-	
+
 //	 public StreamedContent getFile()
 //	 {
 //	 InputStream stream =
-//	 FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/aaa");
+//	 FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/bbb");
 //	 return new DefaultStreamedContent(stream, "image/jpg",
 //	 "downloaded_optimus");
 //	 }

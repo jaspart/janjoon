@@ -8,7 +8,7 @@
 <ui:composition>
 
 	<h:form id="statusForm">
-		<p:growl id="statusMessage" showDetail="true" />
+		
 		<p:panel id="statusPanel" style="width:750px" columns="1"
 			cellpadding="6">
 			<p:dataTable id="dataTable" var="status" lazy="true"
@@ -107,7 +107,7 @@
 				<p:commandButton id="createSaveButton"
 					value="#{messages.admin_status_new_save_button}"
 					action="#{jJStatusBean.persistStatus}"
-					update="createPanelGrid,:tabview:statusForm:statusMessage" />
+					update="createPanelGrid,:growlForm" />
 				<p:commandButton id="createCloseButton"
 					value="#{messages.admin_status_new_close_button}"
 					onclick="PF('createSatDialogWidget').hide()" type="button" />
@@ -129,7 +129,7 @@
 				<p:commandButton id="editSaveButton"
 					value="#{messages.admin_status_edit_save_button}"
 					action="#{jJStatusBean.persistStatus}"
-					update="editPanelGrid,:tabview:statusForm:statusMessage" />
+					update="editPanelGrid,:growlForm" />
 				<p:commandButton id="editCloseButton"
 					value="#{messages.admin_status_edit_close_button}"
 					onclick="PF('editSatDialogWidget').hide()" type="button" />
@@ -162,7 +162,7 @@
 			<h:form id="sdeleteForm">
 				<p:commandButton id="deleteYesButton"
 					value="#{messages.admin_status_delete_yes_label}"
-					action="#{jJStatusBean.deleteStatus}" update=":tabview:statusForm"
+					action="#{jJStatusBean.deleteStatus}" update=":tabview:statusForm :growlForm"
 					oncomplete="PF('deleteSatDialogWidget').hide()" />
 				<p:commandButton id="deleteNoButton"
 					value="#{messages.admin_status_delete_no_label}"

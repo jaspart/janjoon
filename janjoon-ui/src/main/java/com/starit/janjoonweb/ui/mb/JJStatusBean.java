@@ -318,14 +318,14 @@ public class JJStatusBean {
 						"#{jJStatusBean.completeObject}", List.class,
 						new Class[] { String.class }));
 		objetCreateInput.setDropdown(true);
+		objetCreateInput.setRequired(true);
 		objetCreateInput.setScrollHeight(200);
 		objetCreateInput.setValueExpression("var", expressionFactory
 				.createValueExpression(elContext, "objet", String.class));
 		objetCreateInput.setValueExpression("itemLabel", expressionFactory
 				.createValueExpression(elContext, "#{objet}", String.class));
 		objetCreateInput.setValueExpression("itemValue", expressionFactory
-				.createValueExpression(elContext, "#{objet}", String.class));
-		objetCreateInput.setRequired(false);
+				.createValueExpression(elContext, "#{objet}", String.class));		
 		htmlPanelGrid.getChildren().add(objetCreateInput);
 
 		Message objetCreateInputMessage = (Message) application
@@ -435,6 +435,7 @@ public class JJStatusBean {
 		objetEditInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
 						"#{jJStatusBean.JJStatus_.objet}", String.class));
+		objetEditInput.setRequired(true);
 		objetEditInput.setCompleteMethod(expressionFactory
 				.createMethodExpression(elContext,
 						"#{jJStatusBean.completeObject}", List.class,
@@ -637,7 +638,7 @@ public class JJStatusBean {
 
 		HtmlOutputText objetValue = (HtmlOutputText) application
 				.createComponent(HtmlOutputText.COMPONENT_TYPE);
-		objetValue.setId("objetValue");
+		objetValue.setId("objetValue");		
 		objetValue.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
 						"#{jJStatusBean.JJStatus_.objet}", String.class));

@@ -259,17 +259,16 @@
 						style="color: red;" />
 
 					<p:dataTable var="columnName" value="#{jJTestcaseBean.colNames}"
-						scrollable="true" scrollHeight="400" rowIndexVar="rowIdx"
-						style="table-layout: fixed;width:#{jJTestcaseBean.width}px"
+						scrollable="true" scrollHeight="#{jJTestcaseBean.scrollHeight}" rowIndexVar="rowIdx" scrollWidth="#{jJTestcaseBean.scrollWidth}"
+						style="table-layout: fixed;width: #{jJTestcaseBean.width};"
 						rendered="#{jJTestcaseBean.rowNames != null and !jJTestcaseBean.rendredTestCaseRecaps and !jJTestcaseBean.rendredTestCaseHistorical and jJTestcaseBean.rowNames != null}">
-						<p:column styleClass="ui-widget-header" width="100">
-							<!-- 							<h:outputText value="#{columnName.name}" /> -->
+						<p:column styleClass="ui-widget-header" width="100">							
 							<p:commandLink value="#{columnName.name}"
 								action="#{jJTestcaseBean.testCaseInfo(columnName.id)}"
 								ajax="false">
 							</p:commandLink>
 						</p:column>
-						<p:columns var="rowName" value="#{jJTestcaseBean.rowNames}"
+						<p:columns var="rowName" value="#{jJTestcaseBean.rowNames}" 
 							width="50" columnIndexVar="colIdx">
 							<f:facet name="header">
 								<h:outputText value="Version #{rowName.name}"
@@ -354,7 +353,7 @@
 								icon="ui-icon-plusthick" />
 						</f:facet>
 					</p:dataTable>
-
+					
 					<p:lineChart id="filled" value="#{chartBean.categoryModel}"
 						legendPosition="ne" title="#{messages.test_graph_testcase_title}"
 						seriesColors="#{chartBean.seriesColors}"
@@ -366,7 +365,7 @@
 					<p:dataTable id="teststepRecapDataTable" paginatorPosition="bottom"
 						value="#{jJTeststepBean.teststeps}" rowKey="#{ts.name}" var="ts"
 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
-						paginator="true" rows="8" style="width:650px;">
+						paginator="true" rows="7" style="width:650px;">
 						<f:facet name="header">
 							<p:row>
 								<p:column>
@@ -391,7 +390,7 @@
 										oncomplete="PF('runTestcaseDialogWidget').show()"
 										actionListener="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
 										update=":runTestcaseDialog"
-										disabled="#{jJBuildBean.build == null or !loginBean.authorisationService.xTest}">
+										disabled="#{empty jJTeststepBean.teststeps or jJBuildBean.build == null or !loginBean.authorisationService.xTest}">
 										<f:setPropertyActionListener
 											value="#{jJTestcaseBean.testcase}"
 											target="#{jJTestcaseBean.testcase}" />
@@ -406,10 +405,12 @@
 						</p:column>
 
 						<p:column headerText="Action">
-							<h:outputText value="#{ts.actionstep}" escape="false" />
+							<h:outputText value="#{ts.actionstep}" escape="false" 
+							style="white-space: pre-wrap;max-height: 30px;min-height: 30px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis"/>
 						</p:column>
 						<p:column headerText="Result">
-							<h:outputText value="#{ts.resultstep}" escape="false" />
+							<h:outputText value="#{ts.resultstep}" escape="false" 
+							style="white-space: pre-wrap;max-height: 30px;min-height: 30px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis" />
 						</p:column>
 					</p:dataTable>
 					
@@ -417,7 +418,7 @@
 						value="#{jJTestcaseexecutionBean.testCaseexecutionRecaps}"
 						rowKey="#{tce.name}" var="tce" paginatorPosition="bottom"
 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
-						paginator="true" rows="8" style="width:650px;margin-top: 20px;">
+						paginator="true" rows="7" style="width:650px;margin-top: 20px;">
 						<p:column headerText="Id">
 							<h:outputText value="#{tce.testcaseexecution.id}" />
 						</p:column>
@@ -425,17 +426,24 @@
 							<h:outputText value="#{tce.testcaseexecution.build.name}" />
 						</p:column>
 						<p:column headerText="Creation Date">
-							<h:outputText value="#{tce.testcaseexecution.creationDate}" />
+							<h:outputText value="#{tce.testcaseexecution.creationDate}">
+							<f:converter converterId="extendedDateTimeConverter" />
+							<f:attribute name="pattern" value="dd/MM/yyyy" />
+							<f:attribute name="timeZone" value="UCL" />							
+						</h:outputText>
 						</p:column>
 						<p:column headerText="Update Date">
-							<h:outputText value="#{tce.testcaseexecution.updatedDate}" />
+							<h:outputText value="#{tce.testcaseexecution.updatedDate}">
+								<f:converter converterId="extendedDateTimeConverter" />
+								<f:attribute name="pattern" value="dd/MM/yyyy" />
+								<f:attribute name="timeZone" value="UCL" />
+							</h:outputText>
 						</p:column>
 						<p:column headerText="Status">
 							<h:outputText value="#{tce.status}" />
 						</p:column>
 					</p:dataTable>
 				</h:form>
-
 			</p:layoutUnit>
 		</p:layout>
 
@@ -456,12 +464,17 @@
 			<p:ajax event="close" listener="#{jJTestcaseBean.closeXMLDialog}" />
 			<p:outputPanel id="importXMLPanel">
 				<h:form id="importXMLForm">
+					<p:panel styleClass="panelDialog">
+						<f:facet name="header">
+							<p:messages id="messages" showDetail="false" closable="true" />
+						</f:facet>
+					</p:panel>
 					<p:fileUpload
 						fileUploadListener="#{jJTestcaseBean.handleImportXML}"
 						mode="advanced" dragDropSupport="false"
 						update="messages :testFormCenter :testFormWest :testFormNorth"
 						sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(xml)$/" />
-					<p:growl id="messages" showDetail="true" />
+
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
@@ -477,11 +490,9 @@
 				<ui:include src="testDialog.xhtml" />
 			</p:outputPanel>
 		</p:dialog>
-
 		<p:dialog id="runTestcaseDialog" header="#{messages.test_exec_title}"
 			modal="true" widgetVar="runTestcaseDialogWidget" draggable="false"
-			height="360px" dynamic="true" resizable="false" width="360px"
-			style="width :400px !important">
+			height="370px" dynamic="true" resizable="false" width="400px">
 			<p:hotkey bind="esc" handler="PF('testcaseDialogWidget').hide()" />
 			<p:hotkey bind="space" handler="TestcaseExecSuccessButton.jq.click()" />
 			<p:hotkey bind="S" handler="TestcaseExecSuccessButton.jq.click()" />
@@ -490,8 +501,11 @@
 				listener="#{jJTeststepexecutionBean.closeDialog()}" />
 			<p:outputPanel id="runTestcaseDialogPanel">
 				<h:form id="runForm">
-					<p:growl id="msg" />
-
+					<p:panel styleClass="panelDialog">
+						<f:facet name="header">
+							<p:messages id="msg" showDetail="false" closable="true" />
+						</f:facet>
+					</p:panel>
 					<p:tabView id="teststepTabView" widgetVar="teststepTabViewWidget"
 						activeIndex="#{jJTeststepexecutionBean.activeIndex}"
 						scrollable="true" dynamic="true"
@@ -535,7 +549,7 @@
 											actionListener="#{jJTeststepexecutionBean.setStatus('true')}"
 											action="#{jJTeststepexecutionBean.handleStatus(tse)}"
 											widgetVar="TestcaseExecSuccessButton"
-											update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton :bugForm:createPanelGrid"
+											update="teststepTabView :runForm:msg :runForm:testcaseexecutionStatus :runForm:validateButton :bugForm:createPanelGrid"
 											async="true" ajax="true" />
 										<p:commandButton id="testExecFailedButton"
 											disabled="#{tse.passed != null}"
@@ -544,7 +558,7 @@
 											actionListener="#{jJTeststepexecutionBean.setStatus('false')}"
 											action="#{jJTeststepexecutionBean.handleStatus(tse)}"
 											widgetVar="TestcaseExecFailedButton"
-											update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton :bugForm:createPanelGrid"
+											update="teststepTabView :runForm:msg :runForm:testcaseexecutionStatus :runForm:validateButton :bugForm:createPanelGrid"
 											async="true" ajax="true" />
 
 										<p:remoteCommand name="remoteButton" update=":runForm" />
@@ -572,7 +586,7 @@
 								<p:commandButton id="validateButton"
 									value="#{messages.test_exec_valid_label}"
 									icon="ui-icon-circle-check"
-									update=":testFormCenter :testFormWest"
+									update=":testFormCenter :testFormWest :growlForm"
 									actionListener="#{jJTeststepexecutionBean.validateTab}"
 									style="float: right;"
 									disabled="#{jJTeststepexecutionBean.disabledTestcase}" />
@@ -595,7 +609,7 @@
 					</ui:include>
 					<p:commandButton id="saveBug" value="#{messages.label_save}"
 						action="#{jJBugBean.saveBug}"
-						update=":runForm:teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton"
+						update=":runForm:teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton :growlForm"
 						oncomplete="PF('bugTestDialogWidget').hide()" />
 				</h:form>
 			</p:outputPanel>

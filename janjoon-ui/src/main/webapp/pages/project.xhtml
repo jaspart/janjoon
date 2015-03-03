@@ -5,7 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition>
-<style type="text/css">
+	<style type="text/css">
 .ui-fileupload-progress {
 	display: none;
 }
@@ -21,7 +21,7 @@
 	height: 30px;
 }
 
-td.ui-fileupload-preview{
+td.ui-fileupload-preview {
 	display: none;
 }
 </style>
@@ -33,7 +33,8 @@ td.ui-fileupload-preview{
 				paginator="true" rows="15" rowKey="#{project.id}">
 				<f:facet name="header">#{messages.admin_project_table_header}</f:facet>
 				<p:column style="width: 70px !important;text-align: center;">
-					<p:graphicImage styleClass="avatar" rendered="#{project.logo != null}"
+					<p:graphicImage styleClass="avatar"
+						rendered="#{project.logo != null}"
 						value="#{imageStreamer.imageProj}">
 						<f:param name="ProjId" value="#{project.id}" />
 					</p:graphicImage>
@@ -84,70 +85,71 @@ td.ui-fileupload-preview{
 			listener="#{jJProjectBean.closeDialog}" />
 		<p:outputPanel id="projectDialogPanel">
 			<h:form id="projectDialogForm">
-				<p:growl id="msg" />
-				<p:panelGrid style="margin-top:10px">
-					<p:row>
-						<p:column colspan="2">
-							<p:inputText id="name" value="#{jJProjectBean.projectAdmin.name}"
-								label="Name" required="true" widgetVar="nameWidget">
-								<f:validateLength maximum="100" />
-								<p:ajax event="blur" update="projLogo" />
-							</p:inputText>
-							<p:message for="name" id="msgName" />
-							<p:watermark for="name"
-								value="#{messages.admin_project_new_name_watermark}" />
-						</p:column>
-						<p:column colspan="2">
-							<h:outputText value="#{messages.admin_project_new_manager_label}" />
-							<p:selectOneMenu id="projectManagerSelect"
-								value="#{jJProjectBean.projectManager}" panelStyle="width:150px"
-								effect="fade" style="width:160px" filter="true"
-								filterMatchMode="startsWith" required="true"
-								label="Project Manager"
-								requiredMessage="#{messages.admin_project_new_manager_alert}"
-								widgetVar="projectManagerWidget">
-								<f:converter
-									converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />
-								<f:selectItems value="#{jJProjectBean.projectManagerList}"
-									var="p" itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />
-
-							</p:selectOneMenu>
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column colspan="3">
-							<h:outputLabel for="projLogo" value="Logo:" />
-
-							<p:fileUpload id="projLogo"
-								disabled="#{empty jJProjectBean.projectAdmin.name}"
-								fileUploadListener="#{licenseBean.handleProjLogoUpload}"
-								mode="advanced" dragDropSupport="true" update="msg"
-								sizeLimit="1000000" allowTypes="/(gif|png|ico|jpeg)$/" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column colspan="3">
-							<p:selectBooleanButton
-								value="#{jJProjectBean.projectAdmin.enabled}"
-								onLabel="#{messages.admin_project_new_active_button}"
-								offLabel="#{messages.admin_project_new_inactive_button}"
-								onIcon="ui-icon-check" offIcon="ui-icon-close">
-								<p:ajax update="msg" listener="#{jJProjectBean.addMessage}" />
-							</p:selectBooleanButton>
-						</p:column>
-					</p:row>
-					<f:facet name="footer">
+				<p:panel styleClass="panelDialog">
+					<f:facet name="header">
+						<p:messages id="msg" showDetail="false" closable="true" />
+					</f:facet>
+					<p:panelGrid>
 						<p:row>
-							<p:column colspan="3">
-								<p:commandButton id="submitButton"
-									value="#{messages.admin_project_new_save_button}"
-									update="projectDialogForm :headerForm"
-									process="@this,name,projectManagerSelect"
-									action="#{jJProjectBean.save}" />
+							<p:column colspan="2">
+								<p:inputText id="name"
+									value="#{jJProjectBean.projectAdmin.name}" label="Name"
+									required="true" widgetVar="nameWidget">
+									<f:validateLength maximum="100" />
+									<p:ajax event="blur" update="projLogo" />
+								</p:inputText>
+								<p:message for="name" id="msgName" />
+								<p:watermark for="name"
+									value="#{messages.admin_project_new_name_watermark}" />
+							</p:column>
+							<p:column colspan="2">
+								<h:outputText
+									value="#{messages.admin_project_new_manager_label}" />
+								<p:selectOneMenu id="projectManagerSelect"
+									value="#{jJProjectBean.projectManager}"
+									panelStyle="width:150px" effect="fade" style="width:160px"
+									filter="true" filterMatchMode="startsWith" required="true"
+									label="Project Manager"
+									requiredMessage="#{messages.admin_project_new_manager_alert}"
+									widgetVar="projectManagerWidget">
+									<f:converter
+										converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />
+									<f:selectItems value="#{jJProjectBean.projectManagerList}"
+										var="p" itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />
+
+								</p:selectOneMenu>
 							</p:column>
 						</p:row>
+						<p:row>
+							<p:column colspan="3">
+								<h:outputLabel for="projLogo" value="Logo:" />
+								<p:fileUpload id="projLogo"
+									disabled="#{empty jJProjectBean.projectAdmin.name}"
+									fileUploadListener="#{licenseBean.handleProjLogoUpload}"
+									mode="advanced" dragDropSupport="true" update="msg"
+									sizeLimit="1000000" allowTypes="/(gif|png|ico|jpeg)$/" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="3">
+								<p:selectBooleanButton
+									value="#{jJProjectBean.projectAdmin.enabled}"
+									onLabel="#{messages.admin_project_new_active_button}"
+									offLabel="#{messages.admin_project_new_inactive_button}"
+									onIcon="ui-icon-check" offIcon="ui-icon-close">
+									<p:ajax update="msg" listener="#{jJProjectBean.addMessage}" />
+								</p:selectBooleanButton>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<f:facet name="footer">
+						<p:commandButton id="submitButton"
+							value="#{messages.admin_project_new_save_button}"
+							update="projectDialogForm :headerForm :growlForm"
+							process="@this,name,projectManagerSelect"
+							action="#{jJProjectBean.save}" />
 					</f:facet>
-				</p:panelGrid>
+				</p:panel>
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
@@ -161,7 +163,7 @@ td.ui-fileupload-preview{
 				<p:commandButton id="deleteYesButton"
 					value="#{messages.admin_project_delete_yes_label}"
 					action="#{jJProjectBean.deleteProject}"
-					update=":tabview:projectForm :headerForm"
+					update=":tabview:projectForm :headerForm :growlForm"
 					oncomplete="PF('projectDeleteDialogWidget').hide()" />
 				<p:commandButton id="deleteNoButton"
 					value="#{messages.admin_project_delete_no_label}"

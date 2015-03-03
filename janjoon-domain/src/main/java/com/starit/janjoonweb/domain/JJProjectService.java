@@ -9,7 +9,7 @@ import org.springframework.roo.addon.layers.service.RooService;
 public interface JJProjectService {
 
 	// New Generic
-	public List<JJProject> getProjects(JJCompany company,JJContact contact,boolean onlyActif);
+	public List<JJProject> getProjects(JJCompany company,JJContact contact,boolean onlyActif,boolean all);
 	
 	public List<JJProject> getAdminListProjects();
 	

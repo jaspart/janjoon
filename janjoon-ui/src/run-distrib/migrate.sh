@@ -16,7 +16,7 @@ else
     rm -rf $HOME/lib/jetty-runner-8.1.9.v20130131.jar
     rm -rf $HOME/save/$1
     mkdir $HOME/save/$1
-    mv $HOME/bin $HOME/janjoon-ui $HOME/lib $HOME/log $HOME/license $HOME/upload $HOME/save/$1/
+    mv $HOME/bin $HOME/janjoon-ui $HOME/lib $HOME/log $HOME/license  $HOME/save/$1/
     unzip $HOME/janjoon-ui-2.0-$2-distrib.zip -d $HOME/
     mv $HOME/lib/janjoon-ui-2.0-$2.war $HOME/lib/janjoon-ui-2.0-$2.war.zip
     mkdir $HOME/lib/janjoon-ui-2.0-$2.war

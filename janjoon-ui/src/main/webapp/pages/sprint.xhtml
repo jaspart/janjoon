@@ -6,8 +6,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
-	<h:form id="sprintCreationForm" rendered="#{jjsprint.render}">
-		<p:growl id="sprintCreationGrowl" showDetail="true" life="2000" />
+	<h:form id="sprintCreationForm" rendered="#{jjsprint.render}">		
 		<p:panelGrid style="width: 100%;">
 			<f:facet name="header">
 				<p:row>
@@ -71,18 +70,18 @@
 							value="#{messages.label_create}"
 							disabled="#{jjsprint.neditabale}"
 							actionListener="#{jJSprintBean.attrListener}"
-							update=":projecttabview:SprintTabView:sprintCreationForm">
+							update=":projecttabview:SprintTabView:sprintCreationForm :growlForm">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 							<f:attribute name="create" value="create" />
 						</p:commandButton>
-						<p:remoteCommand name="createSprint" update=":projecttabview"
+						<p:remoteCommand name="createSprint" update=":projecttabview :growlForm"
 							action="#{jJSprintBean.createSprint}"
 							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock();" />
 					</p:column>
 					<p:column>
 						<p:commandButton value="Done" id="doneButtonr"
-							update=":projecttabview" immediate="true"
+							update=":projecttabview :growlForm" immediate="true"
 							disabled="#{!jjsprint.neditabale}"
 							actionListener="#{jJSprintBean.doneEvent}"
 							onstart="PF('blockUIWidget').block()"

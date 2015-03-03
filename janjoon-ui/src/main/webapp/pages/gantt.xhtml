@@ -91,12 +91,12 @@
 		<f:event type="preRenderComponent"
 			oncomplete="PF('blockUIWidget').unblock();"
 			listener="#{jJTaskBean.loadingData()}" />
-		<p:growl id="msg" sticky="true" life="3000" autoUpdate="true" />
+<!-- 		<p:growl id="msg" sticky="true" life="3000" autoUpdate="true" /> -->
 		<p:panelGrid style="margin-top:10px;width:100%;">
 			<p:row style="width:100%;">
 				<p:column style="width:100%;">
 					<p:remoteCommand name="onCellEditTableComplete"
-						update=":projecttabview "
+						update=":projecttabview :growlForm"
 						oncomplete="PF('blockUIWidget').unblock()" />
 					<p:scrollPanel style="width:100%;" mode="native">
 						<pe:layout fullPage="false" style="width:100%;height:600px;"
@@ -114,7 +114,7 @@
 										process="@widgetVar(nameWidget)"
 										onstart="PF('blockUIWidget').block()"
 										onsuccess="onCellEditTableComplete()"
-										update="taskDataTable :projecttabview:planningForm:timeline :projecttabview:planningForm:msg" />
+										update="taskDataTable :projecttabview:planningForm:timeline :growlForm" />
 
 									<p:summaryRow paginatorPosition="top" 
 										rendered="#{jJTaskBean.sortMode == 'chapter'}">
@@ -385,7 +385,7 @@
 									<p:ajax event="add" update="@none"
 										onstart="PF('timelineWdgt').cancelAdd()" />
 									<p:ajax event="change"
-										update=":projecttabview:planningForm:timeline :projecttabview:planningForm:taskDataTable :projecttabview:SprintTabView :projecttabview:planningForm:msg"
+										update=":projecttabview:planningForm:timeline :projecttabview:planningForm:taskDataTable :projecttabview:SprintTabView :growlForm"
 										listener="#{jJTaskBean.onChangeTimelineEvent}"
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()" />
@@ -414,7 +414,7 @@
 			<h:form id="duplicateTaskForm">
 				<p:commandButton id="duplicateYesButton"
 					value="#{messages.label_yes}" action="#{jJTaskBean.duplicateTask}"
-					update=":projecttabview:planningForm :projecttabview:SprintTabView"
+					update=":projecttabview:planningForm :projecttabview:SprintTabView :growlForm"
 					onstart="PF('blockUIWidget').block()"
 					oncomplete="PF('blockUIWidget').unblock();PF('duplicateTaskDialogWidget').hide()" />
 				<p:commandButton id="duplicateNoButton" value="#{messages.label_no}"

@@ -8,7 +8,6 @@
 <ui:composition>
 
 	<h:form id="configForm">
-		<p:growl id="ConfMessage" showDetail="true" />
 		<p:panel id="configPanel" style="width:800px" columns="1"
 			cellpadding="6">
 			<p:dataTable id="dataTable" var="conf" lazy="true"
@@ -46,24 +45,24 @@
 						<h:outputText value="#{messages.admin_config_table_action_title}" />
 					</f:facet>
 
-<!-- 					<p:splitButton id="viewButton" icon="ui-icon-zoomin" -->
-<!-- 						update=":tabview:viewForm:viewPanelGrid" -->
-<!-- 						oncomplete="PF('viewDialogWidget').show()" -->
-<!-- 						value="#{messages.label_view}"> -->
-<!-- 						<f:setPropertyActionListener value="#{conf}" -->
-<!-- 							target="#{jJConfigurationBean.JJConfiguration_}" /> -->
+					<!-- 					<p:splitButton id="viewButton" icon="ui-icon-zoomin" -->
+					<!-- 						update=":tabview:viewForm:viewPanelGrid" -->
+					<!-- 						oncomplete="PF('viewDialogWidget').show()" -->
+					<!-- 						value="#{messages.label_view}"> -->
+					<!-- 						<f:setPropertyActionListener value="#{conf}" -->
+					<!-- 							target="#{jJConfigurationBean.JJConfiguration_}" /> -->
 
 
-						<p:splitButton id="editButton" icon="ui-icon-pencil"
-							update=":tabview:createForm:createPanelGrid :tabview:createDialog"
-							action="#{jJConfigurationBean.onEdit}"
-							oncomplete="PF('createDialogWidget').show()"
-							value="#{messages.admin_config_edit_title}">
-							<f:setPropertyActionListener value="#{conf}"
-								target="#{jJConfigurationBean.JJConfiguration_}" />
-							<f:setPropertyActionListener
-								target="#{jJConfigurationBean.renderCreate}" value="false" />
-						
+					<p:splitButton id="editButton" icon="ui-icon-pencil"
+						update=":tabview:createForm:createPanelGrid :tabview:createDialog"
+						action="#{jJConfigurationBean.onEdit}"
+						oncomplete="PF('createDialogWidget').show()"
+						value="#{messages.admin_config_edit_title}">
+						<f:setPropertyActionListener value="#{conf}"
+							target="#{jJConfigurationBean.JJConfiguration_}" />
+						<f:setPropertyActionListener
+							target="#{jJConfigurationBean.renderCreate}" value="false" />
+
 
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
 							oncomplete="PF('deleteDialogWidget').show()"
@@ -105,56 +104,64 @@
 				value="#{messages.admin_config_edit_title}" />
 		</f:facet>
 		<p:outputPanel id="createPanel">
-			<h:form id="createForm" enctype="multipart/form-data" style="height: 450px;width: 670px;">
-				<h:panelGrid id="createPanelGrid" columns="2" styleClass="dialog"
-					columnClasses="col1,col2,col3">
+			<h:form id="createForm" enctype="multipart/form-data"
+				style="height: 500px;width: 700px;">
+				<p:panel styleClass="panelDialog">
+					<f:facet name="header">
+						<p:messages id="msg" showDetail="false" closable="true" />
+					</f:facet>
+					<h:panelGrid id="createPanelGrid" columns="2" styleClass="dialog"
+						columnClasses="col1,col2,col3">
+						<p:outputLabel for="confName" value="Name:" />
+						<p:inputTextarea
+							value="#{jJConfigurationBean.JJConfiguration_.name}"
+							id="confName" required="true"
+							requiredMessage="Name field is requiered">
+							<f:validateLength maximum="100" />
+						</p:inputTextarea>
 
-					<p:outputLabel for="confName" value="Name:" />
-					<p:inputTextarea
-						value="#{jJConfigurationBean.JJConfiguration_.name}" id="confName"
-						required="true" requiredMessage="Name field is requiered">
-						<f:validateLength maximum="100" />
-					</p:inputTextarea>
+						<p:outputLabel for="confDesc" value="Description :"
+							rendered="#{!loginBean.mobile}" />
+						<pe:ckEditor id="confDesc"
+							toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
+							rendered="#{!loginBean.mobile}"
+							customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+							value="#{jJConfigurationBean.JJConfiguration_.description}"
+							required="true"
+							requiredMessage="Config Description is a required value" />
 
-					<p:outputLabel for="confDesc" value="Description :"
-						rendered="#{!loginBean.mobile}" />
-					<pe:ckEditor id="confDesc"
-						toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
-						style="width:680px" rendered="#{!loginBean.mobile}"
-						customConfig="#{request.contextPath}/resources/js/ckEditor.js"
-						value="#{jJConfigurationBean.JJConfiguration_.description}"
-						required="true"
-						requiredMessage="Config Description is a required value" />
-
-					<p:outputLabel for="confMobileDesc" value="Description :"
-						rendered="#{loginBean.mobile}" />
-					<p:editor id="confMobileDesc" style="width:680px"
-						rendered="#{loginBean.mobile}"
-						value="#{jJConfigurationBean.JJConfiguration_.description}"
-						required="true"
-						requiredMessage="Config Description is a required value" />
+						<p:outputLabel for="confMobileDesc" value="Description :"
+							rendered="#{loginBean.mobile}" />
+						<p:editor id="confMobileDesc" style="width:680px"
+							rendered="#{loginBean.mobile}"
+							value="#{jJConfigurationBean.JJConfiguration_.description}"
+							required="true"
+							requiredMessage="Config Description is a required value" />
 
 
-					<p:outputLabel for="confParam" value="Parametre:" />
-					<p:inputText value="#{jJConfigurationBean.JJConfiguration_.param}"
-						id="confParam">
-						<f:validateLength maximum="100" />
-					</p:inputText>
+						<p:outputLabel for="confParam" value="Parametre:" />
+						<p:inputText value="#{jJConfigurationBean.JJConfiguration_.param}"
+							id="confParam">
+							<f:validateLength maximum="100" />
+						</p:inputText>
 
-					<p:outputLabel for="confVal" value="Value:" />
-					<p:inputTextarea
-						value="#{jJConfigurationBean.JJConfiguration_.val}" id="confVal">
-						<f:validateLength maximum="100" />
-					</p:inputTextarea>
-				</h:panelGrid>
-				<p:commandButton id="createSaveButton"
-					value="#{messages.admin_config_new_save_button}"
-					action="#{jJConfigurationBean.persistConf}"
-					update="createPanelGrid,:tabview:configForm:ConfMessage :scrollRight" />
-<!-- 					 :messagePanel -->
-				<p:commandButton idid="createCloseButton"
-					value="#{messages.admin_config_new_close_button}"
-					onclick="PF('createDialogWidget').hide()" type="button" />
+						<p:outputLabel for="confVal" value="Value:" />
+						<p:inputTextarea
+							value="#{jJConfigurationBean.JJConfiguration_.val}" id="confVal">
+							<f:validateLength maximum="100" />
+						</p:inputTextarea>
+					</h:panelGrid>
+					<f:facet name="footer">
+						<p:commandButton id="createSaveButton"
+							value="#{messages.admin_config_new_save_button}"
+							action="#{jJConfigurationBean.persistConf}"
+							update="createPanelGrid,:growlForm :scrollRight" />
+						<!-- 					 :messagePanel -->
+						<p:commandButton idid="createCloseButton"
+							value="#{messages.admin_config_new_close_button}"
+							onclick="PF('createDialogWidget').hide()" type="button" />
+					</f:facet>
+				</p:panel>
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
@@ -183,9 +190,9 @@
 				<p:commandButton id="deleteYesButton"
 					value="#{messages.admin_config_delete_yes_label}"
 					action="#{jJConfigurationBean.deleteConfig}"
-					update=":tabview:configForm :scrollRight "
+					update=":tabview:configForm :scrollRight :growlForm"
 					oncomplete="PF('deleteDialogWidget').hide()" />
-<!-- 					:messagePanel -->
+				<!-- 					:messagePanel -->
 				<p:commandButton id="deleteNoButton"
 					value="#{messages.admin_config_delete_no_label}"
 					onclick="PF('deleteDialogWidget').hide()" type="button" />

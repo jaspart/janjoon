@@ -13,7 +13,7 @@
 
 	<h:form id="headerForm">
 
-		<p:growl id="growlHeader" showDetail="true" life="1500" />
+<!-- 		<p:growl id="growlHeader" showDetail="true" life="1500" /> -->
 		<h:panelGrid id="panelHeader" columns="#{loginBean.columns}"
 			cellpadding="2" style="background-color:white;width:100%;">
 
@@ -50,7 +50,7 @@
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()"
-							update=":contentPanel tabMenu :scrollRight :messageCreationForm communicationButton" />
+							update=":contentPanel tabMenu :scrollRight :messageCreationForm communicationButton :growlForm" />
 						<!-- 																:messagePanel -->
 					</p:selectOneMenu>
 
@@ -66,7 +66,7 @@
 						<f:selectItems value="#{jJProductBean.productList}" var="p"
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax onstart="PF('blockUIWidget').block()"
-							update="versionSelectOneMenu :contentPanel tabMenu :scrollRight :messageCreationForm communicationButton"
+							update="versionSelectOneMenu :contentPanel tabMenu :scrollRight :messageCreationForm communicationButton :growlForm"
 							oncomplete="PF('blockUIWidget').unblock()" />
 						<!-- 																:messagePanel -->
 					</p:selectOneMenu>
@@ -86,7 +86,7 @@
 
 						<p:ajax onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()"
-							update=":contentPanel" />
+							update=":contentPanel :growlForm" />
 					</p:selectOneMenu>
 
 					<p:splitButton
@@ -127,7 +127,7 @@
 						disabled="#{!loginBean.authorisationService.rProject}"
 						title="#{loginBean.authorisationService.rProjectMSG}"
 						onstart="PF('blockUIWidget').block()"
-						actionListener="#{loginBean.redirection}" update="growlHeader"
+						actionListener="#{loginBean.redirection}" update=":growlForm"
 						icon="ui-icon-calendar"
 						rendered="#{loginBean.enable and !loginBean.mobile}" />
 
@@ -158,7 +158,7 @@
 						onstart="PF('blockUIWidget').block()"
 						disabled="#{!loginBean.authorisationService.rwDev}"
 						title="#{loginBean.authorisationService.rwDevMSG}"
-						actionListener="#{loginBean.redirectToDev}" update="growlHeader"
+						actionListener="#{loginBean.redirectToDev}" update=":growlForm"
 						icon="ui-icon-wrench"
 						rendered="#{loginBean.enable and !loginBean.mobile}" />
 
@@ -172,7 +172,7 @@
 						title="#{loginBean.authorisationService.rTestMSG}"
 						value="#{messages.header_test_menuitem}"
 						onstart="PF('blockUIWidget').block()"
-						actionListener="#{loginBean.redirection}" update="growlHeader"
+						actionListener="#{loginBean.redirection}" update=":growlForm"
 						icon="ui-icon-clipboard"
 						rendered="#{loginBean.enable and !loginBean.mobile}" />
 
@@ -202,12 +202,12 @@
 						title="#{loginBean.authorisationService.rProjectMSG}"
 						value="#{messages.header_stat_menuitem}"
 						onstart="PF('blockUIWidget').block()"
-						actionListener="#{loginBean.redirection}" update="growlHeader"
+						actionListener="#{loginBean.redirection}" update=":growlForm"
 						icon="ui-icon-calculator"
 						rendered="#{loginBean.enable and !loginBean.mobile}" />
 
 					<p:menuitem value="#{messages.header_admin_menuitem}"						
-						rendered="#{!loginBean.authorisationService.renderAdmin}"						
+						rendered="#{loginBean.authorisationService.renderAdmin}"						
 						url="/pages/administration.jsf?faces-redirect=true"
 						icon="ui-icon-key" update=":contentPanel" />
 

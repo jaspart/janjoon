@@ -63,19 +63,13 @@ public class JJProductBean {
 	}
 
 	private JJProduct product;
-	private List<JJProduct> productList;
-
 	private JJProduct productAdmin;
 	private LazyProductDataModel productListTable;
-
 	private JJContact productManager;
 	private List<JJContact> productManagerList;
-
 	private String message;
-
 	private boolean disabledProductMode;
 	private boolean disabledVersionMode;
-
 	private boolean productState;
 
 	public JJProduct getProduct() {
@@ -100,18 +94,13 @@ public class JJProductBean {
 
 	public List<JJProduct> getProductList() {
 
-		if(((LoginBean) LoginBean.findBean("loginBean")).getContact() != null)
-		{
-			if (productList == null || productList.isEmpty())
-				productList = jJProductService.getProducts(
-						((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),((LoginBean) LoginBean.findBean("loginBean")).getContact(), true);
-		}	
-
-		return productList;
-	}
-
-	public void setProductList(List<JJProduct> productList) {
-		this.productList = productList;
+		if (((LoginBean) LoginBean.findBean("loginBean")).isEnable())
+			return jJProductService.getProducts(((LoginBean) LoginBean
+					.findBean("loginBean")).getContact().getCompany(),
+					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
+					true,false);
+		else
+			return new ArrayList<JJProduct>();
 	}
 
 	public JJProduct getProductAdmin() {
@@ -344,7 +333,7 @@ public class JJProductBean {
 	}
 
 	public void resetVersionProductList() {
-		productList = null;
+		
 		productListTable = null;
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);

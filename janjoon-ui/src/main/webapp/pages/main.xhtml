@@ -6,8 +6,8 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
-		<p:growl id="notif" showDetail="true" life="2000" />
-		<p:growl id="dev" showDetail="true" life="2000" />
+<!-- 		<p:growl id="notif" showDetail="false" life="2000" /> -->
+<!-- 		<p:growl id="dev" showDetail="false" life="2000" /> -->
 
 		<!--p:panel id="mainPanel" toggleable="true" toggleSpeed="250">
 			<f:facet name="header">
@@ -181,7 +181,7 @@
 					</p:column-->
 			<!--/p:dataTable>
 			</h:form-->
-			<p:growl id="notifMPT" showDetail="true" life="2000" />
+<!-- 			<p:growl id="notifMPT" showDetail="false" life="2000" /> -->
 			<p:confirmDialog id="resolveDialog" widgetVar="resolveDialogWidget"
 				message="#{messages.label_disable_record}" showEffect="fade"
 				hideEffect="explode" header="#{messages.label_confirm_disabling}"
@@ -191,7 +191,7 @@
 						<p:commandButton id="deleteYesButton"
 							value="#{messages.label_yes}"
 							action="#{jJMessageBean.resolveJJMessage}"
-							update=":messageForm,:notifMPT"
+							update=":messageForm,:growlForm"
 							oncomplete="PF('resolveDialogWidget').hide()" />
 						<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
 							onclick="PF('resolveDialogWidget').hide()" type="button" />
@@ -271,25 +271,31 @@
 					listener="#{jJTaskBean.closeEvent('main')}" />
 				<p:outputPanel id="viewTaskPanel">
 					<h:form id="viewTaskForm" enctype="multipart/form-data">
-					<p:remoteCommand name="updateForm" update=":viewTaskForm"/>
-						<ui:include src="taskDialog.xhtml">
-							<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
-						</ui:include>
-						
-						<p:commandButton id="updateTaskButton" update=":viewTaskForm"
-							actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'main')}"
-							value="#{messages.label_update} Task"
-							onstart="PF('viewtaskBlockUIWidget').block()"
-							style="margin-top: 5px;"
-							oncomplete="PF('viewtaskBlockUIWidget').unblock();"
-							process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload" />
-							
-						<p:commandButton id="viewCloseButton"
-							value="#{messages.label_close}"
-							style="margin-left: 20px;margin-top: 5px;"
-							oncomplete="PF('blockUIWidget').unblock()"
-							onstart="PF('blockUIWidget').block()"
-							onclick="PF('viewTaskDialogWidget').hide()" type="button" />
+						<p:remoteCommand name="updateForm" update=":viewTaskForm" />
+
+						<p:panel styleClass="panelDialog">
+							<f:facet name="header">
+								<p:messages id="msg" closable="true" />
+							</f:facet>
+							<ui:include src="taskDialog.xhtml">
+								<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
+							</ui:include>
+							<f:facet name="footer">
+								<p:commandButton id="updateTaskButton" update=":viewTaskForm"
+									actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'main')}"
+									value="#{messages.label_update} Task"
+									onstart="PF('viewtaskBlockUIWidget').block()"
+									style="margin-top: 5px;"
+									oncomplete="PF('viewtaskBlockUIWidget').unblock();"
+									process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload" />
+								<p:commandButton id="viewCloseButton"
+									value="#{messages.label_close}"
+									style="margin-left: 20px;margin-top: 5px;"
+									oncomplete="PF('blockUIWidget').unblock()"
+									onstart="PF('blockUIWidget').block()"
+									onclick="PF('viewTaskDialogWidget').hide()" type="button" />
+							</f:facet>
+						</p:panel>
 					</h:form>
 				</p:outputPanel>
 			</p:dialog>
@@ -346,8 +352,7 @@
 		<p:dialog widgetVar="messageDialog" id="messageDialog"
 			header="#{messages.main_message_header}" showEffect="fade"
 			dynamic="true" closable="true">
-			<h:form id="messageDialogForm">
-				<p:growl id="messageDialogFormGrowl" showDetail="true" life="1000" />
+			<h:form id="messageDialogForm">				
 				<p:panelGrid columns="1">
 					<p:outputLabel for="messagedsc" value="Message :" />
 					<p:inputTextarea id="messagedsc" cols="40" rows="6"
@@ -360,7 +365,7 @@
 						<p:commandButton id="submitMes" value="OK"
 							process="@this,alert,messagedsc"
 							actionListener="#{jJMessageBean.createMessage}"
-							update="messageDialogForm :headerForm:communicationButton" />
+							update="messageDialogForm :headerForm:communicationButton :growlForm" />
 					</p:panelGrid>
 				</p:panelGrid>
 			</h:form>

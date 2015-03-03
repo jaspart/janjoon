@@ -42,7 +42,11 @@
 		</h:panelGrid>
 	</pe:blockUI>
 	<h:form id="chapterDialogForm" >
-		<p:growl id="msg" sticky="true" />
+		<p:panel styleClass="panelDialog">
+			<f:facet name="header">
+				<p:messages id="msg" showDetail="false" closable="true" />
+			</f:facet>
+		</p:panel>
 		<p:tabView widgetVar="chapterTabView">
 			<p:tab title="Chapitre">
 				<p:panelGrid style="margin-top:10px;height: 400px;">

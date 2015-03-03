@@ -92,16 +92,15 @@ public class JJProductServiceImpl implements JJProductService {
 
 	@Override
 	public List<JJProduct> getProducts(JJCompany company, JJContact contact,
-			boolean onlyActif) {
+			boolean onlyActif,boolean all) {
 
 		if (company != null) {
 
 			List<JJProduct> products = new ArrayList<JJProduct>();
 			CriteriaBuilder criteriaBuilder = entityManager
-					.getCriteriaBuilder();
-			boolean all = false;
+					.getCriteriaBuilder();			
 
-			if (contact != null) {
+			if (contact != null && !all) {
 				CriteriaQuery<JJPermission> criteriaPermission = criteriaBuilder
 						.createQuery(JJPermission.class);
 				Root<JJPermission> fromPermission = criteriaPermission

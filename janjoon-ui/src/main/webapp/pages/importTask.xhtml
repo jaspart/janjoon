@@ -192,7 +192,7 @@
 		</p:dataTable>
 
 		<p:remoteCommand actionListener="#{jJTaskBean.importTask}"
-			name="importTask" update=":projecttabview"
+			name="importTask" update=":projecttabview :growlForm"
 			onstart="PF('taskBlockUIWidget').block()"
 			oncomplete="PF('taskBlockUIWidget').unblock()" />
 
@@ -200,7 +200,7 @@
 			onstart="PF('taskBlockUIWidget').block()"
 			oncomplete="PF('taskBlockUIWidget').unblock()" style="float: right;"
 			actionListener="#{jJTaskBean.validateTaskField}"
-			update=":projecttabview:planningForm:msg" />
+			update=":growlForm" />
 		<p:commandButton value="Annuler" style="float: right;"
 			oncomplete="PF('taskImportDialogWidget').hide()" />
 	</h:form>

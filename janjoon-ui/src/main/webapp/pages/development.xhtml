@@ -19,13 +19,13 @@
 		</style>
 		<h:form>
 			<p:remoteCommand name="updateHeader"
-				oncomplete="PF('blockUIWidget').unblock()" update=":contentPanel" />
+				oncomplete="PF('blockUIWidget').unblock()" update=":contentPanel :growlForm" />
 		</h:form>
 		<br />
 		<p:panel id="errorPanel"
 			header="#{messages['dev.panel.error.header']}"
 			style="width: 100%;valign: top;" rendered="#{!jJDevelopment.render}">
-			<p:growl id="error" showDetail="true" life="2000" />
+<!-- 			<p:growl id="error" showDetail="false" life="2000" /> -->
 			<H1>#{messages['dev.panel.error.title']}</H1>
 		</p:panel>
 
@@ -62,14 +62,16 @@
 									<p:column>
 										<p:commandButton id="fetchFromRepo" immediate="true"
 											process="@this" icon="ui-icon-refresh"
-											actionListener="#{jJDevelopment.pull}" update=":form" />
+											onstart="PF('blockUIWidget').block()"
+											oncomplete="PF('blockUIWidget').unblock()"
+											actionListener="#{jJDevelopment.pull}" update=":form :growlForm" />
 
 										<h:panelGroup id="startTaskPanel">
 
 											<p:commandButton immediate="true" icon="ui-icon-play"
 												disabled="#{jJDevelopment.task == null or jJDevelopment.task.startDateReal != null}"
 												actionListener="#{jJDevelopment.startTask}"
-												update=":form:taskSelectOneMenu startTaskPanel" />
+												update=":form:taskSelectOneMenu startTaskPanel :growlForm" />
 
 											<p:commandButton id="viewTaskButton" icon="ui-icon-zoomin"
 												update=":viewTaskForm"
@@ -104,7 +106,7 @@
 									<p:column colspan="2">
 										<p:message for="taskSelectOneMenu" id="taskmessage"
 											closable="true" />
-										<p:growl id="messages" showDetail="true" life="2000" />
+<!-- 										<p:growl id="messages" showDetail="false" life="2000" /> -->
 										<p:panel header="#{messages['devs.projectexplorer.label']}">
 
 											<p:scrollPanel id="fileTreeScrollPanel" style="height:300px;"
@@ -193,8 +195,10 @@
 									<p:column>
 										<p:commandButton value="#{messages['dev.submit.button']}"
 											id="submit" icon="ui-icon-disk"
+											onstart="PF('blockUIWidget').block()"
+											oncomplete="PF('blockUIWidget').unblock()"
 											actionListener="#{jJDevelopment.commit}"
-											update=":form:messages,:form:tabView,:form:fileTree,:form:taskmessage,:form:commentmessage,startTaskPanel" />
+											update=":growlForm,:form:tabView,:form:fileTree,:form:taskmessage,:form:commentmessage,startTaskPanel" />
 									</p:column>
 								</p:row>
 							</p:panelGrid></td>
@@ -228,20 +232,8 @@
 								</p:tabView>
 							</p:panel></td>
 					</tr>
-				</table>
-
-				<p:blockUI block="form" trigger=":form:submit">  
-        				#{messages['dev.block.commit.label']}<br />
-					<p:graphicImage library="images" name="ajax-loader.gif" />
-				</p:blockUI>
-				<p:blockUI block="form" trigger=":form:fetchFromRepo">  
-        				#{messages['dev.block.fetch.label']}<br />
-					<p:graphicImage library="images" name="ajax-loader.gif" />
-				</p:blockUI>
-				<p:blockUI block="form" trigger=":headerForm:projectSelectOneMenu">
-					#{messages['dev.block.update.label']}<br />
-					<p:graphicImage library="images" name="ajax-loader.gif" />
-				</p:blockUI>
+				</table>				
+			
 
 			</h:form>
 			<p:confirmDialog id="deletFileDialog"
@@ -254,7 +246,7 @@
 					<h:form id="deleteForm">
 						<p:commandButton id="deleteYesButton"
 							value="#{messages.label_yes}"
-							action="#{jJDevelopment.deleteFile}" update=":form"
+							action="#{jJDevelopment.deleteFile}" update=":form :growlForm"
 							oncomplete="PF('deleteFileDialogWidget').hide()" />
 						<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
 							onclick="PF('deleteFileDialogWidget').hide()" type="button" />
@@ -270,8 +262,9 @@
 					<h:form id="commitForm">
 						<p:commandButton id="commitYesButton"
 							value="#{messages.label_yes}"
-							action="#{jJDevelopment.commitFile}" update=":form"
-							oncomplete="PF('commitFileDialogWidget').hide()" />
+							onstart="PF('blockUIWidget').block()"							
+							action="#{jJDevelopment.commitFile}" update=":form :growlForm"
+							oncomplete="PF('commitFileDialogWidget').hide(),PF('blockUIWidget').unblock()" />
 						<p:commandButton id="commitNoButton" value="#{messages.label_no}"
 							onclick="PF('commitFileDialogWidget').hide()" type="button" />
 					</h:form>
@@ -285,7 +278,7 @@
 				<p:outputPanel id="savePanel">
 					<h:form id="saveForm">
 						<p:commandButton id="saveYesButton" value="#{messages.label_yes}"
-							action="#{jJDevelopment.saveFile}" update=":form:tabViewPanel" />
+							action="#{jJDevelopment.saveFile}" update=":form:tabViewPanel :growlForm" />
 						<p:commandButton id="saveNoButton" value="#{messages.label_no}"
 							action="#{jJDevelopment.notSaveFile}" update=":form:tabViewPanel" />
 					</h:form>
@@ -308,7 +301,9 @@
 								offIcon="ui-icon-folder-collapsed">
 							</p:selectBooleanButton>
 							<p:commandButton id="createSaveButton"
-								value="#{messages.label_save}" update=":form,"
+								value="#{messages.label_save}" update=":form,:growlForm"
+								onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock()"
 								action="#{jJDevelopment.CreateFile}" />
 							<p:commandButton id="createCloseButton"
 								value="#{messages.label_close}"
@@ -326,24 +321,30 @@
 					listener="#{jJTaskBean.closeEvent('dev')}" />
 				<p:outputPanel id="viewTaskPanel">
 					<h:form id="viewTaskForm" enctype="multipart/form-data" >
-						<ui:include src="taskDialog.xhtml">
-							<ui:param name="JJTask_" value="#{jJTaskBean.task}" />			
-						</ui:include>
+						<p:panel styleClass="panelDialog">
+							<f:facet name="header">
+								<p:messages id="msg" closable="true" />
+							</f:facet>
+							<ui:include src="taskDialog.xhtml">
+								<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
+							</ui:include>
+							<f:facet name="footer">
+								<p:commandButton id="updateTaskButton" update=":viewTaskForm"
+									actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'dev')}"
+									value="#{messages.label_update} Task"
+									onstart="PF('viewtaskBlockUIWidget').block()"
+									style="margin-top: 5px;"
+									oncomplete="PF('viewtaskBlockUIWidget').unblock();"
+									process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload" />
 
-						<p:commandButton id="updateTaskButton" update=":viewTaskForm"
-							actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'dev')}"
-							value="#{messages.label_update} Task"
-							onstart="PF('viewtaskBlockUIWidget').block()"
-							style="margin-top: 5px;"
-							oncomplete="PF('viewtaskBlockUIWidget').unblock();"
-							process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload" />
-
-						<p:commandButton id="viewCloseButton"
-							value="#{messages.label_close}"
-							style="margin-left: 20px;margin-top: 5px;"
-							oncomplete="PF('blockUIWidget').unblock()"
-							onstart="PF('blockUIWidget').block()"
-							onclick="PF('viewTaskDialogWidget').hide()" type="button" />
+								<p:commandButton id="viewCloseButton"
+									value="#{messages.label_close}"
+									style="margin-left: 20px;margin-top: 5px;"
+									oncomplete="PF('blockUIWidget').unblock()"
+									onstart="PF('blockUIWidget').block()"
+									onclick="PF('viewTaskDialogWidget').hide()" type="button" />
+							</f:facet>
+						</p:panel>
 					</h:form>
 				</p:outputPanel>
 			</p:dialog>
@@ -356,25 +357,14 @@
 					<h:form id="uploadFileForm">
 						<p:fileUpload id="uploadFileButton"
 							fileUploadListener="#{jJDevelopment.handleFileUpload}"
-							mode="advanced" dragDropSupport="false" update=":form"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"							
+							mode="advanced" dragDropSupport="false" update=":form :growlForm"
 							sizeLimit="1000000" fileLimit="4" />
 					</h:form>
 				</p:outputPanel>
-			</p:dialog>
-			<p:blockUI block=":devPanel"
-				trigger=":uploadFileForm:uploadFileButton">  
-        				#{messages['dev.block.upload.label']}<br />
-				<p:graphicImage library="images" name="ajax-loader.gif" />
-			</p:blockUI>
-			<p:blockUI block=":devPanel"
-				trigger=":createFileForm:createSaveButton">  
-        				#{messages['dev.block.create.label']}<br />
-				<p:graphicImage library="images" name="ajax-loader.gif" />
-			</p:blockUI>
-			<p:blockUI block=":devPanel" trigger=":commitForm:commitYesButton">  
-        				#{messages['dev.block.commit.label']}<br />
-				<p:graphicImage library="images" name="ajax-loader.gif" />
-			</p:blockUI>
+			</p:dialog>	
+	
 		</p:panel>
 		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
 		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
@@ -384,21 +374,7 @@
 			<video width="100%" height="100%" controls="true">
 				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
 			</video>
-		</p:dialog>
-		<p:blockUI block=":devPanel"
-			trigger=":headerForm:versionSelectOneMenu"
-			rendered="#{jJDevelopment.render}">
-			#{messages['dev.block.render.label']}<br />
-			<p:graphicImage library="images" name="ajax-loader.gif" />
-		</p:blockUI>
-
-		<p:blockUI block=":errorPanel"
-			trigger=":headerForm:versionSelectOneMenu"
-			rendered="#{!jJDevelopment.render}">
-			#{messages['dev.block.error.label']}<br />
-			<p:graphicImage library="images" name="ajax-loader.gif" />
-		</p:blockUI>
-
+		</p:dialog>	
 	</ui:define>
 	<ui:define name="outer">
 		<center>

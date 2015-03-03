@@ -89,7 +89,7 @@
 							<p:outputLabel for="description"
 								value="#{messages.test_new_description_label}" />
 							<pe:ckEditor id="description" widgetVar="descriptionWidget"
-								style="width:680px;" rendered="#{!loginBean.mobile}"
+								rendered="#{!loginBean.mobile}"
 								customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 								readOnly="#{jJTestcaseBean.disabledTestcaseMode}"
 								toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor']]"
@@ -255,7 +255,7 @@
 					</p:column>
 					<p:column headerText="#{messages.test_new_table_actions_label}"
 						style="width:15%;">
-						<p:commandButton id="insertTestStep" update="testStepDataTable"
+						<p:commandButton id="insertTestStep" update="testStepDataTable :testcaseDialogForm:msg"
 							action="#{jJTeststepBean.insertTestStep()}"
 							onstart="PF('testBlockUIWidget').block()"
 							oncomplete="PF('testBlockUIWidget').unblock()"
@@ -268,7 +268,7 @@
 							value="#{messages.test_new_teststep_insert_tooltip}"
 							showEffect="fade" hideEffect="fade" />
 
-						<p:commandButton id="deleteTestStep" update="testStepDataTable"
+						<p:commandButton id="deleteTestStep" update="testStepDataTable :testcaseDialogForm:msg "
 							action="#{jJTeststepBean.deleteTestStep()}"
 							onstart="PF('testBlockUIWidget').block()"
 							oncomplete="PF('testBlockUIWidget').unblock()"
@@ -280,16 +280,10 @@
 							value="#{messages.test_new_teststep_delete_tooltip}"
 							showEffect="fade" hideEffect="fade" />
 					</p:column>
-					<p:column style="width:6%;">
-<!-- 						<p:remoteCommand name="updateCkeditor" -->
-<!-- 							onstart="PF('act_#{ts.id}').initialize();PF('res_#{ts.id}').initialize()" immediate="true" /> -->
-						<!-- 						<p:commandLink ajax="true" update="resultInputWidget actionInputWidget" immediate="true"> -->
-						<p:rowEditor/>
-<!-- 							<p:ajaxStatus onstart="PF('act_#{ts.id}').initialize();PF('res_#{ts.id}').initialize()"  /> -->
-<!-- 						</p:rowEditor> -->
-						<!-- 						</p:commandLink>						 -->
-					</p:column>
-				</p:dataTable>
+						<p:column style="width:6%;">
+							<p:rowEditor />
+						</p:column>
+					</p:dataTable>
 			</p:tab>
 		</p:tabView>
 		<!-- 					</p:scrollPanel> -->
@@ -300,7 +294,7 @@
 			onstart="PF('testBlockUIWidget').block()"
 			oncomplete="PF('testBlockUIWidget').unblock()"
 			disabled="#{jJTestcaseBean.disabledTeststepMode}"
-			update=":testcaseDialogForm :testFormWest" style="float: right;"
+			update=":testcaseDialogForm :testFormWest :growlForm" style="float: right;"
 			action="#{jJTestcaseBean.saveAndclose(jJTeststepBean)}" />
 		<p:commandButton value="Save"
 			process="@this,:testcaseDialogForm:testTabView:name,:testcaseDialogForm:testTabView:requirement,:testcaseDialogForm:testTabView:descriptionMobile"
@@ -308,7 +302,7 @@
 			oncomplete="PF('testBlockUIWidget').unblock()"
 			disabled="#{jJTestcaseBean.disabledTeststepMode}"
 			rendered="#{loginBean.mobile}"
-			update=":testcaseDialogForm :testFormWest" style="float: right;"
+			update=":testcaseDialogForm :testFormWest :growlForm" style="float: right;"
 			action="#{jJTestcaseBean.saveAndclose(jJTeststepBean)}" />	
 			</f:facet>
 	</p:panel>

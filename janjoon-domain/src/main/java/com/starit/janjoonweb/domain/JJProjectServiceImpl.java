@@ -91,14 +91,14 @@ public class JJProjectServiceImpl implements JJProjectService {
 
 	@Override
 	public List<JJProject> getProjects(JJCompany company, JJContact contact,
-			boolean onlyActif) {
+			boolean onlyActif,boolean all) {
 
 		if (company != null) {
 			List<JJProject> projects = new ArrayList<JJProject>();
 			CriteriaBuilder criteriaBuilder = entityManager
 					.getCriteriaBuilder();
-			boolean all = false;
-			if (contact != null) {
+			
+			if (contact != null && !all) {
 				CriteriaQuery<JJPermission> criteriaPermission = criteriaBuilder
 						.createQuery(JJPermission.class);
 				Root<JJPermission> fromPermission = criteriaPermission

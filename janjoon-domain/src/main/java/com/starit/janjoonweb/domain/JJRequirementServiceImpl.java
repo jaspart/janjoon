@@ -68,7 +68,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 
-		if (result.getResultList() != null)
+		if (result.getResultList() != null && !result.getResultList().isEmpty())
 			return result.getResultList().get(0);
 		else
 			return null;

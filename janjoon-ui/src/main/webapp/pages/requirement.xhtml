@@ -239,9 +239,9 @@
 						<f:facet name="footer">
 							<p:row>
 								<p:column colspan="2">
-									<p:commandButton id="manageChapterButton"
+									<p:commandButton 
 										onstart="PF('blockUIWidget').block()"
-										action="#{requirementBean.save}"
+										action="#{requirementBean.save(jJRequirementBean)}"
 										oncomplete="PF('blockUIWidget').unblock()"
 										value="#{messages.specification_create_save_button}"
 										style="float:right;" />
@@ -383,7 +383,7 @@
 
 						<p:column style="width:50%">
 							<h:form id="testCaseForm">
-								<p:growl id="msg" />
+<!-- 								<p:growl id="msg" /> -->
 								<p:dataTable id="testCaseDataTable" var="testCaseModel"
 									selection="#{requirementBean.reqSelectedtestCases}"
 									rowKey="#{testCaseModel.id}" styleClass="testCaseDataTable"
@@ -410,7 +410,7 @@
 										<p:commandButton onstart="PF('blockUIWidget').block()"
 											oncomplete="PF('blockUIWidget').unblock()" id="update"
 											disabled="#{empty requirementBean.reqtestCases}"
-											update="testCaseDataTable :testCaseForm:msg" value="Update"
+											update="testCaseDataTable :growlForm" value="Update"
 											process="testCaseDataTable"
 											action="#{requirementBean.updateReqTestCases(jJTestcaseBean)}" />
 										<br />
@@ -425,7 +425,7 @@
 											onstart="PF('blockUIWidget').block()"
 											oncomplete="PF('blockUIWidget').unblock()"
 											style="font-size: 1.0em !important;float:right;top: -3px;"
-											update="@form"
+											update="@form :growlForm"
 											disabled="#{empty requirementBean.testCaseName}"
 											action="#{requirementBean.addTestCase(jJTestcaseBean)}"
 											value="Ajouter TestCase" />
@@ -488,7 +488,7 @@
 						</p:column>
 						<f:facet name="footer">
 							<p:commandButton value="Update"
-								action="#{requirementBean.updateRequirementLinks}"
+								action="#{requirementBean.updateRequirementLinks(jJRequirementBean)}"
 								onstart="PF('requirementBlockUIWidget').block()"
 								oncomplete="PF('requirementBlockUIWidget').unblock()"
 								disabled="#{empty requirementBean.linkReqList}" />
