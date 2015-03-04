@@ -565,7 +565,7 @@ public class ContactCalendarUtil {
 
 	}
 
-	private boolean isHoliday(Date date) {
+	public boolean isHoliday(Date date) {
 		int i = 0;
 		boolean isHoliday = false;
 		while (i < calendarUtil.getHolidays().size() && !isHoliday) {
@@ -581,6 +581,39 @@ public class ContactCalendarUtil {
 			i++;
 		}
 		return isHoliday;
+	}
+	
+	public int getNumberOfWorkingDay(Date start,Date end)
+	{
+		if(start.before(end))
+		{
+			int i=0;
+			start=CalendarUtil.getZeroTimeDate(start);
+			end=CalendarUtil.getZeroTimeDate(end);
+			while(start.before(end))
+			{
+				if(!isHoliday(start) && !isWeekEnd(start))
+					i++;
+				start=CalendarUtil.getAfterDay(start);
+				
+			}
+			if(!isHoliday(end) && !isWeekEnd(end))
+				i++;
+			return i;
+		}			
+		else
+			return 0;
+	}
+	public boolean isWeekEnd(Date date)
+	{
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);		
+		if(getWorkingChunkTime(cal
+				.get(Calendar.DAY_OF_WEEK) - 1).isWeekEnd())
+			return true;
+		else
+			return false;
 	}
 
 	private int isVacation(Date date) {

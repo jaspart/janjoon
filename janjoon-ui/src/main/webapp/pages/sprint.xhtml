@@ -68,7 +68,7 @@
 					<p:column>
 						<p:commandButton id="createSprintButton"
 							value="#{messages.label_create}"
-							disabled="#{jjsprint.neditabale}"
+							disabled="#{jjsprint.neditabale or !loginBean.authorisationService.wProject}"
 							actionListener="#{jJSprintBean.attrListener}"
 							update=":projecttabview:SprintTabView:sprintCreationForm :growlForm">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
@@ -82,7 +82,7 @@
 					<p:column>
 						<p:commandButton value="Done" id="doneButtonr"
 							update=":projecttabview :growlForm" immediate="true"
-							disabled="#{!jjsprint.neditabale}"
+							disabled="#{!jjsprint.neditabale or !loginBean.authorisationService.wProject}"							
 							actionListener="#{jJSprintBean.doneEvent}"
 							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()">

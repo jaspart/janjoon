@@ -77,6 +77,7 @@ public class AuthorisationService implements Serializable {
 	private String rwDevMSG;
 	private boolean rProject;
 	private String rProjectMSG;
+	private boolean wProject;	
 	private boolean rBuild;
 	private String rBuildMSG;
 	private boolean wRequiement;
@@ -333,6 +334,14 @@ public class AuthorisationService implements Serializable {
 		this.rProjectMSG = rProjectMSG;
 	}
 
+	public boolean iswProject() {
+		return wProject;
+	}
+
+	public void setwProject(boolean wProject) {
+		this.wProject = wProject;
+	}
+
 	public boolean isrBuild() {
 		return rBuild;
 	}
@@ -576,7 +585,9 @@ public class AuthorisationService implements Serializable {
 					.getDetail();
 
 		rProject = jJPermissionService.isAuthorized(contact, project, product,
-				"Task", null, true, null, null);
+				"Projet", null, true, null, null);
+		wProject = jJPermissionService.isAuthorized(contact, project, product,
+				"Projet", null, null, true, null);
 
 		if (!rProject)
 			rProjectMSG = MessageFactory.getMessage(

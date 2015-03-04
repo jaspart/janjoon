@@ -237,49 +237,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		return isAuthorized(contact, project, null, null, null, null, null,
 				null);
 	}
-
-	public List<JJContact> areSprintAuthorized(JJCompany company,
-			JJProject project) {
-
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
-				.createQuery(JJPermission.class);
-		Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
-		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
-		List<Predicate> predicates = new ArrayList<Predicate>();
-		List<Predicate> orPredicates = new ArrayList<Predicate>();
-
-		if (project != null)
-			orPredicates
-					.add(criteriaBuilder.equal(from.get("project"), project));
-
-		orPredicates.add(criteriaBuilder.isNull(from.get("project")));
-
-		Predicate orPredicate = criteriaBuilder.or(orPredicates
-				.toArray(new Predicate[] {}));
-
-		predicates.add(criteriaBuilder.and(orPredicate));
-
-		predicates.add(criteriaBuilder.equal(from.join("contact")
-				.get("company"), company));
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		predicates.add(criteriaBuilder.equal(from.join("contact")
-				.get("enabled"), true));
-
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
-
-		TypedQuery<JJPermission> result = entityManager.createQuery(select);
-
-		List<JJPermission> permissions = result.getResultList();
-		List<JJContact> contacts = new ArrayList<JJContact>();
-		for (JJPermission permission : permissions) {
-			if (!contacts.contains(permission.getContact()))
-				contacts.add(permission.getContact());
-		}
-
-		return contacts;
-	}
-
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public List<JJContact> areAuthorized(JJCompany company, JJContact contact,
@@ -308,17 +266,23 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 		predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
 
-		if (objet != null || !objet.equalsIgnoreCase("sprintContact")) {
+		if (objet != null && !objet.equalsIgnoreCase("sprintContact")) {
 			orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
 					objet));
 			if (!objet.contains("*"))
 				orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
 						"JJ" + objet));
-			orPredicates
-					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
-		} else
-			orPredicates
-					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
+		} else {
+			if (objet != null && objet.equalsIgnoreCase("sprintContact")) {
+				orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
+						"Task"));
+				orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
+						"JJTask"));
+			}
+
+		}
+
+		orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
 
 		Predicate orPredicate = criteriaBuilder.or(orPredicates
 				.toArray(new Predicate[] {}));
@@ -337,20 +301,23 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 				.toArray(new Predicate[] {}));
 		predicates.add(orPredicate);
 
-		if (r != null) {
-			predicates.add(criteriaBuilder.equal(fromRight.get("r"), r));
+		
+			if (r != null) {
+				predicates.add(criteriaBuilder.equal(fromRight.get("r"), r));
 
-		}
+			}
 
-		if (w != null) {
-			predicates.add(criteriaBuilder.equal(fromRight.get("w"), w));
+			if (w != null) {
+				predicates.add(criteriaBuilder.equal(fromRight.get("w"), w));
 
-		}
+			}
 
-		if (x != null) {
-			predicates.add(criteriaBuilder.equal(fromRight.get("x"), x));
+			if (x != null) {
+				predicates.add(criteriaBuilder.equal(fromRight.get("x"), x));
 
-		}
+			}
+		
+		
 
 		subquery.where(criteriaBuilder.and(predicates
 				.toArray(new Predicate[] {})));
@@ -386,6 +353,8 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		}
 
 		predicates.add(criteriaBuilder.equal(path.get("enabled"), true));
+		predicates.add(criteriaBuilder.equal(from.join("contact")
+				.get("enabled"), true));
 
 		predicates.add(criteriaBuilder.in(path).value(subquery));
 
@@ -397,17 +366,14 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 		if (company == null)
 			for (JJPermission permission : permissions) {
-				if (permission.getContact().getEnabled()
-						&& !contacts.contains(permission.getContact())) {
+				if (!contacts.contains(permission.getContact())) {
 					contacts.add(permission.getContact());
 				}
 			}
 		else {
 			if (contact == null)
 				for (JJPermission permission : permissions) {
-					if (permission.getContact().getEnabled()
-							&& permission.getContact().getCompany()
-									.equals(company)
+					if (permission.getContact().getCompany().equals(company)
 							&& !contacts.contains(permission.getContact())) {
 						contacts.add(permission.getContact());
 					}
@@ -417,9 +383,8 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 					if (objet != null
 							&& objet.equalsIgnoreCase("sprintContact")) {
 						for (JJPermission permission : permissions) {
-							if (permission.getContact().getEnabled()
-									&& permission.getContact().getCompany()
-											.equals(company)
+							if (permission.getContact().getCompany()
+									.equals(company)
 									&& !contacts.contains(permission
 											.getContact())) {
 								contacts.add(permission.getContact());
@@ -428,17 +393,14 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 					} else
 						for (JJPermission permission : permissions) {
-							if (permission.getContact().getEnabled()
-									&& !contacts.contains(permission
-											.getContact())) {
+							if (!contacts.contains(permission.getContact())) {
 								contacts.add(permission.getContact());
 							}
 						}
 				} else
 					for (JJPermission permission : permissions) {
-						if (permission.getContact().getEnabled()
-								&& permission.getContact().getCompany()
-										.equals(company)
+						if (permission.getContact().getCompany()
+								.equals(company)
 								&& !contacts.contains(permission.getContact())) {
 							contacts.add(permission.getContact());
 						}
@@ -539,7 +501,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 				if (permission.getProfile().getRights() != null)
 					rights.addAll(new ArrayList<JJRight>(permission
 							.getProfile().getRights()));
-			}			
+			}
 			for (JJRight right : rights) {
 				if (right.getCategory() != null)
 					categories.add(right.getCategory());
@@ -551,7 +513,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 					Integer val = map.get(t);
 					map.put(t, val == null ? 1 : val + 1);
 				}
-				categories = new ArrayList<JJCategory>();			
+				categories = new ArrayList<JJCategory>();
 
 				Entry<JJCategory, Integer> max = null;
 
@@ -562,8 +524,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 				}
 				return max.getKey();
-			}else 
-			{
+			} else {
 				int i = 1;
 
 				while (categories.size() < 3) {
@@ -579,26 +540,25 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 					i++;
 				}
 				return categories.get(0);
-			}	
+			}
 
-		} else
-		{
+		} else {
 			int i = 1;
 
 			while (categories.size() < 1) {
-				qu = "SELECT r FROM  JJCategory r Where "
-						+ "r.enabled = true " + "AND r.stage =" + i;
+				qu = "SELECT r FROM  JJCategory r Where " + "r.enabled = true "
+						+ "AND r.stage =" + i;
 				query = entityManager.createQuery(qu, JJCategory.class);
 
 				if (!query.getResultList().isEmpty()) {
-					categories.add((JJCategory) query.getResultList()
-							.get(0));
+					categories.add((JJCategory) query.getResultList().get(0));
 
 				}
 				i++;
-			}return categories.get(0);
+			}
+			return categories.get(0);
 		}
-			
+
 	}
 
 	public List<JJCategory> getDefaultCategories(JJContact contact) {
@@ -645,14 +605,13 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 								max = e;
 						}
 					}
-					if(max != null)
-					{
+					if (max != null) {
 						categories.add(max.getKey());
 						map.remove(max);
 					}
-					
+
 				}
-				
+
 				i = 1;
 
 				while (categories.size() < 3) {
@@ -667,8 +626,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 					}
 					i++;
 				}
-				
-				
+
 			} else {
 				int i = 1;
 
@@ -692,7 +650,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 			int i = 1;
 
 			while (categories.size() < 3) {
-				
+
 				qu = "SELECT r FROM  JJCategory r Where " + "r.enabled = true "
 						+ "AND r.stage =" + i;
 				query = entityManager.createQuery(qu, JJCategory.class);
@@ -716,7 +674,8 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		query.setParameter("c", contact.getCompany());
 		query.setParameter("contact", contact);
 
-		List<JJPermission> permissions = ((List<JJPermission>) query.getResultList());
+		List<JJPermission> permissions = ((List<JJPermission>) query
+				.getResultList());
 
 		if (!permissions.isEmpty()) {
 			List<JJProduct> products = new ArrayList<JJProduct>();

@@ -124,7 +124,7 @@ public class JJTaskBean {
 	private long zoomMin;
 	private long zoomMax;
 	private String sortMode;
-	private List<JJContact> contacts;
+	//private List<JJContact> contacts;
 
 	private JJProject project;
 	private JJProduct product;
@@ -268,20 +268,20 @@ public class JJTaskBean {
 		this.zoomMax = zoomMax;
 	}
 
-	public List<JJContact> getContacts() {
+//	public List<JJContact> getContacts() {
+//
+//		getProject();		
+//		JJProduct product = LoginBean.getProduct();
+//
+//		contacts = jJPermissionService.areAuthorized(project.getManager()
+//				.getCompany(), null, project, product, "Task");
+//
+//		return contacts;
+//	}
 
-		getProject();		
-		JJProduct product = LoginBean.getProduct();
-
-		contacts = jJPermissionService.areAuthorized(project.getManager()
-				.getCompany(), null, project, product, "Task");
-
-		return contacts;
-	}
-
-	public void setContacts(List<JJContact> contacts) {
-		this.contacts = contacts;
-	}
+//	public void setContacts(List<JJContact> contacts) {
+//		this.contacts = contacts;
+//	}
 
 	public JJProject getProject() {		
 		this.project = LoginBean.getProject();
@@ -2078,11 +2078,7 @@ public class JJTaskBean {
 					}
 
 					subject = subject.replace("[", " ").replace("]", "");
-//					
-//					for (JJContact c : jJPermissionService.areAuthorized(
-//							contact.getCompany(), null, project, product,
-//							"sprintContact")) {
-//						System.out.println(c.getEmail() + subject);
+
 						mailingService.sendMail(LoginBean.getProject().getManager().getEmail(),
 								jJPermissionService.areAuthorized(
 								contact.getCompany(), null, project, product,

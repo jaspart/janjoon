@@ -37,40 +37,26 @@ public class SprintChart {
 	private void initChartModel(List<JJTask> tasks) {
 
 		DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-		// List<String> dates=new ArrayList<String>();
+		
 		int workload = 0;
-		int workload2 = 0;
-		// dates.add(f.format(sprint.getEndDate()));
+		int diff = 0;	
 
 		for (JJTask task : tasks) {
 			if (task.getWorkloadPlanned() != null)
-				workload = workload + task.getWorkloadPlanned();
-			// if(task.getEndDateReal() != null)
-			// dates.add(f.format(task.getEndDateReal()));
+				workload = workload + task.getWorkloadPlanned();			
 		}
 
-		// Set<String> set=new HashSet<String>();
-		// set.addAll(dates) ;
-		// dates=new ArrayList<String>(set);
-		// Collections.sort(dates, new Comparator<String>() {
-		// DateFormat ff = new SimpleDateFormat("yyyy-MM-dd");
-		// @Override
-		// public int compare(String o1, String o2) {
-		// try {
-		// return ff.parse(o1).compareTo(ff.parse(o2));
-		// } catch (ParseException e) {
-		// throw new IllegalArgumentException(e);
-		// }
-		// }
-		// });
-		workload2 = workload;
+		
+		diff = workload;
 		ChartSeries chartSeries = new ChartSeries();
 		LineChartSeries lineSeries = new LineChartSeries();
 		ContactCalendarUtil calendar = new ContactCalendarUtil(
 				((LoginBean) LoginBean.findBean("loginBean")).getContact()
 						.getCompany());
+		
+		float dayWorkload=workload * 1.0f/(calendar.getNumberOfWorkingDay(sprint.getStartDate(), sprint.getEndDate())-1);
 		chartSeries.set(f.format(sprint.getStartDate()), workload);
-		lineSeries.set(f.format(sprint.getStartDate()), workload2);
+		lineSeries.set(f.format(sprint.getStartDate()), workload);
 		chartSeries.setLabel(sprint.getName() + " Workload");
 		lineSeries.setLabel("BurnDown Ideal");		
 
@@ -85,11 +71,7 @@ public class SprintChart {
 				}
 		}
 		chartSeries.set(f.format(staDate), workload);
-//		int diff = workload2
-//				- calendar.calculateWorkLoad(sprint.getStartDate(), staDate);
-//		if (diff < 0)
-//			diff = 0;
-		lineSeries.set(f.format(staDate), workload);
+		lineSeries.set(f.format(staDate), diff);
 		staDate = CalendarUtil.getAfterDay(staDate);
 		
 		while (staDate.before(sprint.getEndDate())) {
@@ -102,9 +84,13 @@ public class SprintChart {
 					}
 			}
 			chartSeries.set(f.format(staDate), workload);
-			int diff = workload2
-					- calendar
-							.calculateWorkLoad(sprint.getStartDate(), staDate);
+			if(!calendar.isHoliday(staDate) && !calendar.isWeekEnd(staDate))
+			{
+				diff=Math.round(diff-dayWorkload);
+			}
+//			diff = diff
+//					- calendar
+//							.calculateWorkLoad(sprint.getStartDate(), staDate);
 			if (diff < 0)
 				diff = 0;
 			lineSeries.set(f.format(staDate), diff);
@@ -121,33 +107,17 @@ public class SprintChart {
 				}
 		}
 		chartSeries.set(f.format(staDate), workload);
-		int diff = workload2
-				- calendar.calculateWorkLoad(sprint.getStartDate(), staDate);
-		if (diff < 0)
-			diff = 0;
-		lineSeries.set(f.format(staDate), diff);
+//		
+//		if(!calendar.isHoliday(staDate) && !calendar.isWeekEnd(staDate))
+//		{
+//			diff=Math.round(diff-dayWorkload);
+//		}
+////		diff = diff
+////				- calendar.calculateWorkLoad(sprint.getStartDate(), staDate);
+//		if (diff < 0)
+//			diff = 0;
+		lineSeries.set(f.format(staDate), 0);
 
-		// for(String date:dates)
-		// {
-		// for(JJTask task:tasks)
-		// {
-		// if(task.getEndDateReal() != null)
-		// if(f.format(task.getEndDateReal()).equalsIgnoreCase(date) &&
-		// task.getWorkloadPlanned() != null)
-		// {
-		// workload=workload-task.getWorkloadPlanned();
-		// }
-		// }
-		// chartSeries.set(date, workload);
-		// // try {
-		// // int
-		// diff=workload2-calendar.calculateWorkLoad(sprint.getStartDate(),f.parse(date));
-		// // if(diff<0)
-		// // diff=0;
-		// // lineSeries.set(date,diff);
-		// // } catch (ParseException e) {
-		// // }
-		// }
 		chartModel.addSeries(chartSeries);
 		chartModel.addSeries(lineSeries);
 		DateAxis axis = new DateAxis("Dates");

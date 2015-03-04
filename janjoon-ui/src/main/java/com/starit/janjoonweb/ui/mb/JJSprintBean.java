@@ -206,6 +206,13 @@ public class JJSprintBean {
 	public void setProject(JJProject project) {
 		this.project = project;
 	}
+	
+	public boolean isDisableDragDrop(SprintUtil jJSprint)
+	{
+		JJContact loginContact=((LoginBean)LoginBean.findBean("loginBean")).getContact();
+		return !jJSprint.getContacts().contains(loginContact);		
+		
+	}
 
 	public JJTask getTask() {
 		if (task == null) {
@@ -293,9 +300,9 @@ public class JJSprintBean {
 
 		if (contacts == null) {
 			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-					.getContact();
-			contacts = jJPermissionService.areSprintAuthorized(contact
-					.getCompany(), LoginBean.getProject());
+					.getContact();			
+			contacts=jJPermissionService.areAuthorized(contact.getCompany(), 
+					null, LoginBean.getProject(), LoginBean.getProduct(),"sprintContact", null, true, null, true);
 		}
 		return contacts;
 	}
@@ -434,8 +441,8 @@ public class JJSprintBean {
 			if (!su.isRender()) {
 				JJSprint s = jJSprintService.findJJSprint(su.getSprint()
 						.getId());
-				sprintList.set(contains(su.getSprint().getId()),
-						new SprintUtil(s, jJTaskService.getSprintTasks(s)));
+				sprintUtil=new SprintUtil(s, jJTaskService.getSprintTasks(s));
+				sprintList.set(contains(su.getSprint().getId()),sprintUtil);
 
 			}
 		} else {
@@ -516,15 +523,14 @@ public class JJSprintBean {
 
 	public void addTaskToProg(DragDropEvent ddevent) {
 
-		if (ddevent.getDragId().contains(":todoIcon")) {
-			JJTask dropedTask = (JJTask) ddevent.getData();
+		JJTask dropedTask = (JJTask) ddevent.getData();
+		Long sprintId = dropedTask.getSprint().getId();
+		
+		if (ddevent.getDragId().contains(":todoIcon")) {			
 			JJContact assignedTo = ((LoginBean) LoginBean.findBean("loginBean"))
 					.getContact();
-
 			JJStatus status = jJStatusService.getOneStatus("IN PROGRESS",
-					"Task", true);
-
-			Long sprintId = dropedTask.getSprint().getId();
+					"Task", true);			
 
 			dropedTask.setStatus(status);
 			dropedTask.setStartDateReal(new Date());
@@ -570,21 +576,23 @@ public class JJSprintBean {
 		context.execute("PF('projectTabView').select(" + i + ")");
 		update = false;
 		context.execute("PF('SprintTab').select("
-				+ contains(sprintUtil.getSprint().getId()) + ")");
+				+ contains(sprintId) + ")");
 
 	}
 
 	public void addTaskToDone(DragDropEvent ddevent) {
 
 		Long id = null;
+		JJTask dropedTask = (JJTask) ddevent.getData();		
+
+		Long sprintId = dropedTask.getSprint().getId();
 
 		if (ddevent.getDragId().contains(":progIcon")) {
-			JJTask dropedTask = (JJTask) ddevent.getData();
+			
 			id = dropedTask.getId();
 			JJStatus status = jJStatusService
 					.getOneStatus("DONE", "Task", true);
-
-			Long sprintId = dropedTask.getSprint().getId();
+			
 			dropedTask.setEndDateReal(new Date());
 			dropedTask.setCompleted(true);
 			dropedTask.setStatus(status);
@@ -625,7 +633,7 @@ public class JJSprintBean {
 		context.execute("PF('projectTabView').select(" + i + ")");
 		update = false;
 		context.execute("PF('SprintTab').select("
-				+ contains(sprintUtil.getSprint().getId()) + ")");
+				+ contains(sprintId) + ")");
 		if (id != null) {
 			JJTask t = jJTaskService.findJJTask(id);
 			if (t.getBug() != null) {

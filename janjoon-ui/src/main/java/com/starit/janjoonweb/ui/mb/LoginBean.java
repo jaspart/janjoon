@@ -112,7 +112,7 @@ public class LoginBean implements Serializable {
 		this.mobile = (((HttpServletRequest) FacesContext.getCurrentInstance()
 				.getExternalContext().getRequest()).getHeader("User-Agent")
 				.indexOf("Mobile")) != -1;
-		// this.mobile = true;
+		//this.mobile = true;
 		// } else {
 		// this.mobile=true;
 		// }
