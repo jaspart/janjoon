@@ -61,7 +61,7 @@
 					itemLabel="#{requirement.name}" itemValue="#{requirement}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
 					dropdown="true" var="requirement"
-					onchange="jJbugTeststepWV.val('');"
+					onchange="jJbugTeststepWV.val('');"					
 					completeMethod="#{jJBugBean.completeReqBug}">
 					<p:ajax event="itemSelect" update="jJbugRequirement jJbugTeststep" />
 				</p:autoComplete>
@@ -93,7 +93,7 @@
 					dropdown="true" var="project" scrollHeight="200"
 					completeMethod="#{jJBugBean.completeProject}">
 
-					<p:ajax event="itemSelect" listener="#{jJBugBean.changeEvent}"
+					<p:ajax event="itemSelect" listener="#{jJBugBean.changeEvent('project',JJBug_)}"
 						update="jJbugRequirement jJbugTeststep jJbugProject">
 						<f:setPropertyActionListener
 							target="#{jJBugBean.bugRequirementSelected}" value="#{null}" />
@@ -121,7 +121,7 @@
 					converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
 					dropdown="true" var="version"
 					completeMethod="#{jJBugBean.completeVersioningBug}">
-					<p:ajax event="itemSelect" update="jJbugVersion jJbugBuild" />
+					<p:ajax event="itemSelect" update="jJbugVersion jJbugBuild" listener="#{jJBugBean.changeEvent('version',JJBug_)}" />
 				</p:autoComplete>
 				<p:selectOneMenu id="jJbugVersion2"
 					value="#{jJBugBean.bugVersionSelected}"

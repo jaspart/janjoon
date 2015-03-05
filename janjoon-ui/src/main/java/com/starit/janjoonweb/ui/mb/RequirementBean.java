@@ -39,6 +39,7 @@ import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.CategorieRequirement;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.RequirementUtil;
+import com.starit.janjoonweb.ui.security.AuthorisationService;
 
 @Scope("session")
 @Component("requirementBean")
@@ -373,6 +374,10 @@ public class RequirementBean {
 				if (change) {
 					((LoginBean) LoginBean.findBean("loginBean"))
 							.changeEvent(null);
+					((LoginBean) LoginBean.findBean("loginBean")).setAuthorisationService(new AuthorisationService(
+							(HttpSession) FacesContext.getCurrentInstance()
+									.getExternalContext().getSession(false),((LoginBean) LoginBean.findBean("loginBean"))
+									.getContact()));
 					rootNode = null;					
 				}				
 				

@@ -1378,7 +1378,7 @@ public class LoginBean implements Serializable {
 //	 public StreamedContent getFile()
 //	 {
 //	 InputStream stream =
-//	 FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/bbb");
+//	 FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/aaa");
 //	 return new DefaultStreamedContent(stream, "image/jpg",
 //	 "downloaded_optimus");
 //	 }

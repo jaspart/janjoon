@@ -71,11 +71,11 @@ public class JJTestcaseexecutionServiceImpl implements
 		CriteriaQuery<JJTestcaseexecution> select = criteriaQuery.select(from);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
+		
 		if (testcase != null) {
 			predicates
 					.add(criteriaBuilder.equal(from.get("testcase"), testcase));
-		} else
-
+		} 
 		if (build != null) {
 			predicates.add(criteriaBuilder.equal(
 					from.get("build"), build));

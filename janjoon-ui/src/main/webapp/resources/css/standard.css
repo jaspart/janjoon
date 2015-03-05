@@ -377,12 +377,12 @@ a:visited {
 }
 
 .TestcaseNotExecuted {
-	color: #0000FF;
+	color: #0088FF;
 	font-weight: bold;
 }
 
 .TestcaseFailed {
-	color: #FF0000;
+	color: #FF3333;
 	font-weight: bold;
 }
 
@@ -635,99 +635,97 @@ div.revised2 {
 }
 
 .RequirementNoTask {
-	background-color: #0B9CEF !important;
+	background-color: #808080 !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .RequirementNotLinked {
-	background-color: #FFFFFF !important;
+	background-color: #FF3333 !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .RequirementInProcess {
-	background-color: #88DDDD !important;
+	background-color: #8800FF !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .RequirementFinishedSuccessed {
-	background-color: #69A6C8 !important;
+	background-color: #008000 !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .RequirementFinishedTestProcess {
-	background-color: #A2D1EB !important;
+	background-color: #0088FF !important;
 	background-image: none !important;
 	color: black !important;
 }
 
-//
-bug dattable style 
 .NEW {
-	background-color: #B0DAF2 !important;
+	background-color: #FF3333 !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .ASSIGNED {
-	background-color: #A2D1EB !important;
+	background-color: #0088FF !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .REOPENED {
-	background-color: #69A6C8 !important;
+	background-color: #FF3333 !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .READY {
-	background-color: #4F94B9 !important;
+	background-color: #0088FF !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .FIXED {
-	background-color: #3882A9 !important;
+	background-color: #008000 !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .INVALID {
-	background-color: #1A6993 !important;
+	background-color: #8800FF !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .WONTFIX {
-	background-color: #0791DC !important;
+	background-color: #808080 !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .DUPLICATE {
-	background-color: #0B9CEF !important;
+	background-color: #8800FF !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .RESOLVED {
-	background-color: #1BA9F9 !important;
+	background-color: #008000 !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .VERIFIED {
-	background-color: #174597 !important;
+	background-color: #8800FF !important;
 	background-image: none !important;
 	color: black !important;
 }
 
 .CLOSED {
-	background-color: #88DDDD !important;
+	background-color: #808080 !important;
 	background-image: none !important;
 	color: black !important;
 }

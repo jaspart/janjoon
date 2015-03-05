@@ -353,9 +353,7 @@ public class JJTestcaseBean {
 
 	public List<TestCaseRecap> getTestCaseRecaps() {
 
-		testCaseRecaps = new ArrayList<TestCaseRecap>();
-		JJBuild build = ((JJBuildBean) LoginBean.findBean("jJBuildBean"))
-				.getBuild();
+		testCaseRecaps = new ArrayList<TestCaseRecap>();		
 		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,
 				chapter, true, true, false);
 
@@ -960,12 +958,8 @@ public class JJTestcaseBean {
 
 	}
 
-	public void closeDialog() {
-
-		// testcase = null;
-		// requirement = null;
-		task = null;
-		// createTestcaseTree();
+	public void closeDialog() {		
+		task = null;	
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
@@ -977,10 +971,7 @@ public class JJTestcaseBean {
 
 	private void manageTestcaseOrder(JJRequirement requirement) {
 
-		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
-
-		JJBuild build = ((JJBuildBean) LoginBean.findBean("jJBuildBean"))
-				.getBuild();
+		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();	
 
 		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,
 				requirement.getChapter(), false, false, false);

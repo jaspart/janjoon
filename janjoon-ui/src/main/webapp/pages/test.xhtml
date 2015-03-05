@@ -91,14 +91,14 @@
 					<p:panelGrid>
 						<p:row>
 							<p:column>
-								<h:outputText for="build" value="#{messages.test_build_label}" />
+<!-- 								<h:outputText for="build" value="#{messages.test_build_label}" /> -->
 								<p:selectOneMenu id="build" value="#{jJBuildBean.build}"
-									panelStyle="width:100px;" effect="fade" style="width:100px;"
+									effect="fade" style="width:100%;"
 									filter="true" filterMatchMode="startsWith">
 									<f:converter
 										converterId="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter" />
 									<f:selectItem itemValue="#{null}"
-										itemLabel="#{messages.test_build_select}" />
+										itemLabel="#{messages.test_build_select} #{messages.test_build_label}" />
 									<f:selectItems value="#{jJBuildBean.builds}" var="c"
 										itemLabel="#{c.name}" itemValue="#{c}" />
 									<p:ajax process="@this" partialSubmit="true"

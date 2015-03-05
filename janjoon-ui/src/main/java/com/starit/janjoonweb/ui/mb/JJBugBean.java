@@ -565,8 +565,14 @@ public class JJBugBean {
 		jJBugService.updateJJBug(b);
 	}
 
-	public void changeEvent(SelectEvent e) {
-		bugRequirementSelected = null;
+	public void changeEvent(String field, JJBug b) {
+
+		if (field.equalsIgnoreCase("project"))
+			bugRequirementSelected = null;
+		else {
+			if (field.equalsIgnoreCase("version"))
+				b.setBuild(null);
+		}
 	}
 
 	public List<JJRequirement> completeReqBug(String query) {

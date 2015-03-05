@@ -636,6 +636,42 @@ public class JJTaskBean {
 		return suggestions;
 	}
 	
+	public List<JJContact> completeAssignedToTask(String query) {
+
+		List<JJContact> suggestions = new ArrayList<JJContact>();
+		suggestions.add(null);
+		if (task.getSprint() == null) {
+			JJProject proj = null;
+			if (task.getRequirement() != null)
+				proj = task.getRequirement().getProject();
+			else if (task.getBug() != null)
+				proj = task.getBug().getProject();
+			else if (task.getTestcase() != null)
+				proj = task.getTestcase().getRequirement().getProject();
+
+			for (JJContact jJContact : jJPermissionService.areAuthorized(proj
+					.getManager().getCompany(), null, proj, null,
+					"sprintContact", null, true, null, true)) {
+				String jJCriticityStr = String.valueOf(jJContact.getName());
+				if (jJCriticityStr.toLowerCase()
+						.startsWith(query.toLowerCase())) {
+					suggestions.add(jJContact);
+				}
+			}
+		} else {
+			JJSprint sp=jJSprintService.findJJSprint(task.getSprint().getId());
+			for (JJContact jJContact : sp.getContacts()) {
+				String jJCriticityStr = String.valueOf(jJContact.getName());
+				if (jJCriticityStr.toLowerCase()
+						.startsWith(query.toLowerCase())) {
+					suggestions.add(jJContact);
+				}
+			}
+		}
+
+		return suggestions;
+	}
+	
 	public List<JJSprint> completeSprintTask(String query) {
 		List<JJSprint> suggestions = new ArrayList<JJSprint>();
 		suggestions.add(null);
@@ -2079,10 +2115,13 @@ public class JJTaskBean {
 
 					subject = subject.replace("[", " ").replace("]", "");
 
-						mailingService.sendMail(LoginBean.getProject().getManager().getEmail(),
-								jJPermissionService.areAuthorized(
-								contact.getCompany(), null, project, product,
-								"sprintContact"), ttt, subject);
+					List<JJContact> contacts=jJPermissionService.areAuthorized(
+							contact.getCompany(), null, project, product,
+							"sprintContact");
+					if(LoginBean.getProduct() != null && !contacts.contains(LoginBean.getProduct().getManager()))
+						contacts.add(LoginBean.getProduct().getManager());
+					mailingService.sendMail(LoginBean.getProject().getManager()
+							.getEmail(),contacts, ttt, subject);
 					
 
 				}

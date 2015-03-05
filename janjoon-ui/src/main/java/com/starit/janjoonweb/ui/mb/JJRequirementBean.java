@@ -76,6 +76,11 @@ public class JJRequirementBean {
 	public static final String UPDATE_OPERATION = "update";
 	public static final String DELETE_OPERATION = "delete";
 	public static final String ADD_OPERATION = "add";
+	public static final String SPECIFICATION_WARNING_LINKUP="specification_warning_linkUp";
+	public static final String SPECIFICATION_WARNING_LINKDOWN="specification_warning_linkDown";
+	public static final String SPECIFICATION_WARNING_NOCHAPTER="specification_warning_NoChapter";
+	public static final String SPECIFICATION_ERROR_NOCATEGORYCHAPTER="specification_error_NoCategoryChapter";
+	public static final String MESSAGE_SUCCESSFULLY_UPDATED="message_successfully_updated";
 
 	@Autowired
 	private JJConfigurationService jJConfigurationService;
@@ -327,7 +332,7 @@ public class JJRequirementBean {
 					else
 						return "0%";
 				} else
-					return 19.5 + "%";
+					return 19 + "%";
 
 			} else
 				return tableDataModelSizePct + "%";
@@ -1457,6 +1462,7 @@ public class JJRequirementBean {
 		updateDataTable(requirement, u);
 		this.mine = false;
 		mineChangeEvent();
+		getWarningList(jJRequirementService.findJJRequirement(requirement.getId()));
 
 		RequestContext context = RequestContext.getCurrentInstance();
 
@@ -1464,7 +1470,9 @@ public class JJRequirementBean {
 			boolean r = getRequirementDialogConfiguration();
 			if (r) {
 				context.execute("PF('requirementDialogWidget').hide()");
+//				context.execute("updateGrowlForm()");
 				reset();
+				
 				if (specPage)
 					closeDialog(false, true);
 				else {
@@ -1474,13 +1482,16 @@ public class JJRequirementBean {
 
 			} else {
 				// if (rrr)
-				newRequirement(requirementCategory.getId());
+				//newRequirement(requirementCategory.getId());
+				editRequirement();
 				if (!specPage)
 					RequestContext.getCurrentInstance().execute("updateTree()");
 			}
 
 		} else {
 			context.execute("PF('requirementDialogWidget').hide()");
+//			context.execute("updateGrowlForm()");
+			
 			reset();
 			if (specPage)
 				closeDialog(false, true);
@@ -4674,6 +4685,47 @@ public class JJRequirementBean {
 				}
 
 			}
+		}
+
+	}
+	
+	public void getWarningList(JJRequirement req)
+ {
+		boolean warn = false;
+
+		if (requirementChapterList == null || requirementChapterList.isEmpty()) {
+			warn = true;
+			FacesMessage facesMessage = MessageFactory.getMessage(SPECIFICATION_ERROR_NOCATEGORYCHAPTER,req.getCategory().getName());
+			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+		} else if (req.getChapter() == null) {
+			warn = true;
+			FacesMessage facesMessage = MessageFactory.getMessage(SPECIFICATION_WARNING_NOCHAPTER,"Requirement");
+			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
+		
+		if(req.getRequirementLinkDown() == null || req.getRequirementLinkDown().isEmpty())
+		{
+			warn = true;
+			FacesMessage facesMessage = MessageFactory.getMessage(SPECIFICATION_WARNING_LINKDOWN,"Requirement");
+			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
+		
+		if(req.getRequirementLinkUp() == null || req.getRequirementLinkUp().isEmpty())
+		{
+			warn = true;
+			FacesMessage facesMessage = MessageFactory.getMessage(SPECIFICATION_WARNING_LINKUP,"Requirement");
+			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
+			FacesContext.getCurrentInstance().addMessage("Requirement", facesMessage);
+		}
+
+		if (!warn) {
+			FacesMessage facesMessage = MessageFactory.getMessage(MESSAGE_SUCCESSFULLY_UPDATED,"Requirement");
+			facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
+			FacesContext.getCurrentInstance().addMessage("Requirement", facesMessage);
 		}
 
 	}

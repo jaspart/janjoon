@@ -25,17 +25,19 @@
 					converter="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter"
 					dropdown="true" var="sprint" binding="#{sprintComponent}"
 					completeMethod="#{jJTaskBean.completeSprintTask}" >
-					<p:ajax event="itemSelect" update="taskStartDatePlanned taskEndDatePlanned" />
+					<p:ajax event="itemSelect" update="taskStartDatePlanned taskEndDatePlanned taskAssignedTo" />
 					</p:autoComplete>
 			</p:column>
 			<p:column colspan="2">
 				<p:outputLabel value="Assigned To :" for="taskAssignedTo" />
-				<p:inputText id="taskAssignedTo" readonly="true"
-					converter="JJContactConverter" value="#{JJTask_.assignedTo}" />
+				<p:autoComplete id="taskAssignedTo" value="#{JJTask_.assignedTo}"
+					itemLabel="#{assignedTo.name}" itemValue="#{assignedTo}" scrollHeight="200"
+					converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
+					dropdown="true" var="assignedTo" completeMethod="#{jJTaskBean.completeAssignedToTask}">					
+				</p:autoComplete>			
 			</p:column>
 			<p:column colspan="2">
-				<p:outputLabel value="Status :" for="taskStatus" />
-				
+				<p:outputLabel value="Status :" for="taskStatus" />				
 				<p:autoComplete id="taskStatus" value="#{JJTask_.status}"
 					itemLabel="#{status.name}" itemValue="#{status}" scrollHeight="200"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
