@@ -487,8 +487,7 @@ public class ContactCalendarUtil {
 	}
 
 	private long getRestOfChunk(Date date, ChunkTime Chunk, boolean after) {
-
-		long diff;
+		long diff = 0;
 		if (after) {
 			Date endDate;
 			boolean secondSeance;
@@ -500,21 +499,19 @@ public class ContactCalendarUtil {
 				secondSeance = false;
 			}
 
-			diff = CalendarUtil.getZeroDate(endDate).getTime()
-					- CalendarUtil.getZeroDate(date).getTime();
-
-			diff = diff / (60 * 60 * 1000) % 24;
-
-			if (secondSeance) {
-				if (CalendarUtil.getZeroDate(date).before(
-						CalendarUtil.getZeroDate(Chunk.getEndDate1())))
-					diff = diff
+			if(CalendarUtil.getZeroDate(endDate) != null && CalendarUtil.getZeroDate(date) != null) {
+				diff = CalendarUtil.getZeroDate(endDate).getTime() - CalendarUtil.getZeroDate(date).getTime();
+				diff = diff / (60 * 60 * 1000) % 24;
+				if (secondSeance) {
+					if (CalendarUtil.getZeroDate(date).before(CalendarUtil.getZeroDate(Chunk.getEndDate1()))) {
+						diff = diff
 							- ((CalendarUtil.getZeroDate(Chunk.getStartDate2())
-									.getTime() - CalendarUtil.getZeroDate(
-									Chunk.getEndDate1()).getTime())
-									/ (60 * 60 * 1000) % 24);
+								.getTime() - CalendarUtil.getZeroDate(
+								Chunk.getEndDate1()).getTime())
+								/ (60 * 60 * 1000) % 24);
+					}
+				}
 			}
-
 		} else {
 			diff = CalendarUtil.getZeroDate(date).getTime()
 					- CalendarUtil.getZeroDate(Chunk.getStartDate1()).getTime();

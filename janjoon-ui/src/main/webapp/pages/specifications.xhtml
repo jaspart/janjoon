@@ -11,14 +11,13 @@
 
 	<ui:define name="content">
 		<style type="text/css">
-.ui-accordion .ui-accordion-content {
-	background: #E6E6E6;
-}
-
-.ui-accordion .ui-accordion-header {
-	background: #E6E6E6;
-}
-</style>
+			.ui-accordion .ui-accordion-content {
+				background: #E6E6E6;
+			}
+			.ui-accordion .ui-accordion-header {
+				background: #E6E6E6;
+			}
+		</style>
 		<h:outputScript library="js" name="ckEditor.js" />
 		<h:form id="categoryForm">
 			<c:forEach items="#{jJRequirementBean.categoryList}" var="category">
@@ -225,7 +224,7 @@
 												icon=".ui-icon-carat-2-n-s" title="Release All Requirements"
 												actionListener="#{jJRequirementBean.preReleaseRequirement(tableDataModel.categoryId)}"
 												oncomplete="PF('requirementReleaseDialogWidget').show()" />
-										</p:column-->
+											</p:column-->
 											<!-- 										<p:column colspan="3" rendered="#{!jJRequirementBean.expand or tableDataModel.expanded}"> -->
 											<!-- 											<p:inputText id="globalFilter" style="width:90%" -->
 											<!-- 												onkeyup="PF('dataTable_#{loop.index}_Widget').filter()" /> -->
@@ -537,7 +536,6 @@
 				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
 			</video>
 		</p:dialog>
-
 
 		<p:hotkey bind="esc"
 			handler="PF('requirementImportDialogWidget').hide()" />
