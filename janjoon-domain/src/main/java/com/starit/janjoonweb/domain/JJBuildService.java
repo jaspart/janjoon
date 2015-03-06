@@ -9,6 +9,7 @@ public interface JJBuildService {
 	
 	public List<JJBuild> getBuilds(JJVersion version, boolean withVersion,
 			boolean onlyActif);
+	
 	public List<JJBuild> getBuilds(JJProduct product,JJVersion version,boolean onlyActif);
 	
 	public JJBuild getBuildByName(JJVersion version,String buildName);

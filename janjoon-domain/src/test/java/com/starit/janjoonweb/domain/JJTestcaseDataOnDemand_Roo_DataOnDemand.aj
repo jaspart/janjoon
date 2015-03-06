@@ -56,6 +56,7 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
         setName(obj, index);
         setOrdering(obj, index);
         setPricepoint(obj, index);
+        setRegression(obj, index);
         setRequirement(obj, index);
         setUpdatedDate(obj, index);
         setWorkload(obj, index);
@@ -98,6 +99,11 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     public void JJTestcaseDataOnDemand.setPricepoint(JJTestcase obj, int index) {
         Integer pricepoint = new Integer(index);
         obj.setPricepoint(pricepoint);
+    }
+    
+    public void JJTestcaseDataOnDemand.setRegression(JJTestcase obj, int index) {
+        Boolean regression = Boolean.TRUE;
+        obj.setRegression(regression);
     }
     
     public void JJTestcaseDataOnDemand.setRequirement(JJTestcase obj, int index) {

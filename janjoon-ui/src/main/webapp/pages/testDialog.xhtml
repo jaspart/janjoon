@@ -65,25 +65,16 @@
 								<p:ajax listener="#{jJTestcaseBean.addMessage}" />
 							</p:selectBooleanCheckbox>
 						</p:column>
-<!-- 						<p:column colspan="2"> -->
-<!-- 							<p:outputLabel for="build" value="Build :" /> -->
-<!-- 							<p:selectOneMenu id="build" -->
-<!-- 								value="#{jJTestcaseBean.testcase.build}" -->
-<!-- 								panelStyle="width:300px;" effect="fade" -->
-<!-- 								style="width:300px;margin-left: 20px;" filter="true" -->
-<!-- 								required="true" filterMatchMode="startsWith" -->
-<!-- 								widgetVar="buildWidget" -->
-<!-- 								disabled="#{jJTestcaseBean.disabledTestcaseMode}" -->
-<!-- 								requiredMessage="#{messages.test_new_name_alert}"> -->
-<!-- 								<f:converter -->
-<!-- 									converterId="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter" /> -->
-<!-- 								<f:selectItem itemValue="#{null}" -->
-<!-- 									itemLabel="#{messages.test_build_select}" /> -->
-<!-- 								<f:selectItems value="#{jJBuildBean.builds}" var="c" -->
-<!-- 									itemLabel="#{c.name}" itemValue="#{c}" /> -->
-<!-- 							</p:selectOneMenu> -->
-<!-- 						</p:column> -->
-					</p:row>
+							<p:column colspan="2">
+								<p:selectCheckboxMenu id="builds" style="width:90%;"
+									value="#{jJTestcaseBean.builds}"
+									label="Builds" converter="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter">
+									<f:selectItems value="#{jJTestcaseBean.availableBuilds}"
+										var="build" itemLabel="#{build.name}"
+										itemValue="#{build}" />
+								</p:selectCheckboxMenu>
+							</p:column>
+						</p:row>
 					<p:row>
 						<p:column colspan="3">
 							<p:outputLabel for="description"
@@ -132,7 +123,7 @@
 								actionListener="#{jJTestcaseBean.save()}"
 								onstart="PF('testBlockUIWidget').block()"
 								oncomplete="PF('testBlockUIWidget').unblock()"
-								process="@this,name,requirement,description"
+								process="@this,name,requirement,description,builds"
 								update=":testcaseDialogForm :testFormWest" />
 							<p:commandButton value="#{messages.test_new_addtest_label}"
 								onstart="PF('testBlockUIWidget').block()"
@@ -140,7 +131,7 @@
 								disabled="#{not jJTestcaseBean.disabledTeststepMode}"
 								icon="ui-icon-plusthick" rendered="#{loginBean.mobile}"
 								actionListener="#{jJTestcaseBean.save()}"
-								process="@this,name,requirement,descriptionMobile"
+								process="@this,name,requirement,descriptionMobile,builds"
 								update=":testcaseDialogForm :testFormWest" />
 						</p:column>
 					</p:row>
@@ -289,7 +280,7 @@
 		<!-- 					</p:scrollPanel> -->
 		<f:facet name="footer">
 		<p:commandButton value="Save"
-			process="@this,:testcaseDialogForm:testTabView:name,:testcaseDialogForm:testTabView:requirement,:testcaseDialogForm:testTabView:descriptionMobile"
+			process="@this,:testcaseDialogForm:testTabView:name,:testcaseDialogForm:testTabView:requirement,:testcaseDialogForm:testTabView:descriptionMobile,:testcaseDialogForm:testTabView:builds"
 			rendered="#{!loginBean.mobile}"
 			onstart="PF('testBlockUIWidget').block()"
 			oncomplete="PF('testBlockUIWidget').unblock()"
@@ -297,7 +288,7 @@
 			update=":testcaseDialogForm :testFormWest :growlForm" style="float: right;"
 			action="#{jJTestcaseBean.saveAndclose(jJTeststepBean)}" />
 		<p:commandButton value="Save"
-			process="@this,:testcaseDialogForm:testTabView:name,:testcaseDialogForm:testTabView:requirement,:testcaseDialogForm:testTabView:descriptionMobile"
+			process="@this,:testcaseDialogForm:testTabView:name,:testcaseDialogForm:testTabView:requirement,:testcaseDialogForm:testTabView:descriptionMobile,:testcaseDialogForm:testTabView:builds"
 			onstart="PF('testBlockUIWidget').block()"
 			oncomplete="PF('testBlockUIWidget').unblock()"
 			disabled="#{jJTestcaseBean.disabledTeststepMode}"

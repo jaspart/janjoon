@@ -24,7 +24,7 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 
 	@Override
 	public List<JJTestcase> getTestcases(JJRequirement requirement,
-			JJChapter chapter, boolean onlyActif,
+			JJChapter chapter,JJBuild build, boolean onlyActif,
 			boolean sortedByOrder, boolean sortedByCreationdate) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -41,9 +41,9 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 					requirement));
 		}
 
-//		if (build != null) {
-//			predicates.add(criteriaBuilder.equal(from.get("build"), build));
-//		}
+		if (build != null) {
+			predicates.add(criteriaBuilder.isMember(build,from.<Set<JJBuild>>get("builds")));
+		}
 
 		if (chapter != null) {
 			Path<Object> path = from.join("requirement").get("chapter");
@@ -164,7 +164,7 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 
 	@Override
 	public List<JJTestcase> getJJtestCases(JJRequirement requirement) {
-		return getTestcases(requirement, null,true, true, true);
+		return getTestcases(requirement, null,null,true, true, true);
 	}
 
 	@Override

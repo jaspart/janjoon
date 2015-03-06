@@ -95,7 +95,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 			predicates
 					.add(criteriaBuilder.equal(from.get("category"), category));
 		}
-		if (ids.isEmpty()) {
+		if (ids == null || ids.isEmpty()) {
 
 			select.where(predicates.toArray(new Predicate[] {}));
 

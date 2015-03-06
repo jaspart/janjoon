@@ -3,6 +3,7 @@
 
 package com.starit.janjoonweb.ui.mb;
 
+import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJHardware;
@@ -16,21 +17,23 @@ import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.ui.mb.JJTestcaseBean;
+import com.starit.janjoonweb.ui.mb.converter.JJBuildConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJSprintConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UISelectItems;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
@@ -43,6 +46,7 @@ import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
+import org.primefaces.component.selectmanymenu.SelectManyMenu;
 import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
@@ -83,6 +87,8 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
     private HtmlPanelGrid JJTestcaseBean.viewPanelGrid;
     
     private boolean JJTestcaseBean.createDialogVisible = false;
+    
+    private List<JJBuild> JJTestcaseBean.selectedBuilds;
     
     private List<JJSoftware> JJTestcaseBean.selectedSoftwares;
     
@@ -439,6 +445,49 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         automaticCreateInputMessage.setFor("automaticCreateInput");
         automaticCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(automaticCreateInputMessage);
+        
+        OutputLabel regressionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        regressionCreateOutput.setFor("regressionCreateInput");
+        regressionCreateOutput.setId("regressionCreateOutput");
+        regressionCreateOutput.setValue("Regression:");
+        htmlPanelGrid.getChildren().add(regressionCreateOutput);
+        
+        SelectBooleanCheckbox regressionCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        regressionCreateInput.setId("regressionCreateInput");
+        regressionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.regression}", Boolean.class));
+        regressionCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(regressionCreateInput);
+        
+        Message regressionCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        regressionCreateInputMessage.setId("regressionCreateInputMessage");
+        regressionCreateInputMessage.setFor("regressionCreateInput");
+        regressionCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(regressionCreateInputMessage);
+        
+        OutputLabel buildsCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        buildsCreateOutput.setFor("buildsCreateInput");
+        buildsCreateOutput.setId("buildsCreateOutput");
+        buildsCreateOutput.setValue("Builds:");
+        htmlPanelGrid.getChildren().add(buildsCreateOutput);
+        
+        SelectManyMenu buildsCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        buildsCreateInput.setId("buildsCreateInput");
+        buildsCreateInput.setConverter(new JJBuildConverter());
+        buildsCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.selectedBuilds}", List.class));
+        UISelectItems buildsCreateInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        buildsCreateInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.allJJBuilds}", List.class));
+        buildsCreateInput.setRequired(false);
+        buildsCreateInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJBuild", String.class));
+        buildsCreateInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJBuild}", String.class));
+        buildsCreateInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJBuild}", JJBuild.class));
+        buildsCreateInput.getChildren().add(buildsCreateInputItems);
+        htmlPanelGrid.getChildren().add(buildsCreateInput);
+        
+        Message buildsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        buildsCreateInputMessage.setId("buildsCreateInputMessage");
+        buildsCreateInputMessage.setFor("buildsCreateInput");
+        buildsCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(buildsCreateInputMessage);
         
         HtmlOutputText softwaresCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         softwaresCreateOutput.setId("softwaresCreateOutput");
@@ -803,6 +852,49 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         automaticEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(automaticEditInputMessage);
         
+        OutputLabel regressionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        regressionEditOutput.setFor("regressionEditInput");
+        regressionEditOutput.setId("regressionEditOutput");
+        regressionEditOutput.setValue("Regression:");
+        htmlPanelGrid.getChildren().add(regressionEditOutput);
+        
+        SelectBooleanCheckbox regressionEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        regressionEditInput.setId("regressionEditInput");
+        regressionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.regression}", Boolean.class));
+        regressionEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(regressionEditInput);
+        
+        Message regressionEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        regressionEditInputMessage.setId("regressionEditInputMessage");
+        regressionEditInputMessage.setFor("regressionEditInput");
+        regressionEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(regressionEditInputMessage);
+        
+        OutputLabel buildsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        buildsEditOutput.setFor("buildsEditInput");
+        buildsEditOutput.setId("buildsEditOutput");
+        buildsEditOutput.setValue("Builds:");
+        htmlPanelGrid.getChildren().add(buildsEditOutput);
+        
+        SelectManyMenu buildsEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        buildsEditInput.setId("buildsEditInput");
+        buildsEditInput.setConverter(new JJBuildConverter());
+        buildsEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.selectedBuilds}", List.class));
+        UISelectItems buildsEditInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        buildsEditInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.allJJBuilds}", List.class));
+        buildsEditInput.setRequired(false);
+        buildsEditInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJBuild", String.class));
+        buildsEditInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJBuild}", String.class));
+        buildsEditInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJBuild}", JJBuild.class));
+        buildsEditInput.getChildren().add(buildsEditInputItems);
+        htmlPanelGrid.getChildren().add(buildsEditInput);
+        
+        Message buildsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        buildsEditInputMessage.setId("buildsEditInputMessage");
+        buildsEditInputMessage.setFor("buildsEditInput");
+        buildsEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(buildsEditInputMessage);
+        
         HtmlOutputText softwaresEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         softwaresEditOutput.setId("softwaresEditOutput");
         softwaresEditOutput.setValue("Softwares:");
@@ -1029,6 +1121,34 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         automaticValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.automatic}", String.class));
         htmlPanelGrid.getChildren().add(automaticValue);
         
+        HtmlOutputText regressionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        regressionLabel.setId("regressionLabel");
+        regressionLabel.setValue("Regression:");
+        htmlPanelGrid.getChildren().add(regressionLabel);
+        
+        HtmlOutputText regressionValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        regressionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.regression}", String.class));
+        htmlPanelGrid.getChildren().add(regressionValue);
+        
+        HtmlOutputText buildsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        buildsLabel.setId("buildsLabel");
+        buildsLabel.setValue("Builds:");
+        htmlPanelGrid.getChildren().add(buildsLabel);
+        
+        SelectManyMenu buildsValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        buildsValue.setId("buildsValue");
+        buildsValue.setConverter(new JJBuildConverter());
+        buildsValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.selectedBuilds}", List.class));
+        UISelectItems buildsValueItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        buildsValue.setReadonly(true);
+        buildsValue.setDisabled(true);
+        buildsValueItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.builds}", Set.class));
+        buildsValueItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJBuild", String.class));
+        buildsValueItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJBuild}", String.class));
+        buildsValueItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJBuild}", JJBuild.class));
+        buildsValue.getChildren().add(buildsValueItems);
+        htmlPanelGrid.getChildren().add(buildsValue);
+        
         HtmlOutputText softwaresLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         softwaresLabel.setId("softwaresLabel");
         softwaresLabel.setValue("Softwares:");
@@ -1136,6 +1256,17 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         return suggestions;
     }
     
+    public List<JJBuild> JJTestcaseBean.getSelectedBuilds() {
+        return selectedBuilds;
+    }
+    
+    public void JJTestcaseBean.setSelectedBuilds(List<JJBuild> selectedBuilds) {
+        if (selectedBuilds != null) {
+            JJTestcase_.setBuilds(new HashSet<JJBuild>(selectedBuilds));
+        }
+        this.selectedBuilds = selectedBuilds;
+    }
+    
     public List<JJSoftware> JJTestcaseBean.getSelectedSoftwares() {
         return selectedSoftwares;
     }
@@ -1181,6 +1312,9 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
     }
     
     public String JJTestcaseBean.onEdit() {
+        if (JJTestcase_ != null && JJTestcase_.getBuilds() != null) {
+            selectedBuilds = new ArrayList<JJBuild>(JJTestcase_.getBuilds());
+        }
         if (JJTestcase_ != null && JJTestcase_.getSoftwares() != null) {
             selectedSoftwares = new ArrayList<JJSoftware>(JJTestcase_.getSoftwares());
         }
@@ -1245,6 +1379,7 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
     
     public void JJTestcaseBean.reset() {
         JJTestcase_ = null;
+        selectedBuilds = null;
         selectedSoftwares = null;
         selectedHardwares = null;
         selectedTeststeps = null;

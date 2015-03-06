@@ -25,6 +25,7 @@ import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJChapterService;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJImportance;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
@@ -542,7 +543,7 @@ public class RequirementBean {
 		rootNode = null;
 		selectedNode = null;
 		jJRequirementService.saveJJRequirement(requirement);
-		jJRequirementBean.updateDataTable(requirement, JJRequirementBean.UPDATE_OPERATION);;
+		jJRequirementBean.updateDataTable(requirement, JJRequirementBean.UPDATE_OPERATION,false);
 		long id = requirement.getId();
 		
 		FacesMessage facesMessage = MessageFactory.getMessage(
@@ -619,9 +620,23 @@ public class RequirementBean {
 		}else
 			return "";
 	}
+	
+	public List<JJChapter> completeChapterRequirement(String query) {
+		List<JJChapter> suggestions = new ArrayList<JJChapter>();
+		suggestions.add(null);
+		for (JJChapter chapter : jJChapterService.getChapters(null, LoginBean.getProject(), requirement.getCategory(), true, null)) {
+			String jJChapterStr = String.valueOf(chapter.getName());
+			if (jJChapterStr.toLowerCase().startsWith(query.toLowerCase())) {
+				suggestions.add(chapter);
+			}
+		}
+		return suggestions;
+	}
+	
+	
 	public void save(JJRequirementBean jJRequirementBean) throws IOException {
 		jJRequirementBean.updateJJRequirement(requirement);
-		jJRequirementBean.updateDataTable(requirement, JJRequirementBean.UPDATE_OPERATION);;
+		jJRequirementBean.updateDataTable(requirement, JJRequirementBean.UPDATE_OPERATION,false);;
 		long id = requirement.getId();
 		
 		FacesMessage facesMessage = MessageFactory.getMessage(

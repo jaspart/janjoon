@@ -6,7 +6,9 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -69,6 +71,12 @@ public class JJTestcase {
 	private Integer pricepoint;
 
 	private Boolean automatic;
+	
+	private Boolean regression;
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "JJBuildLinkJJTestcase", joinColumns = { @javax.persistence.JoinColumn(name = "Testcase_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Build_ID", referencedColumnName = "id") })	
+	private Set<JJBuild> builds = new HashSet<JJBuild>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
 	private Set<JJSoftware> softwares = new HashSet<JJSoftware>();

@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,7 @@ import com.lowagie.text.Phrase;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.html.simpleparser.StyleSheet;
 import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
@@ -112,6 +114,13 @@ public class JJTestcaseBean {
 			JJTestcaseexecutionService jJTestcaseexecutionService) {
 		this.jJTestcaseexecutionService = jJTestcaseexecutionService;
 	}
+	
+	@Autowired
+	private JJBuildService jJBuildService;	
+
+	public void setjJBuildService(JJBuildService jJBuildService) {
+		this.jJBuildService = jJBuildService;
+	}
 
 	@Autowired
 	private JJTeststepService jJTeststepService;
@@ -132,6 +141,7 @@ public class JJTestcaseBean {
 	private JJProduct product;
 	private JJVersion version;
 	private float reqCoverage;
+	private List<JJBuild> builds;
 
 	private String width;
 	private List<Object> rowNames = new ArrayList<Object>();
@@ -167,6 +177,11 @@ public class JJTestcaseBean {
 	private String namefile;
 	private List<CategoryUtil> categoryList;
 
+	
+	public List<JJBuild> getAvailableBuilds(){
+		
+		return jJBuildService.getBuilds(LoginBean.getProduct(), LoginBean.getVersion(), true);
+	}
 	public boolean isTestcaseState() {
 		return testcaseState;
 	}
@@ -355,7 +370,7 @@ public class JJTestcaseBean {
 
 		testCaseRecaps = new ArrayList<TestCaseRecap>();		
 		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,
-				chapter, true, true, false);
+				chapter, null,true, true, false);
 
 		for (JJTestcase testcase : testcases) {
 			TestCaseRecap testCaseRecap = new TestCaseRecap(testcase);
@@ -478,6 +493,14 @@ public class JJTestcaseBean {
 
 	public void setDisabledExport(boolean disabledExport) {
 		this.disabledExport = disabledExport;
+	}
+
+	public List<JJBuild> getBuilds() {
+		return builds;
+	}
+
+	public void setBuilds(List<JJBuild> builds) {
+		this.builds = builds;
 	}
 
 	public String getNamefile() {
@@ -725,6 +748,7 @@ public class JJTestcaseBean {
 		disabledTestcaseMode = false;
 		disabledTeststepMode = true;
 		testcaseState = true;
+		builds=new ArrayList<JJBuild>();
 
 		// HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 		// .getExternalContext().getSession(false);
@@ -784,6 +808,7 @@ public class JJTestcaseBean {
 
 		disabledInitTask = true;
 		disabledTask = true;
+		builds=new ArrayList<JJBuild>(tc.getBuilds());
 
 		disabledTestcaseMode = false;
 		disabledTeststepMode = false;
@@ -872,9 +897,7 @@ public class JJTestcaseBean {
 	public void save() {
 
 		if (testcase.getId() == null) {
-
 			manageTestcaseOrder(requirement);
-
 			testcase.setRequirement(requirement);
 			requirement.getTestcases().add(testcase);
 
@@ -884,7 +907,7 @@ public class JJTestcaseBean {
 //				testcase.getTasks().add(task);
 //				task.setTestcase(testcase);
 //			}
-
+			testcase.setBuilds(new HashSet<JJBuild>(builds));
 			saveJJTestcase(testcase);
 
 			disabledInitTask = true;
@@ -905,7 +928,6 @@ public class JJTestcaseBean {
 	public void saveAndclose(JJTeststepBean jJTeststepBean) {
 
 		RequestContext context = RequestContext.getCurrentInstance();
-
 		if (testcaseState) {
 
 			if (getTestcaseDialogConfiguration()) {
@@ -915,31 +937,14 @@ public class JJTestcaseBean {
 			}
 
 		} else {
-
-			// JJTestcase tc;
-
-			// if (jJTeststepBean.getActionTeststep()) {
-			// String name = testcase.getName();
-			// String description = testcase.getDescription();
-			// Boolean automatic = testcase.getAutomatic();
-			// JJBuild build =testcase.getBuild();
-			//
-			// tc = jJTestcaseService.findJJTestcase(testcase.getId());
-			// tc.setName(name);
-			// tc.setBuild(build);
-			// tc.setDescription(description);
-			// tc.setAutomatic(automatic);
-			//
-			// } else {
-			// tc = testcase;
-			// }
-
+			
 			if (!requirement.equals(testcase.getRequirement())) {
 
 				testcase.setRequirement(requirement);
 
 			}
 
+			testcase.setBuilds(new HashSet<JJBuild>(builds));
 			updateJJTestcase(testcase);
 			testcase = jJTestcaseService.findJJTestcase(testcase.getId());
 			requirement.getTestcases().add(testcase);
@@ -960,7 +965,7 @@ public class JJTestcaseBean {
 
 	public void closeDialog() {		
 		task = null;	
-
+		builds=null;
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJTeststepBean jJTeststepBean = (JJTeststepBean) session
@@ -974,7 +979,7 @@ public class JJTestcaseBean {
 		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();	
 
 		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,
-				requirement.getChapter(), false, false, false);
+				requirement.getChapter(), null,false, false, false);
 
 		for (JJTestcase testcase : testcases) {
 			elements.put(testcase.getOrdering(), testcase);
@@ -1104,8 +1109,9 @@ public class JJTestcaseBean {
 
 	// Recursive function to create tree
 	private TreeNode createTree(JJChapter chapterParent, TreeNode rootNode,
-			JJCategory category, JJBuild build) {
-
+			JJCategory category, JJBuild build) {	
+		
+		
 		TreeNode newNode = new DefaultTreeNode("CH-" + chapterParent.getId()
 				+ "- " + chapterParent.getName(), rootNode);
 
@@ -1127,7 +1133,7 @@ public class JJTestcaseBean {
 
 				JJRequirement requirement = (JJRequirement) entry.getValue();
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-						requirement, null, true, true, false);
+						requirement, null,build, true, true, false);
 				for (JJTestcase testcase : testcases) {
 					testcaseElements.put(testcase.getOrdering(), testcase);
 				}
@@ -1363,7 +1369,7 @@ public class JJTestcaseBean {
 
 				JJRequirement requirement = (JJRequirement) entry.getValue();
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-						requirement, null, true, true, false);
+						requirement, null,null, true, true, false);
 				for (JJTestcase testcase : testcases) {
 					testcaseElements.put(testcase.getOrdering(), testcase);
 				}
@@ -1392,13 +1398,10 @@ public class JJTestcaseBean {
 	public List<JJTestcase> getTestcases() {
 
 		// List<JJTestcase> testcases = new ArrayList<JJTestcase>();
-		// JJBuild build = ((JJBuildBean) LoginBean.findBean("jJBuildBean"))
-		// .getBuild();
-		// testcases = jJTestcaseService.getTestcases(null, build, chapter,
-		// true,
-		// false, true);
+		 JJBuild build = ((JJBuildBean) LoginBean.findBean("jJBuildBean"))
+		 .getBuild();	
 
-		return jJTestcaseService.getTestcases(null, chapter, true, false, true);
+		return jJTestcaseService.getTestcases(null, chapter, build,true, false, true);
 	}
 
 	public class TestCaseRecap {

@@ -34,9 +34,9 @@
 
 	<h:form id="requirementDialogForm" style="padding:0px;">
 		<p:panel styleClass="panelDialog">
-			<f:facet name="header">
-				<p:messages id="msg" showDetail="false" closable="true" />
-			</f:facet>
+<!-- 			<f:facet name="header"> -->
+<!-- 				<p:messages id="msg" showDetail="false" closable="true" /> -->
+<!-- 			</f:facet> -->
 			<p:panelGrid rendered="#{jJRequirementBean.requirement != null}">
 				<p:row>
 					<p:column>
@@ -242,7 +242,7 @@
 									onstart="PF('requirementBlockUIWidget').block()"
 									oncomplete="PF('requirementBlockUIWidget').unblock()"
 									disabled="#{empty jJRequirementBean.reqtestCases}"
-									update="testCaseDataTable :requirementDialogForm:msg"
+									update="testCaseDataTable :growlForm"
 									process="testCaseDataTable" value="Update"
 									action="#{jJRequirementBean.updateReqTestCases(jJTestcaseBean)}" />
 								<br />
@@ -257,7 +257,7 @@
 									onstart="PF('requirementBlockUIWidget').block()"
 									oncomplete="PF('requirementBlockUIWidget').unblock()"
 									style="font-size: 1.0em !important;float:right;top: -3px;"
-									update="testcase testCaseDataTable :requirementDialogForm:msg"
+									update="testcase testCaseDataTable :growlForm"
 									action="#{jJRequirementBean.addTestCase(jJTestcaseBean)}"
 									value="Ajouter TestCase" process="@this,testcase" />
 							</f:facet>

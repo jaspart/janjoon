@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -61,6 +62,9 @@ public class JJBuild {
 
 //	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "build")
 //	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
+	
+	@ManyToMany(mappedBy="builds",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
 	
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "build")
