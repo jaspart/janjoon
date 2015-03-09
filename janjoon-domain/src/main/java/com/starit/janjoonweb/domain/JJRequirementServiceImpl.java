@@ -3,6 +3,7 @@ package com.starit.janjoonweb.domain;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,6 +27,46 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	}
 
 	// Generic Request
+
+	public boolean haveLinkDown(JJRequirement requirement) {		
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
+				.createQuery(JJRequirement.class);
+
+		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"),true));
+		predicates.add(criteriaBuilder.isMember(requirement,from.<Set<JJRequirement>>get("requirementLinkUp")));
+		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
+		cq.select(criteriaBuilder.count(cq.from(JJRequirement.class)));
+		entityManager.createQuery(cq);
+		cq.where(predicates.toArray(new Predicate[] {}));
+		boolean have = entityManager.createQuery(cq).getSingleResult() > 0;
+		return have;
+		
+	}
+
+	public boolean haveLinkUp(JJRequirement requirement) {		
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
+				.createQuery(JJRequirement.class);
+
+		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"),true));
+		predicates.add(criteriaBuilder.isMember(requirement,from.<Set<JJRequirement>>get("requirementLinkDown")));
+		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
+		cq.select(criteriaBuilder.count(cq.from(JJRequirement.class)));
+		entityManager.createQuery(cq);
+		cq.where(predicates.toArray(new Predicate[] {}));
+		boolean have = entityManager.createQuery(cq).getSingleResult() > 0;
+		return have;
+		
+	}
 
 	public JJRequirement getRequirementByName(JJCategory category,
 			JJProject project, JJProduct product, String name, JJCompany company) {
@@ -155,7 +196,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	public List<JJRequirement> getRequirements(JJCompany company,
 			JJCategory category, JJProject project, JJProduct product,
 			JJVersion version, JJStatus status, JJChapter chapter,
-			boolean withChapter, boolean onlyActif, boolean orderByCreationdate,boolean mine,JJContact contact) {
+			boolean withChapter, boolean onlyActif,
+			boolean orderByCreationdate, boolean mine, JJContact contact) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
@@ -196,8 +238,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		if (status != null) {
 			predicates.add(criteriaBuilder.equal(from.get("status"), status));
 		}
-		
-		if (contact != null && mine ) {
+
+		if (contact != null && mine) {
 			Predicate condition1 = criteriaBuilder.equal(from.get("createdBy"),
 					contact);
 			Predicate condition2 = criteriaBuilder.equal(from.get("updatedBy"),
@@ -255,7 +297,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	public List<JJRequirement> getRequirements(JJCompany company,
 			JJProject project, JJProduct product, JJVersion version) {
 		return getRequirements(company, null, project, product, version, null,
-				null, false, true, true,false,null);
+				null, false, true, true, false, null);
 	}
 
 	@Override
@@ -263,7 +305,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			JJStatus status) {
 
 		return getRequirements(company, null, null, null, null, status, null,
-				false, true, false,false,null);
+				false, true, false, false, null);
 	}
 
 	@Override
@@ -414,7 +456,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 						orPredicates.add(criteriaBuilder.and(andPredicates
 								.toArray(new Predicate[] {})));
-					}else
+					} else
 						orPredicates.add(criteriaBuilder.equal(
 								from.get("project"), entry.getKey()));
 

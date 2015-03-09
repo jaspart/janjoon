@@ -38,6 +38,10 @@ public interface JJRequirementService {
 	
 	public void refreshRequirement(JJRequirement requirement);
 	
+	public boolean haveLinkUp(JJRequirement requirement);
+	
+	public boolean haveLinkDown(JJRequirement requirement);
+	
 	public JJRequirement getRequirementByName(JJCategory catgory,JJProject project,JJProduct produit,String name,JJCompany company);	
 	
 	public List<JJRequirement> getNonCouvredRequirements(JJCompany company,Map<JJProject,JJProduct> map);

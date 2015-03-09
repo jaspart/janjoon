@@ -635,7 +635,11 @@ public class RequirementBean {
 	
 	
 	public void save(JJRequirementBean jJRequirementBean) throws IOException {
-		jJRequirementBean.updateJJRequirement(requirement);
+		
+		
+		jJRequirementBean.setRequirementStatus(requirement.getStatus());
+		jJRequirementBean.getRequirementOrder(requirement);
+		//jJRequirementBean.updateJJRequirement(requirement);
 		jJRequirementBean.updateDataTable(requirement, JJRequirementBean.UPDATE_OPERATION,false);;
 		long id = requirement.getId();
 		

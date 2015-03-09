@@ -1206,6 +1206,7 @@ public class JJRequirementBean {
 								jJTestcaseexecutionService)));
 					}
 
+					tableDataModelList.get(i).setWrappedData(listRes);
 					tableDataModelList.get(i).setCompletionProgress(0);
 					tableDataModelList.get(i).setCoverageProgress(0);
 					tableDataModelList.get(i).setActiveIndex(-1);
@@ -1326,7 +1327,7 @@ public class JJRequirementBean {
 		requirement.setProduct(requirementProduct);
 		requirement.setVersioning(requirementVersion);
 		requirement.setStatus(requirementStatus);
-		getRequirementOrder();
+		getRequirementOrder(requirement);
 		String u = UPDATE_OPERATION;
 
 		if (requirement.getId() == null) {
@@ -2370,12 +2371,14 @@ public class JJRequirementBean {
 		}
 
 		if (tableDataModelList.get(i).getRendered()) {
-			CategoryDataModel categoryDataModel = tableDataModelList.get(i);
+			
 			List<JJRequirement> requirements = getRequirementsList(category,
 					product, version, project, true);
-
-			categoryDataModel
-					.setWrappedData(getListOfRequiremntUtils(requirements));
+			CategoryDataModel categoryDataModel = new CategoryDataModel(getListOfRequiremntUtils(requirements),
+					category.getId(),category.getName(), tableDataModelList.get(i).getRendered());
+			categoryDataModel.setExpanded(tableDataModelList.get(i).isExpanded());
+//			categoryDataModel
+//					.setWrappedData(getListOfRequiremntUtils(requirements));
 			// categoryDataModel.calculCompletionProgress();
 			// categoryDataModel.calculCoverageProgress();
 
@@ -2964,7 +2967,7 @@ public class JJRequirementBean {
 		return list;
 	}
 
-	private void getRequirementOrder() {
+	public void getRequirementOrder(JJRequirement requirementToOrder) {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 
@@ -2987,67 +2990,67 @@ public class JJRequirementBean {
 		SortedMap<Integer, JJTestcase> testcases = null;
 		SortedMap<Integer, JJTestcase> subTestcases = null;
 
-		if (requirement.getId() == null) {
+		if (requirementToOrder.getId() == null) {
 			// Mode New Requirement
-			requirement.setChapter(requirementChapter);
+			requirementToOrder.setChapter(requirementChapter);
 			if (requirementChapter != null) {
 				elements = getSortedElements(requirementChapter,
-						requirement.getProject(), requirement.getCategory(),
+						requirementToOrder.getProject(), requirementToOrder.getCategory(),
 						false, jJChapterService, jJRequirementService);
 
 				if (elements.isEmpty()) {
-					requirement.setOrdering(0);
+					requirementToOrder.setOrdering(0);
 				} else {
-					requirement.setOrdering(elements.lastKey() + 1);
+					requirementToOrder.setOrdering(elements.lastKey() + 1);
 				}
 			} else {
-				requirement.setOrdering(null);
+				requirementToOrder.setOrdering(null);
 			}
 		} else {
 			subTestcases = getSortedTestcases(
-					jJRequirementService.findJJRequirement(requirement.getId()),
+					jJRequirementService.findJJRequirement(requirementToOrder.getId()),
 					null);
 			testcases = getSortedTestcases(null, jJRequirementService
-					.findJJRequirement(requirement.getId()).getChapter());
+					.findJJRequirement(requirementToOrder.getId()).getChapter());
 
 			// Mode Edit Requirement
 
 			if (requirementChapter != null) {
 
-				if (requirement.getChapter() != null) {
+				if (requirementToOrder.getChapter() != null) {
 
 					// Drag R and Drop to C
 
-					if (requirement.getChapter().getId() != requirementChapter
+					if (requirementToOrder.getChapter().getId() != requirementChapter
 							.getId()) {
 
 						SortedMap<Integer, JJTestcase> testcases1 = getSortedTestcases(
 								null, requirementChapter);
 
-						int requirementOrder = requirement.getOrdering();
+						int requirementOrder = requirementToOrder.getOrdering();
 
-						elements = getSortedElements(requirement.getChapter(),
-								requirement.getProject(),
-								requirement.getCategory(), false,
+						elements = getSortedElements(requirementToOrder.getChapter(),
+								requirementToOrder.getProject(),
+								requirementToOrder.getCategory(), false,
 								jJChapterService, jJRequirementService);
 
 						subElements = elements.tailMap(requirementOrder);
 
-						requirement.setChapter(requirementChapter);
+						requirementToOrder.setChapter(requirementChapter);
 
 						elements = getSortedElements(requirementChapter,
-								requirement.getProject(),
-								requirement.getCategory(), false,
+								requirementToOrder.getProject(),
+								requirementToOrder.getCategory(), false,
 								jJChapterService, jJRequirementService);
 
 						if (elements.isEmpty()) {
-							requirement.setOrdering(0);
+							requirementToOrder.setOrdering(0);
 
 						} else {
-							requirement.setOrdering(elements.lastKey() + 1);
+							requirementToOrder.setOrdering(elements.lastKey() + 1);
 						}
 
-						updateJJRequirement(requirement);
+						updateJJRequirement(requirementToOrder);
 
 						subElements.remove(requirementOrder);
 
@@ -3150,7 +3153,7 @@ public class JJRequirementBean {
 
 					} else {
 
-						updateJJRequirement(requirement);
+						updateJJRequirement(requirementToOrder);
 						reset();
 
 					}
@@ -3159,19 +3162,19 @@ public class JJRequirementBean {
 					SortedMap<Integer, JJTestcase> testcases1 = getSortedTestcases(
 							null, requirementChapter);
 
-					requirement.setChapter(requirementChapter);
+					requirementToOrder.setChapter(requirementChapter);
 
 					elements = getSortedElements(requirementChapter,
-							requirement.getProject(),
-							requirement.getCategory(), false, jJChapterService,
+							requirementToOrder.getProject(),
+							requirementToOrder.getCategory(), false, jJChapterService,
 							jJRequirementService);
 					if (elements.isEmpty()) {
-						requirement.setOrdering(0);
+						requirementToOrder.setOrdering(0);
 					} else {
-						requirement.setOrdering(elements.lastKey() + 1);
+						requirementToOrder.setOrdering(elements.lastKey() + 1);
 					}
 
-					updateJJRequirement(requirement);
+					updateJJRequirement(requirementToOrder);
 					reset();
 
 					if (!subTestcases.isEmpty()) {
@@ -3207,21 +3210,21 @@ public class JJRequirementBean {
 
 				// Drag R and Drop to Left
 
-				if (requirement.getChapter() != null) {
+				if (requirementToOrder.getChapter() != null && requirementToOrder.getOrdering() != null) {
 
-					int requirementOrder = requirement.getOrdering();
+					int requirementOrder = requirementToOrder.getOrdering();
 
-					elements = getSortedElements(requirement.getChapter(),
-							requirement.getProject(),
-							requirement.getCategory(), false, jJChapterService,
+					elements = getSortedElements(requirementToOrder.getChapter(),
+							requirementToOrder.getProject(),
+							requirementToOrder.getCategory(), false, jJChapterService,
 							jJRequirementService);
 
 					subElements = elements.tailMap(requirementOrder);
 
-					requirement.setChapter(null);
-					requirement.setOrdering(null);
+					requirementToOrder.setChapter(null);
+					requirementToOrder.setOrdering(null);
 
-					updateJJRequirement(requirement);
+					updateJJRequirement(requirementToOrder);
 					reset();
 
 					subElements.remove(requirementOrder);
@@ -3244,14 +3247,14 @@ public class JJRequirementBean {
 
 						} else if (className.equalsIgnoreCase("JJRequirement")) {
 
-							JJRequirement requirement = (JJRequirement) entry
+							JJRequirement r = (JJRequirement) entry
 									.getValue();
 
-							int lastOrder = requirement.getOrdering();
-							requirement.setOrdering(lastOrder - 1);
+							int lastOrder = r.getOrdering();
+							r.setOrdering(lastOrder - 1);
 
 							jJRequirementService
-									.updateJJRequirement(requirement);
+									.updateJJRequirement(r);
 							reset();
 						}
 
@@ -3299,7 +3302,7 @@ public class JJRequirementBean {
 					}
 
 				} else {
-					updateJJRequirement(requirement);
+					updateJJRequirement(requirementToOrder);
 					reset();
 				}
 
@@ -3309,7 +3312,7 @@ public class JJRequirementBean {
 			Set<JJTestcase> testcaseList = null;
 
 			JJRequirement req = jJRequirementService
-					.findJJRequirement(requirement.getId());
+					.findJJRequirement(requirementToOrder.getId());
 
 			if (requirementStatus.getName().equalsIgnoreCase("CANCELED")
 					|| requirementStatus.getName().equalsIgnoreCase("DELETED")) {
@@ -3707,6 +3710,7 @@ public class JJRequirementBean {
 		private float completionProgress = 0;
 		private List<RequirementUtil> filtredRequirements;
 		private boolean rendered;
+		private TreeNode chapterTree;
 		// private boolean mine;
 		private boolean expanded;
 
@@ -3723,7 +3727,10 @@ public class JJRequirementBean {
 		}
 
 		public void setExpanded(boolean expanded) {
+			
 			this.expanded = expanded;
+			if(!this.expanded)
+				chapterTree=null;
 		}
 
 		public int getActiveIndex() {
@@ -3787,26 +3794,34 @@ public class JJRequirementBean {
 
 		public TreeNode getChapterTree() {
 
-			TreeNode chapterTree = new DefaultTreeNode("Root", null);
+			if (expanded && chapterTree == null) {
+				chapterTree = new DefaultTreeNode("Root", null);
+				JJProject project = LoginBean.getProject();
 
-			JJProject project = LoginBean.getProject();
+				TreeNode categoryNode = new DefaultTreeNode("category",
+						jJCategoryService.findJJCategory(categoryId),
+						chapterTree);
 
-			TreeNode categoryNode = new DefaultTreeNode("category",
-					jJCategoryService.findJJCategory(categoryId), chapterTree);
+				categoryNode.setExpanded(true);
 
-			categoryNode.setExpanded(true);
+				List<JJChapter> chapters = jJChapterService.getParentsChapter(
+						((LoginBean) LoginBean.findBean("loginBean"))
+								.getContact().getCompany(), project,
+						jJCategoryService.findJJCategory(categoryId), true,
+						true);
 
-			List<JJChapter> chapters = jJChapterService.getParentsChapter(
-					((LoginBean) LoginBean.findBean("loginBean")).getContact()
-							.getCompany(), project, jJCategoryService
-							.findJJCategory(categoryId), true, true);
-
-			new DefaultTreeNode("withOutChapter", "withOutChapter",
-					categoryNode);
-			for (JJChapter ch : chapters) {
-				new DefaultTreeNode("chapter", ch, categoryNode);
+				new DefaultTreeNode("withOutChapter", "withOutChapter",
+						categoryNode);
+				for (JJChapter ch : chapters) {
+					new DefaultTreeNode("chapter", ch, categoryNode);
+				}
 			}
+
 			return chapterTree;
+		}
+
+		public void setChapterTree(TreeNode chapterTree) {
+			this.chapterTree = chapterTree;
 		}
 
 		public CategoryDataModel(List<RequirementUtil> data, long categoryId,
@@ -3818,6 +3833,7 @@ public class JJRequirementBean {
 			// this.mine = false;
 			this.activeIndex = -1;
 			this.expanded = false;
+			chapterTree = null;
 		}
 
 		public String getTableStyle() {
@@ -4457,12 +4473,14 @@ public class JJRequirementBean {
 		if (category.getStage() == categoryList.get(0).getStage()) {
 			DOWN = true;
 
-			for (JJRequirement req : requirement.getRequirementLinkUp()) {
-				if (req.getEnabled()) {
-					UP = true;
-					break;
-				}
-			}
+//			for (JJRequirement req : requirement.getRequirementLinkUp()) {
+//				if (req.getEnabled()) {
+//					UP = true;
+//					break;
+//				}
+//			}
+			
+			UP=jJRequirementService.haveLinkUp(requirement);
 
 			sizeIsOne = true;
 		} else if (category.getStage() == categoryList.get(
@@ -4471,29 +4489,32 @@ public class JJRequirementBean {
 
 			UP = true;
 
-			for (JJRequirement req : requirement.getRequirementLinkDown()) {
-				if (req.getEnabled()) {
-					DOWN = true;
-					break;
-				}
-			}
+//			for (JJRequirement req : requirement.getRequirementLinkDown()) {
+//				if (req.getEnabled()) {
+//					DOWN = true;
+//					break;
+//				}
+//			}			
+			DOWN=jJRequirementService.haveLinkDown(requirement);
 
 		} else {
 
-			for (JJRequirement req : requirement.getRequirementLinkUp()) {
-				if (req.getEnabled()) {
-					UP = true;
-					break;
-				}
-			}
+//			for (JJRequirement req : requirement.getRequirementLinkUp()) {
+//				if (req.getEnabled()) {
+//					UP = true;
+//					break;
+//				}
+//			}
+			
+			UP=jJRequirementService.haveLinkUp(requirement);
 
-			for (JJRequirement req : requirement.getRequirementLinkDown()) {
-				if (req.getEnabled()) {
-					DOWN = true;
-					break;
-				}
-			}
-
+//			for (JJRequirement req : requirement.getRequirementLinkDown()) {
+//				if (req.getEnabled()) {
+//					DOWN = true;
+//					break;
+//				}
+//			}
+			DOWN=jJRequirementService.haveLinkDown(requirement);
 		}
 
 		List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
@@ -4741,8 +4762,7 @@ public class JJRequirementBean {
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
 
-		if (req.getRequirementLinkDown() == null
-				|| req.getRequirementLinkDown().isEmpty()) {
+		if (!jJRequirementService.haveLinkDown(req) && !jJCategoryService.isLowLevel(req.getCategory())) {
 			warn = true;
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					SPECIFICATION_WARNING_LINKDOWN, "Requirement");
@@ -4750,8 +4770,7 @@ public class JJRequirementBean {
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
 
-		if (req.getRequirementLinkUp() == null
-				|| req.getRequirementLinkUp().isEmpty()) {
+		if (!jJRequirementService.haveLinkUp(req) && !jJCategoryService.isHighLevel(req.getCategory())) {
 			warn = true;
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					SPECIFICATION_WARNING_LINKUP, "Requirement");

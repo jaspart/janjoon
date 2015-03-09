@@ -94,4 +94,9 @@ public class JJBuild {
 		return (object instanceof JJBuild) && (getId() != null) ? getId()
 				.equals(((JJBuild) object).getId()) : (object == this);
 	}
+	
+	@Override
+	public int hashCode() {
+	    return this.getId().hashCode();
+	}
 }

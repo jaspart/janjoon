@@ -2,6 +2,7 @@ package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -107,6 +108,51 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 
 		TypedQuery<JJCategory> result = entityManager.createQuery(select);
 		return result.getResultList();
+	}
+	
+	public boolean isHighLevel(JJCategory category)
+	{	
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder
+				.createQuery(JJCategory.class);
+
+		Root<JJCategory> from = criteriaQuery.from(JJCategory.class);
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"),true));
+		predicates.add(criteriaBuilder.greaterThan(from.<Integer>get("stage"),category.getStage()));
+		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
+		cq.select(criteriaBuilder.count(cq.from(JJCategory.class)));
+		entityManager.createQuery(cq);
+		cq.where(predicates.toArray(new Predicate[] {}));
+		boolean have = !(entityManager.createQuery(cq).getSingleResult() > 0);
+		return have;
+		
+	
+		
+	}
+	
+	public boolean isLowLevel(JJCategory category)
+	{		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder
+				.createQuery(JJCategory.class);
+
+		Root<JJCategory> from = criteriaQuery.from(JJCategory.class);
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"),true));
+		predicates.add(criteriaBuilder.lessThan(from.<Integer>get("stage"),category.getStage()));
+		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
+		cq.select(criteriaBuilder.count(cq.from(JJCategory.class)));
+		entityManager.createQuery(cq);
+		cq.where(predicates.toArray(new Predicate[] {}));
+		boolean have = !(entityManager.createQuery(cq).getSingleResult() > 0);
+		return have;
+	
+		
+	
+		
 	}
 	
 	public void saveJJCategory(JJCategory JJCategory_) {

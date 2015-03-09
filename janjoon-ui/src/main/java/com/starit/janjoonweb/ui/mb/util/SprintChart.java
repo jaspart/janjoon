@@ -94,7 +94,7 @@ public class SprintChart {
 		}
 		
 		chartModel.addSeries(chartSeries);
-		chartModel.addSeries(lineSeries);
+		chartModel.addSeries(lineSeries);		
 		DateAxis axis = new DateAxis("Dates");
 		axis.setTickAngle(-50);
 		chartModel.getAxes().put(AxisType.X, axis);

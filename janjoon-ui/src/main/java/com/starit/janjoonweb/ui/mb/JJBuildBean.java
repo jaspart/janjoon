@@ -184,6 +184,11 @@ public class JJBuildBean {
 		
 		if(b.getVersion() == null)
 		{
+			JJContact contact=((LoginBean) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+					.getSession(false)).getAttribute("loginBean")).getContact();
+			b.setUpdatedBy(contact);
+			b.setUpdatedDate(new Date());
+			jJBuildService.updateJJBuild(b);
 			return true;
 			
 		}else{

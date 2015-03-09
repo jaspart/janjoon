@@ -91,10 +91,10 @@
 					<p:panelGrid>
 						<p:row>
 							<p:column>
-<!-- 								<h:outputText for="build" value="#{messages.test_build_label}" /> -->
+								<!-- 								<h:outputText for="build" value="#{messages.test_build_label}" /> -->
 								<p:selectOneMenu id="build" value="#{jJBuildBean.build}"
-									effect="fade" style="width:100%;"
-									filter="true" filterMatchMode="startsWith">
+									effect="fade" style="width:100%;" filter="true"
+									filterMatchMode="startsWith">
 									<f:converter
 										converterId="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter" />
 									<f:selectItem itemValue="#{null}"
@@ -259,17 +259,21 @@
 						style="color: red;" />
 
 					<p:dataTable var="columnName" value="#{jJTestcaseBean.colNames}"
-						scrollable="true" scrollHeight="#{jJTestcaseBean.scrollHeight}" rowIndexVar="rowIdx" scrollWidth="#{jJTestcaseBean.scrollWidth}"
+						id="buildTestTable" scrollable="true"
+						scrollHeight="#{jJTestcaseBean.scrollHeight}" rowIndexVar="colIdx"
+						scrollWidth="#{jJTestcaseBean.scrollWidth}"
 						style="table-layout: fixed;width: #{jJTestcaseBean.width};"
 						rendered="#{jJTestcaseBean.rowNames != null and !jJTestcaseBean.rendredTestCaseRecaps and !jJTestcaseBean.rendredTestCaseHistorical and jJTestcaseBean.rowNames != null}">
-						<p:column styleClass="ui-widget-header" width="100">							
+
+
+						<p:column styleClass="ui-widget-header" width="100">
 							<p:commandLink value="#{columnName.name}"
 								action="#{jJTestcaseBean.testCaseInfo(columnName.id)}"
 								ajax="false">
 							</p:commandLink>
 						</p:column>
-						<p:columns var="rowName" value="#{jJTestcaseBean.rowNames}" 
-							width="50" columnIndexVar="colIdx">
+						<p:columns var="rowName" value="#{jJTestcaseBean.rowNames}"
+							width="50" columnIndexVar="rowIdx">
 							<f:facet name="header">
 								<h:outputText value="Version #{rowName.name}"
 									rendered="#{rowName['class'].simpleName == 'JJVersion'}" />
@@ -279,8 +283,19 @@
 							</f:facet>
 							<p:panel>
 								<p:selectBooleanCheckbox
-									value="#{jJTestcaseBean.isChecked(rowName,columnName)}"
+									rendered="#{rowName['class'].simpleName == 'JJBuild'}"
+									value="#{jJTestcaseBean.value[colIdx][rowIdx]}">
+									<p:ajax update=":growlForm :testFormCenter"
+										listener="#{jJTestcaseBean.onCellEdit(colIdx,rowIdx)}"
+										onstart="PF('blockUIWidget').block()"
+										oncomplete="PF('blockUIWidget').unblock();" />
+								</p:selectBooleanCheckbox>
+
+								<p:selectBooleanCheckbox
+									rendered="#{rowName['class'].simpleName == 'JJVersion'}"
+									value="#{jJTestcaseBean.value[colIdx][rowIdx]}"
 									disabled="true" />
+
 							</p:panel>
 						</p:columns>
 					</p:dataTable>
@@ -353,7 +368,7 @@
 								icon="ui-icon-plusthick" />
 						</f:facet>
 					</p:dataTable>
-					
+
 					<p:lineChart id="filled" value="#{chartBean.categoryModel}"
 						legendPosition="ne" title="#{messages.test_graph_testcase_title}"
 						seriesColors="#{chartBean.seriesColors}"
@@ -405,15 +420,15 @@
 						</p:column>
 
 						<p:column headerText="Action">
-							<h:outputText value="#{ts.actionstep}" escape="false" 
-							style="white-space: pre-wrap;max-height: 30px;min-height: 30px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis"/>
+							<h:outputText value="#{ts.actionstep}" escape="false"
+								style="white-space: pre-wrap;max-height: 30px;min-height: 30px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis" />
 						</p:column>
 						<p:column headerText="Result">
-							<h:outputText value="#{ts.resultstep}" escape="false" 
-							style="white-space: pre-wrap;max-height: 30px;min-height: 30px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis" />
+							<h:outputText value="#{ts.resultstep}" escape="false"
+								style="white-space: pre-wrap;max-height: 30px;min-height: 30px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis" />
 						</p:column>
 					</p:dataTable>
-					
+
 					<p:dataTable id="testexecutionRecapDataTable"
 						value="#{jJTestcaseexecutionBean.testCaseexecutionRecaps}"
 						rowKey="#{tce.name}" var="tce" paginatorPosition="bottom"
@@ -427,10 +442,10 @@
 						</p:column>
 						<p:column headerText="Creation Date">
 							<h:outputText value="#{tce.testcaseexecution.creationDate}">
-							<f:converter converterId="extendedDateTimeConverter" />
-							<f:attribute name="pattern" value="dd/MM/yyyy" />
-							<f:attribute name="timeZone" value="UCL" />							
-						</h:outputText>
+								<f:converter converterId="extendedDateTimeConverter" />
+								<f:attribute name="pattern" value="dd/MM/yyyy" />
+								<f:attribute name="timeZone" value="UCL" />
+							</h:outputText>
 						</p:column>
 						<p:column headerText="Update Date">
 							<h:outputText value="#{tce.testcaseexecution.updatedDate}">

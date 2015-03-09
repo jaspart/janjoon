@@ -18,6 +18,7 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.domain.JJVersionService;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJVersion.class, beanName = "jJVersionBean")
@@ -31,6 +32,11 @@ public class JJVersionBean {
 		this.jJRequirementService = jJRequirementService;
 	}
 
+	
+	public JJVersionService getJJVersionService()
+	{
+		return jJVersionService;
+	}
 	private JJProduct product;
 	private JJVersion version;
 	private List<JJVersion> versionList;

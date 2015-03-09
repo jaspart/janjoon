@@ -126,6 +126,7 @@
 						<p:commandButton id="taskBugSaveButton"
 							value="#{messages.bug_edit_save_button}"
 							action="#{jJSprintBean.persistBugTask}" update=":projecttabview :growlForm"
+							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()"
 							onsuccess="PF('editBugDialogWidget').hide()">
 						</p:commandButton>

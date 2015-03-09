@@ -43,9 +43,10 @@ public class BuildUtil {
 	{
 		for(JJBuild build:versionBuilds)
 		{
-			if(!contain(build))
+			if(!versionSelectedBuilds.contains(build))
 			{
 				build.setVersion(null);
+				build.setEnabled(false);
 				bean.updateJJBuild(build);
 			}			
 			
@@ -69,15 +70,15 @@ public class BuildUtil {
 		return i;
 	}
 	
-	public boolean contain(JJBuild build)
-	{
-		boolean contain=false;
-		int i=0;
-		while(i<versionSelectedBuilds.size() && !contain)
-		{
-			contain=versionSelectedBuilds.get(i).equals(build);
-			i++;
-		}
-		return contain;
-	}
+//	public boolean contain(JJBuild build)
+//	{
+//		boolean contain=false;
+//		int i=0;
+//		while(i<versionSelectedBuilds.size() && !contain)
+//		{
+//			contain=versionSelectedBuilds.get(i).equals(build);
+//			i++;
+//		}
+//		return contain;
+//	}
 }

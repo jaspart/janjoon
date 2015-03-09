@@ -641,7 +641,7 @@ public class JJChapterBean {
 					paragraph.add(e);
 					/* } */
 				}
-				if (requirement.getNote().length() > 2) {
+				if (requirement.getNote() != null && requirement.getNote().length() > 2) {
 					paragraph
 							.add("Note: "
 									+ new Chunk(requirement.getNote() + "\n",
@@ -672,6 +672,7 @@ public class JJChapterBean {
 							onlyActif);
 
 			for (JJRequirement requirement : requirements) {
+				if(requirement.getOrdering() != null)
 				elements.put(requirement.getOrdering(), requirement);
 
 			}

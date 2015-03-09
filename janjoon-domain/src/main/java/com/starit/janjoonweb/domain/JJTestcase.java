@@ -98,5 +98,10 @@ public class JJTestcase {
 		return (object instanceof JJTestcase) && (getId() != null) ? getId()
 				.equals(((JJTestcase) object).getId()) : (object == this);
 	}
+	
+	@Override
+	public int hashCode() {
+	    return this.getId().hashCode();
+	}
 
 }
