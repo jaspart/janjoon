@@ -25,7 +25,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity(sequenceName = "JJTestcaseSEQ")
 public class JJTestcase {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;
@@ -55,13 +55,14 @@ public class JJTestcase {
 
 	@NotNull
 	@ManyToOne
-	private JJRequirement requirement;	
-	
-//	@ManyToOne
-//	private JJBuild build;
-//
-//	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
-//	private Set<JJVersion> versions = new HashSet<JJVersion>();
+	private JJRequirement requirement;
+
+	// @ManyToOne
+	// private JJBuild build;
+	//
+	// @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy =
+	// "testcase")
+	// private Set<JJVersion> versions = new HashSet<JJVersion>();
 
 	@ManyToOne
 	private JJSprint sprint;
@@ -71,11 +72,11 @@ public class JJTestcase {
 	private Integer pricepoint;
 
 	private Boolean automatic;
-	
+
 	private Boolean regression;
-	
+
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "JJBuildLinkJJTestcase", joinColumns = { @javax.persistence.JoinColumn(name = "Testcase_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Build_ID", referencedColumnName = "id") })	
+	@JoinTable(name = "JJBuildLinkJJTestcase", joinColumns = { @javax.persistence.JoinColumn(name = "Testcase_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Build_ID", referencedColumnName = "id") })
 	private Set<JJBuild> builds = new HashSet<JJBuild>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
@@ -98,10 +99,13 @@ public class JJTestcase {
 		return (object instanceof JJTestcase) && (getId() != null) ? getId()
 				.equals(((JJTestcase) object).getId()) : (object == this);
 	}
-	
+
 	@Override
 	public int hashCode() {
-	    return this.getId().hashCode();
+		if (this.getId() != null)
+			return this.getId().hashCode();
+		else
+			return super.hashCode();
 	}
 
 }

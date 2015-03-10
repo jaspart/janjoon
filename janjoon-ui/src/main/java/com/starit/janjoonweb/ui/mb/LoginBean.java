@@ -1,7 +1,6 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,7 +19,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ValueChangeEvent;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -29,8 +27,6 @@ import org.primefaces.component.dialog.Dialog;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -1374,6 +1370,21 @@ public class LoginBean implements Serializable {
 		});
 		return found[0];
 	}
+	
+	public String getStyleClass()
+	{
+		FacesContext ctx = FacesContext.getCurrentInstance();
+		String viewId = ctx.getViewRoot().getViewId();
+		if(viewId.contains("login"))
+			return "login-content";
+		else if(viewId.contains("signup"))
+			return "signup-content";
+		else 
+			return null;
+	}
+	
+	
+	
 
 //	public StreamedContent getFile() {
 //		InputStream stream = FacesContext.getCurrentInstance()

@@ -1739,7 +1739,7 @@ public class JJTaskBean {
 			} else if (objet.equalsIgnoreCase("Testcase")) {
 
 				for (JJTestcase testcase : jJTestcaseService
-						.getImportTestcases(null, project,LoginBean.getProduct(),true)) {
+						.getImportTestcases(null, project,LoginBean.getProduct(),true,false)) {
 
 					if (!checkAll) {
 						tasks = jJTaskService.getImportTasks(null, null,

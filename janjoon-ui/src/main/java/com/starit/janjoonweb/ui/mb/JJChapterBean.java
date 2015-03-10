@@ -298,6 +298,7 @@ public class JJChapterBean {
 		disabledProject = true;
 
 		chapterState = false;
+		selectedChapterNode=null;
 	}
 
 	public void deleteChapter() {
@@ -369,6 +370,7 @@ public class JJChapterBean {
 				"Deleted" + selectedChapterNode.getData(), "Deleted"
 						+ selectedChapterNode.getData());
 		FacesContext.getCurrentInstance().addMessage(null, message);
+		selectedChapterNode=null;
 
 	}
 

@@ -273,7 +273,7 @@ public class RequirementBean {
 					.getId()));
 			b.setDescription("TestCase for Requirement "
 					+ requirement.getName());
-			b.setOrdering(reqtestCases.size());
+			b.setOrdering(jJTestcaseService.getMaxOrdering(requirement));
 			b.setAutomatic(false);
 			jjTestcaseBean.saveJJTestcase(b);
 			testCaseName = "";

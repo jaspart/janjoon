@@ -38,18 +38,13 @@
 	</h:head>
 	<h:body styleClass="login-body">
 		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
-			<p:panel styleClass="login-content">
-
+			<p:panel styleClass="#{loginBean.styleClass}">
 				<ui:insert name="header" rendered="false">
 					<ui:include src="generic-login.xhtml" />
 				</ui:insert>
 
-				<p:panel id="contentPanel" styleClass="content">
-					<f:event listener="#{loginBean.initMenuIndexvalue}"
-						type="preRenderView" />
-					<ui:insert name="content" />
-					<p:growl id="auth" for="login" styleClass="alert alert-error"
-						showDetail="true" life="2000" />
+				<p:panel id="contentPanel" styleClass="content">					
+					<ui:insert name="content" />					
 				</p:panel>
 				<ui:insert name="footer">
 					<ui:include src="footer.xhtml" />

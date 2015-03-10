@@ -9,6 +9,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
+import javax.servlet.http.HttpSession;
 
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.ui.mb.JJContactBean;
@@ -43,6 +44,11 @@ public class EmailValidator implements Validator {
         JJContact con=(JJContact) c.getAttributes().get("contact");
         if(con!=null)
         {
+        	if(LoginBean.findBean("jJContactBean") == null)
+        	{
+        		HttpSession session = (HttpSession)fc.getExternalContext().getSession(false);
+        		session.setAttribute("jJContactBean",new JJContactBean());
+        	}        		
         	 if(!((JJContactBean)LoginBean.findBean("jJContactBean")).emailValid(o.toString(), con))
              {
              	FacesMessage msg = new FacesMessage("Email Already Exist!", "Email Validation Error");

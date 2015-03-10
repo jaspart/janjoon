@@ -125,6 +125,9 @@ public class JJContactBean {
 
 	public JJContact getContactAdmin() {
 
+		if(contactAdmin == null)
+			contactAdmin =new JJContact();
+		
 		return contactAdmin;
 	}
 
@@ -564,6 +567,37 @@ public class JJContactBean {
 		}
 
 		return j;
+
+	}
+	
+	public String signUp()
+ {
+		FacesMessage facesMessage = null;
+
+		contactAdmin.setDescription("This contact is "
+				+ contactAdmin.getFirstname() + " " + contactAdmin.getName());
+		contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword()));
+		contactAdmin.setCreationDate(new Date());
+		contactAdmin.setEnabled(true);
+		contactAdmin.setCreatedBy(((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact());
+
+		if (jJContactService.saveJJContactTransaction(contactAdmin)) {
+
+			facesMessage = MessageFactory.getMessage(
+					"message_successfully_created", FacesMessage.SEVERITY_INFO,
+					"Contact");			
+			return "success";
+
+		} else {
+
+			facesMessage = MessageFactory.getMessage(
+					"jjcontact_unsuccessfully_created",
+					FacesMessage.SEVERITY_ERROR, "Contact");
+			contactAdmin.setEmail("");
+			contactAdmin.setPassword("");
+			return "fail";
+		}
 
 	}
 

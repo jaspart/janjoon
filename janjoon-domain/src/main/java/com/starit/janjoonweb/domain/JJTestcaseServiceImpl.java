@@ -24,7 +24,7 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 
 	@Override
 	public List<JJTestcase> getTestcases(JJRequirement requirement,
-			JJChapter chapter,JJBuild build, boolean onlyActif,
+			JJChapter chapter, JJBuild build, boolean onlyActif,
 			boolean sortedByOrder, boolean sortedByCreationdate) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -42,7 +42,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 		}
 
 		if (build != null) {
-			predicates.add(criteriaBuilder.isMember(build,from.<Set<JJBuild>>get("builds")));
+			predicates.add(criteriaBuilder.isMember(build,
+					from.<Set<JJBuild>> get("builds")));
 		}
 
 		if (chapter != null) {
@@ -96,7 +97,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 
 	@Override
 	public List<JJTestcase> getImportTestcases(JJCategory category,
-			JJProject project, JJProduct product,boolean onlyActif) {
+			JJProject project, JJProduct product, boolean onlyActif,
+			boolean withOutChapter) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcase> criteriaQuery = criteriaBuilder
 				.createQuery(JJTestcase.class);
@@ -110,11 +112,17 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 		if (project != null) {
 			Path<Object> path = from.join("requirement").get("project");
 			predicates.add(criteriaBuilder.equal(path, project));
-		}		
+		}
 
 		if (product != null) {
 			Path<Object> path = from.join("requirement").get("product");
 			predicates.add(criteriaBuilder.equal(path, product));
+		}
+
+		if (withOutChapter) {
+			predicates.add(criteriaBuilder.isNull(from.join("requirement")
+					.get("chapter")));
+
 		}
 
 		if (category != null) {
@@ -138,18 +146,19 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 	}
 
 	public Integer getMaxOrdering(JJRequirement requirement) {
-		
-		Integer r =null;
-		if(requirement.getChapter() != null)
-		r = (Integer) entityManager
-				.createQuery(
-						"select max(e.ordering) from JJTestcase e Where e.requirement.chapter = :c")
-				.setParameter("c", requirement.getChapter()).getSingleResult();
+
+		Integer r = null;
+		if (requirement.getChapter() != null)
+			r = (Integer) entityManager
+					.createQuery(
+							"select max(e.ordering) from JJTestcase e Where e.requirement.chapter = :c")
+					.setParameter("c", requirement.getChapter())
+					.getSingleResult();
 		else
 			r = (Integer) entityManager
-			.createQuery(
-					"select max(e.ordering) from JJTestcase e Where e.requirement = :c")
-			.setParameter("c", requirement).getSingleResult();
+					.createQuery(
+							"select max(e.ordering) from JJTestcase e Where e.requirement = :c")
+					.setParameter("c", requirement).getSingleResult();
 
 		if (r != null)
 			return r + 1;
@@ -164,7 +173,7 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 
 	@Override
 	public List<JJTestcase> getJJtestCases(JJRequirement requirement) {
-		return getTestcases(requirement, null,null,true, true, true);
+		return getTestcases(requirement, null, null, true, true, true);
 	}
 
 	@Override

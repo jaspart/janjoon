@@ -19,15 +19,13 @@
 /* 	visibility: inherit; */
 /* 	width: 600px !important; */
 /* } */
-
-.ui-editor{
+.ui-editor {
 	height: 250px !important;
 }
 
 /* .cke_contents { */
 /* 	height: 200px !important; */
 /* } */
-
 .cke_bottom {
 	display: block;
 }
@@ -41,7 +39,7 @@
 				style="white-space: nowrap;" />
 		</h:panelGrid>
 	</pe:blockUI>
-	<h:form id="chapterDialogForm" >
+	<h:form id="chapterDialogForm">
 		<p:panel styleClass="panelDialog">
 			<f:facet name="header">
 				<p:messages id="msg" showDetail="false" closable="true" />
@@ -82,7 +80,7 @@
 						</p:column>
 					</p:row>
 					<p:row>
-						<p:column  style="width:600px;">
+						<p:column style="width:600px;">
 							<h:outputText
 								value="#{messages.specification_chapter_description_label}" />
 							<pe:ckEditor id="description" height="250px" width="600px"
@@ -97,18 +95,18 @@
 								requiredMessage="#{messages.specification_chapter_description_alert}" />
 						</p:column>
 						<p:column>
-							<p:contextMenu for="chapterTreeSingle">
+							<p:contextMenu id="chapterContextMenu" for="chapterTreeSingle">
 								<p:menuitem
 									value="#{messages.specification_chapter_edit_menuitem}"
-									actionListener="#{jJChapterBean.editChapter()}" process="@this"
+									actionListener="#{jJChapterBean.editChapter}" process="@this,chapterTreeSingle"
 									icon="ui-icon-pencil"
 									onstart="PF('chapterBlockUIWidget').block()"
 									oncomplete="PF('chapterBlockUIWidget').unblock()"
 									update=":chapterDialogForm" />
 								<p:menuitem
 									value="#{messages.specification_chapter_delete_menuitem}"
-									actionListener="#{jJChapterBean.deleteChapter()}"
-									process="@this" icon="ui-icon-close"
+									actionListener="#{jJChapterBean.deleteChapter}" process="@this,chapterTreeSingle"
+									icon="ui-icon-close"									
 									onstart="PF('chapterBlockUIWidget').block()"
 									oncomplete="PF('chapterBlockUIWidget').unblock()"
 									update=":chapterDialogForm" />
@@ -118,9 +116,8 @@
 							<p:tree id="chapterTreeSingle" style="width:250px"
 								value="#{jJChapterBean.chapterRoot}" var="nodeChapter"
 								selectionMode="single"
-								selection="#{jJChapterBean.selectedChapterNode}" dynamic="true"
-								cache="false">
-								<p:ajax event="select" listener="#{jJChapterBean.onNodeSelect}" />
+								selection="#{jJChapterBean.selectedChapterNode}" dynamic="true">
+<!-- 								<p:ajax event="select" listener="#{jJChapterBean.onNodeSelect}" update=":chapterDialogForm" /> -->
 								<p:treeNode>
 									<h:outputText value="#{nodeChapter}" />
 								</p:treeNode>
@@ -169,7 +166,7 @@
 							<!-- 							<p:scrollPanel style="height:350px;" mode="native"> -->
 							<p:tree id="RightTreeIncorporated"
 								value="#{jJChapterBean.rightRoot}" var="nodeRight"
-								selectionMode="single" 
+								selectionMode="single"
 								selection="#{jJChapterBean.selectedRightNode}" draggable="true"
 								droppable="true" dragdropScope="demo" cache="false">
 								<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"

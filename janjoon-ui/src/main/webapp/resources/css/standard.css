@@ -218,6 +218,18 @@ a:visited {
 	background: rgba(255, 255, 255, 0.5);
 }
 
+.signup-content {
+	height: 65%;
+  	width: 30%;
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
+	left: 0px;
+	margin: auto;
+	background: rgba(255, 255, 255, 0.5);
+}
+
 .ui-overlaypanel-close {
 	left: -9px;
 	top: -2px;

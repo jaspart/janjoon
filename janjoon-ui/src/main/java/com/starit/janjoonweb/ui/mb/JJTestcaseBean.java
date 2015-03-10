@@ -199,7 +199,7 @@ public class JJTestcaseBean {
 		if (rowNames == null || rowNames.isEmpty()) {
 
 			colNames = jJTestcaseService.getImportTestcases(category,
-					LoginBean.getProject(), LoginBean.getProduct(), true);
+					LoginBean.getProject(), LoginBean.getProduct(), true,false);
 			// rowNames=new ArrayList<Object>();
 			if (colNames != null && !colNames.isEmpty()) {
 
@@ -223,20 +223,27 @@ public class JJTestcaseBean {
 
 					rowNames.add(build);
 				}
-				
-				 for (int i = 0; i < colNames.size(); i++) {
+				if(!rowNames.isEmpty())
+				{
+					for (int i = 0; i < colNames.size(); i++) {
 			            value.add(new ArrayList<Boolean>());			           
 			            for (int j = 0; j < rowNames.size(); j++) {			            	
-			            	value.get(i).add(isChecked(rowNames.get(j), colNames.get(i)));
+			            	value.get(i).add(jJTestcaseService.findJJTestcase(colNames.get(i).getId()).getBuilds().contains(rowNames.get(j)));
 			            }
 			        }
+				}else
+				{
+					rowNames=null;
+					colNames=null;
+				}
+				 
 
 
 			}
 			if (rowNames != null) {
-				width = 170 + (rowNames.size() * 70) + "px";
+				width = 180 + (rowNames.size() * 70) + "px";
 
-				if (170 + (rowNames.size() * 70) > 1000)
+				if (180 + (rowNames.size() * 70) > 1000)
 					width = "100%";
 			} else
 				width = 170 + "px";
@@ -263,30 +270,6 @@ public class JJTestcaseBean {
 
 	public void setValue(ArrayList<ArrayList<Boolean>> value) {
 		this.value = value;
-	}
-
-	public boolean isChecked(Object rowName, JJTestcase columnName) {
-		
-		columnName =jJTestcaseService.findJJTestcase(columnName.getId());
-		if (rowName instanceof JJBuild)
-			return columnName.getBuilds().contains(rowName);
-		else if (rowName instanceof JJVersion) {
-			
-			JJVersionService jJVersionService=((JJVersionBean)LoginBean.findBean("jJVersionBean")).getJJVersionService();
-			JJVersion version=jJVersionService.findJJVersion(((JJVersion) rowName).getId());
-			boolean contain = false;
-			for (JJBuild build :version.getBuilds()) {
-				if (build.getEnabled()) {
-					if (columnName.getBuilds().contains(build)) {
-						contain = true;
-						break;
-					}
-				}
-			}
-			return contain;
-		} else
-			return jJTestcaseexecutionService.haveTestcaseExec(columnName,
-					null, null);
 	}
 	
 	public void onCellEdit(int colIdx,int rowIdx)
@@ -336,7 +319,7 @@ public class JJTestcaseBean {
 	}
 
 	public Integer getScrollWidth() {
-		if (170 + (rowNames.size() * 70) > 1110)
+		if (180 + (rowNames.size() * 70) > 1110)
 			return 1100;
 		else
 			return null;
@@ -357,13 +340,8 @@ public class JJTestcaseBean {
 		this.width = width;
 	}
 
-	public JJProject getProject() {
-
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJProjectBean jJProjectBean = (JJProjectBean) session
-				.getAttribute("jJProjectBean");
-		this.project = jJProjectBean.getProject();
+	public JJProject getProject() {	
+		this.project = LoginBean.getProject();
 		return project;
 	}
 
@@ -1079,6 +1057,19 @@ public class JJTestcaseBean {
 				if (chapter != null && ch.equals(chapter))
 					selectedNode = node;
 			}
+			
+			List<JJTestcase> testWithOutChapter=jJTestcaseService.getImportTestcases(category, LoginBean.getProject(),
+					LoginBean.getProduct(),true, true);
+			for(JJTestcase test:testWithOutChapter)				
+			{			
+				String type = getType(test);
+				TreeNode newNode3 = new DefaultTreeNode(type, "TC-"
+						+ test.getId() + "- " + test.getName(), categoryNode);
+				
+				if (testcase != null && testcase.equals(test))
+					selectedNode = newNode3;
+
+			}
 
 		}
 
@@ -1653,12 +1644,12 @@ public class JJTestcaseBean {
 	public StreamedContent getFile() {
 
 		if (category != null) {
-			JJBuild build = ((JJBuildBean) LoginBean.findBean("jJBuildBean"))
-					.getBuild();
+//			JJBuild build = ((JJBuildBean) LoginBean.findBean("jJBuildBean"))
+//					.getBuild();
 			String buffer = "<category name=\""
 					+ category.getName().toUpperCase() + "\">";
 			List<JJTestcase> tests = jJTestcaseService.getImportTestcases(
-					category, project, LoginBean.getProduct(), true);
+					category, project, LoginBean.getProduct(), true,false);
 			for (JJTestcase ttt : tests) {
 				String description = "";
 				StringReader strReader = new StringReader(ttt.getDescription());

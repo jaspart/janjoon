@@ -9,17 +9,17 @@
 <ui:composition template="../templates/layout-login.xhtml">
 	<ui:define name="title">#{messages.login_title}</ui:define>
 	<ui:define name="content">
-<!-- 		<f:event listener="#{loginBean.checkAuthorities}" type="preRenderView"  /> -->
+		<!-- 		<f:event listener="#{loginBean.checkAuthorities}" type="preRenderView"  /> -->
 		<h:form id="login" method="post">
+			<p:growl showDetail="true" id="auth"/>
 			<p:panelGrid style="background-color:transparent;margin: 0 auto;">
 				<f:facet name="header">
 					<p:row>
 						<p:column colspan="2">
-							<p:outputLabel value="  #{messages.login_pleaseLogin_header}" />
+							<p:outputLabel value="#{messages.login_pleaseLogin_header}" />
 						</p:column>
 					</p:row>
-				</f:facet>
-
+				</f:facet>				
 				<p:row>
 					<p:column>
 						<h:outputLabel for="username"
@@ -76,20 +76,20 @@
 								oncomplete="PF('blockUIWidget').unblock()"
 								action="#{loginBean.login}" style="margin-top:20px;"
 								disabled="#{!loginBean.agreeTerms}"
-								update=":login:mdp,:login:mail,:auth" />
+								update=":login:mdp,:login:mail :login:auth" />
 						</p:column>
 					</p:row>
 				</f:facet>
 			</p:panelGrid>
 		</h:form>
-		<pe:blockUI widgetVar="blockUIWidget">
-			<h:panelGrid columns="2">
-				<p:graphicImage library="images" name="ajax-loader.gif"
-					style="vertical-align: middle;" />
-				<h:outputText value="#{messages.label_refresh}"
-					style="white-space: nowrap;" />
-			</h:panelGrid>
-		</pe:blockUI>
+		<!-- 		<pe:blockUI widgetVar="blockUIWidget"> -->
+		<!-- 			<h:panelGrid columns="2"> -->
+		<!-- 				<p:graphicImage library="images" name="ajax-loader.gif" -->
+		<!-- 					style="vertical-align: middle;" /> -->
+		<!-- 				<h:outputText value="#{messages.label_refresh}" -->
+		<!-- 					style="white-space: nowrap;" /> -->
+		<!-- 			</h:panelGrid> -->
+		<!-- 		</pe:blockUI> -->
 	</ui:define>
 </ui:composition>
 </html>
