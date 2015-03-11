@@ -81,15 +81,15 @@ public class SprintChart {
 							workload = workload - task.getWorkloadPlanned();
 						}
 				}
-				chartSeries.set(f.format(staDate), workload);
+				chartSeries.set(f.format(CalendarUtil.getPreviousDate(staDate)), workload);
 			} else {
-				chartSeries.set(f.format(staDate), 0);
+				chartSeries.set(f.format(CalendarUtil.getPreviousDate(staDate)), 0);
 			}
 			if(!calendar.isHoliday(staDate) && !calendar.isWeekEnd(staDate)) {
 				diff=Math.round(diff-dayWorkload);
 			}
 			diff = Math.max(diff, 0);
-			lineSeries.set(f.format(staDate), diff);
+			lineSeries.set(f.format(CalendarUtil.getPreviousDate(staDate)), diff);
 			staDate = CalendarUtil.getAfterDay(staDate);
 		}
 		
