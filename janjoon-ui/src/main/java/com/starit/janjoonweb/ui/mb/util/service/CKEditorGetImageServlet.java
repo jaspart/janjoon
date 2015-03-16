@@ -60,6 +60,7 @@ public class CKEditorGetImageServlet extends HttpServlet {
 						CKEDITOR_CONTENT_DISPOSITION,
 						CKEDITOR_CONTENT_DISPOSITION_VALUE
 								+ uploadedFile.getName() + "\"");
+				
 				response.getOutputStream().write(rb, 0, rb.length);
 				response.getOutputStream().flush();
 				response.getOutputStream().close();

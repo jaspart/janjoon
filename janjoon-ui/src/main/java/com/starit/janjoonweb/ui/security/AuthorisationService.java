@@ -534,7 +534,8 @@ public class AuthorisationService implements Serializable {
 		if (!rwDev) {
 			rwDevMSG = "Permission Denied";
 		} else {
-			rwDevMSG = MessageFactory.getMessage("header_dev_menuitem", "").getDetail();
+			rwDevMSG = MessageFactory.getMessage("header_dev_menuitem", "").getDetail();		 
+			
 		}
 		
 		rProject = jJPermissionService.isAuthorized(contact, project, product, "Project", null, true, null, null);

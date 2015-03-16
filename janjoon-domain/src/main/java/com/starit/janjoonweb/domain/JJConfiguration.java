@@ -49,7 +49,7 @@ public class JJConfiguration {
 	private String param;
 
 	@NotNull
-	@Size(max = 100)
+	@Lob
 	private String val;
 	
 	@Override

@@ -4080,6 +4080,7 @@ public class JJRequirementBean {
 						.getDescription());
 				List arrList = null;
 				try {
+					
 					arrList = HTMLWorker.parseToList(strReader, null);
 				} catch (Exception e) {
 

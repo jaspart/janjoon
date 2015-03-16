@@ -88,9 +88,6 @@ privileged aspect JJConfigurationDataOnDemand_Roo_DataOnDemand {
     
     public void JJConfigurationDataOnDemand.setVal(JJConfiguration obj, int index) {
         String val = "val_" + index;
-        if (val.length() > 100) {
-            val = val.substring(0, 100);
-        }
         obj.setVal(val);
     }
     

@@ -1,5 +1,8 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
@@ -7,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -19,9 +23,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ValueChangeEvent;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.primefaces.component.dialog.Dialog;
 import org.primefaces.component.tabview.TabView;
@@ -53,6 +59,7 @@ import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.UsageChecker;
+import com.starit.janjoonweb.ui.mb.util.service.CKEditorUploadServlet;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
 import com.sun.faces.component.visit.FullVisitContext;
 
@@ -104,14 +111,10 @@ public class LoginBean implements Serializable {
 	@Autowired
 	public LoginBean(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
-		// if(true) {
+
 		this.mobile = (((HttpServletRequest) FacesContext.getCurrentInstance()
 				.getExternalContext().getRequest()).getHeader("User-Agent")
 				.indexOf("Mobile")) != -1;
-		//this.mobile = true;
-		// } else {
-		// this.mobile=true;
-		// }
 	}
 
 	public AuthorisationService getAuthorisationService() {
@@ -699,16 +702,14 @@ public class LoginBean implements Serializable {
 								context.update(":contentPanel:errorPanel");
 								context.update(":growlForm");
 							}
-						}else
-						{
-							FacesMessage facesMessage = MessageFactory.getMessage(
-									"dev.nullVersion.label",
-									FacesMessage.SEVERITY_ERROR, "");
+						} else {
+							FacesMessage facesMessage = MessageFactory
+									.getMessage("dev.nullVersion.label",
+											FacesMessage.SEVERITY_ERROR, "");
 							FacesContext.getCurrentInstance().addMessage(null,
 									facesMessage);
 						}
-						
-						
+
 					} else {
 						jJProjectBean.setProject((JJProject) event
 								.getNewValue());
@@ -1370,26 +1371,64 @@ public class LoginBean implements Serializable {
 		});
 		return found[0];
 	}
-	
-	public String getStyleClass()
-	{
+
+	public String getStyleClass() {
 		FacesContext ctx = FacesContext.getCurrentInstance();
 		String viewId = ctx.getViewRoot().getViewId();
-		if(viewId.contains("login"))
+		if (viewId.contains("login"))
 			return "login-content";
-		else if(viewId.contains("signup"))
+		else if (viewId.contains("signup"))
 			return "signup-content";
-		else 
+		else
 			return null;
 	}
-	
-	
-	
 
-//	public StreamedContent getFile() {
-//		InputStream stream = FacesContext.getCurrentInstance()
-//				.getExternalContext().getResourceAsStream("/resources/aaa");
-//		return new DefaultStreamedContent(stream, "image/jpg",
-//				"downloaded_optimus");
-//	}
+	public static void copyUploadImages(boolean copy)
+			throws FileNotFoundException, IOException {
+		Properties properties = new Properties();
+		
+		String serverName =((HttpServletRequest) FacesContext.getCurrentInstance()
+				.getExternalContext().getRequest()).getServerName();
+		String janjoon_directory="";
+		
+		boolean contextPath=((HttpServletRequest) FacesContext.getCurrentInstance()
+				.getExternalContext().getRequest()).getContextPath().contains("janjoon-ui");
+		
+		if(serverName.contains("localhost") && contextPath)
+		{
+			janjoon_directory="src"+File.separator+"main"+File.separator+"webapp"+File.separator+"images";
+		}else			
+		{
+			ServletContext servletContext = (ServletContext) FacesContext
+					.getCurrentInstance().getExternalContext().getContext();
+			String path = servletContext.getRealPath("WEB-INF" + File.separator
+					+ "classes")
+					+ File.separator;
+			properties.load(new FileInputStream(path + "email.properties"));
+			janjoon_directory="lib" + File.separator+ properties.getProperty("janjoon.version") + File.separator
+					+ "images";
+		}		
+		
+		System.err.println("JANJOON_DIRECTORY = "+janjoon_directory);
+		File deletedFile = new File(janjoon_directory);
+		FileUtils.deleteDirectory(deletedFile);
+		if (copy) {
+			File fromPath = new File(CKEditorUploadServlet.CKEDITOR_DIR);
+			if (!fromPath.exists())
+				fromPath.mkdirs();
+			File toPath = new File(janjoon_directory);
+			if (!toPath.exists())
+				toPath.mkdirs();
+
+			FileUtils.copyDirectory(fromPath, toPath);
+		}
+
+	}
+
+	// public StreamedContent getFile() {
+	// InputStream stream = FacesContext.getCurrentInstance()
+	// .getExternalContext().getResourceAsStream("/resources/aaa");
+	// return new DefaultStreamedContent(stream, "image/jpg",
+	// "downloaded_optimus");
+	// }
 }

@@ -1,15 +1,21 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.awt.Color;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import javax.el.ELException;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -21,7 +27,9 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TreeDragDropEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
@@ -37,7 +45,9 @@ import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.codec.Base64;
+import com.lowagie.text.html.HtmlTags;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.html.simpleparser.StyleSheet;
 
@@ -46,6 +56,7 @@ import org.apache.log4j.Logger;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJCompany;
+import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProduct;
@@ -160,7 +171,7 @@ public class JJChapterBean {
 	}
 
 	public JJProject getProject() {
-		
+
 		this.project = LoginBean.getProject();
 		return project;
 	}
@@ -298,7 +309,7 @@ public class JJChapterBean {
 		disabledProject = true;
 
 		chapterState = false;
-		selectedChapterNode=null;
+		selectedChapterNode = null;
 	}
 
 	public void deleteChapter() {
@@ -370,7 +381,7 @@ public class JJChapterBean {
 				"Deleted" + selectedChapterNode.getData(), "Deleted"
 						+ selectedChapterNode.getData());
 		FacesContext.getCurrentInstance().addMessage(null, message);
-		selectedChapterNode=null;
+		selectedChapterNode = null;
 
 	}
 
@@ -403,8 +414,9 @@ public class JJChapterBean {
 
 		} else {
 			context.execute("PF('chapterDialogWidget').hide()");
-			RequirementBean requirementBean=(RequirementBean) LoginBean.findBean("requirementBean");
-			if(requirementBean != null)
+			RequirementBean requirementBean = (RequirementBean) LoginBean
+					.findBean("requirementBean");
+			if (requirementBean != null)
 				requirementBean.setRootNode(null);
 		}
 	}
@@ -427,15 +439,15 @@ public class JJChapterBean {
 	private void transferTree() {
 
 		// Requirement Tree WHERE requirment.getChapter = null
-		leftRoot = new DefaultTreeNode("leftRoot", null);	
+		leftRoot = new DefaultTreeNode("leftRoot", null);
 
-		JJVersion version = LoginBean.getVersion();		
+		JJVersion version = LoginBean.getVersion();
 		JJProduct product = LoginBean.getProduct();
 
 		List<JJRequirement> jJRequirementList = jJRequirementService
 				.getRequirements(((LoginBean) LoginBean.findBean("loginBean"))
 						.getContact().getCompany(), category, project, product,
-						version, null, null, true, true, false,false,null);
+						version, null, null, true, true, false, false, null);
 
 		for (JJRequirement requirement : jJRequirementList) {
 			TreeNode node = new DefaultTreeNode("R-" + requirement.getId()
@@ -524,14 +536,16 @@ public class JJChapterBean {
 		categoryId = id;
 	}
 
-	public void preProcessPDF(Object document) throws IOException,
-			BadElementException, DocumentException {
-
+	public StreamedContent getPreProcessPDF() throws IOException,
+			BadElementException, DocumentException {		
 		this.getProject();
 
-		Document pdf = (Document) document;
+		LoginBean.copyUploadImages(true);
+		Document pdf = new Document();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PdfWriter writer = PdfWriter.getInstance(pdf, baos);
+		// pdf.set
 		pdf.addTitle("THIS IS THE TITLE");
-
 		pdf.open();
 		pdf.setPageSize(PageSize.A4);
 
@@ -557,8 +571,8 @@ public class JJChapterBean {
 		 */
 
 		StyleSheet style = new StyleSheet();
-		style.loadTagStyle("body", "font", "Times New Roman");
-
+		style.loadTagStyle("body", "font", "Times New Roman");		
+		loadStyleSheet(style);
 		JJCategory category = jJCategoryService.findJJCategory(categoryId);
 
 		Phrase phrase = new Phrase(20, new Chunk("\n" + category.getName()
@@ -576,9 +590,58 @@ public class JJChapterBean {
 			createTreeDocument(chapter, category, paragraph, fontNote,
 					fontChapter, fontRequirement, style);
 		}
+		
+		List<JJRequirement> withOutChapter=jJRequirementService
+				.getRequirementsWithOutChapter(((LoginBean) LoginBean
+						.findBean("loginBean")).getContact().getCompany(),
+						category, project, LoginBean.getProduct(), LoginBean
+								.getVersion(), null, true, true);
+		if(withOutChapter != null && !withOutChapter.isEmpty())
+		{
+			paragraph.add(new Chunk("\n "+
+					MessageFactory.getMessage("specification_tree_withOutChapter", "").getDetail()+"\n",
+					fontChapter));
 
-		paragraph.add(phrase);
+			for (JJRequirement requirement : withOutChapter) {
+				paragraph.add(new Chunk(requirement.getName() + "\n",
+						fontRequirement));
+				StringReader strReader = new StringReader(requirement
+						.getDescription().replace(
+								"/pages/ckeditor/getimage?imageId=", "/images/"));
+				
+//				StringReader strReader = new StringReader(requirement.getDescription());
+				
+				try
+				{
+					List arrList = HTMLWorker.parseToList(strReader, style);
+					
+					for (int i = 0; i < arrList.size(); ++i) {
+						Element e = (Element) arrList.get(i);
+						paragraph.add(e);
+					}
+					if (requirement.getNote() != null
+							&& requirement.getNote().length() > 2) {
+						paragraph.add("Note: "
+								+ new Chunk(requirement.getNote() + "\n", fontNote));
+					}
+				}catch(ELException e)
+				{
+					System.err.println(e.getMessage());
+				}
+				
+			}
+		}
+
+		
+
+		// paragraph.add(phrase);
 		pdf.add(paragraph);
+		pdf.close();	
+		LoginBean.copyUploadImages(false);
+
+		return new DefaultStreamedContent(new ByteArrayInputStream(
+				baos.toByteArray()), "pdf", category.getName().toUpperCase().trim()
+				+ "-Spec.pdf");
 	}
 
 	private void createTreeDocument(JJChapter chapterParent,
@@ -592,10 +655,12 @@ public class JJChapterBean {
 		StringReader strChapitre = new StringReader(chapterParent
 				.getDescription().replace("/pages/ckeditor/getimage?imageId=",
 						"/images/"));
+		
+//		StringReader strChapitre = new StringReader(chapterParent
+//				.getDescription());
 		List arrChapitre = HTMLWorker.parseToList(strChapitre, style);
 		for (int i = 0; i < arrChapitre.size(); ++i) {
 			Element e = (Element) arrChapitre.get(i);
-			System.out.println("ChapterElement = " + e.getClass().getName());
 			paragraph.setSpacingAfter(50);
 			paragraph.add(e);
 		}
@@ -618,10 +683,9 @@ public class JJChapterBean {
 						.getDescription()
 						.replace("/pages/ckeditor/getimage?imageId=",
 								"/images/"));
-				System.out.println("ExportPDF req : "
-						+ requirement.getDescription()
-								.replace("/pages/ckeditor/getimage?imageId=",
-										"/images/"));
+				
+//				StringReader strReader = new StringReader(requirement
+//						.getDescription());
 				List arrList = HTMLWorker.parseToList(strReader, style);
 				for (int i = 0; i < arrList.size(); ++i) {
 					/*
@@ -643,7 +707,8 @@ public class JJChapterBean {
 					paragraph.add(e);
 					/* } */
 				}
-				if (requirement.getNote() != null && requirement.getNote().length() > 2) {
+				if (requirement.getNote() != null
+						&& requirement.getNote().length() > 2) {
 					paragraph
 							.add("Note: "
 									+ new Chunk(requirement.getNote() + "\n",
@@ -674,8 +739,8 @@ public class JJChapterBean {
 							onlyActif);
 
 			for (JJRequirement requirement : requirements) {
-				if(requirement.getOrdering() != null)
-				elements.put(requirement.getOrdering(), requirement);
+				if (requirement.getOrdering() != null)
+					elements.put(requirement.getOrdering(), requirement);
 
 			}
 		} else {
@@ -699,7 +764,7 @@ public class JJChapterBean {
 		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
 
 		List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-				requirement,chapter, null,false, true, false);
+				requirement, chapter, null, false, true, false);
 
 		for (JJTestcase testcase : testcases) {
 			elements.put(testcase.getOrdering(), testcase);
@@ -1268,8 +1333,9 @@ public class JJChapterBean {
 				.getExternalContext().getSession(false);
 		JJRequirementBean jJRequirementBean = (JJRequirementBean) session
 				.getAttribute("jJRequirementBean");
-		if(jJRequirementBean != null && jJRequirementBean.getTableDataModelList() != null)
-		jJRequirementBean.editOneColumn(category);
+		if (jJRequirementBean != null
+				&& jJRequirementBean.getTableDataModelList() != null)
+			jJRequirementBean.editOneColumn(category);
 	}
 
 	public void closeDialog(CloseEvent event) {
@@ -1291,7 +1357,7 @@ public class JJChapterBean {
 		chapterRoot = null;
 		selectedChapterNode = null;
 
-		chapterState = true;		
+		chapterState = true;
 
 		if (FacesContext.getCurrentInstance().getViewRoot().getViewId()
 				.contains("specifications")) {
@@ -1315,6 +1381,43 @@ public class JJChapterBean {
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJChapterService.saveJJChapter(b);
+	}
+	
+	public void loadStyleSheet(StyleSheet style)
+	{
+		List<JJConfiguration> configs=jJConfigurationService.getConfigurations(null, "specs.document.stylesheet",
+				true);
+		if(configs != null && !configs.isEmpty())
+		{
+			JJConfiguration specificationStylesheet=configs.get(0);
+			String styleSheet=specificationStylesheet.getVal().substring(1, 
+					specificationStylesheet.getVal().length()-1);
+			String[] keyValuePairs = styleSheet.split(";");              //split the string to creat key-value pairs
+			//Map<String,Map<String,String>> map = new HashMap<>();   
+			
+			for(String pair : keyValuePairs)                        //iterate over the pais
+			{
+			    String[] entry = pair.split(":");                   //split the pairs to get key and value 
+			   // map.put(entry[0].trim(), entry[1].trim());   //add them to the hashmap
+			    String tag=entry[1].replace("\"", " ");
+			    String[] styleKeyValue = tag.trim().substring(1, tag.trim().length()-1).split(",");
+			    HashMap<String,String> styleMap = new HashMap<>();
+			    for(String stylePair : styleKeyValue)                        //iterate over the pais
+				{
+				    String[] styleEntry = stylePair.split("="); 
+				    //System.err.println(styleEntry[0].trim()+"="+styleEntry[1].trim());
+				    styleMap.put(styleEntry[0].trim(), styleEntry[1].trim());
+				}			    
+			    //System.err.println(entry[0].replace("\"", " ")+"= XXX");
+			    if(!entry[0].replace("\"", " ").startsWith("."))
+			    	style.loadTagStyle(entry[0].replace("\"", " ").trim(), styleMap);
+			    else
+			    	style.loadStyle(entry[0].replace("\"", " ").trim().substring(1), styleMap);
+			   
+			}
+			
+			}
+		
 	}
 
 	public void updateJJChapter(JJChapter b) {

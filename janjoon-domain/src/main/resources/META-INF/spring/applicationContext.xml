@@ -24,7 +24,7 @@
 	<!-- This declaration will cause Spring to locate every @Component, @Repository 
 		and @Service in your application. In practical terms this allows you to write 
 		a POJO and then simply annotate the new POJO as an @Service and Spring will 
-		automatically detect, instantiate and dependency inject your service at startup 
+		automatically detect, instantiate and dependency repositoryinject your service at startup 
 		time. Importantly, you can then also have your new service injected into 
 		any other class that requires it simply by declaring a field for your service 
 		inside the relying class and Spring will inject it. Note that two exclude 

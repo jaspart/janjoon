@@ -123,16 +123,25 @@
 									hideEffect="fade" />
 							</p:column>
 							<p:column>
-								<h:commandLink id="exportPDF"
+<!-- 								<h:commandLink id="exportPDF" -->
+<!-- 									title="#{messages.test_export_tooltip}" -->
+<!-- 									disabled="#{jJTestcaseBean.disabledExport}" -->
+<!-- 									style="float: right;"> -->
+<!--  									<p:graphicImage value="/resources/images/pdf.png" /> --> 
+<!-- 									<p:dataExporter type="pdf" -->
+<!-- 										target=":testFormCenter:testcaseRecapDataTable" -->
+<!-- 										fileName="#{jJTestcaseBean.namefile}" -->
+<!-- 										preProcessor="#{jJTestcaseBean.preProcessPDF}" /> -->
+<!-- 								</h:commandLink> -->
+
+								<p:commandButton ajax="false" id="exportPDF"
 									title="#{messages.test_export_tooltip}"
 									disabled="#{jJTestcaseBean.disabledExport}"
-									style="float: right;">
-									<p:graphicImage value="/resources/images/pdf.png" />
-									<p:dataExporter type="pdf"
-										target=":testFormCenter:testcaseRecapDataTable"
-										fileName="#{jJTestcaseBean.namefile}"
-										preProcessor="#{jJTestcaseBean.preProcessPDF}" />
-								</h:commandLink>
+									style="float: right;"									
+									onclick="PrimeFaces.monitorDownload(start, stop);"
+									icon="ui-icon-pdf">
+									<p:fileDownload value="#{jJTestcaseBean.preProcessPDF}" />
+								</p:commandButton>
 							</p:column>
 						</p:row>
 						<p:row>

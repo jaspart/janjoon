@@ -31,6 +31,16 @@ a:visited {
 	color: #23AFB2;
 }
 
+.ui-icon-pdf{
+    background-image: url("#{resource['images/pdf.ico']}") !important;
+	width: 25px !important;
+	height: 25px !important;
+	left: 0px !important;
+	margin-left: 0 !important;
+	margin-top: 0 !important;
+	top: 0px !important;
+	}
+
 .wrapper {
 	width: 100%;
 	height: 100%;

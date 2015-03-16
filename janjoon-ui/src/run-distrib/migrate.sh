@@ -21,10 +21,11 @@ else
     mv $HOME/lib/janjoon-ui-2.0-$2.war $HOME/lib/janjoon-ui-2.0-$2.war.zip
     mkdir $HOME/lib/janjoon-ui-2.0-$2.war
     unzip $HOME/lib/janjoon-ui-2.0-$2.war.zip -d $HOME/lib/janjoon-ui-2.0-$2.war/
-    cd $HOME/lib/janjoon-ui-2.0-$2.war/
-    ln -s ../../upload/images images
+    #cd $HOME/lib/janjoon-ui-2.0-$2.war/
+    #ln -s ../../upload/images images
     cd -
     sed -i 's/BUILD_NUMBER/'"$2"'/g' $HOME/bin/start.sh
+    sed -i 's/BUILD_NUMBER/'"$2"'/g' $HOME/lib/janjoon-ui-2.0-$2.war/WEB-INF/classes/email.properties
     sed -i 's/9999/'"$3"'/g' $HOME/bin/start.sh
     sed -i 's/PATH_URL/'"$4"'/g' $HOME/bin/start.sh
     $HOME/bin/start.sh

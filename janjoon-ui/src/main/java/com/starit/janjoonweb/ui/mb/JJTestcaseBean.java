@@ -2,6 +2,7 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.awt.Color;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -46,6 +47,7 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.html.simpleparser.StyleSheet;
+import com.lowagie.text.pdf.PdfWriter;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJCategory;
@@ -176,8 +178,7 @@ public class JJTestcaseBean {
 	private boolean disabledInitTask;
 	private boolean disabledTask;
 	private boolean disabledExport;
-	private boolean testcaseState;
-	private String namefile;
+	private boolean testcaseState;	
 	private List<CategoryUtil> categoryList;
 
 	public List<JJBuild> getAvailableBuilds() {
@@ -535,15 +536,7 @@ public class JJTestcaseBean {
 	public void setBuilds(List<JJBuild> builds) {
 		this.builds = builds;
 	}
-
-	public String getNamefile() {
-		return namefile;
-	}
-
-	public void setNamefile(String namefile) {
-		this.namefile = namefile;
-	}
-
+	
 	public List<CategoryUtil> getCategoryList() {
 
 		if (categoryList == null)
@@ -680,19 +673,7 @@ public class JJTestcaseBean {
 				rowNames = null;
 				colNames = null;
 				disabledExport = true;
-
-				namefile = null;
-
-				if (category != null) {
-					namefile = category.getName().trim();
-					disabledExport = false;
-
-				} else {
-
-					namefile = null;
-					disabledExport = true;
-
-				}
+				disabledExport=category == null;				
 				createTestcaseTree();
 				rowNames = null;
 				colNames = null;
@@ -738,24 +719,13 @@ public class JJTestcaseBean {
 				rowNames = null;
 				colNames = null;
 				disabledExport = true;
-
-				namefile = null;
-
 				if (category == null) {
 					category = ((LoginBean) LoginBean.findBean("loginBean"))
 							.getAuthorisationService().getCategory();
 				}
 
-				if (category != null) {
-					namefile = category.getName().trim();
-					disabledExport = false;
-
-				} else {
-
-					namefile = null;
-					disabledExport = true;
-
-				}
+				disabledExport=category == null;
+			
 				if (project != null)
 					createTestcaseTree();
 				rendredEmptySelection = true;
@@ -1343,10 +1313,13 @@ public class JJTestcaseBean {
 
 	}
 
-	public void preProcessPDF(Object document) throws IOException,
+	public StreamedContent getPreProcessPDF() throws IOException,
 			BadElementException, DocumentException {
 
-		Document pdf = (Document) document;
+		LoginBean.copyUploadImages(true);
+		Document pdf = new Document();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PdfWriter writer = PdfWriter.getInstance(pdf, baos);
 		pdf.open();
 		pdf.setPageSize(PageSize.A4);
 
@@ -1381,10 +1354,38 @@ public class JJTestcaseBean {
 			createTreeDocument(chapter, build, category, paragraph,
 					fontTeststep, fontChapter, fontTestcase, style);
 		}
+		
+		List<JJTestcase> withOutChapter=jJTestcaseService.getImportTestcases
+				(category, project, LoginBean.getProduct(), true, true);
+		
+		if(withOutChapter != null && !withOutChapter.isEmpty())
+		{
+			paragraph.add(new Chunk("\n "+
+					MessageFactory.getMessage("test_tree_withOutChapter", "").getDetail()+"\n",
+					fontChapter));
+			
+			for(JJTestcase test:withOutChapter)
+			{
+				paragraph.add(new Chunk(test.getName() + "\n", fontTestcase));
 
-		paragraph.add(phrase);
+				List<JJTeststep> teststeps = jJTeststepService.getTeststeps(
+						test, true, true);
 
-		pdf.add(paragraph);
+				for (JJTeststep teststep : teststeps) {
+					paragraph.add(new Chunk(teststep.getActionstep() + "\t"
+							+ teststep.getResultstep() + "\n", fontTeststep));
+				}
+			}
+				
+		}
+
+		pdf.add(paragraph);		
+		pdf.close();
+		LoginBean.copyUploadImages(false);
+
+		return new DefaultStreamedContent(new ByteArrayInputStream(
+				baos.toByteArray()), "pdf", category.getName().toUpperCase().trim()
+				+ "-test.pdf");
 
 	}
 
