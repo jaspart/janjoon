@@ -1337,6 +1337,7 @@ public class JJTestcaseBean {
 
 		StyleSheet style = new StyleSheet();
 		style.loadTagStyle("body", "font", "Times New Roman");
+		((LoginBean)LoginBean.findBean("loginBean")).loadStyleSheet(style,"test.document.stylesheet");
 
 		Phrase phrase = new Phrase(20, new Chunk("\n" + category.getName()
 				+ "\n" + project.getName() + "\n" + "\n" + "\n", fontChapter));

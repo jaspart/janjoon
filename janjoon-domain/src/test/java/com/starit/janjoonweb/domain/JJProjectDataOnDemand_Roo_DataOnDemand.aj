@@ -44,9 +44,11 @@ privileged aspect JJProjectDataOnDemand_Roo_DataOnDemand {
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
+        setEndDate(obj, index);
         setLogo(obj, index);
         setManager(obj, index);
         setName(obj, index);
+        setStartDate(obj, index);
         setUpdatedDate(obj, index);
         return obj;
     }
@@ -66,6 +68,11 @@ privileged aspect JJProjectDataOnDemand_Roo_DataOnDemand {
         obj.setEnabled(enabled);
     }
     
+    public void JJProjectDataOnDemand.setEndDate(JJProject obj, int index) {
+        Date endDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setEndDate(endDate);
+    }
+    
     public void JJProjectDataOnDemand.setLogo(JJProject obj, int index) {
         byte[] logo = String.valueOf(index).getBytes();
         obj.setLogo(logo);
@@ -82,6 +89,11 @@ privileged aspect JJProjectDataOnDemand_Roo_DataOnDemand {
             name = name.substring(0, 100);
         }
         obj.setName(name);
+    }
+    
+    public void JJProjectDataOnDemand.setStartDate(JJProject obj, int index) {
+        Date startDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setStartDate(startDate);
     }
     
     public void JJProjectDataOnDemand.setUpdatedDate(JJProject obj, int index) {

@@ -301,9 +301,6 @@ privileged aspect JJConfigurationBean_Roo_ManagedBean {
         InputTextarea valCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         valCreateInput.setId("valCreateInput");
         valCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJConfigurationBean.JJConfiguration_.val}", String.class));
-        LengthValidator valCreateInputValidator = new LengthValidator();
-        valCreateInputValidator.setMaximum(100);
-        valCreateInput.addValidator(valCreateInputValidator);
         valCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(valCreateInput);
         
@@ -501,9 +498,6 @@ privileged aspect JJConfigurationBean_Roo_ManagedBean {
         InputTextarea valEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         valEditInput.setId("valEditInput");
         valEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJConfigurationBean.JJConfiguration_.val}", String.class));
-        LengthValidator valEditInputValidator = new LengthValidator();
-        valEditInputValidator.setMaximum(100);
-        valEditInput.addValidator(valEditInputValidator);
         valEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(valEditInput);
         

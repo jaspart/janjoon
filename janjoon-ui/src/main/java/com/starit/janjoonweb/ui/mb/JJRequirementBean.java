@@ -4794,21 +4794,9 @@ public class JJRequirementBean {
 	public void mineChangeEvent() {
 
 		if (mine) {
-			for (CategoryDataModel cc : tableDataModelList) {
-				if (cc.getCategoryId() != 0 && cc.getRendered()) {
-					JJCategory category = jJCategoryService.findJJCategory(cc
-							.getCategoryId());
-					this.setMine(true);
-					cc.setFiltredRequirements(getFiltredListValue(getListOfRequiremntUtils(jJRequirementService
-							.getMineRequirements(((LoginBean) LoginBean
-									.findBean("loginBean")).getContact()
-									.getCompany(), ((LoginBean) LoginBean
-									.findBean("loginBean")).getContact(),
-									product, project, category, version, true,
-									true))));
-				}
-
-			}
+			this.setMine(true);
+			for(int i=0;i<tableDataModelList.size();i++)
+				mineChangeEvent(i);
 
 		} else {
 

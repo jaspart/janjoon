@@ -121,6 +121,25 @@ td.ui-fileupload-preview {
 							</p:column>
 						</p:row>
 						<p:row>
+							<p:column colspan="2">
+								<p:watermark for="projectSD" value="#{messages.admin_project_new_startDate_label}" />
+								<p:calendar id="projectSD" navigator="true" effect="slideDown"
+									pattern="dd/MM/yyyy" required="true"
+									binding="#{startDateEdition}" requiredMessage="#{messages.admin_project_new_startDate_alert}"
+									value="#{jJProjectBean.projectAdmin.startDate}" />
+							</p:column>
+							<p:column colspan="2">
+								<p:watermark for="projectED" value="#{messages.admin_project_new_endDate_label}" />
+								<p:calendar id="projectED" navigator="true" effect="slideDown"
+									pattern="dd/MM/yyyy" required="true" requiredMessage="#{messages.admin_project_new_endDate_alert}"
+									value="#{jJProjectBean.projectAdmin.endDate}">
+									<f:validator validatorId="dateRangeValidator" />
+									<f:attribute name="startDateComponent"
+										value="#{startDateEdition}" />									
+								</p:calendar>
+							</p:column>
+						</p:row>
+						<p:row>
 							<p:column colspan="3">
 								<h:outputLabel for="projLogo" value="Logo:" />
 								<p:fileUpload id="projLogo"
@@ -146,7 +165,7 @@ td.ui-fileupload-preview {
 						<p:commandButton id="submitButton"
 							value="#{messages.admin_project_new_save_button}"
 							update="projectDialogForm :headerForm :growlForm"
-							process="@this,name,projectManagerSelect"
+							process="@this,name,projectManagerSelect,projectSD,projectED"
 							action="#{jJProjectBean.save}" />
 					</f:facet>
 				</p:panel>

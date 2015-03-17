@@ -53,13 +53,19 @@
 				value="#{messages.specification_table_requirement_filter}"
 				for="globalFilter" />
 
-			<p:selectBooleanButton id="mineSpec" style="margin-left: 10%;"
-				value="#{jJRequirementBean.mine}" onLabel="Mine" offLabel="All"
-				onIcon="ui-icon-check" offIcon="ui-icon-close">
-				<p:ajax onstart="PF('blockUIWidget').block()"
-					oncomplete="PF('blockUIWidget').unblock()"
-					listener="#{jJRequirementBean.mineChangeEvent}" update=":specForm" />
-			</p:selectBooleanButton>
+						<p:selectBooleanButton id="mineSpec" style="margin-left: 10%;"
+							value="#{jJRequirementBean.mine}" onLabel="Mine" offLabel="All"
+							onIcon="ui-icon-check" offIcon="ui-icon-close">
+							<p:ajax onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock()"
+								listener="#{jJRequirementBean.mineChangeEvent}" update=":specForm" />
+						</p:selectBooleanButton>
+<!-- 			<p:inputSwitch id="mineSpec" style="margin-left: 10%;" onLabel="Mine" -->
+<!-- 				offLabel="All" value="#{jJRequirementBean.mine}"> -->
+<!-- 				<p:ajax onstart="PF('blockUIWidget').block()" -->
+<!-- 					oncomplete="PF('blockUIWidget').unblock()" -->
+<!-- 					listener="#{jJRequirementBean.mineChangeEvent}" update=":specForm" /> -->
+<!-- 			</p:inputSwitch> -->
 			<p:tooltip for="mineSpec" value="Filter" showEffect="fade"
 				hideEffect="fade" />
 
@@ -198,8 +204,7 @@
 								<f:facet name="header">
 									<h:outputText value="#{tableDataModel.nameDataModel}" />
 									<p:commandButton icon="ui-icon-arrowthick-2-e-w"
-										style="float:left;"
-										onstart="PF('blockUIWidget').block()"
+										style="float:left;" onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()"
 										actionListener="#{jJRequirementBean.expandTable(tableDataModel)}"
 										title="Expand" update=":specForm" />
@@ -262,22 +267,23 @@
 												<!-- 												showEffect="fade" hideEffect="fade" /> -->
 												<!-- 										</p:column> -->
 												<p:column colspan="1">
-												<p:commandButton ajax="false" id="pdf" title="#{jJRequirementBean.warnMessage}"
+													<p:commandButton ajax="false" id="pdf"
+														title="#{jJRequirementBean.warnMessage}"
 														disabled="#{jJRequirementBean.disabledExport}"
 														actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}"
 														onclick="PrimeFaces.monitorDownload(start, stop);"
 														icon="ui-icon-pdf">
 														<p:fileDownload value="#{jJChapterBean.preProcessPDF}" />
 													</p:commandButton>
-													
-<!-- 													<h:commandLink id="pdf" -->
-<!-- 														disabled="#{jJRequirementBean.disabledExport}" -->
-<!-- 														actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}"> -->
-<!-- 														<p:graphicImage value="/resources/images/pdf.png" /> -->
-<!-- 														<p:dataExporter type="pdf" -->
-<!-- 															target="categoryTable_#{loop.index}" fileName="Document" -->
-<!-- 															preProcessor="#{jJChapterBean.preProcessPDF}" /> -->
-<!-- 													</h:commandLink> -->													
+
+													<!-- 													<h:commandLink id="pdf" -->
+													<!-- 														disabled="#{jJRequirementBean.disabledExport}" -->
+													<!-- 														actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}"> -->
+													<!-- 														<p:graphicImage value="/resources/images/pdf.png" /> -->
+													<!-- 														<p:dataExporter type="pdf" -->
+													<!-- 															target="categoryTable_#{loop.index}" fileName="Document" -->
+													<!-- 															preProcessor="#{jJChapterBean.preProcessPDF}" /> -->
+													<!-- 													</h:commandLink> -->
 												</p:column>
 											</p:row>
 										</f:facet>

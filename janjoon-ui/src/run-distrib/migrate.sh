@@ -23,7 +23,7 @@ else
     unzip $HOME/lib/janjoon-ui-2.0-$2.war.zip -d $HOME/lib/janjoon-ui-2.0-$2.war/
     #cd $HOME/lib/janjoon-ui-2.0-$2.war/
     #ln -s ../../upload/images images
-    cd -
+    #cd -
     sed -i 's/BUILD_NUMBER/'"$2"'/g' $HOME/bin/start.sh
     sed -i 's/BUILD_NUMBER/'"$2"'/g' $HOME/lib/janjoon-ui-2.0-$2.war/WEB-INF/classes/email.properties
     sed -i 's/9999/'"$3"'/g' $HOME/bin/start.sh

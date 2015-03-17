@@ -68,6 +68,22 @@ privileged aspect JJProject_Roo_JavaBean {
         this.enabled = enabled;
     }
     
+    public Date JJProject.getStartDate() {
+        return this.startDate;
+    }
+    
+    public void JJProject.setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+    
+    public Date JJProject.getEndDate() {
+        return this.endDate;
+    }
+    
+    public void JJProject.setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+    
     public byte[] JJProject.getLogo() {
         return this.logo;
     }

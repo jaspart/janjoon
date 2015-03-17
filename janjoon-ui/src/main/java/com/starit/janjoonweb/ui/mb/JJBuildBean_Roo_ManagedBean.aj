@@ -9,6 +9,7 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJPhaseService;
+import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.JJBuildBean;
@@ -18,6 +19,7 @@ import com.starit.janjoonweb.ui.mb.converter.JJVersionConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -77,6 +79,8 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
     private HtmlPanelGrid JJBuildBean.viewPanelGrid;
     
     private boolean JJBuildBean.createDialogVisible = false;
+    
+    private List<JJTestcase> JJBuildBean.selectedTestcases;
     
     @PostConstruct
     public void JJBuildBean.init() {
@@ -350,6 +354,22 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         phaseCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(phaseCreateInputMessage);
         
+        HtmlOutputText testcasesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesCreateOutput.setId("testcasesCreateOutput");
+        testcasesCreateOutput.setValue("Testcases:");
+        htmlPanelGrid.getChildren().add(testcasesCreateOutput);
+        
+        HtmlOutputText testcasesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesCreateInput.setId("testcasesCreateInput");
+        testcasesCreateInput.setValue("This relationship is managed from the JJTestcase side");
+        htmlPanelGrid.getChildren().add(testcasesCreateInput);
+        
+        Message testcasesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcasesCreateInputMessage.setId("testcasesCreateInputMessage");
+        testcasesCreateInputMessage.setFor("testcasesCreateInput");
+        testcasesCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcasesCreateInputMessage);
+        
         OutputLabel messagesCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         messagesCreateOutput.setFor("messagesCreateInput");
         messagesCreateOutput.setId("messagesCreateOutput");
@@ -574,6 +594,22 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         phaseEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(phaseEditInputMessage);
         
+        HtmlOutputText testcasesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesEditOutput.setId("testcasesEditOutput");
+        testcasesEditOutput.setValue("Testcases:");
+        htmlPanelGrid.getChildren().add(testcasesEditOutput);
+        
+        HtmlOutputText testcasesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesEditInput.setId("testcasesEditInput");
+        testcasesEditInput.setValue("This relationship is managed from the JJTestcase side");
+        htmlPanelGrid.getChildren().add(testcasesEditInput);
+        
+        Message testcasesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcasesEditInputMessage.setId("testcasesEditInputMessage");
+        testcasesEditInputMessage.setFor("testcasesEditInput");
+        testcasesEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcasesEditInputMessage);
+        
         OutputLabel messagesEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         messagesEditOutput.setFor("messagesEditInput");
         messagesEditOutput.setId("messagesEditOutput");
@@ -700,6 +736,16 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         phaseValue.setConverter(new JJPhaseConverter());
         htmlPanelGrid.getChildren().add(phaseValue);
         
+        HtmlOutputText testcasesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesLabel.setId("testcasesLabel");
+        testcasesLabel.setValue("Testcases:");
+        htmlPanelGrid.getChildren().add(testcasesLabel);
+        
+        HtmlOutputText testcasesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesValue.setId("testcasesValue");
+        testcasesValue.setValue("This relationship is managed from the JJTestcase side");
+        htmlPanelGrid.getChildren().add(testcasesValue);
+        
         HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesLabel.setId("messagesLabel");
         messagesLabel.setValue("Messages:");
@@ -767,7 +813,21 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         return suggestions;
     }
     
+    public List<JJTestcase> JJBuildBean.getSelectedTestcases() {
+        return selectedTestcases;
+    }
+    
+    public void JJBuildBean.setSelectedTestcases(List<JJTestcase> selectedTestcases) {
+        if (selectedTestcases != null) {
+            JJBuild_.setTestcases(new HashSet<JJTestcase>(selectedTestcases));
+        }
+        this.selectedTestcases = selectedTestcases;
+    }
+    
     public String JJBuildBean.onEdit() {
+        if (JJBuild_ != null && JJBuild_.getTestcases() != null) {
+            selectedTestcases = new ArrayList<JJTestcase>(JJBuild_.getTestcases());
+        }
         return null;
     }
     
@@ -820,6 +880,7 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
     
     public void JJBuildBean.reset() {
         JJBuild_ = null;
+        selectedTestcases = null;
         createDialogVisible = false;
     }
     

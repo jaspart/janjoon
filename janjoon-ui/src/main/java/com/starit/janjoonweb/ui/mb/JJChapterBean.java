@@ -572,7 +572,7 @@ public class JJChapterBean {
 
 		StyleSheet style = new StyleSheet();
 		style.loadTagStyle("body", "font", "Times New Roman");		
-		loadStyleSheet(style);
+		((LoginBean)LoginBean.findBean("loginBean")).loadStyleSheet(style,"specs.document.stylesheet");
 		JJCategory category = jJCategoryService.findJJCategory(categoryId);
 
 		Phrase phrase = new Phrase(20, new Chunk("\n" + category.getName()
@@ -1381,45 +1381,8 @@ public class JJChapterBean {
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJChapterService.saveJJChapter(b);
-	}
+	}	
 	
-	public void loadStyleSheet(StyleSheet style)
-	{
-		List<JJConfiguration> configs=jJConfigurationService.getConfigurations(null, "specs.document.stylesheet",
-				true);
-		if(configs != null && !configs.isEmpty())
-		{
-			JJConfiguration specificationStylesheet=configs.get(0);
-			String styleSheet=specificationStylesheet.getVal().substring(1, 
-					specificationStylesheet.getVal().length()-1);
-			String[] keyValuePairs = styleSheet.split(";");              //split the string to creat key-value pairs
-			//Map<String,Map<String,String>> map = new HashMap<>();   
-			
-			for(String pair : keyValuePairs)                        //iterate over the pais
-			{
-			    String[] entry = pair.split(":");                   //split the pairs to get key and value 
-			   // map.put(entry[0].trim(), entry[1].trim());   //add them to the hashmap
-			    String tag=entry[1].replace("\"", " ");
-			    String[] styleKeyValue = tag.trim().substring(1, tag.trim().length()-1).split(",");
-			    HashMap<String,String> styleMap = new HashMap<>();
-			    for(String stylePair : styleKeyValue)                        //iterate over the pais
-				{
-				    String[] styleEntry = stylePair.split("="); 
-				    //System.err.println(styleEntry[0].trim()+"="+styleEntry[1].trim());
-				    styleMap.put(styleEntry[0].trim(), styleEntry[1].trim());
-				}			    
-			    //System.err.println(entry[0].replace("\"", " ")+"= XXX");
-			    if(!entry[0].replace("\"", " ").startsWith("."))
-			    	style.loadTagStyle(entry[0].replace("\"", " ").trim(), styleMap);
-			    else
-			    	style.loadStyle(entry[0].replace("\"", " ").trim().substring(1), styleMap);
-			   
-			}
-			
-			}
-		
-	}
-
 	public void updateJJChapter(JJChapter b) {
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();

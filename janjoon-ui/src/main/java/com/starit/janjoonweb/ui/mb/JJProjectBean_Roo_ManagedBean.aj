@@ -13,9 +13,9 @@ import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -77,6 +77,7 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         columns.add("description");
         columns.add("creationDate");
         columns.add("updatedDate");
+        columns.add("startDate");
     }
     
     public String JJProjectBean.getName() {
@@ -293,6 +294,48 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         enabledCreateInputMessage.setFor("enabledCreateInput");
         enabledCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
+        
+        OutputLabel startDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        startDateCreateOutput.setFor("startDateCreateInput");
+        startDateCreateOutput.setId("startDateCreateOutput");
+        startDateCreateOutput.setValue("Start Date:");
+        htmlPanelGrid.getChildren().add(startDateCreateOutput);
+        
+        Calendar startDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        startDateCreateInput.setId("startDateCreateInput");
+        startDateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProjectBean.JJProject_.startDate}", Date.class));
+        startDateCreateInput.setNavigator(true);
+        startDateCreateInput.setEffect("slideDown");
+        startDateCreateInput.setPattern("dd/MM/yyyy");
+        startDateCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(startDateCreateInput);
+        
+        Message startDateCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        startDateCreateInputMessage.setId("startDateCreateInputMessage");
+        startDateCreateInputMessage.setFor("startDateCreateInput");
+        startDateCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(startDateCreateInputMessage);
+        
+        OutputLabel endDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        endDateCreateOutput.setFor("endDateCreateInput");
+        endDateCreateOutput.setId("endDateCreateOutput");
+        endDateCreateOutput.setValue("End Date:");
+        htmlPanelGrid.getChildren().add(endDateCreateOutput);
+        
+        Calendar endDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        endDateCreateInput.setId("endDateCreateInput");
+        endDateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProjectBean.JJProject_.endDate}", Date.class));
+        endDateCreateInput.setNavigator(true);
+        endDateCreateInput.setEffect("slideDown");
+        endDateCreateInput.setPattern("dd/MM/yyyy");
+        endDateCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(endDateCreateInput);
+        
+        Message endDateCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        endDateCreateInputMessage.setId("endDateCreateInputMessage");
+        endDateCreateInputMessage.setFor("endDateCreateInput");
+        endDateCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(endDateCreateInputMessage);
         
         OutputLabel logoCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         logoCreateOutput.setFor("logoCreateInput");
@@ -528,6 +571,48 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         enabledEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledEditInputMessage);
         
+        OutputLabel startDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        startDateEditOutput.setFor("startDateEditInput");
+        startDateEditOutput.setId("startDateEditOutput");
+        startDateEditOutput.setValue("Start Date:");
+        htmlPanelGrid.getChildren().add(startDateEditOutput);
+        
+        Calendar startDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        startDateEditInput.setId("startDateEditInput");
+        startDateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProjectBean.JJProject_.startDate}", Date.class));
+        startDateEditInput.setNavigator(true);
+        startDateEditInput.setEffect("slideDown");
+        startDateEditInput.setPattern("dd/MM/yyyy");
+        startDateEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(startDateEditInput);
+        
+        Message startDateEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        startDateEditInputMessage.setId("startDateEditInputMessage");
+        startDateEditInputMessage.setFor("startDateEditInput");
+        startDateEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(startDateEditInputMessage);
+        
+        OutputLabel endDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        endDateEditOutput.setFor("endDateEditInput");
+        endDateEditOutput.setId("endDateEditOutput");
+        endDateEditOutput.setValue("End Date:");
+        htmlPanelGrid.getChildren().add(endDateEditOutput);
+        
+        Calendar endDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        endDateEditInput.setId("endDateEditInput");
+        endDateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProjectBean.JJProject_.endDate}", Date.class));
+        endDateEditInput.setNavigator(true);
+        endDateEditInput.setEffect("slideDown");
+        endDateEditInput.setPattern("dd/MM/yyyy");
+        endDateEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(endDateEditInput);
+        
+        Message endDateEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        endDateEditInputMessage.setId("endDateEditInputMessage");
+        endDateEditInputMessage.setFor("endDateEditInput");
+        endDateEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(endDateEditInputMessage);
+        
         OutputLabel logoEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         logoEditOutput.setFor("logoEditInput");
         logoEditOutput.setId("logoEditOutput");
@@ -691,6 +776,30 @@ privileged aspect JJProjectBean_Roo_ManagedBean {
         HtmlOutputText enabledValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProjectBean.JJProject_.enabled}", String.class));
         htmlPanelGrid.getChildren().add(enabledValue);
+        
+        HtmlOutputText startDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        startDateLabel.setId("startDateLabel");
+        startDateLabel.setValue("Start Date:");
+        htmlPanelGrid.getChildren().add(startDateLabel);
+        
+        HtmlOutputText startDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        startDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProjectBean.JJProject_.startDate}", Date.class));
+        DateTimeConverter startDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
+        startDateValueConverter.setPattern("dd/MM/yyyy");
+        startDateValue.setConverter(startDateValueConverter);
+        htmlPanelGrid.getChildren().add(startDateValue);
+        
+        HtmlOutputText endDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        endDateLabel.setId("endDateLabel");
+        endDateLabel.setValue("End Date:");
+        htmlPanelGrid.getChildren().add(endDateLabel);
+        
+        HtmlOutputText endDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        endDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJProjectBean.JJProject_.endDate}", Date.class));
+        DateTimeConverter endDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
+        endDateValueConverter.setPattern("dd/MM/yyyy");
+        endDateValue.setConverter(endDateValueConverter);
+        htmlPanelGrid.getChildren().add(endDateValue);
         
         HtmlOutputText logoLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         logoLabel.setId("logoLabel");

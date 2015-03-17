@@ -49,6 +49,14 @@ public class JJProject {
 
 	private Boolean enabled;
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "M-")
+	private Date startDate;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "M-")
+	private Date endDate;
+	
 	@Lob
 	private byte[] logo;
 

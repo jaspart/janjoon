@@ -11,13 +11,12 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 import org.primefaces.component.calendar.Calendar;
-import org.primefaces.context.RequestContext;
 
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.ui.mb.JJSprintBean;
-import com.starit.janjoonweb.ui.mb.LoginBean;
 import com.starit.janjoonweb.ui.mb.JJTaskBean.TaskData;
+import com.starit.janjoonweb.ui.mb.LoginBean;
 
 @FacesValidator("dateRangeValidator")
 public class DateRangeValidator implements Validator {
@@ -55,6 +54,7 @@ public class DateRangeValidator implements Validator {
 						FacesMessage.SEVERITY_ERROR,
 						"Start date may not be after end date.", null));
 			}
+
 		} else {
 
 			if (edition != null) {
@@ -148,14 +148,14 @@ public class DateRangeValidator implements Validator {
 					}
 				} else {
 					// View Task ValidatOr
-					UIInput sprintComponent = (UIInput) component.getAttributes().get(
-							"sprintComponent");
-					JJSprint sprint=(JJSprint) sprintComponent.getValue();
-					
+					UIInput sprintComponent = (UIInput) component
+							.getAttributes().get("sprintComponent");
+					JJSprint sprint = (JJSprint) sprintComponent.getValue();
+
 					if (edition.equalsIgnoreCase("startDatePlanned")) {
-						
-						Calendar taskEndDatePlanned = (Calendar) component.getAttributes().get(
-								"taskEndDatePlanned");
+
+						Calendar taskEndDatePlanned = (Calendar) component
+								.getAttributes().get("taskEndDatePlanned");
 						Date end = (Date) taskEndDatePlanned.getValue();
 
 						if (endDate == null) {
@@ -163,17 +163,17 @@ public class DateRangeValidator implements Validator {
 						}
 
 						if (endDate.after(end)) {
-							
+
 							throw new ValidatorException(new FacesMessage(
 									FacesMessage.SEVERITY_ERROR,
 									"Start date may not be after end date .",
 									null));
-							
+
 						}
 
 						if (sprint != null)
-							
-							if (endDate.before(sprint.getStartDate())) {								
+
+							if (endDate.before(sprint.getStartDate())) {
 								throw new ValidatorException(
 										new FacesMessage(
 												FacesMessage.SEVERITY_ERROR,
@@ -183,17 +183,17 @@ public class DateRangeValidator implements Validator {
 
 					}
 					if (edition.equalsIgnoreCase("endDatePlanned")) {
-						
-						Calendar taskStartDatePlanned = (Calendar) component.getAttributes().get(
-								"taskStartDatePlanned");
-						
+
+						Calendar taskStartDatePlanned = (Calendar) component
+								.getAttributes().get("taskStartDatePlanned");
+
 						Date start = (Date) taskStartDatePlanned.getValue();
-						
+
 						if (endDate == null) {
 							return; // Let required="true" handle.
 						}
 
-						if (endDate.before(start)) {							
+						if (endDate.before(start)) {
 							throw new ValidatorException(new FacesMessage(
 									FacesMessage.SEVERITY_ERROR,
 									"End Date may not be Before Start Date.",
@@ -202,7 +202,7 @@ public class DateRangeValidator implements Validator {
 
 						if (sprint != null)
 							if (endDate.after(sprint.getEndDate())) {
-								
+
 								throw new ValidatorException(
 										new FacesMessage(
 												FacesMessage.SEVERITY_ERROR,
