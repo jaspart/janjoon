@@ -25,7 +25,7 @@ public interface JJTaskService {
 	public List<JJTask> getTasksByStatus(JJStatus status, JJProject project,
 			JJSprint sprint, boolean onlyActif);
 
-	public List<JJTask> getSprintTasks(JJSprint sprint);
+	public List<JJTask> getSprintTasks(JJSprint sprint,JJProduct product);
 
 	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project);
 	

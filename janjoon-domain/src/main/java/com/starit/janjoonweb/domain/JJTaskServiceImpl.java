@@ -263,29 +263,10 @@ public class JJTaskServiceImpl implements JJTaskService {
 	}
 
 	@Override
-	public List<JJTask> getSprintTasks(JJSprint sprint) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
-				.createQuery(JJTask.class);
-
-		Root<JJTask> from = criteriaQuery.from(JJTask.class);
-
-		CriteriaQuery<JJTask> select = criteriaQuery.select(from);
-		List<Predicate> predicates = new ArrayList<Predicate>();
-
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-
-		if (sprint != null) {
-			predicates.add(criteriaBuilder.equal(from.get("sprint"), sprint));
+	public List<JJTask> getSprintTasks(JJSprint sprint,JJProduct product) {
+		return getTasks(sprint, null, product, null, null, null, null, 
+				null, true, true, false, null);
 		}
-
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
-
-		TypedQuery<JJTask> result = entityManager.createQuery(select);
-
-		return result.getResultList();
-
-	}
 
 	@Override
 	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project) {

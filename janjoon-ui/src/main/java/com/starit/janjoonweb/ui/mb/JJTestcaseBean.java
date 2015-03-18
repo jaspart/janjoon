@@ -147,6 +147,7 @@ public class JJTestcaseBean {
 	private float reqCoverage;
 	private List<JJBuild> builds;
 	private String width;
+	private JJTestcase copyTestcase;
 	
 	private List<JJBuild> rowNames = new ArrayList<JJBuild>();
 	private List<JJTestcase> colNames = new ArrayList<JJTestcase>();
@@ -550,6 +551,14 @@ public class JJTestcaseBean {
 		this.categoryList = categoryList;
 	}
 
+	public JJTestcase getCopyTestcase() {
+		return copyTestcase;
+	}
+
+	public void setCopyTestcase(JJTestcase copyTestcase) {
+		this.copyTestcase = copyTestcase;
+	}
+
 	public void loadData(Dialog dialog, JJCategory c, boolean projNull) {
 
 		HttpServletRequest request = (HttpServletRequest) FacesContext
@@ -585,9 +594,13 @@ public class JJTestcaseBean {
 			if (show) {
 
 				boolean change = false;
+				HttpSession session = (HttpSession) FacesContext
+						.getCurrentInstance().getExternalContext()
+						.getSession(false);
 
 				if (jJProjectBean.getProject() == null) {
 					change = true;
+					
 					jJProjectBean.setProject(testcase.getRequirement()
 							.getProject());
 					jJProductBean.setProduct(testcase.getRequirement()
@@ -595,10 +608,6 @@ public class JJTestcaseBean {
 					jJVersionBean.getVersionList();
 					jJVersionBean.setVersion(testcase.getRequirement()
 							.getVersioning());
-
-					HttpSession session = (HttpSession) FacesContext
-							.getCurrentInstance().getExternalContext()
-							.getSession(false);
 					session.setAttribute("jJSprintBean", new JJSprintBean());
 					session.setAttribute("jJStatusBean", new JJStatusBean());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
@@ -611,11 +620,7 @@ public class JJTestcaseBean {
 							.getProduct());
 					jJVersionBean.getVersionList();
 					jJVersionBean.setVersion(testcase.getRequirement()
-							.getVersioning());
-
-					HttpSession session = (HttpSession) FacesContext
-							.getCurrentInstance().getExternalContext()
-							.getSession(false);
+							.getVersioning());					
 					session.setAttribute("jJSprintBean", new JJSprintBean());
 					session.setAttribute("jJStatusBean", new JJStatusBean());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
@@ -629,6 +634,8 @@ public class JJTestcaseBean {
 						jJVersionBean.getVersionList();
 						jJVersionBean.setVersion(testcase.getRequirement()
 								.getVersioning());
+						session.setAttribute("jJTaskBean", new JJTaskBean());
+						session.setAttribute("jJSprintBean", new JJSprintBean());
 					} else if (testcase.getRequirement().getVersioning() != null
 							&& jJVersionBean.getVersion() != null) {
 						if (!testcase.getRequirement().getVersioning()
@@ -641,10 +648,7 @@ public class JJTestcaseBean {
 					}
 				}
 
-				if (change) {
-					HttpSession session = (HttpSession) FacesContext
-							.getCurrentInstance().getExternalContext()
-							.getSession(false);
+				if (change) {				
 
 					((LoginBean) LoginBean.findBean("loginBean"))
 							.setAuthorisationService(new AuthorisationService(
@@ -787,6 +791,32 @@ public class JJTestcaseBean {
 			task = new JJTask();
 		}
 
+	}
+	public void pasteTestcase(JJTeststepBean jJTeststepBean)
+	{
+		message = "test_paste_header";
+		
+		testcase = new JJTestcase();
+		testcase.setName(copyTestcase.getName());
+		testcase.setDescription(copyTestcase.getDescription());		
+		testcase.setEnabled(true);
+		testcase.setAutomatic(copyTestcase.getAutomatic());
+		requirement = null;
+
+		task = new JJTask();
+
+		initiateTask = false;
+		disabledInitTask = false;
+		disabledTask = true;
+
+		disabledTestcaseMode = false;
+		disabledTeststepMode = true;
+		testcaseState = true;
+		builds = new ArrayList<JJBuild>();	
+
+		jJTeststepBean.newTeststep();
+		jJTeststepBean.setActionTeststep(false);
+	
 	}
 
 	public void editTestcase(JJTeststepBean jJTeststepBean) {
@@ -1388,6 +1418,13 @@ public class JJTestcaseBean {
 				baos.toByteArray()), "pdf", category.getName().toUpperCase().trim()
 				+ "-test.pdf");
 
+	}
+	public void onCopyEvent()
+	{
+		System.err.println(copyTestcase.getName());
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"TestCase Successfully copied",FacesMessage.SEVERITY_INFO, "TestCase");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 
 	private void createTreeDocument(JJChapter chapterParent, JJBuild build,

@@ -83,8 +83,8 @@ public class JJStatusBean {
 	private PieChartModel pieChart;
 
 	private JJProject project;
-	private JJProduct product;
-	private JJVersion version;
+//	private JJProduct product;
+//	private JJVersion version;
 
 	private List<CategoryDataModel> categoryDataModel;
 
@@ -117,24 +117,24 @@ public class JJStatusBean {
 		this.project = project;
 	}
 
-	public JJProduct getProduct() {		
-		this.product = LoginBean.getProduct();
-		return product;
-	}
-
-	public void setProduct(JJProduct product) {
-		this.product = product;
-	}
-
-	public JJVersion getVersion() {
-		
-		this.version = LoginBean.getVersion();
-		return version;
-	}
-
-	public void setVersion(JJVersion version) {
-		this.version = version;
-	}
+//	public JJProduct getProduct() {		
+//		this.product = LoginBean.getProduct();
+//		return product;
+//	}
+//
+//	public void setProduct(JJProduct product) {
+//		this.product = product;
+//	}
+//
+//	public JJVersion getVersion() {
+//		
+//		this.version = LoginBean.getVersion();
+//		return version;
+//	}
+//
+//	public void setVersion(JJVersion version) {
+//		this.version = version;
+//	}
 
 	public List<CategoryDataModel> getCategoryDataModel() {
 		return categoryDataModel;
@@ -148,9 +148,9 @@ public class JJStatusBean {
 		return pieChart;
 	}
 
-	private boolean first;
+	private Boolean first;
 	
-	public void setFirst(boolean bb)
+	public void setFirst(Boolean bb)
 	{
 		this.first=bb;
 	}
@@ -174,8 +174,8 @@ public class JJStatusBean {
 			((JJSprintBean) LoginBean.findBean("jJSprintBean"))
 					.iniSprintChart();
 			getProject();
-			getProduct();
-			getVersion();
+//			getProduct();
+//			getVersion();
 			if(project != null)
 			{
 				categoryDataModel = new ArrayList<CategoryDataModel>();
@@ -196,7 +196,7 @@ public class JJStatusBean {
 							+ jJRequirementService.getReqCountByStaus(
 									((LoginBean) LoginBean.findBean("loginBean"))
 											.getContact().getCompany(), project,
-									product, version, s, true));
+									LoginBean.getProduct(), LoginBean.getVersion(), s, true));
 					pieChart.set(s.getName(), i);
 				}
 			}
@@ -679,6 +679,7 @@ public class JJStatusBean {
 
 		private float coverageProgress = 0;
 		private float completionProgress = 0;
+		private PieChartModel categoryPieChart;
 
 		public JJCategory getCategory() {
 			return category;
@@ -688,13 +689,28 @@ public class JJStatusBean {
 			this.category = category;
 		}
 
+		public PieChartModel getCategoryPieChart() {
+			
+			getCompletionProgress();			
+			categoryPieChart = new PieChartModel();
+			categoryPieChart.set("Done",completionProgress*100);
+			categoryPieChart.set("Not",100-completionProgress*100);
+			//categoryPieChart.set
+			
+			return categoryPieChart;
+		}
+
+		public void setCategoryPieChart(PieChartModel categoryPieChart) {
+			this.categoryPieChart = categoryPieChart;
+		}
+
 		public float getCoverageProgress() {
 
 			float compteur = 0;
 			List<JJRequirement> dataList = jJRequirementService
 					.getRequirements(((LoginBean) LoginBean
 							.findBean("loginBean")).getContact().getCompany(),
-							category, project, product, version, null, null,
+							category, project, LoginBean.getProduct(),LoginBean.getVersion(), null, null,
 							false, true, false,false,null);
 
 			List<JJCategory> categoryList = jJCategoryService.getCategories(
@@ -794,7 +810,7 @@ public class JJStatusBean {
 			List<JJRequirement> dataList = jJRequirementService
 					.getRequirements(((LoginBean) LoginBean
 							.findBean("loginBean")).getContact().getCompany(),
-							category, project, product, version, null, null,
+							category, project, LoginBean.getProduct(),LoginBean.getVersion(), null, null,
 							false, true, false,false,null);
 
 			for (JJRequirement requirement : dataList) {

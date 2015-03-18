@@ -626,8 +626,7 @@ public class LoginBean implements Serializable {
 						.setCategory(cat);
 			}
 
-			// authorisationService = new AuthorisationService(session,
-			// contact);
+			// authorisationService = new AuthorisationService(session,contact);
 			messageCount = null;
 			// messageListener(session);
 			session.setAttribute("jJBugBean", new JJBugBean());
@@ -656,6 +655,8 @@ public class LoginBean implements Serializable {
 						.contains("productSelectOneMenu")) {
 					JJProductBean productBean = (JJProductBean) findBean("jJProductBean");
 					productBean.setProduct((JJProduct) event.getNewValue());
+					session.setAttribute("jJTaskBean", new JJTaskBean());
+					session.setAttribute("jJSprintBean", new JJSprintBean());
 					if (session.getAttribute("jJStatusBean") != null)
 						((JJStatusBean) session.getAttribute("jJStatusBean"))
 								.setFirst(true);

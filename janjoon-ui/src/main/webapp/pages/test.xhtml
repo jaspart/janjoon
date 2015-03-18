@@ -123,21 +123,21 @@
 									hideEffect="fade" />
 							</p:column>
 							<p:column>
-<!-- 								<h:commandLink id="exportPDF" -->
-<!-- 									title="#{messages.test_export_tooltip}" -->
-<!-- 									disabled="#{jJTestcaseBean.disabledExport}" -->
-<!-- 									style="float: right;"> -->
-<!--  									<p:graphicImage value="/resources/images/pdf.png" /> --> 
-<!-- 									<p:dataExporter type="pdf" -->
-<!-- 										target=":testFormCenter:testcaseRecapDataTable" -->
-<!-- 										fileName="#{jJTestcaseBean.namefile}" -->
-<!-- 										preProcessor="#{jJTestcaseBean.preProcessPDF}" /> -->
-<!-- 								</h:commandLink> -->
+								<!-- 								<h:commandLink id="exportPDF" -->
+								<!-- 									title="#{messages.test_export_tooltip}" -->
+								<!-- 									disabled="#{jJTestcaseBean.disabledExport}" -->
+								<!-- 									style="float: right;"> -->
+								<!--  									<p:graphicImage value="/resources/images/pdf.png" /> -->
+								<!-- 									<p:dataExporter type="pdf" -->
+								<!-- 										target=":testFormCenter:testcaseRecapDataTable" -->
+								<!-- 										fileName="#{jJTestcaseBean.namefile}" -->
+								<!-- 										preProcessor="#{jJTestcaseBean.preProcessPDF}" /> -->
+								<!-- 								</h:commandLink> -->
 
 								<p:commandButton ajax="false" id="exportPDF"
 									title="#{messages.test_export_tooltip}"
 									disabled="#{jJTestcaseBean.disabledExport}"
-									style="float: right;"									
+									style="float: right;"
 									onclick="PrimeFaces.monitorDownload(start, stop);"
 									icon="ui-icon-pdf">
 									<p:fileDownload value="#{jJTestcaseBean.preProcessPDF}" />
@@ -302,8 +302,7 @@
 
 								<p:selectBooleanCheckbox
 									rendered="#{rowName['class'].simpleName == 'JJVersion'}"
-									value="#{jJTestcaseBean.value[colIdx][rowIdx]}"
-									disabled="true" />
+									value="#{jJTestcaseBean.value[colIdx][rowIdx]}" disabled="true" />
 
 							</p:panel>
 						</p:columns>
@@ -366,6 +365,14 @@
 							</p:commandButton>
 							<p:tooltip for="editButton" value="#{messages.label_edit}"
 								showEffect="fade" hideEffect="fade" />
+							<p:commandButton id="copyButton" icon="ui-icon-copy"
+								disabled="#{!loginBean.authorisationService.wTest}"
+								action="#{jJTestcaseBean.onCopyEvent}" update=":growlForm :testFormCenter:testcaseRecapDataTable">
+								<f:setPropertyActionListener value="#{tcr.testcase}"
+									target="#{jJTestcaseBean.copyTestcase}" />
+							</p:commandButton>
+							<p:tooltip for="copyButton" value="Copy"
+								showEffect="fade" hideEffect="fade" />
 						</p:column>
 						<f:facet name="footer">
 							<p:commandButton value="#{messages.test_create_button}"
@@ -375,6 +382,13 @@
 								update=":testcaseDialog"
 								oncomplete="PF('testcaseDialogWidget').show()"
 								icon="ui-icon-plusthick" />
+							<p:commandButton value="Paste"
+								id="pasteTestcase"
+								disabled="#{!loginBean.authorisationService.wTest or jJTestcaseBean.copyTestcase == null}"
+								actionListener="#{jJTestcaseBean.pasteTestcase(jJTeststepBean)}"
+								update=":testcaseDialog"
+								oncomplete="PF('testcaseDialogWidget').show()"
+								icon="ui-icon-disk" />
 						</f:facet>
 					</p:dataTable>
 

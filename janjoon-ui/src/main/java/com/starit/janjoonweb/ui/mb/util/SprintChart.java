@@ -123,7 +123,7 @@ public class SprintChart {
 			sprintUtils = new ArrayList<SprintChart>();
 			for (JJSprint s : sprints) {
 				SprintChart ss = new SprintChart(s,
-						jJTaskService.getSprintTasks(s));
+						jJTaskService.getSprintTasks(s,LoginBean.getProduct()));
 				sprintUtils.add(ss);
 			}
 		}

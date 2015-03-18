@@ -7,7 +7,7 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
-
+import com.starit.janjoonweb.ui.mb.LoginBean;
 import com.starit.janjoonweb.ui.mb.util.SprintChart;
 
 public class SprintUtil {
@@ -170,7 +170,7 @@ public class SprintUtil {
 			sprintUtils = new ArrayList<SprintUtil>();
 			for (JJSprint s : sprints) {
 				SprintUtil ss = new SprintUtil(s,
-						jJTaskService.getSprintTasks(s));
+						jJTaskService.getSprintTasks(s,LoginBean.getProduct()));
 				sprintUtils.add(ss);
 			}
 		}

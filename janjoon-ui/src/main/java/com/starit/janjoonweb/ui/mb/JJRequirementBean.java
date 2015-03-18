@@ -19,6 +19,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.ListDataModel;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -1466,7 +1467,7 @@ public class JJRequirementBean {
 		updateJJRequirement(requirement);
 		updateDataTable(requirement, u, specPage);
 		this.mine = false;
-		mineChangeEvent();
+		mineChangeEvent(null);
 		getWarningList(jJRequirementService.findJJRequirement(requirement
 				.getId()));
 
@@ -4791,7 +4792,7 @@ public class JJRequirementBean {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void mineChangeEvent() {
+	public void mineChangeEvent(final AjaxBehaviorEvent event) {
 
 		if (mine) {
 			this.setMine(true);

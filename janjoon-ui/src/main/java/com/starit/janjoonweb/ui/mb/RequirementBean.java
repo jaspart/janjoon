@@ -325,16 +325,16 @@ public class RequirementBean {
 
 			if (show) {
 				boolean change = false;
+				HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+						.getSession(false);		
 
 				if (jJProjectBean.getProject() == null) {
 					change = true;
 					jJProjectBean.setProject(requirement.getProject());
 					jJProductBean.setProduct(requirement.getProduct());
 					jJVersionBean.getVersionList();
-					jJVersionBean.setVersion(requirement.getVersioning());
-					
-					HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-							.getSession(false);					
+					jJVersionBean.setVersion(requirement.getVersioning());				
+									
 					session.setAttribute("jJSprintBean", new JJSprintBean());
 					session.setAttribute("jJStatusBean", new JJStatusBean());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
@@ -344,11 +344,8 @@ public class RequirementBean {
 					jJProjectBean.setProject(requirement.getProject());
 					jJProductBean.setProduct(requirement.getProduct());
 					jJVersionBean.getVersionList();
-					jJVersionBean.setVersion(requirement.getVersioning());
-					
-					
-					HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-							.getSession(false);					
+					jJVersionBean.setVersion(requirement.getVersioning());	
+								
 					session.setAttribute("jJSprintBean", new JJSprintBean());
 					session.setAttribute("jJStatusBean", new JJStatusBean());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
@@ -360,6 +357,8 @@ public class RequirementBean {
 						jJProductBean.setProduct(requirement.getProduct());
 						jJVersionBean.getVersionList();
 						jJVersionBean.setVersion(requirement.getVersioning());
+						session.setAttribute("jJTaskBean", new JJTaskBean());
+						session.setAttribute("jJSprintBean", new JJSprintBean());
 					} else if (requirement.getVersioning() != null
 							&& jJVersionBean.getVersion() != null) {
 						if (!requirement.getVersioning().equals(

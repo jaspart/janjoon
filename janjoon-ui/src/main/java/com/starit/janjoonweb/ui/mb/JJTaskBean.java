@@ -510,7 +510,7 @@ public class JJTaskBean {
 					s = new SprintUtil(jJSprintService.findJJSprint(task
 							.getSprint().getId()),
 							jJTaskService.getSprintTasks(jJSprintService
-									.findJJSprint(task.getSprint().getId())));
+									.findJJSprint(task.getSprint().getId()),LoginBean.getProduct()));
 
 					// sprintUtil.setRenderTaskForm(false);
 					jJSprintBean.getSprintList().set(
@@ -523,7 +523,7 @@ public class JJTaskBean {
 					if (s != null) {
 						s = new SprintUtil(jJSprintService.findJJSprint(ss.getId()),
 								jJTaskService.getSprintTasks(jJSprintService
-										.findJJSprint(ss.getId())));
+										.findJJSprint(ss.getId()),LoginBean.getProduct()));
 
 						// sprintUtil.setRenderTaskForm(false);
 						jJSprintBean.getSprintList().set(
@@ -541,7 +541,7 @@ public class JJTaskBean {
 						s = new SprintUtil(jJSprintService.findJJSprint(task
 								.getSprint().getId()),
 								jJTaskService.getSprintTasks(jJSprintService
-										.findJJSprint(task.getSprint().getId())));
+										.findJJSprint(task.getSprint().getId()),LoginBean.getProduct()));
 
 						// sprintUtil.setRenderTaskForm(false);
 						jJSprintBean.getSprintList().set(
@@ -555,7 +555,7 @@ public class JJTaskBean {
 					if (s != null) {
 						s = new SprintUtil(jJSprintService.findJJSprint(ss.getId()),
 								jJTaskService.getSprintTasks(jJSprintService
-										.findJJSprint(ss.getId())));
+										.findJJSprint(ss.getId()),LoginBean.getProduct()));
 
 						// sprintUtil.setRenderTaskForm(false);
 						jJSprintBean.getSprintList().set(
@@ -763,15 +763,15 @@ public class JJTaskBean {
 				Map<Date, String> max = new TreeMap<Date, String>();
 
 				List<JJTask> tasks = new ArrayList<JJTask>();
-				tasks.addAll(jJTaskService.getTasks(sprint, null, null, null,
+				tasks.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null,
 						chapter, null, null, null, true, true, false,
 						"Requirement"));
 
-				tasks.addAll(jJTaskService.getTasks(sprint, null, null, null,
+				tasks.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null,
 						chapter, null, null, null, true, true, false,
 						"Testcase"));
 
-				tasks.addAll(jJTaskService.getTasks(sprint, null, null, null,
+				tasks.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null,
 						chapter, null, null, null, true, true, false, "Bug"));
 
 				TreeMap<String, JJTask> Tasks = new TreeMap<String, JJTask>();
@@ -1134,9 +1134,9 @@ public class JJTaskBean {
 	// sortedData
 	public void loadSortedData(List<JJTask> allTasks, int k) {
 
-		allTasks.addAll(jJTaskService.getTasks(sprint, project, null, null,
+		allTasks.addAll(jJTaskService.getTasks(sprint, project, LoginBean.getProduct(), null,
 				null, null, null, null, true, false, false, "requirement"));
-		allTasks.addAll(jJTaskService.getTasks(sprint, project, null, null,
+		allTasks.addAll(jJTaskService.getTasks(sprint, project, LoginBean.getProduct(), null,
 				null, null, null, null, true, false, false, "bug"));
 
 		Collections.sort(allTasks, new Comparator<JJTask>() {
@@ -1425,7 +1425,7 @@ public class JJTaskBean {
 					s = new SprintUtil(jJSprintService.findJJSprint(task
 							.getSprint().getId()),
 							jJTaskService.getSprintTasks(jJSprintService
-									.findJJSprint(task.getSprint().getId())));
+									.findJJSprint(task.getSprint().getId()),LoginBean.getProduct()));
 
 					// sprintUtil.setRenderTaskForm(false);
 					jJSprintBean.getSprintList().set(
@@ -1540,7 +1540,7 @@ public class JJTaskBean {
 				s = new SprintUtil(jJSprintService.findJJSprint(duplicatedTask
 						.getSprint().getId()),
 						jJTaskService.getSprintTasks(jJSprintService
-								.findJJSprint(duplicatedTask.getSprint().getId())));
+								.findJJSprint(duplicatedTask.getSprint().getId()),LoginBean.getProduct()));
 
 				// sprintUtil.setRenderTaskForm(false);
 				jJSprintBean.getSprintList().set(
@@ -1940,7 +1940,7 @@ public class JJTaskBean {
 				JJSprint sprint = jJSprintService.findJJSprint(jJSprintBean
 						.getSprintUtil().getSprint().getId());
 				SprintUtil sprintUtil = new SprintUtil(sprint,
-						jJTaskService.getSprintTasks(sprint));
+						jJTaskService.getSprintTasks(sprint,LoginBean.getProduct()));
 				jJSprintBean.setSprintUtil(sprintUtil);
 				jJSprintBean.getSprintList().set(
 						jJSprintBean.contains(sprint.getId()), sprintUtil);
@@ -2260,14 +2260,14 @@ public class JJTaskBean {
 			}
 
 			List<JJTask> list = new ArrayList<JJTask>();
-			list.addAll(jJTaskService.getTasks(sprint, null, null, null,
+			list.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null,
 					chapter, null, null, null, true, false, false,
 					"Requirement"));
 
-			list.addAll(jJTaskService.getTasks(sprint, null, null, null,
+			list.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null,
 					chapter, null, null, null, true, false, false, "Testcase"));
 
-			list.addAll(jJTaskService.getTasks(sprint, null, null, null,
+			list.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null,
 					chapter, null, null, null, true, false, false, "Bug"));
 
 			list.remove(task);
@@ -2438,7 +2438,7 @@ public class JJTaskBean {
 					s = new SprintUtil(jJSprintService.findJJSprint(tJjTask
 							.getSprint().getId()),
 							jJTaskService.getSprintTasks(jJSprintService
-									.findJJSprint(tJjTask.getSprint().getId())));
+									.findJJSprint(tJjTask.getSprint().getId()),LoginBean.getProduct()));
 
 					// sprintUtil.setRenderTaskForm(false);
 					jJSprintBean.getSprintList().set(
@@ -2803,7 +2803,7 @@ public class JJTaskBean {
 			if (s != null) {
 				s = new SprintUtil(jJSprintService.findJJSprint(tt.getSprint()
 						.getId()), jJTaskService.getSprintTasks(jJSprintService
-						.findJJSprint(tt.getSprint().getId())));
+						.findJJSprint(tt.getSprint().getId()),LoginBean.getProduct()));
 				jJSprintBean.getSprintList().set(
 						jJSprintBean.contains(s.getSprint().getId()), s);
 			}
@@ -2822,7 +2822,7 @@ public class JJTaskBean {
 	public void onSprintUpdate(JJSprint sprint) {
 
 		for (JJTask tt : jJTaskService.getSprintTasks(jJSprintService
-				.findJJSprint(sprint.getId()))) {
+				.findJJSprint(sprint.getId()),LoginBean.getProduct())) {
 
 			if (containTaskData(tt.getId()) != -1)
 				updateView(tt, false);
