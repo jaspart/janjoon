@@ -123,7 +123,7 @@
 								<p:column colspan="1">
 									<p:commandButton id="createButton" icon="ui-icon-plusthick"
 										value="#{messages.bug_table_add_label}" update=":createForm "
-										style="margin-left: 20px;"
+										style="margin-left: 20px;" resetValues="true"
 										oncomplete="PF('createDialogWidget').show()"
 										title="#{messages.label_create}" />
 									<p:tooltip for="createButton" value="#{messages.label_create}"
@@ -180,19 +180,19 @@
 						<f:facet name="header">
 							<h:outputText value="#{messages.bug_table_action_title}" />
 						</f:facet>
-						<p:splitButton value="Action">
+						<p:splitButton id="viewButton" action="#{jJBugBean.bugInfo}"
+							title="View" value="View" ajax="false" icon="ui-icon-eye"
+							onclick="target='_blank'">
 							<p:menuitem id="editButton" icon="ui-icon-pencil"
 								value="#{messages.label_edit}" update=":editForm"
 								oncomplete="PF('editDialogWidget').show()"
-								title="#{messages.label_edit}">
+								title="#{messages.label_edit}" resetValues="true">
 								<f:setPropertyActionListener value="#{bug}"
 									target="#{jJBugBean.JJBug_}" />
 								<f:setPropertyActionListener value="#{bug.project}"
 									target="#{jJBugBean.bugProjectSelected}" />
 								<f:setPropertyActionListener value="#{bug.requirement}"
 									target="#{jJBugBean.bugRequirementSelected}" />
-								<f:setPropertyActionListener value="#{bug.versioning}"
-									target="#{jJBugBean.bugVersionSelected}" />
 							</p:menuitem>
 							<p:tooltip for="editButton" value="#{messages.label_edit}"
 								showEffect="fade" hideEffect="fade" />
@@ -205,6 +205,8 @@
 							</p:menuitem>
 							<p:tooltip for="deleteButton" value="#{messages.label_delete}"
 								showEffect="fade" hideEffect="fade" />
+							<f:setPropertyActionListener value="#{bug}"
+								target="#{jJBugBean.viewBug}" />
 						</p:splitButton>
 					</p:column>
 					<f:facet name="footer">
@@ -263,7 +265,7 @@
 				modal="true" widgetVar="editDialogWidget" dynamic="true"
 				resizable="true" maximizable="true" showEffect="fade"
 				hideEffect="explode" draggable="false">
-				<p:ajax event="close" listener="#{jJBugBean.handleDialogClose}" />
+				<p:ajax event="close" listener="#{jJBugBean.handleDialogClose}" immediate="true"/>
 				<p:outputPanel id="editPanel">
 					<h:form id="editForm" enctype="multipart/form-data">
 					<p:panel styleClass="panelDialog">
@@ -280,7 +282,7 @@
 							value="#{messages.bug_edit_save_button}"
 							action="#{jJBugBean.persistBug}"
 							update="createPanelGrid :bugForm :growlForm" />
-						<p:commandButton id="editCloseButton"
+						<p:commandButton id="editCloseButton" immediate="true"
 							value="#{messages.bug_edit_close_button}"
 							onclick="PF('editDialogWidget').hide()" type="button" />
 							</f:facet></p:panel>

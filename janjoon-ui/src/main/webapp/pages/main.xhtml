@@ -48,7 +48,7 @@
 					<p:column style="width: 70px !important;text-align: center;">
 						<f:facet name="header">
 							<p:commandButton id="createButton" icon="ui-icon-plusthick"
-								update=":messageDialogForm"
+								update=":messageDialogForm" resetValues="true"
 								oncomplete="PF('messageDialog').show();" />
 							<!-- 							<p:tooltip for="createButton" value="#{messages.label_create}" -->
 							<!-- 								showEffect="fade" hideEffect="fade" /> -->
@@ -83,7 +83,7 @@
 					</p:column>
 					<p:column style="width:5% !important;">
 						<p:commandButton id="resolveButton" icon="ui-icon-minus"
-							oncomplete="PF('resolveDialogWidget').show()"
+							oncomplete="PF('resolveDialogWidget').show()" resetValues="true"
 							title="#{messages.label_disable}">
 							<!--value="#{messages.main_communication_resolve_button}"-->
 							<f:setPropertyActionListener value="#{mes}"
@@ -254,7 +254,7 @@
 					<p:column styleClass="action-column" style="width:80px;"
 						headerText="#{messages.bug_table_action_title}">
 						<p:commandButton id="viewTaskButton" icon="ui-icon-zoomin"
-							update=":viewTaskForm" immediate="true"
+							update=":viewTaskForm" immediate="true" resetValues="true"
 							title="#{messages.project_gantt_table_actions_viewMenuItem}"
 							action="#{jJTaskBean.initiateReqTreeNode}">
 							<f:setPropertyActionListener value="#{task}"

@@ -93,7 +93,7 @@
 						<p:commandButton value="#{messages.label_create} JJTask"
 							disabled="#{!jjsprint.neditabale}" id="createTaskttButton"
 							icon="ui-icon-circle-plus" immediate="true"
-							onstart="PF('blockUIWidget').block()"
+							onstart="PF('blockUIWidget').block()" resetValues="true"
 							oncomplete="PF('blockUIWidget').unblock()"
 							actionListener="#{jJTaskBean.loadImportFormat}"
 							title="#{messages.label_create} JJTask">

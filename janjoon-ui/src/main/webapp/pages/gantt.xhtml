@@ -55,7 +55,7 @@
 				<p:column>
 					<p:commandButton id="commandButton"
 						value="#{messages.project_gantt_import_button}"
-						style="float: right;"
+						style="float: right;" resetValues="true"
 						actionListener="#{jJTaskBean.loadImportFormat}"
 						update=":taskImportDialog"
 						oncomplete="PF('taskImportDialogWidget').show()">
@@ -128,7 +128,7 @@
 										<p:graphicImage library="images" name="#{taskData.icone}"
 											width="16" height="16" />
 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-											update=":viewTaskForm" immediate="true" 
+											update=":viewTaskForm" immediate="true" resetValues="true"
 											title="#{messages.project_gantt_table_actions_viewMenuItem}"
 											action="#{jJTaskBean.initiateReqTreeNode}">
 											<f:setPropertyActionListener value="#{taskData.task}"
@@ -143,7 +143,7 @@
 											</p:menuitem>
 											<p:menuitem id="deleteButton" icon="ui-icon-trash"
 												oncomplete="PF('deleteDialogWidget').show()"
-												value="#{messages.label_delete}"
+												value="#{messages.label_delete}" resetValues="true"
 												title="#{messages.label_delete}">
 												<f:setPropertyActionListener value="#{taskData}"
 													target="#{jJTaskBean.selectedTaskData}" />
@@ -390,6 +390,7 @@
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()" />
 									<p:ajax event="edit" update=":viewTaskForm"
+										resetValues="true"
 										listener="#{jJTaskBean.onEditTimelineEvent}"
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()" />

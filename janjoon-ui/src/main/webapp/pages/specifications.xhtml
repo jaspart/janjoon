@@ -106,7 +106,7 @@
 			<p:commandButton icon="ui-icon-arrowthick-1-sw" style="float: right;"
 				disabled="#{jJRequirementBean.disabledExport}"
 				actionListener="#{jJRequirementBean.loadImportFormat()}"
-				update=":requirementImportDialog"
+				update=":requirementImportDialog" resetValues="true"
 				onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock();PF('requirementImportDialogWidget').show()"
 				title="#{messages.specification_import_button}" />
@@ -221,7 +221,7 @@
 													<p:commandButton id="manageChapterButton"
 														icon="ui-icon-document"
 														title="#{jJChapterBean.warnMessage}"
-														update=":chapterDialogPanel"
+														update=":chapterDialogPanel" resetValues="true"
 														disabled="#{jJChapterBean.disabledChapter or jJProjectBean.project == null}"
 														actionListener="#{jJChapterBean.loadData(tableDataModel.categoryId)}"
 														onstart="PF('blockUIWidget').block()"
@@ -251,7 +251,7 @@
 												<!-- 										</p:column> -->
 												<p:column colspan="1">
 													<p:commandButton id="newRequirementButton"
-														icon="ui-icon-plusthick"
+														icon="ui-icon-plusthick" resetValues="true"
 														title="#{loginBean.authorisationService.wRequiementMSG}"
 														disabled="#{jJRequirementBean.disabledRequirement or !loginBean.authorisationService.wRequiement}"
 														actionListener="#{jJRequirementBean.newRequirement(tableDataModel.categoryId)}"

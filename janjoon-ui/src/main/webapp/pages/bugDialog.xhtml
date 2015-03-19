@@ -115,7 +115,7 @@
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugVersion" scrollHeight="200"
 					onchange="jJbugBuild.val('');jJbugRequirementWV.val('');"
-					value="#{jJBugBean.bugVersionSelected}"
+					value="#{JJBug_.versioning}"
 					itemLabel="#{version.name} : #{version.product.name}"
 					itemValue="#{version}" rendered="#{jJVersionBean.version == null}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
@@ -124,7 +124,7 @@
 					<p:ajax event="itemSelect" update="jJbugVersion jJbugBuild" listener="#{jJBugBean.changeEvent('version',JJBug_)}" />
 				</p:autoComplete>
 				<p:selectOneMenu id="jJbugVersion2"
-					value="#{jJBugBean.bugVersionSelected}"
+					value="#{JJBug_.versioning}"
 					rendered="#{jJVersionBean.version != null}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
 					<f:selectItem itemValue="#{jJVersionBean.version}"
@@ -143,9 +143,10 @@
 					converter="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter"
 					dropdown="true" var="build"
 					completeMethod="#{jJBugBean.completeBuildBug}">
+					<f:attribute name="version" value="#{JJBug_.versioning}" />
 					<f:validator validatorId="bugValidator" />
 					<f:attribute name="jJbugVersion"
-						value="#{jJBugBean.bugVersionSelected}" />
+						value="#{JJBug_.versioning}" />
 				</p:autoComplete>
 				<p:watermark for="jJbugBuild" value="Build : " />
 			</p:column>

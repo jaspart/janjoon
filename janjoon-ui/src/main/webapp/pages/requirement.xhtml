@@ -125,7 +125,7 @@
 						</p:row>
 						<p:row>
 							<p:column colspan="1">
-								<p:commandButton id="manageChapterButton"
+								<p:commandButton id="manageChapterButton" resetValues="true"
 									icon="ui-icon-document" title="#{jJChapterBean.warnMessage}"
 									update=":chapterDialogPanel"
 									disabled="#{jJChapterBean.disabledChapter or jJProjectBean.project == null or requirementBean.category == null}"
@@ -138,7 +138,7 @@
 									title="#{loginBean.authorisationService.wRequiementMSG}"
 									disabled="#{jJRequirementBean.disabledRequirement or !loginBean.authorisationService.wRequiement or requirementBean.category == null}"
 									actionListener="#{jJRequirementBean.newRequirement(requirementBean.category.id)}"
-									update=":requirementDialog"
+									update=":requirementDialog" resetValues="true"
 									onstart="PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock();PF('requirementDialogWidget').show()" />
 							</p:column>
@@ -286,7 +286,7 @@
 									<!-- 							<h:outputText value="#{req.id}-#{fn:substring(req.name,0,25)}" /> -->
 									<f:facet name="footer">
 										<p:commandButton id="createButton" style="width: 100%;"
-											icon="ui-icon-circle-plus"
+											icon="ui-icon-circle-plus" resetValues="true"
 											actionListener="#{requirementBean.loadData(categorieRequirement)}"
 											onstart="PF('blockUIWidget').block()" update=":linkForm"
 											oncomplete="PF('blockUIWidget').unblock();PF('linkDialogWidget').show()" />

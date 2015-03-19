@@ -25,14 +25,14 @@
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
 						oncomplete="PF('profileDialogWidget').show()"
 						action="#{jJProfileBean.editProfile(jJRightBean)}"
-						update=":tabview:profileDialog"
+						update=":tabview:profileDialog" resetValues="true"
 						title="#{messages.admin_profile_table_edit_tooltip}"
 						value="#{messages.admin_profile_table_edit_tooltip}">
 						<f:setPropertyActionListener value="#{profile}"
 							target="#{jJProfileBean.profileAdmin}" />
 
 
-						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+						<p:menuitem id="deleteButton" icon="ui-icon-trash" resetValues="true"
 							oncomplete="PF('profileDeleteDialogWidget').show()"
 							title="#{messages.admin_profile_table_delete_tooltip}"
 							value="#{messages.admin_profile_table_delete_tooltip}">
@@ -46,7 +46,7 @@
 					<p:commandButton value="#{messages.admin_profile_new_button}"
 						id="newProfile" title="#{messages.admin_profile_new_button}"
 						actionListener="#{jJProfileBean.newProfile(jJRightBean)}"
-						update=":tabview:profileDialog"
+						update=":tabview:profileDialog" resetValues="true"
 						oncomplete="PF('profileDialogWidget').show()"
 						icon="ui-icon-circle-plus" />
 				</f:facet>

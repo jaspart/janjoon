@@ -287,7 +287,7 @@ public class JJTeststepexecutionBean {
 			jJBugBean.setJJBug_(bug);
 			jJBugBean.setBugRequirementSelected(teststepexecution.getTeststep()
 					.getTestcase().getRequirement());
-			jJBugBean.setBugVersionSelected(teststepexecution.getTestcaseexecution().getBuild()
+			jJBugBean.getJJBug_().setVersioning(teststepexecution.getTestcaseexecution().getBuild()
 					.getVersion());
 			jJBugBean.setBugProjectSelected(LoginBean.getProject());
 

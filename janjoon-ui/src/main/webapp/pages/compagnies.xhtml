@@ -44,7 +44,7 @@
 						oncomplete="PF('companyDialogWidget').show()"
 						value="#{messages.admin_company_table_edit_tooltip}"
 						title="#{messages.admin_company_table_edit_tooltip}"
-						update=":tabview:companyDialog">
+						update=":tabview:companyDialog" resetValues="true">
 						<f:setPropertyActionListener value="#{company}"
 							target="#{jJCompanyBean.companie}" />
 						<f:setPropertyActionListener
@@ -55,7 +55,7 @@
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
 							value="#{messages.admin_company_table_delete_tooltip}"
 							oncomplete="PF('companyDeleteDialogWidget').show()"
-							title="#{messages.label_delete}">
+							title="#{messages.label_delete}" resetValues="true">
 							<f:setPropertyActionListener value="#{company}"
 								target="#{jJCompanyBean.companie}" />
 
@@ -68,7 +68,7 @@
 						title="#{messages.admin_company_new_button}"
 						id="newCompany" update=":tabview:companyDialog"
 						oncomplete="PF('companyDialogWidget').show()"
-						icon="ui-icon-circle-plus">
+						icon="ui-icon-circle-plus" resetValues="true">
 						<f:setPropertyActionListener
 							target="#{jJCompanyBean.headerMessage}"
 							value="admin_company_new_title" />

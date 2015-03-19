@@ -33,7 +33,7 @@
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
 						oncomplete="PF('categoryDialogWidget').show()"
 						value="#{messages.admin_category_table_edit_tooltip}"
-						action="#{jJCategoryBean.editCategory}"
+						action="#{jJCategoryBean.editCategory}" resetValues="true"
 						update=":tabview:categoryDialog">
 						<f:setPropertyActionListener value="#{category}"
 							target="#{jJCategoryBean.categoryAdmin}" />
@@ -42,7 +42,7 @@
 						<p:menuitem id="deleteButton" icon="ui-icon-trash"
 							value="#{messages.admin_category_table_delete_tooltip}"
 							oncomplete="PF('categoryDeleteDialogWidget').show()"
-							title="#{messages.label_delete}">
+							title="#{messages.label_delete}" resetValues="true">
 							<f:setPropertyActionListener value="#{category}"
 								target="#{jJCategoryBean.categoryAdmin}" />
 						</p:menuitem>
@@ -52,7 +52,7 @@
 				<f:facet name="footer">
 					<p:commandButton value="#{messages.admin_category_new_button}"
 						id="newCategory" actionListener="#{jJCategoryBean.newCategory}"
-						update=":tabview:categoryDialog"
+						update=":tabview:categoryDialog" resetValues="true"
 						oncomplete="PF('categoryDialogWidget').show()"
 						icon="ui-icon-circle-plus" />
 				</f:facet>

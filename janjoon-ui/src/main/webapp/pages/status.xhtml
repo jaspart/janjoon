@@ -62,13 +62,13 @@
 
 						<p:splitButton id="editButton" icon="ui-icon-pencil"
 							update=":tabview:seditForm:editPanelGrid"
-							action="#{jJStatusBean.onEdit}"
+							action="#{jJStatusBean.onEdit}" resetValues="true"
 							oncomplete="PF('editSatDialogWidget').show()"
 							value="#{messages.admin_status_table_edit_tooltip}">
 							<f:setPropertyActionListener value="#{status}"
 								target="#{jJStatusBean.JJStatus_}" />						
 
-						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+						<p:menuitem id="deleteButton" icon="ui-icon-trash" resetValues="true"
 							oncomplete="PF('deleteSatDialogWidget').show()"
 							value="#{messages.admin_status_table_delete_tooltip}"
 							title="#{messages.admin_status_table_delete_title}">
@@ -80,7 +80,7 @@
 				</p:column>
 				<f:facet name="footer">
 					<p:commandButton value="#{messages.admin_status_new_button}"
-						id="createButton" icon="ui-icon-circle-plus"
+						id="createButton" icon="ui-icon-circle-plus" resetValues="true"
 						update=":tabview:ScreateForm:createPanelGrid"
 						oncomplete="PF('createSatDialogWidget').show()"
 						title="#{messages.admin_status_new_button}" />

@@ -50,14 +50,14 @@ td.ui-fileupload-preview {
 						<h:outputText value="#{messages.admin_project_table_action_title}" />
 					</f:facet>
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
-						oncomplete="PF('projectDialogWidget').show()"
+						oncomplete="PF('projectDialogWidget').show()" resetValues="true"
 						value="#{messages.admin_project_table_edit_tooltip}"
 						action="#{jJProjectBean.editProject}"
 						update=":tabview:projectDialog">
 						<f:setPropertyActionListener value="#{project}"
 							target="#{jJProjectBean.projectAdmin}" />
 
-						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+						<p:menuitem id="deleteButton" icon="ui-icon-trash" resetValues="true"
 							oncomplete="PF('projectDeleteDialogWidget').show()"
 							value="#{messages.admin_project_table_delete_title}"
 							title="#{messages.label_delete}">
@@ -70,7 +70,7 @@ td.ui-fileupload-preview {
 				<f:facet name="footer">
 					<p:commandButton value="#{messages.admin_project_new_button}"
 						actionListener="#{jJProjectBean.newProject}" id="newProject"
-						update=":tabview:projectDialog"
+						update=":tabview:projectDialog" resetValues="true"
 						oncomplete="PF('projectDialogWidget').show()"
 						icon="ui-icon-circle-plus" />
 				</f:facet>

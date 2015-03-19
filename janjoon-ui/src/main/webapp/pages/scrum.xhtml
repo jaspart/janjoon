@@ -129,7 +129,7 @@
 									id="createTaskttButton" icon="ui-icon-circle-plus"
 									update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm :taskImportDialog :growlForm"
 									immediate="true" onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock()"
+									oncomplete="PF('blockUIWidget').unblock()" resetValues="true"
 									actionListener="#{jJTaskBean.loadImportFormat}"
 									title="#{messages.label_create} JJTask">
 									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
@@ -201,7 +201,7 @@
 											<h:outputText value="#{messages.bug_table_action_title}" />
 										</f:facet>
 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-											update=":viewTaskForm" immediate="true"
+											update=":viewTaskForm" immediate="true" resetValues="true"
 											title="#{messages.project_gantt_table_actions_viewMenuItem}"
 											action="#{jJTaskBean.initiateReqTreeNode}">
 											<f:setPropertyActionListener value="#{todo}"
@@ -262,7 +262,7 @@
 												<h:outputText value="#{messages.bug_table_action_title}" />
 											</f:facet>
 											<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-												update=":viewTaskForm" immediate="true"
+												update=":viewTaskForm" immediate="true" resetValues="true"
 												action="#{jJTaskBean.initiateReqTreeNode}">
 												<f:setPropertyActionListener value="#{prog}"
 													target="#{jJTaskBean.task}" />
@@ -313,7 +313,7 @@
 												<h:outputText value="#{messages.bug_table_action_title}" />
 											</f:facet>
 											<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-												update=":viewTaskForm" immediate="true"
+												update=":viewTaskForm" immediate="true" resetValues="true"
 												action="#{jJTaskBean.initiateReqTreeNode}">
 												<f:setPropertyActionListener value="#{done}"
 													target="#{jJTaskBean.task}" />
