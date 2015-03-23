@@ -8,164 +8,255 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
-	<f:event listener="#{jJBugBean.checkBug}"
-			type="preRenderView" />
-		<style type="text/css">		
+		<f:event listener="#{jJBugBean.checkBug}" type="preRenderView" />
+		<style type="text/css">
+.ui-datalist-data {
+	-webkit-padding-start: 20px;
+}
+
 .bugAutoComplete .ui-inputfield {
 	width: 100px;
 }
 </style>
-		<h:form id="bugForm">
-			<p:panelGrid id="createPanelGrid">
-				<f:facet name="header">
-					<p:row>
-						<p:column colspan="1">
-							<p:commandButton id="createButton" icon="ui-icon-plusthick"
-								value="#{messages.bug_table_add_label}" update=":createForm "
-								style="margin-left: 20px;" resetValues="true" immediate="true"
-								oncomplete="PF('createDialogWidget').show()"
-								title="#{messages.label_create}" />
-							<p:tooltip for="createButton" value="#{messages.label_create}"
-								showEffect="fade" hideEffect="fade" />
-						</p:column>
-						<p:column colspan="2">
-							BUG
-					</p:column>
-					</p:row>
-				</f:facet>
-				<p:row>
-					<p:column>
-						<p:outputLabel for="jJbugName" value="Name : " />
-					</p:column>
-					<p:column colspan="2">
-						<p:inputTextarea id="jJbugName" value="#{jJBugBean.viewBug.name}"
-							cols="65" rows="1" required="true">
-							<f:validateLength maximum="100" />
-						</p:inputTextarea>
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column>						
-						<p:outputLabel for="jJbugProject" value="Project : " />						
-						<p:selectOneMenu id="jJbugProject"
-							value="#{jJBugBean.viewBug.project}"							
-							style="float: right;width:100px"
-							converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
-						<f:selectItem itemValue="#{null}" itemLabel="AnyProject" />
-						<f:selectItems value="#{jJProjectBean.projectList}" var="p"
-							itemLabel="#{p.name}" itemValue="#{p}" />							
-						</p:selectOneMenu>
-					</p:column>
-					<p:column>
-						<p:outputLabel for="jJbugVersion" value="Version : " />
-						
-						<p:autoComplete id="jJbugVersion" scrollHeight="200"
-							onchange="jJbugBuild.val('');"
-							value="#{jJBugBean.viewBug.versioning}"
-							styleClass="bugAutoComplete"
-							itemLabel="#{version.name} : #{version.product.name}"
-							itemValue="#{version}" style="float: right;margin-right: 20px;"							
-							converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
-							dropdown="true" var="version"
-							completeMethod="#{jJBugBean.completeVersioningBug}">
-							<p:ajax event="itemSelect" update="jJbugVersion jJbugBuild"
-								listener="#{jJBugBean.changeEvent('version',jJBugBean.viewBug)}" />
-						</p:autoComplete>						
-					</p:column>
-					<p:column>
-						<p:outputLabel for="jJbugBuild" value="Build : " />
-						<p:autoComplete id="jJbugBuild" scrollHeight="200"
-							styleClass="bugAutoComplete" widgetVar="jJbugBuildWV"
-							value="#{jJBugBean.viewBug.build}" itemLabel="#{build.name}"
-							itemValue="#{build}"
-							converter="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter"
-							dropdown="true" var="build"
-							style="float: right;margin-right: 20px;"
-							completeMethod="#{jJBugBean.completeBuildBug}">
-							<f:attribute name="version" value="#{jJBugBean.viewBug.versioning}" />
-							<f:validator validatorId="bugValidator" />
-							<f:attribute name="jJbugVersion"
-								value="#{jJBugBean.viewBug.versioning}" />
-						</p:autoComplete>
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column colspan="1">
-						<p:outputLabel for="jJbugCriticity" value="Criticity : " />
-						<p:autoComplete id="jJbugCriticity" scrollHeight="200"
-							styleClass="bugAutoComplete"
-							value="#{jJBugBean.viewBug.criticity}"
-							itemLabel="#{criticity.name}" itemValue="#{criticity}"
-							style="float: right;margin-right: 20px;"
-							converter="com.starit.janjoonweb.ui.mb.converter.JJCriticityConverter"
-							dropdown="true" var="criticity"
-							completeMethod="#{jJBugBean.completeCriticityBug}" />
-
-					</p:column>
-					<p:column colspan="1">
-						<p:outputLabel for="jJbugImportance" value="Importance : " />
-						<p:autoComplete id="jJbugImportance" scrollHeight="200"
-							styleClass="bugAutoComplete"
-							value="#{jJBugBean.viewBug.importance}"
-							itemLabel="#{importance.name}" itemValue="#{importance}"
-							style="float: right;margin-right: 20px;"
-							converter="com.starit.janjoonweb.ui.mb.converter.JJImportanceConverter"
-							dropdown="true" var="importance"
-							completeMethod="#{jJBugBean.completeImportance}" />
-
-					</p:column>
-					<p:column colspan="1">
-						<p:outputLabel for="jJbugStatus" value="Status : " />
-						<p:autoComplete id="jJbugStatus"
-							value="#{jJBugBean.viewBug.status}" itemLabel="#{status.name}"
-							itemValue="#{status}" styleClass="bugAutoComplete"
-							scrollHeight="200" style="float: right;margin-right: 20px;"
-							converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
-							dropdown="true" var="status"
-							completeMethod="#{jJBugBean.completeStatusBug}" />
-
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column colspan="3">
-						<p:outputLabel value="Description" for="jJBugDescription"
-							rendered="#{!loginBean.mobile}" />
-						<p:outputLabel value="Description" for="jJBugMobileDescription"
-							rendered="#{loginBean.mobile}" />
-						<br />
-						<pe:ckEditor id="jJBugDescription"
-							toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
-							rendered="#{!loginBean.mobile}" width="700px"
-							customConfig="#{request.contextPath}/resources/js/ckEditor.js"
-							value="#{jJBugBean.viewBug.description}" required="true"
-							requiredMessage="Description is a required value" />
-						<p:editor id="jJBugMobileDescription" width="700"
-							rendered="#{loginBean.mobile}"
-							value="#{jJBugBean.viewBug.description}" required="true"
-							requiredMessage="Description is a required value" />
-
-					</p:column>
-				</p:row>
-				<f:facet name="footer">
-					<p:row>
-						<p:column colspan="3">
-							<p:commandButton id="editSaveButton"
-								onstart="PF('bugBlockUIWidget').block()"
-								oncomplete="PF('bugBlockUIWidget').unblock()"
-								value="#{messages.bug_edit_save_button}"
-								action="#{jJBugBean.persistviewBug}"
-								update=":bugForm :growlForm" />
-						</p:column>
-					</p:row>
-				</f:facet>
-			</p:panelGrid>
+		<h:form>
+			<p:commandButton id="communicationButton" icon="ui-icon-comment"
+				value="Communication" style="float: right;"
+				actionListener="#{jJMessageBean.initComMessages(jJBugBean.viewBug)}"
+				oncomplete="PF('communication').show();"
+				title="#{message.header_communication_label}"
+				rendered="#{loginBean.enable and jJBugBean.viewBug != null}" />
 		</h:form>
+		<p:panelGrid>
+			<p:row>
+				<p:column>
+					<h:form id="bugForm">
+						<p:panelGrid id="createPanelGrid">
+							<f:facet name="header">
+								<p:row>
+									<p:column colspan="1">
+										<p:commandButton id="createButton" icon="ui-icon-plusthick"
+											value="#{messages.bug_table_add_label}" update=":createForm "
+											style="margin-left: 20px;" resetValues="true"
+											immediate="true" oncomplete="PF('createDialogWidget').show()"
+											title="#{messages.label_create}" />
+										<p:tooltip for="createButton" value="#{messages.label_create}"
+											showEffect="fade" hideEffect="fade" />
+									</p:column>
+									<p:column colspan="2">BUG</p:column>
+								</p:row>
+							</f:facet>
+							<p:row>
+								<p:column>
+									<p:outputLabel for="jJbugName" value="Name : " />
+								</p:column>
+								<p:column colspan="2">
+									<p:inputTextarea id="jJbugName"
+										value="#{jJBugBean.viewBug.name}" cols="65" rows="1"
+										required="true">
+										<f:validateLength maximum="100" />
+									</p:inputTextarea>
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<p:outputLabel for="jJbugProject" value="Project : " />
+									<p:selectOneMenu id="jJbugProject"
+										value="#{jJBugBean.viewBug.project}"
+										style="float: right;width:100px"
+										converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
+										<f:selectItem itemValue="#{null}" itemLabel="AnyProject" />
+										<f:selectItems value="#{jJProjectBean.projectList}" var="p"
+											itemLabel="#{p.name}" itemValue="#{p}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column>
+									<p:outputLabel for="jJbugVersion" value="Version : " />
+
+									<p:autoComplete id="jJbugVersion" scrollHeight="200"
+										onchange="jJbugBuild.val('');"
+										value="#{jJBugBean.viewBug.versioning}"
+										styleClass="bugAutoComplete"
+										itemLabel="#{version.name} : #{version.product.name}"
+										itemValue="#{version}"
+										style="float: right;margin-right: 20px;"
+										converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
+										dropdown="true" var="version"
+										completeMethod="#{jJBugBean.completeVersioningBug}">
+										<p:ajax event="itemSelect" update="jJbugVersion jJbugBuild"
+											listener="#{jJBugBean.changeEvent('version',jJBugBean.viewBug)}" />
+									</p:autoComplete>
+								</p:column>
+								<p:column>
+									<p:outputLabel for="jJbugBuild" value="Build : " />
+									<p:autoComplete id="jJbugBuild" scrollHeight="200"
+										styleClass="bugAutoComplete" widgetVar="jJbugBuild"
+										value="#{jJBugBean.viewBug.build}" itemLabel="#{build.name}"
+										itemValue="#{build}"
+										converter="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter"
+										dropdown="true" var="build"
+										style="float: right;margin-right: 20px;"
+										completeMethod="#{jJBugBean.completeBuildBug}">
+										<f:attribute name="version"
+											value="#{jJBugBean.viewBug.versioning}" />
+										<f:validator validatorId="bugValidator" />
+										<f:attribute name="jJbugVersion"
+											value="#{jJBugBean.viewBug.versioning}" />
+									</p:autoComplete>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column colspan="1">
+									<p:outputLabel for="jJbugCriticity" value="Criticity : " />
+									<p:autoComplete id="jJbugCriticity" scrollHeight="200"
+										styleClass="bugAutoComplete"
+										value="#{jJBugBean.viewBug.criticity}"
+										itemLabel="#{criticity.name}" itemValue="#{criticity}"
+										style="float: right;margin-right: 20px;"
+										converter="com.starit.janjoonweb.ui.mb.converter.JJCriticityConverter"
+										dropdown="true" var="criticity"
+										completeMethod="#{jJBugBean.completeCriticityBug}" />
+
+								</p:column>
+								<p:column colspan="1">
+									<p:outputLabel for="jJbugImportance" value="Importance : " />
+									<p:autoComplete id="jJbugImportance" scrollHeight="200"
+										styleClass="bugAutoComplete"
+										value="#{jJBugBean.viewBug.importance}"
+										itemLabel="#{importance.name}" itemValue="#{importance}"
+										style="float: right;margin-right: 20px;"
+										converter="com.starit.janjoonweb.ui.mb.converter.JJImportanceConverter"
+										dropdown="true" var="importance"
+										completeMethod="#{jJBugBean.completeImportance}" />
+
+								</p:column>
+								<p:column colspan="1">
+									<p:outputLabel for="jJbugStatus" value="Status : " />
+									<p:autoComplete id="jJbugStatus"
+										value="#{jJBugBean.viewBug.status}" itemLabel="#{status.name}"
+										itemValue="#{status}" styleClass="bugAutoComplete"
+										scrollHeight="200" style="float: right;margin-right: 20px;"
+										converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+										dropdown="true" var="status"
+										completeMethod="#{jJBugBean.completeStatusBug}" />
+
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column colspan="3">
+									<p:outputLabel value="Description" for="jJBugDescription"
+										rendered="#{!loginBean.mobile}" />
+									<p:outputLabel value="Description" for="jJBugMobileDescription"
+										rendered="#{loginBean.mobile}" />
+									<br />
+									<pe:ckEditor id="jJBugDescription"
+										toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
+										rendered="#{!loginBean.mobile}" width="700px"
+										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+										value="#{jJBugBean.viewBug.description}" required="true"
+										requiredMessage="Description is a required value" />
+									<p:editor id="jJBugMobileDescription" width="700"
+										rendered="#{loginBean.mobile}"
+										value="#{jJBugBean.viewBug.description}" required="true"
+										requiredMessage="Description is a required value" />
+
+								</p:column>
+							</p:row>
+							<f:facet name="footer">
+								<p:row>
+									<p:column colspan="3">
+										<p:commandButton id="editSaveButton"
+											onstart="PF('bugBlockUIWidget').block()"
+											oncomplete="PF('bugBlockUIWidget').unblock()"
+											value="#{messages.bug_edit_save_button}"
+											action="#{jJBugBean.persistviewBug}"
+											update=":bugForm :growlForm" />
+									</p:column>
+								</p:row>
+							</f:facet>
+						</p:panelGrid>
+					</h:form>
+				</p:column>
+				<p:column>
+					<h:form id="linkForm">
+						<p:panelGrid>
+							<f:facet name="header">
+								<p:row>
+									<p:column colspan="2">Link</p:column>
+								</p:row>
+							</f:facet>
+							<p:row>
+								<p:column>
+									<p:outputLabel for="bugReq" value="Requirement :" />
+								</p:column>
+								<p:column style="width: 220px;">
+									<p:autoComplete id="bugReq" scrollHeight="200"
+										value="#{jJBugBean.viewBug.requirement}"
+										widgetVar="jJbugRequirement"
+										disabled="#{jJBugBean.viewBug.project == null}"
+										itemLabel="#{requirement.name}" itemValue="#{requirement}"
+										converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
+										dropdown="true" var="requirement"
+										onchange="jJbugTeststep.val('');"
+										completeMethod="#{jJBugBean.completeReqBug}">
+										<p:ajax event="itemSelect"
+											listener="#{jJBugBean.persistJJBug}"
+											onstart="PF('blockUIWidget').block()"
+											oncomplete="PF('blockUIWidget').unblock()"
+											update=":bugForm :growlForm :linkForm" />
+										<f:attribute name="project"
+											value="#{jJBugBean.viewBug.project}" />
+									</p:autoComplete>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<p:outputLabel for="bugTest" value="TestCase :" />
+								</p:column>
+								<p:column style="width: 220px;">
+									<p:autoComplete id="bugTest" scrollHeight="200"
+										widgetVar="jJbugTeststep"
+										value="#{jJBugBean.viewBug.teststep}" itemValue="#{teststep}"
+										converter="com.starit.janjoonweb.ui.mb.converter.JJTeststepConverter"
+										disabled="#{jJBugBean.viewBug.project == null and jJBugBean.viewBug.requirement==null}"
+										dropdown="true" var="teststep" itemLabel="#{teststep.name}"
+										completeMethod="#{jJBugBean.completeTestStepsBug}">
+										<p:column>
+											<h:outputText value="#{teststep.name}" escape="false" />
+										</p:column>
+										<p:ajax event="itemSelect"
+											listener="#{jJBugBean.persistJJBug}"
+											onstart="PF('blockUIWidget').block()"
+											oncomplete="PF('blockUIWidget').unblock()"
+											update=":bugForm :growlForm :linkForm" />
+										<f:attribute name="requirement"
+											value="#{jJBugBean.viewBug.requirement}" />
+										<f:attribute name="project"
+											value="#{jJBugBean.viewBug.project}" />
+									</p:autoComplete>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<p:outputLabel for="bugTasks" value="Tasks :" />
+								</p:column>
+								<p:column style="width: 220px;">
+									<p:dataList id="bugTasks" value="#{jJBugBean.viewBugTasks}" var="task">
+										 #{task.name}
+									</p:dataList>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</h:form>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
 		<p:dialog id="createDialog" header="#{messages.bug_create_title}"
 			draggable="false" modal="true" widgetVar="createDialogWidget"
 			dynamic="true" visible="#{jJBugBean.createDialogVisible}"
 			resizable="true" maximizable="true" showEffect="fade"
 			hideEffect="explode">
-			<p:ajax event="close" listener="#{jJBugBean.handleDialogClose}"/>
+			<p:ajax event="close" listener="#{jJBugBean.handleDialogClose}" />
 			<p:outputPanel id="createPanel">
 				<h:form id="createForm" enctype="multipart/form-data">
 					<p:panel styleClass="panelDialog">
@@ -182,7 +273,7 @@
 								value="#{messages.label_save}" action="#{jJBugBean.persistBug}"
 								update="createPanelGrid,:growlForm" />
 							<p:commandButton id="createCloseButton"
-								value="#{messages.label_close}" 
+								value="#{messages.label_close}"
 								onclick="PF('createDialogWidget').hide()" type="button" />
 						</f:facet>
 					</p:panel>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+	<h:form id="comForm">
+		<p:dataTable id="comDataTable" value="#{jJMessageBean.comMessages}"
+			rowKey="#{mes.id}" var="mes" scrollable="true"
+			rendered="#{loginBean.enable}" scrollHeight="300"
+			rowStyleClass="#{mes.criticity.name}"
+			style="border-spacing:0px;" selectionMode="single"
+			sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
+			<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
+				listener="#{jJMessageBean.onRowSelect}" immediate="true"
+				oncomplete="PF('viewDialogWidget1').show()" />
+			<f:facet name="header">
+				<p:panelGrid columns="1">
+					<p:outputLabel for="messagedsc" value="Message :" style="float:left;"/>
+					<p:inputTextarea id="messagedsc" cols="35" rows="3" style="float:left;"
+						value="#{jJMessageBean.message.message}" required="true" />
+					<p:panelGrid columns="2" style="border:hidden;">
+						<p:selectBooleanButton id="alert"
+							value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
+							offLabel="Info" onIcon="ui-icon-alert" offIcon="ui-icon-info">
+						</p:selectBooleanButton>
+						<p:commandButton id="submitMes" value="OK"
+							process="@this,alert,messagedsc"
+							actionListener="#{jJMessageBean.createMessage}"
+							update=":comForm :headerForm:communicationButton :growlForm" />
+					</p:panelGrid>
+				</p:panelGrid>
+			</f:facet>
+			<p:column style="width: 70px !important;text-align: center;">				
+				<p:graphicImage styleClass="comAvatar" value="#{imageStreamer.image}"
+					rendered="#{mes.createdBy.picture != null}">
+					<f:param name="contactId" value="#{mes.createdBy.id}" />
+				</p:graphicImage>
+
+			</p:column>
+			<p:column >
+				<h:outputText id="viewButton" value="#{mes.message}" />
+				<p:tooltip for="viewButton"
+					value="#{messages.label_view} #{mes.name}" showEffect="fade"
+					hideEffect="fade" />
+			</p:column>			
+		</p:dataTable>
+	</h:form>
+</ui:composition>
+</html>

@@ -34,6 +34,7 @@ public class JJMessageBean {
 
 	private JJMessage message;
 	private JJMessage resolvedJJMessage;
+	private Object field;
 	private boolean loadFiltredJJmessage = false;
 	private boolean alertOrInfo;
 	private SelectItem[] projectOptions;
@@ -44,8 +45,10 @@ public class JJMessageBean {
 	// private List<JJMessage> enabledJJMessage;
 	private List<JJMessage> allJJMessages;
 	private List<JJMessage> alertMessages;
+	private List<JJMessage> comMessages;
+
 	private LazyMessageDataModel mainMessages;
-	private List<String> columns;	
+	private List<String> columns;
 	private boolean collapsedLayoutPanel = true;
 	private HtmlPanelGrid viewPanel;
 	private JJMessage viewedMessage;
@@ -53,7 +56,8 @@ public class JJMessageBean {
 	public List<JJMessage> getAlertMessages() {
 
 		if (alertMessages == null) {
-			alertMessages = jJMessageService.getAlertMessages(LoginBean.getProject(), LoginBean.getProduct());
+			alertMessages = jJMessageService.getAlertMessages(
+					LoginBean.getProject(), LoginBean.getProduct());
 		}
 		return alertMessages;
 	}
@@ -73,7 +77,8 @@ public class JJMessageBean {
 		columns.add("message");
 		allJJMessages = jJMessageService.findAllJJMessages();
 		setMessage(new JJMessage());
-		alertMessages = jJMessageService.getAlertMessages(LoginBean.getProject(), LoginBean.getProduct());
+		alertMessages = jJMessageService.getAlertMessages(
+				LoginBean.getProject(), LoginBean.getProduct());
 		viewedMessage = new JJMessage();
 		mainMessages = null;
 		((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
@@ -105,14 +110,6 @@ public class JJMessageBean {
 		return message;
 	}
 
-	// public List<JJMessage> getEnabledJJMessage() {
-	// return enabledJJMessage;
-	// }
-	//
-	// public void setEnabledJJMessage(List<JJMessage> enabledJJMessage) {
-	// this.enabledJJMessage = enabledJJMessage;
-	// }
-
 	public void setMessage(JJMessage message) {
 		this.message = message;
 	}
@@ -143,13 +140,26 @@ public class JJMessageBean {
 		this.viewedMessage = viewedMessage;
 	}
 
+	public List<JJMessage> getComMessages() {
+		return comMessages;
+	}
+
+	public void setComMessages(List<JJMessage> comMessages) {
+		this.comMessages = comMessages;
+	}
+
+	public void initComMessages(Object field) {
+		this.field = field;
+		comMessages = jJMessageService.getCommMessages(this.field);
+	}
+
 	public boolean isLoadFiltredJJmessage() {
 		return loadFiltredJJmessage;
 	}
 
 	public void setLoadFiltredJJmessage(boolean loadFiltredJJmessage) {
 		this.loadFiltredJJmessage = loadFiltredJJmessage;
-	}	
+	}
 
 	public boolean isCollapsedLayoutPanel() {
 		return collapsedLayoutPanel;
@@ -196,24 +206,29 @@ public class JJMessageBean {
 		for (int i = 0; i < data.size(); i++) {
 			if (data.get(i) instanceof JJCriticity) {
 				JJCriticity criticity = (JJCriticity) data.get(i);
-				options[i + 1] = new SelectItem(criticity.getName(), criticity.getName());
+				options[i + 1] = new SelectItem(criticity.getName(),
+						criticity.getName());
 			} else if (data.get(i) instanceof JJStatus) {
 				JJStatus status = (JJStatus) data.get(i);
-				options[i + 1] = new SelectItem(status.getName(), status.getName());
+				options[i + 1] = new SelectItem(status.getName(),
+						status.getName());
 			} else if (data.get(i) instanceof JJContact) {
 				JJContact contact = (JJContact) data.get(i);
-				options[i + 1] = new SelectItem(contact.getFirstname()+" "+contact.getName(),
-						contact.getFirstname()+" "+contact.getName());
+				options[i + 1] = new SelectItem(contact.getFirstname() + " "
+						+ contact.getName(), contact.getFirstname() + " "
+						+ contact.getName());
 			} else if (data.get(i) instanceof JJProduct) {
 				JJProduct product = (JJProduct) data.get(i);
-				options[i + 1] = new SelectItem(product.getName(), product.getName());
+				options[i + 1] = new SelectItem(product.getName(),
+						product.getName());
 			} else if (data.get(i) instanceof JJProject) {
 				JJProject project = (JJProject) data.get(i);
-				options[i + 1] = new SelectItem(project.getName(), project.getName());
+				options[i + 1] = new SelectItem(project.getName(),
+						project.getName());
 			}
 		}
 		return options;
-	}	
+	}
 
 	public void handleLayoutToggle(ToggleEvent event) {
 		this.collapsedLayoutPanel = !this.collapsedLayoutPanel;
@@ -221,7 +236,8 @@ public class JJMessageBean {
 
 	public void resolveJJMessage() {
 		resolvedJJMessage.setEnabled(false);
-		JJStatus status = jJStatusService.getOneStatus("CLOSED", "Message", true);
+		JJStatus status = jJStatusService.getOneStatus("CLOSED", "Message",
+				true);
 		if (status != null) {
 			resolvedJJMessage.setStatus(status);
 		}
@@ -243,8 +259,8 @@ public class JJMessageBean {
 			mainMessages = new LazyMessageDataModel(jJMessageService,
 					LoginBean.getProject(), LoginBean.getProduct());
 
-//			RequestContext context = RequestContext.getCurrentInstance();
-//			context.update(":headerForm:dataTable1");
+			// RequestContext context = RequestContext.getCurrentInstance();
+			// context.update(":headerForm:dataTable1");
 		}
 	}
 
@@ -261,26 +277,30 @@ public class JJMessageBean {
 			List<JJProject> projectes = new ArrayList<JJProject>();
 			List<JJContact> contactes = new ArrayList<JJContact>();
 			// enabledJJMessage = jJMessageService.getMessages(true);
-			
 
 			mainMessages = new LazyMessageDataModel(jJMessageService,
 					LoginBean.getProject(), LoginBean.getProduct());
-////			if (!login.isCollapsedMesPanel()) {
-//				RequestContext context = RequestContext.getCurrentInstance();
-//				context.update("messagePanel");
-////			}
+			// // if (!login.isCollapsedMesPanel()) {
+			// RequestContext context = RequestContext.getCurrentInstance();
+			// context.update("messagePanel");
+			// // }
 
 			for (JJMessage mes : jJMessageService.getActifMessages(
 					LoginBean.getProject(), LoginBean.getProduct())) {
-				if (mes.getCreatedBy() != null && !listContaines(contactes, mes.getCreatedBy()))
+				if (mes.getCreatedBy() != null
+						&& !listContaines(contactes, mes.getCreatedBy()))
 					contactes.add(mes.getCreatedBy());
-				if (mes.getProduct() != null && !listContaines(productes, mes.getProduct()))
+				if (mes.getProduct() != null
+						&& !listContaines(productes, mes.getProduct()))
 					productes.add(mes.getProduct());
-				if (mes.getProject() != null && !listContaines(projectes, mes.getProject()))
+				if (mes.getProject() != null
+						&& !listContaines(projectes, mes.getProject()))
 					projectes.add(mes.getProject());
-				if (mes.getCriticity() != null && !listContaines(criticities, mes.getCriticity()))
+				if (mes.getCriticity() != null
+						&& !listContaines(criticities, mes.getCriticity()))
 					criticities.add(mes.getCriticity());
-				if (mes.getStatus() != null && !listContaines(status, mes.getStatus()))
+				if (mes.getStatus() != null
+						&& !listContaines(status, mes.getStatus()))
 					status.add(mes.getStatus());
 			}
 			criticityOptions = createFilterOptions(criticities);
@@ -363,7 +383,8 @@ public class JJMessageBean {
 			message = "message_successfully_created";
 		}
 
-		FacesMessage facesMessage = MessageFactory.getMessage(message, "Message");
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				"Message");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 	}
@@ -371,12 +392,14 @@ public class JJMessageBean {
 	public void createMessage() {
 		if (!alertOrInfo) {
 
-			JJCriticity criticity = jJCriticityService.getCriticityByName("INFO", true);
+			JJCriticity criticity = jJCriticityService.getCriticityByName(
+					"INFO", true);
 			if (criticity != null)
 				message.setCriticity(criticity);
 
 		} else {
-			JJCriticity criticity = jJCriticityService.getCriticityByName("ALERT", true);
+			JJCriticity criticity = jJCriticityService.getCriticityByName(
+					"ALERT", true);
 			if (criticity != null)
 				message.setCriticity(criticity);
 		}
@@ -391,8 +414,9 @@ public class JJMessageBean {
 
 		if (status != null) {
 			message.setStatus(status);
-		}		
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		}
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 
 		if (LoginBean.getProduct() != null)
 			message.setProduct(LoginBean.getProduct());
@@ -404,25 +428,37 @@ public class JJMessageBean {
 		message.setEnabled(true);
 		message.setContact(contact);
 		message.setDescription(message.getMessage());
+
+		if (field instanceof JJBug)
+			message.setBug((JJBug) field);
+		else if (field instanceof JJRequirement)
+			message.setRequirement((JJRequirement) field);
+		else if (field instanceof JJTestcase)
+			message.setTestcase((JJTestcase) field);
+
 		save(message);
+		if (field != null)
+			initComMessages(field);
 		message = new JJMessage();
-		alertMessages=null;
+		alertMessages = null;
 	}
 
 	public void onRowSelect(SelectEvent event) {
 		viewedMessage = (JJMessage) event.getObject();
-		//viewPanel = populateMessagePanel();
+		// viewPanel = populateMessagePanel();
 	}
 
 	public void saveJJMessage(JJMessage b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
 		jJMessageService.saveJJMessage(b);
 	}
 
 	public void updateJJMessage(JJMessage b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJMessageService.updateJJMessage(b);
@@ -432,7 +468,8 @@ public class JJMessageBean {
 		setAllJJMessages(jJMessageService.findAllJJMessages());
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.update(":headerForm:dataTable1");
-		if (FacesContext.getCurrentInstance().getViewRoot().getViewId().contains("main")) {
+		if (FacesContext.getCurrentInstance().getViewRoot().getViewId()
+				.contains("main")) {
 			context.update("contentPanel");
 		}
 		setJJMessage_(null);
@@ -440,6 +477,7 @@ public class JJMessageBean {
 		loadFiltredJJmessage = false;
 		mainMessages = null;
 		alertMessages = null;
+		comMessages = null;
 		((LoginBean) LoginBean.findBean("loginBean")).setShowMarquee(null);
 		((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 		// initJJmessageTable(null);
@@ -466,8 +504,9 @@ public class JJMessageBean {
 			InputTextarea nameValue = (InputTextarea) application
 					.createComponent(InputTextarea.COMPONENT_TYPE);
 			nameValue.setId("nameValue");
-			nameValue.setValueExpression("value", expressionFactory
-					.createValueExpression(elContext,
+			nameValue.setValueExpression("value",
+					expressionFactory
+							.createValueExpression(elContext,
 									"#{jJMessageBean.viewedMessage.name}",
 									String.class));
 			nameValue.setReadonly(true);
@@ -519,11 +558,13 @@ public class JJMessageBean {
 				HtmlOutputText createdByValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
 				createdByValue
-						.setValueExpression("value", expressionFactory
-								.createValueExpression(
-										elContext,
-										"#{jJMessageBean.viewedMessage.createdBy.name}",
-										String.class));
+						.setValueExpression(
+								"value",
+								expressionFactory
+										.createValueExpression(
+												elContext,
+												"#{jJMessageBean.viewedMessage.createdBy.name}",
+												String.class));
 				htmlPanelGrid.getChildren().add(createdByValue);
 			}
 
@@ -553,11 +594,14 @@ public class JJMessageBean {
 				htmlPanelGrid.getChildren().add(updatedByLabel);
 				HtmlOutputText updatedByValue = (HtmlOutputText) application
 						.createComponent(HtmlOutputText.COMPONENT_TYPE);
-				updatedByValue.setValueExpression("value",
-						expressionFactory.createValueExpression(
-								elContext,
-								"#{jJMessageBean.viewedMessage.updatedBy.name}",
-								String.class));
+				updatedByValue
+						.setValueExpression(
+								"value",
+								expressionFactory
+										.createValueExpression(
+												elContext,
+												"#{jJMessageBean.viewedMessage.updatedBy.name}",
+												String.class));
 				htmlPanelGrid.getChildren().add(updatedByValue);
 
 			}

@@ -202,6 +202,14 @@
 			<p:layoutUnit position="center" resizable="false"
 				style="min-height:500px;width:1060px !important;height:600px !important;">
 				<h:form id="testFormCenter">
+
+					<p:commandButton id="communicationButton" icon="ui-icon-comment"
+						value="Communication" style="float: right;"
+						actionListener="#{jJMessageBean.initComMessages(jJTestcaseBean.testcase)}"
+						oncomplete="PF('communication').show();"
+						title="#{message.header_communication_label}"
+						rendered="#{loginBean.enable and jJTestcaseBean.testcase != null}" />
+
 					<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
 						style="float: right;"
 						title="#{messages.specification_video_help_title}" />

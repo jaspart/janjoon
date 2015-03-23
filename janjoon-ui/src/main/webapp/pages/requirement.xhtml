@@ -70,6 +70,12 @@
 		<p:panel style="height:900px;">
 			<h:form id="treeForm">
 				<p:remoteCommand name="updateTree" update="@form" />
+				<p:commandButton id="communicationButton" icon="ui-icon-comment"
+					value="Communication" style="float: right;"
+					actionListener="#{jJMessageBean.initComMessages(requirementBean.requirement)}"
+					oncomplete="PF('communication').show();"
+					title="#{message.header_communication_label}"
+					rendered="#{loginBean.enable and requirementBean.requirement != null}" />
 				<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
 					style="float: right;" />
 				<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"

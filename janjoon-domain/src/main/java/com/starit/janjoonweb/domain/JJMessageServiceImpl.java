@@ -28,26 +28,41 @@ public class JJMessageServiceImpl implements JJMessageService {
 		this.entityManager = entityManager;
 	}
 	
-	public Integer getMessagesCount(JJProject project,JJProduct product)
+	public List<JJMessage> getCommMessages(Object field)
 	{
-//		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-//		CriteriaQuery<JJMessage> criteriaQuery = criteriaBuilder
-//				.createQuery(JJMessage.class);		
-//		
-//		Root<JJMessage> from = criteriaQuery.from(JJMessage.class);
-//		List<Predicate> predicates = new ArrayList<Predicate>();
-//		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-//
-//		if (product != null)
-//			predicates.add(criteriaBuilder.equal(from.get("product"), product));
-//
-//		if (project != null)
-//			predicates.add(criteriaBuilder.equal(from.get("project"), project));
-//		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
-//		cq.select(criteriaBuilder.count(cq.from(JJMessage.class)));	
-//		cq.where(predicates.toArray(new Predicate[] {}));	
-//		
-//		return safeLongToInt(entityManager.createQuery(cq).getSingleResult());
+		if(field != null)
+		{
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<JJMessage> criteriaQuery = criteriaBuilder
+					.createQuery(JJMessage.class);
+
+			Root<JJMessage> from = criteriaQuery.from(JJMessage.class);
+			CriteriaQuery<JJMessage> select = criteriaQuery.select(from);
+			List<Predicate> predicates = new ArrayList<Predicate>();
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+			
+			if(field instanceof JJBug)
+				predicates.add(criteriaBuilder.equal(from.get("bug"), (JJBug)field));
+			
+			else if(field instanceof JJRequirement)
+				predicates.add(criteriaBuilder.equal(from.get("requirement"), (JJRequirement)field));
+			
+			else if(field instanceof JJTestcase)
+				predicates.add(criteriaBuilder.equal(from.get("testcase"), (JJTestcase)field));
+			
+			select.where(predicates.toArray(new Predicate[] {}));
+
+			TypedQuery<JJMessage> result = entityManager.createQuery(select);
+			return result.getResultList();
+
+		}else
+			return new ArrayList<JJMessage>();
+		
+		
+	}
+	
+	public Integer getMessagesCount(JJProject project,JJProduct product)
+	{	
 		long r=0;
 		if(project != null && product != null)
 		r=(long) entityManager.createQuery("select count(e.id) from JJMessage e Where e.enabled = true and e.project = :proj and e.product = :prod").

@@ -1843,7 +1843,7 @@ public class JJTaskBean {
 					JJRequirement requirement = (JJRequirement) format
 							.getObject();
 
-					name = requirement.getName() + "(" + df.format(new Date())
+					name = requirement.getName() + " (" + df.format(new Date())
 							+ "h)";
 
 					requirement = jJRequirementService
@@ -1857,7 +1857,7 @@ public class JJTaskBean {
 
 					JJBug bug = (JJBug) format.getObject();
 
-					name = bug.getName() + "(" + df.format(new Date()) + "h)";
+					name = bug.getName() + " (" + df.format(new Date()) + "h)";
 
 					bug = jJBugService.findJJBug(bug.getId());
 					bug.getTasks().add(task);
@@ -1868,7 +1868,7 @@ public class JJTaskBean {
 
 					JJTestcase testcase = (JJTestcase) format.getObject();
 
-					name = testcase.getName() + "(" + df.format(new Date())
+					name = testcase.getName() + " (" + df.format(new Date())
 							+ "h)";
 
 					testcase = jJTestcaseService.findJJTestcase(testcase

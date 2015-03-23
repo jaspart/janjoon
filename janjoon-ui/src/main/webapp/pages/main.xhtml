@@ -6,21 +6,6 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
-<!-- 		<p:growl id="notif" showDetail="false" life="2000" /> -->
-<!-- 		<p:growl id="dev" showDetail="false" life="2000" /> -->
-
-		<!--p:panel id="mainPanel" toggleable="true" toggleSpeed="250">
-			<f:facet name="header">
-				<h:outputFormat value="#{messages.main_welcome_title}">
-					<f:param value="#{messages.label_appName}" />
-				</h:outputFormat>
-			</f:facet>
-			<p />
-			<h:outputText id="welcomeText" value="#{messages.label_welcome_text}" />
-			<p />
-		</p:panel>
-		<br /-->
-
 		<p:panel id="dataPanel" rendered="#{loginBean.enable}"
 			header="#{messages.main_communication_title}"
 			styleClass="customTitleBar"

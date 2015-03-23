@@ -55,7 +55,7 @@
 			</p:column>
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugRequirement" scrollHeight="200"
-					value="#{jJBugBean.bugRequirementSelected}"
+					value="#{JJBug_.requirement}"
 					widgetVar="jJbugRequirementWV"
 					disabled="#{jJBugBean.bugProjectSelected==null and jJProjectBean.project == null}"
 					itemLabel="#{requirement.name}" itemValue="#{requirement}"
@@ -64,6 +64,7 @@
 					onchange="jJbugTeststepWV.val('');"					
 					completeMethod="#{jJBugBean.completeReqBug}">
 					<p:ajax event="itemSelect" update="jJbugRequirement jJbugTeststep" />
+					<f:attribute name="project" value="#{jJBugBean.bugProjectSelected}" />
 				</p:autoComplete>
 
 				<p:watermark for="jJbugRequirement" value="Requirement : " />
@@ -73,12 +74,14 @@
 					widgetVar="jJbugTeststepWV" value="#{JJBug_.teststep}"
 					itemValue="#{teststep}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJTeststepConverter"
-					disabled="#{jJBugBean.bugProjectSelected == null and jJProjectBean.project == null and jJBugBean.bugRequirementSelected==null}"
+					disabled="#{jJBugBean.bugProjectSelected == null and jJProjectBean.project == null and JJBug_.requirement==null}"
 					dropdown="true" var="teststep" itemLabel="#{teststep.name}"
 					completeMethod="#{jJBugBean.completeTestStepsBug}" >
 					<p:column>
 						<h:outputText value="#{teststep.name}" escape="false"/>
 					</p:column>
+					<f:attribute name="requirement" value="#{JJBug_.requirement}" />
+					<f:attribute name="project" value="#{jJBugBean.bugProjectSelected}" />
 				</p:autoComplete>
 				<p:watermark for="jJbugTeststep" value="Teststep : " />
 			</p:column>
@@ -96,7 +99,7 @@
 					<p:ajax event="itemSelect" listener="#{jJBugBean.changeEvent('project',JJBug_)}"
 						update="jJbugRequirement jJbugTeststep jJbugProject">
 						<f:setPropertyActionListener
-							target="#{jJBugBean.bugRequirementSelected}" value="#{null}" />
+							target="#{JJBug_.requirement}" value="#{null}" />
 					</p:ajax>
 
 				</p:autoComplete>

@@ -145,6 +145,36 @@ a:visited {
 	overflow: hidden !important;
 }
 
+
+
+.communicationPanelDialog {
+  right: 2% !important;
+  top: 17% !important;
+  left: 75% !important;
+}
+
+.communicationPanelDialog .ui-dialog-titlebar {
+	border-bottom: 0px solid #eee !important;
+	height: 0px;
+}
+
+.communicationPanelDialog .ui-dialog-titlebar-close {
+	float: left;
+	margin-top: -5px;
+	margin-left: -10px;
+	padding: 0px;
+/* 	width: 10px; */
+/* 	height: 10px; */
+}
+
+.communicationPanelDialog .ui-dialog-title {
+	float: none !important;
+}
+
+.communicationPanelDialog .ui-dialog-content {
+	overflow: hidden !important;
+}
+
 }
 .disable-scroll .ui-dialog-content {
 	overflow: hidden !important;
@@ -215,6 +245,21 @@ a:visited {
 	margin-left: auto;
 	margin-right: auto;
 }
+
+.comAvatar {
+	width: 30px;
+	height: 30px;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	-webkit-box-shadow: 0px 0px 5px 5px #888888;
+	-moz-box-shadow: 0px 0px 5px 5px #888888;
+	box-shadow: 0px 0px 5px 5px #888888;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
 
 .login-content {
 	height: 240px;
@@ -399,7 +444,7 @@ a:visited {
 }
 
 .TestcaseNotExecuted {
-	color: #B3DBFF;
+	color: #D9EDF7;
 	font-weight: bold;
 }
 
@@ -681,7 +726,7 @@ div.revised2 {
 }
 
 .RequirementFinishedTestProcess {
-	background-color: #B3DBFF !important;
+	background-color: #D9EDF7 !important;
 	background-image: none !important;
 	color: black !important;
 }
@@ -693,7 +738,7 @@ div.revised2 {
 }
 
 .ASSIGNED {
-	background-color: #B3DBFF !important;
+	background-color: #D9EDF7 !important;
 	background-image: none !important;
 	color: black !important;
 }
@@ -705,7 +750,7 @@ div.revised2 {
 }
 
 .READY {
-	background-color: #B3DBFF !important;
+	background-color: #D9EDF7 !important;
 	background-image: none !important;
 	color: black !important;
 }
@@ -748,6 +793,16 @@ div.revised2 {
 
 .CLOSED {
 	background-color: #CCCCCC !important;
+	background-image: none !important;
+	color: black !important;
+}
+.ALERT{
+	background-color: #F2DEDE !important;
+	background-image: none !important;
+	color: black !important;
+}
+.INFO{
+	background-color: #D9EDF7 !important;
 	background-image: none !important;
 	color: black !important;
 }
