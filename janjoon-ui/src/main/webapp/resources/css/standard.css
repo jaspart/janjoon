@@ -444,7 +444,7 @@ a:visited {
 }
 
 .TestcaseNotExecuted {
-	color: #D9EDF7;
+	color: #00A5F7;
 	font-weight: bold;
 }
 
@@ -702,34 +702,115 @@ div.revised2 {
 }
 
 .RequirementNoTask {
-	background-color: #CCCCCC !important;
-	background-image: none !important;
-	color: black !important;
+	display: inline;
+	padding: .2em .6em .3em;
+	font-size: 70%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: .25em;
+	background-color: #666666 !important;
 }
 
 .RequirementNotLinked {
-	background-color: #FFB3B3 !important;
-	background-image: none !important;
-	color: black !important;
+	display: inline;
+	padding: .2em .6em .3em;
+	font-size: 70%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: .25em;
+	background-color: #FF3333 !important;
 }
 
 .RequirementInProcess {
-	background-color: #DBB3FF !important;
-	background-image: none !important;
-	color: black !important;
+	display: inline;
+	padding: .2em .6em .3em;
+	font-size: 70%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: .25em;
+	background-color: #9E33FF !important;
 }
 
 .RequirementFinishedSuccessed {
-	background-color: #B3FFB3 !important;
-	background-image: none !important;
-	color: black !important;
+	display: inline;
+	padding: .2em .6em .3em;
+	font-size: 70%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: .25em;
+	background-color: #24B324 !important;
 }
 
 .RequirementFinishedTestProcess {
-	background-color: #D9EDF7 !important;
-	background-image: none !important;
-	color: black !important;
+	display: inline;
+	padding: .2em .6em .3em;
+	font-size: 70%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: .25em;
+	background-color: #00A5F7 !important;
 }
+
+.RequirementNoTaskOverlay {
+	background-color: #666666 !important;
+	background-image: none !important;
+	color: #fff;
+	font-size: 70%;
+	font-weight: 700;
+}
+
+.RequirementNotLinkedOverlay {
+	background-color: #FF3333 !important;
+	background-image: none !important;
+	color: #fff;
+	font-size: 70%;
+	font-weight: 700;
+}
+
+.RequirementInProcessOverlay {
+	background-color: #9E33FF !important;
+	background-image: none !important;
+	color: #fff;
+	font-size: 70%;
+	font-weight: 700;
+}
+
+.RequirementFinishedSuccessedOverlay {
+	background-color: #24B324 !important;
+	background-image: none !important;
+	color: #fff;
+	font-size: 70%;
+	font-weight: 700;
+}
+
+.RequirementFinishedTestProcessOverlay {
+	background-color: #00A5F7 !important;
+	background-image: none !important;
+	color: #fff;
+	font-size: 70%;
+	font-weight: 700;
+}
+
 
 .NEW {
 	background-color: #FFB3B3 !important;

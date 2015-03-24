@@ -76,13 +76,13 @@ public class JJVersionBean {
 				product = jJproduct;
 				versionList = jJVersionService.getVersions(true, true, product,
 						((LoginBean) LoginBean.findBean("loginBean"))
-								.getContact().getCompany());
+								.getContact().getCompany(),true);
 
 			} else if (!product.equals(jJproduct)) {
 				product = jJproduct;
 				versionList = jJVersionService.getVersions(true, true, product,
 						((LoginBean) LoginBean.findBean("loginBean"))
-								.getContact().getCompany());
+								.getContact().getCompany(),true);
 			}
 		}
 
@@ -165,7 +165,7 @@ public class JJVersionBean {
 
 		List<JJVersion> versions = jJVersionService.getVersions(true, true,
 				product, ((LoginBean) LoginBean.findBean("loginBean"))
-						.getContact().getCompany());
+						.getContact().getCompany(),true);
 
 		for (JJVersion version : versions) {
 			versionDataModel.add(new VersionDataModel(version, true, true));

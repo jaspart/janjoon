@@ -152,7 +152,7 @@ public class JJContactBean {
 		{
 			JJContact c=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 			c.setLastVersion(null);
-			versionList = jJVersionService.getVersions(true, true, c.getLastProduct(),c.getCompany());
+			versionList = jJVersionService.getVersions(true, true, c.getLastProduct(),c.getCompany(),true);
 		}	
 		return versionList;
 	}

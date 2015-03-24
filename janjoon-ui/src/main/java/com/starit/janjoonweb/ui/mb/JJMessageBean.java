@@ -389,7 +389,7 @@ public class JJMessageBean {
 		reset();
 	}
 
-	public void createMessage() {
+	public void createMessage(boolean withField) {
 		if (!alertOrInfo) {
 
 			JJCriticity criticity = jJCriticityService.getCriticityByName(
@@ -417,27 +417,24 @@ public class JJMessageBean {
 		}
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
-
-		if (LoginBean.getProduct() != null)
-			message.setProduct(LoginBean.getProduct());
-		if (LoginBean.getProject() != null)
-			message.setProject(LoginBean.getProject());
-		if (LoginBean.getVersion() != null)
-			message.setVersioning(LoginBean.getVersion());
+		
+		message.setProduct(LoginBean.getProduct());
+		message.setProject(LoginBean.getProject());
+		message.setVersioning(LoginBean.getVersion());
 
 		message.setEnabled(true);
 		message.setContact(contact);
 		message.setDescription(message.getMessage());
 
-		if (field instanceof JJBug)
+		if (withField && field instanceof JJBug)
 			message.setBug((JJBug) field);
-		else if (field instanceof JJRequirement)
+		else if (withField && field instanceof JJRequirement)
 			message.setRequirement((JJRequirement) field);
-		else if (field instanceof JJTestcase)
+		else if (withField && field instanceof JJTestcase)
 			message.setTestcase((JJTestcase) field);
 
 		save(message);
-		if (field != null)
+		if (withField && field != null)
 			initComMessages(field);
 		message = new JJMessage();
 		alertMessages = null;

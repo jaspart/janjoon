@@ -349,7 +349,7 @@
 						</p:selectBooleanButton>
 						<p:commandButton id="submitMes" value="OK"
 							process="@this,alert,messagedsc"
-							actionListener="#{jJMessageBean.createMessage}"
+							actionListener="#{jJMessageBean.createMessage(false)}"
 							update="messageDialogForm :headerForm:communicationButton :growlForm" />
 					</p:panelGrid>
 				</p:panelGrid>

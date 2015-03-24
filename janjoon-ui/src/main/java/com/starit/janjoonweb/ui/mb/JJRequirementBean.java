@@ -517,7 +517,7 @@ public class JJRequirementBean {
 	public List<JJVersion> getRequirementVersionList() {
 		requirementVersionList = jJVersionService.getVersions(true, true,
 				requirementProduct, ((LoginBean) LoginBean
-						.findBean("loginBean")).getContact().getCompany());
+						.findBean("loginBean")).getContact().getCompany(),true);
 		return requirementVersionList;
 	}
 
@@ -810,7 +810,7 @@ public class JJRequirementBean {
 
 		importVersionList = jJVersionService.getVersions(true, true,
 				importProduct, ((LoginBean) LoginBean.findBean("loginBean"))
-						.getContact().getCompany());
+						.getContact().getCompany(),true);
 
 		return importVersionList;
 	}

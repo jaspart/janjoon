@@ -2105,13 +2105,13 @@ public class JJTaskBean {
 					List arrList = null;
 					try {
 						arrList = HTMLWorker.parseToList(description, null);
+						for (int i = 0; i < arrList.size(); ++i) {
+							subject = subject
+									+ ((Element) arrList.get(i)).toString();
+						}
 					} catch (Exception e) {
-
-					}
-					for (int i = 0; i < arrList.size(); ++i) {
-						subject = subject
-								+ ((Element) arrList.get(i)).toString();
-					}
+						subject=description.toString();
+					}					
 
 					subject = subject.replace("[", " ").replace("]", "");
 

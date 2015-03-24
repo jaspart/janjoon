@@ -910,7 +910,7 @@ public class JJBugBean {
 		suggestions.add(null);
 
 		for (JJVersion req : jJVersionService.getVersions(true, prod != null,
-				prod, (JJCompany) LoginBean.findBean("JJCompany"))) {
+				prod, (JJCompany) LoginBean.findBean("JJCompany"),true)) {
 			String jJCriticityStr = String.valueOf(req.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(req);

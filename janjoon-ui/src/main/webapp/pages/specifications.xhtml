@@ -14,8 +14,9 @@
 .ui-accordion .ui-accordion-content {
 	background: #E6E6E6;
 }
-.mineSelect .ui-selectonemenu-trigger{
-	display:none;
+
+.mineSelect .ui-selectonemenu-trigger {
+	display: none;
 }
 
 .ui-accordion .ui-accordion-header {
@@ -56,17 +57,17 @@
 				value="#{messages.specification_table_requirement_filter}"
 				for="globalFilter" />
 
-<!-- 			<p:selectBooleanButton id="mineSpec" style="margin-left: 10%;" -->
-<!-- 				value="#{jJRequirementBean.mine}" onLabel="Mine" offLabel="All" -->
-<!-- 				onIcon="ui-icon-check" offIcon="ui-icon-close"> -->
-<!-- 				<p:ajax onstart="PF('blockUIWidget').block()" -->
-<!-- 					oncomplete="PF('blockUIWidget').unblock()" -->
-<!-- 					listener="#{jJRequirementBean.mineChangeEvent}" update=":specForm" /> -->
-<!-- 			</p:selectBooleanButton> -->
-			<p:selectOneMenu id="mineSpec" value="#{jJRequirementBean.mine}" styleClass="mineSelect"
-				effect="fade" style="margin-left: 10%;">
+			<!-- 			<p:selectBooleanButton id="mineSpec" style="margin-left: 10%;" -->
+			<!-- 				value="#{jJRequirementBean.mine}" onLabel="Mine" offLabel="All" -->
+			<!-- 				onIcon="ui-icon-check" offIcon="ui-icon-close"> -->
+			<!-- 				<p:ajax onstart="PF('blockUIWidget').block()" -->
+			<!-- 					oncomplete="PF('blockUIWidget').unblock()" -->
+			<!-- 					listener="#{jJRequirementBean.mineChangeEvent}" update=":specForm" /> -->
+			<!-- 			</p:selectBooleanButton> -->
+			<p:selectOneMenu id="mineSpec" value="#{jJRequirementBean.mine}"
+				styleClass="mineSelect" effect="fade" style="margin-left: 10%;">
 				<f:selectItem itemValue="#{false}" itemLabel="All" />
-				<f:selectItem itemValue="#{true}" itemLabel="Mine" />				
+				<f:selectItem itemValue="#{true}" itemLabel="Mine" />
 				<p:ajax onstart="PF('blockUIWidget').block()" event="change"
 					oncomplete="PF('blockUIWidget').unblock()"
 					listener="#{jJRequirementBean.mineChangeEvent}" update=":specForm" />
@@ -134,23 +135,23 @@
 						</p:row>
 					</f:facet>
 					<p:row>
-						<p:column colspan="2" styleClass="RequirementNotLinked">
+						<p:column colspan="2" styleClass="RequirementNotLinkedOverlay">
 							<p:outputLabel
 								value="#{messages.specification_color_RequirementNotLinked_label}" />
 						</p:column>
-						<p:column colspan="2" styleClass="RequirementNoTask">
+						<p:column colspan="2" styleClass="RequirementNoTaskOverlay">
 							<p:outputLabel
 								value="#{messages.specification_color_RequirementNoTask_label}" />
 						</p:column>
-						<p:column colspan="2" styleClass="RequirementInProcess">
+						<p:column colspan="2" styleClass="RequirementInProcessOverlay">
 							<p:outputLabel
 								value="#{messages.specification_color_RequirementInProcess_label}" />
 						</p:column>
-						<p:column colspan="2" styleClass="RequirementFinishedTestProcess">
+						<p:column colspan="2" styleClass="RequirementFinishedTestProcessOverlay">
 							<p:outputLabel
 								value="#{messages.specification_color_RequirementFinishedTestProcess_label}" />
 						</p:column>
-						<p:column colspan="2" styleClass="RequirementFinishedSuccessed">
+						<p:column colspan="2" styleClass="RequirementFinishedSuccessedOverlay">
 							<p:outputLabel
 								value="#{messages.specification_color_RequirementFinishedSuccessed_label}" />
 						</p:column>
@@ -194,7 +195,7 @@
 							<p:dataTable id="categoryTable_#{loop.index}" var="reqUtil"
 								value="#{tableDataModel}" scrollable="true" scrollHeight="300"
 								sortMode="multiple" resizableColumns="true"
-								rowStyleClass="#{reqUtil.style}" styleClass="requirement-table"
+								styleClass="requirement-table"
 								filteredValue="#{tableDataModel.filtredRequirements}"
 								rowKey="#{reqUtil.requirement.id}" editable="true"
 								editMode="cell" rendered="#{tableDataModel.rendered}"
@@ -304,6 +305,9 @@
 									</f:facet>
 									<h:outputText value="#{reqUtil.requirement.id}" />
 								</p:column>
+								<!-- 								<p:column style="width: 170px;"> -->
+								<!-- 								<h:outputText value="#{reqUtil.style}" styleClass="#{reqUtil.style}" /> -->
+								<!-- 								</p:column> -->
 
 								<p:column filterBy="#{reqUtil.requirement.name}"
 									filterStyle="display:none" styleClass="requirement-column"
@@ -314,8 +318,11 @@
 									</f:facet>
 									<p:cellEditor>
 										<f:facet name="output">
-											<h:outputText id="reqContent"
-												value="#{reqUtil.requirement.name}" />
+											<h:outputText value="#{reqUtil.style}"
+												styleClass="#{reqUtil.style}" />
+
+											<h:outputText id="reqContent" style="white-space: normal;"
+												value="    #{reqUtil.requirement.name}" />
 											<p:tooltip id="toolTipContent" for="reqContent"
 												showEffect="fade" hideEffect="fade" style="width:300px">
 												<p:panelGrid style="width:300px">
@@ -344,9 +351,9 @@
 
 											<p:panelGrid
 												style="border-style: groove;border-color: black;">
-												<f:facet name="header">
+												<f:facet name="header">													
 													<p:row>
-														<p:column styleClass="#{reqUtil.style}">
+														<p:column >
 															<h:outputText
 																style="font-weight: bold;white-space: pre-wrap;"
 																value="Requirement: #{reqUtil.requirement.name}" />
@@ -354,7 +361,7 @@
 													</p:row>
 												</f:facet>
 												<p:row>
-													<p:column styleClass="#{reqUtil.style}">
+													<p:column>
 														<p:outputLabel style="font-weight: bold;" for="expDesc"
 															value="Description :" />
 														<br />
@@ -363,8 +370,16 @@
 															style="white-space: normal;" />
 													</p:column>
 												</p:row>
+												<p:row>													
+													<p:column>
+													<p:outputLabel style="font-weight: bold;" for="expStyle"
+														value="Type:  " />
+														<h:outputText id="expStyle" value="#{reqUtil.style}"
+															styleClass="#{reqUtil.style}" />
+													</p:column>
+												</p:row>
 												<p:row rendered="#{reqUtil.requirement.note != null}">
-													<p:column styleClass="#{reqUtil.style}">
+													<p:column>
 														<p:outputLabel style="font-weight: bold;" for="expNote"
 															value="Note :" />
 														<br />

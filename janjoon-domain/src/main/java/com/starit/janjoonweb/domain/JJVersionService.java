@@ -9,7 +9,7 @@ public interface JJVersionService {
 
 	// New Generic
 	public List<JJVersion> getVersions(boolean onlyActif, boolean withProduct,
-			JJProduct product,JJCompany company);
+			JJProduct product,JJCompany company,boolean sortedbydate);
 
 	public List<JJTask> getTastksByVersion(JJVersion jJversion);
 	

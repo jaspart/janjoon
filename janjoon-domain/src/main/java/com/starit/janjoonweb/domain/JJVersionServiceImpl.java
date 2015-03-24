@@ -22,7 +22,7 @@ public class JJVersionServiceImpl implements JJVersionService {
 	
 	@Override
 	public List<JJVersion> getVersions(boolean onlyActif, boolean withProduct,
-			JJProduct product, JJCompany company) {
+			JJProduct product, JJCompany company,boolean sortedbydate) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJVersion> criteriaQuery = criteriaBuilder
@@ -54,6 +54,10 @@ public class JJVersionServiceImpl implements JJVersionService {
 					company));
 
 		select.where(predicates.toArray(new Predicate[] {}));
+		
+		if (sortedbydate) {
+			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
+		}
 
 		TypedQuery<JJVersion> result = entityManager.createQuery(select);
 		return result.getResultList();

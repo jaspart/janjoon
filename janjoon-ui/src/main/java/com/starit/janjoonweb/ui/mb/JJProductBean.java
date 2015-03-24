@@ -253,7 +253,7 @@ public class JJProductBean {
 		resetVersionProductList();
 
 		List<JJVersion> versions = jJVersionService.getVersions(true, true,
-				productAdmin, ((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany());
+				productAdmin, ((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),true);
 
 		List<VersionDataModel> versionDataModels = jJVersionBean
 				.getVersionDataModel();
