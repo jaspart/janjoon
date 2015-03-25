@@ -137,7 +137,7 @@ public class JJTestcaseexecutionBean {
 		updateJJTestcaseexecution(tce);
 
 		List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
-				null, null, tce.getTestcase(), tce.getBuild(), true, false,
+				null,false, null, tce.getTestcase(), tce.getBuild(), true, false,
 				true, null);
 		if (!tasks.isEmpty()) {
 			JJTask task = tasks.get(0);

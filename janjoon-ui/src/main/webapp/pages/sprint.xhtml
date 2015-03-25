@@ -90,13 +90,13 @@
 						</p:commandButton>
 					</p:column>
 					<p:column colspan="2">
-						<p:commandButton value="#{messages.label_create} JJTask"
+						<p:commandButton value="#{messages.label_create} Task"
 							disabled="#{!jjsprint.neditabale}" id="createTaskttButton"
 							icon="ui-icon-circle-plus" immediate="true"
 							onstart="PF('blockUIWidget').block()" resetValues="true"
 							oncomplete="PF('blockUIWidget').unblock()"
 							actionListener="#{jJTaskBean.loadImportFormat}"
-							title="#{messages.label_create} JJTask">
+							title="#{messages.label_create} Task">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 							<f:attribute name="mode" value="scrum" />
 						</p:commandButton>

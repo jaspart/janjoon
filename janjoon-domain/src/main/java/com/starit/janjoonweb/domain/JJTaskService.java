@@ -9,7 +9,7 @@ import org.springframework.roo.addon.layers.service.RooService;
 public interface JJTaskService {
 
 	public List<JJTask> getTasks(JJSprint sprint, JJProject project,
-			JJProduct product, JJContact contact, JJChapter chapter,
+			JJProduct product, JJContact contact, JJChapter chapter,boolean nullChapter,
 			JJRequirement requirement, JJTestcase testcase, JJBuild build,
 			boolean onlyActif, boolean sortedByCreationDate, boolean withBuild,
 			String objet);

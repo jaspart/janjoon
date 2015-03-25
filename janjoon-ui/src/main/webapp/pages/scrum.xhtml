@@ -125,13 +125,13 @@
 									oncomplete="PF('blockUIWidget').unblock();" />
 							</p:column>
 							<p:column colspan="1" style="width:15% important;">
-								<p:commandButton value="#{messages.label_create} JJTask"
+								<p:commandButton value="#{messages.label_create} Task"
 									id="createTaskttButton" icon="ui-icon-circle-plus"
 									update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm :taskImportDialog :growlForm"
 									immediate="true" onstart="PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock()" resetValues="true"
 									actionListener="#{jJTaskBean.loadImportFormat}"
-									title="#{messages.label_create} JJTask">
+									title="#{messages.label_create} Task">
 									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 									<f:attribute name="mode" value="scrum" />
 								</p:commandButton>

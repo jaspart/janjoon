@@ -814,6 +814,21 @@ public class JJTestcaseBean {
 		testcaseState = true;
 		builds = new ArrayList<JJBuild>();	
 
+		testcase.setTeststeps(new HashSet<JJTeststep>());
+		for(JJTeststep teststep:jJTeststepService.getTeststeps(copyTestcase, true, true))
+		{
+			JJTeststep ts=new JJTeststep();
+			ts.setName(teststep.getName());
+			ts.setDescription(teststep.getDescription());
+			ts.setCreationDate(new Date());
+			ts.setActionstep(teststep.getActionstep());
+			ts.setResultstep(teststep.getResultstep());
+			ts.setEnabled(true);
+			ts.setOrdering(teststep.getOrdering());
+			ts.setTestcase(testcase);
+			testcase.getTeststeps().add(ts);
+			
+		}
 		jJTeststepBean.newTeststep();
 		jJTeststepBean.setActionTeststep(false);
 	
@@ -871,9 +886,9 @@ public class JJTestcaseBean {
 		JJBuild build = jJBuildBean.getBuild();
 
 		List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
-				null, null, testcase, build, true, false, true, null);
+				null, false,null, testcase, build, true, false, true, null);
 		if (tasks.isEmpty()) {
-			tasks = jJTaskService.getTasks(null, null, null, null, null, null,
+			tasks = jJTaskService.getTasks(null, null, null, null, null, false,null,
 					testcase, null, true, false, false, null);
 			if (!tasks.isEmpty()) {
 
@@ -942,6 +957,17 @@ public class JJTestcaseBean {
 			// }
 			testcase.setBuilds(new HashSet<JJBuild>(builds));
 			saveJJTestcase(testcase);
+			
+			if(testcase.getTeststeps() != null && !testcase.getTeststeps().isEmpty())
+			{
+				JJTeststepBean jJTeststepBean=((JJTeststepBean)LoginBean.findBean("jJTeststepBean"));
+				for(JJTeststep ts:testcase.getTeststeps())
+				{
+					jJTeststepBean.saveJJTeststep(ts);
+				}
+				
+				jJTeststepBean.getTeststeps();
+			}
 
 			disabledInitTask = true;
 			disabledTask = true;

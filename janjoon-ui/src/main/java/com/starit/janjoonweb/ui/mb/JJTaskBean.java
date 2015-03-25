@@ -764,15 +764,15 @@ public class JJTaskBean {
 
 				List<JJTask> tasks = new ArrayList<JJTask>();
 				tasks.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null,
-						chapter, null, null, null, true, true, false,
+						chapter, true,null, null, null, true, true, false,
 						"Requirement"));
 
 				tasks.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null,
-						chapter, null, null, null, true, true, false,
+						chapter, true,null, null, null, true, true, false,
 						"Testcase"));
 
 				tasks.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null,
-						chapter, null, null, null, true, true, false, "Bug"));
+						chapter, true,null, null, null, true, true, false, "Bug"));
 
 				TreeMap<String, JJTask> Tasks = new TreeMap<String, JJTask>();
 				// TreeMap<String, JJTask> Tasks = new TreeMap<String,
@@ -969,175 +969,16 @@ public class JJTaskBean {
 		}
 
 	}
-
-	// }
-	//
-	// public void replaceTimeLineEventReal(JJTask tt, boolean delete) {
-	// int i = containTaskData(tt.getId());
-	//
-	// int workLoad = 0;
-	// Date startDate = null, endDate = null;
-	// int j = findInEventTimeLine(tt, true);
-	//
-	// if (!delete && i != -1) {
-	// if (tt.getStartDateReal() != null) {
-	//
-	// startDate = tt.getStartDateReal();
-	// if (tt.getEndDateReal() == null)
-	// endDate = tt.getEndDatePlanned();
-	// else
-	// endDate = tt.getEndDateReal();
-	// workLoad = tt.getWorkloadReal();
-	//
-	// }
-	// }
-	//
-	// if (j != -1) {
-	//
-	// String style = model.getEvents().get(j).getStyleClass();
-	// String group = model.getEvents().get(j).getGroup();
-	// model.getEvents().remove(model.getEvents().get(j));
-	//
-	// if (!delete && startDate != null)
-	// model.add(new TimelineEvent(tt, startDate, endDate, true,
-	// group, style));
-	//
-	// int in = findInEventTimeLine(tt, false);
-	//
-	// if (in != -1) {
-	//
-	// model.getEvents().remove(model.getEvents().get(in));
-	//
-	// if (!delete) {
-	//
-	// startDate = null;
-	// endDate = null;
-	//
-	// if (!delete && i != -1) {
-	// if (tt.getStartDateRevised() != null) {
-	//
-	// startDate = tt.getStartDateRevised();
-	// style = "revised";
-	// if (tt.getEndDateRevised() == null)
-	// endDate = tt.getEndDatePlanned();
-	// else
-	// endDate = tt.getEndDateRevised();
-	// workLoad = tt.getWorkloadRevised();
-	//
-	// } else {
-	//
-	// style = "planned";
-	// endDate = tt.getEndDatePlanned();
-	// startDate = tt.getStartDatePlanned();
-	// workLoad = tt.getWorkloadPlanned();
-	//
-	// }
-	// }
-	//
-	// TimelineEvent event = new TimelineEvent(tt, startDate,
-	// endDate, true, group, style);
-	//
-	// model.add(event);
-	// }
-	// }
-	//
-	// }
-	//
-	// if (i != -1) {
-	// if (!delete) {
-	// TaskData tskst = new TaskData(tt,
-	// tasksData.get(i).getChapter(), startDate, endDate,
-	// workLoad, tt.getStartDateRevised() != null);
-	//
-	// tasksData.set(i, tskst);
-	// } else
-	// tasksData.remove(i);
-	//
-	// }
-	//
-	// }
-	//
-	// public void replaceTimeLineEvent(JJTask tt, boolean delete,
-	// String styleClass) {
-	//
-	// int i = containTaskData(tt.getId());
-	//
-	// int workLoad = 0;
-	// Date startDate = null, endDate = null;
-	//
-	// int j = findInEventTimeLine(tt, styleClass.equalsIgnoreCase("real"));
-	//
-	// if (!delete && i != -1) {
-	// if (tt.getStartDateRevised() != null) {
-	//
-	// styleClass = "revised";
-	// startDate = tt.getStartDateRevised();
-	// if (tt.getEndDateRevised() == null)
-	// endDate = tt.getEndDatePlanned();
-	// else
-	// endDate = tt.getEndDateRevised();
-	// workLoad = tt.getWorkloadRevised();
-	//
-	// } else {
-	//
-	// styleClass = "planned";
-	// endDate = tt.getEndDatePlanned();
-	// startDate = tt.getStartDatePlanned();
-	// workLoad = tt.getWorkloadPlanned();
-	//
-	// }
-	// }
-	//
-	// if (j != -1) {
-	//
-	// String group = model.getEvents().get(j).getGroup();
-	// model.getEvents().remove(model.getEvents().get(j));
-	// if (!delete)
-	// model.add(new TimelineEvent(tt, startDate, endDate, true,
-	// group, styleClass));
-	// int in = findInEventTimeLine(tt, true);
-	// if (in != -1)
-	// model.getEvents().remove(model.getEvents().get(in));
-	//
-	// if (tt.getStartDateReal() != null && !delete) {
-	//
-	// Date endDatereal;
-	//
-	// if (tt.getEndDateReal() == null)
-	// endDatereal = tt.getEndDatePlanned();
-	// else
-	// endDatereal = tt.getEndDateReal();
-	//
-	// TimelineEvent event = new TimelineEvent(tt,
-	// tt.getStartDateReal(), endDatereal, true, group, "real");
-	//
-	// model.add(event);
-	//
-	// }
-	//
-	// }
-	//
-	// if (i != -1) {
-	// if (!delete) {
-	// TaskData tskst = new TaskData(tt,
-	// tasksData.get(i).getChapter(), startDate, endDate,
-	// workLoad, tt.getStartDateRevised() != null);
-	//
-	// tasksData.set(i, tskst);
-	// } else
-	// tasksData.remove(i);
-	//
-	// }
-	//
-	// }
-
-	// sortedData
+	
+	
 	public void loadSortedData(List<JJTask> allTasks, int k) {
 
 		allTasks.addAll(jJTaskService.getTasks(sprint, project, LoginBean.getProduct(), null,
-				null, null, null, null, true, false, false, "requirement"));
+				null, true,null, null, null, true, false, false, "requirement"));
 		allTasks.addAll(jJTaskService.getTasks(sprint, project, LoginBean.getProduct(), null,
-				null, null, null, null, true, false, false, "bug"));
+				null,true, null,null, null, true, false, false, "bug"));
+		allTasks.addAll(jJTaskService.getTasks(sprint, project, LoginBean.getProduct(), null,
+				null,true, null,null, null, true, false, false, "testcase"));
 
 		Collections.sort(allTasks, new Comparator<JJTask>() {
 
@@ -2261,14 +2102,14 @@ public class JJTaskBean {
 
 			List<JJTask> list = new ArrayList<JJTask>();
 			list.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null,
-					chapter, null, null, null, true, false, false,
+					chapter, true,null, null, null, true, false, false,
 					"Requirement"));
 
 			list.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null,
-					chapter, null, null, null, true, false, false, "Testcase"));
+					chapter, true,null, null, null, true, false, false, "Testcase"));
 
 			list.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null,
-					chapter, null, null, null, true, false, false, "Bug"));
+					chapter, true,null, null, null, true, false, false, "Bug"));
 
 			list.remove(task);
 

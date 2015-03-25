@@ -4520,7 +4520,7 @@ public class JJRequirementBean {
 		}
 
 		List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
-				null, requirement, null, null, true, false, false, null);
+				null, false,requirement, null, null, true, false, false, null);
 		if (tasks.isEmpty()) {
 			TASK = false;
 		}
@@ -4538,7 +4538,7 @@ public class JJRequirementBean {
 		if (UP && DOWN && TASK) {
 
 			if (ENCOURS && !FINIS) {
-				rowStyleClass = "RequirementInProcess";
+				rowStyleClass = "Progress";
 			} else if (!ENCOURS && FINIS) {
 
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
@@ -4567,18 +4567,18 @@ public class JJRequirementBean {
 				}
 
 				if (SUCCESS) {
-					rowStyleClass = "RequirementFinishedSuccessed";
+					rowStyleClass = "Finished";
 				} else {
-					rowStyleClass = "RequirementFinishedTestProcess";
+					rowStyleClass = "InTesting";
 				}
 
 			}
 
 		} else if (UP && DOWN && !TASK) {
-			rowStyleClass = "RequirementNoTask";
+			rowStyleClass = "Specified";
 		} else {
 			if (!(UP && DOWN && TASK))
-				rowStyleClass = "RequirementNotLinked";
+				rowStyleClass = "UnLinked";
 		}
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		return rowStyleClass;

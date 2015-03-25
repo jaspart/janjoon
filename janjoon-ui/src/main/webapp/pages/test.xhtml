@@ -208,7 +208,7 @@
 						actionListener="#{jJMessageBean.initComMessages(jJTestcaseBean.testcase)}"
 						oncomplete="PF('communication').show();"
 						title="#{message.header_communication_label}"
-						rendered="#{loginBean.enable and jJTestcaseBean.testcase != null}" />
+						rendered="#{loginBean.enable and jJTestcaseBean.testcase != null and !jJTestcaseBean.rendredTestCaseRecaps}" />
 
 					<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
 						style="float: right;"
@@ -441,6 +441,15 @@
 											value="#{jJTestcaseBean.testcase}"
 											target="#{jJTestcaseBean.testcase}" />
 									</p:commandButton>
+									<p:commandButton id="copyButton" icon="ui-icon-copy"
+										disabled="#{!loginBean.authorisationService.wTest}"
+										action="#{jJTestcaseBean.onCopyEvent}"
+										update=":growlForm :testFormCenter:testcaseRecapDataTable">
+										<f:setPropertyActionListener value="#{jJTestcaseBean.testcase}"
+											target="#{jJTestcaseBean.copyTestcase}" />
+									</p:commandButton>
+									<p:tooltip for="copyButton" value="Copy" showEffect="fade"
+										hideEffect="fade" />
 								</p:column>
 							</p:row>
 

@@ -27,9 +27,9 @@ public class SprintUtil {
 	
 	public SprintUtil(JJSprint sprint, List<JJTask> tasks) {
 		this.sprint = sprint;
-		this.neditabale=false;
-		this.chart = new SprintChart(sprint, tasks);
+		this.neditabale=false;		
 		calculateField(tasks);
+		this.chart = new SprintChart(sprint, tasks);
 	}
 
 	public boolean isNeditabale() {

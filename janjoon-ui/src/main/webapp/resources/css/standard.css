@@ -701,10 +701,10 @@ div.revised2 {
 	color: black !important;
 }
 
-.RequirementNoTask {
+.Specified {
 	display: inline;
 	padding: .2em .6em .3em;
-	font-size: 70%;
+	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
 	color: #fff;
@@ -715,10 +715,10 @@ div.revised2 {
 	background-color: #666666 !important;
 }
 
-.RequirementNotLinked {
+.UnLinked {
 	display: inline;
 	padding: .2em .6em .3em;
-	font-size: 70%;
+	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
 	color: #fff;
@@ -729,10 +729,10 @@ div.revised2 {
 	background-color: #FF3333 !important;
 }
 
-.RequirementInProcess {
+.Progress {
 	display: inline;
 	padding: .2em .6em .3em;
-	font-size: 70%;
+	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
 	color: #fff;
@@ -743,10 +743,10 @@ div.revised2 {
 	background-color: #9E33FF !important;
 }
 
-.RequirementFinishedSuccessed {
+.Finished {
 	display: inline;
 	padding: .2em .6em .3em;
-	font-size: 70%;
+	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
 	color: #fff;
@@ -757,10 +757,10 @@ div.revised2 {
 	background-color: #24B324 !important;
 }
 
-.RequirementFinishedTestProcess {
+.InTesting{
 	display: inline;
 	padding: .2em .6em .3em;
-	font-size: 70%;
+	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
 	color: #fff;
@@ -771,43 +771,43 @@ div.revised2 {
 	background-color: #00A5F7 !important;
 }
 
-.RequirementNoTaskOverlay {
+.SpecifiedOverlay {
 	background-color: #666666 !important;
 	background-image: none !important;
 	color: #fff;
-	font-size: 70%;
+	font-size: 80%;
 	font-weight: 700;
 }
 
-.RequirementNotLinkedOverlay {
+.UnLinkedOverlay {
 	background-color: #FF3333 !important;
 	background-image: none !important;
 	color: #fff;
-	font-size: 70%;
+	font-size: 80%;
 	font-weight: 700;
 }
 
-.RequirementInProcessOverlay {
+.ProgressOverlay {
 	background-color: #9E33FF !important;
 	background-image: none !important;
 	color: #fff;
-	font-size: 70%;
+	font-size: 80%;
 	font-weight: 700;
 }
 
-.RequirementFinishedSuccessedOverlay {
+.FinishedOverlay {
 	background-color: #24B324 !important;
 	background-image: none !important;
 	color: #fff;
-	font-size: 70%;
+	font-size: 80%;
 	font-weight: 700;
 }
 
-.RequirementFinishedTestProcessOverlay {
+.InTestingOverlay {
 	background-color: #00A5F7 !important;
 	background-image: none !important;
 	color: #fff;
-	font-size: 70%;
+	font-size: 80%;
 	font-weight: 700;
 }
 

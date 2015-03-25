@@ -1,6 +1,7 @@
 package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +42,7 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 	@Override
 	public List<JJTask> getTasks(JJSprint sprint, JJProject project,
-			JJProduct product, JJContact contact, JJChapter chapter,
+			JJProduct product, JJContact contact, JJChapter chapter,boolean nullChapter,
 			JJRequirement requirement, JJTestcase testcase, JJBuild build,
 			boolean onlyActif, boolean sortedByCreationDate, boolean withBuild,
 			String objet) {
@@ -105,8 +106,39 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 		}
 
-		if (product != null) {			
-			predicates.add(criteriaBuilder.equal(from.join("requirement").get("product"), product));
+		if (product != null) {
+
+			List<Predicate> andPredicates = new ArrayList<Predicate>();
+
+			if (objet.equalsIgnoreCase("requirement")) {
+				andPredicates.add(criteriaBuilder.equal(from
+						.join("requirement").get("product"), product));
+				andPredicates.add(criteriaBuilder.isNotNull(from
+						.get("requirement")));
+				predicates.add(criteriaBuilder.and(andPredicates
+						.toArray(new Predicate[] {})));
+			} else if (objet.equalsIgnoreCase("bug")
+					|| objet.equalsIgnoreCase("b")) {
+
+				andPredicates.add(criteriaBuilder.equal(
+						from.get("bug").get("versioning").get("product"),
+						product));
+				andPredicates.add(criteriaBuilder.isNotNull(from.get("bug")));
+
+				predicates.add(criteriaBuilder.and(andPredicates
+						.toArray(new Predicate[] {})));
+			}
+
+			else if (objet.equalsIgnoreCase("testcase")) {
+				andPredicates.add(criteriaBuilder.equal(from.get("testcase")
+						.get("requirement").get("product"), product));
+				andPredicates.add(criteriaBuilder.isNotNull(from
+						.get("testcase")));
+
+				predicates.add(criteriaBuilder.and(andPredicates
+						.toArray(new Predicate[] {})));
+			}
+
 		}
 
 		if (chapter != null && objet != null) {
@@ -127,7 +159,7 @@ public class JJTaskServiceImpl implements JJTaskService {
 						from.join("bug").join("requirement").get("chapter"),
 						chapter));
 			}
-		} else if (objet != null && chapter == null) {
+		} else if (nullChapter &&  objet != null && chapter == null) {
 			if (objet.equalsIgnoreCase("b")) {
 				predicates.add(criteriaBuilder.isNull(from.join("bug").get("requirement")));
 
@@ -168,7 +200,8 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 			List<JJTask> resuList = new ArrayList<JJTask>();
 			resuList.addAll(entityManager.createQuery(select).getResultList());	
-			resuList.addAll(getTasks(sprint, project, product, contact, chapter, requirement, testcase, build, onlyActif, sortedByCreationDate, withBuild, "b"));
+			resuList.addAll(getTasks(sprint, project, product, contact, chapter,nullChapter, 
+					requirement, testcase, build, onlyActif, sortedByCreationDate, withBuild, "b"));
 			return resuList;
 
 		} else {
@@ -261,15 +294,37 @@ public class JJTaskServiceImpl implements JJTaskService {
 	}
 
 	@Override
-	public List<JJTask> getSprintTasks(JJSprint sprint,JJProduct product) {
-		return getTasks(sprint, null, product, null, null, null, null, 
-				null, true, true, false, null);
-		}
+	public List<JJTask> getSprintTasks(JJSprint sprint, JJProduct product) {
+
+		Set<JJTask> returnedValue = new HashSet<JJTask>();
+
+		returnedValue.addAll(new HashSet<JJTask>(getTasks(sprint, null,
+				product, null, null,false, null, null, null, true, false, false,
+				"requirement")));
+		returnedValue.addAll(new HashSet<JJTask>(getTasks(sprint, null,
+				product, null,null,false, null, null, null, true, false, false,
+				"bug")));
+		returnedValue.addAll(new HashSet<JJTask>(getTasks(sprint, null,
+				product, null,null,false, null, null, null, true, false, false,
+				"testcase")));
+
+		return new ArrayList<JJTask>(returnedValue);
+
+	}
 
 	@Override
 	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project) {
-		return getTasks(null, project, product, null, null, null, null, null,
-				true, false, false, null);
+		
+		Set<JJTask> returnedValue=new HashSet<JJTask>();
+		
+		returnedValue.addAll(new HashSet<JJTask>(getTasks(null, project, product, null, null, false,null, null, null,
+				true, false, false, "requirement")));
+		returnedValue.addAll(new HashSet<JJTask>(getTasks(null, project, product, null, null, false,null, null, null,
+				true, false, false, "bug")));
+		returnedValue.addAll(new HashSet<JJTask>(getTasks(null, project, product, null, null, false,null, null, null,
+				true, false, false, "testcase")));		
+		
+		return new ArrayList<JJTask>(returnedValue);
 
 	}
 
