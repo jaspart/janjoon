@@ -82,7 +82,7 @@ public class JJSprintBean {
 	// private List<JJRequirement> reqList;
 	private JJProject project;
 	private List<SprintUtil> sprintList;
-	private List<SprintChart> sprintChartList;
+	//private List<SprintChart> sprintChartList;
 	private SprintUtil sprintUtil;
 	private JJTask task;
 	private int tabIndex;
@@ -273,19 +273,13 @@ public class JJSprintBean {
 		this.sprintList = sprintList;
 	}
 
-	public List<SprintChart> getSprintChartList() {
-		return sprintChartList;
-	}
+//	public List<SprintChart> getSprintChartList() {
+//		return sprintChartList;
+//	}
 
 	public void iniSprintChart() {
 		if(LoginBean.getProject() != null)
-		sprintChartList = SprintChart.generateSprintChartList(jJSprintService
-				.getSprints(LoginBean.getProject(), true),
-				jJTaskService);
-	}
-
-	public void setSprintChartList(List<SprintChart> sprintChartList) {
-		this.sprintChartList = sprintChartList;
+			getSprintList();
 	}
 
 	public SprintUtil getSprintUtil() {

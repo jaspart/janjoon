@@ -164,7 +164,7 @@ public class JJTask {
 		else if(this.getBug() != null && this.getVersioning() != null)
 			return this.getBug().getVersioning().getProduct();
 		else if(this.getBug() != null && this.getBug().getBuild() != null && this.getBug().getBuild().getVersion() != null)
-			return this.getBuild().getVersion().getProduct();
+			return this.getBug().getBuild().getVersion().getProduct();
 		else if(this.getTestcase() != null)
 			return this.getTestcase().getRequirement().getProduct();		
 		else

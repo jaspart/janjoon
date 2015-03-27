@@ -171,11 +171,12 @@ public class JJStatusBean {
 
 		if (project == null) {
 			first = true;
+			if(((JJSprintBean) LoginBean.findBean("jJSprintBean")).getSprintList() == null || 
+					((JJSprintBean) LoginBean.findBean("jJSprintBean")).getSprintList().isEmpty())
 			((JJSprintBean) LoginBean.findBean("jJSprintBean"))
 					.iniSprintChart();
-			getProject();
-//			getProduct();
-//			getVersion();
+			getProject();	
+
 			if(project != null)
 			{
 				categoryDataModel = new ArrayList<CategoryDataModel>();

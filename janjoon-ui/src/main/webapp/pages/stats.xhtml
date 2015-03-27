@@ -61,14 +61,14 @@
 					</p:dataTable>
 				</h:form>
 			</p:tab>
-			<p:tab id="sprintTab" title="Sprint"
-				rendered="#{not empty jJSprintBean.sprintChartList}">
+			<p:tab id="sprintTab" title="Sprint" 
+				rendered="#{not empty jJSprintBean.sprintList}">
 				<p:tabView id="SprintTabView" dynamic="true" widgetVar="SprintTab"
-					value="#{jJSprintBean.sprintChartList}" var="jjsprint">
-					<p:tab title="#{jjsprint.sprint.name}">
-						<p:barChart value="#{jjsprint.chartModel}" legendPosition="e"
+					value="#{jJSprintBean.sprintList}" var="jjsprint">
+					<p:tab title="#{jjsprint.sprint.name}" rendered="#{!jjsprint.render}">
+						<p:barChart value="#{jjsprint.chart.chartModel}" legendPosition="e"
 							widgetVar="barChart_#{jjsprint.sprint.id}_Widget" minY="0"
-							xaxisLabel="Date" yaxisLabel="WorkLoad" />
+							rendered="#{!jjsprint.render}" xaxisLabel="Date" yaxisLabel="WorkLoad" />
 					</p:tab>
 				</p:tabView>
 			</p:tab>
