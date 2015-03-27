@@ -641,14 +641,8 @@ public class JJTaskBean {
 		List<JJContact> suggestions = new ArrayList<JJContact>();
 		suggestions.add(null);
 		if (task.getSprint() == null) {
-			JJProject proj = null;
-			if (task.getRequirement() != null)
-				proj = task.getRequirement().getProject();
-			else if (task.getBug() != null)
-				proj = task.getBug().getProject();
-			else if (task.getTestcase() != null)
-				proj = task.getTestcase().getRequirement().getProject();
-
+			JJProject proj = task.getProject();
+			
 			for (JJContact jJContact : jJPermissionService.areAuthorized(proj
 					.getManager().getCompany(), null, proj, null,
 					"sprintContact", null, true, null, true)) {
@@ -1933,7 +1927,7 @@ public class JJTaskBean {
 				if (jJTaskService.findJJTask(ttt.getId()).getEndDateReal() == null) {
 					if (mailingService == null)
 						mailingService = new MailingService();
-
+					
 					StringReader description = null ;
 					if (ttt.getRequirement() != null)
 						description = new StringReader (ttt.getRequirement().getDescription());
@@ -1957,11 +1951,11 @@ public class JJTaskBean {
 					subject = subject.replace("[", " ").replace("]", "");
 
 					List<JJContact> contacts=jJPermissionService.areAuthorized(
-							contact.getCompany(), null, project, product,
+							contact.getCompany(), null, ttt.getProject(), ttt.getProduct(),
 							"sprintContact");
-					if(LoginBean.getProduct() != null && !contacts.contains(LoginBean.getProduct().getManager()))
-						contacts.add(LoginBean.getProduct().getManager());
-					mailingService.sendMail(LoginBean.getProject().getManager()
+					if(ttt.getProduct() != null && !contacts.contains(ttt.getProduct().getManager()))
+						contacts.add(ttt.getProduct().getManager());
+					mailingService.sendMail(ttt.getProject().getManager()
 							.getEmail(),contacts, ttt, subject);
 					
 

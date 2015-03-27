@@ -370,7 +370,7 @@ public class LoginBean implements Serializable {
 
 		if (messageCount == null)
 			messageCount = jJMessageService.getMessagesCount(getProject(),
-					getProduct());
+					getProduct(),getContact().getCompany());
 
 		return messageCount;
 	}
@@ -1400,24 +1400,38 @@ public class LoginBean implements Serializable {
 			{
 			    String[] entry = pair.split(":");                   //split the pairs to get key and value 
 			   // map.put(entry[0].trim(), entry[1].trim());   //add them to the hashmap
-			    String tag=entry[1].replace("\"", " ");
+			    String tag=entry[1].replace("'", " ");
 			    String[] styleKeyValue = tag.trim().substring(1, tag.trim().length()-1).split(",");
 			    HashMap<String,String> styleMap = new HashMap<>();
 			    for(String stylePair : styleKeyValue)                        //iterate over the pais
 				{
 				    String[] styleEntry = stylePair.split("="); 
-				    //System.err.println(styleEntry[0].trim()+"="+styleEntry[1].trim());
+				    System.err.println(styleEntry[0].trim()+"="+styleEntry[1].trim());
 				    styleMap.put(styleEntry[0].trim(), styleEntry[1].trim());
 				}			    
-			    //System.err.println(entry[0].replace("\"", " ")+"= XXX");
-			    if(!entry[0].replace("\"", " ").startsWith("."))
-			    	style.loadTagStyle(entry[0].replace("\"", " ").trim(), styleMap);
+			    System.err.println(entry[0].replace("'", " ")+"= XXX");
+			    if(!entry[0].replace("'", " ").startsWith("."))
+			    	style.loadTagStyle(entry[0].replace("'", " ").trim(), styleMap);
 			    else
-			    	style.loadStyle(entry[0].replace("\"", " ").trim().substring(1), styleMap);
+			    	style.loadStyle(entry[0].replace("'", " ").trim().substring(1), styleMap);
 			   
-			}
-			
-			}
+			}			
+		}else 
+		{
+			JJConfiguration configuration = new JJConfiguration();
+			configuration.setName(param);
+			configuration
+					.setDescription("specify PDF Style");
+			configuration.setCreatedBy(((LoginBean)LoginBean.findBean("loginBean")).getContact());
+			configuration.setCreationDate(new Date());
+			configuration.setEnabled(true);
+			configuration.setParam(param);
+			configuration.setVal("{'logo':('background'='/intern/images/logo.png');"+
+			"'title':('font'='verdana', 'size'='12', 'font-weight'='bold', 'style'='normal', 'align'='center');"+
+			"'h1':('font'='verdana', 'size'='10', 'font-weight'='normal', 'style'='normal', 'align'='left')}");
+			jJConfigurationService.saveJJConfiguration(configuration);			
+			loadStyleSheet(style,param);
+		}
 		
 	}
 

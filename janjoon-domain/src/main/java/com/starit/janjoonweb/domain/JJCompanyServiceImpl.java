@@ -12,7 +12,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 public class JJCompanyServiceImpl implements JJCompanyService {
-	
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -25,23 +25,22 @@ public class JJCompanyServiceImpl implements JJCompanyService {
 		jJCompanyRepository.save(JJCompany_);
 		JJCompany_ = jJCompanyRepository.findOne(JJCompany_.getId());
 	}
-	
-	public Long getMaxId()
-	{
-		Long r=(Long) entityManager.createQuery("select max(e.id) from JJCompany e").getSingleResult();
-		return r+1;
+
+	public Long getMaxId() {
+		Long r = (Long) entityManager.createQuery(
+				"select max(e.id) from JJCompany e").getSingleResult();
+		return r + 1;
 	}
 
 	public JJCompany updateJJCompany(JJCompany JJCompany_) {
 
 		jJCompanyRepository.save(JJCompany_);
-		JJCompany_ = jJCompanyRepository.findOne(JJCompany_.getId());		
+		JJCompany_ = jJCompanyRepository.findOne(JJCompany_.getId());
 		return JJCompany_;
 	}
-	
-	public List<JJCompany> getActifCompanies(){
-		
-		
+
+	public JJCompany getCompanyByName(String name) {
+
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJCompany> criteriaQuery = criteriaBuilder
 				.createQuery(JJCompany.class);
@@ -50,11 +49,37 @@ public class JJCompanyServiceImpl implements JJCompanyService {
 
 		CriteriaQuery<JJCompany> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();		
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		
+		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));	
+
+		predicates.add(criteriaBuilder.equal(
+				criteriaBuilder.lower(from.<String> get("name")),
+				name.toLowerCase()));
+
+		select.where(predicates.toArray(new Predicate[] {}));
+
+		TypedQuery<JJCompany> result = entityManager.createQuery(select);
+
+		if (result.getResultList() != null && !result.getResultList().isEmpty())
+			return result.getResultList().get(0);
+		else
+			return null;
+
+	}
+
+	public List<JJCompany> getActifCompanies() {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJCompany> criteriaQuery = criteriaBuilder
+				.createQuery(JJCompany.class);
+
+		Root<JJCompany> from = criteriaQuery.from(JJCompany.class);
+
+		CriteriaQuery<JJCompany> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		select.where(predicates.toArray(new Predicate[] {}));
 

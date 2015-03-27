@@ -26,6 +26,8 @@ import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJChapterService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJImportance;
+import com.starit.janjoonweb.domain.JJMessage;
+import com.starit.janjoonweb.domain.JJMessageService;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
@@ -66,6 +68,14 @@ public class RequirementBean {
 
 	@Autowired
 	private JJPermissionService jJPermissionService;
+	
+	@Autowired
+	private JJMessageService jJMessageService;	
+	
+	
+	public void setjJMessageService(JJMessageService jJMessageService) {
+		this.jJMessageService = jJMessageService;
+	}
 
 	private TreeNode rootNode;
 	private TreeNode selectedNode;
@@ -81,6 +91,7 @@ public class RequirementBean {
 	private JJRequirement requirement;
 	private boolean reqDialogReqListrender;
 	private String categoryName;
+	private List<JJMessage> communicationMessages;
 
 	public void setjJRequirementService(
 			JJRequirementService jJRequirementService) {
@@ -223,6 +234,21 @@ public class RequirementBean {
 
 	public void setLinkReq(List<JJRequirement> linkReq) {
 		this.linkReq = linkReq;
+	}
+	
+	public List<JJMessage> getCommunicationMessages() {
+
+		if (requirement != null) {
+			communicationMessages = jJMessageService
+					.getCommMessages(requirement);
+			return communicationMessages;
+		} else
+			return new ArrayList<JJMessage>();
+	}
+
+
+	public void setCommunicationMessages(List<JJMessage> communicationMessages) {
+		this.communicationMessages = communicationMessages;
 	}
 
 	public boolean isReqDialogReqListrender() {

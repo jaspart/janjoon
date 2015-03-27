@@ -8,9 +8,12 @@ import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -37,7 +40,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 					.createQuery(JJMessage.class);
 
 			Root<JJMessage> from = criteriaQuery.from(JJMessage.class);
-			CriteriaQuery<JJMessage> select = criteriaQuery.select(from);
+			CriteriaQuery<JJMessage> select = criteriaQuery.select(from);			
 			List<Predicate> predicates = new ArrayList<Predicate>();
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 			
@@ -51,6 +54,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 				predicates.add(criteriaBuilder.equal(from.get("testcase"), (JJTestcase)field));
 			
 			select.where(predicates.toArray(new Predicate[] {}));
+			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 			TypedQuery<JJMessage> result = entityManager.createQuery(select);
 			return result.getResultList();
@@ -61,7 +65,19 @@ public class JJMessageServiceImpl implements JJMessageService {
 		
 	}
 	
-	public Integer getMessagesCount(JJProject project,JJProduct product)
+	
+	public void updateAll(JJCompany company)
+	{
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaUpdate<JJMessage> update = criteriaBuilder.createCriteriaUpdate(JJMessage.class);
+		Root<JJMessage> from = update.from(JJMessage.class);
+		
+		update.set("company",company);
+		update.where(criteriaBuilder.equal(from.get("company").get("id"),0));
+		entityManager.createQuery(update).executeUpdate();
+		}
+	
+	public Integer getMessagesCount(JJProject project,JJProduct product,JJCompany company)
 	{	
 		long r=0;
 		if(project != null && product != null)
@@ -75,7 +91,10 @@ public class JJMessageServiceImpl implements JJMessageService {
 			else if(product != null)
 				r=(long) entityManager.createQuery("select count(e.id) from JJMessage e Where e.enabled = true and e.product = :prod").
 				setParameter("prod", product).getSingleResult();
-			else
+			else if(company != null)
+				r=(long) entityManager.createQuery("select count(e.id) from JJMessage e Where e.enabled = true and e.company = :comp").
+				setParameter("comp", company).getSingleResult();
+			else 
 				r=(long) entityManager.createQuery("select count(e.id) from JJMessage e Where e.enabled = true").getSingleResult();
 		}
 		
@@ -93,7 +112,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 
 	public List<JJMessage> getActifMessages(MutableInt size, int first,
 			int pageSize, List<SortMeta> multiSortMeta,
-			Map<String, Object> filters, JJProject project, JJProduct product) {
+			Map<String, Object> filters, JJProject project, JJProduct product,JJCompany company) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJMessage> criteriaQuery = criteriaBuilder
 				.createQuery(JJMessage.class);
@@ -108,6 +127,11 @@ public class JJMessageServiceImpl implements JJMessageService {
 
 		if (project != null)
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		
+		if(project == null && product == null && company != null)
+		{
+			predicates.add(criteriaBuilder.equal(from.get("company"), company));
+		}
 
 		if (filters != null) {
 			Iterator<Entry<String, Object>> it = filters.entrySet().iterator();
@@ -246,7 +270,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 		return result.getResultList();
 	}
 
-	public List<JJMessage> getAlertMessages(JJProject project, JJProduct product) {
+	public List<JJMessage> getAlertMessages(JJProject project, JJProduct product,JJCompany company) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJMessage> criteriaQuery = criteriaBuilder
 				.createQuery(JJMessage.class);
@@ -265,6 +289,11 @@ public class JJMessageServiceImpl implements JJMessageService {
 
 		if (project != null)
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		
+		if(project == null && product == null && company != null)
+		{
+			predicates.add(criteriaBuilder.equal(from.get("company"), company));
+		}
 
 		select.where(predicates.toArray(new Predicate[] {}));
 
@@ -274,7 +303,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 	}
 
 	@Override
-	public List<JJMessage> getMessages(boolean onlyActif) {
+	public List<JJMessage> getMessages(boolean onlyActif,JJCompany company) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJMessage> criteriaQuery = criteriaBuilder
@@ -288,6 +317,11 @@ public class JJMessageServiceImpl implements JJMessageService {
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
+		
+		if(company != null)
+		{
+			predicates.add(criteriaBuilder.equal(from.get("company"), company));
+		}
 
 		select.where(predicates.toArray(new Predicate[] {}));
 
@@ -296,7 +330,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 
 	}
 
-	public List<JJMessage> getActifMessages(JJProject project, JJProduct product) {
+	public List<JJMessage> getActifMessages(JJProject project, JJProduct product,JJCompany company) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJMessage> criteriaQuery = criteriaBuilder
@@ -308,16 +342,19 @@ public class JJMessageServiceImpl implements JJMessageService {
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		if (product != null) {
-
 			predicates.add(criteriaBuilder.equal(from.get("product"), product));
-
-		}
+		}		
+		
 
 		if (project != null) {
-
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
-
 		}
+		
+		if(project == null && product == null && company != null)
+		{
+			predicates.add(criteriaBuilder.equal(from.get("company"), company));
+		}
+		
 		select.where(predicates.toArray(new Predicate[] {}));
 		TypedQuery<JJMessage> result = entityManager.createQuery(select);
 

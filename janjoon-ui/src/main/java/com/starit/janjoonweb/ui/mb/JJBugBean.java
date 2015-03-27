@@ -24,11 +24,15 @@ import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCompany;
+import com.starit.janjoonweb.domain.JJConfiguration;
+import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJImportance;
 import com.starit.janjoonweb.domain.JJImportanceService;
+import com.starit.janjoonweb.domain.JJMessage;
+import com.starit.janjoonweb.domain.JJMessageService;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
@@ -58,7 +62,25 @@ public class JJBugBean {
 	@Autowired
 	private JJTaskService jjTaskService;
 	
+	@Autowired
+	private JJMessageService jJMessageService;	
 	
+	@Autowired
+	private JJConfigurationService jJConfigurationService;
+	
+	
+	
+	public void setjJConfigurationService(
+			JJConfigurationService jJConfigurationService) {
+		this.jJConfigurationService = jJConfigurationService;
+	}
+
+
+	public void setjJMessageService(JJMessageService jJMessageService) {
+		this.jJMessageService = jJMessageService;
+	}
+
+
 	public void setjJPermissionService(JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
 	}
@@ -86,6 +108,7 @@ public class JJBugBean {
 	private SelectItem[] criticityOptions;
 	private SelectItem[] importanceOptions;
 	private SelectItem[] statusOptions;
+	private List<JJMessage> communicationMessages;
 
 	public JJProject getBugProjectSelected() {
 		return bugProjectSelected;
@@ -94,22 +117,6 @@ public class JJBugBean {
 	public void setBugProjectSelected(JJProject bugProjectSelected) {
 		this.bugProjectSelected = bugProjectSelected;
 	}
-
-//	public JJRequirement getBugRequirementSelected() {
-//		return bugRequirementSelected;
-//	}
-//
-//	public void setBugRequirementSelected(JJRequirement bugRequirementSelected) {
-//		this.bugRequirementSelected = bugRequirementSelected;
-//	}
-
-//	public JJVersion getBugVersionSelected() {
-//		return bugVersionSelected;
-//	}
-//
-//	public void setBugVersionSelected(JJVersion bugVersionSelected) {
-//		this.bugVersionSelected = bugVersionSelected;
-//	}
 
 	public JJBug getViewBug() {
 
@@ -183,6 +190,23 @@ public class JJBugBean {
 	public void setSelectedBugList(List<JJBug> selectedBugList) {
 		this.selectedBugList = selectedBugList;
 	}
+
+	public List<JJMessage> getCommunicationMessages() {	
+		
+		if(viewBug != null && viewBug.getId() != null)			
+		{
+			communicationMessages=jJMessageService.getCommMessages(viewBug);
+			return communicationMessages;
+		}else
+			return new ArrayList<JJMessage>();
+		
+	}
+
+
+	public void setCommunicationMessages(List<JJMessage> communicationMessages) {
+		this.communicationMessages = communicationMessages;
+	}
+
 
 	public SelectItem[] getcriticityOptions() {
 		return criticityOptions;
@@ -578,12 +602,17 @@ public class JJBugBean {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 		System.err.println(facesMessage.getDetail());
-		if (message != "message_successfully_updated")
-			RequestContext.getCurrentInstance().execute(
-					"PF('createDialogWidget').hide()");
-		else
-			RequestContext.getCurrentInstance().execute(
-					"PF('editDialogWidget').hide()");
+		
+		if(hideBugDialog())
+		{
+			if (message != "message_successfully_updated")
+				RequestContext.getCurrentInstance().execute(
+						"PF('createDialogWidget').hide()");
+			else
+				RequestContext.getCurrentInstance().execute(
+						"PF('editDialogWidget').hide()");
+		}
+		
 
 	}
 	
@@ -794,9 +823,26 @@ public class JJBugBean {
 
 		JJBug_ = null;
 		bugProjectSelected = null;
-		//bugVersionSelected = null;
-		//bugRequirementSelected = null;
-
+	}
+	
+	public boolean hideBugDialog()
+	{		
+		if(jJConfigurationService.getConfigurations("BugDialog", "bugs.bug.create.saveandclose", true).isEmpty())
+		{
+			JJConfiguration configuration = new JJConfiguration();
+			configuration.setName("BugDialog");
+			configuration
+					.setDescription("specify action after submit in bug dialog");
+			configuration.setCreatedBy(((LoginBean)LoginBean.findBean("loginBean")).getContact());
+			configuration.setCreationDate(new Date());
+			configuration.setEnabled(true);
+			configuration.setParam("bugs.bug.create.saveandclose");
+			configuration.setVal("true");
+			jJConfigurationService.saveJJConfiguration(configuration);
+		}
+		
+		return jJConfigurationService.getDialogConfig("BugDialog", "bugs.bug.create.saveandclose");
+				
 	}
 
 	public void saveJJBug(JJBug b) {

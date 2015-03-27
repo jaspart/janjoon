@@ -17,6 +17,7 @@ import javax.faces.event.ComponentSystemEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
+import org.junit.experimental.theories.internal.AllMembersSupplier;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -34,7 +35,7 @@ public class JJMessageBean {
 
 	private JJMessage message;
 	private JJMessage resolvedJJMessage;
-	private Object field;
+	//private Object field;
 	private boolean loadFiltredJJmessage = false;
 	private boolean alertOrInfo;
 	private SelectItem[] projectOptions;
@@ -45,7 +46,7 @@ public class JJMessageBean {
 	// private List<JJMessage> enabledJJMessage;
 	private List<JJMessage> allJJMessages;
 	private List<JJMessage> alertMessages;
-	private List<JJMessage> comMessages;
+	//private List<JJMessage> comMessages;
 
 	private LazyMessageDataModel mainMessages;
 	private List<String> columns;
@@ -57,7 +58,8 @@ public class JJMessageBean {
 
 		if (alertMessages == null) {
 			alertMessages = jJMessageService.getAlertMessages(
-					LoginBean.getProject(), LoginBean.getProduct());
+					LoginBean.getProject(), LoginBean.getProduct(),((LoginBean) LoginBean
+							.findBean("loginBean")).getContact().getCompany());
 		}
 		return alertMessages;
 	}
@@ -75,10 +77,8 @@ public class JJMessageBean {
 		columns.add("creationDate");
 		columns.add("updatedDate");
 		columns.add("message");
-		allJJMessages = jJMessageService.findAllJJMessages();
-		setMessage(new JJMessage());
-		alertMessages = jJMessageService.getAlertMessages(
-				LoginBean.getProject(), LoginBean.getProduct());
+		//allJJMessages = jJMessageService.findAllJJMessages();
+		setMessage(new JJMessage());		
 		viewedMessage = new JJMessage();
 		mainMessages = null;
 		((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
@@ -99,6 +99,8 @@ public class JJMessageBean {
 	}
 
 	public List<JJMessage> getAllJJMessages() {
+		if(allJJMessages == null)
+			allJJMessages = jJMessageService.findAllJJMessages();
 		return allJJMessages;
 	}
 
@@ -138,20 +140,7 @@ public class JJMessageBean {
 
 	public void setViewedMessage(JJMessage viewedMessage) {
 		this.viewedMessage = viewedMessage;
-	}
-
-	public List<JJMessage> getComMessages() {
-		return comMessages;
-	}
-
-	public void setComMessages(List<JJMessage> comMessages) {
-		this.comMessages = comMessages;
-	}
-
-	public void initComMessages(Object field) {
-		this.field = field;
-		comMessages = jJMessageService.getCommMessages(this.field);
-	}
+	}	
 
 	public boolean isLoadFiltredJJmessage() {
 		return loadFiltredJJmessage;
@@ -257,7 +246,8 @@ public class JJMessageBean {
 		if (mainMessages == null && login.isEnable()) {
 
 			mainMessages = new LazyMessageDataModel(jJMessageService,
-					LoginBean.getProject(), LoginBean.getProduct());
+					LoginBean.getProject(), LoginBean.getProduct(),((LoginBean) LoginBean
+							.findBean("loginBean")).getContact().getCompany());
 
 			// RequestContext context = RequestContext.getCurrentInstance();
 			// context.update(":headerForm:dataTable1");
@@ -279,14 +269,16 @@ public class JJMessageBean {
 			// enabledJJMessage = jJMessageService.getMessages(true);
 
 			mainMessages = new LazyMessageDataModel(jJMessageService,
-					LoginBean.getProject(), LoginBean.getProduct());
+					LoginBean.getProject(), LoginBean.getProduct(),((LoginBean) LoginBean
+							.findBean("loginBean")).getContact().getCompany());
 			// // if (!login.isCollapsedMesPanel()) {
 			// RequestContext context = RequestContext.getCurrentInstance();
 			// context.update("messagePanel");
 			// // }
 
 			for (JJMessage mes : jJMessageService.getActifMessages(
-					LoginBean.getProject(), LoginBean.getProduct())) {
+					LoginBean.getProject(), LoginBean.getProduct(),((LoginBean) LoginBean
+							.findBean("loginBean")).getContact().getCompany())) {
 				if (mes.getCreatedBy() != null
 						&& !listContaines(contactes, mes.getCreatedBy()))
 					contactes.add(mes.getCreatedBy());
@@ -389,7 +381,7 @@ public class JJMessageBean {
 		reset();
 	}
 
-	public void createMessage(boolean withField) {
+	public void createMessage(boolean withField,Object field) {
 		if (!alertOrInfo) {
 
 			JJCriticity criticity = jJCriticityService.getCriticityByName(
@@ -434,8 +426,7 @@ public class JJMessageBean {
 			message.setTestcase((JJTestcase) field);
 
 		save(message);
-		if (withField && field != null)
-			initComMessages(field);
+		
 		message = new JJMessage();
 		alertMessages = null;
 	}
@@ -449,20 +440,26 @@ public class JJMessageBean {
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		b.setCreatedBy(contact);
+		b.setCompany(contact.getCompany());
 		b.setCreationDate(new Date());
 		jJMessageService.saveJJMessage(b);
 	}
 
 	public void updateJJMessage(JJMessage b) {
+		
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		b.setUpdatedBy(contact);
+		
+		if(b.getCompany() != null)
+			b.setCompany(contact.getCompany());
+		
 		b.setUpdatedDate(new Date());
 		jJMessageService.updateJJMessage(b);
 	}
 
 	public void reset() {
-		setAllJJMessages(jJMessageService.findAllJJMessages());
+		setAllJJMessages(null);
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.update(":headerForm:dataTable1");
 		if (FacesContext.getCurrentInstance().getViewRoot().getViewId()
@@ -474,7 +471,7 @@ public class JJMessageBean {
 		loadFiltredJJmessage = false;
 		mainMessages = null;
 		alertMessages = null;
-		comMessages = null;
+		//comMessages = null;
 		((LoginBean) LoginBean.findBean("loginBean")).setShowMarquee(null);
 		((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 		// initJJmessageTable(null);

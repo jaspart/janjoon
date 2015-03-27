@@ -18,15 +18,7 @@
 	width: 100px;
 }
 </style>
-		<h:form>
-			<p:commandButton id="communicationButton" icon="ui-icon-comment"
-				value="Communication" style="float: right;"
-				actionListener="#{jJMessageBean.initComMessages(jJBugBean.viewBug)}"
-				oncomplete="PF('communication').show();"
-				title="#{message.header_communication_label}"
-				rendered="#{loginBean.enable and jJBugBean.viewBug != null}" />
-		</h:form>
-		<p:panelGrid>
+		<p:panelGrid style="width: 70%;">
 			<p:row>
 				<p:column>
 					<h:form id="bugForm">
@@ -179,7 +171,7 @@
 				</p:column>
 				<p:column>
 					<h:form id="linkForm">
-						<p:panelGrid>
+						<p:panelGrid style="width: 350px;">
 							<f:facet name="header">
 								<p:row>
 									<p:column colspan="2">Link</p:column>
@@ -241,13 +233,27 @@
 									<p:outputLabel for="bugTasks" value="Tasks :" />
 								</p:column>
 								<p:column style="width: 220px;">
-									<p:dataList id="bugTasks" value="#{jJBugBean.viewBugTasks}" var="task">
+									<p:dataList id="bugTasks" value="#{jJBugBean.viewBugTasks}"
+										var="task">
 										 #{task.name}
 									</p:dataList>
 								</p:column>
 							</p:row>
 						</p:panelGrid>
 					</h:form>
+				</p:column>
+				</p:row>
+				<p:row rendered="#{loginBean.enable and jJBugBean.viewBug != null}">
+				<p:column colspan="2">
+					<p:fieldset id="container" legend="Comments" toggleable="true"
+						collapsed="true" style="width:60%"
+						rendered="#{loginBean.enable and jJBugBean.viewBug != null and jJBugBean.viewBug.id != null}">
+						<ui:include src="/pages/communication.xhtml">
+							<ui:param name="communicationList"
+								value="#{jJBugBean.communicationMessages}" />
+							<ui:param name="field" value="#{jJBugBean.viewBug}" />
+						</ui:include>
+					</p:fieldset>
 				</p:column>
 			</p:row>
 		</p:panelGrid>

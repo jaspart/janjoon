@@ -36,12 +36,7 @@
 
 		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
 
-			<p:panel styleClass="content">
-			<p:dialog widgetVar="communication" id="communication"
-					styleClass="communicationPanelDialog" showEffect="fade" dynamic="true"
-					closable="true" style="width:400px" rendered="#{loginBean.enable}">
-					<ui:include src="/pages/communication.xhtml"/>
-					</p:dialog>
+			<p:panel styleClass="content">			
 				<p:dialog widgetVar="communicationPanel" id="communicationPanel"
 					styleClass="overlayPanelDialog" showEffect="fade" dynamic="true"
 					closable="true" style="width:400px" rendered="#{loginBean.enable}">
@@ -81,7 +76,7 @@
 										</p:selectBooleanButton>
 										<p:commandButton id="submitMes" value="OK"
 											process="@this,alert,messagedsc"
-											actionListener="#{jJMessageBean.createMessage(false)}"
+											actionListener="#{jJMessageBean.createMessage(false,null)}"
 											update=":messageCreationForm :headerForm:communicationButton :growlForm" />
 										<!--												,:scrollRight (Marquee)-->
 									</p:panelGrid>

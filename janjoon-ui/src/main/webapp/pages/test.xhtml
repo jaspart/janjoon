@@ -33,7 +33,7 @@
 							offIcon="ui-icon-close">
 							<p:ajax
 								listener="#{jJTestcaseBean.loadData(categoryPanel,category.category,true)}"
-								update=":testFormWest :testFormCenter :testFormNorth:categoryPanel"
+								update=":testFormWest :testFormCenter :testFormNorth:categoryPanel :container"
 								onstart="PF('blockUIWidget').block()"
 								oncomplete="PF('blockUIWidget').unblock()" />
 						</p:selectBooleanButton>
@@ -56,7 +56,7 @@
 							offIcon="ui-icon-close">
 							<p:ajax
 								listener="#{jJTestcaseBean.loadData(null,category.category,true)}"
-								update=":testFormWest :testFormCenter :testFormNorth"
+								update=":testFormWest :testFormCenter :testFormNorth :container"
 								onstart="PF('blockUIWidget').block()"
 								oncomplete="PF('blockUIWidget').unblock()" />
 						</p:selectBooleanButton>
@@ -103,7 +103,7 @@
 										itemLabel="#{c.name}" itemValue="#{c}" />
 									<p:ajax process="@this" partialSubmit="true"
 										listener="#{jJTestcaseBean.createTestcaseTree()}"
-										update=":testFormWest :testFormCenter "
+										update=":testFormWest :testFormCenter :container"
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()" />
 								</p:selectOneMenu>
@@ -151,7 +151,8 @@
 									selection="#{jJTestcaseBean.selectedNode}" dynamic="true">
 									<p:ajax event="select"
 										listener="#{jJTestcaseBean.onNodeSelect}"
-										update=":testFormCenter" onstart="PF('blockUIWidget').block()"
+										update=":testFormCenter :container"
+										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()" />
 
 									<p:treeNode>
@@ -201,76 +202,78 @@
 			</p:layoutUnit>
 			<p:layoutUnit position="center" resizable="false"
 				style="min-height:500px;width:1060px !important;height:600px !important;">
+				<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
+					style="float: right;"
+					title="#{messages.specification_video_help_title}" />
+				<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade">
+					<p:panelGrid>
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="12">#{messages.test_color_title}</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column colspan="2" styleClass="TestcaseSuccess">
+								<p:outputLabel
+									value="#{messages.test_color_TestcaseSuccess_title}" />
+							</p:column>
+
+							<p:column colspan="2" styleClass="TestcaseFailed">
+								<p:outputLabel
+									value="#{messages.test_color_TestcaseFailed_title}" />
+							</p:column>
+
+							<p:column colspan="2" styleClass="TestcaseNotExecuted">
+								<p:outputLabel
+									value="#{messages.test_color_TestcaseNotExecuted_title}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2" styleClass="TestcaseWithoutTeststep">
+								<p:outputLabel
+									value="#{messages.test_color_TestcaseNotExecuted_title}" />
+							</p:column>
+
+							<p:column colspan="2" styleClass="TestcaseNonFini">
+								<p:outputLabel
+									value="#{messages.test_color_TestcaseNonFini_title}" />
+							</p:column>
+
+							<p:column colspan="2" styleClass="TestcaseChapter">
+								<p:outputLabel
+									value="#{messages.test_color_TestcaseChapter_title}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2" styleClass="TestcaseFailedWithoutBuild">
+								<p:outputLabel
+									value="#{messages.test_color_TestcaseFailedWithoutBuild_title}" />
+							</p:column>
+
+							<p:column colspan="2" styleClass="TestcaseNonFiniWithoutBuild">
+								<p:outputLabel
+									value="#{messages.test_color_TestcaseNonFiniWithoutBuild_title}" />
+							</p:column>
+
+							<p:column colspan="2" styleClass="TestcaseSuccessWithoutBuild">
+								<p:outputLabel
+									value="#{messages.test_color_TestcaseSuccessWithoutBuild_title}" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:overlayPanel>
+				<h:panelGroup id="container"
+					style="width: 55%;float: right;margin-right: 10px;">
+					<p:fieldset legend="Comments" toggleable="true" collapsed="true"
+						rendered="#{jJTestcaseBean.renderCommentsPanel}">
+						<ui:include src="/pages/communication.xhtml">
+							<ui:param name="communicationList"
+								value="#{jJTestcaseBean.communicationMessages}" />
+							<ui:param name="field" value="#{jJTestcaseBean.testcase}" />
+						</ui:include>
+					</p:fieldset>
+				</h:panelGroup>
 				<h:form id="testFormCenter">
-
-					<p:commandButton id="communicationButton" icon="ui-icon-comment"
-						value="Communication" style="float: right;"
-						actionListener="#{jJMessageBean.initComMessages(jJTestcaseBean.testcase)}"
-						oncomplete="PF('communication').show();"
-						title="#{message.header_communication_label}"
-						rendered="#{loginBean.enable and jJTestcaseBean.testcase != null and !jJTestcaseBean.rendredTestCaseRecaps}" />
-
-					<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
-						style="float: right;"
-						title="#{messages.specification_video_help_title}" />
-					<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade">
-						<p:panelGrid>
-							<f:facet name="header">
-								<p:row>
-									<p:column colspan="12">#{messages.test_color_title}</p:column>
-								</p:row>
-							</f:facet>
-							<p:row>
-								<p:column colspan="2" styleClass="TestcaseSuccess">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseSuccess_title}" />
-								</p:column>
-
-								<p:column colspan="2" styleClass="TestcaseFailed">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseFailed_title}" />
-								</p:column>
-
-								<p:column colspan="2" styleClass="TestcaseNotExecuted">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseNotExecuted_title}" />
-								</p:column>
-							</p:row>
-							<p:row>
-								<p:column colspan="2" styleClass="TestcaseWithoutTeststep">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseNotExecuted_title}" />
-								</p:column>
-
-								<p:column colspan="2" styleClass="TestcaseNonFini">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseNonFini_title}" />
-								</p:column>
-
-								<p:column colspan="2" styleClass="TestcaseChapter">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseChapter_title}" />
-								</p:column>
-							</p:row>
-							<p:row>
-								<p:column colspan="2" styleClass="TestcaseFailedWithoutBuild">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseFailedWithoutBuild_title}" />
-								</p:column>
-
-								<p:column colspan="2" styleClass="TestcaseNonFiniWithoutBuild">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseNonFiniWithoutBuild_title}" />
-								</p:column>
-
-								<p:column colspan="2" styleClass="TestcaseSuccessWithoutBuild">
-									<p:outputLabel
-										value="#{messages.test_color_TestcaseSuccessWithoutBuild_title}" />
-								</p:column>
-							</p:row>
-						</p:panelGrid>
-					</p:overlayPanel>
-
 					<h:outputText value="#{messages.test_select_alert}"
 						rendered="#{jJTestcaseBean.rendredEmptySelection}"
 						style="color: red;" />
@@ -302,7 +305,7 @@
 								<p:selectBooleanCheckbox
 									rendered="#{rowName['class'].simpleName == 'JJBuild'}"
 									value="#{jJTestcaseBean.value[colIdx][rowIdx]}">
-									<p:ajax update=":growlForm :testFormCenter"
+									<p:ajax update=":growlForm :testFormCenter :container"
 										listener="#{jJTestcaseBean.onCellEdit(colIdx,rowIdx)}"
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock();" />
@@ -375,12 +378,13 @@
 								showEffect="fade" hideEffect="fade" />
 							<p:commandButton id="copyButton" icon="ui-icon-copy"
 								disabled="#{!loginBean.authorisationService.wTest}"
-								action="#{jJTestcaseBean.onCopyEvent}" update=":growlForm :testFormCenter:testcaseRecapDataTable">
+								action="#{jJTestcaseBean.onCopyEvent}"
+								update=":growlForm :testFormCenter:testcaseRecapDataTable :container">
 								<f:setPropertyActionListener value="#{tcr.testcase}"
 									target="#{jJTestcaseBean.copyTestcase}" />
 							</p:commandButton>
-							<p:tooltip for="copyButton" value="Copy"
-								showEffect="fade" hideEffect="fade" />
+							<p:tooltip for="copyButton" value="Copy" showEffect="fade"
+								hideEffect="fade" />
 						</p:column>
 						<f:facet name="footer">
 							<p:commandButton value="#{messages.test_create_button}"
@@ -390,8 +394,8 @@
 								update=":testcaseDialog"
 								oncomplete="PF('testcaseDialogWidget').show()"
 								icon="ui-icon-plusthick" />
-							<p:commandButton value="Paste"
-								id="pasteTestcase" resetValues="true"
+							<p:commandButton value="Paste" id="pasteTestcase"
+								resetValues="true"
 								disabled="#{!loginBean.authorisationService.wTest or jJTestcaseBean.copyTestcase == null}"
 								actionListener="#{jJTestcaseBean.pasteTestcase(jJTeststepBean)}"
 								update=":testcaseDialog"
@@ -411,7 +415,7 @@
 					<p:dataTable id="teststepRecapDataTable" paginatorPosition="bottom"
 						value="#{jJTeststepBean.teststeps}" rowKey="#{ts.name}" var="ts"
 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
-						paginator="true" rows="7" style="width:650px;">
+						paginator="true" rows="7" style="width:450px;">
 						<f:facet name="header">
 							<p:row>
 								<p:column>
@@ -426,7 +430,8 @@
 								</p:column>
 								<p:column>
 									<p:commandButton id="editButton" icon="ui-icon-pencil"
-										oncomplete="PF('testcaseDialogWidget').show()" resetValues="true"
+										oncomplete="PF('testcaseDialogWidget').show()"
+										resetValues="true"
 										disabled="#{!loginBean.authorisationService.wTest}"
 										action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
 										update=":testcaseDialog" />
@@ -444,8 +449,9 @@
 									<p:commandButton id="copyButton" icon="ui-icon-copy"
 										disabled="#{!loginBean.authorisationService.wTest}"
 										action="#{jJTestcaseBean.onCopyEvent}"
-										update=":growlForm :testFormCenter:testcaseRecapDataTable">
-										<f:setPropertyActionListener value="#{jJTestcaseBean.testcase}"
+										update=":growlForm :testFormCenter:testcaseRecapDataTable :container">
+										<f:setPropertyActionListener
+											value="#{jJTestcaseBean.testcase}"
 											target="#{jJTestcaseBean.copyTestcase}" />
 									</p:commandButton>
 									<p:tooltip for="copyButton" value="Copy" showEffect="fade"
@@ -473,7 +479,7 @@
 						value="#{jJTestcaseexecutionBean.testCaseexecutionRecaps}"
 						rowKey="#{tce.name}" var="tce" paginatorPosition="bottom"
 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
-						paginator="true" rows="7" style="width:650px;margin-top: 20px;">
+						paginator="true" rows="7" style="width:450px;margin-top: 20px;">
 						<p:column headerText="Id">
 							<h:outputText value="#{tce.testcaseexecution.id}" />
 						</p:column>
@@ -527,7 +533,7 @@
 					<p:fileUpload
 						fileUploadListener="#{jJTestcaseBean.handleImportXML}"
 						mode="advanced" dragDropSupport="false"
-						update="messages :testFormCenter :testFormWest :testFormNorth"
+						update="messages :testFormCenter :testFormWest :testFormNorth :container"
 						sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(xml)$/" />
 
 				</h:form>
@@ -539,7 +545,8 @@
 			header="#{messages[jJTestcaseBean.message]}" modal="true"
 			widgetVar="testcaseDialogWidget" dynamic="true" resizable="false"
 			style="top: 30px;">
-			<p:ajax event="close" update=":testFormCenter :testFormWest"
+			<p:ajax event="close"
+				update=":testFormCenter :testFormWest :container"
 				listener="#{jJTestcaseBean.closeDialog}" />
 			<p:outputPanel id="testcaseDialogPanel">
 				<ui:include src="testDialog.xhtml" />
@@ -552,7 +559,8 @@
 			<p:hotkey bind="space" handler="TestcaseExecSuccessButton.jq.click()" />
 			<p:hotkey bind="S" handler="TestcaseExecSuccessButton.jq.click()" />
 			<p:hotkey bind="F" handler="TestcaseExecFailedButton.jq.click()" />
-			<p:ajax event="close" update=":testFormCenter :testFormWest"
+			<p:ajax event="close"
+				update=":testFormCenter :testFormWest :container"
 				listener="#{jJTeststepexecutionBean.closeDialog()}" />
 			<p:outputPanel id="runTestcaseDialogPanel">
 				<h:form id="runForm">
@@ -641,7 +649,7 @@
 								<p:commandButton id="validateButton"
 									value="#{messages.test_exec_valid_label}"
 									icon="ui-icon-circle-check"
-									update=":testFormCenter :testFormWest :growlForm"
+									update=":testFormCenter :testFormWest :growlForm :container"
 									actionListener="#{jJTeststepexecutionBean.validateTab}"
 									style="float: right;"
 									disabled="#{jJTeststepexecutionBean.disabledTestcase}" />
@@ -669,7 +677,6 @@
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
-
 	</ui:define>
 </ui:composition>
 </html>

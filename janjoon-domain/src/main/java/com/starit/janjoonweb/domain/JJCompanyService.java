@@ -9,5 +9,7 @@ public interface JJCompanyService {
 	
 	public List<JJCompany> getActifCompanies();
 	
+	public JJCompany getCompanyByName(String name);
+	
 	public Long getMaxId();
 }

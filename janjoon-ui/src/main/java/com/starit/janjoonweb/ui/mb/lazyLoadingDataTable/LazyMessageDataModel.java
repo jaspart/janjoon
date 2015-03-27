@@ -9,6 +9,7 @@ import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJMessageService;
 import com.starit.janjoonweb.domain.JJProduct;
@@ -23,10 +24,12 @@ public class LazyMessageDataModel extends LazyDataModel<JJMessage> {
 	JJMessageService messageService;
 	JJProject project;
 	JJProduct product;
+	JJCompany company;
 
-	public LazyMessageDataModel(JJMessageService messageService, JJProject project,JJProduct product) {
+	public LazyMessageDataModel(JJMessageService messageService, JJProject project,JJProduct product,JJCompany company) {
 		this.project = project;
 		this.product=product;
+		this.company=company;
 		this.messageService = messageService;
 	}
 
@@ -58,7 +61,7 @@ public class LazyMessageDataModel extends LazyDataModel<JJMessage> {
 		}
 		
 		MutableInt size=new MutableInt(0);
-		data = messageService.getActifMessages(size,first, pageSize, multiSortMeta,filters, project,product);
+		data = messageService.getActifMessages(size,first, pageSize, multiSortMeta,filters, project,product,company);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 
@@ -81,7 +84,7 @@ public class LazyMessageDataModel extends LazyDataModel<JJMessage> {
 
 		List<JJMessage> data = new ArrayList<JJMessage>();
 		MutableInt size=new MutableInt(0);
-		data = messageService.getActifMessages(size,first, pageSize, multiSortMeta,filters, project,product);
+		data = messageService.getActifMessages(size,first, pageSize, multiSortMeta,filters, project,product,company);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

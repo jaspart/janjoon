@@ -47,7 +47,11 @@
 					<p:calendar id="sprintCSD" navigator="true" effect="slideDown"
 						pattern="dd/MM/yyyy" required="true"
 						binding="#{startDateCreation}" disabled="#{jjsprint.neditabale}"
-						value="#{jjsprint.sprint.startDate}" />
+						value="#{jjsprint.sprint.startDate}" >
+						<f:validator validatorId="dateRangeValidator" />
+						<f:attribute name="sprintMode"
+							value="sprintSD" />
+						</p:calendar>
 				</p:column>
 				<p:column>
 					<p:outputLabel for="sprintCED" value="end Date:" />
@@ -60,6 +64,8 @@
 						<f:validator validatorId="dateRangeValidator" />
 						<f:attribute name="startDateComponent"
 							value="#{startDateCreation}" />
+							<f:attribute name="sprintMode"
+							value="sprintED" />
 					</p:calendar>
 				</p:column>
 			</p:row>

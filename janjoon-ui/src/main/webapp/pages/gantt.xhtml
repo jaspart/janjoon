@@ -9,7 +9,7 @@
 
 <ui:composition style="width:100%">
 	<style type="text/css">
-.ui-datatable table {
+.planning-dataTable table {
 	table-layout: fixed;
 	border-collapse: separate;
 }
@@ -18,22 +18,22 @@
 	
 }
 
-.ui-datatable .ui-datatable-data th {
+.planning-dataTable .ui-datatable-data th {
 	height: 37px;
 	overflow: hidden;
 }
 
-.ui-datatable .ui-datatable-data td {
+.planning-dataTable .ui-datatable-data td {
 	overflow: hidden;
 }
 
-.ui-datatable .ui-datatable-data tr {
+.planning-dataTable .ui-datatable-data tr {
 	height: 44px;
 	overflow: hidden;
 }
 </style>
 	<h:form id="sprintForm" style="width:100%;">
-		<p:panelGrid style="margin-top:10px;width:100%;">
+		<p:panelGrid style="width:100%;">
 			<p:row>
 				<p:column style="width:50%">
 					<h:outputText for="sprint" value="Sprint:" />
@@ -106,7 +106,7 @@
 							<pe:layoutPane position="west" id="westLayout">
 								<f:facet name="header">Task Data Table</f:facet>
 								<p:dataTable id="taskDataTable" var="taskData"
-									sortFunction="#{jJTaskBean.sortFunction}"
+									sortFunction="#{jJTaskBean.sortFunction}" styleClass="planning-dataTable"
 									sortBy="#{taskData.chapter}" value="#{jJTaskBean.tasksData}"
 									editable="true" editMode="cell">
 

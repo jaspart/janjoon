@@ -210,34 +210,34 @@ public class ConfigListener implements ServletContextListener {
 
 		}
 		
-		for(JJRight right:jJRightService.findAllJJRights())
-		{
-			if(right.getObjet().startsWith("JJ"))
-			{
-				right.setObjet(right.getObjet().substring(2));
-				jJRightService.saveJJRight(right);
-			}
-				
-		}
-		
-		for(JJCriticity criticity:jJCriticityService.findAllJJCriticitys())
-		{
-			if(criticity.getObjet().startsWith("JJ"))
-			{
-				criticity.setObjet(criticity.getObjet().substring(2));
-				jJCriticityService.saveJJCriticity(criticity);
-			}
-		}
-		
-		for(JJStatus status:jJStatusService.findAllJJStatuses())
-		{
-			if(status.getObjet().startsWith("JJ"))
-			{
-				status.setObjet(status.getObjet().substring(2));
-				jJStatusService.saveJJStatus(status);
-			}
-		}
-		
+//		for(JJRight right:jJRightService.findAllJJRights())
+//		{
+//			if(right.getObjet().startsWith("JJ"))
+//			{
+//				right.setObjet(right.getObjet().substring(2));
+//				jJRightService.saveJJRight(right);
+//			}
+//				
+//		}
+//		
+//		for(JJCriticity criticity:jJCriticityService.findAllJJCriticitys())
+//		{
+//			if(criticity.getObjet().startsWith("JJ"))
+//			{
+//				criticity.setObjet(criticity.getObjet().substring(2));
+//				jJCriticityService.saveJJCriticity(criticity);
+//			}
+//		}
+//		
+//		for(JJStatus status:jJStatusService.findAllJJStatuses())
+//		{
+//			if(status.getObjet().startsWith("JJ"))
+//			{
+//				status.setObjet(status.getObjet().substring(2));
+//				jJStatusService.saveJJStatus(status);
+//			}
+//		}
+//		
 		if(jJImportanceService.findAllJJImportances().isEmpty())
 		{
 			String[] names ={"High","Medium","Low"};
@@ -1043,7 +1043,14 @@ public class ConfigListener implements ServletContextListener {
 		// }
 		// }
 		// }
-//		if (jJMessageService.findAllJJMessages().isEmpty()) {
+		
+			
+		JJCompany company = jJCompanyService.getCompanyByName("StarIt");
+		if (company == null)
+			company = jJCompanyService.getActifCompanies().get(0);
+		jJMessageService.updateAll(company);
+			
+		
 //
 //			int i = 0;
 //			while (i < productList.size()) {

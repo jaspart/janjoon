@@ -32,7 +32,6 @@
 	float: left;
 	margin-left: 10px;
 	width: 65%;
-	border-style: hidden;
 }
 
 .testCaseDataTable tbody td {
@@ -43,9 +42,9 @@
 }
 
 .ui-tree {
-	height: 750px;
+	height: 700px;
 	width: 100%;
-	max-width: 450px;
+	max-width: 400px;
 	overflow-y: auto;
 	overflow-x: hidden;
 	border: rgba(255, 0, 0, 0);
@@ -67,15 +66,9 @@
 /* } */
 </style>
 		<h:outputScript library="js" name="scrollTab.js" />
-		<p:panel style="height:900px;">
+		<p:panel style="height:800px;">
 			<h:form id="treeForm">
 				<p:remoteCommand name="updateTree" update="@form" />
-				<p:commandButton id="communicationButton" icon="ui-icon-comment"
-					value="Communication" style="float: right;"
-					actionListener="#{jJMessageBean.initComMessages(requirementBean.requirement)}"
-					oncomplete="PF('communication').show();"
-					title="#{message.header_communication_label}"
-					rendered="#{loginBean.enable and requirementBean.requirement != null}" />
 				<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
 					style="float: right;" />
 				<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
@@ -87,23 +80,23 @@
 							</p:row>
 						</f:facet>
 						<p:row>
-							<p:column colspan="2" styleClass="UnLinkedOverlay">
+							<p:column colspan="2" styleClass="UnLinked">
 								<p:outputLabel
 									value="#{messages.specification_color_RequirementNotLinked_label}" />
 							</p:column>
-							<p:column colspan="2" styleClass="SpecifiedOverlay">
+							<p:column colspan="2" styleClass="Specified">
 								<p:outputLabel
 									value="#{messages.specification_color_RequirementNoTask_label}" />
 							</p:column>
-							<p:column colspan="2" styleClass="ProgressOverlay">
+							<p:column colspan="2" styleClass="Progress">
 								<p:outputLabel
 									value="#{messages.specification_color_RequirementInProcess_label}" />
 							</p:column>
-							<p:column colspan="2" styleClass="InTestingOverlay">
+							<p:column colspan="2" styleClass="InTesting">
 								<p:outputLabel
 									value="#{messages.specification_color_RequirementFinishedTestProcess_label}" />
 							</p:column>
-							<p:column colspan="2" styleClass="FinishedOverlay">
+							<p:column colspan="2" styleClass="Finished">
 								<p:outputLabel
 									value="#{messages.specification_color_RequirementFinishedSuccessed_label}" />
 							</p:column>
@@ -115,9 +108,9 @@
 						<p:row>
 							<p:column colspan="2">
 								<p:selectOneMenu id="category"
-									value="#{requirementBean.category}" 
-									effect="fade" style="width: 50%;text-transform: uppercase"
-									filter="true" filterMatchMode="startsWith"
+									value="#{requirementBean.category}" effect="fade"
+									style="width: 50%;text-transform: uppercase" filter="true"
+									filterMatchMode="startsWith"
 									converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter">
 
 									<f:selectItems value="#{requirementBean.categories}" var="c"
@@ -211,8 +204,8 @@
 								<h:outputText for="chapter"
 									value="#{messages.specification_create_chapter_label}" />
 								<p:autoComplete id="chapter" scrollHeight="200"
-									value="#{requirementBean.requirement.chapter}" itemLabel="#{chapter.name}"
-									itemValue="#{chapter}"
+									value="#{requirementBean.requirement.chapter}"
+									itemLabel="#{chapter.name}" itemValue="#{chapter}"
 									converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter"
 									dropdown="true" var="chapter"
 									completeMethod="#{requirementBean.completeChapterRequirement}" />
@@ -379,8 +372,18 @@
 						</p:column>
 					</p:row>
 				</p:panelGrid>
-			</p:panelGrid>
+			</p:panelGrid>			
 		</p:panel>
+		<p:fieldset id="container" legend="Comments" toggleable="true"
+				collapsed="true" style="margin-top: 10px;width:50%;"
+				rendered="#{loginBean.enable and requirementBean.requirement != null}">
+				<ui:include src="/pages/communication.xhtml">
+					<ui:param name="communicationList"
+						value="#{requirementBean.communicationMessages}" />
+					<ui:param name="field" value="#{requirementBean.requirement}" />
+				</ui:include>
+			</p:fieldset>
+
 
 		<p:dialog id="requirementDialog" draggable="false"
 			header="#{messages[jJRequirementBean.message]}" modal="true"
@@ -442,6 +445,17 @@
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
+		<!-- 		<p:dialog widgetVar="communication" id="communication" -->
+		<!-- 			styleClass="communicationPanelDialog" showEffect="fade" -->
+		<!-- 			dynamic="true" closable="true" style="width:400px" -->
+		<!-- 			rendered="#{loginBean.enable}"> -->
+		<!-- 			<ui:include src="/pages/communication.xhtml"> -->
+		<!-- 				<ui:param name="communicationList" -->
+		<!-- 					value="#{requirementBean.communicationMessages}" /> -->
+		<!-- 				<ui:param name="field" value="#{requirementBean.requirement}" /> -->
+		<!-- 			</ui:include> -->
+		<!-- 		</p:dialog> -->
+
 
 		<p:dialog id="chapterDialog" draggable="false" appendTo="@(body)"
 			header="#{messages.specification_chapter_header}" modal="true"

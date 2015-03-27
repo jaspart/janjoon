@@ -57,7 +57,7 @@
 			</props>
 		</property>
 	</bean>
-	<bean class="org.apache.commons.dbcp.BasicDataSource"
+	<bean class="org.apache.commons.dbcp2.BasicDataSource"
 		destroy-method="close" id="dataSource">
 		<property name="driverClassName" value="${database.driverClassName}" />
 		<property name="url" value="${database.url}" />

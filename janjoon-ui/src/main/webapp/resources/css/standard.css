@@ -701,116 +701,70 @@ div.revised2 {
 	color: black !important;
 }
 
-.Specified {
-	display: inline;
+.Specified {	
 	padding: .2em .6em .3em;
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
 	color: #fff;
 	text-align: center;
-	white-space: nowrap;
+	white-space: pre-line;
 	vertical-align: baseline;
 	border-radius: .25em;
 	background-color: #666666 !important;
 }
 
-.UnLinked {
-	display: inline;
+.UnLinked {	
 	padding: .2em .6em .3em;
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
 	color: #fff;
 	text-align: center;
-	white-space: nowrap;
+	white-space: pre-line;
 	vertical-align: baseline;
 	border-radius: .25em;
 	background-color: #FF3333 !important;
 }
 
-.Progress {
-	display: inline;
+.Progress {	
 	padding: .2em .6em .3em;
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
 	color: #fff;
 	text-align: center;
-	white-space: nowrap;
+	white-space: pre-line;
 	vertical-align: baseline;
 	border-radius: .25em;
 	background-color: #9E33FF !important;
 }
 
-.Finished {
-	display: inline;
+.Finished {	
 	padding: .2em .6em .3em;
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
 	color: #fff;
 	text-align: center;
-	white-space: nowrap;
+	white-space: pre-line;
 	vertical-align: baseline;
 	border-radius: .25em;
 	background-color: #24B324 !important;
 }
 
-.InTesting{
-	display: inline;
+.InTesting{	
 	padding: .2em .6em .3em;
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
 	color: #fff;
 	text-align: center;
-	white-space: nowrap;
+	white-space: pre-line;
 	vertical-align: baseline;
 	border-radius: .25em;
 	background-color: #00A5F7 !important;
 }
-
-.SpecifiedOverlay {
-	background-color: #666666 !important;
-	background-image: none !important;
-	color: #fff;
-	font-size: 80%;
-	font-weight: 700;
-}
-
-.UnLinkedOverlay {
-	background-color: #FF3333 !important;
-	background-image: none !important;
-	color: #fff;
-	font-size: 80%;
-	font-weight: 700;
-}
-
-.ProgressOverlay {
-	background-color: #9E33FF !important;
-	background-image: none !important;
-	color: #fff;
-	font-size: 80%;
-	font-weight: 700;
-}
-
-.FinishedOverlay {
-	background-color: #24B324 !important;
-	background-image: none !important;
-	color: #fff;
-	font-size: 80%;
-	font-weight: 700;
-}
-
-.InTestingOverlay {
-	background-color: #00A5F7 !important;
-	background-image: none !important;
-	color: #fff;
-	font-size: 80%;
-	font-weight: 700;
-}
-
 
 .NEW {
 	background-color: #FFB3B3 !important;

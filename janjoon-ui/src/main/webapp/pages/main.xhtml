@@ -176,7 +176,7 @@
 						<p:commandButton id="deleteYesButton"
 							value="#{messages.label_yes}"
 							action="#{jJMessageBean.resolveJJMessage}"
-							update=":messageForm,:growlForm"
+							update=":messageForm :growlForm :headerForm:communicationButton"
 							oncomplete="PF('resolveDialogWidget').hide()" />
 						<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
 							onclick="PF('resolveDialogWidget').hide()" type="button" />
@@ -210,17 +210,8 @@
 					</p:column>
 
 					<p:column headerText="Project" style="width:100px;">
-						<h:outputText value="#{task.requirement.project}"
-							converter="JJProjectConverter"
-							rendered="#{task.requirement != null}" />
-
-						<h:outputText value="#{task.bug.project}"
-							converter="JJProjectConverter"
-							rendered="#{task.requirement == null and task.bug != null }" />
-
-						<h:outputText value="#{task.sprint.project}"
-							converter="JJProjectConverter"
-							rendered="#{task.requirement == null and task.bug == null and task.sprint != null}" />
+						<h:outputText value="#{task.project}"
+							converter="JJProjectConverter"/>						
 					</p:column>
 
 					<p:column headerText="Start Date :" style="width:100px;">
@@ -349,7 +340,7 @@
 						</p:selectBooleanButton>
 						<p:commandButton id="submitMes" value="OK"
 							process="@this,alert,messagedsc"
-							actionListener="#{jJMessageBean.createMessage(false)}"
+							actionListener="#{jJMessageBean.createMessage(false,null)}"
 							update="messageDialogForm :headerForm:communicationButton :growlForm" />
 					</p:panelGrid>
 				</p:panelGrid>

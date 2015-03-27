@@ -34,6 +34,10 @@ public class JJMessage {
 
 	@ManyToOne
 	private JJContact createdBy;
+	
+	@NotNull
+	@ManyToOne
+	private JJCompany company;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(style = "M-")

@@ -8,6 +8,56 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
+		<style type="text/css">
+.jqplot-xaxis-label {
+	display: none;
+}
+
+.jqplot-xaxis-tick {
+	transform: rotate(45deg);
+	top: 10px;
+}
+</style>
+		<h:form id="projectForm" rendered="#{jJProjectBean.project != null}">
+			<p:panelGrid style="margin: auto auto 5px auto;">
+				<p:row>
+					<p:column>
+						<p:outputLabel for="projectName" value="Project :" />
+						<h:outputText id="projectName"
+							value="#{jJProjectBean.project.name}" />
+					</p:column>
+					<p:column>
+						<p:outputLabel for="projectSD"
+							value="#{messages.admin_project_new_startDate_label}" />
+						<p:calendar id="projectSD" navigator="true" effect="slideDown"
+							pattern="dd/MM/yyyy" required="true"
+							binding="#{startDateProjectEdition}"
+							requiredMessage="#{messages.admin_project_new_startDate_alert}"
+							value="#{jJProjectBean.project.startDate}" />
+					</p:column>
+					<p:column>
+						<p:outputLabel for="projectED"
+							value="#{messages.admin_project_new_endDate_label}" />
+						<p:calendar id="projectED" navigator="true" effect="slideDown"
+							pattern="dd/MM/yyyy" required="true"
+							requiredMessage="#{messages.admin_project_new_endDate_alert}"
+							value="#{jJProjectBean.project.endDate}">
+							<f:validator validatorId="dateRangeValidator" />
+							<f:attribute name="startDateComponent"
+								value="#{startDateProjectEdition}" />
+						</p:calendar>
+					</p:column>
+					<p:column>
+						<p:commandButton id="submitButton"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							value="#{messages.admin_project_new_save_button}"
+							update=":projectForm :headerForm :growlForm"
+							action="#{jJProjectBean.savePlanning}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
 		<p:tabView id="projecttabview" widgetVar="projectTabView"
 			dynamic="false" cache="true" style="width:100% !important;"
 			activeIndex="#{loginBean.activeTabProjectIndex}">
@@ -16,7 +66,8 @@
 				listener="#{jJSprintBean.onTabSprintChange}"
 				onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock()" />
-			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}" rendered="#{loginBean.renderGantt}">
+			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}"
+				rendered="#{loginBean.renderGantt}">
 				<h:panelGrid id="projectpanel" columns="1" cellpadding="3"
 					style="width:100% !important;">
 					<ui:insert name="gantt">
@@ -24,7 +75,8 @@
 					</ui:insert>
 				</h:panelGrid>
 			</p:tab>
-			<p:tab title="#{messages.project_scrum_menuitem}" rendered="#{loginBean.renderScrum}">
+			<p:tab title="#{messages.project_scrum_menuitem}"
+				rendered="#{loginBean.renderScrum}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="scrum">
 						<ui:include src="scrum.xhtml" />
@@ -49,9 +101,10 @@
 				<h:form id="deleteForm">
 					<p:commandButton id="deleteYesPlanning"
 						value="#{messages.bug_delete_yes_button}"
-						action="#{jJTaskBean.deleteTaskData}" update=":projecttabview :growlForm" 
+						action="#{jJTaskBean.deleteTaskData}"
+						update=":projecttabview :growlForm"
 						onstart="PF('blockUIWidget').block()"
-						oncomplete="PF('blockUIWidget').unblock();"/>
+						oncomplete="PF('blockUIWidget').unblock();" />
 					<p:commandButton id="deleteNoButton"
 						value="#{messages.bug_delete_no_button}"
 						oncomplete="PF('blockUIWidget').unblock()"
@@ -75,7 +128,8 @@
 			modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
 			resizable="true" maximizable="true" showEffect="fade"
 			hideEffect="explode" draggable="#{jJTaskBean.mode eq 'planning'}">
-			<p:ajax event="close" update=":projecttabview" listener="#{jJTaskBean.closeEvent('planning')}"/>
+			<p:ajax event="close" update=":projecttabview"
+				listener="#{jJTaskBean.closeEvent('planning')}" />
 			<p:outputPanel id="viewTaskPanel">
 				<h:form id="viewTaskForm" enctype="multipart/form-data">
 					<p:panel styleClass="panelDialog">
@@ -125,7 +179,8 @@
 							completeMethod="#{jJBugBean.completeStatusBug}" />
 						<p:commandButton id="taskBugSaveButton"
 							value="#{messages.bug_edit_save_button}"
-							action="#{jJSprintBean.persistBugTask}" update=":projecttabview :growlForm"
+							action="#{jJSprintBean.persistBugTask}"
+							update=":projecttabview :growlForm"
 							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()"
 							onsuccess="PF('editBugDialogWidget').hide()">

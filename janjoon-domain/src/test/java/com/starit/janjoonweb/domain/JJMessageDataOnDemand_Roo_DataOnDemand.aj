@@ -6,6 +6,8 @@ package com.starit.janjoonweb.domain;
 import com.starit.janjoonweb.domain.JJBugDataOnDemand;
 import com.starit.janjoonweb.domain.JJBuildDataOnDemand;
 import com.starit.janjoonweb.domain.JJChapterDataOnDemand;
+import com.starit.janjoonweb.domain.JJCompany;
+import com.starit.janjoonweb.domain.JJCompanyDataOnDemand;
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJCriticityDataOnDemand;
 import com.starit.janjoonweb.domain.JJImportanceDataOnDemand;
@@ -52,6 +54,9 @@ privileged aspect JJMessageDataOnDemand_Roo_DataOnDemand {
     JJChapterDataOnDemand JJMessageDataOnDemand.jJChapterDataOnDemand;
     
     @Autowired
+    JJCompanyDataOnDemand JJMessageDataOnDemand.jJCompanyDataOnDemand;
+    
+    @Autowired
     JJContactDataOnDemand JJMessageDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
@@ -92,6 +97,7 @@ privileged aspect JJMessageDataOnDemand_Roo_DataOnDemand {
     
     public JJMessage JJMessageDataOnDemand.getNewTransientJJMessage(int index) {
         JJMessage obj = new JJMessage();
+        setCompany(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
@@ -99,6 +105,11 @@ privileged aspect JJMessageDataOnDemand_Roo_DataOnDemand {
         setName(obj, index);
         setUpdatedDate(obj, index);
         return obj;
+    }
+    
+    public void JJMessageDataOnDemand.setCompany(JJMessage obj, int index) {
+        JJCompany company = jJCompanyDataOnDemand.getRandomJJCompany();
+        obj.setCompany(company);
     }
     
     public void JJMessageDataOnDemand.setCreationDate(JJMessage obj, int index) {

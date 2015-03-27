@@ -21,6 +21,7 @@ import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJProjectService;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyProjectDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
@@ -33,7 +34,7 @@ public class JJProjectBean {
 
 	@Autowired
 	JJPermissionService jJPermissionService;
-	
+
 	private JJProject project;
 	private JJProject projectAdmin;
 	private LazyProjectDataModel projectListTable;
@@ -59,8 +60,10 @@ public class JJProjectBean {
 		this.projectState = projectState;
 	}
 
-	public JJProject getProject() {
+	public JJProject getProject() {	
+			
 		return project;
+
 	}
 
 	public void setProject(JJProject project) {
@@ -68,13 +71,12 @@ public class JJProjectBean {
 	}
 
 	public List<JJProject> getProjectList() {
-	
+
 		if (((LoginBean) LoginBean.findBean("loginBean")).isEnable())
-		return jJProjectService.getProjects(
-				((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact().getCompany(),
-		((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact(), true,false);
+			return jJProjectService.getProjects(((LoginBean) LoginBean
+					.findBean("loginBean")).getContact().getCompany(),
+					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
+					true, false);
 		else
 			return new ArrayList<JJProject>();
 	}
@@ -171,7 +173,7 @@ public class JJProjectBean {
 		if (projectAdmin != null) {
 
 			projectAdmin.setEnabled(false);
-			updateJJProject(projectAdmin);			
+			updateJJProject(projectAdmin);
 			projectListTable = null;
 		}
 	}
@@ -216,6 +218,19 @@ public class JJProjectBean {
 
 			context.execute("PF('projectDialogWidget').hide()");
 		}
+	}
+
+	public void savePlanning() {
+
+		String message = "";
+		updateJJProject(project);
+		project = jJProjectService.findJJProject(project.getId());
+		projectListTable = null;
+		message = "message_successfully_updated";
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				"Project");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
 	}
 
 	public void addMessage() {

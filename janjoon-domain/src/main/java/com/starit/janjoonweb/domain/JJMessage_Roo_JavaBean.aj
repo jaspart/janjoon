@@ -6,6 +6,7 @@ package com.starit.janjoonweb.domain;
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJChapter;
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJImportance;
@@ -52,6 +53,14 @@ privileged aspect JJMessage_Roo_JavaBean {
     
     public void JJMessage.setCreatedBy(JJContact createdBy) {
         this.createdBy = createdBy;
+    }
+    
+    public JJCompany JJMessage.getCompany() {
+        return this.company;
+    }
+    
+    public void JJMessage.setCompany(JJCompany company) {
+        this.company = company;
     }
     
     public Date JJMessage.getUpdatedDate() {
