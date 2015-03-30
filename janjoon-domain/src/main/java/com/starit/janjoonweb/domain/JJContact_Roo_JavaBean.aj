@@ -3,6 +3,7 @@
 
 package com.starit.janjoonweb.domain;
 
+import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
@@ -11,7 +12,9 @@ import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJPermission;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJSprint;
+import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJVersion;
 import java.util.Date;
 import java.util.Set;
@@ -248,6 +251,30 @@ privileged aspect JJContact_Roo_JavaBean {
     
     public void JJContact.setCategories(Set<JJCategory> categories) {
         this.categories = categories;
+    }
+    
+    public Set<JJRequirement> JJContact.getRequirements() {
+        return this.requirements;
+    }
+    
+    public void JJContact.setRequirements(Set<JJRequirement> requirements) {
+        this.requirements = requirements;
+    }
+    
+    public Set<JJBug> JJContact.getBugs() {
+        return this.bugs;
+    }
+    
+    public void JJContact.setBugs(Set<JJBug> bugs) {
+        this.bugs = bugs;
+    }
+    
+    public Set<JJTestcase> JJContact.getTestcases() {
+        return this.testcases;
+    }
+    
+    public void JJContact.setTestcases(Set<JJTestcase> testcases) {
+        this.testcases = testcases;
     }
     
     public Set<JJPermission> JJContact.getPermissions() {

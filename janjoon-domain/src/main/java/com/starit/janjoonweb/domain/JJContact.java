@@ -121,6 +121,18 @@ public class JJContact  {
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "JJCategoryLinkJJContact", joinColumns = { @javax.persistence.JoinColumn(name = "Contact_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Category_ID", referencedColumnName = "id") })	
 	private Set<JJCategory> categories = new HashSet<JJCategory>();
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "JJRequirementLinkJJContact", joinColumns = { @javax.persistence.JoinColumn(name = "Contact_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Requirement_ID", referencedColumnName = "id") })	
+	private Set<JJRequirement> requirements = new HashSet<JJRequirement>();
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "JJBugLinkJJContact", joinColumns = { @javax.persistence.JoinColumn(name = "Contact_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Bug_ID", referencedColumnName = "id") })	
+	private Set<JJBug> bugs = new HashSet<JJBug>();
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "JJTestcaseLinkJJContact", joinColumns = { @javax.persistence.JoinColumn(name = "Contact_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Testcase_ID", referencedColumnName = "id") })	
+	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "contact")
 	private Set<JJPermission> permissions = new HashSet<JJPermission>();

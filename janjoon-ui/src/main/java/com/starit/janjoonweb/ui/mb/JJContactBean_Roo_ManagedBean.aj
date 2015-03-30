@@ -3,6 +3,7 @@
 
 package com.starit.janjoonweb.ui.mb;
 
+import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJCompanyService;
@@ -15,16 +16,21 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProductService;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJProjectService;
+import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJSprint;
+import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.JJContactBean;
+import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJCompanyConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJJobConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJProductConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJProjectConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJVersionConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
@@ -103,6 +109,12 @@ privileged aspect JJContactBean_Roo_ManagedBean {
     private List<JJSprint> JJContactBean.selectedSprints;
     
     private List<JJCategory> JJContactBean.selectedCategories;
+    
+    private List<JJRequirement> JJContactBean.selectedRequirements;
+    
+    private List<JJBug> JJContactBean.selectedBugs;
+    
+    private List<JJTestcase> JJContactBean.selectedTestcases;
     
     private List<JJPermission> JJContactBean.selectedPermissions;
     
@@ -786,6 +798,81 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         categoriesCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(categoriesCreateInputMessage);
         
+        OutputLabel requirementsCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        requirementsCreateOutput.setFor("requirementsCreateInput");
+        requirementsCreateOutput.setId("requirementsCreateOutput");
+        requirementsCreateOutput.setValue("Requirements:");
+        htmlPanelGrid.getChildren().add(requirementsCreateOutput);
+        
+        SelectManyMenu requirementsCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        requirementsCreateInput.setId("requirementsCreateInput");
+        requirementsCreateInput.setConverter(new JJRequirementConverter());
+        requirementsCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedRequirements}", List.class));
+        UISelectItems requirementsCreateInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        requirementsCreateInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.allJJRequirements}", List.class));
+        requirementsCreateInput.setRequired(false);
+        requirementsCreateInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJRequirement", String.class));
+        requirementsCreateInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJRequirement}", String.class));
+        requirementsCreateInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJRequirement}", JJRequirement.class));
+        requirementsCreateInput.getChildren().add(requirementsCreateInputItems);
+        htmlPanelGrid.getChildren().add(requirementsCreateInput);
+        
+        Message requirementsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        requirementsCreateInputMessage.setId("requirementsCreateInputMessage");
+        requirementsCreateInputMessage.setFor("requirementsCreateInput");
+        requirementsCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(requirementsCreateInputMessage);
+        
+        OutputLabel bugsCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        bugsCreateOutput.setFor("bugsCreateInput");
+        bugsCreateOutput.setId("bugsCreateOutput");
+        bugsCreateOutput.setValue("Bugs:");
+        htmlPanelGrid.getChildren().add(bugsCreateOutput);
+        
+        SelectManyMenu bugsCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        bugsCreateInput.setId("bugsCreateInput");
+        bugsCreateInput.setConverter(new JJBugConverter());
+        bugsCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedBugs}", List.class));
+        UISelectItems bugsCreateInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        bugsCreateInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBugBean.allJJBugs}", List.class));
+        bugsCreateInput.setRequired(false);
+        bugsCreateInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJBug", String.class));
+        bugsCreateInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJBug}", String.class));
+        bugsCreateInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJBug}", JJBug.class));
+        bugsCreateInput.getChildren().add(bugsCreateInputItems);
+        htmlPanelGrid.getChildren().add(bugsCreateInput);
+        
+        Message bugsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        bugsCreateInputMessage.setId("bugsCreateInputMessage");
+        bugsCreateInputMessage.setFor("bugsCreateInput");
+        bugsCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(bugsCreateInputMessage);
+        
+        OutputLabel testcasesCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        testcasesCreateOutput.setFor("testcasesCreateInput");
+        testcasesCreateOutput.setId("testcasesCreateOutput");
+        testcasesCreateOutput.setValue("Testcases:");
+        htmlPanelGrid.getChildren().add(testcasesCreateOutput);
+        
+        SelectManyMenu testcasesCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        testcasesCreateInput.setId("testcasesCreateInput");
+        testcasesCreateInput.setConverter(new JJTestcaseConverter());
+        testcasesCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedTestcases}", List.class));
+        UISelectItems testcasesCreateInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        testcasesCreateInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.allJJTestcases}", List.class));
+        testcasesCreateInput.setRequired(false);
+        testcasesCreateInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJTestcase", String.class));
+        testcasesCreateInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJTestcase}", String.class));
+        testcasesCreateInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJTestcase}", JJTestcase.class));
+        testcasesCreateInput.getChildren().add(testcasesCreateInputItems);
+        htmlPanelGrid.getChildren().add(testcasesCreateInput);
+        
+        Message testcasesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcasesCreateInputMessage.setId("testcasesCreateInputMessage");
+        testcasesCreateInputMessage.setFor("testcasesCreateInput");
+        testcasesCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcasesCreateInputMessage);
+        
         HtmlOutputText permissionsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         permissionsCreateOutput.setId("permissionsCreateOutput");
         permissionsCreateOutput.setValue("Permissions:");
@@ -1433,6 +1520,81 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         categoriesEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(categoriesEditInputMessage);
         
+        OutputLabel requirementsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        requirementsEditOutput.setFor("requirementsEditInput");
+        requirementsEditOutput.setId("requirementsEditOutput");
+        requirementsEditOutput.setValue("Requirements:");
+        htmlPanelGrid.getChildren().add(requirementsEditOutput);
+        
+        SelectManyMenu requirementsEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        requirementsEditInput.setId("requirementsEditInput");
+        requirementsEditInput.setConverter(new JJRequirementConverter());
+        requirementsEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedRequirements}", List.class));
+        UISelectItems requirementsEditInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        requirementsEditInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.allJJRequirements}", List.class));
+        requirementsEditInput.setRequired(false);
+        requirementsEditInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJRequirement", String.class));
+        requirementsEditInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJRequirement}", String.class));
+        requirementsEditInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJRequirement}", JJRequirement.class));
+        requirementsEditInput.getChildren().add(requirementsEditInputItems);
+        htmlPanelGrid.getChildren().add(requirementsEditInput);
+        
+        Message requirementsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        requirementsEditInputMessage.setId("requirementsEditInputMessage");
+        requirementsEditInputMessage.setFor("requirementsEditInput");
+        requirementsEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(requirementsEditInputMessage);
+        
+        OutputLabel bugsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        bugsEditOutput.setFor("bugsEditInput");
+        bugsEditOutput.setId("bugsEditOutput");
+        bugsEditOutput.setValue("Bugs:");
+        htmlPanelGrid.getChildren().add(bugsEditOutput);
+        
+        SelectManyMenu bugsEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        bugsEditInput.setId("bugsEditInput");
+        bugsEditInput.setConverter(new JJBugConverter());
+        bugsEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedBugs}", List.class));
+        UISelectItems bugsEditInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        bugsEditInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBugBean.allJJBugs}", List.class));
+        bugsEditInput.setRequired(false);
+        bugsEditInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJBug", String.class));
+        bugsEditInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJBug}", String.class));
+        bugsEditInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJBug}", JJBug.class));
+        bugsEditInput.getChildren().add(bugsEditInputItems);
+        htmlPanelGrid.getChildren().add(bugsEditInput);
+        
+        Message bugsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        bugsEditInputMessage.setId("bugsEditInputMessage");
+        bugsEditInputMessage.setFor("bugsEditInput");
+        bugsEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(bugsEditInputMessage);
+        
+        OutputLabel testcasesEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        testcasesEditOutput.setFor("testcasesEditInput");
+        testcasesEditOutput.setId("testcasesEditOutput");
+        testcasesEditOutput.setValue("Testcases:");
+        htmlPanelGrid.getChildren().add(testcasesEditOutput);
+        
+        SelectManyMenu testcasesEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        testcasesEditInput.setId("testcasesEditInput");
+        testcasesEditInput.setConverter(new JJTestcaseConverter());
+        testcasesEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedTestcases}", List.class));
+        UISelectItems testcasesEditInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        testcasesEditInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.allJJTestcases}", List.class));
+        testcasesEditInput.setRequired(false);
+        testcasesEditInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJTestcase", String.class));
+        testcasesEditInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJTestcase}", String.class));
+        testcasesEditInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJTestcase}", JJTestcase.class));
+        testcasesEditInput.getChildren().add(testcasesEditInputItems);
+        htmlPanelGrid.getChildren().add(testcasesEditInput);
+        
+        Message testcasesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        testcasesEditInputMessage.setId("testcasesEditInputMessage");
+        testcasesEditInputMessage.setFor("testcasesEditInput");
+        testcasesEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(testcasesEditInputMessage);
+        
         HtmlOutputText permissionsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         permissionsEditOutput.setId("permissionsEditOutput");
         permissionsEditOutput.setValue("Permissions:");
@@ -1787,6 +1949,63 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         categoriesValue.getChildren().add(categoriesValueItems);
         htmlPanelGrid.getChildren().add(categoriesValue);
         
+        HtmlOutputText requirementsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        requirementsLabel.setId("requirementsLabel");
+        requirementsLabel.setValue("Requirements:");
+        htmlPanelGrid.getChildren().add(requirementsLabel);
+        
+        SelectManyMenu requirementsValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        requirementsValue.setId("requirementsValue");
+        requirementsValue.setConverter(new JJRequirementConverter());
+        requirementsValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedRequirements}", List.class));
+        UISelectItems requirementsValueItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        requirementsValue.setReadonly(true);
+        requirementsValue.setDisabled(true);
+        requirementsValueItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.requirements}", Set.class));
+        requirementsValueItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJRequirement", String.class));
+        requirementsValueItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJRequirement}", String.class));
+        requirementsValueItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJRequirement}", JJRequirement.class));
+        requirementsValue.getChildren().add(requirementsValueItems);
+        htmlPanelGrid.getChildren().add(requirementsValue);
+        
+        HtmlOutputText bugsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        bugsLabel.setId("bugsLabel");
+        bugsLabel.setValue("Bugs:");
+        htmlPanelGrid.getChildren().add(bugsLabel);
+        
+        SelectManyMenu bugsValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        bugsValue.setId("bugsValue");
+        bugsValue.setConverter(new JJBugConverter());
+        bugsValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedBugs}", List.class));
+        UISelectItems bugsValueItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        bugsValue.setReadonly(true);
+        bugsValue.setDisabled(true);
+        bugsValueItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.bugs}", Set.class));
+        bugsValueItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJBug", String.class));
+        bugsValueItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJBug}", String.class));
+        bugsValueItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJBug}", JJBug.class));
+        bugsValue.getChildren().add(bugsValueItems);
+        htmlPanelGrid.getChildren().add(bugsValue);
+        
+        HtmlOutputText testcasesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        testcasesLabel.setId("testcasesLabel");
+        testcasesLabel.setValue("Testcases:");
+        htmlPanelGrid.getChildren().add(testcasesLabel);
+        
+        SelectManyMenu testcasesValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        testcasesValue.setId("testcasesValue");
+        testcasesValue.setConverter(new JJTestcaseConverter());
+        testcasesValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.selectedTestcases}", List.class));
+        UISelectItems testcasesValueItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        testcasesValue.setReadonly(true);
+        testcasesValue.setDisabled(true);
+        testcasesValueItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJContactBean.JJContact_.testcases}", Set.class));
+        testcasesValueItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJTestcase", String.class));
+        testcasesValueItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJTestcase}", String.class));
+        testcasesValueItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJTestcase}", JJTestcase.class));
+        testcasesValue.getChildren().add(testcasesValueItems);
+        htmlPanelGrid.getChildren().add(testcasesValue);
+        
         HtmlOutputText permissionsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         permissionsLabel.setId("permissionsLabel");
         permissionsLabel.setValue("Permissions:");
@@ -1930,6 +2149,39 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         this.selectedCategories = selectedCategories;
     }
     
+    public List<JJRequirement> JJContactBean.getSelectedRequirements() {
+        return selectedRequirements;
+    }
+    
+    public void JJContactBean.setSelectedRequirements(List<JJRequirement> selectedRequirements) {
+        if (selectedRequirements != null) {
+            JJContact_.setRequirements(new HashSet<JJRequirement>(selectedRequirements));
+        }
+        this.selectedRequirements = selectedRequirements;
+    }
+    
+    public List<JJBug> JJContactBean.getSelectedBugs() {
+        return selectedBugs;
+    }
+    
+    public void JJContactBean.setSelectedBugs(List<JJBug> selectedBugs) {
+        if (selectedBugs != null) {
+            JJContact_.setBugs(new HashSet<JJBug>(selectedBugs));
+        }
+        this.selectedBugs = selectedBugs;
+    }
+    
+    public List<JJTestcase> JJContactBean.getSelectedTestcases() {
+        return selectedTestcases;
+    }
+    
+    public void JJContactBean.setSelectedTestcases(List<JJTestcase> selectedTestcases) {
+        if (selectedTestcases != null) {
+            JJContact_.setTestcases(new HashSet<JJTestcase>(selectedTestcases));
+        }
+        this.selectedTestcases = selectedTestcases;
+    }
+    
     public List<JJPermission> JJContactBean.getSelectedPermissions() {
         return selectedPermissions;
     }
@@ -1947,6 +2199,15 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         }
         if (JJContact_ != null && JJContact_.getCategories() != null) {
             selectedCategories = new ArrayList<JJCategory>(JJContact_.getCategories());
+        }
+        if (JJContact_ != null && JJContact_.getRequirements() != null) {
+            selectedRequirements = new ArrayList<JJRequirement>(JJContact_.getRequirements());
+        }
+        if (JJContact_ != null && JJContact_.getBugs() != null) {
+            selectedBugs = new ArrayList<JJBug>(JJContact_.getBugs());
+        }
+        if (JJContact_ != null && JJContact_.getTestcases() != null) {
+            selectedTestcases = new ArrayList<JJTestcase>(JJContact_.getTestcases());
         }
         if (JJContact_ != null && JJContact_.getPermissions() != null) {
             selectedPermissions = new ArrayList<JJPermission>(JJContact_.getPermissions());
@@ -2005,6 +2266,9 @@ privileged aspect JJContactBean_Roo_ManagedBean {
         JJContact_ = null;
         selectedSprints = null;
         selectedCategories = null;
+        selectedRequirements = null;
+        selectedBugs = null;
+        selectedTestcases = null;
         selectedPermissions = null;
         createDialogVisible = false;
     }

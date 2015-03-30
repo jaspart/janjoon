@@ -45,8 +45,8 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -127,6 +127,8 @@ privileged aspect JJBugBean_Roo_ManagedBean {
     private List<JJBug> JJBugBean.selectedBugs;
     
     private List<JJTask> JJBugBean.selectedTasks;
+    
+    private List<JJContact> JJBugBean.selectedContacts;
     
     @PostConstruct
     public void JJBugBean.init() {
@@ -668,6 +670,22 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         tasksCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(tasksCreateInputMessage);
         
+        HtmlOutputText contactsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        contactsCreateOutput.setId("contactsCreateOutput");
+        contactsCreateOutput.setValue("Contacts:");
+        htmlPanelGrid.getChildren().add(contactsCreateOutput);
+        
+        HtmlOutputText contactsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        contactsCreateInput.setId("contactsCreateInput");
+        contactsCreateInput.setValue("This relationship is managed from the JJContact side");
+        htmlPanelGrid.getChildren().add(contactsCreateInput);
+        
+        Message contactsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        contactsCreateInputMessage.setId("contactsCreateInputMessage");
+        contactsCreateInputMessage.setFor("contactsCreateInput");
+        contactsCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(contactsCreateInputMessage);
+        
         OutputLabel assignedTosCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         assignedTosCreateOutput.setFor("assignedTosCreateInput");
         assignedTosCreateOutput.setId("assignedTosCreateOutput");
@@ -1184,6 +1202,22 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         tasksEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(tasksEditInputMessage);
         
+        HtmlOutputText contactsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        contactsEditOutput.setId("contactsEditOutput");
+        contactsEditOutput.setValue("Contacts:");
+        htmlPanelGrid.getChildren().add(contactsEditOutput);
+        
+        HtmlOutputText contactsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        contactsEditInput.setId("contactsEditInput");
+        contactsEditInput.setValue("This relationship is managed from the JJContact side");
+        htmlPanelGrid.getChildren().add(contactsEditInput);
+        
+        Message contactsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        contactsEditInputMessage.setId("contactsEditInputMessage");
+        contactsEditInputMessage.setFor("contactsEditInput");
+        contactsEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(contactsEditInputMessage);
+        
         OutputLabel assignedTosEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         assignedTosEditOutput.setFor("assignedTosEditInput");
         assignedTosEditOutput.setId("assignedTosEditOutput");
@@ -1453,6 +1487,16 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         tasksValue.setValue("This relationship is managed from the JJTask side");
         htmlPanelGrid.getChildren().add(tasksValue);
         
+        HtmlOutputText contactsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        contactsLabel.setId("contactsLabel");
+        contactsLabel.setValue("Contacts:");
+        htmlPanelGrid.getChildren().add(contactsLabel);
+        
+        HtmlOutputText contactsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        contactsValue.setId("contactsValue");
+        contactsValue.setValue("This relationship is managed from the JJContact side");
+        htmlPanelGrid.getChildren().add(contactsValue);
+        
         HtmlOutputText assignedTosLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         assignedTosLabel.setId("assignedTosLabel");
         assignedTosLabel.setValue("Assigned Tos:");
@@ -1639,6 +1683,17 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         this.selectedTasks = selectedTasks;
     }
     
+    public List<JJContact> JJBugBean.getSelectedContacts() {
+        return selectedContacts;
+    }
+    
+    public void JJBugBean.setSelectedContacts(List<JJContact> selectedContacts) {
+        if (selectedContacts != null) {
+            JJBug_.setContacts(new HashSet<JJContact>(selectedContacts));
+        }
+        this.selectedContacts = selectedContacts;
+    }
+    
     public List<JJContact> JJBugBean.completeAssignedTos(String query) {
         List<JJContact> suggestions = new ArrayList<JJContact>();
         for (JJContact jJContact : jJContactService.findAllJJContacts()) {
@@ -1656,6 +1711,9 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         }
         if (JJBug_ != null && JJBug_.getTasks() != null) {
             selectedTasks = new ArrayList<JJTask>(JJBug_.getTasks());
+        }
+        if (JJBug_ != null && JJBug_.getContacts() != null) {
+            selectedContacts = new ArrayList<JJContact>(JJBug_.getContacts());
         }
         return null;
     }

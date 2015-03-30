@@ -93,6 +93,9 @@ public class JJTestcase {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
+	
+	@ManyToMany(mappedBy="testcases",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<JJContact> contacts = new HashSet<JJContact>();
 
 	@Override
 	public boolean equals(Object object) {

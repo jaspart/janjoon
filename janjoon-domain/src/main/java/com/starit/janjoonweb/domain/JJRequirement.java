@@ -130,11 +130,22 @@ public class JJRequirement {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
 	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
+	
+	@ManyToMany(mappedBy="requirements",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<JJContact> contacts = new HashSet<JJContact>();
 
 	@Override
 	public boolean equals(Object object) {
 		return (object instanceof JJRequirement) && (getId() != null) ? getId()
 				.equals(((JJRequirement) object).getId()) : (object == this);
+	}
+	
+	@Override
+	public int hashCode() {
+		if (this.getId() != null)
+			return this.getId().hashCode();
+		else
+			return super.hashCode();
 	}
 
 }

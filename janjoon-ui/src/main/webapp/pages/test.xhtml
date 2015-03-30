@@ -33,7 +33,7 @@
 							offIcon="ui-icon-close">
 							<p:ajax
 								listener="#{jJTestcaseBean.loadData(categoryPanel,category.category,true)}"
-								update=":testFormWest :testFormCenter :testFormNorth:categoryPanel :container"
+								update=":testFormWest :testFormCenter :testFormNorth:categoryPanel "
 								onstart="PF('blockUIWidget').block()"
 								oncomplete="PF('blockUIWidget').unblock()" />
 						</p:selectBooleanButton>
@@ -56,7 +56,7 @@
 							offIcon="ui-icon-close">
 							<p:ajax
 								listener="#{jJTestcaseBean.loadData(null,category.category,true)}"
-								update=":testFormWest :testFormCenter :testFormNorth :container"
+								update=":testFormWest :testFormCenter :testFormNorth "
 								onstart="PF('blockUIWidget').block()"
 								oncomplete="PF('blockUIWidget').unblock()" />
 						</p:selectBooleanButton>
@@ -103,7 +103,7 @@
 										itemLabel="#{c.name}" itemValue="#{c}" />
 									<p:ajax process="@this" partialSubmit="true"
 										listener="#{jJTestcaseBean.createTestcaseTree()}"
-										update=":testFormWest :testFormCenter :container"
+										update=":testFormWest :testFormCenter "
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()" />
 								</p:selectOneMenu>
@@ -151,7 +151,7 @@
 									selection="#{jJTestcaseBean.selectedNode}" dynamic="true">
 									<p:ajax event="select"
 										listener="#{jJTestcaseBean.onNodeSelect}"
-										update=":testFormCenter :container"
+										update=":testFormCenter "
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()" />
 
@@ -262,6 +262,15 @@
 						</p:row>
 					</p:panelGrid>
 				</p:overlayPanel>
+				<h:form id="rate">
+					<p:rating value="#{jJTestcaseBean.rated}" style="float: right;margin-top: 35px;margin-right: -30px;"
+						stars="1" rendered="#{jJTestcaseBean.renderCommentsPanel}">
+						<p:ajax event="rate" listener="#{jJTestcaseBean.onrate}"
+							update=":growlForm" />
+						<p:ajax event="cancel" listener="#{jJTestcaseBean.oncancel}"
+							update=":growlForm" />
+					</p:rating>
+				</h:form>
 				<h:panelGroup id="container"
 					style="width: 55%;float: right;margin-right: 10px;">
 					<p:fieldset legend="Comments" toggleable="true" collapsed="true"
@@ -305,7 +314,7 @@
 								<p:selectBooleanCheckbox
 									rendered="#{rowName['class'].simpleName == 'JJBuild'}"
 									value="#{jJTestcaseBean.value[colIdx][rowIdx]}">
-									<p:ajax update=":growlForm :testFormCenter :container"
+									<p:ajax update=":growlForm :testFormCenter :container :rate"
 										listener="#{jJTestcaseBean.onCellEdit(colIdx,rowIdx)}"
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock();" />
@@ -379,7 +388,7 @@
 							<p:commandButton id="copyButton" icon="ui-icon-copy"
 								disabled="#{!loginBean.authorisationService.wTest}"
 								action="#{jJTestcaseBean.onCopyEvent}"
-								update=":growlForm :testFormCenter:testcaseRecapDataTable :container">
+								update=":growlForm :testFormCenter:testcaseRecapDataTable :container :rate">
 								<f:setPropertyActionListener value="#{tcr.testcase}"
 									target="#{jJTestcaseBean.copyTestcase}" />
 							</p:commandButton>
@@ -449,7 +458,7 @@
 									<p:commandButton id="copyButton" icon="ui-icon-copy"
 										disabled="#{!loginBean.authorisationService.wTest}"
 										action="#{jJTestcaseBean.onCopyEvent}"
-										update=":growlForm :testFormCenter:testcaseRecapDataTable :container">
+										update=":growlForm :testFormCenter:testcaseRecapDataTable ">
 										<f:setPropertyActionListener
 											value="#{jJTestcaseBean.testcase}"
 											target="#{jJTestcaseBean.copyTestcase}" />
@@ -533,7 +542,7 @@
 					<p:fileUpload
 						fileUploadListener="#{jJTestcaseBean.handleImportXML}"
 						mode="advanced" dragDropSupport="false"
-						update="messages :testFormCenter :testFormWest :testFormNorth :container"
+						update="messages :testFormCenter :testFormWest :testFormNorth "
 						sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(xml)$/" />
 
 				</h:form>
@@ -545,8 +554,7 @@
 			header="#{messages[jJTestcaseBean.message]}" modal="true"
 			widgetVar="testcaseDialogWidget" dynamic="true" resizable="false"
 			style="top: 30px;">
-			<p:ajax event="close"
-				update=":testFormCenter :testFormWest :container"
+			<p:ajax event="close" update=":testFormCenter :testFormWest "
 				listener="#{jJTestcaseBean.closeDialog}" />
 			<p:outputPanel id="testcaseDialogPanel">
 				<ui:include src="testDialog.xhtml" />
@@ -559,8 +567,7 @@
 			<p:hotkey bind="space" handler="TestcaseExecSuccessButton.jq.click()" />
 			<p:hotkey bind="S" handler="TestcaseExecSuccessButton.jq.click()" />
 			<p:hotkey bind="F" handler="TestcaseExecFailedButton.jq.click()" />
-			<p:ajax event="close"
-				update=":testFormCenter :testFormWest :container"
+			<p:ajax event="close" update=":testFormCenter :testFormWest "
 				listener="#{jJTeststepexecutionBean.closeDialog()}" />
 			<p:outputPanel id="runTestcaseDialogPanel">
 				<h:form id="runForm">
@@ -649,7 +656,7 @@
 								<p:commandButton id="validateButton"
 									value="#{messages.test_exec_valid_label}"
 									icon="ui-icon-circle-check"
-									update=":testFormCenter :testFormWest :growlForm :container"
+									update=":testFormCenter :testFormWest :growlForm "
 									actionListener="#{jJTeststepexecutionBean.validateTab}"
 									style="float: right;"
 									disabled="#{jJTeststepexecutionBean.disabledTestcase}" />

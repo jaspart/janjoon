@@ -138,6 +138,8 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
     
     private List<JJTestcase> JJRequirementBean.selectedTestcases;
     
+    private List<JJContact> JJRequirementBean.selectedContacts;
+    
     public String JJRequirementBean.getName() {
         return name;
     }
@@ -893,6 +895,22 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         testcasesCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testcasesCreateInputMessage);
         
+        HtmlOutputText contactsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        contactsCreateOutput.setId("contactsCreateOutput");
+        contactsCreateOutput.setValue("Contacts:");
+        htmlPanelGrid.getChildren().add(contactsCreateOutput);
+        
+        HtmlOutputText contactsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        contactsCreateInput.setId("contactsCreateInput");
+        contactsCreateInput.setValue("This relationship is managed from the JJContact side");
+        htmlPanelGrid.getChildren().add(contactsCreateInput);
+        
+        Message contactsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        contactsCreateInputMessage.setId("contactsCreateInputMessage");
+        contactsCreateInputMessage.setFor("contactsCreateInput");
+        contactsCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(contactsCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -1591,6 +1609,22 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         testcasesEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testcasesEditInputMessage);
         
+        HtmlOutputText contactsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        contactsEditOutput.setId("contactsEditOutput");
+        contactsEditOutput.setValue("Contacts:");
+        htmlPanelGrid.getChildren().add(contactsEditOutput);
+        
+        HtmlOutputText contactsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        contactsEditInput.setId("contactsEditInput");
+        contactsEditInput.setValue("This relationship is managed from the JJContact side");
+        htmlPanelGrid.getChildren().add(contactsEditInput);
+        
+        Message contactsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        contactsEditInputMessage.setId("contactsEditInputMessage");
+        contactsEditInputMessage.setFor("contactsEditInput");
+        contactsEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(contactsEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -1949,6 +1983,16 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         testcasesValue.setValue("This relationship is managed from the JJTestcase side");
         htmlPanelGrid.getChildren().add(testcasesValue);
         
+        HtmlOutputText contactsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        contactsLabel.setId("contactsLabel");
+        contactsLabel.setValue("Contacts:");
+        htmlPanelGrid.getChildren().add(contactsLabel);
+        
+        HtmlOutputText contactsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        contactsValue.setId("contactsValue");
+        contactsValue.setValue("This relationship is managed from the JJContact side");
+        htmlPanelGrid.getChildren().add(contactsValue);
+        
         return htmlPanelGrid;
     }
     
@@ -2160,6 +2204,17 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         this.selectedTestcases = selectedTestcases;
     }
     
+    public List<JJContact> JJRequirementBean.getSelectedContacts() {
+        return selectedContacts;
+    }
+    
+    public void JJRequirementBean.setSelectedContacts(List<JJContact> selectedContacts) {
+        if (selectedContacts != null) {
+            JJRequirement_.setContacts(new HashSet<JJContact>(selectedContacts));
+        }
+        this.selectedContacts = selectedContacts;
+    }
+    
     public String JJRequirementBean.onEdit() {
         if (JJRequirement_ != null && JJRequirement_.getBugs() != null) {
             selectedBugs = new ArrayList<JJBug>(JJRequirement_.getBugs());
@@ -2175,6 +2230,9 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         }
         if (JJRequirement_ != null && JJRequirement_.getTestcases() != null) {
             selectedTestcases = new ArrayList<JJTestcase>(JJRequirement_.getTestcases());
+        }
+        if (JJRequirement_ != null && JJRequirement_.getContacts() != null) {
+            selectedContacts = new ArrayList<JJContact>(JJRequirement_.getContacts());
         }
         return null;
     }

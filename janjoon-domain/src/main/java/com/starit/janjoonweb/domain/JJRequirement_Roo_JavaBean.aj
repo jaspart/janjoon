@@ -288,4 +288,12 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.testcases = testcases;
     }
     
+    public Set<JJContact> JJRequirement.getContacts() {
+        return this.contacts;
+    }
+    
+    public void JJRequirement.setContacts(Set<JJContact> contacts) {
+        this.contacts = contacts;
+    }
+    
 }

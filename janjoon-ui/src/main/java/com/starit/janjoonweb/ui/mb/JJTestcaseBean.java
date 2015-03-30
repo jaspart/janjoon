@@ -27,6 +27,7 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.event.RateEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.StreamedContent;
@@ -149,6 +150,7 @@ public class JJTestcaseBean {
 		this.jJMessageService = jJMessageService;
 	}
 
+	private Integer rated;
 	private JJTestcase testcase;
 	private JJProject project;
 	private JJProduct product;
@@ -161,6 +163,14 @@ public class JJTestcaseBean {
 	private List<JJBuild> rowNames = new ArrayList<JJBuild>();
 	private List<JJTestcase> colNames = new ArrayList<JJTestcase>();
 	private ArrayList<ArrayList<Boolean>> value = new ArrayList<ArrayList<Boolean>>();
+
+	public Integer getRated() {
+		return rated;
+	}
+
+	public void setRated(Integer rated) {
+		this.rated = rated;
+	}
 
 	public float getReqCoverage() {
 		return reqCoverage;
@@ -697,6 +707,8 @@ public class JJTestcaseBean {
 				this.getProject();
 				this.getProduct();
 				this.getVersion();
+				rated = (((LoginBean) LoginBean.findBean("loginBean"))
+						.getContact().getTestcases().contains(testcase)) ? 1 : 0;
 
 				chapter = null;
 
@@ -1822,6 +1834,42 @@ public class JJTestcaseBean {
 					+ "-Tests.xml");
 		} else
 			return null;
+	}
+	
+	public void onrate(RateEvent rateEvent) {
+
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
+		if (!contact.getTestcases().contains(testcase)) {
+			contact.getTestcases()
+					.add(jJTestcaseService.findJJTestcase(testcase
+							.getId()));
+			((LoginBean) LoginBean.findBean("loginBean")).getjJContactService()
+					.updateJJContact(contact);
+		
+
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				RequirementBean.REQUIREMENT_SUBSCRIPTION_RATE, "Testcase");
+		facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
+	
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);}
+	}
+
+	public void oncancel() {
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+								.getContact();
+		if (contact.getTestcases().contains(testcase)) {
+			contact.getTestcases()
+					.remove(jJTestcaseService.findJJTestcase(testcase
+							.getId()));
+			((LoginBean) LoginBean.findBean("loginBean")).getjJContactService()
+					.updateJJContact(contact);	
+
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				RequirementBean.REQUIREMENT_SUBSCRIPTION_CANCEL_RATE, "Testcase");
+		facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
+	
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);}
 	}
 
 }

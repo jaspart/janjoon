@@ -236,9 +236,9 @@ public class LoginBean implements Serializable {
 
 		if (contact != null) {
 			enable = !(contact == null || contact.getEmail().equals(""));
-			return contact;
-		} else if (enable && !username.isEmpty()) {
-			contact = jJContactService.getContactByEmail(username, true);
+			if (enable && !username.isEmpty()) {
+				contact = jJContactService.getContactByEmail(username, true);
+			}
 			return contact;
 		} else
 			return null;

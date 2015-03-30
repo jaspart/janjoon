@@ -178,4 +178,12 @@ privileged aspect JJTestcase_Roo_JavaBean {
         this.messages = messages;
     }
     
+    public Set<JJContact> JJTestcase.getContacts() {
+        return this.contacts;
+    }
+    
+    public void JJTestcase.setContacts(Set<JJContact> contacts) {
+        this.contacts = contacts;
+    }
+    
 }

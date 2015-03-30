@@ -191,6 +191,14 @@ privileged aspect JJBug_Roo_JavaBean {
         this.tasks = tasks;
     }
     
+    public Set<JJContact> JJBug.getContacts() {
+        return this.contacts;
+    }
+    
+    public void JJBug.setContacts(Set<JJContact> contacts) {
+        this.contacts = contacts;
+    }
+    
     public JJContact JJBug.getAssignedTos() {
         return this.assignedTos;
     }

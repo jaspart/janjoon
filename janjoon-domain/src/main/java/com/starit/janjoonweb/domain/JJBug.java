@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -94,6 +95,9 @@ public class JJBug {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bug")
 	private Set<JJTask> tasks = new HashSet<JJTask>();
+	
+	@ManyToMany(mappedBy="bugs",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<JJContact> contacts = new HashSet<JJContact>();
 
 	@ManyToOne
 	private JJContact assignedTos;
@@ -105,6 +109,14 @@ public class JJBug {
 	public boolean equals(Object object) {
 		return (object instanceof JJBug) && (getId() != null) ? getId()
 				.equals(((JJBug) object).getId()) : (object == this);
+	}
+	
+	@Override
+	public int hashCode() {
+		if (this.getId() != null)
+			return this.getId().hashCode();
+		else
+			return super.hashCode();
 	}
 
 }
