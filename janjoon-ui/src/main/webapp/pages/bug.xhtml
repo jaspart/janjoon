@@ -30,9 +30,9 @@
 											rendered="#{loginBean.enable and jJBugBean.viewBug != null and jJBugBean.viewBug.id != null}"
 											stars="1">
 											<p:ajax event="rate" listener="#{jJBugBean.onrate}"
-												update=":growlForm" />
+												update=":growlForm :messageCreationForm :headerForm:communicationButton" />
 											<p:ajax event="cancel" listener="#{jJBugBean.oncancel}"
-												update=":growlForm" />
+												update=":growlForm :messageCreationForm :headerForm:communicationButton" />
 										</p:rating>
 										<p:commandButton id="createButton" icon="ui-icon-plusthick"
 											value="#{messages.bug_table_add_label}" update=":createForm "

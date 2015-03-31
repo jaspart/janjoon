@@ -42,12 +42,9 @@ public class JJMessageBean {
 	private SelectItem[] productOptions;
 	private SelectItem[] creatorOptions;
 	private SelectItem[] criticityOptions;
-	private SelectItem[] statusOptions;
-	// private List<JJMessage> enabledJJMessage;
+	private SelectItem[] statusOptions;	
 	private List<JJMessage> allJJMessages;
 	private List<JJMessage> alertMessages;
-	//private List<JJMessage> comMessages;
-
 	private LazyMessageDataModel mainMessages;
 	private List<String> columns;
 	private boolean collapsedLayoutPanel = true;
@@ -56,10 +53,11 @@ public class JJMessageBean {
 
 	public List<JJMessage> getAlertMessages() {
 
-		if (alertMessages == null) {
+		if (alertMessages == null && ((LoginBean) LoginBean.findBean("loginBean")).isEnable()) {
 			alertMessages = jJMessageService.getAlertMessages(
 					LoginBean.getProject(), LoginBean.getProduct(),((LoginBean) LoginBean
-							.findBean("loginBean")).getContact().getCompany());
+							.findBean("loginBean")).getContact().getCompany(),((LoginBean) LoginBean
+									.findBean("loginBean")).getContact());
 		}
 		return alertMessages;
 	}
@@ -247,7 +245,8 @@ public class JJMessageBean {
 
 			mainMessages = new LazyMessageDataModel(jJMessageService,
 					LoginBean.getProject(), LoginBean.getProduct(),((LoginBean) LoginBean
-							.findBean("loginBean")).getContact().getCompany());
+							.findBean("loginBean")).getContact().getCompany(),((LoginBean) LoginBean
+									.findBean("loginBean")).getContact());
 
 			// RequestContext context = RequestContext.getCurrentInstance();
 			// context.update(":headerForm:dataTable1");
@@ -270,7 +269,8 @@ public class JJMessageBean {
 
 			mainMessages = new LazyMessageDataModel(jJMessageService,
 					LoginBean.getProject(), LoginBean.getProduct(),((LoginBean) LoginBean
-							.findBean("loginBean")).getContact().getCompany());
+							.findBean("loginBean")).getContact().getCompany(),((LoginBean) LoginBean
+									.findBean("loginBean")).getContact());
 			// // if (!login.isCollapsedMesPanel()) {
 			// RequestContext context = RequestContext.getCurrentInstance();
 			// context.update("messagePanel");

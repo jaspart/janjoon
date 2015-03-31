@@ -266,9 +266,9 @@
 					<p:rating value="#{jJTestcaseBean.rated}" style="float: right;margin-top: 35px;margin-right: -30px;"
 						stars="1" rendered="#{jJTestcaseBean.renderCommentsPanel}">
 						<p:ajax event="rate" listener="#{jJTestcaseBean.onrate}"
-							update=":growlForm" />
+							update=":growlForm :messageCreationForm :headerForm:communicationButton" />
 						<p:ajax event="cancel" listener="#{jJTestcaseBean.oncancel}"
-							update=":growlForm" />
+							update=":growlForm :messageCreationForm :headerForm:communicationButton" />
 					</p:rating>
 				</h:form>
 				<h:panelGroup id="container"

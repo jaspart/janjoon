@@ -18,11 +18,11 @@ public interface JJMessageService {
 	
 	public void updateAll(JJCompany company);
 	
-	public List<JJMessage> getAlertMessages(JJProject project, JJProduct product,JJCompany company);
+	public List<JJMessage> getAlertMessages(JJProject project, JJProduct product,JJCompany company,JJContact contact);
 	
-	public List<JJMessage> getActifMessages(MutableInt size,int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters,JJProject project,JJProduct product,JJCompany company);
+	public List<JJMessage> getActifMessages(MutableInt size,int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters,JJProject project,JJProduct product,JJCompany company,JJContact contact);
 	
-	public Integer getMessagesCount(JJProject project,JJProduct product,JJCompany company);
+	public Integer getMessagesCount(JJProject project,JJProduct product,JJCompany company,JJContact contact);
 	
 	
 }

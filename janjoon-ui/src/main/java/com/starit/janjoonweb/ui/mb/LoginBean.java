@@ -8,9 +8,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Map.Entry;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -75,7 +77,6 @@ public class LoginBean implements Serializable {
 	private AuthorisationService authorisationService;
 	static Logger logger = Logger.getLogger("loginBean-Logger");
 	private boolean mobile;
-	// private boolean collapsedMesPanel = true;
 	private String showMarquee;
 	private FacesMessage facesMessage;
 
@@ -111,8 +112,8 @@ public class LoginBean implements Serializable {
 
 	@Autowired
 	public LoginBean(AuthenticationManager authenticationManager) {
-		this.authenticationManager = authenticationManager;
 
+		this.authenticationManager = authenticationManager;
 		this.mobile = (((HttpServletRequest) FacesContext.getCurrentInstance()
 				.getExternalContext().getRequest()).getHeader("User-Agent")
 				.indexOf("Mobile")) != -1;
@@ -189,6 +190,7 @@ public class LoginBean implements Serializable {
 					.getAttribute("SPRING_SECURITY_SAVED_REQUEST");
 			if (savedRequest != null) {
 				String s = savedRequest.getRedirectUrl();
+
 				s = s.substring(s.lastIndexOf("/") + 1);
 				int index = s.indexOf(".");
 				if (index != -1) {
@@ -207,6 +209,20 @@ public class LoginBean implements Serializable {
 								FacesMessage.SEVERITY_ERROR, "");
 					}
 
+				} else if (savedRequest.getParameterMap() != null
+						&& !savedRequest.getParameterMap().isEmpty()) {
+					s = s + ".jsf?";
+					Iterator<Entry<String, String[]>> it = savedRequest
+							.getParameterMap().entrySet().iterator();
+					while (it.hasNext()) {
+						Map.Entry pairs = (Map.Entry) it.next();
+						for (String st : (String[]) pairs.getValue()) {
+							System.err.println(pairs.getKey() + ":" + st);
+							s = s + pairs.getKey() + "=" + st + "&";
+						}
+					}
+					s=s.substring(0,s.length()-1);
+					System.out.println(s);
 				}
 				return s;
 			}
@@ -234,15 +250,12 @@ public class LoginBean implements Serializable {
 
 	public JJContact getContact() {
 
-		if (contact != null) {
-			enable = !(contact == null || contact.getEmail().equals(""));
-			if (enable && !username.isEmpty()) {
-				contact = jJContactService.getContactByEmail(username, true);
-			}
-			return contact;
+		if (enable && !username.isEmpty()) {
+			contact = jJContactService.getContactByEmail(username, true);
 		} else
-			return null;
+			contact = null;
 
+		return contact;
 	}
 
 	public void setContact(JJContact contact) {
@@ -370,7 +383,7 @@ public class LoginBean implements Serializable {
 
 		if (messageCount == null)
 			messageCount = jJMessageService.getMessagesCount(getProject(),
-					getProduct(),getContact().getCompany());
+					getProduct(), getContact().getCompany(),getContact());
 
 		return messageCount;
 	}
@@ -1384,85 +1397,93 @@ public class LoginBean implements Serializable {
 		else
 			return null;
 	}
-	
-	public void loadStyleSheet(StyleSheet style,String param)
-	{
-		List<JJConfiguration> configs=jJConfigurationService.getConfigurations(null,param,true);
-		if(configs != null && !configs.isEmpty())
-		{
-			JJConfiguration specificationStylesheet=configs.get(0);
-			String styleSheet=specificationStylesheet.getVal().substring(1, 
-					specificationStylesheet.getVal().length()-1);
-			String[] keyValuePairs = styleSheet.split(";");              //split the string to creat key-value pairs
-			//Map<String,Map<String,String>> map = new HashMap<>();   
-			
-			for(String pair : keyValuePairs)                        //iterate over the pais
+
+	public void loadStyleSheet(StyleSheet style, String param) {
+		List<JJConfiguration> configs = jJConfigurationService
+				.getConfigurations(null, param, true);
+		if (configs != null && !configs.isEmpty()) {
+			JJConfiguration specificationStylesheet = configs.get(0);
+			String styleSheet = specificationStylesheet.getVal().substring(1,
+					specificationStylesheet.getVal().length() - 1);
+			String[] keyValuePairs = styleSheet.split(";"); // split the string
+															// to creat
+															// key-value pairs
+			// Map<String,Map<String,String>> map = new HashMap<>();
+
+			for (String pair : keyValuePairs) // iterate over the pais
 			{
-			    String[] entry = pair.split(":");                   //split the pairs to get key and value 
-			   // map.put(entry[0].trim(), entry[1].trim());   //add them to the hashmap
-			    String tag=entry[1].replace("'", " ");
-			    String[] styleKeyValue = tag.trim().substring(1, tag.trim().length()-1).split(",");
-			    HashMap<String,String> styleMap = new HashMap<>();
-			    for(String stylePair : styleKeyValue)                        //iterate over the pais
+				String[] entry = pair.split(":"); // split the pairs to get key
+													// and value
+				// map.put(entry[0].trim(), entry[1].trim()); //add them to the
+				// hashmap
+				String tag = entry[1].replace("'", " ");
+				String[] styleKeyValue = tag.trim()
+						.substring(1, tag.trim().length() - 1).split(",");
+				HashMap<String, String> styleMap = new HashMap<>();
+				for (String stylePair : styleKeyValue) // iterate over the pais
 				{
-				    String[] styleEntry = stylePair.split("="); 
-				    System.err.println(styleEntry[0].trim()+"="+styleEntry[1].trim());
-				    styleMap.put(styleEntry[0].trim(), styleEntry[1].trim());
-				}			    
-			    System.err.println(entry[0].replace("'", " ")+"= XXX");
-			    if(!entry[0].replace("'", " ").startsWith("."))
-			    	style.loadTagStyle(entry[0].replace("'", " ").trim(), styleMap);
-			    else
-			    	style.loadStyle(entry[0].replace("'", " ").trim().substring(1), styleMap);
-			   
-			}			
-		}else 
-		{
+					String[] styleEntry = stylePair.split("=");
+					System.err.println(styleEntry[0].trim() + "="
+							+ styleEntry[1].trim());
+					styleMap.put(styleEntry[0].trim(), styleEntry[1].trim());
+				}
+				System.err.println(entry[0].replace("'", " ") + "= XXX");
+				if (!entry[0].replace("'", " ").startsWith("."))
+					style.loadTagStyle(entry[0].replace("'", " ").trim(),
+							styleMap);
+				else
+					style.loadStyle(entry[0].replace("'", " ").trim()
+							.substring(1), styleMap);
+
+			}
+		} else {
 			JJConfiguration configuration = new JJConfiguration();
 			configuration.setName(param);
-			configuration
-					.setDescription("specify PDF Style");
-			configuration.setCreatedBy(((LoginBean)LoginBean.findBean("loginBean")).getContact());
+			configuration.setDescription("specify PDF Style");
+			configuration.setCreatedBy(((LoginBean) LoginBean
+					.findBean("loginBean")).getContact());
 			configuration.setCreationDate(new Date());
 			configuration.setEnabled(true);
 			configuration.setParam(param);
-			configuration.setVal("{'logo':('background'='/intern/images/logo.png');"+
-			"'title':('font'='verdana', 'size'='12', 'font-weight'='bold', 'style'='normal', 'align'='center');"+
-			"'h1':('font'='verdana', 'size'='10', 'font-weight'='normal', 'style'='normal', 'align'='left')}");
-			jJConfigurationService.saveJJConfiguration(configuration);			
-			loadStyleSheet(style,param);
+			configuration
+					.setVal("{'logo':('background'='/intern/images/logo.png');"
+							+ "'title':('font'='verdana', 'size'='12', 'font-weight'='bold', 'style'='normal', 'align'='center');"
+							+ "'h1':('font'='verdana', 'size'='10', 'font-weight'='normal', 'style'='normal', 'align'='left')}");
+			jJConfigurationService.saveJJConfiguration(configuration);
+			loadStyleSheet(style, param);
 		}
-		
-	}
 
+	}
 
 	public static void copyUploadImages(boolean copy)
 			throws FileNotFoundException, IOException {
 		Properties properties = new Properties();
-		
-		String serverName =((HttpServletRequest) FacesContext.getCurrentInstance()
-				.getExternalContext().getRequest()).getServerName();
-		String janjoon_directory="";
-		
-		boolean contextPath=((HttpServletRequest) FacesContext.getCurrentInstance()
-				.getExternalContext().getRequest()).getContextPath().contains("janjoon-ui");
-		
-		if(serverName.contains("localhost") && contextPath)
-		{
-			janjoon_directory="src"+File.separator+"main"+File.separator+"webapp"+File.separator+"images";
-		}else			
-		{
+
+		String serverName = ((HttpServletRequest) FacesContext
+				.getCurrentInstance().getExternalContext().getRequest())
+				.getServerName();
+		String janjoon_directory = "";
+
+		boolean contextPath = ((HttpServletRequest) FacesContext
+				.getCurrentInstance().getExternalContext().getRequest())
+				.getContextPath().contains("janjoon-ui");
+
+		if (serverName.contains("localhost") && contextPath) {
+			janjoon_directory = "src" + File.separator + "main"
+					+ File.separator + "webapp" + File.separator + "images";
+		} else {
 			ServletContext servletContext = (ServletContext) FacesContext
 					.getCurrentInstance().getExternalContext().getContext();
 			String path = servletContext.getRealPath("WEB-INF" + File.separator
 					+ "classes")
 					+ File.separator;
 			properties.load(new FileInputStream(path + "email.properties"));
-			janjoon_directory="lib" + File.separator+ properties.getProperty("janjoon.version") + File.separator
-					+ "images";
-		}		
-		
-		System.err.println("JANJOON_DIRECTORY = "+janjoon_directory);
+			janjoon_directory = "lib" + File.separator
+					+ properties.getProperty("janjoon.version")
+					+ File.separator + "images";
+		}
+
+		System.err.println("JANJOON_DIRECTORY = " + janjoon_directory);
 		File deletedFile = new File(janjoon_directory);
 		FileUtils.deleteDirectory(deletedFile);
 		if (copy) {

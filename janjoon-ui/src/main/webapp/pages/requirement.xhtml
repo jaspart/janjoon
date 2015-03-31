@@ -71,12 +71,13 @@
 				<p:remoteCommand name="updateTree" update="@form" />
 				<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
 					style="float: right;" />
-				<p:rating id="rate" value="#{requirementBean.rated}"  style="float: right;" stars="1"
+				<p:rating id="rate" value="#{requirementBean.rated}"  
+				style="float: right;margin-top: 3%;margin-right: -2%;" stars="1"
 						rendered="#{requirementBean.requirement != null}">
 					<p:ajax event="rate" listener="#{requirementBean.onrate}"
-						update=":growlForm"  />
+						update=":growlForm :messageCreationForm :headerForm:communicationButton"  />
 					<p:ajax event="cancel" listener="#{requirementBean.oncancel}"
-						update=":growlForm" />
+						update=":growlForm :messageCreationForm :headerForm:communicationButton" />
 				</p:rating>
 				<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
 					dynamic="true" style="width:40%">

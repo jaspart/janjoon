@@ -1008,6 +1008,13 @@ public class JJBugBean {
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		if (!contact.getBugs().contains(viewBug)) {
+			
+			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
+			if(((JJMessageBean)LoginBean.findBean("jJMessageBean")) != null)
+			{
+				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
+				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setMainMessages(null);
+			}
 			contact.getBugs().add(jJBugService.findJJBug(viewBug.getId()));
 			((LoginBean) LoginBean.findBean("loginBean")).getjJContactService()
 					.updateJJContact(contact);
@@ -1028,6 +1035,13 @@ public class JJBugBean {
 			((LoginBean) LoginBean.findBean("loginBean")).getjJContactService()
 					.updateJJContact(contact);
 
+			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
+			if(((JJMessageBean)LoginBean.findBean("jJMessageBean")) != null)
+			{
+				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
+				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setMainMessages(null);
+			}			
+			
 			FacesMessage facesMessage = MessageFactory
 					.getMessage(
 							RequirementBean.REQUIREMENT_SUBSCRIPTION_CANCEL_RATE,

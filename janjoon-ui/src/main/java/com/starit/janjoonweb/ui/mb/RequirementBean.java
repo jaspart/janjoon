@@ -691,11 +691,18 @@ public class RequirementBean {
 		return suggestions;
 	}
 
-	public void onrate(RateEvent rateEvent) {
+	public void onrate(RateEvent rateEvent) {		
 
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		if (!contact.getRequirements().contains(requirement)) {
+			
+			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
+			if(((JJMessageBean)LoginBean.findBean("jJMessageBean")) != null)
+			{
+				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
+				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setMainMessages(null);
+			}
 			contact.getRequirements()
 					.add(jJRequirementService.findJJRequirement(requirement
 							.getId()));
@@ -714,6 +721,13 @@ public class RequirementBean {
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		if (contact.getRequirements().contains(requirement)) {
+			
+			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
+			if(((JJMessageBean)LoginBean.findBean("jJMessageBean")) != null)
+			{
+				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
+				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setMainMessages(null);
+			}
 			contact.getRequirements()
 					.remove(jJRequirementService.findJJRequirement(requirement
 							.getId()));

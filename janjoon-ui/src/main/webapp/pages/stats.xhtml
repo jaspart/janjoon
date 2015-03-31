@@ -66,7 +66,7 @@
 				<p:tabView id="SprintTabView" dynamic="true" widgetVar="SprintTab"
 					value="#{jJSprintBean.sprintList}" var="jjsprint">
 					<p:tab title="#{jjsprint.sprint.name}" rendered="#{!jjsprint.render}">
-						<p:barChart value="#{jjsprint.chart.chartModel}" legendPosition="e"
+						<p:barChart value="#{jjsprint.chartModel}" legendPosition="e"
 							widgetVar="barChart_#{jjsprint.sprint.id}_Widget" minY="0"
 							rendered="#{!jjsprint.render}" xaxisLabel="Date" yaxisLabel="WorkLoad" />
 					</p:tab>

@@ -1841,6 +1841,13 @@ public class JJTestcaseBean {
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		if (!contact.getTestcases().contains(testcase)) {
+			
+			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
+			if(((JJMessageBean)LoginBean.findBean("jJMessageBean")) != null)
+			{
+				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
+				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setMainMessages(null);
+			}
 			contact.getTestcases()
 					.add(jJTestcaseService.findJJTestcase(testcase
 							.getId()));
@@ -1859,6 +1866,13 @@ public class JJTestcaseBean {
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 								.getContact();
 		if (contact.getTestcases().contains(testcase)) {
+			
+			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
+			if(((JJMessageBean)LoginBean.findBean("jJMessageBean")) != null)
+			{
+				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
+				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setMainMessages(null);
+			}
 			contact.getTestcases()
 					.remove(jJTestcaseService.findJJTestcase(testcase
 							.getId()));

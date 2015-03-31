@@ -4473,15 +4473,7 @@ public class JJRequirementBean {
 		requirement = jJRequirementService.findJJRequirement(requirement
 				.getId());
 		if (category.getStage() == categoryList.get(0).getStage()) {
-			DOWN = true;
-
-//			for (JJRequirement req : requirement.getRequirementLinkUp()) {
-//				if (req.getEnabled()) {
-//					UP = true;
-//					break;
-//				}
-//			}
-			
+			DOWN = true;			
 			UP=jJRequirementService.haveLinkUp(requirement);
 
 			sizeIsOne = true;
@@ -4490,32 +4482,11 @@ public class JJRequirementBean {
 				&& !sizeIsOne) {
 
 			UP = true;
-
-//			for (JJRequirement req : requirement.getRequirementLinkDown()) {
-//				if (req.getEnabled()) {
-//					DOWN = true;
-//					break;
-//				}
-//			}			
+	
 			DOWN=jJRequirementService.haveLinkDown(requirement);
 
-		} else {
-
-//			for (JJRequirement req : requirement.getRequirementLinkUp()) {
-//				if (req.getEnabled()) {
-//					UP = true;
-//					break;
-//				}
-//			}
-			
+		} else {			
 			UP=jJRequirementService.haveLinkUp(requirement);
-
-//			for (JJRequirement req : requirement.getRequirementLinkDown()) {
-//				if (req.getEnabled()) {
-//					DOWN = true;
-//					break;
-//				}
-//			}
 			DOWN=jJRequirementService.haveLinkDown(requirement);
 		}
 
@@ -4526,7 +4497,7 @@ public class JJRequirementBean {
 		}
 
 		for (JJTask task : tasks) {
-			if (task.getEndDateReal() == null) {
+			if (!(task.getEndDateReal() != null || (task.getStatus() != null && task.getStatus().getName().equalsIgnoreCase("DONE")))) {
 				ENCOURS = true;
 				FINIS = false;
 				break;

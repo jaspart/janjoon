@@ -13,7 +13,9 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProjectService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
+import com.starit.janjoonweb.ui.mb.JJRequirementBean;
 import com.starit.janjoonweb.ui.mb.LoginBean;
+import com.starit.janjoonweb.ui.mb.RequirementBean;
 
 @Aspect
 @Configurable
@@ -47,7 +49,7 @@ public class AppLogger {
 		} else {
 			task.setUpdatedBy(contact);
 			task.setUpdatedDate(new Date());
-		}
+		}	
 
 		ContactCalendarUtil calendarUtil;
 		boolean assignedTo = false;

@@ -1972,6 +1972,15 @@ public class JJTaskBean {
 		}
 
 		ttt = jJTaskService.findJJTask(ttt.getId());
+		
+		if(ttt.getRequirement() != null)
+		{
+			if(((RequirementBean) LoginBean.findBean("requirementBean")) != null)
+				((RequirementBean) LoginBean.findBean("requirementBean")).setRootNode(null);
+			JJRequirementBean jJRequirementBean=(JJRequirementBean) LoginBean.findBean("jJRequirementBean");
+			jJRequirementBean.updateDataTable(ttt.getRequirement(), JJRequirementBean.UPDATE_OPERATION,false);
+			
+		}
 
 	}
 
