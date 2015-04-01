@@ -161,12 +161,12 @@ public class JJTask {
 	{
 		if(this.getRequirement() != null && this.getRequirement().getProduct() != null)
 			return this.getRequirement().getProduct();
-		else if(this.getBug() != null && this.getVersioning() != null)
-			return this.getBug().getVersioning().getProduct();
-		else if(this.getBug() != null && this.getBug().getBuild() != null && this.getBug().getBuild().getVersion() != null)
-			return this.getBug().getBuild().getVersion().getProduct();
+		else if(this.getBug() != null && this.getBug().getProduct() != null)
+			return this.getBug().getProduct();		
 		else if(this.getTestcase() != null)
-			return this.getTestcase().getRequirement().getProduct();		
+			return this.getTestcase().getRequirement().getProduct();
+		else if(this.getVersioning() != null)
+			return this.getVersioning().getProduct();
 		else
 			return null;
 	}

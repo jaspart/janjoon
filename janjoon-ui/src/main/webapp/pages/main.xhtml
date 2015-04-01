@@ -18,7 +18,7 @@
 					value="#{jJMessageBean.mainMessages}" rowKey="#{mes.id}" var="mes"
 					widgetVar="messageTable" paginator="true" rows="4"
 					paginatorPosition="bottom" sortBy="#{mes.creationDate}"
-					sortOrder="ASCENDING"
+					sortOrder="DESCENDING"
 					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 					lazy="true" emptyMessage="#{messages.label_notFound}"
 					rowClasses="order-table-odd-row,order-table-even-row">
@@ -60,7 +60,7 @@
 					</p:column>
 					<p:column headerText="#{messages.main_communication_message_title}"
 						filterBy="#{mes.message}" filterMatchMode="contains"
-						sortBy="#{mes.message}" filterStyle="width: 85%;"
+						sortBy="#{mes.creationDate}" filterStyle="width: 85%;"
 						style="width: 65%;min-width: 200px">
 						<h:outputText
 							style="width: 100% !important;color: #22222222;font-size: 14px;white-space: pre-wrap;"

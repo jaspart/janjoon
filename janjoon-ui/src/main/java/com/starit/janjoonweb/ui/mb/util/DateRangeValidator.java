@@ -101,7 +101,7 @@ public class DateRangeValidator implements Validator {
 							return; // Let required="true" handle.
 						}
 
-						if (starDate.after(endDate)) {
+						if (starDate != null && starDate.after(endDate)) {
 							throw new ValidatorException(
 									new FacesMessage(
 											FacesMessage.SEVERITY_ERROR,
@@ -132,7 +132,7 @@ public class DateRangeValidator implements Validator {
 					if (edition.equalsIgnoreCase("startDate")) {
 						Date end = taskData.getEndDate();
 
-						if (endDate.after(end)) {
+						if (end != null && endDate.after(end)) {
 							throw new ValidatorException(new FacesMessage(
 									FacesMessage.SEVERITY_ERROR,
 									"Start date may not be after end date.",
@@ -162,7 +162,7 @@ public class DateRangeValidator implements Validator {
 					if (edition.equalsIgnoreCase("endDate")) {
 						Date start = taskData.getStartDate();
 
-						if (start.after(endDate)) {
+						if (start != null && start.after(endDate)) {
 							throw new ValidatorException(new FacesMessage(
 									FacesMessage.SEVERITY_ERROR,
 									"End date may not be Before Start date.",
@@ -190,9 +190,9 @@ public class DateRangeValidator implements Validator {
 
 					}
 					if (edition.equalsIgnoreCase("startDateReal")) {
-						Date end = taskData.getEndDate();
+						Date end = taskData.getTask().getEndDateReal();
 
-						if (end.before(endDate)) {
+						if (end != null && end.before(endDate)) {
 							throw new ValidatorException(
 									new FacesMessage(
 											FacesMessage.SEVERITY_ERROR,

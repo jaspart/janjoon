@@ -1,6 +1,7 @@
 package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,18 +41,53 @@ public class JJTaskServiceImpl implements JJTaskService {
 		this.jJRequirementService = jJRequirementService;
 	}
 
+	public List<JJTask> getSuperimposeTasks(JJContact assignedTo,
+			Date startDate, Date endDate, JJTask task) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
+				.createQuery(JJTask.class);
+		Root<JJTask> from = criteriaQuery.from(JJTask.class);
+		List<Predicate> andPredicates = new ArrayList<Predicate>();
+		List<Predicate> orPredicates = new ArrayList<Predicate>();
+		CriteriaQuery<JJTask> select = criteriaQuery.select(from);
+
+		andPredicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		if (task != null)
+			andPredicates.add(criteriaBuilder.notEqual(from.get("id"),
+					task.getId()));
+		andPredicates.add(criteriaBuilder.isNotNull(from.get("startDateReal")));
+
+		if (assignedTo != null) {
+			andPredicates.add(criteriaBuilder.equal(from.get("assignedTo"),
+					assignedTo));
+		}
+
+		orPredicates.add(criteriaBuilder.between(
+				from.<Date> get("startDateReal"), startDate, endDate));
+		orPredicates.add(criteriaBuilder.between(
+				from.<Date> get("endDateReal"), startDate, endDate));
+
+		select.where(
+				criteriaBuilder.and(andPredicates.toArray(new Predicate[] {})),
+				criteriaBuilder.or(orPredicates.toArray(new Predicate[] {})));
+		select.orderBy(criteriaBuilder.asc(from.get("startDateReal")));
+		TypedQuery<JJTask> result = entityManager.createQuery(select);
+
+		return result.getResultList();
+	}
+
 	@Override
 	public List<JJTask> getTasks(JJSprint sprint, JJProject project,
-			JJProduct product, JJContact contact, JJChapter chapter,boolean nullChapter,
-			JJRequirement requirement, JJTestcase testcase, JJBuild build,
-			boolean onlyActif, boolean sortedByCreationDate, boolean withBuild,
-			String objet) {
+			JJProduct product, JJContact contact, JJChapter chapter,
+			boolean nullChapter, JJRequirement requirement,
+			JJTestcase testcase, JJBuild build, boolean onlyActif,
+			boolean sortedByCreationDate, boolean withBuild, String objet) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
 				.createQuery(JJTask.class);
 
 		Root<JJTask> from = criteriaQuery.from(JJTask.class);
-		
+
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		if (onlyActif) {
@@ -73,7 +109,7 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 		if (objet != null && project != null && chapter == null) {
 
-			if (objet.equalsIgnoreCase("bug")||objet.equalsIgnoreCase("b")) {
+			if (objet.equalsIgnoreCase("bug") || objet.equalsIgnoreCase("b")) {
 				List<Predicate> andPredicates = new ArrayList<Predicate>();
 				andPredicates.add(criteriaBuilder.isNotNull(from.get("bug")));
 				andPredicates.add(criteriaBuilder.equal(
@@ -159,12 +195,14 @@ public class JJTaskServiceImpl implements JJTaskService {
 						from.join("bug").join("requirement").get("chapter"),
 						chapter));
 			}
-		} else if (nullChapter &&  objet != null && chapter == null) {
+		} else if (nullChapter && objet != null && chapter == null) {
 			if (objet.equalsIgnoreCase("b")) {
-				predicates.add(criteriaBuilder.isNull(from.join("bug").get("requirement")));
+				predicates.add(criteriaBuilder.isNull(from.join("bug").get(
+						"requirement")));
 
-			}else if (objet.equalsIgnoreCase("requirement")) {
-				predicates.add(criteriaBuilder.isNull(from.join("requirement").get("chapter")));
+			} else if (objet.equalsIgnoreCase("requirement")) {
+				predicates.add(criteriaBuilder.isNull(from.join("requirement")
+						.get("chapter")));
 
 			} else if (objet.equalsIgnoreCase("testcase")) {
 
@@ -187,25 +225,27 @@ public class JJTaskServiceImpl implements JJTaskService {
 		}
 		CriteriaQuery<JJTask> select = criteriaQuery.select(from);
 
-		if (objet != null && chapter == null && objet.equalsIgnoreCase("bug")) {		
-			
-			predicates.add(criteriaBuilder.isNull(from.join("bug").join("requirement").get("chapter")));
-			
-			
-			select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		if (objet != null && chapter == null && objet.equalsIgnoreCase("bug")) {
+
+			predicates.add(criteriaBuilder.isNull(from.join("bug")
+					.join("requirement").get("chapter")));
+
+			select.where(criteriaBuilder.and(predicates
+					.toArray(new Predicate[] {})));
 
 			if (sortedByCreationDate) {
 				select.orderBy(criteriaBuilder.asc(from.get("creationDate")));
 			}
 
 			List<JJTask> resuList = new ArrayList<JJTask>();
-			resuList.addAll(entityManager.createQuery(select).getResultList());	
-			resuList.addAll(getTasks(sprint, project, product, contact, chapter,nullChapter, 
-					requirement, testcase, build, onlyActif, sortedByCreationDate, withBuild, "b"));
+			resuList.addAll(entityManager.createQuery(select).getResultList());
+			resuList.addAll(getTasks(sprint, project, product, contact,
+					chapter, nullChapter, requirement, testcase, build,
+					onlyActif, sortedByCreationDate, withBuild, "b"));
 			return resuList;
 
 		} else {
-			
+
 			select.where(criteriaBuilder.and(predicates
 					.toArray(new Predicate[] {})));
 
@@ -299,14 +339,14 @@ public class JJTaskServiceImpl implements JJTaskService {
 		Set<JJTask> returnedValue = new HashSet<JJTask>();
 
 		returnedValue.addAll(new HashSet<JJTask>(getTasks(sprint, null,
-				product, null, null,false, null, null, null, true, false, false,
-				"requirement")));
+				product, null, null, false, null, null, null, true, false,
+				false, "requirement")));
 		returnedValue.addAll(new HashSet<JJTask>(getTasks(sprint, null,
-				product, null,null,false, null, null, null, true, false, false,
-				"bug")));
+				product, null, null, false, null, null, null, true, false,
+				false, "bug")));
 		returnedValue.addAll(new HashSet<JJTask>(getTasks(sprint, null,
-				product, null,null,false, null, null, null, true, false, false,
-				"testcase")));
+				product, null, null, false, null, null, null, true, false,
+				false, "testcase")));
 
 		return new ArrayList<JJTask>(returnedValue);
 
@@ -314,16 +354,19 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 	@Override
 	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project) {
-		
-		Set<JJTask> returnedValue=new HashSet<JJTask>();
-		
-		returnedValue.addAll(new HashSet<JJTask>(getTasks(null, project, product, null, null, false,null, null, null,
-				true, false, false, "requirement")));
-		returnedValue.addAll(new HashSet<JJTask>(getTasks(null, project, product, null, null, false,null, null, null,
-				true, false, false, "bug")));
-		returnedValue.addAll(new HashSet<JJTask>(getTasks(null, project, product, null, null, false,null, null, null,
-				true, false, false, "testcase")));		
-		
+
+		Set<JJTask> returnedValue = new HashSet<JJTask>();
+
+		returnedValue.addAll(new HashSet<JJTask>(getTasks(null, project,
+				product, null, null, false, null, null, null, true, false,
+				false, "requirement")));
+		returnedValue.addAll(new HashSet<JJTask>(getTasks(null, project,
+				product, null, null, false, null, null, null, true, false,
+				false, "bug")));
+		returnedValue.addAll(new HashSet<JJTask>(getTasks(null, project,
+				product, null, null, false, null, null, null, true, false,
+				false, "testcase")));
+
 		return new ArrayList<JJTask>(returnedValue);
 
 	}
@@ -358,43 +401,38 @@ public class JJTaskServiceImpl implements JJTaskService {
 			return null;
 
 	}
-	
 
 	@Override
 	public void saveTasks(Set<JJTask> tasks) {
-		for(JJTask t:tasks)
-		{
+		for (JJTask t : tasks) {
 			saveJJTask(t);
-		}	
+		}
 	}
 
 	@Override
 	public void updateTasks(Set<JJTask> tasks) {
-		for(JJTask t:tasks)
-		{
+		for (JJTask t : tasks) {
 			updateJJTask(t);
 		}
 	}
 
 	public void saveJJTask(JJTask JJTask_) {
 
-		if(JJTask_.getName().length()>100 )
-		{
+		if (JJTask_.getName().length() > 100) {
 			JJTask_.setName(JJTask_.getName().substring(0, 99));
 		}
-		if(JJTask_.getWorkloadPlanned() == null)
+		if (JJTask_.getWorkloadPlanned() == null)
 			JJTask_.setWorkloadPlanned(0);
 		jJTaskRepository.save(JJTask_);
 		JJTask_ = jJTaskRepository.findOne(JJTask_.getId());
 	}
 
 	public JJTask updateJJTask(JJTask JJTask_) {
-		
-		if(JJTask_.getName().length()>100 )
-		{
+
+		if (JJTask_.getName().length() > 100) {
 			JJTask_.setName(JJTask_.getName().substring(0, 99));
 		}
-		if(JJTask_.getWorkloadPlanned() == null)
+		if (JJTask_.getWorkloadPlanned() == null)
 			JJTask_.setWorkloadPlanned(0);
 		jJTaskRepository.save(JJTask_);
 		JJTask_ = jJTaskRepository.findOne(JJTask_.getId());

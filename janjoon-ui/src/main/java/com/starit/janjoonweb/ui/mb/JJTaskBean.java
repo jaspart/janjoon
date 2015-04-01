@@ -77,6 +77,10 @@ import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 @RooSerializable
 @RooJsfManagedBean(entity = JJTask.class, beanName = "jJTaskBean")
 public class JJTaskBean {
+	
+	public static String Planned="planned";
+	public static String Real="real";
+	public static String Revised="revised";
 
 	@Autowired
 	private JJChapterService jJChapterService;
@@ -472,16 +476,16 @@ public class JJTaskBean {
 		
 		if((beforeUpdateTT.getWorkloadPlanned() == null && tt.getWorkloadPlanned() != null)
 				||(tt.getWorkloadPlanned() != null && !tt.getWorkloadPlanned().equals(beforeUpdateTT.getWorkloadPlanned())))
-			calendarUtil.getEndDate(tt, "planned");	
+			calendarUtil.getEndDate(tt, Planned);	
 		else 
 		{
 			if((beforeUpdateTT.getEndDatePlanned() == null && tt.getEndDatePlanned() != null)
 					||(tt.getEndDatePlanned() != null && !tt.getEndDatePlanned().equals(beforeUpdateTT.getEndDatePlanned())))
-				calendarUtil.getStartDate(tt, "planned");	
+				calendarUtil.getStartDate(tt, Planned);	
 			else {
 				if((beforeUpdateTT.getStartDatePlanned() == null && tt.getStartDatePlanned() != null)
 						||(tt.getStartDatePlanned() != null && !tt.getStartDatePlanned().equals(beforeUpdateTT.getStartDatePlanned())))
-					calendarUtil.getEndDate(tt, "planned");	
+					calendarUtil.getEndDate(tt, Planned);	
 			}
 		}
 		
@@ -819,7 +823,7 @@ public class JJTaskBean {
 
 							TimelineEvent event = new TimelineEvent(tt,
 									tt.getStartDateReal(), endDate, true,
-									group, "real");
+									group, Real);
 
 							model.add(event);
 
@@ -1035,7 +1039,7 @@ public class JJTaskBean {
 					endDate = tt.getEndDateReal();
 
 				TimelineEvent event = new TimelineEvent(tt,
-						tt.getStartDateReal(), endDate, true, group, "real");
+						tt.getStartDateReal(), endDate, true, group, Real);
 
 				model.add(event);
 
@@ -1129,7 +1133,7 @@ public class JJTaskBean {
 
 				if (taskData.getWorkload() != null) {
 
-					calendarUtil.getEndDate(task, "Revised");
+					calendarUtil.getEndDate(task, Revised);
 				} else
 					task.setEndDateRevised(taskData.getEndDate());
 			}
@@ -1143,7 +1147,7 @@ public class JJTaskBean {
 
 				} else {
 					if (taskData.getWorkload() != null) {
-						calendarUtil.getStartDate(task, "Revised");
+						calendarUtil.getStartDate(task, Revised);
 					}
 				}
 			}
@@ -1157,10 +1161,10 @@ public class JJTaskBean {
 
 					task.setStartDateRevised(taskData.getStartDate());
 
-					calendarUtil.getEndDate(task, "Revised");
+					calendarUtil.getEndDate(task, Revised);
 
 				} else if (taskData.getEndDate() != null) {
-					calendarUtil.getStartDate(task, "Revised");
+					calendarUtil.getStartDate(task,  Revised);
 				}
 
 			}
@@ -1171,7 +1175,7 @@ public class JJTaskBean {
 				task.setStartDateReal(date);
 
 				if (task.getWorkloadReal() != null) {
-					calendarUtil.getEndDate(task, "real");
+					calendarUtil.getEndDate(task,  Real);
 				}
 
 			}
@@ -1182,7 +1186,7 @@ public class JJTaskBean {
 				task.setEndDateReal(date);
 				if (task.getStartDateReal() == null
 						&& task.getWorkloadReal() != null)
-					calendarUtil.getStartDate(task, "real");
+					calendarUtil.getStartDate(task, Real);
 			}
 		} else if (columnKey.contains("wr")) {
 			if (newValue != null) {
@@ -1190,10 +1194,10 @@ public class JJTaskBean {
 				task.setWorkloadReal(workloadReal);
 				if (task.getStartDateReal() != null) {
 
-					calendarUtil.getEndDate(task, "Real");
+					calendarUtil.getEndDate(task, Real);
 
 				} else if (task.getEndDateReal() != null) {
-					calendarUtil.getStartDate(task, "Real");
+					calendarUtil.getStartDate(task, Real);
 				}
 
 			}
@@ -1670,7 +1674,7 @@ public class JJTaskBean {
 					task.setWorkloadPlanned(format.getWorkload());
 
 					if (task.getStartDatePlanned() != null)
-						calendarUtil.getEndDate(task, "planned");
+						calendarUtil.getEndDate(task, Planned);
 				}
 
 				if (format.getObject() instanceof JJRequirement) {
@@ -1738,14 +1742,14 @@ public class JJTaskBean {
 						task.setStartDatePlanned(jJSprintBean.getSprintUtil()
 								.getSprint().getStartDate());
 						if (task.getWorkloadPlanned() != null)
-							calendarUtil.getEndDate(task, "planned");
+							calendarUtil.getEndDate(task, Planned);
 					}
 
 				}
 
 				if (task.getWorkloadPlanned() == null) {
 					task.setWorkloadPlanned(3);
-					calendarUtil.getEndDate(task, "planned");
+					calendarUtil.getEndDate(task, Planned);
 				}
 				saveJJTask(task, false);
 
@@ -2441,11 +2445,11 @@ public class JJTaskBean {
 			System.out.println(events.get(i).getStyleClass()
 					+ ":"
 					+ !(events.get(i).getStyleClass()
-							.equalsIgnoreCase("real") ^ real) + ":" + real);
+							.equalsIgnoreCase(Real) ^ real) + ":" + real);
 
 			if (events.get(i).getData() instanceof JJTask
 					&& !(events.get(i).getStyleClass()
-							.equalsIgnoreCase("real") ^ real) && !events.get(i).getStyleClass()
+							.equalsIgnoreCase(Real) ^ real) && !events.get(i).getStyleClass()
 							.equalsIgnoreCase("invisible")) {
 				JJTask tt = (JJTask) events.get(i).getData();
 				if (t.equals(tt)) {
@@ -2617,7 +2621,7 @@ public class JJTaskBean {
 		tt = jJTaskService.findJJTask(tt.getId());
 		String group = ev.getTimelineEvent().getStyleClass().toUpperCase();
 
-		if (group.equalsIgnoreCase("Real")) {
+		if (group.equalsIgnoreCase(Real)) {
 
 			tt.setStartDateReal(ev.getTimelineEvent().getStartDate());
 			tt.setEndDateReal(ev.getTimelineEvent().getEndDate());
@@ -2739,7 +2743,7 @@ public class JJTaskBean {
 
 				if (startDate != null)
 					events.add(new TimelineEvent(tt, startDate, endDate, true,
-							group, "real"));
+							group, Real));
 
 			}
 		} else if (!delete && tt.getStartDateReal() != null) {
@@ -2756,7 +2760,7 @@ public class JJTaskBean {
 			if (j != -1) {
 				String group = events.get(j).getGroup();
 				events.add(new TimelineEvent(tt, startDate, endDate, true,
-						group, "real"));
+						group, Real));
 			}
 
 		}

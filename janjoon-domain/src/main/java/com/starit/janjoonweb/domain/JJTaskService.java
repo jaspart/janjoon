@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.domain;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +14,8 @@ public interface JJTaskService {
 			JJRequirement requirement, JJTestcase testcase, JJBuild build,
 			boolean onlyActif, boolean sortedByCreationDate, boolean withBuild,
 			String objet);
+	
+	public List<JJTask> getSuperimposeTasks(JJContact assignedTo,Date startDate,Date endDate,JJTask task);
 
 	public List<JJTask> getImportTasks(JJBug bug, JJRequirement requirement,
 			JJTestcase testcase, boolean onlyActif);

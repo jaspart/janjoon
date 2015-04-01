@@ -266,8 +266,12 @@
 					<p:rating value="#{jJTestcaseBean.rated}" style="float: right;margin-top: 35px;margin-right: -30px;"
 						stars="1" rendered="#{jJTestcaseBean.renderCommentsPanel}">
 						<p:ajax event="rate" listener="#{jJTestcaseBean.onrate}"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()"
 							update=":growlForm :messageCreationForm :headerForm:communicationButton" />
 						<p:ajax event="cancel" listener="#{jJTestcaseBean.oncancel}"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()"
 							update=":growlForm :messageCreationForm :headerForm:communicationButton" />
 					</p:rating>
 				</h:form>
@@ -679,7 +683,7 @@
 					</ui:include>
 					<p:commandButton id="saveBug" value="#{messages.label_save}"
 						action="#{jJBugBean.saveBug}"
-						update=":runForm:teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton :growlForm"
+						update=":runForm:teststepTabView :messageCreationForm :headerForm:communicationButton :runForm:testcaseexecutionStatus :runForm:validateButton  :growlForm"
 						oncomplete="PF('bugTestDialogWidget').hide()" />
 				</h:form>
 			</p:outputPanel>

@@ -105,6 +105,18 @@ public class JJBug {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bug")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
 	
+	public JJProduct getProduct()
+	{
+		if(this.getRequirement() != null && this.getRequirement().getProduct() != null)
+			return this.getRequirement().getProduct();
+		else if(this.getVersioning() != null)
+			return this.getVersioning().getProduct();
+		else if(this.getBuild() != null && this.getBuild().getVersion() != null)
+			return this.getBuild().getVersion().getProduct();		
+		else
+			return null;
+	}
+	
 	@Override
 	public boolean equals(Object object) {
 		return (object instanceof JJBug) && (getId() != null) ? getId()

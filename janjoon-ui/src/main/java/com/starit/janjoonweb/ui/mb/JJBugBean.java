@@ -870,9 +870,8 @@ public class JJBugBean {
 						.equals(b.getRequirement()))
 			b.setTeststep(null);
 
-		JJContact contact = (JJContact) ((HttpSession) FacesContext
-				.getCurrentInstance().getExternalContext().getSession(false))
-				.getAttribute("JJContact");
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJBugService.updateJJBug(b);

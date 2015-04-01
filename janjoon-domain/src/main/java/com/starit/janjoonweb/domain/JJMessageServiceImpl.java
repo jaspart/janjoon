@@ -144,9 +144,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 						&& !contact.getRequirements().isEmpty())
 					q.setParameter("reqs", contact.getRequirements());
 
-				r = (long) q.setParameter("proj", project)
-						.setParameter("bugs", contact.getBugs())
-						.getSingleResult();
+				r = (long) q.setParameter("proj", project).getSingleResult();
 				
 			} else if (product != null) {
 				String query = "select count(e.id) from JJMessage e Where e.enabled = true and e.product = :prod and "
@@ -400,6 +398,9 @@ public class JJMessageServiceImpl implements JJMessageService {
 
 			}
 
+		}else
+		{
+			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 		}
 
 		select.where(

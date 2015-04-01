@@ -537,7 +537,7 @@ public class JJSprintBean {
 			JJTaskBean jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
 			if (jJTaskBean == null)
 				jJTaskBean = new JJTaskBean();
-			jJTaskBean.updateView(jJTaskService.findJJTask(dropedTask.getId()), true);
+			jJTaskBean.updateView(jJTaskService.findJJTask(dropedTask.getId()), false);
 
 			JJSprint s = jJSprintService.findJJSprint(sprintId);
 			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s,LoginBean.getProduct()));
@@ -597,7 +597,7 @@ public class JJSprintBean {
 			JJTaskBean jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
 			if (jJTaskBean == null)
 				jJTaskBean = new JJTaskBean();
-			jJTaskBean.updateView(jJTaskService.findJJTask(dropedTask.getId()), true);
+			jJTaskBean.updateView(jJTaskService.findJJTask(dropedTask.getId()), false);
 
 			JJSprint s = jJSprintService.findJJSprint(sprintId);
 			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s,LoginBean.getProduct()));

@@ -281,14 +281,14 @@
 					oncomplete="PF('requirementBlockUIWidget').unblock()"
 					action="#{jJRequirementBean.save}" rendered="#{!loginBean.mobile}"
 					process="@this,nameReq,status,project,product,version,chapter,description,lowRequirement,mediumRequirement,highRequirement,note"
-					widgetVar="requirementSaveWidget" update="@form :growlForm :headerForm" />
+					widgetVar="requirementSaveWidget" update="@form :growlForm :headerForm :messageCreationForm" />
 				<p:commandButton
 					value="#{messages.specification_create_save_button}"
 					onstart="PF('requirementBlockUIWidget').block()"
 					oncomplete="PF('requirementBlockUIWidget').unblock()"
 					action="#{jJRequirementBean.save}" rendered="#{loginBean.mobile}"
 					process="@this,nameReq,status,project,product,version,chapter,descriptionMobile,lowRequirement,mediumRequirement,highRequirement,note"
-					widgetVar="requirementSaveWidget" update="@form :growlForm :headerForm" />
+					widgetVar="requirementSaveWidget" update="@form :growlForm :headerForm :messageCreationForm" />
 			</f:facet>
 		</p:panel>
 
