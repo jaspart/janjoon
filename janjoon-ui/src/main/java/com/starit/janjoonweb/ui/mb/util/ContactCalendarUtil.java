@@ -236,7 +236,7 @@ public class ContactCalendarUtil {
 
 	}
 
-	public int calculateWorkLoad(Date start, Date end,
+	public long calculateWorkLoad(Date start, Date end,
 			JJTaskService jJTaskService, JJTask task) {
 
 		final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
@@ -245,8 +245,8 @@ public class ContactCalendarUtil {
 		if (workDays == null) {
 			final long Hours_IN_MILLIS = 60 * 60 * 1000;
 			if (start.before(end))
-				return Math.round(end.getTime() / Hours_IN_MILLIS
-						- start.getTime() / Hours_IN_MILLIS);
+				return end.getTime() / Hours_IN_MILLIS - start.getTime()
+						/ Hours_IN_MILLIS;
 			else
 				return 0;
 
@@ -317,22 +317,24 @@ public class ContactCalendarUtil {
 					workload = workload + getRestOfChunk(end, endChunk, false);
 				}
 
-				if (jJTaskService != null && task != null && task.getAssignedTo() != null)
-					workload = workload -calculateSuperimposedWorkload(task, jJTaskService);
-					
-				return Math.round(Math.max(0, workload));
+				if (jJTaskService != null && task != null
+						&& task.getAssignedTo() != null)
+					workload = workload
+							- calculateSuperimposedWorkload(task, jJTaskService);
+
+				return Math.max(0, workload);
 			} else
 				return 0;
 		}
 
 	}
 
-	public void getStartDate(JJTask task, String champ) {
+	public void getStartDate(JJTask task, String champ,JJTaskService jJTaskService) {
 		if (champ.equalsIgnoreCase(Planned)) {
 			int workload = task.getWorkloadPlanned();
 			Date end = nextWorkingDate(task.getEndDatePlanned());
 			task.setEndDatePlanned(end);
-			task.setStartDatePlanned(getStartDate(end, workload));
+			task.setStartDatePlanned(getStartDate(end, workload,null,null));
 
 		}
 
@@ -342,7 +344,7 @@ public class ContactCalendarUtil {
 			int workload = task.getWorkloadRevised();
 			Date end = nextWorkingDate(task.getEndDateRevised());
 			task.setEndDateRevised(end);
-			task.setStartDateRevised(getStartDate(end, workload));
+			task.setStartDateRevised(getStartDate(end, workload,null,null));
 		}
 
 		if (champ.equalsIgnoreCase(Real)) {
@@ -351,11 +353,11 @@ public class ContactCalendarUtil {
 			int workload = task.getWorkloadReal();
 			Date end = nextWorkingDate(task.getEndDateReal());
 			task.setEndDateReal(end);
-			task.setStartDateReal(getStartDate(end, workload));
+			task.setStartDateReal(getStartDate(end, workload,jJTaskService,task));
 		}
 	}
 
-	private Date getStartDate(Date end, int workload) {
+	private Date getStartDate(Date end, int workload,JJTaskService jJTaskService,JJTask task) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(end);
 
@@ -365,30 +367,32 @@ public class ContactCalendarUtil {
 			kk = workload;
 			start = CalendarUtil.getPreviousDate(start);
 			kk = workload
-					- calculateWorkLoad(nextWorkingDate(start), end, null, null);
+					- Math.round(calculateWorkLoad(nextWorkingDate(start), end,
+							jJTaskService, task));
 		}
 		if (kk < 0) {
-			int i = workload - calculateWorkLoad(start, end, null, null);
+			int i = workload
+					- Math.round(calculateWorkLoad(start, end, jJTaskService, task));
 			while (i < 0) {
 				cal.setTime(start);
 				cal.add(Calendar.HOUR, 1);
 				start = cal.getTime();
 				i = workload
-						- calculateWorkLoad(nextWorkingDate(start), end, null,
-								null);
+						- Math.round(calculateWorkLoad(nextWorkingDate(start),
+								end,  jJTaskService,task));
 			}
 
 		}
 		return nextWorkingDate(start);
 	}
 
-	public void getEndDate(JJTask task, String champ) {
+	public void getEndDate(JJTask task, String champ,JJTaskService jJTaskService) {
 
 		if (champ.equalsIgnoreCase(Planned)) {
 			int workload = task.getWorkloadPlanned();
 			Date start = nextWorkingDate(task.getStartDatePlanned());
 			task.setStartDatePlanned(start);
-			task.setEndDatePlanned(getEndDate(start, workload));
+			task.setEndDatePlanned(getEndDate(start, workload,null,null));
 
 		}
 
@@ -398,7 +402,7 @@ public class ContactCalendarUtil {
 			int workload = task.getWorkloadRevised();
 			Date start = nextWorkingDate(task.getStartDateRevised());
 			task.setStartDateRevised(start);
-			task.setEndDateRevised(getEndDate(start, workload));
+			task.setEndDateRevised(getEndDate(start, workload,null,null));
 		}
 
 		if (champ.equalsIgnoreCase(Real)) {
@@ -407,12 +411,12 @@ public class ContactCalendarUtil {
 			int workload = task.getWorkloadReal();
 			Date start = nextWorkingDate(task.getStartDateReal());
 			task.setStartDateReal(start);
-			task.setEndDateReal(getEndDate(start, workload));
+			task.setEndDateReal(getEndDate(start, workload,jJTaskService,task));
 		}
 
 	}
 
-	private Date getEndDate(Date start, int workload) {
+	private Date getEndDate(Date start, int workload,JJTaskService jJTaskService,JJTask task) {
 
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(start);
@@ -421,7 +425,8 @@ public class ContactCalendarUtil {
 		while (kk > 0) {
 			kk = workload;
 			end = nextWorkingDate(CalendarUtil.getAfterDay(end));
-			kk = workload - calculateWorkLoad(start, end, null, null);
+			kk = workload
+					- Math.round(calculateWorkLoad(start, end, jJTaskService,task));
 		}
 		if (kk < 0) {
 			Date endDate = end;
@@ -436,12 +441,14 @@ public class ContactCalendarUtil {
 				repeat++;
 			}
 			end = endDate;
-			int i = workload - calculateWorkLoad(start, end, null, null);
+			int i = workload
+					- Math.round(calculateWorkLoad(start, end, jJTaskService,task));
 			while (i > 0) {
 				cal.setTime(end);
 				cal.add(Calendar.HOUR_OF_DAY, 1);
 				end = nextWorkingDate(cal.getTime());
-				i = workload - calculateWorkLoad(start, end, null, null);
+				i = workload
+						- Math.round(calculateWorkLoad(start, end, jJTaskService,task));
 			}
 
 		}
@@ -640,52 +647,95 @@ public class ContactCalendarUtil {
 		}
 		return i;
 	}
-	
-	public long calculateSuperimposedWorkload(JJTask task,JJTaskService jJTaskService) {		
-		
-		List<SuperimposedShunkTime> list=new ArrayList<SuperimposedShunkTime>();	
-		int i=0;
-		List<Date> dates=new ArrayList<Date>();
-		for(JJTask t:jJTaskService.
-				getSuperimposeTasks(task.getAssignedTo(), task.getStartDateReal(), task.getEndDateReal(), null))
-		{
-			
-			if(t.getStartDateReal() != null && t.getStartDateReal().after(task.getStartDateReal()))dates.add(t.getStartDateReal());
-			if(t.getEndDateReal() != null && t.getEndDateReal().before(task.getEndDateReal()))dates.add(t.getEndDateReal());
-		}
-		
-		
-		dates=new ArrayList<Date>(new HashSet<Date>(dates));
-		Collections.sort(dates, new Comparator<Date>() {
-			@Override
-			public int compare(Date o1, Date o2) {				
-					return o1.compareTo(o2);			
 
+	public long calculateSuperimposedWorkload(JJTask task,
+			JJTaskService jJTaskService) {
+
+		List<JJTask> tasks = jJTaskService.getSuperimposeTasks(
+				task.getAssignedTo(), task.getStartDateReal(),
+				task.getEndDateReal(), task);
+		if (tasks != null && !tasks.isEmpty()) {
+			List<SuperimposedShunkTime> list = new ArrayList<SuperimposedShunkTime>();
+			int i = 0;
+			List<Date> dates = new ArrayList<Date>();
+
+			dates.add(task.getStartDateReal());
+			dates.add(task.getEndDateReal());
+			for (JJTask t : tasks) {
+				if (t.getStartDateReal() != null
+						&& t.getStartDateReal().after(task.getStartDateReal()))
+					dates.add(t.getStartDateReal());
+				if (t.getEndDateReal() != null
+						&& t.getEndDateReal().before(task.getEndDateReal()))
+					dates.add(t.getEndDateReal());
 			}
-		});	
-		
-		while(i<dates.size()-2)
-		{
-			List<JJTask> tasks=jJTaskService.getSuperimposeTasks(task.getAssignedTo(),
-					dates.get(i),dates.get(i+1), task);
-			if(tasks != null && !tasks.isEmpty() && tasks.size()>0)
-			{
-				SuperimposedShunkTime element=new SuperimposedShunkTime(dates.get(i),dates.get(i+1),tasks.size());
-				element.setWorkload(calculateWorkLoad(dates.get(i),dates.get(i+1), null, null));
-				list.add(element);
+
+			dates = new ArrayList<Date>(new HashSet<Date>(dates));
+			Collections.sort(dates, new Comparator<Date>() {
+				@Override
+				public int compare(Date o1, Date o2) {
+					return o1.compareTo(o2);
+
+				}
+			});
+
+//			int pt = 0;
+//			int tpt = 0;
+
+			while (i < dates.size() - 1) {
+
+//				tpt = tpt
+//						+ jJTaskService.getSuperimposeTasks(
+//								task.getAssignedTo(), dates.get(i),
+//								dates.get(i + 1), task).size();
+
+				List<JJTask> periodPasks = getPeriodTasks(tasks, dates.get(i),
+						dates.get(i + 1));
+				//pt = pt + periodPasks.size();
+				//System.out.println(pt + "/" + tpt);
+				if (periodPasks != null && !periodPasks.isEmpty()
+						&& periodPasks.size() > 0) {
+					SuperimposedShunkTime element = new SuperimposedShunkTime(
+							dates.get(i), dates.get(i + 1), periodPasks.size());
+					element.setWorkload(calculateWorkLoad(dates.get(i),
+							dates.get(i + 1), null, null));
+					list.add(element);
+				}
+
+				i++;
 			}
-			
-			i++;
+			long l = 0;
+
+			for (SuperimposedShunkTime elt : list) {
+				System.err.println((elt.getNbTask() + "/"
+						+ (elt.getNbTask() + 1) + "*" + elt.getWorkload()));
+				l = l
+						+ (elt.getNbTask() * elt.getWorkload() / (elt
+								.getNbTask() + 1));
+			}
+
+			return l;
+		} else
+			return 0;
+
+	}
+
+	public List<JJTask> getPeriodTasks(List<JJTask> tasks, Date startDate,
+			Date endDate) {
+		List<JJTask> periodTasks = new ArrayList<JJTask>();
+
+		for (JJTask t : tasks) {
+
+			if (((t.getStartDateReal().compareTo(startDate) >= 0) && t.getStartDateReal().before(endDate))
+					|| (t.getEndDateReal() != null && (t.getEndDateReal()
+							.after(startDate) && (t.getEndDateReal().compareTo(endDate) <= 0)))
+					||(t.getStartDateReal().before(startDate) && t.getEndDateReal() == null)
+					|| (t.getStartDateReal().before(startDate) && t.getEndDateReal().after(endDate))
+					&& ((!t.getStartDateReal().equals(endDate)) && (!t.getEndDateReal().equals(startDate))))
+				periodTasks.add(t);
+
 		}
-		long l=0;
-		
-		for(SuperimposedShunkTime elt:list)
-		{
-			System.err.println((elt.getNbTask()+"/"+(elt.getNbTask()+1)+"*"+elt.getWorkload()));
-			l=l+(elt.getNbTask()*elt.getWorkload()/(elt.getNbTask()+1));
-		}
-		
-		return l;
+		return periodTasks;
 	}
 
 	public class SuperimposedShunkTime {
@@ -700,7 +750,7 @@ public class ContactCalendarUtil {
 			this.startDate = startDate;
 			this.endDate = endDate;
 			this.nbTask = nbTask;
-			this.workload=0;
+			this.workload = 0;
 		}
 
 		public Date getStartDate() {
@@ -734,7 +784,7 @@ public class ContactCalendarUtil {
 		public void setWorkload(long workload) {
 			this.workload = workload;
 		}
-		
+
 	}
 
 }

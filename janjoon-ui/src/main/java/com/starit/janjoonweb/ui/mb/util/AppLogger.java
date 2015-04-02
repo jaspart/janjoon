@@ -162,10 +162,13 @@ public class AppLogger {
 	public void updateJJTaskFields(JoinPoint joinPoint) {
 		Object[] args = joinPoint.getArgs();
 		JJTask task = (JJTask) args[0];
+		
+		if (task.getId() == null)
+			task.setCreationDate(new Date());
+		
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
-		if (task.getId() == null) {
-			task.setCreationDate(new Date());
+		if (task.getId() == null) {			
 			task.setCreatedBy(contact);
 		} else {
 			task.setUpdatedBy(contact);
@@ -236,8 +239,8 @@ public class AppLogger {
 
 		if (task.getEndDatePlanned() != null
 				&& task.getStartDatePlanned() != null && planned)
-			task.setWorkloadPlanned(calendarUtil.calculateWorkLoad(
-					task.getStartDatePlanned(), task.getEndDatePlanned(),null,null));
+			task.setWorkloadPlanned(Math.round(calendarUtil.calculateWorkLoad(
+					task.getStartDatePlanned(), task.getEndDatePlanned(),null,null)));
 
 		if (task.getStartDateReal() != null) {
 			if (task.getId() != null) {
@@ -278,8 +281,8 @@ public class AppLogger {
 
 		if (task.getEndDateReal() != null && task.getStartDateReal() != null
 				&& real)
-			task.setWorkloadReal(calendarUtil.calculateWorkLoad(
-					task.getStartDateReal(), task.getEndDateReal(),jJTaskService,task));
+			task.setWorkloadReal(Math.round(calendarUtil.calculateWorkLoad(
+					task.getStartDateReal(), task.getEndDateReal(),jJTaskService,task)));
 
 		if (task.getStartDateRevised() != null) {
 			if (task.getId() != null) {
@@ -322,8 +325,8 @@ public class AppLogger {
 
 		if (task.getEndDateRevised() != null
 				&& task.getStartDateRevised() != null && revised)
-			task.setWorkloadRevised(calendarUtil.calculateWorkLoad(
-					task.getStartDateRevised(), task.getEndDateRevised(),null,null));
+			task.setWorkloadRevised(Math.round(calendarUtil.calculateWorkLoad(
+					task.getStartDateRevised(), task.getEndDateRevised(),null,null)));
 
 		if (task.getStartDateReal() == null
 				&& (task.getStatus() == null || !task.getStatus().getName()

@@ -476,16 +476,16 @@ public class JJTaskBean {
 		
 		if((beforeUpdateTT.getWorkloadPlanned() == null && tt.getWorkloadPlanned() != null)
 				||(tt.getWorkloadPlanned() != null && !tt.getWorkloadPlanned().equals(beforeUpdateTT.getWorkloadPlanned())))
-			calendarUtil.getEndDate(tt, Planned);	
+			calendarUtil.getEndDate(tt, Planned,null);	
 		else 
 		{
 			if((beforeUpdateTT.getEndDatePlanned() == null && tt.getEndDatePlanned() != null)
 					||(tt.getEndDatePlanned() != null && !tt.getEndDatePlanned().equals(beforeUpdateTT.getEndDatePlanned())))
-				calendarUtil.getStartDate(tt, Planned);	
+				calendarUtil.getStartDate(tt, Planned,null);	
 			else {
 				if((beforeUpdateTT.getStartDatePlanned() == null && tt.getStartDatePlanned() != null)
 						||(tt.getStartDatePlanned() != null && !tt.getStartDatePlanned().equals(beforeUpdateTT.getStartDatePlanned())))
-					calendarUtil.getEndDate(tt, Planned);	
+					calendarUtil.getEndDate(tt, Planned,null);	
 			}
 		}
 		
@@ -1133,7 +1133,7 @@ public class JJTaskBean {
 
 				if (taskData.getWorkload() != null) {
 
-					calendarUtil.getEndDate(task, Revised);
+					calendarUtil.getEndDate(task, Revised,null);
 				} else
 					task.setEndDateRevised(taskData.getEndDate());
 			}
@@ -1147,7 +1147,7 @@ public class JJTaskBean {
 
 				} else {
 					if (taskData.getWorkload() != null) {
-						calendarUtil.getStartDate(task, Revised);
+						calendarUtil.getStartDate(task, Revised,null);
 					}
 				}
 			}
@@ -1161,10 +1161,10 @@ public class JJTaskBean {
 
 					task.setStartDateRevised(taskData.getStartDate());
 
-					calendarUtil.getEndDate(task, Revised);
+					calendarUtil.getEndDate(task, Revised,null);
 
 				} else if (taskData.getEndDate() != null) {
-					calendarUtil.getStartDate(task,  Revised);
+					calendarUtil.getStartDate(task,  Revised,null);
 				}
 
 			}
@@ -1175,7 +1175,7 @@ public class JJTaskBean {
 				task.setStartDateReal(date);
 
 				if (task.getWorkloadReal() != null) {
-					calendarUtil.getEndDate(task,  Real);
+					calendarUtil.getEndDate(task,  Real,jJTaskService);
 				}
 
 			}
@@ -1186,7 +1186,7 @@ public class JJTaskBean {
 				task.setEndDateReal(date);
 				if (task.getStartDateReal() == null
 						&& task.getWorkloadReal() != null)
-					calendarUtil.getStartDate(task, Real);
+					calendarUtil.getStartDate(task, Real,jJTaskService);
 			}
 		} else if (columnKey.contains("wr")) {
 			if (newValue != null) {
@@ -1194,10 +1194,10 @@ public class JJTaskBean {
 				task.setWorkloadReal(workloadReal);
 				if (task.getStartDateReal() != null) {
 
-					calendarUtil.getEndDate(task, Real);
+					calendarUtil.getEndDate(task, Real,jJTaskService);
 
 				} else if (task.getEndDateReal() != null) {
-					calendarUtil.getStartDate(task, Real);
+					calendarUtil.getStartDate(task, Real,jJTaskService);
 				}
 
 			}
@@ -1674,7 +1674,7 @@ public class JJTaskBean {
 					task.setWorkloadPlanned(format.getWorkload());
 
 					if (task.getStartDatePlanned() != null)
-						calendarUtil.getEndDate(task, Planned);
+						calendarUtil.getEndDate(task, Planned,null);
 				}
 
 				if (format.getObject() instanceof JJRequirement) {
@@ -1742,14 +1742,14 @@ public class JJTaskBean {
 						task.setStartDatePlanned(jJSprintBean.getSprintUtil()
 								.getSprint().getStartDate());
 						if (task.getWorkloadPlanned() != null)
-							calendarUtil.getEndDate(task, Planned);
+							calendarUtil.getEndDate(task, Planned,null);
 					}
 
 				}
 
 				if (task.getWorkloadPlanned() == null) {
 					task.setWorkloadPlanned(3);
-					calendarUtil.getEndDate(task, Planned);
+					calendarUtil.getEndDate(task, Planned,null);
 				}
 				saveJJTask(task, false);
 
@@ -1761,6 +1761,20 @@ public class JJTaskBean {
 
 			project = null;
 			tasksData = null;
+			if(sprint != null)
+			{
+
+				sprint = jJSprintService.findJJSprint(sprint.getId());
+				HttpSession session = (HttpSession) FacesContext
+						.getCurrentInstance().getExternalContext()
+						.getSession(false);
+				JJSprintBean jJSprintBean = (JJSprintBean) session
+						.getAttribute("jJSprintBean");
+				jJSprintBean.getSprintList().set(
+						jJSprintBean.contains(sprint.getId()),  new SprintUtil(sprint,
+								jJTaskService.getSprintTasks(sprint,LoginBean.getProduct())));			
+				
+			}
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('taskImportDialogWidget').hide()");
 			if (sprint != null)
@@ -2934,7 +2948,7 @@ public class JJTaskBean {
 		else
 			return 410;
 	}	
-
+ 
 	public HtmlPanelGrid populateViewPanelGrid() {
 
 		FacesContext facesContext = FacesContext.getCurrentInstance();

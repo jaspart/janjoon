@@ -144,15 +144,8 @@ public class JJTestcaseexecutionBean {
 			task.setName(tce.getTestcase().getName() + "_"
 					+ tce.getBuild().getName().trim().toUpperCase());
 
-			task.setEndDateReal(new Date());
-
-			long startTime = task.getStartDateReal().getTime();
-			long endTime = task.getEndDateReal().getTime();
-			long str = endTime - startTime;
-
-			int workloadReal = (int) (str / 3600000);
-
-			task.setWorkloadReal(workloadReal);
+			task.setEndDateReal(new Date());		
+			
 			HttpSession session = (HttpSession) FacesContext
 					.getCurrentInstance().getExternalContext()
 					.getSession(false);

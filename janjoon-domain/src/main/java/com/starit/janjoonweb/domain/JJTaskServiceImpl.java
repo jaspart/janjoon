@@ -56,6 +56,9 @@ public class JJTaskServiceImpl implements JJTaskService {
 			andPredicates.add(criteriaBuilder.notEqual(from.get("id"),
 					task.getId()));
 		andPredicates.add(criteriaBuilder.isNotNull(from.get("startDateReal")));
+		
+		andPredicates.add(criteriaBuilder.lessThan(from.<Date>get("startDateReal"),endDate));
+		
 
 		if (assignedTo != null) {
 			andPredicates.add(criteriaBuilder.equal(from.get("assignedTo"),
@@ -64,12 +67,27 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 		orPredicates.add(criteriaBuilder.between(
 				from.<Date> get("startDateReal"), startDate, endDate));
+		orPredicates.add(criteriaBuilder.equal(
+				from.<Date> get("startDateReal"),startDate));
+		
 		orPredicates.add(criteriaBuilder.between(
 				from.<Date> get("endDateReal"), startDate, endDate));
+		orPredicates.add(criteriaBuilder.equal(
+				from.<Date> get("endDateReal"),endDate));
+		
+		
+		
+		
+		orPredicates.add(criteriaBuilder.and(criteriaBuilder.lessThan(from.<Date> get("startDateReal"), startDate),
+				criteriaBuilder.isNull(from.get("endDateReal"))));
+		
+		orPredicates.add(criteriaBuilder.and(criteriaBuilder.lessThan(from.<Date> get("startDateReal"), startDate),
+				criteriaBuilder.greaterThan(from.<Date> get("endDateReal"), endDate)));
 
 		select.where(
 				criteriaBuilder.and(andPredicates.toArray(new Predicate[] {})),
 				criteriaBuilder.or(orPredicates.toArray(new Predicate[] {})));
+		
 		select.orderBy(criteriaBuilder.asc(from.get("startDateReal")));
 		TypedQuery<JJTask> result = entityManager.createQuery(select);
 

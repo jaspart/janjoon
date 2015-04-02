@@ -986,14 +986,7 @@ public class JJTestcaseBean {
 		if (testcase.getId() == null) {
 			manageTestcaseOrder(requirement);
 			testcase.setRequirement(requirement);
-			requirement.getTestcases().add(testcase);
-
-			// if (initiateTask) {
-			// task.setName(testcase.getName());
-			// task.setDescription("This is Task: " + task.getName());
-			// testcase.getTasks().add(task);
-			// task.setTestcase(testcase);
-			// }
+			requirement.getTestcases().add(testcase);			
 			testcase.setBuilds(new HashSet<JJBuild>(builds));
 			saveJJTestcase(testcase);
 
