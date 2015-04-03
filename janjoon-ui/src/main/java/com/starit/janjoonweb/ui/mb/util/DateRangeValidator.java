@@ -127,7 +127,7 @@ public class DateRangeValidator implements Validator {
 
 						if (taskData.getTask().getSprint() != null) {
 							if (testedDate.compareTo(taskData.getTask().getSprint().getStartDate())
-									* taskData.getTask().getSprint().getEndDate().compareTo(testedDate) >= 0) {
+									* taskData.getTask().getSprint().getEndDate().compareTo(testedDate) < 0) {
 								throw new ValidatorException(
 										new FacesMessage(
 												FacesMessage.SEVERITY_ERROR,
@@ -171,7 +171,7 @@ public class DateRangeValidator implements Validator {
 
 						if (taskData.getTask().getSprint() != null) {
 							if (testedDate.compareTo(taskData.getTask().getSprint().getStartDate())
-									* taskData.getTask().getSprint().getEndDate().compareTo(testedDate) >= 0) {
+									* taskData.getTask().getSprint().getEndDate().compareTo(testedDate) < 0) {
 								throw new ValidatorException(
 										new FacesMessage(
 												FacesMessage.SEVERITY_ERROR,
@@ -215,7 +215,7 @@ public class DateRangeValidator implements Validator {
 
 						if (taskData.getTask().getSprint() != null) {
 							if (testedDate.compareTo(taskData.getTask().getSprint().getStartDate())
-									* taskData.getTask().getSprint().getEndDate().compareTo(testedDate) >= 0) {
+									* taskData.getTask().getSprint().getEndDate().compareTo(testedDate) < 0) {
 								throw new ValidatorException(
 										new FacesMessage(
 												FacesMessage.SEVERITY_ERROR,
@@ -255,7 +255,7 @@ public class DateRangeValidator implements Validator {
 						}
 						if (taskData.getTask().getSprint() != null) {
 							if (testedDate.compareTo(taskData.getTask().getSprint().getStartDate())
-									* taskData.getTask().getSprint().getEndDate().compareTo(testedDate) >= 0) {
+									* taskData.getTask().getSprint().getEndDate().compareTo(testedDate) < 0) {
 								throw new ValidatorException(
 										new FacesMessage(
 												FacesMessage.SEVERITY_ERROR,
@@ -311,7 +311,7 @@ public class DateRangeValidator implements Validator {
 
 						if (sprint != null) {
 							if (testedDate.compareTo(sprint.getStartDate())
-									* sprint.getEndDate().compareTo(testedDate) >= 0) {
+									* sprint.getEndDate().compareTo(testedDate) < 0) {
 								throw new ValidatorException(
 										new FacesMessage(
 												FacesMessage.SEVERITY_ERROR,
@@ -363,7 +363,7 @@ public class DateRangeValidator implements Validator {
 
 						if (sprint != null) {
 							if (testedDate.compareTo(sprint.getStartDate())
-									* sprint.getEndDate().compareTo(testedDate) >= 0) {
+									* sprint.getEndDate().compareTo(testedDate) < 0) {
 
 								throw new ValidatorException(
 										new FacesMessage(
