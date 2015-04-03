@@ -101,7 +101,7 @@ public class BuildWS {
 						else
 						{
 							JJVersion version=jJVersionService.getVersionByName(versionName, product);
-							if(product == null)
+							if(version == null)
 								return "Version Not Found";
 							else
 							{

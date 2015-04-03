@@ -6,8 +6,8 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:p="http://primefaces.org/ui">
 
-<ui:composition>	
-	<h:form style="width:100%;display:none;" >
+<ui:composition>
+	<h:form style="width:100%;display:none;">
 		<p:remoteCommand update=":projecttabview:SprintTabView :growlForm"
 			name="updateTabSprint" />
 	</h:form>
@@ -48,23 +48,14 @@
 						<p:column style="width:10% important; min-width:200px;">
 							<p:outputLabel for="sprintcts" value="Sprint Contacts:" />
 							<p:selectManyMenu id="sprintcts" value="#{jjsprint.contacts}"
-								scrollHeight="150"
+								scrollHeight="100"
 								converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
-								style="width:150px;height:150px !important;" showCheckbox="true">
+								style="width:150px;height:100px !important;" showCheckbox="true">
 								<f:selectItems value="#{jJSprintBean.contacts}" var="c"
 									itemLabel="#{c.firstname} #{c.name}" itemValue="#{c}" />
 								<f:validator validatorId="listCategoriesValidator" />
 							</p:selectManyMenu>
 						</p:column>
-						<!--p:column rowspan="2"
-							style="width:60% !important; min-width:100px;">
-							<h:outputText value="Sprint Burndown Chart" />
-							<p:barChart value="#{jjsprint.chartModel}"
-								legendPosition="e"
-								widgetVar="barChart_#{jjsprint.sprint.id}_Widget" minY="0"
-								xaxisLabel="Date" yaxisLabel="WorkLoad"
-								style="width:98%;height:300px;"/>
-						</p:column-->
 					</p:row>
 					<p:row>
 						<p:column style="width:10% important; min-width:200px;">
@@ -87,6 +78,18 @@
 									value="#{startDateEdition}" />
 								<f:attribute name="sprintMode" value="sprintED" />
 							</p:calendar>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:10% important; min-width:200px;">
+							<p:outputLabel for="sprintPS" value="Price Sold:" />
+							<p:spinner id="sprintPS" value="#{jjsprint.priseSold}" prefix="$"
+								min="0" readonly="true" />
+						</p:column>
+						<p:column style="width:10% important; min-width:200px;">
+							<p:outputLabel for="sprintPR" value="Price Real:" />
+							<p:spinner id="sprintPR" value="#{jjsprint.priseReal}" prefix="$"
+								min="0" readonly="true" />
 						</p:column>
 					</p:row>
 					<p:row>
@@ -139,7 +142,7 @@
 						</p:row>
 					</f:facet>
 				</p:panelGrid>
-				<p:panelGrid id="sprintChartPanelGrid"
+				<p:panelGrid id="sprintChartPanelGrid" rendered="#{jjsprint.chartModel != null}"
 					style="width:50% !important;min-width:200px !important;">
 					<f:facet name="header">
 						<p:row>
@@ -149,8 +152,7 @@
 					<p:row>
 						<p:column rowspan="2"
 							style="width:60% !important; min-width:100px;">
-							<p:barChart value="#{jjsprint.chartModel}"
-								legendPosition="e"
+							<p:barChart value="#{jjsprint.chartModel}" legendPosition="e"
 								widgetVar="barChart_#{jjsprint.sprint.id}_Widget" minY="0"
 								xaxisLabel="Date" yaxisLabel="WorkLoad"
 								style="width:98%;height:300px;" />
@@ -171,7 +173,8 @@
 						<p:column style="width: 33.33%;">
 							<p:fieldset legend="Todo" id="todoFieldset">
 								<p:dataTable scrollable="true" scrollHeight="250" id="todo"
-									var="todo" value="#{jjsprint.todoTask}" styleClass="planning-dataTable" rowKey="#{todo.id}"
+									var="todo" value="#{jjsprint.todoTask}"
+									styleClass="planning-dataTable" rowKey="#{todo.id}"
 									rendered="#{not empty jjsprint.todoTask}">
 
 									<p:column style="width:1px">
@@ -228,7 +231,8 @@
 										rendered="#{empty jjsprint.progressTask}"
 										style="font-size:24px;" />
 									<p:dataTable scrollable="true" scrollHeight="250" id="prog"
-										editable="true" editMode="cell" var="prog" styleClass="planning-dataTable"
+										editable="true" editMode="cell" var="prog"
+										styleClass="planning-dataTable"
 										value="#{jjsprint.progressTask}" rowKey="#{prog.id}"
 										rendered="#{not empty jjsprint.progressTask}">
 										<p:ajax event="cellEdit"
@@ -286,9 +290,10 @@
 								<p:outputPanel id="donedropArea">
 									<h:outputText value="!!!Drop here!!!"
 										rendered="#{empty jjsprint.doneTask}" style="font-size:24px;" />
-									<p:dataTable id="done" styleClass="planning-dataTable" var="done" value="#{jjsprint.doneTask}"
-										rowKey="#{done.id}" rendered="#{not empty jjsprint.doneTask}"
-										scrollable="true" scrollHeight="250">
+									<p:dataTable id="done" styleClass="planning-dataTable"
+										var="done" value="#{jjsprint.doneTask}" rowKey="#{done.id}"
+										rendered="#{not empty jjsprint.doneTask}" scrollable="true"
+										scrollHeight="250">
 
 										<p:column style="width:80px" headerText="Task">
 											<p:graphicImage rendered="#{done.bug != null}"

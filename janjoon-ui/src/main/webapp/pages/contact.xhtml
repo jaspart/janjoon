@@ -46,7 +46,8 @@
 						<f:setPropertyActionListener value="#{contact}"
 							target="#{jJContactBean.contactAdmin}" />
 
-						<p:menuitem id="deleteButton" icon="ui-icon-trash" resetValues="true"
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							resetValues="true"
 							oncomplete="PF('contactDeleteDialogWidget').show()"
 							value="#{messages.admin_contact_delete_button}"
 							title="#{messages.admin_contact_delete_label}">
@@ -159,7 +160,16 @@
 											<p:ajax update="msg" listener="#{jJContactBean.addMessage}" />
 										</p:selectBooleanButton>
 									</p:column>
-
+									<p:column>
+										<h:outputLabel for="priceReal" value="Price Real: " />
+										<p:spinner id="priceReal" value="#{jJContactBean.contactAdmin.priceReal}"
+											prefix="$" min="0" disabled="#{jJContactBean.disabledContactMode}"/>
+									</p:column>
+									<p:column>
+										<h:outputLabel for="priceSold" value="Price Sold: " />
+										<p:spinner id="priceSold" value="#{jJContactBean.contactAdmin.priceSold}"
+											prefix="$" min="0" disabled="#{jJContactBean.disabledContactMode}" />
+									</p:column>
 								</p:row>
 
 								<p:row>
@@ -168,7 +178,7 @@
 											value="#{messages.admin_contact_add_button}"
 											style="float: right;" update="contactDialogForm"
 											title="#{messages.admin_contact_add_button}"
-											process="@this,firstname,lastname,email,password,company"
+											process="@this,firstname,lastname,email,password,company,priceSold,priceReal"
 											action="#{jJContactBean.addContact(jJPermissionBean)}"
 											disabled="#{not jJContactBean.disabledPermissionMode}" />
 									</p:column>
@@ -313,7 +323,7 @@
 						<p:commandButton id="saveButton" value="Save" title="Save"
 							update="contactDialogForm :headerForm :growlForm"
 							style="float: right;"
-							process="@this,firstname,lastname,email,password,company"
+							process="@this,firstname,lastname,email,password,company,priceReal,priceSold"
 							disabled="#{jJContactBean.disabledPermissionMode}"
 							action="#{jJContactBean.save(jJPermissionBean)}" />
 					</f:facet>

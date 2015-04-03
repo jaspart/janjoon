@@ -1276,6 +1276,7 @@ public class JJTaskBean {
 			message = "Success Update";
 			facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					message, "Task");
+			//RequestContext.getCurrentInstance().equals("onCellEditTableComplete");
 
 		} else {
 			facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,

@@ -319,8 +319,13 @@ public class ContactCalendarUtil {
 
 				if (jJTaskService != null && task != null
 						&& task.getAssignedTo() != null)
+				{
+					task.setStartDateReal(start);
+					task.setEndDateReal(end);
 					workload = workload
 							- calculateSuperimposedWorkload(task, jJTaskService);
+				}
+					
 
 				return Math.max(0, workload);
 			} else
