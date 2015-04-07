@@ -28,18 +28,24 @@ public class EmailValidator implements Validator {
     public void validate(FacesContext fc, UIComponent c, Object o) throws ValidatorException {
         // No value is not ok
         if (o == null || "".equals((String)o)) {
-            FacesMessage msg = new FacesMessage("No email value!", "Email Validation Error");
-            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-            throw new ValidatorException(msg);
+        	
+        	FacesMessage facesMessage = MessageFactory.getMessage(
+					"validator_email_emailRequired", "Email");
+			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+			throw new ValidatorException(facesMessage);
+            
+           
         }
          
         // The email matcher
         Matcher matcher = EMAIL_COMPILED_PATTERN.matcher((String)o);
          
-        if (!matcher.matches()) {   // Email doesn't match
-            FacesMessage msg = new FacesMessage("Invalid email value!", "Email Validation Error");
-            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-            throw new ValidatorException(msg);
+        if (!matcher.matches()) {   // Email doesn't match           
+            
+            FacesMessage facesMessage = MessageFactory.getMessage(
+					"validator_email_emailInvalid", "Email");
+			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+			throw new ValidatorException(facesMessage);
         }        
         JJContact con=(JJContact) c.getAttributes().get("contact");
         if(con!=null)
@@ -51,9 +57,10 @@ public class EmailValidator implements Validator {
         	}        		
         	 if(!((JJContactBean)LoginBean.findBean("jJContactBean")).emailValid(o.toString(), con))
              {
-             	FacesMessage msg = new FacesMessage("Email Already Exist!", "Email Validation Error");
-                 msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-                 throw new ValidatorException(msg);
+        		FacesMessage facesMessage = MessageFactory.getMessage(
+     					"validator_email_emailExist", "Email");
+     			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+     			throw new ValidatorException(facesMessage);
              }
         } 
     }

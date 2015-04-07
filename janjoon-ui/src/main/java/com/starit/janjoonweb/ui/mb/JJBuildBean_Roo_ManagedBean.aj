@@ -800,18 +800,8 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
             }
         }
         return suggestions;
-    }
+    }  
     
-    public List<JJPhase> JJBuildBean.completePhase(String query) {
-        List<JJPhase> suggestions = new ArrayList<JJPhase>();
-        for (JJPhase jJPhase : jJPhaseService.findAllJJPhases()) {
-            String jJPhaseStr = String.valueOf(jJPhase.getName() +  " "  + jJPhase.getDescription() +  " "  + jJPhase.getCreationDate() +  " "  + jJPhase.getUpdatedDate());
-            if (jJPhaseStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJPhase);
-            }
-        }
-        return suggestions;
-    }
     
     public List<JJTestcase> JJBuildBean.getSelectedTestcases() {
         return selectedTestcases;

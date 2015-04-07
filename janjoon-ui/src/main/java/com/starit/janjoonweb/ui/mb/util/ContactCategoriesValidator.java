@@ -22,42 +22,43 @@ public class ContactCategoriesValidator implements Validator {
 		try {
 			List<Object> selectedItemscheckbox = (List<Object>) value;
 
-			if(component.getId().contains("categories"))
-			{
-				if (selectedItemscheckbox.size() > 3)
-					throw new ValidatorException(
-							new FacesMessage(FacesMessage.SEVERITY_ERROR,
-									"Max 3 item allowed", null));
-			}else 
-			{
-				if (selectedItemscheckbox == null
-						|| selectedItemscheckbox.isEmpty())
-					throw new ValidatorException(new FacesMessage(
-							FacesMessage.SEVERITY_ERROR,
-							"You Should select a contact", null));
+			if (component.getId().contains("categories")
+					&& selectedItemscheckbox.size() > 3) {
+				
+				FacesMessage facesMessage = MessageFactory.getMessage(
+     					"validator_contact_max3Item", "Contact");
+     			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+     			throw new ValidatorException(facesMessage);				
+
+			} else if (selectedItemscheckbox == null
+					|| selectedItemscheckbox.isEmpty()) {
+				FacesMessage facesMessage = MessageFactory.getMessage(
+     					"validator_contact_shouldSelectContat", "Contact");
+     			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+     			throw new ValidatorException(facesMessage);	
 			}
-			
 
 		} catch (ClassCastException e) {
-			
+
 			Set<Object> selectedItemscheckbox = (Set<Object>) value;
 
-			if(component.getId().contains("categories"))
-			{
-				if (selectedItemscheckbox.size() > 3)
-					throw new ValidatorException(
-							new FacesMessage(FacesMessage.SEVERITY_ERROR,
-									"Max 3 item allowed", null));
-			}else 
-			{
-				if (selectedItemscheckbox == null
-						|| selectedItemscheckbox.isEmpty())
-					throw new ValidatorException(new FacesMessage(
-							FacesMessage.SEVERITY_ERROR,
-							"You Should select a contact", null));
+			if (component.getId().contains("categories")
+					&& selectedItemscheckbox.size() > 3) {
+
+				FacesMessage facesMessage = MessageFactory.getMessage(
+     					"validator_contact_max3Item", "Contact");
+     			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+     			throw new ValidatorException(facesMessage);			
+
+			} else if (selectedItemscheckbox == null
+					|| selectedItemscheckbox.isEmpty()) {
+				FacesMessage facesMessage = MessageFactory.getMessage(
+     					"validator_contact_shouldSelectContat", "Contact");
+     			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+     			throw new ValidatorException(facesMessage);	
 			}
+
 		}
 
 	}
-
 }

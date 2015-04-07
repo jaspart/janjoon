@@ -15,4 +15,6 @@ public interface JJProductService {
 	public JJProduct getJJProductWithName(String name);
 	
 	public List<JJProduct> getAdminListProducts();
+	
+	public List<JJProduct> getProducts(JJCompany company,JJProject project);
 }

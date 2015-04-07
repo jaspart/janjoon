@@ -801,11 +801,11 @@ public class JJBugBean {
 						.getContact().getBugs().contains(viewBug)) ? 1 : 0;
 			} else {
 				viewBug = null;
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"validator_page_access", "Bug");
+				facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);	
 				((LoginBean) LoginBean.findBean("loginBean"))
-						.setFacesMessage(new FacesMessage(
-								FacesMessage.SEVERITY_WARN,
-								"This Bug is not among your company Specs",
-								"Bug"));
+						.setFacesMessage(facesMessage);
 			}
 
 		} catch (NumberFormatException ex) {

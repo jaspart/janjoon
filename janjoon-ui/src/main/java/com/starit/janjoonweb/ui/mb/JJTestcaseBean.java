@@ -728,11 +728,11 @@ public class JJTestcaseBean {
 				rendredEmptySelection = false;
 
 			} else {
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"validator_page_access", "Testcase");
+				facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);	
 				((LoginBean) LoginBean.findBean("loginBean"))
-						.setFacesMessage(new FacesMessage(
-								FacesMessage.SEVERITY_WARN,
-								"This TestCase is not among your company TestCase",
-								"TestCase"));
+						.setFacesMessage(facesMessage);
 				project = null;
 				category = null;
 				id = Long.parseLong("gfbfghgf");

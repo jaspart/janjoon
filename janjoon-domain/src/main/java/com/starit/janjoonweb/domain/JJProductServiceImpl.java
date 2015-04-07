@@ -1,6 +1,7 @@
 package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -44,6 +45,53 @@ public class JJProductServiceImpl implements JJProductService {
 
 		return result.getResultList();
 
+	}
+	
+	public List<JJProduct> getProducts(JJCompany company,JJProject project)
+	{
+		if(project == null)
+			return getProducts(company, null, true, true);
+		else
+		{
+
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<JJProduct> criteriaQuery = criteriaBuilder
+					.createQuery(JJProduct.class);
+
+			Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
+
+			CriteriaQuery<JJProduct> select = criteriaQuery.select(from.<JJProduct>get("product"));
+			
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+			predicates.add(criteriaBuilder.isNotNull(from.get("product")));
+
+			select.where(predicates.toArray(new Predicate[] {}));
+
+			TypedQuery<JJProduct> result = entityManager.createQuery(select);
+			HashSet<JJProduct> products=new HashSet<JJProduct>(result.getResultList());
+			
+			Root<JJBug> from2 = criteriaQuery.from(JJBug.class);
+
+			select = criteriaQuery.select(from2.join("versioning").<JJProduct>get("product"));
+			
+			predicates = new ArrayList<Predicate>();
+
+			predicates.add(criteriaBuilder.equal(from2.get("enabled"), true));
+			predicates.add(criteriaBuilder.equal(from2.get("project"), project));
+			predicates.add(criteriaBuilder.isNotNull(from2.get("versioning")));
+
+			select.where(predicates.toArray(new Predicate[] {}));
+
+			TypedQuery<JJProduct> result2 = entityManager.createQuery(select);
+			products.addAll(result2.getResultList());
+			
+
+			return new ArrayList<JJProduct>(products) ;
+
+		}
 	}
 
 	public List<JJProduct> load(JJCompany company, MutableInt size, int first,

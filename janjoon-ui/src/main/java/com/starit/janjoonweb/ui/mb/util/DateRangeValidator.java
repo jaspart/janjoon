@@ -47,18 +47,19 @@ public class DateRangeValidator implements Validator {
 			if (sprintMode != null
 					&& LoginBean.getProject().getStartDate() != null
 					&& LoginBean.getProject().getStartDate().after(testedDate)) {
-				throw new ValidatorException(
-						new FacesMessage(
-								FacesMessage.SEVERITY_ERROR,
-								"Sprint Start date may not be before Project Start date.",
-								null));
+
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"validator_date_startBeforeStart", "Sprint", "Project");
+				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+				throw new ValidatorException(facesMessage);
 			} else if (sprintMode != null
 					&& LoginBean.getProject().getEndDate() != null
 					&& LoginBean.getProject().getEndDate().before(testedDate)) {
-				throw new ValidatorException(new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Sprint Start date may not be after Project end date.",
-						null));
+
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"validator_date_endAfterEnd", "Sprint", "Project");
+				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+				throw new ValidatorException(facesMessage);
 			}
 
 		} else if (taskData == null && startDateComponent != null) {
@@ -79,31 +80,32 @@ public class DateRangeValidator implements Validator {
 				if (LoginBean.getProject().getEndDate() != null
 						&& LoginBean.getProject().getEndDate()
 								.before(testedDate)) {
-					throw new ValidatorException(
-							new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"Sprint End date may not be after Project end date.",
-									null));
+					FacesMessage facesMessage = MessageFactory.getMessage(
+							"validator_date_endAfterEnd", "Sprint", "Project");
+					facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+					throw new ValidatorException(facesMessage);
 				} else if (LoginBean.getProject().getStartDate() != null
 						&& LoginBean.getProject().getStartDate()
 								.after(testedDate)) {
-					throw new ValidatorException(
-							new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"Sprint End date may not be before Project start date.",
-									null));
+					FacesMessage facesMessage = MessageFactory.getMessage(
+							"validator_date_endBeforeStart", "Sprint",
+							"Project");
+					facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+					throw new ValidatorException(facesMessage);
 				} else if (startDate.after(testedDate)) {
 					startDateComponent.setValid(false);
-					throw new ValidatorException(new FacesMessage(
-							FacesMessage.SEVERITY_ERROR,
-							"Start date may not be after end date.", null));
+					FacesMessage facesMessage = MessageFactory.getMessage(
+							"validator_date_startAfterEnd", "Sprint", "Sprint");
+					facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+					throw new ValidatorException(facesMessage);
 				}
 				// ProjectEndDate
 			} else if (startDate.after(testedDate)) {
 				startDateComponent.setValid(false);
-				throw new ValidatorException(new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Start date may not be after end date.", null));
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"validator_date_startAfterEnd", "Project", "Project");
+				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+				throw new ValidatorException(facesMessage);
 			}
 
 		} else {
@@ -118,21 +120,24 @@ public class DateRangeValidator implements Validator {
 						}
 
 						if (starDate != null && starDate.after(testedDate)) {
-							throw new ValidatorException(
-									new FacesMessage(
-											FacesMessage.SEVERITY_ERROR,
-											"Start date Real may not be after end date Real.",
-											null));
+							FacesMessage facesMessage = MessageFactory
+									.getMessage("validator_date_startAfterEnd",
+											"Task", "Task");
+							facesMessage
+									.setSeverity(FacesMessage.SEVERITY_ERROR);
+							throw new ValidatorException(facesMessage);
 						}
 
 						if (taskData.getTask().getSprint() != null) {
-							if (testedDate.compareTo(taskData.getTask().getSprint().getStartDate())
-									* taskData.getTask().getSprint().getEndDate().compareTo(testedDate) < 0) {
-								throw new ValidatorException(
-										new FacesMessage(
-												FacesMessage.SEVERITY_ERROR,
-												"End Date Real may not be after Sprint end Date or Before Sprint Start date.",
-												null));
+							if (testedDate.compareTo(taskData.getTask()
+									.getSprint().getStartDate())
+									* taskData.getTask().getSprint()
+											.getEndDate().compareTo(testedDate) < 0) {							
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_endAfterEndOREndBeforeStart", "Task",
+										"Sprint");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
 							}
 						} else {
 							if (taskData.getTask().getProject() != null
@@ -140,21 +145,21 @@ public class DateRangeValidator implements Validator {
 											.getEndDate() != null
 									&& taskData.getTask().getProject()
 											.getEndDate().before(testedDate)) {
-								throw new ValidatorException(
-										new FacesMessage(
-												FacesMessage.SEVERITY_ERROR,
-												"End Date Real may not be after Project end Date.",
-												null));
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_endAfterEnd", "Task", "Project");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
 							} else if (taskData.getTask().getProject() != null
 									&& taskData.getTask().getProject()
 											.getStartDate() != null
 									&& taskData.getTask().getProject()
 											.getStartDate().after(testedDate)) {
-								throw new ValidatorException(
-										new FacesMessage(
-												FacesMessage.SEVERITY_ERROR,
-												"End Date Real may not be before Project start Date.",
-												null));
+								
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_endBeforeStart", "Task", "Project");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
+								
 							}
 						}
 
@@ -163,20 +168,24 @@ public class DateRangeValidator implements Validator {
 						Date end = taskData.getEndDate();
 
 						if (end != null && testedDate.after(end)) {
-							throw new ValidatorException(new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"Start date may not be after end date.",
-									null));
+							FacesMessage facesMessage = MessageFactory
+									.getMessage("validator_date_startAfterEnd",
+											"Task", "Task");
+							facesMessage
+									.setSeverity(FacesMessage.SEVERITY_ERROR);
+							throw new ValidatorException(facesMessage);
 						}
 
 						if (taskData.getTask().getSprint() != null) {
-							if (testedDate.compareTo(taskData.getTask().getSprint().getStartDate())
-									* taskData.getTask().getSprint().getEndDate().compareTo(testedDate) < 0) {
-								throw new ValidatorException(
-										new FacesMessage(
-												FacesMessage.SEVERITY_ERROR,
-												"Start Date may not be before Sprint Start Date or After Sprint End date.",
-												null));
+							if (testedDate.compareTo(taskData.getTask()
+									.getSprint().getStartDate())
+									* taskData.getTask().getSprint()
+											.getEndDate().compareTo(testedDate) < 0) {
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_StartAfterEndORStartBeforeStart", "Task",
+										"Sprint");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
 							}
 						} else {
 							if (taskData.getTask().getProject() != null
@@ -184,21 +193,19 @@ public class DateRangeValidator implements Validator {
 											.getStartDate() != null
 									&& taskData.getTask().getProject()
 											.getStartDate().after(testedDate)) {
-								throw new ValidatorException(
-										new FacesMessage(
-												FacesMessage.SEVERITY_ERROR,
-												"Start Date may not be before Project Start Date.",
-												null));
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_startBeforeStart", "Task", "Project");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
 							} else if (taskData.getTask().getProject() != null
 									&& taskData.getTask().getProject()
 											.getEndDate() != null
 									&& taskData.getTask().getProject()
 											.getEndDate().before(testedDate)) {
-								throw new ValidatorException(
-										new FacesMessage(
-												FacesMessage.SEVERITY_ERROR,
-												"Start Date may not be after Project End Date.",
-												null));
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_startAfterEnd", "Task", "Project");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
 							}
 						}
 
@@ -207,82 +214,90 @@ public class DateRangeValidator implements Validator {
 						Date start = taskData.getStartDate();
 
 						if (start != null && start.after(testedDate)) {
-							throw new ValidatorException(new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"End date may not be Before Start date.",
-									null));
+							FacesMessage facesMessage = MessageFactory
+									.getMessage("validator_date_endBeforeStart",
+											"Task", "Task");
+							facesMessage
+									.setSeverity(FacesMessage.SEVERITY_ERROR);
+							throw new ValidatorException(facesMessage);
 						}
 
 						if (taskData.getTask().getSprint() != null) {
-							if (testedDate.compareTo(taskData.getTask().getSprint().getStartDate())
-									* taskData.getTask().getSprint().getEndDate().compareTo(testedDate) < 0) {
-								throw new ValidatorException(
-										new FacesMessage(
-												FacesMessage.SEVERITY_ERROR,
-												"End Date may not be after Sprint end Date or before Sprint Start Date.",
-												null));
+							if (testedDate.compareTo(taskData.getTask()
+									.getSprint().getStartDate())
+									* taskData.getTask().getSprint()
+											.getEndDate().compareTo(testedDate) < 0) {
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_endAfterEndOREndBeforeStart", "Task",
+										"Sprint");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
 							}
-						} else{ if (taskData.getTask().getProject() != null
-								&& taskData.getTask().getProject().getEndDate() != null
-								&& taskData.getTask().getProject().getEndDate()
-										.before(testedDate)) {
-							throw new ValidatorException(
-									new FacesMessage(
-											FacesMessage.SEVERITY_ERROR,
-											"End Date may not be after Project end Date.",
-											null));
-						}else if (taskData.getTask().getProject() != null
-								&& taskData.getTask().getProject().getStartDate() != null
-								&& taskData.getTask().getProject().getStartDate()
-										.after(testedDate)) {
-							throw new ValidatorException(
-									new FacesMessage(
-											FacesMessage.SEVERITY_ERROR,
-											"End Date may not be before Project Start Date.",
-											null));
-						}}
+						} else {
+							if (taskData.getTask().getProject() != null
+									&& taskData.getTask().getProject()
+											.getEndDate() != null
+									&& taskData.getTask().getProject()
+											.getEndDate().before(testedDate)) {
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_endAfterEnd", "Task", "Project");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
+							} else if (taskData.getTask().getProject() != null
+									&& taskData.getTask().getProject()
+											.getStartDate() != null
+									&& taskData.getTask().getProject()
+											.getStartDate().after(testedDate)) {
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_endBeforeStart", "Task", "Project");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
+							}
+						}
 
 					}
 					if (edition.equalsIgnoreCase("startDateReal")) {
 						Date end = taskData.getTask().getEndDateReal();
 
 						if (end != null && end.before(testedDate)) {
-							throw new ValidatorException(
-									new FacesMessage(
-											FacesMessage.SEVERITY_ERROR,
-											"Start date Real may not be after end date Real.",
-											null));
+							FacesMessage facesMessage = MessageFactory
+									.getMessage("validator_date_startAfterEnd",
+											"Task", "Task");
+							facesMessage
+									.setSeverity(FacesMessage.SEVERITY_ERROR);
+							throw new ValidatorException(facesMessage);
 						}
 						if (taskData.getTask().getSprint() != null) {
-							if (testedDate.compareTo(taskData.getTask().getSprint().getStartDate())
-									* taskData.getTask().getSprint().getEndDate().compareTo(testedDate) < 0) {
-								throw new ValidatorException(
-										new FacesMessage(
-												FacesMessage.SEVERITY_ERROR,
-												"Start Date Real may not be before Sprint Start Date or After Sprint end Date.",
-												null));
+							if (testedDate.compareTo(taskData.getTask()
+									.getSprint().getStartDate())
+									* taskData.getTask().getSprint()
+											.getEndDate().compareTo(testedDate) < 0) {
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_startAfterEndORStartBeforeStart", "Task",
+										"Sprint");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
 							}
-						} else { if (taskData.getTask().getProject() != null
-								&& taskData.getTask().getProject()
-										.getStartDate() != null
-								&& taskData.getTask().getProject()
-										.getStartDate().after(testedDate)) {
-							throw new ValidatorException(
-									new FacesMessage(
-											FacesMessage.SEVERITY_ERROR,
-											"Start Date Real may not be before Project Start Date.",
-											null));
-						}else if (taskData.getTask().getProject() != null
-								&& taskData.getTask().getProject()
-								.getEndDate() != null
-						&& taskData.getTask().getProject()
-								.getEndDate().before(testedDate)) {
-					throw new ValidatorException(
-							new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"Start Date Real may not be after Project End Date.",
-									null));
-				}
+						} else {
+							if (taskData.getTask().getProject() != null
+									&& taskData.getTask().getProject()
+											.getStartDate() != null
+									&& taskData.getTask().getProject()
+											.getStartDate().after(testedDate)) {
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_startBeforeStart", "Task", "Project");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
+							} else if (taskData.getTask().getProject() != null
+									&& taskData.getTask().getProject()
+											.getEndDate() != null
+									&& taskData.getTask().getProject()
+											.getEndDate().before(testedDate)) {
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_startAfterEnd", "Task", "Project");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
+							}
 						}
 
 					}
@@ -302,42 +317,39 @@ public class DateRangeValidator implements Validator {
 
 						if (testedDate.after(end)) {
 
-							throw new ValidatorException(new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"Start date may not be after end date .",
-									null));
-
+							FacesMessage facesMessage = MessageFactory.getMessage(
+			     					"validator_date_startAfterEnd", "Task","Task");
+			     			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+			     			throw new ValidatorException(facesMessage);	
 						}
 
 						if (sprint != null) {
 							if (testedDate.compareTo(sprint.getStartDate())
 									* sprint.getEndDate().compareTo(testedDate) < 0) {
-								throw new ValidatorException(
-										new FacesMessage(
-												FacesMessage.SEVERITY_ERROR,
-												"Start date may not be Before Sprint start Date or after sprint end Date.",
-												null));
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_startAfterEndORStartBeforeStart", "Task",
+										"Sprint");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
 							}
 						} else {
 							if (task.getProject() != null
 									&& task.getProject().getStartDate() != null
 									&& task.getProject().getStartDate()
 											.after(testedDate)) {
-								throw new ValidatorException(
-										new FacesMessage(
-												FacesMessage.SEVERITY_ERROR,
-												"Start date may not be Before Project start Date.",
-												null));
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_startBeforeStart", "Task", "Project");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
 
 							} else if (task.getProject() != null
 									&& task.getProject().getEndDate() != null
 									&& task.getProject().getEndDate()
 											.before(testedDate)) {
-								throw new ValidatorException(
-										new FacesMessage(
-												FacesMessage.SEVERITY_ERROR,
-												"Start date may not be after Project end Date.",
-												null));
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_startAfterEnd", "Task", "Project");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
 
 							}
 						}
@@ -355,41 +367,40 @@ public class DateRangeValidator implements Validator {
 						}
 
 						if (testedDate.before(start)) {
-							throw new ValidatorException(new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"End Date may not be Before Start Date.",
-									null));
+							FacesMessage facesMessage = MessageFactory
+									.getMessage("validator_date_endBeforeStart",
+											"Task", "Task");
+							facesMessage
+									.setSeverity(FacesMessage.SEVERITY_ERROR);
+							throw new ValidatorException(facesMessage);
 						}
 
 						if (sprint != null) {
 							if (testedDate.compareTo(sprint.getStartDate())
 									* sprint.getEndDate().compareTo(testedDate) < 0) {
-
-								throw new ValidatorException(
-										new FacesMessage(
-												FacesMessage.SEVERITY_ERROR,
-												"End Date may not be after Sprint End Date or before sprint Start date.",
-												null));
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_endAfterEndOREndBeforeStart", "Task",
+										"Sprint");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
 							}
 						} else {
 							if (task.getProject() != null
 									&& task.getProject().getEndDate() != null
 									&& task.getProject().getEndDate()
 											.before(testedDate)) {
-								throw new ValidatorException(
-										new FacesMessage(
-												FacesMessage.SEVERITY_ERROR,
-												"End date may not be After Project End Date.",
-												null));
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_endAfterEnd", "Task", "Project");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
 							} else if (task.getProject() != null
 									&& task.getProject().getStartDate() != null
 									&& task.getProject().getStartDate()
 											.after(testedDate)) {
-								throw new ValidatorException(
-										new FacesMessage(
-												FacesMessage.SEVERITY_ERROR,
-												"end date may not be before Project start Date.",
-												null));
+								FacesMessage facesMessage = MessageFactory.getMessage(
+										"validator_date_endBeforeStart", "Task", "Project");
+								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+								throw new ValidatorException(facesMessage);
 							}
 
 						}
@@ -405,11 +416,10 @@ public class DateRangeValidator implements Validator {
 					if (sprintBean.getSprintUtil().getSprint() != null) {
 						if (testedDate.before(sprintBean.getSprintUtil()
 								.getSprint().getStartDate())) {
-							throw new ValidatorException(
-									new FacesMessage(
-											FacesMessage.SEVERITY_ERROR,
-											"Start Date may not be before Sprint Start Date.",
-											null));
+							FacesMessage facesMessage = MessageFactory.getMessage(
+									"validator_date_startBeforeStart", "Task", "Sprint");
+							facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+							throw new ValidatorException(facesMessage);
 						}
 					}
 
@@ -419,11 +429,10 @@ public class DateRangeValidator implements Validator {
 
 					if (sprint != null) {
 						if (testedDate.before(sprint.getStartDate())) {
-							throw new ValidatorException(
-									new FacesMessage(
-											FacesMessage.SEVERITY_ERROR,
-											"Start Date may not be before Sprint Start Date.",
-											null));
+							FacesMessage facesMessage = MessageFactory.getMessage(
+									"validator_date_startBeforeStart", "Task", "Sprint");
+							facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+							throw new ValidatorException(facesMessage);
 						}
 					}
 

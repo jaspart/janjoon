@@ -184,7 +184,7 @@
 					</p:row>
 				</p:panelGrid>
 			</h:form>
-			<p:panelGrid columns="1" styleClass="customPanelGrid"
+			<h:panelGrid columns="1" styleClass="customPanelGrid" border="0"
 				rendered="#{requirementBean.requirement != null}">
 				<h:form id="requirementForm">
 					<p:panelGrid rendered="#{requirementBean.requirement != null}"
@@ -383,8 +383,9 @@
 							</h:form>
 						</p:column>
 					</p:row>
+					
 				</p:panelGrid>
-			</p:panelGrid>			
+			</h:panelGrid>			
 		</p:panel>
 		<p:fieldset id="container" legend="Comments" toggleable="true"
 				collapsed="true" style="margin-top: 10px;width:50%;"

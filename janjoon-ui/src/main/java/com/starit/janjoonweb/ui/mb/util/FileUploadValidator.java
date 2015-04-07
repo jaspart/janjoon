@@ -24,11 +24,16 @@ public class FileUploadValidator implements Validator {
 		String fileName = getFileName(part);
 		System.out.println("----- validator fileName: " + fileName);
 		if(fileName.length() == 0 ) {
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error: File name is invalid !!","");
-			throw new ValidatorException(message);
+			
+			FacesMessage facesMessage = MessageFactory.getMessage(
+ 					"validator_file_nameInvalid", "File");
+ 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+ 			throw new ValidatorException(facesMessage);			
 		} else if (fileName.length() > 50) {
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error: File name is too long !!","");
-			throw new ValidatorException(message);
+			FacesMessage facesMessage = MessageFactory.getMessage(
+ 					"validator_file_nameLong", "File");
+ 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+ 			throw new ValidatorException(facesMessage);	
 		}
  
 //		try {
@@ -43,16 +48,20 @@ public class FileUploadValidator implements Validator {
 		if(fileType.equalsIgnoreCase("image"))
 		{
 			if (!part.getContentType().contains("image")) {
-				FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error: File type is invalid !!","");
-			throw new ValidatorException(message);
+				FacesMessage facesMessage = MessageFactory.getMessage(
+	 					"validator_file_TypeInvalid", "File");
+	 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+	 			throw new ValidatorException(facesMessage);	
 			  }
 		}
 		
  
 		// 3. validate file size (should not be greater than 512 bytes)
 		if (part.getSize() > 100000) {
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error: File size is too big !!","");
-			throw new ValidatorException(message);
+			FacesMessage facesMessage = MessageFactory.getMessage(
+ 					"validator_file_sizeBig", "File");
+ 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+ 			throw new ValidatorException(facesMessage);
 		}
 	}
  

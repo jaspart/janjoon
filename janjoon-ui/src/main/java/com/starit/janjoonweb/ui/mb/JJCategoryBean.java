@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
@@ -145,9 +146,13 @@ public class JJCategoryBean {
 			}
 		}
 		else {
-			message = "This category is already exist into the database, try to use another name";
-			facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+			message = "validator_buildVersion_nameExist";		
+			
+			facesMessage = MessageFactory.getMessage(
 					message, "Category");
+			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+			throw new ValidatorException(facesMessage);
+
 		}
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}

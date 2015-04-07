@@ -4,21 +4,62 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
-		<p:panel id="deliveryPanel">
-			<h:form id="deliveryFormNorth">
-				<p:layoutUnit position="north" style="min-height:30px;">
+		<p:panel id="deliveryPanel" style="height: #{jJBuildBean.height};">
+			<p:commandButton value="#{messages.specification_video_help_title}"
+				style="float: right;margin-right: -10px;margin-top: -7px;"
+				id="videoHelpBtn" icon="ui-icon-video"
+				onclick="PF('videoHelpWidget').show()" type="button" />
+			<h:form id="deliveryForm">
+				<h:panelGrid columns="3" style="margin-top: 20px;" border="0">
+					<c:forEach items="#{jJBuildBean.buildDataModelList}"
+						var="buildDataModel" varStatus="loop">
 
-					<p:commandButton value="#{messages.specification_video_help_title}"
-						style="float: right;" id="videoHelpBtn" icon="ui-icon-video"
-						onclick="PF('videoHelpWidget').show()" type="button" />
-
-				</p:layoutUnit>
+						<p:fieldset
+							legend="#{buildDataModel.version.product.name}/#{buildDataModel.version.name}"
+							id="buildFieldSet">
+							<p:dataTable id="buildDataTable_#{loop.index}" scrollable="true"
+								scrollHeight="250" var="build" value="#{buildDataModel.builds}"
+								rowKey="#{build.id}">
+								<!-- 							<p:column headerText="Project"> -->
+								<!-- 								<h:outputText value="#{build.name}" /> -->
+								<!-- 							</p:column> -->
+								<p:column headerText="Build">
+									<h:outputText value="#{build.name}" />
+								</p:column>
+								<p:column headerText="Stage">
+									<p:autoComplete id="phase" dropdown="true"
+										value="#{build.phase}" itemLabel="#{phase.name}"
+										itemValue="#{phase}" var="phase"
+										converter="com.starit.janjoonweb.ui.mb.converter.JJPhaseConverter"
+										completeMethod="#{jJBuildBean.completePhase}">
+										<p:ajax event="itemSelect"
+											onstart="PF('blockUIWidget').block()"
+											oncomplete="PF('blockUIWidget').unblock()"
+											listener="#{jJBuildBean.changeEvent(build)}"
+											update="buildDataTable_#{loop.index} :growlForm" />
+									</p:autoComplete>
+								</p:column>
+							</p:dataTable>
+						</p:fieldset>
+					</c:forEach>
+				</h:panelGrid>
 			</h:form>
+
 		</p:panel>
+		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
+		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
+			position="center" header="#{messages.specification_video_help_title}"
+			style="padding:0px;" resizable="false" draggable="false"
+			minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
+			<video width="100%" height="100%" controls="true">
+				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
+			</video>
+		</p:dialog>
 	</ui:define>
 </ui:composition>
 </html>

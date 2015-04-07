@@ -25,40 +25,49 @@ public class OnSubmitTaskValidator implements Validator {
 		{
 			Integer workload=(Integer) value;
 			if(workload == null)
-				throw new ValidatorException(new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Workload is requierd", null));
+			{
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"validator_task_workloadRequired", "Task");
+				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+				throw new ValidatorException(facesMessage);
+				
+			}				
 			if(workload <= 0)
-				throw new ValidatorException(new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Please set Workload More than 0", null));
+			{
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"validator_task_workloadNegatif", "Task");
+				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+				throw new ValidatorException(facesMessage);			
+			}
+				
 		}
 		
 		if(type.equalsIgnoreCase("startDate"))
 		{
 			Date startDate=(Date) value;
 			if(startDate == null)
-				throw new ValidatorException(new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"start date is requierd", null));
-			
-			else
+			{
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"validator_task_startDateRequired", "Task");
+				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+				throw new ValidatorException(facesMessage);			
+				
+			}else
 			{
 				if(((JJTaskBean)LoginBean.findBean("jJTaskBean")).getMode().equalsIgnoreCase("scrum"))
 				{
 					if(startDate.before(((JJSprintBean)LoginBean.findBean("jJSprintBean")).getSprintUtil().getSprint().getStartDate()))
 					{
-						throw new ValidatorException(
-								new FacesMessage(
-										FacesMessage.SEVERITY_ERROR,
-										"Start Date may not be before Sprint Start Date.",
-										null));
+						FacesMessage facesMessage = MessageFactory.getMessage(
+								"validator_task_startBeforeSprintStart", "Task");
+						facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+						throw new ValidatorException(facesMessage);		
 					}else if(startDate.after(((JJSprintBean)LoginBean.findBean("jJSprintBean")).getSprintUtil().getSprint().getEndDate()))
 					{
-						throw new ValidatorException(new FacesMessage(
-								FacesMessage.SEVERITY_ERROR,
-								"End Date may not be after Sprint end Date.",
-								null));
+						FacesMessage facesMessage = MessageFactory.getMessage(
+								"validator_task_endAfterSprintEnd", "Task");
+						facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+						throw new ValidatorException(facesMessage);	
 					}
 				}else
 				{
@@ -66,17 +75,16 @@ public class OnSubmitTaskValidator implements Validator {
 					{
 						if(startDate.before(((JJTaskBean)LoginBean.findBean("jJTaskBean")).getSprint().getStartDate()))
 						{
-							throw new ValidatorException(
-									new FacesMessage(
-											FacesMessage.SEVERITY_ERROR,
-											"Start Date may not be before Sprint Start Date.",
-											null));
+							FacesMessage facesMessage = MessageFactory.getMessage(
+									"validator_task_startBeforeSprintStart", "Task");
+							facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+							throw new ValidatorException(facesMessage);	
 						}else if(startDate.after(((JJTaskBean)LoginBean.findBean("jJTaskBean")).getSprint().getEndDate()))
 						{
-							throw new ValidatorException(new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"End Date may not be after Sprint end Date.",
-									null));
+							FacesMessage facesMessage = MessageFactory.getMessage(
+									"validator_task_endAfterSprintEnd", "Task");
+							facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+							throw new ValidatorException(facesMessage);	
 						}
 					
 					

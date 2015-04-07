@@ -213,13 +213,13 @@ public class SprintUtil {
 
 		DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 
-		int workload = 0;
+		int workload = this.workload;
 		int diff = 0;
 
-		for (JJTask task : tasks) {
-			if (task.getWorkloadPlanned() != null)
-				workload = workload + task.getWorkloadPlanned();
-		}
+//		for (JJTask task : tasks) {
+//			if (task.getWorkloadPlanned() != null)
+//				workload = workload + task.getWorkloadPlanned();
+//		}
 
 		diff = workload;
 		List<JJTask> removedTasks = new ArrayList<JJTask>();
@@ -259,7 +259,7 @@ public class SprintUtil {
 		removedTasks = new ArrayList<JJTask>();
 
 		while (staDate.before(CalendarUtil.getAfterDay(sprint.getEndDate()))) {
-			if (staDate.before(CalendarUtil.getAfterDay(currentTime))) {
+			if (staDate.before(CalendarUtil.getAfterDay(currentTime)) && !tasks.isEmpty()) {
 				for (JJTask task : tasks) {
 					if (task.getEndDateReal() != null) {
 						if (f.format(task.getEndDateReal()).equalsIgnoreCase(

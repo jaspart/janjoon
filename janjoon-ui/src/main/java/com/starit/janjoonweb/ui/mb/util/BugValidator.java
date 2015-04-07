@@ -21,10 +21,10 @@ public class BugValidator implements Validator {
 		{
 			if(object == null)
 			{
-				throw new ValidatorException(new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"You Should Set one value from Build or Version",
-						null));
+				FacesMessage facesMessage = MessageFactory.getMessage(
+     					"validator_bug_versionOrBuildRequired", "Bug");
+     			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+     			throw new ValidatorException(facesMessage);			
 			}
 		}
 		

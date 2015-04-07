@@ -447,11 +447,11 @@ public class RequirementBean {
 
 			} else {
 				requirement = null;
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"validator_page_access", "requirement");
+				facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);	
 				((LoginBean) LoginBean.findBean("loginBean"))
-						.setFacesMessage(new FacesMessage(
-								FacesMessage.SEVERITY_WARN,
-								"This Requirement is not among your company Specs",
-								"Requirement"));
+						.setFacesMessage(facesMessage);
 			}
 
 		} catch (NumberFormatException ex) {

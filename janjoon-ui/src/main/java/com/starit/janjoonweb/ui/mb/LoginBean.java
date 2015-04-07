@@ -199,6 +199,13 @@ public class LoginBean implements Serializable {
 
 				if (s.contains("development") || s.contains("login"))
 					s = "main";
+				else if(getProject() == null && getProduct() == null && s.contains("delivery"))
+				{
+					s = "main";
+					facesMessage = MessageFactory.getMessage(
+							"dev.nullProject.label",
+							FacesMessage.SEVERITY_ERROR, "");
+				}
 				else if (s.contains("planning") || s.contains("test")
 						|| s.contains("stats")) {
 
@@ -221,7 +228,7 @@ public class LoginBean implements Serializable {
 							s = s + pairs.getKey() + "=" + st + "&";
 						}
 					}
-					s=s.substring(0,s.length()-1);
+					s = s.substring(0, s.length() - 1);
 					System.out.println(s);
 				}
 				return s;
@@ -383,7 +390,7 @@ public class LoginBean implements Serializable {
 
 		if (messageCount == null)
 			messageCount = jJMessageService.getMessagesCount(getProject(),
-					getProduct(), getContact().getCompany(),getContact());
+					getProduct(), getContact().getCompany(), getContact());
 
 		return messageCount;
 	}
@@ -638,13 +645,17 @@ public class LoginBean implements Serializable {
 				((JJTestcaseBean) session.getAttribute("jJTestcaseBean"))
 						.setCategory(cat);
 			}
-
-			// authorisationService = new AuthorisationService(session,contact);
+			
 			messageCount = null;
-			// messageListener(session);
 			session.setAttribute("jJBugBean", new JJBugBean());
 			session.setAttribute("jJMessageBean", null);
 			session.setAttribute("jJRequirementBean", null);
+			
+			if(session.getAttribute("jJBuildBean") != null)
+			{
+				((JJBuildBean)session.getAttribute("jJBuildBean")).
+					setBuildDataModelList(null);
+			}
 
 			if (event != null) {
 				if (session.getAttribute("requirementBean") != null) {
@@ -1018,6 +1029,14 @@ public class LoginBean implements Serializable {
 				FacesContext.getCurrentInstance().getExternalContext()
 						.redirect(path + "/pages/main.jsf?faces-redirect=true");
 
+			} else if (getProject() == null && getProduct() == null && root.getViewId().contains("delivery")) {
+				
+				facesMessage = MessageFactory.getMessage(
+						"dev.nullProject.label", FacesMessage.SEVERITY_ERROR,
+						"Project");
+				FacesContext.getCurrentInstance().getExternalContext()
+						.redirect(path + "/pages/main.jsf?faces-redirect=true");
+				
 			} else {
 				String previos = FacesContext.getCurrentInstance()
 						.getExternalContext().getRequestHeaderMap()

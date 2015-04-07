@@ -24,7 +24,7 @@ public class ConfigListener implements ServletContextListener {
 
 	@Autowired
 	JJMessageService jJMessageService;
-	
+
 	@Autowired
 	JJImportanceService jJImportanceService;
 
@@ -79,6 +79,13 @@ public class ConfigListener implements ServletContextListener {
 	@Autowired
 	JJProfileService jJProfileService;
 
+	@Autowired
+	JJPhaseService jJPhaseService;
+
+	public void setjJPhaseService(JJPhaseService jJPhaseService) {
+		this.jJPhaseService = jJPhaseService;
+	}
+
 	public void setjJMessageService(JJMessageService jJMessageService) {
 		this.jJMessageService = jJMessageService;
 	}
@@ -123,7 +130,7 @@ public class ConfigListener implements ServletContextListener {
 	public void setjJVersionService(JJVersionService jJVersionService) {
 		this.jJVersionService = jJVersionService;
 	}
-	
+
 	public void setjJImportanceService(JJImportanceService importanceService) {
 		this.jJImportanceService = importanceService;
 	}
@@ -197,63 +204,63 @@ public class ConfigListener implements ServletContextListener {
 				company.setEnabled(true);
 				company.setCalendar(convertStreamToString(company.getName()));
 				jJCompanyService.saveJJCompany(company);
-//
-//				company = new JJCompany();
-//				company.setName("StarConsulting");
-//				company.setDescription(company.getName()
-//						+ "Message-CompanyDescription");
-//				company.setCreationDate(new Date());
-//				company.setEnabled(true);
-//				company.setCalendar(convertStreamToString(company.getName()));
-//				jJCompanyService.saveJJCompany(company);
+				//
+				// company = new JJCompany();
+				// company.setName("StarConsulting");
+				// company.setDescription(company.getName()
+				// + "Message-CompanyDescription");
+				// company.setCreationDate(new Date());
+				// company.setEnabled(true);
+				// company.setCalendar(convertStreamToString(company.getName()));
+				// jJCompanyService.saveJJCompany(company);
 			}
 
 		}
-		
-//		for(JJRight right:jJRightService.findAllJJRights())
-//		{
-//			if(right.getObjet().startsWith("JJ"))
-//			{
-//				right.setObjet(right.getObjet().substring(2));
-//				jJRightService.saveJJRight(right);
-//			}
-//				
-//		}
-//		
-//		for(JJCriticity criticity:jJCriticityService.findAllJJCriticitys())
-//		{
-//			if(criticity.getObjet().startsWith("JJ"))
-//			{
-//				criticity.setObjet(criticity.getObjet().substring(2));
-//				jJCriticityService.saveJJCriticity(criticity);
-//			}
-//		}
-//		
-//		for(JJStatus status:jJStatusService.findAllJJStatuses())
-//		{
-//			if(status.getObjet().startsWith("JJ"))
-//			{
-//				status.setObjet(status.getObjet().substring(2));
-//				jJStatusService.saveJJStatus(status);
-//			}
-//		}
-//		
-		if(jJImportanceService.findAllJJImportances().isEmpty())
-		{
-			String[] names ={"High","Medium","Low"};
-			Integer i=3;
-			
+
+		// for(JJRight right:jJRightService.findAllJJRights())
+		// {
+		// if(right.getObjet().startsWith("JJ"))
+		// {
+		// right.setObjet(right.getObjet().substring(2));
+		// jJRightService.saveJJRight(right);
+		// }
+		//
+		// }
+		//
+		// for(JJCriticity criticity:jJCriticityService.findAllJJCriticitys())
+		// {
+		// if(criticity.getObjet().startsWith("JJ"))
+		// {
+		// criticity.setObjet(criticity.getObjet().substring(2));
+		// jJCriticityService.saveJJCriticity(criticity);
+		// }
+		// }
+		//
+		// for(JJStatus status:jJStatusService.findAllJJStatuses())
+		// {
+		// if(status.getObjet().startsWith("JJ"))
+		// {
+		// status.setObjet(status.getObjet().substring(2));
+		// jJStatusService.saveJJStatus(status);
+		// }
+		// }
+		//
+		if (jJImportanceService.findAllJJImportances().isEmpty()) {
+			String[] names = { "High", "Medium", "Low" };
+			Integer i = 3;
+
 			for (String name : names) {
-				JJImportance importance=new JJImportance();
+				JJImportance importance = new JJImportance();
 				importance.setCreationDate(new Date());
 				importance.setEnabled(true);
 				importance.setObjet("Bug");
 				importance.setLevelImportance(i);
 				importance.setName(name);
-				importance.setDescription(name+" :Bug Importance Description");
+				importance
+						.setDescription(name + " :Bug Importance Description");
 				jJImportanceService.saveJJImportance(importance);
 				i--;
-				
+
 			}
 		}
 
@@ -371,32 +378,31 @@ public class ConfigListener implements ServletContextListener {
 			configuration.setEnabled(true);
 			jJConfigurationService.saveJJConfiguration(configuration);
 
-		}		
+		}
 
-
-//		if (jJBuildService.getBuilds(null, false, true).isEmpty()) {
-//			JJBuild build;
-//			for (int i = 0; i < 4; i++) {
-//				build = new JJBuild();
-//				build.setName("Build 0." + i);
-//				build.setCreationDate(new Date());
-//				build.setDescription("Build 0." + i + " Description");
-//				build.setEnabled(true);
-//				jJBuildService.saveJJBuild(build);
-//			}
-//		}
-//
-//		if (jJSprintService.getSprints(null, true).isEmpty()) {
-//			JJSprint sprint;
-//			for (int i = 0; i < 4; i++) {
-//				sprint = new JJSprint();
-//				sprint.setName("Sprint " + i);
-//				sprint.setCreationDate(new Date());
-//				sprint.setDescription("Sprint " + i + " Description");
-//				sprint.setEnabled(true);
-//				jJSprintService.saveJJSprint(sprint);
-//			}
-//		}
+		// if (jJBuildService.getBuilds(null, false, true).isEmpty()) {
+		// JJBuild build;
+		// for (int i = 0; i < 4; i++) {
+		// build = new JJBuild();
+		// build.setName("Build 0." + i);
+		// build.setCreationDate(new Date());
+		// build.setDescription("Build 0." + i + " Description");
+		// build.setEnabled(true);
+		// jJBuildService.saveJJBuild(build);
+		// }
+		// }
+		//
+		// if (jJSprintService.getSprints(null, true).isEmpty()) {
+		// JJSprint sprint;
+		// for (int i = 0; i < 4; i++) {
+		// sprint = new JJSprint();
+		// sprint.setName("Sprint " + i);
+		// sprint.setCreationDate(new Date());
+		// sprint.setDescription("Sprint " + i + " Description");
+		// sprint.setEnabled(true);
+		// jJSprintService.saveJJSprint(sprint);
+		// }
+		// }
 
 		String[] objects = { "Requirement", "Bug", "Message", "Task" };
 
@@ -451,40 +457,65 @@ public class ConfigListener implements ServletContextListener {
 			}
 		}
 
-//		if (jJBugService.getBugs(null, null, null, true, true).isEmpty()) {
-//			List<JJStatus> statuses = jJStatusService.getStatus("Bug", true,
-//					null, true);
-//			List<JJCriticity> criticities = jJCriticityService.getCriticities(
-//					"Bug", true);
-//			JJCriticity crit = null;
-//			int iCrit = 0;
-//			for (JJStatus stat : statuses) {
-//				JJBug bug;
-//				crit = criticities.get(iCrit);
-//				bug = new JJBug();
-//				bug.setName(stat.getName() + "-bug : " + crit.getName());
-//				bug.setDescription(stat.getName() + "-bugDescription : "
-//						+ crit.getName());
-//				bug.setCreationDate(new Date());
-//				bug.setEnabled(true);
-//				bug.setStatus(stat);
-//				bug.setCriticity(crit);
-//				jJBugService.saveJJBug(bug);
-//				iCrit = (iCrit + 1) % 2;
-//				crit = criticities.get(iCrit);
-//				bug = new JJBug();
-//				bug.setName(stat.getName() + "-bug : " + crit.getName());
-//				bug.setDescription(stat.getName() + "-bugDescription : "
-//						+ crit.getName());
-//				bug.setCreationDate(new Date());
-//				bug.setEnabled(true);
-//				bug.setStatus(stat);
-//				bug.setCriticity(crit);
-//				jJBugService.saveJJBug(bug);
-//
-//			}
-//
-//		}
+		if (jJPhaseService.findAllJJPhases().isEmpty()) {
+
+			JJPhase phase = new JJPhase();
+			phase.setName("BETA");
+			phase.setDescription("BETA");
+			phase.setEnabled(true);
+			phase.setCreationDate(new Date());
+			phase.setLevelPhase(2);
+			jJPhaseService.saveJJPhase(phase);
+			phase = new JJPhase();
+			phase.setName("ALPHA");
+			phase.setDescription("ALPHA");
+			phase.setEnabled(true);
+			phase.setCreationDate(new Date());
+			phase.setLevelPhase(1);
+			jJPhaseService.saveJJPhase(phase);
+			phase = new JJPhase();
+			phase.setName("RELEASE");
+			phase.setDescription("RELEASE");
+			phase.setEnabled(true);
+			phase.setCreationDate(new Date());
+			phase.setLevelPhase(3);
+			jJPhaseService.saveJJPhase(phase);
+		}
+
+		// if (jJBugService.getBugs(null, null, null, true, true).isEmpty()) {
+		// List<JJStatus> statuses = jJStatusService.getStatus("Bug", true,
+		// null, true);
+		// List<JJCriticity> criticities = jJCriticityService.getCriticities(
+		// "Bug", true);
+		// JJCriticity crit = null;
+		// int iCrit = 0;
+		// for (JJStatus stat : statuses) {
+		// JJBug bug;
+		// crit = criticities.get(iCrit);
+		// bug = new JJBug();
+		// bug.setName(stat.getName() + "-bug : " + crit.getName());
+		// bug.setDescription(stat.getName() + "-bugDescription : "
+		// + crit.getName());
+		// bug.setCreationDate(new Date());
+		// bug.setEnabled(true);
+		// bug.setStatus(stat);
+		// bug.setCriticity(crit);
+		// jJBugService.saveJJBug(bug);
+		// iCrit = (iCrit + 1) % 2;
+		// crit = criticities.get(iCrit);
+		// bug = new JJBug();
+		// bug.setName(stat.getName() + "-bug : " + crit.getName());
+		// bug.setDescription(stat.getName() + "-bugDescription : "
+		// + crit.getName());
+		// bug.setCreationDate(new Date());
+		// bug.setEnabled(true);
+		// bug.setStatus(stat);
+		// bug.setCriticity(crit);
+		// jJBugService.saveJJBug(bug);
+		//
+		// }
+		//
+		// }
 
 		if (jJCategoryService.getCategories(null, false, true, true).isEmpty()) {
 			String[] names = { "BUSINESS", "FUNCTIONAL", "TECHNICAL",
@@ -557,10 +588,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setX(true);
 			right.setEnabled(true);
 			right.setProfile(projectManagerProfile);
-			
-			
-			jJRightService.saveJJRight(right);			
-			
+
+			jJRightService.saveJJRight(right);
+
 			right = new JJRight();
 			right.setObjet("Requirement");
 			right.setCategory(businessCategory);
@@ -568,9 +598,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(projectManagerProfile);		
+			right.setProfile(projectManagerProfile);
 
-			jJRightService.saveJJRight(right);			
+			jJRightService.saveJJRight(right);
 
 			right = new JJRight();
 			right.setObjet("Requirement");
@@ -581,10 +611,8 @@ public class ConfigListener implements ServletContextListener {
 			right.setEnabled(true);
 			right.setProfile(projectManagerProfile);
 
-			
-
 			jJRightService.saveJJRight(right);
-			
+
 			right = new JJRight();
 			right.setObjet("Requirement");
 			right.setCategory(technicalCategory);
@@ -592,11 +620,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(false);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(projectManagerProfile);			
+			right.setProfile(projectManagerProfile);
 
 			jJRightService.saveJJRight(right);
-			
-			
 
 			right = new JJRight();
 			right.setObjet("Requirement");
@@ -605,11 +631,10 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(false);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(projectManagerProfile);		
+			right.setProfile(projectManagerProfile);
 
 			jJRightService.saveJJRight(right);
-			
-			
+
 			right = new JJRight();
 			right.setObjet("Planning");
 			right.setCategory(architectureCategory);
@@ -617,10 +642,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(projectManagerProfile);			
+			right.setProfile(projectManagerProfile);
 
 			jJRightService.saveJJRight(right);
-			
 
 			right = new JJRight();
 			right.setObjet("Planning");
@@ -629,10 +653,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(projectManagerProfile);			
+			right.setProfile(projectManagerProfile);
 
 			jJRightService.saveJJRight(right);
-			
 
 			right = new JJRight();
 			right.setObjet("Test");
@@ -640,20 +663,19 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(false);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(projectManagerProfile);		
+			right.setProfile(projectManagerProfile);
 
 			jJRightService.saveJJRight(right);
-			
+
 			right = new JJRight();
 			right.setObjet("Product");
 			right.setR(true);
 			right.setW(false);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(projectManagerProfile);			
+			right.setProfile(projectManagerProfile);
 
 			jJRightService.saveJJRight(right);
-			
 
 			// Product Manager Profile
 
@@ -664,10 +686,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(productManagerProfile);		
+			right.setProfile(productManagerProfile);
 
 			jJRightService.saveJJRight(right);
-		
 
 			right = new JJRight();
 			right.setObjet("Requirement");
@@ -676,10 +697,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(false);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(productManagerProfile);			
+			right.setProfile(productManagerProfile);
 
 			jJRightService.saveJJRight(right);
-			
 
 			right = new JJRight();
 			right.setObjet("Requirement");
@@ -688,10 +708,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(productManagerProfile);		
+			right.setProfile(productManagerProfile);
 
 			jJRightService.saveJJRight(right);
-			
 
 			right = new JJRight();
 			right.setObjet("Requirement");
@@ -700,7 +719,7 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(productManagerProfile);			
+			right.setProfile(productManagerProfile);
 
 			jJRightService.saveJJRight(right);
 
@@ -711,7 +730,7 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(productManagerProfile);		
+			right.setProfile(productManagerProfile);
 
 			jJRightService.saveJJRight(right);
 
@@ -723,11 +742,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setX(true);
 			right.setEnabled(true);
 			right.setProfile(productManagerProfile);
-		
 
 			jJRightService.saveJJRight(right);
 
-			
 			right = new JJRight();
 			right.setObjet("Planning");
 			right.setCategory(technicalCategory);
@@ -735,10 +752,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(productManagerProfile);		
+			right.setProfile(productManagerProfile);
 
 			jJRightService.saveJJRight(right);
-	
 
 			right = new JJRight();
 			right.setObjet("Test");
@@ -746,10 +762,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(productManagerProfile);			
+			right.setProfile(productManagerProfile);
 
 			jJRightService.saveJJRight(right);
-
 
 			// CEO Profile
 			right = new JJRight();
@@ -758,11 +773,10 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(ceoProfile);			
+			right.setProfile(ceoProfile);
 
 			jJRightService.saveJJRight(right);
-	
-			
+
 			// cutomProfile rights
 			right = new JJRight();
 			right.setObjet("Build");
@@ -770,10 +784,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(false);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(customProfile);			
+			right.setProfile(customProfile);
 
 			jJRightService.saveJJRight(right);
-	
 
 			right = new JJRight();
 			right.setObjet("Requirement");
@@ -781,11 +794,10 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(false);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(customProfile);			
+			right.setProfile(customProfile);
 
 			jJRightService.saveJJRight(right);
-		
-			
+
 			// CEO Profile
 			right = new JJRight();
 			right.setObjet("*");
@@ -793,10 +805,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(ctoProfile);			
+			right.setProfile(ctoProfile);
 
 			jJRightService.saveJJRight(right);
-	
 
 			// Tester Profile
 			right = new JJRight();
@@ -805,10 +816,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(testerProfile);			
+			right.setProfile(testerProfile);
 
 			jJRightService.saveJJRight(right);
-
 
 			right = new JJRight();
 			right.setObjet("Requirement");
@@ -816,10 +826,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(false);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(testerProfile);		
+			right.setProfile(testerProfile);
 
 			jJRightService.saveJJRight(right);
-	
 
 			right = new JJRight();
 			right.setObjet("Product");
@@ -831,8 +840,6 @@ public class ConfigListener implements ServletContextListener {
 			right.setProfile(testerProfile);
 
 			jJRightService.saveJJRight(right);
-	
-
 
 			// Developer Profile
 			right = new JJRight();
@@ -843,10 +850,7 @@ public class ConfigListener implements ServletContextListener {
 			right.setEnabled(true);
 			right.setProfile(developerProfile);
 
-			
-
 			jJRightService.saveJJRight(right);
-
 
 			right = new JJRight();
 			right.setObjet("Requirement");
@@ -854,7 +858,7 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(false);
 			right.setX(false);
 			right.setEnabled(true);
-			right.setProfile(developerProfile);			
+			right.setProfile(developerProfile);
 
 			jJRightService.saveJJRight(right);
 
@@ -865,11 +869,9 @@ public class ConfigListener implements ServletContextListener {
 			right.setW(true);
 			right.setX(true);
 			right.setEnabled(true);
-			right.setProfile(developerProfile);		
-			
+			right.setProfile(developerProfile);
 
 			jJRightService.saveJJRight(right);
-		
 
 		}
 
@@ -890,8 +892,10 @@ public class ConfigListener implements ServletContextListener {
 			jJContactService.saveJJContact(contact);
 
 			List<JJProfile> profiles = new ArrayList<JJProfile>();
-			//profiles.add(jJProfileService.getOneProfile("ProjectManager", true));
-			//profiles.add(jJProfileService.getOneProfile("ProductManager", true));
+			// profiles.add(jJProfileService.getOneProfile("ProjectManager",
+			// true));
+			// profiles.add(jJProfileService.getOneProfile("ProductManager",
+			// true));
 			profiles.add(jJProfileService.getOneProfile("CTO", true));
 
 			for (JJProfile profile : profiles) {
@@ -903,117 +907,119 @@ public class ConfigListener implements ServletContextListener {
 				jJPermissionService.saveJJPermission(permission);
 			}
 
-//			contact = new JJContact();
-//			contact.setName("Thierry");
-//			contact.setFirstname("Thierry");
-//			contact.setPassword(passwordEncoder.encode("BeHappy2012"));
-//			contact.setDescription("This contact is " + contact.getFirstname()
-//					+ " " + contact.getName());
-//			contact.setEnabled(true);
-//			contact.setEmail("thierry@startit.fr");
-//			contact.setCreationDate(new Date());
-//			contact.setCompany(jJCompanyService.getActifCompanies().get(0));
-//			jJContactService.saveJJContact(contact);
-//
-//			JJProfile profile = jJProfileService.getOneProfile("CustomProfile",
-//					true);
-//			JJPermission permission = new JJPermission();
-//			permission.setContact(contact);
-//			permission.setProfile(profile);
-//			permission.setEnabled(true);
-//			contact.getPermissions().add(permission);
-//			jJPermissionService.saveJJPermission(permission);
+			// contact = new JJContact();
+			// contact.setName("Thierry");
+			// contact.setFirstname("Thierry");
+			// contact.setPassword(passwordEncoder.encode("BeHappy2012"));
+			// contact.setDescription("This contact is " +
+			// contact.getFirstname()
+			// + " " + contact.getName());
+			// contact.setEnabled(true);
+			// contact.setEmail("thierry@startit.fr");
+			// contact.setCreationDate(new Date());
+			// contact.setCompany(jJCompanyService.getActifCompanies().get(0));
+			// jJContactService.saveJJContact(contact);
+			//
+			// JJProfile profile =
+			// jJProfileService.getOneProfile("CustomProfile",
+			// true);
+			// JJPermission permission = new JJPermission();
+			// permission.setContact(contact);
+			// permission.setProfile(profile);
+			// permission.setEnabled(true);
+			// contact.getPermissions().add(permission);
+			// jJPermissionService.saveJJPermission(permission);
 
 		}
 
-//		if (jJProductService.getProducts(true).isEmpty()) {
-//			JJContact manager = null;
-//			JJContact contact = jJContactService.getContactByEmail(
-//					"janjoon.mailer@gmail.com", true);
-//
-//			if (contact != null) {
-//				manager = contact;
-//			}
-//
-//			Set<JJVersion> versions = new HashSet<JJVersion>();
-//
-//			JJProduct product = new JJProduct();
-//			product.setName("ProductName 1");
-//			product.setDescription("ProductDescription 1");
-//			product.setCreationDate(new Date());
-//			product.setEnabled(true);
-//			product.setExtname("ProductExtName 1");
-//			product.setManager(manager);
-//
-//			jJProductService.saveJJProduct(product);
-//			JJVersion version;
-//			version = new JJVersion();
-//			version.setName("main");
-//			version.setDescription("VersionDescription Main");
-//			version.setCreationDate(new Date());
-//			version.setEnabled(true);
-//			version.setProduct(product);
-//			jJVersionService.saveJJVersion(version);
-//
-//			versions.add(version);
-//			JJVersion version1 = new JJVersion();
-//			version1.setName("integ/14.1");
-//			version1.setDescription("VersionDescription Integ V:14.1");
-//			version1.setCreationDate(new Date());
-//			version1.setEnabled(true);
-//			version1.setProduct(product);
-//			jJVersionService.saveJJVersion(version1);
-//
-//			versions.add(version1);
-//			JJVersion version2 = new JJVersion();
-//			version2.setName("integ/14.2");
-//			version2.setDescription("VersionDescription Integ V:14.2");
-//			version2.setCreationDate(new Date());
-//			version2.setEnabled(true);
-//			version2.setProduct(product);
-//			jJVersionService.saveJJVersion(version2);
-//
-//			versions.add(version2);
-//			JJVersion version3 = new JJVersion();
-//			version3.setName("prod/13.4");
-//			version3.setDescription("VersionDescription Production V:13.4");
-//			version3.setCreationDate(new Date());
-//			version3.setEnabled(true);
-//			version3.setProduct(product);
-//			jJVersionService.saveJJVersion(version3);
-//
-//			versions.add(version3);
-//
-//			jJProductService.saveJJProduct(product);
-//			product.setVersions(versions);
-//
-//		}
-//		JJContact contact = jJContactService.getContactByEmail(
-//				"janjoon.mailer@gmail.com", true);
-//		JJContact manager = null;
-//		if (contact != null) {
-//			manager = contact;
-//		}
+		// if (jJProductService.getProducts(true).isEmpty()) {
+		// JJContact manager = null;
+		// JJContact contact = jJContactService.getContactByEmail(
+		// "janjoon.mailer@gmail.com", true);
+		//
+		// if (contact != null) {
+		// manager = contact;
+		// }
+		//
+		// Set<JJVersion> versions = new HashSet<JJVersion>();
+		//
+		// JJProduct product = new JJProduct();
+		// product.setName("ProductName 1");
+		// product.setDescription("ProductDescription 1");
+		// product.setCreationDate(new Date());
+		// product.setEnabled(true);
+		// product.setExtname("ProductExtName 1");
+		// product.setManager(manager);
+		//
+		// jJProductService.saveJJProduct(product);
+		// JJVersion version;
+		// version = new JJVersion();
+		// version.setName("main");
+		// version.setDescription("VersionDescription Main");
+		// version.setCreationDate(new Date());
+		// version.setEnabled(true);
+		// version.setProduct(product);
+		// jJVersionService.saveJJVersion(version);
+		//
+		// versions.add(version);
+		// JJVersion version1 = new JJVersion();
+		// version1.setName("integ/14.1");
+		// version1.setDescription("VersionDescription Integ V:14.1");
+		// version1.setCreationDate(new Date());
+		// version1.setEnabled(true);
+		// version1.setProduct(product);
+		// jJVersionService.saveJJVersion(version1);
+		//
+		// versions.add(version1);
+		// JJVersion version2 = new JJVersion();
+		// version2.setName("integ/14.2");
+		// version2.setDescription("VersionDescription Integ V:14.2");
+		// version2.setCreationDate(new Date());
+		// version2.setEnabled(true);
+		// version2.setProduct(product);
+		// jJVersionService.saveJJVersion(version2);
+		//
+		// versions.add(version2);
+		// JJVersion version3 = new JJVersion();
+		// version3.setName("prod/13.4");
+		// version3.setDescription("VersionDescription Production V:13.4");
+		// version3.setCreationDate(new Date());
+		// version3.setEnabled(true);
+		// version3.setProduct(product);
+		// jJVersionService.saveJJVersion(version3);
+		//
+		// versions.add(version3);
+		//
+		// jJProductService.saveJJProduct(product);
+		// product.setVersions(versions);
+		//
+		// }
+		// JJContact contact = jJContactService.getContactByEmail(
+		// "janjoon.mailer@gmail.com", true);
+		// JJContact manager = null;
+		// if (contact != null) {
+		// manager = contact;
+		// }
 
-//		if (jJProjectService.getProjects(true).isEmpty()) {
-//
-//			JJProject project;
-//
-//			for (int i = 0; i < 2; i++) {
-//				project = new JJProject();
-//				project.setName("ProjectName " + i);
-//				project.setDescription("ProjectDescription " + i);
-//				project.setCreationDate(new Date());
-//				project.setEnabled(true);
-//				project.setManager(manager);
-//
-//				jJProjectService.saveJJProject(project);
-//			}
-//		}
+		// if (jJProjectService.getProjects(true).isEmpty()) {
+		//
+		// JJProject project;
+		//
+		// for (int i = 0; i < 2; i++) {
+		// project = new JJProject();
+		// project.setName("ProjectName " + i);
+		// project.setDescription("ProjectDescription " + i);
+		// project.setCreationDate(new Date());
+		// project.setEnabled(true);
+		// project.setManager(manager);
+		//
+		// jJProjectService.saveJJProject(project);
+		// }
+		// }
 
-//		List<JJProject> projectList = jJProjectService.getProjects(true);
-//		//
-//		List<JJProduct> productList = jJProductService.getProducts(true);
+		// List<JJProject> projectList = jJProjectService.getProjects(true);
+		// //
+		// List<JJProduct> productList = jJProductService.getProducts(true);
 		// if (jJRequirementService.findAllJJRequirements().isEmpty()) {
 		// List<JJStatus> status = jJStatusService.getStatus("Task", true,
 		// null, true);
@@ -1043,37 +1049,35 @@ public class ConfigListener implements ServletContextListener {
 		// }
 		// }
 		// }
-		
-			
+
 		JJCompany company = jJCompanyService.getCompanyByName("StarIt");
 		if (company == null)
 			company = jJCompanyService.getActifCompanies().get(0);
 		jJMessageService.updateAll(company);
-			
-		
-//
-//			int i = 0;
-//			while (i < productList.size()) {
-//
-//				for (int j = 0; j < 5; j++) {
-//
-//					JJMessage mes = new JJMessage();
-//					mes.setName("mes : " + j + "/" + i);
-//					mes.setCreatedBy(manager);
-//					// mes.setContact(manager);
-//					mes.setProduct(productList.get(i));
-//					mes.setProject(projectList.get(i));
-//					mes.setDescription("mesDescription : " + j + "/" + i);
-//					mes.setCreationDate(new Date());
-//					mes.setEnabled(true);
-//					mes.setMessage("message tttttt" + j + "/" + i);
-//					jJMessageService.saveJJMessage(mes);
-//
-//				}
-//				i++;
-//
-//			}
-//		}
+
+		//
+		// int i = 0;
+		// while (i < productList.size()) {
+		//
+		// for (int j = 0; j < 5; j++) {
+		//
+		// JJMessage mes = new JJMessage();
+		// mes.setName("mes : " + j + "/" + i);
+		// mes.setCreatedBy(manager);
+		// // mes.setContact(manager);
+		// mes.setProduct(productList.get(i));
+		// mes.setProject(projectList.get(i));
+		// mes.setDescription("mesDescription : " + j + "/" + i);
+		// mes.setCreationDate(new Date());
+		// mes.setEnabled(true);
+		// mes.setMessage("message tttttt" + j + "/" + i);
+		// jJMessageService.saveJJMessage(mes);
+		//
+		// }
+		// i++;
+		//
+		// }
+		// }
 	}
 
 	// public String setCompanyCalendar(String company)
@@ -1091,7 +1095,7 @@ public class ConfigListener implements ServletContextListener {
 		// InputStream
 		// is=ConfigListener.class.getResourceAsStream("/resources/Calandar"+
 		// company);
-	
+
 		FileInputStream inputStream = new FileInputStream(this.getClass()
 				.getResource("/Calendar" + company + ".properties").getFile());
 		Scanner s = new Scanner(inputStream).useDelimiter("\\A");

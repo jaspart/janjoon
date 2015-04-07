@@ -3712,16 +3712,7 @@ public class JJRequirementBean {
 		private List<RequirementUtil> filtredRequirements;
 		private boolean rendered;
 		private TreeNode chapterTree;
-		// private boolean mine;
 		private boolean expanded;
-
-		// public boolean isMine() {
-		// return mine;
-		// }
-
-		// public void setMine(boolean mine) {
-		// this.mine = mine;
-		// }
 
 		public boolean isExpanded() {
 			return expanded;

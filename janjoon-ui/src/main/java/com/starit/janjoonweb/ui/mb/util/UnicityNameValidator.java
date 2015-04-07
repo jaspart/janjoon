@@ -34,9 +34,10 @@ public class UnicityNameValidator implements Validator{
 			
 			if(buildBean.buildNameExist((String) value, version))
 			{
-				throw new ValidatorException(new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Build Name Exist", "JJBuild"));
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"validator_buildVersion_nameExist", "Build");
+				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+				throw new ValidatorException(facesMessage);
 			}
 			
 		}else 
@@ -53,9 +54,10 @@ public class UnicityNameValidator implements Validator{
 				
 				if(versionBean.versionNameExist((String) value, product))
 				{
-					throw new ValidatorException(new FacesMessage(
-							FacesMessage.SEVERITY_ERROR,
-							"Version Name Exist", "JJVersion"));
+					FacesMessage facesMessage = MessageFactory.getMessage(
+							"validator_buildVersion_nameExist", "Version");
+					facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+					throw new ValidatorException(facesMessage);
 				}
 			}
 		}
