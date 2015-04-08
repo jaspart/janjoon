@@ -424,10 +424,8 @@ public class LoginBean implements Serializable {
 
 		} catch (AuthenticationException loginError) {
 
-			FacesMessage message = new FacesMessage(
-					FacesMessage.SEVERITY_ERROR,
-					"Invalid username/password. Reason :",
-					loginError.getMessage());
+			FacesMessage message = MessageFactory.getMessage("login_invalid_credentials",
+					FacesMessage.SEVERITY_ERROR, loginError.getMessage());			
 			FacesContext.getCurrentInstance().addMessage("login", message);
 
 			enable = false;
@@ -506,15 +504,15 @@ public class LoginBean implements Serializable {
 					jjVersionBean.setVersion(contact.getLastVersion());
 
 				authorisationService = new AuthorisationService(session,
-						contact);
+						contact);	
+				
+				
+				facesMessage = MessageFactory.getMessage("login_welcome_message",
+						FacesMessage.SEVERITY_INFO, getContact().getName());	
 
-				facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"Welcome ", getContact().getName());
-
-				if (!UsageChecker.checkExpiryDate()) {
-
-					facesMessage = new FacesMessage(FacesMessage.SEVERITY_WARN,
-							"License expiry date is NOT valid!", null);
+				if (!UsageChecker.checkExpiryDate()) {				
+					facesMessage = MessageFactory.getMessage("login_licence_expired",
+							FacesMessage.SEVERITY_WARN);	
 				}
 
 				prevPage = getRedirectUrl(session);
@@ -523,9 +521,9 @@ public class LoginBean implements Serializable {
 				HttpSession session = (HttpSession) fContext
 						.getExternalContext().getSession(false);
 				session.invalidate();
-				SecurityContextHolder.clearContext();
-				facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-						"License is NOT correct!", null);
+				SecurityContextHolder.clearContext();				
+				facesMessage = MessageFactory.getMessage("login_licence_notCorrect",
+						FacesMessage.SEVERITY_ERROR);	
 
 				prevPage = "fail";
 			}
@@ -980,14 +978,12 @@ public class LoginBean implements Serializable {
 
 			} else if (getProject() == null) {
 				FacesMessage message = MessageFactory.getMessage(
-						"dev.nullProject.label", FacesMessage.SEVERITY_ERROR,
-						"Project");
+						"dev.nullProject.label", FacesMessage.SEVERITY_ERROR,"Project");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 
 			} else {
 				FacesMessage message = MessageFactory.getMessage(
-						"dev.nullVersion.label", FacesMessage.SEVERITY_ERROR,
-						"");
+						"dev.nullVersion.label", FacesMessage.SEVERITY_ERROR,"");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 
 			}

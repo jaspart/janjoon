@@ -19,6 +19,7 @@
 	<modules>
 		<module>janjoon-domain</module>
 		<module>janjoon-ui</module>
+		<module>janjoon-service</module>
 	</modules>
 	<repositories>
 		<repository>

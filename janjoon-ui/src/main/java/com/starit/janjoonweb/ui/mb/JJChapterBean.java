@@ -377,10 +377,10 @@ public class JJChapterBean {
 
 		loadData(categoryId);
 
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"Deleted" + selectedChapterNode.getData(), "Deleted"
-						+ selectedChapterNode.getData());
-		FacesContext.getCurrentInstance().addMessage(null, message);
+		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted",
+				FacesMessage.SEVERITY_ERROR, selectedChapterNode.getData());
+		
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		selectedChapterNode = null;
 
 	}
@@ -1030,19 +1030,16 @@ public class JJChapterBean {
 						testcase = null;
 					}
 				}
+				
+				message= MessageFactory.getMessage("chapter_successfully_droped",
+						FacesMessage.SEVERITY_INFO,dragNodeData,dropNodeData,"Requirement");		
 
-				message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"Requirement: " + dragNodeData
-								+ "\n Dropped on Chapter: " + dropNodeData
-								+ " at (" + dropIndex + ")", null);
-
+				
 			} else if (dropNodeData.startsWith("leftRoot")) {
 
 				if (requirementCHAPTER == null) {
-					message = new FacesMessage(FacesMessage.SEVERITY_WARN,
-							"Requirement: " + dragNodeData + "\n Dropped on: "
-									+ dropNodeData + " at (" + dropIndex + ")"
-									+ "\n No changes found", null);
+					message= MessageFactory.getMessage("chapter_unsuccessfully_dropedNoChanges",
+							FacesMessage.SEVERITY_WARN,dragNodeData,dropNodeData,"Requirement");	
 
 				} else {
 
@@ -1128,27 +1125,15 @@ public class JJChapterBean {
 						tempTestcases = null;
 					}
 
-					message = new FacesMessage(FacesMessage.SEVERITY_WARN,
-							"Requirement: " + dragNodeData
-									+ " is detached from chapter",
-							"\n Dropped on " + dropNodeData + " at ("
-									+ dropIndex + ")");
+					message= MessageFactory.getMessage("chapter_successfully_detached",
+							FacesMessage.SEVERITY_WARN,dragNodeData,dropNodeData,"Requirement");	
 
 				}
 
 			} else if (dropNodeData.startsWith("R-")
 					|| dropNodeData.startsWith("rightRoot")) {
-				message = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Requirement: "
-								+ dragNodeData
-								+ "\nDropped on: "
-								+ dropNodeData
-								+ " at ("
-								+ dropIndex
-								+ ")"
-								+ "\nThis action is not allowed and does not have effects",
-						null);
+				message= MessageFactory.getMessage("chapter_unsuccessfully_droped_notAllowed",
+						FacesMessage.SEVERITY_ERROR,dragNodeData,dropNodeData,"Requirement");	
 
 			}
 
@@ -1167,24 +1152,17 @@ public class JJChapterBean {
 				JJChapter newChapterPARENT = null;
 
 				if (dropNodeData.equalsIgnoreCase("rightRoot")) {
-
-					message = new FacesMessage(
-							FacesMessage.SEVERITY_WARN,
-							"Chapter: "
-									+ dragNodeData
-									+ " becomes a parent chapter in the document",
-							"\n Dropped on " + dropNodeData + " at ("
-									+ dropIndex + ")");
+					
+					message= MessageFactory.getMessage("chapter_parent_document",
+							FacesMessage.SEVERITY_WARN,dragNodeData,dropNodeData,"Chapter");	
 				} else {
 					long newChapterPARENTID = Long
 							.parseLong(getSplitFromString(dropNodeData, 1));
 					newChapterPARENT = jJChapterService
 							.findJJChapter(newChapterPARENTID);
 
-					message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Chapter: " + dragNodeData
-									+ "\n Dropped on Chapter: " + dropNodeData
-									+ " at (" + dropIndex + ")", null);
+					message= MessageFactory.getMessage("chapter_successfully_droped",
+							FacesMessage.SEVERITY_INFO,dragNodeData,dropNodeData,"Chapter");		
 				}
 
 				// Update the last chapter list
@@ -1300,17 +1278,8 @@ public class JJChapterBean {
 
 			} else if (dropNodeData.startsWith("R-")
 					|| dropNodeData.equalsIgnoreCase("leftRoot")) {
-				message = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Chapter: "
-								+ dragNodeData
-								+ "\nDropped on: "
-								+ dropNodeData
-								+ " at ("
-								+ dropIndex
-								+ ")"
-								+ "\nThis action is not allowed and does not have effects",
-						null);
+				message= MessageFactory.getMessage("chapter_unsuccessfully_droped_notAllowed",
+						FacesMessage.SEVERITY_INFO,dragNodeData,dropNodeData,"Chapter");		
 
 			}
 

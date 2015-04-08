@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-	<wb-module deploy-name="janjoon-ui">
+    <wb-module deploy-name="janjoon-service">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <wb-resource deploy-path="/run-distrib" source-path="/src/run-distrib"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/webapp"/>
-        <dependent-module archiveName="janjoon-service-2.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/janjoon-service/janjoon-service">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="janjoon-domain-2.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/janjoon-domain/janjoon-domain">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-		<property name="context-root" value="janjoon-ui"/>
-		<property name="java-output-path" value="/janjoon-ui/target/classes"/>
-	</wb-module>
+        <property name="context-root" value="janjoon-service"/>
+        <property name="java-output-path" value="/janjoon-service/target/classes"/>
+    </wb-module>
 </project-modules>

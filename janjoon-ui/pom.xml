@@ -381,6 +381,11 @@
 			<version>2.4</version>
 		</dependency>
 		<dependency>
+			<groupId>com.starit.janjoonweb.service</groupId>
+			<artifactId>janjoon-service</artifactId>
+			<version>2.0-${build.number}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.starit.janjoonweb.domain</groupId>
 			<artifactId>janjoon-domain</artifactId>
 			<version>2.0-${build.number}</version>
