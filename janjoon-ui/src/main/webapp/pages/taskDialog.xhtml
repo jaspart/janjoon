@@ -85,7 +85,7 @@
 			<p:column colspan="4" rendered="#{jJTaskBean.taskTreeNode == null}">
 				<p:outputLabel value="Description :" />
 				<br />
-				<pe:ckEditor id="Bugdescription" toolbar="[['Copy','Table']]"
+				<pe:ckEditor id="Bugdescription" toolbar="#{imageStreamer.ckEditorToolBar}"
 					style="width:680px" value="#{JJTask_.bug.description}"
 					readOnly="true" rendered="#{!loginBean.mobile}" />
 				<p:editor id="BugMobiledescription" style="width:680px"
@@ -103,7 +103,7 @@
 			<p:column colspan="4">
 				<p:outputLabel value="Description :" />
 				<br />
-				<pe:ckEditor id="testCasedescription" toolbar="[['Copy','Table']]"
+				<pe:ckEditor id="testCasedescription" toolbar="#{imageStreamer.ckEditorToolBar}"
 					style="width:680px" value="#{JJTask_.testcase.description}"
 					readOnly="true" rendered="#{!loginBean.mobile}" />
 				<p:editor id="testcaseMobiledescription" style="width:680px"
@@ -162,7 +162,7 @@
 						<p:column colspan="2">
 							<p:outputLabel value="Description :" />
 							<br />
-							<pe:ckEditor id="description" toolbar="[['Copy','Table']]"
+							<pe:ckEditor id="description" toolbar="#{imageStreamer.ckEditorToolBar}"
 								style="width:680px" rendered="#{!loginBean.mobile}"
 								value="#{jJTaskBean.selectedReq.description}" readOnly="true" />
 

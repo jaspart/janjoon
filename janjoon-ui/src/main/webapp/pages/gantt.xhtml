@@ -128,7 +128,7 @@
 										<p:graphicImage library="images" name="#{taskData.icone}"
 											width="16" height="16" />
 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-											update=":viewTaskForm" immediate="true" resetValues="true"
+											update=":viewTaskForm :viewTaskDialog" immediate="true" resetValues="true"
 											title="#{messages.project_gantt_table_actions_viewMenuItem}"
 											action="#{jJTaskBean.initiateReqTreeNode}">
 											<f:setPropertyActionListener value="#{taskData.task}"
@@ -389,7 +389,7 @@
 										listener="#{jJTaskBean.onChangeTimelineEvent}"
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()" />
-									<p:ajax event="edit" update=":viewTaskForm"
+									<p:ajax event="edit" update=":viewTaskForm :viewTaskDialog"
 										resetValues="true"
 										listener="#{jJTaskBean.onEditTimelineEvent}"
 										onstart="PF('blockUIWidget').block()"

@@ -18,10 +18,10 @@ public class JJHardwareBean {
 	
 	public void saveJJHardware(JJHardware b)
 	{
-		JJContact contact=(JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("JJContact");
-		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
+		b.setCreatedBy(contact);
 		jJHardwareService.saveJJHardware(b);
 	}
 	

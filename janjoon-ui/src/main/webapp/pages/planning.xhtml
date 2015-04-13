@@ -124,7 +124,7 @@
 			</p:outputPanel>
 		</p:dialog>
 
-		<p:dialog id="viewTaskDialog" header="#{messages.label_view} JJTask"
+		<p:dialog id="viewTaskDialog" header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task)}"
 			modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
 			resizable="true" maximizable="true" showEffect="fade"
 			hideEffect="explode" draggable="#{jJTaskBean.mode eq 'planning'}">

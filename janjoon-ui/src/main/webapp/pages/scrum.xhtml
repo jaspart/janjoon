@@ -203,7 +203,7 @@
 											<h:outputText value="#{messages.bug_table_action_title}" />
 										</f:facet>
 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-											update=":viewTaskForm" immediate="true" resetValues="true"
+											update=":viewTaskForm :viewTaskDialog" immediate="true" resetValues="true"
 											title="#{messages.project_gantt_table_actions_viewMenuItem}"
 											action="#{jJTaskBean.initiateReqTreeNode}">
 											<f:setPropertyActionListener value="#{todo}"
@@ -266,7 +266,7 @@
 												<h:outputText value="#{messages.bug_table_action_title}" />
 											</f:facet>
 											<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-												update=":viewTaskForm" immediate="true" resetValues="true"
+												update=":viewTaskForm :viewTaskDialog" immediate="true" resetValues="true"
 												action="#{jJTaskBean.initiateReqTreeNode}">
 												<f:setPropertyActionListener value="#{prog}"
 													target="#{jJTaskBean.task}" />
@@ -318,7 +318,7 @@
 												<h:outputText value="#{messages.bug_table_action_title}" />
 											</f:facet>
 											<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-												update=":viewTaskForm" immediate="true" resetValues="true"
+												update=":viewTaskForm :viewTaskDialog" immediate="true" resetValues="true"
 												action="#{jJTaskBean.initiateReqTreeNode}">
 												<f:setPropertyActionListener value="#{done}"
 													target="#{jJTaskBean.task}" />

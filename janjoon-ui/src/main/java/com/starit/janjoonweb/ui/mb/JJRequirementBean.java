@@ -4547,10 +4547,10 @@ public class JJRequirementBean {
 	}
 
 	public void saveJJRequirement(JJRequirement b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
-		b.setCreatedBy(contact);
+		
 		b.setCreationDate(new Date());
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		b.setCreatedBy(contact);		
 		jJRequirementService.saveJJRequirement(b);
 	}
 

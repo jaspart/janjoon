@@ -244,10 +244,10 @@ public class JJVersionBean {
 		
 		if(!versionNameExist(b.getName(), b.getProduct()))
 		{
+			b.setCreationDate(new Date());
 			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 					.getContact();
-			b.setCreatedBy(contact);
-			b.setCreationDate(new Date());
+			b.setCreatedBy(contact);			
 			jJVersionService.saveJJVersion(b);
 			return true;
 		}else

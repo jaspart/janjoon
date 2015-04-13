@@ -21,9 +21,10 @@ public class JJCriticityBean {
 	
 	public void saveJJCriticity(JJCriticity b)
 	{
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
-		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
+		b.setCreatedBy(contact);
 		jJCriticityService.saveJJCriticity(b);
 	}
 	

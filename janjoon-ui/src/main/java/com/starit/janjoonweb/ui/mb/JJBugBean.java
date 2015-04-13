@@ -850,11 +850,11 @@ public class JJBugBean {
 	}
 
 	public void saveJJBug(JJBug b) {
-		JJContact contact = (JJContact) ((HttpSession) FacesContext
-				.getCurrentInstance().getExternalContext().getSession(false))
-				.getAttribute("JJContact");
-		b.setCreatedBy(contact);
+		
 		b.setCreationDate(new Date());
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
+		b.setCreatedBy(contact);		
 		jJBugService.saveJJBug(b);
 	}
 

@@ -86,7 +86,7 @@
 							<pe:ckEditor id="description" height="250px" width="600px"
 								rendered="#{!loginBean.mobile}"
 								customConfig="#{request.contextPath}/resources/js/ckEditor.js"
-								toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
+								toolbar="#{imageStreamer.ckEditorToolBar}"
 								value="#{jJChapterBean.chapter.description}" required="true"
 								requiredMessage="#{messages.specification_chapter_description_alert}" />
 							<p:editor id="descriptionMobile" style="width:600px !important"

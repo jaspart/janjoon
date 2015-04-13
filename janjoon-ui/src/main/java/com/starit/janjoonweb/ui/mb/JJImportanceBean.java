@@ -18,9 +18,10 @@ public class JJImportanceBean {
 	
 	public void saveJJImportance(JJImportance b)
 	{
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
-		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
+		b.setCreatedBy(contact);
 		jJImportanceService.saveJJImportance(b);
 	}
 	

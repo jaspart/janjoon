@@ -20,8 +20,7 @@ public class ChunkTime {
 		
 	}
 	
-	public ChunkTime(int i) {
-		
+	public ChunkTime(int i) {		
 		
 		this.dayNumber = i;
 		this.day=capitalizeDay(dayNumber);

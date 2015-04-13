@@ -18,9 +18,9 @@ public class JJWorkflowBean {
 	
 	public void saveJJWorkflow(JJWorkflow b)
 	{
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
-		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		b.setCreatedBy(contact);		
 		jJWorkflowService.saveJJWorkflow(b);
 	}
 	

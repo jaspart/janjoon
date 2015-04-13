@@ -308,11 +308,11 @@ public class JJBuildBean {
 	public boolean saveJJBuild(JJBuild b) {
 
 		if (!buildNameExist(b.getName(), b.getVersion())) {
+			b.setCreationDate(new Date());
 			JJContact contact = ((LoginBean) ((HttpSession) FacesContext
 					.getCurrentInstance().getExternalContext()
 					.getSession(false)).getAttribute("loginBean")).getContact();
-			b.setCreatedBy(contact);
-			b.setCreationDate(new Date());
+			b.setCreatedBy(contact);			
 			jJBuildService.saveJJBuild(b);
 			return true;
 		} else

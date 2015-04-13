@@ -6,6 +6,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import com.starit.janjoonweb.domain.*;

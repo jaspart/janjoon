@@ -149,6 +149,20 @@ public class ContactCalendarUtil {
 				}
 			}
 		}
+		if(workDays != null)
+		{
+			List<ChunkTime> work=new ArrayList<ChunkTime>();
+			int i=1;
+			while(i<7)
+			{
+				work.add(workDays.get(i));
+				i++;
+			}
+			work.add(6,workDays.get(0));
+			workDays=work;
+		}
+		
+		
 	}
 
 	public JJContact getContact() {

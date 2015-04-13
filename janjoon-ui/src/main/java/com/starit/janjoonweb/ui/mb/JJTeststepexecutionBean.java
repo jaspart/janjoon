@@ -407,9 +407,9 @@ public class JJTeststepexecutionBean {
 	
 	public void saveJJTeststepexecution(JJTeststepexecution b)
 	{
+		b.setCreationDate(new Date());
 		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
-		b.setCreationDate(new Date());
 		jJTeststepexecutionService.saveJJTeststepexecution(b);
 	}
 	

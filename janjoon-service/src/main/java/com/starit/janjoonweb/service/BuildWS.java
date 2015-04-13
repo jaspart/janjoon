@@ -56,6 +56,10 @@ public class BuildWS {
 //
 //	}
 
+	public void setjJVersionService(JJVersionService jJVersionService) {
+		this.jJVersionService = jJVersionService;
+	}
+
 	@POST
 	@Path("createBuild")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)

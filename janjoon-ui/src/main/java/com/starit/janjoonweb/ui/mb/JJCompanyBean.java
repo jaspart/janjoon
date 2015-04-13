@@ -191,10 +191,11 @@ public class JJCompanyBean {
 	}
 
 	public void saveJJCompany(JJCompany b) {
+		
+		b.setCreationDate(new Date());
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		b.setCreatedBy(contact);
-		b.setCreationDate(new Date());
 		jJCompanyService.saveJJCompany(b);
 	}
 

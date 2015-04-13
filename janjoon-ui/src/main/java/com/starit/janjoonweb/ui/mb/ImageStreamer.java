@@ -42,7 +42,7 @@ public class ImageStreamer {
 
 	public void setjJProductService(JJProductService jJProductService) {
 		this.jJProductService = jJProductService;
-	}
+	}	
 
 	public StreamedContent getImageProd() throws IOException {
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -146,6 +146,12 @@ public class ImageStreamer {
 			}
 
 		}
+	}
+	
+	public String getCkEditorToolBar()
+	{
+		return "[['Bold','Italic','Underline','Strike','NumberedList',"
+				+ "'BulletedList','Image','TextColor','BGColor','Undo','Table','-', 'RemoveFormat']]";
 	}
 
 }

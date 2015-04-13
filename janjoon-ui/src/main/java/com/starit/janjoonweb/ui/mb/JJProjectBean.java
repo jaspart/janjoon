@@ -251,10 +251,10 @@ public class JJProjectBean {
 	}
 
 	public void saveJJProject(JJProject b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
-		b.setCreatedBy(contact);
+		
 		b.setCreationDate(new Date());
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		b.setCreatedBy(contact);		
 		jJProjectService.saveJJProject(b);
 	}
 

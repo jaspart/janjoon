@@ -255,9 +255,9 @@ public class JJTeststepBean {
 	
 	public void saveJJTeststep(JJTeststep b)
 	{
+		b.setCreationDate(new Date());
 		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
-		b.setCreationDate(new Date());
 		jJTeststepService.saveJJTeststep(b);
 	}
 	

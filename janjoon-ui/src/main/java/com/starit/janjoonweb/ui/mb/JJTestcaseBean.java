@@ -585,7 +585,7 @@ public class JJTestcaseBean {
 	}
 
 	public List<JJMessage> getCommunicationMessages() {
-		if (testcase != null) {
+		if (testcase != null && testcase.getId() != null && testcase.getId() != 0) {
 			communicationMessages = jJMessageService.getCommMessages(testcase);
 			return communicationMessages;
 		} else
@@ -1636,10 +1636,10 @@ public class JJTestcaseBean {
 	}
 
 	public void saveJJTestcase(JJTestcase b) {
+		b.setCreationDate(new Date());
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
-		b.setCreatedBy(contact);
-		b.setCreationDate(new Date());
+		b.setCreatedBy(contact);		
 		jJTestcaseService.saveJJTestcase(b);
 	}
 

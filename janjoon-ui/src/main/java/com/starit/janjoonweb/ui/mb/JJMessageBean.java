@@ -437,11 +437,13 @@ public class JJMessageBean {
 	}
 
 	public void saveJJMessage(JJMessage b) {
+		
+
+		b.setCreationDate(new Date());
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		b.setCreatedBy(contact);
 		b.setCompany(contact.getCompany());
-		b.setCreationDate(new Date());
 		jJMessageService.saveJJMessage(b);
 	}
 

@@ -171,10 +171,10 @@ public class JJCategoryBean {
 	
 	public void saveJJCategory(JJCategory b)
 	{
+		b.setCreationDate(new Date());
 		JJContact contact=((LoginBean) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
 				.getSession(false)).getAttribute("loginBean")).getContact();
 		b.setCreatedBy(contact);
-		b.setCreationDate(new Date());
 		jJCategoryService.saveJJCategory(b);
 	}
 	

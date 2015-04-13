@@ -230,7 +230,7 @@
 							</p:column>
 							<p:column colspan="3">
 								<pe:ckEditor id="description"
-									toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
+									toolbar="#{imageStreamer.ckEditorToolBar}"
 									height="60%" width="98%"
 									customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 									value="#{requirementBean.requirement.description}"

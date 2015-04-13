@@ -17,9 +17,10 @@ public class JJJobBean {
 	
 	public void saveJJJob(JJJob b)
 	{
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
-		b.setCreatedBy(contact);
 		b.setCreationDate(new Date());
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
+		b.setCreatedBy(contact);
 		jJJobService.saveJJJob(b);
 	}
 	

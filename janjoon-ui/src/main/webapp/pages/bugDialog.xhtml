@@ -162,7 +162,7 @@
 					rendered="#{loginBean.mobile}" />
 				<br />
 				<pe:ckEditor id="jJBugDescription"
-					toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
+					toolbar="#{imageStreamer.ckEditorToolBar}"
 					style="width:600px" rendered="#{!loginBean.mobile}"
 					customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 					value="#{JJBug_.description}" required="true"

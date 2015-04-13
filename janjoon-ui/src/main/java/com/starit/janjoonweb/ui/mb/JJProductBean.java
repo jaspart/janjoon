@@ -355,9 +355,10 @@ public class JJProductBean {
 	}
 
 	public void saveJJProduct(JJProduct b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
-		b.setCreatedBy(contact);
+		
 		b.setCreationDate(new Date());
+		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		b.setCreatedBy(contact);		
 		jJProductService.saveJJProduct(b);
 	}
 

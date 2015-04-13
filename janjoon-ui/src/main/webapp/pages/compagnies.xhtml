@@ -146,7 +146,7 @@
 								for="jJCompanyMobileDescription" rendered="#{loginBean.mobile}" />
 							<br />
 							<pe:ckEditor id="jJCompanyDescription" 
-								toolbar="[['Bold','Italic','Underline','Strike','NumberedList','BulletedList','Image','TextColor','BGColor','Undo','Table']]"
+								toolbar="#{imageStreamer.ckEditorToolBar}"
 								style="width:680px" rendered="#{!loginBean.mobile}"
 								customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 								value="#{jJCompanyBean.companie.description}" required="true"
