@@ -14,6 +14,7 @@ import org.primefaces.model.chart.DateAxis;
 import org.primefaces.model.chart.LineChartSeries;
 
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
@@ -23,6 +24,7 @@ public class SprintUtil {
 
 	JJSprint sprint;
 	private boolean neditabale;
+	private JJContactService jJContactService;
 	private CartesianChartModel chartModel;
 	private List<JJTask> todoTask;
 	private List<JJTask> doneTask;
@@ -31,19 +33,18 @@ public class SprintUtil {
 
 	private Integer consumed;
 	private Integer workload;
-	private Integer priseReal;
-	private Integer priseSold;
 	private boolean render;
 
-	public SprintUtil(JJSprint sprint, List<JJTask> tasks) {
+	public SprintUtil(JJSprint sprint, List<JJTask> tasks,JJContactService jJContactService) {
 		this.sprint = sprint;
+		this.jJContactService =jJContactService;
 		this.neditabale = false;
 		this.chartModel = new CartesianChartModel();
 		calculateField(tasks);
 		if (tasks != null && !tasks.isEmpty())
 			initChartModel(tasks);
-		else 
-			this.chartModel =null;
+		else
+			this.chartModel = null;
 
 	}
 
@@ -116,19 +117,34 @@ public class SprintUtil {
 	}
 
 	public Integer getPriseReal() {
-		return priseReal;
-	}
 
-	public void setPriseReal(Integer priseReal) {
-		this.priseReal = priseReal;
+		int priseReal = 0;
+
+		for (JJTask task : doneTask) {
+
+			if (task.getAssignedTo() != null && task.getWorkloadReal() != null
+					&& task.getAssignedTo().getPriceReal() != null) {
+				priseReal = priseReal + task.getWorkloadReal()
+						* jJContactService.findJJContact(task.getAssignedTo().getId()).getPriceReal();
+			}
+		}
+		return priseReal;
+
 	}
 
 	public Integer getPriseSold() {
-		return priseSold;
-	}
+		
+		
+		int priseSold = 0;
+		for (JJTask task : doneTask) {
+		if (task.getAssignedTo() != null
+				&& task.getWorkloadReal() != null
+				&& task.getAssignedTo().getPriceSold() != null) {
+			priseSold = priseSold + task.getWorkloadReal()
+					*  jJContactService.findJJContact(task.getAssignedTo().getId()).getPriceSold();
+		}}
 
-	public void setPriseSold(Integer priseSold) {
-		this.priseSold = priseSold;
+		return priseSold;
 	}
 
 	public boolean isRender() {
@@ -150,8 +166,8 @@ public class SprintUtil {
 	private void calculateField(List<JJTask> tasks) {
 		Integer i = 0;
 		Integer j = 0;
-		priseReal = 0;
-		priseSold = 0;
+//		priseReal = 0;
+//		priseSold = 0;
 		this.render = (sprint.getId() == null);
 		if (!render) {
 
@@ -166,19 +182,19 @@ public class SprintUtil {
 
 					for (JJTask task : tasks) {
 
-						if (task.getAssignedTo() != null
-								&& task.getWorkloadReal() != null
-								&& task.getAssignedTo().getPriceReal() != null) {
-							priseReal = priseReal + task.getWorkloadReal()
-									* task.getAssignedTo().getPriceReal();
-						}
-
-						if (task.getAssignedTo() != null
-								&& task.getWorkloadReal() != null
-								&& task.getAssignedTo().getPriceSold() != null) {
-							priseSold = priseSold + task.getWorkloadReal()
-									* task.getAssignedTo().getPriceSold();
-						}
+//						if (task.getAssignedTo() != null
+//								&& task.getWorkloadReal() != null
+//								&& task.getAssignedTo().getPriceReal() != null) {
+//							priseReal = priseReal + task.getWorkloadReal()
+//									* task.getAssignedTo().getPriceReal();
+//						}
+//
+//						if (task.getAssignedTo() != null
+//								&& task.getWorkloadReal() != null
+//								&& task.getAssignedTo().getPriceSold() != null) {
+//							priseSold = priseSold + task.getWorkloadReal()
+//									* task.getAssignedTo().getPriceSold();
+//						}
 
 						if (task.getWorkloadPlanned() != null)
 							i = i + task.getWorkloadPlanned();
@@ -216,10 +232,10 @@ public class SprintUtil {
 		int workload = this.workload;
 		int diff = 0;
 
-//		for (JJTask task : tasks) {
-//			if (task.getWorkloadPlanned() != null)
-//				workload = workload + task.getWorkloadPlanned();
-//		}
+		// for (JJTask task : tasks) {
+		// if (task.getWorkloadPlanned() != null)
+		// workload = workload + task.getWorkloadPlanned();
+		// }
 
 		diff = workload;
 		List<JJTask> removedTasks = new ArrayList<JJTask>();
@@ -259,7 +275,8 @@ public class SprintUtil {
 		removedTasks = new ArrayList<JJTask>();
 
 		while (staDate.before(CalendarUtil.getAfterDay(sprint.getEndDate()))) {
-			if (staDate.before(CalendarUtil.getAfterDay(currentTime)) && !tasks.isEmpty()) {
+			if (staDate.before(CalendarUtil.getAfterDay(currentTime))
+					&& !tasks.isEmpty()) {
 				for (JJTask task : tasks) {
 					if (task.getEndDateReal() != null) {
 						if (f.format(task.getEndDateReal()).equalsIgnoreCase(
@@ -319,13 +336,13 @@ public class SprintUtil {
 	}
 
 	public static List<SprintUtil> generateSprintUtilList(
-			List<JJSprint> sprints, JJTaskService jJTaskService) {
+			List<JJSprint> sprints, JJTaskService jJTaskService,JJContactService jjContactService) {
 		List<SprintUtil> sprintUtils = null;
 		if (!sprints.isEmpty()) {
 			sprintUtils = new ArrayList<SprintUtil>();
 			for (JJSprint s : sprints) {
 				SprintUtil ss = new SprintUtil(s, jJTaskService.getSprintTasks(
-						s, LoginBean.getProduct()));
+						s, LoginBean.getProduct()),jjContactService);
 				sprintUtils.add(ss);
 			}
 		}

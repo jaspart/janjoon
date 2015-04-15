@@ -151,7 +151,7 @@
 									selection="#{jJTestcaseBean.selectedNode}" dynamic="true">
 									<p:ajax event="select"
 										listener="#{jJTestcaseBean.onNodeSelect}"
-										update=":testFormCenter "
+										update=":testFormCenter :container :rate"
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()" />
 

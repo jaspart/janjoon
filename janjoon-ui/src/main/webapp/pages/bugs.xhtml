@@ -83,7 +83,7 @@
 					widgetVar="blockUIWidget2" />
 				<h:panelGrid id="blockUIContent" columns="2"
 					style="display:none;table-layout:auto;">
-					<h:graphicImage library="images" name="ajax-loader1.gif"
+					<h:graphicImage library="images" name="ajax-loader.gif"
 						style="margin-right: 12px; vertical-align: middle;" />
 					<h:outputText value="Please wait, data is being processed..."
 						style="white-space: nowrap;" />
@@ -102,11 +102,11 @@
 					<p:ajax event="rowUnselectCheckbox"
 						update="bugTable2:deleteMButton" />
 					<p:ajax event="toggleSelect" update="bugTable2:deleteMButton" />
+					
 					<p:ajax event="page" onstart="PF('blockUIWidget2').block()"
 						oncomplete="PF('blockUIWidget2').unblock()" />
 					<p:ajax event="sort" onstart="PF('blockUIWidget2').block()"
 						oncomplete="PF('blockUIWidget2').unblock()" />
-
 					<p:ajax event="filter" onstart="PF('blockUIWidget2').block()"
 						oncomplete="PF('blockUIWidget2').unblock()" />
 

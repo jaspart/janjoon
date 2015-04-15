@@ -35,6 +35,7 @@ import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirementService;
@@ -69,8 +70,11 @@ public class JJSprintBean {
 	private JJStatusService jJStatusService;
 
 	@Autowired
-	private JJBugService jJBugService;
+	private JJBugService jJBugService;	
 
+	public void setjJBugService(JJBugService jJBugService) {
+		this.jJBugService = jJBugService;
+	}
 	private List<JJCategory> categoryList;
 	private List<JJContact> contacts;
 	private HtmlPanelGrid createTaskPanelGrid;
@@ -110,11 +114,7 @@ public class JJSprintBean {
 	public void setjJPermissionService(JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
 	}
-
-	public void setjBugService(JJBugService jjBugService) {
-		this.jJBugService = jjBugService;
-	}
-
+	
 	public void setjJCategoryService(JJCategoryService jJCategoryService) {
 		this.jJCategoryService = jJCategoryService;
 	}
@@ -364,7 +364,7 @@ public class JJSprintBean {
 		sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil
 				.getSprint().getId()));
 		sprintUtil = new SprintUtil(sprintUtil.getSprint(),
-				jJTaskService.getSprintTasks(sprintUtil.getSprint(),LoginBean.getProduct()));
+				jJTaskService.getSprintTasks(sprintUtil.getSprint(),LoginBean.getProduct()),jJContactService);
 		sprintList.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
 		String message = "message_successfully_updated";
 		FacesMessage facesMessage = MessageFactory.getMessage(message, "Task");
@@ -375,13 +375,13 @@ public class JJSprintBean {
 	public void initJJSprintPage(JJProject pr) {
 
 		sprintList = SprintUtil.generateSprintUtilList(
-				jJSprintService.getSprints(pr, true), jJTaskService);
+				jJSprintService.getSprints(pr, true), jJTaskService, jJContactService);
 
 		if (sprintList == null)
 			sprintList = new ArrayList<SprintUtil>();
 		JJSprint sp = new JJSprint();
 		sp.setProject(pr);
-		sprintList.add(new SprintUtil(sp, null));
+		sprintList.add(new SprintUtil(sp, null,jJContactService));
 
 	}
 
@@ -396,7 +396,7 @@ public class JJSprintBean {
 		updateJJSprint(sprintUtil.getSprint());
 		sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil.getSprint().getId()));
 		sprintUtil = new SprintUtil(sprintUtil.getSprint(),
-				jJTaskService.getSprintTasks(sprintUtil.getSprint(),LoginBean.getProduct()));
+				jJTaskService.getSprintTasks(sprintUtil.getSprint(),LoginBean.getProduct()),jJContactService);
 		sprintList.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
 		JJTaskBean jjTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
 		if (jJTaskBean == null)
@@ -434,7 +434,7 @@ public class JJSprintBean {
 			if (!su.isRender()) {
 				JJSprint s = jJSprintService.findJJSprint(su.getSprint()
 						.getId());
-				sprintUtil=new SprintUtil(s, jJTaskService.getSprintTasks(s,LoginBean.getProduct()));
+				sprintUtil=new SprintUtil(s, jJTaskService.getSprintTasks(s,LoginBean.getProduct()),jJContactService);
 				sprintList.set(contains(su.getSprint().getId()),sprintUtil);
 
 			}
@@ -540,7 +540,7 @@ public class JJSprintBean {
 			jJTaskBean.updateView(jJTaskService.findJJTask(dropedTask.getId()), false);
 
 			JJSprint s = jJSprintService.findJJSprint(sprintId);
-			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s,LoginBean.getProduct()));
+			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s,LoginBean.getProduct()),jJContactService);
 
 			sprintList
 					.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
@@ -600,7 +600,7 @@ public class JJSprintBean {
 			jJTaskBean.updateView(jJTaskService.findJJTask(dropedTask.getId()), false);
 
 			JJSprint s = jJSprintService.findJJSprint(sprintId);
-			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s,LoginBean.getProduct()));
+			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s,LoginBean.getProduct()),jJContactService);
 
 			sprintList
 					.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
@@ -708,13 +708,13 @@ public class JJSprintBean {
 
 		attrListener(e);
 		sprintUtil = new SprintUtil(sprintUtil.getSprint(),
-				jJTaskService.getSprintTasks(sprintUtil.getSprint(),LoginBean.getProduct()));
+				jJTaskService.getSprintTasks(sprintUtil.getSprint(),LoginBean.getProduct()),jJContactService);
 
 		sprintList.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
 		
 		JJSprint sp = new JJSprint();
 		sp.setProject(LoginBean.getProject());
-		sprintList.add(new SprintUtil(sp, null));
+		sprintList.add(new SprintUtil(sp, null,jJContactService));
 		// requirement = null;
 		category = null;
 		categoryList = null;
@@ -762,7 +762,7 @@ public class JJSprintBean {
 					jJSprintService
 							.findJJSprint(sprintUtil.getSprint().getId()),
 					jJTaskService.getSprintTasks(jJSprintService
-							.findJJSprint(sprintUtil.getSprint().getId()),LoginBean.getProduct())));
+							.findJJSprint(sprintUtil.getSprint().getId()),LoginBean.getProduct()),jJContactService));
 			System.out.println(jJTaskService.getSprintTasks(
 					jJSprintService
 							.findJJSprint(sprintUtil.getSprint().getId()),LoginBean.getProduct())
@@ -787,7 +787,7 @@ public class JJSprintBean {
 		sprintUtil = new SprintUtil(jJSprintService.findJJSprint(task
 				.getSprint().getId()),
 				jJTaskService.getSprintTasks(jJSprintService.findJJSprint(task
-						.getSprint().getId()),LoginBean.getProduct()));
+						.getSprint().getId()),LoginBean.getProduct()),jJContactService);
 
 		// sprintUtil.setRenderTaskForm(false);
 		sprintList.set(contains(sprintUtil.getSprint().getId()), sprintUtil);

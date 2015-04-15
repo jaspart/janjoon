@@ -49,7 +49,7 @@
 				<p:autoComplete id="jJbugStatus" value="#{JJBug_.status}"
 					itemLabel="#{status.name}" itemValue="#{status}" scrollHeight="200"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
-					dropdown="true" var="status"
+					dropdown="true" var="status" readonly="#{JJBug_.id == null}"
 					completeMethod="#{jJBugBean.completeStatusBug}" />
 				<p:watermark for="jJbugStatus" value="Status : " />
 			</p:column>
