@@ -35,16 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
-import com.lowagie.text.BadElementException;
-import com.lowagie.text.Chunk;
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.Image;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
+import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.codec.Base64;
 import com.lowagie.text.html.HtmlTags;
@@ -441,12 +432,13 @@ public class JJChapterBean {
 		// Requirement Tree WHERE requirment.getChapter = null
 		leftRoot = new DefaultTreeNode("leftRoot", null);
 
+		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
 		JJVersion version = LoginBean.getVersion();
 		JJProduct product = LoginBean.getProduct();
 
 		List<JJRequirement> jJRequirementList = jJRequirementService
 				.getRequirements(((LoginBean) LoginBean.findBean("loginBean"))
-						.getContact().getCompany(), category, project, product,
+						.getContact().getCompany(), category,loginBean.getAuthorizedMap("Requirement", project, product),
 						version, null, null, true, true, false, false, null);
 
 		for (JJRequirement requirement : jJRequirementList) {
@@ -541,6 +533,7 @@ public class JJChapterBean {
 		this.getProject();
 
 		LoginBean.copyUploadImages(true);
+		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
 		Document pdf = new Document();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		PdfWriter writer = PdfWriter.getInstance(pdf, baos);
@@ -594,7 +587,7 @@ public class JJChapterBean {
 		List<JJRequirement> withOutChapter=jJRequirementService
 				.getRequirementsWithOutChapter(((LoginBean) LoginBean
 						.findBean("loginBean")).getContact().getCompany(),
-						category, project, LoginBean.getProduct(), LoginBean
+						category, loginBean.getAuthorizedMap("Requirement",project,LoginBean.getProduct()), LoginBean
 								.getVersion(), null, true, true);
 		if(withOutChapter != null && !withOutChapter.isEmpty())
 		{

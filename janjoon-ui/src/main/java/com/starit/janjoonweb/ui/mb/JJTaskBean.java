@@ -476,6 +476,7 @@ public class JJTaskBean {
 			return "";
 
 	}
+	
 
 	public void updateTask(JJTask tt, String operation) {
 		JJTask beforeUpdateTT = jJTaskService.findJJTask(tt.getId());
@@ -609,11 +610,12 @@ public class JJTaskBean {
 		if (operation.equalsIgnoreCase("main")) {
 			toDoTasks = null;
 			initToDoTasks(null);
-		} else if (operation.equalsIgnoreCase("dev")) {
+		} else if (operation.equalsIgnoreCase("dev") && LoginBean.findBean("jJDevelopment") != null) {
 			((DevelopmentBean) LoginBean.findBean("jJDevelopment"))
-					.setTask(null);
+					.setTask(task);
 			((DevelopmentBean) LoginBean.findBean("jJDevelopment"))
-					.setTasks(null);
+					.setTasks(jJTaskService.getTasksByProduct(LoginBean.getProduct(),
+							LoginBean.getProject()));
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
@@ -1415,18 +1417,22 @@ public class JJTaskBean {
 
 			JJSprintBean jJSprintBean = (JJSprintBean) LoginBean
 					.findBean("jJSprintBean");
-			SprintUtil s = SprintUtil.getSprintUtil(duplicatedTask.getSprint()
-					.getId(), jJSprintBean.getSprintList());
-			if (s != null) {
-				s = new SprintUtil(jJSprintService.findJJSprint(duplicatedTask
-						.getSprint().getId()), jJTaskService.getSprintTasks(
-						jJSprintService.findJJSprint(duplicatedTask.getSprint()
-								.getId()), LoginBean.getProduct()),jJContactService);
+			if(jJSprintBean.contains(duplicatedTask.getSprint().getId()) != -1)
+			{
+				SprintUtil s = SprintUtil.getSprintUtil(duplicatedTask.getSprint()
+						.getId(), jJSprintBean.getSprintList());
+				if (s != null) {
+					s = new SprintUtil(jJSprintService.findJJSprint(duplicatedTask
+							.getSprint().getId()), jJTaskService.getSprintTasks(
+							jJSprintService.findJJSprint(duplicatedTask.getSprint()
+									.getId()), LoginBean.getProduct()),jJContactService);
 
-				// sprintUtil.setRenderTaskForm(false);
-				jJSprintBean.getSprintList().set(
-						jJSprintBean.contains(s.getSprint().getId()), s);
+					// sprintUtil.setRenderTaskForm(false);
+					jJSprintBean.getSprintList().set(
+							jJSprintBean.contains(s.getSprint().getId()), s);
+				}
 			}
+			
 		}
 
 		duplicatedTask = null;
@@ -1593,12 +1599,12 @@ public class JJTaskBean {
 				}
 
 			} else if (objet.equalsIgnoreCase("Requirement")) {
-
+				LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
 				for (JJRequirement requirement : jJRequirementService
 						.getRequirements(((LoginBean) LoginBean
 								.findBean("loginBean")).getContact()
-								.getCompany(), importCategory, project,
-								product, version, importStatus, null, false,
+								.getCompany(), importCategory, loginBean.getAuthorizedMap("Requirement", project, product)
+								, version, importStatus, null, false,
 								true, false, false, null)) {
 
 					if (!checkAll) {
@@ -2348,7 +2354,8 @@ public class JJTaskBean {
 			saveJJTask(tJjTask, true);
 			updateView(tJjTask, true);
 
-			if (tJjTask.getSprint() != null) {
+			if (tJjTask.getSprint() != null && jJSprintBean.contains(tJjTask.getSprint().getId()) != -1)
+			{
 				SprintUtil s = SprintUtil.getSprintUtil(tJjTask.getSprint()
 						.getId(), jJSprintBean.getSprintList());
 				if (s != null) {
@@ -2719,16 +2726,20 @@ public class JJTaskBean {
 					.getSession(false);
 			JJSprintBean jJSprintBean = (JJSprintBean) session
 					.getAttribute("jJSprintBean");
-			SprintUtil s = SprintUtil.getSprintUtil(tt.getSprint().getId(),
-					jJSprintBean.getSprintList());
-			if (s != null) {
-				s = new SprintUtil(jJSprintService.findJJSprint(tt.getSprint()
-						.getId()), jJTaskService.getSprintTasks(
-						jJSprintService.findJJSprint(tt.getSprint().getId()),
-						LoginBean.getProduct()),jJContactService);
-				jJSprintBean.getSprintList().set(
-						jJSprintBean.contains(s.getSprint().getId()), s);
+			if(jJSprintBean.contains(tt.getSprint().getId()) != -1)
+			{
+				SprintUtil s = SprintUtil.getSprintUtil(tt.getSprint().getId(),
+						jJSprintBean.getSprintList());
+				if (s != null) {
+					s = new SprintUtil(jJSprintService.findJJSprint(tt.getSprint()
+							.getId()), jJTaskService.getSprintTasks(
+							jJSprintService.findJJSprint(tt.getSprint().getId()),
+							LoginBean.getProduct()),jJContactService);
+					jJSprintBean.getSprintList().set(
+							jJSprintBean.contains(s.getSprint().getId()), s);
+				}
 			}
+			
 		}
 
 		reset();

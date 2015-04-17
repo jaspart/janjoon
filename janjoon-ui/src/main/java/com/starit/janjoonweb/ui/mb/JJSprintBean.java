@@ -40,6 +40,7 @@ import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJSprint;
+import com.starit.janjoonweb.domain.JJSprintService;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTask;
@@ -136,6 +137,16 @@ public class JJSprintBean {
 
 	public void setCreateTaskPanelGrid(HtmlPanelGrid createTaskPanelGrid) {
 		this.createTaskPanelGrid = createTaskPanelGrid;
+	}
+	
+	public JJSprintService getJJSprintService()
+	{
+		return jJSprintService;
+	}
+	
+	public JJContactService getJJContactService()
+	{
+		return jJContactService;
 	}
 
 	public List<JJCategory> getCategoryList() {

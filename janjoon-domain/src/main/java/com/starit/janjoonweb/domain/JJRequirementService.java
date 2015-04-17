@@ -11,24 +11,22 @@ public interface JJRequirementService {
 	// Generic request
 
 	public List<JJRequirement> getRequirements(JJCompany company,JJCategory category,
-			JJProject project, JJProduct product, JJVersion version,
+			Map<JJProject,JJProduct> map, JJVersion version,
 			JJStatus status, JJChapter chapter, boolean withChapter,
 			boolean onlyActif, boolean orderByCreationdate,boolean mine,JJContact contact);
 	
 	public List<JJRequirement> getRequirementsWithOutChapter(JJCompany company,JJCategory category,
-			JJProject project, JJProduct product, JJVersion version,
-			JJStatus status,
-			boolean onlyActif, boolean orderByCreationdate);
+			Map<JJProject,JJProduct> map, JJVersion version,
+			JJStatus status,boolean onlyActif, boolean orderByCreationdate);
 	
 	public boolean haveTestcase(JJRequirement requirement);
 
-	public List<JJRequirement> getRequirements(JJCompany company,JJProject project,
-			JJProduct product, JJVersion version);
+	public List<JJRequirement> getRequirements(JJCompany company,Map<JJProject,JJProduct> map, JJVersion version);
 
 	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
 			JJCompany company,JJChapter chapter, boolean onlyActif);
 	
-	public List<JJRequirement> getMineRequirements(JJCompany company,JJContact creator,JJProduct produit,JJProject projet,JJCategory category,JJVersion version,
+	public List<JJRequirement> getMineRequirements(JJCompany company,JJContact creator,Map<JJProject,JJProduct> map,JJCategory category,JJVersion version,
 			boolean onlyActif, boolean orderByCreationdate);
 
 	public List<JJRequirement> getRequirements(JJCompany company,JJStatus status);

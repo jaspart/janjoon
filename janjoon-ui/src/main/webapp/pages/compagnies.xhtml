@@ -43,7 +43,7 @@
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
 						oncomplete="PF('companyDialogWidget').show()"
 						value="#{messages.admin_company_table_edit_tooltip}"
-						title="#{messages.admin_company_table_edit_tooltip}"
+						title="#{messages.admin_companprogressy_table_edit_tooltip}"
 						update=":tabview:companyDialog" resetValues="true">
 						<f:setPropertyActionListener value="#{company}"
 							target="#{jJCompanyBean.companie}" />
@@ -86,7 +86,7 @@
 		<p:ajax event="close" update=":tabview:companyForm"
 			listener="#{jJCompanyBean.closeDialog}" />
 		<p:outputPanel id="companyDialogPanel">
-			<h:form id="companyDialogForm" enctype="multipart/form-data" style="height: 555px;width: 670px;">
+			<h:form id="companyDialogForm" enctype="multipart/form-data" style="height: 580px;width: 650px;">
 				<p:panel styleClass="panelDialog">
 					<f:facet name="header">						
 						<p:messages id="msg" showDetail="false" closable="true" />
@@ -119,24 +119,12 @@
 						<p:column colspan="1">
 							<h:outputLabel for="calendar" value="Calendrier" />
 						</p:column>
-						<p:column>
+						<p:column colspan="2">
 							<p:inputTextarea id="calendar"
 								value="#{jJCompanyBean.companie.calendar}" required="true"
-								requiredMessage="Calendar Field is Required" rows="8" cols="37"
+								requiredMessage="Calendar Field is Required" rows="8" cols="50"
 								autoResize="false" />
-						</p:column>
-						<!-- 						<p:column colspan="2"> -->
-						<!-- 							<p:fileUpload id="calendar" fileLimit="1" -->
-						<!-- 								required="#{jJCompanyBean.update}" -->
-						<!-- 								fileUploadListener="#{jJCompanyBean.handleFileUpload}" -->
-						<!-- 								mode="advanced" dragDropSupport="true" -->
-						<!-- 								update="msg valValue" sizeLimit="100000" -->
-						<!-- 								allowTypes="/(\.|\/)(properties)$/" /> -->
-
-						<!-- 							<h:inputHidden id="valValue" value="#{jJCompanyBean.calendar}" -->
-						<!-- 								required="#{jJCompanyBean.update}" -->
-						<!-- 								requiredMessage="You Have Not Uploaded the Calendar of the Company" /> -->
-						<!-- 						</p:column> -->
+						</p:column>					
 					</p:row>
 					<p:row>
 						<p:column colspan="3">

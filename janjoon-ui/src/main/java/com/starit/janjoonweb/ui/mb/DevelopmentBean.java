@@ -46,6 +46,7 @@ import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 import com.starit.janjoonweb.ui.mb.util.service.AbstractConfigManager;
 import com.starit.janjoonweb.ui.mb.util.service.FileMap;
 import com.starit.janjoonweb.ui.mb.util.service.GitConfigManager;
@@ -524,7 +525,7 @@ public class DevelopmentBean implements Serializable {
 		}
 		task = jJTaskService.findJJTask(task.getId());
 		if (check) {
-
+			
 			task.setEndDateReal(new Date());
 			task.setCompleted(true);
 			status = jJStatusService.getOneStatus("DONE", "Task", true);
@@ -536,6 +537,7 @@ public class DevelopmentBean implements Serializable {
 		JJMessage message = new JJMessage();
 		message.setProduct(product);
 		message.setContact(contact);
+		message.setCompany(contact.getCompany());
 		message.setProject(project);
 		message.setVersioning(version);		
 		message.setEnabled(true);
@@ -559,6 +561,26 @@ public class DevelopmentBean implements Serializable {
 		}
 
 		jJTaskBean.saveJJTask(task,false);
+		if(task.getSprint() != null && LoginBean.findBean("jJSprintBean") != null)
+		{		
+			JJSprintBean jJSprintBean = (JJSprintBean) LoginBean.findBean("jJSprintBean");
+			if(jJSprintBean.contains(task.getSprint().getId()) != -1)
+			{
+				SprintUtil s = SprintUtil.getSprintUtil(task.getSprint()
+						.getId(), jJSprintBean.getSprintList());
+				if (s != null) {
+					s = new SprintUtil(jJSprintBean.getJJSprintService().findJJSprint(task
+							.getSprint().getId()),
+							jJTaskService.getSprintTasks(jJSprintBean.getJJSprintService()
+									.findJJSprint(task.getSprint().getId()),
+									LoginBean.getProduct()),jJSprintBean.getJJContactService());
+					// sprintUtil.setRenderTaskForm(false);
+					jJSprintBean.getSprintList().set(
+							jJSprintBean.contains(s.getSprint().getId()), s);
+					}
+			}
+			
+		}
 		FacesMessage growlMessage = null;
 
 		if (configManager.checkIn(task.getId() + ":" + task.getName() + " : "
@@ -587,10 +609,11 @@ public class DevelopmentBean implements Serializable {
 	}
 
 	public void startTask() {
-		task.setStartDateReal(new Date());
-		jJTaskBean.saveJJTask(task,false);
-		tasks = jJTaskService.getTasksByProduct(product, project);	
-
+		task.setStartDateReal(new Date());	
+		jJTaskBean.updateTask(task, "dev");
+//		task=jJTaskService.findJJTask(task.getId());
+//		tasks = jJTaskService.getTasksByProduct(product, project);
+		
 	}
 
 	public void onSelectTree(NodeSelectEvent event) {

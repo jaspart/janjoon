@@ -708,10 +708,11 @@ public class JJStatusBean {
 		public float getCoverageProgress() {
 
 			float compteur = 0;
+			LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
 			List<JJRequirement> dataList = jJRequirementService
 					.getRequirements(((LoginBean) LoginBean
 							.findBean("loginBean")).getContact().getCompany(),
-							category, project, LoginBean.getProduct(),LoginBean.getVersion(), null, null,
+							category, loginBean.getAuthorizedMap("Requirement", project, LoginBean.getProduct()),LoginBean.getVersion(), null, null,
 							false, true, false,false,null);
 
 			List<JJCategory> categoryList = jJCategoryService.getCategories(
@@ -808,10 +809,11 @@ public class JJStatusBean {
 
 		public float getCompletionProgress() {
 			float compteur = 0;
+			LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
 			List<JJRequirement> dataList = jJRequirementService
 					.getRequirements(((LoginBean) LoginBean
 							.findBean("loginBean")).getContact().getCompany(),
-							category, project, LoginBean.getProduct(),LoginBean.getVersion(), null, null,
+							category,loginBean.getAuthorizedMap("Requirement", project, LoginBean.getProduct()),LoginBean.getVersion(), null, null,
 							false, true, false,false,null);
 
 			for (JJRequirement requirement : dataList) {

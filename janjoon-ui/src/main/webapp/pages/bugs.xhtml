@@ -181,7 +181,8 @@
 							<h:outputText value="#{messages.bug_table_action_title}" />
 						</f:facet>
 						<p:splitButton id="viewButton" action="#{jJBugBean.bugInfo}"
-							title="View" value="View" ajax="false" icon="ui-icon-eye"
+							title="#{messages.specification_table_actions_viewButton}"
+							value="#{messages.label_view}" ajax="false" icon="ui-icon-eye"
 							onclick="target='_blank'">
 							<p:menuitem id="editButton" icon="ui-icon-pencil"
 								value="#{messages.label_edit}" update=":editForm"

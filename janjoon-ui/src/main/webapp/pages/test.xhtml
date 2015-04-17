@@ -264,7 +264,7 @@
 				</p:overlayPanel>
 				<h:form id="rate">
 					<p:rating value="#{jJTestcaseBean.rated}" style="float: right;margin-top: 35px;margin-right: -30px;"
-						stars="1" rendered="#{jJTestcaseBean.renderCommentsPanel}">
+						stars="1" rendered="#{jJTestcaseBean.renderCommentsPanel}" >
 						<p:ajax event="rate" listener="#{jJTestcaseBean.onrate}"
 						onstart="PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock()"

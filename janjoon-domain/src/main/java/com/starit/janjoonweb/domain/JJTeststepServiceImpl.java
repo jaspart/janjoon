@@ -1,7 +1,9 @@
 package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -126,7 +128,9 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 	@Override
 	public List<JJTeststep> getJJtestSteps(JJProject project) {
 		
-		List<JJRequirement> requirements=jJRequirementService.getRequirements(null,project, null, null);
+		Map<JJProject, JJProduct> map = new HashMap<JJProject, JJProduct>();
+		map.put(project, null);
+		List<JJRequirement> requirements=jJRequirementService.getRequirements(null,map,null);
 		List<JJTeststep> jjTeststeps=new ArrayList<JJTeststep>();
 		if(requirements!=null)
 		{

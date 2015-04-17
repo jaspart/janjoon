@@ -35,9 +35,10 @@ public class SprintUtil {
 	private Integer workload;
 	private boolean render;
 
-	public SprintUtil(JJSprint sprint, List<JJTask> tasks,JJContactService jJContactService) {
+	public SprintUtil(JJSprint sprint, List<JJTask> tasks,
+			JJContactService jJContactService) {
 		this.sprint = sprint;
-		this.jJContactService =jJContactService;
+		this.jJContactService = jJContactService;
 		this.neditabale = false;
 		this.chartModel = new CartesianChartModel();
 		calculateField(tasks);
@@ -118,33 +119,47 @@ public class SprintUtil {
 
 	public Integer getPriseReal() {
 
-		int priseReal = 0;
+		if (doneTask != null) {
+			int priseReal = 0;
 
-		for (JJTask task : doneTask) {
+			for (JJTask task : doneTask) {
 
-			if (task.getAssignedTo() != null && task.getWorkloadReal() != null
-					&& task.getAssignedTo().getPriceReal() != null) {
-				priseReal = priseReal + task.getWorkloadReal()
-						* jJContactService.findJJContact(task.getAssignedTo().getId()).getPriceReal();
+				if (task.getAssignedTo() != null
+						&& task.getWorkloadReal() != null
+						&& task.getAssignedTo().getPriceReal() != null) {
+					priseReal = priseReal
+							+ task.getWorkloadReal()
+							* jJContactService.findJJContact(
+									task.getAssignedTo().getId())
+									.getPriceReal();
+				}
 			}
-		}
-		return priseReal;
+			return priseReal;
+		} else
+			return 0;
 
 	}
 
 	public Integer getPriseSold() {
-		
-		
-		int priseSold = 0;
-		for (JJTask task : doneTask) {
-		if (task.getAssignedTo() != null
-				&& task.getWorkloadReal() != null
-				&& task.getAssignedTo().getPriceSold() != null) {
-			priseSold = priseSold + task.getWorkloadReal()
-					*  jJContactService.findJJContact(task.getAssignedTo().getId()).getPriceSold();
-		}}
 
-		return priseSold;
+		if (doneTask != null) {
+			int priseSold = 0;
+			for (JJTask task : doneTask) {
+				if (task.getAssignedTo() != null
+						&& task.getWorkloadReal() != null
+						&& task.getAssignedTo().getPriceSold() != null) {
+					priseSold = priseSold
+							+ task.getWorkloadReal()
+							* jJContactService.findJJContact(
+									task.getAssignedTo().getId())
+									.getPriceSold();
+				}
+			}
+
+			return priseSold;
+		} else
+			return 0;
+
 	}
 
 	public boolean isRender() {
@@ -166,8 +181,8 @@ public class SprintUtil {
 	private void calculateField(List<JJTask> tasks) {
 		Integer i = 0;
 		Integer j = 0;
-//		priseReal = 0;
-//		priseSold = 0;
+		// priseReal = 0;
+		// priseSold = 0;
 		this.render = (sprint.getId() == null);
 		if (!render) {
 
@@ -182,19 +197,19 @@ public class SprintUtil {
 
 					for (JJTask task : tasks) {
 
-//						if (task.getAssignedTo() != null
-//								&& task.getWorkloadReal() != null
-//								&& task.getAssignedTo().getPriceReal() != null) {
-//							priseReal = priseReal + task.getWorkloadReal()
-//									* task.getAssignedTo().getPriceReal();
-//						}
-//
-//						if (task.getAssignedTo() != null
-//								&& task.getWorkloadReal() != null
-//								&& task.getAssignedTo().getPriceSold() != null) {
-//							priseSold = priseSold + task.getWorkloadReal()
-//									* task.getAssignedTo().getPriceSold();
-//						}
+						// if (task.getAssignedTo() != null
+						// && task.getWorkloadReal() != null
+						// && task.getAssignedTo().getPriceReal() != null) {
+						// priseReal = priseReal + task.getWorkloadReal()
+						// * task.getAssignedTo().getPriceReal();
+						// }
+						//
+						// if (task.getAssignedTo() != null
+						// && task.getWorkloadReal() != null
+						// && task.getAssignedTo().getPriceSold() != null) {
+						// priseSold = priseSold + task.getWorkloadReal()
+						// * task.getAssignedTo().getPriceSold();
+						// }
 
 						if (task.getWorkloadPlanned() != null)
 							i = i + task.getWorkloadPlanned();
@@ -336,13 +351,14 @@ public class SprintUtil {
 	}
 
 	public static List<SprintUtil> generateSprintUtilList(
-			List<JJSprint> sprints, JJTaskService jJTaskService,JJContactService jjContactService) {
+			List<JJSprint> sprints, JJTaskService jJTaskService,
+			JJContactService jjContactService) {
 		List<SprintUtil> sprintUtils = null;
 		if (!sprints.isEmpty()) {
 			sprintUtils = new ArrayList<SprintUtil>();
 			for (JJSprint s : sprints) {
 				SprintUtil ss = new SprintUtil(s, jJTaskService.getSprintTasks(
-						s, LoginBean.getProduct()),jjContactService);
+						s, LoginBean.getProduct()), jjContactService);
 				sprintUtils.add(ss);
 			}
 		}

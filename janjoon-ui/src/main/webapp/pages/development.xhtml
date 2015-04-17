@@ -75,6 +75,7 @@
 
 											<p:commandButton id="viewTaskButton" icon="ui-icon-zoomin"
 												update=":viewTaskForm :viewTaskDialog"
+												resetValues="true"
 												disabled="#{jJDevelopment.task == null}" immediate="true"
 												oncomplete="PF('viewTaskDialogWidget').show()"
 												actionListener="#{jJTaskBean.gettingTaskValue}"

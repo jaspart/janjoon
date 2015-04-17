@@ -891,6 +891,7 @@ public class JJBugBean {
 	public List<JJRequirement> completeReqBug(String query) {
 
 		List<JJRequirement> suggestions = new ArrayList<JJRequirement>();
+		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
 		JJProduct prod = LoginBean.getProduct();
 		JJProject proj = (JJProject) UIComponent
 				.getCurrentComponent(FacesContext.getCurrentInstance())
@@ -898,7 +899,7 @@ public class JJBugBean {
 		suggestions.add(null);
 
 		for (JJRequirement req : jJRequirementService.getRequirements(
-				(JJCompany) LoginBean.findBean("JJCompany"), proj, prod, null)) {
+				(JJCompany) LoginBean.findBean("JJCompany"), loginBean.getAuthorizedMap("Requirement", proj, prod), null)) {
 			String jJCriticityStr = String.valueOf(req.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(req);

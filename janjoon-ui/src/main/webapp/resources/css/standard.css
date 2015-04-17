@@ -31,6 +31,11 @@ a:visited {
 	color: #23AFB2;
 }
 
+.ui-widget-header .ui-inputfield, .ui-widget-content .ui-inputfield{	
+  font-weight: normal;
+  background: white;
+}
+
 .ui-icon-pdf{
     background-image: url("#{resource['images/pdf.ico']}") !important;
 	width: 25px !important;

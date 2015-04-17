@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -486,9 +487,10 @@ public class JJTestcaseBean {
 
 	public List<JJRequirement> getRequirements() {
 
+		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
 		requirements = jJRequirementService.getRequirements(
 				((LoginBean) LoginBean.findBean("loginBean")).getContact()
-						.getCompany(), null, null, null, null, null, chapter,
+						.getCompany(), null, new HashMap<JJProject, JJProduct>(), null, null, chapter,
 				true, true, true, false, null);
 
 		return requirements;
@@ -1153,12 +1155,13 @@ public class JJTestcaseBean {
 
 		} else if (code.equalsIgnoreCase("CH")) {
 
+			//LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
 			long id = Long.parseLong(getSubString(selectedNode, 1, "-"));
 
 			chapter = jJChapterService.findJJChapter(id);
 			List<JJRequirement> rqs = jJRequirementService.getRequirements(
 					((LoginBean) LoginBean.findBean("loginBean")).getContact()
-							.getCompany(), null, null, null, null, null,
+							.getCompany(), null, new HashMap<JJProject, JJProduct>(), null, null,
 					chapter, true, true, true, false, null);
 
 			if (rqs.size() > 0) {
