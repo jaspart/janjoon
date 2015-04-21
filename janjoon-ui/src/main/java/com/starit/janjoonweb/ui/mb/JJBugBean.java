@@ -372,6 +372,7 @@ public class JJBugBean {
 
 	private SelectItem[] createFilterOptions(Object objet) {
 
+		@SuppressWarnings("unchecked")
 		List<Object> data = (List<Object>) objet;
 
 		SelectItem[] options = new SelectItem[data.size() + 1];
@@ -399,6 +400,7 @@ public class JJBugBean {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public boolean listContaines(Object objet, Object find) {
 
 		if (find instanceof JJStatus) {
@@ -522,10 +524,10 @@ public class JJBugBean {
 	}
 
 	public void persistBugTask() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJSprintBean jJSprintBean = (JJSprintBean) session
-				.getAttribute("jJSprintBean");
+//		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+//				.getExternalContext().getSession(false);
+//		JJSprintBean jJSprintBean = (JJSprintBean) session
+//				.getAttribute("jJSprintBean");
 		String message = "";
 		updateJJBug(JJBug_);
 		message = "message_successfully_updated";
@@ -533,19 +535,19 @@ public class JJBugBean {
 		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
-		RequestContext context = RequestContext.getCurrentInstance();
+		//RequestContext context = RequestContext.getCurrentInstance();
 
-		int i = 0;
-		if (((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
-			i = 1;
-		else
-			i = 0;
+//		int i = 0;
+//		if (((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
+//			i = 1;
+//		else
+//			i = 0;
 
-		context.execute("PF('projectTabView').select(" + i + ")");
-		jJSprintBean.setUpdate(false);
-		context.execute("PF('SprintTab').select("
-				+ jJSprintBean.contains(jJSprintBean.getSprintUtil()
-						.getSprint().getId()) + ")");
+//		context.execute("PF('projectTabView').select(" + i + ")");
+//		jJSprintBean.setUpdate(false);
+//		context.execute("PF('SprintTab').select("
+//				+ jJSprintBean.contains(jJSprintBean.getSprintUtil()
+//						.getSprint().getId()) + ")");
 	}
 
 	public void persistJJBug() {

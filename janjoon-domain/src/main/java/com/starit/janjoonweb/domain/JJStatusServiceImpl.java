@@ -25,7 +25,7 @@ public class JJStatusServiceImpl implements JJStatusService {
 		this.entityManager = entityManager;
 	}
 
-	public List<JJStatus> load(MutableInt size,int first, int pageSize) {
+	public List<JJStatus> load(MutableInt size, int first, int pageSize) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJStatus> criteriaQuery = criteriaBuilder
@@ -44,13 +44,14 @@ public class JJStatusServiceImpl implements JJStatusService {
 		TypedQuery<JJStatus> result = entityManager.createQuery(select);
 		result.setFirstResult(first);
 		result.setMaxResults(pageSize);
-		
+
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJStatus.class)));
 		entityManager.createQuery(cq);
 		cq.where(predicates.toArray(new Predicate[] {}));
-		size.setValue(Math.round(entityManager.createQuery(cq).getSingleResult()));	
-		
+		size.setValue(Math.round(entityManager.createQuery(cq)
+				.getSingleResult()));
+
 		return result.getResultList();
 	}
 
@@ -74,12 +75,16 @@ public class JJStatusServiceImpl implements JJStatusService {
 
 		if (object != null) {
 			List<Predicate> orPredicates = new ArrayList<Predicate>();
-			
-			orPredicates.add(criteriaBuilder.equal(from.get("objet"), object));			
-			if(!object.contains("*"))
-				orPredicates.add(criteriaBuilder.equal(from.get("objet"),
-						"JJ"+object));
-			
+
+			orPredicates.add(criteriaBuilder.equal(
+					criteriaBuilder.lower(from.<String> get("objet")),
+					object.toLowerCase()));
+
+			if (!object.contains("*"))
+				orPredicates.add(criteriaBuilder.equal(
+						criteriaBuilder.lower(from.<String> get("objet")), "JJ"
+								+ object.toLowerCase()));
+
 			Predicate orPredicate = criteriaBuilder.or(orPredicates
 					.toArray(new Predicate[] {}));
 			predicates.add(orPredicate);
@@ -91,7 +96,7 @@ public class JJStatusServiceImpl implements JJStatusService {
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
-		TypedQuery<JJStatus> result = entityManager.createQuery(select);		
+		TypedQuery<JJStatus> result = entityManager.createQuery(select);
 
 		if (result.getResultList().size() == 0)
 			return null;
@@ -115,12 +120,14 @@ public class JJStatusServiceImpl implements JJStatusService {
 
 		if (object != null) {
 			List<Predicate> orPredicates = new ArrayList<Predicate>();
-			
-			orPredicates.add(criteriaBuilder.equal(from.get("objet"), object));			
-			if(!object.contains("*"))
-				orPredicates.add(criteriaBuilder.equal(from.get("objet"),
-						"JJ"+object));
-			
+			orPredicates.add(criteriaBuilder.equal(
+					criteriaBuilder.lower(from.<String> get("objet")),
+					object.toLowerCase()));
+			if (!object.contains("*"))
+				orPredicates.add(criteriaBuilder.equal(
+						criteriaBuilder.lower(from.<String> get("objet")), "JJ"
+								+ object.toLowerCase()));
+
 			Predicate orPredicate = criteriaBuilder.or(orPredicates
 					.toArray(new Predicate[] {}));
 			predicates.add(orPredicate);
@@ -166,7 +173,7 @@ public class JJStatusServiceImpl implements JJStatusService {
 		Metamodel model = entityManager.getMetamodel();
 		model.getEntities();
 
-		List<String> tableNames = new ArrayList<String>();		
+		List<String> tableNames = new ArrayList<String>();
 		Set<EntityType<?>> allEntityTypes = model.getEntities();
 		for (EntityType<?> entityType : allEntityTypes) {
 			tableNames.add(entityType.getName().substring(2));

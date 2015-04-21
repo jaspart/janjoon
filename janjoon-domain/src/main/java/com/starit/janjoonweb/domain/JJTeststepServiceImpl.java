@@ -57,13 +57,15 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		if (onlyActif) {
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		}
+	
 
 		if (testcase != null) {
 			predicates
 					.add(criteriaBuilder.equal(from.get("testcase"), testcase));
+		}
+		
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));

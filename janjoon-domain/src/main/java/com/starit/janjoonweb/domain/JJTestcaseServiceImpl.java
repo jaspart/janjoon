@@ -36,10 +36,7 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 		CriteriaQuery<JJTestcase> select = criteriaQuery.select(from);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		if (requirement != null) {
-			predicates.add(criteriaBuilder.equal(from.get("requirement"),
-					requirement));
-		}
+		
 
 		if (build != null) {
 			predicates.add(criteriaBuilder.isMember(build,
@@ -49,6 +46,11 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 		if (chapter != null) {
 			Path<Object> path = from.join("requirement").get("chapter");
 			predicates.add(criteriaBuilder.equal(path, chapter));
+		}
+		
+		if (requirement != null) {
+			predicates.add(criteriaBuilder.equal(from.get("requirement"),
+					requirement));
 		}
 
 		if (onlyActif) {

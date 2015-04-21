@@ -38,8 +38,9 @@ public class JJChapterServiceImpl implements JJChapterService {
 
 		predicates.add(criteriaBuilder.isNull(from.get("parent")));
 
-		if (onlyActif) {
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		if (category != null) {
+			predicates
+					.add(criteriaBuilder.equal(from.get("category"), category));
 		}
 		// Adding predicates in case of parameter not being null
 		if (project != null) {
@@ -50,9 +51,8 @@ public class JJChapterServiceImpl implements JJChapterService {
 					company));
 		}
 
-		if (category != null) {
-			predicates
-					.add(criteriaBuilder.equal(from.get("category"), category));
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
 		select.where(predicates.toArray(new Predicate[] {}));
@@ -79,9 +79,11 @@ public class JJChapterServiceImpl implements JJChapterService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		if (onlyActif) {
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		if (category != null) {
+			predicates
+					.add(criteriaBuilder.equal(from.get("category"), category));
 		}
+
 		// Adding predicates in case of parameter not being null
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
@@ -91,10 +93,10 @@ public class JJChapterServiceImpl implements JJChapterService {
 					company));
 		}
 
-		if (category != null) {
-			predicates
-					.add(criteriaBuilder.equal(from.get("category"), category));
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
+
 		if (ids == null || ids.isEmpty()) {
 
 			select.where(predicates.toArray(new Predicate[] {}));
@@ -133,7 +135,10 @@ public class JJChapterServiceImpl implements JJChapterService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		if (category != null) {
+			predicates
+					.add(criteriaBuilder.equal(from.get("category"), category));
+		}
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
@@ -143,13 +148,12 @@ public class JJChapterServiceImpl implements JJChapterService {
 					company));
 		}
 
-		if (category != null) {
-			predicates
-					.add(criteriaBuilder.equal(from.get("category"), category));
-		}
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		if (name != null)
-			predicates.add(criteriaBuilder.equal(criteriaBuilder.upper(from.<String>get("name")), name.toUpperCase()));
+			predicates.add(criteriaBuilder.equal(
+					criteriaBuilder.upper(from.<String> get("name")),
+					name.toUpperCase()));
 
 		select.where(predicates.toArray(new Predicate[] {}));
 
@@ -174,8 +178,6 @@ public class JJChapterServiceImpl implements JJChapterService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-
 		// Adding predicates in case of parameter not being null
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
@@ -184,6 +186,8 @@ public class JJChapterServiceImpl implements JJChapterService {
 					from.join("project").join("manager").get("company"),
 					company));
 		}
+		
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		select.where(predicates.toArray(new Predicate[] {}));
 		if (sotedByDate) {
@@ -206,10 +210,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 		CriteriaQuery<JJChapter> select = criteriaQuery.select(from);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
-
-		if (onlyActif) {
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		}
+		
 		// Adding predicates in case of parameter not being null
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
@@ -217,6 +218,10 @@ public class JJChapterServiceImpl implements JJChapterService {
 			predicates.add(criteriaBuilder.equal(
 					from.join("project").join("manager").get("company"),
 					company));
+		}
+		
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
 		select.where(predicates.toArray(new Predicate[] {}));

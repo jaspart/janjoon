@@ -13,6 +13,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJRequirementService;
@@ -25,7 +26,10 @@ import com.starit.janjoonweb.domain.JJVersionService;
 public class JJVersionBean {
 
 	@Autowired
-	JJRequirementService jJRequirementService;
+	private JJRequirementService jJRequirementService;
+	
+	@Autowired
+	private JJTaskService jJTaskService;
 
 	public void setjJRequirementService(
 			JJRequirementService jJRequirementService) {
@@ -33,6 +37,11 @@ public class JJVersionBean {
 	}
 
 	
+	public void setjJTaskService(JJTaskService jJTaskService) {
+		this.jJTaskService = jJTaskService;
+	}
+
+
 	public JJVersionService getJJVersionService()
 	{
 		return jJVersionService;
@@ -283,6 +292,6 @@ public class JJVersionBean {
 	}
 
 	public List<JJTask> getTastksByVersion(JJVersion jJversion) {
-		return jJVersionService.getTastksByVersion(jJversion);
+		return jJTaskService.getTastksByVersion(jJversion);
 	}
 }

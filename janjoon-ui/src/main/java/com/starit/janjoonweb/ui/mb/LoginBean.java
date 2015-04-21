@@ -107,7 +107,6 @@ public class LoginBean implements Serializable {
 	private JJContact contact;
 	private boolean enable = false;
 	private int activeTabAdminIndex;
-	private int activeTabProjectIndex;
 	private int menuIndex;
 	private JJConfiguration planingTabsConf;
 
@@ -292,14 +291,6 @@ public class LoginBean implements Serializable {
 
 	public void setActiveTabAdminIndex(int activeTabAdminIndex) {
 		this.activeTabAdminIndex = activeTabAdminIndex;
-	}
-
-	public int getActiveTabProjectIndex() {
-		return activeTabProjectIndex;
-	}
-
-	public void setActiveTabProjectIndex(int activeTabProjectIndex) {
-		this.activeTabProjectIndex = activeTabProjectIndex;
 	}
 
 	public int getMenuIndex() {
@@ -613,18 +604,6 @@ public class LoginBean implements Serializable {
 		System.out.println(this.activeTabAdminIndex);
 		this.activeTabAdminIndex = tv.getChildren().indexOf(event.getTab());
 		System.out.println("###### ACtive tab: " + activeTabAdminIndex);
-
-	}
-
-	public void onTabProjectChange(TabChangeEvent event) {
-		TabView tv = (TabView) event.getComponent();
-		this.activeTabProjectIndex = tv.getChildren().indexOf(event.getTab());
-		if (activeTabProjectIndex == 0) {
-			JJTaskBean jJTaskBean = (JJTaskBean) findBean("jJTaskBean");
-			jJTaskBean.loadData();
-			System.out.println("jJTaskBean");
-		}
-		System.out.println("###### ACtive tab: " + activeTabProjectIndex);
 
 	}
 
@@ -1450,14 +1429,25 @@ public class LoginBean implements Serializable {
 	}
 
 	public boolean isRenderScrum() {
-		return getPlaningTabsConf().getVal().toLowerCase()
+		boolean bbbb =getPlaningTabsConf().getVal().toLowerCase()
 				.contains("scrum".toLowerCase());
+		
+		if(!bbbb && findBean("jJSprintBean") != null)
+			((JJSprintBean)findBean("jJSprintBean")).setActiveTabGantIndex(0);
+		
+		return bbbb;
 
 	}
 
 	public boolean isRenderGantt() {
-		return getPlaningTabsConf().getVal().toLowerCase()
+		
+		boolean bbbb  =getPlaningTabsConf().getVal().toLowerCase()
 				.contains("gantt".toLowerCase());
+		
+		if(!bbbb && findBean("jJSprintBean") != null)
+			((JJSprintBean)findBean("jJSprintBean")).setActiveTabGantIndex(0);
+			
+		return bbbb;
 
 	}
 

@@ -38,9 +38,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();
-
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		List<Predicate> predicates = new ArrayList<Predicate>();	
 
 		predicates.add(criteriaBuilder.equal(from.get("contact"), contact));
 
@@ -63,6 +61,8 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 			}
 
 		}
+		
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		select.where(predicates.toArray(new Predicate[] {}));
 

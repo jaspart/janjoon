@@ -59,13 +59,15 @@
 			</p:panelGrid>
 		</h:form>
 		<p:tabView id="projecttabview" widgetVar="projectTabView"
-			dynamic="false" cache="true" style="width:100% !important;"
-			activeIndex="#{loginBean.activeTabProjectIndex}">
+			activeIndex="#{jJSprintBean.activeTabGantIndex}"
+			onTabChange="tabChangeHelper([{name: 'activeGantIndex', value: index}])"
+			dynamic="false" cache="true" style="width:100% !important;">
 
-			<p:ajax event="tabChange"
-				listener="#{jJSprintBean.onTabSprintChange}"
-				onstart="PF('blockUIWidget').block()"
-				oncomplete="PF('blockUIWidget').unblock()" />
+			<!-- 			<p:ajax event="tabChange" -->
+			<!-- 				listener="#{jJSprintBean.onTabSprintChange}" -->
+			<!-- 				onstart="PF('blockUIWidget').block()" -->
+			<!-- 				oncomplete="PF('blockUIWidget').unblock()" /> -->
+
 			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}"
 				rendered="#{loginBean.renderGantt}">
 				<h:panelGrid id="projectpanel" columns="1" cellpadding="3"
@@ -116,6 +118,8 @@
 			draggable="false" styleClass="disable-scroll"
 			widgetVar="taskImportDialogWidget" dynamic="true" resizable="false">
 			<p:ajax event="close" update=":projecttabview"
+				onstart="PF('blockUIWidget').block()"
+				oncomplete="PF('blockUIWidget').unblock()"
 				listener="#{jJTaskBean.closeDialogImport}" />
 			<p:outputPanel id="importTaskDialogPanel">
 				<ui:insert name="importTask">
@@ -124,11 +128,14 @@
 			</p:outputPanel>
 		</p:dialog>
 
-		<p:dialog id="viewTaskDialog" header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task)}"
+		<p:dialog id="viewTaskDialog"
+			header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task)}"
 			modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
 			resizable="true" maximizable="true" showEffect="fade"
 			hideEffect="explode" draggable="#{jJTaskBean.mode eq 'planning'}">
 			<p:ajax event="close" update=":projecttabview"
+				onstart="PF('blockUIWidget').block()"
+				oncomplete="PF('blockUIWidget').unblock()"
 				listener="#{jJTaskBean.closeEvent('planning')}" />
 			<p:outputPanel id="viewTaskPanel">
 				<h:form id="viewTaskForm" enctype="multipart/form-data">

@@ -36,11 +36,7 @@ public class JJBugServiceImpl implements JJBugService {
 
 		CriteriaQuery<JJBug> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();
-
-		if (onlyActif) {
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		}
+		List<Predicate> predicates = new ArrayList<Predicate>();		
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
@@ -57,6 +53,10 @@ public class JJBugServiceImpl implements JJBugService {
 			predicates.add(criteriaBuilder.equal(
 					from.join("versioning").join("product").join("manager")
 							.get("company"), company));
+		}
+		
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
 		select.where(predicates.toArray(new Predicate[] {}));
@@ -83,7 +83,12 @@ public class JJBugServiceImpl implements JJBugService {
 		CriteriaQuery<JJBug> select = criteriaQuery.select(from);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
-
+		
+		if (category != null) {
+			predicates
+					.add(criteriaBuilder.equal(from.get("category"), category));
+		}
+		
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
 		}
@@ -95,12 +100,7 @@ public class JJBugServiceImpl implements JJBugService {
 			predicates.add(criteriaBuilder.equal(
 					from.join("versioning").join("product").join("manager")
 							.get("company"), company));
-		}
-
-		if (category != null) {
-			predicates
-					.add(criteriaBuilder.equal(from.get("category"), category));
-		}
+		}		
 
 		if (status != null) {
 			predicates.add(criteriaBuilder.equal(from.get("status"), status));
@@ -132,7 +132,7 @@ public class JJBugServiceImpl implements JJBugService {
 		CriteriaQuery<JJBug> select = criteriaQuery.select(from);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
@@ -141,17 +141,7 @@ public class JJBugServiceImpl implements JJBugService {
 		if (version != null) {
 			predicates.add(criteriaBuilder.equal(from.get("versioning"),
 					version));
-		} else if (product != null) {
-			// List<Predicate> orPredicates = new ArrayList<Predicate>();
-			// product = entityManager.find(JJProduct.class, product.getId());
-			// for (JJVersion v : product.getVersions()) {
-			// if (v.getEnabled())
-			// orPredicates.add(criteriaBuilder.equal(
-			// from.get("versioning"), v));
-			// }
-			// Predicate orPredicate = criteriaBuilder.or(orPredicates
-			// .toArray(new Predicate[] {}));
-			// predicates.add(orPredicate);
+		} else if (product != null) {		
 			predicates.add(criteriaBuilder.equal(
 					from.join("versioning").get("product"), product));
 		} else if (company != null) {
@@ -202,6 +192,8 @@ public class JJBugServiceImpl implements JJBugService {
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
 		}
+		
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		select.where(predicates.toArray(new Predicate[] {}));
 
@@ -279,9 +271,7 @@ public class JJBugServiceImpl implements JJBugService {
 
 		CriteriaQuery<JJBug> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();
-
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		List<Predicate> predicates = new ArrayList<Predicate>();		
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
@@ -298,6 +288,8 @@ public class JJBugServiceImpl implements JJBugService {
 					from.join("versioning").join("product").join("manager")
 							.get("company"), company));
 		}
+		
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		select.where(predicates.toArray(new Predicate[] {}));
 

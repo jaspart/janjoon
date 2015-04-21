@@ -71,8 +71,11 @@ public class JJProfileServiceImpl implements JJProfileService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		if (name != null) {
-			predicates.add(criteriaBuilder.equal(from.get("name"), name));
+		if (name != null) {		
+			
+			predicates.add(criteriaBuilder.equal(
+					criteriaBuilder.lower(from.<String> get("name")),
+					name.toLowerCase()));
 		}
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));

@@ -32,11 +32,7 @@ public class JJBuildServiceImpl implements JJBuildService {
 
 		CriteriaQuery<JJBuild> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();
-
-		if (onlyActif) {
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		}
+		List<Predicate> predicates = new ArrayList<Predicate>();		
 
 		if (version != null) {
 			predicates.add(criteriaBuilder.equal(from.get("version"), version));
@@ -44,6 +40,10 @@ public class JJBuildServiceImpl implements JJBuildService {
 			predicates.add(criteriaBuilder.isNotNull(from.get("version")));
 			predicates.add(criteriaBuilder.equal(
 					from.join("version").get("product"), product));
+		}
+		
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
 		select.where(predicates.toArray(new Predicate[] {}));
@@ -63,11 +63,11 @@ public class JJBuildServiceImpl implements JJBuildService {
 
 		CriteriaQuery<JJBuild> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		List<Predicate> predicates = new ArrayList<Predicate>();	
 
 		predicates.add(criteriaBuilder.equal(from.get("version"), version));
 		predicates.add(criteriaBuilder.equal(from.get("name"), buildName));
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		select.where(predicates.toArray(new Predicate[] {}));
 
@@ -90,11 +90,7 @@ public class JJBuildServiceImpl implements JJBuildService {
 
 		CriteriaQuery<JJBuild> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();
-
-		if (onlyActif) {
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		}
+		List<Predicate> predicates = new ArrayList<Predicate>();		
 
 		if (withVersion) {
 			if (version != null) {
@@ -103,6 +99,10 @@ public class JJBuildServiceImpl implements JJBuildService {
 			} else {
 				predicates.add(criteriaBuilder.isNull(from.get("version")));
 			}
+		}
+		
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
 		select.where(predicates.toArray(new Predicate[] {}));

@@ -56,14 +56,6 @@
 			<p:watermark
 				value="#{messages.specification_table_requirement_filter}"
 				for="globalFilter" />
-
-			<!-- 			<p:selectBooleanButton id="mineSpec" style="margin-left: 10%;" -->
-			<!-- 				value="#{jJRequirementBean.mine}" onLabel="Mine" offLabel="All" -->
-			<!-- 				onIcon="ui-icon-check" offIcon="ui-icon-close"> -->
-			<!-- 				<p:ajax onstart="PF('blockUIWidget').block()" -->
-			<!-- 					oncomplete="PF('blockUIWidget').unblock()" -->
-			<!-- 					listener="#{jJRequirementBean.mineChangeEvent}" update=":specForm" /> -->
-			<!-- 			</p:selectBooleanButton> -->
 			<p:selectOneMenu id="mineSpec" value="#{jJRequirementBean.mine}"
 				styleClass="mineSelect" effect="fade" style="margin-left: 10%;">
 				<f:selectItem itemValue="#{false}" itemLabel="All" />

@@ -38,9 +38,9 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		predicates.add(criteriaBuilder.isMember(requirement,
 				from.<Set<JJRequirement>> get("requirementLinkUp")));
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJRequirement.class)));
 		entityManager.createQuery(cq);
@@ -59,9 +59,10 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		predicates.add(criteriaBuilder.isMember(requirement,
 				from.<Set<JJRequirement>> get("requirementLinkDown")));
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJRequirement.class)));
 		entityManager.createQuery(cq);
@@ -83,8 +84,6 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-
 		if (category != null) {
 			predicates
 					.add(criteriaBuilder.equal(from.get("category"), category));
@@ -101,6 +100,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		if (product != null) {
 			predicates.add(criteriaBuilder.equal(from.get("product"), product));
 		}
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		if (name != null) {
 			predicates.add(criteriaBuilder.equal(
@@ -155,14 +156,14 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
-			if (onlyActif) {
-				predicates
-						.add(criteriaBuilder.equal(from.get("enabled"), true));
-			}
-
 			if (category != null) {
 				predicates.add(criteriaBuilder.equal(from.get("category"),
 						category));
+			}
+
+			if (status != null) {
+				predicates
+						.add(criteriaBuilder.equal(from.get("status"), status));
 			}
 
 			if (map != null && !map.isEmpty()) {
@@ -206,9 +207,9 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 						version));
 			}
 
-			if (status != null) {
+			if (onlyActif) {
 				predicates
-						.add(criteriaBuilder.equal(from.get("status"), status));
+						.add(criteriaBuilder.equal(from.get("enabled"), true));
 			}
 
 			predicates.add(criteriaBuilder.isNull(from.get("chapter")));
@@ -246,14 +247,22 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
-			if (onlyActif) {
-				predicates
-						.add(criteriaBuilder.equal(from.get("enabled"), true));
-			}
-
 			if (category != null) {
 				predicates.add(criteriaBuilder.equal(from.get("category"),
 						category));
+			}
+
+			if (status != null) {
+				predicates
+						.add(criteriaBuilder.equal(from.get("status"), status));
+			}
+
+			if (contact != null && mine) {
+				Predicate condition1 = criteriaBuilder.equal(
+						from.get("createdBy"), contact);
+				Predicate condition2 = criteriaBuilder.equal(
+						from.get("updatedBy"), contact);
+				predicates.add(criteriaBuilder.or(condition1, condition2));
 			}
 
 			if (map != null && !map.isEmpty()) {
@@ -280,12 +289,17 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 						if (entry.getValue() != null) {
 							orPredicates.add(criteriaBuilder.equal(
 									from.get("product"), entry.getValue()));
+						} else {
+							predicates.add(criteriaBuilder.equal(
+									from.join("project").join("manager")
+											.get("company"), company));
 						}
 					}
 
 				}
-				predicates.add(criteriaBuilder.or(orPredicates
-						.toArray(new Predicate[] {})));
+				if (!orPredicates.isEmpty())
+					predicates.add(criteriaBuilder.or(orPredicates
+							.toArray(new Predicate[] {})));
 			} else {
 				predicates.add(criteriaBuilder.equal(
 						from.join("project").join("manager").get("company"),
@@ -297,19 +311,6 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 						version));
 			}
 
-			if (status != null) {
-				predicates
-						.add(criteriaBuilder.equal(from.get("status"), status));
-			}
-
-			if (contact != null && mine) {
-				Predicate condition1 = criteriaBuilder.equal(
-						from.get("createdBy"), contact);
-				Predicate condition2 = criteriaBuilder.equal(
-						from.get("updatedBy"), contact);
-				predicates.add(criteriaBuilder.or(condition1, condition2));
-			}
-
 			if (withChapter) {
 				if (chapter != null) {
 					predicates.add(criteriaBuilder.equal(from.get("chapter"),
@@ -318,6 +319,11 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 					predicates.add(criteriaBuilder.isNull(from.get("chapter")));
 				}
 
+			}
+
+			if (onlyActif) {
+				predicates
+						.add(criteriaBuilder.equal(from.get("enabled"), true));
 			}
 
 			select.where(criteriaBuilder.and(predicates
@@ -371,7 +377,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	public List<JJRequirement> getRequirements(JJCompany company,
 			JJStatus status) {
 
-		return getRequirements(company, null, new HashMap<JJProject, JJProduct>(), null, status, null, false,
+		return getRequirements(company, null,
+				new HashMap<JJProject, JJProduct>(), null, status, null, false,
 				true, false, false, null);
 	}
 
@@ -385,6 +392,10 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		Root<JJRequirement> from = select.from(JJRequirement.class);
 		select.select(criteriaBuilder.count(from));
 		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (status != null) {
+			predicates.add(criteriaBuilder.equal(from.get("status"), status));
+		}
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
@@ -401,10 +412,6 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		if (version != null) {
 			predicates.add(criteriaBuilder.equal(from.get("versioning"),
 					version));
-		}
-
-		if (status != null) {
-			predicates.add(criteriaBuilder.equal(from.get("status"), status));
 		}
 
 		if (onlyActif) {
@@ -433,14 +440,17 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
-			if (onlyActif) {
-				predicates
-						.add(criteriaBuilder.equal(from.get("enabled"), true));
-			}
-
 			if (category != null) {
 				predicates.add(criteriaBuilder.equal(from.get("category"),
 						category));
+			}
+
+			if (creator != null) {
+				Predicate condition1 = criteriaBuilder.equal(
+						from.get("createdBy"), creator);
+				Predicate condition2 = criteriaBuilder.equal(
+						from.get("updatedBy"), creator);
+				predicates.add(criteriaBuilder.or(condition1, condition2));
 			}
 
 			if (map != null && !map.isEmpty()) {
@@ -484,12 +494,9 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 						version));
 			}
 
-			if (creator != null) {
-				Predicate condition1 = criteriaBuilder.equal(
-						from.get("createdBy"), creator);
-				Predicate condition2 = criteriaBuilder.equal(
-						from.get("updatedBy"), creator);
-				predicates.add(criteriaBuilder.or(condition1, condition2));
+			if (onlyActif) {
+				predicates
+						.add(criteriaBuilder.equal(from.get("enabled"), true));
 			}
 
 			select.where(criteriaBuilder.and(predicates
@@ -511,7 +518,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	public List<JJRequirement> getNonCouvredRequirements(JJCompany company,
 			Map<JJProject, JJProduct> map) {
 		if (map == null) {
-			String qu = "SELECT r FROM  JJRequirement r Where r.project.manager.company = :c AND r.enabled = true AND r.category != null and r.requirementLinkDown IS empty and r.requirementLinkUp IS empty";
+			String qu = "SELECT r FROM  JJRequirement r Where r.project.manager.company = :c AND r.category != null AND r.enabled = true AND r.requirementLinkDown IS empty and r.requirementLinkUp IS empty";
 			Query query = entityManager.createQuery(qu, JJRequirement.class);
 			query.setParameter("c", company);
 
@@ -528,11 +535,11 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 			predicates.add(criteriaBuilder.equal(
 					from.join("project").join("manager").get("company"),
 					company));
 
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 			predicates.add(criteriaBuilder.isEmpty(from
 					.<List<JJRequirement>> get("requirementLinkDown")));
 			predicates.add(criteriaBuilder.isEmpty(from

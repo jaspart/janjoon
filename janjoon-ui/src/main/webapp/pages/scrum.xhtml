@@ -10,13 +10,15 @@
 	<h:form style="width:100%;display:none;">
 		<p:remoteCommand update=":projecttabview:SprintTabView :growlForm"
 			name="updateTabSprint" />
+			<p:remoteCommand onstart="PF('blockUIWidget').block()" name="tabChangeHelper"  actionListener="#{jJSprintBean.onTabSprintChange}"
+			oncomplete="PF('blockUIWidget').unblock()" />
 	</h:form>
 	<p:tabView id="SprintTabView" dynamic="true" cache="true"
-		widgetVar="SprintTab" value="#{jJSprintBean.sprintList}"
-		var="jjsprint" style="width:100%;">
-		<p:ajax event="tabChange" listener="#{jJSprintBean.onTabSprintChange}"
-			onstart="PF('blockUIWidget').block()"
-			oncomplete="PF('blockUIWidget').unblock()" update="SprintTabView" />
+		widgetVar="SprintTab" value="#{jJSprintBean.sprintList}" onTabChange="tabChangeHelper([{name: 'activeScrumIndex', value: index}])"
+		var="jjsprint" style="width:100%;" activeIndex="#{jJSprintBean.activeTabSprintIndex}">
+<!-- 		<p:ajax event="tabChange" listener="#{jJSprintBean.onTabSprintChange}" -->
+<!-- 			onstart="PF('blockUIWidget').block()" -->
+<!-- 			oncomplete="PF('blockUIWidget').unblock()" update="SprintTabView" /> -->
 
 		<p:tab style="width:100%;"
 			disabled="#{jjsprint.render and !loginBean.authorisationService.wProject}">

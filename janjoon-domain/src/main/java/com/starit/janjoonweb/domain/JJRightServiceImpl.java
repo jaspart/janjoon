@@ -33,15 +33,17 @@ public class JJRightServiceImpl implements JJRightService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		if (onlyActif) {
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		}
 
 		if (profile != null) {
 			predicates.add(criteriaBuilder.equal(from.get("profile"), profile));
 		} else {
 			predicates.add(criteriaBuilder.isNull(from.get("profile")));
 		}
+		
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 

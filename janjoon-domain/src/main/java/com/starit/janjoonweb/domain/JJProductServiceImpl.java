@@ -53,7 +53,6 @@ public class JJProductServiceImpl implements JJProductService {
 			return getProducts(company, null, true, true);
 		else
 		{
-
 			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<JJProduct> criteriaQuery = criteriaBuilder
 					.createQuery(JJProduct.class);
@@ -63,10 +62,10 @@ public class JJProductServiceImpl implements JJProductService {
 			CriteriaQuery<JJProduct> select = criteriaQuery.select(from.<JJProduct>get("product"));
 			
 			List<Predicate> predicates = new ArrayList<Predicate>();
-
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+			
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
 			predicates.add(criteriaBuilder.isNotNull(from.get("product")));
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 			select.where(predicates.toArray(new Predicate[] {}));
 
@@ -78,10 +77,10 @@ public class JJProductServiceImpl implements JJProductService {
 			select = criteriaQuery.select(from2.join("versioning").<JJProduct>get("product"));
 			
 			predicates = new ArrayList<Predicate>();
-
-			predicates.add(criteriaBuilder.equal(from2.get("enabled"), true));
+			
 			predicates.add(criteriaBuilder.equal(from2.get("project"), project));
 			predicates.add(criteriaBuilder.isNotNull(from2.get("versioning")));
+			predicates.add(criteriaBuilder.equal(from2.get("enabled"), true));
 
 			select.where(predicates.toArray(new Predicate[] {}));
 
@@ -106,11 +105,13 @@ public class JJProductServiceImpl implements JJProductService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		
 
 		if (company != null)
 			predicates.add(criteriaBuilder.equal(
 					from.join("manager").get("company"), company));
+		
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		select.where(predicates.toArray(new Predicate[] {}));
 
@@ -153,12 +154,14 @@ public class JJProductServiceImpl implements JJProductService {
 						.createQuery(JJPermission.class);
 				Root<JJPermission> fromPermission = criteriaPermission
 						.from(JJPermission.class);
-				List<Predicate> predicatesPermion = new ArrayList<Predicate>();
-				predicatesPermion.add(criteriaBuilder.equal(
-						fromPermission.get("enabled"), true));
+				List<Predicate> predicatesPermion = new ArrayList<Predicate>();			
 
 				predicatesPermion.add(criteriaBuilder.equal(
 						fromPermission.get("contact"), contact));
+				
+				predicatesPermion.add(criteriaBuilder.equal(
+						fromPermission.get("enabled"), true));
+				
 				CriteriaQuery<JJPermission> selectPermission = criteriaPermission
 						.select(fromPermission);
 				selectPermission.where(predicatesPermion

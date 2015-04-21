@@ -1216,7 +1216,7 @@ public class JJRequirementBean {
 
 	public void filterTable() {
 		int i = 0;
-		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		while (i < tableDataModelList.size()) {
 			if (tableDataModelList.get(i).getRendered()) {
 
@@ -1236,9 +1236,11 @@ public class JJRequirementBean {
 														.getCompany(),
 												((LoginBean) LoginBean
 														.findBean("loginBean"))
-														.getContact(), loginBean.getAuthorizedMap("Requirement", project, product)
-														, category, version,
-												true, true)));
+														.getContact(),
+												loginBean.getAuthorizedMap(
+														"Requirement", project,
+														product), category,
+												version, true, true)));
 					} else
 						tableDataModelList.get(i).setFiltredRequirements(null);
 
@@ -1481,6 +1483,11 @@ public class JJRequirementBean {
 				if (!specPage) {
 					// closeDialog(true, false);
 					RequestContext.getCurrentInstance().execute("updateTree()");
+				} else if (filterButton != null
+						&& !filterButton
+								.equalsIgnoreCase("specification_filter_button")) {
+					filterButton = null;
+					redirectPage();
 				}
 
 			} else {
@@ -1506,8 +1513,12 @@ public class JJRequirementBean {
 			if (!specPage) {
 				// closeDialog(true, false);
 				RequestContext.getCurrentInstance().execute("updateTree()");
+			} else if (filterButton != null
+					&& !filterButton
+							.equalsIgnoreCase("specification_filter_button")) {
+				filterButton = null;
+				redirectPage();
 			}
-
 		}
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 
@@ -1766,7 +1777,7 @@ public class JJRequirementBean {
 	public void fillTableImport() {
 		long t = System.currentTimeMillis();
 		importFormats = new ArrayList<ImportFormat>();
-		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		copyTestcases = false;
 		copyChapters = false;
 		copyRequirements = false;
@@ -1775,9 +1786,10 @@ public class JJRequirementBean {
 		int i = 0;
 		for (JJRequirement requirement : jJRequirementService.getRequirements(
 				((LoginBean) LoginBean.findBean("loginBean")).getContact()
-						.getCompany(), importCategory, loginBean.getAuthorizedMap("Requirement", importProject, importProduct)
-						, importVersion, importStatus, null, false, false,
-				true, false, null)) {
+						.getCompany(), importCategory, loginBean
+						.getAuthorizedMap("Requirement", importProject,
+								importProduct), importVersion, importStatus,
+				null, false, false, true, false, null)) {
 			importFormats.add(new ImportFormat(String.valueOf(i), requirement,
 					copyRequirements, copyTestcases, copyChapters));
 			i++;
@@ -2396,7 +2408,7 @@ public class JJRequirementBean {
 	private void editTableDataModelList(long id, boolean rendered) {
 		long t = System.currentTimeMillis();
 		String[] results = templateHeader.split("-");
-		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		for (int i = 0; i < results.length; i++) {
 			String result = results[i];
 			JJCategory category = null;
@@ -2434,9 +2446,11 @@ public class JJRequirementBean {
 													.getContact().getCompany(),
 											((LoginBean) LoginBean
 													.findBean("loginBean"))
-													.getContact(),  loginBean.getAuthorizedMap("Requirement", project, product)
-													, category, version, true,
-											true)));
+													.getContact(), loginBean
+													.getAuthorizedMap(
+															"Requirement",
+															project, product),
+											category, version, true, true)));
 						else {
 							categoryDataModel
 									.setFiltredRequirements(getFiltredListValue(getListOfRequiremntUtils(jJRequirementService.getMineRequirements(
@@ -2445,9 +2459,11 @@ public class JJRequirementBean {
 													.getContact().getCompany(),
 											((LoginBean) LoginBean
 													.findBean("loginBean"))
-													.getContact(),loginBean.getAuthorizedMap("Requirement", project, product)
-													, category, version, true,
-											true))));
+													.getContact(), loginBean
+													.getAuthorizedMap(
+															"Requirement",
+															project, product),
+											category, version, true, true))));
 						}
 					} else if (!(filterValue == null || filterValue.isEmpty())) {
 						categoryDataModel
@@ -2480,9 +2496,11 @@ public class JJRequirementBean {
 											.getContact().getCompany(),
 											((LoginBean) LoginBean
 													.findBean("loginBean"))
-													.getContact(),loginBean.getAuthorizedMap("Requirement", project, product)
-													, category, version, true,
-											true)));
+													.getContact(), loginBean
+													.getAuthorizedMap(
+															"Requirement",
+															project, product),
+											category, version, true, true)));
 				tableDataModelList.set(i, categoryDataModel);
 
 			}
@@ -2948,14 +2966,15 @@ public class JJRequirementBean {
 	private List<JJRequirement> getRequirementsList(JJCategory category,
 			JJProduct product, JJVersion version, JJProject project,
 			boolean withProject) {
-		
-		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		long t = System.currentTimeMillis();
 		List<JJRequirement> list = new ArrayList<JJRequirement>();
 		if (category != null && withProject) {
 			list = jJRequirementService.getRequirements(((LoginBean) LoginBean
 					.findBean("loginBean")).getContact().getCompany(),
-					category, loginBean.getAuthorizedMap("Requirement", project, product), version, null, null, false,
+					category, loginBean.getAuthorizedMap("Requirement",
+							project, product), version, null, null, false,
 					true, true, false, null);
 		}
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
@@ -3583,7 +3602,8 @@ public class JJRequirementBean {
 
 	public void viewLinks() {
 
-		if (filterButton.equalsIgnoreCase("specification_filter_button")) {
+		if (filterButton == null
+				|| filterButton.equalsIgnoreCase("specification_filter_button")) {
 			filterButton = "specification_showAll_button";
 			requirement = jJRequirementService.findJJRequirement(requirement
 					.getId());
@@ -3627,8 +3647,9 @@ public class JJRequirementBean {
 
 			for (int i = 0; i < results.length; i++) {
 
-				CategoryDataModel categoryDataModel = tableDataModelList.get(i);
-				long categoryId = categoryDataModel.getCategoryId();
+				// CategoryDataModel categoryDataModel =
+				// tableDataModelList.get(i);
+				long categoryId = tableDataModelList.get(i).getCategoryId();
 
 				if (categoryId != 0) {
 
@@ -3679,21 +3700,36 @@ public class JJRequirementBean {
 
 					}
 
-					categoryDataModel = new CategoryDataModel(
-							getListOfRequiremntUtils(requirements),
-							category.getId(), category.getName(), true);
+					// categoryDataModel = new CategoryDataModel(
+					// getListOfRequiremntUtils(requirements),
+					// category.getId(), category.getName(), true);
 
-					tableDataModelList.set(i, categoryDataModel);
+					tableDataModelList.get(i).setFiltredRequirements(
+							getListOfRequiremntUtils(requirements));
+					// tableDataModelList.set(i, categoryDataModel);
 
 				}
 
 			}
-
 			redirectPage();
 
 		} else {
+
 			filterButton = null;
-			reloadPage();
+			for (int i = 0; i < tableDataModelList.size(); i++) {
+				if (tableDataModelList.get(i).getCategoryId() != 0
+						&& tableDataModelList.get(i).getRendered()) {
+
+					tableDataModelList.get(i).setFiltredRequirements(null);
+					//
+					// RequestContext.getCurrentInstance().execute(
+					// "PF('dataTable_" + i + "_Widget').clearFilters();");
+
+				}
+
+				// reloadPage();
+			}
+			redirectPage();
 		}
 
 	}
@@ -4204,24 +4240,25 @@ public class JJRequirementBean {
 			JJProject project, JJProduct product, JJVersion version,
 			JJStatus status, JJChapter chapter, boolean withChapter,
 			boolean onlyActif, boolean orderByCreationdate) {
-		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		return jJRequirementService.getRequirements(((LoginBean) LoginBean
 				.findBean("loginBean")).getContact().getCompany(), category,
-				loginBean.getAuthorizedMap("Requirement", project, product), version, status, chapter, withChapter,
-				onlyActif, orderByCreationdate, false, null);
+				loginBean.getAuthorizedMap("Requirement", project, product),
+				version, status, chapter, withChapter, onlyActif,
+				orderByCreationdate, false, null);
 	}
 
 	public List<JJRequirement> getRequirements(JJProject project,
 			JJProduct product, JJVersion version) {
-		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		return jJRequirementService.getRequirements(((LoginBean) LoginBean
-				.findBean("loginBean")).getContact().getCompany(), loginBean.getAuthorizedMap("Requirement", project, product)
-				, version);
+				.findBean("loginBean")).getContact().getCompany(), loginBean
+				.getAuthorizedMap("Requirement", project, product), version);
 	}
 
 	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
 			JJChapter chapter, boolean onlyActif) {
-		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		return jJRequirementService
 				.getRequirementChildrenWithChapterSortedByOrder(
 						((LoginBean) LoginBean.findBean("loginBean"))
@@ -4607,29 +4644,32 @@ public class JJRequirementBean {
 		}
 
 		if (i != -1) {
-			LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+			LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 			if (event.getTreeNode().getData() instanceof JJChapter) {
 
 				List<JJRequirement> requirements = jJRequirementService
 						.getRequirements(((LoginBean) LoginBean
 								.findBean("loginBean")).getContact()
 								.getCompany(), ((JJChapter) event.getTreeNode()
-								.getData()).getCategory(),loginBean.getAuthorizedMap("Requirement", project, product),
-								version, null, ((JJChapter) event.getTreeNode()
-										.getData()), true, true, true,
-								this.mine, ((LoginBean) LoginBean
-										.findBean("loginBean")).getContact());
+								.getData()).getCategory(), loginBean
+								.getAuthorizedMap("Requirement", project,
+										product), version, null,
+								((JJChapter) event.getTreeNode().getData()),
+								true, true, true, this.mine,
+								((LoginBean) LoginBean.findBean("loginBean"))
+										.getContact());
 				for (JJChapter ch : jJChapterService
-						.getChildrenOfParentChapter((JJChapter) event.getTreeNode()
-								.getData(), true, true)) {
-						requirements.addAll( jJRequirementService
-						.getRequirements(((LoginBean) LoginBean
-								.findBean("loginBean")).getContact()
-								.getCompany(), ((JJChapter) event.getTreeNode()
-								.getData()).getCategory(), loginBean.getAuthorizedMap("Requirement", project, product),
-								version, null, ch, true, true, true,
-								this.mine, ((LoginBean) LoginBean
-										.findBean("loginBean")).getContact()));
+						.getChildrenOfParentChapter((JJChapter) event
+								.getTreeNode().getData(), true, true)) {
+					requirements.addAll(jJRequirementService.getRequirements(
+							((LoginBean) LoginBean.findBean("loginBean"))
+									.getContact().getCompany(),
+							((JJChapter) event.getTreeNode().getData())
+									.getCategory(), loginBean.getAuthorizedMap(
+									"Requirement", project, product), version,
+							null, ch, true, true, true, this.mine,
+							((LoginBean) LoginBean.findBean("loginBean"))
+									.getContact()));
 				}
 				tableDataModelList.get(i).setFiltredRequirements(
 						getListOfRequiremntUtils(requirements));
@@ -4676,7 +4716,7 @@ public class JJRequirementBean {
 	public void mineChangeEvent(int i) {
 
 		if (mine) {
-			LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+			LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 			if (tableDataModelList.get(i).getCategoryId() != 0
 					&& tableDataModelList.get(i).getRendered()) {
 				JJCategory category = jJCategoryService
@@ -4694,9 +4734,11 @@ public class JJRequirementBean {
 														.getCompany(),
 												((LoginBean) LoginBean
 														.findBean("loginBean"))
-														.getContact(), loginBean.getAuthorizedMap("Requirement", project, product)
-														, category, version,
-												true, true))));
+														.getContact(),
+												loginBean.getAuthorizedMap(
+														"Requirement", project,
+														product), category,
+												version, true, true))));
 			}
 
 		} else {

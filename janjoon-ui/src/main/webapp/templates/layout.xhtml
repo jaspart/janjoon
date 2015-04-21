@@ -12,6 +12,9 @@
 		<link rel="shortcut icon" type="image/png"
 			href="#{request.contextPath}/resources/images/janjoon_logo.ico" />
 		<h:outputScript library="primefaces" name="jquery/jquery.js" />
+		<h:outputScript library="js" name="jquery.sticky.js" />
+		<script type="text/javascript" charset="utf8"
+			src="//cdn.datatables.net/1.10.6/js/jquery.dataTables.js" />
 		<script type="text/javascript">
 			function centerDialog() {
 				var top, left;
@@ -23,9 +26,7 @@
 					top : top,
 					left : left
 				});
-			}	
-			
-			
+			}
 
 			function updateRowExapansion() {
 				$(".rowExpansion").slideUp("fast");
@@ -33,7 +34,6 @@
 		</script>
 	</h:head>
 	<h:body>
-
 		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
 
 			<p:panel styleClass="content">
@@ -250,7 +250,7 @@
 				PF('statusDialog').hide();
 			}
 
-			jQuery("div.ui-growl").remove();
+			jQuery("div.ui-growl").remove();			
 		</script>
 	</h:body>
 </f:view>

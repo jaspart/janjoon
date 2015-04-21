@@ -35,13 +35,13 @@ public class JJProjectServiceImpl implements JJProjectService {
 
 		CriteriaQuery<JJProject> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();
-
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		List<Predicate> predicates = new ArrayList<Predicate>();		
 		if (company != null)
 			predicates.add(criteriaBuilder.equal(
 					from.get("manager").get("company"), company));
 
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		
 		select.where(predicates.toArray(new Predicate[] {}));
 
 		TypedQuery<JJProject> result = entityManager.createQuery(select);
@@ -136,13 +136,15 @@ public class JJProjectServiceImpl implements JJProjectService {
 				CriteriaQuery<JJProject> select = criteriaQuery.select(from);
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
-
+				
+				predicates.add(criteriaBuilder.equal(
+						from.join("manager").get("company"), company));
+				
 				if (onlyActif) {
 					predicates.add(criteriaBuilder.equal(from.get("enabled"),
 							true));
 				}
-				predicates.add(criteriaBuilder.equal(
-						from.join("manager").get("company"), company));
+				
 				select.where(predicates.toArray(new Predicate[] {}));
 
 				TypedQuery<JJProject> result = entityManager

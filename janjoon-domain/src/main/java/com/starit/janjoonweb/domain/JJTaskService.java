@@ -34,4 +34,6 @@ public interface JJTaskService {
 	
 	public List<JJTask> getToDoTasks(JJContact contact);
 
+	public List<JJTask> getTastksByVersion(JJVersion jJversion);
+
 }

@@ -624,35 +624,35 @@ public class JJTaskBean {
 	}
 
 	public void closeEvent(String operation) {
-		Long id = null;
-		if (task.getSprint() != null)
-			id = task.getSprint().getId();
+//		//Long id = null;
+//		if (task.getSprint() != null)
+//			id = task.getSprint().getId();
+//
+//		task = null;
 
-		task = null;
-
-		if (mode != null && mode.equalsIgnoreCase("scrum")
-				&& operation.equalsIgnoreCase("planning")) {
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			JJSprintBean jJSprintBean = (JJSprintBean) session
-					.getAttribute("jJSprintBean");
-			RequestContext context = RequestContext.getCurrentInstance();
-			int i = 0;
-			if (((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
-				i = 1;
-			else
-				i = 0;
-
-			context.execute("PF('projectTabView').select(" + i + ")");
-			jJSprintBean.setUpdate(false);
-			if (id != null)
-				context.execute("PF('SprintTab').select("
-						+ jJSprintBean.contains(id) + ")");
-		} else {
-			// if(operation.equalsIgnoreCase("main"))
-			// toDoTasks=null;
-		}
+//		if (mode != null && mode.equalsIgnoreCase("scrum")
+//				&& operation.equalsIgnoreCase("planning")) {
+//			HttpSession session = (HttpSession) FacesContext
+//					.getCurrentInstance().getExternalContext()
+//					.getSession(false);
+//			JJSprintBean jJSprintBean = (JJSprintBean) session
+//					.getAttribute("jJSprintBean");
+//			RequestContext context = RequestContext.getCurrentInstance();
+//			int i = 0;
+//			if (((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
+//				i = 1;
+//			else
+//				i = 0;
+//
+//			context.execute("PF('projectTabView').select(" + i + ")");
+//			jJSprintBean.setUpdate(false);
+//			if (id != null)
+//				context.execute("PF('SprintTab').select("
+//						+ jJSprintBean.contains(id) + ")");
+//		} else {
+//			// if(operation.equalsIgnoreCase("main"))
+//			// toDoTasks=null;
+//		}
 	}
 
 	public List<JJStatus> completeStatusTask(String query) {
@@ -1859,21 +1859,21 @@ public class JJTaskBean {
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
 					"Task");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-			RequestContext context = RequestContext.getCurrentInstance();
+//			RequestContext context = RequestContext.getCurrentInstance();
+//
+//			int i = 0;
+//			if (((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
+//				i = 1;
+//			else
+//				i = 0;
 
-			int i = 0;
-			if (((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
-				i = 1;
-			else
-				i = 0;
-
-			context.execute("PF('projectTabView').select(" + i + ")");
-			jJSprintBean.setUpdate(false);
-			context.execute("PF('SprintTab').select("
-					+ jJSprintBean.contains(jJSprintBean.getSprintUtil()
-							.getSprint().getId()) + ")");
-
-			context.execute("PF('taskImportDialogWidget').hide()");
+//			context.execute("PF('projectTabView').select(" + i + ")");
+//			jJSprintBean.setUpdate(false);
+//			context.execute("PF('SprintTab').select("
+//					+ jJSprintBean.contains(jJSprintBean.getSprintUtil()
+//							.getSprint().getId()) + ")");
+//
+//			context.execute("PF('taskImportDialogWidget').hide()");
 
 		}
 
@@ -1892,26 +1892,26 @@ public class JJTaskBean {
 		objets = null;
 
 		importFormats = null;
-		if (mode.equalsIgnoreCase("scrum")) {
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			JJSprintBean jJSprintBean = (JJSprintBean) session
-					.getAttribute("jJSprintBean");
-			RequestContext context = RequestContext.getCurrentInstance();
-
-			int i = 0;
-			if (((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
-				i = 1;
-			else
-				i = 0;
-
-			context.execute("PF('projectTabView').select(" + i + ")");
-			jJSprintBean.setUpdate(false);
-			context.execute("PF('SprintTab').select("
-					+ jJSprintBean.contains(jJSprintBean.getSprintUtil()
-							.getSprint().getId()) + ")");
-		}
+//		if (mode.equalsIgnoreCase("scrum")) {
+//			HttpSession session = (HttpSession) FacesContext
+//					.getCurrentInstance().getExternalContext()
+//					.getSession(false);
+//			JJSprintBean jJSprintBean = (JJSprintBean) session
+//					.getAttribute("jJSprintBean");
+//			RequestContext context = RequestContext.getCurrentInstance();
+//
+//			int i = 0;
+//			if (((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
+//				i = 1;
+//			else
+//				i = 0;
+//
+////			context.execute("PF('projectTabView').select(" + i + ")");
+////			jJSprintBean.setUpdate(false);
+////			context.execute("PF('SprintTab').select("
+////					+ jJSprintBean.contains(jJSprintBean.getSprintUtil()
+////							.getSprint().getId()) + ")");
+//		}
 		mode = null;
 
 	}

@@ -120,12 +120,12 @@ public class JJContactServiceImpl implements JJContactService {
 
 		CriteriaQuery<JJContact> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();
-		
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		List<Predicate> predicates = new ArrayList<Predicate>();	
 		
 		if(company != null)
-		predicates.add(criteriaBuilder.equal(from.get("company"), company));
+			predicates.add(criteriaBuilder.equal(from.get("company"), company));
+		
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));		
 		
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));

@@ -13,6 +13,7 @@
 	table-layout: fixed;
 	border-collapse: separate;
 }
+
 .pe-layout-pane-header {
 	/*	background: #2391B2;*/
 	
@@ -24,7 +25,8 @@
 }
 
 .planning-dataTable .ui-datatable-data td {
-	overflow: hidden;navigator
+	overflow: hidden;
+	navigator
 }
 
 .planning-dataTable .ui-datatable-data tr {
@@ -68,8 +70,10 @@
 						panelStyle="width:150px;" effect="fade" style="width:150px;"
 						filter="true" filterMatchMode="startsWith">
 						<f:selectItem itemValue="chapter" itemLabel="Chapter" />
-						<f:selectItem itemValue="StartDateReal" itemLabel="Start Date Real" />
-						<f:selectItem itemValue="StartDatePlanned" itemLabel="Start Date Planned" />						
+						<f:selectItem itemValue="StartDateReal"
+							itemLabel="Start Date Real" />
+						<f:selectItem itemValue="StartDatePlanned"
+							itemLabel="Start Date Planned" />
 						<p:ajax onstart="PF('blockUIWidget').block()" event="change"
 							listener="#{jJTaskBean.SortBySelectionChanged}"
 							update=":projecttabview:planningForm :projecttabview:sprintForm"
@@ -88,10 +92,11 @@
 
 	<h:form id="planningForm" style="width:100%">
 		<h:outputScript library="js" name="scrollTab.js" />
+		<h:outputScript library="js" name="sticky.js" />
 		<f:event type="preRenderComponent"
 			oncomplete="PF('blockUIWidget').unblock();"
 			listener="#{jJTaskBean.loadingData()}" />
-<!-- 		<p:growl id="msg" sticky="true" life="3000" autoUpdate="true" /> -->
+		<!-- 		<p:growl id="msg" sticky="true" life="3000" autoUpdate="true" /> -->
 		<p:panelGrid style="margin-top:10px;width:100%;">
 			<p:row style="width:100%;">
 				<p:column style="width:100%;">
@@ -105,10 +110,32 @@
 
 							<pe:layoutPane position="west" id="westLayout">
 								<f:facet name="header">Task Data Table</f:facet>
+								<!-- 								<br /> -->
+<!-- 								<p:panelGrid style="width :1600px;margin-top: -1%;" -->
+<!-- 									id="stickyHeader"> -->
+<!-- 									<f:facet name="header"> -->
+<!-- 										<p:row> -->
+<!-- 											<p:column style="width:100px;">Actions</p:column> -->
+<!-- 											<p:column style="width:180px !important;">#{messages.project_gantt_table_name_title}</p:column> -->
+<!-- 											<p:column style="width: 130px;">#{messages.project_gantt_table_assigned_title}</p:column> -->
+<!-- 											<p:column style="width: 120px;">#{messages.project_gantt_table_startplanned_title}</p:column> -->
+<!-- 											<p:column style="width: 120px;">#{messages.project_gantt_table_endplanned_title}</p:column> -->
+<!-- 											<p:column style="width: 60px;">#{messages.project_gantt_table_wlplanned_title}</p:column> -->
+<!-- 											<p:column style="width: 120px;">#{messages.project_gantt_table_startreal_title}</p:column> -->
+<!-- 											<p:column style="width: 120px;">#{messages.project_gantt_table_endreal_title}</p:column> -->
+<!-- 											<p:column style="width: 60px;">#{messages.project_gantt_table_wlreal_title}</p:column> -->
+<!-- 											<p:column style="width: 160px;">#{messages.project_gantt_table_previous_title}</p:column> -->
+<!-- 											<p:column style="width: 160px;">Sprint</p:column> -->
+<!-- 										</p:row> -->
+<!-- 									</f:facet> -->
+<!-- 								</p:panelGrid> -->
+								<!-- 								</f:facet> -->
+
+<!-- 								<p:sticky target="stickyHeader"  /> -->
 								<p:dataTable id="taskDataTable" var="taskData"
-									sortFunction="#{jJTaskBean.sortFunction}" styleClass="planning-dataTable"
-									sortBy="#{taskData.chapter}" value="#{jJTaskBean.tasksData}"
-									editable="true" editMode="cell">
+									sortFunction="#{jJTaskBean.sortFunction}" style="margin-top: -1%;"
+									styleClass="planning-dataTable" sortBy="#{taskData.chapter}"
+									value="#{jJTaskBean.tasksData}" editable="true" editMode="cell">
 
 									<p:ajax event="cellEdit" listener="#{jJTaskBean.onCellEdit}"
 										process="@widgetVar(nameWidget)"
@@ -116,7 +143,7 @@
 										onsuccess="onCellEditTableComplete()"
 										update="taskDataTable :projecttabview:planningForm:timeline :growlForm" />
 
-									<p:summaryRow paginatorPosition="top" 
+									<p:summaryRow paginatorPosition="top"
 										rendered="#{jJTaskBean.sortMode == 'chapter'}">
 										<p:column colspan="11" style="text-align:left">
 											<h:outputText icon="ui-icon-arrowreturnthick-1-e"
@@ -128,13 +155,14 @@
 										<p:graphicImage library="images" name="#{taskData.icone}"
 											width="16" height="16" />
 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-											update=":viewTaskForm :viewTaskDialog" immediate="true" resetValues="true"
+											update=":viewTaskForm :viewTaskDialog" immediate="true"
+											resetValues="true"
 											title="#{messages.project_gantt_table_actions_viewMenuItem}"
 											action="#{jJTaskBean.initiateReqTreeNode}">
 											<f:setPropertyActionListener value="#{taskData.task}"
 												target="#{jJTaskBean.task}" />
 											<f:setPropertyActionListener target="#{jJTaskBean.mode}"
-													value="planning" />
+												value="planning" />
 											<p:menuitem id="duplicate" icon="ui-icon-copy"
 												oncomplete="PF('duplicateTaskDialogWidget').show()"
 												value="#{messages.project_gantt_task_dupplicate_button}">
@@ -168,8 +196,9 @@
 													value="#{taskData.task.name}" />
 											</f:facet>
 											<f:facet name="input">
-												<p:inputTextarea value="#{taskData.task.name}" required="true"
-													label="Name" widgetVar="nameWidget" cols="25" rows="3"
+												<p:inputTextarea value="#{taskData.task.name}"
+													required="true" label="Name" widgetVar="nameWidget"
+													cols="25" rows="3"
 													requiredMessage="#{messages.project_gantt_task_alert}">
 													<f:validateLength maximum="100" />
 												</p:inputTextarea>
@@ -366,14 +395,14 @@
 								<f:facet name="header">Task TimeLine</f:facet>
 
 								<pe:timeline id="timeline" value="#{jJTaskBean.model}"
-									eventMargin="10" eventMarginAxis="0"
-									themable="false" locale="#{LocaleBean.locale}"
-									start="#{jJTaskBean.start}" end="#{jJTaskBean.end}"
-									widgetVar="timelineWdgt" axisOnTop="true"									
-									groupsChangeable="false" var="task" stackEvents="false"
-									style="width:100%;min-height:350px;" editable="true"
-									zoomMin="#{jJTaskBean.zoomMin}" zoomMax="#{jJTaskBean.zoomMax}"
-									animateZoom="false" animate="false"	>
+									eventMargin="10" eventMarginAxis="0" themable="false"
+									locale="#{LocaleBean.locale}" start="#{jJTaskBean.start}"
+									end="#{jJTaskBean.end}" widgetVar="timelineWdgt"
+									axisOnTop="true" groupsChangeable="false" var="task"
+									stackEvents="false" style="width:100%;min-height:350px;"
+									editable="true" zoomMin="#{jJTaskBean.zoomMin}"
+									zoomMax="#{jJTaskBean.zoomMax}" animateZoom="false"
+									animate="false">
 
 									<p:ajax event="delete"
 										listener="#{jJTaskBean.onDeleteTimelineEvent}"
@@ -396,7 +425,7 @@
 										oncomplete="PF('blockUIWidget').unblock()" />
 
 									<h:outputText id="tt" style="height:30px;" title="#{task.name}"
-										value="#{task.name}" rendered="#{task != null}" />									
+										value="#{task.name}" rendered="#{task != null}" />
 								</pe:timeline>
 
 							</pe:layoutPane>

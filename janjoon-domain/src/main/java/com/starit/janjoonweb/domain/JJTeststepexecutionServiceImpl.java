@@ -90,7 +90,7 @@ public class JJTeststepexecutionServiceImpl implements
 				teststep);
 		Predicate predicate3 = criteriaBuilder.equal(from.join("testcaseexecution").get("build"), build);
 
-		select.where(criteriaBuilder.and(predicate1, predicate2, predicate3));
+		select.where(criteriaBuilder.and(predicate2, predicate3, predicate1));
 
 		TypedQuery<JJTeststepexecution> result = entityManager
 				.createQuery(select);
