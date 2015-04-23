@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
@@ -28,6 +29,7 @@ import com.starit.janjoonweb.domain.reference.JJRelationship;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJRequirementSEQ")
+@Table(indexes ={@Index(unique=false,columnList="project,category")})
 public class JJRequirement {
 	
 	@NotNull

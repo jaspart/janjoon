@@ -368,9 +368,10 @@ public class JJChapterBean {
 
 		loadData(categoryId);
 
-		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted",
-				FacesMessage.SEVERITY_ERROR, selectedChapterNode.getData());
-		
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_deleted", FacesMessage.SEVERITY_ERROR,
+				selectedChapterNode.getData());
+
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		selectedChapterNode = null;
 
@@ -432,13 +433,14 @@ public class JJChapterBean {
 		// Requirement Tree WHERE requirment.getChapter = null
 		leftRoot = new DefaultTreeNode("leftRoot", null);
 
-		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		JJVersion version = LoginBean.getVersion();
 		JJProduct product = LoginBean.getProduct();
 
 		List<JJRequirement> jJRequirementList = jJRequirementService
 				.getRequirements(((LoginBean) LoginBean.findBean("loginBean"))
-						.getContact().getCompany(), category,loginBean.getAuthorizedMap("Requirement", project, product),
+						.getContact().getCompany(), category, loginBean
+						.getAuthorizedMap("Requirement", project, product),
 						version, null, null, true, true, false, false, null);
 
 		for (JJRequirement requirement : jJRequirementList) {
@@ -529,11 +531,11 @@ public class JJChapterBean {
 	}
 
 	public StreamedContent getPreProcessPDF() throws IOException,
-			BadElementException, DocumentException {		
+			BadElementException, DocumentException {
 		this.getProject();
 
 		LoginBean.copyUploadImages(true);
-		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		Document pdf = new Document();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		PdfWriter writer = PdfWriter.getInstance(pdf, baos);
@@ -564,8 +566,9 @@ public class JJChapterBean {
 		 */
 
 		StyleSheet style = new StyleSheet();
-		style.loadTagStyle("body", "font", "Times New Roman");		
-		((LoginBean)LoginBean.findBean("loginBean")).loadStyleSheet(style,"specs.document.stylesheet");
+		style.loadTagStyle("body", "font", "Times New Roman");
+		((LoginBean) LoginBean.findBean("loginBean")).loadStyleSheet(style,
+				"specs.document.stylesheet");
 		JJCategory category = jJCategoryService.findJJCategory(categoryId);
 
 		Phrase phrase = new Phrase(20, new Chunk("\n" + category.getName()
@@ -583,78 +586,98 @@ public class JJChapterBean {
 			createTreeDocument(chapter, category, paragraph, fontNote,
 					fontChapter, fontRequirement, style);
 		}
-		
-		List<JJRequirement> withOutChapter=jJRequirementService
+
+		List<JJRequirement> withOutChapter = jJRequirementService
 				.getRequirementsWithOutChapter(((LoginBean) LoginBean
 						.findBean("loginBean")).getContact().getCompany(),
-						category, loginBean.getAuthorizedMap("Requirement",project,LoginBean.getProduct()), LoginBean
+						category, loginBean.getAuthorizedMap("Requirement",
+								project, LoginBean.getProduct()), LoginBean
 								.getVersion(), null, true, true);
-		if(withOutChapter != null && !withOutChapter.isEmpty())
-		{
-			paragraph.add(new Chunk("\n "+
-					MessageFactory.getMessage("specification_tree_withOutChapter", "").getDetail()+"\n",
-					fontChapter));
+		if (withOutChapter != null && !withOutChapter.isEmpty()) {
+			paragraph.add(new Chunk("\n "
+					+ MessageFactory.getMessage(
+							"specification_tree_withOutChapter", "")
+							.getDetail() + "\n", fontChapter));
 
 			for (JJRequirement requirement : withOutChapter) {
-				paragraph.add(new Chunk(requirement.getName() + "\n",
-						fontRequirement));
+				paragraph.add(new Chunk("Requirement : "
+						+ requirement.getName() + "\n", fontRequirement));
 				StringReader strReader = new StringReader(requirement
-						.getDescription().replace(
-								"/pages/ckeditor/getimage?imageId=", "/images/"));
-				
-//				StringReader strReader = new StringReader(requirement.getDescription());
-				
-				try
-				{
-					List arrList = HTMLWorker.parseToList(strReader, style);
-					
+						.getDescription()
+						.replace("/pages/ckeditor/getimage?imageId=",
+								"/images/"));
+
+				// StringReader strReader = new
+				// StringReader(requirement.getDescription());
+
+				try {
+					@SuppressWarnings("unchecked")
+					List<Paragraph> arrList = HTMLWorker.parseToList(strReader,
+							style);
+
 					for (int i = 0; i < arrList.size(); ++i) {
 						Element e = (Element) arrList.get(i);
+						if (((Chunk) e.getChunks().get(0)).getImage() != null) {
+							Image img = ((Chunk) e.getChunks().get(0))
+									.getImage();
+							//img.setTop(paragraph.getTotalLeading() + 5);
+							//img.setBottom(img.getTop() + img.getHeight() + 5);
+							// img.setSpacingAfter(5);
+							// img.setSpacingBefore(5);
+							paragraph.add(img);
+						}
 						paragraph.add(e);
 					}
 					if (requirement.getNote() != null
 							&& requirement.getNote().length() > 2) {
 						paragraph.add("Note: "
-								+ new Chunk(requirement.getNote() + "\n", fontNote));
+								+ new Chunk(requirement.getNote() + "\n",
+										fontNote));
 					}
-				}catch(ELException e)
-				{
+				} catch (ELException e) {
 					System.err.println(e.getMessage());
 				}
-				
+
 			}
 		}
 
-		
-
 		// paragraph.add(phrase);
 		pdf.add(paragraph);
-		pdf.close();	
+		pdf.close();
 		LoginBean.copyUploadImages(false);
 
 		return new DefaultStreamedContent(new ByteArrayInputStream(
-				baos.toByteArray()), "pdf", category.getName().toUpperCase().trim()
+				baos.toByteArray()), "pdf", category.getName().toUpperCase()
+				.trim()
 				+ "-Spec.pdf");
 	}
 
+	@SuppressWarnings("unchecked")
 	private void createTreeDocument(JJChapter chapterParent,
 			JJCategory category, Paragraph paragraph, Font fontNote,
 			Font fontChapter, Font fontRequirement, StyleSheet style)
 			throws IOException {
 
-		paragraph.add(new Chunk("\n" + chapterParent.getName() + "\n",
+		paragraph.add(new Chunk("\n Chapter:" + chapterParent.getName() + "\n",
 				fontChapter));
 
 		StringReader strChapitre = new StringReader(chapterParent
 				.getDescription().replace("/pages/ckeditor/getimage?imageId=",
 						"/images/"));
-		
-//		StringReader strChapitre = new StringReader(chapterParent
-//				.getDescription());
-		List arrChapitre = HTMLWorker.parseToList(strChapitre, style);
+
+		List<Paragraph> arrChapitre = HTMLWorker
+				.parseToList(strChapitre, style);
 		for (int i = 0; i < arrChapitre.size(); ++i) {
 			Element e = (Element) arrChapitre.get(i);
-			paragraph.setSpacingAfter(50);
+			if (((Chunk) e.getChunks().get(0)).getImage() != null) {
+
+				Image img = ((Chunk) e.getChunks().get(0)).getImage();
+				//img.setTop(paragraph.getTotalLeading() + 5);
+				//img.setBottom(img.getTop() + img.getHeight() + 5);
+				// img.setSpacingAfter(5);
+				// img.setSpacingBefore(5);
+				paragraph.add(img);
+			}
 			paragraph.add(e);
 		}
 
@@ -670,35 +693,28 @@ public class JJChapterBean {
 
 			} else if (className.equalsIgnoreCase("JJRequirement")) {
 				JJRequirement requirement = (JJRequirement) entry.getValue();
-				paragraph.add(new Chunk(requirement.getName() + "\n",
-						fontRequirement));
+				paragraph.add(new Chunk("Requirement: " + requirement.getName()
+						+ "\n", fontRequirement));
 				StringReader strReader = new StringReader(requirement
 						.getDescription()
 						.replace("/pages/ckeditor/getimage?imageId=",
 								"/images/"));
-				
-//				StringReader strReader = new StringReader(requirement
-//						.getDescription());
-				List arrList = HTMLWorker.parseToList(strReader, style);
+
+				List<Paragraph> arrList = HTMLWorker.parseToList(strReader,
+						style);
 				for (int i = 0; i < arrList.size(); ++i) {
-					/*
-					 * String chunk = (String) arrList.get(i); String
-					 * imageIndicator = "<img src='data:image/png;base64,";
-					 * logger.info("Chunk of HTMLWorker : "+chunk);
-					 * if(chunk.startsWith(imageIndicator)){ Image img = null;
-					 * String base64Data =
-					 * "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"
-					 * ; base64Data = chunk.substring(imageIndicator.length(),
-					 * chunk.length()-2); try { img =
-					 * Image.getInstance(Base64.decode(base64Data));
-					 * paragraph.add(img); } catch (Exception exception) {
-					 * logger
-					 * .warn("Problem with decoding b64 image ("+base64Data
-					 * +") instance while exporting in pdf"); } } else {
-					 */
+
 					Element e = (Element) arrList.get(i);
-					paragraph.add(e);
-					/* } */
+					if (((Chunk) e.getChunks().get(0)).getImage() != null) {
+						Image img = ((Chunk) e.getChunks().get(0)).getImage();
+						//img.setTop(paragraph.getTotalLeading() + 5);
+						//img.setBottom(img.getTop() + img.getHeight() + 5);
+						// img.setSpacingAfter(5);
+						// img.setSpacingBefore(5);
+						paragraph.add(img);
+
+					} else
+						paragraph.add(e);
 				}
 				if (requirement.getNote() != null
 						&& requirement.getNote().length() > 2) {
@@ -1023,16 +1039,19 @@ public class JJChapterBean {
 						testcase = null;
 					}
 				}
-				
-				message= MessageFactory.getMessage("chapter_successfully_droped",
-						FacesMessage.SEVERITY_INFO,dragNodeData,dropNodeData,"Requirement");		
 
-				
+				message = MessageFactory.getMessage(
+						"chapter_successfully_droped",
+						FacesMessage.SEVERITY_INFO, dragNodeData, dropNodeData,
+						"Requirement");
+
 			} else if (dropNodeData.startsWith("leftRoot")) {
 
 				if (requirementCHAPTER == null) {
-					message= MessageFactory.getMessage("chapter_unsuccessfully_dropedNoChanges",
-							FacesMessage.SEVERITY_WARN,dragNodeData,dropNodeData,"Requirement");	
+					message = MessageFactory.getMessage(
+							"chapter_unsuccessfully_dropedNoChanges",
+							FacesMessage.SEVERITY_WARN, dragNodeData,
+							dropNodeData, "Requirement");
 
 				} else {
 
@@ -1118,15 +1137,19 @@ public class JJChapterBean {
 						tempTestcases = null;
 					}
 
-					message= MessageFactory.getMessage("chapter_successfully_detached",
-							FacesMessage.SEVERITY_WARN,dragNodeData,dropNodeData,"Requirement");	
+					message = MessageFactory.getMessage(
+							"chapter_successfully_detached",
+							FacesMessage.SEVERITY_WARN, dragNodeData,
+							dropNodeData, "Requirement");
 
 				}
 
 			} else if (dropNodeData.startsWith("R-")
 					|| dropNodeData.startsWith("rightRoot")) {
-				message= MessageFactory.getMessage("chapter_unsuccessfully_droped_notAllowed",
-						FacesMessage.SEVERITY_ERROR,dragNodeData,dropNodeData,"Requirement");	
+				message = MessageFactory.getMessage(
+						"chapter_unsuccessfully_droped_notAllowed",
+						FacesMessage.SEVERITY_ERROR, dragNodeData,
+						dropNodeData, "Requirement");
 
 			}
 
@@ -1145,17 +1168,21 @@ public class JJChapterBean {
 				JJChapter newChapterPARENT = null;
 
 				if (dropNodeData.equalsIgnoreCase("rightRoot")) {
-					
-					message= MessageFactory.getMessage("chapter_parent_document",
-							FacesMessage.SEVERITY_WARN,dragNodeData,dropNodeData,"Chapter");	
+
+					message = MessageFactory.getMessage(
+							"chapter_parent_document",
+							FacesMessage.SEVERITY_WARN, dragNodeData,
+							dropNodeData, "Chapter");
 				} else {
 					long newChapterPARENTID = Long
 							.parseLong(getSplitFromString(dropNodeData, 1));
 					newChapterPARENT = jJChapterService
 							.findJJChapter(newChapterPARENTID);
 
-					message= MessageFactory.getMessage("chapter_successfully_droped",
-							FacesMessage.SEVERITY_INFO,dragNodeData,dropNodeData,"Chapter");		
+					message = MessageFactory.getMessage(
+							"chapter_successfully_droped",
+							FacesMessage.SEVERITY_INFO, dragNodeData,
+							dropNodeData, "Chapter");
 				}
 
 				// Update the last chapter list
@@ -1271,8 +1298,10 @@ public class JJChapterBean {
 
 			} else if (dropNodeData.startsWith("R-")
 					|| dropNodeData.equalsIgnoreCase("leftRoot")) {
-				message= MessageFactory.getMessage("chapter_unsuccessfully_droped_notAllowed",
-						FacesMessage.SEVERITY_INFO,dragNodeData,dropNodeData,"Chapter");		
+				message = MessageFactory.getMessage(
+						"chapter_unsuccessfully_droped_notAllowed",
+						FacesMessage.SEVERITY_INFO, dragNodeData, dropNodeData,
+						"Chapter");
 
 			}
 
@@ -1343,8 +1372,8 @@ public class JJChapterBean {
 				.getContact();
 		b.setCreatedBy(contact);
 		jJChapterService.saveJJChapter(b);
-	}	
-	
+	}
+
 	public void updateJJChapter(JJChapter b) {
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();

@@ -2,8 +2,10 @@ package com.starit.janjoonweb.domain;
 
 import java.util.Date;
 
+import javax.persistence.Index;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
@@ -16,6 +18,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJAuditLogSEQ")
+@Table(indexes ={@Index(unique=false,columnList="objet")})
 public class JJAuditLog {
 
 	@Temporal(TemporalType.TIMESTAMP)

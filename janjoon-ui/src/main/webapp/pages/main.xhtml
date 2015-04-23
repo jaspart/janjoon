@@ -11,7 +11,7 @@
 			styleClass="customTitleBar"
 			style="height: 400px;background: #DDEEFF;">
 			<f:event listener="#{jJMessageBean.initJJmessageTable}"
-				type="preRenderView"/>
+				type="preRenderView" />
 
 			<h:form id="messageForm">
 				<p:dataTable id="MessageTable2" sortMode="multiple"
@@ -38,7 +38,8 @@
 							<!-- 							<p:tooltip for="createButton" value="#{messages.label_create}" -->
 							<!-- 								showEffect="fade" hideEffect="fade" /> -->
 						</f:facet>
-						<p:graphicImage styleClass="avatar" value="#{imageStreamer.image}" rendered="#{mes.createdBy.picture != null}">
+						<p:graphicImage styleClass="avatar" value="#{imageStreamer.image}"
+							rendered="#{mes.createdBy.picture != null}">
 							<f:param name="contactId" value="#{mes.createdBy.id}" />
 						</p:graphicImage>
 
@@ -166,7 +167,7 @@
 					</p:column-->
 			<!--/p:dataTable>
 			</h:form-->
-<!-- 			<p:growl id="notifMPT" showDetail="false" life="2000" /> -->
+			<!-- 			<p:growl id="notifMPT" showDetail="false" life="2000" /> -->
 			<p:confirmDialog id="resolveDialog" widgetVar="resolveDialogWidget"
 				message="#{messages.label_disable_record}" showEffect="fade"
 				hideEffect="explode" header="#{messages.label_confirm_disabling}"
@@ -188,9 +189,9 @@
 		<p:panel id="taskPanel" rendered="#{loginBean.enable}"
 			header="#{messages.main_taskPanel_header}"
 			styleClass="customTitleBar">
-			<f:event listener="#{jJTaskBean.initToDoTasks}"
-				type="preRenderComponent" />
 			<h:form id="taskForm">
+				<f:event listener="#{jJTaskBean.initToDoTasks}"
+					type="preRenderComponent" />
 				<p:dataTable id="taskTable" value="#{jJTaskBean.toDoTasks}"
 					rowKey="#{task.id}" var="task" widgetVar="taskTable"
 					scrollable="true" scrollHeight="200" style="table-layout: fixed;"
@@ -211,7 +212,7 @@
 
 					<p:column headerText="Project" style="width:100px;">
 						<h:outputText value="#{task.project}"
-							converter="JJProjectConverter"/>						
+							converter="JJProjectConverter" />
 					</p:column>
 
 					<p:column headerText="Start Date :" style="width:100px;">
@@ -230,7 +231,8 @@
 					<p:column styleClass="action-column" style="width:80px;"
 						headerText="#{messages.bug_table_action_title}">
 						<p:commandButton id="viewTaskButton" icon="ui-icon-zoomin"
-							update=":viewTaskForm :viewTaskDialog" immediate="true" resetValues="true"
+							update=":viewTaskForm :viewTaskDialog" immediate="true"
+							resetValues="true"
 							title="#{messages.project_gantt_table_actions_viewMenuItem}"
 							action="#{jJTaskBean.initiateReqTreeNode}">
 							<f:setPropertyActionListener value="#{task}"
@@ -239,9 +241,10 @@
 					</p:column>
 				</p:dataTable>
 			</h:form>
-			<p:dialog id="viewTaskDialog" header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task)}"
+			<p:dialog id="viewTaskDialog"
+				header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task)}"
 				modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
-				resizable="true" maximizable="true"  showEffect="fade" 
+				resizable="true" maximizable="true" showEffect="fade"
 				hideEffect="explode" draggable="false">
 				<p:ajax event="close" update=":taskForm"
 					listener="#{jJTaskBean.closeEvent('main')}" />
@@ -328,7 +331,7 @@
 		<p:dialog widgetVar="messageDialog" id="messageDialog"
 			header="#{messages.main_message_header}" showEffect="fade"
 			dynamic="true" closable="true">
-			<h:form id="messageDialogForm">				
+			<h:form id="messageDialogForm">
 				<p:panelGrid columns="1">
 					<p:outputLabel for="messagedsc" value="Message :" />
 					<p:inputTextarea id="messagedsc" cols="40" rows="6"

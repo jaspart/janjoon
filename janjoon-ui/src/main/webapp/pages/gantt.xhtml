@@ -7,33 +7,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
-<ui:composition style="width:100%">
-	<style type="text/css">
-.planning-dataTable table {
-	table-layout: fixed;
-	border-collapse: separate;
-}
-
-.pe-layout-pane-header {
-	/*	background: #2391B2;*/
-	
-}
-
-.planning-dataTable .ui-datatable-data th {
-	height: 37px;
-	overflow: hidden;
-}
-
-.planning-dataTable .ui-datatable-data td {
-	overflow: hidden;
-	navigator
-}
-
-.planning-dataTable .ui-datatable-data tr {
-	height: 44px;
-	overflow: hidden;
-}
-</style>
+<ui:composition style="width:100%">	
 	<h:form id="sprintForm" style="width:100%;">
 		<p:panelGrid style="width:100%;">
 			<p:row>
@@ -91,8 +65,7 @@
 	</h:form>
 
 	<h:form id="planningForm" style="width:100%">
-		<h:outputScript library="js" name="scrollTab.js" />
-		<h:outputScript library="js" name="sticky.js" />
+		<h:outputScript library="js" name="scrollTab.js" />		
 		<f:event type="preRenderComponent"
 			oncomplete="PF('blockUIWidget').unblock();"
 			listener="#{jJTaskBean.loadingData()}" />
@@ -110,28 +83,6 @@
 
 							<pe:layoutPane position="west" id="westLayout">
 								<f:facet name="header">Task Data Table</f:facet>
-								<!-- 								<br /> -->
-<!-- 								<p:panelGrid style="width :1600px;margin-top: -1%;" -->
-<!-- 									id="stickyHeader"> -->
-<!-- 									<f:facet name="header"> -->
-<!-- 										<p:row> -->
-<!-- 											<p:column style="width:100px;">Actions</p:column> -->
-<!-- 											<p:column style="width:180px !important;">#{messages.project_gantt_table_name_title}</p:column> -->
-<!-- 											<p:column style="width: 130px;">#{messages.project_gantt_table_assigned_title}</p:column> -->
-<!-- 											<p:column style="width: 120px;">#{messages.project_gantt_table_startplanned_title}</p:column> -->
-<!-- 											<p:column style="width: 120px;">#{messages.project_gantt_table_endplanned_title}</p:column> -->
-<!-- 											<p:column style="width: 60px;">#{messages.project_gantt_table_wlplanned_title}</p:column> -->
-<!-- 											<p:column style="width: 120px;">#{messages.project_gantt_table_startreal_title}</p:column> -->
-<!-- 											<p:column style="width: 120px;">#{messages.project_gantt_table_endreal_title}</p:column> -->
-<!-- 											<p:column style="width: 60px;">#{messages.project_gantt_table_wlreal_title}</p:column> -->
-<!-- 											<p:column style="width: 160px;">#{messages.project_gantt_table_previous_title}</p:column> -->
-<!-- 											<p:column style="width: 160px;">Sprint</p:column> -->
-<!-- 										</p:row> -->
-<!-- 									</f:facet> -->
-<!-- 								</p:panelGrid> -->
-								<!-- 								</f:facet> -->
-
-<!-- 								<p:sticky target="stickyHeader"  /> -->
 								<p:dataTable id="taskDataTable" var="taskData"
 									sortFunction="#{jJTaskBean.sortFunction}" style="margin-top: -1%;"
 									styleClass="planning-dataTable" sortBy="#{taskData.chapter}"

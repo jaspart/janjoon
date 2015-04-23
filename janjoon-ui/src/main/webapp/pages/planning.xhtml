@@ -9,6 +9,31 @@
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
 		<style type="text/css">
+.planning-dataTable table {
+	table-layout: fixed;
+	border-collapse: separate;
+}
+
+.pe-layout-pane-header {
+	/*	background: #2391B2;*/
+	
+}
+
+.planning-dataTable .ui-datatable-data th {
+	height: 37px;
+	overflow: hidden;
+}
+
+.planning-dataTable .ui-datatable-data td {
+	overflow: hidden;
+	navigator
+}
+
+.planning-dataTable .ui-datatable-data tr {
+	height: 44px;
+	overflow: hidden;
+}
+
 .jqplot-xaxis-label {
 	display: none;
 }
@@ -18,6 +43,14 @@
 	top: 10px;
 }
 </style>
+		<h:form style="width:100%;display:none;">
+			<p:remoteCommand update=":projecttabview:SprintTabView :growlForm"
+				name="updateTabSprint" />
+			<p:remoteCommand onstart="PF('blockUIWidget').block()"
+				name="tabChangeHelper"
+				actionListener="#{jJSprintBean.onTabSprintChange}"
+				oncomplete="PF('blockUIWidget').unblock()" />
+		</h:form>
 		<h:form id="projectForm" rendered="#{jJProjectBean.project != null}">
 			<p:panelGrid style="margin: auto auto 5px auto;">
 				<p:row>
@@ -61,12 +94,7 @@
 		<p:tabView id="projecttabview" widgetVar="projectTabView"
 			activeIndex="#{jJSprintBean.activeTabGantIndex}"
 			onTabChange="tabChangeHelper([{name: 'activeGantIndex', value: index}])"
-			dynamic="false" cache="true" style="width:100% !important;">
-
-			<!-- 			<p:ajax event="tabChange" -->
-			<!-- 				listener="#{jJSprintBean.onTabSprintChange}" -->
-			<!-- 				onstart="PF('blockUIWidget').block()" -->
-			<!-- 				oncomplete="PF('blockUIWidget').unblock()" /> -->
+			dynamic="false" cache="true" style="width:100% !important;">	
 
 			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}"
 				rendered="#{loginBean.renderGantt}">
