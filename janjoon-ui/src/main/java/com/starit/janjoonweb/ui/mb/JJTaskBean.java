@@ -83,6 +83,9 @@ public class JJTaskBean {
 	public static String Planned = "planned";
 	public static String Real = "real";
 	public static String Revised = "revised";
+	public static final String UPDATE_OPERATION = "update";
+	public static final String DELETE_OPERATION = "delete";
+	public static final String ADD_OPERATION = "add";
 
 	@Autowired
 	private JJChapterService jJChapterService;
@@ -630,7 +633,7 @@ public class JJTaskBean {
 			}
 		}
 
-		updateView(jJTaskService.findJJTask(tt.getId()), false);
+		updateView(jJTaskService.findJJTask(tt.getId()), UPDATE_OPERATION);
 		task = jJTaskService.findJJTask(tt.getId());
 		taskTreeNode = null;
 		selectedReq = null;
@@ -869,7 +872,6 @@ public class JJTaskBean {
 						String group = "<span style=display:none>" + c
 								+ "</span>";
 						// + task.getName();
-
 						TaskData taskData = null;
 						boolean add = false;
 
@@ -1086,20 +1088,10 @@ public class JJTaskBean {
 			char c = (char) k;
 			String group = "<span style=display:none>" + c + "</span>";
 			boolean add = false;
-			JJChapter chapter = null;
+			JJChapter chapter = tt.getChapter();
 
 			TaskData taskData = null;
 			System.err.println(group + "/" + tt.getName());
-
-			if (tt.getRequirement() != null)
-				chapter = tt.getRequirement().getChapter();
-			else if (tt.getBug() != null) {
-				if (tt.getBug().getRequirement() != null)
-					chapter = tt.getBug().getRequirement().getChapter();
-			} else if (tt.getTestcase() != null) {
-				if (tt.getTestcase().getRequirement() != null)
-					chapter = tt.getTestcase().getRequirement().getChapter();
-			}
 
 			model.add(new TimelineEvent(tt, new GregorianCalendar(Calendar
 					.getInstance().get(Calendar.YEAR) - 5, 1, 1).getTime(),
@@ -1326,7 +1318,7 @@ public class JJTaskBean {
 		if (valid) {
 			saveJJTask(task, true);
 			task = jJTaskService.findJJTask(task.getId());
-			updateView(task, false);
+			updateView(task, UPDATE_OPERATION);
 
 			if (task.getSprint() != null) {
 
@@ -1724,6 +1716,7 @@ public class JJTaskBean {
 
 	public void importTask() {
 
+		long startTime = System.nanoTime();
 		JJContact c = jJProjectService.findJJProject(
 				LoginBean.getProject().getId()).getManager();
 		if (c == null)
@@ -1842,6 +1835,7 @@ public class JJTaskBean {
 					calendarUtil.getEndDate(task, Planned, null);
 				}
 				saveJJTask(task, false);
+				updateView(task, ADD_OPERATION);
 
 			}
 
@@ -1849,8 +1843,8 @@ public class JJTaskBean {
 
 		if (mode.equalsIgnoreCase("planning")) {
 
-			project = null;
-			tasksData = null;
+			// project = null;
+			// tasksData = null;
 			if (sprint != null) {
 
 				sprint = jJSprintService.findJJSprint(sprint.getId());
@@ -1892,32 +1886,22 @@ public class JJTaskBean {
 
 			}
 
-			project = null;
-			tasksData = null;
+			// project = null;
+			// tasksData = null;
 
 			String message = "message_successfully_created";
 
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
 					"Task");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-			// RequestContext context = RequestContext.getCurrentInstance();
-			//
-			// int i = 0;
-			// if (((LoginBean)
-			// LoginBean.findBean("loginBean")).isRenderGantt())
-			// i = 1;
-			// else
-			// i = 0;
-
-			// context.execute("PF('projectTabView').select(" + i + ")");
-			// jJSprintBean.setUpdate(false);
-			// context.execute("PF('SprintTab').select("
-			// + jJSprintBean.contains(jJSprintBean.getSprintUtil()
-			// .getSprint().getId()) + ")");
-			//
-			// context.execute("PF('taskImportDialogWidget').hide()");
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("PF('taskImportDialogWidget').hide()");
 
 		}
+		long endTime = System.nanoTime();
+
+		long duration = (endTime - startTime);
+		System.err.println("duration :" + (double) duration / 1000000000.0);
 
 	}
 
@@ -1934,26 +1918,6 @@ public class JJTaskBean {
 		objets = null;
 
 		importFormats = null;
-		// if (mode.equalsIgnoreCase("scrum")) {
-		// HttpSession session = (HttpSession) FacesContext
-		// .getCurrentInstance().getExternalContext()
-		// .getSession(false);
-		// JJSprintBean jJSprintBean = (JJSprintBean) session
-		// .getAttribute("jJSprintBean");
-		// RequestContext context = RequestContext.getCurrentInstance();
-		//
-		// int i = 0;
-		// if (((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
-		// i = 1;
-		// else
-		// i = 0;
-		//
-		// // context.execute("PF('projectTabView').select(" + i + ")");
-		// // jJSprintBean.setUpdate(false);
-		// // context.execute("PF('SprintTab').select("
-		// // + jJSprintBean.contains(jJSprintBean.getSprintUtil()
-		// // .getSprint().getId()) + ")");
-		// }
 		mode = null;
 
 	}
@@ -2394,7 +2358,7 @@ public class JJTaskBean {
 					.getId());
 			tJjTask.setEnabled(false);
 			saveJJTask(tJjTask, true);
-			updateView(tJjTask, true);
+			updateView(tJjTask, DELETE_OPERATION);
 
 			if (tJjTask.getSprint() != null
 					&& jJSprintBean.contains(tJjTask.getSprint().getId()) != -1) {
@@ -2420,7 +2384,8 @@ public class JJTaskBean {
 
 			tJjTask = jJSprintBean.getTask();
 			jJSprintBean.deleteTask();
-			updateView(jJTaskService.findJJTask(tJjTask.getId()), true);
+			updateView(jJTaskService.findJJTask(tJjTask.getId()),
+					DELETE_OPERATION);
 
 		}
 
@@ -2749,7 +2714,7 @@ public class JJTaskBean {
 			tt.setEndDateReal(ev.getTimelineEvent().getEndDate());
 			saveJJTask(tt, true);
 			tt = jJTaskService.findJJTask(tt.getId());
-			updateView(tt, false);
+			updateView(tt, UPDATE_OPERATION);
 
 		} else {
 
@@ -2757,7 +2722,7 @@ public class JJTaskBean {
 			tt.setEndDateRevised(ev.getTimelineEvent().getEndDate());
 			saveJJTask(tt, true);
 			tt = jJTaskService.findJJTask(tt.getId());
-			updateView(tt, false);
+			updateView(tt, UPDATE_OPERATION);
 
 		}
 
@@ -2801,18 +2766,18 @@ public class JJTaskBean {
 				LoginBean.getProduct())) {
 
 			if (containTaskData(tt.getId()) != -1)
-				updateView(tt, false);
+				updateView(tt, UPDATE_OPERATION);
 		}
 
 	}
 
-	public JJChapter replaceTaskData(JJTask tt, boolean delete) {
+	public JJChapter replaceTaskData(JJTask tt, String operation) {
 
 		int i = containTaskData(tt.getId());
 		JJChapter chapter = null;
 		if (i != -1) {
 			chapter = tasksData.get(i).getChapter();
-			if (!delete) {
+			if (!operation.equalsIgnoreCase(DELETE_OPERATION)) {
 				Date startDate = null, endDate = null;
 				int workLoad = 0;
 
@@ -2844,20 +2809,84 @@ public class JJTaskBean {
 			} else
 				tasksData.remove(i);
 
+		} else if (operation.equalsIgnoreCase(ADD_OPERATION)) {
+			if (sortMode == null || sortMode.equalsIgnoreCase("chapter")) {
+				if (tt.getChapter() != null
+						&& (this.sprint == null || (this.sprint.equals(tt
+								.getSprint())))) {
+					Date startDate = null, endDate = null;
+					int workLoad = 0;
+
+					if (tt.getStartDateRevised() != null) {
+						startDate = tt.getStartDateRevised();
+
+						if (tt.getEndDateRevised() != null)
+							endDate = tt.getEndDateRevised();
+						else
+							endDate = tt.getEndDatePlanned();
+
+						if (tt.getWorkloadRevised() == null) {
+							if (tt.getWorkloadPlanned() != null)
+								workLoad = tt.getWorkloadPlanned();
+						} else
+							workLoad = tt.getWorkloadRevised();
+					} else {
+						startDate = tt.getStartDatePlanned();
+						endDate = tt.getEndDatePlanned();
+						if (tt.getWorkloadPlanned() != null)
+							workLoad = tt.getWorkloadPlanned();
+					}
+
+					TaskData tskst = new TaskData(tt, tt.getChapter(),
+							startDate, endDate, workLoad,
+							tt.getStartDateRevised() != null);
+					tasksData.add(tskst);
+					chapter = tt.getChapter();
+				}
+			} else if (this.sprint == null
+					|| (this.sprint.equals(tt.getSprint()))) {
+				Date startDate = null, endDate = null;
+				int workLoad = 0;
+
+				if (tt.getStartDateRevised() != null) {
+					startDate = tt.getStartDateRevised();
+
+					if (tt.getEndDateRevised() != null)
+						endDate = tt.getEndDateRevised();
+					else
+						endDate = tt.getEndDatePlanned();
+
+					if (tt.getWorkloadRevised() == null) {
+						if (tt.getWorkloadPlanned() != null)
+							workLoad = tt.getWorkloadPlanned();
+					} else
+						workLoad = tt.getWorkloadRevised();
+				} else {
+					startDate = tt.getStartDatePlanned();
+					endDate = tt.getEndDatePlanned();
+					if (tt.getWorkloadPlanned() != null)
+						workLoad = tt.getWorkloadPlanned();
+				}
+
+				TaskData tskst = new TaskData(tt, tt.getChapter(), startDate,
+						endDate, workLoad, tt.getStartDateRevised() != null);
+				tasksData.add(tskst);
+			}
+
 		}
 		return chapter;
 
 	}
 
 	public void replaceRealTimelineEvent(List<TimelineEvent> events, JJTask tt,
-			boolean delete) {
+			String operation) {
 
 		int i = findInEventTimeLine(events, tt, true);
 		if (i != -1) {
 
 			String group = events.get(i).getGroup();
 			events.remove(i);
-			if (!delete) {
+			if (!operation.equalsIgnoreCase(DELETE_OPERATION)) {
 
 				Date startDate = null, endDate = null;
 
@@ -2876,7 +2905,8 @@ public class JJTaskBean {
 							group, Real));
 
 			}
-		} else if (!delete && tt.getStartDateReal() != null) {
+		} else if (!operation.equalsIgnoreCase(DELETE_OPERATION)
+				&& tt.getStartDateReal() != null) {
 
 			Date startDate = null, endDate = null;
 
@@ -2897,14 +2927,15 @@ public class JJTaskBean {
 
 	}
 
-	public void updateView(JJTask tt, boolean delete) {
+	public void updateView(JJTask tt, String operation) {
 
-		JJChapter chapter = replaceTaskData(tt, delete);
-		if (model != null) {
+		JJChapter chapter = replaceTaskData(tt, operation);
+
+		if (model != null && !operation.equalsIgnoreCase(ADD_OPERATION)) {
 			List<TimelineEvent> events = model.getEvents();
-			replaceRealTimelineEvent(events, tt, delete);
+			replaceRealTimelineEvent(events, tt, operation);
 
-			if (delete) {
+			if (operation.equalsIgnoreCase(DELETE_OPERATION)) {
 				int j1 = -1;
 				int i1 = 0;
 				while (i1 < events.size()) {
@@ -2923,7 +2954,6 @@ public class JJTaskBean {
 
 				}
 
-				// model.delete(model.getEvents().get(j1));
 				if (j1 != -1)
 					events.remove(j1);
 			}
@@ -2932,7 +2962,7 @@ public class JJTaskBean {
 			String styleClass = "";
 			Date startDate = null, endDate = null;
 
-			if (!delete && j != -1) {
+			if (!operation.equalsIgnoreCase(DELETE_OPERATION) && j != -1) {
 
 				if (tt.getStartDateRevised() != null) {
 
@@ -2968,9 +2998,257 @@ public class JJTaskBean {
 			}
 
 			model.setEvents(events);
-			// int k = containTaskData(tt.getId());
 			if (sortMode.equalsIgnoreCase("chapter") && chapter != null)
 				updateChapterTimeLineEvent(chapter);
+
+		} else if (operation.equalsIgnoreCase(ADD_OPERATION)
+				&& (sprint == null || (sprint.equals(tt.getSprint())))) {
+			String group = null;
+			List<TimelineEvent> events = model.getEvents();
+			/* Get Chapter Group */
+			if (sortMode.equalsIgnoreCase("chapter") && tt.getChapter() != null) {
+				int i = 0;
+				int j = -1;
+				while (i < events.size()) {
+					if (events.get(i).getStyleClass()
+							.equalsIgnoreCase("chapter")) {
+
+						if (((JJChapter) events.get(i).getData())
+								.equals(chapter)) {
+							j = i;
+							group = events.get(j).getGroup();
+							i = events.size();
+
+						}
+					}
+					i++;
+				}
+				int k = 0;
+				if (group == null) {
+
+					k = 65;
+					if (!events.isEmpty()) {
+						group = events.get(events.size() - 1).getGroup();
+						k = (int) group.trim().charAt(25);
+						k++;						
+					}
+					
+				} else {
+					i = 0;
+					k = (int) group.trim().charAt(25);
+					while (i < events.size()) {
+
+						TimelineEvent event = events.get(i);
+						int kd = (int) event.getGroup().trim().charAt(25);
+						if (kd >= k) {
+							kd++;
+							if (kd == 92)
+								kd++;
+
+							char c = (char) kd;
+							event.setGroup("<span style=display:none>" + c
+									+ "</span>");
+							events.set(i, event);
+						}
+
+						i++;
+
+					}
+				}
+
+				Map<Date, String> min = new TreeMap<Date, String>();
+				Map<Date, String> max = new TreeMap<Date, String>();
+
+				if (k == 92)
+					k++;
+
+				char c = (char) k;
+				group = "<span style=display:none>" + c + "</span>";
+				new GregorianCalendar(2010, 1, 1).getTime();
+				events.add(new TimelineEvent(tt, new GregorianCalendar(Calendar
+						.getInstance().get(Calendar.YEAR) - 5, 1, 1).getTime(),
+						new GregorianCalendar(Calendar.getInstance().get(
+								Calendar.YEAR) + 5, 1, 1).getTime(), false,
+						group, "invisible"));
+
+				if (tt.getStartDateReal() != null) {
+
+					Date endDate;
+					if (tt.getEndDateReal() == null)
+						endDate = tt.getEndDatePlanned();
+					else
+						endDate = tt.getEndDateReal();
+
+					TimelineEvent event = new TimelineEvent(tt,
+							tt.getStartDateReal(), endDate, true, group, Real);
+
+					events.add(event);
+
+				}
+				if (tt.getStartDateRevised() != null) {
+
+					Date endDate;
+					String styleClass;
+
+					if (tt.getStartDateReal() == null)
+						styleClass = "revised1";
+					else
+						styleClass = "revised2";
+
+					if (tt.getEndDateRevised() == null)
+						endDate = tt.getEndDatePlanned();
+					else
+						endDate = tt.getEndDateRevised();
+
+					TimelineEvent event = new TimelineEvent(tt,
+							tt.getStartDateRevised(), endDate, true, group,
+							styleClass);
+					events.add(event);
+				} else {
+
+					String style = null;
+					if (tt.getStartDateReal() == null)
+						style = "planned1";
+					else
+						style = "planned2";
+					TimelineEvent event = new TimelineEvent(tt,
+							tt.getStartDatePlanned(), tt.getEndDatePlanned(),
+							true, group, style);
+					events.add(event);
+
+				}
+
+				if (tt.getStartDatePlanned() != null) {
+					min.put(tt.getStartDatePlanned(), tt.getStartDatePlanned()
+							.toString());
+				}
+
+				if (tt.getStartDateRevised() != null) {
+					min.put(tt.getStartDateRevised(), tt.getStartDateRevised()
+							.toString());
+				}
+
+				if (tt.getStartDateReal() != null) {
+					min.put(tt.getStartDateReal(), tt.getStartDateReal()
+							.toString());
+				}
+
+				if (tt.getEndDatePlanned() != null) {
+					max.put(tt.getEndDatePlanned(), tt.getEndDatePlanned()
+							.toString());
+				}
+
+				if (tt.getEndDateRevised() != null) {
+					max.put(tt.getEndDateRevised(), tt.getEndDateRevised()
+							.toString());
+				}
+
+				if (tt.getEndDateReal() != null) {
+					max.put(tt.getEndDateReal(), tt.getEndDateReal().toString());
+				}
+
+				k++;
+
+				if (!min.isEmpty() && !max.isEmpty() && j == -1) {
+
+					if (k == 92)
+						k++;
+
+					Date end = null;
+					Set<Date> dates = min.keySet();
+
+					Date start = dates.iterator().next();
+
+					dates = max.keySet();
+					for (Date date : dates) {
+						end = date;
+					}
+					c = (char) k;
+					group = "<span style=display:none>" + c + "</span>";
+					// + task.getName();
+					TimelineEvent event = new TimelineEvent(chapter, start,
+							end, false, group, "chapter");
+					events.add(new TimelineEvent(chapter,
+							new GregorianCalendar(Calendar.getInstance().get(
+									Calendar.YEAR) - 5, 1, 1).getTime(),
+							new GregorianCalendar(Calendar.getInstance().get(
+									Calendar.YEAR) + 5, 1, 1).getTime(), false,
+							group, "invisible"));
+
+					events.add(event);
+
+				}
+				updateChapterTimeLineEvent(tt.getChapter());
+
+			} else if (!sortMode.equalsIgnoreCase("chapter")) {
+				int k = 65;
+				if (!events.isEmpty()) {
+					group = events.get(events.size() - 1).getGroup();
+					k = (int) group.trim().charAt(25);
+					k++;
+					if (k == 92)
+						k++;
+				}
+
+				char c = (char) k;
+				group = "<span style=display:none>" + c + "</span>";
+
+				events.add(new TimelineEvent(tt, new GregorianCalendar(Calendar
+						.getInstance().get(Calendar.YEAR) - 5, 1, 1).getTime(),
+						new GregorianCalendar(Calendar.getInstance().get(
+								Calendar.YEAR) + 5, 1, 1).getTime(), false,
+						group, "invisible"));
+
+				if (tt.getStartDateReal() != null) {
+
+					Date endDate;
+					if (tt.getEndDateReal() == null)
+						endDate = tt.getEndDatePlanned();
+					else
+						endDate = tt.getEndDateReal();
+
+					TimelineEvent event = new TimelineEvent(tt,
+							tt.getStartDateReal(), endDate, true, group, Real);
+
+					events.add(event);
+
+				}
+				if (tt.getStartDateRevised() != null) {
+
+					Date endDate;
+					if (tt.getEndDateRevised() == null)
+						endDate = tt.getEndDatePlanned();
+					else
+						endDate = tt.getEndDateRevised();
+
+					String styleClass;
+
+					if (tt.getStartDateReal() == null)
+						styleClass = "revised1";
+					else
+						styleClass = "revised2";
+
+					TimelineEvent event = new TimelineEvent(tt,
+							tt.getStartDateRevised(), endDate, true, group,
+							styleClass);
+					events.add(event);
+
+				} else {
+
+					String style = null;
+					if (tt.getStartDateReal() == null)
+						style = "planned1";
+					else
+						style = "planned2";
+
+					TimelineEvent event = new TimelineEvent(tt,
+							tt.getStartDatePlanned(), tt.getEndDatePlanned(),
+							true, group, style);
+					events.add(event);
+				}
+			}
+
+			model.setEvents(events);
 		}
 
 	}

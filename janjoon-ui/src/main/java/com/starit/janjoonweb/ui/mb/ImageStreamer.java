@@ -150,7 +150,7 @@ public class ImageStreamer {
 	
 	public String getCkEditorToolBar()
 	{
-		return "[['Bold','Italic','Underline','Strike','NumberedList',"
+		return "[['Source','Bold','Italic','Underline','Strike','NumberedList',"
 				+ "'BulletedList','Image','TextColor','BGColor','Undo','Table','-', 'RemoveFormat']]";
 	}
 

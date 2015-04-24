@@ -25,7 +25,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity(sequenceName = "JJTaskSEQ")
 public class JJTask {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;
@@ -142,30 +142,41 @@ public class JJTask {
 		return (object instanceof JJTask) && (getId() != null) ? getId()
 				.equals(((JJTask) object).getId()) : (object == this);
 	}
-	
-	public JJProject getProject()
+
+	public JJChapter getChapter()
 	{
-		if(this.getRequirement() != null)
+		if(this.getRequirement() != null && this.getRequirement().getChapter() != null)
+			return this.getRequirement().getChapter();
+		else if(this.getBug() != null && this.getBug().getRequirement() != null && this.getBug().getRequirement().getChapter() != null)
+			return this.getBug().getRequirement().getChapter();
+		else if(this.getTestcase() != null && this.getTestcase().getRequirement().getChapter() != null)
+			return  this.getTestcase().getRequirement().getChapter();		
+		else
+			return null;
+	}
+
+	public JJProject getProject() {
+		if (this.getRequirement() != null)
 			return this.getRequirement().getProject();
-		else if(this.getBug() != null)
+		else if (this.getBug() != null)
 			return this.getBug().getProject();
-		else if(this.getTestcase() != null)
+		else if (this.getTestcase() != null)
 			return this.getTestcase().getRequirement().getProject();
-		else if(this.getSprint() != null)
+		else if (this.getSprint() != null)
 			return this.getSprint().getProject();
 		else
 			return null;
 	}
-	
-	public JJProduct getProduct()
-	{
-		if(this.getRequirement() != null && this.getRequirement().getProduct() != null)
+
+	public JJProduct getProduct() {
+		if (this.getRequirement() != null
+				&& this.getRequirement().getProduct() != null)
 			return this.getRequirement().getProduct();
-		else if(this.getBug() != null && this.getBug().getProduct() != null)
-			return this.getBug().getProduct();		
-		else if(this.getTestcase() != null)
+		else if (this.getBug() != null && this.getBug().getProduct() != null)
+			return this.getBug().getProduct();
+		else if (this.getTestcase() != null)
 			return this.getTestcase().getRequirement().getProduct();
-		else if(this.getVersioning() != null)
+		else if (this.getVersioning() != null)
 			return this.getVersioning().getProduct();
 		else
 			return null;

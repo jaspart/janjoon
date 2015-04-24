@@ -638,7 +638,7 @@ public class JJSprintBean {
 			if (jJTaskBean == null)
 				jJTaskBean = new JJTaskBean();
 			jJTaskBean.updateView(jJTaskService.findJJTask(dropedTask.getId()),
-					false);
+					JJTaskBean.UPDATE_OPERATION);
 
 			JJSprint s = jJSprintService.findJJSprint(sprintId);
 			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s,
@@ -701,7 +701,7 @@ public class JJSprintBean {
 			if (jJTaskBean == null)
 				jJTaskBean = new JJTaskBean();
 			jJTaskBean.updateView(jJTaskService.findJJTask(dropedTask.getId()),
-					false);
+					JJTaskBean.UPDATE_OPERATION);
 
 			JJSprint s = jJSprintService.findJJSprint(sprintId);
 			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s,
@@ -907,12 +907,12 @@ public class JJSprintBean {
 		JJTaskBean jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
 		if (jJTaskBean == null)
 			jJTaskBean = new JJTaskBean();
-		jJTaskBean.updateView(jJTaskService.findJJTask(task.getId()), true);
+		jJTaskBean.updateView(jJTaskService.findJJTask(task.getId()), JJTaskBean.DELETE_OPERATION);
 		// reqList = null;
 		task = null;
 		// resetJJTaskBean();
 
-		// RequestContext context = RequestContext.getCurrentInstance();
+		RequestContext context = RequestContext.getCurrentInstance();
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted", "Task");
@@ -928,7 +928,7 @@ public class JJSprintBean {
 		// context.execute("PF('SprintTab').select("
 		// + contains(sprintUtil.getSprint().getId()) + ")");
 		//
-		// context.execute("PF('deleteDialogWidget').hide()");
+		context.execute("PF('deleteDialogWidget').hide()");
 	}
 
 	public void resetJJTaskBean() {
