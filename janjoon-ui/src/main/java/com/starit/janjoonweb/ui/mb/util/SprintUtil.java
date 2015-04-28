@@ -1,23 +1,11 @@
 package com.starit.janjoonweb.ui.mb.util;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.text.*;
+import java.util.*;
 
-import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.CartesianChartModel;
-import org.primefaces.model.chart.ChartSeries;
-import org.primefaces.model.chart.DateAxis;
-import org.primefaces.model.chart.LineChartSeries;
+import org.primefaces.model.chart.*;
 
-import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJContactService;
-import com.starit.janjoonweb.domain.JJSprint;
-import com.starit.janjoonweb.domain.JJTask;
-import com.starit.janjoonweb.domain.JJTaskService;
+import com.starit.janjoonweb.domain.*;
 import com.starit.janjoonweb.ui.mb.LoginBean;
 
 public class SprintUtil {
@@ -34,6 +22,10 @@ public class SprintUtil {
 	private Integer consumed;
 	private Integer workload;
 	private boolean render;
+	
+	private Integer priseReal;
+	private Integer priseSold;
+	
 
 	public SprintUtil(JJSprint sprint, List<JJTask> tasks,
 			JJContactService jJContactService) {
@@ -119,8 +111,8 @@ public class SprintUtil {
 
 	public Integer getPriseReal() {
 
-		if (doneTask != null) {
-			int priseReal = 0;
+		if (doneTask != null && priseReal == null) {
+			priseReal = 0;
 
 			for (JJTask task : doneTask) {
 
@@ -136,14 +128,14 @@ public class SprintUtil {
 			}
 			return priseReal;
 		} else
-			return 0;
+			return priseReal;
 
 	}
 
 	public Integer getPriseSold() {
 
-		if (doneTask != null) {
-			int priseSold = 0;
+		if (doneTask != null && priseSold == null) {
+			priseSold = 0;
 			for (JJTask task : doneTask) {
 				if (task.getAssignedTo() != null
 						&& task.getWorkloadReal() != null
@@ -158,8 +150,16 @@ public class SprintUtil {
 
 			return priseSold;
 		} else
-			return 0;
+			return priseSold;
 
+	}
+
+	public void setPriseReal(Integer priseReal) {
+		this.priseReal = priseReal;
+	}
+
+	public void setPriseSold(Integer priseSold) {
+		this.priseSold = priseSold;
 	}
 
 	public boolean isRender() {

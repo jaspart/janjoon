@@ -130,7 +130,9 @@ public class JJTestcaseexecutionServiceImpl implements
 			subquery.select(fromJJRequirement);
 			subquery.where(criteriaBuilder.equal(
 					fromJJRequirement.get("chapter"), chapter));
-
+			
+			subquery.where(criteriaBuilder.equal(
+					fromJJRequirement.get("enabled"), true));
 			predicates.add(criteriaBuilder.in(path).value(subquery));
 
 		}

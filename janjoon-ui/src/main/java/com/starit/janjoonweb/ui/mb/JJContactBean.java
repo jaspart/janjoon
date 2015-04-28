@@ -32,6 +32,7 @@ import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyContactDataModel;
 import com.starit.janjoonweb.ui.mb.util.Contact;
 import com.starit.janjoonweb.ui.mb.util.ContactCalendarUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJContact.class, beanName = "jJContactBean")
@@ -435,6 +436,21 @@ public class JJContactBean {
 					.getSession(false);
 			LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
 			loginBean.getAuthorisationService().setSession(session);
+
+			JJSprintBean jJSprintBean = (JJSprintBean) session
+					.getAttribute("jJSprintBean");
+
+			if (jJSprintBean != null && jJSprintBean.getSprintList() != null
+					&& !jJSprintBean.getSprintList().isEmpty()) {
+
+				for (SprintUtil sprintUtil : jJSprintBean.getSprintList()) {
+					if (sprintUtil.getContacts().contains(contactAdmin)) {
+						sprintUtil.setPriseReal(null);
+						sprintUtil.setPriseSold(null);
+					}
+
+				}
+			}
 
 			FacesContext.getCurrentInstance().addMessage(
 					null,

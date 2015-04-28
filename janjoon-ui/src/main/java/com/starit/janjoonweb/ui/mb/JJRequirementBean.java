@@ -1155,6 +1155,7 @@ public class JJRequirementBean {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void updateDataTable(JJRequirement req, String operation,
 			boolean specPage) {
 		int i = 0;
@@ -1214,6 +1215,7 @@ public class JJRequirementBean {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void filterTable() {
 		int i = 0;
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
@@ -2405,6 +2407,7 @@ public class JJRequirementBean {
 		this.disabledRequirement = disabledRequirement;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void editTableDataModelList(long id, boolean rendered) {
 		long t = System.currentTimeMillis();
 		String[] results = templateHeader.split("-");
@@ -4103,6 +4106,7 @@ public class JJRequirementBean {
 		// }
 		// }
 
+		@SuppressWarnings("unchecked")
 		public StreamedContent getFile() {
 
 			String buffer = "<category name=\"" + nameDataModel.toUpperCase()
@@ -4260,9 +4264,8 @@ public class JJRequirementBean {
 			JJChapter chapter, boolean onlyActif) {
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		return jJRequirementService
-				.getRequirementChildrenWithChapterSortedByOrder(
-						((LoginBean) LoginBean.findBean("loginBean"))
-								.getContact().getCompany(), chapter, onlyActif);
+				.getRequirementChildrenWithChapterSortedByOrder(loginBean
+						.getContact().getCompany(), chapter, onlyActif);
 	}
 
 	public void reset() {
@@ -4627,6 +4630,7 @@ public class JJRequirementBean {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void onNodeSelect(NodeSelectEvent event) throws IOException {
 
 		int i = -1;
@@ -4713,6 +4717,7 @@ public class JJRequirementBean {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void mineChangeEvent(int i) {
 
 		if (mine) {

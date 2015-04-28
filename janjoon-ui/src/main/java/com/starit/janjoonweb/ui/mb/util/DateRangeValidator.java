@@ -12,7 +12,6 @@ import javax.faces.validator.ValidatorException;
 
 import org.primefaces.component.calendar.Calendar;
 
-import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.ui.mb.JJSprintBean;
@@ -22,6 +21,7 @@ import com.starit.janjoonweb.ui.mb.LoginBean;
 @FacesValidator("dateRangeValidator")
 public class DateRangeValidator implements Validator {
 
+	@SuppressWarnings("unused")
 	@Override
 	public void validate(FacesContext context, UIComponent component,
 			Object value) throws ValidatorException {
@@ -54,7 +54,7 @@ public class DateRangeValidator implements Validator {
 				throw new ValidatorException(facesMessage);
 			} else if (sprintMode != null
 					&& LoginBean.getProject().getEndDate() != null
-					&& LoginBean.getProject().getEndDate().before(testedDate)) {
+					&& CalendarUtil.getAfterDay(LoginBean.getProject().getEndDate()).before(testedDate)) {
 
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"validator_date_endAfterEnd", "Sprint", "Project");
@@ -78,7 +78,7 @@ public class DateRangeValidator implements Validator {
 			// sprintEndDate
 			if (sprintMode != null) {
 				if (LoginBean.getProject().getEndDate() != null
-						&& LoginBean.getProject().getEndDate()
+						&& CalendarUtil.getAfterDay(LoginBean.getProject().getEndDate())
 								.before(testedDate)) {
 					FacesMessage facesMessage = MessageFactory.getMessage(
 							"validator_date_endAfterEnd", "Sprint", "Project");
@@ -325,7 +325,7 @@ public class DateRangeValidator implements Validator {
 
 						if (sprint != null) {
 							if (testedDate.compareTo(sprint.getStartDate())
-									* sprint.getEndDate().compareTo(testedDate) < 0) {
+									* CalendarUtil.getAfterDay(sprint.getEndDate()).compareTo(testedDate) < 0) {
 								FacesMessage facesMessage = MessageFactory.getMessage(
 										"validator_date_startAfterEndORStartBeforeStart", "Task",
 										"Sprint");
@@ -344,7 +344,7 @@ public class DateRangeValidator implements Validator {
 
 							} else if (task.getProject() != null
 									&& task.getProject().getEndDate() != null
-									&& task.getProject().getEndDate()
+									&& CalendarUtil.getAfterDay(task.getProject().getEndDate())
 											.before(testedDate)) {
 								FacesMessage facesMessage = MessageFactory.getMessage(
 										"validator_date_startAfterEnd", "Task", "Project");
@@ -377,7 +377,7 @@ public class DateRangeValidator implements Validator {
 
 						if (sprint != null) {
 							if (testedDate.compareTo(sprint.getStartDate())
-									* sprint.getEndDate().compareTo(testedDate) < 0) {
+									* CalendarUtil.getAfterDay(sprint.getEndDate()).compareTo(testedDate) < 0) {
 								FacesMessage facesMessage = MessageFactory.getMessage(
 										"validator_date_endAfterEndOREndBeforeStart", "Task",
 										"Sprint");
@@ -387,8 +387,7 @@ public class DateRangeValidator implements Validator {
 						} else {
 							if (task.getProject() != null
 									&& task.getProject().getEndDate() != null
-									&& task.getProject().getEndDate()
-											.before(testedDate)) {
+									&& CalendarUtil.getAfterDay(task.getProject().getEndDate()).before(testedDate)) {
 								FacesMessage facesMessage = MessageFactory.getMessage(
 										"validator_date_endAfterEnd", "Task", "Project");
 								facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);

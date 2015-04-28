@@ -131,9 +131,10 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 			predicates.add(criteriaBuilder.isNotNull(from.join("requirement")
 					.get("category")));
 			predicates.add(criteriaBuilder.equal(
-					from.join("requirement").get("enabled"), true));
-			predicates.add(criteriaBuilder.equal(
 					from.join("requirement").get("category"), category));
+			predicates.add(criteriaBuilder.equal(
+					from.join("requirement").get("enabled"), true));
+			
 		}
 
 		if (onlyActif) {

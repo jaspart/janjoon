@@ -78,32 +78,15 @@ public class JJSprintBean {
 	private List<JJCategory> categoryList;
 	private List<JJContact> contacts;
 	private HtmlPanelGrid createTaskPanelGrid;
-	private JJCategory category;
-	// private JJRequirement requirement;
-	// private List<JJBug> bugs;
+	private JJCategory category;	
 	private JJBug bug;
-	// private List<JJRequirement> reqList;
 	private JJProject project;
-	private List<SprintUtil> sprintList;
-	// private List<SprintChart> sprintChartList;
+	private List<SprintUtil> sprintList;	
 	private SprintUtil sprintUtil;
-	private JJTask task;
-	// private int tabIndex;
+	private JJTask task;	
 	private boolean update = true;
 	private int activeTabSprintIndex;
 	private int activeTabGantIndex;
-
-	// public int getTabIndex() {
-	// if (sprintUtil != null)
-	// tabIndex = contains(sprintUtil.getSprint().getId());
-	// else
-	// tabIndex = 0;
-	// return tabIndex;
-	// }
-	//
-	// public void setTabIndex(int tabIndex) {
-	// this.tabIndex = tabIndex;
-	// }
 
 	public int getActiveTabSprintIndex() {
 		return activeTabSprintIndex;
@@ -184,29 +167,7 @@ public class JJSprintBean {
 	public void setCategory(JJCategory category) {
 		this.category = category;
 	}
-
-	// public JJRequirement getRequirement() {
-	// return requirement;
-	// }
-	//
-	// public void setRequirement(JJRequirement requirement) {
-	// this.requirement = requirement;
-	// }
-
-	// public List<JJBug> getBugs() {
-	//
-	// if (bugs == null)
-	// bugs = jJBugService.getBugs(((LoginBean) LoginBean
-	// .findBean("loginBean")).getContact().getCompany(), project,
-	// null, null);
-	//
-	// return bugs;
-	// }
-	//
-	// public void setBugs(List<JJBug> bugs) {
-	// this.bugs = bugs;
-	// }
-
+	
 	public JJBug getBug() {
 		return bug;
 	}
@@ -214,16 +175,7 @@ public class JJSprintBean {
 	public void setBug(JJBug bug) {
 		this.bug = bug;
 	}
-
-	// public List<JJRequirement> getReqList() {
-	//
-	// return reqList;
-	// }
-	//
-	// public void setReqList(List<JJRequirement> reqList) {
-	// this.reqList = reqList;
-	// }
-
+	
 	public JJProject getProject() {
 		return project;
 	}
@@ -253,10 +205,7 @@ public class JJSprintBean {
 	}
 
 	public void loadingsprintPage(ComponentSystemEvent e) {
-		category = null;
-		// reqList = null;
-		// requirement = null;
-
+		category = null;	
 	}
 
 	public List<SprintUtil> getSprintList() {
@@ -297,10 +246,6 @@ public class JJSprintBean {
 	public void setSprintList(List<SprintUtil> sprintList) {
 		this.sprintList = sprintList;
 	}
-
-	// public List<SprintChart> getSprintChartList() {
-	// return sprintChartList;
-	// }
 
 	public void iniSprintChart() {
 		if (LoginBean.getProject() != null)
@@ -377,10 +322,7 @@ public class JJSprintBean {
 	//
 	// }
 
-	public void onCellEditTask(CellEditEvent event) {
-
-		// JJTask t = jJTaskService.findJJTask(Long.parseLong(event.getColumn()
-		// .getColumnKey()));
+	public void onCellEditTask(CellEditEvent event) {	
 
 		DataTable dataTable = (DataTable) event.getSource();
 		JJTask t = (JJTask) dataTable.getRowData();
@@ -440,19 +382,6 @@ public class JJSprintBean {
 		jJTaskBean.setSprints(null);
 		jJTaskBean.setSprint(null);
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		// RequestContext context = RequestContext.getCurrentInstance();
-		//
-		// int i = 0;
-		// if (((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
-		// i = 1;
-		// else
-		// i = 0;
-
-		// context.update(":projecttabview");
-		// context.execute("PF('projectTabView').select(" + i + ")");
-		// update = false;
-		// context.execute("PF('SprintTab').select("
-		// + contains(sprintUtil.getSprint().getId()) + ")");
 
 	}
 
@@ -468,11 +397,11 @@ public class JJSprintBean {
 			SprintUtil su = sprintList.get(activeTabSprintIndex);
 
 			if (!su.isRender()) {
-				JJSprint s = jJSprintService.findJJSprint(su.getSprint()
-						.getId());
-				sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s,
-						LoginBean.getProduct()), jJContactService);
-				sprintList.set(contains(su.getSprint().getId()), sprintUtil);
+//				JJSprint s = jJSprintService.findJJSprint(su.getSprint()
+//						.getId());
+//				sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s,
+//						LoginBean.getProduct()), jJContactService);
+//				sprintList.set(contains(su.getSprint().getId()), sprintUtil);
 				System.err.println("###### ACtive activeTabSprintIndex: "
 						+ activeTabSprintIndex);
 			}
@@ -484,13 +413,13 @@ public class JJSprintBean {
 				SprintUtil su = sprintList.get(activeTabSprintIndex);
 
 				if (!su.isRender()) {
-					JJSprint s = jJSprintService.findJJSprint(su.getSprint()
-							.getId());
-					sprintUtil = new SprintUtil(s,
-							jJTaskService.getSprintTasks(s,
-									LoginBean.getProduct()), jJContactService);
-					sprintList
-							.set(contains(su.getSprint().getId()), sprintUtil);
+//					JJSprint s = jJSprintService.findJJSprint(su.getSprint()
+//							.getId());
+//					sprintUtil = new SprintUtil(s,
+//							jJTaskService.getSprintTasks(s,
+//									LoginBean.getProduct()), jJContactService);
+//					sprintList
+//							.set(contains(su.getSprint().getId()), sprintUtil);
 					System.err.println("###### ACtive activeTabSprintIndex: "
 							+ activeTabSprintIndex);
 				}

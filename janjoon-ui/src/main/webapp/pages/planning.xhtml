@@ -14,9 +14,18 @@
 	border-collapse: separate;
 }
 
+.planning-dataTable thead {
+	display: none;
+}
+
 .pe-layout-pane-header {
 	/*	background: #2391B2;*/
 	
+}
+
+.stickyHeader {
+	width: 1600px;
+	margin-top: -0.5%;
 }
 
 .planning-dataTable .ui-datatable-data th {
@@ -94,7 +103,7 @@
 		<p:tabView id="projecttabview" widgetVar="projectTabView"
 			activeIndex="#{jJSprintBean.activeTabGantIndex}"
 			onTabChange="tabChangeHelper([{name: 'activeGantIndex', value: index}])"
-			dynamic="false" cache="true" style="width:100% !important;">	
+			dynamic="false" cache="true" style="width:100% !important;">
 
 			<p:tab id="tabPlanning" title="#{messages.project_gantt_menuitem}"
 				rendered="#{loginBean.renderGantt}">

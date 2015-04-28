@@ -1,21 +1,10 @@
 package com.starit.janjoonweb.domain;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Subquery;
+import javax.persistence.*;
+import javax.persistence.criteria.*;
 
 public class JJPermissionServiceImpl implements JJPermissionService {
 
@@ -38,7 +27,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();	
+		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		predicates.add(criteriaBuilder.equal(from.get("contact"), contact));
 
@@ -61,7 +50,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 			}
 
 		}
-		
+
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		select.where(predicates.toArray(new Predicate[] {}));
@@ -237,7 +226,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		return isAuthorized(contact, project, null, null, null, null, null,
 				null);
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public List<JJContact> areAuthorized(JJCompany company, JJContact contact,
@@ -301,23 +290,20 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 				.toArray(new Predicate[] {}));
 		predicates.add(orPredicate);
 
-		
-			if (r != null) {
-				predicates.add(criteriaBuilder.equal(fromRight.get("r"), r));
+		if (r != null) {
+			predicates.add(criteriaBuilder.equal(fromRight.get("r"), r));
 
-			}
+		}
 
-			if (w != null) {
-				predicates.add(criteriaBuilder.equal(fromRight.get("w"), w));
+		if (w != null) {
+			predicates.add(criteriaBuilder.equal(fromRight.get("w"), w));
 
-			}
+		}
 
-			if (x != null) {
-				predicates.add(criteriaBuilder.equal(fromRight.get("x"), x));
+		if (x != null) {
+			predicates.add(criteriaBuilder.equal(fromRight.get("x"), x));
 
-			}
-		
-		
+		}
 
 		subquery.where(criteriaBuilder.and(predicates
 				.toArray(new Predicate[] {})));
@@ -413,6 +399,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public JJProject getDefaultProject(JJContact contact) {
 		String qu = "SELECT r FROM  JJPermission r Where r.project IS NOT NULL AND r.project.manager.company = :c "
 				+ "AND r.enabled = true " + "AND r.contact = :contact";
@@ -482,6 +469,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public JJCategory getDefaultCategory(JJContact contact) {
 
 		String qu = "SELECT r FROM  JJPermission r Where "
@@ -561,6 +549,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<JJCategory> getDefaultCategories(JJContact contact) {
 
 		String qu = "SELECT r FROM  JJPermission r Where "
@@ -665,6 +654,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public JJProduct getDefaultProduct(JJContact contact) {
 
 		String qu = "SELECT r FROM  JJPermission r Where r.product IS NOT NULL AND r.product.manager.company = :c "
