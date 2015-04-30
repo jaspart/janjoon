@@ -46,7 +46,25 @@ public class ChartBean implements Serializable {
 
 	public ChartBean() {
 
-		createCategoryModel();
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+
+		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
+				.getAttribute("jJTestcaseBean");
+
+		List<TestCaseChartUtil> testcases = TestCaseChartUtil
+				.getTestCaseUtilFromJJTesCase(jJTestcaseBean.getTestcases());
+		if (testcases != null && !testcases.isEmpty())
+			createCategoryModel();
+		else {
+			categoryModel = new CartesianChartModel();
+
+			ChartSeries totalTC = new ChartSeries("Total TC");
+			totalTC.set(f.format(new Date()), 0);
+			categoryModel.addSeries(totalTC);
+
+		}
 
 	}
 
@@ -62,18 +80,17 @@ public class ChartBean implements Serializable {
 
 		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
 				.getAttribute("jJTestcaseBean");
-		
-		List<TestCaseChartUtil> testcases = TestCaseChartUtil.getTestCaseUtilFromJJTesCase(jJTestcaseBean.getTestcases());
-		
-		
+
+		List<TestCaseChartUtil> testcases = TestCaseChartUtil
+				.getTestCaseUtilFromJJTesCase(jJTestcaseBean.getTestcases());
 
 		Set<String> datesTMP = new HashSet<String>();
 
-		for (TestCaseChartUtil testcase : testcases) {			
+		for (TestCaseChartUtil testcase : testcases) {
 
 			datesTMP.add(f.format(testcase.getTestcase().getCreationDate()));
 
-		}	
+		}
 
 		JJTestcaseexecutionBean jJTestcaseexecutionBean = (JJTestcaseexecutionBean) session
 				.getAttribute("jJTestcaseexecutionBean");
@@ -83,30 +100,30 @@ public class ChartBean implements Serializable {
 		}
 
 		Set<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionBean
-				.getTestcaseexecutions();	
+				.getTestcaseexecutions();
 
 		for (JJTestcaseexecution tce : testcaseexecutions) {
-			
-			if(tce.getEnabled() && tce.getUpdatedDate()!=null)
-			{
+
+			if (tce.getEnabled() && tce.getUpdatedDate() != null) {
 				datesTMP.add(f.format(tce.getUpdatedDate()));
 			}
-			
+
 		}
 		List<String> dates = new ArrayList<String>();
-		dates.addAll(datesTMP);	
-		
+		dates.addAll(datesTMP);
+
 		Collections.sort(dates, new Comparator<String>() {
-	        DateFormat ff = new SimpleDateFormat("yyyy-MM-dd");
-	        @Override
-	        public int compare(String o1, String o2) {
-	            try {
-	                return ff.parse(o1).compareTo(ff.parse(o2));
-	            } catch (ParseException e) {
-	                throw new IllegalArgumentException(e);
-	            }
-	        }
-	    });
+			DateFormat ff = new SimpleDateFormat("yyyy-MM-dd");
+
+			@Override
+			public int compare(String o1, String o2) {
+				try {
+					return ff.parse(o1).compareTo(ff.parse(o2));
+				} catch (ParseException e) {
+					throw new IllegalArgumentException(e);
+				}
+			}
+		});
 
 		Map<String, String> mapTotalTC = new LinkedHashMap<String, String>();
 		Map<String, String> mapSuccessTC = new LinkedHashMap<String, String>();
@@ -120,8 +137,9 @@ public class ChartBean implements Serializable {
 			int compteurFailed = 0;
 
 			for (TestCaseChartUtil testcase : testcases) {
-				
-				if (date.equalsIgnoreCase(f.format(testcase.getTestcase().getCreationDate()))) {
+
+				if (date.equalsIgnoreCase(f.format(testcase.getTestcase()
+						.getCreationDate()))) {
 					compteur++;
 				}
 
@@ -136,7 +154,8 @@ public class ChartBean implements Serializable {
 						Date updatedDate = tce.getUpdatedDate();
 						if ((updatedDate != null)
 								&& (date.equalsIgnoreCase(f.format(updatedDate)))
-								&& (tce.getTestcase().equals(testcase.getTestcase()))) {
+								&& (tce.getTestcase().equals(testcase
+										.getTestcase()))) {
 
 							if (tce.getPassed() != null) {
 								exec.add(tce);
@@ -147,22 +166,28 @@ public class ChartBean implements Serializable {
 					if (!exec.isEmpty()) {
 						if (exec.size() == 1) {
 							if (exec.get(0).getPassed()) {
-								compteurSuccess++;	
+								compteurSuccess++;
 								testcase.setSuccess("compteurSuccess");
 							} else {
 								compteurFailed++;
 								testcase.setSuccess("compteurFailed");
 							}
 						} else {
-							Collections.sort(exec, new Comparator<JJTestcaseexecution>() {
+							Collections.sort(exec,
+									new Comparator<JJTestcaseexecution>() {
 
-								@Override
-								public int compare(JJTestcaseexecution o1, JJTestcaseexecution o2) {									
-									return o2.getUpdatedDate().compareTo(o1.getUpdatedDate());
-									}
-							});		
+										@Override
+										public int compare(
+												JJTestcaseexecution o1,
+												JJTestcaseexecution o2) {
+											return o2
+													.getUpdatedDate()
+													.compareTo(
+															o1.getUpdatedDate());
+										}
+									});
 							if (exec.get(0).getPassed()) {
-								compteurSuccess++;	
+								compteurSuccess++;
 								testcase.setSuccess("compteurSuccess");
 							} else {
 								compteurFailed++;
@@ -192,87 +217,90 @@ public class ChartBean implements Serializable {
 						Date updatedDate = tce.getUpdatedDate();
 						if ((updatedDate != null)
 								&& (date.equalsIgnoreCase(f.format(updatedDate)))
-								&& (tce.getTestcase().equals(testcase.getTestcase()))) {
+								&& (tce.getTestcase().equals(testcase
+										.getTestcase()))) {
 
 							if (tce.getPassed() != null) {
-								exec.add(tce);							
+								exec.add(tce);
 							}
 
 						}
 					}
 					if (!exec.isEmpty()) {
 						if (exec.size() == 1) {
-							if (exec.get(0).getPassed()) {								
-								if(testcase.getSuccess()!=null)
-								{
-									if(testcase.getSuccess().equalsIgnoreCase("compteurFailed"))
-									{
-										compteurFailed--;compteurSuccess++;
+							if (exec.get(0).getPassed()) {
+								if (testcase.getSuccess() != null) {
+									if (testcase.getSuccess().equalsIgnoreCase(
+											"compteurFailed")) {
+										compteurFailed--;
+										compteurSuccess++;
 										testcase.setSuccess("compteurSuccess");
 									}
-								}else
-								{
+								} else {
 									compteurSuccess++;
 									testcase.setSuccess("compteurSuccess");
 								}
-								
+
 							} else {
-								if(testcase.getSuccess()!=null)
-								{
-									if(testcase.getSuccess().equalsIgnoreCase("compteurSuccess"))
-									{
-										compteurFailed++;compteurSuccess--;
+								if (testcase.getSuccess() != null) {
+									if (testcase.getSuccess().equalsIgnoreCase(
+											"compteurSuccess")) {
+										compteurFailed++;
+										compteurSuccess--;
 										testcase.setSuccess("compteurFailed");
 									}
-								}else
-								{
+								} else {
 									compteurFailed++;
 									testcase.setSuccess("compteurFailed");
 								}
 							}
 						} else {
-							Collections.sort(exec, new Comparator<JJTestcaseexecution>() {
+							Collections.sort(exec,
+									new Comparator<JJTestcaseexecution>() {
 
-								@Override
-								public int compare(JJTestcaseexecution o1, JJTestcaseexecution o2) {									
-									return o2.getUpdatedDate().compareTo(o1.getUpdatedDate());
-									}
-							});	
-							if (exec.get(0).getPassed()) {								
-								if(testcase.getSuccess()!=null)
-								{
-									if(testcase.getSuccess().equalsIgnoreCase("compteurFailed"))
-									{
-										compteurFailed--;compteurSuccess++;
+										@Override
+										public int compare(
+												JJTestcaseexecution o1,
+												JJTestcaseexecution o2) {
+											return o2
+													.getUpdatedDate()
+													.compareTo(
+															o1.getUpdatedDate());
+										}
+									});
+							if (exec.get(0).getPassed()) {
+								if (testcase.getSuccess() != null) {
+									if (testcase.getSuccess().equalsIgnoreCase(
+											"compteurFailed")) {
+										compteurFailed--;
+										compteurSuccess++;
 										testcase.setSuccess("compteurSuccess");
 									}
-								}else
-								{
+								} else {
 									compteurSuccess++;
 									testcase.setSuccess("compteurSuccess");
 								}
-								
+
 							} else {
-								if(testcase.getSuccess()!=null)
-								{
-									if(testcase.getSuccess().equalsIgnoreCase("compteurSuccess"))
-									{
-										compteurFailed++;compteurSuccess--;
+								if (testcase.getSuccess() != null) {
+									if (testcase.getSuccess().equalsIgnoreCase(
+											"compteurSuccess")) {
+										compteurFailed++;
+										compteurSuccess--;
 										testcase.setSuccess("compteurFailed");
 									}
-								}else
-								{
+								} else {
 									compteurFailed++;
 									testcase.setSuccess("compteurFailed");
 								}
-							}						
+							}
 						}
 					}
 				}
-				if(compteurFailed<0)
-					compteurFailed=0;
-				if(compteurSuccess<0)
-					compteurSuccess=0;
+				if (compteurFailed < 0)
+					compteurFailed = 0;
+				if (compteurSuccess < 0)
+					compteurSuccess = 0;
 
 				mapSuccessTC.put(date, String.valueOf(compteurSuccess));
 				mapFailedTC.put(date, String.valueOf(compteurFailed));

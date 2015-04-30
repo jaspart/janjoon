@@ -388,12 +388,13 @@
 			</h:panelGrid>			
 		</p:panel>
 		<p:fieldset id="container" legend="Comments" toggleable="true"
-				collapsed="true" style="margin-top: 10px;width:50%;"
+				style="margin-top: 10px;width:95%;"
 				rendered="#{loginBean.enable and requirementBean.requirement != null}">
 				<ui:include src="/pages/communication.xhtml">
 					<ui:param name="communicationList"
 						value="#{requirementBean.communicationMessages}" />
 					<ui:param name="field" value="#{requirementBean.requirement}" />
+					<ui:param name="cols" value="170"/>
 				</ui:include>
 			</p:fieldset>
 

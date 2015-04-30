@@ -34,7 +34,7 @@ public class ApplicationLogger {
 
 	@Autowired
 	JJStatusService jJStatusService;
-	
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -68,68 +68,65 @@ public class ApplicationLogger {
 		logger.error("exception throw operation : "
 				+ joinPoint.getSignature().toShortString() + " :rised "
 				+ ex.getMessage());
-		if(ex instanceof EntityNotFoundException)
-		{
+		if (ex instanceof EntityNotFoundException) {
 			System.err.println("EntityNotFoundException");
-			//Query query=entityManager.createQuery("");
+			// Query query=entityManager.createQuery("");
 		}
-		
-		if(ex instanceof JpaObjectRetrievalFailureException)
-		{
+
+		if (ex instanceof JpaObjectRetrievalFailureException) {
 			System.err.println("JpaObjectRetrievalFailureException");
-			
-//			for(String tableName:jJStatusService.getTablesName())
-//			{
-//				Query query=entityManager.createQuery("UPDATE "+tableName+" r SET  version = NULL WHERE  r.version =0");			
-//				query.executeUpdate();
-//			}
-//			
+
+			// for(String tableName:jJStatusService.getTablesName())
+			// {
+			// Query
+			// query=entityManager.createQuery("UPDATE "+tableName+" r SET  version = NULL WHERE  r.version =0");
+			// query.executeUpdate();
+			// }
+			//
 			System.err.println(joinPoint.getThis().toString());
-			System.err.println(joinPoint.getKind()+"/"+joinPoint.getTarget().toString());		
-			
-			
-			
-			
+			System.err.println(joinPoint.getKind() + "/"
+					+ joinPoint.getTarget().toString());
+
 		}
 
 	}
-	
-//	@After("execution(* com.starit.janjoonweb.domain.JJTask.setEndDateReal(..))")
-//	public void setJJTaskWorkLoadReal(JoinPoint joinPoint)
-//	{
-//	
-//		JJTask t=(JJTask) joinPoint.getThis();
-//		if(t.getEndDateReal()!=null && t.getStartDateReal()!=null)
-//		{
-//			Date s=t.getStartDateReal();
-//			Date f=t.getEndDateReal();
-//			System.out.println(s+"/"+f);
-//			
-//			long w=f.getTime() - s.getTime();
-//			
-//			t.setWorkloadReal(Math.round(TimeUnit.MILLISECONDS.toHours(w/3)));
-//		}
-//		
-//	}
-	
-//	@After("execution(* com.starit.janjoonweb.domain.JJTask.setEndDateRevised(..))")
-//	public void setJJTaskWorkLoadRevised(JoinPoint joinPoint)
-//	{
-//	
-//		JJTask t=(JJTask) joinPoint.getThis();
-//		
-//		if(t.getStartDateRevised()!=null && t.getEndDateRevised()!=null)
-//		{			
-//			Date s=t.getStartDateRevised();
-//			Date f=t.getEndDateRevised();
-//			System.out.println(s+"/"+f);
-//			
-//			long w=f.getTime() - s.getTime();
-//			
-//			t.setWorkloadRevised(Math.round(TimeUnit.MILLISECONDS.toHours(w/3)));
-//		}
-//		
-//	}
+
+	// @After("execution(* com.starit.janjoonweb.domain.JJTask.setEndDateReal(..))")
+	// public void setJJTaskWorkLoadReal(JoinPoint joinPoint)
+	// {
+	//
+	// JJTask t=(JJTask) joinPoint.getThis();
+	// if(t.getEndDateReal()!=null && t.getStartDateReal()!=null)
+	// {
+	// Date s=t.getStartDateReal();
+	// Date f=t.getEndDateReal();
+	// System.out.println(s+"/"+f);
+	//
+	// long w=f.getTime() - s.getTime();
+	//
+	// t.setWorkloadReal(Math.round(TimeUnit.MILLISECONDS.toHours(w/3)));
+	// }
+	//
+	// }
+
+	// @After("execution(* com.starit.janjoonweb.domain.JJTask.setEndDateRevised(..))")
+	// public void setJJTaskWorkLoadRevised(JoinPoint joinPoint)
+	// {
+	//
+	// JJTask t=(JJTask) joinPoint.getThis();
+	//
+	// if(t.getStartDateRevised()!=null && t.getEndDateRevised()!=null)
+	// {
+	// Date s=t.getStartDateRevised();
+	// Date f=t.getEndDateRevised();
+	// System.out.println(s+"/"+f);
+	//
+	// long w=f.getTime() - s.getTime();
+	//
+	// t.setWorkloadRevised(Math.round(TimeUnit.MILLISECONDS.toHours(w/3)));
+	// }
+	//
+	// }
 
 	@After("execution(* com.starit.janjoonweb.domain.JJTaskService.updateJJTask(..))")
 	public void startRequirement(JoinPoint joinPoint) {
@@ -138,28 +135,27 @@ public class ApplicationLogger {
 		Object[] args = joinPoint.getArgs();
 		// JJStatus status=(JJStatus) args[0];
 		JJTask task = (JJTask) args[0];
-		JJStatus status = task.getStatus();	
-		
+		JJStatus status = task.getStatus();
 
-		if (status != null && task.getRequirement()!=null) {		
-			
-		
+		if (status != null && task.getRequirement() != null) {
+
 			JJRequirement req = jJRequirementService.findJJRequirement(task
 					.getRequirement().getId());
 
 			System.out.println(status.getName());
-			
-			if (status.getName().equalsIgnoreCase("IN PROGRESS") ) {
+
+			if (status.getName().equalsIgnoreCase("IN PROGRESS")
+					&& (req.getStatus() == null || !req.getStatus().getName()
+							.equalsIgnoreCase("RELEASED"))) {
 
 				JJStatus reqStatus = jJStatusService.getOneStatus("RELEASED",
 						"Requirement", true);
 				req.setStatus(reqStatus);
-				jJRequirementService.updateJJRequirement(req);			
+				jJRequirementService.updateJJRequirement(req);
 
 			}
 
 		}
-		
-		
+
 	}
 }

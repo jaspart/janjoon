@@ -277,12 +277,13 @@
 				</h:form>
 				<h:panelGroup id="container"
 					style="width: 55%;float: right;margin-right: 10px;">
-					<p:fieldset legend="Comments" toggleable="true" collapsed="true"
+					<p:fieldset legend="Comments" toggleable="true" 
 						rendered="#{jJTestcaseBean.renderCommentsPanel}">
 						<ui:include src="/pages/communication.xhtml">
 							<ui:param name="communicationList"
 								value="#{jJTestcaseBean.communicationMessages}" />
 							<ui:param name="field" value="#{jJTestcaseBean.testcase}" />
+							<ui:param name="cols" value="80"/>
 						</ui:include>
 					</p:fieldset>
 				</h:panelGroup>
@@ -518,6 +519,9 @@
 						</p:column>
 					</p:dataTable>
 				</h:form>
+			</p:layoutUnit>
+			
+			<p:layoutUnit position="south">
 			</p:layoutUnit>
 		</p:layout>
 

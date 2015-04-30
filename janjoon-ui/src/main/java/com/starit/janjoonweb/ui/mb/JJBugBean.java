@@ -272,7 +272,12 @@ public class JJBugBean {
 
 		} else if (project != null) {
 
-			if (!project.equals(LoginBean.getProject())) {
+			if (bugList == null) {
+				project = LoginBean.getProject();
+				bugList = new LazyBugDataModel(jJBugService, project,
+						LoginBean.getProduct(), LoginBean.getVersion());
+				initJJBugTable(LoginBean.getProduct(), LoginBean.getVersion());
+			} else if (!project.equals(LoginBean.getProject())) {
 				project = LoginBean.getProject();
 				bugList = new LazyBugDataModel(jJBugService, project,
 						LoginBean.getProduct(), LoginBean.getVersion());
@@ -560,6 +565,7 @@ public class JJBugBean {
 		String message = "message_successfully_updated";
 		updateJJBug(viewBug);
 		bugList = null;
+		project = null;
 		viewBug = jJBugService.findJJBug(viewBug.getId());
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug");

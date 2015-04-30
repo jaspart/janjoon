@@ -106,8 +106,6 @@ public class JJTestcaseexecutionServiceImpl implements
 	public Set<JJTestcaseexecution> getTestcaseexecutions(JJChapter chapter,
 			JJBuild build, boolean onlyActif, boolean sortedByUpdatedDate) {
 
-		Set<JJTestcaseexecution> testcaseexecutions = new HashSet<JJTestcaseexecution>();
-
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcaseexecution> criteriaQuery = criteriaBuilder
 				.createQuery(JJTestcaseexecution.class);
@@ -136,6 +134,7 @@ public class JJTestcaseexecutionServiceImpl implements
 			predicates.add(criteriaBuilder.in(path).value(subquery));
 
 		}
+		predicates.add(criteriaBuilder.equal(from.get("testcase").get("enabled"), true));
 
 		if (build != null) {
 
@@ -153,14 +152,8 @@ public class JJTestcaseexecutionServiceImpl implements
 		}
 
 		TypedQuery<JJTestcaseexecution> typedQuery = entityManager
-				.createQuery(select);
-		List<JJTestcaseexecution> result = typedQuery.getResultList();
-
-		for (JJTestcaseexecution testcaseexecution : result) {
-
-			testcaseexecutions.add(testcaseexecution);
-		}
-		return testcaseexecutions;
+				.createQuery(select);	
+		return new HashSet<JJTestcaseexecution>(typedQuery.getResultList());
 
 	}
 

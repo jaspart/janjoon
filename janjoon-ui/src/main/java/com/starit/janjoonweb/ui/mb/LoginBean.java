@@ -542,7 +542,9 @@ public class LoginBean implements Serializable {
 				.getRequestContextPath();
 		String view = viewId.replace(path, "");
 		view = view.replace("/pages/", "");
-		view = view.replace(".jsf?faces-redirect=true", "");
+		if(view.indexOf(".jsf") != -1)
+		view=view.substring(0, view.indexOf(".jsf"));
+		view = view.replace(".jsf?faces-redirect=true", "");		
 		view = view.replace(".jsf", "");
 		view = view.replace(".xhtml", "");
 
@@ -556,7 +558,13 @@ public class LoginBean implements Serializable {
 		case "specifications":
 			menuIndex = 2;
 			break;
+		case "requirement":
+			menuIndex = 2;
+			break;
 		case "bugs":
+			menuIndex = 3;
+			break;
+		case "bug":
 			menuIndex = 3;
 			break;
 		case "development":
@@ -572,17 +580,17 @@ public class LoginBean implements Serializable {
 			menuIndex = 7;
 			break;
 		case "stats":
-			menuIndex = 8;
+			menuIndex = 6;
 			break;
 		case "administration":
-			menuIndex = 9;
+			menuIndex = 7;
 			break;
 
 		default:
 			menuIndex = 0;
 			break;
 		}
-		// menuIndex++;
+	
 
 	}
 

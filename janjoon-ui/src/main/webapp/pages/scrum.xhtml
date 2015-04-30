@@ -184,7 +184,7 @@
 										<p:graphicImage title="TestCase"
 											rendered="#{todo.bug == null and todo.requirement == null and todo.testcase != null}"
 											library="images" name="test.ico" width="16" height="16" />
-										<h:outputText value="#{todo.name}" />
+										<h:outputText value="#{jJTaskBean.getDialogHeader(todo)}" />
 									</p:column>
 
 									<p:column style="width:10px" headerText="W">
@@ -247,7 +247,7 @@
 											<p:graphicImage
 												rendered="#{prog.bug == null and prog.requirement == null and prog.testcase != null}"
 												library="images" name="test.ico" width="16" height="16" />
-											<h:outputText value="#{prog.name}" />
+											<h:outputText value="#{jJTaskBean.getDialogHeader(prog)}" />
 										</p:column>
 
 										<p:column style="width:30px" headerText="Who">
@@ -298,7 +298,7 @@
 												rendered="#{done.bug == null and done.requirement == null and done.testcase != null}"
 												library="images" name="test.ico" width="16" height="16" />
 
-											<h:outputText value="#{done.name}" />
+											<h:outputText value="#{jJTaskBean.getDialogHeader(done)}"  />
 										</p:column>
 
 										<p:column style="width:10px" headerText="Diff">

@@ -170,8 +170,7 @@ public class JJTestcaseexecutionBean {
 	}
 
 	public Set<JJTestcaseexecution> getTestcaseexecutions() {
-		Set<JJTestcaseexecution> testcaseexecutions = new HashSet<JJTestcaseexecution>();
-
+		
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJBuildBean jJBuildBean = (JJBuildBean) session
@@ -180,7 +179,7 @@ public class JJTestcaseexecutionBean {
 		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
 				.getAttribute("jJTestcaseBean");
 
-		return testcaseexecutions = jJTestcaseexecutionService
+		return jJTestcaseexecutionService
 				.getTestcaseexecutions(jJTestcaseBean.getChapter(),
 						jJBuildBean.getBuild(), true, true);
 	}

@@ -4485,6 +4485,8 @@ public class JJRequirementBean {
 	}
 
 	public void reloadPage() {
+		
+		filterButton=null;
 		loadData();
 		closeDialog(false, true);
 		// oncomplete="PF('blockUIWidget').unblock();"
