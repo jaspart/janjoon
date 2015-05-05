@@ -40,8 +40,11 @@
 		<aop:include name="appMBLogger" />
 	</aop:aspectj-autoproxy>
 
+
+	<bean class="com.starit.janjoonweb.ui.mb.util.WorkFlowsActions" id="workFlowActions" />
 	<bean class="com.starit.janjoonweb.domain.reference.ApplicationLogger"
 		id="appLogger" />
-	<bean class="com.starit.janjoonweb.ui.mb.util.AppLogger" id="appMBLogger" />
+	<bean class="com.starit.janjoonweb.ui.mb.util.AppLogger" id="appMBLogger" />	
+	
 
 </beans>

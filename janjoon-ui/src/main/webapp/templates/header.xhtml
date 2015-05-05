@@ -12,8 +12,7 @@
 	<f:event listener="#{loginBean.loadingMain}" type="preRenderView" />
 
 	<h:form id="headerForm">
-
-<!-- 		<p:growl id="growlHeader" showDetail="true" life="1500" /> -->
+	<p:remoteCommand name="updateCommunicationButton" update=":messageCreationForm communicationButton"/>
 		<h:panelGrid id="panelHeader" columns="#{loginBean.columns}"
 			cellpadding="2" style="background-color:white;width:100%;">
 

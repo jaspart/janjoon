@@ -82,6 +82,9 @@ public class ConfigListener implements ServletContextListener {
 	@Autowired
 	JJPhaseService jJPhaseService;
 
+	@Autowired
+	private JJWorkflowService jJWorkflowService;
+
 	public void setjJPhaseService(JJPhaseService jJPhaseService) {
 		this.jJPhaseService = jJPhaseService;
 	}
@@ -162,6 +165,10 @@ public class ConfigListener implements ServletContextListener {
 
 	public void setjJProfileService(JJProfileService jJProfileService) {
 		this.jJProfileService = jJProfileService;
+	}
+
+	public void setjJWorkflowService(JJWorkflowService jJWorkflowService) {
+		this.jJWorkflowService = jJWorkflowService;
 	}
 
 	@Override
@@ -245,6 +252,7 @@ public class ConfigListener implements ServletContextListener {
 		// }
 		// }
 		//
+
 		if (jJImportanceService.findAllJJImportances().isEmpty()) {
 			String[] names = { "High", "Medium", "Low" };
 			Integer i = 3;
@@ -455,6 +463,67 @@ public class ConfigListener implements ServletContextListener {
 
 				}
 			}
+		}
+		
+		if(jJStatusService.getOneStatus("Any", "*", true) == null)			
+		{
+			JJStatus status = new JJStatus();
+			status.setObjet("*");
+			status.setName("Any");
+			status.setCreationDate(new Date());
+			status.setDescription("A JJStatus defined as " + "Any");
+			status.setEnabled(true);
+			jJStatusService.saveJJStatus(status);
+		}
+		// initBasiqueWorkFlows
+		if (jJWorkflowService.findAllJJWorkflows().isEmpty()) {
+
+			JJWorkflow workFlow = new JJWorkflow();
+			workFlow.setCreationDate(new Date());
+			workFlow.setEnabled(true);
+			workFlow.setActionWorkflow("createMessageWorkFlow");
+			workFlow.setName(workFlow.getActionWorkflow());
+			workFlow.setDescription(workFlow.getActionWorkflow());
+			workFlow.setObjet("Bug");
+			workFlow.setSource(jJStatusService.getOneStatus("Any", "*", true));
+			workFlow.setTarget(jJStatusService.getOneStatus("Any", "*", true));
+			jJWorkflowService.saveJJWorkflow(workFlow);
+
+			workFlow = new JJWorkflow();
+			workFlow.setCreationDate(new Date());
+			workFlow.setEnabled(true);
+			workFlow.setActionWorkflow("createMessageWorkFlow");
+			workFlow.setName(workFlow.getActionWorkflow());
+			workFlow.setDescription(workFlow.getActionWorkflow());
+			workFlow.setObjet("Requirement");
+			workFlow.setSource(jJStatusService.getOneStatus("Any", "*", true));
+			workFlow.setTarget(jJStatusService.getOneStatus("Any", "*", true));
+			jJWorkflowService.saveJJWorkflow(workFlow);
+
+			workFlow = new JJWorkflow();
+			workFlow.setCreationDate(new Date());
+			workFlow.setEnabled(true);
+			workFlow.setActionWorkflow("setRequirementToREALEASEDWorkFlow");
+			workFlow.setName(workFlow.getActionWorkflow());
+			workFlow.setDescription(workFlow.getActionWorkflow());
+			workFlow.setObjet("Task");
+			workFlow.setSource(jJStatusService.getOneStatus("Any", "*", true));
+			workFlow.setTarget(jJStatusService.getOneStatus("IN PROGRESS",
+					"task", true));
+			jJWorkflowService.saveJJWorkflow(workFlow);
+
+			workFlow = new JJWorkflow();
+			workFlow.setCreationDate(new Date());
+			workFlow.setEnabled(true);
+			workFlow.setActionWorkflow("sendMailWorkFlow");
+			workFlow.setName(workFlow.getActionWorkflow());
+			workFlow.setDescription(workFlow.getActionWorkflow());
+			workFlow.setObjet("Task");
+			workFlow.setSource(jJStatusService.getOneStatus("Any", "*", true));
+			workFlow.setTarget(jJStatusService.getOneStatus("Done", "task",
+					true));
+			jJWorkflowService.saveJJWorkflow(workFlow);
+
 		}
 
 		if (jJPhaseService.findAllJJPhases().isEmpty()) {

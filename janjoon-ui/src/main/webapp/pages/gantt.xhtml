@@ -146,6 +146,9 @@
 												<f:setPropertyActionListener target="#{jJTaskBean.mode}"
 													value="planning" />
 											</p:menuitem>
+											<p:menuitem id="copyButton" icon="ui-icon-copy" update="viewTaskButton"
+												action="#{jJTaskBean.copyName(taskData.task)}"
+												value="Copy" title="Copy"/>
 										</p:splitButton>
 									</p:column>
 

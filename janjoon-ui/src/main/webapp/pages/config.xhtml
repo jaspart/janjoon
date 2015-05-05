@@ -47,14 +47,6 @@
 						<h:outputText value="#{messages.admin_config_table_action_title}" />
 					</f:facet>
 
-					<!-- 					<p:splitButton id="viewButton" icon="ui-icon-zoomin" -->
-					<!-- 						update=":tabview:viewForm:viewPanelGrid" -->
-					<!-- 						oncomplete="PF('viewDialogWidget').show()" -->
-					<!-- 						value="#{messages.label_view}"> -->
-					<!-- 						<f:setPropertyActionListener value="#{conf}" -->
-					<!-- 							target="#{jJConfigurationBean.JJConfiguration_}" /> -->
-
-
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
 						update=":tabview:createForm:createPanelGrid :tabview:createDialog"
 						action="#{jJConfigurationBean.onEdit}" resetValues="true"
@@ -165,22 +157,6 @@
 							onclick="PF('createDialogWidget').hide()" type="button" />
 					</f:facet>
 				</p:panel>
-			</h:form>
-		</p:outputPanel>
-	</p:dialog>
-
-	<p:dialog id="viewDialog" header="#{messages.admin_config_view_title}"
-		modal="true" widgetVar="viewDialogWidget" dynamic="true"
-		resizable="true" maximizable="true" showEffect="fade"
-		hideEffect="explode">
-		<p:outputPanel id="viewPanel">
-			<h:form id="viewForm" enctype="multipart/form-data">
-				<h:panelGrid id="viewPanelGrid" columns="2"
-					binding="#{jJConfigurationBean.viewPanel}" styleClass="dialog"
-					columnClasses="col1,col2" />
-				<p:commandButton id="viewCloseButton"
-					value="#{messages.admin_config_view_close_button}"
-					onclick="PF('viewDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>

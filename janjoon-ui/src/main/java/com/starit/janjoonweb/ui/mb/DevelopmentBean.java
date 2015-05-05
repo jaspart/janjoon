@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.net.ssl.SSLHandshakeException;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
@@ -63,9 +65,9 @@ public class DevelopmentBean implements Serializable {
 
 	@Autowired
 	private JJStatusService jJStatusService;
-	
+
 	private JJConfigurationService jJConfigurationService;
-	
+
 	public void setjJConfigurationService(
 			JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
@@ -128,28 +130,28 @@ public class DevelopmentBean implements Serializable {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		JJConfigurationBean configurationBean=(JJConfigurationBean)session.getAttribute("jJConfigurationBean");
-		if(configurationBean == null)
-			configurationBean=new JJConfigurationBean();
-		jJConfigurationService=configurationBean.getJjConfigurationService();
+		JJConfigurationBean configurationBean = (JJConfigurationBean) session
+				.getAttribute("jJConfigurationBean");
+		if (configurationBean == null)
+			configurationBean = new JJConfigurationBean();
+		jJConfigurationService = configurationBean.getJjConfigurationService();
 		init = false;
 		initJJDevlopment();
 	}
 
 	public DevelopmentBean(DevelopmentBean devBean) {
-		
-		
-		if(jJTaskBean == null)
-		{
-			HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-					.getExternalContext().getSession(false);
-			jJTaskBean=(JJTaskBean) session.getAttribute("jJTaskBean");
-			if(jJTaskBean == null)
-				jJTaskBean =new JJTaskBean();
-		}		
+
+		if (jJTaskBean == null) {
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+			jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
+			if (jJTaskBean == null)
+				jJTaskBean = new JJTaskBean();
+		}
 
 		init = false;
-		this.jJConfigurationService=devBean.jJConfigurationService;
+		this.jJConfigurationService = devBean.jJConfigurationService;
 		this.jJStatusService = devBean.jJStatusService;
 		this.jJTaskService = devBean.jJTaskService;
 		this.jJMessageService = devBean.jJMessageService;
@@ -158,23 +160,22 @@ public class DevelopmentBean implements Serializable {
 	public void initJJDevlopment() throws FileNotFoundException, IOException {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);		
-		
-		if(jJTaskBean == null)
-			jJTaskBean=(JJTaskBean) session.getAttribute("jJTaskBean");
-		if(jJTaskBean == null)
-			jJTaskBean=new JJTaskBean();
-		
-		contact = ((LoginBean) session.getAttribute("loginBean")).getContact();		
-		
-		init = true;		
-		version = LoginBean.getVersion();		
+				.getExternalContext().getSession(false);
+
+		if (jJTaskBean == null)
+			jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
+		if (jJTaskBean == null)
+			jJTaskBean = new JJTaskBean();
+
+		contact = ((LoginBean) session.getAttribute("loginBean")).getContact();
+
+		init = true;
+		version = LoginBean.getVersion();
 		product = LoginBean.getProduct();
 		project = LoginBean.getProject();
 
-
-
-		configuration = jJConfigurationService.getConfigurations("ConfigurationManager", "git", true).get(0);
+		configuration = jJConfigurationService.getConfigurations(
+				"ConfigurationManager", "git", true).get(0);
 
 		if (getConfigManager() != null && version != null && product != null) {
 
@@ -220,12 +221,12 @@ public class DevelopmentBean implements Serializable {
 	public void reloadRepository() throws FileNotFoundException, IOException {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);		
+				.getExternalContext().getSession(false);
 
 		if (!(product == LoginBean.getProduct() && version == LoginBean
 				.getVersion())) {
-			
-					version = LoginBean.getVersion();			
+
+			version = LoginBean.getVersion();
 
 			product = LoginBean.getProduct();
 			if (version != null && product != null) {
@@ -250,7 +251,7 @@ public class DevelopmentBean implements Serializable {
 
 			}
 		} else {
-			
+
 			if (project != LoginBean.getProject()) {
 				DevelopmentBean jJDevelopment = (DevelopmentBean) session
 						.getAttribute("jJDevelopment");
@@ -273,37 +274,51 @@ public class DevelopmentBean implements Serializable {
 
 		if (configuration.getParam().equalsIgnoreCase("git") && product != null
 				&& version != null) {
-			
-			HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-					.getExternalContext().getSession(false);
-			
+
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+
 			String url = configuration.getVal()
 					+ product.getName().replace(" ", "-") + ".git";
 			if (testUrl(url)) {
 				try {
-					configManager = new GitConfigManager(1, contact.getName(),(String) session.getAttribute("password"));
-					String path = System.getProperty("user.home") + File.separator+"git"+File.separator+contact.getName()+File.separator;
+					configManager = new GitConfigManager(1, contact.getName(),
+							(String) session.getAttribute("password"));
+					String path = System.getProperty("user.home")
+							+ File.separator + "git" + File.separator
+							+ contact.getName() + File.separator;
 
 					path = configManager.cloneRemoteRepository(url,
 							product.getName(), path);
 					if (path != null
 							&& !path.equalsIgnoreCase("InvalidRemoteException")
 							&& !path.equalsIgnoreCase("TransportException")) {
-						configManager = new GitConfigManager(url, path, contact.getName(),(String)session.getAttribute("password"));
+						configManager = new GitConfigManager(url, path,
+								contact.getName(),
+								(String) session.getAttribute("password"));
 
 					} else if (path == null) {
-						path = System.getProperty("user.home") + File.separator+"git"+File.separator+contact.getName()+File.separator
-								+ product.getName() + File.separator;
-						configManager = new GitConfigManager(url, path,contact.getName(),(String) session.getAttribute("password"));
+						path = System.getProperty("user.home") + File.separator
+								+ "git" + File.separator + contact.getName()
+								+ File.separator + product.getName()
+								+ File.separator;
+						configManager = new GitConfigManager(url, path,
+								contact.getName(),
+								(String) session.getAttribute("password"));
 
 					} else {
 						configManager = null;
 
 					}
 				} catch (JGitInternalException e) {
-					String path = System.getProperty("user.home") + File.separator+"git"+File.separator+contact.getName()+File.separator
+					String path = System.getProperty("user.home")
+							+ File.separator + "git" + File.separator
+							+ contact.getName() + File.separator
 							+ product.getName() + File.separator;
-					configManager =  new GitConfigManager(url, path,contact.getName(),(String) session.getAttribute("password"));
+					configManager = new GitConfigManager(url, path,
+							contact.getName(),
+							(String) session.getAttribute("password"));
 
 				}
 			} else {
@@ -525,7 +540,7 @@ public class DevelopmentBean implements Serializable {
 		}
 		task = jJTaskService.findJJTask(task.getId());
 		if (check) {
-			
+
 			task.setEndDateReal(new Date());
 			task.setCompleted(true);
 			status = jJStatusService.getOneStatus("DONE", "Task", true);
@@ -539,7 +554,7 @@ public class DevelopmentBean implements Serializable {
 		message.setContact(contact);
 		message.setCompany(contact.getCompany());
 		message.setProject(project);
-		message.setVersioning(version);		
+		message.setVersioning(version);
 		message.setEnabled(true);
 		message.setTask(task);
 		message.setMessage(comment);
@@ -547,39 +562,39 @@ public class DevelopmentBean implements Serializable {
 				+ task.getDescription());
 		message.setName("Message For" + task.getName());
 		saveJJMessage(message);
-		
-		if (task.getStartDateReal() == null)
-		{
+
+		if (task.getStartDateReal() == null) {
 			task.setStartDateReal(new Date());
 		}
-			
 
 		if (!task.getCompleted()) {
-			status = jJStatusService
-					.getOneStatus("IN PROGRESS", "Task", true);
+			status = jJStatusService.getOneStatus("IN PROGRESS", "Task", true);
 			task.setStatus(status);
 		}
 
-		jJTaskBean.saveJJTask(task,false);
-		if(task.getSprint() != null && LoginBean.findBean("jJSprintBean") != null)
-		{		
-			JJSprintBean jJSprintBean = (JJSprintBean) LoginBean.findBean("jJSprintBean");
-			if(jJSprintBean.contains(task.getSprint().getId()) != -1)
-			{
+		jJTaskBean.saveJJTask(task, false);
+		if (task.getSprint() != null
+				&& LoginBean.findBean("jJSprintBean") != null) {
+			JJSprintBean jJSprintBean = (JJSprintBean) LoginBean
+					.findBean("jJSprintBean");
+			if (jJSprintBean.contains(task.getSprint().getId()) != -1) {
 				SprintUtil s = SprintUtil.getSprintUtil(task.getSprint()
 						.getId(), jJSprintBean.getSprintList());
 				if (s != null) {
-					s = new SprintUtil(jJSprintBean.getJJSprintService().findJJSprint(task
-							.getSprint().getId()),
-							jJTaskService.getSprintTasks(jJSprintBean.getJJSprintService()
-									.findJJSprint(task.getSprint().getId()),
-									LoginBean.getProduct()),jJSprintBean.getJJContactService());
+					s = new SprintUtil(jJSprintBean.getJJSprintService()
+							.findJJSprint(task.getSprint().getId()),
+							jJTaskService.getSprintTasks(
+									jJSprintBean.getJJSprintService()
+											.findJJSprint(
+													task.getSprint().getId()),
+									LoginBean.getProduct()),
+							jJSprintBean.getJJContactService());
 					// sprintUtil.setRenderTaskForm(false);
 					jJSprintBean.getSprintList().set(
 							jJSprintBean.contains(s.getSprint().getId()), s);
-					}
+				}
 			}
-			
+
 		}
 		FacesMessage growlMessage = null;
 
@@ -609,11 +624,11 @@ public class DevelopmentBean implements Serializable {
 	}
 
 	public void startTask() {
-		task.setStartDateReal(new Date());	
+		task.setStartDateReal(new Date());
 		jJTaskBean.updateTask(task, "dev");
-//		task=jJTaskService.findJJTask(task.getId());
-//		tasks = jJTaskService.getTasksByProduct(product, project);
-		
+		// task=jJTaskService.findJJTask(task.getId());
+		// tasks = jJTaskService.getTasksByProduct(product, project);
+
 	}
 
 	public void onSelectTree(NodeSelectEvent event) {
@@ -743,7 +758,7 @@ public class DevelopmentBean implements Serializable {
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('saveFileDialogWidget').hide()");
 		if (files.isEmpty())
-			context.update(":form :growlForm");		
+			context.update(":form :growlForm");
 		else
 			context.update(":form:tabView :growlForm");
 		fileIndex = -1;
@@ -907,10 +922,11 @@ public class DevelopmentBean implements Serializable {
 		}
 
 	}
-	public void saveJJMessage(JJMessage m)
-	{
-		JJContact contact=((LoginBean) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("loginBean")).getContact();
+
+	public void saveJJMessage(JJMessage m) {
+		JJContact contact = ((LoginBean) ((HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext().getSession(false))
+				.getAttribute("loginBean")).getContact();
 		m.setCreatedBy(contact);
 		m.setCreationDate(new Date());
 		jJMessageService.saveJJMessage(m);
@@ -920,7 +936,7 @@ public class DevelopmentBean implements Serializable {
 		selectedTree = null;
 	}
 
-	public boolean testUrl(String urlPath)  {
+	public boolean testUrl(String urlPath) {
 
 		URL url;
 		try {
@@ -928,15 +944,21 @@ public class DevelopmentBean implements Serializable {
 			HttpURLConnection huc;
 			huc = (HttpURLConnection) url.openConnection();
 			huc.setRequestMethod("HEAD");
-			
-			int responseCode = huc.getResponseCode();
 
-			if (responseCode != 404) {
+			try {
 
-				logger.info("Valid URL");
-				return true;
-			} else {
-				logger.error("BAD URL");
+				int responseCode = huc.getResponseCode();
+
+				if (responseCode != 404) {
+
+					logger.info("Valid URL");
+					return true;
+				} else {
+					logger.error("BAD URL");
+					return false;
+				}
+			} catch (SSLHandshakeException e) {
+				System.err.println(e.getMessage());
 				return false;
 			}
 		} catch (MalformedURLException e) {

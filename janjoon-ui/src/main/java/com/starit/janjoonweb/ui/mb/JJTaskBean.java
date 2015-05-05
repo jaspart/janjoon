@@ -1,5 +1,8 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
 import java.io.StringReader;
 import java.text.DateFormat;
@@ -89,7 +92,6 @@ public class JJTaskBean {
 
 	@Autowired
 	private JJChapterService jJChapterService;
-	private MailingService mailingService;
 
 	private TaskData selectedTaskData;
 
@@ -116,10 +118,6 @@ public class JJTaskBean {
 
 	public void setjJCategoryService(JJCategoryService jJCategoryService) {
 		this.jJCategoryService = jJCategoryService;
-	}
-
-	public void setMailingService(MailingService mailingService) {
-		this.mailingService = mailingService;
 	}
 
 	private List<TaskData> tasksData;
@@ -1995,51 +1993,6 @@ public class JJTaskBean {
 		if (update) {
 			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 					.getContact();
-			// check_if_realendDate_not_null
-			if (ttt.getEndDateReal() != null) {
-				if (jJTaskService.findJJTask(ttt.getId()).getEndDateReal() == null) {
-					if (mailingService == null)
-						mailingService = new MailingService();
-
-					StringReader description = null;
-					if (ttt.getRequirement() != null)
-						description = new StringReader(ttt.getRequirement()
-								.getDescription());
-					else if (ttt.getBug() != null)
-						description = new StringReader(ttt.getBug()
-								.getDescription());
-					else if (ttt.getTestcase() != null)
-						description = new StringReader(ttt.getTestcase()
-								.getDescription());
-
-					String subject = "";
-					List arrList = null;
-					try {
-						arrList = HTMLWorker.parseToList(description, null);
-						for (int i = 0; i < arrList.size(); ++i) {
-							subject = subject
-									+ ((Element) arrList.get(i)).toString();
-						}
-					} catch (Exception e) {
-						subject = description.toString();
-					}
-
-					subject = subject.replace("[", " ").replace("]", "");
-
-					List<JJContact> contacts = jJPermissionService
-							.areAuthorized(contact.getCompany(), null,
-									ttt.getProject(), ttt.getProduct(),
-									"sprintContact");
-					if (ttt.getProduct() != null
-							&& !contacts
-									.contains(ttt.getProduct().getManager()))
-						contacts.add(ttt.getProduct().getManager());
-					mailingService.sendMail(ttt.getProject().getManager()
-							.getEmail(), contacts, ttt, subject);
-
-				}
-			}
-
 			ttt.setUpdatedBy(contact);
 			ttt.setUpdatedDate(new Date());
 			jJTaskService.updateJJTask(ttt);
@@ -2053,19 +2006,7 @@ public class JJTaskBean {
 		}
 
 		ttt = jJTaskService.findJJTask(ttt.getId());
-
-		if (ttt.getRequirement() != null) {
-			if (((RequirementBean) LoginBean.findBean("requirementBean")) != null)
-				((RequirementBean) LoginBean.findBean("requirementBean"))
-						.setRootNode(null);
-			JJRequirementBean jJRequirementBean = (JJRequirementBean) LoginBean
-					.findBean("jJRequirementBean");
-			jJRequirementBean.updateDataTable(ttt.getRequirement(),
-					JJRequirementBean.UPDATE_OPERATION, false);
-
 		}
-
-	}
 
 	public void copyObjet() {
 
@@ -2341,6 +2282,13 @@ public class JJTaskBean {
 
 		setJJTask_(null);
 		setCreateDialogVisible(false);
+	}
+	
+	public void copyName(JJTask	ttt)
+	{		
+		StringSelection stringSelection = new StringSelection (this.getDialogHeader(ttt));
+		Clipboard clpbrd = Toolkit.getDefaultToolkit ().getSystemClipboard ();
+		clpbrd.setContents (stringSelection, null);
 	}
 
 	public void deleteTaskData() {
@@ -3030,9 +2978,9 @@ public class JJTaskBean {
 					if (!events.isEmpty()) {
 						group = events.get(events.size() - 1).getGroup();
 						k = (int) group.trim().charAt(25);
-						k++;						
+						k++;
 					}
-					
+
 				} else {
 					i = 0;
 					k = (int) group.trim().charAt(25);

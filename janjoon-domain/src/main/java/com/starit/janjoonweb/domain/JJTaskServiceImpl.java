@@ -311,9 +311,6 @@ public class JJTaskServiceImpl implements JJTaskService {
 		CriteriaQuery<JJTask> select = criteriaQuery.select(from);
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		
-		
-
 		if (requirement != null) {
 			predicates.add(criteriaBuilder.equal(from.get("requirement"),
 					requirement));
@@ -323,11 +320,11 @@ public class JJTaskServiceImpl implements JJTaskService {
 			predicates
 					.add(criteriaBuilder.equal(from.get("testcase"), testcase));
 		}
-		
+
 		if (bug != null) {
 			predicates.add(criteriaBuilder.equal(from.get("bug"), bug));
 		}
-		
+
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
@@ -352,7 +349,6 @@ public class JJTaskServiceImpl implements JJTaskService {
 		CriteriaQuery<JJTask> select = criteriaQuery.select(from);
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		
 		if (project != null) {
 			Path<Object> path = from.join("requirement").get("project");
 			predicates.add(criteriaBuilder.equal(path, project));
@@ -365,11 +361,10 @@ public class JJTaskServiceImpl implements JJTaskService {
 		if (sprint != null) {
 			predicates.add(criteriaBuilder.equal(from.get("sprint"), status));
 		}
-		
+
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
-
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
@@ -432,9 +427,11 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 			predicates.add(criteriaBuilder.equal(from.get("assignedTo"),
 					contact));
-			predicates.add(criteriaBuilder.isNull(from.get("endDateReal")));			
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));			
-			
+			predicates.add(criteriaBuilder.isNull(from.get("endDateReal")));
+			predicates.add(criteriaBuilder.notEqual(
+					criteriaBuilder.lower(from.get("status").<String> get(
+							"name")), "DONE".toLowerCase()));
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 			select.where(criteriaBuilder.and(predicates
 					.toArray(new Predicate[] {})));

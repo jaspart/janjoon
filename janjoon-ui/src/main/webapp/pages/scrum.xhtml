@@ -6,10 +6,12 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:p="http://primefaces.org/ui">
 
-<ui:composition>	
+<ui:composition>
 	<p:tabView id="SprintTabView" dynamic="true" cache="true"
-		widgetVar="SprintTab" value="#{jJSprintBean.sprintList}" onTabChange="tabChangeHelper([{name: 'activeScrumIndex', value: index}])"
-		var="jjsprint" style="width:100%;" activeIndex="#{jJSprintBean.activeTabSprintIndex}">
+		widgetVar="SprintTab" value="#{jJSprintBean.sprintList}"
+		onTabChange="tabChangeHelper([{name: 'activeScrumIndex', value: index}])"
+		var="jjsprint" style="width:100%;"
+		activeIndex="#{jJSprintBean.activeTabSprintIndex}">
 		<p:tab style="width:100%;"
 			disabled="#{jjsprint.render and !loginBean.authorisationService.wProject}">
 			<f:facet name="title">
@@ -134,7 +136,8 @@
 						</p:row>
 					</f:facet>
 				</p:panelGrid>
-				<p:panelGrid id="sprintChartPanelGrid" rendered="#{jjsprint.chartModel != null}"
+				<p:panelGrid id="sprintChartPanelGrid"
+					rendered="#{jjsprint.chartModel != null}"
 					style="width:50% !important;min-width:200px !important;">
 					<f:facet name="header">
 						<p:row>
@@ -195,7 +198,8 @@
 											<h:outputText value="#{messages.bug_table_action_title}" />
 										</f:facet>
 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-											update=":viewTaskForm :viewTaskDialog" immediate="true" resetValues="true"
+											update=":viewTaskForm :viewTaskDialog" immediate="true"
+											resetValues="true"
 											title="#{messages.project_gantt_table_actions_viewMenuItem}"
 											action="#{jJTaskBean.initiateReqTreeNode}">
 											<f:setPropertyActionListener value="#{todo}"
@@ -211,6 +215,9 @@
 												<f:setPropertyActionListener target="#{jJTaskBean.mode}"
 													value="scrum" />
 											</p:menuitem>
+											<p:menuitem id="copyButton" icon="ui-icon-copy"
+												action="#{jJTaskBean.copyName(todo)}" value="Copy"
+												title="Copy" />
 										</p:splitButton>
 									</p:column>
 								</p:dataTable>
@@ -258,7 +265,8 @@
 												<h:outputText value="#{messages.bug_table_action_title}" />
 											</f:facet>
 											<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-												update=":viewTaskForm :viewTaskDialog" immediate="true" resetValues="true"
+												update=":viewTaskForm :viewTaskDialog" immediate="true"
+												resetValues="true"
 												action="#{jJTaskBean.initiateReqTreeNode}">
 												<f:setPropertyActionListener value="#{prog}"
 													target="#{jJTaskBean.task}" />
@@ -271,6 +279,9 @@
 													<f:setPropertyActionListener target="#{jJTaskBean.mode}"
 														value="scrum" />
 												</p:menuitem>
+												<p:menuitem id="copyButton" icon="ui-icon-copy"
+													action="#{jJTaskBean.copyName(prog)}" value="Copy"
+													title="Copy" />
 											</p:splitButton>
 										</p:column>
 									</p:dataTable>
@@ -298,7 +309,7 @@
 												rendered="#{done.bug == null and done.requirement == null and done.testcase != null}"
 												library="images" name="test.ico" width="16" height="16" />
 
-											<h:outputText value="#{jJTaskBean.getDialogHeader(done)}"  />
+											<h:outputText value="#{jJTaskBean.getDialogHeader(done)}" />
 										</p:column>
 
 										<p:column style="width:10px" headerText="Diff">
@@ -310,7 +321,8 @@
 												<h:outputText value="#{messages.bug_table_action_title}" />
 											</f:facet>
 											<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-												update=":viewTaskForm :viewTaskDialog" immediate="true" resetValues="true"
+												update=":viewTaskForm :viewTaskDialog" immediate="true"
+												resetValues="true"
 												action="#{jJTaskBean.initiateReqTreeNode}">
 												<f:setPropertyActionListener value="#{done}"
 													target="#{jJTaskBean.task}" />
@@ -323,7 +335,9 @@
 													<f:setPropertyActionListener target="#{jJTaskBean.mode}"
 														value="scrum" />
 												</p:menuitem>
-
+												<p:menuitem id="copyButton" icon="ui-icon-copy"
+													action="#{jJTaskBean.copyName(done)}" value="Copy"
+													title="Copy" />
 											</p:splitButton>
 										</p:column>
 									</p:dataTable>

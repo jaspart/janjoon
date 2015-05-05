@@ -128,7 +128,7 @@ public class ApplicationLogger {
 	//
 	// }
 
-	@After("execution(* com.starit.janjoonweb.domain.JJTaskService.updateJJTask(..))")
+	//@After("execution(* com.starit.janjoonweb.domain.JJTaskService.updateJJTask(..))")
 	public void startRequirement(JoinPoint joinPoint) {
 		// JJTask task=(JJTask) joinPoint.getThis();
 

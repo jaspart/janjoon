@@ -388,6 +388,7 @@ public class LoginBean implements Serializable {
 
 	public void setMessageCount(Integer messageCount) {
 		this.messageCount = messageCount;
+		RequestContext.getCurrentInstance().execute("updateCommunicationButton()");
 	}
 
 	public String logout() {

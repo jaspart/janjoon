@@ -687,7 +687,7 @@
 					</ui:include>
 					<p:commandButton id="saveBug" value="#{messages.label_save}"
 						action="#{jJBugBean.saveBug}"
-						update=":runForm:teststepTabView :messageCreationForm :headerForm:communicationButton :runForm:testcaseexecutionStatus :runForm:validateButton  :growlForm"
+						update=":runForm:teststepTabView  :runForm:testcaseexecutionStatus :runForm:validateButton  :growlForm"
 						oncomplete="PF('bugTestDialogWidget').hide()" />
 				</h:form>
 			</p:outputPanel>

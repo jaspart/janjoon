@@ -890,29 +890,8 @@ privileged aspect JJWorkflowBean_Roo_ManagedBean {
             }
         }
         return suggestions;
-    }
-    
-    public List<JJStatus> JJWorkflowBean.completeSource(String query) {
-        List<JJStatus> suggestions = new ArrayList<JJStatus>();
-        for (JJStatus jJStatus : jJStatusService.findAllJJStatuses()) {
-            String jJStatusStr = String.valueOf(jJStatus.getName() +  " "  + jJStatus.getDescription() +  " "  + jJStatus.getCreationDate() +  " "  + jJStatus.getUpdatedDate());
-            if (jJStatusStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJStatus);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<JJStatus> JJWorkflowBean.completeTarget(String query) {
-        List<JJStatus> suggestions = new ArrayList<JJStatus>();
-        for (JJStatus jJStatus : jJStatusService.findAllJJStatuses()) {
-            String jJStatusStr = String.valueOf(jJStatus.getName() +  " "  + jJStatus.getDescription() +  " "  + jJStatus.getCreationDate() +  " "  + jJStatus.getUpdatedDate());
-            if (jJStatusStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJStatus);
-            }
-        }
-        return suggestions;
-    }
+    }   
+
     
     public List<JJContact> JJWorkflowBean.completeActor(String query) {
         List<JJContact> suggestions = new ArrayList<JJContact>();
@@ -947,26 +926,8 @@ privileged aspect JJWorkflowBean_Roo_ManagedBean {
         JJWorkflow_ = new JJWorkflow();
         createDialogVisible = true;
         return "JJWorkflow_";
-    }
+    }  
     
-    public String JJWorkflowBean.persist() {
-        String message = "";
-        if (JJWorkflow_.getId() != null) {
-            jJWorkflowService.updateJJWorkflow(JJWorkflow_);
-            message = "message_successfully_updated";
-        } else {
-            jJWorkflowService.saveJJWorkflow(JJWorkflow_);
-            message = "message_successfully_created";
-        }
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("createDialogWidget.hide()");
-        context.execute("editDialogWidget.hide()");
-        
-        FacesMessage facesMessage = MessageFactory.getMessage(message, "JJWorkflow");
-        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-        reset();
-        return findAllJJWorkflows();
-    }
     
     public String JJWorkflowBean.delete() {
         jJWorkflowService.deleteJJWorkflow(JJWorkflow_);
@@ -974,12 +935,8 @@ privileged aspect JJWorkflowBean_Roo_ManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
         return findAllJJWorkflows();
-    }
+    }   
     
-    public void JJWorkflowBean.reset() {
-        JJWorkflow_ = null;
-        createDialogVisible = false;
-    }
     
     public void JJWorkflowBean.handleDialogClose(CloseEvent event) {
         reset();

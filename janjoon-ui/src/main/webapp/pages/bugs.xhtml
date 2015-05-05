@@ -241,7 +241,7 @@
 									onstart="PF('bugBlockUIWidget').block()"
 									oncomplete="PF('bugBlockUIWidget').unblock()"
 									value="#{messages.label_save}" action="#{jJBugBean.persistBug}"
-									update="createPanelGrid,:bugForm :growlForm,:messageCreationForm :headerForm:communicationButton" />
+									update="createPanelGrid,:bugForm :growlForm" />
 								<p:commandButton id="createCloseButton"
 									value="#{messages.label_close}"
 									onclick="PF('createDialogWidget').hide()" type="button" />
@@ -282,7 +282,7 @@
 							oncomplete="PF('bugBlockUIWidget').unblock()"
 							value="#{messages.bug_edit_save_button}"
 							action="#{jJBugBean.persistBug}"
-							update="createPanelGrid :bugForm :growlForm,:messageCreationForm :headerForm:communicationButton" />
+							update="createPanelGrid :bugForm :growlForm" />
 						<p:commandButton id="editCloseButton" immediate="true"
 							value="#{messages.bug_edit_close_button}"
 							onclick="PF('editDialogWidget').hide()" type="button" />
