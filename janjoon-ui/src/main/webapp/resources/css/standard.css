@@ -107,6 +107,10 @@ a:visited {
 	width: 75px;
 }
 
+.ui-tabs .ui-tabs-nav li {
+	margin: 0em 0em 0em 0em;
+}
+
 .ui-menu .ui-menuitem-link {
 	color: #2391B2;
 }
@@ -117,16 +121,16 @@ a:visited {
 }
 
 .ui-state-default {
-	padding-top: 1px !important;
+	padding-top: 0px !important;
 }
 
 .ui-state-hover {
-	border-top: 2px solid #0083D7 !important;
+	border-top: 1px solid #0083D7 !important;
 	padding-top: 0px !important;
 }
 
 .ui-state-active {
-	border-top: 2px solid #0072C6 !important;
+	border-top: 1px solid #0072C6 !important;
 	padding-top: 0px !important;
 }
 
