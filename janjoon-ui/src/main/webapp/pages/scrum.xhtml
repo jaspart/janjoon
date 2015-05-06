@@ -215,7 +215,7 @@
 												<f:setPropertyActionListener target="#{jJTaskBean.mode}"
 													value="scrum" />
 											</p:menuitem>
-											<p:menuitem id="copyButton" icon="ui-icon-copy"
+											<p:menuitem id="copyButton" icon="ui-icon-copy" update="viewTaskButton"
 												action="#{jJTaskBean.copyName(todo)}" value="Copy"
 												title="Copy" />
 										</p:splitButton>
@@ -279,7 +279,7 @@
 													<f:setPropertyActionListener target="#{jJTaskBean.mode}"
 														value="scrum" />
 												</p:menuitem>
-												<p:menuitem id="copyButton" icon="ui-icon-copy"
+												<p:menuitem id="copyButton" icon="ui-icon-copy" update="viewTaskButton"
 													action="#{jJTaskBean.copyName(prog)}" value="Copy"
 													title="Copy" />
 											</p:splitButton>
@@ -335,7 +335,7 @@
 													<f:setPropertyActionListener target="#{jJTaskBean.mode}"
 														value="scrum" />
 												</p:menuitem>
-												<p:menuitem id="copyButton" icon="ui-icon-copy"
+												<p:menuitem id="copyButton" icon="ui-icon-copy" update="viewTaskButton"
 													action="#{jJTaskBean.copyName(done)}" value="Copy"
 													title="Copy" />
 											</p:splitButton>

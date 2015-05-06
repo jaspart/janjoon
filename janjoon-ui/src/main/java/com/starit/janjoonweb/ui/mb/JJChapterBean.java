@@ -617,11 +617,14 @@ public class JJChapterBean {
 
 					for (int i = 0; i < arrList.size(); ++i) {
 						Element e = (Element) arrList.get(i);
-						if (((Chunk) e.getChunks().get(0)).getImage() != null) {
+						if (e.getChunks() != null
+								&& !e.getChunks().isEmpty()
+								&& ((Chunk) e.getChunks().get(0)).getImage() != null) {
 							Image img = ((Chunk) e.getChunks().get(0))
 									.getImage();
-							//img.setTop(paragraph.getTotalLeading() + 5);
-							//img.setBottom(img.getTop() + img.getHeight() + 5);
+							// img.setTop(paragraph.getTotalLeading() + 5);
+							// img.setBottom(img.getTop() + img.getHeight() +
+							// 5);
 							// img.setSpacingAfter(5);
 							// img.setSpacingBefore(5);
 							paragraph.add(img);
@@ -669,11 +672,12 @@ public class JJChapterBean {
 				.parseToList(strChapitre, style);
 		for (int i = 0; i < arrChapitre.size(); ++i) {
 			Element e = (Element) arrChapitre.get(i);
-			if (((Chunk) e.getChunks().get(0)).getImage() != null) {
+			if (e.getChunks() != null && !e.getChunks().isEmpty()
+					&& ((Chunk) e.getChunks().get(0)).getImage() != null) {
 
 				Image img = ((Chunk) e.getChunks().get(0)).getImage();
-				//img.setTop(paragraph.getTotalLeading() + 5);
-				//img.setBottom(img.getTop() + img.getHeight() + 5);
+				// img.setTop(paragraph.getTotalLeading() + 5);
+				// img.setBottom(img.getTop() + img.getHeight() + 5);
 				// img.setSpacingAfter(5);
 				// img.setSpacingBefore(5);
 				paragraph.add(img);
@@ -705,10 +709,12 @@ public class JJChapterBean {
 				for (int i = 0; i < arrList.size(); ++i) {
 
 					Element e = (Element) arrList.get(i);
-					if (((Chunk) e.getChunks().get(0)).getImage() != null) {
+					if (e.getChunks() != null
+							&& !e.getChunks().isEmpty()
+							&& ((Chunk) e.getChunks().get(0)).getImage() != null) {
 						Image img = ((Chunk) e.getChunks().get(0)).getImage();
-						//img.setTop(paragraph.getTotalLeading() + 5);
-						//img.setBottom(img.getTop() + img.getHeight() + 5);
+						// img.setTop(paragraph.getTotalLeading() + 5);
+						// img.setBottom(img.getTop() + img.getHeight() + 5);
 						// img.setSpacingAfter(5);
 						// img.setSpacingBefore(5);
 						paragraph.add(img);

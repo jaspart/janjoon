@@ -606,8 +606,7 @@ public class JJContactBean {
 
 	}
 
-	public String signUp() {
-		FacesMessage facesMessage = null;
+	public String signUp() {	
 
 		contactAdmin.setDescription("This contact is "
 				+ contactAdmin.getFirstname() + " " + contactAdmin.getName());
@@ -630,17 +629,11 @@ public class JJContactBean {
 			permission.setContact(contactAdmin);
 			permission.setProfile(customProfile);
 			permission.setEnabled(true);
-			jJPermissionService.saveJJPermission(permission);
-			facesMessage = MessageFactory.getMessage(
-					"message_successfully_created", FacesMessage.SEVERITY_INFO,
-					"Contact");
+			jJPermissionService.saveJJPermission(permission);			
 			return "success";
 
 		} else {
-
-			facesMessage = MessageFactory.getMessage(
-					"jjcontact_unsuccessfully_created",
-					FacesMessage.SEVERITY_ERROR, "Contact");
+			
 			contactAdmin.setEmail("");
 			contactAdmin.setPassword("");
 			return "fail";
