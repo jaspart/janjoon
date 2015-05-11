@@ -487,17 +487,16 @@ public class LoginBean implements Serializable {
 					jjProjectBean.setProject(contact.getLastProject());
 
 				jjProductBean.getProductList();
-				if (jjProductBean.getProductList().contains(
-						contact.getLastProduct()))
+				if (jjProductBean.getProductList().contains(contact.getLastProduct())) {
 					jjProductBean.setProduct(contact.getLastProduct());
+				}
 
 				jjVersionBean.getVersionList();
-				if (jjVersionBean.getVersionList().contains(
-						contact.getLastVersion()))
+				if (jjVersionBean.getVersionList().contains(contact.getLastVersion())) {
 					jjVersionBean.setVersion(contact.getLastVersion());
+				}
 
-				authorisationService = new AuthorisationService(session,
-						contact);
+				authorisationService = new AuthorisationService(session, contact);
 
 				facesMessage = MessageFactory.getMessage(
 						"login_welcome_message", FacesMessage.SEVERITY_INFO,

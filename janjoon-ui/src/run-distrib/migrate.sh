@@ -10,18 +10,17 @@ if [ $# -ne 4 ] && [ $# -ne 5 ]
 then
         echo "Error in arguments [previous_rev, next_rev, service_port] :"
         echo "Expected > ./migrate.sh 120 125 9898 urlpath (target_directory)"
-        echo "previous_rev may be equal to : actual"
         echo "urlpath : janjoon (prod), integ (integ), intern (starit)"
         exit 2
 else
-        PREVIOUS_BUILD=$1
-        if [ $PREVIOUS_BUILD=="actual" ]
-        then
+	PREVIOUS_BUILD=$1
+	if [ $PREVIOUS_BUILD=="actual" ]
+	then
                 PREVIOUS_BUILD="$(echo /home/jj_integ/lib/janjoon-ui-*.war | cut -f4 -d"-" | cut -f1 -d'.')"
-        fi
+	fi
         NEXT_BUILD=$2
-        APPLICATION_PORT=$3
-        URL_PATH=$4
+	APPLICATION_PORT=$3
+	URL_PATH=$4
         if [ -z "$5" ]
         then
                 DIRECTORY=${HOME}
@@ -30,24 +29,24 @@ else
         fi
         echo home = ${HOME}
         echo directory = $DIRECTORY
-        cd $DIRECTORY
-        $DIRECTORY/bin/stop.sh
-        rm -rf $DIRECTORY/bin/janjoon.pid
-        rm -rf $DIRECTORY/log/janjoon.log
-        rm -rf $DIRECTORY/save/$PREVIOUS_BUILD
-        mkdir $DIRECTORY/save/$PREVIOUS_BUILD
-        mv $DIRECTORY/bin $DIRECTORY/janjoon-ui $DIRECTORY/lib $DIRECTORY/log $DIRECTORY/license $DIRECTORY/upload $DIRECTORY/save/$PREVIOUS_BUILD/
-        sudo unzip $DIRECTORY/janjoon-ui-2.0-$NEXT_BUILD-distrib.zip -d $DIRECTORY/
-        sudo mv $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war.zip
-        sudo mkdir $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war
-        sudo unzip $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war.zip -d $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war/
-        cd $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war/
-        sudo ln -s ../../upload/images images
-        sudo chmod -R 777 $DIRECTORY/log
-        cd -
-        sudo sed -i 's/BUILD_NUMBER/'"$NEXT_BUILD"'/g' $DIRECTORY/bin/start.sh
-        sudo sed -i 's/9999/'"$APPLICATION_PORT"'/g' $DIRECTORY/bin/start.sh
-        sudo sed -i 's/PATH_URL/'"$URL_PATH"'/g' $DIRECTORY/bin/start.sh
-        sudo $DIRECTORY/bin/start.sh
-        echo "Migration done. Process re-starting !..."
+	cd $DIRECTORY
+	$DIRECTORY/bin/stop.sh
+	rm -rf $DIRECTORY/bin/janjoon.pid
+	rm -rf $DIRECTORY/log/janjoon.log
+	rm -rf $DIRECTORY/save/$PREVIOUS_BUILD
+	mkdir $DIRECTORY/save/$PREVIOUS_BUILD
+	mv $DIRECTORY/bin $DIRECTORY/janjoon-ui $DIRECTORY/lib $DIRECTORY/log $DIRECTORY/license $DIRECTORY/upload $DIRECTORY/save/$PREVIOUS_BUILD/
+	unzip $DIRECTORY/janjoon-ui-2.0-$NEXT_BUILD-distrib.zip -d $DIRECTORY/
+	mv $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war.zip
+	mkdir $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war
+	unzip $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war.zip -d $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war/
+	cd $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war/
+	ln -s ../../upload/images images
+	chmod -R 777 $DIRECTORY/log
+	cd -
+	sed -i 's/BUILD_NUMBER/'"$NEXT_BUILD"'/g' $DIRECTORY/bin/start.sh
+	sed -i 's/9999/'"$APPLICATION_PORT"'/g' $DIRECTORY/bin/start.sh
+	sed -i 's/PATH_URL/'"$URL_PATH"'/g' $DIRECTORY/bin/start.sh
+	$DIRECTORY/bin/start.sh
+	echo "Migration done. Process re-starting !..."
 fi
