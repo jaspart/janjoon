@@ -27,6 +27,9 @@ public class BuildWS {
 	@Autowired
 	private JJContactService jJContactService;
 	
+	@Autowired
+	private JJTaskService jJTaskService;
+	
 	
 	@Autowired 
 	private BCryptPasswordEncoder encoder;
@@ -58,6 +61,10 @@ public class BuildWS {
 
 	public void setjJVersionService(JJVersionService jJVersionService) {
 		this.jJVersionService = jJVersionService;
+	}
+
+	public void setjJTaskService(JJTaskService jJTaskService) {
+		this.jJTaskService = jJTaskService;
 	}
 
 	@POST

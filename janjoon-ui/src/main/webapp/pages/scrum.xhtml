@@ -215,8 +215,9 @@
 												<f:setPropertyActionListener target="#{jJTaskBean.mode}"
 													value="scrum" />
 											</p:menuitem>
-											<p:menuitem id="copyButton" icon="ui-icon-copy" update="viewTaskButton"
-												action="#{jJTaskBean.copyName(todo)}" value="Copy"
+											<p:menuitem id="copyButton" icon="ui-icon-copy"
+												onclick="copyName('#{jJTaskBean.getDialogHeader(todo)}');" 
+												value="Copy"
 												title="Copy" />
 										</p:splitButton>
 									</p:column>
@@ -279,9 +280,9 @@
 													<f:setPropertyActionListener target="#{jJTaskBean.mode}"
 														value="scrum" />
 												</p:menuitem>
-												<p:menuitem id="copyButton" icon="ui-icon-copy" update="viewTaskButton"
-													action="#{jJTaskBean.copyName(prog)}" value="Copy"
-													title="Copy" />
+												<p:menuitem id="copyButton" icon="ui-icon-copy" 
+													onclick="copyName('#{jJTaskBean.getDialogHeader(prog)}');" 
+													value="Copy" title="Copy" />
 											</p:splitButton>
 										</p:column>
 									</p:dataTable>
@@ -335,9 +336,9 @@
 													<f:setPropertyActionListener target="#{jJTaskBean.mode}"
 														value="scrum" />
 												</p:menuitem>
-												<p:menuitem id="copyButton" icon="ui-icon-copy" update="viewTaskButton"
-													action="#{jJTaskBean.copyName(done)}" value="Copy"
-													title="Copy" />
+												<p:menuitem id="copyButton" icon="ui-icon-copy"
+													onclick="copyName('#{jJTaskBean.getDialogHeader(done)}');" 
+													value="Copy" title="Copy" />
 											</p:splitButton>
 										</p:column>
 									</p:dataTable>

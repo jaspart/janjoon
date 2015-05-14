@@ -1,23 +1,16 @@
 package com.starit.janjoonweb.domain.reference;
-
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
-import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
+import org.springframework.util.StringUtils;
 
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
@@ -34,14 +27,6 @@ public class ApplicationLogger {
 
 	@Autowired
 	JJStatusService jJStatusService;
-
-	@PersistenceContext
-	private EntityManager entityManager;
-
-	public void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
-
-	}
 
 	public void setjJRequirementService(
 			JJRequirementService jJRequirementService) {
@@ -61,6 +46,54 @@ public class ApplicationLogger {
 				+ " :successful");
 
 	}
+
+//	@AfterReturning("execution(* com.starit.janjoonweb.domain.JJRequirement.getDescription(..))")
+//	public void logAfterGetDescription(JoinPoint joinPoint) {
+//
+//		logger.info("operation : " + joinPoint.getSignature().toShortString()
+//				+ " :successful");
+//		JJRequirement requirement = (JJRequirement) joinPoint.getThis();
+//		String description = requirement.getDescription();
+//		if (FacesContext.getCurrentInstance() != null) {
+//			int imgNumber = Math.min(StringUtils.countOccurrencesOf(
+//					description, "<img"), StringUtils.countOccurrencesOf(
+//					description, "/pages/ckeditor/getimage?imageId="));
+//
+//			if (imgNumber > 0) {
+//
+//				int k = 0;
+//				HttpServletRequest request = ((HttpServletRequest) FacesContext
+//						.getCurrentInstance().getExternalContext().getRequest());
+//
+//				String url = "";
+//				if (!request.getServerName().contains("localhost"))
+//					url = "https" + "://" + request.getServerName()
+//							+ request.getContextPath() + "/images/";
+//				else
+//					url = "http" + "://" + request.getServerName() + ":"
+//							+ request.getServerPort()
+//							+ request.getContextPath() + "/images/";
+//
+//				while (k < imgNumber) {
+//					int kk = description.indexOf("alt=\"\" src=");
+//
+//					description = description.substring(0,
+//							description.indexOf("alt=\"\" src=")
+//									+ "alt=\"\" src=".length() + 1)
+//							+ url
+//							+ description.substring(description
+//									.indexOf("?imageId=")
+//									+ "?imageId=".length());
+//					k++;
+//				}
+//				
+//				requirement.setDescription(description);
+//			}
+//			
+//			
+//
+//		}
+//	}
 
 	@AfterThrowing(pointcut = "execution(* com.starit.janjoonweb.domain.*Service.*(..))", throwing = "ex")
 	public void logAfterEX(JoinPoint joinPoint, Throwable ex) {
@@ -128,7 +161,7 @@ public class ApplicationLogger {
 	//
 	// }
 
-	//@After("execution(* com.starit.janjoonweb.domain.JJTaskService.updateJJTask(..))")
+	// @After("execution(* com.starit.janjoonweb.domain.JJTaskService.updateJJTask(..))")
 	public void startRequirement(JoinPoint joinPoint) {
 		// JJTask task=(JJTask) joinPoint.getThis();
 

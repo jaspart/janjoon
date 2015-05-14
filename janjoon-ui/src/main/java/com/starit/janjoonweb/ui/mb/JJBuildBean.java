@@ -15,6 +15,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPhase;
+import com.starit.janjoonweb.domain.JJPhaseService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProductService;
 import com.starit.janjoonweb.domain.JJVersion;
@@ -34,6 +35,13 @@ public class JJBuildBean {
 
 	@Autowired
 	private JJProductService jJProductService;
+	
+	@Autowired
+	private JJPhaseService jJPhaseService;
+
+	public void setjJPhaseService(JJPhaseService jJPhaseService) {
+		this.jJPhaseService = jJPhaseService;
+	}
 
 	public JJProductService getjJProductService() {
 		return jJProductService;

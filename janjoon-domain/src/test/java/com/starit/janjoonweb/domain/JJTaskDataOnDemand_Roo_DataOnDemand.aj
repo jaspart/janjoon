@@ -4,7 +4,6 @@
 package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJBugDataOnDemand;
-import com.starit.janjoonweb.domain.JJBuildDataOnDemand;
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJRequirementDataOnDemand;
 import com.starit.janjoonweb.domain.JJSprintDataOnDemand;
@@ -41,9 +40,6 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     JJBugDataOnDemand JJTaskDataOnDemand.jJBugDataOnDemand;
-    
-    @Autowired
-    JJBuildDataOnDemand JJTaskDataOnDemand.jJBuildDataOnDemand;
     
     @Autowired
     JJRequirementDataOnDemand JJTaskDataOnDemand.jJRequirementDataOnDemand;

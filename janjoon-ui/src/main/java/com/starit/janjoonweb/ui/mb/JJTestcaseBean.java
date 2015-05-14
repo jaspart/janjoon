@@ -38,18 +38,20 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 import org.xml.sax.SAXParseException;
 
-import com.lowagie.text.BadElementException;
-import com.lowagie.text.Chunk;
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.html.simpleparser.HTMLWorker;
-import com.lowagie.text.html.simpleparser.StyleSheet;
-import com.lowagie.text.pdf.PdfWriter;
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.html.simpleparser.HTMLWorker;
+import com.itextpdf.text.html.simpleparser.StyleSheet;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJCategory;
@@ -80,8 +82,10 @@ import com.starit.janjoonweb.ui.mb.util.CategoryUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.ReadXMLFile;
 import com.starit.janjoonweb.ui.mb.util.RequirementUtil;
+import com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
 
+@SuppressWarnings("deprecation")
 @RooSerializable
 @RooJsfManagedBean(entity = JJTestcase.class, beanName = "jJTestcaseBean")
 public class JJTestcaseBean {
@@ -461,11 +465,13 @@ public class JJTestcaseBean {
 	public void setRendredEmptySelection(boolean rendredEmptySelection) {
 		this.rendredEmptySelection = rendredEmptySelection;
 	}
-	
-	public boolean getRenderCommentsPanel()
-	{
-		boolean returnValue=((LoginBean)LoginBean.findBean("loginBean")).isEnable() && testcase != null 
-				&& rendredTestCaseHistorical && !rendredTestCaseRecaps;
+
+	public boolean getRenderCommentsPanel() {
+		boolean returnValue = ((LoginBean) LoginBean.findBean("loginBean"))
+				.isEnable()
+				&& testcase != null
+				&& rendredTestCaseHistorical
+				&& !rendredTestCaseRecaps;
 		return returnValue;
 	}
 
@@ -487,11 +493,12 @@ public class JJTestcaseBean {
 
 	public List<JJRequirement> getRequirements() {
 
-		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		requirements = jJRequirementService.getRequirements(
 				((LoginBean) LoginBean.findBean("loginBean")).getContact()
-						.getCompany(), null, new HashMap<JJProject, JJProduct>(), null, null, chapter,
-				true, true, true, false, null);
+						.getCompany(), null,
+				new HashMap<JJProject, JJProduct>(), null, null, chapter, true,
+				true, true, false, null);
 
 		return requirements;
 	}
@@ -587,7 +594,8 @@ public class JJTestcaseBean {
 	}
 
 	public List<JJMessage> getCommunicationMessages() {
-		if (testcase != null && testcase.getId() != null && testcase.getId() != 0) {
+		if (testcase != null && testcase.getId() != null
+				&& testcase.getId() != 0) {
 			communicationMessages = jJMessageService.getCommMessages(testcase);
 			return communicationMessages;
 		} else
@@ -710,7 +718,8 @@ public class JJTestcaseBean {
 				this.getProduct();
 				this.getVersion();
 				rated = (((LoginBean) LoginBean.findBean("loginBean"))
-						.getContact().getTestcases().contains(testcase)) ? 1 : 0;
+						.getContact().getTestcases().contains(testcase)) ? 1
+						: 0;
 
 				chapter = null;
 
@@ -732,7 +741,7 @@ public class JJTestcaseBean {
 			} else {
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"validator_page_access", "Testcase");
-				facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);	
+				facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 				((LoginBean) LoginBean.findBean("loginBean"))
 						.setFacesMessage(facesMessage);
 				project = null;
@@ -946,8 +955,7 @@ public class JJTestcaseBean {
 				task.setWorkloadReal(null);
 
 				task.setTestcase(testcase);
-				task.setBuild(build);
-
+				// task.setBuild(build);
 				task.setAssignedTo(task1.getAssignedTo());
 
 				task.setStartDateReal(new Date());
@@ -960,10 +968,9 @@ public class JJTestcaseBean {
 				task.setEndDatePlanned(task1.getEndDatePlanned());
 				task.setWorkloadPlanned(task1.getWorkloadPlanned());
 
-				// task.setCompleted(task1.getCompleted());
-				// task.setConsumed(task1.getConsumed());
-
 				jJTaskBean.saveJJTask(task, false);
+				build.getTasks().add(task);
+				jJBuildBean.saveJJBuild(build);
 
 			}
 
@@ -988,7 +995,7 @@ public class JJTestcaseBean {
 		if (testcase.getId() == null) {
 			manageTestcaseOrder(requirement);
 			testcase.setRequirement(requirement);
-			requirement.getTestcases().add(testcase);			
+			requirement.getTestcases().add(testcase);
 			testcase.setBuilds(new HashSet<JJBuild>(builds));
 			saveJJTestcase(testcase);
 
@@ -1155,14 +1162,15 @@ public class JJTestcaseBean {
 
 		} else if (code.equalsIgnoreCase("CH")) {
 
-			//LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+			// LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
 			long id = Long.parseLong(getSubString(selectedNode, 1, "-"));
 
 			chapter = jJChapterService.findJJChapter(id);
 			List<JJRequirement> rqs = jJRequirementService.getRequirements(
 					((LoginBean) LoginBean.findBean("loginBean")).getContact()
-							.getCompany(), null, new HashMap<JJProject, JJProduct>(), null, null,
-					chapter, true, true, true, false, null);
+							.getCompany(), null,
+					new HashMap<JJProject, JJProduct>(), null, null, chapter,
+					true, true, true, false, null);
 
 			if (rqs.size() > 0) {
 				int i = 0;
@@ -1405,27 +1413,27 @@ public class JJTestcaseBean {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public StreamedContent getPreProcessPDF() throws IOException,
 			BadElementException, DocumentException {
 
-		LoginBean.copyUploadImages(true);
 		Document pdf = new Document();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		PdfWriter writer = PdfWriter.getInstance(pdf, baos);
 		pdf.open();
 		pdf.setPageSize(PageSize.A4);
 
-		Font fontTitle = new Font(Font.TIMES_ROMAN, 30, Font.BOLD);
-		fontTitle.setColor(new Color(0x24, 0x14, 0x14));
+		Font fontTitle = new Font(FontFamily.TIMES_ROMAN, 30, Font.BOLD);
+		fontTitle.setColor(0x24, 0x14, 0x14);
 
-		Font fontChapter = new Font(Font.HELVETICA, 15, Font.BOLD);
-		fontChapter.setColor(new Color(0x4E, 0x4E, 0x4E));
+		Font fontChapter = new Font(FontFamily.HELVETICA, 15, Font.BOLD);
+		fontChapter.setColor(0x4E, 0x4E, 0x4E);
 
-		Font fontTestcase = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
-		fontTestcase.setColor(new Color(0x5A, 0x5A, 0x5A));
+		Font fontTestcase = new Font(FontFamily.TIMES_ROMAN, 10, Font.BOLD);
+		fontTestcase.setColor(0x5A, 0x5A, 0x5A);
 
-		Font fontTeststep = new Font(Font.COURIER, 8, Font.BOLD);
-		fontTeststep.setColor(new Color(0x82, 0x82, 0x82));
+		Font fontTeststep = new Font(FontFamily.COURIER, 8, Font.BOLD);
+		fontTeststep.setColor(0x82, 0x82, 0x82);
 
 		StyleSheet style = new StyleSheet();
 		style.loadTagStyle("body", "font", "Times New Roman");
@@ -1464,8 +1472,60 @@ public class JJTestcaseBean {
 						test, true, true);
 
 				for (JJTeststep teststep : teststeps) {
-					paragraph.add(new Chunk(teststep.getActionstep() + "\t"
-							+ teststep.getResultstep() + "\n", fontTeststep));
+
+					StringReader strReader = new StringReader(
+							teststep.getActionstep());
+
+					List<Element> arrList = HTMLWorkerImpl.parseToList(
+							strReader, style);
+
+					for (int i = 0; i < arrList.size(); ++i) {
+						Element e = (Element) arrList.get(i);
+
+						if (e.getChunks() != null) {
+							for (Chunk chunk : (List<Chunk>) e.getChunks()) {
+								if (chunk.getImage() != null) {
+
+									Image img = chunk.getImage();
+									paragraph.add(Chunk.NEWLINE);
+									paragraph.add(img);
+									paragraph.add(Chunk.NEWLINE);
+
+								} else {
+									chunk.setFont(fontTeststep);
+									paragraph.add(chunk);
+								}
+							}
+						} else {
+							paragraph.add(e);
+						}
+					}
+					paragraph.add(Chunk.NEWLINE);
+
+					strReader = new StringReader(teststep.getResultstep());
+					arrList = HTMLWorkerImpl.parseToList(strReader, style);
+
+					for (int i = 0; i < arrList.size(); ++i) {
+						Element e = (Element) arrList.get(i);
+
+						if (e.getChunks() != null) {
+							for (Chunk chunk : (List<Chunk>) e.getChunks()) {
+								if (chunk.getImage() != null) {
+
+									Image img = chunk.getImage();
+									paragraph.add(Chunk.NEWLINE);
+									paragraph.add(img);
+									paragraph.add(Chunk.NEWLINE);
+
+								} else {
+									chunk.setFont(fontTeststep);
+									paragraph.add(chunk);
+								}
+							}
+						} else {
+							paragraph.add(e);
+						}
+					}
 				}
 			}
 
@@ -1490,6 +1550,7 @@ public class JJTestcaseBean {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void createTreeDocument(JJChapter chapterParent, JJBuild build,
 			JJCategory category, Paragraph paragraph, Font fontTeststep,
 			Font fontChapter, Font fontTestcase, StyleSheet style)
@@ -1535,8 +1596,56 @@ public class JJTestcaseBean {
 					testcase, true, true);
 
 			for (JJTeststep teststep : teststeps) {
-				paragraph.add(new Chunk(teststep.getActionstep() + "\t"
-						+ teststep.getResultstep() + "\n", fontTeststep));
+
+				StringReader strReader = new StringReader(teststep
+						.getActionstep()
+						.replace("/pages/ckeditor/getimage?imageId=",
+								"/images/"));
+
+				List<Element> arrList = HTMLWorker
+						.parseToList(strReader, style);
+
+				for (int i = 0; i < arrList.size(); ++i) {
+					Element e = (Element) arrList.get(i);
+
+					if (e.getChunks() != null) {
+						for (Chunk chunk : (List<Chunk>) e.getChunks()) {
+							if (chunk.getImage() != null) {
+								Image img = chunk.getImage();
+								paragraph.add(img);
+							} else {
+								chunk.setFont(fontTeststep);
+								paragraph.add(chunk);
+							}
+						}
+					} else {
+						paragraph.add(e);
+					}
+				}
+				paragraph.add(Chunk.NEWLINE);
+
+				strReader = new StringReader(teststep.getResultstep().replace(
+						"/pages/ckeditor/getimage?imageId=", "/images/"));
+				arrList = HTMLWorker.parseToList(strReader, style);
+
+				for (int i = 0; i < arrList.size(); ++i) {
+					Element e = (Element) arrList.get(i);
+
+					if (e.getChunks() != null) {
+						for (Chunk chunk : (List<Chunk>) e.getChunks()) {
+							if (chunk.getImage() != null) {
+								Image img = chunk.getImage();
+								paragraph.add(img);
+							} else {
+								chunk.setFont(fontTeststep);
+								paragraph.add(chunk);
+							}
+						}
+					} else {
+						paragraph.add(e);
+					}
+				}
+				paragraph.add(Chunk.NEWLINE);
 			}
 		}
 
@@ -1642,7 +1751,7 @@ public class JJTestcaseBean {
 		b.setCreationDate(new Date());
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
-		b.setCreatedBy(contact);		
+		b.setCreatedBy(contact);
 		jJTestcaseService.saveJJTestcase(b);
 	}
 
@@ -1831,55 +1940,57 @@ public class JJTestcaseBean {
 		} else
 			return null;
 	}
-	
+
 	public void onrate(RateEvent rateEvent) {
 
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		if (!contact.getTestcases().contains(testcase)) {
-			
+
 			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
-			if(((JJMessageBean)LoginBean.findBean("jJMessageBean")) != null)
-			{
-				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
-				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setMainMessages(null);
+			if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setAlertMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setMainMessages(null);
 			}
-			contact.getTestcases()
-					.add(jJTestcaseService.findJJTestcase(testcase
-							.getId()));
+			contact.getTestcases().add(
+					jJTestcaseService.findJJTestcase(testcase.getId()));
 			((LoginBean) LoginBean.findBean("loginBean")).getjJContactService()
 					.updateJJContact(contact);
-		
 
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				RequirementBean.REQUIREMENT_SUBSCRIPTION_RATE, "Testcase");
-		facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
-	
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);}
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					RequirementBean.REQUIREMENT_SUBSCRIPTION_RATE, "Testcase");
+			facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
+
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
 	}
 
 	public void oncancel() {
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-								.getContact();
+				.getContact();
 		if (contact.getTestcases().contains(testcase)) {
-			
-			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
-			if(((JJMessageBean)LoginBean.findBean("jJMessageBean")) != null)
-			{
-				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
-				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setMainMessages(null);
-			}
-			contact.getTestcases()
-					.remove(jJTestcaseService.findJJTestcase(testcase
-							.getId()));
-			((LoginBean) LoginBean.findBean("loginBean")).getjJContactService()
-					.updateJJContact(contact);	
 
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				RequirementBean.REQUIREMENT_SUBSCRIPTION_CANCEL_RATE, "Testcase");
-		facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
-	
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);}
+			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
+			if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setAlertMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setMainMessages(null);
+			}
+			contact.getTestcases().remove(
+					jJTestcaseService.findJJTestcase(testcase.getId()));
+			((LoginBean) LoginBean.findBean("loginBean")).getjJContactService()
+					.updateJJContact(contact);
+
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					RequirementBean.REQUIREMENT_SUBSCRIPTION_CANCEL_RATE,
+					"Testcase");
+			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
+
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
 	}
 
 }

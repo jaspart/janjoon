@@ -7,6 +7,7 @@ import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJPhase;
+import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJVersion;
 import java.util.Date;
@@ -76,6 +77,14 @@ privileged aspect JJBuild_Roo_JavaBean {
     
     public void JJBuild.setTestcases(Set<JJTestcase> testcases) {
         this.testcases = testcases;
+    }
+    
+    public Set<JJTask> JJBuild.getTasks() {
+        return this.tasks;
+    }
+    
+    public void JJBuild.setTasks(Set<JJTask> tasks) {
+        this.tasks = tasks;
     }
     
     public Set<JJMessage> JJBuild.getMessages() {

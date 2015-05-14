@@ -65,7 +65,7 @@
 	</h:form>
 
 	<h:form id="planningForm" style="width:100%">
-		<h:outputScript library="js" name="scrollTab.js" />		
+<!-- 		<h:outputScript library="js" name="scrollTab.js" />		 -->
 		<f:event type="preRenderComponent"
 			oncomplete="PF('blockUIWidget').unblock();"
 			listener="#{jJTaskBean.loadingData()}" />
@@ -146,8 +146,8 @@
 												<f:setPropertyActionListener target="#{jJTaskBean.mode}"
 													value="planning" />
 											</p:menuitem>
-											<p:menuitem id="copyButton" icon="ui-icon-copy" update="viewTaskButton"
-												action="#{jJTaskBean.copyName(taskData.task)}"
+											<p:menuitem id="copyButton" icon="ui-icon-copy" 
+												onclick="copyName('#{jJTaskBean.getDialogHeader(taskData.task)}');" 											
 												value="Copy" title="Copy"/>
 										</p:splitButton>
 									</p:column>

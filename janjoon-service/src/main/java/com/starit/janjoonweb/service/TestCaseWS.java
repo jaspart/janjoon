@@ -1,15 +1,27 @@
 package com.starit.janjoonweb.service;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
-import com.starit.janjoonweb.domain.*;
+import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJBuildService;
+import com.starit.janjoonweb.domain.JJTestcase;
+import com.starit.janjoonweb.domain.JJTestcaseService;
+import com.starit.janjoonweb.domain.JJTestcaseexecution;
+import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
+import com.starit.janjoonweb.domain.JJTeststep;
+import com.starit.janjoonweb.domain.JJTeststepService;
+import com.starit.janjoonweb.domain.JJTeststepexecution;
+import com.starit.janjoonweb.domain.JJTeststepexecutionService;
 
 
 @Component

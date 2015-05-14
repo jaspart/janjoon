@@ -4,19 +4,35 @@ import java.io.StringReader;
 import java.util.Date;
 import java.util.List;
 
-import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.tmatesoft.sqljet.core.internal.lang.SqlParser.add_subexpr_return;
 
-import com.lowagie.text.Element;
-import com.lowagie.text.html.simpleparser.HTMLWorker;
-import com.starit.janjoonweb.domain.*;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.html.simpleparser.HTMLWorker;
+import com.starit.janjoonweb.domain.JJAuditLog;
+import com.starit.janjoonweb.domain.JJBug;
+import com.starit.janjoonweb.domain.JJBugService;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJCriticity;
+import com.starit.janjoonweb.domain.JJCriticityService;
+import com.starit.janjoonweb.domain.JJMessage;
+import com.starit.janjoonweb.domain.JJMessageService;
+import com.starit.janjoonweb.domain.JJPermissionService;
+import com.starit.janjoonweb.domain.JJProjectService;
+import com.starit.janjoonweb.domain.JJRequirement;
+import com.starit.janjoonweb.domain.JJRequirementService;
+import com.starit.janjoonweb.domain.JJStatus;
+import com.starit.janjoonweb.domain.JJStatusService;
+import com.starit.janjoonweb.domain.JJTask;
+import com.starit.janjoonweb.domain.JJTaskService;
+import com.starit.janjoonweb.domain.JJWorkflow;
+import com.starit.janjoonweb.domain.JJWorkflowService;
 import com.starit.janjoonweb.ui.mb.JJAuditLogBean;
 import com.starit.janjoonweb.ui.mb.JJRequirementBean;
 import com.starit.janjoonweb.ui.mb.LoginBean;
 import com.starit.janjoonweb.ui.mb.RequirementBean;
 
+@SuppressWarnings("deprecation")
 @Configurable
 public class WorkFlowsActions {
 

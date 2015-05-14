@@ -47,7 +47,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 
-import com.lowagie.text.html.simpleparser.StyleSheet;
+import com.itextpdf.text.html.simpleparser.StyleSheet;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJConfiguration;
@@ -223,12 +223,12 @@ public class LoginBean implements Serializable {
 					while (it.hasNext()) {
 						Map.Entry pairs = (Map.Entry) it.next();
 						for (String st : (String[]) pairs.getValue()) {
-							System.err.println(pairs.getKey() + ":" + st);
+							//System.err.println(pairs.getKey() + ":" + st);
 							s = s + pairs.getKey() + "=" + st + "&";
 						}
 					}
 					s = s.substring(0, s.length() - 1);
-					System.out.println(s);
+					//System.out.println(s);
 				}
 				return s;
 			}
@@ -527,7 +527,7 @@ public class LoginBean implements Serializable {
 			return prevPage;
 
 		} catch (Exception e) {
-			System.err.println(e.getMessage() + prevPage);
+			//System.err.println(e.getMessage() + prevPage);
 			prevPage = "main";
 			return prevPage;
 		}
@@ -609,7 +609,7 @@ public class LoginBean implements Serializable {
 	public void onTabAdminChange(TabChangeEvent event) {
 
 		TabView tv = (TabView) event.getComponent();
-		System.out.println(this.activeTabAdminIndex);
+		//System.out.println(this.activeTabAdminIndex);
 		this.activeTabAdminIndex = tv.getChildren().indexOf(event.getTab());
 		System.out.println("###### ACtive tab: " + activeTabAdminIndex);
 
@@ -1489,6 +1489,7 @@ public class LoginBean implements Serializable {
 			return null;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void loadStyleSheet(StyleSheet style, String param) {
 		List<JJConfiguration> configs = jJConfigurationService
 				.getConfigurations(null, param, true);
@@ -1514,11 +1515,11 @@ public class LoginBean implements Serializable {
 				for (String stylePair : styleKeyValue) // iterate over the pais
 				{
 					String[] styleEntry = stylePair.split("=");
-					System.err.println(styleEntry[0].trim() + "="
-							+ styleEntry[1].trim());
+//					System.err.println(styleEntry[0].trim() + "="
+//							+ styleEntry[1].trim());
 					styleMap.put(styleEntry[0].trim(), styleEntry[1].trim());
 				}
-				System.err.println(entry[0].replace("'", " ") + "= XXX");
+				//System.err.println(entry[0].replace("'", " ") + "= XXX");
 				if (!entry[0].replace("'", " ").startsWith("."))
 					style.loadTagStyle(entry[0].replace("'", " ").trim(),
 							styleMap);
@@ -1574,7 +1575,7 @@ public class LoginBean implements Serializable {
 					+ File.separator + "images";
 		}
 
-		System.err.println("JANJOON_DIRECTORY = " + janjoon_directory);
+		logger.info("JANJOON_DIRECTORY = " + janjoon_directory);
 		File deletedFile = new File(janjoon_directory);
 		FileUtils.deleteDirectory(deletedFile);
 		if (copy) {
@@ -1585,15 +1586,10 @@ public class LoginBean implements Serializable {
 			if (!toPath.exists())
 				toPath.mkdirs();
 
+			logger.info("FROMPATH = " + fromPath.getAbsolutePath());
+			logger.info("TOPATH = " + toPath.getAbsolutePath());
 			FileUtils.copyDirectory(fromPath, toPath);
 		}
 
-	}
-
-	// public StreamedContent getFile() {
-	// InputStream stream = FacesContext.getCurrentInstance()
-	// .getExternalContext().getResourceAsStream("/resources/aaa");
-	// return new DefaultStreamedContent(stream, "image/jpg",
-	// "downloaded_optimus");
-	// }
+	}	
 }

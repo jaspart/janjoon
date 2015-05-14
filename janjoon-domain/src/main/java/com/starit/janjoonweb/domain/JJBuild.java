@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.Index;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -69,6 +70,9 @@ public class JJBuild {
 	@ManyToMany(mappedBy="builds",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
 	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "JJbuildLinkJJTask", joinColumns = { @javax.persistence.JoinColumn(name = "Build_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Task_ID", referencedColumnName = "id") })	
+	private Set<JJTask> tasks = new HashSet<JJTask>();
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "build")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();	

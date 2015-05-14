@@ -14,7 +14,7 @@
 		<roo.version>1.2.5.RELEASE</roo.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<spring.version>3.2.8.RELEASE</spring.version>
-		<build.number>SNAPSHOT</build.number>
+		<build.number>SNAPSHOT</build.number>		
 	</properties>
 	<modules>
 		<module>janjoon-domain</module>
@@ -320,7 +320,7 @@
 							<contextPath>/${project.name}</contextPath>
 						</webAppConfig>
 					</configuration>
-				</plugin>
+				</plugin>			
 				<!--plugin> <groupId>com.github.wvengen</groupId> <artifactId>proguard-maven-plugin</artifactId> 
 					<version>2.0.6</version> <executions> <execution> <phase>package</phase> 
 					<goals> <goal>proguard</goal> </goals> </execution> </executions> <configuration> 

@@ -12,12 +12,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJStatus;
+import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJWorkflow;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyWorkFlowDataTable;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -26,6 +28,13 @@ import com.starit.janjoonweb.ui.mb.util.WorkFlowsActions;
 @RooSerializable
 @RooJsfManagedBean(entity = JJWorkflow.class, beanName = "jJWorkflowBean")
 public class JJWorkflowBean {
+	
+	@Autowired
+	private JJStatusService jJStatusService;
+
+	public void setjJStatusService(JJStatusService jJStatusService) {
+		this.jJStatusService = jJStatusService;
+	}
 
 	private LazyWorkFlowDataTable workflowList;
 	private JJWorkflow selectedWorkFlow;

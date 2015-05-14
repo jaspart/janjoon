@@ -6,7 +6,6 @@ package com.starit.janjoonweb.ui.mb;
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJBuild;
-import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -23,7 +22,6 @@ import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.JJTaskBean;
 import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJBuildConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJSprintConverter;
@@ -78,9 +76,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
     JJVersionService JJTaskBean.jJVersionService;
     
     @Autowired
-    JJBuildService JJTaskBean.jJBuildService;
-    
-    @Autowired
     JJBugService JJTaskBean.jJBugService;
     
     @Autowired
@@ -116,6 +111,8 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
     private List<JJTask> JJTaskBean.selectedTasks;
     
     private List<JJTask> JJTaskBean.selectedAfterTasks;
+    
+    private List<JJBuild> JJTaskBean.selectedBuilds;
     
     private List<JJTask> JJTaskBean.selectedBeforeTasks;
     
@@ -669,30 +666,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         versioningCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(versioningCreateInputMessage);
         
-        OutputLabel buildCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        buildCreateOutput.setFor("buildCreateInput");
-        buildCreateOutput.setId("buildCreateOutput");
-        buildCreateOutput.setValue("Build:");
-        htmlPanelGrid.getChildren().add(buildCreateOutput);
-        
-        AutoComplete buildCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        buildCreateInput.setId("buildCreateInput");
-        buildCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.build}", JJBuild.class));
-        buildCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeBuild}", List.class, new Class[] { String.class }));
-        buildCreateInput.setDropdown(true);
-        buildCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "build", String.class));
-        buildCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{build.name} #{build.description} #{build.creationDate} #{build.updatedDate}", String.class));
-        buildCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{build}", JJBuild.class));
-        buildCreateInput.setConverter(new JJBuildConverter());
-        buildCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(buildCreateInput);
-        
-        Message buildCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        buildCreateInputMessage.setId("buildCreateInputMessage");
-        buildCreateInputMessage.setFor("buildCreateInput");
-        buildCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(buildCreateInputMessage);
-        
         OutputLabel bugCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         bugCreateOutput.setFor("bugCreateInput");
         bugCreateOutput.setId("bugCreateOutput");
@@ -928,6 +901,22 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         afterTasksCreateInputMessage.setFor("afterTasksCreateInput");
         afterTasksCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(afterTasksCreateInputMessage);
+        
+        HtmlOutputText buildsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        buildsCreateOutput.setId("buildsCreateOutput");
+        buildsCreateOutput.setValue("Builds:");
+        htmlPanelGrid.getChildren().add(buildsCreateOutput);
+        
+        HtmlOutputText buildsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        buildsCreateInput.setId("buildsCreateInput");
+        buildsCreateInput.setValue("This relationship is managed from the JJBuild side");
+        htmlPanelGrid.getChildren().add(buildsCreateInput);
+        
+        Message buildsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        buildsCreateInputMessage.setId("buildsCreateInputMessage");
+        buildsCreateInputMessage.setFor("buildsCreateInput");
+        buildsCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(buildsCreateInputMessage);
         
         OutputLabel beforeTasksCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         beforeTasksCreateOutput.setFor("beforeTasksCreateInput");
@@ -1437,30 +1426,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         versioningEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(versioningEditInputMessage);
         
-        OutputLabel buildEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        buildEditOutput.setFor("buildEditInput");
-        buildEditOutput.setId("buildEditOutput");
-        buildEditOutput.setValue("Build:");
-        htmlPanelGrid.getChildren().add(buildEditOutput);
-        
-        AutoComplete buildEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        buildEditInput.setId("buildEditInput");
-        buildEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.build}", JJBuild.class));
-        buildEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeBuild}", List.class, new Class[] { String.class }));
-        buildEditInput.setDropdown(true);
-        buildEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "build", String.class));
-        buildEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{build.name} #{build.description} #{build.creationDate} #{build.updatedDate}", String.class));
-        buildEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{build}", JJBuild.class));
-        buildEditInput.setConverter(new JJBuildConverter());
-        buildEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(buildEditInput);
-        
-        Message buildEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        buildEditInputMessage.setId("buildEditInputMessage");
-        buildEditInputMessage.setFor("buildEditInput");
-        buildEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(buildEditInputMessage);
-        
         OutputLabel bugEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         bugEditOutput.setFor("bugEditInput");
         bugEditOutput.setId("bugEditOutput");
@@ -1696,6 +1661,22 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         afterTasksEditInputMessage.setFor("afterTasksEditInput");
         afterTasksEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(afterTasksEditInputMessage);
+        
+        HtmlOutputText buildsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        buildsEditOutput.setId("buildsEditOutput");
+        buildsEditOutput.setValue("Builds:");
+        htmlPanelGrid.getChildren().add(buildsEditOutput);
+        
+        HtmlOutputText buildsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        buildsEditInput.setId("buildsEditInput");
+        buildsEditInput.setValue("This relationship is managed from the JJBuild side");
+        htmlPanelGrid.getChildren().add(buildsEditInput);
+        
+        Message buildsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        buildsEditInputMessage.setId("buildsEditInputMessage");
+        buildsEditInputMessage.setFor("buildsEditInput");
+        buildsEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(buildsEditInputMessage);
         
         OutputLabel beforeTasksEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         beforeTasksEditOutput.setFor("beforeTasksEditInput");
@@ -1979,16 +1960,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         versioningValue.setConverter(new JJVersionConverter());
         htmlPanelGrid.getChildren().add(versioningValue);
         
-        HtmlOutputText buildLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        buildLabel.setId("buildLabel");
-        buildLabel.setValue("Build:");
-        htmlPanelGrid.getChildren().add(buildLabel);
-        
-        HtmlOutputText buildValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        buildValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.build}", JJBuild.class));
-        buildValue.setConverter(new JJBuildConverter());
-        htmlPanelGrid.getChildren().add(buildValue);
-        
         HtmlOutputText bugLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bugLabel.setId("bugLabel");
         bugLabel.setValue("Bug:");
@@ -2097,6 +2068,16 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         afterTasksValue.setValue("This relationship is managed from the JJTask side");
         htmlPanelGrid.getChildren().add(afterTasksValue);
         
+        HtmlOutputText buildsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        buildsLabel.setId("buildsLabel");
+        buildsLabel.setValue("Builds:");
+        htmlPanelGrid.getChildren().add(buildsLabel);
+        
+        HtmlOutputText buildsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        buildsValue.setId("buildsValue");
+        buildsValue.setValue("This relationship is managed from the JJBuild side");
+        htmlPanelGrid.getChildren().add(buildsValue);
+        
         HtmlOutputText beforeTasksLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         beforeTasksLabel.setId("beforeTasksLabel");
         beforeTasksLabel.setValue("Before Tasks:");
@@ -2158,17 +2139,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
             String jJVersionStr = String.valueOf(jJVersion.getName() +  " "  + jJVersion.getDescription() +  " "  + jJVersion.getCreationDate() +  " "  + jJVersion.getUpdatedDate());
             if (jJVersionStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJVersion);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<JJBuild> JJTaskBean.completeBuild(String query) {
-        List<JJBuild> suggestions = new ArrayList<JJBuild>();
-        for (JJBuild jJBuild : jJBuildService.findAllJJBuilds()) {
-            String jJBuildStr = String.valueOf(jJBuild.getName() +  " "  + jJBuild.getDescription() +  " "  + jJBuild.getCreationDate() +  " "  + jJBuild.getUpdatedDate());
-            if (jJBuildStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJBuild);
             }
         }
         return suggestions;
@@ -2273,6 +2243,17 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         this.selectedAfterTasks = selectedAfterTasks;
     }
     
+    public List<JJBuild> JJTaskBean.getSelectedBuilds() {
+        return selectedBuilds;
+    }
+    
+    public void JJTaskBean.setSelectedBuilds(List<JJBuild> selectedBuilds) {
+        if (selectedBuilds != null) {
+            JJTask_.setBuilds(new HashSet<JJBuild>(selectedBuilds));
+        }
+        this.selectedBuilds = selectedBuilds;
+    }
+    
     public List<JJTask> JJTaskBean.getSelectedBeforeTasks() {
         return selectedBeforeTasks;
     }
@@ -2290,6 +2271,9 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         }
         if (JJTask_ != null && JJTask_.getAfterTasks() != null) {
             selectedAfterTasks = new ArrayList<JJTask>(JJTask_.getAfterTasks());
+        }
+        if (JJTask_ != null && JJTask_.getBuilds() != null) {
+            selectedBuilds = new ArrayList<JJBuild>(JJTask_.getBuilds());
         }
         if (JJTask_ != null && JJTask_.getBeforeTasks() != null) {
             selectedBeforeTasks = new ArrayList<JJTask>(JJTask_.getBeforeTasks());

@@ -8,26 +8,28 @@ import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJPhase;
-import com.starit.janjoonweb.domain.JJPhaseService;
+import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.JJBuildBean;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJPhaseConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJTaskConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJVersionConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UISelectItems;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
@@ -40,6 +42,7 @@ import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
+import org.primefaces.component.selectmanymenu.SelectManyMenu;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,9 +61,6 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
     
     @Autowired
     JJVersionService JJBuildBean.jJVersionService;
-    
-    @Autowired
-    JJPhaseService JJBuildBean.jJPhaseService;
     
     private String JJBuildBean.name = "JJBuilds";
     
@@ -81,6 +81,8 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
     private boolean JJBuildBean.createDialogVisible = false;
     
     private List<JJTestcase> JJBuildBean.selectedTestcases;
+    
+    private List<JJTask> JJBuildBean.selectedTasks;
     
     @PostConstruct
     public void JJBuildBean.init() {
@@ -370,6 +372,31 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         testcasesCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testcasesCreateInputMessage);
         
+        OutputLabel tasksCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        tasksCreateOutput.setFor("tasksCreateInput");
+        tasksCreateOutput.setId("tasksCreateOutput");
+        tasksCreateOutput.setValue("Tasks:");
+        htmlPanelGrid.getChildren().add(tasksCreateOutput);
+        
+        SelectManyMenu tasksCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        tasksCreateInput.setId("tasksCreateInput");
+        tasksCreateInput.setConverter(new JJTaskConverter());
+        tasksCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.selectedTasks}", List.class));
+        UISelectItems tasksCreateInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        tasksCreateInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.allJJTasks}", List.class));
+        tasksCreateInput.setRequired(false);
+        tasksCreateInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJTask", String.class));
+        tasksCreateInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJTask}", String.class));
+        tasksCreateInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJTask}", JJTask.class));
+        tasksCreateInput.getChildren().add(tasksCreateInputItems);
+        htmlPanelGrid.getChildren().add(tasksCreateInput);
+        
+        Message tasksCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        tasksCreateInputMessage.setId("tasksCreateInputMessage");
+        tasksCreateInputMessage.setFor("tasksCreateInput");
+        tasksCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(tasksCreateInputMessage);
+        
         OutputLabel messagesCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         messagesCreateOutput.setFor("messagesCreateInput");
         messagesCreateOutput.setId("messagesCreateOutput");
@@ -610,6 +637,31 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         testcasesEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(testcasesEditInputMessage);
         
+        OutputLabel tasksEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        tasksEditOutput.setFor("tasksEditInput");
+        tasksEditOutput.setId("tasksEditOutput");
+        tasksEditOutput.setValue("Tasks:");
+        htmlPanelGrid.getChildren().add(tasksEditOutput);
+        
+        SelectManyMenu tasksEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        tasksEditInput.setId("tasksEditInput");
+        tasksEditInput.setConverter(new JJTaskConverter());
+        tasksEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.selectedTasks}", List.class));
+        UISelectItems tasksEditInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        tasksEditInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.allJJTasks}", List.class));
+        tasksEditInput.setRequired(false);
+        tasksEditInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJTask", String.class));
+        tasksEditInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJTask}", String.class));
+        tasksEditInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJTask}", JJTask.class));
+        tasksEditInput.getChildren().add(tasksEditInputItems);
+        htmlPanelGrid.getChildren().add(tasksEditInput);
+        
+        Message tasksEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        tasksEditInputMessage.setId("tasksEditInputMessage");
+        tasksEditInputMessage.setFor("tasksEditInput");
+        tasksEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(tasksEditInputMessage);
+        
         OutputLabel messagesEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         messagesEditOutput.setFor("messagesEditInput");
         messagesEditOutput.setId("messagesEditOutput");
@@ -746,6 +798,25 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         testcasesValue.setValue("This relationship is managed from the JJTestcase side");
         htmlPanelGrid.getChildren().add(testcasesValue);
         
+        HtmlOutputText tasksLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        tasksLabel.setId("tasksLabel");
+        tasksLabel.setValue("Tasks:");
+        htmlPanelGrid.getChildren().add(tasksLabel);
+        
+        SelectManyMenu tasksValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        tasksValue.setId("tasksValue");
+        tasksValue.setConverter(new JJTaskConverter());
+        tasksValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.selectedTasks}", List.class));
+        UISelectItems tasksValueItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
+        tasksValue.setReadonly(true);
+        tasksValue.setDisabled(true);
+        tasksValueItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.tasks}", Set.class));
+        tasksValueItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "jJTask", String.class));
+        tasksValueItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{jJTask}", String.class));
+        tasksValueItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{jJTask}", JJTask.class));
+        tasksValue.getChildren().add(tasksValueItems);
+        htmlPanelGrid.getChildren().add(tasksValue);
+        
         HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesLabel.setId("messagesLabel");
         messagesLabel.setValue("Messages:");
@@ -800,8 +871,7 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
             }
         }
         return suggestions;
-    }  
-    
+    }
     
     public List<JJTestcase> JJBuildBean.getSelectedTestcases() {
         return selectedTestcases;
@@ -814,9 +884,23 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         this.selectedTestcases = selectedTestcases;
     }
     
+    public List<JJTask> JJBuildBean.getSelectedTasks() {
+        return selectedTasks;
+    }
+    
+    public void JJBuildBean.setSelectedTasks(List<JJTask> selectedTasks) {
+        if (selectedTasks != null) {
+            JJBuild_.setTasks(new HashSet<JJTask>(selectedTasks));
+        }
+        this.selectedTasks = selectedTasks;
+    }
+    
     public String JJBuildBean.onEdit() {
         if (JJBuild_ != null && JJBuild_.getTestcases() != null) {
             selectedTestcases = new ArrayList<JJTestcase>(JJBuild_.getTestcases());
+        }
+        if (JJBuild_ != null && JJBuild_.getTasks() != null) {
+            selectedTasks = new ArrayList<JJTask>(JJBuild_.getTasks());
         }
         return null;
     }
@@ -871,6 +955,7 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
     public void JJBuildBean.reset() {
         JJBuild_ = null;
         selectedTestcases = null;
+        selectedTasks = null;
         createDialogVisible = false;
     }
     

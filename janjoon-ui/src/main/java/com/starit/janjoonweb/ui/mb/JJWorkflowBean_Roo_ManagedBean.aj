@@ -6,7 +6,6 @@ package com.starit.janjoonweb.ui.mb;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJStatus;
-import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJWorkflow;
 import com.starit.janjoonweb.domain.JJWorkflowService;
 import com.starit.janjoonweb.ui.mb.JJWorkflowBean;
@@ -34,7 +33,6 @@ import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -49,9 +47,6 @@ privileged aspect JJWorkflowBean_Roo_ManagedBean {
     
     @Autowired
     JJContactService JJWorkflowBean.jJContactService;
-    
-    @Autowired
-    JJStatusService JJWorkflowBean.jJStatusService;
     
     private String JJWorkflowBean.name = "JJWorkflows";
     
@@ -890,8 +885,7 @@ privileged aspect JJWorkflowBean_Roo_ManagedBean {
             }
         }
         return suggestions;
-    }   
-
+    }
     
     public List<JJContact> JJWorkflowBean.completeActor(String query) {
         List<JJContact> suggestions = new ArrayList<JJContact>();
@@ -926,8 +920,7 @@ privileged aspect JJWorkflowBean_Roo_ManagedBean {
         JJWorkflow_ = new JJWorkflow();
         createDialogVisible = true;
         return "JJWorkflow_";
-    }  
-    
+    }
     
     public String JJWorkflowBean.delete() {
         jJWorkflowService.deleteJJWorkflow(JJWorkflow_);
@@ -935,8 +928,7 @@ privileged aspect JJWorkflowBean_Roo_ManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
         return findAllJJWorkflows();
-    }   
-    
+    }
     
     public void JJWorkflowBean.handleDialogClose(CloseEvent event) {
         reset();

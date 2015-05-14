@@ -1,15 +1,23 @@
 package com.starit.janjoonweb.ui.mb.util.service;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.StandardCopyOption;
 import java.util.Date;
+import java.util.Properties;
 
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -35,9 +43,9 @@ public class CKEditorGetImageServlet extends HttpServlet {
 		
 		
 		String imageId = null;
-		ApplicationContext ctx = WebApplicationContextUtils
-				.getWebApplicationContext(request.getSession()
-						.getServletContext());
+//		ApplicationContext ctx = WebApplicationContextUtils
+//				.getWebApplicationContext(request.getSession()
+//						.getServletContext());
 		//UploadedFileService uploadedFileService = (UploadedFileService) ctx
 				//.getBean("uploadedFileService");
 		String parameterId = request.getParameter(IMAGE_PARAMETER_NAME);
@@ -69,5 +77,59 @@ public class CKEditorGetImageServlet extends HttpServlet {
 			response.getOutputStream().close();
 			logger.error(ERROR_FILE_DOWNLOAD + parameterId, e);
 		}
+		
+//		imageId =parameterId;
+//		File uploadedFile = new File(CKEditorUploadServlet.CKEDITOR_DIR+File.separator+imageId);
+//		
+//		
+//		String serverName = request.getServerName();
+//		String janjoon_directory = "";
+//		Properties properties = new Properties();
+//		boolean contextPath = request.getContextPath().contains("janjoon-ui");
+//
+//		if (serverName.contains("localhost") && contextPath) {
+//			janjoon_directory = "src" + File.separator + "main"
+//					+ File.separator + "webapp" + File.separator + "images";
+//		} else {
+//			ServletContext servletContext = (ServletContext) FacesContext
+//					.getCurrentInstance().getExternalContext().getContext();
+//			String path = servletContext.getRealPath("WEB-INF" + File.separator
+//					+ "classes")
+//					+ File.separator;
+//			properties.load(new FileInputStream(path + "email.properties"));
+//			janjoon_directory = "lib" + File.separator
+//					+ properties.getProperty("janjoon.version")
+//					+ File.separator + "images";
+//		}	
+//		
+//		try{
+//			
+//			File cretedDirectory = new File(janjoon_directory);
+//			
+//			if (!cretedDirectory.exists())
+//				cretedDirectory.mkdirs();			
+//			//FileUtils.copyFile(uploadedFile, cretedDirectory);			
+//			Files.copy(uploadedFile.toPath(), cretedDirectory.toPath());
+//			
+//			 String pathToFile="";
+//			  if(!request.getServerName().contains("localhost"))
+//			   pathToFile = "https"+"://"+request.getServerName()+request.getContextPath() + "/images/" + uploadedFile.getName();
+//			  else
+//				  pathToFile = "http"+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath() +"/images/" + uploadedFile.getName();		  
+//			  
+//			response.sendRedirect(pathToFile);
+//		}catch(FileAlreadyExistsException e)
+//		{
+//			System.err.println("FileAlreadyExistsException");
+//		}catch(NoSuchFileException e)
+//		{
+//			System.err.println("NoSuchFileException");
+//		}
+		
+		
+		
+		
+		
+		
 	}
 }

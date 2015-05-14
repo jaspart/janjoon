@@ -618,8 +618,7 @@ public class JJContactBean {
 
 		if (jJContactService.saveJJContactTransaction(contactAdmin)) {
 
-			JJProfile customProfile = jJProfileService.getOneProfile(
-					"CustomProfile", true);
+			JJProfile customProfile = jJProfileService.getOneProfile("CustomProfile", true);
 			if (customProfile == null) {
 
 				customProfile = createCustomProfile();

@@ -42,8 +42,8 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 import org.xml.sax.SAXParseException;
 
-import com.lowagie.text.Element;
-import com.lowagie.text.html.simpleparser.HTMLWorker;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.html.simpleparser.HTMLWorker;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
@@ -69,6 +69,7 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.ReadXMLFile;
 import com.starit.janjoonweb.ui.mb.util.RequirementUtil;
 
+@SuppressWarnings("deprecation")
 @RooSerializable
 @RooJsfManagedBean(entity = JJRequirement.class, beanName = "jJRequirementBean")
 public class JJRequirementBean {

@@ -3,10 +3,13 @@ package com.starit.janjoonweb.ui.mb;
 import java.awt.Color;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,13 +37,22 @@ import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
+import org.springframework.util.StringUtils;
 
-import com.lowagie.text.*;
-import com.lowagie.text.pdf.PdfWriter;
-import com.lowagie.text.pdf.codec.Base64;
-import com.lowagie.text.html.HtmlTags;
-import com.lowagie.text.html.simpleparser.HTMLWorker;
-import com.lowagie.text.html.simpleparser.StyleSheet;
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.html.simpleparser.StyleSheet;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.tool.xml.XMLWorker;
 
 import org.apache.log4j.Logger;
 
@@ -58,10 +70,11 @@ import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJChapter.class, beanName = "jJChapterBean")
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "deprecation" })
 public class JJChapterBean {
 
 	static Logger logger = Logger.getLogger(JJChapterBean.class);
@@ -530,11 +543,10 @@ public class JJChapterBean {
 		categoryId = id;
 	}
 
+	@SuppressWarnings("unchecked")
 	public StreamedContent getPreProcessPDF() throws IOException,
 			BadElementException, DocumentException {
 		this.getProject();
-
-		LoginBean.copyUploadImages(true);
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		Document pdf = new Document();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -544,17 +556,17 @@ public class JJChapterBean {
 		pdf.open();
 		pdf.setPageSize(PageSize.A4);
 
-		Font fontTitle = new Font(Font.TIMES_ROMAN, 30, Font.BOLD);
-		fontTitle.setColor(new Color(0x24, 0x14, 0x14));
+		Font fontTitle = new Font(FontFamily.TIMES_ROMAN, 30, Font.BOLD);
+		fontTitle.setColor(0x24, 0x14, 0x14);
 
-		Font fontChapter = new Font(Font.HELVETICA, 15, Font.BOLD);
-		fontChapter.setColor(new Color(0x4E, 0x4E, 0x4E));
+		Font fontChapter = new Font(FontFamily.HELVETICA, 15, Font.BOLD);
+		fontChapter.setColor(0x4E, 0x4E, 0x4E);
 
-		Font fontRequirement = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
-		fontRequirement.setColor(new Color(0x5A, 0x5A, 0x5A));
+		Font fontRequirement = new Font(FontFamily.TIMES_ROMAN, 10, Font.BOLD);
+		fontRequirement.setColor(0x5A, 0x5A, 0x5A);
 
-		Font fontNote = new Font(Font.COURIER, 8, Font.BOLD);
-		fontNote.setColor(new Color(0x82, 0x82, 0x82));
+		Font fontNote = new Font(FontFamily.COURIER, 8, Font.BOLD);
+		fontNote.setColor(0x82, 0x82, 0x82);
 
 		/*
 		 * Font fontTitle = new Font(FontFamily.TIMES_ROMAN, 30, Font.BOLD, new
@@ -602,35 +614,41 @@ public class JJChapterBean {
 			for (JJRequirement requirement : withOutChapter) {
 				paragraph.add(new Chunk("Requirement : "
 						+ requirement.getName() + "\n", fontRequirement));
-				StringReader strReader = new StringReader(requirement
-						.getDescription()
-						.replace("/pages/ckeditor/getimage?imageId=",
-								"/images/"));
+				StringReader strReader = new StringReader(
+						requirement.getDescription());
 
-				// StringReader strReader = new
-				// StringReader(requirement.getDescription());
+				// StringReader strReader = new StringReader(
+				// requirement.getDescription());
 
 				try {
-					@SuppressWarnings("unchecked")
-					List<Paragraph> arrList = HTMLWorker.parseToList(strReader,
-							style);
+					// List<String> imgUrlRequi = getImageUrlList(requirement
+					// .getDescription());
+					// int k = 0;
+					List<Element> arrList = HTMLWorkerImpl.parseToList(
+							strReader, style);
 
 					for (int i = 0; i < arrList.size(); ++i) {
 						Element e = (Element) arrList.get(i);
-						if (e.getChunks() != null
-								&& !e.getChunks().isEmpty()
-								&& ((Chunk) e.getChunks().get(0)).getImage() != null) {
-							Image img = ((Chunk) e.getChunks().get(0))
-									.getImage();
-							// img.setTop(paragraph.getTotalLeading() + 5);
-							// img.setBottom(img.getTop() + img.getHeight() +
-							// 5);
-							// img.setSpacingAfter(5);
-							// img.setSpacingBefore(5);
-							paragraph.add(img);
+
+						if (e.getChunks() != null) {
+							for (Chunk chunk : (List<Chunk>) e.getChunks()) {
+								if (chunk.getImage() != null) {
+
+									com.itextpdf.text.Image img = chunk
+											.getImage();
+									paragraph.add(Chunk.NEWLINE);
+									paragraph.add(img);
+									paragraph.add(Chunk.NEWLINE);
+
+								} else {
+									paragraph.add(chunk);
+								}
+							}
+						} else {
+							paragraph.add(e);
 						}
-						paragraph.add(e);
 					}
+					paragraph.add(Chunk.NEWLINE);
 					if (requirement.getNote() != null
 							&& requirement.getNote().length() > 2) {
 						paragraph.add("Note: "
@@ -647,7 +665,6 @@ public class JJChapterBean {
 		// paragraph.add(phrase);
 		pdf.add(paragraph);
 		pdf.close();
-		LoginBean.copyUploadImages(false);
 
 		return new DefaultStreamedContent(new ByteArrayInputStream(
 				baos.toByteArray()), "pdf", category.getName().toUpperCase()
@@ -664,26 +681,34 @@ public class JJChapterBean {
 		paragraph.add(new Chunk("\n Chapter:" + chapterParent.getName() + "\n",
 				fontChapter));
 
-		StringReader strChapitre = new StringReader(chapterParent
-				.getDescription().replace("/pages/ckeditor/getimage?imageId=",
-						"/images/"));
+		StringReader strChapitre = new StringReader(
+				chapterParent.getDescription());
+		// List<String> imgUrl =
+		// getImageUrlList(chapterParent.getDescription());
+		// int k = 0;
 
-		List<Paragraph> arrChapitre = HTMLWorker
-				.parseToList(strChapitre, style);
+		List<Element> arrChapitre = HTMLWorkerImpl.parseToList(strChapitre,
+				style);
 		for (int i = 0; i < arrChapitre.size(); ++i) {
 			Element e = (Element) arrChapitre.get(i);
-			if (e.getChunks() != null && !e.getChunks().isEmpty()
-					&& ((Chunk) e.getChunks().get(0)).getImage() != null) {
 
-				Image img = ((Chunk) e.getChunks().get(0)).getImage();
-				// img.setTop(paragraph.getTotalLeading() + 5);
-				// img.setBottom(img.getTop() + img.getHeight() + 5);
-				// img.setSpacingAfter(5);
-				// img.setSpacingBefore(5);
-				paragraph.add(img);
+			if (e.getChunks() != null) {
+				for (Chunk chunk : (List<Chunk>) e.getChunks()) {
+					if (chunk.getImage() != null) {
+						Image img = chunk.getImage();
+						paragraph.add(Chunk.NEWLINE);
+						paragraph.add(img);
+						paragraph.add(Chunk.NEWLINE);
+
+					} else {
+						paragraph.add(chunk);
+					}
+				}
+			} else {
+				paragraph.add(e);
 			}
-			paragraph.add(e);
 		}
+		paragraph.add(Chunk.NEWLINE);
 
 		SortedMap<Integer, Object> elements = getSortedElements(chapterParent,
 				project, category, true);
@@ -699,29 +724,35 @@ public class JJChapterBean {
 				JJRequirement requirement = (JJRequirement) entry.getValue();
 				paragraph.add(new Chunk("Requirement: " + requirement.getName()
 						+ "\n", fontRequirement));
-				StringReader strReader = new StringReader(requirement
-						.getDescription()
-						.replace("/pages/ckeditor/getimage?imageId=",
-								"/images/"));
+				StringReader strReader = new StringReader(
+						requirement.getDescription());
 
-				List<Paragraph> arrList = HTMLWorker.parseToList(strReader,
+				// List<String> imgUrlRequi = getImageUrlList(requirement
+				// .getDescription());
+				// k = 0;
+				List<Element> arrList = HTMLWorkerImpl.parseToList(strReader,
 						style);
 				for (int i = 0; i < arrList.size(); ++i) {
-
 					Element e = (Element) arrList.get(i);
-					if (e.getChunks() != null
-							&& !e.getChunks().isEmpty()
-							&& ((Chunk) e.getChunks().get(0)).getImage() != null) {
-						Image img = ((Chunk) e.getChunks().get(0)).getImage();
-						// img.setTop(paragraph.getTotalLeading() + 5);
-						// img.setBottom(img.getTop() + img.getHeight() + 5);
-						// img.setSpacingAfter(5);
-						// img.setSpacingBefore(5);
-						paragraph.add(img);
 
-					} else
+					if (e.getChunks() != null) {
+						for (Chunk chunk : (List<Chunk>) e.getChunks()) {
+							if (chunk.getImage() != null) {
+
+								Image img = chunk.getImage();
+								paragraph.add(Chunk.NEWLINE);
+								paragraph.add(img);
+								paragraph.add(Chunk.NEWLINE);
+
+							} else {
+								paragraph.add(chunk);
+							}
+						}
+					} else {
 						paragraph.add(e);
+					}
 				}
+				paragraph.add(Chunk.NEWLINE);
 				if (requirement.getNote() != null
 						&& requirement.getNote().length() > 2) {
 					paragraph
@@ -1371,6 +1402,112 @@ public class JJChapterBean {
 		}
 
 	}
+
+	// public static String getDescriptionWithOutUrl(String description) {
+	// int imgNumber = Math.min(StringUtils.countOccurrencesOf(description,
+	// "<img"), StringUtils.countOccurrencesOf(description,
+	// "/pages/ckeditor/getimage?imageId="));
+	//
+	// if (imgNumber > 0) {
+	//
+	// int k = 0;
+	// HttpServletRequest request = ((HttpServletRequest) FacesContext
+	// .getCurrentInstance().getExternalContext().getRequest());
+	//
+	// String url = "";
+	// if (!request.getServerName().contains("localhost"))
+	// url = "https" + "://" + request.getServerName()
+	// + request.getContextPath() + "/images/";
+	// else
+	// url = "http" + "://" + request.getServerName() + ":"
+	// + request.getServerPort() + request.getContextPath()
+	// + "/images/";
+	//
+	// while (k < imgNumber) {
+	// int kk = nthOccurrence(description, "alt=\"\" src=", k);
+	//
+	// String fileName = description
+	// .substring(description.indexOf("?imageId=")
+	// + "?imageId=".length(),
+	// nthOccurrence(description, "style", k) - 2);
+	//
+	// if (imgExists(url + fileName)) {
+	// description = description.substring(0,
+	// nthOccurrence(description, "alt=\"\" src=", k)
+	// + "alt=\"\" src=".length() + 1)
+	// + url
+	// + description.substring(description
+	// .indexOf("?imageId=")
+	// + "?imageId=".length());
+	// } else {
+	// description = description.substring(0,
+	// nthOccurrence(description, "alt=\"\" src=", k))
+	// + description.substring(nthOccurrence(description,
+	// "style", k));
+	// }
+	//
+	// k++;
+	// }
+	//
+	// return description;
+	// } else
+	// return description;
+	// }
+	//
+	// public static boolean imgExists(String URLName) {
+	// try {
+	// HttpURLConnection.setFollowRedirects(false);
+	// // note : you may also need
+	// // HttpURLConnection.setInstanceFollowRedirects(false)
+	// HttpURLConnection con = (HttpURLConnection) new URL(URLName)
+	// .openConnection();
+	// con.setRequestMethod("HEAD");
+	// return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// return false;
+	// }
+	// }
+
+	// public static List<String> getImageUrlList(String description) {
+	// int imgNumber = Math.min(StringUtils.countOccurrencesOf(description,
+	// "<img"), StringUtils.countOccurrencesOf(description,
+	// "/pages/ckeditor/getimage?imageId="));
+	// List<String> imgUrl = new ArrayList<String>();
+	// String desc = description;
+	// HttpServletRequest request = ((HttpServletRequest) FacesContext
+	// .getCurrentInstance().getExternalContext().getRequest());
+	//
+	// if (imgNumber > 0) {
+	// int k = 0;
+	// while (k < imgNumber) {
+	// int kk = desc.indexOf("style") + "style".length();
+	// desc = desc.substring(
+	// desc.indexOf("?imageId=") + "?imageId=".length(),
+	// desc.indexOf("style") - 2);
+	// String url = "";
+	// if (!request.getServerName().contains("localhost"))
+	// url = "https" + "://" + request.getServerName()
+	// + request.getContextPath() + "/images/" + desc;
+	// else
+	// url = "http" + "://" + request.getServerName() + ":"
+	// + request.getServerPort()
+	// + request.getContextPath() + "/images/" + desc;
+	// imgUrl.add(url);
+	// desc = description.substring(kk);
+	// k++;
+	// }
+	//
+	// }
+	// return imgUrl;
+	// }
+	//
+	// public static int nthOccurrence(String str, String c, int n) {
+	// int pos = str.indexOf(c, 0);
+	// while (n-- > 0 && pos != -1)
+	// pos = str.indexOf(c, pos + 1);
+	// return pos;
+	// }
 
 	public void saveJJChapter(JJChapter b) {
 		b.setCreationDate(new Date());

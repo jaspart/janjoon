@@ -99,9 +99,6 @@ public class JJTask {
 	private JJVersion versioning;
 
 	@ManyToOne
-	private JJBuild build;
-
-	@ManyToOne
 	private JJBug bug;
 
 	@ManyToOne
@@ -132,6 +129,9 @@ public class JJTask {
 
 	@ManyToMany(mappedBy = "beforeTasks", fetch = FetchType.LAZY)
 	private Set<JJTask> afterTasks = new HashSet<JJTask>();
+	
+	@ManyToMany(mappedBy = "tasks", fetch = FetchType.LAZY)
+	private Set<JJBuild> builds = new HashSet<JJBuild>();
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "JJTaskLink", joinColumns = { @javax.persistence.JoinColumn(name = "AfterTask_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "BeforeTask_ID", referencedColumnName = "id") })

@@ -202,14 +202,6 @@ privileged aspect JJTask_Roo_JavaBean {
         this.versioning = versioning;
     }
     
-    public JJBuild JJTask.getBuild() {
-        return this.build;
-    }
-    
-    public void JJTask.setBuild(JJBuild build) {
-        this.build = build;
-    }
-    
     public JJBug JJTask.getBug() {
         return this.bug;
     }
@@ -296,6 +288,14 @@ privileged aspect JJTask_Roo_JavaBean {
     
     public void JJTask.setAfterTasks(Set<JJTask> afterTasks) {
         this.afterTasks = afterTasks;
+    }
+    
+    public Set<JJBuild> JJTask.getBuilds() {
+        return this.builds;
+    }
+    
+    public void JJTask.setBuilds(Set<JJBuild> builds) {
+        this.builds = builds;
     }
     
     public Set<JJTask> JJTask.getBeforeTasks() {

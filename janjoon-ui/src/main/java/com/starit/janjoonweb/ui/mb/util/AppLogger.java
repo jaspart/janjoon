@@ -1,14 +1,13 @@
 package com.starit.janjoonweb.ui.mb.util;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -100,6 +99,16 @@ public class AppLogger {
 
 	public void setWorkFlowsActions(WorkFlowsActions workFlowsActions) {
 		this.workFlowsActions = workFlowsActions;
+	}
+
+	@Pointcut("within(com.starit.janjoonweb.domain.JJRequirement)")
+	public void logAfterGetJJRequirementDescription() {
+	}
+
+	@Before("logAfterGetJJRequirementDescription()")
+	public void profile(JoinPoint joinPoint){
+		logger.info("operation : " + joinPoint.getSignature().toShortString()+ " :successful");	
+		
 	}
 
 	@Before("execution(* com.starit.janjoonweb.ui.mb.*.updateJJ*(..))")
