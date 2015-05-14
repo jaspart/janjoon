@@ -11,8 +11,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -31,7 +31,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.hibernate.loader.custom.Return;
 import org.primefaces.component.dialog.Dialog;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
@@ -67,6 +66,7 @@ import com.starit.janjoonweb.ui.mb.util.service.CKEditorUploadServlet;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
 import com.sun.faces.component.visit.FullVisitContext;
 
+@SuppressWarnings("deprecation")
 @Scope("session")
 @Component("loginBean")
 public class LoginBean implements Serializable {
@@ -402,7 +402,6 @@ public class LoginBean implements Serializable {
 
 	}
 
-	@SuppressWarnings("deprecation")
 	public String login() {
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
 				username, password);
@@ -1489,7 +1488,6 @@ public class LoginBean implements Serializable {
 			return null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void loadStyleSheet(StyleSheet style, String param) {
 		List<JJConfiguration> configs = jJConfigurationService
 				.getConfigurations(null, param, true);

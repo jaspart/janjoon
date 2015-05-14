@@ -123,7 +123,9 @@ public class BuildWS {
 										b.setCreatedBy(contact);
 										b.setCreationDate(new Date());
 										jJBuildService.saveJJBuild(b);
-										return "Build "+buildName+" has been created for product="+productName+" and  version="+versionName;
+										
+										return "Build "+buildName+" has been created for product="+productName+" and  version="+versionName+""
+												+ ""+personParams.getFirst("changelog");
 									}
 								}
 							}
