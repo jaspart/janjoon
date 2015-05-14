@@ -33,6 +33,7 @@
 
 				var copyDiv = document.createElement('div');
 				copyDiv.contentEditable = true;
+				//copiedText=copiedText.replace("\'", " ");
 				document.body.appendChild(copyDiv);
 				copyDiv.innerHTML = copiedText;
 				copyDiv.unselectable = "off";

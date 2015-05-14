@@ -454,13 +454,13 @@ public class JJTaskBean {
 		if (ttt != null) {
 			if (ttt.getRequirement() != null)
 				return "TASK[" + ttt.getId() + "]-REQ["
-						+ ttt.getRequirement().getId() + "] " + ttt.getName();
+						+ ttt.getRequirement().getId() + "] " + ttt.getName().replace("\'", " ");
 			else if (ttt.getBug() != null)
 				return "TASK[" + ttt.getId() + "]-BUG[" + ttt.getBug().getId()
-						+ "] " + ttt.getName();
+						+ "] " + ttt.getName().replace("\'", " ");
 			else if (ttt.getTestcase() != null)
 				return "TASK[" + ttt.getId() + "]-TESTCASE["
-						+ ttt.getTestcase().getId() + "] " + ttt.getName();
+						+ ttt.getTestcase().getId() + "] " + ttt.getName().replace("\'", " ");
 			else
 				return "";
 		} else
