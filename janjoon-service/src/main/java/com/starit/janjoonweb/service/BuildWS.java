@@ -126,7 +126,7 @@ public class BuildWS {
 										b.setCreationDate(new Date());
 										jJBuildService.saveJJBuild(b);
 										
-										return "Build "+buildName+" has been created for product="+productName+" and  version="+versionName+""
+										return "Build "+buildName+" has been created for product="+productName+" and  version="+versionName+" changelog"
 												+ ""+personParams.getFirst("changelog");
 									}
 								}
