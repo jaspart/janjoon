@@ -66,7 +66,6 @@ public class JJBuild {
 
 //	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "build")
 //	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
-	
 	@ManyToMany(mappedBy="builds",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
 	
