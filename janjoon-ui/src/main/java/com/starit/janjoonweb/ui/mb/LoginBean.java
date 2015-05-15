@@ -579,10 +579,10 @@ public class LoginBean implements Serializable {
 			menuIndex = 7;
 			break;
 		case "stats":
-			menuIndex = 6;
+			menuIndex = 7;
 			break;
 		case "administration":
-			menuIndex = 7;
+			menuIndex = 8;
 			break;
 
 		default:

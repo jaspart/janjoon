@@ -47,6 +47,7 @@ public class JJBuildServiceImpl implements JJBuildService {
 		}
 
 		select.where(predicates.toArray(new Predicate[] {}));
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJBuild> result = entityManager.createQuery(select);
 		return result.getResultList();
@@ -70,6 +71,7 @@ public class JJBuildServiceImpl implements JJBuildService {
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		select.where(predicates.toArray(new Predicate[] {}));
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJBuild> result = entityManager.createQuery(select);
 		if(result.getResultList() != null && !result.getResultList().isEmpty())			
@@ -106,6 +108,7 @@ public class JJBuildServiceImpl implements JJBuildService {
 		}
 
 		select.where(predicates.toArray(new Predicate[] {}));
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJBuild> result = entityManager.createQuery(select);
 		return result.getResultList();

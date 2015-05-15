@@ -28,6 +28,12 @@
 								<!-- 							<p:column headerText="Project"> -->
 								<!-- 								<h:outputText value="#{build.name}" /> -->
 								<!-- 							</p:column> -->
+								<p:ajax event="rowToggle" listener="#{jJBuildBean.rowToggle}"
+									update="buildDataTable_#{loop.index}"
+									onstart="updateRowExapansion();" />
+								<p:column style="width:10%;" >
+									<p:rowToggler />
+								</p:column>
 								<p:column headerText="Build">
 									<h:outputText value="#{build.name}" />
 								</p:column>
@@ -44,6 +50,47 @@
 											update="buildDataTable_#{loop.index} :growlForm" />
 									</p:autoComplete>
 								</p:column>
+								<p:rowExpansion styleClass="rowExpansion">
+									<!-- 									<f:event type="preRenderComponent" update="versionDataTable" -->
+									<!-- 										onstart="PF('versionBlockUIWidget').block()" -->
+									<!-- 										oncomplete="PF('versionBlockUIWidget').unblock()" -->
+									<!-- 										listener="#{jJBuildBean.loadingRowExpansion(versionModel.version)}" /> -->
+
+									<p:dataTable id="taskDataTable" var="task" style="width:90%;"
+										rowKey="#{task.id}" emptyMessage="That Build have no Tasks"
+										value="#{build.tasks}">
+
+										<p:column style="width:25%">
+											<f:facet name="header">
+												<p:row>
+													<p:column>
+														<h:outputText value="Task Id" />
+													</p:column>
+												</p:row>
+											</f:facet>
+											<h:outputText value="#{task.id}" />
+										</p:column>
+
+										<p:column style="width:75%">
+											<f:facet name="header">
+												<p:row>
+													<p:column>
+														<h:outputText value="Name:" />
+													</p:column>
+												</p:row>
+											</f:facet>
+											<p:graphicImage rendered="#{task.bug != null}"
+												library="images" name="bug.ico" width="16" height="16" />
+											<p:graphicImage
+												rendered="#{task.bug == null and task.requirement != null}"
+												library="images" name="function.ico" width="16" height="16" />
+											<p:graphicImage title="TestCase"
+												rendered="#{task.bug == null and task.requirement == null and task.testcase != null}"
+												library="images" name="test.ico" width="16" height="16" />
+											<h:outputText value="#{task.name}" />
+										</p:column>
+									</p:dataTable>
+								</p:rowExpansion>
 							</p:dataTable>
 						</p:fieldset>
 					</c:forEach>
