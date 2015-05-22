@@ -3,10 +3,9 @@ package com.starit.janjoonweb.ui.mb.converter;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
-import com.starit.janjoonweb.domain.JJAuditLog;
-import com.starit.janjoonweb.domain.JJWorkflow;
-
 import org.springframework.roo.addon.jsf.converter.RooJsfConverter;
+
+import com.starit.janjoonweb.domain.JJAuditLog;
 
 @RooJsfConverter(entity = JJAuditLog.class)
 public class JJAuditLogConverter {

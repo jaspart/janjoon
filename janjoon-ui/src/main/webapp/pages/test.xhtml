@@ -33,7 +33,7 @@
 							offIcon="ui-icon-close">
 							<p:ajax
 								listener="#{jJTestcaseBean.loadData(categoryPanel,category.category,true)}"
-								update=":testFormWest :testFormCenter :testFormNorth:categoryPanel "
+								update=":testFormWest :testFormCenter :testFormNorth:categoryPanel :container :rate"
 								onstart="PF('blockUIWidget').block()"
 								oncomplete="PF('blockUIWidget').unblock()" />
 						</p:selectBooleanButton>
@@ -56,7 +56,7 @@
 							offIcon="ui-icon-close">
 							<p:ajax
 								listener="#{jJTestcaseBean.loadData(null,category.category,true)}"
-								update=":testFormWest :testFormCenter :testFormNorth "
+								update=":testFormWest :testFormCenter :testFormNorth :container :rate"
 								onstart="PF('blockUIWidget').block()"
 								oncomplete="PF('blockUIWidget').unblock()" />
 						</p:selectBooleanButton>
@@ -263,7 +263,7 @@
 					</p:panelGrid>
 				</p:overlayPanel>
 				<h:form id="rate">
-					<p:rating value="#{jJTestcaseBean.rated}" style="float: right;margin-top: 35px;margin-right: -30px;"
+					<p:rating value="#{jJTestcaseBean.rated}" style="float: right;margin-top: 2.5%;margin-right: -2.5%;"
 						stars="1" rendered="#{jJTestcaseBean.renderCommentsPanel}" >
 						<p:ajax event="rate" listener="#{jJTestcaseBean.onrate}"
 						onstart="PF('blockUIWidget').block()"
@@ -276,14 +276,14 @@
 					</p:rating>
 				</h:form>
 				<h:panelGroup id="container"
-					style="width: 55%;float: right;margin-right: 10px;">
+					style="width: 50%;float: right;margin-right: 1%;">
 					<p:fieldset legend="Comments" toggleable="true" 
 						rendered="#{jJTestcaseBean.renderCommentsPanel}">
 						<ui:include src="/pages/communication.xhtml">
 							<ui:param name="communicationList"
 								value="#{jJTestcaseBean.communicationMessages}" />
 							<ui:param name="field" value="#{jJTestcaseBean.testcase}" />
-							<ui:param name="cols" value="80"/>
+							<ui:param name="cols" value="50"/>
 						</ui:include>
 					</p:fieldset>
 				</h:panelGroup>
@@ -429,7 +429,7 @@
 					<p:dataTable id="teststepRecapDataTable" paginatorPosition="bottom"
 						value="#{jJTeststepBean.teststeps}" rowKey="#{ts.name}" var="ts"
 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
-						paginator="true" rows="7" style="width:450px;">
+						paginator="true" rows="7" style="width:42%;">
 						<f:facet name="header">
 							<p:row>
 								<p:column>
@@ -493,7 +493,7 @@
 						value="#{jJTestcaseexecutionBean.testCaseexecutionRecaps}"
 						rowKey="#{tce.name}" var="tce" paginatorPosition="bottom"
 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
-						paginator="true" rows="7" style="width:450px;margin-top: 20px;">
+						paginator="true" rows="7" style="width:42%;margin-top: 20px;">
 						<p:column headerText="Id">
 							<h:outputText value="#{tce.testcaseexecution.id}" />
 						</p:column>

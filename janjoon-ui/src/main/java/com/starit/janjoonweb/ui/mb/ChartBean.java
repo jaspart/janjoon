@@ -28,7 +28,7 @@ import com.starit.janjoonweb.domain.JJTestcaseexecution;
 import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
 import com.starit.janjoonweb.ui.mb.util.TestCaseChartUtil;
 
-@ManagedBean
+@ManagedBean(name="chartBean")
 @RequestScoped
 @Configurable
 public class ChartBean implements Serializable {

@@ -16,7 +16,7 @@ import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Configurable;
 
 //@RooJsfApplicationBean
-@ManagedBean
+@ManagedBean(name="applicationBean")
 @RequestScoped
 @Configurable
 public class ApplicationBean {

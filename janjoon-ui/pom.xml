@@ -259,12 +259,12 @@
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-impl</artifactId>
-			<version>2.2.5</version>
+			<version>2.2.11</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-api</artifactId>
-			<version>2.2.5</version>
+			<version>2.2.11</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
@@ -357,25 +357,25 @@
 			<artifactId>xmlworker</artifactId>
 			<version>5.5.6</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.lowagie</groupId> -->
-<!-- 			<artifactId>itext</artifactId> -->
-<!-- 			<version>4.2.1</version> -->
-<!-- 			<exclusions> -->
-<!-- 				<exclusion> -->
-<!-- 					<groupId>bouncycastle</groupId> -->
-<!-- 					<artifactId>bcprov-jdk14</artifactId> -->
-<!-- 				</exclusion> -->
-<!-- 				<exclusion> -->
-<!-- 					<groupId>bouncycastle</groupId> -->
-<!-- 					<artifactId>bcmail-jdk14</artifactId> -->
-<!-- 				</exclusion> -->
-<!-- 				<exclusion> -->
-<!-- 					<groupId>org.bouncycastle</groupId> -->
-<!-- 					<artifactId>bctsp-jdk14</artifactId> -->
-<!-- 				</exclusion> -->
-<!-- 			</exclusions> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.lowagie</groupId> -->
+		<!-- <artifactId>itext</artifactId> -->
+		<!-- <version>4.2.1</version> -->
+		<!-- <exclusions> -->
+		<!-- <exclusion> -->
+		<!-- <groupId>bouncycastle</groupId> -->
+		<!-- <artifactId>bcprov-jdk14</artifactId> -->
+		<!-- </exclusion> -->
+		<!-- <exclusion> -->
+		<!-- <groupId>bouncycastle</groupId> -->
+		<!-- <artifactId>bcmail-jdk14</artifactId> -->
+		<!-- </exclusion> -->
+		<!-- <exclusion> -->
+		<!-- <groupId>org.bouncycastle</groupId> -->
+		<!-- <artifactId>bctsp-jdk14</artifactId> -->
+		<!-- </exclusion> -->
+		<!-- </exclusions> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
@@ -416,7 +416,16 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.2</version>
-				<!-- <configuration> <webXml>target/web.xml</webXml> </configuration> -->
+				<configuration>
+					<archiveClasses>true</archiveClasses>
+					<!-- <webResources> -->
+					<!-- <resource> -->
+					<!-- <directory>src/main/resources</directory> -->
+					<!-- <targetPath>WEB-INF/classes</targetPath> -->
+					<!-- <filtering>true</filtering> -->
+					<!-- </resource> -->
+					<!-- </webResources> -->
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -606,45 +615,39 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-			<!-- <plugin> -->
-			<!-- groupId>com.pyx4me</groupId -->
-			<!-- <groupId>com.github.wvengen</groupId> -->
-			<!-- <artifactId>proguard-maven-plugin</artifactId> -->
-			<!-- <executions> -->
-			<!-- <execution> -->
-			<!-- <id>proguard</id> -->
-			<!-- <phase>package</phase> -->
-			<!-- <goals> -->
-			<!-- <goal>proguard</goal> -->
-			<!-- </goals> -->
-			<!-- </execution> -->
-			<!-- </executions> -->
-			<!-- <configuration> -->
-			<!-- <injar>${project.build.finalName}.war</injar> -->
-			<!-- <outjar>${project.build.finalName}-small.war</outjar> -->
-			<!-- <outputDirectory>${project.build.directory}</outputDirectory> -->
-			<!-- <options> -->
-			<!-- <option>-keep public class * { public protected *; }</option> -->
-			<!-- <option>-dontnote</option> -->
-			<!-- <option>-printseeds</option> -->
-			<!-- <option>-keep interface MyMarkerInterface</option> -->
-			<!-- <option>-ignorewarnings</option> -->
-			<!-- <option>-dontpreverify</option> -->
-			<!-- </options> -->
-			<!-- <libs> -->
-			<!-- <lib>${java.bootstrap.classes}</lib> -->
-			<!-- <lib>${java.cryptographic.extension.classes}</lib> -->
-			<!-- <lib>${java.secure.socket.extension.classes}</lib> -->
-			<!-- </libs> -->
-			<!-- </configuration> -->
-			<!-- <dependencies> -->
-			<!-- <dependency> -->
-			<!-- <groupId>net.sf.proguard</groupId> -->
-			<!-- <artifactId>proguard-base</artifactId> -->
-			<!-- <version>5.2.1</version> -->
-			<!-- </dependency> -->
-			<!-- </dependencies> -->
-			<!-- </plugin> -->
+
+<!-- 			<plugin> -->
+<!-- 				<groupId>com.github.wvengen</groupId> -->
+<!-- 				<artifactId>proguard-maven-plugin</artifactId> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<id>proguard</id> -->
+<!-- 						<phase>package</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>proguard</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 				<configuration> -->
+<!-- 					<injar>${project.build.finalName}-distrib.zip</injar> -->
+<!-- 					<outjar>${project.build.finalName}-small.zip</outjar> -->
+<!-- 					<outputDirectory>${project.build.directory}</outputDirectory> -->
+<!-- 					<proguardInclude>src/assemble/proguard.conf</proguardInclude> -->
+<!-- 					<addMavenDescriptor>true</addMavenDescriptor> -->
+<!-- 					<libs> -->
+<!-- 						<lib>${java.bootstrap.classes}</lib> -->
+<!-- 						<lib>${java.cryptographic.extension.classes}</lib> -->
+<!-- 						<lib>${java.secure.socket.extension.classes}</lib> -->
+<!-- 					</libs> -->
+<!-- 				</configuration> -->
+<!-- 				<dependencies> -->
+<!-- 					<dependency> -->
+<!-- 						<groupId>net.sf.proguard</groupId> -->
+<!-- 						<artifactId>proguard-base</artifactId> -->
+<!-- 						<version>5.2.1</version> -->
+<!-- 					</dependency> -->
+<!-- 				</dependencies> -->
+<!-- 			</plugin> -->
 
 			<!-- <plugin> -->
 			<!-- <groupId>org.codehaus.mojo</groupId> -->

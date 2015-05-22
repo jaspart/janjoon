@@ -30,8 +30,9 @@
 								<!-- 							</p:column> -->
 								<p:ajax event="rowToggle" listener="#{jJBuildBean.rowToggle}"
 									update="buildDataTable_#{loop.index}"
-									onstart="updateRowExapansion();" />
-								<p:column style="width:10%;" >
+									onstart="updateRowExapansion();PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()" />
+								<p:column style="width:10%;">
 									<p:rowToggler />
 								</p:column>
 								<p:column headerText="Build">

@@ -28,7 +28,7 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
-@ManagedBean
+@ManagedBean(name="licenseBean")
 @SessionScoped
 public class LicenseBean implements Serializable {
 	/**

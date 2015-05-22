@@ -39,7 +39,7 @@ import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
 
-@Component
+@Component("buildWS")
 @Path("/build")
 public class BuildWS {
 

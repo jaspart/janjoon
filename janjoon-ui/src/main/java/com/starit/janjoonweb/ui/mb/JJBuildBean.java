@@ -30,6 +30,7 @@ public class JJBuildBean {
 	private String buildName;
 	private JJBuild build;
 	private List<JJBuild> builds;
+	private List<JJPhase> phases;
 	private List<BuildUtil> buildUtils;
 	private List<BuildDataModel> buildDataModelList;
 
@@ -113,7 +114,9 @@ public class JJBuildBean {
 	
 	public List<JJPhase> completePhase(String query) {
         List<JJPhase> suggestions = new ArrayList<JJPhase>();
-        for (JJPhase jJPhase : jJPhaseService.findAllJJPhases()) {
+        if(phases == null)
+        	phases=jJPhaseService.findAllJJPhases();
+        for (JJPhase jJPhase : phases) {
             String jJPhaseStr = String.valueOf(jJPhase.getName() +  " "  + 
         jJPhase.getDescription() +  " "  + jJPhase.getCreationDate() +  " "  + jJPhase.getUpdatedDate());
             if (jJPhaseStr.toLowerCase().contains(query.toLowerCase())) {
@@ -239,6 +242,7 @@ public class JJBuildBean {
 	public void initBuildDataModelList() {
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		buildDataModelList = new ArrayList<BuildDataModel>();
+		phases=jJPhaseService.findAllJJPhases();
 		if (LoginBean.getProduct() == null) {
 
 			for (JJProduct prod : jJProductService.getProducts(loginBean

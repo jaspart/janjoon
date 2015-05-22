@@ -99,17 +99,7 @@ public class AppLogger {
 
 	public void setWorkFlowsActions(WorkFlowsActions workFlowsActions) {
 		this.workFlowsActions = workFlowsActions;
-	}
-
-	@Pointcut("within(com.starit.janjoonweb.domain.JJRequirement)")
-	public void logAfterGetJJRequirementDescription() {
-	}
-
-	@Before("logAfterGetJJRequirementDescription()")
-	public void profile(JoinPoint joinPoint){
-		logger.info("operation : " + joinPoint.getSignature().toShortString()+ " :successful");	
-		
-	}
+	}	
 
 	@Before("execution(* com.starit.janjoonweb.ui.mb.*.updateJJ*(..))")
 	public void workFlowUpdateListener(JoinPoint joinPoint) {
@@ -233,7 +223,7 @@ public class AppLogger {
 		ContactCalendarUtil calendarUtil;
 		boolean assignedTo = false;
 
-		if (task.getAssignedTo() != null) {
+		if (task.getAssignedTo() != null && task.getId() != null) {
 			calendarUtil = new ContactCalendarUtil(task.getAssignedTo());
 			assignedTo = !task.getAssignedTo().equals(
 					jJTaskService.findJJTask(task.getId()).getAssignedTo());

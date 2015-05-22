@@ -24,7 +24,7 @@ import com.starit.janjoonweb.domain.JJTeststepexecution;
 import com.starit.janjoonweb.domain.JJTeststepexecutionService;
 
 
-@Component
+@Component("testCaseWS")
 @Path("/testcase")
 public class TestCaseWS {
 	

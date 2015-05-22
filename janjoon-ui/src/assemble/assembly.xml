@@ -19,14 +19,14 @@
 		</moduleSet>
 	</moduleSets>
 
-	<dependencySets>
-		<dependencySet>
-			<outputDirectory>/lib</outputDirectory>
-			<unpack>false</unpack>
-			<scope>runtime</scope>
-			<useProjectArtifact>true</useProjectArtifact>
-		</dependencySet>
-	</dependencySets>
+	<!-- <dependencySets> -->
+	<!-- <dependencySet> -->
+	<!-- <outputDirectory>/lib</outputDirectory> -->
+	<!-- <unpack>false</unpack> -->
+	<!-- <scope>runtime</scope> -->
+	<!-- <useProjectArtifact>true</useProjectArtifact> -->
+	<!-- </dependencySet> -->
+	<!-- </dependencySets> -->
 
 	<fileSets>
 		<!-- Adds startup scripts to the root directory of zip package. The startup 
@@ -36,24 +36,30 @@
 			<directory>src/run-distrib</directory>
 			<outputDirectory>/lib</outputDirectory>
 			<includes>
-				<include>jetty-runner-8.1.14.v20131031.jar</include>
+				<include>jetty-runner-8.1.14.v20131031.jar</include>				
 			</includes>
 		</fileSet>
 
-
-
+		<fileSet>
+			<directory>target</directory>
+			<outputDirectory>/lib</outputDirectory>
+			<includes>
+				<include>janjoon-ui-2.0-1.war</include>
+			</includes>
+		</fileSet>
+		
 		<fileSet>
 			<directory>src/log</directory>
 			<outputDirectory>/log</outputDirectory>
 		</fileSet>
 
-		<fileSet>
-			<directory>src/run-distrib</directory>
-			<outputDirectory>/db</outputDirectory>
-			<excludes>
-				<exclude>*.*</exclude>
-			</excludes>
-		</fileSet>
+<!-- 		<fileSet> -->
+<!-- 			<directory>src/run-distrib</directory> -->
+<!-- 			<outputDirectory>/db</outputDirectory> -->
+<!-- 			<excludes> -->
+<!-- 				<exclude>*.*</exclude> -->
+<!-- 			</excludes> -->
+<!-- 		</fileSet> -->
 
 		<fileSet>
 			<directory>src/run-distrib</directory>

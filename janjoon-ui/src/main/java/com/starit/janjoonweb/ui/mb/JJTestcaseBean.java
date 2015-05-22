@@ -1,6 +1,5 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.awt.Color;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -10,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,7 +23,6 @@ import javax.servlet.http.HttpSession;
 
 import org.primefaces.component.dialog.Dialog;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.RateEvent;
@@ -58,17 +55,14 @@ import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJChapterService;
-import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJMessageService;
 import com.starit.janjoonweb.domain.JJPermissionService;
-import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
-import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJTestcase;
@@ -77,11 +71,9 @@ import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTeststepService;
 import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.util.CategoryUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.ReadXMLFile;
-import com.starit.janjoonweb.ui.mb.util.RequirementUtil;
 import com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
 
@@ -982,6 +974,8 @@ public class JJTestcaseBean {
 			task.setEndDateReal(null);
 			task.setWorkloadReal(null);
 			jJTaskBean.saveJJTask(task, true);
+			build.getTasks().add(task);
+			jJBuildBean.saveJJBuild(build);
 		}
 
 	}
