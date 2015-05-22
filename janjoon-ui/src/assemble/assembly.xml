@@ -44,7 +44,7 @@
 			<directory>target</directory>
 			<outputDirectory>/lib</outputDirectory>
 			<includes>
-				<include>janjoon-ui-2.0-1.war</include>
+				<include>janjoon-ui-2.0-BUILD_NUMBER.war</include>
 			</includes>
 		</fileSet>
 		
