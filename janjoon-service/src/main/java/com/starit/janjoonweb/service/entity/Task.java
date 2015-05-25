@@ -39,9 +39,7 @@ public class Task {
 	@XmlElement
 	private Date startDateReal;
 	@XmlElement
-	private Date endDateReal;
-	@XmlElement
-	private String build;
+	private Date endDateReal;	
 	@XmlElement
 	private String assignedTo;
 	@XmlElement
@@ -55,14 +53,8 @@ public class Task {
 		if(tache.getAssignedTo() != null)
 			this.assignedTo=tache.getAssignedTo().getName();
 		else
-			this.assignedTo="null";
+			this.assignedTo="null";	
 		
-		
-		
-		if(tache.getBuild() != null)
-		   this.build=tache.getBuild().getName();
-		else
-			   this.build="null";
 		
 		if(tache.getCreatedBy() !=null)
 			this.createdBy=tache.getCreatedBy().getName();
@@ -171,13 +163,6 @@ public class Task {
 	}
 	public void setEndDateReal(Date endDateReal) {
 		this.endDateReal = endDateReal;
-	}
-	
-	public String getBuild() {
-		return build;
-	}
-	public void setBuild(String build) {
-		this.build = build;
 	}
 	
 	
