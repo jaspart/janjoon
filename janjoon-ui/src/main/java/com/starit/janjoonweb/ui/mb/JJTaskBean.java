@@ -1789,7 +1789,11 @@ public class JJTaskBean {
 
 					task.setTestcase(testcase);
 				}
-
+				
+				if (name.length() > 100) {
+					name =name.substring(0, 99);
+				}
+				
 				task.setName(name);
 				task.setDescription("This is task " + task.getName());
 				HttpSession session = (HttpSession) FacesContext
@@ -1801,6 +1805,7 @@ public class JJTaskBean {
 					JJSprintBean jJSprintBean = (JJSprintBean) session
 							.getAttribute("jJSprintBean");
 					task.setCreationDate(new Date());
+					//exception name size
 					task.setCreatedBy(((LoginBean) LoginBean
 							.findBean("loginBean")).getContact());
 					JJStatus status = jJStatusService.getOneStatus("TODO",
@@ -2940,7 +2945,7 @@ public class JJTaskBean {
 			if (sortMode.equalsIgnoreCase("chapter") && chapter != null)
 				updateChapterTimeLineEvent(chapter);
 
-		} else if (operation.equalsIgnoreCase(ADD_OPERATION)
+		} else if (model != null && operation.equalsIgnoreCase(ADD_OPERATION)
 				&& (sprint == null || (sprint.equals(tt.getSprint())))) {
 			String group = null;
 			List<TimelineEvent> events = model.getEvents();
