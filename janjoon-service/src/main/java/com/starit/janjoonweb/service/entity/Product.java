@@ -1,9 +1,12 @@
 package com.starit.janjoonweb.service.entity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.*;
 
 import com.starit.janjoonweb.domain.JJProduct;
@@ -120,22 +123,23 @@ public class Product {
 	}
 	
 
-//	@Override
-//	public String toString() {
-//		return "Product [id=" + id + ", name=" + name + ", description="
-//				+ description + ", creationDate=" + creationDate
-//				+ ", createdBy=" + createdBy + ", enabled=" + enabled
-//				+ ", extname=" + extname + ", manager=" + manager + "]";
-//	}
+	@Override
+	public String toString() {
+		return "Product [id=" + id + ", name=" + name + ", description="
+				+ description + ", creationDate=" + creationDate
+				+ ", createdBy=" + createdBy + ", enabled=" + enabled
+				+ ", extname=" + extname + ", manager=" + manager + "]";
+	}
 
-	public static List<Product> getProductListFromJJProductList(
-			List<JJProduct> jJProducts) {
+	public static Response getProductListFromJJProductList(List<JJProduct> jJProducts) {
 		List<Product> products = new ArrayList<Product>();
-
-		for (JJProduct prod : jJProducts) {
+		GenericEntity<List<Product>> entity = new GenericEntity<List<Product>>(products) {};
+		//Response response = Response.ok(entity).build();
+        for (JJProduct prod : jJProducts) {
 			products.add(new Product(prod));
 		}
-		return products;
+        //GenericEntity<List<Product>> entity = new GenericEntity<List<Product>>(products) {};
+		return  Response.ok(entity).build();
 	}
 
 }

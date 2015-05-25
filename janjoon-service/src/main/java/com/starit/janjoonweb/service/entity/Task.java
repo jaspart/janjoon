@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -190,11 +192,25 @@ public class Task {
 	
 	
 	
-	public static List<Task> getListTaskFrommJJTask(List<JJTask> jJTasks){
+	@Override
+	public String toString() {
+		return "Task [id=" + id + ", name=" + name + ", description="
+				+ description + ", creationDate=" + creationDate
+				+ ", createdBy=" + createdBy + ", updatedDate=" + updatedDate
+				+ ", enabled=" + enabled + ", startDatePlanned="
+				+ startDatePlanned + ", endDatePlanned=" + endDatePlanned
+				+ ", startDateRevised=" + startDateRevised
+				+ ", endDateRevised=" + endDateRevised + ", startDateReal="
+				+ startDateReal + ", endDateReal=" + endDateReal
+				+ ", assignedTo=" + assignedTo + ", status=" + status + "]";
+	}
+
+	public static Response getListTaskFrommJJTask(List<JJTask> jJTasks){
 		List<Task> taches =new ArrayList<Task>();
+		GenericEntity<List<Task>> entity = new GenericEntity<List<Task>>(taches) {};
 		for (JJTask tache : jJTasks ){
 			taches.add(new Task(tache));
 		}
-		return taches;
+		return Response.ok(entity).build();
 	}
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -174,13 +176,14 @@ public class Project {
 	}
 	
 	
-	public static List<Project> getListProjectFromJJProject(List<JJProject> jJProject){
+	public static Response getListProjectFromJJProject(List<JJProject> jJProject){
 		List<Project> projets = new ArrayList<Project>();
+		GenericEntity<List<Project>> entity = new GenericEntity<List<Project>>(projets) {};
 		for (JJProject projet : jJProject){
 			projets.add(new Project(projet));
 		}
 		
-		return projets;
+		return Response.ok(entity).build();
 		
 	}
 	

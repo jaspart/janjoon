@@ -1,11 +1,10 @@
 package com.starit.janjoonweb.service;
 
-import java.util.List;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,7 +25,7 @@ public class ContactWS {
 	@GET
 	@Path("/listecontact")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Contact> getContact(){
+	public Response getContact(){
 		return Contact.getListContactFromJJContact(jJContacService.getContacts(true));
 	}
 }

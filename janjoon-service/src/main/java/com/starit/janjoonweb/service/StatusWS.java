@@ -1,10 +1,9 @@
 package com.starit.janjoonweb.service;
 
-import java.util.List;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,7 +25,7 @@ public class StatusWS {
 	@GET
 	@Path("/listeStatus")
 	@javax.ws.rs.Produces(MediaType.APPLICATION_JSON)
-	public List<Status> getStatusName(){
+	public Response getStatusName(){
 		
 		return Status.getListContactFromJJStatut(jJStatusService.getStatus("task", true, null, true));
 		

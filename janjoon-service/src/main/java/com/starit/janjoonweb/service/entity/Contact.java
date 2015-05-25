@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.Pattern;
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -83,13 +85,15 @@ public class Contact {
 	
 	
 	
-	public static List<Contact> getListContactFromJJContact(List<JJContact> jJContact){
+	public static Response getListContactFromJJContact(List<JJContact> jJContact){
 		List<Contact> contacts =new ArrayList<Contact>();
+		GenericEntity<List<Contact>> entity = new GenericEntity<List<Contact>>(contacts) {};
+
 		for(JJContact cont : jJContact){
 			 contacts.add(new Contact(cont));
 		}
 		
-		return contacts;
+		return Response.ok(entity).build();
 	
 	}
 }

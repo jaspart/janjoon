@@ -1,18 +1,14 @@
 package com.starit.janjoonweb.service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,7 +25,6 @@ import com.starit.janjoonweb.domain.JJSprintService;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTask;
-import com.starit.janjoonweb.domain.JJTaskRepository;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.service.entity.Task;
@@ -104,7 +99,7 @@ public class TaskWS {
 	@Path("/listetache")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public List<Task> getTask(MultivaluedMap<String, String> tasksParameter) {
+	public Response getTask(MultivaluedMap<String, String> tasksParameter) {
 
 		String productName = tasksParameter.getFirst("product");
 		Long projectId = Long.parseLong(tasksParameter.getFirst("projectId"));
@@ -123,8 +118,7 @@ public class TaskWS {
 
 		if (project != null && product != null)
 
-			return Task.getListTaskFrommJJTask(jJTaskService.getTasksByProduct(
-					product, project));
+			return Task.getListTaskFrommJJTask(jJTaskService.getTasksByProduct(product, project));
 		else
 			return null;
 	}
@@ -160,7 +154,7 @@ public class TaskWS {
 	@GET
 	@Path("/gettaches")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Task> getTasks(){
+	public Response getTasks(){
 		return  Task.getListTaskFrommJJTask(jJTaskService.findAllJJTasks());
 	}
 	
