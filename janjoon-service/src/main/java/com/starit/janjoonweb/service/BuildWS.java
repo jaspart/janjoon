@@ -154,7 +154,7 @@ public class BuildWS {
 
 		if (login != null && password != null) {
 			JJContact contact = jJContactService.getContactByEmail(login, true);
-
+			password=password.trim();
 			if (contact == null) {
 				return "user not Found";
 			} else if (!encoder.matches(password, contact.getPassword())) {

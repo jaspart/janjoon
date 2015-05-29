@@ -403,6 +403,7 @@ public class LoginBean implements Serializable {
 	}
 
 	public String login() {
+		password=password.trim();
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
 				username, password);
 		String prevPage = "";

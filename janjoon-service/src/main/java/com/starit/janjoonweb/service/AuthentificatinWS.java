@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 
-@Component
+@Component("authentificatinWS")
 @Path("/authentifier")
 public class AuthentificatinWS {
       

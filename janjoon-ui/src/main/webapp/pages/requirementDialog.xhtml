@@ -61,7 +61,7 @@
 							<f:converter
 								converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
 							<f:selectItems value="#{jJRequirementBean.requirementStatusList}"
-								var="c" itemLabel="#{c.name}" itemValue="#{c}" />
+								var="req" itemLabel="#{req.name}" itemValue="#{req}" />
 							<p:ajax partialSubmit="true"
 								listener="#{jJRequirementBean.handleSelectStatus()}" />
 						</p:selectOneMenu>
@@ -77,8 +77,8 @@
 							converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
 
 							<f:selectItems
-								value="#{jJRequirementBean.requirementProjectList}" var="c"
-								itemLabel="#{c.name}" itemValue="#{c}" />
+								value="#{jJRequirementBean.requirementProjectList}" var="req"
+								itemLabel="#{req.name}" itemValue="#{req}" />
 							<p:ajax partialSubmit="true"
 								onstart="PF('requirementBlockUIWidget').block()"
 								oncomplete="PF('requirementBlockUIWidget').unblock()"
@@ -100,8 +100,8 @@
 							<f:selectItem itemValue="#{null}"
 								itemLabel="#{messages.specification_create_select_label}" />
 							<f:selectItems
-								value="#{jJRequirementBean.requirementProductList}" var="c"
-								itemLabel="#{c.name}" itemValue="#{c}" />
+								value="#{jJRequirementBean.requirementProductList}" var="req"
+								itemLabel="#{req.name}" itemValue="#{req}" />
 							<p:ajax partialSubmit="true" update="version"
 								onstart="PF('requirementBlockUIWidget').block()"
 								oncomplete="PF('requirementBlockUIWidget').unblock()"
@@ -121,8 +121,8 @@
 							<f:selectItem itemValue="#{null}"
 								itemLabel="#{messages.specification_create_select_label}" />
 							<f:selectItems
-								value="#{jJRequirementBean.requirementVersionList}" var="c"
-								itemLabel="#{c.name}" itemValue="#{c}" />
+								value="#{jJRequirementBean.requirementVersionList}" var="req"
+								itemLabel="#{req.name}" itemValue="#{req}" />
 							<p:ajax partialSubmit="true"
 								listener="#{jJRequirementBean.handleSelectVersion()}" />
 						</p:selectOneMenu>
@@ -139,8 +139,8 @@
 							<f:selectItem itemValue="#{null}"
 								itemLabel="#{messages.specification_create_select_label}" />
 							<f:selectItems
-								value="#{jJRequirementBean.requirementChapterList}" var="c"
-								itemLabel="#{c.name}" itemValue="#{c}" />
+								value="#{jJRequirementBean.requirementChapterList}" var="req"
+								itemLabel="#{req.name}" itemValue="#{req}" />
 							<p:ajax partialSubmit="true"
 								listener="#{jJRequirementBean.handleSelectChapter()}" />
 						</p:selectOneMenu>

@@ -88,11 +88,11 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
 
 		if (objet != null) {
-			orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
-					objet));
+			orPredicates.add(criteriaBuilder.equal(criteriaBuilder.lower(fromRight.<String>get("objet")),
+					objet.toLowerCase()));
 			if (!objet.contains("*"))
-				orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
-						"JJ" + objet));
+				orPredicates.add(criteriaBuilder.equal(criteriaBuilder.lower(fromRight.<String>get("objet")),
+						"JJ" + objet.toLowerCase()));
 			orPredicates
 					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
 
@@ -256,17 +256,17 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
 
 		if (objet != null && !objet.equalsIgnoreCase("sprintContact")) {
-			orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
-					objet));
+			orPredicates.add(criteriaBuilder.equal(criteriaBuilder.lower(fromRight.<String>get("objet")),
+					objet.toLowerCase()));
 			if (!objet.contains("*"))
-				orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
-						"JJ" + objet));
+				orPredicates.add(criteriaBuilder.equal(criteriaBuilder.lower(fromRight.<String>get("objet")),
+						"JJ" + objet.toLowerCase()));
 		} else {
 			if (objet != null && objet.equalsIgnoreCase("sprintContact")) {
-				orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
-						"Task"));
-				orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"),
-						"JJTask"));
+				orPredicates.add(criteriaBuilder.equal(criteriaBuilder.lower(fromRight.<String>get("objet")),
+						"Task".toLowerCase()));
+				orPredicates.add(criteriaBuilder.equal(criteriaBuilder.lower(fromRight.<String>get("objet")),
+						"JJTask".toLowerCase()));
 			}
 
 		}
@@ -727,8 +727,8 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 	}
 
 	public boolean isSuperAdmin(JJContact contact) {
-		return isAuthorized(contact, null, null, "Company", null, true, true,
-				null);
+		return isAuthorized(contact, null, null, "Company", null, null, null,
+				true);
 	}
 
 	@Override

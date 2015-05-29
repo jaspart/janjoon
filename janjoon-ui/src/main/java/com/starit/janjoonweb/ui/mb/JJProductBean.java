@@ -3,7 +3,6 @@ package com.starit.janjoonweb.ui.mb;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -14,17 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
-import com.starit.janjoonweb.domain.JJCompany;
-import com.starit.janjoonweb.domain.JJConfigurationService;
-import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJPermissionService;
-import com.starit.janjoonweb.domain.JJPhase;
-import com.starit.janjoonweb.domain.JJProduct;
-import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJTask;
-import com.starit.janjoonweb.domain.JJTaskService;
-import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.domain.JJVersionService;
+import com.starit.janjoonweb.domain.*;
 import com.starit.janjoonweb.ui.mb.JJVersionBean.VersionDataModel;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyProductDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -32,7 +21,7 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 @RooSerializable
 @RooJsfManagedBean(entity = JJProduct.class, beanName = "jJProductBean")
 public class JJProductBean {
-
+	
 	@Autowired
 	public JJConfigurationService jJConfigurationService;
 

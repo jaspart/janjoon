@@ -66,7 +66,9 @@ public class JJPermissionBean {
 	}
 
 	public List<JJProfile> getProfiles() {
-		profiles = jJProfileService.getProfiles(true);
+		profiles = jJProfileService.getProfiles(true, jJPermissionService
+				.isSuperAdmin(((LoginBean) LoginBean.findBean("loginBean"))
+						.getContact()));
 		return profiles;
 	}
 
@@ -83,13 +85,13 @@ public class JJPermissionBean {
 	}
 
 	public List<JJProject> getProjects() {
-		
+
 		JJContact contactAdmin = ((JJContactBean) LoginBean
 				.findBean("jJContactBean")).getContactAdmin();
-		List<JJProject> projects=new ArrayList<JJProject>();
-		if (contactAdmin.getId() != null) {					
-				projects = jJProjectService.getProjects(
-						contactAdmin.getCompany(),contactAdmin, true,true);		
+		List<JJProject> projects = new ArrayList<JJProject>();
+		if (contactAdmin.getId() != null) {
+			projects = jJProjectService.getProjects(contactAdmin.getCompany(),
+					contactAdmin, true, true);
 		}
 
 		return projects;
@@ -104,16 +106,16 @@ public class JJPermissionBean {
 	}
 
 	public List<JJProduct> getProducts() {
-		
+
 		JJContact contactAdmin = ((JJContactBean) LoginBean
 				.findBean("jJContactBean")).getContactAdmin();
-		List<JJProduct> products=new ArrayList<JJProduct>();
-			if (contactAdmin.getId() != null) {	
-				
-					products = jJProductService.getProducts(
-							contactAdmin.getCompany(),contactAdmin, true,true);
-				
-			}
+		List<JJProduct> products = new ArrayList<JJProduct>();
+		if (contactAdmin.getId() != null) {
+
+			products = jJProductService.getProducts(contactAdmin.getCompany(),
+					contactAdmin, true, true);
+
+		}
 		return products;
 	}
 

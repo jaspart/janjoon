@@ -6,18 +6,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.faces.event.ComponentSystemEvent;
-import javax.persistence.criteria.Join;
 
 import org.primefaces.component.datatable.DataTable;
-import org.primefaces.context.RequestContext;
 import org.primefaces.model.SortMeta;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import com.starit.janjoonweb.domain.JJBug;
-import com.starit.janjoonweb.domain.JJCriticity;
-import com.starit.janjoonweb.domain.JJImportance;
-import com.starit.janjoonweb.domain.JJStatus;
 
 @Scope("session")
 @Component("bugDataTableOptions")

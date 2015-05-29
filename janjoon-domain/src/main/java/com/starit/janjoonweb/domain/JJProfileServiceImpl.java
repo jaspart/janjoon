@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 
@@ -21,9 +22,10 @@ public class JJProfileServiceImpl implements JJProfileService {
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
-	
-	public List<JJProfile> load(MutableInt size,int first, int pageSize)
-	{
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<JJProfile> load(MutableInt size, int first, int pageSize,
+			boolean isSuperAdmin) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJProfile> criteriaQuery = criteriaBuilder
 				.createQuery(JJProfile.class);
@@ -34,22 +36,37 @@ public class JJProfileServiceImpl implements JJProfileService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		
+		if (!isSuperAdmin) {			
+			Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
+			Root<JJRight> fromRight = subquery.from(JJRight.class);
+			List<Predicate> predicatesRight = new ArrayList<Predicate>();
+			subquery.select(fromRight.get("profile").<Long>get("id"));
+			predicatesRight.add(criteriaBuilder.and(criteriaBuilder.equal(
+					fromRight.get("x"), true),criteriaBuilder.equal(criteriaBuilder.lower(fromRight
+							.<String> get("objet")),"company".toLowerCase())));
+			predicatesRight.add(criteriaBuilder.and(criteriaBuilder.equal(
+					fromRight.get("x"), true),criteriaBuilder.equal(criteriaBuilder.lower(fromRight
+							.<String> get("objet")),"*".toLowerCase())));
 
+			subquery.where(criteriaBuilder.and(criteriaBuilder.or(predicatesRight.toArray(new Predicate[] {})),
+					criteriaBuilder.equal(fromRight.get("enabled"), true)));
+			
+			predicates.add(criteriaBuilder.in(from.get("id")).value(subquery).not());
+
+		}
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		TypedQuery<JJProfile> result = entityManager.createQuery(select);
 		result.setFirstResult(first);
 		result.setMaxResults(pageSize);
-		
+
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJProfile.class)));
 		entityManager.createQuery(cq);
 		cq.where(predicates.toArray(new Predicate[] {}));
 		size.setValue(entityManager.createQuery(cq).getSingleResult());
-		
+
 		return result.getResultList();
 
 	}
@@ -71,8 +88,8 @@ public class JJProfileServiceImpl implements JJProfileService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		if (name != null) {		
-			
+		if (name != null) {
+
 			predicates.add(criteriaBuilder.equal(
 					criteriaBuilder.lower(from.<String> get("name")),
 					name.toLowerCase()));
@@ -90,7 +107,7 @@ public class JJProfileServiceImpl implements JJProfileService {
 
 	}
 
-	public List<JJProfile> getProfiles(boolean onlyActif) {
+	public List<JJProfile> getProfiles(boolean onlyActif, boolean isSuperAdmin) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJProfile> criteriaQuery = criteriaBuilder
 				.createQuery(JJProfile.class);
@@ -100,6 +117,19 @@ public class JJProfileServiceImpl implements JJProfileService {
 		CriteriaQuery<JJProfile> select = criteriaQuery.select(from);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (!isSuperAdmin) {
+			Subquery<JJRight> subquery = criteriaQuery.subquery(JJRight.class);
+			Root fromRight = subquery.from(JJRight.class);
+			subquery.select(fromRight.get("profile"));
+
+			predicates.add(criteriaBuilder.and(criteriaBuilder.notEqual(
+					fromRight.get("x"), true),
+					criteriaBuilder.or(criteriaBuilder.notEqual(
+							fromRight.get("objet"), "company"), criteriaBuilder
+							.notEqual(fromRight.get("objet"), "*"))));
+
+		}
 
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
@@ -112,16 +142,16 @@ public class JJProfileServiceImpl implements JJProfileService {
 		return result.getResultList();
 
 	}
-	
-public void saveJJProfile(JJProfile JJProfile_) {
-		
-        jJProfileRepository.save(JJProfile_);
-        JJProfile_=jJProfileRepository.findOne(JJProfile_.getId());
-    }
-    
-    public JJProfile updateJJProfile(JJProfile JJProfile_) {
-        jJProfileRepository.save(JJProfile_);
-        JJProfile_=jJProfileRepository.findOne(JJProfile_.getId());
-        return JJProfile_;
-    }
+
+	public void saveJJProfile(JJProfile JJProfile_) {
+
+		jJProfileRepository.save(JJProfile_);
+		JJProfile_ = jJProfileRepository.findOne(JJProfile_.getId());
+	}
+
+	public JJProfile updateJJProfile(JJProfile JJProfile_) {
+		jJProfileRepository.save(JJProfile_);
+		JJProfile_ = jJProfileRepository.findOne(JJProfile_.getId());
+		return JJProfile_;
+	}
 }

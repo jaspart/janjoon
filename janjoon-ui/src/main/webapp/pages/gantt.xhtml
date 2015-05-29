@@ -20,8 +20,8 @@
 
 						<f:selectItem itemValue="#{null}"
 							itemLabel="#{messages.project_gantt_select_label}" />
-						<f:selectItems value="#{jJTaskBean.sprints}" var="c"
-							itemLabel="#{c.name}" itemValue="#{c}" />
+						<f:selectItems value="#{jJTaskBean.sprints}" var="spr"
+							itemLabel="#{spr.name}" itemValue="#{spr}" />
 						<p:ajax onstart="PF('blockUIWidget').block()" event="change"
 							listener="#{jJTaskBean.sprintSelectionChanged}"
 							update=":projecttabview:planningForm "
@@ -351,8 +351,8 @@
 													converter="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter">
 													<f:selectItem itemValue="#{null}"
 														itemLabel="Select a Sprint" />
-													<f:selectItems value="#{jJTaskBean.sprints}" var="c"
-														itemLabel="#{c.name}" itemValue="#{c}" />
+													<f:selectItems value="#{jJTaskBean.sprints}" var="spr"
+														itemLabel="#{spr.name}" itemValue="#{spr}" />
 												</p:selectOneMenu>
 											</f:facet>
 										</p:cellEditor>

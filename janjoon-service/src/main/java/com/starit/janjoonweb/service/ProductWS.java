@@ -16,7 +16,7 @@ import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJProductService;
 import com.starit.janjoonweb.service.entity.Product;
 
-@Component
+@Component("productWS")
 @Path("/product")
 public class ProductWS {
       @Autowired

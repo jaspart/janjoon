@@ -36,7 +36,7 @@
 			<directory>src/run-distrib</directory>
 			<outputDirectory>/lib</outputDirectory>
 			<includes>
-				<include>jetty-runner-8.1.14.v20131031.jar</include>				
+				<include>jetty-runner-8.1.14.v20131031.jar</include>
 			</includes>
 		</fileSet>
 
@@ -44,7 +44,16 @@
 			<directory>target</directory>
 			<outputDirectory>/lib</outputDirectory>
 			<includes>
-				<include>janjoon-ui-2.0-BUILD_NUMBER.war</include>
+				<include>janjoon-ui-2.0-BUILD_NUMBER-small.war</include>
+			</includes>
+		</fileSet>
+		
+		
+		<fileSet>
+			<directory>target/janjoon-ui-2.0-BUILD_NUMBER/WEB-INF/lib</directory>
+			<outputDirectory>/license</outputDirectory>
+			<includes>
+				<include>org.eclipse.jgit-3.2.0.201312181205-r.jar</include>
 			</includes>
 		</fileSet>
 		
@@ -53,13 +62,13 @@
 			<outputDirectory>/log</outputDirectory>
 		</fileSet>
 
-<!-- 		<fileSet> -->
-<!-- 			<directory>src/run-distrib</directory> -->
-<!-- 			<outputDirectory>/db</outputDirectory> -->
-<!-- 			<excludes> -->
-<!-- 				<exclude>*.*</exclude> -->
-<!-- 			</excludes> -->
-<!-- 		</fileSet> -->
+		<!-- <fileSet> -->
+		<!-- <directory>src/run-distrib</directory> -->
+		<!-- <outputDirectory>/db</outputDirectory> -->
+		<!-- <excludes> -->
+		<!-- <exclude>*.*</exclude> -->
+		<!-- </excludes> -->
+		<!-- </fileSet> -->
 
 		<fileSet>
 			<directory>src/run-distrib</directory>
@@ -76,6 +85,7 @@
 			<outputDirectory>/license</outputDirectory>
 			<includes>
 				<include>*.lic*</include>
+				<include>janjoon-base.jar</include>
 			</includes>
 		</fileSet>
 

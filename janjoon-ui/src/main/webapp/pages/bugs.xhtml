@@ -98,11 +98,11 @@
 					paginatorPosition="bottom"
 					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 					rowsPerPageTemplate="50,100,200">
+
 					<p:ajax event="rowSelectCheckbox" update="bugTable2:deleteMButton" />
 					<p:ajax event="rowUnselectCheckbox"
 						update="bugTable2:deleteMButton" />
 					<p:ajax event="toggleSelect" update="bugTable2:deleteMButton" />
-					
 					<p:ajax event="page" onstart="PF('blockUIWidget2').block()"
 						oncomplete="PF('blockUIWidget2').unblock()" />
 					<p:ajax event="sort" onstart="PF('blockUIWidget2').block()"
@@ -192,8 +192,6 @@
 									target="#{jJBugBean.JJBug_}" />
 								<f:setPropertyActionListener value="#{bug.project}"
 									target="#{jJBugBean.bugProjectSelected}" />
-<!-- 								<f:setPropertyActionListener value="#{bug.requirement}" -->
-<!-- 									target="#{jJBugBean.bugRequirementSelected}" /> -->
 							</p:menuitem>
 							<p:tooltip for="editButton" value="#{messages.label_edit}"
 								showEffect="fade" hideEffect="fade" />
@@ -216,8 +214,6 @@
 							oncomplete="PF('deleteMDialogWidget').show()"
 							disabled="#{empty jJBugBean.selectedBugList}"
 							title="#{messages.label_delete}" />
-						<p:tooltip for="deleteMButton" value="#{messages.label_delete}"
-							showEffect="fade" hideEffect="fade" />
 					</f:facet>
 				</p:dataTable>
 			</h:form>
@@ -266,27 +262,29 @@
 				modal="true" widgetVar="editDialogWidget" dynamic="true"
 				resizable="true" maximizable="true" showEffect="fade"
 				hideEffect="explode" draggable="false">
-				<p:ajax event="close" listener="#{jJBugBean.handleDialogClose}" immediate="true"/>
+				<p:ajax event="close" listener="#{jJBugBean.handleDialogClose}"
+					immediate="true" />
 				<p:outputPanel id="editPanel">
 					<h:form id="editForm" enctype="multipart/form-data">
-					<p:panel styleClass="panelDialog">
+						<p:panel styleClass="panelDialog">
 							<f:facet name="header">
 								<p:messages id="msg" showDetail="false" closable="true" />
 							</f:facet>
-						<ui:include src="bugDialog.xhtml">
-							<ui:param name="JJBug_" value="#{jJBugBean.JJBug_}" />
-						</ui:include>
-						<f:facet name="footer">
-						<p:commandButton id="editSaveButton"
-							onstart="PF('bugBlockUIWidget').block()"
-							oncomplete="PF('bugBlockUIWidget').unblock()"
-							value="#{messages.bug_edit_save_button}"
-							action="#{jJBugBean.persistBug}"
-							update="createPanelGrid :bugForm :growlForm" />
-						<p:commandButton id="editCloseButton" immediate="true"
-							value="#{messages.bug_edit_close_button}"
-							onclick="PF('editDialogWidget').hide()" type="button" />
-							</f:facet></p:panel>
+							<ui:include src="bugDialog.xhtml">
+								<ui:param name="JJBug_" value="#{jJBugBean.JJBug_}" />
+							</ui:include>
+							<f:facet name="footer">
+								<p:commandButton id="editSaveButton"
+									onstart="PF('bugBlockUIWidget').block()"
+									oncomplete="PF('bugBlockUIWidget').unblock()"
+									value="#{messages.bug_edit_save_button}"
+									action="#{jJBugBean.persistBug}"
+									update="createPanelGrid :bugForm :growlForm" />
+								<p:commandButton id="editCloseButton" immediate="true"
+									value="#{messages.bug_edit_close_button}"
+									onclick="PF('editDialogWidget').hide()" type="button" />
+							</f:facet>
+						</p:panel>
 					</h:form>
 				</p:outputPanel>
 			</p:dialog>

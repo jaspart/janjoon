@@ -56,7 +56,7 @@ public class JJContactAuthentificationProvider implements
 			throw new BadCredentialsException("Username not found.");
 		}
 			
-		if (!encoder.matches(password,contact.getPassword())){
+		if (!encoder.matches(password.trim(),contact.getPassword())){
 			throw new BadCredentialsException("Wrong password.");
 		}
 

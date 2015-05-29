@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.service.entity.Status;
 
-@Component
+@Component("statusWS")
 @Path("/status")
 public class StatusWS {
 	

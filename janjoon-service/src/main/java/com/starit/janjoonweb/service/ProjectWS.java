@@ -14,7 +14,7 @@ import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJProjectService;
 import com.starit.janjoonweb.service.entity.Project;
 
-@Component
+@Component("projectWS")
 @Path("/projets")
 public class ProjectWS {
     

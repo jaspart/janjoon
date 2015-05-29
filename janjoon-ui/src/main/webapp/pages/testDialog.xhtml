@@ -49,8 +49,8 @@
 									converterId="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter" />
 								<f:selectItem itemValue="#{null}"
 									itemLabel="#{messages.test_build_select}" />
-								<f:selectItems value="#{jJTestcaseBean.requirements}" var="c"
-									itemLabel="#{c.name}" itemValue="#{c}" />
+								<f:selectItems value="#{jJTestcaseBean.requirements}" var="req"
+									itemLabel="#{req.name}" itemValue="#{req}" />
 								<p:ajax process="@this" partialSubmit="true"
 									listener="#{jJTestcaseBean.handleSelectRequirement()}" />
 							</p:selectOneMenu>

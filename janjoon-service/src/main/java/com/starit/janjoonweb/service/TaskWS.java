@@ -29,7 +29,7 @@ import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.service.entity.Task;
 
-@Component
+@Component("taskWS")
 @Path("/tache")
 public class TaskWS {
 	@Autowired

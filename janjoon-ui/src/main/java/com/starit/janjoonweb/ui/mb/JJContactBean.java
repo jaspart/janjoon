@@ -315,7 +315,7 @@ public class JJContactBean {
 					+ contactAdmin.getFirstname() + " "
 					+ contactAdmin.getName());
 			contactAdmin
-					.setPassword(encoder.encode(contactAdmin.getPassword()));
+					.setPassword(encoder.encode(contactAdmin.getPassword().trim()));
 			contactAdmin.setCreationDate(new Date());
 			contactAdmin.setCreatedBy(((LoginBean) LoginBean
 					.findBean("loginBean")).getContact());
@@ -364,11 +364,11 @@ public class JJContactBean {
 		contactAdmin.setUpdatedBy(((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact());
 
-		if (!contactAdmin.getPassword().equals(
+		if (!contactAdmin.getPassword().trim().equals(
 				jJContactService.findJJContact(contactAdmin.getId())
-						.getPassword())) {
+						.getPassword().trim())) {
 			contactAdmin
-					.setPassword(encoder.encode(contactAdmin.getPassword()));
+					.setPassword(encoder.encode(contactAdmin.getPassword().trim()));
 		}
 
 		if (jJContactService.updateJJContactTransaction(contactAdmin)) {
@@ -610,7 +610,7 @@ public class JJContactBean {
 
 		contactAdmin.setDescription("This contact is "
 				+ contactAdmin.getFirstname() + " " + contactAdmin.getName());
-		contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword()));
+		contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword().trim()));
 		contactAdmin.setCreationDate(new Date());
 		contactAdmin.setEnabled(true);
 		contactAdmin.setCreatedBy(((LoginBean) LoginBean.findBean("loginBean"))

@@ -145,8 +145,8 @@
 											converter="com.starit.janjoonweb.ui.mb.converter.JJCompanyConverter"
 											label="Company">
 
-											<f:selectItems value="#{jJCompanyBean.companies}" var="c"
-												itemLabel="#{c.name}" itemValue="#{c}" />
+											<f:selectItems value="#{jJCompanyBean.companies}" var="comp"
+												itemLabel="#{comp.name}" itemValue="#{comp}" />
 											<p:ajax update="product project addPermission" />
 										</p:selectOneMenu>
 									</p:column>

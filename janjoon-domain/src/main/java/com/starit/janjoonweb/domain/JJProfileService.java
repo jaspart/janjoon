@@ -10,7 +10,7 @@ public interface JJProfileService {
 
 	public JJProfile getOneProfile(String name, boolean onlyActif);
 
-	public List<JJProfile> getProfiles(boolean onlyActif);
+	public List<JJProfile> getProfiles(boolean onlyActif,boolean isSuperAdmin);
 
-	public List<JJProfile> load(MutableInt size,int first, int pageSize);
+	public List<JJProfile> load(MutableInt size,int first, int pageSize,boolean isSuperAdmin);
 }

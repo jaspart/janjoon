@@ -35,10 +35,10 @@
 		</property>
 	</bean>
 
-	<aop:aspectj-autoproxy>
-		<aop:include name="appLogger" />
-		<aop:include name="appMBLogger" />
-	</aop:aspectj-autoproxy>
+<!-- 	<aop:aspectj-autoproxy> -->
+<!-- 		<aop:include name="appLogger" /> -->
+<!-- 		<aop:include name="appMBLogger" /> -->
+<!-- 	</aop:aspectj-autoproxy> -->
 
 
 	<bean class="com.starit.janjoonweb.ui.mb.util.WorkFlowsActions" id="workFlowActions" />

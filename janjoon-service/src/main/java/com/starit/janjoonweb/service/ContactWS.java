@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.service.entity.Contact;
 
-@Component
+@Component("contactWS")
 @Path("/contact")
 public class ContactWS {
    

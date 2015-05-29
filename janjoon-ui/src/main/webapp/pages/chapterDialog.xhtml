@@ -70,8 +70,8 @@
 
 								<f:selectItem itemValue="#{null}"
 									itemLabel="#{messages.specification_create_select_label}" />
-								<f:selectItems value="#{jJChapterBean.chapterList}" var="c"
-									itemLabel="#{c.name}" itemValue="#{c}" />
+								<f:selectItems value="#{jJChapterBean.chapterList}" var="chap"
+									itemLabel="#{chap.name}" itemValue="#{chap}" />
 								<p:ajax partialSubmit="true"
 									onstart="PF('chapterBlockUIWidget').block()"
 									oncomplete="PF('chapterBlockUIWidget').unblock()"

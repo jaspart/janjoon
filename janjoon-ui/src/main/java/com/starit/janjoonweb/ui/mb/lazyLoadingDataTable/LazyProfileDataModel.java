@@ -8,8 +8,10 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
+import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJProfileService;
+import com.starit.janjoonweb.ui.mb.LoginBean;
 
 public class LazyProfileDataModel extends LazyDataModel<JJProfile> {
 
@@ -17,11 +19,13 @@ public class LazyProfileDataModel extends LazyDataModel<JJProfile> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	JJProfileService profileService;	
+	private JJProfileService profileService;	
+	private JJPermissionService permissionService;
 
-	public LazyProfileDataModel(JJProfileService profileService) {
+	public LazyProfileDataModel(JJProfileService profileService,JJPermissionService jJPermissionService) {
 		
 		this.profileService = profileService;
+		this.permissionService=jJPermissionService;
 	}
 
 	@Override
@@ -40,7 +44,9 @@ public class LazyProfileDataModel extends LazyDataModel<JJProfile> {
 
 		List<JJProfile> data = new ArrayList<JJProfile>();
 		MutableInt size=new MutableInt(0);
-		data = profileService.load(size,first, pageSize);
+		data = profileService.load(size,first, pageSize,permissionService
+				.isSuperAdmin(((LoginBean) LoginBean.findBean("loginBean"))
+						.getContact()));
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

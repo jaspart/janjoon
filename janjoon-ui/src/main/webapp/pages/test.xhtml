@@ -99,8 +99,8 @@
 										converterId="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter" />
 									<f:selectItem itemValue="#{null}"
 										itemLabel="#{messages.test_build_select} #{messages.test_build_label}" />
-									<f:selectItems value="#{jJBuildBean.builds}" var="c"
-										itemLabel="#{c.name}" itemValue="#{c}" />
+									<f:selectItems value="#{jJBuildBean.builds}" var="bld"
+										itemLabel="#{bld.name}" itemValue="#{bld}" />
 									<p:ajax process="@this" partialSubmit="true"
 										listener="#{jJTestcaseBean.createTestcaseTree()}"
 										update=":testFormWest :testFormCenter "
