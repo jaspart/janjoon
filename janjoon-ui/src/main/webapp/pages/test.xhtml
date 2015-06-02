@@ -263,27 +263,28 @@
 					</p:panelGrid>
 				</p:overlayPanel>
 				<h:form id="rate">
-					<p:rating value="#{jJTestcaseBean.rated}" style="float: right;margin-top: 2.5%;margin-right: -2.5%;"
-						stars="1" rendered="#{jJTestcaseBean.renderCommentsPanel}" >
+					<p:rating value="#{jJTestcaseBean.rated}"
+						style="float: right;margin-top: 2.5%;margin-right: -2.5%;"
+						stars="1" rendered="#{jJTestcaseBean.renderCommentsPanel}">
 						<p:ajax event="rate" listener="#{jJTestcaseBean.onrate}"
-						onstart="PF('blockUIWidget').block()"
-						oncomplete="PF('blockUIWidget').unblock()"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
 							update=":growlForm :messageCreationForm :headerForm:communicationButton" />
 						<p:ajax event="cancel" listener="#{jJTestcaseBean.oncancel}"
-						onstart="PF('blockUIWidget').block()"
-						oncomplete="PF('blockUIWidget').unblock()"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
 							update=":growlForm :messageCreationForm :headerForm:communicationButton" />
 					</p:rating>
 				</h:form>
 				<h:panelGroup id="container"
 					style="width: 50%;float: right;margin-right: 1%;">
-					<p:fieldset legend="Comments" toggleable="true" 
+					<p:fieldset legend="Comments" toggleable="true"
 						rendered="#{jJTestcaseBean.renderCommentsPanel}">
 						<ui:include src="/pages/communication.xhtml">
 							<ui:param name="communicationList"
 								value="#{jJTestcaseBean.communicationMessages}" />
 							<ui:param name="field" value="#{jJTestcaseBean.testcase}" />
-							<ui:param name="cols" value="50"/>
+							<ui:param name="cols" value="50" />
 						</ui:include>
 					</p:fieldset>
 				</h:panelGroup>
@@ -520,7 +521,7 @@
 					</p:dataTable>
 				</h:form>
 			</p:layoutUnit>
-			
+
 			<p:layoutUnit position="south">
 			</p:layoutUnit>
 		</p:layout>
@@ -569,8 +570,9 @@
 			</p:outputPanel>
 		</p:dialog>
 		<p:dialog id="runTestcaseDialog" header="#{messages.test_exec_title}"
-			modal="true" widgetVar="runTestcaseDialogWidget" draggable="false"
-			height="370px" dynamic="true" resizable="false" width="400px">
+			hideEffect="explode" modal="true" widgetVar="runTestcaseDialogWidget"
+			draggable="false" height="370px" dynamic="true" resizable="false"
+			width="400px">
 			<p:hotkey bind="esc" handler="PF('testcaseDialogWidget').hide()" />
 			<p:hotkey bind="space" handler="TestcaseExecSuccessButton.jq.click()" />
 			<p:hotkey bind="S" handler="TestcaseExecSuccessButton.jq.click()" />
@@ -666,7 +668,8 @@
 									icon="ui-icon-circle-check"
 									update=":testFormCenter :testFormWest :growlForm "
 									actionListener="#{jJTeststepexecutionBean.validateTab}"
-									style="float: right;"
+									style="float: right;" onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()"
 									disabled="#{jJTeststepexecutionBean.disabledTestcase}" />
 							</p:column>
 						</p:row>

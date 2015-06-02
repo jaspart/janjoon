@@ -316,19 +316,22 @@ public class WorkFlowsActions {
 
 		}
 
-		JJAuditLog auditLog = new JJAuditLog();
-		auditLog.setAuditLogDate(new Date());
-		auditLog.setContact(((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact());
-		auditLog.setObjet(obj);
-		auditLog.setKeyName(longText);
-		auditLog.setKeyValue(longText);
-		JJAuditLogBean jJAuditLogBean = ((JJAuditLogBean) LoginBean
-				.findBean("jJAuditLogBean"));
-		if (jJAuditLogBean == null)
-			jJAuditLogBean = new JJAuditLogBean();
+		if (obj != null) {
+			JJAuditLog auditLog = new JJAuditLog();
+			auditLog.setAuditLogDate(new Date());
+			auditLog.setContact(((LoginBean) LoginBean.findBean("loginBean"))
+					.getContact());
+			auditLog.setObjet(obj);
+			auditLog.setKeyName("Status Changed for " + obj);
+			auditLog.setKeyValue(longText);
+			JJAuditLogBean jJAuditLogBean = ((JJAuditLogBean) LoginBean
+					.findBean("jJAuditLogBean"));
+			if (jJAuditLogBean == null)
+				jJAuditLogBean = new JJAuditLogBean();
 
-		jJAuditLogBean.saveJJAuditLog(auditLog);
+			jJAuditLogBean.saveJJAuditLog(auditLog);
+
+		}
 
 	}
 
@@ -376,7 +379,7 @@ public class WorkFlowsActions {
 	@SuppressWarnings("rawtypes")
 	public void sendMailWorkFlow(Object object) {
 
-		System.err.println("sendMailWorkFlow Successufuly Executed");
+		//System.err.println("sendMailWorkFlow Successufuly Executed");
 		if (object instanceof JJTask) {
 			JJTask task = (JJTask) object;
 			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))

@@ -2753,7 +2753,7 @@ public class JJTaskBean {
 			} else
 				tasksData.remove(i);
 
-		} else if (operation.equalsIgnoreCase(ADD_OPERATION)) {
+		} else if (operation.equalsIgnoreCase(ADD_OPERATION) && tasksData != null) {
 			if (sortMode == null || sortMode.equalsIgnoreCase("chapter")) {
 				if (tt.getChapter() != null
 						&& (this.sprint == null || (this.sprint.equals(tt

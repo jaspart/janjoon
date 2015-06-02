@@ -16,6 +16,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletContext;
 
+import org.apache.log4j.Logger;
+
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJTask;
 
@@ -26,6 +28,7 @@ public class MailingService {
 	private String userName;
 	private String password;
 	private boolean error;
+	static Logger logger = Logger.getLogger("MailingService");
 
 	public MailingService() {
 
@@ -43,8 +46,10 @@ public class MailingService {
 			userName = properties.getProperty("email.username");
 			password = properties.getProperty("email.password");
 			error = false;
+			logger.info("Mailing Service Successfully initialised");
 		} catch (IOException e) {
 			error = true;
+			logger.error("Error While initialising Mailing Service");
 		}
 	}
 
@@ -114,10 +119,10 @@ public class MailingService {
 
 				Transport.send(message);
 
-				System.out.println("Done");
+				logger.info("Message Successfully send");
 
 			} catch (MessagingException e) {
-				System.out.println(new RuntimeException(e).getMessage());
+				logger.error(new RuntimeException(e).getMessage());
 			}
 		}
 	}
