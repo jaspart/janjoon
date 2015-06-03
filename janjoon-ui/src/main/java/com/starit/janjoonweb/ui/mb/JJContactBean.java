@@ -314,8 +314,8 @@ public class JJContactBean {
 			contactAdmin.setDescription("This contact is "
 					+ contactAdmin.getFirstname() + " "
 					+ contactAdmin.getName());
-			contactAdmin
-					.setPassword(encoder.encode(contactAdmin.getPassword().trim()));
+			contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword()
+					.trim()));
 			contactAdmin.setCreationDate(new Date());
 			contactAdmin.setCreatedBy(((LoginBean) LoginBean
 					.findBean("loginBean")).getContact());
@@ -364,11 +364,13 @@ public class JJContactBean {
 		contactAdmin.setUpdatedBy(((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact());
 
-		if (!contactAdmin.getPassword().trim().equals(
-				jJContactService.findJJContact(contactAdmin.getId())
+		if (!contactAdmin
+				.getPassword()
+				.trim()
+				.equals(jJContactService.findJJContact(contactAdmin.getId())
 						.getPassword().trim())) {
-			contactAdmin
-					.setPassword(encoder.encode(contactAdmin.getPassword().trim()));
+			contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword()
+					.trim()));
 		}
 
 		if (jJContactService.updateJJContactTransaction(contactAdmin)) {
@@ -606,11 +608,12 @@ public class JJContactBean {
 
 	}
 
-	public String signUp() {	
+	public String signUp() {
 
 		contactAdmin.setDescription("This contact is "
 				+ contactAdmin.getFirstname() + " " + contactAdmin.getName());
-		contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword().trim()));
+		contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword()
+				.trim()));
 		contactAdmin.setCreationDate(new Date());
 		contactAdmin.setEnabled(true);
 		contactAdmin.setCreatedBy(((LoginBean) LoginBean.findBean("loginBean"))
@@ -618,7 +621,8 @@ public class JJContactBean {
 
 		if (jJContactService.saveJJContactTransaction(contactAdmin)) {
 
-			JJProfile customProfile = jJProfileService.getOneProfile("CustomProfile", true);
+			JJProfile customProfile = jJProfileService.getOneProfile(
+					"CustomProfile", true);
 			if (customProfile == null) {
 
 				customProfile = createCustomProfile();
@@ -628,16 +632,29 @@ public class JJContactBean {
 			permission.setContact(contactAdmin);
 			permission.setProfile(customProfile);
 			permission.setEnabled(true);
-			jJPermissionService.saveJJPermission(permission);			
+			jJPermissionService.saveJJPermission(permission);
 			return "success";
 
 		} else {
-			
+
 			contactAdmin.setEmail("");
 			contactAdmin.setPassword("");
 			return "fail";
 		}
 
+	}
+
+	public void updateJJContact(JJContact b) {
+
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
+		if (contact.equals(b)) {
+			b.setUpdatedBy(b);
+			((LoginBean) LoginBean.findBean("loginBean")).setContact(null);
+		} else
+			b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJContactService.updateJJContact(b);
 	}
 
 	private JJProfile createCustomProfile() {

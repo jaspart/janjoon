@@ -45,6 +45,7 @@ import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.PlanningConfiguration;
 import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 
 @RooSerializable
@@ -397,11 +398,6 @@ public class JJSprintBean {
 			SprintUtil su = sprintList.get(activeTabSprintIndex);
 
 			if (!su.isRender()) {
-//				JJSprint s = jJSprintService.findJJSprint(su.getSprint()
-//						.getId());
-//				sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s,
-//						LoginBean.getProduct()), jJContactService);
-//				sprintList.set(contains(su.getSprint().getId()), sprintUtil);
 				System.err.println("###### ACtive activeTabSprintIndex: "
 						+ activeTabSprintIndex);
 			}
@@ -409,17 +405,10 @@ public class JJSprintBean {
 			String paramIndex = paramMap.get("activeGantIndex");
 			setActiveTabGantIndex(Integer.valueOf(paramIndex));
 
-			if (activeTabGantIndex == 1) {
+			if (activeTabGantIndex == PlanningConfiguration.getSrumIndex()) {
 				SprintUtil su = sprintList.get(activeTabSprintIndex);
 
 				if (!su.isRender()) {
-//					JJSprint s = jJSprintService.findJJSprint(su.getSprint()
-//							.getId());
-//					sprintUtil = new SprintUtil(s,
-//							jJTaskService.getSprintTasks(s,
-//									LoginBean.getProduct()), jJContactService);
-//					sprintList
-//							.set(contains(su.getSprint().getId()), sprintUtil);
 					System.err.println("###### ACtive activeTabSprintIndex: "
 							+ activeTabSprintIndex);
 				}
@@ -429,11 +418,11 @@ public class JJSprintBean {
 			} else
 				((JJTaskBean) LoginBean.findBean("jJTaskBean"))
 						.setMode("planning");
-			if (update && activeTabGantIndex == 1) {
+			if (update && activeTabGantIndex == PlanningConfiguration.getSrumIndex()) {
 				RequestContext.getCurrentInstance()
 						.execute("updateTabSprint()");
 				update = false;
-			}else if(activeTabGantIndex == 0)
+			}else if(activeTabGantIndex == PlanningConfiguration.getGanttIndex())
 				update = true;
 			System.err.println("###### ACtive activeTabGantIndex: "
 					+ activeTabGantIndex);

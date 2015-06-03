@@ -449,7 +449,7 @@ public class RequirementBean {
 				requirement = null;
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"validator_page_access", "requirement");
-				facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);	
+				facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 				((LoginBean) LoginBean.findBean("loginBean"))
 						.setFacesMessage(facesMessage);
 			}
@@ -463,7 +463,7 @@ public class RequirementBean {
 
 		rootNode = new DefaultTreeNode("Root", null);
 
-		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		JJProject project = LoginBean.getProject();
 		JJProduct product = LoginBean.getProduct();
 		JJVersion version = LoginBean.getVersion();
@@ -492,7 +492,8 @@ public class RequirementBean {
 		List<JJRequirement> requirements = jJRequirementService
 				.getRequirementsWithOutChapter(((LoginBean) LoginBean
 						.findBean("loginBean")).getContact().getCompany(),
-						category, loginBean.getAuthorizedMap("Requirement", project, product), version, null, true, true);
+						category, loginBean.getAuthorizedMap("Requirement",
+								project, product), version, null, true, true);
 
 		for (JJRequirement requirement : requirements) {
 			new DefaultTreeNode("Requirement", new RequirementUtil(requirement,
@@ -508,10 +509,11 @@ public class RequirementBean {
 			JJVersion version) {
 
 		TreeNode newNode = new DefaultTreeNode("chapter", chapter, categoryNode);
-		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		List<JJRequirement> requirements = jJRequirementService
 				.getRequirements(((LoginBean) LoginBean.findBean("loginBean"))
-						.getContact().getCompany(), cat, loginBean.getAuthorizedMap("Requirement", project, product),
+						.getContact().getCompany(), cat, loginBean
+						.getAuthorizedMap("Requirement", project, product),
 						version, null, chapter, true, true, true, false, null);
 
 		for (JJRequirement requirement : requirements) {
@@ -618,13 +620,15 @@ public class RequirementBean {
 		linkReq = new ArrayList<JJRequirement>();
 		this.categoryName = cateRequirement.getCategory().getName();
 		linkReqList = new ArrayList<JJRequirement>();
-		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		JJCategory selectedCategory = jJCategoryService.getCategory(
 				categoryName, true);
 		linkReqList = jJRequirementService.getRequirements(
 				((LoginBean) LoginBean.findBean("loginBean")).getContact()
-						.getCompany(), selectedCategory,loginBean.getAuthorizedMap("Requirement",requirement
-								.getProject(), requirement.getProduct()) , requirement
+						.getCompany(), selectedCategory, loginBean
+						.getAuthorizedMap("Requirement",
+								requirement.getProject(),
+								requirement.getProduct()), requirement
 						.getVersioning(), null, null, false, true, true, false,
 				null);
 		linkReq = cateRequirement.getRequirements();
@@ -693,22 +697,29 @@ public class RequirementBean {
 		return suggestions;
 	}
 
-	public void onrate(RateEvent rateEvent) {		
+	public void onrate(RateEvent rateEvent) {
 
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		if (!contact.getRequirements().contains(requirement)) {
-			
+
 			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
-			if(((JJMessageBean)LoginBean.findBean("jJMessageBean")) != null)
-			{
-				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
-				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setMainMessages(null);
+			if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setAlertMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setMainMessages(null);
 			}
 			contact.getRequirements()
 					.add(jJRequirementService.findJJRequirement(requirement
 							.getId()));
-			((LoginBean) LoginBean.findBean("loginBean")).getjJContactService()
+			if (LoginBean.findBean("jJContactBean") == null) {
+				FacesContext fContext = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
+				session.setAttribute("jJProjectBean", new JJProjectBean());
+			}
+			((JJContactBean) LoginBean.findBean("jJContactBean"))
 					.updateJJContact(contact);
 
 			FacesMessage facesMessage = MessageFactory.getMessage(
@@ -723,17 +734,24 @@ public class RequirementBean {
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		if (contact.getRequirements().contains(requirement)) {
-			
+
 			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
-			if(((JJMessageBean)LoginBean.findBean("jJMessageBean")) != null)
-			{
-				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
-				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setMainMessages(null);
+			if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setAlertMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setMainMessages(null);
 			}
 			contact.getRequirements()
 					.remove(jJRequirementService.findJJRequirement(requirement
 							.getId()));
-			((LoginBean) LoginBean.findBean("loginBean")).getjJContactService()
+			if (LoginBean.findBean("jJContactBean") == null) {
+				FacesContext fContext = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
+				session.setAttribute("jJProjectBean", new JJProjectBean());
+			}
+			((JJContactBean) LoginBean.findBean("jJContactBean"))
 					.updateJJContact(contact);
 
 			FacesMessage facesMessage = MessageFactory.getMessage(

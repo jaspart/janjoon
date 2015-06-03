@@ -19,7 +19,7 @@ public class BugDataTableOptions {
 	private int first;
 	private List<SortMeta> multiSortMeta;
 	private Map<String, Object> filters;
-	private DataTable dataTable;
+	//private DataTable dataTable;
 	private String importance;
 	private String status;
 	private String criticity;
@@ -48,21 +48,21 @@ public class BugDataTableOptions {
 		this.criticity = criticity;
 	}
 
-	public DataTable getDataTable() {
-		return dataTable;
-	}
-
-	public void setDataTable(DataTable dataTable) {
-		this.dataTable = dataTable;
-	}
+//	public DataTable getDataTable() {
+//		return dataTable;
+//	}
+//
+//	public void setDataTable(DataTable dataTable) {
+//		this.dataTable = dataTable;
+//	}
 
 	public BugDataTableOptions() {
 
-		if (dataTable != null) {
-			this.first = dataTable.getFirst();
-			this.multiSortMeta = dataTable.getMultiSortMeta();
-			this.filters = dataTable.getFilters();
-		}
+//		if (dataTable != null) {
+//			this.first = dataTable.getFirst();
+//			this.multiSortMeta = dataTable.getMultiSortMeta();
+//			this.filters = dataTable.getFilters();
+//		}
 
 	}
 
@@ -72,35 +72,33 @@ public class BugDataTableOptions {
 		this.first = first;
 		this.multiSortMeta = multiSortMeta;
 		this.filters = filters;
-		importance="selected";
-		status="selected";
-		criticity="selected";
+		importance = "selected";
+		status = "selected";
+		criticity = "selected";
 		if (filters != null) {
 			Iterator<Entry<String, Object>> it = filters.entrySet().iterator();
 			while (it.hasNext()) {
 				@SuppressWarnings("rawtypes")
 				Map.Entry pairs = (Map.Entry) it.next();
 				if (pairs.getKey().toString().contains("importance")) {
-					
-					importance=pairs.getValue().toString().toUpperCase();
+
+					importance = pairs.getValue().toString().toUpperCase();
 				} else if (pairs.getKey().toString().contains("criticity")) {
-					
-					criticity=pairs.getValue().toString().toUpperCase();
+
+					criticity = pairs.getValue().toString().toUpperCase();
 				} else if (pairs.getKey().toString().contains("status")) {
-					
-					status=pairs.getValue().toString().toUpperCase();
+
+					status = pairs.getValue().toString().toUpperCase();
 				}
 			}
 		}
 	}
 
-	public void dataTableInit(ComponentSystemEvent e) {
-		System.err.println(e.getComponent().getId());
+	public void dataTableInit(DataTable dataTable) {
+		
 		dataTable.setFirst(first);
 		dataTable.setFilters(filters);
 		dataTable.setMultiSortMeta(multiSortMeta);
-//		if(importance != null)
-//			RequestContext.getCurrentInstance().execute("preRenderDataTable()");
 	}
 
 	public int getFirst() {

@@ -59,9 +59,8 @@ public class JJConfigurationBean {
 		columns.add("param");
 		columns.add("val");
 	}
-	
-	public JJConfigurationService getJjConfigurationService()
-	{
+
+	public JJConfigurationService getJjConfigurationService() {
 		return jJConfigurationService;
 	}
 
@@ -74,8 +73,8 @@ public class JJConfigurationBean {
 	}
 
 	public LazyConfDataTable getConfigList() {
-		if(configList ==null)
-			configList=new LazyConfDataTable(jJConfigurationService);	
+		if (configList == null)
+			configList = new LazyConfDataTable(jJConfigurationService);
 		return configList;
 	}
 
@@ -148,40 +147,42 @@ public class JJConfigurationBean {
 
 	public String persistConf() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);	
+				.getExternalContext().getSession(false);
 
-		if (getJJConfiguration_().getId() == null) {			
+		if (getJJConfiguration_().getId() == null) {
 			getJJConfiguration_().setEnabled(true);
 		}
 
 		return persist();
 	}
+
 	public String persist() {
-		
-        String message = "";
-        if (getJJConfiguration_().getId() != null) {
-            updateJJConfiguration(getJJConfiguration_());
-            message = "message_successfully_updated";
-        } else {
-            saveJJConfiguration(getJJConfiguration_());
-            message = "message_successfully_created";
-        }
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("PF('createDialogWidget').hide()");
-        
-        
-        FacesMessage facesMessage = MessageFactory.getMessage(message, "Configuration");
-        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-        reset();
-        return findAllJJConfigurations();
-    }
+
+		String message = "";
+		if (getJJConfiguration_().getId() != null) {
+			updateJJConfiguration(getJJConfiguration_());
+			message = "message_successfully_updated";
+		} else {
+			saveJJConfiguration(getJJConfiguration_());
+			message = "message_successfully_created";
+		}
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('createDialogWidget').hide()");
+
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				"Configuration");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		reset();
+		return findAllJJConfigurations();
+	}
 
 	public void reset() {
 
 		setJJConfiguration_(null);
-		configList= null;
+		configList = null;
 		setCreateDialogVisible(false);
-		jJconfiguration =jJConfigurationService.getConfigurations("ConfigurationManager", "git", true).get(0);
+		jJconfiguration = jJConfigurationService.getConfigurations(
+				"ConfigurationManager", "git", true).get(0);
 	}
 
 	public void beforeDialogShow(ActionEvent event) {
@@ -192,21 +193,24 @@ public class JJConfigurationBean {
 		context.execute("PF('createDialogWidget').show()");
 
 	}
-	
-	public void saveJJConfiguration(JJConfiguration b)
-	{
+
+	public void saveJJConfiguration(JJConfiguration b) {
 		b.setCreationDate(new Date());
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		b.setCreatedBy(contact);
 		jJConfigurationService.saveJJConfiguration(b);
 	}
-	
-	public void updateJJConfiguration(JJConfiguration b)
-	{
-		if(b.equals(((LoginBean) LoginBean.findBean("loginBean")).getPlaningTabsConf()))
-				((LoginBean) LoginBean.findBean("loginBean")).setPlaningTabsConf(null);
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+
+	public void updateJJConfiguration(JJConfiguration b) {
+		if (((LoginBean) LoginBean.findBean("loginBean"))
+				.getPlanningConfiguration() != null
+				&& b.equals(((LoginBean) LoginBean.findBean("loginBean"))
+						.getPlanningConfiguration().getPlaningTabsConf()))
+			((LoginBean) LoginBean.findBean("loginBean"))
+					.setPlanningConfiguration(null);
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJConfigurationService.updateJJConfiguration(b);

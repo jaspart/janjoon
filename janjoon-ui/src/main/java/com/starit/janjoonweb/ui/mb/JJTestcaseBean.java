@@ -317,6 +317,7 @@ public class JJTestcaseBean {
 			colNames.set(colIdx,
 					jJTestcaseService.findJJTestcase(columnName.getId()));
 			value.get(colIdx).set(rowIdx, !value.get(colIdx).get(rowIdx));
+			createTestcaseTree();
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					MessageFactory.getMessage("message_successfully_updated",
@@ -1950,8 +1951,15 @@ public class JJTestcaseBean {
 			}
 			contact.getTestcases().add(
 					jJTestcaseService.findJJTestcase(testcase.getId()));
-			((LoginBean) LoginBean.findBean("loginBean")).getjJContactService()
-					.updateJJContact(contact);
+			
+			if(LoginBean.findBean("jJContactBean") == null)
+			{
+				FacesContext fContext = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
+				session.setAttribute("jJProjectBean", new JJProjectBean());
+			}			
+			((JJContactBean)LoginBean.findBean("jJContactBean")).updateJJContact(contact);
 
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					RequirementBean.REQUIREMENT_SUBSCRIPTION_RATE, "Testcase");
@@ -1975,8 +1983,15 @@ public class JJTestcaseBean {
 			}
 			contact.getTestcases().remove(
 					jJTestcaseService.findJJTestcase(testcase.getId()));
-			((LoginBean) LoginBean.findBean("loginBean")).getjJContactService()
-					.updateJJContact(contact);
+			
+			if(LoginBean.findBean("jJContactBean") == null)
+			{
+				FacesContext fContext = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
+				session.setAttribute("jJProjectBean", new JJProjectBean());
+			}			
+			((JJContactBean)LoginBean.findBean("jJContactBean")).updateJJContact(contact);
 
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					RequirementBean.REQUIREMENT_SUBSCRIPTION_CANCEL_RATE,

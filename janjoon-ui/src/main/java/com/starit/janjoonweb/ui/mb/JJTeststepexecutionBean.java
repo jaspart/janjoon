@@ -2,6 +2,7 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.util.*;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -19,6 +20,7 @@ import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTeststepexecution;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJTeststepexecution.class, beanName = "jJTeststepexecutionBean")
@@ -400,6 +402,12 @@ public class JJTeststepexecutionBean {
 		JJTestcaseexecutionBean jJTestcaseexecutionBean = (JJTestcaseexecutionBean) session
 				.getAttribute("jJTestcaseexecutionBean");
 		jJTestcaseexecutionBean.save();
+		
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_executed", "TestCase");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		
+		
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('runTestcaseDialogWidget').hide()");
 		closeDialog();

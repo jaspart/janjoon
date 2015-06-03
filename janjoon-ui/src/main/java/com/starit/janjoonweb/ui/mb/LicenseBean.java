@@ -28,7 +28,7 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
-@ManagedBean(name="licenseBean")
+@ManagedBean(name = "licenseBean")
 @SessionScoped
 public class LicenseBean implements Serializable {
 	/**
@@ -62,55 +62,59 @@ public class LicenseBean implements Serializable {
 
 		}
 	}
-	
-	public void uploadTest() throws IOException
-	{
+
+	public void uploadTest() throws IOException {
 		System.out.println("STARTING_OPERATION");
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
-		
+
 		byte[] bFile = new byte[(int) fileUplaod.getSize()];
 
 		InputStream inputStream;
-		FacesMessage facesMessage=null;
+		FacesMessage facesMessage = null;
 		try {
 			inputStream = fileUplaod.getInputStream();
 			inputStream.read(bFile);
 			inputStream.close();
 
 			contact.setPicture(bFile);
-			((LoginBean) LoginBean.findBean("loginBean")).getjJContactService()
+			if (LoginBean.findBean("jJContactBean") == null) {
+				FacesContext fContext = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
+				session.setAttribute("jJProjectBean", new JJProjectBean());
+			}
+			((JJContactBean) LoginBean.findBean("jJContactBean"))
 					.updateJJContact(contact);
 			((LoginBean) LoginBean.findBean("loginBean"))
 					.getAuthorisationService().setSession(
 							(HttpSession) FacesContext.getCurrentInstance()
-									.getExternalContext().getSession(false));			
+									.getExternalContext().getSession(false));
 			facesMessage = MessageFactory.getMessage(
 					"message_successfully_uploded", "Photo");
-			
+
 		} catch (FileNotFoundException e) {
-			
+
 		}
 		// convert file into array of bytes
 		catch (IOException e) {
-			
+
 		}
-	
-		
-		if(facesMessage == null)
-			facesMessage=new FacesMessage(FacesMessage.SEVERITY_WARN, "Error while File Upload", "Photo");		
-			
-		((LoginBean) LoginBean.findBean("loginBean")).setFacesMessage(facesMessage);
+
+		if (facesMessage == null)
+			facesMessage = new FacesMessage(FacesMessage.SEVERITY_WARN,
+					"Error while File Upload", "Photo");
+
+		((LoginBean) LoginBean.findBean("loginBean"))
+				.setFacesMessage(facesMessage);
 		FacesContext
-		.getCurrentInstance()
-		.getExternalContext()
-		.redirect(
-				FacesContext.getCurrentInstance().getExternalContext()
-						.getRequestContextPath()
-						+ "/pages/contactConfig.jsf?&faces-redirect=true");
-		
-		
-		
+				.getCurrentInstance()
+				.getExternalContext()
+				.redirect(
+						FacesContext.getCurrentInstance().getExternalContext()
+								.getRequestContextPath()
+								+ "/pages/contactConfig.jsf?&faces-redirect=true");
+
 	}
 
 	public void handleContactFileUpload(FileUploadEvent event) {
@@ -158,12 +162,18 @@ public class LicenseBean implements Serializable {
 			inputStream.close();
 
 			contact.setPicture(bFile);
-			((LoginBean) LoginBean.findBean("loginBean")).getjJContactService()
+			if (LoginBean.findBean("jJContactBean") == null) {
+				FacesContext fContext = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
+				session.setAttribute("jJProjectBean", new JJProjectBean());
+			}
+			((JJContactBean) LoginBean.findBean("jJContactBean"))
 					.updateJJContact(contact);
 			((LoginBean) LoginBean.findBean("loginBean"))
 					.getAuthorisationService().setSession(
 							(HttpSession) FacesContext.getCurrentInstance()
-									.getExternalContext().getSession(false));			
+									.getExternalContext().getSession(false));
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					"message_successfully_uploded", "Photo");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -177,10 +187,8 @@ public class LicenseBean implements Serializable {
 			e.printStackTrace();
 		}
 
-		
 	}
-	
-	
+
 	public void handleProjLogoUpload(FileUploadEvent event) {
 
 		System.out.println("STARTING_OPERATION");
@@ -209,7 +217,7 @@ public class LicenseBean implements Serializable {
 		}
 
 	}
-	
+
 	public void handleProdLogoUpload(FileUploadEvent event) {
 
 		System.out.println("STARTING_OPERATION");

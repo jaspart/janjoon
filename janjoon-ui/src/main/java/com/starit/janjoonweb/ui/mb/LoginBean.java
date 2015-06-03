@@ -61,6 +61,7 @@ import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.PlanningConfiguration;
 import com.starit.janjoonweb.ui.mb.util.UsageChecker;
 import com.starit.janjoonweb.ui.mb.util.service.CKEditorUploadServlet;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
@@ -108,7 +109,8 @@ public class LoginBean implements Serializable {
 	private boolean enable = false;
 	private int activeTabAdminIndex;
 	private int menuIndex;
-	private JJConfiguration planingTabsConf;
+	//private JJConfiguration planingTabsConf;
+	private PlanningConfiguration planningConfiguration;
 
 	@Autowired
 	public LoginBean(AuthenticationManager authenticationManager) {
@@ -136,11 +138,7 @@ public class LoginBean implements Serializable {
 	public void setjJMessageService(JJMessageService jJMessageService) {
 		this.jJMessageService = jJMessageService;
 	}
-
-	public JJContactService getjJContactService() {
-		return jJContactService;
-	}
-
+	
 	public void setjJContactService(JJContactService jJContactService) {
 		this.jJContactService = jJContactService;
 	}
@@ -223,12 +221,12 @@ public class LoginBean implements Serializable {
 					while (it.hasNext()) {
 						Map.Entry pairs = (Map.Entry) it.next();
 						for (String st : (String[]) pairs.getValue()) {
-							//System.err.println(pairs.getKey() + ":" + st);
+							// System.err.println(pairs.getKey() + ":" + st);
 							s = s + pairs.getKey() + "=" + st + "&";
 						}
 					}
 					s = s.substring(0, s.length() - 1);
-					//System.out.println(s);
+					// System.out.println(s);
 				}
 				return s;
 			}
@@ -257,7 +255,8 @@ public class LoginBean implements Serializable {
 	public JJContact getContact() {
 
 		if (enable && !username.isEmpty()) {
-			contact = jJContactService.getContactByEmail(username, true);
+			if (contact == null || contact.getId() == null)
+				contact = jJContactService.getContactByEmail(username, true);
 		} else
 			contact = null;
 
@@ -302,34 +301,34 @@ public class LoginBean implements Serializable {
 		this.menuIndex = menuIndex;
 	}
 
-	public JJConfiguration getPlaningTabsConf() {
-		if (planingTabsConf == null) {
-			List<JJConfiguration> conf = jJConfigurationService
-					.getConfigurations("planning", "project.type", true);
-			if (conf != null && !conf.isEmpty())
-				planingTabsConf = conf.get(0);
-			else {
-				JJConfiguration configuration = new JJConfiguration();
-				configuration.setName("planning");
-				configuration
-						.setDescription("specify available tab in planing vue");
-				configuration.setCreatedBy(getContact());
-				configuration.setCreationDate(new Date());
-				configuration.setEnabled(true);
-				configuration.setParam("project.type");
-				configuration.setVal("gantt,scrum");
-				jJConfigurationService.saveJJConfiguration(configuration);
-				planingTabsConf = jJConfigurationService.getConfigurations(
-						"planning", "project.type", true).get(0);
-			}
-
-		}
-		return planingTabsConf;
-	}
-
-	public void setPlaningTabsConf(JJConfiguration planingTabsConf) {
-		this.planingTabsConf = planingTabsConf;
-	}
+//	public JJConfiguration getPlaningTabsConf() {
+//		if (planingTabsConf == null) {
+//			List<JJConfiguration> conf = jJConfigurationService
+//					.getConfigurations("planning", "project.type", true);
+//			if (conf != null && !conf.isEmpty())
+//				planingTabsConf = conf.get(0);
+//			else {
+//				JJConfiguration configuration = new JJConfiguration();
+//				configuration.setName("planning");
+//				configuration
+//						.setDescription("specify available tab in planing vue");
+//				configuration.setCreatedBy(getContact());
+//				configuration.setCreationDate(new Date());
+//				configuration.setEnabled(true);
+//				configuration.setParam("project.type");
+//				configuration.setVal("gantt,scrum");
+//				jJConfigurationService.saveJJConfiguration(configuration);
+//				planingTabsConf = jJConfigurationService.getConfigurations(
+//						"planning", "project.type", true).get(0);
+//			}
+//
+//		}
+//		return planingTabsConf;
+//	}
+//
+//	public void setPlaningTabsConf(JJConfiguration planingTabsConf) {
+//		this.planingTabsConf = planingTabsConf;
+//	}
 
 	public boolean isMobile() {
 
@@ -388,7 +387,19 @@ public class LoginBean implements Serializable {
 
 	public void setMessageCount(Integer messageCount) {
 		this.messageCount = messageCount;
-		RequestContext.getCurrentInstance().execute("updateCommunicationButton()");
+		RequestContext.getCurrentInstance().execute(
+				"updateCommunicationButton()");
+	}
+
+	public PlanningConfiguration getPlanningConfiguration() {
+		
+		if(planningConfiguration == null)
+			planningConfiguration =new PlanningConfiguration(jJConfigurationService);
+		return planningConfiguration;
+	}
+
+	public void setPlanningConfiguration(PlanningConfiguration planningConfiguration) {
+		this.planningConfiguration = planningConfiguration;
 	}
 
 	public String logout() {
@@ -403,7 +414,7 @@ public class LoginBean implements Serializable {
 	}
 
 	public String login() {
-		password=password.trim();
+		password = password.trim();
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
 				username, password);
 		String prevPage = "";
@@ -487,16 +498,19 @@ public class LoginBean implements Serializable {
 					jjProjectBean.setProject(contact.getLastProject());
 
 				jjProductBean.getProductList();
-				if (jjProductBean.getProductList().contains(contact.getLastProduct())) {
+				if (jjProductBean.getProductList().contains(
+						contact.getLastProduct())) {
 					jjProductBean.setProduct(contact.getLastProduct());
 				}
 
 				jjVersionBean.getVersionList();
-				if (jjVersionBean.getVersionList().contains(contact.getLastVersion())) {
+				if (jjVersionBean.getVersionList().contains(
+						contact.getLastVersion())) {
 					jjVersionBean.setVersion(contact.getLastVersion());
 				}
 
-				authorisationService = new AuthorisationService(session, contact);
+				authorisationService = new AuthorisationService(session,
+						contact);
 
 				facesMessage = MessageFactory.getMessage(
 						"login_welcome_message", FacesMessage.SEVERITY_INFO,
@@ -527,7 +541,7 @@ public class LoginBean implements Serializable {
 			return prevPage;
 
 		} catch (Exception e) {
-			//System.err.println(e.getMessage() + prevPage);
+			// System.err.println(e.getMessage() + prevPage);
 			prevPage = "main";
 			return prevPage;
 		}
@@ -542,9 +556,9 @@ public class LoginBean implements Serializable {
 				.getRequestContextPath();
 		String view = viewId.replace(path, "");
 		view = view.replace("/pages/", "");
-		if(view.indexOf(".jsf") != -1)
-		view=view.substring(0, view.indexOf(".jsf"));
-		view = view.replace(".jsf?faces-redirect=true", "");		
+		if (view.indexOf(".jsf") != -1)
+			view = view.substring(0, view.indexOf(".jsf"));
+		view = view.replace(".jsf?faces-redirect=true", "");
 		view = view.replace(".jsf", "");
 		view = view.replace(".xhtml", "");
 
@@ -590,7 +604,6 @@ public class LoginBean implements Serializable {
 			menuIndex = 0;
 			break;
 		}
-	
 
 	}
 
@@ -609,7 +622,7 @@ public class LoginBean implements Serializable {
 	public void onTabAdminChange(TabChangeEvent event) {
 
 		TabView tv = (TabView) event.getComponent();
-		//System.out.println(this.activeTabAdminIndex);
+		// System.out.println(this.activeTabAdminIndex);
 		this.activeTabAdminIndex = tv.getChildren().indexOf(event.getTab());
 		System.out.println("###### ACtive tab: " + activeTabAdminIndex);
 
@@ -1436,28 +1449,28 @@ public class LoginBean implements Serializable {
 			return null;
 	}
 
-	public boolean isRenderScrum() {
-		boolean bbbb =getPlaningTabsConf().getVal().toLowerCase()
-				.contains("scrum".toLowerCase());
-		
-		if(!bbbb && findBean("jJSprintBean") != null)
-			((JJSprintBean)findBean("jJSprintBean")).setActiveTabGantIndex(0);
-		
-		return bbbb;
-
-	}
-
-	public boolean isRenderGantt() {
-		
-		boolean bbbb  =getPlaningTabsConf().getVal().toLowerCase()
-				.contains("gantt".toLowerCase());
-		
-		if(!bbbb && findBean("jJSprintBean") != null)
-			((JJSprintBean)findBean("jJSprintBean")).setActiveTabGantIndex(0);
-			
-		return bbbb;
-
-	}
+//	public boolean isRenderScrum() {
+//		boolean bbbb = getPlaningTabsConf().getVal().toLowerCase()
+//				.contains("scrum".toLowerCase());
+//
+//		if (!bbbb && findBean("jJSprintBean") != null)
+//			((JJSprintBean) findBean("jJSprintBean")).setActiveTabGantIndex(0);
+//
+//		return bbbb;
+//
+//	}
+//
+//	public boolean isRenderGantt() {
+//
+//		boolean bbbb = getPlaningTabsConf().getVal().toLowerCase()
+//				.contains("gantt".toLowerCase());
+//
+//		if (!bbbb && findBean("jJSprintBean") != null)
+//			((JJSprintBean) findBean("jJSprintBean")).setActiveTabGantIndex(0);
+//
+//		return bbbb;
+//
+//	}
 
 	public UIComponent findComponent(final String id) {
 
@@ -1514,11 +1527,11 @@ public class LoginBean implements Serializable {
 				for (String stylePair : styleKeyValue) // iterate over the pais
 				{
 					String[] styleEntry = stylePair.split("=");
-//					System.err.println(styleEntry[0].trim() + "="
-//							+ styleEntry[1].trim());
+					// System.err.println(styleEntry[0].trim() + "="
+					// + styleEntry[1].trim());
 					styleMap.put(styleEntry[0].trim(), styleEntry[1].trim());
 				}
-				//System.err.println(entry[0].replace("'", " ") + "= XXX");
+				// System.err.println(entry[0].replace("'", " ") + "= XXX");
 				if (!entry[0].replace("'", " ").startsWith("."))
 					style.loadTagStyle(entry[0].replace("'", " ").trim(),
 							styleMap);
@@ -1590,5 +1603,5 @@ public class LoginBean implements Serializable {
 			FileUtils.copyDirectory(fromPath, toPath);
 		}
 
-	}	
+	}
 }

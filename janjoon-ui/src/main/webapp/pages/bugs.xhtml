@@ -78,7 +78,7 @@
 			<br />
 			<h:form id="bugForm">
 				<f:event type="preRenderComponent"
-					listener="#{bugDataTableOptions.dataTableInit}" />
+					listener="#{bugDataTableOptions.dataTableInit(dataTable)}" />
 				<pe:blockUI target="bugTable2" content="blockUIContent"
 					widgetVar="blockUIWidget2" />
 				<h:panelGrid id="blockUIContent" columns="2"
@@ -91,9 +91,8 @@
 				<p:dataTable id="bugTable2" sortMode="multiple"
 					styleClass="bugDataTable" style="table-layout: fixed;"
 					value="#{jJBugBean.bugList}" rowKey="#{bug.id}" var="bug"
-					widgetVar="bugTable" lazy="true" rowStyleClass="#{bug.status.name}"
-					binding="#{bugDataTableOptions.dataTable}"
-					emptyMessage="#{messages.bug_table_alert}"
+					widgetVar="bugTable" lazy="true" 
+					binding="#{dataTable}" emptyMessage="#{messages.bug_table_alert}"
 					selection="#{jJBugBean.selectedBugList}" paginator="true" rows="50"
 					paginatorPosition="bottom"
 					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
@@ -139,6 +138,8 @@
 						filterMatchMode="contains" sortBy="#{bug.name}"
 						filterStyle="width: 90%;"
 						style="width: 25% !important;height: 5px !important;">
+						<h:outputText value="#{bug.status.name}"
+							styleClass="#{bug.status.name}" />
 						<h:outputText value="#{bug.name}" />
 					</p:column>
 					<p:column headerText="#{messages.bug_table_creation_title}"
@@ -174,7 +175,8 @@
 						filterStyleClass="status"
 						filterOptions="#{jJBugBean.statusOptions}" filterMatchMode="exact"
 						filterStyle="width: 90%;">
-						<h:outputText value="#{bug.status.name}" />
+						<h:outputText value="#{bug.status.name}"
+							styleClass="#{bug.status.name}" />
 					</p:column>
 					<p:column styleClass="action-column" style="width: 100px;">
 						<f:facet name="header">
