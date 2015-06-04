@@ -130,7 +130,12 @@ public class WorkFlowsActions {
 							"Message", true);
 
 					JJMessage mes = new JJMessage();
-					mes.setName("Requirement :" + requirement.getName()
+					mes.setName("Requirement :"
+							+ requirement.getName()
+									.substring(
+											0,
+											Math.min(85, requirement.getName()
+													.length()))
 							+ " status changed");
 					mes.setCreatedBy(contact);
 					mes.setCriticity(criticity);
@@ -169,7 +174,10 @@ public class WorkFlowsActions {
 							"Message", true);
 
 					JJMessage mes = new JJMessage();
-					mes.setName("Bug :" + bug.getName() + "status changed");
+					mes.setName("Bug :"
+							+ bug.getName().substring(0,
+									Math.min(85, bug.getName().length()))
+							+ "status changed");
 					mes.setCreatedBy(contact);
 					mes.setStatus(status);
 					mes.setCriticity(criticity);
@@ -207,7 +215,10 @@ public class WorkFlowsActions {
 							"Message", true);
 
 					JJMessage mes = new JJMessage();
-					mes.setName("Task :" + task.getName() + "status changed");
+					mes.setName("Task :"
+							+ task.getName().substring(0,
+									Math.min(85, task.getName().length()))
+							+ "status changed");
 					mes.setCreatedBy(contact);
 					mes.setStatus(status);
 					mes.setCriticity(criticity);
@@ -379,7 +390,7 @@ public class WorkFlowsActions {
 	@SuppressWarnings("rawtypes")
 	public void sendMailWorkFlow(Object object) {
 
-		//System.err.println("sendMailWorkFlow Successufuly Executed");
+		// System.err.println("sendMailWorkFlow Successufuly Executed");
 		if (object instanceof JJTask) {
 			JJTask task = (JJTask) object;
 			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))

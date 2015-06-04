@@ -468,43 +468,107 @@ a:visited {
 }
 
 .TestcaseWithoutTeststep {
-	background-color: #CCCCCC;
-	font-weight: bold;
+	background-color: #666666;	
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .TestcaseNotExecuted {
-	color: #00A5F7;
-	font-weight: bold;
+	background-color: #00A5F7;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .TestcaseFailed {
-	color: #FFB3B3;
-	font-weight: bold;
+	color: #FF0000;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	background-color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .TestcaseFailedWithoutBuild {
-	background-color: #FF8888;
-	font-weight: bold;
+	background-color: #FF0000;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .TestcaseNonFini {
-	color: #F7BE81;
-	font-weight: bold;
+	color: #FFD500;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	background-color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .TestcaseNonFiniWithoutBuild {
-	background-color: #F5D0A9;
-	font-weight: bold;
+	background-color: #FFD500;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .TestcaseSuccess {
-	color: #00FF00;
-	font-weight: bold;
+	color: #008800;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	background-color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .TestcaseSuccessWithoutBuild {
-	background-color: #88FF88;
-	font-weight: bold;
+	background-color: #008800;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .TestcaseChapter {
@@ -795,69 +859,146 @@ div.revised2 {
 }
 
 .NEW {
-	background-color: #FFB3B3 !important;
-	background-image: none !important;
-	color: black !important;
+	background-color: #FF0000 !important;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .ASSIGNED {
-	background-color: #D9EDF7 !important;
-	background-image: none !important;
-	color: black !important;
+	background-color: #00A5F7 !important;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .REOPENED {
-	background-color: #FFB3B3 !important;
-	background-image: none !important;
-	color: black !important;
+	background-color: #FF0000 !important;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .READY {
-	background-color: #D9EDF7 !important;
-	background-image: none !important;
-	color: black !important;
+	background-color: #00A5F7 !important;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .FIXED {
-	background-color: #B3FFB3 !important;
-	background-image: none !important;
-	color: black !important;
+	background-color: #008800 !important;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .INVALID {
-	background-color: #DBB3FF !important;
-	background-image: none !important;
-	color: black !important;
+	background-color: #8600FF !important;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .WONTFIX {
-	background-color: #CCCCCC !important;
-	background-image: none !important;
-	color: black !important;
+	background-color: #666666 !important;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .DUPLICATE {
-	background-color: #DBB3FF !important;
-	background-image: none !important;
-	color: black !important;
+	background-color: #8600FF !important;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .RESOLVED {
-	background-color: #B3FFB3 !important;
-	background-image: none !important;
-	color: black !important;
+	background-color: #008800 !important;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .VERIFIED {
-	background-color: #DBB3FF !important;
-	background-image: none !important;
-	color: black !important;
+	background-color: #8600FF !important;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .CLOSED {
-	background-color: #CCCCCC !important;
-	background-image: none !important;
-	color: black !important;
+	background-color: #666666 !important;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .ALERT {

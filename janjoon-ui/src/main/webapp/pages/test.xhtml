@@ -320,7 +320,7 @@
 								<p:selectBooleanCheckbox
 									rendered="#{rowName['class'].simpleName == 'JJBuild'}"
 									value="#{jJTestcaseBean.value[colIdx][rowIdx]}">
-									<p:ajax update=":growlForm :testFormCenter :container :rate"
+									<p:ajax update=":growlForm :testFormCenter :testFormWest :container :rate "
 										listener="#{jJTestcaseBean.onCellEdit(colIdx,rowIdx)}"
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock();" />
@@ -349,7 +349,7 @@
 					<p:dataTable id="testcaseRecapDataTable" var="tcr"
 						paginatorPosition="bottom"
 						value="#{jJTestcaseBean.testCaseRecaps}" paginator="true" rows="5"
-						style="width:550px;" rowKey="#{tcr.testcase.name}"
+						style="width:50%;" rowKey="#{tcr.testcase.name}"
 						rendered="#{jJTestcaseBean.rendredTestCaseRecaps}">
 						<f:facet name="header">
 							<h:outputText value="#{jJTestcaseBean.chapter.name}" />

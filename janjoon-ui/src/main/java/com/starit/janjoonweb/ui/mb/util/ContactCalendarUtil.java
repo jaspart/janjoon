@@ -38,7 +38,7 @@ public class ContactCalendarUtil {
 		this.calendarUtil = new CalendarUtil(contact.getCompany());
 		this.workDays = this.calendarUtil.getWorkDays();
 		try {
-			initVactions();
+			initVacations();
 		} catch (IOException | ParseException e) {
 			vacation = new ArrayList<ChunkPeriod>();
 
@@ -55,7 +55,7 @@ public class ContactCalendarUtil {
 
 	}
 
-	private void initVactions() throws IOException, ParseException {
+	private void initVacations() throws IOException, ParseException {
 		workDays = this.calendarUtil.getWorkDays();
 		vacation = new ArrayList<ChunkPeriod>();
 		if (contact.getCalendar() != null) {
