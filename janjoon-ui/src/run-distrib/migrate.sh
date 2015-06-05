@@ -41,9 +41,10 @@ else
 	mkdir $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war
 	unzip $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war.zip -d $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war/
 	cd $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war/
-	ln -s ../../upload/images images
 	chmod -R 777 $DIRECTORY/log
 	cd -
+	mv $DIRECTORY/license/janjoon-base.jar $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war/run-distrib/
+	mv -f $DIRECTORY/license/org.eclipse.jgit-3.2.0.201312181205-r.jar $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war/WEB-INF/lib/
 	sed -i 's/BUILD_NUMBER/'"$NEXT_BUILD"'/g' $DIRECTORY/bin/start.sh
 	sed -i 's/9999/'"$APPLICATION_PORT"'/g' $DIRECTORY/bin/start.sh
 	sed -i 's/PATH_URL/'"$URL_PATH"'/g' $DIRECTORY/bin/start.sh

@@ -16,4 +16,6 @@ public interface JJTestcaseexecutionService {
 			JJBuild build, boolean onlyActif, boolean sortedByUpdatedDate);
 	
 	public boolean haveTestcaseExec(JJTestcase testcase,JJBuild build,JJVersion version);
+	
+	public Boolean isPassed(JJTestcase testCase,JJBuild build,JJVersion version);
 }

@@ -1,6 +1,7 @@
 package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,28 +25,65 @@ public class JJTestcaseexecutionServiceImpl implements
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
-	
-	public boolean haveTestcaseExec(JJTestcase testcase,JJBuild build,JJVersion version){
-		
+
+	public Boolean isPassed(JJTestcase testCase, JJBuild build,
+			JJVersion version) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Boolean> criteriaQuery = criteriaBuilder
+				.createQuery(Boolean.class);
+
+		Root<JJTestcaseexecution> from = criteriaQuery
+				.from(JJTestcaseexecution.class);
+
+		CriteriaQuery<Boolean> select = criteriaQuery.select(from.<Boolean> get("passed"));
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (testCase != null) {
+			predicates
+					.add(criteriaBuilder.equal(from.get("testcase"), testCase));
+		}
+		if (build != null) {
+			predicates.add(criteriaBuilder.equal(from.get("build"), build));
+		}
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));		
+
+		select.where(predicates.toArray(new Predicate[] {}));
+
+		select.orderBy(criteriaBuilder.desc(from.get("updatedDate")));
+
+		TypedQuery<Boolean> result = entityManager.createQuery(select);
+
+		if (result.getResultList() == null || result.getResultList().isEmpty())
+			return null;
+		else
+			return result.getResultList().get(0);
+
+	}
+
+	public boolean haveTestcaseExec(JJTestcase testcase, JJBuild build,
+			JJVersion version) {
+
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcaseexecution> criteriaQuery = criteriaBuilder
 				.createQuery(JJTestcaseexecution.class);
 
-		Root<JJTestcaseexecution> from = criteriaQuery.from(JJTestcaseexecution.class);
+		Root<JJTestcaseexecution> from = criteriaQuery
+				.from(JJTestcaseexecution.class);
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		if(testcase != null)
-		predicates.add(criteriaBuilder.equal(from.get("testcase"),
-				testcase));
-		
-		if(build != null)
-		{
-			predicates.add(criteriaBuilder.equal(from.get("build"),
-					build));
-		}else if(version != null)
-			predicates.add(criteriaBuilder.equal(from.get("build").get("version"),
-					version));
-		
+		if (testcase != null)
+			predicates
+					.add(criteriaBuilder.equal(from.get("testcase"), testcase));
+
+		if (build != null) {
+			predicates.add(criteriaBuilder.equal(from.get("build"), build));
+		} else if (version != null)
+			predicates.add(criteriaBuilder.equal(
+					from.get("build").get("version"), version));
+
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJTestcaseexecution.class)));
@@ -54,7 +92,6 @@ public class JJTestcaseexecutionServiceImpl implements
 		boolean have = entityManager.createQuery(cq).getSingleResult() > 0;
 		return have;
 	}
-
 
 	@Override
 	public List<JJTestcaseexecution> getTestcaseexecutions(JJTestcase testcase,
@@ -71,14 +108,13 @@ public class JJTestcaseexecutionServiceImpl implements
 		CriteriaQuery<JJTestcaseexecution> select = criteriaQuery.select(from);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		
+
 		if (testcase != null) {
 			predicates
 					.add(criteriaBuilder.equal(from.get("testcase"), testcase));
-		} 
+		}
 		if (build != null) {
-			predicates.add(criteriaBuilder.equal(
-					from.get("build"), build));
+			predicates.add(criteriaBuilder.equal(from.get("build"), build));
 		}
 
 		if (onlyActif) {
@@ -128,13 +164,14 @@ public class JJTestcaseexecutionServiceImpl implements
 			subquery.select(fromJJRequirement);
 			subquery.where(criteriaBuilder.equal(
 					fromJJRequirement.get("chapter"), chapter));
-			
+
 			subquery.where(criteriaBuilder.equal(
 					fromJJRequirement.get("enabled"), true));
 			predicates.add(criteriaBuilder.in(path).value(subquery));
 
 		}
-		predicates.add(criteriaBuilder.equal(from.get("testcase").get("enabled"), true));
+		predicates.add(criteriaBuilder.equal(from.get("testcase")
+				.get("enabled"), true));
 
 		if (build != null) {
 
@@ -152,7 +189,7 @@ public class JJTestcaseexecutionServiceImpl implements
 		}
 
 		TypedQuery<JJTestcaseexecution> typedQuery = entityManager
-				.createQuery(select);	
+				.createQuery(select);
 		return new HashSet<JJTestcaseexecution>(typedQuery.getResultList());
 
 	}

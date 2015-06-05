@@ -74,6 +74,7 @@ import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.CategoryUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.ReadXMLFile;
+import com.starit.janjoonweb.ui.mb.util.TestCaseChartUtil;
 import com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
 
@@ -119,6 +120,10 @@ public class JJTestcaseBean {
 		this.jJTestcaseexecutionService = jJTestcaseexecutionService;
 	}
 
+	public JJTestcaseexecutionService getjJTestcaseexecutionService() {
+		return jJTestcaseexecutionService;
+	}
+
 	@Autowired
 	private JJBuildService jJBuildService;
 
@@ -152,7 +157,7 @@ public class JJTestcaseBean {
 	private JJProject project;
 	private JJProduct product;
 	private JJVersion version;
-	private float reqCoverage;
+	private float reqCoverage;	
 	private List<JJBuild> builds;
 	private String width;
 	private JJTestcase copyTestcase;
@@ -499,7 +504,7 @@ public class JJTestcaseBean {
 	public void setRequirements(List<JJRequirement> requirements) {
 
 		this.requirements = requirements;
-	}
+	}	
 
 	public JJTask getTask() {
 		return task;
@@ -1175,7 +1180,7 @@ public class JJTestcaseBean {
 				}
 				reqCoverage = (float) (i * 100 / rqs.size());
 			} else
-				reqCoverage = 0;
+				reqCoverage = 0;		
 
 			testcase = null;
 
@@ -1951,15 +1956,15 @@ public class JJTestcaseBean {
 			}
 			contact.getTestcases().add(
 					jJTestcaseService.findJJTestcase(testcase.getId()));
-			
-			if(LoginBean.findBean("jJContactBean") == null)
-			{
+
+			if (LoginBean.findBean("jJContactBean") == null) {
 				FacesContext fContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) fContext
 						.getExternalContext().getSession(false);
 				session.setAttribute("jJProjectBean", new JJProjectBean());
-			}			
-			((JJContactBean)LoginBean.findBean("jJContactBean")).updateJJContact(contact);
+			}
+			((JJContactBean) LoginBean.findBean("jJContactBean"))
+					.updateJJContact(contact);
 
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					RequirementBean.REQUIREMENT_SUBSCRIPTION_RATE, "Testcase");
@@ -1983,15 +1988,15 @@ public class JJTestcaseBean {
 			}
 			contact.getTestcases().remove(
 					jJTestcaseService.findJJTestcase(testcase.getId()));
-			
-			if(LoginBean.findBean("jJContactBean") == null)
-			{
+
+			if (LoginBean.findBean("jJContactBean") == null) {
 				FacesContext fContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) fContext
 						.getExternalContext().getSession(false);
 				session.setAttribute("jJProjectBean", new JJProjectBean());
-			}			
-			((JJContactBean)LoginBean.findBean("jJContactBean")).updateJJContact(contact);
+			}
+			((JJContactBean) LoginBean.findBean("jJContactBean"))
+					.updateJJContact(contact);
 
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					RequirementBean.REQUIREMENT_SUBSCRIPTION_CANCEL_RATE,

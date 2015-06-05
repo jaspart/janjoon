@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +21,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.aspectj.apache.bcel.classfile.Unknown;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;

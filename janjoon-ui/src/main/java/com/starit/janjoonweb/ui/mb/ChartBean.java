@@ -21,28 +21,23 @@ import javax.servlet.http.HttpSession;
 
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
-import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
+import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.TestCaseChartUtil;
 
-@ManagedBean(name="chartBean")
+@ManagedBean(name = "chartBean")
 @RequestScoped
 @Configurable
 public class ChartBean implements Serializable {
 
-	@Autowired
-	JJTestcaseexecutionService jJTestcaseexecutionService;
-
-	public void setjJTestcaseexecutionService(
-			JJTestcaseexecutionService jJTestcaseexecutionService) {
-		this.jJTestcaseexecutionService = jJTestcaseexecutionService;
-	}
-
 	private CartesianChartModel categoryModel;
+	private PieChartModel pieChart;
 	private String seriesColors = "000000, 097D0B, D8115A";
+	private String pieChartSerieColor = "0000FF,00FF00,FF0000";
 
 	public ChartBean() {
 
@@ -55,8 +50,11 @@ public class ChartBean implements Serializable {
 
 		List<TestCaseChartUtil> testcases = TestCaseChartUtil
 				.getTestCaseUtilFromJJTesCase(jJTestcaseBean.getTestcases());
-		if (testcases != null && !testcases.isEmpty())
+		if (testcases != null && !testcases.isEmpty()) {
 			createCategoryModel();
+			createPieChart(jJTestcaseBean);
+		}
+
 		else {
 			categoryModel = new CartesianChartModel();
 
@@ -68,8 +66,49 @@ public class ChartBean implements Serializable {
 
 	}
 
+	private void createPieChart(JJTestcaseBean jJTestcaseBean) {		
+		
+		List<TestCaseChartUtil> testcases = TestCaseChartUtil
+				.getTestCaseUtilFromJJTesCase(jJTestcaseBean.getTestcases());
+
+		if (testcases != null && !testcases.isEmpty()) {
+			JJBuild build = ((JJBuildBean) LoginBean.findBean("jJBuildBean"))
+					.getBuild();
+			JJVersion version = ((JJVersionBean) LoginBean
+					.findBean("jJVersionBean")).getVersion();
+
+			pieChart = new PieChartModel();
+			int noExec = 0;
+			int passed = 0;
+			int notPasses = 0;
+
+			for (TestCaseChartUtil test : testcases) {
+
+				Boolean isPassed = jJTestcaseBean.getjJTestcaseexecutionService().isPassed(
+						test.getTestcase(), build, version);
+
+				if (isPassed == null)
+					noExec++;
+				else if (isPassed)
+					passed++;
+				else
+					notPasses++;
+			}
+
+			pieChart.set("Sans Exec", noExec);
+			pieChart.set("Passed", passed);
+			pieChart.set("Non Passed", notPasses);
+
+		} else
+			pieChart = null;
+	}
+
 	public CartesianChartModel getCategoryModel() {
 		return categoryModel;
+	}
+
+	public void setCategoryModel(CartesianChartModel categoryModel) {
+		this.categoryModel = categoryModel;
 	}
 
 	private void createCategoryModel() {
@@ -349,5 +388,21 @@ public class ChartBean implements Serializable {
 
 	public void setSeriesColors(String seriesColors) {
 		this.seriesColors = seriesColors;
+	}
+
+	public String getPieChartSerieColor() {
+		return pieChartSerieColor;
+	}
+
+	public void setPieChartSerieColor(String pieChartSerieColor) {
+		this.pieChartSerieColor = pieChartSerieColor;
+	}
+
+	public PieChartModel getPieChart() {
+		return pieChart;
+	}
+
+	public void setPieChart(PieChartModel pieChart) {
+		this.pieChart = pieChart;
 	}
 }
