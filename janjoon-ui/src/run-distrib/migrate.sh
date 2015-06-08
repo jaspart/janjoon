@@ -43,6 +43,7 @@ else
 	cd $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war/
 	chmod -R 777 $DIRECTORY/log
 	cd -
+	mv -f $DIRECTORY/license/messages_*.properties $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war/WEB-INF/classes/com/starit/janjoonweb/ui/mb/i18n/
 	mv $DIRECTORY/license/janjoon-base.jar $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war/run-distrib/
 	mv -f $DIRECTORY/license/org.eclipse.jgit-3.2.0.201312181205-r.jar $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war/WEB-INF/lib/
 	sed -i 's/BUILD_NUMBER/'"$NEXT_BUILD"'/g' $DIRECTORY/bin/start.sh

@@ -36,11 +36,11 @@ public class JJBugServiceImpl implements JJBugService {
 
 		CriteriaQuery<JJBug> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();		
+		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
-		} 
+		}
 
 		if (teststep != null) {
 			predicates
@@ -49,12 +49,12 @@ public class JJBugServiceImpl implements JJBugService {
 
 		if (build != null) {
 			predicates.add(criteriaBuilder.equal(from.get("build"), build));
-		}else if (company != null) {
+		} else if (company != null) {
 			predicates.add(criteriaBuilder.equal(
 					from.join("versioning").join("product").join("manager")
 							.get("company"), company));
 		}
-		
+
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
@@ -83,12 +83,12 @@ public class JJBugServiceImpl implements JJBugService {
 		CriteriaQuery<JJBug> select = criteriaQuery.select(from);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		
+
 		if (category != null) {
 			predicates
 					.add(criteriaBuilder.equal(from.get("category"), category));
 		}
-		
+
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
 		}
@@ -100,7 +100,7 @@ public class JJBugServiceImpl implements JJBugService {
 			predicates.add(criteriaBuilder.equal(
 					from.join("versioning").join("product").join("manager")
 							.get("company"), company));
-		}		
+		}
 
 		if (status != null) {
 			predicates.add(criteriaBuilder.equal(from.get("status"), status));
@@ -111,6 +111,8 @@ public class JJBugServiceImpl implements JJBugService {
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
+
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		select.where(predicates.toArray(new Predicate[] {}));
 
@@ -132,7 +134,6 @@ public class JJBugServiceImpl implements JJBugService {
 		CriteriaQuery<JJBug> select = criteriaQuery.select(from);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
@@ -141,7 +142,7 @@ public class JJBugServiceImpl implements JJBugService {
 		if (version != null) {
 			predicates.add(criteriaBuilder.equal(from.get("versioning"),
 					version));
-		} else if (product != null) {		
+		} else if (product != null) {
 			predicates.add(criteriaBuilder.equal(
 					from.join("versioning").get("product"), product));
 		} else if (company != null) {
@@ -192,7 +193,7 @@ public class JJBugServiceImpl implements JJBugService {
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
 		}
-		
+
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		select.where(predicates.toArray(new Predicate[] {}));
@@ -247,7 +248,8 @@ public class JJBugServiceImpl implements JJBugService {
 
 			}
 
-		}
+		} else
+			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 		TypedQuery<JJBug> result = entityManager.createQuery(select);
 		size.setValue(entityManager.createQuery(select).getResultList().size());
 		result.setFirstResult(first);
@@ -271,7 +273,7 @@ public class JJBugServiceImpl implements JJBugService {
 
 		CriteriaQuery<JJBug> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();		
+		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
@@ -288,9 +290,10 @@ public class JJBugServiceImpl implements JJBugService {
 					from.join("versioning").join("product").join("manager")
 							.get("company"), company));
 		}
-		
+
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 		select.where(predicates.toArray(new Predicate[] {}));
 
 		TypedQuery<JJBug> result = entityManager.createQuery(select);

@@ -38,6 +38,14 @@
 			<includes>
 				<include>jetty-runner-8.1.14.v20131031.jar</include>
 			</includes>
+		</fileSet>		
+
+		<fileSet>
+			<directory>src/main/resources/com/starit/janjoonweb/ui/mb/i18n</directory>
+			<outputDirectory>/license</outputDirectory>
+			<includes>
+				<include>messages_*.properties</include>
+			</includes>
 		</fileSet>
 
 		<fileSet>
@@ -47,8 +55,8 @@
 				<include>janjoon-ui-2.0-BUILD_NUMBER-small.war</include>
 			</includes>
 		</fileSet>
-		
-		
+
+
 		<fileSet>
 			<directory>target/janjoon-ui-2.0-BUILD_NUMBER/WEB-INF/lib</directory>
 			<outputDirectory>/license</outputDirectory>
@@ -56,7 +64,7 @@
 				<include>org.eclipse.jgit-3.2.0.201312181205-r.jar</include>
 			</includes>
 		</fileSet>
-		
+
 		<fileSet>
 			<directory>src/log</directory>
 			<outputDirectory>/log</outputDirectory>

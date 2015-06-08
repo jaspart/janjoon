@@ -98,15 +98,15 @@
 							<p:contextMenu id="chapterContextMenu" for="chapterTreeSingle">
 								<p:menuitem
 									value="#{messages.specification_chapter_edit_menuitem}"
-									actionListener="#{jJChapterBean.editChapter}" process="@this,chapterTreeSingle"
-									icon="ui-icon-pencil"
+									actionListener="#{jJChapterBean.editChapter}"
+									process="@this,chapterTreeSingle" icon="ui-icon-pencil"
 									onstart="PF('chapterBlockUIWidget').block()"
 									oncomplete="PF('chapterBlockUIWidget').unblock()"
 									update=":chapterDialogForm" />
 								<p:menuitem
 									value="#{messages.specification_chapter_delete_menuitem}"
-									actionListener="#{jJChapterBean.deleteChapter}" process="@this,chapterTreeSingle"
-									icon="ui-icon-close"									
+									actionListener="#{jJChapterBean.deleteChapter}"
+									process="@this,chapterTreeSingle" icon="ui-icon-close"
 									onstart="PF('chapterBlockUIWidget').block()"
 									oncomplete="PF('chapterBlockUIWidget').unblock()"
 									update=":chapterDialogForm" />
@@ -117,7 +117,7 @@
 								value="#{jJChapterBean.chapterRoot}" var="nodeChapter"
 								selectionMode="single"
 								selection="#{jJChapterBean.selectedChapterNode}" dynamic="true">
-<!-- 								<p:ajax event="select" listener="#{jJChapterBean.onNodeSelect}" update=":chapterDialogForm" /> -->
+								<!-- 								<p:ajax event="select" listener="#{jJChapterBean.onNodeSelect}" update=":chapterDialogForm" /> -->
 								<p:treeNode>
 									<h:outputText value="#{nodeChapter}" />
 								</p:treeNode>
@@ -138,11 +138,12 @@
 					</f:facet>
 				</p:panelGrid>
 			</p:tab>
-			<p:tab title="Gestion Des Chapitres">
+			<p:tab title="Document">
 				<p:panelGrid style="margin-top:10px;height: 400px;width: 895px;">
 					<p:row>
 						<p:column colspan="3">
-							<!-- 							<p:scrollPanel style="height:350px;" mode="native"> -->
+							<p:outputLabel for="leftTreeIncorporated" style="font-weight: bold;text-decoration: underline;"
+								value="#{messages.specification_chapter_unordered_tree}" />
 							<p:tree id="leftTreeIncorporated"
 								value="#{jJChapterBean.leftRoot}" var="nodeLeft"
 								selectionMode="single"
@@ -156,14 +157,15 @@
 									<h:outputText value="#{nodeLeft}" />
 								</p:treeNode>
 							</p:tree>
-							<!-- 							</p:scrollPanel> -->
 						</p:column>
 						<p:column colspan="3">
+							<h3>Drag&amp;Drop</h3>
 							<p:graphicImage alt="Transfer" library="images"
 								name="transfer.png" />
 						</p:column>
 						<p:column colspan="3">
-							<!-- 							<p:scrollPanel style="height:350px;" mode="native"> -->
+							<p:outputLabel for="RightTreeIncorporated" style="font-weight: bold;text-decoration: underline;"
+								value="#{messages.specification_chapter_ordered_tree}" />
 							<p:tree id="RightTreeIncorporated"
 								value="#{jJChapterBean.rightRoot}" var="nodeRight"
 								selectionMode="single"
@@ -177,7 +179,6 @@
 									<h:outputText value="#{nodeRight}" />
 								</p:treeNode>
 							</p:tree>
-							<!-- 							</p:scrollPanel> -->
 						</p:column>
 					</p:row>
 				</p:panelGrid>

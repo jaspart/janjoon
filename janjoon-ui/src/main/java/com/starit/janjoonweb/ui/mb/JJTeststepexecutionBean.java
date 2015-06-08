@@ -15,6 +15,7 @@ import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTeststepexecution;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
@@ -27,7 +28,15 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 public class JJTeststepexecutionBean {
 
 	@Autowired
-	JJBugService jJBugService;
+	private JJBugService jJBugService;
+
+	@Autowired
+	private JJStatusService jJStatusService;
+	
+	
+	public void setjJStatusService(JJStatusService jJStatusService) {
+		this.jJStatusService = jJStatusService;
+	}
 
 	public void setjJBugService(JJBugService jJBugService) {
 		this.jJBugService = jJBugService;
@@ -245,6 +254,7 @@ public class JJTeststepexecutionBean {
 		bug.setName("Insert a bug name");
 		bug.setDescription("Insert a bug description");
 		bug.setEnabled(true);
+		bug.setStatus(jJStatusService.getOneStatus("NEW", "BUG", true));
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 

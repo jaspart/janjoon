@@ -467,23 +467,7 @@ public class JJBugBean {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-
 		session.setAttribute("jJBugBean", new JJBugBean());
-		// JJBug_ = null;
-		// bugProjectSelected = null;
-		// bugRequirementSelected = null;
-		// bugList = null;
-		// selectedBugList = null;
-		// filteredJJBug=null;
-		//
-		// criticityOptions = null;
-		// importanceOptions = null;
-		// statusOptions = null;
-		//
-		// setSelectedBugs(null);
-		// setSelectedTasks(null);
-		// setSelectedMessages(null);
-		// setCreateDialogVisible(false);
 	}
 
 	public void saveBug() {
@@ -493,12 +477,8 @@ public class JJBugBean {
 
 		JJTeststepexecutionBean jJTeststepexecutionBean = (JJTeststepexecutionBean) session
 				.getAttribute("jJTeststepexecutionBean");
-		// JJBug_.setVersioning(bugVersionSelected);
-		//
-		// JJBug_.setVersioning(bugVersionSelected);
 
-		// JJBug_.setRequirement(bugRequirementSelected);
-
+		JJBug_ = jJTeststepexecutionBean.getBug();
 		JJBug_.setProject(bugProjectSelected);
 
 		if (JJBug_.getId() == null) {
@@ -508,8 +488,8 @@ public class JJBugBean {
 							.getTeststepexecution().getTeststep().getId());
 
 			JJBug_.setTeststep(teststep);
-			teststep.getBugs().add(JJBug_);
-
+			// teststep.getBugs().add(JJBug_);
+			JJBug_.setCreationDate(new Date());
 			saveJJBug(JJBug_);
 		} else {
 
@@ -529,10 +509,7 @@ public class JJBugBean {
 	}
 
 	public void persistBugTask() {
-//		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-//				.getExternalContext().getSession(false);
-//		JJSprintBean jJSprintBean = (JJSprintBean) session
-//				.getAttribute("jJSprintBean");
+
 		String message = "";
 		updateJJBug(JJBug_);
 		message = "message_successfully_updated";
@@ -540,19 +517,6 @@ public class JJBugBean {
 		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
-		//RequestContext context = RequestContext.getCurrentInstance();
-
-//		int i = 0;
-//		if (((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
-//			i = 1;
-//		else
-//			i = 0;
-
-//		context.execute("PF('projectTabView').select(" + i + ")");
-//		jJSprintBean.setUpdate(false);
-//		context.execute("PF('SprintTab').select("
-//				+ jJSprintBean.contains(jJSprintBean.getSprintUtil()
-//						.getSprint().getId()) + ")");
 	}
 
 	public void persistJJBug() {
@@ -575,7 +539,6 @@ public class JJBugBean {
 
 	public void persistBug() {
 
-		// JJBug_.setRequirement(bugRequirementSelected);
 		if (project == null) {
 			JJBug_.setProject(bugProjectSelected);
 
@@ -811,7 +774,7 @@ public class JJBugBean {
 				viewBug = null;
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"validator_page_access", "Bug");
-				facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);	
+				facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 				((LoginBean) LoginBean.findBean("loginBean"))
 						.setFacesMessage(facesMessage);
 			}
@@ -858,11 +821,11 @@ public class JJBugBean {
 	}
 
 	public void saveJJBug(JJBug b) {
-		
+
 		b.setCreationDate(new Date());
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
-		b.setCreatedBy(contact);		
+		b.setCreatedBy(contact);
 		jJBugService.saveJJBug(b);
 	}
 
@@ -899,7 +862,7 @@ public class JJBugBean {
 	public List<JJRequirement> completeReqBug(String query) {
 
 		List<JJRequirement> suggestions = new ArrayList<JJRequirement>();
-		LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		JJProduct prod = LoginBean.getProduct();
 		JJProject proj = (JJProject) UIComponent
 				.getCurrentComponent(FacesContext.getCurrentInstance())
@@ -907,7 +870,8 @@ public class JJBugBean {
 		suggestions.add(null);
 
 		for (JJRequirement req : jJRequirementService.getRequirements(
-				(JJCompany) LoginBean.findBean("JJCompany"), loginBean.getAuthorizedMap("Requirement", proj, prod), null)) {
+				(JJCompany) LoginBean.findBean("JJCompany"),
+				loginBean.getAuthorizedMap("Requirement", proj, prod), null)) {
 			String jJCriticityStr = String.valueOf(req.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(req);
@@ -1016,23 +980,24 @@ public class JJBugBean {
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		if (!contact.getBugs().contains(viewBug)) {
-			
+
 			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
-			if(((JJMessageBean)LoginBean.findBean("jJMessageBean")) != null)
-			{
-				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
-				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setMainMessages(null);
+			if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setAlertMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setMainMessages(null);
 			}
 			contact.getBugs().add(jJBugService.findJJBug(viewBug.getId()));
-			
-			if(LoginBean.findBean("jJContactBean") == null)
-			{
+
+			if (LoginBean.findBean("jJContactBean") == null) {
 				FacesContext fContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) fContext
 						.getExternalContext().getSession(false);
 				session.setAttribute("jJProjectBean", new JJProjectBean());
-			}			
-			((JJContactBean)LoginBean.findBean("jJContactBean")).updateJJContact(contact);
+			}
+			((JJContactBean) LoginBean.findBean("jJContactBean"))
+					.updateJJContact(contact);
 
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					RequirementBean.REQUIREMENT_SUBSCRIPTION_RATE, "Bug");
@@ -1046,25 +1011,25 @@ public class JJBugBean {
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		if (contact.getBugs().contains(viewBug)) {
-			contact.getBugs().remove(jJBugService.findJJBug(viewBug.getId()));			
-			
-			if(LoginBean.findBean("jJContactBean") == null)
-			{
+			contact.getBugs().remove(jJBugService.findJJBug(viewBug.getId()));
+
+			if (LoginBean.findBean("jJContactBean") == null) {
 				FacesContext fContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) fContext
 						.getExternalContext().getSession(false);
 				session.setAttribute("jJProjectBean", new JJProjectBean());
-			}			
-			((JJContactBean)LoginBean.findBean("jJContactBean")).updateJJContact(contact);
-				
-				
+			}
+			((JJContactBean) LoginBean.findBean("jJContactBean"))
+					.updateJJContact(contact);
+
 			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
-			if(((JJMessageBean)LoginBean.findBean("jJMessageBean")) != null)
-			{
-				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
-				((JJMessageBean)LoginBean.findBean("jJMessageBean")).setMainMessages(null);
-			}			
-			
+			if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setAlertMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setMainMessages(null);
+			}
+
 			FacesMessage facesMessage = MessageFactory
 					.getMessage(
 							RequirementBean.REQUIREMENT_SUBSCRIPTION_CANCEL_RATE,

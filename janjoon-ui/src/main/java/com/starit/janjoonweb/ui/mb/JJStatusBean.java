@@ -13,7 +13,6 @@ import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.validator.LengthValidator;
-import javax.servlet.http.HttpSession;
 
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.inputtextarea.InputTextarea;
@@ -23,6 +22,7 @@ import org.primefaces.component.spinner.Spinner;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
+import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
@@ -31,13 +31,11 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJTask;
-import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyStatusDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -45,9 +43,21 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 @RooSerializable
 @RooJsfManagedBean(entity = JJStatus.class, beanName = "jJStatusBean")
 public class JJStatusBean {
-
+	
+	@Autowired
+	private JJCategoryService jJCategoryService;
+	
+	@Autowired
+	private JJRequirementService jJRequirementService;
+	
 	private List<JJStatus> statusList;
 	private LazyStatusDataModel lazyStatusList;
+	private JJStatus selectedStatus;
+	private PieChartModel pieChart;
+	private CartesianChartModel chartModel;
+	private JJProject project;	
+	private List<CategoryDataModel> categoryDataModel;
+	private Boolean first;
 
 	public LazyStatusDataModel getLazyStatusList() {
 		if (lazyStatusList == null)
@@ -61,32 +71,16 @@ public class JJStatusBean {
 
 	public String onEdit() {
 		return null;
-	}
-
-	@Autowired
-	private JJRequirementService jJRequirementService;
+	}	
 
 	public void setjJRequirementService(
 			JJRequirementService jJRequirementService) {
 		this.jJRequirementService = jJRequirementService;
 	}
 
-	@Autowired
-	private JJCategoryService jJCategoryService;
-
 	public void setjJCategoryService(JJCategoryService jJCategoryService) {
 		this.jJCategoryService = jJCategoryService;
 	}
-
-	private JJStatus selectedStatus;
-
-	private PieChartModel pieChart;
-
-	private JJProject project;
-//	private JJProduct product;
-//	private JJVersion version;
-
-	private List<CategoryDataModel> categoryDataModel;
 
 	public List<JJStatus> getStatusList() {
 
@@ -117,25 +111,6 @@ public class JJStatusBean {
 		this.project = project;
 	}
 
-//	public JJProduct getProduct() {		
-//		this.product = LoginBean.getProduct();
-//		return product;
-//	}
-//
-//	public void setProduct(JJProduct product) {
-//		this.product = product;
-//	}
-//
-//	public JJVersion getVersion() {
-//		
-//		this.version = LoginBean.getVersion();
-//		return version;
-//	}
-//
-//	public void setVersion(JJVersion version) {
-//		this.version = version;
-//	}
-
 	public List<CategoryDataModel> getCategoryDataModel() {
 		return categoryDataModel;
 	}
@@ -147,9 +122,15 @@ public class JJStatusBean {
 	public PieChartModel getPieChart() {
 		return pieChart;
 	}
-
-	private Boolean first;
 	
+	public CartesianChartModel getChartModel() {
+		return chartModel;
+	}
+
+	public void setChartModel(CartesianChartModel chartModel) {
+		this.chartModel = chartModel;
+	}
+
 	public void setFirst(Boolean bb)
 	{
 		this.first=bb;
@@ -232,7 +213,7 @@ public class JJStatusBean {
 		setCreateDialogVisible(false);
 	}
 
-	public List<String> completeObject(String query) {
+	public List<String> completeObject(String query) {	
 
 		return jJStatusService.getTablesName();
 	}

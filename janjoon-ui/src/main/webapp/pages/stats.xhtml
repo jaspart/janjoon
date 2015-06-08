@@ -20,12 +20,15 @@
 				oncomplete="PF('blockUIWidget').unblock();" />
 			<p:tab id="specTab" title="Status">
 				<h:form id="specForm">
-					<p:panel id="statPanel" Header="Status">
+					<h:panelGrid id="statPanel" columns="2" >
 						<p:pieChart id="custom" value="#{jJStatusBean.pieChart}"
 							legendPosition="e" fill="false" showDataLabels="true"
 							title="% Requierement" style="width:400px;height:300px"
 							sliceMargin="5" diameter="150" />
-					</p:panel>
+							
+						
+							
+					</h:panelGrid>
 					<p:dataTable id="categoryTable" var="categoryModel"
 						value="#{jJStatusBean.categoryDataModel}">
 						<f:facet name="header">
