@@ -15,6 +15,30 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		this.entityManager = entityManager;
 	}
 
+	public boolean isAdmin(JJContact contact) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
+				.createQuery(JJPermission.class);
+
+		Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(from.get("contact"), contact));
+		predicates
+				.add(criteriaBuilder.equal(
+						criteriaBuilder.lower(from.get("profile").<String> get(
+								"name")), "admin"));
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
+		cq.select(criteriaBuilder.count(cq.from(JJPermission.class)));
+		entityManager.createQuery(cq);
+		cq.where(predicates.toArray(new Predicate[] {}));
+		boolean have = entityManager.createQuery(cq).getSingleResult() > 0;
+		return have;
+
+	}
+
 	@Override
 	public List<JJPermission> getPermissions(JJContact contact,
 			boolean onlyContact, JJProfile profile, JJProject project,
@@ -88,10 +112,12 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
 
 		if (objet != null) {
-			orPredicates.add(criteriaBuilder.equal(criteriaBuilder.lower(fromRight.<String>get("objet")),
+			orPredicates.add(criteriaBuilder.equal(
+					criteriaBuilder.lower(fromRight.<String> get("objet")),
 					objet.toLowerCase()));
 			if (!objet.contains("*"))
-				orPredicates.add(criteriaBuilder.equal(criteriaBuilder.lower(fromRight.<String>get("objet")),
+				orPredicates.add(criteriaBuilder.equal(
+						criteriaBuilder.lower(fromRight.<String> get("objet")),
 						"JJ" + objet.toLowerCase()));
 			orPredicates
 					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
@@ -256,16 +282,20 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
 
 		if (objet != null && !objet.equalsIgnoreCase("sprintContact")) {
-			orPredicates.add(criteriaBuilder.equal(criteriaBuilder.lower(fromRight.<String>get("objet")),
+			orPredicates.add(criteriaBuilder.equal(
+					criteriaBuilder.lower(fromRight.<String> get("objet")),
 					objet.toLowerCase()));
 			if (!objet.contains("*"))
-				orPredicates.add(criteriaBuilder.equal(criteriaBuilder.lower(fromRight.<String>get("objet")),
+				orPredicates.add(criteriaBuilder.equal(
+						criteriaBuilder.lower(fromRight.<String> get("objet")),
 						"JJ" + objet.toLowerCase()));
 		} else {
 			if (objet != null && objet.equalsIgnoreCase("sprintContact")) {
-				orPredicates.add(criteriaBuilder.equal(criteriaBuilder.lower(fromRight.<String>get("objet")),
+				orPredicates.add(criteriaBuilder.equal(
+						criteriaBuilder.lower(fromRight.<String> get("objet")),
 						"Task".toLowerCase()));
-				orPredicates.add(criteriaBuilder.equal(criteriaBuilder.lower(fromRight.<String>get("objet")),
+				orPredicates.add(criteriaBuilder.equal(
+						criteriaBuilder.lower(fromRight.<String> get("objet")),
 						"JJTask".toLowerCase()));
 			}
 

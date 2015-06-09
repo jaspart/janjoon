@@ -666,6 +666,7 @@ public class JJTestcaseBean {
 					jJVersionBean.getVersionList();
 					jJVersionBean.setVersion(testcase.getRequirement()
 							.getVersioning());
+					
 					session.setAttribute("jJSprintBean", new JJSprintBean());
 					session.setAttribute("jJStatusBean", new JJStatusBean());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
@@ -680,6 +681,7 @@ public class JJTestcaseBean {
 						jJVersionBean.setVersion(testcase.getRequirement()
 								.getVersioning());
 						session.setAttribute("jJTaskBean", new JJTaskBean());
+						session.setAttribute("jJStatusBean", new JJStatusBean());
 						session.setAttribute("jJSprintBean", new JJSprintBean());
 					} else if (testcase.getRequirement().getVersioning() != null
 							&& jJVersionBean.getVersion() != null) {
@@ -689,6 +691,8 @@ public class JJTestcaseBean {
 							jJVersionBean.getVersionList();
 							jJVersionBean.setVersion(testcase.getRequirement()
 									.getVersioning());
+							
+							session.setAttribute("jJStatusBean", new JJStatusBean());
 						}
 					}
 				}

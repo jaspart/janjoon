@@ -398,6 +398,7 @@ public class RequirementBean {
 						jJVersionBean.getVersionList();
 						jJVersionBean.setVersion(requirement.getVersioning());
 						session.setAttribute("jJTaskBean", new JJTaskBean());
+						session.setAttribute("jJStatusBean", new JJStatusBean());
 						session.setAttribute("jJSprintBean", new JJSprintBean());
 					} else if (requirement.getVersioning() != null
 							&& jJVersionBean.getVersion() != null) {
@@ -407,6 +408,7 @@ public class RequirementBean {
 							jJVersionBean.getVersionList();
 							jJVersionBean.setVersion(requirement
 									.getVersioning());
+							session.setAttribute("jJStatusBean", new JJStatusBean());
 						}
 					}
 				}

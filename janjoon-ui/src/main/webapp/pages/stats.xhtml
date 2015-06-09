@@ -20,14 +20,15 @@
 				oncomplete="PF('blockUIWidget').unblock();" />
 			<p:tab id="specTab" title="Status">
 				<h:form id="specForm">
-					<h:panelGrid id="statPanel" columns="2" >
+					<h:panelGrid id="statPanel" columns="2">
 						<p:pieChart id="custom" value="#{jJStatusBean.pieChart}"
 							legendPosition="e" fill="false" showDataLabels="true"
 							title="% Requierement" style="width:400px;height:300px"
-							sliceMargin="5" diameter="150" />
-							
-						
-							
+							sliceMargin="5" diameter="150" />					
+
+						<p:barChart value="#{jJStatusBean.chartModel}" title="KPI"
+						 minY="0" yaxisLabel="KPI" style="height:300px"  />
+
 					</h:panelGrid>
 					<p:dataTable id="categoryTable" var="categoryModel"
 						value="#{jJStatusBean.categoryDataModel}">
@@ -45,12 +46,14 @@
 								<h:outputText
 									value="#{messages.specification_completion_progress}" />
 							</f:facet>
-<!-- 							<p:progressBar id="coverage" style="width:385px" -->
-<!-- 								value="#{categoryModel.completionProgress}" -->
-<!-- 								labelTemplate="{value}%" displayOnly="true" /> -->
-							<p:pieChart id="coverage" value="#{categoryModel.categoryPieChart}"
-								 fill="true" showDataLabels="true" style="width:200px;height:150px;margin: auto;"
-								 seriesColors="8BADC6,FFFDF6"/>
+							<!-- 							<p:progressBar id="coverage" style="width:385px" -->
+							<!-- 								value="#{categoryModel.completionProgress}" -->
+							<!-- 								labelTemplate="{value}%" displayOnly="true" /> -->
+							<p:pieChart id="coverage"
+								value="#{categoryModel.categoryPieChart}" fill="true"
+								showDataLabels="true"
+								style="width:200px;height:150px;margin: auto;"
+								seriesColors="8BADC6,FFFDF6" />
 						</p:column>
 						<p:column>
 							<f:facet name="header">
@@ -64,14 +67,16 @@
 					</p:dataTable>
 				</h:form>
 			</p:tab>
-			<p:tab id="sprintTab" title="Sprint" 
+			<p:tab id="sprintTab" title="Sprint"
 				rendered="#{not empty jJSprintBean.sprintList}">
 				<p:tabView id="SprintTabView" dynamic="true" widgetVar="SprintTab"
 					value="#{jJSprintBean.sprintList}" var="jjsprint">
-					<p:tab title="#{jjsprint.sprint.name}" rendered="#{!jjsprint.render}">
+					<p:tab title="#{jjsprint.sprint.name}"
+						rendered="#{!jjsprint.render}">
 						<p:barChart value="#{jjsprint.chartModel}" legendPosition="e"
 							widgetVar="barChart_#{jjsprint.sprint.id}_Widget" minY="0"
-							rendered="#{!jjsprint.render}" xaxisLabel="Date" yaxisLabel="WorkLoad" />
+							rendered="#{!jjsprint.render}" xaxisLabel="Date"
+							yaxisLabel="WorkLoad" />
 					</p:tab>
 				</p:tabView>
 			</p:tab>

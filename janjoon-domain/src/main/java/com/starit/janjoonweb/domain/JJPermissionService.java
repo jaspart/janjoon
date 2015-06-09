@@ -32,6 +32,8 @@ public interface JJPermissionService {
 			JJProduct product);
 	
 	public boolean isSuperAdmin(JJContact contact);
+	
+	public boolean isAdmin(JJContact contact);
 
 	public boolean isAuthorized(JJContact contact, JJProject project);
 	

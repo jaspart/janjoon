@@ -22,12 +22,16 @@ import org.primefaces.component.spinner.Spinner;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
-import org.primefaces.model.chart.CartesianChartModel;
+import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.BarChartModel;
+import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
+import org.springframework.util.Assert;
 
+import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJContact;
@@ -43,19 +47,22 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 @RooSerializable
 @RooJsfManagedBean(entity = JJStatus.class, beanName = "jJStatusBean")
 public class JJStatusBean {
-	
+
 	@Autowired
 	private JJCategoryService jJCategoryService;
-	
+
 	@Autowired
 	private JJRequirementService jJRequirementService;
-	
+
+	@Autowired
+	private JJBugService jJBugService;
+
 	private List<JJStatus> statusList;
 	private LazyStatusDataModel lazyStatusList;
 	private JJStatus selectedStatus;
 	private PieChartModel pieChart;
-	private CartesianChartModel chartModel;
-	private JJProject project;	
+	private BarChartModel chartModel;
+	private JJProject project;
 	private List<CategoryDataModel> categoryDataModel;
 	private Boolean first;
 
@@ -71,7 +78,7 @@ public class JJStatusBean {
 
 	public String onEdit() {
 		return null;
-	}	
+	}
 
 	public void setjJRequirementService(
 			JJRequirementService jJRequirementService) {
@@ -80,6 +87,10 @@ public class JJStatusBean {
 
 	public void setjJCategoryService(JJCategoryService jJCategoryService) {
 		this.jJCategoryService = jJCategoryService;
+	}
+
+	public void setjJBugService(JJBugService jJBugService) {
+		this.jJBugService = jJBugService;
 	}
 
 	public List<JJStatus> getStatusList() {
@@ -101,8 +112,8 @@ public class JJStatusBean {
 		this.selectedStatus = selectedStatus;
 	}
 
-	public JJProject getProject() {	
-		
+	public JJProject getProject() {
+
 		this.project = LoginBean.getProject();
 		return project;
 	}
@@ -122,18 +133,17 @@ public class JJStatusBean {
 	public PieChartModel getPieChart() {
 		return pieChart;
 	}
-	
-	public CartesianChartModel getChartModel() {
+
+	public BarChartModel getChartModel() {
 		return chartModel;
 	}
 
-	public void setChartModel(CartesianChartModel chartModel) {
+	public void setChartModel(BarChartModel chartModel) {
 		this.chartModel = chartModel;
 	}
 
-	public void setFirst(Boolean bb)
-	{
-		this.first=bb;
+	public void setFirst(Boolean bb) {
+		this.first = bb;
 	}
 
 	public void onTabStatChange(TabChangeEvent event) {
@@ -152,37 +162,87 @@ public class JJStatusBean {
 
 		if (project == null) {
 			first = true;
-			if(((JJSprintBean) LoginBean.findBean("jJSprintBean")).getSprintList() == null || 
-					((JJSprintBean) LoginBean.findBean("jJSprintBean")).getSprintList().isEmpty())
-			((JJSprintBean) LoginBean.findBean("jJSprintBean"))
-					.iniSprintChart();
-			getProject();	
+			if (((JJSprintBean) LoginBean.findBean("jJSprintBean"))
+					.getSprintList() == null
+					|| ((JJSprintBean) LoginBean.findBean("jJSprintBean"))
+							.getSprintList().isEmpty())
+				((JJSprintBean) LoginBean.findBean("jJSprintBean"))
+						.iniSprintChart();
+			getProject();
 
-			if(project != null)
-			{
+			if (project != null) {
 				categoryDataModel = new ArrayList<CategoryDataModel>();
 
-				List<JJCategory> categoryList = jJCategoryService.getCategories(
-						null, false, true, true);
+				List<JJCategory> categoryList = jJCategoryService
+						.getCategories(null, false, true, true);
 
 				for (JJCategory category : categoryList) {
 					categoryDataModel.add(new CategoryDataModel(category));
 				}
 
 				pieChart = new PieChartModel();
-				List<JJStatus> statReq = jJStatusService.getStatus("Requirement",
-						true, null, false);
+				List<JJStatus> statReq = jJStatusService.getStatus(
+						"Requirement", true, null, false);
 				for (JJStatus s : statReq) {
 
 					int i = Integer.parseInt(""
 							+ jJRequirementService.getReqCountByStaus(
-									((LoginBean) LoginBean.findBean("loginBean"))
-											.getContact().getCompany(), project,
-									LoginBean.getProduct(), LoginBean.getVersion(), s, true));
+									((LoginBean) LoginBean
+											.findBean("loginBean"))
+											.getContact().getCompany(),
+									project, LoginBean.getProduct(), LoginBean
+											.getVersion(), s, true));
 					pieChart.set(s.getName(), i);
 				}
+
+				this.chartModel = new BarChartModel();
+				ChartSeries chartSeries = new ChartSeries();
+				float bugKPI = 0L;
+				float projKPI = 0;
+				LoginBean loginBean = (LoginBean) LoginBean
+						.findBean("loginBean");
+				JJRequirementBean jJRequirementBean = (JJRequirementBean) LoginBean
+						.findBean("jJRequirementBean");
+
+				if (jJRequirementBean == null)
+					jJRequirementBean = new JJRequirementBean();
+
+				List<JJRequirement> requirements = jJRequirementService
+						.getRequirements(null, loginBean.getAuthorizedMap(
+								"Requirement", LoginBean.getProject(),
+								LoginBean.getProduct()), LoginBean.getVersion());
+
+				for (JJRequirement req : requirements) {
+
+					bugKPI = bugKPI
+							+ (1 / (1 + jJBugService.requirementBugCount(req)));
+
+					if (project.getStartDate() != null
+							&& project.getEndDate() != null
+							&& jJRequirementBean.checkIfFinished(req))
+						projKPI++;
+
+				}
+
+				if (project.getStartDate() != null
+						&& project.getEndDate() != null) {
+					float tmpsProj = (new Date().getTime() - project
+							.getStartDate().getTime());
+					float tmps=	 (project.getEndDate().getTime() - project.getStartDate()
+									.getTime());
+					
+					projKPI =(projKPI/(1+requirements.size()))-(tmpsProj/(1+tmps));
+				}
+
+				if (requirements != null && !requirements.isEmpty())
+					bugKPI = bugKPI / requirements.size();
+				chartSeries.set("Bug KPI", bugKPI);
+				chartSeries.set("Project KPI",projKPI);
+				chartModel.addSeries(chartSeries);
+				chartModel.getAxis(AxisType.Y).setMin(0);
+
 			}
-			
+
 		} else {
 			first = !LoginBean.isEqualPreviousPage("stats");
 		}
@@ -213,7 +273,7 @@ public class JJStatusBean {
 		setCreateDialogVisible(false);
 	}
 
-	public List<String> completeObject(String query) {	
+	public List<String> completeObject(String query) {
 
 		return jJStatusService.getTablesName();
 	}
@@ -307,7 +367,7 @@ public class JJStatusBean {
 		objetCreateInput.setValueExpression("itemLabel", expressionFactory
 				.createValueExpression(elContext, "#{objet}", String.class));
 		objetCreateInput.setValueExpression("itemValue", expressionFactory
-				.createValueExpression(elContext, "#{objet}", String.class));		
+				.createValueExpression(elContext, "#{objet}", String.class));
 		htmlPanelGrid.getChildren().add(objetCreateInput);
 
 		Message objetCreateInputMessage = (Message) application
@@ -620,7 +680,7 @@ public class JJStatusBean {
 
 		HtmlOutputText objetValue = (HtmlOutputText) application
 				.createComponent(HtmlOutputText.COMPONENT_TYPE);
-		objetValue.setId("objetValue");		
+		objetValue.setId("objetValue");
 		objetValue.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
 						"#{jJStatusBean.JJStatus_.objet}", String.class));
@@ -672,13 +732,13 @@ public class JJStatusBean {
 		}
 
 		public PieChartModel getCategoryPieChart() {
-			
-			getCompletionProgress();			
+
+			getCompletionProgress();
 			categoryPieChart = new PieChartModel();
-			categoryPieChart.set("Done",completionProgress*100);
-			categoryPieChart.set("Not",100-completionProgress*100);
-			//categoryPieChart.set
-			
+			categoryPieChart.set("Done", completionProgress * 100);
+			categoryPieChart.set("Not", 100 - completionProgress * 100);
+			// categoryPieChart.set
+
 			return categoryPieChart;
 		}
 
@@ -689,12 +749,14 @@ public class JJStatusBean {
 		public float getCoverageProgress() {
 
 			float compteur = 0;
-			LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+			LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 			List<JJRequirement> dataList = jJRequirementService
 					.getRequirements(((LoginBean) LoginBean
 							.findBean("loginBean")).getContact().getCompany(),
-							category, loginBean.getAuthorizedMap("Requirement", project, LoginBean.getProduct()),LoginBean.getVersion(), null, null,
-							false, true, false,false,null);
+							category, loginBean.getAuthorizedMap("Requirement",
+									project, LoginBean.getProduct()), LoginBean
+									.getVersion(), null, null, false, true,
+							false, false, null);
 
 			List<JJCategory> categoryList = jJCategoryService.getCategories(
 					null, false, true, true);
@@ -790,12 +852,14 @@ public class JJStatusBean {
 
 		public float getCompletionProgress() {
 			float compteur = 0;
-			LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+			LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 			List<JJRequirement> dataList = jJRequirementService
 					.getRequirements(((LoginBean) LoginBean
 							.findBean("loginBean")).getContact().getCompany(),
-							category,loginBean.getAuthorizedMap("Requirement", project, LoginBean.getProduct()),LoginBean.getVersion(), null, null,
-							false, true, false,false,null);
+							category, loginBean.getAuthorizedMap("Requirement",
+									project, LoginBean.getProduct()), LoginBean
+									.getVersion(), null, null, false, true,
+							false, false, null);
 
 			for (JJRequirement requirement : dataList) {
 				compteur = compteur + calculCompletion(requirement);
@@ -864,10 +928,11 @@ public class JJStatusBean {
 	}
 
 	public void saveJJStatus(JJStatus b) {
-		
+
 		b.setCreationDate(new Date());
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
-		b.setCreatedBy(contact);		
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
+		b.setCreatedBy(contact);
 		jJStatusService.saveJJStatus(b);
 	}
 

@@ -710,7 +710,7 @@ public class JJBugBean {
 					jJVersionBean.getVersionList();
 					jJVersionBean.setVersion(viewBug.getVersioning());
 
-					session.setAttribute("jJSprintBean", new JJSprintBean());
+					session.setAttribute("jJSprintBean", new JJSprintBean());					
 					session.setAttribute("jJStatusBean", new JJStatusBean());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
 				} else if (prod != null && jJProductBean.getProduct() != null) {
@@ -720,6 +720,7 @@ public class JJBugBean {
 						jJVersionBean.getVersionList();
 						jJVersionBean.setVersion(viewBug.getVersioning());
 						session.setAttribute("jJTaskBean", new JJTaskBean());
+						session.setAttribute("jJStatusBean", new JJStatusBean());
 						session.setAttribute("jJSprintBean", new JJSprintBean());
 					} else if (viewBug.getVersioning() != null
 							&& jJVersionBean.getVersion() != null) {
@@ -728,6 +729,8 @@ public class JJBugBean {
 							change = true;
 							jJVersionBean.getVersionList();
 							jJVersionBean.setVersion(viewBug.getVersioning());
+							
+							session.setAttribute("jJStatusBean", new JJStatusBean());
 						}
 					}
 				}

@@ -14,9 +14,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.CollectionAttribute;
-
-import org.hibernate.Hibernate;
 
 public class JJRequirementServiceImpl implements JJRequirementService {
 
@@ -26,9 +23,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
-
-	// Generic Request
-
+	
 	public boolean haveLinkDown(JJRequirement requirement) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

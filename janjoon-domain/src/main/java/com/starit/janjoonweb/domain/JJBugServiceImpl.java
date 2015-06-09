@@ -121,6 +121,30 @@ public class JJBugServiceImpl implements JJBugService {
 
 	}
 
+	public Long requirementBugCount(JJRequirement requirement) {
+
+		if (requirement != null) {
+			CriteriaBuilder criteriaBuilder = entityManager
+					.getCriteriaBuilder();
+			CriteriaQuery<Long> select = criteriaBuilder
+					.createQuery(Long.class);
+			Root<JJBug> from = select.from(JJBug.class);
+			select.select(criteriaBuilder.count(from));
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			predicates.add(criteriaBuilder.equal(from.get("requirement"),
+					requirement));
+
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+			select.where(criteriaBuilder.and(predicates
+					.toArray(new Predicate[] {})));
+			return entityManager.createQuery(select).getSingleResult();
+		} else
+			return 0L;
+
+	}
+
 	public List<JJBug> load(JJCompany company, MutableInt size, int first,
 			int pageSize, List<SortMeta> multiSortMeta,
 			Map<String, Object> filters, JJProject project, JJProduct product,

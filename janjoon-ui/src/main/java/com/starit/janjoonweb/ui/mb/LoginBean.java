@@ -651,6 +651,7 @@ public class LoginBean implements Serializable {
 			session.setAttribute("jJBugBean", new JJBugBean());
 			session.setAttribute("jJMessageBean", null);
 			session.setAttribute("jJRequirementBean", null);
+			session.setAttribute("jJStatusBean", new JJStatusBean());
 
 			if (session.getAttribute("jJBuildBean") != null) {
 				((JJBuildBean) session.getAttribute("jJBuildBean"))

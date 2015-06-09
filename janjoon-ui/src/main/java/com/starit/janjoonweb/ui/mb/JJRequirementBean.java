@@ -86,6 +86,14 @@ public class JJRequirementBean {
 
 	@Autowired
 	private JJConfigurationService jJConfigurationService;
+	@Autowired
+	private JJTaskService jJTaskService;
+	@Autowired
+	private JJTestcaseService jJTestcaseService;
+	@Autowired
+	private JJTestcaseexecutionService jJTestcaseexecutionService;
+	@Autowired
+	private JJTeststepService jJTeststepService;
 
 	private List<JJTestcase> reqtestCases;
 	private List<JJTestcase> reqSelectedtestCases;
@@ -93,45 +101,6 @@ public class JJRequirementBean {
 	private int colspan;
 	private String filterValue;
 	private JJTaskBean jJTaskBean;
-
-	public void setjJTaskBean(JJTaskBean jJTaskBean) {
-		this.jJTaskBean = jJTaskBean;
-	}
-
-	public void setjJConfigurationService(
-			JJConfigurationService jJConfigurationService) {
-		this.jJConfigurationService = jJConfigurationService;
-	}
-
-	@Autowired
-	private JJTaskService jJTaskService;
-
-	public void setjJTaskService(JJTaskService jJTaskService) {
-		this.jJTaskService = jJTaskService;
-	}
-
-	@Autowired
-	private JJTestcaseService jJTestcaseService;
-
-	public void setjJTestcaseService(JJTestcaseService jJTestcaseService) {
-		this.jJTestcaseService = jJTestcaseService;
-	}
-
-	@Autowired
-	private JJTestcaseexecutionService jJTestcaseexecutionService;
-
-	public void setjJTestcaseexecutionService(
-			JJTestcaseexecutionService jJTestcaseexecutionService) {
-		this.jJTestcaseexecutionService = jJTestcaseexecutionService;
-	}
-
-	@Autowired
-	JJTeststepService jJTeststepService;
-
-	public void setjJTeststepService(JJTeststepService jJTeststepService) {
-		this.jJTeststepService = jJTeststepService;
-	}
-
 	private JJCategory lowCategory;
 	private JJCategory mediumCategory;
 	private JJCategory highCategory;
@@ -205,6 +174,60 @@ public class JJRequirementBean {
 	private long categoryId;
 
 	private boolean requirementState;
+
+	private JJProject importProject;
+	private List<JJProject> importProjectList;
+
+	private JJProduct importProduct;
+	private List<JJProduct> importProductList;
+
+	private JJVersion importVersion;
+	private List<JJVersion> importVersionList;
+
+	private JJCategory importCategory;
+	private List<JJCategory> importCategoryList;
+
+	private JJStatus importStatus;
+	private List<JJStatus> importStatusList;
+
+	private boolean disableImportVersion;
+
+	private boolean copyTestcases;
+	private boolean copyChapters;
+	private boolean copyRequirements;
+	private boolean disableImportButton;
+
+	private MindmapNode reqRoot;
+
+	private List<ImportFormat> importFormats;
+
+	private boolean disabledRequirement;
+
+	public void setjJTaskBean(JJTaskBean jJTaskBean) {
+		this.jJTaskBean = jJTaskBean;
+	}
+
+	public void setjJConfigurationService(
+			JJConfigurationService jJConfigurationService) {
+		this.jJConfigurationService = jJConfigurationService;
+	}
+
+	public void setjJTaskService(JJTaskService jJTaskService) {
+		this.jJTaskService = jJTaskService;
+	}
+
+	public void setjJTestcaseService(JJTestcaseService jJTestcaseService) {
+		this.jJTestcaseService = jJTestcaseService;
+	}
+
+	public void setjJTestcaseexecutionService(
+			JJTestcaseexecutionService jJTestcaseexecutionService) {
+		this.jJTestcaseexecutionService = jJTestcaseexecutionService;
+	}
+
+	public void setjJTeststepService(JJTeststepService jJTeststepService) {
+		this.jJTeststepService = jJTeststepService;
+	}
 
 	public String getFilterButton() {
 		if (filterButton == null)
@@ -730,23 +753,6 @@ public class JJRequirementBean {
 	public void setMine(boolean mine) {
 		this.mine = mine;
 	}
-
-	private JJProject importProject;
-	private List<JJProject> importProjectList;
-
-	private JJProduct importProduct;
-	private List<JJProduct> importProductList;
-
-	private JJVersion importVersion;
-	private List<JJVersion> importVersionList;
-
-	private JJCategory importCategory;
-	private List<JJCategory> importCategoryList;
-
-	private JJStatus importStatus;
-	private List<JJStatus> importStatusList;
-
-	private boolean disableImportVersion;
 
 	public JJProject getImportProject() {
 		return importProject;
@@ -1767,8 +1773,6 @@ public class JJRequirementBean {
 
 	}
 
-	private List<ImportFormat> importFormats;
-
 	public List<ImportFormat> getImportFormats() {
 		return importFormats;
 	}
@@ -2397,8 +2401,6 @@ public class JJRequirementBean {
 		}
 
 	}
-
-	private boolean disabledRequirement;
 
 	public boolean getDisabledRequirement() {
 		return disabledRequirement;
@@ -3442,11 +3444,6 @@ public class JJRequirementBean {
 		return elements;
 	}
 
-	private boolean copyTestcases;
-	private boolean copyChapters;
-	private boolean copyRequirements;
-	private boolean disableImportButton;
-
 	public boolean getCopyTestcases() {
 		return copyTestcases;
 	}
@@ -4337,8 +4334,6 @@ public class JJRequirementBean {
 
 	// mindMap part
 
-	private MindmapNode reqRoot;
-
 	public MindmapNode getReqRoot() {
 		return reqRoot;
 	}
@@ -4486,11 +4481,66 @@ public class JJRequirementBean {
 	}
 
 	public void reloadPage() {
-		
-		filterButton=null;
+
+		filterButton = null;
 		loadData();
 		closeDialog(false, true);
 		// oncomplete="PF('blockUIWidget').unblock();"
+	}
+
+	public boolean checkIfFinished(JJRequirement req) {
+
+		long t = System.currentTimeMillis();
+		boolean FINIS = true;
+
+		FINIS = jJRequirementService.haveLinkUp(req)
+				|| jJCategoryService.isHighLevel(req.getCategory());
+
+		if (FINIS)
+			FINIS = jJRequirementService.haveLinkDown(req)
+					|| jJCategoryService.isLowLevel(req.getCategory());
+
+		if (FINIS) {
+			List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
+					null, false, req, null, null, true, false, false, null);
+			FINIS = !tasks.isEmpty();
+
+			for (JJTask task : tasks) {
+				if (!(task.getEndDateReal() != null || (task.getStatus() != null && task
+						.getStatus().getName().equalsIgnoreCase("DONE")))) {
+					FINIS = false;
+					break;
+				}
+			}
+
+			if (FINIS) {
+				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
+						req, null, null, true, false, false);
+
+				FINIS = !testcases.isEmpty();
+				for (JJTestcase testcase : testcases) {
+
+					List<JJTestcaseexecution> testcaseExecutions = jJTestcaseexecutionService
+							.getTestcaseexecutions(testcase, null, true, true,
+									false);
+
+					if (testcaseExecutions.isEmpty()) {
+						FINIS = false;
+						break;
+					} else if ((testcaseExecutions.get(0).getPassed() == null)
+							|| (testcaseExecutions.get(0).getPassed() != null && !testcaseExecutions
+									.get(0).getPassed())) {
+						FINIS = false;
+						break;
+
+					}
+
+				}
+			}
+		}
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
+		return FINIS;
+
 	}
 
 	public static String getRowStyleClass(JJRequirement requirement,
@@ -4499,54 +4549,36 @@ public class JJRequirementBean {
 			JJTaskService jJTaskService, JJTestcaseService jJTestcaseService,
 			JJTestcaseexecutionService jJTestcaseexecutionService) {
 
-		long t = System.currentTimeMillis();
-		List<JJCategory> categoryList = jJCategoryService.getCategories(null,
-				false, true, true);
+		long t = System.currentTimeMillis();	
 
-		JJCategory category = jJCategoryService.findJJCategory(requirement
-				.getCategory().getId());
-
-		boolean sizeIsOne = false;
-
-		boolean UP = false;
-		boolean DOWN = false;
-		boolean TASK = true;
-		boolean ENCOURS = false;
-		boolean FINIS = true;
+		boolean UP = jJRequirementService.haveLinkUp(requirement)
+				|| jJCategoryService.isHighLevel(requirement.getCategory());
+	
+		boolean DOWN = jJRequirementService.haveLinkDown(requirement)
+				|| jJCategoryService.isLowLevel(requirement.getCategory());
+		
 		requirement = jJRequirementService.findJJRequirement(requirement
 				.getId());
-		if (category.getStage() == categoryList.get(0).getStage()) {
-			DOWN = true;
-			UP = jJRequirementService.haveLinkUp(requirement);
-
-			sizeIsOne = true;
-		} else if (category.getStage() == categoryList.get(
-				categoryList.size() - 1).getStage()
-				&& !sizeIsOne) {
-
-			UP = true;
-
-			DOWN = jJRequirementService.haveLinkDown(requirement);
-
-		} else {
-			UP = jJRequirementService.haveLinkUp(requirement);
-			DOWN = jJRequirementService.haveLinkDown(requirement);
-		}
+	
+		boolean TASK = true;
+		boolean ENCOURS = false;
+		boolean FINIS = true;	
+		
 
 		List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
 				null, false, requirement, null, null, true, false, false, null);
 		if (tasks.isEmpty()) {
 			TASK = false;
 		}
-
-		for (JJTask task : tasks) {
-			if (!(task.getEndDateReal() != null || (task.getStatus() != null && task
-					.getStatus().getName().equalsIgnoreCase("DONE")))) {
-				ENCOURS = true;
-				FINIS = false;
-				break;
+		if (UP && DOWN && TASK)
+			for (JJTask task : tasks) {
+				if (!(task.getEndDateReal() != null || (task.getStatus() != null && task
+						.getStatus().getName().equalsIgnoreCase("DONE")))) {
+					ENCOURS = true;
+					FINIS = false;
+					break;
+				}
 			}
-		}
 
 		String rowStyleClass = "";
 
@@ -4558,7 +4590,8 @@ public class JJRequirementBean {
 
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
 						requirement, null, null, true, false, false);
-				boolean SUCCESS = true;
+				boolean SUCCESS = !testcases.isEmpty();
+				;
 
 				for (JJTestcase testcase : testcases) {
 
@@ -4568,6 +4601,7 @@ public class JJRequirementBean {
 
 					if (testcaseExecutions.isEmpty()) {
 						SUCCESS = false;
+						break;
 					} else {
 
 						if ((testcaseExecutions.get(0).getPassed() == null)
