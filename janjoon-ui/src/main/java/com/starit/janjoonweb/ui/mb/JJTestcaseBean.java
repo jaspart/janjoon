@@ -86,34 +86,46 @@ public class JJTestcaseBean {
 	@Autowired
 	private JJConfigurationService jJConfigurationService;
 
+	@Autowired
+	private JJBuildService jJBuildService;
+
+	@Autowired
+	private JJTeststepService jJTeststepService;
+
+	@Autowired
+	private JJTaskService jJTaskService;
+
+	@Autowired
+	private JJMessageService jJMessageService;
+
+	@Autowired
+	private JJPermissionService jJPermissionService;
+
+	@Autowired
+	private JJCategoryService jJCategoryService;
+
+	@Autowired
+	private JJChapterService jJChapterService;
+
+	@Autowired
+	private JJTestcaseexecutionService jJTestcaseexecutionService;
+
 	public void setjJConfigurationService(
 			JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
 	}
 
-	@Autowired
-	private JJPermissionService jJPermissionService;
-
 	public void setjJPermissionService(JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
 	}
-
-	@Autowired
-	private JJCategoryService jJCategoryService;
 
 	public void setjJCategoryService(JJCategoryService jJCategoryService) {
 		this.jJCategoryService = jJCategoryService;
 	}
 
-	@Autowired
-	private JJChapterService jJChapterService;
-
 	public void setjJChapterService(JJChapterService jJChapterService) {
 		this.jJChapterService = jJChapterService;
 	}
-
-	@Autowired
-	private JJTestcaseexecutionService jJTestcaseexecutionService;
 
 	public void setjJTestcaseexecutionService(
 			JJTestcaseexecutionService jJTestcaseexecutionService) {
@@ -124,29 +136,17 @@ public class JJTestcaseBean {
 		return jJTestcaseexecutionService;
 	}
 
-	@Autowired
-	private JJBuildService jJBuildService;
-
 	public void setjJBuildService(JJBuildService jJBuildService) {
 		this.jJBuildService = jJBuildService;
 	}
-
-	@Autowired
-	private JJTeststepService jJTeststepService;
 
 	public void setjJTeststepService(JJTeststepService jJTeststepService) {
 		this.jJTeststepService = jJTeststepService;
 	}
 
-	@Autowired
-	private JJTaskService jJTaskService;
-
 	public void setjJTaskService(JJTaskService jJTaskService) {
 		this.jJTaskService = jJTaskService;
 	}
-
-	@Autowired
-	private JJMessageService jJMessageService;
 
 	public void setjJMessageService(JJMessageService jJMessageService) {
 		this.jJMessageService = jJMessageService;
@@ -157,7 +157,7 @@ public class JJTestcaseBean {
 	private JJProject project;
 	private JJProduct product;
 	private JJVersion version;
-	private float reqCoverage;	
+	private float reqCoverage;
 	private List<JJBuild> builds;
 	private String width;
 	private JJTestcase copyTestcase;
@@ -165,24 +165,6 @@ public class JJTestcaseBean {
 	private List<JJBuild> rowNames = new ArrayList<JJBuild>();
 	private List<JJTestcase> colNames = new ArrayList<JJTestcase>();
 	private ArrayList<ArrayList<Boolean>> value = new ArrayList<ArrayList<Boolean>>();
-
-	public Integer getRated() {
-		return rated;
-	}
-
-	public void setRated(Integer rated) {
-		this.rated = rated;
-	}
-
-	public float getReqCoverage() {
-		return reqCoverage;
-	}
-
-	public void setReqCoverage(float reqCoverage) {
-		this.reqCoverage = reqCoverage;
-	}
-
-	private JJChapter chapter;
 	private JJCategory category;
 	private TreeNode rootNode;
 	private TreeNode selectedNode;
@@ -203,6 +185,24 @@ public class JJTestcaseBean {
 	private boolean testcaseState;
 	private List<CategoryUtil> categoryList;
 	private List<JJMessage> communicationMessages;
+
+	private JJChapter chapter;
+
+	public Integer getRated() {
+		return rated;
+	}
+
+	public void setRated(Integer rated) {
+		this.rated = rated;
+	}
+
+	public float getReqCoverage() {
+		return reqCoverage;
+	}
+
+	public void setReqCoverage(float reqCoverage) {
+		this.reqCoverage = reqCoverage;
+	}
 
 	public List<JJBuild> getAvailableBuilds() {
 
@@ -296,43 +296,6 @@ public class JJTestcaseBean {
 		this.value = value;
 	}
 
-	public void onCellEdit(int colIdx, int rowIdx) {
-		System.err.println("void");
-		JJTestcase columnName = jJTestcaseService.findJJTestcase(colNames.get(
-				colIdx).getId());
-		JJBuild rowName = ((JJBuildBean) LoginBean.findBean("jJBuildBean")).jJBuildService
-				.findJJBuild(((JJBuild) rowNames.get(rowIdx)).getId());
-		boolean successOperation = false;
-		if (value.get(colIdx).get(rowIdx)) {
-			System.err.println("Size = " + columnName.getBuilds().size());
-			successOperation = columnName.getBuilds().remove((JJBuild) rowName);
-			System.err.println("Size = " + columnName.getBuilds().size());
-
-		} else {
-			System.err.println("Size = " + columnName.getBuilds().size());
-			successOperation = columnName.getBuilds().add((JJBuild) rowName);
-
-			System.err.println("Size = " + columnName.getBuilds().size());
-
-		}
-
-		if (successOperation) {
-
-			updateJJTestcase(columnName);
-			colNames.set(colIdx,
-					jJTestcaseService.findJJTestcase(columnName.getId()));
-			value.get(colIdx).set(rowIdx, !value.get(colIdx).get(rowIdx));
-			createTestcaseTree();
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					MessageFactory.getMessage("message_successfully_updated",
-							"Testcase"));
-			// colNames=null;
-			// rowNames=null;
-		}
-
-	}
-
 	public JJTestcase getTestcase() {
 		return testcase;
 	}
@@ -342,17 +305,22 @@ public class JJTestcaseBean {
 	}
 
 	public Integer getScrollWidth() {
-		if (180 + (rowNames.size() * 70) > 1110)
-			return 1100;
+		if (180 + (rowNames.size() * 70) > 950)
+			return 950;
 		else
 			return null;
 	}
 
 	public Integer getScrollHeight() {
-		if ((colNames.size() * 50) > 610)
-			return 600;
+		if ((colNames.size() * 50) > 550)
+			return 550;
 		else
 			return null;
+	}
+	
+	public boolean getScrollable()
+	{
+		return getScrollHeight() != null || getScrollWidth() != null;
 	}
 
 	public String getWidth() {
@@ -491,7 +459,6 @@ public class JJTestcaseBean {
 
 	public List<JJRequirement> getRequirements() {
 
-		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		requirements = jJRequirementService.getRequirements(
 				((LoginBean) LoginBean.findBean("loginBean")).getContact()
 						.getCompany(), null,
@@ -504,7 +471,7 @@ public class JJTestcaseBean {
 	public void setRequirements(List<JJRequirement> requirements) {
 
 		this.requirements = requirements;
-	}	
+	}
 
 	public JJTask getTask() {
 		return task;
@@ -603,6 +570,119 @@ public class JJTestcaseBean {
 	public void setCommunicationMessages(List<JJMessage> communicationMessages) {
 		this.communicationMessages = communicationMessages;
 	}
+	
+	public boolean allBuilds(JJTestcase test) {
+
+		boolean allBuilds = true;
+		int i = 0;
+
+		while (allBuilds && i < rowNames.size()) {
+			allBuilds = test.getBuilds().contains(rowNames.get(i));
+			i++;
+		}
+
+		return allBuilds;
+	}
+
+	public boolean allTestCases(JJBuild build) {
+
+		boolean allTestCases = true;
+		int i = 0;
+
+		while (allTestCases && i < colNames.size()) {
+			allTestCases = colNames.get(i).getBuilds().contains(build);
+			i++;
+		}
+
+		return allTestCases;
+	}
+
+	public void onCellEdit(Object object) {
+
+		if (object instanceof JJBuild) {
+			JJBuild build = (JJBuild) object;
+
+			int i = 0;
+			boolean add = allTestCases(build);
+
+			while (i < colNames.size()) {
+
+				if (add)
+					colNames.get(i).getBuilds().remove(build);
+				else
+					colNames.get(i).getBuilds().add(build);
+
+				updateJJTestcase(colNames.get(i));
+				colNames.set(i, jJTestcaseService.findJJTestcase(colNames
+						.get(i).getId()));
+				value.get(i).set(rowNames.indexOf(build), !add);
+				i++;
+			}
+
+			createTestcaseTree();
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					MessageFactory.getMessage("message_successfully_updated",
+							"Build"));
+
+		} else if (object instanceof JJTestcase) {
+			JJTestcase test = (JJTestcase) object;
+
+			test=jJTestcaseService.findJJTestcase(test.getId());
+			int i = 0;
+			boolean add = allBuilds(test);
+
+			while (i < rowNames.size()) {
+
+				if (add)
+					test.getBuilds().remove(rowNames.get(i));
+				else
+					test.getBuilds().add(rowNames.get(i));
+				value.get(colNames.indexOf(test)).set(i, !add);
+				i++;
+			}
+
+			updateJJTestcase(test);
+			colNames.set(colNames.indexOf(test),
+					jJTestcaseService.findJJTestcase(test.getId()));
+
+			createTestcaseTree();
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					MessageFactory.getMessage("message_successfully_updated",
+							"Tescase"));
+
+		}
+	}
+
+	public void onCellEdit(int colIdx, int rowIdx) {
+
+		JJTestcase columnName = jJTestcaseService.findJJTestcase(colNames.get(
+				colIdx).getId());
+		JJBuild rowName = ((JJBuildBean) LoginBean.findBean("jJBuildBean")).jJBuildService
+				.findJJBuild(((JJBuild) rowNames.get(rowIdx)).getId());
+		boolean successOperation = false;
+		if (value.get(colIdx).get(rowIdx)) {
+			successOperation = columnName.getBuilds().remove((JJBuild) rowName);
+
+		} else {
+			successOperation = columnName.getBuilds().add((JJBuild) rowName);
+		}
+
+		if (successOperation) {
+
+			updateJJTestcase(columnName);
+			colNames.set(colIdx,
+					jJTestcaseService.findJJTestcase(columnName.getId()));
+			value.get(colIdx).set(rowIdx, !value.get(colIdx).get(rowIdx));
+			createTestcaseTree();
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					MessageFactory.getMessage("message_successfully_updated",
+							"Testcase"));
+		}
+
+	}
 
 	public void loadData(Dialog dialog, JJCategory c, boolean projNull) {
 
@@ -666,7 +746,7 @@ public class JJTestcaseBean {
 					jJVersionBean.getVersionList();
 					jJVersionBean.setVersion(testcase.getRequirement()
 							.getVersioning());
-					
+
 					session.setAttribute("jJSprintBean", new JJSprintBean());
 					session.setAttribute("jJStatusBean", new JJStatusBean());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
@@ -691,8 +771,9 @@ public class JJTestcaseBean {
 							jJVersionBean.getVersionList();
 							jJVersionBean.setVersion(testcase.getRequirement()
 									.getVersioning());
-							
-							session.setAttribute("jJStatusBean", new JJStatusBean());
+
+							session.setAttribute("jJStatusBean",
+									new JJStatusBean());
 						}
 					}
 				}
@@ -1184,7 +1265,7 @@ public class JJTestcaseBean {
 				}
 				reqCoverage = (float) (i * 100 / rqs.size());
 			} else
-				reqCoverage = 0;		
+				reqCoverage = 0;
 
 			testcase = null;
 

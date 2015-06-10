@@ -4590,9 +4590,9 @@ public class JJRequirementBean {
 
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
 						requirement, null, null, true, false, false);
-				boolean SUCCESS = !testcases.isEmpty();
-				;
-
+				boolean SUCCESS = true;
+				ENCOURS = testcases.isEmpty();
+					
 				for (JJTestcase testcase : testcases) {
 
 					List<JJTestcaseexecution> testcaseExecutions = jJTestcaseexecutionService
@@ -4614,8 +4614,10 @@ public class JJRequirementBean {
 					}
 
 				}
-
-				if (SUCCESS) {
+				if(ENCOURS)
+				{
+					rowStyleClass = "Progress";
+				}else if (SUCCESS) {
 					rowStyleClass = "Finished";
 				} else {
 					rowStyleClass = "InTesting";
