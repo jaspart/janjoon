@@ -49,6 +49,7 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
     
     public JJTestcase JJTestcaseDataOnDemand.getNewTransientJJTestcase(int index) {
         JJTestcase obj = new JJTestcase();
+        setAllBuilds(obj, index);
         setAutomatic(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
@@ -61,6 +62,11 @@ privileged aspect JJTestcaseDataOnDemand_Roo_DataOnDemand {
         setUpdatedDate(obj, index);
         setWorkload(obj, index);
         return obj;
+    }
+    
+    public void JJTestcaseDataOnDemand.setAllBuilds(JJTestcase obj, int index) {
+        Boolean allBuilds = Boolean.TRUE;
+        obj.setAllBuilds(allBuilds);
     }
     
     public void JJTestcaseDataOnDemand.setAutomatic(JJTestcase obj, int index) {

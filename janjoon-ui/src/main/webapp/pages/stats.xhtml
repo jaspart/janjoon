@@ -11,7 +11,7 @@
 			id="videoHelpBtn" icon="ui-icon-video"
 			onclick="PF('videoHelpWidget').show()" type="button"
 			style="float: right;" />
-		<f:event type="preRenderView"
+		<f:event type="preRenderComponent"
 			oncomplete="PF('blockUIWidget').unblock()"
 			listener="#{jJStatusBean.loadData()}" />
 		<p:tabView id="statsTabView" widgetVar="statsTabView" dynamic="true">
@@ -20,14 +20,21 @@
 				oncomplete="PF('blockUIWidget').unblock();" />
 			<p:tab id="specTab" title="Status">
 				<h:form id="specForm">
-					<h:panelGrid id="statPanel" columns="2">
+					<h:panelGrid id="statPanel" columns="3">
 						<p:pieChart id="custom" value="#{jJStatusBean.pieChart}"
 							legendPosition="e" fill="false" showDataLabels="true"
 							title="% Requierement" style="width:400px;height:300px"
 							sliceMargin="5" diameter="150" />					
 
-						<p:barChart value="#{jJStatusBean.chartModel}" title="KPI"
-						 minY="0" yaxisLabel="KPI" style="height:300px"  />
+<!-- 						<p:barChart value="#{jJStatusBean.chartModel}" title="KPI" -->
+<!-- 						 minY="0" yaxisLabel="KPI" style="height:300px"  /> -->
+						<p:chart type="metergauge" model="#{jJStatusBean.bugMetergauge}" 
+						style="width:400px;height:300px" />
+						
+						<p:chart type="metergauge" model="#{jJStatusBean.prjMetergauge}" 
+						style="width:400px;height:300px" />
+
+
 
 					</h:panelGrid>
 					<p:dataTable id="categoryTable" var="categoryModel"

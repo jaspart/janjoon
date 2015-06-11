@@ -39,8 +39,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 		
 
 		if (build != null) {
-			predicates.add(criteriaBuilder.isMember(build,
-					from.<Set<JJBuild>> get("builds")));
+			predicates.add(criteriaBuilder.or(criteriaBuilder.isMember(build,
+					from.<Set<JJBuild>> get("builds")),criteriaBuilder.equal(from.get("allBuilds"),true)));
 		}
 
 		if (chapter != null) {

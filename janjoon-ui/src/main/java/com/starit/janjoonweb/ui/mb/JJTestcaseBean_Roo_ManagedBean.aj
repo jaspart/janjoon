@@ -368,6 +368,24 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         requirementCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementCreateInputMessage);
         
+        OutputLabel allBuildsCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        allBuildsCreateOutput.setFor("allBuildsCreateInput");
+        allBuildsCreateOutput.setId("allBuildsCreateOutput");
+        allBuildsCreateOutput.setValue("All Builds:");
+        htmlPanelGrid.getChildren().add(allBuildsCreateOutput);
+        
+        SelectBooleanCheckbox allBuildsCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        allBuildsCreateInput.setId("allBuildsCreateInput");
+        allBuildsCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.allBuilds}", Boolean.class));
+        allBuildsCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(allBuildsCreateInput);
+        
+        Message allBuildsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        allBuildsCreateInputMessage.setId("allBuildsCreateInputMessage");
+        allBuildsCreateInputMessage.setFor("allBuildsCreateInput");
+        allBuildsCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(allBuildsCreateInputMessage);
+        
         OutputLabel sprintCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         sprintCreateOutput.setFor("sprintCreateInput");
         sprintCreateOutput.setId("sprintCreateOutput");
@@ -790,6 +808,24 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         requirementEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(requirementEditInputMessage);
         
+        OutputLabel allBuildsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        allBuildsEditOutput.setFor("allBuildsEditInput");
+        allBuildsEditOutput.setId("allBuildsEditOutput");
+        allBuildsEditOutput.setValue("All Builds:");
+        htmlPanelGrid.getChildren().add(allBuildsEditOutput);
+        
+        SelectBooleanCheckbox allBuildsEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        allBuildsEditInput.setId("allBuildsEditInput");
+        allBuildsEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.allBuilds}", Boolean.class));
+        allBuildsEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(allBuildsEditInput);
+        
+        Message allBuildsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        allBuildsEditInputMessage.setId("allBuildsEditInputMessage");
+        allBuildsEditInputMessage.setFor("allBuildsEditInput");
+        allBuildsEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(allBuildsEditInputMessage);
+        
         OutputLabel sprintEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         sprintEditOutput.setFor("sprintEditInput");
         sprintEditOutput.setId("sprintEditOutput");
@@ -1117,6 +1153,15 @@ privileged aspect JJTestcaseBean_Roo_ManagedBean {
         requirementValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.requirement}", JJRequirement.class));
         requirementValue.setConverter(new JJRequirementConverter());
         htmlPanelGrid.getChildren().add(requirementValue);
+        
+        HtmlOutputText allBuildsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        allBuildsLabel.setId("allBuildsLabel");
+        allBuildsLabel.setValue("All Builds:");
+        htmlPanelGrid.getChildren().add(allBuildsLabel);
+        
+        HtmlOutputText allBuildsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        allBuildsValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTestcaseBean.JJTestcase_.allBuilds}", String.class));
+        htmlPanelGrid.getChildren().add(allBuildsValue);
         
         HtmlOutputText sprintLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         sprintLabel.setId("sprintLabel");

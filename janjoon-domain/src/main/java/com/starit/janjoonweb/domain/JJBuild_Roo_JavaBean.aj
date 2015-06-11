@@ -71,6 +71,14 @@ privileged aspect JJBuild_Roo_JavaBean {
         this.phase = phase;
     }
     
+    public Boolean JJBuild.getAllTestcases() {
+        return this.allTestcases;
+    }
+    
+    public void JJBuild.setAllTestcases(Boolean allTestcases) {
+        this.allTestcases = allTestcases;
+    }
+    
     public Set<JJTestcase> JJBuild.getTestcases() {
         return this.testcases;
     }

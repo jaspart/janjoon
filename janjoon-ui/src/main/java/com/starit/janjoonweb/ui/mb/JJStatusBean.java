@@ -22,14 +22,11 @@ import org.primefaces.component.spinner.Spinner;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
-import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.BarChartModel;
-import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.MeterGaugeChartModel;
 import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
-import org.springframework.util.Assert;
 
 import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJCategory;
@@ -61,7 +58,9 @@ public class JJStatusBean {
 	private LazyStatusDataModel lazyStatusList;
 	private JJStatus selectedStatus;
 	private PieChartModel pieChart;
-	private BarChartModel chartModel;
+	// private BarChartModel chartModel;
+	private MeterGaugeChartModel bugMetergauge;
+	private MeterGaugeChartModel prjMetergauge;
 	private JJProject project;
 	private List<CategoryDataModel> categoryDataModel;
 	private Boolean first;
@@ -134,12 +133,20 @@ public class JJStatusBean {
 		return pieChart;
 	}
 
-	public BarChartModel getChartModel() {
-		return chartModel;
+	public MeterGaugeChartModel getBugMetergauge() {
+		return bugMetergauge;
 	}
 
-	public void setChartModel(BarChartModel chartModel) {
-		this.chartModel = chartModel;
+	public void setBugMetergauge(MeterGaugeChartModel bugMetergauge) {
+		this.bugMetergauge = bugMetergauge;
+	}
+
+	public MeterGaugeChartModel getPrjMetergauge() {
+		return prjMetergauge;
+	}
+
+	public void setPrjMetergauge(MeterGaugeChartModel prjMetergauge) {
+		this.prjMetergauge = prjMetergauge;
 	}
 
 	public void setFirst(Boolean bb) {
@@ -158,6 +165,7 @@ public class JJStatusBean {
 		}
 	}
 
+	@SuppressWarnings("serial")
 	public void loadData() {
 
 		if (project == null) {
@@ -195,8 +203,6 @@ public class JJStatusBean {
 					pieChart.set(s.getName(), i);
 				}
 
-				this.chartModel = new BarChartModel();
-				ChartSeries chartSeries = new ChartSeries();
 				float bugKPI = 0L;
 				float projKPI = 0;
 				LoginBean loginBean = (LoginBean) LoginBean
@@ -228,18 +234,51 @@ public class JJStatusBean {
 						&& project.getEndDate() != null) {
 					float tmpsProj = (new Date().getTime() - project
 							.getStartDate().getTime());
-					float tmps=	 (project.getEndDate().getTime() - project.getStartDate()
-									.getTime());
-					
-					projKPI =(projKPI/(1+requirements.size()))-(tmpsProj/(1+tmps));
+					float tmps = (project.getEndDate().getTime() - project
+							.getStartDate().getTime());
+
+					projKPI = (projKPI / (1 + requirements.size()))
+							- (tmpsProj / (1 + tmps));
 				}
 
 				if (requirements != null && !requirements.isEmpty())
 					bugKPI = bugKPI / requirements.size();
-				chartSeries.set("Bug KPI", bugKPI);
-				chartSeries.set("Project KPI",projKPI);
-				chartModel.addSeries(chartSeries);
-				chartModel.getAxis(AxisType.Y).setMin(0);
+
+				List<Number> prjIntervalls = new ArrayList<Number>() {
+					{
+						add(-1);
+						add(-0.50);
+						add(-0.30);
+						add(-0.15);
+						add(0.15);
+						add(0.30);
+						add(0.50);
+						add(1);
+					}
+				};
+
+				prjMetergauge = new MeterGaugeChartModel(projKPI, prjIntervalls);
+				prjMetergauge.setTitle("Project KPI");
+				prjMetergauge.setGaugeLabel("KPI");
+				prjMetergauge.setShowTickLabels(true);
+				prjMetergauge.setMin(-1);prjMetergauge.setMax(1);
+				prjMetergauge.setSeriesColors("FF0000,FF0000,FF7700,FFD000,008000,FFD000,FF7700,FF0000");
+
+				List<Number> bugIntervalls = new ArrayList<Number>() {
+					{
+						add(0.5);
+						add(0.75);
+						add(0.85);
+						add(0.925);
+						add(1);
+					}
+				};
+				bugMetergauge = new MeterGaugeChartModel(bugKPI, bugIntervalls);
+				bugMetergauge.setTitle("Bug KPI");
+				bugMetergauge.setGaugeLabel("KPI");
+				bugMetergauge.setMin(0.5);bugMetergauge.setMax(1);
+				bugMetergauge.setShowTickLabels(true);
+				bugMetergauge.setSeriesColors("FF0000,FF0000,FF7700,FFD000,008000");
 
 			}
 

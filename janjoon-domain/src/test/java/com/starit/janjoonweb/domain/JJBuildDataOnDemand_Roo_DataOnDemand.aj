@@ -48,12 +48,18 @@ privileged aspect JJBuildDataOnDemand_Roo_DataOnDemand {
     
     public JJBuild JJBuildDataOnDemand.getNewTransientJJBuild(int index) {
         JJBuild obj = new JJBuild();
+        setAllTestcases(obj, index);
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
         setName(obj, index);
         setUpdatedDate(obj, index);
         return obj;
+    }
+    
+    public void JJBuildDataOnDemand.setAllTestcases(JJBuild obj, int index) {
+        Boolean allTestcases = Boolean.TRUE;
+        obj.setAllTestcases(allTestcases);
     }
     
     public void JJBuildDataOnDemand.setCreationDate(JJBuild obj, int index) {

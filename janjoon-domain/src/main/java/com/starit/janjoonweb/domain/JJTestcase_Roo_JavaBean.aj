@@ -90,6 +90,14 @@ privileged aspect JJTestcase_Roo_JavaBean {
         this.requirement = requirement;
     }
     
+    public Boolean JJTestcase.getAllBuilds() {
+        return this.allBuilds;
+    }
+    
+    public void JJTestcase.setAllBuilds(Boolean allBuilds) {
+        this.allBuilds = allBuilds;
+    }
+    
     public JJSprint JJTestcase.getSprint() {
         return this.sprint;
     }

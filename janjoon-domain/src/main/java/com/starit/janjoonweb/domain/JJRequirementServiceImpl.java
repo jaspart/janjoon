@@ -23,7 +23,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
-	
+
 	public boolean haveLinkDown(JJRequirement requirement) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -338,7 +338,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 	@Override
 	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
-			JJCompany company, JJChapter chapter, boolean onlyActif) {
+			JJCompany company, JJChapter chapter, JJProduct product,
+			boolean onlyActif) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
 				.createQuery(JJRequirement.class);
@@ -349,6 +350,10 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		predicates.add(criteriaBuilder.equal(from.get("chapter"), chapter));
+
+		if (product != null) {
+			predicates.add(criteriaBuilder.equal(from.get("product"), product));
+		}
 
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));

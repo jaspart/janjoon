@@ -3401,7 +3401,7 @@ public class JJRequirementBean {
 			List<JJRequirement> requirements = jJRequirementService
 					.getRequirementChildrenWithChapterSortedByOrder(
 							((LoginBean) LoginBean.findBean("loginBean"))
-									.getContact().getCompany(), parent,
+									.getContact().getCompany(), parent,LoginBean.getProduct(),
 							onlyActif);
 
 			for (JJRequirement requirement : requirements) {
@@ -4263,7 +4263,7 @@ public class JJRequirementBean {
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		return jJRequirementService
 				.getRequirementChildrenWithChapterSortedByOrder(loginBean
-						.getContact().getCompany(), chapter, onlyActif);
+						.getContact().getCompany(), chapter,LoginBean.getProduct(), onlyActif);
 	}
 
 	public void reset() {
@@ -4516,8 +4516,7 @@ public class JJRequirementBean {
 			if (FINIS) {
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
 						req, null, null, true, false, false);
-
-				FINIS = !testcases.isEmpty();
+				
 				for (JJTestcase testcase : testcases) {
 
 					List<JJTestcaseexecution> testcaseExecutions = jJTestcaseexecutionService
@@ -4590,8 +4589,7 @@ public class JJRequirementBean {
 
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
 						requirement, null, null, true, false, false);
-				boolean SUCCESS = true;
-				ENCOURS = testcases.isEmpty();
+				boolean SUCCESS = true;				
 					
 				for (JJTestcase testcase : testcases) {
 
@@ -4614,10 +4612,7 @@ public class JJRequirementBean {
 					}
 
 				}
-				if(ENCOURS)
-				{
-					rowStyleClass = "Progress";
-				}else if (SUCCESS) {
+				 if (SUCCESS) {
 					rowStyleClass = "Finished";
 				} else {
 					rowStyleClass = "InTesting";

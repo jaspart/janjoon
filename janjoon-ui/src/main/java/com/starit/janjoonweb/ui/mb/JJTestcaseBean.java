@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +73,6 @@ import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.CategoryUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.ReadXMLFile;
-import com.starit.janjoonweb.ui.mb.util.TestCaseChartUtil;
 import com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
 
@@ -220,58 +218,71 @@ public class JJTestcaseBean {
 
 	public List<JJBuild> getRowNames() {
 
-		if (rowNames == null || rowNames.isEmpty()) {
+		if (!rendredTestCaseRecaps && !rendredTestCaseHistorical) {
+			if (rowNames == null || rowNames.isEmpty()) {
 
-			colNames = jJTestcaseService
-					.getImportTestcases(category, LoginBean.getProject(),
-							LoginBean.getProduct(), true, false);
-			// rowNames=new ArrayList<Object>();
-			if (colNames != null && !colNames.isEmpty()) {
+				colNames = jJTestcaseService.getImportTestcases(category,
+						LoginBean.getProject(), LoginBean.getProduct(), true,
+						false);
+				// rowNames=new ArrayList<Object>();
+				if (colNames != null && !colNames.isEmpty()) {
 
-				JJBuild build = ((JJBuildBean) LoginBean
-						.findBean("jJBuildBean")).getBuild();
+					JJBuild build = ((JJBuildBean) LoginBean
+							.findBean("jJBuildBean")).getBuild();
 
-				if (build == null) {
-					if (rowNames == null)
-						rowNames = new ArrayList<JJBuild>(
-								((JJBuildBean) LoginBean
-										.findBean("jJBuildBean")).getBuilds());
-					else
-						rowNames.addAll(new ArrayList<JJBuild>(
-								((JJBuildBean) LoginBean
-										.findBean("jJBuildBean")).getBuilds()));
-				} else {
-					if (rowNames == null)
-						rowNames = new ArrayList<JJBuild>();
+					if (build == null) {
+						if (rowNames == null)
+							rowNames = new ArrayList<JJBuild>(
+									((JJBuildBean) LoginBean
+											.findBean("jJBuildBean"))
+											.getBuilds());
+						else
+							rowNames.addAll(new ArrayList<JJBuild>(
+									((JJBuildBean) LoginBean
+											.findBean("jJBuildBean"))
+											.getBuilds()));
+					} else {
+						if (rowNames == null)
+							rowNames = new ArrayList<JJBuild>();
 
-					rowNames.add(build);
-				}
-				if (!rowNames.isEmpty()) {
-					for (int i = 0; i < colNames.size(); i++) {
-						value.add(new ArrayList<Boolean>());
-						for (int j = 0; j < rowNames.size(); j++) {
-							value.get(i).add(
-									jJTestcaseService
+						rowNames.add(build);
+					}
+					if (!rowNames.isEmpty()) {
+						value = new ArrayList<ArrayList<Boolean>>();
+						for (int i = 0; i < colNames.size(); i++) {
+							value.add(new ArrayList<Boolean>());
+							boolean val = (colNames.get(i).getAllBuilds() != null && colNames
+									.get(i).getAllBuilds());
+							for (int j = 0; j < rowNames.size(); j++) {
+								boolean vall=val;
+								if (!vall)
+									vall = (rowNames.get(j).getAllTestcases() != null && rowNames
+											.get(j).getAllTestcases());
+
+								if (!vall)
+									vall = jJTestcaseService
 											.findJJTestcase(
 													colNames.get(i).getId())
 											.getBuilds()
-											.contains(rowNames.get(j)));
+											.contains(rowNames.get(j));
+								value.get(i).add(vall);
+							}
 						}
+					} else {
+						rowNames = null;
+						colNames = null;
 					}
-				} else {
-					rowNames = null;
-					colNames = null;
+
 				}
+				if (rowNames != null) {
+					width = 180 + (rowNames.size() * 70) + "px";
+
+					if (180 + (rowNames.size() * 70) > 1000)
+						width = "100%";
+				} else
+					width = 170 + "px";
 
 			}
-			if (rowNames != null) {
-				width = 180 + (rowNames.size() * 70) + "px";
-
-				if (180 + (rowNames.size() * 70) > 1000)
-					width = "100%";
-			} else
-				width = 170 + "px";
-
 		}
 		return rowNames;
 	}
@@ -305,8 +316,8 @@ public class JJTestcaseBean {
 	}
 
 	public Integer getScrollWidth() {
-		if (180 + (rowNames.size() * 70) > 950)
-			return 950;
+		if (180 + (rowNames.size() * 70) > 1050)
+			return 1100;
 		else
 			return null;
 	}
@@ -317,9 +328,8 @@ public class JJTestcaseBean {
 		else
 			return null;
 	}
-	
-	public boolean getScrollable()
-	{
+
+	public boolean getScrollable() {
 		return getScrollHeight() != null || getScrollWidth() != null;
 	}
 
@@ -461,9 +471,10 @@ public class JJTestcaseBean {
 
 		requirements = jJRequirementService.getRequirements(
 				((LoginBean) LoginBean.findBean("loginBean")).getContact()
-						.getCompany(), null,
-				new HashMap<JJProject, JJProduct>(), null, null, chapter, true,
-				true, true, false, null);
+						.getCompany(), null, ((LoginBean) LoginBean
+						.findBean("loginBean")).getAuthorizedMap("testcase",
+						LoginBean.getProject(), LoginBean.getProduct()), null,
+				null, chapter, true, true, true, false, null);
 
 		return requirements;
 	}
@@ -570,7 +581,7 @@ public class JJTestcaseBean {
 	public void setCommunicationMessages(List<JJMessage> communicationMessages) {
 		this.communicationMessages = communicationMessages;
 	}
-	
+
 	public boolean allBuilds(JJTestcase test) {
 
 		boolean allBuilds = true;
@@ -628,7 +639,7 @@ public class JJTestcaseBean {
 		} else if (object instanceof JJTestcase) {
 			JJTestcase test = (JJTestcase) object;
 
-			test=jJTestcaseService.findJJTestcase(test.getId());
+			test = jJTestcaseService.findJJTestcase(test.getId());
 			int i = 0;
 			boolean add = allBuilds(test);
 
@@ -877,6 +888,7 @@ public class JJTestcaseBean {
 		testcase = new JJTestcase();
 		testcase.setEnabled(true);
 		testcase.setAutomatic(false);
+		testcase.setAllBuilds(true);
 		requirement = null;
 
 		task = new JJTask();
@@ -934,6 +946,7 @@ public class JJTestcaseBean {
 		testcase.setDescription(copyTestcase.getDescription());
 		testcase.setEnabled(true);
 		testcase.setAutomatic(copyTestcase.getAutomatic());
+		testcase.setAllBuilds(copyTestcase.getAllBuilds());
 		requirement = null;
 
 		task = new JJTask();
@@ -1083,6 +1096,9 @@ public class JJTestcaseBean {
 			requirement.getTestcases().add(testcase);
 			testcase.setBuilds(new HashSet<JJBuild>(builds));
 			saveJJTestcase(testcase);
+			rowNames = null;
+			colNames = null;
+			value = null;
 
 			if (testcase.getTeststeps() != null
 					&& !testcase.getTeststeps().isEmpty()) {
@@ -1129,8 +1145,12 @@ public class JJTestcaseBean {
 
 			}
 
-			testcase.setBuilds(new HashSet<JJBuild>(builds));
+			if (!testcase.getAllBuilds())
+				testcase.setBuilds(new HashSet<JJBuild>(builds));
 			updateJJTestcase(testcase);
+			rowNames = null;
+			colNames = null;
+			value = null;
 			testcase = jJTestcaseService.findJJTestcase(testcase.getId());
 			requirement.getTestcases().add(testcase);
 
@@ -1249,13 +1269,14 @@ public class JJTestcaseBean {
 
 			// LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
 			long id = Long.parseLong(getSubString(selectedNode, 1, "-"));
-
 			chapter = jJChapterService.findJJChapter(id);
 			List<JJRequirement> rqs = jJRequirementService.getRequirements(
 					((LoginBean) LoginBean.findBean("loginBean")).getContact()
-							.getCompany(), null,
-					new HashMap<JJProject, JJProduct>(), null, null, chapter,
-					true, true, true, false, null);
+							.getCompany(), null, ((LoginBean) LoginBean
+							.findBean("loginBean")).getAuthorizedMap(
+							"testcase", LoginBean.getProject(),
+							LoginBean.getProduct()), null, null, chapter, true,
+					true, true, false, null);
 
 			if (rqs.size() > 0) {
 				int i = 0;
@@ -1294,12 +1315,6 @@ public class JJTestcaseBean {
 										+ "&faces-redirect=true");
 			} catch (IOException e) {
 			}
-			// chapter = null;
-			//
-			// rendredTestCaseRecaps = false;
-			// rendredTestCaseHistorical = true;
-			// rendredEmptySelection = false;
-
 		}
 	}
 
@@ -1474,7 +1489,7 @@ public class JJTestcaseBean {
 					.getRequirementChildrenWithChapterSortedByOrder(
 							((LoginBean) LoginBean.findBean("loginBean"))
 									.getContact().getCompany(), parent,
-							onlyActif);
+							LoginBean.getProduct(), onlyActif);
 
 			for (JJRequirement requirement : requirements) {
 				if (requirement.getOrdering() != null)

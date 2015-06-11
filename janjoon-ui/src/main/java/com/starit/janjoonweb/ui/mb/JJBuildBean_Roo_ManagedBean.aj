@@ -356,6 +356,24 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         phaseCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(phaseCreateInputMessage);
         
+        OutputLabel allTestcasesCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        allTestcasesCreateOutput.setFor("allTestcasesCreateInput");
+        allTestcasesCreateOutput.setId("allTestcasesCreateOutput");
+        allTestcasesCreateOutput.setValue("All Testcases:");
+        htmlPanelGrid.getChildren().add(allTestcasesCreateOutput);
+        
+        SelectBooleanCheckbox allTestcasesCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        allTestcasesCreateInput.setId("allTestcasesCreateInput");
+        allTestcasesCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.allTestcases}", Boolean.class));
+        allTestcasesCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(allTestcasesCreateInput);
+        
+        Message allTestcasesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        allTestcasesCreateInputMessage.setId("allTestcasesCreateInputMessage");
+        allTestcasesCreateInputMessage.setFor("allTestcasesCreateInput");
+        allTestcasesCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(allTestcasesCreateInputMessage);
+        
         HtmlOutputText testcasesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         testcasesCreateOutput.setId("testcasesCreateOutput");
         testcasesCreateOutput.setValue("Testcases:");
@@ -621,6 +639,24 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         phaseEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(phaseEditInputMessage);
         
+        OutputLabel allTestcasesEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        allTestcasesEditOutput.setFor("allTestcasesEditInput");
+        allTestcasesEditOutput.setId("allTestcasesEditOutput");
+        allTestcasesEditOutput.setValue("All Testcases:");
+        htmlPanelGrid.getChildren().add(allTestcasesEditOutput);
+        
+        SelectBooleanCheckbox allTestcasesEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        allTestcasesEditInput.setId("allTestcasesEditInput");
+        allTestcasesEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.allTestcases}", Boolean.class));
+        allTestcasesEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(allTestcasesEditInput);
+        
+        Message allTestcasesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        allTestcasesEditInputMessage.setId("allTestcasesEditInputMessage");
+        allTestcasesEditInputMessage.setFor("allTestcasesEditInput");
+        allTestcasesEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(allTestcasesEditInputMessage);
+        
         HtmlOutputText testcasesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         testcasesEditOutput.setId("testcasesEditOutput");
         testcasesEditOutput.setValue("Testcases:");
@@ -787,6 +823,15 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
         phaseValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.phase}", JJPhase.class));
         phaseValue.setConverter(new JJPhaseConverter());
         htmlPanelGrid.getChildren().add(phaseValue);
+        
+        HtmlOutputText allTestcasesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        allTestcasesLabel.setId("allTestcasesLabel");
+        allTestcasesLabel.setValue("All Testcases:");
+        htmlPanelGrid.getChildren().add(allTestcasesLabel);
+        
+        HtmlOutputText allTestcasesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        allTestcasesValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJBuildBean.JJBuild_.allTestcases}", String.class));
+        htmlPanelGrid.getChildren().add(allTestcasesValue);
         
         HtmlOutputText testcasesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         testcasesLabel.setId("testcasesLabel");
