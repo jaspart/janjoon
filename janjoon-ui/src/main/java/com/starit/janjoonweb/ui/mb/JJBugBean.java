@@ -477,6 +477,10 @@ public class JJBugBean {
 
 		JJTeststepexecutionBean jJTeststepexecutionBean = (JJTeststepexecutionBean) session
 				.getAttribute("jJTeststepexecutionBean");
+		JJTestcaseexecutionBean jJTestcaseexecutionBean = (JJTestcaseexecutionBean) session
+				.getAttribute("jJTestcaseexecutionBean");
+		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
+				.getAttribute("jJTestcaseBean");
 
 		JJBug_ = jJTeststepexecutionBean.getBug();
 		JJBug_.setProject(bugProjectSelected);
@@ -498,13 +502,15 @@ public class JJBugBean {
 
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('bugTestDialogWidget').hide()");
+		
+		jJTestcaseBean.runTestcase(jJTestcaseexecutionBean, jJTeststepexecutionBean);
 
-		if (jJTeststepexecutionBean.getDisabledTestcase()) {
-			jJTeststepexecutionBean.nextTab();
-			jJTeststepexecutionBean.onTabChange();
-		} else {
-			jJTeststepexecutionBean.changeTestcaseStatus();
-		}
+//		if (jJTeststepexecutionBean.getDisabledTestcase()) {
+//			jJTeststepexecutionBean.nextTab();
+//			jJTeststepexecutionBean.onTabChange();
+//		} else {
+//			jJTeststepexecutionBean.changeTestcaseStatus();
+//		}
 
 	}
 

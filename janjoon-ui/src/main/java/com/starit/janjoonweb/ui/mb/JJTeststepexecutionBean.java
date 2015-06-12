@@ -6,6 +6,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import junit.extensions.TestSetup;
+
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
@@ -210,8 +212,11 @@ public class JJTeststepexecutionBean {
 					bug = bugs.get(0);
 				}
 			}
-		}
-
+		}	
+	
+		this.teststepexecutions.add(new JJTeststepexecution());
+		if(!disabledTestcase)
+			activeIndex++;
 		changeTestcaseStatus();
 
 //		if (activeIndex != elements.size() - 1) {

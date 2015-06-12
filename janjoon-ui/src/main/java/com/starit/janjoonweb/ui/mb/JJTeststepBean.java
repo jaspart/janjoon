@@ -16,10 +16,14 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.starit.janjoonweb.domain.JJBug;
+import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTeststep;
@@ -34,6 +38,13 @@ public class JJTeststepBean {
 	private List<JJTeststep> teststeps;
 
 	private boolean actionTeststep;
+
+	@Autowired
+	private JJStatusService jJStatusService;
+
+	public void setjJStatusService(JJStatusService jJStatusService) {
+		this.jJStatusService = jJStatusService;
+	}
 
 	public JJTeststep getTeststep() {
 		return teststep;
@@ -74,6 +85,24 @@ public class JJTeststepBean {
 		this.actionTeststep = actionTeststep;
 	}
 
+	public boolean isBugFixed(JJBug bug) {
+
+		return bug.getStatus() != null
+				&& bug.getStatus().getName().equalsIgnoreCase("fixed");
+
+	}
+
+	public void onbugCheckStatus(JJBug bug, JJBugBean jJBugBean) {
+
+		bug.setStatus(jJStatusService.getOneStatus("FIXED", "Bug", true));
+		jJBugBean.updateJJBug(bug);
+		
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_updated", "Bug");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+	}
+
 	public void newTeststep() {
 
 		teststep = new JJTeststep();
@@ -97,7 +126,7 @@ public class JJTeststepBean {
 			manageTeststepOrder(tc);
 
 			teststep.setTestcase(tc);
-			//tc.getTeststeps().add(teststep);
+			// tc.getTeststeps().add(teststep);
 
 			teststep.setName(teststep.getActionstep() + " "
 					+ teststep.getResultstep());
@@ -164,7 +193,7 @@ public class JJTeststepBean {
 
 			int order = teststep.getOrdering();
 
-			teststep.setOrdering(order + 1);		
+			teststep.setOrdering(order + 1);
 
 			// System.out.println("teststep.getName() " + teststep.getName());
 			// System.out.println("teststep.getOrdering() "
@@ -204,18 +233,20 @@ public class JJTeststepBean {
 		FacesContext.getCurrentInstance().addMessage(null,
 				new FacesMessage("Test Step Inserted !"));
 	}
-	
-	public void initCkeditor(RowEditEvent event) {		
-		
+
+	public void initCkeditor(RowEditEvent event) {
+
 		DataTable table = (DataTable) event.getSource();
-		int activeRow  = table.getRowIndex(); 
-		int lenth=table.getRowCount();
-		
-		for(int i=0;i<lenth;i++)
-			if(i != activeRow)
-			RequestContext.getCurrentInstance().
-			execute("jQuery('.ui-datatable-data tr').find('span.ui-icon-close').eq(" + i + ").each(function(){jQuery(this).click()});");
-		
+		int activeRow = table.getRowIndex();
+		int lenth = table.getRowCount();
+
+		for (int i = 0; i < lenth; i++)
+			if (i != activeRow)
+				RequestContext.getCurrentInstance().execute(
+						"jQuery('.ui-datatable-data tr').find('span.ui-icon-close').eq("
+								+ i
+								+ ").each(function(){jQuery(this).click()});");
+
 		RequestContext.getCurrentInstance().execute(
 				"PF('testTabView').select(0)");
 		RequestContext.getCurrentInstance().execute(
@@ -245,25 +276,24 @@ public class JJTeststepBean {
 
 	public void cancelEditTestStep(RowEditEvent event) {
 
-//		FacesMessage facesMessage = MessageFactory.getMessage("Cancel Edit",
-//				"Teststep");
-//		FacesContext.getCurrentInstance().addMessage(null, facesMessage);	
+		// FacesMessage facesMessage = MessageFactory.getMessage("Cancel Edit",
+		// "Teststep");
+		// FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		newTeststep();
-		
 
 	}
-	
-	public void saveJJTeststep(JJTeststep b)
-	{
+
+	public void saveJJTeststep(JJTeststep b) {
 		b.setCreationDate(new Date());
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setCreatedBy(contact);
 		jJTeststepService.saveJJTeststep(b);
 	}
-	
-	public void updateJJTeststep(JJTeststep b)
-	{
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+
+	public void updateJJTeststep(JJTeststep b) {
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJTeststepService.updateJJTeststep(b);
@@ -271,7 +301,7 @@ public class JJTeststepBean {
 
 	public void deleteTestStep() {
 
-		JJTeststep ts = jJTeststepService.findJJTeststep(teststep.getId());		
+		JJTeststep ts = jJTeststepService.findJJTeststep(teststep.getId());
 		ts.setEnabled(false);
 		jJTeststepService.deleteJJTeststep(ts);
 

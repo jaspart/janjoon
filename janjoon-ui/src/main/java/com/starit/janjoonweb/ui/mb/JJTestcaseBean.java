@@ -254,7 +254,7 @@ public class JJTestcaseBean {
 							boolean val = (colNames.get(i).getAllBuilds() != null && colNames
 									.get(i).getAllBuilds());
 							for (int j = 0; j < rowNames.size(); j++) {
-								boolean vall=val;
+								boolean vall = val;
 								if (!vall)
 									vall = (rowNames.get(j).getAllTestcases() != null && rowNames
 											.get(j).getAllTestcases());
@@ -580,6 +580,26 @@ public class JJTestcaseBean {
 
 	public void setCommunicationMessages(List<JJMessage> communicationMessages) {
 		this.communicationMessages = communicationMessages;
+	}
+
+	public boolean getDisableRun() {
+		JJBuildBean jJBuildBean = (JJBuildBean) LoginBean
+				.findBean("jJBuildBean");
+
+		JJBuild build = jJBuildBean.getBuild();
+		boolean disabled = true;
+
+		if (build != null) {
+			disabled = false;
+			disabled = build.getAllTestcases() == null
+					|| !build.getAllTestcases();
+			if (disabled)
+				disabled = testcase.getAllBuilds() == null
+						|| !testcase.getAllBuilds();
+			if (disabled)
+				disabled = !testcase.getBuilds().contains(build);
+		}
+		return disabled;
 	}
 
 	public boolean allBuilds(JJTestcase test) {
@@ -1788,26 +1808,36 @@ public class JJTestcaseBean {
 
 				if (build != null) {
 					disabled = false;
+					disabled = build.getAllTestcases() == null
+							|| !build.getAllTestcases();
+					if (disabled)
+						disabled = testcase.getAllBuilds() == null
+								|| !testcase.getAllBuilds();
+					if (disabled)
+						disabled = !testcase.getBuilds().contains(build);
+					if (!disabled) {
+						List<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionService
+								.getTestcaseexecutions(testcase, build, true,
+										false, true);
 
-					List<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionService
-							.getTestcaseexecutions(testcase, build, true,
-									false, true);
+						if (!testcaseexecutions.isEmpty()) {
+							JJTestcaseexecution testcaseexecution = testcaseexecutions
+									.get(0);
+							if (testcaseexecution.getPassed() != null) {
 
-					if (!testcaseexecutions.isEmpty()) {
-						JJTestcaseexecution testcaseexecution = testcaseexecutions
-								.get(0);
-						if (testcaseexecution.getPassed() != null) {
-
-							if (testcaseexecution.getPassed()) {
-								status = "SUCCESS";
+								if (testcaseexecution.getPassed()) {
+									status = "SUCCESS";
+								} else {
+									status = "FAILED";
+								}
 							} else {
-								status = "FAILED";
+								status = "Non Fini";
 							}
 						} else {
-							status = "Non Fini";
+							status = "NOT RUN";
 						}
 					} else {
-						status = "NOT RUN";
+						status = "not allowed on this build";
 					}
 
 				} else {

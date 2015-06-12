@@ -19,6 +19,7 @@
 	background-color: white !important;
 	margin-left: -6px;
 	margin-top: -4px;
+	font-weight: 900;
 }
 
 .checkBoxButton .ui-button-text {
@@ -344,7 +345,7 @@
 									disabled="#{rowName.allTestcases or columnName.allBuilds}"
 									rendered="#{rowName['class'].simpleName == 'JJBuild'}"
 									value="#{jJTestcaseBean.value[colIdx][rowIdx]}">
-									<p:ajax										
+									<p:ajax
 										update=":growlForm :testFormCenter :testFormWest :container :rate"
 										listener="#{jJTestcaseBean.onCellEdit(colIdx,rowIdx)}"
 										onstart="PF('blockUIWidget').block()"
@@ -357,7 +358,7 @@
 						<p:dataTable id="testcaseRecapDataTable" var="tcr"
 							paginatorPosition="bottom"
 							value="#{jJTestcaseBean.testCaseRecaps}" paginator="true"
-							rows="5" style="width:100%;" rowKey="#{tcr.testcase.name}"
+							rows="5" style="width:100%;" rowKey="#{tcr.testcase.id}"
 							rendered="#{jJTestcaseBean.rendredTestCaseRecaps}">
 							<f:facet name="header">
 								<h:outputText value="#{jJTestcaseBean.chapter.name}" />
@@ -491,7 +492,7 @@
 										oncomplete="PF('runTestcaseDialogWidget').show()"
 										actionListener="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
 										update=":runTestcaseDialog" resetValues="true"
-										disabled="#{empty jJTeststepBean.teststeps or jJBuildBean.build == null or !loginBean.authorisationService.xTest}">
+										disabled="#{jJTestcaseBean.disableRun or empty jJTeststepBean.teststeps or !loginBean.authorisationService.xTest}">
 										<f:setPropertyActionListener
 											value="#{jJTestcaseBean.testcase}"
 											target="#{jJTestcaseBean.testcase}" />
@@ -603,9 +604,9 @@
 		</p:dialog>
 		<p:dialog id="runTestcaseDialog" header="#{messages.test_exec_title}"
 			hideEffect="explode" modal="true" widgetVar="runTestcaseDialogWidget"
-			draggable="false" height="370px" dynamic="true" resizable="false"
+			draggable="false" height="400px" dynamic="true" resizable="false"
 			width="400px">
-			<p:hotkey bind="esc" handler="PF('testcaseDialogWidget').hide()" />
+			<p:hotkey bind="esc" handler="PF('runTestcaseDialogWidget').hide()" />
 			<p:hotkey bind="space" handler="TestcaseExecSuccessButton.jq.click()" />
 			<p:hotkey bind="S" handler="TestcaseExecSuccessButton.jq.click()" />
 			<p:hotkey bind="F" handler="TestcaseExecFailedButton.jq.click()" />
@@ -616,6 +617,7 @@
 					<p:panel styleClass="panelDialog">
 						<f:facet name="header">
 							<p:messages id="msg" showDetail="false" closable="true" />
+							<p:outputLabel value="Testcase : #{jJTestcaseBean.testcase.name}" />
 						</f:facet>
 					</p:panel>
 					<p:tabView id="teststepTabView" widgetVar="teststepTabViewWidget"
@@ -624,9 +626,10 @@
 						value="#{jJTeststepexecutionBean.teststepexecutions}" var="tse">
 						<p:ajax event="tabChange"
 							listener="#{jJTeststepexecutionBean.onTabChange}"
-							update="teststepTabView :runForm:testcaseexecutionStatus :runForm:validateButton" />
-						<p:tab title="#{tse.teststep.ordering}">
-							<p:panelGrid>
+							update="teststepTabView" />
+						<p:tab
+							title="#{tse.teststep != null ? tse.teststep.ordering : 'Teststep'}">
+							<p:panelGrid rendered="#{tse.teststep != null}">
 								<p:row>
 									<p:column>
 										<h:outputText value="#{messages.test_exec_action_label}" />
@@ -637,16 +640,35 @@
 								</p:row>
 								<p:row>
 									<p:column>
-										<p:scrollPanel mode="native" style="height:150px;width:130px;">
+										<p:scrollPanel mode="native" style="height:70px;width:130px;">
 											<h:outputText escape="false"
 												value="#{tse.teststep.actionstep}" />
 										</p:scrollPanel>
 									</p:column>
 									<p:column>
-										<p:scrollPanel mode="native" style="height:150px;width:130px;">
+										<p:scrollPanel mode="native" style="height:70px;width:130px;">
 											<h:outputText escape="false"
 												value="#{tse.teststep.resultstep}" />
 										</p:scrollPanel>
+									</p:column>
+								</p:row>
+								<p:row rendered="#{not empty tse.teststep.bugs}">
+									<p:column colspan="2" rendered="#{not empty tse.teststep.bugs}">
+										<p:dataTable value="#{tse.teststep.bugs}" scrollable="true"
+											scrollHeight="120" var="bug">
+											<p:column headerText="Fixed">
+												<p:panel style="height: 25px;width: 30px; margin: auto;">
+													<p:commandButton styleClass="checkBoxButton"
+														value="#{jJTeststepBean.isBugFixed(bug) ? 'V' : ' '}"
+														disabled="#{jJTeststepBean.isBugFixed(bug)}"
+														update=":runForm:teststepTabView :runForm:msg"
+														actionListener="#{jJTeststepBean.onbugCheckStatus(bug,jJBugBean)}" />
+												</p:panel>
+											</p:column>
+											<p:column headerText="Bug">
+												<h:outputText value="#{bug.name}" />
+											</p:column>
+										</p:dataTable>
 									</p:column>
 								</p:row>
 								<p:row>
@@ -661,7 +683,7 @@
 											actionListener="#{jJTeststepexecutionBean.setStatus('true')}"
 											action="#{jJTeststepexecutionBean.handleStatus(tse)}"
 											widgetVar="TestcaseExecSuccessButton"
-											update="teststepTabView :runForm:msg :runForm:testcaseexecutionStatus :runForm:validateButton :bugForm:createPanelGrid"
+											update="teststepTabView :runForm:msg :bugForm:createPanelGrid"
 											async="true" ajax="true" />
 										<p:commandButton id="testExecFailedButton"
 											disabled="#{tse.passed != null}"
@@ -670,42 +692,62 @@
 											actionListener="#{jJTeststepexecutionBean.setStatus('false')}"
 											action="#{jJTeststepexecutionBean.handleStatus(tse)}"
 											widgetVar="TestcaseExecFailedButton"
-											update="teststepTabView :runForm:msg :runForm:testcaseexecutionStatus :runForm:validateButton :bugForm:createPanelGrid"
+											update="teststepTabView :runForm:msg :bugForm:createPanelGrid"
 											async="true" ajax="true" />
 
 										<p:remoteCommand name="remoteButton" update=":runForm" />
 									</p:column>
 								</p:row>
 							</p:panelGrid>
+
+							<p:panelGrid rendered="#{tse.teststep == null}">
+								<p:row>
+									<p:column colspan="2">
+										<h:outputText
+											value="#{messages.test_exec_finalResult}:#{jJTestcaseBean.testcase.name}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column colspan="2">
+										<p:outputLabel value="Description" />
+										<pe:ckEditor height="100px" width="300px"
+											value="#{jJTestcaseBean.testcase.description}"
+											customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+											toolbar="[['Source','Image','Table']]" readOnly="true"
+											rendered="#{!loginBean.mobile}" />
+										<p:editor id="descriptionMobile" style="width:300px;"
+											rendered="#{loginBean.mobile}" readOnly="true"
+											value="#{jJTestcaseBean.testcase.description}" />
+									</p:column>
+								</p:row>
+								<p:row rendered="#{!jJTeststepexecutionBean.disabledTestcase}">
+									<p:column>
+										<p:selectOneButton id="testcaseexecutionStatus"
+											value="#{jJTestcaseexecutionBean.status}"
+											disabled="#{jJTeststepexecutionBean.disabledTestcase}">
+											<p:ajax listener="#{jJTestcaseexecutionBean.handleStatus()}" />
+											<f:selectItem itemValue="true"
+												itemLabel="#{messages.test_exec_status_passed_label}" />
+											<f:selectItem itemValue="false"
+												itemLabel="#{messages.test_exec_status_failed_label}" />
+										</p:selectOneButton>
+									</p:column>
+									<p:column>
+										<p:commandButton id="validateButton"
+											value="#{messages.test_exec_valid_label}"
+											icon="ui-icon-circle-check"
+											update=":testFormCenter :testFormWest :growlForm "
+											actionListener="#{jJTeststepexecutionBean.validateTab}"
+											style="float: right;" onstart="PF('blockUIWidget').block()"
+											oncomplete="PF('blockUIWidget').unblock()"
+											disabled="#{jJTeststepexecutionBean.disabledTestcase}" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+							<!-- 							</p:panelGrid> -->
 						</p:tab>
 					</p:tabView>
 
-					<p:panelGrid style="width: 100%;"
-						rendered="#{!jJTeststepexecutionBean.disabledTestcase}">
-						<p:row>
-							<p:column>
-								<p:selectOneButton id="testcaseexecutionStatus"
-									value="#{jJTestcaseexecutionBean.status}"
-									disabled="#{jJTeststepexecutionBean.disabledTestcase}">
-									<p:ajax listener="#{jJTestcaseexecutionBean.handleStatus()}" />
-									<f:selectItem itemValue="true"
-										itemLabel="#{messages.test_exec_status_passed_label}" />
-									<f:selectItem itemValue="false"
-										itemLabel="#{messages.test_exec_status_failed_label}" />
-								</p:selectOneButton>
-							</p:column>
-							<p:column>
-								<p:commandButton id="validateButton"
-									value="#{messages.test_exec_valid_label}"
-									icon="ui-icon-circle-check"
-									update=":testFormCenter :testFormWest :growlForm "
-									actionListener="#{jJTeststepexecutionBean.validateTab}"
-									style="float: right;" onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock()"
-									disabled="#{jJTeststepexecutionBean.disabledTestcase}" />
-							</p:column>
-						</p:row>
-					</p:panelGrid>
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
@@ -721,8 +763,7 @@
 						<ui:param name="JJBug_" value="#{jJTeststepexecutionBean.bug}" />
 					</ui:include>
 					<p:commandButton id="saveBug" value="#{messages.label_save}"
-						action="#{jJBugBean.saveBug}"
-						update=":runForm:teststepTabView  :runForm:testcaseexecutionStatus :runForm:validateButton  :growlForm"
+						action="#{jJBugBean.saveBug}" update=":runForm :growlForm"
 						oncomplete="PF('bugTestDialogWidget').hide()" />
 				</h:form>
 			</p:outputPanel>
