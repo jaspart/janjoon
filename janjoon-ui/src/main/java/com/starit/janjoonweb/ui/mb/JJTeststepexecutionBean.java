@@ -107,6 +107,14 @@ public class JJTeststepexecutionBean {
 		this.status = status;
 	}
 
+	public SortedMap<Integer, JJTeststepexecution> getElements() {
+		return elements;
+	}
+
+	public void setElements(SortedMap<Integer, JJTeststepexecution> elements) {
+		this.elements = elements;
+	}
+
 	public void loadTeststepexecution() {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
@@ -256,8 +264,8 @@ public class JJTeststepexecutionBean {
 
 	private void newBug() {
 		bug = new JJBug();
-		bug.setName("Insert a bug name");
-		bug.setDescription("Insert a bug description");
+//		bug.setName("Insert a bug name");
+//		bug.setDescription("Insert a bug description");
 		bug.setEnabled(true);
 		bug.setStatus(jJStatusService.getOneStatus("NEW", "BUG", true));
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()

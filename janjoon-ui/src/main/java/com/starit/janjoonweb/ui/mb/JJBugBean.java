@@ -504,6 +504,8 @@ public class JJBugBean {
 		context.execute("PF('bugTestDialogWidget').hide()");
 		
 		jJTestcaseBean.runTestcase(jJTestcaseexecutionBean, jJTeststepexecutionBean);
+		
+		jJTeststepexecutionBean.setActiveIndex(jJTeststepexecutionBean.getElements().size());
 
 //		if (jJTeststepexecutionBean.getDisabledTestcase()) {
 //			jJTeststepexecutionBean.nextTab();

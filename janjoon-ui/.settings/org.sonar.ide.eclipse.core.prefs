@@ -1,5 +1,5 @@
 eclipse.preferences.version=1
-extraProperties=
+extraProperties=sonar.host.url\=http\://url-serveur\:1234\r\nsonar.jdbc.username\=root\r\nsonar.jdbc.url\=jdbc\:mysql\://localhost\:3306/upmc?useUnicode\r\nsonar.jdbc.driver\=com.mysql.jdbc.Driver\r\nsonar.jdbc.password\=root
 projectKey=com.starit.janjoonweb.ui\:janjoon-ui
 serverUrl=http\://localhost\:9000
 version=2

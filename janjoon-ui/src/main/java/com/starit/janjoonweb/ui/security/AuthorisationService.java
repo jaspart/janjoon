@@ -474,7 +474,7 @@ public class AuthorisationService implements Serializable {
 			adminContactMSG = "";
 			adminProfil = jJPermissionService.isAuthorized(contact, null, null,
 					"Profile", null, null, null, true)
-					&& jJPermissionService.isAdmin(contact);
+					&&  jJPermissionService.isAdmin(contact);
 
 			if (!adminProfil) {
 				adminProfilMSG = "Permission Denied";

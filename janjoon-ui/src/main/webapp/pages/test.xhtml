@@ -656,6 +656,9 @@
 									<p:column colspan="2" rendered="#{not empty tse.teststep.bugs}">
 										<p:dataTable value="#{tse.teststep.bugs}" scrollable="true"
 											scrollHeight="120" var="bug">
+											<p:column headerText="Bug">
+												<h:outputText value="#{bug.name}" />
+											</p:column>
 											<p:column headerText="Fixed">
 												<p:panel style="height: 25px;width: 30px; margin: auto;">
 													<p:commandButton styleClass="checkBoxButton"
@@ -664,9 +667,6 @@
 														update=":runForm:teststepTabView :runForm:msg"
 														actionListener="#{jJTeststepBean.onbugCheckStatus(bug,jJBugBean)}" />
 												</p:panel>
-											</p:column>
-											<p:column headerText="Bug">
-												<h:outputText value="#{bug.name}" />
 											</p:column>
 										</p:dataTable>
 									</p:column>
