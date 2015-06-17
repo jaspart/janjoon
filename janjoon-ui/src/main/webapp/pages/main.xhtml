@@ -198,6 +198,17 @@
 					emptyMessage="There is no Task to do, dee more in project View">
 
 					<p:column headerText="Task">
+						<p:graphicImage
+							rendered="#{task.specification != null and task.specification}"
+							library="images" name="doc.ico" width="16" height="16" />
+						<p:graphicImage rendered="#{task.bug != null}" library="images"
+							name="bug.ico" width="16" height="16" />
+						<p:graphicImage
+							rendered="#{task.bug == null and task.requirement != null}"
+							library="images" name="function.ico" width="16" height="16" />
+						<p:graphicImage title="TestCase"
+							rendered="#{task.bug == null and task.requirement == null and task.testcase != null}"
+							library="images" name="test.ico" width="16" height="16" />
 						<h:outputText value="#{task}" converter="JJTaskConverter" />
 					</p:column>
 
@@ -266,7 +277,7 @@
 									onstart="PF('viewtaskBlockUIWidget').block()"
 									style="margin-top: 5px;"
 									oncomplete="PF('viewtaskBlockUIWidget').unblock();"
-									process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload,taskAssignedTo" />
+									process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload,taskAssignedTo,taskSpec" />
 								<p:commandButton id="viewCloseButton"
 									value="#{messages.label_close}"
 									style="margin-left: 20px;margin-top: 5px;"

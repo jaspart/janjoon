@@ -454,13 +454,15 @@ public class JJTaskBean {
 		if (ttt != null) {
 			if (ttt.getRequirement() != null)
 				return "TASK[" + ttt.getId() + "]-REQ["
-						+ ttt.getRequirement().getId() + "] " + ttt.getName().replace("\'", " ");
+						+ ttt.getRequirement().getId() + "] "
+						+ ttt.getName().replace("\'", " ");
 			else if (ttt.getBug() != null)
 				return "TASK[" + ttt.getId() + "]-BUG[" + ttt.getBug().getId()
 						+ "] " + ttt.getName().replace("\'", " ");
 			else if (ttt.getTestcase() != null)
 				return "TASK[" + ttt.getId() + "]-TESTCASE["
-						+ ttt.getTestcase().getId() + "] " + ttt.getName().replace("\'", " ");
+						+ ttt.getTestcase().getId() + "] "
+						+ ttt.getName().replace("\'", " ");
 			else
 				return "";
 		} else
@@ -651,7 +653,7 @@ public class JJTaskBean {
 
 	public void closeEvent(String operation) {
 
-		System.err.println("dfgdfgdfg");
+		// System.err.println("dfgdfgdfg");
 		// //Long id = null;
 		// if (task.getSprint() != null)
 		// id = task.getSprint().getId();
@@ -1080,7 +1082,7 @@ public class JJTaskBean {
 			JJChapter chapter = tt.getChapter();
 
 			TaskData taskData = null;
-			System.err.println(group + "/" + tt.getName());
+			// System.err.println(group + "/" + tt.getName());
 
 			model.add(new TimelineEvent(tt, new GregorianCalendar(Calendar
 					.getInstance().get(Calendar.YEAR) - 5, 1, 1).getTime(),
@@ -1585,6 +1587,11 @@ public class JJTaskBean {
 
 		fillTableImport();
 	}
+//	
+//	public void changeSpecValueListener(ImportFormat format)
+//	{
+//		format.setSpecification(!format.getSpecification());
+//	}
 
 	public void fillTableImport() {
 
@@ -1725,6 +1732,7 @@ public class JJTaskBean {
 
 				JJTask task = new JJTask();
 				task.setEnabled(true);
+				task.setSpecification(format.getSpecification());
 				if (mode.equalsIgnoreCase("planning"))
 					task.setSprint(this.sprint);
 
@@ -1789,11 +1797,11 @@ public class JJTaskBean {
 
 					task.setTestcase(testcase);
 				}
-				
+
 				if (name.length() > 100) {
-					name =name.substring(0, 99);
+					name = name.substring(0, 99);
 				}
-				
+
 				task.setName(name);
 				task.setDescription("This is task " + task.getName());
 				HttpSession session = (HttpSession) FacesContext
@@ -1805,7 +1813,7 @@ public class JJTaskBean {
 					JJSprintBean jJSprintBean = (JJSprintBean) session
 							.getAttribute("jJSprintBean");
 					task.setCreationDate(new Date());
-					//exception name size
+					// exception name size
 					task.setCreatedBy(((LoginBean) LoginBean
 							.findBean("loginBean")).getContact());
 					JJStatus status = jJStatusService.getOneStatus("TODO",
@@ -2002,7 +2010,15 @@ public class JJTaskBean {
 		}
 
 		ttt = jJTaskService.findJJTask(ttt.getId());
+
+		if (((JJRequirementBean) LoginBean.findBean("jJRequirementBean")) != null
+				&& ttt.getRequirement() != null) {
+
+			((JJRequirementBean) LoginBean.findBean("jJRequirementBean"))
+					.updateDataTable(ttt.getRequirement(),
+							JJRequirementBean.UPDATE_OPERATION, false);
 		}
+	}
 
 	public void copyObjet() {
 
@@ -2035,6 +2051,7 @@ public class JJTaskBean {
 		private boolean copyObjet;
 		private Date startDate;
 		private Integer workload;
+		private boolean specification;
 
 		public ImportFormat() {
 			super();
@@ -2044,7 +2061,7 @@ public class JJTaskBean {
 			super();
 			this.name = name;
 			this.object = object;
-			this.copyObjet = copyObjet;
+			this.copyObjet = copyObjet;		
 		}
 
 		public String getName() {
@@ -2069,6 +2086,14 @@ public class JJTaskBean {
 
 		public void setCopyObjet(boolean copyObjet) {
 			this.copyObjet = copyObjet;
+		}
+
+		public boolean getSpecification() {
+			return specification;
+		}
+
+		public void setSpecification(boolean specification) {
+			this.specification = specification;
 		}
 
 		public Date getStartDate() {
@@ -2279,12 +2304,12 @@ public class JJTaskBean {
 		setJJTask_(null);
 		setCreateDialogVisible(false);
 	}
-	
-	public void copyName(JJTask	ttt)
-	{		
-		StringSelection stringSelection = new StringSelection (this.getDialogHeader(ttt));
-		Clipboard clpbrd = Toolkit.getDefaultToolkit ().getSystemClipboard ();
-		clpbrd.setContents (stringSelection, null);
+
+	public void copyName(JJTask ttt) {
+		StringSelection stringSelection = new StringSelection(
+				this.getDialogHeader(ttt));
+		Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
+		clpbrd.setContents(stringSelection, null);
 	}
 
 	public void deleteTaskData() {
@@ -2393,30 +2418,30 @@ public class JJTaskBean {
 			if (task != null) {
 				if (task.getRequirement() != null) {
 
-					System.out.println("TreeNode "
-							+ task.getRequirement().getName());
+					// System.out.println("TreeNode "
+					// + task.getRequirement().getName());
 
 					taskTreeNode = new DefaultTreeNode("Requirement :", null);
 					DefaultTreeNode tree = new DefaultTreeNode(
 							task.getRequirement(), taskTreeNode);
 
-					System.out.println("TreeNode "
-							+ task.getRequirement().getName());
+					// System.out.println("TreeNode "
+					// + task.getRequirement().getName());
 
 					if (task.getRequirement().getRequirementLinkDown() != null) {
 
-						System.out.println("TreeNode Before "
-								+ task.getRequirement().getName());
+						// System.out.println("TreeNode Before "
+						// + task.getRequirement().getName());
 						reqTreeNode(tree, task.getRequirement());
 
-						System.out.println("TreeNode after "
-								+ task.getRequirement().getName());
+						// System.out.println("TreeNode after "
+						// + task.getRequirement().getName());
 					}
 
 					selectedTree = taskTreeNode;
 					selectedReq = task.getRequirement();
-					System.out.println("TreeNode Last "
-							+ task.getRequirement().getName());
+					// System.out.println("TreeNode Last "
+					// + task.getRequirement().getName());
 				}
 
 			}
@@ -2471,12 +2496,12 @@ public class JJTaskBean {
 		int i = 0;
 		while (i < events.size()) {
 
-			System.out
-					.println(events.get(i).getStyleClass()
-							+ ":"
-							+ !(events.get(i).getStyleClass()
-									.equalsIgnoreCase(Real) ^ real) + ":"
-							+ real);
+			// System.out
+			// .println(events.get(i).getStyleClass()
+			// + ":"
+			// + !(events.get(i).getStyleClass()
+			// .equalsIgnoreCase(Real) ^ real) + ":"
+			// + real);
 
 			if (events.get(i).getData() instanceof JJTask
 					&& !(events.get(i).getStyleClass().equalsIgnoreCase(Real) ^ real)
@@ -2753,7 +2778,8 @@ public class JJTaskBean {
 			} else
 				tasksData.remove(i);
 
-		} else if (operation.equalsIgnoreCase(ADD_OPERATION) && tasksData != null) {
+		} else if (operation.equalsIgnoreCase(ADD_OPERATION)
+				&& tasksData != null) {
 			if (sortMode == null || sortMode.equalsIgnoreCase("chapter")) {
 				if (tt.getChapter() != null
 						&& (this.sprint == null || (this.sprint.equals(tt
@@ -3198,7 +3224,7 @@ public class JJTaskBean {
 	}
 
 	public void SortBySelectionChanged(final AjaxBehaviorEvent event) {
-		System.err.println("sortMode " + sortMode);
+		// System.err.println("sortMode " + sortMode);
 		tasksData = null;
 		model = null;
 	}

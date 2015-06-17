@@ -74,6 +74,14 @@ privileged aspect JJTask_Roo_JavaBean {
         this.enabled = enabled;
     }
     
+    public Boolean JJTask.getSpecification() {
+        return this.specification;
+    }
+    
+    public void JJTask.setSpecification(Boolean specification) {
+        this.specification = specification;
+    }
+    
     public Date JJTask.getStartDatePlanned() {
         return this.startDatePlanned;
     }

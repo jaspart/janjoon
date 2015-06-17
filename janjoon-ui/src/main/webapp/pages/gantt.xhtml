@@ -7,7 +7,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
-<ui:composition style="width:100%">	
+<ui:composition style="width:100%">
 	<h:form id="sprintForm" style="width:100%;">
 		<p:panelGrid style="width:100%;">
 			<p:row>
@@ -65,7 +65,7 @@
 	</h:form>
 
 	<h:form id="planningForm" style="width:100%">
-<!-- 		<h:outputScript library="js" name="scrollTab.js" />		 -->
+		<!-- 		<h:outputScript library="js" name="scrollTab.js" />		 -->
 		<f:event type="preRenderComponent"
 			oncomplete="PF('blockUIWidget').unblock();"
 			listener="#{jJTaskBean.loadingData()}" />
@@ -82,10 +82,10 @@
 							state="#{jJTaskBean.stateOne}">
 
 							<pe:layoutPane position="west" id="westLayout">
-								<f:facet name="header">Task Data Table</f:facet>																
-								<p:panelGrid  id="stickyHeader" styleClass="stickyHeader">
+								<f:facet name="header">Task Data Table</f:facet>
+								<p:panelGrid id="stickyHeader" styleClass="stickyHeader">
 									<f:facet name="header">
-										<p:row >
+										<p:row>
 											<p:column style="width:100px;">Actions</p:column>
 											<p:column style="width:180px !important;">#{messages.project_gantt_table_name_title}</p:column>
 											<p:column style="width: 130px;">#{messages.project_gantt_table_assigned_title}</p:column>
@@ -99,7 +99,7 @@
 											<p:column style="width: 160px;">Sprint</p:column>
 										</p:row>
 									</f:facet>
-								</p:panelGrid>								
+								</p:panelGrid>
 								<p:dataTable id="taskDataTable" var="taskData"
 									sortFunction="#{jJTaskBean.sortFunction}"
 									styleClass="planning-dataTable" sortBy="#{taskData.chapter}"
@@ -120,6 +120,9 @@
 									</p:summaryRow>
 
 									<p:column headerText="Actions" style="width:100px;">
+										<p:graphicImage
+											rendered="#{taskData.task.specification != null and taskData.task.specification}"
+											library="images" name="doc.ico" width="16" height="16" />
 										<p:graphicImage library="images" name="#{taskData.icone}"
 											width="16" height="16" />
 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
@@ -146,9 +149,9 @@
 												<f:setPropertyActionListener target="#{jJTaskBean.mode}"
 													value="planning" />
 											</p:menuitem>
-											<p:menuitem id="copyButton" icon="ui-icon-copy" 
-												onclick="copyName('#{jJTaskBean.getDialogHeader(taskData.task)}');" 											
-												value="Copy" title="Copy"/>
+											<p:menuitem id="copyButton" icon="ui-icon-copy"
+												onclick="copyName('#{jJTaskBean.getDialogHeader(taskData.task)}');"
+												value="Copy" title="Copy" />
 										</p:splitButton>
 									</p:column>
 

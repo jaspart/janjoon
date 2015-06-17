@@ -1,8 +1,11 @@
 package com.starit.janjoonweb.ui.mb.util;
 
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -29,6 +32,7 @@ import com.starit.janjoonweb.domain.JJWorkflow;
 import com.starit.janjoonweb.domain.JJWorkflowService;
 import com.starit.janjoonweb.ui.mb.JJAuditLogBean;
 import com.starit.janjoonweb.ui.mb.JJRequirementBean;
+import com.starit.janjoonweb.ui.mb.JJTaskBean;
 import com.starit.janjoonweb.ui.mb.LoginBean;
 import com.starit.janjoonweb.ui.mb.RequirementBean;
 
@@ -387,6 +391,53 @@ public class WorkFlowsActions {
 
 	}
 
+	public void sendMailTooBusinessReqCreatorWorkFlow(Object object) {
+		// System.err.println("sendMailWorkFlow Successufuly Executed");
+		if (object instanceof JJTask) {
+			JJTask task = (JJTask) object;
+			if (task.getRequirement() != null) {				
+				JJRequirement requirement = task.getRequirement();
+				Set<JJRequirement> businessRequirements = new HashSet<JJRequirement>();
+				fillBusinessRequirements(requirement, businessRequirements);				
+				
+				if(!businessRequirements.isEmpty())
+				{
+					if (mailingService == null)
+						mailingService = new MailingService();
+					String taskTitle=((JJTaskBean)LoginBean.findBean("jJTaskBean")).getDialogHeader(task);
+					
+					for (JJRequirement req : businessRequirements) {
+						System.err.println("REQUIREMENT_" + req.getName());
+						mailingService.sendMail(req, taskTitle);
+					}
+					
+				}
+			}
+
+		}
+
+	}
+
+	private void fillBusinessRequirements(JJRequirement requirement,
+			Set<JJRequirement> businessRequirements) {
+
+		requirement = jJRequirementService.findJJRequirement(requirement
+				.getId());
+		if (requirement.getCategory() != null
+				&& requirement.getCategory().getStage() != null
+				&& requirement.getCategory().getStage() == 1)
+			businessRequirements.add(requirement);
+		else {
+			Set<JJRequirement> linkDownRequirement = requirement
+					.getRequirementLinkDown();
+
+			for (JJRequirement req : linkDownRequirement) {
+				fillBusinessRequirements(req, businessRequirements);
+			}
+
+		}
+	}
+
 	@SuppressWarnings("rawtypes")
 	public void sendMailWorkFlow(Object object) {
 
@@ -454,6 +505,9 @@ public class WorkFlowsActions {
 				break;
 			case "sendMailWorkFlow":
 				this.sendMailWorkFlow(object);
+				break;
+			case "sendMailTooBusinessReqCreatorWorkFlow":
+				this.sendMailTooBusinessReqCreatorWorkFlow(object);
 				break;
 			}
 		}

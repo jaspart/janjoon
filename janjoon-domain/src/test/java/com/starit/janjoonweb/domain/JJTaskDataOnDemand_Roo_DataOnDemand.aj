@@ -75,6 +75,7 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
         setName(obj, index);
         setParent(obj, index);
         setSoldDate(obj, index);
+        setSpecification(obj, index);
         setStartDatePlanned(obj, index);
         setStartDateReal(obj, index);
         setStartDateRevised(obj, index);
@@ -145,6 +146,11 @@ privileged aspect JJTaskDataOnDemand_Roo_DataOnDemand {
     public void JJTaskDataOnDemand.setSoldDate(JJTask obj, int index) {
         Date soldDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setSoldDate(soldDate);
+    }
+    
+    public void JJTaskDataOnDemand.setSpecification(JJTask obj, int index) {
+        Boolean specification = Boolean.TRUE;
+        obj.setSpecification(specification);
     }
     
     public void JJTaskDataOnDemand.setStartDatePlanned(JJTask obj, int index) {

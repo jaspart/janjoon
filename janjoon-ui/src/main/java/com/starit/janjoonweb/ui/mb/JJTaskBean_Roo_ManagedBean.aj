@@ -341,6 +341,24 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         enabledCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
         
+        OutputLabel specificationCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        specificationCreateOutput.setFor("specificationCreateInput");
+        specificationCreateOutput.setId("specificationCreateOutput");
+        specificationCreateOutput.setValue("Specification:");
+        htmlPanelGrid.getChildren().add(specificationCreateOutput);
+        
+        SelectBooleanCheckbox specificationCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        specificationCreateInput.setId("specificationCreateInput");
+        specificationCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.specification}", Boolean.class));
+        specificationCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(specificationCreateInput);
+        
+        Message specificationCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        specificationCreateInputMessage.setId("specificationCreateInputMessage");
+        specificationCreateInputMessage.setFor("specificationCreateInput");
+        specificationCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(specificationCreateInputMessage);
+        
         OutputLabel startDatePlannedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         startDatePlannedCreateOutput.setFor("startDatePlannedCreateInput");
         startDatePlannedCreateOutput.setId("startDatePlannedCreateOutput");
@@ -1101,6 +1119,24 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         enabledEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledEditInputMessage);
         
+        OutputLabel specificationEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        specificationEditOutput.setFor("specificationEditInput");
+        specificationEditOutput.setId("specificationEditOutput");
+        specificationEditOutput.setValue("Specification:");
+        htmlPanelGrid.getChildren().add(specificationEditOutput);
+        
+        SelectBooleanCheckbox specificationEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        specificationEditInput.setId("specificationEditInput");
+        specificationEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.specification}", Boolean.class));
+        specificationEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(specificationEditInput);
+        
+        Message specificationEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        specificationEditInputMessage.setId("specificationEditInputMessage");
+        specificationEditInputMessage.setFor("specificationEditInput");
+        specificationEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(specificationEditInputMessage);
+        
         OutputLabel startDatePlannedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         startDatePlannedEditOutput.setFor("startDatePlannedEditInput");
         startDatePlannedEditOutput.setId("startDatePlannedEditOutput");
@@ -1790,6 +1826,15 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         HtmlOutputText enabledValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.enabled}", String.class));
         htmlPanelGrid.getChildren().add(enabledValue);
+        
+        HtmlOutputText specificationLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        specificationLabel.setId("specificationLabel");
+        specificationLabel.setValue("Specification:");
+        htmlPanelGrid.getChildren().add(specificationLabel);
+        
+        HtmlOutputText specificationValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        specificationValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.specification}", String.class));
+        htmlPanelGrid.getChildren().add(specificationValue);
         
         HtmlOutputText startDatePlannedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         startDatePlannedLabel.setId("startDatePlannedLabel");

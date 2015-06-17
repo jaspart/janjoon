@@ -31,6 +31,22 @@ a:visited {
 	color: #23AFB2;
 }
 
+.checkBoxButton {
+	height: 20px;
+	width: 20px;
+	color: blue !important;
+	font-size: smaller !important;
+	background-image: none !important;
+	background-color: white !important;
+	margin-left: -6px;
+	margin-top: -4px;
+	font-weight: 900;
+}
+
+.checkBoxButton .ui-button-text {
+	margin-left: -4px !important;
+}
+
 .ui-rating-star a,.ui-rating-cancel a {
 	width: 24px;
 	height: 23px;
@@ -468,7 +484,7 @@ a:visited {
 }
 
 .TestcaseWithoutTeststep {
-	background-color: #666666;	
+	background-color: #666666;
 	padding: .2em .6em .3em;
 	font-size: 80%;
 	font-weight: 700;

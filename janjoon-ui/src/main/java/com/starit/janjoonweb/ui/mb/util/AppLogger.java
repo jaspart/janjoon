@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -111,24 +111,24 @@ public class AppLogger {
 			List<JJWorkflow> workFlows = new ArrayList<JJWorkflow>();
 			if (object instanceof JJBug) {
 				JJBug bug = (JJBug) object;
-				if (bug.getId() != null) {
+				if (bug.getId() != null && bug.getEnabled()) {
 					JJBug oldBug = jJBugService.findJJBug(bug.getId());
 					workFlows = jJWorkflowService.getObjectWorkFlows("bug",
 							oldBug.getStatus(), bug.getStatus(), null, true);
-				} else {
+				} else if(bug.getEnabled()){
 					workFlows = jJWorkflowService.getObjectWorkFlows("bug",
 							jJStatusService.getOneStatus("Any", "*", true),
 							bug.getStatus(), null, true);
 				}
 			} else if (object instanceof JJRequirement) {
 				JJRequirement requirement = (JJRequirement) object;
-				if (requirement.getId() != null) {
+				if (requirement.getId() != null && requirement.getEnabled()) {
 					JJRequirement oldRequirement = jJRequirementService
 							.findJJRequirement(requirement.getId());
 					workFlows = jJWorkflowService.getObjectWorkFlows(
 							"requirement", oldRequirement.getStatus(),
 							requirement.getStatus(), null, true);
-				} else {
+				} else if(requirement.getEnabled()) {
 					workFlows = jJWorkflowService.getObjectWorkFlows(
 							"requirement",
 							jJStatusService.getOneStatus("Any", "*", true),
@@ -136,13 +136,13 @@ public class AppLogger {
 				}
 			} else if (object instanceof JJMessage) {
 				JJMessage message = (JJMessage) object;
-				if (message.getId() != null) {
+				if (message.getId() != null && message.getEnabled()) {
 					JJMessage oldTestcase = jJMessageService
 							.findJJMessage(message.getId());
 					workFlows = jJWorkflowService.getObjectWorkFlows("message",
 							oldTestcase.getStatus(), message.getStatus(), null,
 							true);
-				} else {
+				} else if(message.getEnabled()){
 					workFlows = jJWorkflowService.getObjectWorkFlows("message",
 							null, message.getStatus(), null, true);
 				}
@@ -249,14 +249,12 @@ public class AppLogger {
 						|| assignedTo) {
 					task.setStartDatePlanned(calendarUtil.nextWorkingDate(task
 							.getStartDatePlanned()));
-					planned = true;
-					System.err.println("getStartDatePlanned Date modified");
+					planned = true;					
 				}
 			} else {
 				task.setStartDatePlanned(calendarUtil.nextWorkingDate(task
 						.getStartDatePlanned()));
 				planned = true;
-				System.err.println("getStartDatePlanned Date modified");
 			}
 
 		}
@@ -270,14 +268,12 @@ public class AppLogger {
 						|| assignedTo) {
 					task.setEndDatePlanned(calendarUtil.nextWorkingDate(task
 							.getEndDatePlanned()));
-					planned = true;
-					System.err.println("getEndDatePlanned Date modified");
+					planned = true;					
 				}
 			} else {
 				task.setEndDatePlanned(calendarUtil.nextWorkingDate(task
 						.getEndDatePlanned()));
-				planned = true;
-				System.err.println("getEndDatePlanned Date modified");
+				planned = true;				
 			}
 
 		}
@@ -295,14 +291,12 @@ public class AppLogger {
 								.getStartDateReal()))
 						|| assignedTo) {
 					task.setStartDateReal(calendarUtil.nextWorkingDate(task
-							.getStartDateReal()));
-					System.err.println("getStartDateReal Date modified");
+							.getStartDateReal()));					
 					real = true;
 				}
 			} else {
 				task.setStartDateReal(calendarUtil.nextWorkingDate(task
-						.getStartDateReal()));
-				System.err.println("getStartDateReal Date modified");
+						.getStartDateReal()));				
 				real = true;
 			}
 		}
@@ -314,8 +308,7 @@ public class AppLogger {
 								.getEndDateReal()))
 						|| assignedTo) {
 					task.setEndDateReal(calendarUtil.nextWorkingDate(task
-							.getEndDateReal()));
-					System.err.println("getEndDateReal Date modified");
+							.getEndDateReal()));					
 					real = true;
 				}
 			} else {

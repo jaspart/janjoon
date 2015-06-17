@@ -9,24 +9,6 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
-		<style type="text/css">
-.checkBoxButton {
-	height: 20px;
-	width: 20px;
-	color: blue !important;
-	font-size: smaller !important;
-	background-image: none !important;
-	background-color: white !important;
-	margin-left: -6px;
-	margin-top: -4px;
-	font-weight: 900;
-}
-
-.checkBoxButton .ui-button-text {
-	margin-left: -4px !important;
-}
-</style>
-
 		<f:event type="preRenderView"
 			oncomplete="PF('blockUIWidget').unblock()"
 			listener="#{jJTestcaseBean.loadData(null,null,false)}" />

@@ -50,6 +50,8 @@ public class JJTask {
 	private JJContact updatedBy;
 
 	private Boolean enabled;
+	
+	private Boolean specification;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(style = "M-")

@@ -41,7 +41,7 @@
 								<p:column headerText="Stage">
 									<p:autoComplete id="phase" dropdown="true"
 										value="#{build.phase}" itemLabel="#{phase.name}"
-										itemValue="#{phase}" var="phase" size="10" 
+										itemValue="#{phase}" var="phase" size="10"
 										converter="com.starit.janjoonweb.ui.mb.converter.JJPhaseConverter"
 										completeMethod="#{jJBuildBean.completePhase}">
 										<p:ajax event="itemSelect"
@@ -80,6 +80,9 @@
 													</p:column>
 												</p:row>
 											</f:facet>
+											<p:graphicImage
+												rendered="#{task.specification != null and task.specification}"
+												library="images" name="doc.ico" width="16" height="16" />
 											<p:graphicImage rendered="#{task.bug != null}"
 												library="images" name="bug.ico" width="16" height="16" />
 											<p:graphicImage

@@ -19,6 +19,7 @@ import javax.servlet.ServletContext;
 import org.apache.log4j.Logger;
 
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJTask;
 
 public class MailingService {
@@ -83,6 +84,46 @@ public class MailingService {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public void sendMail(JJRequirement requirement,String taskTitle) {
+		
+		if (!error) {
+			
+			Properties props = new Properties();
+			props.put("mail.smtp.host", smtp_host);
+			props.put("mail.smtp.socketFactory.port", smtp_port);
+			props.put("mail.smtp.socketFactory.class",
+					"javax.net.ssl.SSLSocketFactory");
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.port", smtp_port);
+
+			Session session = Session.getDefaultInstance(props,
+					new javax.mail.Authenticator() {
+						protected PasswordAuthentication getPasswordAuthentication() {
+							return new PasswordAuthentication(userName,
+									password);
+						}
+					});
+			
+			try {
+
+				Message message = new MimeMessage(session);
+				message.setRecipients(Message.RecipientType.TO,
+				InternetAddress.parse(requirement.getCreatedBy().getEmail()));
+	
+				message.setSubject("Requirement: " + requirement.getName() + " Started To Be Covred ");
+				message.setText("Requirement: " + requirement.getName() + "  has been treated and started to be covered by " + taskTitle);
+
+				Transport.send(message);
+
+				logger.info("Message Successfully send");
+
+			} catch (MessagingException e) {
+				logger.error(new RuntimeException(e).getMessage());
+			}
+
+		}
 	}
 
 	public void sendMail(String mail_to,List<JJContact> contacts, JJTask task, String subject) {

@@ -179,6 +179,9 @@
 											disabled="#{jJSprintBean.isDisableDragDrop(jjsprint)}" />
 									</p:column>
 									<p:column style="width:80px" headerText="Task">
+										<p:graphicImage
+											rendered="#{todo.specification != null and todo.specification}"
+											library="images" name="doc.ico" width="16" height="16" />
 										<p:graphicImage rendered="#{todo.bug != null}"
 											library="images" name="bug.ico" width="16" height="16" />
 										<p:graphicImage
@@ -216,9 +219,8 @@
 													value="scrum" />
 											</p:menuitem>
 											<p:menuitem id="copyButton" icon="ui-icon-copy"
-												onclick="copyName('#{jJTaskBean.getDialogHeader(todo)}');" 
-												value="Copy"
-												title="Copy" />
+												onclick="copyName('#{jJTaskBean.getDialogHeader(todo)}');"
+												value="Copy" title="Copy" />
 										</p:splitButton>
 									</p:column>
 								</p:dataTable>
@@ -246,6 +248,9 @@
 										</p:column>
 
 										<p:column style="width:50px" headerText="Task">
+											<p:graphicImage
+												rendered="#{prog.specification != null and prog.specification}"
+												library="images" name="doc.ico" width="16" height="16" />
 											<p:graphicImage rendered="#{prog.bug != null}"
 												library="images" name="bug.ico" width="16" height="16" />
 											<p:graphicImage
@@ -280,8 +285,8 @@
 													<f:setPropertyActionListener target="#{jJTaskBean.mode}"
 														value="scrum" />
 												</p:menuitem>
-												<p:menuitem id="copyButton" icon="ui-icon-copy" 
-													onclick="copyName('#{jJTaskBean.getDialogHeader(prog)}');" 
+												<p:menuitem id="copyButton" icon="ui-icon-copy"
+													onclick="copyName('#{jJTaskBean.getDialogHeader(prog)}');"
 													value="Copy" title="Copy" />
 											</p:splitButton>
 										</p:column>
@@ -300,6 +305,9 @@
 										scrollHeight="250">
 
 										<p:column style="width:80px" headerText="Task">
+											<p:graphicImage
+												rendered="#{done.specification != null and done.specification}"
+												library="images" name="doc.ico" width="16" height="16" />
 											<p:graphicImage rendered="#{done.bug != null}"
 												library="images" name="bug.ico" width="16" height="16" />
 											<p:graphicImage
@@ -337,7 +345,7 @@
 														value="scrum" />
 												</p:menuitem>
 												<p:menuitem id="copyButton" icon="ui-icon-copy"
-													onclick="copyName('#{jJTaskBean.getDialogHeader(done)}');" 
+													onclick="copyName('#{jJTaskBean.getDialogHeader(done)}');"
 													value="Copy" title="Copy" />
 											</p:splitButton>
 										</p:column>
