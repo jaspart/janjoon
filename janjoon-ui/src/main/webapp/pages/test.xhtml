@@ -140,12 +140,17 @@
 									selection="#{jJTestcaseBean.selectedNode}" dynamic="true">
 									<p:ajax event="select"
 										listener="#{jJTestcaseBean.onNodeSelect}"
-										update=":testFormCenter :container :rate"
+										update=":testFormCenter :container :rate :testcaseDialog"
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()" />
 
 									<p:treeNode>
 										<h:outputText value="#{node}" styleClass="TestcaseChapter" />
+									</p:treeNode>
+
+									<p:treeNode type="TestcaseRequirement">
+										<p:graphicImage library="images" name="add.ico" width="14" height="14" />
+										<h:outputText value="#{node}" styleClass="TestcaseRequirement" />
 									</p:treeNode>
 
 									<p:treeNode type="TWT">
@@ -298,9 +303,9 @@
 							</p:commandLink>
 							<p:panel style="height: 25px;width: 30px; margin: auto;">
 								<p:commandButton value="#{columnName.allBuilds ? 'V' : 'X'}"
-									styleClass="checkBoxButton" disabled="true"
+									styleClass="checkBoxButton"
 									update=":growlForm :testFormCenter :testFormWest :container :rate "
-									actionListener="#{jJTestcaseBean.onCellEdit(columnName)}"
+									actionListener="#{jJTestcaseBean.onCellEdit(columnName,jJBuildBean,true)}"
 									onstart="PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock();" />
 							</p:panel>
@@ -315,9 +320,9 @@
 									rendered="#{rowName['class'].simpleName == 'JJBuild'}" />
 								<p:panel style="height: 25px;width: 30px; margin: auto;">
 									<p:commandButton styleClass="checkBoxButton"
-										value="#{rowName.allTestcases ? 'V' : 'X'}" disabled="true"
+										value="#{rowName.allTestcases ? 'V' : 'X'}" 
 										update=":growlForm :testFormCenter :testFormWest :container :rate "
-										actionListener="#{jJTestcaseBean.onCellEdit(rowName)}"
+										actionListener="#{jJTestcaseBean.onCellEdit(rowName,jJBuildBean,true)}"
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock();" />
 								</p:panel>

@@ -592,6 +592,10 @@ a:visited {
 	font-weight: bold;
 }
 
+.TestcaseRequirement {
+	color: black;	
+}
+
 .TestcaseExec .ui-button:nth-child(1) {
 	background-color: #77F177;
 	background-image: -webkit-linear-gradient(top, #ffffff, #6DEB62);

@@ -23,7 +23,6 @@ public class JJProfileServiceImpl implements JJProfileService {
 		this.entityManager = entityManager;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<JJProfile> load(MutableInt size, int first, int pageSize,
 			boolean isSuperAdmin) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -106,7 +105,7 @@ public class JJProfileServiceImpl implements JJProfileService {
 			return null;
 
 	}
-
+	
 	public List<JJProfile> getProfiles(boolean onlyActif, boolean isSuperAdmin) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJProfile> criteriaQuery = criteriaBuilder
@@ -118,16 +117,22 @@ public class JJProfileServiceImpl implements JJProfileService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		if (!isSuperAdmin) {
-			Subquery<JJRight> subquery = criteriaQuery.subquery(JJRight.class);
-			Root fromRight = subquery.from(JJRight.class);
-			subquery.select(fromRight.get("profile"));
+		if (!isSuperAdmin) {			
+			Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
+			Root<JJRight> fromRight = subquery.from(JJRight.class);
+			List<Predicate> predicatesRight = new ArrayList<Predicate>();
+			subquery.select(fromRight.get("profile").<Long>get("id"));
+			predicatesRight.add(criteriaBuilder.and(criteriaBuilder.equal(
+					fromRight.get("x"), true),criteriaBuilder.equal(criteriaBuilder.lower(fromRight
+							.<String> get("objet")),"company".toLowerCase())));
+			predicatesRight.add(criteriaBuilder.and(criteriaBuilder.equal(
+					fromRight.get("x"), true),criteriaBuilder.equal(criteriaBuilder.lower(fromRight
+							.<String> get("objet")),"*".toLowerCase())));
 
-			predicates.add(criteriaBuilder.and(criteriaBuilder.notEqual(
-					fromRight.get("x"), true),
-					criteriaBuilder.or(criteriaBuilder.notEqual(
-							fromRight.get("objet"), "company"), criteriaBuilder
-							.notEqual(fromRight.get("objet"), "*"))));
+			subquery.where(criteriaBuilder.and(criteriaBuilder.or(predicatesRight.toArray(new Predicate[] {})),
+					criteriaBuilder.equal(fromRight.get("enabled"), true)));
+			
+			predicates.add(criteriaBuilder.in(from.get("id")).value(subquery).not());
 
 		}
 

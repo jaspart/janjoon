@@ -3,13 +3,16 @@ package com.starit.janjoonweb.ui.mb;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJCategory;
-import com.starit.janjoonweb.domain.JJRight;
 import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJRight;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJRight.class, beanName = "jJRightBean")
@@ -129,15 +132,24 @@ public class JJRightBean {
 
 	public void addRight() {
 
-		if (rightDataModel == null) {
-			rightDataModel = new ArrayList<RightDataModel>();
+		if(((LoginBean)LoginBean.findBean("loginBean")).getAuthorisationService().isAdminCompany()||
+				!rightAdmin.getX() || !(object.equalsIgnoreCase("*") || object.equalsIgnoreCase("company")))
+		{
+			if (rightDataModel == null) {
+				rightDataModel = new ArrayList<RightDataModel>();
+			}
+
+			rightAdmin.setCategory(category);
+			rightAdmin.setObjet(object);
+
+			rightDataModel.add(new RightDataModel(rightAdmin, true, false));
+			newRight();
+		}else if(!((LoginBean)LoginBean.findBean("loginBean")).getAuthorisationService().isAdminCompany())
+		{
+			FacesMessage facesMessage =new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not Authorized", null);
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
-
-		rightAdmin.setCategory(category);
-		rightAdmin.setObjet(object);
-
-		rightDataModel.add(new RightDataModel(rightAdmin, true, false));
-		newRight();
+		
 	}
 
 	public void fillRightTable(JJProfile profile) {

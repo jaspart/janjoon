@@ -100,8 +100,6 @@
 											widgetVar="objectWidget" label="Right Object" required="true">
 											<p:ajax process="@this" partialSubmit="true"
 												listener="#{jJRightBean.handleSelectObject()}" />
-											<f:selectItem itemLabel="#{jJRightBean.object}"
-												itemValue="#{jJRightBean.object}" />
 											<f:selectItems value="#{jJRightBean.objects}" var="p"
 												itemLabel="#{p}" itemValue="#{p}" />
 										</p:selectOneMenu>
@@ -117,8 +115,8 @@
 												listener="#{jJRightBean.handleSelectCategory()}" />
 											<f:converter
 												converterId="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter" />
-											<f:selectItem itemLabel="#{jJRightBean.category.name}"
-												itemValue="#{jJRightBean.category}" />
+											<f:selectItem itemLabel="*"
+												itemValue="#{null}" />
 											<f:selectItems value="#{jJRightBean.categories}" var="p"
 												itemLabel="#{p.name}" itemValue="#{p}" />
 										</p:selectOneMenu>

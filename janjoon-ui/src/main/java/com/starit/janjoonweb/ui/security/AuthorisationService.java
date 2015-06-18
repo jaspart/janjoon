@@ -464,8 +464,7 @@ public class AuthorisationService implements Serializable {
 		JJProject project = projectBean.getProject();
 		JJProduct product = productBean.getProduct();
 
-		adminContact = jJPermissionService.isAuthorized(contact, null, null,
-				"Contact", null, null, null, true);
+		adminContact = jJPermissionService.isAdmin(contact);
 		if (!adminContact) {
 			adminContactMSG = "Permission Denied";
 			adminProfil = false;
@@ -473,8 +472,7 @@ public class AuthorisationService implements Serializable {
 		} else {
 			adminContactMSG = "";
 			adminProfil = jJPermissionService.isAuthorized(contact, null, null,
-					"Profile", null, null, null, true)
-					&&  jJPermissionService.isAdmin(contact);
+					"Profile", null, null, null, true);
 
 			if (!adminProfil) {
 				adminProfilMSG = "Permission Denied";
@@ -485,7 +483,7 @@ public class AuthorisationService implements Serializable {
 
 		adminCompany = jJPermissionService.isAuthorized(contact, null, null,
 				"Company", null, null, null, true);
-		renderAdmin = adminCompany
+		renderAdmin = adminCompany ||adminContact
 				|| jJPermissionService.isAuthorized(contact, null, null,
 						"Company", null, true, null, null);
 		if (!adminCompany) {
