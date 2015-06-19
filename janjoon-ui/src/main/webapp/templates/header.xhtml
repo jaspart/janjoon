@@ -12,7 +12,8 @@
 	<f:event listener="#{loginBean.loadingMain}" type="preRenderView" />
 
 	<h:form id="headerForm">
-	<p:remoteCommand name="updateCommunicationButton" update=":messageCreationForm communicationButton"/>
+		<p:remoteCommand name="updateCommunicationButton"
+			update=":messageCreationForm communicationButton" />
 		<h:panelGrid id="panelHeader" columns="#{loginBean.columns}"
 			cellpadding="2" style="background-color:white;width:100%;">
 
@@ -104,8 +105,10 @@
 
 					<!-- 	communicationButton	: Uncommand the button to start using the communication overlayPanel -->
 					<p:commandButton id="communicationButton" icon="ui-icon-comment"
-						value="#{loginBean.messageCount}" oncomplete="PF('communicationPanel').show();"
-						title="#{message.header_communication_label}" rendered="#{loginBean.enable}" />
+						value="#{loginBean.messageCount}"
+						oncomplete="PF('communicationPanel').show();"
+						title="#{message.header_communication_label}"
+						rendered="#{loginBean.enable}" />
 				</h:panelGrid>
 
 				<p:tabMenu id="tabMenu" name="content" style="float: none;"
@@ -178,8 +181,7 @@
 					<p:menuitem value="#{messages.header_delivery_menuitem}"
 						disabled="#{!loginBean.authorisationService.rBuild}"
 						title="#{loginBean.authorisationService.rBuildMSG}"
-						url="/pages/delivery.jsf?faces-redirect=true"
-						icon="ui-icon-star" />
+						url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
 
 					<p:menuitem value="#{messages.header_delivery_menuitem}"
 						rendered="#{!loginBean.enable and !loginBean.mobile}"
@@ -205,8 +207,8 @@
 						icon="ui-icon-calculator"
 						rendered="#{loginBean.enable and !loginBean.mobile}" />
 
-					<p:menuitem value="#{messages.header_admin_menuitem}"						
-						rendered="#{loginBean.authorisationService.renderAdmin}"						
+					<p:menuitem value="#{messages.header_admin_menuitem}"
+						rendered="#{loginBean.authorisationService.renderAdmin}"
 						url="/pages/administration.jsf?faces-redirect=true"
 						icon="ui-icon-key" update=":contentPanel" />
 

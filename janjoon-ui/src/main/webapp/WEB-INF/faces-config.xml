@@ -30,7 +30,7 @@
 			<from-outcome>fail</from-outcome>
 			<to-view-id>/pages/login.xhtml</to-view-id>
 		</navigation-case>
-	</navigation-rule>	
+	</navigation-rule>
 	<navigation-rule>
 		<from-view-id>/pages/signup.xhtml</from-view-id>
 		<navigation-case>
@@ -43,7 +43,7 @@
 			<from-outcome>success</from-outcome>
 			<to-view-id>/pages/login.xhtml</to-view-id>
 		</navigation-case>
-	</navigation-rule>	
+	</navigation-rule>
 	<navigation-rule>
 		<from-view-id>/pages/login.xhtml</from-view-id>
 		<navigation-case>

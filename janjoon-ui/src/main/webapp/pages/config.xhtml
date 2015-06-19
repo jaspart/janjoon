@@ -38,9 +38,8 @@
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_config_table_value_title}" />
 					</f:facet>
-					<h:outputText  value="#{conf.val}"
-					style="white-space: pre-wrap;max-height: 30px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis"
-					 />
+					<h:outputText value="#{conf.val}"
+						style="white-space: pre-wrap;max-height: 30px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis" />
 				</p:column>
 				<p:column styleClass="action-column" style="width:205px;">
 					<f:facet name="header">
@@ -58,8 +57,8 @@
 							target="#{jJConfigurationBean.renderCreate}" value="false" />
 
 
-						<p:menuitem id="deleteButton" icon="ui-icon-trash" resetValues="true"
-							oncomplete="PF('deleteDialogWidget').show()"
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							resetValues="true" oncomplete="PF('deleteDialogWidget').show()"
 							value="#{messages.admin_config_delete_title}">
 							<f:setPropertyActionListener value="#{conf}"
 								target="#{jJConfigurationBean.selectedConf}" />
@@ -118,8 +117,7 @@
 							rendered="#{!loginBean.mobile}" />
 						<pe:ckEditor id="confDesc"
 							toolbar="#{imageStreamer.ckEditorToolBar}"
-							rendered="#{!loginBean.mobile}"
-							height="150px"
+							rendered="#{!loginBean.mobile}" height="150px"
 							customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 							value="#{jJConfigurationBean.JJConfiguration_.description}"
 							required="true"
@@ -141,9 +139,10 @@
 						</p:inputText>
 
 						<p:outputLabel for="confVal" value="Value:" />
-						<p:inputTextarea scrollHeight="6" cols="82" rows="6" autoResize="false"
+						<p:inputTextarea scrollHeight="6" cols="82" rows="6"
+							autoResize="false"
 							value="#{jJConfigurationBean.JJConfiguration_.val}" id="confVal">
-<!-- 							<f:validateLength maximum="100" /> -->
+							<!-- 							<f:validateLength maximum="100" /> -->
 						</p:inputTextarea>
 					</h:panelGrid>
 					<f:facet name="footer">

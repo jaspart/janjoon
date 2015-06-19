@@ -343,9 +343,9 @@
 
 											<p:panelGrid
 												style="border-style: groove;border-color: black;">
-												<f:facet name="header">													
+												<f:facet name="header">
 													<p:row>
-														<p:column >
+														<p:column>
 															<h:outputText
 																style="font-weight: bold;white-space: pre-wrap;"
 																value="Requirement: #{reqUtil.requirement.name}" />
@@ -362,10 +362,10 @@
 															style="white-space: normal;" />
 													</p:column>
 												</p:row>
-												<p:row>													
+												<p:row>
 													<p:column>
-													<p:outputLabel style="font-weight: bold;" for="expStyle"
-														value="Type:  " />
+														<p:outputLabel style="font-weight: bold;" for="expStyle"
+															value="Type:  " />
 														<h:outputText id="expStyle" value="#{reqUtil.style}"
 															styleClass="#{reqUtil.style}" />
 													</p:column>
@@ -415,8 +415,8 @@
 									<p:splitButton id="viewButton"
 										action="#{jJRequirementBean.requirementInfo}"
 										title="#{messages.specification_table_actions_viewButton}"
-										value="#{messages.label_view}" ajax="false"
-										icon="ui-icon-eye" onclick="target='_blank'">
+										value="#{messages.label_view}" ajax="false" icon="ui-icon-eye"
+										onclick="target='_blank'">
 										<p:menuitem id="filterButton"
 											value="#{messages[jJRequirementBean.filterButton]}"
 											icon="ui-icon-search" onstart="PF('blockUIWidget').block()"

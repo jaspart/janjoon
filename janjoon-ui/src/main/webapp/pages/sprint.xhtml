@@ -6,7 +6,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
-	<h:form id="sprintCreationForm" rendered="#{jjsprint.render}">		
+	<h:form id="sprintCreationForm" rendered="#{jjsprint.render}">
 		<p:panelGrid style="width: 100%;">
 			<f:facet name="header">
 				<p:row>
@@ -30,7 +30,7 @@
 				<p:column>
 					<p:selectManyMenu id="sprintcts" scrollHeight="150"
 						value="#{jjsprint.sprint.contacts}"
-						disabled="#{jjsprint.neditabale}" 
+						disabled="#{jjsprint.neditabale}"
 						converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
 						style="width:150px;height:150px !important;" showCheckbox="true">
 						<f:selectItems value="#{jJSprintBean.contacts}" var="ctc"
@@ -47,11 +47,10 @@
 					<p:calendar id="sprintCSD" navigator="true" effect="slideDown"
 						pattern="dd/MM/yyyy" required="true"
 						binding="#{startDateCreation}" disabled="#{jjsprint.neditabale}"
-						value="#{jjsprint.sprint.startDate}" >
+						value="#{jjsprint.sprint.startDate}">
 						<f:validator validatorId="dateRangeValidator" />
-						<f:attribute name="sprintMode"
-							value="sprintSD" />
-						</p:calendar>
+						<f:attribute name="sprintMode" value="sprintSD" />
+					</p:calendar>
 				</p:column>
 				<p:column>
 					<p:outputLabel for="sprintCED" value="end Date:" />
@@ -64,8 +63,7 @@
 						<f:validator validatorId="dateRangeValidator" />
 						<f:attribute name="startDateComponent"
 							value="#{startDateCreation}" />
-							<f:attribute name="sprintMode"
-							value="sprintED" />
+						<f:attribute name="sprintMode" value="sprintED" />
 					</p:calendar>
 				</p:column>
 			</p:row>
@@ -80,7 +78,8 @@
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 							<f:attribute name="create" value="create" />
 						</p:commandButton>
-						<p:remoteCommand name="createSprint" update=":projecttabview :growlForm"
+						<p:remoteCommand name="createSprint"
+							update=":projecttabview :growlForm"
 							action="#{jJSprintBean.createSprint}"
 							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock();" />
@@ -88,7 +87,7 @@
 					<p:column>
 						<p:commandButton value="Done" id="doneButtonr"
 							update=":projecttabview :growlForm" immediate="true"
-							disabled="#{!jjsprint.neditabale or !loginBean.authorisationService.wProject}"							
+							disabled="#{!jjsprint.neditabale or !loginBean.authorisationService.wProject}"
 							actionListener="#{jJSprintBean.doneEvent}"
 							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()">

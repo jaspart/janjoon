@@ -13,19 +13,20 @@
 		href="/syntaxhighlighter/standard.css" />
 	<ui:define name="content">
 		<style type="text/css">
-			.CodeMirror-scroll {
-				height: 450px;
-				}
-		</style>
+.CodeMirror-scroll {
+	height: 450px;
+}
+</style>
 		<h:form>
 			<p:remoteCommand name="updateHeader"
-				oncomplete="PF('blockUIWidget').unblock()" update=":contentPanel :growlForm" />
+				oncomplete="PF('blockUIWidget').unblock()"
+				update=":contentPanel :growlForm" />
 		</h:form>
 		<br />
 		<p:panel id="errorPanel"
 			header="#{messages['dev.panel.error.header']}"
 			style="width: 100%;valign: top;" rendered="#{!jJDevelopment.render}">
-<!-- 			<p:growl id="error" showDetail="false" life="2000" /> -->
+			<!-- 			<p:growl id="error" showDetail="false" life="2000" /> -->
 			<H1>#{messages['dev.panel.error.title']}</H1>
 		</p:panel>
 
@@ -64,7 +65,8 @@
 											process="@this" icon="ui-icon-refresh"
 											onstart="PF('blockUIWidget').block()"
 											oncomplete="PF('blockUIWidget').unblock()"
-											actionListener="#{jJDevelopment.pull}" update=":form :growlForm" />
+											actionListener="#{jJDevelopment.pull}"
+											update=":form :growlForm" />
 
 										<h:panelGroup id="startTaskPanel">
 
@@ -74,8 +76,7 @@
 												update=":form:taskSelectOneMenu startTaskPanel :growlForm" />
 
 											<p:commandButton id="viewTaskButton" icon="ui-icon-zoomin"
-												update=":viewTaskForm :viewTaskDialog"
-												resetValues="true"
+												update=":viewTaskForm :viewTaskDialog" resetValues="true"
 												disabled="#{jJDevelopment.task == null}" immediate="true"
 												oncomplete="PF('viewTaskDialogWidget').show()"
 												actionListener="#{jJTaskBean.gettingTaskValue}"
@@ -107,7 +108,7 @@
 									<p:column colspan="2">
 										<p:message for="taskSelectOneMenu" id="taskmessage"
 											closable="true" />
-<!-- 										<p:growl id="messages" showDetail="false" life="2000" /> -->
+										<!-- 										<p:growl id="messages" showDetail="false" life="2000" /> -->
 										<p:panel header="#{messages['devs.projectexplorer.label']}">
 
 											<p:scrollPanel id="fileTreeScrollPanel" style="height:300px;"
@@ -233,8 +234,8 @@
 								</p:tabView>
 							</p:panel></td>
 					</tr>
-				</table>				
-			
+				</table>
+
 
 			</h:form>
 			<p:confirmDialog id="deletFileDialog"
@@ -263,7 +264,7 @@
 					<h:form id="commitForm">
 						<p:commandButton id="commitYesButton"
 							value="#{messages.label_yes}"
-							onstart="PF('blockUIWidget').block()"							
+							onstart="PF('blockUIWidget').block()"
 							action="#{jJDevelopment.commitFile}" update=":form :growlForm"
 							oncomplete="PF('commitFileDialogWidget').hide(),PF('blockUIWidget').unblock()" />
 						<p:commandButton id="commitNoButton" value="#{messages.label_no}"
@@ -279,7 +280,8 @@
 				<p:outputPanel id="savePanel">
 					<h:form id="saveForm">
 						<p:commandButton id="saveYesButton" value="#{messages.label_yes}"
-							action="#{jJDevelopment.saveFile}" update=":form:tabViewPanel :growlForm" />
+							action="#{jJDevelopment.saveFile}"
+							update=":form:tabViewPanel :growlForm" />
 						<p:commandButton id="saveNoButton" value="#{messages.label_no}"
 							action="#{jJDevelopment.notSaveFile}" update=":form:tabViewPanel" />
 					</h:form>
@@ -314,14 +316,16 @@
 				</p:outputPanel>
 			</p:dialog>
 
-			<p:dialog id="viewTaskDialog" header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task)}"
+			<p:dialog id="viewTaskDialog"
+				header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task)}"
 				modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
 				resizable="true" maximizable="true" showEffect="fade"
 				hideEffect="explode" draggable="false">
-				<p:ajax event="close" update=":form:taskSelectOneMenu :form:startTaskPanel"
+				<p:ajax event="close"
+					update=":form:taskSelectOneMenu :form:startTaskPanel"
 					listener="#{jJTaskBean.closeEvent('dev')}" />
 				<p:outputPanel id="viewTaskPanel">
-					<h:form id="viewTaskForm" enctype="multipart/form-data" >
+					<h:form id="viewTaskForm" enctype="multipart/form-data">
 						<p:panel styleClass="panelDialog">
 							<f:facet name="header">
 								<p:messages id="msg" closable="true" />
@@ -359,13 +363,13 @@
 						<p:fileUpload id="uploadFileButton"
 							fileUploadListener="#{jJDevelopment.handleFileUpload}"
 							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()"							
-							mode="advanced" dragDropSupport="false" update=":form :growlForm"
+							oncomplete="PF('blockUIWidget').unblock()" mode="advanced"
+							dragDropSupport="false" update=":form :growlForm"
 							sizeLimit="1000000" fileLimit="4" />
 					</h:form>
 				</p:outputPanel>
-			</p:dialog>	
-	
+			</p:dialog>
+
 		</p:panel>
 		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
 		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
@@ -375,7 +379,7 @@
 			<video width="100%" height="100%" controls="true">
 				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
 			</video>
-		</p:dialog>	
+		</p:dialog>
 	</ui:define>
 	<ui:define name="outer">
 		<center>

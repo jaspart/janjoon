@@ -39,12 +39,14 @@ import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
 
+@SuppressWarnings("deprecation")
 @Component("buildWS")
 @Path("/build")
 public class BuildWS {
 
 	public static final String BASE_URI = "https://www.starit.fr/jenkins/job/janjoonCloud/XXX/api/xml?wrapper=changes&xpath=//changeSet//msg";
 
+	public static final String ZIP_URL= "https://www.starit.fr/jenkins/job/janjoonCloud/BUILD_NUMBER/artifact/janjoon-ui/target/janjoon-ui-2.0-REVISION_NUMBER-distrib.zip";
 	@Autowired
 	private JJBuildService jJBuildService;
 
@@ -191,17 +193,21 @@ public class BuildWS {
 												+ " and  version="
 												+ versionName;
 									else {
+										String svnVersion = personParams
+												.getFirst("svnVersion");
+										String buildNumber=buildName.substring(4);
 										JJBuild b = new JJBuild();
-
 										b.setName(buildName);
 										b.setEnabled(true);
 										b.setVersion(version);
 										b.setDescription("Build for Version "
 												+ version.getName());
+										
+										b.setDescription(b.getDescription()+System.getProperty("line.separator")
+												+"[URL]="+ZIP_URL.replace("BUILD_NUMBER",svnVersion)
+												.replace("REVISION_NUMBER", buildNumber));
 										b.setCreatedBy(contact);
-										b.setCreationDate(new Date());
-										String svnVersion = personParams
-												.getFirst("svnVersion");
+										b.setCreationDate(new Date());									
 										String commitMessage = getWebServiceAction(svnVersion);
 										if (commitMessage != null) {
 											List<JJTask> tasks = getCommitedTasks(commitMessage);
@@ -237,6 +243,11 @@ public class BuildWS {
 		while (n-- > 0 && pos != -1)
 			pos = str.indexOf(c, pos + 1);
 		return pos;
+	}
+	
+	public String getSubString(String s, int index, String c) {
+		String[] temp = s.split(c);
+		return temp[index];
 	}
 
 	public List<JJTask> getCommitedTasks(String commitMessage) {

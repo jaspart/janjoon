@@ -254,12 +254,13 @@
 			<p:row rendered="#{loginBean.enable and jJBugBean.viewBug != null}">
 				<p:column colspan="2">
 					<p:fieldset id="container" legend="Comments" toggleable="true"
-						style="width:95%" rendered="#{loginBean.enable and jJBugBean.viewBug != null and jJBugBean.viewBug.id != null}">
+						style="width:95%"
+						rendered="#{loginBean.enable and jJBugBean.viewBug != null and jJBugBean.viewBug.id != null}">
 						<ui:include src="/pages/communication.xhtml">
 							<ui:param name="communicationList"
 								value="#{jJBugBean.communicationMessages}" />
 							<ui:param name="field" value="#{jJBugBean.viewBug}" />
-							<ui:param name="cols" value="120"/>
+							<ui:param name="cols" value="120" />
 						</ui:include>
 					</p:fieldset>
 				</p:column>

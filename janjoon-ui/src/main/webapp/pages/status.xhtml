@@ -8,7 +8,7 @@
 <ui:composition>
 
 	<h:form id="statusForm">
-		
+
 		<p:panel id="statusPanel" style="width:750px" columns="1"
 			cellpadding="6">
 			<p:dataTable id="dataTable" var="status" lazy="true"
@@ -52,23 +52,24 @@
 						<h:outputText value="#{messages.admin_status_table_action_title}" />
 					</f:facet>
 
-<!-- 					<p:splitButton id="viewButton" icon="ui-icon-zoomin" -->
-<!-- 						update=":tabview:sviewForm:viewPanelGrid" -->
-<!-- 						value="#{messages.admin_status_table_view_tooltip}" -->
-<!-- 						oncomplete="PF('viewSatDialogWidget').show()"> -->
-<!-- 						<f:setPropertyActionListener value="#{status}" -->
-<!-- 							target="#{jJStatusBean.JJStatus_}" /> -->
+					<!-- 					<p:splitButton id="viewButton" icon="ui-icon-zoomin" -->
+					<!-- 						update=":tabview:sviewForm:viewPanelGrid" -->
+					<!-- 						value="#{messages.admin_status_table_view_tooltip}" -->
+					<!-- 						oncomplete="PF('viewSatDialogWidget').show()"> -->
+					<!-- 						<f:setPropertyActionListener value="#{status}" -->
+					<!-- 							target="#{jJStatusBean.JJStatus_}" /> -->
 
 
-						<p:splitButton id="editButton" icon="ui-icon-pencil"
-							update=":tabview:seditForm:editPanelGrid"
-							action="#{jJStatusBean.onEdit}" resetValues="true"
-							oncomplete="PF('editSatDialogWidget').show()"
-							value="#{messages.admin_status_table_edit_tooltip}">
-							<f:setPropertyActionListener value="#{status}"
-								target="#{jJStatusBean.JJStatus_}" />						
+					<p:splitButton id="editButton" icon="ui-icon-pencil"
+						update=":tabview:seditForm:editPanelGrid"
+						action="#{jJStatusBean.onEdit}" resetValues="true"
+						oncomplete="PF('editSatDialogWidget').show()"
+						value="#{messages.admin_status_table_edit_tooltip}">
+						<f:setPropertyActionListener value="#{status}"
+							target="#{jJStatusBean.JJStatus_}" />
 
-						<p:menuitem id="deleteButton" icon="ui-icon-trash" resetValues="true"
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							resetValues="true"
 							oncomplete="PF('deleteSatDialogWidget').show()"
 							value="#{messages.admin_status_table_delete_tooltip}"
 							title="#{messages.admin_status_table_delete_title}">
@@ -162,7 +163,8 @@
 			<h:form id="sdeleteForm">
 				<p:commandButton id="deleteYesButton"
 					value="#{messages.admin_status_delete_yes_label}"
-					action="#{jJStatusBean.deleteStatus}" update=":tabview:statusForm :growlForm"
+					action="#{jJStatusBean.deleteStatus}"
+					update=":tabview:statusForm :growlForm"
 					oncomplete="PF('deleteSatDialogWidget').hide()" />
 				<p:commandButton id="deleteNoButton"
 					value="#{messages.admin_status_delete_no_label}"

@@ -57,7 +57,8 @@ td.ui-fileupload-preview {
 						<f:setPropertyActionListener value="#{project}"
 							target="#{jJProjectBean.projectAdmin}" />
 
-						<p:menuitem id="deleteButton" icon="ui-icon-trash" resetValues="true"
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							resetValues="true"
 							oncomplete="PF('projectDeleteDialogWidget').show()"
 							value="#{messages.admin_project_table_delete_title}"
 							title="#{messages.label_delete}">
@@ -122,20 +123,24 @@ td.ui-fileupload-preview {
 						</p:row>
 						<p:row>
 							<p:column colspan="2">
-								<p:watermark for="projectSD" value="#{messages.admin_project_new_startDate_label}" />
+								<p:watermark for="projectSD"
+									value="#{messages.admin_project_new_startDate_label}" />
 								<p:calendar id="projectSD" navigator="true" effect="slideDown"
 									pattern="dd/MM/yyyy" required="true"
-									binding="#{startDateEdition}" requiredMessage="#{messages.admin_project_new_startDate_alert}"
+									binding="#{startDateEdition}"
+									requiredMessage="#{messages.admin_project_new_startDate_alert}"
 									value="#{jJProjectBean.projectAdmin.startDate}" />
 							</p:column>
 							<p:column colspan="2">
-								<p:watermark for="projectED" value="#{messages.admin_project_new_endDate_label}" />
+								<p:watermark for="projectED"
+									value="#{messages.admin_project_new_endDate_label}" />
 								<p:calendar id="projectED" navigator="true" effect="slideDown"
-									pattern="dd/MM/yyyy" required="true" requiredMessage="#{messages.admin_project_new_endDate_alert}"
+									pattern="dd/MM/yyyy" required="true"
+									requiredMessage="#{messages.admin_project_new_endDate_alert}"
 									value="#{jJProjectBean.projectAdmin.endDate}">
 									<f:validator validatorId="dateRangeValidator" />
 									<f:attribute name="startDateComponent"
-										value="#{startDateEdition}" />									
+										value="#{startDateEdition}" />
 								</p:calendar>
 							</p:column>
 						</p:row>

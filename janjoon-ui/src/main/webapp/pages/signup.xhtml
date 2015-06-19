@@ -26,8 +26,8 @@
 							style="margin-top:20px;" />
 					</p:column>
 					<p:column>
-						<p:inputText id="firstName" value="#{jJContactBean.contactAdmin.firstname}"
-							required="true"
+						<p:inputText id="firstName"
+							value="#{jJContactBean.contactAdmin.firstname}" required="true"
 							requiredMessage="#{messages.signup_necessaryFirstName_label}">
 							<f:validateLength maximum="100" />
 						</p:inputText>
@@ -47,8 +47,8 @@
 							style="margin-top:20px;" />
 					</p:column>
 					<p:column>
-						<p:inputText id="lastName" value="#{jJContactBean.contactAdmin.name}"
-							required="true"
+						<p:inputText id="lastName"
+							value="#{jJContactBean.contactAdmin.name}" required="true"
 							requiredMessage="#{messages.signup_necessaryLastName_label}">
 							<f:validateLength maximum="100" />
 						</p:inputText>
@@ -61,13 +61,12 @@
 				</p:row>
 				<p:row>
 					<p:column>
-						<h:outputLabel for="email"
-							value="#{messages.signup_mail_label}:"
+						<h:outputLabel for="email" value="#{messages.signup_mail_label}:"
 							style="margin-top:20px;" />
 					</p:column>
 					<p:column>
-						<p:inputText id="email" value="#{jJContactBean.contactAdmin.email}"
-							required="true"
+						<p:inputText id="email"
+							value="#{jJContactBean.contactAdmin.email}" required="true"
 							requiredMessage="#{messages.signup_necessaryEmail_label}">
 							<f:validator validatorId="emailValidator" />
 							<f:attribute name="contact" value="#{jJContactBean.contactAdmin}" />
@@ -87,8 +86,8 @@
 							style="margin-top:20px;" />
 					</p:column>
 					<p:column>
-						<p:password id="mdp" value="#{jJContactBean.contactAdmin.password}"
-							required="true"
+						<p:password id="mdp"
+							value="#{jJContactBean.contactAdmin.password}" required="true"
 							requiredMessage="#{messages.signup_necessaryPassword_label}" />
 					</p:column>
 				</p:row>
@@ -98,31 +97,30 @@
 					</p:column>
 				</p:row>
 				<p:row>
-						<p:column>
-							<p:outputLabel for="company"
-								value="Company" />
-						</p:column>
-						<p:column>
-							<p:selectOneMenu id="company"
-								value="#{jJContactBean.contactAdmin.company}"
-								effect="fade" required="true"
-								converter="com.starit.janjoonweb.ui.mb.converter.JJCompanyConverter">
+					<p:column>
+						<p:outputLabel for="company" value="Company" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="company"
+							value="#{jJContactBean.contactAdmin.company}" effect="fade"
+							required="true"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJCompanyConverter">
 
-								<f:selectItem itemValue="#{null}"
-									itemLabel="#{messages.signup_select_company}" />
-								<f:selectItems  value="#{jJCompanyBean.companies}" var="p"
-									itemLabel="#{p.name}" itemValue="#{p}" />
-							</p:selectOneMenu>
-						</p:column>
-					</p:row>
-					<p:row>
+							<f:selectItem itemValue="#{null}"
+								itemLabel="#{messages.signup_select_company}" />
+							<f:selectItems value="#{jJCompanyBean.companies}" var="p"
+								itemLabel="#{p.name}" itemValue="#{p}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
 					<p:column colspan="2">
 						<p:message for="company" closable="true" />
 					</p:column>
 				</p:row>
 				<p:row>
 					<p:column colspan="2">
-						<p:captcha id="captcha" label="Captcha"  secure="true" />
+						<p:captcha id="captcha" label="Captcha" secure="true" />
 					</p:column>
 				</p:row>
 				<p:row>

@@ -11,7 +11,7 @@
 			rowKey="#{mes.id}" var="mes" scrollable="true"
 			rendered="#{loginBean.enable}" scrollHeight="300"
 			rowStyleClass="#{mes.criticity.name}" style="border-spacing:0px;"
-			selectionMode="single" >
+			selectionMode="single">
 			<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
 				listener="#{jJMessageBean.onRowSelect}" immediate="true"
 				oncomplete="PF('viewDialogWidget1').show()" />

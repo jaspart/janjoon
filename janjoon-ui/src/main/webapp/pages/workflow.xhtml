@@ -129,7 +129,7 @@
 					<f:facet name="header">
 						<p:messages id="msg" showDetail="false" closable="true" />
 					</f:facet>
-					<h:panelGrid id="createWorkFlowPanelGrid" columns="2" 
+					<h:panelGrid id="createWorkFlowPanelGrid" columns="2"
 						styleClass="dialog" columnClasses="col1,col2,col3">
 						<p:outputLabel for="workflowName" value="Name:" />
 						<p:inputTextarea value="#{jJWorkflowBean.JJWorkflow_.name}"
@@ -153,43 +153,53 @@
 							rendered="#{loginBean.mobile}"
 							value="#{jJWorkflowBean.JJWorkflow_.description}" required="true"
 							requiredMessage="WorkFlow Description is a required value" />
-							
-						<p:outputLabel for="workFlowAction" value="#{messages.admin_workflow_table_action_title} : " />
-						<p:autoComplete id="workFlowAction" scrollHeight="200"
-							widgetVar="workFlowAction" value="#{jJWorkflowBean.JJWorkflow_.actionWorkflow}"
-							itemValue="#{action}" required="true"
-							dropdown="true" var="action" itemLabel="#{action}"
-							completeMethod="#{jJWorkflowBean.completeAction}"/>	
 
-						<p:outputLabel for="workFlowObjet" value="#{messages.admin_workflow_table_object_title} : " />
+						<p:outputLabel for="workFlowAction"
+							value="#{messages.admin_workflow_table_action_title} : " />
+						<p:autoComplete id="workFlowAction" scrollHeight="200"
+							widgetVar="workFlowAction"
+							value="#{jJWorkflowBean.JJWorkflow_.actionWorkflow}"
+							itemValue="#{action}" required="true" dropdown="true"
+							var="action" itemLabel="#{action}"
+							completeMethod="#{jJWorkflowBean.completeAction}" />
+
+						<p:outputLabel for="workFlowObjet"
+							value="#{messages.admin_workflow_table_object_title} : " />
 						<p:autoComplete id="workFlowObjet" scrollHeight="200"
-							widgetVar="workFlowObjet" value="#{jJWorkflowBean.JJWorkflow_.objet}"
-							itemValue="#{objet}" required="true"
-							dropdown="true" var="objet" itemLabel="#{objet}"
-							completeMethod="#{jJWorkflowBean.completeObject}">							
-							<p:ajax event="itemSelect" update="workFlowObjet workFlowTarget workFlowSource" />
+							widgetVar="workFlowObjet"
+							value="#{jJWorkflowBean.JJWorkflow_.objet}" itemValue="#{objet}"
+							required="true" dropdown="true" var="objet" itemLabel="#{objet}"
+							completeMethod="#{jJWorkflowBean.completeObject}">
+							<p:ajax event="itemSelect"
+								update="workFlowObjet workFlowTarget workFlowSource" />
 						</p:autoComplete>
-						
-						<p:outputLabel for="workFlowSource" value="#{messages.admin_workflow_table_source_title} : " />
+
+						<p:outputLabel for="workFlowSource"
+							value="#{messages.admin_workflow_table_source_title} : " />
 						<p:autoComplete id="workFlowSource" scrollHeight="200"
-							widgetVar="workFlowSource" value="#{jJWorkflowBean.JJWorkflow_.source}"							
+							widgetVar="workFlowSource"
+							value="#{jJWorkflowBean.JJWorkflow_.source}"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
-							itemValue="#{source}" required="true"
-							dropdown="true" var="source" itemLabel="#{source.name}"
-							completeMethod="#{jJWorkflowBean.completeSource}">							
-							<f:attribute name="objet" value="#{jJWorkflowBean.JJWorkflow_.objet}" />
+							itemValue="#{source}" required="true" dropdown="true"
+							var="source" itemLabel="#{source.name}"
+							completeMethod="#{jJWorkflowBean.completeSource}">
+							<f:attribute name="objet"
+								value="#{jJWorkflowBean.JJWorkflow_.objet}" />
 						</p:autoComplete>
-						
-						<p:outputLabel for="workFlowTarget" value="#{messages.admin_workflow_table_target_title} : " />
+
+						<p:outputLabel for="workFlowTarget"
+							value="#{messages.admin_workflow_table_target_title} : " />
 						<p:autoComplete id="workFlowTarget" scrollHeight="200"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
-							widgetVar="workFlowTarget" value="#{jJWorkflowBean.JJWorkflow_.target}"
-							itemValue="#{target}" required="true"
-							dropdown="true" var="target" itemLabel="#{target.name}"
-							completeMethod="#{jJWorkflowBean.completeTarget}">							
-							<f:attribute name="objet" value="#{jJWorkflowBean.JJWorkflow_.objet}" />
+							widgetVar="workFlowTarget"
+							value="#{jJWorkflowBean.JJWorkflow_.target}"
+							itemValue="#{target}" required="true" dropdown="true"
+							var="target" itemLabel="#{target.name}"
+							completeMethod="#{jJWorkflowBean.completeTarget}">
+							<f:attribute name="objet"
+								value="#{jJWorkflowBean.JJWorkflow_.objet}" />
 						</p:autoComplete>
-						
+
 					</h:panelGrid>
 					<f:facet name="footer">
 						<p:commandButton id="createWorkFlowSaveButton"

@@ -65,7 +65,8 @@ td.ui-fileupload-preview {
 						<f:setPropertyActionListener value="#{product}"
 							target="#{jJProductBean.productAdmin}" />
 
-						<p:menuitem id="deleteButton" icon="ui-icon-trash" resetValues="true"
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							resetValues="true"
 							oncomplete="PF('productDeleteDialogWidget').show()"
 							value="#{messages.admin_product_table_delete_label}"
 							title="#{messages.admin_product_delete_tooltip}">

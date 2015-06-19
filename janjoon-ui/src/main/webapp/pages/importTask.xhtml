@@ -177,9 +177,9 @@
 
 			<p:column style="width:15%" headerText="Specification">
 				<p:panel style="height: 25px;width: 30px; margin: auto;">
-					<p:commandButton id="specButton" value="#{format.specification ? 'X' : ' '}"
-						styleClass="checkBoxButton" 
-						update="specButton"
+					<p:commandButton id="specButton"
+						value="#{format.specification ? 'X' : ' '}"
+						styleClass="checkBoxButton" update="specButton"
 						actionListener="#{format.setSpecification(!format.specification)}" />
 				</p:panel>
 			</p:column>

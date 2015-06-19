@@ -9,7 +9,8 @@
 <f:event listener="#{loginBean.checkAuthorities}" type="preRenderView" />
 <f:view locale="#{localeBean.locale}" contentType="text/html">
 	<h:head>
-		<link rel="shortcut icon" type="image/png" href="#{request.contextPath}/resources/images/janjoon_logo.ico" />
+		<link rel="shortcut icon" type="image/png"
+			href="#{request.contextPath}/resources/images/janjoon_logo.ico" />
 		<h:outputScript library="primefaces" name="jquery/jquery.js" />
 		<script type="text/javascript">
 			function centerDialog() {
@@ -43,8 +44,8 @@
 					<ui:include src="generic-login.xhtml" />
 				</ui:insert>
 
-				<p:panel id="contentPanel" styleClass="content">					
-					<ui:insert name="content" />					
+				<p:panel id="contentPanel" styleClass="content">
+					<ui:insert name="content" />
 				</p:panel>
 				<ui:insert name="footer">
 					<ui:include src="footer.xhtml" />

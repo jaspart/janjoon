@@ -55,13 +55,12 @@
 			</p:column>
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugRequirement" scrollHeight="200"
-					value="#{JJBug_.requirement}"
-					widgetVar="jJbugRequirementWV"
+					value="#{JJBug_.requirement}" widgetVar="jJbugRequirementWV"
 					disabled="#{jJBugBean.bugProjectSelected==null and jJProjectBean.project == null}"
 					itemLabel="#{requirement.name}" itemValue="#{requirement}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
 					dropdown="true" var="requirement"
-					onchange="jJbugTeststepWV.val('');"					
+					onchange="jJbugTeststepWV.val('');"
 					completeMethod="#{jJBugBean.completeReqBug}">
 					<p:ajax event="itemSelect" update="jJbugRequirement jJbugTeststep" />
 					<f:attribute name="project" value="#{jJBugBean.bugProjectSelected}" />
@@ -76,9 +75,9 @@
 					converter="com.starit.janjoonweb.ui.mb.converter.JJTeststepConverter"
 					disabled="#{jJBugBean.bugProjectSelected == null and jJProjectBean.project == null and JJBug_.requirement==null}"
 					dropdown="true" var="teststep" itemLabel="#{teststep.name}"
-					completeMethod="#{jJBugBean.completeTestStepsBug}" >
+					completeMethod="#{jJBugBean.completeTestStepsBug}">
 					<p:column>
-						<h:outputText value="#{teststep.name}" escape="false"/>
+						<h:outputText value="#{teststep.name}" escape="false" />
 					</p:column>
 					<f:attribute name="requirement" value="#{JJBug_.requirement}" />
 					<f:attribute name="project" value="#{jJBugBean.bugProjectSelected}" />
@@ -96,10 +95,11 @@
 					dropdown="true" var="project" scrollHeight="200"
 					completeMethod="#{jJBugBean.completeProject}">
 
-					<p:ajax event="itemSelect" listener="#{jJBugBean.changeEvent('project',JJBug_)}"
+					<p:ajax event="itemSelect"
+						listener="#{jJBugBean.changeEvent('project',JJBug_)}"
 						update="jJbugRequirement jJbugTeststep jJbugProject">
-						<f:setPropertyActionListener
-							target="#{JJBug_.requirement}" value="#{null}" />
+						<f:setPropertyActionListener target="#{JJBug_.requirement}"
+							value="#{null}" />
 					</p:ajax>
 
 				</p:autoComplete>
@@ -124,10 +124,10 @@
 					converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
 					dropdown="true" var="version"
 					completeMethod="#{jJBugBean.completeVersioningBug}">
-					<p:ajax event="itemSelect" update="jJbugVersion jJbugBuild" listener="#{jJBugBean.changeEvent('version',JJBug_)}" />
+					<p:ajax event="itemSelect" update="jJbugVersion jJbugBuild"
+						listener="#{jJBugBean.changeEvent('version',JJBug_)}" />
 				</p:autoComplete>
-				<p:selectOneMenu id="jJbugVersion2"
-					value="#{JJBug_.versioning}"
+				<p:selectOneMenu id="jJbugVersion2" value="#{JJBug_.versioning}"
 					rendered="#{jJVersionBean.version != null}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
 					<f:selectItem itemValue="#{jJVersionBean.version}"
@@ -148,8 +148,7 @@
 					completeMethod="#{jJBugBean.completeBuildBug}">
 					<f:attribute name="version" value="#{JJBug_.versioning}" />
 					<f:validator validatorId="bugValidator" />
-					<f:attribute name="jJbugVersion"
-						value="#{JJBug_.versioning}" />
+					<f:attribute name="jJbugVersion" value="#{JJBug_.versioning}" />
 				</p:autoComplete>
 				<p:watermark for="jJbugBuild" value="Build : " />
 			</p:column>
@@ -162,8 +161,8 @@
 					rendered="#{loginBean.mobile}" />
 				<br />
 				<pe:ckEditor id="jJBugDescription"
-					toolbar="#{imageStreamer.ckEditorToolBar}"
-					style="width:600px" rendered="#{!loginBean.mobile}"
+					toolbar="#{imageStreamer.ckEditorToolBar}" style="width:600px"
+					rendered="#{!loginBean.mobile}"
 					customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 					value="#{JJBug_.description}" required="true"
 					requiredMessage="Description is a required value" />

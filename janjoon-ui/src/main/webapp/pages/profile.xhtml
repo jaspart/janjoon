@@ -32,7 +32,8 @@
 							target="#{jJProfileBean.profileAdmin}" />
 
 
-						<p:menuitem id="deleteButton" icon="ui-icon-trash" resetValues="true"
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							resetValues="true"
 							oncomplete="PF('profileDeleteDialogWidget').show()"
 							title="#{messages.admin_profile_table_delete_tooltip}"
 							value="#{messages.admin_profile_table_delete_tooltip}">
@@ -115,8 +116,7 @@
 												listener="#{jJRightBean.handleSelectCategory()}" />
 											<f:converter
 												converterId="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter" />
-											<f:selectItem itemLabel="*"
-												itemValue="#{null}" />
+											<f:selectItem itemLabel="*" itemValue="#{null}" />
 											<f:selectItems value="#{jJRightBean.categories}" var="p"
 												itemLabel="#{p.name}" itemValue="#{p}" />
 										</p:selectOneMenu>

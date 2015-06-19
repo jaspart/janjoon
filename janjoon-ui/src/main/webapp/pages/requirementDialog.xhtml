@@ -34,9 +34,9 @@
 
 	<h:form id="requirementDialogForm" style="padding:0px;">
 		<p:panel styleClass="panelDialog">
-<!-- 			<f:facet name="header"> -->
-<!-- 				<p:messages id="msg" showDetail="false" closable="true" /> -->
-<!-- 			</f:facet> -->
+			<!-- 			<f:facet name="header"> -->
+			<!-- 				<p:messages id="msg" showDetail="false" closable="true" /> -->
+			<!-- 			</f:facet> -->
 			<p:panelGrid rendered="#{jJRequirementBean.requirement != null}">
 				<p:row>
 					<p:column>
@@ -197,7 +197,8 @@
 						<h:outputText
 							value="#{messages.specification_create_description_label}" />
 						<pe:ckEditor id="description"
-							toolbar="#{imageStreamer.ckEditorToolBar}" height="250px" width="600px"
+							toolbar="#{imageStreamer.ckEditorToolBar}" height="250px"
+							width="600px"
 							customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 							value="#{jJRequirementBean.requirement.description}"
 							required="true" rendered="#{!loginBean.mobile}"

@@ -15,7 +15,7 @@
 				style="white-space: nowrap;" />
 		</h:panelGrid>
 	</pe:blockUI>
-	<p:panelGrid id="viewTaskPanelGrid" columns="1" 
+	<p:panelGrid id="viewTaskPanelGrid" columns="1"
 		style="height: #{jJTaskBean.height}px ; width: #{jJTaskBean.width}px;">
 		<h:panelGrid columns="6" style="width: 100%">
 			<p:outputLabel value="Sprint :" for="taskSprint" />
@@ -77,13 +77,14 @@
 			<p:spinner id="taskWorkload" value="#{JJTask_.workloadPlanned}"
 				stepFactor="1" min="1" required="true" size="3" />
 			<p:outputLabel value="Specification :" for="taskSpec" />
-			<p:selectBooleanCheckbox id="taskSpec" value="#{JJTask_.specification}" />
-<!-- 			<p:panel style="height: 25px;width: 30px; margin: auto;"> -->
-<!-- 				<p:commandButton id="taskSpec" -->
-<!-- 					value="#{JJTask_.specification ? 'X' : ' '}" -->
-<!-- 					styleClass="checkBoxButton" update="taskSpec" -->
-<!-- 					actionListener="#{JJTask_.setSpecification(!JJTask_.specification)}" /> -->
-<!-- 			</p:panel>			 -->
+			<p:selectBooleanCheckbox id="taskSpec"
+				value="#{JJTask_.specification}" />
+			<!-- 			<p:panel style="height: 25px;width: 30px; margin: auto;"> -->
+			<!-- 				<p:commandButton id="taskSpec" -->
+			<!-- 					value="#{JJTask_.specification ? 'X' : ' '}" -->
+			<!-- 					styleClass="checkBoxButton" update="taskSpec" -->
+			<!-- 					actionListener="#{JJTask_.setSpecification(!JJTask_.specification)}" /> -->
+			<!-- 			</p:panel>			 -->
 		</h:panelGrid>
 		<p:panelGrid>
 			<p:row rowspan="5" rendered="#{JJTask_.bug != null}">

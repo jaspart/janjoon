@@ -6,69 +6,72 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
-	<p:panelGrid id="viewPanelGrid1" >
+	<p:panelGrid id="viewPanelGrid1">
 		<p:row>
-			<p:column style="border-style: none;" colspan="3" >
+			<p:column style="border-style: none;" colspan="3">
 				<p:outputLabel value="Name:" for="messageName" />
-			
+
 				<p:inputText id="messageName" value="#{JJMessage.name}"
 					readonly="true" />
 			</p:column>
-			<p:column  style="border-style: none;" colspan="3">
+			<p:column style="border-style: none;" colspan="3">
 				<p:outputLabel value="CreatedBy:" for="messageCreatedBy" />
-			
+
 				<p:inputText id="messageCreatedBy" readonly="true"
 					converter="JJContactConverter" value="#{JJMessage.createdBy}" />
 			</p:column>
-			</p:row>
+		</p:row>
 		<p:row>
-			<p:column  style="border-style: none;" colspan="2">
+			<p:column style="border-style: none;" colspan="2">
 				<p:outputLabel value="To:" for="messageTo" />
-			
+
 				<p:inputText id="messageTo" readonly="true"
 					converter="JJContactConverter" value="#{JJMessage.contact}" />
 			</p:column>
-		
-			<p:column  style="border-style: none;" colspan="2">
+
+			<p:column style="border-style: none;" colspan="2">
 				<p:outputLabel value="Project:" for="messageProject" />
-			
+
 				<p:inputText id="messageProject" readonly="true"
 					converter="JJProjectConverter" value="#{JJMessage.project}" />
 			</p:column>
-			<p:column  style="border-style: none;" colspan="2">
+			<p:column style="border-style: none;" colspan="2">
 				<p:outputLabel value="Product:" for="messageProduct" />
-			
+
 				<p:inputText id="messageProduct" readonly="true"
 					converter="JJProductConverter" value="#{JJMessage.product}" />
 			</p:column>
-			</p:row>
-			<p:row>
-			<p:column  style="border-style: none;" colspan="3">
+		</p:row>
+		<p:row>
+			<p:column style="border-style: none;" colspan="3">
 				<p:outputLabel value="Criticity:" for="messageCriticity" />
-		
+
 				<p:inputText id="messageCriticity" readonly="true"
 					converter="JJCriticityConverter" value="#{JJMessage.criticity}" />
 			</p:column>
-			<p:column  style="border-style: none;" colspan="3">
+			<p:column style="border-style: none;" colspan="3">
 				<p:outputLabel value="Status:" for="messageStatus" />
-			
+
 				<p:inputText id="messageStatus" readonly="true"
 					converter="JJStatusConverter" value="#{JJMessage.status}" />
 			</p:column>
-			
+
 		</p:row>
 		<p:row>
-			<p:column  style="border-style: none;width: 600px;height: 250px;" colspan="6">
-				<p:outputLabel value="Message:" for="messageMess" 		rendered="#{!loginBean.mobile}"/>
-				<p:outputLabel value="Message:" for="messageMessMobile" rendered="#{loginBean.mobile}"/>
-			
+			<p:column style="border-style: none;width: 600px;height: 250px;"
+				colspan="6">
+				<p:outputLabel value="Message:" for="messageMess"
+					rendered="#{!loginBean.mobile}" />
+				<p:outputLabel value="Message:" for="messageMessMobile"
+					rendered="#{loginBean.mobile}" />
+
 				<pe:ckEditor id="messageMess" toolbar="[['Copy']]"
 					style="width:680px" rendered="#{!loginBean.mobile}"
 					value="#{JJMessage.message}" readOnly="true" />
 
 				<p:editor id="messageMessMobile" style="width:680px"
-					rendered="#{loginBean.mobile}"
-					value="#{JJMessage.message}" readOnly="true" />
+					rendered="#{loginBean.mobile}" value="#{JJMessage.message}"
+					readOnly="true" />
 			</p:column>
 		</p:row>
 	</p:panelGrid>

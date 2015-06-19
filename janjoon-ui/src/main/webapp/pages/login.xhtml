@@ -11,7 +11,7 @@
 	<ui:define name="content">
 		<!-- 		<f:event listener="#{loginBean.checkAuthorities}" type="preRenderView"  /> -->
 		<h:form id="login" method="post">
-			<p:growl showDetail="true" id="auth"/>
+			<p:growl showDetail="true" id="auth" />
 			<p:panelGrid style="background-color:transparent;margin: 0 auto;">
 				<f:facet name="header">
 					<p:row>
@@ -19,7 +19,7 @@
 							<p:outputLabel value="#{messages.login_pleaseLogin_header}" />
 						</p:column>
 					</p:row>
-				</f:facet>				
+				</f:facet>
 				<p:row>
 					<p:column>
 						<h:outputLabel for="username"

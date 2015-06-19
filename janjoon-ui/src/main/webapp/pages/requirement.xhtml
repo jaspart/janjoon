@@ -71,13 +71,13 @@
 				<p:remoteCommand name="updateTree" update="@form" />
 				<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
 					style="float: right;" />
-				<p:rating id="rate" value="#{requirementBean.rated}"  
-				style="float: right;margin-top: 3%;margin-right: -2%;" stars="1"
-						rendered="#{requirementBean.requirement != null}">
+				<p:rating id="rate" value="#{requirementBean.rated}"
+					style="float: right;margin-top: 3%;margin-right: -2%;" stars="1"
+					rendered="#{requirementBean.requirement != null}">
 					<p:ajax event="rate" listener="#{requirementBean.onrate}"
 						onstart="PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock()"
-						update=":growlForm :messageCreationForm :headerForm:communicationButton"  />
+						update=":growlForm :messageCreationForm :headerForm:communicationButton" />
 					<p:ajax event="cancel" listener="#{requirementBean.oncancel}"
 						onstart="PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock()"
@@ -230,8 +230,8 @@
 							</p:column>
 							<p:column colspan="3">
 								<pe:ckEditor id="description"
-									toolbar="#{imageStreamer.ckEditorToolBar}"
-									height="60%" width="98%"
+									toolbar="#{imageStreamer.ckEditorToolBar}" height="60%"
+									width="98%"
 									customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 									value="#{requirementBean.requirement.description}"
 									required="true" rendered="#{!loginBean.mobile}"
@@ -383,20 +383,20 @@
 							</h:form>
 						</p:column>
 					</p:row>
-					
+
 				</p:panelGrid>
-			</h:panelGrid>			
+			</h:panelGrid>
 		</p:panel>
 		<p:fieldset id="container" legend="Comments" toggleable="true"
-				style="margin-top: 10px;width:95%;"
-				rendered="#{loginBean.enable and requirementBean.requirement != null}">
-				<ui:include src="/pages/communication.xhtml">
-					<ui:param name="communicationList"
-						value="#{requirementBean.communicationMessages}" />
-					<ui:param name="field" value="#{requirementBean.requirement}" />
-					<ui:param name="cols" value="170"/>
-				</ui:include>
-			</p:fieldset>
+			style="margin-top: 10px;width:95%;"
+			rendered="#{loginBean.enable and requirementBean.requirement != null}">
+			<ui:include src="/pages/communication.xhtml">
+				<ui:param name="communicationList"
+					value="#{requirementBean.communicationMessages}" />
+				<ui:param name="field" value="#{requirementBean.requirement}" />
+				<ui:param name="cols" value="170" />
+			</ui:include>
+		</p:fieldset>
 
 
 		<p:dialog id="requirementDialog" draggable="false"

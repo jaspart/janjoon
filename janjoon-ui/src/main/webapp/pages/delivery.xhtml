@@ -9,6 +9,12 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
+		<style type="text/css">
+.ui-datatable .ui-row-toggler {
+	float: left;
+  	margin-left: -25%;
+}
+</style>
 		<p:panel id="deliveryPanel" style="height: #{jJBuildBean.height};">
 			<p:commandButton value="#{messages.specification_video_help_title}"
 				style="float: right;margin-right: -10px;margin-top: -7px;"
@@ -34,6 +40,13 @@
 									oncomplete="PF('blockUIWidget').unblock()" />
 								<p:column style="width:10%;">
 									<p:rowToggler />
+									<p:commandLink target="_blank"
+										style="float: right;margin-right: -25%;"
+										action="#{jJBuildBean.getZipFile(build)}" ajax="false"
+										disabled="#{jJBuildBean.haveUrl(build)}" title="Download">
+										<p:graphicImage name="download.ico" library="images"
+											width="14" height="14" />
+									</p:commandLink>
 								</p:column>
 								<p:column headerText="Build">
 									<h:outputText value="#{build.name}" />

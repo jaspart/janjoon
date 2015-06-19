@@ -1,10 +1,12 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -36,7 +38,7 @@ public class JJBuildBean {
 
 	@Autowired
 	private JJProductService jJProductService;
-	
+
 	@Autowired
 	private JJPhaseService jJPhaseService;
 
@@ -111,28 +113,58 @@ public class JJBuildBean {
 	public void setBuildDataModelList(List<BuildDataModel> buildDataModelList) {
 		this.buildDataModelList = buildDataModelList;
 	}
-	
+
+	public boolean haveUrl(JJBuild build) {
+
+		return !build.getDescription().contains("[URL]=");
+	}
+
+	public void getZipFile(JJBuild build) {
+
+		if (build.getDescription().contains("")
+				&& build.getDescription().contains(".zip")) {
+			try {
+				String URL = build.getDescription().substring(
+						build.getDescription().indexOf("[URL]=")
+								+ "[URL]=".length(),
+						build.getDescription().indexOf(".zip")
+								+ ".zip".length());
+
+				ExternalContext externalContext = FacesContext
+						.getCurrentInstance().getExternalContext();
+
+				externalContext.redirect(URL);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
 	public List<JJPhase> completePhase(String query) {
-        List<JJPhase> suggestions = new ArrayList<JJPhase>();
-        if(phases == null)
-        	phases=jJPhaseService.findAllJJPhases();
-        for (JJPhase jJPhase : phases) {
-            String jJPhaseStr = String.valueOf(jJPhase.getName() +  " "  + 
-        jJPhase.getDescription() +  " "  + jJPhase.getCreationDate() +  " "  + jJPhase.getUpdatedDate());
-            if (jJPhaseStr.toLowerCase().contains(query.toLowerCase())) {
-                suggestions.add(jJPhase);
-            }
-        }
-        return suggestions;
-    }
-	
-	public void changeEvent(JJBuild b)
-	{
+		List<JJPhase> suggestions = new ArrayList<JJPhase>();
+		if (phases == null)
+			phases = jJPhaseService.findAllJJPhases();
+		for (JJPhase jJPhase : phases) {
+			String jJPhaseStr = String.valueOf(jJPhase.getName() + " "
+					+ jJPhase.getDescription() + " "
+					+ jJPhase.getCreationDate() + " "
+					+ jJPhase.getUpdatedDate());
+			if (jJPhaseStr.toLowerCase().contains(query.toLowerCase())) {
+				suggestions.add(jJPhase);
+			}
+		}
+		return suggestions;
+	}
+
+	public void changeEvent(JJBuild b) {
 		updateJJBuild(b);
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated", "Build");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		
+
 	}
 
 	public void loadingRowExpansion(JJVersion v) {
@@ -233,7 +265,7 @@ public class JJBuildBean {
 
 			if (j != 0)
 				i = i + 1;
-			return 300 * i+100 + "px";
+			return 300 * i + 100 + "px";
 		} else
 			return "100px";
 
@@ -242,7 +274,7 @@ public class JJBuildBean {
 	public void initBuildDataModelList() {
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		buildDataModelList = new ArrayList<BuildDataModel>();
-		phases=jJPhaseService.findAllJJPhases();
+		phases = jJPhaseService.findAllJJPhases();
 		if (LoginBean.getProduct() == null) {
 
 			for (JJProduct prod : jJProductService.getProducts(loginBean
@@ -324,7 +356,7 @@ public class JJBuildBean {
 			JJContact contact = ((LoginBean) ((HttpSession) FacesContext
 					.getCurrentInstance().getExternalContext()
 					.getSession(false)).getAttribute("loginBean")).getContact();
-			b.setCreatedBy(contact);			
+			b.setCreatedBy(contact);
 			jJBuildService.saveJJBuild(b);
 			return true;
 		} else
