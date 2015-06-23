@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13950744793370" configfile="/janjoon-ui/src/main/webapp/WEB-INF/faces-config.xml">
-  <nodes xsi:type="pageflow:PFPage" name="pages/login" x="180" y="108" id="pf14176128474840" referenceLink="//@navigationRule.1/@navigationCase.1/@toViewId|" outlinks="pf14176128474841 pf14176128474842" inlinks="pf14176128474841 pf14260022315802" path="/pages/login.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="pages/bugs" x="576" y="65" id="pf14176128474843" referenceLink="//@navigationRule.1/@navigationCase.0/@toViewId|" inlinks="pf14176128474842" path="/pages/bugs.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/login" x="180" y="108" id="pf14176128474840" referenceLink="//@navigationRule.2/@fromViewId|" outlinks="pf14176128474841 pf14176128474842" inlinks="pf14176128474841 pf14260022315802" path="/pages/login.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/bugs" x="576" y="65" id="pf14176128474843" referenceLink="//@navigationRule.2/@navigationCase.0/@toViewId|" inlinks="pf14176128474842" path="/pages/bugs.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="pages/signup" id="pf14260022015640" referenceLink="//@navigationRule.1/@fromViewId|" outlinks="pf14260022015641 pf14260022315802" inlinks="pf14260022015641" path="/pages/signup.xhtml"/>
   <links id="pf14176128474841" target="pf14176128474840" source="pf14176128474840" outcome="fail" fromaction="#{loginBean.login}"/>
   <links id="pf14176128474842" target="pf14176128474843" source="pf14176128474840" outcome="bug" fromaction="#{jJBugBean.persistBug}"/>

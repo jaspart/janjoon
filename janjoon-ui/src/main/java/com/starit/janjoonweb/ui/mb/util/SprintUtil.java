@@ -22,17 +22,16 @@ public class SprintUtil {
 	private Integer consumed;
 	private Integer workload;
 	private boolean render;
-	
+
 	private Integer priseReal;
 	private Integer priseSold;
-	
 
 	public SprintUtil(JJSprint sprint, List<JJTask> tasks,
 			JJContactService jJContactService) {
 		this.sprint = sprint;
 		this.jJContactService = jJContactService;
 		this.neditabale = false;
-		this.chartModel = new CartesianChartModel();
+		this.chartModel = new BarChartModel();
 		calculateField(tasks);
 		if (tasks != null && !tasks.isEmpty())
 			initChartModel(tasks);
@@ -174,15 +173,14 @@ public class SprintUtil {
 		return chartModel;
 	}
 
-	public void setChartModel(CartesianChartModel chartModel) {
-		this.chartModel = chartModel;
-	}
+//	public void setChartModel(CartesianChartModel chartModel) {
+//		this.chartModel = chartModel;
+//	}
 
 	private void calculateField(List<JJTask> tasks) {
 		Integer i = 0;
 		Integer j = 0;
-		// priseReal = 0;
-		// priseSold = 0;
+		
 		this.render = (sprint.getId() == null);
 		if (!render) {
 
@@ -196,20 +194,6 @@ public class SprintUtil {
 					doneTask = new ArrayList<JJTask>();
 
 					for (JJTask task : tasks) {
-
-						// if (task.getAssignedTo() != null
-						// && task.getWorkloadReal() != null
-						// && task.getAssignedTo().getPriceReal() != null) {
-						// priseReal = priseReal + task.getWorkloadReal()
-						// * task.getAssignedTo().getPriceReal();
-						// }
-						//
-						// if (task.getAssignedTo() != null
-						// && task.getWorkloadReal() != null
-						// && task.getAssignedTo().getPriceSold() != null) {
-						// priseSold = priseSold + task.getWorkloadReal()
-						// * task.getAssignedTo().getPriceSold();
-						// }
 
 						if (task.getWorkloadPlanned() != null)
 							i = i + task.getWorkloadPlanned();
@@ -247,14 +231,9 @@ public class SprintUtil {
 		int workload = this.workload;
 		int diff = 0;
 
-		// for (JJTask task : tasks) {
-		// if (task.getWorkloadPlanned() != null)
-		// workload = workload + task.getWorkloadPlanned();
-		// }
-
 		diff = workload;
 		List<JJTask> removedTasks = new ArrayList<JJTask>();
-		ChartSeries chartSeries = new ChartSeries();
+		BarChartSeries chartSeries = new BarChartSeries();
 		LineChartSeries lineSeries = new LineChartSeries();
 		ContactCalendarUtil calendar = new ContactCalendarUtil(
 				((LoginBean) LoginBean.findBean("loginBean")).getContact()
@@ -340,14 +319,19 @@ public class SprintUtil {
 			}
 			workload = Math.max(workload, 0);
 			chartSeries.set(f.format(staDate), workload);
-		}
+		}	
 
 		chartModel.addSeries(chartSeries);
 		chartModel.addSeries(lineSeries);
-		DateAxis axis = new DateAxis("Dates");
-		axis.setTickAngle(-50);
-		chartModel.getAxes().put(AxisType.X, axis);
+		chartModel.setLegendPosition("ne");
+		chartModel.setAnimate(true);		
+		
+		chartModel.getAxis(AxisType.X).setTickAngle(-50);		
+		chartModel.getAxis(AxisType.X).setTickFormat("%b %#d, %y");
+		chartModel.getAxis(AxisType.X).setLabel("Date");
+		
 		chartModel.getAxis(AxisType.Y).setMin(0);
+		chartModel.getAxis(AxisType.Y).setLabel("WorkLoad");
 	}
 
 	public static List<SprintUtil> generateSprintUtilList(

@@ -63,7 +63,7 @@ public class JJStatusBean {
 	private MeterGaugeChartModel prjMetergauge;
 	private JJProject project;
 	private List<CategoryDataModel> categoryDataModel;
-	private Boolean first;
+	//private Boolean first;
 
 	public LazyStatusDataModel getLazyStatusList() {
 		if (lazyStatusList == null)
@@ -150,26 +150,26 @@ public class JJStatusBean {
 	}
 
 	public void setFirst(Boolean bb) {
-		this.first = bb;
+		//this.first = bb;
 	}
 
 	public void onTabStatChange(TabChangeEvent event) {
-
-		TabView tv = (TabView) event.getComponent();
-		if (tv.getChildren().indexOf(event.getTab()) == 1 && first) {
-			RequestContext.getCurrentInstance().execute(
-					"PF('statsTabView').select(0)");
-			RequestContext.getCurrentInstance().execute(
-					"PF('statsTabView').select(1)");
-			first = false;
-		}
+//
+//		TabView tv = (TabView) event.getComponent();
+//		if (tv.getChildren().indexOf(event.getTab()) == 1 && first) {
+//			RequestContext.getCurrentInstance().execute(
+//					"PF('statsTabView').select(0)");
+//			RequestContext.getCurrentInstance().execute(
+//					"PF('statsTabView').select(1)");
+//			first = false;
+//		}
 	}
 
 	@SuppressWarnings("serial")
 	public void loadData() {
 
 		if (project == null) {
-			first = true;
+			//first = true;
 			if (((JJSprintBean) LoginBean.findBean("jJSprintBean"))
 					.getSprintList() == null
 					|| ((JJSprintBean) LoginBean.findBean("jJSprintBean"))
@@ -202,7 +202,13 @@ public class JJStatusBean {
 											.getVersion(), s, true));
 					pieChart.set(s.getName(), i);
 				}
-
+				
+				pieChart.setLegendPosition("e");
+				pieChart.setTitle("% Requierement");
+				pieChart.setFill(false);pieChart.setShowDataLabels(true);
+				pieChart.setDiameter(150);pieChart.setSliceMargin(5);
+				
+				
 				float bugKPI = 0L;
 				float projKPI = 0;
 				LoginBean loginBean = (LoginBean) LoginBean
@@ -283,7 +289,7 @@ public class JJStatusBean {
 			}
 
 		} else {
-			first = !LoginBean.isEqualPreviousPage("stats");
+			//first = !LoginBean.isEqualPreviousPage("stats");
 		}
 	}
 
@@ -775,8 +781,10 @@ public class JJStatusBean {
 			getCompletionProgress();
 			categoryPieChart = new PieChartModel();
 			categoryPieChart.set("Done", completionProgress * 100);
-			categoryPieChart.set("Not", 100 - completionProgress * 100);
-			// categoryPieChart.set
+			categoryPieChart.set("Not", 100 - completionProgress * 100);			
+			categoryPieChart.setShowDataLabels(true);
+			categoryPieChart.setFill(true);
+			categoryPieChart.setSeriesColors("8BADC6,FFFDF6");
 
 			return categoryPieChart;
 		}

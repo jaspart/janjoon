@@ -13,17 +13,17 @@
 			href="#{request.contextPath}/resources/images/janjoon_logo.ico" />
 		<h:outputScript library="primefaces" name="jquery/jquery.js" />
 		<script type="text/javascript">
-			function centerDialog() {
-				var top, left;
-				top = Math.max($(window).height() - $("#frame").outerHeight(),
-						0) / 2;
-				left = Math
-						.max($(window).width() - $("#frame").outerWidth(), 0) / 2;
-				$("#frame").css({
-					top : top,
-					left : left
-				});
-			}
+// 			function centerDialog() {
+// 				var top, left;
+// 				top = Math.max($(window).height() - $("#frame").outerHeight(),
+// 						0) / 2;
+// 				left = Math
+// 						.max($(window).width() - $("#frame").outerWidth(), 0) / 2;
+// 				$("#frame").css({
+// 					top : top,
+// 					left : left
+// 				});
+// 			}
 
 			function updateRowExapansion() {
 				$(".rowExpansion").slideUp("fast");
@@ -33,7 +33,6 @@
 
 				var copyDiv = document.createElement('div');
 				copyDiv.contentEditable = true;
-				//copiedText=copiedText.replace("\'", " ");
 				document.body.appendChild(copyDiv);
 				copyDiv.innerHTML = copiedText;
 				copyDiv.unselectable = "off";
@@ -41,7 +40,7 @@
 				document.execCommand('SelectAll');
 				document.execCommand("Copy", false, null);
 				document.body.removeChild(copyDiv);
-				alert(copiedText+" Copied");
+				//alert(copiedText+" Copied");
 			}
 		</script>
 	</h:head>

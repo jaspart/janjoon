@@ -147,9 +147,8 @@
 					<p:row>
 						<p:column rowspan="2"
 							style="width:60% !important; min-width:100px;">
-							<p:barChart value="#{jjsprint.chartModel}" legendPosition="e"
-								widgetVar="barChart_#{jjsprint.sprint.id}_Widget" minY="0"
-								xaxisLabel="Date" yaxisLabel="WorkLoad"
+							<p:chart type="bar" responsive="true" model="#{jjsprint.chartModel}"
+								widgetVar="barChart_#{jjsprint.sprint.id}_Widget"
 								style="width:98%;height:300px;" />
 						</p:column>
 					</p:row>

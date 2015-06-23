@@ -12,7 +12,6 @@
 		<style type="text/css">
 .ui-datatable .ui-row-toggler {
 	float: left;
-  	margin-left: -25%;
 }
 </style>
 		<p:panel id="deliveryPanel" style="height: #{jJBuildBean.height};">
@@ -38,10 +37,10 @@
 									update="buildDataTable_#{loop.index}"
 									onstart="updateRowExapansion();PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock()" />
-								<p:column style="width:10%;">
+								<p:column style="width:15%;">
 									<p:rowToggler />
 									<p:commandLink target="_blank"
-										style="float: right;margin-right: -25%;"
+										style="float: right;"
 										action="#{jJBuildBean.getZipFile(build)}" ajax="false"
 										disabled="#{jJBuildBean.haveUrl(build)}" title="Download">
 										<p:graphicImage name="download.ico" library="images"

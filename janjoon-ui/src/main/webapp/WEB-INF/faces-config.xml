@@ -63,11 +63,11 @@
 			<renderer-type>org.primefaces.component.ProgressBarRenderer</renderer-type>
 			<renderer-class>com.starit.janjoonweb.ui.mb.util.ProgressBarRendererImpl</renderer-class>
 		</renderer>
-		<renderer>
-			<component-family>org.primefaces.component</component-family>
-			<renderer-type>org.primefaces.component.DataTableRenderer</renderer-type>
-			<renderer-class>com.starit.janjoonweb.ui.mb.util.DataTableRendererImpl</renderer-class>
-		</renderer>
+<!-- 		<renderer> -->
+<!-- 			<component-family>org.primefaces.component</component-family> -->
+<!-- 			<renderer-type>org.primefaces.component.DataTableRenderer</renderer-type> -->
+<!-- 			<renderer-class>com.starit.janjoonweb.ui.mb.util.DataTableRendererImpl</renderer-class> -->
+<!-- 		</renderer> -->
 	</render-kit>
 
 </faces-config>

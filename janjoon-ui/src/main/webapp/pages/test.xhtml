@@ -435,20 +435,14 @@
 								<f:facet name="header">
 								#{messages.test_requirement_pieChart}
 								</f:facet>
-								<p:pieChart id="custom" value="#{chartBean.pieChart}"
-									legendPosition="e" fill="false" showDataLabels="true"
-									style="height:200px;margin: auto;width:300px;"
-									rendered="#{jJTestcaseBean.rendredTestCaseRecaps  and chartBean.pieChart != null}"
-									sliceMargin="5" seriesColors="#{chartBean.pieChartSerieColor}" />
+								<p:chart type="pie" id="custom" model="#{chartBean.pieChart}"
+									style="height:200px;margin: auto;width:300px;" responsive="true"
+									rendered="#{jJTestcaseBean.rendredTestCaseRecaps  and chartBean.pieChart != null}" />
 							</p:panelGrid>
 						</h:panelGrid>
 					</h:panelGrid>
-					<p:lineChart id="filled" value="#{chartBean.categoryModel}"
-						legendPosition="ne" title="#{messages.test_graph_testcase_title}"
-						seriesColors="#{chartBean.seriesColors}"
-						style="height:300px;margin-top:2%;"
-						xaxisLabel="#{messages.test_graph_ordinate_label}"
-						yaxisLabel="#{messages.test_graph_abscissa_label}" animate="true"
+					<p:chart id="filled" model="#{chartBean.categoryModel}"
+						style="height:300px;margin-top:2%;" responsive="true" type="line"
 						rendered="#{jJTestcaseBean.rendredTestCaseRecaps}" />
 
 					<p:dataTable id="teststepRecapDataTable" paginatorPosition="bottom"

@@ -21,21 +21,15 @@
 			<p:tab id="specTab" title="Status">
 				<h:form id="specForm">
 					<h:panelGrid id="statPanel" columns="3">
-						<p:pieChart id="custom" value="#{jJStatusBean.pieChart}"
-							legendPosition="e" fill="false" showDataLabels="true"
-							title="% Requierement" style="width:400px;height:300px"
-							sliceMargin="5" diameter="150" />
+						<p:chart id="custom" responsive="true"
+							model="#{jJStatusBean.pieChart}" style="width:400px;height:300px"
+							type="pie" />
 
-						<!-- 						<p:barChart value="#{jJStatusBean.chartModel}" title="KPI" -->
-						<!-- 						 minY="0" yaxisLabel="KPI" style="height:300px"  /> -->
 						<p:chart type="metergauge" model="#{jJStatusBean.bugMetergauge}"
-							style="width:400px;height:300px" />
+							style="width:400px;height:300px" responsive="true" />
 
 						<p:chart type="metergauge" model="#{jJStatusBean.prjMetergauge}"
-							style="width:400px;height:300px" />
-
-
-
+							style="width:400px;height:300px" responsive="true" />
 					</h:panelGrid>
 					<p:dataTable id="categoryTable" var="categoryModel"
 						value="#{jJStatusBean.categoryDataModel}">
@@ -46,28 +40,26 @@
 							<f:facet name="header">
 								<h:outputText value="Name" />
 							</f:facet>
-							<h:outputText value="#{categoryModel.category.name}" />
+							<h:outputText value="#{categoryModel.category.name}" style="margin: auto;"/>
 						</p:column>
 						<p:column>
 							<f:facet name="header">
-								<h:outputText
+								<h:outputText 
 									value="#{messages.specification_completion_progress}" />
 							</f:facet>
-							<!-- 							<p:progressBar id="coverage" style="width:385px" -->
-							<!-- 								value="#{categoryModel.completionProgress}" -->
-							<!-- 								labelTemplate="{value}%" displayOnly="true" /> -->
-							<p:pieChart id="coverage"
-								value="#{categoryModel.categoryPieChart}" fill="true"
-								showDataLabels="true"
-								style="width:200px;height:150px;margin: auto;"
-								seriesColors="8BADC6,FFFDF6" />
+<!-- 							<p:progressBar id="coverage" style="width:385px" -->
+<!-- 								value="#{categoryModel.completionProgress}" -->
+<!-- 								labelTemplate="{value}%" displayOnly="true" /> -->
+							<p:chart id="coverage" responsive="true" 
+								model="#{categoryModel.categoryPieChart}" type="pie"
+								style="width:200px;height:150px;margin: auto;" />
 						</p:column>
 						<p:column>
 							<f:facet name="header">
 								<h:outputText
 									value="#{messages.specification_coverage_progress}" />
 							</f:facet>
-							<p:progressBar style="width:385px"
+							<p:progressBar style="width:385px;margin: auto;"
 								value="#{categoryModel.coverageProgress}"
 								labelTemplate="{value}%" displayOnly="true" />
 						</p:column>
@@ -80,10 +72,10 @@
 					value="#{jJSprintBean.sprintList}" var="jjsprint">
 					<p:tab title="#{jjsprint.sprint.name}"
 						rendered="#{!jjsprint.render}">
-						<p:barChart value="#{jjsprint.chartModel}" legendPosition="e"
-							widgetVar="barChart_#{jjsprint.sprint.id}_Widget" minY="0"
-							rendered="#{!jjsprint.render}" xaxisLabel="Date"
-							yaxisLabel="WorkLoad" />
+						<p:chart model="#{jjsprint.chartModel}" type="bar"
+							style="height:400px;"
+							widgetVar="barChart_#{jjsprint.sprint.id}_Widget"
+							rendered="#{!jjsprint.render}" responsive="true" />
 					</p:tab>
 				</p:tabView>
 			</p:tab>

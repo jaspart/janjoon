@@ -19,14 +19,18 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.DateAxis;
+import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
 import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.TestCaseChartUtil;
 
 @ManagedBean(name = "chartBean")
@@ -34,7 +38,7 @@ import com.starit.janjoonweb.ui.mb.util.TestCaseChartUtil;
 @Configurable
 public class ChartBean implements Serializable {
 
-	private CartesianChartModel categoryModel;
+	private LineChartModel categoryModel;
 	private PieChartModel pieChart;
 	private String seriesColors = "000000, 097D0B, D8115A";
 	private String pieChartSerieColor = "0000FF,00FF00,FF0000";
@@ -56,7 +60,7 @@ public class ChartBean implements Serializable {
 		}
 
 		else {
-			categoryModel = new CartesianChartModel();
+			categoryModel = new LineChartModel();
 
 			ChartSeries totalTC = new ChartSeries("Total TC");
 			totalTC.set(f.format(new Date()), 0);
@@ -66,8 +70,8 @@ public class ChartBean implements Serializable {
 
 	}
 
-	private void createPieChart(JJTestcaseBean jJTestcaseBean) {		
-		
+	private void createPieChart(JJTestcaseBean jJTestcaseBean) {
+
 		List<TestCaseChartUtil> testcases = TestCaseChartUtil
 				.getTestCaseUtilFromJJTesCase(jJTestcaseBean.getTestcases());
 
@@ -84,8 +88,9 @@ public class ChartBean implements Serializable {
 
 			for (TestCaseChartUtil test : testcases) {
 
-				Boolean isPassed = jJTestcaseBean.getjJTestcaseexecutionService().isPassed(
-						test.getTestcase(), build, version);
+				Boolean isPassed = jJTestcaseBean
+						.getjJTestcaseexecutionService().isPassed(
+								test.getTestcase(), build, version);
 
 				if (isPassed == null)
 					noExec++;
@@ -98,16 +103,21 @@ public class ChartBean implements Serializable {
 			pieChart.set("Sans Exec", noExec);
 			pieChart.set("Passed", passed);
 			pieChart.set("Non Passed", notPasses);
+			pieChart.setSeriesColors(pieChartSerieColor);
+			pieChart.setFill(false);
+			pieChart.setLegendPosition("e");
+			pieChart.setSliceMargin(5);
+			pieChart.setShowDataLabels(true);
 
 		} else
 			pieChart = null;
 	}
 
-	public CartesianChartModel getCategoryModel() {
+	public LineChartModel getCategoryModel() {
 		return categoryModel;
 	}
 
-	public void setCategoryModel(CartesianChartModel categoryModel) {
+	public void setCategoryModel(LineChartModel categoryModel) {
 		this.categoryModel = categoryModel;
 	}
 
@@ -375,11 +385,31 @@ public class ChartBean implements Serializable {
 				failedTC.set(entry.getKey(), Integer.parseInt(entry.getValue()));
 			}
 
-		categoryModel = new CartesianChartModel();
+		categoryModel = new LineChartModel();
 		categoryModel.addSeries(totalTC);
 		categoryModel.addSeries(successTC);
 		categoryModel.addSeries(failedTC);
+		categoryModel.setAnimate(true);
+		categoryModel.setLegendPosition("ne");
+		categoryModel.setTitle(MessageFactory.getMessage(
+				"test_graph_testcase_title", "").getDetail());
+		categoryModel.setSeriesColors(seriesColors);
 
+		DateAxis axis = new DateAxis();
+		axis.setTickAngle(-50);
+		axis.setLabel(MessageFactory
+				.getMessage("test_graph_ordinate_label", "").getDetail());
+		axis.setTickFormat("%b %#d, %y");
+		categoryModel.getAxes().put(AxisType.X, axis);
+		
+//		cate goryModel.getAxis(AxisType.X).setTickAngle(-50);		
+//		categoryModel.getAxis(AxisType.X).setTickFormat("%b %#d, %y");
+//		categoryModel.getAxis(AxisType.X).setLabel(MessageFactory
+//				.getMessage("test_graph_ordinate_label", "").getDetail());
+
+		categoryModel.getAxis(AxisType.Y).setLabel(
+				MessageFactory.getMessage("test_graph_abscissa_label", "")
+						.getDetail());
 	}
 
 	public String getSeriesColors() {
