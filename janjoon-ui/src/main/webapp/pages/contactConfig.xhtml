@@ -11,25 +11,19 @@
 		<style type="text/css">
 .ui-datalist-data {
 	-webkit-padding-start: 15px;
-}
-
-.ui-fileupload-progress {
-	display: none;
-}
-
-.ui-fileupload-cancel {
-	display: none;
-}
-
-.ui-fileupload-files {
-	margin: 1px 0;
-	width: 150px !important;
-	display: inline-block;
-	height: 50px;
-}
-
-.ui-datatable table {
-	border-collapse: collapse;
+	/* } */
+	/* .ui-fileupload-progress { */
+	/* 	display: none; */
+	/* } */
+	/* .ui-fileupload-cancel { */
+	/* 	display: none; */
+	/* } */
+	/* .ui-fileupload-files { */
+	/* 	margin: 1px 0; */
+	/* 	width: 150px !important; */
+	/* 	display: inline-block; */
+	/* 	height: 50px; */
+	/* } */ . ui-datatable table { border-collapse : collapse;
 	table-layout: fixed;
 }
 </style>
@@ -73,6 +67,12 @@
 									value="#{imageStreamer.image}">
 									<f:param name="contactId" value="#{loginBean.contact.id}" />
 								</p:graphicImage>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="4">
+								<p:commandButton onclick="PF('changePhotoDialogWidget').show()"
+									value="Change" icon="ui-icon-plusthick" style="float:right;" />
 							</p:column>
 						</p:row>
 					</f:facet>
@@ -184,18 +184,18 @@
 							</p:selectManyMenu>
 						</p:column>
 					</p:row>
-					<p:row>
-						<p:column colspan="4">
-							<p:fileUpload
-								fileUploadListener="#{licenseBean.handleContactFileUpload}"
-								mode="advanced" dragDropSupport="true"
-								onstart="PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock();"
-								update=":vacationForm configForm :workdaysCalendar :growlForm"
-								sizeLimit="100000" allowTypes="/(gif|png|ico|jpeg|jpg)$/" />
+					<!-- 					<p:row> -->
+					<!-- 						<p:column colspan="4"> -->
+					<!-- 							<p:fileUpload -->
+					<!-- 								fileUploadListener="#{licenseBean.handleContactFileUpload}" -->
+					<!-- 								mode="advanced" dragDropSupport="true" -->
+					<!-- 								onstart="PF('blockUIWidget').block()" -->
+					<!-- 								oncomplete="PF('blockUIWidget').unblock();" -->
+					<!-- 								update=":vacationForm configForm :workdaysCalendar :growlForm" -->
+					<!-- 								sizeLimit="100000" allowTypes="/(gif|png|ico|jpeg|jpg)$/" /> -->
 
-						</p:column>
-					</p:row>
+					<!-- 						</p:column> -->
+					<!-- 					</p:row> -->
 					<f:facet name="footer">
 						<p:row>
 							<p:column colspan="4" style="text-align: right">
@@ -211,6 +211,21 @@
 					</f:facet>
 				</p:panelGrid>
 			</h:form>
+			<p:dialog id="changePhotoDialog" draggable="false" modal="true"
+				header="Change Photo" widgetVar="changePhotoDialogWidget"
+				dynamic="true" resizable="false">
+				<p:outputPanel id="changePhotoPanel">
+					<h:form id="changePhotoForm">
+						<p:fileUpload
+							fileUploadListener="#{licenseBean.handleContactFileUpload}"
+							mode="advanced" dragDropSupport="true"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock();PF('changePhotoDialogWidget').hide()"
+							update=":vacationForm :configForm :workdaysCalendar :growlForm"
+							sizeLimit="1000000" allowTypes="/(gif|png|ico|jpeg|jpg)$/" />
+					</h:form>
+				</p:outputPanel>
+			</p:dialog>
 			<h:form id="vacationForm" style="float: left;margin-left: 20px;">
 				<!-- 				<p:growl id="msg" /> -->
 				<p:panelGrid>

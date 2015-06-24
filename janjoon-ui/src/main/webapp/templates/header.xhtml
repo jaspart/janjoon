@@ -120,7 +120,7 @@
 						url="/pages/main.jsf?faces-redirect=true" style="width: 10px;" />
 
 					<p:menuitem value="#{messages.header_project_menuitem}"
-						url="/pages/planning.jsf?faces-redirect=true"
+						url="/pages/planning.jsf?faces-redirect=true" style="min-width: 80px;"
 						icon="ui-icon-calendar" update=":contentPanel"
 						rendered="#{!loginBean.enable and !loginBean.mobile}" />
 
@@ -130,7 +130,7 @@
 						title="#{loginBean.authorisationService.rProjectMSG}"
 						onstart="PF('blockUIWidget').block()"
 						actionListener="#{loginBean.redirection}" update=":growlForm"
-						icon="ui-icon-calendar"
+						icon="ui-icon-calendar" style="min-width: 80px;"
 						rendered="#{loginBean.enable and !loginBean.mobile}" />
 
 					<p:menuitem value="#{messages.header_spec_menuitem}"

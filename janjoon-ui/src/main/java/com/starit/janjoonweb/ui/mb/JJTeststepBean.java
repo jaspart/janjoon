@@ -128,8 +128,7 @@ public class JJTeststepBean {
 			teststep.setTestcase(tc);
 			// tc.getTeststeps().add(teststep);
 
-			teststep.setName(teststep.getActionstep() + " "
-					+ teststep.getResultstep());
+			teststep.setName("Teststep for "+tc.getName());
 
 			teststep.setDescription("This is " + teststep.getActionstep() + " "
 					+ teststep.getResultstep() + " description");

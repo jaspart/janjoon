@@ -30,16 +30,16 @@
 					id="category_#{category.category.id}"
 					onLabel="#{category.category.name}" rendered="#{!loginBean.mobile}"
 					offLabel="#{category.category.name}" onIcon="ui-icon-check"
-					offIcon="ui-icon-close"
+					offIcon="ui-icon-close" title="#{category.category.name}"
 					style="#{jJRequirementBean.getMarginLeft(category)}">
 					<p:ajax
 						listener="#{jJRequirementBean.updateTemplate(category.category.id,null,true,category.checked)}"
 						update=":specForm @form" onstart="PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock()" />
 				</p:selectBooleanButton>
-				<p:tooltip for="category_#{category.category.id}"
-					value="#{category.category.name}" showEffect="fade"
-					hideEffect="fade" />
+<!-- 				<p:tooltip for="category_#{category.category.id}" -->
+<!-- 					value="#{category.category.name}" showEffect="fade" -->
+<!-- 					hideEffect="fade" /> -->
 			</c:forEach>
 
 			<p:commandButton value="&#9776;" id="overlayPanel" title="Category"
@@ -56,7 +56,7 @@
 			<p:watermark
 				value="#{messages.specification_table_requirement_filter}"
 				for="globalFilter" />
-			<p:selectOneMenu id="mineSpec" value="#{jJRequirementBean.mine}"
+			<p:selectOneMenu id="mineSpec" value="#{jJRequirementBean.mine}" title="Filter"
 				styleClass="mineSelect" effect="fade" style="margin-left: 10%;">
 				<f:selectItem itemValue="#{false}" itemLabel="All" />
 				<f:selectItem itemValue="#{true}" itemLabel="Mine" />
@@ -65,15 +65,15 @@
 					listener="#{jJRequirementBean.mineChangeEvent}" update=":specForm" />
 			</p:selectOneMenu>
 
-			<p:tooltip for="mineSpec" value="Filter" showEffect="fade"
-				hideEffect="fade" />
+<!-- 			<p:tooltip for="mineSpec" value="Filter" showEffect="fade" -->
+<!-- 				hideEffect="fade" /> -->
 
 			<p:dialog widgetVar="categoryPanel" id="categoryPanel"
 				styleClass="overlayPanelDialog" rendered="#{loginBean.mobile}"
 				closable="false" binding="#{categoryPanel}">
 				<c:forEach items="#{jJRequirementBean.categoryList}" var="category">
 
-					<p:selectBooleanButton value="#{category.checked}"
+					<p:selectBooleanButton value="#{category.checked}" title="#{category.category.name}"
 						onLabel="#{category.category.name}" rendered="#{loginBean.mobile}"
 						offLabel="#{category.category.name}" onIcon="ui-icon-check"
 						offIcon="ui-icon-close" id="Mcategory_#{category.category.id}"
@@ -83,9 +83,9 @@
 							update=":specForm @form" onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock();PF('categoryPanel').hide()" />
 					</p:selectBooleanButton>
-					<p:tooltip for="Mcategory_#{category.category.id}"
-						value="#{category.category.name}" showEffect="fade"
-						hideEffect="fade" />
+<!-- 					<p:tooltip for="Mcategory_#{category.category.id}" -->
+<!-- 						value="#{category.category.name}" showEffect="fade" -->
+<!-- 						hideEffect="fade" /> -->
 					<br />
 				</c:forEach>
 			</p:dialog>
@@ -221,13 +221,13 @@
 														oncomplete="PF('blockUIWidget').unblock();PF('chapterDialogWidget').show()" />
 												</p:column>
 												<p:column>
-													<p:commandButton ajax="false" id="xml"
+													<p:commandButton ajax="false" id="xml" title="Export To XML"
 														onclick="PrimeFaces.monitorDownload(start, stop);"
 														icon="ui-icon-arrowthick-1-s">
 														<p:fileDownload value="#{tableDataModel.file}" />
 													</p:commandButton>
-													<p:tooltip for="xml" value="Export To XML"
-														showEffect="fade" hideEffect="fade" />
+<!-- 													<p:tooltip for="xml" value="Export To XML" -->
+<!-- 														showEffect="fade" hideEffect="fade" /> -->
 												</p:column>
 												<!--p:column colspan="1">
 											<p:commandButton id="releaseRequirementButton"

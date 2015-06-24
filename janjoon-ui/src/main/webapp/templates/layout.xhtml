@@ -104,9 +104,9 @@
 							<p:menuitem value="#{messages.header_project_menuitem}"
 								url="/pages/planning.jsf?faces-redirect=true"
 								icon="ui-icon-clipboard" update=":contentPanel"
-								rendered="#{!loginBean.enable}" />
+								rendered="#{!loginBean.enable}" style="min-width: 80px;"/>
 
-							<p:menuitem id="proAction"
+							<p:menuitem id="proAction" style="min-width: 80px;"
 								value="#{messages.header_project_menuitem}"
 								disabled="#{!loginBean.authorisationService.rProject}"
 								title="#{loginBean.authorisationService.rProjectMSG}"
@@ -177,7 +177,7 @@
 
 							<p:menuitem id="statsAction"
 								disabled="#{!loginBean.authorisationService.rProject}"
-								title="#{loginBean.authorisationService.rProjectMSG}"
+								title="#{messages.header_stat_menuitem}"
 								value="#{messages.header_stat_menuitem}"
 								onstart="PF('blockUIWidget').block()"
 								actionListener="#{loginBean.redirection}" update=":growlForm"
