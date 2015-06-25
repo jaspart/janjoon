@@ -6,7 +6,7 @@ package com.starit.janjoonweb.domain;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJMessage;
-import com.starit.janjoonweb.domain.JJPhase;
+import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJVersion;
@@ -63,12 +63,12 @@ privileged aspect JJBuild_Roo_JavaBean {
         this.version = version;
     }
     
-    public JJPhase JJBuild.getPhase() {
-        return this.phase;
+    public JJStatus JJBuild.getStatus() {
+        return this.status;
     }
     
-    public void JJBuild.setPhase(JJPhase phase) {
-        this.phase = phase;
+    public void JJBuild.setStatus(JJStatus status) {
+        this.status = status;
     }
     
     public Boolean JJBuild.getAllTestcases() {

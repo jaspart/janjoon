@@ -50,16 +50,16 @@
 								<p:column headerText="Build">
 									<h:outputText value="#{build.name}" />
 								</p:column>
-								<p:column headerText="Stage">
-									<p:autoComplete id="phase" dropdown="true"
-										value="#{build.phase}" itemLabel="#{phase.name}"
-										itemValue="#{phase}" var="phase" size="10"
-										converter="com.starit.janjoonweb.ui.mb.converter.JJPhaseConverter"
-										completeMethod="#{jJBuildBean.completePhase}">
+								<p:column headerText="Status">
+									<p:autoComplete id="status" dropdown="true"
+										value="#{build.status}" itemLabel="#{status.name}"
+										itemValue="#{status}" var="status" size="10"
+										converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+										completeMethod="#{jJBuildBean.completeStatus}">
 										<p:ajax event="itemSelect"
 											onstart="PF('blockUIWidget').block()"
 											oncomplete="PF('blockUIWidget').unblock()"
-											listener="#{jJBuildBean.changeEvent(build)}"
+											listener="#{jJBuildBean.changeEvent(build,buildDataModel)}"
 											update="buildDataTable_#{loop.index} :growlForm" />
 									</p:autoComplete>
 								</p:column>

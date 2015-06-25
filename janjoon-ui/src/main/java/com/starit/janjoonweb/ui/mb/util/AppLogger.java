@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
+import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJCriticityService;
 import com.starit.janjoonweb.domain.JJMessage;
@@ -35,6 +37,9 @@ public class AppLogger {
 
 	@Autowired
 	private JJBugService jJBugService;
+
+	@Autowired
+	private JJBuildService jJBuildService;
 
 	@Autowired
 	private JJRequirementService jJRequirementService;
@@ -62,6 +67,10 @@ public class AppLogger {
 
 	public void setjJBugService(JJBugService jJBugService) {
 		this.jJBugService = jJBugService;
+	}
+
+	public void setjJBuildService(JJBuildService jJBuildService) {
+		this.jJBuildService = jJBuildService;
 	}
 
 	public void setjJRequirementService(
@@ -99,7 +108,7 @@ public class AppLogger {
 
 	public void setWorkFlowsActions(WorkFlowsActions workFlowsActions) {
 		this.workFlowsActions = workFlowsActions;
-	}	
+	}
 
 	@Before("execution(* com.starit.janjoonweb.ui.mb.*.updateJJ*(..))")
 	public void workFlowUpdateListener(JoinPoint joinPoint) {
@@ -115,7 +124,7 @@ public class AppLogger {
 					JJBug oldBug = jJBugService.findJJBug(bug.getId());
 					workFlows = jJWorkflowService.getObjectWorkFlows("bug",
 							oldBug.getStatus(), bug.getStatus(), null, true);
-				} else if(bug.getEnabled()){
+				} else if (bug.getEnabled()) {
 					workFlows = jJWorkflowService.getObjectWorkFlows("bug",
 							jJStatusService.getOneStatus("Any", "*", true),
 							bug.getStatus(), null, true);
@@ -128,7 +137,7 @@ public class AppLogger {
 					workFlows = jJWorkflowService.getObjectWorkFlows(
 							"requirement", oldRequirement.getStatus(),
 							requirement.getStatus(), null, true);
-				} else if(requirement.getEnabled()) {
+				} else if (requirement.getEnabled()) {
 					workFlows = jJWorkflowService.getObjectWorkFlows(
 							"requirement",
 							jJStatusService.getOneStatus("Any", "*", true),
@@ -142,9 +151,21 @@ public class AppLogger {
 					workFlows = jJWorkflowService.getObjectWorkFlows("message",
 							oldTestcase.getStatus(), message.getStatus(), null,
 							true);
-				} else if(message.getEnabled()){
+				} else if (message.getEnabled()) {
 					workFlows = jJWorkflowService.getObjectWorkFlows("message",
 							null, message.getStatus(), null, true);
+				}
+			} else if (object instanceof JJBuild) {
+				JJBuild build = (JJBuild) object;
+				if (build.getId() != null && build.getEnabled()) {
+					JJBuild oldTestcase = jJBuildService
+							.findJJBuild(build.getId());
+					workFlows = jJWorkflowService.getObjectWorkFlows("build",
+							oldTestcase.getStatus(), build.getStatus(), null,
+							true);
+				} else if (build.getEnabled()) {
+					workFlows = jJWorkflowService.getObjectWorkFlows("build",
+							null, build.getStatus(), null, true);
 				}
 			}
 
@@ -180,20 +201,33 @@ public class AppLogger {
 							"requirement", oldRequirement.getStatus(),
 							requirement.getStatus(), null, true);
 				} else {
-					workFlows = jJWorkflowService.getObjectWorkFlows("bug",
-							null, requirement.getStatus(), null, true);
+					workFlows = jJWorkflowService.getObjectWorkFlows(
+							"requirement", null, requirement.getStatus(), null,
+							true);
 				}
 			} else if (object instanceof JJMessage) {
 				JJMessage message = (JJMessage) object;
 				if (message.getId() != null) {
-					JJMessage oldTestcase = jJMessageService
+					JJMessage oldMessage = jJMessageService
 							.findJJMessage(message.getId());
-					workFlows = jJWorkflowService.getObjectWorkFlows(
-							"requirement", oldTestcase.getStatus(),
-							message.getStatus(), null, true);
+					workFlows = jJWorkflowService.getObjectWorkFlows("message",
+							oldMessage.getStatus(), message.getStatus(), null,
+							true);
 				} else {
-					workFlows = jJWorkflowService.getObjectWorkFlows("bug",
+					workFlows = jJWorkflowService.getObjectWorkFlows("message",
 							null, message.getStatus(), null, true);
+				}
+			} else if (object instanceof JJBuild) {
+				JJBuild build = (JJBuild) object;
+				if (build.getId() != null) {
+					JJBuild oldBuild = jJBuildService
+							.findJJBuild(build.getId());
+					workFlows = jJWorkflowService
+							.getObjectWorkFlows("build", oldBuild.getStatus(),
+									build.getStatus(), null, true);
+				} else {
+					workFlows = jJWorkflowService.getObjectWorkFlows("build",
+							null, build.getStatus(), null, true);
 				}
 			}
 			workFlowsActions.iterateOverWorkFlows(workFlows, object);
@@ -249,7 +283,7 @@ public class AppLogger {
 						|| assignedTo) {
 					task.setStartDatePlanned(calendarUtil.nextWorkingDate(task
 							.getStartDatePlanned()));
-					planned = true;					
+					planned = true;
 				}
 			} else {
 				task.setStartDatePlanned(calendarUtil.nextWorkingDate(task
@@ -268,12 +302,12 @@ public class AppLogger {
 						|| assignedTo) {
 					task.setEndDatePlanned(calendarUtil.nextWorkingDate(task
 							.getEndDatePlanned()));
-					planned = true;					
+					planned = true;
 				}
 			} else {
 				task.setEndDatePlanned(calendarUtil.nextWorkingDate(task
 						.getEndDatePlanned()));
-				planned = true;				
+				planned = true;
 			}
 
 		}
@@ -291,12 +325,12 @@ public class AppLogger {
 								.getStartDateReal()))
 						|| assignedTo) {
 					task.setStartDateReal(calendarUtil.nextWorkingDate(task
-							.getStartDateReal()));					
+							.getStartDateReal()));
 					real = true;
 				}
 			} else {
 				task.setStartDateReal(calendarUtil.nextWorkingDate(task
-						.getStartDateReal()));				
+						.getStartDateReal()));
 				real = true;
 			}
 		}
@@ -308,7 +342,7 @@ public class AppLogger {
 								.getEndDateReal()))
 						|| assignedTo) {
 					task.setEndDateReal(calendarUtil.nextWorkingDate(task
-							.getEndDateReal()));					
+							.getEndDateReal()));
 					real = true;
 				}
 			} else {

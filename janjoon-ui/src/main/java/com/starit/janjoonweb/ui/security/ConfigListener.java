@@ -412,7 +412,7 @@ public class ConfigListener implements ServletContextListener {
 		// }
 		// }
 
-		String[] objects = { "Requirement", "Bug", "Message", "Task" };
+		String[] objects = { "Requirement", "Bug", "Message", "Task","Build" };
 
 		for (String object : objects) {
 
@@ -450,7 +450,11 @@ public class ConfigListener implements ServletContextListener {
 					names.add("TODO");
 					names.add("DONE");
 					names.add("IN PROGRESS");
-				}
+				}else if(object.equalsIgnoreCase("Build")) {
+					names.add("ALPHA");
+					names.add("BETA");
+					names.add("RELEASE");
+					}
 
 				for (String name : names) {
 					JJStatus status = new JJStatus();

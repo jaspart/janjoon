@@ -1,6 +1,5 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +19,8 @@ import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJPhaseService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProductService;
+import com.starit.janjoonweb.domain.JJStatus;
+import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.BuildUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -32,7 +33,7 @@ public class JJBuildBean {
 	private String buildName;
 	private JJBuild build;
 	private List<JJBuild> builds;
-	private List<JJPhase> phases;
+	private List<JJStatus> statuts;
 	private List<BuildUtil> buildUtils;
 	private List<BuildDataModel> buildDataModelList;
 
@@ -143,24 +144,27 @@ public class JJBuildBean {
 
 	}
 
-	public List<JJPhase> completePhase(String query) {
-		List<JJPhase> suggestions = new ArrayList<JJPhase>();
-		if (phases == null)
-			phases = jJPhaseService.findAllJJPhases();
-		for (JJPhase jJPhase : phases) {
-			String jJPhaseStr = String.valueOf(jJPhase.getName() + " "
-					+ jJPhase.getDescription() + " "
-					+ jJPhase.getCreationDate() + " "
-					+ jJPhase.getUpdatedDate());
-			if (jJPhaseStr.toLowerCase().contains(query.toLowerCase())) {
-				suggestions.add(jJPhase);
+	public List<JJStatus> completeStatus(String query) {
+		List<JJStatus> suggestions = new ArrayList<JJStatus>();
+		suggestions.add(null);
+		if (statuts == null)
+			statuts = jJStatusService.getStatus("Build", true, null, true);
+		for (JJStatus jJStatus : statuts) {
+			String jJStatusStr = String.valueOf(jJStatus.getName() + " "
+					+ jJStatus.getDescription() + " "
+					+ jJStatus.getCreationDate() + " "
+					+ jJStatus.getUpdatedDate());
+			if (jJStatusStr.toLowerCase().contains(query.toLowerCase())) {
+				suggestions.add(jJStatus);
 			}
 		}
 		return suggestions;
 	}
 
-	public void changeEvent(JJBuild b) {
+	public void changeEvent(JJBuild b, BuildDataModel buildDataModel) {
 		updateJJBuild(b);
+		buildDataModel.getBuilds().set(buildDataModel.getBuilds().indexOf(b),
+				jJBuildService.findJJBuild(b.getId()));
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated", "Build");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -274,7 +278,7 @@ public class JJBuildBean {
 	public void initBuildDataModelList() {
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		buildDataModelList = new ArrayList<BuildDataModel>();
-		phases = jJPhaseService.findAllJJPhases();
+		statuts = jJStatusService.getStatus("Build", true, null, true);
 		if (LoginBean.getProduct() == null) {
 
 			for (JJProduct prod : jJProductService.getProducts(loginBean

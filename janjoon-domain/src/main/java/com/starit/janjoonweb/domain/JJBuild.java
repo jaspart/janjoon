@@ -62,7 +62,7 @@ public class JJBuild {
 	private JJVersion version;
 
 	@ManyToOne
-	private JJPhase phase;
+	private JJStatus status;
 
 	private Boolean allTestcases;	
 	

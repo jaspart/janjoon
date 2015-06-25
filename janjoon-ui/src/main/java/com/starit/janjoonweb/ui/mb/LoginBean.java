@@ -1559,6 +1559,16 @@ public class LoginBean implements Serializable {
 		}
 
 	}
+	
+	public static void redirectPage() {
+		ExternalContext ec = FacesContext.getCurrentInstance()
+				.getExternalContext();
+		try {
+			ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static void copyUploadImages(boolean copy)
 			throws FileNotFoundException, IOException {

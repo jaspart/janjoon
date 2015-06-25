@@ -323,8 +323,7 @@ public class SprintUtil {
 
 		chartModel.addSeries(chartSeries);
 		chartModel.addSeries(lineSeries);
-		chartModel.setLegendPosition("ne");
-		chartModel.setAnimate(true);		
+		chartModel.setLegendPosition("ne");			
 		
 		chartModel.getAxis(AxisType.X).setTickAngle(-50);		
 		chartModel.getAxis(AxisType.X).setTickFormat("%b %#d, %y");

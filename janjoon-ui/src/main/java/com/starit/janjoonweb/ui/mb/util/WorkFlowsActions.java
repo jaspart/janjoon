@@ -15,6 +15,8 @@ import com.itextpdf.text.html.simpleparser.HTMLWorker;
 import com.starit.janjoonweb.domain.JJAuditLog;
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
+import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJCriticityService;
@@ -42,6 +44,9 @@ public class WorkFlowsActions {
 
 	@Autowired
 	private JJBugService jJBugService;
+	
+	@Autowired
+	private JJBuildService jJBuildService;
 
 	@Autowired
 	private JJRequirementService jJRequirementService;
@@ -78,6 +83,10 @@ public class WorkFlowsActions {
 		this.jJRequirementService = jJRequirementService;
 	}
 
+	public void setjJBuildService(JJBuildService jJBuildService) {
+		this.jJBuildService = jJBuildService;
+	}
+	
 	public void setjJMessageService(JJMessageService jJMessageService) {
 		this.jJMessageService = jJMessageService;
 	}
@@ -246,6 +255,47 @@ public class WorkFlowsActions {
 				}
 			}
 
+		}else if (object instanceof JJBuild) {
+			JJBuild build = (JJBuild) object;
+			if (build.getId() != null) {
+				JJBuild oldbuild = jJBuildService.findJJBuild(build.getId());
+				JJContact contact = ((LoginBean) LoginBean
+						.findBean("loginBean")).getContact();
+				if (build.getStatus() != null && oldbuild.getStatus() != null
+						&& !oldbuild.getStatus().equals(build.getStatus())) {
+					JJCriticity criticity = jJCriticityService
+							.getCriticityByName("INFO", true);
+					JJStatus status = jJStatusService.getOneStatus("NEW",
+							"Message", true);
+
+					JJMessage mes = new JJMessage();
+					mes.setName("Build :"
+							+ build.getName().substring(0,
+									Math.min(85, build.getName().length()))
+							+ "status changed");
+					mes.setCreatedBy(contact);
+					mes.setStatus(status);
+					mes.setCriticity(criticity);
+					mes.setCompany(contact.getCompany());
+					mes.setProduct(build.getVersion().getProduct());
+					mes.setProject(LoginBean.getProject());
+					mes.setBuild(build);
+					mes.setDescription("Build :" + build.getName()
+							+ " status changed from "
+							+ oldbuild.getStatus().getName() + " to "
+							+ build.getStatus().getName());
+					mes.setCreationDate(new Date());
+					mes.setEnabled(true);
+					mes.setMessage("Build :" + build.getName()
+							+ " status changed from "
+							+ oldbuild.getStatus().getName() + " to "
+							+ build.getStatus().getName());
+					jJMessageService.saveJJMessage(mes);
+					((LoginBean) LoginBean.findBean("loginBean"))
+							.setMessageCount(null);
+				}
+			}
+
 		}
 	}
 
@@ -320,6 +370,32 @@ public class WorkFlowsActions {
 				String oldStatus = null;
 				if (oldRequirement.getStatus() != null)
 					oldStatus = oldRequirement.getStatus().getName();
+				else
+					oldStatus = "Null";
+				longText = obj + " Status has changed from  :" + oldStatus
+						+ " to " + afterStatus;
+			} else {
+				longText = "new " + obj + " creation with the status :"
+						+ afterStatus;
+			}
+
+		}else if (objet instanceof JJBuild) {
+
+			JJBuild build = (JJBuild) objet;
+			obj = "Build";
+			String afterStatus = null;
+
+			if (build.getStatus() != null)
+				afterStatus = build.getStatus().getName();
+			else
+				afterStatus = "Null";
+
+			if (build.getId() != null) {
+				JJBuild oldBuild = jJBuildService
+						.findJJBuild(build.getId());
+				String oldStatus = null;
+				if (oldBuild.getStatus() != null)
+					oldStatus = oldBuild.getStatus().getName();
 				else
 					oldStatus = "Null";
 				longText = obj + " Status has changed from  :" + oldStatus

@@ -17,7 +17,6 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJWorkflow;
@@ -125,7 +124,7 @@ public class JJWorkflowBean {
 
 	public List<String> completeObject(String query) {
 
-		String[] names = { "Task", "Requirement", "Bug","Message"};
+		String[] names = { "Task", "Requirement", "Bug","Message","Build"};
 		return Arrays.asList(names);
 
 	}

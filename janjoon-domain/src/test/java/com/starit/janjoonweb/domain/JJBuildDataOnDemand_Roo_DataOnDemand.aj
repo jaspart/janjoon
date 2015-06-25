@@ -8,7 +8,7 @@ import com.starit.janjoonweb.domain.JJBuildDataOnDemand;
 import com.starit.janjoonweb.domain.JJBuildRepository;
 import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
-import com.starit.janjoonweb.domain.JJPhaseDataOnDemand;
+import com.starit.janjoonweb.domain.JJStatusDataOnDemand;
 import com.starit.janjoonweb.domain.JJVersionDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ privileged aspect JJBuildDataOnDemand_Roo_DataOnDemand {
     JJContactDataOnDemand JJBuildDataOnDemand.jJContactDataOnDemand;
     
     @Autowired
-    JJPhaseDataOnDemand JJBuildDataOnDemand.jJPhaseDataOnDemand;
+    JJStatusDataOnDemand JJBuildDataOnDemand.jJStatusDataOnDemand;
     
     @Autowired
     JJVersionDataOnDemand JJBuildDataOnDemand.jJVersionDataOnDemand;
