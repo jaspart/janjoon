@@ -52,6 +52,7 @@ public class JJSprintServiceImpl implements JJSprintService {
 		}
 
 		select.where(predicates.toArray(new Predicate[] {}));
+		select.orderBy(criteriaBuilder.asc(from.get("startDate")));
 
 		TypedQuery<JJSprint> result = entityManager.createQuery(select);
 		return result.getResultList();

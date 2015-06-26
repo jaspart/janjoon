@@ -629,33 +629,46 @@ public class JJTestcaseBean {
 		if (object instanceof JJBuild) {
 
 			JJBuild build = (JJBuild) object;
-			int i = 0;
+			//int i = 0;
 			if (build.getAllTestcases() != null)
 				build.setAllTestcases(!build.getAllTestcases());
 			else
 				build.setAllTestcases(true);
 			jJBuildBean.updateJJBuild(build);
+			//jJBuildBean.setBuilds(null);
 
 			build = jJBuildService.findJJBuild(build.getId());
-			rowNames.set(rowNames.indexOf(build), build);
-
-			while (i < colNames.size()) {
-
-				boolean val = (colNames.get(i).getAllBuilds() != null && colNames
-						.get(i).getAllBuilds());
-
-				if (!val)
-					val = build.getAllTestcases() != null
-							&& build.getAllTestcases();
-
-				if (!val)
-					val = jJTestcaseService
-							.findJJTestcase(colNames.get(i).getId())
-							.getBuilds().contains(build);
-
-				value.get(i).set(rowNames.indexOf(build), val);
-				i++;
-			}
+			if (jJBuildBean.getBuild() != null
+					&& build.equals(jJBuildBean.getBuild()))
+				jJBuildBean.setBuild(build);
+			// rowNames.set(rowNames.indexOf(build), build);
+			//
+			// if(rowNames.size()>1)
+			// {
+			// while (i < colNames.size()) {
+			//
+			// boolean val = (colNames.get(i).getAllBuilds() != null &&
+			// colNames
+			// .get(i).getAllBuilds());
+			//
+			// if (!val)
+			// val = build.getAllTestcases() != null
+			// && build.getAllTestcases();
+			//
+			// if (!val)
+			// val = jJTestcaseService
+			// .findJJTestcase(colNames.get(i).getId())
+			// .getBuilds().contains(build);
+			//
+			// value.get(i).set(rowNames.indexOf(build), val);
+			// i++;
+			// }
+			// }else
+			// {
+			// rowNames = null;
+			// colNames = null;
+			// }
+			//
 
 			createTestcaseTree();
 			FacesContext.getCurrentInstance().addMessage(
@@ -672,25 +685,25 @@ public class JJTestcaseBean {
 			else
 				test.setAllBuilds(true);
 			updateJJTestcase(test);
-			test = jJTestcaseService.findJJTestcase(test.getId());
-
-			colNames.set(colNames.indexOf(test), test);
-
-			while (i < rowNames.size()) {
-
-				boolean val = (test.getAllBuilds() != null && test
-						.getAllBuilds());
-
-				if (!val)
-					val = rowNames.get(i).getAllTestcases() != null
-							&& rowNames.get(i).getAllTestcases();
-
-				if (!val)
-					val = test.getBuilds().contains(rowNames.get(i));
-
-				value.get(colNames.indexOf(test)).set(i, val);
-				i++;
-			}
+			// test = jJTestcaseService.findJJTestcase(test.getId());
+			//
+			// colNames.set(colNames.indexOf(test), test);
+			//
+			// while (i < rowNames.size()) {
+			//
+			// boolean val = (test.getAllBuilds() != null && test
+			// .getAllBuilds());
+			//
+			// if (!val)
+			// val = rowNames.get(i).getAllTestcases() != null
+			// && rowNames.get(i).getAllTestcases();
+			//
+			// if (!val)
+			// val = test.getBuilds().contains(rowNames.get(i));
+			//
+			// value.get(colNames.indexOf(test)).set(i, val);
+			// i++;
+			// }
 
 			createTestcaseTree();
 			FacesContext.getCurrentInstance().addMessage(
@@ -718,9 +731,9 @@ public class JJTestcaseBean {
 		if (successOperation) {
 
 			updateJJTestcase(columnName);
-			colNames.set(colIdx,
-					jJTestcaseService.findJJTestcase(columnName.getId()));
-			value.get(colIdx).set(rowIdx, !value.get(colIdx).get(rowIdx));
+			// colNames.set(colIdx,
+			// jJTestcaseService.findJJTestcase(columnName.getId()));
+			// value.get(colIdx).set(rowIdx, !value.get(colIdx).get(rowIdx));
 			createTestcaseTree();
 			FacesContext.getCurrentInstance().addMessage(
 					null,

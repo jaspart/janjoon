@@ -414,21 +414,19 @@ public class LoginBean implements Serializable {
 	}
 
 	public String login() {
+		username = username.trim();
 		password = password.trim();
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-				username, password);
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username,password);
 		String prevPage = "";
 		try {
-			Authentication authentication = authenticationManager
-					.authenticate(token);
+			Authentication authentication = authenticationManager.authenticate(token);
 			SecurityContext sContext = SecurityContextHolder.getContext();
 			sContext.setAuthentication(authentication);
 			enable = true;
 
 		} catch (AuthenticationException loginError) {
 
-			FacesMessage message = MessageFactory.getMessage(
-					"login_invalid_credentials", FacesMessage.SEVERITY_ERROR,
+			FacesMessage message = MessageFactory.getMessage("login_invalid_credentials", FacesMessage.SEVERITY_ERROR,
 					loginError.getMessage());
 			FacesContext.getCurrentInstance().addMessage("login", message);
 
@@ -447,8 +445,7 @@ public class LoginBean implements Serializable {
 
 				session.putValue("password", password);
 
-				logger.info("login operation success " + contact.getName()
-						+ " logged in");
+				logger.info("login operation success " + contact.getName()+ " logged in");
 				if (session.getAttribute("jJProjectBean") == null)
 					session.setAttribute("jJProjectBean", new JJProjectBean());
 
@@ -521,7 +518,6 @@ public class LoginBean implements Serializable {
 							.getMessage("login_licence_expired",
 									FacesMessage.SEVERITY_WARN);
 				}
-
 				prevPage = getRedirectUrl(session);
 			} else {
 				FacesContext fContext = FacesContext.getCurrentInstance();
@@ -532,7 +528,6 @@ public class LoginBean implements Serializable {
 				facesMessage = MessageFactory
 						.getMessage("login_licence_notCorrect",
 								FacesMessage.SEVERITY_ERROR);
-
 				prevPage = "fail";
 			}
 
@@ -541,7 +536,7 @@ public class LoginBean implements Serializable {
 			return prevPage;
 
 		} catch (Exception e) {
-			// System.err.println(e.getMessage() + prevPage);
+			
 			prevPage = "main";
 			return prevPage;
 		}

@@ -125,6 +125,8 @@
 									itemLabel="#{messages.contact_anyProject}" />
 								<f:selectItems value="#{jJProjectBean.projectList}" var="p"
 									itemLabel="#{p.name}" itemValue="#{p}" />
+								<p:ajax onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()" update="configForm" />
 							</p:selectOneMenu>
 						</p:column>
 					</p:row>
@@ -145,7 +147,7 @@
 								<f:selectItems value="#{jJProductBean.productList}" var="p"
 									itemLabel="#{p.name}" itemValue="#{p}" />
 								<p:ajax onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock()" update="lastversion" />
+									oncomplete="PF('blockUIWidget').unblock()" update="configForm" />
 							</p:selectOneMenu>
 						</p:column>
 					</p:row>
@@ -168,7 +170,8 @@
 							</p:selectOneMenu>
 						</p:column>
 					</p:row>
-					<p:row>
+					<p:row
+						rendered="#{loginBean.authorisationService.renderCategoryConfig}">
 						<p:column colspan="2">
 							<p:outputLabel for="categories"
 								value="#{messages.contact_categories}" />

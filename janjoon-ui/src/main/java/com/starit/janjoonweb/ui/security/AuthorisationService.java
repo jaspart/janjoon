@@ -8,6 +8,7 @@ import org.primefaces.context.RequestContext;
 
 import com.starit.janjoonweb.domain.*;
 import com.starit.janjoonweb.ui.mb.*;
+import com.starit.janjoonweb.ui.mb.util.Contact;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 public class AuthorisationService implements Serializable {
@@ -431,6 +432,29 @@ public class AuthorisationService implements Serializable {
 		this.renderAdmin = renderAdmin;
 	}
 
+	public boolean isRenderCategoryConfig() {
+
+		JJPermissionBean permissionBean = (JJPermissionBean) session
+				.getAttribute("jJPermissionBean");
+
+		if (permissionBean == null)
+			permissionBean = new JJPermissionBean();
+
+		JJPermissionService jJPermissionService = permissionBean
+				.getJJPermissionService();
+
+		JJContactBean jjContactBean = (JJContactBean) this.session
+				.getAttribute("jJContactBean");
+		Contact con = jjContactBean.getContactUtil();
+
+		return jJPermissionService.isAuthorized(contact, con.getLastProject(),
+				con.getLastProduct(), "category", null, true, null, null)
+				&& jJPermissionService.isAuthorized(contact,
+						con.getLastProject(), con.getLastProduct(), "requirement",
+						null, true, null, null);
+
+	}
+
 	public AuthorisationService(HttpSession session, JJContact c) {
 		this.session = session;
 		this.contact = c;
@@ -483,7 +507,8 @@ public class AuthorisationService implements Serializable {
 
 		adminCompany = jJPermissionService.isAuthorized(contact, null, null,
 				"Company", null, null, null, true);
-		renderAdmin = adminCompany ||adminContact
+		renderAdmin = adminCompany
+				|| adminContact
 				|| jJPermissionService.isAuthorized(contact, null, null,
 						"Company", null, true, null, null);
 		if (!adminCompany) {
