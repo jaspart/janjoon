@@ -1344,12 +1344,12 @@ public class LoginBean implements Serializable {
 
 	public List<JJRequirement> getNoCouvretReq() {
 
-		if (noCouvretReq == null) {
+		if (noCouvretReq == null && enable ) {
 			if (jJPermissionService.isAuthorized(getContact(), "Requirement",
 					null, true, null, null))
 				noCouvretReq = jJRequirementService.getNonCouvredRequirements(
 						getContact().getCompany(), null);
-			else {
+			else if (enable){
 
 				List<JJProject> projects = ((JJProjectBean) findBean("jJProjectBean"))
 						.getProjectList();
@@ -1376,7 +1376,7 @@ public class LoginBean implements Serializable {
 						getContact().getCompany(), map);
 			}
 		}
-		if (noCouvretReq == null || noCouvretReq.isEmpty())
+		if (noCouvretReq == null || noCouvretReq.isEmpty() || !enable)
 			noCouvretReq = null;
 		return noCouvretReq;
 

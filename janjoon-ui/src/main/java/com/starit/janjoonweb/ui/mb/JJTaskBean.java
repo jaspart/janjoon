@@ -3,7 +3,9 @@ package com.starit.janjoonweb.ui.mb;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,7 +45,9 @@ import org.primefaces.extensions.event.timeline.TimelineModificationEvent;
 import org.primefaces.extensions.model.layout.LayoutOptions;
 import org.primefaces.extensions.model.timeline.TimelineEvent;
 import org.primefaces.extensions.model.timeline.TimelineModel;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
@@ -1587,11 +1591,12 @@ public class JJTaskBean {
 
 		fillTableImport();
 	}
-//	
-//	public void changeSpecValueListener(ImportFormat format)
-//	{
-//		format.setSpecification(!format.getSpecification());
-//	}
+
+	//
+	// public void changeSpecValueListener(ImportFormat format)
+	// {
+	// format.setSpecification(!format.getSpecification());
+	// }
 
 	public void fillTableImport() {
 
@@ -2061,7 +2066,7 @@ public class JJTaskBean {
 			super();
 			this.name = name;
 			this.object = object;
-			this.copyObjet = copyObjet;		
+			this.copyObjet = copyObjet;
 		}
 
 		public String getName() {
@@ -2486,6 +2491,61 @@ public class JJTaskBean {
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('viewTaskDialogWidget').show()");
 
+	}
+
+	public StreamedContent getFile() {
+
+		DateFormat f1 = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat f2 = new SimpleDateFormat("hh:mm:ss");
+		String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"+System.getProperty("line.separator") 
+				+ "<Project xmlns=\"http://schemas.microsoft.com/project\">"+System.getProperty("line.separator") 
+				+ "<SaveVersion>9</SaveVersion>"+System.getProperty("line.separator") 
+				+ "<Title>"+ LoginBean.getProject().getName()+ "</Title>"+System.getProperty("line.separator") 
+				+ "<ScheduleFromStart>1</ScheduleFromStart>"+System.getProperty("line.separator") 
+				+ "<StartDate>"
+				+ f1.format(LoginBean.getProject().getStartDate())+"T"+f2.format(LoginBean.getProject().getStartDate())
+				+ "</StartDate>"+System.getProperty("line.separator") 
+				+ " <FinishDate>"+System.getProperty("line.separator") 
+				+ f1.format(LoginBean.getProject().getEndDate())+"T"+f2.format(LoginBean.getProject().getEndDate())
+				+ "</FinishDate>"+System.getProperty("line.separator") 
+				+ "<DefaultStartTime>09:00:00</DefaultStartTime>"+System.getProperty("line.separator") 
+				+ "<MinutesPerDay>480</MinutesPerDay>"+System.getProperty("line.separator") 
+				+ "<MinutesPerWeek>2400</MinutesPerWeek>"+System.getProperty("line.separator") 
+				+ "<DaysPerMonth>20</DaysPerMonth>"+System.getProperty("line.separator") 
+				+ "<DurationFormat>7</DurationFormat>"+System.getProperty("line.separator") 
+				+ "<WorkFormat>2</WorkFormat>"+System.getProperty("line.separator") 
+				+ "<WeekStartDay>1</WeekStartDay>"+System.getProperty("line.separator") 
+				+ "<CurrentDate>"+ f1.format(new Date())+"T"+f2.format(new Date())+
+				"</CurrentDate>"+System.getProperty("line.separator") 
+				+ "<Tasks>";
+		for (TaskData tt : tasksData) {
+
+			buffer = buffer	+System.getProperty("line.separator") + "<Task>"
+					+ "<UID>1</UID>"+System.getProperty("line.separator") 
+					+ "<ID>1</ID>"+System.getProperty("line.separator") 
+					+ "<Name>"+ tt.getTask().getName()+ "</Name>"+System.getProperty("line.separator") 
+					+ "<Type>0</Type>"+System.getProperty("line.separator") 
+					+ "<IsNull>0</IsNull>"+System.getProperty("line.separator") 
+					+ "<WBS>1</WBS>"+System.getProperty("line.separator") 
+					+ "<OutlineNumber>1</OutlineNumber>"+System.getProperty("line.separator") 
+					+ "<OutlineLevel>1</OutlineLevel>"+System.getProperty("line.separator") 
+					+ "<Priority>500</Priority>"+System.getProperty("line.separator") 
+					+ "<Start>"
+					+ f1.format(tt.getTask().getStartDatePlanned())+"T"+f2.format(tt.getTask().getStartDatePlanned())
+					+ "</Start>"+System.getProperty("line.separator") 
+					+ "<Finish>"
+					+ f1.format(tt.getTask().getEndDatePlanned())+"T"+f2.format(tt.getTask().getEndDatePlanned())
+					+ "</Finish>"+System.getProperty("line.separator") 
+					+ "<DurationFormat>7</DurationFormat>"+System.getProperty("line.separator") 					
+					+ "</Task>";
+
+		}
+		buffer = buffer + System.getProperty("line.separator") + "</Tasks>" + System.getProperty("line.separator") + "<Resources/>" + System.getProperty("line.separator")
+				+ "<Assignments/>" + System.getProperty("line.separator") + "</Project>";
+		InputStream stream = new ByteArrayInputStream(buffer.getBytes());
+		return new DefaultStreamedContent(stream, "xml", LoginBean.getProject()
+				.getName().toUpperCase()
+				+ "-Planning.xml");
 	}
 
 	// Timeline operation

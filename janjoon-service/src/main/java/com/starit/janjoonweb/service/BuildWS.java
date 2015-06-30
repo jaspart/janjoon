@@ -46,7 +46,7 @@ public class BuildWS {
 
 	public static final String BASE_URI = "https://www.starit.fr/jenkins/job/janjoonCloud/XXX/api/xml?wrapper=changes&xpath=//changeSet//msg";
 
-	public static final String ZIP_URL= "https://www.starit.fr/jenkins/job/janjoonCloud/BUILD_NUMBER/artifact/janjoon-ui/target/janjoon-ui-2.0-REVISION_NUMBER-distrib.zip";
+	public static final String ZIP_URL= "https://www.starit.fr/jenkins/job/janjoonCloud/BUILD_NUMBER/artifact/janjoon-ui/target/janjoon-ui-3.0-REVISION_NUMBER-distrib.zip";
 	@Autowired
 	private JJBuildService jJBuildService;
 

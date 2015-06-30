@@ -11,7 +11,7 @@
 	<h:form id="sprintForm" style="width:100%;">
 		<p:panelGrid style="width:100%;">
 			<p:row>
-				<p:column style="width:50%">
+				<p:column>
 					<h:outputText for="sprint" value="Sprint:" />
 					<p:selectOneMenu id="sprint" value="#{jJTaskBean.sprint}"
 						panelStyle="width:150px;" effect="fade" style="width:150px;"
@@ -27,6 +27,13 @@
 							update=":projecttabview:planningForm "
 							oncomplete="PF('blockUIWidget').unblock()" />
 					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:commandButton ajax="false" id="xml"
+						onclick="PrimeFaces.monitorDownload(start, stop);"
+						icon="ui-icon-arrowthick-1-s" value="Export XML">
+						<p:fileDownload value="#{jJTaskBean.file}" />
+					</p:commandButton>
 				</p:column>
 				<p:column>
 					<p:commandButton id="commandButton"

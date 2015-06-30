@@ -36,16 +36,16 @@ else
 	rm -rf $DIRECTORY/save/$PREVIOUS_BUILD
 	mkdir $DIRECTORY/save/$PREVIOUS_BUILD
 	mv $DIRECTORY/bin $DIRECTORY/janjoon-ui $DIRECTORY/lib $DIRECTORY/log $DIRECTORY/license $DIRECTORY/upload $DIRECTORY/save/$PREVIOUS_BUILD/
-	unzip $DIRECTORY/janjoon-ui-2.0-$NEXT_BUILD-distrib.zip -d $DIRECTORY/
-	mv $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war.zip
-	mkdir $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war
-	unzip $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war.zip -d $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war/
-	cd $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war/
+	unzip $DIRECTORY/janjoon-ui-3.0-$NEXT_BUILD-distrib.zip -d $DIRECTORY/
+	mv $DIRECTORY/lib/janjoon-ui-3.0-$NEXT_BUILD.war $DIRECTORY/lib/janjoon-ui-3.0-$NEXT_BUILD.war.zip
+	mkdir $DIRECTORY/lib/janjoon-ui-3.0-$NEXT_BUILD.war
+	unzip $DIRECTORY/lib/janjoon-ui-3.0-$NEXT_BUILD.war.zip -d $DIRECTORY/lib/janjoon-ui-3.0-$NEXT_BUILD.war/
+	cd $DIRECTORY/lib/janjoon-ui-3.0-$NEXT_BUILD.war/
 	chmod -R 777 $DIRECTORY/log
 	cd -
-	mv -f $DIRECTORY/license/messages_*.properties $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war/WEB-INF/classes/com/starit/janjoonweb/ui/mb/i18n/
-	mv $DIRECTORY/license/janjoon-base.jar $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war/run-distrib/
-	mv -f $DIRECTORY/license/org.eclipse.jgit-3.2.0.201312181205-r.jar $DIRECTORY/lib/janjoon-ui-2.0-$NEXT_BUILD.war/WEB-INF/lib/
+	mv -f $DIRECTORY/license/messages_*.properties $DIRECTORY/lib/janjoon-ui-3.0-$NEXT_BUILD.war/WEB-INF/classes/com/starit/janjoonweb/ui/mb/i18n/
+	mv $DIRECTORY/license/janjoon-base.jar $DIRECTORY/lib/janjoon-ui-3.0-$NEXT_BUILD.war/run-distrib/
+	mv -f $DIRECTORY/license/org.eclipse.jgit-3.2.0.201312181205-r.jar $DIRECTORY/lib/janjoon-ui-3.0-$NEXT_BUILD.war/WEB-INF/lib/
 	sed -i 's/BUILD_NUMBER/'"$NEXT_BUILD"'/g' $DIRECTORY/bin/start.sh
 	sed -i 's/9999/'"$APPLICATION_PORT"'/g' $DIRECTORY/bin/start.sh
 	sed -i 's/PATH_URL/'"$URL_PATH"'/g' $DIRECTORY/bin/start.sh

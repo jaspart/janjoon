@@ -2,6 +2,7 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -19,6 +20,7 @@ import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.ui.mb.util.CalendarUtil;
+import com.starit.janjoonweb.ui.mb.util.ChunkTime;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
@@ -31,6 +33,9 @@ public class JJCompanyBean {
 	private String headerMessage;
 	private JJCompany companie;
 	private byte[] logo;
+	private CalendarUtil calendarUtil;
+	private Date day;
+	private List<ChunkTime> workDays;
 
 	public String getCalendar() {
 		return calendar;
@@ -85,6 +90,8 @@ public class JJCompanyBean {
 	}
 
 	public void setCompanie(JJCompany companie) {
+		this.calendarUtil = null;
+		this.workDays = null;
 		this.companie = companie;
 	}
 
@@ -109,6 +116,99 @@ public class JJCompanyBean {
 
 	public void setLogo(byte[] logo) {
 		this.logo = logo;
+	}
+
+	public Date getDay() {
+		return day;
+	}
+
+	public void setDay(Date day) {
+		this.day = day;
+	}
+
+	public List<ChunkTime> getWorkDays() {
+
+		if (calendarUtil == null)
+			calendarUtil = new CalendarUtil(companie);
+		if (workDays == null)
+			workDays = calendarUtil.getWorkDays();
+
+		if (calendarUtil != null
+				&& (workDays == null || workDays.contains(null))) {
+			int i = 0;
+			if (workDays == null)
+				workDays = new ArrayList<ChunkTime>();
+			while (i < 7) {
+
+				if (workDays.get(i) == null)
+					workDays.set(i, new ChunkTime(i));
+				i++;
+			}
+		}
+
+		return workDays;
+	}
+
+	public List<Date> getHolidays() {
+		if (calendarUtil == null)
+			calendarUtil = new CalendarUtil(companie);
+		return calendarUtil.getHolidays();
+	}
+
+	public void addHoliday() throws IOException {
+		String val = calendarUtil.addHoliday(day);
+		companie.setCalendar(val);
+		updateJJCompany(companie);
+		String message = "message_successfully_updated";
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				"Company Calendar");
+		day = null;
+		companie = jJCompanyService.findJJCompany(companie.getId());
+		calendarUtil = new CalendarUtil(companie);
+		getWorkDays();
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+	}
+
+	public void timeSelectListener(ChunkTime day, int type) throws IOException {
+		if (type == 1
+				&& ((day.getStartDate1() != null && day.getEndDate1() != null) || (day
+						.getStartDate1() == null && day.getEndDate1() == null))
+				|| (type == 2 && ((day.getStartDate2() != null && day
+						.getEndDate2() != null) || (day.getStartDate2() == null && day
+						.getEndDate2() == null)))) {
+
+			boolean up = true;
+			if (day.getStartDate1() != null
+					&& day.getStartDate1().after(day.getEndDate1()))
+				up = false;
+			if (up && day.getStartDate2() != null
+					&& day.getStartDate2().after(day.getEndDate2()))
+				up = false;
+			if (up) {
+				String val = calendarUtil.editWorkday(day);
+				companie.setCalendar(val);
+				updateJJCompany(companie);
+				String message = "message_successfully_updated";
+				FacesMessage facesMessage = MessageFactory.getMessage(message,
+						"Company Calendar");
+				companie = jJCompanyService.findJJCompany(companie.getId());
+				calendarUtil = new CalendarUtil(companie);
+				getWorkDays();
+				FacesContext.getCurrentInstance()
+						.addMessage(null, facesMessage);
+			}else
+			{		
+				
+				String message = "validator_date_startAfterEnd";
+				FacesMessage facesMessage = MessageFactory.getMessage(message,FacesMessage.SEVERITY_ERROR,
+						"Company Calendar","Company Calendar");			
+				FacesContext.getCurrentInstance()
+						.addMessage(null, facesMessage);
+			}
+
+		}
+
 	}
 
 	public void initCalendar() {
@@ -137,13 +237,14 @@ public class JJCompanyBean {
 	public void closeDialog() {
 		companie = null;
 		logo = null;
+		calendarUtil = null;
+		day = null;
+		companies = null;
+		workDays = null;
 	}
 
 	public void deleteCompany() {
 		if (companie != null) {
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
 			companie.setEnabled(false);
 			updateJJCompany(companie);
 			companies = null;
@@ -173,16 +274,15 @@ public class JJCompanyBean {
 			message = "message_successfully_updated";
 
 		}
-		
-		HttpSession session = (HttpSession) FacesContext
-				.getCurrentInstance().getExternalContext()
-				.getSession(false);
+
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
 		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
-		if(loginBean.getContact().getCompany().equals(companie))
+		if (loginBean.getContact().getCompany().equals(companie))
 			loginBean.getAuthorisationService().setSession(session);
-		
+
 		companies = null;
-		logo=null;
+		logo = null;
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('companyDialogWidget').hide()");
 		facesMessage = MessageFactory.getMessage(message, "Company");
@@ -191,7 +291,7 @@ public class JJCompanyBean {
 	}
 
 	public void saveJJCompany(JJCompany b) {
-		
+
 		b.setCreationDate(new Date());
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
@@ -209,7 +309,8 @@ public class JJCompanyBean {
 
 	public void handleFileUpload(FileUploadEvent event) throws IOException {
 
-		Scanner s = new Scanner(event.getFile().getInputstream()).useDelimiter("\\A");
+		Scanner s = new Scanner(event.getFile().getInputstream())
+				.useDelimiter("\\A");
 		calendar = (s.hasNext() ? s.next() : "");
 	}
 }

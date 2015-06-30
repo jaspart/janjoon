@@ -1,7 +1,10 @@
 package com.starit.janjoonweb.ui.mb.util;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringReader;
+import java.io.StringWriter;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,12 +12,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.TimeZone;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.starit.janjoonweb.domain.JJCompany;
-import com.starit.janjoonweb.domain.JJCompanyService;
 
 public class CalendarUtil {
 
@@ -26,15 +25,12 @@ public class CalendarUtil {
 	private List<Date> holidays;
 	private List<ChunkTime> workDays;
 
-	@Autowired
-	private JJCompanyService jCompanyService;
-
 	public CalendarUtil(JJCompany company) {
 		this.company = company;
 		try {
 			initCompanyCalendar();
 		} catch (IOException e) {
-			workDays =new ArrayList<ChunkTime>();
+			workDays = new ArrayList<ChunkTime>();
 			e.printStackTrace();
 		}
 	}
@@ -42,9 +38,9 @@ public class CalendarUtil {
 	public void initCompanyCalendar() throws IOException {
 
 		Properties properties = new Properties();
-		String calendar=company.getCalendar();
+		String calendar = company.getCalendar();
 		if (calendar == null) {
-			calendar="";
+			calendar = "";
 		}
 		properties.load(new StringReader(calendar));
 		// properties.load(new FileInputStream(string));
@@ -52,18 +48,20 @@ public class CalendarUtil {
 		int i = 0;
 		workDays = new ArrayList<ChunkTime>();
 		hour_format = properties.getProperty("hour.format");
-		
-		while (i < 7) {
-			String workDay = properties.getProperty(WORK_DAYS + "." + i);				
 
-			if (workDay == null || workDay.contains("null"))
-			{
-				if(workDay != null)
-				workDays.add(new ChunkTime(i));
+		if (hour_format == null)
+			hour_format = "HH:mm";
+
+		while (i < 7) {
+			String workDay = properties.getProperty(WORK_DAYS + "." + i);
+
+			if (workDay == null || workDay.contains("null")) {
+				if (workDay != null)
+					workDays.add(new ChunkTime(i));
 				else
 					workDays.add(null);
 			}
-				
+
 			else {
 				Date staDate1, enDate1, staDate2, endDate2;
 				try {
@@ -82,7 +80,7 @@ public class CalendarUtil {
 				try {
 					staDate2 = new SimpleDateFormat(hour_format).parse(workDay
 							.substring(14, 19));
-				} catch (ParseException |StringIndexOutOfBoundsException e) {
+				} catch (ParseException | StringIndexOutOfBoundsException e) {
 					staDate2 = null;
 				}
 				try {
@@ -97,17 +95,18 @@ public class CalendarUtil {
 
 			i++;
 		}
-		
-		i=0;
-		while(i<workDays.size() && workDays.get(i)== null)
+
+		i = 0;
+		while (i < workDays.size() && workDays.get(i) == null)
 			i++;
-		
-		if(workDays.size() == i)
-			workDays=null;
-		
+
+		if (workDays.size() == i)
+			workDays = null;
 
 		// initHolidays
 		String day_format = properties.getProperty("day.format");
+		if (day_format == null)
+			day_format = "dd/MM/yyyy";
 		i = 1;
 		boolean nullPointerException = false;
 		int year = Calendar.getInstance().get(Calendar.YEAR);
@@ -148,11 +147,6 @@ public class CalendarUtil {
 		this.hour_format = hour_format;
 	}
 
-	public void setjCompanyService(JJCompanyService jCompanyService) {
-		this.jCompanyService = jCompanyService;
-
-	}
-
 	public List<Date> getHolidays() {
 		return holidays;
 	}
@@ -168,7 +162,7 @@ public class CalendarUtil {
 	public void setWorkDays(List<ChunkTime> workDays) {
 		this.workDays = workDays;
 	}
-	
+
 	public static Date getZeroTimeDate(Date fecha) {
 		Date res = fecha;
 		Calendar calendar = Calendar.getInstance();
@@ -190,28 +184,73 @@ public class CalendarUtil {
 		cal.add(Calendar.DAY_OF_MONTH, -1);
 		return getZeroTimeDate(cal.getTime());
 	}
-	
-	public static Date getAfterDay(Date date)
-	{
+
+	public static Date getAfterDay(Date date) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		cal.add(Calendar.DAY_OF_MONTH, 1);
 		return getZeroTimeDate(cal.getTime());
 	}
 
+	public String addHoliday(Date date) throws IOException {
+		Properties properties = new Properties();
+		String calendar = company.getCalendar();
+		if (calendar == null) {
+			calendar = "";
+		}
+		properties.load(new StringReader(calendar));
+		DateFormat f = new SimpleDateFormat("dd/MM/");
+		properties.setProperty(HOLIDAYS + "." + String.format("%01d", holidays.size() + 1),
+				f.format(date));
 
+		StringWriter writer = new StringWriter();
+		properties.list(new PrintWriter(writer));
+		return writer.getBuffer().toString();
+
+	}
+
+	public String editWorkday(ChunkTime day) throws IOException {
+		Properties properties = new Properties();
+		String calendar = company.getCalendar();
+		if (calendar == null) {
+			calendar = "";
+		}
+		properties.load(new StringReader(calendar));
+		DateFormat f = new SimpleDateFormat("HH:mm");
+		String value;
+		if (day.getStartDate1() != null && day.getStartDate2() != null)
+			value = f.format(day.getStartDate1()) + "-"
+					+ f.format(day.getEndDate1()) + " & "
+					+ f.format(day.getStartDate2()) + "-"
+					+ f.format(day.getEndDate2());
+		else {
+			if (day.getStartDate1() != null)
+				value = f.format(day.getStartDate1()) + "-"
+						+ f.format(day.getEndDate1());
+			else if (day.getStartDate2() != null)
+				value = f.format(day.getStartDate2()) + "-"
+						+ f.format(day.getEndDate2());
+			else
+				value = "null";
+		}
+
+		properties.setProperty(WORK_DAYS + "." + day.getDayNumber(), value);
+
+		StringWriter writer = new StringWriter();
+		properties.list(new PrintWriter(writer));
+		return writer.getBuffer().toString();
+
+	}
 
 	public static Date getZeroDate(Date date) {
-		if (date != null)
-		{
+		if (date != null) {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(date);
 			calendar.set(1970, 0, 1);
 			return calendar.getTime();
 
-		}else
+		} else
 			return null;
-	
-		
-	}	
+
+	}
 }

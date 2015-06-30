@@ -40,14 +40,15 @@
 							<f:facet name="header">
 								<h:outputText value="Name" />
 							</f:facet>
-							<h:outputText value="#{categoryModel.category.name}" style="margin: auto;"/>
+							<h:outputText value="#{categoryModel.category.name}"
+								style="margin: auto;" />
 						</p:column>
 						<p:column>
 							<f:facet name="header">
-								<h:outputText 
+								<h:outputText
 									value="#{messages.specification_completion_progress}" />
 							</f:facet>
-							<p:chart id="coverage" responsive="true" 
+							<p:chart id="coverage" responsive="true"
 								model="#{categoryModel.categoryPieChart}" type="pie"
 								style="width:200px;height:150px;margin: auto;" />
 						</p:column>
@@ -68,11 +69,11 @@
 				<p:tabView id="SprintTabView" dynamic="true" widgetVar="SprintTab"
 					value="#{jJSprintBean.sprintList}" var="jjsprint">
 					<p:tab title="#{jjsprint.sprint.name}"
-						rendered="#{!jjsprint.render}">
+						disabled="#{jjsprint.render or jjsprint.chartModel == null}">
 						<p:chart model="#{jjsprint.chartModel}" type="bar"
-							style="height:400px;"
+							style="height:400px;" responsive="true"
 							widgetVar="barChart_#{jjsprint.sprint.id}_Widget"
-							rendered="#{!jjsprint.render}" responsive="true" />
+							rendered="#{!jjsprint.render and jjsprint.chartModel != null}" />
 					</p:tab>
 				</p:tabView>
 			</p:tab>

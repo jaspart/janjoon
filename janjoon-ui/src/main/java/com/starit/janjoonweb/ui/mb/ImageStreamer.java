@@ -14,6 +14,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJProductService;
@@ -25,6 +26,13 @@ public class ImageStreamer {
 
 	@Autowired
 	JJContactService jJContactService;
+	
+	@Autowired
+	JJCompanyService jJCompanyService;
+
+	public void setjJCompanyService(JJCompanyService jJCompanyService) {
+		this.jJCompanyService = jJCompanyService;
+	}
 
 	public void setjJContactService(JJContactService jJContactService) {
 		this.jJContactService = jJContactService;
@@ -74,25 +82,32 @@ public class ImageStreamer {
 	public StreamedContent getImageProj() throws IOException {
 		FacesContext context = FacesContext.getCurrentInstance();
 
-		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
-			// So, we're rendering the HTML. Return a stub StreamedContent so
-			// that it will generate right URL.
+		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {			
 			return new DefaultStreamedContent();
-		} else {
-			// So, browser is requesting the image. Return a real
-			// StreamedContent with the image bytes.
-			// for (Map.Entry<String, String> entry :
-			// context.getExternalContext()
-			// .getRequestParameterMap().entrySet()) {
-			// System.out.println("Displays ==== " + entry.getKey() + " : "
-			// + entry.getValue());
-			// }
+		} else {			
 			String projId = context.getExternalContext()
 					.getRequestParameterMap().get("ProjId");
 			System.out.println("Displays ProjId : " + projId);
 
 			return new DefaultStreamedContent(new ByteArrayInputStream(
 					jJProjectService.findJJProject(Long.valueOf(projId))
+							.getLogo()));
+
+		}
+	}
+	
+	public StreamedContent getImageComp() throws IOException {
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {			
+			return new DefaultStreamedContent();
+		} else {			
+			String CompId = context.getExternalContext()
+					.getRequestParameterMap().get("CompId");
+			System.out.println("Displays CompId : " + CompId);
+
+			return new DefaultStreamedContent(new ByteArrayInputStream(
+					jJCompanyService.findJJCompany(Long.valueOf(CompId))
 							.getLogo()));
 
 		}
@@ -106,13 +121,6 @@ public class ImageStreamer {
 			// that it will generate right URL.
 			return new DefaultStreamedContent();
 		} else {
-			// So, browser is requesting the image. Return a real
-			// StreamedContent with the image bytes.
-			// for(Map.Entry<String, String> entry :
-			// context.getExternalContext().getRequestParameterMap().entrySet())
-			// {
-			// System.out.println("Displays ==== "+entry.getKey()+" : "+entry.getValue());
-			// }
 			String contactId = context.getExternalContext()
 					.getRequestParameterMap().get("contactId");
 			System.out.println("Displays contactId : " + contactId);

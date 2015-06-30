@@ -22,8 +22,8 @@ import com.starit.janjoonweb.domain.JJTaskService;
 
 public class ContactCalendarUtil {
 
-	private static String VACATION = "vacation";
-	private static String WORK_DAYS = "weekday";
+	public static String VACATION = "vacation";
+	public static String WORK_DAYS = "weekday";
 	public static String Planned = "planned";
 	public static String Real = "real";
 	public static String Revised = "revised";
