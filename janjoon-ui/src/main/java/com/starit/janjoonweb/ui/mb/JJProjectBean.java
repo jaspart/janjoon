@@ -42,6 +42,9 @@ public class JJProjectBean {
 	private List<JJContact> projectManagerList;
 	private String message;
 	private boolean projectState;
+	
+	private List<JJProject> deletedProject;
+	private List<JJProject> restoredProject;
 
 	public void setjJConfigurationService(
 			JJConfigurationService jJConfigurationService) {
@@ -139,6 +142,47 @@ public class JJProjectBean {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public List<JJProject> getDeletedProject() {
+		if (deletedProject == null) {
+			LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
+			deletedProject = jJProjectService.getProjectList(false, loginBean
+					.getContact().getCompany(), loginBean.getContact());
+		}
+
+		return deletedProject;
+	}
+
+	public void setDeletedProject(List<JJProject> deletedProject) {
+		this.deletedProject = deletedProject;
+	}
+
+	public List<JJProject> getRestoredProject() {
+		if(restoredProject == null)
+			restoredProject = new ArrayList<JJProject>();
+		return restoredProject;
+	}
+
+	public void setRestoredProject(List<JJProject> restoredProject) {
+		this.restoredProject = restoredProject;
+	}
+	
+	public void restoreProjects()
+	{
+		for(JJProject con:restoredProject)
+		{
+			con.setEnabled(true);
+			updateJJProject(con);
+		}
+		
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_restored",
+				FacesMessage.SEVERITY_INFO, "Project");		
+
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		deletedProject = null;
+		restoredProject = null;
 	}
 
 	public void newProject() {
@@ -248,6 +292,9 @@ public class JJProjectBean {
 		projectManagerList = null;
 
 		projectState = true;
+		
+		deletedProject = null;
+		restoredProject = null;
 	}
 
 	public void saveJJProject(JJProject b) {

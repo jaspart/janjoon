@@ -128,9 +128,9 @@ public class JJCompanyBean {
 
 	public List<ChunkTime> getWorkDays() {
 
-		if (calendarUtil == null)
+		if (calendarUtil == null && companie != null)
 			calendarUtil = new CalendarUtil(companie);
-		if (workDays == null)
+		if (workDays == null && companie != null)
 			workDays = calendarUtil.getWorkDays();
 
 		if (calendarUtil != null
@@ -150,9 +150,12 @@ public class JJCompanyBean {
 	}
 
 	public List<Date> getHolidays() {
-		if (calendarUtil == null)
+		if (calendarUtil == null && companie != null)
 			calendarUtil = new CalendarUtil(companie);
-		return calendarUtil.getHolidays();
+		if (companie != null)
+			return calendarUtil.getHolidays();
+		else
+			return null;
 	}
 
 	public void addHoliday() throws IOException {
@@ -197,12 +200,12 @@ public class JJCompanyBean {
 				getWorkDays();
 				FacesContext.getCurrentInstance()
 						.addMessage(null, facesMessage);
-			}else
-			{		
-				
+			} else {
+
 				String message = "validator_date_startAfterEnd";
-				FacesMessage facesMessage = MessageFactory.getMessage(message,FacesMessage.SEVERITY_ERROR,
-						"Company Calendar","Company Calendar");			
+				FacesMessage facesMessage = MessageFactory.getMessage(message,
+						FacesMessage.SEVERITY_ERROR, "Company Calendar",
+						"Company Calendar");
 				FacesContext.getCurrentInstance()
 						.addMessage(null, facesMessage);
 			}

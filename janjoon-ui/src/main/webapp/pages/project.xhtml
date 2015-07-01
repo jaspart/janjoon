@@ -74,10 +74,73 @@ td.ui-fileupload-preview {
 						update=":tabview:projectDialog" resetValues="true"
 						oncomplete="PF('projectDialogWidget').show()"
 						icon="ui-icon-circle-plus" />
+						
+						<p:commandButton id="restoreProject" icon="ui-icon-restore"
+						value="#{messages.admin_project_restore_dialog}"
+						oncomplete="PF('restoreProjectDialogWidget').show()"
+						resetValues="true" update=":tabview:restoreProjectForm" />
+						
 				</f:facet>
 			</p:dataTable>
 		</p:panel>
 	</h:form>
+
+	<p:dialog id="restoreProjectDialog"
+		header="#{messages.admin_project_restore_dialog}" hideEffect="explode"
+		resizable="false" modal="true" widgetVar="restoreProjectDialogWidget"
+		dynamic="true" showEffect="fade" draggable="true">
+		<p:ajax event="close" update=":tabview:projectForm :headerForm"
+			listener="#{jJProjectBean.closeDialog}" />
+
+		<p:outputPanel id="restoreProjectPanel">
+			<h:form id="restoreProjectForm" enctype="multipart/form-data"
+				style="width: 600px;">
+				<p:panel styleClass="panelDialog">
+					<f:facet name="header">
+						<p:messages id="msg" showDetail="false" closable="true" />
+					</f:facet>
+					<p:dataTable id="restoreProjectTable" var="project"
+						scrollable="true" value="#{jJProjectBean.deletedProject}"
+						rowKey="#{project.id}"
+						selection="#{jJProjectBean.restoredProject}" scrollHeight="400">
+
+						<p:ajax event="rowSelectCheckbox"
+							update="tabview:restoreProjectForm:restoreButton" />
+						<p:ajax event="rowUnselectCheckbox"
+							update="tabview:restoreProjectForm:restoreButton" />
+						<p:ajax event="toggleSelect"
+							update="tabview:restoreProjectForm:restoreButton" />
+
+						<f:facet name="header">#{messages.admin_project_restore_table_title}</f:facet>
+						<p:column selectionMode="multiple"
+							style="width: 20px;text-align:center" />
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{messages.admin_project_table_name_title}" />
+							</f:facet>
+							<h:outputText value="#{project.name}" />
+						</p:column>
+						<p:column headerText="Manager">
+						<h:outputText value="#{project.manager}"
+							converter="JJContactConverter" />
+					</p:column>
+					</p:dataTable>
+					<f:facet name="footer">
+						<p:commandButton id="restoreButton"
+							value="#{messages.admin_project_resore_button}"
+							update="restoreProjectForm"
+							disabled="#{empty jJProjectBean.restoredProject}"
+							title="#{messages.admin_project_resore_button}"
+							action="#{jJProjectBean.restoreProjects}" />
+						<p:commandButton id="cancelButton" value="Annuler"
+							onclick="PF('restoreProjectDialogWidget').hide()" type="button" />
+					</f:facet>
+				</p:panel>
+
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+
 	<p:dialog id="projectDialog"
 		header="#{messages[jJProjectBean.message]}" modal="true"
 		widgetVar="projectDialogWidget" dynamic="true" showEffect="fade"

@@ -26,6 +26,6 @@ public class ContactWS {
 	@Path("/listecontact")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getContact(){
-		return Contact.getListContactFromJJContact(jJContacService.getContacts(true));
+		return Contact.getListContactFromJJContact(jJContacService.getContacts(true,null,null));
 	}
 }

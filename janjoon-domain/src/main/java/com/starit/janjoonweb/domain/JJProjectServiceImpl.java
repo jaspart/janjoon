@@ -13,6 +13,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class JJProjectServiceImpl implements JJProjectService {
 	@PersistenceContext
@@ -22,7 +23,43 @@ public class JJProjectServiceImpl implements JJProjectService {
 		this.entityManager = entityManager;
 	}
 
-	// New Generic
+	@Autowired
+	private JJPermissionService jJPermissionService;
+
+	public void setjJPermissionService(JJPermissionService jJPermissionService) {
+		this.jJPermissionService = jJPermissionService;
+	}
+	
+	public List<JJProject> getProjectList(boolean enabled,JJCompany company,JJContact contact){	
+		
+		if(company != null || jJPermissionService.isSuperAdmin(contact))
+		{
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<JJProject> criteriaQuery = criteriaBuilder
+					.createQuery(JJProject.class);
+
+			Root<JJProject> from = criteriaQuery.from(JJProject.class);
+
+			CriteriaQuery<JJProject> select = criteriaQuery.select(from);
+
+			List<Predicate> predicates = new ArrayList<Predicate>();
+			
+			if (company != null)
+				predicates.add(criteriaBuilder.equal(
+						from.get("manager").get("company"), company));
+			
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), enabled));		
+
+			select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+			TypedQuery<JJProject> result = entityManager.createQuery(select);
+
+			return result.getResultList();
+		}else
+			return new ArrayList<JJProject>();
+		
+	
+	}
 
 	public List<JJProject> load(JJCompany company, MutableInt size, int first,
 			int pageSize) {

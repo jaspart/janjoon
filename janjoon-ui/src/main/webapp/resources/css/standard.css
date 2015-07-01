@@ -85,6 +85,16 @@ a:visited {
 	top: 0px !important;
 }
 
+.ui-icon-restore{
+	background-image: url("#{resource['images/restore.ico']}") !important;
+	width: 16px !important;
+	height: 16px !important;
+	left: 2% !important;
+ 	margin-left: 0 !important;
+  	margin-top: 0px !important;
+  	top: 15% !important
+}
+
 .wrapper {
 	width: 100%;
 	height: 100%;

@@ -12,7 +12,7 @@ public interface JJContactService {
 
 	public JJContact getContactById(Long id);
 
-	public List<JJContact> getContacts(boolean onlyActif);
+	public List<JJContact> getContacts(boolean onlyActif,JJCompany company,JJContact contact);
 
 	public boolean saveJJContactTransaction(JJContact contact);
 

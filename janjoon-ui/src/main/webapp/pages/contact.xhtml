@@ -64,10 +64,79 @@
 						update=":tabview:contactDialog" resetValues="true"
 						oncomplete="PF('contactDialogWidget').show()"
 						icon="ui-icon-circle-plus" />
+					<p:commandButton id="restoreContact" icon="ui-icon-restore"
+						value="#{messages.admin_contact_restore_dialog}"
+						oncomplete="PF('restoreContactDialogWidget').show()"
+						resetValues="true" update=":tabview:restoreContactForm" />
+
 				</f:facet>
 			</p:dataTable>
 		</p:panel>
 	</h:form>
+
+	<p:dialog id="restoreContactDialog"
+		header="#{messages.admin_contact_restore_dialog}" hideEffect="explode"
+		resizable="false" modal="true" widgetVar="restoreContactDialogWidget"
+		dynamic="true" showEffect="fade" draggable="true">
+		<p:ajax event="close" update=":tabview:contactForm"
+			listener="#{jJContactBean.closeDialog(jJPermissionBean)}" />
+
+		<p:outputPanel id="restoreContactPanel">
+			<h:form id="restoreContactForm" enctype="multipart/form-data" style="width: 600px;">
+				<p:panel styleClass="panelDialog">
+					<f:facet name="header">
+						<p:messages id="msg" showDetail="false" closable="true" />
+					</f:facet>
+					<p:dataTable id="restoreContactTable" var="contact" scrollable="true"
+						value="#{jJContactBean.deletedContact}" rowKey="#{contact.id}"
+						selection="#{jJContactBean.restoredContact}" scrollHeight="400">
+						
+						<p:ajax event="rowSelectCheckbox" update="tabview:restoreContactForm:restoreButton" />
+					<p:ajax event="rowUnselectCheckbox"
+						update="tabview:restoreContactForm:restoreButton" />
+					<p:ajax event="toggleSelect" update="tabview:restoreContactForm:restoreButton" />
+
+						<f:facet name="header">#{messages.admin_contact_restore_table_title}</f:facet>
+						<p:column selectionMode="multiple"
+							style="width: 20px;text-align:center" />
+						<p:column>
+							<f:facet name="header">
+								<h:outputText
+									value="#{messages.admin_contact_table_firstname_label}" />
+							</f:facet>
+							<h:outputText value="#{contact.firstname}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText
+									value="#{messages.admin_contact_table_lastname_label}" />
+							</f:facet>
+							<h:outputText value="#{contact.name}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText
+									value="#{messages.admin_contact_table_email_label}" />
+							</f:facet>
+							<h:outputText value="#{contact.email}" />
+						</p:column>
+					</p:dataTable>
+					<f:facet name="footer">
+						<p:commandButton id="restoreButton"
+							value="#{messages.admin_contact_resore_button}"
+							update="restoreContactForm" 
+							disabled="#{empty jJContactBean.restoredContact}"
+							title="#{messages.admin_contact_resore_button}"
+							action="#{jJContactBean.restoreContacts}" />
+						<p:commandButton id="cancelButton" value="Annuler"
+							onclick="PF('restoreContactDialogWidget').hide()" type="button" />
+					</f:facet>
+				</p:panel>
+
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+
 	<p:dialog id="contactDialog" draggable="false"
 		header="#{messages[jJContactBean.message]}" modal="true"
 		widgetVar="contactDialogWidget" dynamic="true" showEffect="fade"

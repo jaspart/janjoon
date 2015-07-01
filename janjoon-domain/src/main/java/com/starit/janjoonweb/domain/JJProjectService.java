@@ -13,5 +13,7 @@ public interface JJProjectService {
 	
 	public List<JJProject> getAdminListProjects();
 	
+	public List<JJProject> getProjectList(boolean enabled,JJCompany company,JJContact contact);
+	
 	public List<JJProject> load(JJCompany company,MutableInt size,int first, int pageSize);
 }

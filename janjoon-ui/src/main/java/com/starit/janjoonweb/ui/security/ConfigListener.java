@@ -948,7 +948,7 @@ public class ConfigListener implements ServletContextListener {
 
 		}
 
-		if (jJContactService.getContacts(true).isEmpty()) {
+		if (jJContactService.findAllJJContacts().isEmpty()) {
 
 			PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(11);
 			JJContact contact = new JJContact();

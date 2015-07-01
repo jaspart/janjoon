@@ -10,14 +10,26 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class JJContactServiceImpl implements JJContactService {
 
 	@PersistenceContext
 	private EntityManager entityManager;
+	
+	@Autowired
+	private JJPermissionService jJPermissionService;
 
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
+	}
+
+	public JJPermissionService getjJPermissionService() {
+		return jJPermissionService;
+	}
+
+	public void setjJPermissionService(JJPermissionService jJPermissionService) {
+		this.jJPermissionService = jJPermissionService;
 	}
 
 	@Override
@@ -77,25 +89,33 @@ public class JJContactServiceImpl implements JJContactService {
 	}
 
 	@Override
-	public List<JJContact> getContacts(boolean onlyActif) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJContact> criteriaQuery = criteriaBuilder
-				.createQuery(JJContact.class);
+	public List<JJContact> getContacts(boolean onlyActif,JJCompany company,JJContact contact) {
+		
+		if(company != null || jJPermissionService.isSuperAdmin(contact))
+		{
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<JJContact> criteriaQuery = criteriaBuilder
+					.createQuery(JJContact.class);
 
-		Root<JJContact> from = criteriaQuery.from(JJContact.class);
+			Root<JJContact> from = criteriaQuery.from(JJContact.class);
 
-		CriteriaQuery<JJContact> select = criteriaQuery.select(from);
+			CriteriaQuery<JJContact> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();
-		if (onlyActif) {
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		}
+			List<Predicate> predicates = new ArrayList<Predicate>();
+			
+			if(company != null)
+				predicates.add(criteriaBuilder.equal(from.get("company"), company));
+			
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), onlyActif));		
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+			select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
-		TypedQuery<JJContact> result = entityManager.createQuery(select);
+			TypedQuery<JJContact> result = entityManager.createQuery(select);
 
-		return result.getResultList();
+			return result.getResultList();
+		}else
+			return new ArrayList<JJContact>();
+		
 	}
 
 	@Override
