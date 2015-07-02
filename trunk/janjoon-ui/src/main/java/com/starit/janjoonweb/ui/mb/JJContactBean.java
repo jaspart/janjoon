@@ -589,7 +589,7 @@ public class JJContactBean {
 
 		contactAdmin = null;
 		//contacts = null;
-
+		
 		jJPermissionBean.setPermissionAdmin(null);
 		jJPermissionBean.setPermissionDataModel(null);
 		jJPermissionBean.setProfile(null);
