@@ -8,7 +8,7 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
-		<p:panel id="bugPanel" header="BUG" style="width: 100%;valign: top;">
+		<p:panel id="bugPanel" header="BUG" styleClass="Container100">
 			<f:event listener="#{jJBugBean.initJJBug}" type="preRenderView" />
 
 			<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
@@ -16,10 +16,11 @@
 			<p:commandButton value="#{messages.specification_video_help_title}"
 				id="videoHelpBtn" icon="ui-icon-video"
 				onclick="PF('videoHelpWidget').show()"
-				style="float: right;position: relative;" type="button" />
+				style="float: right;position: relative;" type="button" />			
+			<div class="Separator"/>
 			<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
 				dynamic="true" style="width:600px">
-				<p:panelGrid style="width: 100%;">
+				<p:panelGrid styleClass="Container100">
 					<f:facet name="header">
 						<p:row>
 							<p:column colspan="12">Code des Couleurs</p:column>
@@ -27,55 +28,54 @@
 					</f:facet>
 					<p:row>
 						<p:column colspan="2" styleClass="NEW">
-							<p:outputLabel value="NEW" />
+							<p:outputLabel value="NEW" style="color: #fff !important;"/>
 						</p:column>
 
 						<p:column colspan="2" styleClass="CLOSED">
-							<p:outputLabel value="CLOSED" />
+							<p:outputLabel value="CLOSED" style="color: #fff !important;" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="VERIFIED">
-							<p:outputLabel value="VERIFIED" />
+							<p:outputLabel value="VERIFIED" style="color: #fff !important;" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="RESOLVED">
-							<p:outputLabel value="RESOLVED" />
+							<p:outputLabel value="RESOLVED" style="color: #fff !important;" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="DUPLICATE">
-							<p:outputLabel value="DUPLICATE" />
+							<p:outputLabel value="DUPLICATE" style="color: #fff !important;" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="WONTFIX">
-							<p:outputLabel value="WONTFIX" />
+							<p:outputLabel value="WONTFIX" style="color: #fff !important;" />
 						</p:column>
 					</p:row>
 					<p:row>
 						<p:column colspan="2" styleClass="INVALID">
-							<p:outputLabel value="INVALID" />
+							<p:outputLabel value="INVALID" style="color: #fff !important;" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="FIXED">
-							<p:outputLabel value="FIXED" />
+							<p:outputLabel value="FIXED" style="color: #fff !important;" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="READY">
-							<p:outputLabel value="READY" />
+							<p:outputLabel value="READY" style="color: #fff !important;" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="REOPENED">
-							<p:outputLabel value="REOPENED" />
+							<p:outputLabel value="REOPENED" style="color: #fff !important;" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="ASSIGNED">
-							<p:outputLabel value="ASSIGNED" />
+							<p:outputLabel value="ASSIGNED" style="color: #fff !important;"/>
 						</p:column>
 					</p:row>
 				</p:panelGrid>
 			</p:overlayPanel>
 
-			<br />
-			<br />
+			
 			<h:form id="bugForm">
 				<f:event type="preRenderComponent"
 					listener="#{bugDataTableOptions.dataTableInit(dataTable)}" />
@@ -122,7 +122,7 @@
 								<p:column colspan="1">
 									<p:commandButton id="createButton" icon="ui-icon-plusthick"
 										value="#{messages.bug_table_add_label}" update=":createForm "
-										style="margin-left: 20px;" resetValues="true"
+										style="margin-left: 20px !important;" resetValues="true"
 										oncomplete="PF('createDialogWidget').show()"
 										title="#{messages.label_create}" />
 									<p:tooltip for="createButton" value="#{messages.label_create}"
@@ -132,7 +132,7 @@
 						</p:outputPanel>
 					</f:facet>
 
-					<p:column selectionMode="multiple" style="width:2%" />
+					<p:column selectionMode="multiple" style="width:5%" />
 
 					<p:column headerText="#{messages.bug_table_title_title}"
 						filterMatchMode="contains" sortBy="#{bug.name}"
@@ -144,7 +144,7 @@
 					</p:column>
 					<p:column headerText="#{messages.bug_table_creation_title}"
 						sortBy="#{bug.creationDate}"
-						style="width: 15% !important;height: 5px !important;">
+						style="height: 5px !important;">
 						<h:outputText value="#{bug.creationDate}">
 							<f:converter converterId="extendedDateTimeConverter" />
 							<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
@@ -154,7 +154,7 @@
 					<p:column headerText="#{messages.bug_table_criticity_title}"
 						sortBy="#{bug.criticity.name}" id="criticity"
 						filterStyleClass="criticity"
-						style="width: 10% !important;height: 5px !important;"
+						style="height: 5px !important;"
 						filterOptions="#{jJBugBean.criticityOptions}"
 						filterMatchMode="exact" filterStyle="width: 90%;"
 						filterBy="#{bug.criticity.name}">
@@ -163,7 +163,7 @@
 					<p:column headerText="#{messages.bug_table_importance_title}"
 						sortBy="#{bug.importance.name}" id="importance"
 						filterStyleClass="importance"
-						style="width: 10% !important;height: 5px !important;"
+						style="height: 5px !important;"
 						filterOptions="#{jJBugBean.importanceOptions}"
 						filterMatchMode="exact" filterStyle="width: 90%;"
 						filterBy="#{bug.importance.name}">
@@ -171,14 +171,14 @@
 					</p:column>
 					<p:column headerText="#{messages.bug_table_status_title}"
 						sortBy="#{bug.status.name}" filterBy="#{bug.status.name}"
-						id="status" style="width: 10% !important;height: 5px !important;"
+						id="status" style="height: 5px !important;"
 						filterStyleClass="status"
 						filterOptions="#{jJBugBean.statusOptions}" filterMatchMode="exact"
 						filterStyle="width: 90%;">
 						<h:outputText value="#{bug.status.name}"
 							styleClass="#{bug.status.name}" />
 					</p:column>
-					<p:column styleClass="action-column" style="width: 100px;">
+					<p:column >
 						<f:facet name="header">
 							<h:outputText value="#{messages.bug_table_action_title}" />
 						</f:facet>

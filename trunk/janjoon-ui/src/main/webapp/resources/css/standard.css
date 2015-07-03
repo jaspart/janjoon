@@ -118,6 +118,7 @@ a:visited {
 .panelDialog .ui-panel-titlebar {
 	padding: 0 0 0 0;
 	border: none;
+	background-color: #FFFFFF;
 }
 
 .menu {
@@ -146,19 +147,19 @@ a:visited {
 	font-size: small;
 }
 
-.ui-state-default {
-	padding-top: 0px !important;
-}
+/* .ui-state-default { */
+/* 	padding-top: 0px !important; */
+/* } */
 
-.ui-state-hover {
-	border-top: 1px solid #0083D7 !important;
-	padding-top: 0px !important;
-}
+/* .ui-state-hover { */
+/* 	border-top: 1px solid #0083D7 !important; */
+/* 	padding-top: 0px !important; */
+/* } */
 
-.ui-state-active {
-	border-top: 1px solid #0072C6 !important;
-	padding-top: 0px !important;
-}
+/* .ui-state-active { */
+/* 	border-top: 1px solid #0072C6 !important; */
+/* 	padding-top: 0px !important; */
+/* } */
 
 .rowExpansion {
 	
@@ -499,7 +500,7 @@ a:visited {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -512,7 +513,7 @@ a:visited {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -538,7 +539,7 @@ a:visited {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -564,7 +565,7 @@ a:visited {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -590,7 +591,7 @@ a:visited {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -828,7 +829,7 @@ div.revised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -841,7 +842,7 @@ div.revised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -854,7 +855,7 @@ div.revised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -867,7 +868,7 @@ div.revised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -880,7 +881,7 @@ div.revised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -894,7 +895,7 @@ div.revised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -907,7 +908,7 @@ div.revised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -920,7 +921,7 @@ div.revised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -933,7 +934,7 @@ div.revised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -946,7 +947,7 @@ div.revised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -959,7 +960,7 @@ div.revised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -972,7 +973,7 @@ div.revised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -985,7 +986,7 @@ div.revised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -998,7 +999,7 @@ div.revised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1011,7 +1012,7 @@ div.revised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1024,7 +1025,7 @@ div.revised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;

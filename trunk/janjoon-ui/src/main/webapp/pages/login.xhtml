@@ -1,95 +1,101 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
+	xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="../templates/layout-login.xhtml">
-	<ui:define name="title">#{messages.login_title}</ui:define>
-	<ui:define name="content">
-		<!-- 		<f:event listener="#{loginBean.checkAuthorities}" type="preRenderView"  /> -->
-		<h:form id="login" method="post">
-			<p:growl showDetail="true" id="auth" />
-			<p:panelGrid style="background-color:transparent;margin: 0 auto;">
-				<f:facet name="header">
-					<p:row>
-						<p:column colspan="2">
-							<p:outputLabel value="#{messages.login_pleaseLogin_header}" />
-						</p:column>
-					</p:row>
-				</f:facet>
-				<p:row>
-					<p:column>
-						<h:outputLabel for="username"
-							value="#{messages.login_username_label}:"
-							style="margin-top:20px;" />
-					</p:column>
-					<p:column>
+<h:head>
+	<link rel="shortcut icon" type="image/png"
+		href="#{request.contextPath}/resources/images/janjoon_logo.ico" />
+	<h:outputScript library="primefaces" name="jquery/jquery.js" />
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+	</f:facet>
+	<title>Janjoon</title>
+	<ui:insert name="head" />
+</h:head>
+
+<h:body styleClass="login-body">
+	<h:form id="login" method="post">
+		<div class="Wid90 DispBlock MarAuto MarTopPerc5 TexAlCenter">
+			<div class="Wid33 MarAuto WidAutoOnMobile">
+				<h:graphicImage name="janjoon_logo.ico" library="images"
+					style="width:40%; max-width:200px;" />
+				<div class="Card ShadowEffect">
+					<div class="EmptyBox20"></div>
+					<div class="Wid100 OvHidden BigTopic Fs22">
+						<i class="icon-users Fs22"></i>#{messages.login_pleaseLogin_header}
+					</div>
+					<p:messages id="auth" autoUpdate="true" closable="true" />
+					<div class="EmptyBox20"></div>
+					<div class="Wid100">
 						<p:inputText id="username" value="#{loginBean.username}"
-							required="true"
+							required="true" placeholder="Email"
+							styleClass="Wid80 TexAlCenter Fs18"
 							requiredMessage="#{messages.login_necessaryUsername_label}">
 							<f:validator validatorId="emailValidator" />
 						</p:inputText>
-
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column colspan="2">
-						<p:message for="username" id="mail" closable="true" />
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column>
-						<h:outputLabel for="password"
-							value="#{messages.login_password_label}:"
-							style="margin-top:20px;" />
-					</p:column>
-					<p:column>
-						<p:password id="password" value="#{loginBean.password}"
-							required="true"
+					</div>
+					<div class="EmptyBox10"></div>
+					<div class="Wid100">
+						<p:inputText id="password" value="#{loginBean.password}"
+							required="true" type="password" placeholder="Password"
+							styleClass="Wid80 TexAlCenter Fs18"
 							requiredMessage="#{messages.login_necessaryPassword_label}" />
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column colspan="2">
-						<p:message for="password" id="mdp" closable="true" />
-					</p:column>
-				</p:row>
-				<f:facet name="footer">
-					<p:row style="padding: 4px 1px;">
-						<p:column colspan="2">
-							<p:selectBooleanCheckbox value="#{loginBean.agreeTerms}">
-								<p:ajax event="change" update="submit" />
-							</p:selectBooleanCheckbox>
-							<h:outputLink target="_blank"
-								value="../resources/ConfidentialityTermsAndConditions_BetaUsers.pdf"
-								styleClass="preformatted">
-								<h:outputLabel value="#{messages.login_terms_label}" />
-							</h:outputLink>
-							<br />
-							<p:commandButton id="submit"
-								value="#{messages.login_login_button}"
-								onstart="PF('blockUIWidget').block()"
-								onerror="PF('blockUIWidget').unblock()"
-								oncomplete="PF('blockUIWidget').unblock()"
-								action="#{loginBean.login}" style="margin-top:20px;"
-								disabled="#{!loginBean.agreeTerms}"
-								update=":login:mdp,:login:mail :login:auth" />
-						</p:column>
-					</p:row>
-				</f:facet>
-			</p:panelGrid>
-		</h:form>
-		<!-- 		<pe:blockUI widgetVar="blockUIWidget"> -->
-		<!-- 			<h:panelGrid columns="2"> -->
-		<!-- 				<p:graphicImage library="images" name="ajax-loader.gif" -->
-		<!-- 					style="vertical-align: middle;" /> -->
-		<!-- 				<h:outputText value="#{messages.label_refresh}" -->
-		<!-- 					style="white-space: nowrap;" /> -->
-		<!-- 			</h:panelGrid> -->
-		<!-- 		</pe:blockUI> -->
-	</ui:define>
-</ui:composition>
+					</div>
+					<div class="EmptyBox30"></div>
+					<p:selectBooleanCheckbox value="#{loginBean.agreeTerms}">
+						<p:ajax event="change" update="submit" />
+					</p:selectBooleanCheckbox>
+					<h:outputLink target="_blank"
+						value="../resources/ConfidentialityTermsAndConditions_BetaUsers.pdf"
+						styleClass="preformatted">
+						<h:outputLabel value="#{messages.login_terms_label}" />
+					</h:outputLink>
+					<div class="EmptyBox30"></div>
+					<div class="Wid100">
+						<p:button value="Sign In / Sign Up" icon="fa fa-sign-in"
+							styleClass="Wid60 Fs18 White RaisedButton"
+							href="signup.jsf" />
+					</div>
+					<div class="EmptyBox5"></div>
+
+					<div class="EmptyBox20"></div>
+					<div class="Separator"></div>
+					<div class="EmptyBox10"></div>
+					<div class="Wid100">
+						<p:commandButton id="submit"
+							value="#{messages.login_login_button}" icon="fa fa-key"
+							styleClass="GreenButton Wid60 Fs18 White RaisedButton"
+							action="#{loginBean.login}" disabled="#{!loginBean.agreeTerms}"
+							update=":login:auth" />
+					</div>
+					<div class="EmptyBox20"></div>
+
+					<div
+						class="Wid100 TexAlCenter Fs14 FontRobotoRegular WhiteBlue">
+						<i class="fa fa-copyright"></i>
+						<h:outputLink value="https://www.starit.fr">
+							<h:graphicImage library="images" name="starit-logo.png"
+								alt="StarIT - Janjoon" />
+						</h:outputLink>
+					</div>
+				</div>
+			</div>
+		</div>
+	</h:form>
+
+	<h:outputStylesheet name="css/core-layout.css" library="rio-layout" />
+	<h:outputStylesheet name="standard.css" library="css" />
+	<h:outputStylesheet name="css/animate.css" library="rio-layout" />
+	<h:outputStylesheet name="css/rio-font.css" library="rio-layout" />
+	<h:outputStylesheet name="css/ripple-effect.css" library="rio-layout" />
+	<h:outputStylesheet name="css/font-awesome.css" library="rio-layout" />
+	<h:outputStylesheet name="css/rio-layout.css" library="rio-layout" />
+</h:body>
 </html>
