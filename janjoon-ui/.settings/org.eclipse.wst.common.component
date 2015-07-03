@@ -6,6 +6,13 @@
 		<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
 		<wb-resource deploy-path="/run-distrib" source-path="/src/run-distrib"/>
 		<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/webapp"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main"/>
+        <dependent-module archiveName="janjoon-service-3.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/janjoon-service/janjoon-service">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="janjoon-domain-3.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/janjoon-domain/janjoon-domain">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
 		<property name="context-root" value="janjoon-ui"/>
 		<property name="java-output-path" value="/janjoon-ui/target/classes"/>
 	</wb-module>

@@ -13,18 +13,6 @@
 			href="#{request.contextPath}/resources/images/janjoon_logo.ico" />
 		<h:outputScript library="primefaces" name="jquery/jquery.js" />
 		<script type="text/javascript">
-// 			function centerDialog() {
-// 				var top, left;
-// 				top = Math.max($(window).height() - $("#frame").outerHeight(),
-// 						0) / 2;
-// 				left = Math
-// 						.max($(window).width() - $("#frame").outerWidth(), 0) / 2;
-// 				$("#frame").css({
-// 					top : top,
-// 					left : left
-// 				});
-// 			}
-
 			function updateRowExapansion() {
 				$(".rowExpansion").slideUp("fast");
 			}
@@ -104,7 +92,7 @@
 							<p:menuitem value="#{messages.header_project_menuitem}"
 								url="/pages/planning.jsf?faces-redirect=true"
 								icon="ui-icon-clipboard" update=":contentPanel"
-								rendered="#{!loginBean.enable}" style="min-width: 80px;"/>
+								rendered="#{!loginBean.enable}" style="min-width: 80px;" />
 
 							<p:menuitem id="proAction" style="min-width: 80px;"
 								value="#{messages.header_project_menuitem}"
@@ -263,6 +251,12 @@
 
 			jQuery("div.ui-growl").remove();
 		</script>
+		<h:outputStylesheet name="css/core-layout.css" library="rio-layout" />
+		<h:outputStylesheet name="css/animate.css" library="rio-layout" />
+		<h:outputStylesheet name="css/rio-font.css" library="rio-layout" />
+		<h:outputStylesheet name="css/ripple-effect.css" library="rio-layout" />
+		<h:outputStylesheet name="css/font-awesome.css" library="rio-layout" />
+		<h:outputStylesheet name="css/rio-layout.css" library="rio-layout" />
 	</h:body>
 </f:view>
 </html>
