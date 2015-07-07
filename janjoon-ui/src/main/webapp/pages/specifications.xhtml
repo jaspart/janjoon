@@ -29,9 +29,12 @@
 				<p:selectBooleanButton value="#{category.checked}"
 					id="category_#{category.category.id}"
 					onLabel="#{category.category.name}" rendered="#{!loginBean.mobile}"
-					offLabel="#{category.category.name}" onIcon="ui-icon-check"
-					offIcon="ui-icon-close" title="#{category.category.name}"
-					style="#{jJRequirementBean.getMarginLeft(category)}">
+					offLabel="#{category.category.name}"
+                    onIcon="ui-icon-check fa fa-check Fs15"
+					offIcon="ui-icon-close fa fa-close Fs15"
+                    title="#{category.category.name}"
+					style="#{jJRequirementBean.getMarginLeft(category)}"
+                    styleClass="BlueTextButton GrayButton" >
 					<p:ajax
 						listener="#{jJRequirementBean.updateTemplate(category.category.id,null,true,category.checked)}"
 						update=":specForm @form" onstart="PF('blockUIWidget').block()"
@@ -67,13 +70,13 @@
 					<p:selectBooleanButton value="#{category.checked}" title="#{category.category.name}"
 						onLabel="#{category.category.name}" rendered="#{loginBean.mobile}"
 						offLabel="#{category.category.name}" onIcon="ui-icon-check"
-						offIcon="ui-icon-close" id="Mcategory_#{category.category.id}"
-						style="width: 150px;margin-left: 20px;height: 100px;margin-top: 20px;">
+						offIcon="fa-close" id="Mcategory_#{category.category.id}" styleClass="BlueTextButton GrayButton">
 						<p:ajax
 							listener="#{jJRequirementBean.updateTemplate(category.category.id,categoryPanel,true,category.checked)}"
 							update=":specForm @form" onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock();PF('categoryPanel').hide()" />
 					</p:selectBooleanButton>
+
 <!-- 					<p:tooltip for="Mcategory_#{category.category.id}" -->
 <!-- 						value="#{category.category.name}" showEffect="fade" -->
 <!-- 						hideEffect="fade" /> -->
@@ -84,7 +87,8 @@
 
 			<p:commandButton title="#{messages.specification_video_help_title}"
 				style="float: right;" id="videoHelpBtn" icon="ui-icon-video"
-				onclick="PF('videoHelpWidget').show()" type="button" />
+				onclick="PF('videoHelpWidget').show()" type="button"
+                styleClass="BlueTextButton GrayButton" />
 
 			<p:commandButton icon="ui-icon-arrowthick-1-sw" style="float: right;"
 				disabled="#{jJRequirementBean.disabledExport}"
@@ -92,7 +96,8 @@
 				update=":requirementImportDialog" resetValues="true"
 				onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock();PF('requirementImportDialogWidget').show()"
-				title="#{messages.specification_import_button}" />
+				title="#{messages.specification_import_button}"
+                styleClass="BlueTextButton GrayButton" />
 
 			<p:commandButton icon="ui-icon-arrowthick-1-n"
 				style="float: right;" disabled="#{jJProjectBean.project == null}"
@@ -171,6 +176,7 @@
 							</p:tree>
 						</p:column>
 						<p:column style="#{tableDataModel.tableStyle}">
+<div class="Card ShadowEffect"><div class="Container100"><div class="ContainerIndent">
 							<p:dataTable id="categoryTable_#{loop.index}" var="reqUtil"
 								value="#{tableDataModel}" scrollable="true" scrollHeight="300"
 								sortMode="multiple" resizableColumns="true"
@@ -193,7 +199,7 @@
 										style="float:left;" onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()"
 										actionListener="#{jJRequirementBean.expandTable(tableDataModel)}"
-										title="Expand" update=":specForm" />
+										title="Expand" update=":specForm" styleClass="BlueTextButton GrayButton" />
 									<p:panelGrid style="margin-top: 15px;">
 										<f:facet name="header">
 											<p:row>
@@ -234,7 +240,7 @@
 														disabled="#{jJRequirementBean.disabledExport}"
 														actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}"
 														onclick="PrimeFaces.monitorDownload(start, stop);"
-														icon="ui-icon-pdf">
+														icon="ui-icon-pdf fa fa-file-pdf-o Fs15">
 														<p:fileDownload value="#{jJChapterBean.preProcessPDF}" />
 													</p:commandButton>
 
@@ -402,18 +408,19 @@
 												<p:progressBar id="coverage"
 													value="#{tableDataModel.coverageProgress}"
 													labelTemplate="#{messages.specification_coverage_progress} {value}%"
-													displayOnly="true" />
+													displayOnly="true" style="height:30px !important;"/>
 											</p:row>
 											<p:row style="height :20px;">
 												<p:progressBar id="completion"
 													value="#{tableDataModel.completionProgress}"
 													labelTemplate="#{messages.specification_completion_progress} {value}%"
-													displayOnly="true" />
+													displayOnly="true" style="height:30px !important;" />
 											</p:row>
 										</p:tab>
 									</p:accordionPanel>
 								</f:facet>
 							</p:dataTable>
+</div></div></div>
 						</p:column>
 					</p:row>
 				</p:panelGrid>

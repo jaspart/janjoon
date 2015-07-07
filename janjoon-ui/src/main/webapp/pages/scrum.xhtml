@@ -12,8 +12,8 @@
 		onTabChange="tabChangeHelper([{name: 'activeScrumIndex', value: index}])"
 		var="jjsprint" style="width:100%;"
 		activeIndex="#{jJSprintBean.activeTabSprintIndex}">
-		<p:tab style="width:100%;"
-			disabled="#{jjsprint.render and !loginBean.authorisationService.wProject}">
+        
+		<p:tab style="width:100%;" disabled="#{jjsprint.render and !loginBean.authorisationService.wProject}">
 			<f:facet name="title">
 				<h:outputText id="tabHeader" rendered="#{!jjsprint.render}"
 					value="#{jjsprint.sprint.name}" />
@@ -22,149 +22,154 @@
 					value="Add New Sprint" />
 			</f:facet>
 			<ui:include src="sprint.xhtml" />
-			<h:form id="sprintForm" rendered="#{!jjsprint.render}"
-				style="width:100% !important;">
-				<p:panelGrid id="sprintPanelGrid"
-					style="width:50% !important;min-width:200px !important;float:left;height:331px !important;">
-					<f:facet name="header">
-						<p:row>
-							<p:column colspan="5">Sprint Information</p:column>
-						</p:row>
-					</f:facet>
-					<p:row>
-						<p:column style="width:10% important; min-width:200px;">
-							<p:outputLabel for="sprintName" value="Sprint Name:" />
-							<p:inputText id="sprintName" value="#{jjsprint.sprint.name}"
-								required="true" requiredMessage="Sprint name is empty">
-								<f:validateLength maximum="100" />
-							</p:inputText>
-						</p:column>
-						<p:column style="width:10% important; min-width:200px;">
-							<p:outputLabel for="sprintcts" value="Sprint Contacts:" />
-							<p:selectManyMenu id="sprintcts" value="#{jjsprint.contacts}"
-								scrollHeight="100"
-								converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
-								style="width:150px;height:100px !important;" showCheckbox="true">
-								<f:selectItems value="#{jJSprintBean.contacts}" var="ctc"
-									itemLabel="#{ctc.firstname} #{c.name}" itemValue="#{ctc}" />
-								<f:validator validatorId="listCategoriesValidator" />
-							</p:selectManyMenu>
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column style="width:10% important; min-width:200px;">
-							<p:outputLabel for="sprintSD" value="Start Date:" />
-							<p:calendar id="sprintSD" navigator="true" effect="slideDown"
-								pattern="dd/MM/yyyy" required="true"
-								binding="#{startDateEdition}"
-								value="#{jjsprint.sprint.startDate}">
-								<f:validator validatorId="dateRangeValidator" />
-								<f:attribute name="sprintMode" value="sprintSD" />
-							</p:calendar>
-						</p:column>
-						<p:column style="width:10% important; min-width:200px;">
-							<p:outputLabel for="sprintED" value="end Date:" />
-							<p:calendar id="sprintED" navigator="true" effect="slideDown"
-								pattern="dd/MM/yyyy" required="true"
-								value="#{jjsprint.sprint.endDate}">
-								<f:validator validatorId="dateRangeValidator" />
-								<f:attribute name="startDateComponent"
-									value="#{startDateEdition}" />
-								<f:attribute name="sprintMode" value="sprintED" />
-							</p:calendar>
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column style="width:10% important; min-width:200px;">
-							<p:outputLabel for="sprintPS" value="Price Sold:" />
-							<p:spinner id="sprintPS" value="#{jjsprint.priseSold}" prefix="$"
-								min="0" readonly="true" />
-						</p:column>
-						<p:column style="width:10% important; min-width:200px;">
-							<p:outputLabel for="sprintPR" value="Price Real:" />
-							<p:spinner id="sprintPR" value="#{jjsprint.priseReal}" prefix="$"
-								min="0" readonly="true" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column style="width:10% important; min-width:200px;">
-							<p:outputLabel for="sprintW" value="Total:" />
-							<p:inputText id="sprintW" readonly="true"
-								value="#{jjsprint.workload}" />
-						</p:column>
-						<p:column style="width:10% important; min-width:200px;">
-							<p:outputLabel for="sprintC" value="Consumed:" />
-							<p:inputText id="sprintC" readonly="true"
-								value="#{jjsprint.consumed}" />
-						</p:column>
-					</p:row>
-					<f:facet name="footer">
-						<p:row>
-							<p:column style="width:20% important;">
-								<p:commandButton id="editSprintButton"
-									disabled="{!loginBean.authorisationService.wProject}"
-									value="#{messages.label_edit}"
-									process="@this,sprintName,sprintED,sprintSD,sprintcts"
-									actionListener="#{jJSprintBean.attrListener}"
-									onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock()"
-									update=":projecttabview:SprintTabView:sprintForm :growlForm">
-									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
-									<f:attribute name="create" value="edit" />
-								</p:commandButton>
-								<p:remoteCommand name="editSprint"
-									update=":projecttabview :growlForm"
-									action="#{jJSprintBean.editSprint}"
-									onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock();" />
-							</p:column>
-							<p:column colspan="1" style="width:15% important;">
-								<p:commandButton value="#{messages.label_create} Task"
-									id="createTaskttButton" icon="ui-icon-circle-plus"
-									update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm :taskImportDialog :growlForm"
-									immediate="true" onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock()" resetValues="true"
-									actionListener="#{jJTaskBean.loadImportFormat}"
-									title="#{messages.label_create} Task">
-									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
-									<f:attribute name="mode" value="scrum" />
-								</p:commandButton>
-								<p:tooltip for="createTaskttButton"
-									value="#{messages.label_create} Task" showEffect="fade"
-									hideEffect="fade" />
-							</p:column>
-						</p:row>
-					</f:facet>
-				</p:panelGrid>
-				<p:panelGrid id="sprintChartPanelGrid"
-					rendered="#{jjsprint.chartModel != null}"
-					style="width:50% !important;min-width:200px !important;">
-					<f:facet name="header">
-						<p:row>
-							<p:column colspan="5">Sprint Chart</p:column>
-						</p:row>
-					</f:facet>
-					<p:row>
-						<p:column rowspan="2"
-							style="width:60% !important; min-width:100px;">
-							<p:chart type="bar" responsive="true" model="#{jjsprint.chartModel}"
-								widgetVar="barChart_#{jjsprint.sprint.id}_Widget"
-								style="width:98%;height:322px;" />
-						</p:column>
-					</p:row>
-				</p:panelGrid>
-				<p:separator />
-			</h:form>
+
+            <div class="Container">
+			    <h:form id="sprintForm" rendered="#{!jjsprint.render}">
+                    <div class="Container50 Responsive50">
+				        <p:panelGrid id="sprintPanelGrid" styleClass="Wid100">
+					        <f:facet name="header">
+						        <p:row>
+							        <p:column colspan="5">Sprint Information</p:column>
+						        </p:row>
+					        </f:facet>
+					        <p:row>
+						        <p:column style="width:10% important; min-width:200px;">
+							        <p:outputLabel for="sprintName" value="Sprint Name:" />
+							        <p:inputText id="sprintName" value="#{jjsprint.sprint.name}"
+								        required="true" requiredMessage="Sprint name is empty">
+								        <f:validateLength maximum="100" />
+							        </p:inputText>
+						        </p:column>
+						        <p:column style="width:10% important; min-width:200px;">
+							        <p:outputLabel for="sprintcts" value="Sprint Contacts:" />
+							        <p:selectManyMenu id="sprintcts" value="#{jjsprint.contacts}"
+								        scrollHeight="100"
+								        converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
+								        style="width:150px;height:100px !important;" showCheckbox="true">
+								        <f:selectItems value="#{jJSprintBean.contacts}" var="ctc"
+									        itemLabel="#{ctc.firstname} #{c.name}" itemValue="#{ctc}" />
+								        <f:validator validatorId="listCategoriesValidator" />
+							        </p:selectManyMenu>
+						        </p:column>
+					        </p:row>
+					        <p:row>
+						        <p:column style="width:10% important; min-width:200px;">
+							        <p:outputLabel for="sprintSD" value="Start Date:" />
+							        <p:calendar id="sprintSD" navigator="true" effect="slideDown"
+								        pattern="dd/MM/yyyy" required="true"
+								        binding="#{startDateEdition}"
+								        value="#{jjsprint.sprint.startDate}">
+								        <f:validator validatorId="dateRangeValidator" />
+								        <f:attribute name="sprintMode" value="sprintSD" />
+							        </p:calendar>
+						        </p:column>
+						        <p:column style="width:10% important; min-width:200px;">
+							        <p:outputLabel for="sprintED" value="end Date:" />
+							        <p:calendar id="sprintED" navigator="true" effect="slideDown"
+								        pattern="dd/MM/yyyy" required="true"
+								        value="#{jjsprint.sprint.endDate}">
+								        <f:validator validatorId="dateRangeValidator" />
+								        <f:attribute name="startDateComponent"
+									        value="#{startDateEdition}" />
+								        <f:attribute name="sprintMode" value="sprintED" />
+							        </p:calendar>
+						        </p:column>
+					        </p:row>
+					        <p:row>
+						        <p:column style="width:10% important; min-width:200px;">
+							        <p:outputLabel for="sprintPS" value="Price Sold:" />
+							        <p:spinner id="sprintPS" value="#{jjsprint.priseSold}" prefix="$"
+								        min="0" readonly="true" />
+						        </p:column>
+						        <p:column style="width:10% important; min-width:200px;">
+							        <p:outputLabel for="sprintPR" value="Price Real:" />
+							        <p:spinner id="sprintPR" value="#{jjsprint.priseReal}" prefix="$"
+								        min="0" readonly="true" />
+						        </p:column>
+					        </p:row>
+					        <p:row>
+						        <p:column style="width:10% important; min-width:200px;">
+							        <p:outputLabel for="sprintW" value="Total:" />
+							        <p:inputText id="sprintW" readonly="true"
+								        value="#{jjsprint.workload}" />
+						        </p:column>
+						        <p:column style="width:10% important; min-width:200px;">
+							        <p:outputLabel for="sprintC" value="Consumed:" />
+							        <p:inputText id="sprintC" readonly="true"
+								        value="#{jjsprint.consumed}" />
+						        </p:column>
+					        </p:row>
+					        <f:facet name="footer">
+						        <p:row>
+							        <p:column style="width:20% important;">
+								        <p:commandButton id="editSprintButton"
+									        disabled="{!loginBean.authorisationService.wProject}"
+									        value="#{messages.label_edit}"
+									        process="@this,sprintName,sprintED,sprintSD,sprintcts"
+									        actionListener="#{jJSprintBean.attrListener}"
+									        onstart="PF('blockUIWidget').block()"
+									        oncomplete="PF('blockUIWidget').unblock()"
+									        update=":projecttabview:SprintTabView:sprintForm :growlForm">
+									        <f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+									        <f:attribute name="create" value="edit" />
+								        </p:commandButton>
+								        <p:remoteCommand name="editSprint"
+									        update=":projecttabview :growlForm"
+									        action="#{jJSprintBean.editSprint}"
+									        onstart="PF('blockUIWidget').block()"
+									        oncomplete="PF('blockUIWidget').unblock();" />
+							        </p:column>
+							        <p:column colspan="1" style="width:15% important;">
+								        <p:commandButton value="#{messages.label_create} Task"
+									        id="createTaskttButton" icon="ui-icon-circle-plus"
+									        update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm :taskImportDialog :growlForm"
+									        immediate="true" onstart="PF('blockUIWidget').block()"
+									        oncomplete="PF('blockUIWidget').unblock()" resetValues="true"
+									        actionListener="#{jJTaskBean.loadImportFormat}"
+									        title="#{messages.label_create} Task">
+									        <f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+									        <f:attribute name="mode" value="scrum" />
+								        </p:commandButton>
+								        <p:tooltip for="createTaskttButton"
+									        value="#{messages.label_create} Task" showEffect="fade"
+									        hideEffect="fade" />
+							        </p:column>
+						        </p:row>
+					        </f:facet>
+				        </p:panelGrid>
+                    </div>
+                    <div class="Container50 Responsive50">
+				        <p:panelGrid id="sprintChartPanelGrid" rendered="#{jjsprint.chartModel != null}" styleClass="Wid100">
+					        <f:facet name="header">
+						        <p:row>
+							        <p:column colspan="5">Sprint Chart</p:column>
+						        </p:row>
+					        </f:facet>
+					        <p:row>
+						        <p:column rowspan="2"
+							        style="width:60% !important; min-width:100px;">
+							        <p:chart type="bar" responsive="true" model="#{jjsprint.chartModel}"
+								        widgetVar="barChart_#{jjsprint.sprint.id}_Widget"/>
+								        <!--style="width:98%;height:300px;"/-->
+						        </p:column>
+					        </p:row>
+				        </p:panelGrid>
+                    </div>
+				    <p:separator />
+			    </h:form>
+            </div>
+
+            <div class="Container">
 			<h:form id="taskListForm" rendered="#{!jjsprint.render}"
 				style="width:100% !important;">
-				<p:panelGrid style="width:100% !important;">
+				<p:panelGrid>
 					<f:facet name="header">
 						<p:row>
 							<p:column colspan="6">Sprint Tasks</p:column>
 						</p:row>
 					</f:facet>
 					<p:row>
-						<p:column style="width: 33.33%;">
+						<p:column layout="grid" styleClass="Container33 Responsive100">
 							<p:fieldset legend="Todo" id="todoFieldset">
 								<p:dataTable scrollable="true" scrollHeight="250" id="todo"
 									var="todo" value="#{jjsprint.todoTask}"
@@ -225,7 +230,7 @@
 								</p:dataTable>
 							</p:fieldset>
 						</p:column>
-						<p:column style="width: 33.33%;">
+						<p:column layout="grid" styleClass="Container33 Responsive100">
 							<p:fieldset legend="In Progress" id="progFieldset">
 								<p:outputPanel id="progdropArea">
 									<h:outputText value="!!!Drop here!!!"
@@ -293,7 +298,7 @@
 								</p:outputPanel>
 							</p:fieldset>
 						</p:column>
-						<p:column style="width: 33.33%;">
+						<p:column layout="grid" styleClass="Container33 Responsive100">
 							<p:fieldset legend="Done Tasks" id="doneFieldset">
 								<p:outputPanel id="donedropArea">
 									<h:outputText value="!!!Drop here!!!"
@@ -376,6 +381,7 @@
 					</p:ajax>
 				</p:droppable>
 			</h:form>
+            </div>
 		</p:tab>
 	</p:tabView>
 </ui:composition>
