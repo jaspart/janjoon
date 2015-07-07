@@ -19,11 +19,6 @@
 .ui-editor {
 	height: 150px !important;
 }
-
-/* .cke_chrome { */
-/* 	visibility: inherit; */
-/* 	width: 730px !important; */
-/* } */
 .testCaseDataTable {
 	
 }
@@ -43,7 +38,7 @@
 
 .ui-tree {
 	height: 700px;
-	width: 100%;
+	width: 95%;
 	max-width: 400px;
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -65,8 +60,7 @@
 /* 	height: 150px !important; */
 /* } */
 </style>
-		<h:outputScript library="js" name="scrollTab.js" />
-		<p:panel style="height:800px;">
+		<h:outputScript library="js" name="scrollTab.js" />		
 			<h:form id="treeForm">
 				<p:remoteCommand name="updateTree" update="@form" />
 				<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
@@ -93,23 +87,23 @@
 						</f:facet>
 						<p:row>
 							<p:column colspan="2" styleClass="UnLinked">
-								<p:outputLabel
+								<p:outputLabel style="color: #fff !important;"
 									value="#{messages.specification_color_RequirementNotLinked_label}" />
 							</p:column>
 							<p:column colspan="2" styleClass="Specified">
-								<p:outputLabel
+								<p:outputLabel style="color: #fff !important;"
 									value="#{messages.specification_color_RequirementNoTask_label}" />
 							</p:column>
 							<p:column colspan="2" styleClass="Progress">
-								<p:outputLabel
+								<p:outputLabel style="color: #fff !important;"
 									value="#{messages.specification_color_RequirementInProcess_label}" />
 							</p:column>
 							<p:column colspan="2" styleClass="InTesting">
-								<p:outputLabel
+								<p:outputLabel style="color: #fff !important;"
 									value="#{messages.specification_color_RequirementFinishedTestProcess_label}" />
 							</p:column>
 							<p:column colspan="2" styleClass="Finished">
-								<p:outputLabel
+								<p:outputLabel style="color: #fff !important;"
 									value="#{messages.specification_color_RequirementFinishedSuccessed_label}" />
 							</p:column>
 						</p:row>
@@ -341,15 +335,7 @@
 									value="#{requirementBean.reqtestCases}">
 									<p:column selectionMode="multiple"
 										style="width:30%;text-align:center;" />
-									<p:column style="width:70%">
-										<f:facet name="header">
-											<p:row>
-												<p:column>
-													<h:outputText value="TestCases:" />
-												</p:column>
-											</p:row>
-										</f:facet>
-										<!-- 									<h:outputText value="#{testCaseModel.name}" /> -->
+									<p:column style="width:70%" headerText="TestCases">										
 										<p:commandLink target="_blank" value="#{testCaseModel.name}"
 											action="#{jJTestcaseBean.testCaseInfo(testCaseModel.id)}"
 											ajax="false">
@@ -385,8 +371,7 @@
 					</p:row>
 
 				</p:panelGrid>
-			</h:panelGrid>
-		</p:panel>
+			</h:panelGrid>		
 		<p:fieldset id="container" legend="Comments" toggleable="true"
 			style="margin-top: 10px;width:95%;"
 			rendered="#{loginBean.enable and requirementBean.requirement != null}">

@@ -92,8 +92,7 @@
 							<p:column>
 								<!-- 								<h:outputText for="build" value="#{messages.test_build_label}" /> -->
 								<p:selectOneMenu id="build" value="#{jJBuildBean.build}"
-									effect="fade" style="width:100%;" filter="true"
-									filterMatchMode="startsWith">
+									effect="fade" style="width:75%;" filter="true">
 									<f:converter
 										converterId="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter" />
 									<f:selectItem itemValue="#{null}"
@@ -219,13 +218,13 @@
 							</p:column>
 
 							<p:column colspan="2" styleClass="TestcaseNotExecuted">
-								<p:outputLabel
+								<p:outputLabel style="color: #fff !important;"
 									value="#{messages.test_color_TestcaseNotExecuted_title}" />
 							</p:column>
 						</p:row>
 						<p:row>
 							<p:column colspan="2" styleClass="TestcaseWithoutTeststep">
-								<p:outputLabel
+								<p:outputLabel style="color: #fff !important;"
 									value="#{messages.test_color_TestcaseNotExecuted_title}" />
 							</p:column>
 
@@ -241,17 +240,17 @@
 						</p:row>
 						<p:row>
 							<p:column colspan="2" styleClass="TestcaseFailedWithoutBuild">
-								<p:outputLabel
+								<p:outputLabel style="color: #fff !important;"
 									value="#{messages.test_color_TestcaseFailedWithoutBuild_title}" />
 							</p:column>
 
 							<p:column colspan="2" styleClass="TestcaseNonFiniWithoutBuild">
-								<p:outputLabel
+								<p:outputLabel style="color: #fff !important;"
 									value="#{messages.test_color_TestcaseNonFiniWithoutBuild_title}" />
 							</p:column>
 
 							<p:column colspan="2" styleClass="TestcaseSuccessWithoutBuild">
-								<p:outputLabel
+								<p:outputLabel style="color: #fff !important;"
 									value="#{messages.test_color_TestcaseSuccessWithoutBuild_title}" />
 							</p:column>
 						</p:row>

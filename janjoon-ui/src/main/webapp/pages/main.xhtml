@@ -9,14 +9,14 @@
 		<p:panel id="dataPanel" rendered="#{loginBean.enable}"
 			header="#{messages.main_communication_title}"
 			styleClass="customTitleBar"
-			style="height: 400px;background: #DDEEFF;">
+			style="height: 500px;background: #DDEEFF;">
 			<f:event listener="#{jJMessageBean.initJJmessageTable}"
 				type="preRenderView" />
 
 			<h:form id="messageForm">
 				<p:dataTable id="MessageTable2" sortMode="multiple"
 					value="#{jJMessageBean.mainMessages}" rowKey="#{mes.id}" var="mes"
-					widgetVar="messageTable" paginator="true" rows="4"
+					widgetVar="messageTable" paginator="true" rows="3"
 					paginatorPosition="bottom" sortBy="#{mes.creationDate}"
 					sortOrder="DESCENDING"
 					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"

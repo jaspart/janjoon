@@ -14,17 +14,21 @@
 	border-collapse: separate;
 }
 
+.ui-datatable-tablewrapper {
+  margin: 0px !important;
+}
+
 .planning-dataTable thead {
 	display: none;
 }
 
 .pe-layout-pane-header {
-	/*	background: #2391B2;*/
+	background: #2391B2;
 	
 }
 
 .stickyHeader {
-	width: 1600px;
+	width: 1650px;
 	margin-top: -0.5%;
 }
 
@@ -35,22 +39,18 @@
 
 .planning-dataTable .ui-datatable-data td {
 	overflow: hidden;
-	navigator
+	padding: 1px 5px !important;
 }
 
 .planning-dataTable .ui-datatable-data tr {
 	height: 44px;
 	overflow: hidden;
+	width: 1600px;
 }
-
-/* .jqplot-xaxis-label { */
-/* 	display: none; */
-/* } */
-
-/* .jqplot-xaxis-tick { */
-/* 	transform: rotate(45deg); */
-/* 	top: 10px; */
-/* } */
+tr.ui-selectlistbox-item.ui-corner-all {
+  height: 40px !important;
+  width: 100% !important;
+}
 </style>
 		<h:outputScript library="js" name="scrollTab.js" />
 		<h:form style="width:100%;display:none;">
@@ -104,25 +104,7 @@
 		<p:tabView id="projecttabview" widgetVar="projectTabView"
 			activeIndex="#{jJSprintBean.activeTabGantIndex}"
 			onTabChange="tabChangeHelper([{name: 'activeGantIndex', value: index}])"
-			dynamic="false" cache="true" style="width:100% !important;">
-
-			<!-- 			<p:tab title="#{messages.project_gantt_menuitem}" -->
-			<!-- 				rendered="#{loginBean.renderGantt}"> -->
-			<!-- 				<h:panelGrid id="projectpanel" columns="1" cellpadding="3" -->
-			<!-- 					style="width:100% !important;"> -->
-			<!-- 					<ui:insert name="gantt"> -->
-			<!-- 						<ui:include src="gantt.xhtml" /> -->
-			<!-- 					</ui:insert> -->
-			<!-- 				</h:panelGrid> -->
-			<!-- 			</p:tab> -->
-			<!-- 			<p:tab title="#{messages.project_scrum_menuitem}" -->
-			<!-- 				rendered="#{loginBean.renderScrum}"> -->
-			<!-- 				<h:panelGrid columns="1" cellpadding="3"> -->
-			<!-- 					<ui:insert name="scrum"> -->
-			<!-- 						<ui:include src="scrum.xhtml" /> -->
-			<!-- 					</ui:insert> -->
-			<!-- 				</h:panelGrid> -->
-			<!-- 			</p:tab> -->
+			dynamic="false" cache="true" style="width:100% !important;">			
 
 			<p:tab title="#{loginBean.planningConfiguration.firstPageHeader}">
 				<h:panelGrid columns="1" cellpadding="3"

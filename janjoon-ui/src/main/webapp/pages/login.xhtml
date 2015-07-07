@@ -3,7 +3,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <h:head>
 	<link rel="shortcut icon" type="image/png"
@@ -25,7 +26,7 @@
 		<div class="Wid90 DispBlock MarAuto MarTopPerc5 TexAlCenter">
 			<div class="Wid33 MarAuto WidAutoOnMobile">
 				<h:graphicImage name="janjoon_logo.ico" library="images"
-					style="width:40%; max-width:200px;" />
+					style="width:30%; max-width:200px;" />
 				<div class="Card ShadowEffect">
 					<div class="EmptyBox20"></div>
 					<div class="Wid100 OvHidden BigTopic Fs22">
@@ -60,8 +61,7 @@
 					<div class="EmptyBox30"></div>
 					<div class="Wid100">
 						<p:button value="Sign In / Sign Up" icon="fa fa-sign-in"
-							styleClass="Wid60 Fs18 White RaisedButton"
-							href="signup.jsf" />
+							styleClass="Wid60 Fs18 White RaisedButton" href="signup.jsf" />
 					</div>
 					<div class="EmptyBox5"></div>
 
@@ -73,12 +73,14 @@
 							value="#{messages.login_login_button}" icon="fa fa-key"
 							styleClass="GreenButton Wid60 Fs18 White RaisedButton"
 							action="#{loginBean.login}" disabled="#{!loginBean.agreeTerms}"
-							update=":login:auth" />
+							update=":login:auth"
+							onstart="PF('blockUIWidget').block()" 
+							onerror="PF('blockUIWidget').unblock()"
+							oncomplete="PF('blockUIWidget').unblock()" />
 					</div>
 					<div class="EmptyBox20"></div>
 
-					<div
-						class="Wid100 TexAlCenter Fs14 FontRobotoRegular WhiteBlue">
+					<div class="Wid100 TexAlCenter Fs14 FontRobotoRegular WhiteBlue">
 						<i class="fa fa-copyright"></i>
 						<h:outputLink value="https://www.starit.fr">
 							<h:graphicImage library="images" name="starit-logo.png"
@@ -89,6 +91,15 @@
 			</div>
 		</div>
 	</h:form>
+
+	<pe:blockUI widgetVar="blockUIWidget">
+		<h:panelGrid columns="2">
+			<p:graphicImage library="images" name="ajax-loader.gif"
+				style="vertical-align: middle;" />
+			<h:outputText value="#{messages.label_refresh}"
+				style="white-space: nowrap;" />
+		</h:panelGrid>
+	</pe:blockUI>
 
 	<h:outputStylesheet name="css/core-layout.css" library="rio-layout" />
 	<h:outputStylesheet name="standard.css" library="css" />
