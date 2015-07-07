@@ -50,9 +50,11 @@
 							onLabel="#{category.category.name}"
 							id="category_#{category.category.id}"
 							rendered="#{!loginBean.mobile}"
+							offLabel="#{category.category.name}"
+                            onIcon="ui-icon-check fa fa-check Fs15"
+					        offIcon="ui-icon-close fa fa-close Fs15"
 							style="visibility: visible;#{jJTestcaseBean.getMarginLeft(category)}"
-							offLabel="#{category.category.name}" onIcon="ui-icon-check"
-							offIcon="ui-icon-close">
+                            styleClass="BlueTextButton GrayButton">
 							<p:ajax
 								listener="#{jJTestcaseBean.loadData(null,category.category,true)}"
 								update=":testFormWest :testFormCenter :testFormNorth :container :rate"

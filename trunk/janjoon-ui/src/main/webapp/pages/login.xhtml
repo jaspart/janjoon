@@ -25,7 +25,7 @@
 	<h:form id="login" method="post">
 		<div class="Wid90 DispBlock MarAuto MarTopPerc5 TexAlCenter">
 			<div class="Wid33 MarAuto WidAutoOnMobile">
-				<h:graphicImage name="janjoon_logo.ico" library="images"
+				<h:graphicImage name="janjoon_logo.png" library="images"
 					style="width:30%; max-width:200px;" />
 				<div class="Card ShadowEffect">
 					<div class="EmptyBox20"></div>
@@ -60,8 +60,11 @@
 					</h:outputLink>
 					<div class="EmptyBox30"></div>
 					<div class="Wid100">
-						<p:button value="Sign In / Sign Up" icon="fa fa-sign-in"
-							styleClass="Wid60 Fs18 White RaisedButton" href="signup.jsf" />
+						<p:commandButton id="submit"
+							value="#{messages.login_login_button}" icon="fa fa-key"
+							styleClass="GreenButton Wid60 Fs18 White RaisedButton"
+							action="#{loginBean.login}" disabled="#{!loginBean.agreeTerms}"
+							update=":login:auth" />
 					</div>
 					<div class="EmptyBox5"></div>
 
@@ -69,14 +72,9 @@
 					<div class="Separator"></div>
 					<div class="EmptyBox10"></div>
 					<div class="Wid100">
-						<p:commandButton id="submit"
-							value="#{messages.login_login_button}" icon="fa fa-key"
-							styleClass="GreenButton Wid60 Fs18 White RaisedButton"
-							action="#{loginBean.login}" disabled="#{!loginBean.agreeTerms}"
-							update=":login:auth"
-							onstart="PF('blockUIWidget').block()" 
-							onerror="PF('blockUIWidget').unblock()"
-							oncomplete="PF('blockUIWidget').unblock()" />
+						<p:button value="Sign In / Sign Up" icon="fa fa-sign-in"
+							styleClass="Wid60 Fs18 White RaisedButton"
+							href="signup.jsf" />
 					</div>
 					<div class="EmptyBox20"></div>
 
