@@ -1410,7 +1410,7 @@ public class JJTestcaseBean {
 			if (className.equalsIgnoreCase("JJChapter")) {
 
 				JJChapter chapter = (JJChapter) entry.getValue();
-				TreeNode newNode2 = createTree(chapter, newNode, category,
+				createTree(chapter, newNode, category,
 						build);
 
 			} else if (className.equalsIgnoreCase("JJRequirement")) {
@@ -1435,7 +1435,7 @@ public class JJTestcaseBean {
 				.entrySet()) {
 			JJTestcase testcase = testcaseEntry.getValue();
 			String type = getType(testcase);
-			TreeNode newNode3 = new DefaultTreeNode(type, "TC-"
+			new DefaultTreeNode(type, "TC-"
 					+ testcase.getId() + "- " + testcase.getName(), newNode);
 
 		}

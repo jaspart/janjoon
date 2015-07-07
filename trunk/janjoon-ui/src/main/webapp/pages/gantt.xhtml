@@ -93,7 +93,7 @@
 								<p:panelGrid id="stickyHeader" styleClass="stickyHeader">
 									<f:facet name="header">
 										<p:row>
-											<p:column style="width:100px;">Actions</p:column>
+											<p:column style="width:150px;">Actions</p:column>
 											<p:column style="width:180px !important;">#{messages.project_gantt_table_name_title}</p:column>
 											<p:column style="width: 130px;">#{messages.project_gantt_table_assigned_title}</p:column>
 											<p:column style="width: 120px;">#{messages.project_gantt_table_startplanned_title}</p:column>
@@ -108,9 +108,10 @@
 									</f:facet>
 								</p:panelGrid>
 								<p:dataTable id="taskDataTable" var="taskData"
-									sortFunction="#{jJTaskBean.sortFunction}" style="width: 1600px;"
-									styleClass="planning-dataTable" sortBy="#{taskData.chapter}"
-									value="#{jJTaskBean.tasksData}" editable="true" editMode="cell">
+									sortFunction="#{jJTaskBean.sortFunction}"
+									style="width: 1650px;" styleClass="planning-dataTable"
+									sortBy="#{taskData.chapter}" value="#{jJTaskBean.tasksData}"
+									editable="true" editMode="cell">
 
 									<p:ajax event="cellEdit" listener="#{jJTaskBean.onCellEdit}"
 										process="@widgetVar(nameWidget)"
@@ -126,15 +127,16 @@
 										</p:column>
 									</p:summaryRow>
 
-									<p:column headerText="Actions" style="width:100px;">
-										<p:graphicImage
+									<p:column headerText="Actions"
+										style="width:145px;padding-bottom: 0px !important;">
+										<p:graphicImage style="margin-top: 10px;"
 											rendered="#{taskData.task.specification != null and taskData.task.specification}"
 											library="images" name="doc.ico" width="16" height="16" />
 										<p:graphicImage library="images" name="#{taskData.icone}"
-											width="16" height="16" />
+											width="16" height="16" style="margin-top: 10px;margin-left: 5px;" />
 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
 											update=":viewTaskForm :viewTaskDialog" immediate="true"
-											resetValues="true"
+											resetValues="true" style="margin-left: 10px;"
 											title="#{messages.project_gantt_table_actions_viewMenuItem}"
 											action="#{jJTaskBean.initiateReqTreeNode}">
 											<f:setPropertyActionListener value="#{taskData.task}"
@@ -168,7 +170,7 @@
 									</p:column>
 
 									<p:column id="name"
-										style="width:180px !important; overflow:hidden;"
+										style="width:175px !important; overflow:hidden;"
 										headerText="#{messages.project_gantt_table_name_title}">
 										<p:cellEditor>
 											<f:facet name="output">
