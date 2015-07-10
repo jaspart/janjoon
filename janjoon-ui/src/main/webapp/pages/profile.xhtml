@@ -169,7 +169,7 @@
 											disabled="#{jJRightBean.disabledCheckRight}"
 											value="#{jJRightBean.checkRights}">
 											<p:ajax update="rightDataTable"
-												listener="#{jJRightBean.checkRights}" />
+												listener="#{jJRightBean.checkRightsListener}" />
 										</p:selectBooleanCheckbox>
 									</p:column>
 								</p:row>
@@ -177,7 +177,7 @@
 							<p:selectBooleanCheckbox value="#{rightModel.checkRight}"
 								disabled="#{jJRightBean.disabledCheckRight}">
 								<p:ajax update="rightDataTable"
-									listener="#{jJRightBean.checkRight}" />
+									listener="#{jJRightBean.checkRightListener}" />
 							</p:selectBooleanCheckbox>
 						</p:column>
 						<p:column style="width:25%">

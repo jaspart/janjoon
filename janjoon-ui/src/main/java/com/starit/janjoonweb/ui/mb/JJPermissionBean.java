@@ -34,6 +34,7 @@ public class JJPermissionBean {
 	private JJProduct product;
 	private boolean checkPermission;
 	private boolean checkPermissions;
+	private boolean oldCheckPermissions;
 	private boolean disabledCheckPermission;
 
 	public JJPermissionService getJJPermissionService() {
@@ -213,13 +214,18 @@ public class JJPermissionBean {
 		}
 
 		checkPermissions = true;
+		oldCheckPermissions = true;
 	}
 
 	public void checkPermissions() {
 
+		if(checkPermissions == oldCheckPermissions)
+			checkPermissions = !checkPermissions;
 		for (PermissionDataModel permissionModel : permissionDataModel) {
 			permissionModel.setCheckPermission(checkPermissions);
 		}
+		
+		oldCheckPermissions = checkPermissions;
 
 	}
 

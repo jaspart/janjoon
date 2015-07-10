@@ -28,7 +28,7 @@
 			cellpadding="6">
 			<p:dataTable id="companyDataTable" var="company"
 				value="#{jJCompanyBean.companies}" paginator="true" rows="15"
-				rowKey="#{company.id}">
+				rowKey="#{company.id}"  paginatorPosition="bottom">
 				<f:facet name="header">#{messages.admin_company_table_header}</f:facet>
 				<p:column style="width: 70px !important;text-align: center;">
 					<p:graphicImage styleClass="avatar"

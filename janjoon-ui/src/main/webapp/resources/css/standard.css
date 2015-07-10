@@ -76,14 +76,10 @@ a:visited {
 }
 
 .ui-icon-pdf {
-	background-image:
-		url("/janjoon-ui/javax.faces.resource/images/pdf.ico.jsf") !important;
 	width: 25px !important;
 	height: 25px !important;
 	left: 20% !important;
 	margin-left: 0 !important;
-	margin-top: 0 !important;
-	top: 20% !important;
 }
 
 .ui-icon-restore {
@@ -108,7 +104,7 @@ a:visited {
 .ui-messages-info,.ui-messages-warn,.ui-messages-error,.ui-messages-fatal
 	{
 	margin: 0 0 0 0;
-	}
+}
 
 .panelDialog {
 	border: none;
@@ -753,7 +749,7 @@ div.revised2 div.timeline-event-content span {
 
 div.real {
 	background: #118811 none !important; /* orange */
-	border-color: black; /* black */
+	border-color: white; /* black */
 	opacity: 0.6;
 	filter: alpha(opacity = 60);
 	height: 17px !important;
@@ -803,14 +799,6 @@ div.revised2 {
 	transform: translate(0px, -3px);
 	border-radius: 0px !important;
 }
-
-/* .noPadding { */
-/* 	padding-top: 0px !important; */
-/* 	padding-left: 0px !important; */
-/* 	padding-bottom: 0px !important; */
-/* 	padding-right: 0px !important; */
-/* 	background: #F2F2F2; */
-/* } */
 
 .old {
 	background-color: #FCA752 !important;
