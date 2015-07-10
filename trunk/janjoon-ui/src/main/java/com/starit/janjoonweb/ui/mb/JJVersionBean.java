@@ -56,6 +56,7 @@ public class JJVersionBean {
 
 	private boolean checkVersion;
 	private boolean checkVersions;
+	private boolean oldCheckVersions;
 	private boolean disabledCheckVersion;
 
 	public JJProduct getProduct() {
@@ -181,13 +182,18 @@ public class JJVersionBean {
 		}
 
 		checkVersions = true;
+		oldCheckVersions= true;
 	}
 
 	public void checkVersions() {
 
+		if(checkVersions == oldCheckVersions)
+			checkVersions = !checkVersions;
 		for (VersionDataModel versionModel : versionDataModel) {
 			versionModel.setCheckVersion(checkVersions);
 		}
+		
+		oldCheckVersions = checkVersions ;
 
 	}
 
