@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../templates/layout.xhtml">
+	<ui:define name="content">
+		<p:commandButton value="#{messages.specification_video_help_title}"
+			id="videoHelpBtn" icon="ui-icon-video"
+			onclick="PF('videoHelpWidget').show()" type="button"
+			style="float: right;" />
+		<f:event type="preRenderComponent"
+			oncomplete="PF('blockUIWidget').unblock()"
+			listener="#{jJStatusBean.loadData()}" />
+		<p:tabView id="statsTabView" widgetVar="statsTabView" dynamic="true">
+			<p:ajax event="tabChange" listener="#{jJStatusBean.onTabStatChange}"
+				update="SprintTabView" onstart="PF('blockUIWidget').block()"
+				oncomplete="PF('blockUIWidget').unblock();" />
+			<p:tab id="specTab" title="Status">
+				<h:form id="specForm">
+					<h:panelGrid id="statPanel" columns="3">
+						<p:chart id="custom" responsive="true"
+							model="#{jJStatusBean.pieChart}" style="width:400px;height:300px"
+							type="pie" />
+
+						<p:chart type="metergauge" model="#{jJStatusBean.bugMetergauge}"
+							style="width:400px;height:300px" responsive="true" />
+
+						<p:chart type="metergauge" model="#{jJStatusBean.prjMetergauge}"
+							style="width:400px;height:300px" responsive="true" />
+					</h:panelGrid>
+					<p:dataTable id="categoryTable" var="categoryModel"
+						value="#{jJStatusBean.categoryDataModel}">
+						<f:facet name="header">
+							<h:outputText value="Categories stats" />
+						</f:facet>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Name" />
+							</f:facet>
+							<h:outputText value="#{categoryModel.category.name}"
+								style="margin: auto;" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText
+									value="#{messages.specification_completion_progress}" />
+							</f:facet>
+							<p:chart id="coverage" responsive="true"
+								model="#{categoryModel.categoryPieChart}" type="pie"
+								style="width:200px;height:150px;margin: auto;" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText
+									value="#{messages.specification_coverage_progress}" />
+							</f:facet>
+							<p:progressBar style="width:385px;margin: auto;"
+								value="#{categoryModel.coverageProgress}"
+								labelTemplate="{value}%" displayOnly="true" />
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</p:tab>
+			<p:tab id="sprintTab" title="Sprint"
+				rendered="#{not empty jJSprintBean.sprintList}">
+				<p:tabView id="SprintTabView" dynamic="true" widgetVar="SprintTab"
+					value="#{jJSprintBean.sprintList}" var="jjsprint">
+					<p:tab title="#{jjsprint.sprint.name}"
+						disabled="#{jjsprint.render or jjsprint.chartModel == null}">
+						<p:chart model="#{jjsprint.chartModel}" type="bar"
+							style="height:400px;" responsive="true"
+							widgetVar="barChart_#{jjsprint.sprint.id}_Widget"
+							rendered="#{!jjsprint.render and jjsprint.chartModel != null}" />
+					</p:tab>
+				</p:tabView>
+			</p:tab>
+		</p:tabView>
+		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
+		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
+			position="center" header="#{messages.specification_video_help_title}"
+			style="padding:0px;" resizable="false" draggable="false"
+			minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
+			<video width="100%" height="100%" controls="true">
+				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
+			</video>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

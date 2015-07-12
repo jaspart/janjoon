@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+	<style type="text/css">
+.ui-fileupload-progress {
+	display: none;
+}
+
+.ui-fileupload-cancel {
+	display: none;
+}
+
+.ui-fileupload-files {
+	margin: 1px 0;
+	width: 150px !important;
+	display: inline-block;
+	height: 30px;
+}
+
+td.ui-fileupload-preview {
+	display: none;
+}
+</style>
+	<h:form id="productForm">
+		<p:panel id="productPanel" style="width:700px" columns="1"
+			cellpadding="6">
+			<p:dataTable id="productDataTable" var="product" lazy="true"
+				value="#{jJProductBean.productListTable}" paginator="true" rows="15"
+				rowKey="#{product.id}">
+				<f:facet name="header">#{messages.admin_product_table_title}</f:facet>
+				<p:column style="width: 70px !important;text-align: center;">
+					<p:graphicImage styleClass="avatar"
+						rendered="#{product.logo != null}"
+						value="#{imageStreamer.imageProd}">
+						<f:param name="ProdId" value="#{product.id}" />
+					</p:graphicImage>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_product_table_name_label}" />
+					</f:facet>
+					<h:outputText value="#{product.name}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText
+							value="#{messages.admin_product_table_extname_label}" />
+					</f:facet>
+					<h:outputText value="#{product.extname}" />
+				</p:column>
+				<p:column styleClass="action-column">
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_product_table_action_label}" />
+					</f:facet>
+					<p:splitButton id="editButton" icon="ui-icon-pencil"
+						oncomplete="PF('productDialogWidget').show()" resetValues="true"
+						value="#{messages.admin_product_edit_tooltip}"
+						action="#{jJProductBean.editProduct(jJVersionBean)}"
+						update=":tabview:productDialog">
+						<f:setPropertyActionListener value="#{product}"
+							target="#{jJProductBean.productAdmin}" />
+
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							resetValues="true"
+							oncomplete="PF('productDeleteDialogWidget').show()"
+							value="#{messages.admin_product_table_delete_label}"
+							title="#{messages.admin_product_delete_tooltip}">
+							<f:setPropertyActionListener value="#{product}"
+								target="#{jJProductBean.productAdmin}" />
+						</p:menuitem>
+					</p:splitButton>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton value="#{messages.admin_product_table_new_label}"
+						id="newProduct" resetValues="true"
+						actionListener="#{jJProductBean.newProduct(jJVersionBean)}"
+						update=":tabview:productDialog"
+						oncomplete="PF('productDialogWidget').show()"
+						icon="ui-icon-circle-plus" />
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+	<p:dialog id="productDialog" draggable="false"
+		header="#{messages[jJProductBean.message]}" modal="true"
+		widgetVar="productDialogWidget" dynamic="true" showEffect="fade"
+		hideEffect="explode" resizable="false">
+		<p:ajax event="close" update=":tabview:productForm :headerForm"
+			listener="#{jJProductBean.closeDialog(jJVersionBean,jJBuildBean)}" />
+		<pe:blockUI widgetVar="versionBlockUIWidget"
+			target="productDialogPanel">
+			<h:panelGrid columns="2" layout="grid">
+				<p:graphicImage library="images" name="ajax-loader.gif"
+					style="vertical-align: middle;" />
+				<h:outputText value="#{messages.label_refresh}"
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+		</pe:blockUI>
+		<p:outputPanel id="productDialogPanel">
+			<h:form id="productDialogForm">
+				<p:panel styleClass="panelDialog">
+					<f:facet name="header">
+						<p:messages id="msg" showDetail="false" closable="true" />
+					</f:facet>
+					<p:row>
+						<p:column>
+							<p:panelGrid>
+								<p:row>
+									<p:column>
+										<p:inputText id="name"
+											disabled="#{jJProductBean.disabledProductMode}"
+											value="#{jJProductBean.productAdmin.name}"
+											label="#{messages.admin_product_new_name_title}"
+											required="true" widgetVar="nameWidget">
+											<f:validateLength maximum="100" />
+											<p:ajax event="blur" update="prodLogo" />
+										</p:inputText>
+										<p:watermark for="name"
+											value="#{messages.admin_product_new_name_watermark}" />
+									</p:column>
+									<p:column>
+										<h:outputText
+											value="#{messages.admin_product_new_manager_title}" />
+										<p:selectOneMenu id="productManagerSelect"
+											disabled="#{jJProductBean.disabledProductMode}"
+											value="#{jJProductBean.productManager}"
+											panelStyle="width:150px" effect="fade" style="width:160px"
+											filter="true" filterMatchMode="startsWith" required="true"
+											requiredMessage="Product Manager is a required value"
+											widgetVar="productManagerWidget"
+											label="#{messages.admin_product_new_manager_label}">
+											<f:converter
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />
+											<f:selectItems value="#{jJProductBean.productManagerList}"
+												var="p" itemLabel="#{p.firstname} #{p.name}"
+												itemValue="#{p}" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:inputText id="extname"
+											disabled="#{jJProductBean.disabledProductMode}"
+											value="#{jJProductBean.productAdmin.extname}"
+											label="#{messages.admin_product_new_extname_label}"
+											required="true" widgetVar="extnameWidget">
+											<f:validateLength maximum="100" />
+										</p:inputText>
+										<p:watermark for="extname"
+											value="#{messages.admin_product_new_extname_waternmark}" />
+									</p:column>
+
+									<p:column>
+										<p:selectBooleanButton
+											disabled="#{jJProductBean.disabledProductMode}"
+											value="#{jJProductBean.productAdmin.enabled}"
+											onLabel="#{messages.admin_product_new_active_button}"
+											offLabel="#{messages.admin_product_new_inactive_button}"
+											onIcon="ui-icon-check" offIcon="ui-icon-close">
+											<p:ajax update="msg" listener="#{jJProductBean.addMessage}" />
+										</p:selectBooleanButton>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column colspan="2">
+										<h:outputLabel for="prodLogo" value="Logo:" />
+										<p:fileUpload id="prodLogo"
+											disabled="#{empty jJProductBean.productAdmin.name}"
+											fileUploadListener="#{licenseBean.handleProdLogoUpload}"
+											mode="advanced" dragDropSupport="true" update="msg"
+											sizeLimit="1000000" allowTypes="/(gif|png|ico|jpeg)$/" />
+									</p:column>
+								</p:row>
+								<p:row rendered="#{jJProductBean.disabledVersionMode}">
+									<p:column colspan="2">
+										<p:commandButton id="addProduct" value="Add Product"
+											style="float: right;" update="productDialogForm"
+											disabled="#{not jJProductBean.disabledVersionMode}"
+											process="@this,name,extname,productManagerSelect"
+											action="#{jJProductBean.addProduct(jJVersionBean)}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:inputText id="version"
+											disabled="#{jJProductBean.disabledVersionMode}"
+											value="#{jJVersionBean.versionAdmin.name}"
+											label="Version Name" required="true"
+											requiredMessage="Version Name is required"
+											widgetVar="versionWidget">
+											<f:validateLength maximum="100" />
+											<f:validator validatorId="unicityNameValidator" />
+											<f:attribute name="product"
+												value="#{jJProductBean.productAdmin}" />
+											<f:attribute name="versionBean" value="#{jJVersionBean}" />
+										</p:inputText>
+										<p:watermark for="version"
+											value="#{messages.admin_product_new_version_watermark}" />
+									</p:column>
+
+									<p:column>
+										<p:commandButton id="addVersion"
+											onstart="PF('versionBlockUIWidget').block()"
+											oncomplete="PF('versionBlockUIWidget').unblock()"
+											disabled="#{jJProductBean.disabledVersionMode}"
+											update="version versionDataTable msg"
+											actionListener="#{jJVersionBean.addVersion}"
+											icon="ui-icon-circle-plus"
+											value="#{messages.admin_product_new_version_button}"
+											process="@this,version" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:column>
+					</p:row>
+					<p:dataTable id="versionDataTable" var="versionModel"
+						scrollable="true" style="width:460px;" scrollHeight="250"
+						value="#{jJVersionBean.versionDataModel}"
+						rowStyleClass="#{versionModel.old ? 'old' : null}">
+
+						<p:ajax event="rowToggle" listener="#{jJBuildBean.rowToggle}"
+							update="versionDataTable" onstart="updateRowExapansion();" />
+
+						<f:facet name="header">
+							<h:outputText value="#{messages.admin_product_new_version_title}" />
+						</f:facet>
+
+						<p:column style="width:20%">
+							<f:facet name="header">
+								<p:row>
+									<p:column>
+										<p:selectBooleanCheckbox
+											disabled="#{jJVersionBean.disabledCheckVersion}"
+											value="#{jJVersionBean.checkVersions}">
+											<p:ajax update="versionDataTable"
+												listener="#{jJVersionBean.checkVersions}" />
+										</p:selectBooleanCheckbox>
+									</p:column>
+								</p:row>
+							</f:facet>
+
+							<p:selectBooleanCheckbox value="#{versionModel.checkVersion}"
+								disabled="#{jJVersionBean.disabledCheckVersion}">
+								<p:ajax update="versionDataTable"
+									listener="#{jJVersionBean.checkVersion}" />
+							</p:selectBooleanCheckbox>
+							<p:rowToggler />
+						</p:column>
+						<p:column style="width:80%">
+							<f:facet name="header">
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{messages.admin_product_new_version_header}" />
+									</p:column>
+								</p:row>
+							</f:facet>
+							<h:outputText value="#{versionModel.version.name}" />
+						</p:column>
+
+						<p:rowExpansion styleClass="rowExpansion">
+							<f:event type="preRenderComponent" update="versionDataTable"
+								onstart="PF('versionBlockUIWidget').block()"
+								oncomplete="PF('versionBlockUIWidget').unblock()"
+								listener="#{jJBuildBean.loadingRowExpansion(versionModel.version)}" />
+
+							<p:dataTable id="buildDataTable" var="build" style="width:80%;"
+								selection="#{jJBuildBean.buildUtils.get(jJBuildBean.index).versionSelectedBuilds}"
+								rowKey="#{build.id}" emptyMessage="That version have no builds"
+								value="#{jJBuildBean.buildUtils.get(jJBuildBean.index).versionBuilds}">
+
+								<p:column selectionMode="multiple"
+									style="width:30%;text-align:center" />
+								<p:column style="width:70%">
+									<f:facet name="header">
+										<p:row>
+											<p:column>
+												<h:outputText value="Name:" />
+											</p:column>
+										</p:row>
+									</f:facet>
+									<h:outputText value="#{build.name}" />
+								</p:column>
+								<f:facet name="footer">
+									<p:commandButton onstart="PF('versionBlockUIWidget').block()"
+										oncomplete="PF('versionBlockUIWidget').unblock()"
+										update="buildDataTable :tabview:productDialogForm:msg"
+										process="buildDataTable" value="Update"
+										action="#{jJBuildBean.updateVersionBuilds(versionModel.version.id)}" />
+
+								</f:facet>
+							</p:dataTable>
+							<p:panelGrid style="width:80%;">
+								<p:row>
+									<p:column>
+										<p:inputText id="build" style="width:80%;"
+											value="#{jJBuildBean.buildName}" label="Build Name"
+											required="true" requiredMessage="Build Name is required">
+											<f:validateLength maximum="100" />
+											<f:validator validatorId="unicityNameValidator" />
+											<f:attribute name="version" value="#{versionModel.version}" />
+											<f:attribute name="buildBean" value="#{jJBuildBean}" />
+										</p:inputText>
+										<p:watermark for="build" value="Build Name" />
+									</p:column>
+
+									<p:column>
+										<p:commandButton id="addBuild"
+											onstart="PF('versionBlockUIWidget').block()"
+											oncomplete="PF('versionBlockUIWidget').unblock()"
+											style="font-size: 1.0em !important;width:100%;height:100%"
+											update="build buildDataTable :tabview:productDialogForm:msg"
+											action="#{jJBuildBean.addBuild(versionModel.version.id)}"
+											value="#{messages.admin_product_new_build_button}"
+											process="@this,build">
+										</p:commandButton>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:rowExpansion>
+					</p:dataTable>
+
+					<f:facet name="footer">
+						<p:commandButton id="saveButton" style="float: right;"
+							onstart="PF('versionBlockUIWidget').block()"
+							oncomplete="PF('versionBlockUIWidget').unblock()"
+							disabled="#{jJProductBean.disabledVersionMode}" value="Save"
+							update="productDialogForm :headerForm :growlForm"
+							process="@this,name,extname,productManagerSelect"
+							action="#{jJProductBean.save(jJVersionBean)}" />
+					</f:facet>
+				</p:panel>
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+	<p:confirmDialog id="productDeleteDialog"
+		widgetVar="productDeleteDialogWidget"
+		message="#{messages.admin_product_delete_label}" showEffect="fade"
+		hideEffect="fade"
+		header="#{messages.admin_product_delete_confirm_label}"
+		severity="alarm">
+		<p:outputPanel id="productDeletePanel">
+			<h:form id="productDeleteForm">
+				<p:commandButton id="deleteYesButton"
+					value="#{messages.admin_product_new_yes_button}"
+					action="#{jJProductBean.deleteProduct}"
+					update=":tabview:productForm :headerForm"
+					oncomplete="PF('productDeleteDialogWidget').hide()" />
+				<p:commandButton id="deleteNoButton"
+					value="#{messages.admin_product_new_no_button}"
+					onclick="PF('productDeleteDialogWidget').hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:confirmDialog>
+</ui:composition>
+</html>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+
+	<h:form id="configForm">
+		<p:panel id="configPanel" style="width:800px" columns="1"
+			cellpadding="6">
+			<p:dataTable id="dataTable" var="conf" lazy="true"
+				paginatorPosition="bottom" value="#{jJConfigurationBean.configList}"
+				paginator="true" rows="10"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15">
+				<f:facet name="header">  
+           #{messages.admin_config_table_header}  
+        </f:facet>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_config_table_name_title}" />
+					</f:facet>
+					<h:outputText value="#{conf.name}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText
+							value="#{messages.admin_config_table_parameter_title}" />
+					</f:facet>
+					<h:outputText value="#{conf.param}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_config_table_value_title}" />
+					</f:facet>
+					<h:outputText value="#{conf.val}"
+						style="white-space: pre-wrap;max-height: 30px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis" />
+				</p:column>
+				<p:column styleClass="action-column" style="width:205px;">
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_config_table_action_title}" />
+					</f:facet>
+
+					<p:splitButton id="editButton" icon="ui-icon-pencil"
+						update=":tabview:createForm:createPanelGrid :tabview:createDialog"
+						action="#{jJConfigurationBean.onEdit}" resetValues="true"
+						oncomplete="PF('createDialogWidget').show()"
+						value="#{messages.admin_config_edit_title}">
+						<f:setPropertyActionListener value="#{conf}"
+							target="#{jJConfigurationBean.JJConfiguration_}" />
+						<f:setPropertyActionListener
+							target="#{jJConfigurationBean.renderCreate}" value="false" />
+
+
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							resetValues="true" oncomplete="PF('deleteDialogWidget').show()"
+							value="#{messages.admin_config_delete_title}">
+							<f:setPropertyActionListener value="#{conf}"
+								target="#{jJConfigurationBean.selectedConf}" />
+						</p:menuitem>
+
+					</p:splitButton>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton value="#{messages.admin_config_new_button}"
+						id="createButton" icon="ui-icon-circle-plus"
+						update=":tabview:createForm:createPanelGrid :tabview:createDialog"
+						actionListener="#{jJConfigurationBean.beforeDialogShow}"
+						title="#{messages.admin_config_new_title}" resetValues="true">
+						<f:setPropertyActionListener
+							target="#{jJConfigurationBean.renderCreate}" value="true" />
+					</p:commandButton>
+					<p:tooltip for="createButton"
+						value="#{messages.admin_config_table_create_title}"
+						showEffect="fade" hideEffect="fade" />
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
+
+	</h:form>
+	<p:dialog id="createDialog" modal="true" widgetVar="createDialogWidget"
+		dynamic="true" visible="#{jJConfigurationBean.createDialogVisible}"
+		resizable="true" maximizable="true" showEffect="fade"
+		hideEffect="explode">
+		<p:ajax event="close" update=":tabview:configForm"
+			listener="#{jJConfigurationBean.handleDialogClose}" />
+		<f:facet name="header">
+			<p:outputLabel rendered="#{jJConfigurationBean.renderCreate}"
+				value="#{messages.admin_config_new_title}" />
+
+			<p:outputLabel rendered="#{!jJConfigurationBean.renderCreate}"
+				value="#{messages.admin_config_edit_title}" />
+		</f:facet>
+		<p:outputPanel id="createPanel">
+			<h:form id="createForm" enctype="multipart/form-data"
+				style="height: 470px;width: 700px;">
+				<p:panel styleClass="panelDialog">
+					<f:facet name="header">
+						<p:messages id="msg" showDetail="false" closable="true" />
+					</f:facet>
+					<h:panelGrid id="createPanelGrid" columns="2" styleClass="dialog"
+						columnClasses="col1,col2,col3">
+						<p:outputLabel for="confName" value="Name:" />
+						<p:inputTextarea
+							value="#{jJConfigurationBean.JJConfiguration_.name}"
+							id="confName" required="true"
+							requiredMessage="Name field is requiered">
+							<f:validateLength maximum="100" />
+						</p:inputTextarea>
+
+						<p:outputLabel for="confDesc" value="Description :"
+							rendered="#{!loginBean.mobile}" />
+						<pe:ckEditor id="confDesc"
+							toolbar="#{imageStreamer.ckEditorToolBar}"
+							rendered="#{!loginBean.mobile}" height="150px"
+							customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+							value="#{jJConfigurationBean.JJConfiguration_.description}"
+							required="true"
+							requiredMessage="Config Description is a required value" />
+
+						<p:outputLabel for="confMobileDesc" value="Description :"
+							rendered="#{loginBean.mobile}" />
+						<p:editor id="confMobileDesc" style="width:680px"
+							rendered="#{loginBean.mobile}"
+							value="#{jJConfigurationBean.JJConfiguration_.description}"
+							required="true"
+							requiredMessage="Config Description is a required value" />
+
+
+						<p:outputLabel for="confParam" value="Parametre:" />
+						<p:inputText value="#{jJConfigurationBean.JJConfiguration_.param}"
+							id="confParam">
+							<f:validateLength maximum="100" />
+						</p:inputText>
+
+						<p:outputLabel for="confVal" value="Value:" />
+						<p:inputTextarea scrollHeight="6" cols="82" rows="6"
+							autoResize="false"
+							value="#{jJConfigurationBean.JJConfiguration_.val}" id="confVal">
+							<!-- 							<f:validateLength maximum="100" /> -->
+						</p:inputTextarea>
+					</h:panelGrid>
+					<f:facet name="footer">
+						<p:commandButton id="createSaveButton"
+							value="#{messages.admin_config_new_save_button}"
+							action="#{jJConfigurationBean.persistConf}"
+							update="createPanelGrid,:growlForm :scrollRight" />
+						<!-- 					 :messagePanel -->
+						<p:commandButton idid="createCloseButton"
+							value="#{messages.admin_config_new_close_button}"
+							onclick="PF('createDialogWidget').hide()" type="button" />
+					</f:facet>
+				</p:panel>
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+	<p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget"
+		message="#{messages.admin_config_delete_label}" showEffect="fade"
+		hideEffect="explode" header="#{messages.admin_config_delete_title}"
+		severity="alarm">
+		<p:outputPanel id="deletePanel">
+			<h:form id="deleteForm">
+				<p:commandButton id="deleteYesButton"
+					value="#{messages.admin_config_delete_yes_label}"
+					action="#{jJConfigurationBean.deleteConfig}"
+					update=":tabview:configForm :scrollRight :growlForm"
+					oncomplete="PF('deleteDialogWidget').hide()" />
+				<!-- 					:messagePanel -->
+				<p:commandButton id="deleteNoButton"
+					value="#{messages.admin_config_delete_no_label}"
+					onclick="PF('deleteDialogWidget').hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:confirmDialog>
+</ui:composition>
+</html>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+
+	<h:form id="mindMapForm">
+		<p:mindmap value="#{jJRequirementBean.reqRoot}"
+			style="width: 500px;height: 500px;border: 1px solid black;">
+			<p:ajax event="select" listener="#{jJRequirementBean.onNodeSelect}" />
+			<p:ajax event="dblselect" onstart="PF('blockUIWidget').block()"
+				oncomplete="PF('blockUIWidget').unblock();"
+				update=":requirementDialog"
+				disabled="#{!loginBean.authorisationService.wRequiement}"
+				listener="#{jJRequirementBean.onNodeDblselect}" />
+		</p:mindmap>
+
+	</h:form>
+</ui:composition>
+</html>

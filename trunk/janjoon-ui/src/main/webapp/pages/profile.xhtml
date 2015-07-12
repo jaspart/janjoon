@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+	<h:form id="profileForm">
+		<p:panel id="profilePanel" style="width:600px" columns="1"
+			cellpadding="6">
+			<p:dataTable id="profileDataTable" var="profile" lazy="true"
+				paginatorPosition="bottom" value="#{jJProfileBean.profileListTable}"
+				paginator="true" rows="15" rowKey="#{profile.id}">
+				<f:facet name="header">#{messages.admin_profile_table_header}</f:facet>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_profile_table_name_title}" />
+					</f:facet>
+					<h:outputText value="#{profile.name}" />
+				</p:column>
+				<p:column style="width: 150px;" styleClass="action-column">
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_profile_table_action_title}" />
+					</f:facet>
+					<p:splitButton id="editButton" icon="ui-icon-pencil"
+						oncomplete="PF('profileDialogWidget').show()"
+						action="#{jJProfileBean.editProfile(jJRightBean)}"
+						update=":tabview:profileDialog" resetValues="true"
+						title="#{messages.admin_profile_table_edit_tooltip}"
+						value="#{messages.admin_profile_table_edit_tooltip}">
+						<f:setPropertyActionListener value="#{profile}"
+							target="#{jJProfileBean.profileAdmin}" />
+
+
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							resetValues="true"
+							oncomplete="PF('profileDeleteDialogWidget').show()"
+							title="#{messages.admin_profile_table_delete_tooltip}"
+							value="#{messages.admin_profile_table_delete_tooltip}">
+							<f:setPropertyActionListener value="#{profile}"
+								target="#{jJProfileBean.profileAdmin}" />
+						</p:menuitem>
+
+					</p:splitButton>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton value="#{messages.admin_profile_new_button}"
+						id="newProfile" title="#{messages.admin_profile_new_button}"
+						actionListener="#{jJProfileBean.newProfile(jJRightBean)}"
+						update=":tabview:profileDialog" resetValues="true"
+						oncomplete="PF('profileDialogWidget').show()"
+						icon="ui-icon-circle-plus" />
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+	<p:dialog id="profileDialog"
+		header="#{messages[jJProfileBean.message]}" modal="true"
+		widgetVar="profileDialogWidget" dynamic="true" showEffect="fade"
+		hideEffect="explode" resizable="false">
+		<p:ajax event="close" update=":tabview:profileForm"
+			listener="#{jJProfileBean.closeDialog(jJRightBean)}" />
+		<p:outputPanel id="profileDialogPanel">
+			<h:form id="profileDialogForm">
+				<p:panel styleClass="panelDialog">
+					<f:facet name="header">
+						<p:messages id="msg" showDetail="false" closable="true" />
+					</f:facet>
+					<p:row>
+						<p:column>
+							<p:panelGrid>
+								<p:row>
+									<p:column colspan="3">
+										<p:inputText id="name"
+											disabled="#{jJProfileBean.disabledProfileMode}"
+											value="#{jJProfileBean.profileAdmin.name}" label="Name"
+											required="true">
+											<f:validateLength maximum="100" />
+										</p:inputText>
+										<p:watermark for="name"
+											value="#{messages.admin_profile_new_name_watermark}" />
+									</p:column>
+									<p:column>
+										<p:commandButton id="addProfile"
+											value="#{messages.admin_profile_addProfil_button}"
+											style="float: right;" update="profileDialogForm"
+											title="#{messages.admin_profile_addProfil_button}"
+											disabled="#{not jJProfileBean.disabledRightMode}"
+											process="@this,name" icon="ui-icon-circle-plus"
+											action="#{jJProfileBean.addProfile(jJRightBean)}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{messages.admin_profile_new_object_label}" />
+										<p:selectOneMenu id="object" value="#{jJRightBean.object}"
+											panelStyle="width:150px" effect="fade" style="width:160px"
+											filter="true" filterMatchMode="startsWith"
+											disabled="#{jJProfileBean.disabledRightMode}"
+											widgetVar="objectWidget" label="Right Object" required="true">
+											<p:ajax process="@this" partialSubmit="true"
+												listener="#{jJRightBean.handleSelectObject()}" />
+											<f:selectItems value="#{jJRightBean.objects}" var="p"
+												itemLabel="#{p}" itemValue="#{p}" />
+										</p:selectOneMenu>
+									</p:column>
+									<p:column>
+										<h:outputText
+											value="#{messages.admin_profile_new_category_label}" />
+										<p:selectOneMenu id="category" value="#{jJRightBean.category}"
+											panelStyle="width:150px" effect="fade" style="width:160px"
+											filter="true" filterMatchMode="startsWith"
+											disabled="#{jJProfileBean.disabledRightMode}">
+											<p:ajax process="@this" partialSubmit="true"
+												listener="#{jJRightBean.handleSelectCategory()}" />
+											<f:converter
+												converterId="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter" />
+											<f:selectItem itemLabel="*" itemValue="#{null}" />
+											<f:selectItems value="#{jJRightBean.categories}" var="p"
+												itemLabel="#{p.name}" itemValue="#{p}" />
+										</p:selectOneMenu>
+									</p:column>
+									<p:column>
+										<h:outputText value="R " />
+										<p:selectBooleanCheckbox id="r"
+											disabled="#{jJProfileBean.disabledRightMode}"
+											value="#{jJRightBean.rightAdmin.r}">
+											<p:ajax listener="#{jJRightBean.addMessage}" />
+										</p:selectBooleanCheckbox>
+										<h:outputText value="W " />
+										<p:selectBooleanCheckbox id="w"
+											disabled="#{jJProfileBean.disabledRightMode}"
+											value="#{jJRightBean.rightAdmin.w}">
+											<p:ajax listener="#{jJRightBean.addMessage}" />
+										</p:selectBooleanCheckbox>
+										<h:outputText value="X " />
+										<p:selectBooleanCheckbox id="x"
+											disabled="#{jJProfileBean.disabledRightMode}"
+											value="#{jJRightBean.rightAdmin.x}">
+											<p:ajax listener="#{jJRightBean.addMessage}" />
+										</p:selectBooleanCheckbox>
+									</p:column>
+									<p:column>
+										<p:commandButton id="addRight"
+											disabled="#{jJProfileBean.disabledRightMode}"
+											update="rightDataTable r w x category object msg"
+											actionListener="#{jJRightBean.addRight}"
+											title="#{messages.admin_profile_new_right_button}"
+											value="#{messages.admin_profile_new_right_button}"
+											icon="ui-icon-circle-plus" process="@this,object" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:column>
+					</p:row>
+					<p:dataTable id="rightDataTable" var="rightModel" scrollable="true"
+						style="width:500px;" scrollHeight="300"
+						value="#{jJRightBean.rightDataModel}"
+						rowStyleClass="#{rightModel.old ? 'old' : null}">
+						<f:facet name="header">
+							<h:outputText value="#{messages.admin_profile_new_table_header} " />
+						</f:facet>
+						<p:column style="width:7%">
+							<f:facet name="header">
+								<p:row>
+									<p:column>
+										<p:selectBooleanCheckbox
+											disabled="#{jJRightBean.disabledCheckRight}"
+											value="#{jJRightBean.checkRights}">
+											<p:ajax update="rightDataTable"
+												listener="#{jJRightBean.checkRights}" />
+										</p:selectBooleanCheckbox>
+									</p:column>
+								</p:row>
+							</f:facet>
+							<p:selectBooleanCheckbox value="#{rightModel.checkRight}"
+								disabled="#{jJRightBean.disabledCheckRight}">
+								<p:ajax update="rightDataTable"
+									listener="#{jJRightBean.checkRight}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+						<p:column style="width:25%">
+							<f:facet name="header">
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{messages.admin_profile_new_table_object_title}" />
+									</p:column>
+								</p:row>
+							</f:facet>
+							<h:outputText value="#{rightModel.right.objet}" />
+						</p:column>
+						<p:column style="width:25%">
+							<f:facet name="header">
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{messages.admin_profile_new_table_category_title}" />
+									</p:column>
+								</p:row>
+							</f:facet>
+							<h:outputText value="#{rightModel.right.category.name}" />
+						</p:column>
+						<p:column style="width:13%">
+							<f:facet name="header">
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{messages.admin_profile_new_table_read_title}" />
+									</p:column>
+								</p:row>
+							</f:facet>
+							<h:outputText value="#{rightModel.right.r}" />
+						</p:column>
+						<p:column style="width:15%">
+							<f:facet name="header">
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{messages.admin_profile_new_table_write_title}" />
+									</p:column>
+								</p:row>
+							</f:facet>
+							<h:outputText value="#{rightModel.right.w}" />
+						</p:column>
+						<p:column style="width:15%">
+							<f:facet name="header">
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{messages.admin_profile_new_table_execute_title}" />
+									</p:column>
+								</p:row>
+							</f:facet>
+							<h:outputText value="#{rightModel.right.x}" />
+						</p:column>
+					</p:dataTable>
+
+					<f:facet name="footer">
+						<p:commandButton id="saveButton" style="float: right;"
+							value="Save" update="profileDialogForm :growlForm"
+							disabled="#{jJProfileBean.disabledRightMode}"
+							process="@this,name" action="#{jJProfileBean.save(jJRightBean)}" />
+					</f:facet>
+				</p:panel>
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+	<p:confirmDialog id="profileDeleteDialog"
+		widgetVar="profileDeleteDialogWidget"
+		message="#{messages.admin_profile_delete_title}" showEffect="fade"
+		hideEffect="explode" header="#{messages.admin_profile_delete_label}"
+		severity="alarm">
+		<p:outputPanel id="profileDeletePanel">
+			<h:form id="profileDeleteForm">
+				<p:commandButton id="deleteYesButton"
+					value="#{messages.admin_profile_delete_yes_label}"
+					action="#{jJProfileBean.deleteProfile}"
+					update=":tabview:profileForm :growlForm"
+					oncomplete="PF('profileDeleteDialogWidget').hide()" />
+				<p:commandButton id="deleteNoButton"
+					value="#{messages.admin_profile_delete_no_label}"
+					onclick="PF('profileDeleteDialogWidget').hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:confirmDialog>
+</ui:composition>
+</html>

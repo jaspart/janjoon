@@ -1,0 +1,417 @@
+---- AspectJ Properties ---
+AspectJ Compiler 1.7.2 built on Friday Feb 15, 2013 at 18:40:45 GMT
+---- Dump Properties ---
+Dump file: ajcore.20150507.113354.715.txt
+Dump reason: java.io.FileNotFoundException
+Dump on exception: true
+Dump at exit condition: abort
+---- Exception Information ---
+java.io.FileNotFoundException: /home/lazher/Workspace/janjoon/janjoon-domain/target/classes/com/starit/janjoonweb/domain/JJTeststepService.class (No such file or directory)
+	at java.io.FileInputStream.open(Native Method)
+	at java.io.FileInputStream.<init>(FileInputStream.java:146)
+	at org.aspectj.weaver.bcel.BcelWeaver.addAspectsFromDirectory(BcelWeaver.java:296)
+	at org.aspectj.weaver.bcel.BcelWeaver.addLibraryJarFile(BcelWeaver.java:236)
+	at org.aspectj.ajdt.internal.core.builder.AjBuildManager.initBcelWorld(AjBuildManager.java:871)
+	at org.aspectj.ajdt.internal.core.builder.AjBuildManager.performBuild(AjBuildManager.java:249)
+	at org.aspectj.ajdt.internal.core.builder.AjBuildManager.batchBuild(AjBuildManager.java:185)
+	at org.aspectj.ajdt.ajc.AjdtCommand.doCommand(AjdtCommand.java:112)
+	at org.aspectj.ajdt.ajc.AjdtCommand.runCommand(AjdtCommand.java:60)
+	at org.aspectj.tools.ajc.Main.run(Main.java:371)
+	at org.aspectj.tools.ajc.Main.runMain(Main.java:248)
+	at org.codehaus.mojo.aspectj.AbstractAjcCompiler.execute(AbstractAjcCompiler.java:360)
+	at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo(DefaultBuildPluginManager.java:106)
+	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:208)
+	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:153)
+	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:145)
+	at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject(LifecycleModuleBuilder.java:84)
+	at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject(LifecycleModuleBuilder.java:59)
+	at org.apache.maven.lifecycle.internal.LifecycleStarter.singleThreadedBuild(LifecycleStarter.java:183)
+	at org.apache.maven.lifecycle.internal.LifecycleStarter.execute(LifecycleStarter.java:161)
+	at org.apache.maven.DefaultMaven.doExecute(DefaultMaven.java:317)
+	at org.apache.maven.DefaultMaven.execute(DefaultMaven.java:152)
+	at org.apache.maven.cli.MavenCli.execute(MavenCli.java:555)
+	at org.apache.maven.cli.MavenCli.doMain(MavenCli.java:214)
+	at org.apache.maven.cli.MavenCli.main(MavenCli.java:158)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced(Launcher.java:289)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.launch(Launcher.java:229)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode(Launcher.java:415)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.main(Launcher.java:356)
+	at org.codehaus.classworlds.Launcher.main(Launcher.java:46)
+---- System Properties ---
+java.runtime.name=Java(TM) SE Runtime Environment
+sun.boot.library.path=/usr/lib/jvm/jdk1.7.0_51/jre/lib/amd64
+java.vm.version=24.51-b03
+java.vm.vendor=Oracle Corporation
+java.vendor.url=http://java.oracle.com/
+guice.disable.misplaced.annotation.check=true
+path.separator=:
+java.vm.name=Java HotSpot(TM) 64-Bit Server VM
+file.encoding.pkg=sun.io
+user.country=FR
+sun.java.launcher=SUN_STANDARD
+sun.os.patch.level=unknown
+java.vm.specification.name=Java Virtual Machine Specification
+user.dir=/home/lazher/Workspace/janjoon
+java.runtime.version=1.7.0_51-b13
+java.awt.graphicsenv=sun.awt.X11GraphicsEnvironment
+java.endorsed.dirs=/usr/lib/jvm/jdk1.7.0_51/jre/lib/endorsed
+os.arch=amd64
+java.io.tmpdir=/tmp
+line.separator=
+
+java.vm.specification.vendor=Oracle Corporation
+os.name=Linux
+classworlds.conf=/home/lazher/Workspace/.metadata/.plugins/org.eclipse.m2e.launching/launches/m2conf2574797212459205359.tmp
+maven.test.skip=true
+sun.jnu.encoding=UTF-8
+java.library.path=/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib
+java.specification.name=Java Platform API Specification
+java.class.version=51.0
+sun.management.compiler=HotSpot 64-Bit Tiered Compilers
+os.version=3.13.0-52-generic
+user.home=/home/lazher
+user.timezone=Africa/Tunis
+java.awt.printerjob=sun.print.PSPrinterJob
+file.encoding=UTF-8
+java.specification.version=1.7
+build.number=1
+java.class.path=/home/lazher/Tools/apache-maven-3.1.1/boot/plexus-classworlds-2.5.1.jar:/home/lazher/.m2/repository/org/springframework/spring-instrument/3.2.8.RELEASE/spring-instrument-3.2.8.RELEASE.jar
+user.name=lazher
+org.slf4j.simpleLogger.defaultLogLevel=info
+java.vm.specification.version=1.7
+sun.java.command=org.codehaus.classworlds.Launcher -B -U -Dmaven.test.skip=true clean install -Dbuild.number=1
+java.home=/usr/lib/jvm/jdk1.7.0_51/jre
+sun.arch.data.model=64
+user.language=fr
+java.specification.vendor=Oracle Corporation
+awt.toolkit=sun.awt.X11.XToolkit
+java.vm.info=mixed mode
+java.version=1.7.0_51
+securerandom.source=file:/dev/./urandom
+java.ext.dirs=/usr/lib/jvm/jdk1.7.0_51/jre/lib/ext:/usr/java/packages/lib/ext
+sun.boot.class.path=/usr/lib/jvm/jdk1.7.0_51/jre/lib/resources.jar:/usr/lib/jvm/jdk1.7.0_51/jre/lib/rt.jar:/usr/lib/jvm/jdk1.7.0_51/jre/lib/sunrsasign.jar:/usr/lib/jvm/jdk1.7.0_51/jre/lib/jsse.jar:/usr/lib/jvm/jdk1.7.0_51/jre/lib/jce.jar:/usr/lib/jvm/jdk1.7.0_51/jre/lib/charsets.jar:/usr/lib/jvm/jdk1.7.0_51/jre/lib/jfr.jar:/usr/lib/jvm/jdk1.7.0_51/jre/classes
+java.vendor=Oracle Corporation
+maven.home=/home/lazher/Tools/apache-maven-3.1.1
+file.separator=/
+java.vendor.url.bug=http://bugreport.sun.com/bugreport/
+maven.bootclasspath=/home/lazher/Tools/apache-maven-3.1.1/boot/plexus-classworlds-2.5.1.jar
+sun.io.unicode.encoding=UnicodeLittle
+sun.cpu.endian=little
+sun.desktop=gnome
+sun.cpu.isalist=
+---- Command Line ---
+-encoding
+UTF-8
+-outxml
+-source
+1.7
+-target
+1.7
+-classpath
+/home/lazher/.m2/repository/antlr/antlr/2.7.7/antlr-2.7.7.jar:/home/lazher/.m2/repository/aopalliance/aopalliance/1.0/aopalliance-1.0.jar:/home/lazher/.m2/repository/cglib/cglib-nodep/2.2.2/cglib-nodep-2.2.2.jar:/home/lazher/.m2/repository/com/fasterxml/classmate/1.0.0/classmate-1.0.0.jar:/home/lazher/.m2/repository/commons-codec/commons-codec/1.8/commons-codec-1.8.jar:/home/lazher/.m2/repository/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar:/home/lazher/.m2/repository/commons-io/commons-io/2.4/commons-io-2.4.jar:/home/lazher/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/home/lazher/.m2/repository/commons-pool/commons-pool/1.5.6/commons-pool-1.5.6.jar:/home/lazher/.m2/repository/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar:/home/lazher/.m2/repository/javax/activation/activation/1.1.1/activation-1.1.1.jar:/home/lazher/.m2/repository/javax/mail/mail/1.4.1/mail-1.4.1.jar:/home/lazher/.m2/repository/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar:/home/lazher/.m2/repository/javax/transaction/jta/1.1/jta-1.1.jar:/home/lazher/.m2/repository/javax/validation/validation-api/1.1.0.Final/validation-api-1.1.0.Final.jar:/home/lazher/.m2/repository/junit/junit/4.10/junit-4.10.jar:/home/lazher/.m2/repository/log4j/log4j/1.2.16/log4j-1.2.16.jar:/home/lazher/.m2/repository/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar:/home/lazher/.m2/repository/net/sf/flexjson/flexjson/2.1/flexjson-2.1.jar:/home/lazher/.m2/repository/org/apache/commons/commons-dbcp2/2.1/commons-dbcp2-2.1.jar:/home/lazher/.m2/repository/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar:/home/lazher/.m2/repository/org/apache/commons/commons-pool2/2.3/commons-pool2-2.3.jar:/home/lazher/.m2/repository/org/aspectj/aspectjrt/1.7.2/aspectjrt-1.7.2.jar:/home/lazher/.m2/repository/org/aspectj/aspectjweaver/1.7.2/aspectjweaver-1.7.2.jar:/home/lazher/.m2/repository/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar:/home/lazher/.m2/repository/org/hibernate/hibernate-core/4.3.8.Final/hibernate-core-4.3.8.Final.jar:/home/lazher/.m2/repository/org/hibernate/hibernate-entitymanager/4.3.8.Final/hibernate-entitymanager-4.3.8.Final.jar:/home/lazher/.m2/repository/org/hibernate/hibernate-validator/5.1.0.Final/hibernate-validator-5.1.0.Final.jar:/home/lazher/.m2/repository/org/hibernate/common/hibernate-commons-annotations/4.0.5.Final/hibernate-commons-annotations-4.0.5.Final.jar:/home/lazher/.m2/repository/org/hibernate/javax/persistence/hibernate-jpa-2.1-api/1.0.0.Final/hibernate-jpa-2.1-api-1.0.0.Final.jar:/home/lazher/.m2/repository/org/hsqldb/hsqldb/1.8.0.10/hsqldb-1.8.0.10.jar:/home/lazher/.m2/repository/org/javassist/javassist/3.18.1-GA/javassist-3.18.1-GA.jar:/home/lazher/.m2/repository/org/jboss/jandex/1.1.0.Final/jandex-1.1.0.Final.jar:/home/lazher/.m2/repository/org/jboss/logging/jboss-logging/3.1.3.GA/jboss-logging-3.1.3.GA.jar:/home/lazher/.m2/repository/org/jboss/logging/jboss-logging-annotations/1.2.0.Beta1/jboss-logging-annotations-1.2.0.Beta1.jar:/home/lazher/.m2/repository/org/jboss/spec/javax/transaction/jboss-transaction-api_1.2_spec/1.0.0.Final/jboss-transaction-api_1.2_spec-1.0.0.Final.jar:/home/lazher/.m2/repository/org/primefaces/primefaces/5.0/primefaces-5.0.jar:/home/lazher/.m2/repository/org/slf4j/jcl-over-slf4j/1.7.5/jcl-over-slf4j-1.7.5.jar:/home/lazher/.m2/repository/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar:/home/lazher/.m2/repository/org/slf4j/slf4j-log4j12/1.7.5/slf4j-log4j12-1.7.5.jar:/home/lazher/.m2/repository/org/springframework/spring-aop/3.2.8.RELEASE/spring-aop-3.2.8.RELEASE.jar:/home/lazher/.m2/repository/org/springframework/spring-aspects/3.2.8.RELEASE/spring-aspects-3.2.8.RELEASE.jar:/home/lazher/.m2/repository/org/springframework/spring-beans/3.2.8.RELEASE/spring-beans-3.2.8.RELEASE.jar:/home/lazher/.m2/repository/org/springframework/spring-context/3.2.8.RELEASE/spring-context-3.2.8.RELEASE.jar:/home/lazher/.m2/repository/org/springframework/spring-context-support/3.2.8.RELEASE/spring-context-support-3.2.8.RELEASE.jar:/home/lazher/.m2/repository/org/springframework/spring-core/3.2.8.RELEASE/spring-core-3.2.8.RELEASE.jar:/home/lazher/.m2/repository/org/springframework/spring-expression/3.2.8.RELEASE/spring-expression-3.2.8.RELEASE.jar:/home/lazher/.m2/repository/org/springframework/spring-jdbc/3.2.8.RELEASE/spring-jdbc-3.2.8.RELEASE.jar:/home/lazher/.m2/repository/org/springframework/spring-orm/3.2.8.RELEASE/spring-orm-3.2.8.RELEASE.jar:/home/lazher/.m2/repository/org/springframework/spring-test/3.2.8.RELEASE/spring-test-3.2.8.RELEASE.jar:/home/lazher/.m2/repository/org/springframework/spring-tx/3.2.8.RELEASE/spring-tx-3.2.8.RELEASE.jar:/home/lazher/.m2/repository/org/springframework/data/spring-data-commons/1.6.3.RELEASE/spring-data-commons-1.6.3.RELEASE.jar:/home/lazher/.m2/repository/org/springframework/data/spring-data-jpa/1.4.3.RELEASE/spring-data-jpa-1.4.3.RELEASE.jar:/home/lazher/.m2/repository/org/springframework/roo/org.springframework.roo.annotations/1.2.5.RELEASE/org.springframework.roo.annotations-1.2.5.RELEASE.jar:/home/lazher/.m2/repository/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar:/home/lazher/Workspace/janjoon/janjoon-domain/target/test-classes:/home/lazher/Workspace/janjoon/janjoon-domain/target/classes
+-aspectpath
+/home/lazher/Workspace/janjoon/janjoon-domain/target/classes:/home/lazher/.m2/repository/org/springframework/spring-aspects/3.2.8.RELEASE/spring-aspects-3.2.8.RELEASE.jar
+-d
+/home/lazher/Workspace/janjoon/janjoon-domain/target/test-classes
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJRequirementIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProjectIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJVersionDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJJobDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJSprintDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJConfigurationIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCompanyDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJImportanceIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProductIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJBuildIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCriticityDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTestcaseexecutionIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJHardwareIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJPermissionDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTeststepDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJWorkflowDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJChapterDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJPermissionIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCompanyDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJRequirementDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProductDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJConfigurationIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJRightIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCompanyDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJPhaseIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJSoftwareDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTaskIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTeststepexecutionIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTeststepDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJStatusDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJStatusDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJChapterIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJRightDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJBuildDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJBugIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJPhaseDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCriticityDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTeststepIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJMessageDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTestcaseexecutionDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJConfigurationDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJAuditLogDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCategoryDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJImportanceDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTestcaseexecutionIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTeststepexecutionDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJImputationIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProfileDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTeststepDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJBugDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJImputationDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProductIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProfileIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJJobIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJPermissionIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTestcaseDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJBugIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProductDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJContactIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJSprintIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJPermissionIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCompanyIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJContactDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJImportanceIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProjectDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCategoryDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJRightIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJImportanceDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTestcaseexecutionIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJRequirementIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJRightDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJSoftwareDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTestcaseIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJSoftwareDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJContactDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTeststepexecutionDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJStatusDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJMessageIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJBugIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJContactDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProjectIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJRequirementDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTestcaseIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJMessageDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJStatusIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTaskIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJRequirementDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJJobDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTeststepIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProductDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCriticityDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProfileDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJAuditLogIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJBuildDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJAuditLogDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJVersionIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCriticityIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJPhaseDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJAuditLogIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJRightDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJHardwareIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJBuildIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProfileIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJImportanceDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCategoryIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJHardwareDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProfileIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJMessageIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJBuildIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTeststepexecutionDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJPermissionDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJHardwareIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJConfigurationDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJJobDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJContactIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTestcaseDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTeststepexecutionIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJVersionIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJAuditLogDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJSprintIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJStatusIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJBuildDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJChapterIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProjectDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProjectIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJVersionDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJStatusIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJHardwareDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCategoryDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTeststepIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJWorkflowIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJConfigurationDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJVersionIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJImportanceIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJMessageDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJRightIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJJobIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJBugDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCriticityIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTaskDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJConfigurationIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJMessageIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTaskIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJHardwareDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJAuditLogIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTestcaseexecutionDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCompanyIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJWorkflowDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJPhaseIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJPhaseIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJSprintDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJImputationDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProjectDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJChapterIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJPhaseDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTestcaseDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJJobIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJWorkflowIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJSoftwareIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJSprintDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJChapterDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTestcaseIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJPermissionDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJBugDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJSoftwareIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJSprintIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJRequirementIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJContactIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJImputationIntegrationTest.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTaskDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJVersionDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJWorkflowIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCategoryIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTestcaseexecutionDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJImputationDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProductIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCategoryIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCriticityIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJCompanyIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTeststepexecutionIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJWorkflowDataOnDemand_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJSoftwareIntegrationTest_Roo_Configurable.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJTaskDataOnDemand.java
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJProfileDataOnDemand_Roo_DataOnDemand.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJImputationIntegrationTest_Roo_IntegrationTest.aj
+/home/lazher/Workspace/janjoon/janjoon-domain/src/test/java/com/starit/janjoonweb/domain/JJChapterDataOnDemand.java
+---- Full Classpath ---
+/usr/lib/jvm/jdk1.7.0_51/jre/lib/resources.jar(2462917 bytes)
+/usr/lib/jvm/jdk1.7.0_51/jre/lib/rt.jar(62371704 bytes)
+/usr/lib/jvm/jdk1.7.0_51/jre/lib/sunrsasign.jar(missing)
+/usr/lib/jvm/jdk1.7.0_51/jre/lib/jsse.jar(580558 bytes)
+/usr/lib/jvm/jdk1.7.0_51/jre/lib/jce.jar(109504 bytes)
+/usr/lib/jvm/jdk1.7.0_51/jre/lib/charsets.jar(3695578 bytes)
+/usr/lib/jvm/jdk1.7.0_51/jre/lib/jfr.jar(532559 bytes)
+/usr/lib/jvm/jdk1.7.0_51/jre/classes(missing)
+/home/lazher/.m2/repository/org/springframework/spring-aspects/3.2.8.RELEASE/spring-aspects-3.2.8.RELEASE.jar(51456 bytes)
+/usr/lib/jvm/jdk1.7.0_51/jre/lib/ext/sunpkcs11.jar(237244 bytes)
+/usr/lib/jvm/jdk1.7.0_51/jre/lib/ext/sunec.jar(15941 bytes)
+/usr/lib/jvm/jdk1.7.0_51/jre/lib/ext/sunjce_provider.jar(198101 bytes)
+/usr/lib/jvm/jdk1.7.0_51/jre/lib/ext/localedata.jar(1024712 bytes)
+/usr/lib/jvm/jdk1.7.0_51/jre/lib/ext/zipfs.jar(68762 bytes)
+/usr/lib/jvm/jdk1.7.0_51/jre/lib/ext/dnsns.jar(8934 bytes)
+/home/lazher/.m2/repository/antlr/antlr/2.7.7/antlr-2.7.7.jar(445288 bytes)
+/home/lazher/.m2/repository/aopalliance/aopalliance/1.0/aopalliance-1.0.jar(4467 bytes)
+/home/lazher/.m2/repository/cglib/cglib-nodep/2.2.2/cglib-nodep-2.2.2.jar(326917 bytes)
+/home/lazher/.m2/repository/com/fasterxml/classmate/1.0.0/classmate-1.0.0.jar(60282 bytes)
+/home/lazher/.m2/repository/commons-codec/commons-codec/1.8/commons-codec-1.8.jar(263865 bytes)
+/home/lazher/.m2/repository/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar(575389 bytes)
+/home/lazher/.m2/repository/commons-io/commons-io/2.4/commons-io-2.4.jar(185140 bytes)
+/home/lazher/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar(61829 bytes)
+/home/lazher/.m2/repository/commons-pool/commons-pool/1.5.6/commons-pool-1.5.6.jar(100472 bytes)
+/home/lazher/.m2/repository/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar(313898 bytes)
+/home/lazher/.m2/repository/javax/activation/activation/1.1.1/activation-1.1.1.jar(69409 bytes)
+/home/lazher/.m2/repository/javax/mail/mail/1.4.1/mail-1.4.1.jar(447676 bytes)
+/home/lazher/.m2/repository/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar(105112 bytes)
+/home/lazher/.m2/repository/javax/transaction/jta/1.1/jta-1.1.jar(15071 bytes)
+/home/lazher/.m2/repository/javax/validation/validation-api/1.1.0.Final/validation-api-1.1.0.Final.jar(63777 bytes)
+/home/lazher/.m2/repository/junit/junit/4.10/junit-4.10.jar(253160 bytes)
+/home/lazher/.m2/repository/log4j/log4j/1.2.16/log4j-1.2.16.jar(481535 bytes)
+/home/lazher/.m2/repository/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar(960372 bytes)
+/home/lazher/.m2/repository/net/sf/flexjson/flexjson/2.1/flexjson-2.1.jar(81151 bytes)
+/home/lazher/.m2/repository/org/apache/commons/commons-dbcp2/2.1/commons-dbcp2-2.1.jar(173567 bytes)
+/home/lazher/.m2/repository/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar(315805 bytes)
+/home/lazher/.m2/repository/org/apache/commons/commons-pool2/2.3/commons-pool2-2.3.jar(109568 bytes)
+/home/lazher/.m2/repository/org/aspectj/aspectjrt/1.7.2/aspectjrt-1.7.2.jar(116847 bytes)
+/home/lazher/.m2/repository/org/aspectj/aspectjweaver/1.7.2/aspectjweaver-1.7.2.jar(1828687 bytes)
+/home/lazher/.m2/repository/org/hibernate/hibernate-core/4.3.8.Final/hibernate-core-4.3.8.Final.jar(5272790 bytes)
+/home/lazher/.m2/repository/org/hibernate/hibernate-entitymanager/4.3.8.Final/hibernate-entitymanager-4.3.8.Final.jar(647572 bytes)
+/home/lazher/.m2/repository/org/hibernate/hibernate-validator/5.1.0.Final/hibernate-validator-5.1.0.Final.jar(622634 bytes)
+/home/lazher/.m2/repository/org/hibernate/common/hibernate-commons-annotations/4.0.5.Final/hibernate-commons-annotations-4.0.5.Final.jar(75324 bytes)
+/home/lazher/.m2/repository/org/hibernate/javax/persistence/hibernate-jpa-2.1-api/1.0.0.Final/hibernate-jpa-2.1-api-1.0.0.Final.jar(113371 bytes)
+/home/lazher/.m2/repository/org/hsqldb/hsqldb/1.8.0.10/hsqldb-1.8.0.10.jar(706710 bytes)
+/home/lazher/.m2/repository/org/javassist/javassist/3.18.1-GA/javassist-3.18.1-GA.jar(714194 bytes)
+/home/lazher/.m2/repository/org/jboss/jandex/1.1.0.Final/jandex-1.1.0.Final.jar(76551 bytes)
+/home/lazher/.m2/repository/org/jboss/logging/jboss-logging/3.1.3.GA/jboss-logging-3.1.3.GA.jar(57183 bytes)
+/home/lazher/.m2/repository/org/jboss/logging/jboss-logging-annotations/1.2.0.Beta1/jboss-logging-annotations-1.2.0.Beta1.jar(11558 bytes)
+/home/lazher/.m2/repository/org/jboss/spec/javax/transaction/jboss-transaction-api_1.2_spec/1.0.0.Final/jboss-transaction-api_1.2_spec-1.0.0.Final.jar(27717 bytes)
+/home/lazher/.m2/repository/org/primefaces/primefaces/5.0/primefaces-5.0.jar(2650526 bytes)
+/home/lazher/.m2/repository/org/slf4j/jcl-over-slf4j/1.7.5/jcl-over-slf4j-1.7.5.jar(16517 bytes)
+/home/lazher/.m2/repository/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar(26084 bytes)
+/home/lazher/.m2/repository/org/slf4j/slf4j-log4j12/1.7.5/slf4j-log4j12-1.7.5.jar(8869 bytes)
+/home/lazher/.m2/repository/org/springframework/spring-aop/3.2.8.RELEASE/spring-aop-3.2.8.RELEASE.jar(337694 bytes)
+/home/lazher/.m2/repository/org/springframework/spring-aspects/3.2.8.RELEASE/spring-aspects-3.2.8.RELEASE.jar(51456 bytes)
+/home/lazher/.m2/repository/org/springframework/spring-beans/3.2.8.RELEASE/spring-beans-3.2.8.RELEASE.jar(612569 bytes)
+/home/lazher/.m2/repository/org/springframework/spring-context/3.2.8.RELEASE/spring-context-3.2.8.RELEASE.jar(866273 bytes)
+/home/lazher/.m2/repository/org/springframework/spring-context-support/3.2.8.RELEASE/spring-context-support-3.2.8.RELEASE.jar(128595 bytes)
+/home/lazher/.m2/repository/org/springframework/spring-core/3.2.8.RELEASE/spring-core-3.2.8.RELEASE.jar(873608 bytes)
+/home/lazher/.m2/repository/org/springframework/spring-expression/3.2.8.RELEASE/spring-expression-3.2.8.RELEASE.jar(196367 bytes)
+/home/lazher/.m2/repository/org/springframework/spring-jdbc/3.2.8.RELEASE/spring-jdbc-3.2.8.RELEASE.jar(405717 bytes)
+/home/lazher/.m2/repository/org/springframework/spring-orm/3.2.8.RELEASE/spring-orm-3.2.8.RELEASE.jar(385454 bytes)
+/home/lazher/.m2/repository/org/springframework/spring-test/3.2.8.RELEASE/spring-test-3.2.8.RELEASE.jar(457987 bytes)
+/home/lazher/.m2/repository/org/springframework/spring-tx/3.2.8.RELEASE/spring-tx-3.2.8.RELEASE.jar(242436 bytes)
+/home/lazher/.m2/repository/org/springframework/data/spring-data-commons/1.6.3.RELEASE/spring-data-commons-1.6.3.RELEASE.jar(385730 bytes)
+/home/lazher/.m2/repository/org/springframework/data/spring-data-jpa/1.4.3.RELEASE/spring-data-jpa-1.4.3.RELEASE.jar(164056 bytes)
+/home/lazher/.m2/repository/org/springframework/roo/org.springframework.roo.annotations/1.2.5.RELEASE/org.springframework.roo.annotations-1.2.5.RELEASE.jar(30933 bytes)
+/home/lazher/.m2/repository/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar(109318 bytes)
+/home/lazher/Workspace/janjoon/janjoon-domain/target/classes(3 entries)
+---- Compiler Messages ---
+info directory classpath entry does not exist: /usr/lib/jvm/jdk1.7.0_51/jre/lib/sunrsasign.jar
+info zipfile classpath entry does not exist: /usr/lib/jvm/jdk1.7.0_51/jre/classes
+abort ABORT -- (FileNotFoundException) /home/lazher/Workspace/janjoon/janjoon-domain/target/classes/com/starit/janjoonweb/domain/JJTeststepService.class (No such file or directory)
+/home/lazher/Workspace/janjoon/janjoon-domain/target/classes/com/starit/janjoonweb/domain/JJTeststepService.class (No such file or directory)
+java.io.FileNotFoundException: /home/lazher/Workspace/janjoon/janjoon-domain/target/classes/com/starit/janjoonweb/domain/JJTeststepService.class (No such file or directory)
+	at java.io.FileInputStream.open(Native Method)
+	at java.io.FileInputStream.<init>(FileInputStream.java:146)
+	at org.aspectj.weaver.bcel.BcelWeaver.addAspectsFromDirectory(BcelWeaver.java:296)
+	at org.aspectj.weaver.bcel.BcelWeaver.addLibraryJarFile(BcelWeaver.java:236)
+	at org.aspectj.ajdt.internal.core.builder.AjBuildManager.initBcelWorld(AjBuildManager.java:871)
+	at org.aspectj.ajdt.internal.core.builder.AjBuildManager.performBuild(AjBuildManager.java:249)
+	at org.aspectj.ajdt.internal.core.builder.AjBuildManager.batchBuild(AjBuildManager.java:185)
+	at org.aspectj.ajdt.ajc.AjdtCommand.doCommand(AjdtCommand.java:112)
+	at org.aspectj.ajdt.ajc.AjdtCommand.runCommand(AjdtCommand.java:60)
+	at org.aspectj.tools.ajc.Main.run(Main.java:371)
+	at org.aspectj.tools.ajc.Main.runMain(Main.java:248)
+	at org.codehaus.mojo.aspectj.AbstractAjcCompiler.execute(AbstractAjcCompiler.java:360)
+	at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo(DefaultBuildPluginManager.java:106)
+	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:208)
+	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:153)
+	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:145)
+	at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject(LifecycleModuleBuilder.java:84)
+	at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject(LifecycleModuleBuilder.java:59)
+	at org.apache.maven.lifecycle.internal.LifecycleStarter.singleThreadedBuild(LifecycleStarter.java:183)
+	at org.apache.maven.lifecycle.internal.LifecycleStarter.execute(LifecycleStarter.java:161)
+	at org.apache.maven.DefaultMaven.doExecute(DefaultMaven.java:317)
+	at org.apache.maven.DefaultMaven.execute(DefaultMaven.java:152)
+	at org.apache.maven.cli.MavenCli.execute(MavenCli.java:555)
+	at org.apache.maven.cli.MavenCli.doMain(MavenCli.java:214)
+	at org.apache.maven.cli.MavenCli.main(MavenCli.java:158)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced(Launcher.java:289)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.launch(Launcher.java:229)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode(Launcher.java:415)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.main(Launcher.java:356)
+	at org.codehaus.classworlds.Launcher.main(Launcher.java:46)
+

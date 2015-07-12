@@ -1,0 +1,217 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.starit.janjoonweb.service</groupId>
+	<artifactId>janjoon-service</artifactId>
+	<version>3.0-${build.number}</version>
+	<name>janjoon-service</name>
+	<properties>
+		<aspectj.version>1.7.2</aspectj.version>
+		<java.version>1.7</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<roo.version>1.2.5.RELEASE</roo.version>
+		<slf4j.version>1.7.5</slf4j.version>
+		<spring.version>3.2.8.RELEASE</spring.version>
+		<spring-sec.version>3.2.5.RELEASE</spring-sec.version>
+		<build.number>SNAPSHOT</build.number>
+		<java.bootstrap.classes>
+			${java.home}/lib/rt.jar
+		</java.bootstrap.classes>
+		<java.cryptographic.extension.classes>
+			${java.home}/lib/jce.jar
+		</java.cryptographic.extension.classes>
+		<java.secure.socket.extension.classes>
+			${java.home}/lib/jsse.jar
+		</java.secure.socket.extension.classes>
+	</properties>
+	<repositories>
+		<repository>
+			<id>spring-maven-release</id>
+			<name>Spring Maven Release Repository</name>
+			<url>http://maven.springframework.org/release</url>
+		</repository>
+		<repository>
+			<id>spring-maven-milestone</id>
+			<name>Spring Maven Milestone Repository</name>
+			<url>http://maven.springframework.org/milestone</url>
+		</repository>
+		<repository>
+			<id>spring-roo-repository</id>
+			<name>Spring Roo Repository</name>
+			<url>http://spring-roo-repository.springsource.org/release</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-maven-release</id>
+			<name>Spring Maven Release Repository</name>
+			<url>http://maven.springframework.org/release</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>spring-maven-milestone</id>
+			<name>Spring Maven Milestone Repository</name>
+			<url>http://maven.springframework.org/milestone</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>spring-roo-repository</id>
+			<name>Spring Roo Repository</name>
+			<url>http://spring-roo-repository.springsource.org/release</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<dependencies>
+		<dependency>
+			<groupId>com.starit.janjoonweb.domain</groupId>
+			<artifactId>janjoon-domain</artifactId>
+			<version>3.0-${build.number}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>6.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>1.19</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-core</artifactId>
+			<version>1.19</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-servlet</artifactId>
+			<version>1.19</version>
+		</dependency>
+		<dependency>
+	        <groupId>com.sun.jersey</groupId>
+	        <artifactId>jersey-json</artifactId>
+	        <version>1.19</version>
+        </dependency>
+		
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey.contribs</groupId>
+			<artifactId>jersey-spring</artifactId>
+			<version>1.19</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-aop</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-web</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring-sec.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>${spring-sec.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring-sec.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring-sec.version}</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.2</version>
+				<!-- <configuration> <webXml>target/web.xml</webXml> </configuration> -->
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+			<!-- <plugin> -->
+			<!-- groupId>com.pyx4me</groupId -->
+			<!-- <groupId>com.github.wvengen</groupId> -->
+			<!-- <artifactId>proguard-maven-plugin</artifactId> -->
+			<!-- <executions> -->
+			<!-- <execution> -->
+			<!-- <id>proguard</id> -->
+			<!-- <phase>package</phase> -->
+			<!-- <goals> -->
+			<!-- <goal>proguard</goal> -->
+			<!-- </goals> -->
+			<!-- </execution> -->
+			<!-- </executions> -->
+			<!-- <configuration> -->
+			<!-- <injar>${project.build.finalName}.jar</injar> -->
+			<!-- <outjar>${project.build.finalName}-small.jar</outjar> -->
+			<!-- <outputDirectory>${project.build.directory}</outputDirectory> -->
+			<!-- <options> -->
+			<!-- <option>-keep public class * { public protected *; }</option> -->
+			<!-- <option>-keepattributes *Annotation*</option> -->
+			<!-- <option>-dontnote</option> -->
+			<!-- <option>-printseeds</option> -->
+			<!-- <option>-keep interface MyMarkerInterface</option> -->
+			<!-- <option>-keep -->
+			<!-- class *com.starit.janjoonweb.domain.**</option> -->
+			<!-- <option>-keepclassmembers -->
+			<!-- public *com.starit.janjoonweb.domain.**</option> -->
+			<!-- <option>-keepclassmembers -->
+			<!-- private *com.starit.janjoonweb.domain.**.**</option> -->
+			<!-- <option>-keepclassmembers -->
+			<!-- protected *com.starit.janjoonweb.domain.**.**</option> -->
+			<!-- </options> -->
+			<!-- <libs> -->
+			<!-- <lib>${java.bootstrap.classes}</lib> -->
+			<!-- <lib>${java.cryptographic.extension.classes}</lib> -->
+			<!-- <lib>${java.secure.socket.extension.classes}</lib> -->
+			<!-- </libs> -->
+			<!-- </configuration> -->
+			<!-- <dependencies> -->
+			<!-- <dependency> -->
+			<!-- <groupId>net.sf.proguard</groupId> -->
+			<!-- <artifactId>proguard-base</artifactId> -->
+			<!-- <version>5.2.1</version> -->
+			<!-- </dependency> -->
+			<!-- </dependencies> -->
+			<!-- </plugin> -->
+		</plugins>
+	</build>
+</project>

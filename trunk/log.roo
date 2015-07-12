@@ -1,0 +1,362 @@
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-17 14:49:52
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-17 17:07:39
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-17 17:31:19
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-17 17:48:51
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-17 17:52:06
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-17 17:53:18
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-17 18:00:31
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-17 18:00:35
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-17 18:02:53
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-17 18:24:33
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-17 18:26:15
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-25 17:51:03
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-25 17:51:29
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-25 17:52:19
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-26 09:54:42
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-26 09:55:02
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-26 10:15:25
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-26 11:25:44
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-26 11:42:30
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-26 14:51:35
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-26 14:57:23
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-26 15:43:49
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-26 15:47:07
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-27 09:50:54
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-27 10:46:00
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-03-31 17:33:06
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-03-31 18:10:24
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-01 10:57:17
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-01 10:58:23
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-01 11:38:44
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-01 11:39:26
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-01 11:42:11
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-01 11:44:49
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-01 11:44:53
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-01 11:45:47
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-01 11:49:21
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-01 11:50:21
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-01 17:20:24
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-01 17:20:59
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-01 17:24:39
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-01 17:28:44
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-01 17:28:49
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-01 17:29:31
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 09:45:46
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 10:23:05
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 10:28:59
+// [failed] focus --class ~.JJTestcaseexecution
+// [failed] field set --fieldName teststepexecutions  --type ~.JJTeststepexecution --cardinality ONE_TO_MANY --mappedBy testcaseexecution --fetch LAZY
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 10:39:29
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 10:39:34
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 10:52:51
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 10:52:55
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 11:04:09
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 11:06:58
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 11:26:04
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 11:38:00
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 11:41:46
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 12:23:31
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 12:24:42
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 12:24:46
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 12:33:06
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-02 14:46:03
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-02 14:46:41
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-15 09:35:50
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-15 09:36:42
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-16 13:26:57
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-16 13:28:05
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-16 13:30:20
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-16 13:31:54
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-17 11:47:09
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-17 12:00:43
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-17 14:04:19
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-17 14:06:30
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-17 14:21:01
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-17 14:22:53
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-18 09:36:39
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-18 09:38:25
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-18 11:45:31
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-18 11:48:02
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-18 12:26:46
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-18 12:29:01
+=======
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-17 18:36:34
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-17 18:37:17
+<<<<<<< .mine
+>>>>>>> .r253
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-21 09:56:41
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-21 10:04:42
+=======
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-21 09:48:48
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-21 09:49:08
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-22 09:50:58
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-22 09:54:27
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-22 10:01:20
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-22 10:06:04
+<<<<<<< .mine
+>>>>>>> .r254
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-22 11:53:16
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-22 11:57:32
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-23 13:47:38
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-23 13:48:16
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-23 16:23:54
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-23 16:29:35
+=======
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-24 14:39:11
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-24 14:40:22
+<<<<<<< .mine
+>>>>>>> .r257
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-25 09:40:55
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-25 09:45:25
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-25 09:45:58
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-25 09:48:04
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-25 09:50:17
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-25 09:51:00
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-25 09:55:03
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-25 09:57:15
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-25 10:35:33
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-25 14:26:36
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-25 14:42:15
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-04-25 17:36:09
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-25 18:03:22
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-04-30 17:35:51
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-02 14:52:07
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-02 15:14:07
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-02 15:30:23
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-05 12:25:36
+// [failed] quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-05 12:27:07
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-05 12:30:18
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-05 12:39:28
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-05 13:31:54
+qui
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-05 13:34:25
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-07 11:11:58
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-07 11:13:26
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-15 16:33:26
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-07 15:15:20
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-07 15:16:14
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-07 15:16:21
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-07 15:25:17
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-08 14:09:19
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-08 14:13:56
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-15 11:37:37
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-15 11:55:28
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-15 12:05:09
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-15 12:05:41
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-15 12:09:18
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-15 12:52:40
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-15 13:05:00
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-15 13:06:52
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-15 13:15:49
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-20 09:49:25
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-20 10:14:49
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-21 18:15:06
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-21 18:15:35
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-28 16:33:38
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-28 16:54:15
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-29 11:26:23
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-29 11:26:59
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-30 15:24:43
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-30 15:25:49
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-30 16:28:50
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-30 16:30:21
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-05-30 17:29:03
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-05-30 17:29:46
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-06-02 12:08:24
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-06-02 12:15:51
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-06-05 12:07:42
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-06-05 12:08:49
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-06-11 11:11:50
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-06-11 11:52:54
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-06-12 16:50:48
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-06-12 16:51:42
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-06-23 11:34:28
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-06-23 11:36:03
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-06-30 12:07:14
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-06-30 12:09:32
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-07-09 08:59:07
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-07-09 09:00:32
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-07-09 09:00:36
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-07-18 14:43:24
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-07-18 14:44:30
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-07-18 14:46:23
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-07-21 10:52:42
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-07-21 10:54:51
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-07-21 10:55:00
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-07-21 10:56:57
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-07-21 10:59:49
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-07-21 11:05:40
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-07-23 11:27:23
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-07-23 11:43:14
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-09-04 10:29:48
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-09-04 16:24:17
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-09-15 09:10:14
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-09-15 09:23:06
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-09-15 09:25:10
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-09-15 09:26:50
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-09-15 09:28:31
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-10-07 10:37:50
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-10-07 10:39:29
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-10-07 10:44:13
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-10-07 10:48:43
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-10-07 10:56:07
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-10-07 10:57:08
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-10-07 10:57:32
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-10-07 10:58:14
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-10-07 11:00:16
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-10-07 11:09:56
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-10-07 11:10:30
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-10-07 11:15:07
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-10-07 11:16:00
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-10-07 11:22:11
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-10-07 11:27:33
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-10-07 12:00:21
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-10-07 12:02:32
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-10-29 12:09:40
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-10-29 12:10:19
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-10-29 12:13:05
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-01-21 15:09:11
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2015-01-21 15:09:59
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-01-21 15:36:17
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2015-01-21 15:46:54
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-02-19 11:22:39
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-02-25 12:07:41
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2015-02-25 12:21:56
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-03-06 11:37:51
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2015-03-06 11:38:57
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-03-06 11:39:03
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2015-03-06 11:39:50
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-03-06 11:48:49
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2015-03-06 11:49:21
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-03-06 11:53:19
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2015-03-06 11:53:58
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-03-17 10:58:42
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2015-03-17 11:00:15
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-03-27 11:58:03
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-03-30 11:00:33
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2015-03-30 11:02:34
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-05-11 12:43:23
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2015-05-11 12:44:55
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-05-26 12:25:06
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2015-05-26 12:25:53
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-05-26 12:26:48
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-06-11 10:21:57
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2015-06-11 10:23:04
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-06-11 10:34:48
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2015-06-11 10:58:14
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-06-17 12:35:57
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2015-06-17 12:37:40
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2015-06-25 10:55:09
+quit
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2015-06-25 10:56:43

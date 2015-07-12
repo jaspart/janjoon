@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+	<h:form id="comForm">
+		<p:dataTable id="comDataTable" value="#{communicationList}"
+			rowKey="#{mes.id}" var="mes" scrollable="true"
+			rendered="#{loginBean.enable}" scrollHeight="300"
+			rowStyleClass="#{mes.criticity.name}" style="border-spacing:0px;"
+			selectionMode="single">
+			<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
+				listener="#{jJMessageBean.onRowSelect}" immediate="true"
+				oncomplete="PF('viewDialogWidget1').show()" />
+			<f:facet name="header">
+				<p:panelGrid>
+					<p:row>
+						<p:column style="width: 70px !important;text-align: center;">
+							<p:graphicImage styleClass="avatar"
+								value="#{imageStreamer.image}">
+								<f:param name="contactId" value="#{loginBean.contact.id}" />
+							</p:graphicImage>
+						</p:column>
+						<p:column colspan="5">
+							<p:outputLabel for="messagedsc" value="Message :"
+								style="float:left;" />
+							<br />
+							<p:inputTextarea id="messagedsc" cols="#{cols}" rows="3"
+								style="float:left;" value="#{jJMessageBean.message.message}"
+								required="true" />
+						</p:column>
+					</p:row>
+					<f:facet name="footer">
+						<p:row>
+							<p:column colspan="6">
+								<p:selectBooleanButton id="alert" style="float: left;"
+									value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
+									offLabel="Info" onIcon="ui-icon-alert" offIcon="ui-icon-info">
+								</p:selectBooleanButton>
+								<p:commandButton id="submitMes" value="OK"
+									process="@this,alert,messagedsc" style="float: left;"
+									actionListener="#{jJMessageBean.createMessage(true,field)}"
+									update=":comForm :headerForm:communicationButton :growlForm" />
+							</p:column>
+						</p:row>
+					</f:facet>
+				</p:panelGrid>
+			</f:facet>
+			<p:column style="width: 15%;text-align: center;">
+				<p:graphicImage styleClass="avatar" value="#{imageStreamer.image}"
+					rendered="#{mes.createdBy.picture != null}">
+					<f:param name="contactId" value="#{mes.createdBy.id}" />
+				</p:graphicImage>
+			</p:column>
+			<p:column style="width: 20%;min-width: 200px !important; ">
+				<h:outputText
+					value="#{mes.createdBy.firstname} #{mes.createdBy.name}"
+					style="font-weight: bold;color: #3b5998;" />
+				<br />
+				<h:outputText value="#{mes.creationDate}"
+					style="color: #9197a3;font-size: 10px;">
+					<f:converter converterId="extendedDateTimeConverter" />
+					<f:attribute name="pattern" value="dd/MM/yyyy HH:mm:ss" />
+					<f:attribute name="timeZone" value="UCL" />
+				</h:outputText>
+				<br />
+				<h:outputText value="#{mes.project.name} / #{mes.product.name}"
+					style="font-weight: bold;color: #9197a3;font-size: 10px;" />
+			</p:column>
+			<p:column style="width: 65%;min-width: 200px">
+				<h:outputText id="viewButton"
+					style="width: 100% !important;color: #22222222;font-size: 14px;white-space: pre-wrap;"
+					value="#{mes.message}" />
+				<p:tooltip for="viewButton"
+					value="#{messages.label_view} #{mes.name}" showEffect="fade"
+					hideEffect="fade" />
+			</p:column>
+
+		</p:dataTable>
+	</h:form>
+</ui:composition>
+</html>

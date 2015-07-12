@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+	<style type="text/css">
+/* .cke_chrome { */
+/* 	visibility: inherit; */
+/* 	width: 600px !important; */
+/* } */
+.ui-editor {
+	height: 250px !important;
+}
+
+/* .cke_contents { */
+/* 	height: 200px !important; */
+/* } */
+.cke_bottom {
+	display: block;
+}
+</style>
+	<pe:blockUI widgetVar="requirementBlockUIWidget"
+		target="requirementDialogPanel">
+		<h:panelGrid columns="2">
+			<p:graphicImage library="images" name="ajax-loader.gif"
+				style="vertical-align: middle;" />
+			<h:outputText value="#{messages.label_refresh}"
+				style="white-space: nowrap;" />
+		</h:panelGrid>
+	</pe:blockUI>
+
+	<h:form id="requirementDialogForm" style="padding:0px;">
+		<p:panel styleClass="panelDialog">
+			<!-- 			<f:facet name="header"> -->
+			<!-- 				<p:messages id="msg" showDetail="false" closable="true" /> -->
+			<!-- 			</f:facet> -->
+			<p:panelGrid rendered="#{jJRequirementBean.requirement != null}">
+				<p:row>
+					<p:column>
+						<p:inputText id="nameReq"
+							label="#{messages.specification_create_name_label}"
+							value="#{jJRequirementBean.requirement.name}" required="true"
+							requiredMessage="#{messages.specification_create_name_alert}">
+							<f:validateLength maximum="100" />
+						</p:inputText>
+						<p:watermark for="nameReq"
+							value="#{messages.specification_create_name_watermark}" />
+					</p:column>
+					<p:column>
+						<h:outputText for="status"
+							value="#{messages.specification_create_status_label}" />
+						<p:selectOneMenu id="status"
+							value="#{jJRequirementBean.requirementStatus}" required="true"
+							requiredMessage="Requirement Status is a required value"
+							panelStyle="width:150px" effect="fade" style="width:150px"
+							filter="true" filterMatchMode="startsWith"
+							disabled="#{jJRequirementBean.disabledStatus}">
+							<f:converter
+								converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
+							<f:selectItems value="#{jJRequirementBean.requirementStatusList}"
+								var="req" itemLabel="#{req.name}" itemValue="#{req}" />
+							<p:ajax partialSubmit="true"
+								listener="#{jJRequirementBean.handleSelectStatus()}" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<h:outputText for="project"
+							value="#{messages.specification_create_project_label} *" />
+						<p:selectOneMenu id="project"
+							value="#{jJRequirementBean.requirementProject}"
+							panelStyle="width:150px" effect="fade" style="width:150px"
+							filter="true" filterMatchMode="startsWith"
+							disabled="#{jJRequirementBean.disabledProject}"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
+
+							<f:selectItems
+								value="#{jJRequirementBean.requirementProjectList}" var="req"
+								itemLabel="#{req.name}" itemValue="#{req}" />
+							<p:ajax partialSubmit="true"
+								onstart="PF('requirementBlockUIWidget').block()"
+								oncomplete="PF('requirementBlockUIWidget').unblock()"
+								update="lowRequirement mediumRequirement highRequirement chapter"
+								listener="#{jJRequirementBean.handleSelectProject()}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText for="product"
+							value="#{messages.specification_create_product_label}" />
+						<p:selectOneMenu id="product"
+							value="#{jJRequirementBean.requirementProduct}"
+							panelStyle="width:150px" effect="fade" style="width:150px"
+							filter="true" filterMatchMode="startsWith"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
+
+							<f:selectItem itemValue="#{null}"
+								itemLabel="#{messages.specification_create_select_label}" />
+							<f:selectItems
+								value="#{jJRequirementBean.requirementProductList}" var="req"
+								itemLabel="#{req.name}" itemValue="#{req}" />
+							<p:ajax partialSubmit="true" update="version"
+								onstart="PF('requirementBlockUIWidget').block()"
+								oncomplete="PF('requirementBlockUIWidget').unblock()"
+								listener="#{jJRequirementBean.handleSelectProduct()}" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<h:outputText for="version"
+							value="#{messages.specification_create_version_label}" />
+						<p:selectOneMenu id="version"
+							value="#{jJRequirementBean.requirementVersion}"
+							panelStyle="width:150px" effect="fade" style="width:150px"
+							filter="true" filterMatchMode="startsWith"
+							disabled="#{jJRequirementBean.disabledVersion}"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
+
+							<f:selectItem itemValue="#{null}"
+								itemLabel="#{messages.specification_create_select_label}" />
+							<f:selectItems
+								value="#{jJRequirementBean.requirementVersionList}" var="req"
+								itemLabel="#{req.name}" itemValue="#{req}" />
+							<p:ajax partialSubmit="true"
+								listener="#{jJRequirementBean.handleSelectVersion()}" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<h:outputText for="chapter"
+							value="#{messages.specification_create_chapter_label}" />
+						<p:selectOneMenu id="chapter"
+							value="#{jJRequirementBean.requirementChapter}"
+							panelStyle="width:150px" effect="fade" style="width:150px"
+							filter="true" filterMatchMode="startsWith"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter">
+
+							<f:selectItem itemValue="#{null}"
+								itemLabel="#{messages.specification_create_select_label}" />
+							<f:selectItems
+								value="#{jJRequirementBean.requirementChapterList}" var="req"
+								itemLabel="#{req.name}" itemValue="#{req}" />
+							<p:ajax partialSubmit="true"
+								listener="#{jJRequirementBean.handleSelectChapter()}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row rendered="#{requirementBean.reqDialogReqListrender}">
+					<p:column>
+						<p:selectCheckboxMenu id="lowRequirement"
+							value="#{jJRequirementBean.selectedLowRequirementsList}"
+							label="#{jJRequirementBean.lowCategoryName}" filter="true"
+							filterText="Filter" filterMatchMode="contains"
+							panelStyle="width:220px"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
+							disabled="#{jJRequirementBean.disabledLowRequirements}">
+							<f:selectItems value="#{jJRequirementBean.lowRequirementsList}"
+								var="requirement" itemLabel="#{requirement.name}"
+								itemValue="#{requirement}" />
+							<p:ajax listener="#{jJRequirementBean.handleChangeLow}" />
+						</p:selectCheckboxMenu>
+					</p:column>
+					<p:column>
+						<p:selectCheckboxMenu id="mediumRequirement"
+							value="#{jJRequirementBean.selectedMediumRequirementsList}"
+							label="#{jJRequirementBean.mediumCategoryName}" filter="true"
+							filterText="Filter" filterMatchMode="contains"
+							panelStyle="width:220px"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
+							disabled="#{jJRequirementBean.disabledMediumRequirements}">
+							<f:selectItems
+								value="#{jJRequirementBean.mediumRequirementsList}"
+								var="requirement" itemLabel="#{requirement.name}"
+								itemValue="#{requirement}" />
+							<p:ajax listener="#{jJRequirementBean.handleChangeMedium}" />
+						</p:selectCheckboxMenu>
+					</p:column>
+					<p:column>
+						<p:selectCheckboxMenu id="highRequirement"
+							value="#{jJRequirementBean.selectedHighRequirementsList}"
+							label="#{jJRequirementBean.highCategoryName}" filter="true"
+							filterText="Filter" filterMatchMode="contains"
+							panelStyle="width:220px"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
+							disabled="#{jJRequirementBean.disabledHighRequirements}">
+							<f:selectItems value="#{jJRequirementBean.highRequirementsList}"
+								var="requirement" itemLabel="#{requirement.name}"
+								itemValue="#{requirement}" />
+							<p:ajax listener="#{jJRequirementBean.handleChangeHigh}" />
+						</p:selectCheckboxMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="#{jJRequirementBean.colspan}"
+						style="width:600px;height:300px;">
+						<h:outputText
+							value="#{messages.specification_create_description_label}" />
+						<pe:ckEditor id="description"
+							toolbar="#{imageStreamer.ckEditorToolBar}" height="250px"
+							width="600px"
+							customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+							value="#{jJRequirementBean.requirement.description}"
+							required="true" rendered="#{!loginBean.mobile}"
+							requiredMessage="Requirement Description is a required value" />
+
+						<p:editor id="descriptionMobile"
+							style="width:680px;height:250px;margin-left:auto;margin-right:auto;"
+							value="#{jJRequirementBean.requirement.description}"
+							required="true" rendered="#{loginBean.mobile}"
+							requiredMessage="Requirement Description is a required value" />
+
+						<p:message for="description" rendered="#{!loginBean.mobile}" />
+						<p:message for="descriptionMobile" rendered="#{loginBean.mobile}" />
+						<!--h:outputLabel for="description" value="#{request.contextPath}" /-->
+					</p:column>
+					<p:column rendered="#{jJRequirementBean.requirement.id != null}">
+						<p:dataTable id="testCaseDataTable" var="testCaseModel"
+							selection="#{jJRequirementBean.reqSelectedtestCases}"
+							rowKey="#{testCaseModel.id}"
+							emptyMessage="That Requirement have no Testcase"
+							scrollable="true" style="width:350px;" scrollHeight="200"
+							value="#{jJRequirementBean.reqtestCases}">
+							<p:column selectionMode="multiple"
+								style="width:30%;text-align:center" />
+							<p:column style="width:70%">
+								<f:facet name="header">
+									<p:row>
+										<p:column>
+											<h:outputText value="TestCases :" />
+										</p:column>
+									</p:row>
+								</f:facet>
+								<!-- 							<h:outputText value="#{testCaseModel.name}" /> -->
+								<p:commandLink target="_blank" value="#{testCaseModel.name}"
+									action="#{jJTestcaseBean.testCaseInfo(testCaseModel.id)}"
+									ajax="false" immediate="true">
+								</p:commandLink>
+							</p:column>
+							<f:facet name="footer">
+								<p:commandButton
+									onstart="PF('requirementBlockUIWidget').block()"
+									oncomplete="PF('requirementBlockUIWidget').unblock()"
+									disabled="#{empty jJRequirementBean.reqtestCases}"
+									update="testCaseDataTable :growlForm"
+									process="testCaseDataTable" value="Update"
+									action="#{jJRequirementBean.updateReqTestCases(jJTestcaseBean)}" />
+								<br />
+								<p:inputText id="testcase" style="width:50%;"
+									value="#{jJRequirementBean.testCaseName}" label="TestCase Name">
+									<f:validateLength maximum="100" />
+									<p:ajax event="keyup" update="addTestCase" />
+								</p:inputText>
+								<p:watermark for="testcase" value="TestCase Name" />
+								<p:commandButton id="addTestCase"
+									disabled="#{empty jJRequirementBean.testCaseName}"
+									onstart="PF('requirementBlockUIWidget').block()"
+									oncomplete="PF('requirementBlockUIWidget').unblock()"
+									style="font-size: 1.0em !important;float:right;top: -3px;"
+									update="testcase testCaseDataTable :growlForm"
+									action="#{jJRequirementBean.addTestCase(jJTestcaseBean)}"
+									value="Ajouter TestCase" process="@this,testcase" />
+							</f:facet>
+						</p:dataTable>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column rowspan="3" colspan="3">
+						<p:inputTextarea id="note" rows="3" cols="100"
+							value="#{jJRequirementBean.requirement.note}" autoResize="false"
+							style="width: 600px;margin-left:auto;margin-right:auto;" />
+						<p:watermark for="note"
+							value="#{messages.specification_create_note_watermark}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<f:facet name="footer">
+				<p:commandButton
+					value="#{messages.specification_create_save_button}"
+					onstart="PF('requirementBlockUIWidget').block()"
+					oncomplete="PF('requirementBlockUIWidget').unblock()"
+					action="#{jJRequirementBean.save}" rendered="#{!loginBean.mobile}"
+					process="@this,nameReq,status,project,product,version,chapter,description,lowRequirement,mediumRequirement,highRequirement,note"
+					widgetVar="requirementSaveWidget" update="@form :growlForm" />
+				<p:commandButton
+					value="#{messages.specification_create_save_button}"
+					onstart="PF('requirementBlockUIWidget').block()"
+					oncomplete="PF('requirementBlockUIWidget').unblock()"
+					action="#{jJRequirementBean.save}" rendered="#{loginBean.mobile}"
+					process="@this,nameReq,status,project,product,version,chapter,descriptionMobile,lowRequirement,mediumRequirement,highRequirement,note"
+					widgetVar="requirementSaveWidget" update="@form :growlForm" />
+			</f:facet>
+		</p:panel>
+
+	</h:form>
+</ui:composition>
+</html>

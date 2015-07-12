@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+	<div id="footer">
+		<h:form>
+			<p:separator style="margin-top:5px;" />
+			<h:panelGrid columns="2" cellspacing="0" cellpadding="0" width="100%">
+				<p:row>
+					<p:column width="50%">
+						<h:outputText value=" Version 3.0-BUILD_NUMBER Lithium" />
+					</p:column>
+					<p:column width="50%" style="text-align: right;"
+						rendered="#{loginBean.enable}">
+						<h:outputLink value="https://www.starit.fr">
+							<h:graphicImage library="images" name="starit-logo.png"
+								alt="StarIT - Janjoon" />
+						</h:outputLink>
+					</p:column>
+				</p:row>
+			</h:panelGrid>
+		</h:form>
+	</div>
+</ui:composition>
+</html>

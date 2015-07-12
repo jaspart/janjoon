@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+	<style type="text/css">
+.ui-fileupload-progress {
+	display: none;
+}
+
+.ui-fileupload-cancel {
+	display: none;
+}
+
+.ui-fileupload-files {
+	margin: 1px 0;
+	width: 150px !important;
+	display: inline-block;
+	height: 30px;
+}
+</style>
+
+	<h:form id="companyForm">
+		<p:panel id="companyPanel" style="width:500px" columns="1"
+			cellpadding="6">
+			<p:dataTable id="companyDataTable" var="company"
+				value="#{jJCompanyBean.companies}" paginator="true" rows="15"
+				rowKey="#{company.id}">
+				<f:facet name="header">#{messages.admin_company_table_header}</f:facet>
+				<p:column style="width: 70px !important;text-align: center;">
+					<p:graphicImage styleClass="avatar"
+						rendered="#{company.logo != null}"
+						value="#{imageStreamer.imageComp}">
+						<f:param name="CompId" value="#{company.id}" />
+					</p:graphicImage>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_company_table_name_title}" />
+					</f:facet>
+					<h:outputText value="#{company.name}" />
+				</p:column>
+				<p:column styleClass="action-column" style="width: 150px;">
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_company_table_action_title}" />
+					</f:facet>
+					<p:splitButton id="editButton" icon="ui-icon-pencil"
+						oncomplete="PF('companyDialogWidget').show()"
+						value="#{messages.admin_company_table_edit_tooltip}"
+						title="#{messages.admin_companprogressy_table_edit_tooltip}"
+						update=":tabview:companyDialog" resetValues="true">
+						<f:setPropertyActionListener value="#{company}"
+							target="#{jJCompanyBean.companie}" />
+						<f:setPropertyActionListener
+							target="#{jJCompanyBean.headerMessage}"
+							value="admin_company_edit_title" />
+
+						<p:menuitem id="editCalendar" icon="ui-icon-calendar"
+							value="Edit Calendar"
+							oncomplete="PF('companyEditCalendarDialogWidget').show()"
+							resetValues="true" update=":tabview:EditCalendarForm">
+							<f:setPropertyActionListener value="#{company}"
+								target="#{jJCompanyBean.companie}" />
+						</p:menuitem>
+
+
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							value="#{messages.admin_company_table_delete_tooltip}"
+							oncomplete="PF('companyDeleteDialogWidget').show()"
+							title="#{messages.label_delete}" resetValues="true">
+							<f:setPropertyActionListener value="#{company}"
+								target="#{jJCompanyBean.companie}" />
+
+						</p:menuitem>
+
+
+
+					</p:splitButton>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton value="#{messages.admin_company_new_button}"
+						title="#{messages.admin_company_new_button}" id="newCompany"
+						update=":tabview:companyDialog"
+						oncomplete="PF('companyDialogWidget').show()"
+						icon="ui-icon-circle-plus" resetValues="true">
+						<f:setPropertyActionListener
+							target="#{jJCompanyBean.headerMessage}"
+							value="admin_company_new_title" />
+						<f:setPropertyActionListener value="#{null}"
+							target="#{jJCompanyBean.companie}" />
+					</p:commandButton>
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+
+	<p:dialog id="companyEditCalendarDialog" header="Edit Calendar"
+		hideEffect="explode" resizable="false" modal="true"
+		widgetVar="companyEditCalendarDialogWidget" dynamic="true"
+		showEffect="fade" draggable="true" >
+		<p:ajax event="close" update=":tabview:companyForm"
+			listener="#{jJCompanyBean.closeDialog}" />
+
+		<p:outputPanel id="EditCalendarDialogPanel">
+			<h:form id="EditCalendarForm" enctype="multipart/form-data">
+				<p:panel styleClass="panelDialog">
+					<f:facet name="header">
+						<p:messages id="msg" showDetail="false" closable="true" />
+					</f:facet>
+					<p:panelGrid>
+						<p:row>
+							<p:column colspan="2">
+								<p:dataTable value="#{jJCompanyBean.workDays}" var="day"
+									style="width: 550px;"
+									rendered="#{jJCompanyBean.workDays != null}">
+
+									<p:columnGroup type="header">
+										<p:row>
+											<p:column colspan="5" style="text-align: left;"
+												headerText="#{messages.contact_datatableHeader}" />
+										</p:row>
+										<p:row>
+											<p:column rowspan="2" width="40%"
+												headerText="#{messages.contact_dataTable_day}" />
+											<p:column colspan="2" rowspan="1" width="30%"
+												headerText="#{messages.contact_datatable_morning}" />
+											<p:column colspan="2" rowspan="1" width="30%"
+												headerText="#{messages.contact_datatable_afternoon}" />
+										</p:row>
+										<p:row>
+											<p:column width="15%"
+												headerText="#{messages.contact_dataTable_from}" />
+											<p:column width="15%"
+												headerText="#{messages.contact_dataTable_to}" />
+											<p:column width="15%"
+												headerText="#{messages.contact_dataTable_from}" />
+											<p:column width="15%"
+												headerText="#{messages.contact_dataTable_to}" />
+										</p:row>
+									</p:columnGroup>
+									<p:column width="40%">
+										<h:outputText value="#{day.day}" />
+									</p:column>
+									<p:column width="15%">
+										<pe:timePicker value="#{day.startDate1}" showDeselectButton="true" mode="popup">
+											<p:ajax event="timeSelect"
+												update=":tabview:EditCalendarForm"
+												listener="#{jJCompanyBean.timeSelectListener(day,1)}" />
+										</pe:timePicker>
+									</p:column>
+									<p:column width="15%">
+										<pe:timePicker value="#{day.endDate1}" showDeselectButton="true" mode="popup">
+											<p:ajax event="timeSelect"
+												update=":tabview:EditCalendarForm"
+												listener="#{jJCompanyBean.timeSelectListener(day,1)}" />
+										</pe:timePicker>
+									</p:column>
+									<p:column width="15%">
+										<pe:timePicker value="#{day.startDate2}" showDeselectButton="true" mode="popup">
+											<p:ajax event="timeSelect"
+												update=":tabview:EditCalendarForm"
+												listener="#{jJCompanyBean.timeSelectListener(day,2)}" />
+										</pe:timePicker>
+									</p:column>
+									<p:column width="15%">
+										<pe:timePicker value="#{day.endDate2}" showDeselectButton="true" mode="popup">
+											<p:ajax event="timeSelect"
+												update=":tabview:EditCalendarForm"
+												listener="#{jJCompanyBean.timeSelectListener(day,2)}" />
+										</pe:timePicker>
+									</p:column>
+								</p:dataTable>
+							</p:column>
+							<p:column>
+								<p:panelGrid>
+									<f:facet name="header">
+										<p:row>
+											<p:column colspan="2">#{jJCompanyBean.companie.name} #{messages.company_holidays}</p:column>
+										</p:row>
+									</f:facet>
+									<p:row>
+										<p:column colspan="2">
+											<p:dataList var="holy" paginator="true" rows="7"
+												paginatorPosition="bottom"
+												emptyMessage="#{messages.company_empty_holidays}"
+												value="#{jJCompanyBean.holidays}"
+												type="ordered">
+
+												<p:outputLabel value="#{messages.company_day_holidays}: " />
+												<p:inputText readonly="true"
+													value="#{holy}" style="width: 137px;">
+													<f:converter converterId="extendedDateTimeConverter" />
+													<f:attribute name="pattern" value="dd/MM/yyyy" />
+												</p:inputText>												
+											</p:dataList>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<p:outputLabel for="start" value="#{messages.company_day_holidays}:" />
+											<p:calendar id="start" navigator="true" effect="slideDown"
+												required="true" pattern="dd/MM/yyyy"
+												value="#{jJCompanyBean.day}" />
+										</p:column>										
+									</p:row>
+									<p:row>
+										<p:column colspan="2">
+											<p:commandButton id="addVacation"
+												onstart="PF('blockUIWidget').block()"
+												oncomplete="PF('blockUIWidget').unblock()"
+												update=":tabview:EditCalendarForm"
+												action="#{jJCompanyBean.addHoliday}"
+												value="#{messages.company_new_holiday}" />
+										</p:column>
+									</p:row>
+								</p:panelGrid>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<f:facet name="footer">						
+						<p:commandButton id="cancelButton" value="Annuler"
+							onclick="PF('companyEditCalendarDialogWidget').hide()" type="button" />
+					</f:facet>
+				</p:panel>
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+	<p:dialog id="companyDialog"
+		header="#{messages[jJCompanyBean.headerMessage]}" modal="true"
+		widgetVar="companyDialogWidget" dynamic="true" showEffect="fade"
+		hideEffect="explode" resizable="false">
+		<p:ajax event="close" update=":tabview:companyForm"
+			listener="#{jJCompanyBean.closeDialog}" />
+		<p:outputPanel id="companyDialogPanel">
+			<h:form id="companyDialogForm" enctype="multipart/form-data"
+				style="height: 450px;width: 650px;">
+				<p:panel styleClass="panelDialog">
+					<f:facet name="header">
+						<p:messages id="msg" showDetail="false" closable="true" />
+					</f:facet>
+					<p:panelGrid>
+						<p:row>
+							<p:column colspan="1">
+								<p:outputLabel value="Name :" for="name" />
+							</p:column>
+							<p:column colspan="1">
+								<p:inputText id="name" value="#{jJCompanyBean.companie.name}"
+									label="#{messages.admin_company_new_name_label}"
+									required="true" widgetVar="nameWidget">
+									<f:validateLength maximum="100" />
+									<p:ajax event="blur" update="compLogo" />
+								</p:inputText>
+								<p:message for="name" id="msgName" />
+							</p:column>
+							<p:column colspan="1">
+								<h:outputLabel for="compLogo" value="Logo:" />
+
+								<p:fileUpload id="compLogo"
+									disabled="#{empty jJCompanyBean.companie.name}"
+									fileUploadListener="#{licenseBean.handleCompLogoUpload}"
+									mode="advanced" dragDropSupport="true" update="msg"
+									sizeLimit="1000000" allowTypes="/(gif|png|ico|jpeg)$/" />
+							</p:column>
+						</p:row>
+						<!-- 						<p:row> -->
+						<!-- 							<p:column colspan="1"> -->
+						<!-- 								<h:outputLabel for="calendar" value="Calendrier *" /> -->
+						<!-- 							</p:column> -->
+						<!-- 							<p:column colspan="2"> -->
+						<!-- 								<p:inputTextarea id="calendar" -->
+						<!-- 									value="#{jJCompanyBean.companie.calendar}" required="true" -->
+						<!-- 									requiredMessage="Calendar Field is Required" rows="8" cols="50" -->
+						<!-- 									autoResize="false" /> -->
+						<!-- 							</p:column> -->
+						<!-- 						</p:row> -->
+						<p:row>
+							<p:column colspan="3">
+								<p:outputLabel value="Description" for="jJCompanyDescription"
+									rendered="#{!loginBean.mobile}" />
+								<p:outputLabel value="Description"
+									for="jJCompanyMobileDescription" rendered="#{loginBean.mobile}" />
+								<br />
+								<pe:ckEditor id="jJCompanyDescription"
+									toolbar="#{imageStreamer.ckEditorToolBar}" style="width:680px"
+									rendered="#{!loginBean.mobile}"
+									customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+									value="#{jJCompanyBean.companie.description}" required="true"
+									requiredMessage="Description is a required value" />
+								<p:editor id="jJCompanyMobileDescription" style="width:680px"
+									rendered="#{loginBean.mobile}"
+									value="#{jJCompanyBean.companie.description}" required="true"
+									requiredMessage="Description is a required value" />
+
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<f:facet name="footer">
+						<p:commandButton id="submitButton"
+							value="#{messages.admin_company_new_save_button}"
+							update="companyDialogForm :growlForm"
+							title="#{messages.admin_company_new_save_button}"
+							action="#{jJCompanyBean.saveCompany}" />
+						<p:commandButton id="cancelButton" value="Annuler"
+							onclick="PF('companyDialogWidget').hide()" type="button" />
+					</f:facet>
+				</p:panel>
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+	<p:confirmDialog id="companyDeleteDialog"
+		widgetVar="companyDeleteDialogWidget"
+		message="#{messages.admin_company_delete_label}" showEffect="fade"
+		hideEffect="explode" header="#{messages.admin_company_delete_title}"
+		severity="alarm">
+		<p:outputPanel id="companyDeletePanel">
+			<h:form id="companyDeleteForm">
+				<p:commandButton id="deleteYesButton"
+					value="#{messages.admin_company_delete_yes_label}"
+					action="#{jJCompanyBean.deleteCompany}"
+					update=":tabview:companyForm :growlForm"
+					oncomplete="PF('companyDeleteDialogWidget').hide()" />
+				<p:commandButton id="deleteNoButton"
+					value="#{messages.admin_company_delete_no_label}"
+					onclick="PF('companyDeleteDialogWidget').hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:confirmDialog>
+</ui:composition>
+</html>

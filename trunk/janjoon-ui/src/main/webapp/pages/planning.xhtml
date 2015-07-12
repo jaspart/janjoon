@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/layout.xhtml">
+	<ui:define name="content">
+		<style type="text/css">
+.planning-dataTable table {
+	table-layout: fixed;
+	border-collapse: separate;
+}
+
+.planning-dataTable thead {
+	display: none;
+}
+
+.pe-layout-pane-header {
+	/*	background: #2391B2;*/
+	
+}
+
+.stickyHeader {
+	width: 1600px;
+	margin-top: -0.5%;
+}
+
+.planning-dataTable .ui-datatable-data th {
+	height: 37px;
+	overflow: hidden;
+}
+
+.planning-dataTable .ui-datatable-data td {
+	overflow: hidden;
+	navigator
+}
+
+.planning-dataTable .ui-datatable-data tr {
+	height: 44px;
+	overflow: hidden;
+	width: 1600px;
+}
+</style>
+		<h:outputScript library="js" name="scrollTab.js" />
+		<h:form style="width:100%;display:none;">
+			<p:remoteCommand update=":projecttabview:SprintTabView :growlForm"
+				name="updateTabSprint" />
+			<p:remoteCommand onstart="PF('blockUIWidget').block()"
+				name="tabChangeHelper"
+				actionListener="#{jJSprintBean.onTabSprintChange}"
+				oncomplete="PF('blockUIWidget').unblock()" />
+		</h:form>
+		<h:form id="projectForm" rendered="#{jJProjectBean.project != null}">
+			<p:panelGrid style="margin: auto auto 5px auto;">
+				<p:row>
+					<p:column>
+						<p:outputLabel for="projectName" value="Project :" />
+						<h:outputText id="projectName"
+							value="#{jJProjectBean.project.name}" />
+					</p:column>
+					<p:column>
+						<p:outputLabel for="projectSD"
+							value="#{messages.admin_project_new_startDate_label}" />
+						<p:calendar id="projectSD" navigator="true" effect="slideDown"
+							pattern="dd/MM/yyyy" required="true"
+							binding="#{startDateProjectEdition}"
+							requiredMessage="#{messages.admin_project_new_startDate_alert}"
+							value="#{jJProjectBean.project.startDate}" />
+					</p:column>
+					<p:column>
+						<p:outputLabel for="projectED"
+							value="#{messages.admin_project_new_endDate_label}" />
+						<p:calendar id="projectED" navigator="true" effect="slideDown"
+							pattern="dd/MM/yyyy" required="true"
+							requiredMessage="#{messages.admin_project_new_endDate_alert}"
+							value="#{jJProjectBean.project.endDate}">
+							<f:validator validatorId="dateRangeValidator" />
+							<f:attribute name="startDateComponent"
+								value="#{startDateProjectEdition}" />
+						</p:calendar>
+					</p:column>
+					<p:column>
+						<p:commandButton id="submitButton"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							value="#{messages.admin_project_new_save_button}"
+							update=":projectForm :headerForm :growlForm"
+							action="#{jJProjectBean.savePlanning}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+		<p:tabView id="projecttabview" widgetVar="projectTabView"
+			activeIndex="#{jJSprintBean.activeTabGantIndex}"
+			onTabChange="tabChangeHelper([{name: 'activeGantIndex', value: index}])"
+			dynamic="false" cache="true" style="width:100% !important;">
+
+			<!-- 			<p:tab title="#{messages.project_gantt_menuitem}" -->
+			<!-- 				rendered="#{loginBean.renderGantt}"> -->
+			<!-- 				<h:panelGrid id="projectpanel" columns="1" cellpadding="3" -->
+			<!-- 					style="width:100% !important;"> -->
+			<!-- 					<ui:insert name="gantt"> -->
+			<!-- 						<ui:include src="gantt.xhtml" /> -->
+			<!-- 					</ui:insert> -->
+			<!-- 				</h:panelGrid> -->
+			<!-- 			</p:tab> -->
+			<!-- 			<p:tab title="#{messages.project_scrum_menuitem}" -->
+			<!-- 				rendered="#{loginBean.renderScrum}"> -->
+			<!-- 				<h:panelGrid columns="1" cellpadding="3"> -->
+			<!-- 					<ui:insert name="scrum"> -->
+			<!-- 						<ui:include src="scrum.xhtml" /> -->
+			<!-- 					</ui:insert> -->
+			<!-- 				</h:panelGrid> -->
+			<!-- 			</p:tab> -->
+
+			<p:tab title="#{loginBean.planningConfiguration.firstPageHeader}">
+				<h:panelGrid columns="1" cellpadding="3"
+					style="width:100% !important;">
+					<ui:insert>
+						<ui:include src="#{loginBean.planningConfiguration.firstPage}" />
+					</ui:insert>
+				</h:panelGrid>
+			</p:tab>
+			<p:tab title="#{loginBean.planningConfiguration.secondPageHeader}"
+				rendered="#{loginBean.planningConfiguration.render}">
+				<h:panelGrid columns="1" cellpadding="3"
+					style="width:100% !important;">
+					<ui:insert>
+						<ui:include src="#{loginBean.planningConfiguration.secondPage}" />
+					</ui:insert>
+				</h:panelGrid>
+			</p:tab>
+		</p:tabView>
+		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
+		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
+			position="center" header="#{messages.specification_video_help_title}"
+			style="padding:0px;" resizable="false" draggable="false"
+			minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
+			<video width="100%" height="100%" controls="true">
+				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
+			</video>
+		</p:dialog>
+		<p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget"
+			message="#{messages.task_delete_title}" showEffect="fade"
+			hideEffect="explode" header="#{messages.task_delete_confirm_label}"
+			severity="alarm">
+			<p:outputPanel id="deletePanel">
+				<h:form id="deleteForm">
+					<p:commandButton id="deleteYesPlanning"
+						value="#{messages.bug_delete_yes_button}"
+						action="#{jJTaskBean.deleteTaskData}"
+						update=":projecttabview :growlForm"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock();" />
+					<p:commandButton id="deleteNoButton"
+						value="#{messages.bug_delete_no_button}"
+						oncomplete="PF('blockUIWidget').unblock()"
+						onclick="PF('deleteDialogWidget').hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
+		<p:dialog id="taskImportDialog" header="Import Tasks" modal="true"
+			draggable="false" styleClass="disable-scroll"
+			widgetVar="taskImportDialogWidget" dynamic="true" resizable="false">
+			<p:ajax event="close" update=":projecttabview"
+				onstart="PF('blockUIWidget').block()"
+				oncomplete="PF('blockUIWidget').unblock()"
+				listener="#{jJTaskBean.closeDialogImport}" />
+			<p:outputPanel id="importTaskDialogPanel">
+				<ui:insert name="importTask">
+					<ui:include src="importTask.xhtml" />
+				</ui:insert>
+			</p:outputPanel>
+		</p:dialog>
+
+		<p:dialog id="viewTaskDialog"
+			header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task)}"
+			modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
+			resizable="true" maximizable="true" showEffect="fade"
+			hideEffect="explode" draggable="#{jJTaskBean.mode eq 'planning'}">
+			<p:ajax event="close" update=":projecttabview"
+				onstart="PF('blockUIWidget').block()"
+				oncomplete="PF('blockUIWidget').unblock()"
+				listener="#{jJTaskBean.closeEvent('planning')}" />
+			<p:outputPanel id="viewTaskPanel">
+				<h:form id="viewTaskForm" enctype="multipart/form-data">
+					<p:panel styleClass="panelDialog">
+						<f:facet name="header">
+							<p:messages id="msg" closable="true" />
+						</f:facet>
+						<ui:include src="taskDialog.xhtml">
+							<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
+						</ui:include>
+						<f:facet name="footer">
+							<p:commandButton id="updateTaskButton" update=":viewTaskForm"
+								actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'planning')}"
+								value="#{messages.label_update} Task"
+								process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload,taskAssignedTo,taskSpec"
+								onstart="PF('viewtaskBlockUIWidget').block()"
+								style="margin-top: 5px;"
+								oncomplete="PF('viewtaskBlockUIWidget').unblock();" />
+
+							<p:commandButton id="viewCloseButton"
+								value="#{messages.label_close}"
+								style="margin-left: 20px;margin-top: 5px;"
+								oncomplete="PF('blockUIWidget').unblock()"
+								onstart="PF('blockUIWidget').block()"
+								onclick="PF('viewTaskDialogWidget').hide()" type="button" />
+						</f:facet>
+					</p:panel>
+
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+		<p:dialog id="editBugDialog" header="#{messages.label_edit} Bug"
+			modal="true" widgetVar="editBugDialogWidget" dynamic="true"
+			resizable="true" maximizable="true" showEffect="fade"
+			draggable="false" hideEffect="explode">
+			<p:outputPanel id="editBugPanel">
+				<h:form id="editBugForm" enctype="multipart/form-data">
+					<p:panelGrid columns="2">
+						<p:outputLabel value="BUG :" for="taskBugName" />
+						<p:inputText id="taskBugName" readonly="true"
+							converter="JJBugConverter" value="#{jJSprintBean.bug}" />
+						<p:outputLabel for="taskBugStatus" value="Status : " />
+						<p:autoComplete id="taskBugStatus"
+							value="#{jJSprintBean.bug.status}" itemLabel="#{status.name}"
+							itemValue="#{status}" scrollHeight="200"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+							dropdown="true" var="status" style="width:200px;"
+							completeMethod="#{jJBugBean.completeStatusBug}" />
+						<p:commandButton id="taskBugSaveButton"
+							value="#{messages.bug_edit_save_button}"
+							action="#{jJSprintBean.persistBugTask}"
+							update=":projecttabview :growlForm"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							onsuccess="PF('editBugDialogWidget').hide()">
+						</p:commandButton>
+						<p:commandButton id="taskBugCloseButton"
+							value="#{messages.bug_edit_close_button}"
+							oncomplete="PF('blockUIWidget').unblock()"
+							onclick="PF('editBugDialogWidget').hide()" type="button" />
+					</p:panelGrid>
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

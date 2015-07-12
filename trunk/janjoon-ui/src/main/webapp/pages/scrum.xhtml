@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+	<p:tabView id="SprintTabView" dynamic="true" cache="true"
+		widgetVar="SprintTab" value="#{jJSprintBean.sprintList}"
+		onTabChange="tabChangeHelper([{name: 'activeScrumIndex', value: index}])"
+		var="jjsprint" style="width:100%;"
+		activeIndex="#{jJSprintBean.activeTabSprintIndex}">
+		<p:tab style="width:100%;"
+			disabled="#{jjsprint.render and !loginBean.authorisationService.wProject}">
+			<f:facet name="title">
+				<h:outputText id="tabHeader" rendered="#{!jjsprint.render}"
+					value="#{jjsprint.sprint.name}" />
+				<h:outputText rendered="#{jjsprint.render}"
+					styleClass="ui-corner-all ui-icon ui-icon-plusthick"
+					value="Add New Sprint" />
+			</f:facet>
+			<ui:include src="sprint.xhtml" />
+			<h:form id="sprintForm" rendered="#{!jjsprint.render}"
+				style="width:100% !important;">
+				<p:panelGrid id="sprintPanelGrid"
+					style="width:50% !important;min-width:200px !important;float:left;height:331px !important;">
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="5">Sprint Information</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column style="width:10% important; min-width:200px;">
+							<p:outputLabel for="sprintName" value="Sprint Name:" />
+							<p:inputText id="sprintName" value="#{jjsprint.sprint.name}"
+								required="true" requiredMessage="Sprint name is empty">
+								<f:validateLength maximum="100" />
+							</p:inputText>
+						</p:column>
+						<p:column style="width:10% important; min-width:200px;">
+							<p:outputLabel for="sprintcts" value="Sprint Contacts:" />
+							<p:selectManyMenu id="sprintcts" value="#{jjsprint.contacts}"
+								scrollHeight="100"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
+								style="width:150px;height:100px !important;" showCheckbox="true">
+								<f:selectItems value="#{jJSprintBean.contacts}" var="ctc"
+									itemLabel="#{ctc.firstname} #{c.name}" itemValue="#{ctc}" />
+								<f:validator validatorId="listCategoriesValidator" />
+							</p:selectManyMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:10% important; min-width:200px;">
+							<p:outputLabel for="sprintSD" value="Start Date:" />
+							<p:calendar id="sprintSD" navigator="true" effect="slideDown"
+								pattern="dd/MM/yyyy" required="true"
+								binding="#{startDateEdition}"
+								value="#{jjsprint.sprint.startDate}">
+								<f:validator validatorId="dateRangeValidator" />
+								<f:attribute name="sprintMode" value="sprintSD" />
+							</p:calendar>
+						</p:column>
+						<p:column style="width:10% important; min-width:200px;">
+							<p:outputLabel for="sprintED" value="end Date:" />
+							<p:calendar id="sprintED" navigator="true" effect="slideDown"
+								pattern="dd/MM/yyyy" required="true"
+								value="#{jjsprint.sprint.endDate}">
+								<f:validator validatorId="dateRangeValidator" />
+								<f:attribute name="startDateComponent"
+									value="#{startDateEdition}" />
+								<f:attribute name="sprintMode" value="sprintED" />
+							</p:calendar>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:10% important; min-width:200px;">
+							<p:outputLabel for="sprintPS" value="Price Sold:" />
+							<p:spinner id="sprintPS" value="#{jjsprint.priseSold}" prefix="$"
+								min="0" readonly="true" />
+						</p:column>
+						<p:column style="width:10% important; min-width:200px;">
+							<p:outputLabel for="sprintPR" value="Price Real:" />
+							<p:spinner id="sprintPR" value="#{jjsprint.priseReal}" prefix="$"
+								min="0" readonly="true" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:10% important; min-width:200px;">
+							<p:outputLabel for="sprintW" value="Total:" />
+							<p:inputText id="sprintW" readonly="true"
+								value="#{jjsprint.workload}" />
+						</p:column>
+						<p:column style="width:10% important; min-width:200px;">
+							<p:outputLabel for="sprintC" value="Consumed:" />
+							<p:inputText id="sprintC" readonly="true"
+								value="#{jjsprint.consumed}" />
+						</p:column>
+					</p:row>
+					<f:facet name="footer">
+						<p:row>
+							<p:column style="width:20% important;">
+								<p:commandButton id="editSprintButton"
+									disabled="{!loginBean.authorisationService.wProject}"
+									value="#{messages.label_edit}"
+									process="@this,sprintName,sprintED,sprintSD,sprintcts"
+									actionListener="#{jJSprintBean.attrListener}"
+									onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()"
+									update=":projecttabview:SprintTabView:sprintForm :growlForm">
+									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+									<f:attribute name="create" value="edit" />
+								</p:commandButton>
+								<p:remoteCommand name="editSprint"
+									update=":projecttabview :growlForm"
+									action="#{jJSprintBean.editSprint}"
+									onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock();" />
+							</p:column>
+							<p:column colspan="1" style="width:15% important;">
+								<p:commandButton value="#{messages.label_create} Task"
+									id="createTaskttButton" icon="ui-icon-circle-plus"
+									update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm :taskImportDialog :growlForm"
+									immediate="true" onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()" resetValues="true"
+									actionListener="#{jJTaskBean.loadImportFormat}"
+									title="#{messages.label_create} Task">
+									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+									<f:attribute name="mode" value="scrum" />
+								</p:commandButton>
+								<p:tooltip for="createTaskttButton"
+									value="#{messages.label_create} Task" showEffect="fade"
+									hideEffect="fade" />
+							</p:column>
+						</p:row>
+					</f:facet>
+				</p:panelGrid>
+				<p:panelGrid id="sprintChartPanelGrid"
+					rendered="#{jjsprint.chartModel != null}"
+					style="width:50% !important;min-width:200px !important;">
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="5">Sprint Chart</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column rowspan="2"
+							style="width:60% !important; min-width:100px;">
+							<p:chart type="bar" responsive="true" model="#{jjsprint.chartModel}"
+								widgetVar="barChart_#{jjsprint.sprint.id}_Widget"
+								style="width:98%;height:300px;" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<p:separator />
+			</h:form>
+			<h:form id="taskListForm" rendered="#{!jjsprint.render}"
+				style="width:100% !important;">
+				<p:panelGrid style="width:100% !important;">
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="6">Sprint Tasks</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column style="width: 33.33%;">
+							<p:fieldset legend="Todo" id="todoFieldset">
+								<p:dataTable scrollable="true" scrollHeight="250" id="todo"
+									var="todo" value="#{jjsprint.todoTask}"
+									styleClass="planning-dataTable" rowKey="#{todo.id}"
+									rendered="#{not empty jjsprint.todoTask}">
+
+									<p:column style="width:1px">
+										<h:outputText id="todoIcon"
+											styleClass="ui-icon ui-icon-arrow-4" />
+										<p:draggable for="todoIcon" revert="true" scope="ProgTask"
+											disabled="#{jJSprintBean.isDisableDragDrop(jjsprint)}" />
+									</p:column>
+									<p:column style="width:80px" headerText="Task">
+										<p:graphicImage
+											rendered="#{todo.specification != null and todo.specification}"
+											library="images" name="doc.ico" width="16" height="16" />
+										<p:graphicImage rendered="#{todo.bug != null}"
+											library="images" name="bug.ico" width="16" height="16" />
+										<p:graphicImage
+											rendered="#{todo.bug == null and todo.requirement != null}"
+											library="images" name="function.ico" width="16" height="16" />
+										<p:graphicImage title="TestCase"
+											rendered="#{todo.bug == null and todo.requirement == null and todo.testcase != null}"
+											library="images" name="test.ico" width="16" height="16" />
+										<h:outputText value="#{jJTaskBean.getDialogHeader(todo)}" />
+									</p:column>
+
+									<p:column style="width:10px" headerText="W">
+										<h:outputText value="#{todo.workloadPlanned}" />
+									</p:column>
+									<p:column style="width:20px">
+										<f:facet name="header">
+											<h:outputText value="#{messages.bug_table_action_title}" />
+										</f:facet>
+										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
+											update=":viewTaskForm :viewTaskDialog" immediate="true"
+											resetValues="true"
+											title="#{messages.project_gantt_table_actions_viewMenuItem}"
+											action="#{jJTaskBean.initiateReqTreeNode}">
+											<f:setPropertyActionListener value="#{todo}"
+												target="#{jJTaskBean.task}" />
+											<f:setPropertyActionListener target="#{jJTaskBean.mode}"
+												value="scrum" />
+
+											<p:menuitem id="deleteButton" icon="ui-icon-trash"
+												oncomplete="PF('deleteDialogWidget').show()"
+												value="#{messages.label_delete}">
+												<f:setPropertyActionListener value="#{todo}"
+													target="#{jJSprintBean.task}" />
+												<f:setPropertyActionListener target="#{jJTaskBean.mode}"
+													value="scrum" />
+											</p:menuitem>
+											<p:menuitem id="copyButton" icon="ui-icon-copy"
+												onclick="copyName('#{jJTaskBean.getDialogHeader(todo)}');"
+												value="Copy" title="Copy" />
+										</p:splitButton>
+									</p:column>
+								</p:dataTable>
+							</p:fieldset>
+						</p:column>
+						<p:column style="width: 33.33%;">
+							<p:fieldset legend="In Progress" id="progFieldset">
+								<p:outputPanel id="progdropArea">
+									<h:outputText value="!!!Drop here!!!"
+										rendered="#{empty jjsprint.progressTask}"
+										style="font-size:24px;" />
+									<p:dataTable scrollable="true" scrollHeight="250" id="prog"
+										editable="true" editMode="cell" var="prog"
+										styleClass="planning-dataTable"
+										value="#{jjsprint.progressTask}" rowKey="#{prog.id}"
+										rendered="#{not empty jjsprint.progressTask}">
+										<p:ajax event="cellEdit"
+											listener="#{jJSprintBean.onCellEditTask}"
+											update=":growlForm :projecttabview:SprintTabView:taskListForm :projecttabview:SprintTabView:sprintForm" />
+										<p:column style="width:1px">
+											<h:outputText id="progIcon"
+												styleClass="ui-icon ui-icon-arrow-4" />
+											<p:draggable for="progIcon" revert="true" scope="DoneTask"
+												disabled="#{jJSprintBean.isDisableDragDrop(jjsprint)}" />
+										</p:column>
+
+										<p:column style="width:50px" headerText="Task">
+											<p:graphicImage
+												rendered="#{prog.specification != null and prog.specification}"
+												library="images" name="doc.ico" width="16" height="16" />
+											<p:graphicImage rendered="#{prog.bug != null}"
+												library="images" name="bug.ico" width="16" height="16" />
+											<p:graphicImage
+												rendered="#{prog.bug == null and prog.requirement != null}"
+												library="images" name="function.ico" width="16" height="16" />
+
+											<p:graphicImage
+												rendered="#{prog.bug == null and prog.requirement == null and prog.testcase != null}"
+												library="images" name="test.ico" width="16" height="16" />
+											<h:outputText value="#{jJTaskBean.getDialogHeader(prog)}" />
+										</p:column>
+
+										<p:column style="width:30px" headerText="Who">
+											<h:outputText value="#{prog.assignedTo.name}" />
+										</p:column>
+										<p:column style="width:20px">
+											<f:facet name="header">
+												<h:outputText value="#{messages.bug_table_action_title}" />
+											</f:facet>
+											<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
+												update=":viewTaskForm :viewTaskDialog" immediate="true"
+												resetValues="true"
+												action="#{jJTaskBean.initiateReqTreeNode}">
+												<f:setPropertyActionListener value="#{prog}"
+													target="#{jJTaskBean.task}" />
+
+												<p:menuitem id="deleteButton" icon="ui-icon-trash"
+													oncomplete="PF('deleteDialogWidget').show()"
+													value="#{messages.label_delete}">
+													<f:setPropertyActionListener value="#{prog}"
+														target="#{jJSprintBean.task}" />
+													<f:setPropertyActionListener target="#{jJTaskBean.mode}"
+														value="scrum" />
+												</p:menuitem>
+												<p:menuitem id="copyButton" icon="ui-icon-copy"
+													onclick="copyName('#{jJTaskBean.getDialogHeader(prog)}');"
+													value="Copy" title="Copy" />
+											</p:splitButton>
+										</p:column>
+									</p:dataTable>
+								</p:outputPanel>
+							</p:fieldset>
+						</p:column>
+						<p:column style="width: 33.33%;">
+							<p:fieldset legend="Done Tasks" id="doneFieldset">
+								<p:outputPanel id="donedropArea">
+									<h:outputText value="!!!Drop here!!!"
+										rendered="#{empty jjsprint.doneTask}" style="font-size:24px;" />
+									<p:dataTable id="done" styleClass="planning-dataTable"
+										var="done" value="#{jjsprint.doneTask}" rowKey="#{done.id}"
+										rendered="#{not empty jjsprint.doneTask}" scrollable="true"
+										scrollHeight="250">
+
+										<p:column style="width:80px" headerText="Task">
+											<p:graphicImage
+												rendered="#{done.specification != null and done.specification}"
+												library="images" name="doc.ico" width="16" height="16" />
+											<p:graphicImage rendered="#{done.bug != null}"
+												library="images" name="bug.ico" width="16" height="16" />
+											<p:graphicImage
+												rendered="#{done.bug == null and done.requirement != null}"
+												library="images" name="function.ico" width="16" height="16" />
+
+											<p:graphicImage
+												rendered="#{done.bug == null and done.requirement == null and done.testcase != null}"
+												library="images" name="test.ico" width="16" height="16" />
+
+											<h:outputText value="#{jJTaskBean.getDialogHeader(done)}" />
+										</p:column>
+
+										<p:column style="width:10px" headerText="Diff">
+											<h:outputText
+												value="#{done.workloadPlanned-done.workloadReal}" />
+										</p:column>
+										<p:column style="width:20px">
+											<f:facet name="header">
+												<h:outputText value="#{messages.bug_table_action_title}" />
+											</f:facet>
+											<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
+												update=":viewTaskForm :viewTaskDialog" immediate="true"
+												resetValues="true"
+												action="#{jJTaskBean.initiateReqTreeNode}">
+												<f:setPropertyActionListener value="#{done}"
+													target="#{jJTaskBean.task}" />
+
+												<p:menuitem id="deleteButton" icon="ui-icon-trash"
+													oncomplete="PF('deleteDialogWidget').show()"
+													value="#{messages.label_delete}">
+													<f:setPropertyActionListener value="#{done}"
+														target="#{jJSprintBean.task}" />
+													<f:setPropertyActionListener target="#{jJTaskBean.mode}"
+														value="scrum" />
+												</p:menuitem>
+												<p:menuitem id="copyButton" icon="ui-icon-copy"
+													onclick="copyName('#{jJTaskBean.getDialogHeader(done)}');"
+													value="Copy" title="Copy" />
+											</p:splitButton>
+										</p:column>
+									</p:dataTable>
+								</p:outputPanel>
+
+							</p:fieldset>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<p:droppable id="addTaskToProg" for="progFieldset" tolerance="touch"
+					scope="ProgTask"
+					disabled="#{jJSprintBean.isDisableDragDrop(jjsprint)}"
+					activeStyleClass="ui-state-highlight" datasource="todo">
+					<p:ajax listener="#{jJSprintBean.addTaskToProg}"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()"
+						update=":projecttabview :growlForm">
+					</p:ajax>
+				</p:droppable>
+				<p:droppable id="addTaskToDone" for="doneFieldset" tolerance="touch"
+					scope="DoneTask"
+					disabled="#{jJSprintBean.isDisableDragDrop(jjsprint)}"
+					activeStyleClass="ui-state-highlight" datasource="prog">
+					<p:ajax listener="#{jJSprintBean.addTaskToDone}"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()"
+						update=":projecttabview :editBugDialog :growlForm">
+					</p:ajax>
+				</p:droppable>
+			</h:form>
+		</p:tab>
+	</p:tabView>
+</ui:composition>
+</html>

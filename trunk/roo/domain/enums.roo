@@ -1,0 +1,14 @@
+
+#/*   Create all janjoon enumerations. */
+
+#######################
+
+enum type --class ~.reference.JJRelationship
+enum constant --name version
+enum constant --name requirement
+enum constant --name related
+enum constant --name child
+enum constant --name duplicated
+
+
+

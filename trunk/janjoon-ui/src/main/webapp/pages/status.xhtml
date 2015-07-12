@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+
+	<h:form id="statusForm">
+
+		<p:panel id="statusPanel" style="width:750px" columns="1"
+			cellpadding="6">
+			<p:dataTable id="dataTable" var="status" lazy="true"
+				paginatorPosition="bottom" value="#{jJStatusBean.lazyStatusList}"
+				paginator="true" rows="10"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15">
+				<f:facet name="header">  
+           #{messages.admin_status_table_header}  
+        </f:facet>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_status_table_name_title}" />
+					</f:facet>
+					<h:outputText value="#{status.name}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_status_table_objet_title}" />
+					</f:facet>
+					<h:outputText value="#{status.objet}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_status_table_date_title}" />
+					</f:facet>
+					<h:outputText value="#{status.creationDate}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_status_table_creator_title}" />
+					</f:facet>
+					<h:outputText value="#{status.createdBy.name}" />
+				</p:column>
+				<p:column styleClass="action-column" style="width:200px;">
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_status_table_action_title}" />
+					</f:facet>
+
+					<!-- 					<p:splitButton id="viewButton" icon="ui-icon-zoomin" -->
+					<!-- 						update=":tabview:sviewForm:viewPanelGrid" -->
+					<!-- 						value="#{messages.admin_status_table_view_tooltip}" -->
+					<!-- 						oncomplete="PF('viewSatDialogWidget').show()"> -->
+					<!-- 						<f:setPropertyActionListener value="#{status}" -->
+					<!-- 							target="#{jJStatusBean.JJStatus_}" /> -->
+
+
+					<p:splitButton id="editButton" icon="ui-icon-pencil"
+						update=":tabview:seditForm:editPanelGrid"
+						action="#{jJStatusBean.onEdit}" resetValues="true"
+						oncomplete="PF('editSatDialogWidget').show()"
+						value="#{messages.admin_status_table_edit_tooltip}">
+						<f:setPropertyActionListener value="#{status}"
+							target="#{jJStatusBean.JJStatus_}" />
+
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							resetValues="true"
+							oncomplete="PF('deleteSatDialogWidget').show()"
+							value="#{messages.admin_status_table_delete_tooltip}"
+							title="#{messages.admin_status_table_delete_title}">
+							<f:setPropertyActionListener value="#{status}"
+								target="#{jJStatusBean.selectedStatus}" />
+						</p:menuitem>
+
+					</p:splitButton>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton value="#{messages.admin_status_new_button}"
+						id="createButton" icon="ui-icon-circle-plus" resetValues="true"
+						update=":tabview:ScreateForm:createPanelGrid"
+						oncomplete="PF('createSatDialogWidget').show()"
+						title="#{messages.admin_status_new_button}" />
+					<p:tooltip for="createButton"
+						value="#{messages.admin_status_new_tooltip}" showEffect="fade"
+						hideEffect="fade" />
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
+
+	</h:form>
+	<p:dialog id="ScreateDialog"
+		header="#{messages.admin_status_new_title}" modal="true"
+		widgetVar="createSatDialogWidget" dynamic="true"
+		visible="#{jJStatusBean.createDialogVisible}" resizable="true"
+		maximizable="true" showEffect="fade" hideEffect="explode">
+		<p:ajax event="close" update=":tabview:statusForm"
+			listener="#{jJStatusBean.handleDialogClose}" />
+		<p:outputPanel id="ScreatePanel">
+			<h:form id="ScreateForm" enctype="multipart/form-data">
+				<h:panelGrid id="createPanelGrid" columns="3"
+					binding="#{jJStatusBean.createPanelGrid}" styleClass="dialog"
+					columnClasses="col1,col2,col3" />
+				<p:commandButton id="createSaveButton"
+					value="#{messages.admin_status_new_save_button}"
+					action="#{jJStatusBean.persistStatus}"
+					update="createPanelGrid,:growlForm" />
+				<p:commandButton id="createCloseButton"
+					value="#{messages.admin_status_new_close_button}"
+					onclick="PF('createSatDialogWidget').hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+
+	<p:dialog id="SeditDialog" header="#{messages.admin_status_edit_title}"
+		modal="true" widgetVar="editSatDialogWidget" dynamic="true"
+		resizable="true" maximizable="true" showEffect="fade"
+		hideEffect="explode">
+		<p:ajax event="close" update=":tabview:statusForm"
+			listener="#{jJStatusBean.handleDialogClose}" />
+		<p:outputPanel id="SeditPanel">
+			<h:form id="seditForm" enctype="multipart/form-data">
+				<h:panelGrid id="editPanelGrid" columns="3"
+					binding="#{jJStatusBean.editPanelGrid}" styleClass="dialog"
+					columnClasses="col1,col2,col3" />
+				<p:commandButton id="editSaveButton"
+					value="#{messages.admin_status_edit_save_button}"
+					action="#{jJStatusBean.persistStatus}"
+					update="editPanelGrid,:growlForm" />
+				<p:commandButton id="editCloseButton"
+					value="#{messages.admin_status_edit_close_button}"
+					onclick="PF('editSatDialogWidget').hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+
+	<p:dialog id="SviewDialog"
+		header="#{messages.admin_status_view_title} Status" modal="true"
+		widgetVar="viewSatDialogWidget" dynamic="true" resizable="true"
+		maximizable="true" showEffect="fade" hideEffect="explode">
+		<p:ajax event="close" update=":tabview:statusForm"
+			listener="#{jJStatusBean.handleDialogClose}" />
+		<p:outputPanel id="SviewPanel">
+			<h:form id="sviewForm" enctype="multipart/form-data">
+				<h:panelGrid id="viewPanelGrid" columns="2"
+					binding="#{jJStatusBean.viewPanelGrid}" styleClass="dialog"
+					columnClasses="col1,col2" />
+				<p:commandButton id="viewCloseButton"
+					value="#{messages.admin_status_view_close_button}"
+					onclick="PF('viewSatDialogWidget').hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+	<p:confirmDialog id="SdeleteDialog" widgetVar="deleteSatDialogWidget"
+		message="#{messages.admin_status_delete_label}" showEffect="fade"
+		hideEffect="explode" header="#{messages.admin_status_delete_title}"
+		severity="alarm">
+		<p:outputPanel id="SdeletePanel">
+			<h:form id="sdeleteForm">
+				<p:commandButton id="deleteYesButton"
+					value="#{messages.admin_status_delete_yes_label}"
+					action="#{jJStatusBean.deleteStatus}"
+					update=":tabview:statusForm :growlForm"
+					oncomplete="PF('deleteSatDialogWidget').hide()" />
+				<p:commandButton id="deleteNoButton"
+					value="#{messages.admin_status_delete_no_label}"
+					onclick="PF('deleteSatDialogWidget').hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:confirmDialog>
+</ui:composition>
+</html>

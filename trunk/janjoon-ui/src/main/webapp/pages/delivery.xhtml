@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="../templates/layout.xhtml">
+	<ui:define name="content">
+		<style type="text/css">
+.ui-datatable .ui-row-toggler {
+	float: left;
+}
+</style>
+		<p:panel id="deliveryPanel" style="height: #{jJBuildBean.height};">
+			<p:commandButton value="#{messages.specification_video_help_title}"
+				style="float: right;margin-right: -10px;margin-top: -7px;"
+				id="videoHelpBtn" icon="ui-icon-video"
+				onclick="PF('videoHelpWidget').show()" type="button" />
+			<h:form id="deliveryForm">
+				<h:panelGrid columns="3" style="margin-top: 20px;" border="0">
+					<c:forEach items="#{jJBuildBean.buildDataModelList}"
+						var="buildDataModel" varStatus="loop">
+
+						<p:fieldset
+							legend="#{buildDataModel.version.product.name}/#{buildDataModel.version.name}"
+							id="buildFieldSet">
+							<p:dataTable id="buildDataTable_#{loop.index}" scrollable="true"
+								scrollHeight="250" var="build" value="#{buildDataModel.builds}"
+								rowKey="#{build.id}">
+								<!-- 							<p:column headerText="Project"> -->
+								<!-- 								<h:outputText value="#{build.name}" /> -->
+								<!-- 							</p:column> -->
+								<p:ajax event="rowToggle" listener="#{jJBuildBean.rowToggle}"
+									update="buildDataTable_#{loop.index}"
+									onstart="updateRowExapansion();PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()" />
+								<p:column style="width:15%;">
+									<p:rowToggler />
+									<p:commandLink target="_blank"
+										style="float: right;"
+										action="#{jJBuildBean.getZipFile(build)}" ajax="false"
+										disabled="#{jJBuildBean.haveUrl(build)}" title="Download">
+										<p:graphicImage name="download.ico" library="images"
+											width="14" height="14" />
+									</p:commandLink>
+								</p:column>
+								<p:column headerText="Build">
+									<h:outputText value="#{build.name}" />
+								</p:column>
+								<p:column headerText="Status">
+									<p:autoComplete id="status" dropdown="true"
+										value="#{build.status}" itemLabel="#{status.name}"
+										itemValue="#{status}" var="status" size="10"
+										converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+										completeMethod="#{jJBuildBean.completeStatus}">
+										<p:ajax event="itemSelect"
+											onstart="PF('blockUIWidget').block()"
+											oncomplete="PF('blockUIWidget').unblock()"
+											listener="#{jJBuildBean.changeEvent(build,buildDataModel)}"
+											update="buildDataTable_#{loop.index} :growlForm" />
+									</p:autoComplete>
+								</p:column>
+								<p:rowExpansion styleClass="rowExpansion">
+									<!-- 									<f:event type="preRenderComponent" update="versionDataTable" -->
+									<!-- 										onstart="PF('versionBlockUIWidget').block()" -->
+									<!-- 										oncomplete="PF('versionBlockUIWidget').unblock()" -->
+									<!-- 										listener="#{jJBuildBean.loadingRowExpansion(versionModel.version)}" /> -->
+
+									<p:dataTable id="taskDataTable" var="task" style="width:90%;"
+										rowKey="#{task.id}" emptyMessage="That Build have no Tasks"
+										value="#{build.tasks}">
+
+										<p:column style="width:25%">
+											<f:facet name="header">
+												<p:row>
+													<p:column>
+														<h:outputText value="Task Id" />
+													</p:column>
+												</p:row>
+											</f:facet>
+											<h:outputText value="#{task.id}" />
+										</p:column>
+
+										<p:column style="width:75%">
+											<f:facet name="header">
+												<p:row>
+													<p:column>
+														<h:outputText value="Name:" />
+													</p:column>
+												</p:row>
+											</f:facet>
+											<p:graphicImage
+												rendered="#{task.specification != null and task.specification}"
+												library="images" name="doc.ico" width="16" height="16" />
+											<p:graphicImage rendered="#{task.bug != null}"
+												library="images" name="bug.ico" width="16" height="16" />
+											<p:graphicImage
+												rendered="#{task.bug == null and task.requirement != null}"
+												library="images" name="function.ico" width="16" height="16" />
+											<p:graphicImage title="TestCase"
+												rendered="#{task.bug == null and task.requirement == null and task.testcase != null}"
+												library="images" name="test.ico" width="16" height="16" />
+											<h:outputText value="#{task.name}" />
+										</p:column>
+									</p:dataTable>
+								</p:rowExpansion>
+							</p:dataTable>
+						</p:fieldset>
+					</c:forEach>
+				</h:panelGrid>
+			</h:form>
+
+		</p:panel>
+		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
+		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
+			position="center" header="#{messages.specification_video_help_title}"
+			style="padding:0px;" resizable="false" draggable="false"
+			minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
+			<video width="100%" height="100%" controls="true">
+				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
+			</video>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

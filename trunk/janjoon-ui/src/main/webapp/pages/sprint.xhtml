@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+	<h:form id="sprintCreationForm" rendered="#{jjsprint.render}">
+		<p:panelGrid style="width: 100%;">
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="4">Create Sprint</p:column>
+				</p:row>
+			</f:facet>
+			<p:row>
+				<p:column>
+					<p:outputLabel for="sprintCName" value="Sprint Name:" />
+				</p:column>
+				<p:column>
+					<p:inputTextarea id="sprintCName" value="#{jjsprint.sprint.name}"
+						required="true" requiredMessage="Sprint name is empty"
+						readonly="#{jjsprint.neditabale}">
+						<f:validateLength maximum="100" />
+					</p:inputTextarea>
+				</p:column>
+				<p:column>
+					<p:outputLabel for="sprintcts" value="Sprint Contacts:" />
+				</p:column>
+				<p:column>
+					<p:selectManyMenu id="sprintcts" scrollHeight="150"
+						value="#{jjsprint.sprint.contacts}"
+						disabled="#{jjsprint.neditabale}"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
+						style="width:150px;height:150px !important;" showCheckbox="true">
+						<f:selectItems value="#{jJSprintBean.contacts}" var="ctc"
+							itemLabel="#{ctc.firstname} #{c.name}" itemValue="#{ctc}" />
+						<f:validator validatorId="listCategoriesValidator" />
+					</p:selectManyMenu>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:outputLabel for="sprintCSD" value="Start Date:" />
+				</p:column>
+				<p:column>
+					<p:calendar id="sprintCSD" navigator="true" effect="slideDown"
+						pattern="dd/MM/yyyy" required="true"
+						binding="#{startDateCreation}" disabled="#{jjsprint.neditabale}"
+						value="#{jjsprint.sprint.startDate}">
+						<f:validator validatorId="dateRangeValidator" />
+						<f:attribute name="sprintMode" value="sprintSD" />
+					</p:calendar>
+				</p:column>
+				<p:column>
+					<p:outputLabel for="sprintCED" value="end Date:" />
+				</p:column>
+				<p:column>
+					<p:calendar id="sprintCED" navigator="true" effect="slideDown"
+						pattern="dd/MM/yyyy" required="true"
+						disabled="#{jjsprint.neditabale}"
+						value="#{jjsprint.sprint.endDate}">
+						<f:validator validatorId="dateRangeValidator" />
+						<f:attribute name="startDateComponent"
+							value="#{startDateCreation}" />
+						<f:attribute name="sprintMode" value="sprintED" />
+					</p:calendar>
+				</p:column>
+			</p:row>
+			<f:facet name="footer">
+				<p:row>
+					<p:column>
+						<p:commandButton id="createSprintButton"
+							value="#{messages.label_create}"
+							disabled="#{jjsprint.neditabale or !loginBean.authorisationService.wProject}"
+							actionListener="#{jJSprintBean.attrListener}"
+							update=":projecttabview:SprintTabView:sprintCreationForm :growlForm">
+							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+							<f:attribute name="create" value="create" />
+						</p:commandButton>
+						<p:remoteCommand name="createSprint"
+							update=":projecttabview :growlForm"
+							action="#{jJSprintBean.createSprint}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock();" />
+					</p:column>
+					<p:column>
+						<p:commandButton value="Done" id="doneButtonr"
+							update=":projecttabview :growlForm" immediate="true"
+							disabled="#{!jjsprint.neditabale or !loginBean.authorisationService.wProject}"
+							actionListener="#{jJSprintBean.doneEvent}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()">
+							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+						</p:commandButton>
+					</p:column>
+					<p:column colspan="2">
+						<p:commandButton value="#{messages.label_create} Task"
+							disabled="#{!jjsprint.neditabale}" id="createTaskttButton"
+							icon="ui-icon-circle-plus" immediate="true"
+							onstart="PF('blockUIWidget').block()" resetValues="true"
+							oncomplete="PF('blockUIWidget').unblock()"
+							actionListener="#{jJTaskBean.loadImportFormat}"
+							title="#{messages.label_create} Task">
+							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+							<f:attribute name="mode" value="scrum" />
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</f:facet>
+		</p:panelGrid>
+	</h:form>
+</ui:composition>
+</html>

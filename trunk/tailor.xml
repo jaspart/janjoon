@@ -1,0 +1,106 @@
+
+<!-- The Janjoon tailor configuration for roo. -->
+
+<tailorconfiguration>
+	<!-- Create a project with two modules (domain and ui) -->
+	<tailor name="janjoonRooStyle" description="The Janjoon Roo Style">
+		<config command="project">
+			<action type="defaultvalue" argument="packaging" value="pom" />
+			<action type="execute" />
+			<action type="execute"
+				command="module create --moduleName ${projectName}-domain --topLevelPackage ${topLevelPackage}.domain --packaging jar" />
+			<action type="execute"
+				command="email sender setup --hostServer smtp.gmail.com --port 587 --protocol SMTP --username janjoon.mailer --password BeHappy2012" />
+			<action type="execute" command="logging setup --level INFO" /><!--INFO -->
+			<action type="focus" module="~" />
+			<action type="execute"
+				command="module create --moduleName ${projectName}-ui --topLevelPackage ${topLevelPackage}.ui --packaging war" />
+			<action type="execute" command="logging setup --level INFO" />
+			<action type="focus" module="~" />
+			<action type="execute" command="backup" />
+		</config>
+
+		<!-- Perform MySQL jpa setup -->
+		<config command="mysql-jpa-setup">
+			<action type="focus" module="domain" />
+			<action type="execute"
+				command="jpa setup --provider HIBERNATE --database MYSQL --databaseName ${databaseName} --userName ${userName} --password ${password} --persistenceUnit PU-domain" />
+		</config>
+
+		<!-- Perform HSQL (in memory) jpa setup -->
+		<config command="hypersonic-jpa-setup">
+			<action type="focus" module="domain" />
+			<action type="execute"
+				command="jpa setup --provider HIBERNATE --database HYPERSONIC_IN_MEMORY" />
+		</config>
+
+		<!-- Perform H2 (in memory) jpa setup -->
+		<config command="h2-jpa-setup">
+			<action type="focus" module="domain" />
+			<action type="execute"
+				command="jpa setup --provider HIBERNATE --database H2_IN_MEMORY" />
+		</config>
+
+		<!-- Create a jpa entity -->
+		<config command="entity jpa">
+			<action type="focus" module="domain" />
+			<action type="defaultvalue" argument="--activeRecord" value="false" />
+			<action type="defaultvalue" argument="--testAutomatically"
+				value="true" />
+			<!--action type="defaultvalue" argument="-equals" value="true"/ -->
+			<action type="defaultvalue" argument="--sequenceName" value="${class}SEQ" />
+			<action type="execute" />
+		</config>
+
+		<!-- Create a jpa repository and a service for an entity -->
+		<config command="layer">
+			<action type="focus" module="domain" />
+			<action type="execute"
+				command="repository jpa --interface ~.${class}Repository --entity ~.${class}" />
+			<action type="execute"
+				command="service type --interface ~.${class}Service --class ~.${class}ServiceImpl --entity ~.${class}" />
+			<!--<action type="execute" command="solr add -class ~.${class}"/> -->
+			<action type="focus" module="domain" />
+		</config>
+
+		<!-- Perform Json setup -->
+		<config command="json-setup">
+			<action type="focus" module="ui" />
+			<action type="execute" command="json all --deepSerialize" />
+			<action type="focus" module="~" />
+		</config>
+
+		<!-- Perform JSF setup -->
+		<config command="jsf-setup">
+			<action type="focus" module="ui" />
+			<action type="execute"
+				command="web jsf setup --implementation APACHE_MYFACES --theme SMOOTHNESS" />
+			<action type="execute" command="web jsf all --package ~.mb" />
+			<action type="focus" module="~" />
+		</config>
+
+		<!-- Perform Spring MVC setup -->
+		<config command="mvc-setup">
+			<action type="focus" module="ui" />
+			<action type="execute" command="web mvc json setup" />
+			<action type="execute" command="web mvc json all --package ~.mvc" />
+			<action type="execute" command="web mvc setup" />
+			<action type="execute" command="web mvc all --package ~.mb" />
+			<action type="execute" command="web mvc finder all" />
+			<action type="execute" command="web flow" />
+			<!--action type="execute" command="web mvc language -code fr"/ -->
+			<action type="execute" command="web mvc language --code de" />
+			<action type="execute" command="web mvc language --code es" />
+			<action type="execute" command="security setup" />
+			<action type="focus" module="~" />
+		</config>
+
+		<!-- Last actions before closing a project -->
+		<config command="close">
+			<action type="focus" module="~" />
+			<action type="execute" command="backup" />
+			<!--action type="execute" command="perform-eclipse"/> <action type="execute" 
+				command="backup"/ -->
+		</config>
+	</tailor>
+</tailorconfiguration>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+	<h:form id="categoryForm">
+		<p:panel id="categoryPanel" style="width:650px" columns="1"
+			cellpadding="6">
+			<p:dataTable id="categoryDataTable" var="category" lazy="true"
+				paginatorPosition="bottom"
+				value="#{jJCategoryBean.categoryListTable}" paginator="true"
+				rows="15" rowKey="#{category.id}">
+				<f:facet name="header">#{messages.admin_category_table_header}</f:facet>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_category_table_name_title}" />
+					</f:facet>
+					<h:outputText value="#{category.name}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_category_table_stage_title}" />
+					</f:facet>
+					<h:outputText value="#{category.stage}" />
+				</p:column>
+				<p:column styleClass="action-column">
+					<f:facet name="header">
+						<h:outputText
+							value="#{messages.admin_category_table_action_title}" />
+					</f:facet>
+					<p:splitButton id="editButton" icon="ui-icon-pencil"
+						oncomplete="PF('categoryDialogWidget').show()"
+						value="#{messages.admin_category_table_edit_tooltip}"
+						action="#{jJCategoryBean.editCategory}" resetValues="true"
+						update=":tabview:categoryDialog">
+						<f:setPropertyActionListener value="#{category}"
+							target="#{jJCategoryBean.categoryAdmin}" />
+
+
+						<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							value="#{messages.admin_category_table_delete_tooltip}"
+							oncomplete="PF('categoryDeleteDialogWidget').show()"
+							title="#{messages.label_delete}" resetValues="true">
+							<f:setPropertyActionListener value="#{category}"
+								target="#{jJCategoryBean.categoryAdmin}" />
+						</p:menuitem>
+
+					</p:splitButton>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton value="#{messages.admin_category_new_button}"
+						id="newCategory" actionListener="#{jJCategoryBean.newCategory}"
+						update=":tabview:categoryDialog" resetValues="true"
+						oncomplete="PF('categoryDialogWidget').show()"
+						icon="ui-icon-circle-plus" />
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+	<p:dialog id="categoryDialog"
+		header="#{messages[jJCategoryBean.message]}" modal="true"
+		widgetVar="categoryDialogWidget" dynamic="true" showEffect="fade"
+		hideEffect="explode" resizable="false">
+		<p:ajax event="close" update=":tabview:categoryForm"
+			listener="#{jJCategoryBean.closeDialog}" />
+		<p:outputPanel id="categoryDialogPanel">
+			<h:form id="categoryDialogForm">
+				<!-- 				<p:growl id="msg" /> -->
+				<p:panel styleClass="panelDialog">
+					<f:facet name="header">
+						<p:messages id="msg" showDetail="false" closable="true" />
+					</f:facet>
+					<p:panelGrid>
+						<p:row>
+							<p:column colspan="2">
+								<br />
+								<p:inputText id="name"
+									value="#{jJCategoryBean.categoryAdmin.name}"
+									label="#{messages.admin_category_new_name_label}"
+									required="true" widgetVar="nameWidget">
+									<f:validateLength maximum="100" />
+								</p:inputText>
+								<p:message for="name" id="msgName" />
+								<p:watermark for="name"
+									value="#{messages.admin_category_new_name_watermark}" />
+							</p:column>
+							<p:column colspan="2">
+								<h:outputLabel for="stage"
+									value="#{messages.admin_category_new_stage_label}" />
+								<p:outputPanel>
+									<p:spinner id="stage"
+										value="#{jJCategoryBean.categoryAdmin.stage}" min="0"
+										max="100">
+										<p:ajax update="stagevalue" process="@this" />
+									</p:spinner>
+									<h:outputText id="stagevalue"
+										value="#{jJCategoryBean.categoryAdmin.stage}" />
+								</p:outputPanel>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<f:facet name="footer">
+						<p:commandButton id="submitButton"
+							value="#{messages.admin_category_new_save_button}"
+							update="categoryDialogForm :growlForm"
+							action="#{jJCategoryBean.save}" />
+
+					</f:facet>
+				</p:panel>
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+	<p:confirmDialog id="categoryDeleteDialog"
+		widgetVar="categoryDeleteDialogWidget"
+		message="#{messages.admin_category_delete_label}" showEffect="fade"
+		hideEffect="explode" header="#{messages.admin_category_delete_title}"
+		severity="alarm">
+		<p:outputPanel id="categoryDeletePanel">
+			<h:form id="categoryDeleteForm">
+				<p:commandButton id="deleteYesButton"
+					value="#{messages.admin_category_delete_yes_label}"
+					action="#{jJCategoryBean.deleteCategory}"
+					update=":tabview:categoryForm :growlForm"
+					oncomplete="PF('categoryDeleteDialogWidget').hide()" />
+				<p:commandButton id="deleteNoButton"
+					value="#{messages.admin_category_delete_no_label}"
+					onclick="PF('categoryDeleteDialogWidget').hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:confirmDialog>
+</ui:composition>
+</html>

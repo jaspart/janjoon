@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><License>
+	<features>
+		<projectNumber>6</projectNumber>
+		<productNumber>6</productNumber>
+		<contactNumber>5</contactNumber>
+		<expires>2015-08-01T00:00:00</expires>
+	</features>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<ds:SignedInfo>
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+<ds:Reference URI="">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>hL6HREHSJX7X6arOE/RrfzFGFQcrZvxSLwGgCDYMnyc=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue>
+PaHnjwkCr5cs3JivRYTIbhdZi8YQ/Aomh8F/OxFWwdHTtvwHLlTfKYhEiU5QZ/5q0LNZN/Igi6if
+6q57qfP8clVyuxg8pbBReFH7cPWTkVOe3eGr4Bv17oRA7vuBjfnAl+z4M5kzX+yApQNJNxPcoanf
+VENKRzAwFvR8M/hdBc0kQR2eF0dGULna0PtaJC6DKcFvRxkX89F9IFAP4Zx1ALNVU1vZ7hXVWKDi
+/kY6iWGVmP6yzGFTfh/sQCD1u/S5dwxaDnXVS0l5B/+uSwS19E8uA4izmEYlVgyyK9FRX0CJ4Vki
++s6zRk7QQZvKLg8Drqek6RRA1UWVUSurhvuE9Q==
+</ds:SignatureValue>
+</ds:Signature></License>

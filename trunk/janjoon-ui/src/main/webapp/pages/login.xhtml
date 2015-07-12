@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/layout-login.xhtml">
+	<ui:define name="title">#{messages.login_title}</ui:define>
+	<ui:define name="content">
+		<!-- 		<f:event listener="#{loginBean.checkAuthorities}" type="preRenderView"  /> -->
+		<h:form id="login" method="post">
+			<p:growl showDetail="true" id="auth" />
+			<p:panelGrid style="background-color:transparent;margin: 0 auto;">
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="2">
+							<p:outputLabel value="#{messages.login_pleaseLogin_header}" />
+						</p:column>
+					</p:row>
+				</f:facet>
+				<p:row>
+					<p:column>
+						<h:outputLabel for="username"
+							value="#{messages.login_username_label}:"
+							style="margin-top:20px;" />
+					</p:column>
+					<p:column>
+						<p:inputText id="username" value="#{loginBean.username}"
+							required="true"
+							requiredMessage="#{messages.login_necessaryUsername_label}">
+							<f:validator validatorId="emailValidator" />
+						</p:inputText>
+
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:message for="username" id="mail" closable="true" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputLabel for="password"
+							value="#{messages.login_password_label}:"
+							style="margin-top:20px;" />
+					</p:column>
+					<p:column>
+						<p:password id="password" value="#{loginBean.password}"
+							required="true"
+							requiredMessage="#{messages.login_necessaryPassword_label}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:message for="password" id="mdp" closable="true" />
+					</p:column>
+				</p:row>
+				<f:facet name="footer">
+					<p:row style="padding: 4px 1px;">
+						<p:column colspan="2">
+							<p:selectBooleanCheckbox value="#{loginBean.agreeTerms}">
+								<p:ajax event="change" update="submit" />
+							</p:selectBooleanCheckbox>
+							<h:outputLink target="_blank"
+								value="../resources/ConfidentialityTermsAndConditions_BetaUsers.pdf"
+								styleClass="preformatted">
+								<h:outputLabel value="#{messages.login_terms_label}" />
+							</h:outputLink>
+							<br />
+							<p:commandButton id="submit"
+								value="#{messages.login_login_button}"
+								onstart="PF('blockUIWidget').block()"
+								onerror="PF('blockUIWidget').unblock()"
+								oncomplete="PF('blockUIWidget').unblock()"
+								action="#{loginBean.login}" style="margin-top:20px;"
+								disabled="#{!loginBean.agreeTerms}"
+								update=":login:mdp,:login:mail :login:auth" />
+						</p:column>
+					</p:row>
+				</f:facet>
+			</p:panelGrid>
+		</h:form>
+		<!-- 		<pe:blockUI widgetVar="blockUIWidget"> -->
+		<!-- 			<h:panelGrid columns="2"> -->
+		<!-- 				<p:graphicImage library="images" name="ajax-loader.gif" -->
+		<!-- 					style="vertical-align: middle;" /> -->
+		<!-- 				<h:outputText value="#{messages.label_refresh}" -->
+		<!-- 					style="white-space: nowrap;" /> -->
+		<!-- 			</h:panelGrid> -->
+		<!-- 		</pe:blockUI> -->
+	</ui:define>
+</ui:composition>
+</html>

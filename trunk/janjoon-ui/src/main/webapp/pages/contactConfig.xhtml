@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/layout.xhtml">
+	<ui:define name="content">
+		<style type="text/css">
+.ui-datalist-data {
+	-webkit-padding-start: 15px;
+}
+/* .ui-fileupload-progress { */
+/* 	display: none; */
+/* } */
+/* .ui-fileupload-cancel { */
+/* 	display: none; */
+/* } */
+/* .ui-fileupload-files { */
+/* 	margin: 1px 0; */
+/* 	width: 150px !important; */
+/* 	display: inline-block; */
+/* 	height: 50px; */
+/* } */
+.ui-datatable table {
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+</style>
+		<p:panel style="height:650px;"
+			header="#{messages.contact_panel_header}">
+			<h:form id="configForm" style="float:left;">
+				<p:remoteCommand name="updateAdmin" />
+				<p:panelGrid>
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="4">#{loginBean.contact.name} Configuration</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="4">
+								<p:graphicImage style="width:100px; height:100px"
+									value="#{imageStreamer.image}">
+									<f:param name="contactId" value="#{loginBean.contact.id}" />
+								</p:graphicImage>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="4">
+								<p:commandButton onclick="PF('changePhotoDialogWidget').show()"
+									value="Change" icon="ui-icon-plusthick" style="float:right;" />
+							</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column colspan="2">
+							<p:outputLabel for="firstname"
+								value="#{messages.contact_firstname}" />
+
+						</p:column>
+						<p:column colspan="2">
+							<p:inputText id="firstname"
+								value="#{jJContactBean.contactUtil.firstname}" required="true">
+								<f:validateLength maximum="100" />
+							</p:inputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+							<p:outputLabel for="name" value="#{messages.contact_name}" />
+						</p:column>
+						<p:column colspan="2">
+							<p:inputText id="name" value="#{jJContactBean.contactUtil.name}"
+								required="true">
+								<f:validateLength maximum="100" />
+							</p:inputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+							<p:outputLabel for="email" value="#{messages.contact_email}" />
+						</p:column>
+						<p:column colspan="2">
+							<p:inputText id="email"
+								value="#{jJContactBean.contactUtil.email}" readonly="true" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+							<p:outputLabel for="lastproject"
+								value="#{messages.contact_lastproject}" />
+						</p:column>
+						<p:column colspan="2">
+							<p:selectOneMenu id="lastproject"
+								value="#{jJContactBean.contactUtil.lastProject}"
+								panelStyle="width:120px" effect="fade" style="width:160px"
+								filter="true" filterMatchMode="startsWith"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
+
+								<f:selectItem itemValue="#{null}"
+									itemLabel="#{messages.contact_anyProject}" />
+								<f:selectItems value="#{jJProjectBean.projectList}" var="p"
+									itemLabel="#{p.name}" itemValue="#{p}" />
+								<p:ajax onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()" update="configForm" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+							<p:outputLabel for="lastproduct"
+								value="#{messages.contact_lastproduct}" />
+						</p:column>
+						<p:column colspan="2">
+							<p:selectOneMenu id="lastproduct"
+								value="#{jJContactBean.contactUtil.lastProduct}"
+								panelStyle="width:120px" effect="fade" style="width:160px"
+								filter="true" filterMatchMode="startsWith"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
+
+								<f:selectItem itemValue="#{null}"
+									itemLabel="#{messages.contact_anyProduct}" />
+								<f:selectItems value="#{jJProductBean.productList}" var="p"
+									itemLabel="#{p.name}" itemValue="#{p}" />
+								<p:ajax onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()" update="configForm" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+							<p:outputLabel for="lastversion"
+								value="#{messages.contact_lastversion}" />
+						</p:column>
+						<p:column colspan="2">
+							<p:selectOneMenu id="lastversion"
+								value="#{jJContactBean.contactUtil.lastVersion}"
+								panelStyle="width:120px" effect="fade" style="width:160px"
+								filter="true" filterMatchMode="startsWith"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
+
+								<f:selectItem itemValue="#{null}"
+									itemLabel="#{messages.contact_anyVersion}" />
+								<f:selectItems value="#{jJContactBean.versionList}" var="p"
+									itemLabel="#{p.name}" itemValue="#{p}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row
+						rendered="#{loginBean.authorisationService.renderCategoryConfig}">
+						<p:column colspan="2">
+							<p:outputLabel for="categories"
+								value="#{messages.contact_categories}" />
+						</p:column>
+						<p:column colspan="2">
+							<p:selectManyMenu id="categories" scrollHeight="110"
+								value="#{jJContactBean.loggedContactCategories}"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter"
+								style="height: 110px !important;" showCheckbox="true">
+								<f:selectItems value="#{jJContactBean.categories}" var="cat"
+									itemLabel="#{cat.name}" itemValue="#{cat}" />
+								<f:validator validatorId="listCategoriesValidator" />
+							</p:selectManyMenu>
+						</p:column>
+					</p:row>
+					<f:facet name="footer">
+						<p:row>
+							<p:column colspan="4" style="text-align: right">
+								<p:commandButton id="submit"
+									update=":vacationForm configForm :workdaysCalendar :growlForm "
+									onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()"
+									value="#{messages.contact_submit}"
+									action="#{jJContactBean.updateUserConfiguration(loginBean)}" />
+
+							</p:column>
+						</p:row>
+					</f:facet>
+				</p:panelGrid>
+			</h:form>
+			<p:dialog id="changePhotoDialog" draggable="false" modal="true"
+				header="Change Photo" widgetVar="changePhotoDialogWidget"
+				dynamic="true" resizable="false">
+				<p:outputPanel id="changePhotoPanel">
+					<h:form id="changePhotoForm">
+						<p:fileUpload
+							fileUploadListener="#{licenseBean.handleContactFileUpload}"
+							mode="advanced" dragDropSupport="true"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock();PF('changePhotoDialogWidget').hide()"
+							update=":vacationForm :configForm :workdaysCalendar :growlForm"
+							sizeLimit="1000000" allowTypes="/(gif|png|ico|jpeg|jpg)$/" />
+					</h:form>
+				</p:outputPanel>
+			</p:dialog>
+			<h:form id="vacationForm" style="float: left;margin-left: 20px;">
+				<!-- 				<p:growl id="msg" /> -->
+				<p:panelGrid>
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="2">
+            			#{loginBean.contact.name} #{messages.contact_vacances}</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column colspan="2">
+							<p:dataList var="vacation" paginator="true" rows="9"
+								paginatorPosition="bottom"
+								emptyMessage="#{messages.contact_empty_vacation}"
+								value="#{jJContactBean.calendarUtil.vacation}" type="ordered">
+
+								<p:outputLabel value="#{messages.contact_from} :" />
+								<p:inputText readonly="true" value="#{vacation.startVacation}"
+									style="width: 137px;">
+									<f:converter converterId="extendedDateTimeConverter" />
+									<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
+								</p:inputText>
+								<p:outputLabel value=" #{messages.contact_to} :"
+									style="-webkit-padding-start: 30px;" />
+								<p:inputText readonly="true" value="#{vacation.endVacation}">
+									<f:converter converterId="extendedDateTimeConverter" />
+									<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
+
+								</p:inputText>
+							</p:dataList>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<p:outputLabel for="start" value="#{messages.contact_from}:" />
+							<p:calendar id="start" navigator="true" effect="slideDown"
+								required="true" pattern="dd/MM/yyyy HH:mm"
+								binding="#{startDateCreation}"
+								value="#{jJContactBean.startDate}" />
+						</p:column>
+						<p:column>
+							<p:outputLabel for="end" value="#{messages.contact_to}:" />
+							<p:calendar id="end" navigator="true" effect="slideDown"
+								required="true" pattern="dd/MM/yyyy HH:mm"
+								value="#{jJContactBean.endDate}">
+								<f:validator validatorId="dateRangeValidator" />
+								<f:attribute name="startDateComponent"
+									value="#{startDateCreation}" />
+							</p:calendar>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+							<p:commandButton id="addVacation"
+								onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock()"
+								update="vacationForm :configForm :workdaysCalendar :growlForm"
+								action="#{jJContactBean.addVacation(loginBean,loginBean.contact)}"
+								value="#{messages.contact_new_vacation}" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+			</h:form>
+			<h:form id="workdaysCalendar" style="float: right;margin-left: 20px;">
+				<p:dataTable value="#{jJContactBean.calendarUtil.workDays}"
+					var="day" style="width: 550px;"
+					rendered="#{jJContactBean.calendarUtil.workDays != null}">
+
+					<p:columnGroup type="header">
+						<p:row>
+							<p:column colspan="5" style="text-align: left;"
+								headerText="#{messages.contact_datatableHeader}" />
+						</p:row>
+						<p:row>
+							<p:column rowspan="2" width="40%"
+								headerText="#{messages.contact_dataTable_day}" />
+							<p:column colspan="2" rowspan="1" width="30%"
+								headerText="#{messages.contact_datatable_morning}" />
+							<p:column colspan="2" rowspan="1" width="30%"
+								headerText="#{messages.contact_datatable_afternoon}" />
+						</p:row>
+						<p:row>
+							<p:column width="15%"
+								headerText="#{messages.contact_dataTable_from}" />
+							<p:column width="15%"
+								headerText="#{messages.contact_dataTable_to}" />
+							<p:column width="15%"
+								headerText="#{messages.contact_dataTable_from}" />
+							<p:column width="15%"
+								headerText="#{messages.contact_dataTable_to}" />
+						</p:row>
+					</p:columnGroup>
+					<p:column width="40%">
+						<h:outputText value="#{day.day}" />
+					</p:column>
+					<p:column colspan="2" style="text-align: center;" width="30%"
+						rendered="#{day.startDate1 == null}">#{messages.contact_datatable_off}</p:column>
+					<p:column rendered="#{day.startDate1 != null}" width="15%">
+						<p:inputText readonly="true" value="#{day.startDate1}"
+							style="width: 50px;">
+							<f:converter converterId="extendedDateTimeConverter" />
+							<f:attribute name="pattern" value="HH:mm" />
+						</p:inputText>
+					</p:column>
+					<p:column rendered="#{day.startDate1 != null}" width="15%">
+						<p:inputText readonly="true" value="#{day.endDate1}"
+							style="width: 50px;">
+							<f:converter converterId="extendedDateTimeConverter" />
+							<f:attribute name="pattern" value="HH:mm" />
+						</p:inputText>
+					</p:column>
+					<p:column colspan="2" style="text-align: center;" width="30%"
+						rendered="#{day.startDate2 == null}">#{messages.contact_datatable_off}</p:column>
+					<p:column rendered="#{day.startDate2 != null}" width="15%">
+						<p:inputText readonly="true" value="#{day.startDate2}"
+							style="width: 50px;">
+							<f:converter converterId="extendedDateTimeConverter" />
+							<f:attribute name="pattern" value="HH:mm" />
+						</p:inputText>
+					</p:column>
+					<p:column rendered="#{day.startDate2 != null}" width="15%">
+						<p:inputText readonly="true" value="#{day.endDate2}"
+							style="width: 50px;">
+							<f:converter converterId="extendedDateTimeConverter" />
+							<f:attribute name="pattern" value="HH:mm" />
+						</p:inputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+			<!-- 			<h:form enctype="multipart/form-data" -->
+			<!-- 				style="margin-top: 500px;margin-left: 20px;"> -->
+			<!-- 				<p:panelGrid> -->
+			<!-- 					<f:facet name="header"> -->
+			<!-- 						<p:row> -->
+			<!-- 							<p:column colspan="2"> -->
+			<!--             			#{loginBean.contact.name} Picture</p:column> -->
+			<!-- 						</p:row> -->
+			<!-- 					</f:facet> -->
+			<!-- 					<p:row> -->
+			<!-- 						<p:column colspan="1"> -->
+			<!-- 							<h:inputFile id="file" value="#{licenseBean.fileUplaod}" -->
+			<!-- 								label="file" required="true" -->
+			<!-- 								requiredMessage="No File selected !!"> -->
+			<!-- 								<f:validator validatorId="fileUploadValidator" /> -->
+			<!-- 								<f:attribute name="fileType" value="image" /> -->
+			<!-- 							</h:inputFile> -->
+			<!-- 						</p:column> -->
+			<!-- 						<p:column colspan="1"> -->
+			<!-- 							<h:commandButton value="Upload" -->
+			<!-- 								actionListener="#{licenseBean.uploadTest}" /> -->
+			<!-- 						</p:column> -->
+			<!-- 					</p:row> -->
+			<!-- 				</p:panelGrid> -->
+			<!-- 			</h:form> -->
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>
