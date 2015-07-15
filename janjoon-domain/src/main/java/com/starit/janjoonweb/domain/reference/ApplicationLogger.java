@@ -1,4 +1,5 @@
 package com.starit.janjoonweb.domain.reference;
+
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -47,53 +48,53 @@ public class ApplicationLogger {
 
 	}
 
-//	@AfterReturning("execution(* com.starit.janjoonweb.domain.JJRequirement.getDescription(..))")
-//	public void logAfterGetDescription(JoinPoint joinPoint) {
-//
-//		logger.info("operation : " + joinPoint.getSignature().toShortString()
-//				+ " :successful");
-//		JJRequirement requirement = (JJRequirement) joinPoint.getThis();
-//		String description = requirement.getDescription();
-//		if (FacesContext.getCurrentInstance() != null) {
-//			int imgNumber = Math.min(StringUtils.countOccurrencesOf(
-//					description, "<img"), StringUtils.countOccurrencesOf(
-//					description, "/pages/ckeditor/getimage?imageId="));
-//
-//			if (imgNumber > 0) {
-//
-//				int k = 0;
-//				HttpServletRequest request = ((HttpServletRequest) FacesContext
-//						.getCurrentInstance().getExternalContext().getRequest());
-//
-//				String url = "";
-//				if (!request.getServerName().contains("localhost"))
-//					url = "https" + "://" + request.getServerName()
-//							+ request.getContextPath() + "/images/";
-//				else
-//					url = "http" + "://" + request.getServerName() + ":"
-//							+ request.getServerPort()
-//							+ request.getContextPath() + "/images/";
-//
-//				while (k < imgNumber) {
-//					int kk = description.indexOf("alt=\"\" src=");
-//
-//					description = description.substring(0,
-//							description.indexOf("alt=\"\" src=")
-//									+ "alt=\"\" src=".length() + 1)
-//							+ url
-//							+ description.substring(description
-//									.indexOf("?imageId=")
-//									+ "?imageId=".length());
-//					k++;
-//				}
-//				
-//				requirement.setDescription(description);
-//			}
-//			
-//			
-//
-//		}
-//	}
+	// @AfterReturning("execution(* com.starit.janjoonweb.domain.JJRequirement.getDescription(..))")
+	// public void logAfterGetDescription(JoinPoint joinPoint) {
+	//
+	// logger.info("operation : " + joinPoint.getSignature().toShortString()
+	// + " :successful");
+	// JJRequirement requirement = (JJRequirement) joinPoint.getThis();
+	// String description = requirement.getDescription();
+	// if (FacesContext.getCurrentInstance() != null) {
+	// int imgNumber = Math.min(StringUtils.countOccurrencesOf(
+	// description, "<img"), StringUtils.countOccurrencesOf(
+	// description, "/pages/ckeditor/getimage?imageId="));
+	//
+	// if (imgNumber > 0) {
+	//
+	// int k = 0;
+	// HttpServletRequest request = ((HttpServletRequest) FacesContext
+	// .getCurrentInstance().getExternalContext().getRequest());
+	//
+	// String url = "";
+	// if (!request.getServerName().contains("localhost"))
+	// url = "https" + "://" + request.getServerName()
+	// + request.getContextPath() + "/images/";
+	// else
+	// url = "http" + "://" + request.getServerName() + ":"
+	// + request.getServerPort()
+	// + request.getContextPath() + "/images/";
+	//
+	// while (k < imgNumber) {
+	// int kk = description.indexOf("alt=\"\" src=");
+	//
+	// description = description.substring(0,
+	// description.indexOf("alt=\"\" src=")
+	// + "alt=\"\" src=".length() + 1)
+	// + url
+	// + description.substring(description
+	// .indexOf("?imageId=")
+	// + "?imageId=".length());
+	// k++;
+	// }
+	//
+	// requirement.setDescription(description);
+	// }
+	//
+	//
+	//
+	// }
+	// }
 
 	@AfterThrowing(pointcut = "execution(* com.starit.janjoonweb.domain.*Service.*(..))", throwing = "ex")
 	public void logAfterEX(JoinPoint joinPoint, Throwable ex) {

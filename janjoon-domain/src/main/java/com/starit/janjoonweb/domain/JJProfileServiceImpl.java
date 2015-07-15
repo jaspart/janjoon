@@ -35,22 +35,26 @@ public class JJProfileServiceImpl implements JJProfileService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		if (!isSuperAdmin) {			
+		if (!isSuperAdmin) {
 			Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
 			Root<JJRight> fromRight = subquery.from(JJRight.class);
 			List<Predicate> predicatesRight = new ArrayList<Predicate>();
-			subquery.select(fromRight.get("profile").<Long>get("id"));
+			subquery.select(fromRight.get("profile").<Long> get("id"));
 			predicatesRight.add(criteriaBuilder.and(criteriaBuilder.equal(
-					fromRight.get("x"), true),criteriaBuilder.equal(criteriaBuilder.lower(fromRight
-							.<String> get("objet")),"company".toLowerCase())));
+					fromRight.get("x"), true), criteriaBuilder.equal(
+					criteriaBuilder.lower(fromRight.<String> get("objet")),
+					"company".toLowerCase())));
 			predicatesRight.add(criteriaBuilder.and(criteriaBuilder.equal(
-					fromRight.get("x"), true),criteriaBuilder.equal(criteriaBuilder.lower(fromRight
-							.<String> get("objet")),"*".toLowerCase())));
+					fromRight.get("x"), true), criteriaBuilder.equal(
+					criteriaBuilder.lower(fromRight.<String> get("objet")),
+					"*".toLowerCase())));
 
-			subquery.where(criteriaBuilder.and(criteriaBuilder.or(predicatesRight.toArray(new Predicate[] {})),
+			subquery.where(criteriaBuilder.and(criteriaBuilder
+					.or(predicatesRight.toArray(new Predicate[] {})),
 					criteriaBuilder.equal(fromRight.get("enabled"), true)));
-			
-			predicates.add(criteriaBuilder.in(from.get("id")).value(subquery).not());
+
+			predicates.add(criteriaBuilder.in(from.get("id")).value(subquery)
+					.not());
 
 		}
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
@@ -105,7 +109,7 @@ public class JJProfileServiceImpl implements JJProfileService {
 			return null;
 
 	}
-	
+
 	public List<JJProfile> getProfiles(boolean onlyActif, boolean isSuperAdmin) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJProfile> criteriaQuery = criteriaBuilder
@@ -117,22 +121,26 @@ public class JJProfileServiceImpl implements JJProfileService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		if (!isSuperAdmin) {			
+		if (!isSuperAdmin) {
 			Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
 			Root<JJRight> fromRight = subquery.from(JJRight.class);
 			List<Predicate> predicatesRight = new ArrayList<Predicate>();
-			subquery.select(fromRight.get("profile").<Long>get("id"));
+			subquery.select(fromRight.get("profile").<Long> get("id"));
 			predicatesRight.add(criteriaBuilder.and(criteriaBuilder.equal(
-					fromRight.get("x"), true),criteriaBuilder.equal(criteriaBuilder.lower(fromRight
-							.<String> get("objet")),"company".toLowerCase())));
+					fromRight.get("x"), true), criteriaBuilder.equal(
+					criteriaBuilder.lower(fromRight.<String> get("objet")),
+					"company".toLowerCase())));
 			predicatesRight.add(criteriaBuilder.and(criteriaBuilder.equal(
-					fromRight.get("x"), true),criteriaBuilder.equal(criteriaBuilder.lower(fromRight
-							.<String> get("objet")),"*".toLowerCase())));
+					fromRight.get("x"), true), criteriaBuilder.equal(
+					criteriaBuilder.lower(fromRight.<String> get("objet")),
+					"*".toLowerCase())));
 
-			subquery.where(criteriaBuilder.and(criteriaBuilder.or(predicatesRight.toArray(new Predicate[] {})),
+			subquery.where(criteriaBuilder.and(criteriaBuilder
+					.or(predicatesRight.toArray(new Predicate[] {})),
 					criteriaBuilder.equal(fromRight.get("enabled"), true)));
-			
-			predicates.add(criteriaBuilder.in(from.get("id")).value(subquery).not());
+
+			predicates.add(criteriaBuilder.in(from.get("id")).value(subquery)
+					.not());
 
 		}
 

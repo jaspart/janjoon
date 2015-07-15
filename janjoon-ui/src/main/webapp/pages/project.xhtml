@@ -28,7 +28,7 @@ td.ui-fileupload-preview {
 	<h:form id="projectForm">
 		<p:panel id="projectForm" style="width:600px" columns="1"
 			cellpadding="6">
-			<p:dataTable id="projectDataTable" var="project" lazy="true"
+			<p:dataTable id="projectDataTable" var="project" lazy="true" emptyMessage="#{messages.label_notRecordFound}"
 				paginatorPosition="bottom" value="#{jJProjectBean.projectListTable}"
 				paginator="true" rows="15" rowKey="#{project.id}">
 				<f:facet name="header">#{messages.admin_project_table_header}</f:facet>
@@ -101,7 +101,7 @@ td.ui-fileupload-preview {
 					</f:facet>
 					<p:dataTable id="restoreProjectTable" var="project"
 						scrollable="true" value="#{jJProjectBean.deletedProject}"
-						rowKey="#{project.id}"
+						rowKey="#{project.id}" emptyMessage="#{messages.label_notRecordFound}"
 						selection="#{jJProjectBean.restoredProject}" scrollHeight="400">
 
 						<p:ajax event="rowSelectCheckbox"

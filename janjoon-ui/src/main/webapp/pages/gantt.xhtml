@@ -107,7 +107,7 @@
 										</p:row>
 									</f:facet>
 								</p:panelGrid>
-								<p:dataTable id="taskDataTable" var="taskData"
+								<p:dataTable id="taskDataTable" var="taskData" emptyMessage="#{messages.label_notRecordFound}"
 									sortFunction="#{jJTaskBean.sortFunction}" style="width: 1600px;"
 									styleClass="planning-dataTable" sortBy="#{taskData.chapter}"
 									value="#{jJTaskBean.tasksData}" editable="true" editMode="cell">

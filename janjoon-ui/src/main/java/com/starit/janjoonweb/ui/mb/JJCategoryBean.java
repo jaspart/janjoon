@@ -27,7 +27,8 @@ public class JJCategoryBean {
 	@Autowired
 	public JJConfigurationService jJConfigurationService;
 
-	public void setjJConfigurationService(JJConfigurationService jJConfigurationService) {
+	public void setjJConfigurationService(
+			JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
 	}
 
@@ -47,8 +48,8 @@ public class JJCategoryBean {
 	}
 
 	public LazyCategoryDataTable getCategoryListTable() {
-		if(categoryListTable == null)
-		categoryListTable = new LazyCategoryDataTable(jJCategoryService);
+		if (categoryListTable == null)
+			categoryListTable = new LazyCategoryDataTable(jJCategoryService);
 		return categoryListTable;
 	}
 
@@ -62,18 +63,19 @@ public class JJCategoryBean {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}	
+	}
+
 	public void newCategory() {
-		
+
 		message = "admin_category_new_title";
 		categoryAdmin = new JJCategory();
-		categoryAdmin.setEnabled(true);		
-		categoryAdmin.setStage(0);		
+		categoryAdmin.setEnabled(true);
+		categoryAdmin.setStage(0);
 		categoryState = true;
 	}
 
 	public void editCategory() {
-		message = "admin_category_edit_title";		
+		message = "admin_category_edit_title";
 		categoryState = false;
 	}
 
@@ -82,10 +84,11 @@ public class JJCategoryBean {
 		if (categoryAdmin != null) {
 			categoryAdmin.setEnabled(false);
 			updateJJCategory(categoryAdmin);
-			categoryListTable=null;
-			
+			categoryListTable = null;
+
 			String message = "message_successfully_deleted";
-			FacesMessage facesMessage = MessageFactory.getMessage(message, "Category");		
+			FacesMessage facesMessage = MessageFactory.getMessage(message,
+					"Category");
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
@@ -98,15 +101,13 @@ public class JJCategoryBean {
 		String name = categoryAdmin.getName().trim().toUpperCase();
 		List<JJCategory> categories = jJCategoryService.getCategories(name,
 				true, false, false);
-		if (categoryAdmin.getId() != null && !categories.isEmpty())
-		{
-			if(categories.size() == 1)
-			{
-				if(categories.get(0).equals(categoryAdmin))
+		if (categoryAdmin.getId() != null && !categories.isEmpty()) {
+			if (categories.size() == 1) {
+				if (categories.get(0).equals(categoryAdmin))
 					categories.remove(0);
 			}
 		}
-		
+
 		if (categories.isEmpty()) {
 			categoryAdmin.setName(name);
 			if (categoryAdmin.getId() == null) {
@@ -116,8 +117,7 @@ public class JJCategoryBean {
 				saveJJCategory(categoryAdmin);
 				message = "message_successfully_created";
 
-			}
-			else {
+			} else {
 
 				categoryAdmin.setUpdatedDate(new Date());
 
@@ -126,7 +126,7 @@ public class JJCategoryBean {
 
 				// closeDialog();
 			}
-			categoryListTable=null;
+			categoryListTable = null;
 
 			facesMessage = MessageFactory.getMessage(message, "Category");
 			RequestContext context = RequestContext.getCurrentInstance();
@@ -134,30 +134,24 @@ public class JJCategoryBean {
 			if (categoryState) {
 				if (getCategoryDialogConfiguration()) {
 					context.execute("PF('categoryDialogWidget').hide()");
-				}
-				else {
+				} else {
 
 					newCategory();
 				}
 
-			}
-			else {
+			} else {
 				context.execute("PF('categoryDialogWidget').hide()");
 			}
-		}
-		else {
-			message = "validator_buildVersion_nameExist";		
-			
-			facesMessage = MessageFactory.getMessage(
-					message, "Category");
-			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);				
+		} else {
+			message = "validator_buildVersion_nameExist";
+
+			facesMessage = MessageFactory.getMessage(message, "Category");
+			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 			throw new ValidatorException(facesMessage);
 
 		}
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
-	
-	
 
 	public void closeDialog() {
 		categoryAdmin = null;
@@ -168,20 +162,20 @@ public class JJCategoryBean {
 		return jJConfigurationService.getDialogConfig("CategoryDialog",
 				"category.create.saveandclose");
 	}
-	
-	public void saveJJCategory(JJCategory b)
-	{
+
+	public void saveJJCategory(JJCategory b) {
 		b.setCreationDate(new Date());
-		JJContact contact=((LoginBean) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("loginBean")).getContact();
+		JJContact contact = ((LoginBean) ((HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext().getSession(false))
+				.getAttribute("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		jJCategoryService.saveJJCategory(b);
 	}
-	
-	public void updateJJCategory(JJCategory b)
-	{
-		JJContact contact=((LoginBean) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false)).getAttribute("loginBean")).getContact();
+
+	public void updateJJCategory(JJCategory b) {
+		JJContact contact = ((LoginBean) ((HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext().getSession(false))
+				.getAttribute("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJCategoryService.updateJJCategory(b);

@@ -8,7 +8,7 @@ import javax.faces.convert.FacesConverter;
 import com.starit.janjoonweb.domain.JJProfile;
 
 @FacesConverter("JJProfileConverter")
-public class JJProfileConverter implements Converter{
+public class JJProfileConverter implements Converter {
 
 	@Override
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
@@ -17,7 +17,8 @@ public class JJProfileConverter implements Converter{
 	}
 
 	@Override
-	  public String getAsString(FacesContext context, UIComponent component, Object value) {
-      return value instanceof JJProfile ? ((JJProfile) value).getName() : "";
-  }
+	public String getAsString(FacesContext context, UIComponent component,
+			Object value) {
+		return value instanceof JJProfile ? ((JJProfile) value).getName() : "";
+	}
 }

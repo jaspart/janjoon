@@ -12,7 +12,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 public class JJImportanceServiceImpl implements JJImportanceService {
-	
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -27,7 +27,7 @@ public class JJImportanceServiceImpl implements JJImportanceService {
 		JJImportance_ = jJImportanceRepository.findOne(JJImportance_.getId());
 		return JJImportance_;
 	}
-	
+
 	@Override
 	public List<JJImportance> getBugImportance() {
 
@@ -39,22 +39,20 @@ public class JJImportanceServiceImpl implements JJImportanceService {
 
 		CriteriaQuery<JJImportance> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();	
-		
-		
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		
-		List<Predicate> orPredicates = new ArrayList<Predicate>();		
-		orPredicates.add(criteriaBuilder.equal(from.get("objet"), "JJBug"));		
-		orPredicates.add(criteriaBuilder.equal(from.get("objet"),"Bug"));		
+
+		List<Predicate> orPredicates = new ArrayList<Predicate>();
+		orPredicates.add(criteriaBuilder.equal(from.get("objet"), "JJBug"));
+		orPredicates.add(criteriaBuilder.equal(from.get("objet"), "Bug"));
 		Predicate orPredicate = criteriaBuilder.or(orPredicates
 				.toArray(new Predicate[] {}));
-		
+
 		predicates.add(orPredicate);
-		
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
-		
+
 		TypedQuery<JJImportance> result = entityManager.createQuery(select);
 		return result.getResultList();
 	}

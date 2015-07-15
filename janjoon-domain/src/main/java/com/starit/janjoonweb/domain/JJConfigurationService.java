@@ -12,8 +12,8 @@ public interface JJConfigurationService {
 			boolean onlyactif);
 
 	public boolean getDialogConfig(String name, String param);
-	
-	public List<JJConfiguration> load(MutableInt size,int first, int pageSize,String name, String param,
-			boolean onlyactif);
+
+	public List<JJConfiguration> load(MutableInt size, int first, int pageSize,
+			String name, String param, boolean onlyactif);
 
 }

@@ -15,17 +15,19 @@ import com.starit.janjoonweb.service.entity.Contact;
 @Component("contactWS")
 @Path("/contact")
 public class ContactWS {
-   
+
 	@Autowired
 	private JJContactService jJContacService;
 
 	public void setjJContacService(JJContactService jJContacService) {
 		this.jJContacService = jJContacService;
 	}
+
 	@GET
 	@Path("/listecontact")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getContact(){
-		return Contact.getListContactFromJJContact(jJContacService.getContacts(true,null,null));
+	public Response getContact() {
+		return Contact.getListContactFromJJContact(jJContacService.getContacts(
+				true, null, null));
 	}
 }

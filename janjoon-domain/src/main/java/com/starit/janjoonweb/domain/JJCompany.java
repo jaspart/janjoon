@@ -23,10 +23,10 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJCompanySEQ")
-public class JJCompany  {
-	
+public class JJCompany {
+
 	@NotNull
-	@Size(max = 100)	
+	@Size(max = 100)
 	private String name;
 
 	@NotNull
@@ -71,7 +71,7 @@ public class JJCompany  {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "company")
 	private Set<JJContact> contacts = new HashSet<JJContact>();
-	
+
 	@Override
 	public boolean equals(Object object) {
 		return (object instanceof JJCompany) && (getId() != null) ? getId()

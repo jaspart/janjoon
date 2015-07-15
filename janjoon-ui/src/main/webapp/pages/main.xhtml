@@ -195,7 +195,7 @@
 				<p:dataTable id="taskTable" value="#{jJTaskBean.toDoTasks}"
 					rowKey="#{task.id}" var="task" widgetVar="taskTable"
 					scrollable="true" scrollHeight="200" style="table-layout: fixed;"
-					emptyMessage="There is no Task to do, dee more in project View">
+					emptyMessage="#{messages.label_notRecordFound}">
 
 					<p:column headerText="Task">
 						<p:graphicImage

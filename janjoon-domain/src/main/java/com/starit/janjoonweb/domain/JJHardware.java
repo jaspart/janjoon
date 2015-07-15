@@ -18,7 +18,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity(sequenceName = "JJHardwareSEQ")
 public class JJHardware {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;

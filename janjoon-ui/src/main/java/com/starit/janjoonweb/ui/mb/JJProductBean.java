@@ -21,7 +21,7 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 @RooSerializable
 @RooJsfManagedBean(entity = JJProduct.class, beanName = "jJProductBean")
 public class JJProductBean {
-	
+
 	@Autowired
 	public JJConfigurationService jJConfigurationService;
 
@@ -87,7 +87,7 @@ public class JJProductBean {
 			return jJProductService.getProducts(((LoginBean) LoginBean
 					.findBean("loginBean")).getContact().getCompany(),
 					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
-					true,false);
+					true, false);
 		else
 			return new ArrayList<JJProduct>();
 	}
@@ -101,7 +101,7 @@ public class JJProductBean {
 	}
 
 	public LazyProductDataModel getProductListTable() {
-		
+
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		JJCompany company = null;
 		if (!loginBean.getAuthorisationService().isAdminCompany())
@@ -127,12 +127,15 @@ public class JJProductBean {
 
 	public List<JJContact> getProductManagerList() {
 
-		if(productAdmin.getId() == null)
-			productManagerList = jJPermissionService.getManagers(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
-					((LoginBean) LoginBean.findBean("loginBean")).getContact(),"Product");
+		if (productAdmin.getId() == null)
+			productManagerList = jJPermissionService.getManagers(
+					((LoginBean) LoginBean.findBean("loginBean")).getContact()
+							.getCompany(), ((LoginBean) LoginBean
+							.findBean("loginBean")).getContact(), "Product");
 		else
-			productManagerList = jJPermissionService.getManagers(productAdmin.getManager().getCompany(),
-					((LoginBean) LoginBean.findBean("loginBean")).getContact(),"Product");
+			productManagerList = jJPermissionService.getManagers(productAdmin
+					.getManager().getCompany(), ((LoginBean) LoginBean
+					.findBean("loginBean")).getContact(), "Product");
 
 		return productManagerList;
 	}
@@ -242,7 +245,8 @@ public class JJProductBean {
 		resetVersionProductList();
 
 		List<JJVersion> versions = jJVersionService.getVersions(true, true,
-				productAdmin, ((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),true);
+				productAdmin, ((LoginBean) LoginBean.findBean("loginBean"))
+						.getContact().getCompany(), true);
 
 		List<VersionDataModel> versionDataModels = jJVersionBean
 				.getVersionDataModel();
@@ -258,7 +262,7 @@ public class JJProductBean {
 
 			for (JJVersion version : selectedVersions) {
 				if (version.getId() == null) {
-					version.setProduct(productAdmin);					
+					version.setProduct(productAdmin);
 					jJVersionBean.saveJJVersion(version);
 				}
 			}
@@ -277,7 +281,7 @@ public class JJProductBean {
 			}
 		} else if (!selectedVersions.isEmpty() && versions.isEmpty()) {
 			for (JJVersion version : selectedVersions) {
-				version.setProduct(productAdmin);				
+				version.setProduct(productAdmin);
 				jJVersionBean.saveJJVersion(version);
 			}
 		}
@@ -322,7 +326,7 @@ public class JJProductBean {
 	}
 
 	public void resetVersionProductList() {
-		
+
 		productListTable = null;
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
@@ -344,15 +348,17 @@ public class JJProductBean {
 	}
 
 	public void saveJJProduct(JJProduct b) {
-		
+
 		b.setCreationDate(new Date());
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
-		b.setCreatedBy(contact);		
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
+		b.setCreatedBy(contact);
 		jJProductService.saveJJProduct(b);
 	}
 
 	public void updateJJProduct(JJProduct b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJProductService.updateJJProduct(b);

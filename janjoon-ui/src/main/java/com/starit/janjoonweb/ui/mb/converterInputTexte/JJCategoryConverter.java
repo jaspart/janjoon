@@ -5,10 +5,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-import com.starit.janjoonweb.domain.JJCategory;;
+import com.starit.janjoonweb.domain.JJCategory;
+
+;
 
 @FacesConverter("JJCategoryConverter")
-public class JJCategoryConverter implements Converter{
+public class JJCategoryConverter implements Converter {
 
 	@Override
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
@@ -17,7 +19,9 @@ public class JJCategoryConverter implements Converter{
 	}
 
 	@Override
-	  public String getAsString(FacesContext context, UIComponent component, Object value) {
-      return value instanceof JJCategory ? ((JJCategory) value).getName() : "";
-  }
+	public String getAsString(FacesContext context, UIComponent component,
+			Object value) {
+		return value instanceof JJCategory ? ((JJCategory) value).getName()
+				: "";
+	}
 }

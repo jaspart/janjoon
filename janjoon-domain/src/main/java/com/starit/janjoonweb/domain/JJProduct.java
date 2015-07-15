@@ -23,7 +23,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity(sequenceName = "JJProductSEQ")
 public class JJProduct {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;
@@ -52,7 +52,7 @@ public class JJProduct {
 	@NotNull
 	@Size(max = 100)
 	private String extname;
-	
+
 	@Lob
 	private byte[] logo;
 

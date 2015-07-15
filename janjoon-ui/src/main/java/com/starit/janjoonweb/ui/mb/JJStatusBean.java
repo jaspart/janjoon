@@ -132,20 +132,18 @@ public class JJStatusBean {
 	}
 
 	public PieChartModel getPieChart() {
-		if(pieChart == null)
-		{
+		if (pieChart == null) {
 			pieChart = new PieChartModel();
-			List<JJStatus> statReq = jJStatusService.getStatus(
-					"Requirement", true, null, false);
+			List<JJStatus> statReq = jJStatusService.getStatus("Requirement",
+					true, null, false);
 			for (JJStatus s : statReq) {
 
 				int i = Integer.parseInt(""
 						+ jJRequirementService.getReqCountByStaus(
-								((LoginBean) LoginBean
-										.findBean("loginBean"))
-										.getContact().getCompany(),
-								project, LoginBean.getProduct(), LoginBean
-										.getVersion(), s, true));
+								((LoginBean) LoginBean.findBean("loginBean"))
+										.getContact().getCompany(), project,
+								LoginBean.getProduct(), LoginBean.getVersion(),
+								s, true));
 				pieChart.set(s.getName(), i);
 			}
 
@@ -1016,15 +1014,15 @@ public class JJStatusBean {
 			this.category = category;
 
 		}
-		
+
 		@Override
 		public boolean equals(Object obj) {
-			
-			return (obj instanceof CategoryDataModel) && (getCategory() != null) ? getCategory()
-					.equals(((CategoryDataModel) obj).getCategory()) : (obj == this);
-		}		
-		
-		
+
+			return (obj instanceof CategoryDataModel)
+					&& (getCategory() != null) ? getCategory().equals(
+					((CategoryDataModel) obj).getCategory()) : (obj == this);
+		}
+
 	}
 
 	public void saveJJStatus(JJStatus b) {

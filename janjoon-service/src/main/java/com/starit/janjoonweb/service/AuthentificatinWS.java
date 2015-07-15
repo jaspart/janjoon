@@ -17,8 +17,7 @@ import com.starit.janjoonweb.domain.JJContactService;
 @Component("authentificatinWS")
 @Path("/authentifier")
 public class AuthentificatinWS {
-      
-	
+
 	@Autowired
 	private JJContactService jJContactService;
 	@Autowired
@@ -27,7 +26,7 @@ public class AuthentificatinWS {
 	public void setjJContactService(JJContactService jJContactService) {
 		this.jJContactService = jJContactService;
 	}
-	
+
 	public void setEncoder(BCryptPasswordEncoder encoder) {
 		this.encoder = encoder;
 	}
@@ -36,20 +35,20 @@ public class AuthentificatinWS {
 	@Path("verification")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String Authentifier(MultivaluedMap<String, String> personParams){
-		
-		String login =personParams.getFirst("mail");
-		String password=personParams.getFirst("password");
-		if(login !=null  && password != null){
-			JJContact contact =jJContactService.getContactByEmail(login, true);
-			if(contact == null){
+	public String Authentifier(MultivaluedMap<String, String> personParams) {
+
+		String login = personParams.getFirst("mail");
+		String password = personParams.getFirst("password");
+		if (login != null && password != null) {
+			JJContact contact = jJContactService.getContactByEmail(login, true);
+			if (contact == null) {
 				return "User not found";
-			}else if (!encoder.matches(password, contact.getPassword())){
+			} else if (!encoder.matches(password, contact.getPassword())) {
 				return "Wrong Password";
 			}
-		}else
-		   return "erreur";
-		   
-	return "success";
+		} else
+			return "erreur";
+
+		return "success";
 	}
 }

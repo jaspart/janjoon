@@ -18,7 +18,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity(sequenceName = "JJTeststepexecutionSEQ")
 public class JJTeststepexecution {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;
@@ -43,7 +43,7 @@ public class JJTeststepexecution {
 	private JJContact updatedBy;
 
 	private Boolean enabled;
-	
+
 	@ManyToOne
 	private JJTeststep teststep;
 

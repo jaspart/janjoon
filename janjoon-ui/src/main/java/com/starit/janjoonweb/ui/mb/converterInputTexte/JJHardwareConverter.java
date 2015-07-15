@@ -8,7 +8,7 @@ import javax.faces.convert.FacesConverter;
 import com.starit.janjoonweb.domain.JJHardware;
 
 @FacesConverter("JJHardwareConverter")
-public class JJHardwareConverter implements Converter{
+public class JJHardwareConverter implements Converter {
 
 	@Override
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
@@ -17,7 +17,9 @@ public class JJHardwareConverter implements Converter{
 	}
 
 	@Override
-	  public String getAsString(FacesContext context, UIComponent component, Object value) {
-      return value instanceof JJHardware ? ((JJHardware) value).getName() : "";
-  }
+	public String getAsString(FacesContext context, UIComponent component,
+			Object value) {
+		return value instanceof JJHardware ? ((JJHardware) value).getName()
+				: "";
+	}
 }

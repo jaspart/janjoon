@@ -8,7 +8,7 @@ import javax.faces.convert.FacesConverter;
 import com.starit.janjoonweb.domain.JJJob;
 
 @FacesConverter("JJJobConverter")
-public class JJJobConverter implements Converter{
+public class JJJobConverter implements Converter {
 
 	@Override
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
@@ -17,7 +17,8 @@ public class JJJobConverter implements Converter{
 	}
 
 	@Override
-	  public String getAsString(FacesContext context, UIComponent component, Object value) {
-      return value instanceof JJJob ? ((JJJob) value).getName() : "";
-  }
+	public String getAsString(FacesContext context, UIComponent component,
+			Object value) {
+		return value instanceof JJJob ? ((JJJob) value).getName() : "";
+	}
 }

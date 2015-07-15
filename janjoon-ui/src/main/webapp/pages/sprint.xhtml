@@ -10,22 +10,22 @@
 		<p:panelGrid style="width: 100%;">
 			<f:facet name="header">
 				<p:row>
-					<p:column colspan="4">Create Sprint</p:column>
+					<p:column colspan="4">#{messages.project_scrum_new_title}</p:column>
 				</p:row>
 			</f:facet>
 			<p:row>
 				<p:column>
-					<p:outputLabel for="sprintCName" value="Sprint Name:" />
+					<p:outputLabel for="sprintCName" value="#{messages.project_scrum_sprint_name}:" />
 				</p:column>
 				<p:column>
 					<p:inputTextarea id="sprintCName" value="#{jjsprint.sprint.name}"
-						required="true" requiredMessage="Sprint name is empty"
+						required="true" requiredMessage="#{messages.project_scrum_sprint_name_required}"
 						readonly="#{jjsprint.neditabale}">
 						<f:validateLength maximum="100" />
 					</p:inputTextarea>
 				</p:column>
 				<p:column>
-					<p:outputLabel for="sprintcts" value="Sprint Contacts:" />
+					<p:outputLabel for="sprintcts" value="#{messages.project_scrum_sprint_contacts}:" />
 				</p:column>
 				<p:column>
 					<p:selectManyMenu id="sprintcts" scrollHeight="150"
@@ -41,7 +41,7 @@
 			</p:row>
 			<p:row>
 				<p:column>
-					<p:outputLabel for="sprintCSD" value="Start Date:" />
+					<p:outputLabel for="sprintCSD" value="#{messages.project_scrum_new_start_label}" />
 				</p:column>
 				<p:column>
 					<p:calendar id="sprintCSD" navigator="true" effect="slideDown"
@@ -53,7 +53,7 @@
 					</p:calendar>
 				</p:column>
 				<p:column>
-					<p:outputLabel for="sprintCED" value="end Date:" />
+					<p:outputLabel for="sprintCED" value="#{messages.project_scrum_new_end_label}" />
 				</p:column>
 				<p:column>
 					<p:calendar id="sprintCED" navigator="true" effect="slideDown"

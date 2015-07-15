@@ -23,7 +23,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity(sequenceName = "JJProjectSEQ")
 public class JJProject {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;
@@ -48,7 +48,7 @@ public class JJProject {
 	private JJContact updatedBy;
 
 	private Boolean enabled;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(style = "M-")
 	private Date startDate;
@@ -56,7 +56,7 @@ public class JJProject {
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(style = "M-")
 	private Date endDate;
-	
+
 	@Lob
 	private byte[] logo;
 

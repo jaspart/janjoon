@@ -16,7 +16,7 @@ import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Configurable;
 
 //@RooJsfApplicationBean
-@ManagedBean(name="applicationBean")
+@ManagedBean(name = "applicationBean")
 @RequestScoped
 @Configurable
 public class ApplicationBean {
@@ -39,14 +39,15 @@ public class ApplicationBean {
 
 	@PostConstruct
 	public void init() {
-		
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				.getSession(false);
-		
-		JJWorkflowBean jJWorkflowBean=(JJWorkflowBean) session.getAttribute("jJWorkflowBean");
-		if(jJWorkflowBean==null)
-			jJWorkflowBean=new JJWorkflowBean();
-		
+
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+
+		JJWorkflowBean jJWorkflowBean = (JJWorkflowBean) session
+				.getAttribute("jJWorkflowBean");
+		if (jJWorkflowBean == null)
+			jJWorkflowBean = new JJWorkflowBean();
+
 		menuModel = new DefaultMenuModel();
 
 		DefaultSubMenu submenu;

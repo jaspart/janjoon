@@ -8,7 +8,7 @@ import javax.faces.convert.FacesConverter;
 import com.starit.janjoonweb.domain.JJWorkflow;
 
 @FacesConverter("JJWorkflowConverter")
-public class JJWorkflowConverter implements Converter{
+public class JJWorkflowConverter implements Converter {
 
 	@Override
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
@@ -17,7 +17,9 @@ public class JJWorkflowConverter implements Converter{
 	}
 
 	@Override
-	  public String getAsString(FacesContext context, UIComponent component, Object value) {
-      return value instanceof JJWorkflow ? ((JJWorkflow) value).getName() : "";
-  }
+	public String getAsString(FacesContext context, UIComponent component,
+			Object value) {
+		return value instanceof JJWorkflow ? ((JJWorkflow) value).getName()
+				: "";
+	}
 }

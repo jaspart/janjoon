@@ -10,38 +10,48 @@ public interface JJRequirementService {
 
 	// Generic request
 
-	public List<JJRequirement> getRequirements(JJCompany company,JJCategory category,
-			Map<JJProject,JJProduct> map, JJVersion version,
-			JJStatus status, JJChapter chapter, boolean withChapter,
-			boolean onlyActif, boolean orderByCreationdate,boolean mine,JJContact contact);
-	
-	public List<JJRequirement> getRequirementsWithOutChapter(JJCompany company,JJCategory category,
-			Map<JJProject,JJProduct> map, JJVersion version,
-			JJStatus status,boolean onlyActif, boolean orderByCreationdate);
-	
+	public List<JJRequirement> getRequirements(JJCompany company,
+			JJCategory category, Map<JJProject, JJProduct> map,
+			JJVersion version, JJStatus status, JJChapter chapter,
+			boolean withChapter, boolean onlyActif,
+			boolean orderByCreationdate, boolean mine, JJContact contact);
+
+	public List<JJRequirement> getRequirementsWithOutChapter(JJCompany company,
+			JJCategory category, Map<JJProject, JJProduct> map,
+			JJVersion version, JJStatus status, boolean onlyActif,
+			boolean orderByCreationdate);
+
 	public boolean haveTestcase(JJRequirement requirement);
 
-	public List<JJRequirement> getRequirements(JJCompany company,Map<JJProject,JJProduct> map, JJVersion version);
+	public List<JJRequirement> getRequirements(JJCompany company,
+			Map<JJProject, JJProduct> map, JJVersion version);
 
 	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
-			JJCompany company,JJChapter chapter,JJProduct product,boolean onlyActif);
-	
-	public List<JJRequirement> getMineRequirements(JJCompany company,JJContact creator,Map<JJProject,JJProduct> map,JJCategory category,JJVersion version,
-			boolean onlyActif, boolean orderByCreationdate);
+			JJCompany company, JJChapter chapter, JJProduct product,
+			boolean onlyActif);
 
-	public List<JJRequirement> getRequirements(JJCompany company,JJStatus status);
+	public List<JJRequirement> getMineRequirements(JJCompany company,
+			JJContact creator, Map<JJProject, JJProduct> map,
+			JJCategory category, JJVersion version, boolean onlyActif,
+			boolean orderByCreationdate);
 
-	public Long getReqCountByStaus(JJCompany company,JJProject project, JJProduct product,
-			JJVersion version,JJStatus status, boolean onlyActif);
-	
+	public List<JJRequirement> getRequirements(JJCompany company,
+			JJStatus status);
+
+	public Long getReqCountByStaus(JJCompany company, JJProject project,
+			JJProduct product, JJVersion version, JJStatus status,
+			boolean onlyActif);
+
 	public void refreshRequirement(JJRequirement requirement);
-	
+
 	public boolean haveLinkUp(JJRequirement requirement);
-	
+
 	public boolean haveLinkDown(JJRequirement requirement);
-	
-	public JJRequirement getRequirementByName(JJCategory catgory,JJProject project,JJProduct produit,String name,JJCompany company);	
-	
-	public List<JJRequirement> getNonCouvredRequirements(JJCompany company,Map<JJProject,JJProduct> map);
+
+	public JJRequirement getRequirementByName(JJCategory catgory,
+			JJProject project, JJProduct produit, String name, JJCompany company);
+
+	public List<JJRequirement> getNonCouvredRequirements(JJCompany company,
+			Map<JJProject, JJProduct> map);
 
 }

@@ -46,23 +46,23 @@ public class JJProductServiceImpl implements JJProductService {
 		return result.getResultList();
 
 	}
-	
-	public List<JJProduct> getProducts(JJCompany company,JJProject project)
-	{
-		if(project == null)
+
+	public List<JJProduct> getProducts(JJCompany company, JJProject project) {
+		if (project == null)
 			return getProducts(company, null, true, true);
-		else
-		{
-			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		else {
+			CriteriaBuilder criteriaBuilder = entityManager
+					.getCriteriaBuilder();
 			CriteriaQuery<JJProduct> criteriaQuery = criteriaBuilder
 					.createQuery(JJProduct.class);
 
 			Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
 
-			CriteriaQuery<JJProduct> select = criteriaQuery.select(from.<JJProduct>get("product"));
-			
+			CriteriaQuery<JJProduct> select = criteriaQuery.select(from
+					.<JJProduct> get("product"));
+
 			List<Predicate> predicates = new ArrayList<Predicate>();
-			
+
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
 			predicates.add(criteriaBuilder.isNotNull(from.get("product")));
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
@@ -70,15 +70,18 @@ public class JJProductServiceImpl implements JJProductService {
 			select.where(predicates.toArray(new Predicate[] {}));
 
 			TypedQuery<JJProduct> result = entityManager.createQuery(select);
-			HashSet<JJProduct> products=new HashSet<JJProduct>(result.getResultList());
-			
+			HashSet<JJProduct> products = new HashSet<JJProduct>(
+					result.getResultList());
+
 			Root<JJBug> from2 = criteriaQuery.from(JJBug.class);
 
-			select = criteriaQuery.select(from2.join("versioning").<JJProduct>get("product"));
-			
+			select = criteriaQuery.select(from2.join("versioning")
+					.<JJProduct> get("product"));
+
 			predicates = new ArrayList<Predicate>();
-			
-			predicates.add(criteriaBuilder.equal(from2.get("project"), project));
+
+			predicates
+					.add(criteriaBuilder.equal(from2.get("project"), project));
 			predicates.add(criteriaBuilder.isNotNull(from2.get("versioning")));
 			predicates.add(criteriaBuilder.equal(from2.get("enabled"), true));
 
@@ -86,9 +89,8 @@ public class JJProductServiceImpl implements JJProductService {
 
 			TypedQuery<JJProduct> result2 = entityManager.createQuery(select);
 			products.addAll(result2.getResultList());
-			
 
-			return new ArrayList<JJProduct>(products) ;
+			return new ArrayList<JJProduct>(products);
 
 		}
 	}
@@ -105,12 +107,10 @@ public class JJProductServiceImpl implements JJProductService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		
-
 		if (company != null)
 			predicates.add(criteriaBuilder.equal(
 					from.join("manager").get("company"), company));
-		
+
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		select.where(predicates.toArray(new Predicate[] {}));
@@ -141,27 +141,27 @@ public class JJProductServiceImpl implements JJProductService {
 
 	@Override
 	public List<JJProduct> getProducts(JJCompany company, JJContact contact,
-			boolean onlyActif,boolean all) {
+			boolean onlyActif, boolean all) {
 
 		if (company != null) {
 
 			List<JJProduct> products = new ArrayList<JJProduct>();
 			CriteriaBuilder criteriaBuilder = entityManager
-					.getCriteriaBuilder();			
+					.getCriteriaBuilder();
 
 			if (contact != null && !all) {
 				CriteriaQuery<JJPermission> criteriaPermission = criteriaBuilder
 						.createQuery(JJPermission.class);
 				Root<JJPermission> fromPermission = criteriaPermission
 						.from(JJPermission.class);
-				List<Predicate> predicatesPermion = new ArrayList<Predicate>();			
+				List<Predicate> predicatesPermion = new ArrayList<Predicate>();
 
 				predicatesPermion.add(criteriaBuilder.equal(
 						fromPermission.get("contact"), contact));
-				
+
 				predicatesPermion.add(criteriaBuilder.equal(
 						fromPermission.get("enabled"), true));
-				
+
 				CriteriaQuery<JJPermission> selectPermission = criteriaPermission
 						.select(fromPermission);
 				selectPermission.where(predicatesPermion
@@ -226,7 +226,9 @@ public class JJProductServiceImpl implements JJProductService {
 		CriteriaQuery<JJProduct> select = criteriaQuery.select(from);
 
 		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
-		Predicate predicate2 = criteriaBuilder.equal(criteriaBuilder.lower(from.<String>get("name")), name.toLowerCase());
+		Predicate predicate2 = criteriaBuilder.equal(
+				criteriaBuilder.lower(from.<String> get("name")),
+				name.toLowerCase());
 
 		select.where(criteriaBuilder.and(predicate1, predicate2));
 

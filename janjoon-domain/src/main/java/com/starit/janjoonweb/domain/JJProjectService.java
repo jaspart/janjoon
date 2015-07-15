@@ -9,11 +9,14 @@ import org.springframework.roo.addon.layers.service.RooService;
 public interface JJProjectService {
 
 	// New Generic
-	public List<JJProject> getProjects(JJCompany company,JJContact contact,boolean onlyActif,boolean all);
-	
+	public List<JJProject> getProjects(JJCompany company, JJContact contact,
+			boolean onlyActif, boolean all);
+
 	public List<JJProject> getAdminListProjects();
-	
-	public List<JJProject> getProjectList(boolean enabled,JJCompany company,JJContact contact);
-	
-	public List<JJProject> load(JJCompany company,MutableInt size,int first, int pageSize);
+
+	public List<JJProject> getProjectList(boolean enabled, JJCompany company,
+			JJContact contact);
+
+	public List<JJProject> load(JJCompany company, MutableInt size, int first,
+			int pageSize);
 }

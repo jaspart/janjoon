@@ -259,7 +259,7 @@
 			</h:form>
 			<h:form id="workdaysCalendar" style="float: right;margin-left: 20px;">
 				<p:dataTable value="#{jJContactBean.calendarUtil.workDays}"
-					var="day" style="width: 550px;"
+					var="day" style="width: 550px;" emptyMessage="#{messages.label_notRecordFound}"
 					rendered="#{jJContactBean.calendarUtil.workDays != null}">
 
 					<p:columnGroup type="header">

@@ -17,25 +17,23 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 public class JJTeststepServiceImpl implements JJTeststepService {
 
 	@PersistenceContext
 	private EntityManager entityManager;
-	
+
 	@Autowired
-	private JJTestcaseService jJTestcaseService;	
-	
+	private JJTestcaseService jJTestcaseService;
 
 	public void setjJTestcaseService(JJTestcaseService jJTestcaseService) {
 		this.jJTestcaseService = jJTestcaseService;
 	}
-	
-	@Autowired
-	private JJRequirementService jJRequirementService;	
-	
 
-	public void setjJRequirementService(JJRequirementService JJRequirementService) {
+	@Autowired
+	private JJRequirementService jJRequirementService;
+
+	public void setjJRequirementService(
+			JJRequirementService JJRequirementService) {
 		this.jJRequirementService = JJRequirementService;
 	}
 
@@ -57,13 +55,11 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-	
-
 		if (testcase != null) {
 			predicates
 					.add(criteriaBuilder.equal(from.get("testcase"), testcase));
 		}
-		
+
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
@@ -96,30 +92,30 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 	}
 
 	public JJTeststep updateJJTeststep(JJTeststep JJTeststep_) {
-		
+
 		jJTeststepRepository.save(JJTeststep_);
 		JJTeststep_ = jJTeststepRepository.findOne(JJTeststep_.getId());
 		return JJTeststep_;
-	}	
+	}
 
 	@Override
 	public List<JJTeststep> getJJtestSteps(JJRequirement requirement) {
-		
-		List<JJTeststep> jjTeststeps=new ArrayList<JJTeststep>();
-		if(requirement!=null)
-		{
-			List<JJTestcase> testcases=jJTestcaseService.getJJtestCases(requirement);
-			
-			if(testcases!=null)
-			{
+
+		List<JJTeststep> jjTeststeps = new ArrayList<JJTeststep>();
+		if (requirement != null) {
+			List<JJTestcase> testcases = jJTestcaseService
+					.getJJtestCases(requirement);
+
+			if (testcases != null) {
 				for (JJTestcase jjTestcase : testcases) {
-					
-					List<JJTeststep> steps=getTeststeps(jjTestcase, true, true);
-					if (steps!=null) {
-						
+
+					List<JJTeststep> steps = getTeststeps(jjTestcase, true,
+							true);
+					if (steps != null) {
+
 						jjTeststeps.addAll(steps);
 					}
-					
+
 				}
 			}
 		}
@@ -129,43 +125,45 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 
 	@Override
 	public List<JJTeststep> getJJtestSteps(JJProject project) {
-		
+
 		Map<JJProject, JJProduct> map = new HashMap<JJProject, JJProduct>();
 		map.put(project, null);
-		List<JJRequirement> requirements=jJRequirementService.getRequirements(null,map,null);
-		List<JJTeststep> jjTeststeps=new ArrayList<JJTeststep>();
-		if(requirements!=null)
-		{
+		List<JJRequirement> requirements = jJRequirementService
+				.getRequirements(null, map, null);
+		List<JJTeststep> jjTeststeps = new ArrayList<JJTeststep>();
+		if (requirements != null) {
 			for (JJRequirement jjRequirement : requirements) {
 				jjTeststeps.addAll(getJJtestSteps(jjRequirement));
 			}
 		}
 		return jjTeststeps;
 	}
-	
-	
-	public void deleteJJTeststep(JJTeststep JJTeststep_) {		
-		//entityManager.remove(JJTeststep_);
-		//JJTeststepexecution teststep	
-		Query q=entityManager.createQuery("DELETE FROM JJTeststepexecution c WHERE c.teststep = :p");
+
+	public void deleteJJTeststep(JJTeststep JJTeststep_) {
+		// entityManager.remove(JJTeststep_);
+		// JJTeststepexecution teststep
+		Query q = entityManager
+				.createQuery("DELETE FROM JJTeststepexecution c WHERE c.teststep = :p");
 		q.setParameter("p", JJTeststep_).executeUpdate();
-		q=entityManager.createQuery("DELETE FROM JJBug c WHERE c.teststep = :p");
-		q.setParameter("p", JJTeststep_).executeUpdate();		
-		Query query=entityManager.createQuery("DELETE FROM JJTeststep c WHERE c.id = :p");
+		q = entityManager
+				.createQuery("DELETE FROM JJBug c WHERE c.teststep = :p");
+		q.setParameter("p", JJTeststep_).executeUpdate();
+		Query query = entityManager
+				.createQuery("DELETE FROM JJTeststep c WHERE c.id = :p");
 		query.setParameter("p", JJTeststep_.getId()).executeUpdate();
-		
+
 	}
 
 	@Override
 	public List<JJTeststep> getJJtestSteps(JJRequirement requirement,
 			JJProject project) {
-		
-		if(requirement==null)
+
+		if (requirement == null)
 			return getJJtestSteps(project);
 		else {
 			return getJJtestSteps(requirement);
-			
-		}		
-	
+
+		}
+
 	}
 }

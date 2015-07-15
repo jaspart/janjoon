@@ -781,8 +781,8 @@ public class JJChapterBean {
 			List<JJRequirement> requirements = jJRequirementService
 					.getRequirementChildrenWithChapterSortedByOrder(
 							((LoginBean) LoginBean.findBean("loginBean"))
-									.getContact().getCompany(), parent,LoginBean.getProduct(),
-							onlyActif);
+									.getContact().getCompany(), parent,
+							LoginBean.getProduct(), onlyActif);
 
 			for (JJRequirement requirement : requirements) {
 				if (requirement.getOrdering() != null)

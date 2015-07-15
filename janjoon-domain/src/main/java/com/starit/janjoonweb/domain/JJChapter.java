@@ -24,9 +24,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJChapterSEQ")
-@Table(indexes ={@Index(unique=false,columnList="project,category")})
+@Table(indexes = { @Index(unique = false, columnList = "project,category") })
 public class JJChapter {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;

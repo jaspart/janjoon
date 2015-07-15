@@ -2727,265 +2727,265 @@ public class JJRequirementBean {
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
-//	private void getRequirementsListUP() {
-//		long t = System.currentTimeMillis();
-//
-//		List<JJRequirement> listUP = new ArrayList<JJRequirement>();
-//
-//		/**
-//		 * Low Category
-//		 */
-//		if (requirementCategory.getId().equals(lowCategory.getId())) {
-//
-//			// List UP contains M & H
-//			if (changeMedium) {
-//				for (JJRequirement entry : selectedMediumRequirementsList) {
-//					JJRequirement req = jJRequirementService
-//							.findJJRequirement(entry.getId());
-//					if (requirement.getId() == null) {
-//						req.getRequirementLinkDown().add(requirement);
-//					}
-//					listUP.add(req);
-//				}
-//			}
-//
-//			if (changeHigh) {
-//				for (JJRequirement entry : selectedHighRequirementsList) {
-//					JJRequirement req = jJRequirementService
-//							.findJJRequirement(entry.getId());
-//					if (requirement.getId() == null) {
-//						req.getRequirementLinkDown().add(requirement);
-//					}
-//					listUP.add(req);
-//				}
-//			}
-//		}
-//
-//		/**
-//		 * Medium Category
-//		 */
-//		else if (requirementCategory.getId().equals(mediumCategory.getId())) {
-//
-//			// List UP contains H
-//			if (changeHigh) {
-//				for (JJRequirement entry : selectedHighRequirementsList) {
-//					JJRequirement req = jJRequirementService
-//							.findJJRequirement(entry.getId());
-//					if (requirement.getId() == null) {
-//						req.getRequirementLinkDown().add(requirement);
-//					}
-//					listUP.add(req);
-//				}
-//			}
-//		}
-//
-//		if (requirement.getId() == null) {
-//			requirement.getRequirementLinkUp().addAll(listUP);
-//		} else {
-//			if (!listUP.isEmpty() && !storeMapUp.isEmpty()) {
-//				// Traitement elm par elem
-//				List<String> idListUP = new ArrayList<String>();
-//				List<String> idStoreMapUp = new ArrayList<String>();
-//				for (JJRequirement req : listUP) {
-//					idListUP.add(String.valueOf(req.getId()));
-//				}
-//				for (JJRequirement req : storeMapUp) {
-//					idStoreMapUp.add(String.valueOf(req.getId()));
-//				}
-//				if (!idStoreMapUp.equals(idListUP)) {
-//					List<JJRequirement> removeList = new ArrayList<JJRequirement>();
-//					List<JJRequirement> addList = new ArrayList<JJRequirement>();
-//					for (String key : idStoreMapUp) {
-//						if (!idListUP.contains(key)) {
-//							for (JJRequirement req : storeMapUp) {
-//								if (req.getId().equals(Long.parseLong(key))) {
-//									req = jJRequirementService
-//											.findJJRequirement(req.getId());
-//									req.getRequirementLinkDown().remove(
-//											requirement);
-//									removeList.add(req);
-//									break;
-//								}
-//							}
-//						}
-//					}
-//
-//					for (String key : idListUP) {
-//						if (!idStoreMapUp.contains(key)) {
-//							for (JJRequirement req : listUP) {
-//								if (req.getId().equals(Long.parseLong(key))) {
-//									req.getRequirementLinkDown().add(
-//											requirement);
-//									addList.add(req);
-//									break;
-//								}
-//							}
-//						}
-//					}
-//
-//					if (!removeList.isEmpty()) {
-//						requirement.getRequirementLinkUp()
-//								.removeAll(removeList);
-//					}
-//					if (!addList.isEmpty()) {
-//						requirement.getRequirementLinkUp().addAll(addList);
-//					}
-//				}
-//			}
-//
-//			else if (listUP.isEmpty() && !storeMapUp.isEmpty()) {
-//				// Supprimer les storeMapUp
-//				for (JJRequirement req : storeMapUp) {
-//					req = jJRequirementService.findJJRequirement(req.getId());
-//					req.getRequirementLinkDown().remove(requirement);
-//				}
-//				requirement.getRequirementLinkUp().removeAll(storeMapUp);
-//			} else if (!listUP.isEmpty() && storeMapUp.isEmpty()) {
-//				// Ajouter list Up
-//				for (JJRequirement req : listUP) {
-//					req.getRequirementLinkDown().add(requirement);
-//				}
-//				requirement.getRequirementLinkUp().addAll(listUP);
-//			}
-//		}
-//
-//		// editRowsFromCategoryDataModel(listUP);
-//		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
-//	}
+	// private void getRequirementsListUP() {
+	// long t = System.currentTimeMillis();
+	//
+	// List<JJRequirement> listUP = new ArrayList<JJRequirement>();
+	//
+	// /**
+	// * Low Category
+	// */
+	// if (requirementCategory.getId().equals(lowCategory.getId())) {
+	//
+	// // List UP contains M & H
+	// if (changeMedium) {
+	// for (JJRequirement entry : selectedMediumRequirementsList) {
+	// JJRequirement req = jJRequirementService
+	// .findJJRequirement(entry.getId());
+	// if (requirement.getId() == null) {
+	// req.getRequirementLinkDown().add(requirement);
+	// }
+	// listUP.add(req);
+	// }
+	// }
+	//
+	// if (changeHigh) {
+	// for (JJRequirement entry : selectedHighRequirementsList) {
+	// JJRequirement req = jJRequirementService
+	// .findJJRequirement(entry.getId());
+	// if (requirement.getId() == null) {
+	// req.getRequirementLinkDown().add(requirement);
+	// }
+	// listUP.add(req);
+	// }
+	// }
+	// }
+	//
+	// /**
+	// * Medium Category
+	// */
+	// else if (requirementCategory.getId().equals(mediumCategory.getId())) {
+	//
+	// // List UP contains H
+	// if (changeHigh) {
+	// for (JJRequirement entry : selectedHighRequirementsList) {
+	// JJRequirement req = jJRequirementService
+	// .findJJRequirement(entry.getId());
+	// if (requirement.getId() == null) {
+	// req.getRequirementLinkDown().add(requirement);
+	// }
+	// listUP.add(req);
+	// }
+	// }
+	// }
+	//
+	// if (requirement.getId() == null) {
+	// requirement.getRequirementLinkUp().addAll(listUP);
+	// } else {
+	// if (!listUP.isEmpty() && !storeMapUp.isEmpty()) {
+	// // Traitement elm par elem
+	// List<String> idListUP = new ArrayList<String>();
+	// List<String> idStoreMapUp = new ArrayList<String>();
+	// for (JJRequirement req : listUP) {
+	// idListUP.add(String.valueOf(req.getId()));
+	// }
+	// for (JJRequirement req : storeMapUp) {
+	// idStoreMapUp.add(String.valueOf(req.getId()));
+	// }
+	// if (!idStoreMapUp.equals(idListUP)) {
+	// List<JJRequirement> removeList = new ArrayList<JJRequirement>();
+	// List<JJRequirement> addList = new ArrayList<JJRequirement>();
+	// for (String key : idStoreMapUp) {
+	// if (!idListUP.contains(key)) {
+	// for (JJRequirement req : storeMapUp) {
+	// if (req.getId().equals(Long.parseLong(key))) {
+	// req = jJRequirementService
+	// .findJJRequirement(req.getId());
+	// req.getRequirementLinkDown().remove(
+	// requirement);
+	// removeList.add(req);
+	// break;
+	// }
+	// }
+	// }
+	// }
+	//
+	// for (String key : idListUP) {
+	// if (!idStoreMapUp.contains(key)) {
+	// for (JJRequirement req : listUP) {
+	// if (req.getId().equals(Long.parseLong(key))) {
+	// req.getRequirementLinkDown().add(
+	// requirement);
+	// addList.add(req);
+	// break;
+	// }
+	// }
+	// }
+	// }
+	//
+	// if (!removeList.isEmpty()) {
+	// requirement.getRequirementLinkUp()
+	// .removeAll(removeList);
+	// }
+	// if (!addList.isEmpty()) {
+	// requirement.getRequirementLinkUp().addAll(addList);
+	// }
+	// }
+	// }
+	//
+	// else if (listUP.isEmpty() && !storeMapUp.isEmpty()) {
+	// // Supprimer les storeMapUp
+	// for (JJRequirement req : storeMapUp) {
+	// req = jJRequirementService.findJJRequirement(req.getId());
+	// req.getRequirementLinkDown().remove(requirement);
+	// }
+	// requirement.getRequirementLinkUp().removeAll(storeMapUp);
+	// } else if (!listUP.isEmpty() && storeMapUp.isEmpty()) {
+	// // Ajouter list Up
+	// for (JJRequirement req : listUP) {
+	// req.getRequirementLinkDown().add(requirement);
+	// }
+	// requirement.getRequirementLinkUp().addAll(listUP);
+	// }
+	// }
+	//
+	// // editRowsFromCategoryDataModel(listUP);
+	// logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
+	// }
 
-//	private void getRequirementsListDOWN() {
-//		long t = System.currentTimeMillis();
-//
-//		List<JJRequirement> listDOWN = new ArrayList<JJRequirement>();
-//
-//		/**
-//		 * Medium Category
-//		 */
-//		if (requirementCategory.getId().equals(mediumCategory.getId())) {
-//			// List DOWN contains L
-//			if (changeLow) {
-//				for (JJRequirement entry : selectedLowRequirementsList) {
-//					JJRequirement req = jJRequirementService
-//							.findJJRequirement(entry.getId());
-//					listDOWN.add(req);
-//				}
-//			}
-//		}
-//		/**
-//		 * High Category
-//		 */
-//		else if (requirementCategory.getId().equals(highCategory.getId())) {
-//			// List DOWN contains L & M
-//			if (changeLow) {
-//				for (JJRequirement entry : selectedLowRequirementsList) {
-//					JJRequirement req = jJRequirementService
-//							.findJJRequirement(entry.getId());
-//					listDOWN.add(req);
-//				}
-//			}
-//			if (changeMedium) {
-//				for (JJRequirement entry : selectedMediumRequirementsList) {
-//					JJRequirement req = jJRequirementService
-//							.findJJRequirement(entry.getId());
-//					listDOWN.add(req);
-//				}
-//			}
-//		}
-//
-//		if (requirement.getId() == null) {
-//			for (JJRequirement req : listDOWN) {
-//				req.getRequirementLinkUp().add(requirement);
-//			}
-//			requirement.getRequirementLinkDown().addAll(listDOWN);
-//		} else {
-//			if (!listDOWN.isEmpty() && !storeMapDown.isEmpty()) {
-//				// Traitement elm par elem
-//				List<String> idListDown = new ArrayList<String>();
-//				List<String> idStoreMapDown = new ArrayList<String>();
-//				for (JJRequirement req : listDOWN) {
-//					idListDown.add(String.valueOf(req.getId()));
-//				}
-//				for (JJRequirement req : storeMapDown) {
-//					idStoreMapDown.add(String.valueOf(req.getId()));
-//				}
-//				if (!idStoreMapDown.equals(idListDown)) {
-//					List<JJRequirement> removeList = new ArrayList<JJRequirement>();
-//					List<JJRequirement> addList = new ArrayList<JJRequirement>();
-//					for (String key : idStoreMapDown) {
-//						if (!idListDown.contains(key)) {
-//							for (JJRequirement req : storeMapDown) {
-//								if (req.getId().equals(Long.parseLong(key))) {
-//									removeList.add(req);
-//									break;
-//								}
-//							}
-//						}
-//					}
-//
-//					for (String key : idListDown) {
-//						if (!idStoreMapDown.contains(key)) {
-//							for (JJRequirement req : listDOWN) {
-//								if (req.getId().equals(Long.parseLong(key))) {
-//									addList.add(req);
-//									break;
-//								}
-//							}
-//						}
-//					}
-//
-//					if (!removeList.isEmpty()) {
-//						for (JJRequirement req : removeList) {
-//							req.getRequirementLinkUp().remove(requirement);
-//							updateJJRequirement(req);
-//						}
-//						requirement.getRequirementLinkDown().removeAll(
-//								removeList);
-//						reset();
-//					}
-//
-//					if (!addList.isEmpty()) {
-//						for (JJRequirement req : addList) {
-//							JJRequirement req1 = jJRequirementService
-//									.findJJRequirement(req.getId());
-//							JJRequirement req2 = jJRequirementService
-//									.findJJRequirement(requirement.getId());
-//							req1.getRequirementLinkUp().add(req2);
-//							req2.getRequirementLinkDown().add(req1);
-//							updateJJRequirement(req1);
-//						}
-//						reset();
-//					}
-//				}
-//			}
-//
-//			else if (listDOWN.isEmpty() && !storeMapDown.isEmpty()) {
-//				// Supprimer les storeMapDown
-//				for (JJRequirement req : storeMapDown) {
-//					req.getRequirementLinkUp().remove(requirement);
-//					updateJJRequirement(req);
-//				}
-//				reset();
-//				requirement.getRequirementLinkDown().removeAll(storeMapDown);
-//
-//			} else if (!listDOWN.isEmpty() && storeMapDown.isEmpty()) {
-//				// Ajouter list Down
-//				for (JJRequirement req : listDOWN) {
-//					JJRequirement req1 = jJRequirementService
-//							.findJJRequirement(req.getId());
-//					JJRequirement req2 = jJRequirementService
-//							.findJJRequirement(requirement.getId());
-//
-//					req1.getRequirementLinkUp().add(req2);
-//					req2.getRequirementLinkDown().add(req1);
-//
-//					updateJJRequirement(req1);
-//				}
-//			}
-//			reset();
-//		}
-//		// editRowsFromCategoryDataModel(listDOWN);
-//		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
-//	}
+	// private void getRequirementsListDOWN() {
+	// long t = System.currentTimeMillis();
+	//
+	// List<JJRequirement> listDOWN = new ArrayList<JJRequirement>();
+	//
+	// /**
+	// * Medium Category
+	// */
+	// if (requirementCategory.getId().equals(mediumCategory.getId())) {
+	// // List DOWN contains L
+	// if (changeLow) {
+	// for (JJRequirement entry : selectedLowRequirementsList) {
+	// JJRequirement req = jJRequirementService
+	// .findJJRequirement(entry.getId());
+	// listDOWN.add(req);
+	// }
+	// }
+	// }
+	// /**
+	// * High Category
+	// */
+	// else if (requirementCategory.getId().equals(highCategory.getId())) {
+	// // List DOWN contains L & M
+	// if (changeLow) {
+	// for (JJRequirement entry : selectedLowRequirementsList) {
+	// JJRequirement req = jJRequirementService
+	// .findJJRequirement(entry.getId());
+	// listDOWN.add(req);
+	// }
+	// }
+	// if (changeMedium) {
+	// for (JJRequirement entry : selectedMediumRequirementsList) {
+	// JJRequirement req = jJRequirementService
+	// .findJJRequirement(entry.getId());
+	// listDOWN.add(req);
+	// }
+	// }
+	// }
+	//
+	// if (requirement.getId() == null) {
+	// for (JJRequirement req : listDOWN) {
+	// req.getRequirementLinkUp().add(requirement);
+	// }
+	// requirement.getRequirementLinkDown().addAll(listDOWN);
+	// } else {
+	// if (!listDOWN.isEmpty() && !storeMapDown.isEmpty()) {
+	// // Traitement elm par elem
+	// List<String> idListDown = new ArrayList<String>();
+	// List<String> idStoreMapDown = new ArrayList<String>();
+	// for (JJRequirement req : listDOWN) {
+	// idListDown.add(String.valueOf(req.getId()));
+	// }
+	// for (JJRequirement req : storeMapDown) {
+	// idStoreMapDown.add(String.valueOf(req.getId()));
+	// }
+	// if (!idStoreMapDown.equals(idListDown)) {
+	// List<JJRequirement> removeList = new ArrayList<JJRequirement>();
+	// List<JJRequirement> addList = new ArrayList<JJRequirement>();
+	// for (String key : idStoreMapDown) {
+	// if (!idListDown.contains(key)) {
+	// for (JJRequirement req : storeMapDown) {
+	// if (req.getId().equals(Long.parseLong(key))) {
+	// removeList.add(req);
+	// break;
+	// }
+	// }
+	// }
+	// }
+	//
+	// for (String key : idListDown) {
+	// if (!idStoreMapDown.contains(key)) {
+	// for (JJRequirement req : listDOWN) {
+	// if (req.getId().equals(Long.parseLong(key))) {
+	// addList.add(req);
+	// break;
+	// }
+	// }
+	// }
+	// }
+	//
+	// if (!removeList.isEmpty()) {
+	// for (JJRequirement req : removeList) {
+	// req.getRequirementLinkUp().remove(requirement);
+	// updateJJRequirement(req);
+	// }
+	// requirement.getRequirementLinkDown().removeAll(
+	// removeList);
+	// reset();
+	// }
+	//
+	// if (!addList.isEmpty()) {
+	// for (JJRequirement req : addList) {
+	// JJRequirement req1 = jJRequirementService
+	// .findJJRequirement(req.getId());
+	// JJRequirement req2 = jJRequirementService
+	// .findJJRequirement(requirement.getId());
+	// req1.getRequirementLinkUp().add(req2);
+	// req2.getRequirementLinkDown().add(req1);
+	// updateJJRequirement(req1);
+	// }
+	// reset();
+	// }
+	// }
+	// }
+	//
+	// else if (listDOWN.isEmpty() && !storeMapDown.isEmpty()) {
+	// // Supprimer les storeMapDown
+	// for (JJRequirement req : storeMapDown) {
+	// req.getRequirementLinkUp().remove(requirement);
+	// updateJJRequirement(req);
+	// }
+	// reset();
+	// requirement.getRequirementLinkDown().removeAll(storeMapDown);
+	//
+	// } else if (!listDOWN.isEmpty() && storeMapDown.isEmpty()) {
+	// // Ajouter list Down
+	// for (JJRequirement req : listDOWN) {
+	// JJRequirement req1 = jJRequirementService
+	// .findJJRequirement(req.getId());
+	// JJRequirement req2 = jJRequirementService
+	// .findJJRequirement(requirement.getId());
+	//
+	// req1.getRequirementLinkUp().add(req2);
+	// req2.getRequirementLinkDown().add(req1);
+	//
+	// updateJJRequirement(req1);
+	// }
+	// }
+	// reset();
+	// }
+	// // editRowsFromCategoryDataModel(listDOWN);
+	// logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
+	// }
 
 	private List<JJRequirement> getRequirementsList(JJCategory category,
 			JJProduct product, JJVersion version, JJProject project,

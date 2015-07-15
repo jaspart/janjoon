@@ -90,7 +90,7 @@ public class PlanningConfiguration {
 		else
 			return 1;
 	}
-	
+
 	public static int getGanttIndex() {
 		PlanningConfiguration configuration = ((LoginBean) LoginBean
 				.findBean("loginBean")).getPlanningConfiguration();

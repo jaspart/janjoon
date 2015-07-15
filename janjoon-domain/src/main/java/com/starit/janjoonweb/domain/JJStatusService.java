@@ -16,6 +16,6 @@ public interface JJStatusService {
 			List<String> names, boolean sortedByName);
 
 	public List<String> getTablesName();
-	
-	public List<JJStatus> load(MutableInt size,int first, int pageSize);
+
+	public List<JJStatus> load(MutableInt size, int first, int pageSize);
 }

@@ -8,7 +8,7 @@ import javax.faces.convert.FacesConverter;
 import com.starit.janjoonweb.domain.JJTeststep;
 
 @FacesConverter("JJTeststepConverter")
-public class JJTeststepConverter implements Converter{
+public class JJTeststepConverter implements Converter {
 
 	@Override
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
@@ -17,7 +17,9 @@ public class JJTeststepConverter implements Converter{
 	}
 
 	@Override
-	  public String getAsString(FacesContext context, UIComponent component, Object value) {
-      return value instanceof JJTeststep ? ((JJTeststep) value).getName() : "";
-  }
+	public String getAsString(FacesContext context, UIComponent component,
+			Object value) {
+		return value instanceof JJTeststep ? ((JJTeststep) value).getName()
+				: "";
+	}
 }

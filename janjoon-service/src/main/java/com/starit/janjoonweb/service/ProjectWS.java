@@ -17,7 +17,7 @@ import com.starit.janjoonweb.service.entity.Project;
 @Component("projectWS")
 @Path("/projets")
 public class ProjectWS {
-    
+
 	@Autowired
 	private JJProjectService jJProjectService;
 	@Autowired
@@ -28,7 +28,7 @@ public class ProjectWS {
 	public void setjJProjectService(JJProjectService jJProjectService) {
 		this.jJProjectService = jJProjectService;
 	}
-	
+
 	public void setjJContactService(JJContactService jJContactService) {
 		this.jJContactService = jJContactService;
 	}
@@ -40,10 +40,10 @@ public class ProjectWS {
 	@GET
 	@Path("/listeprojets")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getProjects(){
-		return Project.getListProjectFromJJProject(jJProjectService.getAdminListProjects());
-		
+	public Response getProjects() {
+		return Project.getListProjectFromJJProject(jJProjectService
+				.getAdminListProjects());
+
 	}
-	
 
 }

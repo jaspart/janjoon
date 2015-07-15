@@ -23,7 +23,7 @@ public class JJProfile {
 	private String name;
 
 	private Boolean enabled;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")
 	private Set<JJRight> rights = new HashSet<JJRight>();
 

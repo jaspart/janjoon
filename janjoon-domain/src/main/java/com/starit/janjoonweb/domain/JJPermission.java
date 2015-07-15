@@ -27,7 +27,7 @@ public class JJPermission {
 	private JJProfile profile;
 
 	private Boolean enabled;
-	
+
 	@Override
 	public boolean equals(Object object) {
 		return (object instanceof JJPermission) && (getId() != null) ? getId()

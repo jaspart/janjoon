@@ -13,7 +13,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJRightSEQ")
-@Table(indexes ={@Index(unique=false,columnList="profile")})
+@Table(indexes = { @Index(unique = false, columnList = "profile") })
 public class JJRight {
 
 	@NotNull

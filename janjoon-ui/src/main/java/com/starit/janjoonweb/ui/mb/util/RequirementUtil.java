@@ -50,7 +50,7 @@ public class RequirementUtil {
 	public void setStyle(String style) {
 		this.style = style;
 	}
-	
+
 	@Override
 	public boolean equals(Object object) {
 		return (object instanceof RequirementUtil)

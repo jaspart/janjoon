@@ -32,7 +32,7 @@ public class JJBuildServiceImpl implements JJBuildService {
 
 		CriteriaQuery<JJBuild> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();		
+		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		if (version != null) {
 			predicates.add(criteriaBuilder.equal(from.get("version"), version));
@@ -41,7 +41,7 @@ public class JJBuildServiceImpl implements JJBuildService {
 			predicates.add(criteriaBuilder.equal(
 					from.join("version").get("product"), product));
 		}
-		
+
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
@@ -64,7 +64,7 @@ public class JJBuildServiceImpl implements JJBuildService {
 
 		CriteriaQuery<JJBuild> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();	
+		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		predicates.add(criteriaBuilder.equal(from.get("version"), version));
 		predicates.add(criteriaBuilder.equal(from.get("name"), buildName));
@@ -74,7 +74,7 @@ public class JJBuildServiceImpl implements JJBuildService {
 		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJBuild> result = entityManager.createQuery(select);
-		if(result.getResultList() != null && !result.getResultList().isEmpty())			
+		if (result.getResultList() != null && !result.getResultList().isEmpty())
 			return result.getResultList().get(0);
 		else
 			return null;
@@ -92,7 +92,7 @@ public class JJBuildServiceImpl implements JJBuildService {
 
 		CriteriaQuery<JJBuild> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();		
+		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		if (withVersion) {
 			if (version != null) {
@@ -102,7 +102,7 @@ public class JJBuildServiceImpl implements JJBuildService {
 				predicates.add(criteriaBuilder.isNull(from.get("version")));
 			}
 		}
-		
+
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}

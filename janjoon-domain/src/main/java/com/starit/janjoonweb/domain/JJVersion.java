@@ -24,9 +24,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJVersionSEQ")
-@Table(indexes ={@Index(unique=true,columnList="name,product")})
+@Table(indexes = { @Index(unique = true, columnList = "name,product") })
 public class JJVersion {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;
@@ -56,8 +56,8 @@ public class JJVersion {
 	@ManyToOne
 	private JJProduct product;
 
-//	@ManyToOne
-//	private JJTestcase testcase;
+	// @ManyToOne
+	// private JJTestcase testcase;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "versioning")
 	private Set<JJTask> tasks = new HashSet<JJTask>();

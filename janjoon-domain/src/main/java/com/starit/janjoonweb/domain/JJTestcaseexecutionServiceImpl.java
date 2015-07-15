@@ -36,7 +36,8 @@ public class JJTestcaseexecutionServiceImpl implements
 		Root<JJTestcaseexecution> from = criteriaQuery
 				.from(JJTestcaseexecution.class);
 
-		CriteriaQuery<Boolean> select = criteriaQuery.select(from.<Boolean> get("passed"));
+		CriteriaQuery<Boolean> select = criteriaQuery.select(from
+				.<Boolean> get("passed"));
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -48,7 +49,7 @@ public class JJTestcaseexecutionServiceImpl implements
 			predicates.add(criteriaBuilder.equal(from.get("build"), build));
 		}
 
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));		
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		select.where(predicates.toArray(new Predicate[] {}));
 

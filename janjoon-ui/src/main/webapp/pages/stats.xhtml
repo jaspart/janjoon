@@ -31,7 +31,7 @@
 						<p:chart type="metergauge" model="#{jJStatusBean.prjMetergauge}"
 							style="width:400px;height:300px" responsive="true" />
 					</h:panelGrid>
-					<p:dataTable id="categoryTable" var="categoryModel"
+					<p:dataTable id="categoryTable" var="categoryModel" emptyMessage="#{messages.label_notRecordFound}"
 						value="#{jJStatusBean.categoryDataModel}">
 						<f:facet name="header">
 							<h:outputText value="Categories stats" />

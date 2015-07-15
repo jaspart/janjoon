@@ -187,7 +187,7 @@
 							<p:dataTable id="categoryTable_#{loop.index}" var="reqUtil"
 								value="#{tableDataModel}" scrollable="true" scrollHeight="300"
 								sortMode="multiple" resizableColumns="true"
-								styleClass="requirement-table"
+								styleClass="requirement-table" emptyMessage="#{messages.label_notRecordFound}"
 								filteredValue="#{tableDataModel.filtredRequirements}"
 								rowKey="#{reqUtil.requirement.id}" editable="true"
 								editMode="cell" rendered="#{tableDataModel.rendered}"
@@ -727,7 +727,7 @@
 					</p:panelGrid>
 
 					<p:dataTable id="importDataTable" var="format" scrollable="true"
-						style="width:500px;" scrollHeight="300"
+						style="width:500px;" scrollHeight="300" emptyMessage="#{messages.label_notRecordFound}"
 						value="#{jJRequirementBean.importFormats}">
 						<f:facet name="header">
 							<h:outputText

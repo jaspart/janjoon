@@ -31,7 +31,7 @@ td.ui-fileupload-preview {
 			cellpadding="6">
 			<p:dataTable id="productDataTable" var="product" lazy="true"
 				value="#{jJProductBean.productListTable}" paginator="true" rows="15"
-				rowKey="#{product.id}">
+				rowKey="#{product.id}"  emptyMessage="#{messages.label_notRecordFound}">
 				<f:facet name="header">#{messages.admin_product_table_title}</f:facet>
 				<p:column style="width: 70px !important;text-align: center;">
 					<p:graphicImage styleClass="avatar"
@@ -220,7 +220,7 @@ td.ui-fileupload-preview {
 					</p:row>
 					<p:dataTable id="versionDataTable" var="versionModel"
 						scrollable="true" style="width:460px;" scrollHeight="250"
-						value="#{jJVersionBean.versionDataModel}"
+						value="#{jJVersionBean.versionDataModel}" emptyMessage="#{messages.label_notRecordFound}"
 						rowStyleClass="#{versionModel.old ? 'old' : null}">
 
 						<p:ajax event="rowToggle" listener="#{jJBuildBean.rowToggle}"

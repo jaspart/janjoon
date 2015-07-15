@@ -29,7 +29,7 @@
 							id="buildFieldSet">
 							<p:dataTable id="buildDataTable_#{loop.index}" scrollable="true"
 								scrollHeight="250" var="build" value="#{buildDataModel.builds}"
-								rowKey="#{build.id}">
+								rowKey="#{build.id}" emptyMessage="#{messages.label_notRecordFound}">
 								<!-- 							<p:column headerText="Project"> -->
 								<!-- 								<h:outputText value="#{build.name}" /> -->
 								<!-- 							</p:column> -->
@@ -70,8 +70,8 @@
 									<!-- 										listener="#{jJBuildBean.loadingRowExpansion(versionModel.version)}" /> -->
 
 									<p:dataTable id="taskDataTable" var="task" style="width:90%;"
-										rowKey="#{task.id}" emptyMessage="That Build have no Tasks"
-										value="#{build.tasks}">
+										rowKey="#{task.id}" emptyMessage="#{messages.label_notRecordFound}"
+										value="#{build.tasks}" >
 
 										<p:column style="width:25%">
 											<f:facet name="header">

@@ -85,11 +85,11 @@ public class MailingService {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	public void sendMail(JJRequirement requirement,String taskTitle) {
-		
+
+	public void sendMail(JJRequirement requirement, String taskTitle) {
+
 		if (!error) {
-			
+
 			Properties props = new Properties();
 			props.put("mail.smtp.host", smtp_host);
 			props.put("mail.smtp.socketFactory.port", smtp_port);
@@ -105,15 +105,18 @@ public class MailingService {
 									password);
 						}
 					});
-			
+
 			try {
 
 				Message message = new MimeMessage(session);
-				message.setRecipients(Message.RecipientType.TO,
-				InternetAddress.parse(requirement.getCreatedBy().getEmail()));
-	
-				message.setSubject("Requirement: " + requirement.getName() + " Started To Be Covred ");
-				message.setText("Requirement: " + requirement.getName() + "  has been treated and started to be covered by " + taskTitle);
+				message.setRecipients(Message.RecipientType.TO, InternetAddress
+						.parse(requirement.getCreatedBy().getEmail()));
+
+				message.setSubject("Requirement: " + requirement.getName()
+						+ " Started To Be Covred ");
+				message.setText("Requirement: " + requirement.getName()
+						+ "  has been treated and started to be covered by "
+						+ taskTitle);
 
 				Transport.send(message);
 
@@ -126,7 +129,8 @@ public class MailingService {
 		}
 	}
 
-	public void sendMail(String mail_to,List<JJContact> contacts, JJTask task, String subject) {
+	public void sendMail(String mail_to, List<JJContact> contacts, JJTask task,
+			String subject) {
 
 		if (!error) {
 			Properties props = new Properties();
@@ -148,12 +152,12 @@ public class MailingService {
 			try {
 
 				Message message = new MimeMessage(session);
-				 message.setRecipients(Message.RecipientType.TO,
-				 InternetAddress.parse(mail_to));
+				message.setRecipients(Message.RecipientType.TO,
+						InternetAddress.parse(mail_to));
 				for (JJContact c : contacts)
-					if(!c.getEmail().equalsIgnoreCase(mail_to))
-					message.addRecipients(Message.RecipientType.CC,
-							InternetAddress.parse(c.getEmail()));
+					if (!c.getEmail().equalsIgnoreCase(mail_to))
+						message.addRecipients(Message.RecipientType.CC,
+								InternetAddress.parse(c.getEmail()));
 				message.setSubject("Task: " + task.getName() + " Done ");
 				message.setText("Task: " + task.getName() + " Done " + "\n\n"
 						+ subject);

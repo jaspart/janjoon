@@ -34,8 +34,7 @@ public class JJTeststepexecutionBean {
 
 	@Autowired
 	private JJStatusService jJStatusService;
-	
-	
+
 	public void setjJStatusService(JJStatusService jJStatusService) {
 		this.jJStatusService = jJStatusService;
 	}
@@ -131,33 +130,28 @@ public class JJTeststepexecutionBean {
 
 		elements = new TreeMap<Integer, JJTeststepexecution>();
 
-		disabledTestcase=true;
+		disabledTestcase = true;
 		if (teststepexecutions.isEmpty()) {
 			newTeststepexecutions(testcaseexecution);
-			
-		}else
-		{
-			int i=0;
-			while(i<teststepexecutions.size())
-			{
-				if(teststepexecutions.get(i).getPassed() != null && !teststepexecutions.get(i).getPassed())	
-				{
-					disabledTestcase=false;
-					i=teststepexecutions.size();
+
+		} else {
+			int i = 0;
+			while (i < teststepexecutions.size()) {
+				if (teststepexecutions.get(i).getPassed() != null
+						&& !teststepexecutions.get(i).getPassed()) {
+					disabledTestcase = false;
+					i = teststepexecutions.size();
 				}
 				i++;
 			}
-			
-			if(disabledTestcase)
-			{
-				i=0;
-				disabledTestcase=false;
-				while(i<teststepexecutions.size())
-				{
-					if(teststepexecutions.get(i).getPassed() == null )	
-					{
-						disabledTestcase=true;
-						i=teststepexecutions.size();
+
+			if (disabledTestcase) {
+				i = 0;
+				disabledTestcase = false;
+				while (i < teststepexecutions.size()) {
+					if (teststepexecutions.get(i).getPassed() == null) {
+						disabledTestcase = true;
+						i = teststepexecutions.size();
 					}
 					i++;
 				}
@@ -209,10 +203,12 @@ public class JJTeststepexecutionBean {
 				newBug();
 			} else {
 				JJBuildBean jJBuildBean = (JJBuildBean) session
-						.getAttribute("jJBuildBean");				
+						.getAttribute("jJBuildBean");
 
-				List<JJBug> bugs = jJBugService.getBugs(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany()
-						,LoginBean.getProject(),teststepexecution.getTeststep(),
+				List<JJBug> bugs = jJBugService.getBugs(((LoginBean) LoginBean
+						.findBean("loginBean")).getContact().getCompany(),
+						LoginBean.getProject(),
+						teststepexecution.getTeststep(),
 						jJBuildBean.getBuild(), true, true);
 				if (bugs.isEmpty()) {
 					newBug();
@@ -220,18 +216,18 @@ public class JJTeststepexecutionBean {
 					bug = bugs.get(0);
 				}
 			}
-		}	
-	
+		}
+
 		this.teststepexecutions.add(new JJTeststepexecution());
-		if(!disabledTestcase)
+		if (!disabledTestcase)
 			activeIndex++;
 		changeTestcaseStatus();
 
-//		if (activeIndex != elements.size() - 1) {
-//			disabledTestcase = true;
-//		} else {
-//			disabledTestcase = false;
-//		}
+		// if (activeIndex != elements.size() - 1) {
+		// disabledTestcase = true;
+		// } else {
+		// disabledTestcase = false;
+		// }
 
 	}
 
@@ -264,15 +260,15 @@ public class JJTeststepexecutionBean {
 
 	private void newBug() {
 		bug = new JJBug();
-//		bug.setName("Insert a bug name");
-//		bug.setDescription("Insert a bug description");
+		// bug.setName("Insert a bug name");
+		// bug.setDescription("Insert a bug description");
 		bug.setEnabled(true);
 		bug.setStatus(jJStatusService.getOneStatus("NEW", "BUG", true));
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 
 		JJBuildBean jJBuildBean = (JJBuildBean) session
-				.getAttribute("jJBuildBean");		
+				.getAttribute("jJBuildBean");
 		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
 				.getAttribute("jJTestcaseBean");
 
@@ -284,7 +280,7 @@ public class JJTeststepexecutionBean {
 
 	public void handleStatus(JJTeststepexecution tse) {
 
-		teststepexecution=tse;
+		teststepexecution = tse;
 		teststepexecution.setPassed(status);
 		updateJJTeststepexecution(teststepexecution);
 		teststepexecution = jJTeststepexecutionService
@@ -294,7 +290,7 @@ public class JJTeststepexecutionBean {
 
 		if (teststepexecution.getPassed()) {
 
-			nextTab();			
+			nextTab();
 			onTabChange();
 
 		} else {
@@ -304,28 +300,30 @@ public class JJTeststepexecutionBean {
 					.getSession(false);
 
 			JJBugBean jJBugBean = (JJBugBean) session.getAttribute("jJBugBean");
-			if(jJBugBean == null)
-				jJBugBean=new JJBugBean();
+			if (jJBugBean == null)
+				jJBugBean = new JJBugBean();
 
 			bug.setTeststep(teststepexecution.getTeststep());
 
 			jJBugBean.setJJBug_(bug);
-			jJBugBean.getJJBug_().setRequirement(teststepexecution.getTeststep()
-					.getTestcase().getRequirement());
-			jJBugBean.getJJBug_().setVersioning(teststepexecution.getTestcaseexecution().getBuild()
-					.getVersion());
+			jJBugBean.getJJBug_().setRequirement(
+					teststepexecution.getTeststep().getTestcase()
+							.getRequirement());
+			jJBugBean.getJJBug_().setVersioning(
+					teststepexecution.getTestcaseexecution().getBuild()
+							.getVersion());
 			jJBugBean.setBugProjectSelected(LoginBean.getProject());
 
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('bugTestDialogWidget').show()");
-			disabledTestcase=false;
+			disabledTestcase = false;
 		}
 
 		if (activeIndex == elements.size()) {
 			changeTestcaseStatus();
 		}
-		if(!disabledTestcase)
-			RequestContext.getCurrentInstance().execute("remoteButton()");	
+		if (!disabledTestcase)
+			RequestContext.getCurrentInstance().execute("remoteButton()");
 	}
 
 	public void changeTestcaseStatus() {
@@ -377,12 +375,13 @@ public class JJTeststepexecutionBean {
 							.getSession(false);
 					JJBuildBean jJBuildBean = (JJBuildBean) session
 							.getAttribute("jJBuildBean");
-					
 
-					List<JJBug> bugs = jJBugService.getBugs(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany(),
-							LoginBean.getProject(),
-							teststepexecution.getTeststep(),
-							jJBuildBean.getBuild(), true, true);
+					List<JJBug> bugs = jJBugService.getBugs(
+							((LoginBean) LoginBean.findBean("loginBean"))
+									.getContact().getCompany(), LoginBean
+									.getProject(), teststepexecution
+									.getTeststep(), jJBuildBean.getBuild(),
+							true, true);
 
 					if (bugs.isEmpty()) {
 						newBug();
@@ -399,19 +398,16 @@ public class JJTeststepexecutionBean {
 			changeTestcaseStatus();
 		}
 
-		
 	}
 
 	public void nextTab() {
-		
-		activeIndex=teststepexecutions.size();
-		int i=0;
-		while(i<teststepexecutions.size())
-		{
-			if(teststepexecutions.get(i).getPassed() == null)
-			{
-				activeIndex=i;
-				i=teststepexecutions.size();
+
+		activeIndex = teststepexecutions.size();
+		int i = 0;
+		while (i < teststepexecutions.size()) {
+			if (teststepexecutions.get(i).getPassed() == null) {
+				activeIndex = i;
+				i = teststepexecutions.size();
 			}
 			i++;
 		}
@@ -425,28 +421,27 @@ public class JJTeststepexecutionBean {
 		JJTestcaseexecutionBean jJTestcaseexecutionBean = (JJTestcaseexecutionBean) session
 				.getAttribute("jJTestcaseexecutionBean");
 		jJTestcaseexecutionBean.save();
-		
+
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_executed", "TestCase");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		
-		
+
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('runTestcaseDialogWidget').hide()");
 		closeDialog();
 	}
-	
-	public void saveJJTeststepexecution(JJTeststepexecution b)
-	{
+
+	public void saveJJTeststepexecution(JJTeststepexecution b) {
 		b.setCreationDate(new Date());
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setCreatedBy(contact);
 		jJTeststepexecutionService.saveJJTeststepexecution(b);
 	}
-	
-	public void updateJJTeststepexecution(JJTeststepexecution b)
-	{
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+
+	public void updateJJTeststepexecution(JJTeststepexecution b) {
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJTeststepexecutionService.updateJJTeststepexecution(b);

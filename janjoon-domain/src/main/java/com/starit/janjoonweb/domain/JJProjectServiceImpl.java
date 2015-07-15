@@ -29,12 +29,13 @@ public class JJProjectServiceImpl implements JJProjectService {
 	public void setjJPermissionService(JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
 	}
-	
-	public List<JJProject> getProjectList(boolean enabled,JJCompany company,JJContact contact){	
-		
-		if(company != null || jJPermissionService.isSuperAdmin(contact))
-		{
-			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+	public List<JJProject> getProjectList(boolean enabled, JJCompany company,
+			JJContact contact) {
+
+		if (company != null || jJPermissionService.isSuperAdmin(contact)) {
+			CriteriaBuilder criteriaBuilder = entityManager
+					.getCriteriaBuilder();
 			CriteriaQuery<JJProject> criteriaQuery = criteriaBuilder
 					.createQuery(JJProject.class);
 
@@ -43,22 +44,22 @@ public class JJProjectServiceImpl implements JJProjectService {
 			CriteriaQuery<JJProject> select = criteriaQuery.select(from);
 
 			List<Predicate> predicates = new ArrayList<Predicate>();
-			
+
 			if (company != null)
 				predicates.add(criteriaBuilder.equal(
 						from.get("manager").get("company"), company));
-			
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), enabled));		
 
-			select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), enabled));
+
+			select.where(criteriaBuilder.and(predicates
+					.toArray(new Predicate[] {})));
 
 			TypedQuery<JJProject> result = entityManager.createQuery(select);
 
 			return result.getResultList();
-		}else
+		} else
 			return new ArrayList<JJProject>();
-		
-	
+
 	}
 
 	public List<JJProject> load(JJCompany company, MutableInt size, int first,
@@ -72,13 +73,13 @@ public class JJProjectServiceImpl implements JJProjectService {
 
 		CriteriaQuery<JJProject> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();		
+		List<Predicate> predicates = new ArrayList<Predicate>();
 		if (company != null)
 			predicates.add(criteriaBuilder.equal(
 					from.get("manager").get("company"), company));
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		
+
 		select.where(predicates.toArray(new Predicate[] {}));
 
 		TypedQuery<JJProject> result = entityManager.createQuery(select);
@@ -128,13 +129,13 @@ public class JJProjectServiceImpl implements JJProjectService {
 
 	@Override
 	public List<JJProject> getProjects(JJCompany company, JJContact contact,
-			boolean onlyActif,boolean all) {
+			boolean onlyActif, boolean all) {
 
 		if (company != null) {
 			List<JJProject> projects = new ArrayList<JJProject>();
 			CriteriaBuilder criteriaBuilder = entityManager
 					.getCriteriaBuilder();
-			
+
 			if (contact != null && !all) {
 				CriteriaQuery<JJPermission> criteriaPermission = criteriaBuilder
 						.createQuery(JJPermission.class);
@@ -155,9 +156,9 @@ public class JJProjectServiceImpl implements JJProjectService {
 						.createQuery(selectPermission);
 
 				for (JJPermission permission : resultPermission.getResultList()) {
-					if (permission.getProject() != null ) {
-						if(!projects.contains(permission.getProject()))
-						projects.add(permission.getProject());
+					if (permission.getProject() != null) {
+						if (!projects.contains(permission.getProject()))
+							projects.add(permission.getProject());
 					} else {
 						all = true;
 					}
@@ -173,15 +174,15 @@ public class JJProjectServiceImpl implements JJProjectService {
 				CriteriaQuery<JJProject> select = criteriaQuery.select(from);
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
-				
+
 				predicates.add(criteriaBuilder.equal(
 						from.join("manager").get("company"), company));
-				
+
 				if (onlyActif) {
 					predicates.add(criteriaBuilder.equal(from.get("enabled"),
 							true));
 				}
-				
+
 				select.where(predicates.toArray(new Predicate[] {}));
 
 				TypedQuery<JJProject> result = entityManager

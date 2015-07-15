@@ -248,9 +248,11 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 		if (withBuild) {
 			if (build != null) {
-				predicates.add(criteriaBuilder.isMember(build, from.<Set<JJBuild>>get("builds")));
+				predicates.add(criteriaBuilder.isMember(build,
+						from.<Set<JJBuild>> get("builds")));
 			} else {
-				predicates.add(criteriaBuilder.isEmpty(from.<Set<JJBuild>>get("builds")));
+				predicates.add(criteriaBuilder.isEmpty(from
+						.<Set<JJBuild>> get("builds")));
 			}
 		}
 

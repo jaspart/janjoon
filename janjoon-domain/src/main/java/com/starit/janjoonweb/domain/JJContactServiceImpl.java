@@ -16,7 +16,7 @@ public class JJContactServiceImpl implements JJContactService {
 
 	@PersistenceContext
 	private EntityManager entityManager;
-	
+
 	@Autowired
 	private JJPermissionService jJPermissionService;
 
@@ -62,8 +62,8 @@ public class JJContactServiceImpl implements JJContactService {
 			return result.getResultList().get(0);
 
 	}
+
 	@Override
-	
 	public JJContact getContactById(Long id) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -89,11 +89,12 @@ public class JJContactServiceImpl implements JJContactService {
 	}
 
 	@Override
-	public List<JJContact> getContacts(boolean onlyActif,JJCompany company,JJContact contact) {
-		
-		if(company != null || jJPermissionService.isSuperAdmin(contact))
-		{
-			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+	public List<JJContact> getContacts(boolean onlyActif, JJCompany company,
+			JJContact contact) {
+
+		if (company != null || jJPermissionService.isSuperAdmin(contact)) {
+			CriteriaBuilder criteriaBuilder = entityManager
+					.getCriteriaBuilder();
 			CriteriaQuery<JJContact> criteriaQuery = criteriaBuilder
 					.createQuery(JJContact.class);
 
@@ -102,20 +103,23 @@ public class JJContactServiceImpl implements JJContactService {
 			CriteriaQuery<JJContact> select = criteriaQuery.select(from);
 
 			List<Predicate> predicates = new ArrayList<Predicate>();
-			
-			if(company != null)
-				predicates.add(criteriaBuilder.equal(from.get("company"), company));
-			
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), onlyActif));		
 
-			select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+			if (company != null)
+				predicates.add(criteriaBuilder.equal(from.get("company"),
+						company));
+
+			predicates
+					.add(criteriaBuilder.equal(from.get("enabled"), onlyActif));
+
+			select.where(criteriaBuilder.and(predicates
+					.toArray(new Predicate[] {})));
 
 			TypedQuery<JJContact> result = entityManager.createQuery(select);
 
 			return result.getResultList();
-		}else
+		} else
 			return new ArrayList<JJContact>();
-		
+
 	}
 
 	@Override
@@ -130,8 +134,9 @@ public class JJContactServiceImpl implements JJContactService {
 		}
 
 	}
-	
-	public List<JJContact> load(JJCompany company,MutableInt size,int first, int pageSize) {
+
+	public List<JJContact> load(JJCompany company, MutableInt size, int first,
+			int pageSize) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJContact> criteriaQuery = criteriaBuilder
 				.createQuery(JJContact.class);
@@ -140,26 +145,25 @@ public class JJContactServiceImpl implements JJContactService {
 
 		CriteriaQuery<JJContact> select = criteriaQuery.select(from);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();	
-		
-		if(company != null)
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (company != null)
 			predicates.add(criteriaBuilder.equal(from.get("company"), company));
-		
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));		
-		
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		TypedQuery<JJContact> result = entityManager.createQuery(select);
 		result.setFirstResult(first);
 		result.setMaxResults(pageSize);
-		
+
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJContact.class)));
 		entityManager.createQuery(cq);
 		cq.where(predicates.toArray(new Predicate[] {}));
 		size.setValue(entityManager.createQuery(cq).getSingleResult());
-		
+
 		return result.getResultList();
 
 	}
@@ -183,7 +187,7 @@ public class JJContactServiceImpl implements JJContactService {
 				return false;
 
 		}
-	}	
+	}
 
 	public void saveJJContact(JJContact JJContact_) {
 
@@ -193,7 +197,7 @@ public class JJContactServiceImpl implements JJContactService {
 	}
 
 	public JJContact updateJJContact(JJContact JJContact_) {
-		
+
 		jJContactRepository.save(JJContact_);
 		JJContact_ = jJContactRepository.findOne(JJContact_.getId());
 		return JJContact_;

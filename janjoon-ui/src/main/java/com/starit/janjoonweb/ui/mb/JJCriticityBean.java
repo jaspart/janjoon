@@ -18,19 +18,18 @@ public class JJCriticityBean {
 	public JJCriticity getCriticityByName(String name) {
 		return jJCriticityService.getCriticityByName(name, true);
 	}
-	
-	public void saveJJCriticity(JJCriticity b)
-	{
+
+	public void saveJJCriticity(JJCriticity b) {
 		b.setCreationDate(new Date());
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		b.setCreatedBy(contact);
 		jJCriticityService.saveJJCriticity(b);
 	}
-	
-	public void updateJJCriticity(JJCriticity b)
-	{
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+
+	public void updateJJCriticity(JJCriticity b) {
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJCriticityService.updateJJCriticity(b);

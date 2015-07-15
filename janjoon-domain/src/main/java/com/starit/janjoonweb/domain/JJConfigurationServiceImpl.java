@@ -22,8 +22,8 @@ public class JJConfigurationServiceImpl implements JJConfigurationService {
 		this.entityManager = entityManager;
 	}
 
-	public List<JJConfiguration> load(MutableInt size,int first, int pageSize, String name,
-			String param, boolean onlyactif) {
+	public List<JJConfiguration> load(MutableInt size, int first, int pageSize,
+			String name, String param, boolean onlyactif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJConfiguration> criteriaQuery = criteriaBuilder
@@ -58,13 +58,13 @@ public class JJConfigurationServiceImpl implements JJConfigurationService {
 		TypedQuery<JJConfiguration> result = entityManager.createQuery(select);
 		result.setFirstResult(first);
 		result.setMaxResults(pageSize);
-		
+
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJConfiguration.class)));
 		entityManager.createQuery(cq);
 		cq.where(predicates.toArray(new Predicate[] {}));
 		size.setValue(entityManager.createQuery(cq).getSingleResult());
-		
+
 		return result.getResultList();
 	}
 

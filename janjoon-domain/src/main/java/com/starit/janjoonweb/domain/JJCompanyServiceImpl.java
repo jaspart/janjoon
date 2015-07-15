@@ -51,7 +51,7 @@ public class JJCompanyServiceImpl implements JJCompanyService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));	
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		predicates.add(criteriaBuilder.equal(
 				criteriaBuilder.lower(from.<String> get("name")),

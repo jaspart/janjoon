@@ -64,23 +64,25 @@ public class CKEditorUploadServlet extends HttpServlet {
 
 		FileItemFactory factory = new DiskFileItemFactory();
 		ServletFileUpload upload = new ServletFileUpload(factory);
-		//File uploadedFile = null;
-		String imageString ="";
+		// File uploadedFile = null;
+		String imageString = "";
 		try {
 			List<FileItem> items = upload.parseRequest(request);
 			if (!items.isEmpty() && items.get(0) != null) {
 
-//				uploadedFile = new File(CKEDITOR_DIR + File.separator
-//						+ ((DiskFileItem) items.get(0)).getName());
-//				uploadFile(((FileItem) items.get(0)).get(), uploadedFile);
-				
-				//imageString = Base64.encodeBase64URLSafeString(((FileItem) items.get(0)).get());
-				
+				// uploadedFile = new File(CKEDITOR_DIR + File.separator
+				// + ((DiskFileItem) items.get(0)).getName());
+				// uploadFile(((FileItem) items.get(0)).get(), uploadedFile);
+
+				// imageString = Base64.encodeBase64URLSafeString(((FileItem)
+				// items.get(0)).get());
+
 				StringBuilder sb = new StringBuilder();
 				sb.append("data:image;base64,");
-				sb.append(StringUtils.newStringUtf8(Base64.encodeBase64(((FileItem) items.get(0)).get(), false)));
+				sb.append(StringUtils.newStringUtf8(Base64.encodeBase64(
+						((FileItem) items.get(0)).get(), false)));
 				imageString = sb.toString();
-			   
+
 			} else {
 				errorMessage = ERROR_NO_FILE_UPLOAD;
 			}
@@ -89,7 +91,7 @@ public class CKEditorUploadServlet extends HttpServlet {
 			errorMessage = ERROR_FILE_UPLOAD;
 			logger.error(errorMessage, e);
 		}
-		
+
 		// CKEditorFuncNum Is the location to display when the callback
 		String callback = request.getParameter("CKEditorFuncNum");
 		// verify if the callback contains only digits and letters in order to
@@ -98,27 +100,29 @@ public class CKEditorUploadServlet extends HttpServlet {
 			callback = "";
 			errorMessage = ERROR_INVALID_CALLBACK;
 		}
-//		String pathToFile = "";
-//		if (!request.getServerName().contains("localhost"))
-//			pathToFile = "https" + "://" + request.getServerName()
-//					+ request.getContextPath()
-//					+ "/pages/ckeditor/getimage?imageId="
-//					+ uploadedFile.getName();
-//		else
-//			pathToFile = "http" + "://" + request.getServerName() + ":"
-//					+ request.getServerPort() + request.getContextPath()
-//					+ "/pages/ckeditor/getimage?imageId="
-//					+ uploadedFile.getName();
+		// String pathToFile = "";
+		// if (!request.getServerName().contains("localhost"))
+		// pathToFile = "https" + "://" + request.getServerName()
+		// + request.getContextPath()
+		// + "/pages/ckeditor/getimage?imageId="
+		// + uploadedFile.getName();
+		// else
+		// pathToFile = "http" + "://" + request.getServerName() + ":"
+		// + request.getServerPort() + request.getContextPath()
+		// + "/pages/ckeditor/getimage?imageId="
+		// + uploadedFile.getName();
 
-//		System.out.println(uploadedFile.getAbsolutePath() + "--" + pathToFile);
-//		System.out.println(uploadedFile.getCanonicalPath() + "--" + pathToFile);
+		// System.out.println(uploadedFile.getAbsolutePath() + "--" +
+		// pathToFile);
+		// System.out.println(uploadedFile.getCanonicalPath() + "--" +
+		// pathToFile);
 		// String pathToFile =uploadedFile.getPath();
 		out.println("<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction("
-				+ callback + ",'"+imageString+"','" + errorMessage + "')");
+				+ callback + ",'" + imageString + "','" + errorMessage + "')");
 		out.println("</script>");
 		out.flush();
 		out.close();
-		//System.out.println(pathToFile);
+		// System.out.println(pathToFile);
 	}
 
 	public boolean uploadFile(byte[] bs, File file) {

@@ -29,9 +29,9 @@ import com.starit.janjoonweb.domain.reference.JJRelationship;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJRequirementSEQ")
-@Table(indexes ={@Index(unique=false,columnList="project,category")})
+@Table(indexes = { @Index(unique = false, columnList = "project,category") })
 public class JJRequirement {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;
@@ -132,8 +132,8 @@ public class JJRequirement {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
 	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
-	
-	@ManyToMany(mappedBy="requirements",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+	@ManyToMany(mappedBy = "requirements", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<JJContact> contacts = new HashSet<JJContact>();
 
 	@Override
@@ -141,7 +141,7 @@ public class JJRequirement {
 		return (object instanceof JJRequirement) && (getId() != null) ? getId()
 				.equals(((JJRequirement) object).getId()) : (object == this);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		if (this.getId() != null)

@@ -58,17 +58,17 @@ public class JJSprintServiceImpl implements JJSprintService {
 		return result.getResultList();
 
 	}
-	
-public void saveJJSprint(JJSprint JJSprint_) {
-		
-        jJSprintRepository.save(JJSprint_);
-        JJSprint_=jJSprintRepository.findOne(JJSprint_.getId());
-    }
-    
-    public JJSprint updateJJSprint(JJSprint JJSprint_) {
-        jJSprintRepository.save(JJSprint_);
-        JJSprint_=jJSprintRepository.findOne(JJSprint_.getId());
-        return JJSprint_;
-    }
+
+	public void saveJJSprint(JJSprint JJSprint_) {
+
+		jJSprintRepository.save(JJSprint_);
+		JJSprint_ = jJSprintRepository.findOne(JJSprint_.getId());
+	}
+
+	public JJSprint updateJJSprint(JJSprint JJSprint_) {
+		jJSprintRepository.save(JJSprint_);
+		JJSprint_ = jJSprintRepository.findOne(JJSprint_.getId());
+		return JJSprint_;
+	}
 
 }

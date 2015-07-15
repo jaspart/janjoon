@@ -27,7 +27,7 @@ import com.starit.janjoonweb.ui.mb.util.WorkFlowsActions;
 @RooSerializable
 @RooJsfManagedBean(entity = JJWorkflow.class, beanName = "jJWorkflowBean")
 public class JJWorkflowBean {
-	
+
 	@Autowired
 	private JJStatusService jJStatusService;
 
@@ -124,7 +124,7 @@ public class JJWorkflowBean {
 
 	public List<String> completeObject(String query) {
 
-		String[] names = { "Task", "Requirement", "Bug","Message","Build"};
+		String[] names = { "Task", "Requirement", "Bug", "Message", "Build" };
 		return Arrays.asList(names);
 
 	}

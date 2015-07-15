@@ -13,17 +13,6 @@
 			href="#{request.contextPath}/resources/images/janjoon_logo.ico" />
 		<h:outputScript library="primefaces" name="jquery/jquery.js" />
 		<script type="text/javascript">
-// 			function centerDialog() {
-// 				var top, left;
-// 				top = Math.max($(window).height() - $("#frame").outerHeight(),
-// 						0) / 2;
-// 				left = Math
-// 						.max($(window).width() - $("#frame").outerWidth(), 0) / 2;
-// 				$("#frame").css({
-// 					top : top,
-// 					left : left
-// 				});
-// 			}
 
 			function updateRowExapansion() {
 				$(".rowExpansion").slideUp("fast");
@@ -59,6 +48,7 @@
 							paginatorPosition="bottom" rendered="#{loginBean.enable}"
 							rowStyleClass="#{mes.criticity.name}" style="border-spacing:0px;"
 							selectionMode="single" rows="10" lazy="true"
+							emptyMessage="#{messages.label_notRecordFound}"
 							sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
 							<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
 								listener="#{jJMessageBean.onRowSelect}" immediate="true"

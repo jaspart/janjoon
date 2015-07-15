@@ -44,7 +44,7 @@ public class WorkFlowsActions {
 
 	@Autowired
 	private JJBugService jJBugService;
-	
+
 	@Autowired
 	private JJBuildService jJBuildService;
 
@@ -86,7 +86,7 @@ public class WorkFlowsActions {
 	public void setjJBuildService(JJBuildService jJBuildService) {
 		this.jJBuildService = jJBuildService;
 	}
-	
+
 	public void setjJMessageService(JJMessageService jJMessageService) {
 		this.jJMessageService = jJMessageService;
 	}
@@ -255,7 +255,7 @@ public class WorkFlowsActions {
 				}
 			}
 
-		}else if (object instanceof JJBuild) {
+		} else if (object instanceof JJBuild) {
 			JJBuild build = (JJBuild) object;
 			if (build.getId() != null) {
 				JJBuild oldbuild = jJBuildService.findJJBuild(build.getId());
@@ -379,7 +379,7 @@ public class WorkFlowsActions {
 						+ afterStatus;
 			}
 
-		}else if (objet instanceof JJBuild) {
+		} else if (objet instanceof JJBuild) {
 
 			JJBuild build = (JJBuild) objet;
 			obj = "Build";
@@ -391,8 +391,7 @@ public class WorkFlowsActions {
 				afterStatus = "Null";
 
 			if (build.getId() != null) {
-				JJBuild oldBuild = jJBuildService
-						.findJJBuild(build.getId());
+				JJBuild oldBuild = jJBuildService.findJJBuild(build.getId());
 				String oldStatus = null;
 				if (oldBuild.getStatus() != null)
 					oldStatus = oldBuild.getStatus().getName();
@@ -471,22 +470,22 @@ public class WorkFlowsActions {
 		// System.err.println("sendMailWorkFlow Successufuly Executed");
 		if (object instanceof JJTask) {
 			JJTask task = (JJTask) object;
-			if (task.getRequirement() != null) {				
+			if (task.getRequirement() != null) {
 				JJRequirement requirement = task.getRequirement();
 				Set<JJRequirement> businessRequirements = new HashSet<JJRequirement>();
-				fillBusinessRequirements(requirement, businessRequirements);				
-				
-				if(!businessRequirements.isEmpty())
-				{
+				fillBusinessRequirements(requirement, businessRequirements);
+
+				if (!businessRequirements.isEmpty()) {
 					if (mailingService == null)
 						mailingService = new MailingService();
-					String taskTitle=((JJTaskBean)LoginBean.findBean("jJTaskBean")).getDialogHeader(task);
-					
+					String taskTitle = ((JJTaskBean) LoginBean
+							.findBean("jJTaskBean")).getDialogHeader(task);
+
 					for (JJRequirement req : businessRequirements) {
 						System.err.println("REQUIREMENT_" + req.getName());
 						mailingService.sendMail(req, taskTitle);
 					}
-					
+
 				}
 			}
 

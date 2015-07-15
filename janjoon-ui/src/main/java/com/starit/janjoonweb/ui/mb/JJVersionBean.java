@@ -27,7 +27,7 @@ public class JJVersionBean {
 
 	@Autowired
 	private JJRequirementService jJRequirementService;
-	
+
 	@Autowired
 	private JJTaskService jJTaskService;
 
@@ -36,16 +36,14 @@ public class JJVersionBean {
 		this.jJRequirementService = jJRequirementService;
 	}
 
-	
 	public void setjJTaskService(JJTaskService jJTaskService) {
 		this.jJTaskService = jJTaskService;
 	}
 
-
-	public JJVersionService getJJVersionService()
-	{
+	public JJVersionService getJJVersionService() {
 		return jJVersionService;
 	}
+
 	private JJProduct product;
 	private JJVersion version;
 	private List<JJVersion> versionList;
@@ -56,6 +54,7 @@ public class JJVersionBean {
 
 	private boolean checkVersion;
 	private boolean checkVersions;
+	private boolean oldCheckVersions;
 	private boolean disabledCheckVersion;
 
 	public JJProduct getProduct() {
@@ -78,20 +77,19 @@ public class JJVersionBean {
 
 	public List<JJVersion> getVersionList() {
 
-		
 		JJProduct jJproduct = LoginBean.getProduct();
 		if (((LoginBean) LoginBean.findBean("loginBean")).getContact() != null) {
 			if (product == null) {
 				product = jJproduct;
 				versionList = jJVersionService.getVersions(true, true, product,
 						((LoginBean) LoginBean.findBean("loginBean"))
-								.getContact().getCompany(),true);
+								.getContact().getCompany(), true);
 
 			} else if (!product.equals(jJproduct)) {
 				product = jJproduct;
 				versionList = jJVersionService.getVersions(true, true, product,
 						((LoginBean) LoginBean.findBean("loginBean"))
-								.getContact().getCompany(),true);
+								.getContact().getCompany(), true);
 			}
 		}
 
@@ -174,20 +172,25 @@ public class JJVersionBean {
 
 		List<JJVersion> versions = jJVersionService.getVersions(true, true,
 				product, ((LoginBean) LoginBean.findBean("loginBean"))
-						.getContact().getCompany(),true);
+						.getContact().getCompany(), true);
 
 		for (JJVersion version : versions) {
 			versionDataModel.add(new VersionDataModel(version, true, true));
 		}
 
 		checkVersions = true;
+		oldCheckVersions = true;
 	}
 
 	public void checkVersions() {
 
+		if (checkVersions == oldCheckVersions)
+			checkVersions = !checkVersions;
 		for (VersionDataModel versionModel : versionDataModel) {
 			versionModel.setCheckVersion(checkVersions);
 		}
+
+		oldCheckVersions = checkVersions;
 
 	}
 
@@ -203,6 +206,7 @@ public class JJVersionBean {
 
 		}
 		checkVersions = checkAll;
+		oldCheckVersions = checkAll;
 	}
 
 	public class VersionDataModel {
@@ -250,37 +254,34 @@ public class JJVersionBean {
 	}
 
 	public boolean saveJJVersion(JJVersion b) {
-		
-		if(!versionNameExist(b.getName(), b.getProduct()))
-		{
+
+		if (!versionNameExist(b.getName(), b.getProduct())) {
 			b.setCreationDate(new Date());
 			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 					.getContact();
-			b.setCreatedBy(contact);			
+			b.setCreatedBy(contact);
 			jJVersionService.saveJJVersion(b);
 			return true;
-		}else
+		} else
 			return false;
-		
+
 	}
 
 	public boolean updateJJVersion(JJVersion b) {
-		
-		JJVersion v=jJVersionService.getVersionByName(b.getName(), b.getProduct());
-		if(v != null)
-		{
-			if(v.getId().equals(b.getId()))
-			{
-				JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-						.getContact();
+
+		JJVersion v = jJVersionService.getVersionByName(b.getName(),
+				b.getProduct());
+		if (v != null) {
+			if (v.getId().equals(b.getId())) {
+				JJContact contact = ((LoginBean) LoginBean
+						.findBean("loginBean")).getContact();
 				b.setUpdatedBy(contact);
 				b.setUpdatedDate(new Date());
 				jJVersionService.updateJJVersion(b);
 				return true;
-			}else
+			} else
 				return false;
-		}else 
-		{
+		} else {
 			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 					.getContact();
 			b.setUpdatedBy(contact);
@@ -288,7 +289,7 @@ public class JJVersionBean {
 			jJVersionService.updateJJVersion(b);
 			return true;
 		}
-		
+
 	}
 
 	public List<JJTask> getTastksByVersion(JJVersion jJversion) {

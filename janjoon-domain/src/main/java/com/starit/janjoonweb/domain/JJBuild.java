@@ -28,10 +28,10 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJBuildSEQ")
-@Table(indexes ={@Index(unique=true,columnList="name,version")})
+@Table(indexes = { @Index(unique = true, columnList = "name,version") })
 @XmlRootElement
 public class JJBuild {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;
@@ -57,50 +57,50 @@ public class JJBuild {
 
 	private Boolean enabled;
 
-
 	@ManyToOne
 	private JJVersion version;
 
 	@ManyToOne
 	private JJStatus status;
 
-	private Boolean allTestcases;	
-	
-	@ManyToMany(mappedBy="builds",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Boolean allTestcases;
+
+	@ManyToMany(mappedBy = "builds", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
-	
+
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "JJbuildLinkJJTask", joinColumns = { @javax.persistence.JoinColumn(name = "Build_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Task_ID", referencedColumnName = "id") })	
+	@JoinTable(name = "JJbuildLinkJJTask", joinColumns = { @javax.persistence.JoinColumn(name = "Build_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Task_ID", referencedColumnName = "id") })
 	private Set<JJTask> tasks = new HashSet<JJTask>();
-	
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "build")
-	private Set<JJMessage> messages = new HashSet<JJMessage>();	
+	private Set<JJMessage> messages = new HashSet<JJMessage>();
 
 	@XmlAttribute
-    public String getName() {
-        return this.name;
-    }
-    
-    @XmlAttribute
-    public String getDescription() {
-        return this.description;
-    }
-    
-    @XmlAttribute
-    public Date getCreationDate() {
-        return this.creationDate;
-    }
-    @XmlAttribute
-    public Boolean getEnabled() {
-        return this.enabled;
-    }
-    
+	public String getName() {
+		return this.name;
+	}
+
+	@XmlAttribute
+	public String getDescription() {
+		return this.description;
+	}
+
+	@XmlAttribute
+	public Date getCreationDate() {
+		return this.creationDate;
+	}
+
+	@XmlAttribute
+	public Boolean getEnabled() {
+		return this.enabled;
+	}
+
 	@Override
 	public boolean equals(Object object) {
 		return (object instanceof JJBuild) && (getId() != null) ? getId()
 				.equals(((JJBuild) object).getId()) : (object == this);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		if (this.getId() != null)

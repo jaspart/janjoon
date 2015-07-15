@@ -36,18 +36,19 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 		CriteriaQuery<JJTestcase> select = criteriaQuery.select(from);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		
 
 		if (build != null) {
-			predicates.add(criteriaBuilder.or(criteriaBuilder.isMember(build,
-					from.<Set<JJBuild>> get("builds")),criteriaBuilder.equal(from.get("allBuilds"),true)));
+			predicates.add(criteriaBuilder.or(
+					criteriaBuilder.isMember(build,
+							from.<Set<JJBuild>> get("builds")),
+					criteriaBuilder.equal(from.get("allBuilds"), true)));
 		}
 
 		if (chapter != null) {
 			Path<Object> path = from.join("requirement").get("chapter");
 			predicates.add(criteriaBuilder.equal(path, chapter));
 		}
-		
+
 		if (requirement != null) {
 			predicates.add(criteriaBuilder.equal(from.get("requirement"),
 					requirement));
@@ -122,8 +123,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 		}
 
 		if (withOutChapter) {
-			predicates.add(criteriaBuilder.isNull(from.join("requirement")
-					.get("chapter")));
+			predicates.add(criteriaBuilder.isNull(from.join("requirement").get(
+					"chapter")));
 
 		}
 
@@ -134,7 +135,7 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 					from.join("requirement").get("category"), category));
 			predicates.add(criteriaBuilder.equal(
 					from.join("requirement").get("enabled"), true));
-			
+
 		}
 
 		if (onlyActif) {

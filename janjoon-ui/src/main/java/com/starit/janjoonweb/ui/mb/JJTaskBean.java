@@ -154,6 +154,7 @@ public class JJTaskBean {
 	private List<ImportFormat> importFormats;
 
 	private boolean copyObjets;
+	private boolean oldCopyObjects;
 
 	public String getSortMode() {
 		return sortMode;
@@ -1474,6 +1475,7 @@ public class JJTaskBean {
 
 		checkAll = false;
 		copyObjets = false;
+		oldCopyObjects = false;
 
 		if (mode.equalsIgnoreCase("planning")) {
 
@@ -1587,6 +1589,7 @@ public class JJTaskBean {
 
 	public void checkAll() {
 		copyObjets = false;
+		oldCopyObjects = false;
 		disabledImportButton = true;
 
 		fillTableImport();
@@ -1603,6 +1606,7 @@ public class JJTaskBean {
 		importFormats = new ArrayList<ImportFormat>();
 		List<JJTask> tasks;
 		copyObjets = false;
+		oldCopyObjects = false;
 		disabledImportButton = true;
 
 		if (objet != null) {
@@ -1939,6 +1943,7 @@ public class JJTaskBean {
 
 		disabledImportButton = true;
 		copyObjets = false;
+		oldCopyObjects = false;
 
 		if (objet != null) {
 			if (objet.equalsIgnoreCase("Testcase")) {
@@ -1959,6 +1964,7 @@ public class JJTaskBean {
 		getImportStatus();
 		disabledImportButton = true;
 		copyObjets = false;
+		oldCopyObjects =false;
 
 		if (objet != null) {
 			fillTableImport();
@@ -1973,6 +1979,7 @@ public class JJTaskBean {
 
 		disabledImportButton = true;
 		copyObjets = false;
+		oldCopyObjects = false;
 
 		if (objet != null) {
 			fillTableImport();
@@ -1987,13 +1994,16 @@ public class JJTaskBean {
 		model = null;
 	}
 
-	public void copyObjets() {
+	public void copyObjetsListener() {
 
+		if (copyObjets == oldCopyObjects)
+			copyObjets = !copyObjets;
 		for (ImportFormat importFormat : importFormats) {
 			importFormat.setCopyObjet(copyObjets);
 		}
 
 		disabledImportButton = !copyObjets;
+		oldCopyObjects = copyObjets;
 
 	}
 
@@ -2025,7 +2035,7 @@ public class JJTaskBean {
 		}
 	}
 
-	public void copyObjet() {
+	public void copyObjetListener() {
 
 		boolean copyAll = true;
 		for (ImportFormat importFormat : importFormats) {
@@ -2037,6 +2047,7 @@ public class JJTaskBean {
 		}
 
 		copyObjets = copyAll;
+		oldCopyObjects = copyAll;
 
 		for (ImportFormat importFormat : importFormats) {
 			if (importFormat.getCopyObjet()) {
@@ -2497,51 +2508,83 @@ public class JJTaskBean {
 
 		DateFormat f1 = new SimpleDateFormat("yyyy-MM-dd");
 		DateFormat f2 = new SimpleDateFormat("hh:mm:ss");
-		String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"+System.getProperty("line.separator") 
-				+ "<Project xmlns=\"http://schemas.microsoft.com/project\">"+System.getProperty("line.separator") 
-				+ "<SaveVersion>9</SaveVersion>"+System.getProperty("line.separator") 
-				+ "<Title>"+ LoginBean.getProject().getName()+ "</Title>"+System.getProperty("line.separator") 
-				+ "<ScheduleFromStart>1</ScheduleFromStart>"+System.getProperty("line.separator") 
+		String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+				+ System.getProperty("line.separator")
+				+ "<Project xmlns=\"http://schemas.microsoft.com/project\">"
+				+ System.getProperty("line.separator")
+				+ "<SaveVersion>9</SaveVersion>"
+				+ System.getProperty("line.separator")
+				+ "<Title>"
+				+ LoginBean.getProject().getName()
+				+ "</Title>"
+				+ System.getProperty("line.separator")
+				+ "<ScheduleFromStart>1</ScheduleFromStart>"
+				+ System.getProperty("line.separator")
 				+ "<StartDate>"
-				+ f1.format(LoginBean.getProject().getStartDate())+"T"+f2.format(LoginBean.getProject().getStartDate())
-				+ "</StartDate>"+System.getProperty("line.separator") 
-				+ " <FinishDate>"+System.getProperty("line.separator") 
-				+ f1.format(LoginBean.getProject().getEndDate())+"T"+f2.format(LoginBean.getProject().getEndDate())
-				+ "</FinishDate>"+System.getProperty("line.separator") 
-				+ "<DefaultStartTime>09:00:00</DefaultStartTime>"+System.getProperty("line.separator") 
-				+ "<MinutesPerDay>480</MinutesPerDay>"+System.getProperty("line.separator") 
-				+ "<MinutesPerWeek>2400</MinutesPerWeek>"+System.getProperty("line.separator") 
-				+ "<DaysPerMonth>20</DaysPerMonth>"+System.getProperty("line.separator") 
-				+ "<DurationFormat>7</DurationFormat>"+System.getProperty("line.separator") 
-				+ "<WorkFormat>2</WorkFormat>"+System.getProperty("line.separator") 
-				+ "<WeekStartDay>1</WeekStartDay>"+System.getProperty("line.separator") 
-				+ "<CurrentDate>"+ f1.format(new Date())+"T"+f2.format(new Date())+
-				"</CurrentDate>"+System.getProperty("line.separator") 
+				+ f1.format(LoginBean.getProject().getStartDate())
+				+ "T"
+				+ f2.format(LoginBean.getProject().getStartDate())
+				+ "</StartDate>"
+				+ System.getProperty("line.separator")
+				+ " <FinishDate>"
+				+ System.getProperty("line.separator")
+				+ f1.format(LoginBean.getProject().getEndDate())
+				+ "T"
+				+ f2.format(LoginBean.getProject().getEndDate())
+				+ "</FinishDate>"
+				+ System.getProperty("line.separator")
+				+ "<DefaultStartTime>09:00:00</DefaultStartTime>"
+				+ System.getProperty("line.separator")
+				+ "<MinutesPerDay>480</MinutesPerDay>"
+				+ System.getProperty("line.separator")
+				+ "<MinutesPerWeek>2400</MinutesPerWeek>"
+				+ System.getProperty("line.separator")
+				+ "<DaysPerMonth>20</DaysPerMonth>"
+				+ System.getProperty("line.separator")
+				+ "<DurationFormat>7</DurationFormat>"
+				+ System.getProperty("line.separator")
+				+ "<WorkFormat>2</WorkFormat>"
+				+ System.getProperty("line.separator")
+				+ "<WeekStartDay>1</WeekStartDay>"
+				+ System.getProperty("line.separator")
+				+ "<CurrentDate>"
+				+ f1.format(new Date())
+				+ "T"
+				+ f2.format(new Date())
+				+ "</CurrentDate>"
+				+ System.getProperty("line.separator")
 				+ "<Tasks>";
 		for (TaskData tt : tasksData) {
 
-			buffer = buffer	+System.getProperty("line.separator") + "<Task>"
-					+ "<UID>1</UID>"+System.getProperty("line.separator") 
-					+ "<ID>1</ID>"+System.getProperty("line.separator") 
-					+ "<Name>"+ tt.getTask().getName()+ "</Name>"+System.getProperty("line.separator") 
-					+ "<Type>0</Type>"+System.getProperty("line.separator") 
-					+ "<IsNull>0</IsNull>"+System.getProperty("line.separator") 
-					+ "<WBS>1</WBS>"+System.getProperty("line.separator") 
-					+ "<OutlineNumber>1</OutlineNumber>"+System.getProperty("line.separator") 
-					+ "<OutlineLevel>1</OutlineLevel>"+System.getProperty("line.separator") 
-					+ "<Priority>500</Priority>"+System.getProperty("line.separator") 
-					+ "<Start>"
-					+ f1.format(tt.getTask().getStartDatePlanned())+"T"+f2.format(tt.getTask().getStartDatePlanned())
-					+ "</Start>"+System.getProperty("line.separator") 
-					+ "<Finish>"
-					+ f1.format(tt.getTask().getEndDatePlanned())+"T"+f2.format(tt.getTask().getEndDatePlanned())
-					+ "</Finish>"+System.getProperty("line.separator") 
-					+ "<DurationFormat>7</DurationFormat>"+System.getProperty("line.separator") 					
-					+ "</Task>";
+			buffer = buffer + System.getProperty("line.separator") + "<Task>"
+					+ "<UID>1</UID>" + System.getProperty("line.separator")
+					+ "<ID>1</ID>" + System.getProperty("line.separator")
+					+ "<Name>" + tt.getTask().getName() + "</Name>"
+					+ System.getProperty("line.separator") + "<Type>0</Type>"
+					+ System.getProperty("line.separator")
+					+ "<IsNull>0</IsNull>"
+					+ System.getProperty("line.separator") + "<WBS>1</WBS>"
+					+ System.getProperty("line.separator")
+					+ "<OutlineNumber>1</OutlineNumber>"
+					+ System.getProperty("line.separator")
+					+ "<OutlineLevel>1</OutlineLevel>"
+					+ System.getProperty("line.separator")
+					+ "<Priority>500</Priority>"
+					+ System.getProperty("line.separator") + "<Start>"
+					+ f1.format(tt.getTask().getStartDatePlanned()) + "T"
+					+ f2.format(tt.getTask().getStartDatePlanned())
+					+ "</Start>" + System.getProperty("line.separator")
+					+ "<Finish>" + f1.format(tt.getTask().getEndDatePlanned())
+					+ "T" + f2.format(tt.getTask().getEndDatePlanned())
+					+ "</Finish>" + System.getProperty("line.separator")
+					+ "<DurationFormat>7</DurationFormat>"
+					+ System.getProperty("line.separator") + "</Task>";
 
 		}
-		buffer = buffer + System.getProperty("line.separator") + "</Tasks>" + System.getProperty("line.separator") + "<Resources/>" + System.getProperty("line.separator")
-				+ "<Assignments/>" + System.getProperty("line.separator") + "</Project>";
+		buffer = buffer + System.getProperty("line.separator") + "</Tasks>"
+				+ System.getProperty("line.separator") + "<Resources/>"
+				+ System.getProperty("line.separator") + "<Assignments/>"
+				+ System.getProperty("line.separator") + "</Project>";
 		InputStream stream = new ByteArrayInputStream(buffer.getBytes());
 		return new DefaultStreamedContent(stream, "xml", LoginBean.getProject()
 				.getName().toUpperCase()
@@ -2714,6 +2757,7 @@ public class JJTaskBean {
 		disabledFilter = true;
 		checkAll = false;
 		copyObjets = false;
+		oldCopyObjects = false;
 		importSprint = null;
 		getProject();
 		getProduct();

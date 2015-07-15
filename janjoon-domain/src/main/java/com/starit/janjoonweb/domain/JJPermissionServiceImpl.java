@@ -15,11 +15,11 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		this.entityManager = entityManager;
 	}
 
-	 public boolean isAdmin(JJContact contact) {
-		 
-		 return isAuthorized(contact, null, null, "Contact", null, true,
-					true, true);
-	 }
+	public boolean isAdmin(JJContact contact) {
+
+		return isAuthorized(contact, null, null, "Contact", null, true, true,
+				true);
+	}
 
 	@Override
 	public List<JJPermission> getPermissions(JJContact contact,

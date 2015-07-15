@@ -9,8 +9,8 @@ public interface JJVersionService {
 
 	// New Generic
 	public List<JJVersion> getVersions(boolean onlyActif, boolean withProduct,
-			JJProduct product,JJCompany company,boolean sortedbydate);
-	
-	public JJVersion getVersionByName(String jJversion,JJProduct product);
-	
+			JJProduct product, JJCompany company, boolean sortedbydate);
+
+	public JJVersion getVersionByName(String jJversion, JJProduct product);
+
 }

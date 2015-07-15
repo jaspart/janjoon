@@ -1,7 +1,7 @@
 package com.starit.janjoonweb.domain;
 
 public class JJHardwareServiceImpl implements JJHardwareService {
-	
+
 	public void saveJJHardware(JJHardware JJHardware_) {
 
 		jJHardwareRepository.save(JJHardware_);

@@ -29,9 +29,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJContactSEQ")
-@Table(indexes ={@Index(unique=false,columnList="company")})
-public class JJContact  {
-	
+@Table(indexes = { @Index(unique = false, columnList = "company") })
+public class JJContact {
+
 	@NotNull
 	@Size(max = 100)
 	private String name;
@@ -101,8 +101,7 @@ public class JJContact  {
 	private JJProduct lastProduct;
 
 	@ManyToOne
-	private JJVersion lastVersion;	
-	
+	private JJVersion lastVersion;
 
 	@ManyToOne
 	private JJContact manager;
@@ -119,21 +118,21 @@ public class JJContact  {
 
 	@ManyToMany(mappedBy = "contacts", fetch = FetchType.LAZY)
 	private Set<JJSprint> sprints = new HashSet<JJSprint>();
-	
+
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "JJCategoryLinkJJContact", joinColumns = { @javax.persistence.JoinColumn(name = "Contact_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Category_ID", referencedColumnName = "id") })	
+	@JoinTable(name = "JJCategoryLinkJJContact", joinColumns = { @javax.persistence.JoinColumn(name = "Contact_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Category_ID", referencedColumnName = "id") })
 	private Set<JJCategory> categories = new HashSet<JJCategory>();
-	
+
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "JJRequirementLinkJJContact", joinColumns = { @javax.persistence.JoinColumn(name = "Contact_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Requirement_ID", referencedColumnName = "id") })	
+	@JoinTable(name = "JJRequirementLinkJJContact", joinColumns = { @javax.persistence.JoinColumn(name = "Contact_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Requirement_ID", referencedColumnName = "id") })
 	private Set<JJRequirement> requirements = new HashSet<JJRequirement>();
-	
+
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "JJBugLinkJJContact", joinColumns = { @javax.persistence.JoinColumn(name = "Contact_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Bug_ID", referencedColumnName = "id") })	
+	@JoinTable(name = "JJBugLinkJJContact", joinColumns = { @javax.persistence.JoinColumn(name = "Contact_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Bug_ID", referencedColumnName = "id") })
 	private Set<JJBug> bugs = new HashSet<JJBug>();
-	
+
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "JJTestcaseLinkJJContact", joinColumns = { @javax.persistence.JoinColumn(name = "Contact_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Testcase_ID", referencedColumnName = "id") })	
+	@JoinTable(name = "JJTestcaseLinkJJContact", joinColumns = { @javax.persistence.JoinColumn(name = "Contact_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Testcase_ID", referencedColumnName = "id") })
 	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "contact")

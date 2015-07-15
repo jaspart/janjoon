@@ -33,17 +33,15 @@ public class JJRightServiceImpl implements JJRightService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-
 		if (profile != null) {
 			predicates.add(criteriaBuilder.equal(from.get("profile"), profile));
 		} else {
 			predicates.add(criteriaBuilder.isNull(from.get("profile")));
 		}
-		
+
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
-
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
@@ -66,17 +64,17 @@ public class JJRightServiceImpl implements JJRightService {
 
 		return tableNames;
 	}
-	
+
 	public void saveJJRight(JJRight JJRight_) {
-		
-        jJRightRepository.save(JJRight_);
-        JJRight_=jJRightRepository.findOne(JJRight_.getId());
-    }
-    
-    public JJRight updateJJRight(JJRight JJRight_) {
-        jJRightRepository.save(JJRight_);
-        JJRight_=jJRightRepository.findOne(JJRight_.getId());
-        return JJRight_;
-    }
+
+		jJRightRepository.save(JJRight_);
+		JJRight_ = jJRightRepository.findOne(JJRight_.getId());
+	}
+
+	public JJRight updateJJRight(JJRight JJRight_) {
+		jJRightRepository.save(JJRight_);
+		JJRight_ = jJRightRepository.findOne(JJRight_.getId());
+		return JJRight_;
+	}
 
 }

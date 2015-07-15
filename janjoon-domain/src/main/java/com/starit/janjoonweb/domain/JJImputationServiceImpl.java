@@ -1,7 +1,7 @@
 package com.starit.janjoonweb.domain;
 
 public class JJImputationServiceImpl implements JJImputationService {
-	
+
 	public void saveJJImputation(JJImputation JJImputation_) {
 
 		jJImputationRepository.save(JJImputation_);

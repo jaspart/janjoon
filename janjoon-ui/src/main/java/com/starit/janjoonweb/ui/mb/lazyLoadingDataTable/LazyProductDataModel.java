@@ -21,10 +21,11 @@ public class LazyProductDataModel extends LazyDataModel<JJProduct> {
 	private JJProductService productService;
 	private JJCompany company;
 
-	public LazyProductDataModel(JJProductService productService,JJCompany company) {
-		
-		this.company=company;	
-		
+	public LazyProductDataModel(JJProductService productService,
+			JJCompany company) {
+
+		this.company = company;
+
 		this.productService = productService;
 	}
 
@@ -56,11 +57,12 @@ public class LazyProductDataModel extends LazyDataModel<JJProduct> {
 	}
 
 	@Override
-	public List<JJProduct> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {
+	public List<JJProduct> load(int first, int pageSize, String sortField,
+			SortOrder sortOrder, Map<String, Object> filters) {
 
 		List<JJProduct> data = new ArrayList<JJProduct>();
-		MutableInt size=new MutableInt(0);
-		data = productService.load(company,size,first, pageSize);
+		MutableInt size = new MutableInt(0);
+		data = productService.load(company, size, first, pageSize);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

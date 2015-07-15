@@ -24,9 +24,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJStatusSEQ")
-@Table(indexes ={@Index(unique=false,columnList="objet")})
+@Table(indexes = { @Index(unique = false, columnList = "objet") })
 public class JJStatus {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;
@@ -60,7 +60,7 @@ public class JJStatus {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "status")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
-	
+
 	@Override
 	public boolean equals(Object object) {
 		return (object instanceof JJStatus) && (getId() != null) ? getId()

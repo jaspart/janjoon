@@ -110,7 +110,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 				q.setParameter("reqs", contact.getRequirements());
 
 			r = (long) q.setParameter("proj", project)
-					.setParameter("prod", product).getSingleResult();			
+					.setParameter("prod", product).getSingleResult();
 		}
 
 		else {
@@ -145,7 +145,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 					q.setParameter("reqs", contact.getRequirements());
 
 				r = (long) q.setParameter("proj", project).getSingleResult();
-				
+
 			} else if (product != null) {
 				String query = "select count(e.id) from JJMessage e Where e.enabled = true and e.product = :prod and "
 						+ "((e.bug = null and e.requirement = null and e.testcase = null)";
@@ -176,7 +176,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 						&& !contact.getRequirements().isEmpty())
 					q.setParameter("reqs", contact.getRequirements());
 
-				r = (long) q.setParameter("prod", product).getSingleResult();			
+				r = (long) q.setParameter("prod", product).getSingleResult();
 			}
 
 			else if (company != null) {
@@ -398,8 +398,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 
 			}
 
-		}else
-		{
+		} else {
 			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 		}
 

@@ -49,18 +49,17 @@ public class ElementFactoryImpl extends ElementFactory {
 		}
 		if (!src.startsWith("data"))
 			img = Image.getInstance(src);
-		else
-		{
-			String imgData=src.substring(src.indexOf(",")+1);
-			img=Image.getInstance(Base64.decodeBase64(imgData));
+		else {
+			String imgData = src.substring(src.indexOf(",") + 1);
+			img = Image.getInstance(Base64.decodeBase64(imgData));
 		}
 		if (img == null)
 			return null;
 
-//		for (String key : attrs.keySet()) {
-//		
-//			System.err.println(key+":::"+attrs.get(key));
-//		}
+		// for (String key : attrs.keySet()) {
+		//
+		// System.err.println(key+":::"+attrs.get(key));
+		// }
 		float actualFontSize = HtmlUtilities.parseLength(
 				chain.getProperty(HtmlTags.SIZE),
 				HtmlUtilities.DEFAULT_FONT_SIZE);

@@ -35,14 +35,14 @@ public class JJMessageBean {
 
 	private JJMessage message;
 	private JJMessage resolvedJJMessage;
-	//private Object field;
+	// private Object field;
 	private boolean loadFiltredJJmessage = false;
 	private boolean alertOrInfo;
 	private SelectItem[] projectOptions;
 	private SelectItem[] productOptions;
 	private SelectItem[] creatorOptions;
 	private SelectItem[] criticityOptions;
-	private SelectItem[] statusOptions;	
+	private SelectItem[] statusOptions;
 	private List<JJMessage> allJJMessages;
 	private List<JJMessage> alertMessages;
 	private LazyMessageDataModel mainMessages;
@@ -53,11 +53,13 @@ public class JJMessageBean {
 
 	public List<JJMessage> getAlertMessages() {
 
-		if (alertMessages == null && ((LoginBean) LoginBean.findBean("loginBean")).isEnable()) {
-			alertMessages = jJMessageService.getAlertMessages(
-					LoginBean.getProject(), LoginBean.getProduct(),((LoginBean) LoginBean
-							.findBean("loginBean")).getContact().getCompany(),((LoginBean) LoginBean
-									.findBean("loginBean")).getContact());
+		if (alertMessages == null
+				&& ((LoginBean) LoginBean.findBean("loginBean")).isEnable()) {
+			alertMessages = jJMessageService.getAlertMessages(LoginBean
+					.getProject(), LoginBean.getProduct(),
+					((LoginBean) LoginBean.findBean("loginBean")).getContact()
+							.getCompany(), ((LoginBean) LoginBean
+							.findBean("loginBean")).getContact());
 		}
 		return alertMessages;
 	}
@@ -75,8 +77,8 @@ public class JJMessageBean {
 		columns.add("creationDate");
 		columns.add("updatedDate");
 		columns.add("message");
-		//allJJMessages = jJMessageService.findAllJJMessages();
-		setMessage(new JJMessage());		
+		// allJJMessages = jJMessageService.findAllJJMessages();
+		setMessage(new JJMessage());
 		viewedMessage = new JJMessage();
 		mainMessages = null;
 		((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
@@ -97,7 +99,7 @@ public class JJMessageBean {
 	}
 
 	public List<JJMessage> getAllJJMessages() {
-		if(allJJMessages == null)
+		if (allJJMessages == null)
 			allJJMessages = jJMessageService.findAllJJMessages();
 		return allJJMessages;
 	}
@@ -138,7 +140,7 @@ public class JJMessageBean {
 
 	public void setViewedMessage(JJMessage viewedMessage) {
 		this.viewedMessage = viewedMessage;
-	}	
+	}
 
 	public boolean isLoadFiltredJJmessage() {
 		return loadFiltredJJmessage;
@@ -244,9 +246,10 @@ public class JJMessageBean {
 		if (mainMessages == null && login.isEnable()) {
 
 			mainMessages = new LazyMessageDataModel(jJMessageService,
-					LoginBean.getProject(), LoginBean.getProduct(),((LoginBean) LoginBean
-							.findBean("loginBean")).getContact().getCompany(),((LoginBean) LoginBean
-									.findBean("loginBean")).getContact());
+					LoginBean.getProject(), LoginBean.getProduct(),
+					((LoginBean) LoginBean.findBean("loginBean")).getContact()
+							.getCompany(),
+					((LoginBean) LoginBean.findBean("loginBean")).getContact());
 
 			// RequestContext context = RequestContext.getCurrentInstance();
 			// context.update(":headerForm:dataTable1");
@@ -268,17 +271,19 @@ public class JJMessageBean {
 			// enabledJJMessage = jJMessageService.getMessages(true);
 
 			mainMessages = new LazyMessageDataModel(jJMessageService,
-					LoginBean.getProject(), LoginBean.getProduct(),((LoginBean) LoginBean
-							.findBean("loginBean")).getContact().getCompany(),((LoginBean) LoginBean
-									.findBean("loginBean")).getContact());
+					LoginBean.getProject(), LoginBean.getProduct(),
+					((LoginBean) LoginBean.findBean("loginBean")).getContact()
+							.getCompany(),
+					((LoginBean) LoginBean.findBean("loginBean")).getContact());
 			// // if (!login.isCollapsedMesPanel()) {
 			// RequestContext context = RequestContext.getCurrentInstance();
 			// context.update("messagePanel");
 			// // }
 
-			for (JJMessage mes : jJMessageService.getActifMessages(
-					LoginBean.getProject(), LoginBean.getProduct(),((LoginBean) LoginBean
-							.findBean("loginBean")).getContact().getCompany())) {
+			for (JJMessage mes : jJMessageService.getActifMessages(LoginBean
+					.getProject(), LoginBean.getProduct(),
+					((LoginBean) LoginBean.findBean("loginBean")).getContact()
+							.getCompany())) {
 				if (mes.getCreatedBy() != null
 						&& !listContaines(contactes, mes.getCreatedBy()))
 					contactes.add(mes.getCreatedBy());
@@ -381,7 +386,7 @@ public class JJMessageBean {
 		reset();
 	}
 
-	public void createMessage(boolean withField,Object field) {
+	public void createMessage(boolean withField, Object field) {
 		if (!alertOrInfo) {
 
 			JJCriticity criticity = jJCriticityService.getCriticityByName(
@@ -409,7 +414,7 @@ public class JJMessageBean {
 		}
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
-		
+
 		message.setProduct(LoginBean.getProduct());
 		message.setProject(LoginBean.getProject());
 		message.setVersioning(LoginBean.getVersion());
@@ -426,7 +431,7 @@ public class JJMessageBean {
 			message.setTestcase((JJTestcase) field);
 
 		save(message);
-		
+
 		message = new JJMessage();
 		alertMessages = null;
 	}
@@ -437,7 +442,6 @@ public class JJMessageBean {
 	}
 
 	public void saveJJMessage(JJMessage b) {
-		
 
 		b.setCreationDate(new Date());
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
@@ -448,14 +452,14 @@ public class JJMessageBean {
 	}
 
 	public void updateJJMessage(JJMessage b) {
-		
+
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		b.setUpdatedBy(contact);
-		
-		if(b.getCompany() != null)
+
+		if (b.getCompany() != null)
 			b.setCompany(contact.getCompany());
-		
+
 		b.setUpdatedDate(new Date());
 		jJMessageService.updateJJMessage(b);
 	}
@@ -473,7 +477,7 @@ public class JJMessageBean {
 		loadFiltredJJmessage = false;
 		mainMessages = null;
 		alertMessages = null;
-		//comMessages = null;
+		// comMessages = null;
 		((LoginBean) LoginBean.findBean("loginBean")).setShowMarquee(null);
 		((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 		// initJJmessageTable(null);

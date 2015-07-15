@@ -8,7 +8,7 @@ import javax.faces.convert.FacesConverter;
 import com.starit.janjoonweb.domain.JJPhase;
 
 @FacesConverter("JJPhaseConverter")
-public class JJPhaseConverter implements Converter{
+public class JJPhaseConverter implements Converter {
 
 	@Override
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
@@ -17,7 +17,8 @@ public class JJPhaseConverter implements Converter{
 	}
 
 	@Override
-	  public String getAsString(FacesContext context, UIComponent component, Object value) {
-      return value instanceof JJPhase ? ((JJPhase) value).getName() : "";
-  }
+	public String getAsString(FacesContext context, UIComponent component,
+			Object value) {
+		return value instanceof JJPhase ? ((JJPhase) value).getName() : "";
+	}
 }

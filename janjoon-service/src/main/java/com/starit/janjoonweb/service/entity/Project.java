@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.starit.janjoonweb.domain.JJProject;
+
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Project {
@@ -36,34 +37,31 @@ public class Project {
 	@XmlElement
 	private Date endDate;
 	@XmlElement
-    private String manager;
+	private String manager;
 
-	
-	
-	
-	public Project(JJProject projet){
-		this.id=projet.getId();
-		this.name=projet.getName();
+	public Project(JJProject projet) {
+		this.id = projet.getId();
+		this.name = projet.getName();
 		if (projet.getCreatedBy() != null)
 			this.createdBy = projet.getCreatedBy().getName();
 		else
 			this.createdBy = "null";
-		
-		this.creationDate=projet.getCreationDate();
-		this.description=projet.getDescription();
-		this.enabled=projet.getEnabled();
-		this.endDate=projet.getEndDate();
-		this.startDate=projet.getStartDate();
-		
-		if(projet.getManager() != null)
-		    this.manager=projet.getManager().getName();
+
+		this.creationDate = projet.getCreationDate();
+		this.description = projet.getDescription();
+		this.enabled = projet.getEnabled();
+		this.endDate = projet.getEndDate();
+		this.startDate = projet.getStartDate();
+
+		if (projet.getManager() != null)
+			this.manager = projet.getManager().getName();
 		else
 			this.manager = "null";
-		if(projet.getUpdatedBy() != null)
-		    this.updatedBy=projet.getUpdatedBy().getName();
+		if (projet.getUpdatedBy() != null)
+			this.updatedBy = projet.getUpdatedBy().getName();
 		else
 			this.updatedBy = "null";
-		this.updatedDate=projet.getUpdatedDate();
+		this.updatedDate = projet.getUpdatedDate();
 	}
 
 	public Project() {
@@ -157,40 +155,33 @@ public class Project {
 	public void setManager(String manager) {
 		this.manager = manager;
 	}
-	
+
 	public boolean equals(Object object) {
 		return (object instanceof Project) && (getId() != null) ? getId()
 				.equals(((Project) object).getId()) : (object == this);
 	}
-	
-	
-	
+
 	@Override
 	public String toString() {
 		return "Project [id=" + id + ", name=" + name + ", description="
 				+ description + ", creationDate=" + creationDate
 				+ ", createdBy=" + createdBy + ", enabled=" + enabled
-				+ ", updatedBy=" + updatedBy + ", manager=" + manager 
-				+ ", endDate=" + endDate + ", startDate=" + startDate 
+				+ ", updatedBy=" + updatedBy + ", manager=" + manager
+				+ ", endDate=" + endDate + ", startDate=" + startDate
 				+ ", updatedBy=" + updatedBy + ", ]";
 	}
-	
-	
-	public static Response getListProjectFromJJProject(List<JJProject> jJProject){
+
+	public static Response getListProjectFromJJProject(List<JJProject> jJProject) {
 		List<Project> projets = new ArrayList<Project>();
-		GenericEntity<List<Project>> entity = new GenericEntity<List<Project>>(projets) {};
-		for (JJProject projet : jJProject){
+		GenericEntity<List<Project>> entity = new GenericEntity<List<Project>>(
+				projets) {
+		};
+		for (JJProject projet : jJProject) {
 			projets.add(new Project(projet));
 		}
-		
+
 		return Response.ok(entity).build();
-		
+
 	}
-	
-	
-	
-	
-	
-	
 
 }

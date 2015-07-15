@@ -28,9 +28,9 @@ import com.starit.janjoonweb.domain.reference.JJRelationship;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJBugSEQ")
-@Table(indexes ={@Index(unique=false,columnList="project,category")})
+@Table(indexes = { @Index(unique = false, columnList = "project,category") })
 public class JJBug {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;
@@ -55,7 +55,6 @@ public class JJBug {
 	private JJContact updatedBy;
 
 	private Boolean enabled;
-
 
 	@ManyToOne
 	private JJProject project;
@@ -98,8 +97,8 @@ public class JJBug {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bug")
 	private Set<JJTask> tasks = new HashSet<JJTask>();
-	
-	@ManyToMany(mappedBy="bugs",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+	@ManyToMany(mappedBy = "bugs", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<JJContact> contacts = new HashSet<JJContact>();
 
 	@ManyToOne
@@ -107,25 +106,26 @@ public class JJBug {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bug")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
-	
-	public JJProduct getProduct()
-	{
-		if(this.getRequirement() != null && this.getRequirement().getProduct() != null)
+
+	public JJProduct getProduct() {
+		if (this.getRequirement() != null
+				&& this.getRequirement().getProduct() != null)
 			return this.getRequirement().getProduct();
-		else if(this.getVersioning() != null)
+		else if (this.getVersioning() != null)
 			return this.getVersioning().getProduct();
-		else if(this.getBuild() != null && this.getBuild().getVersion() != null)
-			return this.getBuild().getVersion().getProduct();		
+		else if (this.getBuild() != null
+				&& this.getBuild().getVersion() != null)
+			return this.getBuild().getVersion().getProduct();
 		else
 			return null;
 	}
-	
+
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof JJBug) && (getId() != null) ? getId()
-				.equals(((JJBug) object).getId()) : (object == this);
+		return (object instanceof JJBug) && (getId() != null) ? getId().equals(
+				((JJBug) object).getId()) : (object == this);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		if (this.getId() != null)

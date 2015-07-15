@@ -10,8 +10,10 @@ import org.springframework.roo.addon.jsf.converter.RooJsfConverter;
 
 @RooJsfConverter(entity = JJPermission.class)
 public class JJPermissionConverter {
-	
-	public String getAsString(FacesContext context, UIComponent component, Object value) {
-        return (value instanceof JJPermission && ((JJPermission) value).getId() != null) ? ((JJPermission) value).getId().toString() : "";
-    }
+
+	public String getAsString(FacesContext context, UIComponent component,
+			Object value) {
+		return (value instanceof JJPermission && ((JJPermission) value).getId() != null) ? ((JJPermission) value)
+				.getId().toString() : "";
+	}
 }

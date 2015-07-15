@@ -9,7 +9,7 @@
 		<p:panel id="categoryPanel" style="width:650px" columns="1"
 			cellpadding="6">
 			<p:dataTable id="categoryDataTable" var="category" lazy="true"
-				paginatorPosition="bottom"
+				paginatorPosition="bottom" emptyMessage="#{messages.label_notRecordFound}"
 				value="#{jJCategoryBean.categoryListTable}" paginator="true"
 				rows="15" rowKey="#{category.id}">
 				<f:facet name="header">#{messages.admin_category_table_header}</f:facet>

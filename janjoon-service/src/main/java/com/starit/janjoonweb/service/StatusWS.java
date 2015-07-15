@@ -14,22 +14,22 @@ import com.starit.janjoonweb.service.entity.Status;
 @Component("statusWS")
 @Path("/status")
 public class StatusWS {
-	
+
 	@Autowired
 	private JJStatusService jJStatusService;
 
 	public void setjJStatusService(JJStatusService jJStatusService) {
 		this.jJStatusService = jJStatusService;
 	}
-	
+
 	@GET
 	@Path("/listeStatus")
 	@javax.ws.rs.Produces(MediaType.APPLICATION_JSON)
-	public Response getStatusName(){
-		
-		return Status.getListContactFromJJStatut(jJStatusService.getStatus("task", true, null, true));
-		
+	public Response getStatusName() {
+
+		return Status.getListContactFromJJStatut(jJStatusService.getStatus(
+				"task", true, null, true));
+
 	}
-	
 
 }

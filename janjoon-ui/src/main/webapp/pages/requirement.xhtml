@@ -341,20 +341,15 @@
 									value="#{requirementBean.reqtestCases}">
 									<p:column selectionMode="multiple"
 										style="width:30%;text-align:center;" />
-									<p:column style="width:70%">
-										<f:facet name="header">
-											<p:row>
-												<p:column>
-													<h:outputText value="TestCases:" />
-												</p:column>
-											</p:row>
-										</f:facet>
-										<!-- 									<h:outputText value="#{testCaseModel.name}" /> -->
+									<p:column style="width:70%" headerText="TestCases:">
+																			
 										<p:commandLink target="_blank" value="#{testCaseModel.name}"
 											action="#{jJTestcaseBean.testCaseInfo(testCaseModel.id)}"
 											ajax="false">
 										</p:commandLink>
+										
 									</p:column>
+									
 									<f:facet name="footer">
 										<p:commandButton onstart="PF('blockUIWidget').block()"
 											oncomplete="PF('blockUIWidget').unblock()" id="update"

@@ -7,7 +7,7 @@ import javax.faces.convert.FacesConverter;
 import com.starit.janjoonweb.domain.JJProject;
 
 @FacesConverter("JJProjectConverter")
-public class JJProjectConverter implements Converter{
+public class JJProjectConverter implements Converter {
 
 	@Override
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
@@ -16,7 +16,8 @@ public class JJProjectConverter implements Converter{
 	}
 
 	@Override
-	  public String getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJProject ? ((JJProject) value).getName() : "";
-    }
+	public String getAsString(FacesContext context, UIComponent component,
+			Object value) {
+		return value instanceof JJProject ? ((JJProject) value).getName() : "";
+	}
 }

@@ -15,18 +15,18 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 @RooSerializable
 @RooJsfManagedBean(entity = JJSoftware.class, beanName = "jJSoftwareBean")
 public class JJSoftwareBean {
-	
-	public void saveJJSoftware(JJSoftware b)
-	{
+
+	public void saveJJSoftware(JJSoftware b) {
 		b.setCreationDate(new Date());
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
-		b.setCreatedBy(contact);		
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
+		b.setCreatedBy(contact);
 		jJSoftwareService.saveJJSoftware(b);
 	}
-	
-	public void updateJJSoftware(JJSoftware b)
-	{
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+
+	public void updateJJSoftware(JJSoftware b) {
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJSoftwareService.updateJJSoftware(b);

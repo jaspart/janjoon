@@ -18,7 +18,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity(sequenceName = "JJMessageSEQ")
 public class JJMessage {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;
@@ -34,7 +34,7 @@ public class JJMessage {
 
 	@ManyToOne
 	private JJContact createdBy;
-	
+
 	@NotNull
 	@ManyToOne
 	private JJCompany company;

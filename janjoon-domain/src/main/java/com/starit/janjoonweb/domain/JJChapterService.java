@@ -8,20 +8,23 @@ import org.springframework.roo.addon.layers.service.RooService;
 public interface JJChapterService {
 
 	// New generic
-	public List<JJChapter> getParentsChapter(JJCompany company,JJProject project,
-			JJCategory category, boolean onlyActif, boolean sortedByOrder);
+	public List<JJChapter> getParentsChapter(JJCompany company,
+			JJProject project, JJCategory category, boolean onlyActif,
+			boolean sortedByOrder);
 
-	public List<JJChapter> getChapters(JJCompany company,JJProject project, JJCategory category,
-			boolean onlyActif, List<String> ids);
+	public List<JJChapter> getChapters(JJCompany company, JJProject project,
+			JJCategory category, boolean onlyActif, List<String> ids);
 
-	public List<JJChapter> getChapters(JJCompany company,JJProject project, boolean onlyActif,
-			boolean sortedByName);
-	
-	public List<JJChapter> getChapters(JJCompany company,JJProject project, boolean sortedByDate);
+	public List<JJChapter> getChapters(JJCompany company, JJProject project,
+			boolean onlyActif, boolean sortedByName);
+
+	public List<JJChapter> getChapters(JJCompany company, JJProject project,
+			boolean sortedByDate);
 
 	public List<JJChapter> getChildrenOfParentChapter(JJChapter parent,
 			boolean onlyActif, boolean sortedByOrder);
-	
-	public JJChapter getChapterByName(JJCategory category,String name,JJProject project,JJCompany company);
+
+	public JJChapter getChapterByName(JJCategory category, String name,
+			JJProject project, JJCompany company);
 
 }

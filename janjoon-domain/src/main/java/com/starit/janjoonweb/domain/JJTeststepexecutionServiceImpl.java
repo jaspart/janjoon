@@ -88,7 +88,8 @@ public class JJTeststepexecutionServiceImpl implements
 		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
 		Predicate predicate2 = criteriaBuilder.equal(from.get("teststep"),
 				teststep);
-		Predicate predicate3 = criteriaBuilder.equal(from.join("testcaseexecution").get("build"), build);
+		Predicate predicate3 = criteriaBuilder.equal(
+				from.join("testcaseexecution").get("build"), build);
 
 		select.where(criteriaBuilder.and(predicate2, predicate3, predicate1));
 
@@ -106,17 +107,20 @@ public class JJTeststepexecutionServiceImpl implements
 			List<JJTeststepexecution> teststepexecutions) {
 		jJTeststepexecutionRepository.save(teststepexecutions);
 	}
-	
+
 	public void saveJJTeststepexecution(JJTeststepexecution JJTeststepexecution_) {
-		
-        jJTeststepexecutionRepository.save(JJTeststepexecution_);
-        JJTeststepexecution_=jJTeststepexecutionRepository.findOne(JJTeststepexecution_.getId());
-    }
-    
-    public JJTeststepexecution updateJJTeststepexecution(JJTeststepexecution JJTeststepexecution_) {
-        jJTeststepexecutionRepository.save(JJTeststepexecution_);
-        JJTeststepexecution_=jJTeststepexecutionRepository.findOne(JJTeststepexecution_.getId());
-        return JJTeststepexecution_;
-    }
+
+		jJTeststepexecutionRepository.save(JJTeststepexecution_);
+		JJTeststepexecution_ = jJTeststepexecutionRepository
+				.findOne(JJTeststepexecution_.getId());
+	}
+
+	public JJTeststepexecution updateJJTeststepexecution(
+			JJTeststepexecution JJTeststepexecution_) {
+		jJTeststepexecutionRepository.save(JJTeststepexecution_);
+		JJTeststepexecution_ = jJTeststepexecutionRepository
+				.findOne(JJTeststepexecution_.getId());
+		return JJTeststepexecution_;
+	}
 
 }

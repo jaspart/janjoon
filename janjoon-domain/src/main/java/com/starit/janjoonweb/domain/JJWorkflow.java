@@ -19,9 +19,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJWorkflowSEQ")
-@Table(indexes ={@Index(unique=false,columnList="objet")})
+@Table(indexes = { @Index(unique = false, columnList = "objet") })
 public class JJWorkflow {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;

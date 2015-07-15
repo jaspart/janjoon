@@ -26,7 +26,7 @@ public class ImageStreamer {
 
 	@Autowired
 	JJContactService jJContactService;
-	
+
 	@Autowired
 	JJCompanyService jJCompanyService;
 
@@ -50,7 +50,7 @@ public class ImageStreamer {
 
 	public void setjJProductService(JJProductService jJProductService) {
 		this.jJProductService = jJProductService;
-	}	
+	}
 
 	public StreamedContent getImageProd() throws IOException {
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -82,9 +82,9 @@ public class ImageStreamer {
 	public StreamedContent getImageProj() throws IOException {
 		FacesContext context = FacesContext.getCurrentInstance();
 
-		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {			
+		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
 			return new DefaultStreamedContent();
-		} else {			
+		} else {
 			String projId = context.getExternalContext()
 					.getRequestParameterMap().get("ProjId");
 			System.out.println("Displays ProjId : " + projId);
@@ -95,13 +95,13 @@ public class ImageStreamer {
 
 		}
 	}
-	
+
 	public StreamedContent getImageComp() throws IOException {
 		FacesContext context = FacesContext.getCurrentInstance();
 
-		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {			
+		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
 			return new DefaultStreamedContent();
-		} else {			
+		} else {
 			String CompId = context.getExternalContext()
 					.getRequestParameterMap().get("CompId");
 			System.out.println("Displays CompId : " + CompId);
@@ -137,11 +137,14 @@ public class ImageStreamer {
 					if (contact.getPicture() != null) {
 						return new DefaultStreamedContent(
 								new ByteArrayInputStream(contact.getPicture()));
-					}else {
-						
-						InputStream stream = FacesContext.getCurrentInstance()
-								.getExternalContext().getResourceAsStream("/resources/images/default-user-2.jpg");
-						return new DefaultStreamedContent(stream, "image/jpg");					
+					} else {
+
+						InputStream stream = FacesContext
+								.getCurrentInstance()
+								.getExternalContext()
+								.getResourceAsStream(
+										"/resources/images/default-user-2.jpg");
+						return new DefaultStreamedContent(stream, "image/jpg");
 
 					}
 				} else {
@@ -155,9 +158,8 @@ public class ImageStreamer {
 
 		}
 	}
-	
-	public String getCkEditorToolBar()
-	{
+
+	public String getCkEditorToolBar() {
 		return "[['Source','Bold','Italic','Underline','Strike','NumberedList',"
 				+ "'BulletedList','Image','TextColor','BGColor','Undo','Table','-', 'RemoveFormat']]";
 	}

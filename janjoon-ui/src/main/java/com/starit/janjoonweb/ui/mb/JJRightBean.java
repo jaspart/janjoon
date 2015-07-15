@@ -29,6 +29,7 @@ public class JJRightBean {
 
 	private boolean checkRight;
 	private boolean checkRights;
+	private boolean oldCheckRights;
 	private boolean disabledCheckRight;
 
 	public JJRight getRightAdmin() {
@@ -132,9 +133,11 @@ public class JJRightBean {
 
 	public void addRight() {
 
-		if(((LoginBean)LoginBean.findBean("loginBean")).getAuthorisationService().isAdminCompany()||
-				!rightAdmin.getX() || !(object.equalsIgnoreCase("*") || object.equalsIgnoreCase("company")))
-		{
+		if (((LoginBean) LoginBean.findBean("loginBean"))
+				.getAuthorisationService().isAdminCompany()
+				|| !rightAdmin.getX()
+				|| !(object.equalsIgnoreCase("*") || object
+						.equalsIgnoreCase("company"))) {
 			if (rightDataModel == null) {
 				rightDataModel = new ArrayList<RightDataModel>();
 			}
@@ -144,53 +147,49 @@ public class JJRightBean {
 
 			rightDataModel.add(new RightDataModel(rightAdmin, true, false));
 			newRight();
-		}else if(!((LoginBean)LoginBean.findBean("loginBean")).getAuthorisationService().isAdminCompany())
-		{
-			FacesMessage facesMessage =new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not Authorized", null);
+		} else if (!((LoginBean) LoginBean.findBean("loginBean"))
+				.getAuthorisationService().isAdminCompany()) {
+			FacesMessage facesMessage = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "Not Authorized", null);
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
-		
+
 	}
 
 	public void fillRightTable(JJProfile profile) {
+
 		rightDataModel = new ArrayList<RightDataModel>();
 
-		if (profile == null) {
-			System.out.println("null");
-		} else {
-			System.out.println("   sdfsdfsd " + profile.getId());
-		}
-
 		List<JJRight> rights = jJRightService.getRights(profile, true);
-
-		System.out.println("tttt " + rights.size());
 
 		for (JJRight right : rights) {
 			rightDataModel.add(new RightDataModel(right, true, true));
 		}
 
 		checkRights = true;
+		oldCheckRights = true;
 	}
 
-	public void checkRights() {
+	public void checkRightsListener() {
 
+		if (checkRights == oldCheckRights)
+			checkRights = !checkRights;
 		for (RightDataModel rightModel : rightDataModel) {
 			rightModel.setCheckRight(checkRights);
 		}
 
+		oldCheckRights = checkRights;
 	}
-	
-	public void saveJJRight(JJRight b)
-	{
+
+	public void saveJJRight(JJRight b) {
 		jJRightService.saveJJRight(b);
 	}
-	
-	public void updateJJRight(JJRight b)
-	{
+
+	public void updateJJRight(JJRight b) {
 		jJRightService.updateJJRight(b);
 	}
 
-	public void checkRight() {
+	public void checkRightListener() {
 
 		boolean checkAll = true;
 		for (RightDataModel rightModel : rightDataModel) {
@@ -202,6 +201,7 @@ public class JJRightBean {
 
 		}
 		checkRights = checkAll;
+		oldCheckRights = checkAll;
 	}
 
 	public class RightDataModel {

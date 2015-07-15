@@ -42,7 +42,7 @@ public class JJProjectBean {
 	private List<JJContact> projectManagerList;
 	private String message;
 	private boolean projectState;
-	
+
 	private List<JJProject> deletedProject;
 	private List<JJProject> restoredProject;
 
@@ -63,8 +63,8 @@ public class JJProjectBean {
 		this.projectState = projectState;
 	}
 
-	public JJProject getProject() {	
-			
+	public JJProject getProject() {
+
 		return project;
 
 	}
@@ -159,7 +159,7 @@ public class JJProjectBean {
 	}
 
 	public List<JJProject> getRestoredProject() {
-		if(restoredProject == null)
+		if (restoredProject == null)
 			restoredProject = new ArrayList<JJProject>();
 		return restoredProject;
 	}
@@ -167,18 +167,16 @@ public class JJProjectBean {
 	public void setRestoredProject(List<JJProject> restoredProject) {
 		this.restoredProject = restoredProject;
 	}
-	
-	public void restoreProjects()
-	{
-		for(JJProject con:restoredProject)
-		{
+
+	public void restoreProjects() {
+		for (JJProject con : restoredProject) {
 			con.setEnabled(true);
 			updateJJProject(con);
 		}
-		
+
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_restored",
-				FacesMessage.SEVERITY_INFO, "Project");		
+				"message_successfully_restored", FacesMessage.SEVERITY_INFO,
+				"Project");
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		deletedProject = null;
@@ -292,16 +290,17 @@ public class JJProjectBean {
 		projectManagerList = null;
 
 		projectState = true;
-		
+
 		deletedProject = null;
 		restoredProject = null;
 	}
 
 	public void saveJJProject(JJProject b) {
-		
+
 		b.setCreationDate(new Date());
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
-		b.setCreatedBy(contact);		
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
+		b.setCreatedBy(contact);
 		jJProjectService.saveJJProject(b);
 	}
 

@@ -23,7 +23,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity(sequenceName = "JJTestcaseexecutionSEQ")
 public class JJTestcaseexecution {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;
@@ -51,7 +51,7 @@ public class JJTestcaseexecution {
 
 	@ManyToOne
 	private JJTestcase testcase;
-	
+
 	@ManyToOne
 	private JJBuild build;
 

@@ -46,7 +46,7 @@ public class UsageChecker {
 	 * the jaxp schema language test.
 	 */
 	static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
-	public static Logger logger= Logger.getLogger("UsageChecker");
+	public static Logger logger = Logger.getLogger("UsageChecker");
 
 	/**
 	 * The Constant Field <code>W3C_XML_SCHEMA</code> is used to specify the w3
@@ -84,13 +84,15 @@ public class UsageChecker {
 
 			try {
 				final KeyStore keyStore = KeyStore.getInstance("JKS");
-				iStream = new FileInputStream(workingdirectory + File.separator + keystorePath);
+				iStream = new FileInputStream(workingdirectory + File.separator
+						+ keystorePath);
 				keyStore.load(iStream, keystorpass.toCharArray());
 
 				usedCert = (X509Certificate) keyStore.getCertificate(alias);
 			} catch (final IOException | KeyStoreException
 					| NoSuchAlgorithmException | CertificateException e) {
-				throw new IOException("Could not find certificate with alias: " + alias);
+				throw new IOException("Could not find certificate with alias: "
+						+ alias);
 			} finally {
 				if (iStream != null)
 					closeFile(iStream);
@@ -100,14 +102,17 @@ public class UsageChecker {
 			org.apache.xml.security.Init.init();
 
 			final NodeList nodeList = document.getDocumentElement()
-				.getElementsByTagNameNS(javax.xml.crypto.dsig.XMLSignature.XMLNS, "Signature");
+					.getElementsByTagNameNS(
+							javax.xml.crypto.dsig.XMLSignature.XMLNS,
+							"Signature");
 
 			final Element signatureElement = (Element) nodeList.item(0);
 			if (signatureElement != null) {
-				final org.apache.xml.security.signature.XMLSignature signer = 
-					new org.apache.xml.security.signature.XMLSignature(signatureElement, "");
+				final org.apache.xml.security.signature.XMLSignature signer = new org.apache.xml.security.signature.XMLSignature(
+						signatureElement, "");
 
-				final org.apache.xml.security.keys.KeyInfo keyInfo = signer.getKeyInfo();
+				final org.apache.xml.security.keys.KeyInfo keyInfo = signer
+						.getKeyInfo();
 
 				if (usedCert != null) {
 					try {
@@ -117,9 +122,11 @@ public class UsageChecker {
 					}
 				} else {
 					if (keyInfo.containsKeyValue()) {
-						result = signer.checkSignatureValue(keyInfo.getPublicKey());
+						result = signer.checkSignatureValue(keyInfo
+								.getPublicKey());
 					} else if (keyInfo.containsX509Data()) {
-						result = signer.checkSignatureValue(keyInfo.getX509Certificate());
+						result = signer.checkSignatureValue(keyInfo
+								.getX509Certificate());
 					} else {
 						throw new Exception("Verification key is not found");
 					}
@@ -136,14 +143,16 @@ public class UsageChecker {
 
 	/**
 	 * Method to close the file.
-	 * @param iStream : specify the xml request path value.
+	 * 
+	 * @param iStream
+	 *            : specify the xml request path value.
 	 */
 	public static void closeFile(InputStream iStream) {
 		if (iStream != null) {
 			try {
 				iStream.close();
 			} catch (IOException e) {
-				logger.error("Error to close file, " + e.getMessage());				
+				logger.error("Error to close file, " + e.getMessage());
 			}
 		}
 	}
@@ -161,7 +170,8 @@ public class UsageChecker {
 			SAXException, ParserConfigurationException {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
-		Document doc = dbf.newDocumentBuilder().parse(new FileInputStream(input));
+		Document doc = dbf.newDocumentBuilder().parse(
+				new FileInputStream(input));
 		return doc;
 	}
 
@@ -177,18 +187,20 @@ public class UsageChecker {
 	public static Date getExpiryDate() {
 		Date date = null;
 		Element root = license.getDocumentElement();
-		String expiryDate = root.getElementsByTagName("expires").item(0).getTextContent();
+		String expiryDate = root.getElementsByTagName("expires").item(0)
+				.getTextContent();
 		try {
-			date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH).parse(expiryDate);
+			date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
+					.parse(expiryDate);
 		} catch (ParseException e) {
-			logger.error("Exception : " + e);			
+			logger.error("Exception : " + e);
 		}
 		return date;
 	}
 
 	public static boolean checkExpiryDate() {
-		boolean result= getExpiryDate().after(new Date());
-		if(result) {
+		boolean result = getExpiryDate().after(new Date());
+		if (result) {
 			logger.info("Licence not expired");
 		} else {
 			logger.error("licence expired");
@@ -198,7 +210,8 @@ public class UsageChecker {
 
 	public static String getStringData(String data) {
 		Element root = license.getDocumentElement();
-		String result = root.getElementsByTagName(data).item(0).getTextContent();
+		String result = root.getElementsByTagName(data).item(0)
+				.getTextContent();
 		return result;
 	}
 
@@ -220,7 +233,7 @@ public class UsageChecker {
 		try {
 			license = readFile(workingdirectory + File.separator + file);
 			result = UsageChecker.validate(license);
-			if(result) {
+			if (result) {
 				logger.info("Licence validated");
 			} else {
 				logger.error("licence not validated");

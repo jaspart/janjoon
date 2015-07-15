@@ -408,7 +408,8 @@ public class RequirementBean {
 							jJVersionBean.getVersionList();
 							jJVersionBean.setVersion(requirement
 									.getVersioning());
-							session.setAttribute("jJStatusBean", new JJStatusBean());
+							session.setAttribute("jJStatusBean",
+									new JJStatusBean());
 						}
 					}
 				}

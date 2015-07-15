@@ -96,7 +96,7 @@ public class JJTeststepBean {
 
 		bug.setStatus(jJStatusService.getOneStatus("FIXED", "Bug", true));
 		jJBugBean.updateJJBug(bug);
-		
+
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated", "Bug");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -128,7 +128,7 @@ public class JJTeststepBean {
 			teststep.setTestcase(tc);
 			// tc.getTeststeps().add(teststep);
 
-			teststep.setName("Teststep for "+tc.getName());
+			teststep.setName("Teststep for " + tc.getName());
 
 			teststep.setDescription("This is " + teststep.getActionstep() + " "
 					+ teststep.getResultstep() + " description");

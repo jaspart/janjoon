@@ -15,19 +15,18 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 @RooSerializable
 @RooJsfManagedBean(entity = JJImportance.class, beanName = "jJImportanceBean")
 public class JJImportanceBean {
-	
-	public void saveJJImportance(JJImportance b)
-	{
+
+	public void saveJJImportance(JJImportance b) {
 		b.setCreationDate(new Date());
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		b.setCreatedBy(contact);
 		jJImportanceService.saveJJImportance(b);
 	}
-	
-	public void updateJJImportance(JJImportance b)
-	{
-		JJContact contact=((LoginBean) LoginBean.findBean("loginBean")).getContact();
+
+	public void updateJJImportance(JJImportance b) {
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJImportanceService.updateJJImportance(b);

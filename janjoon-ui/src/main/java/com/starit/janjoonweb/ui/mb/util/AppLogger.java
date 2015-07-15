@@ -158,8 +158,8 @@ public class AppLogger {
 			} else if (object instanceof JJBuild) {
 				JJBuild build = (JJBuild) object;
 				if (build.getId() != null && build.getEnabled()) {
-					JJBuild oldTestcase = jJBuildService
-							.findJJBuild(build.getId());
+					JJBuild oldTestcase = jJBuildService.findJJBuild(build
+							.getId());
 					workFlows = jJWorkflowService.getObjectWorkFlows("build",
 							oldTestcase.getStatus(), build.getStatus(), null,
 							true);

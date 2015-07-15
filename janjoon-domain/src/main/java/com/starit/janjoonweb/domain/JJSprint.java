@@ -28,9 +28,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJSprintSEQ")
-@Table(indexes ={@Index(unique=false,columnList="project")})
+@Table(indexes = { @Index(unique = false, columnList = "project") })
 public class JJSprint {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;
@@ -70,7 +70,7 @@ public class JJSprint {
 	private JJProject project;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<JJBuild> builds = new HashSet<JJBuild>();	
+	private Set<JJBuild> builds = new HashSet<JJBuild>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<JJTask> obstacles = new HashSet<JJTask>();
@@ -87,8 +87,8 @@ public class JJSprint {
 		return (object instanceof JJSprint) && (getId() != null) ? getId()
 				.equals(((JJSprint) object).getId()) : (object == this);
 	}
-	
-	public Set<JJContact> getContacts() {		 
-	       return this.contacts;
-	 }
+
+	public Set<JJContact> getContacts() {
+		return this.contacts;
+	}
 }

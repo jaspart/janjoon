@@ -23,7 +23,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity(sequenceName = "JJCriticitySEQ")
 public class JJCriticity {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;

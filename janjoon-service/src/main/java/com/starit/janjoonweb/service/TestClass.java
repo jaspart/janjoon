@@ -32,12 +32,13 @@ public class TestClass {
 	// public static final String PATH_NAME =
 	// "/175/api/xml?wrapper=changes&xpath=//changeSet//msg";
 
-	// public static final String PATH_AGE = "/UserInfoService/age/";	
+	// public static final String PATH_AGE = "/UserInfoService/age/";
 
-	public static void main(String[] args) throws NoSuchAlgorithmException, KeyManagementException {
+	public static void main(String[] args) throws NoSuchAlgorithmException,
+			KeyManagementException {
 
 		InputStream is = null;
-		try {			
+		try {
 			@SuppressWarnings("resource")
 			HttpClient httpClient = new DefaultHttpClient();
 			// httpClient.
@@ -73,8 +74,8 @@ public class TestClass {
 				sb.append(line + "\n");
 				System.out.println(line);
 			}
-			
-			//BuildWS.getCommitedTasks(sb.substring(0));
+
+			// BuildWS.getCommitedTasks(sb.substring(0));
 			is.close();
 		} catch (Exception e) {
 			System.err.println("Buffer Error" + "Error converting result "

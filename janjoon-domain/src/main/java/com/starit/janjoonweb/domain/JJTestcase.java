@@ -26,7 +26,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJTestcaseSEQ")
-@Table(indexes ={@Index(unique=true,columnList="requirement")})
+@Table(indexes = { @Index(unique = true, columnList = "requirement") })
 public class JJTestcase {
 
 	@NotNull
@@ -59,7 +59,7 @@ public class JJTestcase {
 	@NotNull
 	@ManyToOne
 	private JJRequirement requirement;
-	
+
 	private Boolean allBuilds;
 
 	@ManyToOne
@@ -91,8 +91,8 @@ public class JJTestcase {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
 	private Set<JJMessage> messages = new HashSet<JJMessage>();
-	
-	@ManyToMany(mappedBy="testcases",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+	@ManyToMany(mappedBy = "testcases", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<JJContact> contacts = new HashSet<JJContact>();
 
 	@Override

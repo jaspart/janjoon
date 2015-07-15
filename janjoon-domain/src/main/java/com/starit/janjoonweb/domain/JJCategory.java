@@ -25,7 +25,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity(sequenceName = "JJCategorySEQ")
 public class JJCategory {
-	
+
 	@NotNull
 	@Size(max = 100)
 	private String name;
@@ -52,8 +52,8 @@ public class JJCategory {
 	private Boolean enabled;
 
 	private Integer stage;
-	
-	@ManyToMany(mappedBy="categories",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+	@ManyToMany(mappedBy = "categories", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<JJContact> contacts = new HashSet<JJContact>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "category")

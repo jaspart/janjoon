@@ -17,10 +17,10 @@ public class LazyWorkFlowDataTable extends LazyDataModel<JJWorkflow> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	JJWorkflowService workFlowService;	
+	JJWorkflowService workFlowService;
 
 	public LazyWorkFlowDataTable(JJWorkflowService workFlowService) {
-		
+
 		this.workFlowService = workFlowService;
 	}
 
@@ -36,11 +36,12 @@ public class LazyWorkFlowDataTable extends LazyDataModel<JJWorkflow> {
 	}
 
 	@Override
-	public List<JJWorkflow> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {
+	public List<JJWorkflow> load(int first, int pageSize, String sortField,
+			SortOrder sortOrder, Map<String, Object> filters) {
 
 		List<JJWorkflow> data = new ArrayList<JJWorkflow>();
-		MutableInt size=new MutableInt(0);
-		data = workFlowService.load(size,first, pageSize, null, null, true);
+		MutableInt size = new MutableInt(0);
+		data = workFlowService.load(size, first, pageSize, null, null, true);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

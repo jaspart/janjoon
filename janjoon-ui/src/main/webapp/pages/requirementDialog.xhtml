@@ -218,20 +218,12 @@
 						<p:dataTable id="testCaseDataTable" var="testCaseModel"
 							selection="#{jJRequirementBean.reqSelectedtestCases}"
 							rowKey="#{testCaseModel.id}"
-							emptyMessage="That Requirement have no Testcase"
-							scrollable="true" style="width:350px;" scrollHeight="200"
+							emptyMessage="#{messages.label_notRecordFound}" scrollable="true"
+							style="width:350px;" scrollHeight="200"
 							value="#{jJRequirementBean.reqtestCases}">
 							<p:column selectionMode="multiple"
 								style="width:30%;text-align:center" />
-							<p:column style="width:70%">
-								<f:facet name="header">
-									<p:row>
-										<p:column>
-											<h:outputText value="TestCases :" />
-										</p:column>
-									</p:row>
-								</f:facet>
-								<!-- 							<h:outputText value="#{testCaseModel.name}" /> -->
+							<p:column style="width:70%" headerText="TestCases:">
 								<p:commandLink target="_blank" value="#{testCaseModel.name}"
 									action="#{jJTestcaseBean.testCaseInfo(testCaseModel.id)}"
 									ajax="false" immediate="true">

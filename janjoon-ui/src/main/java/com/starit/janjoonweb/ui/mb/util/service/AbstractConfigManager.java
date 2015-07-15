@@ -17,15 +17,15 @@ public abstract class AbstractConfigManager implements Serializable {
 	protected String url;
 	protected String path;
 	protected String login;
-	protected String password;	
+	protected String password;
 
 	public AbstractConfigManager(String type, String url, String path,
-			String login,String password) {
+			String login, String password) {
 		this.type = type;
 		this.url = url;
 		this.path = path;
-		this.login=login;
-		this.password=password;
+		this.login = login;
+		this.password = password;
 
 	}
 
@@ -52,7 +52,7 @@ public abstract class AbstractConfigManager implements Serializable {
 
 	public void setPath(String path) {
 		this.path = path;
-	}	
+	}
 
 	public String getLogin() {
 		return login;

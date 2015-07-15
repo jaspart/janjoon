@@ -79,13 +79,13 @@ public class JJSprintBean {
 	private List<JJCategory> categoryList;
 	private List<JJContact> contacts;
 	private HtmlPanelGrid createTaskPanelGrid;
-	private JJCategory category;	
+	private JJCategory category;
 	private JJBug bug;
 	private JJProject project;
-	private List<SprintUtil> sprintList;	
+	private List<SprintUtil> sprintList;
 	private SprintUtil sprintUtil;
-	private JJTask task;	
-	//private boolean update = true;
+	private JJTask task;
+	// private boolean update = true;
 	private int activeTabSprintIndex;
 	private int activeTabGantIndex;
 
@@ -168,7 +168,7 @@ public class JJSprintBean {
 	public void setCategory(JJCategory category) {
 		this.category = category;
 	}
-	
+
 	public JJBug getBug() {
 		return bug;
 	}
@@ -176,7 +176,7 @@ public class JJSprintBean {
 	public void setBug(JJBug bug) {
 		this.bug = bug;
 	}
-	
+
 	public JJProject getProject() {
 		return project;
 	}
@@ -206,7 +206,7 @@ public class JJSprintBean {
 	}
 
 	public void loadingsprintPage(ComponentSystemEvent e) {
-		category = null;	
+		category = null;
 	}
 
 	public List<SprintUtil> getSprintList() {
@@ -277,13 +277,13 @@ public class JJSprintBean {
 		this.contacts = contacts;
 	}
 
-//	public boolean isUpdate() {
-//		return update;
-//	}
-//
-//	public void setUpdate(boolean update) {
-//		this.update = update;
-//	}
+	// public boolean isUpdate() {
+	// return update;
+	// }
+	//
+	// public void setUpdate(boolean update) {
+	// this.update = update;
+	// }
 
 	public void attrListener(ActionEvent event) {
 
@@ -323,7 +323,7 @@ public class JJSprintBean {
 	//
 	// }
 
-	public void onCellEditTask(CellEditEvent event) {	
+	public void onCellEditTask(CellEditEvent event) {
 
 		DataTable dataTable = (DataTable) event.getSource();
 		JJTask t = (JJTask) dataTable.getRowData();
@@ -418,12 +418,14 @@ public class JJSprintBean {
 			} else
 				((JJTaskBean) LoginBean.findBean("jJTaskBean"))
 						.setMode("planning");
-//			if (update && activeTabGantIndex == PlanningConfiguration.getSrumIndex()) {
-//				RequestContext.getCurrentInstance()
-//						.execute("updateTabSprint()");
-//				update = false;
-//			}else if(activeTabGantIndex == PlanningConfiguration.getGanttIndex())
-//				update = true;
+			// if (update && activeTabGantIndex ==
+			// PlanningConfiguration.getSrumIndex()) {
+			// RequestContext.getCurrentInstance()
+			// .execute("updateTabSprint()");
+			// update = false;
+			// }else if(activeTabGantIndex ==
+			// PlanningConfiguration.getGanttIndex())
+			// update = true;
 			System.err.println("###### ACtive activeTabGantIndex: "
 					+ activeTabGantIndex);
 
@@ -825,7 +827,8 @@ public class JJSprintBean {
 		JJTaskBean jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
 		if (jJTaskBean == null)
 			jJTaskBean = new JJTaskBean();
-		jJTaskBean.updateView(jJTaskService.findJJTask(task.getId()), JJTaskBean.DELETE_OPERATION);
+		jJTaskBean.updateView(jJTaskService.findJJTask(task.getId()),
+				JJTaskBean.DELETE_OPERATION);
 		// reqList = null;
 		task = null;
 		// resetJJTaskBean();

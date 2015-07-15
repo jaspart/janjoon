@@ -9,7 +9,7 @@
 		<p:panel id="contactPanel" style="width:800px" columns="1"
 			cellpadding="6">
 			<p:dataTable id="contactDataTable" var="contact" lazy="true"
-				paginatorPosition="bottom"
+				paginatorPosition="bottom" emptyMessage="#{messages.label_notRecordFound}"
 				value="#{jJContactBean.contactsLazyModel}" paginator="true"
 				rows="15" rowKey="#{contact.id}">
 				<f:facet name="header">#{messages.admin_contact_table_title}</f:facet>
@@ -89,7 +89,8 @@
 					</f:facet>
 					<p:dataTable id="restoreContactTable" var="contact" scrollable="true"
 						value="#{jJContactBean.deletedContact}" rowKey="#{contact.id}"
-						selection="#{jJContactBean.restoredContact}" scrollHeight="400">
+						selection="#{jJContactBean.restoredContact}" scrollHeight="400"
+						emptyMessage="#{messages.label_notRecordFound}" >
 						
 						<p:ajax event="rowSelectCheckbox" update="tabview:restoreContactForm:restoreButton" />
 					<p:ajax event="rowUnselectCheckbox"
@@ -325,7 +326,8 @@
 					<p:dataTable id="permissionDataTable" var="permissionModel"
 						scrollable="true" style="width:500px;" scrollHeight="200"
 						value="#{jJPermissionBean.permissionDataModel}"
-						rowStyleClass="#{permissionModel.old ? 'old' : null}">
+						rowStyleClass="#{permissionModel.old ? 'old' : null}"
+						emptyMessage="#{messages.label_notRecordFound}" >
 						<f:facet name="header">
 							<h:outputText value="#{messages.admin_contact_new_table_title} " />
 						</f:facet>

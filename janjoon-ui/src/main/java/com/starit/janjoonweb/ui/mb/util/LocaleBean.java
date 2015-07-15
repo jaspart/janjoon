@@ -18,10 +18,10 @@ public class LocaleBean {
 
 	@PostConstruct
 	public void init() {
-		
+
 		locale = FacesContext.getCurrentInstance().getExternalContext()
 				.getRequestLocale();
-		
+
 	}
 
 	public Locale getLocale() {

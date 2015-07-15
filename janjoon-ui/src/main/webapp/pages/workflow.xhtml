@@ -12,7 +12,7 @@
 			cellpadding="6">
 			<p:dataTable id="dataTable" var="workflow" lazy="true"
 				paginatorPosition="bottom" value="#{jJWorkflowBean.workflowList}"
-				paginator="true" rows="10"
+				paginator="true" rows="10" emptyMessage="#{messages.label_notRecordFound}"
 				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,15">
 				<f:facet name="header">  

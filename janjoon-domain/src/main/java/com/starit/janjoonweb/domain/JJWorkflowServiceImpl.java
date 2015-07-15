@@ -111,10 +111,10 @@ public class JJWorkflowServiceImpl implements JJWorkflowService {
 		}
 
 		if (action != null) {
-			
-				predicates.add(criteriaBuilder.equal(criteriaBuilder.lower(from
-						.<String> get("actionWorkflow")), action
-						.toLowerCase()));
+
+			predicates.add(criteriaBuilder.equal(
+					criteriaBuilder.lower(from.<String> get("actionWorkflow")),
+					action.toLowerCase()));
 
 		}
 
@@ -129,13 +129,13 @@ public class JJWorkflowServiceImpl implements JJWorkflowService {
 		TypedQuery<JJWorkflow> result = entityManager.createQuery(select);
 		result.setFirstResult(first);
 		result.setMaxResults(pageSize);
-		
+
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJWorkflow.class)));
 		entityManager.createQuery(cq);
 		cq.where(predicates.toArray(new Predicate[] {}));
 		size.setValue(entityManager.createQuery(cq).getSingleResult());
-		
+
 		return result.getResultList();
 	}
 }

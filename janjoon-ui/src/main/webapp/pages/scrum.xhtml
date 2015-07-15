@@ -28,19 +28,19 @@
 					style="width:50% !important;min-width:200px !important;float:left;height:331px !important;">
 					<f:facet name="header">
 						<p:row>
-							<p:column colspan="5">Sprint Information</p:column>
+							<p:column colspan="5">#{messages.project_scrum_sprint_info}</p:column>
 						</p:row>
 					</f:facet>
 					<p:row>
 						<p:column style="width:10% important; min-width:200px;">
-							<p:outputLabel for="sprintName" value="Sprint Name:" />
+							<p:outputLabel for="sprintName" value="#{messages.project_scrum_sprint_name}:" />
 							<p:inputText id="sprintName" value="#{jjsprint.sprint.name}"
-								required="true" requiredMessage="Sprint name is empty">
+								required="true" requiredMessage="#{messages.project_scrum_sprint_name_required}">
 								<f:validateLength maximum="100" />
 							</p:inputText>
 						</p:column>
 						<p:column style="width:10% important; min-width:200px;">
-							<p:outputLabel for="sprintcts" value="Sprint Contacts:" />
+							<p:outputLabel for="sprintcts" value="#{messages.project_scrum_sprint_contacts}:" />
 							<p:selectManyMenu id="sprintcts" value="#{jjsprint.contacts}"
 								scrollHeight="100"
 								converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
@@ -53,7 +53,7 @@
 					</p:row>
 					<p:row>
 						<p:column style="width:10% important; min-width:200px;">
-							<p:outputLabel for="sprintSD" value="Start Date:" />
+							<p:outputLabel for="sprintSD" value="#{messages.project_scrum_new_start_label}" />
 							<p:calendar id="sprintSD" navigator="true" effect="slideDown"
 								pattern="dd/MM/yyyy" required="true"
 								binding="#{startDateEdition}"
@@ -63,7 +63,7 @@
 							</p:calendar>
 						</p:column>
 						<p:column style="width:10% important; min-width:200px;">
-							<p:outputLabel for="sprintED" value="end Date:" />
+							<p:outputLabel for="sprintED" value="#{messages.project_scrum_new_end_label}" />
 							<p:calendar id="sprintED" navigator="true" effect="slideDown"
 								pattern="dd/MM/yyyy" required="true"
 								value="#{jjsprint.sprint.endDate}">
@@ -76,24 +76,24 @@
 					</p:row>
 					<p:row>
 						<p:column style="width:10% important; min-width:200px;">
-							<p:outputLabel for="sprintPS" value="Price Sold:" />
+							<p:outputLabel for="sprintPS" value="#{messages.project_scrum_price_sold}:" />
 							<p:spinner id="sprintPS" value="#{jjsprint.priseSold}" prefix="$"
 								min="0" readonly="true" />
 						</p:column>
 						<p:column style="width:10% important; min-width:200px;">
-							<p:outputLabel for="sprintPR" value="Price Real:" />
+							<p:outputLabel for="sprintPR" value="#{messages.project_scrum_price_real}:" />
 							<p:spinner id="sprintPR" value="#{jjsprint.priseReal}" prefix="$"
 								min="0" readonly="true" />
 						</p:column>
 					</p:row>
 					<p:row>
 						<p:column style="width:10% important; min-width:200px;">
-							<p:outputLabel for="sprintW" value="Total:" />
+							<p:outputLabel for="sprintW" value="#{messages.project_scrum_total}:" />
 							<p:inputText id="sprintW" readonly="true"
 								value="#{jjsprint.workload}" />
 						</p:column>
 						<p:column style="width:10% important; min-width:200px;">
-							<p:outputLabel for="sprintC" value="Consumed:" />
+							<p:outputLabel for="sprintC" value="#{messages.project_scrum_consumed}:" />
 							<p:inputText id="sprintC" readonly="true"
 								value="#{jjsprint.consumed}" />
 						</p:column>
@@ -141,7 +141,7 @@
 					style="width:50% !important;min-width:200px !important;">
 					<f:facet name="header">
 						<p:row>
-							<p:column colspan="5">Sprint Chart</p:column>
+							<p:column colspan="5">#{messages.project_scrum_sprint_chart}</p:column>
 						</p:row>
 					</f:facet>
 					<p:row>
@@ -160,14 +160,14 @@
 				<p:panelGrid style="width:100% !important;">
 					<f:facet name="header">
 						<p:row>
-							<p:column colspan="6">Sprint Tasks</p:column>
+							<p:column colspan="6">#{messages.project_scrum_sprint_tasks}</p:column>
 						</p:row>
 					</f:facet>
 					<p:row>
 						<p:column style="width: 33.33%;">
-							<p:fieldset legend="Todo" id="todoFieldset">
+							<p:fieldset legend="#{messages.project_scrum_todo}" id="todoFieldset">
 								<p:dataTable scrollable="true" scrollHeight="250" id="todo"
-									var="todo" value="#{jjsprint.todoTask}"
+									var="todo" value="#{jjsprint.todoTask}" emptyMessage="#{messages.label_notRecordFound}"
 									styleClass="planning-dataTable" rowKey="#{todo.id}"
 									rendered="#{not empty jjsprint.todoTask}">
 
@@ -226,14 +226,14 @@
 							</p:fieldset>
 						</p:column>
 						<p:column style="width: 33.33%;">
-							<p:fieldset legend="In Progress" id="progFieldset">
+							<p:fieldset legend="#{messages.project_scrum_inProgress}" id="progFieldset">
 								<p:outputPanel id="progdropArea">
 									<h:outputText value="!!!Drop here!!!"
 										rendered="#{empty jjsprint.progressTask}"
 										style="font-size:24px;" />
 									<p:dataTable scrollable="true" scrollHeight="250" id="prog"
 										editable="true" editMode="cell" var="prog"
-										styleClass="planning-dataTable"
+										styleClass="planning-dataTable" emptyMessage="#{messages.label_notRecordFound}"
 										value="#{jjsprint.progressTask}" rowKey="#{prog.id}"
 										rendered="#{not empty jjsprint.progressTask}">
 										<p:ajax event="cellEdit"
@@ -294,11 +294,11 @@
 							</p:fieldset>
 						</p:column>
 						<p:column style="width: 33.33%;">
-							<p:fieldset legend="Done Tasks" id="doneFieldset">
+							<p:fieldset legend="#{messages.project_scrum_done}" id="doneFieldset">
 								<p:outputPanel id="donedropArea">
 									<h:outputText value="!!!Drop here!!!"
 										rendered="#{empty jjsprint.doneTask}" style="font-size:24px;" />
-									<p:dataTable id="done" styleClass="planning-dataTable"
+									<p:dataTable id="done" styleClass="planning-dataTable" emptyMessage="#{messages.label_notRecordFound}"
 										var="done" value="#{jjsprint.doneTask}" rowKey="#{done.id}"
 										rendered="#{not empty jjsprint.doneTask}" scrollable="true"
 										scrollHeight="250">

@@ -19,7 +19,7 @@ public class BugDataTableOptions {
 	private int first;
 	private List<SortMeta> multiSortMeta;
 	private Map<String, Object> filters;
-	//private DataTable dataTable;
+	// private DataTable dataTable;
 	private String importance;
 	private String status;
 	private String criticity;
@@ -48,21 +48,21 @@ public class BugDataTableOptions {
 		this.criticity = criticity;
 	}
 
-//	public DataTable getDataTable() {
-//		return dataTable;
-//	}
-//
-//	public void setDataTable(DataTable dataTable) {
-//		this.dataTable = dataTable;
-//	}
+	// public DataTable getDataTable() {
+	// return dataTable;
+	// }
+	//
+	// public void setDataTable(DataTable dataTable) {
+	// this.dataTable = dataTable;
+	// }
 
 	public BugDataTableOptions() {
 
-//		if (dataTable != null) {
-//			this.first = dataTable.getFirst();
-//			this.multiSortMeta = dataTable.getMultiSortMeta();
-//			this.filters = dataTable.getFilters();
-//		}
+		// if (dataTable != null) {
+		// this.first = dataTable.getFirst();
+		// this.multiSortMeta = dataTable.getMultiSortMeta();
+		// this.filters = dataTable.getFilters();
+		// }
 
 	}
 
@@ -95,7 +95,7 @@ public class BugDataTableOptions {
 	}
 
 	public void dataTableInit(DataTable dataTable) {
-		
+
 		dataTable.setFirst(first);
 		dataTable.setFilters(filters);
 		dataTable.setMultiSortMeta(multiSortMeta);

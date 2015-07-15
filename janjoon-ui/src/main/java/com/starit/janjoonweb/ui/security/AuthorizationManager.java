@@ -69,12 +69,12 @@ public class AuthorizationManager implements Serializable {
 	public AuthorizationManager() {
 
 	}
-	
+
 	public boolean isAuthorized(JJContact contact, JJProject project,
 			JJProduct product, String objet, JJCategory category, Boolean r,
-			Boolean w, Boolean x)
-	{
-		return jJPermissionService.isAuthorized(contact, project, product,objet, category, r, w, x);
+			Boolean w, Boolean x) {
+		return jJPermissionService.isAuthorized(contact, project, product,
+				objet, category, r, w, x);
 	}
 
 	public boolean getAuthorization(String page, JJProject project,

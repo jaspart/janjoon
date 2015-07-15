@@ -502,17 +502,19 @@ public class JJBugBean {
 
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('bugTestDialogWidget').hide()");
-		
-		jJTestcaseBean.runTestcase(jJTestcaseexecutionBean, jJTeststepexecutionBean);
-		
-		jJTeststepexecutionBean.setActiveIndex(jJTeststepexecutionBean.getElements().size());
 
-//		if (jJTeststepexecutionBean.getDisabledTestcase()) {
-//			jJTeststepexecutionBean.nextTab();
-//			jJTeststepexecutionBean.onTabChange();
-//		} else {
-//			jJTeststepexecutionBean.changeTestcaseStatus();
-//		}
+		jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,
+				jJTeststepexecutionBean);
+
+		jJTeststepexecutionBean.setActiveIndex(jJTeststepexecutionBean
+				.getElements().size());
+
+		// if (jJTeststepexecutionBean.getDisabledTestcase()) {
+		// jJTeststepexecutionBean.nextTab();
+		// jJTeststepexecutionBean.onTabChange();
+		// } else {
+		// jJTeststepexecutionBean.changeTestcaseStatus();
+		// }
 
 	}
 
@@ -718,7 +720,7 @@ public class JJBugBean {
 					jJVersionBean.getVersionList();
 					jJVersionBean.setVersion(viewBug.getVersioning());
 
-					session.setAttribute("jJSprintBean", new JJSprintBean());					
+					session.setAttribute("jJSprintBean", new JJSprintBean());
 					session.setAttribute("jJStatusBean", new JJStatusBean());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
 				} else if (prod != null && jJProductBean.getProduct() != null) {
@@ -737,8 +739,9 @@ public class JJBugBean {
 							change = true;
 							jJVersionBean.getVersionList();
 							jJVersionBean.setVersion(viewBug.getVersioning());
-							
-							session.setAttribute("jJStatusBean", new JJStatusBean());
+
+							session.setAttribute("jJStatusBean",
+									new JJStatusBean());
 						}
 					}
 				}

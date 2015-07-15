@@ -52,7 +52,6 @@ public class TaskWS {
 	private JJTestcaseService jJTestcaseService;
 	@Autowired
 	private JJStatusService jJStatusService;
-	
 
 	public void setjJStatusService(JJStatusService jJStatusService) {
 		this.jJStatusService = jJStatusService;
@@ -103,60 +102,57 @@ public class TaskWS {
 
 		String productName = tasksParameter.getFirst("product");
 		Long projectId = Long.parseLong(tasksParameter.getFirst("projectId"));
-		JJProduct product=new JJProduct();
-		JJProject project=new JJProject();
+		JJProduct product = new JJProduct();
+		JJProject project = new JJProject();
 
 		if (productName != null)
 			product = jJProductService.getJJProductWithName(productName);
 		else
-			product =null;
+			product = null;
 
 		if (projectId != null)
 			project = jJProjectService.findJJProject(projectId);
 		else
-			project=null;
+			project = null;
 
 		if (project != null && product != null)
 
-			return Task.getListTaskFrommJJTask(jJTaskService.getTasksByProduct(product, project));
+			return Task.getListTaskFrommJJTask(jJTaskService.getTasksByProduct(
+					product, project));
 		else
 			return null;
 	}
-	
-	
-	
+
 	@PUT
 	@Path("/updateTask")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(MediaType.APPLICATION_JSON)
-	public String UpdateTask(MultivaluedMap<String, String> Param){
+	@Produces(MediaType.APPLICATION_JSON)
+	public String UpdateTask(MultivaluedMap<String, String> Param) {
 		Long taskID = Long.parseLong(Param.getFirst("TaskId"));
 		String status = Param.getFirst("statut");
-		JJStatus jjstatus=jJStatusService.getOneStatus(status, "Task", true);
+		JJStatus jjstatus = jJStatusService.getOneStatus(status, "Task", true);
 		JJTask task = new JJTask();
-		
-		if(taskID != null)
-			task =  (JJTask) jJTaskService.findJJTask(taskID);
+
+		if (taskID != null)
+			task = (JJTask) jJTaskService.findJJTask(taskID);
 		else
 			task = null;
-		    System.out.println("not task exist");
-		if(status == null || jjstatus == null)
+		System.out.println("not task exist");
+		if (status == null || jjstatus == null)
 			return "erreur";
-		else 
-			if (status != null && task != null){ 
-		     task.setStatus(jjstatus);
+		else if (status != null && task != null) {
+			task.setStatus(jjstatus);
 			jJTaskService.saveJJTask(task);
-		}else 
-		  return null;
+		} else
+			return null;
 		return "succes";
 	}
-	
+
 	@GET
 	@Path("/gettaches")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getTasks(){
-		return  Task.getListTaskFrommJJTask(jJTaskService.findAllJJTasks());
+	public Response getTasks() {
+		return Task.getListTaskFrommJJTask(jJTaskService.findAllJJTasks());
 	}
-	
-	
+
 }

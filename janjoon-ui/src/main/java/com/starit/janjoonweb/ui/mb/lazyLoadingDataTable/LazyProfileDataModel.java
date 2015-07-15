@@ -19,13 +19,14 @@ public class LazyProfileDataModel extends LazyDataModel<JJProfile> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JJProfileService profileService;	
+	private JJProfileService profileService;
 	private JJPermissionService permissionService;
 
-	public LazyProfileDataModel(JJProfileService profileService,JJPermissionService jJPermissionService) {
-		
+	public LazyProfileDataModel(JJProfileService profileService,
+			JJPermissionService jJPermissionService) {
+
 		this.profileService = profileService;
-		this.permissionService=jJPermissionService;
+		this.permissionService = jJPermissionService;
 	}
 
 	@Override
@@ -40,11 +41,12 @@ public class LazyProfileDataModel extends LazyDataModel<JJProfile> {
 	}
 
 	@Override
-	public List<JJProfile> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {
+	public List<JJProfile> load(int first, int pageSize, String sortField,
+			SortOrder sortOrder, Map<String, Object> filters) {
 
 		List<JJProfile> data = new ArrayList<JJProfile>();
-		MutableInt size=new MutableInt(0);
-		data = profileService.load(size,first, pageSize,permissionService
+		MutableInt size = new MutableInt(0);
+		data = profileService.load(size, first, pageSize, permissionService
 				.isSuperAdmin(((LoginBean) LoginBean.findBean("loginBean"))
 						.getContact()));
 		setRowCount(size.getValue());

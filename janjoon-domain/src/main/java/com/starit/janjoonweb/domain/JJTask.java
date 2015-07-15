@@ -50,7 +50,7 @@ public class JJTask {
 	private JJContact updatedBy;
 
 	private Boolean enabled;
-	
+
 	private Boolean specification;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -131,7 +131,7 @@ public class JJTask {
 
 	@ManyToMany(mappedBy = "beforeTasks", fetch = FetchType.LAZY)
 	private Set<JJTask> afterTasks = new HashSet<JJTask>();
-	
+
 	@ManyToMany(mappedBy = "tasks", fetch = FetchType.LAZY)
 	private Set<JJBuild> builds = new HashSet<JJBuild>();
 
@@ -145,14 +145,17 @@ public class JJTask {
 				.equals(((JJTask) object).getId()) : (object == this);
 	}
 
-	public JJChapter getChapter()
-	{
-		if(this.getRequirement() != null && this.getRequirement().getChapter() != null)
+	public JJChapter getChapter() {
+		if (this.getRequirement() != null
+				&& this.getRequirement().getChapter() != null)
 			return this.getRequirement().getChapter();
-		else if(this.getBug() != null && this.getBug().getRequirement() != null && this.getBug().getRequirement().getChapter() != null)
+		else if (this.getBug() != null
+				&& this.getBug().getRequirement() != null
+				&& this.getBug().getRequirement().getChapter() != null)
 			return this.getBug().getRequirement().getChapter();
-		else if(this.getTestcase() != null && this.getTestcase().getRequirement().getChapter() != null)
-			return  this.getTestcase().getRequirement().getChapter();		
+		else if (this.getTestcase() != null
+				&& this.getTestcase().getRequirement().getChapter() != null)
+			return this.getTestcase().getRequirement().getChapter();
 		else
 			return null;
 	}

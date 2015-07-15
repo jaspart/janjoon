@@ -291,7 +291,7 @@
 					<p:dataTable var="columnName" value="#{jJTestcaseBean.colNames}"
 						id="buildTestTable" scrollable="#{jJTestcaseBean.scrollable}"
 						scrollHeight="#{jJTestcaseBean.scrollHeight}" rowIndexVar="colIdx"
-						scrollWidth="#{jJTestcaseBean.scrollWidth}"
+						scrollWidth="#{jJTestcaseBean.scrollWidth}" emptyMessage="#{messages.label_notRecordFound}"
 						style="table-layout: fixed;width: #{jJTestcaseBean.width};"
 						rendered="#{jJTestcaseBean.rowNames != null and !jJTestcaseBean.rendredTestCaseRecaps and !jJTestcaseBean.rendredTestCaseHistorical}">
 
@@ -344,7 +344,7 @@
 					</p:dataTable>
 					<h:panelGrid columns="2" border="0">
 						<p:dataTable id="testcaseRecapDataTable" var="tcr"
-							paginatorPosition="bottom"
+							paginatorPosition="bottom" emptyMessage="#{messages.label_notRecordFound}"
 							value="#{jJTestcaseBean.testCaseRecaps}" paginator="true"
 							rows="5" style="width:100%;" rowKey="#{tcr.testcase.id}"
 							rendered="#{jJTestcaseBean.rendredTestCaseRecaps}">
@@ -448,7 +448,7 @@
 					<p:dataTable id="teststepRecapDataTable" paginatorPosition="bottom"
 						value="#{jJTeststepBean.teststeps}" rowKey="#{ts.name}" var="ts"
 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
-						paginator="true" rows="7" style="width:42%;">
+						paginator="true" rows="7" style="width:42%;" emptyMessage="#{messages.label_notRecordFound}">
 						<f:facet name="header">
 							<p:row>
 								<p:column>
@@ -508,7 +508,7 @@
 						</p:column>
 					</p:dataTable>
 
-					<p:dataTable id="testexecutionRecapDataTable"
+					<p:dataTable id="testexecutionRecapDataTable" emptyMessage="#{messages.label_notRecordFound}"
 						value="#{jJTestcaseexecutionBean.testCaseexecutionRecaps}"
 						rowKey="#{tce.name}" var="tce" paginatorPosition="bottom"
 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
@@ -636,7 +636,7 @@
 								</p:row>
 								<p:row rendered="#{not empty tse.teststep.bugs}">
 									<p:column colspan="2" rendered="#{not empty tse.teststep.bugs}">
-										<p:dataTable value="#{tse.teststep.bugs}" scrollable="true"
+										<p:dataTable emptyMessage="#{messages.label_notRecordFound}" value="#{tse.teststep.bugs}" scrollable="true"
 											scrollHeight="120" var="bug">
 											<p:column headerText="Bug">
 												<h:outputText value="#{bug.name}" />

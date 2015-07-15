@@ -55,7 +55,7 @@
 				<p:column rendered="#{jjsprint.render}">
 					<p:dataTable id="taskTable" value="#{jjsprint.taskList}" var="t"
 						scrollable="true" scrollHeight="200" style="width:350px;"
-						rowKey="#{t.id}" emptyMessage="#{messages.label_notFound}">
+						rowKey="#{t.id}" emptyMessage="#{messages.label_notRecordFound}">
 
 						<p:column headerText="Name" style="width:200px">
 							<h:outputText value="#{t.name}" />

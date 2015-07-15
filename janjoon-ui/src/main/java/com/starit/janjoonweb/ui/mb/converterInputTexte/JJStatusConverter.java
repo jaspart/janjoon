@@ -7,7 +7,7 @@ import javax.faces.convert.FacesConverter;
 import com.starit.janjoonweb.domain.JJStatus;
 
 @FacesConverter("JJStatusConverter")
-public class JJStatusConverter implements Converter{
+public class JJStatusConverter implements Converter {
 
 	@Override
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
@@ -16,7 +16,8 @@ public class JJStatusConverter implements Converter{
 	}
 
 	@Override
-	  public String getAsString(FacesContext context, UIComponent component, Object value) {
-        return value instanceof JJStatus ? ((JJStatus) value).getName() : "";
-    }
+	public String getAsString(FacesContext context, UIComponent component,
+			Object value) {
+		return value instanceof JJStatus ? ((JJStatus) value).getName() : "";
+	}
 }

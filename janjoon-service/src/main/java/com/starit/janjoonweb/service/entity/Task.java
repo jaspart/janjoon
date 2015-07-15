@@ -12,10 +12,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.starit.janjoonweb.domain.JJTask;
+
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Task {
-   
+
 	@XmlElement
 	private Long id;
 	@XmlElement
@@ -41,157 +42,173 @@ public class Task {
 	@XmlElement
 	private Date startDateReal;
 	@XmlElement
-	private Date endDateReal;	
+	private Date endDateReal;
 	@XmlElement
 	private String assignedTo;
 	@XmlElement
 	private String status;
-	
-	public Task(JJTask tache){
-		this.id=tache.getId();
-		this.name=tache.getName();
-		this.description=tache.getDescription();
-		
-		if(tache.getAssignedTo() != null)
-			this.assignedTo=tache.getAssignedTo().getName();
+
+	public Task(JJTask tache) {
+		this.id = tache.getId();
+		this.name = tache.getName();
+		this.description = tache.getDescription();
+
+		if (tache.getAssignedTo() != null)
+			this.assignedTo = tache.getAssignedTo().getName();
 		else
-			this.assignedTo="null";	
-		
-		
-		if(tache.getCreatedBy() !=null)
-			this.createdBy=tache.getCreatedBy().getName();
+			this.assignedTo = "null";
+
+		if (tache.getCreatedBy() != null)
+			this.createdBy = tache.getCreatedBy().getName();
 		else
-			this.createdBy="null";
-		this.creationDate=tache.getCreationDate();
-		this.enabled=tache.getEnabled();
-		this.endDatePlanned=tache.getEndDatePlanned();
-		this.endDateReal=tache.getEndDateReal();
-		this.endDateRevised=tache.getEndDateRevised();
-		
-		this.startDatePlanned=tache.getStartDatePlanned();
-		this.startDateReal=tache.getStartDateReal();
-		this.startDateRevised=tache.getEndDateRevised();
-		
-		if(tache.getStatus()!= null)
-			this.status=tache.getStatus().getName();
+			this.createdBy = "null";
+		this.creationDate = tache.getCreationDate();
+		this.enabled = tache.getEnabled();
+		this.endDatePlanned = tache.getEndDatePlanned();
+		this.endDateReal = tache.getEndDateReal();
+		this.endDateRevised = tache.getEndDateRevised();
+
+		this.startDatePlanned = tache.getStartDatePlanned();
+		this.startDateReal = tache.getStartDateReal();
+		this.startDateRevised = tache.getEndDateRevised();
+
+		if (tache.getStatus() != null)
+			this.status = tache.getStatus().getName();
 		else
-			this.status="null";
-		
-		
-		
+			this.status = "null";
+
 	}
-	
+
 	public Task() {
 		super();
 	}
-	
-	
-	
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 	public Date getCreationDate() {
 		return creationDate;
 	}
+
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
+
 	public String getCreatedBy() {
 		return createdBy;
 	}
+
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
+
 	public Date getUpdatedDate() {
 		return updatedDate;
 	}
+
 	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
 	}
-	
+
 	public Boolean getEnabled() {
 		return enabled;
 	}
+
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
+
 	public Date getStartDatePlanned() {
 		return startDatePlanned;
 	}
+
 	public void setStartDatePlanned(Date startDatePlanned) {
 		this.startDatePlanned = startDatePlanned;
 	}
+
 	public Date getEndDatePlanned() {
 		return endDatePlanned;
 	}
+
 	public void setEndDatePlanned(Date endDatePlanned) {
 		this.endDatePlanned = endDatePlanned;
 	}
+
 	public Date getStartDateRevised() {
 		return startDateRevised;
 	}
+
 	public void setStartDateRevised(Date startDateRevised) {
 		this.startDateRevised = startDateRevised;
 	}
+
 	public Date getEndDateRevised() {
 		return endDateRevised;
 	}
+
 	public void setEndDateRevised(Date endDateRevised) {
 		this.endDateRevised = endDateRevised;
 	}
+
 	public Date getStartDateReal() {
 		return startDateReal;
 	}
+
 	public void setStartDateReal(Date startDateReal) {
 		this.startDateReal = startDateReal;
 	}
+
 	public Date getEndDateReal() {
 		return endDateReal;
 	}
+
 	public void setEndDateReal(Date endDateReal) {
 		this.endDateReal = endDateReal;
 	}
-	
-	
+
 	public String getAssignedTo() {
 		return assignedTo;
 	}
+
 	public void setAssignedTo(String assignedTo) {
 		this.assignedTo = assignedTo;
 	}
+
 	public String getStatus() {
 		return status;
 	}
+
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
-	
+
 	@Override
 	public boolean equals(Object object) {
 		return (object instanceof JJTask) && (getId() != null) ? getId()
 				.equals(((Task) object).getId()) : (object == this);
 	}
-	
-	
-	
-	
-	
+
 	@Override
 	public String toString() {
 		return "Task [id=" + id + ", name=" + name + ", description="
@@ -205,10 +222,11 @@ public class Task {
 				+ ", assignedTo=" + assignedTo + ", status=" + status + "]";
 	}
 
-	public static Response getListTaskFrommJJTask(List<JJTask> jJTasks){
-		List<Task> taches =new ArrayList<Task>();
-		GenericEntity<List<Task>> entity = new GenericEntity<List<Task>>(taches) {};
-		for (JJTask tache : jJTasks ){
+	public static Response getListTaskFrommJJTask(List<JJTask> jJTasks) {
+		List<Task> taches = new ArrayList<Task>();
+		GenericEntity<List<Task>> entity = new GenericEntity<List<Task>>(taches) {
+		};
+		for (JJTask tache : jJTasks) {
 			taches.add(new Task(tache));
 		}
 		return Response.ok(entity).build();

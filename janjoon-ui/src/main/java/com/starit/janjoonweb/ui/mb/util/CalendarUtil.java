@@ -200,7 +200,8 @@ public class CalendarUtil {
 		}
 		properties.load(new StringReader(calendar));
 		DateFormat f = new SimpleDateFormat("dd/MM/");
-		properties.setProperty(HOLIDAYS + "." + String.format("%01d", holidays.size() + 1),
+		properties.setProperty(
+				HOLIDAYS + "." + String.format("%01d", holidays.size() + 1),
 				f.format(date));
 
 		StringWriter writer = new StringWriter();

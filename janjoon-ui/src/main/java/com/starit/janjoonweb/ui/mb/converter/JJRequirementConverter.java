@@ -10,8 +10,11 @@ import org.springframework.roo.addon.jsf.converter.RooJsfConverter;
 
 @RooJsfConverter(entity = JJRequirement.class)
 public class JJRequirementConverter {
-	
-	public String getAsString(FacesContext context, UIComponent component, Object value) {
-        return (value instanceof JJRequirement && ((JJRequirement) value).getId() != null) ? ((JJRequirement) value).getId().toString() : "";
-    }
+
+	public String getAsString(FacesContext context, UIComponent component,
+			Object value) {
+		return (value instanceof JJRequirement && ((JJRequirement) value)
+				.getId() != null) ? ((JJRequirement) value).getId().toString()
+				: "";
+	}
 }

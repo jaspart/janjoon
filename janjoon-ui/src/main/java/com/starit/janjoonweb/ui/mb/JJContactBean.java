@@ -73,7 +73,7 @@ public class JJContactBean {
 	private ContactCalendarUtil calendarUtil;
 	private List<JJCategory> categories;
 	private List<JJCategory> loggedContactCategories;
-	//private List<JJContact> contacts;
+	// private List<JJContact> contacts;
 	private List<JJVersion> versionList;
 	private LazyContactDataModel contactsLazyModel;
 	private String message;
@@ -97,7 +97,7 @@ public class JJContactBean {
 			contactsLazyModel = new LazyContactDataModel(jJContactService,
 					company);
 
-		//getContacts();
+		// getContacts();
 
 		return contactsLazyModel;
 	}
@@ -157,19 +157,19 @@ public class JJContactBean {
 		this.contactAdmin = contactAdmin;
 	}
 
-//	public List<JJContact> getContacts() {
-//		if (contacts == null) {
-//			LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
-//			contacts = jJContactService.getContacts(true, loginBean
-//					.getContact().getCompany(), loginBean.getContact());
-//		}
-//
-//		return contacts;
-//	}
+	// public List<JJContact> getContacts() {
+	// if (contacts == null) {
+	// LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
+	// contacts = jJContactService.getContacts(true, loginBean
+	// .getContact().getCompany(), loginBean.getContact());
+	// }
+	//
+	// return contacts;
+	// }
 
-//	public void setContacts(List<JJContact> contacts) {
-//		this.contacts = contacts;
-//	}
+	// public void setContacts(List<JJContact> contacts) {
+	// this.contacts = contacts;
+	// }
 
 	public List<JJVersion> getVersionList() {
 
@@ -269,7 +269,7 @@ public class JJContactBean {
 	}
 
 	public List<JJContact> getRestoredContact() {
-		if(restoredContact == null)
+		if (restoredContact == null)
 			restoredContact = new ArrayList<JJContact>();
 		return restoredContact;
 	}
@@ -277,18 +277,16 @@ public class JJContactBean {
 	public void setRestoredContact(List<JJContact> restoredContact) {
 		this.restoredContact = restoredContact;
 	}
-	
-	public void restoreContacts()
-	{
-		for(JJContact con:restoredContact)
-		{
+
+	public void restoreContacts() {
+		for (JJContact con : restoredContact) {
 			con.setEnabled(true);
 			updateJJContact(con);
 		}
-		
+
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_restored",
-				FacesMessage.SEVERITY_INFO, "Contact");		
+				"message_successfully_restored", FacesMessage.SEVERITY_INFO,
+				"Contact");
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		deletedContact = null;
@@ -349,7 +347,7 @@ public class JJContactBean {
 			}
 
 		}
-		//contacts.remove(contains(contactAdmin.getId()));
+		// contacts.remove(contains(contactAdmin.getId()));
 		contactsLazyModel = null;
 	}
 
@@ -386,7 +384,7 @@ public class JJContactBean {
 				facesMessage = MessageFactory.getMessage(
 						"message_successfully_created",
 						FacesMessage.SEVERITY_INFO, "Contact");
-				//contacts.add(contactAdmin);
+				// contacts.add(contactAdmin);
 
 			} else {
 
@@ -476,10 +474,10 @@ public class JJContactBean {
 			}
 
 			contactAdmin = jJContactService.findJJContact(contactAdmin.getId());
-//			if (contains(contactAdmin.getId()) != -1)
-//				contacts.set(contains(contactAdmin.getId()), contactAdmin);
-//			else
-//				contacts.add(contactAdmin);
+			// if (contains(contactAdmin.getId()) != -1)
+			// contacts.set(contains(contactAdmin.getId()), contactAdmin);
+			// else
+			// contacts.add(contactAdmin);
 
 			HttpSession session = (HttpSession) FacesContext
 					.getCurrentInstance().getExternalContext()
@@ -588,7 +586,7 @@ public class JJContactBean {
 	public void closeDialog(JJPermissionBean jJPermissionBean) {
 
 		contactAdmin = null;
-		//contacts = null;
+		// contacts = null;
 
 		jJPermissionBean.setPermissionAdmin(null);
 		jJPermissionBean.setPermissionDataModel(null);
@@ -598,7 +596,7 @@ public class JJContactBean {
 		jJPermissionBean.setProduct(null);
 
 		contactState = true;
-		
+
 		restoredContact = null;
 		deletedContact = null;
 
@@ -642,23 +640,23 @@ public class JJContactBean {
 		return jJContactService.getContactByEmail(email, true);
 	}
 
-//	public int contains(Long id) {
-//		int i = 0;
-//		int j = -1;
-//
-//		if (contacts != null) {
-//			while (i < contacts.size()) {
-//				if (contacts.get(i).getId().equals(id)) {
-//					j = i;
-//					i = contacts.size();
-//				} else
-//					i++;
-//			}
-//		}
-//
-//		return j;
-//
-//	}
+	// public int contains(Long id) {
+	// int i = 0;
+	// int j = -1;
+	//
+	// if (contacts != null) {
+	// while (i < contacts.size()) {
+	// if (contacts.get(i).getId().equals(id)) {
+	// j = i;
+	// i = contacts.size();
+	// } else
+	// i++;
+	// }
+	// }
+	//
+	// return j;
+	//
+	// }
 
 	public String signUp() {
 

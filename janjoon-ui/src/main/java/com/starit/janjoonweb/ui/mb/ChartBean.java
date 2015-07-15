@@ -401,11 +401,11 @@ public class ChartBean implements Serializable {
 				.getMessage("test_graph_ordinate_label", "").getDetail());
 		axis.setTickFormat("%b %#d, %y");
 		categoryModel.getAxes().put(AxisType.X, axis);
-		
-//		cate goryModel.getAxis(AxisType.X).setTickAngle(-50);		
-//		categoryModel.getAxis(AxisType.X).setTickFormat("%b %#d, %y");
-//		categoryModel.getAxis(AxisType.X).setLabel(MessageFactory
-//				.getMessage("test_graph_ordinate_label", "").getDetail());
+
+		// cate goryModel.getAxis(AxisType.X).setTickAngle(-50);
+		// categoryModel.getAxis(AxisType.X).setTickFormat("%b %#d, %y");
+		// categoryModel.getAxis(AxisType.X).setLabel(MessageFactory
+		// .getMessage("test_graph_ordinate_label", "").getDetail());
 
 		categoryModel.getAxis(AxisType.Y).setLabel(
 				MessageFactory.getMessage("test_graph_abscissa_label", "")

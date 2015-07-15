@@ -19,26 +19,30 @@ import com.starit.janjoonweb.service.entity.Product;
 @Component("productWS")
 @Path("/product")
 public class ProductWS {
-      @Autowired
-      private JJProductService jJProductService;
-      @Autowired
-      private JJCompanyService jJCompanyService;
-      @Autowired
-      private JJContactService jJContactService;
-     
-    public void setjJProductService(JJProductService jJProductService) {
-  		this.jJProductService = jJProductService;
-  	}
-  	public void setjJCompanyService(JJCompanyService jJCompanyService) {
-  		this.jJCompanyService = jJCompanyService;
-  	}
-  	public void setjJContactService(JJContactService jJContactService) {
-  		this.jJContactService = jJContactService;
-  	}
-      @GET
-      @Path("/listeproduit")
-      @Produces(MediaType.APPLICATION_JSON)
-      public Response getProduct(){
-    	  return Product.getProductListFromJJProductList( jJProductService.getAdminListProducts());
-      }
+	@Autowired
+	private JJProductService jJProductService;
+	@Autowired
+	private JJCompanyService jJCompanyService;
+	@Autowired
+	private JJContactService jJContactService;
+
+	public void setjJProductService(JJProductService jJProductService) {
+		this.jJProductService = jJProductService;
+	}
+
+	public void setjJCompanyService(JJCompanyService jJCompanyService) {
+		this.jJCompanyService = jJCompanyService;
+	}
+
+	public void setjJContactService(JJContactService jJContactService) {
+		this.jJContactService = jJContactService;
+	}
+
+	@GET
+	@Path("/listeproduit")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getProduct() {
+		return Product.getProductListFromJJProductList(jJProductService
+				.getAdminListProducts());
+	}
 }

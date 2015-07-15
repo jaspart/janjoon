@@ -20,7 +20,7 @@ import com.starit.janjoonweb.ui.mb.JJContactBean;
 
 @Component("contactAuthentificationProvider")
 public class JJContactAuthentificationProvider implements
-		AuthenticationProvider, Serializable{
+		AuthenticationProvider, Serializable {
 
 	/**
 	 * 
@@ -29,11 +29,9 @@ public class JJContactAuthentificationProvider implements
 
 	@Autowired
 	JJContactService jJContactService;
-	
-	@Autowired 
+
+	@Autowired
 	BCryptPasswordEncoder encoder;
-	
-	
 
 	public void setEncoder(BCryptPasswordEncoder encoder) {
 		this.encoder = encoder;
@@ -55,8 +53,8 @@ public class JJContactAuthentificationProvider implements
 		if (contact == null) {
 			throw new BadCredentialsException("Username not found.");
 		}
-			
-		if (!encoder.matches(password.trim(),contact.getPassword())){
+
+		if (!encoder.matches(password.trim(), contact.getPassword())) {
 			throw new BadCredentialsException("Wrong password.");
 		}
 
@@ -69,7 +67,5 @@ public class JJContactAuthentificationProvider implements
 
 		return UsernamePasswordAuthenticationToken.class.equals(authentication);
 	}
-
-	
 
 }

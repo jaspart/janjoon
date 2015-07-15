@@ -450,8 +450,8 @@ public class AuthorisationService implements Serializable {
 		return jJPermissionService.isAuthorized(contact, con.getLastProject(),
 				con.getLastProduct(), "category", null, true, null, null)
 				&& jJPermissionService.isAuthorized(contact,
-						con.getLastProject(), con.getLastProduct(), "requirement",
-						null, true, null, null);
+						con.getLastProject(), con.getLastProduct(),
+						"requirement", null, true, null, null);
 
 	}
 

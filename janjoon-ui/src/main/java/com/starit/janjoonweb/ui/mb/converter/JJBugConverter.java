@@ -10,8 +10,10 @@ import org.springframework.roo.addon.jsf.converter.RooJsfConverter;
 
 @RooJsfConverter(entity = JJBug.class)
 public class JJBugConverter {
-	
-	public String getAsString(FacesContext context, UIComponent component, Object value) {
-        return (value instanceof JJBug && ((JJBug) value).getId() != null) ? ((JJBug) value).getId().toString() : "";
-    }
+
+	public String getAsString(FacesContext context, UIComponent component,
+			Object value) {
+		return (value instanceof JJBug && ((JJBug) value).getId() != null) ? ((JJBug) value)
+				.getId().toString() : "";
+	}
 }

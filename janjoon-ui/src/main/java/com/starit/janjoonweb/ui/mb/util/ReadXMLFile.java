@@ -119,14 +119,14 @@ public class ReadXMLFile {
 			InputStream stream, JJTestcaseService jjTestcaseService,
 			JJCategoryService jJCategoryService,
 			JJRequirementService jJRequirementService, JJProject project,
-			JJProduct product) throws SAXParseException{
+			JJProduct product) throws SAXParseException {
 
 		List<JJTestcase> testests = new ArrayList<JJTestcase>();
 		List<JJTeststep> teststeps = new ArrayList<JJTeststep>();
 
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
-		try {			
+		try {
 			dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(stream);
 			doc.getDocumentElement().normalize();
@@ -226,7 +226,6 @@ public class ReadXMLFile {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
 		List<Object> objects = new ArrayList<Object>();
 		objects.add(testests);

@@ -173,14 +173,14 @@ public class SprintUtil {
 		return chartModel;
 	}
 
-//	public void setChartModel(CartesianChartModel chartModel) {
-//		this.chartModel = chartModel;
-//	}
+	// public void setChartModel(CartesianChartModel chartModel) {
+	// this.chartModel = chartModel;
+	// }
 
 	private void calculateField(List<JJTask> tasks) {
 		Integer i = 0;
 		Integer j = 0;
-		
+
 		this.render = (sprint.getId() == null);
 		if (!render) {
 
@@ -319,16 +319,16 @@ public class SprintUtil {
 			}
 			workload = Math.max(workload, 0);
 			chartSeries.set(f.format(staDate), workload);
-		}	
+		}
 
 		chartModel.addSeries(chartSeries);
 		chartModel.addSeries(lineSeries);
-		chartModel.setLegendPosition("ne");			
-		
-		chartModel.getAxis(AxisType.X).setTickAngle(-50);		
+		chartModel.setLegendPosition("ne");
+
+		chartModel.getAxis(AxisType.X).setTickAngle(-50);
 		chartModel.getAxis(AxisType.X).setTickFormat("%b %#d, %y");
 		chartModel.getAxis(AxisType.X).setLabel("Date");
-		
+
 		chartModel.getAxis(AxisType.Y).setMin(0);
 		chartModel.getAxis(AxisType.Y).setLabel("WorkLoad");
 	}

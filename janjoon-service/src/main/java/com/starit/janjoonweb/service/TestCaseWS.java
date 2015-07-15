@@ -23,12 +23,10 @@ import com.starit.janjoonweb.domain.JJTeststepService;
 import com.starit.janjoonweb.domain.JJTeststepexecution;
 import com.starit.janjoonweb.domain.JJTeststepexecutionService;
 
-
 @Component("testCaseWS")
 @Path("/testcase")
 public class TestCaseWS {
-	
-	
+
 	@Autowired
 	private JJBuildService jJBuildService;
 	@Autowired
@@ -38,8 +36,8 @@ public class TestCaseWS {
 	@Autowired
 	private JJTeststepService jJTeststepService;
 	@Autowired
-	private JJTeststepexecutionService jJTeststepexecutionService;		
-	
+	private JJTeststepexecutionService jJTeststepexecutionService;
+
 	public void setjJBuildService(JJBuildService jJBuildService) {
 		this.jJBuildService = jJBuildService;
 	}
@@ -61,152 +59,135 @@ public class TestCaseWS {
 			JJTeststepexecutionService jJTeststepexecutionService) {
 		this.jJTeststepexecutionService = jJTeststepexecutionService;
 	}
-	
+
 	@POST
 	@Path("validateTestStepExec")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String validateTestStepExec(MultivaluedMap<String, String> params)
-	{ 
+	public String validateTestStepExec(MultivaluedMap<String, String> params) {
 		Long teststepeexecutionId = null;
-		Boolean status = null;		
-		
-		try{
-			teststepeexecutionId = Long.parseLong(params.getFirst("teststepeexecution"));
-		}catch(NumberFormatException e)
-		{
-			teststepeexecutionId =null;
+		Boolean status = null;
+
+		try {
+			teststepeexecutionId = Long.parseLong(params
+					.getFirst("teststepeexecution"));
+		} catch (NumberFormatException e) {
+			teststepeexecutionId = null;
 		}
-		
-		try{
-			if(params.getFirst("status").equalsIgnoreCase("success"))
-				status =true;
-			else if(params.getFirst("status").equalsIgnoreCase("failed"))
-				status=false;
-			
-		}catch(NumberFormatException e)
-		{
-			status =null;
+
+		try {
+			if (params.getFirst("status").equalsIgnoreCase("success"))
+				status = true;
+			else if (params.getFirst("status").equalsIgnoreCase("failed"))
+				status = false;
+
+		} catch (NumberFormatException e) {
+			status = null;
 		}
-		
-		if(status == null || teststepeexecutionId == null)
-		{
+
+		if (status == null || teststepeexecutionId == null) {
 			return "A Parameter has a FormatException";
-		}else
-		{
-			JJTeststepexecution teststepexecution=jJTeststepexecutionService.
-					findJJTeststepexecution(teststepeexecutionId);
-			if(teststepexecution != null)
-			{
+		} else {
+			JJTeststepexecution teststepexecution = jJTeststepexecutionService
+					.findJJTeststepexecution(teststepeexecutionId);
+			if (teststepexecution != null) {
 				teststepexecution.setUpdatedDate(new Date());
 				teststepexecution.setPassed(status);
-				jJTeststepexecutionService.updateJJTeststepexecution(teststepexecution);
-				return "teststepexecution :"+teststepexecution.getName()+" Successfully Updated";
-			}else
-			{
+				jJTeststepexecutionService
+						.updateJJTeststepexecution(teststepexecution);
+				return "teststepexecution :" + teststepexecution.getName()
+						+ " Successfully Updated";
+			} else {
 				return "Teststep Execution not Found";
 			}
-			
-			
+
 		}
 	}
 
-	
 	@POST
 	@Path("validateTestCaseExec")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String validateTestCaseExec(MultivaluedMap<String, String> params)
-	{ 
+	public String validateTestCaseExec(MultivaluedMap<String, String> params) {
 		Long testcaseeexecutionId = null;
-		Boolean status = null;		
-		
-		try{
-			testcaseeexecutionId = Long.parseLong(params.getFirst("testcaseeexecution"));
-		}catch(NumberFormatException e)
-		{
-			testcaseeexecutionId =null;
+		Boolean status = null;
+
+		try {
+			testcaseeexecutionId = Long.parseLong(params
+					.getFirst("testcaseeexecution"));
+		} catch (NumberFormatException e) {
+			testcaseeexecutionId = null;
 		}
-		
-		try{
-			if(params.getFirst("status").equalsIgnoreCase("success"))
-				status =true;
-			else if(params.getFirst("status").equalsIgnoreCase("failed"))
-				status=false;
-			
-		}catch(NumberFormatException e)
-		{
-			status =null;
+
+		try {
+			if (params.getFirst("status").equalsIgnoreCase("success"))
+				status = true;
+			else if (params.getFirst("status").equalsIgnoreCase("failed"))
+				status = false;
+
+		} catch (NumberFormatException e) {
+			status = null;
 		}
-		
-		if(status == null || testcaseeexecutionId == null)
-		{
+
+		if (status == null || testcaseeexecutionId == null) {
 			return "A Parameter has a FormatException";
-		}else
-		{
-			JJTestcaseexecution testcaseexecution=jJTestcaseexecutionService.
-					findJJTestcaseexecution(testcaseeexecutionId);
-			if(testcaseexecution != null)
-			{
+		} else {
+			JJTestcaseexecution testcaseexecution = jJTestcaseexecutionService
+					.findJJTestcaseexecution(testcaseeexecutionId);
+			if (testcaseexecution != null) {
 				testcaseexecution.setUpdatedDate(new Date());
 				testcaseexecution.setPassed(status);
-				jJTestcaseexecutionService.updateJJTestcaseexecution(testcaseexecution);
-				return "testcaseexecution :"+testcaseexecution.getName()+" Successfully Updated";
-			}else
-			{
+				jJTestcaseexecutionService
+						.updateJJTestcaseexecution(testcaseexecution);
+				return "testcaseexecution :" + testcaseexecution.getName()
+						+ " Successfully Updated";
+			} else {
 				return "Testcase Execution not Found";
 			}
-			
-			
+
 		}
 	}
 
 	@POST
 	@Path("createTestCaseExec")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String createTestCaseExec(MultivaluedMap<String, String> params)
-	{
+	public String createTestCaseExec(MultivaluedMap<String, String> params) {
 		Long testcaseId = null;
-		Long buildId = null;		
-		System.out.println(params.getFirst("testcaseId")+"/"+params.getFirst("buildId"));
-		try{
+		Long buildId = null;
+		System.out.println(params.getFirst("testcaseId") + "/"
+				+ params.getFirst("buildId"));
+		try {
 			testcaseId = Long.parseLong(params.getFirst("testcaseId"));
-		}catch(NumberFormatException e)
-		{
-			testcaseId =null;
+		} catch (NumberFormatException e) {
+			testcaseId = null;
 		}
-		
-		try{
+
+		try {
 			buildId = Long.parseLong(params.getFirst("buildId"));
-		}catch(NumberFormatException e)
-		{
-			buildId =null;
+		} catch (NumberFormatException e) {
+			buildId = null;
 		}
-		
-		if(buildId == null || testcaseId == null)
-		{
+
+		if (buildId == null || testcaseId == null) {
 			return "A Parameter has a NumberFormatException";
-		}else
-		{
-			JJBuild build =jJBuildService.findJJBuild(buildId);
-			JJTestcase testcase=jJTestcaseService.findJJTestcase(testcaseId);
-			
-			if(build == null)
-			{
+		} else {
+			JJBuild build = jJBuildService.findJJBuild(buildId);
+			JJTestcase testcase = jJTestcaseService.findJJTestcase(testcaseId);
+
+			if (build == null) {
 				return "Build Not Found";
-			}else if(testcase == null)
-			{
+			} else if (testcase == null) {
 				return "TestCase not Found";
-			}else
-			{			
+			} else {
 				JJTestcaseexecution testcaseexecution = new JJTestcaseexecution();
 				testcaseexecution.setName(testcase.getName());
-				testcaseexecution.setDescription(testcase.getDescription());		
+				testcaseexecution.setDescription(testcase.getDescription());
 				testcaseexecution.setEnabled(true);
 				testcaseexecution.setTestcase(testcase);
 				testcaseexecution.setBuild(build);
 				testcaseexecution.setPassed(null);
 				testcaseexecution.setCreationDate(new Date());
-				jJTestcaseexecutionService.saveJJTestcaseexecution(testcaseexecution);
-				String render=testcaseexecution.getId()+",[";
+				jJTestcaseexecutionService
+						.saveJJTestcaseexecution(testcaseexecution);
+				String render = testcaseexecution.getId() + ",[";
 				testcaseexecution = jJTestcaseexecutionService
 						.findJJTestcaseexecution(testcaseexecution.getId());
 
@@ -226,18 +207,17 @@ public class TestCaseWS {
 
 					teststepexecution.setTestcaseexecution(testcaseexecution);
 					teststepexecution.setCreationDate(new Date());
-					jJTeststepexecutionService.saveJJTeststepexecution(teststepexecution);
-					render+=testcaseexecution.getId()+",";
+					jJTeststepexecutionService
+							.saveJJTeststepexecution(teststepexecution);
+					render += testcaseexecution.getId() + ",";
 
 				}
-				
-				return render.substring(0,render.length()-1)+"],SUCCESS";
+
+				return render.substring(0, render.length() - 1) + "],SUCCESS";
 			}
-			
+
 		}
-		
-		
-		
+
 	}
 
 }

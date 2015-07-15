@@ -62,7 +62,7 @@ public class JJVersionServiceImpl implements JJVersionService {
 		TypedQuery<JJVersion> result = entityManager.createQuery(select);
 		return result.getResultList();
 
-	}	
+	}
 
 	public JJVersion getVersionByName(String jJversion, JJProduct product) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

@@ -8,7 +8,7 @@
 <ui:composition>
 	<h:form id="comForm">
 		<p:dataTable id="comDataTable" value="#{communicationList}"
-			rowKey="#{mes.id}" var="mes" scrollable="true"
+			rowKey="#{mes.id}" var="mes" scrollable="true" emptyMessage="#{messages.label_notRecordFound}"
 			rendered="#{loginBean.enable}" scrollHeight="300"
 			rowStyleClass="#{mes.criticity.name}" style="border-spacing:0px;"
 			selectionMode="single">

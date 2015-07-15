@@ -12,13 +12,14 @@ public interface JJContactService {
 
 	public JJContact getContactById(Long id);
 
-	public List<JJContact> getContacts(boolean onlyActif,JJCompany company,JJContact contact);
+	public List<JJContact> getContacts(boolean onlyActif, JJCompany company,
+			JJContact contact);
 
 	public boolean saveJJContactTransaction(JJContact contact);
 
 	public boolean updateJJContactTransaction(JJContact contact);
 
-	public List<JJContact> load(JJCompany company,MutableInt size,int first, int pageSize);	
-	
+	public List<JJContact> load(JJCompany company, MutableInt size, int first,
+			int pageSize);
 
 }

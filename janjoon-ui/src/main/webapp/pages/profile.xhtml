@@ -8,7 +8,7 @@
 	<h:form id="profileForm">
 		<p:panel id="profilePanel" style="width:600px" columns="1"
 			cellpadding="6">
-			<p:dataTable id="profileDataTable" var="profile" lazy="true"
+			<p:dataTable id="profileDataTable" var="profile" lazy="true" emptyMessage="#{messages.label_notRecordFound}"
 				paginatorPosition="bottom" value="#{jJProfileBean.profileListTable}"
 				paginator="true" rows="15" rowKey="#{profile.id}">
 				<f:facet name="header">#{messages.admin_profile_table_header}</f:facet>
@@ -156,7 +156,7 @@
 					</p:row>
 					<p:dataTable id="rightDataTable" var="rightModel" scrollable="true"
 						style="width:500px;" scrollHeight="300"
-						value="#{jJRightBean.rightDataModel}"
+						value="#{jJRightBean.rightDataModel}" emptyMessage="#{messages.label_notRecordFound}"
 						rowStyleClass="#{rightModel.old ? 'old' : null}">
 						<f:facet name="header">
 							<h:outputText value="#{messages.admin_profile_new_table_header} " />
@@ -169,7 +169,7 @@
 											disabled="#{jJRightBean.disabledCheckRight}"
 											value="#{jJRightBean.checkRights}">
 											<p:ajax update="rightDataTable"
-												listener="#{jJRightBean.checkRights}" />
+												listener="#{jJRightBean.checkRightsListener}" />
 										</p:selectBooleanCheckbox>
 									</p:column>
 								</p:row>
@@ -177,7 +177,7 @@
 							<p:selectBooleanCheckbox value="#{rightModel.checkRight}"
 								disabled="#{jJRightBean.disabledCheckRight}">
 								<p:ajax update="rightDataTable"
-									listener="#{jJRightBean.checkRight}" />
+									listener="#{jJRightBean.checkRightListener}" />
 							</p:selectBooleanCheckbox>
 						</p:column>
 						<p:column style="width:25%">

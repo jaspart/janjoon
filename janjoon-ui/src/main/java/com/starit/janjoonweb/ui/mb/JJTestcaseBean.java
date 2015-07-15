@@ -629,13 +629,13 @@ public class JJTestcaseBean {
 		if (object instanceof JJBuild) {
 
 			JJBuild build = (JJBuild) object;
-			//int i = 0;
+			// int i = 0;
 			if (build.getAllTestcases() != null)
 				build.setAllTestcases(!build.getAllTestcases());
 			else
 				build.setAllTestcases(true);
 			jJBuildBean.updateJJBuild(build);
-			//jJBuildBean.setBuilds(null);
+			// jJBuildBean.setBuilds(null);
 
 			build = jJBuildService.findJJBuild(build.getId());
 			if (jJBuildBean.getBuild() != null
@@ -1410,8 +1410,7 @@ public class JJTestcaseBean {
 			if (className.equalsIgnoreCase("JJChapter")) {
 
 				JJChapter chapter = (JJChapter) entry.getValue();
-				TreeNode newNode2 = createTree(chapter, newNode, category,
-						build);
+				createTree(chapter, newNode, category, build);
 
 			} else if (className.equalsIgnoreCase("JJRequirement")) {
 
@@ -1435,8 +1434,8 @@ public class JJTestcaseBean {
 				.entrySet()) {
 			JJTestcase testcase = testcaseEntry.getValue();
 			String type = getType(testcase);
-			TreeNode newNode3 = new DefaultTreeNode(type, "TC-"
-					+ testcase.getId() + "- " + testcase.getName(), newNode);
+			new DefaultTreeNode(type, "TC-" + testcase.getId() + "- "
+					+ testcase.getName(), newNode);
 
 		}
 

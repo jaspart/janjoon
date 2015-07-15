@@ -63,10 +63,11 @@ public class DataTableRendererImpl extends DataTableRenderer {
 
 		boolean page = FacesContext.getCurrentInstance().getViewRoot()
 				.getViewId().contains("planning")
-				&& (((JJTaskBean) LoginBean.findBean("jJTaskBean")).getSortMode() != null) && (!((JJTaskBean) LoginBean.findBean("jJTaskBean")).getSortMode()
-						.equalsIgnoreCase("chapter"));
-		if(page)			
-		{
+				&& (((JJTaskBean) LoginBean.findBean("jJTaskBean"))
+						.getSortMode() != null)
+				&& (!((JJTaskBean) LoginBean.findBean("jJTaskBean"))
+						.getSortMode().equalsIgnoreCase("chapter"));
+		if (page) {
 			table.setValueExpression("sortBy", null);
 			table.setSortBy(null);
 		}

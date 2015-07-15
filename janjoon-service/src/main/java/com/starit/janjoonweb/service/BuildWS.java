@@ -46,7 +46,7 @@ public class BuildWS {
 
 	public static final String BASE_URI = "https://www.starit.fr/jenkins/job/janjoonCloud/XXX/api/xml?wrapper=changes&xpath=//changeSet//msg";
 
-	public static final String ZIP_URL= "https://www.starit.fr/jenkins/job/janjoonCloud/BUILD_NUMBER/artifact/janjoon-ui/target/janjoon-ui-3.0-REVISION_NUMBER-distrib.zip";
+	public static final String ZIP_URL = "https://www.starit.fr/jenkins/job/janjoonCloud/BUILD_NUMBER/artifact/janjoon-ui/target/janjoon-ui-3.0-REVISION_NUMBER-distrib.zip";
 	@Autowired
 	private JJBuildService jJBuildService;
 
@@ -105,8 +105,8 @@ public class BuildWS {
 
 			@SuppressWarnings({ "resource", "deprecation" })
 			HttpClient httpClient = new DefaultHttpClient();
-			HttpGet httpget=null;
-			if(svnVersion != null)
+			HttpGet httpget = null;
+			if (svnVersion != null)
 				httpget = new HttpGet(BASE_URI.replace("XXX", svnVersion));
 			else
 				httpget = new HttpGet(BASE_URI.replace("XXX", "175"));
@@ -136,8 +136,9 @@ public class BuildWS {
 				sb.append(line + "\n");
 			}
 			is.close();
-			return sb.toString().replace("<changes>", " ").replace("<msg>", " ")
-					.replace("</changes>", " ").replace("</msg>", " ");
+			return sb.toString().replace("<changes>", " ")
+					.replace("<msg>", " ").replace("</changes>", " ")
+					.replace("</msg>", " ");
 		} catch (Exception e) {
 			System.err.println("Buffer Error" + "Error converting result "
 					+ e.toString());
@@ -156,7 +157,7 @@ public class BuildWS {
 
 		if (login != null && password != null) {
 			JJContact contact = jJContactService.getContactByEmail(login, true);
-			password=password.trim();
+			password = password.trim();
 			if (contact == null) {
 				return "user not Found";
 			} else if (!encoder.matches(password, contact.getPassword())) {
@@ -195,19 +196,25 @@ public class BuildWS {
 									else {
 										String svnVersion = personParams
 												.getFirst("svnVersion");
-										String buildNumber=buildName.substring(4);
+										String buildNumber = buildName
+												.substring(4);
 										JJBuild b = new JJBuild();
 										b.setName(buildName);
 										b.setEnabled(true);
 										b.setVersion(version);
 										b.setDescription("Build for Version "
 												+ version.getName());
-										
-										b.setDescription(b.getDescription()+System.getProperty("line.separator")
-												+"[URL]="+ZIP_URL.replace("BUILD_NUMBER",svnVersion)
-												.replace("REVISION_NUMBER", buildNumber));
+
+										b.setDescription(b.getDescription()
+												+ System.getProperty("line.separator")
+												+ "[URL]="
+												+ ZIP_URL.replace(
+														"BUILD_NUMBER",
+														svnVersion).replace(
+														"REVISION_NUMBER",
+														buildNumber));
 										b.setCreatedBy(contact);
-										b.setCreationDate(new Date());									
+										b.setCreationDate(new Date());
 										String commitMessage = getWebServiceAction(svnVersion);
 										if (commitMessage != null) {
 											List<JJTask> tasks = getCommitedTasks(commitMessage);
@@ -244,7 +251,7 @@ public class BuildWS {
 			pos = str.indexOf(c, pos + 1);
 		return pos;
 	}
-	
+
 	public String getSubString(String s, int index, String c) {
 		String[] temp = s.split(c);
 		return temp[index];
@@ -269,11 +276,11 @@ public class BuildWS {
 				System.err.println(id);
 				try {
 					ids.add(Long.parseLong(id));
-					JJTask task=jJTaskService.findJJTask(Long.parseLong(id));
+					JJTask task = jJTaskService.findJJTask(Long.parseLong(id));
 					if (task != null) {
 						tasks.add(task);
 					}
-					
+
 				} catch (NumberFormatException e) {
 					System.err.println("NumberFormatException");
 				}

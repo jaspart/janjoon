@@ -186,7 +186,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 					from.join("project").join("manager").get("company"),
 					company));
 		}
-		
+
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		select.where(predicates.toArray(new Predicate[] {}));
@@ -210,7 +210,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 		CriteriaQuery<JJChapter> select = criteriaQuery.select(from);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		
+
 		// Adding predicates in case of parameter not being null
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(from.get("project"), project));
@@ -219,7 +219,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 					from.join("project").join("manager").get("company"),
 					company));
 		}
-		
+
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}

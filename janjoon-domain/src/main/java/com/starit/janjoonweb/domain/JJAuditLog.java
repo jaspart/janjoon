@@ -18,7 +18,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJAuditLogSEQ")
-@Table(indexes ={@Index(unique=false,columnList="objet")})
+@Table(indexes = { @Index(unique = false, columnList = "objet") })
 public class JJAuditLog {
 
 	@Temporal(TemporalType.TIMESTAMP)

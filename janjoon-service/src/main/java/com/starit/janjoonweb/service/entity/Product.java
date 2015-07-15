@@ -121,7 +121,6 @@ public class Product {
 		return (object instanceof Product) && (getId() != null) ? getId()
 				.equals(((Product) object).getId()) : (object == this);
 	}
-	
 
 	@Override
 	public String toString() {
@@ -131,15 +130,19 @@ public class Product {
 				+ ", extname=" + extname + ", manager=" + manager + "]";
 	}
 
-	public static Response getProductListFromJJProductList(List<JJProduct> jJProducts) {
+	public static Response getProductListFromJJProductList(
+			List<JJProduct> jJProducts) {
 		List<Product> products = new ArrayList<Product>();
-		GenericEntity<List<Product>> entity = new GenericEntity<List<Product>>(products) {};
-		//Response response = Response.ok(entity).build();
-        for (JJProduct prod : jJProducts) {
+		GenericEntity<List<Product>> entity = new GenericEntity<List<Product>>(
+				products) {
+		};
+		// Response response = Response.ok(entity).build();
+		for (JJProduct prod : jJProducts) {
 			products.add(new Product(prod));
 		}
-        //GenericEntity<List<Product>> entity = new GenericEntity<List<Product>>(products) {};
-		return  Response.ok(entity).build();
+		// GenericEntity<List<Product>> entity = new
+		// GenericEntity<List<Product>>(products) {};
+		return Response.ok(entity).build();
 	}
 
 }

@@ -14,15 +14,13 @@ import com.starit.janjoonweb.domain.JJContact;
 @RooSerializable
 @RooJsfManagedBean(entity = JJAuditLog.class, beanName = "jJAuditLogBean")
 public class JJAuditLogBean {
-	
-	public void saveJJAuditLog(JJAuditLog b)
-	{	
+
+	public void saveJJAuditLog(JJAuditLog b) {
 		jJAuditLogService.saveJJAuditLog(b);
 	}
-	
-	public void updateJJAuditLog(JJAuditLog b)
-	{
-		
+
+	public void updateJJAuditLog(JJAuditLog b) {
+
 		jJAuditLogService.updateJJAuditLog(b);
 	}
 }
