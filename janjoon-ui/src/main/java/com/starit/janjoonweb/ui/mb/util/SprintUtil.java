@@ -245,7 +245,10 @@ public class SprintUtil {
 						sprint.getEndDate()) - 1);
 		chartSeries.set(f.format(sprint.getStartDate()), workload);
 		lineSeries.set(f.format(sprint.getStartDate()), workload);
-		chartSeries.setLabel(sprint.getName() + " Workload");
+		chartSeries.setLabel(sprint.getName()
+				+ " "
+				+ MessageFactory.getMessage(
+						"specification_create_workload_label", "").getDetail());
 		lineSeries.setLabel("BurnDown Ideal");
 
 		Date staDate = sprint.getStartDate();
@@ -330,7 +333,9 @@ public class SprintUtil {
 		chartModel.getAxis(AxisType.X).setLabel("Date");
 
 		chartModel.getAxis(AxisType.Y).setMin(0);
-		chartModel.getAxis(AxisType.Y).setLabel("WorkLoad");
+		chartModel.getAxis(AxisType.Y).setLabel(
+				MessageFactory.getMessage(
+						"specification_create_workload_label", "").getDetail());
 	}
 
 	public static List<SprintUtil> generateSprintUtilList(

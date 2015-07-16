@@ -193,7 +193,7 @@
 							<p:row>
 								<p:column colspan="4">
 									<h:outputText id="nombres"
-										value="#{requirementBean.requirement.category.name} Requirement"
+										value="#{requirementBean.requirement.category.name} #{messages.label_requirement}"
 										style="text-transform: uppercase" />
 								</p:column>
 							</p:row>
@@ -354,7 +354,7 @@
 										<p:commandButton onstart="PF('blockUIWidget').block()"
 											oncomplete="PF('blockUIWidget').unblock()" id="update"
 											disabled="#{empty requirementBean.reqtestCases}"
-											update="testCaseDataTable :growlForm" value="Update"
+											update="testCaseDataTable :growlForm" value="#{messages.label_update}"
 											process="testCaseDataTable"
 											action="#{requirementBean.updateReqTestCases(jJTestcaseBean)}" />
 										<br />
@@ -408,7 +408,7 @@
 		</p:dialog>
 
 		<p:dialog id="linkDialog" draggable="false" appendTo="@(body)"
-			header="Select Requirement-Links" modal="true"
+			header="#{messages.requirement_dialog_linkHeader}" modal="true"
 			widgetVar="linkDialogWidget" dynamic="true" resizable="false">
 			<p:ajax event="close" update=":linkForm"
 				onstart="PF('blockUIWidget').block()"
@@ -432,18 +432,11 @@
 						value="#{requirementBean.linkReqList}">
 						<p:column selectionMode="multiple"
 							style="width:30%;text-align:center" />
-						<p:column style="width:70%">
-							<f:facet name="header">
-								<p:row>
-									<p:column>
-										<h:outputText value="Requirement :" />
-									</p:column>
-								</p:row>
-							</f:facet>
+						<p:column style="width:70%" headerText="#{messages.label_requirement}">							
 							<h:outputText value="#{req.id}-#{req.name}" />
 						</p:column>
 						<f:facet name="footer">
-							<p:commandButton value="Update"
+							<p:commandButton value="#{messages.label_update}"
 								action="#{requirementBean.updateRequirementLinks(jJRequirementBean)}"
 								onstart="PF('requirementBlockUIWidget').block()"
 								oncomplete="PF('requirementBlockUIWidget').unblock()"

@@ -21,22 +21,13 @@
 					sortOrder="DESCENDING"
 					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 					lazy="true" emptyMessage="#{messages.label_notFound}"
-					rowClasses="order-table-odd-row,order-table-even-row">
-					<!--f:facet name="header">
-						<p:outputPanel>
-							<h:outputText value="#{messages.main_communication_search_label}" />
-							<p:inputText id="globalFilter"
-								onkeyup="PF('messageTable').filter()" style="width:200px"
-								placeholder="#{messages.main_communication_search_watermark}" />
-						</p:outputPanel>
-					</f:facet-->
+					rowClasses="order-table-odd-row,order-table-even-row">					
 					<p:column style="width: 70px !important;text-align: center;">
 						<f:facet name="header">
 							<p:commandButton id="createButton" icon="ui-icon-plusthick"
 								update=":messageDialogForm" resetValues="true"
 								oncomplete="PF('messageDialog').show();" />
-							<!-- 							<p:tooltip for="createButton" value="#{messages.label_create}" -->
-							<!-- 								showEffect="fade" hideEffect="fade" /> -->
+						
 						</f:facet>
 						<p:graphicImage styleClass="avatar" value="#{imageStreamer.image}"
 							rendered="#{mes.createdBy.picture != null}">
@@ -80,94 +71,6 @@
 					</p:column>
 				</p:dataTable>
 			</h:form>
-
-
-			<!--h:form id="messageForm">
-				<p:dataTable id="MessageTable2" sortMode="multiple" 
-					value="#{jJMessageBean.mainMessages}" rowKey="#{mes.id}" var="mes"
-					widgetVar="messageTable"  paginator="true" rows="6" paginatorPosition="bottom"
-					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-					lazy="true"					
-					emptyMessage="#{messages.label_notFound}">
-					<f:facet name="header">
-						<p:outputPanel>
-							<h:outputText value="#{messages.main_communication_search_label}" />
-							<p:inputText id="globalFilter"
-								onkeyup="PF('messageTable').filter()" style="width:200px"
-								placeholder="#{messages.main_communication_search_watermark}" />
-						</p:outputPanel>
-					</f:facet>
-					<p:column headerText="#{messages.main_communication_creator_title}"
-						filterBy="createdBy.name" sortBy="createdBy.name"
-						filterOptions="#{jJMessageBean.creatorOptions}"
-						filterMatchMode="exact" filterStyle="width: 90%;"
-						style="width: 6% !important;height: 5px !important;">
-						<h:outputText value="#{mes.createdBy.firstname} #{mes.createdBy.name}" />
-					</p:column>
-					<p:column
-						headerText="#{messages.main_communication_creation_title}"
-						sortBy="creationDate"
-						style="width: 6% !important;height: 5px !important;">
-						<h:outputText value="#{mes.creationDate}">
-							<f:converter converterId="extendedDateTimeConverter" />
-							<f:attribute name="pattern" value="dd/MM/yyyy" />
-							<f:attribute name="timeZone" value="UCL" />
-
-						</h:outputText>
-					</p:column>
-					<p:column headerText="#{messages.main_communication_project_title}"
-						filterBy="project.name" sortBy="project.name"
-						filterOptions="#{jJMessageBean.projectOptions}"
-						filterMatchMode="exact" filterStyle="width: 90%;"
-						style="width: 6% !important;height: 5px !important;">
-						<h:outputText value="#{mes.project.name}" />
-					</p:column>
-					<p:column headerText="#{messages.main_communication_product_title}"
-						filterBy="product.name" sortBy="product.name"
-						filterOptions="#{jJMessageBean.productOptions}"
-						filterMatchMode="exact" filterStyle="width: 90%;"
-						style="width: 6% !important;height: 5px !important;">
-						<h:outputText value="#{mes.product.name}" />
-					</p:column>
-					<p:column headerText="#{messages.main_communication_message_title}"
-						filterBy="message" filterMatchMode="contains" sortBy="message"
-						filterStyle="width: 90%;"
-						style="width: 10% !important;height: 5px !important;">
-						<h:outputText style="width: 90% !important;"
-							value="#{mes.message}" />
-					</p:column-->
-			<!--p:column
-						headerText="#{messages.main_communication_criticity_title}"
-						filterBy="criticity.name" sortBy="criticity.name"
-						filterMatchMode="exact"
-						style="width: 6% !important;height: 5px !important;"
-						filterOptions="#{jJMessageBean.criticityOptions}"
-						filterStyle="width: 90%;">
-						<h:outputText value="#{mes.criticity.name}" />
-					</p:column-->
-			<!--p:column headerText="#{messages.main_communication_status_title}"
-						sortBy="status.name" filterBy="status.name"
-						filterMatchMode="exact"
-						filterOptions="#{jJMessageBean.statusOptions}"
-						style="width: 6% !important;height: 5px !important;"
-						filterStyle="width: 90%;">
-						<h:outputText value="#{mes.status.name}" />
-					</p:column-->
-			<!--p:column headerText="#{messages.main_communication_resolve_title}"
-						style="width:5% !important;">
-						<p:commandButton id="resolveButton"
-							value="#{messages.main_communication_resolve_button}"
-							oncomplete="PF('resolveDialogWidget').show()"
-							title="#{messages.label_disable}">
-							<f:setPropertyActionListener value="#{mes}"
-								target="#{jJMessageBean.resolvedJJMessage}" />
-						</p:commandButton>
-						<p:tooltip for="resolveButton" value="#{messages.label_disable}"
-							showEffect="fade" hideEffect="fade" />
-					</p:column-->
-			<!--/p:dataTable>
-			</h:form-->
-			<!-- 			<p:growl id="notifMPT" showDetail="false" life="2000" /> -->
 			<p:confirmDialog id="resolveDialog" widgetVar="resolveDialogWidget"
 				message="#{messages.label_disable_record}" showEffect="fade"
 				hideEffect="explode" header="#{messages.label_confirm_disabling}"
@@ -197,7 +100,7 @@
 					scrollable="true" scrollHeight="200" style="table-layout: fixed;"
 					emptyMessage="#{messages.label_notRecordFound}">
 
-					<p:column headerText="Task">
+					<p:column headerText="#{messages.label_task}">
 						<p:graphicImage
 							rendered="#{task.specification != null and task.specification}"
 							library="images" name="doc.ico" width="16" height="16" />
@@ -212,7 +115,7 @@
 						<h:outputText value="#{task}" converter="JJTaskConverter" />
 					</p:column>
 
-					<p:column headerText="Specification">
+					<p:column headerText="#{messages.label_requirement}">
 						<h:outputText value="#{task.requirement}"
 							converter="JJRequirementConverter" />
 					</p:column>
@@ -221,12 +124,12 @@
 						<h:outputText value="#{task.bug}" converter="JJBugConverter" />
 					</p:column>
 
-					<p:column headerText="Project" style="width:100px;">
+					<p:column headerText="#{messages.label_project}" style="width:100px;">
 						<h:outputText value="#{task.project}"
 							converter="JJProjectConverter" />
 					</p:column>
 
-					<p:column headerText="Start Date :" style="width:100px;">
+					<p:column headerText="#{messages.project_scrum_new_start_label}" style="width:100px;">
 						<h:outputText value="#{task.startDateReal}">
 							<f:converter converterId="extendedDateTimeConverter" />
 							<f:attribute name="pattern" value="dd/MM/yyyy" />
@@ -235,7 +138,7 @@
 					</p:column>
 
 
-					<p:column headerText="WorkLoad" style="width:100px;">
+					<p:column headerText="#{messages.specification_create_workload_label}" style="width:100px;">
 						<h:outputText value="#{task.workloadPlanned}" />
 					</p:column>
 
@@ -294,17 +197,14 @@
 		<p:panel id="specpanel" header="#{messages.main_specPanel_header}"
 			rendered="#{loginBean.enable and loginBean.noCouvretReq != null}"
 			styleClass="customTitleBar">
-
-			<!-- 			<f:event listener="#{loginBean.initNonCouvretSpec}" -->
-			<!-- 				type="preRenderView" /> -->
+			
 			<h:form id="specForm">
 				<p:dataTable id="specTable" value="#{loginBean.noCouvretReq}"
 					rowKey="#{req.id}" var="req" widgetVar="taskTable"
 					scrollable="true" scrollHeight="200"
-					emptyMessage="There is no Requirement non couvered,See all in Spec View">
+					emptyMessage="#{messages.label_notRecordFound}">
 
-					<p:column headerText="Specification">
-						<!-- 						<h:outputText value="#{req}" converter="JJRequirementConverter" /> -->
+					<p:column headerText="#{messages.label_requirement}">						
 						<p:commandLink target="_blank" value="#{req.name}"
 							action="#{jJRequirementBean.requirementInfo}" ajax="false">
 							<f:setPropertyActionListener value="#{req}"
@@ -312,17 +212,17 @@
 						</p:commandLink>
 					</p:column>
 
-					<p:column headerText="Chapter">
+					<p:column headerText="#{messages.label_chapter}">
 						<h:outputText value="#{req.chapter}"
 							converter="JJChapterConverter" />
 					</p:column>
 
-					<p:column headerText="Project">
+					<p:column headerText="#{messages.label_project}">
 						<h:outputText value="#{req.project}"
 							converter="JJProjectConverter" />
 					</p:column>
 
-					<p:column headerText="Category">
+					<p:column headerText="#{messages.label_category}">
 						<h:outputText value="#{req.category}"
 							converter="JJCategoryConverter" />
 					</p:column>

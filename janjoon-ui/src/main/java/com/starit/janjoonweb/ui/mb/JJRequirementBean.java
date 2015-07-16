@@ -2050,16 +2050,20 @@ public class JJRequirementBean {
 			jJChapterBean = new JJChapterBean();
 		}
 		if (project == null) {
-			warnMessage = "Select a project to export PDF";
+			warnMessage = MessageFactory.getMessage("specification_req_warnMessage",
+					"").getDetail();
 			disabledExport = true;
 			disabledRequirement = true;
-			jJChapterBean.setWarnMessage("Select a project to manage document");
+			jJChapterBean.setWarnMessage(MessageFactory.getMessage("specification_chap_warnMessage",
+					"").getDetail());
 			jJChapterBean.setDisabledChapter(true);
 		} else {
-			warnMessage = "Export to PDF";
+			warnMessage = MessageFactory.getMessage("specification_req_exportTo",
+					"").getDetail()+" PDF";
 			disabledExport = false;
 			disabledRequirement = false;
-			jJChapterBean.setWarnMessage("Manage document");
+			jJChapterBean.setWarnMessage(MessageFactory.getMessage("specification_req_managedocument",
+					"").getDetail());
 			jJChapterBean.setDisabledChapter(false);
 		}
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));

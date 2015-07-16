@@ -46,15 +46,15 @@
 					</p:commandButton>
 				</p:column>
 				<p:column>
-					<p:outputLabel for="sortMode" value="Sort By: " />
+					<p:outputLabel for="sortMode" value="#{messages.project_gantt_select_sortBy} :" />
 					<p:selectOneMenu id="sortMode" value="#{jJTaskBean.sortMode}"
 						panelStyle="width:150px;" effect="fade" style="width:150px;"
 						filter="true" filterMatchMode="startsWith">
-						<f:selectItem itemValue="chapter" itemLabel="Chapter" />
+						<f:selectItem itemValue="chapter" itemLabel="#{messages.label_chapter}" />
 						<f:selectItem itemValue="StartDateReal"
-							itemLabel="Start Date Real" />
+							itemLabel="#{messages.project_gantt_table_startreal_title}" />
 						<f:selectItem itemValue="StartDatePlanned"
-							itemLabel="Start Date Planned" />
+							itemLabel="#{messages.project_gantt_table_startplanned_title}" />
 						<p:ajax onstart="PF('blockUIWidget').block()" event="change"
 							listener="#{jJTaskBean.SortBySelectionChanged}"
 							update=":projecttabview:planningForm :projecttabview:sprintForm"
@@ -122,7 +122,7 @@
 										rendered="#{jJTaskBean.sortMode == 'chapter'}">
 										<p:column colspan="11" style="text-align:left">
 											<h:outputText icon="ui-icon-arrowreturnthick-1-e"
-												value="Chapter: #{taskData.chapter.name}" />
+												value="#{messages.label_chapter}: #{taskData.chapter.name}" />
 										</p:column>
 									</p:summaryRow>
 

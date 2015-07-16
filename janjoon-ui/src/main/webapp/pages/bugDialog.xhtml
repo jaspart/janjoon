@@ -20,38 +20,35 @@
 		<p:row>
 			<p:column colspan="1">
 				<p:inputTextarea id="jJbugName" value="#{JJBug_.name}"
-					required="true">
+					required="true" placeholder="#{messages.label_name} :">
 					<f:validateLength maximum="100" />
 				</p:inputTextarea>
-				<p:watermark for="jJbugName" value="Name : " />
 			</p:column>
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugCriticity" scrollHeight="200"
 					value="#{JJBug_.criticity}" itemLabel="#{criticity.name}"
-					itemValue="#{criticity}"
+					itemValue="#{criticity}" placeholder="#{messages.label_criticity}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJCriticityConverter"
 					dropdown="true" var="criticity"
 					completeMethod="#{jJBugBean.completeCriticityBug}" />
-				<p:watermark for="jJbugCriticity" value="Criticity : " />
 			</p:column>
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugImportance" scrollHeight="200"
 					value="#{JJBug_.importance}" itemLabel="#{importance.name}"
-					itemValue="#{importance}"
+					itemValue="#{importance}" placeholder="Importance : "
 					converter="com.starit.janjoonweb.ui.mb.converter.JJImportanceConverter"
 					dropdown="true" var="importance"
 					completeMethod="#{jJBugBean.completeImportance}" />
-				<p:watermark for="jJbugImportance" value="Importance : " />
 			</p:column>
 		</p:row>
 		<p:row>
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugStatus" value="#{JJBug_.status}"
-					itemLabel="#{status.name}" itemValue="#{status}" scrollHeight="200"
+					placeholder="Status : " itemLabel="#{status.name}"
+					itemValue="#{status}" scrollHeight="200"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
 					dropdown="true" var="status" readonly="#{JJBug_.id == null}"
 					completeMethod="#{jJBugBean.completeStatusBug}" />
-				<p:watermark for="jJbugStatus" value="Status : " />
 			</p:column>
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugRequirement" scrollHeight="200"
@@ -60,34 +57,33 @@
 					itemLabel="#{requirement.name}" itemValue="#{requirement}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
 					dropdown="true" var="requirement"
+					placeholder="#{messages.label_requirement} :"
 					onchange="jJbugTeststepWV.val('');"
 					completeMethod="#{jJBugBean.completeReqBug}">
 					<p:ajax event="itemSelect" update="jJbugRequirement jJbugTeststep" />
 					<f:attribute name="project" value="#{jJBugBean.bugProjectSelected}" />
 				</p:autoComplete>
-
-				<p:watermark for="jJbugRequirement" value="Requirement : " />
 			</p:column>
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugTeststep" scrollHeight="200"
 					widgetVar="jJbugTeststepWV" value="#{JJBug_.teststep}"
-					itemValue="#{teststep}"
+					itemValue="#{teststep}" placeholder="TestStep : " 
 					converter="com.starit.janjoonweb.ui.mb.converter.JJTeststepConverter"
 					disabled="#{jJBugBean.bugProjectSelected == null and jJProjectBean.project == null and JJBug_.requirement==null}"
 					dropdown="true" var="teststep" itemLabel="#{teststep.name}"
-					completeMethod="#{jJBugBean.completeTestStepsBug}">
+					completeMethod="#{jJBugBean.completeTestStepsBug}" >
 					<p:column>
-						<h:outputText value="#{teststep.name}" escape="false" />
+						<h:outputText rendered="#{teststep != null}" value="#{teststep.name}" escape="false" />
 					</p:column>
 					<f:attribute name="requirement" value="#{JJBug_.requirement}" />
 					<f:attribute name="project" value="#{jJBugBean.bugProjectSelected}" />
 				</p:autoComplete>
-				<p:watermark for="jJbugTeststep" value="Teststep : " />
 			</p:column>
 		</p:row>
 		<p:row>
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugProject"
+					placeholder="#{messages.lable_project}"
 					onchange="jJbugRequirementWV.val('');"
 					value="#{jJBugBean.bugProjectSelected}" itemLabel="#{project.name}"
 					itemValue="#{project}" rendered="#{jJProjectBean.project == null}"
@@ -109,8 +105,6 @@
 					<f:selectItem itemValue="#{jJProjectBean.project}"
 						itemLabel="#{jJProjectBean.project.name}" itemDisabled="true" />
 				</p:selectOneMenu>
-				<p:watermark for="jJbugProject" value="Project : "
-					rendered="#{jJProjectBean.project == null}" />
 				<p:watermark for="jJbugProject2" value="Project : "
 					rendered="#{jJProjectBean.project != null}" />
 
@@ -118,14 +112,13 @@
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugVersion" scrollHeight="200"
 					onchange="jJbugBuild.val('');jJbugRequirementWV.val('');"
-					value="#{JJBug_.versioning}"
-					itemLabel="#{version.name} : #{version.product.name}"
+					value="#{JJBug_.versioning}" placeholder="Version :"					
 					itemValue="#{version}" rendered="#{jJVersionBean.version == null}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
-					dropdown="true" var="version"
+					dropdown="true" var="version" itemLabel="#{version.name} : #{version.product.name}"
 					completeMethod="#{jJBugBean.completeVersioningBug}">
 					<p:ajax event="itemSelect" update="jJbugVersion jJbugBuild"
-						listener="#{jJBugBean.changeEvent('version',JJBug_)}" />
+						listener="#{jJBugBean.changeEvent('version',JJBug_)}" />					
 				</p:autoComplete>
 				<p:selectOneMenu id="jJbugVersion2" value="#{JJBug_.versioning}"
 					rendered="#{jJVersionBean.version != null}"
@@ -134,8 +127,6 @@
 						itemDisabled="true"
 						itemLabel="#{jJVersionBean.version.name} : #{jJVersionBean.version.product.name}" />
 				</p:selectOneMenu>
-				<p:watermark for="jJbugVersion" value="Version : "
-					rendered="#{jJVersionBean.version == null}" />
 				<p:watermark for="jJbugVersion2" value="Version : "
 					rendered="#{jJVersionBean.version != null}" />
 			</p:column>
@@ -144,13 +135,12 @@
 					widgetVar="jJbugBuildWV" value="#{JJBug_.build}"
 					itemLabel="#{build.name}" itemValue="#{build}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter"
-					dropdown="true" var="build"
+					dropdown="true" var="build" placeholder="#{messages.label_build}"
 					completeMethod="#{jJBugBean.completeBuildBug}">
 					<f:attribute name="version" value="#{JJBug_.versioning}" />
 					<f:validator validatorId="bugValidator" />
 					<f:attribute name="jJbugVersion" value="#{JJBug_.versioning}" />
-				</p:autoComplete>
-				<p:watermark for="jJbugBuild" value="Build : " />
+				</p:autoComplete>				
 			</p:column>
 		</p:row>
 		<p:row>

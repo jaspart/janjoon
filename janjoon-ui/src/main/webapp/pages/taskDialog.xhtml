@@ -28,7 +28,7 @@
 					update="taskStartDatePlanned taskEndDatePlanned taskAssignedTo" />
 			</p:autoComplete>
 
-			<p:outputLabel value="Assigned To :" for="taskAssignedTo" />
+			<p:outputLabel value="#{messages.taskDialog_assignedTo} :" for="taskAssignedTo" />
 			<p:autoComplete id="taskAssignedTo" value="#{JJTask_.assignedTo}"
 				size="15" itemLabel="#{assignedTo.name}" itemValue="#{assignedTo}"
 				scrollHeight="200"
@@ -46,7 +46,7 @@
 
 		</h:panelGrid>
 		<h:panelGrid columns="8" style="width: 100%">
-			<p:outputLabel value="Start Date :" for="taskStartDatePlanned" />
+			<p:outputLabel value="#{messages.project_scrum_new_start_label}:" for="taskStartDatePlanned" />
 			<p:calendar id="taskStartDatePlanned" style="width:90px"
 				value="#{JJTask_.startDatePlanned}" navigator="true"
 				pattern="yyyy/MM/dd HH:mm" required="true"
@@ -59,7 +59,7 @@
 				<p:ajax event="dateSelect" update="taskEndDatePlanned" />
 			</p:calendar>
 
-			<p:outputLabel value="End Date :" for="taskEndDatePlanned" />
+			<p:outputLabel value="#{messages.project_scrum_new_start_label}:" for="taskEndDatePlanned" />
 			<p:calendar id="taskEndDatePlanned" style="width:90px"
 				value="#{JJTask_.endDatePlanned}" navigator="true"
 				pattern="yyyy/MM/dd HH:mm" required="true"
@@ -73,7 +73,7 @@
 				<p:ajax event="dateSelect" update="taskEndDatePlanned" />
 			</p:calendar>
 
-			<p:outputLabel value="Workload Planned :" for="taskWorkload" />
+			<p:outputLabel value="#{messages.specification_create_workload_label}:" for="taskWorkload" />
 			<p:spinner id="taskWorkload" value="#{JJTask_.workloadPlanned}"
 				stepFactor="1" min="1" required="true" size="3" />
 			<p:outputLabel value="Specification :" for="taskSpec" />
@@ -127,7 +127,7 @@
 
 			<p:row rowspan="5" rendered="#{jJTaskBean.taskTreeNode != null}">
 				<p:column colspan="2">
-					<h:outputLabel id="requirementLabel" value="Requirement: "
+					<h:outputLabel id="requirementLabel" value="#{messages.label_requirement}: "
 						for="reqTree" />
 					<p:tree id="reqTree" value="#{jJTaskBean.taskTreeNode}" var="node"
 						selection="#{jJTaskBean.selectedTree}" animate="true"
@@ -145,14 +145,14 @@
 					<p:panelGrid id="taskTreePanelGrid" style="margin-top:10px">
 						<f:facet name="header">
 							<p:row>
-								<p:column colspan="2">Requirement : <p:outputLabel
+								<p:column colspan="2">#{messages.label_requirement}: <p:outputLabel
 										value="#{jJTaskBean.selectedReq.name}" />
 								</p:column>
 							</p:row>
 						</f:facet>
 						<p:row>
 							<p:column colspan="1">
-								<p:outputLabel value="Category :" for="category" />
+								<p:outputLabel value="#{messages.label_category}:" for="category" />
 								<p:inputText id="category"
 									value="#{jJTaskBean.selectedReq.category}" readonly="true"
 									converter="JJCategoryConverter" />
@@ -166,7 +166,7 @@
 						</p:row>
 						<p:row>
 							<p:column colspan="1">
-								<h:outputText for="chapter" value="Chapter :" />
+								<h:outputText for="chapter" value="#{messages.label_chapter}:" />
 								<p:inputText id="chapter" readonly="true"
 									converter="JJChapterConverter"
 									value="#{jJTaskBean.selectedReq.chapter}" />

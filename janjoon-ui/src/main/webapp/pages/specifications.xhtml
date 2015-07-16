@@ -221,7 +221,7 @@
 														oncomplete="PF('blockUIWidget').unblock();PF('chapterDialogWidget').show()" />
 												</p:column>
 												<p:column>
-													<p:commandButton ajax="false" id="xml" title="Export To XML"
+													<p:commandButton ajax="false" id="xml" title="#{messages.specification_req_exportTo} XML"
 														onclick="PrimeFaces.monitorDownload(start, stop);"
 														icon="ui-icon-arrowthick-1-s">
 														<p:fileDownload value="#{tableDataModel.file}" />
@@ -274,15 +274,7 @@
 														icon="ui-icon-pdf">
 														<p:fileDownload value="#{jJChapterBean.preProcessPDF}" />
 													</p:commandButton>
-
-													<!-- 													<h:commandLink id="pdf" -->
-													<!-- 														disabled="#{jJRequirementBean.disabledExport}" -->
-													<!-- 														actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}"> -->
-													<!-- 														<p:graphicImage value="/resources/images/pdf.png" /> -->
-													<!-- 														<p:dataExporter type="pdf" -->
-													<!-- 															target="categoryTable_#{loop.index}" fileName="Document" -->
-													<!-- 															preProcessor="#{jJChapterBean.preProcessPDF}" /> -->
-													<!-- 													</h:commandLink> -->
+													
 												</p:column>
 											</p:row>
 										</f:facet>
@@ -296,11 +288,7 @@
 										<h:outputText value="Id" />
 									</f:facet>
 									<h:outputText value="#{reqUtil.requirement.id}" />
-								</p:column>
-								<!-- 								<p:column style="width: 170px;"> -->
-								<!-- 								<h:outputText value="#{reqUtil.style}" styleClass="#{reqUtil.style}" /> -->
-								<!-- 								</p:column> -->
-
+								</p:column>								
 								<p:column filterBy="#{reqUtil.requirement.name}"
 									filterStyle="display:none" styleClass="requirement-column"
 									sortBy="#{reqUtil.requirement.name}">
@@ -310,7 +298,7 @@
 									</f:facet>
 									<p:cellEditor>
 										<f:facet name="output">
-											<h:outputText value="#{reqUtil.style}"
+											<h:outputText value="#{messages['specification_'.concat(reqUtil.style)]}"
 												styleClass="#{reqUtil.style}" />
 
 											<h:outputText id="reqContent" style="white-space: normal;"
@@ -366,7 +354,7 @@
 													<p:column>
 														<p:outputLabel style="font-weight: bold;" for="expStyle"
 															value="Type:  " />
-														<h:outputText id="expStyle" value="#{reqUtil.style}"
+														<h:outputText id="expStyle" value="#{messages['specification_'.concat(reqUtil.style)]}"
 															styleClass="#{reqUtil.style}" />
 													</p:column>
 												</p:row>

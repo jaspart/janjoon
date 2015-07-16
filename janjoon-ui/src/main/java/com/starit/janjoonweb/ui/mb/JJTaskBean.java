@@ -1964,7 +1964,7 @@ public class JJTaskBean {
 		getImportStatus();
 		disabledImportButton = true;
 		copyObjets = false;
-		oldCopyObjects =false;
+		oldCopyObjects = false;
 
 		if (objet != null) {
 			fillTableImport();

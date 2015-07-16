@@ -182,12 +182,12 @@
 						<p:panelGrid style="width: 350px;">
 							<f:facet name="header">
 								<p:row>
-									<p:column colspan="2">Link</p:column>
+									<p:column colspan="2">#{messages.bug_headerTable_link}</p:column>
 								</p:row>
 							</f:facet>
 							<p:row>
 								<p:column>
-									<p:outputLabel for="bugReq" value="Requirement :" />
+									<p:outputLabel for="bugReq" value="#{messages.label_requirement} :" />
 								</p:column>
 								<p:column style="width: 220px;">
 									<p:autoComplete id="bugReq" scrollHeight="200"
@@ -238,7 +238,7 @@
 							</p:row>
 							<p:row>
 								<p:column>
-									<p:outputLabel for="bugTasks" value="Tasks :" />
+									<p:outputLabel for="bugTasks" value="#{messages.importTask_headerTable_tasks} :" />
 								</p:column>
 								<p:column style="width: 220px;">
 									<p:dataList id="bugTasks" value="#{jJBugBean.viewBugTasks}"

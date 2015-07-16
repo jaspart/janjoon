@@ -113,13 +113,13 @@
 									<p:graphicImage library="images" name="ajaxloadingbar.gif"
 										style="vertical-align: middle;" />
 								</p:dialog>
-								<p:commandButton ajax="false" id="xml"
+								<p:commandButton ajax="false" id="xml" title="#{messages.specification_req_exportTo} XML"
 									onclick="PrimeFaces.monitorDownload(start, stop);"
 									icon="ui-icon-arrowthick-1-s">
 									<p:fileDownload value="#{jJTestcaseBean.file}" />
 								</p:commandButton>
-								<p:tooltip for="xml" value="Export To XML" showEffect="fade"
-									hideEffect="fade" />
+<!-- 								<p:tooltip for="xml" value="Export To XML" showEffect="fade" -->
+<!-- 									hideEffect="fade" /> -->
 							</p:column>
 							<p:column>
 
@@ -317,7 +317,7 @@
 								<h:outputText value="Version #{rowName.name}"
 									rendered="#{rowName['class'].simpleName == 'JJVersion'}" />
 
-								<h:outputText value="Build #{rowName.name}"
+								<h:outputText value="#{messages.label_build} #{rowName.name}"
 									rendered="#{rowName['class'].simpleName == 'JJBuild'}" />
 								<p:panel style="height: 25px;width: 30px; margin: auto;">
 									<p:commandButton styleClass="checkBoxButton"
@@ -458,7 +458,7 @@
 								</p:column>
 								<p:column>
 									<h:outputText
-										value=" Requirement: #{jJTestcaseBean.testcase.requirement.name}" />
+										value=" #{messages.label_requirement}: #{jJTestcaseBean.testcase.requirement.name}" />
 									<br />
 								</p:column>
 								<p:column>
@@ -516,17 +516,17 @@
 						<p:column headerText="Id">
 							<h:outputText value="#{tce.testcaseexecution.id}" />
 						</p:column>
-						<p:column headerText="Build">
+						<p:column headerText="#{messages.label_build}">
 							<h:outputText value="#{tce.testcaseexecution.build.name}" />
 						</p:column>
-						<p:column headerText="Creation Date">
+						<p:column headerText="#{messages.label_creationDate}">
 							<h:outputText value="#{tce.testcaseexecution.creationDate}">
 								<f:converter converterId="extendedDateTimeConverter" />
 								<f:attribute name="pattern" value="dd/MM/yyyy" />
 								<f:attribute name="timeZone" value="UCL" />
 							</h:outputText>
 						</p:column>
-						<p:column headerText="Update Date">
+						<p:column headerText="#{messages.label_updateDate}">
 							<h:outputText value="#{tce.testcaseexecution.updatedDate}">
 								<f:converter converterId="extendedDateTimeConverter" />
 								<f:attribute name="pattern" value="dd/MM/yyyy" />
