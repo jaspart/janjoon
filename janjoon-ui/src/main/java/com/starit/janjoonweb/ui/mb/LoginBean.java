@@ -515,9 +515,8 @@ public class LoginBean implements Serializable {
 				authorisationService = new AuthorisationService(session,
 						contact);
 
-				facesMessage = MessageFactory.getMessage(
-						"login_welcome_message", FacesMessage.SEVERITY_INFO,
-						getContact().getName());
+				facesMessage = MessageFactory.getMessage("label_welcome_text",
+						FacesMessage.SEVERITY_INFO, getContact().getName());
 
 				if (!UsageChecker.checkExpiryDate()) {
 					facesMessage = MessageFactory

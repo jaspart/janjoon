@@ -105,7 +105,7 @@
 					</f:facet>
 					<h:panelGrid id="createPanelGrid" columns="2" styleClass="dialog"
 						columnClasses="col1,col2,col3">
-						<p:outputLabel for="confName" value="Name:" />
+						<p:outputLabel for="confName" value="#{messages.admin_config_table_name_title}:" />
 						<p:inputTextarea
 							value="#{jJConfigurationBean.JJConfiguration_.name}"
 							id="confName" required="true"
@@ -132,17 +132,16 @@
 							requiredMessage="Config Description is a required value" />
 
 
-						<p:outputLabel for="confParam" value="Parametre:" />
+						<p:outputLabel for="confParam" value="#{messages.admin_config_table_parameter_title}:" />
 						<p:inputText value="#{jJConfigurationBean.JJConfiguration_.param}"
 							id="confParam">
 							<f:validateLength maximum="100" />
 						</p:inputText>
 
-						<p:outputLabel for="confVal" value="Value:" />
+						<p:outputLabel for="confVal" value="#{messages.admin_config_table_value_title}:" />
 						<p:inputTextarea scrollHeight="6" cols="82" rows="6"
 							autoResize="false"
-							value="#{jJConfigurationBean.JJConfiguration_.val}" id="confVal">
-							<!-- 							<f:validateLength maximum="100" /> -->
+							value="#{jJConfigurationBean.JJConfiguration_.val}" id="confVal">							
 						</p:inputTextarea>
 					</h:panelGrid>
 					<f:facet name="footer">

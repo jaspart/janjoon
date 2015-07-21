@@ -652,7 +652,8 @@ public class JJTaskBean {
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "Task");
+				"message_successfully_updated",
+				MessageFactory.getMessage("label_task", "").getDetail());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 
@@ -1341,12 +1342,14 @@ public class JJTaskBean {
 
 			message = "Success Update";
 			facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					message, "Task");
+					message, MessageFactory.getMessage("label_task", "")
+							.getDetail());
 			// RequestContext.getCurrentInstance().equals("onCellEditTableComplete");
 
 		} else {
 			facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					message, "Task");
+					message, MessageFactory.getMessage("label_task", "")
+							.getDetail());
 		}
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -1511,8 +1514,9 @@ public class JJTaskBean {
 				Date startDate = format.getStartDate();
 				if (format.getStartDate() == null) {
 					validationFailed = true;
-					message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"start date is requierd", null);
+					message = MessageFactory.getMessage(
+							"validator_task_startDateRequired",
+							FacesMessage.SEVERITY_ERROR, "ttt");
 
 				} else {
 					if (mode.equalsIgnoreCase("scrum")) {
@@ -1520,35 +1524,38 @@ public class JJTaskBean {
 								.findBean("jJSprintBean")).getSprintUtil()
 								.getSprint().getStartDate())) {
 							validationFailed = true;
-							message = new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"Start Date may not be before Sprint Start Date.",
-									null);
+							message = MessageFactory.getMessage(
+									"validator_date_startBeforeStart",
+									MessageFactory.getMessage("label_task", "")
+											.getDetail(), "Sprint");
+							message.setSeverity(FacesMessage.SEVERITY_ERROR);
 						} else if (startDate.after(((JJSprintBean) LoginBean
 								.findBean("jJSprintBean")).getSprintUtil()
 								.getSprint().getEndDate())) {
 							validationFailed = true;
-
-							message = new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"Start Date may not be after Sprint end Date.",
-									null);
+							message = MessageFactory.getMessage(
+									"validator_date_startAfterEnd",
+									MessageFactory.getMessage("label_task", "")
+											.getDetail(), "Sprint");
+							message.setSeverity(FacesMessage.SEVERITY_ERROR);
 						}
 					} else {
 						if (sprint != null) {
 							if (startDate.before(sprint.getStartDate())) {
 								validationFailed = true;
 
-								message = new FacesMessage(
-										FacesMessage.SEVERITY_ERROR,
-										"Start Date may not be before Sprint Start Date.",
-										null);
+								message = MessageFactory.getMessage(
+										"validator_date_startBeforeStart",
+										MessageFactory.getMessage("label_task",
+												"").getDetail(), "Sprint");
+								message.setSeverity(FacesMessage.SEVERITY_ERROR);
 							} else if (startDate.after(sprint.getEndDate())) {
 								validationFailed = true;
-								message = new FacesMessage(
-										FacesMessage.SEVERITY_ERROR,
-										"Start Date may not be after Sprint end Date.",
-										null);
+								message = MessageFactory.getMessage(
+										"validator_date_startAfterEnd",
+										MessageFactory.getMessage("label_task",
+												"").getDetail(), "Sprint");
+								message.setSeverity(FacesMessage.SEVERITY_ERROR);
 							}
 
 						}
@@ -1561,13 +1568,15 @@ public class JJTaskBean {
 					if (workload == null) {
 
 						validationFailed = true;
-						message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-								"Workload is requierd", null);
+						message = MessageFactory
+								.getMessage("validator_task_workloadRequired");
+						message.setSeverity(FacesMessage.SEVERITY_ERROR);
 					} else if (workload <= 0) {
 
 						validationFailed = true;
-						message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-								"Please set Workload More than 0", null);
+						message = MessageFactory
+								.getMessage("validator_task_workloadNegatif");
+						message.setSeverity(FacesMessage.SEVERITY_ERROR);
 					}
 
 				}
@@ -1903,7 +1912,7 @@ public class JJTaskBean {
 			String message = "message_successfully_created";
 
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
-					"Task");
+					MessageFactory.getMessage("label_task", "").getDetail());
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('taskImportDialogWidget').hide()");
@@ -2362,7 +2371,8 @@ public class JJTaskBean {
 				}
 			}
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_successfully_deleted", "Task");
+					"message_successfully_deleted",
+					MessageFactory.getMessage("label_task", "").getDetail());
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			context.execute("PF('deleteDialogWidget').hide()");
 		} else {
@@ -2828,7 +2838,7 @@ public class JJTaskBean {
 
 		message = "Success Update " + group + " Date";
 		facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, message,
-				"Task");
+				MessageFactory.getMessage("label_task", "").getDetail());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 

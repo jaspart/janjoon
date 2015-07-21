@@ -516,14 +516,12 @@ public class JJContactBean {
 			} else {
 				context.execute("PF('contactDialogWidget').hide()");
 			}
-
-			System.out.println("dfgdfgf");
 			contactsLazyModel = null;
 		} else
 			FacesContext.getCurrentInstance().addMessage(
 					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Mail Already Exist", "Contact"));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Mail Exist",
+							"Contact"));
 
 	}
 

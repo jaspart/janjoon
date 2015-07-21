@@ -297,7 +297,8 @@ public class RequirementBean {
 		reqSelectedtestCases = reqtestCases;
 		testCaseName = null;
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "Requirement");
+				"message_successfully_updated",
+				MessageFactory.getMessage("label_requirement", "").getDetail());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 
@@ -451,7 +452,9 @@ public class RequirementBean {
 			} else {
 				requirement = null;
 				FacesMessage facesMessage = MessageFactory.getMessage(
-						"validator_page_access", "requirement");
+						"validator_page_access",
+						MessageFactory.getMessage("label_requirement", "")
+								.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 				((LoginBean) LoginBean.findBean("loginBean"))
 						.setFacesMessage(facesMessage);
@@ -602,7 +605,8 @@ public class RequirementBean {
 		long id = requirement.getId();
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "Requirement");
+				"message_successfully_updated",
+				MessageFactory.getMessage("label_requirement", "").getDetail());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		((LoginBean) LoginBean.findBean("loginBean"))
@@ -726,7 +730,9 @@ public class RequirementBean {
 					.updateJJContact(contact);
 
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					REQUIREMENT_SUBSCRIPTION_RATE, "Requirement");
+					REQUIREMENT_SUBSCRIPTION_RATE,
+					MessageFactory.getMessage("label_requirement", "")
+							.getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -758,7 +764,8 @@ public class RequirementBean {
 					.updateJJContact(contact);
 
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					REQUIREMENT_SUBSCRIPTION_CANCEL_RATE, "Requirement");
+					REQUIREMENT_SUBSCRIPTION_CANCEL_RATE, MessageFactory
+							.getMessage("label_requirement", "").getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -776,7 +783,8 @@ public class RequirementBean {
 		long id = requirement.getId();
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "Requirement");
+				"message_successfully_updated",
+				MessageFactory.getMessage("label_requirement", "").getDetail());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		((LoginBean) LoginBean.findBean("loginBean"))

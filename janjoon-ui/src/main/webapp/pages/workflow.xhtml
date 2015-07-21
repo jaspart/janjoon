@@ -131,7 +131,7 @@
 					</f:facet>
 					<h:panelGrid id="createWorkFlowPanelGrid" columns="2"
 						styleClass="dialog" columnClasses="col1,col2,col3">
-						<p:outputLabel for="workflowName" value="Name:" />
+						<p:outputLabel for="workflowName" value="#{messages.admin_workflow_table_name_title}:" />
 						<p:inputTextarea value="#{jJWorkflowBean.JJWorkflow_.name}"
 							id="workflowName" required="true"
 							requiredMessage="Name field is requiered">

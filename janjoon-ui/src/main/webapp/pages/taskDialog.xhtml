@@ -28,7 +28,8 @@
 					update="taskStartDatePlanned taskEndDatePlanned taskAssignedTo" />
 			</p:autoComplete>
 
-			<p:outputLabel value="#{messages.taskDialog_assignedTo} :" for="taskAssignedTo" />
+			<p:outputLabel value="#{messages.taskDialog_assignedTo} :"
+				for="taskAssignedTo" />
 			<p:autoComplete id="taskAssignedTo" value="#{JJTask_.assignedTo}"
 				size="15" itemLabel="#{assignedTo.name}" itemValue="#{assignedTo}"
 				scrollHeight="200"
@@ -46,7 +47,8 @@
 
 		</h:panelGrid>
 		<h:panelGrid columns="8" style="width: 100%">
-			<p:outputLabel value="#{messages.project_scrum_new_start_label}:" for="taskStartDatePlanned" />
+			<p:outputLabel value="#{messages.project_scrum_new_start_label}"
+				for="taskStartDatePlanned" />
 			<p:calendar id="taskStartDatePlanned" style="width:90px"
 				value="#{JJTask_.startDatePlanned}" navigator="true"
 				pattern="yyyy/MM/dd HH:mm" required="true"
@@ -59,7 +61,8 @@
 				<p:ajax event="dateSelect" update="taskEndDatePlanned" />
 			</p:calendar>
 
-			<p:outputLabel value="#{messages.project_scrum_new_start_label}:" for="taskEndDatePlanned" />
+			<p:outputLabel value="#{messages.project_scrum_new_end_label}"
+				for="taskEndDatePlanned" />
 			<p:calendar id="taskEndDatePlanned" style="width:90px"
 				value="#{JJTask_.endDatePlanned}" navigator="true"
 				pattern="yyyy/MM/dd HH:mm" required="true"
@@ -73,18 +76,14 @@
 				<p:ajax event="dateSelect" update="taskEndDatePlanned" />
 			</p:calendar>
 
-			<p:outputLabel value="#{messages.specification_create_workload_label}:" for="taskWorkload" />
+			<p:outputLabel
+				value="#{messages.specification_create_workload_label}:"
+				for="taskWorkload" />
 			<p:spinner id="taskWorkload" value="#{JJTask_.workloadPlanned}"
 				stepFactor="1" min="1" required="true" size="3" />
 			<p:outputLabel value="Specification :" for="taskSpec" />
 			<p:selectBooleanCheckbox id="taskSpec"
 				value="#{JJTask_.specification}" />
-			<!-- 			<p:panel style="height: 25px;width: 30px; margin: auto;"> -->
-			<!-- 				<p:commandButton id="taskSpec" -->
-			<!-- 					value="#{JJTask_.specification ? 'X' : ' '}" -->
-			<!-- 					styleClass="checkBoxButton" update="taskSpec" -->
-			<!-- 					actionListener="#{JJTask_.setSpecification(!JJTask_.specification)}" /> -->
-			<!-- 			</p:panel>			 -->
 		</h:panelGrid>
 		<p:panelGrid>
 			<p:row rowspan="5" rendered="#{JJTask_.bug != null}">
@@ -127,8 +126,8 @@
 
 			<p:row rowspan="5" rendered="#{jJTaskBean.taskTreeNode != null}">
 				<p:column colspan="2">
-					<h:outputLabel id="requirementLabel" value="#{messages.label_requirement}: "
-						for="reqTree" />
+					<h:outputLabel id="requirementLabel"
+						value="#{messages.label_requirement}: " for="reqTree" />
 					<p:tree id="reqTree" value="#{jJTaskBean.taskTreeNode}" var="node"
 						selection="#{jJTaskBean.selectedTree}" animate="true"
 						selectionMode="single">
@@ -145,35 +144,35 @@
 					<p:panelGrid id="taskTreePanelGrid" style="margin-top:10px">
 						<f:facet name="header">
 							<p:row>
-								<p:column colspan="2">#{messages.label_requirement}: <p:outputLabel
+								<p:column colspan="3">#{messages.label_requirement}: <p:outputLabel
 										value="#{jJTaskBean.selectedReq.name}" />
 								</p:column>
 							</p:row>
 						</f:facet>
 						<p:row>
-							<p:column colspan="1">
-								<p:outputLabel value="#{messages.label_category}:" for="category" />
-								<p:inputText id="category"
+							<p:column colspan="1" style="border-style: none;">
+								<p:outputLabel value="#{messages.label_category}:"
+									for="category" />
+								<p:inputText id="category" size="15"
 									value="#{jJTaskBean.selectedReq.category}" readonly="true"
 									converter="JJCategoryConverter" />
 							</p:column>
-							<p:column colspan="1">
+							<p:column colspan="1" style="border-style: none;">
 								<h:outputText for="status" value="Status :" />
-								<p:inputText id="status"
+								<p:inputText id="status" size="15"
 									value="#{jJTaskBean.selectedReq.status}" readonly="true"
 									converter="JJStatusConverter" />
 							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="1">
+
+							<p:column style="border-style: none;">
 								<h:outputText for="chapter" value="#{messages.label_chapter}:" />
 								<p:inputText id="chapter" readonly="true"
-									converter="JJChapterConverter"
+									converter="JJChapterConverter" size="15"
 									value="#{jJTaskBean.selectedReq.chapter}" />
 							</p:column>
 						</p:row>
 						<p:row>
-							<p:column colspan="2">
+							<p:column colspan="3">
 								<p:outputLabel value="Description :" />
 								<br />
 								<pe:ckEditor id="description"

@@ -148,7 +148,9 @@ public class JJStatusBean {
 			}
 
 			pieChart.setLegendPosition("e");
-			pieChart.setTitle("% Requierement");
+			pieChart.setTitle("% "
+					+ MessageFactory.getMessage("label_requirement", "")
+							.getDetail());
 			pieChart.setFill(false);
 			pieChart.setShowDataLabels(true);
 			pieChart.setDiameter(150);
@@ -228,7 +230,9 @@ public class JJStatusBean {
 				}
 
 				pieChart.setLegendPosition("e");
-				pieChart.setTitle("% Requierement");
+				pieChart.setTitle("% "
+						+ MessageFactory.getMessage("label_requirement", "")
+								.getDetail());
 				pieChart.setFill(false);
 				pieChart.setShowDataLabels(true);
 				pieChart.setDiameter(150);
@@ -289,7 +293,9 @@ public class JJStatusBean {
 				};
 
 				prjMetergauge = new MeterGaugeChartModel(projKPI, prjIntervalls);
-				prjMetergauge.setTitle("Project KPI");
+				prjMetergauge.setTitle(MessageFactory.getMessage(
+						"label_project", "").getDetail()
+						+ " KPI");
 				prjMetergauge.setGaugeLabel("KPI");
 				prjMetergauge.setShowTickLabels(true);
 				prjMetergauge.setMin(-1);
@@ -394,7 +400,9 @@ public class JJStatusBean {
 				.createComponent(OutputLabel.COMPONENT_TYPE);
 		nameCreateOutput.setFor("nameStatCreateInput");
 		nameCreateOutput.setId("nameStatCreateOutput");
-		nameCreateOutput.setValue("Name:");
+		nameCreateOutput.setValue(MessageFactory.getMessage(
+				"admin_status_table_name_title", "").getDetail()
+				+ ":");
 		htmlPanelGrid.getChildren().add(nameCreateOutput);
 
 		InputTextarea nameCreateInput = (InputTextarea) application
@@ -515,7 +523,10 @@ public class JJStatusBean {
 				.createComponent(OutputLabel.COMPONENT_TYPE);
 		nameEditOutput.setFor("nameStatEditInput");
 		nameEditOutput.setId("nameStatEditOutput");
-		nameEditOutput.setValue("Name:");
+		nameEditOutput.setValue(MessageFactory.getMessage(
+				"admin_status_table_name_title", "").getDetail()
+				+ ":");
+
 		htmlPanelGrid.getChildren().add(nameEditOutput);
 
 		InputTextarea nameEditInput = (InputTextarea) application
@@ -600,26 +611,6 @@ public class JJStatusBean {
 		levelStatusEditInputMessage.setDisplay("icon");
 		htmlPanelGrid.getChildren().add(levelStatusEditInputMessage);
 
-		HtmlOutputText messagesEditOutput = (HtmlOutputText) application
-				.createComponent(HtmlOutputText.COMPONENT_TYPE);
-		messagesEditOutput.setId("messagesStatEditOutput");
-		messagesEditOutput.setValue("Messages:");
-		htmlPanelGrid.getChildren().add(messagesEditOutput);
-
-		HtmlOutputText messagesEditInput = (HtmlOutputText) application
-				.createComponent(HtmlOutputText.COMPONENT_TYPE);
-		messagesEditInput.setId("messagesStatEditInput");
-		messagesEditInput
-				.setValue("This relationship is managed from the JJMessage side");
-		htmlPanelGrid.getChildren().add(messagesEditInput);
-
-		Message messagesEditInputMessage = (Message) application
-				.createComponent(Message.COMPONENT_TYPE);
-		messagesEditInputMessage.setId("messagesStatEditInputMessage");
-		messagesEditInputMessage.setFor("messagesStatEditInput");
-		messagesEditInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(messagesEditInputMessage);
-
 		return htmlPanelGrid;
 	}
 
@@ -638,7 +629,9 @@ public class JJStatusBean {
 		HtmlOutputText nameLabel = (HtmlOutputText) application
 				.createComponent(HtmlOutputText.COMPONENT_TYPE);
 		nameLabel.setId("nameLabel");
-		nameLabel.setValue("Name:");
+		nameLabel.setValue(MessageFactory.getMessage(
+				"admin_status_table_name_title", "").getDetail()
+				+ ":");
 		htmlPanelGrid.getChildren().add(nameLabel);
 
 		InputTextarea nameValue = (InputTextarea) application
@@ -772,19 +765,6 @@ public class JJStatusBean {
 				.createValueExpression(elContext,
 						"#{jJStatusBean.JJStatus_.levelStatus}", String.class));
 		htmlPanelGrid.getChildren().add(levelStatusValue);
-
-		HtmlOutputText messagesLabel = (HtmlOutputText) application
-				.createComponent(HtmlOutputText.COMPONENT_TYPE);
-		messagesLabel.setId("messagesLabel");
-		messagesLabel.setValue("Messages:");
-		htmlPanelGrid.getChildren().add(messagesLabel);
-
-		HtmlOutputText messagesValue = (HtmlOutputText) application
-				.createComponent(HtmlOutputText.COMPONENT_TYPE);
-		messagesValue.setId("messagesValue");
-		messagesValue
-				.setValue("This relationship is managed from the JJMessage side");
-		htmlPanelGrid.getChildren().add(messagesValue);
 
 		return htmlPanelGrid;
 	}

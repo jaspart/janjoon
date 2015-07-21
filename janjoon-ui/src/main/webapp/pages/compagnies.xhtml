@@ -50,7 +50,7 @@
 					<p:splitButton id="editButton" icon="ui-icon-pencil"
 						oncomplete="PF('companyDialogWidget').show()"
 						value="#{messages.admin_company_table_edit_tooltip}"
-						title="#{messages.admin_companprogressy_table_edit_tooltip}"
+						title="#{messages.admin_company_table_edit_tooltip}"
 						update=":tabview:companyDialog" resetValues="true">
 						<f:setPropertyActionListener value="#{company}"
 							target="#{jJCompanyBean.companie}" />
@@ -59,7 +59,7 @@
 							value="admin_company_edit_title" />
 
 						<p:menuitem id="editCalendar" icon="ui-icon-calendar"
-							value="Edit Calendar"
+							value="#{messages.admin_company_table_editcalendar_tooltip}"
 							oncomplete="PF('companyEditCalendarDialogWidget').show()"
 							resetValues="true" update=":tabview:EditCalendarForm">
 							<f:setPropertyActionListener value="#{company}"
@@ -244,7 +244,7 @@
 					<p:panelGrid>
 						<p:row>
 							<p:column colspan="1">
-								<p:outputLabel value="Name :" for="name" />
+								<p:outputLabel value="#{messages.label_name} :" for="name" />
 							</p:column>
 							<p:column colspan="1">
 								<p:inputText id="name" value="#{jJCompanyBean.companie.name}"

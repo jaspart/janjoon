@@ -239,7 +239,7 @@
 
 					<f:facet name="footer">
 						<p:commandButton id="saveButton" style="float: right;"
-							value="Save" update="profileDialogForm :growlForm"
+							value="#{messages.admin_profil_new_save_button}" update="profileDialogForm :growlForm"
 							disabled="#{jJProfileBean.disabledRightMode}"
 							process="@this,name" action="#{jJProfileBean.save(jJRightBean)}" />
 					</f:facet>

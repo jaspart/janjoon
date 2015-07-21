@@ -256,8 +256,8 @@ public class JJBuildBean {
 		} else {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Build Name Exist", "JJBuild"));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nom Exist",
+							"Build"));
 		}
 
 	}

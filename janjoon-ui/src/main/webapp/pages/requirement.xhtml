@@ -284,7 +284,7 @@
 									var="req" type="unordered" paginatorPosition="bottom"
 									rendered="#{categorieRequirement.requirements != null}"
 									paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} "
-									itemType="none" paginator="true" rows="5"
+									itemType="none" paginator="true" rows="5" emptyMessage="#{messages.label_notRecordFound}"
 									styleClass="paginated">
 									<f:facet name="header">
            				 #{categorieRequirement.category.name}
@@ -318,13 +318,13 @@
 					</f:facet>
 					<p:row>
 						<p:column style="width:50%">
-							<p:dataList id="taskDatalist"
+							<p:dataList id="taskDatalist" emptyMessage="#{messages.label_notRecordFound}"
 								value="#{requirementBean.requirementTasks}" var="task"
 								type="unordered" paginatorPosition="bottom"
 								paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} "
 								itemType="none" paginator="true" rows="5" styleClass="paginated">
 								<f:facet name="header">
-							Task
+							#{messages.label_task}
 						</f:facet>
 								<h:outputText value="#{task.id}-#{fn:substring(task.name,0,30)}" />
 							</p:dataList>
@@ -336,7 +336,7 @@
 								<p:dataTable id="testCaseDataTable" var="testCaseModel"
 									selection="#{requirementBean.reqSelectedtestCases}"
 									rowKey="#{testCaseModel.id}" styleClass="testCaseDataTable"
-									emptyMessage="That Requirement have no Testcase"
+									emptyMessage="#{messages.label_notRecordFound}"
 									scrollable="true" scrollHeight="100"
 									value="#{requirementBean.reqtestCases}">
 									<p:column selectionMode="multiple"
@@ -427,7 +427,7 @@
 				<h:form id="linkForm">
 					<p:dataTable id="linkDataTable" var="req"
 						selection="#{requirementBean.linkReq}" rowKey="#{req.id}"
-						emptyMessage="That Categorie Have no Requirement"
+						emptyMessage="#{messages.label_notRecordFound}"
 						scrollable="true" style="width:350px;" scrollHeight="200"
 						value="#{requirementBean.linkReqList}">
 						<p:column selectionMode="multiple"

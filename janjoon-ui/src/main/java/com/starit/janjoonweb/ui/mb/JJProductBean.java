@@ -232,7 +232,8 @@ public class JJProductBean {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					MessageFactory.getMessage("message_successfully_created",
-							"Product"));
+							MessageFactory.getMessage("label_product", "")
+									.getDetail()));
 		}
 	}
 
@@ -289,7 +290,8 @@ public class JJProductBean {
 		FacesContext.getCurrentInstance().addMessage(
 				null,
 				MessageFactory.getMessage("message_successfully_updated",
-						"Product"));
+						MessageFactory.getMessage("label_product", "")
+								.getDetail()));
 
 		RequestContext context = RequestContext.getCurrentInstance();
 

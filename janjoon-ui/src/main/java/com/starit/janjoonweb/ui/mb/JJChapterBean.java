@@ -405,7 +405,7 @@ public class JJChapterBean {
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"Chapter");
+				MessageFactory.getMessage("label_chapter", "").getDetail());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		RequestContext context = RequestContext.getCurrentInstance();
@@ -1209,7 +1209,9 @@ public class JJChapterBean {
 					message = MessageFactory.getMessage(
 							"chapter_parent_document",
 							FacesMessage.SEVERITY_WARN, dragNodeData,
-							dropNodeData, "Chapter");
+							dropNodeData,
+							MessageFactory.getMessage("label_chapter", "")
+									.getDetail());
 				} else {
 					long newChapterPARENTID = Long
 							.parseLong(getSplitFromString(dropNodeData, 1));
@@ -1219,7 +1221,9 @@ public class JJChapterBean {
 					message = MessageFactory.getMessage(
 							"chapter_successfully_droped",
 							FacesMessage.SEVERITY_INFO, dragNodeData,
-							dropNodeData, "Chapter");
+							dropNodeData,
+							MessageFactory.getMessage("label_chapter", "")
+									.getDetail());
 				}
 
 				// Update the last chapter list
@@ -1338,7 +1342,8 @@ public class JJChapterBean {
 				message = MessageFactory.getMessage(
 						"chapter_unsuccessfully_droped_notAllowed",
 						FacesMessage.SEVERITY_INFO, dragNodeData, dropNodeData,
-						"Chapter");
+						MessageFactory.getMessage("label_chapter", "")
+								.getDetail());
 
 			}
 

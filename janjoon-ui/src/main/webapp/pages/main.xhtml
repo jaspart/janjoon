@@ -21,13 +21,13 @@
 					sortOrder="DESCENDING"
 					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 					lazy="true" emptyMessage="#{messages.label_notFound}"
-					rowClasses="order-table-odd-row,order-table-even-row">					
+					rowClasses="order-table-odd-row,order-table-even-row">
 					<p:column style="width: 70px !important;text-align: center;">
 						<f:facet name="header">
 							<p:commandButton id="createButton" icon="ui-icon-plusthick"
 								update=":messageDialogForm" resetValues="true"
 								oncomplete="PF('messageDialog').show();" />
-						
+
 						</f:facet>
 						<p:graphicImage styleClass="avatar" value="#{imageStreamer.image}"
 							rendered="#{mes.createdBy.picture != null}">
@@ -49,6 +49,14 @@
 						<br />
 						<h:outputText value="#{mes.project.name} / #{mes.product.name}"
 							style="font-weight: bold;color: #9197a3;font-size: 10px;" />
+						<br />
+						<h:outputText value="HOME"
+							rendered="#{mes.requirement == null and mes.bug == null and mes.testcase == null}"
+							styleClass="HOME" style="margin-left: 25%;" />
+						<h:outputText value="OBJECT"
+							rendered="#{mes.requirement != null or mes.bug != null or mes.testcase != null}"
+							styleClass="OBJECT" style="margin-left: 25%;" />
+
 					</p:column>
 					<p:column headerText="#{messages.main_communication_message_title}"
 						filterBy="#{mes.message}" filterMatchMode="contains"
@@ -124,12 +132,14 @@
 						<h:outputText value="#{task.bug}" converter="JJBugConverter" />
 					</p:column>
 
-					<p:column headerText="#{messages.label_project}" style="width:100px;">
+					<p:column headerText="#{messages.label_project}"
+						style="width:100px;">
 						<h:outputText value="#{task.project}"
 							converter="JJProjectConverter" />
 					</p:column>
 
-					<p:column headerText="#{messages.project_scrum_new_start_label}" style="width:100px;">
+					<p:column headerText="#{messages.project_scrum_new_start_label}"
+						style="width:100px;">
 						<h:outputText value="#{task.startDateReal}">
 							<f:converter converterId="extendedDateTimeConverter" />
 							<f:attribute name="pattern" value="dd/MM/yyyy" />
@@ -138,7 +148,9 @@
 					</p:column>
 
 
-					<p:column headerText="#{messages.specification_create_workload_label}" style="width:100px;">
+					<p:column
+						headerText="#{messages.specification_create_workload_label}"
+						style="width:100px;">
 						<h:outputText value="#{task.workloadPlanned}" />
 					</p:column>
 
@@ -197,14 +209,14 @@
 		<p:panel id="specpanel" header="#{messages.main_specPanel_header}"
 			rendered="#{loginBean.enable and loginBean.noCouvretReq != null}"
 			styleClass="customTitleBar">
-			
+
 			<h:form id="specForm">
 				<p:dataTable id="specTable" value="#{loginBean.noCouvretReq}"
 					rowKey="#{req.id}" var="req" widgetVar="taskTable"
 					scrollable="true" scrollHeight="200"
 					emptyMessage="#{messages.label_notRecordFound}">
 
-					<p:column headerText="#{messages.label_requirement}">						
+					<p:column headerText="#{messages.label_requirement}">
 						<p:commandLink target="_blank" value="#{req.name}"
 							action="#{jJRequirementBean.requirementInfo}" ajax="false">
 							<f:setPropertyActionListener value="#{req}"

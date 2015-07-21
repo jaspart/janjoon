@@ -164,7 +164,7 @@ public class JJCompanyBean {
 		updateJJCompany(companie);
 		String message = "message_successfully_updated";
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"Company Calendar");
+				MessageFactory.getMessage("label_company", "").getDetail());
 		day = null;
 		companie = jJCompanyService.findJJCompany(companie.getId());
 		calendarUtil = new CalendarUtil(companie);
@@ -194,7 +194,8 @@ public class JJCompanyBean {
 				updateJJCompany(companie);
 				String message = "message_successfully_updated";
 				FacesMessage facesMessage = MessageFactory.getMessage(message,
-						"Company Calendar");
+						MessageFactory.getMessage("label_company", "")
+								.getDetail());
 				companie = jJCompanyService.findJJCompany(companie.getId());
 				calendarUtil = new CalendarUtil(companie);
 				getWorkDays();
@@ -204,8 +205,9 @@ public class JJCompanyBean {
 
 				String message = "validator_date_startAfterEnd";
 				FacesMessage facesMessage = MessageFactory.getMessage(message,
-						FacesMessage.SEVERITY_ERROR, "Company Calendar",
-						"Company Calendar");
+						FacesMessage.SEVERITY_ERROR,
+						MessageFactory.getMessage("label_company", "")
+								.getDetail());
 				FacesContext.getCurrentInstance()
 						.addMessage(null, facesMessage);
 			}
@@ -254,7 +256,7 @@ public class JJCompanyBean {
 
 			String message = "message_successfully_deleted";
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
-					"Company");
+					MessageFactory.getMessage("label_company", "").getDetail());
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
@@ -288,7 +290,8 @@ public class JJCompanyBean {
 		logo = null;
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('companyDialogWidget').hide()");
-		facesMessage = MessageFactory.getMessage(message, "Company");
+		facesMessage = MessageFactory.getMessage(message, MessageFactory
+				.getMessage("label_company", "").getDetail());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}

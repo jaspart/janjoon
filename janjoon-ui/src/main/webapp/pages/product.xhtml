@@ -112,16 +112,14 @@ td.ui-fileupload-preview {
 							<p:panelGrid>
 								<p:row>
 									<p:column>
-										<p:inputText id="name"
+										<p:inputText id="name" placeholder="#{messages.admin_product_new_name_watermark}"
 											disabled="#{jJProductBean.disabledProductMode}"
 											value="#{jJProductBean.productAdmin.name}"
 											label="#{messages.admin_product_new_name_title}"
 											required="true" widgetVar="nameWidget">
 											<f:validateLength maximum="100" />
 											<p:ajax event="blur" update="prodLogo" />
-										</p:inputText>
-										<p:watermark for="name"
-											value="#{messages.admin_product_new_name_watermark}" />
+										</p:inputText>										
 									</p:column>
 									<p:column>
 										<h:outputText
@@ -144,15 +142,13 @@ td.ui-fileupload-preview {
 								</p:row>
 								<p:row>
 									<p:column>
-										<p:inputText id="extname"
+										<p:inputText id="extname" placeholder="#{messages.admin_product_new_extname_waternmark}"
 											disabled="#{jJProductBean.disabledProductMode}"
 											value="#{jJProductBean.productAdmin.extname}"
 											label="#{messages.admin_product_new_extname_label}"
 											required="true" widgetVar="extnameWidget">
 											<f:validateLength maximum="100" />
-										</p:inputText>
-										<p:watermark for="extname"
-											value="#{messages.admin_product_new_extname_waternmark}" />
+										</p:inputText>										
 									</p:column>
 
 									<p:column>
@@ -187,7 +183,7 @@ td.ui-fileupload-preview {
 								</p:row>
 								<p:row>
 									<p:column>
-										<p:inputText id="version"
+										<p:inputText id="version" placeholder="#{messages.admin_product_new_version_watermark}"
 											disabled="#{jJProductBean.disabledVersionMode}"
 											value="#{jJVersionBean.versionAdmin.name}"
 											label="Version Name" required="true"
@@ -198,9 +194,7 @@ td.ui-fileupload-preview {
 											<f:attribute name="product"
 												value="#{jJProductBean.productAdmin}" />
 											<f:attribute name="versionBean" value="#{jJVersionBean}" />
-										</p:inputText>
-										<p:watermark for="version"
-											value="#{messages.admin_product_new_version_watermark}" />
+										</p:inputText>										
 									</p:column>
 
 									<p:column>
@@ -271,7 +265,7 @@ td.ui-fileupload-preview {
 
 							<p:dataTable id="buildDataTable" var="build" style="width:80%;"
 								selection="#{jJBuildBean.buildUtils.get(jJBuildBean.index).versionSelectedBuilds}"
-								rowKey="#{build.id}" emptyMessage="That version have no builds"
+								rowKey="#{build.id}" emptyMessage="#{messages.label_notRecordFound}"
 								value="#{jJBuildBean.buildUtils.get(jJBuildBean.index).versionBuilds}">
 
 								<p:column selectionMode="multiple"
@@ -280,7 +274,7 @@ td.ui-fileupload-preview {
 									<f:facet name="header">
 										<p:row>
 											<p:column>
-												<h:outputText value="Name:" />
+												<h:outputText value="Build:" />
 											</p:column>
 										</p:row>
 									</f:facet>
@@ -290,7 +284,7 @@ td.ui-fileupload-preview {
 									<p:commandButton onstart="PF('versionBlockUIWidget').block()"
 										oncomplete="PF('versionBlockUIWidget').unblock()"
 										update="buildDataTable :tabview:productDialogForm:msg"
-										process="buildDataTable" value="Update"
+										process="buildDataTable" value="#{messages.label_update}"
 										action="#{jJBuildBean.updateVersionBuilds(versionModel.version.id)}" />
 
 								</f:facet>
@@ -298,15 +292,14 @@ td.ui-fileupload-preview {
 							<p:panelGrid style="width:80%;">
 								<p:row>
 									<p:column>
-										<p:inputText id="build" style="width:80%;"
-											value="#{jJBuildBean.buildName}" label="Build Name"
+										<p:inputText id="build" style="width:80%;" placeholder="#{messages.admin_product_new_build_text}"
+											value="#{jJBuildBean.buildName}" label="#{messages.admin_product_new_build_text}"
 											required="true" requiredMessage="Build Name is required">
 											<f:validateLength maximum="100" />
 											<f:validator validatorId="unicityNameValidator" />
 											<f:attribute name="version" value="#{versionModel.version}" />
 											<f:attribute name="buildBean" value="#{jJBuildBean}" />
-										</p:inputText>
-										<p:watermark for="build" value="Build Name" />
+										</p:inputText>										
 									</p:column>
 
 									<p:column>
@@ -329,7 +322,7 @@ td.ui-fileupload-preview {
 						<p:commandButton id="saveButton" style="float: right;"
 							onstart="PF('versionBlockUIWidget').block()"
 							oncomplete="PF('versionBlockUIWidget').unblock()"
-							disabled="#{jJProductBean.disabledVersionMode}" value="Save"
+							disabled="#{jJProductBean.disabledVersionMode}" value="#{messages.admin_product_new_save_button}"
 							update="productDialogForm :headerForm :growlForm"
 							process="@this,name,extname,productManagerSelect"
 							action="#{jJProductBean.save(jJVersionBean)}" />

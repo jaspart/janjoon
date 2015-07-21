@@ -2050,20 +2050,21 @@ public class JJRequirementBean {
 			jJChapterBean = new JJChapterBean();
 		}
 		if (project == null) {
-			warnMessage = MessageFactory.getMessage("specification_req_warnMessage",
-					"").getDetail();
+			warnMessage = MessageFactory.getMessage(
+					"specification_req_warnMessage", "").getDetail();
 			disabledExport = true;
 			disabledRequirement = true;
-			jJChapterBean.setWarnMessage(MessageFactory.getMessage("specification_chap_warnMessage",
-					"").getDetail());
+			jJChapterBean.setWarnMessage(MessageFactory.getMessage(
+					"specification_chap_warnMessage", "").getDetail());
 			jJChapterBean.setDisabledChapter(true);
 		} else {
-			warnMessage = MessageFactory.getMessage("specification_req_exportTo",
-					"").getDetail()+" PDF";
+			warnMessage = MessageFactory.getMessage(
+					"specification_req_exportTo", "").getDetail()
+					+ " PDF";
 			disabledExport = false;
 			disabledRequirement = false;
-			jJChapterBean.setWarnMessage(MessageFactory.getMessage("specification_req_managedocument",
-					"").getDetail());
+			jJChapterBean.setWarnMessage(MessageFactory.getMessage(
+					"specification_req_managedocument", "").getDetail());
 			jJChapterBean.setDisabledChapter(false);
 		}
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
@@ -3598,8 +3599,10 @@ public class JJRequirementBean {
 									true));
 			if (requirements.isEmpty()) {
 				FacesMessage facesMessage = MessageFactory.getMessage(
-						"No Requirement Found in This File",
-						FacesMessage.SEVERITY_WARN, "Requirement");
+						"Pas d'Exigence trouvé dans ce Fichier",
+						FacesMessage.SEVERITY_WARN,
+						MessageFactory.getMessage("label_requirement", "")
+								.getDetail());
 				FacesContext.getCurrentInstance()
 						.addMessage(null, facesMessage);
 			} else {
@@ -3607,17 +3610,21 @@ public class JJRequirementBean {
 					saveJJRequirement(r);
 					updateDataTable(r, ADD_OPERATION, true);
 				}
-				FacesMessage facesMessage = MessageFactory.getMessage(
-						requirements.size() + " Requirement Successfuly added",
-						FacesMessage.SEVERITY_INFO, "Requirement");
+				FacesMessage facesMessage = MessageFactory
+						.getMessage(requirements.size()
+								+ " Exigences Ajoutées avec succés",
+								FacesMessage.SEVERITY_INFO, MessageFactory
+										.getMessage("label_requirement", "")
+										.getDetail());
 				FacesContext.getCurrentInstance()
 						.addMessage(null, facesMessage);
 
 			}
 		} catch (SAXParseException e) {
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"Error While Parsing File", FacesMessage.SEVERITY_WARN,
-					"Requirement");
+					"Erreur Fichier", FacesMessage.SEVERITY_WARN,
+					MessageFactory.getMessage("label_requirement", "")
+							.getDetail());
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
 
@@ -4850,7 +4857,9 @@ public class JJRequirementBean {
 		} else if (req.getChapter() == null) {
 			warn = true;
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					SPECIFICATION_WARNING_NOCHAPTER, "Requirement");
+					SPECIFICATION_WARNING_NOCHAPTER,
+					MessageFactory.getMessage("label_requirement", "")
+							.getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
@@ -4859,7 +4868,9 @@ public class JJRequirementBean {
 				&& !jJCategoryService.isLowLevel(req.getCategory())) {
 			warn = true;
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					SPECIFICATION_WARNING_LINKDOWN, "Requirement");
+					SPECIFICATION_WARNING_LINKDOWN,
+					MessageFactory.getMessage("label_requirement", "")
+							.getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
@@ -4868,18 +4879,24 @@ public class JJRequirementBean {
 				&& !jJCategoryService.isHighLevel(req.getCategory())) {
 			warn = true;
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					SPECIFICATION_WARNING_LINKUP, "Requirement");
+					SPECIFICATION_WARNING_LINKUP,
+					MessageFactory.getMessage("label_requirement", "")
+							.getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
-			FacesContext.getCurrentInstance().addMessage("Requirement",
-					facesMessage);
+			FacesContext.getCurrentInstance().addMessage(
+					MessageFactory.getMessage("label_requirement", "")
+							.getDetail(), facesMessage);
 		}
 
 		if (!warn) {
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					MESSAGE_SUCCESSFULLY_UPDATED, "Requirement");
+					MESSAGE_SUCCESSFULLY_UPDATED,
+					MessageFactory.getMessage("label_requirement", "")
+							.getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
-			FacesContext.getCurrentInstance().addMessage("Requirement",
-					facesMessage);
+			FacesContext.getCurrentInstance().addMessage(
+					MessageFactory.getMessage("label_requirement", "")
+							.getDetail(), facesMessage);
 		}
 
 	}

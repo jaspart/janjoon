@@ -519,12 +519,9 @@ public class JJBugBean {
 	}
 
 	public void persistBugTask() {
-
-		String message = "";
 		updateJJBug(JJBug_);
-		message = "message_successfully_updated";
-
-		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug");
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_updated", "Bug");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 	}
@@ -536,13 +533,13 @@ public class JJBugBean {
 			viewBug.setCategory(viewBug.getRequirement().getCategory());
 		}
 
-		String message = "message_successfully_updated";
 		updateJJBug(viewBug);
 		bugList = null;
 		project = null;
 		viewBug = jJBugService.findJJBug(viewBug.getId());
 
-		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug");
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_updated", "Bug");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -566,9 +563,6 @@ public class JJBugBean {
 
 		if (JJBug_.getVersioning() == null)
 			JJBug_.setVersioning(JJBug_.getBuild().getVersion());
-
-		// if (JJBug_.getRequirement() != null)
-		// System.out.println(JJBug_.getRequirement().getName());
 
 		String message = "";
 		if (JJBug_.getId() != null) {

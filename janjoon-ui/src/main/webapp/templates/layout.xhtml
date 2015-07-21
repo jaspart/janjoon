@@ -55,7 +55,16 @@
 								oncomplete="PF('viewDialogWidget1').show()" />
 							<!--									update=":viewForm1:viewPanelGrid1"-->
 							<p:column headerText="Messages" sortBy="#{mes.creationDate}">
-								<h:outputText id="viewButton" value="#{mes.message}" />
+
+								<h:outputText value="HOME"
+									rendered="#{mes.requirement == null and mes.bug == null and mes.testcase == null}"
+									styleClass="HOME" style=""/>
+
+								<h:outputText value="OBJECT"
+									rendered="#{mes.requirement != null or mes.bug != null or mes.testcase != null}"
+									styleClass="OBJECT" />
+									
+								<h:outputText id="viewButton" value=" #{mes.message}" />
 								<p:tooltip for="viewButton"
 									value="#{messages.label_view} #{mes.name}" showEffect="fade"
 									hideEffect="fade" />
@@ -94,7 +103,7 @@
 							<p:menuitem value="#{messages.header_project_menuitem}"
 								url="/pages/planning.jsf?faces-redirect=true"
 								icon="ui-icon-clipboard" update=":contentPanel"
-								rendered="#{!loginBean.enable}" style="min-width: 80px;"/>
+								rendered="#{!loginBean.enable}" style="min-width: 80px;" />
 
 							<p:menuitem id="proAction" style="min-width: 80px;"
 								value="#{messages.header_project_menuitem}"
@@ -218,7 +227,8 @@
 							<f:event listener="#{loginBean.updateGrowl}"
 								type="preRenderComponent" />
 							<p:remoteCommand name="updateGrowl" />
-							<p:messages id="auth" showDetail="false" closable="true" />
+							<p:messages id="auth" showDetail="false" closable="true"
+								escape="false" style="text-align: center;" />
 						</f:facet>
 					</p:panel>
 				</h:form>

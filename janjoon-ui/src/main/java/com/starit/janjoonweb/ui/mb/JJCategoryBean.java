@@ -87,8 +87,10 @@ public class JJCategoryBean {
 			categoryListTable = null;
 
 			String message = "message_successfully_deleted";
-			FacesMessage facesMessage = MessageFactory.getMessage(message,
-					"Category");
+			FacesMessage facesMessage = MessageFactory
+					.getMessage(message,
+							MessageFactory.getMessage("label_category", "")
+									.getDetail());
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
@@ -145,7 +147,8 @@ public class JJCategoryBean {
 		} else {
 			message = "validator_buildVersion_nameExist";
 
-			facesMessage = MessageFactory.getMessage(message, "Category");
+			facesMessage = MessageFactory.getMessage(message, MessageFactory
+					.getMessage("label_category", "").getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 			throw new ValidatorException(facesMessage);
 
