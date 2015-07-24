@@ -168,8 +168,8 @@
 							<p:fieldset legend="#{messages.project_scrum_todo}" id="todoFieldset">
 								<p:dataTable scrollable="true" scrollHeight="250" id="todo"
 									var="todo" value="#{jjsprint.todoTask}" emptyMessage="#{messages.label_notRecordFound}"
-									styleClass="planning-dataTable" rowKey="#{todo.id}"
-									rendered="#{not empty jjsprint.todoTask}">
+									styleClass="planning-dataTable" rowKey="#{todo.id}" sortOrder="DESCENDING"
+									rendered="#{not empty jjsprint.todoTask}" sortBy="#{todo.creationDate}">
 
 									<p:column style="width:1px">
 										<h:outputText id="todoIcon"
@@ -232,10 +232,10 @@
 										rendered="#{empty jjsprint.progressTask}"
 										style="font-size:24px;" />
 									<p:dataTable scrollable="true" scrollHeight="250" id="prog"
-										editable="true" editMode="cell" var="prog"
+										editable="true" editMode="cell" var="prog" sortOrder="DESCENDING"
 										styleClass="planning-dataTable" emptyMessage="#{messages.label_notRecordFound}"
 										value="#{jjsprint.progressTask}" rowKey="#{prog.id}"
-										rendered="#{not empty jjsprint.progressTask}">
+										rendered="#{not empty jjsprint.progressTask}" sortBy="#{prog.startDateReal}">
 										<p:ajax event="cellEdit"
 											listener="#{jJSprintBean.onCellEditTask}"
 											update=":growlForm :projecttabview:SprintTabView:taskListForm :projecttabview:SprintTabView:sprintForm" />
@@ -298,10 +298,11 @@
 								<p:outputPanel id="donedropArea">
 									<h:outputText value="!!!Drop here!!!"
 										rendered="#{empty jjsprint.doneTask}" style="font-size:24px;" />
-									<p:dataTable id="done" styleClass="planning-dataTable" emptyMessage="#{messages.label_notRecordFound}"
+									<p:dataTable id="done" styleClass="planning-dataTable" 
+										emptyMessage="#{messages.label_notRecordFound}"
 										var="done" value="#{jjsprint.doneTask}" rowKey="#{done.id}"
 										rendered="#{not empty jjsprint.doneTask}" scrollable="true"
-										scrollHeight="250">
+										scrollHeight="250" sortOrder="DESCENDING" sortBy="#{prog.endDateReal}">
 
 										<p:column style="width:80px" headerText="Task">
 											<p:graphicImage
