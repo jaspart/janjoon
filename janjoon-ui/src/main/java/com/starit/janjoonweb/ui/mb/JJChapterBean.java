@@ -1392,19 +1392,19 @@ public class JJChapterBean {
 
 		chapterState = true;
 
-		if (FacesContext.getCurrentInstance().getViewRoot().getViewId()
-				.contains("specifications")) {
-			ExternalContext ec = FacesContext.getCurrentInstance()
-					.getExternalContext();
-			try {
-				ec.redirect(((HttpServletRequest) ec.getRequest())
-						.getRequestURI());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
+//		if (FacesContext.getCurrentInstance().getViewRoot().getViewId()
+//				.contains("specifications")) {
+//			ExternalContext ec = FacesContext.getCurrentInstance()
+//					.getExternalContext();
+//			try {
+//				ec.redirect(((HttpServletRequest) ec.getRequest())
+//						.getRequestURI());
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//
+//		}
 
 	}
 

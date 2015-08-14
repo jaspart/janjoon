@@ -153,7 +153,7 @@
 
 					<p:menuitem value="#{messages.header_dev_menuitem}"
 						url="/pages/development.jsf?faces-redirect=true"
-						icon="ui-icon-wrench"
+						icon="ui-icon-wrench" style="min-width: 120px;"
 						rendered="#{!loginBean.enable and !loginBean.mobile}" />
 
 					<p:menuitem id="devAction" value="#{messages.header_dev_menuitem}"
@@ -161,7 +161,7 @@
 						disabled="#{!loginBean.authorisationService.rwDev}"
 						title="#{loginBean.authorisationService.rwDevMSG}"
 						actionListener="#{loginBean.redirectToDev}" update=":growlForm"
-						icon="ui-icon-wrench"
+						icon="ui-icon-wrench" style="min-width: 120px;"
 						rendered="#{loginBean.enable and !loginBean.mobile}" />
 
 					<p:menuitem value="#{messages.header_test_menuitem}"

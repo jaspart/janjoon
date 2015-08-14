@@ -490,16 +490,19 @@ public class AuthorisationService implements Serializable {
 
 		adminContact = jJPermissionService.isAdmin(contact);
 		if (!adminContact) {
-			adminContactMSG = "Permission Denied";
+			adminContactMSG = MessageFactory.getMessage(
+					"header_noPermission_menuitem", "").getDetail();
 			adminProfil = false;
-			adminProfilMSG = "Permission Denied";
+			adminProfilMSG = MessageFactory.getMessage(
+					"header_noPermission_menuitem", "").getDetail();
 		} else {
 			adminContactMSG = "";
 			adminProfil = jJPermissionService.isAuthorized(contact, null, null,
 					"Profile", null, null, null, true);
 
 			if (!adminProfil) {
-				adminProfilMSG = "Permission Denied";
+				adminProfilMSG = MessageFactory.getMessage(
+						"header_noPermission_menuitem", "").getDetail();
 			} else {
 				adminProfilMSG = "";
 			}
@@ -512,7 +515,8 @@ public class AuthorisationService implements Serializable {
 				|| jJPermissionService.isAuthorized(contact, null, null,
 						"Company", null, true, null, null);
 		if (!adminCompany) {
-			adminCompanyMSG = "Permission Denied";
+			adminCompanyMSG = MessageFactory.getMessage(
+					"header_noPermission_menuitem", "").getDetail();
 		} else {
 			adminCompanyMSG = "";
 		}
@@ -520,7 +524,8 @@ public class AuthorisationService implements Serializable {
 		adminProduct = jJPermissionService.isAuthorized(contact, null, null,
 				"Product", null, null, null, true);
 		if (!adminProduct) {
-			adminProductMSG = "Permission Denied";
+			adminProductMSG = MessageFactory.getMessage(
+					"header_noPermission_menuitem", "").getDetail();
 		} else {
 			adminProductMSG = "";
 		}
@@ -528,7 +533,8 @@ public class AuthorisationService implements Serializable {
 		adminProject = jJPermissionService.isAuthorized(contact, null, null,
 				"Project", null, null, null, true);
 		if (!adminProject) {
-			adminProjectMSG = "Permission Denied";
+			adminProjectMSG = MessageFactory.getMessage(
+					"header_noPermission_menuitem", "").getDetail();
 		} else {
 			adminProjectMSG = "";
 		}
@@ -536,7 +542,8 @@ public class AuthorisationService implements Serializable {
 		adminWorkflow = jJPermissionService.isAuthorized(contact, null, null,
 				"Workflow", null, null, null, true);
 		if (!adminWorkflow) {
-			adminWorkflowMSG = "Permission Denied";
+			adminWorkflowMSG = MessageFactory.getMessage(
+					"header_noPermission_menuitem", "").getDetail();
 		} else {
 			adminWorkflowMSG = "";
 		}
@@ -544,7 +551,8 @@ public class AuthorisationService implements Serializable {
 		adminCategory = jJPermissionService.isAuthorized(contact, null, null,
 				"Category", null, null, null, true);
 		if (!adminCategory) {
-			adminCategoryMSG = "Permission Denied";
+			adminCategoryMSG = MessageFactory.getMessage(
+					"header_noPermission_menuitem", "").getDetail();
 		} else {
 			adminCategoryMSG = "";
 		}
@@ -552,14 +560,16 @@ public class AuthorisationService implements Serializable {
 		adminConfiguration = jJPermissionService.isAuthorized(contact, null,
 				null, "Configuration", null, null, null, true);
 		if (!adminConfiguration) {
-			adminConfigurationMSG = "Permission Denied";
+			adminConfigurationMSG = MessageFactory.getMessage(
+					"header_noPermission_menuitem", "").getDetail();
 		} else {
 			adminConfigurationMSG = "";
 		}
 		adminStatus = jJPermissionService.isAuthorized(contact, null, null,
 				"Status", null, null, null, true);
 		if (!adminStatus) {
-			adminStatusMSG = "Permission Denied";
+			adminStatusMSG = MessageFactory.getMessage(
+					"header_noPermission_menuitem", "").getDetail();
 		} else {
 			adminStatusMSG = "";
 		}
@@ -567,7 +577,8 @@ public class AuthorisationService implements Serializable {
 		rRequiement = jJPermissionService.isAuthorized(contact, project,
 				product, "Requirement", null, true, null, null);
 		if (!rRequiement) {
-			rRequiementMSG = "Permission Denied";
+			rRequiementMSG = MessageFactory.getMessage(
+					"header_noPermission_menuitem", "").getDetail();
 		} else {
 			rRequiementMSG = MessageFactory.getMessage("header_spec_menuitem",
 					"").getDetail();
@@ -580,7 +591,8 @@ public class AuthorisationService implements Serializable {
 		xTest = jJPermissionService.isAuthorized(contact, project, product,
 				"Testcase", null, null, null, true);
 		if (!rTest) {
-			rTestMSG = "Permission Denied";
+			rTestMSG = MessageFactory.getMessage(
+					"header_noPermission_menuitem", "").getDetail();
 		} else {
 			rTestMSG = MessageFactory.getMessage("header_test_menuitem", "")
 					.getDetail();
@@ -589,7 +601,8 @@ public class AuthorisationService implements Serializable {
 		rwDev = jJPermissionService.isAuthorized(contact, project, product,
 				"Version", null, true, true, null);
 		if (!rwDev) {
-			rwDevMSG = "Permission Denied";
+			rwDevMSG = MessageFactory.getMessage(
+					"header_noPermission_menuitem", "").getDetail();
 		} else {
 			rwDevMSG = MessageFactory.getMessage("header_dev_menuitem", "")
 					.getDetail();
@@ -652,12 +665,16 @@ public class AuthorisationService implements Serializable {
 			wRequiement = jJPermissionService.isAuthorized(contact, project,
 					product, "Requirement", null, null, true, null);
 			if (!wRequiement)
-				wRequiementMSG = "You Have no permisson to do this action";
+				wRequiementMSG = MessageFactory.getMessage(
+						"header_noAction_Permission_menuitem", "").getDetail();
 			else
-				wRequiementMSG = "New Requirement";
+				wRequiementMSG = MessageFactory.getMessage(
+						"specification_table_requirement_new", "").getDetail();
 		} else {
 			wRequiement = false;
-			wRequiementMSG = "Select a project to create requiremen";
+			//wRequiementMSG = "Select a project to create requirement";
+			wRequiementMSG=MessageFactory.getMessage(
+					"specification_warning_lackProject", "").getDetail();
 		}
 	}
 }

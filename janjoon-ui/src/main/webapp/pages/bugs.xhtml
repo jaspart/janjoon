@@ -4,7 +4,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
@@ -27,48 +28,48 @@
 					</f:facet>
 					<p:row>
 						<p:column colspan="2" styleClass="NEW">
-							<p:outputLabel value="NEW" />
+							<p:outputLabel value="#{messages.status_NEW}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="CLOSED">
-							<p:outputLabel value="CLOSED" />
+							<p:outputLabel value="#{messages.status_CLOSED}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="VERIFIED">
-							<p:outputLabel value="VERIFIED" />
+							<p:outputLabel value="#{messages.status_VERIFIED}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="RESOLVED">
-							<p:outputLabel value="RESOLVED" />
+							<p:outputLabel value="#{messages.status_RESOLVED}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="DUPLICATE">
-							<p:outputLabel value="DUPLICATE" />
+							<p:outputLabel value="#{messages.status_DUPLICATE}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="WONTFIX">
-							<p:outputLabel value="WONTFIX" />
+							<p:outputLabel value="#{messages.status_WONTFIX}" />
 						</p:column>
 					</p:row>
 					<p:row>
 						<p:column colspan="2" styleClass="INVALID">
-							<p:outputLabel value="INVALID" />
+							<p:outputLabel value="#{messages.status_INVALID}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="FIXED">
-							<p:outputLabel value="FIXED" />
+							<p:outputLabel value="#{messages.status_FIXED}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="READY">
-							<p:outputLabel value="READY" />
+							<p:outputLabel value="#{messages.status_READY}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="REOPENED">
-							<p:outputLabel value="REOPENED" />
+							<p:outputLabel value="#{messages.status_REOPENED}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="ASSIGNED">
-							<p:outputLabel value="ASSIGNED" />
+							<p:outputLabel value="#{messages.status_ASSIGNED}" />
 						</p:column>
 					</p:row>
 				</p:panelGrid>
@@ -175,7 +176,7 @@
 						filterStyleClass="status"
 						filterOptions="#{jJBugBean.statusOptions}" filterMatchMode="exact"
 						filterStyle="width: 90%;">
-						<h:outputText value="#{bug.status.name}"
+						<h:outputText value="#{messages['status_'.concat(fn:replace(bug.status.name, ' ', '_'))]}"
 							styleClass="#{bug.status.name}" />
 					</p:column>
 					<p:column styleClass="action-column" style="width: 100px;">

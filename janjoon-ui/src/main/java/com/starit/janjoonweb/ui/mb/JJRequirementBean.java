@@ -20,6 +20,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.ComponentSystemEvent;
 import javax.faces.model.ListDataModel;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -111,6 +112,7 @@ public class JJRequirementBean {
 	private List<CategoryDataModel> tableDataModelList;
 
 	private JJRequirement requirement;
+	private JJRequirement viewLinkRequirement;
 
 	private JJProject project;
 	private JJProject requirementProject;
@@ -230,8 +232,10 @@ public class JJRequirementBean {
 	}
 
 	public String getFilterButton() {
-		if (filterButton == null)
+		if (filterButton == null) {
 			filterButton = "specification_filter_button";
+			viewLinkRequirement = null;
+		}
 		return filterButton;
 	}
 
@@ -245,6 +249,14 @@ public class JJRequirementBean {
 
 	public void setFilterValue(String filterValue) {
 		this.filterValue = filterValue;
+	}
+
+	public JJRequirement getViewLinkRequirement() {
+		return viewLinkRequirement;
+	}
+
+	public void setViewLinkRequirement(JJRequirement viewLinkRequirement) {
+		this.viewLinkRequirement = viewLinkRequirement;
 	}
 
 	public JJCategory getLowCategory() {
@@ -1155,6 +1167,7 @@ public class JJRequirementBean {
 		}
 
 		deleteTasksAndTestcase(requirement);
+		mineChangeEvent(null);
 
 		closeDialog(false, true);
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
@@ -1238,10 +1251,10 @@ public class JJRequirementBean {
 
 						}
 					}
-					if (specPage)
-						RequestContext.getCurrentInstance().execute(
-								"PF('dataTable_" + i
-										+ "_Widget').clearFilters();");
+					// if (specPage)
+					// RequestContext.getCurrentInstance().execute(
+					// "PF('dataTable_" + i
+					// + "_Widget').clearFilters();");
 					i = tableDataModelList.size();
 
 				}
@@ -1282,12 +1295,7 @@ public class JJRequirementBean {
 					} else
 						tableDataModelList.get(i).setFiltredRequirements(null);
 
-				} else {
-					if (this.mine)
-						tableDataModelList.get(i).setFiltredRequirements(
-								getFiltredListValue(tableDataModelList.get(i)
-										.getFiltredRequirements()));
-					else
+				} else {					
 						tableDataModelList
 								.get(i)
 								.setFiltredRequirements(
@@ -1299,17 +1307,29 @@ public class JJRequirementBean {
 			i++;
 
 		}
+		// RequestContext.getCurrentInstance().execute("updateDataTable()");
 	}
 
 	public List<RequirementUtil> getFiltredListValue(List<RequirementUtil> list) {
 
-		if (filterValue == null || filterValue.isEmpty())
+		if ((filterValue == null || filterValue.isEmpty()) && !mine)
 			return list;
 		else {
 			List<RequirementUtil> filtredList = new ArrayList<RequirementUtil>();
+			JJContact mineContact = null;
+			if (mine)
+				mineContact = ((LoginBean) LoginBean.findBean("loginBean"))
+						.getContact();
+
 			for (RequirementUtil req : list) {
-				if (req.getRequirement().getName().toLowerCase()
+				if (((filterValue == null || filterValue.isEmpty()) || req
+						.getRequirement().getName().toLowerCase()
 						.contains(filterValue.toLowerCase()))
+						&& (mineContact == null
+								|| (req.getRequirement().getUpdatedBy() != null && req.getRequirement().getUpdatedBy()
+										.equals(mineContact)) || (req.getRequirement().getCreatedBy() != null && req
+								.getRequirement().getCreatedBy()
+								.equals(mineContact))))
 					filtredList.add(req);
 			}
 			return filtredList;
@@ -1350,6 +1370,7 @@ public class JJRequirementBean {
 			}
 		}
 		reset();
+		mineChangeEvent(null);
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
@@ -1497,7 +1518,7 @@ public class JJRequirementBean {
 		}
 		updateJJRequirement(requirement);
 		updateDataTable(requirement, u, specPage);
-		this.mine = false;
+		// this.mine = true;
 		mineChangeEvent(null);
 		getWarningList(jJRequirementService.findJJRequirement(requirement
 				.getId()));
@@ -1508,25 +1529,18 @@ public class JJRequirementBean {
 			boolean r = getRequirementDialogConfiguration();
 			if (r) {
 				context.execute("PF('requirementDialogWidget').hide()");
-				// context.execute("updateGrowlForm()");
 				reset();
 
-				// if (specPage)
-				// closeDialog(false, true);
-				// else {
-				// closeDialog(true, false);
-				// RequestContext.getCurrentInstance().execute("updateTree()");
-				// }
-
 				if (!specPage) {
-					// closeDialog(true, false);
 					RequestContext.getCurrentInstance().execute("updateTree()");
-				} else if (filterButton != null
-						&& !filterButton
-								.equalsIgnoreCase("specification_filter_button")) {
-					filterButton = null;
-					LoginBean.redirectPage();
 				}
+				// else if (filterButton != null
+				// && !filterButton
+				// .equalsIgnoreCase("specification_filter_button")) {
+				// filterButton = null;
+				// viewLinkRequirement = null;
+				// LoginBean.redirectPage();
+				// }
 
 			} else {
 
@@ -1537,25 +1551,19 @@ public class JJRequirementBean {
 
 		} else {
 			context.execute("PF('requirementDialogWidget').hide()");
-			// context.execute("updateGrowlForm()");
-
 			reset();
-			// if (specPage)
-			// closeDialog(false, true);
-			// else {
-			// closeDialog(true, false);
-			// RequestContext.getCurrentInstance().execute("updateTree()");
-			// }
 
 			if (!specPage) {
-				// closeDialog(true, false);
 				RequestContext.getCurrentInstance().execute("updateTree()");
-			} else if (filterButton != null
-					&& !filterButton
-							.equalsIgnoreCase("specification_filter_button")) {
-				filterButton = null;
-				LoginBean.redirectPage();
 			}
+			// } else if (filterButton != null
+			// && !filterButton
+			// .equalsIgnoreCase("specification_filter_button")) {
+			// // filterButton = null;
+			// // viewLinkRequirement = null;
+			// viewLinks();
+			// //LoginBean.redirectPage();
+			// }
 		}
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 
@@ -1682,6 +1690,7 @@ public class JJRequirementBean {
 				}
 
 				saveJJRequirement(importRequirement);
+				updateDataTable(importRequirement, ADD_OPERATION, true);
 				reset();
 
 				if (format.getCopyTestcase()) {
@@ -1764,6 +1773,8 @@ public class JJRequirementBean {
 
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('requirementImportDialogWidget').hide()");
+		//loadData();
+		mineChangeEvent(null);
 		reset();
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
@@ -1928,14 +1939,10 @@ public class JJRequirementBean {
 
 		requirementState = true;
 
-		// loadData();
-		// LoginBean.redirectPage();
-
 		System.out.println("fin");
 
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		if (redirection)
-			// LoginBean.redirectPage();
 			RequestContext.getCurrentInstance().execute("updateDataTable()");
 
 	}
@@ -1955,8 +1962,8 @@ public class JJRequirementBean {
 		importVersionList = null;
 		importStatusList = null;
 
-		loadData();
-		LoginBean.redirectPage();
+		//loadData();
+		//LoginBean.redirectPage();
 
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 
@@ -2341,6 +2348,7 @@ public class JJRequirementBean {
 		if (dialog != null)
 			dialog.setVisible(false);
 		categoryList = null;
+		// RequestContext.getCurrentInstance().execute("updateDataTable()");
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
@@ -2419,7 +2427,7 @@ public class JJRequirementBean {
 			// categoryDataModel.calculCoverageProgress();
 
 			tableDataModelList.set(i, categoryDataModel);
-
+			mineChangeEvent(i);
 			logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		}
 
@@ -3610,6 +3618,7 @@ public class JJRequirementBean {
 					saveJJRequirement(r);
 					updateDataTable(r, ADD_OPERATION, true);
 				}
+				mineChangeEvent(null);
 				FacesMessage facesMessage = MessageFactory
 						.getMessage(requirements.size()
 								+ " Exigences Ajoutées avec succés",
@@ -3632,14 +3641,16 @@ public class JJRequirementBean {
 
 	public void viewLinks() {
 
-		if (filterButton == null
-				|| filterButton.equalsIgnoreCase("specification_filter_button")) {
+		if (viewLinkRequirement != null
+				&& (filterButton == null || filterButton
+						.equalsIgnoreCase("specification_filter_button"))) {
 			filterButton = "specification_showAll_button";
-			requirement = jJRequirementService.findJJRequirement(requirement
-					.getId());
+			viewLinkRequirement = jJRequirementService
+					.findJJRequirement(viewLinkRequirement.getId());
 
-			Set<JJRequirement> downs = requirement.getRequirementLinkDown();
-			Set<JJRequirement> ups = requirement.getRequirementLinkUp();
+			Set<JJRequirement> downs = viewLinkRequirement
+					.getRequirementLinkDown();
+			Set<JJRequirement> ups = viewLinkRequirement.getRequirementLinkUp();
 			Set<JJRequirement> links = new HashSet<JJRequirement>();
 			JJVersion version = null;
 			JJProduct product = null;
@@ -3674,11 +3685,13 @@ public class JJRequirementBean {
 				}
 
 			String[] results = templateHeader.split("-");
+			JJContact mineContact = null;
+			if (mine)
+				mineContact = ((LoginBean) LoginBean.findBean("loginBean"))
+						.getContact();
 
 			for (int i = 0; i < results.length; i++) {
 
-				// CategoryDataModel categoryDataModel =
-				// tableDataModelList.get(i);
 				long categoryId = tableDataModelList.get(i).getCategoryId();
 
 				if (categoryId != 0) {
@@ -3688,10 +3701,10 @@ public class JJRequirementBean {
 
 					List<JJRequirement> requirements = new ArrayList<JJRequirement>();
 
-					if (category.equals(requirement.getCategory())
-							&& !listContain(requirement, requirements)) {
+					if (category.equals(viewLinkRequirement.getCategory())
+							&& !listContain(viewLinkRequirement, requirements)) {
 
-						requirements.add(requirement);
+						requirements.add(viewLinkRequirement);
 					} else {
 
 						for (JJRequirement req : links) {
@@ -3717,49 +3730,51 @@ public class JJRequirementBean {
 											add = version.equals(r
 													.getVersioning());
 									}
-									if (add)
+									if (add
+											&& (mineContact == null
+													|| (r.getUpdatedBy() != null && r.getUpdatedBy().equals(
+															mineContact)) || (r.getCreatedBy() != null && r.getCreatedBy().equals(
+															mineContact)))) {
+
 										requirements.add(r);
+									}
+
 								}
 
 							}
 
 							if (req.getCategory().equals(category)
-									&& !listContain(req, requirements))
+									&& !listContain(req, requirements)
+									&& (mineContact == null
+											|| (req.getUpdatedBy() != null && req.getUpdatedBy()
+													.equals(mineContact)) || (req.getCreatedBy() != null && req
+											.getCreatedBy().equals(mineContact))))
 								requirements.add(req);
 						}
 
 					}
 
-					// categoryDataModel = new CategoryDataModel(
-					// getListOfRequiremntUtils(requirements),
-					// category.getId(), category.getName(), true);
-
-					tableDataModelList.get(i).setFiltredRequirements(
-							getListOfRequiremntUtils(requirements));
-					// tableDataModelList.set(i, categoryDataModel);
+					tableDataModelList
+							.get(i)
+							.setFiltredRequirements(
+									getFiltredListValue(getListOfRequiremntUtils(requirements)));
 
 				}
 
 			}
-			LoginBean.redirectPage();
 
 		} else {
 
 			filterButton = null;
+			viewLinkRequirement = null;
 			for (int i = 0; i < tableDataModelList.size(); i++) {
 				if (tableDataModelList.get(i).getCategoryId() != 0
 						&& tableDataModelList.get(i).getRendered()) {
-
-					tableDataModelList.get(i).setFiltredRequirements(null);
-					//
-					// RequestContext.getCurrentInstance().execute(
-					// "PF('dataTable_" + i + "_Widget').clearFilters();");
+					mineChangeEvent(i);
 
 				}
-
-				// reloadPage();
 			}
-			LoginBean.redirectPage();
+
 		}
 
 	}
@@ -4513,7 +4528,10 @@ public class JJRequirementBean {
 
 	public void reloadPage() {
 
+		mine = false;
+		filterValue = null;
 		filterButton = null;
+		viewLinkRequirement = null;
 		loadData();
 		closeDialog(false, true);
 		// oncomplete="PF('blockUIWidget').unblock();"
@@ -4661,7 +4679,7 @@ public class JJRequirementBean {
 	}
 
 	public void saveJJRequirement(JJRequirement b) {
-
+		((LoginBean)LoginBean.findBean("loginBean")).setNoCouvretReq(null);
 		b.setCreationDate(new Date());
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
@@ -4670,6 +4688,7 @@ public class JJRequirementBean {
 	}
 
 	public void updateJJRequirement(JJRequirement b) {
+		((LoginBean)LoginBean.findBean("loginBean")).setNoCouvretReq(null);
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		b.setUpdatedBy(contact);
@@ -4739,8 +4758,10 @@ public class JJRequirementBean {
 							((LoginBean) LoginBean.findBean("loginBean"))
 									.getContact()));
 				}
-				tableDataModelList.get(i).setFiltredRequirements(
-						getListOfRequiremntUtils(requirements));
+				tableDataModelList
+						.get(i)
+						.setFiltredRequirements(
+								getFiltredListValue(getListOfRequiremntUtils(requirements)));
 
 			} else if (event.getTreeNode().getData() instanceof String
 					&& (((String) event.getTreeNode().getData())
@@ -4753,12 +4774,12 @@ public class JJRequirementBean {
 						if (!mine)
 							list.add(reqUtil);
 						else {
-							if (reqUtil
+							if ((reqUtil.getRequirement().getCreatedBy() != null && reqUtil
 									.getRequirement()
 									.getCreatedBy()
 									.equals(((LoginBean) LoginBean
 											.findBean("loginBean"))
-											.getContact())
+											.getContact()))
 									|| (reqUtil.getRequirement().getUpdatedBy() != null && reqUtil
 											.getRequirement()
 											.getUpdatedBy()
@@ -4771,7 +4792,8 @@ public class JJRequirementBean {
 					}
 
 				}
-				tableDataModelList.get(i).setFiltredRequirements(list);
+				tableDataModelList.get(i).setFiltredRequirements(
+						getFiltredListValue(list));
 
 			} else
 				mineChangeEvent(i);
@@ -4920,6 +4942,8 @@ public class JJRequirementBean {
 				specPage = true;
 			}
 
+			filterButton = null;
+			viewLinkRequirement = null;
 			for (int i = 0; i < tableDataModelList.size(); i++) {
 				if (tableDataModelList.get(i).getCategoryId() != 0
 						&& tableDataModelList.get(i).getRendered()) {
@@ -4944,6 +4968,29 @@ public class JJRequirementBean {
 			}
 
 		}
+		RequestContext.getCurrentInstance().execute("updateDataTable()");
+	}
+
+	public void initDataTabels(ComponentSystemEvent e) {
+
+		if (tableDataModelList != null) {
+			for (int i = 0; i < tableDataModelList.size(); i++) {
+				if (tableDataModelList.get(i).getFiltredRequirements() != null) {
+					System.out
+							.println("SIZE: -----"
+									+ tableDataModelList.get(i)
+											.getFiltredRequirements().size()
+									+ "------");
+					// RequestContext.getCurrentInstance().execute("PF('dataTable_"
+					// + i + "_Widget').filter();");
+					//
+				} else
+					System.out.println("SIZE: -----NULL------");
+			}
+
+			RequestContext.getCurrentInstance().execute("updateDataTable();");
+		}
+
 	}
 
 }

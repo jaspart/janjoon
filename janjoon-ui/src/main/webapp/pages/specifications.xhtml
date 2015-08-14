@@ -24,6 +24,7 @@
 }
 </style>
 		<h:outputScript library="js" name="ckEditor.js" />
+		<f:event  type="preRenderComponent"	listener="#{jJRequirementBean.initDataTabels}" />
 		<h:form id="categoryForm">
 			<c:forEach items="#{jJRequirementBean.categoryList}" var="category">
 				<p:selectBooleanButton value="#{category.checked}"
@@ -34,12 +35,9 @@
 					style="#{jJRequirementBean.getMarginLeft(category)}">
 					<p:ajax
 						listener="#{jJRequirementBean.updateTemplate(category.category.id,null,true,category.checked)}"
-						update=":specForm @form" onstart="PF('blockUIWidget').block()"
-						oncomplete="PF('blockUIWidget').unblock()" />
+						update="@form" onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock();updateDataTable();" />
 				</p:selectBooleanButton>
-<!-- 				<p:tooltip for="category_#{category.category.id}" -->
-<!-- 					value="#{category.category.name}" showEffect="fade" -->
-<!-- 					hideEffect="fade" /> -->
 			</c:forEach>
 
 			<p:commandButton value="&#9776;" id="overlayPanel" title="Category"
@@ -47,45 +45,47 @@
 				action="#{loginBean.showAndHideDialog('categoryPanel',categoryPanel)}"
 				rendered="#{loginBean.mobile}" />
 
-			<p:remoteCommand name="filter" update=":specForm"
-				actionListener="#{jJRequirementBean.filterTable}" />
-			<p:inputText id="globalFilter"
-				style="margin-left: 10%;height: 20px;width: 15%;"
-				value="#{jJRequirementBean.filterValue}" onkeyup="filter()" />
 
-			<p:watermark
-				value="#{messages.specification_table_requirement_filter}"
-				for="globalFilter" />
-			<p:selectOneMenu id="mineSpec" value="#{jJRequirementBean.mine}" title="Filter"
-				styleClass="mineSelect" effect="fade" style="margin-left: 10%;">
-				<f:selectItem itemValue="#{false}" itemLabel="All" />
-				<f:selectItem itemValue="#{true}" itemLabel="Mine" />
+			<p:inputText id="globalFilter"
+				placeholder="#{messages.specification_table_requirement_filter}"
+				style="margin-left: 5%;height: 20px;width: 15%;"
+				value="#{jJRequirementBean.filterValue}">
+				<p:ajax event="change" listener="#{jJRequirementBean.filterTable}"
+					onstart="PF('blockUIWidget').block()"
+					oncomplete="PF('blockUIWidget').unblock();updateDataTable();" />
+			</p:inputText>
+
+			<p:selectOneMenu id="mineSpec" value="#{jJRequirementBean.mine}"
+				title="#{messages.specification_table_requirement_filter}"
+				styleClass="mineSelect" effect="fade" style="margin-left: 5%;">
+				<f:selectItem itemValue="#{false}"
+					itemLabel="#{messages.specification_table_requirement_all}" />
+				<f:selectItem itemValue="#{true}"
+					itemLabel="#{messages.specification_table_requirement_mine}" />
 				<p:ajax onstart="PF('blockUIWidget').block()" event="change"
 					oncomplete="PF('blockUIWidget').unblock()"
-					listener="#{jJRequirementBean.mineChangeEvent}" update=":specForm" />
+					listener="#{jJRequirementBean.mineChangeEvent}" />
 			</p:selectOneMenu>
-
-<!-- 			<p:tooltip for="mineSpec" value="Filter" showEffect="fade" -->
-<!-- 				hideEffect="fade" /> -->
 
 			<p:dialog widgetVar="categoryPanel" id="categoryPanel"
 				styleClass="overlayPanelDialog" rendered="#{loginBean.mobile}"
 				closable="false" binding="#{categoryPanel}">
 				<c:forEach items="#{jJRequirementBean.categoryList}" var="category">
 
-					<p:selectBooleanButton value="#{category.checked}" title="#{category.category.name}"
+					<p:selectBooleanButton value="#{category.checked}"
+						title="#{category.category.name}"
 						onLabel="#{category.category.name}" rendered="#{loginBean.mobile}"
 						offLabel="#{category.category.name}" onIcon="ui-icon-check"
 						offIcon="ui-icon-close" id="Mcategory_#{category.category.id}"
 						style="width: 150px;margin-left: 20px;height: 100px;margin-top: 20px;">
 						<p:ajax
 							listener="#{jJRequirementBean.updateTemplate(category.category.id,categoryPanel,true,category.checked)}"
-							update=":specForm @form" onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock();PF('categoryPanel').hide()" />
+							update="@form" onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock();PF('categoryPanel').hide();updateDataTable();" />
 					</p:selectBooleanButton>
-<!-- 					<p:tooltip for="Mcategory_#{category.category.id}" -->
-<!-- 						value="#{category.category.name}" showEffect="fade" -->
-<!-- 						hideEffect="fade" /> -->
+					<!-- 					<p:tooltip for="Mcategory_#{category.category.id}" -->
+					<!-- 						value="#{category.category.name}" showEffect="fade" -->
+					<!-- 						hideEffect="fade" /> -->
 					<br />
 				</c:forEach>
 			</p:dialog>
@@ -113,7 +113,7 @@
 			<p:commandButton id="reloadBtn" icon="ui-icon-refresh"
 				onstart="PF('blockUIWidget').block()" style="float: right;"
 				actionListener="#{jJRequirementBean.reloadPage}"
-				title="#{messages.label_refresh}" />
+				title="#{messages.label_refresh}" update="globalFilter" />
 
 			<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
 				style="float: right;"
@@ -152,7 +152,7 @@
 			</p:overlayPanel>
 		</h:form>
 		<h:form id="specForm" style="overflow:hidden;width:100%">
-			<p:remoteCommand name="updateDataTable" update="specForm" />
+			<p:remoteCommand name="updateDataTable" update="specForm" />			
 			<c:forEach items="#{jJRequirementBean.tableDataModelList}"
 				var="tableDataModel" varStatus="loop">
 				<p:panelGrid
@@ -187,7 +187,8 @@
 							<p:dataTable id="categoryTable_#{loop.index}" var="reqUtil"
 								value="#{tableDataModel}" scrollable="true" scrollHeight="300"
 								sortMode="multiple" resizableColumns="true"
-								styleClass="requirement-table" emptyMessage="#{messages.label_notRecordFound}"
+								styleClass="requirement-table"
+								emptyMessage="#{messages.label_notRecordFound}"
 								filteredValue="#{tableDataModel.filtredRequirements}"
 								rowKey="#{reqUtil.requirement.id}" editable="true"
 								editMode="cell" rendered="#{tableDataModel.rendered}"
@@ -204,9 +205,9 @@
 									<h:outputText value="#{tableDataModel.nameDataModel}" />
 									<p:commandButton icon="ui-icon-arrowthick-2-e-w"
 										style="float:left;" onstart="PF('blockUIWidget').block()"
-										oncomplete="PF('blockUIWidget').unblock()"
+										oncomplete="PF('blockUIWidget').unblock();updateDataTable();"
 										actionListener="#{jJRequirementBean.expandTable(tableDataModel)}"
-										title="Expand" update=":specForm" />
+										title="Expand" />
 									<p:panelGrid style="margin-top: 15px;">
 										<f:facet name="header">
 											<p:row>
@@ -221,27 +222,14 @@
 														oncomplete="PF('blockUIWidget').unblock();PF('chapterDialogWidget').show()" />
 												</p:column>
 												<p:column>
-													<p:commandButton ajax="false" id="xml" title="#{messages.specification_req_exportTo} XML"
+													<p:commandButton ajax="false" id="xml"
+														title="#{messages.specification_req_exportTo} XML"
 														onclick="PrimeFaces.monitorDownload(start, stop);"
 														icon="ui-icon-arrowthick-1-s">
 														<p:fileDownload value="#{tableDataModel.file}" />
 													</p:commandButton>
-<!-- 													<p:tooltip for="xml" value="Export To XML" -->
-<!-- 														showEffect="fade" hideEffect="fade" /> -->
+
 												</p:column>
-												<!--p:column colspan="1">
-											<p:commandButton id="releaseRequirementButton"
-												icon=".ui-icon-carat-2-n-s" title="Release All Requirements"
-												actionListener="#{jJRequirementBean.preReleaseRequirement(tableDataModel.categoryId)}"
-												oncomplete="PF('requirementReleaseDialogWidget').show()" />
-											</p:column-->
-												<!-- 										<p:column colspan="3" rendered="#{!jJRequirementBean.expand or tableDataModel.expanded}"> -->
-												<!-- 											<p:inputText id="globalFilter" style="width:90%" -->
-												<!-- 												onkeyup="PF('dataTable_#{loop.index}_Widget').filter()" /> -->
-												<!-- 											<p:watermark -->
-												<!-- 												value="#{messages.specification_table_requirement_filter}" -->
-												<!-- 												for="globalFilter" /> -->
-												<!-- 										</p:column> -->
 												<p:column colspan="1">
 													<p:commandButton id="newRequirementButton"
 														icon="ui-icon-plusthick" resetValues="true"
@@ -252,19 +240,6 @@
 														onstart="PF('blockUIWidget').block()"
 														oncomplete="PF('blockUIWidget').unblock();PF('requirementDialogWidget').show()" />
 												</p:column>
-												<!-- 										<p:column colspan="1"> -->
-												<!-- 											<p:selectBooleanButton id="mineSpec" -->
-												<!-- 												style="left: -5px;font-size: smaller;" -->
-												<!-- 												value="#{tableDataModel.mine}" onLabel="Mine" offLabel="All" -->
-												<!-- 												onIcon="ui-icon-check" offIcon="ui-icon-close"> -->
-												<!-- 												<p:ajax onstart="PF('blockUIWidget').block()" -->
-												<!-- 													oncomplete="PF('blockUIWidget').unblock()" -->
-												<!-- 													listener="#{tableDataModel.mineChangeEvent}" -->
-												<!-- 													update=":specForm" /> -->
-												<!-- 											</p:selectBooleanButton> -->
-												<!-- 											<p:tooltip for="mineSpec" value="Filter" -->
-												<!-- 												showEffect="fade" hideEffect="fade" /> -->
-												<!-- 										</p:column> -->
 												<p:column colspan="1">
 													<p:commandButton ajax="false" id="pdf"
 														title="#{jJRequirementBean.warnMessage}"
@@ -274,7 +249,7 @@
 														icon="ui-icon-pdf">
 														<p:fileDownload value="#{jJChapterBean.preProcessPDF}" />
 													</p:commandButton>
-													
+
 												</p:column>
 											</p:row>
 										</f:facet>
@@ -288,7 +263,7 @@
 										<h:outputText value="Id" />
 									</f:facet>
 									<h:outputText value="#{reqUtil.requirement.id}" />
-								</p:column>								
+								</p:column>
 								<p:column filterBy="#{reqUtil.requirement.name}"
 									filterStyle="display:none" styleClass="requirement-column"
 									sortBy="#{reqUtil.requirement.name}">
@@ -298,7 +273,8 @@
 									</f:facet>
 									<p:cellEditor>
 										<f:facet name="output">
-											<h:outputText value="#{messages['specification_'.concat(reqUtil.style)]}"
+											<h:outputText
+												value="#{messages['specification_'.concat(reqUtil.style)]}"
 												styleClass="#{reqUtil.style}" />
 
 											<h:outputText id="reqContent" style="white-space: normal;"
@@ -354,7 +330,8 @@
 													<p:column>
 														<p:outputLabel style="font-weight: bold;" for="expStyle"
 															value="Type:  " />
-														<h:outputText id="expStyle" value="#{messages['specification_'.concat(reqUtil.style)]}"
+														<h:outputText id="expStyle"
+															value="#{messages['specification_'.concat(reqUtil.style)]}"
 															styleClass="#{reqUtil.style}" />
 													</p:column>
 												</p:row>
@@ -373,27 +350,6 @@
 										</f:facet>
 									</p:cellEditor>
 								</p:column>
-
-								<!-- 						<p:column filterBy="#{reqUtil.requirement.product.name}" -->
-								<!-- 							styleClass="product-column" filterStyle="display:none" -->
-								<!-- 							sortBy="#{reqUtil.requirement.product.name}" -->
-								<!-- 							rendered="#{tableDataModel.expanded}"> -->
-								<!-- 							<f:facet name="header"> -->
-								<!-- 								<h:outputText value="#{messages.specification_table_product_title}" /> -->
-								<!-- 							</f:facet> -->
-								<!-- 							<h:outputText value="#{reqUtil.requirement.product.name}" /> -->
-								<!-- 						</p:column> -->
-
-								<!-- 						<p:column filterBy="#{reqUtil.requirement.chapter.name}" -->
-								<!-- 							styleClass="chapter-column" filterStyle="display:none" -->
-								<!-- 							sortBy="#{reqUtil.requirement.chapter.name}" -->
-								<!-- 							rendered="#{tableDataModel.expanded}"> -->
-								<!-- 							<f:facet name="header"> -->
-								<!-- 								<h:outputText value="#{messages.specification_table_chapter_title}" /> -->
-								<!-- 							</f:facet> -->
-								<!-- 							<h:outputText value="#{reqUtil.requirement.chapter.name}" /> -->
-								<!-- 						</p:column> -->
-
 								<p:column exportable="false" styleClass="action-column"
 									style="width: 80px;"
 									rendered="#{!jJRequirementBean.expand or tableDataModel.expanded}">
@@ -409,22 +365,24 @@
 											value="#{messages[jJRequirementBean.filterButton]}"
 											icon="ui-icon-search" onstart="PF('blockUIWidget').block()"
 											action="#{jJRequirementBean.viewLinks()}"
-											oncomplete="PF('blockUIWidget').unblock()" update=":specForm">
+											oncomplete="PF('blockUIWidget').unblock();updateDataTable();">
 											<f:setPropertyActionListener value="#{reqUtil.requirement}"
-												target="#{jJRequirementBean.requirement}" />
+												target="#{jJRequirementBean.viewLinkRequirement}" />
 										</p:menuitem>
 
 										<p:menuitem id="editButton" icon="ui-icon-pencil"
 											action="#{jJRequirementBean.editRequirement()}"
 											onstart="PF('blockUIWidget').block()"
 											oncomplete="PF('blockUIWidget').unblock();PF('requirementDialogWidget').show()"
-											update=":requirementDialog" value="Edit"
+											update=":requirementDialog"
+											value="#{messages.specification_table_actions_editButton}"
 											disabled="#{jJRequirementBean.getDisabledEdit(reqUtil.requirement) or !loginBean.authorisationService.wRequiement}">
 											<f:setPropertyActionListener value="#{reqUtil.requirement}"
 												target="#{jJRequirementBean.requirement}" />
 										</p:menuitem>
 
-										<p:menuitem id="mindMapButton" value="View ReqMap"
+										<p:menuitem id="mindMapButton"
+											value="#{messages.specification_table_actions_mapButton}"
 											title="#{messages.specification_table_actions_mindMapButton}"
 											icon="ui-icon-search" onstart="PF('blockUIWidget').block()"
 											action="#{jJRequirementBean.initReqMindMap}"
@@ -435,9 +393,9 @@
 										</p:menuitem>
 
 										<p:menuitem id="deleteButton" icon="ui-icon-trash"
-											title="Delete"
+											title="#{messages.specification_table_actions_deleteButton}"
 											oncomplete="PF('requirementDeleteDialogWidget').show()"
-											value="Delete">
+											value="#{messages.specification_table_actions_deleteButton}">
 											<f:setPropertyActionListener value="#{reqUtil.requirement}"
 												target="#{jJRequirementBean.requirement}" />
 										</p:menuitem>
@@ -498,7 +456,7 @@
 			header="#{messages.specification_chapter_header}" modal="true"
 			widgetVar="chapterDialogWidget" dynamic="true" resizable="false">
 			<p:ajax event="close" onstart="PF('blockUIWidget').block()"
-				oncomplete="PF('blockUIWidget').unblock()"
+				oncomplete="PF('blockUIWidget').unblock();updateDataTable();"
 				listener="#{jJChapterBean.closeDialog}" />
 			<p:outputPanel id="chapterDialogPanel">
 				<ui:include src="chapterDialog.xhtml" />
@@ -515,9 +473,9 @@
 					<p:commandButton id="deleteYesButton"
 						value="#{messages.specification_delete_yes_button}"
 						action="#{jJRequirementBean.deleteRequirement}"
-						update=":specForm :growlForm"
+						update=":growlForm"
 						onstart="PF('requirementDeleteDialogWidget').hide();PF('blockUIWidget').block()"
-						oncomplete="PF('blockUIWidget').unblock()" />
+						oncomplete="PF('blockUIWidget').unblock();updateDataTable();" />
 					<p:commandButton id="deleteNoButton"
 						value="#{messages.specification_delete_no_button}"
 						onclick="PF('requirementDeleteDialogWidget').hide()" type="button" />
@@ -535,9 +493,9 @@
 					<p:commandButton id="releaseYesButton"
 						value="#{messages.specification_release_yes_button}"
 						action="#{jJRequirementBean.releaseRequirement}"
-						update=":specForm :growlForm"
+						update=":growlForm"
 						onstart="PF('requirementReleaseDialogWidget').hide();PF('blockUIWidget').block()"
-						oncomplete="PF('blockUIWidget').unblock()" />
+						oncomplete="PF('blockUIWidget').unblock();updateDataTable();" />
 					<p:commandButton id="releaseNoButton"
 						value="#{messages.specification_release_no_button}"
 						onclick="PF('requirementReleaseDialogWidget').hide()"
@@ -567,8 +525,8 @@
 					<p:fileUpload
 						fileUploadListener="#{jJRequirementBean.handleImportXML}"
 						mode="advanced" dragDropSupport="false"
-						update=":growlForm :specForm :categoryForm" sizeLimit="100000"
-						fileLimit="3" allowTypes="/(\.|\/)(xml)$/" />
+						oncomplete="updateDataTable();" update=":growlForm :categoryForm"
+						sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(xml)$/" />
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
@@ -588,7 +546,7 @@
 			widgetVar="requirementImportDialogWidget" dynamic="true"
 			resizable="false">
 			<p:ajax event="close" onstart="PF('blockUIWidget').block()"
-				oncomplete="PF('blockUIWidget').unblock()"
+				oncomplete="PF('blockUIWidget').unblock();updateDataTable();"
 				listener="#{jJRequirementBean.closeDialogImport}" />
 
 			<p:outputPanel id="importPanel">
@@ -715,7 +673,8 @@
 					</p:panelGrid>
 
 					<p:dataTable id="importDataTable" var="format" scrollable="true"
-						style="width:500px;" scrollHeight="300" emptyMessage="#{messages.label_notRecordFound}"
+						style="width:500px;" scrollHeight="300"
+						emptyMessage="#{messages.label_notRecordFound}"
 						value="#{jJRequirementBean.importFormats}">
 						<f:facet name="header">
 							<h:outputText
@@ -798,9 +757,8 @@
 
 					<h3 style="margin-top: 0" />
 					<p:commandButton id="importButton" value="Import"
-						update=":specForm :growlForm"
-						onstart="PF('importBlockUIWidget').block()"
-						oncomplete="PF('importBlockUIWidget').unblock()"
+						update=":growlForm" onstart="PF('importBlockUIWidget').block()"
+						oncomplete="PF('importBlockUIWidget').unblock();updateDataTable();"
 						style="float: right;"
 						disabled="#{jJRequirementBean.disableImportButton}"
 						action="#{jJRequirementBean.importRequirement()}" />

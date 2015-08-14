@@ -56,14 +56,17 @@
 							<!--									update=":viewForm1:viewPanelGrid1"-->
 							<p:column headerText="Messages" sortBy="#{mes.creationDate}">
 
-								<h:outputText value="HOME"
+								<h:outputText value="INFO"
 									rendered="#{mes.requirement == null and mes.bug == null and mes.testcase == null}"
-									styleClass="HOME" style=""/>
+									styleClass="HOME" />
 
-								<h:outputText value="OBJECT"
-									rendered="#{mes.requirement != null or mes.bug != null or mes.testcase != null}"
+								<h:outputText value="Spec" rendered="#{mes.requirement != null}"
 									styleClass="OBJECT" />
-									
+								<h:outputText value="Ano" rendered="#{mes.bug != null}"
+									styleClass="OBJECT" />
+								<h:outputText value="Test" rendered="#{mes.testcase != null}"
+									styleClass="OBJECT" />
+
 								<h:outputText id="viewButton" value=" #{mes.message}" />
 								<p:tooltip for="viewButton"
 									value="#{messages.label_view} #{mes.name}" showEffect="fade"

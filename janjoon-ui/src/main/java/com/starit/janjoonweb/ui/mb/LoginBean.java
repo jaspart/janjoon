@@ -104,7 +104,7 @@ public class LoginBean implements Serializable {
 	private String password;
 	private boolean agreeTerms = false;
 	private boolean loading = false;
-	private boolean loadMain = false;
+	// private boolean loadMain = false;
 	private JJContact contact;
 	private boolean enable = false;
 	private int activeTabAdminIndex;
@@ -228,11 +228,17 @@ public class LoginBean implements Serializable {
 					s = s.substring(0, s.length() - 1);
 					// System.out.println(s);
 				}
+				if (!s.contains("?")) {
+					s = s + ".jsf?faces-redirect=true";
+				} else if (!s.contains("faces-redirect")) {
+					s = s + "&faces-redirect=true";
+				}
+
 				return s;
 			}
 		}
 
-		return "main";
+		return "main.jsf?faces-redirect=true";
 	}
 
 	public String getUsername() {
@@ -276,13 +282,13 @@ public class LoginBean implements Serializable {
 		this.loading = loading;
 	}
 
-	public boolean isLoadMain() {
-		return loadMain;
-	}
-
-	public void setLoadMain(boolean loadMain) {
-		this.loadMain = loadMain;
-	}
+	// public boolean isLoadMain() {
+	// return loadMain;
+	// }
+	//
+	// public void setLoadMain(boolean loadMain) {
+	// this.loadMain = loadMain;
+	// }
 
 	public int getActiveTabAdminIndex() {
 		return activeTabAdminIndex;
@@ -542,7 +548,7 @@ public class LoginBean implements Serializable {
 
 		} catch (Exception e) {
 
-			prevPage = "main";
+			prevPage = "main.jsf?faces-redirect=true";
 			return prevPage;
 		}
 
@@ -754,12 +760,13 @@ public class LoginBean implements Serializable {
 					if (requirementBean == null)
 						requirementBean = new JJRequirementBean();
 					if (requirementBean.getTableDataModelList() == null)
+						
 						requirementBean.fullTableDataModelList();
-
-					ExternalContext ec = FacesContext.getCurrentInstance()
-							.getExternalContext();
-					ec.redirect(((HttpServletRequest) ec.getRequest())
-							.getRequestURI());
+					RequestContext.getCurrentInstance().execute("updateDataTable()");
+//					ExternalContext ec = FacesContext.getCurrentInstance()
+//							.getExternalContext();
+//					ec.redirect(((HttpServletRequest) ec.getRequest())
+//							.getRequestURI());
 
 				}
 
@@ -827,35 +834,24 @@ public class LoginBean implements Serializable {
 
 	}
 
-	// public void loginRedirect(ComponentSystemEvent e) throws IOException {
-	//
-	// if (enable) {
-	// String path = FacesContext.getCurrentInstance()
-	// .getExternalContext().getRequestContextPath();
-	//
-	// FacesContext.getCurrentInstance().getExternalContext()
-	// .redirect(path + "/pages/main.jsf?faces-redirect=true");
-	// }
-	// }
-
 	public void loadingMain(ComponentSystemEvent e) throws IOException {
 
 		if (enable) {
 
-			if (!loadMain) {
-				loadMain = true;
-				String path = FacesContext.getCurrentInstance()
-						.getExternalContext().getRequestContextPath();
-
-				FacesContext
-						.getCurrentInstance()
-						.getExternalContext()
-						.redirect(
-								path
-										+ FacesContext.getCurrentInstance()
-												.getViewRoot().getViewId()
-												.replace(".xhtml", ".jsf"));
-			}
+			// if (!loadMain) {
+			// loadMain = true;
+			// String path = FacesContext.getCurrentInstance()
+			// .getExternalContext().getRequestContextPath();
+			//
+			// FacesContext
+			// .getCurrentInstance()
+			// .getExternalContext()
+			// .redirect(
+			// path
+			// + FacesContext.getCurrentInstance()
+			// .getViewRoot().getViewId()
+			// .replace(".xhtml", ".jsf"));
+			// }
 
 			String viewId = FacesContext.getCurrentInstance().getViewRoot()
 					.getViewId();
@@ -1056,11 +1052,12 @@ public class LoginBean implements Serializable {
 									requirementBean = new JJRequirementBean();
 								if (requirementBean.getTableDataModelList() == null) {
 									requirementBean.fullTableDataModelList();
-									ExternalContext ec = FacesContext
-											.getCurrentInstance()
-											.getExternalContext();
-									ec.redirect(((HttpServletRequest) ec
-											.getRequest()).getRequestURI());
+									RequestContext.getCurrentInstance().execute("updateDataTable()");
+//									ExternalContext ec = FacesContext
+//											.getCurrentInstance()
+//											.getExternalContext();
+//									ec.redirect(((HttpServletRequest) ec
+//											.getRequest()).getRequestURI());
 								}
 
 							} else {
@@ -1212,11 +1209,12 @@ public class LoginBean implements Serializable {
 								requirementBean = new JJRequirementBean();
 							if (requirementBean.getTableDataModelList() == null) {
 								requirementBean.fullTableDataModelList();
-								ExternalContext ec = FacesContext
-										.getCurrentInstance()
-										.getExternalContext();
-								ec.redirect(((HttpServletRequest) ec
-										.getRequest()).getRequestURI());
+								RequestContext.getCurrentInstance().execute("updateDataTable()");
+//								ExternalContext ec = FacesContext
+//										.getCurrentInstance()
+//										.getExternalContext();
+//								ec.redirect(((HttpServletRequest) ec
+//										.getRequest()).getRequestURI());
 							}
 						} else {
 							facesMessage = MessageFactory.getMessage(
