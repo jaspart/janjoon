@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -51,6 +52,8 @@ import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
+import com.starit.janjoonweb.domain.JJConnectionStatistics;
+import com.starit.janjoonweb.domain.JJConnectionStatisticsService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJMessageService;
@@ -81,6 +84,7 @@ public class LoginBean implements Serializable {
 	private boolean mobile;
 	private String showMarquee;
 	private FacesMessage facesMessage;
+	private JJConnectionStatistics connectionStatistics;
 
 	@Autowired
 	private JJContactService jJContactService;
@@ -98,18 +102,19 @@ public class LoginBean implements Serializable {
 	private JJConfigurationService jJConfigurationService;
 
 	@Autowired
-	private JJMessageService jJMessageService;
+	private JJMessageService jJMessageService;	
+	
+	@Autowired
+	private JJConnectionStatisticsService jJConnectionStatisticsService;
 
 	private String username = "";
 	private String password;
 	private boolean agreeTerms = false;
-	private boolean loading = false;
-	// private boolean loadMain = false;
+	private boolean loading = false;	
 	private JJContact contact;
 	private boolean enable = false;
 	private int activeTabAdminIndex;
-	private int menuIndex;
-	// private JJConfiguration planingTabsConf;
+	private int menuIndex;	
 	private PlanningConfiguration planningConfiguration;
 
 	@Autowired
@@ -154,6 +159,23 @@ public class LoginBean implements Serializable {
 
 	public void setjJCompanyService(JJCompanyService jJCompanyService) {
 		this.jJCompanyService = jJCompanyService;
+	}
+
+	public JJConnectionStatistics getConnectionStatistics() {
+		return connectionStatistics;
+	}
+
+	public void setConnectionStatistics(JJConnectionStatistics connectionStatistics) {
+		this.connectionStatistics = connectionStatistics;
+	}
+
+	public static void setLogger(Logger logger) {
+		LoginBean.logger = logger;
+	}
+
+	public void setjJConnectionStatisticsService(
+			JJConnectionStatisticsService jJConnectionStatisticsService) {
+		this.jJConnectionStatisticsService = jJConnectionStatisticsService;
 	}
 
 	public boolean isEnable() {
@@ -529,6 +551,13 @@ public class LoginBean implements Serializable {
 							.getMessage("login_licence_expired",
 									FacesMessage.SEVERITY_WARN);
 				}
+				
+				
+				connectionStatistics =new JJConnectionStatistics();
+				connectionStatistics.setContact(contact);				
+				connectionStatistics.setLoginDate(new Date());
+				
+				
 				prevPage = getRedirectUrl(session);
 			} else {
 				FacesContext fContext = FacesContext.getCurrentInstance();
@@ -593,17 +622,20 @@ public class LoginBean implements Serializable {
 		case "test":
 			menuIndex = 5;
 			break;
-		case "delivery":
+		case "exploitation":
 			menuIndex = 6;
+			break;	
+		case "delivery":
+			menuIndex = 7;
 			break;
 		case "teams":
-			menuIndex = 7;
+			menuIndex = 8;
 			break;
 		case "stats":
-			menuIndex = 7;
+			menuIndex = 8;
 			break;
 		case "administration":
-			menuIndex = 8;
+			menuIndex = 9;
 			break;
 
 		default:
@@ -1566,6 +1598,21 @@ public class LoginBean implements Serializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@PreDestroy
+	public void preDestroySession() throws Exception {
+		
+	  System.err.println("Spring Container is destroy! Customer clean up");
+	  System.out.println("Contact "+contact.getName());
+	  
+	  if(connectionStatistics != null)
+	  {
+		  connectionStatistics.setCreationDate(new Date());
+		  connectionStatistics.setLogoutDate(new Date());
+		  jJConnectionStatisticsService.saveJJConnectionStatistics(connectionStatistics); 
+		  connectionStatistics = null;
+	  }	  
 	}
 
 	public static void copyUploadImages(boolean copy)

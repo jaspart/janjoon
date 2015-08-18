@@ -1,10 +1,12 @@
 package com.starit.janjoonweb.ui.mb.util;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJPermission;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJVersion;
@@ -18,6 +20,7 @@ public class Contact {
 	private JJProduct lastProduct;
 	private JJVersion lastVersion;
 	private Set<JJCategory> categories = new HashSet<JJCategory>();
+	private Set<JJPermission> permissions= new HashSet<JJPermission>();
 
 	public String getName() {
 		return name;
@@ -75,7 +78,15 @@ public class Contact {
 		this.categories = categories;
 	}
 
-	public Contact(JJContact contact) {
+	public Set<JJPermission> getPermissions() {
+		return permissions;
+	}
+
+	public void setPermissions(Set<JJPermission> permissions) {
+		this.permissions = permissions;
+	}
+
+	public Contact(JJContact contact,List<JJPermission> permissions) {
 
 		this.firstname = contact.getFirstname();
 		this.name = contact.getName();
@@ -84,6 +95,7 @@ public class Contact {
 		this.lastVersion = contact.getLastVersion();
 		this.lastProject = contact.getLastProject();
 		this.categories = contact.getCategories();
+		this.setPermissions(new HashSet<JJPermission>(permissions));
 	}
 
 	public JJContact getJJContact(JJContact contact) {
@@ -92,7 +104,7 @@ public class Contact {
 		contact.setLastVersion(this.lastVersion);
 		contact.setLastProject(lastProject);
 		contact.setCategories(categories);
-		contact.setFirstname(firstname);
+		contact.setFirstname(firstname);		
 		return contact;
 	}
 

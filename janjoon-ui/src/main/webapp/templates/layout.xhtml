@@ -13,7 +13,6 @@
 			href="#{request.contextPath}/resources/images/janjoon_logo.ico" />
 		<h:outputScript library="primefaces" name="jquery/jquery.js" />
 		<script type="text/javascript">
-
 			function updateRowExapansion() {
 				$(".rowExpansion").slideUp("fast");
 			}
@@ -154,6 +153,11 @@
 								onstart="PF('blockUIWidget').block()"
 								actionListener="#{loginBean.redirection}" update=":growlForm"
 								icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
+
+							<p:menuitem value="#{messages.header_exploitation_menuitem}"
+								rendered="#{loginBean.mobile}" style="min-width: 80px;"
+								url="/pages/exploitation.jsf?faces-redirect=true"
+								icon="ui-icon-suitcase" />
 
 							<p:menuitem value="#{messages.header_delivery_menuitem}"
 								disabled="#{!loginBean.authorisationService.rBuild}"

@@ -1,24 +1,21 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
-import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJJob;
 import com.starit.janjoonweb.domain.JJPermission;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJPermission.class, beanName = "jJPermissionBean")
@@ -165,7 +162,7 @@ public class JJPermissionBean {
 		if (permissionDataModel == null) {
 			permissionDataModel = new ArrayList<PermissionDataModel>();
 		} else {
-			System.out.println("gfggfdfgdfg");
+
 			for (PermissionDataModel permissionData : permissionDataModel) {
 
 				if ((permissionData.getProfile().getId()
@@ -188,15 +185,11 @@ public class JJPermissionBean {
 					profile, project, product, true, false));
 			newPermission();
 		} else {
-
-			FacesContext
-					.getCurrentInstance()
-					.addMessage(
-							null,
-							new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"This permission is already attributed to this contact",
-									"Permission"));
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					MessageFactory.getMessage(
+							"admin_contact_addPermission_warning",
+							FacesMessage.SEVERITY_ERROR, "Permission"));
 		}
 
 	}

@@ -45,7 +45,8 @@
 						filterMatchMode="startsWith"
 						converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
 
-						<f:selectItem itemValue="#{null}" itemLabel="#{messages.header_any_project}" />
+						<f:selectItem itemValue="#{null}"
+							itemLabel="#{messages.header_any_project}" />
 						<f:selectItems value="#{jJProjectBean.projectList}" var="p"
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax onstart="PF('blockUIWidget').block()"
@@ -62,7 +63,8 @@
 						filterMatchMode="startsWith"
 						converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
 
-						<f:selectItem itemValue="#{null}" itemLabel="#{messages.header_any_product}" />
+						<f:selectItem itemValue="#{null}"
+							itemLabel="#{messages.header_any_product}" />
 						<f:selectItems value="#{jJProductBean.productList}" var="p"
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax onstart="PF('blockUIWidget').block()"
@@ -79,7 +81,8 @@
 						converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
 						filterMatchMode="startsWith" disabled="#{jJVersionBean.disabled}">
 
-						<f:selectItem itemValue="#{null}" itemLabel="#{messages.header_any_version}" />
+						<f:selectItem itemValue="#{null}"
+							itemLabel="#{messages.header_any_version}" />
 
 						<f:selectItems value="#{jJVersionBean.versionList}" var="v"
 							itemLabel="#{v.name}" itemValue="#{v}" />
@@ -120,8 +123,9 @@
 						url="/pages/main.jsf?faces-redirect=true" style="width: 10px;" />
 
 					<p:menuitem value="#{messages.header_project_menuitem}"
-						url="/pages/planning.jsf?faces-redirect=true" style="min-width: 80px;"
-						icon="ui-icon-calendar" update=":contentPanel"
+						url="/pages/planning.jsf?faces-redirect=true"
+						style="min-width: 80px;" icon="ui-icon-calendar"
+						update=":contentPanel"
 						rendered="#{!loginBean.enable and !loginBean.mobile}" />
 
 					<p:menuitem id="proAction"
@@ -177,6 +181,10 @@
 						actionListener="#{loginBean.redirection}" update=":growlForm"
 						icon="ui-icon-clipboard"
 						rendered="#{loginBean.enable and !loginBean.mobile}" />
+
+					<p:menuitem value="#{messages.header_exploitation_menuitem}"
+						rendered="#{!loginBean.mobile}" style="min-width: 80px;"
+						url="/pages/exploitation.jsf?faces-redirect=true" icon="ui-icon-suitcase" />
 
 					<p:menuitem value="#{messages.header_delivery_menuitem}"
 						disabled="#{!loginBean.authorisationService.rBuild}"

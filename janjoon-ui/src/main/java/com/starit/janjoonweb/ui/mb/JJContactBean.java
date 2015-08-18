@@ -105,7 +105,10 @@ public class JJContactBean {
 	public Contact getContactUtil() {
 		if (contactUtil == null)
 			contactUtil = new Contact(
-					((LoginBean) LoginBean.findBean("loginBean")).getContact());
+					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
+					jJPermissionService.getPermissions(((LoginBean) LoginBean
+							.findBean("loginBean")).getContact(), true, null,
+							null, null));
 		return contactUtil;
 	}
 

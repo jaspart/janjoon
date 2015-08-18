@@ -15,7 +15,6 @@ public class JSFRequestMatcher implements RequestMatcher, Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean matches(HttpServletRequest request) {
 		System.out.println(Collections.list(request.getHeaderNames()));
