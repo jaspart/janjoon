@@ -1,18 +1,36 @@
 $(function() {
 
-	$(".ui-layout-content").scroll(function() {
-		$(".ui-layout-content").scrollTop($(this).scrollTop());
-		var scroll=$(this).scrollTop();
-		$(".stickyHeader").css('transform','translate(0px,'+scroll+'px)');
-		$(".stickyHeader").css('z-index','50');
-		$(".timeline-axis").css('transform','translate(0px,'+scroll+'px)');
-		$(".timeline-axis").css('z-index','50');
-		$(".timeline-axis-text").css('transform','translate(0px,'+scroll+'px)');
-		$(".timeline-groups-axis-onleft").css('transform','translate(0px,'+scroll+'px)');
-		$(".timeline-axis-grid-major").css('transform','translate(0px,'+scroll+'px)');
-	});
+	$(".ui-layout-content").scroll(
+			function() {
+				$(".ui-layout-content").scrollTop($(this).scrollTop());
+				var scroll = $(this).scrollTop();
+				$(".stickyHeader").css('transform',
+						'translate(0px,' + scroll + 'px)');
+				$(".stickyHeader").css('z-index', '50');
+				$(".timeline-axis").css('transform',
+						'translate(0px,' + scroll + 'px)');
+				$(".timeline-axis").css('z-index', '50');
+				$(".timeline-axis-text").css('transform',
+						'translate(0px,' + scroll + 'px)');
+				$(".timeline-groups-axis-onleft").css('transform',
+						'translate(0px,' + scroll + 'px)');
+				$(".timeline-axis-grid-major").css('transform',
+						'translate(0px,' + scroll + 'px)');
+			});
 
 });
+
+//$(function() {
+//	$(".rsh").draggable({
+//		axis : "y",
+//		containment : "parent",
+//		helper : "clone",
+//		drag : function(event, ui) {
+//			var height = ui.offset.top;
+//			$(this).prev().height(height);
+//		}
+//	});
+//});
 
 $(function() {
 	$(".wmd-view-topscroll").scroll(function() {

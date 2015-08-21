@@ -5,9 +5,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
-	
+
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
+		<h:outputScript library="js" name="scrollTab.js" />
 		<p:panel id="dataPanel" rendered="#{loginBean.enable}"
 			header="#{messages.main_communication_title}"
 			styleClass="customTitleBar"
@@ -55,14 +56,11 @@
 						<h:outputText value="INFO"
 							rendered="#{mes.requirement == null and mes.bug == null and mes.testcase == null}"
 							styleClass="HOME" style="margin-left: 25%;" />
-						<h:outputText value="Spec"
-							rendered="#{mes.requirement != null}"
+						<h:outputText value="Spec" rendered="#{mes.requirement != null}"
 							styleClass="OBJECT" style="margin-left: 25%;" />
-						<h:outputText value="Ano"
-							rendered="#{mes.bug != null}"
+						<h:outputText value="Ano" rendered="#{mes.bug != null}"
 							styleClass="OBJECT" style="margin-left: 25%;" />
-						<h:outputText value="Test"
-							rendered="#{mes.testcase != null}"
+						<h:outputText value="Test" rendered="#{mes.testcase != null}"
 							styleClass="OBJECT" style="margin-left: 25%;" />
 
 					</p:column>
@@ -87,22 +85,6 @@
 					</p:column>
 				</p:dataTable>
 			</h:form>
-			<p:confirmDialog id="resolveDialog" widgetVar="resolveDialogWidget"
-				message="#{messages.label_disable_record}" showEffect="fade"
-				hideEffect="explode" header="#{messages.label_confirm_disabling}"
-				severity="alarm">
-				<p:outputPanel id="deletePanel">
-					<h:form id="deleteForm">
-						<p:commandButton id="deleteYesButton"
-							value="#{messages.label_yes}"
-							action="#{jJMessageBean.resolveJJMessage}"
-							update=":messageForm :growlForm :headerForm:communicationButton"
-							oncomplete="PF('resolveDialogWidget').hide()" />
-						<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
-							onclick="PF('resolveDialogWidget').hide()" type="button" />
-					</h:form>
-				</p:outputPanel>
-			</p:confirmDialog>
 		</p:panel>
 
 		<p:panel id="taskPanel" rendered="#{loginBean.enable}"
@@ -175,49 +157,11 @@
 					</p:column>
 				</p:dataTable>
 			</h:form>
-			<p:dialog id="viewTaskDialog"
-				header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task)}"
-				modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
-				resizable="true" maximizable="true" showEffect="fade"
-				hideEffect="explode" draggable="false">
-				<p:ajax event="close" update=":taskForm"
-					listener="#{jJTaskBean.closeEvent('main')}" />
-				<p:outputPanel id="viewTaskPanel">
-					<h:form id="viewTaskForm" enctype="multipart/form-data">
-						<p:remoteCommand name="updateForm" update=":viewTaskForm" />
-
-						<p:panel styleClass="panelDialog">
-							<f:facet name="header">
-								<p:messages id="msg" closable="true" />
-							</f:facet>
-							<ui:include src="taskDialog.xhtml">
-								<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
-							</ui:include>
-							<f:facet name="footer">
-								<p:commandButton id="updateTaskButton" update=":viewTaskForm"
-									actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'main')}"
-									value="#{messages.label_update} Task"
-									onstart="PF('viewtaskBlockUIWidget').block()"
-									style="margin-top: 5px;"
-									oncomplete="PF('viewtaskBlockUIWidget').unblock();"
-									process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload,taskAssignedTo,taskSpec" />
-								<p:commandButton id="viewCloseButton"
-									value="#{messages.label_close}"
-									style="margin-left: 20px;margin-top: 5px;"
-									oncomplete="PF('blockUIWidget').unblock()"
-									onstart="PF('blockUIWidget').block()"
-									onclick="PF('viewTaskDialogWidget').hide()" type="button" />
-							</f:facet>
-						</p:panel>
-					</h:form>
-				</p:outputPanel>
-			</p:dialog>
 		</p:panel>
-
+<!-- 		<p:separator styleClass="rsh"/> -->
 		<p:panel id="specpanel" header="#{messages.main_specPanel_header}"
 			rendered="#{loginBean.enable and loginBean.noCouvretReq != null}"
 			styleClass="customTitleBar">
-
 			<h:form id="specForm">
 				<p:dataTable id="specTable" value="#{loginBean.noCouvretReq}"
 					rowKey="#{req.id}" var="req" widgetVar="taskTable"
@@ -253,11 +197,66 @@
 					</p:column>
 
 					<p:column headerText="Status">
-						<h:outputText value="#{messages['status_'.concat(fn:replace(req.status.name, ' ', '_'))]}" />
+						<h:outputText
+							value="#{messages['status_'.concat(fn:replace(req.status.name, ' ', '_'))]}" />
 					</p:column>
 				</p:dataTable>
 			</h:form>
 		</p:panel>
+
+		<p:confirmDialog id="resolveDialog" widgetVar="resolveDialogWidget"
+			message="#{messages.label_disable_record}" showEffect="fade"
+			hideEffect="explode" header="#{messages.label_confirm_disabling}"
+			severity="alarm">
+			<p:outputPanel id="deletePanel">
+				<h:form id="deleteForm">
+					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+						action="#{jJMessageBean.resolveJJMessage}"
+						update=":messageForm :growlForm :headerForm:communicationButton"
+						oncomplete="PF('resolveDialogWidget').hide()" />
+					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+						onclick="PF('resolveDialogWidget').hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
+
+		<p:dialog id="viewTaskDialog"
+			header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task)}"
+			modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
+			resizable="true" maximizable="true" showEffect="fade"
+			hideEffect="explode" draggable="false">
+			<p:ajax event="close" update=":taskForm"
+				listener="#{jJTaskBean.closeEvent('main')}" />
+			<p:outputPanel id="viewTaskPanel">
+				<h:form id="viewTaskForm" enctype="multipart/form-data">
+					<p:remoteCommand name="updateForm" update=":viewTaskForm" />
+
+					<p:panel styleClass="panelDialog">
+						<f:facet name="header">
+							<p:messages id="msg" closable="true" />
+						</f:facet>
+						<ui:include src="taskDialog.xhtml">
+							<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
+						</ui:include>
+						<f:facet name="footer">
+							<p:commandButton id="updateTaskButton" update=":viewTaskForm"
+								actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'main')}"
+								value="#{messages.label_update} Task"
+								onstart="PF('viewtaskBlockUIWidget').block()"
+								style="margin-top: 5px;"
+								oncomplete="PF('viewtaskBlockUIWidget').unblock();"
+								process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload,taskAssignedTo,taskSpec" />
+							<p:commandButton id="viewCloseButton"
+								value="#{messages.label_close}"
+								style="margin-left: 20px;margin-top: 5px;"
+								oncomplete="PF('blockUIWidget').unblock()"
+								onstart="PF('blockUIWidget').block()"
+								onclick="PF('viewTaskDialogWidget').hide()" type="button" />
+						</f:facet>
+					</p:panel>
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
 
 		<p:dialog widgetVar="messageDialog" id="messageDialog"
 			header="#{messages.main_message_header}" showEffect="fade"

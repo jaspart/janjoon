@@ -284,7 +284,8 @@
 									var="req" type="unordered" paginatorPosition="bottom"
 									rendered="#{categorieRequirement.requirements != null}"
 									paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} "
-									itemType="none" paginator="true" rows="5" emptyMessage="#{messages.label_notRecordFound}"
+									itemType="none" paginator="true" rows="5"
+									emptyMessage="#{messages.label_notRecordFound}"
 									styleClass="paginated">
 									<f:facet name="header">
            				 #{categorieRequirement.category.name}
@@ -318,16 +319,24 @@
 					</f:facet>
 					<p:row>
 						<p:column style="width:50%">
-							<p:dataList id="taskDatalist" emptyMessage="#{messages.label_notRecordFound}"
+							<p:dataTable id="taskDatalist"
+								emptyMessage="#{messages.label_notRecordFound}"
 								value="#{requirementBean.requirementTasks}" var="task"
-								type="unordered" paginatorPosition="bottom"
+								paginatorPosition="bottom"
 								paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} "
-								itemType="none" paginator="true" rows="5" styleClass="paginated">
+								paginator="true" rows="5" styleClass="paginated">
 								<f:facet name="header">
 							#{messages.label_task}
 						</f:facet>
-								<h:outputText value="#{task.id}-#{fn:substring(task.name,0,30)}" />
-							</p:dataList>
+								<p:column headerText="#{messages.project_gantt_table_name_title}" width="70%">
+									<h:outputText
+										value="#{task.id}-#{fn:substring(task.name,0,30)}" />
+								</p:column>
+								<p:column headerText="#{messages.project_gantt_table_assigned_title}" width="30%">
+									<h:outputText
+										value="#{task.assignedTo}" converter="JJContactConverter" />
+								</p:column>
+							</p:dataTable>
 						</p:column>
 
 						<p:column style="width:50%">
@@ -342,20 +351,20 @@
 									<p:column selectionMode="multiple"
 										style="width:30%;text-align:center;" />
 									<p:column style="width:70%" headerText="TestCases:">
-																			
+
 										<p:commandLink target="_blank" value="#{testCaseModel.name}"
 											action="#{jJTestcaseBean.testCaseInfo(testCaseModel.id)}"
 											ajax="false">
 										</p:commandLink>
-										
+
 									</p:column>
-									
+
 									<f:facet name="footer">
 										<p:commandButton onstart="PF('blockUIWidget').block()"
 											oncomplete="PF('blockUIWidget').unblock()" id="update"
 											disabled="#{empty requirementBean.reqtestCases}"
-											update="testCaseDataTable :growlForm" value="#{messages.label_update}"
-											process="testCaseDataTable"
+											update="testCaseDataTable :growlForm"
+											value="#{messages.label_update}" process="testCaseDataTable"
 											action="#{requirementBean.updateReqTestCases(jJTestcaseBean)}" />
 										<br />
 										<br />
@@ -427,12 +436,13 @@
 				<h:form id="linkForm">
 					<p:dataTable id="linkDataTable" var="req"
 						selection="#{requirementBean.linkReq}" rowKey="#{req.id}"
-						emptyMessage="#{messages.label_notRecordFound}"
-						scrollable="true" style="width:350px;" scrollHeight="200"
+						emptyMessage="#{messages.label_notRecordFound}" scrollable="true"
+						style="width:350px;" scrollHeight="200"
 						value="#{requirementBean.linkReqList}">
 						<p:column selectionMode="multiple"
 							style="width:30%;text-align:center" />
-						<p:column style="width:70%" headerText="#{messages.label_requirement}">							
+						<p:column style="width:70%"
+							headerText="#{messages.label_requirement}">
 							<h:outputText value="#{req.id}-#{req.name}" />
 						</p:column>
 						<f:facet name="footer">

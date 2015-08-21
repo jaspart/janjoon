@@ -36,182 +36,6 @@
 		<h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
 
 			<p:panel styleClass="content">
-				<p:dialog widgetVar="communicationPanel" id="communicationPanel"
-					styleClass="overlayPanelDialog" showEffect="fade" dynamic="true"
-					closable="true" style="width:400px" rendered="#{loginBean.enable}">
-					<f:event listener="#{jJMessageBean.initJJMessageLayout}"
-						type="preRenderView" />
-					<h:form id="messageCreationForm">
-						<p:dataTable id="dataTable1" value="#{jJMessageBean.mainMessages}"
-							rowKey="#{mes.id}" var="mes" paginator="true"
-							paginatorPosition="bottom" rendered="#{loginBean.enable}"
-							rowStyleClass="#{mes.criticity.name}" style="border-spacing:0px;"
-							selectionMode="single" rows="10" lazy="true"
-							emptyMessage="#{messages.label_notRecordFound}"
-							sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
-							<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
-								listener="#{jJMessageBean.onRowSelect}" immediate="true"
-								oncomplete="PF('viewDialogWidget1').show()" />
-							<!--									update=":viewForm1:viewPanelGrid1"-->
-							<p:column headerText="Messages" sortBy="#{mes.creationDate}">
-
-								<h:outputText value="INFO"
-									rendered="#{mes.requirement == null and mes.bug == null and mes.testcase == null}"
-									styleClass="HOME" />
-
-								<h:outputText value="Spec" rendered="#{mes.requirement != null}"
-									styleClass="OBJECT" />
-								<h:outputText value="Ano" rendered="#{mes.bug != null}"
-									styleClass="OBJECT" />
-								<h:outputText value="Test" rendered="#{mes.testcase != null}"
-									styleClass="OBJECT" />
-
-								<h:outputText id="viewButton" value=" #{mes.message}" />
-								<p:tooltip for="viewButton"
-									value="#{messages.label_view} #{mes.name}" showEffect="fade"
-									hideEffect="fade" />
-							</p:column>
-
-							<f:facet name="footer">
-								<h:panelGrid columns="1" border="0">
-									<p:outputLabel for="messagedsc" value="Message :" />
-									<p:inputTextarea id="messagedsc" cols="20" rows="6"
-										value="#{jJMessageBean.message.message}" required="true" />
-									<h:panelGrid columns="2" border="0" style="border:hidden;">
-										<p:selectBooleanButton id="alert"
-											value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
-											offLabel="Info" onIcon="ui-icon-alert" offIcon="ui-icon-info">
-										</p:selectBooleanButton>
-										<p:commandButton id="submitMes" value="OK"
-											process="@this,alert,messagedsc"
-											actionListener="#{jJMessageBean.createMessage(false,null)}"
-											update=":messageCreationForm :headerForm:communicationButton :growlForm" />
-									</h:panelGrid>
-								</h:panelGrid>
-
-							</f:facet>
-						</p:dataTable>
-					</h:form>
-				</p:dialog>
-
-				<p:dialog widgetVar="headerPanel" id="headerPanel"
-					styleClass="overlayPanelDialog" rendered="#{loginBean.mobile}"
-					closable="true">
-					<h:form>
-						<p:menu>
-							<p:menuitem value="" icon="ui-icon-home"
-								url="/pages/main.jsf?faces-redirect=true" />
-
-							<p:menuitem value="#{messages.header_project_menuitem}"
-								url="/pages/planning.jsf?faces-redirect=true"
-								icon="ui-icon-clipboard" update=":contentPanel"
-								rendered="#{!loginBean.enable}" style="min-width: 80px;" />
-
-							<p:menuitem id="proAction" style="min-width: 80px;"
-								value="#{messages.header_project_menuitem}"
-								disabled="#{!loginBean.authorisationService.rProject}"
-								title="#{loginBean.authorisationService.rProjectMSG}"
-								onstart="PF('blockUIWidget').block()"
-								actionListener="#{loginBean.redirection}" update=":growlForm"
-								icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
-
-							<p:menuitem value="#{messages.header_spec_menuitem}"
-								disabled="#{!loginBean.authorisationService.rRequiement}"
-								title="#{loginBean.authorisationService.rRequiementMSG}"
-								url="/pages/specifications.jsf?faces-redirect=true"
-								icon="ui-icon-document" rendered="#{loginBean.enable}" />
-
-							<p:menuitem value="#{messages.header_spec_menuitem}"
-								url="/pages/specifications.jsf?faces-redirect=true"
-								icon="ui-icon-document" rendered="#{!loginBean.enable}" />
-
-							<p:menuitem value="#{messages.header_bug_menuitem}"
-								disabled="#{!loginBean.authorisationService.rBug}"
-								title="#{loginBean.authorisationService.rBugMSG}"
-								url="/pages/bugs.jsf?faces-redirect=true" icon="ui-icon-gear" />
-
-							<p:menuitem value="#{messages.header_dev_menuitem}"
-								url="/pages/development.jsf?faces-redirect=true"
-								icon="ui-icon-wrench" rendered="#{!loginBean.enable}" />
-
-							<p:menuitem id="devAction"
-								value="#{messages.header_dev_menuitem}"
-								onstart="PF('blockUIWidget').block()"
-								disabled="#{!loginBean.authorisationService.rwDev}"
-								title="#{loginBean.authorisationService.rwDevMSG}"
-								actionListener="#{loginBean.redirectToDev}" update=":growlForm"
-								icon="ui-icon-wrench" rendered="#{loginBean.enable}" />
-
-							<p:menuitem value="#{messages.header_test_menuitem}"
-								url="/pages/test.jsf?faces-redirect=true" icon="ui-icon-check"
-								update=":contentPanel" rendered="#{!loginBean.enable}" />
-
-							<p:menuitem id="testAction"
-								disabled="#{!loginBean.authorisationService.rTest}"
-								title="#{loginBean.authorisationService.rTestMSG}"
-								value="#{messages.header_test_menuitem}"
-								onstart="PF('blockUIWidget').block()"
-								actionListener="#{loginBean.redirection}" update=":growlForm"
-								icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
-
-							<p:menuitem value="#{messages.header_exploitation_menuitem}"
-								rendered="#{loginBean.mobile}" style="min-width: 80px;"
-								url="/pages/exploitation.jsf?faces-redirect=true"
-								icon="ui-icon-suitcase" />
-
-							<p:menuitem value="#{messages.header_delivery_menuitem}"
-								disabled="#{!loginBean.authorisationService.rBuild}"
-								title="#{loginBean.authorisationService.rBuildMSG}"
-								rendered="#{loginBean.enable}"
-								url="/pages/delivery.jsf?faces-redirect=true"
-								icon="ui-icon-star" />
-
-							<p:menuitem value="#{messages.header_delivery_menuitem}"
-								rendered="#{!loginBean.enable}"
-								url="/pages/delivery.jsf?faces-redirect=true"
-								icon="ui-icon-star" />
-
-							<p:menuitem value="#{messages.header_team_menuitem}"
-								disabled="#{!loginBean.authorisationService.rContact}"
-								title="#{loginBean.authorisationService.rContactMSG}"
-								url="/pages/teams.jsf?faces-redirect=true" icon="ui-icon-person" />
-
-							<p:menuitem value="#{messages.header_stat_menuitem}"
-								url="/pages/stats.jsf?faces-redirect=true"
-								icon="ui-icon-arrowreturnthick-1-n"
-								rendered="#{!loginBean.enable}" />
-
-							<p:menuitem id="statsAction"
-								disabled="#{!loginBean.authorisationService.rProject}"
-								title="#{messages.header_stat_menuitem}"
-								value="#{messages.header_stat_menuitem}"
-								onstart="PF('blockUIWidget').block()"
-								actionListener="#{loginBean.redirection}" update=":growlForm"
-								icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
-
-							<p:menuitem value="#{messages.header_admin_menuitem}"
-								rendered="#{loginBean.authorisationService.renderAdmin}"
-								url="/pages/administration.jsf?faces-redirect=true"
-								icon="ui-icon-key" update=":contentPanel" />
-						</p:menu>
-					</h:form>
-				</p:dialog>
-				<p:dialog id="viewDialog1" header="#{messages.label_view} Message"
-					modal="true" widgetVar="viewDialogWidget1" dynamic="true"
-					resizable="true" maximizable="true" showEffect="fade"
-					hideEffect="fade">
-					<p:outputPanel id="viewPanel1">
-						<h:form id="viewForm1">
-							<ui:include src="/pages/messageDialog.xhtml">
-								<ui:param name="JJMessage"
-									value="#{jJMessageBean.viewedMessage}" />
-							</ui:include>
-							<p:commandButton id="viewCloseButton1"
-								value="#{messages.label_close}" style="margin-top: 10px;"
-								onclick="PF('viewDialogWidget1').hide()" type="button" />
-						</h:form>
-					</p:outputPanel>
-				</p:dialog>
 
 				<ui:insert name="header">
 					<ui:include src="header.xhtml" />
@@ -239,11 +63,11 @@
 						</f:facet>
 					</p:panel>
 				</h:form>
-				<p:panel id="contentPanel" styleClass="content">
+				<p:outputPanel id="contentPanel" styleClass="content">
 					<f:event listener="#{loginBean.initMenuIndexvalue}"
 						type="preRenderView" />
 					<ui:insert name="content" />
-				</p:panel>
+				</p:outputPanel>
 				<ui:insert name="footer">
 					<ui:include src="footer.xhtml" />
 				</ui:insert>
@@ -257,8 +81,179 @@
 						style="white-space: nowrap;" />
 				</h:panelGrid>
 			</pe:blockUI>
-
 		</h:panelGrid>
+		<p:dialog widgetVar="communicationPanel" id="communicationPanel"
+			styleClass="overlayPanelDialog" showEffect="fade" dynamic="true"
+			closable="true" style="width:400px" rendered="#{loginBean.enable}">
+			<f:event listener="#{jJMessageBean.initJJMessageLayout}"
+				type="preRenderView" />
+			<h:form id="messageCreationForm">
+				<p:dataTable id="dataTable1" value="#{jJMessageBean.mainMessages}"
+					rowKey="#{mes.id}" var="mes" paginator="true"
+					paginatorPosition="bottom" rendered="#{loginBean.enable}"
+					rowStyleClass="#{mes.criticity.name}" style="border-spacing:0px;"
+					selectionMode="single" rows="10" lazy="true"
+					emptyMessage="#{messages.label_notRecordFound}"
+					sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
+					<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
+						listener="#{jJMessageBean.onRowSelect}" immediate="true"
+						oncomplete="PF('viewDialogWidget1').show()" />
+					<!--									update=":viewForm1:viewPanelGrid1"-->
+					<p:column headerText="Messages" sortBy="#{mes.creationDate}">
+
+						<h:outputText value="INFO"
+							rendered="#{mes.requirement == null and mes.bug == null and mes.testcase == null}"
+							styleClass="HOME" />
+
+						<h:outputText value="Spec" rendered="#{mes.requirement != null}"
+							styleClass="OBJECT" />
+						<h:outputText value="Ano" rendered="#{mes.bug != null}"
+							styleClass="OBJECT" />
+						<h:outputText value="Test" rendered="#{mes.testcase != null}"
+							styleClass="OBJECT" />
+
+						<h:outputText id="viewButton" value=" #{mes.message}" />
+						<p:tooltip for="viewButton"
+							value="#{messages.label_view} #{mes.name}" showEffect="fade"
+							hideEffect="fade" />
+					</p:column>
+
+					<f:facet name="footer">
+						<h:panelGrid columns="1" border="0">
+							<p:outputLabel for="messagedsc" value="Message :" />
+							<p:inputTextarea id="messagedsc" cols="20" rows="6"
+								value="#{jJMessageBean.message.message}" required="true" />
+							<h:panelGrid columns="2" border="0" style="border:hidden;">
+								<p:selectBooleanButton id="alert"
+									value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
+									offLabel="Info" onIcon="ui-icon-alert" offIcon="ui-icon-info">
+								</p:selectBooleanButton>
+								<p:commandButton id="submitMes" value="OK"
+									process="@this,alert,messagedsc"
+									actionListener="#{jJMessageBean.createMessage(false,null)}"
+									update=":messageCreationForm :headerForm:communicationButton :growlForm" />
+							</h:panelGrid>
+						</h:panelGrid>
+
+					</f:facet>
+				</p:dataTable>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog widgetVar="headerPanel" id="headerPanel"
+			styleClass="overlayPanelDialog" rendered="#{loginBean.mobile}"
+			closable="true">
+			<h:form>
+				<p:menu>
+					<p:menuitem value="" icon="ui-icon-home"
+						url="/pages/main.jsf?faces-redirect=true" />
+
+					<p:menuitem value="#{messages.header_project_menuitem}"
+						url="/pages/planning.jsf?faces-redirect=true"
+						icon="ui-icon-clipboard" update=":contentPanel"
+						rendered="#{!loginBean.enable}" style="min-width: 80px;" />
+
+					<p:menuitem id="proAction" style="min-width: 80px;"
+						value="#{messages.header_project_menuitem}"
+						disabled="#{!loginBean.authorisationService.rProject}"
+						title="#{loginBean.authorisationService.rProjectMSG}"
+						onstart="PF('blockUIWidget').block()"
+						actionListener="#{loginBean.redirection}" update=":growlForm"
+						icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
+
+					<p:menuitem value="#{messages.header_spec_menuitem}"
+						disabled="#{!loginBean.authorisationService.rRequiement}"
+						title="#{loginBean.authorisationService.rRequiementMSG}"
+						url="/pages/specifications.jsf?faces-redirect=true"
+						icon="ui-icon-document" rendered="#{loginBean.enable}" />
+
+					<p:menuitem value="#{messages.header_spec_menuitem}"
+						url="/pages/specifications.jsf?faces-redirect=true"
+						icon="ui-icon-document" rendered="#{!loginBean.enable}" />
+
+					<p:menuitem value="#{messages.header_bug_menuitem}"
+						disabled="#{!loginBean.authorisationService.rBug}"
+						title="#{loginBean.authorisationService.rBugMSG}"
+						url="/pages/bugs.jsf?faces-redirect=true" icon="ui-icon-gear" />
+
+					<p:menuitem value="#{messages.header_dev_menuitem}"
+						url="/pages/development.jsf?faces-redirect=true"
+						icon="ui-icon-wrench" rendered="#{!loginBean.enable}" />
+
+					<p:menuitem id="devAction" value="#{messages.header_dev_menuitem}"
+						onstart="PF('blockUIWidget').block()"
+						disabled="#{!loginBean.authorisationService.rwDev}"
+						title="#{loginBean.authorisationService.rwDevMSG}"
+						actionListener="#{loginBean.redirectToDev}" update=":growlForm"
+						icon="ui-icon-wrench" rendered="#{loginBean.enable}" />
+
+					<p:menuitem value="#{messages.header_test_menuitem}"
+						url="/pages/test.jsf?faces-redirect=true" icon="ui-icon-check"
+						update=":contentPanel" rendered="#{!loginBean.enable}" />
+
+					<p:menuitem id="testAction"
+						disabled="#{!loginBean.authorisationService.rTest}"
+						title="#{loginBean.authorisationService.rTestMSG}"
+						value="#{messages.header_test_menuitem}"
+						onstart="PF('blockUIWidget').block()"
+						actionListener="#{loginBean.redirection}" update=":growlForm"
+						icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
+
+					<p:menuitem value="#{messages.header_exploitation_menuitem}"
+						rendered="#{loginBean.mobile}" style="min-width: 80px;"
+						url="/pages/exploitation.jsf?faces-redirect=true"
+						icon="ui-icon-suitcase" />
+
+					<p:menuitem value="#{messages.header_delivery_menuitem}"
+						disabled="#{!loginBean.authorisationService.rBuild}"
+						title="#{loginBean.authorisationService.rBuildMSG}"
+						rendered="#{loginBean.enable}"
+						url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
+
+					<p:menuitem value="#{messages.header_delivery_menuitem}"
+						rendered="#{!loginBean.enable}"
+						url="/pages/delivery.jsf?faces-redirect=true" icon="ui-icon-star" />
+
+					<p:menuitem value="#{messages.header_team_menuitem}"
+						disabled="#{!loginBean.authorisationService.rContact}"
+						title="#{loginBean.authorisationService.rContactMSG}"
+						url="/pages/teams.jsf?faces-redirect=true" icon="ui-icon-person" />
+
+					<p:menuitem value="#{messages.header_stat_menuitem}"
+						url="/pages/stats.jsf?faces-redirect=true"
+						icon="ui-icon-arrowreturnthick-1-n"
+						rendered="#{!loginBean.enable}" />
+
+					<p:menuitem id="statsAction"
+						disabled="#{!loginBean.authorisationService.rProject}"
+						title="#{messages.header_stat_menuitem}"
+						value="#{messages.header_stat_menuitem}"
+						onstart="PF('blockUIWidget').block()"
+						actionListener="#{loginBean.redirection}" update=":growlForm"
+						icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
+
+					<p:menuitem value="#{messages.header_admin_menuitem}"
+						rendered="#{loginBean.authorisationService.renderAdmin}"
+						url="/pages/administration.jsf?faces-redirect=true"
+						icon="ui-icon-key" update=":contentPanel" />
+				</p:menu>
+			</h:form>
+		</p:dialog>
+		<p:dialog id="viewDialog1" header="#{messages.label_view} Message"
+			modal="true" widgetVar="viewDialogWidget1" dynamic="true"
+			resizable="true" maximizable="true" showEffect="fade"
+			hideEffect="fade">
+			<p:outputPanel id="viewPanel1">
+				<h:form id="viewForm1">
+					<ui:include src="/pages/messageDialog.xhtml">
+						<ui:param name="JJMessage" value="#{jJMessageBean.viewedMessage}" />
+					</ui:include>
+					<p:commandButton id="viewCloseButton1"
+						value="#{messages.label_close}" style="margin-top: 10px;"
+						onclick="PF('viewDialogWidget1').hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
 		<script type="text/javascript">
 			function start() {
 				PF('statusDialog').show();

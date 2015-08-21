@@ -96,25 +96,7 @@
 		<p:tabView id="projecttabview" widgetVar="projectTabView"
 			activeIndex="#{jJSprintBean.activeTabGantIndex}"
 			onTabChange="tabChangeHelper([{name: 'activeGantIndex', value: index}])"
-			dynamic="false" cache="true" style="width:100% !important;">
-
-			<!-- 			<p:tab title="#{messages.project_gantt_menuitem}" -->
-			<!-- 				rendered="#{loginBean.renderGantt}"> -->
-			<!-- 				<h:panelGrid id="projectpanel" columns="1" cellpadding="3" -->
-			<!-- 					style="width:100% !important;"> -->
-			<!-- 					<ui:insert name="gantt"> -->
-			<!-- 						<ui:include src="gantt.xhtml" /> -->
-			<!-- 					</ui:insert> -->
-			<!-- 				</h:panelGrid> -->
-			<!-- 			</p:tab> -->
-			<!-- 			<p:tab title="#{messages.project_scrum_menuitem}" -->
-			<!-- 				rendered="#{loginBean.renderScrum}"> -->
-			<!-- 				<h:panelGrid columns="1" cellpadding="3"> -->
-			<!-- 					<ui:insert name="scrum"> -->
-			<!-- 						<ui:include src="scrum.xhtml" /> -->
-			<!-- 					</ui:insert> -->
-			<!-- 				</h:panelGrid> -->
-			<!-- 			</p:tab> -->
+			dynamic="false" cache="true" style="width: 99.5% !important;">
 
 			<p:tab title="#{loginBean.planningConfiguration.firstPageHeader}">
 				<h:panelGrid columns="1" cellpadding="3"

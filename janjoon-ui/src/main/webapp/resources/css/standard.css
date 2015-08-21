@@ -31,6 +31,10 @@ a:visited {
 	color: #23AFB2;
 }
 
+div#contentPanel_content {
+	padding: 0px;
+}
+
 .checkBoxButton {
 	height: 20px;
 	width: 20px;
@@ -85,14 +89,14 @@ a:visited {
 	top: 0px !important;
 }
 
-.ui-icon-restore{
+.ui-icon-restore {
 	background-image: url("#{resource['images/restore.ico']}") !important;
 	width: 16px !important;
 	height: 16px !important;
 	left: 2% !important;
- 	margin-left: 0 !important;
-  	margin-top: 0px !important;
-  	top: 15% !important
+	margin-left: 0 !important;
+	margin-top: 0px !important;
+	top: 15% !important
 }
 
 .wrapper {
@@ -249,6 +253,11 @@ a:visited {
 	height: auto;
 	vertical-align: top;
 	text-align: left;
+}
+
+.rsh {
+	height: 8px;
+	background-color: red;
 }
 
 .chat {
@@ -1034,8 +1043,8 @@ div.revised2 {
 .OBJECT {
 	background-color: #FF0000 !important;
 	padding: .2em .6em .3em;
-/* 	font-size: 80%; */
-/* 	font-weight: 700; */
+	/* 	font-size: 80%; */
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff;
 	text-align: center;
@@ -1045,11 +1054,12 @@ div.revised2 {
 	font-weight: bold;
 	font-size: 10px;
 }
+
 .HOME {
 	background-color: #008800 !important;
 	padding: .2em .6em .3em;
-/* 	font-size: 80%; */
-/* 	font-weight: 700; */
+	/* 	font-size: 80%; */
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff;
 	text-align: center;
