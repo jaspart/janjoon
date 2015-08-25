@@ -31,6 +31,8 @@ public class AuthorisationService implements Serializable {
 				.getAttribute("jJProductBean");
 		JJContactBean jjContactBean = (JJContactBean) this.session
 				.getAttribute("jJContactBean");
+		JJCompanyBean jjCompanyBean = (JJCompanyBean) this.session
+				.getAttribute("jJCompanyBean");
 		LoginBean loginBean = (LoginBean) this.session
 				.getAttribute("loginBean");
 		loginBean.setContact(null);
@@ -39,10 +41,12 @@ public class AuthorisationService implements Serializable {
 		jjContactBean.setContactsLazyModel(null);
 		jjContactBean.setContactUtil(null);
 		jjProductBean.setProductListTable(null);
-		jjProjectBean.setProjectListTable(null);
+		jjProjectBean.setProjectListTable(null);		
 		jjContactBean.setCategories(null);
 		jjContactBean.setVersionList(null);
 		jjContactBean.setLoggedContactCategories(null);
+		if(jjCompanyBean != null)
+			jjCompanyBean.setCompanies(null);
 
 		if (jJSprintBean != null)
 			jJSprintBean.setContacts(null);
@@ -509,7 +513,7 @@ public class AuthorisationService implements Serializable {
 		}
 
 		adminCompany = jJPermissionService.isAuthorized(contact, null, null,
-				"Company", null, null, null, true);
+				"Company", null, true, true, true);
 		renderAdmin = adminCompany
 				|| adminContact
 				|| jJPermissionService.isAuthorized(contact, null, null,

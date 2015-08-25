@@ -72,8 +72,7 @@ public class JJContactBean {
 	private Contact contactUtil;
 	private ContactCalendarUtil calendarUtil;
 	private List<JJCategory> categories;
-	private List<JJCategory> loggedContactCategories;
-	// private List<JJContact> contacts;
+	private List<JJCategory> loggedContactCategories;	
 	private List<JJVersion> versionList;
 	private LazyContactDataModel contactsLazyModel;
 	private String message;

@@ -183,7 +183,7 @@
 									</f:facet>
 									<p:row>
 										<p:column colspan="2">
-											<p:dataList var="holy" paginator="true" rows="7"
+											<p:dataList var="holy" paginator="true" rows="6"
 												paginatorPosition="bottom"
 												emptyMessage="#{messages.company_empty_holidays}"
 												value="#{jJCompanyBean.holidays}"
@@ -228,15 +228,14 @@
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
-	<p:dialog id="companyDialog"
+	<p:dialog id="companyDialog" height="510" width="660"
 		header="#{messages[jJCompanyBean.headerMessage]}" modal="true"
 		widgetVar="companyDialogWidget" dynamic="true" showEffect="fade"
 		hideEffect="explode" resizable="false">
 		<p:ajax event="close" update=":tabview:companyForm"
 			listener="#{jJCompanyBean.closeDialog}" />
 		<p:outputPanel id="companyDialogPanel">
-			<h:form id="companyDialogForm" enctype="multipart/form-data"
-				style="height: 450px;width: 650px;">
+			<h:form id="companyDialogForm" enctype="multipart/form-data">
 				<p:panel styleClass="panelDialog">
 					<f:facet name="header">
 						<p:messages id="msg" showDetail="false" closable="true" />
@@ -284,7 +283,7 @@
 									for="jJCompanyMobileDescription" rendered="#{loginBean.mobile}" />
 								<br />
 								<pe:ckEditor id="jJCompanyDescription"
-									toolbar="#{imageStreamer.ckEditorToolBar}" style="width:680px"
+									toolbar="#{imageStreamer.ckEditorToolBar}"
 									rendered="#{!loginBean.mobile}"
 									customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 									value="#{jJCompanyBean.companie.description}" required="true"

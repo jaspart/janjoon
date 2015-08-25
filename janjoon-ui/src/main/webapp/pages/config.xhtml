@@ -98,7 +98,7 @@
 		</f:facet>
 		<p:outputPanel id="createPanel">
 			<h:form id="createForm" enctype="multipart/form-data"
-				style="height: 470px;width: 700px;">
+				style="height: 470px;width: 710px;">
 				<p:panel styleClass="panelDialog">
 					<f:facet name="header">
 						<p:messages id="msg" showDetail="false" closable="true" />
@@ -120,7 +120,7 @@
 							rendered="#{!loginBean.mobile}" height="150px"
 							customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 							value="#{jJConfigurationBean.JJConfiguration_.description}"
-							required="true"
+							required="true" width="580px"
 							requiredMessage="Config Description is a required value" />
 
 						<p:outputLabel for="confMobileDesc" value="Description :"

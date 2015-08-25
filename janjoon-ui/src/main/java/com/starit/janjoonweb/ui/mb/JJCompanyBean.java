@@ -101,8 +101,17 @@ public class JJCompanyBean {
 
 	public List<JJCompany> getCompanies() {
 
-		if (companies == null)
-			companies = jJCompanyService.getActifCompanies();
+		if (companies == null) {
+			if (((LoginBean) LoginBean.findBean("loginBean"))
+					.getAuthorisationService().isAdminCompany())
+				companies = jJCompanyService.getActifCompanies();
+			else
+			{
+				companies = new ArrayList<JJCompany>();
+				companies.add(((LoginBean) LoginBean.findBean("loginBean")).getContact().getCompany());
+			}
+		}
+
 		return companies;
 	}
 

@@ -151,6 +151,8 @@
 			listener="#{jJContactBean.closeDialog(jJPermissionBean)}" />
 		<p:outputPanel id="contactDialogPanel">
 			<h:form id="contactDialogForm">
+				<input style="display: none"> </input>
+				<input type="password" style="display: none"></input>
 				<p:panel styleClass="panelDialog">
 					<f:facet name="header">
 						<p:messages id="msg" showDetail="false" closable="true" />
@@ -173,7 +175,7 @@
 										<p:inputText id="lastname"
 											value="#{jJContactBean.contactAdmin.name}" label="Lastname"
 											required="true"
-											placeholder="#{messages.admin_contact_new_firstname_watermark}"
+											placeholder="#{messages.admin_contact_new_lastname_watermark}"
 											disabled="#{jJContactBean.disabledContactMode}">
 											<f:validateLength maximum="100" />
 										</p:inputText>
@@ -183,7 +185,7 @@
 										<p:inputText id="email"
 											value="#{jJContactBean.contactAdmin.email}"
 											label="#{messages.admin_contact_new_email_label}"
-											required="true"
+											required="true" autocomplete="off"
 											placeholder="#{messages.admin_contact_new_email_watermark}"
 											readonly="#{jJContactBean.contactAdmin.id != null}"
 											disabled="#{jJContactBean.disabledContactMode}">
